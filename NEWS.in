@@ -1,0 +1,56 @@
+ccHost Release Notes
+====================
+
+Version: PROJECT_VERSION
+
+ccHost PROJECT_VERSION is a major feature release. This release 
+focuses approximately 6 months of develop work into this release. The 
+largest visible features are the native reviews (and removal of 
+support for phpbb2), the overall better support for feeds (including 
+support for ATOM feeds now), one-click ratings, and overall interface 
+refinements learned from testing and user feedback.
+
+New Features
+============
+
+User
+
+    * Native reviews (no longer rely on phpBB)
+    * Native reviews feed support
+    * One-click ratings (hover over stars to pick ratings)
+    * Formatting in user and upload descriptions
+    * Major performance improvements
+    * Radio (based on M3U)
+    * ATOM feed support
+    * NSFW (Not Safe For Work) flag
+    * Profile stats: overall ratings, # of remixes/remixed, 
+      reviews/reviewed
+    * Bread crumbs for easier site navigation
+    * Flagging uploads for site policy violations
+    * "How I Did It" browser
+
+Admin
+
+    * sample pools turned on 
+    * import/export of settings for easy re-creation of installations
+    * feed caching enabled
+    * assignable default feed for pages without auto-feeds
+    * internationization turned on for user screens
+    * ccHost updates now happen from browser (after you install code)
+    * magpie replaced with customized feed reader
+    * new ratings admin panel (ban users, undo ratings, etc.)
+    * stricter fairness policies (no self-remixing, self-rating, etc.)
+    * file verifier handles more "edge cases"
+    * activity log enhancements
+
+Still Testing
+
+    * Monthly archives
+    * Stats/Charts pages
+
+
+Bugfixes
+========
+
+    * Podcasting is now repaired.
+    * feed caching now working

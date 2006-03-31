@@ -1,0 +1,107 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+
+To see this file create a link to: media/viewfile/picks.xml
+
+-->
+</tal:block>
+<style>
+.pickspage td
+{
+    vertical-align: top;
+    padding-right: 12px;
+}
+.pickspage
+{
+    margin-left: 3%;
+    width: 90%;
+}
+.pickspage td p
+{
+  margin: 1px;
+}
+.pickspage td a
+{
+  white-space: nowrap;
+}
+.pickspage td span, 
+.pickspage td i
+{
+  white-space: nowrap;
+  padding-left: 20px;
+}
+.pickspage td i
+{
+  color: green;
+}
+.pickspage td div
+{
+  margin-bottom: 7px;
+}
+.pickspage .cc_file_link
+{
+  font-weight: bold;
+}
+.pickspage h3 {
+  border-bottom: 1px dotted #77A;
+}
+
+.pickspage .cc_stream_page_link, 
+.pickspage .cc_stream_page_link span {
+  padding-left: 5px;
+  margin:0px;
+}
+.pickspage .cc_stream_page_link span {
+}
+</style>
+<h1>ccMixter Radio</h1>
+<p>Enjoy ccMixter music based on some of the popular genres our remixers chose for their work.</p>
+<table class="pickspage">
+<tr><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=ambient+remix"><span
+tal:content="string: ambient" /></a></div></td>
+<td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=chill+remix"><span
+tal:content="string: chill" /></a></div></td></tr>
+
+<tr><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=downtempo+remix"><span
+tal:content="string: downtempo" /></a></div></td><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=experimental+remix"><span
+tal:content="string: experimetal" /></a></div></td></tr>
+
+<tr><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=funky+remix"><span
+tal:content="string: funky" /></a></div></td>
+<td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=hip_hop+remix"><span
+tal:content="string: hip hop" /></a></div></td></tr>
+
+<tr><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=rap+remix"><span
+tal:content="string: rap" /></a></div></td>
+<td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=rock+remix"><span
+tal:content="string: rock" /></a></div></td></tr>
+
+<tr>
+<td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=trip_hop+remix"><span
+tal:content="string: trip hop" /></a></div></td>
+<td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=editorial_pick+remix"><span
+tal:content="string: editors' picks" /></a></div></td>
+</tr>
+
+</table>
+
+
+</div>

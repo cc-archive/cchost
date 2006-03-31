@@ -1,0 +1,71 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="contest_listing">
+  <table tal:repeat="record contest_record" class="cc_contest_listing">
+    <tr tal:condition="not: record/contest-homepage">
+      <td colspan="3">
+          <h2><a href="${record/contest_url}">${record/contest_friendly_name}</a></h2>
+      </td> 
+	</tr>
+    <tr>
+      <td>
+        <img tal:condition="record/contest_bitmap_url" class="cc_contest_bitmap" src="${record/contest_bitmap_url}" />
+      </td>
+      <td>
+        <p class="cc_by_line" tal:condition="record/user_name"><tal:block content="php: CC_lang('Created by:')" /> <a 
+        href="${record/artist_page_url}">${record/user_name}</a></p>
+        <p class="cc_contest_description">${record/contest_description}</p>
+        <tal:block repeat="contest_state record/contest_states" >
+          <p class="${contest_state/css_class}">${contest_state/text}</p>
+        </tal:block>
+      </td>
+      <td style="width: 20%;">
+          <a tal:condition="record/render_source_link" href="${record/render_source_link/href}"
+                id="${record/render_source_link/id}" ><span>${record/render_source_link/title}</span></a>
+          <a tal:condition="record/render_entries_link" href="${record/render_entries_link/href}"
+                id="${record/render_entries_link/id}" ><span>${record/render_entries_link/title}</span></a>
+      </td>
+	</tr>
+	<tr tal:condition="record/contest_vote_online">
+	<td colspan="3" id="${record/contest_short_name}_vote_frame" >
+          <tal:block >
+            <script  language="JavaScript" type="text/javascript" >
+            cc_get_data("${record/contest_vote_url}","${record/contest_short_name}_vote_frame","getting polling data..."); 
+            </script>
+          </tal:block>
+      </td>        
+    </tr>
+  </table>
+  <metal:block use-macro="${prev_next_links}" />
+</metal:block>
+
+<metal:block define-macro="polling_data">
+    <div class="cc_polling_data">
+      <div tal:repeat="poll_entry poll_data/poll_entries" class="cc_poll_entry" style="white-space:nowrap">
+         ${poll_entry/poll_value}  ${poll_entry/poll_percent}%
+         <div align="left" class="cc_polling_bar" style="width:${poll_entry/poll_percent}%" >&nbsp;</div>
+      </div>
+    </div>
+</metal:block>
+</tal:block>

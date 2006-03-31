@@ -1,0 +1,280 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<phptal:block include="string:skin-${skin}-map.xml" />
+
+<tal:block define="topic_flag_tip php: CC_lang('Flag this topic for possible violation of terms');" />
+<tal:block define="upload_flag_tip php: CC_lang('Flag this upload for possible violation of terms');" />
+
+<div class="cc_topic_page">
+  <metal:block use-macro="${macro}" />
+</div>
+
+<metal:block define-macro="post_review">
+  <metal:block use-macro="topics.xml/list_review_record" />
+  <hr />
+  <a name="edit" />
+  <metal:block use-macro="${html_form}" />
+</metal:block>
+
+<metal:block define-macro="post_reply">
+  <tal:block define="show_cmds 0" />
+  <metal:block use-macro="topics.xml/one_topic" />
+<br />
+  <a name="edit" />
+  <metal:block use-macro="${html_form}" />
+</metal:block>
+
+<metal:block define-macro="left_reviews">
+  <div class="cc_topic_left"><a id="commentcommand" href="${left_link/url}"><span>${left_link/text</span></a></div>
+  <br clear="right" />
+  <metal:block use-macro="recent_reviews" />
+</metal:block>
+
+<metal:block define-macro="recent_reviews">
+  <table class="cc_topic_table" cellspacing="0" cellpadding="0">
+    <tal:block repeat="topic topics">
+      <tal:block define="reviewer topic/reviewer" />
+      <tr>
+        <td>
+           <span class="cc_topic_date" tal:content="php: CC_datefmt('${topic/topic_date}','M d h:i a')" />
+          </td>
+         <td class="cc_topic_thumb_head">
+            <a class="cc_user_link" 
+               href="${home-url}people/${reviewer/user_name}">${reviewer/user_real_name}</a> 
+            <span tal:content="php: CC_lang('review of');" /> <a class="cc_file_link" 
+                   href="${topic/file_page_url}">${topic/upload_name}</a> 
+            <span tal:content="php: CC_lang('by');" /> <a  class="cc_user_link" 
+                   href="${topic/artist_page_url}">${topic/user_real_name}</a> 
+         </td>
+      </tr>
+      <tr>
+        <td>         
+          <div class="cc_topic_see">
+             <a id="commentcommand" 
+                href="${topic/topic_permalink}"><span tal:content="php: CC_lang('see review...');" /></a>
+          </div>
+         </td>
+         <td class="cc_topic_thumb">
+              <tal:block condition="not: topic/topic_search_result_info" >
+              <tal:block define="text php: CC_strchop('${topic/topic_text_plain}',80);" />
+              <a  href="${topic/topic_permalink}"><span tal:content="text" /></a>
+          </tal:block>
+          <tal:block condition="topic/topic_search_result_info" >
+              <a class="cc_search_result_info" href="${topic/topic_permalink}">
+                <tal:block content="structure topic/topic_search_result_info" />
+              </a>
+          </tal:block>
+        </td>
+      </tr>
+    </tal:block>
+  </table>
+  <metal:block use-macro="${prev_next_links}" />
+</metal:block>
+
+<metal:block define-macro="post_edit">
+  <a name="edit" />
+  <metal:block use-macro="${html_form}" />
+</metal:block>
+
+<metal:block define-macro="list_reviews">
+  <metal:block use-macro="topics.xml/list_review_record" />
+  <br />
+  <metal:block use-macro="topics.xml/list_topics" />
+</metal:block>
+
+<metal:block define-macro="one_topic">
+  <table class="cc_topic_table" cellspacing="0" cellpadding="0">
+      <metal:block use-macro="topic_head" />
+      <tr>
+         <td class="cc_topic_avatar"><a tal:condition="topic/user_avatar_url" href="${topic/artist_page_url}"><img 
+                 src="${topic/user_avatar_url}" /></a>
+         </td>
+         <td  class="cc_topic_text">
+           <div class="cc_topic_text_div" id="topic_text_${topic/topic_id}">
+              ${topic/topic_text_html}
+           </div>
+         </td>
+      </tr>
+      <tr tal:condition="show_cmds" >
+         <td />
+         <metal:block use-macro="topic_cmds" />
+      </tr>
+      <tr tal:condition="not: show_cmds" >
+        <td />
+        <td class="cc_topic_cmds">&nbsp;</td>
+      </tr>
+  </table>
+</metal:block>
+
+<metal:block define-macro="topic_head">
+  <tr>
+     <td class="cc_topic_reviewer"><a name="${topic/topic_id}" />
+       <a href="${topic/artist_page_url}" class="cc_user_link">${topic/user_real_name}</a>
+     </td>
+     <td  class="cc_topic_header">
+        <span class="cc_topic_date" tal:content="php: CC_datefmt('${topic/topic_date}','F d, Y h:i a')" />
+              <metal:block use-macro="topics.xml/topic_flag" />
+     </td>
+  </tr>
+</metal:block>
+
+<metal:block define-macro="list_topics">
+  <table class="cc_topic_table" cellspacing="0" cellpadding="0">
+    <tal:block repeat="topic topics">
+      <tr>
+         <td class="cc_topic_reviewer"><a name="${topic/topic_id}" />
+           <a href="${topic/artist_page_url}" class="cc_user_link">${topic/user_real_name}</a>
+         </td>
+         <td  class="cc_topic_header">
+         <a tal:condition="topic/topic_permalink" class="cc_topic_permalink" href="${topic/topic_permalink}">permalink</a>
+            <span class="cc_topic_date" tal:content="php: CC_datefmt('${topic/topic_date}','F d, Y h:i a')" />
+              <metal:block use-macro="topics.xml/topic_flag" />
+         </td>
+      </tr>
+      <tr>
+         <td rowspan="2" class="cc_topic_avatar">        
+             <div class="cc_review_count" tal:condition="topic/user_num_reviews"> <a 
+                 href="${home-url}reviews/${topic/user_name}?qtype=leftby">${topic/user_num_reviews} <span tal:content="php: CC_lang('Reviews');" /></a></div><a 
+                 tal:condition="topic/user_avatar_url" href="${topic/artist_page_url}"><img 
+                 src="${topic/user_avatar_url}" /></a>
+                 <div class="cc_topic_admin" 
+                     tal:condition="topic/user_is_admin" tal:content="php: CC_lang('Admin')" />
+         </td>
+         <td  class="cc_topic_text">
+           <div class="cc_topic_text_div" id="topic_text_${topic/topic_id}">
+              ${topic/topic_text_html}
+           </div>
+         </td>
+      </tr>         
+      <tr>
+        <metal:block use-macro="topics.xml/topic_cmds" />
+      </tr>
+      <metal:block use-macro="topics.xml/topic_children" />
+    </tal:block>
+  </table>
+</metal:block>
+
+<metal:block define-macro="topic_cmds">
+    <td class="cc_topic_cmds" id="topic_cmds_${topic/topic_id}">
+      <tal:block repeat="cmd topic/commands">
+       <a tal:condition="cmd/script" onclick="${cmd/script}" class="cc_topic_cmd" id="commentcommand" 
+           href="#{$review/topic_id}"><span>${cmd/text}</span></a>
+       <a tal:condition="not: cmd/script" class="cc_topic_cmd" id="commentcommand" 
+           href="${cmd/url}"><span>${cmd/text}</span></a>
+      </tal:block>
+    </td>
+</metal:block>
+
+<metal:block define-macro="topic_flag">
+<tal:block condition="exists: topic/flag_url"> <a class="cc_flag_url" 
+   title="$topic_flag_tip" href="${topic/flag_url}"><span>&nbsp;</span></a></tal:block>
+</metal:block>
+
+<metal:block define-macro="topic_children">
+   <tr tal:condition="topic/topic_children">
+   <td class="cc_topic_child_branch">&nbsp;</td>
+   <td>
+     <table class="cc_topic_child_table" cellspacing="0" cellpadding="0">
+       <tal:block repeat="topic topic/topic_children">
+          <tal:block condition="not: topic/topic_deleted">
+            <tr>
+               <td class="cc_topic_reviewer"><a name="${topic/topic_id}" />
+                 <a href="${topic/artist_page_url}" class="cc_user_link">${topic/user_real_name}</a>
+               </td>
+               <td  class="cc_topic_header">
+                  <span class="cc_topic_date" tal:content="php: CC_datefmt('${topic/topic_date}','F d, Y h:i a')" />
+              <metal:block use-macro="topics.xml/topic_flag" />
+               </td>
+            </tr>
+            <tr>
+               <td />
+               <td  class="cc_topic_text">
+                 <div class="cc_topic_text_div" id="topic_text_${topic/topic_id}">
+                    ${topic/topic_text_html}
+                 </div>
+               </td>
+            </tr>         
+            <tr>
+              <td />
+              <metal:block use-macro="topics.xml/topic_cmds" />
+            </tr>
+         </tal:block>
+         <tal:block condition="topic/topic_deleted">
+            <tr><td />
+             <td class="cc_topic_deleted">**<span tal:content="php: CC_lang('Topic deleted');" />**</td>
+            </tr>
+          </tal:block>
+          <metal:block use-macro="topics.xml/topic_children" />
+       </tal:block>
+     </table>
+   </td>
+   </tr>
+</metal:block>
+
+<metal:block define-macro="list_review_record">
+  <table id="cc_file_info" cellpadding="0" cellspacing="0">
+    <tr>
+      <th tal:content="php: CC_lang('by:');" /> 
+      <td><metal:block use-macro="${upload_flag}" /><a href="${record/artist_page_url}" class="cc_user_link" 
+          tal:content="php: CC_strchop('${record/user_real_name}',35)" /></td>
+    </tr>
+    <tr>
+      <th tal:content="php: CC_lang('date:');" /> 
+      <td tal:content="php: CC_datefmt('${record/upload_date}','F d, Y h:i a')" />
+    </tr>
+    <tr tal:condition="exists: record/flag_url">
+      <td />
+      <td>
+         <a class="cc_flag_link" href="${record/flag_url}"><span>$upload_flag_tip</span></a>
+      </td>
+    </tr>
+    <tr>
+      <tal:block condition="record/ratings_score"      define="rate_head_show string:inline" />
+      <tal:block condition="not: record/ratings_score" define="rate_head_show string:none" />
+      <th><span id="cc_rate_head_${record/upload_id}" style="display: ${rate_head_show}" 
+            tal:content="php: CC_lang('ratings:');"  />
+      </th>
+      <td id="cc_rate_block_${record/upload_id}">
+        <metal:block use-macro="${ratings_stars}" />
+      </td>
+    </tr>
+      <tr tal:condition="record/ok_to_rate" >
+        <th /> 
+        <td>
+          <metal:block use-macro="${dl_edit_ratings}" />
+        </td>
+      </tr>
+  </table>
+  <tal:block define="menu record/local_menu" />
+  <metal:block use-macro="${dl_action_buttons}" />
+
+  <br style="clear:both" />
+      <tal:block condition="record/upload_description_html">
+        <tal:block define="says php: CC_lang('says'); 
+                           dtitle string:${record/user_real_name} ${says}; 
+                           dtext  record/upload_description_html" />
+        <metal:block use-macro="${show_box}" />
+      </tal:block>
+</metal:block>
+</tal:block>

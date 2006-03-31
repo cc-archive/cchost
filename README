@@ -1,0 +1,82 @@
+Release notes for ccHost
+
+1.   What's New (Stable)
+2.   System Requirements
+3.   New Installations/Upgrading from RC1 and before
+4.   Known Issues
+4.   Contacts (Reporting Bugs)
+5.   Licensing Information
+
+
+1.   What's New
+---------------------------------
+
+Please read the document NEWS.
+
+
+2.   System Requirements
+---------------------------------
+
+a.  APACHE.  This system has been tested on Apache 1 and 2 Windows and
+Linux.  If you get it working on IIS or OSX let us know.  We haven't
+tried.
+
+b.  PHP.  This system requires PHP 4, and prefers 4.3 but has been seen
+working on 4.4 and 5.  PHP 3 will never be supported.
+
+c.  MYSQL.  MySQL 4 is required.
+
+d.  GETID3.  Download the GetID3 (1.7.3) library from
+http://www.getid3.org/#download, then untar and place into ccHost at
+cchost/getid3/. 
+
+Ratings, Editorial Picks, Reviews, Comments and Contest Polls are built into 
+the core ccHost. Support for phpBB2 is removed in this release.
+
+e.  BROWSER.  Should work on any browser.  COOKIES must be enabled in
+your browser in order to log in to a session.
+
+
+3. New Installations/Upgrading from previous ccHost
+------------------------------------------------------
+
+To install follow the instructions in ccadmin/INSTALL.TXT
+
+
+4. Known Issues
+------------------------
+
+a. There are no major issues known with this release
+
+
+5. Contacts (Reporting Bugs)
+---------------------------------
+Mailing for dicussion, support and announcements:
+
+https://lists.sourceforge.net/lists/listinfo/cctools-cchost
+
+Project WIKI with every link you ever wanted (including
+bug reporting) and some tips contributed by users:
+
+http://wiki.creativecommons.org/wiki/CcHost
+
+
+6. Licensing Information
+---------------------------
+
+Creative Commons has made the contents of this package
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+

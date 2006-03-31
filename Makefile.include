@@ -1,0 +1,30 @@
+# This file includes the names of files we are including.
+
+DIST_FILES_STATIC=AUTHORS \
+	ChangeLog \
+	COPYING \
+	LICENSE.TXT \
+	README \
+	VERSION \
+	cc-custom.php \
+	cc-error-msg.txt \
+	cc-includes.php \
+	cc-non-ui.php \
+	index.php \
+	Makefile.include
+
+DIST_FOLDERS=ccadmin \
+	ccextras \
+	ccfiles \
+	ccimages \
+	cclib \
+	cctemplates \
+	cctools \
+	bin
+	#mixter-files \
+	#mixter-lib \
+	
+DIST_FILES_GENERATED=NEWS \
+	PRESS \
+	cchost.spec
+

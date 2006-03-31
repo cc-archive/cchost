@@ -1,0 +1,78 @@
+<tal:block>
+
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="pool_info_head">
+  <div class="cc_pool_info">
+    <div class="cc_rbroundbox">
+      <div class="cc_rbtop"><div></div></div>
+      <div class="cc_rbcontent">
+        <a  id="poollink" href="${pool_info/pool_site_url}" 
+                class="cc_external_link">${pool_info/pool_site_url}</a>
+        <span id="pooldesc">${pool_info/pool_description}</span>
+        </div><!-- /cc_rbcontent -->
+      <div class="cc_rbbot"><div></div></div>
+    </div><!-- /cc_rbroundbox -->
+  </div>
+</metal:block>
+
+<metal:block define-macro="pool_item_listing">
+  <div class="cc_pool_item_listing" tal:repeat="item pool_items" >
+    <h2><a href="${item/file_page_url}" >${item/pool_item_name}</a></h2>
+    <p class="cc_small_by_line" tal:condition="item/pool_item_artist">
+      <tal:block content="php: CC_lang('by')" /> ${item/pool_item_artist}
+    </p>
+    <p><tal:block content="php: CC_lang('from the sample pool:')" /> 
+      <a href="${item/pool_item_pool_url}">${item/pool_name}</a>
+    </p>
+    <p><tal:block content="php: CC_lang('External link:')" />
+      <a href="${item/pool_item_url}" class="cc_external_link">${item/pool_item_url}</a>
+    </p>
+    <tal:block define="record item" />
+    <metal:block use-macro="${show_remix_parents}" />
+    <metal:block use-macro="${show_remix_children}" />
+  </div>
+  <metal:block use-macro="${prev_next_links}" />
+</metal:block>
+
+
+<metal:block define-macro="pool_approvals">
+ <form tal:condition="pool_info/records" action="${pool_info/approve_url}" method="post">
+  <div class="cc_pool_approval_list">
+    <table>
+      <tr><th tal:repeat="head pool_info/heads">${head}</th></tr>
+      <tr tal:repeat="r pool_info/records">
+         <td><input type="checkbox" name="approve[]" value="${r/pool_item_id}" checked="checked"/></td>
+         <td><a href="${r/pool_item_url}" target="_blank" class="cc_pool_item_external_link">${r/pool_item_name}</a></td>
+         <td><a href="${r/pool_item_download_url}" class="cc_pool_download_link">${r/pool_name}</a></td>
+         <td>${r/pool_item_artist}</td>
+         <td>${r/upload_name} by ${r/user_real_name} (${r/user_name})</td>
+      </tr>
+    </table>
+  </div>
+  <input type="submit" value="Submit" />
+  </form>
+</metal:block>
+
+
+</tal:block>
