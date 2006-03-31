@@ -1,0 +1,37 @@
+*NOTE: This is just a quick point release for PROJECT_VERSION. This release
+is only to show what is in this release primarily.*
+
+ccHost Release Notes
+====================
+
+Version: 1.0.2
+
+ccHost 1.0.2 is primarily a bugfix release. Victor added a couple 
+of large features like file import (for large files). Also added in this 
+release are packaging to make installation for the system easier. Also, this 
+makes it eastier to backup your configuration files.
+
+New Features
+============
+
+	* Large file import for admins to use.
+	* Added packaging infrastructure to make releases easier.
+	* Added bin/ folder with scripts to make backing up of configs easier.
+
+Bugfixes
+========
+
+	* Fixed new submit forms to show up in throttle rules
+	* Fixed so that	verify errors are caught when file has no extension
+	* Fixed download button to review topic header
+	* Fixed topic count that got out of sync when topic was deleted
+	* Check for and display forum feed button
+	* Fixed so that new submit forms show throttle rules
+	* Put site into email subject when generating email for whitelisting
+	* Added next/prev button for activity log
+	* Fixed drifting of download popup menu on every click in IE
+	* favicon.ico: Moved into ccimages per legal review of the site.
+	* cc-install-db.php: Changed some initial install values for the
+	footer and header to be legally compliant.
+
+

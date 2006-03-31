@@ -1,0 +1,53 @@
+# Makefile for ccHost
+#
+# Please see Makefile for information about what this file is constructed from.
+#
+# Copyright 2005, Jon Phillips & Paul Howarth.
+# Copyright 2005, Creative Commons.
+#
+# It basically just installs gotmail and the manpage into the
+# right places and also provides a mechanism to remove them.
+#
+
+APPNAME = cchost
+INSTALLOPTS = -c
+INSTALL = install $(INSTALLOPTS)
+MANCOMPRESS = .gz
+PREFIX = /usr
+EXEC_PREFIX = $(PREFIX)
+BINDIR = $(EXEC_PREFIX)/bin
+MANDIR = $(PREFIX)/man
+MAN1DIR = $(MANDIR)/man1
+WEBDIR=/var/www
+DESTDIR =
+
+all:	
+#$(APPNAME).1$(MANCOMPRESS)
+
+install: all
+#	$(INSTALL) -m 755 -d $(DESTDIR)$(BINDIR)
+#	$(INSTALL) -m 755 -d $(DESTDIR)$(MAN1DIR)
+
+	# JON:	
+	# $(INSTALL) -m 755 $(APPNAME) $(DESTDIR)$(BINDIR)
+#
+#
+#	$(INSTALL) -m 644 $(APPNAME).1$(MANCOMPRESS) $(DESTDIR)$(MAN1DIR)
+
+uninstall:
+	rm $(DESTDIR)$(WEBDIR)/$(APPNAME)
+#	rm $(DESTDIR)$(MANDIR)/$(APPNAME).1$(MANCOMPRESS)
+
+clean:
+#	rm -f $(APPNAME).1$(MANCOMPRESS)
+
+#$(APPNAME).1: $(APPNAME).man AUTHORS
+#	cat $(APPNAME).man AUTHORS > $(APPNAME).1
+
+#$(APPNAME).1.gz: $(APPNAME).man AUTHORS
+#	cat $(APPNAME).man AUTHORS | gzip -c > $(APPNAME).1.gz
+
+#$(APPNAME).1.bz2: $(APPNAME).man AUTHORS
+#	cat $(APPNAME).man AUTHORS | bzip2 -c > $(APPNAME).1.bz2
+
+.PHONY: all install uninstall clean

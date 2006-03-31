@@ -1,0 +1,102 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+<div style="font-style:Courier New, courier, serif;font-size: 12px">
+
+<h1>Some admin tips and how-tos</h1>
+<h2>How to change the look of the site</h2><p>
+There are several ways to change the look of the site depending on how much 
+you want to change.
+</p><p>
+<b>Creating a Virtual Site</b>
+</p><p>
+
+ccHost can create 'virtual' installations without modifying your
+server installation. Read more about this feature <a href="${home-url}viewfile/howtovirtual.xml">here</a>.
+</p><p>
+
+<b>Changing Elements on the Page</b>
+</p><p>
+
+Use the 'Manage Site' menu item to change the look and feel of the site.
+</p><p>
+
+<b>Adding custom files</b>
+</p><p>
+
+You create custom HTML pages by authoring <a href="http://www.google.com/search?q=well-formed+xhtml"><b>well-formed XHTML</b></a> files and putting 
+them in the <b>ccfiles</b> directory.
+</p><p>
+
+To view the files you can browse to 
+</p><p>
+
+${home-url}viewfile/<i>your_file_name.xml</i>
+</p><p>
+
+You can use the last part: viewfile/<i>your_file_name.xml</i> as menu and navigation 
+URL actions.
+</p><p>
+
+HINT: These files are parsed as <a href="http://phptal.motion-twin.com/manual/php4/index.html"><b>PHPTAL</b></a> files which can include php calls into 
+the runtime system when rendering. 
+</p><p>
+
+Many 'features' of ccMixter are implemented with PHPTAL enhanced xml files.
+</p><p>
+
+<b>Creating a Skin</b>
+</p><p>
+
+Currently there is no interactive way to change styles on the site. 
+</p><p>
+
+To customize the look (fonts, colors, element placement, background 
+images, etc.) you should make a new skin and edit the .CSS file.
+</p><p>
+
+To customize which elements are on the screen and how they interact 
+with the user a working knowledge of <a href="http://phptal.motion-twin.com/manual/php4/index.html"><b>PHPTAL</b></a> is required.
+</p><p>
+
+To create a skin you need three files. They must all start with the 
+prefix 'skin-' and live in the <b>cctemplates</b> directory.
+</p>
+
+<ul>
+<li>skin-<b>skin_name</b>.css</li>
+<li>skin-<b>skin_name</b>.xml</li>
+<li>skin-<b>skin_name</b>-map.xml</li>
+</ul>
+<p>
+See the skin called <b>simple</b> for a comprehensive look at what 
+a skin can look like.
+</p><p>
+
+HINT: Skins can share many (most, all) PHPTAL macros by re-using
+macros references in the "map" file. This file tells the page
+rendering engine where to find instances of macros being called 
+for.
+</p>
+
+</div>
+</div>

@@ -1,0 +1,294 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="prev_next_links">
+  <table id="cc_prev_next_links"><tr>
+    <td tal:condition="prev_link">
+      <a class="cc_gen_button" href="${prev_link}"><span tal:content="back_text" /></a>
+    </td>
+    <td class="cc_list_list_space">&nbsp</td>
+    <td tal:condition="next_link">
+      <a class="cc_gen_button" href="${next_link}"><span tal:content="more_text" /></a>
+    </td>
+  </tr></table>
+</metal:block>
+
+<metal:block define-macro="show_macro_patterns">
+    <table class="cc_macro_patterns">
+    <tr tal:repeat="pattern macro_patterns">
+       <td class="cc_macro_pattern_label">${repeat/pattern/key}</td>
+       <td class="cc_macro_pattern">${pattern}</td>
+    </tr>
+    </table>
+</metal:block>
+
+
+<metal:block define-macro="render_image">
+    <div class="cc_image_thumbnail">
+        <div class="cc_image_thumbnail_title" tal:content="php: CC_lang('Thumbnail');"></div>
+        <img class="cc_image_thumbnail_img" src="${record/thumbnail_url}" style="${record/thumbnail_style}" />
+    </div>
+</metal:block>
+
+<metal:block define-macro="ajax_block">
+<script type="text/javascript">
+//<!--
+
+var cc_xml;
+var cc_target;
+
+//just ping ccHost code
+function cc_ping_cchost(url)
+{
+    if (window.XMLHttpRequest)
+    { 
+        cc_xml = new XMLHttpRequest();            //set the request
+    }
+    else if(window.ActiveXObject)
+    { 
+        //Create our RequestObject
+        cc_xml = new ActiveXObject("Microsoft.XMLHTTP"); 
+    }
+
+    if( cc_xml )
+    {
+        cc_xml.open("GET", url, true);            //set the page to request
+        cc_xml.send(null);                        //initialize the request 
+    }
+}
+
+//Create our function to start the request
+function cc_get_data(url,element_name,default_msg)
+{
+    //inform there is an action!
+    iobj = new cc_obj(element_name);
+    iobj.obj.innerHTML = default_msg;
+
+    cc_target = element_name;
+
+    //determine if the browser is Moz, FF, NN, Op
+    if (window.XMLHttpRequest)
+    { 
+        cc_xml = new XMLHttpRequest();            //set the request
+        cc_xml.onreadystatechange = cc_response;  //function to call on each set
+        cc_xml.open("GET", url, true);            //set the page to request
+        cc_xml.send(null);                        //initialize the request 
+    }
+    // IE
+    else if(window.ActiveXObject)
+    { 
+        //Create our RequestObject
+        cc_xml = new ActiveXObject("Microsoft.XMLHTTP"); 
+        if(cc_xml)
+        { 
+            cc_xml.onreadystatechange = cc_response;  //function to call on each step
+            cc_xml.open("GET", url, true);            //set the page to request
+            cc_xml.send(null);                        //initialize the request
+        }
+    }
+    else
+    {   // er, this'll be lovely
+        document.write("<iframe src=\"" + url + "\" style=\"border:0px;width:80%;\"></iframe>");
+    }       
+}
+          
+function cc_response()
+{
+    //Look to see if the request is in the 4th stage (complete)         
+    if(cc_xml.readyState == 4)
+    {
+        //Make sure that we get a sucess page status   
+        target = new cc_obj(cc_target);
+
+        if(cc_xml.status == 200)
+        {
+            target.obj.innerHTML = cc_xml.responseText;
+        }
+        else
+        {
+            target.obj.innerHTML = "err, no";
+        }
+    }
+}
+//-->
+</script>
+</metal:block>
+
+<metal:block define-macro="admin_menu_page">
+  <div id="cc_admin_menu_page">
+    <h2>${admin_menu/global_title}</h2>
+    <h3>${admin_menu/global_help}</h3>
+    <tal:block define="link_table_items admin_menu/global_items" />
+    <metal:block use-macro="${link_table}" />
+    <h2>${admin_menu/local_title}</h2>
+    <h3>${admin_menu/local_help}
+      <select onchange="document.location = '${root-url}' + this.options[this.options.selectedIndex].value + '/admin/site';">
+        <tal:block repeat="root admin_menu/config_roots">
+          <option tal:condition="root/selected" selected="selected" value="${root/cfg}" tal:content="root/text" />
+          <option tal:condition="not: root/selected" value="${root/cfg}" tal:content="root/text" />
+        </tal:block>
+      </select>
+    </h3>
+    <div id="cc_admin_hint">${admin_menu/local_hint}</div>
+    <tal:block define="link_table_items admin_menu/local_items" />
+    <metal:block use-macro="${link_table}" />
+  </div>
+</metal:block>
+
+<metal:block define-macro="link_table">
+<table class="cc_link_table">
+ <tr tal:repeat="lti link_table_items"><th><a href="${lti/action}" title="${lti/help}">${lti/menu_text}</a></th><td>${lti/help}</td></tr>
+</table>
+</metal:block>
+
+<metal:block define-macro="howididit_link">
+  <h3 class="cc_howididit_link"><a href="${record/howididit_link/action}">${record/howididit_link/text}</a></h3>
+</metal:block>
+
+<metal:block define-macro="howididit">
+ <div class="cc_howididit">
+    <tal:block repeat="head howididit_fields">
+      <tal:block define="fkey repeat/head/key" />
+      <tal:block condition="howididit_info/$fkey" tal:on-error="">
+          <tal:block define="dtitle head/label" />
+          <tal:block define="dtext howididit_info/$fkey" />
+          <metal:block use-macro="${show_box}" />
+      </tal:block>
+    </tal:block>
+</div>
+</metal:block>
+
+<metal:block define-macro="ratings_field">
+<style> #rl { white-space:nowrap;vertical-align:middle; } </style>
+<tal:block define="us string:ccimages/stars/star-full.gif" />
+<tal:block define="u string:$root-url$us" />
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="500" /><label><img src="${u}"/><img src="${u}"/><img src="${u}"/><img src="${u}"/><img src="${u}"/></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="400" /><label><img src="${u}"/><img src="${u}"/><img src="${u}"/><img src="${u}"/></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="300" checked="checked"/><label><img src="${u}"/><img src="${u}"/><img src="${u}"/></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="200" /><label><img src="${u}"/><img src="${u}"/></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="100" /><label><img src="${u}"/></label></div>
+</metal:block>
+
+<metal:block define-macro="show_activity_log">
+<style>
+.cc_log_view td
+{
+  white-space: nowrap;
+}
+</style>
+<table class="cc_log_view" cellspacing="0" cellpadding="0">
+  <tr><th>Date</th><th>IP</th><th>User</th><th>Event</th><th></th><th></th></tr>
+  <tr tal:repeat="e activity_log">
+    <td tal:content="php: CC_datefmt('${e/activity_log_date}','F d, Y h:i:s a')" />
+    <td>${e/activity_log_ip}</td>
+    <td><a href="${home-url}people/${e/activity_log_user_name}">${e/activity_log_user_name}</a></td>
+    <td><b>${e/activity_log_event}</b></td>
+    <td>${e/activity_log_param_1}</td>
+    <td>${e/activity_log_param_2}</td>
+    <td>${e/activity_log_param_3}</td>
+  </tr>
+</table>
+<metal:block use-macro="${prev_next_links}" />
+</metal:block>
+
+<metal:block define-macro="edit_files_links">
+ <div class="cc_form_about" style="width:90%;margin:auto;">${field/form_about}</div>
+ <table id="cc_edit_files" cellspacing="0" cellpadding="0">
+    <tr tal:repeat="file field/files" >
+      <th tal:content="php: CC_lang('Replace:')"/>
+      <td>
+        <a href="${field/urls/upload_replace_url}/${file/file_id}" >${file/file_name}</a>
+      </td>
+      <th tal:content="php: CC_lang('Nickname: ')"/>
+      <td>
+        <a href="${field/urls/upload_nicname_url}/${file/file_id}"> $file/file_nicname</a>
+      </td>
+      <td>
+        <tal:block condition="not: repeat/file/end">
+          <a id="movedownfile" href="${field/urls/upload_jockey_down_url}/${file/file_id}"
+              tal:content="php: CC_lang('Down')"></a>
+        </tal:block>
+      </td>
+      <td>
+        <tal:block condition="not: repeat/file/start">
+          <a id="moveupfile" href="${field/urls/upload_jockey_up_url}/${file/file_id}"
+              tal:content="php: CC_lang('Up')"></a>
+        </tal:block>
+      </td>
+      <td>
+        <tal:block condition="not: repeat/file/start">
+          <a id="deletefile" href="${field/urls/upload_delete_url}/${file/file_id}" 
+              tal:content="php: CC_lang('Delete')"></a>
+        </tal:block>
+      </td>
+    </tr>
+    <tr>
+      <th colspan="2"><a id="uploadmore" href="${field/urls/upload_new_url}" tal:content="php: CC_lang('Upload more formats')"></a></th>
+    </tr>
+  </table>
+</metal:block>
+
+<metal:block define-macro="show_editor_picks">
+
+<table id="edpick_stream_links"><tr><td>
+<div class="cc_podcast_link"><a href="${home-url}podcast/page?tags=editorial_pick">PODCAST Ed. Picks</a></div></td><td>
+<div class="cc_stream_page_link"><a href="${home-url}stream/page?tags=editorial_pick">STREAM Ed. Picks</a></div></td></tr></table>
+
+ <table tal:repeat="ep editorial_picks" class="cc_pick_ed_table" cellpadding="0" cellspacing="0">
+     <tr>
+        <td style="width:100px;height:100px;"><img tal:condition="ep/user_avatar_url" src="${ep/user_avatar_url}" /></td>
+        <td >
+            <h2><a href="${ep/file_page_url}">${ep/upload_name}</a></h2>
+            <p class="cc_small_byline">by <a href="${ep/artist_page_url}">${ep/user_real_name}</a></p>
+        </td>
+        <td style="text-align:right;padding-right:7px;">
+        <div style="float:right">
+          <tal:block condition="ep/script_link">
+              <a id="cc_streamfile" href="javascript:void(0)" onclick="${ep/script_link/url}"><span tal:content="ep/script_link/text"/></a> 
+          </tal:block>
+          <tal:block condition="ep/stream_link">
+              <a id="cc_streamfile" href="${ep/stream_link/url}"><span tal:content="ep/stream_link/text"/></a> 
+          </tal:block>
+          <a id="cc_downloadbutton" href="${ep/files/0/download_url}"><span tal:content="php: CC_lang('Download')" /></a>
+        </div>
+        &nbsp;
+        </td>
+    </tr>
+    <tal:block repeat="pick ep/upload_extra/edpicks">
+      <tr><td colspan="3" class="cc_pick_head"><a href="${home-url}people/${repeat/pick/key}" class="cc_pick_ed_name">${pick/reviewer}</a>  sez:</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="cc_pick_text">${pick/review_html}</td>
+      </tr>
+      <tr>
+          <td colspan="3" style="text-align:right;white-space:nowrap;" class="cc_pick_head">
+              <span class="cc_pick_date" ><tal:block content="php: CC_lang('Edited:');" /> 
+                <tal:block content="pick/edited" /></span> </td>
+      </tr>
+    </tal:block>
+</table>
+<metal:block use-macro="${prev_next_links}" />
+<p tal:condition="exists: all_picks_link"><a href="${all_picks_link}" tal:content="php: CC_lang('See all picks...')" /></p>
+</metal:block>
+
+</tal:block>

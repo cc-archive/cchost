@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" 
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:content="http://purl.org/rss/1.0/modules/content/"
+   xmlns:cc="http://web.resource.org/cc/" 
+   >
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<channel>
+<title>${channel_title}</title>
+<link>${home-url}</link>
+<description>${site-description}</description>
+<language>en-us</language>
+
+<pubDate>${rfc822-pub-date}</pubDate>
+<lastBuildDate>${rfc822-build-date}</lastBuildDate>
+
+<item tal:condition="feed_items" tal:repeat="item feed_items">
+  <title>${item/collection_name}</title>
+  <link>${item/collection_api_url}</link>
+  <description>${item/collection_description}</description>
+</item>
+</channel>
+
+</tal:block>
+
+</rss>

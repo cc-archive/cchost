@@ -1,0 +1,50 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+<style>
+.hs
+{
+    font-style:Courier New, courier, serif;
+    font-size: 12px;
+    vertical-align: top;
+}
+</style>
+<div class="hs"><h1>Congratulations</h1><h1>You've installed ccHost ${cc-host-version}</h1>
+
+<tal:block condition="is_admin">
+Here are some places to start :<ul><li>To change css-skins use <a class="cc_menu_link" href="${home-url}admin/settings">Settings</a></li>
+<li>Change the <a class="cc_menu_link" href="${home-url}admin/content">Page Contents</a></li>
+<li>To add administrators use <a class="cc_menu_link" href="${home-url}admin/settings">Settings</a></li>
+<li>Edit the <a class="cc_menu_link" href="${home-url}admin/menu">Menus</a></li>
+<li>Pick the allowable <a class="cc_menu_link" href="${home-url}admin/formats">File Formats</a></li></ul>
+</tal:block>
+
+<tal:block condition="not_admin">
+You need to be logged in as Admin to configure the site.
+</tal:block>
+
+
+<p>
+The text for this file is in ${files-root}home.xml .
+</p>
+</div>
+</div>

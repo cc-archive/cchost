@@ -1,0 +1,78 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+<style>
+a { font-weight: bold; }
+</style>
+<h1 class="user">Welcome to ccMixter</h1>
+
+<div style="float:left; width:44%;/*border:1px solid #8F9EA2;background:#D8E5E9;*/margin-right:20px;">
+  <p><strong>Sampling, Mashing, Sharing</strong></p>
+
+  <img src="/mixter-files/ccdj.gif" alt="" height="100" border="0" style="float:right;margin-left:17px;border:none;" />
+  <p>This is a community music site featuring remixes licensed under <a href="http://creativecommons.org/">Creative Commons</a>, where you can listen to, sample, mash-up, or interact with music in whatever way you want.</p>
+
+  <p><b>Remixers</b> If you're into sampling, remixing and mash-ups grab the  <a href="${root-url}media/view/media/samples">sample packs</a> and <a href="${root-url}media/view/media/pells">a cappellas</a> for download and you can upload your version back into ccMixter, for others to enjoy and re-sample. All legal.</p>
+
+  <p><b>Podcasters, directors and music lovers</b> If you're into music, browse this site to hear some of the <a href="${root-url}media/view/media/picks">great remixes</a> people have built from sampling music on this site, all licensed for use under Creative Commons license.</p>
+
+<div style="border: 1px solid #888;margin:14px;background:#ffe;">
+  <div style="padding:10px;">
+
+  <h2 style="font-size:18px;margin:0px;font-weight:bold;font-family:arial;">ccMixter II is Here!
+  <a href="http://ccmixter.org/forum/viewtopic.php?p=6727" style="font-size: 11px">details...</a></h2>
+  </div>
+</div>
+
+
+</div>
+
+<div style="float:left; width:52%; ">
+  <div style="border: 1px solid #888;">
+    <div style="padding:10px;">
+
+      <h2 style="font-size:18px;margin:0px;font-weight:bold;">Previous Contest: Magnatune/Lisa DeBenedictis Remix Contest </h2>
+      <div style="float:right"><a href="http://magnatune.com"><img border="0" src="/mixter-files/magnatune_logo.gif"  /></a></div>
+      <p style="font-size:12px;font-weight:normal;">ccMixter recently hosted a remix contest featuring the 
+      work of Magnatune recording artist <b>Lisa DeBenedictis</b> with the entire Magnatune catalog of over 1,700 pieces of music available
+      for source material. The creators of the top 10 winning entries (up to two winning entries per contestant) will get signed to a <a href="http://magnatune.com/info/terms">Magnatune recording contract</a> and appear on a commercially available remix album.</p>
+
+        <h3><a href="${root-url}magnatune/view/contest/about">Click here for all the details...</a></h3>
+      </div>
+
+</div>
+
+  <div style="border: 1px solid #888;margin-top:10px;background:#ffe;">
+    <div style="padding:10px;">
+        <h2 style="font-size:18px;margin:0px;font-weight:bold;">Previous Contest: The Fine Art of Sampling Contests Winners Announced</h2>
+
+        <div style="float:right"><a href="${root-url}freestylemix/view/contest/winners"><img border="0" src="/mixter-files/wired-remix.gif" style="border:1px solid #ccc;" /></a></div>
+
+        <p style="font-size:12px;font-weight:normal;">ccMixter recently hosted two remix contests where entrants had a chance to
+      be featured on the Creative Commons release THE WIRED CD: Ripped. Sampled. Mashed. Shared.  Sampling <strong>The Beastie Boys, David Byrne, DJ Danger Mouse</strong>, and many others to win. Or, win a chance to be on the next <strong>Fine Arts Militia</strong> album <strong>featuring Chuck D</strong>.</p>
+
+        <p style="margin-bottom:0px;"><h3><a href="${root-url}freestylemix/view/contest/winners" style="background:#ffe;">Full List of Winners</a>...</h3></p>
+        <p style="margin-bottom:0px;"><h3><a href="${root-url}freestylemix/view/contest/about" style="background:#ffe;">More information about the contests</a>...</h3></p>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,87 @@
+*NOTE: This is just a quick point release for PROJECT_VERSION. This release
+is only to show what is in this release primarily.*
+
+PRESS RELEASE: ccHost Bugfix Release 1.0.2 Announced
+
+San Francisco, USA - October 19, 2005 - ccHost, an open source project that 
+provides web-based infrastructure to support collaboration, sharing, and 
+storage of multi-media using the Creative Commons licenses and metadata, 
+released a bugfix version 1.0.2 today. The primary features in this release 
+include administrative file import for large file uploads and new packaging 
+infrastructure. Bugfixes include:
+
+    * Fixed new submit forms to show up in throttle rules
+    * Fixed so that verify errors are caught when file has no extension
+    * Fixed download button to review topic header
+    * Fixed topic count that got out of sync when topic was deleted
+    * Check for and display forum feed button
+    * Fixed so that new submit forms show throttle rules
+    * Put site into email subject when generating email for whitelisting
+    * Added next/prev button for activity log
+    * Fixed drifting of download popup menu on every click in IE
+    * favicon.ico: Moved into ccimages per legal review of the site.
+    * cc-install-db.php: Changed some initial install values for the footer 
+      and header for legal compliance.
+
+The upcoming 1.1.0 release of ccHost will focus on expanding the types of files
+that are supported by the system. Also, better statistics output are potential 
+features in the upcoming release.
+
+The community encourages participation by interested people as this project is 
+fun, used in Creative Commons sponsored ccMixter website (www.ccmixter.org) and
+has great potential for up and coming contributors.
+
+Chat with other developers on channel #cc on irc.freenode.org, join the project
+mailing list (https://lists.sourceforge.net/mailman/listinfo/cctools-cchost), 
+and edit the project wiki page to help shape this project's future direction 
+(http://wiki.creativecommons.org/wiki/ccHost).
+
+
+Website
+
+http://wiki.creativecommons.org/wiki/ccHost
+
+
+Download
+
+http://sourceforge.net/project/showfiles.php?group_id=80503&package_id=156675
+
+
+Feature Requests
+
+https://sourceforge.net/tracker/?group_id=80503&atid=559969
+
+
+Bug Reports
+
+https://sourceforge.net/tracker/?atid=559966&group_id=80503&func=browse
+
+
+Roadmap (Project Timeline)
+
+http://wiki.creativecommons.org/wiki/CcHost:Roadmap
+
+
+About ccHost
+
+The goal of this project is to spread media content that is licensed under 
+Creative Commons throughout the web in much the same way that weblogs spread 
+CC licensed text. ccHost is web-based infrastructure that may be used to host 
+and allow for commenting, remixing, and distribution globally. The more 
+installations of ccHost and its variations, the more content there will be 
+available for enjoyment and artistic re-use in a sane and legal setting. ccHost
+is what is used for the infamous Creative Commons CC Mixter project which 
+supports legal media sharing and remixing. For more information, contact Jon 
+Phillips at jon@creativecommons.org.
+
+
+About Creative Commons
+
+A nonprofit founded in early 2002, Creative Commons promotes the creative 
+re-use of intellectual and artistic workswhether owned or in the public domain 
+by empowering authors and audiences. It is sustained by the generous support of
+the Center for the Public Domain, the John D. and Catherine T. MacArthur 
+Foundation, the Omidyar Network, and the Hewlett Foundation. For more 
+information, visit Creative Commons' website or contact Mia Garlick at 
+mia@creativecommons.org. 
+

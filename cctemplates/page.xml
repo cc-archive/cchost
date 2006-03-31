@@ -1,0 +1,199 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="html_head">
+  <head>
+  <title>${site-title}<tal:block condition="page-title"> ${page-title}</tal:block></title>
+  <tal:block repeat="head_link head_links">
+  <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
+  </tal:block>
+  <script type="text/javascript">
+  //<!--
+  function cc_obj(name)
+  {
+    if (document.getElementById)
+    {
+      this.obj = document.getElementById(name);
+      if( !this.obj )
+        alert("no obj: " + name);
+      this.style = document.getElementById(name).style;
+    }
+    else if (document.all)
+    {
+      this.obj = document.all[name];
+      this.style = document.all[name].style;
+    }
+    else if (document.layers)
+    {
+      this.obj = document.layers[name];
+      this.style = document.layers[name];
+    }
+  }
+
+  function cc_set_text(obj,text)
+  {
+    if( obj.innerText )
+       obj.innerText = text;
+    else if( obj.childNodes )
+      obj.childNodes[0].nodeValue = text;
+  }
+  //-->
+  </script>
+  <tal:block condition="script_blocks" repeat="script script_blocks">
+  <tal:block define="tscript ${script}" />
+  <metal:block use-macro="${tscript}" />
+  </tal:block>
+  </head>
+</metal:block>
+
+<metal:block define-macro="main_body">
+<body>
+<div class="cc_hide">
+    <a href="#content" tal:attributes="title php: CC_lang('Skip the site navigation to go directly to the content');"
+        tal:content="php: CC_lang('Skip to content')" />
+</div>
+<div id="cc_wrapper1">
+  <div id="cc_wrapper2">
+    <tal:block condition="show_body_header">
+      <div class="cc_header" id="cc_header">
+        <div class="cc_headerpadding">    
+          <tal:block condition="beta_message"><metal:block use-macro="${show_beta_message}" /></tal:block>
+          <h1 id="cc_site_name"><a href='${root-url}' title="${site-title}">${banner-html}</a></h1>
+          <p tal:condition="site-description" tal:content="site-description" />
+          <ul tal:condition="tab_info" tal:attributes="title php: CC_Lang('Main Site Sections');" >
+             <tal:block define="rtabs php: array_reverse(${tab_info/tabs},true);" />
+             <tal:block repeat="tab rtabs"><li tal:condition="exists: tab/selected" class="selected_tab" ><a href="${tab/url}" tal:content="tab/text" /></li>
+                  <li tal:condition="exists: tab/normal" ><a tal:content="tab/text"  href="${tab/url}" title="${tab/help}" /></li>
+                  </tal:block>
+          </ul>
+          <form tal:condition="sticky_search"  id="cc_search" action="${home-url}search/results" method="get" >
+            <div>
+              <a href="${home-url}search" id="cc_adv_search" tal:content="php: CC_lang('Advanced search');"/>
+              <input class="cc_form_text" id="search_text" name="search_text" value="" />
+              <input type="hidden" name="search_type" value="any" />
+              <input type="hidden" name="search_in" value="3" />
+              <tal:block define="search_t php: CC_lang('Search')" />
+              <input class="cc_form_submit" id="cc_submit" value="${search_t}" type="submit" />
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <hr class="cc_hide" /> 
+    </tal:block>
+    <div id="cc_content">
+      <tal:block condition="show_body_header">
+        <div id="cc_leftside">
+          <div class="cc_sidebar">
+            <tal:block repeat="menu_group menu_groups">
+              <p tal:content="menu_group/group_name" />
+              <ul><li tal:repeat="menu_item menu_group/menu_items"><a tal:attributes="href menu_item/action" >${menu_item/menu_text}</a></li></ul>
+            </tal:block>
+
+            <tal:block condition="custom_macros" repeat="custom_macro custom_macros" >
+              <metal:block use-macro="${custom_macro}" />
+            </tal:block>
+                  
+            <p>
+            <span tal:condition="feed_links" tal:repeat="feed_link feed_links" class="cc_feed_link">
+              <a class="cc_feed_button" type="${feed_link/type}" href="${feed_link/href}" 
+                 title="${feed_link/title}">${feed_link/link_text}</a> ${feed_link/link_help}<br />
+            </span>
+            </p>
+          </div>        
+        </div><!-- leftside -->
+
+        <div class="cc_logged_in_as" tal:condition="logged_in_as">Logged in as: 
+          <div class="cc_logged_in_name">${logged_in_as}</div> <a href="${logout_url}" tal:content="php: CC_lang('log out')"></a>
+        </div>
+      </tal:block>
+
+      <div id="cc_centercontent">
+
+        <h1 tal:condition="page-title" tal:content="page-title" />
+
+        <tal:block replace="">
+          The CONTENT STARTS/ENDS comments are searched for at runtime so do not remove or change them it
+        </tal:block>
+
+        <a name="content" />
+
+        <!-- CONTENT STARTS -->
+
+        <tal:block condition="macro_names" repeat="macro_name macro_names" >
+          <tal:block define="tname ${macro_name}" />
+          <metal:block use-macro="${tname}" />
+        </tal:block>
+        <tal:block condition="inc_names" repeat="inc_name inc_names" >
+          <metal:block use-macro="${inc_name}" />
+        </tal:block>
+
+        <!-- CONTENT ENDS -->
+        
+        <br clear="all" />
+
+      </div><!-- centerconent -->
+
+      <tal:block condition="show_body_footer">
+        <hr class="cc_hide" />  
+        <br clear="all" />
+
+        <div class="cc_rbroundbox">
+          <div class="cc_rbtop"><div></div></div>
+          <div class="cc_rbcontent">
+            <div class="cc_tinytext">${site-license} ${footer}</div>
+          </div><!-- /cc_rbcontent -->
+          <div class="cc_rbbot"><div></div></div>
+        </div><!-- /cc_rbroundbox -->
+      </tal:block>
+    </div><!-- content -->
+  </div><!-- wrapper2 -->
+</div><!-- wrapper1 -->
+
+<tal:block condition="end_script_blocks" repeat="script end_script_blocks">
+  <tal:block define="tscript ${script}" />
+  <metal:block use-macro="${tscript}" />
+</tal:block>
+
+</body>
+</metal:block>
+
+
+<metal:block define-macro="show_prompts">
+    <tal:block repeat="prompt prompts">
+        <div class="cc_${prompt/name}">${prompt/value}</div>
+    </tal:block>
+</metal:block>
+
+<metal:block define-macro="show_beta_message">
+   <div class="cc_beta_message">${beta_message}</div>
+</metal:block>
+
+<metal:block define-macro="show_box">
+  <div class="cc_box">
+    <h3 tal:content="dtitle" />
+    <p tal:content="structure dtext" />
+  </div>
+</metal:block>
+
+</tal:block>

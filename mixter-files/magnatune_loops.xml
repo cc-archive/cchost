@@ -1,0 +1,160 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+<style>
+.hs
+{
+    font-style:Courier New, courier, serif;
+    font-size: 12px;
+    vertical-align: top;
+}
+.msgs
+{
+  float: right;
+  width: 24%;
+}
+.msgs td div
+{
+  padding: 10px;
+  background-color:#eee;
+  border:1px solid #ddd;
+  margin: 6px;
+}
+.msgs td a
+{
+  font-weight: bold;
+}
+</style>
+<h1>Magnatune Samples Library</h1>
+
+<table class="msgs" cellpadding="0" cellspacing="0">
+<tr>
+  <td><div>All music and samples pointed to on this page are covered under a
+  Creative Commons <a href="http://creativecommons.org/licenses/by-nc-sa/2.0">Attribution NonCommercial ShareAlike</a> license. 
+  Please note that any work derived from this music <i>must</i> be released under the same license.</div></td>
+</tr>
+<tr>
+  <td><div>Music licensed under the <b>Sampling</b> licenses (i.e. much of what is currently available on ccMixter) is
+  specifically <b>NOT</b> allowed to used in music that also has samples from Magnatune.</div></td>
+</tr>
+</table>
+
+<h2>Studio Tracks</h2>
+
+<p>Several Magnatune recording have made the individual studio tracks available for remixing. 
+(These tracks are under the same Attribution-Noncommericial-ShareAlike license as every thing else in the 
+Magnatune catalog.). These are in WAV format (archived in ZIP files) and taken directly from the 
+pre-mixed recording sessions:</p>
+
+<p><a href="http://magnatune.com/extra/remix/tracks/thornside.zip">Tracks to "Lambourgini" and "Can I Be A Star" by Burnsee Thornside</a></p>
+<p><a href="http://magnatune.com/extra/remix/tracks/clayne.zip">Tracks to "The King" by c. layne</a></p>
+<p><a href="http://magnatune.com/extra/remix/tracks/brad_sucks.zip">Tracks to "Sick as a Dog" by Brad Sucks</a></p>
+<p><a href="http://magnatune.com/extra/remix/tracks/drop_trio.zip">Tracks to "Lefty's Alone" by Drop Trio</a></p>
+<p><a href="http://magnatune.com/extra/remix/tracks/debenedictis.zip">A cappellas for "Below" and "Cuckoo" by Lisa DeBenedictis</a></p>
+<hr />
+
+<a name="loops"></a>
+<h2>Pre-Cut Loop Libraries</h2>
+
+<p>In order to jump start your remix CC Mixter has prepared a set of loop libraries culled from the 
+Magnatune library. There are over 400 loops in the total set with every imaginable instrumentation
+and genre. All loops are have been pre-cut (where appropriate) and are each labelled with 
+key and tempo (BPM). In addition the loop files are all ACIDized which means applications like ACID,
+FL Studio, SONAR, Garageband and many others will be able to correctly detect the key and tempo
+for each of the loops.</p>
+
+<table border="0" cellpadding="3" cellspacing="0" >
+<tr>
+<td valign="top">
+<form method="post" action="${mt/loop_preview_url}">
+  <select name="loop_artist" size="9" onchange="on_get_selection(this,'get_loops_button')">
+    <tal:block repeat="artist mt/artists" >
+      <option value="${artist/loop_artist}">${artist/artist} - ${artist/artistdesc}</option>
+    </tal:block>
+  </select><br />
+  <input type="submit" value="Get Loop Library Listing" name="get_loops_button" id="get_loops_button" disabled="1" />
+  </form>
+</td>
+<td style="vertical-align:top;padding-left:5px;">  
+  <p tal:condition="mt/loop_preview">Download the entire 
+    <a href="http://magnatune.com/extra/remix/loops/${mt/loop_preview/loop_artist}.zip">${mt/loop_preview/loop_artist_name} Loop Set</a>
+    in ZIP archive format.
+  </p>
+  <div style="white-space:nowrap" tal:condition="mt/loop_preview" tal:repeat="loop mt/loop_preview/loops">
+    <a href="${mt/loop_stream_url}/${loop/loop_id}.m3u" id="mt_streamfile"><span>Preview</span></a>&nbsp;&nbsp; "${loop/loop_filename}" 
+  </div>
+</td>
+</tr>
+</table>
+
+<hr />
+<a name="catalog"></a>
+<h2>Cut Your Own from the Magnatune Catalog</h2>
+<p>You can also use samples from the entire Magnatune catalog. Here you can browse, stream and 
+download individual tracks in high quality MP3:</p>
+<br />
+<table border="0" cellpadding="3" cellspacing="0" >
+<tr>
+<td valign="top">
+  <style> optgroup { font-weight: bold; font-family: verdana; font-style: normal;} </style>
+  <form method="post" action="${mt/album_preview_url}">
+      <select name="album_pick" size="19" onchange="on_get_selection(this,'get_album_button')"
+          style="font-size: 11px">
+          <tal:block repeat="artist mt/albums_by_artist">
+            <optgroup label="${artist/artist}">
+              <option value="[d]" style='color:#777' tal:content="php: CC_strchop('${artist/artistdesc}',50);" />
+              <tal:block repeat="album artist/albums">
+                <option value="${artist/artist}::${album/albumname}">"${album/albumname}"</option>
+              </tal:block>
+            </optgroup>
+          </tal:block>
+      </select>
+  <br />
+  <input type="submit" name="get_album_button" id="get_album_button" value="Get Album Listing" disabled="1"/>
+
+  </form>
+
+</td>
+<td style="vertical-align:top;padding-left:5px;">
+
+<p tal:condition="mt/album_preview">
+  To downlad a track from "${mt/album_preview/album}" by <b>${mt/album_preview/artist}</b> right-click on a 
+  link below and select 'Save Target As...'
+
+<div style="white-space:nowrap" tal:repeat="cut mt/album_preview/songs" >
+  <a href="${mt/song_stream_url}/${cut/songid}.m3u">Stream</a>&nbsp;&nbsp; 
+  <a href="${cut/download_mp3}">Download</a> "${cut/trackname}" 
+</div>
+</p>
+
+</td>
+</tr></table>
+<script>
+function on_get_selection(listbox,button_id)
+{
+   var button = document.getElementById(button_id);
+   var opt    = listbox.options[listbox.selectedIndex];
+   button.disabled = opt.value == "[d]";
+}
+</script>
+
+</div>
