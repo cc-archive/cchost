@@ -1,0 +1,142 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+
+To see this file create a link to: media/viewfile/picks.xml
+
+-->
+</tal:block>
+<h1 tal:content="php: CC_lang('Editors\' Picks and Listener Favorites');" />
+<style>
+.pickspage td
+{
+    vertical-align: top;
+    padding-right: 12px;
+}
+.pickspage
+{
+    margin-left: 3%;
+    width: 90%;
+}
+.pickspage td p
+{
+  margin: 1px;
+}
+.pickspage td a
+{
+  white-space: nowrap;
+}
+.pickspage td span, 
+.pickspage td i
+{
+  white-space: nowrap;
+  padding-left: 20px;
+}
+.pickspage td i
+{
+  color: green;
+}
+.pickspage td div
+{
+  margin-bottom: 7px;
+}
+.pickspage .cc_file_link
+{
+  font-weight: bold;
+}
+.pickspage h3 {
+  border-bottom: 1px dotted #77A;
+}
+.pickspage .cc_podcast_link, 
+.pickspage .cc_stream_page_link, 
+.pickspage .cc_podcast_link span, 
+.pickspage .cc_stream_page_link span {
+  padding-left: 5px;
+  margin:0px;
+}
+.pickspage .cc_podcast_link span, 
+.pickspage .cc_stream_page_link span {
+}
+</style>
+<table class="pickspage">
+<tr>
+<td rowspan="2" style="padding-right: 25px;">
+    <h3 tal:content="php: CC_lang('Editors\' Picks')" />
+    <table cellspacing="0" cellpadding="0" id="edpick_stream_links"><tr><td>
+<div class="cc_podcast_link"><a href="${home-url}podcast/page?tags=editorial_pick"><span
+tal:content="php: CC_lang('PODCAST Ed. Picks')" /></a></div></td><td>
+<div class="cc_stream_page_link"><a href="${home-url}stream/page?tags=editorial_pick"><span
+tal:content="php: CC_lang('STREAM Ed. Picks')" /></a></div></td></tr></table>
+
+    <tal:block define="erecords php: CC_tag_query('editorial_pick', 'all', 'upload_date', 'DESC', 15)" />
+    <tal:block condition="erecords">
+        <div tal:repeat="item erecords"><a href="${item/file_page_url}" 
+                     class="cc_file_link">${item/upload_name}</a><br />
+          <span><tal:block content="php: CC_lang('by');" /> <a href="${item/artist_page_url}">${item/user_real_name}</a></span>
+          <p tal:repeat="editorial item/upload_extra/edpicks">
+               <i> <tal:block content="php: CC_strchop('${editorial/review}',40)" /> <a href="${editorial/review_url}">(more) </a></i>
+          </p>
+        </div>
+    </tal:block>
+    <div><a href="${home-url}editorial/picks" tal:content="php: CC_lang('More editors\' picks...')" /></div>
+</td>
+
+<td>
+    <h3 tal:content="php: CC_lang('Highest Listener Rated (Recent)');" />
+    <tal:block define="chart php: CC_ratings_chart(18)" />
+    <tal:block condition="chart" >
+      <tal:block define="chart_ids php: CC_ids_for_records($chart)" />
+      <table cellspacing="0" cellpadding="0" id="edpick_stream_links"><tr><td>
+  <div class="cc_podcast_link"><a href="${home-url}podcast/page?ids=${chart_ids}&nosort=1"><span
+  tal:content="php: CC_lang('PODCAST Favorites')" /></a></div></td><td>
+  <div class="cc_stream_page_link"><a href="${home-url}stream/page?ids=${chart_ids}&nosort=1"><span
+  tal:content="php: CC_lang('STREAM Favorites')" /></a></div></td></tr></table>
+        <div tal:repeat="item chart"><a href="${item/file_page_url}" 
+                         class="cc_file_link">${item/upload_name}</a><br />
+        <span><tal:block content="php: CC_lang('by');" /> <a href="${item/artist_page_url}">${item/user_real_name}</a></span>
+        </div>
+    </tal:block>
+    <div tal:condition="not: chart" >No chart</div>
+</td>
+</tr>
+<tr>
+<td>
+    <h3 tal:content="php: CC_lang('Highest Listener Rated (All Time)');" />
+    <tal:block define="chart php: CC_ratings_chart(5,'forever')" />
+    <tal:block condition="chart" >
+      <tal:block define="chart_ids php: CC_ids_for_records($chart)" />
+      <table cellspacing="0" cellpadding="0" id="edpick_stream_links"><tr><td>
+  <div class="cc_podcast_link"><a href="${home-url}podcast/page?ids=${chart_ids}&nosort=1"><span 
+  tal:content="php: CC_lang('PODCAST All Time')" /></a></div></td><td>
+  <div class="cc_stream_page_link"><a href="${home-url}stream/page?ids=${chart_ids}&nosort=1"><span 
+  tal:content="php: CC_lang('STREAM All Time')" /></a></div></td></tr></table>
+        <div tal:repeat="item chart"><a href="${item/file_page_url}" 
+                         class="cc_file_link">${item/upload_name}</a><br />
+        <span><tal:block content="php: CC_lang('by');" /> <a href="${item/artist_page_url}">${item/user_real_name}</a></span>
+        </div>
+    </tal:block>
+    <div tal:condition="not: chart" >No chart</div>
+</td>
+</tr>
+</table>
+
+
+
+</div>

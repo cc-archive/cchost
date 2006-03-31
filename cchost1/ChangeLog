@@ -1,0 +1,259 @@
+2005-10-18  Jon Phillips  <jon@creativecommons.org>
+
+	* README README.TXT: Renamed README.TXT to README.
+
+	* bin/README bin/fix_permission.sh: Added script for fixing
+	permissions and generally made a place for not web-based scripts.
+
+	* bin/backup_configs.sh: Backup the config files so that we don't 
+	erase our setup when we do CVS up.
+	
+	* bin/fix_live_setup.sh: Fix our setup so that it will work live. This
+	includes moving ccadmin to a backed up position as well as moving any 
+	backud up config files to their standard positions.
+	
+	* bin/restore_configs.sh: If there are backed up files, then they are
+	placed in their standard positions as in CVS.
+
+	* PRESS.in: Press Release file to be included along with the release.
+
+	* README ccadmin/INSTALL.txt: Updated README file and also 
+	ccadmin/INSTALL.txt with the newest instructions (which aren't that 
+	much different).
+
+	* ccHost-phpBB2-template.zip: Added this package to the mix. Yes, it 
+	changes, but is necessary in order to do forum integration. I 
+	decided it important to include.
+
+
+2005-10-18  Victor Stone  <fourstones@users.sf.net>
+
+	* ccextras/cc-import-files.php: simple way to admin's to import files
+	already on a server into the system (useful for very large files that 
+	were ftp'd to the server outside of the cchost system)
+	* cclib/cc-submit.php: 'enable' flag was not being honored on
+	submit forms
+
+	* *: new submit forms were not showing up in throttle rules, not all 
+	verify errors were being caught when file had no extension, download 
+	button didn't work in review topic header, topic count was out of sync 
+	when topic was deleted, check for and display forum feed button, new 
+	submit forms were not showing up in throttle rules, put site into 
+	email subject when generating email for whitelisting, forgot next/prev 
+	button for activity log, download popup menu was drifting down on every
+	click in IE
+	
+2005-10-17  Jon Phillips  <jon@creativecommons.org>
+
+	* Makefile Makefile.dist: Packaging nearly complete to make releases
+	easier.
+
+2005-10-09  Jon Phillips  <jon@creativecommons.org>
+
+	* favicon.ico: Moved into ccimages per legal review of the site.
+
+	* cc-install-db.php: Changed some initial install values for the
+	footer and header to be legally compliant.
+
+	* VERSION: Added version number file.
+
+	* COPYING LICENSE.TXT: Deleted LICENSE.TXT and moved to COPYING, a
+	standard location.
+
+	* Makefile Makefile.dist: Added Makefiles to help with building the
+	release packages and adjusting other parts of the release process.
+	These do not work yet really, but I committed and changed primary
+	parts of the them for testing and development.
+
+
+--------------------------------
+Release 1.0.1.
+--------------------------------
+   feature: now with editable/searchable BPM for music files
+   feature: localized user pages
+   feature: minimal support for >PHP4.4 (including 5)
+   feature: Google search
+
+--------------------------------
+Release 1.0.RC1 
+--------------------------------
+
+   feature: a real skin!
+   feature: email login confirmation
+   feature: lost password 
+   feature: user resizable textareas
+   feature: rewrote throttle engine
+   feature: ip banning/user account management
+   feature: feed on remixes of/by
+   feature: submit forms module allows admins total 
+       control over submissions
+   feature: folksonomy tag alias translators other options
+   feature: admin activity log
+   feature: 'how i did it'
+   added: count added to ratings score
+   added: count included in ratings
+   added: logfile location now editable by admins
+   added: 'popular tags' on uploads (ala Mixter)
+   added: explicit 'hide' to menu options
+   added: now showing upload message 
+          (hiding form on submit - broken on Safari)
+   dev: macro call outs are now done through redirection in page.xml
+   bugfix: review counts were off
+   bugfix: addtofavorites broken in mixed case name
+   bugfix: home url was not a link
+   bugfix: new reviews were broken
+   bugfix: not stripping slashes for short comments
+   bugfix: avatars were not showing up in phpBB2
+   bugfix: sp: nicname to nickname
+   bugfix: was showing 'uploading' prompt when editing nickname
+   bugfix: couldn't see a user's files if they were not remix,original or sample
+   bugfix: certain cases you couldn't see contest files in general listing
+   bugfix: not prompting properly after deleting a file
+   bugfix: titles were not set properly on submit forms
+   bugfix: macro patterns were not showing up
+   bugfix: showing prompts twice
+   bugfix: no longer allow dupes of javascript blocks
+   bugfix: mal-formed HTML when there was an error on the form
+   bugfix: user profile was not being sync'd with phpBB2
+   bugfix: pools weren't accounted for in editing remixes
+   bugfix: was installing licenses into blank config
+   bugfix: fixed paging so it doesn't clobber other get args
+   bugfix: bad path created for new uploads
+   bugfix: now only show pool items with remix histories
+   bugfix: no longer showing welcome screen for the wrong person
+   bugfix: enabled MIDI uploads
+   bugfix: admin not shown delete uplaod menu item
+
+--------------------------------
+Beta 0.3.0 Release
+--------------------------------
+
+   - podcast this page, this user
+   - stream this page
+   - ratings engine and related config screens, templates
+   - all admin functions moved off main menu
+   - bug: missing mass mailer menu item
+   - verify email address in contacts form
+   - bug: some dynamic menus blowing up on upgrades
+   - music realted submit forms (a cappella, sample)
+   - bug: wrong url in prompt after mass mail error
+   - change home page to no-tabs version so upgrade 
+     prompts don't upset folks
+   - edit remixes after upload
+   - add support for pools implemented locally (magnatune)
+   - bug: was stepping on contest tags when editing remixes
+   - check credentials (!) on remix edit
+   - changed cookie format (more secure? er...)
+   - bug: contest wasn't setting original/remix tags on entries
+   - enable track-type swapping on the fly (original<->remix)
+   - delete review thread when song is deleted
+   - showing short name in sidebar items
+   - only show users with uploads
+   - bug: edpick wasn't taking the first time
+   - no longer assuming contest is remix based
+   - bug: feeds were not properly utf8 encoding
+   - bug: remix tree was left behind after upload delete
+   - lower case check for admin
+   - global avatar override introduced (for sharing with forums)
+
+--------------------------------
+Beta 0.2.3 Release
+--------------------------------
+  - mail contact to user now enabled
+  - mass mailing enabled (url is /media/admin/massmail)
+  - licenses are editable after upload as part of 
+    'file properties' (but to only more lax licenses)
+  - licenses for remixes can be re-adjusted if underlying
+    sources change their licenses
+  - now setting file permissions to group read/writeable
+  - including unix permissions help on install
+  - license choices are now saved at the vroot/config level
+    that means a given contest can have it's own set
+    of licenses
+  - artists listing now listed in rev. reg date order
+  - default tab setting in navigator is no longer limited  
+    to just files in that vroot (except for contests)
+  - bug: app was blowing up uploading avatars
+  - bug: app was blowing up with no reviews and user 
+    not logged in
+  - bug: credential check was failing (case sensitive
+    lookup)
+  - bug: template was generating garbage on 
+    'rating' link
+  - bug: tags were splitting on spaces
+  - bug: don't show ratings menu when upload is banned
+  - bug: review topics were not attaching to upload
+    records properly
+  - perf: num reviews cached in uploads table (no longer 
+    calling into phpBB for every review count)
+
+--------------------------------
+Beta 0.2.2 Release
+--------------------------------
+
+ - made username search case INsensitive during login
+ - added admin change pw form (no menu, use admin/password to access)
+ - don't show menu item if record is banned
+ - bug: editorial_pick blown away on properties edit
+ - All Tags display page only shows tags with > 2 hits
+ - Tag display page now pages after 'max display'
+ - Limit 'I Sampled This' box with 'more' link(ala Mixter)
+ - complete rewrite (again) of how topics are created/viewed
+ - bug: wrong number of reviews displayed 
+ - template errors are now displayed to admins to make
+   finding bugs in home.xml easier
+ - inline reviews are only shown on a song's main page
+ - bug: collision renaming created bad filename
+ - collapse multiple '_' in renamed files
+ - bug: streaming was broken with spaces in filename 
+    (WIRED CD needed this)
+ - changing all URL handling from 'mode' to 'ccm'
+     (mode conflicted with phpBB and probably others)
+ - now look for CC_EXTRAS_DIR in environment to load 
+      plugs ins and updates
+ - several links were bad on song listings pages,
+   especially in 'Samples used from' section
+
+--------------------------------
+Beta 0.2.1 Release
+--------------------------------
+
+Wrong zip was uploaded to SourceForge.
+
+--------------------------------
+Beta 0.2.0 Release
+--------------------------------
+
+Fixes several bugs
+
+- Error on new registration
+- Editorial picks and ratings gets and shows the wrong records
+- Avatars were blowing up when there were errors in the form
+- Fixed bad listings when 'Latest Remixes' were visible
+
+Most new 'features' were actually for enabling ccMixter specific scenarios between 
+international Creative Commons installations, hence the 0.2 bump. As of today the 
+RESTful sample pool API in this release is considered 'undocumented' and therefore 
+should be ignored by non-Creative Commons clients until further notice (i.e. 
+after it works).
+
+--------------------------------
+Beta 0.1.1 Release
+--------------------------------
+
+The update fixes several problems with the initial release:
+
+- Bad paths being generated for contests and media pages (especially when not using mod_rewrite)
+- NonCommercial license was pointing to the wrong image file
+- System was demanding a cookie domain for several installations 'null' was the right choice
+- Added API for developers to check for and add permanant menu items on the fly
+- Checking for writable phptal_cache directory when template generation fails
+
+Patches for 0.1.0 installation are included in this release in ccextras/cc-update.php
+which will be picked up the first time you run the new installation.
+
+--------------------------------
+0.1 Beta Release
+--------------------------------
+
+Initial beta release

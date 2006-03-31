@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" 
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:content="http://purl.org/rss/1.0/modules/content/"
+   xmlns:cc="http://web.resource.org/cc/" 
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:itunes="http://www.itunes.com/DTDs/Podcast-1.0.dtd"
+   >
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+  <channel>
+    <title>${channel_title}</title>
+    <link>${home-url}</link>
+    <description>${channel_description}</description>
+    <language>en-us</language>
+
+    <pubDate>${rfc822-pub-date}</pubDate>
+    <lastBuildDate>${rfc822-build-date}</lastBuildDate>
+
+    <item tal:condition="feed_items" tal:repeat="item feed_items">
+      <title>${item/upload_name}</title>
+      <link>${item/file_page_url}</link>
+      <pubDate>${item/rss_pubdate}</pubDate>
+      <dc:author>${item/user_real_name}</dc:author>
+      <description>${item/upload_description} </description>
+      <content:encoded><![CDATA[${item/upload_description_html}]]></content:encoded>
+      <enclosure url="${item/files/0/download_url}" 
+          length="${item/files/0/file_rawsize}" type="${item/files/0/file_format_info/mime_type}"/>
+      <category tal:repeat="tag_link item/upload_taglinks">${tag_link/tag}</category>
+      <guid>${item/file_page_url}</guid>
+      <tal:block condition="item/has_parents" repeat="parent item/remix_parents">
+        <dc:source resource="${parent/file_page_url}" />
+      </tal:block>
+      <cc:License rdf:about="${item/license_url}">
+	    <tal:block condition="item/license_permits" repeat="pt php:CC_split_tags(${item/license_permits})">
+          <cc:permits rdf:resource="http://web.resource.org/cc/${pt}" />
+        </tal:block>
+        <tal:block condition="item/license_required" repeat="rd php:CC_split_tags(${item/license_required})">
+          <cc:permits rdf:resource="http://web.resource.org/cc/${rd}" />
+        </tal:block>
+        <tal:block condition="item/license_prohibits" repeat="ph php:CC_split_tags(${item/license_prohibits})">
+          <cc:prohibits rdf:resource="http://web.resource.org/cc/${ph}" />
+        </tal:block>
+      </cc:License>
+    </item>
+  </channel>
+</rss>

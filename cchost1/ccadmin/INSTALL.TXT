@@ -1,0 +1,91 @@
+
+$Header$
+
+
+=========================================
+|  Installation notes for 1.0.2 (Stable) |
+=========================================
+
+
+ UPGRADE EXISTING ccHOST INSTALLATIONS
+---------------------------------------
+
+For 1.0.RC installations:
+
+Copy this installation over your current installation. It 
+is not necessary to run the installer.
+
+For everybody before that (beta testers):
+
+A full reinstall in needed. All configuration and 
+customations will be lost.
+
+
+ NEW INSTALL: (no phpBB2 integration)
+------------------------------------------------
+If you have basic knowledge of using FTP you can use these steps to 
+quickly get started. 
+
+ 1. Unzip the ccHost ZIP archive on your local system and
+    copy the files (retaining the directory sturcture)
+    to you web server.
+
+ 2. Browse to http://where_you_installed_cchost/ccadmin 
+
+ 3. Follow the instructions from there on...
+
+UNIX Installations Take Note: on the last screen of the 
+installation process you'll be prompted to read about
+specific issues regarding file permissions. DO NOT 
+SKIP THIS STEP!!!!
+
+
+ NEW INSTALL: (with phpBB2 integration)
+------------------------------------------------
+
+  1. Unzip the ccHost ZIP archive on your local system and
+     copy the files (retaining the directory sturcture)
+     to you web server.
+
+  2. Download and install phpBB:
+     http://www.phpbb.com/downloads.php
+
+  2. Create a "Reviews" forum. MAKE NOTE of the 
+     forum ID number in the Administrators panel.
+
+ 3. Unzip the cchost-phpBB-template ZIP archive
+    in cctools directory to your local system -- 
+    this should create a 'cchost' directory.
+
+ 4. Copy that 'cchost' directory into your phpBB2/templates 
+    directory at the same level as 'subSilver'
+
+ 5. NOTE: If you installed ccHost into the root directory of your 
+    server you can SKIP this step. 
+
+      In the file phpBB2\templates\cchost\cchost.cfg
+
+         $cc_host_root = '/';
+
+      Replace the backslash '/' with your ccHost directory
+      (as seen in the BROWSER relative to your domain name):
+
+	 $cc_host_root = '/cchost_dir/';
+
+ 6. In the phpBB2 Administration panel, under 
+    'Styles Admin' select 'Add'
+
+ 7. Click ' install' next to 'cchost'
+
+ 8. Under 'General Admin' select 'Configuation'
+
+ 9. Select 'cchost' for the 'Default Style' and select 'override users 
+    style' then click 'Submit'
+     (Don't freak when your screen loses all styles.)
+
+ 10. Log out of phpBB2
+
+ 11. Browse to http://where_you_installed_cchost/ccadmin 
+
+ 12. Follow the instructions from there on...
+
