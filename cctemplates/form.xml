@@ -1,0 +1,175 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="grow_textarea_script">
+<script type="text/javascript">
+//<!--
+function cc_grow_textarea(elemname)
+{
+  var elemobj;
+  var elemlink;
+  elemobj = new cc_obj(elemname);
+  if( elemobj )
+  {
+      elemlink = new cc_obj('grow_' + elemname);
+      if( elemobj.style.height == '100px' )
+      {
+          cc_set_text(elemlink.obj,'[ - ]');
+          elemobj.style.height = '300px';
+          elemobj.style.width = '450px';
+      }
+      else
+      {
+          cc_set_text(elemlink.obj,'[ + ]');
+          elemobj.style.height = '100px';
+          elemobj.style.width = '300px';
+      }
+      elemobj.obj.focus();
+  }
+}
+//-->
+</script>
+</metal:block>
+
+<metal:block define-macro="hide_form_on_submit_script">
+<div class="cc_submit_form_message" style="display:none" id="form_submit_message">${form_submit_message}</div>
+<script type="text/javascript">
+//<!--
+
+function cc_hide_form_and_submit()
+{
+  if( navigator.userAgent.indexOf('Safari') > -1 )
+  {
+    var submit_button = new cc_obj('form_submit');
+    if( submit_button )
+    {
+      submit_button.obj.value = "Submission in process, please wait...";
+    }
+  }
+  else
+  {
+    var the_form;
+    var message_div;
+    the_form = new cc_obj('${form_id}');
+    the_form.style.display = 'none';
+    message_div = new cc_obj('cc_form_submit_message');
+    message_div.style.display = 'block';
+  }
+  return(true);
+}
+
+function cc_init_form_capture()
+{
+  var submit_button = new cc_obj('form_submit');
+  if( submit_button )
+    submit_button.obj.onclick = cc_hide_form_and_submit;
+}
+
+cc_init_form_capture();
+
+//-->
+</script>
+</metal:block>
+
+<metal:block define-macro="html_form">
+    <div tal:condition="exists: show_form_submit_message" id="cc_form_submit_message" style="display:none;" >
+      <h2 tal:content="php: CC_lang('Upload in progress');" />
+      <p  tal:content="php: CC_lang('This might take a while..');" />
+      <p  tal:content="php: CC_lang('Do not close your browser or click on any links, that may cancel your upload (!)');" />
+    </div>
+
+    <form action="${form_action}" method="${form_method}" class="cc_form" 
+        id="${form_id}" tal:attributes="enctype form-data | nothing" >
+
+        <tal:block condition="form_macros" repeat="macro_name form_macros" >
+          <tal:block define="tname ${macro_name}" />
+          <metal:block use-macro="${tname}" />
+        </tal:block>
+
+        <tal:block condition="html_form_grid_columns"><metal:block use-macro="form.xml/grid_form_fields" /></tal:block>
+        <tal:block condition="html_form_fields"><metal:block use-macro="form.xml/form_fields" /></tal:block>
+
+        <tal:block condition="submit_text">
+            <input type="submit" name="form_submit" id="form_submit" class="cc_form_submit" 
+                    tal:attributes="value submit_text" />
+        </tal:block>
+
+        <input tal:condition="html_hidden_fields" tal:repeat="hfield html_hidden_fields"
+               type="hidden" name="${hfield/hidden_name}" value="${hfield/hidden_value}" />
+
+    </form>
+</metal:block>
+
+<metal:block define-macro="form_fields">
+  <table class="cc_form_table" >
+    <tal:block repeat="field html_form_fields">
+      <tr tal:condition="field/form_error" class="cc_form_error_row"><td></td><td class="cc_form_error">${field/form_error}</td></tr>
+      <tr class="cc_form_row">
+        <td class="cc_form_label">${field/label}<div tal:condition="field/form_tip" class="cc_form_tip">${field/form_tip}</div></td>
+        <td class="cc_form_element">
+          <tal:block condition="field/macro" ><tal:block define="tname ${field/macro}" /><metal:block use-macro="${tname}" /></tal:block>
+          ${field/form_element}
+        </td>
+      </tr>
+    </tal:block>
+  </table>
+</metal:block>
+
+<metal:block define-macro="grid_form_fields">
+  <table class="cc_grid_form_table">
+    <tr class="cc_grid_form_header_row">
+        <th tal:repeat="head html_form_grid_columns" class="cc_grid_form_header">${head/column_name}</th>
+    </tr>
+    <tal:block repeat="row html_form_grid_rows">
+        <tr tal:condition="row/form_error" class="cc_form_error_row"><td></td>
+            <td colspan="${repeat/row/length}" class="cc_form_error">${row/form_error}</td>
+        </tr>
+        <tr class="cc_form_row">
+           <td tal:repeat="field row/html_form_grid_fields">${field/form_grid_element}
+           </td>
+        </tr>
+   </tal:block>
+ </table>
+</metal:block>
+
+<metal:block define-macro="submit_forms">
+  <div class="cc_submit_forms_outer">
+    <div tal:repeat="submit_info submit_form_infos" class="cc_submit_forms">
+      <tal:block condition="submit_info/logo"><img src="${submit_info/logo}" /></tal:block>
+      <h2>${submit_info/text}</h2>
+      <div class="cc_submit_form_help">${submit_info/help}</div>
+      <div class="cc_submit_form_url">
+        <a href="${submit_info/action}" tal:condition="not: submit_info/quota_reached" tal:on-error="">${submit_info/text}</a>
+        <span class="cc_quota_message" tal:condition="submit_info/quota_reached" tal:on-error="" tal:content="submit_info/quota_message" />
+      </div>
+    </div>
+  </div>
+</metal:block>
+
+<metal:block define-macro="show_form_about">
+    <div tal:repeat="htext form_about" class="cc_form_about">
+        ${htext}
+    </div>
+</metal:block>
+
+</tal:block>

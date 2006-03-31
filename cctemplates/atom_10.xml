@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+  <title>${channel_title} [BETA]</title>
+  <link rel="self" href="${raw_feed_url}"/>
+  <link rel="alternate" href="${feed_url}"/>
+  <updated>${atom-pub-date}</updated>
+  <id>${feed_url}</id>
+  <entry tal:condition="feed_items" tal:repeat="item feed_items">
+      <id>${item/file_page_url}</id>
+      <title>${item/upload_name}</title>
+      <author>
+        <name>${item/user_real_name}</name>
+      </author>
+      <link rel="alternate" href="${item/file_page_url}" type="text/html" />
+      <link rel="enclosure" href="${item/files/0/download_url}"               
+                        length="${item/files/0/file_rawsize}" 
+                        type="${item/files/0/file_format_info/mime_type}"/>
+      <tal:block repeat="tag_link item/upload_taglinks">
+         <category term="${tag_link/tag}" />
+      </tal:block>
+      <updated>${item/atom_pubdate}</updated>
+      <content type="text/plain">${item/upload_description} 
+      
+      Download from: ${item/files/0/download_url}
+      </content>
+      <link rel="license" href="${item/license_url}" type="text/html" />
+  
+  </entry>
+
+</feed>

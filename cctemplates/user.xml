@@ -1,0 +1,87 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="user_listings">
+    <div class="cc_user_short_listing">
+      <metal:block use-macro="${user_listing_short}" />
+    </div>
+   <metal:block use-macro="${prev_next_links}" />
+</metal:block>
+
+<metal:block define-macro="user_listing_short">
+  <table cellspacing="0" cellpadding="0" class="cc_user_listing_table">
+  <tal:block repeat="record user_record">
+    <tr>
+        <td class="cc_user_avatar" >
+           <a tal:condition="record/user_avatar_url" href="${record/artist_page_url}"><img src="${record/user_avatar_url}" /></a>
+        </td>
+        <td >
+            <h3>${record/user_real_name}</h3>
+            <a  class="cc_user_name" href="${record/artist_page_url}">${record/user_name}</a>
+                  <a class="cc_email_link" href="${record/user_emailurl}" 
+                     title="click to send email to this user"><span class="cc_email_contact" tal:content="php: CC_lang('[email contact]')" /></a>
+            <div class="cc_user_regdate"><span tal:content="php: CC_lang('member since')" />: ${record/user_date_format}</div>
+            <br />
+        </td>
+    </tr>
+    <tr tal:condition="record/result_info"><td colspan="2"><div class="cc_search_result_info">${record/result_info}</div></td></tr>
+  </tal:block>
+  </table>
+</metal:block>
+
+<metal:block define-macro="user_listing">
+    <table cellspacing="0" cellpadding="4" class="cc_user_listing_table"  tal:repeat="record user_record">
+    <tr>
+        <td class="cc_user_avatar" >
+           <a tal:condition="record/user_avatar_url" href="${record/artist_page_url}"><img src="${record/user_avatar_url}" /></a>
+        </td>
+        <td>
+            <h3 class="cc_user_name">${record/user_name} 
+                  <a class="cc_email_link" href="${record/user_emailurl}" 
+                     title="click to send email to this user"><span class="cc_email_contact" tal:content="php: CC_lang('[email contact]')" /></a>
+            </h3>
+            <div class="cc_user_regdate"><span tal:content="php: CC_lang('member since')" />: ${record/user_date_format}</div>
+        </td>
+    </tr>
+
+    <tr tal:repeat="uf record/user_fields">
+      <th tal:content="uf/label" />
+      <td>${uf/value}</td>
+    </tr>
+    <tr tal:condition="record/ratings_score">
+      <th tal:content="php: CC_lang('Ratings')" />
+      <td><metal:block use-macro="${ratings_stars}" /></td>
+    </tr>
+    <tr tal:repeat="user_tag_link record/user_tag_links">
+      <th>${user_tag_link/label}</th>
+      <td>
+        <tal:block define="tag_array user_tag_link/value" />
+        <metal:block use-macro="${taglinks}" />
+      </td>
+    </tr>
+    <tr tal:condition="record/user_favs_link"><td/><td class="cc_user_favs_link"><a href="${record/user_favs_link/link}">${record/user_favs_link/text}</a></td></tr>
+    <tr tal:condition="record/result_info"><td colspan="2"><div class="cc_search_result_info">${record/result_info}</div></td></tr>
+    </table>
+</metal:block>
+
+</tal:block>

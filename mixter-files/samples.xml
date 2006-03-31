@@ -1,0 +1,151 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+
+To see this file create a link to: media/viewfile/picks.xml
+
+-->
+</tal:block>
+<style>
+.cc_slogo, #magnatune_logo { margin: 4px; border: 1px solid black; }
+.cc_slogo {  float: right;  }
+.cc_sample_head {  margin: 5px;}
+
+#plug_td {  
+  padding: 7px; 
+  border-top: 1px solid #666; 
+  border-right: 1px solid #666; 
+  border-left: 1px solid #666; 
+  font-size: 11px;
+  font-family: Arial; 
+  background:#cdc;
+  vertical-align: top;
+  width: 30%;
+}
+
+#plug_link_td {
+  border-bottom: 1px solid #666; 
+  border-right: 1px solid #666; 
+  border-left: 1px solid #666; 
+  font-family: Arial; 
+  background:#cdc;
+}
+
+#plug_div { }
+
+.cc_sample_head {
+  margin-bottom: 10px;
+}
+
+.sub_head {
+  margin: 7px;
+  margin-bottom: 20px;
+ }
+
+.sub_head td, .sub_head a {
+  vertical-align: center;
+  text-align: center;
+  margin: 0px;
+  font-family: arial;
+  font-size: 13px;
+  padding: 4px;
+  font-weight: bold;
+}
+
+.seltab {
+  border-right: 1px solid black;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  background: white;
+}
+
+.normtab {
+  background: black;
+  color: white;
+  border-top: 3px solid white;
+}
+
+#tablink
+{
+  display: block;
+}
+
+#tablink:hover
+{
+  background: #999;
+  text-decoration: none;
+}
+
+#tablink, #tablink:visited {
+  color: white;
+}
+
+#plug_link_td h3 {
+  margin: 1px;
+  font-size: 11px;
+  text-align: right; 
+  font-family: arial;  
+  white-space: nowrap; 
+  }
+
+</style>
+<h1>Samples</h1>
+  <tal:block condition="show_plugs" on-error="">
+    <table class="cc_sample_head" cellspacing="0">
+      <tr>
+        <td id="plug_td"><div id="plug_div">
+         <img id="magnatune_logo" src="${root-url}mixter-files/magnatune_logo.gif" />
+         Over 1,700 album cuts, studio tracks, a cappellas and ACIDized pre-cut loops from the Magnatune catalog.</div>
+        </td>
+        <td>&nbsp;</td>
+        <td id="plug_td"><div id="plug_div">
+         <img class="cc_slogo" src="${root-url}mixter-files/wired.jpg" />
+         Sample the Beastie Boys, David Byrne, Theivery Corp.
+         and many other artists from WIRED/CC CD.</div>
+        </td>
+        <td>&nbsp;</td>
+        <td id="plug_td"><div id="plug_div">
+         <img class="cc_slogo" src="${root-url}mixter-files/militiamix.jpg" />
+         The Fine Arts Militia feat. Chuck D. donated studio tracks with
+         a cappellas to the Commons.</div>
+        </td>
+      </tr>
+      <tr>
+      <td id="plug_link_td"><h3><a href="${root-url}magnatune/view/contest/sources">Samples are here</a></h3></td>
+        <td>&nbsp;</td>
+      <td id="plug_link_td"><h3><a href="${root-url}freestylemix/people/wired">Samples are here</a>.</h3></td>
+        <td>&nbsp;</td>
+      <td id="plug_link_td"><h3><a href="${root-url}militiamix/people/militiamix">Samples are here</a>.</h3></td>
+      </tr>
+    </table>
+  </tal:block>
+
+    <table class="sub_head" cellspacing="0" cellpadding="0">
+      <tr>
+          <tal:block repeat="tab samples_links">
+              <td width="30%" tal:condition="tab/selected" class="seltab">${tab/text}</td>
+              <td width="30%" tal:condition="tab/normal"   class="normtab" >
+                    <a id="tablink" href="${tab/action}" title="${tab/text}" >${tab/text}</a>
+              </td>
+          </tal:block>
+      </tr>
+    </table>
+
+</div>

@@ -1,0 +1,86 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="nav_admin_page">
+  <div class="cc_body_text">
+    <table>
+      <tr tal:repeat="nav_command nav_commands">
+        <td> <a class="cc_menu_command" href="${nav_command/url}">${nav_command/text}</a></td>
+        <td class="">${nav_command/tip}</td>
+      </tr>
+    </table>
+  </div>
+</metal:block>
+
+<metal:block define-macro="page_edit_field">
+    <table>
+    <tal:block define="page field/page" />
+    <tr><td><input type="text" class="cc_form_input_short" value="${page/name}" /></td>
+       <td><tal:block condition="not: repeat/file/end">
+          <a class="cc_file_command" id="movedownpage" href="${page/down_url}">Down</a>
+       </tal:block></td>
+       <td><tal:block condition="not: repeat/file/start">
+         <a class="cc_file_command" id="moveuppage" href="${page/up_url}">Up</a>
+       </tal:block></td>
+       <td><tal:block condition="not: repeat/file/start">
+         <a class="cc_file_command" id="deletepage" href="${page/delete_url}">Delete</a>
+       </tal:block></td>
+    </tr>
+    </table>
+</metal:block>
+
+<metal:block define-macro="tab_script">
+    <script>
+    //<!--
+    var ${tab_info/id}_txt;
+    ${tab_info/id}_txt = "${tab_info/selected_text}";
+    function ${tab_info/id}_smht(txt)
+    {
+        var obj;
+        obj = new cc_obj('${tab_info/id}');
+        cc_set_text(obj.obj,txt);
+    }
+    //-->
+    </script>
+</metal:block>
+
+<metal:block define-macro="page_tabs">
+    <div class="cc_tab_head_outer">
+        <div class="cc_tab_help" ><div id="${tab_info/id}" >${tab_info/selected_text}</div></div>
+        <table class="cc_tab_head" cellspacing ="0" cellpadding="0">
+            <tr><td colspan="${tab_info/num_tabs}" class="cc_tab_head_room" >&nbsp;</td></tr>
+            <tr>
+                <tal:block repeat="tab tab_info/tabs">
+                    <tal:block condition="tab/selected"><td class="cc_tab_selected" width="${tab_info/tab_width}"><div id="ccseltab">${tab/text}</div></td></tal:block>
+                    <tal:block condition="tab/normal"><td class="cc_tab_normal" width="${tab_info/tab_width}"><a 
+                        onmouseover ="${tab_info/id}_smht(&quot;${tab/help&quot;);" 
+                        onmouseout  ="${tab_info/id}_smht(${tab_info/id}_txt); " 
+                        href="${tab/url}" title="${tab/help}" >${tab/text}</a></td>
+                    </tal:block>
+                </tal:block>
+            </tr>
+        </table>
+    </div>
+</metal:block>
+
+</tal:block>

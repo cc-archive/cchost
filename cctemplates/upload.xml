@@ -1,0 +1,200 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="show_remix_parents">
+    <div tal:condition="record/has_parents" id="cc_downstream_mixes">
+        <h3 tal:content="php: CC_lang('Uses samples from:')" />
+        <div id="cc_history_wrapper">
+          <tal:block condition="record/remix_parents" repeat="rs record/remix_parents" >
+              <tal:block define="more_link record/more_parents_link | nothing" />
+              <metal:block use-macro="${remix_line}" />
+          </tal:block>
+        </div>
+    </div>
+</metal:block>
+
+<metal:block define-macro="show_remix_children">
+  <tal:block define="reply record/local_menu/remix/replyremix | nothing" on-error=""/>
+  <tal:block define="do_children record/has_children | reply | record/is_orphan_original" tal:on-error="" /> 
+  <div id="cc_upstream_mixes" tal:condition="do_children" > 
+      <p tal:condition="record/is_orphan_original" id="noonesampled" tal:content="php: CC_lang('(no one has sampled this)')" />
+      <tal:block condition="record/has_children">
+        <h3 tal:content="php: CC_lang('Samples are used in:')" />
+        <div id="cc_history_wrapper">
+          <tal:block condition="record/remix_children" repeat="rs record/remix_children" >
+              <tal:block define="more_link record/more_children_link | nothing" />
+              <metal:block use-macro="${remix_line}" />
+          </tal:block>
+        </div>
+     </tal:block>
+     <p tal:condition="reply" class="cc_postreply" ><a href="${reply/action}">${reply/menu_text}...</a></p>
+   </div>
+</metal:block>
+
+<metal:block define-macro="remix_line">
+  <tal:block define="furl  rs/file_page_url;
+                     fname rs/upload_name | rs/pool_item_name;
+                     aurl  rs/artist_page_url;
+                     name  rs/user_real_name | rs/pool_item_artist;
+                     hack  14;" tal:on-error=""/>
+  
+  <tal:block condition="repeat/rs/end" >
+    <tal:block condition="more_link">
+      <tal:block  define="hack 6;" />
+      <a class="cc_remix_more_link" href="$more_link" tal:content="php: CC_lang('More...')" />
+    </tal:block>
+  </tal:block>
+  <p>
+    <a href="$furl" class="cc_file_link" tal:content="php: CC_strchop('$fname',$hack,$chop)" />
+    <tal:block content="php: CC_lang('by')" />
+    <a href="$aurl" class="cc_user_link" tal:content="php: CC_strchop('$name',$hack,$chop)" />
+  </p>
+</metal:block>
+
+<metal:block define-macro="list_file">
+   <div class="cc_works_page">
+     <metal:block use-macro="${list_files}" />
+   </div>
+</metal:block>
+
+<metal:block define-macro="list_files">
+  <tal:block define="upload_flag_tip php: CC_lang('Flag this upload for possible violation of terms');" />
+  <tal:block define="xclass nothing" />
+  <tal:block condition="exists: all_tags">
+    <tal:block define="xclass string:cc_record_listing_chopped" />
+    <metal:block use-macro="${tag_picker}" />
+  </tal:block>
+  <tal:block repeat="record file_records">
+    <div id="cc_record_listing" >
+    <div class="${xclass}">
+      <tal:block define="menu record/local_menu" />
+      <table id="cc_file_info" cellpadding="0" cellspacing="0">
+        <tr tal:condition="not: record/works_page">
+          <tal:block define="upname php: CC_strchop('${record/upload_name}',37,$chop)" />
+          <td colspan="2"><h2><a href="${record/file_page_url}" tal:content="structure: upname"></a>
+          </h2>
+              
+          </td>
+        </tr>
+        <tr>
+          <th tal:content="php: CC_lang('by:');" /> 
+          <td><metal:block use-macro="${upload_flag}" /><a href="${record/artist_page_url}" class="cc_user_link" 
+          tal:content="php: CC_strchop('${record/user_real_name}',25,$chop)" /></td>
+        </tr>
+        <tr>
+          <th tal:content="php: CC_lang('date:');" /> 
+          <td>
+            <span tal:content="php: CC_datefmt('${record/upload_date}','F d, Y h:i a')" />
+          </td>
+        </tr>
+      <tal:block condition="record/works_page"      define="tag_array record/upload_taglinks" />
+      <tal:block condition="not: record/works_page" define="tag_array record/usertag_links" />
+      <tr tal:condition="tag_array" >
+        <th tal:content="php: CC_lang('tags:');" />
+        <td><metal:block use-macro="${taglinks}" /></td>
+      </tr>
+      <tr>
+        <tal:block condition="record/ratings_score"      define="rate_head_show string:inline" />
+        <tal:block condition="not: record/ratings_score" define="rate_head_show string:none" />
+        <th><span id="cc_rate_head_${record/upload_id}" style="display: ${rate_head_show}" 
+              tal:content="php: CC_lang('ratings:');"  />
+        </th>
+        <td id="cc_rate_block_${record/upload_id}">
+          <metal:block use-macro="${ratings_stars}" />
+        </td>
+      </tr>
+      <tr tal:condition="record/ok_to_rate" >
+        <th /> 
+        <td>
+          <metal:block use-macro="${dl_edit_ratings}" />
+        </td>
+      </tr>
+      <tal:block condition="record/works_page" >
+        <tr tal:condition="record/files/0/file_format_info/ps">
+            <th tal:content="php: CC_lang('length:')" />
+            <td>${record/files/0/file_format_info/ps}</td>
+        </tr>
+        <tr tal:condition="record/upload_extra/bpm">
+            <th tal:content="php: CC_lang('bpm:')" />
+            <td>${record/upload_extra/bpm}</td>
+        </tr>
+      </tal:block>
+      <tr>
+        <th tal:content="php: CC_lang('license:');" /> 
+        <td><a href="${record/license_url}" title="${record/license_name}" ><img 
+                  src="${root-url}ccimages/lics/small-${record/license_logo}" /></a></td>
+      </tr>
+        <tr tal:condition="record/upload_extra/nsfw">
+           <td colspan="2"><span class="cc_nsfw">This upload might be "<a 
+               href="http://en.wikipedia.org/wiki/NSFW"
+                target="_blank">Not Safe For Work</a>"</span></td>
+        </tr>
+      <tr  tal:condition="record/reviews_link">
+        <th />
+        <td><a href="${record/reviews_link/url}" tal:content="record/reviews_link/text" />
+        </td>
+      </tr>
+      <tr tal:condition="record/upload_extra/edpicks" tal:repeat="pick record/upload_extra/edpicks">
+       <td colspan="2">
+          <img src="${root-url}ccimages/stars/star-red.gif" height="17" width="17" /> 
+          <a href="${pick/review_url}" tal:content="php: CC_lang('Editorial pick...')" />
+       </td>
+     </tr>
+      <tr tal:condition="record/result_info"  tal:on-error="">
+       <td colspan="2" class="cc_search_result_info" >
+          ${record/result_info}
+       </td>
+     </tr>
+    </table><!-- file_info -->
+      <metal:block use-macro="${dl_action_buttons}" />
+      <br tal:condition="record/works_page" clear="left" />
+      <div id="cc_sample_history" tal:condition="not: record/skip_remixes">
+        <metal:block use-macro="${show_remix_parents}" />
+        <metal:block use-macro="${show_remix_children}" />
+      </div>
+      <tal:block condition="record/works_page">
+        <tal:block condition="record/upload_description_html">
+          <tal:block define="says php: CC_lang('says'); 
+                             dtitle string:${record/user_real_name} ${says}; 
+                             dtext  record/upload_description_html" />
+          <metal:block use-macro="${show_box}" />
+        </tal:block>
+
+        <tal:block condition="record/file_macros" repeat="macro_name record/file_macros" >
+          <tal:block define="tname ${macro_name}" />
+          <metal:block use-macro="${tname}" />
+        </tal:block>
+      </tal:block>
+
+
+    </div> <!-- xclass -->
+    </div> <!-- record_listing -->
+    <div style=""><br clear="all" /></div>
+    <tal:block condition="not: repeat/record/end">
+      <p class="cc_songbreak" id="${xclass}" >&nbsp;</p>
+    </tal:block>
+  </tal:block>
+  <metal:block use-macro="${prev_next_links}" />
+</metal:block>
+
+</tal:block>

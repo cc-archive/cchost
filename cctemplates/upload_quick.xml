@@ -1,0 +1,60 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+
+<metal:block define-macro="list_file">
+  <div class="cc_works_page">
+      <div id="cc_record_listing"> 
+        <div class="">
+            <tal:block define="listing php: mixter_list_files($file_records,'');" />
+            ${listing}
+
+        <tal:block define="record file_records/0" />
+        <tal:block condition="record/upload_description_html">
+          <tal:block define="says php: CC_lang('says'); 
+                             dtitle string:${record/user_real_name} ${says}; 
+                             dtext  record/upload_description_html" />
+          <metal:block use-macro="${show_box}" />
+        </tal:block>
+
+        <tal:block condition="record/file_macros" repeat="macro_name record/file_macros" >
+          <tal:block define="tname ${macro_name}" />
+          <metal:block use-macro="${tname}" />
+        </tal:block>
+    </div> <!-- xclass -->
+  </div> <!-- record_listing -->
+  <div style=""><br clear="all"/></div>
+  </div>
+</metal:block>
+
+<metal:block define-macro="list_files">
+  <tal:block define="xclass nothing" />
+  <tal:block condition="exists: all_tags">
+    <tal:block define="xclass string:cc_record_listing_chopped" />
+    <metal:block use-macro="${tag_picker}" />
+  </tal:block>
+  <tal:block define="listing php: mixter_list_files($file_records,'$xclass');" />
+  ${listing}
+  <metal:block use-macro="${prev_next_links}" />
+</metal:block>
+
+</tal:block>

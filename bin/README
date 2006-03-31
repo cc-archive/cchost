@@ -1,0 +1,5 @@
+The scripts in bin are meant to operate on the site and possibly should be 
+moved so that they are not accessible by the web root.
+
+For now, setting permissions to 700.
+

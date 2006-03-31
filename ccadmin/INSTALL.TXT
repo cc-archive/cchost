@@ -1,0 +1,89 @@
+$Header$
+
+
+=========================================
+|  Installation notes for v2.0.0 RC     |
+=========================================
+
+
+UPGRADE EXISTING ccHOST INSTALLATIONS
+-------------------------------------
+
+  1. Log in as administrator
+
+  2. Copy this installation over your current 
+     installation. 
+
+  3. Browse to: http://where_you_installed/?update=1
+
+Note to 1.x ccHost installations: phpBB2 is no
+longer used for reviews. There is a script for 
+importing existing phpBB2 format reviews into the
+new native reviewing system. Contact 
+fourstones@users.sourceforge.net for details.
+
+NEW INSTALL (Simple or Hosted Environment): 
+-------------------------------------------
+If you are using a shared server or other hosted site 
+(like Dreamcast, etc.) then your hosting service
+probably provided you with a web interface for 
+creating a database, doing file uploads and setting
+permissions for files and directories. You will need 
+to create a new database for ccHost BEFORE 
+running this installation:
+
+ 1. Unzip the ccHost ZIP archive on your local system
+    and copy the files to your server retaining the
+    the directory structure.
+
+ 2. Browse to http://where_you_installed/ccadmin and
+    follow all the instructions from then on. 
+
+
+NEW INSTALL (Advanced): 
+-----------------------
+If you have basic knowledge of using FTP and you are comfortable
+at a UNIX command line you can use these steps to intall: 
+
+ 1. Unzip the ccHost ZIP or tar.bz2 archive on your local system and
+    copy the files (retaining the directory structure)
+    to your web server.
+
+    For example:
+    cp -a cchost-1.0.3 /var/www/localhost/htdocs/cchost
+    chgrp -R apache /var/www/localhost/htdocs/cchost
+    chmod g+w /var/www/localhost/htdocs/cchost/
+    chmod -R g+w /var/www/localhost/htdocs/cchost/cclib/phptal/phptal_cache/
+
+ 2. Install getID3.  Unpack the package, and then copy the getid3
+    directory to the location it will be accessed.  For example:
+
+    tar xzf getid3.tar.gz
+    cp -a getid3/getid3 /var/www/localhost/htdocs/cchost/
+
+ 3. Create a database instance and users to access it.  For example:
+
+    mysql -p -u root
+
+    mysql> CREATE DATABASE cchost;
+    mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE ON cchost.* 
+    ->     TO 'cchost'@'localhost' IDENTIFIED BY 'password';
+
+    Make sure to change 'password' (and maybe cchost) to something
+    unique to your site.
+
+ 4. Create directory /var/log/cchost or other location to store log
+    files.  Must be writable by apache.  For example:
+
+    mkdir /var/log/cchost
+    chown apache:apache /var/log/cchost
+
+ 5. Browse to http://where_you_installed_cchost/ccadmin 
+
+ 6. Follow the instructions from there on...
+
+UNIX Installations Take Note: on the last screen of the 
+installation process you'll be prompted to read about
+specific issues regarding file permissions. DO NOT 
+SKIP THIS STEP!!!!
+

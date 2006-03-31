@@ -1,0 +1,207 @@
+<?
+/*
+* Creative Commons has made the contents of this file
+* available under a CC-GNU-GPL license:
+*
+* http://creativecommons.org/licenses/GPL/2.0/
+*
+* A copy of the full license can be found as part of this
+* distribution in the file LICENSE.TXT.
+* 
+* You may use the ccHost software in accordance with the
+* terms of that license. You agree that you are solely 
+* responsible for your use of the ccHost software and you
+* represent and warrant to Creative Commons that your use
+* of the ccHost software will comply with the CC-GNU-GPL.
+*
+* $Header$
+*
+*/
+
+if( !defined('IN_CC_HOST') )
+   die('Welcome to CC Host');
+
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCFeeds',  'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  array( 'CCFeeds',  'OnUploadDelete'));
+CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    array( 'CCFeeds',  'OnFileDelete'));
+CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCFeeds',  'OnUploadDone'));
+CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,    array( 'CCFeeds',  'OnRenderPage'));
+
+/**
+* XML Feed generator and reader for site
+*
+* NOTE: Kill the cache for the menu if you are adding new menu items:
+* http://cchost.localhost/?ccm=/media/admin/menu/killcache
+*/
+class CCFeeds extends CCFeed
+{
+    /**
+    * Handler for feed/rss - returns rss xml feed for given tags
+    *
+    * @param string $tagstr Space (or '+') delimited tags to use as basis of xml feed
+    */
+    function GenerateRSSFromTags($tagstr='')
+    {
+        $this->_gen_feed_from_tags('rss_20.xml',$tagstr,'atom');
+    }
+
+
+    function PodcastPage()
+    {
+        $uploads =& CCUploads::GetTable();
+
+        //
+        //
+        // if you're making changes here, you probably want to make
+        // the same ones in cc-renderaudio.php StreamPage() as well
+        //
+        //
+        $sort_order = array();
+
+        if( !empty($_REQUEST['ids']) )
+        {
+            $ids = $_REQUEST['ids'];
+            $ids = explode(';',$ids);
+            $ids = array_unique($ids);
+            $where_id = array();
+            $i = 0;
+            foreach($ids as $id)
+            {
+                $sort_order[$id] = $i++;
+                $where_id[] = " (upload_id = $id) ";
+            }
+            $where = implode('OR',$where_id);
+            if( empty($_REQUEST['nosort']) )
+                $sort_order = array();
+        }
+        elseif( !empty($_REQUEST['tags']) )
+        {
+            $tagstr = CCUtil::StripText($_REQUEST['tags']);
+            $tagstr = str_replace(' ',',',urldecode($tagstr));
+            if( empty($tagstr) )
+                return;
+            $uploads->SetTagFilter($tagstr,'all');
+            $where = '';
+        }
+        else
+        {
+            return;
+        }
+
+        if( empty($_REQUEST['nosort']) )
+            $uploads->SetOrder('upload_date','DESC');
+        $records = $uploads->GetRecords($where);
+        $this->_resort_records($records,$sort_order);
+        $this->PrepRecords($records);
+        $this->GenerateRSSFromRecords( $records, 
+                                       "Podcast this page",
+                                       ccl('podcast','page'),
+                                       'podcast');
+    }
+
+    function PodcastUser($username='')
+    {
+        if( empty($username) )
+            return;
+
+        $uploads =& CCUploads::GetTable();
+        $where['user_name'] = $username;
+        $records = $uploads->GetRecords($where);
+        $this->PrepRecords($records);
+        $this->GenerateRSSFromRecords($records,"Podcast for $username",ccl('podcast','page',$username),'podcast');
+    }
+
+    /**
+    * Handler for feed/rss - returns rss xml feed for given records
+    *
+    * @param array $records Results of some kind of uploads query
+    * @param string $tagstr  Search string to display as part of description
+    * @param string $feed_url The URL that represents this result set 
+    */
+    function GenerateRSSFromRecords(&$records,$tagstr,$feed_url,$cache_type='rss')
+    {
+        $this->_gen_feed_from_records('rss_20.xml',$records,$tagstr,$feed_url,$cache_type);
+    }
+
+    /**
+    * Adds the cute orange buttons to the page
+    *
+    * @param string $tagstr Tags to add to hrefs of links
+    */
+    function AddFeedLinks($tagstr,$qstring='',$help_text='')
+    {
+        CCFeeds::_inner_add_feed_links($tagstr,$qstring,$help_text);
+        global $CC_GLOBALS;
+        $CC_GLOBALS['page-has-feed-links'] = 1;
+    }
+
+    function _inner_add_feed_links($tagstr,$qstring='',$help_text='')
+    {
+        if( !empty($tagstr) )
+        {
+            $tags = CCTag::TagSplit($tagstr);
+            $utags = urlencode(implode(' ',$tags));
+            $rss_feed_url  = ccl('feed','rss', $utags);
+            $atom_feed_url = ccl('feed','atom',$utags);
+        }
+        else
+        {
+            $rss_feed_url = url_args( ccl('feed','rss'), $qstring );
+            $atom_feed_url = url_args( ccl('feed','atom'), $qstring );
+        }
+
+        CCPage::AddLink( 'head_links', 'alternate', 'application/rss+xml', $rss_feed_url, "RSS 2.0");
+        CCPage::AddLink( 'head_links', 'alternate', 'application/atom+xml', $atom_feed_url, "ATOM 1.0");
+
+        CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $rss_feed_url, "RSS 2.0", "xml",$help_text );
+    }
+
+    function OnRenderPage()
+    {
+        global $CC_GLOBALS;
+        $skip = array_key_exists('page-has-feed-links',$CC_GLOBALS) &&
+                    $CC_GLOBALS['page-has-feed-links'] == 1;
+
+        if( $skip )
+            return;
+
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('settings');
+        if( !empty($settings['default-feed-tags']) )
+        {
+            CCFeeds::_inner_add_feed_links($settings['default-feed-tags'],'',cct('Syndicate'));
+        }
+
+    }
+
+    /**
+    * Event handler for mapping urls to methods
+    *
+    * @see CCEvents::MapUrl
+    */
+    function OnMapUrls()
+    {
+        CCEvents::MapUrl( 'feed/rss',  array( 'CCFeeds', 'GenerateRSSFromTags'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( 'podcast/page',  array( 'CCFeeds', 'PodcastPage'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( 'podcast/artist',  array( 'CCFeeds', 'PodcastUser'), CC_DONT_CARE_LOGGED_IN);
+    }
+
+    /**
+    * Internal: Cache an rss feed into the database
+    *
+    * @see   CCFeed::_cache
+    * @param string $xml Actual feed text
+    * @param string $type Feed format
+    * @param string $tagstr Tags represented by this feed.
+    */
+    function _cache(&$xml,$type,$tagstr)
+    {
+        if( $type != 'rss' )
+            return;
+        parent::_cache($xml, $type, $tagstr);
+    }
+
+} // end of class CCFeeds
+
+
+?>
