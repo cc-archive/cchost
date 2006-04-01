@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Header: /cvsroot/cctools/cchost1/cclib/cc-uploadapi.php,v 1.34 2006/03/13 18:38:23 fourstones Exp $
 *
 */
 
@@ -978,11 +978,6 @@ class CCUploadAPI
             }
         }
 
-        if( defined('IN_MIXTER_PORT') )
-        {
-            return;
-        }
-
         CCUtil::MakeSubdirs( $relative_dir ); // you have to make the dir for realpath() to work
 
         $current_path  = str_replace('\\', '/', $current_path);
@@ -1140,18 +1135,35 @@ class CCUploadAPI
 
     function _move_upload_file(&$current_path,$new_name,&$is_temp)
     {
+        // sigh
+        //
+        // getid3 requires that a file have an extension that
+        // relates to the format. (hey, don't be so quick to judge)
+        // since shared hosting environments are unlikely to allow
+        // direct manipulation of files in /tmp we move the file
+        // to a temp location (root of /people) with a unique name
+        // 
+        // if the upload worked then a rename() above will move
+        // the temp file out of people. if the upload fails, 
+        // the code in _cleanup_upload_file() will nuke it
+        //
+
         $is_temp = false;
 
         if( !is_uploaded_file($current_path) )
             return;
-
         
         global $CC_GLOBALS;
         $upload_root = empty($CC_GLOBALS['user-upload-root']) ? 'people' : 
                                $CC_GLOBALS['user-upload-root'];
-        
-        preg_match('/\.([^\.]+)$/',$new_name,$m);
-        $temp_name = tempnam($upload_root,'cch') . '.' . $m[1];
+        $upload_root = realpath($upload_root);
+        CCUtil::MakeSubdirs($upload_root);
+        if( preg_match('/\.([^\.]+)$/',$new_name,$m) )
+            $ext = $m[1];
+        else
+            $ext = 'tmp';
+        $root_name = substr( md5(uniqid(rand(),true)), rand() & 0x1F, 8 );
+        $temp_name = $upload_root . '/cch_'. $CC_GLOBALS['user_name'] . '_' . $root_name . '.' . $ext;
         move_uploaded_file($current_path,$temp_name);
         $current_path = $temp_name;
         $is_temp = true;
@@ -1160,14 +1172,8 @@ class CCUploadAPI
 
     function _cleanup_upload_file(&$current_path,$is_temp)
     {
-        if( $is_temp )
-           @unlink($current_path);
-
-        preg_match('/(.*)\.[^\.]+$/',$current_path,$m);
-        $real_temp = $m[1];
-        CCDebug::LogVar('real_temp',$real_temp);
-        if( file_exists($real_temp) )
-            @unlink($real_temp);
+        if( $is_temp && file_exists($current_path) )
+            @unlink($current_path);
     }
 
 }
