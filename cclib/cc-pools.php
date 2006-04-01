@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Header: /cvsroot/cctools/cchost1/cclib/cc-pools.php,v 1.17 2006/03/18 04:38:34 fourstones Exp $
 *
 */
 
@@ -650,10 +650,13 @@ END;
             CCDatabase::Query($drop_sql);
         }
         CCDatabase::Query($sql);
+
+        // don't overwrite intallers settings
+
+        // $vals['allow-pool-ui']       = false;
+        // $vals['allow-pool-search']   = false;
+        // $vals['allow-pool-register'] = false;
         
-        $vals['allow-pool-ui']       = false;
-        $vals['allow-pool-search']   = false;
-        $vals['allow-pool-register'] = false;
         $vals['pool-push-hub']       = '';
         $vals['pool-pull-hub']       = '';
         $vals['pool-remix-throttle'] = 10;
