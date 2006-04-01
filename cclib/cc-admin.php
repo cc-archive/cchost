@@ -15,7 +15,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -459,11 +459,18 @@ class CCAdmin
     
     function _wheres_home()
     {
-        $docroot = str_replace('\\','/', $_SERVER['DOCUMENT_ROOT']);
-        $dir     = str_replace('\\', '/', getcwd());
-        if( preg_match( "|$docroot(/.+)$|",$dir,$m) )
-            return( $m[1] );
-        return( '/' );
+        $me = $_SERVER['SCRIPT_URL'];
+        if( !empty($me) )
+        {
+            if( preg_match( '%^(.+/)[^/]+/$%', $me, $m ) )
+            {
+                $base = $m[1];
+            }
+        }
+
+        if( empty($base) )
+            $base = '/';
+        return $base;
     }
 
     /**
