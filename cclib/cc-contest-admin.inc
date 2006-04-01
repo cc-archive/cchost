@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -300,7 +300,7 @@ class CCContestAdmin
             $configs =& CCConfigs::GetTable();
 
             // create a tabs page for this contest
-            $pages['contest'] = $contest_api->_get_contest_tabs($contest_short_name, $long_name );
+            $pages['contest'] = $this->_get_contest_tabs($contest_short_name, $long_name );
             $configs->SaveConfig('tab_pages',$pages,$contest_short_name,false);
 
             // create a new virtual config, point it's home page it at the tabs page
