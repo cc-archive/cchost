@@ -15,7 +15,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id$
+* $Header: /cvsroot/cctools/cchost1/cclib/cc-admin.php,v 1.15 2005/08/12 02:21:57 fourstones Exp $
 *
 */
 
@@ -459,10 +459,12 @@ class CCAdmin
     
     function _wheres_home()
     {
+        global $CC_CFG_ROOT;
+        
         $me = $_SERVER['SCRIPT_URL'];
         if( !empty($me) )
         {
-            if( preg_match( '%^(.+/)[^/]+/$%', $me, $m ) )
+            if( preg_match( "%^(.+/)$CC_CFG_ROOT%", $me, $m ) )
             {
                 $base = $m[1];
             }
@@ -470,6 +472,7 @@ class CCAdmin
 
         if( empty($base) )
             $base = '/';
+
         return $base;
     }
 
@@ -495,7 +498,7 @@ RewriteEngine On
 RewriteBase $surl
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ /index.php?ccm=/$1 [L,QSA]
+RewriteRule ^(.*)$ {$surl}index.php?ccm=/$1 [L,QSA]
 </div>
 END;
 
