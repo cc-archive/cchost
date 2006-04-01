@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header: /cvsroot/cctools/cchost1/cclib/cc-uploadapi.php,v 1.34 2006/03/13 18:38:23 fourstones Exp $
+* $Id$
 *
 */
 
