@@ -432,9 +432,10 @@ END;
 
         $sql_part =<<<END
             FROM cc_tbl_ratings ratings, 
-                 cc_tbl_uploads uploads, 
                  cc_tbl_user    revr
-            JOIN cc_tbl_user    revee ON revee.user_id = uploads.upload_user
+            JOIN (cc_tbl_user    revee,
+                  cc_tbl_uploads uploads ) 
+                     ON revee.user_id = uploads.upload_user
             WHERE ratings_upload = upload_id AND
                   ratings_user = revr.user_id
                   $where
