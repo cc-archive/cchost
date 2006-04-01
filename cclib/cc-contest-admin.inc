@@ -442,7 +442,7 @@ class CCContestAdmin
     *
     * @param string $contest_short_name Short (internal) name of contest
     */
-    function SubmitSource($contest_short_name)
+    function SubmitSource($contest_api, $contest_short_name)
     {
         if( !CCUser::IsAdmin() )
             return;
