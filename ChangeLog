@@ -3,6 +3,8 @@
 	* VERSION cclib/cc-defines.php: Updated to new release working version
 	2.1-SVN.
 
+	* Makefile: Added PRESS.html generation...
+
 2006-03-29  Jon Phillips  <jon@creativecommons.org>
 
 	* VERSION cclib/cc-defines.php: Updated to new release working version

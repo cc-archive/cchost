@@ -25,6 +25,7 @@ DIST_FILES_OTHER=Makefile.dist
 
 all:	$(DIST_FILES_GENERATED) $(DIST_FILES_OTHER)
 	$(MAKE) -f Makefile.dist all
+	[ -x `which txt2html` ] && txt2html --xhtml PRESS > PRESS.html
 
 install: all
 	$(MAKE) -f Makefile.dist install
@@ -35,6 +36,7 @@ uninstall:
 clean:
 	rm -f $(DIST_FILES_GENERATED)
 	$(MAKE) -f Makefile.dist clean
+	rm -f PRESS.html
 
 #$(APPNAME): $(APPNAME).in
 #	sed -e "s/PROJECT_VERSION/$(RELEASE_NUM)/" $(APPNAME).in > $(APPNAME)
