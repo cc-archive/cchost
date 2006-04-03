@@ -1,7 +1,28 @@
+2006-04-02  Jon Phillips  <jon@creativecommons.org>
+
+	* ChangeLog: updated changelog.
+
 2006-04-02  Victor Stone  <fourstones@users.sourceforge.net>
 
 	* cclib/cc-uploadapi.php: bugfix: upload broken if 'people' didn't 
 	  already exist
+
+2006-03-31  Victor Stone  <fourstones@users.sourceforge.net>
+
+	* cclib/cc-ratings-admin.inc: mysql5 choked on ratings query
+
+	* cclib/cc-admin.php: non-root installs were too easy to screw up 
+	(take2), we were generating misleading info about rewrite
+
+	* cclib/cc-contest-admin.inc cclib/cc-contest.php: SubmitSource was 
+	broken, could not create a new contest
+
+	* ccadmin/index.php: pnon-root installs were too easy to screw up
+
+	* cclib/cc-pools.php: sample-ui switch was overriding install
+
+	* cclib/cc-uploadapi.php: upload was broken on sharedhosts (e.g. 
+	dreamhost) (now with Id)
 
 2006-03-31  Jon Phillips  <jon@creativecommons.org>
 

@@ -21,7 +21,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define('CC_HOST_VERSION', '2.1-SVN');
+define('CC_HOST_VERSION', '2.0.1');
 
 define( 'CC_GLOBAL_SCOPE', 'media' );
 define( 'CC_LOCAL_SCOPE',  'local' );

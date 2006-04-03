@@ -3,21 +3,36 @@ ccHost Release Notes
 
 Version: PROJECT_VERSION
 
-This is where text about this release goes.
-
-New Features
-============
-
-    * ... 
-
+This is a simple bugfix release to counter several critical bugs found after 
+releasing ccHost PROJECT_VERSION. Primarily, one could not create a contest 
+and there were some other problems with the sample-pool api.
 
 Bugfixes
 ========
 
-    * ... 
+	* cclib/cc-uploadapi.php: bugfix: upload broken if 'people' didn't 
+	already exist
+
+	* cclib/cc-ratings-admin.inc: mysql5 choked on ratings 
+	query
+
+	* cclib/cc-admin.php: non-root installs were too easy to 
+	screw up (take2), we were generating misleading info about rewrite
+
+	* cclib/cc-contest-admin.inc cclib/cc-contest.php: SubmitSource was 
+	broken, could not create a new contest
+
+	* ccadmin/index.php: non-root installs were too easy to 
+	screw up
+
+	* cclib/cc-pools.php: sample-ui switch was overriding 
+	install
+
+	* cclib/cc-uploadapi.php: upload was broken on 
+	sharedhosts (e.g. dreamhost) (now with Id)
 
 
 Known Issues
 ============
 
-    * ...
+	* No known issues currently...
