@@ -7,6 +7,14 @@ This is a simple bugfix release to counter several critical bugs found after
 releasing ccHost PROJECT_VERSION. Primarily, one could not create a contest 
 and there were some other problems with the sample-pool api.
 
+Features
+========
+
+	* Makefile Makefile.dist: Made more robust and now backup cchost 
+	installations done with 'make install'. Also added a 
+	'make uninstall-all' which removes all cchos installations at 
+	default web directory location.
+
 Bugfixes
 ========
 

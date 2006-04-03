@@ -1,7 +1,17 @@
-2006-04-02  Victor Stone  <fourstones@users.sourceforge.net>
+2006-04-03  Jon Phillips  <jon@creativecommons.org>
+
+	* Makefile Makefile.dist: Now more intelligently handle make install
+	to check if we have an installation at $(DESTDIR)$(WEBDIR) to not
+	erase everything. Also, makes backups if cchost already exists so that
+	one can keep their settings files, etc. User data loss is the worst 
+	thing EVER! Also, this fixes a problem when doing install where you
+	keep overwriting and adding to an already crufty install, or things 
+	one has already added.
+
+2006-04-03  Victor Stone  <fourstones@users.sourceforge.net>
 
 	* ccadmin/index.php: bugfix: some servers don't like 
-	      SCRIPT_URL
+	SCRIPT_URL
 
 2006-04-02  Jon Phillips  <jon@creativecommons.org>
 
