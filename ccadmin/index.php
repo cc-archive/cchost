@@ -18,6 +18,7 @@
 *
 */
 
+
 error_reporting(E_ALL);
 
 define('IN_CC_HOST', true);
@@ -485,10 +486,11 @@ function get_default_values()
 
 function get_script_base()
 {
-    $me = $_SERVER['SCRIPT_URL'];
+    $me = $_SERVER['REQUEST_URI'];
+
     if( !empty($me) )
     {
-        if( preg_match( '%^(.+/)[^/]+/$%', $me, $m ) )
+        if( preg_match( '%^(.+/)[^/]+/(\?.*)?$%', $me, $m ) )
         {
             $base = $m[1];
         }
