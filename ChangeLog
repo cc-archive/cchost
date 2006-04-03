@@ -8,6 +8,8 @@
 	keep overwriting and adding to an already crufty install, or things 
 	one has already added.
 
+	* VERSION cclib/cc-defines.php: Open for business once more on 2.1-SVN
+
 2006-04-03  Victor Stone  <fourstones@users.sourceforge.net>
 
 	* ccadmin/index.php: bugfix: some servers don't like 
