@@ -1156,8 +1156,8 @@ class CCUploadAPI
         global $CC_GLOBALS;
         $upload_root = empty($CC_GLOBALS['user-upload-root']) ? 'people' : 
                                $CC_GLOBALS['user-upload-root'];
-        $upload_root = realpath($upload_root);
         CCUtil::MakeSubdirs($upload_root);
+        $upload_root = realpath($upload_root);
         if( preg_match('/\.([^\.]+)$/',$new_name,$m) )
             $ext = $m[1];
         else
