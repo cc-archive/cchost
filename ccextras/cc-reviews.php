@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -39,6 +39,34 @@ CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCReview' , 'OnTopicDe
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCReview',  'OnFormFields'));
 CCEvents::AddHandler(CC_EVENT_DO_SEARCH,          array( 'CCReview',  'OnDoSearch') );
 
+function CC_recent_reviews($limit=5)
+{
+    $sql =<<<END
+        SELECT     reviewer.user_real_name reviewer_name, 
+                   reviewee.user_name      reviewee_user_name, 
+                   upload_id, 
+                   topic_id
+            FROM cc_tbl_topics
+            JOIN cc_tbl_user reviewer ON topic_user   = reviewer.user_id
+            JOIN cc_tbl_uploads       ON topic_upload = upload_id
+            JOIN cc_tbl_user reviewee ON upload_user  = reviewee.user_id
+        WHERE (topic_type = 'review') AND (upload_banned < 1) AND (upload_published > 0)
+        GROUP BY reviewer.user_id
+        ORDER BY topic_date DESC
+        LIMIT $limit
+END;
+
+    $rows = CCDatabase::QueryRows($sql);
+    $count = count($rows);
+    for( $i = 0; $i < $count; $i++ )
+    {
+        $R =& $rows[$i];
+        $R['topic_permalink'] = ccl( 'reviews', $R['reviewee_user_name'],
+                                     $R['upload_id'] . '#' . $R['topic_id'] );
+    }
+
+    return $rows;
+}
 
 class CCReviewForm extends CCTopicForm
 {
