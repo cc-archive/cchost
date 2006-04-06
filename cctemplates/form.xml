@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -115,7 +115,8 @@ cc_init_form_capture();
         </tal:block>
 
         <input tal:condition="html_hidden_fields" tal:repeat="hfield html_hidden_fields"
-               type="hidden" name="${hfield/hidden_name}" value="${hfield/hidden_value}" />
+               type="hidden" name="${hfield/hidden_name}" id="${hfield/hidden_name}" 
+               value="${hfield/hidden_value}" />
 
     </form>
 </metal:block>
