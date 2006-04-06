@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -342,11 +342,19 @@ class CCFeed
 
         if( $this->_is_full_dump() )
         {
+            header("Content-type: text/plain"); 
             $f = fopen('all_audio.xml','w');
+            if( !$f )
+            {
+                print('could not open "all_audio.xml"');
+            }
+            else
+            {
             fwrite($f,$xml);
             fclose($f);
-            header("Content-type: text/plain"); 
+                chmod('all_audio.xml',CC_DEFAULT_FILE_PERMS);
             print('all_audio.xml written to server');
+        }
         }
         else
         {
