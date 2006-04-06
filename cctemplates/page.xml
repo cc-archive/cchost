@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -54,8 +54,10 @@ $Header$
   {
     if( obj.innerText )
        obj.innerText = text;
-    else if( obj.childNodes )
-      obj.childNodes[0].nodeValue = text;
+    else if( obj.childNodes && obj.childNodes.length )
+       obj.childNodes[0].nodeValue = text;
+    else
+       obj.value = text;
   }
 
  
@@ -141,7 +143,20 @@ $Header$
             <tal:block condition="not: repeat/crumb/end" ><a href="${crumb/url}"><span>${crumb/text}</span></a>  &raquo; </tal:block>
             <span tal:condition="repeat/crumb/end" tal:content="crumb/text" />
           </tal:block>
+          <tal:block condition="crumb_tags">
+            <select onchange="document.location = this.options[this.selectedIndex].value;" style="font-size:smaller;">
+               <tal:block repeat="tagopt crumb_tags">
+                  <option tal:condition="tagopt/selected" selected="selected" 
+                                       value="${tagopt/url}">${tagopt/text}</option>
+                  <option tal:condition="not: tagopt/selected" 
+                                       value="${tagopt/url}">${tagopt/text}</option>
+               </tal:block>
+            </select>
+          </tal:block>
         </div>
+        <tal:block condition="sub_nav_tabs">
+          <metal:block use-macro="${show_sub_nav_tabs}" />
+        </tal:block>
 
         <h1 tal:condition="page-title" tal:content="page-title" />
 
@@ -208,6 +223,22 @@ $Header$
     <h3 tal:content="dtitle" />
     <p tal:content="structure dtext" />
   </div>
+</metal:block>
+
+<metal:block define-macro="show_sub_nav_tabs">
+  <div id="cc_sub_header" >
+  <ul >
+     <tal:block repeat="tab sub_nav_tabs/tabs">
+       <li tal:condition="exists: tab/selected" class="selected_tab" >
+           <a href="${tab/url}" tal:content="tab/text" /></li>
+          <li tal:condition="exists: tab/normal" ><a tal:content="tab/text"  href="${tab/url}" title="${tab/help}" /></li>
+     </tal:block>
+  </ul>
+  </div>
+</metal:block>
+
+<metal:block define-macro="show_body_html">
+  ${body_html}
 </metal:block>
 
 </tal:block>
