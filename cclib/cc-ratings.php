@@ -112,39 +112,33 @@ class CCRating
         $api->Admin($cmd,$user_id,$ratings_id,$cmd2,$confirmed);
     }
 
+    function Recalc()
+    {
+        require_once('cclib/cc-ratings-admin.inc');
+        $api = new CCRatingsAdmin();
+        $api->Recalc();
+    }
+
+
     function GetChart($limit,$since='')
     {
         $configs =& CCConfigs::GetTable();
         $C = $configs->GetConfig('chart',CC_GLOBAL_SCOPE);
+        if( empty($C['bayesian-min']) )
+            $C['bayesian-min'] = 1;
 
-        if( $since == 'forever' )
-        {
-            $date_where = '';
-        }
-        else
+        $where = "(upload_num_scores >= {$C['bayesian-min']})";
+        if( $since != 'forever' )
         {
             $cutoff_t = strtotime( empty($since) ? $C['cut-off'] : $since);
             $cutoff = date('Y-m-d H:i:s', $cutoff_t);
-            $date_where = " upload_date > '$cutoff' ";
-        }
-
-        if( ($since == 'forever') || empty($C['per-hour']) )
-        {
-            $rank_col = 'upload_rank as rank';
-        }
-        else
-        {
-            $min_time = CCDatabase::QueryItem("SELECT MIN(UNIX_TIMESTAMP(upload_date) / 360) FROM cc_tbl_uploads");
-            if( empty($min_time) )
-                $min_time = '0';
-            $rank_col = "((UNIX_TIMESTAMP(upload_date)/360) - $min_time) * {$C['per-hour']} * upload_rank as rank"; 
+            $where .= " AND  (upload_date > '$cutoff')";
         }
 
         $uploads = new CCUploads(); // getting new let's us step all over it fearlessly
-        $uploads->AddExtraColumn($rank_col);
-        $uploads->SetSort('rank','DESC');
+        $uploads->SetSort('upload_rank','DESC');
         $uploads->SetOffsetAndLimit(0,$limit);
-        $records = $uploads->GetRecords($date_where);
+        $records = $uploads->GetRecords($where);
         return $records;
     }
 
@@ -186,7 +180,6 @@ class CCRating
         $template->SetAllAndPrint($args);
         exit;
     }
-
 
     function OnUploadListing(&$record)
     {
@@ -279,6 +272,7 @@ class CCRating
     {
         CCEvents::MapUrl( ccp('rate'),                  array('CCRating','Rate'), CC_MUST_BE_LOGGED_IN);
         CCEvents::MapUrl( ccp('admin','ratings'),       array('CCRating','Admin'), CC_ADMIN_ONLY);
+        CCEvents::MapUrl( ccp('admin','ratings','recalc'), array('CCRating','Recalc'), CC_ADMIN_ONLY);
     }
 }
 
