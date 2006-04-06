@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -303,7 +303,10 @@ class CCUsers extends CCTable
         $where = "LOWER(user_name) = '" . strtolower($username) . "'";
         $row = $this->QueryRow($where);
         if( empty($row) )
-            return(null);
+        {
+            $row = null;
+            return $row;
+        }
         $r =& $this->GetRecordFromRow($row);
         return $r;
     }
@@ -591,11 +594,35 @@ class CCUser
 
                 if( !empty($tagfilter) )
                 {
-                    $trail[] = array( 'url' => ccl('people',$username,$tagfilter), 'text' => $tagfilter );
+  //                $trail[] = array( 'url' => ccl('people',$username,$tagfilter), 'text' => $tagfilter );
+                    $trail[] = array( 'url' => '', 'text' => '');
                 }
+            }
+
+            $uploads = new CCUploads();
+            $where['user_name'] = $username;
+            $tagrows = $uploads->QueryRows($where,'upload_tags');
+            if( !empty($tagrows) )
+            {
+                $all_tags = array();
+                foreach( $tagrows as $tagrow )
+                    $all_tags = array_merge($all_tags,CCTag::TagSplit($tagrow['upload_tags']));
+                $all_tags = array_unique($all_tags);
+                sort($all_tags);
+                $taglinks = array();
+                $taglinks[] = array( 'url' => ccl('people',$username),
+                                     'text' => empty($tagfilter) ? cct('(select tag)') : cct('(no tag)'),
+                                     'selected' => empty($tagfilter) );
+                foreach($all_tags as $tag)
+                    $taglinks[] = array( 'url' => ccl('people',$username,$tag),
+                                         'text' => $tag,
+                                         'selected' => $tag == $tagfilter );
+
+                CCPage::PageArg('crumb_tags',$taglinks);
             }
         }
 
+        
         CCPage::AddBreadCrumbs($trail);
     }
 
@@ -605,8 +632,8 @@ class CCUser
 
         if( empty($username) )
         {
-            $uploads =& CCUploads::GetTable();
-            $uploads->_key_field = 'user_id'; // HACK alert!
+            $uploads = new CCUploads();
+            $uploads->_key_field = 'user_id'; // cheese alert!
             $uploads->GroupOnKey();
             $uploads->SetOrder('user_registered','DESC');
             CCPage::AddPagingLinks($uploads,'');
@@ -615,13 +642,30 @@ class CCUser
         }
         else
         {
+            $where['user_name'] = $username;
             $users  = new CCUsers(); // we'll be slamming
             $users->AddExtraColumn('1 as artist_page');
-            $where['user_name'] = $username;
             $records  = $users->GetRecords($where);
             $itsme = $username == $this->CurrentUserName();
             $R =& $records[0];
             $name = $R['user_real_name'];
+
+            if( !empty($tagfilter ) )
+                $tagfilter = CCUtil::StripText($tagfilter);
+
+            if( !empty($tagfilter ) )
+            {
+                CCUpload::ListMultipleFiles($where,$tagfilter);
+                $this->_show_feed_links($username);
+            
+                CCPage::SetTitle($name . ' :: ' . $tagfilter );
+
+                /// EARLY EXIT 
+                return;
+            }
+
+            CCPage::SetTitle($name);
+
             if( !$itsme && $this->IsLoggedIn() )
             {
                 $current_favs = strtolower($this->CurrentUserField('user_favorites'));
@@ -633,18 +677,6 @@ class CCUser
                 $R['user_favs_link'] = array( 'text' => $msg,
                                              'link' => ccl('people','addtofavs',$username) );
             }
-            /*
-                Just holding on to this query, it's a list of all the remixes that
-                have been done on this artist:
-
-                    SELECT j1.upload_name, j2.upload_name, tree_id
-                    FROM `cc_tbl_tree`
-                    JOIN cc_tbl_uploads j1 ON tree_parent = j1.upload_id
-                    JOIN cc_tbl_uploads j2 ON tree_child = j2.upload_id
-                    WHERE j1.upload_user = '9'
-
-            */
-            CCPage::SetTitle($name);
 
             $uploads =& CCUploads::GetTable();
             $show_user = true;
@@ -692,20 +724,19 @@ END;
 
             if( $show_records )
             {
-                if( !empty($tagfilter ) )
-                    $tagfilter = CCUtil::StripText($tagfilter);
-
                 CCUpload::ListMultipleFiles($where,$tagfilter);
             }
 
-            CCPage::PageArg('artist_page',$username);
-            CCFeeds::AddFeedLinks($username,'',cct('Uploads by ').$username);
-            CCFeeds::AddFeedLinks('','remixesof=' .$username,cct('Remixes of ').$username);
-            CCFeeds::AddFeedLinks('','remixedby=' .$username,cct('Remixed by ').$username);
-
-            if( CCUser::IsAdmin() && !empty($_REQUEST['dump_rec']) )
-                CCDebug::PrintVar($records);
+            $this->_show_feed_links($username);
         }
+    }
+
+    function _show_feed_links($username)
+    {
+        CCPage::PageArg('artist_page',$username);
+        CCFeeds::AddFeedLinks($username,'',cct('Uploads by ').$username);
+        CCFeeds::AddFeedLinks('','remixesof=' .$username,cct('Remixes of ').$username);
+        CCFeeds::AddFeedLinks('','remixedby=' .$username,cct('Remixed by ').$username);
     }
 
     function AddToFavs($user_to_add_or_remove)
