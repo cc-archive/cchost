@@ -77,7 +77,7 @@ $Header$
     <tal:block define="latest_title php: CC_lang('Editors Picks')" />
     <tal:block define="latest_tag  string:editorial_pick" />
     <metal:block use-macro="custom.xml/_query_latest" />
-    <a href="${home-url}editorial/picks" tal:content="php: CC_Lang('See all picks...')" />
+    <a href="${home-url}editorial/picks" class="cc_more_menu_link" tal:content="php: CC_Lang('See all picks...')" />
 </metal:block>
 
 <metal:block define-macro="Latest_Uploads">
@@ -98,6 +98,16 @@ $Header$
   <ul tal:condition="qrecords">
     <li tal:repeat="qrecord qrecords"><a href="${qrecord/file_page_url}">${qrecord/upload_short_name}</a></li>
   </ul>
+</metal:block>
+
+<metal:block define-macro="Recent_Reviews">
+  <tal:block define="reviews php: CC_recent_reviews();" />
+  <p tal:content="php: CC_lang('Recent Reviewers');" />
+  <ul condition="reviews">
+     <li tal:repeat="rev reviews"><a href="${rev/topic_permalink}" 
+          tal:content="php: CC_strchop('${rev/reviewer_name}',12);" /></li>
+  </ul>
+  <a href="${home-url}reviews" class="cc_more_menu_link" tal:content="php: CC_Lang('More reviews...')" />    
 </metal:block>
 
 </tal:block>
