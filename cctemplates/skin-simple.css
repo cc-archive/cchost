@@ -13,7 +13,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -61,6 +61,7 @@ a:hover {
   height: 3.45em;
   padding: 15px 0;
 } 
+
 
 #cc_header h1 {
   position: absolute;
@@ -135,18 +136,35 @@ a:hover {
 }
 
 /*cc_header nav */
-#cc_header ul {
-  width: auto;
+#cc_header ul, #cc_sub_header ul {
+  list-style: none;
   position: absolute;
   bottom: 0;
-  right: 0;
   margin: 0;
+}
+
+#cc_header ul {
+  width: auto;
+  right: 0;
   padding: 0 15px 0 0;
-  list-style: none;
-  background: url("ccmixter/bg_header_bottom_right.gif") no-repeat bottom right;
   z-index: 90; /* below the H1 */
 }
-#cc_header li {
+
+#cc_sub_header {
+  position: relative;
+  height: 33px;
+  margin-bottom: 12px;
+}
+
+#cc_sub_header ul {
+  width: 100%;
+  padding: 0px;
+  left: 0;
+  border-right: solid 1px white;
+  background: url("ccmixter/sub_tab_bottom.gif") repeat-x bottom;
+}
+
+#cc_header li, #cc_sub_header li {
   float: right;
   background: transparent url("ccmixter/header_tab.gif") 100% -600px no-repeat;
   padding: 0 6px 0 0;
@@ -157,8 +175,11 @@ a:hover {
   font-size:14px;
 }
 
+#cc_sub_header li {
+  float: left;
+}
 
-#cc_header ul a {
+#cc_header ul a, #cc_sub_header ul a  {
   float: left;
   display: block;
   padding: 4px 4px 4px 10px;
@@ -168,20 +189,20 @@ a:hover {
   text-decoration: none;
 }
 
-#cc_header ul li:hover a {
+#cc_header ul li:hover a, #cc_sub_header ul li:hover a {
   background-position: 0% -400px;
 }
 
-#cc_header ul li:hover{
+#cc_header ul li:hover, #cc_sub_header ul li:hover {
   background-position: 100% -400px;
 }
 
-#cc_header ul li.selected_tab a {
+#cc_header ul li.selected_tab a, #cc_sub_header ul li.selected_tab a {
   background: transparent url("ccmixter/header_tab.gif") 0% 0px no-repeat;
   color:#036;
 }
 
-#cc_header ul li.selected_tab {
+#cc_header ul li.selected_tab, #cc_sub_header ul li.selected_tab  {
   background: transparent url("ccmixter/header_tab.gif") 100% 0px no-repeat;
   border-bottom: 1px solid white;
 }
