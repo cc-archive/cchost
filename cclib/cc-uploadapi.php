@@ -157,7 +157,7 @@ END;
 
                         OR
                         (
-                            upload_contest AND contest_publish 
+                            upload_contest AND contest_publish AND (NOW() > contest_open)
 
                             AND 
                             
