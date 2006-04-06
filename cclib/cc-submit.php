@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Header: /cvsroot/cctools/cchost1/cclib/cc-submit.php,v 1.12 2006/03/22 05:31:22 fourstones Exp $
 *
 */
 
@@ -67,7 +67,14 @@ class CCAdminSubmitFormForm extends CCUploadForm
 
                     'tags' =>
                         array( 'label' => 'Tags',
-                               'form_tip'   => 'Comma separted list of tags that will be associated with uploads. (e.g. home_movie, super8)',
+                               'form_tip'   => 'Comma separted list of tags that will be automatically associated with uploads. (e.g. home_movie, super8)',
+                               'formatter'  => 'tagsedit',
+                               'isarray'    => true,
+                               'flags'      => CCFF_POPULATE ),
+
+                    'suggested_tags' =>
+                        array( 'label' => 'Suggested Tags',
+                               'form_tip'   => 'Comma separted list of tags that will the user can optionally attach to the submission.',
                                'formatter'  => 'tagsedit',
                                'isarray'    => true,
                                'flags'      => CCFF_POPULATE ),
@@ -168,14 +175,23 @@ class CCSubmit
 
         if( empty($type['quota_reached']) && !empty($type['enabled']))
         {
+            $etc = array();
+
+            if( !empty($extra) )
+            {
+                $etc['url_extra'] = $extra;
+            }
+
+            $etc['suggested_tags'] = empty($type['suggested_tags']) ? '' : $type['suggested_tags'];
+
             $api = new CCMediaHost();
             if( $type['isremix'] )
             {
-                $api->SubmitRemix( $type['text'], $type['tags'], $type['form_help'], $extra );
+                $api->SubmitRemix( $type['text'], $type['tags'], $type['form_help'], $etc );
             }
             else
             {
-                $api->SubmitOriginal( $type['text'], $type['tags'], $type['form_help'], $username, $extra  );
+                $api->SubmitOriginal( $type['text'], $type['tags'], $type['form_help'], $username, $etc  );
             }
         }
 
