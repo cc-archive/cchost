@@ -341,18 +341,40 @@ END;
     */
     function _calc_rank(&$C,&$R,$prefix='upload')
     {
-        $parents = array_key_exists(  $prefix . '_num_sources', $R )
-                   ? $R[$prefix . '_num_sources']
-                   : $R[$prefix . '_num_remixed'];
+        /*
+            rank = (v / (v+m)) * A + (m / (v+m)) * C
 
-        $weight = ((
-                    $R[$prefix . '_score'] * $C['per-star'] *
-                    $R[$prefix . '_num_scores'] * $C['per-review']
-                   )+1) *
-                  (($parents * $C['per-parent'])+1) *
-                  (($R[$prefix . '_num_remixes'] * $C['per-child'])+1);
+            where:
+            A = average for the sample
+            v = number of votes for the sample
+            m = minimum votes required to be listed (currently 7)
+            C = the mean vote across the whole list of samples with more than m votes
+        */
 
-        $R[$prefix . '_rank'] = $weight / 500; // these numbers tend to get large
+        $m = empty( $C['bayesian-min'] ) ? 5 : $C['bayesian-min'];
+
+        $v = $R[$prefix . '_num_scores'];
+
+        if( $v < $m )
+        {
+            $rank = 0;
+        }
+        else
+        {
+            $A = $R[$prefix . '_score'];
+
+            $sql =<<<END
+                SELECT AVG(upload_score)
+                FROM cc_tbl_uploads
+                WHERE upload_num_scores >= $m
+END;
+
+            $C = CCDatabase::QueryItem($sql);
+            
+            $rank = ($v / ($v+$m)) * $A + ($m / ($v+$m)) * $C;
+        }
+
+        $R[$prefix . '_rank'] = $rank;
     }
 
     /**
