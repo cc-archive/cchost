@@ -226,6 +226,7 @@ class CCTemplateAdmin
 
     function OnNewTags()
     {
+        CCPage::SetTitle("Addd a New Template Tag");
         $form = new CCNewTemplateTagForm();
         if( empty($_POST['newtemplatetag']) )
         {
@@ -234,8 +235,10 @@ class CCTemplateAdmin
         else
         {
             $newtagname = $_REQUEST['newtag'];
-            $form->SetHiddenField($newtagname,'');
-            CCAdmin::SaveConfig($form);
+            $newtag[$newtagname] = '';
+            $configs =& CCConfigs::GetTable();
+            $configs->SaveConfig('ttag',$newtag);
+            CCUtil::SendBrowserTo(ccl('admin','templatetags'));
         }
     }
 
