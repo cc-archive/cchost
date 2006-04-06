@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -241,10 +241,13 @@ a.vlink:hover {
 
 </style>
 <table class="cc_log_view" cellspacing="0" cellpadding="0">
-  <tr><th>Date</th><th>IP</th><th colspan="2">User</th><th>Event</th><th></th><th></th></tr>
+  <tr><th>Date</th><th colspan="2">IP</th><th colspan="2">User</th><th>Event</th><th></th><th></th></tr>
   <tr tal:repeat="e activity_log">
     <td tal:content="php: CC_datefmt('${e/activity_log_date}','m-d h:ia')" />
-    <td><a href="${home-url}activity?ip=${e/activity_log_ip}">${e/activity_log_ip}</a></td>
+    <td class="vlinktd">
+    <a href="http://www.dnsstuff.com/tools/whois.ch?ip=${e/activity_log_ip}">IP</a></td>
+    <td>
+    <a href="${home-url}activity?ip=${e/activity_log_ip}">${e/activity_log_ip}</a></td>
     <td class="vlinktd"><a class="vlink" tal:condition="e/activity_log_user_name"
     href="${home-url}people/${e/activity_log_user_name}">view</a></td><td><a 
       tal:condition="e/activity_log_user_name"
