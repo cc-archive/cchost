@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -88,7 +88,26 @@ class CCUploadMediaForm extends CCUploadForm
         $this->_extra = array();
 
         CCPage::AddScriptBlock('popular_tags_script');
+    }
 
+    function AddSuggestedTags($suggested_tags)
+    {
+        if( empty($suggested_tags) )
+            return;
+
+        if( !is_array($suggested_tags) )
+            $suggested_tags = CCTag::TagSplit($suggested_tags);
+
+        $fields['suggested_tags'] =
+                        array( 'label'      => cct('Suggested Tags'),
+                               'target'     => 'upload_tags',
+                               'tags'       => $suggested_tags,
+                               'formatter'  => 'metalmacro',
+                               'macro'      => 'popular_tags',
+                               'form_tip'   => cct('Click on these to automatically add to your upload.'),
+                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
+
+        $this->InsertFormFields( $fields, 'before', 'popular_tags' );
     }
 
 }
