@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -46,7 +46,6 @@ $Header$
     list_file string:upload.xml/list_file;
     list_files string:upload.xml/list_files;
     main_body string:page.xml/main_body;
-    page_tabs string:navigator.xml/page_tabs;
     polling_data string:contest.xml/polling_data;
     pool_approvals string:pool.xml/pool_approvals;
     pool_info_head string:pool.xml/pool_info_head;
@@ -60,6 +59,7 @@ $Header$
     remix_line string:upload.xml/remix_line;
     show_activity_log string:misc.xml/show_activity_log;
     show_beta_message string:page.xml/show_beta_message;
+    show_body_html string:page.xml/show_body_html;
     show_box string:page.xml/show_box;
     show_editor_picks string:misc.xml/show_editor_picks;
     show_form_about string:form.xml/show_form_about;
@@ -70,9 +70,9 @@ $Header$
     show_remix_license string:remix_form.xml/show_remix_license;
     show_remix_parents string:upload.xml/show_remix_parents;
     show_remix_search string:remix_form.xml/show_remix_search;
+    show_sub_nav_tabs string:page.xml/show_sub_nav_tabs;
     show_zip_dir string:upload_misc.xml/show_zip_dir;
     submit_forms string:form.xml/submit_forms;
-    tab_script string:navigator.xml/tab_script;
     tags string:tags.xml/tags;
     taglinks string:tags.xml/taglinks;
     tag_picker string:tags.xml/tag_picker;
