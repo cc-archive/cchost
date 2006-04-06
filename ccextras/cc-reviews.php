@@ -51,21 +51,28 @@ function CC_recent_reviews($limit=5)
             JOIN cc_tbl_uploads       ON topic_upload = upload_id
             JOIN cc_tbl_user reviewee ON upload_user  = reviewee.user_id
         WHERE (topic_type = 'review') AND (upload_banned < 1) AND (upload_published > 0)
-        GROUP BY reviewer.user_id
         ORDER BY topic_date DESC
-        LIMIT $limit
+        LIMIT 100
 END;
 
     $rows = CCDatabase::QueryRows($sql);
     $count = count($rows);
+    $reviewers = array();
+    $reviews = array();
     for( $i = 0; $i < $count; $i++ )
     {
         $R =& $rows[$i];
+        if( in_array($R['reviewer_name'],$reviewers) )
+            continue;
+        $reviewers[] = $R['reviewer_name'];
         $R['topic_permalink'] = ccl( 'reviews', $R['reviewee_user_name'],
                                      $R['upload_id'] . '#' . $R['topic_id'] );
+        $reviews[] = $R;
+        if( count($reviews) == $limit )
+            break;
     }
 
-    return $rows;
+    return $reviews;
 }
 
 class CCReviewForm extends CCTopicForm
