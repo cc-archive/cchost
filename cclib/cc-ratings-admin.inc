@@ -27,75 +27,55 @@ class CCAdminRatingsForm extends CCEditConfigForm
     function CCAdminRatingsForm()
     {
         $this->CCEditConfigForm('chart',CC_GLOBAL_SCOPE);
-            $fields = array( 
-                        'per-star' =>  
-                           array(  'label'      => 'Per User Rating',
-                                   'form_tip'   => 'What each \'star\' is worth',
-                                   'class'      => 'cc_form_input_short',
-                                   'formatter'  => 'textedit',
-                                   'flags'      => CCFF_POPULATE ),
-                        'per-review' =>  
-                           array(  'label'      => 'Per User Review',
-                                   'form_tip'   => 'This rewards for the number of reviewer and is multipled against the average rating',
-                                   'class'      => 'cc_form_input_short',
-                                   'formatter'  => 'textedit',
-                                   'flags'      => CCFF_POPULATE),
-                        'per-child' =>  
-                           array(  'label'      => 'Per Number of Times Remixed',
-                                   'form_tip'   => 'This rewards for how people have remixed this work',
-                                   'class'      => 'cc_form_input_short',
-                                   'formatter'  => 'textedit',
-                                   'flags'      => CCFF_POPULATE),
-                        'per-parent' =>  
-                           array(  'label'      => 'Per Number of Samples Used',
-                                   'form_tip'   => 'This rewards for using lots of samples',
-                                   'class'      => 'cc_form_input_short',
-                                   'formatter'  => 'textedit',
-                                   'flags'      => CCFF_POPULATE),
-                        'cut-off' =>  
-                           array(  'label'      => 'Cut Off Point',
-                                   'form_tip'   => 'Only look at upload since this time',
-                                   'formatter'  => 'select',
-                                   'options'    => array( '1 day ago' => 'The day before',
-                                                          '3 days ago' => 'The previous 3 days',
-                                                          '1 week ago' => 'The previous week',
-                                                          '2 weeks ago' => 'The previous 2 weeks',
-                                                          '1 month ago' => 'The previous month',
-                                                          'forever' => 'Since forever and ever',
-                                                            ),
-                                   'value'      => '2 weeks ago',
-                                   'flags'      => CCFF_POPULATE),
-                        'per-hour' =>  
-                           array(  'label'      => 'Per Hour Since Cut Off',
-                                   'form_tip'   => 'This puts more weight on newer uploads',
-                                   'class'      => 'cc_form_input_short',
-                                   'formatter'  => 'textedit',
-                                   'flags'      => CCFF_POPULATE),
-                );
+
+        $url = ccl('admin','ratings','recalc');
+
+        $fields = array( 
+                    'bayesian-min' =>  
+                       array(  'label'      => 'Chart minimum',
+                               'form_tip'   => 'Mininum number of ratings an upload must have to seen in charts',
+                               'class'      => 'cc_form_input_short',
+                               'formatter'  => 'textedit',
+                               'flags'      => CCFF_POPULATE ),
+                    'cut-off' =>  
+                       array(  'label'      => 'Cut Off Point',
+                               'form_tip'   => 'Only chart uploads since this time',
+                               'formatter'  => 'select',
+                               'options'    => array( '1 day ago' => 'The day before',
+                                                      '3 days ago' => 'The previous 3 days',
+                                                      '1 week ago' => 'The previous week',
+                                                      '2 weeks ago' => 'The previous 2 weeks',
+                                                      '1 month ago' => 'The previous month',
+                                                      'forever' => 'Since forever and ever',
+                                                        ),
+                               'value'      => '2 weeks ago',
+                               'flags'      => CCFF_POPULATE),
+                    'list-min' =>  
+                       array(  'label'      => 'Listing minium',
+                               'form_tip'   => 'Minium number of ratings an upload must have to display ratings in listing',
+                               'class'      => 'cc_form_input_short',
+                               'formatter'  => 'textedit',
+                               'flags'      => CCFF_POPULATE),
+                    'recalc_now' =>  
+                       array(  'label'      => 'Recalc now',
+                               'form_tip'   => 'Recalculate rating during submit. NOTE: This can take a very, very (very) long time if you have a lot of uploads.',
+                               'value'      => '<a href="$url" class="cc_gen_button"><span>Recalc</span></a>',
+                               'formatter'  => 'checkbox',
+                               'flags'      => CCFF_POPULATE),
+            );
 
         $this->AddFormFields($fields);
-        $this->SetHiddenField('dirty','1',CCFF_HIDDEN);
         $url = ccl('viewfile','picks.xml');
 
         $help =<<<END
-            <p>
-            Each value here determines the weight of all the corresponding element 
-            that is used
-            to calculate the ratings (favorites) chart. You can see an example of how
-            to use this chart at <a href="$url">media/viewfile/picks.xml</a></p>
-            <ul><li>A <b>1</b> (one) means use the value as found</li>
-            <li>A <b>0</b> (zero) means don't use the value at all</li>
-            <li>Less than 1 (e.g. <b>0.5</b>) means use a percentage of the value</li>
-            <li>More than 1 (e.g. <b>5</b>) means use a multiple</li></ul>
-                <p>For example if you just want to use the User's Ratings and no other
-            values then set "Per User Rating" and "Per User" to <b>1</b> (one) and everything
-                else to <b>0</b> (zero).</p>
-                <p>None of this is very scientific. Just have fun.</p>
+            <p>The system uses the Bayesian method for calculating the ranking of 
+            an upload for the 'picks' page.
 END;
         $this->SetHelpText($help);
 
         // quick hack to make up for the fact that the admin forms
         // don't know how to include this file
+        // ALSO: gives us a chance to recalc ratings if we have to
         $this->SetHandler( ccl('admin', 'ratings', 'savesettings') );
 
     }
@@ -208,6 +188,44 @@ EOF;
         CCPage::AddForm( $form->GenerateForm() );
     }
 
+    function Recalc()
+    {
+        $configs =& CCConfigs::GetTable();
+        $chart = $configs->GetConfig('chart');
+
+        if( empty($chart['bayesian-min']) )
+            $chart['bayesian-min'] = 5;
+
+        $uploads =& CCUploads::GetTable();
+        $where = 'upload_num_scores >= ' . $chart['bayesian-min'];
+        $rows = $uploads->QueryRows($where);
+        $count = count($rows);
+        for( $i = 0; $i < $count; $i++ )
+        {
+            CCSync::_calc_rank($chart,$rows[$i]);
+            $args['upload_id'] = $rows[$i]['upload_id'];
+            $args['upload_rank'] = $rows[$i]['upload_rank'];
+            $uploads->Update($args);
+        }
+        $upcount = $count;
+        $count   = 0;
+
+        $args = array();
+        $users =& CCUsers::GetTable();
+        $where = 'user_num_scores > ' . $chart['bayesian-min'];
+        $rows = $users->QueryRows($where);
+        $count = count($rows);
+        for( $i = 0; $i < $count; $i++ )
+        {
+            CCSync::_calc_rank($chart,$rows[$i],'user');
+            $args['user_id'] = $rows[$i]['user_id'];
+            $args['user_rank'] = $rows[$i]['user_rank'];
+            $users->Update($args);
+        }
+
+        CCPage::Prompt("$count user scores and $upcount uploads recalculated");
+    }
+
     function Admin($cmd='',$user_id='',$ratings_id='',$cmd2='',$confirmed='')
     {
         if( $cmd == 'savesettings' )
@@ -216,6 +234,10 @@ EOF;
             // is not automatically included
             $admin_api = new CCAdmin();
             $admin_api->SaveConfig();
+            if( !empty($_POST['recalc_now']) )
+            {
+                $this->Recalc();
+            }
             return;
         }
 
