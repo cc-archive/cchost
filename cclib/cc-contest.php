@@ -167,8 +167,18 @@ class CCContests extends CCTable
     */
     function & GetOpenContests($expand=false,$limit=0)
     {
-        $where = '(contest_deadline > NOW()) OR (contest_vote_deadline > NOW())';
-        return( $this->GetRecords($where,$expand,0,$limit) );
+        $where =<<<EOF
+         contest_publish 
+           AND
+         NOW() > contest_open
+           AND 
+         (
+           (NOW() < contest_deadline) OR 
+           (NOW() < contest_vote_deadline)
+         )
+EOF;
+        $r = $this->GetRecords($where,$expand,0,$limit);
+        return $r;
     }
 
     /**
@@ -211,9 +221,10 @@ class CCContests extends CCTable
         $row['contest_over']               = false;
         if( $row['contest_publish'] > 0 )
         {
+            $open     = strtotime($row['contest_open']);
             $deadline = strtotime($row['contest_deadline']);
             $now      = time();
-            if( $deadline > $now )
+            if( ($now > $open) && ($now < $deadline) )
             {
                 $row['contest_taking_submissions'] = true;
 
@@ -222,16 +233,19 @@ class CCContests extends CCTable
             }
             else
             {
-                $row['contest_can_browse_entries'] = true;
-
-                if( $row['contest_vote_online'] )
+                if( $now > $open )
                 {
-                    $deadline = strtotime($row['contest_vote_deadline']);
-                    $row['contest_show_results'] = true;
-                    if( $deadline > $now )
-                        $row['contest_voting_open'] = true;
-                    else
-                        $row['contest_over'] = true;
+                    $row['contest_can_browse_entries'] = true;
+
+                    if( $row['contest_vote_online'] )
+                    {
+                        $deadline = strtotime($row['contest_vote_deadline']);
+                        $row['contest_show_results'] = true;
+                        if( $now < $deadline )
+                            $row['contest_voting_open'] = true;
+                        else
+                            $row['contest_over'] = true;
+                    }
                 }
                 else
                 {
@@ -383,6 +397,18 @@ class CCContest
         require_once('cclib/cc-contest-admin.inc');
         $admin_api = new CCContestAdmin();
         $admin_api->CreateContest($this);
+    }
+
+    /**
+    * Handler for admin/contest
+    *
+    * Show a contest create form and handles POST
+    */
+    function Admin($contest_short_name)
+    {
+        require_once('cclib/cc-contest-admin.inc');
+        $admin_api = new CCContestAdmin();
+        $admin_api->Admin($this,$contest_short_name);
     }
 
     /**
@@ -875,6 +901,7 @@ END;
         CCEvents::MapUrl( 'contest/create',        array( 'CCContest', 'CreateContest'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( 'contest/edit',          array( 'CCContest', 'EditContest'),   CC_ADMIN_ONLY );
         CCEvents::MapUrl( 'contest/vote',          array( 'CCContest', 'Vote'),          CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'admin/contest',          array( 'CCContest', 'Admin'),        CC_ADMIN_ONLY);
 
         //CCEvents::MapUrl( 'contest/poll/results', array( 'CCContest', 'PollResults'),     CC_DONT_CARE_LOGGED_IN );
     }

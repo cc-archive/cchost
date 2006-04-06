@@ -273,6 +273,74 @@ class CCContestAdmin
     *
     * Show a contest create form and handles POST
     */
+    function Admin($contest_api,$contest_short_name)
+    {
+        global $CC_CFG_ROOT;
+
+        $submitform_url = ccc($contest_short_name, 'admin','submit');
+        $gsubmitform_url = ccc(CC_GLOBAL_SCOPE, 'admin','submit');
+        $navtabs_url    = ccc($contest_short_name, 'admin', 'tabs' );
+        $settings_url   = ccc($contest_short_name, 'admin', 'settings' );
+        $tags_url       = ccc($contest_short_name, 'admin', 'templatetags' );
+
+        $html =<<<EOF
+<style>
+.contest_help {
+    width: 80%;
+    }
+.contest_help td a {
+    font-weight: bold;
+    }
+.contest_help td, 
+.contest_help th {
+    vertical-align: top;
+    padding-bottom: 10px;
+    border-top: 1px solid #AAA;
+    }
+.contest_help th {
+    text-align: right;
+    white-space: nowrap;
+    padding-right: 8px;
+    font-size: 12px;
+    }
+.contest_help ol li  {
+     margin-bottom: 9px;
+    }
+</style>
+<br />
+<h4>Things you might want to do now that your contest is in the system:</h4>
+<br />
+            <table class="contest_help">
+  <tr><th>Upload special files</th>
+     <td>Upload special files for the contest like pages, rules, etc. Click on 'Add Files' tab above.</td></tr>
+  <tr><th>Assign navigation tabs</th>
+     <td>Assign navigation tabs to files, rename, remove tabs. Do that <a href="$navtabs_url">here</a>.</td></tr>
+  <tr><th>Edit the Banner</th>
+     <td>Change the banner and other page content <a href="$tags_url">here</a>.</td></tr>
+  <tr><th>Edit 'Submit Files'</th>
+     <td>Create a blurb on the site's main submit page (the menu link 'Submit Files'). Do that <a href="$gsubmitform_url">here</a>.
+       (Or if you just want to change it for <b>{$CC_CFG_ROOT}</b> do that <a href=\"$submitform_url\">here</a>.)</td></tr>
+  <tr><th>Submit Sources</th>
+     <td>You might want to create a user that represents the contest source
+              rather than having the sources look like they came from a site administrator.
+              <ol><li>Pick a login name for the source provider user.</li>
+                  <li>Add that login name as an administrator <a href="$settings_url">here</a></li>
+                  <li>Log out, and then register the user.</li>
+                  <li>Log in as that user and come back to this screen.</li>
+                  <li>Submit Sources as that user so users will see the sources as coming from them.</li>
+                </ol>
+        </td></tr>
+    </table>
+EOF;
+
+        CCPage::PageArg('body_html',$html,'show_body_html');
+    }
+         
+    /**
+    * Handler for contest/create
+    *
+    * Show a contest create form and handles POST
+    */
     function CreateContest($contest_api)
     {
         CCPage::SetTitle('Create Contest');
@@ -300,7 +368,7 @@ class CCContestAdmin
             $configs =& CCConfigs::GetTable();
 
             // create a tabs page for this contest
-            $pages['contest'] = $this->_get_contest_tabs($contest_short_name, $long_name );
+            $pages = $this->_get_contest_tabs($contest_short_name, $long_name );
             $configs->SaveConfig('tab_pages',$pages,$contest_short_name,false);
 
             // create a new virtual config, point it's home page it at the tabs page
@@ -313,7 +381,9 @@ class CCContestAdmin
             $template_tags['banner-html'] = $template_tags['site-title'] . ' - ' . $long_name;
             $configs->SaveConfig('ttag',$template_tags,$contest_short_name,false);
 
-            CCUtil::SendBrowserTo( ccr($contest_short_name) );
+            $url = ccc($contest_short_name,'view','contest','edit');
+
+            CCUtil::SendBrowserTo( $url );
         }
 
     }
@@ -326,7 +396,7 @@ class CCContestAdmin
     */
     function _get_contest_tabs($short_name, $full_name )
     {
-        $a = array(
+        $a['contest'] = array(
              'handler' => array(
                                  'method' => array( 'CCContest', 'OnTabDisplay' ),
                                  'args' => array( 'contest' => $short_name ),
@@ -355,35 +425,70 @@ class CCContestAdmin
 
              'entries' =>     array(  'text'   => cct('Entries'),
                                    'help'   => cct('See recently uploaded originals'),
-                                   'limit'  => 1,
-                                   'tags'   => CCUD_CONTEST_ENTRY,
+                                   'limit'  => '',
+                                   'tags'   => 'contest_entry, ' . $short_name,
                                    'access' => CC_DONT_CARE_LOGGED_IN,
-                                   'function' => 'any' ),
+                                   'function' => 'all' ),
 
-             'submit'   =>    array(  'text'   => cct('Submit'),
+             'submit'   =>    array(  'text'   => cct('Submit Entry'),
                                    'help'   => cct('Submit an entry in the ') . $full_name . ' contest',
                                    'tags'   => '/contest/submit/' . $short_name,
                                    'limit'  => 1,
                                    'access' => CC_MUST_BE_LOGGED_IN,
                                    'function' => 'url' ),
 
-             'submitsources'   =>    array(  'text'   => cct('Submit Sources'),
-                                   'help'   => cct('Submit sources for the ') . $full_name . ' contest',
-                                   'tags'   => '/contest/submitsource/' . $short_name,
+             'edit'   =>    array(  'text'   => cct('Admin'),
+                                   'help'   => 'Admin the contest',
+                                   'tags'   => 'admin',
                                    'limit'  => 1,
                                    'access' => CC_ADMIN_ONLY,
-                                   'function' => 'url' ),
-
-             'edit'   =>    array(  'text'   => cct('Properties'),
-                                   'help'   => cct('Edit the properties (dates, rules, etc.) for ') . $full_name . ' contest',
-                                   'tags'   => '/contest/edit/' . $short_name,
-                                   'limit'  => 1,
-                                   'access' => CC_ADMIN_ONLY,
-                                   'function' => 'url' ),
+                                   'function' => 'sub' ),
              );
 
-        return( $a );
+            $a['admin'] = array (
+                'home' => array (
+                    'text' => 'Admin Home',
+                    'help' => 'Main admin screen',
+                    'tags' => '/admin/contest/' . $short_name,
+                    'limit' => '',
+                    'access' => CC_ADMIN_ONLY,
+                    'function' => 'url',
+                    ),
+                'properties' => array (
+                    'text' => 'Properties',
+                    'help' => 'Edit contest properties',
+                    'tags' => '/contest/edit/' . $short_name,
+                    'limit' => '',
+                    'access' => CC_ADMIN_ONLY,
+                    'function' => 'url',
+                    ),
+             'submitsources' =>  array(  'text'   => 'Submit Sources',
+                   'help'   => 'Submit sources for the ' . $full_name . ' contest',
+                   'tags'   => '/contest/submitsource/' . $short_name,
+                   'limit'  => '',
+                   'access' => CC_ADMIN_ONLY,
+                   'function' => 'url' ),
+                'files' => array (
+                    'text' => 'Manage Files',
+                    'help' => 'Manage system files',
+                    'tags' => '/admin/files',
+                    'limit' => '',
+                    'access' => CC_ADMIN_ONLY,
+                    'function' => 'url',
+                    ),
+                'addfiles' => array (
+                    'text' => 'Add Files',
+                    'help' => 'Add files to the system',
+                    'tags' => '/admin/addfiles',
+                    'limit' => '',
+                    'access' => CC_ADMIN_ONLY,
+                    'function' => 'url',
+                    ),
+                );
+
+        return $a ;
     }
+
 
     /**
     * Delete a contest
@@ -413,7 +518,6 @@ class CCContestAdmin
         $contests =& CCContests::GetTable();
 
         $record = $contests->GetRecordFromShortName($contest_short_name) ;
-        CCPage::SetTitle(cct('Edit ') . $record['contest_friendly_name']);
 
         $upload_dir = $contest_api->_get_upload_dir($contest_short_name);
         $form = new CCEditContestForm($record,$upload_dir);
@@ -447,7 +551,6 @@ class CCContestAdmin
         if( !CCUser::IsAdmin() )
             return;
 
-        CCPage::SetTitle(cct('Submit Contest Sources'));
         $contests =& CCContests::GetTable();
         $record =& $contests->GetRecordFromShortName($contest_short_name);
         $form = new CCUploadContestSourceForm($record);
