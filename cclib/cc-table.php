@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -291,7 +291,10 @@ class CCTable
     {
         $row = $this->QueryKeyRow($key);
         if( !empty($row) )
-            return $this->GetRecordFromRow($row);
+        {
+            $R =& $this->GetRecordFromRow($row);
+            return $R;
+        }
         $a = array();
         return $a;
     }
@@ -303,7 +306,10 @@ class CCTable
     {
         $row = $this->QueryKeyRow($key);
         if( !empty($row) )
-            return $this->GetRecordFromRow($row);
+        {
+            $r = $this->GetRecordFromRow($row);
+            return $r;
+        }
         $a = array();
         return $a;
     }
@@ -503,7 +509,8 @@ class CCTable
     */
     function & QueryRows($where,$columns='*')
     {
-        return( CCDatabase::QueryRows(  $this->_get_select($where,$columns) ) );
+        $r =& CCDatabase::QueryRows(  $this->_get_select($where,$columns) );
+        return $r;
     }
 
     function CountRows($where = '' )
