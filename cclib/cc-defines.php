@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -73,6 +73,7 @@ define('CC_EVENT_RENDER_PAGE',         'renderpage');
 
 define('CC_EVENT_FORM_INIT',           'forminit' );
 define('CC_EVENT_FORM_FIELDS',         'formfields' );
+define('CC_EVENT_EXTRA_FORM_FIELDS',   'formfieldsex' );
 define('CC_EVENT_FORM_POPULATE',       'formpopulate' );
 define('CC_EVENT_FORM_VERIFY',         'formverify' );
 
