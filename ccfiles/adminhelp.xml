@@ -16,15 +16,15 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
 <style>
 #adminhelp
 {
-  font-style : Courier New, courier, serif;
-  font-size: 12px;
+  font-style : Verdana;
+  font-size: 11px;
 }
 #adminhelp li
 {
@@ -37,7 +37,13 @@ $Header$
   margin-bottom: 2px;
   text-decoration: underline;
 } 
-
+td.tb {
+  vertical-align: top;
+  text-align: right;
+  font-style: italic;
+  width: 190px;
+  padding-bottom: 23px;
+ }
 </style>
 <div id="adminhelp">
 
@@ -130,21 +136,27 @@ of the blank-map:
      <li><b>Name</b> 
        This is used in the url. For example: if the tab set is called 'mytabs' and the tab name is 'funky' you can browse to the page and highlight that tab by using <code>${home-url}view/mytabs/<i>funky</i></code>
      </li>
+    <li><b>Order</b> The order (from left to right) in which the tabs will appear.</li>
     <li><b>Text</b> This is the text that is used in the tab itself.</li>
     <li><b>Help Hint</b> The text that displays when the user hovers over an unselected tab.</li>
-    <li><b>Function</b> 
-      Use this to determine what happens when the user clicks on the tab. You can chose to <ul><li>list out upload   based on tags</li>
-     <li>specify a URL to fetch a form or file</li></ul> </li>
-     <!-- li><b>Limit</b> If you chose an upload listing check this box to limit the searches to the local <a href="$home-url">virtual root</a>. If you chose to execute a URL then this has no effect. </li -->
-    <li><b>Data</b> This fields doubles as <i>either</i>
-      <ul>
-        <li>A comma separated list of tags to search the uploads database when the use selects the tab.</li>
-        <li>An internal ccHost URL (e.g. 'viewfile/myhelp.xml' or 'files/submit'). If the URL starts with 'http://' then the next option kicks in:</li>
-        <li>An fully qualified path to any place on the web. This can be helpful if you want tabs that point to other virtual roots in your system.</li>
-      </ul>
-      The interpretation depends the 'Function' field.
-    </li>
+    <li><b>Access</b> This is where (like the menus) you decide who gets to see the items. <i>Contests 
+          are a special case</i> that hide certain tabs if they are not relevant, so even if you 
+          say the 'Submit Entry' tab is available to 'Everyone', it will be hidden if the contest
+          date has ended.</li>
   </ul>
+  <p>The Function and Data fields work together to determin what happens when the user
+    clicks on the tab. </p>
+  <table>
+  <tr><th>If 'Function' is set to...:</th><th>Then 'Data' should be...</th></tr>
+  <tr><td class='tb'>Match Any Tags</td><td>A comma separated list of tags. The user will see a listing of 
+           uploads that have <i>any</i> of the tags specified.</td></tr>
+  <tr><td class='tb'>Match All Tags</td><td>A comma separated list of tags. The user will see a listing of 
+           uploads that have <i>all</i> of the tags specified.</td></tr>
+  <tr><td class='tb'>Execute URL</td><td>A url to execute. If the url does <i>not</i> start with 'http://' then
+    system will assume it is an internal ccHost URL (e.g. 'viewfile/myhelp.xml' or 'files/submit'). If it does start with 'http://' then the user's browser will be redirected to that web address.</td></tr>
+  <tr><td class='tb'>Subtabs</td><td>The name of a subnaviation tab set that will appear on the screen <i>under</i> the current tab set. (As of 3/2006 only the top tab set can have a sub-tab set).</td></tr>
+
+  </table>
 </div> 
 
 </div>
