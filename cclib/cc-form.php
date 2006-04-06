@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -254,15 +254,40 @@ class CCForm
     *
     * @param array $fields Array of meta-data structures.
     */
-    function AddFormFields( &$fields )
+    function AddFormFields( &$fields, $trigger_event = true )
     {
         // the += operator will NOT overwrite existing keys with new
         // information:
         // http://us4.php.net/manual/en/language.operators.array.php
         $this->_form_fields = array_merge($this->_form_fields,$fields);
 
+        if( $trigger_event )
         CCEvents::Invoke( CC_EVENT_FORM_FIELDS, array( &$this, &$this->_form_fields ) );
     }
+
+
+    function InsertFormFields( &$fields, $before_or_after, $target_field )
+    {
+        $pos = array_search($target_field, array_keys($this->_form_fields));
+        if( $before_or_after == 'after' )
+            $pos++;
+        if( $pos == count($this->_form_fields) )
+        {
+            $this->AddFormFields($fields,false);
+        }
+        else
+        {
+            $this->_form_fields = array_merge(
+                                    array_slice($this->_form_fields, 0, $pos), 
+                                    $fields, 
+                                    array_slice($this->_form_fields, $pos));
+
+            //CCDebug::PrintVar($this->_form_fields,false);
+        }
+
+        CCEvents::Invoke( CC_EVENT_EXTRA_FORM_FIELDS, array( &$this, &$fields ) );
+    }
+
 
     /**
     * Set the 'action' field of the form element. (The default is the current url.)
