@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -23,28 +23,12 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCMixter',  'OnBuildMenu'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCMixter' , 'OnMapUrls') );
-CCEvents::AddHandler(CC_EVENT_APP_INIT,     array( 'CCMixter' , 'OnAppInit') );
+//CCEvents::AddHandler(CC_EVENT_APP_INIT,     array( 'CCMixter' , 'OnAppInit') );
 
 class CCMixter
 {
 
-    function OnAppInit()
-    {
-        global $CC_GLOBALS;
-
-        if( CCUser::IsAdmin() && !empty($_REQUEST['closeccc']) )
-        {
-            if( file_exists('mixter-lib/close-criminals.inc') )
-            {
-                require_once('mixter-lib/close-criminals.inc');
-                _kill_ccc_contest($_REQUEST['closeccc']);
-            }
-            else
-            {
-                CCPage::Prompt('cound not find .inc file');
-            }
-        }
-    }
+//  function OnAppInit() { }
 
     function Samples()
     {
