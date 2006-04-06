@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -63,7 +63,7 @@ class CCEditTabsForm extends CCGridForm
 
         $help =<<<END
 <p><a href="$url"><b>Click here</b> for help with editing navigator tab sets.</a></p>
-<p><a href="$addtab"><b>Click here</b> for add another tab.</a></p>
+<p><a href="$addtab"><b>Click here</b> to add another tab.</a></p>
 <p>(Clickings on these links will not save your form.)</p>
 END;
         $this->SetHelpText($help);
@@ -125,7 +125,8 @@ END;
                     'formatter'  => 'select',
                     'options'    => array( 'any' => 'Match Any Tags',
                                            'all' => 'Match All Tags',
-                                           'url' => 'Execute URL'
+                                           'url' => 'Execute URL',
+                                           'sub' => 'SubTabs'
                                             ),
                     'flags'      => CCFF_NONE ),
 /*
@@ -332,6 +333,11 @@ class CCNavigatorAdmin
                                 // this is a web url
                                 $data = $tab['tags'];
                             }
+                        }
+                        elseif( $tab['function'] == 'sub' )
+                        {
+                            // this is the name of sub-navigation tabs set
+                            $data = $tab['tags'];
                         }
                         else
                         {

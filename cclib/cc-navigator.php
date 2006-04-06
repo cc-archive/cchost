@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -53,22 +53,134 @@ class CCNavigator
     *
     * @param string $page_name Name of tab page to display, or if null, uses the default page for the config root
     * @param string $default_tab_name Name of the selected tab, or if null, uses the first tab on the page
+    * @param string $sub_tab_name Name of the selected sub tab, or if null, uses the first sub tab on the page
     */
-    function View($page_name='',$default_tab_name='')
+    function View($page_name='',$default_tab_name='',$sub_tab_name='')
     {
         $page =& CCPage::GetPage();
-        $this->ShowTabs($page,true,$page_name,$default_tab_name);
+        $this->ShowTabs($page,true,$page_name,$default_tab_name,$sub_tab_name);
     }
 
-    function ShowTabs(&$page_out,$execute=false,$page_name='',$default_tab_name='')
+    function ShowSubTabs($tabsetname,$selected_tab,$base_url,$execute)
+    {
+        if( $this->_get_selected_page($tabsetname,$selected_tab,$sub_page) )
+        {
+            $default_tab = array();
+            $sub_tab_info = array();
+
+            $this->_setup_page(   $selected_tab,
+                                  $sub_page, 
+                                  $base_url,
+                                  $execute,
+                                  $default_tab,
+                                  $sub_tab_info );
+
+            $page_out =& CCPage::GetPage();
+            $page_out->PageArg('sub_nav_tabs',$sub_tab_info);
+            
+            return true;
+        }
+
+        return false;
+    }
+
+    function ShowTabs(&$page_out,$execute=false,$page_name='',$default_tab_name='',$sub_tab_name='')
     {
         global $CC_CFG_ROOT;
 
         // Step 1. Figure out what page we're loading
         if( !$this->_get_selected_page($page_name,$default_tab_name,$page) )
             return;
-        
-        // Step 2. Call any custom handler to allow for dynamic removal
+
+        // Step 2. Get the Page ready for display
+        //
+        $base_url = ccl( 'view', $page_name );
+        $default_tab = array();
+        $tab_info = array();
+
+        $this->_setup_page(   $default_tab_name,
+                              $page, 
+                              $base_url,
+                              $execute,
+                              &$default_tab,
+                              &$tab_info );
+
+        // Step 3. This displays the tab on the page
+        $page_out->AddTabNaviator( $tab_info, 'page_tabs' );
+
+        $title = $default_tab['text'];
+
+        if( $default_tab['function'] == 'sub' )
+        {
+            if( $this->_get_selected_page($default_tab['tags'],$sub_tab_name,$sub_page) )
+            {
+                $base_url = ccl( 'view', $page_name, $default_tab_name );
+                $default_tab = array();
+                $sub_tab_info = array();
+
+                $this->_setup_page(   $sub_tab_name,
+                                      $sub_page, 
+                                      $base_url,
+                                      $execute,
+                                      &$default_tab,
+                                      &$sub_tab_info );
+
+                $page_out->PageArg('sub_nav_tabs',$sub_tab_info);
+
+                $title = '';
+
+            }
+        }
+
+        if( $execute )
+        {
+            // Step 4. Execute the currently selected tab
+
+            if( $default_tab['function'] == 'url' )
+            {
+                // 4a. The tab is an internal URL to execute, translate it into
+                //     action (method + args psuedo-closure) and perform it.
+
+                $url = $default_tab['tags'];
+                if( strtolower(substr($url,0,7)) == 'http://' )
+                    CCUtil::SendBrowserTo($url);
+
+                $action = CCEvents::ResolveUrl( $url, true );
+                if( empty($action) )
+                    $this->_signal_error();
+                else
+                    CCEvents::PerformAction($action);
+            }
+            elseif( $default_tab['function'] != 'sub' )
+            {
+                // 4b. Let folks know they can subscribe to this query
+                //     TODO: although the query isn't limited to this vroot!!
+
+                if( !empty($title) )
+                    $page_out->SetTitle($title);
+
+                $tagstr = $default_tab['tags'];
+                $taghelp = strlen($tagstr) > 10 ? substr($tagstr,0,8) . '...' : $tagstr;
+                CCFeeds::AddFeedLinks($tagstr,'','Tags: ' . $taghelp);
+
+                // 4c. Limit queries to this vroot 
+                if( $default_tab['limit'] )
+                    $where['upload_config'] = $CC_CFG_ROOT;  // todo: this needs to be thought out a bit
+                else
+                    $where = '';
+
+                // 4d. The tab is a tag-based query of the uploads
+                //     database
+
+                CCUpload::ListMultipleFiles($where,$default_tab['tags'],$default_tab['function']);
+            }
+        }
+    }
+
+
+    function _setup_page(&$default_tab_name, &$page, $base_url, $execute, &$default_tab, &$tab_info )
+    {
+        // Step 1. Call any custom handler to allow for dynamic removal
         //         of tabs and other hacks
         if( !empty($page['handler']) )
         {
@@ -83,7 +195,7 @@ class CCNavigator
             call_user_func_array($handler,array(&$page));
         }
 
-        // Step 3. Remove tabs that we're not supposed to see
+        // Step 2. Remove tabs that we're not supposed to see
         $tab_keys = array_keys($page);
         $count = count($page);
         $mask = CCMenu::GetAccessMask();
@@ -94,7 +206,7 @@ class CCNavigator
                 unset($page[$tab_keys[$i]]);
         }
         
-        // Step 3a. The keys and count might have changed
+        // Step 3. The keys and count might have changed
         $tab_keys = array_keys($page);
         $count = count($page);
 
@@ -116,7 +228,7 @@ class CCNavigator
             if( empty($page[$name]) )
                 continue;
             $tab =& $page[$name];
-            $tab['url'] = ccl( 'view', $page_name, $name );
+            $tab['url'] = $base_url . '/' . $name;
             if( $execute && $default_tab_name == $name )
             {
                 $tab['selected'] = true;
@@ -130,66 +242,16 @@ class CCNavigator
         // Step 6. Create a tab info structure the way the HTML 
         //         template wants it
 
-        $tab_info['id']            = $page_name;
         $tab_info['num_tabs']      = $count;
         $tab_info['tab_width']     = intval(100/$count) . '%';
 
         $default_tab = $page[$default_tab_name];
+
         $tab_info['selected_text'] = $default_tab['help'];
         $tab_info['tags']          = $default_tab['tags'];
         $tab_info['function']      = $default_tab['function'];
         $tab_info['tabs']          = $page; // array_reverse($page);
 
-        //CCDebug::PrintVar($tab_info,false);
-        
-        // Step 7. Add the supporting Javascript to the page
-        //         for hover hints
-        $page_out->AddScriptBlock('tab_script');
-
-        // Step 8. This displays the tab on the page
-        $page_out->AddTabNaviator( $tab_info, 'page_tabs' );
-
-        if( $execute )
-        {
-            // Step 9. Execute the currently selected tab
-
-            if( $default_tab['function'] == 'url' )
-            {
-                // 9a. The tab is an internal URL to execute, translate it into
-                //     action (method + args psuedo-closure) and perform it.
-
-                $url = $default_tab['tags'];
-                if( strtolower(substr($url,0,7)) == 'http://' )
-                    CCUtil::SendBrowserTo($url);
-
-                $action = CCEvents::ResolveUrl( $url, true );
-                //CCDebug::PrintVar($action);
-                CCEvents::PerformAction($action);
-                // huh?? $page_out->SetTitle(''); // action might have set the title
-            }
-            else
-            {
-                // 9b. Let folks know they can subscribe to this query
-                //     TODO: although the query isn't limited to this vroot!!
-                
-                $page_out->SetTitle($default_tab['text']);
-
-                $tagstr = $default_tab['tags'];
-                $taghelp = strlen($tagstr) > 10 ? substr($tagstr,0,8) . '...' : $tagstr;
-                CCFeeds::AddFeedLinks($tagstr,'','Tags: ' . $taghelp);
-
-                // 9c. Limit queries to this vroot 
-                if( $default_tab['limit'] )
-                    $where['upload_config'] = $CC_CFG_ROOT;  // todo: this needs to be thought out a bit
-                else
-                    $where = '';
-
-                // 9d. The tab is a tag-based query of the uploads
-                //     database
-
-                CCUpload::ListMultipleFiles($where,$default_tab['tags'],$default_tab['function']);
-            }
-        }
     }
 
     /**
@@ -274,7 +336,7 @@ class CCNavigator
             return;
 
         $items += array( 
-            'tab_pages'   => array(  'menu_text'  => 'Navigator',
+            'tab_pages'   => array(  'menu_text'  => 'Navigator Tab Sets',
                              'menu_group' => 'configure',
                              'help' => 'Create and edit navigator tabs',
                              'access' => CC_ADMIN_ONLY,
@@ -296,9 +358,6 @@ class CCNavigator
     }
 
 }
-
-
-
 
 
 ?>
