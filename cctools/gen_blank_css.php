@@ -34,7 +34,6 @@ $files = array(
                 "cctemplates/form.xml",
                 "cctemplates/license.xml",
                 "cctemplates/misc.xml",
-                "cctemplates/navigator.xml",
                 "cctemplates/page.xml",
                 "cctemplates/pool.xml",
                 "cctemplates/remix_form.xml",
