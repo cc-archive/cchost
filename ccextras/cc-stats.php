@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -117,7 +117,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
 
 function _cc_stats_filter($since)
 {
-    $x = 'wired,admin,criminals,militiamix';
+    $x = 'wired,admin,criminals,militiamix,fort_minor';
 
     $x = CCTag::TagSplit($x);
     $where = array();
@@ -274,7 +274,8 @@ function cc_stats_remixes_of_type($tag,$max = 10)
 select count(*) c, upload_id
    from cc_tbl_tree
    join cc_tbl_uploads on tree_parent = upload_id
-   WHERE upload_tags REGEXP '(^| |,)($tag)(,|$)'
+   WHERE upload_tags REGEXP '(^| |,)($tag)(,|$)' AND
+         upload_extra NOT LIKE '%contest_s%' 
    group by tree_parent
    order by c desc
    LIMIT $max
@@ -302,7 +303,7 @@ select count(*) c, user_id
    from cc_tbl_tree
    join cc_tbl_uploads on tree_parent = upload_id
    join cc_tbl_user on upload_user = user_id
-   where upload_extra NOT LIKE '%contest_source%'
+   where upload_extra NOT LIKE '%contest_s%' 
    group by user_id
    order by c desc
    LIMIT $max
