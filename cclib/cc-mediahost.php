@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Header: /cvsroot/cctools/cchost1/cclib/cc-mediahost.php,v 1.38 2006/03/13 20:26:15 fourstones Exp $
 *
 */
 
@@ -139,7 +139,7 @@ class CCMediaHost
     * @param string $page_title Caption for page
     * @param string $username Login name of user doing the upload
     */
-    function SubmitOriginal($page_title, $tags, $form_help, $username='', $extra='')
+    function SubmitOriginal($page_title, $tags, $form_help, $username='', $etc='')
     {
         CCPage::SetTitle($page_title);
         if( empty($username) )
@@ -154,6 +154,9 @@ class CCMediaHost
         }
         $form = new CCNewUploadForm($uid);
         
+        if( !empty($etc['suggested_tags']) )
+            $form->AddSuggestedTags($etc['suggested_tags']);
+
         $this->_add_publish_field($form);
 
         if( !empty($_POST['newupload']) )
@@ -182,9 +185,12 @@ class CCMediaHost
         CCPage::AddForm( $form->GenerateForm() );
     }
 
-    function SubmitRemix($title,$tags,$form_help,$remix_this_id ='')
+    function SubmitRemix($title,$tags,$form_help,$etc ='')
     {
         global $CC_GLOBALS;
+
+        if( !empty($etc['url_extra']) )
+            $remix_this_id = $etc['url_extra'];
 
         $username = CCUser::CurrentUserName();
         $userid   = CCUser::CurrentUser();
@@ -192,6 +198,9 @@ class CCMediaHost
         $form     = new CCPostRemixForm($userid,$pools);
 
         $this->_add_publish_field($form);
+
+        if( !empty($etc['suggested_tags']) )
+            $form->AddSuggestedTags($etc['suggested_tags']);
 
         CCPage::SetTitle($title);
 
