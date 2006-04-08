@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -54,7 +54,7 @@ class CCTopicsFeed extends CCFeed
             $T['user_real_name']   = utf8_encode($this->_cct($T['user_real_name']));
         }
 
-        $this->_gen_feed_from_records($template,&$topics,$title,$feed_url,$feed_type);
+        $this->_gen_feed_from_records($template,$topics,$title,$feed_url,$feed_type);
     }
 }
 
