@@ -387,21 +387,37 @@ $CC_ERROR_STRING = '';
 //
 function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcontext=null)
 {
+    // these libraries just spew too much stuff
+    // especially warning for php >4.1
     if( strpos($errfile,'phptal') !== false )
         return;
     if( strpos($errfile,'getid3') !== false )
+        return;
+
+    // same goes for PEAR in php 5
+    if( strpos($errfile,'PEAR') !== false )
         return;
     
     // errno will be 0 when caller uses the '@' prefix
     // comment these two lines if want these errors logged
     // anyway
-    if( !$errno )
+    if( !$errno || ($errno == 2048) ) // E_STRICT, sorry, we don't care about 
+    {                                 // deprecated stuff
         return;
+    }
+
+    // just return if system if error is below threshold
+    if( ($errno & error_reporting()) == 0 )
+    {
+        global $CC_ERROR_STRING;
+        $CC_ERROR_STRING = $errstr;
+        return;
+    }
 
     $states =& CCDebug::_states();
 
     $date = date("Y-m-d H:i a");
-    if( isset($_SERVER) )
+    if( isset($_SERVER['REMOTE_ADDR']) )
     {
         $ip = $_SERVER['REMOTE_ADDR'];
         $url = preg_replace("#http://[^/]*/(.*)#","\1",$_SERVER['REQUEST_URI']);
@@ -413,23 +429,15 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
     }
     $err  = "\"$errfile\"($errline): $errstr [$date][$ip][$url]\n";
 
-    if( ($errno & (($states['log_errors']) != 0) || CCUser::IsAdmin()) )
+    if( ($states['log_errors'] & $errno) != 0 )
     {
         global $CC_GLOBALS;
         error_log($err,3,$CC_GLOBALS['logfile-dir'] . CC_ERROR_FILE);
     }
 
-    // errno will be 0 when caller uses the '@' prefix
-    if( !$errno || ( ($errno & error_reporting()) == 0 ) )
-    {
-        global $CC_ERROR_STRING;
-        $CC_ERROR_STRING = $errstr;
-        return;
-    }
-
     if( $states['enabled'] === true )
     {
-        //print($err . "<br />");
+
         die($err);
     }
     else

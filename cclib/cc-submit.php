@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header: /cvsroot/cctools/cchost1/cclib/cc-submit.php,v 1.12 2006/03/22 05:31:22 fourstones Exp $
+* $Id$
 *
 */
 
@@ -323,7 +323,7 @@ class CCSubmit
         elseif ( $form->ValidateFields() )
         {
             // CCDebug::PrintVar($form_types);
-            $this->_save_form(&$form,$form_type_key,&$form_types);
+            $this->_save_form($form,$form_type_key,$form_types);
             $urlx = ccl('admin','submit');
             $urly = ccl('submit');
             $form_name = $form_types[$form_type_key]['submit_type'];
@@ -350,7 +350,7 @@ class CCSubmit
             while( in_array( 'userform' . $i, $keys ) )
                 $i++;
             $form_type_key = 'userform' . $i;
-            $this->_save_form(&$form,$form_type_key,&$form_types);
+            $this->_save_form($form,$form_type_key,$form_types);
             $form_name = $form_types[$form_type_key]['submit_type'];
             $urlz = ccl('admin','submit');
             $urlf = ccl('submit');

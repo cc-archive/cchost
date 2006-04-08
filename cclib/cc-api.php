@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -77,7 +77,7 @@ class CCRestAPI
             $type = 'any';
 
         $results = array();
-        CCSearch::DoSearch( $query, $type, CC_SEARCH_UPLOADS, &$results  );
+        CCSearch::DoSearch( $query, $type, CC_SEARCH_UPLOADS, $results  );
 
         $feeds->PrepRecords($results[CC_SEARCH_UPLOADS]);
 

@@ -102,8 +102,8 @@ class CCNavigator
                               $page, 
                               $base_url,
                               $execute,
-                              &$default_tab,
-                              &$tab_info );
+                              $default_tab,
+                              $tab_info );
 
         // Step 3. This displays the tab on the page
         $page_out->AddTabNaviator( $tab_info, 'page_tabs' );
@@ -122,8 +122,8 @@ class CCNavigator
                                       $sub_page, 
                                       $base_url,
                                       $execute,
-                                      &$default_tab,
-                                      &$sub_tab_info );
+                                      $default_tab,
+                                      $sub_tab_info );
 
                 $page_out->PageArg('sub_nav_tabs',$sub_tab_info);
 

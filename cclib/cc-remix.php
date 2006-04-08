@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -494,7 +494,7 @@ END;
             //$parents = $remix_sources->GetSources($row);
 
             $parents = CCDatabase::QueryRows($sql);
-            $this->_mark_row(&$row,'has_parents','remix_parents', $parents, 'more_parents_link');
+            $this->_mark_row($row,'has_parents','remix_parents', $parents, 'more_parents_link');
         }
 
 
@@ -516,7 +516,7 @@ END;
             //$children = $remixes->GetRemixes($row);
 
             $children = CCDatabase::QueryRows($sql);
-            if( !$this->_mark_row(&$row,'has_children','remix_children', $children,'more_children_link') )
+            if( !$this->_mark_row($row,'has_children','remix_children', $children,'more_children_link') )
             {
                 if( !CCUploads::InTags('remix',$row) )
                     $row['is_orphan_original'] = true;

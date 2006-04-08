@@ -162,11 +162,15 @@ class CCConfigs extends CCTable
         }
 
         $cache =& $this->_cache();
-        $loc =& $cache[$where['config_scope']][$where['config_type']];
-        if( $merge )
+        if( $merge && !empty($cache[$where['config_scope']][$where['config_type']]))
+        {
+            $loc =& $cache[$where['config_scope']][$where['config_type']];
             $loc = array_merge($loc,$arr);
+        }
         else
-            $loc = $arr;
+        {
+            $cache[$where['config_scope']][$where['config_type']] = $arr;
+        }
            
     }
 

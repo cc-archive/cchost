@@ -577,7 +577,7 @@ class CCUploadAPI
         // (this will update $upload_args['upload_tags'] and 
         //  $upload_args['upload_extra'])
         //
-        CCUploadAPI::_do_get_systags(&$upload_args, $a_files, $ccud_tags, $user_tags);
+        CCUploadAPI::_do_get_systags($upload_args, $a_files, $ccud_tags, $user_tags);
 
 
         // Sometimes the user might leave the upload name field
@@ -662,7 +662,7 @@ class CCUploadAPI
         //
         $file_args = array();
         $file_args['file_extra'] = array();
-        $errs = CCUploadAPI::_do_verify_file_format( $current_path, &$file_args );
+        $errs = CCUploadAPI::_do_verify_file_format( $current_path, $file_args );
         if( $errs )
         {
             CCUploadAPI::_cleanup_upload_file($current_path,$is_temp);
@@ -750,7 +750,7 @@ class CCUploadAPI
         //
         $file_args = array();
         $file_args['file_extra'] = array();
-        $errs = CCUploadAPI::_do_verify_file_format($current_path,&$file_args);
+        $errs = CCUploadAPI::_do_verify_file_format($current_path,$file_args);
         if( $errs )
         {
             CCUploadAPI::_cleanup_upload_file($current_path,$is_temp);
@@ -836,7 +836,7 @@ class CCUploadAPI
         // (this will update $upload_args['upload_tags'] and 
         //  $upload_args['upload_extra'])
         //
-        CCUploadAPI::_do_get_systags(&$new_args, $new_args['files'], $ccud_tags, $user_tags);
+        CCUploadAPI::_do_get_systags($new_args, $new_args['files'], $ccud_tags, $user_tags);
         $upload_args['upload_tags']  = $new_args['upload_tags'];
         
         // Sometimes the user might leave the upload name field

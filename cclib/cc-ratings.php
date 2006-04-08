@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -174,7 +174,7 @@ class CCRating
         $args = $CC_GLOBALS;
         $args['root-url'] = ccd();
         $args['auto_execute'] = array( 'ratings_stars' );
-        $this->OnUploadListing(&$record);
+        $this->OnUploadListing($record);
         $args['record'] = $record;
         $template = new CCTemplate( $CC_GLOBALS['skin-map'] );
         $template->SetAllAndPrint($args);

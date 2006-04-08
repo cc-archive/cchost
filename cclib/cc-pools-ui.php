@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -173,7 +173,7 @@ class CCPoolUI
         $sourcepool =& CCLocalPoolSources::GetTable();
         for( $i = 0; $i < $count; $i++ )
         {
-            $this->_prep_for_display(&$items[$i], &$remixpool,&$sourcepool,true);
+            $this->_prep_for_display($items[$i], $remixpool,$sourcepool,true);
         }
 
         CCPage::SetTitle( cct('Sample Pool: ') . $pool['pool_name'] );
@@ -195,7 +195,7 @@ class CCPoolUI
         CCPage::PageArg( 'chop', false );
         $remixpool  =& CCLocalPoolRemixes::GetTable();
         $sourcepool =& CCLocalPoolSources::GetTable();
-        $this->_prep_for_display(&$item, &$remixpool,&$sourcepool);
+        $this->_prep_for_display($item, $remixpool,$sourcepool);
         $pools =& CCPools::GetTable();
         $pool = $pools->QueryKeyRow($item['pool_item_pool']);
         CCPage::PageArg( 'pool_info', $pool, 'pool_info_head' );
@@ -206,9 +206,9 @@ class CCPoolUI
     function _prep_for_display(&$item, &$remixpool,&$sourcepool)
     {
         $children = $remixpool->GetRemixes($item);
-        CCRemix::_mark_row(&$item,'has_children','remix_children',$children,'more_children_link',false);
+        CCRemix::_mark_row($item,'has_children','remix_children',$children,'more_children_link',false);
         $parents = $sourcepool->GetSources($item);
-        CCRemix::_mark_row(&$item,'has_parents','remix_parents',$parents,'more_parents_link',false);
+        CCRemix::_mark_row($item,'has_parents','remix_parents',$parents,'more_parents_link',false);
 
         // hmmm... I'm sure this is here for a great reason...
         $item['upload_name'] = $item['pool_item_name'];

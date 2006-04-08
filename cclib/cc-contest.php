@@ -811,7 +811,7 @@ END;
         
         if( $isentry )
         {
-            CCContests::GetOpenStatus(&$record);
+            CCContests::GetOpenStatus($record);
             if( !$record['contest_can_browse_entries'] )
             {
                 $msg = cct('This contest entry is only visible to the owner and admins.');
