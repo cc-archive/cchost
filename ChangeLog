@@ -1,3 +1,36 @@
+2006-04-06     Victor Stone fourstones@users.sourceforge.net
+
+      * ccextras/cc-reviews.php bugfix: recent reviews where not showing, um, recent reviews
+      * mixter-lib/mixter.php don't need criminals contest close code anymore
+      * cctemplates/skin-simple.css crumb tags and subtabs
+      * cctemplates/skin-blank-map.xml crumb tags and subtabs
+      * cctemplates/page.xml crumb tags and subtabs
+      * cctemplates/navigator.xml (nuke this file)
+      * cctemplates/misc.xml added IP lookup to activity log
+      * cctemplates/custom.xml just added svn Id tag
+      * cctemplates/form.xml code bugfix: hidden form fields couldn't be searched for by jscript code
+      * cctemplates/custom.xml feature: recent reviewers
+      * cclib/cc-user.php ui feature: limit user page by tags 
+      * cclib/cc-uploadapi.php added contest_open awareness to upload queries
+      * cclib/cc-upload.php ui feature: 'Suggested tags' on submit forms
+      * cclib/cc-template.php bugfix: adding template tags was completely broken
+      * cclib/cc-table.php clean up: php strict compliance
+      * cclib/cc-sync.php policy change: now using bayesian rating scheme
+
+2006-04-05     Victor Stone fourstones@users.sourceforge.net
+
+      * cclib/cc-submit.php ui feature: 'Suggested tags' on submit forms
+      * cclib/cc-page.php just added svn Id tag
+      * cclib/cc-navigator-admin.inc ui feature: subtabs (!)
+      * cclib/cc-mediahost.php genericized extra param (enabled 'Suggested tags' feature)
+      * cclib/cc-feed.php bugfix: dump all would not report errors correctly
+      * cclib/cc-defines.php added formfields events (enabled 'suggested tags' to be injected into upload forms)
+      * cclib/cc-contest-admin.inc admin: admin now uses subtabs, fileman, much friendlier
+      * ccfiles/adminhelp.xml admin: added some nav tab help
+      * ccextras/cc-stats.php ui: added hack so fm and other contest sources don't show here
+      * ccextras/cc-reviews.php feature: recent reviewers
+      * ccextras/cc-fileman.inc ftp-less file manager
+
 2006-04-03  Jon Phillips  <jon@creativecommons.org>
 
 	* Makefile Makefile.dist: Now more intelligently handle make install
