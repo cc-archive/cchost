@@ -636,7 +636,7 @@ END;
         $uwhere['upload_id'] = $upload_id;
         $record = $uploads->QueryRow($uwhere);
         if( !empty($record) )
-            CCSync::Ratings(&$record,&$ratings);
+            CCSync::Ratings($record,$ratings);
         if( $redir ) 
             CCUtil::SendBrowserTo(); 
     }
