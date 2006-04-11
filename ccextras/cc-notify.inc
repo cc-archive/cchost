@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header: /cvsroot/cctools/cchost1/ccextras/cc-format.php,v 1.7 2006/03/16 17:10:25 fourstones Exp $
+* $Id$
 *
 */
 
