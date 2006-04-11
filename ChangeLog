@@ -1,3 +1,31 @@
+2006-04-10     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccextras/cc-reviews.php 3251:
+     * ccextras/update_v_2_1a.inc 3251:
+     * cclib/cc-ratings.php 3252:
+     * cclib/cc-uploadapi.php 3252:
+     * ccextras/cc-notify.inc 3253:
+     * ccextras/cc-notify.php 3253:
+         feature: email notifications
+
+2006-04-07     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/cc-api.php 3248:
+     * cclib/cc-config.php 3248:
+     * cclib/cc-contest.php 3248:
+     * cclib/cc-debug.php 3248:
+     * cclib/cc-navigator.php 3248:
+     * cclib/cc-pools-ui.php 3248:
+     * cclib/cc-ratings.php 3248:
+     * cclib/cc-remix.php 3248:
+     * cclib/cc-submit.php 3248:
+     * cclib/cc-uploadapi.php 3248:
+         php 5.1.2 compat
+     * ccextras/cc-topics.php 3249:
+         php 5.1.2 compat
+     * cclib/cc-ratings-admin.inc 3250:
+         php 5.1.2 compat
+
 2006-04-06     Victor Stone fourstones@users.sourceforge.net
 
       * ccextras/cc-reviews.php bugfix: recent reviews where not showing, um, recent reviews
