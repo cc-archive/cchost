@@ -637,7 +637,7 @@ class CCUploadAPI
         $db_args['file_filesize']    = filesize($file_args['local_path']);
         $files->Insert($db_args);
 
-        CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $upload_args['upload_id'], CC_UF_NEW_UPLOAD ) );
+        CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $upload_args['upload_id'], CC_UF_NEW_UPLOAD, &$parents ) );
 
         if( !$parents ) // sync'ing for remixes happens elsewhere
             CCSync::NewUpload($db_args['file_upload']);

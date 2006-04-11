@@ -167,7 +167,7 @@ class CCRating
 
             $ratings->Insert($R);
             CCSync::Ratings($record,$ratings);
-            CCEvents::Invoke( CC_EVENT_RATED, array( $record, $score/100 ) );
+            CCEvents::Invoke( CC_EVENT_RATED, array( $R, $score/100, &$record ) );
         }
 
         global $CC_GLOBALS;
