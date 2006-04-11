@@ -550,13 +550,14 @@ class CCReview
             else
             {
                 $form->GetFormValues($values);
+                $reviews =& CCReviews::GetTable();
+                $values['topic_id'] = $reviews->NextID();
                 $values['topic_upload'] = $upload_id;
                 $values['topic_date'] = date('Y-m-d H:i:s',time());
                 $values['topic_user'] = CCUser::CurrentUser();
                 $values['topic_type'] = 'review';
                 $user_real = CCUser::CurrentUserField('user_real_name');
                 $values['topic_name'] = sprintf(cct("%s's Review of '%s'"),$user_real,$R['upload_name']);
-                $reviews =& CCReviews::GetTable();
                 $reviews->Insert($values);
                 $this->Sync($upload_id,$values['topic_user']);
 
