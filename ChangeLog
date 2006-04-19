@@ -1,3 +1,7 @@
+2006-04-18  Jon Phillips <kidproto@users.sf.net>
+
+	* bin/makedoc.sh: Makes phpdoc if its installed
+
 2006-04-10     Victor Stone <fourstones@users.sourceforge.net>
 
      * ccextras/cc-reviews.php 3251:
