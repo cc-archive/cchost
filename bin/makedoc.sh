@@ -49,10 +49,10 @@ PATH_PROJECT=$PWD
 #  *
 #  * @var               string PATH_PHPDOC
 #  */
-PATH_PHPDOC=/home/rejon/Documents/freelance/creativecommons/cchost/PhpDocumentor-1.3.0RC4/pear-phpdoc
-#PATH_PHPDOC=~/phpdoc/phpdoc
+PATH_PHPDOC=/opt/PhpDocumentor-1.3.0RC4/pear-phpdoc
 
-PATH_PHP=/usr/bin/php
+PATH_PHP=/usr/local/apache2049/php/bin/php
+#PATH_PHP=/usr/bin/php
 
 #/**
 #  * where documentation will be put
