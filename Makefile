@@ -18,6 +18,8 @@ RELEASE_NUM = $(shell cat VERSION)
 APPNAME = cchost
 PACKAGEDIR=packages
 
+DATETIME=$(shell date +%F_%H%M%S)
+
 # The next line includes the vars which contain our needed file names
 include Makefile.include
 
@@ -103,6 +105,18 @@ bzip: distprep
 
 # TODO: Add rpms back to the dist: directive
 dist: tarball zip bzip rpms
+
+
+zip-datetime: distprep
+	(cd $(PACKAGEDIR); zip -r $(APPNAME)-$(RELEASE_NUM)-$(DATETIME).zip $(APPNAME)-$(RELEASE_NUM))
+
+tarball-datetime: distprep
+	(cd $(PACKAGEDIR); tar czf $(APPNAME)-$(RELEASE_NUM)-$(DATETIME).tar.gz $(APPNAME)-$(RELEASE_NUM))
+
+bzip-datetime: distprep
+	(cd $(PACKAGEDIR); tar -cjf $(APPNAME)-$(RELEASE_NUM)-$(DATETIME).tar.bz2 $(APPNAME)-$(RELEASE_NUM))
+
+dist-datetime: tarball-datetime zip-datetime bzip-datetime
 
 test:
 	@echo "BINDIR: $(BINDIR)"
