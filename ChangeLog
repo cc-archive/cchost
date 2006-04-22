@@ -8,6 +8,11 @@
 	basic ability to sign packages which is useful for releases. I just
 	wanted to automate this a little bit more.
 
+	* mixter-lib/cc-phpbb2.php mixter-lib/cc-phpbb2-cb.php: Moved the 
+	phpbb code here from the old location in cclib.
+
+	* cclib/cc-phpbb2.php cclib/cc-phpbb2-cb.php: removed these.
+
 
 2006-04-18  Jon Phillips <kidproto@users.sf.net>
 
