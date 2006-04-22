@@ -17,8 +17,11 @@
 RELEASE_NUM = $(shell cat VERSION)
 APPNAME = cchost
 PACKAGEDIR=packages
-
 DATETIME=$(shell date +%F_%H%M%S)
+SIGNPACKAGE=gpg --detach-sign --armor
+
+# must be multiple of 3 because only allowing tar.gz, tar.bz2, and zip
+MAX_SNAPSHOTS=90
 
 # The next line includes the vars which contain our needed file names
 include Makefile.include
@@ -103,10 +106,29 @@ tarball: distprep
 bzip: distprep
 	(cd $(PACKAGEDIR); tar -cjf $(APPNAME)-$(RELEASE_NUM).tar.bz2 $(APPNAME)-$(RELEASE_NUM))
 
-# TODO: Add rpms back to the dist: directive
 dist: tarball zip bzip rpms
 
 
+#gpg sign all the following packages baby!
+
+zip-sign: zip
+	(cd $(PACKAGEDIR); $(SIGNPACKAGE) $(APPNAME)-$(RELEASE_NUM).zip)
+	
+tarball-sign: tarball
+	(cd $(PACKAGEDIR); $(SIGNPACKAGE) $(APPNAME)-$(RELEASE_NUM).tar.gz)
+	 
+bzip-sign: bzip
+	(cd $(PACKAGEDIR); $(SIGNPACKAGE) $(APPNAME)-$(RELEASE_NUM).tar.bz2)
+	
+rpms-sign: rpms 
+	@cd $(PACKAGEDIR); for i in `ls $(APPNAME)-$(RELEASE_NUM)*rpm`; \
+	do $(SIGNPACKAGE) $$i; done
+
+
+dist-sign-all: dist zip-sign tarball-sign bzip-sign rpms-sign
+	
+
+# the following datetime directives print date and time at the end of the list
 zip-datetime: distprep
 	(cd $(PACKAGEDIR); zip -r $(APPNAME)-$(RELEASE_NUM)-$(DATETIME).zip $(APPNAME)-$(RELEASE_NUM))
 
@@ -116,8 +138,21 @@ tarball-datetime: distprep
 bzip-datetime: distprep
 	(cd $(PACKAGEDIR); tar -cjf $(APPNAME)-$(RELEASE_NUM)-$(DATETIME).tar.bz2 $(APPNAME)-$(RELEASE_NUM))
 
+# builds the packages with datetime at the end for making snapshots
 dist-datetime: tarball-datetime zip-datetime bzip-datetime
 
+#first cleans out old snapshots over the max snapshots var and makes new ones
+snapshots: distclean-max-snapshots dist-datetime
+
+# removes how ever many snapshots are created over the MAX_SNAPSHOTS allowed
+distclean-max-snapshots:
+	@COUNTER=0; for i in $(shell ls -t $(PACKAGEDIR)/*.{gz,bz2,zip}); \
+	do if [ $$COUNTER -ge $(MAX_SNAPSHOTS) ]; \
+	then rm -f $$i; \
+	fi; \
+	let COUNTER=$$COUNTER+1; \
+	done
+	
 test:
 	@echo "BINDIR: $(BINDIR)"
 	@echo "MANDIR: $(MANDIR)"

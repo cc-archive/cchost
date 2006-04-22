@@ -1,8 +1,13 @@
-2006-04-18  Jon Phillips <kidproto@users.sf.net>
+2006-04-21  Jon Phillips <kidproto@users.sf.net>
 
 	* Makefile: Added make dist-datetime to make a snapshot of the 
 	current build so we can start having thrice-daily builds of the
-	package available on mirrors.
+	package available on mirrors. Also added option:
+	make snapshots to make snapshots into the packages folder which is
+	set by the MAX_SNAPSHOTS var in the makefile. Also, added a 
+	basic ability to sign packages which is useful for releases. I just
+	wanted to automate this a little bit more.
+
 
 2006-04-18  Jon Phillips <kidproto@users.sf.net>
 
