@@ -73,6 +73,8 @@ class CCFeeds extends CCFeed
             $where = implode('OR',$where_id);
             if( empty($_REQUEST['nosort']) )
                 $sort_order = array();
+
+            $sub_title = date(' (Y-d-m h:i:s a)');
         }
         elseif( !empty($_REQUEST['tags']) )
         {
@@ -82,6 +84,7 @@ class CCFeeds extends CCFeed
                 return;
             $uploads->SetTagFilter($tagstr,'all');
             $where = '';
+            $sub_title = ' (' . $tagstr . ') ';
         }
         else
         {
@@ -94,7 +97,7 @@ class CCFeeds extends CCFeed
         $this->_resort_records($records,$sort_order);
         $this->PrepRecords($records);
         $this->GenerateRSSFromRecords( $records, 
-                                       "Podcast this page",
+                                       "Podcast this page" . $sub_title,
                                        ccl('podcast','page'),
                                        'podcast');
     }
