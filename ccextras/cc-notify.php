@@ -87,7 +87,7 @@ class CCNotify
         $notify_api->OnEdPick($upload_id);
     }
 
-    function OnUploadDone($upload_id,$op,$parents)
+    function OnUploadDone($upload_id,$op,$parents=array())
     {
         if( $op != CC_UF_NEW_UPLOAD || !$this->_is_notify_on() )
             return;
