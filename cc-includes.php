@@ -64,7 +64,6 @@ require_once( 'cclib/cc-search.php' );
 require_once( 'cclib/cc-renderaudio.php' );
 require_once( 'cclib/cc-renderimage.php' );
 require_once( 'cclib/cc-renderflash.php' );
-require_once( 'cclib/cc-phpbb2.php' );
 require_once( 'cclib/cc-feed.php' );
 require_once( 'cclib/cc-feeds.php' );
 require_once( 'cclib/cc-feeds-atom.php' );
