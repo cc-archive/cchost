@@ -41,7 +41,7 @@ class CCPhpBB2
         global $db,$userdata,$user_ip,$phpbb_root_path,$phpEx,$board_config;
         $args = func_get_args();
         array_shift($args);
-        require_once('cclib/cc-phpbb2-cb.php');
+        require_once('mixter-lib/cc-phpbb2-cb.inc');
         $function = 'cc_phpbb_' . $function;
         if( $CC_GLOBALS['phpbb2_closedb'] )
             CCDatabase::DBClose();
