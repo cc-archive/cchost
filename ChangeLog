@@ -1,3 +1,13 @@
+2006-04-24     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-lib/cc-phpbb2-cb.php:3262) 3263:
+     * mixter-lib/cc-phpbb2.php 3263:
+         bugfix: phpbb files were not including properly
+     * cc-includes.php 3264:
+         bugfix: phpbb files were not including properly
+     * ccextras/cc-notify.php 3265:
+         bugfix: AddFile was broken
+
 2006-04-21  Jon Phillips <kidproto@users.sf.net>
 
 	* Makefile: Added make dist-datetime to make a snapshot of the 
