@@ -116,7 +116,8 @@ class CCID3Tagger
         foreach( $tagmasks as $name => $mask )
         {
             $value     = CCMacro::TranslateMask($patterns,$mask);
-            $tags[$name] = array( $value );
+            if( !empty($value) )
+                $tags[$name] = array( $value );
         }
 
         if( count($tags) > 0 )
@@ -135,6 +136,7 @@ class CCID3Tagger
                 $tagwriter->tagformats = array( "id3v2.3"  );
             $tagwriter->overwrite_tags = true;
             $tagwriter->tag_data = $tags;
+
             $res = $tagwriter->WriteTags();
 
             CCDebug::Enable($debug);
@@ -205,7 +207,7 @@ class CCID3Tagger
                    array(  'label'       => "Artist's URL",
                            'flags'       => CCFF_POPULATE,
                            'formatter'   => 'textedit',
-                           'value'       => "%artist_page");
+                           'value'       => "%artist_page%");
 
         return( $standard_tags );
     }

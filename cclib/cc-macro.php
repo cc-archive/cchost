@@ -60,7 +60,7 @@ class CCMacro
         $patterns['%m%'] = date('m');
 
         $regex = array();
-        $replacesments = array();
+        $replacements = array();
         foreach( $patterns as $r => $repl )
         {
             $regex[] = '/' . $r . '/';

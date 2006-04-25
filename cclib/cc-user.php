@@ -805,7 +805,7 @@ END;
         {
             $patterns['%artist%'] = "Artist name";
             $patterns['%login%']  = "Artist login name";
-            $patterns['%page%']   = "Artist page URL";
+            $patterns['%artist_page%']   = "Artist page URL";
         }
         else
         {
@@ -814,6 +814,8 @@ END;
 
             if( !empty($record['artist_page_url']) )
                 $patterns['%artist_page%']   = $record['artist_page_url'];
+            else
+                $patterns['%artist_page%'] = '';
         }
     }
 
