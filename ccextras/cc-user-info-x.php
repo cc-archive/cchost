@@ -201,7 +201,7 @@ class CCUserInfoX
                     continue;
                 $nice_name = $contests->GetFriendlyNameFromShortName($contest);
                 $url = ccl('contest','userinfo',$contest,'edit');
-                $value = "<a style=\width:100px\" href=\"$url\" class=\"cc_gen_button\"><span>For \"$nice_name\"</span></a>";
+                $value = "<a style=\"width:180px\" href=\"$url\" class=\"cc_gen_button\"><span>For \"$nice_name\"</span></a>";
                 $fields[ $contest . '_uinfo_link'] = 
                             array( 'label'      => cct('Contest Entry Info'),
                                    'form_tip'   => cct('Edit your personal contest information'),
