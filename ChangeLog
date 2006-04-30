@@ -1,5 +1,10 @@
 2006-04-30     Victor Stone <fourstones@users.sourceforge.net>
 
+     * cc-custom.php 3281:
+     * ccextras/cc-reviews.php 3281:
+     * cctemplates/custom.xml 3281:
+         bugfix: recent reviews was not showing contest entries
+
      * ccextras/cc-notify.inc 3279:
          bugfix: notification were broken on nested replies
 
