@@ -265,6 +265,8 @@ This is a notification that "%s" has been reviewed by %s
         $this_poster = $reply['topic_user'];
         $posters = array();
         $C =& $original;
+        $topic_tree =& CCTopicTree::GetTable();
+        $topics =& CCTopics::GetTable();
         while( $C )
         {
             if( ($C['topic_user'] != $this_poster) )
@@ -272,6 +274,14 @@ This is a notification that "%s" has been reviewed by %s
 
             if( $C['topic_type'] != 'reply' )
                 break;
+
+            $ttarg['topic_tree_child'] = $C['topic_id'];
+            $parent_id = $topic_tree->QueryItem('topic_tree_parent',$ttarg);
+            if( empty($parent_id) )
+                break;
+
+            $row = $topics->QueryKeyRow($parent_id);
+            $C =& $row;
         }
 
         // this shouldn't happen in today's code
@@ -334,6 +344,13 @@ This is a notification of a reply to a review thread
         $notify_rows = $notifications->QueryRows($where);
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_DONE}
+    * 
+    * @param integer $upload_id ID of upload row
+    * @param string $op One of {@link CC_UF_NEW_UPLOAD}, {@link CC_UF_FILE_REPLACE}, {@link CC_UF_FILE_ADD}, {@link CC_UF_PROPERTIES_EDIT'} 
+    * @param array &$parents Array of remix sources
+    */
     function OnUploadDone($upload_id,$op,&$parents)
     {
         $uploads =& CCUploads::GetTable();
