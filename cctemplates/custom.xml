@@ -105,7 +105,7 @@ $Id$
   <p tal:content="php: CC_lang('Recent Reviewers');" />
   <ul condition="reviews">
      <li tal:repeat="rev reviews"><a href="${rev/topic_permalink}" 
-          tal:content="php: CC_strchop('${rev/reviewer_name}',12);" /></li>
+          tal:content="php: CC_strchop('${rev/user_real_name}',12);" /></li>
   </ul>
   <a href="${home-url}reviews" class="cc_more_menu_link" tal:content="php: CC_Lang('More reviews...')" />    
 </metal:block>

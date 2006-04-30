@@ -39,41 +39,7 @@ CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCReview' , 'OnTopicDe
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCReview',  'OnFormFields'));
 CCEvents::AddHandler(CC_EVENT_DO_SEARCH,          array( 'CCReview',  'OnDoSearch') );
 
-function CC_recent_reviews($limit=5)
-{
-    $sql =<<<END
-        SELECT     reviewer.user_real_name reviewer_name, 
-                   reviewee.user_name      reviewee_user_name, 
-                   upload_id, 
-                   topic_id
-            FROM cc_tbl_topics
-            JOIN cc_tbl_user reviewer ON topic_user   = reviewer.user_id
-            JOIN cc_tbl_uploads       ON topic_upload = upload_id
-            JOIN cc_tbl_user reviewee ON upload_user  = reviewee.user_id
-        WHERE (topic_type = 'review') AND (upload_banned < 1) AND (upload_published > 0)
-        ORDER BY topic_date DESC
-        LIMIT 100
-END;
 
-    $rows = CCDatabase::QueryRows($sql);
-    $count = count($rows);
-    $reviewers = array();
-    $reviews = array();
-    for( $i = 0; $i < $count; $i++ )
-    {
-        $R =& $rows[$i];
-        if( in_array($R['reviewer_name'],$reviewers) )
-            continue;
-        $reviewers[] = $R['reviewer_name'];
-        $R['topic_permalink'] = ccl( 'reviews', $R['reviewee_user_name'],
-                                     $R['upload_id'] . '#' . $R['topic_id'] );
-        $reviews[] = $R;
-        if( count($reviews) == $limit )
-            break;
-    }
-
-    return $reviews;
-}
 
 class CCReviewForm extends CCTopicForm
 {
@@ -600,6 +566,13 @@ class CCReview
         CCTopic::AddLinks();
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_USER_ROW}
+    *
+    * Add extra data to a user row before display
+    *
+    * @param array &$record User record to massage
+    */
     function OnUserRow(&$record)
     {
         if( empty($record['artist_page']) )
@@ -659,11 +632,10 @@ class CCReview
     }
 
     /**
-    * Event handler for when a media record is fetched from the database 
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * This will add semantic richness and make the db row display ready.
-    * 
-    * @see CCTable::GetRecordFromRow
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
     */
     function OnUploadRow( &$record )
     {
@@ -702,6 +674,11 @@ class CCReview
         }
     }
 
+    /**
+    * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
+    * 
+    * @param array $record Upload database record
+    */
     function OnUploadDelete(&$record)
     {
         global $CC_GLOBALS;
@@ -724,12 +701,12 @@ class CCReview
     }
 
     /**
-    * Event handler for CC_EVENT_BUILD_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
     * 
     * The menu items gathered here are for the 'local' menu at each upload display
     * 
     * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnBuildUploadMenu(&$menu)
     {
@@ -742,14 +719,14 @@ class CCReview
     }
 
     /**
-    * Event handler for CC_EVENT_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
     * a specific record. All dynamic changes are made here
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
@@ -839,7 +816,7 @@ class CCReview
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -873,6 +850,12 @@ class CCReview
         }
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_FORM_FIELDS}
+    *
+    * @param object &$form CCForm object
+    * @param object &$fields Current array of form fields
+    */
     function OnFormFields(&$form,&$fields)
     {
         if( strtolower( get_class($form) ) == 'ccsearchform' )
@@ -897,6 +880,11 @@ class CCReview
         }
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_DO_SEARCH}
+    * 
+    * @param boolean &$done_search Set this to true if you handle the search
+    */
     function OnDoSearch(&$done_search)
     {
         if( $done_search )
@@ -965,9 +953,9 @@ class CCReview
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

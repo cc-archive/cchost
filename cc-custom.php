@@ -235,7 +235,11 @@ CC_tag_query($tags,$search_type='all',$sort_on='',$order='',$limit='',$with_menu
         {
             if( $with_menus )
             {
-                $menu = CCMenu::GetLocalMenu(CC_EVENT_UPLOAD_MENU,array(&$records[$i]));
+                $menu = 
+                   CCMenu::GetLocalMenu(CC_EVENT_UPLOAD_MENU,
+                                        array(&$records[$i]),
+                                        CC_EVENT_BUILD_UPLOAD_MENU);
+
                 $records[$i]['local_menu'] = $menu;
             }
             if( $with_remixes )
@@ -249,5 +253,51 @@ CC_tag_query($tags,$search_type='all',$sort_on='',$order='',$limit='',$with_menu
 }
 
 
+function list_all_users()
+{
+   $users = new CCUsers();
+   $users->SetOrder('user_name');
+   $records = $users->GetRecords('');
+   return $records;
+}
+
+
+if( class_exists('CCReviews') )
+{
+    function CC_recent_reviews($limit=5)
+    {
+        $lim = 5 * $limit; // inc the limit to cover user's multiple reviews and banned,
+                           // unpublished
+        $uploads = new CCUploads();
+        $uploads->SetDefaultFilter(true,true);
+        $reviews =& CCReviews::GetTable();
+        $reviews->SetOrder('topic_date','DESC');
+        $reviews->SetOffsetAndLimit(0,$lim);
+        $rows = $reviews->QueryRows('');
+        $reviewers = array();
+        $reviews = array();
+        $count = count($rows);
+        for( $i = 0; $i < $count; $i++ )
+        {
+            $R =& $rows[$i];
+            if( in_array($R['user_name'],$reviewers) )
+                continue;
+
+            // weed out unpublished and banned recs
+            $uprow = $uploads->QueryKeyRow($R['topic_upload']);
+            if( !empty($uprow) )
+            {
+                $reviewers[] = $R['user_name'];
+                $R['topic_permalink'] = ccl( 'reviews', $R['user_name'],
+                                             $R['topic_upload'] . '#' . $R['topic_id'] );
+                $reviews[] = $R;
+                if( count($reviews) == $limit )
+                    break;
+            }
+        }
+
+        return $reviews;
+    }
+}
 
 ?>
