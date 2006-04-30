@@ -1,3 +1,13 @@
+2006-04-30     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccextras/cc-notify.inc 3279:
+         bugfix: notification were broken on nested replies
+
+2006-04-26     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccextras/cc-user-info-x.php 3276:
+         bugfix: missing quote in style button
+
 2006-04-24     Victor Stone <fourstones@users.sourceforge.net>
 
      * cclib/cc-feeds.php 3267:
