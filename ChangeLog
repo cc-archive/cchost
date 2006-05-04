@@ -1,3 +1,8 @@
+2006-05-04     Victor Stone <fourstones@users.sourceforge.net>
+     
+     * cclib/cc-renderaudio.php 3283:
+         bugfix: Displaying a contest row was taking >3.5 seconds (temp fix)
+
 2006-04-30     Victor Stone <fourstones@users.sourceforge.net>
 
      * cc-custom.php 3281:
