@@ -14,26 +14,39 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
+/**
+* @package cchost
+* @subpackage audio
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define('RADIO_PROMO_INTERVAL', 4); // some linux players prevent us from passing this 
-                                   // number in as part of the GET argument so we
-                                   // hard wire it here.
+/**
+* Some linux players prevent us from passing this 
+* number in as part of the GET argument so we
+* hard wire it here.
+*/
+define('RADIO_PROMO_INTERVAL', 4); 
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,     array( 'CCRenderAudio', 'OnUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,      array( 'CCRenderAudio', 'OnUploadRow'));
-CCEvents::AddHandler(CC_EVENT_CONTEST_ROW,     array( 'CCRenderAudio', 'OnContestRow'));
+//CCEvents::AddHandler(CC_EVENT_CONTEST_ROW,     array( 'CCRenderAudio', 'OnContestRow'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,        array( 'CCRenderAudio', 'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_LISTING_RECORDS, array( 'CCRenderAudio', 'OnListingRecords')); 
 
+/**
+*/
 class CCRenderAudio
 {
-
+    /**
+    * Handler for {@link CC_EVENT_LISTING_RECORDS}
+    *
+    * @param array $records Array of records being displayed
+    */
     function OnListingRecords(&$records)
     {
         $count = count($records);
@@ -103,9 +116,9 @@ class CCRenderAudio
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -117,9 +130,9 @@ class CCRenderAudio
     }
 
     /**
-    * Event handler for building local menus for contest rows
+    * Event handler for {@link CC_EVENT_CONTEST_ROW}
     *
-    * @see CCMenu::AddItems
+    * @param array &$record Contest row to massage before display
     */
     function OnContestRow(&$record)
     {
@@ -145,6 +158,12 @@ class CCRenderAudio
 		}
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
+    *
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
+    */
     function OnUploadRow(&$record)
     {
         if( empty($record['stream_link']) )
@@ -177,14 +196,14 @@ class CCRenderAudio
     }
 
     /**
-    * Event handler for CC_EVENT_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
     * a specific record. All dynamic changes are made here
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
