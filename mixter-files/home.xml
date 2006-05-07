@@ -39,19 +39,27 @@ a { font-weight: bold; }
 
 
 
-  <div style="border: 1px solid rgb(136, 136, 136); margin-top: 10px;">
-    <div style="padding: 10px;background-color: rgb(255, 255, 238);">
+	  <div style="border: 1px solid rgb(136, 136, 136); margin-top: 10px;">
+	    <div style="padding: 10px;background-color: rgb(255, 255, 238); ">
+	      <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
+	      Creative Commons Copyright Criminals Remix Contest</h2>
+	      <div style="display: block; text-align: center;"><a href="${root-url}copyrightcriminals"><img src="${root-url}mixter-files/copyrightcriminals.png" border="0" /></a></div>
+	      <p style="font-size: 12px; font-weight: normal;">
+	<div style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center;">The contest is closed to new entries.</div>
 
-      <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">Previous Contest: Magnatune/Lisa DeBenedictis Remix Contest Winners Announced</h2>
-      <div style="float: right;"><a href="${root-url}magnatune"><img src="${root-url}mixter-files/magnatune_logo.gif" border="0" /></a></div>
-      <p style="font-size: 12px; font-weight: normal;">ccMixter recently hosted a remix contest featuring the 
-      work of Magnatune recording artist <b>Lisa DeBenedictis</b> with the entire Magnatune catalog of over 1,700 pieces of music available
-      for source material. The 13 creators who made the top 15 winning entries were signed to a <a href="http://magnatune.com/info/terms">Magnatune recording contract</a> and appear on a commercially available remix album.</p>
+	This contest 
+	challenged artists to mix tracks under 4 minutes and use
+	provided voice samples from Ben Franzen and Kembrew McLeod's
+	forthcoming film, "Copyright Criminals." Samples from the film include
+	voiceovers from DJ Spooky, De La Soul, DJ Qbert, members of Public
+	Enemy, Matmos, Coldcut, members of Negativland, and others. The best
+	overall winner will be included prominently in the film and the top 11
+	other entries are to be included on a companion CD. Judging entries
+	along with McLeod and Franzen is Jeff Chang...</p>
 
-<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}magnatune/view/contest/winners">Full List of Winners</a>...</h3>
-<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}magnatune/view/contest/about">More information about the contests</a>...</h3>
-      </div>
-</div>
+	<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}copyrightcriminals/view/contest/about">More information about the contest</a>...</h3>
+	    </div>
+	  </div>
 
 
 </div>
@@ -63,40 +71,33 @@ a { font-weight: bold; }
     <div style="padding: 10px; background-color: rgb(255, 255, 238);">
 
       <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
-      Fort Minor Remix Contest</h2>
-      <div style="display: block; text-align: center;"><a href="${root-url}fortminor"><img src="${root-url}mixter-files/fmlogo.jpg" style="margin: 10px 10px 8px 0pt;" align="left" border="0" /></a></div>
+      Crammed Discs Remix Contest</h2>
+      <div style="display: block; text-align: center;"><a href="${root-url}crammed/"><img src="${root-url}mixter-files/crammed-logo.png" style="margin: 10px 10px 8px 0pt;" align="left" border="0" /></a></div>
       <p style="font-size: 12px; font-weight: normal;">
-      Creative Commons, Warner Bros. Records, and Machine Shop Recordings  are proud to present the Fort Minor Remix Contest. Fort Minor -- the  hip-hop project led by Linkin Park's Mike Shinoda -- is offering the  separated audio elements of "Remember the Name" online under a  Creative Commons BY-NC license, so that producers all over the world  can easily create new versions of the hit song. The winning remixer  will be awarded a new Technics SL-1200MK5 turntable, courtesy of  Warner Bros. Records and Machine Shop Recordings.
+      Creative Commons and Crammed Discs are pleased to present the Crammed Discs Remix Contest. Crammed artists Cibelle, DJ Dolores, and Apollo Nove &mdash; some of Brazil's most creative musical innovators &mdash; are offering some of their new music under a CC BY-NC 2.5 license, so that producers worldwide can use the tracks in remixes and new compositions. Nine winning remixes will appear on a Crammed/ccMixter remix compilation, to be sold online through digital music stores.
       </p>
 
-<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}fortminor/">More information about the contest</a>...</h3>
+<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}crammed/">More information about the contest</a>...</h3>
       </div>
 
 </div>
 
-
-
   <div style="border: 1px solid rgb(136, 136, 136); margin-top: 10px;">
     <div style="padding: 10px;background-color: rgb(255, 255, 238); ">
-      <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
-      Creative Commons Copyright Criminals Remix Contest</h2>
-      <div style="display: block; text-align: center;"><a href="${root-url}copyrightcriminals"><img src="${root-url}mixter-files/copyrightcriminals.png" border="0" /></a></div>
-      <p style="font-size: 12px; font-weight: normal;">
-<div style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center;">The contest is closed to new entries.</div>
-      
-This contest 
-challenged artists to mix tracks under 4 minutes and use
-provided voice samples from Ben Franzen and Kembrew McLeod's
-forthcoming film, "Copyright Criminals." Samples from the film include
-voiceovers from DJ Spooky, De La Soul, DJ Qbert, members of Public
-Enemy, Matmos, Coldcut, members of Negativland, and others. The best
-overall winner will be included prominently in the film and the top 11
-other entries are to be included on a companion CD. Judging entries
-along with McLeod and Franzen is Jeff Chang...</p>
+  		     <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
+			      Fort Minor Remix Contest</h2>
+			      <div style="display: block; text-align: center;"><a href="${root-url}fortminor/"><img src="${root-url}mixter-files/fmlogo.jpg" style="margin: 10px 10px 8px 0pt;" align="left" border="0" /></a></div>
+	<div style="float:right;border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center; width: 50%;">The contest is closed to new entries.</div>
 
-<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}copyrightcriminals/view/contest/about">More information about the contest</a>...</h3>
-    </div>
+			      <p style="font-size: 12px; font-weight: normal;">
+			      Creative Commons, Warner Bros. Records, and Machine Shop Recordings  are proud to present the Fort Minor Remix Contest. Fort Minor &mdash; the  hip-hop project led by Linkin Park's Mike Shinoda &mdash; is offering the  separated audio elements of "Remember the Name" online under a  Creative Commons BY-NC license, so that producers all over the world  can easily create new versions of the hit song. The winning remixer  will be awarded a new Technics SL-1200MK5 turntable, courtesy of  Warner Bros. Records and Machine Shop Recordings.
+			      </p>
+
+			<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}fortminor/">More information about the contest</a>...</h3>
+			      </div>
   </div>
+
+
 
 <script>
   //<!--

@@ -55,31 +55,11 @@ alt="Fort Minor logo &copy; Fort Minor. Used with permission." title="Fort Minor
 <a href="http://creativecommons.org/">Creative Commons</a>, <a href="http://www.warnerbrosrecords.com/">Warner Bros. Records</a>, and <a href="http://www.machineshoprecordings.com">Machine Shop Recordings</a> are proud to present the Fort Minor Remix Contest. <a href="http://fortminor.com/">Fort Minor</a> is offering the separated audio elements of "Remember the Name" online under a <a href="http://creativecommons.org/licenses/by-nc/2.5/">Creative Commons BY-NC license</a>, so that producers all over the world can easily create remixes of the hit song.
 </p>
 <p>
-To enter, produce a remix of Fort Minor's "Remember the  Name" (download the audio sources <a href="${root-url}fortminor/view/contest/sources">here</a>) and upload it to ccMixter  before May 6, 2006. All entries must be licensed to the public under a <a href="http://creativecommons.org/licenses/by-nc/2.5/"> CC BY-NC license</a>. After all eligible entries have been received, Fort Minor's Mike Shinoda will choose a winning remix. The producer of the winning remix will be awarded a new <a href="http://en.wikipedia.org/wiki/SL-1200">Technics SL-1200MK5</a> turntable, courtesy of Warner Bros. Records and Machine Shop Recordings.
+All eligible entries have now been received, Fort Minor's Mike Shinoda will choose a winning remix. The producer of the winning remix will be awarded a new <a href="http://en.wikipedia.org/wiki/SL-1200">Technics SL-1200MK5</a> turntable, courtesy of Warner Bros. Records and Machine Shop Recordings.
 </p>
 <p>
-Your remix must include the vocal track from "Remember the Name."  You may, but are not required to, also include other elements from  the original version of the song in your remix. You can download the album version of "Remember the Name" for free by visiting Fort Minor's <a href="http://www.myspace.com/fortminor">MySpace page</a>.
+The contest entries included the vocal track from "Remember the Name."  You can download the album version of "Remember the Name" for free by visiting Fort Minor's <a href="http://www.myspace.com/fortminor">MySpace page</a>.
 </p>
-<p>
-<strong>Note:</strong> You are free to use music licensed under <a href=" http://creativecommons.org/licenses/by/2.5/">CC BY</a> or <a href=" http://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC</a>, audio in the public domain, and your own original sounds in your remix. Submissions that include music that you don't have permission to use will become ineligible.
-</p>
-
-<!--
- <div class="contestbox">
-  <div class="contestback" style="margin: 8px; width: 260px; float: right;">	
-    <div style="padding: 10px 10px 10px 10px;">
-      <img src="${root-url}mixter-files/fortminorcolor.jpg" alt="Fort Minor" style="display: block; margin-left: auto; margin-right: auto; margin-bottom: 4px;" width="240" /><small><em>Fort Minor photo &copy; Warner Bros. Records.<br/>Used with permission.</em></small>
-
-	<h2 style="margin: 12px 0px 0px; font-size: 18px; font-weight: normal; text-align: center;">Fort Minor</h2>
-
-	<div style="text-align:left; line-height:1.4em; padding: 0 0px 10px 0px;">
-	<a href="http://www.fortminor.com/">Fort Minor</a> is a hip-hop project fronted by <a href="http://www.linkinpark.com/">Linkin Park</a> vocalist/guitarist/keyboardist Mike Shinoda. Fort Minor's debut album, <i>The Rising Tied</i> was executive produced by <a href="http://www.rocafella.com/Artist.aspx?id=1&avid=121&idj=352">Jay-Z</a> and features <a href="http://www.demigodz.com/bio_SOB.html">Styles of Beyond</a>, <a href="http://www.common-music.com/">Common</a>, <a href="http://www.johnlegend.com/">John Legend</a>, and Black Thought of <a href="http://www.theroots.com/">The Roots</a>. To hear Fort Minor's music, visit the group's <a href="http://www.myspace.com/fortminor">MySpace page</a>. For information about Warner Bros. Records artists and releases, visit the label's <a href="http://www.warnerbrosrecords.com/">Web site</a>. 
-	</div>
-    </div>
-
-  </div>
-</div>
--->
  <div class="contestbox">
   <div class="contestback" style="margin: 8px; width: 260px; float: right;">	
     <div style="padding: 10px;">
@@ -96,16 +76,7 @@ Your remix must include the vocal track from "Remember the Name."  You may, but 
 
 
 <h2 style="margin: 0px; font-size: 18px; font-weight: normal;">How to Participate</h2>
-
-<ol>
-<li>Read the following sections and the <a href="${home-url}viewfile/fortminor_rules.xml">Official Rules</a>. (Also  available for download as a <a href="${root-url}mixter-files/fortminor_rules.pdf">PDF</a> file.) This is important, because you're agreeing to the rules by participating in the contest.</li>
-<li>Download the <a href="${root-url}fortminor/view/contest/sources">audio sources</a>, which are offered under a CC BY-NC  license. This means you're free to use them for any noncommerical  purpose, as long as you give credit to Fort Minor, Warner Bros.  Records, and Machine Shop Recordings.</li>
-<li>Make your remix.</li>
-<tal:block define="is_logged_in logged_in_as | 0" />
-<li tal:condition="is_logged_in">Use <a href="${root-url}fortminor/view/contest/submit"><b>this form</b></a> to submit your remix before May 6, 2006.</li>
-<li tal:condition="not: is_logged_in">Log in to ccMixter and submit your remix under a CC BY-NC license by  May 6, 2006. If you don't already have a ccMixter account, <a href="${home-url}register">create one  here</a>. </li>
-
-</ol>
+	<div style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center; width: 50%;">The contest is closed to new entries.</div>
 
 
 <br />
@@ -117,12 +88,6 @@ Your remix must include the vocal track from "Remember the Name."  You may, but 
 
 <br />
 
-<h2 style="margin: 0px; font-size: 18px; font-weight: normal;">Format of Entries</h2>
-
-<p>Entries must be in MP3 format. Duration of an entry may not exceed 5 minutes. All eligible entries must be received via ccMixter.org by 9:00 p.m. PST on May 6, 2006. Entries that finish uploading after 9:00 p.m. PST on May 6, 2006 will not be eligible. Listen to the <a href="${root-url}fortminor/view/contest/entries">current entries</a>.
-</p>
-
-<br />
 
 <h2 style="margin: 0px; font-size: 18px; font-weight: normal;">Prize</h2>
 
@@ -138,15 +103,5 @@ Read the <a href="${home-url}viewfile/fortminor_rules.xml">Official Rules</a>. (
 
 <br />
 
-<tal:block replace="">
-<!--
-<h2 style="margin: 0px; font-size: 18px; font-weight: normal;">About Fort Minor</h2>
-
-<p><a href="http://www.fortminor.com/">Fort Minor</a> is a hip-hop project fronted by Linkin Park vocalist/guitarist/keyboardist <a href="http://en.wikipedia.org/wiki/Mike_Shinoda">Mike Shinoda</a>. Fort Minor's debut album, <i>The Rising Tied</i> was executive produced by <a href="http://en.wikipedia.org/wiki/Jay-Z">Jay-Z</a> and features <a href="http://en.wikipedia.org/wiki/Styles_Of_Beyond">Styles of Beyond</a>, <a href="http://en.wikipedia.org/wiki/Common_%28rapper%29">Common</a>, <a href="http://en.wikipedia.org/wiki/John_Legend">John Legend</a>, and <a href="http://en.wikipedia.org/wiki/Black_Thought">Black Thought</a> of <a href="http://en.wikipedia.org/wiki/The_Roots">The Roots</a>. To hear Fort Minor's music, visit the group's <a href="http://www.myspace.com/fortminor">MySpace page</a>. For information about Warner Bros. Records artists and releases, visit the label's <a href="http://www.warnerbrosrecords.com/">Web site</a>.</p>
-
--->
-</tal:block>
-
-<br />
 
 </tal:block>
