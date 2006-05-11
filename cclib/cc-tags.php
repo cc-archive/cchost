@@ -14,10 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
  
+/**
+* @package cchost
+* @subpackage folksonomy
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -25,6 +30,8 @@ CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCTag', 'OnBuildMenu'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCTag', 'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCTag', 'OnAdminMenu'));
 
+/**
+*/
 define('CC_MAX_TAG_LEN',  25);
 define('CC_MIN_TAG_LEN',  3);
 
@@ -38,7 +45,7 @@ class CCTagAliases extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -76,7 +83,7 @@ class CCTags extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -328,7 +335,10 @@ class CCTags extends CCTable
 
 }
 
-
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCAdminTagsForm extends CCForm
 {
     function CCAdminTagsForm()
@@ -625,8 +635,10 @@ class CCTag
     }
 
     /**
-    * Event handler for building admin menus
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -646,9 +658,9 @@ class CCTag
 
 
     /**
-    * Event handler for building menus
-    *
-    * @see CCMenu::AddItems
+    * Event handler for {@link CC_EVENT_MAIN_MENU}
+    * 
+    * @see CCMenu::AddItems()
     */
     function OnBuildMenu()
     {
@@ -667,9 +679,9 @@ class CCTag
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

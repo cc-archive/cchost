@@ -21,7 +21,18 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+* Module for handling admin UI for navigation tabs
+*
+* This module is <i>not</i> automatically included
+*
+* @package cchost
+* @subpackage admin
+*/
 
+/**
+* Form for renaming tab set
+*/
 class CCRenameNavTabForm extends CCForm
 {
     function CCRenameNavTabForm($name)
@@ -471,9 +482,5 @@ class CCNavigatorAdmin
 
 
 }
-
-
-
-
 
 ?>

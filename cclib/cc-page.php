@@ -18,6 +18,13 @@
 *
 */
 
+/**
+* Main page display module
+*
+* @package cchost
+* @subpackage ui
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -29,6 +36,8 @@ CCEvents::AddHandler(CC_EVENT_APP_INIT,           array( 'CCPageAdmin', 'OnAppIn
 * Page template administration API
 *
 * Handles events and basic event routing for the page template used throughout the site
+* @package cchost
+* @subpackage admin
 *
 */
 class CCPageAdmin
@@ -36,7 +45,7 @@ class CCPageAdmin
     /**
     * Event handler for mapping urls to methods
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrl()
     {
@@ -45,10 +54,9 @@ class CCPageAdmin
     }
 
     /**
-    * Event handler for CC_EVENT_APP_INIT
+    * Event handler for {@link CC_EVENT_APP_INIT}
     * 
     * Maps an alias based on user preferences for 'homepage'
-    * 
     */
     function OnAppInit()
     {
@@ -74,7 +82,7 @@ class CCPageAdmin
     /**
     * Display a file in hte client area of the page (wrapper)
     *
-    * @see CCPage::ViewFile
+    * @see CCPage::ViewFile()
     */
     function ViewFile($template)
     {
@@ -82,7 +90,7 @@ class CCPageAdmin
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -139,8 +147,8 @@ class CCPageAdmin
 *
 * For less specialized use, you should use the base class instead.
 *
-* @see CCPage::GetPage
-* @see CCTemplate::CCTemplate
+* @see GetPage
+* @see CCTemplate::CCTemplate()
 */
 class CCPage extends CCTemplate
 {
@@ -153,7 +161,7 @@ class CCPage extends CCTemplate
     * Do not call this for the main page's output. Use GetPage function instead to get 
     * the global singleton instance.
     *
-    * @see CCPage::GetPage
+    * @see GetPage
     */
     function CCPage()
     {
@@ -478,7 +486,7 @@ class CCPage extends CCTemplate
     * Add a form to the page's template variables
     *
     * Use this method to add a form to the page.
-    * @see CCForm::GenerateForm
+    * @see CCForm::GenerateForm()
     * @param object $form The CCForm object to add.
     */
     function AddForm($form)
@@ -536,6 +544,12 @@ class CCPage extends CCTemplate
         $page->_page_args['script_links'] = array_unique($arr);
     }
 
+    /**
+    * Add a navigation tab set to the top of the page
+    *
+    * @param array &$tab_info Array of meta data for tabs
+    * @param string $macro Name of macro to invoke
+    */
     function AddTabNaviator(&$tab_info,$macro)
     {
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
@@ -552,13 +566,13 @@ class CCPage extends CCTemplate
     * Include a trail of bread crumb urls at the top of the page
     * 
     * $trail arg is an array:
-    * 
+    * <code>
     *   $trail = array( 
-    *                array( 'url' => '/',      'text' => 'home' ),
-    *                array( 'url' => '/people' 'text' => 'people' ),
-    *                array( 'url' => '/people/' . $user, 'text' => $user )
-    *                  );
-    *                
+    *      array( 'url' => '/',      'text' => 'home' ),
+    *      array( 'url' => '/people' 'text' => 'people' ),
+    *      array( 'url' => '/people/' . $user, 'text' => $user )
+    *    );
+    * </code>         
     * @param array $trail Links to display at top of page
     */
     function AddBreadCrumbs($trail)

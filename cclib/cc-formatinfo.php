@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Module used by file verifier to communicate with uploader
+*
+* @package cchost
+* @subpackage io
 */
 
 if( !defined('IN_CC_HOST') )
@@ -28,8 +35,8 @@ if( !defined('IN_CC_HOST') )
 * The shipping version of this code uses a wrapper for the the GetID3
 * library to do that.
 *
-* @see CCUpload::PostProcessNewUpload
-* @see CCFileVerify::FileValidate
+* @see CCUpload::PostProcessNewUpload()
+* @see CCFileVerify::FileValidate()
 */
 class CCFileFormatInfo
 {

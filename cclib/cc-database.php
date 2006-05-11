@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Implements the core mySQL wrapper
+*
+* @package cchost
+* @subpackage core
 */
 
 if( !defined('IN_CC_HOST') )
@@ -28,7 +35,7 @@ $_CC_DEBUG_SQL = '';
 /**
 * Wrapper class for mySQL, however only CCTable should be calling it directly.
 *
-* @see CCTable::CCTable
+* @see CCTable::CCTable()
 */
 class CCDatabase
 {
@@ -143,6 +150,20 @@ class CCDatabase
         return( $row[0] );
     }
 
+    /**
+    * Retrieves an array of a single column. Use with SELECT statment.
+    *  
+    * <code>
+    * $usernames = CCDatabase::QueryItem("SELECT username FROM users");
+    * foreach( $usernames as $username )
+    * {
+    *     //...
+    * }
+    * </code>
+    *  
+    * @param string $sql mySQL SELECT statement with a single column
+    * @return array $rows Array of sql rows
+    */
     function QueryItems( $sql )
     {
         $qr = CCDatabase::Query($sql);
@@ -156,11 +177,11 @@ class CCDatabase
     * Retrieves multiple rows. Use with SELECT statment.
     *  
     * <code>
-        $rows =& CCDatabase::QueryRows("SELECT username, age FROM users WHERE age < 27");
-        foreach( $rows as $row )
-        {
-            // ....
-        }
+    * $rows =& CCDatabase::QueryRows("SELECT username, age FROM users WHERE age < 27");
+    * foreach( $rows as $row )
+    * {
+    *     // ....
+    * }
     * </code>
     *
     * @param string $sql mySQL SELECT statement 
@@ -203,6 +224,8 @@ class CCDatabase
     * Internal:  Returns the path to the current database config file
     *
     * @param string $file Name of config file to load (default is 'cc-config-db.php')
+    *
+    * @access private
     **/
     function _config_db($file = '')
     {
@@ -217,6 +240,7 @@ class CCDatabase
     /**
     * Internal:  Returns the link to the current connection
     *
+    * @access private
     **/
     function & _link()
     {

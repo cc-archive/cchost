@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Atom Module feed generator
+*
+* @package cchost
+* @subpackage api
 */
 
 if( !defined('IN_CC_HOST') )
@@ -27,6 +34,8 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCFeedsAtom', 'OnMapUrls'));
 /**
 * Atom Feed generator and reader for site
 *
+* @package cchost
+* @subpackage api
 */
 class CCFeedsAtom extends CCFeed
 {
@@ -41,9 +50,9 @@ class CCFeedsAtom extends CCFeed
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

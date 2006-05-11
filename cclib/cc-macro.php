@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/** 
+* Module for handling macro-replacement
+*
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
@@ -23,15 +30,18 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,   array( 'CCMacro' , 'OnGetMacros'));
 
+/**
+* Macro API for handling macro translations
+*/
 class CCMacro
 {
     /**
-    * Event handler for getting renaming/id3 tagging macros
+    * Event handler for {@link CC_EVENT_GET_MACROS}
     *
-    * @param array $dummy Record we're getting macros for (if null returns documentation)
-    * @param array $dummy1 (not used)
-    * @param array $patterns Substituion pattern to be used when renaming/tagging
-    * @param array $dummy2 (not used)
+    * @param array &$record Upload record we're getting macros for (if null returns documentation)
+    * @param array &$file File record we're getting macros for
+    * @param array &$patterns Substituion pattern to be used when renaming/tagging
+    * @param array &$mask Actual mask to use (based on admin specifications)
     */
     function OnGetMacros(&$dummy, &$dummy1, &$patterns, &$dummy2)
     {

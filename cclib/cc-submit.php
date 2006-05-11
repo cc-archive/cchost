@@ -18,9 +18,16 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage upload
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 define('CC_FORM_TYPE_LOGO_DIR', 'ccimages/form_types' );
 
 CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCSubmit',  'OnBuildMenu'));
@@ -28,6 +35,10 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCSubmit',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCSubmit', 'OnAdminMenu'));
 CCEvents::AddHandler(CC_EVENT_TRANSLATE,    array( 'CCSubmit', 'OnTranslate'));
 
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCAdminSubmitFormForm extends CCUploadForm
 {
     function CCAdminSubmitFormForm()
@@ -396,9 +407,9 @@ class CCSubmit
     }
 
     /**
-    * Event handler for building menus
-    *
-    * @see CCMenu::AddItems
+    * Event handler for {@link CC_EVENT_MAIN_MENU}
+    * 
+    * @see CCMenu::AddItems()
     */
     function OnBuildMenu()
     {
@@ -416,9 +427,9 @@ class CCSubmit
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -430,8 +441,10 @@ class CCSubmit
     }
 
     /**
-    * Event handler for admin building
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -450,6 +463,9 @@ class CCSubmit
         }
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_TRANSLATE}
+    */
     function OnTranslate()
     {
         $configs =& CCConfigs::GetTable();

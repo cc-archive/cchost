@@ -14,18 +14,28 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage util
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-// Sat, 07 Sep 2002 00:00:01 GMT
-// ..actually 'T' prints the entire acronym out
+/**#@+
+* Sat, 07 Sep 2002 00:00:01 GMT
+* ..actually 'T' prints the entire acronym out
+*/
 define('CC_RFC822_FORMAT', 'D, d M Y H:i:s '); // T');
 define('CC_RFC3339_FORMAT', 'Y-m-d\TH:i:s');
+/**#@-*/
 
+/**
+*/
 function cc_setcookie($name,$value,$expire,$path='',$domain='')
 {
     global $CC_GLOBALS;
@@ -46,12 +56,16 @@ function cc_setcookie($name,$value,$expire,$path='',$domain='')
     return( $ok );
 }
 
+/**
+*/
 function cc_exit()
 {
     CCEvents::Invoke(CC_EVENT_APP_DONE);    
     exit();
 }
 
+/**
+*/
 class CCUtil
 {
     function StripText(&$text)

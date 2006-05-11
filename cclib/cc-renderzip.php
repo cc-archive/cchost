@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage archive
 */
 
 if( !defined('IN_CC_HOST') )
@@ -23,14 +28,17 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderZip', 'OnUploadRow'));
 
+/**
+* @package cchost
+* @subpackage archive
+*/
 class CCRenderZip
 {
     /**
-    * Event handler for when a media record is fetched from the database 
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * This will add semantic richness and make the db row display ready.
-    * 
-    * @see CCTable::GetRecordFromRow
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
     */
     function OnUploadRow(&$record)
     {

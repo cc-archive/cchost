@@ -18,9 +18,18 @@
 *
 */
 
+/**
+* Module for admin management of sample pools
+*
+* @package cchost
+* @subpackage admin
+*/
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to ccHost');
+
+/**
+*/
 
 require_once('cclib/cc-feedreader.php');
 
@@ -396,6 +405,11 @@ class CCPoolUI
         CCPage::Prompt("no implemento");
     }
 
+    /**
+    * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
+    * 
+    * @param array $record Upload database record
+    */
     function OnUploadDelete( &$row )
     {
         $id = $row['upload_id'];
@@ -404,6 +418,13 @@ class CCPoolUI
         $tree->DeleteWhere($where);
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_LISTING}
+    *
+    * Final chance to massage a record before being displayed in a list
+    * 
+    * @param array &$row Record to massage with extra display information
+    */
     function OnUploadListing( &$row )
     {
         $fhome = ccl() . 'pools/item/';
@@ -468,9 +489,9 @@ END;
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -494,8 +515,10 @@ END;
     }
 
     /**
-    * Event handler for menu admin building
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu($items,$scope)
     {

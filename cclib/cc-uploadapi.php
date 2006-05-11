@@ -18,6 +18,10 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage io
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -27,40 +31,8 @@ if( !defined('IN_CC_HOST') )
 * There are two tables that manage uploads, the CCUploads table manages 
 * the meta data for the upload, CCFiles handles the actual physical
 * files. (There can be multiple physical files for one upload record.)
-* 
-* <code> 
-//  Rules for when an upload is visible:
-//  
-//   These apply to uploads not part of a contest:
-//   ---------------------------------------------
-//         If the admin said auto-publish:
-//             SHOW if : the user said ok to publish
-//         If the admin wants to vet uploads:
-//             SHOW if : the admin checked the publish bit
-//             
-//   These apply to a contest entry:
-//   --------------------------------------------
-//         If the admin said auto-publish:
-//             SHOW
-//         If the admin withholds entries until deadline:
-//             SHOW if : after contest deadline
-// 
-//   These two override all above states:
-//   ----------------------------------
-//   SHOW if : an admin is logged in
-//   SHOW if : the registered user is the same as uploader
-// 
-//       If we get into an override state:
-//       ---------------------------------
-//        Display a notice to user that file is 'unpublished'
-// 
-//           If the current user is Admin:
-//           -----------------------------
-//             Display a command link to publish the work
-</code>
-* 
 *
-* @see CCUploads::CCUploads 
+* @see CCUploads::CCUploads()
 */
 class CCUploads extends CCTable
 {
@@ -69,20 +41,7 @@ class CCUploads extends CCTable
     var $_filter;
 
     /**
-     * Constructor
-     *
-     * 
-     * <code> 
- //    This is what we're aiming for in the constructor:
- // 
- // SELECT *, DATE_FORMAT(upload_date, '$CC_SQL_DATE') as upload_date_format,
- //           DATE_FORMAT(user_registered, '$CC_SQL_DATE') as user_date_format  
- //    FROM cc_tbl_uploads
- //    LEFT OUTER JOIN cc_tbl_contests e ON upload_contest  = e.contest_id
- //    LEFT OUTER JOIN cc_tbl_user     u ON upload_user     = u.user_id
- //    LEFT OUTER JOIN cc_tbl_license  c ON upload_license  = c.license_id
-     * </code> 
-     * 
+    * Constructor
     */
     function CCUploads($anon_user=false)
     {
@@ -101,7 +60,9 @@ class CCUploads extends CCTable
         $this->SetDefaultFilter(true,$anon_user);
     }
 
-    /*
+    /**
+     * Override default sensitity to logged in user
+     *
      * Typically this class is sensitive to the current user, showing files
      * they own even if it's banned or unpublished, etc. (Admins can see 
      * everything) Use the 'anon_user' flag on the constructor to create
@@ -185,7 +146,7 @@ END;
 
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -200,6 +161,18 @@ END;
         return $_table;
     }
 
+    /**
+    * Limit query results to certain tags
+    *
+    * The 'tags' parameter can either be a comma separeated list of tags
+    * or an array of array.
+    *
+    * The 'type' parameter determines how the tags are combined, either 
+    * 'any' or 'all'
+    *
+    * @param mixed $tags What tags to limit the search by
+    * @param string $type One of 'any' or 'all'
+    */
     function SetTagFilter($tags, $type='any')
     {
         if( is_array($tags) )
@@ -209,7 +182,19 @@ END;
         $this->_tag_filter_type = $type;
     }
 
-    function & GetRecordFromRow($row)
+    /**
+    * Convert a database 'row' to a more semantically rich 'record'
+    * 
+    * This method is abstract (returns $row). Derived classes
+    * implement this method for shortly after a row from the database has
+    * been returned to fill the row with semantically rich, runtime data.
+    *
+    * For a tutorial see {@tutorial cchost.pkg#rowvsrecord "row" vs. "record"}
+    * 
+    * @param array $row Row as retrieved from the database
+    * @return array $record A 'record' that has runtime data
+    */
+    function & GetRecordFromRow( &$row )
     {
         if( is_string( $row['upload_extra'] ) )
             $row['upload_extra'] = unserialize($row['upload_extra']);
@@ -264,7 +249,8 @@ END;
         return $row;
     }
 
-    function IsMediaType(&$record,$looking_for_media,$looking_for_ext='')
+/*
+//    function IsMediaType(&$record,$looking_for_media,$looking_for_ext='')
     {
         if( empty($record['files']) )
         {
@@ -280,7 +266,14 @@ END;
             $ok =  $file['file_format_info']['default-ext'] == $looking_for_ext;
         return($ok);
     }
+*/
 
+    /**
+    * Shortcut for getting the basic file format
+    * @param array &$record Upload record
+    * @param string $field Optionally specific just one field
+    * @return mixed Field value or entire format info structure
+    */
     function GetFormatInfo(&$record,$field='')
     {
         if( empty($record['files']) )
@@ -299,6 +292,15 @@ END;
         return( $F );
     }
 
+    /**
+    * Set data into the upload record
+    *
+    * See {@tutorial cchost.pkg#uploadextra a tutorial} on how use this method.
+    * 
+    * @param mixter $id_or_row Interger upload id or upload record
+    * @param string $fieldname Name of extra field
+    * @param value $value Value to set into field
+    */
     function SetExtraField( $id_or_row, $fieldname, $value)
     {
         if( is_array($id_or_row) )
@@ -321,6 +323,14 @@ END;
         $this->Update($args);
     }
 
+    /**
+    * Get data out of the upload record
+    *
+    * See {@tutorial cchost.pkg#uploadextra a tutorial} on how use this method.
+    * 
+    * @param mixter $id_or_row Interger upload id or upload record
+    * @param string $fieldname Name of extra field
+    */
     function GetExtraField( &$id_or_row, $fieldname )
     {
         if( is_array($id_or_row) )
@@ -340,17 +350,35 @@ END;
         return( null );
     }
 
+    /**
+    * Check this record for tag
+    *
+    * @param mixed $tags Comma separated list or array of tags
+    * @param array $record Upload record 
+    * @return boolean true means tags are in record 
+    */
     function InTags($tags,&$record)
     {
         return( CCTag::InTag($tags,$record['upload_tags']));
     }
 
+    /**
+    * Return tags for upload in array
+    *
+    * @param array $record Upload record to get tags from
+    * @return array Array of tags for this record
+    */
     function SplitTags(&$record)
     {
         return( CCTag::TagSplit($record['upload_tags']) );
     }
 
-    // overwrite parent's version to add descriptor
+    /**
+    * Overwrite parent's version to add descriptor
+    * 
+    * @param mixed $where Where filter for next query
+    * @param string $columns Return these columns
+    */
     function _get_select($where,$columns='*')
     {
         $where = $this->_where_to_string($where);
@@ -397,14 +425,14 @@ END;
 * the meta data for the upload, CCFiles handles the actual physical
 * files. (There can be multiple physical files for one upload record.)
 *
-* @see CCUploads::CCUploads 
+* @see CCUploads::CCUploads()
 */
 class CCFiles extends CCTable
 {
     /**
     * Constructor -- don't use new, use GetTable() instead
     *
-    * @see CCTable::GetTable
+    * @see CCTable::GetTable()
     */
     function CCFiles()
     {
@@ -413,7 +441,7 @@ class CCFiles extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.

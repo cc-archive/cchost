@@ -14,17 +14,32 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
+/**
+* Module for displaying a poll 
+*
+* @package cchost
+* @subpackage contest
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+* @deprecated
+*/
 define( 'CC_POLL_COOKIE', 'loginsat');
 
+/**
+* @deprecated
+*/
 class CCPollsForm extends CCForm
 {
+    /**
+    * @deprecated
+    */
     function CCPollsForm($poll_id,$poll_end_time)
     {
         $this->CCForm();
@@ -50,19 +65,26 @@ class CCPollsForm extends CCForm
         
 
 
+/**
+* @deprecated
+*/
 class CCPolls extends CCTable
 {
+    /**
+    * @deprecated
+    */
     function CCPolls()
     {
         $this->CCTable('cc_tbl_polls','poll_valueid');
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
     * 
+    * @deprecated
     * @returns object $table An instance of this table
     */
     function & GetTable()
@@ -73,6 +95,9 @@ class CCPolls extends CCTable
         return( $_table );
     }
 
+    /**
+    * @deprecated
+    */
     function GetPollingData($poll_id,$sort = 'poll_value')
     {
         $this->SetOrder($sort,'DESC');
@@ -92,12 +117,18 @@ class CCPolls extends CCTable
         return( $arr );
     }
 
+    /**
+    * @deprecated
+    */
     function PollExists($poll_id)
     {
         $count = $this->QueryItem('COUNT(*)',"poll_id = '$poll_id'");
         return( $count > 0 );
     }
 
+    /**
+    * @deprecated
+    */
     function AddVote($poll_valueid)
     {
         $updates['poll_valueid']  = $poll_valueid;
@@ -107,9 +138,14 @@ class CCPolls extends CCTable
 
 }
 
-
+/**
+* @deprecated
+*/
 class CCPoll
 {
+    /**
+    * @deprecated
+    */
     function Vote($poll_id)
     {
         global $CC_GLOBALS;
@@ -124,6 +160,9 @@ class CCPoll
         }
     }
 
+    /**
+    * @deprecated
+    */
     function AlreadyVoted($poll_id)
     {
         return( array_key_exists( md5($poll_id), $_COOKIE ) );

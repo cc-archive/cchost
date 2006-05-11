@@ -14,13 +14,25 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Module for debugging ccHost 
+*
+* For examples and tutorials see {@tutorial cchost.pkg#debug Inspecting variables}, 
+* {@tutorial cchost.pkg#stacktrace Dumping a stacktrace} and {@tutorial cchost.pkg#testbed Create a test bed}
+*
+* @package cchost
+* @subpackage core
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 define( 'CC_QUIET_LEVEL', 0); 
 
 define( 'CC_LOG_FILE', 'cc-log.txt');
@@ -275,29 +287,29 @@ class CCDebug
     /**
     *  Works exactly like a stop watch, ie. starts if stopped and stops if started
     *
-    * Based on http://us2.php.net/microtime#50277
+    * Based on {@link http://us2.php.net/microtime#50277}
     *
     * Call the function a first time to start the chronometer. The next call to the function will return the number of
     * milliseconds elapsed since the chronometer was started (rounded to three decimal places). The next call will start 
     * the chronometer again from where it finished. Multiple timers can be used by creating multiple $timer variables.
     *
     * <code>
-
-CCDebug::chronometer($timer1);
-// DO STUFF HERE
-CCDebug::chronometer($timer2);
-CCDebug::chronometer($timer3);
-
-// DO MORE STUFF
-CCDebug::Log('timer1: ' . CCDebug::chronometer($timer1));
-// DO SOMETHING
-CCDebug::Log('timer3: ' . CCDebug::chronometer($timer3));
-// DO SOMETHING
-CCDebug::Log('timer2: ' . CCDebug::chronometer($timer2));
-
+    * CCDebug::Chronometer($timer1);
+    * // DO STUFF HERE
+    * CCDebug::Log('timer1: ' . CCDebug::Chronometer($timer1));
+    *
+    * CCDebug::Chronometer($timer2);
+    * CCDebug::Chronometer($timer3);
+    * 
+    * // DO SOMETHING
+    * CCDebug::Log('timer3: ' . CCDebug::Chronometer($timer3));
+    * // DO SOMETHING
+    * CCDebug::Log('timer2: ' . CCDebug::Chronometer($timer2));
     * </code>
     *
-    * @param mixed $CHRONO_STARTTIME Reference to timer var (does not need to be declared or initialized before use)
+    * The $CHRONO_STARTTIME reference paramater does not need to be declared or initialized before use.
+    *
+    * @param mixed $CHRONO_STARTTIME Reference to timer var
     * @returns float $result Void if starting timer, string (in seconds) formatted
     */
     function Chronometer(&$CHRONO_STARTTIME)

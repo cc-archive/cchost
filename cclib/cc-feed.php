@@ -18,21 +18,32 @@
 *
 */
 
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigFields') );
+/**
+* Bass module for generating feeds
+*
+* @package cchost
+* @subpackage api
+*/
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigFields') );
+
+/**
+*/
 define ( 'NUM_FEED_ITEMS', 15 );
 
 /**
 * Abstract class to be used for generating feeds.
 *
+* @package cchost
+* @subpackage api
 */
 class CCFeed
 {
     /**
-     * @var boolean <code>true</code> if is full dump and <code>false</code>
+     * @var boolean true if is full dump and false
      */
     var $is_dump;
     
@@ -40,7 +51,7 @@ class CCFeed
 
   
     /**
-    * Event hander to clear the feed cache
+    * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
     * 
     * @param array $record Upload database record
     */
@@ -60,17 +71,19 @@ class CCFeed
     }
 
     /**
-    * Event hander to clear the feed cache
+    * Event handler for {@link CC_EVENT_UPLOAD_DONE}
     * 
-    * @param integer $fileid Database ID of file
+    * @param integer $upload_id ID of upload row
+    * @param string $op One of {@link CC_UF_NEW_UPLOAD}, {@link CC_UF_FILE_REPLACE}, {@link CC_UF_FILE_ADD}, {@link CC_UF_PROPERTIES_EDIT'} 
+    * @param array &$parents Array of remix sources
     */
-    function OnUploadDone($fileid)
+    function OnUploadDone($upload_id,$op,&$parents)
     {
-        $this->_clear_cache($fileid);
+        $this->_clear_cache($upload_id);
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -205,16 +218,31 @@ class CCFeed
         return $records;
     }
 
+    /**
+    * Returns true is user is requesting an entire dump
+    *
+    * If logged in as admin and the url has ?all=1 in it
+    *
+    * @return boolean $is_full_dump
+    */
     function _is_full_dump()
     {
         return $this->is_dump || (CCUser::IsAdmin() && !empty($_REQUEST['all']) && ($_REQUEST['all'] == 1));
     }
 
+    /**
+    * Internal: strip string of any non-ascii characters
+    * 
+    * @param string $str String to clean
+    */
     function _cct($str)
     {
         return( preg_replace('&[^a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]&','',$str ) );
     }
 
+    /**
+    * @access private
+    */
     function _resort_records(&$records,&$sort_order)
     {
         if( !empty($sort_order) )
@@ -231,6 +259,16 @@ class CCFeed
         }
     }
 
+    /**
+    * Internal helper to generate XML from tags
+    *
+    * This method with print XML to the browser.
+    *
+    * @param string $template Relative path to template file to merge
+    * @param string $tagstr Comma seperated list tags 
+    * @param string $cache_type e.g. 'rss', 'atom', etc.
+    * @see _gen_feed_from_records
+    */
     function _gen_feed_from_tags($template, $tagstr, $cache_type)
     {
         if( empty($tagstr) )
@@ -288,6 +326,16 @@ class CCFeed
     }
 
 
+    /**
+    * Internal helper to generate XML from a set of records
+    *
+    * This method with print XML to the browser.
+    *
+    * @param string $template Relative path to template file to merge
+    * @param array &$records Array of records to merge with template
+    * @param string $feed_url URL that represents this feed
+    * @param string $cache_type e.g. 'rss', 'atom', etc.
+    */
     function _gen_feed_from_records($template,&$records,$tagstr,$feed_url,$cache_type)
     {
         global $CC_GLOBALS;
@@ -365,7 +413,11 @@ class CCFeed
         exit;
     }
 
-
+    /**
+    * Format a set of records for UTF-8 feed output
+    *
+    * @param array &$records Array of records to massage
+    */
     function PrepRecords(&$records)
     {
         $remix_api = new CCRemix();

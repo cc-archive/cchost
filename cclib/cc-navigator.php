@@ -18,6 +18,13 @@
 *
 */
 
+/**
+* Module for displaying navigator tabs
+*
+* @package cchost
+* @subpackage ui
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -61,6 +68,14 @@ class CCNavigator
         $this->ShowTabs($page,true,$page_name,$default_tab_name,$sub_tab_name);
     }
 
+    /**
+    * Display sub tab (A tab set embedded in the page)
+    *
+    * @param string $tabsetname Name of tab set
+    * @param string $selected_tab Name of the tab to highlight and execute
+    * @param string $base_url Base url to use prepend to tab names 
+    * @param boolean $execute (not used)
+    */
     function ShowSubTabs($tabsetname,$selected_tab,$base_url,$execute)
     {
         if( $this->_get_selected_page($tabsetname,$selected_tab,$sub_page) )
@@ -84,6 +99,15 @@ class CCNavigator
         return false;
     }
 
+    /**
+    * Display main navigation tab set
+    *
+    * @param object &$page_out CCPage object to output tabs
+    * @param boolean $execute true means execute underlying URL
+    * @param string $page_name Name of tabset to display
+    * @param string $default_tab_name Name of selected tab
+    * @param string $sub_tab_name Name of subtabs to embed in page
+    */
     function ShowTabs(&$page_out,$execute=false,$page_name='',$default_tab_name='',$sub_tab_name='')
     {
         global $CC_CFG_ROOT;
@@ -91,7 +115,6 @@ class CCNavigator
         // Step 1. Figure out what page we're loading
         if( !$this->_get_selected_page($page_name,$default_tab_name,$page) )
             return;
-
         // Step 2. Get the Page ready for display
         //
         $base_url = ccl( 'view', $page_name );
@@ -177,7 +200,9 @@ class CCNavigator
         }
     }
 
-
+    /**
+    * @access private
+    */
     function _setup_page(&$default_tab_name, &$page, $base_url, $execute, &$default_tab, &$tab_info )
     {
         // Step 1. Call any custom handler to allow for dynamic removal
@@ -251,12 +276,12 @@ class CCNavigator
         $tab_info['tags']          = $default_tab['tags'];
         $tab_info['function']      = $default_tab['function'];
         $tab_info['tabs']          = $page; // array_reverse($page);
-
     }
 
     /**
     * Internal: Returns pages current assigned to the current config root
     *
+    * @access private
     */
     function  _get_pages()
     {
@@ -274,6 +299,7 @@ class CCNavigator
 
     /**
     * Internal: returns the current selected page and tab
+    * @access private
     */
     function _get_selected_page(&$page_name,&$default_tab_name,&$page)
     {
@@ -319,6 +345,7 @@ class CCNavigator
 
     /**
     * Internal: fake out error
+    * @access private
     */
     function _signal_error()
     {
@@ -327,8 +354,10 @@ class CCNavigator
     }
 
     /**
-    * Event handler for building admin menus
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items, $scope)
     {
@@ -347,9 +376,9 @@ class CCNavigator
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage ui
 */
 
 if( !defined('IN_CC_HOST') )
@@ -24,6 +29,8 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCTemplateAdmin', 'OnAdminMenu'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCTemplateAdmin', 'OnMapUrls'));
 
+/**
+*/
 function cc_init_template_lib()
 {
     static $_init = 0;
@@ -42,6 +49,8 @@ function cc_init_template_lib()
 
 }
 
+/**
+*/
 class CCTemplate
 {
     var $_template_file;
@@ -120,6 +129,10 @@ class CCTemplate
 
 }
 
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCAdminTemplateMacrosForm extends CCEditConfigForm
 {
     function CCAdminTemplateMacrosForm()
@@ -142,6 +155,10 @@ class CCAdminTemplateMacrosForm extends CCEditConfigForm
     }
 }
 
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCAdminTemplateTagsForm extends CCEditConfigForm
 {
     function CCAdminTemplateTagsForm()
@@ -171,6 +188,10 @@ class CCAdminTemplateTagsForm extends CCEditConfigForm
     }
 }
 
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCNewTemplateTagForm extends CCForm
 {
     function CCNewTemplateTagForm()
@@ -186,6 +207,10 @@ class CCNewTemplateTagForm extends CCForm
     }
 }
 
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCTemplateAdmin
 {
     function OnAdminContent()
@@ -264,8 +289,10 @@ class CCTemplateAdmin
     }
 
     /**
-    * Event handler for building admin menus
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -300,9 +327,9 @@ class CCTemplateAdmin
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

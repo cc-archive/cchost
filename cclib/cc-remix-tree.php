@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Module for handling remix tables
+*
+* @package cchost
+* @subpackage upload
 */
 
 if( !defined('IN_CC_HOST') )
@@ -24,19 +31,44 @@ if( !defined('IN_CC_HOST') )
 /**
  * Base class for remix fork database table
  *
- * @access private
+ * This wrapper is a little different in that it is used
+ * to wrap more than one mySQL table: the 'regular' remix
+ * tree as well as the sample pool tree.
  */
 class CCRemixTree extends CCTable
 {
+    /**#@+
+    * @access private
+    */
     var $_bind_to_query;
     var $_uploads;
+    /**#@-*/
 
+    /**
+    * Constructor
+    *
+    * Callers can bind to this table as a parent looking for children
+    * or visa versa
+    *
+    * @see CCRemixes
+    * @see CCRemixSources
+    * @param string $bind_to_upload The name of key column
+    * @param string $bind_to_query The name of column that will be returned by queries
+    * @param string $table_name Physical table to wrap
+    */
     function CCRemixTree( $bind_to_upload, $bind_to_query, $table_name = 'cc_tbl_tree')
     {
         $this->CCTable($table_name,$bind_to_upload);
         $this->_bind_to_query = $bind_to_query;
     }
 
+    /**
+    * Use by derived classes to return _bind_to_query results
+    *
+    * @param integer $upload_id Upload to get remix relatives
+    * @param boolean $limit true: Limit results by {@link CC_MAX_SHORT_REMIX_DISPLAY}
+    * @return array &$records Full blown records for remixes
+    */
     function & _get_relatives($upload_id, $limit)
     {
         if( !isset($this->_uploads) )
@@ -56,6 +88,9 @@ class CCRemixTree extends CCTable
         return $records;
     }
 
+    /**
+    * @access private
+    */
     function & _get_user_stat($user_id,$count_only)
     {
         if( $count_only )
@@ -108,6 +143,25 @@ class CCRemixSources extends CCRemixTree
         $this->CCRemixTree('tree_parent','tree_child');
     }
 
+    /**
+    * Return the remix sources for a given record
+    *
+    * NOTE: This method is, er, performance intensive. See {@link CCRemix::OnUploadListing()} for
+    * an example of an optimized version.
+    * 
+    * The $limit_by_works_page parameter is (unfortunately) a flip-negative flag
+    * that will limit the number of records returned based on the following 
+    * conditions:
+    *
+    *   If $limit_by_works_page is <i>true</i> AND $record['works_page'] is <i>false</i>
+    *   then the number of records returned will be max out at {@link CC_MAX_SHORT_REMIX_DISPLAY}
+    *
+    * This flag is used when we are doing an upload listing and only have room for a few
+    * remix relatives.
+    *
+    * @param array $record Record to get remixes of
+    * @param boolean $limit_by_works_page (See method comments)
+    */
     function & GetSources($record,$limit_by_works_page=true)
     {
         $do_limit = $limit_by_works_page ? empty($record['works_page']) : false;
@@ -122,7 +176,7 @@ class CCRemixSources extends CCRemixTree
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -150,6 +204,25 @@ class CCRemixes extends CCRemixTree
         $this->CCRemixTree('tree_child','tree_parent');
     }
 
+    /**
+    * Return the remixes for a given record
+    *
+    * NOTE: This method is, er, performance intensive. See {@link CCRemix::OnUploadListing()} for
+    * an example of an optimized version.
+    * 
+    * The $limit_by_works_page parameter is (unfortunately) a flip-negative flag
+    * that will limit the number of records returned based on the following 
+    * conditions:
+    *
+    *   If $limit_by_works_page is <i>true</i> AND $record['works_page'] is <i>false</i>
+    *   then the number of records returned will be max out at {@link CC_MAX_SHORT_REMIX_DISPLAY}
+    *
+    * This flag is used when we are doing an upload listing and only have room for a few
+    * remix relatives.
+    *
+    * @param array $record Record to get remixes of
+    * @param boolean $limit_by_works_page (See method comments)
+    */
     function & GetRemixes($record,$limit_by_works_page=true)
     {
         $do_limit = $limit_by_works_page ? empty($record['works_page']) : false;
@@ -165,7 +238,7 @@ class CCRemixes extends CCRemixTree
 
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.

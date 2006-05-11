@@ -18,9 +18,18 @@
 *
 */
 
+/** 
+* Module for handling Remix UI
+*
+* @package cchost
+* @subpackage upload
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*
+*/
 define('CC_REMIX_SEARCH_LIMIT', 30 );
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING, array( 'CCRemix', 'OnUploadListing'));
@@ -105,6 +114,9 @@ class CCEditRemixesForm extends CCForm
  */
 class CCRemix
 {
+    /**
+    * @access private
+    */
     function _setup_search_fields(&$form)
     {
         if( !empty($_POST['remix_search_type']) )
@@ -130,6 +142,9 @@ class CCRemix
         $this->SetTemplateVar('inputcheck', 'checked="checked"' );
     }
 
+    /**
+    * @access private
+    */
     function _add_pool_to_form(&$form)
     {
         $pool_table =& CCPools::GetTable(); // tada!!!
@@ -150,6 +165,11 @@ class CCRemix
         }
     }
 
+    /**
+    * Display UI for managing remix ('I Sampled This') list
+    *
+    * @param integer $upload_id Uplaod ID to edit remixes for
+    */
     function EditRemixes($upload_id)
     {
         global $CC_GLOBALS;
@@ -187,6 +207,14 @@ class CCRemix
         }
     }
 
+    /**
+    * Function called in repsonse to submit on a remix form
+    *
+    * @param object &$form CCForm object
+    * @param string $relative_dir Target directory of upload
+    * @param string $ccud System tag to attach to upload
+    * @param integer $remixid Upload id of remix editing
+    */
     function OnPostRemixForm(&$form, $relative_dir, $ccud = CCUD_REMIX, $remixid = '')
     {
         $is_update  = !empty($remixid);
@@ -294,6 +322,9 @@ class CCRemix
         return( false );
     }
 
+    /**
+    * @access private
+    */
     function _perform_search(&$form)
     {
         $query = CCUtil::StripText($_POST['remix_search_query']);
@@ -388,6 +419,9 @@ class CCRemix
 
     }
 
+    /**
+    * @access private
+    */
     function _update_remix_tree($field, $remixid, $parentf, $childf, &$table)
     {
         if( empty($_POST[$field]) )
@@ -410,6 +444,9 @@ class CCRemix
         return($sourceids);
     }
 
+    /**
+    * @access private
+    */
     function _check_for_sources( $field, &$table, &$form, &$remix_sources )
     {
         if( !empty($_POST[$field]) )
@@ -429,6 +466,12 @@ class CCRemix
         return( false );
     }
 
+    /**
+    * Calculate the strictest license given a set of uploads
+    *
+    * @param object &$form CCForm object
+    * @param array &$rows Array of upload rows
+    */
     function StrictestLicense( &$form, &$rows )
     {
         $license = '';
@@ -449,6 +492,11 @@ class CCRemix
         $form->AddTemplateVars( $licenserow  );
     }
 
+    /**
+    * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
+    * 
+    * @param array $record Upload database record
+    */
     function OnUploadDelete( &$row )
     {
         $id = $row['upload_id'];
@@ -457,6 +505,13 @@ class CCRemix
         $tree->DeleteWhere($where);
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_LISTING}
+    *
+    * Final chance to massage a record before being displayed in a list
+    * 
+    * @param array &$row Record to massage with extra display information
+    */
     function OnUploadListing( &$row )
     {
         global $CC_GLOBALS;
@@ -525,6 +580,9 @@ END;
 
     }
 
+    /**
+    * @access private
+    */
     function _mark_row(&$row,$hasflag,$elemname,&$branches,$more_name,$add_macro=true)
     {
         if( empty($branches) ) 
@@ -548,9 +606,9 @@ END;
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

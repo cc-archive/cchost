@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Module for handling ID3 file tagging
+*
+* @package cchost
+* @subpackage audio
 */
 
 if( !defined('IN_CC_HOST') )
@@ -26,39 +33,6 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCID3Tagger', 'OnMapUrls') );
 
 $CC_ID3_TAGGER = new CCID3Tagger();
 
-/**
-* Admin form for upload ID3 tagging rules
-*/
-class CCAdminTaggerForm  extends CCEditConfigForm
-{
-    /**
-    * Constructor
-    *
-    * Every module in the system has the opportunity to participate in the ID3 tagging
-    * rules by responding to CC_EVENT_GET_MACROS event (triggered by this method).
-    * In this case the $record field will be blank and therefore the documentation
-    * for each tagging macro is expected back.
-    *
-    */
-    function CCAdminTaggerForm()
-    {
-        $this->CCEditConfigForm('id3-tag-masks');
-
-        $fields = array();
-
-        $standard_tags =& CCID3Tagger::_get_standard_tags();
-        $this->AddFormFields( $standard_tags );
-
-        // Help...
-        $patterns['%title%'] = "Title";
-        $patterns['%site%']  = "Site name";
-        $dummy = array();
-        CCEvents::Invoke( CC_EVENT_GET_MACROS, array( $dummy, $dummy, &$patterns, $dummy ) );
-        ksort($patterns);
-        $this->CallFormMacro('macro_patterns','show_macro_patterns',$patterns);
-    }
-
-}
 
 /**
 * ID3 Tagging policy API
@@ -77,24 +51,21 @@ class CCID3Tagger
     * This method is called by checking for the global '$CC_ID3_TAGGER' and then
     * calling $CC_ID3_TAGGER->TagFile($record).
     *
-    *
     * <code>
-        
-    // get $record from database or user filled out form...
-
-    if( isset($CC_ID3_TAGGER) )
-    {
-        $errors = $CC_ID3_TAGGER->TagFile($record,$local_path);
-        if( !empty($errors) )
-        {
-            $error_text = implode('<br />',$errors);
-            print($error_text);
-        }
-    }
-
+    *     // get $record from database or user filled out form...
+    * 
+    *     if( isset($CC_ID3_TAGGER) )
+    *     {
+    *         $errors = $CC_ID3_TAGGER->TagFile($record,$local_path);
+    *         if( !empty($errors) )
+    *         {
+    *             $error_text = implode('<br />',$errors);
+    *             print($error_text);
+    *         }
+    *     }
     * </code>
     *
-    * @see CCUploadAPI::PostProcessNewUpload
+    * @see CCUploadAPI::PostProcessNewUpload()
     * @param array $record Database record of upload
     * @returns array $errors Array of errors found, otherwise null on success
     */
@@ -214,8 +185,10 @@ class CCID3Tagger
 
 
     /**
-    * Event handler for building admin menus
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -235,9 +208,9 @@ class CCID3Tagger
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -247,11 +220,12 @@ class CCID3Tagger
     /**
     * Handler for admin/id3tags - puts up form
     *
-    * @see CCAdminTaggerForm::CCAdminTaggerForm
+    * @see CCAdminTaggerForm::CCAdminTaggerForm()
     */
     function AdminTagger()
     {
         CCPage::SetTitle("Configure ID3 Tagger");
+        require_once('cclib/cc-filetagger-admin.inc');
         $form = new CCAdminTaggerForm($this);
         CCPage::AddForm( $form->GenerateForm() );
     }

@@ -14,19 +14,29 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header: /cvsroot/cctools/cchost1/cclib/cc-pools.php,v 1.17 2006/03/18 04:38:34 fourstones Exp $
+* $Id$
 *
 */
 
+/**
+* Module for sample pools
+*
+* @package cchost
+* @subpackage api
+*/
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to ccHost');
 
+/**
+*/
 require_once('cclib/cc-feedreader.php');
 
 /**
 * Remote sample pools we know about
 * 
+* @package cchost
+* @subpackage api
 */
 class CCPools extends CCTable
 {
@@ -42,7 +52,7 @@ class CCPools extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -61,6 +71,8 @@ class CCPools extends CCTable
 /**
 * Items we share samples with (remote version of uploads)
 * 
+* @package cchost
+* @subpackage api
 */
 class CCPoolItems extends CCTable
 {
@@ -91,7 +103,7 @@ class CCPoolItems extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -113,6 +125,8 @@ class CCPoolItems extends CCTable
 * This table wrapper answers the question: given a local upload
 * what are the remote remixes and remix sources out there?
 *
+* @package cchost
+* @subpackage api
 */
 class CCPoolTree extends CCTable
 {
@@ -151,6 +165,8 @@ class CCPoolTree extends CCTable
 /**
 * Table wrapper used for returning remote sources given local remixes
 *
+* @package cchost
+* @subpackage api
 */
 class CCPoolSources extends CCPoolTree
 {
@@ -159,6 +175,25 @@ class CCPoolSources extends CCPoolTree
         $this->CCPoolTree('pool_tree_pool_parent', 'pool_tree_child');
     }
 
+    /**
+    * Return the pool remix sources for a given record
+    *
+    * NOTE: This method is, er, performance intensive. See {@link CCPoolUI::OnUploadListing()} for
+    * an example of an optimized version.
+    * 
+    * The $limit_by_works_page parameter is (unfortunately) a flip-negative flag
+    * that will limit the number of records returned based on the following 
+    * conditions:
+    *
+    *   If $limit_by_works_page is <i>true</i> AND $record['works_page'] is <i>false</i>
+    *   then the number of records returned will be max out at {@link CC_MAX_SHORT_REMIX_DISPLAY}
+    *
+    * This flag is used when we are doing an upload listing and only have room for a few
+    * remix relatives.
+    *
+    * @param array $record Record to get remixes of
+    * @param boolean $limit_by_works_page (See method comments)
+    */
     function & GetSources($record,$limit_by_works_page=false)
     {
         $do_limit = $limit_by_works_page ? empty($record['works_page']) : false;
@@ -167,7 +202,7 @@ class CCPoolSources extends CCPoolTree
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -186,6 +221,8 @@ class CCPoolSources extends CCPoolTree
 /**
 * Table wrapper used for returning remote remixes given local sources
 *
+* @package cchost
+* @subpackage api
 */
 class CCPoolRemixes extends CCPoolTree
 {
@@ -229,7 +266,7 @@ class CCPoolRemixes extends CCPoolTree
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -248,6 +285,8 @@ class CCPoolRemixes extends CCPoolTree
 /**
 * Table wrapper used for returning local sources given remote remixes
 *
+* @package cchost
+* @subpackage api
 */
 class CCLocalPoolSources extends CCRemixTree
 {
@@ -256,6 +295,25 @@ class CCLocalPoolSources extends CCRemixTree
         $this->CCRemixTree('pool_tree_parent', 'pool_tree_pool_child', 'cc_tbl_pool_tree');
     }
 
+    /**
+    * Return the local remix sources for a given remote remix
+    *
+    * NOTE: This method is, er, performance intensive. See {@link CCPoolUI::OnUploadListing()} for
+    * an example of an optimized version.
+    * 
+    * The $limit_by_works_page parameter is (unfortunately) a flip-negative flag
+    * that will limit the number of records returned based on the following 
+    * conditions:
+    *
+    *   If $limit_by_works_page is <i>true</i> AND $record['works_page'] is <i>false</i>
+    *   then the number of records returned will be max out at {@link CC_MAX_SHORT_REMIX_DISPLAY}
+    *
+    * This flag is used when we are doing an upload listing and only have room for a few
+    * remix relatives.
+    *
+    * @param array $record Record to get remixes of
+    * @param boolean $limit_by_works_page (See method comments)
+    */
     function & GetSources($item,$limit_by_works_page=false)
     {
         $do_limit = $limit_by_works_page ? empty($item['works_page']) : false;
@@ -264,7 +322,7 @@ class CCLocalPoolSources extends CCRemixTree
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -283,6 +341,8 @@ class CCLocalPoolSources extends CCRemixTree
 /**
 * Table wrapper used for returning local remixes given remote sources
 *
+* @package cchost
+* @subpackage api
 */
 class CCLocalPoolRemixes extends CCRemixTree
 {
@@ -291,6 +351,25 @@ class CCLocalPoolRemixes extends CCRemixTree
         $this->CCRemixTree('pool_tree_child', 'pool_tree_pool_parent', 'cc_tbl_pool_tree');
     }
 
+    /**
+    * Return the pool remixes for a given record
+    *
+    * NOTE: This method is, er, performance intensive. See {@link CCPoolUI::OnUploadListing()} for
+    * an example of an optimized version.
+    * 
+    * The $limit_by_works_page parameter is (unfortunately) a flip-negative flag
+    * that will limit the number of records returned based on the following 
+    * conditions:
+    *
+    *   If $limit_by_works_page is <i>true</i> AND $record['works_page'] is <i>false</i>
+    *   then the number of records returned will be max out at {@link CC_MAX_SHORT_REMIX_DISPLAY}
+    *
+    * This flag is used when we are doing an upload listing and only have room for a few
+    * remix relatives.
+    *
+    * @param array $record Record to get remixes of
+    * @param boolean $limit_by_works_page (See method comments)
+    */
     function & GetRemixes($pool_item,$limit_by_works_page=true)
     {
         $do_limit = $limit_by_works_page ? empty($pool_item['works_page']) : false;
@@ -299,7 +378,7 @@ class CCLocalPoolRemixes extends CCRemixTree
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -317,6 +396,10 @@ class CCLocalPoolRemixes extends CCRemixTree
 
 
 
+/**
+* @package cchost
+* @subpackage api
+*/
 class CCPool
 {
     function PoolQuery($pool_id, $query, $type='full')
@@ -328,6 +411,8 @@ class CCPool
         if( substr($api_url,0,7) == 'http://' )
         {
             $query_url = CCRestAPI::MakeUrl( $api_url, 'search', 'query=' . $query );
+            $query_url = str_replace('/search','search',$query_url);
+            //CCDebug::PrintVar($query_url);
             //CCDebug::LogVar('query_url',$query_url);
             $fr = new CCFeedReader();
             $rss = $fr->cc_parse_url( $query_url );
@@ -667,6 +752,10 @@ END;
     
 }
 
+/**
+* @package cchost
+* @access private
+*/
 function cc_trim_array(&$a)
 {
     $keys = array_keys($a);

@@ -14,10 +14,16 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
+/**
+* Module for managing Creative Commons licenses
+*
+* @package cchost
+* @subpackage feature
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -31,7 +37,8 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,   array( 'CCLicense',  'OnUploadRow'))
 /**
  * Form class for configuring licenses.
  *
- * @access public
+* @package cchost
+* @subpackage admin
  */
 class CCAdminLicenseForm extends CCForm
 {
@@ -88,7 +95,7 @@ class CCLicenses extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -139,12 +146,12 @@ class CCLicenses extends CCTable
 class CCLicense
 {
     /**
-    * Event handler for getting id3 tagging macros
+    * Event handler for {@link CC_EVENT_GET_MACROS}
     *
-    * @param array $record Upload record we're getting macros for (if null returns documentation)
-    * @param array $file File record we're getting macros for 
-    * @param array $patterns Substituion pattern to be used when renaming/tagging
-    * @param array $masks Actual mask to use (based on admin specifications)
+    * @param array &$record Upload record we're getting macros for (if null returns documentation)
+    * @param array &$file File record we're getting macros for
+    * @param array &$patterns Substituion pattern to be used when renaming/tagging
+    * @param array &$mask Actual mask to use (based on admin specifications)
     */
     function OnGetMacros(&$record, &$file, &$patterns, &$masks)
     {
@@ -165,9 +172,10 @@ class CCLicense
     }
 
     /**
-    * Event handler for CC_EVENT_GET_SYSTAGS 
+    * Event handler for {@link CC_EVENT_GET_SYSTAGS}
     *
     * @param array $record Record we're getting tags for 
+    * @param array $file Specific file record we're getting tags for
     * @param array $tags Place to put the appropriate tags.
     */
     function OnGetSysTags(&$record,&$file,&$tags)
@@ -190,11 +198,10 @@ class CCLicense
     }
 
     /**
-    * Event handler for when a media record is fetched from the database 
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * This will add semantic richness and make the db row display ready.
-    * 
-    * @see CCTable::GetRecordFromRow
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
     */
     function OnUploadRow( &$record )
     {
@@ -210,8 +217,10 @@ class CCLicense
     }
 
     /**
-    * Event handler for building menus
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items, $scope)
     {
@@ -258,9 +267,9 @@ class CCLicense
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

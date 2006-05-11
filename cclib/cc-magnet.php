@@ -1,13 +1,35 @@
 <?
+/*
+* Creative Commons has made the contents of this file
+* available under a CC-GNU-GPL license:
+*
+* http://creativecommons.org/licenses/GPL/2.0/
+*
+* A copy of the full license can be found as part of this
+* distribution in the file LICENSE.TXT.
+* 
+* You may use the ccHost software in accordance with the
+* terms of that license. You agree that you are solely 
+* responsible for your use of the ccHost software and you
+* represent and warrant to Creative Commons that your use
+* of the ccHost software will comply with the CC-GNU-GPL.
+*
+* $Id$
+*
+*/
 
-// $Header$
-
+/**
+* Support for Magnet links (currently disabled)
+*
+* @package cchost
+* @subpackage feature
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCMagnetLink' , 'OnGetConfigFields' ));
 CCEvents::AddHandler(CC_EVENT_APP_INIT,           array( 'CCMagnetLink',  'OnAppInit'         ));
-CCEvents::AddHandler(CC_EVENT_FILE_DONE,          array( 'CCMagnetLink',  'OnUploadDone'      ));
+CCEvents::AddHandler(CC_EVENT_FILE_DONE,          array( 'CCMagnetLink',  'OnFileDone'      ));
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCMagnetLink',  'OnBuildUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCMagnetLink',  'OnUploadMenu'));
 
@@ -17,7 +39,7 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCMagnetLink',  'OnUpl
 class CCMagnetLink
 {
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -37,7 +59,7 @@ class CCMagnetLink
         }
     }
 
-    function OnUploadDone( &$file )
+    function OnFileDone( &$file )
     {
         global $CC_GLOBALS;
 
@@ -53,12 +75,12 @@ class CCMagnetLink
     }
 
     /**
-    * Event handler for CC_EVENT_BUILD_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
     * 
     * The menu items gathered here are for the 'local' menu at each upload display
     * 
     * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnBuildUploadMenu(&$menu)
     {
@@ -71,14 +93,14 @@ class CCMagnetLink
     }
 
     /**
-    * Event handler for CC_EVENT_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
     * a specific record. All dynamic changes are made here
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
@@ -110,9 +132,10 @@ class CCMagnetLink
     }
 
     /**
-    * Called in response to application initialization
+    * Event handler for {@link CC_EVENT_APP_INIT}
     *
     * Includes bitcollider API if user requested magnet support
+    * 
     */
     function OnAppInit()
     {
@@ -125,11 +148,4 @@ class CCMagnetLink
     }
 }
  
-
-
-
-
-
-
-
 ?>

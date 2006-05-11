@@ -18,6 +18,12 @@
 *
 */
 
+/**
+* Base User interface forms
+*
+* @package cchost
+* @subpackage ui
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -29,13 +35,19 @@ if( !defined('IN_CC_HOST') )
  * needs. It contains several field type handlers built in such as
  * text inputs, textareas, radio groups, checkboxes, etc.
  *
+ * See {@tutorial cchost.pkg#newform CCForm tutorials}
  */
 class CCForm 
 {
+    /**#@+
+    * @access private
+    * @var string 
+    */
     var $_template_vars;
     var $_form_fields;
     var $_template_macro;
     var $_form_help_messages;
+    /**#@-*/
 
     /**
      * Constructor
@@ -52,11 +64,10 @@ class CCForm
      * you are processing the right form:
      * 
      * <code>
-
-          if( !empty($_POST['myediting']) )
-          {
-                 // .... User hit 'submit' button
-          }
+     * if( !empty($_POST['myediting']) )
+     * {
+     *      // .... User hit 'submit' button
+     * }
      * </code>
      *
      */
@@ -144,6 +155,7 @@ class CCForm
     {
         $this->_form_fields[$name] = array(  'flags' => $flags,
                                              'value' => $value );
+
     }
 
     /**
@@ -155,98 +167,93 @@ class CCForm
     * Typical usage is to call this method from the constructor of a form and looks like:
     * 
     * <code>
-    
-        $fields = array(
-
-            'contest_friendly_name' => array (
-                        'label'      => 'Friendly Name',
-                        'form_tip'   => 'This is the one people actually see',
-                        'formatter'  => 'textedit',
-                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
-
-            'contest_description' => array (
-                        'label'      => 'Description',
-                        'form_tip'   => 'Let people know that this contest is about',
-                        'formatter'  => 'textarea',
-                        'flags'      => CCFF_POPULATE),
-               );
-
-        $this->AddFormFields( $fields );
-    
+    * $fields = array(
+    *
+    *     'contest_friendly_name' => array (
+    *                 'label'      => 'Friendly Name',
+    *                 'form_tip'   => 'This is the one people actually see',
+    *                 'formatter'  => 'textedit',
+    *                 'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
+    *
+    *     'contest_description' => array (
+    *                 'label'      => 'Description',
+    *                 'form_tip'   => 'Let people know that this contest is about',
+    *                 'formatter'  => 'textarea',
+    *                 'flags'      => CCFF_POPULATE),
+    *        );
+    *
+    * $this->AddFormFields( $fields );
+    * 
     * </code>
     * 
     * The name ('contest_friendly_name' above) will be the name and id of the HTML form
     * element and can be used in $_POST although all that is encapsulated in this class.
     * 
     * The various fields are described below:
-    *<table class="listing_table">
-    <tr><th>Element</th><th>Type</th><th>Descpription</th></tr>
-
-    <tr><td class="h">label</td><td>string</td><td>The main text label for the field</td></tr>
-    <tr><td class="h">form_tip</td><td>string</td><td>Helpful text used to further describe, preferrably by example, the field</td></tr>
-    <tr><td class="h">formatter</td><td>string</td>
-                 <td>This name will map into two functions in the CCForm (or derived class). One has a 'generator_' prefix,
-                    the other has a 'validator_' prefix. For example, if the formatter value here is 'textedit', that means
-                    that there are two methods on this class 'generator_textedit' and 'validator_textedit'. The generator
-                    is used when HTML need to be generated, the validator is used on POST to validate if the user has
-                    entered valid data. <br /><br />CCForm has many stock formatters for standard INPUT fields but the formatter
-                    can be a completely unique value as long there are matching methods in the level of derivation (or above).
-                    For example if the formatter is 'unique_name' you can write a generator_unique_name() method that simply
-                    calls the generator_textedit() and a validator_unique_name() method that checks against a database to
-                    ensure the value is unique to the database before accepting the form.<br /><br />This field is required
-                    unless it is hidden.
-                 </td></tr>
-    <tr><td class="h">flags</td><td>integer</td>
-                 <td>Control flags for how to treat this field during various stags of processing. here are possible values:
-                  <table class="listing_table">
-                     <tr><th>Flag</th><th>Used by method</th><th>Description</th></tr>
-                     <tr><td>CCFF_NONE</td><td></td><td>Just do all default behavior</td></tr>
-                     <tr><td>CCFF_SKIPIFNULL</td><td>GetFormValues</td><td>Do not return this field if blank(good for passwords left blank)</td></tr>
-                     <tr><td>CCFF_NOUPDATE</td><td>GetFormValues</td><td>Never return this field (good for static and hidden)</td></tr>
-                     <tr><td>CCFF_POPULATE</td><td>PopulateValues</td><td>If this flag is set, it will use the matching value
-                        passed in to PopulateValues, otherwise this field will be left alone during that process.</td></tr>
-                     <tr><td>CCFF_HIDDEN</td><td>GenerateForm</td><td>Creates a type='hidden' INPUT field, you can also use the
-                              SetHiddenField() method.</td></tr>
-                     <tr><td>CCFF_REQUIRED</td><td>validator_must_exist</td><td>validator_* methods call validator_must_exist()
-                        and if this flag is present it will return 'false'</td></tr>
-                     <tr><td>CCFF_NOSTRIP</td><td>ValidateFields</td><td>The default behavoir is to strip all tags
-                       out of all input values. If that flag is present the strip is skipped.</td></tr>
-                     <tr><td>CCFF_NOADMINSTRIP</td><td>ValidateFields</td><td>Behaves the same as CCFF_NOSTRIP but only if the current
-                       user is logged in an admin.</td></tr>
-                     <tr><td>CCFF_STATIC</td><td>ValidateFields</td><td>No validation will be done this field.</td></tr>
-                     <tr><td>CCFF_HTML</td><td>Generate/Validate</td><td>Alters the generator and validator not to do any special processing (e.g. nl2br or other character encoding). </td></tr>
-                     <tr><td>CCFF_HIDDEN_DEFAULT</td><td></td><td>Combination of CCFF_HIDDEN | CCFF_POPULATE</td></tr></table>
-                  </td></tr>
-     <tr><td class="h">value</td><td>mixed</td><td>A default value used by the generator.</td></tr>
-     <tr><td class="h">options</td><td>array</td><td>Applies to multiple choice formatters (e.g. radio, select).
-<pre>
-    'formatter'  => 'radio',
-    'options'      => array( 
-                        '0' => 'Winner is determined offline',
-                        '1' => 'Display a poll after deadline for entries has passed' )
-</pre>
-</td></tr>
-     <tr><td class="h">class</td><td>string</td><td>Name of css class to use. This is rare since most skins will style the INPUT fields
-     using generic selectors in the style sheet, however 'cc_form_input_short' is used when a smaller text input field is desired.</td></tr>
-     <tr><td class="h">maxwidth</td><td>integer</td><td>Used by the 'avatar' formatter for sizing the image.</td></tr>
-     <tr><td class="h">maxheight</td><td>integer</td><td>Used by the 'avatar' formatter for sizing the image.</td></tr>
-     <tr><td class="h">macro</td><td>string</td><td>Used by the 'metalmacro' formatter and refers to a template macro
-       to use form formatting the output for this field.  
-<pre>
-        'upload_license' =>
-                    array( 'label'      => 'License',
-                           'formatter'  => 'metalmacro',
-                           'macro'      => 'my_license_choice',
-                           'flags'      => CCFF_POPULATE,
-                           'license_choices' => $lics
-                    )
-</pre>
-        In this case 'license_choices' is a value expected by the macro 'license_choice' in the file 'license.xml'.
-       </td></tr>
-    <tr><td class="h">nomd5</td><td>boolean</td><td>Used by the 'password' formatter which normally would hash the input
-    value using md5(). If this flag is present and set to 'true' the value is not hashed. </td></tr>
-                     
-    </table>
+    *<ul>
+    *    <li><b>label</b>  <i>string</i> The main text label for the field</li>
+    *    <li><b>form_tip</b> <i>string</i> Helpful text used to further describe, preferrably by example, the field</li>
+    *    <li><b>formatter</b> <i>string</i> 
+    *                 This name will map into two functions in the CCForm (or derived class). One has a 'generator_' prefix,
+    *                    the other has a 'validator_' prefix. For example, if the formatter value here is 'textedit', that means
+    *                    that there are two methods on this class 'generator_textedit' and 'validator_textedit'. The generator
+    *                    is used when HTML need to be generated, the validator is used on POST to validate if the user has
+    *                    entered valid data. <br /><br />CCForm has many stock formatters for standard INPUT fields but the formatter
+    *                    can be a completely unique value as long there are matching methods in the level of derivation (or above).
+    *                    For example if the formatter is 'unique_name' you can write a generator_unique_name() method that simply
+    *                    calls the generator_textedit() and a validator_unique_name() method that checks against a database to
+    *                    ensure the value is unique to the database before accepting the form.<br /><br />This field is required
+    *                    unless it is hidden.
+    *                 </li>
+    *     <li><b>value</b> <i>mixed</i> A default value used by the generator.</li>
+    *     <li><b>options</b> <i>array</i> Applies to multiple choice formatters (e.g. radio, select).
+    *<code>
+    *    'formatter'  => 'radio',
+    *    'options'      => array( 
+    *                        '0' => 'Winner is determined offline',
+    *                        '1' => 'Display a poll after deadline for entries has passed' )
+    *</code>
+    *</li>
+    *    <li><b>flags</b> <i>integer</i>
+    *                 Control flags for how to treat this field during various stags of processing. here are possible values:
+    *  <ul>
+    *      <li>{@link CCFF_NONE} Just do all default behavior</li>
+    *      <li> {@link CCFF_SKIPIFNULL} (used by {@link GetFormValues}) Do not return this field if blank(good for passwords left blank)</li>
+    *      <li> {@link CCFF_NOUPDATE} (used by {@link GetFormValues}) Never return this field (good for static and hidden)</li>
+    *      <li> {@link CCFF_POPULATE} (used by {@link PopulateValues}) If this flag is set, it will 
+    *          use the matching value
+    *         passed in to PopulateValues, otherwise this field will be left alone during that process.</li>
+    *      <li> {@link CCFF_HIDDEN} (used by {@link GenerateForm}) Creates a type='hidden' INPUT field, you can also use the
+    *               SetHiddenField() method.</li>
+    *      <li> {@link CCFF_REQUIRED} validator_must_exist validator_* methods call validator_must_exist()
+    *         and if this flag is present it will return 'false'</li>
+    *      <li> {@link CCFF_STATIC} (used by {@link ValidateFields}) No validation will be done this field.</li>
+    *      <li> {@link CCFF_HTML} (used by Generate/Validate) Alters the generator and validator not to do any special 
+    *             processing (e.g. nl2br or other character encoding). </li>
+    *      <li> {@link CCFF_HIDDEN_DEFAULT} Combination of CCFF_HIDDEN | CCFF_POPULATE</li>
+    *   </ul>
+    *             </li>
+    *     <li><b>class</b> <i>string</i> Name of css class to use. This is rare since most skins will style the INPUT fields
+    *     using generic selectors in the style sheet, however 'cc_form_input_short' is used when a smaller text input field is desired.</li>
+    *     <li><b>maxwidth</b> <i>integer</i> Used by the 'avatar' formatter for sizing the image.</li>
+    *     <li><b>maxheight</b> <i>integer</i> Used by the 'avatar' formatter for sizing the image.</li>
+    *     <li><b>macro</b> <i>string</i> Used by the 'metalmacro' formatter and refers to a template macro
+    *       to use form formatting the output for this field.  
+    *<code>
+    *        'upload_license' =>
+    *                    array( 'label'      => 'License',
+    *                           'formatter'  => 'metalmacro',
+    *                           'macro'      => 'my_license_choice',
+    *                           'flags'      => CCFF_POPULATE,
+    *                           'license_choices' => $lics
+    *                    )
+    *</code>
+    *        In this case 'license_choices' is a value expected by the macro 'license_choice' in the file 'license.xml'.
+    *       </li>
+    *    <li><b>nomd5</b> <i>boolean</i> Used by the 'password' formatter which normally would hash the input
+    *    value using md5(). If this flag is present and set to 'true' the value is not hashed. </li>
+    *                     
+    *</ul>
     * 
     * As you can see there are a core set of elements ('label', 'form_tip', 'value', etc.) while others are specific for
     * various formatters. Obviously, any formatter pair of generator/validator functions can speficy any name/value pair
@@ -265,7 +272,14 @@ class CCForm
         CCEvents::Invoke( CC_EVENT_FORM_FIELDS, array( &$this, &$this->_form_fields ) );
     }
 
-
+    /**
+    * Put fields into a specific place in the form
+    *
+    * @param array &$fields Array of new fields to insert
+    * @param string $before_or_after One of: 'before' or 'after'
+    * @param string $target_field Name of field to place new feilds before or after
+    * @see AddFields
+    */
     function InsertFormFields( &$fields, $before_or_after, $target_field )
     {
         $pos = array_search($target_field, array_keys($this->_form_fields));
@@ -380,7 +394,7 @@ class CCForm
     /**
     * Retrieves a specific element from the field's meta-data structure.
     *
-    * @see CCForm::AddFormFields
+    * @see CCForm::AddFormFields()
     * @param string $fieldname Name passed into AddFormFields for the field
     * @param string $itemname Name of the element to retrieve.
     */
@@ -395,7 +409,7 @@ class CCForm
     /**
     * Set the value for a specific element in a field's meta-data structure.
     *
-    * @see CCForm::AddFormFields
+    * @see CCForm::AddFormFields()
     * @param string $fieldname Name passed into AddFormFields for the field
     * @param string $itemname Name of the element to retrieve.
     * @param mixed $value Value to put into structure
@@ -409,7 +423,7 @@ class CCForm
     /**
     * Set (or replace) a field's meta-data structure.
     *
-    * @see CCForm::AddFormFields
+    * @see CCForm::AddFormFields()
     * @param string $name  Name of HTML field
     * @param mixed $value Meta-data structure for field
     */
@@ -533,7 +547,7 @@ class CCForm
      *    $page->AddForm( $form->GenerateForm() );
      *</code>
      *  
-     * @see CCForm::AddFormFields
+     * @see CCForm::AddFormFields()
      * @returns array $varsname Array containing two elements: array of variables and template marco name
     */
     function GenerateForm($hiddenonly = false)
@@ -580,6 +594,13 @@ class CCForm
         return( $this );
     }
 
+    /**
+    * Generate HTML from this form.
+    *
+    * This is actually rarely used, usually for secondary forms on the page.
+    *
+    * @see GenerateForm
+    */
     function GenerateHTML()
     {
         global $CC_GLOBALS;
@@ -592,7 +613,7 @@ class CCForm
     /**
      * Validates the fields in this form, called during POST processing.
      * 
-     * @see CCForm::AddFormFields
+     * @see CCForm::AddFormFields()
      * @returns bool $success true if all fields validated, false on errors
     */
     function ValidateFields()
@@ -638,7 +659,7 @@ class CCForm
     /**
      * Populate the values of the field with specific data (e.g. a database record)
      * 
-     * @see CCForm::AddFormFields
+     * @see CCForm::AddFormFields()
      * @param array $values Name/value pairs to be used to populate fields
     */
     function PopulateValues($values)
@@ -665,6 +686,7 @@ class CCForm
 
     /**
     * Internal wrapper
+    * @access private
     */
     function & _get_form_field( $name )
     {
@@ -679,6 +701,7 @@ class CCForm
 
     /**
     * Internal checks for all the ways a field might deny updating
+    * @access private
     */
     function _should_update(&$form_fields)
     {
@@ -717,7 +740,7 @@ class CCForm
     /**
     * Generic 'check-for-null-value' validator for HTML field, called during ValidateFields()
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok false if field value must exist and doesn't, otherwise true
@@ -759,7 +782,7 @@ class CCForm
     * This version always returns true since the field is actually
     * just a passthru
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok always true
@@ -783,7 +806,7 @@ class CCForm
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok always true
@@ -794,7 +817,7 @@ class CCForm
     }
 
     /**
-     * Handles generation of HTML field &lt;input type='text'
+     * Handles generation of HMTL field INPUT type='text'
      *
      * @param string $varname Name of the HTML field
      * @param string $value   value to be published into the field
@@ -817,7 +840,7 @@ class CCForm
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -859,7 +882,7 @@ class CCForm
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok always true
@@ -891,7 +914,7 @@ END;
     /**
     * Handles validator for HTML field, called during ValidateFields()
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -903,7 +926,7 @@ END;
     }
 
     /**
-     * Handles generation of HTML field &lt;input type='checkbox'
+     * Handles generation of HMTL field <input type='checkbox'
      *
      * @param string $varname Name of the HTML field
      * @param string $value   value to be published into the field
@@ -928,7 +951,7 @@ END;
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok always true
@@ -976,7 +999,7 @@ END;
     * Handles validator for HTML field, called during ValidateFields()
     * 
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok always true 
@@ -1021,7 +1044,7 @@ END;
     * 
     * Use the 'maxlenghth' field to limit user's input
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok always true
@@ -1054,7 +1077,7 @@ END;
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -1112,7 +1135,7 @@ END;
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -1162,7 +1185,7 @@ END;
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -1356,7 +1379,7 @@ END;
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -1432,7 +1455,7 @@ END;
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -1452,11 +1475,25 @@ END;
         return(true);
     }
 
+    /**
+    * Accepts a regular expression as input
+    * 
+    * @param string $fieldsname Name of the HTML field
+    * @param string $value   value to be published into the field
+    * @param string $class   CSS class (rarely used)
+    * @returns string of HTML that represents the field
+    */
     function generator_regex($fieldname,$value='',$class='')
     {
         return( $this->generator_textedit($fieldname,$value,$class) );
     }
 
+    /**
+    * Validates that a regular expression will compile
+    *
+    * @param string $fieldname Name of the field will be passed in.
+    * @returns bool $ok true means field validates, false means there were errors in user input
+    */
     function validator_regex($fieldname)
     {
         $mask = $this->GetFormValue($fieldname);
@@ -1491,9 +1528,14 @@ END;
  */
 class CCGridForm extends CCForm
 {
+    /**#@+
+    * @access private
+    * @var string 
+    */
     var $_grid_rows;
     var $_column_heads;
     var $_is_normalized;
+    /**#@-*/
 
     /**
      * Constructor
@@ -1513,10 +1555,9 @@ class CCGridForm extends CCForm
     /**
      * Add a row of controls to the form.
      *
-     * @access public
      * @param integer $key Typically the unique key in the a db representing this record
      * @param array   $row An array of field objects 
-     * @see CCForm::AddFormFields
+     * @see CCForm::AddFormFields()
      */
     function AddGridRow($key,&$row)
     {
@@ -1717,6 +1758,10 @@ class CCGridForm extends CCForm
  */
 class CCUploadForm extends CCForm
 {
+    /**
+    * @access private
+    * @var string 
+    */
     var $_enabled_submit_message;
 
     /**
@@ -1953,6 +1998,14 @@ class CCUploadForm extends CCForm
         return( $ok );
     }
 
+    /**
+    *  Generate the form
+    *
+    *  Overrides base class to handle case where submit message might be disabled
+    *
+    * @param boolean $hiddenonly Only generate hidden fields
+    * @see EnableSubmitMessage
+    */
     function GenerateForm($hiddenonly = false)
     {
         if( $this->_enable_submit_message )
@@ -1960,11 +2013,19 @@ class CCUploadForm extends CCForm
         return( parent::GenerateForm($hiddenonly) );
     }
 
+    /**
+    * Shows or hides the message during file submits
+    *
+    * @param boolean $bool
+    */
     function EnableSubmitMessage($bool)
     {
         $this->_enable_submit_message = $bool;
     }
 
+    /**
+    * Adds the necessary javascript macros to show submit message
+    */
     function DoSubmitMessage()
     {
         CCPage::PageArg('show_form_submit_message',true);

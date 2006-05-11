@@ -18,6 +18,10 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage user
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -31,6 +35,8 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCUser' , 'OnGetConfig
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,   array( 'CCUser', 'OnUploadRow'));
 CCEvents::AddHandler(CC_EVENT_CONTEST_ROW,  array( 'CCUser', 'OnUploadRow'));
 
+/**
+*/
 class CCSecurityVerifierForm extends CCForm
 {
     function CCSecurityVerifierForm()
@@ -45,7 +51,7 @@ class CCSecurityVerifierForm extends CCForm
      * this module and return a bitmap corresponding to the security key's
      * id. The '#' is combination of id the index into the key in question
      * 
-     * @CCLogin::OnSecurityCallback
+     * @see CCLogin::OnSecurityCallback()
      * @param string $varname Name of the HTML field
      * @param string $value   value to be published into the field
      * @param string $class   CSS class (rarely used)
@@ -72,7 +78,7 @@ class CCSecurityVerifierForm extends CCForm
     * 
     * Validates that the user typed in the proper security code.
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -269,7 +275,7 @@ class CCUsers extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -780,11 +786,10 @@ END;
     }
 
     /**
-    * Event handler for when a media record is fetched from the database 
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * This will add semantic richness and make the db row display ready.
-    * 
-    * @see CCTable::GetRecordFromRow
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
     */
     function OnUploadRow(&$row)
     {
@@ -793,11 +798,12 @@ END;
     }
 
     /**
-    * Event handler for getting renaming/id3 tagging macros
+    * Event handler for {@link CC_EVENT_GET_MACROS}
     *
-    * @param array $record Record we're getting macros for (if null returns documentation)
-    * @param array $patterns Substituion pattern to be used when renaming/tagging
-    * @param array $mask Actual mask to use (based on admin specifications)
+    * @param array &$record Upload record we're getting macros for (if null returns documentation)
+    * @param array &$file File record we're getting macros for
+    * @param array &$patterns Substituion pattern to be used when renaming/tagging
+    * @param array &$mask Actual mask to use (based on admin specifications)
     */
     function OnGetMacros(&$record,&$file,&$patterns,&$mask)
     {
@@ -820,9 +826,9 @@ END;
     }
 
     /**
-    * Event handler for building menus
-    *
-    * @see CCMenu::AddItems
+    * Event handler for {@link CC_EVENT_MAIN_MENU}
+    * 
+    * @see CCMenu::AddItems()
     */
     function OnBuildMenu()
     {
@@ -855,6 +861,10 @@ END;
 
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_PATCH_MENU}
+    * 
+    */
     function OnPatchMenu(&$menu)
     {
         $current_user_name = $this->CurrentUserName();
@@ -862,9 +872,9 @@ END;
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -874,7 +884,7 @@ END;
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 

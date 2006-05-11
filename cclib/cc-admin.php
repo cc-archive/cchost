@@ -1,5 +1,4 @@
 <?
-
 /*
 * Creative Commons has made the contents of this file
 * available under a CC-GNU-GPL license:
@@ -15,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header: /cvsroot/cctools/cchost1/cclib/cc-admin.php,v 1.15 2005/08/12 02:21:57 fourstones Exp $
+* $Id$
 *
+*/
+
+/**
+* Base classes and general user admin interface
+*
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
@@ -36,59 +42,61 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCAdmin' , 'OnGetConfi
  * do not have to perform any action on user submit. The global config affects
  * all users so typically only administrators will see derivations of this form.
  *  
- *  
- *  For example:
- *
  * <code>
  *
-    // Derive from the base 
-    class CCMyAdminForm extends CCEditConfigForm
-    {
-        function CCMyAdminForm()
-        {
-            $this->CCEditConfigForm('my-settings-type'); // name of the type
-            $fields = array( 
-                        'mySettting' =>  // name of the setting
-                           array(  'label'      => 'Set this setting',
-                                   'form_tip'   => 'make it good',
-                                   'value'      => 'Admin',
-                                   'formatter'  => 'textedit',
-                                   'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
-                           );
-
-            $this->AddFormFields($fields);
-       }
-    }
-
-
-    // Then later in the code when it's time to call it up, simply do:
-    function ShowMyAdminForm()
-    {
-        CCPage::SetTitle('My Admin Form');
-        $form = new CCMyAdminForm();
-        CCPage::AddForm( $form->GenerateForm() );
-    }
-
-    // Still later you can retreive the user's setting:
-    function DoMyStuff()
-    {
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('my-settings-type');
-
-        $value = $settings['mySetting'];
-
-        ///...
-    }
-    
- * 
- *  </code>
+ * // Derive from the base 
+ *class CCMyAdminForm extends CCEditConfigForm
+ *{
+ *  function CCMyAdminForm()
+ *  {
+ *    $type_name = 'my-settings-type';
+ *    $this->CCEditConfigForm($type_name); 
+ *    $fields = array( 
+ *     'mySettting' =>  // name of the setting
+ *      array(  
+ *       'label'     => 'Set this setting',
+ *       'form_tip'  => 'make it good',
+ *       'value'     => 'Admin',
+ *       'formatter' => 'textedit',
+ *       'flags'     => CCFF_POPULATE | CCFF_REQUIRED ),
+ *      );
+ *
+ *    $this->AddFormFields($fields);
+ *   }
+ *}
+ *
+ *
+ * // Then later in the code when it's time to call it up, simply do:
+ *function ShowMyAdminForm()
+ *{
+ *  CCPage::SetTitle('My Admin Form');
+ *  $form = new CCMyAdminForm();
+ *  CCPage::AddForm( $form->GenerateForm() );
+ *}
+ *
+ * // Still later you can retreive the user's setting:
+ *function DoMyStuff()
+ *{
+ *  $configs =& CCConfigs::GetTable();
+ *  $settings = $configs->GetConfig('my-settings-type');
+ *
+ *  $value = $settings['mySetting'];
+ *
+ *  ///...
+ *}
+ *</code>
  *
  *
  */
 class CCEditConfigForm extends CCForm
 {
+    /**#@+
+    /* @access private
+    /* @var string
+    */
     var $_typename;
     var $_scope;
+    /**#@-*/
 
     /**
      * Constructor
@@ -100,6 +108,7 @@ class CCEditConfigForm extends CCForm
     {
         $this->CCForm();
         $this->SetHandler( ccl('admin', 'save') );
+        $classname = __CLASS__;
         $this->SetHiddenField( '_name', get_class($this), CCFF_HIDDEN | CCFF_NOUPDATE );
         $this->_typename = $config_type;
         $this->_scope = $scope;
@@ -108,6 +117,7 @@ class CCEditConfigForm extends CCForm
     /**
      * Overrides base class in order to populate fields with current contents of environment's config.
      *
+     * @param boolean $hiddenonly 
      */
     function GenerateForm($hiddenonly = false)
     {
@@ -132,7 +142,7 @@ class CCEditConfigForm extends CCForm
     /**
     * Saves this forms data to the proper type of the current scope
     * 
-    * @see CCConfigs::SaveConfig
+    * @see CCConfigs::SaveConfig()
     */
     function SaveToConfig()
     {
@@ -163,7 +173,6 @@ class CCAdminConfigForm extends CCEditConfigForm
         CCEvents::Invoke( CC_EVENT_GET_CONFIG_FIELDS, array( CC_GLOBAL_SCOPE, &$fields ) );
         $this->AddFormFields($fields);
    }
-
 }
 
 /**
@@ -187,7 +196,6 @@ class CCAdminSettingsForm extends CCEditConfigForm
         CCEvents::Invoke( CC_EVENT_GET_CONFIG_FIELDS, array( CC_LOCAL_SCOPE, &$fields ) );
         $this->AddFormFields($fields);
    }
-
 }
 
 /**
@@ -221,13 +229,13 @@ class CCAdminMakeCfgRootForm extends CCForm
     /**
     * noop generator, required because we have a special validator
     * 
-    * @see CCAdminMakeCfgRootForm::validataor_cfg_root
-    * @see CCForm::generator_textedit
+    * @see CCAdminMakeCfgRootForm::validataor_cfg_root()
+    * @see CCForm::generator_textedit()
     *
     * @param string $varname Name of the HTML field
     * @param string $value   value to be published into the field
     * @param string $class   CSS class (rarely used)
-    * @returns string $html HTML that represents the field
+    * @return string $html HTML that represents the field
     */
     function generator_cfg_root($varname,$value='',$class='')
     {
@@ -242,10 +250,10 @@ class CCAdminMakeCfgRootForm extends CCForm
     * On user input error this method will set the proper error message
     * into the form
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
-    * @returns bool $ok true means field validates, false means there were errors in user input
+    * @return bool $ok true means field validates, false means there were errors in user input
     */
     function validator_cfg_root($fieldname)
     {
@@ -319,6 +327,7 @@ class CCAdminRawForm extends CCGridForm
     /**
     * Local helper
     *
+    * @access private
     */
     function _make_field($row,$id,$i,$name,$value)
     {
@@ -402,12 +411,13 @@ class CCAdmin
         $args['local_items'] = $local_items;
         CCPage::PageArg('admin_menu', $args, 'admin_menu_page');
     }
+
     /**
     * This form edits the raw configation data
     *
     * This is not on any menu, admins can reach it via /main/admin/edit
     *
-    * @see CCAdminRawForm::CCAdminRawForm
+    * @see CCAdminRawForm::CCAdminRawForm()
     */
     function Deep()
     {
@@ -456,7 +466,10 @@ class CCAdmin
 
         CCPage::AddForm( $form->GenerateForm() );
     }
-    
+
+    /**
+    * @access private
+    */
     function _wheres_home()
     {
         global $CC_CFG_ROOT;
@@ -477,7 +490,7 @@ class CCAdmin
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -525,8 +538,10 @@ END;
     }
 
     /**
-    * Event handler for admin building
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -571,9 +586,9 @@ END;
     }
 
     /**
-    * Event handler for menu building
-    *
-    * @see CCMenu::AddItems
+    * Event handler for {@link CC_EVENT_MAIN_MENU}
+    * 
+    * @see CCMenu::AddItems()
     */
     function OnBuildMenu()
     {
@@ -597,9 +612,9 @@ END;
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -614,7 +629,7 @@ END;
     /**
     * Handler for /admin/setup
     *
-    * @see CCAdminConfigForm::CCAdminConfigForm
+    * @see CCAdminConfigForm::CCAdminConfigForm()
     */
     function Setup()
     {
@@ -626,7 +641,7 @@ END;
     /**
     * Handler for /admin/settings
     *
-    * @see CCAdminConfigForm::CCAdminConfigForm
+    * @see CCAdminConfigForm::CCAdminConfigForm()
     */
     function Settings()
     {
@@ -643,7 +658,7 @@ END;
     * On rare occasions you may want to do special processing on user 
     * submit of an admin/config. At some point you call this to
     * save the new config values. 
-    * @see CCEditConfigForm::CCEditConfigForm
+    * @see CCEditConfigForm::CCEditConfigForm()
     */
     function SaveConfig($form = '')
     {
@@ -651,6 +666,11 @@ END;
         if( empty($form) )
         {
             $form_name = CCUtil::StripText($_REQUEST['_name']);
+            if( !class_exists($form_name) )
+            {
+                $file = CCUtil::StripText($_REQUEST['_file']);
+                require_once($file);
+            }
             $form = new $form_name();
         }
 
@@ -667,6 +687,9 @@ END;
 
 }
 
+/**
+* @access private
+*/
 function cc_check_site_enabled()
 {
     global $CC_GLOBALS;

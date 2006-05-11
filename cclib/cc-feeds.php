@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* RSS Module feed generator
+*
+* @package cchost
+* @subpackage api
 */
 
 if( !defined('IN_CC_HOST') )
@@ -28,10 +35,12 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCFeeds',  'OnUploadDone')
 CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,    array( 'CCFeeds',  'OnRenderPage'));
 
 /**
-* XML Feed generator and reader for site
+* RSS Feed generator and reader for site
 *
 * NOTE: Kill the cache for the menu if you are adding new menu items:
 * http://cchost.localhost/?ccm=/media/admin/menu/killcache
+* @package cchost
+* @subpackage api
 */
 class CCFeeds extends CCFeed
 {
@@ -159,6 +168,10 @@ class CCFeeds extends CCFeed
         CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $rss_feed_url, "RSS 2.0", "xml",$help_text );
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_RENDER_PAGE}
+    *
+    */
     function OnRenderPage()
     {
         global $CC_GLOBALS;
@@ -178,9 +191,9 @@ class CCFeeds extends CCFeed
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -192,7 +205,7 @@ class CCFeeds extends CCFeed
     /**
     * Internal: Cache an rss feed into the database
     *
-    * @see   CCFeed::_cache
+    * @see   CCFeed::_cache()
     * @param string $xml Actual feed text
     * @param string $type Feed format
     * @param string $tagstr Tags represented by this feed.

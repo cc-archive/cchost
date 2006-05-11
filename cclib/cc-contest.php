@@ -18,6 +18,13 @@
 *
 */
 
+/**
+* Implements the user interface and database management for contests
+*
+* @package cchost
+* @subpackage contest
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -63,7 +70,7 @@ class CCContests extends CCTable
     /**
     * Constructor -- don't use new, use GetTable() instead
     *
-    * @see CCTable::GetTable
+    * @see GetTable
     */
     function CCContests()
     {
@@ -75,7 +82,7 @@ class CCContests extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -132,8 +139,8 @@ class CCContests extends CCTable
     /**
     * Returns a series of full display ready records of contests
     *
-    * @see CCTable::GetRecordFromRow
-    * @see CCTable::Query
+    * @see CCTable::GetRecordFromRow()
+    * @see CCTable::Query()
     * @param mixed $where array or string specifying row filter
     * @param bool  $expand true if you need the local command menus for each row
     * @param integer $offset Offset into database
@@ -160,7 +167,7 @@ class CCContests extends CCTable
     * Returns the display ready records for the currently open contests
     *
 
-    * @see CCTable::GetRecordForRow
+    * @see CCTable::GetRecordForRow()
     * @param bool  $expand true if you need the local command menus for each row
     * @param integer $limit Number of contests to return
     * @returns array $records Array of display ready records from Contests table
@@ -184,7 +191,7 @@ EOF;
     /**
     * Returns the display ready records for contests no longer open
     *
-    * @see CCTable::GetRecordForRow
+    * @see CCTable::GetRecordForRow()
     * @param bool  $expand true if you need the local command menus for each row
     * @returns array $records Array of display ready records from Contests table
     */
@@ -201,13 +208,11 @@ EOF;
     * current state of this contest. 
     *
     * <code>
-
-        $a['contest_taking_submissions']  // true if NOW is before deadline
-        $a['contest_voting_open']         // true if voting is allowed and NOW is after deadline but before voting deadline
-        $a['contest_show_results']        // true if voting is allowed and NOW is after voting deadline
-        $a['contest_can_browse_entries']  // true if browing is always allowed or NOW is after contest deadline
-        $a['contest_over']                // true is NOW after all submissions and voting
-
+    * $a['contest_taking_submissions']  // true if NOW is before deadline
+    * $a['contest_voting_open']         // true if voting is allowed and NOW is after deadline but before voting deadline
+    * $a['contest_show_results']        // true if voting is allowed and NOW is after voting deadline
+    * $a['contest_can_browse_entries']  // true if browing is always allowed or NOW is after contest deadline
+    * $a['contest_over']                // true is NOW after all submissions and voting
     *  </code>
     *
     * @param array $row Reference to contest database row
@@ -283,7 +288,6 @@ EOF;
                                               strtotime($row['contest_deadline']));
         $row['contest_vote_deadline_fmt'] = date(' l F jS, Y \a\t g:ia',
                                               strtotime($row['contest_vote_deadline']));
-
         if( $row['contest_taking_submissions'] )
         {
             $row['contest_states'][] = 
@@ -414,7 +418,7 @@ class CCContest
     /**
     * Callback for Navigation tab display
     *
-    * @see CCNavigator::View
+    * @see CCNavigator::View()
     * @param array $page Array of tabs to be manipulated before display
     */
     function OnTabDisplay( &$page )
@@ -765,8 +769,10 @@ END;
     }
 
     /**
-    * Event handler for building admin menus
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -785,11 +791,10 @@ END;
     }
 
     /**
-    * Event handler for when a media record is fetched from the database  
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * This will add semantic richness and make the db row display ready.
-    * 
-    * @see CCTable::GetRecordFromRow
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
     */
     function OnUploadRow( &$record )
     {
@@ -833,11 +838,12 @@ END;
     }
 
     /**
-    * Event handler for getting renaming/id3 tagging macros
+    * Event handler for {@link CC_EVENT_GET_MACROS}
     *
-    * @param array $record Record we're getting macros for (if null returns documentation)
-    * @param array $patterns Substituion pattern to be used when renaming/tagging
-    * @param array $mask Actual mask to use (based on admin specifications)
+    * @param array &$record Upload record we're getting macros for (if null returns documentation)
+    * @param array &$file File record we're getting macros for
+    * @param array &$patterns Substituion pattern to be used when renaming/tagging
+    * @param array &$mask Actual mask to use (based on admin specifications)
     */
     function OnGetMacros( &$record, &$file, &$patterns, &$mask )
     {
@@ -888,9 +894,9 @@ END;
 
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -907,7 +913,7 @@ END;
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 

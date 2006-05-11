@@ -18,6 +18,13 @@
 *
 */
 
+/**
+* Module for handling ratings
+*
+* @package cchost
+* @subpackage ui
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -27,13 +34,30 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCRating',  'OnMapUrls
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCRating' , 'OnAdminMenu') );
 CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCRating' , 'OnUserRow') );
 
+/**
+* Ratings table wrapper
+*
+*/
 class CCRatings extends CCTable
 {
+    /**
+    * Constructor
+    *
+    * @see GetTable
+    */
     function CCRatings()
     {
         $this->CCTable('cc_tbl_ratings','ratings_id');
     }
 
+    /**
+    * Returns static singleton of table wrapper.
+    * 
+    * Use this method instead of the constructor to get
+    * an instance of this class.
+    * 
+    * @returns object $table An instance of this table
+    */
     function & GetTable()
     {
         static $_table;
@@ -42,6 +66,11 @@ class CCRatings extends CCTable
         return($_table);
     }
 
+    /**
+    * Determine if the current user is allowed to rate a given record
+    *
+    * @param array $record Upload record
+    */
     function IsRateBlocked($record)
     {
         global $CC_GLOBALS;
@@ -74,15 +103,25 @@ class CCRatings extends CCTable
             ratings_upload = '$upload_id'
 END;
 
-        $row = $this->QueryRow($where);
-        //CCDebug::PrintVar($row);
-        return !empty($row);
+        $rows = $this->QueryRows($where);
+
+        $blocked = !empty($rows);
+
+        return($blocked);
     }
 }
 
-
+/**
+* Ratings API
+*/
 class CCRating
 {
+    /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
     function OnAdminMenu(&$items,$scope)
     {
         if( $scope == CC_GLOBAL_SCOPE )
@@ -105,6 +144,16 @@ class CCRating
     }
 
 
+    /**
+    * Catch all for ratings admin UI
+    *
+    * @param string $cmd One of 'chart' (default), 'user', 'msg'
+    * @param integer $user_id User to operate on
+    * @param integet $ragings_id Rating id to operate on
+    * @param string $cmd2 One of 'delete', 'banuser', 'deluser'
+    * @param string $confirmed If present and set to 'confirmed' operation will proceed without UI
+    * @see CCRatingsAdmin::Admin()
+    */
     function Admin($cmd='',$user_id='',$ratings_id='',$cmd2='',$confirmed='')
     {
         require_once('cclib/cc-ratings-admin.inc');
@@ -112,6 +161,9 @@ class CCRating
         $api->Admin($cmd,$user_id,$ratings_id,$cmd2,$confirmed);
     }
 
+    /**
+    * Racalculate all ratings in system
+    */
     function Recalc()
     {
         require_once('cclib/cc-ratings-admin.inc');
@@ -119,7 +171,13 @@ class CCRating
         $api->Recalc();
     }
 
-
+    /**
+    * Returns array of records sorted by uploaded ranks desc.
+    *
+    * @param integer $limit Max number of records to return
+    * @param string $since String representing date of first record to return
+    * @return array $records Upload records
+    */
     function GetChart($limit,$since='')
     {
         $configs =& CCConfigs::GetTable();
@@ -142,6 +200,15 @@ class CCRating
         return $records;
     }
 
+    /**
+    * Rate an upload
+    *
+    * This is an AJAX callback and will print stars to the browser and
+    * call {@link exit()} the session when done.
+    *
+    * @param integer $upload_id Upload id of record to rate
+    * @param integer $score Number between 100-500
+    */
     function Rate($upload_id,$score=0)
     {
         if( empty($score) )
@@ -181,6 +248,13 @@ class CCRating
         exit;
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_LISTING}
+    *
+    * Final chance to massage a record before being displayed in a list
+    * 
+    * @param array &$row Record to massage with extra display information
+    */
     function OnUploadListing(&$record)
     {
         $configs =& CCConfigs::GetTable();
@@ -207,6 +281,9 @@ class CCRating
         $this->_fill_scores($record,'upload');
     }
 
+    /**
+    * @access private
+    */
     function _fill_scores(&$record,$prefix)
     {
         $average = $record[$prefix . '_score'] / 100;
@@ -229,6 +306,13 @@ class CCRating
         $record['ratings_score'] = number_format($average,2) . '/' . $count;
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_USER_ROW}
+    *
+    * Add extra data to a user row before display
+    *
+    * @param array &$record User record to massage
+    */
     function OnUserRow(&$record)
     {
         if( !empty($record['user_num_scores']) ) // && $row['user_num_scores'] > 10 )
@@ -238,7 +322,7 @@ class CCRating
     }
     
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -268,6 +352,11 @@ class CCRating
 
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('rate'),                  array('CCRating','Rate'), CC_MUST_BE_LOGGED_IN);

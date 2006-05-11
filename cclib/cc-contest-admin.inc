@@ -18,6 +18,13 @@
 *
 */
 
+/**
+* Implements the admin user interface for contests
+*
+* @package cchost
+* @subpackage admin
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -151,7 +158,7 @@ class CCCreateContestForm extends CCContestForm
     *
     * This method is called from CCForm, don't call it.
     *
-    * @see CCForm::GenerateForm
+    * @see CCForm::GenerateForm()
     * @param string $varname Name of form field
     * @param string $value Value (if any) to populate into form field
     * @param string $class CSS class to use for this field
@@ -173,7 +180,7 @@ class CCCreateContestForm extends CCContestForm
     *
     * This method is called from CCForm, don't call it
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * @param string $fieldname Name of form field
     * @returns bool $ok true if field validates ok
     */

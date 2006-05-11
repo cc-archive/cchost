@@ -18,17 +18,26 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage core
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 /**
 * Bass class for use by singleton table representations 
 *
-* 
+* For a tutorial see '{@tutorial cchost.pkg#newtable Create A New Table}'
 *
 */
 class CCTable
 {
+    /**#@+
+    * @access private
+    * @var string 
+    */
     var $_table_name;
     var $_key_field;
     var $_joins;
@@ -37,10 +46,26 @@ class CCTable
     var $_extra_columns;
     var $_order;
     var $_direction;
+    /** 
+    * Debug
+    */
     var $_last_sql;
+    /**#@-*/
+
+    /**#@+
+    * @access private
+    * @var integer
+    */
     var $_offset;
     var $_limit;
+    /**#@-*/
+
+    /**#@+
+    * @access private
+    * @var boolean
+    */
     var $_group_on_key;
+    /**#@-*/
 
     /**
     * Constructor
@@ -95,6 +120,11 @@ class CCTable
         $this->_limit  = $limit;
     }
 
+    /**
+    * Generate a GROUP ON sql qualifier using the table's key
+    *
+    * @param boolean $on true: generate GROUP ON, false: don't generate
+    */
     function GroupOnKey($on=true)
     {
         $this->_group_on_key = $on;
@@ -108,7 +138,7 @@ class CCTable
     * In a derived class' contstructor:
     * 
     * <code>
-    *    $this->AddExtraColumn('DATE_FORMAT(upload_date, \'$CC_SQL_DATE\') as upload_date_format');
+    *    $this->AddExtraColumn("DATE_FORMAT(upload_date, '$CC_SQL_DATE') as upload_date_format");
     * </code>
     *
     * @param string $spec Valid mySQL string for defining a virtual column
@@ -121,6 +151,13 @@ class CCTable
         $this->_extra_columns[] = $spec;
     }
 
+    /**
+    * Removes extra columns added by AddExtraColumn()
+    * 
+    *
+    * @see AddExtraColumn
+    * @param string $spec Valid mySQL string for defining a virtual column
+    */
     function RemoveExtraColumn($spec)
     {
         $this->_extra_columns = array_diff($this->_extra_columns,array($spec));
@@ -134,13 +171,13 @@ class CCTable
     * In a derived class' contstructor:
     * 
     * <code>
-    *            $this->AddJoin( new CCUsers(),    'upload_user');
+    * $this->AddJoin( new CCUsers(), 'upload_user');
     * </code>
     * 
     * @param string $other_cctable Instance of a CCTable class to JOIN with
     * @param string $joinfield Name of field in <b>this</b> table that the key field of the <b>other</b> table will join on.
     * @param string $jointype Valid mySQL type of JOIN 
-    * @returns mixed $name JOIN token. Hold onto this and pass to RemoveJoin if you don't want the next Query() to use the join.
+    * @return mixed $name JOIN token. Hold onto this and pass to RemoveJoin if you don't want the next Query() to use the join.
     * @see RemoveJoin
     */
     function AddJoin($other_cctable, $joinfield, $jointype = 'LEFT OUTER' )
@@ -176,6 +213,13 @@ class CCTable
         unset($this->_join_parts[$joinid]);
     }
 
+    /**
+    * A hack: simulate a join 
+    *
+    * This method will query joined tables for a record that was hand-rolled
+    * (i.e. not retrieved from the database)
+    *
+    */
     function FakeJoin(&$fake_record)
     {
         foreach( $this->_join_parts as $jpart )
@@ -199,7 +243,7 @@ class CCTable
     * to get a singleton instance of the class:
     * 
     * <code>
-    *     $uploads =& CCUploads::GetTable();
+    * $uploads =& CCUploads::GetTable();
     * </code>
     * 
     * Where CCUploads is a derivation of CCTable.
@@ -217,12 +261,12 @@ class CCTable
     * to test for.
     * 
     * <code>
-    *      // The following is the equivalent of:
-    *      //   ...WHERE ('file_name' = 'myfile.mp3') AND ('user' = 204 )
+    * // The following is the equivalent of:
+    * // ...WHERE ('file_name' = 'myfile.mp3') AND ('user' = 204 )
     *      
-    *      $where['file_name'] = 'myfile.mp3';
-    *      $where['user']      = 204;
-    *      $sql_result =& $table->Query($where);
+    * $where['file_name'] = 'myfile.mp3';
+    * $where['user']      = 204;
+    * $sql_result =& $table->Query($where);
     * </code>
     * 
     * @param mixed $where mySQL WHERE clause as string or array 
@@ -254,6 +298,8 @@ class CCTable
     * This method is abstract (returns $row). Derived classes
     * implement this method for shortly after a row from the database has
     * been returned to fill the row with semantically rich, runtime data.
+    *
+    * For a tutorial see {@tutorial cchost.pkg#rowvsrecord "row" vs. "record"}
     * 
     * @param array $row Row as retrieved from the database
     * @return array $record A 'record' that has runtime data
@@ -263,6 +309,12 @@ class CCTable
         return $row;
     }
 
+    /**
+    * Returns an array of records given keys (aka 'id')
+    *
+    * @param array $key array of keys to look up
+    * @return array $records Array of full records (as opposed to raw database rows)
+    */
     function & GetRecordsFromKeys($keys)
     {
         if( empty($keys) )
@@ -277,6 +329,16 @@ class CCTable
         return $records;
     }
 
+    /**
+    * Return full records for a given where statement
+    *
+    * Param $where can be either a SQL WHERE clause or an array of
+    * field names and valued. 
+    *
+    * @see Query
+    * @param mixed $where string or array query statement
+    * @return array $records Array of full records
+    */
     function & GetRecords($where)
     {
         $rows = $this->QueryRows($where);
@@ -285,7 +347,10 @@ class CCTable
     }
 
     /**
-    * Yes, same as GetRecordFromKey
+    * Return a record given key (aka 'id')
+    *
+    * @param integer $key key to look up
+    * @return array $record Full record (as opposed to raw database row)
     */
     function & GetRecordFromID($key)
     {
@@ -300,18 +365,18 @@ class CCTable
     }
 
     /**
-    * Yes, same as GetRecordFromID
+    * Return a record given key (aka 'id')
+    *
+    * Alias for GetRecordFromID()
+    *
+    * @see GetRecordFromID
+    * @param integer $key key to look up
+    * @return array $record Full record (as opposed to raw database row)
     */
     function & GetRecordFromKey($key)
     {
-        $row = $this->QueryKeyRow($key);
-        if( !empty($row) )
-        {
-            $r = $this->GetRecordFromRow($row);
-            return $r;
-        }
-        $a = array();
-        return $a;
+        $R =& $this->GetRecordFromID($key);
+        return $R;
     }
 
     /**
@@ -379,6 +444,7 @@ class CCTable
     /**
     * Internal helper to add OFFSET and LIMIT quota to SELECT statements
     *
+    * @access private
     * @param string $sql A reference to the current SELECT statment to be appended
     */
     function _add_offset_limit(&$sql)
@@ -396,8 +462,8 @@ class CCTable
     * Return the value of a single item.
     * 
     * <code>
-    *    $where['user_id'] = 10;
-    *    $name = $table->QueryItem('user_name', $where );
+    * $where['user_id'] = 10;
+    * $name = $table->QueryItem('user_name', $where );
     * </code>
     * 
     * @param string $column_name Name of table's column
@@ -415,8 +481,8 @@ class CCTable
     * Return the key for a record that matches the $where clause
     * 
     * <code>
-    *    $where['user_name'] = 'Fred';
-    *    $key = $table->QueryKey($where );
+    * $where['user_name'] = 'Fred';
+    * $key = $table->QueryKey($where );
     * </code>
     * 
     * @param mixed $where string or array representing WHERE clause
@@ -428,6 +494,20 @@ class CCTable
         return( $this->QueryItem( $this->_key_field, $where ) );
     }
     
+    /**
+    * Return array of keys for a record that matches the $where clause
+    * 
+    * <code>
+    * $where['user_name'] = 'Fred';
+    * $keys = $table->QueryKeys($where );
+    * foreach( $keys as $key )
+    * //...
+    * </code>
+    * 
+    * @param mixed $where string or array representing WHERE clause
+    * @see Query
+    * @return array $keys Array of keys matching the $where paramater
+    */
     function QueryKeys($where='')
     {
         $sql = $this->_get_select($where,$this->_key_field);
@@ -445,8 +525,8 @@ class CCTable
     * is.
     * 
     * <code>
-    *    // return the row the record whose key value is '4501'
-    *    $row =& $table->QueryKeyRow(4501);
+    * // return the row the record whose key value is '4501'
+    * $row =& $table->QueryKeyRow(4501);
     * </code>
     * 
     * @param string $key Key value
@@ -462,7 +542,7 @@ class CCTable
     * Return an item from the record where key is $key
     * 
     * <code>
-    *    $name = $table->QueryItemFromKey('user_name',1058);
+    * $name = $table->QueryItemFromKey('user_name',1058);
     * </code>
     * 
     * @param string $column_name Name of table's column
@@ -478,8 +558,8 @@ class CCTable
     * Returns a single row that matches a query
     * 
     * <code>
-    *    $where['user_name'] = 'Fred';
-    *    $row = $table->QueryRow($where );
+    * $where['user_name'] = 'Fred';
+    * $row = $table->QueryRow($where );
     * </code>
     * 
     * @param mixed $where string or array representing WHERE clause
@@ -495,12 +575,12 @@ class CCTable
     * Returns an array  of rows that matches a query
     * 
     * <code>
-    *    $where['user_name'] = 'Fred';
-    *    $rows =& $table->QueryRows($where );
-    *    foreach( $rows as $row )
-    *    {
-    *       // ....
-    *    }
+    * $where['user_name'] = 'Fred';
+    * $rows =& $table->QueryRows($where );
+    * foreach( $rows as $row )
+    * {
+    *   // ....
+    * }
     * </code>
     * 
     * @param mixed $where string or array representing WHERE clause
@@ -513,6 +593,13 @@ class CCTable
         return $r;
     }
 
+    /**
+    * Return the number of rows matching the $where clause
+    *
+    * @see Query
+    * @param mixed $where string or array to filter results (see Query)
+    * @return integer $num_rows 
+    */
     function CountRows($where = '' )
     {
         if( $this->_group_on_key )
@@ -524,11 +611,33 @@ class CCTable
         return( $this->QueryItem("COUNT(*)",$where) );
     }
 
+    /**
+    * Returns max value for a column
+    *
+    * @see Query
+    * @param string $column Name of column with max value
+    * @param mixed $where string or array to filter results (see Query)
+    * @return integer
+    */
     function Max($column, $where = '' )
     {
         return( $this->QueryItem("MAX($column)",$where) );
     }
 
+    /**
+    * Inserts a new record into the database
+    *
+    * <code>
+    * $args['column_name_1'] = 'value_1';
+    * $args['column_name_2'] = 'value_2';
+    * $args['column_name_3'] = 'value_3';
+    * $table->Insert($args);
+    * </code>
+    *
+    * For a tutorial see {@tutorial cchost.pkg#insert Insert a Record into a Table}
+    *
+    * @param array $fields Associative array of column names and values 
+    */
     function Insert($fields)
     {
         $columns  = array_keys($fields);
@@ -543,6 +652,22 @@ class CCTable
         CCDatabase::Query($sql);
     }
 
+    /**
+    * Inserts a batch of new records into the database
+    *
+    * <code>
+    * $columns = array( 'col_name_1', 'col_name_2', 'col_name_3' );
+    * $new_records = array(
+    *           array( 'value_1_1', 'value_1_2', 'value_1_3' ),
+    *           array( 'value_2_1', 'value_2_2', 'value_3_3' ),
+    *           array( 'value_3_1', 'value_3_2', 'value_3_3' )
+    *         );
+    * $table->InsertBatch($columns, $new_records);
+    * </code>
+    *
+    * @param array $columns Names of columns
+    * @param array $value Array of records to insert
+    */
     function InsertBatch($columns,$values)
     {
         $valuestr = '';
@@ -560,11 +685,42 @@ class CCTable
         CCDatabase::Query($sql);
    }
 
+    /** 
+    * Update a record in the table
+    *
+    * One of the $fields parameter <b>must</b> be the key field for this table
+    * 
+    * <code>
+    * $args['col_key']  = $row_id;
+    * $args['column_1'] = 'value_1';
+    * $args['column_2'] = 'value_2';
+    * $table->Update($args);
+    * </code>
+    *
+    * For a tutorial see {@tutorial cchost.pkg#update Update a Database Record}
+    *
+    *
+    * @see UpdateWhere
+    * @param array $fields Associative array of columns to update
+    * @param boolean $autoquote true: wrap values in single quotes
+    */
     function Update($fields,$autoquote=true)
     {
         $this->UpdateWhere($fields, $this->_key_field . "= '{$fields[$this->_key_field]}'",$autoquote);
     }
 
+    /**
+    * Update records that match a specific where filter
+    *
+    * The $fields array parameter should <b>not</b> include the key field of the table.
+    * See the Query() method for acceptable $where filter syntax.
+    *
+    * @see Update
+    * @see Query
+    * @param array $fields Associative array of columns to update
+    * @param boolean $autoquote true: wrap values in single quotes
+    * @param mixed $where string or array to filter results (see Query)
+    */
     function UpdateWhere($fields,$where,$autoquote=true)
     {
         $sets = '';        
@@ -584,12 +740,29 @@ class CCTable
         $this->_last_sql = $sql;
     }
 
+    /**
+    * Delete a record given a row key
+    *
+    * @see DeleteWhere
+    * @param integer $key 
+    */
     function DeleteKey($key)
     {
         $key = addslashes($key);
         $this->DeleteWhere($this->_key_field . "= '$key'");
     }
 
+    /**
+    * Delete records based on a $where filter
+    *
+    * To delete all records:
+    * <code>
+    * $table->DeleteWhere('1');
+    * </code>
+    *
+    * @see DeleteKey
+    * @param mixed $where string or array to filter results (see Query)
+    */
     function DeleteWhere($where)
     {
         $where = $this->_where_to_string($where);
@@ -597,6 +770,24 @@ class CCTable
         CCDatabase::Query($sql);
     }
 
+    /**
+    * Return an ID that is guaranteed unique and unused in the table
+    *
+    * Use this method when creating new recrods and you need to ID
+    * of the newly row:
+    * <code>
+    * function new_record($table,$value1,$value2)
+    * {
+    *     $args['id'] = $table->NextID();
+    *     $args['column_1'] = $value1;
+    *     $args['column_2'] = $value2;
+    *     $table->Insert($args);
+    *     return $args['id'];
+    * }
+    * </code>
+    *
+    * @return integer $next_id
+    */
     function NextID()
     {
         $sql = "SHOW TABLE STATUS LIKE '$this->_table_name'" ;
@@ -612,22 +803,25 @@ class CCTable
     *   second string is usable in WHERE statements for regex matching
     * 
     * <code>
-        
-        $arr = serialize( array( 'foo' => 'bar', 'birthday' => '2004-01-29' ) );
-        $where['s_field'] = $arr;
-        $table->Insert($where);
-
-        // then...
-        // query for anything but baz
-        array( $s_field ) = $table->WhereForSerializedField('s_field','foo');
-        $qwhere = "$s_field <> 'baz'";
-        $rows = $table->QueryRows($qwhere);
-
-        // or...
-        // query for today's birthdays
-        array( , $s_regex_where ) = $table->WhereForSerializedField('s_field','foo','[0-9]+-01-29');
-        $rows = $table->QueryRows($s_regex_where);
-
+    * $arr = serialize( 
+    *          array( 'foo' => 'bar', 
+    *                 'birthday' => '2004-01-29' ) );
+    * $where['s_field'] = $arr;
+    * $table->Insert($where);
+    * 
+    * // then...
+    * // query for anything but baz
+    * array( $s_field ) = 
+    *    $table->WhereForSerializedField('s_field','foo');
+    * $qwhere = "$s_field <> 'baz'";
+    * $rows = $table->QueryRows($qwhere);
+    * 
+    * // or...
+    * // query for today's birthdays
+    * array( , $s_regex_where ) = 
+    *    $table->WhereForSerializedField('s_field',
+    *                         'foo','[0-9]+-01-29');
+    * $rows = $table->QueryRows($s_regex_where);
     * </code>        
     * 
     * The selects drawn from this is potentially a very slow operation so use sparingly.
@@ -636,7 +830,7 @@ class CCTable
     * @param string $dbcol Name of serialized data column
     * @param string $fname Name of field in serialized 
     * @param string $matches Regex expression to match
-    * @returns array as described above
+    * @return array as described above
     */
     function WhereForSerializedField($dbcol, $fname, $matches = '[^"]+')
     {

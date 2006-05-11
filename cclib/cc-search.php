@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage feature
 */
 
 if( !defined('IN_CC_HOST') )
@@ -23,6 +28,8 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCSearch', 'OnMapUrls') );
 
+/**
+*/
 class CCSearchForm extends CCForm
 {
     function CCSearchForm()
@@ -62,9 +69,9 @@ class CCSearchForm extends CCForm
 class CCSearch
 {
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

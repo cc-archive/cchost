@@ -18,6 +18,17 @@
 *
 */
 
+/**
+* Handles admin user interface for database config
+*
+* This module sets up the url: admin/database but doesn't
+* actually map it to any menu items because getting it
+* wrong can break the site too easily.
+*
+* @package cchost
+* @subpackage admin
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -76,9 +87,9 @@ class CCDatabaseAdmin
 {
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -90,7 +101,7 @@ class CCDatabaseAdmin
     *
     * Wildly dangerous, guaranteed to generate support calls.
     *.
-    * @see CCAdminDatabaseForm::CCAdminDatabaseForm
+    * @see CCAdminDatabaseForm::CCAdminDatabaseForm()
     */
     function Admin()
     {

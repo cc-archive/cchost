@@ -14,16 +14,29 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Module for admin UI for ratings
+*
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 
+/**
+* Form for admin ui for ratings
+*/
 class CCAdminRatingsForm extends CCEditConfigForm
 {
+    /**
+    * Constructor
+    */
     function CCAdminRatingsForm()
     {
         $this->CCEditConfigForm('chart',CC_GLOBAL_SCOPE);
@@ -81,8 +94,14 @@ END;
     }
 }
 
+/**
+* Admin management API for ratings
+*/
 class CCRatingsAdmin
 {
+    /**
+    * @access private
+    */
     function _manage_user_rating($user_id,$ratings_id,$cmd,$confirmed)
     {
         global $CC_GLOBALS;
@@ -181,6 +200,9 @@ EOF;
         return false;
     }
 
+    /**
+    * @access private
+    */
     function _admin_ratings_chart()
     {
         CCPage::SetTitle("Configure Ratings Chart Engine");
@@ -188,6 +210,9 @@ EOF;
         CCPage::AddForm( $form->GenerateForm() );
     }
 
+    /**
+    * Implementation of racalculate all ratings in system
+    */
     function Recalc()
     {
         $configs =& CCConfigs::GetTable();
@@ -226,6 +251,16 @@ EOF;
         CCPage::Prompt("$count user scores and $upcount uploads recalculated");
     }
 
+    /**
+    * Catch all for ratings admin UI (implementation)
+    *
+    * @param string $cmd One of 'chart' (default), 'user', 'msg'
+    * @param integer $user_id User to operate on
+    * @param integet $ragings_id Rating id to operate on
+    * @param string $cmd2 One of 'delete', 'banuser', 'deluser'
+    * @param string $confirmed If present and set to 'confirmed' operation will proceed without UI
+    * @see CCRatingsAdmin::Admin()
+    */
     function Admin($cmd='',$user_id='',$ratings_id='',$cmd2='',$confirmed='')
     {
         if( $cmd == 'savesettings' )
@@ -594,6 +629,9 @@ END;
         CCPage::AddPrompt('body_html',$html);
     }
 
+    /**
+    * @access private
+    */
     function _burl($base,$parts)
     {
         //CCDebug::PrintVar($parts);
@@ -626,6 +664,12 @@ END;
         return $base . $q;
     }
 
+    /**
+    * Delete a rating
+    * 
+    * @param integer $ratings_id ID of ratings to delete
+    * @param boolean $redir If true a will exit and redirect browser to calling page
+    */
     function DeleteRating($rating_id,$redir=true)
     {
         $ratings =& CCRatings::GetTable();

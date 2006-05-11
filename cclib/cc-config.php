@@ -15,8 +15,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Base configuration and initialization 
+*
+* @package cchost
+* @subpackage core
 */
 
 if( !defined('IN_CC_HOST') )
@@ -34,7 +41,7 @@ class CCConfigs extends CCTable
     /**
     * Constructor (should not be used, use GetTable() instead)
     *
-    * @see CCConfigs::GetTable
+    * @see GetTable
     */
     function CCConfigs()
     {
@@ -42,7 +49,7 @@ class CCConfigs extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -57,6 +64,9 @@ class CCConfigs extends CCTable
         return($table);
     }
 
+    /*
+    * @access private
+    */
     function & _cache()
     {
         static $_cache = array();
@@ -339,9 +349,9 @@ class CCConfigs extends CCTable
         return($roots);
     }
 
-    /**
-    * Internal goodie -- for now, it's how we upgrade database fields 
-    *
+    /*
+    * @access private
+    * @deprecated See {@link cc-upload.php}
     * @param string $config_in_db Version string to check against code
     */
     function _upgrade($config_in_db)

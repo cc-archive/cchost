@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Implements core eventing system
+*
+* @package cchost
+* @subpackage core
 */
 
 if( !defined('IN_CC_HOST') )
@@ -31,11 +38,13 @@ class CCAction
 
 /**
 * Invoking and registering system wide events. 
+*
+* For a tutorial on using this method see {@tutorial cchost.pkg#url Create an URL and Bind it to a Method}
+*
+* You can register for an event ({@link CCEvents::AddHandler}) so that when some code, 
+* somewhere triggers the event your code will be called.
 *  
-* You can register for an event (CCEvents::AddHandler()) so that when some code, somewhere triggers the
-* event your code will be called.
-*  
-* You can also define an event and then invoke it (CCEvents::Invoke()) and get
+* You can also define an event and then invoke it ({@link CCEvents::Invoke}) and get
 * results back.
 *  
 * Using this system allows for modules to come and go, extending the system without 
@@ -43,9 +52,11 @@ class CCAction
 * constructed, when a row is fetched from a database, when a file is done being uploaded,
 * etc. etc.
 *  
-* Events that are mapped to URLs are handled separately via CCEvents::MapUrl().
+* Events that are mapped to URLs are handled separately via {@link CCEvents::MapUrl}.
 *
-* @see AddHandler, Invoke, MapUrl
+* @see AddHandler
+* @see Invoke
+* @see MapUrl
 */
 class CCEvents
 {
@@ -57,9 +68,7 @@ class CCEvents
     * don't actually miss the firing of the event.
     *  
     * <code>
-    *  
-    *    CCEvents::AddHandler(CC_EVENT_MAIN_MENU,   array( 'CCID3Tagger', 'OnBuildMenu') );
-    *  
+    * CCEvents::AddHandler(CC_EVENT_MAIN_MENU, array( 'CCID3Tagger', 'OnBuildMenu') );
     * </code>
     *  
     * The <b>$eventname</b> parameter is typically a descriptively named define(). By
@@ -110,7 +119,6 @@ class CCEvents
     * who is implementing the event handler.
     *  
     * <code>
-    *    
     *     // file is uploaded, database record, let add-in modules
     *     // have a go at the file and record. 
     *     
@@ -162,6 +170,7 @@ class CCEvents
 
         $events  =& CCEvents::_events();
         $results = array();
+        
         if( array_key_exists($eventname,$events) )
         {
             foreach( $events[$eventname] as $handler )
@@ -179,13 +188,23 @@ class CCEvents
 
         return($results);
     }
-  
+
+    /**
+    * @access private
+    */
     function & _hooks()
     {
         static $_hook_list;
         return( $_hook_list);
     }
 
+    /**
+    * Adds an event hook into the system
+    *
+    * All events will be sent to the '$func' argument
+    *
+    * @param string $func Name of function callback
+    */
     function AddHook( $func )
     {
         $hook_list =& CCEvents::_hooks();
@@ -195,43 +214,47 @@ class CCEvents
     /**
     * Maps incoming urls to functions/methods
     *
-    * You call this method in your event handler for CC_EVENT_MAP_URLS
+    * For a tutorial on using this method see {@tutorial cchost.pkg#url Create an URL and Bind it to a Method}
+    *
+    * You call this method in your event handler for {@link CC_EVENT_MAP_URLS}
     * It will tell the system what method to call in repsone to incoming URLs
     *
-    * The system uses a 'drupal' method of scoping. The more specific mapping
+    * The more specific mapping
     * is always respected first. If no handler is found for a specific url
     * the trailing part of the url is assumed to be arguments to the method
     * that handles the base url.
     * 
     * For example:
     * <code>
-           
-// Given:
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'MyClass' , 'OnMapUrls'));
-
-class MyClass
-{
-    function OnMapUrls()
-    {
-        CCEvents::MapUrl( 'foo',      
-                          array( 'MyClass', 'HandleFoo'),    CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'foo/bar',  
-                           array( 'MyClass', 'HandleFooBar'), CC_MUST_BE_LOGGED_IN );
-    }
- }
-
- // Here is what the mapping looks like:
- //
- //    URL                             Method called
- //  ------                            ----------------
- //  http://cchost.org/media/foo       $this->HandleFoo()
- //  http://cchost.org/media/foo/bar   $this->HandleFooBar()
- //  http://cchost.org/media/foo/BAZ   $this->HandleFoo('BAZ')
- //
-
-      </code>
+    *            
+    * // Given:
     *
+    * CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'MyClass' , 'OnMapUrls'));
     * 
+    * class MyClass
+    * {
+    *     function OnMapUrls()
+    *     {
+    *         CCEvents::MapUrl( 'foo',      
+    *                           array( 'MyClass', 'HandleFoo'),    
+    *                           CC_DONT_CARE_LOGGED_IN );
+    *
+    *         CCEvents::MapUrl( 'foo/bar',  
+    *                           array( 'MyClass', 'HandleFooBar'), 
+    *                           CC_MUST_BE_LOGGED_IN );
+    *     }
+    *  }
+    * 
+    *  // Here is what the mapping looks like:
+    *  //
+    *  //    URL                             Method called
+    *  //  ------                            ----------------
+    *  //  http://cchost.org/media/foo       $this->HandleFoo()
+    *  //  http://cchost.org/media/foo/bar   $this->HandleFooBar()
+    *  //  http://cchost.org/media/foo/BAZ   $this->HandleFoo('BAZ')
+    *  //
+    * 
+    * </code>
     * @param string $url What the incoming url looks like stripped of domain and vroot
     * @param mixed $callback Method to be called 
     * @param integer $permissions CC_* flags to mask off unauthorized users
@@ -260,6 +283,7 @@ class MyClass
     /**
     * Grabs the current incoming URL and calls the approproate method mapped to it
     *
+    * @param object $action a CCAction object (empty means perform the current url)
     */
     function PerformAction($action = null )
     {
@@ -299,6 +323,9 @@ class MyClass
         }
     }
 
+    /**
+    * @access private
+    */
     function _send_no_cache_headers()
     {
         header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -317,6 +344,7 @@ class MyClass
     /**
     * Convert an url into an internal action structure.
     * 
+    * @param string $url Internal url to execute (empty means the currently calling URL)
     */
     function ResolveUrl($url='')
     {
@@ -373,6 +401,11 @@ class MyClass
         }
     }
 
+    /**
+    * Retruns the current url-to-method map
+    *
+    * @param bool $force false: use cached version if available; true: always generate a new map
+    */
     function & GetUrlMap($force = false)
     {
         $paths =& CCEvents::_paths();
@@ -390,7 +423,7 @@ class MyClass
     }
 
     /**
-    * Internal goody
+    * @access private
     */
     function & _paths()
     {
@@ -401,7 +434,7 @@ class MyClass
     }
 
     /**
-    * Internal goody
+    * @access private
     */
     function & _events()
     {
@@ -412,7 +445,7 @@ class MyClass
     }
 
     /**
-    * Internal goody
+    * @access private
     */
     function & _current_action()
     {
@@ -421,7 +454,7 @@ class MyClass
     }
 
     /**
-    * Internal goody
+    * @access private
     */
     function & _aliases()
     {

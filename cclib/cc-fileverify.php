@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* GetID3 file verification interface
+*
+* @package cchost
+* @subpackage io
 */
 
 if( !defined('IN_CC_HOST') )
@@ -72,16 +79,14 @@ class CCFileVerify
     * calling $CC_UPLOAD_VALIDATOR->GetValidFileTypes($types).
     * 
     * <code>
-
-        $type = array();
-        if( isset($CC_UPLOAD_VALIDATOR) )
-        {
-            $CC_UPLOAD_VALIDATOR->GetValidFileTypes($types);
-        }
-
+    * $type = array();
+    * if( isset($CC_UPLOAD_VALIDATOR) )
+    * {
+    *     $CC_UPLOAD_VALIDATOR->GetValidFileTypes($types);
+    * }
     * </code>
     * 
-    * @param array $types Outbound parameter to put the valid format types
+    * @param array &$types Outbound parameter to put the valid format types
     * @returns bool $havetypes true if there is at least one type
     */
     function GetValidFileTypes(&$types)
@@ -107,26 +112,24 @@ class CCFileVerify
     * calling $CC_UPLOAD_VALIDATOR->FileValidate($formatinfo).
     * 
     * <code>
-
-    $format_info = new CCFileFormatInfo('/some/path/to/file');
-
-    if( isset($CC_UPLOAD_VALIDATOR) )
-    {
-        if( $CC_UPLOAD_VALIDATOR->FileValidate($format_info) )
-        {
-            // validated ok
-        }
-        else
-       {
-           // handle problems
-          $errors = $format_info->GetErrors();
-       }
-    }
-
+    * $format_info = new CCFileFormatInfo('/some/path/to/file');
+    * 
+    * if( isset($CC_UPLOAD_VALIDATOR) )
+    * {
+    *     if( $CC_UPLOAD_VALIDATOR->FileValidate($format_info) )
+    *     {
+    *         // validated ok
+    *     }
+    *     else
+    *    {
+    *        // handle problems
+    *       $errors = $format_info->GetErrors();
+    *    }
+    * }
     * </code>
     *
-    * @see CCFileFormatInfo::CCFileFormatInfo
-    * @see CCUploadAPI::PostProcessNewUpload
+    * @see CCFileFormatInfo::CCFileFormatInfo()
+    * @see CCUploadAPI::PostProcessNewUpload()
     * @param object $formatinfo Database record of upload
     * @returns boolean $renamed true if file was replaced
     */
@@ -199,12 +202,12 @@ class CCFileVerify
     }
 
     /**
-    * Event handler for getting renaming/id3 tagging macros
+    * Event handler for {@link CC_EVENT_GET_MACROS}
     *
-    * @param array $record Record we're getting macros for (if null returns documentation)
-    * @param array $file Specific file record we're getting macros for (may be null)
-    * @param array $patterns Substituion pattern to be used when renaming/tagging
-    * @param array $mask Actual mask to use (based on admin specifications)
+    * @param array &$record Upload record we're getting macros for (if null returns documentation)
+    * @param array &$file File record we're getting macros for
+    * @param array &$patterns Substituion pattern to be used when renaming/tagging
+    * @param array &$mask Actual mask to use (based on admin specifications)
     */
     function OnGetMacros(&$record,&$file,&$patterns,&$mask)
     {
@@ -223,7 +226,7 @@ class CCFileVerify
     }
 
     /**
-    * Event handler for CC_EVENT_GET_SYSTAGS 
+    * Event handler for {@link CC_EVENT_GET_SYSTAGS}
     *
     * @param array $record Record we're getting tags for 
     * @param array $file Specific file record we're getting tags for
@@ -248,10 +251,11 @@ class CCFileVerify
         }
     }
 
-
     /**
-    * Event handler for building admin menus
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items, $scope)
     {
@@ -270,9 +274,9 @@ class CCFileVerify
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -282,7 +286,7 @@ class CCFileVerify
     /**
     * Show the configure formats form
     *
-    * @see CCAdminFileVerifyForm::CCAdminFileVerifyForm
+    * @see CCAdminFileVerifyForm::CCAdminFileVerifyForm()
     */
     function ConfigureFormats()
     {
@@ -294,6 +298,8 @@ class CCFileVerify
 
     /**
     * Internal: maps GetID3 meta-info tags to our own meta-info format
+    * 
+    * @access private
     */
     function _ID3_to_format_info(&$id3obj,&$F, $name)
     {
@@ -365,6 +371,8 @@ class CCFileVerify
 
     /**
     * Internal: Build an array with a listing of files contained in the zip file
+    * 
+    * @access private
     */
     function _walk_zip_files($k,$v,$curdir,&$R)
     {

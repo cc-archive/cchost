@@ -14,14 +14,23 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Install licenses
+*
+* @package cchost
+* @subpackage admin
 */
 
 error_reporting(E_ALL);
 
 
-
+/**
+* Install licenses to use in this installation
+*/
 function cc_install_licenses()
 {
     $default_licenses= array( 

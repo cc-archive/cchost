@@ -14,10 +14,16 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
+/**
+* Module for handling user login
+*
+* @package cchost
+* @subpackage user
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -42,7 +48,7 @@ class CCSecurityKeys extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -194,7 +200,7 @@ class CCNewUserForm extends CCUserForm
     * 
     * Validates uniqueness of name as well as character checks and length.
     * 
-    * @see CCForm::ValidateFields
+    * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok true means field validates, false means there were errors in user input
@@ -331,7 +337,7 @@ class CCLostPasswordForm extends CCUserForm
 class CCLogin
 {
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -357,9 +363,9 @@ class CCLogin
     }
 
     /**
-    * Event handler for building menus
-    *
-    * @see CCMenu::AddItems
+    * Event handler for {@link CC_EVENT_MAIN_MENU}
+    * 
+    * @see CCMenu::AddItems()
     */
     function OnBuildMenu()
     {
@@ -385,9 +391,9 @@ class CCLogin
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -647,7 +653,7 @@ END;
     * 
     * This function does NOT return, it sends an image back to the browser then exits.
     * 
-    * @see CCNewUserForm::generator_securitykey
+    * @see CCNewUserForm::generator_securitykey()
     * @param integer $s Combination ID and index into a security key
     */
     function OnSecurityCallback($s)

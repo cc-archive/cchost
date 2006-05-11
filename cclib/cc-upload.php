@@ -18,6 +18,11 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage upload
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -173,6 +178,10 @@ class CCConfirmDeleteForm extends CCForm
     }
 }
 
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCAdminUploadForm extends CCForm
 {
     function CCAdminUploadForm(&$record)

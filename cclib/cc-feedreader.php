@@ -14,17 +14,55 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Module to read and parse XML RSS and Atom feeds
+*
+* @package cchost
+* @subpackage api
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+* Abstract base class for downloading and parsing XML
+*
+* Derived classes need to impelement the follwing methods:
+*
+* <code>
+* function cb_element_start ( $parser, $name, $attribs )
+* {   
+* }
+* 
+* function cb_element_data($parser, $data) 
+* {   
+* }
+* 
+* function cb_element_end ( $parser, $name)
+* {
+* }
+* </code>
+* @package cchost
+* @subpackage api
+*/
 class CCXmlReader
 {
+    /**
+    * @var string Error string
+    */
     var $ERROR;
 
+    /**
+    * Initialize a parse session
+    *
+    * This is internal, you probably want {@link parse}
+    *
+    * @param string &$data XML data that will be parsed
+    */
     function cc_xml_parser_create(&$data) 
     {
         // Default XML encoding is UTF-8
@@ -70,6 +108,15 @@ class CCXmlReader
         return $xml_parser;
     }
 
+    /**
+    * Download and parse a URL
+    *
+    * URL will be connected and downloaded (through Snoopy) and the contents
+    * returned will be parsed. 
+    *
+    * @param string $url URL to download
+    * @param array $headers Optional raw HTTP headers to send along with URL
+    */
     function cc_parse_url($url, $headers = "" ) 
     {
         require_once('cclib/snoopy/Snoopy.class.php');
@@ -90,6 +137,12 @@ class CCXmlReader
         return 0;
     }
 
+    /*
+    * Parse XML using PHP Sax style callbacks
+    *
+    * @param string $data XML data to parse
+    * @return boolean $ok 
+    */
     function parse($data)
     {
         // parse the data:
@@ -115,24 +168,62 @@ class CCXmlReader
     }
 }
 
-// the xml parser in php plays around with instances
-// of the call back class; it seems to like the 
-// global variables so comply.
 
+/**
+* internal: Struct used as global trapper
+*
+* the xml parser in php plays around with instances
+* of the call back class; it seems to like the 
+* global variables so comply.
+*
+* @package cchost
+* @subpackage api
+*/
 class CCFeedStatusReaderData
 {
-    // expected:
-    // status['status']
-    // status['message']
+    /** 
+    * @var array 
+    * expected:
+    *   status['status']
+    *   status['message']
+    */
     var $status;
+
+    /**
+    * @var string Next element
+    */
     var $waiting_for;
+
+    /**
+    * @var string Error string
+    */
     var $ERROR;
 }
 
+/**
+* Global helper (see {@link CCFeedStatusReaderData})
+* @package cchost
+* @subpackage api
+*/
 $ccFSR = new CCFeedStatusReaderData();
 
+/**
+* Feed status return reader
+*
+* Quick and dirty parser for reading status returns from RESTful 
+* type APIs
+*
+* @package cchost
+* @subpackage api
+*/
 class CCFeedStatusReader extends CCXmlReader
 {
+    /**
+    * Parse status XML
+    *
+    * @param string $data XML data
+    * @return object $feedStatusReaderData CCFeedStatusReaderData
+    */
     function parse($data)
     {
         parent::parse($data);
@@ -141,6 +232,12 @@ class CCFeedStatusReader extends CCXmlReader
         return $ccFSR;
     }
 
+    /**
+    * Start element callback
+    * 
+    * As specified in PHP {@link http://us2.php.net/manual/en/function.xml-set-element-handler.php cb_element_start})
+    *
+    */
     function cb_element_start ( $parser, $name, $attribs )
     {   
         global $ccFSR;
@@ -149,6 +246,12 @@ class CCFeedStatusReader extends CCXmlReader
             $ccFSR->waiting_for = $name;
     }
 
+    /**
+    * Character data callback
+    * 
+    * As specified in PHP {@link http://us2.php.net/manual/en/function.xml-set-element-handler.php cb_element_data})
+    *
+    */
    function cb_element_data($parser, $data) 
     {
         global $ccFSR;
@@ -160,19 +263,48 @@ class CCFeedStatusReader extends CCXmlReader
     }
 }
 
+/**
+* Global struct helper for parsing an RSS or Atom feed
+*
+* Returned by {@link CCFeedReader::parse()} 
+*
+* @package cchost
+* @subpackage api
+*/
 class CCFeedReaderData
 {
+    /** 
+    * @var array $items Results
+    */
     var $items;
-    var $current_item;
-    var $channel;
+
+    /**#@+
+    * @var boolean 
+    */
     var $is_atom;
     var $is_rss;
+    /**#@-*/
+
+    /**#@+
+    * @access private
+    */
+    var $current_item;
+    var $channel;
     var $waiting_for;
     var $wait_for_special;
+    /**#@-*/
 }
 
+/**
+* @package cchost
+* @subpackage api
+*/
 $ccFR = new CCFeedReaderData();
 
+/**
+* @package cchost
+* @subpackage api
+*/
 class CCFeedReader extends CCXmlReader
 {
     function parse($data)

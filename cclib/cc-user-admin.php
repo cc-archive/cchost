@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
@@ -345,10 +350,11 @@ END;
         chmod('.cc-ban.txt',CC_DEFAULT_FILE_PERMS);
 
     }
+
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

@@ -18,15 +18,28 @@
 *
 */
 
+/**
+* Implementation of the ccHost RESTful API (e.g. Sample Pool API)
+*
+* @package cchost
+* @subpackage api
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 require_once('cclib/cc-feedreader.php');
 
 CCEvents::AddHandler(CC_EVENT_APP_INIT, array('CCRestAPI', 'OnInitApp'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array('CCRestAPI', 'OnMapUrls'));
 
 
+/**
+* @package cchost
+* @subpackage api
+*/
 class CCRestAPI
 {
     function MakeUrl( $base, $cmd, $args = '' )
@@ -311,9 +324,9 @@ class CCRestAPI
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

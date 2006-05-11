@@ -14,10 +14,16 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header: /cvsroot/cctools/cchost1/cclib/cc-mediahost.php,v 1.38 2006/03/13 20:26:15 fourstones Exp $
+* $Id$
 *
 */
 
+/**
+* Main module that handles uploads
+*
+* @package cchost
+* @subpackage upload
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -36,6 +42,9 @@ CCEvents::AddHandler(CC_EVENT_LISTING_RECORDS,    array( 'CCMediaHost' , 'OnList
 class CCMediaHost
 {
 
+    /**
+    * @access private
+    */
     function _build_bread_crumb_trail($username,$upload_id)
     {
         $trail[] = array( 'url' => ccl(), 'text' => cct('Home') );
@@ -137,7 +146,10 @@ class CCMediaHost
     * Displays and process new submission form and assign tags to upload
     *
     * @param string $page_title Caption for page
+    * @param string $tags System tags to apply to upload
+    * @param string $form_help String to display with this form
     * @param string $username Login name of user doing the upload
+    * @param array  $etc Extra data for this operation (current supports $etc['suggested_tags'])
     */
     function SubmitOriginal($page_title, $tags, $form_help, $username='', $etc='')
     {
@@ -185,6 +197,17 @@ class CCMediaHost
         CCPage::AddForm( $form->GenerateForm() );
     }
 
+    /**
+    * Generic handler for submitting remixes
+    *
+    * Displays and process new submission form and assign tags to upload
+    *
+    * @param string $page_title Caption for page
+    * @param string $tags System tags to apply to upload
+    * @param string $form_help String to display with this form
+    * @param string $username Login name of user doing the upload
+    * @param array  $etc Extra data for this operation (current supports $etc['suggested_tags'])
+    */
     function SubmitRemix($title,$tags,$form_help,$etc ='')
     {
         global $CC_GLOBALS;
@@ -269,6 +292,7 @@ class CCMediaHost
 
     /**
     * Internal: Get the directory to upload this user's files to
+    * @access private
     */
     function _get_upload_dir($username)
     {
@@ -280,6 +304,7 @@ class CCMediaHost
 
     /**
     * Internal: pump a 'publish' check box into form
+    * @access private
     */
     function _add_publish_field(&$form)
     {
@@ -302,6 +327,7 @@ class CCMediaHost
 
     /**
     * Internal: Returns the current state of the admin's preference for auto-publish
+    * @access private
     */
     function _is_auto_pub()
     {
@@ -312,6 +338,7 @@ class CCMediaHost
 
     /**
     * Internal: Returns the upload page's URL
+    * @access private
     */
     function _get_file_page_url(&$record)
     {
@@ -320,11 +347,10 @@ class CCMediaHost
     }
 
     /**
-    * Event handler for when a media record is fetched from the database 
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * This will add semantic richness and make the db row display ready.
-    * 
-    * @see CCTable::GetRecordFromRow
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
     */
     function OnUploadRow( &$record )
     {
@@ -353,12 +379,12 @@ class CCMediaHost
     }
 
     /**
-    * Event handler for getting renaming/id3 tagging macros
+    * Event handler for {@link CC_EVENT_GET_MACROS}
     *
-    * @param array $record Upload record (meta data) we're getting macros for (if null returns documentation)
-    * @param array $file  Specific file record we're getting macros for 
-    * @param array $patterns Substituion pattern to be used when renaming/tagging
-    * @param array $mask Actual mask to use (based on admin specifications)
+    * @param array &$record Upload record we're getting macros for (if null returns documentation)
+    * @param array &$file File record we're getting macros for
+    * @param array &$patterns Substituion pattern to be used when renaming/tagging
+    * @param array &$mask Actual mask to use (based on admin specifications)
     */
     function OnGetMacros(&$record, &$file, &$patterns, &$mask)
     {
@@ -408,12 +434,12 @@ class CCMediaHost
     }
 
     /**
-    * Event handler for CC_EVENT_BUILD_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
     * 
     * The menu items gathered here are for the 'local' menu at each upload display
     * 
     * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnBuildUploadMenu(&$menu)
     {
@@ -468,14 +494,14 @@ class CCMediaHost
     }
 
     /**
-    * Event handler for CC_EVENT_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
     * a specific record. All dynamic changes are made here
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
@@ -608,9 +634,9 @@ class CCMediaHost
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -623,6 +649,14 @@ class CCMediaHost
         CCEvents::MapUrl( ccp('admin','editcommands'), array('CCUpload','EditCommands'), CC_ADMIN_ONLY );
     }
 
+    /**
+    * Handler for {@link CC_EVENT_LISTING_RECORDS}
+    *
+    * Adds a listing of current ids and stuffs them into page template for use with
+    * features like 'Stream this page'
+    *
+    * @param array $records Array of records being displayed
+    */
     function OnListingRecords(&$records)
     {
         $ids = array();
@@ -635,6 +669,9 @@ class CCMediaHost
         }
     }
 
+    /**
+    * @access private
+    */
     function _grab_ids(&$records,&$ids)
     {
         $count = count($records);
@@ -656,7 +693,7 @@ class CCMediaHost
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 

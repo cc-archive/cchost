@@ -14,13 +14,22 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Module for interfacing with GetID3
+*
+* @package cchost
+* @subpackage io
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 define('CCGETID3_PATH_KEY',               'getid3-path'); 
 define('CCGETID3_FILEVERIFY_ENABLED_KEY', 'getid3-fileverify-enabled');
 define('CCGETID3_FILETAGGER_ENABLED_KEY', 'getid3-filetagger-enabled');
@@ -74,11 +83,11 @@ class CCGetID3
     * Sets the following parameters:
     * 
     * <code>
-            $ID3Obj = new getID3;
-            $ID3Obj->option_tag_lyrics3       = false;
-            $ID3Obj->option_tag_apetag        = false;
-            $ID3Obj->option_tags_process      = true;
-            $ID3Obj->option_tags_html         = false;
+    * $ID3Obj = new getID3;
+    * $ID3Obj->option_tag_lyrics3       = false;
+    * $ID3Obj->option_tag_apetag        = false;
+    * $ID3Obj->option_tags_process      = true;
+    * $ID3Obj->option_tags_html         = false;
     * 
     * </code>
     * 
@@ -106,12 +115,12 @@ class CCGetID3
     * Returns an array of the following structure:
     * 
     * <code>
-         $file_formats['audio-aiff-aiff'] =  array(
-           'name'        => 'aif',
-           'description' => 'AIFF Audio',
-           'enabled'     => true,
-           'mediatype'   => 'audio',
-           );
+    * $file_formats['audio-aiff-aiff'] =  array(
+    *     'name'        => 'aif',
+    *     'description' => 'AIFF Audio',
+    *     'enabled'     => true,
+    *     'mediatype'   => 'audio',
+    *     );
     * </code>
     * 
     * @returns array $formats Array of format info structures
@@ -245,7 +254,7 @@ class CCGetID3
       }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 

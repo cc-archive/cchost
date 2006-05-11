@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage video
 */
 
 if( !defined('IN_CC_HOST') )
@@ -24,6 +29,10 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,    array( 'CCRenderFlash', 'OnUploadRow'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCRenderFlash', 'OnMapUrls'));
 
+/**
+* @package cchost
+* @subpackage video
+*/
 class CCRenderFlash
 {
 
@@ -48,6 +57,12 @@ END;
         exit;
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
+    *
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
+    */
     function OnUploadRow(&$record)
     {
         if( empty($record['script_link']) )
@@ -79,9 +94,9 @@ END;
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

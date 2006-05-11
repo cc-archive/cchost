@@ -14,8 +14,15 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* Implements Editor's Picks
+*
+* @package cchost
+* @subpackage feature
 */
 
 if( !defined('IN_CC_HOST') )
@@ -188,6 +195,7 @@ class CCEditorials
 
     /**
     * Internal helper to determine if current user is has eidtor status
+    * @access private
     */
     function _is_editor()
     {
@@ -200,11 +208,10 @@ class CCEditorials
 
 
     /**
-    * Event handler for when a media record is fetched from the database 
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * This will add semantic richness and make the db row display ready.
-    * 
-    * @see CCTable::GetRecordFromRow
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
     */
     function OnUploadRow( &$record )
     {
@@ -227,12 +234,12 @@ class CCEditorials
 
 
     /**
-    * Event handler for CC_EVENT_BUILD_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
     * 
     * The menu items gathered here are for the 'local' menu at each upload display
     * 
     * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnBuildUploadMenu(&$menu)
     {
@@ -245,14 +252,14 @@ class CCEditorials
     }
 
     /**
-    * Event handler for CC_EVENT_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
     * a specific record. All dynamic changes are made here
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
@@ -271,9 +278,9 @@ class CCEditorials
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -282,7 +289,7 @@ class CCEditorials
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings to config editing form
     * 
@@ -302,9 +309,10 @@ class CCEditorials
     }
 
     /**
-    * Event handler for CC_EVENT_GET_SYSTAGS 
+    * Event handler for {@link CC_EVENT_GET_SYSTAGS}
     *
     * @param array $record Record we're getting tags for 
+    * @param array $file Specific file record we're getting tags for
     * @param array $tags Place to put the appropriate tags.
     */
     function OnGetSysTags(&$record,&$file,&$tags)

@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage util
 */
 
 if( !defined('IN_CC_HOST') )
@@ -168,14 +173,24 @@ END;
         $queries[] = array( 'user_num_remixes', $sql );
 
         $sql =<<<END
-            SELECT SUM(upload_num_remixes) as user_num_remixed, upload_user as user_id
-                FROM cc_tbl_uploads
-                WHERE upload_user = '$user_id'
-                GROUP BY upload_user
+            SELECT parents.upload_id parent
+            FROM cc_tbl_tree tree
+            JOIN cc_tbl_uploads parents ON tree_child = parents.upload_id
+            JOIN cc_tbl_uploads children ON tree_parent = children.upload_id
+            where children.upload_user = '$user_id'
+            group by parents.upload_id
 END;
+
+        $rows = CCDatabase::QueryRows($sql);
+
+        $sql = 'SELECT ' . count($rows) . ' as user_num_remixed,  ' . $user_id . ' as user_id';
 
         $queries[] = array( 'user_num_remixed', $sql );
 
+        //
+        // Execute the queries
+        //
+        
         $users = new CCTable('cc_tbl_user','user_id');
         
         foreach( $queries as $query )
@@ -211,8 +226,8 @@ END;
     * to be a call to CCSync::Remix to update the counts
     * on the new parents.
     *
-    * @see CCSync::Remix
-    * @see CCRemix::OnPostRemixForm
+    * @see CCSync::Remix()
+    * @see CCRemix::OnPostRemixForm()
     **/
     function RemixDetach($remix_id)
     {
@@ -235,8 +250,8 @@ END;
     * to be a call here to CCSync::Remix to update the counts
     * on the new parents.
     *
-    * @see CCSync::RemixDetach
-    * @see CCRemix::OnPostRemixForm
+    * @see CCSync::RemixDetach()
+    * @see CCRemix::OnPostRemixForm()
     **/
     function Remix($remix_id,$parents)
     {
@@ -442,10 +457,11 @@ END;
             else
                 $parent_users[] = $parents[$i]['upload_user'];
         }
-        
+
         CCSync::_update_sqls($queries);
 
         $parent_users = array_unique($parent_users);
+
         foreach( $parent_users as $user_id )
             CCSync::User(0,$user_id);
     }
