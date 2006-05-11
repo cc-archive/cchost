@@ -14,10 +14,14 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
+/**
+* @package cchost
+* @subpackage feature
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -79,6 +83,11 @@ END;
     }
 
 
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('archive'), array('CCArchive','Archive'), CC_DONT_CARE_LOGGED_IN);

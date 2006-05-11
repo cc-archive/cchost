@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
@@ -24,6 +29,8 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_APP_INIT, array( 'CCUpdate', 'UpdateSite') );
 
+/**
+*/
 class CCUpdate
 {
     function UpdateSite()
@@ -78,6 +85,12 @@ class CCUpdate
         return in_array( $tablename, $tables );
     }
 
+    /**
+    * Check for existance of a database column and create one if it doesn't exist.
+    *
+    * For a tutorial on using this method see {@tutorial cchost.pkg#new Create a new database column}
+    *
+    */
     function _check_for_field($tablename,$fieldname, $desc)
     {
         if( is_object($tablename) )

@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage feature
 */
 
 if( !defined('IN_CC_HOST') )
@@ -25,6 +30,8 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCMailerAPI' , 'OnAdmi
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCMailerAPI' , 'OnMapUrls') );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCMailerAPI' , 'OnGetConfigFields') );
 
+/**
+*/
 class CCMailer
 {
     var $_to;
@@ -210,6 +217,13 @@ class CCMailerAPI
     {
         global $CC_GLOBALS;
 
+        if( !CCUser::IsLoggedIn() )
+        {
+            CCPage::Prompt('Due to spamming issues we have to temporarily restrict email contacts ' . 
+                           'to registered users only.');
+            return;
+        }
+
         if( empty($CC_GLOBALS['mail_sender']) )
         {
             CCPage::SystemError("Mail has not been properly configured on the this system. Contact your administrator.");
@@ -245,8 +259,9 @@ class CCMailerAPI
                 $mailer = new CCMailer();
             else
                 $mailer = $CC_MAILER;
-            
-            $mailer->From( empty($user_from) ? $fields['mail_from'] : $user_from['user_email']);
+
+            $from_email = empty($user_from) ? $fields['mail_from'] : $user_from['user_email'];
+            $mailer->From( $from_email );
             $mailer->To( $user_to['user_email'] );
             $mailer->Subject( $fields['mail_subject'] );
             $mailer->Body( $fields['mail_body'] );
@@ -257,6 +272,10 @@ class CCMailerAPI
                 $msg .= " ($ok)";
 
             CCPage::Prompt($msg);
+
+            CCDebug::Enable(true);
+            $from = empty($user_from) ? $fields['mail_from'] : $user_from['user_name'];
+            CCDebug::Log("Mail sent from $from -- to $userto");
         }
     }
 
@@ -339,9 +358,9 @@ class CCMailerAPI
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -350,7 +369,7 @@ class CCMailerAPI
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -368,6 +387,12 @@ class CCMailerAPI
         }
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
     function OnAdminMenu(&$items,$scope)
     {
         if( $scope == CC_GLOBAL_SCOPE )

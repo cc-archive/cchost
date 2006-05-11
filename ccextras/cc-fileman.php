@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header: /cvsroot/cctools/cchost1/ccextras/cc-format.php,v 1.7 2006/03/16 17:10:25 fourstones Exp $
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
@@ -53,6 +58,11 @@ class CCFileMan
         $fileman->Files();
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('admin','files','manage'), array('CCFileMan','Manage'), CC_ADMIN_ONLY);
@@ -61,8 +71,10 @@ class CCFileMan
     }
 
     /**
-    * Event handler for admin building
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -84,7 +96,7 @@ class CCFileMan
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 

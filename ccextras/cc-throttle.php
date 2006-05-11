@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
@@ -29,6 +34,8 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCThrottle',  'OnMapUrl
 /**
 * Form for configuring upload rules
 *
+* @package cchost
+* @subpackage admin
 */
 class CCAdminThrottleForm extends CCEditConfigForm
 {
@@ -79,6 +86,8 @@ class CCAdminThrottleForm extends CCEditConfigForm
 /**
 * Form for editing upload rules
 *
+* @package cchost
+* @subpackage admin
 */
 class CCAdminThrottleRulesForm extends CCGridForm
 {
@@ -227,6 +236,11 @@ class CCAdminThrottleRulesForm extends CCGridForm
 class CCThrottle
 {
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_ALLOWED}
+    *
+    * @param array $submit_types Array of submit forms meta data
+    */
     function OnUploadAllowed(&$submit_types)
     {
         $type_keys  = array_keys($submit_types);
@@ -414,8 +428,10 @@ class CCThrottle
     }
 
     /**
-    * Event handler for admin building
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -437,9 +453,9 @@ class CCThrottle
 
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -449,6 +465,9 @@ class CCThrottle
 
 }
 
+/**
+* @access private
+*/
 function cc_order_sorter($a,$b)
 {
     return( $a['order'] > $b['order'] ? 1 : -1 );

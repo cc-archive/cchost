@@ -14,8 +14,14 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* incomplete
+* @package cchost
+* @subpackage extras
 */
 
 if( !defined('IN_CC_HOST') )
@@ -27,6 +33,9 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,     array( 'CCBlogPing' , 'OnAdminMenu
 
 /**
 * Form for configuration the file format verification module
+* !!incomplete!!
+* @package cchost
+* @subpackage admin
 *
 */
 class CCAdminBlogPingForm extends CCEditConfigForm
@@ -66,8 +75,10 @@ class CCBlogPing
     }
 
     /**
-    * Event handler for admin building
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -88,13 +99,14 @@ class CCBlogPing
         }
     }
 
-
     /**
-    * Event hander to clear the feed cache
+    * Event handler for {@link CC_EVENT_UPLOAD_DONE}
     * 
-    * @param integer $fileid Database ID of file
+    * @param integer $upload_id ID of upload row
+    * @param string $op One of {@link CC_UF_NEW_UPLOAD}, {@link CC_UF_FILE_REPLACE}, {@link CC_UF_FILE_ADD}, {@link CC_UF_PROPERTIES_EDIT'} 
+    * @param array &$parents Array of remix sources
     */
-    function OnUploadDone($upload_id, $type)
+    function OnUploadDone($upload_id, $op)
     {
         if( $type != CC_UF_NEW_UPLOAD )
             return;
@@ -148,9 +160,9 @@ class CCBlogPing
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

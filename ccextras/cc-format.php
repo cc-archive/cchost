@@ -14,13 +14,20 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage ui
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 require_once('ccextras/cc-topics.php');
 
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,    array( 'CCFormat', 'OnFormFields'));
@@ -158,6 +165,11 @@ class CCFormat
         $row['topic_text_plain'] = _cc_format_unformat($row['topic_text']);
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
+    *
+    * @param array &$record Upload row to massage with display data 
+    */
     function OnUploadRow(&$row)
     {
         if( !_cc_is_formatting_on() )
@@ -193,6 +205,13 @@ class CCFormat
 
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_USER_ROW}
+    *
+    * Add extra data to a user row before display
+    *
+    * @param array &$record User record to massage
+    */
     function OnUserRow(&$row)
     {
         if( !_cc_is_formatting_on() )
@@ -219,6 +238,11 @@ class CCFormat
             _cc_format_links();
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('format'), array('CCFormat','CallBack'), CC_DONT_CARE_LOGGED_IN);
@@ -234,6 +258,12 @@ class CCFormat
     }
 
 
+    /**
+    * Event handler for {@link CC_EVENT_FORM_FIELDS}
+    *
+    * @param object &$form CCForm object
+    * @param object &$fields Current array of form fields
+    */
     function OnFormFields(&$form,&$fields)
     {
         if( !_cc_can_format_edit() )
@@ -265,7 +295,7 @@ class CCFormat
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 

@@ -18,9 +18,16 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage feature
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 define('CC_STATS_CACHE', 'ccstatscache.txt');
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       'cc_stats_on_map_urls');
@@ -117,7 +124,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
 
 function _cc_stats_filter($since)
 {
-    $x = 'wired,admin,criminals,militiamix,fort_minor';
+    $x = 'wired,admin,criminals,militiamix,fortminor';
 
     $x = CCTag::TagSplit($x);
     $where = array();
@@ -298,18 +305,20 @@ function cc_stats_most_remixed()
 {
     $max = 15;
 
+    $where = _cc_stats_filter('');
+
     $sql =<<<END
-select count(*) c, user_id
-   from cc_tbl_tree
-   join cc_tbl_uploads on tree_parent = upload_id
-   join cc_tbl_user on upload_user = user_id
-   where upload_extra NOT LIKE '%contest_s%' 
-   group by user_id
-   order by c desc
+SELECT *, user_num_remixed c, user_num_remixed num_remixed
+   FROM cc_tbl_user
+   WHERE $where
+   ORDER BY c DESC
    LIMIT $max
 END;
 
-   return _cc_stats_get_user_counts($sql);
+    $rows = CCDatabase::QueryRows($sql);
+    $users =& CCUsers::GetTable();
+    $records = $users->GetRecordsFromRows($rows);
+    return $records;
 }
 
 function _cc_stats_get_user_counts($sql)

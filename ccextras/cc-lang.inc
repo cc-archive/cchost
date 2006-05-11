@@ -14,40 +14,42 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
-//----------------------------------------------------------------------
-//
-// Attention translators:
-//
-// As of this writing the admin pages are not internationalized, 
-// only the user and non-registered user pages are.
-//
-// To start a new translation use:
-//
-// http://example.com/media/admin/language/en
-//
-
-//
-// Ideally you have done all this BEFORE installing ccHost. If not
-// you will have to edit the menu settings and 'revert' to system
-// defaults. (You will lose any customizations you have done at that
-// point.)
-//
-//
-// When you install a new (3rd party) module you should do the 
-// following to extract the strings:
-//
-// 1. Sign in as administrator
-// 2. Browse to http://your_server_root/?record_lang=on
-// 3. Run the 3rd party module
-// 4. Browse to http://your_server_root/?record_lang=off
-// 5. Note the differences in cclib/lang/en/cc-translation-*.php and
-//    copy them to your language's files to translate them.
-//
-//----------------------------------------------------------------------
+/**
+* International support
+*
+* Attention translators:
+*
+* As of this writing the admin pages are not internationalized, 
+* only the user and non-registered user pages are.
+*
+* To start a new translation use:
+*
+* http://example.com/media/admin/language/en
+*
+*
+* Ideally you have done all this BEFORE installing ccHost. If not
+* you will have to edit the menu settings and 'revert' to system
+* defaults. (You will lose any customizations you have done at that
+* point.)
+*
+*
+* When you install a new (3rd party) module you should do the 
+* following to extract the strings:
+*
+* 1. Sign in as administrator
+* 2. Browse to http://your_server_root/?record_lang=on
+* 3. Run the 3rd party module
+* 4. Browse to http://your_server_root/?record_lang=off
+* 5. Note the differences in cclib/lang/en/cc-translation-*.php and
+*    copy them to your language's files to translate them.
+*
+* @package cchost
+* @subpackage admin
+*/
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
@@ -55,6 +57,8 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_APP_INIT,  'cc_lang_start_record');
 CCEvents::AddHandler(CC_EVENT_APP_DONE,  'cc_lang_stop_record');
 
+/**
+*/
 $CC_LANG_RECORD_MODE = false;
 
 // cct will already exist when doing string editing, we don't need real cct
@@ -133,6 +137,11 @@ function cc_lang_start_record()
     }
 }
 
+
+/**
+* Event handler for {@link CC_EVENT_APP_DONE}
+* 
+*/
 function cc_lang_stop_record()
 {
     global $CC_LANG_RECORD_MODE;

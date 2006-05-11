@@ -18,9 +18,16 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage admin
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 class v_2_1a extends CCUpdate
 {
     function Update()

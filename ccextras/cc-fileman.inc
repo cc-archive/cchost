@@ -14,13 +14,22 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header: /cvsroot/cctools/cchost1/ccextras/cc-format.php,v 1.7 2006/03/16 17:10:25 fourstones Exp $
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage io
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+* @package cchost
+* @subpackage io
+*/
 class CCFilesAddForm extends CCUploadForm
 {
     function CCFilesAddForm($dirs)
@@ -80,7 +89,7 @@ class CCFilesAddForm extends CCUploadForm
 
 /**
 *
-*
+* @subpackage admin
 */
 class CCFileManAdmin
 {
@@ -176,7 +185,7 @@ class CCFileManAdmin
         if( empty($pages['fileman']) )
         {
             $pages['fileman'] = array(
-                 'files'   =>    array(  'text'   => 'Manage Files',
+                 'files'   =>    array('text'   => 'Manage Files',
                                        'help'   => 'Manage files your viewfile directory',
                                        'tags'   => '/files',
                                        'limit'  => 0,

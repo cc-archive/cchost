@@ -18,9 +18,16 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage feature
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 require_once('cclib/cc-feeds.php');
 
 define('CC_EVENT_TOPIC_ROW', 'topicrow');
@@ -162,7 +169,7 @@ class CCTopics extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -345,7 +352,7 @@ class CCTopicTree extends CCTable
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.
@@ -621,6 +628,11 @@ class CCTopic
         CCPage::SetTitle($title);
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('topics','reply'),  array( 'CCTopic', 'Reply'),   CC_MUST_BE_LOGGED_IN);

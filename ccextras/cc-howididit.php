@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage feature
 */
 
 if( !defined('IN_CC_HOST') )
@@ -26,6 +31,8 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCHowIDidIt',  'OnUplo
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCHowIDidIt',  'OnUploadRow'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCHowIDidIt',  'OnMapUrls'));
 
+/**
+*/
 class CCHowIDidItForm extends CCForm
 {
     function CCHowIDidItForm()
@@ -209,11 +216,10 @@ class CCHowIDidIt
     }
 
     /**
-    * Event handler for when a media record is fetched from the database 
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * This will add semantic richness and make the db row display ready.
-    * 
-    * @see CCTable::GetRecordFromRow
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
     */
     function OnUploadRow( &$record )
     {
@@ -230,12 +236,12 @@ class CCHowIDidIt
     }
 
     /**
-    * Event handler for CC_EVENT_BUILD_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
     * 
     * The menu items gathered here are for the 'local' menu at each upload display
     * 
     * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnBuildUploadMenu(&$menu)
     {
@@ -248,14 +254,14 @@ class CCHowIDidIt
     }
 
     /**
-    * Event handler for CC_EVENT_UPLOAD_MENU
+    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
     * a specific record. All dynamic changes are made here
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu
+    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
@@ -276,9 +282,9 @@ class CCHowIDidIt
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage feature
 */
 
 if( !defined('IN_CC_HOST') )
@@ -31,9 +36,16 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCNSFW', 'OnUploadDone') )
 */
 class CCNSFW
 {
-    function OnUploadDone($upload_id, $uf_type)
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_DONE}
+    * 
+    * @param integer $upload_id ID of upload row
+    * @param string $op One of {@link CC_UF_NEW_UPLOAD}, {@link CC_UF_FILE_REPLACE}, {@link CC_UF_FILE_ADD}, {@link CC_UF_PROPERTIES_EDIT'} 
+    * @param array &$parents Array of remix sources
+    */
+    function OnUploadDone($upload_id, $op)
     {
-        if( ($uf_type == CC_UF_NEW_UPLOAD || $uf_type == CC_UF_PROPERTIES_EDIT) )
+        if( ($op == CC_UF_NEW_UPLOAD || $op == CC_UF_PROPERTIES_EDIT) )
         {
             $value =  array_key_exists('upload_nsfw',$_POST);
             $uploads =& CCUploads::GetTable();
@@ -41,6 +53,12 @@ class CCNSFW
         }
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_FORM_FIELDS}
+    *
+    * @param object &$form CCForm object
+    * @param object &$fields Current array of form fields
+    */
     function OnFormFields(&$form,&$fields)
     {
         if( is_subclass_of($form,'CCUploadMediaForm') ||
@@ -60,6 +78,12 @@ class CCNSFW
         }
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_FORM_POPULATE}
+    * 
+    * @param object &$form CCForm object
+    * @param array &$values Current values being applied to form fields
+    */
     function OnFormPopulate(&$form,&$values)
     {
         if( !is_subclass_of($form,'CCUploadMediaForm') &&

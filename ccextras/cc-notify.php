@@ -18,9 +18,16 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage feature
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 require_once('ccextras/cc-reviews.php');
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCNotify',  'OnMapUrls'));
@@ -87,6 +94,13 @@ class CCNotify
         $notify_api->OnEdPick($upload_id);
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_DONE}
+    * 
+    * @param integer $upload_id ID of upload row
+    * @param string $op One of {@link CC_UF_NEW_UPLOAD}, {@link CC_UF_FILE_REPLACE}, {@link CC_UF_FILE_ADD}, {@link CC_UF_PROPERTIES_EDIT'} 
+    * @param array &$parents Array of remix sources
+    */
     function OnUploadDone($upload_id,$op,$parents=array())
     {
         if( $op != CC_UF_NEW_UPLOAD || !$this->_is_notify_on() )
@@ -98,6 +112,13 @@ class CCNotify
     }
 
 
+    /**
+    * Event handler for {@link CC_EVENT_USER_ROW}
+    *
+    * Add extra data to a user row before display
+    *
+    * @param array &$record User record to massage
+    */
     function OnUserRow(&$row)
     {
         if( $this->_is_notify_on() && CCUser::IsLoggedIn())
@@ -118,13 +139,18 @@ class CCNotify
         }
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('people', 'notify', 'edit'), array('CCNotify','EditMyNotifications'), CC_MUST_BE_LOGGED_IN);
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 

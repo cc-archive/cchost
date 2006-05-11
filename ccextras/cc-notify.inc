@@ -18,10 +18,17 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage feature
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 
+/**
+*/
 define('CC_NTFY_IVE_BEEN_REVIEWED', 0x0001 );
 define('CC_NTFY_THEY_BEEN_REMIXED', 0x0002 );
 define('CC_NTFY_REVIEW_REPLY',      0x0004 );

@@ -14,10 +14,14 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
+/**
+* @package cchost
+* @subpackage api
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -30,6 +34,8 @@ CCEvents::AddHandler(CC_EVENT_DELETE_FILE,
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,
     array( 'CCDataDump',  'OnUploadDone'));
 
+/**
+*/
 define('CCDATADUMP_CACHE_ON', true);
 
 /**
@@ -168,9 +174,9 @@ class CCDataDump extends CCFeed
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {
@@ -182,7 +188,7 @@ class CCDataDump extends CCFeed
     /**
     * Internal: Cache an rss feed into the database
     *
-    * @see   CCFeed::_cache
+    * @see   CCFeed::_cache()
     * @param string $xml Actual feed text
     * @param string $type Feed format
     * @param string $tagstr Tags represented by this feed.

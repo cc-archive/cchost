@@ -14,13 +14,20 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 require_once('ccextras/cc-topics.php');
 
 CCEvents::AddHandler(CC_EVENT_TOPIC_ROW,         array( 'CCFlag', 'OnTopicRow'));
@@ -30,7 +37,8 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCFlag' , 'OnAdminMenu'
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCFlag' , 'OnMapUrls') );
 
 
-
+/**
+*/
 class CCFlagContentForm extends CCSecurityVerifierForm
 {
     function CCFlagContentForm($type,$id,$name,$user_from)
@@ -96,12 +104,23 @@ class CCFlag
             $row['flag_url'] = ccl('flag','topic',$row['topic_id']);
     }
 
-    function OnUploadRow(&$row)
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
+    *
+    * @param array &$record Upload row to massage with display data 
+    * @see CCTable::GetRecordFromRow()
+    */
+    function OnUploadRow( &$record )
     {
         if( $this->_is_flagging_on() )
-            $row['flag_url'] = ccl('flag','upload',$row['upload_id']);
+            $record['flag_url'] = ccl( 'flag', 'upload', $record['upload_id'] );
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('flag'), array('CCFlag','Flag'), CC_DONT_CARE_LOGGED_IN);
@@ -185,7 +204,7 @@ END;
     }
 
     /**
-    * Callback for GET_CONFIG_FIELDS event
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
     * Add global settings settings to config editing form
     * 
@@ -211,6 +230,12 @@ END;
         }
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
     function OnAdminMenu(&$items,$scope)
     {
         /*

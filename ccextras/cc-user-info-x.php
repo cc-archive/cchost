@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage contest
 */
 
 if( !defined('IN_CC_HOST') )
@@ -24,7 +29,7 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCUserInfoX' , 'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,   array( 'CCUserInfoX', 'OnFormFields'));
 
-/*
+/**
 *  Certain contest jurisdictions require that the following 
 *  data be collected for every entrant in a contest where
 *  the prize is over a particular threshold (e.g. $300 USD)
@@ -49,7 +54,6 @@ CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,   array( 'CCUserInfoX', 'OnFormFields
 *       url it is safest to use ModRerwrite to map the
 *       contest/submit form to contest/userinfo
 */
-
 class CCUserInfoForm extends CCForm
 {
     function CCUserInfoForm()
@@ -185,6 +189,12 @@ class CCUserInfoX
         $users->Update($args);
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_FORM_FIELDS}
+    *
+    * @param object &$form CCForm object
+    * @param object &$fields Current array of form fields
+    */
     function OnFormFields(&$form,&$fields)
     {
         global $CC_GLOBALS;
@@ -214,6 +224,11 @@ class CCUserInfoX
     }
 
 
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('contest', 'userinfo'), array( 'CCUserInfoX', 'UserInfo'),  CC_MUST_BE_LOGGED_IN );

@@ -18,9 +18,16 @@
 *
 */
 
+/**
+* @package cchost
+* @subpackage feature
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
 define('NUM_REVIEWS_PER_PAGE', 20);
 
 require_once('ccextras/cc-topics.php');
@@ -60,7 +67,7 @@ class CCReviews extends CCTopics
     }
 
     /**
-    * Returns static singleton of configs table wrapper.
+    * Returns static singleton of table wrapper.
     * 
     * Use this method instead of the constructor to get
     * an instance of this class.

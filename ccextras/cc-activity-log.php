@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
@@ -24,46 +29,37 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_APP_INIT,   array( 'CCActivityLogAPI' , 'OnAppInit') );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,   array( 'CCActivityLogAPI' , 'OnMapUrls') );
 
-/*
-define('CC_EVENT_APP_INIT',            'init');
-define('CC_EVENT_MAIN_MENU',           'mainmenu');
-define('CC_EVENT_PATCH_MENU',          'patchmenu');
-
-define('CC_EVENT_UPLOAD_MENU',         'uploadmenu');
-define('CC_EVENT_BUILD_UPLOAD_MENU',   'builduploadmenu');
-define('CC_EVENT_ADMIN_MENU',          'buildadminmenu');
-define('CC_EVENT_UPLOAD_ROW',          'uploadrow' );
-define('CC_EVENT_UPLOAD_LISTING',      'uploadlisting' );
-define('CC_EVENT_LISTING_RECORDS',     'listingrecs' );
-define('CC_EVENT_GET_SYSTAGS',         'getsystags' );
-define('CC_EVENT_USER_ROW',            'userrow' );
-define('CC_EVENT_MAP_URLS',            'mapurls');
-define('CC_EVENT_UPLOAD_ALLOWED',      'throttle');
-define('CC_EVENT_CONTEST_ROW',         'contestrow' );
-define('CC_EVENT_GET_MACROS',          'getmacros' );
-define('CC_EVENT_SUBMIT_FORM_TYPES',   'submitformtypes' );
-
-define('CC_EVENT_GET_UPLOAD_FIELDS',   'getupflds' );
-define('CC_EVENT_GET_USER_FIELDS',     'getuserflds' );
-define('CC_EVENT_GET_CONFIG_FIELDS',   'getcfgflds' );
-
-define('CC_EVENT_DELETE_UPLOAD',       'delete' );
-define('CC_EVENT_DELETE_FILE',         'deletefile' );
-
-define('CC_EVENT_USER_DELETED',         'userdel' );
-define('CC_EVENT_USER_REGISTERED',      'userreg' );
-define('CC_EVENT_USER_PROFILE_CHANGED', 'userprof' );
-define('CC_EVENT_LOGIN_FORM',           'loginform' );
-define('CC_EVENT_LOGOUT',               'logout' );
+/**
+* Manages storing and display of various events for analysis by admins
+* 
+* @package cchost
+* @subpackage admin
 */
 
+/**
+* Table for storing various events for analysis by admins
+*
+*/
 class CCActivityLog extends CCTable
 {
+    /**
+    * Standard constructor
+    *
+    * @see GetTable
+    */
     function CCActivityLog()
     {
         $this->CCTable('cc_tbl_activity_log','activity_log_id');
     }
 
+    /**
+    * Returns static singleton of table wrapper.
+    * 
+    * Use this method instead of the constructor to get
+    * an instance of this class.
+    * 
+    * @returns object $table An instance of this table
+    */
     function & GetTable()
     {
         static $_table;
@@ -73,13 +69,29 @@ class CCActivityLog extends CCTable
     }
 }
 
+/**
+* Manages storing and display of various events for analysis by admins
+* 
+*/
 class CCActivityLogAPI
 {
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('activity'),  array('CCActivityLogAPI','ViewLog'), CC_ADMIN_ONLY );
     }
 
+    /**
+    * Display the current activity log
+    *
+    * Maps from /activity[?user=<i>user_name</i> | ?ip=<i>ip_number</i>]
+    *
+    * @param string $arg clear: will delete the log
+    */
     function ViewLog($arg='')
     {
         CCPage::SetTitle('View Activity Log');
@@ -112,11 +124,13 @@ class CCActivityLogAPI
         CCPage::PageArg('activity_log',$rows,'show_activity_log');
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_APP_INIT}
+    * 
+    * Adds global hook if logging is enabled
+    */
     function OnAppInit()
     {
-        if( defined('IN_MIXTER_PORT') )
-            return;
-
         $configs =& CCConfigs::GetTable();
         $logging = $configs->GetConfig('logging',CC_GLOBAL_SCOPE);
         if( empty($logging) )
@@ -126,6 +140,12 @@ class CCActivityLogAPI
         CCEvents::AddHook( array( &$this, 'Hook' ) );
     }
 
+    /**
+    * Implements a event hook
+    * 
+    * @param mixed $args Event dependent 
+    * @see CCEvents::AddHook()
+    */
     function Hook($args)
     {
         $event_name = $args[0];

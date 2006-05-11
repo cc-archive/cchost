@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
@@ -24,8 +29,14 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCLanguage',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCLanguage' , 'OnAdminMenu') );
 
+/**
+*/
 require_once('ccextras/cc-lang.inc');
 
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCLanguageAdminForm extends CCForm
 {
     function CCLanguageAdminForm()
@@ -79,7 +90,7 @@ END;
 
 /**
 *
-*
+* @subpackage util
 */
 class CCLanguage
 {
@@ -120,8 +131,10 @@ class CCLanguage
     }
 
     /**
-    * Event handler for admin building
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
     function OnAdminMenu(&$items,$scope)
     {
@@ -229,9 +242,9 @@ END;
     }
 
     /**
-    * Event handler for mapping urls to methods
+    * Event handler for {@link CC_EVENT_MAP_URLS}
     *
-    * @see CCEvents::MapUrl
+    * @see CCEvents::MapUrl()
     */
     function OnMapUrls()
     {

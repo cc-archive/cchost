@@ -14,8 +14,13 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+
+/**
+* @package cchost
+* @subpackage ui
 */
 
 if( !defined('IN_CC_HOST') )
@@ -23,9 +28,18 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_SUBMIT_FORM_TYPES,   array( 'CCMusicForms' , 'OnSubmitFormTypes') );
 
+/**
+* @package cchost
+* @subpackage ui
+*/
 class CCMusicForms
 {
 
+    /*
+    * Event handler for {@link CC_EVENT_SUBMIT_FORM_TYPES}
+    *
+    * @param array &$types Submit form meta information are put here
+    */
     function OnSubmitFormTypes(&$types)
     {
         $new_types = array( 
