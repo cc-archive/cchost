@@ -277,6 +277,7 @@ if( class_exists('CCReviews') )
         $reviewers = array();
         $reviews = array();
         $count = count($rows);
+        $users =& CCUsers::GetTable();
         for( $i = 0; $i < $count; $i++ )
         {
             $R =& $rows[$i];
@@ -288,7 +289,8 @@ if( class_exists('CCReviews') )
             if( !empty($uprow) )
             {
                 $reviewers[] = $R['user_name'];
-                $R['topic_permalink'] = ccl( 'reviews', $R['user_name'],
+                $reviewee = $users->QueryItemFromKey('user_name',$uprow['upload_user']);
+                $R['topic_permalink'] = ccl( 'reviews', $reviewee,
                                              $R['topic_upload'] . '#' . $R['topic_id'] );
                 $reviews[] = $R;
                 if( count($reviews) == $limit )
