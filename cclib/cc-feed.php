@@ -77,7 +77,7 @@ class CCFeed
     * @param string $op One of {@link CC_UF_NEW_UPLOAD}, {@link CC_UF_FILE_REPLACE}, {@link CC_UF_FILE_ADD}, {@link CC_UF_PROPERTIES_EDIT'} 
     * @param array &$parents Array of remix sources
     */
-    function OnUploadDone($upload_id,$op,&$parents)
+    function OnUploadDone($upload_id,$op)
     {
         $this->_clear_cache($upload_id);
     }

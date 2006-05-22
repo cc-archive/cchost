@@ -731,7 +731,7 @@ class CCUploadAPI
 
         CCUploadAPI::_recalc_upload_tags($record['upload_id']);
 
-        CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $record['upload_id'], CC_UF_FILE_ADD, array() ) );
+        CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $record['upload_id'], CC_UF_FILE_ADD ) );
 
         CCUploadAPI::_cleanup_upload_file($current_path,$is_temp);
 
@@ -829,7 +829,7 @@ class CCUploadAPI
 
         CCUploadAPI::_cleanup_upload_file($current_path,$is_temp);
 
-        CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $upload_id, CC_UF_FILE_REPLACE, array() ) );
+        CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $upload_id, CC_UF_FILE_REPLACE ) );
     }
 
     function PostProcessEditUpload(  $upload_args, 
