@@ -1,3 +1,10 @@
+2006-05-22     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/cc-uploadapi.php 3313:
+     * cclib/cc-feed.php 3314:
+     * cclib/cc-uploadapi.php 3314:
+         bugfix: file replace was broken
+
 2006-05-10     Victor Stone <fourstones@users.sourceforge.net>
 
      * ccextras/cc-activity-log.php 3291:
