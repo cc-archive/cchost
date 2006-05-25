@@ -44,7 +44,7 @@ a { font-weight: bold; }
 	      <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
 	      Creative Commons Copyright Criminals Remix Contest</h2>
 	      <div style="display: block; text-align: center;"><a href="${root-url}copyrightcriminals"><img src="${root-url}mixter-files/copyrightcriminals.png" border="0" /></a></div>
-	      <p style="font-size: 12px; font-weight: normal;">
+	      <p style="font-size: 11px; font-weight: normal;">
 	<div style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center;">The contest is closed to new entries.</div>
 
 	This contest 
@@ -72,8 +72,10 @@ a { font-weight: bold; }
 
       <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
       Crammed Discs Remix Contest</h2>
+      	<div style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center;float:left;width:50%;">The contest is closed to new entries.</div>
       <div style="display: block; text-align: center;"><a href="${root-url}crammed/"><img src="${root-url}mixter-files/crammed-logo.png" style="margin: 10px 10px 8px 0pt;" align="left" border="0" /></a></div>
-      <p style="font-size: 12px; font-weight: normal;">
+
+      <p style="font-size: 11px; font-weight: normal;">
       Creative Commons and Crammed Discs are pleased to present the Crammed Discs Remix Contest. Crammed artists Cibelle, DJ Dolores, and Apollo Nove &mdash; some of Brazil's most creative musical innovators &mdash; are offering some of their new music under a CC BY-NC 2.5 license, so that producers worldwide can use the tracks in remixes and new compositions. Nine winning remixes will appear on a Crammed/ccMixter remix compilation, to be sold online through digital music stores.
       </p>
 
@@ -89,7 +91,7 @@ a { font-weight: bold; }
 			      <div style="display: block; text-align: center;"><a href="${root-url}fortminor/"><img src="${root-url}mixter-files/fmlogo.jpg" style="margin: 10px 10px 8px 0pt;" align="left" border="0" /></a></div>
 	<div style="float:right;border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center; width: 50%;">The contest is closed to new entries.</div>
 
-			      <p style="font-size: 12px; font-weight: normal;">
+			      <p style="font-size: 11px; font-weight: normal;">
 			      Creative Commons, Warner Bros. Records, and Machine Shop Recordings  are proud to present the Fort Minor Remix Contest. Fort Minor &mdash; the  hip-hop project led by Linkin Park's Mike Shinoda &mdash; is offering the  separated audio elements of "Remember the Name" online under a  Creative Commons BY-NC license, so that producers all over the world  can easily create new versions of the hit song. The winning remixer  will be awarded a new Technics SL-1200MK5 turntable, courtesy of  Warner Bros. Records and Machine Shop Recordings.
 			      </p>
 
