@@ -23,7 +23,7 @@ if( !defined('IN_CC_HOST') )
 
 CCevents::AddHandler( CC_EVENT_MAP_URLS, array( 'MixterContest', 'OnMapUrls' ) );
 
-CCEvents::AddHandler(CC_EVENT_APP_INIT,array( 'MixterContest', 'kill_fm'));
+CCEvents::AddHandler(CC_EVENT_APP_INIT,array( 'MixterContest', 'kill_crammed'));
 
 class MxSnapContestForm extends CCForm
 {
@@ -178,7 +178,7 @@ ccc()
 }
 END;
 
-        $tdir = "_final_entries/$contest/";
+        $tdir = "$outdir/$contest/";
 
         for( $i = 0; $i < $count; $i++ )
         {
@@ -221,7 +221,7 @@ END;
             $nn = "{$prefix}{$fid}.{$ext}";
             $total_size += ($F['file_rawsize'] / 1024);
             $shell_script .= "\nccc \"{$F['local_path']}\" ".
-                  "\"$outdir/$contest/$nn\"" ;
+                  '"' . $tdir . $nn . '"';
 
            $k = "<a href=\"$nn\">$fid</a>";
 
@@ -237,7 +237,7 @@ END;
         $shell_script .= "\n";
 
         $csv_name = "{$contest}_entries.csv";
-        $csv_path = "$outdir/$contest/$csv_name";
+        $csv_path = '/' . $tdir . $csv_name;
 
         $size = number_format( $total_size / 1024, 2 );
 
@@ -276,11 +276,11 @@ END;
         $target_dir = "$outdir/$contest";
         CCUtil::MakeSubDirs($target_dir,0777);
 
-        $index = "$outdir/$contest/index.htm";
-        $f = fopen($index,'w+');
+        $path_to_index = "$outdir/$contest/index.htm";
+        $f = fopen($path_to_index,'w+');
         fwrite($f,$page);
         fclose($f);
-        chmod($index,0777);
+        chmod($path_to_index,0777);
 
         $script = $contest . '_snap.sh';
         $f = fopen($script, 'w+');
@@ -288,39 +288,22 @@ END;
         fclose($f);
         chmod($script,0777);
 
-        $f = fopen($csv_name, 'w+');
+        $path_to_csv = "$outdir/$contest/$csv_name";
+        $f = fopen($path_to_csv, 'w+');
         fwrite($f,$csv);
         fclose($f);
-        chmod($csv_name,0777);
+        chmod($path_to_csv,0777);
 
-        $url = ccd($index);
+        $url = ccd($path_to_index);
         CCUtil::SendBrowserTo($url);
     }
 
-    function kill_fm()
+    function kill_crammed()
     {
-        if( !CCUser::IsAdmin() || empty($_GET['killfm']) )
+        if( !CCUser::IsAdmin() || empty($_GET['killcrammed']) )
             return;
 
         $data = array (
-                'userform3' => array (
-                    'enabled' => 1,
-                    'submit_type' => 'Crammed Discs Contest Entry',
-                    'text' => 'Submit an Entry in the Crammed Discs Remix Contest',
-                    'logo' => 'crammed-logo.gif',
-                    'help' => '<i>Only use this form if you want to enter the Crammed Discs contest.</i> Otherwise use the \'Remix\' form below. Entries will be accepted until May 24, 9 PM (PST). Please make sure to read the <b><a href="http://ccmixter.org/crammed/view/contest/rules">rules</a></b> because submissions that do not comply will be disqualified from the contest. Good luck!<p style="color:red">The Fort Minor contest is <b>over</b>.</p>',
-                    'tags' => 'media',
-                    'suggested_tags' => '',
-                    'weight' => 2,
-                    'form_help' => 'There is 10Mg limit on uploads.<br />
-    Please do not submit until you have read <a href="/terms"><b>our terms of use</b></a>.<br />
-    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.
-    <p style="color:red">The Fort Minor contest is <b>over</b>.</p>',
-                    'isremix' => '',
-                    'media_types' => '',
-                    'action' => 'http://ccmixter.org/crammed/view/contest/submit',
-                    'type_key' => 'userform3',
-                    ),
                 'remix' => array (
                     'enabled' => 1,
                     'submit_type' => 'Remix',
@@ -334,8 +317,7 @@ END;
                     'weight' => 5,
                     'form_help' => 'There is 10Mg limit on uploads.<br />
     Please do not submit until you have read <a href="/terms"><b>our terms of use</b></a>.<br />
-    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.
-    <p style="color:red">The Fort Minor contest is <b>over</b>.</p>',
+    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.',
                     'isremix' => 1,
                     'media_types' => 'audio',
                     'action' => '',
@@ -355,8 +337,7 @@ END;
                     'weight' => 10,
                     'form_help' => 'There is 10Mg limit on uploads.<br />
     Please do not submit until you have read <a href="/terms"><b>our terms of use</b></a>.<br />
-    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.
-    <p style="color:red">The Fort Minor contest is <b>over</b>.</p>',
+    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.',
                     'isremix' => '',
                     'media_types' => 'audio',
                     'action' => '',
@@ -376,8 +357,7 @@ END;
                     'weight' => 15,
                     'form_help' => 'There is 10Mg limit on uploads.<br />
     Please do not submit until you have read <a href="/terms"><b>our terms of use</b></a>.<br />
-    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.
-    <p style="color:red">The Fort Minor contest is <b>over</b>.</p>',
+    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.',
                     'isremix' => '',
                     'media_types' => 'audio,archive',
                     'action' => '',
@@ -426,7 +406,7 @@ END;
         $configs =& CCCOnfigs::GetTable();
         $configs->SaveConfig('submit_forms',$data,'media',false);
 
-        CCPage::Prompt('fm killed');
+        CCPage::Prompt('crammed killed');
     }
 
 }
