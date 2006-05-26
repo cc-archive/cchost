@@ -3,6 +3,15 @@
 	* index.php: Made the main screen more informative like wikipedia and
 	wordpress installs so people know how to configure their setup.
 
+	* ChangeLog: obvious notes update of what happened here
+
+	* Makefile: fixed some bugs
+	
+	* Makefile.dist: same here
+	
+	* cctemplates/page.xml: commented out the "Current Skin: XXX" so its
+	still in html, but not in bad location on the footer.
+
 2006-05-22     Victor Stone <fourstones@users.sourceforge.net>
 
      * cclib/cc-uploadapi.php 3313:
