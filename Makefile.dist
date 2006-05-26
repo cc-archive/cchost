@@ -62,4 +62,4 @@ clean:
 #$(APPNAME).1.bz2: $(APPNAME).man AUTHORS
 #	cat $(APPNAME).man AUTHORS | bzip2 -c > $(APPNAME).1.bz2
 
-.PHONY: all install uninstall clean
+.PHONY: all install uninstall uninstall-all clean

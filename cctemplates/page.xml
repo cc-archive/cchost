@@ -190,7 +190,8 @@ $Id$
           <div class="cc_rbtop"><div></div></div>
           <div class="cc_rbcontent">
             <div class="cc_tinytext">${site-license} ${footer}  
-               <span style="float:right">Current skin: ${skin}</span></div>
+            <!-- <span style="float:right">Current skin: ${skin}</span>-->
+	    </div>
           </div><!-- /cc_rbcontent -->
           <div class="cc_rbbot"><div></div></div>
         </div><!-- /cc_rbroundbox -->

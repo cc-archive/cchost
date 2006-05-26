@@ -159,5 +159,5 @@ test:
 	@echo "MAN1DIR: $(MAN1DIR)"
 	@echo "INSTALL: $(INSTALL)"
 
-.PHONY: all install uninstall clean distprep distclean rpm srpm rpms deb zip dist tarball bzip test
+.PHONY: all install uninstall clean distprep distclean rpm srpm rpms deb zip dist tarball bzip test distclean-max-snapshots dist-datetime bzip-datetime tarball-datetime zip-datetime dist-sign-all rpms-sign bzip-sign tarball-sign zip-sign press
 

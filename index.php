@@ -24,7 +24,9 @@ if( !file_exists('cc-config-db.php') )
     die('<html><body>ccHost has not been properly installed</body></html>');
 
 if( file_exists('ccadmin') )
-    die('<html><body>ccHost Installation is not complete.</body></html>');
+    die('<html><body>ccHost Installation is not complete. ' . 
+        'Please <a href="/ccadmin/">follow these steps</a> for a successful ' . 
+	'setup.</body></html>');
 
 define('IN_CC_HOST', true);
 

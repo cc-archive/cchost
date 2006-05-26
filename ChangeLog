@@ -1,3 +1,8 @@
+2006-05-26  Jon Phillips   <kidproto@users.sourceforge.net>
+
+	* index.php: Made the main screen more informative like wikipedia and
+	wordpress installs so people know how to configure their setup.
+
 2006-05-22     Victor Stone <fourstones@users.sourceforge.net>
 
      * cclib/cc-uploadapi.php 3313:
@@ -123,8 +128,9 @@
 
 2006-04-24     Victor Stone <fourstones@users.sourceforge.net>
 
-     * cclib/cc-feeds.php 3267:
-         added title to PodcastPage so iTunes will treat each instance differently
+	* cclib/cc-feeds.php 3267:
+	added title to PodcastPage so iTunes will treat each instance 
+	differently
      * cclib/cc-filetagger.php 3269:
      * cclib/cc-macro.php 3269:
      * cclib/cc-user.php 3269:
