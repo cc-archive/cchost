@@ -146,7 +146,6 @@ class CCNotifyAPI
         }
         $current_notifications = $notifications->QueryRow($args);
         
-                              
         $form = new CCEditUserNotificationForm($fields);
 
         if( !empty($_POST['editusernotification']) )
@@ -294,21 +293,28 @@ This is a notification that "%s" has been reviewed by %s
         // this shouldn't happen in today's code
         // but there's no reason to break tomorrows...
 
-        if( empty($C) || ($C['topic_type'] != 'review') )
+        if( empty($C) )
             return;
 
-        // $C should be pointing to a review at this point
-        // let's add the person that uploaded the thing
+        if( !empty($C['topic_upload']) )
+        {
+            // $C should be pointing to a post at this point
+            // let's add the person that uploaded the thing
 
-        $uploads =& CCUploads::GetTable();
-        $uploader = $uploads->QueryItemFromKey('upload_user', $C['topic_upload']);
-        if( $uploader != $this_poster )
-            $posters[] = $uploader;
+            $uploads =& CCUploads::GetTable();
+            $uploader = $uploads->QueryItemFromKey('upload_user', $C['topic_upload']);
+            if( $uploader != $this_poster )
+                $posters[] = $uploader;
+        }
 
         // Do any of the participants even want to
         // get notified about replies?
         //
         $posters = array_unique($posters);
+
+        if( empty($posters) )
+            return;
+
         $wq = array();
         foreach( $posters as $poster )
         {
@@ -326,9 +332,18 @@ This is a notification that "%s" has been reviewed by %s
 
         // Do the notifications
         //
-        $reviews =& CCReviews::GetTable();
-        $review_rec = $reviews->GetRecordFromRow($C);
-        $url = $review_rec['topic_permalink'];
+        if( $C['topic_type'] == 'review' )
+        {
+            $reviews =& CCReviews::GetTable();
+            $topic_rec = $reviews->GetRecordFromRow($C);
+        }
+        else
+        {
+            $topic_rec = $topics->GetRecordFromRow($C);
+            $topic_rec['topic_permalink'] = ccl('thread',$C['topic_thread']) . '#' . $C['topic_id'];
+        }
+
+        $url = $topic_rec['topic_permalink'];
 
         $subject = 'Topic Reply Notification';
         $body = cct('

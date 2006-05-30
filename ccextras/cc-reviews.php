@@ -403,6 +403,10 @@ class CCReview
         $row['topic_permalink'] = ccl('reviews', $remixer, $upload_id. '#' . 
                                          $row['topic_id'] );
 
+        $row['user_post_count'] = $row['user_num_reviews'];
+        $row['user_post_text']  = cct('Reviews');
+        $row['user_post_url']   = ccl( 'reviews', $row['user_name'] ) . '?qtype=leftby';
+
         if( $this->_can_review($upload_id) )
         {
             $row['commands']['new_review'] = 

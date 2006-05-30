@@ -31,6 +31,12 @@ $Id$
     dl_popup_script string:upload_misc.xml/dl_popup_script;
     dl_edit_ratings string:upload_misc.xml/dl_edit_ratings;
     edit_files_links string:misc.xml/edit_files_links;
+    forum_admin string:forums.xml/forum_admin;
+    forum_index string:forums.xml/forum_index;
+    forum_listing string:forums.xml/forum_listing;
+    forum_search_results string:forums.xml/forum_search_results;
+    forum_topic string:forums.xml/forum_topic;
+    forum_user string:forums.xml/forum_user;
     grow_textarea_script string:form.xml/grow_textarea_script;
     howididit string:misc.xml/howididit;
     howididit_browse string:misc.xml/howididit_browse;

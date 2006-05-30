@@ -13,7 +13,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -25,6 +25,7 @@
 	font-style: italic;
 	float:left;
 	white-space: nowrap;
+	color: #555;
 }
 
 .cc_topic_reviewer {
@@ -137,4 +138,104 @@
 
 .cc_topic_left {
   float: right;
+}
+
+.cc_topic_reply_count {
+	text-align: center;
+	color: green;
+}
+
+
+.cc_forum_short td {
+  padding: 2px;
+}
+
+.cc_forum_short td span {
+  font-style: italic;
+  color: #777;
+}
+
+.cc_forum_short td a {
+  font-weight: bold;
+}
+
+
+.cc_forum_index  {
+	font-family: Verdana;
+	font-size: 11px;
+	width: 85%;
+}
+
+.cc_forum_index td {
+	vertical-align: top;
+}
+
+.cc_forum_index  .cc_forum_name {
+   padding-left: 40px;
+}
+
+.cc_forum_index  .cc_forum_description {
+   padding-bottom: 20px;
+   font-weight: normal;
+   font-size: 11px;
+   font-family: Verdana;
+}
+
+
+.cc_forum_group_name {
+   margin: 20px 0px 4px 0px;
+   padding: 4px;
+   text-align: left;
+   font-size: 14px;
+   color: #444;
+   letter-spacing: 0.2em;
+   border-top: 1px #bbb solid;
+   border-left: 1px #bbb solid;
+   border-bottom: 1px #333 solid;
+   border-right: 1px #333 solid;
+
  }
+
+.cc_forum_col_head {
+	font-size: 9px;
+	font-weight: normal;
+	color: #888;
+}
+
+.cc_forum_index .cc_forum_name {
+	width: 45%;
+   padding-top: 6px;
+   font-size: 12px;
+   font-weight: bold;
+ }
+
+.cc_forum_cmds {
+	
+}
+
+.cc_forum_latest_reply {
+   display: block;
+   background: no-repeat url('ccmixter/goto-topic.gif') left top;
+   padding-left: 22px;
+}
+
+.cc_forum_listing {
+	margin: 5px 0px 0px 7px;
+	width: 90%;
+}
+
+.cc_forum_listing .cc_topic_name {
+	font-variant: small-caps;
+	font-weight: bold;
+}
+
+.cc_forum_listing td {
+  vertical-align: top;
+  border-top: 1px solid #CCC;
+  padding: 4px 4px 13px 4px;
+}
+
+.cc_forum_listing th {
+  vertical-align: bottom;
+  padding: 0px 4px 13px 4px;
+}

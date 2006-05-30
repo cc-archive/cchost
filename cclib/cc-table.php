@@ -46,6 +46,7 @@ class CCTable
     var $_extra_columns;
     var $_order;
     var $_direction;
+    var $_group_on;
     /** 
     * Debug
     */
@@ -128,6 +129,16 @@ class CCTable
     function GroupOnKey($on=true)
     {
         $this->_group_on_key = $on;
+    }
+
+    /**
+    * Generate a GROUP ON for a given column
+    *
+    * @param string $column Column to group on
+    */
+    function GroupOn($column)
+    {
+        $this->_group_on = $column;
     }
 
     /**
@@ -431,6 +442,8 @@ class CCTable
             $extra = ',' . implode(',',$this->_extra_columns);
         $join = implode(' ', $this->_joins);
         $group = $this->_group_on_key ? "\nGROUP BY " . $this->_key_field : '';
+        if( empty($group) && $this->_group_on )
+            $group = "\nGROUP BY " . $this->_group_on;
         $sql = "SELECT $columns $extra \nFROM $this->_table_name \n $join \n $where $group \n $order";
 
         $this->_add_offset_limit($sql);
@@ -475,6 +488,28 @@ class CCTable
     {
         $sql = $this->_get_select($where,$column_name);
         return( CCDatabase::QueryItem($sql) );
+    }
+
+    /**
+    * Return an array of a single item.
+    * 
+    * <code>
+    * $where['user_location'] = 'berkeley';
+    * $names = $table->QueryItems('user_name', $where );
+    * foreach( $names as $name )
+    * {
+    *    // ...
+    * }
+    * </code>
+    * 
+    * @param string $column_name Name of table's column
+    * @param mixed $where string or array representing WHERE clause
+    * @return array $items Items from database 
+    */
+    function QueryItems($column_name,$where)
+    {
+        $sql = $this->_get_select($where,$column_name);
+        return CCDatabase::QueryItems($sql);
     }
 
     /**

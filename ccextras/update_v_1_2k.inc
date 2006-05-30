@@ -48,14 +48,17 @@ CREATE TABLE cc_tbl_topics
       topic_upload     int(11) unsigned  NOT NULL,
       topic_user       int(11) unsigned  NOT NULL,
       topic_views      int(11) unsigned  NOT NULL,
-      topic_type       varchar(100) NOT NULL default '',
-      topic_date       datetime        NOT NULL,
-      topic_edited     datetime        NOT NULL,
-      topic_deleted    int(2) unsigned  NOT NULL,
+      topic_type       varchar(100)      NOT NULL default '',
+      topic_date       datetime          NOT NULL,
+      topic_edited     datetime          NOT NULL,
+      topic_deleted    int(2) unsigned   NOT NULL,
 
-      topic_name         mediumtext       NOT NULL default '',
-      topic_text         mediumtext       NOT NULL default '',
-      topic_tags         mediumtext       NOT NULL default '',
+      topic_name       mediumtext       NOT NULL default '',
+      topic_text       mediumtext       NOT NULL default '',
+      topic_tags       mediumtext       NOT NULL default '',
+
+      topic_forum      int(6) unsigned  NOT NULL,
+      topic_thread     int(11) unsigned  NOT NULL,
 
       PRIMARY KEY topic_id (topic_id)
     )

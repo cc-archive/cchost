@@ -27,12 +27,147 @@ class CCImportPhpBBReviews
 {
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('reviews','import'),  
-                          array( 'CCImportPhpBBReviews', 'Import'),  
+        CCEvents::MapUrl( ccp('phpbb2','import'),  
+                          array( 'CCImportPhpBBReviews', 'DoPhpBBImport'),  
                           CC_ADMIN_ONLY);
 
     }
-    function Import($phase)
+
+    function DoPhpBBImport($phase)
+    {
+        if( $phase == 1 )
+            $this->_import_1();
+        elseif( $phase == 2 )
+            $this->_import_2();
+    }
+
+    function _import_2()
+    {
+    }
+
+    function _import_1()
+    {
+        $topics =& CCTopics::GetTable();
+        $threads =& CCForumThreads::GetTable();
+        $forums =& CCForum::GetTable();
+        $forumgroups =& CCForumGroups::GetTable();
+        
+        $threads->DeleteWhere('1');
+        $forums->DeleteWhere('1');
+        $forumgroups->DeleteWhere('1');
+
+        $forumx[1] = 2; // help
+        $forumx[2] = 4; // bugs
+        $forumx[3] = 6; // features
+        $forumx[4] = 1; // announcements
+        // 5 reviews
+        $forumx[7] = 7; // diy
+        $forumx[8] = 3; // off topic
+        $forumx[9] = 8; // pluggy
+
+        $sql[] = "INSERT INTO `cc_tbl_forum_groups` VALUES (3, 'The Site', 1)";
+        $sql[] = "INSERT INTO `cc_tbl_forum_groups` VALUES (4, 'The Music', 2)";
+        $sql[] = "INSERT INTO `cc_tbl_forum_groups` VALUES (5, 'Off Beats', 10)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (1, 8, 4, 1, 'Announcements', 'Messages from the admins', 3)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (2, 1, 4, 2, 'Help', 'get aid', 3)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (3, 1, 4, 3, 'The Big OT', 'off topic stuff', 5)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (4, 1, 1, 5, 'Bugs', 'Report bugs here', 3)";
+//      $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (5, 8, 4, 1, 'Reviews', 'always constructive, riiiiiigggght', 4)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (6, 1, 4, 9, 'Features', 'request and talk about features', 3)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (7, 1, 4, 2, 'DIY', 'tips etc.', 4)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (8, 1, 4, 11, 'Pluggy Plugs', 'plug thyself', 5)";
+        $sql[] = 'DELETE FROM phpbb_topics WHERE forum_id = 5';
+        $sql[] = 'DELETE FROM cc_tbl_topics WHERE topic_forum > 0';
+
+        CCDatabase::Query($sql);
+
+        $sql = 'SELECT * FROM phpbb_topics';
+        $qr = mysql_query($sql);
+
+
+        while( $topic = mysql_fetch_array($qr) )
+        {
+            $tid = $topic['topic_id'];
+
+            $sql =<<<EOF
+SELECT p.post_id, post_time, mu.user_id, post_text
+FROM phpbb_posts p
+JOIN phpbb_posts_text t ON p.post_id = t.post_id
+JOIN phpbb_users pu ON poster_id = pu.user_id
+JOIN cc_tbl_user mu ON pu.username = mu.user_name
+WHERE p.topic_id = $tid
+ORDER BY post_time
+EOF;
+
+            $rows = CCDatabase::QueryRows($sql);
+
+            $P =& $rows[0];
+
+            $parent_topic = $topics->NextID();
+            $thread_id    = $threads->NextID();
+
+            $R = array();
+            $R['topic_id']     = $parent_topic;
+            $R['topic_user']   = $P['user_id'];
+            $R['topic_date']   = date('Y-m-d H:i:s', $P['post_time']);
+            $R['topic_text']   = $this->convert_text($P['post_text']);
+            $R['topic_forum']  = $forumx[ $topic['forum_id'] ];
+            $R['topic_thread'] = $thread_id;
+            $R['topic_name']   = $topic[ 'topic_title' ];
+            $R['topic_type']   = 'forum';
+            $R['topic_top']    = $parent_topic;
+            $topics->Insert($R);
+
+            $T = array();
+            $T['forum_thread_id'] = $thread_id;
+            $T['forum_thread_oldest'] = 
+            $T['forum_thread_newest'] = $parent_topic;
+            $T['forum_thread_date'] = $R['topic_date'];
+            $T['forum_thread_user'] = $R['topic_user'];
+            $T['forum_thread_forum'] = $R['topic_forum'];
+
+            $count = count($rows);
+            for( $n = 1; $n < $count; $n++ )
+            {
+                $P =& $rows[$n];
+                $child_topic = $topics->NextID();
+                $R = array();
+                $R['topic_id']    = $child_topic;
+                $R['topic_user']  = $P['user_id'];
+                $R['topic_date']  = date('Y-m-d H:i:s', $P['post_time']);
+                $R['topic_text']  = $this->convert_text($P['post_text']);
+                $R['topic_forum'] = $forumx[ $topic['forum_id'] ];
+                $R['topic_thread'] = $thread_id;
+                $R['topic_name']  = 'Reply to "' . $topic[ 'topic_title' ] . '"';
+                $R['topic_type']  = 'reply';
+                $R['topic_top']   = $parent_topic;
+                $topics->Insert($R);
+                CCTopic::Sync( $parent_topic, $child_topic );
+
+                if( $R['topic_date'] > $T['topic_date'] )
+                {
+                    $T['forum_thread_newest'] = $R['topic_id'];
+                    $T['forum_thread_date']   = $R['topic_date'];
+                }
+            }
+
+            $threads->Insert($T);
+        }
+
+        $sql =<<<END
+SELECT topic_user AS user_id, count( * ) AS user_num_posts
+FROM `cc_tbl_topics`
+WHERE topic_thread > 0 AND topic_user > 0
+GROUP BY topic_user
+END;
+
+        $users =& CCUsers::GetTable();
+        $updates = CCDatabase::QueryRows($sql);
+        foreach( $updates as $update )
+            $users->Update($update);
+    }
+
+    function ImportReviews($phase)
     {
         if( $phase == 1 )
         {

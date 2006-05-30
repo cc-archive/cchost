@@ -41,7 +41,7 @@ define('CCTDF_DEEP', 'deep');
 
 define('CC_MAX_TOPIC_FEED_ITEMS', 30 );
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCTopic',  'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCTopic',  'OnMapUrls'));
 
 class CCTopicsFeed extends CCFeed
 {
@@ -77,11 +77,21 @@ class CCConfirmTopicDeleteForm extends CCForm
 
 class CCTopicForm extends CCSecurityVerifierForm
 {
-    function CCTopicForm($label_text,$submit_text)
+    function CCTopicForm($label_text,$submit_text,$visible_title = false)
     {
         $this->CCSecurityVerifierForm();
 
-        $fields = array( 
+        $fields = array();
+
+        if( $visible_title )
+        {
+            $fields['topic_name'] = array(
+                            'label'       => cct('Title'),
+                            'formatter'   => 'textedit',
+                            'flags'      => CCFF_REQUIRED | CCFF_POPULATE);
+        }
+
+        $fields += array( 
                     'topic_text' => array(
                             'label'       => $label_text,
                             'formatter'   => 'textarea',
@@ -200,13 +210,28 @@ class CCTopics extends CCTable
     {
         $this->_attach_user($row);
 
+        if( $row['topic_thread'] )
+        {
+            // these are overrwritten by reviews
+            $row['topic_permalink'] = ccl('thread', $row['topic_thread'] ) . 
+                                        '#' . $row['topic_id'];
+        }
+
+        if( $row['user_id'] )
+        {
+            // these are overrwritten by reviews
+            $row['user_post_count'] = $row['user_num_posts'];
+            $row['user_post_text']  = cct('Posts');
+            $row['user_post_url']   = ccl( 'forums', 'people', $row['user_name'] );
+        }
+
         CCEvents::Invoke(CC_EVENT_TOPIC_ROW,array(&$row) );
 
         if( isset($row['topic_is_feed']) )
         {
             $time = strtotime($row['topic_date']);
-            $row['atom_pubdate'] = CCUtil::FormatDate(CC_RFC3339_FORMAT,$time);
-            $row['rss_pubdate']  = CCUtil::FormatDate(CC_RFC822_FORMAT,$time);
+            $row['atom_pubdate'] = CCUtil::FormatDate( CC_RFC3339_FORMAT, $time );
+            $row['rss_pubdate']  = CCUtil::FormatDate( CC_RFC822_FORMAT,  $time );
         }
         else
         {
@@ -288,8 +313,9 @@ END;
         $users = CCUsers::GetTable();
         for( $i = 0; $i < $count; $i++ )
         {
-            $this->GetRecordFromRow($rows[$i]);
-            $this->GetTree($rows[$i]);
+            $R =& $rows[$i];
+            $this->GetRecordFromRow($R);
+            $this->GetTree($R);
         }
 
         $record['topic_children'] = $rows;
@@ -369,6 +395,7 @@ class CCTopicTree extends CCTable
 
 }
 
+
 class CCTopic
 {
     function Reply($topic_id,$is_quote = false)
@@ -434,12 +461,24 @@ class CCTopic
         {
             $form->GetFormValues($values);
             $next_id = $topics->NextID();
-            $values['topic_id']   = $next_id;
-            $values['topic_date'] = date('Y-m-d H:i:s',time());
-            $values['topic_user'] = CCUser::CurrentUser();
-            $values['topic_type'] = 'reply';
+            $values['topic_id']    = $next_id;
+            $values['topic_date']  = date('Y-m-d H:i:s',time());
+            $values['topic_user']  = CCUser::CurrentUser();
+            $values['topic_type']  = 'reply';
+            $values['topic_forum'] = $record['topic_forum'];
+            $values['topic_thread'] = $record['topic_thread'];
+            $values['topic_top']   = $record['topic_top'];
             $topics->Insert($values);
             $this->Sync($topic_id,$next_id);
+
+            if( !empty($values['topic_thread']) )
+            {
+                $threads =& CCForumThreads::GetTable();
+                $tvalues['forum_thread_id']   = $record['topic_thread'];
+                $tvalues['forum_thread_newest'] = $next_id;
+                $tvalues['forum_thread_date'] = $values['topic_date'];
+                $threads->Update($tvalues);
+            }
 
             CCEvents::Invoke( CC_EVENT_TOPIC_REPLY, array( &$values, &$record ) );
 

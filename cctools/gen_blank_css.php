@@ -32,6 +32,7 @@ $files = array(
                 "cctemplates/contest.xml",
                 "cctemplates/custom.xml",
                 "cctemplates/form.xml",
+                "cctemplates/forums.xml",
                 "cctemplates/license.xml",
                 "cctemplates/misc.xml",
                 "cctemplates/page.xml",

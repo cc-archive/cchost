@@ -154,8 +154,8 @@ $Header$
       </tr>
       <tr>
          <td rowspan="2" class="cc_topic_avatar">        
-             <div class="cc_review_count" tal:condition="topic/user_num_reviews"> <a 
-                 href="${home-url}reviews/${topic/user_name}?qtype=leftby">${topic/user_num_reviews} <span tal:content="php: CC_lang('Reviews');" /></a></div><a 
+             <div class="cc_review_count" tal:condition="topic/user_post_count"> <a 
+                 href="${topic/user_post_url">${topic/user_post_count} ${topic/user_post_text}</a></div><a 
                  tal:condition="topic/user_avatar_url" href="${topic/artist_page_url}"><img 
                  src="${topic/user_avatar_url}" /></a>
                  <div class="cc_topic_admin" 
