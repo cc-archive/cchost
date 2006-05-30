@@ -115,7 +115,6 @@ EOF;
             $R['topic_thread'] = $thread_id;
             $R['topic_name']   = $topic[ 'topic_title' ];
             $R['topic_type']   = 'forum';
-            $R['topic_top']    = $parent_topic;
             $topics->Insert($R);
 
             $T = array();
