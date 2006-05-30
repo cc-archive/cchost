@@ -467,7 +467,7 @@ class CCTopic
             $values['topic_type']  = 'reply';
             $values['topic_forum'] = $record['topic_forum'];
             $values['topic_thread'] = $record['topic_thread'];
-            $values['topic_top']   = $record['topic_top'];
+            // $values['topic_top']   = $record['topic_top'];
             $topics->Insert($values);
             $this->Sync($topic_id,$next_id);
 
