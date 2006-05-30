@@ -18,6 +18,34 @@
 *
 */
 
+/**
+*
+* How to close a contest:
+*
+* 1. Edit the method kill_(contest_name) to reflect the current
+*    submit forms. (HINT: use http://ccmixter.org/media/export to
+*    get the current submit forms config, cut and paste the 'submitforms'
+*    section into the method, then edit so it's current.)
+* 
+* 2. Go to http://ccmixter.org?kill(contest_name)=1
+*
+* 3. Go to http://ccmixter.org/media/contest/snap
+*
+* 4. Fill out the form, hit submit. This step might take a while
+*    depending on how many entries in the contest. You should end
+*    up at the home page for the final entries. Note the URL, this
+*    what you give to whoever is picking up the entries.
+*
+* 5. Open a shell and go to mixter's web root directory. Execute
+*    the shell script called (contest_name)_snap.sh This step will 
+*    copy all the entries from the upload directory to the final
+*    entries so it might take a while.
+*
+* 6. To remove the artist's name and track name from the mp3s go to:
+*    http://ccmixter.org/media/contest/tagentries/(contest_name)
+*
+* 
+*/
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
