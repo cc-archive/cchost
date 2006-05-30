@@ -1,3 +1,39 @@
+2006-05-30     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-lib/mixter-contest.php 3340:
+         doc how to close a contest
+     * cctools/apidocsym 3341:
+         no longer using this dir for docs
+     * mixter-files/fortminor_mike2.jpg 3342:
+         straggling fort minor image
+     * mixter-files/crammed_small_apollo.jpg 3343:
+         crammed
+     * ccextras/cc-forums-admin.inc 3344:
+     * ccextras/cc-forums-search.inc 3344:
+     * ccextras/cc-forums.inc 3344:
+     * ccextras/cc-forums.php 3344:
+     * ccextras/cc-notify.inc 3344:
+     * ccextras/cc-reviews.php 3344:
+     * ccextras/cc-topics.php 3344:
+     * ccextras/update_v_1_2k.inc 3344:
+     * ccextras/update_v_3_0c.inc 3344:
+     * cclib/cc-table.php 3344:
+     * cctemplates/forums.xml 3344:
+     * cctemplates/skin-blank-map.xml 3344:
+     * cctemplates/skin-blank.css 3344:
+     * cctemplates/skin-simple-topics.css 3344:
+     * cctemplates/topics.xml 3344:
+     * cctools/gen_blank_css.php 3344:
+     * mixter-lib/mixter-import-phpBB2.php 3344:
+         feature: forums stage 1 (phpbb2 replacement)
+     * ccextras/cc-topics.php 3345:
+         bugfix: replies were broken by last checkin
+
+2006-05-28     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccextras/cc-stats.php 3339:
+         crammed contest stuff
+
 2006-05-26  Jon Phillips   <kidproto@users.sourceforge.net>
 
 	* index.php: Made the main screen more informative like wikipedia and
