@@ -106,7 +106,7 @@ class CCForumsSearchAPI
         $topics->SetOffsetAndLimit(0,NUM_TOPICS_RESULTS_PER_PAGE);
         $mask = CCMenu::GetAccessMask();
         $filter .= "AND (topic_forum > 0) AND (forum_read_access & $mask)";
-        CCDebug::PrintVar($filter);
+        //CCDebug::PrintVar($filter);
         $results =& $topics->GetRecords($filter);
         $count = count($results);
 
