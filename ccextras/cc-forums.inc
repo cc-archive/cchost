@@ -409,8 +409,16 @@ EOF;
         $mask = CCMenu::GetAccessMask();
         if( ($mask & $forum_row['forum_read_access']) == 0 )
         {
-            // hack attempt
-            exit;
+            if( ($forum_row['forum_read_access'] & CC_ADMIN_ONLY) != 0 )
+                $msg = cct('You must have admin rights to see this forum');
+            elseif( ($forum_row['forum_read_access'] & CC_MUST_BE_LOGGED_IN) != 0 )
+                $msg = cct('You must be logged in to see this forum');
+            else
+                $msg = cct('You do have proper permissions to see this forum');
+
+            CCPage::SetTitle(cct('Restricted Access'));
+            CCPage::Prompt($msg);
+            return;
         }
 
         $commands = array();
