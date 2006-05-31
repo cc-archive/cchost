@@ -459,6 +459,11 @@ class CCTopic
         }
         else
         {
+            $replang = cct('Reply');
+            if( strstr($record['topic_name'],$replang) === false )
+                $name = sprintf( '%s (%s)', $record['topic_name'], $replang );
+            else
+                $name = $record['topic_name'];
             $form->GetFormValues($values);
             $next_id = $topics->NextID();
             $values['topic_id']    = $next_id;
@@ -467,6 +472,7 @@ class CCTopic
             $values['topic_type']  = 'reply';
             $values['topic_forum'] = $record['topic_forum'];
             $values['topic_thread'] = $record['topic_thread'];
+            $values['topic_name']   = $name;
             // $values['topic_top']   = $record['topic_top'];
             $topics->Insert($values);
             $this->Sync($topic_id,$next_id);

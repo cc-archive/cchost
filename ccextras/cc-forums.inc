@@ -537,8 +537,22 @@ EOF;
         }
 
         $access = CC_DONT_CARE_LOGGED_IN;
-        $where = "($where) AND (forum_read_access & $access)";
+        //$where = "($where) AND (forum_read_access & $access)";
         $records = $topics->GetRecords($where);
+        $count = count( $records );
+        for( $i = 0; $i < $count; $i++ )
+        {
+            $R =& $records[$i];
+
+            if( ($R['forum_read_access'] & CC_DONT_CARE_LOGGED_IN) == 0 )
+            {
+                $R['topic_text'] = 
+                $R['topic_text_plain'] = 
+                $R['topic_text_html'] = cct('Contents requires login');
+            }
+
+            $R['topic_name'] = $R['forum_name'] . '::' . $R['topic_name'];
+        }
 
         if( $type )
             $url = ccl('feed','rss','forums',$type,$param);
