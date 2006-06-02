@@ -14,14 +14,14 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCImportPhpBBReviews', 'OnMapUrls'));
+//CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCImportPhpBBReviews', 'OnMapUrls'));
 
 class CCImportPhpBBReviews
 {
@@ -35,6 +35,13 @@ class CCImportPhpBBReviews
 
     function DoPhpBBImport($phase)
     {
+        // nop
+    }
+
+    function _historical_do_phpbb_import();
+    {
+        $phase = 0;
+
         if( $phase == 1 )
             $this->_import_1();
         elseif( $phase == 2 )
