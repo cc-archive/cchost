@@ -38,7 +38,7 @@ class CCImportPhpBBReviews
         // nop
     }
 
-    function _historical_do_phpbb_import();
+    function _historical_do_phpbb_import()
     {
         $phase = 0;
 
