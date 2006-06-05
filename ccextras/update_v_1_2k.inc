@@ -80,19 +80,10 @@ END;
         $this->_check_for_field('cc_tbl_user','user_num_reviews',  'INT(7) unsigned');
         $this->_check_for_field('cc_tbl_user','user_num_reviewed', 'INT(7) unsigned');
 
-        $this->_do_phpbb_migrate();
-
         CCPage::Prompt("Reviews installed");
         CCMenu::KillCache();
     }
 
-    function _do_phpbb_migrate()
-    {
-        global $CC_GLOBALS;
-
-        if( empty($CC_GLOBALS['phpbb2_enabled']) )
-            return;
-    }
 }
 
 ?>

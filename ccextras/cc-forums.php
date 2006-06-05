@@ -101,7 +101,7 @@ class CCForumThreads extends CCTable
     function CCForumThreads()
     {
         $this->CCTable('cc_tbl_forum_threads','forum_thread_id');
-        $this->SetSort('forum_thread_date','DESC');
+        $this->SetSort('forum_thread_sticky DESC, forum_thread_date', 'DESC');
     }
 
     function & GetTable()

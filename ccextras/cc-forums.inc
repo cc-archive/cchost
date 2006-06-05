@@ -379,7 +379,8 @@ EOF;
         global $CC_GLOBALS;
 
         $threads =& CCForumThreads::GetTable();
-        $topic_id = $threads->QueryItemFromKey('forum_thread_oldest',$thread_id);
+        $thread_row = $threads->QueryKeyRow($thread_id);
+        $topic_id = $thread_row['forum_thread_oldest'];
 
         $topics =& CCTopics::GetTable();
         $row = $topics->GetRecordFromID($topic_id);
@@ -412,13 +413,32 @@ EOF;
         $commands = array();
         if( ($mask & $forum_row['forum_post_access']) != 0 )
         {
-            $commands[] = array( 'url' => ccl('topics','reply',$topic_id) . '#edit',
-                                 'text' => cct('Post topic reply' ) );
+            $closed = $thread_row['forum_thread_closed'];
+
+            if( $closed )
+            {
+                $commands[] = array( 'url' => 0, 'msg' => cct('Thread is closed to new comments') );
+            }
+            else
+            {
+                $commands[] = array( 'url' => ccl('topics','reply',$topic_id) . '#edit',
+                                 'text' => cct('Post topic reply' ), 'msg' => 0 );
+            }
 
             if( CCUser::IsAdmin() )
             {
                 $commands[] = array( 'url' => ccl('admin','forums', 'move', $thread_id ),
-                                     'text' => cct('Move thread' ) );
+                                     'text' => cct('Move thread' ), 'msg' => 0  );
+
+                $ctext = $closed ? cct('Open') : cct('Close');
+
+                $commands[] = array( 'url' => ccl('admin','forums', 'close', $thread_id ),
+                                     'text' => $ctext, 'msg' => 0  );
+
+                $ctext = $thread_row['forum_thread_sticky'] ? cct('Unstick') : cct('Stick');
+
+                $commands[] = array( 'url' => ccl('admin','forums', 'stick', $thread_id ),
+                                     'text' => $ctext, 'msg' => 0  );
             }
         }
 

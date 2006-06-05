@@ -86,6 +86,8 @@ CREATE TABLE cc_tbl_forum_threads
       forum_thread_newest     int(11) unsigned  NOT NULL,
       forum_thread_date       datetime        NOT NULL,
       forum_thread_extra      mediumtext NOT NULL default '',
+      forum_thread_sticky     int(2) unsigned  NOT NULL,
+      forum_thread_closed     int(2) unsigned  NOT NULL,
 
       PRIMARY KEY forum_thread_id (forum_thread_id)
     )
@@ -94,9 +96,9 @@ END;
 
         CCDatabase::Query($sql);
 
-        $this->_check_for_field('cc_tbl_topics', 'topic_forum',  'INT(6) unsigned');
-        $this->_check_for_field('cc_tbl_topics', 'topic_thread',  'INT(11) unsigned');
-        $this->_check_for_field('cc_tbl_user',   'user_num_posts',  'INT(11) unsigned');
+        $this->_check_for_field('cc_tbl_topics', 'topic_forum',    'INT(6) unsigned');
+        $this->_check_for_field('cc_tbl_topics', 'topic_thread',   'INT(11) unsigned');
+        $this->_check_for_field('cc_tbl_user',   'user_num_posts', 'INT(11) unsigned');
 
         CCPage::Prompt("Forums installed");
         CCMenu::KillCache();

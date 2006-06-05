@@ -55,7 +55,6 @@ class CCForumAddForm extends CCForm
                     'label'     => 'Post Access',
                     'formatter' => 'select',
                     'options'   => array(
-                             CC_DONT_CARE_LOGGED_IN => 'Everyone',
                              CC_MUST_BE_LOGGED_IN   => 'Registered Users',
                              CC_ADMIN_ONLY          => 'Admins Only'
                              ),
@@ -206,8 +205,43 @@ class CCForumsAdmin
         return $options;
     }
 
+    function _stick_thread($thread_id)
+    {
+        $threads =& CCForumThreads::GetTable();
+        $a['forum_thread_id'] = $thread_id;
+        $a['forum_thread_sticky'] = 'forum_thread_sticky ^ 1';
+        $threads->Update($a,false);
+        CCPage::SetTitle(cct('Change Thread Sticky Flag'));
+        $url = ccl('thread',$thread_id);
+        CCPage::Prompt("Sticky status changed for thread. Go <a href=\"$url\">back to thread</a>");
+    }
+
+    function _close_thread($thread_id)
+    {   
+        $threads =& CCForumThreads::GetTable();
+        $a['forum_thread_id'] = $thread_id;
+        $a['forum_thread_closed'] = 'forum_thread_closed ^ 1';
+        $threads->Update($a,false);
+        CCPage::SetTitle(cct('Change Thread Open Status'));
+        $url = ccl('thread',$thread_id);
+        CCPage::Prompt("Open status changed for thread. Go <a href=\"$url\">back to thread</a>");
+    }
+
+
     function Admin($param1,$param2,$param3)
     {
+        if( $param1 == 'stick' )
+        {
+            $this->_stick_thread($param2);
+            return;
+        }
+
+        if( $param1 == 'close' )
+        {
+            $this->_close_thread($param2);
+            return;
+        }
+
         $forums = new CCForum();
         $groups = $this->_groups_options();
 
