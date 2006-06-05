@@ -1,3 +1,46 @@
+2006-06-05     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccadmin/cc-install-db.php 3371:
+         update: forums and notifications install
+     * ccextras/cc-forums-admin.inc 3372:
+     * ccextras/cc-forums.inc 3372:
+     * ccextras/cc-forums.php 3372:
+     * ccextras/update_v_1_2k.inc 3372:
+     * ccextras/update_v_3_0c.inc 3372:
+         feature: forum sticky and comments close
+     * cctemplates 3373:
+     * cctemplates/ccmixter/dright-arrow.gif 3373:
+     * cctemplates/forums.xml 3373:
+     * cctemplates/skin-simple-topics.css 3373:
+         feature: forum sticky and comments close
+     * cc-custom.php 3374:
+         bugfix: blank date choked on Windows
+
+2006-06-04     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccextras/cc-blog-ping.php 3369:
+     * ccextras/cc-forums.inc 3369:
+     * ccextras/cc-topics.php 3369:
+         bugfix: forum thread page were not sorted by date
+     * ccextras/cc-forums.inc 3370:
+         UI: default feed was showing up on forum pages
+
+2006-06-02     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-lib/mixter-import-phpBB2.php 3367:
+         tweak: disable import script lest it run by, er, accident
+     * mixter-lib/mixter-import-phpBB2.php 3368:
+         typo in last checkin
+
+2006-05-31     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-files/home.xml 3356:
+         ui: fixed layout for IE
+     * ccextras/cc-forums.inc 3359:
+         ui: better error prompt for restricted access forums
+     * mixter-files/home.xml 3360:
+         ui: fixed layout for Moz (rrg)
+
 2006-05-30     Victor Stone <fourstones@users.sourceforge.net>
 
      * mixter-lib/mixter-contest.php 3340:
@@ -28,6 +71,21 @@
          feature: forums stage 1 (phpbb2 replacement)
      * ccextras/cc-topics.php 3345:
          bugfix: replies were broken by last checkin
+     * mixter-lib/mixter-import-phpBB2.php 3347:
+         bugfix: replies were broken by last checkin
+     * mixter-lib/cc-phpbb2-cb.inc 3348:
+     * mixter-lib/cc-phpbb2.php 3348:
+         no more phpbb
+     * cctemplates/ccmixter/goto-topic.gif 3349:
+         feature: forums stage 1 (phpbb2 replacement)
+     * cclib/cc-magpie.php 3350:
+         should have done this long ago
+     * ccextras/cc-forums.inc 3351:
+     * ccextras/cc-topics.php 3351:
+         tweak: making forum feeds more usable
+     * ccextras/cc-forums-search.inc 3352:
+         bugfix: removed errant debug printvar
+
 
 2006-05-28     Victor Stone <fourstones@users.sourceforge.net>
 
