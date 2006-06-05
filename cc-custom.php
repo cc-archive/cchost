@@ -71,6 +71,8 @@ function CC_strchop($str,$maxlen,$dochop = true)
 
 function CC_datefmt($date,$fmt)
 {
+    if( empty($date) )
+        return '';
     return( date($fmt,strtotime($date)) );
 }
 
