@@ -224,7 +224,9 @@ EOF;
             $help = cct('Forum');
         }
 
+        global $CC_GLOBALS;
         $CC_GLOBALS['page-has-feed-links'] = 1;
+
         CCPage::AddLink( 'head_links', 'alternate', 'application/rss+xml', $url, "RSS 2.0");
         CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $url, "RSS 2.0", "xml",$help );
     }
