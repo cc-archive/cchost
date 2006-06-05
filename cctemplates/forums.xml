@@ -48,6 +48,10 @@ $Id$
      </tal:block>
   </tal:block>
   </table>
+  <div class="cc_forum_all_times">
+   <span tal:content="php: CC_lang('All times: GMT');" />
+    <span tal:content="php: CC_datefmt('','O');" />
+  </div>
 </metal:block>
 
 <metal:block define-macro="forum_listing">
@@ -60,7 +64,7 @@ $Id$
   </tr>
   <tal:block repeat="thread threads">
     <tr>
-      <td><a class="cc_topic_name" href="${thread/thread_url}"><span
+      <td><span tal:condition="thread/forum_thread_sticky" class="cc_forum_sticky">&nbsp;</span><a class="cc_topic_name" href="${thread/thread_url}"><span
                tal:content="php: CC_strchop('${thread/oldest_topic_name}',30)" /></a>
       </td>
       <td><a href="${thread/author_url}">${thread/author_real_name}</a>
@@ -117,7 +121,12 @@ $Id$
 <metal:block define-macro="forum_cmds" >
   <table class="cc_forum_cmds" tal:condition="forum_cmds">
    <tr>
-   <td tal:repeat="cmd forum_cmds"><a class="cc_gen_button" href="${cmd/url}"><span>${cmd/text}</span></a></td>
+   <td tal:repeat="cmd forum_cmds">
+      <tal:block condition="cmd/url">
+        <a class="cc_gen_button" href="${cmd/url}"><span>${cmd/text}</span></a>
+      </tal:block>
+      <span tal:condition="cmd/msg" class="cc_forum_msg">${cmd/msg}</span>
+   </td>
    </tr>
   </table>
 </metal:block>

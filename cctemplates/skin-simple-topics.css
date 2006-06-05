@@ -219,6 +219,21 @@
    padding-left: 22px;
 }
 
+.cc_forum_sticky {
+   display: block; 
+   background: no-repeat url('ccmixter/dright-arrow.gif') left top;
+   padding-right: 12px;
+   font-size: 20px;
+   float:left;
+}
+
+.cc_forum_msg {
+   font-style: italic;
+   color: #F88;
+   font-family: Verdana;
+   font-size: 11px;
+}
+
 .cc_forum_listing {
 	margin: 5px 0px 0px 7px;
 	width: 90%;
