@@ -27,9 +27,15 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/* 
+
+ Disabled until done
+
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCBlogPing',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCBlogPing',  'OnUploadDone'));
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,     array( 'CCBlogPing' , 'OnAdminMenu') );
+
+*/
 
 /**
 * Form for configuration the file format verification module
@@ -108,7 +114,7 @@ class CCBlogPing
     */
     function OnUploadDone($upload_id, $op)
     {
-        if( $type != CC_UF_NEW_UPLOAD )
+        if( $op != CC_UF_NEW_UPLOAD )
             return;
 
         $configs =& CCConfigs::GetTable();

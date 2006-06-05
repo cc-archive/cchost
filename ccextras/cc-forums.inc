@@ -26,20 +26,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define('CC_MAX_USER_TOPICS', 30 );
-define('CC_EVENT_FORUM_POST', 'forumpost' );
-
-/**
-*/
-require_once('ccextras/cc-topics.php');
-
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCForums',  'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCForums',  'OnFormFields'));
-CCEvents::AddHandler(CC_EVENT_DO_SEARCH,          array( 'CCForums',  'OnDoSearch') );
-CCEvents::AddHandler(CC_EVENT_TOPIC_REPLY,        array( 'CCForums',  'OnTopicReply') );
-CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCForums',  'OnUserRow') );
-CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCForums' , 'OnTopicDelete') );
-
 
 /**
 * Forums API
@@ -435,7 +421,7 @@ EOF;
         }
 
         $records = array( &$row );
-        $topics->GetTreeFromRecords($records);
+        $topics->GetTreeFromRecords($records,'ASC');
 
         // this is a hack, but seems workable:
         // we flatten the topic's first line of children to 

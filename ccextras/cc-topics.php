@@ -285,18 +285,23 @@ class CCTopics extends CCTable
         return $text;
     }
 
-    function GetTreeFromRecords(&$records)
+    function GetTreeFromRecords(&$records,$sort='')
     {
         $count = count($records);
         for( $i = 0; $i < $count; $i++ )
         {
-            $this->GetTree($records[$i]);
+            $this->GetTree($records[$i],$sort);
         }
     }
 
-    function GetTree(&$record)
+    function GetTree(&$record,$sort='')
     {
         // this will return recs marked as deleted
+
+        if( !empty($sort) )
+            $order = "ORDER BY children.topic_date $sort";
+        else
+            $order = '';
 
         $parent_id = $record['topic_id'];
         $sql =<<<END
@@ -306,6 +311,7 @@ class CCTopics extends CCTable
             JOIN cc_tbl_topic_tree tree ON parent.topic_id = tree.topic_tree_parent
             JOIN cc_tbl_topics children ON children.topic_id = tree.topic_tree_child
             WHERE parent.topic_id = '$parent_id'
+            $order
 END;
         
         $rows = CCDatabase::QueryRows($sql);
