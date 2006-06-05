@@ -15,7 +15,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -59,6 +59,8 @@ CREATE TABLE cc_tbl_user
 
       user_num_reviews  INT(7) unsigned,
       user_num_reviewed INT(7) unsigned,
+
+      user_num_posts    INT(11) unsigned,
 
       PRIMARY KEY user_id (user_id)
     )
@@ -377,6 +379,9 @@ CREATE TABLE cc_tbl_topics
       topic_text         mediumtext       NOT NULL default '',
       topic_tags         mediumtext       NOT NULL default '',
 
+      topic_forum      INT(6) unsigned NOT NULL,
+      topic_thread     INT(11) unsigned NOT NULL,
+
       PRIMARY KEY topic_id (topic_id)
     )
 END;
@@ -394,6 +399,90 @@ CREATE TABLE cc_tbl_topic_tree
       topic_tree_child    int(11) unsigned  NOT NULL,
 
       PRIMARY KEY topic_tree_id (topic_tree_id)
+    )
+END;
+
+    //
+    // email notifications
+    //
+    
+    $drops[] = 'cc_tbl_notifications';
+
+    $sql[] =<<<END
+
+CREATE TABLE cc_tbl_notifications
+    (
+      notify_id         int(11) unsigned  NOT NULL auto_increment,
+      notify_user       int(11) unsigned  NOT NULL,
+      notify_other_user int(11) unsigned  NOT NULL,
+      notify_mask       int(4)  unsigned  NOT NULL,
+
+      PRIMARY KEY notify_id (notify_id)
+    )
+END;
+
+    //
+    // Main forums table
+    //
+
+    $drops[] = 'cc_tbl_forums';
+
+    $sql[] =<<<END
+
+CREATE TABLE cc_tbl_forums
+    (
+      forum_id              int(6) unsigned  NOT NULL auto_increment,
+      forum_post_access     int(4) unsigned  NOT NULL,
+      forum_read_access     int(4) unsigned  NOT NULL,
+      forum_weight          int(4) unsigned  NOT NULL,
+      forum_name            varchar(255) NOT NULL,
+      forum_description     varchar(255) NOT NULL,
+      forum_group           int(4) NOT NULL,
+
+      PRIMARY KEY forum_id (forum_id)
+    )
+END;
+
+    //
+    // Forum groups
+    //
+
+    $drops[] = 'cc_tbl_forum_groups';
+
+    $sql[] =<<<END
+
+CREATE TABLE cc_tbl_forum_groups
+    (
+      forum_group_id         int(4) unsigned  NOT NULL auto_increment,
+      forum_group_name       varchar(255) NOT NULL,
+      forum_group_weight     int(4) unsigned  NOT NULL,
+
+      PRIMARY KEY forum_group_id (forum_group_id)
+    )
+END;
+
+    //
+    // Forum threads
+    //
+
+    $drops[] = 'cc_tbl_forum_threads';
+
+    $sql[] =<<<END
+
+CREATE TABLE cc_tbl_forum_threads
+    (
+      forum_thread_id         int(11) unsigned  NOT NULL auto_increment,
+      forum_thread_forum      int(6)  unsigned  NOT NULL,
+      forum_thread_user       int(11) unsigned  NOT NULL,
+      forum_thread_oldest     int(11) unsigned  NOT NULL,
+      forum_thread_newest     int(11) unsigned  NOT NULL,
+      forum_thread_date       datetime        NOT NULL,
+      forum_thread_extra      mediumtext NOT NULL default '',
+
+      forum_thread_sticky     int(2) unsigned  NOT NULL,
+      forum_thread_closed     int(2) unsigned  NOT NULL,
+
+      PRIMARY KEY forum_thread_id (forum_thread_id)
     )
 END;
 
@@ -449,10 +538,10 @@ END;
 
        'v_1_2h'              => true, // mark this installation as having 
                                       // ratings/remix count fields
-        'v_1_2k'              => true, // reviews/topics
+       'v_1_2k'              => true, // reviews/topics
+       'v_2_1a'              => true, // email notifications
+       'v_3_0c'              => true, // forums
 
-        'phpbb2_enabled'        => false,
-        'phpbb2_root_path'      => '',
     );
 
     $configs->SaveConfig( 'config', $arr, CC_GLOBAL_SCOPE);
@@ -547,6 +636,24 @@ END
         $args['dirty']      = true;
 
         $configs->SaveConfig('chart', $args, CC_GLOBAL_SCOPE);
+
+    // ----------------- default forums and forum groups ----------------------------
+
+        $sql = array();
+        $sql[] = "INSERT INTO `cc_tbl_forum_groups` VALUES (1, 'The Site', 1)";
+        $sql[] = "INSERT INTO `cc_tbl_forum_groups` VALUES (2, 'The Content', 2)";
+        $sql[] = "INSERT INTO `cc_tbl_forum_groups` VALUES (3, 'Off Beats', 10)";
+        
+        $ad = CC_ADMIN_ONLY;
+        $dc = CC_DONT_CARE_LOGGED_IN;
+        $ru = CC_MUST_BE_LOGGED_IN;
+
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (1, $ad, $dc, 1, 'Announcements', 'Messages from the admins', 1)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (2, $ru, $dc, 2, 'Help', 'get aid', 2)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (3, $ru, $dc, 3, 'The Big OT', 'off topic stuff', 3)";
+        $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (4, $ru, $dc, 4, 'Bugs', 'Report bugs here', 1)";
+
+        CCDatabase::Query($sql);
 
     return(true);
 }
