@@ -1,3 +1,10 @@
+2006-06-06  Jon Phillips <jon@rejon.org>
+	* print_files_cct.sh AUTHORS VERSION Makefile.language 
+	update_po_files.sh Makefile POTFILES Makefile.include
+	print_potfiles.sh ccextras/cc-language.php ccextras/cc-language.bak
+	cclib/cc-user.php cclib/cc-defines.php: The new language stuff is
+	coming in bulk, so watch the breakages.
+
 2006-06-05     Victor Stone <fourstones@users.sourceforge.net>
 
      * ccadmin/cc-install-db.php 3371:

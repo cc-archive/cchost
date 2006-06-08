@@ -27,4 +27,3 @@ DIST_FOLDERS=ccadmin \
 DIST_FILES_GENERATED=NEWS \
 	PRESS \
 	cchost.spec
-

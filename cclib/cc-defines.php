@@ -29,9 +29,26 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 /**
+ * The name of this software. This is to not be changed.
+ */
+define('CC_APP_NAME', 'cchost');
+define('CC_APP_NAME_PRETTY', 'ccHost');
+
+/**
+ * This constant is for a generic PROJECT_NAME for the project. This is
+ * specific to a project and is not generally the same for every project.
+ * @see CCLanguage
+ * @see CCLanguage::LoadLanguages()
+ * @see CCLanguage::SetLocalePref()
+ * @see CCLanguage::GetLocalePref()
+ */
+define('CC_PROJECT_NAME', 'CC_APP_NAME');
+
+
+/**
 * Current Version
 */
-define('CC_HOST_VERSION', '2.1-SVN');
+define('CC_HOST_VERSION', '3.0-SVN');
 
 define( 'CC_GLOBAL_SCOPE', 'media' );
 define( 'CC_LOCAL_SCOPE',  'local' );
@@ -53,6 +70,66 @@ define('CC_OWNER_ONLY',          0x10 );
 
 define('CC_DISABLED_MENU_ITEM', 0x20 );
 define('CC_DYNAMIC_MENU_ITEM',  0x40 );
+
+/* LANGUAGE DEFINES */
+
+/** 
+ * Default language is nothing so that the default strings in the code are the 
+ * default. In general however, language is general english and not en_US.
+ * @see CCLanguage
+ */
+define('CC_LANG', '');
+
+/**
+ * This constant is the default locale folder to find i18n translations.
+ * @see CCLanguage
+ * @see CCLanguage::LoadLanguages()
+ * @see CCLanguage::CCLanguage()
+ */
+define('CC_LANG_LOCALE', 'locale');
+
+/**
+ * This constant is the default locale preference folder to find different
+ * locale sets for possible different translations depending on installation
+ * and user preference that are larger than just per-language differences of
+ * i18n translations.
+ * @see CCLanguage
+ * @see CCLanguage::CCLanguage()
+ * @see CCLanguage::LoadLanguages()
+ * @see CCLanguage::SetLocalePref()
+ * @see CCLanguage::GetLocalePref()
+ */
+define('CC_LANG_LOCALE_PREF', 'default');
+
+/**
+ * This constant is the default full path relative to an installation / web
+ * root for the locale preference directory.
+ * @see CCLanguage
+ * @see CCLanguage::CCLanguage()
+ * @see CCLanguage::LoadLanguages()
+ * @see CCLanguage::SetLocalePref()
+ * @see CCLanguage::GetLocalePref()
+ */
+define('CC_LANG_LOCALE_PREF_DIR', CC_LANG_LOCALE . '/' . CC_LANG_LOCALE_PREF);
+
+/**
+ * This constant is the domain for messages and is usually the same short
+ * name for the project or package to be installed.
+ * @see CCLanguage
+ * @see CCLanguage::CCLanguage()
+ * @see CCLanguage::LoadLanguages()
+ * @see CCLanguage::SetDomain()
+ * @see CCLanguage::GetDomain()
+ */
+define('CC_LANG_LOCALE_DOMAIN', CC_APP_NAME);
+
+/**
+ * This constant is the default full po filename.
+ * @see CCLanguage
+ * @see CCLanguage::SetDomain()
+ * @see CCLanguage::GetDomain()
+ */
+define('CC_LANG_PO_FN', CC_LANG_LOCALE_DOMAIN . '.po');
 
 
 /**

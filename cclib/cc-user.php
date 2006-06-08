@@ -91,7 +91,7 @@ class CCSecurityVerifierForm extends CCForm
         $retval = $keys->IsMatch( $hash, $id );
         if( !$retval )
         {
-            $this->SetFieldError($fieldname,cct('Security key does not match'));
+            $this->SetFieldError($fieldname,_('Security key does not match'));
         }
         return( $retval );
     }
@@ -131,7 +131,7 @@ class CCUserForm extends CCSecurityVerifierForm
 
             if( $this->record['user_password'] != $password )
             {
-                $this->SetFieldError($fieldname,cct("Password does not match login name."));
+                $this->SetFieldError($fieldname,_("Password does not match login name."));
                 return(false);
             }
 
@@ -170,7 +170,7 @@ class CCUserForm extends CCSecurityVerifierForm
 
             if( empty($this->record) )
             {
-                $this->SetFieldError($fieldname,cct("Can't find that username"));
+                $this->SetFieldError($fieldname,_("Can't find that username"));
                 return(false);
             }
 
@@ -195,60 +195,60 @@ class CCUserProfileForm extends CCUploadForm
 
         $fields = array( 
                     'user_real_name' =>
-                        array( 'label'      => cct('Full Name'),
-                               'form_tip'   => cct('Your display name for the site (not to be confused with' .
+                        array( 'label'      => _('Full Name'),
+                               'form_tip'   => _('Your display name for the site (not to be confused with' .
                                                 ' your login name).'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_password' =>
-                       array( 'label'       => cct('Password'),
+                       array( 'label'       => _('Password'),
                                'formatter'  => 'password',
                                'flags'      => CCFF_SKIPIFNULL ),
 
                     'user_email' =>
-                       array(  'label'      => cct('e-mail'),
-                               'form_tip'   => cct('This address will never show on the site but is '.
+                       array(  'label'      => _('e-mail'),
+                               'form_tip'   => _('This address will never show on the site but is '.
                                                 'required for creating a new account and password '.
                                                 'recovery in case you forget it.'),
                                'formatter'  => 'email',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
                     'user_image' =>
-                       array(  'label'      => cct('Image'),
+                       array(  'label'      => _('Image'),
                                'formatter'  => 'avatar',
-                               'form_tip'   => cct('Image file (can not be bigger than 93x93)'),
+                               'form_tip'   => _('Image file (can not be bigger than 93x93)'),
                                'upload_dir' => $avatar_dir,
                                'maxwidth'   => 93,
                                'maxheight'  => 94,
                                'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL  ),
 
                     'user_description' =>
-                        array( 'label'      => cct('About You'),
+                        array( 'label'      => _('About You'),
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_homepage' =>
-                       array(  'label'      => cct('Home Page URL'),
-                               'form_tip'   => cct('Make sure it starts with http://'),
+                       array(  'label'      => _('Home Page URL'),
+                               'form_tip'   => _('Make sure it starts with http://'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_whatido' =>
-                        array( 'label'      => cct('What I Pound On'),
-                               'form_tip'   => cct('(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)'),
+                        array( 'label'      => _('What I Pound On'),
+                               'form_tip'   => _('(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)'),
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_whatilike' =>
-                        array( 'label'      => cct('What I Like:'),
-                               'form_tip'   => cct('(e.g. Django, Old Skool, Miles Davis, Acid House)'),
+                        array( 'label'      => _('What I Like:'),
+                               'form_tip'   => _('(e.g. Django, Old Skool, Miles Davis, Acid House)'),
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_lookinfor' =>
-                        array( 'label'      => cct("What I'm Looking For:"),
-                               'form_tip'   => cct("List attributes of musicians you'd like to hook up with ".
+                        array( 'label'      => _("What I'm Looking For:"),
+                               'form_tip'   => _("List attributes of musicians you'd like to hook up with ".
                                                '(e.g. Producer, singer, drummer)'),
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
@@ -360,8 +360,8 @@ class CCUsers extends CCTable
         }
 
         // todo: collapse these into the db
-        $user_fields = array( cct('Home Page') => 'user_homepage_html',
-                              cct('About Me')  => 'user_description' );
+        $user_fields = array( _('Home Page') => 'user_homepage_html',
+                              _('About Me')  => 'user_description' );
 
         $row['user_fields'] = array();
         foreach( $user_fields as $name => $uf  )
@@ -397,18 +397,18 @@ class CCUsers extends CCTable
                     WHERE $where
 END;
                 $links = CCDatabase::QueryRows($sql);
-                $row['user_tag_links']['links0'] = array( 'label' => cct('Favorite people'),
+                $row['user_tag_links']['links0'] = array( 'label' => _('Favorite people'),
                                                   'value' => $links );
             //CCDebug::PrintVar($row);
             }
 
             $tags =& CCTags::GetTable();
             $tags->ExpandOnRow($row,'user_whatilike',ccl('search/people', 'whatilike'), 'user_tag_links',
-                                    cct('What I Like'));
+                                    _('What I Like'));
             $tags->ExpandOnRow($row,'user_whatido',  ccl('search/people', 'whatido'),'user_tag_links', 
-                                    cct('What I Pound On'));
+                                    _('What I Pound On'));
             $tags->ExpandOnRow($row,'user_lookinfor',ccl('search/people', 'whatido'),'user_tag_links',
-                                    cct('What I Look For'));
+                                    _('What I Look For'));
 
             CCEvents::Invoke( CC_EVENT_USER_ROW, array( &$row ) );
         }
@@ -532,7 +532,7 @@ class CCUser
         else
             $upload_dir = $CC_GLOBALS['avatar-dir'];
 
-        CCPage::SetTitle(cct("Edit Your Settings"));
+        CCPage::SetTitle(_("Edit Your Settings"));
         $id    = $this->IDFromName($username);
         $form  = new CCUserProfileForm($id, $upload_dir );
         $ok    = false;
@@ -558,7 +558,7 @@ class CCUser
                 
                 CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $id, &$old_info));
 
-                CCPage::Prompt(cct("Changes were saved"));
+                CCPage::Prompt(_("Changes were saved"));
                 $ok = true;
             }
         }
@@ -573,7 +573,7 @@ class CCUser
         $users = new CCUsers(); // getting a new one so we can safely do the join
         if( empty($sql_where) )
         {
-            CCPage::SetTitle(cct("People"));
+            CCPage::SetTitle(_("People"));
             // only show those with uploads
             $users->SetOrder('user_registered','DESC');
             $users->AddJoin( new CCTable('cc_tbl_uploads','upload_user'), 'user_id' );
@@ -588,8 +588,8 @@ class CCUser
 
     function _build_bread_crumb_trail($username,$tagfilter)
     {
-        $trail[] = array( 'url' => ccl(), 'text' => cct('Home') );
-        $trail[] = array( 'url' => ccl('people'), 'text' => cct('People') );
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        $trail[] = array( 'url' => ccl('people'), 'text' => _('People') );
         if( !empty($username) )
         {
             $users =& CCUsers::GetTable();
@@ -617,7 +617,7 @@ class CCUser
                 sort($all_tags);
                 $taglinks = array();
                 $taglinks[] = array( 'url' => ccl('people',$username),
-                                     'text' => empty($tagfilter) ? cct('(select tag)') : cct('(no tag)'),
+                                     'text' => empty($tagfilter) ? _('(select tag)') : _('(no tag)'),
                                      'selected' => empty($tagfilter) );
                 foreach($all_tags as $tag)
                     $taglinks[] = array( 'url' => ccl('people',$username,$tag),
@@ -677,9 +677,9 @@ class CCUser
                 $current_favs = strtolower($this->CurrentUserField('user_favorites'));
                 $favs = CCTag::TagSplit($current_favs);
                 if( in_array( strtolower($R['user_name']), $favs ) )
-                    $msg = sprintf(cct("Remove %s from my favorites"),$name );
+                    $msg = sprintf(_("Remove %s from my favorites"),$name );
                 else
-                    $msg = sprintf(cct("Add %s to my favorites"),$name);
+                    $msg = sprintf(_("Add %s to my favorites"),$name);
                 $R['user_favs_link'] = array( 'text' => $msg,
                                              'link' => ccl('people','addtofavs',$username) );
             }
@@ -715,13 +715,13 @@ Use the 'Submit Files' menu items on the left to start uploading your sampled tr
 END;
 
                          $R['user_fields'][] = array( 'label' => '', 
-                                                      'value' => cct($msg) );
+                                                      'value' => _($msg) );
 
                     }
                 }
                 else
                 {
-                        $msg = $name . cct(' has not uploaded any remixes yet.');                         $R['user_fields'][] = array( 'label' => '', 
+                        $msg = $name . _(' has not uploaded any remixes yet.');                         $R['user_fields'][] = array( 'label' => '', 
                                                       'value' => $msg );
                 }
             }
@@ -740,9 +740,9 @@ END;
     function _show_feed_links($username)
     {
         CCPage::PageArg('artist_page',$username);
-        CCFeeds::AddFeedLinks($username,'',cct('Uploads by ').$username);
-        CCFeeds::AddFeedLinks('','remixesof=' .$username,cct('Remixes of ').$username);
-        CCFeeds::AddFeedLinks('','remixedby=' .$username,cct('Remixed by ').$username);
+        CCFeeds::AddFeedLinks($username,'',_('Uploads by ').$username);
+        CCFeeds::AddFeedLinks('','remixesof=' .$username,_('Remixes of ').$username);
+        CCFeeds::AddFeedLinks('','remixedby=' .$username,_('Remixed by ').$username);
     }
 
     function AddToFavs($user_to_add_or_remove)
@@ -754,12 +754,12 @@ END;
         if( in_array( $user_to_add_or_remove, $favs ) )
         {
             $favs = array_diff($favs,array($user_to_add_or_remove));
-            $msg = sprintf(cct("%s has been removed from your list of favorites"),$user_to_add_or_remove);
+            $msg = sprintf(_("%s has been removed from your list of favorites"),$user_to_add_or_remove);
         }
         else
         {
             $favs[] = $user_to_add_or_remove;
-            $msg = sprintf(cct("%s has been added to your list of favorites"),$user_to_add_or_remove);
+            $msg = sprintf(_("%s has been added to your list of favorites"),$user_to_add_or_remove);
         }
         $new_favs = implode(',',$favs);
         $users =& CCUsers::GetTable();
@@ -833,14 +833,14 @@ END;
     function OnBuildMenu()
     {
         $items = array( 
-            'artist'   => array( 'menu_text'  => cct('Your Page'),
+            'artist'   => array( 'menu_text'  => _('Your Page'),
                              'menu_group' => 'artist',
                              'weight' => 10,
                              'action' =>  ccp( 'people' ,'%login_name%' ),
                              'access' => CC_MUST_BE_LOGGED_IN
                              ),
                                
-            'editprofile'  => array( 'menu_text'  => cct('Edit Your Profile'),
+            'editprofile'  => array( 'menu_text'  => _('Edit Your Profile'),
                              'menu_group' => 'artist',
                              'weight' => 11,
                              'action' =>  ccp( 'people' ,'profile' ),
@@ -851,9 +851,9 @@ END;
         CCMenu::AddItems($items);
 
         $groups = array(
-                    'visitor' => array( 'group_name' => cct('Visitors'),
+                    'visitor' => array( 'group_name' => _('Visitors'),
                                           'weight'    => 1 ),
-                    'artist'  => array( 'group_name' => cct('Artists'),
+                    'artist'  => array( 'group_name' => _('Artists'),
                                           'weight'   => 2 )
                     );
 

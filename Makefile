@@ -30,6 +30,8 @@ DIST_FILES_OTHER=Makefile.dist
 
 all:	$(DIST_FILES_GENERATED) $(DIST_FILES_OTHER)
 	$(MAKE) -f Makefile.dist all
+	if [ -e Makefile.language ]; then \
+	    $(MAKE) -f Makefile.language all; fi
 
 press: all
 	[ -x `which txt2html` ] && txt2html --xhtml PRESS > PRESS.html
@@ -47,6 +49,8 @@ clean:
 	rm -f $(DIST_FILES_GENERATED)
 	$(MAKE) -f Makefile.dist clean
 	rm -f PRESS.html
+	if [ -e Makefile.language ]; then \
+	    $(MAKE) -f Makefile.language clean; fi 
 
 #$(APPNAME): $(APPNAME).in
 #	sed -e "s/PROJECT_VERSION/$(RELEASE_NUM)/" $(APPNAME).in > $(APPNAME)
