@@ -5,6 +5,11 @@
 	cclib/cc-user.php cclib/cc-defines.php: The new language stuff is
 	coming in bulk, so watch the breakages.
 
+	* locale locale/default locale/default/pt_BR 
+	locale/default/pt_BR/LC_MESSAGES 
+	locale/default/pt_BR/LC_MESSAGES/cchost.po: Added language stuff here
+	for translation.
+
 2006-06-05     Victor Stone <fourstones@users.sourceforge.net>
 
      * ccadmin/cc-install-db.php 3371:
