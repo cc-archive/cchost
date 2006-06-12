@@ -189,6 +189,8 @@ class CCContactMailerForm extends CCSecurityVerifierForm
                     'mail_body' => array(
                             'label'       => cct('Message'),
                             'formatter'   => 'textarea',
+                            'maxlength'   => 1000,
+                            'form_tip'    => 'Message is limited to 1,000 characters',
                             'flags'      => CCFF_REQUIRED ),
                     'user_mask' =>
                        array( 'label'       => '',
@@ -212,6 +214,36 @@ class CCContactMailerForm extends CCSecurityVerifierForm
 
 class CCMailerAPI
 {
+
+    function _ok_to_contact($userto)
+    {
+        global $CC_GLOBALS;
+
+        $curr_time = time();
+        if( !empty($CC_GLOBALS['user_extra']['last_email_send']) )
+        {
+            $last_email = $CC_GLOBALS['user_extra']['last_email_send'];
+            if( ($curr_time - $last_email) < (60 * 10) )
+            {
+                CCPage::Prompt('You have exceeded the temporary quota of emails allowed.' );
+                return false;
+            }            
+        }   
+
+        return true;
+    }
+
+    function _mark_user_send()
+    {
+        global $CC_GLOBALS;
+
+        $users =& CCUsers::GetTable();
+        $row['user_extra'] = $CC_GLOBALS['user_extra'];
+        $row['user_extra']['last_email_send'] = time();
+        $row['user_extra'] = serialize($row['user_extra']);
+        $row['user_id'] = CCUser::CurrentUser();
+        $users->Update($row);
+    }
 
     function Contact($userto='')
     {
@@ -244,13 +276,19 @@ class CCMailerAPI
 
         $form = new CCContactMailerForm($user_to,$user_from);
 
+        $is_post = !empty( $_REQUEST['contactmailer'] );
 
-        if( empty( $_REQUEST['contactmailer'] ) || !$form->ValidateFields() )
+        if( !$is_post && !$this->_ok_to_contact($userto) )
+            return;
+
+        if( !$is_post || !$form->ValidateFields() )
         {
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
         {
+            $this->_mark_user_send();
+
             $form->GetFormValues($fields);
             
             global $CC_MAILER;
@@ -276,6 +314,7 @@ class CCMailerAPI
             CCDebug::Enable(true);
             $from = empty($user_from) ? $fields['mail_from'] : $user_from['user_name'];
             CCDebug::Log("Mail sent from $from -- to $userto");
+
         }
     }
 
