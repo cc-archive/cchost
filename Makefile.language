@@ -32,7 +32,7 @@ srcdir = .
 # add your own unique folders here and to the POFILES and CATALOGS
 # list if you have different translations for your site
 localedir =  locale/default
-# testlocaledir = locale/testsite.org
+# testlocaledir = locale/cchost.localhost
 
 APPNAME = cchost
 
@@ -40,7 +40,10 @@ POTFILE = $(APPNAME).pot
 PO_NAME = LC_MESSAGES/$(APPNAME).po
 MO_NAME = LC_MESSAGES/$(APPNAME).mo
 POFILES = \
-	$(localedir)/pt_BR/$(PO_NAME) 
+	$(localedir)/pt_BR/$(PO_NAME) \
+	$(localedir)/zh_CN/$(PO_NAME)
+	#$(testlocaledir)/pt_BR/$(PO_NAME) \
+	#$(testlocaledir)/zh_CN/$(PO_NAME) 
 	# $(localedir)/de_DE/$(PO_NAME) \
 	# $(localedir)/zh_CN/$(PO_NAME)
 	# $(testlocaledir)/en_US/$(PO_NAME) \
@@ -57,7 +60,10 @@ POFILES = \
 include POTFILES
 
 CATALOGS = \
-	$(localedir)/pt_BR/$(MO_NAME)
+	$(localedir)/pt_BR/$(MO_NAME) \
+	$(localedir)/zh_CN/$(MO_NAME)
+	# $(testlocaledir)/pt_BR/$(MO_NAME) \
+	#$(testlocaledir)/zh_CN/$(MO_NAME) 
 	# $(localedir)/de_DE/$(MO_NAME) \
 	# $(localedir)/zh_CN/$(MO_NAME) \
 	# $(testlocaledir)/en_US/$(MO_NAME) \

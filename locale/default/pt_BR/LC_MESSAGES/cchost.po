@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-08 19:38-0700\n"
+"POT-Creation-Date: 2006-06-12 01:00-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Jon Phillips <jon@creativecommons.org>\n"
 "Language-Team:  Brazillian Portuguese <LL@li.org>\n"
@@ -200,4 +200,38 @@ msgstr ""
 
 #: cclib/cc-user.php:856
 msgid "Artists"
+msgstr ""
+
+#: ccextras/cc-language.php:399
+msgid "Default Locale Preference:"
+msgstr ""
+
+#: ccextras/cc-language.php:406
+msgid "Default Language:"
+msgstr ""
+
+#: ccextras/cc-language.php:412
+msgid ""
+"Select the default locale preference and a \n"
+"\t           default language and the system will try to translate \n"
+"\t\t   menus, navigation tabs and anything else you might have \n"
+"\t\t   customized. If the translation system does\n"
+"                   recognize the terms used, those menu items and \n"
+"                   navigation tabs will not change."
+msgstr ""
+
+#: ccextras/cc-language.php:418
+msgid ""
+"The Locale Preference is a specific folder that contains \n"
+"\t\t   specific language translations. The default is a folder \n"
+"\t\t   of the same name. Inside these folders are the specific\n"
+"\t\t   language translations."
+msgstr ""
+
+#: ccextras/cc-language.php:422
+msgid ""
+"To create a specific translation, please copy the default\n"
+"\t\t   folder with a unique name, and then select it as your Default\n"
+"\t\t   Locale Preference. Then, edit the .po files in specific \n"
+"\t\t   language folders for customization."
 msgstr ""

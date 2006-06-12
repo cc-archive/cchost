@@ -1,3 +1,9 @@
+2006-06-10  Jon Phillips <jon@rejon.org>
+
+	* Makefile.language locale/default/pt_BR/LC_MESSAGES/cchost.po 
+	ccextras/cc-language.php: Added admin interface and tested that
+	shizzle
+
 2006-06-06  Jon Phillips <jon@rejon.org>
 	* print_files_cct.sh AUTHORS VERSION Makefile.language 
 	update_po_files.sh Makefile POTFILES Makefile.include

@@ -20,7 +20,7 @@
 
 /**
 * @package cchost
-* @subpackage admin
+* @subpackage lang
 */
 
 if( !defined('IN_CC_HOST') )
@@ -28,15 +28,17 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_APP_INIT,   array( 'CCLanguage', 'OnInitApp'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,   array( 'CCLanguage', 'OnMapUrls'));
-// CCEvents::AddHandler(CC_EVENT_ADMIN_MENU, array( 'CCLanguage', 'OnAdminMenu'));
 
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,
+                     array( 'CCLanguageAdmin',  'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU, 
+                     array( 'CCLanguageAdmin' , 'OnAdminMenu') );
 
 /**
  * This is a class for dealing with standard gettext-based localization
  * (i18n) in php. It should be studied and used for sites that
  * want this type of support for their sites.
  *
- * @subpackage util
  */
 class CCLanguage
 {
@@ -89,14 +91,26 @@ class CCLanguage
                           $locale     = CC_LANG_LOCALE_PREF,
                           $domain     = CC_LANG_LOCALE_DOMAIN )
     {
-    $this->_all_languages = array();
-    $this->_domain = $domain;
+        global $CC_GLOBALS;
+        // CCDebug::PrintVar($CC_GLOBALS);
+    
+        $this->_all_languages = array();
+    
+        $this->_domain = $domain;
     
         $this->LoadLanguages( $locale_dir );
-    $this->SetLocalePref( $locale );
-    $this->SetLanguage( $language );
-    }
    
+        if ( isset($CC_GLOBALS['lang_locale_pref']) )
+            $this->SetLocalePref( $CC_GLOBALS['lang_locale_pref'] );
+        else
+    	    $this->SetLocalePref( $locale );
+	
+        if ( isset($CC_GLOBALS['lang']) )
+            $this->SetLanguage( $CC_GLOBALS['lang'] );
+        else
+    	    $this->SetLanguage( $language );
+    }
+    
     /**
      * Loads all locale preference folders and languages into the 
      * $_all_languages array for use during runtime.
@@ -211,7 +225,7 @@ class CCLanguage
             }
         } 
         // if all else fails set it to the default
-        // $lang_setting = CC_LANG;
+        $this->_language = CC_LANG;
         return false;
     }
    
@@ -261,16 +275,17 @@ class CCLanguage
      */
     function GetPossibleLanguages()
     {
-    return $this->_all_languages['locale'][$this->_locale_pref]['language'];
+    return array_keys(
+        $this->_all_languages['locale'][$this->_locale_pref]['language']);
     }
 
     /**
      * Get possible locale prefs as an array.
-     * @return array possilble locale preferences
+     * @return array possible locale preferences
      */
     function GetPossibleLocalePrefs()
     {
-    return $this->_all_languages['locale'];
+    return array_keys($this->_all_languages['locale']);
     }
 
     /**
@@ -319,11 +334,14 @@ class CCLanguage
     */
     function OnInitApp()
     {
-        // global $CC_GLOBALS;
+        global $CC_GLOBALS;
         // Basically need to init all the language stuff here...
-	    // print_r( $CC_GLOBALS );
-	// $this->SetLanguage('pt_BR');
+	// print_r( $CC_GLOBALS );
         $this->Init();
+	$CC_GLOBALS['lang'] = &$this->_language;
+	$CC_GLOBALS['lang_locale_pref'] = &$this->_locale_pref;
+	$CC_GLOBALS['language'] = &$this;
+	// print_r($CC_GLOBALS['language']->_language);
         // $this->DebugLanguages();
     }
     
@@ -340,6 +358,254 @@ class CCLanguage
         CCEvents::MapUrl( ccp('admin','language','getstring'),  array( 'CCLanguage', 'GetString'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( ccp('admin','language','translate'),  array( 'CCLanguage', 'Translate'), CC_ADMIN_ONLY );
 */
+    }
+
+}
+
+
+/**
+*/
+require_once('ccextras/cc-lang.inc');
+
+/**
+* @package cchost
+* @subpackage admin
+*/
+class CCLanguageAdminForm extends CCForm
+{
+    function CCLanguageAdminForm()
+    {
+        global $CC_GLOBALS;
+
+        $this->CCForm();
+
+        $possible_langs = array_combine(
+	    $CC_GLOBALS['language']->GetPossibleLanguages(), 
+	    $CC_GLOBALS['language']->GetPossibleLanguages() ) ;
+	// set the following placeholder for CC_LANG
+        $possible_langs[CC_LANG] = 'default ' . CC_LANG;
+
+        $possible_locale_prefs = array_combine(
+	    $CC_GLOBALS['language']->GetPossibleLocalePrefs(),
+	    $CC_GLOBALS['language']->GetPossibleLocalePrefs() );
+/*
+        $fields['lang_enabled'] = array(
+                                'label'      => _("Enabled language support:"),
+                                'formatter'  => 'checkbox',
+                                'value'      => $CC_GLOBALS['lang_enabled'],
+                                'flags'      => CCFF_POPULATE );
+*/
+        $fields['lang_locale_pref'] = array(
+                                'label'      => _("Default Locale Preference:"),
+                                'formatter'  => 'select',
+                                'value'      => $CC_GLOBALS['lang_locale_pref'],
+                                'options'    => $possible_locale_prefs,
+                                'flags'      => CCFF_POPULATE );
+
+        $fields['lang'] = array(
+                                'label'      => _("Default Language:"),
+                                'formatter'  => 'select',
+                                'value'      => $CC_GLOBALS['lang'],
+                                'options'    => $possible_langs,
+                                'flags'      => CCFF_POPULATE );
+
+        $help = "<p>" . _("Select the default locale preference and a 
+	           default language and the system will try to translate 
+		   menus, navigation tabs and anything else you might have 
+		   customized. If the translation system does
+                   recognize the terms used, those menu items and 
+                   navigation tabs will not change.") . "</p><p>" . 
+		   _("The Locale Preference is a specific folder that contains 
+		   specific language translations. The default is a folder 
+		   of the same name. Inside these folders are the specific
+		   language translations.") . "</p><p>" . 
+		   _("To create a specific translation, please copy the default
+		   folder with a unique name, and then select it as your Default
+		   Locale Preference. Then, edit the .po files in specific 
+		   language folders for customization.") . "</p>";
+        $this->SetFormHelp($help);
+        $this->AddFormFields($fields);
+    }
+}
+
+/**
+*
+* @subpackage admin
+*/
+class CCLanguageAdmin
+{
+    function Admin()
+    {
+        global $CC_GLOBALS;
+
+        $form = new CCLanguageAdminForm();
+        CCPage::SetTitle("Language Support");
+
+        if( empty($_POST['languageadmin']) || !$form->ValidateFields() )
+        {
+            CCPage::AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            $form->GetFormValues($values);
+            if( !isset($values['lang']) )
+                $values['lang'] = CC_LANG;
+	    
+            if ( !isset($values['lang_locale_pref']) )
+                $values['lang_locale_pref'] = CC_LANG_LOCALE_PREF;
+
+            $config =& CCConfigs::GetTable();    
+	    // CCDebug::PrintVar($values);
+	    $config->SaveConfig('config',$values,CC_GLOBAL_SCOPE,true);
+            CCUtil::SendBrowserTo(ccl('admin','language', 'save'));
+        }
+    }
+
+    function SavePage ()
+    {
+        CCPage::SetTitle("Language Support");
+        CCPage::Prompt("Language support options saved.");
+    }
+
+    /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
+    function OnAdminMenu(&$items,$scope)
+    {
+        if( $scope == CC_GLOBAL_SCOPE )
+        {
+            $items += array(
+                'language'   => array( 
+                                 'menu_text'  => 'Language',
+                                 'menu_group' => 'configure',
+                                 'help' => 'Configure Language use',
+                                 'access' => CC_ADMIN_ONLY,
+                                 'weight' => 40,
+                                 'action' =>  ccl('admin','language')
+                                 ),
+                );
+        }
+    }
+
+    function Language($cclang='',$mode='u')
+    {
+        // if( empty($cclang) )
+        // {
+            $this->Admin();
+            return;
+        // }
+
+        // JON: thre rest is for the string editor which isn't connected
+	// up yet...
+
+        global $CC_GLOBALS;
+
+        $lang_file = "cclib/lang/$cclang/cc-translation-$mode.php";
+        if( file_exists($lang_file) )
+            include($lang_file);
+        else
+        {
+        }
+        $tablename = 'cc_translation_table_' . $mode;
+        $args = $CC_GLOBALS;
+        $tt =& $$tablename;
+            CCDebug::LogVar('tt',$tt);
+        natsort($tt);
+        $args['string_table'] = $tt;
+        $args['lang'] = $cclang;
+        $args['mode'] = $mode;
+        $template = new CCTemplate( 'ccextras/language.xml', true); // false would mean xml mode
+        $text = $template->SetAllAndParse( $args );
+        CCPage::AddScriptBlock('ajax_block');
+        CCPage::SetTitle("Language String Editor");
+        CCPage::AddPrompt('body_text',$text);
+    }
+
+/*
+    function Translate()
+    {
+        CCPage::SetTitle("Performing Translation");
+        global $CC_GLOBALS;
+        $old_lang_enabled = $CC_GLOBALS['lang_enabled'];
+        $CC_GLOBALS['lang_enabled'] = true;
+        CCEvents::Invoke(CC_EVENT_TRANSLATE);
+        $CC_GLOBALS['lang_enabled'] = $old_lang_enabled;
+        CCPage::Prompt("Language support options saved.");
+    }
+
+    function GetString($cclang,$mode,$targetlang,$hash)
+    {
+        $en_file = "cclib/lang/$cclang/cc-translation-$mode.php";
+        include($en_file);
+        $tablename = "cc_translation_table_" . $mode;
+        $tt = $$tablename;
+        $encoded = htmlentities($tt[$hash]);
+        $target_file = "cclib/lang/$targetlang/cc-translation-$mode.php";
+        if( file_exists($target_file) )
+        {
+            $tt = null;
+            include($target_file);
+        }
+        else
+        {
+            //$target_file = $en_file;
+        }
+        $tt = $$tablename;
+        $string = $tt[$hash];
+        $html =<<<END
+     <div class="org_title">Original String</div>
+     <div class="org_string">$encoded</div>
+     <div class="org_title">Translates to:</div>
+     <textarea id="translated" name="translated" rows="11" cols = "45">$string</textarea>
+     <div><br /><a id="commentcommand" href="#" onclick='do_edit_string("$hash")'><span>Commit Changes</span></a> to: $target_file</div><br />
+     <div><br /><a id="commentcommand" href="#" onclick='do_get_string("$hash")'><span>Revert</span></a></div>
+END;
+
+       print $html;
+       exit;
+    }
+
+    function EditString($cclang,$mode,$hash)
+    {
+        if( empty($hash) ) {
+            print("Invalid hash");
+            exit;
+        }
+
+        $lang_dir = "cclib/lang/$cclang";
+        $target_file = "$lang_dir/cc-translation-$mode.php";
+
+        if( !file_exists($target_file) )
+        {
+            CCUtil::MakeSubdirs($lang_dir);
+            $en_file = "cclib/lang/en/cc-translation-$mode.php";
+            copy( $en_file, $target_file );
+            chmod( $target_file, CC_DEFAULT_FILE_PERMS );
+        }
+
+        $tt[$hash] = CCUtil::StripSlash(urldecode($_REQUEST['string']));
+        $recorder[$mode] = $tt;
+        cc_lang_write_inner($lang_dir,$mode,$recorder);
+        print("Changed saved");
+        exit;
+    }
+*/
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
+    function OnMapUrls()
+    {
+        CCEvents::MapUrl( ccp('admin','language'),  array( 'CCLanguageAdmin', 'Language'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','language','save'),  array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
+	/*
+        CCEvents::MapUrl( ccp('admin','language','edit'),  array( 'CCLanguageAdmin', 'EditString'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','language','getstring'),  array( 'CCLanguageAdmin', 'GetString'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','language','translate'),  array( 'CCLanguageAdmin', 'Translate'), CC_ADMIN_ONLY ); */
     }
 
 }
