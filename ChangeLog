@@ -3,7 +3,8 @@
 	* cctemplates/page.xml cctemplates/skin-simple.xml
 	ccadmin/cc-install-db.php: Added support for metadata in the page
 	heads so that is good! Now users can configure their sites with way
-	more searchability and deep metadata.
+	more searchability and deep metadata. This is needed by the big
+	search engines!
 
 	* cclib/cc-user.php ccextras/update_v_3_0f.inc
 	ccadmin/cc-install-db.php: Added support for 
