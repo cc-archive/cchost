@@ -581,8 +581,8 @@ END
             'site-meta-description' => "This is the " . CC_APP_NAME . 
 	                               " site," . $vars['sitename']['v'] . 
 				       ". " . $vars['site-description']['v'],
-	    'site-meta-keywords' => join(", ", array( CC_APP_NAME, _("remix"), 
-	                                 _("sharing"), _("media") ) )
+	    'site-meta-keywords' => join(", ", array( CC_APP_NAME, "remix", 
+	                                 "sharing", "media" ) )
         );
 
     $configs->SaveConfig( 'ttag', $arr, CC_GLOBAL_SCOPE);
