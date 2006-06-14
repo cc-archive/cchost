@@ -35,6 +35,9 @@
 	with language strings and other things to finalize i18n for 
 	cchost!!!
 
+	* locale/default/zh_CN/LC_MESSAGES/cchost.po: Added chinese language
+	base.
+
 2006-06-10  Jon Phillips <jon@rejon.org>
 
 	* Makefile.language locale/default/pt_BR/LC_MESSAGES/cchost.po 
