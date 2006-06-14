@@ -98,7 +98,7 @@ END;
       window.open('$link','showimage','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width=$w, height=$h');
 END;
             $menu['stream'] = 
-                         array(  'menu_text'  => cct('Show'),
+                         array(  'menu_text'  => _('Show'),
                                  'weight'     => 1,
                                  'group_name' => 'play',
                                  'id'         => 'showimage',

@@ -235,7 +235,7 @@ class CCFeed
     * 
     * @param string $str String to clean
     */
-    function _cct($str)
+    function __($str)
     {
         return( preg_replace('&[^a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]&','',$str ) );
     }
@@ -286,7 +286,7 @@ class CCFeed
                         if( !empty($records) )
                             $this->PrepRecords($records);
                         $qstring = '?remixesof=' . $username;
-                        $tagstr = cct('Remixes of ') . $username;
+                        $tagstr = _('Remixes of ') . $username;
                     }
                 }
             }
@@ -303,7 +303,7 @@ class CCFeed
                         if( !empty($records) )
                             $this->PrepRecords($records);
                         $qstring = '?remixedby=' . $username;
-                        $tagstr = cct('Uploads remixed by ') . $username;
+                        $tagstr = _('Uploads remixed by ') . $username;
                     }
                 }
             }
@@ -342,7 +342,7 @@ class CCFeed
 
         $configs         =& CCConfigs::GetTable();
         $template_tags   = $configs->GetConfig('ttag');
-        $site_title      = utf8_encode($this->_cct($template_tags['site-title']));
+        $site_title      = utf8_encode($this->__($template_tags['site-title']));
 
         $args = $CC_GLOBALS;
         $args += $template_tags;
@@ -363,7 +363,7 @@ class CCFeed
             $args['feed_subject'] = "$site_title ($tagstr)";
         }
 
-        $args['channel_description'] = utf8_encode($this->_cct($template_tags['site-description']));
+        $args['channel_description'] = utf8_encode($this->__($template_tags['site-description']));
 
         if( empty($records) )
         {
@@ -454,9 +454,9 @@ class CCFeed
             if( !empty($row['upload_description_text']) )
                 $row['upload_description'] =  $row['upload_description_text'];
 
-            $row['upload_description'] = utf8_encode($this->_cct($row['upload_description']));
-            $row['upload_name']        = utf8_encode($this->_cct($row['upload_name']));
-            $row['user_real_name']     = utf8_encode($this->_cct($row['user_real_name']));
+            $row['upload_description'] = utf8_encode($this->__($row['upload_description']));
+            $row['upload_name']        = utf8_encode($this->__($row['upload_name']));
+            $row['user_real_name']     = utf8_encode($this->__($row['user_real_name']));
 
             $remix_api->OnUploadListing( $row );
         }

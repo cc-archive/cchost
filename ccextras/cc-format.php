@@ -89,7 +89,7 @@ function _cc_format_unformat($text)
 
 function _cc_format_format($text)
 {
-    $quote = cct('Quote:');
+    $quote = _('Quote:');
     require_once('cclib/smartypants/smartypants.php');
     $attrs = '(b|i|u|red|green|blue|big|small)';
     $text = strip_tags($text);
@@ -272,7 +272,7 @@ class CCFormat
         $fields_we_like = array( 'user_description', 'upload_description', 
                                   'editorial_review', 'topic_text' );
 
-        $help = cct('Select text and use the <br />buttons to apply format');
+        $help = _('Select text and use the <br />buttons to apply format');
 
 
         $count = count($fields);

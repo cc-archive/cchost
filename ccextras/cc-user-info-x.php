@@ -64,23 +64,23 @@ class CCUserInfoForm extends CCForm
 
         $fields = array(
             'ux_name' => array(
-                'label'     => cct('Name'),
-                'form_tip'  => cct('Your legal name'),
+                'label'     => _('Name'),
+                'form_tip'  => _('Your legal name'),
                 'formatter' => 'textedit',
                 'flags'     => CCFF_POPULATE | CCFF_REQUIRED),
             'ux_phone' => array(
-                'label'     => cct('Phone Number'),
-                'form_tip'  => cct('A phone number to reach you'),
+                'label'     => _('Phone Number'),
+                'form_tip'  => _('A phone number to reach you'),
                 'formatter' => 'textedit',
                 'flags'     => CCFF_POPULATE | CCFF_REQUIRED),
             'ux_country' => array(
-                'label'     => cct('Country'),
-                'form_tip'  => cct('The country of your legal residence'),
+                'label'     => _('Country'),
+                'form_tip'  => _('The country of your legal residence'),
                 'formatter' => 'textedit',
                 'flags'     => CCFF_POPULATE | CCFF_REQUIRED),
             'ux_birthdate' => array(
-                'label'     => cct('Date of birth'),
-                'form_tip'  => cct('You must be 15 or older to be elligable'),
+                'label'     => _('Date of birth'),
+                'form_tip'  => _('You must be 15 or older to be elligable'),
                 'formatter' => 'date',
                 'day_only'  => true,
                 'value'     => date('Y-m-d', $fifteen_yo),
@@ -100,7 +100,7 @@ You must be <b>at least 15 years old</b> to participate in this contest.<br /><b
 You will be able to edit this information if it changes before the contest closes by
 clicking on the '<b>Edit Your Profile</b>' link on the left.
 END;
-        $this->SetFormHelp(cct($help));
+        $this->SetFormHelp(_($help));
     }
 }
 
@@ -147,7 +147,7 @@ class CCUserInfoX
 
         if( !$ok )
         {
-            CCPage::SetTitle(cct('Contest Entry User Information'));
+            CCPage::SetTitle(_('Contest Entry User Information'));
             $form = new CCUserInfoForm();
             if( !empty($info) )
                 $form->PopulateValues($info);
@@ -213,8 +213,8 @@ class CCUserInfoX
                 $url = ccl('contest','userinfo',$contest,'edit');
                 $value = "<a style=\"width:180px\" href=\"$url\" class=\"cc_gen_button\"><span>For \"$nice_name\"</span></a>";
                 $fields[ $contest . '_uinfo_link'] = 
-                            array( 'label'      => cct('Contest Entry Info'),
-                                   'form_tip'   => cct('Edit your personal contest information'),
+                            array( 'label'      => _('Contest Entry Info'),
+                                   'form_tip'   => _('Edit your personal contest information'),
                                    'formatter'  => 'statictext',
                                    'value'      => $value,
                                    'flags'      => CCFF_NOUPDATE | CCFF_STATIC

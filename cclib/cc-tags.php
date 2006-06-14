@@ -534,7 +534,7 @@ class CCTag
 
     function OnBrowseTags($tagstr='')
     {
-        CCPage::SetTitle(cct("Tags ") . $tagstr);
+        CCPage::SetTitle(_("Tags ") . $tagstr);
 
         if( empty($tagstr) )
         {
@@ -610,12 +610,12 @@ class CCTag
         {
             $where .=  ' AND tags_type = ' . CCTT_USER;
             $url_on = url_args( ccl('tags'), 'all=1' );
-            $switch_link = "<a href=\"$url_on\">" . cct('Turn System Tags ON') . "</a>";
+            $switch_link = "<a href=\"$url_on\">" . _('Turn System Tags ON') . "</a>";
         }
         else
         {
             $url_off = ccl('tags');
-            $switch_link = "<a href=\"$url_off\">" . cct('Turn System Tags OFF') . "</a>";
+            $switch_link = "<a href=\"$url_off\">" . _('Turn System Tags OFF') . "</a>";
         }
 
         $records =& $tags->QueryRows($where);
@@ -629,7 +629,7 @@ class CCTag
             $records[$i]['tagurl'] = ccl('tags',  $records[$i]['tags_tag']);
         }
 
-        CCPage::SetTitle(cct("Tags"));
+        CCPage::SetTitle(_("Tags"));
         CCPage::PageArg('tag_switch_link',$switch_link);
         CCPage::PageArg('tag_array',$records,'tags');
     }
@@ -665,7 +665,7 @@ class CCTag
     function OnBuildMenu()
     {
         $items = array( 
-            'tags'   => array( 'menu_text'  => cct('Browse Tags'),
+            'tags'   => array( 'menu_text'  => _('Browse Tags'),
                              'menu_group' => 'visitor',
                              'weight' => 5,
                              'action' =>  ccp('tags'),

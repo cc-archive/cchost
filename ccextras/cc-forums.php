@@ -120,7 +120,7 @@ class CCForumPostForm extends CCTopicForm
 {
     function CCForumPostForm()
     {
-        $this->CCTopicForm(cct('New Topic Text'),'Submit Topic',true);
+        $this->CCTopicForm(_('New Topic Text'),'Submit Topic',true);
     }
 }
 
@@ -154,9 +154,9 @@ class CCForums
         $name = $record['user_real_name'];
         $url   = ccl('forums', 'people', $record['user_name']);
 
-        $text = sprintf( cct("%s has posted <a href=\"%s\">%d forum messages</a>"), $name, $url, 
+        $text = sprintf( _("%s has posted <a href=\"%s\">%d forum messages</a>"), $name, $url, 
                                       $record['user_num_posts'] );
-        $record['user_fields'][] = array( 'label' => cct('Forum posts'), 
+        $record['user_fields'][] = array( 'label' => _('Forum posts'), 
                                           'value' => $text,
                                           'id' => 'user_post_stats' );
     }

@@ -85,7 +85,7 @@ class CCDataDump extends CCFeed
 
         $configs         =& CCConfigs::GetTable();
         $template_tags   = $configs->GetConfig('ttag');
-        $site_title      = utf8_encode($this->_cct($template_tags['site-title']));
+        $site_title      = utf8_encode($this->__($template_tags['site-title']));
 
         $args = $CC_GLOBALS;
         $args += $template_tags;
@@ -103,7 +103,7 @@ class CCDataDump extends CCFeed
             $args['feed_subject'] = "$site_title ($tagstr)";
         }
 
-        $args['channel_description'] = utf8_encode($this->_cct($template_tags['site-description']));
+        $args['channel_description'] = utf8_encode($this->__($template_tags['site-description']));
 
         if( empty($records) )
         {

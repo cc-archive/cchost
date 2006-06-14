@@ -53,7 +53,7 @@ class CCHowIDidIt
 
     function Browse()
     {
-        CCPage::SetTitle(cct("Browse 'How I Did It'"));
+        CCPage::SetTitle(_("Browse 'How I Did It'"));
         CCPage::AddScriptBlock('ajax_block');
         $uploads =& CCUploads::GetTable();
         $uploads->SetTagFilter('how_i_did_it');
@@ -66,7 +66,7 @@ class CCHowIDidIt
                 'submissions to this site. Below is a list of submissions that the author has ' .
                 'annotated with these special notes. Click on any submission to see the ' .
                 'author\'s notes.';
-        CCPage::PageArg('howididit_help', cct($help) );
+        CCPage::PageArg('howididit_help', _($help) );
         CCPage::PageArg('howididit_url',$url);
         CCPage::PageArg('howididit_records',$rows,'howididit_browse');
     }
@@ -100,7 +100,7 @@ class CCHowIDidIt
         CCUpload::ListRecords( $arg );
         $fields = $this->_get_fields();
         $data = $this->_get_data($record);
-        CCPage::SetTitle(cct("How I Did It"));
+        CCPage::SetTitle(_("How I Did It"));
         CCPage::PageArg('howididit_fields',$fields);
         CCPage::PageArg('howididit_info',$data,'howididit');
 
@@ -130,7 +130,7 @@ class CCHowIDidIt
         $record = $uploads->GetRecordFromKey($upload_id);
         if( empty($record) )
             return;
-        CCPage::SetTitle( cct("Edit 'How I Did It' for ") . $record['upload_name']);
+        CCPage::SetTitle( _("Edit 'How I Did It' for ") . $record['upload_name']);
         $form = new CCHowIDidItForm();
         $is_post = !empty($_POST['howididit']);
         if(  !$is_post && !empty($record['upload_extra']['howididit']) )
@@ -160,7 +160,7 @@ class CCHowIDidIt
                 $uploads->Update($args);
                 CCUploadAPI::UpdateCCUD($upload_id,'how_i_did_it','');
                 $url = ccl('howididit',$upload_id);
-                CCPage::Prompt(sprintf(cct("Changes saved. Click <a href=\"%s\">here</a> to see results"),$url));
+                CCPage::Prompt(sprintf(_("Changes saved. Click <a href=\"%s\">here</a> to see results"),$url));
             }
             else
             {
@@ -176,7 +176,7 @@ class CCHowIDidIt
 
                 $url = $record['file_page_url'];
                 $msg = "No 'How I Did It' for this record. Click <a href=\"%s\">here</a> to go back to the upload's page";
-                CCPage::Prompt(sprintf(cct($msg),$url));
+                CCPage::Prompt(sprintf(_($msg),$url));
             }
                     
         }
@@ -186,28 +186,28 @@ class CCHowIDidIt
     {
         $fields = array(
             'tools' => array(
-                'label'     => cct('Tools I Used'),
-                'form_tip'  => cct('What software, hardware, plug-ins, etc. did you use?'),
+                'label'     => _('Tools I Used'),
+                'form_tip'  => _('What software, hardware, plug-ins, etc. did you use?'),
                 'formatter' => 'textarea',
                 'flags'     => CCFF_POPULATE),
             'samples' => array(
-                'label'     => cct('Samples I Used'),
-                'form_tip'  => cct('Where did you find your samples? What kind of license are they under?'),
+                'label'     => _('Samples I Used'),
+                'form_tip'  => _('Where did you find your samples? What kind of license are they under?'),
                 'formatter' => 'textarea',
                 'flags'     => CCFF_POPULATE),
             'origial' => array(
-                'label'     => cct('Original Samples'),
-                'form_tip'  => cct('What material did you create just for this work?'),
+                'label'     => _('Original Samples'),
+                'form_tip'  => _('What material did you create just for this work?'),
                 'formatter' => 'textarea',
                 'flags'     => CCFF_POPULATE),
             'process' => array(
-                'label'     => cct('Process'),
-                'form_tip'  => cct('How did you put all the pieces together?'),
+                'label'     => _('Process'),
+                'form_tip'  => _('How did you put all the pieces together?'),
                 'formatter' => 'textarea',
                 'flags'     => CCFF_POPULATE),
             'other' => array(
-                'label'     => cct('Other Notes'),
-                'form_tip'  => cct('Share your feelings about the experience of creating this work'),
+                'label'     => _('Other Notes'),
+                'form_tip'  => _('Share your feelings about the experience of creating this work'),
                 'formatter' => 'textarea',
                 'flags'     => CCFF_POPULATE)
             );
@@ -226,7 +226,7 @@ class CCHowIDidIt
         if( !empty($record['upload_extra']['howididit']) )
         {
             $record['howididit_link'] = array( 'action' => ccl('howididit',$record['upload_id']),
-                                               'text'  => cct('How I Did It'));
+                                               'text'  => _('How I Did It'));
             if( empty($record['file_macros']) )
                 $record['file_macros'][] = 'howididit_link';
             else
@@ -246,7 +246,7 @@ class CCHowIDidIt
     function OnBuildUploadMenu(&$menu)
     {
         $menu['howididit'] = 
-                     array(  'menu_text'  => cct('Edit "How I Did It"'),
+                     array(  'menu_text'  => _('Edit "How I Did It"'),
                              'weight'     => 110,
                              'group_name' => 'owner',
                              'id'         => 'editcommand',

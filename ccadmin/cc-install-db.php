@@ -41,6 +41,7 @@ CREATE TABLE cc_tbl_user
       user_image       varchar(255)    NOT NULL default '',
       user_description mediumtext      NOT NULL default '',
       user_homepage    mediumtext      NOT NULL default '',
+      user_language    varchar(255)    NOT NULL default '',
       user_registered  datetime        NOT NULL,
       user_favorites   mediumtext      NOT NULL default '',
       user_whatilike   mediumtext      NOT NULL default '',
@@ -576,6 +577,12 @@ END
             'site-license' => <<<END
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.5/"><img alt="Creative Commons License" src="http://creativecommons.org/images/public/somerights20.gif" id="cc_license_image"></a> The text of this site is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/2.5/">Creative Commons Attribution-NonCommercial 2.5 License</a>.
 END
+,
+            'site-meta-description' => "This is the " . CC_APP_NAME . 
+	                               " site," . $vars['sitename']['v'] . 
+				       ". " . $vars['site-description']['v'],
+	    'site-meta-keywords' => join(", ", array( CC_APP_NAME, _("remix"), 
+	                                 _("sharing"), _("media") ) )
         );
 
     $configs->SaveConfig( 'ttag', $arr, CC_GLOBAL_SCOPE);

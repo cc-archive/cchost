@@ -66,7 +66,7 @@ $CC_LANG_RECORD_MODE = false;
 
 if( !function_exists('cct') )
 {
-    function cct($in_text,$mode='u',$index='')
+    function cct_($in_text,$mode='u',$index='')
     {
         global $CC_GLOBALS,$CC_LANG_RECORD_MODE;
 

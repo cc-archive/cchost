@@ -47,15 +47,15 @@ class CCMediaHost
     */
     function _build_bread_crumb_trail($username,$upload_id)
     {
-        $trail[] = array( 'url' => ccl(), 'text' => cct('Home') );
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
         
         if( empty($username) )
         {
-            $trail[] = array( 'url' => ccl('media','files'), 'text' => cct('Uploads') );
+            $trail[] = array( 'url' => ccl('media','files'), 'text' => _('Uploads') );
         }
         else
         {
-            $trail[] = array( 'url' => ccl('people'), 'text' => cct('People') );
+            $trail[] = array( 'url' => ccl('people'), 'text' => _('People') );
             $users =& CCUsers::GetTable();
             $user_real_name = $users->QueryItem('user_real_name',"user_name = '$username'");
             if( !empty($user_real_name) )
@@ -95,7 +95,7 @@ class CCMediaHost
 
         if( empty($username) )
         {
-            CCPage::SetTitle(cct("Browse Uploads"));
+            CCPage::SetTitle(_("Browse Uploads"));
             CCUpload::ListMultipleFiles();
         }
         else
@@ -112,14 +112,14 @@ class CCMediaHost
 
                 if( empty($row) )
                 {
-                    CCPage::SetTitle(cct('Unknown File'));
-                    CCPage::Prompt(cct('That file can not be found, it may have been removed by the owner.'));
+                    CCPage::SetTitle(_('Unknown File'));
+                    CCPage::Prompt(_('That file can not be found, it may have been removed by the owner.'));
                 }
                 else
                 {
                     // aha
                     CCPage::SetTitle($row['upload_name']);
-                    CCPage::Prompt(cct('This upload is not currently available for viewing.'));
+                    CCPage::Prompt(_('This upload is not currently available for viewing.'));
                 }
                 return;
             }
@@ -184,8 +184,8 @@ class CCMediaHost
                     $uploads =& CCUploads::GetTable();
                     $record = $uploads->GetRecordFromID($upload_id);
                     $url = $this->_get_file_page_url($record);
-                    CCPage::Prompt(sprintf(cct("Upload succeeded. Click <a href=\"%s\">here</a> to see results."),$url));
-                    CCPage::Prompt(cct("This upload is <b>NOT</b> entered in any contest."));
+                    CCPage::Prompt(sprintf(_("Upload succeeded. Click <a href=\"%s\">here</a> to see results."),$url));
+                    CCPage::Prompt(_("This upload is <b>NOT</b> entered in any contest."));
                     return;
                 }
             }
@@ -250,7 +250,7 @@ class CCMediaHost
             $do_prompt = CCRemix::OnPostRemixForm($form, $upload_dir, $tags );
 
             if( $do_prompt )
-                CCPage::Prompt(cct("This upload is <b>NOT</b> entered in any contest."));
+                CCPage::Prompt(_("This upload is <b>NOT</b> entered in any contest."));
 
         }
     }
@@ -283,7 +283,7 @@ class CCMediaHost
         
         CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $fileid, CC_UF_PROPERTIES_EDIT, array(&$row) ) );
 
-        $this->Media( $username, $fileid, $value ? cct("Published") : cct("Unpublished")  );
+        $this->Media( $username, $fileid, $value ? _("Published") : _("Unpublished")  );
     }
 
     /*-----------------------------
@@ -312,7 +312,7 @@ class CCMediaHost
         {
             $fields = array( 
                 'upload_published' =>
-                            array( 'label'      => cct('Publish Now'),
+                            array( 'label'      => _('Publish Now'),
                                    'formatter'  => 'checkbox',
                                    'flags'      => CCFF_NONE,
                                    'value'      => 'on'
@@ -369,7 +369,7 @@ class CCMediaHost
 
             if( empty($record['upload_published']) )
             {
-                $record['publish_message'] = cct('This file is only visible to the owner and admins.');
+                $record['publish_message'] = _('This file is only visible to the owner and admins.');
                 $record['file_macros'][] = 'upload_not_published';
             }
 
@@ -444,49 +444,49 @@ class CCMediaHost
     function OnBuildUploadMenu(&$menu)
     {
         $menu['editupload'] = 
-                     array(  'menu_text'  => cct('Edit'),
+                     array(  'menu_text'  => _('Edit'),
                              'weight'     => 100,
                              'group_name' => 'owner',
                              'id'         => 'editcommand',
                              'access'     => CC_DYNAMIC_MENU_ITEM );
 
         $menu['managefiles'] = 
-                     array(  'menu_text'  => cct('Manage Files'),
+                     array(  'menu_text'  => _('Manage Files'),
                              'weight'     => 101,
                              'group_name' => 'owner',
                              'id'         => 'managecommand',
                              'access'     => CC_DYNAMIC_MENU_ITEM );
 
         $menu['manageremixes'] = 
-                     array(  'menu_text'  => cct('Manage Remixes'),
+                     array(  'menu_text'  => _('Manage Remixes'),
                              'weight'     => 102,
                              'group_name' => 'owner',
                              'id'         => 'manageremixcommand',
                              'access'     => CC_DYNAMIC_MENU_ITEM );
 
         $menu['publish'] =
-                    array( 'menu_text' => cct('Publish'),
+                    array( 'menu_text' => _('Publish'),
                            'group_name' => 'owner',
                             'id'        => 'publishcommand',
                            'weight'    => 103,
                            'access'    => CC_DYNAMIC_MENU_ITEM );
 
         $menu['deleteupload'] = 
-                     array(  'menu_text'  => cct('Delete'),
+                     array(  'menu_text'  => _('Delete'),
                              'weight'     => 104,
                              'group_name' => 'owner',
                              'id'         => 'deletecommand',
                              'access'     => CC_DYNAMIC_MENU_ITEM );
 
         $menu['replyremix'] = 
-                     array(  'menu_text'  => cct('I Sampled This'),
+                     array(  'menu_text'  => _('I Sampled This'),
                              'weight'     => 3,
                              'group_name' => 'remix',
                              'id'         => 'replyremix',
                              'access'     => CC_MUST_BE_LOGGED_IN );
 
         $menu['uploadadmin'] = 
-                     array(  'menu_text'  => cct('Admin'),
+                     array(  'menu_text'  => _('Admin'),
                              'weight'     => 1010,
                              'group_name' => 'admin',
                              'id'         => 'admincommand',
@@ -592,12 +592,12 @@ class CCMediaHost
             if( $record['upload_published'] )
             {
                 $classid = 'unpublishcommand';
-                $text = cct('Unpublish');
+                $text = _('Unpublish');
             }
             else
             {
                 $classid = 'publishcommand';
-                $text = cct('Publish');
+                $text = _('Publish');
             }
 
             $menu['publish']['menu_text'] = $text;

@@ -185,7 +185,7 @@ class CCFeeds extends CCFeed
         $settings = $configs->GetConfig('settings');
         if( !empty($settings['default-feed-tags']) )
         {
-            CCFeeds::_inner_add_feed_links($settings['default-feed-tags'],'',cct('Syndicate'));
+            CCFeeds::_inner_add_feed_links($settings['default-feed-tags'],'',_('Syndicate'));
         }
 
     }

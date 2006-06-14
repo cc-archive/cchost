@@ -293,11 +293,11 @@ EOF;
             $row['contest_states'][] = 
                 array( 'css_class' => 'cc_contest_open',
                        'text'      => $row['contest_friendly_name'] . 
-                                      cct(' is currently open and taking submissions.') );
+                                      _(' is currently open and taking submissions.') );
 
             $row['contest_states'][] = 
                 array( 'css_class' => 'cc_contest_open',
-                       'text'      => cct('Submissions allowed until: '));
+                       'text'      => _('Submissions allowed until: '));
 
 			$row['contest_states'][] = 
                 array( 'css_class' => '',
@@ -307,7 +307,7 @@ EOF;
             {
 				$row['contest_states'][] = 
 					array( 'css_class' => 'cc_contest_open',
-						   'text'      => cct('(Only logged in users can submit entries.)') );
+						   'text'      => _('(Only logged in users can submit entries.)') );
             }
         }
         else
@@ -315,11 +315,11 @@ EOF;
             $row['contest_states'][] = 
                 array( 'css_class' => 'cc_contest_closed',
                        'text'      => $row['contest_friendly_name'] . 
-                                      cct(' is not taking submissions any more.') );
+                                      _(' is not taking submissions any more.') );
 
             $row['contest_states'][] = 
                 array( 'css_class' => 'cc_contest_closed',
-                       'text'      => cct('Submissions stopped after: ') );
+                       'text'      => _('Submissions stopped after: ') );
 
             $row['contest_states'][] = 
                 array( 'css_class' => '',
@@ -330,7 +330,7 @@ EOF;
         {
             $row['contest_states'][] = 
                 array( 'css_class' => 'cc_contest_voting_status',
-                       'text'      => cct('Voting is open until ') .
+                       'text'      => _('Voting is open until ') .
                                       $row['contest_vote_deadline_fmt'] ) ;
 
         }
@@ -479,7 +479,7 @@ class CCContest
     */
     function Contests($contest_short_name='')
     {
-        CCPage::SetTitle(cct('Browse Contests'));
+        CCPage::SetTitle(_('Browse Contests'));
         $this->ViewContests($contest_short_name);
     }
 
@@ -527,7 +527,7 @@ class CCContest
 
         if( !$record['contest_vote_online'] )
         {
-            print(cct('<h3>This contest does not support online voting</h3>'));
+            print(_('<h3>This contest does not support online voting</h3>'));
             cc_exit();
         }
 
@@ -566,13 +566,13 @@ class CCContest
         {
             if( $record['contest_taking_submissions'] )
             {
-                print(cct('<h3>Voting will open after submission period has ended</h3>'));
+                print(_('<h3>Voting will open after submission period has ended</h3>'));
             }
             elseif( !$record['contest_voting_open'] )
             {
                 $data = $polls->GetPollingData($contest_short_name,'poll_numvotes');
                 $data = array_merge($data,$record);
-                print(cct('<h3>Poll Results</h3>'));
+                print(_('<h3>Poll Results</h3>'));
                 $args['poll_data'] = $data;
                 $args['auto_execute'][] = 'polling_data';
                 $template = new CCTemplate($CC_GLOBALS['skin-map'] );
@@ -581,9 +581,9 @@ class CCContest
             else
             {
                 if( !CCUser::IsLoggedIn() )
-                    print(cct('<h3>Voting is only open to registered users</h3>'));
+                    print(_('<h3>Voting is only open to registered users</h3>'));
                 else
-                    print(cct('<h3>Results will be shown here after the voting period is closed</h3>'));
+                    print(_('<h3>Results will be shown here after the voting period is closed</h3>'));
             }
         }
 
@@ -606,7 +606,7 @@ class CCContest
         if( !$record['contest_taking_submissions'] )
             return; // someone is hacking in
 
-        CCPage::SetTitle(sprintf(cct("Submit to: '%s'"),$record['contest_friendly_name']));
+        CCPage::SetTitle(sprintf(_("Submit to: '%s'"),$record['contest_friendly_name']));
 
         $records   = $this->_contest_uploads($record['contest_id'],CCUD_CONTEST_ALL_SOURCES);
         $do_prompt = false;
@@ -667,7 +667,7 @@ END;
 
         if( $do_prompt )
         {
-            CCPage::Prompt(sprintf(cct("Your upload has been entered in '%s'"),$record['contest_friendly_name']));
+            CCPage::Prompt(sprintf(_("Your upload has been entered in '%s'"),$record['contest_friendly_name']));
         }
     }
 
@@ -819,7 +819,7 @@ END;
             CCContests::GetOpenStatus($record);
             if( !$record['contest_can_browse_entries'] )
             {
-                $msg = cct('This contest entry is only visible to the owner and admins.');
+                $msg = _('This contest entry is only visible to the owner and admins.');
                 $record['publish_message'] = $msg;
                 $record['file_macros'][] = 'upload_not_published';
             }

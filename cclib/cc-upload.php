@@ -47,14 +47,14 @@ class CCUploadMediaForm extends CCUploadForm
         global $CC_CFG_ROOT;
 
         $this->CCUploadForm();
-        $this->SetSubmitText(cct('Upload'));
+        $this->SetSubmitText(_('Upload'));
         $this->SetHiddenField('upload_user', $user_id);
         $this->SetHiddenField('upload_config', $CC_CFG_ROOT);
 
         $fields['upload_name'] =
-                        array( 'label'      => cct('Name'),
+                        array( 'label'      => _('Name'),
                                'formatter'  => 'textedit',
-                               'form_tip'   => cct('Display name for file'),
+                               'form_tip'   => _('Display name for file'),
                                'flags'      => CCFF_POPULATE );
 
         if( $file_field )
@@ -69,22 +69,22 @@ class CCUploadMediaForm extends CCUploadForm
         $pop_tags = $tags->QueryKeys($where);
 
         $fields['upload_tags'] =
-                        array( 'label'      => cct('Tags'),
+                        array( 'label'      => _('Tags'),
                                'formatter'  => 'tagsedit',
-                               'form_tip'   => cct('Comma separated list of terms'),
+                               'form_tip'   => _('Comma separated list of terms'),
                                'flags'      => CCFF_NONE );
 
         $fields['popular_tags'] =
-                        array( 'label'      => cct('Popular Tags'),
+                        array( 'label'      => _('Popular Tags'),
                                'target'     => 'upload_tags',
                                'tags'       => $pop_tags,
                                'formatter'  => 'metalmacro',
                                'macro'      => 'popular_tags',
-                               'form_tip'   => cct('Click on these to automatically add to your upload.'),
+                               'form_tip'   => _('Click on these to automatically add to your upload.'),
                                'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
 
         $fields['upload_description'] =
-                        array( 'label'      => cct('Description'),
+                        array( 'label'      => _('Description'),
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE );
         
@@ -104,12 +104,12 @@ class CCUploadMediaForm extends CCUploadForm
             $suggested_tags = CCTag::TagSplit($suggested_tags);
 
         $fields['suggested_tags'] =
-                        array( 'label'      => cct('Suggested Tags'),
+                        array( 'label'      => _('Suggested Tags'),
                                'target'     => 'upload_tags',
                                'tags'       => $suggested_tags,
                                'formatter'  => 'metalmacro',
                                'macro'      => 'popular_tags',
-                               'form_tip'   => cct('Click on these to automatically add to your upload.'),
+                               'form_tip'   => _('Click on these to automatically add to your upload.'),
                                'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
 
         $this->InsertFormFields( $fields, 'before', 'popular_tags' );
@@ -152,7 +152,7 @@ class CCNewUploadForm extends CCUploadMediaForm
             {
                 $fields = array( 
                     'upload_license' =>
-                                array( 'label'      => cct('License'),
+                                array( 'label'      => _('License'),
                                        'formatter'  => 'metalmacro',
                                        'flags'      => CCFF_POPULATE,
                                        'macro'      => 'license_choice',
@@ -173,8 +173,8 @@ class CCConfirmDeleteForm extends CCForm
     function CCConfirmDeleteForm($pretty_name)
     {
         $this->CCForm();
-        $this->SetHelpText(cct("This action can not be reversed..."));
-        $this->SetSubmitText(sprintf(cct("Delete \"%s\" ?"),$pretty_name));
+        $this->SetHelpText(_("This action can not be reversed..."));
+        $this->SetSubmitText(sprintf(_("Delete \"%s\" ?"),$pretty_name));
     }
 }
 
@@ -318,7 +318,7 @@ class CCUpload
     {
         $this->CheckFileAccess(CCUser::CurrentUser(),$upload_id);
         $uploads =& CCUploads::GetTable();
-        CCPage::SetTitle(cct("Deleting File"));
+        CCPage::SetTitle(_("Deleting File"));
         if( empty($_POST['confirmdelete']) )
         {
             $pretty_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
@@ -328,7 +328,7 @@ class CCUpload
         else
         {
             CCUploadAPI::DeleteUpload($upload_id);
-            CCPage::Prompt(cct("Upload has been deleted"));
+            CCPage::Prompt(_("Upload has been deleted"));
         }
     }
 
@@ -366,16 +366,16 @@ class CCUpload
 
         if( empty($types) )
         {
-            $form_tip = cct('Specify file to upload');
+            $form_tip = _('Specify file to upload');
         }
         else
         {
             $types = implode(', ',$types);
-            $form_tip = cct("Valid file types: ") . $types;
+            $form_tip = _("Valid file types: ") . $types;
         }
 
         $fields[$field_name] = 
-                           array(  'label'      => cct('File'),
+                           array(  'label'      => _('File'),
                                    'formatter'  => 'upload',
                                    'form_tip'   => $form_tip,
                                    'flags'      => CCFF_REQUIRED  );

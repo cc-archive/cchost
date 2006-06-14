@@ -142,7 +142,7 @@ class CCRenderAudio
 		{
 			$record['render_source_link'] = 
 					 array(  'href'     => ccl( 'contest', 'streamsource', $contest . '.m3u' ),
-							 'title'    => cct('Stream Sources'),
+							 'title'    => _('Stream Sources'),
 							 'id'       => 'cc_streamfile' );
 		}
 
@@ -151,7 +151,7 @@ class CCRenderAudio
 			if( CCUser::IsAdmin() || $record['contest_can_browse_entries'] )
 			{
 				$record['render_entries_link'] = 
-					 array(  'title'  => cct('Stream Entries'),
+					 array(  'title'  => _('Stream Entries'),
 							 'id'         => 'cc_streamfile',
 							 'href'     => ccl( 'contest', 'stream', $contest. '.m3u' ) );
 			}
@@ -190,7 +190,7 @@ class CCRenderAudio
         $link['url'] = ccl( 'files', 'stream', 
                                     $fakename, 
                                     $record['upload_id']. '.m3u' );
-        $link['text'] = cct('Stream');
+        $link['text'] = _('Stream');
 
         return($link);
     }

@@ -116,8 +116,8 @@ This action will delete <b>ALL</b> topics ever posted in the forum. There is <b>
 so once you delete the forum <b>ALL</b> messages will be gone forever.
 END;
         $this->CCForm();
-        $this->SetHelpText(cct($help));
-        $this->SetSubmitText(sprintf(cct("Delete \"%s\" ?"),$pretty_name));
+        $this->SetHelpText(_($help));
+        $this->SetSubmitText(sprintf(_("Delete \"%s\" ?"),$pretty_name));
     }
 }
 
@@ -167,7 +167,7 @@ class CCForumsAdmin
 
         if( empty($_POST['forummovethread']) || !$form->ValidateFields() )
         {
-            $title = sprintf( cct('Move topic: %s'), $row['topic_name'] );
+            $title = sprintf( _('Move topic: %s'), $row['topic_name'] );
             CCPage::SetTitle($title);
 
             CCPage::AddForm( $form->GenerateForm() );
@@ -211,7 +211,7 @@ class CCForumsAdmin
         $a['forum_thread_id'] = $thread_id;
         $a['forum_thread_sticky'] = 'forum_thread_sticky ^ 1';
         $threads->Update($a,false);
-        CCPage::SetTitle(cct('Change Thread Sticky Flag'));
+        CCPage::SetTitle(_('Change Thread Sticky Flag'));
         $url = ccl('thread',$thread_id);
         CCPage::Prompt("Sticky status changed for thread. Go <a href=\"$url\">back to thread</a>");
     }
@@ -222,7 +222,7 @@ class CCForumsAdmin
         $a['forum_thread_id'] = $thread_id;
         $a['forum_thread_closed'] = 'forum_thread_closed ^ 1';
         $threads->Update($a,false);
-        CCPage::SetTitle(cct('Change Thread Open Status'));
+        CCPage::SetTitle(_('Change Thread Open Status'));
         $url = ccl('thread',$thread_id);
         CCPage::Prompt("Open status changed for thread. Go <a href=\"$url\">back to thread</a>");
     }

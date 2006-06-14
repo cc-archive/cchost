@@ -51,18 +51,18 @@ class CCEditorialForm extends CCForm
 
         $fields = array( 
             'reviewer' =>
-                        array( 'label'      => cct('Reviewer'),
+                        array( 'label'      => _('Reviewer'),
                                'formatter'  => 'statictext',
                                'flags'      => CCFF_NOUPDATE | CCFF_STATIC,
                                'value'      => $reviewer,
                         ),
             'editorial_review' =>
-                        array( 'label'      => cct('Review'),
+                        array( 'label'      => _('Review'),
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_NONE,
                         ),
             'editorial_delete' =>
-                        array( 'label'      => cct('Delete'),
+                        array( 'label'      => _('Delete'),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_NONE,
                         ),
@@ -91,7 +91,7 @@ class CCEditorials
     */
     function ViewPicks($upload_id = '')
     {
-        CCPage::SetTitle( cct("Editors' Picks") );
+        CCPage::SetTitle( _("Editors' Picks") );
         $tag   = empty($upload_id) ? 'editorial_pick' : '';
         $where = empty($upload_id) ? '' : array( 'upload_id' => $upload_id );
         $uploads =& CCUploads::GetTable();
@@ -117,11 +117,11 @@ class CCEditorials
     {
         if( !$this->_is_editor() )
         {
-            CCPage::Prompt(cct("Invalid path"));
+            CCPage::Prompt(_("Invalid path"));
             return;
         }
 
-        CCPage::SetTitle(cct("Edit Editorial"));
+        CCPage::SetTitle(_("Edit Editorial"));
         $reviewer_user_name = CCUser::CurrentUsername();
         $reviewer_name      = CCUser::CurrentUserField('user_real_name');
 
@@ -180,7 +180,7 @@ class CCEditorials
                 $showform = false;
 
                 $url = ccl('editorial','picks');
-                CCPage::Prompt(sprintf(cct("Editorial saved. See <a href=\"%s\">here</a> for results."),$url));
+                CCPage::Prompt(sprintf(_("Editorial saved. See <a href=\"%s\">here</a> for results."),$url));
             }
         }
 
@@ -244,7 +244,7 @@ class CCEditorials
     function OnBuildUploadMenu(&$menu)
     {
         $menu['editorial'] = 
-                     array(  'menu_text'  => cct('Editorial'),
+                     array(  'menu_text'  => _('Editorial'),
                              'weight'     => 300,
                              'group_name' => 'editorial',
                              'id'         => 'editorialcommand',

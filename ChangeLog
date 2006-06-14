@@ -1,3 +1,40 @@
+2006-06-13  Jon Phillips <jon@rejon.org>
+
+	* cctemplates/page.xml cctemplates/skin-simple.xml
+	ccadmin/cc-install-db.php: Added support for metadata in the page
+	heads so that is good! Now users can configure their sites with way
+	more searchability and deep metadata.
+
+	* cclib/cc-user.php ccextras/update_v_3_0f.inc
+	ccadmin/cc-install-db.php: Added support for 
+	per-user language settings.
+
+	* cc-custom.php ccadmin/cc-install-db.php 
+	locale/default/pt_BR/LC_MESSAGES/cchost.po cctemplates/page.xml 
+	cctemplates/skin-simple.xml cc-includes.php ChangeLog 
+	ccextras/cc-flag.php ccextras/cc-forums.php ccextras/cc-data-dump.php
+	ccextras/cc-user-info-x.php ccextras/cc-music-submit.php 
+	ccextras/cc-archive.php ccextras/cc-language.php 
+	ccextras/cc-reviews.php ccextras/cc-notify.inc ccextras/cc-stats.php
+	ccextras/cc-forums-search.inc ccextras/cc-lang.inc 
+	ccextras/cc-notify.php ccextras/update_v_3_0c.inc 
+	ccextras/cc-import-files.php ccextras/update_v_3_0f.inc
+	ccextras/cc-nswf.php ccextras/cc-bpm.php ccextras/cc-update.php
+	ccextras/cc-mail.php ccextras/cc-forums-admin.inc 
+	ccextras/cc-howididit.php ccextras/cc-format.php 
+	ccextras/cc-forums.inc ccextras/cc-topics.php cclib/cc-page.php
+	cclib/cc-mediahost.php cclib/cc-uploadapi.php cclib/cc-renderimage.php
+	cclib/cc-remix.php cclib/cc-upload.php cclib/cc-contest-admin.inc
+	cclib/cc-tags.php cclib/cc-renderaudio.php cclib/cc-submit.php
+	cclib/cc-search.php cclib/cc-pools-ui.php cclib/cc-contest.php
+	cclib/cc-renderflash.php cclib/cc-editorials.php cclib/cc-files.php
+	cclib/cc-form.php cclib/cc-poll.php cclib/cc-login.php 
+	cclib/cc-template.php cclib/cc-user.php cclib/cc-feeds.php
+	cclib/cc-navigator-admin.inc cclib/cc-menu.php cclib/cc-feed.php
+	mixter-lib/mixter-dump-listing.inc: All of these files were updated
+	with language strings and other things to finalize i18n for 
+	cchost!!!
+
 2006-06-10  Jon Phillips <jon@rejon.org>
 
 	* Makefile.language locale/default/pt_BR/LC_MESSAGES/cchost.po 

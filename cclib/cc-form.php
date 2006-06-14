@@ -79,7 +79,7 @@ class CCForm
 
         $this->_template_vars = array(
                                 'form_method' => 'post',
-                                'submit_text' => cct("Submit"),
+                                'submit_text' => _("Submit"),
                                 );
 
         $this->_template_macro = 'html_form';
@@ -751,7 +751,7 @@ class CCForm
         $value = $this->GetFormValue($fieldname);
         if( ($flags & CCFF_REQUIRED) && empty($value) )
         {
-            $this->SetFieldError( $fieldname, cct("can not be left blank") );
+            $this->SetFieldError( $fieldname, _("can not be left blank") );
             return(false);
         }
         return( true );
@@ -1418,7 +1418,7 @@ END;
 
                 if( $out_of_range )
                 {
-                    $this->SetFieldError($fieldname, cct("Date is out of range") );
+                    $this->SetFieldError($fieldname, _("Date is out of range") );
                     $ok = false;
                 }
             }
@@ -1426,7 +1426,7 @@ END;
         }
         else
         {
-            $this->SetFieldError($fieldname, cct("Not a valid date") );
+            $this->SetFieldError($fieldname, _("Not a valid date") );
             $ok = false;
         }
 
@@ -1920,10 +1920,10 @@ class CCUploadForm extends CCForm
 
         if( $filesobj['error'] != 0 )
         {
-            $problems = array( UPLOAD_ERR_INI_SIZE  => cct('File too big'),
-                               UPLOAD_ERR_FORM_SIZE => cct('File too big'),
-                               UPLOAD_ERR_PARTIAL   => cct('File was not fully uloaded'),
-                               UPLOAD_ERR_NO_FILE   => cct('Missing file name'));
+            $problems = array( UPLOAD_ERR_INI_SIZE  => _('File too big'),
+                               UPLOAD_ERR_FORM_SIZE => _('File too big'),
+                               UPLOAD_ERR_PARTIAL   => _('File was not fully uloaded'),
+                               UPLOAD_ERR_NO_FILE   => _('Missing file name'));
 
             $this->SetFieldError($fieldname, $problems[$filesobj['error']]);
             return(false);

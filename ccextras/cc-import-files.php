@@ -38,7 +38,7 @@ class CCImportForm extends CCNewUploadForm
         $this->CCNewUploadForm($uid);
 
         $this->SetFormFieldItem( 'upload_file_name', 'formatter', 'importer');
-        $this->SetFormFieldItem( 'upload_file_name', 'label', cct('Path to file on server') );
+        $this->SetFormFieldItem( 'upload_file_name', 'label', _('Path to file on server') );
     }
 
     function generator_importer($varname,$value='',$class='')
@@ -53,7 +53,7 @@ class CCImportForm extends CCNewUploadForm
             $name = $this->GetFormValue($fieldname);
             if( !file_exists($name) || !is_file($name) )
             {
-                $this->SetFieldError($fieldname,cct('Can not file a file by that name'));
+                $this->SetFieldError($fieldname,_('Can not file a file by that name'));
             }
             else
             {
@@ -123,9 +123,9 @@ class CCImportFiles
     */
     function Import($username='', $extra='')
     {
-        $page_title = cct('Import files');
+        $page_title = _('Import files');
         $tags = CCUD_ORIGINAL;
-        $form_help = cct('Use this form to import files already on your server into the ccHost system. WARNING: This form will <b>MOVE</b> your file from its original location.');
+        $form_help = _('Use this form to import files already on your server into the ccHost system. WARNING: This form will <b>MOVE</b> your file from its original location.');
 
         CCPage::SetTitle($page_title);
         if( empty($username) )
@@ -176,7 +176,7 @@ class CCImportFiles
                     $uploads =& CCUploads::GetTable();
                     $record = $uploads->GetRecordFromID($upload_id);
                     $url = $media_host->_get_file_page_url($record);
-                    CCPage::Prompt(sprintf(cct("Import succeeded. Click <a href=\"%s\">here</a> to see results."),$url));
+                    CCPage::Prompt(sprintf(_("Import succeeded. Click <a href=\"%s\">here</a> to see results."),$url));
                     return;
                 }
             }

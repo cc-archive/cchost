@@ -88,7 +88,7 @@ END;
                 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width=$w, height=$h');
 END;
             $link['url'] = $action;
-            $link['text'] = cct('Play');
+            $link['text'] = _('Play');
             return($link);
         }
     }

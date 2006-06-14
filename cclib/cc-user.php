@@ -189,6 +189,8 @@ class CCUserProfileForm extends CCUploadForm
 
     function CCUserProfileForm($userid,$avatar_dir)
     {
+        global $CC_GLOBALS;
+
         $this->CCUploadForm();
         $users =& CCUsers::GetTable();
         $this->record = $users->GetRecordFromID($userid);
@@ -234,6 +236,12 @@ class CCUserProfileForm extends CCUploadForm
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
+                    'user_language' => 
+		       array(  'label'      => _("Default Language:"),
+                               'formatter'  => 'select',
+                               'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(), 
+                               'flags'      => CCFF_POPULATE ),
+			       
                     'user_whatido' =>
                         array( 'label'      => _('What I Pound On'),
                                'form_tip'   => _('(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)'),

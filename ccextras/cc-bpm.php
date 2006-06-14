@@ -82,7 +82,7 @@ class CCBPM
                     $nextbit <<= 1;
                 }
             }
-            $options[$nextbit] = cct('BPM (use \'-\' for range: 90-100)');
+            $options[$nextbit] = _('BPM (use \'-\' for range: 90-100)');
             $fields['search_in']['options'] = $options;
             $form->SetHiddenField('bpm_search',$nextbit);
         }
@@ -94,8 +94,8 @@ class CCBPM
             */
             if( empty($fields['upload_bpm']) )
                 $fields['upload_bpm'] = 
-                            array( 'label'      => cct('BPM'),
-                                   'form_tip'   => cct('Tempo'),
+                            array( 'label'      => _('BPM'),
+                                   'form_tip'   => _('Tempo'),
                                     'class'     => 'form_input_short',
                                    'formatter'  => 'textedit',
                                    'flags'      => CCFF_NOUPDATE);
@@ -194,7 +194,7 @@ class CCBPM
                 if( empty($records) )
                 {
                     $url = ccl('search');
-                    CCPage::Prompt(sprintf(cct("No records match that BPM. Go back to <a href=\"%s\">search again</a>"),$url));
+                    CCPage::Prompt(sprintf(_("No records match that BPM. Go back to <a href=\"%s\">search again</a>"),$url));
                 }
                 else
                 {

@@ -47,22 +47,22 @@ class CCFlagContentForm extends CCSecurityVerifierForm
 
         $this->CCSecurityVerifierForm();
 
-        $text = cct("This $type contains material that may violate the terms of the site");
+        $text = _("This $type contains material that may violate the terms of the site");
 
         $fields = array( 
                     'mail_from' => array(
-                            'label'       => cct('From'),
+                            'label'       => _('From'),
                             'formatter'   => 'textedit',
                             'value'       => $user_from,
-                            'form_tip'    => cct('Your email address (optional)'),
+                            'form_tip'    => _('Your email address (optional)'),
                             'flags'      => CCFF_NONE ),
                     'mail_subject' => array(
-                            'label'       => cct('Subject'),
+                            'label'       => _('Subject'),
                             'formatter'   => 'statictext',
-                            'value'      => sprintf( cct('Flag %s "%s"'), $type, $name ),
+                            'value'      => sprintf( _('Flag %s "%s"'), $type, $name ),
                             'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
                     'mail_body' => array(
-                            'label'       => cct('Message'),
+                            'label'       => _('Message'),
                             'formatter'   => 'textarea',
                              'value'      => $text,
                             'flags'      => CCFF_REQUIRED ),
@@ -72,10 +72,10 @@ class CCFlagContentForm extends CCSecurityVerifierForm
                                'form_tip'   => '',
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
-                       array( 'label'       => cct('Security Key'),
+                       array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => cct('Type in characters above'),
+                               'form_tip'   => _('Type in characters above'),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
             );
 
@@ -130,7 +130,7 @@ class CCFlag
     {
         global $CC_GLOBALS;
 
-        CCPage::SetTitle(cct('Flag Content'));
+        CCPage::SetTitle(_('Flag Content'));
 
         if( $type == 'upload' )
         {
@@ -160,7 +160,7 @@ class CCFlag
                 $record = $uploads->GetRecordFromKey($id);
                 $url = $record['file_page_url'];
                 $title = $record['upload_name'];
-                $type = cct('Upload');
+                $type = _('Upload');
 
             }
             elseif( $type == 'topic' )
@@ -168,12 +168,12 @@ class CCFlag
                 $record = $topics->GetRecordFromKey($id);
                 $url = ccl('topics','view',$id);
                 $title = $record['topic_name'];
-                $type = cct('Topic');
+                $type = _('Topic');
             }
 
             $from = empty($values['mail_from']) ? $CC_GLOBALS['mail_sender'] : $values['mail_from'];
             $user_text = $values['mail_body'];
-            $flag_lang = cct('Content has been flagged');
+            $flag_lang = _('Content has been flagged');
             $ip = $_SERVER['REMOTE_ADDR'];
             $user = CCUser::IsLoggedIn() ? CCUser::CurrentUserName() : 'anon';
             $text =<<<END
@@ -194,11 +194,11 @@ END;
             $ok = $mailer->Send();
             if( !$ok )
             {
-                CCPage::Prompt(cct("An error occurred trying to contact the site"));
+                CCPage::Prompt(_("An error occurred trying to contact the site"));
             }
             else
             {
-                CCPage::Prompt(cct("Thank you, your message has been sent"));                
+                CCPage::Prompt(_("Thank you, your message has been sent"));                
             }
         }
     }

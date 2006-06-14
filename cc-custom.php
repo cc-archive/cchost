@@ -47,7 +47,7 @@ function CC_split_tags($tagstr)
 // language engine...
 function CC_lang($string)
 {
-    return(cct($string));
+    return(_($string));
 }
 
 function CC_count($obj)

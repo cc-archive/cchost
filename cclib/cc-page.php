@@ -75,7 +75,7 @@ class CCPageAdmin
     */
     function Homepage()
     {
-        CCPage::SetTitle(cct("Welcome to ccHost"));
+        CCPage::SetTitle(_("Welcome to ccHost"));
         CCPage::ViewFile('home.xml');
     }
 
@@ -681,7 +681,7 @@ class CCPage extends CCTemplate
             if( $offset )
             {
                $url = url_args( $current_url, 'offset=' . ($offset - $limit) );
-               $back_text = cct('<<< Back');
+               $back_text = _('<<< Back');
                CCPage::PageArg('back_text',$back_text);
                CCPage::PageArg('prev_link',$url);
                $args['prev_link'] = $url;
@@ -691,7 +691,7 @@ class CCPage extends CCTemplate
             if( $offset + $limit < $all_row_count )
             {
                $url = url_args( $current_url, 'offset=' . ($offset + $limit) );
-               $more_text = cct('More >>>');
+               $more_text = _('More >>>');
                CCPage::PageArg('more_text',$more_text);
                CCPage::PageArg('next_link',$url);
                $args['next_link'] = $url;

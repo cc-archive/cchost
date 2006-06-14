@@ -185,7 +185,7 @@ class CCPoolUI
             $this->_prep_for_display($items[$i], $remixpool,$sourcepool,true);
         }
 
-        CCPage::SetTitle( cct('Sample Pool: ') . $pool['pool_name'] );
+        CCPage::SetTitle( _('Sample Pool: ') . $pool['pool_name'] );
         CCPage::PageArg( 'pool_info', $pool, 'pool_info_head' );
         CCPage::PageArg( 'pool_items', $items, 'pool_item_listing' );
 
@@ -209,7 +209,7 @@ class CCPoolUI
         $pool = $pools->QueryKeyRow($item['pool_item_pool']);
         CCPage::PageArg( 'pool_info', $pool, 'pool_info_head' );
         CCPage::PageArg( 'pool_items', array( $item ), 'pool_item_listing' );
-        CCPage::SetTitle( cct('Sample Pool Item: ') . $item['pool_item_name'] );
+        CCPage::SetTitle( _('Sample Pool Item: ') . $item['pool_item_name'] );
     }
 
     function _prep_for_display(&$item, &$remixpool,&$sourcepool)

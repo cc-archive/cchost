@@ -36,8 +36,8 @@ class CCArchive
     function Archive($type='',$arg1='',$tags='')
     {
         $trail = array();
-        $trail[] = array( 'url' => ccl(), 'text' => cct('Home') );
-        $trail[] = array( 'url' => ccl('archive'), 'text' => cct('Archive') );
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        $trail[] = array( 'url' => ccl('archive'), 'text' => _('Archive') );
         if( $type == 'month' )
         {
             preg_match( '/^(2[0-9]{3}-(?:01|02|03|04|05|06|07|08|09|10|11|12))$/',$arg1,$m);
@@ -49,7 +49,7 @@ class CCArchive
                 if( !empty($tags) )
                     $trail[] = array( 'url' => ccl('archive','month',$arg1,$tags), 'text' => $tags);
 
-                CCPage::SetTitle( sprintf(cct('Archive for %s'),$tstr) . ' [BETA]' );
+                CCPage::SetTitle( sprintf(_('Archive for %s'),$tstr) . ' [BETA]' );
                 $month = $m[1];
                 $where = "SUBSTRING(upload_date,1,7) = '${m[1]}'";
                 CCUpload::ListMultipleFiles($where,$tags,'all');
@@ -70,7 +70,7 @@ class CCArchive
 END;
         $dates = CCDatabase::QueryRows($sql);
 
-        CCPage::SetTitle( cct('Monthly Archive') . ' [BETA]' );
+        CCPage::SetTitle( _('Monthly Archive') . ' [BETA]' );
         $html = '<ul>';
         foreach( $dates as $date )
         {

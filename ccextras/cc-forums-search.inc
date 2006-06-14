@@ -59,7 +59,7 @@ class CCForumsSearchAPI
                     $nextbit <<= 1;
                 }
             }
-            $options[$nextbit] = cct('Forum Topics');
+            $options[$nextbit] = _('Forum Topics');
             $fields['search_in']['options'] = $options;
             $form->SetHiddenField('forums_search',$nextbit);
         }
@@ -112,7 +112,7 @@ class CCForumsSearchAPI
 
         if( empty($count) )
         {
-            CCPage::Prompt(cct('Sorry, no topics match'));
+            CCPage::Prompt(_('Sorry, no topics match'));
         }
         else
         {

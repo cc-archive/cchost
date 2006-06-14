@@ -101,12 +101,14 @@ class CCLanguage
         $this->LoadLanguages( $locale_dir );
    
         if ( isset($CC_GLOBALS['lang_locale_pref']) )
-            $this->SetLocalePref( $CC_GLOBALS['lang_locale_pref'] );
+            $this->SetLocalePref( &$CC_GLOBALS['lang_locale_pref'] );
         else
     	    $this->SetLocalePref( $locale );
-	
-        if ( isset($CC_GLOBALS['lang']) )
-            $this->SetLanguage( $CC_GLOBALS['lang'] );
+
+        if ( !empty($CC_GLOBALS['user_language']) )
+            $this->SetLanguage( &$CC_GLOBALS['user_language'] );
+        else if ( !empty($CC_GLOBALS['lang']) )
+            $this->SetLanguage( &$CC_GLOBALS['lang'] );
         else
     	    $this->SetLanguage( $language );
     }
@@ -210,7 +212,7 @@ class CCLanguage
     
         if ( $lang_pref == $this->_language )
             return true;
-    
+   
     // Yet again, the conditions to test for default language
     // in order
         $lang_tests = array(&$lang_pref, 
@@ -270,13 +272,31 @@ class CCLanguage
 
     /**
      * Get possible language as an array.
+     * @param bool $inherits_parent <code>true</code> or <code>false</code>
      * @return array This is an array of possible language within the current
      * locale preference directory.
      */
     function GetPossibleLanguages()
     {
-    return array_keys(
-        $this->_all_languages['locale'][$this->_locale_pref]['language']);
+        // return array_keys(
+        //    $this->_all_languages['locale'][$this->_locale_pref]['language']);
+
+        $lang_list = 
+	    array_keys(
+	    &$this->_all_languages['locale'][$this->_locale_pref]['language']);
+        // This is a dumb hack to get an array that has key and value the 
+	// same as necessary by cchost
+        $possible_langs = array_combine(&$lang_list, &$lang_list);
+
+	// This is dumb in that if it is selected for user preferences, it
+	// inherits the master default for an installation.
+	// If default is selected for the master setting, then this is 
+	// set to the constant, CC_LANG, and if that setting is not available
+	// or set to nothing, then the default is to use the strings in the
+	// code
+        $possible_langs['default'] = _('default');
+	
+	return $possible_langs;
     }
 
     /**
@@ -285,7 +305,9 @@ class CCLanguage
      */
     function GetPossibleLocalePrefs()
     {
-    return array_keys($this->_all_languages['locale']);
+        $locale_prefs_list = array_keys(&$this->_all_languages['locale']);
+        return array_combine(&$locale_prefs_list, &$locale_prefs_list);
+	
     }
 
     /**
@@ -319,10 +341,11 @@ class CCLanguage
      */
     function DebugLanguages ()
     {
+	global $CC_GLOBALS;
         echo "<pre>";
         // print_r( $this->_all_languages );
-        print_r( $this );
-	echo("<p>1st</p>");
+        // print_r( $this );
+	print_r( $CC_GLOBALS );
         echo "</pre>";
     }
 
@@ -336,12 +359,12 @@ class CCLanguage
     {
         global $CC_GLOBALS;
         // Basically need to init all the language stuff here...
-	// print_r( $CC_GLOBALS );
         $this->Init();
+	// The CC_GLOBALS array are the active values and not hard settings
+	// in the database
 	$CC_GLOBALS['lang'] = &$this->_language;
 	$CC_GLOBALS['lang_locale_pref'] = &$this->_locale_pref;
 	$CC_GLOBALS['language'] = &$this;
-	// print_r($CC_GLOBALS['language']->_language);
         // $this->DebugLanguages();
     }
     
@@ -377,17 +400,10 @@ class CCLanguageAdminForm extends CCForm
     {
         global $CC_GLOBALS;
 
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('config');
+
         $this->CCForm();
-
-        $possible_langs = array_combine(
-	    $CC_GLOBALS['language']->GetPossibleLanguages(), 
-	    $CC_GLOBALS['language']->GetPossibleLanguages() ) ;
-	// set the following placeholder for CC_LANG
-        $possible_langs[CC_LANG] = 'default ' . CC_LANG;
-
-        $possible_locale_prefs = array_combine(
-	    $CC_GLOBALS['language']->GetPossibleLocalePrefs(),
-	    $CC_GLOBALS['language']->GetPossibleLocalePrefs() );
 /*
         $fields['lang_enabled'] = array(
                                 'label'      => _("Enabled language support:"),
@@ -398,31 +414,20 @@ class CCLanguageAdminForm extends CCForm
         $fields['lang_locale_pref'] = array(
                                 'label'      => _("Default Locale Preference:"),
                                 'formatter'  => 'select',
-                                'value'      => $CC_GLOBALS['lang_locale_pref'],
-                                'options'    => $possible_locale_prefs,
+                                'value'      => $settings['lang_locale_pref'],
+                                'options'    => $CC_GLOBALS['language']->GetPossibleLocalePrefs(),
                                 'flags'      => CCFF_POPULATE );
 
         $fields['lang'] = array(
                                 'label'      => _("Default Language:"),
                                 'formatter'  => 'select',
-                                'value'      => $CC_GLOBALS['lang'],
-                                'options'    => $possible_langs,
+                                'value'      => $settings['lang'],
+                                'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(),
                                 'flags'      => CCFF_POPULATE );
 
-        $help = "<p>" . _("Select the default locale preference and a 
-	           default language and the system will try to translate 
-		   menus, navigation tabs and anything else you might have 
-		   customized. If the translation system does
-                   recognize the terms used, those menu items and 
-                   navigation tabs will not change.") . "</p><p>" . 
-		   _("The Locale Preference is a specific folder that contains 
-		   specific language translations. The default is a folder 
-		   of the same name. Inside these folders are the specific
-		   language translations.") . "</p><p>" . 
-		   _("To create a specific translation, please copy the default
-		   folder with a unique name, and then select it as your Default
-		   Locale Preference. Then, edit the .po files in specific 
-		   language folders for customization.") . "</p>";
+        $help = "<p>" . _("Select the default locale preference and a default language and the system will try to translate menus, navigation tabs and anything else you might have customized. If the translation system does recognize the terms used, those menu items and navigation tabs will not change.") . "</p><p>" . 
+	                _("The Locale Preference is a specific folder that contains specific language translations. The default is a folder of the same name. Inside these folders are the specific language translations.") . "</p><p>" . 
+		        _("To create a specific translation, please copy the default folder with a unique name, and then select it as your Default Locale Preference. Then, edit the .po files in specific language folders for customization.") . "</p>";
         $this->SetFormHelp($help);
         $this->AddFormFields($fields);
     }

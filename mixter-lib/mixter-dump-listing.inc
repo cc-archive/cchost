@@ -25,25 +25,25 @@ function & _mixter_dump_records(&$records,$xclass)
 {
     global $CC_GLOBALS;
 
-    $str_by      = cct('by:');
-    $str_date    = cct('date:');
-    $str_tags    = cct('tags:');
-    $str_ratings = cct('ratings:');
-    $str_rate    = cct('rate');
-    $str_license = cct('license:');
-    $str_nsfw_t  = cct('This upload might be ');
-    $str_nsfw    = cct('Not Safe For Work');
-    $str_edpick  = cct('Editorial pick...');
-    $str_uses    = cct('Uses samples from:');
-    $str_more    = cct('More...');
-    $str_noone   = cct('(no one has sampled this)');
-    $str_usedin  = cct('Samples are used in:');
-    $str_down    = cct('Download');
-    $str_length  = cct('Length:');
-    $str_bpm     = cct('BPM:');
-    $str_IEtip   = cct('IE: Right-click select \'Save Target As\'');
-    $str_Mactip  = cct('Mac: Control-click select \'Save Link As\'');
-    $str_flagtip = cct('Flag this upload for possible violation of terms');
+    $str_by      = _('by:');
+    $str_date    = _('date:');
+    $str_tags    = _('tags:');
+    $str_ratings = _('ratings:');
+    $str_rate    = _('rate');
+    $str_license = _('license:');
+    $str_nsfw_t  = _('This upload might be ');
+    $str_nsfw    = _('Not Safe For Work');
+    $str_edpick  = _('Editorial pick...');
+    $str_uses    = _('Uses samples from:');
+    $str_more    = _('More...');
+    $str_noone   = _('(no one has sampled this)');
+    $str_usedin  = _('Samples are used in:');
+    $str_down    = _('Download');
+    $str_length  = _('Length:');
+    $str_bpm     = _('BPM:');
+    $str_IEtip   = _('IE: Right-click select \'Save Target As\'');
+    $str_Mactip  = _('Mac: Control-click select \'Save Link As\'');
+    $str_flagtip = _('Flag this upload for possible violation of terms');
 
     $chop = CCPage::GetPageArg('chop');
 

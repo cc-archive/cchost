@@ -56,9 +56,9 @@ class CCTopicsFeed extends CCFeed
         for( $i = 0; $i < $count; $i++ )
         {
             $T =& $topics[$i];
-            $T['topic_name']       = utf8_encode($this->_cct($T['topic_name']));
-            $T['topic_text_plain'] = utf8_encode($this->_cct($T['topic_text_plain']));
-            $T['user_real_name']   = utf8_encode($this->_cct($T['user_real_name']));
+            $T['topic_name']       = utf8_encode($this->__($T['topic_name']));
+            $T['topic_text_plain'] = utf8_encode($this->__($T['topic_text_plain']));
+            $T['user_real_name']   = utf8_encode($this->__($T['user_real_name']));
         }
 
         $this->_gen_feed_from_records($template,$topics,$title,$feed_url,$feed_type);
@@ -70,8 +70,8 @@ class CCConfirmTopicDeleteForm extends CCForm
     function CCConfirmTopicDeleteForm($pretty_name)
     {
         $this->CCForm();
-        $this->SetHelpText(cct("This action can not be reversed..."));
-        $this->SetSubmitText(sprintf(cct("Delete \"%s\" ?"),$pretty_name));
+        $this->SetHelpText(_("This action can not be reversed..."));
+        $this->SetSubmitText(sprintf(_("Delete \"%s\" ?"),$pretty_name));
     }
 }
 
@@ -86,7 +86,7 @@ class CCTopicForm extends CCSecurityVerifierForm
         if( $visible_title )
         {
             $fields['topic_name'] = array(
-                            'label'       => cct('Title'),
+                            'label'       => _('Title'),
                             'formatter'   => 'textedit',
                             'flags'      => CCFF_REQUIRED | CCFF_POPULATE);
         }
@@ -102,10 +102,10 @@ class CCTopicForm extends CCSecurityVerifierForm
                                'form_tip'   => '',
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
-                       array( 'label'       => cct('Security Key'),
+                       array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => cct('Type in characters above'),
+                               'form_tip'   => _('Type in characters above'),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
                     );
 
@@ -118,7 +118,7 @@ class CCTopicReplyForm extends CCTopicForm
 {
     function CCTopicReplyForm()
     {
-        $this->CCTopicForm(cct('Reply'),'Submit Reply');
+        $this->CCTopicForm(_('Reply'),'Submit Reply');
     }
 }
 
@@ -126,7 +126,7 @@ class CCTopicEditForm extends CCTopicForm
 {
     function CCTopicEditForm($static_title=true)
     {
-        $this->CCTopicForm(cct('Text'),'Submit Changes');
+        $this->CCTopicForm(_('Text'),'Submit Changes');
         if( $static_title )
         {
             $flags = CCFF_STATIC | CCFF_NOUPDATE | CCFF_POPULATE;
@@ -138,7 +138,7 @@ class CCTopicEditForm extends CCTopicForm
             $type = 'edittext';
         }
         $f['topic_name'] = array(
-                            'label'       => cct('Title'),
+                            'label'       => _('Title'),
                             'formatter'   => $type,
                             'flags'      => $flags
                             );
@@ -221,7 +221,7 @@ class CCTopics extends CCTable
         {
             // these are overrwritten by reviews
             $row['user_post_count'] = $row['user_num_posts'];
-            $row['user_post_text']  = cct('Posts');
+            $row['user_post_text']  = _('Posts');
             $row['user_post_url']   = ccl( 'forums', 'people', $row['user_name'] );
         }
 
@@ -242,10 +242,10 @@ class CCTopics extends CCTable
             {
                 $row['commands']['delete'] = array( 'url' => ccl('topics','delete',$row['topic_id']),
                                             'script' => '',
-                                            'text' => cct('Delete') );
+                                            'text' => _('Delete') );
                 $row['commands']['edit'] = array( 'url' => ccl('topics','edit',$row['topic_id']),
                                             'script' => '',
-                                            'text' => cct('Edit') );
+                                            'text' => _('Edit') );
 
             }
 
@@ -255,7 +255,7 @@ class CCTopics extends CCTable
                 
                 $row['commands']['quote'] = array( 'url' => ccl('topics','quote',$row['topic_id']),
                                             'script' => '',
-                                            'text' => cct('Reply with quote') );
+                                            'text' => _('Reply with quote') );
                 
                 $row['commands']['reply'] = array( 'url' => ccl('topics','reply',$row['topic_id']),
                                             'script' => '',
@@ -271,15 +271,15 @@ class CCTopics extends CCTable
     {
         if( CCUser::CurrentUser() == $row['topic_user'] )
         {
-            $text = cct('Reply to yourself');
+            $text = _('Reply to yourself');
         }
         elseif( !empty($row['user_real_name']) )
         {
-            $text = sprintf(cct('Reply to %s'),$row['user_real_name']);
+            $text = sprintf(_('Reply to %s'),$row['user_real_name']);
         }
         else
         {
-            $text = cct('Reply');
+            $text = _('Reply');
         }
 
         return $text;
@@ -417,7 +417,7 @@ class CCTopic
 
         if( empty($record) )
         {
-            CCPage::Prompt(cct('Can not find that topic, it might have been deleted by the author'));
+            CCPage::Prompt(_('Can not find that topic, it might have been deleted by the author'));
             return;
         }
 
@@ -465,7 +465,7 @@ class CCTopic
         }
         else
         {
-            $replang = cct('Reply');
+            $replang = _('Reply');
             if( strstr($record['topic_name'],$replang) === false )
                 $name = sprintf( '%s (%s)', $record['topic_name'], $replang );
             else
@@ -529,7 +529,7 @@ class CCTopic
     {
         $this->CheckTopicAccess($topic_id);
         $topics =& CCTopics::GetTable();
-        CCPage::SetTitle(cct("Deleting Topic"));
+        CCPage::SetTitle(_("Deleting Topic"));
         if( empty($_POST['confirmtopicdelete']) )
         {
             $topics =& CCTopics::GetTable();
@@ -542,7 +542,7 @@ class CCTopic
         else
         {
             $this->DeleteTopic($topic_id);
-            //CCPage::Prompt(cct("Topic has been deleted"));
+            //CCPage::Prompt(_("Topic has been deleted"));
             CCUtil::SendBrowserTo();
         }
     }
@@ -639,7 +639,7 @@ class CCTopic
 
         if( !$inpost || !$form->ValidateFields() )
         {
-            CCPage::SetTitle(sprintf(cct("Edit topic: '%s'"),$record['topic_name']));
+            CCPage::SetTitle(sprintf(_("Edit topic: '%s'"),$record['topic_name']));
             $form->GenerateForm();
             $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
             $args['root-url'] = cc_get_root_url();

@@ -45,38 +45,38 @@ function cc_stats_on_user_row(&$row)
         if(  empty( $row['user_num_remixed'] ) )
             return;
 
-        $str = sprintf(cct("%s has no remixes"),$username);
+        $str = sprintf(_("%s has no remixes"),$username);
     }
     else
     {
         if( $row['user_num_remixes'] == 1 )
         {
-            $str = sprintf(cct("%s has 1 remix"),$username);
+            $str = sprintf(_("%s has 1 remix"),$username);
         }
         else
         {
-            $str = sprintf(cct("%s has %d remixes"),$username,$row['user_num_remixes']);
+            $str = sprintf(_("%s has %d remixes"),$username,$row['user_num_remixes']);
         }
     }
 
     if( empty( $row['user_num_remixed'] ) )
     {
-        $str .= cct(' and has not been remixed');
+        $str .= _(' and has not been remixed');
     }
     else
     {
         if( $row['user_num_remixed'] == 1 )
         {
-            $str .= cct( ' and has been remixed once' );
+            $str .= _( ' and has been remixed once' );
         }
         else
         {
-            $str .= sprintf( cct(' and has been remixed %d times'), 
+            $str .= sprintf( _(' and has been remixed %d times'), 
                                $row['user_num_remixed'] );
         }
     }
     
-    $row['user_fields'][] = array( 'label' => cct('Stats'),
+    $row['user_fields'][] = array( 'label' => _('Stats'),
                                    'value' => $str,
                                    'id'    => 'user_num_remixes' );
 }
@@ -118,7 +118,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
     }
     $args['root-url'] = cc_get_root_url();
     $text = $template->SetAllAndParse($args);
-    CCPage::SetTitle(cct("ccMixter Charts [beta]"));
+    CCPage::SetTitle(_("ccMixter Charts [beta]"));
     CCPage::AddPrompt('body_text',$text);
 }
 
@@ -186,7 +186,7 @@ function cc_stats_show()
         chmod($file,CC_DEFAULT_FILE_PERMS);
     }
 
-    CCPage::SetTitle(cct("ccMixter stats [beta]"));
+    CCPage::SetTitle(_("ccMixter stats [beta]"));
     CCPage::AddPrompt('body_text',$text);
 }
 

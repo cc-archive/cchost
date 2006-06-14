@@ -52,7 +52,7 @@ class CCReviewForm extends CCTopicForm
 {
     function CCReviewForm()
     {
-        $this->CCTopicForm(cct('Review'),'Submit Review');
+        $this->CCTopicForm(_('Review'),'Submit Review');
     }
 }
 
@@ -145,7 +145,7 @@ class CCReview
             {
                 $user_name = '';
                 $upload_id = '';
-                CCPage::Prompt(cct('Can not find that user'));
+                CCPage::Prompt(_('Can not find that user'));
             }
 
             if( !empty($upload_id) )
@@ -153,7 +153,7 @@ class CCReview
                 $R = $uploads->GetRecordFromID($upload_id);
                 if( empty($R) )
                 {
-                    CCPage::Prompt(cct('Can not find that upload, it may have been removed by the owner'));
+                    CCPage::Prompt(_('Can not find that upload, it may have been removed by the owner'));
                     $upload_id = '';
                 }
             }
@@ -178,7 +178,7 @@ class CCReview
                 //
                 $pagelinks = CCPage::AddPagingLinks($uploads,$where, NUM_REVIEWS_PER_PAGE,$args);
 
-                CCPage::SetTitle(cct('Recent Reviews'));
+                CCPage::SetTitle(_('Recent Reviews'));
                 $args['topics'] =& $uploads->GetRecords($where);
                 $args['macro'] = 'recent_reviews';
             }
@@ -207,13 +207,13 @@ class CCReview
                     $link_query = 'qtype=leftby';
                 }
                    
-                $title = sprintf(cct("Reviews left $title_for_by %s"),$user_real);
+                $title = sprintf(_("Reviews left $title_for_by %s"),$user_real);
                 CCPage::SetTitle($title);
                 
                 $pagelinks = CCPage::AddPagingLinks($uploads,$where,NUM_REVIEWS_PER_PAGE);
                 $args['topics'] =& $uploads->GetRecords($where);
 
-                $left_text = sprintf(cct("See reviews left $link_for_by %s"),$user_real);
+                $left_text = sprintf(_("See reviews left $link_for_by %s"),$user_real);
                 $left_url = ccl('reviews',$user_name);
                 if( $link_query )
                     $left_url = url_args($left_url,$link_query);
@@ -229,7 +229,7 @@ class CCReview
             //
 
             $uploads =& CCUploads::GetTable();
-            CCPage::SetTitle(sprintf(cct('Reviews for "%s"'),$R['upload_name']) );
+            CCPage::SetTitle(sprintf(_('Reviews for "%s"'),$R['upload_name']) );
             CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING,array(&$R));
             $R['local_menu'] = CCUpload::GetRecordLocalMenu($R);
 
@@ -256,19 +256,19 @@ class CCReview
             if( $upload_id )
             {
                 $url = ccl('feed','rss','reviews',$user_name,$upload_id);
-                $help = sprintf( cct('<br />Reviews left for<br /> "%s"'), CC_strchop($R['upload_name'],16) );
+                $help = sprintf( _('<br />Reviews left for<br /> "%s"'), CC_strchop($R['upload_name'],16) );
             }
             else
             {
                 $url = ccl('feed','rss','reviews',$user_name);
-                $help = sprintf( cct('<br />Reviews left for<br /> %s'), 
+                $help = sprintf( _('<br />Reviews left for<br /> %s'), 
                                         CC_strchop($user_row['user_real_name'],16) );
             }
         }
         else
         {
             $url = ccl('feed','rss','reviews');
-            $help = cct('Reviews');
+            $help = _('Reviews');
         }
 
         $CC_GLOBALS['page-has-feed-links'] = 1;
@@ -282,15 +282,15 @@ class CCReview
     function _build_bread_crumb_trail($user_name,$upload_id='',$cmd_url='',$cmd_text='')
     {
         $trail = array();
-        $trail[] = array( 'url' => ccl(), 'text' => cct('Home') );
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
 
         if( empty($user_name) )
         {
-            $trail[] = array( 'url' => ccl('reviews'), 'text' => cct('Reviews') );
+            $trail[] = array( 'url' => ccl('reviews'), 'text' => _('Reviews') );
         }
         else
         {
-            $trail[] = array( 'url' => ccl('people'), 'text' => cct('People') );
+            $trail[] = array( 'url' => ccl('people'), 'text' => _('People') );
 
             $users   =& CCUsers::GetTable();
             $user_real_name = $users->QueryItem('user_real_name',"user_name = '$user_name'");
@@ -306,7 +306,7 @@ class CCReview
 
                 if( empty($upload_id) )
                 {
-                    $trail[] = array( 'url' => ccl('reviews',$user_name), 'text' => cct('Reviews') );
+                    $trail[] = array( 'url' => ccl('reviews',$user_name), 'text' => _('Reviews') );
                 }
                 else
                 {
@@ -315,7 +315,7 @@ class CCReview
                     $upload_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
                     $upload_name = '"' . $upload_name . '"';
                     $trail[] = array( 'url' => ccl('files',$user_name,$upload_id), 'text' => $upload_name );
-                    $trail[] = array( 'url' => ccl('reviews',$user_name,$upload_id), 'text' => cct('Reviews') );
+                    $trail[] = array( 'url' => ccl('reviews',$user_name,$upload_id), 'text' => _('Reviews') );
 
                     if( !empty($cmd_text) )
                         $trail[] = array( 'url' => $cmd_url, 'text' => $cmd_text );
@@ -340,7 +340,7 @@ class CCReview
 
         if( empty($CC_GLOBALS['reviews_enabled']) )
         {
-            CCPage::Prompt(cct("review integration is not enabled"));
+            CCPage::Prompt(_("review integration is not enabled"));
             exit;
         }
 
@@ -404,7 +404,7 @@ class CCReview
                                          $row['topic_id'] );
 
         $row['user_post_count'] = $row['user_num_reviews'];
-        $row['user_post_text']  = cct('Reviews');
+        $row['user_post_text']  = _('Reviews');
         $row['user_post_url']   = ccl( 'reviews', $row['user_name'] ) . '?qtype=leftby';
 
         if( $this->_can_review($upload_id) )
@@ -413,7 +413,7 @@ class CCReview
                                      array( 
                                         'url' => ccl('reviews','post',$upload_id ),
                                         'script' => '',
-                                        'text' => cct('Write Review') );
+                                        'text' => _('Write Review') );
         }
 
         if( !empty($row['upload_user']) )
@@ -487,7 +487,7 @@ class CCReview
         $R = $uploads->GetRecordFromID($upload_id);
         if( empty($R) )
         {
-            CCPage::Prompt(cct('Can not find that upload.'));
+            CCPage::Prompt(_('Can not find that upload.'));
             return;
         }
 
@@ -497,13 +497,13 @@ class CCReview
 
         if( empty($_POST['review']) || !$form->ValidateFields() )
         {
-            $this->_build_bread_crumb_trail($R['user_name'],$upload_id,'',cct('create new'));
+            $this->_build_bread_crumb_trail($R['user_name'],$upload_id,'',_('create new'));
 
             CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING,array(&$R));
             $R['local_menu'] = CCUpload::GetRecordLocalMenu($R);
             unset($R['local_menu']['comment']);
 
-            CCPage::SetTitle(sprintf(cct("Write a Review for '%s'"),$R['upload_name']));
+            CCPage::SetTitle(sprintf(_("Write a Review for '%s'"),$R['upload_name']));
 
             $form->GenerateForm();
             $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
@@ -522,7 +522,7 @@ class CCReview
             if( !$this->_can_review($R) )
             {
                 // submit was hit twice
-                CCPage::Prompt(cct("You've already reviewed this upload"));
+                CCPage::Prompt(_("You've already reviewed this upload"));
             }
             else
             {
@@ -534,7 +534,7 @@ class CCReview
                 $values['topic_user'] = CCUser::CurrentUser();
                 $values['topic_type'] = 'review';
                 $user_real = CCUser::CurrentUserField('user_real_name');
-                $values['topic_name'] = sprintf(cct("%s's Review of '%s'"),$user_real,$R['upload_name']);
+                $values['topic_name'] = sprintf(_("%s's Review of '%s'"),$user_real,$R['upload_name']);
                 $reviews->Insert($values);
                 $this->Sync($upload_id,$values['topic_user']);
 
@@ -606,11 +606,11 @@ class CCReview
             $link  = "<a href=\"$byurl\">";
             if( $count == 1 )
             {
-                $fmt   = cct('%s has left %s1 review</a> ');
+                $fmt   = _('%s has left %s1 review</a> ');
             }
             else
             {
-                $fmt   = cct('%s has left %s%d reviews</a> ');
+                $fmt   = _('%s has left %s%d reviews</a> ');
             }
             
             $text  = sprintf($fmt, $name, $link, $count );
@@ -626,17 +626,17 @@ class CCReview
             $link  = "<a href=\"$url\">";
             if( $count == 1 )
             {
-                $fmt   = cct('and has been reviewed %sonce</a> ');
+                $fmt   = _('and has been reviewed %sonce</a> ');
             }
             else
             {
-                $fmt   = cct('and has been reviewed %s%d times</a> ');
+                $fmt   = _('and has been reviewed %s%d times</a> ');
             }
             
             $text  .= sprintf($fmt, $link, $count);
         }
 
-        $record['user_fields'][] = array( 'label' => cct('Reviews'), 
+        $record['user_fields'][] = array( 'label' => _('Reviews'), 
                                           'value' => $text,
                                           'id' => 'user_review_stats' );
 
@@ -681,7 +681,7 @@ class CCReview
         {
             $url = ccl('reviews', $record['user_name'], $record['upload_id']);
             $record['reviews_link'] = array( 'url' => $url,
-                                        'text' => sprintf(cct("Reviews (%s)"),$count) );
+                                        'text' => sprintf(_("Reviews (%s)"),$count) );
         }
     }
 
@@ -722,7 +722,7 @@ class CCReview
     function OnBuildUploadMenu(&$menu)
     {
         $menu['comments'] = 
-                 array(  'menu_text'  => cct('Write Review'),
+                 array(  'menu_text'  => _('Write Review'),
                          'weight'     => 95,
                          'group_name' => 'comment',
                          'id'         => 'commentcommand',
@@ -792,7 +792,7 @@ class CCReview
                 if( !empty($upload_name) )
                 {
                     $w['topic_upload'] = $upload_id;
-                    $title = sprintf( cct('Reivews left for "%s" by %s'), $upload_name, $user_real_name );
+                    $title = sprintf( _('Reivews left for "%s" by %s'), $upload_name, $user_real_name );
                 }
             }
             else
@@ -809,12 +809,12 @@ class CCReview
                 foreach($krows as $krow)
                     $keys[] = $krow['topic_id'];
                 $items =& $reviews->GetRecordsFromKeys($keys);
-                $title = sprintf( cct('Reviews left for %s'), $user_real_name );
+                $title = sprintf( _('Reviews left for %s'), $user_real_name );
             }
         }
         else
         {
-            $title = cct('Reviews');
+            $title = _('Reviews');
         }
 
         if( empty($items) )
@@ -885,7 +885,7 @@ class CCReview
                     $nextbit <<= 1;
                 }
             }
-            $options[$nextbit] = cct('Reviews');
+            $options[$nextbit] = _('Reviews');
             $fields['search_in']['options'] = $options;
             $form->SetHiddenField('reviews_search',$nextbit);
         }
@@ -936,7 +936,7 @@ class CCReview
 
         if( empty($count) )
         {
-            CCPage::Prompt(cct('Sorry, no reviews match'));
+            CCPage::Prompt(_('Sorry, no reviews match'));
         }
         else
         {

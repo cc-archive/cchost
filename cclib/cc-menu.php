@@ -52,7 +52,7 @@ class CCMenu
     *{
     *    $items = array( 
     *        'submitforms' => array(   
-    *                             'menu_text'  => cct('Submit Files'),
+    *                             'menu_text'  => _('Submit Files'),
     *                             'menu_group' => 'artist',
     *                             'access'     => CC_MUST_BE_LOGGED_IN,
     *                             'weight'     => 6,
@@ -106,14 +106,14 @@ class CCMenu
     *function OnBuildUploadMenu(&$menu)
     *{
     *    $menu['editupload'] = 
-    *                 array(  'menu_text'  => cct('Edit'),
+    *                 array(  'menu_text'  => _('Edit'),
     *                         'weight'     => 100,
     *                         'group_name' => 'owner',
     *                         'id'         => 'editcommand',
     *                         'access'     => CC_DYNAMIC_MENU_ITEM );
     *
     *    $menu['managefiles'] = 
-    *                 array(  'menu_text'  => cct('Manage Files'),
+    *                 array(  'menu_text'  => _('Manage Files'),
     *                         'weight'     => 101,
     *                         'group_name' => 'owner',
     *                         'id'         => 'managecommand',

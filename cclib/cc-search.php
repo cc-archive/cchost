@@ -37,31 +37,31 @@ class CCSearchForm extends CCForm
         $this->CCForm();
         $fields = array( 
                 'search_text' =>
-                        array( 'label'      => cct('Search Text'),
+                        array( 'label'      => _('Search Text'),
                                'form_tip'   => '',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED),
                 'search_type' =>
-                        array( 'label'      => cct('Type'),
+                        array( 'label'      => _('Type'),
                                'form_tip'   => '',
                                'formatter'  => 'select',
-                               'options'    => array( 'any' => cct('Any match'),
-                                                      'all' => cct('Match all'),
-                                                       'phrase' => cct("Exact Phrase") ),
+                               'options'    => array( 'any' => _('Any match'),
+                                                      'all' => _('Match all'),
+                                                       'phrase' => _("Exact Phrase") ),
                                'flags'      => CCFF_POPULATE),
                 'search_in' =>
-                        array( 'label'      => cct('What'),
+                        array( 'label'      => _('What'),
                                'form_tip'   => '',
                                'formatter'  => 'select',
-                               'options'    => array( CC_SEARCH_UPLOADS => cct('Uploads'),
-                                                      CC_SEARCH_USERS   => cct("Users"),
-                                                CC_SEARCH_UPLOADS | CC_SEARCH_USERS => cct("Uploads and Users")
+                               'options'    => array( CC_SEARCH_UPLOADS => _('Uploads'),
+                                                      CC_SEARCH_USERS   => _("Users"),
+                                                CC_SEARCH_UPLOADS | CC_SEARCH_USERS => _("Uploads and Users")
                                                     ),
                                'flags'      => CCFF_POPULATE),
                 );
 
         $this->AddFormFields( $fields );
-        $this->SetSubmitText(cct('Search'));
+        $this->SetSubmitText(_('Search'));
         $this->SetHandler( ccl('search', 'results') );
     }
 }
@@ -87,10 +87,10 @@ class CCSearch
         $CC_GLOBALS['hide_sticky_search'] = true;
 
 
-        CCPage::SetTitle(cct("Search"));
+        CCPage::SetTitle(_("Search"));
         $form = new CCSearchForm();
         $form_html = $form->GenerateHTML();
-        $form_html .= cct('<h1>Search using Google (tm)</h1>');
+        $form_html .= _('<h1>Search using Google (tm)</h1>');
         $site = preg_replace('#http://(.*)#','\1', cc_get_root_url() );
         $form_html .=<<<END
 <form method="GET" action="http://www.google.com/search">
@@ -121,7 +121,7 @@ END;
             //$url = "http://google.com?site:
         }
 
-        CCPage::SetTitle(cct('Search Results'));
+        CCPage::SetTitle(_('Search Results'));
 
         $done_search = false;
         CCEvents::Invoke( CC_EVENT_DO_SEARCH, array(&$done_search) );
@@ -150,9 +150,9 @@ END;
         }
 
         $url = ccl('search');
-        $msg = sprintf(cct("<a href=\"%s\">Search again...</a>"),$url);
+        $msg = sprintf(_("<a href=\"%s\">Search again...</a>"),$url);
         if( $limit_reached )
-            $msg = cct("Search limit reached. ") . $msg;
+            $msg = _("Search limit reached. ") . $msg;
         CCPage::Prompt($msg);
 
     }
@@ -252,7 +252,7 @@ END;
     function OnUserSearch($field,$tag)
     {
         $field = 'user_' . $field;
-        CCPage::SetTitle(cct("Users That Mentioned: ") . $tag);
+        CCPage::SetTitle(_("Users That Mentioned: ") . $tag);
         CCUser::ListRecords( "$field LIKE '%$tag%'" );
     }
 

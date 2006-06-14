@@ -210,7 +210,7 @@ class CCSubmit
 
     function ShowSubmitTypes($types)
     {
-        CCPage::SetTitle(cct('Pick Submission Type'));
+        CCPage::SetTitle(_('Pick Submission Type'));
         $keys = array_keys($types);
         foreach( $keys as $key )
         {
@@ -415,7 +415,7 @@ class CCSubmit
     {
         $items = array( 
             'submitforms' => array(   
-                                 'menu_text'  => cct('Submit Files'),
+                                 'menu_text'  => _('Submit Files'),
                                  'menu_group' => 'artist',
                                  'access'     => CC_MUST_BE_LOGGED_IN,
                                  'weight'     => 6,
@@ -452,7 +452,7 @@ class CCSubmit
         {
             $items += array(
                 'submit_forms'   => array( 
-                                 'menu_text'  => cct('Submit Forms'),
+                                 'menu_text'  => _('Submit Forms'),
                                  'menu_group' => 'configure',
                                  'help' => 'Edit what kind of submit forms the user can see',
                                  'access' => CC_ADMIN_ONLY,

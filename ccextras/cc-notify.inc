@@ -64,7 +64,7 @@ class CCEditUserNotificationForm extends CCForm
 
         $betatxt = "This feature is in BETA. If you have any problems <a href=\"http://ccmixter.org/media/people/contact/admin\"><b>let us know</b></a>.<br /><br />";
 
-        $this->SetFormHelp( $betatxt . cct('Notify me by email when:') );
+        $this->SetFormHelp( $betatxt . _('Notify me by email when:') );
 
         $F = array();
         $count = count($fields);
@@ -90,7 +90,7 @@ class CCNotifyAPI
 
     function EditMyNotifications($other_user_name='')
     {
-        CCPage::SetTitle(cct('My Notifications') . ' [BETA]' );
+        CCPage::SetTitle(_('My Notifications') . ' [BETA]' );
 
         // figure out what fields we are editing
 
@@ -103,9 +103,9 @@ class CCNotifyAPI
             $where['user_name'] = $other_user_name;
             $user_happy_name = $users->QueryItem('user_real_name',$where);
             $fields = array(
-                array( 'label' => sprintf(cct('%s has been remixed'),$user_happy_name),
+                array( 'label' => sprintf(_('%s has been remixed'),$user_happy_name),
                        'flag' => CC_NTFY_THEY_BEEN_REMIXED, ),
-                array( 'label' => sprintf(cct('%s uploads something new'),$user_happy_name),
+                array( 'label' => sprintf(_('%s uploads something new'),$user_happy_name),
                        'flag' => CC_NTFY_THEY_UPLOADED, ),
                 );
         }
@@ -115,16 +115,16 @@ class CCNotifyAPI
             // to get notified when people affect her work
 
             $fields = array(
-                array( 'label' => cct('I\'ve been remixed'),
+                array( 'label' => _('I\'ve been remixed'),
                        'flag' => CC_NTFY_IVE_BEEN_REMIXED, ),
-                array( 'label' => cct('I\'ve been reviewed'),
+                array( 'label' => _('I\'ve been reviewed'),
                        'flag' => CC_NTFY_IVE_BEEN_REVIEWED, ),
-                array( 'label' => cct('I\'ve been replied to'),
+                array( 'label' => _('I\'ve been replied to'),
                        'flag' => CC_NTFY_REVIEW_REPLY, ),
-                array( 'label' => cct('I\'ve been rated'),
+                array( 'label' => _('I\'ve been rated'),
                        'flag' => CC_NTFY_IVE_BEEN_RATED, ),
 /*
-                array( 'label' => cct('Any upload has been editor picked'),
+                array( 'label' => _('Any upload has been editor picked'),
                        'flag' => CC_NTFY_ED_PICK, ),
 */
                 );
@@ -171,7 +171,7 @@ class CCNotifyAPI
                 $notifications->Insert($args);
             }
             
-            CCPage::Prompt(cct('Notifications have been updated'));
+            CCPage::Prompt(_('Notifications have been updated'));
         }
         else
         {
@@ -210,7 +210,7 @@ class CCNotifyAPI
         $notify_row = $notifications->QueryRow($where);
         if( $notify_row )
         {
-            $body = cct('
+            $body = _('
 
 PLEASE DO NOT RESPOND TO THIS EMAIL
 
@@ -222,7 +222,7 @@ This is a notification that "%s" has just received a rating of %d.00
                                    $rating,
                                    $record['file_page_url'] );
 
-            $subject = cct('Ratings notification');
+            $subject = _('Ratings notification');
             $nrarray = array( $notify_row );
             $this->_do_notify($subject, $body, $nrarray  );
         }
@@ -243,7 +243,7 @@ This is a notification that "%s" has just received a rating of %d.00
             {
                 $reviews =& CCReviews::GetTable();
                 $review_rec = $reviews->GetRecordFromRow($review);
-                $body = cct('
+                $body = _('
 
 PLEASE DO NOT RESPOND TO THIS EMAIL
 
@@ -256,7 +256,7 @@ This is a notification that "%s" has been reviewed by %s
                                       $review_rec['user_real_name'],
                                       $review_rec['topic_permalink']);
 
-                $subject = cct('Review notification');
+                $subject = _('Review notification');
                 $nrarray = array( $notify_row );
                 $this->_do_notify($subject, $body, $nrarray  );
             }
@@ -346,7 +346,7 @@ This is a notification that "%s" has been reviewed by %s
         $url = $topic_rec['topic_permalink'];
 
         $subject = 'Topic Reply Notification';
-        $body = cct('
+        $body = _('
 
 PLEASE DO NOT RESPOND TO THIS EMAIL
 
@@ -431,8 +431,8 @@ This is a notification of a reply to a review thread
         $ttags = $configs->GetConfig('ttag');
         $site_name = $ttags['site-title'];
         
-        $subject = sprintf(cct('Upload by %s'),$record['user_real_name']);
-        $body = cct('
+        $subject = sprintf(_('Upload by %s'),$record['user_real_name']);
+        $body = _('
 
 PLEASE DO NOT RESPOND TO THIS EMAIL
 
@@ -449,7 +449,7 @@ This is a notification that %s has just uploaded new material to %s
 
         if( $parents )
         {
-            $body .= cct("which uses samples from:\n");
+            $body .= _("which uses samples from:\n");
             $count = count($parents);
             for( $i = 0; $i < $count; $i++ )
             {
@@ -458,7 +458,7 @@ This is a notification that %s has just uploaded new material to %s
             }
         }
 
-        $body .= sprintf(cct("\nThank you,\n%s"), $ttags['site-title']);
+        $body .= sprintf(_("\nThank you,\n%s"), $ttags['site-title']);
 
         $this->_do_notify($subject, $body, $notify_rows);
     }

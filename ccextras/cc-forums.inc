@@ -151,7 +151,7 @@ class CCForumAPI
         if( ($mask & $forum_row['forum_post_access']) != 0 )
         {
             $commands[] = array( 'url' => ccl('forums','post',$forum_id),
-                                 'text' => cct('Post new topic' ) );
+                                 'text' => _('Post new topic' ) );
         }
 
         //
@@ -211,7 +211,7 @@ EOF;
         if( !empty($thread) )
         {
             $url = ccl('feed','rss','forums','thread',$thread);
-            $help = cct('Topic');
+            $help = _('Topic');
         }
         elseif( !empty($user) )
         {
@@ -221,7 +221,7 @@ EOF;
         else
         {
             $url = ccl('feed','rss','forums');
-            $help = cct('Forum');
+            $help = _('Forum');
         }
 
         global $CC_GLOBALS;
@@ -234,8 +234,8 @@ EOF;
     function _build_bread_crumb_trail($forum_id='',$topic_name='')
     {
         $trail = array();
-        $trail[] = array( 'url' => ccl(), 'text' => cct('Home') );
-        $trail[] = array( 'url' => ccl('forums'), 'text' => cct('Forums') );
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        $trail[] = array( 'url' => ccl('forums'), 'text' => _('Forums') );
 
         if( $forum_id )
         {
@@ -333,7 +333,7 @@ EOF;
             CCUtil::SendBrowserTo($url);
         }
 
-        CCPage::SetTitle( cct('Post New Topic') );
+        CCPage::SetTitle( _('Post New Topic') );
 
         $form = new CCForumPostForm();
         if( empty($_POST['forumpost']) || !$form->ValidateFields() )
@@ -387,7 +387,7 @@ EOF;
         if( empty($row) )
         {
             $this->_build_bread_crumb_trail(1);
-            CCPage::SetTitle( cct('Thread Missing') );
+            CCPage::SetTitle( _('Thread Missing') );
             CCPage::Prompt('That topic thread does not exist');
             return;
         }
@@ -399,13 +399,13 @@ EOF;
         if( ($mask & $forum_row['forum_read_access']) == 0 )
         {
             if( ($forum_row['forum_read_access'] & CC_ADMIN_ONLY) != 0 )
-                $msg = cct('You must have admin rights to see this forum');
+                $msg = _('You must have admin rights to see this forum');
             elseif( ($forum_row['forum_read_access'] & CC_MUST_BE_LOGGED_IN) != 0 )
-                $msg = cct('You must be logged in to see this forum');
+                $msg = _('You must be logged in to see this forum');
             else
-                $msg = cct('You do have proper permissions to see this forum');
+                $msg = _('You do have proper permissions to see this forum');
 
-            CCPage::SetTitle(cct('Restricted Access'));
+            CCPage::SetTitle(_('Restricted Access'));
             CCPage::Prompt($msg);
             return;
         }
@@ -417,25 +417,25 @@ EOF;
 
             if( $closed )
             {
-                $commands[] = array( 'url' => 0, 'msg' => cct('Thread is closed to new comments') );
+                $commands[] = array( 'url' => 0, 'msg' => _('Thread is closed to new comments') );
             }
             else
             {
                 $commands[] = array( 'url' => ccl('topics','reply',$topic_id) . '#edit',
-                                 'text' => cct('Post topic reply' ), 'msg' => 0 );
+                                 'text' => _('Post topic reply' ), 'msg' => 0 );
             }
 
             if( CCUser::IsAdmin() )
             {
                 $commands[] = array( 'url' => ccl('admin','forums', 'move', $thread_id ),
-                                     'text' => cct('Move thread' ), 'msg' => 0  );
+                                     'text' => _('Move thread' ), 'msg' => 0  );
 
-                $ctext = $closed ? cct('Open') : cct('Close');
+                $ctext = $closed ? _('Open') : _('Close');
 
                 $commands[] = array( 'url' => ccl('admin','forums', 'close', $thread_id ),
                                      'text' => $ctext, 'msg' => 0  );
 
-                $ctext = $thread_row['forum_thread_sticky'] ? cct('Unstick') : cct('Stick');
+                $ctext = $thread_row['forum_thread_sticky'] ? _('Unstick') : _('Stick');
 
                 $commands[] = array( 'url' => ccl('admin','forums', 'stick', $thread_id ),
                                      'text' => $ctext, 'msg' => 0  );
@@ -495,21 +495,21 @@ EOF;
             {
                 $title = $topics->QueryItemFromKey('topic_name', 
                                                     $rows[$i]['forum_thread_oldest'] );
-                $rows[$i]['topic_name'] = sprintf( cct('Reply to: "%s"') , $title ); 
+                $rows[$i]['topic_name'] = sprintf( _('Reply to: "%s"') , $title ); 
             }
         }
 
         $this->_add_feed_links( '', $username);
 
         CCPage::PageArg('topics',$rows,'forum_user');
-        CCPage::SetTitle( sprintf( cct("Forum Posts for %s"), $user_real_name ) );
+        CCPage::SetTitle( sprintf( _("Forum Posts for %s"), $user_real_name ) );
         CCTopic::AddLinks();
 
         $trail = array();
-        $trail[] = array( 'url' => ccl(),                    'text' => cct('Home') );
-        $trail[] = array( 'url' => ccl('people'),            'text' => cct('People') );
+        $trail[] = array( 'url' => ccl(),                    'text' => _('Home') );
+        $trail[] = array( 'url' => ccl('people'),            'text' => _('People') );
         $trail[] = array( 'url' => ccl('people', $username), 'text' => $user_real_name );
-        $trail[] = array( 'url' => '',                       'text' => cct('Forum posts') );
+        $trail[] = array( 'url' => '',                       'text' => _('Forum posts') );
         CCPage::AddBreadCrumbs($trail);
 
     }
@@ -536,7 +536,7 @@ EOF;
             if( empty($user_id) )
                 exit; // hack 
             $where = "(topic_user = $user_id) AND (topic_forum > 0)";
-            $title = sprintf( cct('Feed for topics by %s'), $param );
+            $title = sprintf( _('Feed for topics by %s'), $param );
         }
         elseif( $type == 'thread' )
         {
@@ -544,11 +544,11 @@ EOF;
             $threads = new CCForumThreads();
             $threads->AddJoin( new CCTopics(), 'forum_thread_oldest' );
             $topic_name = $threads->QueryItemFromKey('topic_name',$param);
-            $title = sprintf( cct('Feed for topic: %s'), $topic_name );
+            $title = sprintf( _('Feed for topic: %s'), $topic_name );
         }
         else
         {
-            $title = cct('Forums Feed');
+            $title = _('Forums Feed');
             $where = 'topic_forum > 0';
         }
 
@@ -564,7 +564,7 @@ EOF;
             {
                 $R['topic_text'] = 
                 $R['topic_text_plain'] = 
-                $R['topic_text_html'] = cct('Contents requires login');
+                $R['topic_text_html'] = _('Contents requires login');
             }
 
             $R['topic_name'] = $R['forum_name'] . '::' . $R['topic_name'];

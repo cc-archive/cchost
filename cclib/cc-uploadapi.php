@@ -950,7 +950,7 @@ class CCUploadAPI
             $errors = $format_info->GetErrors();
             if( !empty($errors) )
             {
-                $msg = cct("There was error in the file format<br />") . implode("<br />", $errors );
+                $msg = _("There was error in the file format<br />") . implode("<br />", $errors );
                 CCDebug::Log($msg);
                 return( $msg );
             }

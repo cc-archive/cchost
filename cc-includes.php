@@ -99,6 +99,7 @@ if (is_dir($cc_extras_dir))
 if( !function_exists('cct') )
 {
     function cct($t) { return( $t ); }
+
 }
 
 ?>

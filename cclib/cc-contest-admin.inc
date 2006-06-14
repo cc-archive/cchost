@@ -194,7 +194,7 @@ class CCCreateContestForm extends CCContestForm
             $value = $this->GetFormValue($fieldname);
             if( preg_match('/[^a-z0-9]/i',$value) || (strlen($value) > 25) )
             {
-                $this->SetFieldError($fieldname, cct('Must be characters and numbers, no more than 25'));
+                $this->SetFieldError($fieldname, _('Must be characters and numbers, no more than 25'));
                 return(false);
             }
             $contests =& CCContests::GetTable();
@@ -249,15 +249,15 @@ class CCUploadContestSourceForm extends CCNewUploadForm
         $this->CCNewUploadForm( CCUser::CurrentUser() );
         $fields = array(
                 'ccud_tags' => array(
-                        'label'      => cct('Source Type:'),
+                        'label'      => _('Source Type:'),
                         'form_tip'   => '',
                         'formatter'  => 'radio',
                         'value'      => CCUD_CONTEST_MAIN_SOURCE,
                         'options'    => array( 
                                            CCUD_CONTEST_MAIN_SOURCE
-                                                           => cct('Main Remix Material'),
+                                                           => _('Main Remix Material'),
                                            CCUD_CONTEST_SAMPLE_SOURCE
-                                                           => cct('Sample (loop, layer, fragment, etc.)')),
+                                                           => _('Sample (loop, layer, fragment, etc.)')),
                         'flags'      => CCFF_NOUPDATE),
             );
         $this->AddFormFields($fields);
@@ -409,42 +409,42 @@ EOF;
                                  'args' => array( 'contest' => $short_name ),
                                  'access' => 0 ),
 
-             'home'   =>    array(  'text'   => cct('About'),
-                                   'help'   => cct('Home for ') . $full_name,
+             'home'   =>    array(  'text'   => _('About'),
+                                   'help'   => _('Home for ') . $full_name,
                                    'tags'   => '/contest/' . $short_name,
                                    'limit'  => 1,
                                    'access' => CC_DONT_CARE_LOGGED_IN,
                                    'function' => 'url' ),
 
-             'winners'   =>  array(  'text'   => cct('Winners'),
-                                   'help'   => cct('...and the winner is...'),
+             'winners'   =>  array(  'text'   => _('Winners'),
+                                   'help'   => _('...and the winner is...'),
                                    'tags'   => 'winner,' . $short_name,
                                    'limit'  => 1,
                                    'access' => CC_DONT_CARE_LOGGED_IN,
                                    'function' => 'all' ),
 
-             'sources' =>    array(  'text'   => cct('Sources'),
-                                   'help'   => cct('Download Source Material for ') . $full_name,
+             'sources' =>    array(  'text'   => _('Sources'),
+                                   'help'   => _('Download Source Material for ') . $full_name,
                                    'access' => CC_DONT_CARE_LOGGED_IN,
                                    'limit'  => 1,
                                    'tags'   => CCUD_CONTEST_ALL_SOURCES,
                                    'function' => 'any' ),
 
-             'entries' =>     array(  'text'   => cct('Entries'),
-                                   'help'   => cct('See recently uploaded originals'),
+             'entries' =>     array(  'text'   => _('Entries'),
+                                   'help'   => _('See recently uploaded originals'),
                                    'limit'  => '',
                                    'tags'   => 'contest_entry, ' . $short_name,
                                    'access' => CC_DONT_CARE_LOGGED_IN,
                                    'function' => 'all' ),
 
-             'submit'   =>    array(  'text'   => cct('Submit Entry'),
-                                   'help'   => cct('Submit an entry in the ') . $full_name . ' contest',
+             'submit'   =>    array(  'text'   => _('Submit Entry'),
+                                   'help'   => _('Submit an entry in the ') . $full_name . ' contest',
                                    'tags'   => '/contest/submit/' . $short_name,
                                    'limit'  => 1,
                                    'access' => CC_MUST_BE_LOGGED_IN,
                                    'function' => 'url' ),
 
-             'edit'   =>    array(  'text'   => cct('Admin'),
+             'edit'   =>    array(  'text'   => _('Admin'),
                                    'help'   => 'Admin the contest',
                                    'tags'   => 'admin',
                                    'limit'  => 1,
@@ -539,7 +539,7 @@ EOF;
             $form->GetFormValues($fields);
             $contests =& CCContests::GetTable();
             $contests->Update($fields);
-            CCPage::Prompt(cct('Changes Saved'));
+            CCPage::Prompt(_('Changes Saved'));
         }
 
         CCPage::AddForm( $form->GenerateForm() );
@@ -579,7 +579,7 @@ EOF;
 
                 if( $id )
                 {
-                    CCPage::Prompt(cct('Upload succeeded'));
+                    CCPage::Prompt(_('Upload succeeded'));
                     $form = new CCUploadContestSourceForm($record); // this clears the form
                 }
             }

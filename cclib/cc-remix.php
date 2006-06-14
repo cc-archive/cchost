@@ -103,7 +103,7 @@ class CCEditRemixesForm extends CCForm
 
         CCRemix::_setup_search_fields($this);
 
-        $this->SetSubmitText(cct('Done Editing'));
+        $this->SetSubmitText(_('Done Editing'));
     }
 }
 
@@ -125,13 +125,13 @@ class CCRemix
             $type = 'artist';
 
         $searchtypes[] = array( 'value' => 'artist',
-                                'label' => cct('Artist'),
+                                'label' => _('Artist'),
                                 'selected' => $type == 'artist');
         $searchtypes[] = array( 'value' => 'title',
-                                'label' => cct('Title'),
+                                'label' => _('Title'),
                                 'selected' => $type == 'title' );
         $searchtypes[] = array( 'value' => 'full',
-                                'label' => cct('Full search'),
+                                'label' => _('Full search'),
                                 'selected' => $type == 'full'  );
 
         $form->SetTemplateVar('remix_search_types', $searchtypes );
@@ -178,7 +178,7 @@ class CCRemix
 
         $uploads =& CCUploads::GetTable();
         $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
-        $msg = sprintf(cct("Editing Remixes for '%s'"),$name);
+        $msg = sprintf(_("Editing Remixes for '%s'"),$name);
         CCPage::SetTitle($msg);
         $pools    = empty($CC_GLOBALS['allow-pool-search']) ? false : $CC_GLOBALS['allow-pool-search'];
         $form = new CCEditRemixesForm($pools);
@@ -309,7 +309,7 @@ class CCRemix
                     CCSync::Remix($remixid,$remix_sources);
 
                     $msg = $is_update ? 'update' : 'upload';
-                    $prompt = sprintf(cct("Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"),
+                    $prompt = sprintf(_("Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"),
                         $msg, $url);
                     CCPage::Prompt($prompt);
                     return(true);

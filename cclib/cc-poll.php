@@ -58,7 +58,7 @@ class CCPollsForm extends CCForm
                         'flags'      => CCFF_NONE) );
 
         $this->AddFormFields( $fields );
-        $this->SetSubmitText(cct('Vote'));
+        $this->SetSubmitText(_('Vote'));
         $this->SetHiddenField('poll_over',$poll_end_time);
     }
 }
