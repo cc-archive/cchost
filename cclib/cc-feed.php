@@ -369,7 +369,7 @@ class CCFeed
 
         $configs         =& CCConfigs::GetTable();
         $template_tags   = $configs->GetConfig('ttag');
-        $site_title      = utf8_encode($this->__($template_tags['site-title']));
+        $site_title      = utf8_encode($this->_cct($template_tags['site-title']));
 
         $args = $CC_GLOBALS;
         $args += $template_tags;
@@ -390,7 +390,7 @@ class CCFeed
             $args['feed_subject'] = "$site_title ($tagstr)";
         }
 
-        $args['channel_description'] = utf8_encode($this->__($template_tags['site-description']));
+        $args['channel_description'] = utf8_encode($this->_cct($template_tags['site-description']));
 
         if( empty($records) )
         {
@@ -492,9 +492,9 @@ class CCFeed
             if( !empty($row['upload_description_text']) )
                 $row['upload_description'] =  $row['upload_description_text'];
 
-            $row['upload_description'] = utf8_encode($this->__($row['upload_description']));
-            $row['upload_name']        = utf8_encode($this->__($row['upload_name']));
-            $row['user_real_name']     = utf8_encode($this->__($row['user_real_name']));
+            $row['upload_description'] = utf8_encode($this->_cct($row['upload_description']));
+            $row['upload_name']        = utf8_encode($this->_cct($row['upload_name']));
+            $row['user_real_name']     = utf8_encode($this->_cct($row['user_real_name']));
 
             $remix_api->OnUploadListing( $row );
         }
