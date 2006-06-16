@@ -15,7 +15,7 @@ then :
     then :
         mv ccadmin_backup ccadmin_backup_${CURR_DATE}
     fi
-    mv ccadmin ccadmin_old
+    mv ccadmin ccadmin_backup
 fi
     
 if [ -e "cc-config-db.php.backup" ]

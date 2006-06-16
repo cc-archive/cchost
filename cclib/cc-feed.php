@@ -19,10 +19,13 @@
 */
 
 /**
-* Bass module for generating feeds
+* Base module for generating feeds
 *
 * @package cchost
 * @subpackage api
+*
+* TODO: Finish abstracting the feed classes into this one.
+
 */
 
 if( !defined('IN_CC_HOST') )
@@ -32,10 +35,15 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigF
 
 /**
 */
-define ( 'NUM_FEED_ITEMS', 15 );
+define ( 'CC_FEED_NUM_ITEMS', 15 );
 
 define ( 'CC_FEED_DUMP_FILE', 'dump.xml' );
 define ( 'CC_FEED_DEFAULT_TAG', 'audio' );
+
+
+/**
+*/
+//define('CC_FEED_CACHE_ON', true);
 
 /**
 * Abstract class to be used for generating feeds.
@@ -45,6 +53,13 @@ define ( 'CC_FEED_DEFAULT_TAG', 'audio' );
 */
 class CCFeed
 {
+    /**
+     * This has a string identifier listing the feed type.
+     * @var		string
+     * @access	private
+     */
+    var $_feed_type;
+
     /**
      * @var boolean true if is full dump and false
      * @var boolean
@@ -208,7 +223,7 @@ class CCFeed
         $uploads =& CCUploads::GetTable();
         
         if ( !$this->_is_full_dump() )
-            $uploads->SetOffsetAndLimit(0,NUM_FEED_ITEMS);  
+            $uploads->SetOffsetAndLimit(0,CC_FEED_NUM_ITEMS);  
 
         $uploads->SetOrder('upload_date','DESC');
 
@@ -281,7 +296,7 @@ class CCFeed
     * @param string $cache_type e.g. 'rss', 'atom', etc.
     * @see _gen_feed_from_records
     */
-    function _gen_feed_from_tags($template, $tagstr, $cache_type)
+    function _gen_feed_from_tags($template, $tagstr, $cache_type = 'rss')
     {
         if( empty($tagstr) )
         {
@@ -323,7 +338,7 @@ class CCFeed
         else
         {
             $tagstr = str_replace(' ',',',urldecode($tagstr));
-            $this->_check_cache('rss',$tagstr);
+            $this->_check_cache($cache_type,$tagstr);
             $qstring = '';
         }
 
@@ -495,9 +510,11 @@ class CCFeed
     function GenerateFeed ($tags='')
     {
         $tags = str_replace(' ',',',urldecode($tags));
-        // if ( CCDATADUMP_CACHE_ON )
-        //    $this->_check_cache('datadump',$tags);
+        // check_cache already checks to see if it is on
+
+	$this->_check_cache($this->GetFeedType(),$tags);
         $qstring = '';
+
 
         if( empty($tags) )
             $tags = CC_FEED_DEFAULT_TAG;
@@ -544,6 +561,28 @@ class CCFeed
     {
         $this->_dump_file = $dump_file;
     }
+
+    /**
+     * Gets the feed type of this feed.
+     * @returns string A string that is the dump filename internally.
+     */
+    function GetFeedType ()
+    {
+        return $this->_feed_type;
+    }
+
+    /**
+     * This sets the feed type as a string which is used in various places
+     * like identifying the cache and other necessary strings for referencing
+     * this feed type.
+     *
+     * @param string $feed_type This is the type of feed
+     */
+    function SetFeedType ($feed_type)
+    {
+        $this->_feed_type = $feed_type;
+    }
+
 } // end of primarily abstract class CCFeed
 
 

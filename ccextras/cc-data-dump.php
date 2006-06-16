@@ -34,9 +34,7 @@ CCEvents::AddHandler(CC_EVENT_DELETE_FILE,
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,
     array( 'CCDataDump',  'OnUploadDone'));
 
-/**
-*/
-define('CCDATADUMP_CACHE_ON', true);
+define('CC_FEED_DATADUMP', 'datadump');
 
 /**
 * XML Feed generator for xml format for audio
@@ -136,12 +134,25 @@ class CCDataDump extends CCFeed
 
         $xml = $template->SetAllAndParse( $args );
 
-        if( CCDATADUMP_CACHE_ON && empty($records) && !empty($tagstr) )
+        if( $this->_is_caching_on() && empty($records) && !empty($tagstr) )
             $this->_cache($xml,$cache_type,$tagstr);
 
         $this->_output_xml($xml);
 	exit;
     }
+
+    /**
+     * Gets the feed type (and sets it if it hasn't been set yet lamely.
+     * This is necessary because there isn't a Constructor.
+     */
+    function GetFeedType ()
+    {
+        if ( empty($this->_feed_type) )
+	    $this->_feed_type = CC_FEED_DATADUMP;
+        return parent::GetFeedType();
+    }
+    
+
 
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
@@ -154,22 +165,6 @@ class CCDataDump extends CCFeed
                           array( 'CCDataDump', 'GenerateFeed'),
                           CC_DONT_CARE_LOGGED_IN );
     }
-
-    /**
-    * Internal: Cache an rss feed into the database
-    *
-    * @see   CCFeed::_cache()
-    * @param string $xml Actual feed text
-    * @param string $type Feed format
-    * @param string $tagstr Tags represented by this feed.
-    */
-    function _cache(&$xml,$type,$tagstr)
-    {
-        if( $type != 'datadump' )
-            return;
-        parent::_cache($xml, $type, $tagstr);
-    }
-
 }
 
 ?>

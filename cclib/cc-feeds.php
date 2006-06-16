@@ -34,6 +34,8 @@ CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    array( 'CCFeeds',  'OnFileDelete')
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCFeeds',  'OnUploadDone'));
 CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,    array( 'CCFeeds',  'OnRenderPage'));
 
+define('CC_FEED_RSS', 'rss');
+
 /**
 * RSS Feed generator and reader for site
 *
@@ -41,6 +43,11 @@ CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,    array( 'CCFeeds',  'OnRenderPage')
 * http://cchost.localhost/?ccm=/media/admin/menu/killcache
 * @package cchost
 * @subpackage api
+*
+* TODO: Rename this to CCFeedsRSS
+* TODO: Rename the file cc-feeds-rss.php
+* TODO: extract the atom stuff that is tainting this to another class
+* TODO: probably should abstract the interface parts of this as well.
 */
 class CCFeeds extends CCFeed
 {
@@ -49,9 +56,9 @@ class CCFeeds extends CCFeed
     *
     * @param string $tagstr Space (or '+') delimited tags to use as basis of xml feed
     */
-    function GenerateFeedFromTags($tagstr='')
+    function GenerateFeedFromTags($tagstr = CC_FEED_DEFAULT_TAG)
     {
-        $this->_gen_feed_from_tags('rss_20.xml',$tagstr,'atom');
+        $this->_gen_feed_from_tags('rss_20.xml',$tagstr,CC_FEED_RSS);
     }
 
 
@@ -130,7 +137,7 @@ class CCFeeds extends CCFeed
     * @param string $tagstr  Search string to display as part of description
     * @param string $feed_url The URL that represents this result set 
     */
-    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,$cache_type='rss')
+    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,$cache_type= CC_FEED_RSS)
     {
         $this->_gen_feed_from_records('rss_20.xml',$records,$tagstr,$feed_url,$cache_type);
     }
@@ -191,6 +198,17 @@ class CCFeeds extends CCFeed
     }
 
     /**
+     * Gets the feed type (and sets it if it hasn't been set yet lamely.
+     * This is necessary because there isn't a Constructor.
+     */
+    function GetFeedType ()
+    {
+        if ( empty($this->_feed_type) )
+	    $this->_feed_type = CC_FEED_RSS;
+        return parent::GetFeedType();
+    }
+
+    /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
     * @see CCEvents::MapUrl()
@@ -200,21 +218,6 @@ class CCFeeds extends CCFeed
         CCEvents::MapUrl( 'feed/rss',  array( 'CCFeeds', 'GenerateFeedFromTags'), CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( 'podcast/page',  array( 'CCFeeds', 'PodcastPage'), CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( 'podcast/artist',  array( 'CCFeeds', 'PodcastUser'), CC_DONT_CARE_LOGGED_IN);
-    }
-
-    /**
-    * Internal: Cache an rss feed into the database
-    *
-    * @see   CCFeed::_cache()
-    * @param string $xml Actual feed text
-    * @param string $type Feed format
-    * @param string $tagstr Tags represented by this feed.
-    */
-    function _cache(&$xml,$type,$tagstr)
-    {
-        if( $type != 'rss' )
-            return;
-        parent::_cache($xml, $type, $tagstr);
     }
 
 } // end of class CCFeeds
