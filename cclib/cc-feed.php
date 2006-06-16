@@ -262,7 +262,7 @@ class CCFeed
     * 
     * @param string $str String to clean
     */
-    function __($str)
+    function _cct($str)
     {
         return( preg_replace('&[^a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]&','',$str ) );
     }

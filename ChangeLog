@@ -1,4 +1,12 @@
 2006-06-13  Jon Phillips <jon@rejon.org>
+
+	* print_files_cct.sh ChangeLog ccextras/cc-data-dump.php
+	ccextras/cc-topics.php cclib/cc-feed.php: Fixed the internal 
+	scraper _cct() function which is diff. from cct() for translation 
+	which caused problems on the forum feed.
+
+2006-06-13  Jon Phillips <jon@rejon.org>
+
 	* locale/default/pt_BR/LC_MESSAGES/cchost.po bin/data_dump.php 
 	ccextras/cc-data-dump.php cclib/cc-feeds-atom.php cclib/cc-feeds.php
 	cclib/cc-api.php cclib/cc-feed.php: Abstracted more of the feeds, 
