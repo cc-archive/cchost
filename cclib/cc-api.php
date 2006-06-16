@@ -68,7 +68,7 @@ class CCRestAPI
     {
         if( !isset($feeds) )
             $feeds = new CCFeeds();
-        $feeds->GenerateRSSFromTags('');
+        $feeds->GenerateFeedFromTags('');
     }
 
     function Search()
@@ -94,7 +94,7 @@ class CCRestAPI
 
         $feeds->PrepRecords($results[CC_SEARCH_UPLOADS]);
 
-        $feeds->GenerateRSSFromRecords(
+        $feeds->GenerateFeedFromRecords(
                         $results[CC_SEARCH_UPLOADS],
                         $query,
                         ccl( 'api', 'search', $query ),
@@ -133,7 +133,7 @@ class CCRestAPI
         $record =& $uploads->GetRecordFromID($upload_id);
         $records = array( $record );
         $feeds->PrepRecords($records);
-        $feeds->GenerateRSSFromRecords(
+        $feeds->GenerateFeedFromRecords(
                         $records,
                         '',
                         ccl('api','file',$upload_id),

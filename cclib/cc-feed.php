@@ -34,6 +34,9 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigF
 */
 define ( 'NUM_FEED_ITEMS', 15 );
 
+define ( 'CC_FEED_DUMP_FILE', 'dump.xml' );
+define ( 'CC_FEED_DEFAULT_TAG', 'audio' );
+
 /**
 * Abstract class to be used for generating feeds.
 *
@@ -44,9 +47,18 @@ class CCFeed
 {
     /**
      * @var boolean true if is full dump and false
+     * @var boolean
+     * @access private
      */
-    var $is_dump;
-    
+    var $_is_dump;
+   
+    /**
+     * This is the file where all audio is dumped.
+     * @var	string
+     * @access	private
+     */
+    var $_dump_file = CC_FEED_DUMP_FILE; 
+   
     // No default constructor
 
   
@@ -227,7 +239,7 @@ class CCFeed
     */
     function _is_full_dump()
     {
-        return $this->is_dump || (CCUser::IsAdmin() && !empty($_REQUEST['all']) && ($_REQUEST['all'] == 1));
+        return $this->_is_dump || (CCUser::IsAdmin() && !empty($_REQUEST['all']) && ($_REQUEST['all'] == 1));
     }
 
     /**
@@ -388,29 +400,40 @@ class CCFeed
         if( !empty($records) && !empty($tagstr) )
             $this->_cache($xml,$cache_type,$tagstr);
 
+        $this->_output_xml($xml);
+        exit;
+    }
+
+    /**
+     * Either outputs xml to screen or to a file from the class.
+     * @returns boolean
+     */
+    function _output_xml (&$xml)
+    {
         if( $this->_is_full_dump() )
         {
             header("Content-type: text/plain"); 
-            $f = fopen('all_audio.xml','w');
+            $f = fopen($this->_dump_file,'w');
             if( !$f )
             {
-                print('could not open "all_audio.xml"');
+                echo sprintf('could not open "%s"', $this->_dump_file);
+		return false;
             }
             else
             {
-            fwrite($f,$xml);
-            fclose($f);
-                chmod('all_audio.xml',CC_DEFAULT_FILE_PERMS);
-            print('all_audio.xml written to server');
-        }
+                fwrite($f,$xml);
+                fclose($f);
+                chmod($this->_dump_file,CC_DEFAULT_FILE_PERMS);
+		if (isset($_REQUEST['all']))
+                    echo sprintf('%s written to server', $this->_dump_file);
+		return true;
+            }
         }
         else
         {
             header("Content-type: text/xml"); // this should enforce a utf-8
             print($xml);
-        }
-
-        exit;
+	}
     }
 
     /**
@@ -462,7 +485,66 @@ class CCFeed
         }
 
     }
-}
+
+    /** 
+     * Generates a feed.
+     *
+     * @param string $tags Tags used for generating the feed.
+     * @return mixed Either true or false, or big xml dump.
+     */
+    function GenerateFeed ($tags='')
+    {
+        $tags = str_replace(' ',',',urldecode($tags));
+        // if ( CCDATADUMP_CACHE_ON )
+        //    $this->_check_cache('datadump',$tags);
+        $qstring = '';
+
+        if( empty($tags) )
+            $tags = CC_FEED_DEFAULT_TAG;
+        else
+            $tags .= ',' . CC_FEED_DEFAULT_TAG;
+
+        $records =& $this->_get_tag_data($tags);
+
+        return ( $this->GenerateFeedFromRecords( $records,
+                                                 $tags,
+                                                 ccl('tags',$tags) . $qstring));
+    }
+
+    /**
+     * Returns if this object is a dump or not.
+     */
+    function GetIsDump ()
+    {
+        return $this->_is_dump;
+    }
+
+    /**
+     * This sets the variable $_is_dump.
+     * @param boolean $is_dump Is this feed a dump or the incremental type.
+     */
+    function SetIsDump ($is_dump = false)
+    {
+        $this->_is_dump = $is_dump;
+    }
+
+    /**
+     * @returns string A string that is the dump filename internally.
+     */
+    function GetDumpFile ()
+    {
+        return $this->_dump_file;
+    }
+
+    /**
+     * This sets the variable $_dump_file.
+     * @param string $dump_file The filename for data to be dumped to.
+     */
+    function SetDumpFile ($dump_file = CC_FEED_DUMP_FILE)
+    {
+        $this->_dump_file = $dump_file;
+    }
+} // end of primarily abstract class CCFeed
 
 
 

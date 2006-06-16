@@ -49,7 +49,7 @@ class CCFeeds extends CCFeed
     *
     * @param string $tagstr Space (or '+') delimited tags to use as basis of xml feed
     */
-    function GenerateRSSFromTags($tagstr='')
+    function GenerateFeedFromTags($tagstr='')
     {
         $this->_gen_feed_from_tags('rss_20.xml',$tagstr,'atom');
     }
@@ -105,7 +105,7 @@ class CCFeeds extends CCFeed
         $records = $uploads->GetRecords($where);
         $this->_resort_records($records,$sort_order);
         $this->PrepRecords($records);
-        $this->GenerateRSSFromRecords( $records, 
+        $this->GenerateFeedFromRecords( $records, 
                                        "Podcast this page" . $sub_title,
                                        ccl('podcast','page'),
                                        'podcast');
@@ -120,7 +120,7 @@ class CCFeeds extends CCFeed
         $where['user_name'] = $username;
         $records = $uploads->GetRecords($where);
         $this->PrepRecords($records);
-        $this->GenerateRSSFromRecords($records,"Podcast for $username",ccl('podcast','page',$username),'podcast');
+        $this->GenerateFeedFromRecords($records,"Podcast for $username",ccl('podcast','page',$username),'podcast');
     }
 
     /**
@@ -130,7 +130,7 @@ class CCFeeds extends CCFeed
     * @param string $tagstr  Search string to display as part of description
     * @param string $feed_url The URL that represents this result set 
     */
-    function GenerateRSSFromRecords(&$records,$tagstr,$feed_url,$cache_type='rss')
+    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,$cache_type='rss')
     {
         $this->_gen_feed_from_records('rss_20.xml',$records,$tagstr,$feed_url,$cache_type);
     }
@@ -197,7 +197,7 @@ class CCFeeds extends CCFeed
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'feed/rss',  array( 'CCFeeds', 'GenerateRSSFromTags'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( 'feed/rss',  array( 'CCFeeds', 'GenerateFeedFromTags'), CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( 'podcast/page',  array( 'CCFeeds', 'PodcastPage'), CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( 'podcast/artist',  array( 'CCFeeds', 'PodcastUser'), CC_DONT_CARE_LOGGED_IN);
     }

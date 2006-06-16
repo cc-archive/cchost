@@ -8,10 +8,27 @@
 
  * // 15 4 * * 3,6 /web/ccmixter/www/bin/data_dump.sh 2>&1 >/dev/null
  * 
+ * TODO: Add commandline options with standard getopts
  */
 
-define ('DUMP_FILE', 'dump.xml'); 
-chdir('/web/ccmixter/www');
+define('FEED_DUMP_FILE', 'dump.xml');
+
+/* define('FEED_CUSTOM', 1);
+define('FEED_ATOM', 2);
+define('FEED_RSS', 3);
+*/
+
+if (!empty($_SERVER['argv'][1])) 
+    $dump_file = $_SERVER['argv'][1];
+else
+    $dump_file = FEED_DUMP_FILE;
+
+// chdir('/web/ccmixter/www');
+
+if (!empty($_SERVER['argv'][2]))
+    $feed_type = $_SERVER['argv'][2];
+else
+    $feed_type = 'custom';
 
 
 error_reporting(E_ALL & ~E_NOTICE);
@@ -58,17 +75,23 @@ CCEvents::Invoke(CC_EVENT_APP_DONE);
 
 
 
-$dataDump = new CCDataDump();
-$dataDump->is_dump = TRUE;
-
-$fh = fopen (DUMP_FILE, 'w');
-if ( !$fh ) {
-    echo "There is an error with opening this file.\n";
-} else {
-    if ( fwrite( $fh, $dataDump->GenerateFeed('audio') ) === false )
-        echo "An error occured with writing\n";
+switch ($feed_type)
+{
+    case 'atom':
+    	$dataDump = new CCFeedsAtom();
+	break;
+    case 'rss':
+    	$dataDump = new CCFeeds();
+	break;
+    case 'custom':
+    default: // default is FEED_CUSTOM
+    	$dataDump = new CCDataDump();
+	break;
 }
-fclose( $fh );
-chmod(DUMP_FILE, 0664);
+
+$dataDump->SetIsDump(true);
+$dataDump->SetDumpFile($dump_file); // default is all_audio.xml
+$dataDump->GenerateFeed();
+
 exit;
 ?>

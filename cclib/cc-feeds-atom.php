@@ -39,12 +39,12 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCFeedsAtom', 'OnMapUrls'));
 */
 class CCFeedsAtom extends CCFeed
 {
-    function GenerateAtomFromRecords(&$records,$tagstr,$feed_url,$cache_type='atom')
+    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,$cache_type='atom')
     {
         $this->_gen_feed_from_records('atom_10.xml',$records,$tagstr,$feed_url,$cache_type);
     }
 
-    function GenerateAtomFromTags($tagstr='')
+    function GenerateFeedFromTags($tagstr='')
     {
         $this->_gen_feed_from_tags('atom_10.xml',$tagstr,'rss');
     }
@@ -57,7 +57,8 @@ class CCFeedsAtom extends CCFeed
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('feed','atom'),  
-                          array( 'CCFeedsAtom', 'GenerateAtomFromTags'), CC_DONT_CARE_LOGGED_IN);
+                          array( 'CCFeedsAtom', 'GenerateFeedFromTags'), 
+			         CC_DONT_CARE_LOGGED_IN);
     }
 
 } // end of class CCFeeds

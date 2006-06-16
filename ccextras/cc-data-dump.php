@@ -46,31 +46,6 @@ define('CCDATADUMP_CACHE_ON', true);
 */
 class CCDataDump extends CCFeed
 {
-    /** 
-     * Generates a feed.
-     *
-     * @param string $tags Tags used for generating the feed.
-     * @return mixed Either true or false, or big xml dump.
-     */
-    function GenerateFeed ($tags='')
-    {
-        $tags = str_replace(' ',',',urldecode($tags));
-        if ( CCDATADUMP_CACHE_ON )
-            $this->_check_cache('datadump',$tags);
-        $qstring = '';
-
-        if( empty($tags) )
-            $tags = 'audio';
-        else
-            $tags .= ',audio';
-
-        $records =& $this->_get_tag_data($tags);
-
-        return ( $this->GenerateFeedFromRecords( $records,
-                                                 $tags,
-                                                 ccl('tags',$tags) . $qstring));
-    }
-
     /**
     * Handler for feed/rss - returns rss xml feed for given records
     *
@@ -163,14 +138,9 @@ class CCDataDump extends CCFeed
 
         if( CCDATADUMP_CACHE_ON && empty($records) && !empty($tagstr) )
             $this->_cache($xml,$cache_type,$tagstr);
-        
-	if ( $this->is_dump ) {
-            return $xml;
-	} else {
-            header("Content-type: text/xml"); // this should enforce a utf-8
-            print($xml);
-            exit;
-	}
+
+        $this->_output_xml($xml);
+	exit;
     }
 
     /**

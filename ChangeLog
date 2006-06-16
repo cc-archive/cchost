@@ -1,4 +1,12 @@
 2006-06-13  Jon Phillips <jon@rejon.org>
+	* locale/default/pt_BR/LC_MESSAGES/cchost.po bin/data_dump.php 
+	ccextras/cc-data-dump.php cclib/cc-feeds-atom.php cclib/cc-feeds.php
+	cclib/cc-api.php cclib/cc-feed.php: Abstracted more of the feeds, 
+	changed some translations, made it so all the feeds can dump, the
+	feeds have more options, can be dumped once logged in as admin,
+	and the data_dump script now has command line options.
+
+2006-06-13  Jon Phillips <jon@rejon.org>
 
 	* cctemplates/page.xml cctemplates/skin-simple.xml
 	ccadmin/cc-install-db.php: Added support for metadata in the page

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-14 12:40-0700\n"
+"POT-Creation-Date: 2006-06-14 16:38-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Jon Phillips <jon@creativecommons.org>\n"
 "Language-Team:  Brazillian Portuguese <LL@li.org>\n"
@@ -652,8 +652,9 @@ msgid "Can't find that username"
 msgstr ""
 
 #: cclib/cc-user.php:200
+#, fuzzy
 msgid "Full Name"
-msgstr ""
+msgstr "First Name"
 
 #: cclib/cc-user.php:201
 msgid "Your display name for the site (not to be confused with"
