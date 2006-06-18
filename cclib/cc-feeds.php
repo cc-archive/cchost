@@ -44,19 +44,23 @@ define('CC_FEED_RSS', 'rss');
 * @package cchost
 * @subpackage api
 *
-* TODO: Rename this to CCFeedsRSS
-* TODO: Rename the file cc-feeds-rss.php
+* TODO: Rename this to CCFeedsRSS20
+* TODO: Rename the file cc-feeds-rss20.php
 * TODO: extract the atom stuff that is tainting this to another class
 * TODO: probably should abstract the interface parts of this as well.
 */
 class CCFeeds extends CCFeed
 {
+
+    var $_feed_type = CC_FEED_RSS;
+
     /**
-    * Handler for feed/rss - returns rss xml feed for given tags
-    *
-    * @param string $tagstr Space (or '+') delimited tags to use as basis of xml feed
-    */
-    function GenerateFeedFromTags($tagstr = CC_FEED_DEFAULT_TAG)
+     * Handler for feed/rss - returns rss xml feed for given tags
+     *
+     * @param string $tagstr Space (or '+') delimited tags to use as basis of 
+     * xml feed
+     */
+    function GenerateFeedFromTags($tagstr = '')
     {
         $this->_gen_feed_from_tags('rss_20.xml',$tagstr,CC_FEED_RSS);
     }
@@ -127,7 +131,9 @@ class CCFeeds extends CCFeed
         $where['user_name'] = $username;
         $records = $uploads->GetRecords($where);
         $this->PrepRecords($records);
-        $this->GenerateFeedFromRecords($records,"Podcast for $username",ccl('podcast','page',$username),'podcast');
+        $this->GenerateFeedFromRecords($records, "Podcast for $username",
+                                       ccl('podcast','page',$username), 
+                                       'podcast');
     }
 
     /**
@@ -137,9 +143,11 @@ class CCFeeds extends CCFeed
     * @param string $tagstr  Search string to display as part of description
     * @param string $feed_url The URL that represents this result set 
     */
-    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,$cache_type= CC_FEED_RSS)
+    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
+                                     $cache_type= CC_FEED_RSS)
     {
-        $this->_gen_feed_from_records('rss_20.xml',$records,$tagstr,$feed_url,$cache_type);
+        $this->_gen_feed_from_records('rss_20.xml',$records,$tagstr,$feed_url,
+                                      $cache_type);
     }
 
     /**
@@ -169,10 +177,13 @@ class CCFeeds extends CCFeed
             $atom_feed_url = url_args( ccl('feed','atom'), $qstring );
         }
 
-        CCPage::AddLink( 'head_links', 'alternate', 'application/rss+xml', $rss_feed_url, "RSS 2.0");
-        CCPage::AddLink( 'head_links', 'alternate', 'application/atom+xml', $atom_feed_url, "ATOM 1.0");
+        CCPage::AddLink( 'head_links', 'alternate', 'application/rss+xml',
+                         $rss_feed_url, "RSS 2.0");
+        CCPage::AddLink( 'head_links', 'alternate', 'application/atom+xml', 
+                         $atom_feed_url, "ATOM 1.0");
 
-        CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $rss_feed_url, "RSS 2.0", "xml",$help_text );
+        CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', 
+                         $rss_feed_url, "RSS 2.0", "xml",$help_text );
     }
 
     /**
@@ -192,20 +203,10 @@ class CCFeeds extends CCFeed
         $settings = $configs->GetConfig('settings');
         if( !empty($settings['default-feed-tags']) )
         {
-            CCFeeds::_inner_add_feed_links($settings['default-feed-tags'],'',_('Syndicate'));
+            CCFeeds::_inner_add_feed_links($settings['default-feed-tags'],'',
+                                           _('Syndicate'));
         }
 
-    }
-
-    /**
-     * Gets the feed type (and sets it if it hasn't been set yet lamely.
-     * This is necessary because there isn't a Constructor.
-     */
-    function GetFeedType ()
-    {
-        if ( empty($this->_feed_type) )
-	    $this->_feed_type = CC_FEED_RSS;
-        return parent::GetFeedType();
     }
 
     /**
@@ -215,9 +216,12 @@ class CCFeeds extends CCFeed
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'feed/rss',  array( 'CCFeeds', 'GenerateFeedFromTags'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( 'podcast/page',  array( 'CCFeeds', 'PodcastPage'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( 'podcast/artist',  array( 'CCFeeds', 'PodcastUser'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( 'feed/rss',  array( 'CCFeeds',
+                          'GenerateFeedFromTags'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( 'podcast/page',  array( 'CCFeeds', 'PodcastPage'),
+                          CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( 'podcast/artist',  array( 'CCFeeds', 'PodcastUser'),
+                          CC_DONT_CARE_LOGGED_IN);
     }
 
 } // end of class CCFeeds

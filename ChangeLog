@@ -1,4 +1,10 @@
-2006-06-13  Jon Phillips <jon@rejon.org>
+2006-06-17  Jon Phillips <jon@rejon.org>
+	* cctemplates/atom_10.xml bin/data_dump.php ccextras/cc-data-dump.php 
+	cclib/cc-feeds-atom.php cclib/cc-feeds.php cclib/cc-feed.php:
+	Added more options to data dump to dump by tag and also for dumping
+	everything together. It works well!
+
+2006-06-14  Jon Phillips <jon@rejon.org>
 
 	* print_files_cct.sh ChangeLog ccextras/cc-data-dump.php
 	ccextras/cc-topics.php cclib/cc-feed.php: Fixed the internal 

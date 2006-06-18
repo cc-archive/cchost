@@ -41,25 +41,20 @@ define('CC_FEED_ATOM', 'atom');
 */
 class CCFeedsAtom extends CCFeed
 {
-    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,$cache_type= CC_FEED_ATOM)
+    var $_feed_type = CC_FEED_ATOM;
+
+
+    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
+                                     $cache_type= CC_FEED_ATOM)
     {
-        $this->_gen_feed_from_records('atom_10.xml',$records,$tagstr,$feed_url,$cache_type);
+        $this->_gen_feed_from_records('atom_10.xml',$records,$tagstr,
+                                      $feed_url,$cache_type);
     }
 
-    function GenerateFeedFromTags($tagstr = CC_FEED_DEFAULT_TAG)
+    // $tagstr = CC_FEED_DEFAULT_TAG
+    function GenerateFeedFromTags($tagstr = '')
     {
         $this->_gen_feed_from_tags('atom_10.xml',$tagstr,CC_FEED_ATOM);
-    }
-
-    /**
-     * Gets the feed type (and sets it if it hasn't been set yet lamely.
-     * This is necessary because there isn't a Constructor.
-     */
-    function GetFeedType ()
-    {
-        if ( empty($this->_feed_type) )
-	    $this->_feed_type = CC_FEED_ATOM;
-        return parent::GetFeedType();
     }
 
     /**

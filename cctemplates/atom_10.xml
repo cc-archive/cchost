@@ -22,7 +22,7 @@ $Header$
 -->
 </tal:block>
 
-  <title>${channel_title} [BETA]</title>
+  <title>${channel_title}</title>
   <link rel="self" href="${raw_feed_url}"/>
   <link rel="alternate" href="${feed_url}"/>
   <updated>${atom-pub-date}</updated>

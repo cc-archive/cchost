@@ -44,6 +44,8 @@ define('CC_FEED_DATADUMP', 'datadump');
 */
 class CCDataDump extends CCFeed
 {
+    var $_feed_type = CC_FEED_DATADUMP;
+
     /**
     * Handler for feed/rss - returns rss xml feed for given records
     *
@@ -52,7 +54,7 @@ class CCDataDump extends CCFeed
     * @param string $feed_url The URL that represents this result set 
     */
     function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
-                                     $cache_type='datadump')
+                                     $cache_type = CC_FEED_DATADUMP)
     {
         global $CC_GLOBALS;
 
@@ -140,19 +142,6 @@ class CCDataDump extends CCFeed
         $this->_output_xml($xml);
 	exit;
     }
-
-    /**
-     * Gets the feed type (and sets it if it hasn't been set yet lamely.
-     * This is necessary because there isn't a Constructor.
-     */
-    function GetFeedType ()
-    {
-        if ( empty($this->_feed_type) )
-	    $this->_feed_type = CC_FEED_DATADUMP;
-        return parent::GetFeedType();
-    }
-    
-
 
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}

@@ -19,14 +19,13 @@
 */
 
 /**
-* Base module for generating feeds
-*
-* @package cchost
-* @subpackage api
-*
-* TODO: Finish abstracting the feed classes into this one.
-
-*/
+ * Base module for generating feeds
+ *
+ * @package cchost
+ * @subpackage api
+ *
+ * TODO: Finish abstracting the feed classes into this one.
+ */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
@@ -34,23 +33,36 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigFields') );
 
 /**
-*/
+ * The number of items in a feed.
+ */
 define ( 'CC_FEED_NUM_ITEMS', 15 );
 
+/**
+ * The folder where data is dumped.
+ */
+define ( 'CC_DUMP_DIR', 'dump' );
+
+/**
+ * The name of the file where audio is dumped.
+ */
 define ( 'CC_FEED_DUMP_FILE', 'dump.xml' );
+
+/**
+ * The default tag if there is no tag.
+ */
 define ( 'CC_FEED_DEFAULT_TAG', 'audio' );
 
 
 /**
-*/
+ */
 //define('CC_FEED_CACHE_ON', true);
 
 /**
-* Abstract class to be used for generating feeds.
-*
-* @package cchost
-* @subpackage api
-*/
+ * Abstract class to be used for generating feeds.
+ *
+ * @package cchost
+ * @subpackage api
+ */
 class CCFeed
 {
     /**
@@ -61,75 +73,80 @@ class CCFeed
     var $_feed_type;
 
     /**
-     * @var boolean true if is full dump and false
+     * @var boolean true if is full dump and false otherwise
      * @var boolean
      * @access private
      */
     var $_is_dump;
-   
+
     /**
      * This is the file where all audio is dumped.
      * @var	string
      * @access	private
      */
-    var $_dump_file = CC_FEED_DUMP_FILE; 
-   
+    var $_dump_file_name; 
+
     // No default constructor
 
-  
     /**
-    * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
-    * 
-    * @param array $record Upload database record
-    */
+     * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
+     *
+     * @param array $record Upload database record
+     */
     function OnUploadDelete($record)
     {
         $this->_clear_cache($record);
     }
 
     /**
-    * Event hander to clear the feed cache
-    * 
-    * @param integer $fileid Database ID of file
-    */
+     * Event hander to clear the feed cache
+     *
+     * @param integer $fileid Database ID of file
+     */
     function OnFileDelete($fileid)
     {
         $this->_clear_cache($fileid);
     }
 
     /**
-    * Event handler for {@link CC_EVENT_UPLOAD_DONE}
-    * 
-    * @param integer $upload_id ID of upload row
-    * @param string $op One of {@link CC_UF_NEW_UPLOAD}, {@link CC_UF_FILE_REPLACE}, {@link CC_UF_FILE_ADD}, {@link CC_UF_PROPERTIES_EDIT'} 
-    * @param array &$parents Array of remix sources
-    */
+     * Event handler for {@link CC_EVENT_UPLOAD_DONE}
+     * 
+     * @param integer $upload_id ID of upload row
+     * @param string $op One of {@link CC_UF_NEW_UPLOAD}, {@link CC_UF_FILE_REPLACE}, {@link CC_UF_FILE_ADD}, {@link CC_UF_PROPERTIES_EDIT'} 
+     * @param array &$parents Array of remix sources
+     */
     function OnUploadDone($upload_id,$op)
     {
         $this->_clear_cache($upload_id);
     }
 
     /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
-    *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
-    */
+     * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
+     *
+     * Add global settings settings to config editing form
+     *
+     * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+     * @param array  $fields Array of form fields to add fields to.
+     */
     function OnGetConfigFields($scope,&$fields)
     {
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields['feed-cache-flag'] =
                array(  'label'      => 'Feed Caching',
-                       'form_tip'   => 'Feed caching can optimize replies for feed requests',
+                       'form_tip'   =>
+                          'Feed caching can optimize replies for feed requests',
                        'value'      => '',
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE);
         }
     }
 
+    /**
+     * Internal: Checks to see if the cache is on or off.
+     *
+     * @returns boolean <code>true</code> if on or <code>false</code> otherwise
+     */
     function _is_caching_on()
     {
         global $CC_GLOBALS;
@@ -137,10 +154,10 @@ class CCFeed
     }
 
     /**
-    * Cleans out the feed cache
-    *
-    * @param mixed $record_or_id Database record of ID of changed file (unused)
-    */
+     * Internal: Cleans out the feed cache
+     *
+     * @param mixed $record_or_id Database record of ID of changed file (unused)
+     */
     function _clear_cache($record_or_id)
     {
         if( $this->_is_caching_on() )
@@ -151,12 +168,12 @@ class CCFeed
     }
 
     /**
-    * Internal: Cache a generic feed into the database
-    *
-    * @param string $xml Actual feed text
-    * @param string $type Feed format
-    * @param string $tagstr Tags represented by this feed.
-    */
+     * Internal: Cache a generic feed into the database
+     *
+     * @param string $xml Actual feed text
+     * @param string $type Feed format
+     * @param string $tagstr Tags represented by this feed.
+     */
     function _cache(&$xml,$type,$tagstr)
     {
         if( $this->_is_caching_on() )
@@ -170,11 +187,11 @@ class CCFeed
     }
 
     /**
-    * Intrnal check the cache for a given type of feed for specific query
-    *
-    * @param string $type Feed format
-    * @param string $tagstr Tag query
-    */
+     * Internal: check the cache for a given type of feed for specific query
+     *
+     * @param string $type Feed format
+     * @param string $tagstr Tag query
+     */
     function _check_cache($type,$tagstr)
     {
         if( $this->_is_caching_on() )
@@ -194,11 +211,12 @@ class CCFeed
     }
 
     /**
-    * Generate and return a feed-ready set of records for a given tag query
-    * 
-    * @param string $tagstr Tag query
-    * @returns string $xml Feed text
-    */
+     * Internal: Generate and return a feed-ready set of records for a given 
+     * tag query
+     *
+     * @param string $tagstr Tag query
+     * @returns string $xml Feed text
+     */
     function & _get_tag_data($tagstr)
     {
         // sometimes (like for REST API) we just want the channel info
@@ -221,7 +239,7 @@ class CCFeed
         }
 
         $uploads =& CCUploads::GetTable();
-        
+
         if ( !$this->_is_full_dump() )
             $uploads->SetOffsetAndLimit(0,CC_FEED_NUM_ITEMS);  
 
@@ -246,30 +264,30 @@ class CCFeed
     }
 
     /**
-    * Returns true is user is requesting an entire dump
-    *
-    * If logged in as admin and the url has ?all=1 in it
-    *
-    * @return boolean $is_full_dump
-    */
+     * Returns true is user is requesting an entire dump
+     *
+     * If logged in as admin and the url has ?all=1 in it
+     *
+     * @return boolean $is_full_dump
+     */
     function _is_full_dump()
     {
         return $this->_is_dump || (CCUser::IsAdmin() && !empty($_REQUEST['all']) && ($_REQUEST['all'] == 1));
     }
 
     /**
-    * Internal: strip string of any non-ascii characters
-    * 
-    * @param string $str String to clean
-    */
+     * Internal: strip string of any non-ascii characters
+     *
+     * @param string $str String to clean
+     */
     function _cct($str)
     {
         return( preg_replace('&[^a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]&','',$str ) );
     }
 
     /**
-    * @access private
-    */
+     * @access private
+     */
     function _resort_records(&$records,&$sort_order)
     {
         if( !empty($sort_order) )
@@ -287,15 +305,15 @@ class CCFeed
     }
 
     /**
-    * Internal helper to generate XML from tags
-    *
-    * This method with print XML to the browser.
-    *
-    * @param string $template Relative path to template file to merge
-    * @param string $tagstr Comma seperated list tags 
-    * @param string $cache_type e.g. 'rss', 'atom', etc.
-    * @see _gen_feed_from_records
-    */
+     * Internal helper to generate XML from tags
+     *
+     * This method with print XML to the browser.
+     *
+     * @param string $template Relative path to template file to merge
+     * @param string $tagstr Comma seperated list tags 
+     * @param string $cache_type e.g. 'rss', 'atom', etc.
+     * @see _gen_feed_from_records
+     */
     function _gen_feed_from_tags($template, $tagstr, $cache_type = 'rss')
     {
         if( empty($tagstr) )
@@ -354,15 +372,15 @@ class CCFeed
 
 
     /**
-    * Internal helper to generate XML from a set of records
-    *
-    * This method with print XML to the browser.
-    *
-    * @param string $template Relative path to template file to merge
-    * @param array &$records Array of records to merge with template
-    * @param string $feed_url URL that represents this feed
-    * @param string $cache_type e.g. 'rss', 'atom', etc.
-    */
+     * Internal helper to generate XML from a set of records
+     *
+     * This method with print XML to the browser.
+     *
+     * @param string $template Relative path to template file to merge
+     * @param array &$records Array of records to merge with template
+     * @param string $feed_url URL that represents this feed
+     * @param string $cache_type e.g. 'rss', 'atom', etc.
+     */
     function _gen_feed_from_records($template,&$records,$tagstr,$feed_url,$cache_type)
     {
         global $CC_GLOBALS;
@@ -416,7 +434,10 @@ class CCFeed
             $this->_cache($xml,$cache_type,$tagstr);
 
         $this->_output_xml($xml);
-        exit;
+        // testing against user agent tests if we are through web browser
+        if ( isset($_SERVER["HTTP_USER_AGENT"]) )
+            exit(0);
+        // }
     }
 
     /**
@@ -427,28 +448,38 @@ class CCFeed
     {
         if( $this->_is_full_dump() )
         {
-            header("Content-type: text/plain"); 
-            $f = fopen($this->_dump_file,'w');
+            header("Content-type: text/plain");
+
+            if ( ! is_dir(CC_DUMP_DIR) ) {
+                if ( ! mkdir(CC_DUMP_DIR, CC_DEFAULT_DIR_PERM) ) {
+                    echo sprintf('Could not open folder "%s"', CC_DUMP_DIR);
+                    return false;
+                }
+            }
+            $dump_file_path = ccp(CC_DUMP_DIR, $this->GetDumpFileName() );
+
+            $f = fopen($dump_file_path,'w');
             if( !$f )
             {
-                echo sprintf('could not open "%s"', $this->_dump_file);
-		return false;
+                echo sprintf('could not open "%s"', $dump_file_path);
+                return false;
             }
             else
             {
                 fwrite($f,$xml);
                 fclose($f);
-                chmod($this->_dump_file,CC_DEFAULT_FILE_PERMS);
-		if (isset($_REQUEST['all']))
-                    echo sprintf('%s written to server', $this->_dump_file);
-		return true;
+                chmod($dump_file_path,CC_DEFAULT_FILE_PERMS);
+                if (isset($_REQUEST['all']))
+                    echo sprintf('%s written to server', 
+                                 $dump_file_path);
+                return true;
             }
         }
         else
         {
             header("Content-type: text/xml"); // this should enforce a utf-8
             print($xml);
-	}
+        }
     }
 
     /**
@@ -502,7 +533,7 @@ class CCFeed
     }
 
     /** 
-     * Generates a feed.
+     * Generates a feed from tags generically.
      *
      * @param string $tags Tags used for generating the feed.
      * @return mixed Either true or false, or big xml dump.
@@ -511,16 +542,15 @@ class CCFeed
     {
         $tags = str_replace(' ',',',urldecode($tags));
         // check_cache already checks to see if it is on
-
-	$this->_check_cache($this->GetFeedType(),$tags);
+        $this->_check_cache($this->GetFeedType(),$tags);
         $qstring = '';
 
-
+        /*
         if( empty($tags) )
             $tags = CC_FEED_DEFAULT_TAG;
         else
             $tags .= ',' . CC_FEED_DEFAULT_TAG;
-
+        */
         $records =& $this->_get_tag_data($tags);
 
         return ( $this->GenerateFeedFromRecords( $records,
@@ -548,18 +578,23 @@ class CCFeed
     /**
      * @returns string A string that is the dump filename internally.
      */
-    function GetDumpFile ()
+    function GetDumpFileName ()
     {
-        return $this->_dump_file;
+        if ( empty($this->_dump_file_name) )
+            $this->SetDumpFileName();
+        return $this->_dump_file_name;
     }
 
     /**
-     * This sets the variable $_dump_file.
-     * @param string $dump_file The filename for data to be dumped to.
+     * This sets the variable $_dump_file_name.
+     * @param string $dump_file_name The filename for data to be dumped to.
      */
-    function SetDumpFile ($dump_file = CC_FEED_DUMP_FILE)
+    function SetDumpFileName ($dump_file_name = '')
     {
-        $this->_dump_file = $dump_file;
+        if (empty($dump_file_name)) {
+            $dump_file_name = $this->_feed_type . ".xml";
+        }
+        $this->_dump_file_name = $dump_file_name;
     }
 
     /**
@@ -578,10 +613,12 @@ class CCFeed
      *
      * @param string $feed_type This is the type of feed
      */
+/*
     function SetFeedType ($feed_type)
     {
         $this->_feed_type = $feed_type;
     }
+*/
 
 } // end of primarily abstract class CCFeed
 
