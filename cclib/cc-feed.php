@@ -48,7 +48,7 @@ define ( 'CC_DUMP_DIR', 'dump' );
 define ( 'CC_FEED_DUMP_FILE', 'dump.xml' );
 
 /**
- * The default tag if there is no tag.
+ * The default tag if there is no tag. CURRENTLY NOT USED!
  */
 define ( 'CC_FEED_DEFAULT_TAG', 'audio' );
 
