@@ -75,7 +75,7 @@ function print_help ()
 /**
  * Dumps individual feeds based on some type.
  */
-function dump_feed ($feed_type, $dump_file_name)
+function dump_feed ($feed_type, $dump_file_name, $tag_str)
 {
     switch ($feed_type)
     {
