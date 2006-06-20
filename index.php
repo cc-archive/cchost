@@ -28,6 +28,9 @@ if( file_exists('ccadmin') )
         'Please <a href="ccadmin/">follow these steps</a> for a successful ' . 
 	'setup.</body></html>');
 
+if( !function_exists('gettext') )
+    require_once('cclib/php-gettext/gettext.php');
+
 define('IN_CC_HOST', true);
 
 if( file_exists('.cc-ban.txt') )        // this file is written by doing
