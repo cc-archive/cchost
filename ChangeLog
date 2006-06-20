@@ -6,6 +6,9 @@
 	allow localization even without gettext (faster) support compiled 
 	into php. It is much slower.
 
+	* index.php: Added gettext backup in-case a php installation is not
+	installed with gettext. This should work for php 4.2 and above.
+
 2006-06-17  Jon Phillips <jon@rejon.org>
 	* cctemplates/atom_10.xml bin/data_dump.php ccextras/cc-data-dump.php 
 	cclib/cc-feeds-atom.php cclib/cc-feeds.php cclib/cc-feed.php:
