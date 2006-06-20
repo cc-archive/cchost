@@ -79,6 +79,7 @@ INSTALL_DATA = $(INSTALL) -m 644
 GMSGFMT = /usr/bin/gmsgfmt
 MSGFMT = /usr/bin/msgfmt
 XGETTEXT = /usr/bin/xgettext -n
+XGETTEXT_PHP = $(XGETTEXT) -L PHP
 
 UPDATE_PO_SCRIPT = ./update_po_files.sh
 
@@ -90,7 +91,7 @@ update-po-files:
 	$(UPDATE_PO_SCRIPT)	
 
 create-pot:
-	$(XGETTEXT) $(POTFILES) -o $(POTFILE)
+	$(XGETTEXT_PHP) $(POTFILES) -o $(POTFILE)
 
 clean:
 	rm -f $(CATALOGS)

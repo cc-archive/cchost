@@ -1,3 +1,11 @@
+2006-06-20  Jon Phillips <jon@rejon.org>
+
+	* cclib/php-gettext cclib/php-gettext/README 
+	cclib/php-gettext/gettext.inc cclib/php-gettext/gettext.php 
+	cclib/php-gettext/streams.php: This is php-gettext which will 
+	allow localization even without gettext (faster) support compiled 
+	into php. It is much slower.
+
 2006-06-17  Jon Phillips <jon@rejon.org>
 	* cctemplates/atom_10.xml bin/data_dump.php ccextras/cc-data-dump.php 
 	cclib/cc-feeds-atom.php cclib/cc-feeds.php cclib/cc-feed.php:

@@ -1,3 +1,123 @@
+#: cclib/cc-navigator-admin.inc:43 cclib/cc-upload.php:55
+#: ccextras/cc-user-info-x.php:67
+msgid "Name"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:442 cclib/cc-mediahost.php:50
+#: cclib/cc-user.php:599 ccextras/cc-archive.php:39
+#: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
+#: ccextras/cc-forums.inc:509
+msgid "Home"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:443
+msgid "Home page"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:448
+msgid "All"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:449
+msgid "See all the latest uploads"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:454
+msgid "Remix"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:455
+msgid "See the latest remixes"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:460
+msgid "Original"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:461 cclib/cc-contest-admin.inc:434
+msgid "See recently uploaded originals"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:466
+msgid "Picks"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:467
+msgid "See picks by the Editorial Staff"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:472
+msgid "Funky"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:473
+msgid "Only the funky stuff please!"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:197
+msgid "Must be characters and numbers, no more than 25"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:252
+msgid "Source Type:"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:258
+msgid "Main Remix Material"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:260
+msgid "Sample (loop, layer, fragment, etc.)"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:412
+msgid "About"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:413
+msgid "Home for "
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:419
+msgid "Winners"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:420
+msgid "...and the winner is..."
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:426
+msgid "Sources"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:427
+msgid "Download Source Material for "
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:433
+msgid "Entries"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:440
+msgid "Submit Entry"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:441
+msgid "Submit an entry in the "
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:447 cclib/cc-mediahost.php:489
+msgid "Admin"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:542
+msgid "Changes Saved"
+msgstr ""
+
+#: cclib/cc-contest-admin.inc:582
+msgid "Upload succeeded"
+msgstr ""
+
 #: cclib/cc-contest.php:296
 msgid " is currently open and taking submissions."
 msgstr ""
@@ -94,15 +214,15 @@ msgstr ""
 msgid "Editorial"
 msgstr ""
 
-#: cclib/cc-feed.php:289 cclib/cc-user.php:752
+#: cclib/cc-feed.php:334 cclib/cc-user.php:752
 msgid "Remixes of "
 msgstr ""
 
-#: cclib/cc-feed.php:306
+#: cclib/cc-feed.php:351
 msgid "Uploads remixed by "
 msgstr ""
 
-#: cclib/cc-feeds.php:188
+#: cclib/cc-feeds.php:207
 msgid "Syndicate"
 msgstr ""
 
@@ -328,17 +448,12 @@ msgstr ""
 msgid "Recover Lost Password"
 msgstr ""
 
-#: cclib/cc-mediahost.php:50 cclib/cc-user.php:599 ccextras/cc-archive.php:39
-#: ccextras/cc-reviews.php:285
-msgid "Home"
-msgstr ""
-
 #: cclib/cc-mediahost.php:54 cclib/cc-search.php:56
 msgid "Uploads"
 msgstr ""
 
 #: cclib/cc-mediahost.php:58 cclib/cc-user.php:584 cclib/cc-user.php:600
-#: ccextras/cc-reviews.php:293
+#: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr ""
 
@@ -393,10 +508,6 @@ msgstr ""
 
 #: cclib/cc-mediahost.php:482
 msgid "I Sampled This"
-msgstr ""
-
-#: cclib/cc-mediahost.php:489
-msgid "Admin"
 msgstr ""
 
 #: cclib/cc-mediahost.php:595
@@ -558,10 +669,6 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
-#: cclib/cc-upload.php:55 ccextras/cc-user-info-x.php:67
-msgid "Name"
-msgstr ""
-
 #: cclib/cc-upload.php:57
 msgid "Display name for file"
 msgstr ""
@@ -591,6 +698,7 @@ msgid "This action can not be reversed..."
 msgstr ""
 
 #: cclib/cc-upload.php:177 ccextras/cc-topics.php:74
+#: ccextras/cc-forums-admin.inc:120
 #, php-format
 msgid "Delete \"%s\" ?"
 msgstr ""
@@ -830,7 +938,7 @@ msgstr ""
 msgid "Flag Content"
 msgstr ""
 
-#: ccextras/cc-flag.php:171
+#: ccextras/cc-flag.php:171 ccextras/cc-forums.inc:214
 msgid "Topic"
 msgstr ""
 
@@ -1226,7 +1334,7 @@ msgstr ""
 msgid "Sorry, no reviews match"
 msgstr ""
 
-#: ccextras/cc-nswf.php:72
+#: ccextras/cc-nswf.php:72 mixter-lib/mixter-dump-listing.inc:35
 msgid "Not Safe For Work"
 msgstr ""
 
@@ -1361,6 +1469,120 @@ msgstr ""
 msgid "Edit your personal contest information"
 msgstr ""
 
+#: ccextras/cc-notify.inc:67
+msgid "Notify me by email when:"
+msgstr ""
+
+#: ccextras/cc-notify.inc:93
+msgid "My Notifications"
+msgstr ""
+
+#: ccextras/cc-notify.inc:106
+#, php-format
+msgid "%s has been remixed"
+msgstr ""
+
+#: ccextras/cc-notify.inc:108
+#, php-format
+msgid "%s uploads something new"
+msgstr ""
+
+#: ccextras/cc-notify.inc:118
+msgid "I've been remixed"
+msgstr ""
+
+#: ccextras/cc-notify.inc:120
+msgid "I've been reviewed"
+msgstr ""
+
+#: ccextras/cc-notify.inc:122
+msgid "I've been replied to"
+msgstr ""
+
+#: ccextras/cc-notify.inc:124
+msgid "I've been rated"
+msgstr ""
+
+#: ccextras/cc-notify.inc:174
+msgid "Notifications have been updated"
+msgstr ""
+
+#: ccextras/cc-notify.inc:213
+#, php-format
+msgid ""
+"\n"
+"\n"
+"PLEASE DO NOT RESPOND TO THIS EMAIL\n"
+"\n"
+"This is a notification that \"%s\" has just received a rating of %d.00\n"
+"\n"
+"%s\n"
+msgstr ""
+
+#: ccextras/cc-notify.inc:225
+msgid "Ratings notification"
+msgstr ""
+
+#: ccextras/cc-notify.inc:246
+#, php-format
+msgid ""
+"\n"
+"\n"
+"PLEASE DO NOT RESPOND TO THIS EMAIL\n"
+"\n"
+"This is a notification that \"%s\" has been reviewed by %s\n"
+"\n"
+"%s\n"
+msgstr ""
+
+#: ccextras/cc-notify.inc:259
+msgid "Review notification"
+msgstr ""
+
+#: ccextras/cc-notify.inc:349
+#, php-format
+msgid ""
+"\n"
+"\n"
+"PLEASE DO NOT RESPOND TO THIS EMAIL\n"
+"\n"
+"This is a notification of a reply to a review thread \n"
+"\"%s\":\n"
+"\n"
+"%s\n"
+msgstr ""
+
+#: ccextras/cc-notify.inc:434
+#, php-format
+msgid "Upload by %s"
+msgstr ""
+
+#: ccextras/cc-notify.inc:435
+#, php-format
+msgid ""
+"\n"
+"\n"
+"PLEASE DO NOT RESPOND TO THIS EMAIL\n"
+"\n"
+"This is a notification that %s has just uploaded new material to %s\n"
+"\n"
+"\"%s\"\n"
+"%s\n"
+"\n"
+msgstr ""
+
+#: ccextras/cc-notify.inc:452
+msgid "which uses samples from:\n"
+msgstr ""
+
+#: ccextras/cc-notify.inc:461
+#, php-format
+msgid ""
+"\n"
+"Thank you,\n"
+"%s"
+msgstr ""
+
 #: ccextras/cc-notify.php:129
 msgid "Edit My Notifications"
 msgstr ""
@@ -1383,6 +1605,191 @@ msgstr ""
 msgid "%s has posted <a href=\"%s\">%d forum messages</a>"
 msgstr ""
 
-#: ccextras/cc-forums.php:159
+#: ccextras/cc-forums.php:159 ccextras/cc-forums.inc:512
 msgid "Forum posts"
+msgstr ""
+
+#: ccextras/cc-forums-search.inc:62
+msgid "Forum Topics"
+msgstr ""
+
+#: ccextras/cc-forums-search.inc:115
+msgid "Sorry, no topics match"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:170
+#, php-format
+msgid "Move topic: %s"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:214
+msgid "Change Thread Sticky Flag"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:225
+msgid "Change Thread Open Status"
+msgstr ""
+
+#: ccextras/cc-forums.inc:154
+msgid "Post new topic"
+msgstr ""
+
+#: ccextras/cc-forums.inc:224
+msgid "Forum"
+msgstr ""
+
+#: ccextras/cc-forums.inc:238
+msgid "Forums"
+msgstr ""
+
+#: ccextras/cc-forums.inc:336
+msgid "Post New Topic"
+msgstr ""
+
+#: ccextras/cc-forums.inc:390
+msgid "Thread Missing"
+msgstr ""
+
+#: ccextras/cc-forums.inc:402
+msgid "You must have admin rights to see this forum"
+msgstr ""
+
+#: ccextras/cc-forums.inc:404
+msgid "You must be logged in to see this forum"
+msgstr ""
+
+#: ccextras/cc-forums.inc:406
+msgid "You do have proper permissions to see this forum"
+msgstr ""
+
+#: ccextras/cc-forums.inc:408
+msgid "Restricted Access"
+msgstr ""
+
+#: ccextras/cc-forums.inc:420
+msgid "Thread is closed to new comments"
+msgstr ""
+
+#: ccextras/cc-forums.inc:425
+msgid "Post topic reply"
+msgstr ""
+
+#: ccextras/cc-forums.inc:431
+msgid "Move thread"
+msgstr ""
+
+#: ccextras/cc-forums.inc:433
+msgid "Open"
+msgstr ""
+
+#: ccextras/cc-forums.inc:433
+msgid "Close"
+msgstr ""
+
+#: ccextras/cc-forums.inc:438
+msgid "Unstick"
+msgstr ""
+
+#: ccextras/cc-forums.inc:438
+msgid "Stick"
+msgstr ""
+
+#: ccextras/cc-forums.inc:498
+#, php-format
+msgid "Reply to: \"%s\""
+msgstr ""
+
+#: ccextras/cc-forums.inc:505
+#, php-format
+msgid "Forum Posts for %s"
+msgstr ""
+
+#: ccextras/cc-forums.inc:539
+#, php-format
+msgid "Feed for topics by %s"
+msgstr ""
+
+#: ccextras/cc-forums.inc:547
+#, php-format
+msgid "Feed for topic: %s"
+msgstr ""
+
+#: ccextras/cc-forums.inc:551
+msgid "Forums Feed"
+msgstr ""
+
+#: ccextras/cc-forums.inc:567
+msgid "Contents requires login"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:28
+msgid "by:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:29
+msgid "date:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:30
+msgid "tags:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:31
+msgid "ratings:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:32
+msgid "rate"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:33
+msgid "license:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:34
+msgid "This upload might be "
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:36
+msgid "Editorial pick..."
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:37
+msgid "Uses samples from:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:38
+msgid "More..."
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:39
+msgid "(no one has sampled this)"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:40
+msgid "Samples are used in:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:41
+msgid "Download"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:42
+msgid "Length:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:43
+msgid "BPM:"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:44
+msgid "IE: Right-click select 'Save Target As'"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:45
+msgid "Mac: Control-click select 'Save Link As'"
+msgstr ""
+
+#: mixter-lib/mixter-dump-listing.inc:46
+msgid "Flag this upload for possible violation of terms"
 msgstr ""
