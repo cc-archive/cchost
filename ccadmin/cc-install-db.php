@@ -536,6 +536,8 @@ END;
        'allow-pool-ui'       => true,
        'allow-pool-search'   => true,
        'allow-pool-register' => false,
+       'lang'                => CC_LANG, // JON: This should be install option
+       'lang_locale_pref'    => CC_LANG_LOCALE_PREF, // same here!
 
        'v_1_2h'              => true, // mark this installation as having 
                                       // ratings/remix count fields

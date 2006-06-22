@@ -1,5 +1,20 @@
 2006-06-20  Jon Phillips <jon@rejon.org>
 
+	* Makefile Makefile.dist Makefile.language index.php: prepping release 
+	2.9 by making sure everything installs well in packaging. Also,
+	cleaned up some funkiness with install.
+
+	* cclib/cc-user.php ccextras/cc-language.php: Updated the defaults
+	upon install which were going all haywire.
+
+	* ccadmin/cc-install-db.php: Set up initial defaults for languages
+	and locale preferences which are a bit of a hack until 
+	auto-detection and selection of languages can be added to the system.
+
+	* VERSION: This software is now ready to go for release 2.9.
+
+2006-06-20  Jon Phillips <jon@rejon.org>
+
 	* cclib/php-gettext cclib/php-gettext/README 
 	cclib/php-gettext/gettext.inc cclib/php-gettext/gettext.php 
 	cclib/php-gettext/streams.php: This is php-gettext which will 

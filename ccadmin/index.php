@@ -292,8 +292,7 @@ function install_tables(&$f,&$errs)
     $user = $f['admin']['v'];
     $date = date('Y-m-d H:i:00');
     $sql =<<<END
-        INSERT INTO cc_tbl_user (user_name,user_real_name,user_password,user_registered) VALUES         
-            ('$user','$user','$pw','$date')
+        INSERT INTO cc_tbl_user (user_name,user_real_name,user_password,user_registered) VALUES ('$user','$user','$pw','$date')
 END;
 
     if( !mysql_query($sql) )

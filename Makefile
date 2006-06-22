@@ -69,9 +69,12 @@ distprep: all
 	cp -Rfp $(DIST_FILES_STATIC) $(DIST_FILES_GENERATED) $(DIST_FOLDERS) \
 		$(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM)
 	cp -p Makefile.dist $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM)/Makefile
+    # copy our langauge stuff over if it exists
+	if [ -e Makefile.language ] && [ -e locale ]; then \
+        cp -Rfp locale/ $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM); fi
 	# Get rid of all CVS folders in the packaging area
 	find $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM) \
-	    -depth -name CVS -type d -exec rm -rf {} \;
+	    -depth -name ".svn" -type d -exec rm -rf {} \;
 	# chmod 644 $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM)/*
 	# chmod 755 $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM)/$(APPNAME)
 

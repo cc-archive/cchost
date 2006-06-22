@@ -195,6 +195,8 @@ class CCUserProfileForm extends CCUploadForm
         $users =& CCUsers::GetTable();
         $this->record = $users->GetRecordFromID($userid);
 
+        // print_r( $CC_GLOBALS['language']->GetPossibleLanguages() );
+
         $fields = array( 
                     'user_real_name' =>
                         array( 'label'      => _('Full Name'),
@@ -378,6 +380,10 @@ class CCUsers extends CCTable
                 continue;
             $row['user_fields'][] = array( 'label' => $name, 'value' => $row[$uf], 'id' => $uf );
         }
+
+        // set the language to default (for visibility on the form only)
+        if (empty($row['user_language']))
+            $row['user_language'] = 'default';
 
 
         if( CCUser::IsAdmin() )

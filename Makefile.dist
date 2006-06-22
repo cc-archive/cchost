@@ -41,6 +41,10 @@ install: all
 	cp -Rfp $(DIST_FILES_STATIC) $(DIST_FILES_GENERATED) $(DIST_FOLDERS) \
 		$(DESTDIR)$(WEBDIR)
 
+    # copy our langauge stuff over if it exists
+	if [ -e locale ]; then \
+        cp -Rfp locale/ $(DESTDIR)$(WEBDIR); fi
+
 
 uninstall:
 	rm -Rf $(DESTDIR)$(WEBDIR)

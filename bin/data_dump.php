@@ -7,7 +7,7 @@
  * http://creativecommons.org/licenses/GPL/2.0/
  *
  * A copy of the full license can be found as part of this
- * distribution in the file LICENSE.TXT.
+ * distribution in the file COPYING.
  *
  * You may use the ccHost software in accordance with the
  * terms of that license. You agree that you are solely 
@@ -31,7 +31,7 @@
 
  * 15 4 * * 3,6 /web/ccmixter/www/bin/data_dump.sh 2>&1 >/dev/null
  *
- * TODO: Should probably have more error output.
+ * TODO: Should probably have more error output for bad CLI options.
  */
 
 // The current feed types available.
@@ -188,7 +188,7 @@ else if ( !empty($opt['o']) && !empty($opt['f']) && !empty($opt['t']) )
         echo "\nERROR:\n\t Not feed type: " . $opt['f']  . "\n\n";
         print_help();
     }
-    dump_feed($type,$opt['o'],$opt['t']);
+    dump_feed($opt['f'],$opt['o'],$opt['t']);
 } else {
     print_help();
 }
