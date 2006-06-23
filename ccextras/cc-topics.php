@@ -70,7 +70,8 @@ class CCConfirmTopicDeleteForm extends CCForm
     function CCConfirmTopicDeleteForm($pretty_name)
     {
         $this->CCForm();
-        $this->SetHelpText(_("This action can not be reversed..."));
+        $this->SetHelpText(_("This action can not be reversed...") );
+        // this line was different in svn:
         $this->SetSubmitText(sprintf(_("Delete \"%s\" ?"),$pretty_name));
     }
 }
