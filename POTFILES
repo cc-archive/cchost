@@ -114,5 +114,4 @@ mixter-lib/mixter-maillist.php \
 mixter-lib/mixter-contest.php \
 cc-custom.php \
 cc-includes.php \
-cc-non-ui.php \
-cc-config-db.php
+cc-non-ui.php
