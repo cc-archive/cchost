@@ -278,6 +278,9 @@ class CCLanguage
      */
     function GetPossibleLanguages()
     {
+        // HACK FIX: vs
+        return( array( 'en' ) );
+
         // return array_keys(
         //    $this->_all_languages['locale'][$this->_locale_pref]['language']);
 
