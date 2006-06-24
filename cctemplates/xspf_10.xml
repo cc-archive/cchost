@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<playlist version="1" xmlns="http://xspf.org/ns/0/">
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Header$
+
+-->
+</tal:block>
+<title>${channel_title}</title>
+<creator>${root-url}</creator>
+<annotation>${channel_description}</annotation>
+<info>${channel_description}</info>
+<location>${raw_feed_url}</location>
+<date>${rss-pub-date}</date>
+
+<trackList>
+    <track tal:condition="feed_items" tal:repeat="item feed_items">
+        <location>${item/files/0/download_url}</location>
+        <identifier>${item/upload_id}</identifier>
+        <title>${item/upload_name}</title>
+        <creator>${item/user_name}</creator>
+        <duration>${item/files/0/file_rawsize}</duration>
+        <meta rel="${item/license_url}">${item/license_url}</meta>
+        <tal:block replace="">
+        <image>http://www.simuze.nl/live/media/avatar/955cb567b6e38f4c6b3f28cc857fc38c/avatar40x30.jpg</image>
+        <!-- This is for specific needs of simuze to identify the diff. requirements
+        for licenses -->
+        <extension application="http://www.simuze.nl">
+        <cclicense_by>1</cclicense_by>
+        <cclicense_commercial>0</cclicense_commercial>
+        <cclicense_derative>1</cclicense_derative>
+        </extension>
+        </tal:block>
+    </track>
+</trackList>
+</playlist>
+</tal:block>
+
+
+
+
+

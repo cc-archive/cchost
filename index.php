@@ -38,7 +38,7 @@ if( file_exists('.cc-ban.txt') )        // this file is written by doing
 
 require_once('cclib/cc-debug.php');
 
-CCDebug::Enable(false);                 // set this to 'true' if you are a
+CCDebug::Enable(true);                 // set this to 'true' if you are a
                                         // developer or otherwise customizing
                                         // the code. 
 

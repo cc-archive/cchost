@@ -279,7 +279,7 @@ class CCLanguage
     function GetPossibleLanguages()
     {
         // HACK FIX: vs
-        return( array( 'en' ) );
+        // return( array( 'en' ) );
 
         // return array_keys(
         //    $this->_all_languages['locale'][$this->_locale_pref]['language']);
@@ -287,10 +287,13 @@ class CCLanguage
         $lang_list = 
 	    array_keys(
 	    &$this->_all_languages['locale'][$this->_locale_pref]['language']);
-        // This is a dumb hack to get an array that has key and value the 
-	// same as necessary by cchost
-        $possible_langs = array_combine(&$lang_list, &$lang_list);
 
+        $possible_langs = array();
+
+        foreach ( $lang_list as $item ) {
+	    $possible_langs[$item] = $item;
+        }
+	
 	// This is dumb in that if it is selected for user preferences, it
 	// inherits the master default for an installation.
 	// If default is selected for the master setting, then this is 

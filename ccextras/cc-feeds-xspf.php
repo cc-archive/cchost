@@ -6,7 +6,7 @@
 * http://creativecommons.org/licenses/GPL/2.0/
 *
 * A copy of the full license can be found as part of this
-* distribution in the file COPYING.
+* distribution in the file LICENSE.TXT.
 * 
 * You may use the ccHost software in accordance with the
 * terms of that license. You agree that you are solely 
@@ -14,41 +14,37 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id$
+* $Id: cc-feeds-atom.php 3503 2006-06-18 07:09:30Z kidproto $
 *
 */
 
 /**
+* XSPF Module feed generator
+*
 * @package cchost
 * @subpackage api
 */
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS, 
-    array( 'CCDataDump', 'OnMapUrls'));
 
-define('CC_FEED_DATADUMP', 'datadump');
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCFeedsXSPF', 'OnMapUrls'));
+
+define('CC_FEED_XSPF', 'xspf');
 
 /**
-* XML Feed generator for xml format for audio
+* Atom Feed generator and reader for site
 *
-* NOTE: Kill the cache for the menu if you are adding new menu items:
-* http://cchost.localhost/?ccm=/media/admin/menu/killcache
+* @package cchost
+* @subpackage api
 */
-class CCDataDump extends CCFeed
+class CCFeedsXSPF extends CCFeed
 {
-    var $_feed_type = CC_FEED_DATADUMP;
+    var $_feed_type = CC_FEED_XSPF;
 
-    /**
-    * Handler for feed/rss - returns rss xml feed for given records
-    *
-    * @param array $records Results of some kind of uploads query
-    * @param string $tagstr  Search string to display as part of description
-    * @param string $feed_url The URL that represents this result set 
-    */
     function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
-                                     $cache_type = CC_FEED_DATADUMP)
+                                     $cache_type= CC_FEED_XSPF)
     {
         global $CC_GLOBALS;
 
@@ -58,6 +54,10 @@ class CCDataDump extends CCFeed
 
         $args = $CC_GLOBALS;
         $args += $template_tags;
+
+        $args['root_url'] = cc_get_root_url();
+        $args['raw_feed_url'] = cc_get_root_url() . $_SERVER['REQUEST_URI'];
+
 
         if( empty($tagstr) )
         {
@@ -126,7 +126,8 @@ class CCDataDump extends CCFeed
 
         // CCDebug::PrintVar( $args );
 
-        $template = new CCTemplate( $CC_GLOBALS['template-root'] . 'datadump.xml', false ); // false means xml mode
+        $template = new CCTemplate( $CC_GLOBALS['template-root'] .
+                    'xspf_10.xml', false ); // false means xml mode
 
         $xml = $template->SetAllAndParse( $args );
 
@@ -135,6 +136,10 @@ class CCDataDump extends CCFeed
 
         $this->_output_xml($xml);
     	exit;
+
+
+        // $this->_gen_feed_from_records('xspf_10.xml',$records,$tagstr,
+        //                              $feed_url,$cache_type);
     }
 
     /**
@@ -144,10 +149,12 @@ class CCDataDump extends CCFeed
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'feed/datadump',
-                          array( 'CCDataDump', 'GenerateFeed'),
-                          CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( ccp('feed','xspf'),  
+                          array( 'CCFeedsXSPF', 'GenerateFeed'), 
+			         CC_DONT_CARE_LOGGED_IN);
     }
-}
+
+} // end of class CCFeeds
+
 
 ?>

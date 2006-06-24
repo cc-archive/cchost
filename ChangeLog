@@ -1,3 +1,8 @@
+2006-06-23  Jon Phillips <jon@rejon.org>
+	
+	* cctemplates/xspf_10.xml ccextras/cc-feeds-xspf.php: Added xspf 1.0
+	support for the simuze guys...now lucas gonze will be happy!
+
 2006-06-20  Jon Phillips <jon@rejon.org>
 
 	* Makefile Makefile.dist Makefile.language index.php: prepping release 
