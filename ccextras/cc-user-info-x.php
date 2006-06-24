@@ -202,12 +202,23 @@ class CCUserInfoX
         if( !empty($CC_GLOBALS['user_extra']['user_info']) &&  
             strtolower( get_class($form) ) == 'ccuserprofileform' )
         {
+            $contests =& CCContests::GetTable();
+            $open_contests =& $contests->GetOpenContests();
+            if( empty($open_contests) )
+                return;
+
+            $cc = count($open_contests);
+            $open_contest_names = array();
+            for( $i = 0; $i < $cc; $i++ )
+            {
+                $open_contest_names[] = $open_contests[$i]['contest_short_name'];
+            }
+
             $infos =& $CC_GLOBALS['user_extra']['user_info']; 
             $keys = array_keys($infos);
-            $contests =& CCContests::GetTable();
             foreach( $keys as $contest )
             {
-                if( empty($infos[$contest]) )
+                if( empty($infos[$contest]) || !in_array( $contest, $open_contest_names ) )
                     continue;
                 $nice_name = $contests->GetFriendlyNameFromShortName($contest);
                 $url = ccl('contest','userinfo',$contest,'edit');
