@@ -540,6 +540,7 @@ END;
                 LEFT OUTER JOIN cc_tbl_tree j4 ON upload_id = j4.tree_parent  
                 WHERE tree_child = '$upload_id'
                 $extra_where
+                ORDER BY upload_date DESC
                 $limit
 END;
 
