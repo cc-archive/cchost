@@ -1,3 +1,9 @@
+2006-06-26     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/cc-renderimage.php 3560:
+         bugfix: thumbnails were not showing
+         feature: admins can turn off thumbnails
+
 2006-06-23  Jon Phillips <jon@rejon.org>
 	
 	* cctemplates/xspf_10.xml ccextras/cc-feeds-xspf.php: Added xspf 1.0
