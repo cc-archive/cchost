@@ -204,7 +204,7 @@ class CCFeeds extends CCFeed
         if( !empty($settings['default-feed-tags']) )
         {
             CCFeeds::_inner_add_feed_links($settings['default-feed-tags'],'',
-                                           _('Syndicate'));
+                                           'Syndicate');
         }
 
     }

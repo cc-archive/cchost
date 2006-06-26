@@ -331,7 +331,7 @@ class CCFeed
                         if( !empty($records) )
                             $this->PrepRecords($records);
                         $qstring = '?remixesof=' . $username;
-                        $tagstr = _('Remixes of ') . $username;
+                        $tagstr = 'Remixes of ' . $username;
                     }
                 }
             }
@@ -348,7 +348,7 @@ class CCFeed
                         if( !empty($records) )
                             $this->PrepRecords($records);
                         $qstring = '?remixedby=' . $username;
-                        $tagstr = _('Uploads remixed by ') . $username;
+                        $tagstr = 'Uploads remixed by ' . $username;
                     }
                 }
             }
