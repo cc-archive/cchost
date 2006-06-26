@@ -116,27 +116,41 @@ END;
     */
     function OnUploadRow(&$record)
     {
-        $image_index = CCRenderImage::_any_image($record);
-        if( $image_index == -1 )
+        $has_image = CCUploads::InTags('image',$record);
+        if( !$has_image )
             return;
     
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
 
-        $maxx = empty($settings['thumbnail-x']) ? '60px' : $settings['thumbnail-x'];
-        $maxy = empty($settings['thumbnail-y']) ? '60px' : $settings['thumbnail-y'];
+        if( empty($settings['thumbnail-on']) )
+            return;
+
+        if( !empty($settings['thumbnail-x']) && !empty($settings['thumbnail-y']) )
+        {
+            $maxx =  $settings['thumbnail-x'];
+            if( strpos($maxx,'px') === false )
+                $maxx .= 'px';
+            $maxy =  $settings['thumbnail-y'];
+            if( strpos($maxy,'px') === false )
+                $maxy .= 'px';
+            $record['thumbnail_style'] = "height:$maxy;width:$maxx;";
+        }
+        else
+        {
+            $record['thumbnail_style'] = '';
+        }
 
         CCUpload::EnsureFiles($record,true);
+        $image_index = 0;
+        $count = count($record['files']);
+        for( $image_index = 0; $image_index < $count; $image_index++ )
+        {
+            if( $record['files'][$image_index]['file_format_info']['media-type'] == 'image' )
+                break;
+        }
         $record['file_macros'][]   = 'render_image';
         $record['thumbnail_url']   = $record['files'][$image_index]['download_url'];
-        $record['thumbnail_style'] = "height:$maxy;width:$maxx;";
-
-    }
-
-    function _any_image($record)
-    {
-        $ok = CCUploads::InTags('image',$record);
-        return  $ok ? true : -1;
     }
 
     /**
@@ -151,17 +165,24 @@ END;
     {
         if( $scope != CC_GLOBAL_SCOPE )
         {
+            $fields['thumbnail-on'] = 
+               array( 'label'       => _('Display Thumbnails'),
+                       'formatter'  => 'checkbox',
+                       'form_tip'   => _('Display thumbnails for image uploads'),
+                       'flags'      => CCFF_POPULATE);
+
             $fields['thumbnail-x'] = 
-               array( 'label'       => 'Max Thumb X',
+               array( 'label'       => _('Max Thumb X'),
                        'formatter'  => 'textedit',
+                       'form_tip'   => _('Leave this blank or 0 (zero) to use the image\'s natural size'),
                        'class'      => 'cc_form_input_short',
-                       'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
+                       'flags'      => CCFF_POPULATE);
 
             $fields['thumbnail-y'] =
-               array( 'label'       => 'Max Thumb Y',
+               array( 'label'       => _('Max Thumb Y'),
                        'formatter'  => 'textedit',
                        'class'      => 'cc_form_input_short',
-                       'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
+                       'flags'      => CCFF_POPULATE );
         }
     }
 }
