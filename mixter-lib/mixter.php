@@ -25,6 +25,51 @@ CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCMixter',  'OnBuildMenu'));
 
 class CCMixter
 {
+    function Samples()
+    {
+        $sample_link = $song_link = $all_link = false;
+
+        if( !empty($_REQUEST['tags']) )
+            $tags = CCUtil::StripText($_REQUEST['tags']);
+
+        if( empty($tags) )
+            $tags = 'sample';
+
+        $base = ccl('view','media','samples');
+
+        $args['sample']   = array( 'text' => 'samples only',
+                                    'normal' => true,
+                                    'selected' => false,
+                                    'action' => url_args( $base, 'tags=sample' ) ) ;
+
+        $args['sample original']   = array( 'text' => 'samples &amp; fully mixed tracks', 
+                                    'selected' => false,
+                                    'normal' => true,
+                                    'action' => url_args( $base, 'tags=sample+original' ) );
+
+        $args['original']   = array( 'text' => 'fully mixed tracks only',
+                                    'selected' => false,
+                                    'normal' => true,
+                                    'action' => url_args( $base, 'tags=original' ) );
+
+        if( !empty($args[$tags]) )
+        {
+            $args[$tags]['selected'] = true;
+            $args[$tags]['normal'] = false;
+        }
+
+
+        $show_plugs = empty($_REQUEST['offset']);
+
+        CCPage::PageArg('show_plugs',$show_plugs);
+        CCPage::PageArg('samples_links',$args);
+
+        $tagapi = new CCTag();
+        $tagapi->BrowseTags($tags,'any');
+
+            CCPage::ViewFile('samples.xml');
+    }
+
     function OnBuildMenu()
     {
         $items = array(
