@@ -54,6 +54,10 @@ class CCSampleBrowser
 
     function OnMapUrls()
     {
+
+        CCEvents::MapUrl( ccp('samples'),   array('CCMixter', 'Samples'),  
+                            CC_DONT_CARE_LOGGED_IN );
+
         CCEvents::MapUrl( ccp('samples','list'),   array('CCSampleBrowser', 'SamplesList'),  
                             CC_DONT_CARE_LOGGED_IN );
         CCEvents::MapUrl( ccp('samples','browse'),   array('CCSampleBrowser', 'SamplesBrowse'),  
