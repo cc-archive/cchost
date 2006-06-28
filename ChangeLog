@@ -1,3 +1,44 @@
+2006-06-28     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-lib/mixter.php 3576:
+     * mixter-lib/mixter-sample-browser.php 3577:
+         wups: temp restore of old samples page
+     * ccadmin/cc-install-db.php 3581:
+         mark new installs with language update (v_3_0f)
+
+2006-06-27     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/phptal/phptal_cache 3570:
+         ignore cache files here
+     *    M /cchost/trunk 3573:
+         ignore mixter specific files
+     * cctemplates/ccmixter/down-button-bg.gif 3574:
+     * cctemplates/ccmixter/down-button-fg.gif 3574:
+     * cctemplates/ccmixter/hear-button-bg.gif 3574:
+     * cctemplates/ccmixter/hear-button-fg.gif 3574:
+     * mixter-files/ccMixStar.gif 3574:
+     * mixter-files/freesound-logo.gif 3574:
+     * mixter-files/freesound-pool-1.gif 3574:
+     * mixter-files/freesound-pool-2.gif 3574:
+     * mixter-files/freesound-pool-3.gif 3574:
+     * mixter-files/freesound-pool.gif 3574:
+     * mixter-files/freesound.xml 3574:
+     * mixter-files/sample_browser.xml 3574:
+     * mixter-lib/mixter-maillist.php 3574:
+     * mixter-lib/mixter-sample-browser.inc 3574:
+     * mixter-lib/mixter-sample-browser.php 3574:
+     * mixter-lib/mixter.php 3574:
+         mixter feature: sample browser
+     * mixter-files/sample_browser.xml 3575:
+         feature: bpm in sample browser
+
+2006-06-26     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/cc-feed.php 3562:
+     * cclib/cc-feeds.php 3562:
+         i18n UI strings
+
+
 2006-06-26     Victor Stone <fourstones@users.sourceforge.net>
 
      * cclib/cc-renderimage.php 3560:
