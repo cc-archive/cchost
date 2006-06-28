@@ -307,6 +307,12 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
     font-size: 10px;
   }
 
+  td.bpm {
+    width: 20px;
+    font-size: 10px;
+    color: #677;
+
+ }
   </style>
 <div id="sample_browser">
   ${default_msg}
@@ -386,8 +392,12 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
           <tal:block repeat="R records">
             <tr class="row_${R/odd}">
              <td class="filelink"><a href="${R/file_page_url}" class="cc_file_link"><span tal:content="php: CC_strchop('${R/upload_name}',26);" /></a></td>
+             <td class="bpm" >
+               <tal:block condition="R/upload_extra/bpm"><span 
+                   tal:content="R/upload_extra/bpm" />bpm</tal:block>
+             </td>
              <td class="userlink"><a class="cc_user_link" href="${R/artist_page_url}"><span 
-                 tal:content="php: CC_strchop('${R/user_real_name}',14);" /></a></td>
+                 tal:content="php: CC_strchop('${R/user_real_name}',12);" /></a></td>
              <td>
                <table  cellpadding="0" cellspacing="0" class="files">
                  <tr tal:repeat="F R/files">
