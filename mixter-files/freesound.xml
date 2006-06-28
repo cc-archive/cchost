@@ -1,0 +1,48 @@
+<div style="font-family: Verdana; font-size:11px">
+<h1>Freesound Project and ccMixter</h1>
+<img style="float: right; margin: 8px;" src="${root-url}mixter-files/freesound-logo.gif" />
+<p>The Creative Commons sample pool just grew by 20,000 samples thanks to the 
+two sites working together to act as one big sample and remix consortium.</p>
+<p>Here are the steps to use the two sites together:</p>
+<style>
+.fslist li {
+  margin-bottom: 13px;
+}
+.fsimg {
+  padding: 8px;
+} 
+</style>
+<ul class="fslist">
+  <li>
+    Create an account at the <a href="http://freesound.iua.upf.edu/">freesound project web site</a>.
+  </li>
+  <li>
+    Browse and download from the 20,000 samples found there. (Make sure to note which
+    artists you sampled.)
+  </li>
+  <li>
+    Create a remix using those sounds and mix in your own sounds and any other Creative Commons licensed
+    or legally safe samples.
+  </li>
+  <li>
+    Create an account here at <a href="${home-url}media/register">here at ccMixter</a>.
+  </li>
+  <li>
+    Upload your remix here at <b>ccMixter</b> using the <a href="${home-url}submit/remix">Submit Remix 
+    form</a> and follow these steps:
+    <div style="margin: 20px 5px 25px 10px; width: 600px; border: 2px solid #88A; background-color: #DDF;  padding: 7px;">
+    <ol  class="fslist"><li>Select the 'Freesound' sample pool and search for the artists that
+    you samples.
+    <div class="fsimg"><img src="${root-url}mixter-files/freesound-pool-1.gif" /></div></li>
+    <li>For each artist you sampled, enter their freesound name...</li>
+    <li>...and click on 'Search'
+    <div class="fsimg"><img src="${root-url}mixter-files/freesound-pool-2.gif" /></div></li>
+    <li>When the search results come back, check off the samples you used in your remix...</li>
+    <li>...and click 'Accept'
+    <div class="fsimg"><img src="${root-url}mixter-files/freesound-pool-3.gif" /></div></li>
+    </ol>
+    </div>
+  </li>
+</ul>
+</div>
+  
