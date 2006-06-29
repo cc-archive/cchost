@@ -545,6 +545,7 @@ END;
        'v_2_1a'              => true, // email notifications
        'v_3_0c'              => true, // forums
        'v_3_0f'              => true, // language
+       'v_3_0g'              => true, // BPM tags
 
     );
 

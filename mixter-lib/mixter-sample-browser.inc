@@ -110,9 +110,28 @@ class CCSampleBrowserAPI
         // this is the only way to AND the 'sample' tag
         // and OR the rest of the them...
 
-        $recs =& $uploads->GetRecords("(upload_tags REGEXP '(^| |,)(sample)(,|\$)' )");
+        if( !empty($_GET['bpm']) && ($_GET['bpm'] != '-') )
+        {
+            $bpm = $_GET['bpm'];
+            $bpm_where = " AND (upload_tags REGEXP '(^| |,)(bpm_{$bpm})(,|\$)' )";
+        }
+        else
+        {
+            $bpm = '';
+            $bpm_where = '';
+        }
 
-        $term = str_replace(',',', ',$tags) . ' (' . $match . ')';
+        $where = "(upload_tags REGEXP '(^| |,)(sample)(,|\$)' )" . $bpm_where;
+
+        $recs =& $uploads->GetRecords($where);
+
+        if( strpos( $tags, ',' ) !== false )
+             $term = str_replace(',',', ',$tags) . ' (' . $match . ')';
+        else
+            $term = $tags;
+        if( $bpm )
+            $term .= " ($bpm BPM)";
+
         $this->_list_records($recs,$term, _('Tags'));
     }
 
@@ -165,13 +184,17 @@ class CCSampleBrowserAPI
         global $CC_GLOBALS;
 
         $args = $CC_GLOBALS;
-        $args['tags']           =& $this->_get_tags();
+        list( $tags, $bpms ) = $this->_get_tags();
+
+        $args['tags']           =& $tags;
+        $args['bpms']           =& $bpms;
         $args['tag_sorts']      =& $this->_get_tag_sorts();
         $args['tag_filters']    =& $this->_get_tag_filters();
         $args['tag_limiters']   =& $this->_get_tag_limiters();
         $args['browser_macro']  = 'browser_page';
         $args['picker_caption'] = _('Search using tags:');
         $args['search_caption'] = _('Search for phrase:');
+        $args['bpm_caption']    = _('Limit to BPM:');
         $args['search_text']    = _('Go');
         $args['default_msg']    = $this->_default_msg();
 
@@ -181,7 +204,7 @@ class CCSampleBrowserAPI
         CCPage::AddScriptBlock('ajax_block');
     }
 
-    function & _get_tags()
+    function _get_tags()
     {
         $uploads =& CCUploads::GetTable();
         $uploads->SetDefaultFilter(true,true); // filter out banned and hidden packs
@@ -189,12 +212,28 @@ class CCSampleBrowserAPI
         $rows = $uploads->QueryRows('','upload_extra');
         $count = count($rows);
         $tagstrs = array();
+        $bpms = array();
+        if( empty($_GET['bpm']) )
+            $selbpm = '-';
+        else
+            $selbpm = $_GET['bpm'];
         for( $i = 0; $i < $count; $i++ )
         {
             $ex = unserialize($rows[$i]['upload_extra']);
             if( !empty($ex['usertags']) )
                $tagstrs[] = $ex['usertags'];
+            if( preg_match( '/bpm_([0-9][^,$]+)/', $ex['ccud'], $m ) )
+            {
+                $bpms[ $m[1] ] = array( 'bpm' => $m[1],
+                                        'selected' => $selbpm == $m[1] );
+            }
         }
+        ksort($bpms);
+        $bpm_head['-']   =  array( 'bpm' => '-',         'selected' => $selbpm == '-' );
+        $bpm_head['b60']  = array( 'bpm' => 'below_60',  'selected' => $selbpm == 'below_60' );
+        $bpm_tail['a180'] = array( 'bpm' => 'above_180', 'selected' => $selbpm == 'above_180' );
+        $bpm_final = array_merge( $bpm_head, $bpms, $bpm_tail );
+
         //CCDebug::Enable(true);
 
         $all_tags = strtolower( join(',', $tagstrs ) );
@@ -246,7 +285,7 @@ class CCSampleBrowserAPI
         }
 
         
-        return $tag_rows;
+        return array( &$tag_rows, &$bpm_final );
     }
 
     function & _get_tag_sorts()

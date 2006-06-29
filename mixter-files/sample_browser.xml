@@ -30,6 +30,7 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
   //<!--
   var tags = new Array();
   var tag_filter = 'any';
+  var bpm_tag = '-';
 
   function tag_checked(cb)
   {
@@ -59,10 +60,17 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
      do_get_data();
   }
 
+  function bpm_picker(selobj)
+  {
+     bpm_tag = selobj.options[ selobj.selectedIndex ].value;
+     if( tags.length > 0 )
+       do_get_data();
+  }
+
   function do_get_data()
   {
      var tagstr = tags.join( ',' );
-     cc_get_data( "${home-url}samples/list?tags=" + tagstr + '&tf=' + tag_filter, 
+     cc_get_data( "${home-url}samples/list?tags=" + tagstr + '&tf=' + tag_filter + '&bpm=' + bpm_tag, 
                   'sample_browser', 
                   '<span class="sb_msg">Hold on... looking up samples...</span>' );
   }
@@ -124,7 +132,7 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
      var input = new cc_obj('sampsearch');
      var str   = input.obj.value;
 
-     cc_get_data( "${home-url}samples/search?term=" + str, 
+     cc_get_data( "${home-url}samples/search?term=" + str /* + '&bpm=' + bpm_tag */ , 
                   'sample_browser', 
                   '<span class="sb_msg">Hold on... looking up samples...</span>' );
   }
@@ -140,7 +148,7 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
     margin-left: 10px;
     background-color: #DDD;
     border: 2px solid #999;
-    padding-bottom: 23px;
+    padding-bottom: 4px;
   }
 
   #sample_browser {
@@ -195,16 +203,29 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
   }
 
   #sampsearch, #btn_search, #dd_tag_sorter, 
-  #dd_tag_filter, #btn_clear, #dd_tag_limiter {
+  #dd_tag_filter, #btn_clear, #dd_tag_limiter,
+  #dd_bpm_picker {
      font-family: Verdana;
      font-size: 10px;
   }
 
   #search_ctrls {
-    padding: 8px 8px 20px 8px;
-    background-color: white;
-    border-bottom: 2px solid #999;
-    }
+    padding: 20px 8px 8px 8px;
+    margin-top: 6px;
+    border-top: 2px solid #999;
+    background-color: #DDD;
+  }
+
+  #bpm_ctrls {
+    padding: 10px 8px 8px 8px;
+    margin-top: 6px;
+    background-color: #DDD;
+  }
+
+  #bpm_caption {
+    font-weight: bold;
+    margin: 0px 0px 10px 0px;
+  }
 
   #search_caption {
     display: block;
@@ -320,13 +341,6 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
 
 <div id="controls">
 
-<div id="search_ctrls">
-<span id="search_caption" >${search_caption}</span>
-<input id="sampsearch" type="text" />
-
-<input type="button" value="${search_text}" onclick="do_search(this);" id="btn_search"/>
-</div>
-
 <span id="picker_caption">${picker_caption}</span>
 
 <div id="tags_container">
@@ -376,7 +390,29 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
    </tal:block>
 </select>
 
+<div id="bpm_ctrls">
+<span id="bpm_caption" tal:content="bpm_caption" />
+<select onchange="bpm_picker(this)" id="dd_bpm_picker" >
+   <tal:block repeat="bpm bpms">
+          <tal:block condition="bpm/selected">
+             <option selected="selected" value="${bpm/bpm}">${bpm/bpm}</option>
+          </tal:block>
+          <tal:block condition="not: bpm/selected">
+             <option value="${bpm/bpm}">${bpm/bpm}</option>
+          </tal:block>
+   </tal:block>
+</select>
 </div>
+
+<div id="search_ctrls">
+<span id="search_caption" >${search_caption}</span>
+<input id="sampsearch" type="text" />
+
+<input type="button" value="${search_text}" onclick="do_search(this);" id="btn_search"/>
+</div>
+
+
+</div> <!-- controls -->
 
 </metal:block>
 

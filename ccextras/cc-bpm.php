@@ -40,6 +40,30 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCBPM', 'OnUploadDone') );
 class CCBPM
 {
 
+    function CalcBPMTag($bpm)
+    {
+        $bpm = intval($bpm);
+
+        if( !$bpm )
+            return null;
+
+        if( $bpm < 60 )
+            return 'bpm_below_60';
+
+        if( $bpm > 180 )
+            return 'bpm_above_180';
+
+        $low = $bpm - ($bpm % 5);
+        $hi  = $low + 5;
+
+        if( $low < 100 )
+            $low = '0' . $low;
+        if( $hi < 100 )
+            $hi = '0' . $hi;
+
+        return "bpm_{$low}_{$hi}";
+    }
+
     /**
     * Event handler for {@link CC_EVENT_UPLOAD_DONE}
     * 
@@ -54,7 +78,13 @@ class CCBPM
           )
         {
             $uploads =& CCUploads::GetTable();
-            $uploads->SetExtraField($upload_id,'bpm',$_POST['upload_bpm']);
+            $old_bpm = $uploads->GetExtraField($upload_id,'bpm');
+            $old_tag = $this->CalcBPMTag($old_bpm);
+            $bpm = $_POST['upload_bpm'];
+            $uploads->SetExtraField($upload_id,'bpm',$bpm);
+            $tag = $this->CalcBPMTag($bpm);
+            if( $tag )
+                CCUploadAPI::UpdateCCUD($upload_id,$tag,$old_tag);
         }
     }
 
