@@ -82,8 +82,8 @@ class CCBan
                array(  'label'      => 'Ban Message',
                        'form_tip'   => 'Message displayed to owner of a banned upload',
                        'value'      => '',
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE);
+                       'formatter'  => 'textarea',
+                       'flags'      => CCFF_POPULATE | CCFF_NOSTRIP | CCFF_HTML);
         }
     }
 

@@ -176,7 +176,7 @@ class CCAdminTemplateTagsForm extends CCEditConfigForm
                                'form_tip'    => '',
                                'formatter'   => strlen($V) > 80 ? 'textarea' : 'textedit',
                                'value'       => htmlspecialchars($V),
-                               'flags'       => CCFF_NOSTRIP | CCFF_HTML );
+                               'flags'       => CCFF_NOSTRIP );
         }
         $this->AddFormFields($fields);
         $this->SetSubmitText("Submit Changes");

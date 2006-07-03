@@ -573,9 +573,17 @@ class CCForm
 
                 $generator  = 'generator_' . $form_fields['formatter'];
                 if( ($form_fields['formatter'] != 'password') && isset($form_fields['value']) )
+                {
                     $value = $form_fields['value'];
+                    if( $form_fields['flags'] & CCFF_HTML )
+                    {
+                        $value = htmlspecialchars($value);
+                    }
+                }
                 else
+                {
                     $value = '';
+                }
                 $class = empty($form_fields['class']) ? '' : $form_fields['class'];
                 if( !empty($form_fields['form_error']) ) 
                     $class = 'cc_form_error_input';
