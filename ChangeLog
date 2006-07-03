@@ -1,3 +1,29 @@
+2006-07-03     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/cc-ban.php 3610:
+     * cclib/cc-form.php 3610:
+     * cclib/cc-template.php 3610:
+         admin feature: allow html in ban message
+
+2006-07-02     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-files/samplepackguide.xml 3609:
+         how to sample pack
+
+2006-06-30     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cctemplates/skin-simple.xml 3605:
+         bugfix: <?xml tag horks IE layout
+
+2006-06-29     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccadmin/cc-install-db.php 3588:
+     * ccextras/cc-bpm.php 3588:
+     * ccextras/update_v_3_0g.inc 3588:
+     * mixter-files/sample_browser.xml 3588:
+     * mixter-lib/mixter-sample-browser.inc 3588:
+         feature: more sample browser stuff
+
 2006-06-28     Victor Stone <fourstones@users.sourceforge.net>
 
      * mixter-lib/mixter.php 3576:
