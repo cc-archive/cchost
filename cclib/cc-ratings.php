@@ -33,6 +33,7 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING,     array( 'CCRating',  'OnUploadL
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCRating',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCRating' , 'OnAdminMenu') );
 CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCRating' , 'OnUserRow') );
+CCEvents::AddHandler(CC_EVENT_USER_DELETED,       array( 'CCRating' , 'OnUserDelete') );
 
 /**
 * Ratings table wrapper
@@ -320,7 +321,20 @@ class CCRating
             $this->_fill_scores($record,'user');
         }
     }
-    
+
+    /**
+    * Event handler for {@link CC_EVENT_USER_DELETED}
+    *
+    * Nuke the user's ratings and update appropriate uploads. The user's
+    * record and uploads still exist at the point of this event.
+    *
+    * @param integer User id 
+    */
+    function OnUserDelete($user_id)
+    {
+        $this->Admin('deluser',$user_id);
+    }
+
     /**
     * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *

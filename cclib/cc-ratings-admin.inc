@@ -289,6 +289,20 @@ EOF;
                 return;
         }
 
+        if( $cmd == 'deluser' )
+        {
+            $ratings =& CCRatings::GetTable();
+            $w['ratings_user'] = $user_id;
+            $keys = $ratings->QueryKeys( $w );
+
+            foreach( $keys as $key )
+            {
+                $this->DeleteRating($key,false);
+            }
+
+            return;
+        }
+
         if( $cmd == 'msg' )
         {
             $msgid = $user_id; // sorry;
