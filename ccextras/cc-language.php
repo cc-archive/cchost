@@ -312,7 +312,11 @@ class CCLanguage
     function GetPossibleLocalePrefs()
     {
         $locale_prefs_list = array_keys(&$this->_all_languages['locale']);
-        return array_combine(&$locale_prefs_list, &$locale_prefs_list);
+	// had to add this hack because array_combine() is only in php5
+	$locale_prefs_list_combined = array();
+	foreach ( $locale_prefs_list as $pref )
+	    $locale_prefs_list_combined[$pref] = $pref;
+        return $locale_prefs_list_combined;
 	
     }
 
