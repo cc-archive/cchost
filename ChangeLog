@@ -1,3 +1,7 @@
+2006-07-04  Jon Phillips  <kidproto@users.sourceforge.net>
+
+	* ccextras/cc-language.php: fixed some php5 only function.
+
 2006-07-03     Victor Stone <fourstones@users.sourceforge.net>
 
      * cclib/cc-ban.php 3610:
@@ -75,6 +79,9 @@
 	
 	* cctemplates/xspf_10.xml ccextras/cc-feeds-xspf.php: Added xspf 1.0
 	support for the simuze guys...now lucas gonze will be happy!
+
+	* locale/default/zh_CN/LC_MESSAGES/cchost.po 
+	locale/default/pt_BR/LC_MESSAGES/cchost.po: Added new translations...
 
 2006-06-20  Jon Phillips <jon@rejon.org>
 
