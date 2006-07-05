@@ -1,3 +1,9 @@
+2006-07-05  Jon Phillips  <kidproto@users.sourceforge.net>
+
+	* locale/default/de_DE/LC_MESSAGES/de_DE.po: Added german translation.
+	
+	* Makefile.language: added de_De to list of languagues
+
 2006-07-04  Jon Phillips  <kidproto@users.sourceforge.net>
 
 	* ccextras/cc-language.php: fixed some php5 only function.

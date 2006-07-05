@@ -36,6 +36,7 @@ $Header$
         <creator>${item/user_name}</creator>
         <duration>${item/files/0/file_rawsize}</duration>
         <meta rel="${item/license_url}">${item/license_url}</meta>
+        <image>${user_avatar_url}</image>        
         <tal:block replace="">
         <image>http://www.simuze.nl/live/media/avatar/955cb567b6e38f4c6b3f28cc857fc38c/avatar40x30.jpg</image>
         <!-- This is for specific needs of simuze to identify the diff. requirements

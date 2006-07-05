@@ -42,6 +42,13 @@ Here are some places to start :<ul><li>To change css-skins use <a class="cc_menu
 You need to be logged in as Admin to configure the site.
 </tal:block>
 
+<object type="application/x-shockwave-flash" width="400" height="170"
+data="/${files-root}xspf_player-0.2.3.swf?playlist_url=${home-url}feed/xspf/media">
+<param name="movie" 
+value="/${files-root}xspf_player-0.2.3.swf?playlist_url=${home-url}feed/xspf/media" />
+</object>
+
+${files-root}xspf_player-0.2.2.swf?playlist_url=${home-url}feed/xspf/media">
 
 <p>
 The text for this file is in ${files-root}home.xml .

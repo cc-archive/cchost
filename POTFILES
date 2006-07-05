@@ -1,4 +1,5 @@
 POTFILES = \
+cctemplates/user.xml \
 cclib/cc-config.php \
 cclib/cc-admin.php \
 cclib/cc-api.php \
