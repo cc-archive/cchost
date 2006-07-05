@@ -345,9 +345,14 @@ class CCPoolUI
                     $pool = $api->AddPool($where['pool_api_url']);
 
                     if( is_string($pool) )
+                    {
                         $form->SeFieldError( 'pool-push-hub', $pool );
+                    }
                     else
-                        CCPage::Prompt("Sample Pool as been registered here.");
+                    {
+                        $url = ccl( 'admin', 'pool', 'edit', $pool['pool_id'] );
+                        CCUtil::SendBrowserTo($url);
+                    }
                 }
                 else
                 {

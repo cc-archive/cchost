@@ -1,0 +1,139 @@
+/*
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id$
+
+*/
+a { 
+  font-weight: bold; 
+}
+
+#mainbox_td {
+  width: 48%;
+}
+
+#mainbox {
+  float: left;
+}
+
+
+#mainbox p {
+  font-size: 11px;
+  font-family: Verdana;
+}
+
+#mainbox img {
+  border: medium none ; 
+  float: right; 
+  margin-left: 17px;
+}
+
+div.contest_closed {
+  float:right;
+  border: 1px solid brown;
+  margin:5px;
+  padding:5px;
+  color:brown;
+  font-weight:bold;
+  text-align:center; 
+  width: 50%;
+}
+
+.maintable td {
+  vertical-align: top;
+}
+
+#contests {
+	width: 70%;
+	margin-right:25%;
+}
+
+.logolink {
+  display: block;
+  float: right;
+  margin: 10px;
+  text-align: center;
+  width: 160px; /* size of crammed logo */
+}
+
+#contests p {
+	
+}
+
+#contests h3 {
+  text-align: right;
+  clear: both;
+  font-size: 13px;
+  margin-bottom: 0px;
+}
+
+hr {
+  margin: 5px;
+}
+
+div.img_holder {
+  text-align: center;
+}
+
+#fs_table {
+  margin: 0px;
+  width: 100%;
+  font-family: Verdana;
+  font-size: 11px;
+}
+
+#fs_table td {
+  /* border: 1px solid #CCC; */
+  }
+
+#fs_top_left,
+#fs_top_right,
+#fs_bot_left,
+#fs_bot_right,
+#fs_side {
+  width: 20px;
+  height: 20px;
+}
+
+#fs_top, 
+#fs_bot, 
+#fs_side,
+#fs_content {
+  background: url('../cctemplates/ccmixter/cbox-bg.gif') top left repeat;
+}
+
+#fs_content {
+ }
+
+#fs_top_left {
+  background: url('../cctemplates/ccmixter/cbox-top-left.gif') top left no-repeat;
+}
+
+#fs_top_right {
+  background: url('../cctemplates/ccmixter/cbox-top-right.gif') top right no-repeat;
+}
+
+#fs_bot_left {
+  background: url('../cctemplates/ccmixter/cbox-bottom-left.gif') bottom left no-repeat;
+}
+
+#fs_bot_right {
+  background: url('../cctemplates/ccmixter/cbox-bottom-right.gif') bottom right no-repeat;
+}
+
+#fs_container {
+  padding: 0px;
+  margin: 8px;
+}

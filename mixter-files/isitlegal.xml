@@ -109,7 +109,7 @@ pieces.</li>
 <li>If you are trying to upload fully mixed original song and don't see the proper menu items it is because you have reached the quota for non-remixes. </li>
 <li>We have recently fixed a problem with older <b>Safari</b> browsers when uploading. Or at least
 we think and hope we fixed it. If you are having problems uploading with an older Safari please 
-<a href="${home-url}people/admin/contact">let us know</a>.<br /></li>
+<a href="${home-url}people/contact/admin">let us know</a>.<br /></li>
 <li>Our MP3 verifier is very particular about the validity of MP3 files so if there is <i>any</i> issue
 in the file it will be rejected. There are two known issues with MP3 encoders that we have caused these
 issues:<br /><br />

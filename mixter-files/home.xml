@@ -1,4 +1,5 @@
-<div>
+<tal:block>
+
 <tal:block replace="">
 <!--
 
@@ -16,98 +17,123 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$id$
 
 -->
 </tal:block>
-<style>
-a { font-weight: bold; }
-</style>
-          
+
+<link rel="stylesheet" type="text/css" href="http://cchost.org/mixter-files/home.css" title="Default Style"/>          
 <h1 class="user">Welcome to ccMixter</h1>
 
-<div style="float: left; width: 44%; margin-right: 20px;">
-  <p><strong>Sampling, Mashing, Sharing</strong></p>
+<table class="maintable">
+<tr>
+  <td id="mainbox_td">
+    <div id="mainbox">
+      <p><strong>Sampling, Mashing, Sharing</strong></p>
 
-  <img src="${root-url}mixter-files/ccdj.gif" alt="" style="border: medium none ; float: right; margin-left: 17px;" border="0" height="100" />
-  <p>This is a community music site featuring remixes licensed under <a href="http://creativecommons.org/">Creative Commons</a>, where you can listen to, sample, mash-up, or interact with music in whatever way you want.</p>
+      <img src="${root-url}mixter-files/ccdj.gif" alt="" border="0" height="100" />
+      <p>This is a community music site featuring remixes licensed under <a href="http://creativecommons.org/">Creative Commons</a>, where you can listen to, sample, mash-up, or interact with music in whatever way you want.</p>
 
-  <p><b>Remixers</b> If you're into sampling, remixing and mash-ups grab the  <a href="${root-url}media/view/media/samples">sample packs</a> and <a href="${root-url}media/view/media/pells">a cappellas</a> for download and you can upload your version back into ccMixter, for others to enjoy and re-sample. All legal.</p>
+      <p><b>Remixers</b> If you're into sampling, remixing and mash-ups grab the  <a href="${root-url}media/view/media/samples">sample packs</a> and <a href="${root-url}media/view/media/pells">a cappellas</a> for download and you can upload your version back into ccMixter, for others to enjoy and re-sample. All legal.</p>
 
-  <p><b>Podcasters, directors and music lovers</b> If you're into music, browse this site to hear some of the <a href="${root-url}media/view/media/picks">great remixes</a> people have built from sampling music on this site, all licensed for use under Creative Commons license.</p>
+      <p><b>Podcasters, directors and music lovers</b> If you're into music, browse this site to hear some of the <a href="${root-url}media/view/media/picks">great remixes</a> people have built from sampling music on this site, all licensed for use under Creative Commons license.</p>
+    </div>
+  </td>
+  <td >
+    <div id="fs_container">
+     <table id="fs_table" cellspacing="0" cellpadding="0" >
+       <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
+       <tr><td id="fs_side" />
+           <td id="fs_content">
 
+            <div class="img_holder"><a href="${root-url}freesound"><img 
+                  src="${root-url}mixter-files/freesound-logo.gif" border="0" /></a></div>
 
+            <p>ccMixter has teamed up with the <a href="${root-url}freesound">freesound project</a> 
+             to share information about freesound's <b>20,000 samples</b> and track remixes
+             across the two sites. It's all part of the Creative Commons Sample Pool and 
+             therefore available to all remixers, safe, legal and sane.</p>
 
+            <p>Check out our freesound support, <i>new sample packs</i> and 
+            the new <i>samples browser</i> that makes it easy to find all the
+            CC licensed samples by the Beastie Boys, Fort Minor, Chuck D., My Morning Jacket,
+            Theivery Corp., DJ Dolores and Cibelle and hundreds more...</p>
 
-	  <div style="border: 1px solid rgb(136, 136, 136); margin-top: 10px;">
-	    <div style="padding: 10px;background-color: rgb(255, 255, 238); ">
-	      <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
-	      Creative Commons Copyright Criminals Remix Contest</h2>
-	      <div style="display: block; text-align: center;"><a href="${root-url}copyrightcriminals"><img src="${root-url}mixter-files/copyrightcriminals.png" border="0" /></a></div>
-	      <p style="font-size: 11px; font-weight: normal;">
-	<div style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center;">The contest is closed to new entries.</div>
+            <h3><a href="${root-url}media/view/media/samples">All about samples at ccMixter</a>...</h3>
 
-	This contest 
-	challenged artists to mix tracks under 4 minutes and use
-	provided voice samples from Ben Franzen and Kembrew McLeod's
-	forthcoming film, "Copyright Criminals." Samples from the film include
-	voiceovers from DJ Spooky, De La Soul, DJ Qbert, members of Public
-	Enemy, Matmos, Coldcut, members of Negativland, and others. The best
-	overall winner will be included prominently in the film and the top 11
-	other entries are to be included on a companion CD. Judging entries
-	along with McLeod and Franzen is Jeff Chang...</p>
+            </td>
+          <td id="fs_side" />
+        </tr>
+       <tr><td id="fs_bot_left" /><td id="fs_bot">&nbsp;</td><td id="fs_bot_right" /></tr>
+    </table>
 
-	<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}copyrightcriminals/view/contest/about">More information about the contest</a>...</h3>
-	    </div>
-	  </div>
+    </div>
+  </td>
+</tr>
+<tr>
+  <td colspan="2">
+    <div  id="contests">
+     <table id="fs_table" cellspacing="0" cellpadding="0" >
+       <tr><td id="fs_top_left" />
+          <td id="fs_top">&nbsp;</td>
+          <td id="fs_top_right" /></tr>
+       <tr><td id="fs_side" />
+           <td id="fs_content">
 
+        <h2 style="text-align:center;margin:2px;">Contests at ccMixter</h2>
+        
+        <a href="${root-url}fortminor" class="logolink"><img 
+           src="${root-url}mixter-files/fmlogo.jpg" border="0" /></a>
+        <p>
+            Fort Minor &mdash; the  hip-hop project 
+            led by Linkin Park's Mike Shinoda &mdash; is offering the  separated audio 
+            elements of "Remember the Name" online under a  Creative Commons BY-NC license, 
+            so that producers all over the world  can easily create new versions of the hit 
+            song. The winning remixer  will be awarded a new Technics SL-1200MK5 turntable, 
+            courtesy of  Warner Bros. Records and Machine Shop Recordings. 
+        </p>
+            <h3><a href="${root-url}fortminor">More information about the Fort Minor contest</a>...</h3>
+  
+        <hr />
 
-</div>
+        <a href="${root-url}crammed" class="logolink"><img 
+           src="${root-url}mixter-files/crammed-logo.png" border="0" /></a>
+        <p>
+          Crammed Discs artists Cibelle, DJ Dolores, and Apollo Nove are offering some of their 
+          new music under a CC BY-NC 2.5 license, so that producers worldwide can use the 
+          tracks in remixes and new compositions. Nine winning remixes will appear on a 
+          Crammed/ccMixter remix compilation, to be sold online through digital music 
+          stores.
+        </p>
+          <h3><a href="${root-url}crammed">More information about the Crammed Discs contest</a>...</h3>
 
+        <hr />
 
+        <a href="${root-url}copyrightcriminals" class="logolink"><img 
+           src="${root-url}mixter-files/copyrightcriminals-small.gif" border="0" /></a>
+        <p >
+          This contest challenged artists to mix tracks under 4 minutes and use provided 
+          voice samples from Ben Franzen and Kembrew McLeod's forthcoming film, 
+          "Copyright Criminals." The winners will be included 
+          prominently in the film and on a companion CD. 
+        </p>
+          <h3><a href="${root-url}copyrightcriminals">More information about the Copyright Criminals contest</a>...</h3>
 
-<div style="float: left; width: 52%;">
-  <div style="border: 1px solid rgb(136, 136, 136);">
-    <div style="padding: 10px; background-color: rgb(255, 255, 238);">
+            </td>
+          <td id="fs_side" />
+        </tr>
+       <tr><td id="fs_bot_left" /><td id="fs_bot">&nbsp;</td><td id="fs_bot_right" /></tr>
+    </table>
+    </div>
 
-      <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
-      Crammed Discs Remix Contest</h2>
-      	
-      <table><tr><td><a href="${root-url}crammed/"><img src="${root-url}mixter-files/crammed-logo.png" style="margin: 10px 10px 8px 0pt;" align="left" border="0" /></a></td><td>
-<div style="border: 1px solid brown;
-      margin:5px;
-      padding:5px;
-      color:brown;
-      font-weight:bold;
-      text-align:center;">The contest is closed to new entries.</div></td></tr></table>
-      <p style="font-size: 11px; font-weight: normal;">
-      Creative Commons and Crammed Discs are pleased to present the Crammed Discs Remix Contest. Crammed artists Cibelle, DJ Dolores, and Apollo Nove &mdash; some of Brazil's most creative musical innovators &mdash; are offering some of their new music under a CC BY-NC 2.5 license, so that producers worldwide can use the tracks in remixes and new compositions. Nine winning remixes will appear on a Crammed/ccMixter remix compilation, to be sold online through digital music stores.
-      </p>
-
-<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}crammed/">More information about the contest</a>...</h3>
-      </div>
-
-</div>
-
-  <div style="border: 1px solid rgb(136, 136, 136); margin-top: 10px;">
-    <div style="padding: 10px;background-color: rgb(255, 255, 238); ">
-  		     <h2 style="margin: 0px; font-size: 18px; font-weight: bold;">
-			      Fort Minor Remix Contest</h2>
-			      <div style="display: block; text-align: center;"><a href="${root-url}fortminor/"><img src="${root-url}mixter-files/fmlogo.jpg" style="margin: 10px 10px 8px 0pt;" align="left" border="0" /></a></div>
-	<div style="float:right;border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center; width: 50%;">The contest is closed to new entries.</div>
-
-			      <p style="font-size: 11px; font-weight: normal;">
-			      Creative Commons, Warner Bros. Records, and Machine Shop Recordings  are proud to present the Fort Minor Remix Contest. Fort Minor &mdash; the  hip-hop project led by Linkin Park's Mike Shinoda &mdash; is offering the  separated audio elements of "Remember the Name" online under a  Creative Commons BY-NC license, so that producers all over the world  can easily create new versions of the hit song. The winning remixer  will be awarded a new Technics SL-1200MK5 turntable, courtesy of  Warner Bros. Records and Machine Shop Recordings.
-			      </p>
-
-			<p style="margin-bottom: 0px;"></p><h3><a href="${root-url}fortminor/">More information about the contest</a>...</h3>
-			      </div>
-  </div>
-
+  </td>
+</tr>
+</table>
 
 
 <script>
   //<!--
+  /*
   var tab_top = -41;
 
   function timed_tab_grow()
@@ -124,7 +150,8 @@ a { font-weight: bold; }
   tabobj = new cc_obj('cc_tab');
   tabobj.obj.innerHTML = '<a href="http://creativecommons.org/">&nbsp;</a>';
   timed_tab_grow();
+  */
   //-->
 </script>
 
-</div>
+</tal:block>

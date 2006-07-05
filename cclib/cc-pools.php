@@ -411,7 +411,6 @@ class CCPool
         if( substr($api_url,0,7) == 'http://' )
         {
             $query_url = CCRestAPI::MakeUrl( $api_url, 'search', 'query=' . $query );
-            $query_url = str_replace('/search','search',$query_url);
             //CCDebug::PrintVar($query_url);
             //CCDebug::LogVar('query_url',$query_url);
             $fr = new CCFeedReader();
