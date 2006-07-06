@@ -6,6 +6,14 @@
          bugfix: re-enabled cc tab
      * mixter-files/home.xml 3636:
          improper Id tag
+     * cctemplates/remix_form.xml 3638:
+         bugfix: erratic enter key on remix form
+     * cctemplates/remix_form.xml 3641:
+         bugfix: erratic enter key on remix form (for real this time)
+     * cclib/cc-remix.php 3642:
+         bugfix: pells and samples were marked as also 'original'
+     * cclib/cc-remix.php 3643:
+         bugfix: pells and samples were marked as also 'original' (*cough*)
 
 2006-07-05     Victor Stone <fourstones@users.sourceforge.net>
 
