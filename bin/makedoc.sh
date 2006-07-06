@@ -51,8 +51,8 @@ PATH_PROJECT=$PWD
 #  */
 PATH_PHPDOC=/opt/PhpDocumentor-1.3.0RC4/pear-phpdoc
 
-PATH_PHP=/usr/local/apache2049/php/bin/php
-#PATH_PHP=/usr/bin/php
+#PATH_PHP=/usr/local/apache2049/php/bin/php
+PATH_PHP=/usr/bin/php
 
 #/**
 #  * where documentation will be put
