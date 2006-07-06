@@ -1,8 +1,41 @@
+2006-07-06     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-files/isitlegal.xml 3634:
+         bugfix: wrong admin contact link
+     * mixter-files/home.xml 3635:
+         bugfix: re-enabled cc tab
+     * mixter-files/home.xml 3636:
+         improper Id tag
+
+2006-07-05     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/cc-pools-ui.php 3632:
+     * cclib/cc-pools.php 3632:
+     * cctemplates/ccmixter/cbox-bottom-left.gif 3632:
+     * cctemplates/ccmixter/cbox-bottom-right.gif 3632:
+     * cctemplates/ccmixter/cbox-top-left.gif 3632:
+     * cctemplates/ccmixter/cbox-top-right.gif 3632:
+     * mixter-files/copyrightcriminals-small.gif 3632:
+     * mixter-files/home.css 3632:
+     * mixter-files/home.xml 3632:
+     * mixter-files/isitlegal.xml 3632:
+     * mixter-files/magnatune_loops.xml 3632:
+     * mixter-files/samples.xml 3632:
+         mixter: freesound promos
+     * cclib/cc-pools-ui.php 3633:
+         bugfix: pool sources were not all listing out
+
 2006-07-05  Jon Phillips  <kidproto@users.sourceforge.net>
 
 	* locale/default/de_DE/LC_MESSAGES/de_DE.po: Added german translation.
 	
 	* Makefile.language: added de_De to list of languagues
+
+2006-07-04     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/cc-ratings-admin.inc 3614:
+     * cclib/cc-ratings.php 3614:
+         admin fix: deleted users had lingering ratings
 
 2006-07-04  Jon Phillips  <kidproto@users.sourceforge.net>
 
@@ -14,6 +47,10 @@
      * cclib/cc-form.php 3610:
      * cclib/cc-template.php 3610:
          admin feature: allow html in ban message
+     * mixter-files/freesound-logo.gif 3611:
+         new logo from Brad
+     * mixter-files/freesound.xml 3612:
+         freesound home page
 
 2006-07-02     Victor Stone <fourstones@users.sourceforge.net>
 
