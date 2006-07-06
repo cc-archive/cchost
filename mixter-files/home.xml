@@ -133,7 +133,6 @@ $id$
 
 <script>
   //<!--
-  /*
   var tab_top = -41;
 
   function timed_tab_grow()
@@ -150,7 +149,6 @@ $id$
   tabobj = new cc_obj('cc_tab');
   tabobj.obj.innerHTML = '<a href="http://creativecommons.org/">&nbsp;</a>';
   timed_tab_grow();
-  */
   //-->
 </script>
 
