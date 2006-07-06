@@ -27,6 +27,33 @@ $Header$
 </metal:block>
 
 <metal:block define-macro="show_remix_search">
+    <script>
+    //<!--
+      var submit_hit = false;
+      function cc_catch_search_enter(e)
+      {
+        var keynum;
+        var keychar;
+        var numcheck;
+
+        e = (e) ? e : ((window.event) ? window.event : '' );
+        if(e)
+            keynum = (e.keyCode) ? e.keyCode : ((e.which) ? e.which : 0); 
+
+        if( keynum == 13 )
+        {
+           if( !submit_hit )
+           {
+              sumbit_hit = true;
+              var search_button = new cc_obj('search');
+              search_button.obj.click();
+           }
+           return false;
+        }
+        return true;
+      }
+    //-->
+    </script>
     <div id="cc_downstream_mixes">
       <h2 tal:content="php: CC_lang('I Used Samples From:');" />
         <tal:block condition="remix_sources" >
@@ -83,33 +110,6 @@ $Header$
                 <option tal:condition="pool/selected" selected="selected" value="${pool/pool_id}">${pool/pool_name}</option>
               </tal:block>
               </select></p>
-              <script>
-              //<!--
-                var submit_hit = false;
-                function cc_catch_search_enter(e)
-                {
-                  var keynum
-                  var keychar
-                  var numcheck
-
-                  e = (e) ? e : ((window.event) ? window.event : '' );
-                  if(e)
-                      keynum = (e.keyCode) ? e.keyCode : ((e.which) ? e.which : 0); 
-
-                  if( keynum == 13 )
-                  {
-                     if( !submit_hit )
-                     {
-                        sumbit_hit = true;
-                        var search_button = new cc_obj('search');
-                        search_button.obj.click();
-                     }
-                     return false;
-                  }
-                  return true;
-                }
-              //-->
-              </script>
           <p><input type="submit" id="search" name="search" value="${search_lang}" /></p>
         </div>
         
