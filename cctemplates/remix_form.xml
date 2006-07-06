@@ -74,7 +74,7 @@ $Header$
                <option tal:condition="not: stype/selected" value="${stype/value}" >${stype/label}</option>
                <option tal:condition="stype/selected" selected="selected" value="${stype/value}" >${stype/label}</option>
              </tal:block>
-             </select> <input name="remix_search_query" 
+             </select> <input name="remix_search_query" onkeypress="return cc_catch_search_enter(event);"
                   value="${remix_search_query}" /></p>
           <p tal:condition="pools">
               <tal:block: content="php: CC_lang('Sample Pools: ')" /><select name="pool" id="pool">
@@ -83,7 +83,34 @@ $Header$
                 <option tal:condition="pool/selected" selected="selected" value="${pool/pool_id}">${pool/pool_name}</option>
               </tal:block>
               </select></p>
-          <p><input type="submit" name="search" value="${search_lang}" /></p>
+              <script>
+              //<!--
+                var submit_hit = false;
+                function cc_catch_search_enter(e)
+                {
+                  var keynum
+                  var keychar
+                  var numcheck
+
+                  e = (e) ? e : ((window.event) ? window.event : '' );
+                  if(e)
+                      keynum = (e.keyCode) ? e.keyCode : ((e.which) ? e.which : 0); 
+
+                  if( keynum == 13 )
+                  {
+                     if( !submit_hit )
+                     {
+                        sumbit_hit = true;
+                        var search_button = new cc_obj('search');
+                        search_button.obj.click();
+                     }
+                     return false;
+                  }
+                  return true;
+                }
+              //-->
+              </script>
+          <p><input type="submit" id="search" name="search" value="${search_lang}" /></p>
         </div>
         
         <br clear="right" />
