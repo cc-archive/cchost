@@ -432,6 +432,7 @@ class CCPoolUI
     */
     function OnUploadListing( &$row )
     {
+        global $CC_GLOBALS;
         $fhome = ccl() . 'pools/item/';
         $phome = ccl() . 'pools/pool/';
         $upload_id = $row['upload_id'];
