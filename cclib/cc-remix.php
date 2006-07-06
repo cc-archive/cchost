@@ -289,11 +289,14 @@ class CCRemix
                         // ccud might have changed...
                         // for both license and ccud let's just recalc all the tags...
 
-                        // this can't be right... (what if it's an a cappella?)
+                        $current_tags = $uploads->QueryItemFromKey('upload_tags',$remixid);
 
-                        $ccuda = array( CCUD_ORIGINAL, CCUD_REMIX  );
+                        if( CCTag::InTag( CCUD_ORIGINAL, $current_tags ) )
+                        {
+                            $ccuda = array( CCUD_ORIGINAL, CCUD_REMIX  );
 
-                        CCUploadAPI::UpdateCCUD( $remixid, $ccuda[$have_sources], $ccuda[!$have_sources] );
+                            CCUploadAPI::UpdateCCUD( $remixid, $ccuda[$have_sources], $ccuda[!$have_sources] );
+                        }
                     }
 
                     // dig out the page url
@@ -490,6 +493,7 @@ class CCRemix
         $lics =& CCLicenses::GetTable();
         $licenserow = $lics->QueryKeyRow($license);
         $form->AddTemplateVars( $licenserow  );
+        //CCDebug::PrintVar($licenserow);
     }
 
     /**
