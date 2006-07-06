@@ -291,7 +291,7 @@ class CCRemix
 
                         $current_tags = $uploads->QueryItemFromKey('upload_tags',$remixid);
 
-                        if( CCTag::InTag( CCUD_ORIGINAL, $current_tags ) )
+                        if( CCTag::InTag( CCUD_ORIGINAL . ',' . CCUD_REMIX, $current_tags ) )
                         {
                             $ccuda = array( CCUD_ORIGINAL, CCUD_REMIX  );
 
