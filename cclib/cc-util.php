@@ -48,7 +48,7 @@ function cc_default_file_perms()
 
 function cc_default_dir_perm()
 {
-    cc_default_file_perms();
+    return cc_default_file_perms();
 }
 
 
