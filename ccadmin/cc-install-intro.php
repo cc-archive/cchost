@@ -25,7 +25,7 @@ together we can get you up and running in just a few minutes. But first...</p>
 <p>In order to run ccHost you need to install some other software and perform
 one database task.</p>
 <ul>
-<li><b>PHP 4</b>
+<li><b>PHP 4 or greater</b>
 <p> <? print $vmsg; ?></p></li>
 
 <li><b>mySQL</b>

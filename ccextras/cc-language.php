@@ -598,7 +598,7 @@ END;
             CCUtil::MakeSubdirs($lang_dir);
             $en_file = "cclib/lang/en/cc-translation-$mode.php";
             copy( $en_file, $target_file );
-            chmod( $target_file, CC_DEFAULT_FILE_PERMS );
+            chmod( $target_file, cc_default_file_perms() );
         }
 
         $tt[$hash] = CCUtil::StripSlash(urldecode($_REQUEST['string']));

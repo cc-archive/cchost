@@ -205,7 +205,7 @@ CC_cache_query($tags,$search_type='all',$sort_on='',$order='',$limit='',$with_me
         $f = fopen($cname,'w+');
         fwrite($f,$text);
         fclose($f);
-        chmod($cname,CC_DEFAULT_FILE_PERMS);
+        chmod($cname,cc_default_file_perms());
         $configs =& CCConfigs::GetTable();
         $tcache = $configs->GetConfig('tcache',CC_GLOBAL_SCOPE);
         if( !in_array($cname,$tcache) )

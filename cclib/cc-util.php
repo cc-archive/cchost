@@ -36,6 +36,24 @@ define('CC_RFC3339_FORMAT', 'Y-m-d\TH:i:s');
 
 /**
 */
+function cc_default_file_perms()
+{
+    global $CC_GLOBALS;
+
+    if( empty($CC_GLOBALS['file-perms']) || !intval($CC_GLOBALS['file-perms']) )
+        return 0777;
+
+    return intval($CC_GLOBALS['file-perms']);
+}
+
+function cc_default_dir_perm()
+{
+    cc_default_file_perms();
+}
+
+
+/**
+*/
 function cc_setcookie($name,$value,$expire,$path='',$domain='')
 {
     global $CC_GLOBALS;
@@ -160,8 +178,11 @@ class CCUtil
         return( !empty($_SERVER['HTTP_HOST']) );
     }
 
-    function MakeSubdirs($pathname,$mode=CC_DEFAULT_DIR_PERM)
+    function MakeSubdirs($pathname,$mode='')
     {
+        if( empty($mode) )
+            $mode = cc_default_dir_perm();
+
         // Check if directory already exists
         if (is_dir($pathname) || empty($pathname)) {
             return true;

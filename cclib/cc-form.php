@@ -1992,7 +1992,7 @@ class CCUploadForm extends CCForm
 
                 if( $ok )
                 {
-                    chmod($realpath,CC_DEFAULT_FILE_PERMS);
+                    chmod($realpath,cc_default_file_perms());
                 }
                 else
                 {

@@ -57,10 +57,6 @@ define('CC_1MG', 1024 * 1024);
 
 define('CC_USER_COOKIE', 'lepsog2');
 
-define('CC_DEFAULT_FILE_PERMS', 0664 );
-define('CC_DEFAULT_DIR_PERM',   0775 );
-
-
 // Access flags
 define('CC_MUST_BE_LOGGED_IN',   1 );
 define('CC_ONLY_NOT_LOGGED_IN',  2 );

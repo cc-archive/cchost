@@ -207,7 +207,7 @@ END;
     $str = "    );\n\n$cbracket";
     fwrite($f,$str);
     fclose($f);
-    chmod($file,CC_DEFAULT_FILE_PERMS);
+    chmod($file,cc_default_file_perms());
 }
 
 function & cct_recorder()

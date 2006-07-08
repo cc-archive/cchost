@@ -514,12 +514,28 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ {$surl}index.php?ccm=/$1 [L,QSA]
 </div>
 END;
+    
+            $perms = array(
+                    0777 => 'World can access (0777)',
+                    0775 => 'Owners and group only (0775)',
+                    0755 => 'Owners only (0755)' );
 
             $fields['cookie-domain'] =
                array( 'label'       => 'Cookie Domain',
-                       'form_tip'      => 'This is the name used to set cookies on the client machine. OK to leave this blank.',
+                       'form_tip'      => 'This is the name used to set cookies on the client machine. Recommend  to leave this blank unless you are having problems.',
                        'value'      => '',
                        'formatter'  => 'textedit',
+                       'flags'      => CCFF_POPULATE  ); // do NOT require cookie domain, blank is legit
+
+            $fields['file-perms'] =
+               array( 'label'       => 'Default File Permissions',
+                       'form_tip'      => 
+                                 'chmod() access mask to use when writing new files. Do not edit this ' .
+                                 'unless you understand UNIX permissions, Apache, PHP CGI mode, ' .
+                                 'etc. Changing this value will affect future writes.',
+                       'value'      => '',
+                       'options'    => $perms,
+                       'formatter'  => 'select',
                        'flags'      => CCFF_POPULATE  ); // do NOT require cookie domain, blank is legit
 
             $fields['pretty-urls-help'] = 
@@ -527,6 +543,7 @@ END;
                        'value'      => $pretty_help,
                        'formatter'  => 'statictext',
                        'flags'      => CCFF_STATIC | CCFF_NOUPDATE);
+
             $fields['pretty-urls'] = 
                array( 'label'       => 'Use URL Rewrite Rules',
                        'form_tip' 
@@ -564,7 +581,7 @@ END;
                                  ),
                 'adminadvanced'   => array( 'menu_text'  => 'Global Setup',
                                  'menu_group' => 'configure',
-                                 'help'  => 'Cookies, ban message, admin email, 3rd party add ins (GetID3, phpBB2, Bitcollider..), etc.',
+                                 'help'  => 'Cookies, ban message, admin email, 3rd party add ins, etc.',
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 10000,
                                  'action' =>  ccl('admin','setup')
@@ -686,6 +703,7 @@ END;
     }
 
 }
+
 
 /**
 * @access private

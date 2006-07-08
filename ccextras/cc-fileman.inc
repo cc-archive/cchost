@@ -143,7 +143,7 @@ class CCFileManAdmin
 
                         if( $fok )
                         {
-                            $fok = @chmod($realpath,CC_DEFAULT_FILE_PERMS);
+                            $fok = @chmod($realpath,cc_default_file_perms());
                         }
 
                         if( $fok )
@@ -325,7 +325,7 @@ class CCFileManAdmin
 
                 if( $ok )
                 {
-                    $ok = @chmod($realpath,CC_DEFAULT_FILE_PERMS);
+                    $ok = @chmod($realpath,cc_default_file_perms());
                 }
 
                 if( $ok )

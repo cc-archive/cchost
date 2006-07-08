@@ -922,7 +922,7 @@ END;
             $fields['avatar-dir'] =
                array(  'label'      => 'Avatar Directory',
                        'form_tip'   => 'If blank then avatars are assumed to be in the user\'s upload directory.',
-                       'value'      => 'Admin',
+                       'value'      => '',
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE );
         }

@@ -451,7 +451,7 @@ class CCFeed
             header("Content-type: text/plain");
 
             if ( ! is_dir(CC_DUMP_DIR) ) {
-                if ( ! mkdir(CC_DUMP_DIR, CC_DEFAULT_DIR_PERM) ) {
+                if ( ! mkdir(CC_DUMP_DIR, cc_default_dir_perm()) ) {
                     echo sprintf('Could not open folder "%s"', CC_DUMP_DIR);
                     return false;
                 }
@@ -468,7 +468,7 @@ class CCFeed
             {
                 fwrite($f,$xml);
                 fclose($f);
-                chmod($dump_file_path,CC_DEFAULT_FILE_PERMS);
+                chmod($dump_file_path,cc_default_file_perms());
                 if (isset($_REQUEST['all']))
                     echo sprintf('%s written to server', 
                                  $dump_file_path);

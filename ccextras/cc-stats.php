@@ -183,7 +183,7 @@ function cc_stats_show()
         $f = fopen($file,'w');
         fwrite($f,$text);
         fclose($f);
-        chmod($file,CC_DEFAULT_FILE_PERMS);
+        chmod($file,cc_default_file_perms());
     }
 
     CCPage::SetTitle(_("ccMixter stats [beta]"));

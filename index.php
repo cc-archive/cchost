@@ -64,4 +64,7 @@ CCDebug::InstallErrorHandler(false);
 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
 
+function _($t) { return $t; }
+function bindtextdomain() { }
+function textdomain() { }
 ?>

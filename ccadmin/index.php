@@ -43,7 +43,7 @@ function step_1()
     }
     elseif( $v[0] >= 5 )
     {
-        $vmsg = "<div style='color:orange'>WARNING: Version 5 of PHP has not been officially tested with this code however there are production installations running ccHost on PHP5.</div>"; 
+        $vmsg = "<div style='color:orange'>WARNING: Version 5 of PHP has is currently being tested with this code however there are production installations running ccHost on PHP5.</div>"; 
     }      
     else
     {
@@ -103,21 +103,20 @@ function step_4()
     require_once('cclib/cc-table.php');
     require_once('cclib/cc-config.php');
 
+
     $configs =& CCConfigs::GetTable();
     $settings = $configs->GetConfig('settings');
+    $config   = $configs->GetConfig('config');
     $admins   = split(',',$settings['admins']);
     $admin    = $admins[0];
     $ttags    = $configs->GetConfig('ttag');
     $root_url = $ttags['root-url'];
 
+    $perms = sprintf( '%04o', $config['file-perms'] );
+
     $rnum = rand();
 
     $html =<<<END
-    <h2>Some Unix Questions</h2>
-
-    <ul><li>Are you running on Unix or Unix-like system?</li><li>Does PHP run in a different user and group account
-        as you?</li><li>Are you confused by that last question?</li></ul>
-    <p>If the answer to most of those questions is 'yes' then please <a href="?step=4a">read this</a>.</p>
 
     <h2>Securing the Site</h2>
 
@@ -133,6 +132,11 @@ function step_4()
     mv ccadmin ccadmin-$rnum
     chmod 700 ccadmin-$rnum
     </pre>
+
+    <p><b>For UNIX</b> In order to facilitate an easy installation, ccHost is initalially 
+    configured with <b>$perms</b> as the default mask used when creating
+    configuration, cache, media content and other files. You can change this in 'Global Settings' 
+    once you've logged in as administrator.</p>
 
     <h2>Go forth...</h2>
 
@@ -665,8 +669,6 @@ END;
 
 function install_db_config($f,&$err)
 {
-    require_once('cclib/cc-defines.php');
-
     $varname = "\$CC_DB_CONFIG";
     $text = "<?PHP";
     $text .= <<<END
@@ -707,7 +709,7 @@ END;
 
     if( !$err )
     {
-        chmod($fname,CC_DEFAULT_FILE_PERMS);
+        chmod($fname, 0777); // cc_default_file_perms());
         print("Database config written<br />");
     }
 

@@ -1055,7 +1055,7 @@ class CCUploadAPI
                // this seems to be failing on ccMixter ported
                // files only (!) when doing a property edit
                // hack fix: quiet the error...
-               @chmod( $new_path, CC_DEFAULT_FILE_PERMS );
+               @chmod( $new_path, cc_default_file_perms() );
             }
 
         }

@@ -142,9 +142,11 @@ END;
             $f = fopen($config_db, 'w+' );
             fwrite($f,$text,strlen($text));
             fclose($f);
-            chmod($f,CC_DEFAULT_FILE_PERMS);
+            $perms = cc_default_file_perms();
+            //CCDebug::PrintVar($perms);
+            chmod($config_db, $perms);
 
-            CCPage::Prompt("Database configuration saved.");
+            CCPage::Prompt(sprintf("Database configuration saved to $config_db (%04o)",$perms));
         }
 
     }

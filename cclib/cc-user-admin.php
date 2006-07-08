@@ -347,7 +347,7 @@ END;
         $f = fopen('.cc-ban.txt','w');
         fwrite($f,$text);
         fclose($f);
-        chmod('.cc-ban.txt',CC_DEFAULT_FILE_PERMS);
+        chmod('.cc-ban.txt',cc_default_file_perms());
 
     }
 
