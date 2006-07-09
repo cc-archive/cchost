@@ -20,7 +20,7 @@ $Id$
 
 -->
 </tal:block>
-<link rel="stylesheet" type="text/css" href="http://cchost.org/mixter-files/home.css" title="Default Style"/>   <style>
+<link rel="stylesheet" type="text/css" href="${root-url}mixter-files/home.css" title="Default Style"/>   <style>
 
 .item_row {
   height: 140px;

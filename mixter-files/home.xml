@@ -22,7 +22,7 @@ $Id$
 -->
 </tal:block>
 
-<link rel="stylesheet" type="text/css" href="http://cchost.org/mixter-files/home.css" title="Default Style"/>          
+<link rel="stylesheet" type="text/css" href="${root-url}mixter-files/home.css" title="Default Style"/>          
 <h1 class="user">Welcome to ccMixter</h1>
 
 <table class="maintable">

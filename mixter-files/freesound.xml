@@ -1,6 +1,6 @@
 <div style="font-family: Verdana; font-size:11px">
 
-<link rel="stylesheet" type="text/css" href="http://cchost.org/mixter-files/home.css" title="Default Style"/>   
+<link rel="stylesheet" type="text/css" href="${root-url}mixter-files/home.css" title="Default Style"/>   
 
 <h1>the freesound project &amp; ccMixter</h1>
 
