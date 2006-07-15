@@ -59,6 +59,7 @@ streaming from an m3u file, they just use the file name.
 */
 class CCRemote
 {
+
     function Run()
     {
         CCPage::SetTitle(_('Transfering files'));
@@ -142,7 +143,7 @@ class CCRemote
         }
     }
 
-    function OnDeleteUpdate( &$record )
+    function OnDeleteUpload( &$record )
     {
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('remote_files');
