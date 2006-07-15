@@ -311,7 +311,7 @@ class CCRenderAudio
             {
                 $p = $promos[ $promo++ % $promo_count ];
                 CCUpload::EnsureFiles($p,true);
-                $url = $p['files'][0]['download_url'];
+                $url = $this->_get_streamable_url($p,0);
                 $streamfile .=  $url. "\n";
             }
             CCUpload::EnsureFiles($records[$i],true);
@@ -322,13 +322,30 @@ class CCRenderAudio
                     break;
             if( $n == $fcount )
                 continue; // this really never should happen
-            $url = str_replace(' ', '%20', $records[$i]['files'][$n]['download_url'] );
+            $surl = $this->_get_streamable_url($records[$i],$n);
+            $url = str_replace(' ', '%20', $surl );
             $streamfile .=  $url . "\n";
         }
 
         header("Content-type: audio/x-mpegurl");
         print($streamfile);
         exit;
+    }
+
+    function _get_streamable_url(&$R,$n)
+    {
+        if( !empty($R['files'][$n]['file_extra']['remote_url']) )
+        {
+            $configs =& CCConfigs::GetTable();
+            $settings = $configs->GetConfig('remote_files');
+            if( !empty($settings['enable_streaming']) )
+            {
+                $url = $R['files'][$n]['file_extra']['remote_url'];
+                return $url;
+            }
+        }
+        
+        return $R['files'][$n]['download_url'];
     }
 
 }
