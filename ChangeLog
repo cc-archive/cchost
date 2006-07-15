@@ -1,3 +1,54 @@
+2006-07-14     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-lib/cc-remote-client.inc 3780:
+     * mixter-lib/cc-remote.php 3780:
+     * mixter-lib/cc-remote.php-cron 3780:
+         
+     * cclib/cc-renderaudio.php 3781:
+     * mixter-lib/mixter-import-phpBB2.php 3781:
+     * mixter-lib/mixter-install.php 3781:
+     * mixter-lib/php-close-db.inc 3781:
+         feature: remote streaming
+     * mixter-lib/cc-remote.php 3782:
+         bugfix: delete upload was broken
+
+2006-07-13     Jon Phillips  <jon@creativecommons.org>
+
+     * ChangeLog 3750:
+         updated
+         
+
+2006-07-09     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-files/freesound.xml 3676:
+     * mixter-files/home.xml 3676:
+     * mixter-files/samples.xml 3676:
+         bugfix: mixter home was broken
+
+2006-07-08     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cc-custom.php 3674:
+     * ccadmin/cc-install-db.php 3674:
+     * ccadmin/cc-install-intro.php 3674:
+     * ccadmin/index.php 3674:
+     * ccextras/cc-fileman.inc 3674:
+     * ccextras/cc-lang.inc 3674:
+     * ccextras/cc-language.php 3674:
+     * ccextras/cc-stats.php 3674:
+     * ccfiles/dev_notes.xml 3674:
+     * cclib/cc-admin.php 3674:
+     * cclib/cc-db-admin.php 3674:
+     * cclib/cc-defines.php 3674:
+     * cclib/cc-feed.php 3674:
+     * cclib/cc-form.php 3674:
+     * cclib/cc-uploadapi.php 3674:
+     * cclib/cc-user-admin.php 3674:
+     * cclib/cc-user.php 3674:
+     * cclib/cc-util.php 3674:
+     * index.php 3674:
+         sys feature: chmod file perms is now admin option
+     * cclib/cc-util.php 3675:
+         bugfix: dir perms were broken
 
 2006-07-06     Victor Stone <fourstones@users.sourceforge.net>
 
