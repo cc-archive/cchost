@@ -68,6 +68,12 @@ class CCRemote
         CCPage::Prompt( _('Files transfer complete') );
     }
 
+    function View()
+    {
+        require_once('mixter-lib/cc-remote-client.inc');
+        cc_remote_dump_queue();
+    }
+
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
@@ -75,8 +81,9 @@ class CCRemote
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin', 'remoting'),         array('CCRemote', 'Admin'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin', 'remoting', 'run'),  array('CCRemote', 'Run'),   CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin', 'remoting'),          array('CCRemote', 'Admin'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin', 'remoting', 'run'),   array('CCRemote', 'Run'),   CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin', 'remoting', 'view'),  array('CCRemote', 'View'),   CC_ADMIN_ONLY );
     }
 
     function Admin()

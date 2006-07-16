@@ -74,14 +74,21 @@ if( class_exists('CCEditConfigForm') || class_exists('cceditconfigform') )
             $msg = '';
             if( !empty($queue) )
             {
-                $caption = _('Run Transfer Queue Now');
-                $url     = ccl('admin','remoting','run');
-                $button  =<<<END
-    <div style="text-align: center; width: 50%">
-      <a href="$url" class="cc_gen_button"><span>$caption</span></a>
+                $caption_run = _('Run Transfer Queue Now');
+                $url_run     = ccl('admin','remoting','run');
+
+                $caption_view = _('View Transfer Queue');
+                $url_view     = ccl('admin','remoting','view');
+
+                $buttons  =<<<END
+    <div style="text-align: center; width: 60%">
+     <table><tr>
+        <td><a href="$url_run"  class="cc_gen_button"><span>$caption_run</span></a></td>
+        <td><a href="$url_view" class="cc_gen_button"><span>$caption_view</span></a></td>
+     </tr></table>
     </div>
 END;
-                $msg = sprintf(_('There are %d files in the queue'), count($queue)) . $button;
+                $msg = sprintf(_('There are %d files in the queue'), count($queue)) . $buttons;
             }
 
             if( empty($msg) )
@@ -93,6 +100,73 @@ END;
             
             $this->SetHelpText($msg);
         }
+    }
+}
+
+if( class_exists('CCPage') || class_exists('ccpage') )
+{
+    function cc_remote_dump_queue()
+    {
+        CCPage::SetTitle(_('View Remoting Queue'));
+
+        $q = cc_remote_get_queue();
+        $empty_msg = false;
+        if( empty($q) )
+        {
+            $empty_msg = true;
+        }
+        else
+        {
+            $files =& CCFiles::GetTable();
+            $where = 'file_id IN (' . join( ',', $q ) . ')';
+            $rows = $files->QueryRows($where,'file_upload');
+            $up_ids = array();
+            foreach( $rows as $row )
+                $up_ids[] = $row['file_upload'];
+            $where = 'upload_id IN (' . join( ',', $up_ids ) . ')';
+            $uploads =& CCUploads::GetTable();
+            $records = $uploads->GetRecords($where);
+            if( empty($records) )
+            {
+                $empty_msg = true;
+            }
+            else
+            {
+                $html = '<table>';
+                $count = count($records);
+                for( $i = 0; $i < $count; $i++ )
+                {
+                    $R =& $records[ $i ];
+                    $t =<<<END
+                        <tr><td>
+                             <a href="{$R['file_page_url']}">{$R['upload_name']}</a> by 
+                             <a href="{$R['artist_page_url']}">{$R['user_real_name']}</a>
+                             </td></tr>
+END;
+                    $html .= $t;
+                }
+                $html .= '</table>';
+
+                $caption_run = _('Run Transfer Queue Now');
+                $url_run     = ccl('admin','remoting','run');
+
+                $caption_admin = _('Admin Transfer Queue');
+                $url_admin     = ccl('admin','remoting');
+
+                $html  .=<<<END
+        <div style="text-align: center; width: 60%">
+         <table><tr>
+            <td><a href="$url_run"   class="cc_gen_button"><span>$caption_run</span></a></td>
+            <td><a href="$url_admin" class="cc_gen_button"><span>$caption_admin</span></a></td>
+         </tr></table>
+        </div>
+END;
+                CCPage::AddPrompt('body_text', $html );
+            }
+        }
+
+        if( $empty_msg )
+            CCPage::Prompt(_('There are no uploads queued for upload'));
     }
 }
 
