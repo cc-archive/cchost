@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -71,9 +71,7 @@ class CCMagnatune
     function Loops()
     {
         $args['loop_preview_url']  = ccc('magnatune','view','contest','sources') . '#loops';
-        $args['album_preview_url'] = ccc('magnatune','view','contest','sources') . '#catalog';
-        $args['loop_stream_url']   = ccl('library','loopstream');
-        $args['song_stream_url']   = ccl('library','songstream');
+        $args['album_preview_url'] = ccc('library', 'albumlist') . '#catalog';
 
         $sql = 'SELECT DISTINCT loop_artist, artist, artistdesc FROM magnatune_loops, magnatune_song_info WHERE loop_artist = page '.
                'ORDER BY artist';
@@ -104,33 +102,6 @@ class CCMagnatune
             $albums_by_artist[$row['artist']]['albums'][] = $row;
         }
 
-        if( !empty($_POST['loop_artist']) )
-        {
-            $loop_artist = CCUtil::StripText($_POST['loop_artist']);
-            if( !empty($loop_artist) )
-            {
-                $artist_name = CCDatabase::QueryItem("SELECT artist FROM magnatune_song_info WHERE page = '$loop_artist' LIMIT 1");
-                $loops = CCDatabase::QueryRows("SELECT * FROM magnatune_loops WHERE loop_artist = '$loop_artist'");
-                $args['loop_preview'] = array( 'loop_artist' => $loop_artist,
-                                               'loop_artist_name' => $artist_name,
-                                               'loops' => $loops );
-            }
-        }
-
-        if( !empty($_POST['get_album_button']) )
-        {
-            $album_pick = CCUtil::StripText($_POST['album_pick']);
-            if( !empty($album_pick) )
-            {
-                $sql = "SELECT download_mp3, trackname, songid, artist, albumname ".
-                       "FROM magnatune_song_info WHERE albumsku = '$album_pick'";
-                $songs = CCDatabase::QueryRows($sql);
-                $args['album_preview'] = array( 'album' => addslashes($songs[0]['albumname']),
-                                                'artist' => addslashes($songs[0]['artist']),
-                                                'songs' => $songs);
-            }
-        }
-        
         $g = empty($args['current_genre']) ? 'all' : $args['current_genre'];
         $sql = "SELECT DISTINCT magnatunegenres FROM magnatune_song_info";
         $all_genres = CCDatabase::QueryItems($sql);
@@ -198,6 +169,40 @@ class CCMagnatune
         return($items);
     }
 
+    function LoopList($loop_artist)
+    {
+        $artist_name = CCDatabase::QueryItem("SELECT artist FROM magnatune_song_info WHERE page = '$loop_artist' LIMIT 1");
+        $loops = CCDatabase::QueryRows("SELECT * FROM magnatune_loops WHERE loop_artist = '$loop_artist'");
+        $args['preview_macro'] = 'loop_preview';
+        $args['mt']['loop_stream_url']   = ccl('library','loopstream');
+        $args['mt']['loop_preview'] = array( 'loop_artist' => $loop_artist,
+                                       'loop_artist_name' => $artist_name,
+                                       'loops' => $loops );
+        $this->_show_preview($args);
+    }
+
+    function AlbumList($album_pick)
+    {
+        $sql = "SELECT download_mp3, trackname, songid, artist, albumname ".
+               "FROM magnatune_song_info WHERE albumsku = '$album_pick'";
+        $songs = CCDatabase::QueryRows($sql);
+        $args['preview_macro'] = 'album_preview';
+        $args['mt']['song_stream_url']   = ccl('library','songstream');
+        $args['mt']['album_preview'] = array( 'album' => addslashes($songs[0]['albumname']),
+                                        'artist' => addslashes($songs[0]['artist']),
+                                        'songs' => $songs);
+        $this->_show_preview($args);
+    }
+
+    function _show_preview(&$args)
+    {
+        global $CC_GLOBALS;
+
+        $template = new CCTemplate( $CC_GLOBALS['files-root'] . 'magnatune_preview.xml' );
+        $html = $template->SetAllAndParse($args);
+        print($html);
+        exit;
+    }
 
     // this was a one time function for digging out the 
     // magnatune contest entrants info
@@ -242,6 +247,8 @@ class CCMagnatune
         CCEvents::MapUrl( ccp('library','loops'),      array('CCMagnatune','Loops'),      CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( ccp('library','loopstream'), array('CCMagnatune','LoopStream'), CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( ccp('library','songstream'), array('CCMagnatune','SongStream'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('library','albumlist'),  array('CCMagnatune','AlbumList'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('library','looplist'),   array('CCMagnatune','LoopList'), CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( ccp('mt','csv'),             array('CCMagnatune','csv'), CC_DONT_CARE_LOGGED_IN);
     }
 }

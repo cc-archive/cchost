@@ -1,0 +1,98 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id$
+
+-->
+</tal:block>
+
+<metal:block use-macro="${preview_macro}" />
+
+<style>
+/* ---------- results style ------- */
+
+.lp_results_head {
+  font-style: italic;
+  font-color: #555;
+  padding: 8px;
+  line-height: 17px;
+  background-color: #EEF;
+}
+
+.lp_results_head img {
+  vertical-align: bottom;
+}
+
+td.sbutton {
+  width: 18px;
+}
+
+.down_button, .hear_button {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+.down_button, .hear_button,
+.down_button:hover, .hear_button:hover {
+  text-decoration:none;
+}
+
+.down_button {
+  background: url('/cctemplates/ccmixter/down-button-fg.gif');
+}
+.down_button:hover {
+  background: url('/cctemplates/ccmixter/down-button-bg.gif');
+}
+.hear_button {
+  background: url('/cctemplates/ccmixter/hear-button-fg.gif');
+}
+.hear_button:hover {
+  background: url('/cctemplates/ccmixter/hear-button-bg.gif');
+}
+</style>
+
+<metal:block define-macro="album_preview">
+
+ <p class="lp_results_head">
+  To listen to a track from "${mt/album_preview/album}" by <b>${mt/album_preview/artist}</b> click on a <img src="/cctemplates/ccmixter/hear-button-fg.gif" /> button. To download a track right-click on a 
+  <img src="/cctemplates/ccmixter/down-button-fg.gif" /> link below and select 'Save Target As...'
+ </p>
+<table cellspacing="0" cellpadding="0" style="white-space:nowrap" >
+<tr tal:repeat="cut mt/album_preview/songs" >
+  <td class="sbutton"><a href="${mt/song_stream_url}/${cut/songid}.m3u" class="hear_button" >&nbsp;</a></td>
+  <td class="sbutton"><a href="${cut/download_mp3}" class="down_button" >&nbsp;</a></td>
+  <td>"${cut/trackname}"</td>
+</tr>
+</table>
+</metal:block>
+
+<metal:block define-macro="loop_preview">
+  <p class="lp_results_head">Download the entire 
+    <a href="http://magnatune.com/extra/remix/loops/${mt/loop_preview/loop_artist}.zip">${mt/loop_preview/loop_artist_name} Loop Set</a>
+    in ZIP archive format.
+  </p>
+<table cellspacing="0" cellpadding="0" style="white-space:nowrap" >
+<tr tal:repeat="loop mt/loop_preview/loops">
+    <td class="sbutton"><a class="hear_button" href="${mt/loop_stream_url}/${loop/loop_id}.m3u" id="mt_streamfile">&nbsp;</a></td>
+    <td>"${loop/loop_filename}"</td>
+</tr>
+</table>
+</metal:block>
+
+
+</div>

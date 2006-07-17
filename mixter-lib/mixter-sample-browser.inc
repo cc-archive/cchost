@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: mixter.php 3245 2006-04-06 07:21:19Z fourstones $
+* $Id$
 *
 */
 
@@ -159,7 +159,6 @@ class CCSampleBrowserAPI
         $args['records']         =& $recs;
         $args['results_caption'] = sprintf( 'returns %d results', count($args['records']) );
         $args['term']            = $term;
-        $args['filter']          = $match;
         $args['browser_macro']   = 'browser_list';
         $args['term_caption']    = $term_caption;
 

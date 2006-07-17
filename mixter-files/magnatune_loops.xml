@@ -43,6 +43,7 @@ $Header$
 {
   font-weight: bold;
 }
+
 </style>
 <h1>Magnatune Samples Library</h1>
 
@@ -81,23 +82,17 @@ for each of the loops.</p>
 <table border="0" cellpadding="3" cellspacing="0" >
 <tr>
 <td valign="top">
-<form method="post" action="${mt/loop_preview_url}">
-  <select name="loop_artist" size="9" onchange="on_get_selection(this,'get_loops_button')">
+  <select name="loop_artist" id="loop_artist" size="9" onchange="on_get_selection(this,'get_loops_button')">
     <tal:block repeat="artist mt/artists" >
       <option value="${artist/loop_artist}">${artist/artist} - ${artist/artistdesc}</option>
     </tal:block>
   </select><br />
-  <input type="submit" value="Get Loop Library Listing" name="get_loops_button" id="get_loops_button" disabled="1" />
-  </form>
+  <input type="button" value="Get Loop Library Listing" name="get_loops_button" id="get_loops_button" 
+    disabled="1" onclick="get_loop_list(this);"/>
 </td>
 <td style="vertical-align:top;padding-left:5px;">  
-  <p tal:condition="mt/loop_preview">Download the entire 
-    <a href="http://magnatune.com/extra/remix/loops/${mt/loop_preview/loop_artist}.zip">${mt/loop_preview/loop_artist_name} Loop Set</a>
-    in ZIP archive format.
-  </p>
-  <div style="white-space:nowrap" tal:condition="mt/loop_preview" tal:repeat="loop mt/loop_preview/loops">
-    <a href="${mt/loop_stream_url}/${loop/loop_id}.m3u" id="mt_streamfile"><span>Preview</span></a>&nbsp;&nbsp; "${loop/loop_filename}" 
-  </div>
+<div id="loop_preview">
+</div>
 </td>
 </tr>
 </table>
@@ -112,7 +107,7 @@ download individual tracks in high quality MP3:</p>
 <tr>
 <td valign="top">
   <style> optgroup { font-weight: bold; font-family: verdana; font-style: normal;} </style>
-  <form method="post" action="${mt/album_preview_url}">
+  <div>
       <select name="magnatunegenres" id="magnatunegenres">
         <option value="all">See all genres</option>
         <tal:block repeat="genre mt/genres">
@@ -122,7 +117,7 @@ download individual tracks in high quality MP3:</p>
       <br /><br />
       <div tal:condition="mt/genre_filter_on" class="genre_head">Currently viewing genre: <span>${mt/current_genre}</span></div>
       <select name="album_pick" size="19" onchange="on_get_selection(this,'get_album_button')"
-          style="font-size: 11px">
+          style="font-size: 11px" id="album_pick">
           <tal:block repeat="artist mt/albums_by_artist">
             <optgroup label="${artist/artist}">
               <option value="[d]" style='color:#777' tal:content="php: CC_strchop('${artist/artistdesc}',50);" />
@@ -132,39 +127,52 @@ download individual tracks in high quality MP3:</p>
             </optgroup>
           </tal:block>
       </select>
+  </div>
   <br />
-  <input type="submit" name="get_album_button" id="get_album_button" value="Get Album Listing" disabled="1"/>
-
-  </form>
+  <input type="button" id="get_album_button" name="get_album_button"
+      value="Get Album Listing" disabled="1" onclick="get_album_list(this);" />
 
 </td>
 <td style="vertical-align:top;padding-left:5px;">
 
-<p tal:condition="mt/album_preview">
-  To downlad a track from "${mt/album_preview/album}" by <b>${mt/album_preview/artist}</b> right-click on a 
-  link below and select 'Save Target As...'
-
-<div style="white-space:nowrap" tal:repeat="cut mt/album_preview/songs" >
-  <a href="${mt/song_stream_url}/${cut/songid}.m3u">Stream</a>&nbsp;&nbsp; 
-  <a href="${cut/download_mp3}">Download</a> "${cut/trackname}" 
+<div id="album_preview">
 </div>
-</p>
 
 </td>
 </tr></table>
 <script>
 function on_get_selection(listbox,button_id)
 {
-   var button = document.getElementById(button_id);
+   var obj    = new cc_obj(button_id);
+   var button = obj.obj;
    var opt    = listbox.options[listbox.selectedIndex];
    button.disabled = opt.value == "[d]";
 }
+function get_album_list(button_obj)
+{
+   var obj = new cc_obj('album_pick');
+   var listbox = obj.obj;
+   var opt = listbox.options[listbox.selectedIndex];
+   var url = "${home-url}library/albumlist/" + opt.value;
+   cc_get_data( url, 'album_preview','getting album data...');
+}
+
+function get_loop_list(button_obj)
+{
+   var obj = new cc_obj('loop_artist');
+   var listbox = obj.obj;
+   var opt = listbox.options[listbox.selectedIndex];
+   var url = "${home-url}library/looplist/" + opt.value;
+   cc_get_data( url, 'loop_preview','getting loop data...');
+}
+
 </script>
 <script tal:condition="mt/genre_filter_on">
 //<!--
 function sel_genre()
 {
-   var glistbox = document.getElementById('magnatunegenres');
+   var obj      = new cc_obj('magnatunegenres');
+   var glistbox = obj.obj;
    var curgenre = '${mt/current_genre}';
    var opts     = glistbox.options;
    var i=0;
