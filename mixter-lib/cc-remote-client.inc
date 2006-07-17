@@ -69,8 +69,8 @@ if( class_exists('CCEditConfigForm') || class_exists('cceditconfigform') )
 
             $this->AddFormFields($fields);
 
-            $queue = cc_remote_get_queue();
-
+            $queue =& cc_remote_get_records();
+            
             $msg = '';
             if( !empty($queue) )
             {
@@ -109,64 +109,44 @@ if( class_exists('CCPage') || class_exists('ccpage') )
     {
         CCPage::SetTitle(_('View Remoting Queue'));
 
-        $q = cc_remote_get_queue();
-        $empty_msg = false;
-        if( empty($q) )
+        $records =& cc_remote_get_records();
+
+        if( empty($records) )
         {
-            $empty_msg = true;
-        }
-        else
-        {
-            $files =& CCFiles::GetTable();
-            $where = 'file_id IN (' . join( ',', $q ) . ')';
-            $rows = $files->QueryRows($where,'file_upload');
-            $up_ids = array();
-            foreach( $rows as $row )
-                $up_ids[] = $row['file_upload'];
-            $where = 'upload_id IN (' . join( ',', $up_ids ) . ')';
-            $uploads =& CCUploads::GetTable();
-            $records = $uploads->GetRecords($where);
-            if( empty($records) )
-            {
-                $empty_msg = true;
-            }
-            else
-            {
-                $html = '<table>';
-                $count = count($records);
-                for( $i = 0; $i < $count; $i++ )
-                {
-                    $R =& $records[ $i ];
-                    $t =<<<END
-                        <tr><td>
-                             <a href="{$R['file_page_url']}">{$R['upload_name']}</a> by 
-                             <a href="{$R['artist_page_url']}">{$R['user_real_name']}</a>
-                             </td></tr>
-END;
-                    $html .= $t;
-                }
-                $html .= '</table>';
-
-                $caption_run = _('Run Transfer Queue Now');
-                $url_run     = ccl('admin','remoting','run');
-
-                $caption_admin = _('Admin Transfer Queue');
-                $url_admin     = ccl('admin','remoting');
-
-                $html  .=<<<END
-        <div style="text-align: center; width: 60%">
-         <table><tr>
-            <td><a href="$url_run"   class="cc_gen_button"><span>$caption_run</span></a></td>
-            <td><a href="$url_admin" class="cc_gen_button"><span>$caption_admin</span></a></td>
-         </tr></table>
-        </div>
-END;
-                CCPage::AddPrompt('body_text', $html );
-            }
+            CCPage::Prompt(_('There are no published or unbanned uploads queued for upload'));
+            return;
         }
 
-        if( $empty_msg )
-            CCPage::Prompt(_('There are no uploads queued for upload'));
+        $html = '<table>';
+        $count = count($records);
+        for( $i = 0; $i < $count; $i++ )
+        {
+            $R =& $records[ $i ];
+            $t =<<<END
+                <tr><td>
+                     <a href="{$R['file_page_url']}">{$R['upload_name']}</a> by 
+                     <a href="{$R['artist_page_url']}">{$R['user_real_name']}</a>
+                     </td></tr>
+END;
+            $html .= $t;
+        }
+        $html .= '</table>';
+
+        $caption_run = _('Run Transfer Queue Now');
+        $url_run     = ccl('admin','remoting','run');
+
+        $caption_admin = _('Admin Transfer Queue');
+        $url_admin     = ccl('admin','remoting');
+
+        $html  .=<<<END
+<div style="text-align: center; width: 60%">
+ <table><tr>
+    <td><a href="$url_run"   class="cc_gen_button"><span>$caption_run</span></a></td>
+    <td><a href="$url_admin" class="cc_gen_button"><span>$caption_admin</span></a></td>
+ </tr></table>
+</div>
+END;
+        CCPage::AddPrompt('body_text', $html );
     }
 }
 
@@ -218,7 +198,7 @@ function cc_remote_send_file($fname,$local_path,$mixter_ftp_settings)
 
         fclose($hremote);
 
-        CCDebug::Log('transfer: ' . CCDebug::Chronometer($timer1));
+        CCDebug::Log("transfer: $fname (" . CCDebug::Chronometer($timer1) . ')' );
 
         $url = $mixter_ftp_settings['ftp_baseurl'] . '/' . $fname;
 
@@ -289,6 +269,31 @@ function cc_remote_get_queue($queue_file_name='')
     }
 }
 
+function & cc_remote_get_records()
+{
+    $q = cc_remote_get_queue();
+    if( !empty($q) )
+    {
+        $files =& CCFiles::GetTable();
+        $where = 'file_id IN (' . join( ',', $q ) . ')';
+        $rows = $files->QueryRows($where,'file_upload');
+        if( !empty($rows) )
+        {
+            $up_ids = array();
+            foreach( $rows as $row )
+                $up_ids[] = $row['file_upload'];
+            $where = 'upload_id IN (' . join( ',', $up_ids ) . ')';
+            $uploads =& CCUploads::GetTable();
+            $uploads->SetDefaultFilter(true,true);
+            $records =& $uploads->GetRecords($where);
+            return $records;
+        }
+    }
+
+    $e = array();
+    return $e;
+}
+
 function cc_remote_update_queue($arr,$queue_file_name='')
 {
     if( empty($queue_file_name) )
@@ -325,6 +330,7 @@ function cc_remote_transfer_queue()
         return;
 
     $uploads  =& CCUploads::GetTable();
+    $uploads->SetDefaultFilter(true,true);
     $files    =& CCFiles::GetTable();
     $done     = array();
     $count    = count($file_ids);
@@ -339,7 +345,7 @@ function cc_remote_transfer_queue()
         {
             $upload_id = $files->QueryItemFromKey( 'file_upload', $file_id );
             $record =& $uploads->GetRecordFromKey( $upload_id );
-            $ok = !empty($record); // upload might have been deleted
+            $ok = !empty($record); // upload might have been deleted or banned
 
             if( $ok )
             {
@@ -371,7 +377,7 @@ function cc_remote_transfer_queue()
             }
         }
 
-        cc_remote_update_queue($file_ids,$cc_remote_update_queue);
+        cc_remote_update_queue($file_ids,$queue_file_name );
     }
 
 }
