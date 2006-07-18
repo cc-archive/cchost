@@ -500,9 +500,14 @@ function cc_remote_transfer_queue()
     $done     = array();
     $count    = count($file_ids);
 
+
+    CCDebug::Log("Info: Staring transfer session for $count files (" . join(',',$file_ids) . ')' );
+
     for( $i = 0; $i < $count; $i++ )
     {
         $file_id = array_shift($file_ids);
+
+        CCDebug::Log("Info: Staring transfer file $file_id");
 
         if( empty($file_id) )
         {
@@ -558,9 +563,9 @@ function cc_remote_transfer_queue()
 
         cc_remote_update_queue($file_ids,$queue_file_name );
 
-        return $done;
     }
 
+    return $done;
 }
 
 ?>
