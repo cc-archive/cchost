@@ -64,8 +64,23 @@ class CCRemote
     {
         CCPage::SetTitle(_('Transfering files'));
         require_once('mixter-lib/cc-remote-client.inc');
-        cc_remote_transfer_queue();
-        CCPage::Prompt( _('Files transfer complete') );
+        $results = cc_remote_transfer_queue();
+        if( empty($results) )
+        {
+            CCPage::Prompt( _('No files were transfered') );
+        }
+        else
+        {
+            $set = join(',', $results);
+            $where = "file_id in ($set)";
+            $files =& CCFiles::GetTable();
+            $rows = $files->QueryRows($where);
+            $html = _('Files transfered:<br />');
+            foreach( $rows as $row )
+                $html .= $row['file_name'] . '<br />';
+            CCPage::Prompt( _('Files transfer complete') );
+            CCPage::AddPrompt('body_text',$html);
+        }
     }
 
     function View()
@@ -81,9 +96,10 @@ class CCRemote
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin', 'remoting'),          array('CCRemote', 'Admin'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin', 'remoting', 'run'),   array('CCRemote', 'Run'),   CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin', 'remoting', 'view'),  array('CCRemote', 'View'),   CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin', 'remoting'),           array('CCRemote', 'Admin'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin', 'remoting', 'run'),    array('CCRemote', 'Run'),   CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin', 'remoting', 'view'),   array('CCRemote', 'View'),   CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin', 'remoting', 'manage'), array('CCRemote', 'Manage'),   CC_ADMIN_ONLY );
     }
 
     function Admin()
@@ -92,6 +108,13 @@ class CCRemote
         CCPage::SetTitle('Configure Remote Transfers');
         $form = new CCRemoteAdminForm();
         CCPage::AddForm( $form->GenerateForm() );
+    }
+
+    function Manage($cmd='',$arg='')
+    {
+        require_once('mixter-lib/cc-remote-client.inc');
+        CCPage::SetTitle('Manage Remote Transfers');
+        cc_remote_manage($cmd,$arg);
     }
 
     /**
