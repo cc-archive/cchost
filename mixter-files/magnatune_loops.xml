@@ -16,14 +16,14 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
 <style>
 .hs
 {
-    font-style:Courier New, courier, serif;
+    font-family:Courier New, courier, serif;
     font-size: 12px;
     vertical-align: top;
 }

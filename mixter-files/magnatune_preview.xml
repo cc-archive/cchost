@@ -28,7 +28,7 @@ $Id$
 
 .lp_results_head {
   font-style: italic;
-  font-color: #555;
+  color: #555;
   padding: 8px;
   line-height: 17px;
   background-color: #EEF;
