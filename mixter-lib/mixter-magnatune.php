@@ -79,9 +79,9 @@ class CCMagnatune
 
         $filter = '';
         $args['genre_filter_on'] = false;
-        if( !empty($_POST['genre_filter']) || !empty($_POST['get_album_button']) )
+        if( !empty($_GET['genre']) )
         {
-            $genre = CCUtil::StripText($_POST['magnatunegenres']);
+            $genre = CCUtil::StripText($_GET['genre']);
             if( !empty($genre) && ($genre != 'all') )
             {
                 $filter = ' WHERE magnatunegenres LIKE \'%' . $genre . '%\' ';

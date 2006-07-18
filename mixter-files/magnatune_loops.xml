@@ -20,27 +20,62 @@ $Id$
 
 -->
 </tal:block>
-<style>
-.hs
+<script>
+function on_get_albumlist(listbox)
 {
-    font-family:Courier New, courier, serif;
-    font-size: 12px;
-    vertical-align: top;
+   var opt    = listbox.options[listbox.selectedIndex];
+   if( opt.value != "[d]" )
+   {
+     var opt = listbox.options[listbox.selectedIndex];
+     var url = "${home-url}library/albumlist/" + opt.value;
+     cc_get_data( url, 'album_preview','getting album data...');
+   }
 }
-.msgs
+
+function on_get_loopset(listbox)
 {
+   var opt = listbox.options[listbox.selectedIndex];
+   var url = "${home-url}library/looplist/" + opt.value;
+   cc_get_data( url, 'loop_preview','getting loop data...');
+}
+
+function on_pick_genre()
+{
+   var obj      = new cc_obj('magnatunegenres');
+   var glistbox = obj.obj;
+   var opt = glistbox.options[glistbox.selectedIndex];
+   var loc = get_mbase_url();
+   document.location = loc + '?genre=' + opt.value + '#catalog';
+}
+
+function get_mbase_url()
+{
+  var loc = '' + document.location;
+  var regex = new RegExp(/\?.+$$/);
+  if( regex.exec( loc ) )
+     loc = loc.replace( regex, '' );
+  return loc;
+}
+
+</script>
+<style>
+.genre_head {
+  margin: 5px;
+}
+.genre_head span {
+  font-weight: bold;
+}
+.msgs {
   float: right;
   width: 32%;
 }
-.msgs td div
-{
+.msgs td div {
   padding: 10px;
   background-color:#eee;
   border:1px solid #ddd;
   margin: 6px;
 }
-.msgs td a
-{
+.msgs td a {
   font-weight: bold;
 }
 
@@ -82,13 +117,11 @@ for each of the loops.</p>
 <table border="0" cellpadding="3" cellspacing="0" >
 <tr>
 <td valign="top">
-  <select name="loop_artist" id="loop_artist" size="9" onchange="on_get_selection(this,'get_loops_button')">
+  <select name="loop_artist" id="loop_artist" size="9" onchange="on_get_loopset(this)">
     <tal:block repeat="artist mt/artists" >
       <option value="${artist/loop_artist}">${artist/artist} - ${artist/artistdesc}</option>
     </tal:block>
-  </select><br />
-  <input type="button" value="Get Loop Library Listing" name="get_loops_button" id="get_loops_button" 
-    disabled="1" onclick="get_loop_list(this);"/>
+  </select>
 </td>
 <td style="vertical-align:top;padding-left:5px;">  
 <div id="loop_preview">
@@ -108,15 +141,16 @@ download individual tracks in high quality MP3:</p>
 <td valign="top">
   <style> optgroup { font-weight: bold; font-family: verdana; font-style: normal;} </style>
   <div>
-      <select name="magnatunegenres" id="magnatunegenres">
+  <table><tr><td>
+      <select name="magnatunegenres" id="magnatunegenres" style="font-size: 11px;font-family: Verdana">
         <option value="all">See all genres</option>
         <tal:block repeat="genre mt/genres">
           <option value="${genre}" >${genre}</option>
         </tal:block>
-      </select><input type="submit" name="genre_filter" id="genre_filter" value="View genre"/>
-      <br /><br />
+      </select></td><td style="width:120px"><a class="cc_gen_button" href="#catalog" onclick="on_pick_genre();"><span>View genre</span></a></td></tr></table>
+
       <div tal:condition="mt/genre_filter_on" class="genre_head">Currently viewing genre: <span>${mt/current_genre}</span></div>
-      <select name="album_pick" size="19" onchange="on_get_selection(this,'get_album_button')"
+      <select name="album_pick" size="19" onchange="on_get_albumlist(this)"
           style="font-size: 11px" id="album_pick">
           <tal:block repeat="artist mt/albums_by_artist">
             <optgroup label="${artist/artist}">
@@ -128,10 +162,6 @@ download individual tracks in high quality MP3:</p>
           </tal:block>
       </select>
   </div>
-  <br />
-  <input type="button" id="get_album_button" name="get_album_button"
-      value="Get Album Listing" disabled="1" onclick="get_album_list(this);" />
-
 </td>
 <td style="vertical-align:top;padding-left:5px;">
 
@@ -140,33 +170,6 @@ download individual tracks in high quality MP3:</p>
 
 </td>
 </tr></table>
-<script>
-function on_get_selection(listbox,button_id)
-{
-   var obj    = new cc_obj(button_id);
-   var button = obj.obj;
-   var opt    = listbox.options[listbox.selectedIndex];
-   button.disabled = opt.value == "[d]";
-}
-function get_album_list(button_obj)
-{
-   var obj = new cc_obj('album_pick');
-   var listbox = obj.obj;
-   var opt = listbox.options[listbox.selectedIndex];
-   var url = "${home-url}library/albumlist/" + opt.value;
-   cc_get_data( url, 'album_preview','getting album data...');
-}
-
-function get_loop_list(button_obj)
-{
-   var obj = new cc_obj('loop_artist');
-   var listbox = obj.obj;
-   var opt = listbox.options[listbox.selectedIndex];
-   var url = "${home-url}library/looplist/" + opt.value;
-   cc_get_data( url, 'loop_preview','getting loop data...');
-}
-
-</script>
 <script tal:condition="mt/genre_filter_on">
 //<!--
 function sel_genre()

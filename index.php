@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -29,7 +29,7 @@ if( file_exists('ccadmin') )
 	'setup.</body></html>');
 
 if( !function_exists('gettext') )
-    require_once('cclib/php-gettext/gettext.php');
+    require_once('ccextras/cc-no-gettext.inc');
 
 define('IN_CC_HOST', true);
 
@@ -53,6 +53,10 @@ require_once('cc-custom.php');
 
 CCConfigs::Init();                      // config settings established here
 CCLogin::InitCurrentUser();             // user logged in 
+
+if( CCUser::IsAdmin() )
+   CCDebug::Enable(true);
+
 CCEvents::Invoke(CC_EVENT_APP_INIT);    // Let all modules know it's safe to 
                                         // get in the waters
 
@@ -64,7 +68,4 @@ CCDebug::InstallErrorHandler(false);
 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
 
-function _($t) { return $t; }
-function bindtextdomain() { }
-function textdomain() { }
 ?>
