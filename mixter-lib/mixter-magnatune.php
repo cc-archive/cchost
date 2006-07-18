@@ -113,6 +113,7 @@ class CCMagnatune
 
         //CCDebug::PrintVar($args['genres']);
         CCPage::PageArg('mt', $args);
+        CCPage::AddScriptBlock('ajax_block');
         CCPage::ViewFile('magnatune_loops.xml');
     }
 
