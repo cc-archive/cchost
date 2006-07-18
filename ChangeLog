@@ -1,3 +1,17 @@
+2006-07-18     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-lib/mixter-magnatune.php 3801:
+         bugfix: non-logged in users couldn't use browser
+     * mixter-files/magnatune_loops.xml 3821:
+     * mixter-files/magnatune_preview.xml 3821:
+         css tweaks
+     * mixter-lib/cc-remote-client.inc 3822, 3823, 3824:
+     * mixter-lib/cc-remote.php 3822, 3824:
+         feature/bugfixs: remote managing
+         more tweaks
+         bugfix: queue was bailing after first session
+
+         
 2006-07-17     Victor Stone <fourstones@users.sourceforge.net>
 
      * mixter-lib/cc-remote-client.inc 3793:
