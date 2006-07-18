@@ -65,6 +65,9 @@ class CCRemote
         CCPage::SetTitle(_('Transfering files'));
         require_once('mixter-lib/cc-remote-client.inc');
         $results = cc_remote_transfer_queue();
+
+        $qrecs = cc_remote_get_records();
+        _cc_show_remoting_menu(&$qrecs);
         if( empty($results) )
         {
             CCPage::Prompt( _('No files were transfered') );
@@ -76,9 +79,27 @@ class CCRemote
             $files =& CCFiles::GetTable();
             $rows = $files->QueryRows($where);
             $html = _('Files transfered:<br />');
-            foreach( $rows as $row )
-                $html .= $row['file_name'] . '<br />';
-            CCPage::Prompt( _('Files transfer complete') );
+            foreach( $rows as $F )
+            {
+                $html .= $F['file_name'];
+                if( is_string($F['file_extra']) )
+                    $F['file_extra'] = unserialize($F['file_extra']);
+
+                if( !empty($F['file_extra']['remote_url']) )
+                {
+                    $url = $F['file_extra']['remote_url'];
+                    $img = ccd('cctemplates/ccmixter/down-button-bg.gif');
+                    $html .= "<a href=\"$url\"><img src=\"$img\" /></a> ";
+                }
+                else
+                {
+                    $msg1 = _('File did not remote');
+                    $msg2 = _('See log for possible details');
+                    $html .= " <span style=\"color:red\">$msg1</span> $msg2";
+                }
+
+                $html .= '<br />';
+            }
             CCPage::AddPrompt('body_text',$html);
         }
     }

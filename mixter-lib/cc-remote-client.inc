@@ -235,6 +235,12 @@ END;
                 $html .= "</td>\n   <td>";
                 if( !empty($F['file_extra']['remote_url']) )
                 {
+                    if( !empty($R['stream_link']) )
+                    {
+                        $img = ccd('cctemplates/ccmixter/hear-button-bg.gif');
+                        $html .= "<a href=\"{$R['stream_link']['url']}\"><img src=\"$img\" /></a> ";
+                    }
+
                     $curl = ccl( 'admin', 'remoting', 'manage', 'unremote', $F['file_id'] );
                     $html .= "<a href=\"$curl\"  style=\"color:green;\">[ Unremote ]</a>";
                 }
