@@ -1,0 +1,350 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Usage: publishcchost [OPTION]... FILE_PATH
+ or:   publishcchost [OPTION]... FILE_PATH CCHOST_URL
+Upload file to ccHost Installation
+
+Mandatory arguments to long options are mandatory for short options too.
+  -u, --username <login name>     try to log with this username
+  -p, --password <password>       NOT SECURE try to log with this password
+  -t, --submission-type <type>    submit the file as the specified type
+  -v, --verbose                   explain what is being done
+  -h, --help                      display this help and exit
+"""
+
+import os.path
+import sys
+import urllib
+import HTMLParser
+import re
+import getopt
+import getpass
+
+#FIXME few comments
+
+def publishcchost(argv = None):
+    """Function to publish files to ccHost installations.
+    Parse command line, interface with the user.
+    Call functions to validate url, get title, log user, pick submission type and upload file"""
+
+    if argv is None:
+        argv = sys.argv
+
+    #set all user's informations
+    url = None
+    username = None
+    password = None
+    type = None
+    filename = None
+    verbose = False
+
+    # parse command line options using getopt lib
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "h v u: p: t:", ["help", "verbose", "username=", "password=", "submission-type="])
+    except getopt.error, msg:
+        print msg
+        print "for help use --help"
+        sys.exit(2)
+    # process options
+    for opt, arg in opts:
+        if opt in ("-h", "--help"): #display help
+            print __doc__
+            sys.exit(0)
+        elif opt in ("-v", "--verbose"):
+            verbose = True
+        elif opt in ("-u", "--username"): #get login name
+            username = arg
+        elif opt in ("-p", "--password"): #get password
+            password = arg
+        elif opt in ("-t", "--submission-type"): #get submission type
+            type = arg
+    # process arguments
+    if len(args) == 1:
+        filename = args[0]
+    elif len(args) == 2:
+        filename = args[0]
+        url = args[1]
+    elif len(args) >= 2:
+        print "too many arguments"
+        print "for help use --help"
+        sys.exit(2)
+
+    if verbose:
+        print "Starting..."
+    Request, urlopen, cj = loader() #prepare to handle cookies
+
+    #another way to get URL
+    if url == None:
+        url = raw_input("Enter the ccHost Installation URL: ")
+
+    if url[len(url)-1] != '/':  #the '/' is necessary to concatenate the selector
+        url = url + "/" 
+
+    if location_validate(url, Request, urlopen, cj):
+        cchosttitle = title(url, Request, urlopen, cj)
+        if verbose:
+            print "Valid URL"
+            print "Welcome to "+ cchosttitle
+
+        #get login name, if it was not given yet
+        if username == None:
+            username = raw_input("Enter " + cchosttitle + " login name: ")
+
+        #get password. getpass prompt the user for a password without echoing.
+        if password == None:
+            password = getpass.getpass("Enter " + cchosttitle + " password: ")
+        
+        if user_validate(username, password, url, Request, urlopen, cj):
+            if verbose:
+                print "Logged as "+ username + "..."
+
+            #FIXME need verify command line options
+            print "Pick Up Submission Type"
+            list = getSubmissionTypes(url, Request, urlopen, cj)
+            #display all enabled submission types
+            for aux in range(len(list)):
+                if (aux % 2 == 1):
+                    print str((aux/2)+1) +") " + list[aux]
+            #and user must choose one
+            option = input("Choose a number: ")
+            if upload(list[2*(option-1)], Request, urlopen, cj):
+                if verbose:
+                    print "File Uploaded"
+                sys.exit(0)
+            else:
+                print "Upload Failed"
+                sys.exit(1)
+        else:
+            print "Unknown User or Wrong Password"
+            sys.exit(1)
+    else:
+        print "Invalid URL"
+        sys.exit(1)
+    
+
+def loader():
+    """Try to import some cookielib, urllib2, or ClientCookie"""
+
+    cj = None
+    ClientCookie = None
+    cookielib = None
+    
+    try:  # see if cookielib is available
+        import cookielib            
+    except ImportError:
+        pass
+    else:
+        import urllib2    
+        urlopen = urllib2.urlopen
+        cj = cookielib.LWPCookieJar()  
+        Request = urllib2.Request
+    
+    if not cookielib:  # if importing cookielib fails, try ClientCookie
+        try:                                            
+            import ClientCookie 
+        except ImportError:
+            import urllib2
+            urlopen = urllib2.urlopen
+            Request = urllib2.Request
+        else:
+            urlopen = ClientCookie.urlopen
+            cj = ClientCookie.LWPCookieJar()
+            Request = ClientCookie.Request
+            
+    if cj != None:  # now we have to install our CookieJar so that it is used as the default CookieProcessor in the default opener handler
+        if cookielib:
+            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+            urllib2.install_opener(opener)
+        else:
+            opener = ClientCookie.build_opener(ClientCookie.HTTPCookieProcessor(cj))
+            ClientCookie.install_opener(opener)
+    return Request, urlopen, cj
+
+def location_validate(url, Request, urlopen, cj):
+    """Confirm that the url is a valid CCHost Installation
+    return True if valid, otherwise return False."""
+
+    login_url = url + "?ccm=/media/login"
+    txdata = None
+    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : login_url}
+    try:
+        req = Request(login_url, txdata, txheaders) # create a request object
+        handle = urlopen(req)
+    except IOError, e:
+        print 'Failed to open "%s".' % login_url
+        if hasattr(e, 'code'):
+            print 'Failed with error code - %s.' % e.code
+        elif hasattr(e, 'reason'):
+            print "The error reason:", e.reason
+            print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
+        sys.exit(2)
+        return False
+            
+    else:
+        htmlSource = handle.read()
+        p = linkParser()
+        p.feed(htmlSource)
+        p.close()
+        return p.valid
+
+
+class linkParser(HTMLParser.HTMLParser):
+    def __init__(self):
+        HTMLParser.HTMLParser.__init__(self)
+        self.valid = False
+    def handle_starttag(self, tag, attrs):
+        if tag=='form':
+            for atribute in attrs:
+                if atribute[0] == "id" and atribute[1] == "userloginform":
+                    self.valid = True
+
+
+def title(url, Request, urlopen, cj):
+    """Get CCHost Installation's Title"""
+
+    txdata = None
+    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : url}
+    try:
+        req = Request(url, txdata, txheaders) # create a request object
+        handle = urlopen(req)
+    except IOError, e:
+        print 'Failed to open "%s".' % url
+        if hasattr(e, 'code'):
+            print 'Failed with error code - %s.' % e.code
+        elif hasattr(e, 'reason'):
+            print "The error reason:", e.reason
+            print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
+        sys.exit(2)
+    else:
+        htmlSource = handle.read()
+        p = getTitle()
+        p.feed(htmlSource)
+        p.close()
+        if p.title != '' and p.title != None:
+            return p.title
+        else:
+            return 'CCHost Installlation Login'
+    return 'CCHost Installlation Login'
+
+class getTitle(HTMLParser.HTMLParser):
+    def __init__(self):
+        HTMLParser.HTMLParser.__init__(self)
+        self.isTitle = False
+        self.title = ''
+    def handle_starttag(self, tag, attrs):
+        if tag=='title':
+            self.isTitle = True
+    def handle_endtag(self, tag):
+        if tag=='title':
+            self.isTitle = False
+    def handle_data(self, data):
+        if self.isTitle:
+            self.title += data
+
+def user_validate(username, password, cchost_url, Request, urlopen, cj):
+    """Confirm that the username/password combination is valid for cchost_url ccHost Installation;
+    return True if valid, otherwise return False."""
+
+    loginurl =  cchost_url + "?ccm=/media/login"
+    values = {'user_name' : username, 'user_password' : password, 'userlogin' : 'classname'}
+    txdata = urllib.urlencode(values)
+    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : loginurl}
+    try:
+        req = Request(loginurl, txdata, txheaders) # create a request object
+        handle = urlopen(req)
+    except IOError, e:
+        print 'Failed to open "%s".' % loginurl
+        if hasattr(e, 'code'):
+            print 'Failed with error code - %s.' % e.code
+        elif hasattr(e, 'reason'):
+            print "The error reason:", e.reason
+            print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
+        sys.exit(2)
+    else:
+        return is_logged_in(handle)
+        
+def is_logged_in(handle):
+    htmlSource = handle.read()
+    p = userParser()
+    p.feed(htmlSource)
+    p.close()
+    return p.logged_in
+    
+class userParser(HTMLParser.HTMLParser):
+    def __init__(self):
+        HTMLParser.HTMLParser.__init__(self)
+        self.logged_in = True
+    def handle_starttag(self, tag, attrs):
+        if tag=='form':
+            for atribute in attrs:
+                if atribute[0] == "id" and atribute[1] == "userloginform":
+                    self.logged_in = False
+
+def getSubmissionTypes(url, Request, urlopen, cj):
+    """Return a list of all submission types enabled"""
+
+    url =  url + "?ccm=/media/submit"
+    txdata = None
+    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : url}
+    try:
+        req = Request(url, txdata, txheaders) # create a request object
+        handle = urlopen(req)
+    except IOError, e:
+        print 'Failed to open "%s".' % url
+        if hasattr(e, 'code'):
+            print 'Failed with error code - %s.' % e.code
+        elif hasattr(e, 'reason'):
+            print "The error reason:", e.reason
+            print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
+        sys.exit(2)
+    else:
+        htmlSource = handle.read()
+        p = submissionParser()
+        p.feed(htmlSource)
+        p.close()
+        return p.submissiontype
+    return 'CCHost Installlation Login'
+
+class submissionParser(HTMLParser.HTMLParser):
+    def __init__(self):
+        HTMLParser.HTMLParser.__init__(self)
+        self.isLink = False
+        self.submissiontype = []
+    def handle_starttag(self, tag, attrs):
+        if tag=='a':
+            for atribute in attrs:
+                if atribute[0] == "href" and self.isSubmissionLink(atribute[1]):
+                    self.isLink = True
+                    self.submissiontype.append(atribute[1])
+    def handle_endtag(self, tag):
+        if tag=='a':
+            self.isLink = False
+    def handle_data(self, data):
+        if self.isLink:
+            self.submissiontype.append(data)
+    def isSubmissionLink(self, url):
+        if re.search("/media/submit/", url, 0) == None:
+            return False
+        else:
+            return True
+
+#FIXME not yet finished
+def upload(url, Request, urlopen, cj):
+    getInformation(url, Request, urlopen, cj)
+
+#FIXME not yet finished
+def getInformation(url, Request, urlopen, cj):
+    txdata = None
+    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : url}
+    try:
+        req = Request(url, txdata, txheaders) # create a request object
+        handle = urlopen(req)
+    except IOError, e:
+        return False
+    else:
+        pass
+
+
+if __name__ == '__main__':
+    publishcchost(sys.argv)
