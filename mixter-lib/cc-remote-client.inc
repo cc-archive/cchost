@@ -168,6 +168,8 @@ END;
 
     function cc_remote_manage($cmd='',$id='')
     {
+        $tagfilter = '';
+
         switch( $cmd )
         {
             case 'remove':
@@ -189,6 +191,11 @@ END;
                 cc_remote_clear_queue();
                 $msg = _('transfer queue cleared');
                 break;
+
+           case 'filter':
+                $tagfilter = $_REQUEST['filter'];
+                $type = $_REQUEST['type'];
+                break;
         }
 
         $qrecs = cc_remote_get_records();
@@ -197,12 +204,18 @@ END;
         $uploads =& CCUploads::GetTable();
         $uploads->SetDefaultFilter(false,false);
         $uploads->SetOrder('upload_date','DESC');
+        if( !empty($tagfilter) )
+            $uploads->SetTagFilter($tagfilter,$type);
         $where = '';
         CCPage::AddPagingLinks($uploads,$where,30);
         $records =& $uploads->GetRecords($where);
         $count = count($records);
         $queue = cc_remote_get_queue();
-        $html = '<table style="font-size: 11px; font-family: Verdana;white-space:nowrap;">';
+        $furl = ccl('admin','remoting','manage','filter');
+        $html =<<<END
+            <form method="GET" action="$furl">Filter by tags: <input style="font-family: Verdana;font-size: 11px;width: 250px;" name="filter" id="filter" value="$tagfilter" /><select name="type" style="font-family: Verdana;font-size: 11px;" id="type"><option value="all" selected="selected">all</option><option value="any">any</option></select><input style="font-family: Verdana;font-size: 11px;" type="submit" value="go" /></form>
+            <table style="font-size: 11px; font-family: Verdana;white-space:nowrap;">
+END;
         if( !empty($msg) )
             $html .= "<tr><td colspan=\"3\"><span style=\"display:inline;margin: 4px;\"
                          class=\"cc_system_prompt\">$msg</div></td></tr>";
