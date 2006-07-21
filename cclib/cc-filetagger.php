@@ -180,7 +180,7 @@ class CCID3Tagger
                            'formatter'   => 'textedit',
                            'value'       => "%artist_page%");
 
-        return( $standard_tags );
+        return $standard_tags;
     }
 
 

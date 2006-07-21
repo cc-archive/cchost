@@ -58,8 +58,7 @@ class CCAdminTaggerForm  extends CCEditConfigForm
         CCEvents::Invoke( CC_EVENT_GET_MACROS, array( $dummy, $dummy, &$patterns, $dummy ) );
         ksort($patterns);
         $this->CallFormMacro('macro_patterns','show_macro_patterns',$patterns);
-
-
+        $this->SetHiddenField('_file', 'cclib/' . basename(__FILE__), CCFF_HIDDEN);
     }
 
 }
