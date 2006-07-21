@@ -180,6 +180,12 @@ function cc_response()
 
 <metal:block define-macro="howididit_browse">
  <div class="cc_form_about">${howididit_help}</div>
+ <table class="cc_howididit_links"><tr> <th>${howididit_sort_cap}</th>
+    <td tal:repeat="sortlink howididit_sorts">
+      <a tal:condition="not: sortlink/selected" href="${sortlink/url}">${sortlink/text}</a>
+      <b tal:condition="sortlink/selected">${sortlink/text}</b>
+    </td>
+ </tr></table>
  <select size="7" id="cc_howididit_browser"
  onchange="cc_get_data('${howididit_url}/' + this.options[this.selectedIndex].value,'cc_howididit_detail','getting data...');"
  >

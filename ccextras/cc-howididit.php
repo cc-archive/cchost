@@ -57,15 +57,52 @@ class CCHowIDidIt
         CCPage::AddScriptBlock('ajax_block');
         $uploads =& CCUploads::GetTable();
         $uploads->SetTagFilter('how_i_did_it');
-        $uploads->SetOrder('upload_name');
+        $ord = 'ASC';
+        if( empty($_GET['sort']) )
+        {
+            $sort = 'upload_name';
+        }
+        else
+        {
+            switch( $_GET['sort'])
+            {
+                case 'name';
+                    $sort = 'upload_name';
+                    break;
+                case 'date';
+                    $sort = 'upload_date';
+                    $ord = 'DESC';
+                    break;
+                case 'user';
+                    $sort = 'user_real_name';
+                    break;
+            }
+        }
+        $uploads->SetOrder($sort,$ord);
         $rows = $uploads->QueryRows('');
         $uploads->SetTagFilter('');
         $uploads->SetOrder('');
         $url = ccl('howididit','detail');
+        $current_url = cc_calling_url();
+        $sorts = array(
+                    array( 'url' => url_args($current_url,'sort=user'),
+                           'text' => _('Artist'),
+                           'selected' => $sort == 'user_real_name' ),
+                    array( 'url' => url_args($current_url,'sort=date'),
+                           'text' => _('Date'),
+                           'selected' => $sort == 'upload_date' ),
+                    array( 'url' => url_args($current_url,'sort=name'),
+                           'text' => _('Upload Name'),
+                           'selected' => $sort == 'upload_name' ),
+            );
+
         $help = 'Remixers are encouraged to specify the tools and process they used to create ' .
                 'submissions to this site. Below is a list of submissions that the author has ' .
                 'annotated with these special notes. Click on any submission to see the ' .
                 'author\'s notes.';
+
+        CCPage::PageArg('howididit_sort_cap', _('Sort by:'));
+        CCPage::PageArg('howididit_sorts', $sorts );
         CCPage::PageArg('howididit_help', _($help) );
         CCPage::PageArg('howididit_url',$url);
         CCPage::PageArg('howididit_records',$rows,'howididit_browse');
