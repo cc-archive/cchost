@@ -1,5 +1,52 @@
+2006-07-21     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccextras/cc-featuring.inc 3843:
+     * ccextras/cc-featuring.php 3843:
+     * cclib/cc-fileverify.php 3843:
+     * cclib/cc-form.php 3843:
+     * cclib/cc-formatinfo.php 3843:
+     * cclib/cc-uploadapi.php 3843:
+     * cctemplates/upload.xml 3843:
+     * mixter-lib/cc-remote-client.inc 3843:
+     * mixter-lib/cc-remote.php 3843:
+     * mixter-lib/mixter-dump-listing.inc 3843:
+         feature: featuring collaborators
+         bugfix: disabling getid3
+         bugfix: remote deleting
+         
+
+2006-07-20     bdilly
+
+     * bin/publishcchost 3831:
+         publishcchost added to cchost/bin
+     * bin/publishcchost 3840:
+         command line submission type parsing added to publishcchost
+
+2006-07-20     Victor Stone <fourstones@users.sourceforge.net>
+
+     * mixter-lib/cc-remote-client.inc 3836:
+         filter queue by tags
+     * ccextras/cc-howididit.php 3837:
+     * cctemplates/misc.xml 3837:
+         feature: sort how i did it browser
+     * cclib/cc-url.php 3838:
+         cc_calling_url
+     * cclib/cc-remix.php 3841:
+         bugfix: Trailing space breaks remix search (whitespace checkin ln. 388)
+     * cclib/cc-filetagger-admin.inc 3842:
+     * cclib/cc-filetagger.php 3842:
+         bugfix: mp3 tagging broken on newer php
+
 2006-07-18     Victor Stone <fourstones@users.sourceforge.net>
 
+     * ChangeLog 3825:
+         feature/bugfixs: remote managing
+     * index.php 3826:
+     * mixter-files/magnatune_loops.xml 3826:
+     * mixter-lib/mixter-magnatune.php 3826:
+         bugfix: genre filter broken
+     * index.php 3827:
+         last checkin was a mistake
      * mixter-lib/mixter-magnatune.php 3801:
          bugfix: non-logged in users couldn't use browser
      * mixter-files/magnatune_loops.xml 3821:
