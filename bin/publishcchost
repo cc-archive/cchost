@@ -8,7 +8,9 @@ Upload file to ccHost Installation
 Mandatory arguments to long options are mandatory for short options too.
   -u, --username <login name>     try to log with this username
   -p, --password <password>       NOT SECURE try to log with this password
-  -t, --submission-type <type>    submit the file as the specified type
+  -t, --submission-type <type>    submit the file as the specified type.
+                                  Case-insensitive (i.e. \"Remix\" and \"remix\"
+                                                 are the same)
   -v, --verbose                   explain what is being done
   -h, --help                      display this help and exit
 """
@@ -99,19 +101,32 @@ def publishcchost(argv = None):
             if verbose:
                 print "Logged as "+ username + "..."
 
-            #FIXME need verify command line options
-            print "Pick Up Submission Type"
             list = getSubmissionTypes(url, Request, urlopen, cj)
-            #display all enabled submission types
-            for aux in range(len(list)):
-                if (aux % 2 == 1):
-                    print str((aux/2)+1) +") " + list[aux]
-            #and user must choose one
-            option = input("Choose a number: ")
+            option = None
+            if type != None:
+                #try to match type with the list
+                for aux in range(len(list)):
+                    if (aux % 2 == 1):
+                        if re.search(type, list[aux], re.I) != None: #re.I is a flag to case-insensitive
+                            option = aux/2+1
+                            if verbose:
+                                print "Submission Type: " + list[aux]
+                            break
+                if option == None and verbose:
+                    print "OPTION --submission-type \"" + type +"\" doesn't match"
+            if option == None: #type didn't match with the list
+                #display all enabled submission types
+                print "Pick Up Submission Type"
+                for aux in range(len(list)):
+                    if (aux % 2 == 1):
+                        print str((aux/2)+1) +") " + list[aux]
+                #and user must choose one
+                #FIXME treat not a number case, or number is bigger than list range/2
+                option = input("Choose a number: ")
             if upload(list[2*(option-1)], Request, urlopen, cj):
                 if verbose:
                     print "File Uploaded"
-                sys.exit(0)
+                    sys.exit(0)
             else:
                 print "Upload Failed"
                 sys.exit(1)
