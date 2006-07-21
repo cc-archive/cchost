@@ -385,7 +385,7 @@ class CCRemix
                         break;
 
                     case 'title':
-                        $fields = array( 'upload_name ');
+                        $fields = array( 'upload_name');
                         $limit = CC_REMIX_SEARCH_LIMIT;
                         break;
 
