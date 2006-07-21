@@ -176,7 +176,7 @@ class CCRemote
 
         require_once('mixter-lib/cc-remote-client.inc');
 
-        list( , $queue_file_name ) = cc_remote_get_settings();
+        list( $settings, $queue_file_name ) = cc_remote_get_settings();
 
         foreach( $record['files'] as $F )
         {
@@ -208,13 +208,12 @@ class CCRemote
 
     function _nuke_remote(&$F, $settings)
     {
-        if( empty($F['file_extra']['remote_url']) )
+        if( empty($F['file_extra']['remote_file_name']) )
             return;
 
         require_once( 'mixter-lib/cc-remote-client.inc' );
 
-        cc_remote_delete($F['file_name'],$settings);
-
+        cc_remote_delete($F['file_extra']['remote_file_name'],$settings);
     }
 }
 

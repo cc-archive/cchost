@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -39,11 +39,12 @@ function & _mixter_dump_records(&$records,$xclass)
     $str_noone   = _('(no one has sampled this)');
     $str_usedin  = _('Samples are used in:');
     $str_down    = _('Download');
-    $str_length  = _('Length:');
+    $str_length  = _('length:');
     $str_bpm     = _('BPM:');
     $str_IEtip   = _('IE: Right-click select \'Save Target As\'');
     $str_Mactip  = _('Mac: Control-click select \'Save Link As\'');
     $str_flagtip = _('Flag this upload for possible violation of terms');
+    $str_feature = _('featuring:');
 
     $chop = CCPage::GetPageArg('chop');
 
@@ -67,8 +68,6 @@ function & _mixter_dump_records(&$records,$xclass)
     <div class="$xclass">
 EOF;
         }
-
-
 
         //----------------------------------
         //
@@ -102,6 +101,19 @@ EOF;
           <th>$str_by</th>
           <td>$flag_link<a href="{$record['artist_page_url']}" class="cc_user_link">{$record['user_real_name']}</a></td>
         </tr>
+EOF;
+
+        if( $detail && !empty($record['upload_extra']['featuring']) )
+        {
+            $html .=<<<EOF
+            <tr>
+              <th>$str_feature</th>
+              <td><span class="cc_featuring">{$record['upload_extra']['featuring']}</td>
+            </tr>
+EOF;
+        }
+
+        $html .=<<<EOF
         <tr>
           <th>$str_date</th>
           <td>$date</td>
@@ -110,6 +122,7 @@ EOF;
           <th>$str_tags</th>
           <td>
 EOF;
+
         $taglinks = $detail ? $record['upload_taglinks'] : $record['usertag_links'];
         $tcount = count($taglinks);
         for( $n = 0; $n < $tcount; $n++)
@@ -124,6 +137,11 @@ EOF;
         $html .=<<<EOF
           </td>
         </tr>
+EOF;
+
+        // ------- Ratings
+
+        $html .=<<<EOF
         <tr>
             <th><span id="cc_rate_head_$upload_id" style="display: $rate_head_show">$str_ratings</span>
             </th>

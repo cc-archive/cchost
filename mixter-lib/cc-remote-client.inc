@@ -318,15 +318,6 @@ function cc_remote_send_file($fname,$local_path,$mixter_ftp_settings)
     $d = $mixter_ftp_settings['ftp_dir'];
     $p = $mixter_ftp_settings['ftp_password'];
 
-    $retval = cc_remote_delete($fname,$mixter_ftp_settings);
-
-    if( $retval < 0 )
-    {
-        //die("Error on remote cmd: $retval");
-        CCDebug::Log("Warning: transfer exec failed. Returned: $retval");
-        return '';
-    }
-
     $remote_open_path = "ftp://{$u}:{$p}@{$s}/{$d}/{$fname}"; 
     $hremote = @fopen($remote_open_path, 'wb');
     if( $hremote === false )
@@ -513,9 +504,6 @@ function cc_remote_transfer_queue()
     $done     = array();
     $count    = count($file_ids);
 
-
-    CCDebug::Log("Info: Staring transfer session for $count files (" . join(',',$file_ids) . ')' );
-
     for( $i = 0; $i < $count; $i++ )
     {
         $file_id = array_shift($file_ids);
@@ -550,7 +538,19 @@ function cc_remote_transfer_queue()
                 continue;
             }
 
-            CCDebug::Log("Info: about to transfer {$F['file_name']}");
+            $ext = $F['file_extra'];
+
+            if( !empty($ext['remote_file_name']) )
+            {
+                $retval = cc_remote_delete($ext['remote_file_name'],$mixter_ftp_settings);
+
+                if( $retval < 0 )
+                {
+                    //die("Error on remote cmd: $retval");
+                    CCDebug::Log("Warning: transfer exec failed. Returned: $retval");
+                    return '';
+                }
+            }
 
             $url = cc_remote_send_file( $F['file_name'],
                                  $F['local_path'],
@@ -560,8 +560,8 @@ function cc_remote_transfer_queue()
             {
                 CCDebug::Log("Info: {$F['file_name']} is at $url");
                 $args['file_id'] = $file_id;
-                $ext = $F['file_extra'];
                 $ext['remote_url'] = $url;
+                $ext['remote_file_name'] = $F['file_name'];
                 $args['file_extra'] = serialize($ext);
                 $files->Update($args);
             }

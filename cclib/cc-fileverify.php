@@ -32,8 +32,9 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,          array( 'CCFileVerify', 'OnAdm
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,            array( 'CCFileVerify', 'OnMapUrls') );
 CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,         array( 'CCFileVerify', 'OnGetSysTags'));
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,          array( 'CCFileVerify', 'OnGetMacros'));
+CCEvents::AddHandler(CC_EVENT_APP_INIT,            array( 'CCFileVerify', 'Install' ));
 
-$CC_UPLOAD_VALIDATOR = new CCFileVerify();
+$CC_UPLOAD_VALIDATOR = null; // new CCFileVerify();
 
 /**
 * Form for configuration the file format verification module
@@ -104,6 +105,13 @@ class CCFileVerify
         return( count($types) > 0 );
     }
 
+    function Install()
+    {
+        global $CC_UPLOAD_VALIDATOR, $CC_GLOBALS;
+        
+        if( !empty($CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY]) )
+            $CC_UPLOAD_VALIDATOR = $this;
+    }
 
     /**
     * Validates a file to be of a certain type.

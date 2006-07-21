@@ -282,26 +282,36 @@ class CCForm
     */
     function InsertFormFields( &$fields, $before_or_after, $target_field )
     {
-        $pos = array_search($target_field, array_keys($this->_form_fields));
+        $this->InnserInsertFormFields($this->_form_fields, &$fields, $before_or_after, $target_field );
+        CCEvents::Invoke( CC_EVENT_EXTRA_FORM_FIELDS, array( &$this, &$fields ) );
+    }
+
+    /**
+    * Put fields into a specific place into an array of fields
+    *
+    * @param array &$target_fields Array of fields to receive the insert
+    * @param array &$fields Array of new fields to insert
+    * @param string $before_or_after One of: 'before' or 'after'
+    * @param string $target_field Name of field to place new feilds before or after
+    * @see AddFields
+    */
+    function InnerInsertFormFields( &$target_fields, &$fields, $before_or_after, $target_field )
+    {
+        $pos = array_search($target_field, array_keys($target_fields));
         if( $before_or_after == 'after' )
             $pos++;
-        if( $pos == count($this->_form_fields) )
+        if( $pos == count($target_fields) )
         {
             $this->AddFormFields($fields,false);
         }
         else
         {
-            $this->_form_fields = array_merge(
-                                    array_slice($this->_form_fields, 0, $pos), 
+            $target_fields = array_merge(
+                                    array_slice($target_fields, 0, $pos), 
                                     $fields, 
-                                    array_slice($this->_form_fields, $pos));
-
-            //CCDebug::PrintVar($this->_form_fields,false);
+                                    array_slice($target_fields, $pos));
         }
-
-        CCEvents::Invoke( CC_EVENT_EXTRA_FORM_FIELDS, array( &$this, &$fields ) );
     }
-
 
     /**
     * Set the 'action' field of the form element. (The default is the current url.)

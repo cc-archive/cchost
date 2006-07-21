@@ -942,9 +942,11 @@ class CCUploadAPI
     function _do_verify_file_format($current_path,&$file_args)
     {
         global $CC_UPLOAD_VALIDATOR;
+
+        $format_info =  new CCFileFormatInfo($current_path);
+        
         if( isset($CC_UPLOAD_VALIDATOR) )
         {
-            $format_info =  new CCFileFormatInfo($current_path);
 
             $CC_UPLOAD_VALIDATOR->FileValidate( $format_info );
             $errors = $format_info->GetErrors();
@@ -954,9 +956,23 @@ class CCUploadAPI
                 CCDebug::Log($msg);
                 return( $msg );
             }
+        
+            $file_args['file_format_info'] = $format_info->GetData();
         }
+        else
+        {
+            $data = $format_info->GetData();
 
-        $file_args['file_format_info'] = $format_info->GetData();
+            if( preg_match('/\.([^\.]+)$/',$current_path,$m) )
+                $ext = $m[1];
+            else
+                $ext = 'tmp';
+
+            $data['default-ext'] = $ext;
+
+            $file_args['file_format_info'] = $data;
+        }
+        
         return( null );
     }
 
@@ -1060,7 +1076,7 @@ class CCUploadAPI
 
         }
 
-        return( $msg );
+        return $msg;
     }
     
     function _concat_tags()
@@ -1134,9 +1150,9 @@ class CCUploadAPI
         // Run the file through the renamer 
         // (this will update $file_args['file_name'])
         //
-        $errs = CCUploadAPI::_do_rename( $record, $file_args, $current_path, $relative_dir );
-        if( $errs )
-            return($errs);
+        $msg = CCUploadAPI::_do_rename( $record, $file_args, $current_path, $relative_dir );
+        if( !empty($msg) )
+            return $msg;
     
         // What follows is a little bit of cheat because instead
         // of calling GetRecordFromRow (which we deam too dangerous
@@ -1148,17 +1164,13 @@ class CCUploadAPI
         $file_args['local_path']   = cca($relative_dir,$file_args['file_name']);
         $file_args['download_url'] = ccd($relative_dir,$file_args['file_name']);
 
-
-        if( defined('IN_MIXTER_PORT') )
-            return;
-
         // Run the file through the ID3 tagger
         //
         global $CC_ID3_TAGGER;
         if( isset($CC_ID3_TAGGER) )
             $CC_ID3_TAGGER->TagFile( $record, $file_args['local_path'] );
 
-        return(null);
+        return $msg;
     }
 
     function _move_upload_file(&$current_path,$new_name,&$is_temp)

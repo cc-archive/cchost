@@ -52,7 +52,13 @@ class CCFileFormatInfo
     */
     function CCFileFormatInfo($file_path)
     {
-        $this->_data        = array();
+        $data = array();
+        $data['media-type']  = 'octect/stream';
+        $data['format-name'] = 'un-verified';
+        $data['default-ext'] = 'unknown';
+
+        $this->_data        = $data;
+
         $this->_errors      = array();
         $this->_warnings    = array();
         $this->_file_path   = $file_path;
