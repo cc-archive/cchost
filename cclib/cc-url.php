@@ -128,5 +128,30 @@ function cc_get_root_url()
     return( $_root_url );
 }
 
+/**
+* Internal helper for getting root pretty url
+*
+*/
+function cc_calling_url()
+{
+    if( !empty($_REQUEST['ccm']) )
+    {
+        $ccm = $_REQUEST['ccm'];
+        if( $ccm == '/ccm=')
+        {
+            $ccm = '';
+        }
+        else
+        {
+            if( $ccm{0} == '/' )
+                $ccm = substr($_REQUEST['ccm'],1,strlen($_REQUEST['ccm'])-1);
+        }
+    }
+    else
+    {
+        $ccm = '';
+    }
+    return ccr($ccm);
+}
 
 ?>
