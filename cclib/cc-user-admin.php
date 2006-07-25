@@ -57,8 +57,9 @@ class CCChangePasswordForm extends CCUserForm
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
                        array( 'label'       => 'Security Key',
-                               'formatter'  => 'password',
-                               'form_tip'   => 'Type in characters above',
+                               'formatter'  => 'textedit',
+                               'class'      => 'cc_form_input_short',
+                               'form_tip'   => CCSecurityKeys::GetSecurityTip(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE),
 
                     'user_password' =>
@@ -95,8 +96,9 @@ class CCDeleteUserFilesForm extends CCUserForm
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
                        array( 'label'       => 'Security Key',
-                               'formatter'  => 'password',
-                               'form_tip'   => 'Type in characters above',
+                               'formatter'  => 'textedit',
+                               'class'      => 'cc_form_input_short',
+                               'form_tip'   => CCSecurityKeys::GetSecurityTip(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE),
                         );
 

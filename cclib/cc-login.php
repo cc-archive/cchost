@@ -105,7 +105,15 @@ class CCSecurityKeys extends CCTable
     function GenKey()
     {
         $hash = md5(uniqid(rand(),true));
-	return( substr($hash,intval($hash[0],16),5) );
+	    return( substr($hash,intval($hash[0],16),5) );
+    }
+
+    /**
+    * Static function to return standard form tip for security field.
+    */
+    function GetSecurityTip()
+    {
+        return _('Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) has a line through it, the D does not.');
     }
 }
 
@@ -161,7 +169,7 @@ class CCNewUserForm extends CCUserForm
                        array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => _('Type in characters above'),
+                               'form_tip'   => CCSecurityKeys::GetSecurityTip(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
             );
 

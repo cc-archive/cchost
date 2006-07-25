@@ -75,7 +75,7 @@ class CCFlagContentForm extends CCSecurityVerifierForm
                        array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => _('Type in characters above'),
+                               'form_tip'   => CCSecurityKeys::GetSecurityTip(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
             );
 
