@@ -1,3 +1,12 @@
+2006-07-24     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccextras/cc-flag.php 3875:
+     * ccextras/cc-mail.php 3875:
+     * ccextras/cc-topics.php 3875:
+     * cclib/cc-login.php 3875:
+     * cclib/cc-user-admin.php 3875:
+         ui: security key fields are now all visible and new form tip
+
 2006-07-21     Victor Stone <fourstones@users.sourceforge.net>
 
      * ccextras/cc-featuring.inc 3843:
