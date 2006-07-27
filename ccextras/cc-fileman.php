@@ -89,7 +89,7 @@ class CCFileMan
                                  'help' => 'Manage files in the ' . $CC_GLOBALS['files-root'] . ' directory',
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 60,
-                                 'action' =>  ccd('media','admin','files','manage')
+                                 'action' =>  ccl('admin','files','manage')
                                  ),
                 );
         }
