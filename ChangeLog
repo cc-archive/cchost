@@ -17,7 +17,8 @@
          bugfix: php5 pass by reference message
      * ccextras/cc-notify.php 3916:
          bugfix: php5 pass by reference message
-         
+
+     * ccadmin/index.php
      * mixter-files/freesound.xml 3917:
          typo
 
