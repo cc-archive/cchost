@@ -81,7 +81,7 @@ class CCNotify
 
         require_once('ccextras/cc-notify.inc');
         $notify_api = new CCNotifyAPI();
-        $notify_api->OnReply(&$reply, &$original);
+        $notify_api->OnReply($reply, $original);
     }
 
     function OnEdPick($upload_id)
