@@ -282,7 +282,7 @@ class CCForm
     */
     function InsertFormFields( &$fields, $before_or_after, $target_field )
     {
-        $this->InnserInsertFormFields($this->_form_fields, &$fields, $before_or_after, $target_field );
+        $this->InnserInsertFormFields($this->_form_fields, $fields, $before_or_after, $target_field );
         CCEvents::Invoke( CC_EVENT_EXTRA_FORM_FIELDS, array( &$this, &$fields ) );
     }
 
@@ -805,14 +805,14 @@ class CCForm
     * @param string $fieldname Name of the field will be passed in.
     * @returns bool $ok always true
     */
-    function validator_passthru($varname,$value='',$class='')
+    function validator_passthru($fieldname,$value='',$class='')
     {
         return( true );
     }
 
     function generator_metalmacro($varname,$value,$class='')
     {
-        return($value);
+        return; // ($value);
     }
 
     /**
