@@ -121,7 +121,18 @@ class CCSampleBrowserAPI
             $bpm_where = '';
         }
 
-        $where = "(upload_tags REGEXP '(^| |,)(sample)(,|\$)' )" . $bpm_where;
+        if( !empty($_GET['lic']) && ($_GET['lic'] != '-') )
+        {
+            $lic = $_GET['lic'];
+            $lic_where = " AND (upload_license = '$lic')";
+        }
+        else
+        {
+            $lic = '';
+            $lic_where = '';
+        }
+
+        $where = "(upload_tags REGEXP '(^| |,)(sample)(,|\$)' )" . $bpm_where . $lic_where;
 
         $recs =& $uploads->GetRecords($where);
 
@@ -129,8 +140,12 @@ class CCSampleBrowserAPI
              $term = str_replace(',',', ',$tags) . ' (' . $match . ')';
         else
             $term = $tags;
+
         if( $bpm )
             $term .= " ($bpm BPM)";
+
+        if( $lic )
+            $term .= " [cc:$lic]";
 
         $this->_list_records($recs,$term, _('Tags'));
     }
@@ -196,11 +211,45 @@ class CCSampleBrowserAPI
         $args['bpm_caption']    = _('Limit to BPM:');
         $args['search_text']    = _('Go');
         $args['default_msg']    = $this->_default_msg();
+        $args['licenses']       = $this->_get_lic_filters();
 
         $template = new CCTemplate( $CC_GLOBALS['files-root'] . 'sample_browser.xml' );
         $html = $template->SetAllAndParse($args);
         CCPage::AddPrompt('body_text',$html);
         CCPage::AddScriptBlock('ajax_block');
+    }
+
+    function _get_lic_filters()
+    {
+        $uploads = new CCUploads();
+        $uploads->GroupOn('upload_license');
+        $uploads->SetTagFilter('sample');
+        $used_lics = $uploads->QueryItems('upload_license','');
+        $in = array();
+        foreach( $used_lics as $ul )
+            $in[] = "'$ul'";
+        $where = 'license_id IN (' . join(',',$in) . ')';
+
+        $licenses =& CCLicenses::GetTable();
+        $licenses->SetOrder('license_name');
+        $rows = $licenses->QueryRows($where);
+        if( empty($_GET['lic']) )
+            $sellic = '-';
+        else
+            $sellic = $_GET['lic'];
+        $lics = array();
+        $lics[] = array( 'value' => '-', 
+                       'text' => '-- ' . _('Pick License'),
+                       'selected' => $sellic == '-'
+                     );
+        foreach( $rows as $row )
+        {
+            $lics[] = array( 'value' => $row['license_id'],
+                             'text'  => trim($row['license_name']),
+                             'selected' => $sellic == $row['license_id'] );
+        }
+
+        return $lics;
     }
 
     function _get_tags()

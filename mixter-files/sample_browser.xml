@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
+$Id$
 
 -->
 </tal:block>
@@ -31,6 +31,7 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
   var tags = new Array();
   var tag_filter = 'any';
   var bpm_tag = '-';
+  var lic_filter = '-';
 
   function tag_checked(cb)
   {
@@ -70,7 +71,10 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
   function do_get_data()
   {
      var tagstr = tags.join( ',' );
-     cc_get_data( "${home-url}samples/list?tags=" + tagstr + '&tf=' + tag_filter + '&bpm=' + bpm_tag, 
+     cc_get_data( "${home-url}samples/list?tags=" + tagstr 
+                                         + '&tf=' + tag_filter 
+                                         + '&bpm=' + bpm_tag
+                                         + '&lic=' + lic_filter, 
                   'sample_browser', 
                   '<span class="sb_msg">Hold on... looking up samples...</span>' );
   }
@@ -93,6 +97,13 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
   {
     var newval = selobj.options[ selobj.selectedIndex ].value;
     tag_filter = newval;
+    do_get_data();
+  }
+
+  function new_lic_filter(selobj)
+  {
+    var newval = selobj.options[ selobj.selectedIndex ].value;
+    lic_filter = newval;
     do_get_data();
   }
 
@@ -175,7 +186,6 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
     background: #999;
   }
 
-
   .sb_msg {
     font-family: arial;
     font-size: 14px;
@@ -204,9 +214,13 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
 
   #sampsearch, #btn_search, #dd_tag_sorter, 
   #dd_tag_filter, #btn_clear, #dd_tag_limiter,
-  #dd_bpm_picker {
+  #dd_bpm_picker, #dd_lic_filter {
      font-family: Verdana;
      font-size: 10px;
+  }
+
+  #dd_lic_filter {
+    width: 170px;
   }
 
   #search_ctrls {
@@ -217,9 +231,6 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
   }
 
   #bpm_ctrls {
-    padding: 10px 8px 8px 8px;
-    margin-top: 6px;
-    background-color: #DDD;
   }
 
   #bpm_caption {
@@ -247,16 +258,21 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
   }
 
   #tag_filter {
-     margin: 5px 0px 6px 4px;
   }
 
   #dd_tag_filter {
   }
 
+  #cpanel {
+     margin: 3px 0px 10px 13px;
+  }
+
+  #cpanel td {
+    padding: 3px;
+  }
 
   #btn_clear {
      float: left;
-     margin: 0px 23px 20px 8px;
   }
 
   #picker_caption {
@@ -357,38 +373,10 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
   </table>
 </div>
 
-<input type="button" value="Clear all" disabled="disabled" onclick="clear_all(this);" id="btn_clear"/>
+<table cellspacing="0" cellpadding="0" id="cpanel">
 
-<tal:block replace=''>
- <select onchange="new_tag_sort(this)" id="dd_tag_sorter" class="toggler">
-   <tal:block repeat="tag_sort tag_sorts">
-          <tal:block condition="tag_sort/selected">
-             <option selected="1" value="${tag_sort/value}">${tag_sort/text}</option>
-          </tal:block>
-          <tal:block condition="not: tag_sort/selected">
-             <option value="${tag_sort/value}">${tag_sort/text}</option>
-          </tal:block>
-       </tal:block>
-</select>
-</tal:block>
-
-<div id="tag_filter">
-  <select onchange="new_tag_filter(this)" id="dd_tag_filter" class="toggler">
-         <option value='any' select="1">Match any tags</option>
-         <option value='all'>Match all tags</option>
-  </select>
-</div>
-
-<select onchange="new_tag_limiter(this)" id="dd_tag_limiter" >
-   <tal:block repeat="TL tag_limiters">
-          <tal:block condition="TL/selected">
-             <option selected="1" value="${TL/value}">${TL/text}</option>
-          </tal:block>
-          <tal:block condition="not: TL/selected">
-             <option value="${TL/value}">${TL/text}</option>
-          </tal:block>
-   </tal:block>
-</select>
+  <tr>
+     <td>
 
 <div id="bpm_ctrls">
 <span id="bpm_caption" tal:content="bpm_caption" />
@@ -403,6 +391,81 @@ $Id: page.xml 3449 2006-06-14 19:31:05Z kidproto $
    </tal:block>
 </select>
 </div>
+
+    </td>
+  </tr>
+
+  <tr>
+     <td>
+<tal:block replace=''>
+ <select onchange="new_tag_sort(this)" id="dd_tag_sorter" class="toggler">
+   <tal:block repeat="tag_sort tag_sorts">
+          <tal:block condition="tag_sort/selected">
+             <option selected="1" value="${tag_sort/value}">${tag_sort/text}</option>
+          </tal:block>
+          <tal:block condition="not: tag_sort/selected">
+             <option value="${tag_sort/value}">${tag_sort/text}</option>
+          </tal:block>
+       </tal:block>
+</select>
+</tal:block>
+
+    </td>
+  </tr>
+  <tr>
+     <td>
+
+<div id="license_filter">
+  <select onchange="new_lic_filter(this)" id="dd_lic_filter" class="toggler">
+     <tal:block repeat="lic licenses">
+            <tal:block condition="lic/selected">
+               <option selected="1" value="${lic/value}">${lic/text}</option>
+            </tal:block>
+            <tal:block condition="not: lic/selected">
+               <option value="${lic/value}">${lic/text}</option>
+            </tal:block>
+     </tal:block>
+  </select>
+</div>
+
+    </td>
+  </tr>
+  <tr>
+     <td>
+
+<div id="tag_filter">
+  <select onchange="new_tag_filter(this)" id="dd_tag_filter" class="toggler">
+         <option value='any' select="1">Match any tags</option>
+         <option value='all'>Match all tags</option>
+  </select>
+</div>
+
+    </td>
+  </tr>
+  <tr>
+     <td>
+
+<select onchange="new_tag_limiter(this)" id="dd_tag_limiter" >
+   <tal:block repeat="TL tag_limiters">
+          <tal:block condition="TL/selected">
+             <option selected="1" value="${TL/value}">${TL/text}</option>
+          </tal:block>
+          <tal:block condition="not: TL/selected">
+             <option value="${TL/value}">${TL/text}</option>
+          </tal:block>
+   </tal:block>
+</select>
+
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+<input type="button" value="Clear all" disabled="disabled" onclick="clear_all(this);" id="btn_clear"/>
+    </td>
+  </tr>
+
+</table>
 
 <div id="search_ctrls">
 <span id="search_caption" >${search_caption}</span>
