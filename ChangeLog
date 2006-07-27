@@ -1,3 +1,26 @@
+2006-07-27     Victor Stone <fourstones@users.sourceforge.net>
+
+     * ccimages/lics/by-nc-sa.GIF:3909) 3910:
+     * ccimages/lics/by-nc-sa.GIF 3910:
+         renaming GIF to gif part 1
+     * ccimages/lics/by-nc-sa-x.GIF 3911:
+     * ccimages/lics/by-nc-sa-x.GIF:3910) 3911:
+         renaming GIF to gif part 2
+     * cclib/cc-admin.php 3912:
+         bugfix: redirected url was broken in non-pretty urls
+     * cclib/cc-form.php 3913:
+         bugfix: php5 pass by reference message
+         bugfix: pick license form had garbage output
+     * cclib/cc-tags.php 3914:
+         admin: configure min number of tags for BrowseTags
+     * ccextras/cc-fileman.php 3915:
+         bugfix: php5 pass by reference message
+     * ccextras/cc-notify.php 3916:
+         bugfix: php5 pass by reference message
+         
+     * mixter-files/freesound.xml 3917:
+         typo
+
 2006-07-24     Victor Stone <fourstones@users.sourceforge.net>
 
      * ccextras/cc-flag.php 3875:
