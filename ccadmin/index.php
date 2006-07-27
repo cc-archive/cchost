@@ -43,7 +43,7 @@ function step_1()
     }
     elseif( $v[0] >= 5 )
     {
-        $vmsg = "<div style='color:orange'>WARNING: Version 5 of PHP has is currently being tested with this code however there are production installations running ccHost on PHP5.</div>"; 
+        $vmsg = "<div style='color:orange'>WARNING: Version 5 of PHP is currently being tested with this code however there are production installations running ccHost on PHP5.</div>"; 
     }      
     else
     {
