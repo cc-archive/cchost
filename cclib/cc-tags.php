@@ -34,6 +34,7 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCTag', 'OnAdminMenu'));
 */
 define('CC_MAX_TAG_LEN',  25);
 define('CC_MIN_TAG_LEN',  3);
+define('CC_MIN_TAG_SHOW',  0);
 
 define('CC_TAG_SPLITTER', '/\W+/');
 
@@ -376,6 +377,7 @@ class CCAdminTagsForm extends CCForm
         $min = isset($CC_GLOBALS['tags-min-length']) ? $CC_GLOBALS['tags-min-length'] : CC_MIN_TAG_LEN;
         $max = isset($CC_GLOBALS['tags-max-length']) ? $CC_GLOBALS['tags-max-length'] : CC_MAX_TAG_LEN;
 
+        $minshow = isset($CC_GLOBALS['tags-min-show']) ? $CC_GLOBALS['tags-min-show'] : CC_MIN_TAG_SHOW;
 
         $fields = array(
             'aliases' => array(
@@ -413,6 +415,14 @@ class CCAdminTagsForm extends CCForm
                 'formatter' =>  'textedit',
                 'class' => 'cc_form_input_short',
                 'value'   => $max,
+                'flags' => CCFF_POPULATE
+                ),
+            'mintagshow' => array(
+                'label' => 'Minimum display tags',
+                'form_tip' => 'Minimum number of tags to display in "Browse Tags"',
+                'formatter' =>  'textedit',
+                'class' => 'cc_form_input_short',
+                'value'   => $minshow,
                 'flags' => CCFF_POPULATE
                 ),
             );
@@ -460,9 +470,11 @@ class CCTag
 
             $min = $form->GetFormValue('mintaglen');
             $max = $form->GetFormValue('maxtaglen');
+            $minshow = $form->GetFormValue('mintagshow');
             $configs =& CCConfigs::GetTable();
             $configs->SetValue('config','tags-min-length',$min,CC_GLOBAL_SCOPE);
             $configs->SetValue('config','tags-max-length',$max,CC_GLOBAL_SCOPE);
+            $configs->SetValue('config','tags-min-show',$minshow,CC_GLOBAL_SCOPE);
             global $CC_GLOBALS;
             $CC_GLOBALS['tags-min-length'] = $min;
             $CC_GLOBALS['tags-max-length'] = $max;
@@ -603,9 +615,18 @@ class CCTag
 
     function ShowAllTags()
     {
+        global $CC_GLOBALS;
+
         $tags =& CCTags::GetTable();
         $tags->SetSort('tags_tag');
-        $where = 'tags_count > 2';
+        
+        if( empty($CC_GLOBALS['tags-min-show']) )
+            $minshow = 0;
+        else
+            $minshow = $CC_GLOBALS['tags-min-show'];
+
+        $where = "tags_count > $minshow";
+
         if( empty($_REQUEST['all']) )
         {
             $where .=  ' AND tags_type = ' . CCTT_USER;
