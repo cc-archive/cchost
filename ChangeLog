@@ -1,5 +1,14 @@
 2006-07-27     Victor Stone <fourstones@users.sourceforge.net>
 
+     * mixter-files/sample_browser.xml 3925:
+     * mixter-lib/mixter-sample-browser.inc 3925:
+         sample browser now with lic filter
+     * ccextras/cc-language.php 3934:
+         bugfix: php5 pass by reference message
+         
+
+2006-07-27     Victor Stone <fourstones@users.sourceforge.net>
+
      * ccimages/lics/by-nc-sa.GIF:3909) 3910:
      * ccimages/lics/by-nc-sa.GIF 3910:
          renaming GIF to gif part 1
