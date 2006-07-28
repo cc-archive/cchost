@@ -282,7 +282,7 @@ class CCForm
     */
     function InsertFormFields( &$fields, $before_or_after, $target_field )
     {
-        $this->InnserInsertFormFields($this->_form_fields, $fields, $before_or_after, $target_field );
+        $this->InnerInsertFormFields($this->_form_fields, $fields, $before_or_after, $target_field );
         CCEvents::Invoke( CC_EVENT_EXTRA_FORM_FIELDS, array( &$this, &$fields ) );
     }
 
