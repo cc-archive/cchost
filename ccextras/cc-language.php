@@ -101,14 +101,14 @@ class CCLanguage
         $this->LoadLanguages( $locale_dir );
    
         if ( isset($CC_GLOBALS['lang_locale_pref']) )
-            $this->SetLocalePref( &$CC_GLOBALS['lang_locale_pref'] );
+            $this->SetLocalePref( $CC_GLOBALS['lang_locale_pref'] );
         else
     	    $this->SetLocalePref( $locale );
 
         if ( !empty($CC_GLOBALS['user_language']) )
-            $this->SetLanguage( &$CC_GLOBALS['user_language'] );
+            $this->SetLanguage( $CC_GLOBALS['user_language'] );
         else if ( !empty($CC_GLOBALS['lang']) )
-            $this->SetLanguage( &$CC_GLOBALS['lang'] );
+            $this->SetLanguage( $CC_GLOBALS['lang'] );
         else
     	    $this->SetLanguage( $language );
     }
@@ -286,7 +286,7 @@ class CCLanguage
 
         $lang_list = 
 	    array_keys(
-	    &$this->_all_languages['locale'][$this->_locale_pref]['language']);
+	    $this->_all_languages['locale'][$this->_locale_pref]['language']);
 
         $possible_langs = array();
 
@@ -311,7 +311,7 @@ class CCLanguage
      */
     function GetPossibleLocalePrefs()
     {
-        $locale_prefs_list = array_keys(&$this->_all_languages['locale']);
+        $locale_prefs_list = array_keys($this->_all_languages['locale']);
 	// had to add this hack because array_combine() is only in php5
 	$locale_prefs_list_combined = array();
 	foreach ( $locale_prefs_list as $pref )
