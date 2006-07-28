@@ -243,14 +243,15 @@ EOF;
                     $row['contest_can_browse_entries'] = true;
 
                     if( $row['contest_vote_online'] )
-                    {
                         $deadline = strtotime($row['contest_vote_deadline']);
-                        $row['contest_show_results'] = true;
-                        if( $now < $deadline )
-                            $row['contest_voting_open'] = true;
-                        else
-                            $row['contest_over'] = true;
-                    }
+
+                    // not used anywhere ????
+                    // $row['contest_show_results'] = true;
+
+                    if( $now < $deadline )
+                        $row['contest_voting_open'] = true;
+                    else
+                        $row['contest_over'] = true;
                 }
                 else
                 {
@@ -424,11 +425,23 @@ class CCContest
     function OnTabDisplay( &$page )
     {
         $contests =& CCContests::GetTable();
-        $record = $contests->GetRecordFromShortName($page['handler']['args']['contest']);
+        $short_name = $page['handler']['args']['contest'];
+        $record = $contests->GetRecordFromShortName($short_name);
 
-        if( !$record['contest_over'] )
+        if( !empty($page['winners']) )
         {
-            unset($page['winners']);
+            if( $page['winners']['function'] != 'url' )
+            {
+                $uploads =& CCUploads::GetTable();
+                $uploads->SetTagFilter('winner,' . $short_name,'all');
+                $num_winners = $uploads->CountRows();
+                $uploads->SetTagFilter('');
+
+                if( !$num_winners )
+                {
+                    unset($page['winners']);
+                }
+            }
         }
 
         if( !$record['contest_taking_submissions'] )
