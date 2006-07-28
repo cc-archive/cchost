@@ -1,3 +1,8 @@
+2006-07-28     Victor Stone <fourstones@users.sourceforge.net>
+
+     * cclib/cc-form.php 3940:
+         bugfix: I checked in a typo yesterday
+
 2006-07-27     Victor Stone <fourstones@users.sourceforge.net>
 
      * mixter-files/sample_browser.xml 3925:
