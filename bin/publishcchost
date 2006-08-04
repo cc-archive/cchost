@@ -37,154 +37,159 @@ def publishcchost(argv = None):
     """Function to publish files to ccHost installations.
     Parse command line, interface with the user.
     Call functions to validate url, get title, log user, pick submission type and upload file"""
-
-    if argv is None:
-        argv = sys.argv
-
-    #set all user's informations
-    url = None
-    username = None
-    password = None
-    type = None
-    filename = None
-    verbose = False
-    ask = True
-    inputnames = []
-    inputvalues = []
-
-    # parse command line options using getopt lib
+    
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h v u: p: t:",
-                                   ["help", "verbose", "username=", "password=", "submission-type=",
-                                    "dont-ask", "input-name=", "input-value="])
-    except getopt.error, msg:
-        print msg
-        print "for help use --help"
-        sys.exit(2)
-    # process options
-    for opt, arg in opts:
-        if opt in ("-h", "--help"): #display help
-            print __doc__
-            sys.exit(0)
-        elif opt in ("-v", "--verbose"):
-            verbose = True
-        elif opt in ("-u", "--username"): #get login name
-            username = arg
-        elif opt in ("-p", "--password"): #get password
-            password = arg
-        elif opt in ("-t", "--submission-type"): #get submission type
-            type = arg
-        elif opt in ("--dont-ask"):
-            ask = False
-        elif opt in ("--input-name"):
-            inputnames.append(arg)
-        elif opt in ("--input-value"):
-            inputvalues.append(arg)
-    # verify quantity of input-names and input-values
-    if len(inputnames) > len(inputvalues):
-        print "Error: missing input-value"
-        print "for help use --help"
-        sys.exit(2)
-    elif len(inputnames) < len(inputvalues):
-        print "Error: missing input-name"
-        print "for help use --help"
-        sys.exit(2)
-    # process arguments
-    if len(args) == 1:
-        filename = args[0]
-    elif len(args) == 2:
-        filename = args[0]
-        url = args[1]
-    elif len(args) >= 2:
-        print "too many arguments"
-        print "for help use --help"
-        sys.exit(2)
+        if argv is None:
+            argv = sys.argv
+            
+        # set all user's informations
+        url = None
+        username = None
+        password = None
+        type = None
+        filename = None
+        verbose = False
+        ask = True
+        inputnames = []
+        inputvalues = []
 
-    if verbose:
-        print "Starting..."
-    Request, urlopen = loader() #prepare to handle cookies
-
-    #another way to get URL
-    if url == None:
+        # parse command line options using getopt lib
         try:
-            url = raw_input("Enter the ccHost Installation URL: ")
-        except EOFError:
-            print "\nAborted by user"
+            opts, args = getopt.getopt(sys.argv[1:], "h v u: p: t:",
+                                       ["help", "verbose", "username=", "password=", "submission-type=",
+                                        "dont-ask", "input-name=", "input-value="])
+        except getopt.error, msg:
+            print msg
+            print "for help use --help"
+            sys.exit(2)
+        # process options
+        for opt, arg in opts:
+            if opt in ("-h", "--help"): #display help
+                print __doc__
+                sys.exit(0)
+            elif opt in ("-v", "--verbose"):
+                verbose = True
+            elif opt in ("-u", "--username"): #get login name
+                username = arg
+            elif opt in ("-p", "--password"): #get password
+                password = arg
+            elif opt in ("-t", "--submission-type"): #get submission type
+                type = arg
+            elif opt in ("--dont-ask"):
+                ask = False
+            elif opt in ("--input-name"):
+                inputnames.append(arg)
+            elif opt in ("--input-value"):
+                inputvalues.append(arg)
+        # verify quantity of input-names and input-values
+        if len(inputnames) > len(inputvalues):
+            print "Error: missing input-value"
+            print "for help use --help"
+            sys.exit(2)
+        elif len(inputnames) < len(inputvalues):
+            print "Error: missing input-name"
+            print "for help use --help"
+            sys.exit(2)
+        # process arguments
+        if len(args) == 1:
+            filename = args[0]
+        elif len(args) == 2:
+            filename = args[0]
+            url = args[1]
+        elif len(args) >= 2:
+            print "too many arguments"
+            print "for help use --help"
             sys.exit(2)
 
-    if url[len(url)-1] != '/':  #the '/' is necessary to concatenate the selector
-        url = url + "/" 
-
-    if location_validate(url, Request, urlopen):
-        cchosttitle = title(url, Request, urlopen)
         if verbose:
-            print "Valid URL"
-            print "Welcome to "+ cchosttitle
+            print "Starting..."
+        Request, urlopen = loader() # prepare to handle cookies
 
-        #get login name, if it was not given yet
-        if username == None:
+        # another way to get URL
+        if url == None:
             try:
-                username = raw_input("Enter " + cchosttitle + " login name: ")
+                url = raw_input("Enter the ccHost Installation URL: ")
             except EOFError:
                 print "\nAborted by user"
                 sys.exit(2)
 
-        #get password. getpass prompt the user for a password without echoing.
-        if password == None:
-            try:
-                password = getpass.getpass("Enter " + cchosttitle + " password: ")
-            except EOFError:
-                print "\nAborted by user"
-                sys.exit(2)
-        
-        if user_validate(username, password, url, Request, urlopen):
+        if url[len(url)-1] != '/':  # the '/' is necessary to concatenate the selector
+            url = url + "/" 
+
+        if location_validate(url, Request, urlopen):
+            cchosttitle = title(url, Request, urlopen)
             if verbose:
-                print "Logged as "+ username + "..."
+                print "Valid URL"
+                print "Welcome to "+ cchosttitle
 
-            list = getSubmissionTypes(url, Request, urlopen)
-            option = 0
-            if type != None:
-                #try to match type with the list
-                for aux in range(len(list)):
-                    if (aux % 2 == 1):
-                        if re.search(type, list[aux], re.I) != None: #re.I is a flag to case-insensitive
-                            option = aux/2+1
-                            if verbose:
-                                print "Submission Type: " + list[aux]
-                            break
-                if option == 0 and verbose:
-                    print "OPTION --submission-type \"" + type +"\" doesn't match"
-            if option == 0: #type didn't match with the list
-                #display all enabled submission types
-                print "Pick Up Submission Type"
-                for aux in range(len(list)):
-                    if (aux % 2 == 1):
-                        print str((aux/2)+1) +") " + list[aux]
-                #and user must choose one
-                while option < 1 or option > len(list)/2:
-                    try:
-                        option = int(raw_input("Choose a number: "))
-                    except EOFError:
-                        print "\nAborted by user"
-                        sys.exit(2)
-                    except ValueError:
-                        print "Error: it must be a number"
-                        option = 0
-                        
-            if upload(list[2*(option-1)], Request, urlopen, ask, filename, inputnames, inputvalues):
+            # get login name, if it was not given yet
+            if username == None:
+                try:
+                    username = raw_input("Enter " + cchosttitle + " login name: ")
+                except EOFError:
+                    print "\nAborted by user"
+                    sys.exit(2)
+
+            # get password. getpass prompt the user for a password without echoing.
+            if password == None:
+                try:
+                    password = getpass.getpass("Enter " + cchosttitle + " password: ")
+                except EOFError:
+                    print "\nAborted by user"
+                    sys.exit(2)
+        
+            if user_validate(username, password, url, Request, urlopen):
                 if verbose:
-                    print "Uploaded succedded"
-                    sys.exit(0)
+                    print "Logged as "+ username + "..."
+
+                list = getSubmissionTypes(url, Request, urlopen)
+                option = 0
+                if type != None:
+                    # try to match type with the list
+                    for aux in range(len(list)):
+                        if (aux % 2 == 1):
+                            if re.search(type, list[aux], re.I) != None: #re.I is a flag to case-insensitive
+                                option = aux/2+1
+                                if verbose:
+                                    print "Submission Type: " + list[aux]
+                                break
+                    if option == 0 and verbose:
+                        print "OPTION --submission-type \"" + type +"\" doesn't match"
+                if option == 0: #type didn't match with the list
+                    # display all enabled submission types
+                    print "Pick Up Submission Type"
+                    for aux in range(len(list)):
+                        if (aux % 2 == 1):
+                            print str((aux/2)+1) +") " + list[aux]
+                    # and user must choose one
+                    while option < 1 or option > len(list)/2:
+                        try:
+                            option = int(raw_input("Choose a number: "))
+                        except EOFError:
+                            print "\nAborted by user"
+                            sys.exit(2)
+                        except ValueError:
+                            print "Error: it must be a number"
+                            option = 0
+                        
+                uploadSucceeded, fileURL = upload(list[2*(option-1)], Request, urlopen, ask, filename, inputnames, inputvalues)
+                if uploadSucceeded:
+                    if verbose:
+                        print "Uploaded succedded"
+                        print "See results here: " + fileURL
+                        sys.exit(0)
+                else:
+                    print "Upload Failed"
+                    sys.exit(1)
             else:
-                print "Upload Failed"
+                print "Unknown User or Wrong Password"
                 sys.exit(1)
         else:
-            print "Unknown User or Wrong Password"
+            print "Invalid URL"
             sys.exit(1)
-    else:
-        print "Invalid URL"
-        sys.exit(1)
-    
+    except (KeyboardInterrupt, SystemExit):
+        print "Aborted by user"
+
 
 def loader():
     """Try to import some cookielib, urllib2, or ClientCookie"""
@@ -247,7 +252,7 @@ def location_validate(url, Request, urlopen):
         return False
             
     else:
-        #parse the requested page
+        # parse the requested page
         htmlSource = handle.read()
         p = linkParser()
         p.feed(htmlSource)
@@ -284,10 +289,10 @@ def title(url, Request, urlopen):
             print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
         sys.exit(2)
     else:
-        #parse requested page
+        # parse requested page
         htmlSource = handle.read()
-        p = getTitle() #start the HTMLParser
-        p.feed(htmlSource) #take it a html that need be parsed
+        p = getTitle() # start the HTMLParser
+        p.feed(htmlSource) # take it a html that need be parsed
         p.close()
         if p.title != '' and p.title != None:
             return p.title
@@ -308,7 +313,7 @@ class getTitle(HTMLParser.HTMLParser):
     def handle_endtag(self, tag):
         if tag=='title':
             self.isTitle = False
-    #title is all the data between the begin and and of "title" tag
+    # title is all the data between the begin and and of "title" tag
     def handle_data(self, data):
         if self.isTitle:
             self.title += data
@@ -376,7 +381,7 @@ def getSubmissionTypes(url, Request, urlopen):
             print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
         sys.exit(2)
     else:
-        #parse submission page
+        # parse submission page
         htmlSource = handle.read()
         p = submissionParser()
         p.feed(htmlSource)
@@ -410,41 +415,42 @@ class submissionParser(HTMLParser.HTMLParser):
             return True
 
 
-#FIXME not yet finished
+#FIXME not yet finished  - postremixform
 def upload(url, Request, urlopen, ask, filename, inputnames, inputvalues):
-    """Upload file using multipart/form-data"""
+    """Upload file using multipart/form-data and return URL"""
     formID = getFormID(url, Request, urlopen)
     if formID == "newuploadform":
-        form = getForm(url, Request, urlopen) #list with requested submission information
-        #print str(form)
+        form = getForm(url, Request, urlopen) # list with requested submission information
         values, files = getInformation(form, ask, filename, inputnames, inputvalues)
 
+        # try to upload
+        htmlSource = post_multipart(url, values, files, urlopen, Request)
+        p = uploadParser() # verify if upload succeeded
+        p.feed(htmlSource)
+        p.close()
+        return p.uploadSucceeded, p.url
         
-        
-        f=open(filename, 'rb')
-        values[files[0]] = f.read()
-        #print str(values)
-        txdata = urllib.urlencode(values)
-        txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : url}
-        try:
-            req = Request(url, txdata, txheaders) # create a request object
-            handle = urlopen(req)
-        except IOError, e:
-            print 'Failed to open "%s".' % url
-            if hasattr(e, 'code'):
-                print 'Failed with error code - %s.' % e.code
-            elif hasattr(e, 'reason'):
-                print "The error reason:", e.reason
-                print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
-                sys.exit(2)
-        else:
-            pass
-#            print handle.read()
-
-#        print post_multipart(url, values, files)
-
+    
     #elif formID == "postremixform":
 
+
+class uploadParser(HTMLParser.HTMLParser):
+    """Parse upload response"""
+    def __init__(self):
+        HTMLParser.HTMLParser.__init__(self)
+        self.uploadSucceeded = False
+        self.url = None
+    def handle_starttag(self, tag, attrs):
+        if tag=='a':
+            for atribute in attrs:
+                if atribute[0] == "href" and self.isFileLink(atribute[1]):
+                    self.uploadSucceeded = True
+                    self.url = atribute[1]
+    def isFileLink(self, url):
+        if re.search("/media/files/", url, 0) == None:
+            return False
+        else:
+            return True
 
 
 def getForm(url, Request, urlopen):
@@ -517,48 +523,64 @@ class formParser(HTMLParser.HTMLParser):
 
 
 def getInformation(form, ask, filename, inputnames, inputvalues):
-    """Get submission information from user and return a dic with that
-    values={key1, value1, key2,  value2, ...}
+    """Get submission information from user and return a list with that
+    values=[[key1, value1], [key2,  value2], ...]
     file = [name, filename]
     """
-    values = {} # values necessary to submit the file
-    #values = []
-    files = [] # file to submit
-    #process all information evaluating it's type
+    values = [] # values necessary to submit the file
+    value = []
+    files = [] # files to submit
+    file = []
+    # process all information evaluating it's type
     for inf in form:
         pos = 0
         found = False
         
         for name in inputnames:
             if inf['name'] == name:
-                values[name] = inputvalues[pos]
-                #values.append(name)
-                #values.append(inputvalues[pos])
+                value.append(name)
+                value.append(inputvalues[pos])
+                values.append(value)
+                value = []
                 found = True
             pos += 1
 
         if found:
             pass
         elif inf['type'] == "hidden":
-            values[inf['name']] = inf['value'][0]
-            #values.append(inf['name'])
-            #values.append(inf['value'][0])
+            value.append(inf['name'])
+            value.append(inf['value'][0])
+            values.append(value)
+            value = []
         elif inf['type'] == "file" and filename != None:
-            files.append(inf['name'])
-            files.append(filename)
-            #FIXME 
-            #files.append("Value")
+            file.append(inf['name'])
+            file.append(filename)
+            try:
+                file.append(open(filename,'rb').read())
+            except IOError, e:
+                print 'Failed to open file "%s".' % filename
+                print e
+                sys.exit(2)
+            files.append(file)
+            file = []
         elif ask:
-            #FIXME file case
             if inf['type'] == "text" or inf['type'] == "file":
                 try:
-                    value = raw_input("Enter " + inf['name'] + ": ")
+                    ans = raw_input("Enter " + inf['name'] + ": ")
                 except EOFError:
                     print "\nAborted by user"
                     sys.exit(2)
-                values[inf['name']] = value
-                #values.append(inf['name'])
-                #values.append(value)
+                if inf['type'] == "file":
+                    file.append(inf['name'])
+                    file.append(ans)
+                    file.append(open(filename,'rb').read())
+                    files.append(file)
+                    file = []
+                else:
+                    value.append(inf['name'])
+                    value.append(ans)
+                    values.append(value)
+                    value = []
 
             elif inf['type'] == "checkbox":
                 ans = None
@@ -571,13 +593,10 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
                     if ans != "y" and ans != "n":
                         print "Answer \"y\" or \"n\""
                 if ans == "y":
-                    values[inf['name']] = "checked"
-                    #values.append(inf['name'])
-                    #values.append("checked")
-                elif ans == "n":
-                    values[inf['name']] = ""
-                    #values.append(inf['name'])
-                    #values.append("")
+                    value.append(inf['name'])
+                    value.append("checked")
+                    values.append(value)
+                    value = []
             
             elif inf['type'] == "radio":
                 print "Choose one " + inf['name'] + ": "
@@ -595,13 +614,15 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
                     except ValueError:
                         print "Error: it must be a number"
                         ans = 0
-                values[inf['name']] = inf['value'][ans-1]
-                #values.append(inf['name'])
-                #values.append(inf['value'][ans-1])
+                value.append(inf['name'])
+                value.append(inf['value'][ans-1])
+                values.append(value)
+                value = []
         elif len(inf['value']) > 0 :
-            values[inf['name']] = inf['value'][0]
-            #values.append(inf['name'])
-            #values.append(inf['value'][0])
+            value.append(inf['name'])
+            value.append(inf['value'][0])
+            values.append(value)
+            value = []
             
     return values, files
 
@@ -638,7 +659,7 @@ class formIDParser(HTMLParser.HTMLParser):
                 if atribute[0] == "id":
                     self.formID = atribute[1]
 
-def post_multipart(url, fields, files):
+def post_multipart(url, fields, files, urlopen, Request):
     """
     Post fields and files to an http host as multipart/form-data.
     fields is a sequence of (name, value) elements for regular form fields.
@@ -648,8 +669,19 @@ def post_multipart(url, fields, files):
     content_type, body = encode_multipart_formdata(fields, files)
     headers = {'Content-Type': content_type,'Content-Length': str(len(body)),
                'User-agent' : 'ccPublisher', 'Refer' : url}
-    r = urllib2.Request(url, body, headers)
-    return urllib2.urlopen(r).read()
+    try:
+        req = Request(url, body, headers) # create a request object
+        handle = urlopen(req)
+    except IOError, e:
+        print 'Failed to open "%s".' % url
+        if hasattr(e, 'code'):
+            print 'Failed with error code - %s.' % e.code
+        elif hasattr(e, 'reason'):
+            print "The error reason:", e.reason
+            print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
+            sys.exit(2)
+    
+    return handle.read()
 
 def encode_multipart_formdata(fields, files):
     """
@@ -660,20 +692,12 @@ def encode_multipart_formdata(fields, files):
     BOUNDARY = mimetools.choose_boundary()
     CRLF = '\r\n'
     L = []
-    for i in range(len(fields)/2):
-        key = fields[2*i]
-        value = fields[2*i+1]
-#    for key, value in fields:
+    for (key, value) in fields:
         L.append('--' + BOUNDARY)
         L.append('Content-Disposition: form-data; name="%s"' % key)
         L.append('')
         L.append(value)
-    for i in range(len(files)/3):
-        key = files[3*i]
-        filename = files[3*i+1]
-        value = files[3*i+2]
-        print str(files)
-#    for key, filename, value in files:
+    for (key, filename, value) in files:
         L.append('--' + BOUNDARY)
         L.append('Content-Disposition: form-data; name="%s"; filename="%s"' % (key, filename))
         L.append('Content-Type: %s' % get_content_type(filename))
