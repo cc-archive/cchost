@@ -16,12 +16,12 @@ Mandatory arguments to long options are mandatory for short options too.
   -h, --help                      display this help and exit
   --dont-ask                      dont ask for other input values for submission
                                                form than given by cmdline
-  --input-name                    name of input for submission form
+  --input-id                      identification of input for submission form
   --input-value                   value of input for submission form
-input-name and input-value is like a pair, one give the name and other
-the value to the input that will be submitted. A lot of --input-name
+input-id and input-value is like a pair, one give the identification and other
+the value to the input that will be submitted. A lot of --input-id
 can be written, but it has to be the same quantity of --input-value.
-The first --input-name will match with the first --input-value and so on...
+The first --input-id will match with the first --input-value and so on.
 """
 
 import os.path
@@ -57,7 +57,7 @@ def publishcchost(argv = None):
         try:
             opts, args = getopt.getopt(sys.argv[1:], "h v u: p: t:",
                                        ["help", "verbose", "username=", "password=", "submission-type=",
-                                        "dont-ask", "input-name=", "input-value="])
+                                        "dont-ask", "input-id=", "input-value="])
         except getopt.error, msg:
             print msg
             print "for help use --help"
@@ -77,17 +77,17 @@ def publishcchost(argv = None):
                 type = arg
             elif opt in ("--dont-ask"):
                 ask = False
-            elif opt in ("--input-name"):
+            elif opt in ("--input-id"):
                 inputnames.append(arg)
             elif opt in ("--input-value"):
                 inputvalues.append(arg)
-        # verify quantity of input-names and input-values
+        # verify quantity of input-ids and input-values
         if len(inputnames) > len(inputvalues):
             print "Error: missing input-value"
             print "for help use --help"
             sys.exit(2)
         elif len(inputnames) < len(inputvalues):
-            print "Error: missing input-name"
+            print "Error: missing input-id"
             print "for help use --help"
             sys.exit(2)
         # process arguments
@@ -187,8 +187,10 @@ def publishcchost(argv = None):
         else:
             print "Invalid URL"
             sys.exit(1)
-    except (KeyboardInterrupt, SystemExit):
-        print "Aborted by user"
+    except (KeyboardInterrupt):
+        print "\nAborted by user"
+        pass
+ 
 
 
 def loader():
@@ -237,7 +239,7 @@ def location_validate(url, Request, urlopen):
 
     login_url = url + "?ccm=/media/login"
     txdata = None
-    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : login_url}
+    txheaders =  {'User-agent' : 'publishcchost', 'Refer' : login_url}
     try:
         req = Request(login_url, txdata, txheaders) # create a request object
         handle = urlopen(req)
@@ -276,7 +278,7 @@ def title(url, Request, urlopen):
     """Get CCHost Installation's Title"""
 
     txdata = None
-    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : url}
+    txheaders =  {'User-agent' : 'publishcchost', 'Refer' : url}
     try:
         req = Request(url, txdata, txheaders) # create a request object
         handle = urlopen(req)
@@ -326,7 +328,7 @@ def user_validate(username, password, cchost_url, Request, urlopen):
     loginurl =  cchost_url + "?ccm=/media/login"
     values = {'user_name' : username, 'user_password' : password, 'userlogin' : 'classname'}
     txdata = urllib.urlencode(values)
-    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : loginurl}
+    txheaders =  {'User-agent' : 'publishcchost', 'Refer' : loginurl}
     try:
         req = Request(loginurl, txdata, txheaders) # create a request object
         handle = urlopen(req)
@@ -368,7 +370,7 @@ def getSubmissionTypes(url, Request, urlopen):
 
     url =  url + "?ccm=/media/submit"
     txdata = None
-    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : url}
+    txheaders =  {'User-agent' : 'publishcchost', 'Refer' : url}
     try:
         req = Request(url, txdata, txheaders) # create a request object
         handle = urlopen(req)
@@ -461,9 +463,13 @@ def getForm(url, Request, urlopen):
     dic['type'] -> type of input
     dic['name'] -> identifier of input
     dic['value'] -> list of possible values to input. It's fundamental to hidden type input and radio type too.
+    dic['label']
+    dic['tip']
+    dic['radiolabels'] -> list of all options labels
+    dic['radiotips'] -> list of all options tips
     """
     txdata = None
-    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : url}
+    txheaders =  {'User-agent' : 'publishcchost', 'Refer' : url}
     try:
         req = Request(url, txdata, txheaders) # create a request object
         handle = urlopen(req)
@@ -491,6 +497,11 @@ class formParser(HTMLParser.HTMLParser):
         self.inf = {}
         self.form = []
         self.submissiontype = []
+        self.isLabel = False
+        self.isTip = False
+        self.isRadioLabel = False
+        self.isRadioTip = False
+
     def handle_starttag(self, tag, attrs):
         if tag=='input' and self.validform:
             inf = {}
@@ -501,25 +512,129 @@ class formParser(HTMLParser.HTMLParser):
                     inf[atribute[0]] = atribute[1]
                 elif (atribute[0] == "checked" and atribute[1] == "checked") or atribute[0] == "value":
                     inf['value'].append(atribute[1])
-            self.inf = inf
+            self.inf.update(inf)
         elif tag=='form':
             for atribute in attrs:
                 if atribute[0] == "enctype" and atribute[1] == "multipart/form-data":
                     self.validform = True
+        elif tag=='textarea' and self.validform:
+            inf = {}
+            for atribute in attrs:
+                if atribute[0] == "name":
+                    inf['name'] = atribute[1]
+                    inf['type'] = "textarea"
+            self.inf.update(inf)
+        elif tag=='div' and self.validform:
+            for atribute in attrs:
+                if atribute[0] == "class":
+                    if atribute[1] == "cc_form_about":
+                        inf = {}
+                        inf['type'] = "about"
+                        inf['name'] = "about"
+                        inf['label'] = ""
+                        self.isLabel = True
+                        self.inf = inf
+                    elif atribute[1] == "cc_form_tip":
+                        self.isLabel = False
+                        self.inf['tip'] = ""
+                        self.isTip = True
+        elif tag=='td' and self.validform:
+            for atribute in attrs:
+                if atribute[0] == "class" and atribute[1] == "cc_form_label":
+                    self.inf = {}
+                    self.inf['label'] = ""
+                    self.isLabel = True
+        elif tag=='label' and self.validform:
+            self.isRadioLabel = True
+            self.isRadioTip = True
+            for atribute in attrs:
+                if atribute[0] == "for":
+                    self.RadioLabel = [atribute[1], ""]
+                    self.RadioTip = [atribute[1], ""]
+                    
     def handle_endtag(self, tag):
-        if tag=='input' and self.validform:
+        if (tag=='input' or tag=='textarea') and self.validform:
             if self.inf['type'] == "submit":
+                self.inf = {}
                 return
             elif self.inf['type'] == "radio":
                 pos = 0
                 for elem in self.form:
                     if self.inf['name'] == elem['name']:
                         self.form[pos]['value'].append(self.inf['value'][0])
+                        self.inf = {}
                         return
                     pos += 1
             self.form.append(self.inf)
+            self.inf = {}
         elif tag=='form':
             self.validform = False
+        elif tag=='div' and self.validform:
+            if self.isLabel == True:
+                self.isLabel = False
+                self.inf['label'] = getString(self.inf['label'])
+                self.form.append(self.inf)
+                self.inf = {}
+            elif self.isTip == True:
+                self.isTip = False
+        elif tag=='td' and self.validform:
+            self.isLabel = False
+        elif tag=='label' and self.validform:
+            self.isRadioTip = False
+            pos = 0
+            for elem in self.form:
+                if elem['type'] == "radio":
+                    for option in elem['value']:
+                        if self.RadioTip[0] == option:
+                            if not(self.form[pos].has_key('radiotips')):
+                                self.form[pos]['radiotips'] = []
+                            self.form[pos]['radiotips'].append(self.RadioTip[1])
+                            return
+                pos += 1
+            if self.isRadioLabel == True:
+                self.isRadioLabel = False
+                pos = 0
+                for elem in self.form:
+                    if elem['type'] == "radio":
+                        for option in elem['value']:
+                            if self.RadioTip[0] == option:
+                                if not(self.form[pos].has_key('radiolabels')):
+                                    self.form[pos]['radiolabels'] = []
+                                self.form[pos]['radiolabels'].append(self.RadioLabel[1])
+                                return
+                    pos += 1
+                
+        elif tag=='strong' and self.validform and self.isRadioLabel == True:
+            self.isRadioLabel = False
+            pos = 0
+            for elem in self.form:
+                if elem['type'] == "radio":
+                    for option in elem['value']:
+                        if self.RadioTip[0] == option:
+                            if not(self.form[pos].has_key('radiolabels')):
+                                self.form[pos]['radiolabels'] = []
+                            self.form[pos]['radiolabels'].append(self.RadioLabel[1])
+                            return
+                pos += 1
+
+    def handle_data(self, data):
+        if self.isLabel:
+            self.inf['label'] += data
+        elif self.isTip:
+            self.inf['tip'] += data
+        if self.isRadioLabel:
+            self.RadioLabel[1] += data
+        if self.isRadioTip:
+            self.RadioTip[1] += data
+
+def getString(data):
+    """Get some data and return string"""
+    result = ""
+    for words in re.findall('\S+', data):
+        if result != "":
+            result += " "
+        result += words
+    return result
 
 
 def getInformation(form, ask, filename, inputnames, inputvalues):
@@ -552,6 +667,9 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
             value.append(inf['value'][0])
             values.append(value)
             value = []
+        elif inf['type'] == "about":
+            if ask:
+                print inf['label']
         elif inf['type'] == "file" and filename != None:
             file.append(inf['name'])
             file.append(filename)
@@ -564,9 +682,9 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
             files.append(file)
             file = []
         elif ask:
-            if inf['type'] == "text" or inf['type'] == "file":
+            if inf['type'] == "text" or inf['type'] == "file" or inf['type'] == "textarea":
                 try:
-                    ans = raw_input("Enter " + inf['name'] + ": ")
+                    ans = raw_input("Enter " + inf['label'] + " (" + inf['name'] + "): ")
                 except EOFError:
                     print "\nAborted by user"
                     sys.exit(2)
@@ -586,7 +704,7 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
                 ans = None
                 while ans != "y" and ans != "n":
                     try:
-                        ans = raw_input(inf['name'] + "? [y/n] ")
+                        ans = raw_input(inf['label'] + " (" + inf['name'] + ")? [y/n] ")
                     except EOFError:
                         print "\nAborted by user"
                         sys.exit(2)
@@ -599,10 +717,10 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
                     value = []
             
             elif inf['type'] == "radio":
-                print "Choose one " + inf['name'] + ": "
+                print "Choose one " + inf['label'] + " (" + inf['name'] + "): "
                 num = 1
                 for elem in inf['value']:
-                    print str(num) + ") " + inf['value'][num-1]
+                    print str(num) + ") " + inf['radiolabels'][num-1] + " (" + inf['value'][num-1] + ")"
                     num += 1
                 ans = 0
                 while ans < 1 or ans > num-1:
@@ -618,7 +736,7 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
                 value.append(inf['value'][ans-1])
                 values.append(value)
                 value = []
-        elif len(inf['value']) > 0 :
+        elif inf.has_key('value') and len(inf['value']) > 0 :
             value.append(inf['name'])
             value.append(inf['value'][0])
             values.append(value)
@@ -629,7 +747,7 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
 def getFormID(url, Request, urlopen):
     """Return form id"""
     txdata = None
-    txheaders =  {'User-agent' : 'ccPublisher', 'Refer' : url}
+    txheaders =  {'User-agent' : 'publishcchost', 'Refer' : url}
     try:
         req = Request(url, txdata, txheaders) # create a request object
         handle = urlopen(req)
@@ -668,7 +786,7 @@ def post_multipart(url, fields, files, urlopen, Request):
     """
     content_type, body = encode_multipart_formdata(fields, files)
     headers = {'Content-Type': content_type,'Content-Length': str(len(body)),
-               'User-agent' : 'ccPublisher', 'Refer' : url}
+               'User-agent' : 'publishcchost', 'Refer' : url}
     try:
         req = Request(url, body, headers) # create a request object
         handle = urlopen(req)
@@ -715,3 +833,4 @@ def get_content_type(filename):
 
 if __name__ == '__main__':
     publishcchost(sys.argv)
+    
