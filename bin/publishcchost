@@ -15,7 +15,8 @@ Mandatory arguments to long options are mandatory for short options too.
   -v, --verbose                   explain what is being done
   -h, --help                      display this help and exit
   --dont-ask                      dont ask for other input values for submission
-                                               form than given by cmdline
+                                      form than given by cmdline (don't use
+							for remix!)
   --input-id                      identification of input for submission form
   --input-value                   value of input for submission form
 input-id and input-value is like a pair, one give the identification and other
@@ -304,7 +305,7 @@ def title(url, Request, urlopen):
 
 
 class getTitle(HTMLParser.HTMLParser):
-    """Get the title of the page, finding tag \"title\""""
+    """Get the title of the page, finding tag \"title\" """
     def __init__(self):
         HTMLParser.HTMLParser.__init__(self)
         self.isTitle = False
@@ -417,23 +418,18 @@ class submissionParser(HTMLParser.HTMLParser):
             return True
 
 
-#FIXME not yet finished  - postremixform
 def upload(url, Request, urlopen, ask, filename, inputnames, inputvalues):
-    """Upload file using multipart/form-data and return URL"""
-    formID = getFormID(url, Request, urlopen)
-    if formID == "newuploadform":
-        form = getForm(url, Request, urlopen) # list with requested submission information
-        values, files = getInformation(form, ask, filename, inputnames, inputvalues)
-
+        """Upload file using multipart/form-data and return URL"""
+	values = None
+	while not(isFormSubmit(values)):
+		form = getForm(url, Request, urlopen, values) # list with requested submission information
+		values, files = getInformation(form, ask, filename, inputnames, inputvalues) # get information from user
         # try to upload
         htmlSource = post_multipart(url, values, files, urlopen, Request)
         p = uploadParser() # verify if upload succeeded
         p.feed(htmlSource)
         p.close()
         return p.uploadSucceeded, p.url
-        
-    
-    #elif formID == "postremixform":
 
 
 class uploadParser(HTMLParser.HTMLParser):
@@ -442,20 +438,35 @@ class uploadParser(HTMLParser.HTMLParser):
         HTMLParser.HTMLParser.__init__(self)
         self.uploadSucceeded = False
         self.url = None
+	self.isPrompt = False
     def handle_starttag(self, tag, attrs):
         if tag=='a':
             for atribute in attrs:
-                if atribute[0] == "href" and self.isFileLink(atribute[1]):
+                if atribute[0] == "href" and self.isPrompt and self.isFileLink(atribute[1]):
                     self.uploadSucceeded = True
                     self.url = atribute[1]
+	elif tag=='div':
+	    for atribute in attrs:
+		if atribute[0] == "class" and atribute[1] == "cc_system_prompt":
+		    self.isPrompt = True
+    def handle_endtag(self, tag):
+	if tag=='div':
+	    self.isPrompt = False
     def isFileLink(self, url):
         if re.search("/media/files/", url, 0) == None:
             return False
         else:
             return True
 
+def isFormSubmit(values):
+	if values!= None:
+		for inf in values:
+			if inf[0] == "form_submit":
+				return True
+	else:
+		return False
 
-def getForm(url, Request, urlopen):
+def getForm(url, Request, urlopen, data = None):
     """Make a list of dictionaries with all requested information about submission, parsing submission page
     All requested information about submission will be put into a list
     It's a list of dictionaries
@@ -468,7 +479,10 @@ def getForm(url, Request, urlopen):
     dic['radiolabels'] -> list of all options labels
     dic['radiotips'] -> list of all options tips
     """
-    txdata = None
+    if data != None:
+    	txdata = urllib.urlencode(getDic(data))
+    else:
+    	txdata = data
     txheaders =  {'User-agent' : 'publishcchost', 'Refer' : url}
     try:
         req = Request(url, txdata, txheaders) # create a request object
@@ -503,119 +517,149 @@ class formParser(HTMLParser.HTMLParser):
         self.isRadioTip = False
 
     def handle_starttag(self, tag, attrs):
-        if tag=='input' and self.validform:
-            inf = {}
-            inf['value'] = []
-            inf['type'] = None
-            for atribute in attrs:
-                if atribute[0] == "type" or atribute[0] == "name":
-                    inf[atribute[0]] = atribute[1]
-                elif (atribute[0] == "checked" and atribute[1] == "checked") or atribute[0] == "value":
-                    inf['value'].append(atribute[1])
-            self.inf.update(inf)
-        elif tag=='form':
+	if tag=='form':
             for atribute in attrs:
                 if atribute[0] == "enctype" and atribute[1] == "multipart/form-data":
                     self.validform = True
-        elif tag=='textarea' and self.validform:
-            inf = {}
-            for atribute in attrs:
-                if atribute[0] == "name":
-                    inf['name'] = atribute[1]
-                    inf['type'] = "textarea"
-            self.inf.update(inf)
-        elif tag=='div' and self.validform:
-            for atribute in attrs:
-                if atribute[0] == "class":
-                    if atribute[1] == "cc_form_about":
-                        inf = {}
-                        inf['type'] = "about"
-                        inf['name'] = "about"
-                        inf['label'] = ""
-                        self.isLabel = True
-                        self.inf = inf
-                    elif atribute[1] == "cc_form_tip":
-                        self.isLabel = False
-                        self.inf['tip'] = ""
-                        self.isTip = True
-        elif tag=='td' and self.validform:
-            for atribute in attrs:
-                if atribute[0] == "class" and atribute[1] == "cc_form_label":
-                    self.inf = {}
-                    self.inf['label'] = ""
-                    self.isLabel = True
-        elif tag=='label' and self.validform:
-            self.isRadioLabel = True
-            self.isRadioTip = True
-            for atribute in attrs:
-                if atribute[0] == "for":
-                    self.RadioLabel = [atribute[1], ""]
-                    self.RadioTip = [atribute[1], ""]
+	elif self.validform:
+	        if tag=='input':
+        	    inf = {}
+	            inf['value'] = []
+	            inf['type'] = "text" # input without type will be text
+	            for atribute in attrs:
+	                if atribute[0] == "type" or atribute[0] == "name":
+	                    inf[atribute[0]] = atribute[1]
+	                elif (atribute[0] == "checked" and atribute[1] == "checked") or atribute[0] == "value":
+	                    inf['value'].append(atribute[1])
+	            self.inf.update(inf)
+	        elif tag=='textarea':
+	            inf = {}
+	            for atribute in attrs:
+	                if atribute[0] == "name":
+	                    inf['name'] = atribute[1]
+		    inf['type'] = "textarea"
+	            self.inf.update(inf)
+	        elif tag=='div':
+	            for atribute in attrs:
+	                if atribute[0] == "class":
+	                    if atribute[1] == "cc_form_about" or atribute[1] == "cc_remix_license_notice":
+	                        inf = {}
+	                        inf['type'] = "about"
+	                        inf['name'] = atribute[1]
+	                        inf['label'] = ""
+	                        self.isLabel = True
+	                        self.inf = inf
+        	            elif atribute[1] == "cc_form_tip":
+                	        self.isLabel = False
+	                        self.inf['tip'] = ""
+	                        self.isTip = True
+			    elif atribute[1] == "cc_remix_search_result" or atribute[1] == "cc_remix_search_box" or atribute[1] == "cc_remix_source_choice":
+				inf = {}
+	                        inf['type'] = "about"
+	                        inf['name'] = atribute[1]
+	                        self.form.append(inf)
+	        elif tag=='td':
+	            for atribute in attrs:
+	                if atribute[0] == "class" and atribute[1] == "cc_form_label":
+	                    self.inf = {}
+	                    self.inf['label'] = ""
+	                    self.isLabel = True
+	        elif tag=='label':
+	            self.isRadioLabel = True
+	            self.isRadioTip = True
+	            for atribute in attrs:
+	                if atribute[0] == "for":
+	                    self.RadioLabel = [atribute[1], ""]
+	                    self.RadioTip = [atribute[1], ""]
+		elif tag=='select':
+			self.inf = {}
+			self.inf['value'] = []
+			self.inf['radiolabels'] = []
+			for atribute in attrs:
+	                	if atribute[0] == "name":
+	                    		self.inf['name'] = atribute[1]
+		  	self.inf['type'] = "select"
+		elif tag=='option':
+			self.isRadioLabel = True
+			self.RadioLabel = ["", ""]
+			for atribute in attrs:
+				if atribute[0] == "value":
+					self.inf['value'].append(atribute[1])
                     
     def handle_endtag(self, tag):
-        if (tag=='input' or tag=='textarea') and self.validform:
-            if self.inf['type'] == "submit":
-                self.inf = {}
-                return
-            elif self.inf['type'] == "radio":
-                pos = 0
-                for elem in self.form:
-                    if self.inf['name'] == elem['name']:
-                        self.form[pos]['value'].append(self.inf['value'][0])
-                        self.inf = {}
-                        return
-                    pos += 1
-            self.form.append(self.inf)
-            self.inf = {}
-        elif tag=='form':
+	if tag=='form':
             self.validform = False
-        elif tag=='div' and self.validform:
-            if self.isLabel == True:
-                self.isLabel = False
-                self.inf['label'] = getString(self.inf['label'])
-                self.form.append(self.inf)
-                self.inf = {}
-            elif self.isTip == True:
-                self.isTip = False
-        elif tag=='td' and self.validform:
-            self.isLabel = False
-        elif tag=='label' and self.validform:
-            self.isRadioTip = False
-            pos = 0
-            for elem in self.form:
-                if elem['type'] == "radio":
-                    for option in elem['value']:
-                        if self.RadioTip[0] == option:
-                            if not(self.form[pos].has_key('radiotips')):
-                                self.form[pos]['radiotips'] = []
-                            self.form[pos]['radiotips'].append(self.RadioTip[1])
-                            return
-                pos += 1
-            if self.isRadioLabel == True:
-                self.isRadioLabel = False
-                pos = 0
-                for elem in self.form:
-                    if elem['type'] == "radio":
-                        for option in elem['value']:
-                            if self.RadioTip[0] == option:
-                                if not(self.form[pos].has_key('radiolabels')):
-                                    self.form[pos]['radiolabels'] = []
-                                self.form[pos]['radiolabels'].append(self.RadioLabel[1])
-                                return
-                    pos += 1
-                
-        elif tag=='strong' and self.validform and self.isRadioLabel == True:
-            self.isRadioLabel = False
-            pos = 0
-            for elem in self.form:
-                if elem['type'] == "radio":
-                    for option in elem['value']:
-                        if self.RadioTip[0] == option:
-                            if not(self.form[pos].has_key('radiolabels')):
-                                self.form[pos]['radiolabels'] = []
-                            self.form[pos]['radiolabels'].append(self.RadioLabel[1])
-                            return
-                pos += 1
+	elif self.validform:
+	        if (tag=='input' or tag=='textarea'):
+	            if self.inf['type'] == "submit":
+		    	self.form.append(self.inf)
+	                self.inf = {}
+	                return
+	            elif self.inf['type'] == "radio":
+	                pos = 0
+	                for elem in self.form:
+	                    if elem.has_key("name") and self.inf['name'] == elem['name']:
+	                        self.form[pos]['value'].append(self.inf['value'][0])
+	                        self.inf = {}
+	                        return
+	                    pos += 1
+	            self.form.append(self.inf)
+	            self.inf = {}
+	        elif tag=='div':
+	            if self.isLabel == True:
+	                self.isLabel = False
+	                self.inf['label'] = getString(self.inf['label'])
+	                self.form.append(self.inf)
+	                self.inf = {}
+	            elif self.isTip == True:
+	                self.isTip = False
+	        elif tag=='td':
+	            self.isLabel = False
+	        elif tag=='label':
+	            self.isRadioTip = False
+	            pos = 0
+	            for elem in self.form:
+	                if elem['type'] == "radio":
+	                    for option in elem['value']:
+	                        if self.RadioTip[0] == option:
+	                            if not(self.form[pos].has_key('radiotips')):
+	                                self.form[pos]['radiotips'] = []
+	                            self.form[pos]['radiotips'].append(self.RadioTip[1])
+	                            return
+	                pos += 1
+	            if self.isRadioLabel == True:
+	                self.isRadioLabel = False
+	                pos = 0
+	                for elem in self.form:
+	                    if elem['type'] == "radio":
+	                        for option in elem['value']:
+	                            if self.RadioTip[0] == option:
+	                                if not(self.form[pos].has_key('radiolabels')):
+	                                    self.form[pos]['radiolabels'] = []
+	                                self.form[pos]['radiolabels'].append(self.RadioLabel[1])
+	                                return
+			    elif elem['type'] == "checkbox":
+                            	if elem.has_key("name") and self.RadioLabel[0] == elem['name']:
+				    self.form[pos]['label'] = self.RadioLabel[1]
+	                    pos += 1
+	        elif tag=='strong' and self.isRadioLabel:
+	            self.isRadioLabel = False
+	            pos = 0
+	            for elem in self.form:
+	                if elem['type'] == "radio":
+	                    for option in elem['value']:
+	                        if self.RadioTip[0] == option:
+	                            if not(self.form[pos].has_key('radiolabels')):
+	                                self.form[pos]['radiolabels'] = []
+	                            self.form[pos]['radiolabels'].append(self.RadioLabel[1])
+	                            return
+	                pos += 1
+		elif tag=='option':
+			self.isRadioLabel = False
+			self.inf['radiolabels'].append(self.RadioLabel[1])
+		elif tag=='select':
+			self.form.append(self.inf)
+	            	self.inf = {}
 
     def handle_data(self, data):
         if self.isLabel:
@@ -630,12 +674,19 @@ class formParser(HTMLParser.HTMLParser):
 def getString(data):
     """Get some data and return string"""
     result = ""
-    for words in re.findall('\S+', data):
+    for words in re.findall('\S+', data): # get off \n \t spaces ...
         if result != "":
             result += " "
         result += words
+    result = re.sub('_', ' ', result)  # substitute _ by space
     return result
 
+def getDic(data):
+    """Transform a list into a dictionary"""
+    dic = {}
+    for elem in data:
+    	dic[elem[0]] = elem[1]
+    return dic
 
 def getInformation(form, ask, filename, inputnames, inputvalues):
     """Get submission information from user and return a list with that
@@ -650,7 +701,11 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
     for inf in form:
         pos = 0
         found = False
-        
+	if not(inf.has_key("name")):
+		inf['name'] = ""
+	if not(inf.has_key("label")):
+		inf['label'] = getString(inf['name'])
+		        
         for name in inputnames:
             if inf['name'] == name:
                 value.append(name)
@@ -667,6 +722,27 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
             value.append(inf['value'][0])
             values.append(value)
             value = []
+	elif inf['type'] == "submit":
+		if not(ask):
+			value.append(inf['name'])
+	        	value.append(inf['value'][0])
+		        values.append(value)
+		        value = []
+		else:
+			ans = None
+	                while ans != "y" and ans != "n":
+	                    try:
+	                        ans = raw_input(inf['label'] + " (" + inf['name'] + ")? [y/n] ")
+	                    except EOFError:
+	                        print "\nAborted by user"
+	                        sys.exit(2)
+	                    if ans != "y" and ans != "n":
+	                        print "Answer \"y\" or \"n\""
+	                if ans == "y":
+			    value.append(inf['name'])
+	        	    value.append(inf['value'][0])
+		            values.append(value)
+		            value = []
         elif inf['type'] == "about":
             if ask:
                 print inf['label']
@@ -716,7 +792,7 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
                     values.append(value)
                     value = []
             
-            elif inf['type'] == "radio":
+            elif inf['type'] == "radio" or inf['type'] == "select":
                 print "Choose one " + inf['label'] + " (" + inf['name'] + "): "
                 num = 1
                 for elem in inf['value']:
@@ -736,7 +812,7 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
                 value.append(inf['value'][ans-1])
                 values.append(value)
                 value = []
-        elif inf.has_key('value') and len(inf['value']) > 0 :
+        elif inf['name'] != "" and inf.has_key('value') and len(inf['value']) > 0 :
             value.append(inf['name'])
             value.append(inf['value'][0])
             values.append(value)
@@ -744,38 +820,6 @@ def getInformation(form, ask, filename, inputnames, inputvalues):
             
     return values, files
 
-def getFormID(url, Request, urlopen):
-    """Return form id"""
-    txdata = None
-    txheaders =  {'User-agent' : 'publishcchost', 'Refer' : url}
-    try:
-        req = Request(url, txdata, txheaders) # create a request object
-        handle = urlopen(req)
-    except IOError, e:
-        print 'Failed to open "%s".' % url
-        if hasattr(e, 'code'):
-            print 'Failed with error code - %s.' % e.code
-        elif hasattr(e, 'reason'):
-            print "The error reason:", e.reason
-            print "This usually means the server doesn't exist, is down, or we don't have an internet connection."
-        sys.exit(2)
-    else:
-        htmlSource = handle.read()
-        p = formIDParser()
-        p.feed(htmlSource)
-        p.close()
-        return p.formID
-
-class formIDParser(HTMLParser.HTMLParser):
-    """Parse submission form page looking for form id"""
-    def __init__(self):
-        HTMLParser.HTMLParser.__init__(self)
-        self.formID = None
-    def handle_starttag(self, tag, attrs):
-        if tag=='form':
-            for atribute in attrs:
-                if atribute[0] == "id":
-                    self.formID = atribute[1]
 
 def post_multipart(url, fields, files, urlopen, Request):
     """
