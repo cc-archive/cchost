@@ -21,7 +21,9 @@ p { font-size: 12px; }
            text-align:center; border: 1px solid brown;margin:7px;">Hear the <a href="${root-url}copyrightcriminals/view/contest/winners">winners</a>!</h2> -->
 
 <img src="/mixter-files/ccdj2.gif" height="150" style="float:right;margin-left:10px;margin-bottom:5px;" />
-<div style="border: 1px solid brown;margin:22px;padding:5px;color:brown;width:60%;font-weight:bold;text-align:center;">The contest is closed to new entries.</div>
+<div style="border: 1px solid brown; font-size: 13px; margin:22px;padding: 15px; color:brown;width:60%;font-weight:normal;text-align:center;"><img 
+src="http://ccmixter.org/avatars/sun93x93.jpg" style="float:left;margin:12px;" />Congratulations to our grand prize winner <a href="${home-url}people/Dermes">Dermes</a> for his entry<br /><br /> "<a href="${home-url}files/Dermes/4186" style="font-weight:bold;font-size:14px">Sounds that Sound Good</a>"<br /><br />
+Check out all the <a href="${root-url}copyrightcriminals/view/contest/winners"><b>winners</b></a>!</div>
 
 <p>This was a contest for artists to mix audio tracks under 4 minutes which use provided voice samples from Ben Franzen and <a href="http://www.kembrew.com/">Kembrew McLeod's</a> forthcoming film, "<a href="http://www.copyrightcriminals.com/">Copyright Criminals</a>." Samples from the film include voiceovers from DJ Spooky, De La Soul, DJ Qbert, members of Public Enemy, Matmos, Coldcut, members of Negativland, and others. The best overall winner will be included prominently in the film and the top 11 other entries are to be included on a companion CD. Judging entries along with McLeod and Franzen is <a href="http://www.cantstopwontstop.com/blog/">Jeff Chang</a>, author of the American Book Award-winning "Can't Stop Won't Stop: A History of the Hip-Hop Generation" and co-founder of the influential label SoleSides (now <a href="http://www.quannum.com/">Quannum Projects</a>), responsible for launching the careers of DJ Shadow, Blackalicious, Lyrics Born and Lateef the Truth Speaker.</p>
 
