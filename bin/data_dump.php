@@ -28,15 +28,16 @@
  * options for more information.
  *
  * Add to do this script with crontab -e to do this
-
- * 15 4 * * 3,6 /web/ccmixter/www/bin/data_dump.sh 2>&1 >/dev/null
+ * 
+ * 15 4 * * 3,6 cd /web/ccmixter/www && /usr/local/apache220/php/bin/php bin/data_dump.php -o atom.xml -t audio -f atom 2>&1 >/dev/null
+ * 
  *
  * TODO: Should probably have more error output for bad CLI options.
  */
 
 // The current feed types available.
 $feed_types = array('datadump', 'atom', 'rss');
-
+// chdir('..');
 /**
  * Prints usage help options.
  */
@@ -127,6 +128,9 @@ if( !file_exists('cc-config-db.php') )
 
 if( file_exists('ccadmin') )
     die('<html><body>ccHost Installation is not complete.</body></html>');
+
+if( !function_exists('gettext') )
+    require_once('ccextras/cc-no-gettext.inc');
 
 define('IN_CC_HOST', true);
 
