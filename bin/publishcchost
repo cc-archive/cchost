@@ -173,7 +173,7 @@ def publishcchost(argv = None):
                             print "Error: it must be a number"
                             option = 0
                         
-                uploadSucceeded, fileURL = upload(list[2*(option-1)], Request, urlopen, ask, filename, inputnames, inputvalues)
+                uploadSucceeded, fileURL, upError = upload(list[2*(option-1)], Request, urlopen, ask, filename, inputnames, inputvalues)
                 if uploadSucceeded:
                     if verbose:
                         print "Uploaded succedded"
@@ -181,6 +181,8 @@ def publishcchost(argv = None):
                         sys.exit(0)
                 else:
                     print "Upload Failed"
+                    if upError != "":
+                        print upError
                     sys.exit(1)
             else:
                 print "Unknown User or Wrong Password"
@@ -428,7 +430,7 @@ def upload(url, Request, urlopen, ask, filename, inputnames, inputvalues):
         p = uploadParser() # verify if upload succeeded
         p.feed(htmlSource)
         p.close()
-        return p.uploadSucceeded, p.url
+        return p.uploadSucceeded, p.url, p.error
 
 
 class uploadParser(HTMLParser.HTMLParser):
@@ -438,6 +440,8 @@ class uploadParser(HTMLParser.HTMLParser):
         self.uploadSucceeded = False
         self.url = None
 	self.isPrompt = False
+        self.isError = False
+        self.error = ""
     def handle_starttag(self, tag, attrs):
         if tag=='a':
             for atribute in attrs:
@@ -448,9 +452,19 @@ class uploadParser(HTMLParser.HTMLParser):
 	    for atribute in attrs:
 		if atribute[0] == "class" and atribute[1] == "cc_system_prompt":
 		    self.isPrompt = True
+        elif tag=='td':
+            for atribute in attrs:
+                if atribute[0] == "class" and atribute[1] == "cc_form_error":
+                    self.isError = True
     def handle_endtag(self, tag):
 	if tag=='div':
 	    self.isPrompt = False
+        elif tag=='td' and self.isError:
+            self.isError = False
+            self.error = getString(self.error)
+    def handle_data(self, data):
+        if self.isError:
+            self.error += data
     def isFileLink(self, url):
         if re.search("/media/files/", url, 0) == None:
             return False
@@ -542,12 +556,11 @@ class formParser(HTMLParser.HTMLParser):
 	            for atribute in attrs:
 	                if atribute[0] == "class":
 	                    if atribute[1] == "cc_form_about" or atribute[1] == "cc_remix_license_notice":
-	                        inf = {}
-	                        inf['type'] = "about"
-	                        inf['name'] = atribute[1]
-	                        inf['label'] = ""
+	                        self.inf = {}
+	                        self.inf['type'] = "about"
+	                        self.inf['name'] = atribute[1]
+	                        self.inf['label'] = ""
 	                        self.isLabel = True
-	                        self.inf = inf
         	            elif atribute[1] == "cc_form_tip":
                 	        self.isLabel = False
 	                        self.inf['tip'] = ""
