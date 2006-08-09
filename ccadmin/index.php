@@ -400,7 +400,7 @@ function verify_mysql(&$f, &$ok)
             $url = "http://www.php.net/manual/en/faq.databases.php#faq.databases.mysql.php5";
 
             $f['database']['e'] = "MySQL does not seem to be installed into PHP<br />The problem might be related to".
-                                    " <a href=\"$url\" target=\"_blank\">this</a>.";
+                                    " <a href=\"$url\" target=\"_blank\">this</a>, or you might need to enable it as an extension in your settings file, php.ini";
             $ok = false;
         }
         else
