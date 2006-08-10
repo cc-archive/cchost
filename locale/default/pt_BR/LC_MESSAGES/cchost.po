@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-05 11:54-0700\n"
-"PO-Revision-Date: 2006-06-23 22:23-0800\n"
-"Last-Translator: Jon Phillips <jon@rejon.org>\n"
-"Language-Team:  Brazillian Portuguese <LL@li.org>\n"
+"POT-Creation-Date: 2006-08-10 13:01-0700\n"
+"PO-Revision-Date: 2006-08-08 10:01-0300\n"
+"Last-Translator: Marcela <capitu@gmail.com>\n"
+"Language-Team: Brazillian Portuguese <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,7 +23,7 @@ msgid "Name"
 msgstr "Nome"
 
 #: cclib/cc-navigator-admin.inc:442 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:605 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:606 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -59,19 +59,19 @@ msgstr "Ver últimos uploads de originais"
 
 #: cclib/cc-navigator-admin.inc:466
 msgid "Picks"
-msgstr ""
+msgstr "Escolhas"
 
 #: cclib/cc-navigator-admin.inc:467
 msgid "See picks by the Editorial Staff"
-msgstr "Ver escolhas da equipe de editores"
+msgstr "Ver escolhas da Equipe de Editores"
 
 #: cclib/cc-navigator-admin.inc:472
 msgid "Funky"
-msgstr ""
+msgstr "Funky"
 
 #: cclib/cc-navigator-admin.inc:473
 msgid "Only the funky stuff please!"
-msgstr ""
+msgstr "Só os sons funky, por favor!"
 
 #: cclib/cc-contest-admin.inc:197
 msgid "Must be characters and numbers, no more than 25"
@@ -83,11 +83,11 @@ msgstr "Tipo de fonte:"
 
 #: cclib/cc-contest-admin.inc:258
 msgid "Main Remix Material"
-msgstr "Material "
+msgstr "Material do Remix Principal"
 
 #: cclib/cc-contest-admin.inc:260
 msgid "Sample (loop, layer, fragment, etc.)"
-msgstr ""
+msgstr "Trecho (loop, camada, fragmento etc)"
 
 #: cclib/cc-contest-admin.inc:412
 msgid "About"
@@ -95,7 +95,7 @@ msgstr "Sobre"
 
 #: cclib/cc-contest-admin.inc:413
 msgid "Home for "
-msgstr ""
+msgstr "Home para"
 
 #: cclib/cc-contest-admin.inc:419
 msgid "Winners"
@@ -111,93 +111,95 @@ msgstr "Fontes"
 
 #: cclib/cc-contest-admin.inc:427
 msgid "Download Source Material for "
-msgstr "Baixar material fonte para"
+msgstr "Baixar Material Fonte para"
 
 #: cclib/cc-contest-admin.inc:433
 msgid "Entries"
-msgstr ""
+msgstr "Inscrições"
 
 #: cclib/cc-contest-admin.inc:440
 msgid "Submit Entry"
-msgstr ""
+msgstr "Enviar Inscrição"
 
 #: cclib/cc-contest-admin.inc:441
 msgid "Submit an entry in the "
-msgstr ""
+msgstr "Inscrever-se em"
 
 #: cclib/cc-contest-admin.inc:447 cclib/cc-mediahost.php:489
 msgid "Admin"
-msgstr "Admin"
+msgstr "Administração"
 
 #: cclib/cc-contest-admin.inc:542
 msgid "Changes Saved"
-msgstr "Alterações salvas"
+msgstr "Alterações Salvas"
 
 #: cclib/cc-contest-admin.inc:582
 msgid "Upload succeeded"
-msgstr ""
+msgstr "Upload feito com sucesso"
 
-#: cclib/cc-contest.php:296
+#: cclib/cc-contest.php:297
 msgid " is currently open and taking submissions."
-msgstr "está aberto e aceitando inscrições"
+msgstr "está aberto e aceitando inscrições."
 
-#: cclib/cc-contest.php:300
+#: cclib/cc-contest.php:301
 msgid "Submissions allowed until: "
 msgstr "Inscrições abertas até:"
 
-#: cclib/cc-contest.php:310
+#: cclib/cc-contest.php:311
 msgid "(Only logged in users can submit entries.)"
-msgstr "(Você deve estar logado para participar)"
+msgstr "(Você deve estar logado para participar.)"
 
-#: cclib/cc-contest.php:318
+#: cclib/cc-contest.php:319
 msgid " is not taking submissions any more."
 msgstr "não está mais aceitando inscrições."
 
-#: cclib/cc-contest.php:322
+#: cclib/cc-contest.php:323
 msgid "Submissions stopped after: "
 msgstr "Inscrições finalizadas depois de:"
 
-#: cclib/cc-contest.php:333
+#: cclib/cc-contest.php:334
 msgid "Voting is open until "
 msgstr "Votações abertas até:"
 
-#: cclib/cc-contest.php:482
+#: cclib/cc-contest.php:495
 msgid "Browse Contests"
-msgstr ""
+msgstr "Ver Concursos"
 
-#: cclib/cc-contest.php:530
+#: cclib/cc-contest.php:543
 msgid "<h3>This contest does not support online voting</h3>"
 msgstr "<h3>Este concurso não tem votação online</h3>"
 
-#: cclib/cc-contest.php:569
+#: cclib/cc-contest.php:582
 msgid "<h3>Voting will open after submission period has ended</h3>"
-msgstr "<h3>"
+msgstr "<h3>Votações serão abertas após o fim do período de inscrições"
 
-#: cclib/cc-contest.php:575
+#: cclib/cc-contest.php:588
 msgid "<h3>Poll Results</h3>"
-msgstr "<h3>Resultados da pesquisa</h3>"
+msgstr "<h3>Resultados da Pesquisa</h3>"
 
-#: cclib/cc-contest.php:584
+#: cclib/cc-contest.php:597
 msgid "<h3>Voting is only open to registered users</h3>"
-msgstr ""
+msgstr "<h3>Votações abertas apenas para usuários registrados</h3>"
 
-#: cclib/cc-contest.php:586
+#: cclib/cc-contest.php:599
 msgid "<h3>Results will be shown here after the voting period is closed</h3>"
 msgstr ""
+"<h3>Os resultados serão anunciados aqui após o fim do período de votação</h3>"
 
-#: cclib/cc-contest.php:609
+#: cclib/cc-contest.php:622
 #, php-format
 msgid "Submit to: '%s'"
-msgstr ""
+msgstr "Inscrever-se em: '%s'"
 
-#: cclib/cc-contest.php:670
+#: cclib/cc-contest.php:683
 #, php-format
 msgid "Your upload has been entered in '%s'"
-msgstr ""
+msgstr "Seu upload foi inscrito em '%s'"
 
-#: cclib/cc-contest.php:822
+#: cclib/cc-contest.php:835
 msgid "This contest entry is only visible to the owner and admins."
 msgstr ""
+"Esta inscrição do concurso só é visível para o autor e os administradores."
 
 #: cclib/cc-editorials.php:54
 msgid "Reviewer"
@@ -214,7 +216,7 @@ msgstr "Deletar"
 
 #: cclib/cc-editorials.php:94
 msgid "Editors' Picks"
-msgstr "Escolha do editor"
+msgstr "Escolhas dos Editores"
 
 #: cclib/cc-editorials.php:120
 msgid "Invalid path"
@@ -227,7 +229,7 @@ msgstr "Editar Editorial"
 #: cclib/cc-editorials.php:183
 #, php-format
 msgid "Editorial saved. See <a href=\"%s\">here</a> for results."
-msgstr ""
+msgstr "Editorial salvo. Veja <a href=\"%s\">aqui</a> os resultados."
 
 #: cclib/cc-editorials.php:247
 msgid "Editorial"
@@ -235,39 +237,42 @@ msgstr "Editorial"
 
 #: cclib/cc-files.php:53
 msgid "Save File Properties"
-msgstr "Salvar propriedades do arquivo"
+msgstr "Salvar Propriedades do Arquivo"
 
 #: cclib/cc-files.php:71 cclib/cc-upload.php:155
 msgid "License"
-msgstr ""
+msgstr "Licença"
 
 #: cclib/cc-files.php:72
 msgid "NOTE: You can only pick less restrictive license. Once you have done "
 msgstr ""
+"NOTA: Você só pode escolher uma licença menos restritiva. A partir do "
+"momento em que você fizer"
 
 #: cclib/cc-files.php:73
 msgid "that you can not re-license under a stricter license (on this site). "
 msgstr ""
+"isso, você não poderá atribuir uma nova licença mais restritiva (neste site)."
 
 #: cclib/cc-files.php:84 cclib/cc-files.php:87 cclib/cc-mediahost.php:454
 msgid "Manage Files"
-msgstr "Gerenciar arquivos"
+msgstr "Gerenciar Arquivos"
 
 #: cclib/cc-files.php:85
 msgid "Update the list of files used by this upload"
-msgstr "Atualizar a lista de arquivos usados por esse aquivo"
+msgstr "Atualizar lista de arquivos usados por este upload"
 
 #: cclib/cc-files.php:95
 msgid "Manage the 'I Sampled This' List"
-msgstr "Gerenciar lista 'Eu usei isso'"
+msgstr "Gerenciar Lista 'Eu usei isso'"
 
 #: cclib/cc-files.php:96
 msgid "Update the list of sources used by this upload"
-msgstr "Atualizar a lista de fontes usadas por este arquivo"
+msgstr "Atualizar a lista de fontes usadas por este upload"
 
 #: cclib/cc-files.php:98 cclib/cc-mediahost.php:461
 msgid "Manage Remixes"
-msgstr "Gerenciar remixes"
+msgstr "Gerenciar Remixes"
 
 #: cclib/cc-files.php:170 cclib/cc-files.php:208
 msgid "Nickname"
@@ -275,7 +280,7 @@ msgstr "Apelido"
 
 #: cclib/cc-files.php:171 cclib/cc-files.php:209
 msgid "(e.g. 'lofi', 'hires') Leave blank to use default"
-msgstr ""
+msgstr "(ex. 'lofi', 'hires') Deixe em branco para usar o padrão"
 
 #: cclib/cc-files.php:233
 msgid "Manage files for: "
@@ -283,17 +288,17 @@ msgstr "Gerenciar arquivos para:"
 
 #: cclib/cc-files.php:282 cclib/cc-files.php:355
 msgid "Edit Properties for "
-msgstr "Editar propriedades para:"
+msgstr "Editar Propriedades para"
 
 #: cclib/cc-files.php:294
 #, php-format
 msgid "Changes saved (see <a href=\"%s\">results</a>)"
-msgstr ""
+msgstr "Alterações salvas (ver <a href=\"%s\">resultados</a>)"
 
 #: cclib/cc-files.php:357
 #, php-format
 msgid "Changes saved -- see <a href=\"%s\">'%s' page</a>"
-msgstr ""
+msgstr "Alterações salvas -- ver <a href=\"%s\">'%s' página</a>"
 
 #: cclib/cc-files.php:361
 #, php-format
@@ -303,7 +308,7 @@ msgstr "ou volte para  <a href=\"%s\">Gerenciar Arquivos</a>"
 #: cclib/cc-files.php:380
 #, php-format
 msgid "Delete File '%s'"
-msgstr "Deletar arquivo '%s'"
+msgstr "Deletar Arquivo '%s'"
 
 #: cclib/cc-files.php:401
 #, php-format
@@ -318,274 +323,281 @@ msgstr "Apelido para '%s'"
 #: cclib/cc-files.php:477
 #, php-format
 msgid "Add File to '%s'"
-msgstr "Adicionar aquivo em '%s'"
+msgstr "Adicionar Aquivo em '%s'"
 
 #: cclib/cc-form.php:82
 msgid "Submit"
 msgstr "Enviar"
 
-#: cclib/cc-form.php:762
+#: cclib/cc-form.php:772
 msgid "can not be left blank"
 msgstr "campo obrigatório"
 
-#: cclib/cc-form.php:1429
+#: cclib/cc-form.php:1439
 msgid "Date is out of range"
-msgstr ""
+msgstr "Data está fora do limite"
 
-#: cclib/cc-form.php:1437
+#: cclib/cc-form.php:1447
 msgid "Not a valid date"
 msgstr "Data inválida"
 
-#: cclib/cc-form.php:1931 cclib/cc-form.php:1932
+#: cclib/cc-form.php:1941 cclib/cc-form.php:1942
 msgid "File too big"
 msgstr "Arquivo muito grande"
 
-#: cclib/cc-form.php:1933
+#: cclib/cc-form.php:1943
 msgid "File was not fully uloaded"
-msgstr ""
+msgstr "Upload do arquivo não foi completo"
 
-#: cclib/cc-form.php:1934
+#: cclib/cc-form.php:1944
 msgid "Missing file name"
+msgstr "Falta o nome do arquivo "
+
+#: cclib/cc-login.php:116
+msgid ""
+"Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) "
+"has a line through it, the D does not."
 msgstr ""
 
-#: cclib/cc-login.php:128 cclib/cc-login.php:263 cclib/cc-login.php:318
+#: cclib/cc-login.php:136 cclib/cc-login.php:271 cclib/cc-login.php:326
 msgid "Login Name"
-msgstr "Nome de login"
+msgstr "Nome de Login"
 
-#: cclib/cc-login.php:130
+#: cclib/cc-login.php:138
 msgid "Must be letter, numbers or underscore (_), no longer than 25 characters"
 msgstr ""
+"Devem ser letras, números ou underscore (_), não maior que 25 caracteres"
 
-#: cclib/cc-login.php:133 cclib/cc-user.php:214
+#: cclib/cc-login.php:141 cclib/cc-user.php:215
 msgid "e-mail"
 msgstr "e-mail"
 
-#: cclib/cc-login.php:135 cclib/cc-user.php:215
+#: cclib/cc-login.php:143 cclib/cc-user.php:216
 msgid "This address will never show on the site but is "
 msgstr "Este endereço nunca aparecerá no site, mas é"
 
-#: cclib/cc-login.php:136 cclib/cc-user.php:216
+#: cclib/cc-login.php:144 cclib/cc-user.php:217
 msgid "required for creating a new account and password "
 msgstr "necessário para criar uma nova conta e senha"
 
-#: cclib/cc-login.php:137 cclib/cc-user.php:217
+#: cclib/cc-login.php:145 cclib/cc-user.php:218
 msgid "recovery in case you forget it."
-msgstr "caso você esqueça."
+msgstr "caso você a esqueça."
 
-#: cclib/cc-login.php:147 cclib/cc-login.php:268 cclib/cc-user.php:209
+#: cclib/cc-login.php:155 cclib/cc-login.php:276 cclib/cc-user.php:210
 msgid "Password"
 msgstr "Senha"
 
-#: cclib/cc-login.php:149
+#: cclib/cc-login.php:157
 msgid "Must be at least 5 characters"
 msgstr "Deve ter pelo menos 5 caracteres"
 
-#: cclib/cc-login.php:161 ccextras/cc-flag.php:75 ccextras/cc-mail.php:201
+#: cclib/cc-login.php:169 ccextras/cc-flag.php:75 ccextras/cc-mail.php:201
 #: ccextras/cc-topics.php:106
 msgid "Security Key"
-msgstr ""
+msgstr "Chave de Segurança"
 
-#: cclib/cc-login.php:164 ccextras/cc-flag.php:78 ccextras/cc-mail.php:204
-#: ccextras/cc-topics.php:109
-msgid "Type in characters above"
-msgstr "Digite os caracteres acima"
-
-#: cclib/cc-login.php:172 cclib/cc-login.php:291
+#: cclib/cc-login.php:180 cclib/cc-login.php:299
 msgid "Lost Password?"
 msgstr "Esqueceu a senha?"
 
-#: cclib/cc-login.php:175 cclib/cc-login.php:281 cclib/cc-login.php:294
-#: cclib/cc-login.php:325
+#: cclib/cc-login.php:183 cclib/cc-login.php:289 cclib/cc-login.php:302
+#: cclib/cc-login.php:333
 msgid "Click Here"
 msgstr "Clique aqui"
 
-#: cclib/cc-login.php:181 cclib/cc-login.php:373
+#: cclib/cc-login.php:189 cclib/cc-login.php:381
 msgid "Register"
 msgstr "Registre-se"
 
-#: cclib/cc-login.php:216
+#: cclib/cc-login.php:224
 msgid " must letters, numbers or underscore (_)"
-msgstr ""
+msgstr "devem ser letras, números ou underscore (_)"
 
-#: cclib/cc-login.php:222
+#: cclib/cc-login.php:230
 msgid " must be less than 25 characters"
 msgstr "deve ter menos de 25 caracteres"
 
-#: cclib/cc-login.php:237
+#: cclib/cc-login.php:245
 msgid "That username is already in use or is reserved by the system"
 msgstr "Este nome de usuário já existe ou foi reservado pelo sistema"
 
-#: cclib/cc-login.php:273
+#: cclib/cc-login.php:281
 msgid "Remember Me"
 msgstr "Lembrar meu login"
 
-#: cclib/cc-login.php:278 cclib/cc-login.php:323
+#: cclib/cc-login.php:286 cclib/cc-login.php:331
 msgid "New User?"
 msgstr "Novo usuário?"
 
-#: cclib/cc-login.php:300 cclib/cc-login.php:381 cclib/cc-login.php:527
+#: cclib/cc-login.php:308 cclib/cc-login.php:389 cclib/cc-login.php:535
 msgid "Log In"
 msgstr "Logar"
 
-#: cclib/cc-login.php:330
+#: cclib/cc-login.php:338
 msgid "Retrieve Password"
 msgstr "Recuperar senha"
 
-#: cclib/cc-login.php:414
+#: cclib/cc-login.php:422
 msgid "Create A New Account"
-msgstr "Criar uma nova conta"
+msgstr "Criar nova conta"
 
-#: cclib/cc-login.php:416
+#: cclib/cc-login.php:424
 msgid "This site requires cookies to be enabled in your browser"
-msgstr "Este site "
+msgstr "Você deve habilitar cookies em seu browser para usar este site"
 
-#: cclib/cc-login.php:503
+#: cclib/cc-login.php:511
 msgid "Log Out"
 msgstr "Sair"
 
-#: cclib/cc-login.php:524
+#: cclib/cc-login.php:532
 msgid "You new login information has been sent to your email address."
-msgstr ""
+msgstr "Sua nova informação de login foi enviada para seu e-mail."
 
-#: cclib/cc-login.php:561
+#: cclib/cc-login.php:569
 msgid "This installation does not support this feature"
-msgstr ""
+msgstr "Esta instalação não suporta essa funcionalidade"
 
-#: cclib/cc-login.php:565
+#: cclib/cc-login.php:573
 msgid "Recover Lost Password"
-msgstr ""
+msgstr "Recuperar Senha Perdida"
 
 #: cclib/cc-mediahost.php:54 cclib/cc-search.php:56
 msgid "Uploads"
-msgstr ""
+msgstr "Uploads"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:590 cclib/cc-user.php:606
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:591 cclib/cc-user.php:607
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
-msgstr ""
+msgstr "Pessoas"
 
 #: cclib/cc-mediahost.php:98
 msgid "Browse Uploads"
-msgstr ""
+msgstr "Ver Uploads"
 
 #: cclib/cc-mediahost.php:115
 msgid "Unknown File"
-msgstr ""
+msgstr "Arquivo Desconhecido"
 
 #: cclib/cc-mediahost.php:116
 msgid "That file can not be found, it may have been removed by the owner."
 msgstr ""
+"Este arquivo não pode ser encontrado, pode ter sido removido pelo dono."
 
 #: cclib/cc-mediahost.php:122
 msgid "This upload is not currently available for viewing."
-msgstr ""
+msgstr "Este upload não pode ser visto no momento."
 
 #: cclib/cc-mediahost.php:187
 #, php-format
 msgid "Upload succeeded. Click <a href=\"%s\">here</a> to see results."
 msgstr ""
+"Upload feito com sucesso. Clique <a href=\"%s\">aqui</a> para ver os "
+"resultados."
 
 #: cclib/cc-mediahost.php:188 cclib/cc-mediahost.php:253
 msgid "This upload is <b>NOT</b> entered in any contest."
-msgstr ""
+msgstr "Este upload <b>NÃO</b> foi inscrito em nenhum concurso."
 
 #: cclib/cc-mediahost.php:286
 msgid "Published"
-msgstr ""
+msgstr "Publicado"
 
 #: cclib/cc-mediahost.php:286
 msgid "Unpublished"
-msgstr ""
+msgstr "Não Publicado"
 
 #: cclib/cc-mediahost.php:315
 msgid "Publish Now"
-msgstr ""
+msgstr "Publicar Agora"
 
 #: cclib/cc-mediahost.php:372
 msgid "This file is only visible to the owner and admins."
-msgstr ""
+msgstr "Este arquivo só pode ser visto pelo dono e administradores."
 
 #: cclib/cc-mediahost.php:447 ccextras/cc-topics.php:249
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: cclib/cc-mediahost.php:468 cclib/cc-mediahost.php:600
 msgid "Publish"
-msgstr ""
+msgstr "Publicar"
 
 #: cclib/cc-mediahost.php:482
 msgid "I Sampled This"
-msgstr ""
+msgstr "Eu Usei Isso"
 
 #: cclib/cc-mediahost.php:595
 msgid "Unpublish"
-msgstr ""
+msgstr "Tirar do ar"
 
 #: cclib/cc-page.php:78
 msgid "Welcome to ccHost"
-msgstr ""
+msgstr "Bem Vindo ao ccHost"
 
 #: cclib/cc-page.php:684
 msgid "<<< Back"
-msgstr ""
+msgstr "<<<Voltar"
 
 #: cclib/cc-page.php:694
 msgid "More >>>"
-msgstr ""
+msgstr "Mais>>>"
 
 #: cclib/cc-poll.php:61
 msgid "Vote"
-msgstr ""
+msgstr "Vote"
 
 #: cclib/cc-pools-ui.php:188
 msgid "Sample Pool: "
-msgstr ""
+msgstr "Grupo de Trechos:"
 
 #: cclib/cc-pools-ui.php:212
 msgid "Sample Pool Item: "
-msgstr ""
+msgstr "Item de Grupo de Trechos"
 
 #: cclib/cc-renderaudio.php:145
 msgid "Stream Sources"
-msgstr ""
+msgstr "Fontes de Stream"
 
 #: cclib/cc-renderaudio.php:154
 msgid "Stream Entries"
-msgstr ""
+msgstr "Inscrições de Stream"
 
 #: cclib/cc-renderaudio.php:193
 msgid "Stream"
-msgstr ""
+msgstr "Stream"
 
 #: cclib/cc-remix.php:106
 msgid "Done Editing"
-msgstr ""
+msgstr "Fim da Edição"
 
-#: cclib/cc-remix.php:128
+#: cclib/cc-remix.php:128 ccextras/cc-howididit.php:89
 msgid "Artist"
-msgstr ""
+msgstr "Artista"
 
 #: cclib/cc-remix.php:131 ccextras/cc-topics.php:90 ccextras/cc-topics.php:142
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: cclib/cc-remix.php:134
 msgid "Full search"
-msgstr ""
+msgstr "Busca completa"
 
 #: cclib/cc-remix.php:181
 #, php-format
 msgid "Editing Remixes for '%s'"
-msgstr ""
+msgstr "Edição de Remixes para '%s'"
 
-#: cclib/cc-remix.php:312
+#: cclib/cc-remix.php:315
 #, php-format
 msgid "Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"
 msgstr ""
+"Remix %s finalizado (clique <a href=\"%s\">aqui</a> para ver o resultado)"
 
 #: cclib/cc-renderimage.php:169
+#, fuzzy
 msgid "Display Thumbnails"
-msgstr ""
+msgstr "Mostrar nome do arquivo"
 
 #: cclib/cc-renderimage.php:171
 msgid "Display thumbnails for image uploads"
@@ -605,938 +617,997 @@ msgstr ""
 
 #: cclib/cc-search.php:40
 msgid "Search Text"
-msgstr ""
+msgstr "Buscar Texto"
 
 #: cclib/cc-search.php:45
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: cclib/cc-search.php:48
 msgid "Any match"
-msgstr ""
+msgstr "Qualquer combinação"
 
 #: cclib/cc-search.php:49
 msgid "Match all"
-msgstr ""
+msgstr "Juntar todos"
 
 #: cclib/cc-search.php:50
 msgid "Exact Phrase"
-msgstr ""
+msgstr "Frase Exata"
 
 #: cclib/cc-search.php:53
 msgid "What"
-msgstr ""
+msgstr "O que"
 
 #: cclib/cc-search.php:57
 msgid "Users"
-msgstr ""
+msgstr "Usuários"
 
 #: cclib/cc-search.php:58
 msgid "Uploads and Users"
-msgstr ""
+msgstr "Uploads e Usuários"
 
 #: cclib/cc-search.php:64 cclib/cc-search.php:90
 msgid "Search"
-msgstr ""
+msgstr "Busca"
 
 #: cclib/cc-search.php:93
 msgid "<h1>Search using Google (tm)</h1>"
-msgstr ""
+msgstr "<h1>Buscar usando o Google (tm)</h1>"
 
 #: cclib/cc-search.php:124
 msgid "Search Results"
-msgstr ""
+msgstr "Resultados de Busca"
 
 #: cclib/cc-search.php:153
 #, php-format
 msgid "<a href=\"%s\">Search again...</a>"
-msgstr ""
+msgstr "<a href=\"%s\">Buscar novamente...</a>"
 
 #: cclib/cc-search.php:155
 msgid "Search limit reached. "
-msgstr ""
+msgstr "Limite de busca alcançado."
 
 #: cclib/cc-search.php:255
 msgid "Users That Mentioned: "
-msgstr ""
+msgstr "Usuários que Citaram:"
 
 #: cclib/cc-submit.php:213
 msgid "Pick Submission Type"
-msgstr ""
+msgstr "Escolha o Tipo de Inscrição"
 
 #: cclib/cc-submit.php:418
 msgid "Submit Files"
-msgstr ""
+msgstr "Enviar Arquivos"
 
 #: cclib/cc-submit.php:455
 msgid "Submit Forms"
-msgstr ""
+msgstr "Enviar Formulário"
 
-#: cclib/cc-tags.php:537
+#: cclib/cc-tags.php:549
 msgid "Tags "
-msgstr ""
+msgstr "Tags"
 
-#: cclib/cc-tags.php:613
+#: cclib/cc-tags.php:634
 msgid "Turn System Tags ON"
-msgstr ""
+msgstr "LIGAR Tags do Sistema"
 
-#: cclib/cc-tags.php:618
+#: cclib/cc-tags.php:639
 msgid "Turn System Tags OFF"
-msgstr ""
+msgstr "DESLIGAR Tags do Sistema"
 
-#: cclib/cc-tags.php:632 cclib/cc-upload.php:72
+#: cclib/cc-tags.php:653 cclib/cc-upload.php:72
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
-#: cclib/cc-tags.php:668
+#: cclib/cc-tags.php:689
 msgid "Browse Tags"
-msgstr ""
+msgstr "Ver Tags"
 
 #: cclib/cc-upload.php:50 ccextras/cc-flag.php:163
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 #: cclib/cc-upload.php:57
 msgid "Display name for file"
-msgstr ""
+msgstr "Mostrar nome do arquivo"
 
 #: cclib/cc-upload.php:74
 msgid "Comma separated list of terms"
-msgstr ""
+msgstr "Lista de termos separados por vírgula"
 
 #: cclib/cc-upload.php:78
 msgid "Popular Tags"
-msgstr ""
+msgstr "Tags Populares"
 
 #: cclib/cc-upload.php:83 cclib/cc-upload.php:112
 msgid "Click on these to automatically add to your upload."
-msgstr ""
+msgstr "Clique neles para adicioná-los automaticamente ao seu upload."
 
 #: cclib/cc-upload.php:87
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: cclib/cc-upload.php:107
 msgid "Suggested Tags"
-msgstr ""
+msgstr "Tags Sugeridas"
 
 #: cclib/cc-upload.php:176 ccextras/cc-topics.php:73
 msgid "This action can not be reversed..."
-msgstr ""
+msgstr "Esta ação não pode ser refeita..."
 
 #: cclib/cc-upload.php:177 ccextras/cc-topics.php:75
 #: ccextras/cc-forums-admin.inc:120
 #, php-format
 msgid "Delete \"%s\" ?"
-msgstr ""
+msgstr "Deletar \"%s\" ?"
 
 #: cclib/cc-upload.php:321
 msgid "Deleting File"
-msgstr ""
+msgstr "Deletando Arquivo"
 
 #: cclib/cc-upload.php:331
 msgid "Upload has been deleted"
-msgstr ""
+msgstr "Upload deletado"
 
 #: cclib/cc-upload.php:369
 msgid "Specify file to upload"
-msgstr ""
+msgstr "Especificar arquivo para upload"
 
 #: cclib/cc-upload.php:374
 msgid "Valid file types: "
-msgstr ""
+msgstr "Tipos válidos de arquivo:"
 
 #: cclib/cc-upload.php:378
 msgid "File"
-msgstr ""
+msgstr "Arquivo"
 
-#: cclib/cc-uploadapi.php:953
+#: cclib/cc-uploadapi.php:955
 msgid "There was error in the file format<br />"
-msgstr ""
+msgstr "Houve um erro no formato do arquivo<br />"
 
 #: cclib/cc-user.php:94
 msgid "Security key does not match"
-msgstr ""
+msgstr "Chave de segurança não confere"
 
 #: cclib/cc-user.php:134
 msgid "Password does not match login name."
-msgstr ""
+msgstr "Senha não confere com nome de login."
 
-#: cclib/cc-user.php:173
+#: cclib/cc-user.php:174
 msgid "Can't find that username"
-msgstr ""
+msgstr "Nome de usuário não encontrado"
 
-#: cclib/cc-user.php:202
+#: cclib/cc-user.php:203
 msgid "Full Name"
 msgstr "Nome completo"
 
-#: cclib/cc-user.php:203
-msgid "Your display name for the site (not to be confused with"
-msgstr ""
-
 #: cclib/cc-user.php:204
+msgid "Your display name for the site (not to be confused with"
+msgstr "Seu nome no site (não confundir com"
+
+#: cclib/cc-user.php:205
 msgid " your login name)."
-msgstr ""
+msgstr "seu nome de login)."
 
-#: cclib/cc-user.php:222
+#: cclib/cc-user.php:223
 msgid "Image"
-msgstr ""
+msgstr "Imagem"
 
-#: cclib/cc-user.php:224
+#: cclib/cc-user.php:225
 msgid "Image file (can not be bigger than 93x93)"
-msgstr ""
+msgstr "Arquivo de imagem (não pode ser maior que 93x93)"
 
-#: cclib/cc-user.php:231
+#: cclib/cc-user.php:232
 msgid "About You"
-msgstr ""
-
-#: cclib/cc-user.php:236
-msgid "Home Page URL"
-msgstr ""
+msgstr "Sobre Você"
 
 #: cclib/cc-user.php:237
+msgid "Home Page URL"
+msgstr "URL da Página Pessoal"
+
+#: cclib/cc-user.php:238
 msgid "Make sure it starts with http://"
-msgstr ""
+msgstr "Não esqueça de colocar o http://"
 
-#: cclib/cc-user.php:242 ccextras/cc-language.php:432
+#: cclib/cc-user.php:243 cclib/cc-language.php:432
 msgid "Default Language:"
-msgstr ""
+msgstr "Língua Padrão"
 
-#: cclib/cc-user.php:248 cclib/cc-user.php:423
+#: cclib/cc-user.php:249 cclib/cc-user.php:424
 msgid "What I Pound On"
-msgstr ""
+msgstr "O Que Eu Toco"
 
-#: cclib/cc-user.php:249
+#: cclib/cc-user.php:250
 msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
-msgstr ""
-
-#: cclib/cc-user.php:254
-msgid "What I Like:"
-msgstr ""
+msgstr "(ex.: LPs, guitarra, ACID Pro, vocais, percussão)"
 
 #: cclib/cc-user.php:255
-msgid "(e.g. Django, Old Skool, Miles Davis, Acid House)"
-msgstr ""
+msgid "What I Like:"
+msgstr "O Que Eu Gosto:"
 
-#: cclib/cc-user.php:260
-msgid "What I'm Looking For:"
-msgstr ""
+#: cclib/cc-user.php:256
+msgid "(e.g. Django, Old Skool, Miles Davis, Acid House)"
+msgstr "(ex.: Django, Old Skool, Miles Davis, Acid House)"
 
 #: cclib/cc-user.php:261
-msgid "List attributes of musicians you'd like to hook up with "
-msgstr ""
+msgid "What I'm Looking For:"
+msgstr "O Que Estou Procurando:"
 
 #: cclib/cc-user.php:262
-msgid "(e.g. Producer, singer, drummer)"
-msgstr ""
+msgid "List attributes of musicians you'd like to hook up with "
+msgstr "Liste os atributos dos músicos que você gostaria de encontrar"
 
-#: cclib/cc-user.php:373
-msgid "Home Page"
-msgstr ""
+#: cclib/cc-user.php:263
+msgid "(e.g. Producer, singer, drummer)"
+msgstr "(ex.: produtor, cantor, baterista)"
 
 #: cclib/cc-user.php:374
+msgid "Home Page"
+msgstr "Página Pessoal"
+
+#: cclib/cc-user.php:375
 msgid "About Me"
-msgstr ""
+msgstr "Sobre mim"
 
-#: cclib/cc-user.php:421
+#: cclib/cc-user.php:422
 msgid "What I Like"
-msgstr ""
+msgstr "O Que Eu Gosto"
 
-#: cclib/cc-user.php:425
+#: cclib/cc-user.php:426
 msgid "What I Look For"
-msgstr ""
+msgstr "O Que Estou Procurando"
 
-#: cclib/cc-user.php:549
+#: cclib/cc-user.php:550
 msgid "Edit Your Settings"
-msgstr ""
+msgstr "Editar Suas Configurações"
 
-#: cclib/cc-user.php:575
+#: cclib/cc-user.php:576
 msgid "Changes were saved"
-msgstr ""
+msgstr "Alterações salvas"
 
-#: cclib/cc-user.php:634
+#: cclib/cc-user.php:635
 msgid "(select tag)"
-msgstr ""
+msgstr "(selecionar tag)"
 
-#: cclib/cc-user.php:634
+#: cclib/cc-user.php:635
 msgid "(no tag)"
-msgstr ""
+msgstr "(sem tags)"
 
-#: cclib/cc-user.php:694
+#: cclib/cc-user.php:695
 #, php-format
 msgid "Remove %s from my favorites"
-msgstr ""
+msgstr "Remover %s de meus favoritos"
 
-#: cclib/cc-user.php:696
+#: cclib/cc-user.php:697
 #, php-format
 msgid "Add %s to my favorites"
-msgstr ""
+msgstr "Adicionar %s aos meus favoritos"
 
-#: cclib/cc-user.php:738
+#: cclib/cc-user.php:739
 msgid " has not uploaded any remixes yet."
-msgstr ""
-
-#: cclib/cc-user.php:757
-msgid "Uploads by "
-msgstr ""
+msgstr "não fez o upload de nenhum remix."
 
 #: cclib/cc-user.php:758
+msgid "Uploads by "
+msgstr "Uploads de"
+
+#: cclib/cc-user.php:759
 msgid "Remixes of "
 msgstr "Remixes de"
 
-#: cclib/cc-user.php:759
+#: cclib/cc-user.php:760
 msgid "Remixed by "
-msgstr ""
+msgstr "Remixado por"
 
-#: cclib/cc-user.php:771
+#: cclib/cc-user.php:772
 #, php-format
 msgid "%s has been removed from your list of favorites"
-msgstr ""
+msgstr "%s foi excluído de sua lista de favoritos"
 
-#: cclib/cc-user.php:776
+#: cclib/cc-user.php:777
 #, php-format
 msgid "%s has been added to your list of favorites"
-msgstr ""
+msgstr "%s foi adicionado à sua lista de favoritos"
 
-#: cclib/cc-user.php:850
+#: cclib/cc-user.php:851
 msgid "Your Page"
-msgstr ""
+msgstr "Sua Página"
 
-#: cclib/cc-user.php:857
+#: cclib/cc-user.php:858
 msgid "Edit Your Profile"
-msgstr ""
+msgstr "Editar Seu Perfil"
 
-#: cclib/cc-user.php:868
+#: cclib/cc-user.php:869
 msgid "Visitors"
-msgstr ""
+msgstr "Visitantes"
 
-#: cclib/cc-user.php:870
+#: cclib/cc-user.php:871
 msgid "Artists"
-msgstr ""
+msgstr "Artistas"
 
 #: ccextras/cc-archive.php:40
 msgid "Archive"
-msgstr ""
+msgstr "Arquivo"
 
 #: ccextras/cc-archive.php:52
 #, php-format
 msgid "Archive for %s"
-msgstr ""
+msgstr "Arquivo para %s"
 
 #: ccextras/cc-archive.php:73
 msgid "Monthly Archive"
-msgstr ""
+msgstr "Arquivo Mensal"
 
 #: ccextras/cc-bpm.php:115
 msgid "BPM (use '-' for range: 90-100)"
-msgstr ""
+msgstr "BPM (use '-' para intervalo: 90-100)"
 
 #: ccextras/cc-bpm.php:127
 msgid "BPM"
-msgstr ""
+msgstr "BPM"
 
 #: ccextras/cc-bpm.php:128
 msgid "Tempo"
-msgstr ""
+msgstr "Tempo"
 
 #: ccextras/cc-bpm.php:227
 #, php-format
 msgid "No records match that BPM. Go back to <a href=\"%s\">search again</a>"
 msgstr ""
+"Nenhuma gravação tem estas BPMs. Volte e <a href=\"%s\">busque novamente</a>"
 
 #: ccextras/cc-flag.php:54 ccextras/cc-mail.php:165 ccextras/cc-mail.php:175
 msgid "From"
-msgstr ""
+msgstr "De"
 
 #: ccextras/cc-flag.php:57
 msgid "Your email address (optional)"
-msgstr ""
+msgstr "Seu e-mail (opcional)"
 
 #: ccextras/cc-flag.php:60 ccextras/cc-mail.php:186
 msgid "Subject"
-msgstr ""
+msgstr "Assunto"
 
 #: ccextras/cc-flag.php:62
 #, php-format
 msgid "Flag %s \"%s\""
-msgstr ""
+msgstr "Denunciar %s \"%s\""
 
 #: ccextras/cc-flag.php:65 ccextras/cc-mail.php:190
 msgid "Message"
-msgstr ""
+msgstr "Mensagem"
 
 #: ccextras/cc-flag.php:133
 msgid "Flag Content"
-msgstr ""
+msgstr "Denunciar Conteúdo"
 
 #: ccextras/cc-flag.php:171 ccextras/cc-forums.inc:214
 msgid "Topic"
-msgstr ""
+msgstr "Tópico"
 
 #: ccextras/cc-flag.php:176
 msgid "Content has been flagged"
-msgstr ""
+msgstr "Conteúdo foi denunciado"
 
 #: ccextras/cc-format.php:92
 msgid "Quote:"
-msgstr ""
+msgstr "Citação:"
 
 #: ccextras/cc-format.php:275
 msgid "Select text and use the <br />buttons to apply format"
-msgstr ""
+msgstr "Selecione o texto e use os <br />botões para aplicar o formato"
 
 #: ccextras/cc-import-files.php:41
 msgid "Path to file on server"
-msgstr ""
+msgstr "Caminho para o arquivo no servidor"
 
 #: ccextras/cc-import-files.php:56
 msgid "Can not file a file by that name"
-msgstr ""
+msgstr "Não é possível guardar um arquivo com este nome"
 
 #: ccextras/cc-import-files.php:126
 msgid "Import files"
-msgstr ""
+msgstr "Importar arquivos"
 
 #: ccextras/cc-import-files.php:128
 msgid ""
 "Use this form to import files already on your server into the ccHost system. "
 "WARNING: This form will <b>MOVE</b> your file from its original location."
 msgstr ""
+"Use este formulário para importar arquvos que já estão no seu servidor para "
+"o sistema do ccHost. ATENÇÃO: Este formulário vai <b>MOVER</b> seu arquivo "
+"do lugar original."
 
 #: ccextras/cc-import-files.php:179
 #, php-format
 msgid "Import succeeded. Click <a href=\"%s\">here</a> to see results."
 msgstr ""
+"Importação realizada. Clique <a href=\"%s\">aqui</a> para ver o resultado."
 
 #: ccextras/cc-howididit.php:56
 msgid "Browse 'How I Did It'"
-msgstr ""
+msgstr "Ver 'Como Eu Fiz'"
 
-#: ccextras/cc-howididit.php:103 ccextras/cc-howididit.php:229
+#: ccextras/cc-howididit.php:92
+#, fuzzy
+msgid "Date"
+msgstr "vote"
+
+#: ccextras/cc-howididit.php:95
+#, fuzzy
+msgid "Upload Name"
+msgstr "Upload"
+
+#: ccextras/cc-howididit.php:104
+#, fuzzy
+msgid "Sort by:"
+msgstr "Tipo de fonte:"
+
+#: ccextras/cc-howididit.php:140 ccextras/cc-howididit.php:266
 msgid "How I Did It"
-msgstr ""
+msgstr "Como Eu Fiz"
 
-#: ccextras/cc-howididit.php:133
+#: ccextras/cc-howididit.php:170
 msgid "Edit 'How I Did It' for "
-msgstr ""
-
-#: ccextras/cc-howididit.php:163
-#, php-format
-msgid "Changes saved. Click <a href=\"%s\">here</a> to see results"
-msgstr ""
-
-#: ccextras/cc-howididit.php:189
-msgid "Tools I Used"
-msgstr ""
-
-#: ccextras/cc-howididit.php:190
-msgid "What software, hardware, plug-ins, etc. did you use?"
-msgstr ""
-
-#: ccextras/cc-howididit.php:194
-msgid "Samples I Used"
-msgstr ""
-
-#: ccextras/cc-howididit.php:195
-msgid "Where did you find your samples? What kind of license are they under?"
-msgstr ""
-
-#: ccextras/cc-howididit.php:199
-msgid "Original Samples"
-msgstr ""
+msgstr "Editar 'Como Eu Fiz' para"
 
 #: ccextras/cc-howididit.php:200
+#, php-format
+msgid "Changes saved. Click <a href=\"%s\">here</a> to see results"
+msgstr "Alterações salvas. Clique <a href=\"%s\">aqui</a> para ver o resultado"
+
+#: ccextras/cc-howididit.php:226
+msgid "Tools I Used"
+msgstr "Ferramentas Que Usei"
+
+#: ccextras/cc-howididit.php:227
+msgid "What software, hardware, plug-ins, etc. did you use?"
+msgstr "Que software, hardware, plug-ins etc você usou?"
+
+#: ccextras/cc-howididit.php:231
+msgid "Samples I Used"
+msgstr "Trechos Que Usei"
+
+#: ccextras/cc-howididit.php:232
+msgid "Where did you find your samples? What kind of license are they under?"
+msgstr "Onde você encontrou seus trechos? Sob que licença eles estão?"
+
+#: ccextras/cc-howididit.php:236
+msgid "Original Samples"
+msgstr "Trechos originais"
+
+#: ccextras/cc-howididit.php:237
 msgid "What material did you create just for this work?"
-msgstr ""
+msgstr "Que material você criou especialmente para este trabalho?"
 
-#: ccextras/cc-howididit.php:204
+#: ccextras/cc-howididit.php:241
 msgid "Process"
-msgstr ""
+msgstr "Processo"
 
-#: ccextras/cc-howididit.php:205
+#: ccextras/cc-howididit.php:242
 msgid "How did you put all the pieces together?"
-msgstr ""
+msgstr "Como você juntou todos os pedaços?"
 
-#: ccextras/cc-howididit.php:209
+#: ccextras/cc-howididit.php:246
 msgid "Other Notes"
-msgstr ""
+msgstr "Outras Anotações"
 
-#: ccextras/cc-howididit.php:210
+#: ccextras/cc-howididit.php:247
 msgid "Share your feelings about the experience of creating this work"
-msgstr ""
+msgstr "Compartilhe suas sensações sobre a experiência de criar este trabalho"
 
-#: ccextras/cc-howididit.php:249
+#: ccextras/cc-howididit.php:286
 msgid "Edit \"How I Did It\""
-msgstr ""
+msgstr "Editar \"Como Eu Fiz\""
 
-#: ccextras/cc-language.php:303
+#: cclib/cc-language.php:303
 msgid "default"
-msgstr ""
+msgstr "padrão"
 
-#: ccextras/cc-language.php:425
+#: cclib/cc-language.php:425
 msgid "Default Locale Preference:"
-msgstr ""
+msgstr "Preferência Padrão de País:"
 
-#: ccextras/cc-language.php:438
+#: cclib/cc-language.php:438
 msgid ""
 "Select the default locale preference and a default language and the system "
 "will try to translate menus, navigation tabs and anything else you might "
 "have customized. If the translation system does recognize the terms used, "
 "those menu items and navigation tabs will not change."
 msgstr ""
+"Selecione o país de preferência e uma língua padrão e o sistema vai tentar "
+"traduzir os menus, as abas de navegação e qualquer coisa que você "
+"customizar. Se o sistema de tradução não reconhecer os termos usados, estes "
+"itens de menu e abas de navegação não vão mudar."
 
-#: ccextras/cc-language.php:439
+#: cclib/cc-language.php:439
 msgid ""
 "The Locale Preference is a specific folder that contains specific language "
 "translations. The default is a folder of the same name. Inside these folders "
 "are the specific language translations."
 msgstr ""
+"A Preferência de País é uma pasta específica que contém traduções "
+"específicas de línguas. O padrão é uma pasta com o mesmo nome. Dentro destas "
+"pastas estão as traduções específicas de línguas."
 
-#: ccextras/cc-language.php:440
+#: cclib/cc-language.php:440
 msgid ""
 "To create a specific translation, please copy the default folder with a "
 "unique name, and then select it as your Default Locale Preference. Then, "
 "edit the .po files in specific language folders for customization."
 msgstr ""
+"Para criar uma tradução específica, por favor copie a pasta padrão com um "
+"nome específico, e então a selecione como sua Preferência Padrão de País. "
+"Depois, edite os arquivos .po nas pastas de línguas específicas para "
+"customizar."
 
 #: ccextras/cc-music-submit.php:47
 msgid "Submit a Remix"
-msgstr ""
+msgstr "Enviar um Remix"
 
 #: ccextras/cc-music-submit.php:49
 msgid ""
 "A remix using samples downloaded from this site. When submitting a remix "
 "make sure "
 msgstr ""
+"Um remix usando trechos baixados deste site. Ao enviar um remix não deixe de"
 
 #: ccextras/cc-music-submit.php:50
 msgid ""
 "to properly attribute the artist you sampled to comply with the Attribution "
-msgstr ""
+msgstr "creditar o artista cujo material você usou para seguir com a Regra de"
 
 #: ccextras/cc-music-submit.php:51
 msgid ""
 "part the Creative Commons license. The next screen will have a search "
 "function "
 msgstr ""
+"Atribuição da licença da Creative Commons. A próxima tela terá uma função de "
+"busca"
 
 #: ccextras/cc-music-submit.php:52
 msgid "that allows you do just that."
-msgstr ""
+msgstr "que permite a realização disto."
 
 #: ccextras/cc-music-submit.php:58
 msgid "Use this form to submit a remix"
-msgstr ""
+msgstr "Use este formulário para enviar um remix"
 
 #: ccextras/cc-music-submit.php:62
 msgid "Submit an A Cappella"
-msgstr ""
+msgstr "Enviar um Vocal"
 
 #: ccextras/cc-music-submit.php:64
 msgid ""
 "Stand alone vocal parts, either spoken word or sung. Mono recording with no "
 "effects  "
 msgstr ""
+"Partes de vocal individuais, cantadas ou recitadas. Gravação mono sem efeitos"
 
 #: ccextras/cc-music-submit.php:65
 msgid ""
 "(reverb, delay, etc.) on them are best because they are the most flexible to "
 "work with. "
 msgstr ""
+"(reverberação, delays etc) são melhores porque são mais flexíveis de se "
+"trabalhar."
 
 #: ccextras/cc-music-submit.php:66
 msgid ""
 "Many singers think they sound \"better\" with a lot of effects but it is "
 "always better to "
 msgstr ""
+"Muitos cantores acham que eles soam \"melhor\" com um monte de efeitos, mas "
+"é sempre melhor"
 
 #: ccextras/cc-music-submit.php:67
 msgid ""
 "leave those choices to a producer/remixer to allow them to use their "
 "creative skills to "
 msgstr ""
+"deixar essas escolhas para um produtor/remixador para que eles possam usar "
+"seus dotes criativos e"
 
 #: ccextras/cc-music-submit.php:68
 msgid "the fullest potential."
-msgstr ""
+msgstr "atingir o potencial máximo."
 
 #: ccextras/cc-music-submit.php:72
 msgid "Use this form to submit an a cappella"
-msgstr ""
+msgstr "Use este formulário para enviar um vocal"
 
 #: ccextras/cc-music-submit.php:78
 msgid "Submit Samples"
-msgstr ""
+msgstr "Enviar Trechos"
 
 #: ccextras/cc-music-submit.php:80
 msgid ""
 "Samples can be a loop, a one-shot note or drum hit or any other snippet of "
 "sound "
 msgstr ""
+"Trechos podem ser um loop, uma nota única ou batida única, ou qualquer outro "
+"pedaço de som"
 
 #: ccextras/cc-music-submit.php:81
 msgid ""
 "that might be useful to a producer or remixer. You are encouraged to make a "
 "collection "
 msgstr ""
+"que seja útil para um produtor ou remixador. Nós incentivamos a criação de "
+"um grupo"
 
 #: ccextras/cc-music-submit.php:82
 msgid ""
 "of samples and upload them together in archive format (ZIP), however sound "
 "files are "
 msgstr ""
+"de trechos e o upload de todos eles em um arquivo único (Zip), mas arquivos "
+"de som"
 
 #: ccextras/cc-music-submit.php:83
 msgid "accepted as well. By far the most flexible "
-msgstr ""
+msgstr "também são aceitos. De longe, os trechos mais flexíveis"
 
 #: ccextras/cc-music-submit.php:84
 msgid ""
 "samples to work with are mono and have no effects for acoustic instruments "
 "and minimal "
 msgstr ""
+"para se trabalhar são os em mono e que não têm nenhum efeito para "
+"instrumentos acústicos e  e efeitos"
 
 #: ccextras/cc-music-submit.php:85
 msgid "effects for synthesized sounds."
-msgstr ""
+msgstr "mínimos para sons sintetizados."
 
 #: ccextras/cc-music-submit.php:88
 msgid "Use this form to submit samples"
-msgstr ""
+msgstr "Use este formulário para enviar trechos"
 
 #: ccextras/cc-music-submit.php:95
 msgid "Submit a Fully Mixed Track"
-msgstr ""
+msgstr "Enviar uma Faixa Totalmente Remixada"
 
 #: ccextras/cc-music-submit.php:97
 msgid ""
 "An original track that is fully mixed is <i>extremely unlikely</i> to be "
 "remixed because of "
 msgstr ""
+"Uma faixa original que foi completamente mixada <i>raramente</i> será "
+"remixada por causa do"
 
 #: ccextras/cc-music-submit.php:98
 msgid ""
 "the extra work the producer or remixer has to do the extract the parts they "
 "actually "
 msgstr ""
+"trabalho extra que o produtor ou remixador vai ter para extrair as partes "
+"que eles realmente"
 
 #: ccextras/cc-music-submit.php:99
 msgid "wish to use. Before uploading your track here, "
-msgstr ""
+msgstr "querem usar. Antes de fazer o upload de sua faixa aqui,"
 
 #: ccextras/cc-music-submit.php:100
 msgid ""
 "consider uploading to one of several free hosting sites sponsored by "
 "Creative Commons such "
 msgstr ""
+"considere fazer o upload em um dos vários sites de hospedagem grátis "
+"patrocinados pela Creative Commons, como"
 
 #: ccextras/cc-music-submit.php:101
 msgid ""
 "<a href=\"http://archive.org/audio\">Internet Archive</a> or <a href="
 "\"http://ourmedia.org\">"
 msgstr ""
+"<a href=\"http://archive.org/audio\">Internet Archive</a> ou <a href="
+"\"http://ourmedia.org\">"
 
 #: ccextras/cc-music-submit.php:102
 msgid ""
 "Our Media</a> both of which might be more appropriate places to post "
 "completely mixed "
 msgstr ""
+"Our Media</a>, que são lugares mais apropriados para publicar faixas "
+"completamente"
 
 #: ccextras/cc-music-submit.php:103
 msgid "tracks."
-msgstr ""
+msgstr "mixadas."
 
 #: ccextras/cc-music-submit.php:107
 msgid "Use this form to submit a fully mixed track"
-msgstr ""
+msgstr "Use este formulário para enviar uma faixa completamente mixada"
 
 #: ccextras/cc-mail.php:157
 msgid "To"
-msgstr ""
+msgstr "Para"
 
 #: ccextras/cc-mail.php:167
 msgid "Your email address"
-msgstr ""
+msgstr "Seu e-mail"
 
 #: ccextras/cc-mail.php:308
 msgid "Mail sent"
-msgstr ""
+msgstr "E-mail enviado"
 
 #: ccextras/cc-reviews.php:148
 msgid "Can not find that user"
-msgstr ""
+msgstr "Usuário não encontrado"
 
 #: ccextras/cc-reviews.php:156
 msgid "Can not find that upload, it may have been removed by the owner"
-msgstr ""
+msgstr "Upload não encontrado, pode ter sido removido pelo dono"
 
 #: ccextras/cc-reviews.php:181
 msgid "Recent Reviews"
-msgstr ""
+msgstr "Resenhas Recentes"
 
 #: ccextras/cc-reviews.php:232
 #, php-format
 msgid "Reviews for \"%s\""
-msgstr ""
+msgstr "Resenhas para \"%s\""
 
 #: ccextras/cc-reviews.php:259
 #, php-format
 msgid "<br />Reviews left for<br /> \"%s\""
-msgstr ""
+msgstr "<br />Resenhas deixadas para<br /> \"%s\""
 
 #: ccextras/cc-reviews.php:264
 #, php-format
 msgid "<br />Reviews left for<br /> %s"
-msgstr ""
+msgstr "<br />Resenhas deixadas para<br /> %s"
 
 #: ccextras/cc-reviews.php:271 ccextras/cc-reviews.php:289
 #: ccextras/cc-reviews.php:309 ccextras/cc-reviews.php:318
 #: ccextras/cc-reviews.php:407 ccextras/cc-reviews.php:639
 #: ccextras/cc-reviews.php:817 ccextras/cc-reviews.php:888
 msgid "Reviews"
-msgstr ""
+msgstr "Resenhas"
 
 #: ccextras/cc-reviews.php:343
 msgid "review integration is not enabled"
-msgstr ""
+msgstr "integração de resenha não está habilitada"
 
 #: ccextras/cc-reviews.php:416 ccextras/cc-reviews.php:725
 msgid "Write Review"
-msgstr ""
+msgstr "Escrever Resenha"
 
 #: ccextras/cc-reviews.php:490
 msgid "Can not find that upload."
-msgstr ""
+msgstr "Upload não encontrado."
 
 #: ccextras/cc-reviews.php:500
 msgid "create new"
-msgstr ""
+msgstr "criar novo"
 
 #: ccextras/cc-reviews.php:506
 #, php-format
 msgid "Write a Review for '%s'"
-msgstr ""
+msgstr "Escrever uma resenha para '%s'"
 
 #: ccextras/cc-reviews.php:525
 msgid "You've already reviewed this upload"
-msgstr ""
+msgstr "Você já resenhou este upload"
 
 #: ccextras/cc-reviews.php:537
 #, php-format
 msgid "%s's Review of '%s'"
-msgstr ""
+msgstr "%s's Resenha de  '%s'"
 
 #: ccextras/cc-reviews.php:609
 #, php-format
 msgid "%s has left %s1 review</a> "
-msgstr ""
+msgstr "%s deixou  %s1 resenha</a> "
 
 #: ccextras/cc-reviews.php:613
 #, php-format
 msgid "%s has left %s%d reviews</a> "
-msgstr ""
+msgstr "%s deixou %s%d resenhas</a> "
 
 #: ccextras/cc-reviews.php:629
 #, php-format
 msgid "and has been reviewed %sonce</a> "
-msgstr ""
+msgstr "e foi resenhado %suma vez</a> "
 
 #: ccextras/cc-reviews.php:633
 #, php-format
 msgid "and has been reviewed %s%d times</a> "
-msgstr ""
+msgstr "e foi resenhado %s%d vezes</a> "
 
 #: ccextras/cc-reviews.php:684
 #, php-format
 msgid "Reviews (%s)"
-msgstr ""
+msgstr "Resenhas (%s)"
 
 #: ccextras/cc-reviews.php:795
 #, php-format
 msgid "Reivews left for \"%s\" by %s"
-msgstr ""
+msgstr "Resenhas deixadas para \"%s\" por %s"
 
 #: ccextras/cc-reviews.php:812
 #, php-format
 msgid "Reviews left for %s"
-msgstr ""
+msgstr "Resenhas deixadas para %s"
 
 #: ccextras/cc-reviews.php:939
 msgid "Sorry, no reviews match"
-msgstr ""
+msgstr "Desculpe, resenhas não encontradas"
 
 #: ccextras/cc-nswf.php:72 mixter-lib/mixter-dump-listing.inc:35
 msgid "Not Safe For Work"
-msgstr ""
+msgstr "Não Apropriado Para o Trabalho (NSFW)"
 
 #: ccextras/cc-nswf.php:73
 msgid "Mark this upload as <a "
-msgstr ""
+msgstr "Marcar este upload como <a"
 
 #: ccextras/cc-nswf.php:74
 msgid "href=\"http://en.wikipedia.org/wiki/NSFW\" target=\"_blank\">NSFW</a> "
-msgstr ""
+msgstr "href=\"http://en.wikipedia.org/wiki/NSFW\" target=\"_blank\">NSFW</a>"
 
 #: ccextras/cc-nswf.php:75
 msgid "if it contains questionable language."
-msgstr ""
+msgstr "se contém linguagem inapropriada."
 
 #: ccextras/cc-stats.php:48
 #, php-format
 msgid "%s has no remixes"
-msgstr ""
+msgstr "%s não tem remixes"
 
 #: ccextras/cc-stats.php:54
 #, php-format
 msgid "%s has 1 remix"
-msgstr ""
+msgstr "%s tem um remix"
 
 #: ccextras/cc-stats.php:58
 #, php-format
 msgid "%s has %d remixes"
-msgstr ""
+msgstr "%s tem %d remixes"
 
 #: ccextras/cc-stats.php:64
 msgid " and has not been remixed"
-msgstr ""
+msgstr "e não foi remixado"
 
 #: ccextras/cc-stats.php:70
 msgid " and has been remixed once"
-msgstr ""
+msgstr "e foi remixado uma vez"
 
 #: ccextras/cc-stats.php:74
 #, php-format
 msgid " and has been remixed %d times"
-msgstr ""
+msgstr "e foi remixado %d vezes"
 
 #: ccextras/cc-stats.php:79
 msgid "Stats"
-msgstr ""
+msgstr "Estatísticas"
 
 #: ccextras/cc-stats.php:121
 msgid "ccMixter Charts [beta]"
-msgstr ""
+msgstr "As mais do ccMixter [beta]"
 
 #: ccextras/cc-stats.php:189
 msgid "ccMixter stats [beta]"
-msgstr ""
+msgstr "Estatísticas ccMixter  [beta]"
 
 #: ccextras/cc-topics.php:122 ccextras/cc-topics.php:283
 #: ccextras/cc-topics.php:469
 msgid "Reply"
-msgstr ""
+msgstr "Responder"
 
 #: ccextras/cc-topics.php:130
 msgid "Text"
-msgstr ""
+msgstr "Texto"
 
 #: ccextras/cc-topics.php:225
 msgid "Posts"
-msgstr ""
+msgstr "Posts"
 
 #: ccextras/cc-topics.php:259
 msgid "Reply with quote"
-msgstr ""
+msgstr "Responder com citação"
 
 #: ccextras/cc-topics.php:275
 msgid "Reply to yourself"
-msgstr ""
+msgstr "Responder para você mesmo"
 
 #: ccextras/cc-topics.php:279
 #, php-format
 msgid "Reply to %s"
-msgstr ""
+msgstr "Responder para %s"
 
 #: ccextras/cc-topics.php:421
 msgid "Can not find that topic, it might have been deleted by the author"
-msgstr ""
+msgstr "Tópico não encontrado, deve ter sido apagado pelo autor"
 
 #: ccextras/cc-topics.php:533
 msgid "Deleting Topic"
-msgstr ""
+msgstr "Deletando Tópico"
 
 #: ccextras/cc-topics.php:643
 #, php-format
 msgid "Edit topic: '%s'"
-msgstr ""
+msgstr "Editar tópico: '%s'"
 
 #: ccextras/cc-user-info-x.php:68
 msgid "Your legal name"
-msgstr ""
+msgstr "Seu nome completo"
 
 #: ccextras/cc-user-info-x.php:72
 msgid "Phone Number"
-msgstr ""
+msgstr "Telefone"
 
 #: ccextras/cc-user-info-x.php:73
 msgid "A phone number to reach you"
-msgstr ""
+msgstr "Telefone de recados"
 
 #: ccextras/cc-user-info-x.php:77
 msgid "Country"
-msgstr ""
+msgstr "País"
 
 #: ccextras/cc-user-info-x.php:78
 msgid "The country of your legal residence"
-msgstr ""
+msgstr "País de residência"
 
 #: ccextras/cc-user-info-x.php:82
 msgid "Date of birth"
-msgstr ""
+msgstr "Data de nascimento"
 
 #: ccextras/cc-user-info-x.php:83
 msgid "You must be 15 or older to be elligable"
-msgstr ""
+msgstr "Você deve ter 15 anos ou mais para participar"
 
 #: ccextras/cc-user-info-x.php:150
 msgid "Contest Entry User Information"
-msgstr ""
+msgstr "Informações do Usuário para Inscrição no Concurso"
 
 #: ccextras/cc-user-info-x.php:227
 msgid "Contest Entry Info"
-msgstr ""
+msgstr "Informação de Inscrição no Concurso"
 
 #: ccextras/cc-user-info-x.php:228
 msgid "Edit your personal contest information"
-msgstr ""
+msgstr "Edite suas informações pessoais para o concurso"
 
 #: ccextras/cc-notify.inc:67
 msgid "Notify me by email when:"
-msgstr ""
+msgstr "Me avisar por e-mail quando:"
 
 #: ccextras/cc-notify.inc:93
 msgid "My Notifications"
-msgstr ""
+msgstr "Meus Avisos"
 
 #: ccextras/cc-notify.inc:106
 #, php-format
 msgid "%s has been remixed"
-msgstr ""
+msgstr "%s for remixado"
 
 #: ccextras/cc-notify.inc:108
 #, php-format
 msgid "%s uploads something new"
-msgstr ""
+msgstr "%s subir material novo"
 
 #: ccextras/cc-notify.inc:118
 msgid "I've been remixed"
-msgstr ""
+msgstr "Eu for remixado"
 
 #: ccextras/cc-notify.inc:120
 msgid "I've been reviewed"
-msgstr ""
+msgstr "Eu for resenhado"
 
 #: ccextras/cc-notify.inc:122
 msgid "I've been replied to"
-msgstr ""
+msgstr "Eu for respondido"
 
 #: ccextras/cc-notify.inc:124
 msgid "I've been rated"
-msgstr ""
+msgstr "Eu for avaliado"
 
 #: ccextras/cc-notify.inc:174
 msgid "Notifications have been updated"
-msgstr ""
+msgstr "Avisos atualizados com sucesso"
 
 #: ccextras/cc-notify.inc:213
 #, php-format
@@ -1549,10 +1620,17 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
+"\n"
+"\n"
+"POR FAVOR NÃO RESPONDA ESTE E-MAIL\n"
+"\n"
+"Este é um aviso de que  \"%s\" acabou de receber uma nota %d.00\n"
+"\n"
+"%s\n"
 
 #: ccextras/cc-notify.inc:225
 msgid "Ratings notification"
-msgstr ""
+msgstr "Aviso de avaliação"
 
 #: ccextras/cc-notify.inc:246
 #, php-format
@@ -1565,10 +1643,17 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
+"\n"
+"\n"
+"POR FAVOR NÃO RESPONDA ESTE E-MAIL\n"
+"\n"
+"Este é um aviso de que \"%s\" foi resenhado por %s\n"
+"\n"
+"%s\n"
 
 #: ccextras/cc-notify.inc:259
 msgid "Review notification"
-msgstr ""
+msgstr "Aviso de resenha"
 
 #: ccextras/cc-notify.inc:349
 #, php-format
@@ -1582,11 +1667,19 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
+"\n"
+"\n"
+"POR FAVOR NÃO RESPONDA ESTE E-MAIL\n"
+"\n"
+"Este é um aviso de resposta de resenha \n"
+"\"%s\":\n"
+"\n"
+"%s\n"
 
 #: ccextras/cc-notify.inc:434
 #, php-format
 msgid "Upload by %s"
-msgstr ""
+msgstr "Upload de %s"
 
 #: ccextras/cc-notify.inc:435
 #, php-format
@@ -1601,10 +1694,19 @@ msgid ""
 "%s\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"POR FAVOR NÃO RESPONDA ESTE E-MAIL\n"
+"\n"
+"Este é um aviso de que %s acaba de subir material novo para %s\n"
+"\n"
+"\"%s\"\n"
+"%s\n"
+"\n"
 
 #: ccextras/cc-notify.inc:452
 msgid "which uses samples from:\n"
-msgstr ""
+msgstr "que usa samples de:\n"
 
 #: ccextras/cc-notify.inc:461
 #, php-format
@@ -1613,217 +1715,233 @@ msgid ""
 "Thank you,\n"
 "%s"
 msgstr ""
+"\n"
+"Obrigado,\n"
+"%s"
 
 #: ccextras/cc-notify.php:129
 msgid "Edit My Notifications"
-msgstr ""
+msgstr "Editar Meus Avisos"
 
 #: ccextras/cc-notify.php:134
 #, php-format
 msgid "Get Notified About %s"
-msgstr ""
+msgstr "Receba Avisos Sobre %s"
 
 #: ccextras/cc-notify.php:137
 msgid "Notifcations"
-msgstr ""
+msgstr "Avisos"
 
 #: ccextras/cc-forums.php:123
 msgid "New Topic Text"
-msgstr ""
+msgstr "Texto do Novo Tópico"
 
 #: ccextras/cc-forums.php:157
 #, php-format
 msgid "%s has posted <a href=\"%s\">%d forum messages</a>"
-msgstr ""
+msgstr "%s colocou <a href=\"%s\">%d mensagens no fórum</a>"
 
 #: ccextras/cc-forums.php:159 ccextras/cc-forums.inc:512
 msgid "Forum posts"
-msgstr ""
+msgstr "Mensagens do fórum"
 
 #: ccextras/cc-forums-search.inc:62
 msgid "Forum Topics"
-msgstr ""
+msgstr "Tópicos do Fórum"
 
 #: ccextras/cc-forums-search.inc:115
 msgid "Sorry, no topics match"
-msgstr ""
+msgstr "Desculpe, tópicos não encontrados"
 
 #: ccextras/cc-forums-admin.inc:170
 #, php-format
 msgid "Move topic: %s"
-msgstr ""
+msgstr "Mover tópico: %s"
 
 #: ccextras/cc-forums-admin.inc:214
 msgid "Change Thread Sticky Flag"
-msgstr ""
+msgstr "Mudar Sinal de Acompanhamento de Discussão"
 
 #: ccextras/cc-forums-admin.inc:225
 msgid "Change Thread Open Status"
-msgstr ""
+msgstr "Mudar Status de Discussão Aberta"
 
 #: ccextras/cc-forums.inc:154
 msgid "Post new topic"
-msgstr ""
+msgstr "Inserir novo tópico"
 
 #: ccextras/cc-forums.inc:224
 msgid "Forum"
-msgstr ""
+msgstr "Fórum"
 
 #: ccextras/cc-forums.inc:238
 msgid "Forums"
-msgstr ""
+msgstr "Fóruns"
 
 #: ccextras/cc-forums.inc:336
 msgid "Post New Topic"
-msgstr ""
+msgstr "Inserir Novo Tópico"
 
 #: ccextras/cc-forums.inc:390
 msgid "Thread Missing"
-msgstr ""
+msgstr "Discussão não encontrada"
 
 #: ccextras/cc-forums.inc:402
 msgid "You must have admin rights to see this forum"
-msgstr ""
+msgstr "Você deve ter privilégios de administrador para ver este fórum"
 
 #: ccextras/cc-forums.inc:404
 msgid "You must be logged in to see this forum"
-msgstr ""
+msgstr "Você deve estar logado para ver este fórum"
 
 #: ccextras/cc-forums.inc:406
 msgid "You do have proper permissions to see this forum"
-msgstr ""
+msgstr "Você não tem autorização correta para ver este fórum"
 
 #: ccextras/cc-forums.inc:408
 msgid "Restricted Access"
-msgstr ""
+msgstr "Acesso Restrito"
 
 #: ccextras/cc-forums.inc:420
 msgid "Thread is closed to new comments"
-msgstr ""
+msgstr "Discussão fechada para novos comentários"
 
 #: ccextras/cc-forums.inc:425
 msgid "Post topic reply"
-msgstr ""
+msgstr "Inserir resposta de tópico"
 
 #: ccextras/cc-forums.inc:431
 msgid "Move thread"
-msgstr ""
+msgstr "Mover discussão"
 
 #: ccextras/cc-forums.inc:433
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: ccextras/cc-forums.inc:433
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: ccextras/cc-forums.inc:438
 msgid "Unstick"
-msgstr ""
+msgstr "Desvincular"
 
 #: ccextras/cc-forums.inc:438
 msgid "Stick"
-msgstr ""
+msgstr "Vincular"
 
 #: ccextras/cc-forums.inc:498
 #, php-format
 msgid "Reply to: \"%s\""
-msgstr ""
+msgstr "Responder para: \"%s\""
 
 #: ccextras/cc-forums.inc:505
 #, php-format
 msgid "Forum Posts for %s"
-msgstr ""
+msgstr "Mensagens de Fórum para %s"
 
 #: ccextras/cc-forums.inc:539
 #, php-format
 msgid "Feed for topics by %s"
-msgstr ""
+msgstr "Feed de tópicos por %s"
 
 #: ccextras/cc-forums.inc:547
 #, php-format
 msgid "Feed for topic: %s"
-msgstr ""
+msgstr "Feed de tópico: %s"
 
 #: ccextras/cc-forums.inc:551
 msgid "Forums Feed"
-msgstr ""
+msgstr "Feeds do Fórum"
 
 #: ccextras/cc-forums.inc:567
 msgid "Contents requires login"
-msgstr ""
+msgstr "Conteúdos exigem login"
 
 #: mixter-lib/mixter-dump-listing.inc:28
 msgid "by:"
-msgstr ""
+msgstr "por:"
 
 #: mixter-lib/mixter-dump-listing.inc:29
 msgid "date:"
-msgstr ""
+msgstr "data:"
 
 #: mixter-lib/mixter-dump-listing.inc:30
 msgid "tags:"
-msgstr ""
+msgstr "tags:"
 
 #: mixter-lib/mixter-dump-listing.inc:31
 msgid "ratings:"
-msgstr ""
+msgstr "notas:"
 
 #: mixter-lib/mixter-dump-listing.inc:32
 msgid "rate"
-msgstr ""
+msgstr "vote"
 
 #: mixter-lib/mixter-dump-listing.inc:33
 msgid "license:"
-msgstr ""
+msgstr "licença:"
 
 #: mixter-lib/mixter-dump-listing.inc:34
 msgid "This upload might be "
-msgstr ""
+msgstr "Este upload pode ser"
 
 #: mixter-lib/mixter-dump-listing.inc:36
 msgid "Editorial pick..."
-msgstr ""
+msgstr "Escolha dos editores..."
 
 #: mixter-lib/mixter-dump-listing.inc:37
 msgid "Uses samples from:"
-msgstr ""
+msgstr "Usa trechos de:"
 
 #: mixter-lib/mixter-dump-listing.inc:38
 msgid "More..."
-msgstr ""
+msgstr "Mais..."
 
 #: mixter-lib/mixter-dump-listing.inc:39
 msgid "(no one has sampled this)"
-msgstr ""
+msgstr "(ninguém usou estes trechos)"
 
 #: mixter-lib/mixter-dump-listing.inc:40
 msgid "Samples are used in:"
-msgstr ""
+msgstr "Trechos são usados em:"
 
 #: mixter-lib/mixter-dump-listing.inc:41
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 #: mixter-lib/mixter-dump-listing.inc:42
-msgid "Length:"
-msgstr ""
+#, fuzzy
+msgid "length:"
+msgstr "Duração:"
 
 #: mixter-lib/mixter-dump-listing.inc:43
 msgid "BPM:"
-msgstr ""
+msgstr "BPM:"
 
 #: mixter-lib/mixter-dump-listing.inc:44
 msgid "IE: Right-click select 'Save Target As'"
 msgstr ""
+"IE: Clique com o botão direito do mouse e selecione 'Salvar destino como...'"
 
 #: mixter-lib/mixter-dump-listing.inc:45
 msgid "Mac: Control-click select 'Save Link As'"
-msgstr ""
+msgstr "Mac: clique apertando control e escolha \"Salvar link como\""
 
 #: mixter-lib/mixter-dump-listing.inc:46
 msgid "Flag this upload for possible violation of terms"
-msgstr ""
+msgstr "Denuncie este upload por possível violação de regras"
+
+#: mixter-lib/mixter-dump-listing.inc:47
+#, fuzzy
+msgid "featuring:"
+msgstr "notas:"
 
 #~ msgid "Uploads remixed by "
 #~ msgstr "Uploads remixados por"
+
+#~ msgid "Syndicate"
+#~ msgstr "Distribuir"
+
+#~ msgid "Type in characters above"
+#~ msgstr "Digite os caracteres acima"
