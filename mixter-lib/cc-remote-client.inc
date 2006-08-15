@@ -180,7 +180,7 @@ END;
     {
         $curl = ccl( 'admin', 'remoting', 'manage', $upart, $fid );
         $spname = _cc_get_arlink_name($fid);
-        $jurl = "cc_get_data('$curl', '$spname', '...');";
+        $jurl = "cc_get_data('$curl', '$spname', '...'); return false;";
         return "<a onclick=\"$jurl\" href='#' style=\"color:green;\">[ $text ]</a>";
     }
 
