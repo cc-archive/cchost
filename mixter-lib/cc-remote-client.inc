@@ -166,6 +166,29 @@ END;
         $files->Update($args);
     }
 
+    function _cc_get_remove_link($fid)
+    {
+        return _cc_get_arlink($fid,'remove','Remove');
+    }
+
+    function _cc_get_add_link($fid)
+    {
+        return _cc_get_arlink($fid,'add','Add');
+    }
+
+    function _cc_get_arlink($fid,$upart,$text)
+    {
+        $curl = ccl( 'admin', 'remoting', 'manage', $upart, $fid );
+        $spname = _cc_get_arlink_name($fid);
+        $jurl = "cc_get_data('$curl', '$spname', '...');";
+        return "<a onclick=\"$jurl\" href='#' style=\"color:green;\">[ $text ]</a>";
+    }
+
+    function _cc_get_arlink_name($fid)
+    {
+        return 'arspan_' . $fid;
+    }
+
     function cc_remote_manage($cmd='',$id='')
     {
         $tagfilter = '';
@@ -174,13 +197,13 @@ END;
         {
             case 'remove':
                 cc_remote_remove($id);
-                $msg = _('file removed from queue');
-                break;
+                print( _cc_get_add_link($id) );
+                exit;
 
            case 'add':
                 cc_remote_add($id);
-                $msg = _('file added to queue');
-                break;
+                print( _cc_get_remove_link($id) );
+                exit;
 
            case 'unremote':
                 cc_remote_unremote($id);
@@ -234,18 +257,14 @@ END;
             for( $n = 0; $n < $fcount; $n++ )
             {
                 $F =& $R['files'][ $n ];
-                $html .= "<tr>\n  <td>"; 
-                if( in_array($F['file_id'],$queue) )
-                {
-                    $curl = ccl( 'admin', 'remoting', 'manage', 'remove', $F['file_id'] );
-                    $html .= "<a href=\"$curl\" style=\"color:green;\">[ Remove ]</a>";
-                }
+                $fid = $F['file_id'];
+                $spname = _cc_get_arlink_name($fid);
+                $html .= "<tr>\n  <td><span id=\"$spname\">"; 
+                if( in_array($fid,$queue) )
+                    $ar_link = _cc_get_remove_link($fid);
                 else
-                {
-                    $curl = ccl( 'admin', 'remoting', 'manage', 'add', $F['file_id'] );
-                    $html .= "<a href=\"$curl\"  style=\"color:green;\">[ Add ]</a>";
-                }
-                $html .= "</td>\n   <td>";
+                    $ar_link = _cc_get_add_link($fid);
+                $html .= "$ar_link</span></td>\n   <td>";
                 if( !empty($F['file_extra']['remote_url']) )
                 {
                     if( !empty($R['stream_link']) )
