@@ -76,6 +76,7 @@ require_once( 'cclib/cc-editorials.php' );
 require_once( 'cclib/cc-pools-ui.php' );
 require_once( 'cclib/cc-submit.php' );
 require_once( 'cclib/cc-user-admin.php' );
+require_once( 'cclib/cc-language.php' );
 
 $cc_extras_dir = empty($_SERVER['CC_EXTRAS_DIR']) ? 'ccextras' : $_SERVER['CC_EXTRAS_DIR'];
 

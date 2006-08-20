@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-05 11:54-0700\n"
+"POT-Creation-Date: 2006-08-19 23:21-0700\n"
 "PO-Revision-Date: 2006-06-28 12:00+0000\n"
 "Last-Translator: Friedemann Bochow <f.bochow@milchhof.net>\n"
 "Language-Team: Deutsch <f.bochow@milchhof.net>\n"
@@ -139,65 +139,65 @@ msgstr "&Auml;nderungen gespeichert"
 msgid "Upload succeeded"
 msgstr "Upload erfolgreich beendet"
 
-#: cclib/cc-contest.php:296
+#: cclib/cc-contest.php:297
 msgid " is currently open and taking submissions."
 msgstr " ist momentan offen f&uuml;r Einsendungen."
 
-#: cclib/cc-contest.php:300
+#: cclib/cc-contest.php:301
 msgid "Submissions allowed until: "
 msgstr "Einsendungen bis: "
 
-#: cclib/cc-contest.php:310
+#: cclib/cc-contest.php:311
 msgid "(Only logged in users can submit entries.)"
 msgstr "(nur eingeloggte User d&uuml;rfen Beitr&uuml;ge schicken.)"
 
-#: cclib/cc-contest.php:318
+#: cclib/cc-contest.php:319
 msgid " is not taking submissions any more."
 msgstr " nimmt keine Einsendungen mehr an."
 
-#: cclib/cc-contest.php:322
+#: cclib/cc-contest.php:323
 msgid "Submissions stopped after: "
 msgstr "Eibnsendungen gestoppt nach: "
 
-#: cclib/cc-contest.php:333
+#: cclib/cc-contest.php:334
 msgid "Voting is open until "
 msgstr "Abstimmung ist offen bis "
 
-#: cclib/cc-contest.php:482
+#: cclib/cc-contest.php:495
 msgid "Browse Contests"
 msgstr "Wettbewerbe durchsuchen"
 
-#: cclib/cc-contest.php:530
+#: cclib/cc-contest.php:543
 msgid "<h3>This contest does not support online voting</h3>"
 msgstr "<h3>Dieser Wettbewerb unterst&uuml;tzt keine Online-Abstimmung</h3>"
 
-#: cclib/cc-contest.php:569
+#: cclib/cc-contest.php:582
 msgid "<h3>Voting will open after submission period has ended</h3>"
 msgstr "<h3>Die Abstimmung wird nach dem Einsendeschluss er&ouml;ffnet</h3>"
 
-#: cclib/cc-contest.php:575
+#: cclib/cc-contest.php:588
 msgid "<h3>Poll Results</h3>"
 msgstr "<h3>Umfrage-Ergebnisse</h3>"
 
-#: cclib/cc-contest.php:584
+#: cclib/cc-contest.php:597
 msgid "<h3>Voting is only open to registered users</h3>"
 msgstr "<h3>Abstimmung nur f&uuml;r registrierte User</h3>"
 
-#: cclib/cc-contest.php:586
+#: cclib/cc-contest.php:599
 msgid "<h3>Results will be shown here after the voting period is closed</h3>"
 msgstr "<h3>Die Ergebnisse werden nach Ende der Abstimmung gezeigt</h3>"
 
-#: cclib/cc-contest.php:609
+#: cclib/cc-contest.php:622
 #, php-format
 msgid "Submit to: '%s'"
 msgstr "Senden an: '%s'"
 
-#: cclib/cc-contest.php:670
+#: cclib/cc-contest.php:683
 #, php-format
 msgid "Your upload has been entered in '%s'"
 msgstr "Dein Upload wurde eingetragen in '%s'"
 
-#: cclib/cc-contest.php:822
+#: cclib/cc-contest.php:835
 msgid "This contest entry is only visible to the owner and admins."
 msgstr "Dieser Wettbewerb ist nur f&uuml;r den Besitzer und Admins sichtbar."
 
@@ -330,135 +330,136 @@ msgstr "Datei anf&uuml;gen an '%s'"
 msgid "Submit"
 msgstr "Senden"
 
-#: cclib/cc-form.php:762
+#: cclib/cc-form.php:772
 msgid "can not be left blank"
 msgstr "muss ausgef&uuml;llt werden"
 
-#: cclib/cc-form.php:1429
+#: cclib/cc-form.php:1439
 msgid "Date is out of range"
 msgstr "Datum veraltet"
 
-#: cclib/cc-form.php:1437
+#: cclib/cc-form.php:1447
 msgid "Not a valid date"
 msgstr "Datum ung&uuml;ltig"
 
-#: cclib/cc-form.php:1931 cclib/cc-form.php:1932
+#: cclib/cc-form.php:1941 cclib/cc-form.php:1942
 msgid "File too big"
 msgstr "Datei zu gro&szlig;"
 
-#: cclib/cc-form.php:1933
+#: cclib/cc-form.php:1943
 msgid "File was not fully uloaded"
 msgstr "Datei nicht vollst&auml;ndig hochgeladen"
 
-#: cclib/cc-form.php:1934
+#: cclib/cc-form.php:1944
 msgid "Missing file name"
 msgstr "Dateiname fehlt"
 
-#: cclib/cc-login.php:128 cclib/cc-login.php:263 cclib/cc-login.php:318
+#: cclib/cc-login.php:116
+msgid ""
+"Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) "
+"has a line through it, the D does not."
+msgstr ""
+
+#: cclib/cc-login.php:136 cclib/cc-login.php:271 cclib/cc-login.php:326
 msgid "Login Name"
 msgstr "Login-Name"
 
-#: cclib/cc-login.php:130
+#: cclib/cc-login.php:138
 msgid "Must be letter, numbers or underscore (_), no longer than 25 characters"
 msgstr ""
 "Buchstaben, Ziffern oder Unterstrich (_), nicht l&auml;nger als 25 Zeichen"
 
-#: cclib/cc-login.php:133 cclib/cc-user.php:214
+#: cclib/cc-login.php:141 cclib/cc-user.php:214
 msgid "e-mail"
 msgstr "e-mail"
 
-#: cclib/cc-login.php:135 cclib/cc-user.php:215
+#: cclib/cc-login.php:143 cclib/cc-user.php:215
 msgid "This address will never show on the site but is "
 msgstr "Diese Adresse wird niemals angezeigt, ist aber erforderlich, "
 
-#: cclib/cc-login.php:136 cclib/cc-user.php:216
+#: cclib/cc-login.php:144 cclib/cc-user.php:216
 msgid "required for creating a new account and password "
 msgstr "um die Wiederherstellung f&uuml;r Account und Passwort anzulegen "
 
-#: cclib/cc-login.php:137 cclib/cc-user.php:217
+#: cclib/cc-login.php:145 cclib/cc-user.php:217
 msgid "recovery in case you forget it."
 msgstr "fr den Fall, dass Du es vergisst."
 
-#: cclib/cc-login.php:147 cclib/cc-login.php:268 cclib/cc-user.php:209
+#: cclib/cc-login.php:155 cclib/cc-login.php:276 cclib/cc-user.php:209
 msgid "Password"
 msgstr "Passwort"
 
-#: cclib/cc-login.php:149
+#: cclib/cc-login.php:157
 msgid "Must be at least 5 characters"
 msgstr "mindestens 5 Zeichen"
 
-#: cclib/cc-login.php:161 ccextras/cc-flag.php:75 ccextras/cc-mail.php:201
+#: cclib/cc-login.php:169 ccextras/cc-flag.php:75 ccextras/cc-mail.php:201
 #: ccextras/cc-topics.php:106
 msgid "Security Key"
 msgstr "Sicherheitsschl&uuml;ssel"
 
-#: cclib/cc-login.php:164 ccextras/cc-flag.php:78 ccextras/cc-mail.php:204
-#: ccextras/cc-topics.php:109
-msgid "Type in characters above"
-msgstr "Bitte die oben stehenden Zeichen eingeben"
-
-#: cclib/cc-login.php:172 cclib/cc-login.php:291
+#: cclib/cc-login.php:180 cclib/cc-login.php:299
 msgid "Lost Password?"
 msgstr "Passwort vergessen?"
 
-#: cclib/cc-login.php:175 cclib/cc-login.php:281 cclib/cc-login.php:294
-#: cclib/cc-login.php:325
+#: cclib/cc-login.php:183 cclib/cc-login.php:289 cclib/cc-login.php:302
+#: cclib/cc-login.php:333
 msgid "Click Here"
 msgstr "Hier klicken"
 
-#: cclib/cc-login.php:181 cclib/cc-login.php:373
+#: cclib/cc-login.php:189 cclib/cc-login.php:381
 msgid "Register"
 msgstr "Registrieren"
 
-#: cclib/cc-login.php:216
+#: cclib/cc-login.php:224
 msgid " must letters, numbers or underscore (_)"
 msgstr " nur Buchstaben, Ziffern oder Unterstrich (_)"
 
-#: cclib/cc-login.php:222
+#: cclib/cc-login.php:230
 msgid " must be less than 25 characters"
 msgstr " es m&uuml;ssen weniger als 25 Zeichen sein"
 
-#: cclib/cc-login.php:237
+#: cclib/cc-login.php:245
 msgid "That username is already in use or is reserved by the system"
 msgstr "Dieser User-Name wird bereits verwendet oder ist vom System reserviert"
 
-#: cclib/cc-login.php:273
+#: cclib/cc-login.php:281
 msgid "Remember Me"
 msgstr "Merken"
 
-#: cclib/cc-login.php:278 cclib/cc-login.php:323
+#: cclib/cc-login.php:286 cclib/cc-login.php:331
 msgid "New User?"
 msgstr "Neuer User?"
 
-#: cclib/cc-login.php:300 cclib/cc-login.php:381 cclib/cc-login.php:527
+#: cclib/cc-login.php:308 cclib/cc-login.php:389 cclib/cc-login.php:535
 msgid "Log In"
 msgstr "Einloggen"
 
-#: cclib/cc-login.php:330
+#: cclib/cc-login.php:338
 msgid "Retrieve Password"
 msgstr "Passwort wiederfinden"
 
-#: cclib/cc-login.php:414
+#: cclib/cc-login.php:422
 msgid "Create A New Account"
 msgstr "Neuen Account anlegen"
 
-#: cclib/cc-login.php:416
+#: cclib/cc-login.php:424
 msgid "This site requires cookies to be enabled in your browser"
 msgstr "Diese Seite braucht Cookies, um vom Browser dargestellt zu werden"
 
-#: cclib/cc-login.php:503
+#: cclib/cc-login.php:511
 msgid "Log Out"
 msgstr "Ausloggen"
 
-#: cclib/cc-login.php:524
+#: cclib/cc-login.php:532
 msgid "You new login information has been sent to your email address."
 msgstr "Die neuen Login-Daten wurden an Deine email-Adresse gesendet."
 
-#: cclib/cc-login.php:561
+#: cclib/cc-login.php:569
 msgid "This installation does not support this feature"
 msgstr "Dieses Feature wird nicht von dieser Installation untersttzt"
 
-#: cclib/cc-login.php:565
+#: cclib/cc-login.php:573
 msgid "Recover Lost Password"
 msgstr "Verlorenes Passwort wiederfinden"
 
@@ -570,7 +571,7 @@ msgstr "Stream"
 msgid "Done Editing"
 msgstr "Bearbeitung fertig"
 
-#: cclib/cc-remix.php:128
+#: cclib/cc-remix.php:128 ccextras/cc-howididit.php:89
 msgid "Artist"
 msgstr "K&uuml;nstler"
 
@@ -587,7 +588,7 @@ msgstr "Vollst&auml;ndige Suche"
 msgid "Editing Remixes for '%s'"
 msgstr "Remixe bearbeiten f&uuml;r '%s'"
 
-#: cclib/cc-remix.php:312
+#: cclib/cc-remix.php:315
 #, php-format
 msgid "Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"
 msgstr "Remix %s erfolgreich beendet (Ergebnisse <a href=\"%s\">hier</a>)"
@@ -682,23 +683,23 @@ msgstr "Dateien senden"
 msgid "Submit Forms"
 msgstr "Formulare senden"
 
-#: cclib/cc-tags.php:537
+#: cclib/cc-tags.php:549
 msgid "Tags "
 msgstr "Tags "
 
-#: cclib/cc-tags.php:613
+#: cclib/cc-tags.php:634
 msgid "Turn System Tags ON"
 msgstr "System-Tags auf EIN setzen"
 
-#: cclib/cc-tags.php:618
+#: cclib/cc-tags.php:639
 msgid "Turn System Tags OFF"
 msgstr "System-Tags auf AUS setzen"
 
-#: cclib/cc-tags.php:632 cclib/cc-upload.php:72
+#: cclib/cc-tags.php:653 cclib/cc-upload.php:72
 msgid "Tags"
 msgstr "Tags"
 
-#: cclib/cc-tags.php:668
+#: cclib/cc-tags.php:689
 msgid "Browse Tags"
 msgstr "Tags durchsuchen"
 
@@ -760,7 +761,7 @@ msgstr "G&uuml;ltige Dateitypen"
 msgid "File"
 msgstr "Datei"
 
-#: cclib/cc-uploadapi.php:953
+#: cclib/cc-uploadapi.php:955
 msgid "There was error in the file format<br />"
 msgstr "Fehler im Dateiformat"
 
@@ -808,7 +809,7 @@ msgstr "URL Homepage"
 msgid "Make sure it starts with http://"
 msgstr "&Uuml;berpr&uuml;fe, ob sie mit http:// beginnt"
 
-#: cclib/cc-user.php:242 ccextras/cc-language.php:432
+#: cclib/cc-user.php:242 cclib/cc-language.php:432
 msgid "Default Language:"
 msgstr "Standard-Sprache:"
 
@@ -1027,72 +1028,87 @@ msgstr "Datei-Import erfolgreich beendet. Ergebnisse <a href=\"%s\">hier</a>."
 msgid "Browse 'How I Did It'"
 msgstr "'Wie habe ich's gemacht' durchsuchen"
 
-#: ccextras/cc-howididit.php:103 ccextras/cc-howididit.php:229
+#: ccextras/cc-howididit.php:92
+#, fuzzy
+msgid "Date"
+msgstr "Bewerten"
+
+#: ccextras/cc-howididit.php:95
+#, fuzzy
+msgid "Upload Name"
+msgstr "Hochladen"
+
+#: ccextras/cc-howididit.php:104
+#, fuzzy
+msgid "Sort by:"
+msgstr "Quellen-Typ"
+
+#: ccextras/cc-howididit.php:140 ccextras/cc-howididit.php:266
 msgid "How I Did It"
 msgstr "Wie habe ich's gemacht"
 
-#: ccextras/cc-howididit.php:133
+#: ccextras/cc-howididit.php:170
 msgid "Edit 'How I Did It' for "
 msgstr "'Wie habe ich's gemacht' bearbeiten f&uuml;r "
 
-#: ccextras/cc-howididit.php:163
+#: ccextras/cc-howididit.php:200
 #, php-format
 msgid "Changes saved. Click <a href=\"%s\">here</a> to see results"
 msgstr "&Auml;nderungen gespeichert. Ergebnisse <a href=\"%s\">hier</a>"
 
-#: ccextras/cc-howididit.php:189
+#: ccextras/cc-howididit.php:226
 msgid "Tools I Used"
 msgstr "verwendete Tools"
 
-#: ccextras/cc-howididit.php:190
+#: ccextras/cc-howididit.php:227
 msgid "What software, hardware, plug-ins, etc. did you use?"
 msgstr "Welche Sofware, Hardware, Plug-Ins etc. hast Du verwendet?"
 
-#: ccextras/cc-howididit.php:194
+#: ccextras/cc-howididit.php:231
 msgid "Samples I Used"
 msgstr "Samples, die ich verwendet habe"
 
-#: ccextras/cc-howididit.php:195
+#: ccextras/cc-howididit.php:232
 msgid "Where did you find your samples? What kind of license are they under?"
 msgstr "Wo hast Du Deine Samples gefunden? Unter welcher Lizenz laufen sie?"
 
-#: ccextras/cc-howididit.php:199
+#: ccextras/cc-howididit.php:236
 msgid "Original Samples"
 msgstr "Original-Samples"
 
-#: ccextras/cc-howididit.php:200
+#: ccextras/cc-howididit.php:237
 msgid "What material did you create just for this work?"
 msgstr "Welches Material hast Du nur fr dieses St&uuml;ck geschaffen?"
 
-#: ccextras/cc-howididit.php:204
+#: ccextras/cc-howididit.php:241
 msgid "Process"
 msgstr "Vorgang"
 
-#: ccextras/cc-howididit.php:205
+#: ccextras/cc-howididit.php:242
 msgid "How did you put all the pieces together?"
 msgstr "Wie hast Du alle Teile zusammengesetzt?"
 
-#: ccextras/cc-howididit.php:209
+#: ccextras/cc-howididit.php:246
 msgid "Other Notes"
 msgstr "Andere Bemerkungen"
 
-#: ccextras/cc-howididit.php:210
+#: ccextras/cc-howididit.php:247
 msgid "Share your feelings about the experience of creating this work"
 msgstr "Deine Erfahrungen aus dieser Arbeit"
 
-#: ccextras/cc-howididit.php:249
+#: ccextras/cc-howididit.php:286
 msgid "Edit \"How I Did It\""
 msgstr "'Wie habe ich's gemacht?' bearbeiten"
 
-#: ccextras/cc-language.php:303
+#: cclib/cc-language.php:303
 msgid "default"
 msgstr "Standard"
 
-#: ccextras/cc-language.php:425
+#: cclib/cc-language.php:425
 msgid "Default Locale Preference:"
 msgstr "Lokale Standard-Einstellung:"
 
-#: ccextras/cc-language.php:438
+#: cclib/cc-language.php:438
 msgid ""
 "Select the default locale preference and a default language and the system "
 "will try to translate menus, navigation tabs and anything else you might "
@@ -1104,7 +1120,7 @@ msgstr ""
 "&uuml;bersetzen. Ausdr&uuml;cke, die das &Uuml;bersetzungssystem erkennt, "
 "werden in den Men&uuml;punkten und Navigations-Tabs nicht ver&auml;ndert."
 
-#: ccextras/cc-language.php:439
+#: cclib/cc-language.php:439
 msgid ""
 "The Locale Preference is a specific folder that contains specific language "
 "translations. The default is a folder of the same name. Inside these folders "
@@ -1115,7 +1131,7 @@ msgstr ""
 "\"default\". In diesen Ordnern befinden sich die jeweiligen Sprach&uuml;"
 "bersetzungen ."
 
-#: ccextras/cc-language.php:440
+#: cclib/cc-language.php:440
 msgid ""
 "To create a specific translation, please copy the default folder with a "
 "unique name, and then select it as your Default Locale Preference. Then, "
@@ -1908,7 +1924,8 @@ msgid "Download"
 msgstr "Download"
 
 #: mixter-lib/mixter-dump-listing.inc:42
-msgid "Length:"
+#, fuzzy
+msgid "length:"
 msgstr "L&auml;nge:"
 
 #: mixter-lib/mixter-dump-listing.inc:43
@@ -1926,6 +1943,14 @@ msgstr "Mac: Control-Click f&uuml;r \"Link speichern unter\""
 #: mixter-lib/mixter-dump-listing.inc:46
 msgid "Flag this upload for possible violation of terms"
 msgstr "Diesen Upload wegen m&ouml;glicher Verst&ouml;%szlig;e flaggen"
+
+#: mixter-lib/mixter-dump-listing.inc:47
+#, fuzzy
+msgid "featuring:"
+msgstr "Bewertungen:"
+
+#~ msgid "Type in characters above"
+#~ msgstr "Bitte die oben stehenden Zeichen eingeben"
 
 #~ msgid "Uploads remixed by "
 #~ msgstr "Uploads remixt von"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-10 13:01-0700\n"
+"POT-Creation-Date: 2006-08-19 23:21-0700\n"
 "PO-Revision-Date: 2006-08-08 10:01-0300\n"
 "Last-Translator: Marcela <capitu@gmail.com>\n"
 "Language-Team: Brazillian Portuguese <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgid "Name"
 msgstr "Nome"
 
 #: cclib/cc-navigator-admin.inc:442 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:606 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:605 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -368,23 +368,23 @@ msgid "Must be letter, numbers or underscore (_), no longer than 25 characters"
 msgstr ""
 "Devem ser letras, números ou underscore (_), não maior que 25 caracteres"
 
-#: cclib/cc-login.php:141 cclib/cc-user.php:215
+#: cclib/cc-login.php:141 cclib/cc-user.php:214
 msgid "e-mail"
 msgstr "e-mail"
 
-#: cclib/cc-login.php:143 cclib/cc-user.php:216
+#: cclib/cc-login.php:143 cclib/cc-user.php:215
 msgid "This address will never show on the site but is "
 msgstr "Este endereço nunca aparecerá no site, mas é"
 
-#: cclib/cc-login.php:144 cclib/cc-user.php:217
+#: cclib/cc-login.php:144 cclib/cc-user.php:216
 msgid "required for creating a new account and password "
 msgstr "necessário para criar uma nova conta e senha"
 
-#: cclib/cc-login.php:145 cclib/cc-user.php:218
+#: cclib/cc-login.php:145 cclib/cc-user.php:217
 msgid "recovery in case you forget it."
 msgstr "caso você a esqueça."
 
-#: cclib/cc-login.php:155 cclib/cc-login.php:276 cclib/cc-user.php:210
+#: cclib/cc-login.php:155 cclib/cc-login.php:276 cclib/cc-user.php:209
 msgid "Password"
 msgstr "Senha"
 
@@ -466,7 +466,7 @@ msgstr "Recuperar Senha Perdida"
 msgid "Uploads"
 msgstr "Uploads"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:591 cclib/cc-user.php:607
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:590 cclib/cc-user.php:606
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr "Pessoas"
@@ -774,155 +774,155 @@ msgstr "Chave de segurança não confere"
 msgid "Password does not match login name."
 msgstr "Senha não confere com nome de login."
 
-#: cclib/cc-user.php:174
+#: cclib/cc-user.php:173
 msgid "Can't find that username"
 msgstr "Nome de usuário não encontrado"
 
-#: cclib/cc-user.php:203
+#: cclib/cc-user.php:202
 msgid "Full Name"
 msgstr "Nome completo"
 
-#: cclib/cc-user.php:204
+#: cclib/cc-user.php:203
 msgid "Your display name for the site (not to be confused with"
 msgstr "Seu nome no site (não confundir com"
 
-#: cclib/cc-user.php:205
+#: cclib/cc-user.php:204
 msgid " your login name)."
 msgstr "seu nome de login)."
 
-#: cclib/cc-user.php:223
+#: cclib/cc-user.php:222
 msgid "Image"
 msgstr "Imagem"
 
-#: cclib/cc-user.php:225
+#: cclib/cc-user.php:224
 msgid "Image file (can not be bigger than 93x93)"
 msgstr "Arquivo de imagem (não pode ser maior que 93x93)"
 
-#: cclib/cc-user.php:232
+#: cclib/cc-user.php:231
 msgid "About You"
 msgstr "Sobre Você"
 
-#: cclib/cc-user.php:237
+#: cclib/cc-user.php:236
 msgid "Home Page URL"
 msgstr "URL da Página Pessoal"
 
-#: cclib/cc-user.php:238
+#: cclib/cc-user.php:237
 msgid "Make sure it starts with http://"
 msgstr "Não esqueça de colocar o http://"
 
-#: cclib/cc-user.php:243 cclib/cc-language.php:432
+#: cclib/cc-user.php:242 cclib/cc-language.php:432
 msgid "Default Language:"
 msgstr "Língua Padrão"
 
-#: cclib/cc-user.php:249 cclib/cc-user.php:424
+#: cclib/cc-user.php:248 cclib/cc-user.php:423
 msgid "What I Pound On"
 msgstr "O Que Eu Toco"
 
-#: cclib/cc-user.php:250
+#: cclib/cc-user.php:249
 msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
 msgstr "(ex.: LPs, guitarra, ACID Pro, vocais, percussão)"
 
-#: cclib/cc-user.php:255
+#: cclib/cc-user.php:254
 msgid "What I Like:"
 msgstr "O Que Eu Gosto:"
 
-#: cclib/cc-user.php:256
+#: cclib/cc-user.php:255
 msgid "(e.g. Django, Old Skool, Miles Davis, Acid House)"
 msgstr "(ex.: Django, Old Skool, Miles Davis, Acid House)"
 
-#: cclib/cc-user.php:261
+#: cclib/cc-user.php:260
 msgid "What I'm Looking For:"
 msgstr "O Que Estou Procurando:"
 
-#: cclib/cc-user.php:262
+#: cclib/cc-user.php:261
 msgid "List attributes of musicians you'd like to hook up with "
 msgstr "Liste os atributos dos músicos que você gostaria de encontrar"
 
-#: cclib/cc-user.php:263
+#: cclib/cc-user.php:262
 msgid "(e.g. Producer, singer, drummer)"
 msgstr "(ex.: produtor, cantor, baterista)"
 
-#: cclib/cc-user.php:374
+#: cclib/cc-user.php:373
 msgid "Home Page"
 msgstr "Página Pessoal"
 
-#: cclib/cc-user.php:375
+#: cclib/cc-user.php:374
 msgid "About Me"
 msgstr "Sobre mim"
 
-#: cclib/cc-user.php:422
+#: cclib/cc-user.php:421
 msgid "What I Like"
 msgstr "O Que Eu Gosto"
 
-#: cclib/cc-user.php:426
+#: cclib/cc-user.php:425
 msgid "What I Look For"
 msgstr "O Que Estou Procurando"
 
-#: cclib/cc-user.php:550
+#: cclib/cc-user.php:549
 msgid "Edit Your Settings"
 msgstr "Editar Suas Configurações"
 
-#: cclib/cc-user.php:576
+#: cclib/cc-user.php:575
 msgid "Changes were saved"
 msgstr "Alterações salvas"
 
-#: cclib/cc-user.php:635
+#: cclib/cc-user.php:634
 msgid "(select tag)"
 msgstr "(selecionar tag)"
 
-#: cclib/cc-user.php:635
+#: cclib/cc-user.php:634
 msgid "(no tag)"
 msgstr "(sem tags)"
 
-#: cclib/cc-user.php:695
+#: cclib/cc-user.php:694
 #, php-format
 msgid "Remove %s from my favorites"
 msgstr "Remover %s de meus favoritos"
 
-#: cclib/cc-user.php:697
+#: cclib/cc-user.php:696
 #, php-format
 msgid "Add %s to my favorites"
 msgstr "Adicionar %s aos meus favoritos"
 
-#: cclib/cc-user.php:739
+#: cclib/cc-user.php:738
 msgid " has not uploaded any remixes yet."
 msgstr "não fez o upload de nenhum remix."
 
-#: cclib/cc-user.php:758
+#: cclib/cc-user.php:757
 msgid "Uploads by "
 msgstr "Uploads de"
 
-#: cclib/cc-user.php:759
+#: cclib/cc-user.php:758
 msgid "Remixes of "
 msgstr "Remixes de"
 
-#: cclib/cc-user.php:760
+#: cclib/cc-user.php:759
 msgid "Remixed by "
 msgstr "Remixado por"
 
-#: cclib/cc-user.php:772
+#: cclib/cc-user.php:771
 #, php-format
 msgid "%s has been removed from your list of favorites"
 msgstr "%s foi excluído de sua lista de favoritos"
 
-#: cclib/cc-user.php:777
+#: cclib/cc-user.php:776
 #, php-format
 msgid "%s has been added to your list of favorites"
 msgstr "%s foi adicionado à sua lista de favoritos"
 
-#: cclib/cc-user.php:851
+#: cclib/cc-user.php:850
 msgid "Your Page"
 msgstr "Sua Página"
 
-#: cclib/cc-user.php:858
+#: cclib/cc-user.php:857
 msgid "Edit Your Profile"
 msgstr "Editar Seu Perfil"
 
-#: cclib/cc-user.php:869
+#: cclib/cc-user.php:868
 msgid "Visitors"
 msgstr "Visitantes"
 
-#: cclib/cc-user.php:871
+#: cclib/cc-user.php:870
 msgid "Artists"
 msgstr "Artistas"
 
