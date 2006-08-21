@@ -134,8 +134,8 @@ class CCGetID3
 	// GetFileFormatArray() which I get below
 	// Also, probably need to push upstream to get the description
 	// field into the description of the filetypes
-	CCGetID3::InitID3Obj();
-        $getid3_file_formats = $ID3Obj->GetFileFormatArray();
+	$getid3_obj = CCGetID3::InitID3Obj();
+        $getid3_file_formats = $getid3_obj->GetFileFormatArray();
 
 	// echo "<pre>";
         // print_r( $getid3_file_formats );
