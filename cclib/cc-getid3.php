@@ -129,6 +129,17 @@ class CCGetID3
     {
         static $file_formats;
 
+        // TODO: Add full support to cchost for the all getid3 formats
+	// which are identified in the getid3.php file in the method
+	// GetFileFormatArray() which I get below
+	// Also, probably need to push upstream to get the description
+	// field into the description of the filetypes
+        $getid3_file_formats = CCGetID3::InitID3Obj()->GetFileFormatArray();
+
+	// echo "<pre>";
+        // print_r( $getid3_file_formats );
+	// echo "</pre>";
+
         if( !empty($file_formats) )
             return($file_formats);
 
@@ -242,12 +253,22 @@ class CCGetID3
            'enabled' => true,
            'mediatype' => 'image',
            );
-         $file_formats['video-swf-swf'] =  array(
-           'name'       => 'swf',
-           'description' => 'Flash Video',
-           'enabled' => true,
-           'mediatype' => 'video',
-           );
+	 // JON: I adding the following two as examples of checking getid3.php
+	 // to see if these types are even allowed...
+	 if ( isset($getid3_file_formats['svg']) )
+             $file_formats['image-xml-svg'] = array(
+                 'name'       => 'svg',
+                 'description' => 'Scalable Vector Graphic',
+                 'enabled' => true,
+                 'mediatype' => 'image',
+             );  
+	 if ( isset($getid3_file_formats['swf']) )
+             $file_formats['video-swf-swf'] =  array(
+                 'name'       => 'swf',
+                 'description' => 'Flash Video',
+                 'enabled' => true,
+                 'mediatype' => 'video',
+             );
 
          return( $file_formats );
 
