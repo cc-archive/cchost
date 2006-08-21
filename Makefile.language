@@ -42,6 +42,7 @@ MO_NAME = LC_MESSAGES/$(APPNAME).mo
 POFILES = \
 	$(localedir)/pt_BR/$(PO_NAME) \
 	$(localedir)/zh_CN/$(PO_NAME) \
+	$(localedir)/zh_TW/$(PO_NAME) \
 	$(localedir)/de_DE/$(PO_NAME)
 	#$(testlocaledir)/pt_BR/$(PO_NAME) \
 	#$(testlocaledir)/zh_CN/$(PO_NAME) 
@@ -63,6 +64,7 @@ include POTFILES
 CATALOGS = \
 	$(localedir)/pt_BR/$(MO_NAME) \
 	$(localedir)/zh_CN/$(MO_NAME) \
+	$(localedir)/zh_TW/$(MO_NAME) \
 	$(localedir)/de_DE/$(MO_NAME)
 	# $(testlocaledir)/pt_BR/$(MO_NAME) \
 	#$(testlocaledir)/zh_CN/$(MO_NAME) 
