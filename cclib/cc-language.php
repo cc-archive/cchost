@@ -373,32 +373,13 @@ class CCLanguage
     	// The CC_GLOBALS array are the active values and not hard settings
     	// in the database
     	$CC_GLOBALS['lang'] = &$this->_language;
+	$CC_GLOBALS['lang_xml'] = str_replace('_', '-', &$this->_language); 
     	$CC_GLOBALS['lang_locale_pref'] = &$this->_locale_pref;
     	$CC_GLOBALS['language'] = &$this;
-        // $this->DebugLanguages();
+        $this->DebugLanguages();
     }
-    
-    /**
-    * Event handler for {@link CC_EVENT_MAP_URLS}
-    *
-    * @see CCEvents::MapUrl()
-    */
-    function OnMapUrls()
-    {
-/*
-        CCEvents::MapUrl( ccp('admin','language'),  array( 'CCLanguage', 'Language'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','language','edit'),  array( 'CCLanguage', 'EditString'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','language','getstring'),  array( 'CCLanguage', 'GetString'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','language','translate'),  array( 'CCLanguage', 'Translate'), CC_ADMIN_ONLY );
-*/
-    }
+} // end of CCLanguage class
 
-}
-
-
-/**
-*/
-require_once('ccextras/cc-lang.inc');
 
 /**
 * @package cchost
@@ -539,75 +520,6 @@ class CCLanguageAdmin
         CCPage::AddPrompt('body_text',$text);
     }
 
-/*
-    function Translate()
-    {
-        CCPage::SetTitle("Performing Translation");
-        global $CC_GLOBALS;
-        $old_lang_enabled = $CC_GLOBALS['lang_enabled'];
-        $CC_GLOBALS['lang_enabled'] = true;
-        CCEvents::Invoke(CC_EVENT_TRANSLATE);
-        $CC_GLOBALS['lang_enabled'] = $old_lang_enabled;
-        CCPage::Prompt("Language support options saved.");
-    }
-
-    function GetString($cclang,$mode,$targetlang,$hash)
-    {
-        $en_file = "cclib/lang/$cclang/cc-translation-$mode.php";
-        include($en_file);
-        $tablename = "cc_translation_table_" . $mode;
-        $tt = $$tablename;
-        $encoded = htmlentities($tt[$hash]);
-        $target_file = "cclib/lang/$targetlang/cc-translation-$mode.php";
-        if( file_exists($target_file) )
-        {
-            $tt = null;
-            include($target_file);
-        }
-        else
-        {
-            //$target_file = $en_file;
-        }
-        $tt = $$tablename;
-        $string = $tt[$hash];
-        $html =<<<END
-     <div class="org_title">Original String</div>
-     <div class="org_string">$encoded</div>
-     <div class="org_title">Translates to:</div>
-     <textarea id="translated" name="translated" rows="11" cols = "45">$string</textarea>
-     <div><br /><a id="commentcommand" href="#" onclick='do_edit_string("$hash")'><span>Commit Changes</span></a> to: $target_file</div><br />
-     <div><br /><a id="commentcommand" href="#" onclick='do_get_string("$hash")'><span>Revert</span></a></div>
-END;
-
-       print $html;
-       exit;
-    }
-
-    function EditString($cclang,$mode,$hash)
-    {
-        if( empty($hash) ) {
-            print("Invalid hash");
-            exit;
-        }
-
-        $lang_dir = "cclib/lang/$cclang";
-        $target_file = "$lang_dir/cc-translation-$mode.php";
-
-        if( !file_exists($target_file) )
-        {
-            CCUtil::MakeSubdirs($lang_dir);
-            $en_file = "cclib/lang/en/cc-translation-$mode.php";
-            copy( $en_file, $target_file );
-            chmod( $target_file, cc_default_file_perms() );
-        }
-
-        $tt[$hash] = CCUtil::StripSlash(urldecode($_REQUEST['string']));
-        $recorder[$mode] = $tt;
-        cc_lang_write_inner($lang_dir,$mode,$recorder);
-        print("Changed saved");
-        exit;
-    }
-*/
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
@@ -617,10 +529,6 @@ END;
     {
         CCEvents::MapUrl( ccp('admin','language'),  array( 'CCLanguageAdmin', 'Language'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( ccp('admin','language','save'),  array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
-	/*
-        CCEvents::MapUrl( ccp('admin','language','edit'),  array( 'CCLanguageAdmin', 'EditString'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','language','getstring'),  array( 'CCLanguageAdmin', 'GetString'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','language','translate'),  array( 'CCLanguageAdmin', 'Translate'), CC_ADMIN_ONLY ); */
     }
 
 }
