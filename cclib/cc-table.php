@@ -570,6 +570,7 @@ class CCTable
     */
     function QueryKeyRow($key)
     {
+        $key = addslashes($key);
         return( $this->QueryRow( $this->_key_field . " = '$key'" ) );
     }
 
@@ -586,6 +587,7 @@ class CCTable
     */
     function QueryItemFromKey($column_name,$key)
     {
+        $key = addslashes($key);
         return( $this->QueryItem( $column_name, $this->_key_field . " = '$key'" ) );
     }
 
