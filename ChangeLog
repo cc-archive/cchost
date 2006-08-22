@@ -1,3 +1,7 @@
+2006-08-22     Victor Stone <fourstones@users.sourceforge.net>
+     * cclib/cc-table.php 4068:
+         security fix: file ids escape out of sql
+
 2006-07-28     Victor Stone <fourstones@users.sourceforge.net>
 
      * cclib/cc-form.php 3940:
