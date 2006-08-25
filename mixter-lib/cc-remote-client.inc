@@ -227,16 +227,23 @@ END;
         $uploads =& CCUploads::GetTable();
         $uploads->SetDefaultFilter(false,false);
         $uploads->SetOrder('upload_date','DESC');
-        if( !empty($tagfilter) )
-            $uploads->SetTagFilter($tagfilter,$type);
         $where = '';
+        if( !empty($tagfilter) )
+        {
+            if( $type == 'user' )
+                $where = "user_name = '$tagfilter'";
+            elseif( $type == 'date' )
+                $where = "upload_date < '$tagfilter'";
+            else
+                $uploads->SetTagFilter($tagfilter,$type);
+        }
         CCPage::AddPagingLinks($uploads,$where,30);
         $records =& $uploads->GetRecords($where);
         $count = count($records);
         $queue = cc_remote_get_queue();
         $furl = ccl('admin','remoting','manage','filter');
         $html =<<<END
-            <form method="GET" action="$furl">Filter by tags: <input style="font-family: Verdana;font-size: 11px;width: 250px;" name="filter" id="filter" value="$tagfilter" /><select name="type" style="font-family: Verdana;font-size: 11px;" id="type"><option value="all" selected="selected">all</option><option value="any">any</option></select><input style="font-family: Verdana;font-size: 11px;" type="submit" value="go" /></form>
+            <form method="GET" action="$furl">Filter: <input style="font-family: Verdana;font-size: 11px;width: 250px;" name="filter" id="filter" value="$tagfilter" /><select name="type" style="font-family: Verdana;font-size: 11px;" id="type"><option value="all" selected="selected">tags: all</option><option value="any">tags: any</option><option value="user">user</option><option value="date">date (y-m-d)</option></select><input style="font-family: Verdana;font-size: 11px;" type="submit" value="go" /></form>
             <table style="font-size: 11px; font-family: Verdana;white-space:nowrap;">
 END;
         if( !empty($msg) )
