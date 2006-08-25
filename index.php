@@ -28,8 +28,8 @@ if( file_exists('ccadmin') )
         'Please <a href="ccadmin/">follow these steps</a> for a successful ' . 
 	'setup.</body></html>');
 
-// if( !function_exists('gettext') )
-//    require_once('ccextras/cc-no-gettext.inc');
+if( !function_exists('gettext') )
+   require_once('ccextras/cc-no-gettext.inc');
 
 define('IN_CC_HOST', true);
 
