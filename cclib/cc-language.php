@@ -370,13 +370,13 @@ class CCLanguage
         global $CC_GLOBALS;
         // Basically need to init all the language stuff here...
         $this->Init();
-    	// The CC_GLOBALS array are the active values and not hard settings
-    	// in the database
-    	$CC_GLOBALS['lang'] = &$this->_language;
-	$CC_GLOBALS['lang_xml'] = str_replace('_', '-', &$this->_language); 
-    	$CC_GLOBALS['lang_locale_pref'] = &$this->_locale_pref;
-    	$CC_GLOBALS['language'] = &$this;
-        $this->DebugLanguages();
+        // The CC_GLOBALS array are the active values and not hard settings
+        // in the database
+        $CC_GLOBALS['lang'] = &$this->_language;
+        $CC_GLOBALS['lang_xml'] = str_replace('_', '-', &$this->_language); 
+        $CC_GLOBALS['lang_locale_pref'] = &$this->_locale_pref;
+        $CC_GLOBALS['language'] = &$this;
+        //$this->DebugLanguages();
     }
 } // end of CCLanguage class
 
