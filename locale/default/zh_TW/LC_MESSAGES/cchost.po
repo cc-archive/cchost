@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ccHost 3.0\n"
 "Report-Msgid-Bugs-To: Jedi <JediLin@Gmail.com>\n"
 "POT-Creation-Date: 2006-08-22 10:45-0700\n"
-"PO-Revision-Date: 2006-08-24 22:28+0800\n"
+"PO-Revision-Date: 2006-08-26 22:09+0800\n"
 "Last-Translator: Jedi <JediLin@Gmail.com>\n"
 "Language-Team: Creative Commons Taiwan <contact@creativecommons.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -374,7 +374,7 @@ msgstr "檔名遺失了"
 
 #: ../../../../cclib/cc-login.php:116
 msgid "Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) has a line through it, the D does not."
-msgstr ""
+msgstr "請輸入上圖內的字母及數字. 可能會出現的只有數字 0 到 9 以及英文字母 A 到 F. 零 (0) 會有條斜線貫穿, 而 D 沒有, 這可以幫助你區別他們."
 
 #: ../../../../cclib/cc-login.php:136
 #: ../../../../cclib/cc-login.php:271
@@ -627,7 +627,7 @@ msgstr "全文搜尋"
 #: ../../../../cclib/cc-remix.php:181
 #, php-format
 msgid "Editing Remixes for '%s'"
-msgstr ""
+msgstr "正在編輯 '%s' 的重混"
 
 #: ../../../../cclib/cc-remix.php:315
 #, php-format
@@ -640,19 +640,19 @@ msgstr "顯示縮圖"
 
 #: ../../../../cclib/cc-renderimage.php:171
 msgid "Display thumbnails for image uploads"
-msgstr ""
+msgstr "顯示已上傳圖片的縮圖"
 
 #: ../../../../cclib/cc-renderimage.php:175
 msgid "Max Thumb X"
-msgstr ""
+msgstr "縮圖寬度上限"
 
 #: ../../../../cclib/cc-renderimage.php:177
 msgid "Leave this blank or 0 (zero) to use the image's natural size"
-msgstr ""
+msgstr "留空不填或填寫 0 (零) 則表示使用圖片原本的尺寸"
 
 #: ../../../../cclib/cc-renderimage.php:182
 msgid "Max Thumb Y"
-msgstr ""
+msgstr "縮圖高度上限"
 
 #: ../../../../cclib/cc-search.php:40
 msgid "Search Text"
@@ -1072,7 +1072,7 @@ msgstr ""
 #: ../../../../ccextras/cc-import-files.php:179
 #, php-format
 msgid "Import succeeded. Click <a href=\"%s\">here</a> to see results."
-msgstr ""
+msgstr "匯入成功. 請<a href=\"%s\">按這裡</a>以檢視結果."
 
 #: ../../../../ccextras/cc-howididit.php:56
 msgid "Browse 'How I Did It'"
@@ -1089,7 +1089,7 @@ msgstr "上傳的檔案"
 
 #: ../../../../ccextras/cc-howididit.php:104
 msgid "Sort by:"
-msgstr ""
+msgstr "排序依據:"
 
 #: ../../../../ccextras/cc-howididit.php:140
 #: ../../../../ccextras/cc-howididit.php:266
@@ -1151,23 +1151,23 @@ msgstr ""
 
 #: ../../../../cclib/cc-language.php:303
 msgid "default"
-msgstr ""
+msgstr "預設"
 
 #: ../../../../cclib/cc-language.php:425
 msgid "Default Locale Preference:"
-msgstr ""
+msgstr "預設的介面語系偏好:"
 
 #: ../../../../cclib/cc-language.php:438
 msgid "Select the default locale preference and a default language and the system will try to translate menus, navigation tabs and anything else you might have customized. If the translation system does recognize the terms used, those menu items and navigation tabs will not change."
-msgstr ""
+msgstr "選擇預設的介面語系偏好及預設的語言後, 系統將會試著把選單, 導覽標籤和任何你可能已經自訂過的東西翻譯成你指定的語言. 如果翻譯系統無法處理任何術語時, 那麼那些選單項目及導覽標籤都將維持不變."
 
 #: ../../../../cclib/cc-language.php:439
 msgid "The Locale Preference is a specific folder that contains specific language translations. The default is a folder of the same name. Inside these folders are the specific language translations."
-msgstr ""
+msgstr "所謂的介面語系偏好乃是個含有特定語言翻譯的資料夾. 預設就是一個叫 default 的資料夾, 其中並含有許多特定的語言翻譯."
 
 #: ../../../../cclib/cc-language.php:440
 msgid "To create a specific translation, please copy the default folder with a unique name, and then select it as your Default Locale Preference. Then, edit the .po files in specific language folders for customization."
-msgstr ""
+msgstr "如果你想建立特定的翻譯, 請先將預設的 default 資料夾複製成另一個名稱, 然後在預設介面語系偏好中選擇這個新的資料夾. 接著, 再編輯特定語言資料夾中的 .po 檔案, 以符合你的需求."
 
 #: ../../../../ccextras/cc-music-submit.php:47
 msgid "Submit a Remix"
@@ -1798,15 +1798,15 @@ msgstr "討論區源料"
 
 #: ../../../../ccextras/cc-forums.inc:567
 msgid "Contents requires login"
-msgstr ""
+msgstr "登入後才能接觸這份內容"
 
 #: ../../../../mixter-lib/mixter-dump-listing.inc:28
 msgid "by:"
-msgstr ""
+msgstr "作者:"
 
 #: ../../../../mixter-lib/mixter-dump-listing.inc:29
 msgid "date:"
-msgstr ""
+msgstr "日期:"
 
 #: ../../../../mixter-lib/mixter-dump-listing.inc:30
 msgid "tags:"
