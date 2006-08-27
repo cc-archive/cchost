@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ccHost 3.0\n"
 "Report-Msgid-Bugs-To: Jedi <JediLin@Gmail.com>\n"
 "POT-Creation-Date: 2006-08-22 10:45-0700\n"
-"PO-Revision-Date: 2006-08-26 22:09+0800\n"
+"PO-Revision-Date: 2006-08-27 19:00+0800\n"
 "Last-Translator: Jedi <JediLin@Gmail.com>\n"
 "Language-Team: Creative Commons Taiwan <contact@creativecommons.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -132,9 +132,10 @@ msgid "Submit Entry"
 msgstr "上傳項目"
 
 # VAR
+# Need fix
 #: ../../../../cclib/cc-contest-admin.inc:441
 msgid "Submit an entry in the "
-msgstr ""
+msgstr "送出項目至 "
 
 #: ../../../../cclib/cc-contest-admin.inc:447
 #: ../../../../cclib/cc-mediahost.php:489
@@ -300,13 +301,13 @@ msgstr "(例如 'lofi', 'hires') 留空不填的話就是採用預設值"
 # VAR
 #: ../../../../cclib/cc-files.php:233
 msgid "Manage files for: "
-msgstr ""
+msgstr "管理檔案: "
 
 # VAR
 #: ../../../../cclib/cc-files.php:282
 #: ../../../../cclib/cc-files.php:355
 msgid "Edit Properties for "
-msgstr ""
+msgstr "編輯屬性: "
 
 #: ../../../../cclib/cc-files.php:294
 #, php-format
@@ -864,31 +865,31 @@ msgstr "預設語言:"
 #: ../../../../cclib/cc-user.php:248
 #: ../../../../cclib/cc-user.php:423
 msgid "What I Pound On"
-msgstr ""
+msgstr "我在玩"
 
 #: ../../../../cclib/cc-user.php:249
 msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
-msgstr ""
+msgstr "(例如 vinyl, guitar, ACID Pro, vocals, beat slicer)"
 
 #: ../../../../cclib/cc-user.php:254
 msgid "What I Like:"
-msgstr ""
+msgstr "我喜歡:"
 
 #: ../../../../cclib/cc-user.php:255
 msgid "(e.g. Django, Old Skool, Miles Davis, Acid House)"
-msgstr ""
+msgstr "(例如 Django, Old Skool, Miles Davis, Acid House)"
 
 #: ../../../../cclib/cc-user.php:260
 msgid "What I'm Looking For:"
-msgstr ""
+msgstr "我在找:"
 
 #: ../../../../cclib/cc-user.php:261
 msgid "List attributes of musicians you'd like to hook up with "
-msgstr ""
+msgstr "請列出你想結交的音樂人特質"
 
 #: ../../../../cclib/cc-user.php:262
 msgid "(e.g. Producer, singer, drummer)"
-msgstr ""
+msgstr "(例如 Producer, singer, drummer)"
 
 #: ../../../../cclib/cc-user.php:373
 msgid "Home Page"
@@ -900,11 +901,11 @@ msgstr "關於我"
 
 #: ../../../../cclib/cc-user.php:421
 msgid "What I Like"
-msgstr ""
+msgstr "我喜歡"
 
 #: ../../../../cclib/cc-user.php:425
 msgid "What I Look For"
-msgstr ""
+msgstr "我在找"
 
 #: ../../../../cclib/cc-user.php:549
 msgid "Edit Your Settings"
@@ -939,17 +940,17 @@ msgstr " 還沒有上傳過任何重混作品."
 # VAR
 #: ../../../../cclib/cc-user.php:757
 msgid "Uploads by "
-msgstr "上傳者: "
+msgstr "由此使用者上傳: "
 
 # VAR
 #: ../../../../cclib/cc-user.php:758
 msgid "Remixes of "
-msgstr ""
+msgstr "此使用者的重混作品: "
 
 # VAR
 #: ../../../../cclib/cc-user.php:759
 msgid "Remixed by "
-msgstr "重混者: "
+msgstr "被此使用者取樣: "
 
 #: ../../../../cclib/cc-user.php:771
 #, php-format
@@ -1022,19 +1023,21 @@ msgstr "您的電子郵件地址 (可以不填)"
 msgid "Subject"
 msgstr "主旨"
 
+# VAR ORDER
 #: ../../../../ccextras/cc-flag.php:62
 #, php-format
 msgid "Flag %s \"%s\""
-msgstr ""
+msgstr "標示 %s 旗標於 \"%s\""
 
 #: ../../../../ccextras/cc-flag.php:65
 #: ../../../../ccextras/cc-mail.php:190
 msgid "Message"
-msgstr ""
+msgstr "訊息"
 
+# not good :-/
 #: ../../../../ccextras/cc-flag.php:133
 msgid "Flag Content"
-msgstr ""
+msgstr "標示內容"
 
 #: ../../../../ccextras/cc-flag.php:171
 #: ../../../../ccextras/cc-forums.inc:214
@@ -1043,7 +1046,7 @@ msgstr "主題"
 
 #: ../../../../ccextras/cc-flag.php:176
 msgid "Content has been flagged"
-msgstr ""
+msgstr "這份內容已經被加上旗標了"
 
 #: ../../../../ccextras/cc-format.php:92
 msgid "Quote:"
@@ -1067,7 +1070,7 @@ msgstr "匯入檔案"
 
 #: ../../../../ccextras/cc-import-files.php:128
 msgid "Use this form to import files already on your server into the ccHost system. WARNING: This form will <b>MOVE</b> your file from its original location."
-msgstr ""
+msgstr "使用這個表單將你伺服器上原有的檔案匯入 ccHost 系統. 警告: 這個表單會把你的檔案<b>移出</b>原來的位置."
 
 #: ../../../../ccextras/cc-import-files.php:179
 #, php-format
@@ -1076,7 +1079,7 @@ msgstr "匯入成功. 請<a href=\"%s\">按這裡</a>以檢視結果."
 
 #: ../../../../ccextras/cc-howididit.php:56
 msgid "Browse 'How I Did It'"
-msgstr ""
+msgstr "瀏覽 '我的做法'"
 
 #: ../../../../ccextras/cc-howididit.php:92
 msgid "Date"
@@ -1094,16 +1097,16 @@ msgstr "排序依據:"
 #: ../../../../ccextras/cc-howididit.php:140
 #: ../../../../ccextras/cc-howididit.php:266
 msgid "How I Did It"
-msgstr ""
+msgstr "我的做法"
 
 #: ../../../../ccextras/cc-howididit.php:170
 msgid "Edit 'How I Did It' for "
-msgstr ""
+msgstr "編輯 '我的做法': "
 
 #: ../../../../ccextras/cc-howididit.php:200
 #, php-format
 msgid "Changes saved. Click <a href=\"%s\">here</a> to see results"
-msgstr ""
+msgstr "變更已儲存. 請<a href=\"%s\">按這裡</a>以檢視結果"
 
 #: ../../../../ccextras/cc-howididit.php:226
 msgid "Tools I Used"
@@ -1147,7 +1150,7 @@ msgstr "分享您創造這個作品的經驗及感受"
 
 #: ../../../../ccextras/cc-howididit.php:286
 msgid "Edit \"How I Did It\""
-msgstr ""
+msgstr "編輯 \"我的做法\""
 
 #: ../../../../cclib/cc-language.php:303
 msgid "default"
@@ -1662,25 +1665,25 @@ msgstr ""
 
 #: ../../../../ccextras/cc-notify.php:129
 msgid "Edit My Notifications"
-msgstr ""
+msgstr "編輯我的通知書"
 
 #: ../../../../ccextras/cc-notify.php:134
 #, php-format
 msgid "Get Notified About %s"
-msgstr ""
+msgstr "取得關於 %s 的通知"
 
 #: ../../../../ccextras/cc-notify.php:137
 msgid "Notifcations"
-msgstr ""
+msgstr "通知書"
 
 #: ../../../../ccextras/cc-forums.php:123
 msgid "New Topic Text"
-msgstr ""
+msgstr "新的主題文字"
 
 #: ../../../../ccextras/cc-forums.php:157
 #, php-format
 msgid "%s has posted <a href=\"%s\">%d forum messages</a>"
-msgstr ""
+msgstr "%s 張貼了 <a href=\"%s\">%d 篇討論區訊息</a>"
 
 #: ../../../../ccextras/cc-forums.php:159
 #: ../../../../ccextras/cc-forums.inc:512
@@ -1698,15 +1701,15 @@ msgstr "抱歉, 沒有吻合的主題"
 #: ../../../../ccextras/cc-forums-admin.inc:170
 #, php-format
 msgid "Move topic: %s"
-msgstr ""
+msgstr "移動主題: %s"
 
 #: ../../../../ccextras/cc-forums-admin.inc:214
 msgid "Change Thread Sticky Flag"
-msgstr ""
+msgstr "變更討論串置頂旗標"
 
 #: ../../../../ccextras/cc-forums-admin.inc:225
 msgid "Change Thread Open Status"
-msgstr ""
+msgstr "變更討論串公開狀態"
 
 #: ../../../../ccextras/cc-forums.inc:154
 msgid "Post new topic"
@@ -1780,17 +1783,17 @@ msgstr "回應至: \"%s\""
 #: ../../../../ccextras/cc-forums.inc:505
 #, php-format
 msgid "Forum Posts for %s"
-msgstr ""
+msgstr "%s 的討論區文章"
 
 #: ../../../../ccextras/cc-forums.inc:539
 #, php-format
 msgid "Feed for topics by %s"
-msgstr ""
+msgstr "%s 的主題源料"
 
 #: ../../../../ccextras/cc-forums.inc:547
 #, php-format
 msgid "Feed for topic: %s"
-msgstr ""
+msgstr "%s 的源料"
 
 #: ../../../../ccextras/cc-forums.inc:551
 msgid "Forums Feed"
