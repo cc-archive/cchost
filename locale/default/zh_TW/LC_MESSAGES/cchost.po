@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ccHost 3.0\n"
 "Report-Msgid-Bugs-To: Jedi <JediLin@Gmail.com>\n"
 "POT-Creation-Date: 2006-08-22 10:45-0700\n"
-"PO-Revision-Date: 2006-08-27 19:00+0800\n"
+"PO-Revision-Date: 2006-08-28 20:14+0800\n"
 "Last-Translator: Jedi <JediLin@Gmail.com>\n"
 "Language-Team: Creative Commons Taiwan <contact@creativecommons.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -865,7 +865,7 @@ msgstr "預設語言:"
 #: ../../../../cclib/cc-user.php:248
 #: ../../../../cclib/cc-user.php:423
 msgid "What I Pound On"
-msgstr "我在玩"
+msgstr "我擅用"
 
 #: ../../../../cclib/cc-user.php:249
 msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
@@ -1178,23 +1178,23 @@ msgstr "上傳重混作品"
 
 #: ../../../../ccextras/cc-music-submit.php:49
 msgid "A remix using samples downloaded from this site. When submitting a remix make sure "
-msgstr ""
+msgstr "重混的作品會用到從本站所下載的取樣. 因此當你上傳重混作品時, "
 
 #: ../../../../ccextras/cc-music-submit.php:50
 msgid "to properly attribute the artist you sampled to comply with the Attribution "
-msgstr ""
+msgstr "別忘了要適當地標示你所使用的取樣原作者姓名, 這樣子纔能滿足"
 
 #: ../../../../ccextras/cc-music-submit.php:51
 msgid "part the Creative Commons license. The next screen will have a search function "
-msgstr ""
+msgstr "創用 CC 授權條款對於「姓名標示」的要求. 接下來的畫面將提供"
 
 #: ../../../../ccextras/cc-music-submit.php:52
 msgid "that allows you do just that."
-msgstr ""
+msgstr "搜尋功能, 幫助你標示出這些原作者的姓名."
 
 #: ../../../../ccextras/cc-music-submit.php:58
 msgid "Use this form to submit a remix"
-msgstr ""
+msgstr "請使用此表單上傳重混作品"
 
 #: ../../../../ccextras/cc-music-submit.php:62
 msgid "Submit an A Cappella"
@@ -1202,27 +1202,27 @@ msgstr "上傳清唱曲"
 
 #: ../../../../ccextras/cc-music-submit.php:64
 msgid "Stand alone vocal parts, either spoken word or sung. Mono recording with no effects  "
-msgstr ""
+msgstr "單獨的人聲, 可能是口述或吟頌. 通常以單聲道錄製, 最好不帶任何附加效果 "
 
 #: ../../../../ccextras/cc-music-submit.php:65
 msgid "(reverb, delay, etc.) on them are best because they are the most flexible to work with. "
-msgstr ""
+msgstr "(例如混響, 延遲等), 因為這麼一來這些人聲才能更彈性地被其他人所運用. "
 
 #: ../../../../ccextras/cc-music-submit.php:66
 msgid "Many singers think they sound \"better\" with a lot of effects but it is always better to "
-msgstr ""
+msgstr "雖然有許多歌手都覺得他們的聲音在加上大量效果後聽起來 \"最棒\" , "
 
 #: ../../../../ccextras/cc-music-submit.php:67
 msgid "leave those choices to a producer/remixer to allow them to use their creative skills to "
-msgstr ""
+msgstr "不過理想的情況下這些選擇還是交給製作人或重混者吧, 這樣他們才能"
 
 #: ../../../../ccextras/cc-music-submit.php:68
 msgid "the fullest potential."
-msgstr ""
+msgstr "發揮完整的創意技巧及潛能."
 
 #: ../../../../ccextras/cc-music-submit.php:72
 msgid "Use this form to submit an a cappella"
-msgstr ""
+msgstr "請使用此表單上傳清唱曲"
 
 #: ../../../../ccextras/cc-music-submit.php:78
 msgid "Submit Samples"
@@ -1230,67 +1230,67 @@ msgstr "上傳取樣素材"
 
 #: ../../../../ccextras/cc-music-submit.php:80
 msgid "Samples can be a loop, a one-shot note or drum hit or any other snippet of sound "
-msgstr ""
+msgstr "取樣素材可以是一段重複的樂段, 只出現一次的音符或鼓擊或任何一小段聲音, "
 
 #: ../../../../ccextras/cc-music-submit.php:81
 msgid "that might be useful to a producer or remixer. You are encouraged to make a collection "
-msgstr ""
+msgstr "只要是可能對製作人或重混者有用即可. 我們鼓勵你將一堆取樣素材蒐集起來, "
 
 #: ../../../../ccextras/cc-music-submit.php:82
 msgid "of samples and upload them together in archive format (ZIP), however sound files are "
-msgstr ""
+msgstr "打包成壓縮檔 (例如 ZIP 格式) 然後再上傳, 當然單純的聲音檔也是可以的啦. "
 
 #: ../../../../ccextras/cc-music-submit.php:83
 msgid "accepted as well. By far the most flexible "
-msgstr ""
+msgstr "目前為止使用上最彈性的取樣素材, "
 
 #: ../../../../ccextras/cc-music-submit.php:84
 msgid "samples to work with are mono and have no effects for acoustic instruments and minimal "
-msgstr ""
+msgstr "會是以單聲道錄製且不帶任何附加效果的音響器材聲, "
 
 #: ../../../../ccextras/cc-music-submit.php:85
 msgid "effects for synthesized sounds."
-msgstr ""
+msgstr "或者是盡可能使用最少附加效果的合成聲音."
 
 #: ../../../../ccextras/cc-music-submit.php:88
 msgid "Use this form to submit samples"
-msgstr ""
+msgstr "請使用此表單上傳取樣素材"
 
 #: ../../../../ccextras/cc-music-submit.php:95
 msgid "Submit a Fully Mixed Track"
-msgstr ""
+msgstr "上傳完整混音過的音軌"
 
 #: ../../../../ccextras/cc-music-submit.php:97
 msgid "An original track that is fully mixed is <i>extremely unlikely</i> to be remixed because of "
-msgstr ""
+msgstr "被完整混音處理過的原始音軌 <i>幾乎不可能</i> 再被拿去重混, 因為"
 
 #: ../../../../ccextras/cc-music-submit.php:98
 msgid "the extra work the producer or remixer has to do the extract the parts they actually "
-msgstr ""
+msgstr "製作人或重混者得要花額外的功夫來把他們真的想用的部分抽離出來. "
 
 #: ../../../../ccextras/cc-music-submit.php:99
 msgid "wish to use. Before uploading your track here, "
-msgstr ""
+msgstr "在你將這類音軌上傳到本站之前, "
 
 #: ../../../../ccextras/cc-music-submit.php:100
 msgid "consider uploading to one of several free hosting sites sponsored by Creative Commons such "
-msgstr ""
+msgstr "不妨考慮一下其他許多支援創用 CC 授權的免費網站空間, 像是"
 
 #: ../../../../ccextras/cc-music-submit.php:101
 msgid "<a href=\"http://archive.org/audio\">Internet Archive</a> or <a href=\"http://ourmedia.org\">"
-msgstr ""
+msgstr "<a href=\"http://archive.org/audio\">Internet Archive</a> 或 <a href=\"http://ourmedia.org\">"
 
 #: ../../../../ccextras/cc-music-submit.php:102
 msgid "Our Media</a> both of which might be more appropriate places to post completely mixed "
-msgstr ""
+msgstr "Our Media</a>, 他們都很適合用來發表這些已完整混音過的"
 
 #: ../../../../ccextras/cc-music-submit.php:103
 msgid "tracks."
-msgstr ""
+msgstr "音軌."
 
 #: ../../../../ccextras/cc-music-submit.php:107
 msgid "Use this form to submit a fully mixed track"
-msgstr ""
+msgstr "請使用此表單上傳完整混音過的音軌"
 
 #: ../../../../ccextras/cc-mail.php:157
 msgid "To"
@@ -1310,26 +1310,26 @@ msgstr "找不到這個使用者"
 
 #: ../../../../ccextras/cc-reviews.php:156
 msgid "Can not find that upload, it may have been removed by the owner"
-msgstr ""
+msgstr "找不到這份上傳檔, 也許已經被其擁有者移除了"
 
 #: ../../../../ccextras/cc-reviews.php:181
 msgid "Recent Reviews"
-msgstr ""
+msgstr "最近的評論"
 
 #: ../../../../ccextras/cc-reviews.php:232
 #, php-format
 msgid "Reviews for \"%s\""
-msgstr ""
+msgstr "\"%s\" 的評論"
 
 #: ../../../../ccextras/cc-reviews.php:259
 #, php-format
 msgid "<br />Reviews left for<br /> \"%s\""
-msgstr ""
+msgstr "<br />留給<br /> \"%s\" <br />的評論"
 
 #: ../../../../ccextras/cc-reviews.php:264
 #, php-format
 msgid "<br />Reviews left for<br /> %s"
-msgstr ""
+msgstr "<br />留給<br /> %s <br />的評論"
 
 #: ../../../../ccextras/cc-reviews.php:271
 #: ../../../../ccextras/cc-reviews.php:289
@@ -1340,122 +1340,123 @@ msgstr ""
 #: ../../../../ccextras/cc-reviews.php:817
 #: ../../../../ccextras/cc-reviews.php:888
 msgid "Reviews"
-msgstr ""
+msgstr "評論"
 
 #: ../../../../ccextras/cc-reviews.php:343
 msgid "review integration is not enabled"
-msgstr ""
+msgstr "未啟用評論整合系統"
 
 #: ../../../../ccextras/cc-reviews.php:416
 #: ../../../../ccextras/cc-reviews.php:725
 msgid "Write Review"
-msgstr ""
+msgstr "撰寫評論"
 
 #: ../../../../ccextras/cc-reviews.php:490
 msgid "Can not find that upload."
-msgstr ""
+msgstr "找不到這份上傳檔."
 
 #: ../../../../ccextras/cc-reviews.php:500
 msgid "create new"
-msgstr ""
+msgstr "建立新的"
 
 #: ../../../../ccextras/cc-reviews.php:506
 #, php-format
 msgid "Write a Review for '%s'"
-msgstr ""
+msgstr "為 '%s' 撰寫評論"
 
 #: ../../../../ccextras/cc-reviews.php:525
 msgid "You've already reviewed this upload"
-msgstr ""
+msgstr "你已經評論過這份上傳檔了"
 
 #: ../../../../ccextras/cc-reviews.php:537
 #, php-format
 msgid "%s's Review of '%s'"
-msgstr ""
+msgstr "%s 對 '%s' 的評論"
 
 #: ../../../../ccextras/cc-reviews.php:609
 #, php-format
 msgid "%s has left %s1 review</a> "
-msgstr ""
+msgstr "%s 留下了 %s1 個評論</a> "
 
 #: ../../../../ccextras/cc-reviews.php:613
 #, php-format
 msgid "%s has left %s%d reviews</a> "
-msgstr ""
+msgstr "%s 留下了 %s%d 個評論</a> "
 
 #: ../../../../ccextras/cc-reviews.php:629
 #, php-format
 msgid "and has been reviewed %sonce</a> "
-msgstr ""
+msgstr "且被評論過 %sonce</a>"
 
 #: ../../../../ccextras/cc-reviews.php:633
 #, php-format
 msgid "and has been reviewed %s%d times</a> "
-msgstr ""
+msgstr "且被評論過 %s%d 次</a> "
 
 #: ../../../../ccextras/cc-reviews.php:684
 #, php-format
 msgid "Reviews (%s)"
-msgstr ""
+msgstr "評論 (%s)"
 
+# VAR ORDER
 #: ../../../../ccextras/cc-reviews.php:795
 #, php-format
 msgid "Reivews left for \"%s\" by %s"
-msgstr ""
+msgstr "留給 \"%s\" 的評論, 評論者: %s"
 
 #: ../../../../ccextras/cc-reviews.php:812
 #, php-format
 msgid "Reviews left for %s"
-msgstr ""
+msgstr "留給 %s 的評論"
 
 #: ../../../../ccextras/cc-reviews.php:939
 msgid "Sorry, no reviews match"
-msgstr ""
+msgstr "抱歉, 沒有吻合的評論"
 
 #: ../../../../ccextras/cc-nswf.php:72
 #: ../../../../mixter-lib/mixter-dump-listing.inc:35
 msgid "Not Safe For Work"
-msgstr ""
+msgstr "工作場合不宜"
 
 #: ../../../../ccextras/cc-nswf.php:73
 msgid "Mark this upload as <a "
-msgstr ""
+msgstr "將此上傳檔標記為<a "
 
 #: ../../../../ccextras/cc-nswf.php:74
 msgid "href=\"http://en.wikipedia.org/wiki/NSFW\" target=\"_blank\">NSFW</a> "
-msgstr ""
+msgstr "href=\"http://en.wikipedia.org/wiki/NSFW\" target=\"_blank\">工作場合不宜</a> "
 
 #: ../../../../ccextras/cc-nswf.php:75
 msgid "if it contains questionable language."
-msgstr ""
+msgstr "以警告其含有可疑的語言."
 
 #: ../../../../ccextras/cc-stats.php:48
 #, php-format
 msgid "%s has no remixes"
-msgstr ""
+msgstr "%s 沒有重混作品"
 
 #: ../../../../ccextras/cc-stats.php:54
 #, php-format
 msgid "%s has 1 remix"
-msgstr ""
+msgstr "%s 有 1 個重混作品"
 
 #: ../../../../ccextras/cc-stats.php:58
 #, php-format
 msgid "%s has %d remixes"
-msgstr ""
+msgstr "%s 有 %d 個重混作品"
 
 #: ../../../../ccextras/cc-stats.php:64
 msgid " and has not been remixed"
-msgstr ""
+msgstr ", 不過還沒有被別人拿去重混過"
 
 #: ../../../../ccextras/cc-stats.php:70
 msgid " and has been remixed once"
-msgstr ""
+msgstr ", 而且被別人拿去重混過一次了"
 
 #: ../../../../ccextras/cc-stats.php:74
 #, php-format
 msgid " and has been remixed %d times"
-msgstr ""
+msgstr ", 而且被別人拿去重混過 %d 次了"
 
 #: ../../../../ccextras/cc-stats.php:79
 msgid "Stats"
@@ -1473,45 +1474,45 @@ msgstr "ccMixter 統計資料 [beta]"
 #: ../../../../ccextras/cc-topics.php:283
 #: ../../../../ccextras/cc-topics.php:469
 msgid "Reply"
-msgstr ""
+msgstr "回覆"
 
 #: ../../../../ccextras/cc-topics.php:130
 msgid "Text"
-msgstr ""
+msgstr "文字"
 
 #: ../../../../ccextras/cc-topics.php:225
 msgid "Posts"
-msgstr ""
+msgstr "文章數"
 
 #: ../../../../ccextras/cc-topics.php:259
 msgid "Reply with quote"
-msgstr ""
+msgstr "回覆並附上引言"
 
 #: ../../../../ccextras/cc-topics.php:275
 msgid "Reply to yourself"
-msgstr ""
+msgstr "回覆給你自己"
 
 #: ../../../../ccextras/cc-topics.php:279
 #, php-format
 msgid "Reply to %s"
-msgstr ""
+msgstr "回覆給 %s"
 
 #: ../../../../ccextras/cc-topics.php:421
 msgid "Can not find that topic, it might have been deleted by the author"
-msgstr ""
+msgstr "找不到這個主題, 可能已經被其他作者刪除了"
 
 #: ../../../../ccextras/cc-topics.php:533
 msgid "Deleting Topic"
-msgstr ""
+msgstr "正在刪除主題"
 
 #: ../../../../ccextras/cc-topics.php:643
 #, php-format
 msgid "Edit topic: '%s'"
-msgstr ""
+msgstr "編輯主題: '%s'"
 
 #: ../../../../ccextras/cc-user-info-x.php:68
 msgid "Your legal name"
-msgstr ""
+msgstr "你在法律文件上的姓名"
 
 #: ../../../../ccextras/cc-user-info-x.php:72
 msgid "Phone Number"
@@ -1519,7 +1520,7 @@ msgstr "電話號碼"
 
 #: ../../../../ccextras/cc-user-info-x.php:73
 msgid "A phone number to reach you"
-msgstr ""
+msgstr "可以聯絡到你的電話號碼"
 
 #: ../../../../ccextras/cc-user-info-x.php:77
 msgid "Country"
@@ -1573,19 +1574,19 @@ msgstr "我被重混過了"
 
 #: ../../../../ccextras/cc-notify.inc:120
 msgid "I've been reviewed"
-msgstr ""
+msgstr "我被評論時"
 
 #: ../../../../ccextras/cc-notify.inc:122
 msgid "I've been replied to"
-msgstr ""
+msgstr "我被回覆時"
 
 #: ../../../../ccextras/cc-notify.inc:124
 msgid "I've been rated"
-msgstr ""
+msgstr "我被評分時"
 
 #: ../../../../ccextras/cc-notify.inc:174
 msgid "Notifications have been updated"
-msgstr ""
+msgstr "通知書偏好已更新"
 
 #: ../../../../ccextras/cc-notify.inc:213
 #, php-format
@@ -1598,10 +1599,17 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
+"\n"
+"\n"
+"請不要回覆此郵件\n"
+"\n"
+"這封信只是要通知你, \"%s\" 剛剛獲得了 %d.00 的評價\n"
+"\n"
+"%s\n"
 
 #: ../../../../ccextras/cc-notify.inc:225
 msgid "Ratings notification"
-msgstr ""
+msgstr "評分通知書"
 
 #: ../../../../ccextras/cc-notify.inc:246
 #, php-format
@@ -1614,10 +1622,17 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
+"\n"
+"\n"
+"請不要回覆此郵件\n"
+"\n"
+"這封信只是要通知你, \"%s\" 剛剛被 %s 評論了\n"
+"\n"
+"%s\n"
 
 #: ../../../../ccextras/cc-notify.inc:259
 msgid "Review notification"
-msgstr ""
+msgstr "評論通知書"
 
 #: ../../../../ccextras/cc-notify.inc:349
 #, php-format
@@ -1631,11 +1646,19 @@ msgid ""
 "\n"
 "%s\n"
 msgstr ""
+"\n"
+"\n"
+"請不要回覆此郵件\n"
+"\n"
+"這封信只是要通知你, 有人回覆了評論討論串 \n"
+"\"%s\":\n"
+"\n"
+"%s\n"
 
 #: ../../../../ccextras/cc-notify.inc:434
 #, php-format
 msgid "Upload by %s"
-msgstr ""
+msgstr "由 %s 上傳的檔案"
 
 #: ../../../../ccextras/cc-notify.inc:435
 #, php-format
@@ -1650,10 +1673,19 @@ msgid ""
 "%s\n"
 "\n"
 msgstr ""
+"\n"
+"\n"
+"請不要回覆此郵件\n"
+"\n"
+"這封信只是要通知你, %s 剛剛上傳了新的東西到 %s\n"
+"\n"
+"\"%s\"\n"
+"%s\n"
+"\n"
 
 #: ../../../../ccextras/cc-notify.inc:452
 msgid "which uses samples from:\n"
-msgstr ""
+msgstr "其中使用了來自此處的取樣:\n"
 
 #: ../../../../ccextras/cc-notify.inc:461
 #, php-format
@@ -1662,6 +1694,9 @@ msgid ""
 "Thank you,\n"
 "%s"
 msgstr ""
+"\n"
+"非常感謝,\n"
+"%s"
 
 #: ../../../../ccextras/cc-notify.php:129
 msgid "Edit My Notifications"
