@@ -399,8 +399,9 @@ class CCNavigatorAdmin
                     {
                         $sorted_tabs['handler'] = $pages[$page_name]['handler'];
                     }
-                    $edited_page[$page_name] = $sorted_tabs;
-                    $configs->SaveConfig('tab_pages',$edited_page);
+                    $all_vroot_pages = $configs->GetConfig('tab_pages');
+                    $all_vroot_pages[$page_name] = $sorted_tabs;
+                    $configs->SaveConfig('tab_pages',$all_vroot_pages);
                     //$url = ccl('admin','tabs');
                     CCUtil::SendBrowserTo();
                 }
