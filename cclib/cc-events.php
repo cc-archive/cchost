@@ -319,6 +319,7 @@ class CCEvents
         }
         else
         {
+            header("HTTP/1.0 404 Not Found");
             CCPage::SystemError("Invalid path");
         }
     }
