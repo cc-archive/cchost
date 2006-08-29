@@ -571,9 +571,10 @@ class CCUser
                 $users->Update($fields);
                 
                 CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $id, &$old_info));
-
-                CCPage::Prompt(_("Changes were saved"));
-                $ok = true;
+		// this sends us to the save page
+		// I added because problem with getting the new language
+		// visible as soon as changed upon save
+                CCUtil::SendBrowserTo('profile/save');
             }
         }
 
@@ -581,6 +582,21 @@ class CCUser
             CCPage::AddForm( $form->GenerateForm() );
     }
 
+    /**
+    *
+    * This just displays a message about the changes being saved.
+    *
+    * This is really a stub for moving the save profile to this method, but for
+    * now it is just a quick display on the page saying changes were saved
+    * and is ncessary to display this message in the newly selected language.
+    *
+    * @access	public
+    */
+    function SaveProfile ()
+    {
+	CCPage::SetTitle(_("Edit Your Settings"));
+        CCPage::Prompt(_("Changes were saved"));
+    }
 
     function ListRecords($sql_where = '')
     {
@@ -892,9 +908,13 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'people',           array('CCUser','UserPage'),     CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'people/profile',   array('CCUser','EditProfile'),  CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( 'people/addtofavs', array('CCUser','AddToFavs'),  CC_MUST_BE_LOGGED_IN );
+        CCEvents::MapUrl( 'people',           array('CCUser','UserPage'),
+	                                      CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'people/profile',   array('CCUser','EditProfile'),  
+	                                      CC_MUST_BE_LOGGED_IN );
+        CCEvents::MapUrl( 'people/profile/save', array('CCUser','SaveProfile'),                                                  CC_MUST_BE_LOGGED_IN );
+        CCEvents::MapUrl( 'people/addtofavs', array('CCUser','AddToFavs'),  
+	                                      CC_MUST_BE_LOGGED_IN );
     }
 
     /**
