@@ -51,13 +51,13 @@ class CCAdminMenuForm extends CCGridForm
 
             if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
             {
-                $help = "You can revert to factory defaults menu by clicking <a href=\"$revert_link\">here</a> ".
+                $help = "You can revert to factory defaults menu by clicking <a href=\"$revert_link\"><b><u>here</u></b></a> ".
                         "(This will erase the customization you've done to the main menu, but not affect any virtual ccHosts" .
                         " that you have customized menus for.)";
             }
             else
             {
-                $help = "You can revert to your main configuration menu by clicking <a href=\"$revert_link\">here</a> ".
+                $help = "You can revert to your main configuration menu by clicking <a href=\"$revert_link\"><b><u>here</u></b></a> ".
                 $extra = "(This will erase the customization you've done to the <b>$CC_CFG_ROOT</b> menu.)";
             }
         }
@@ -75,6 +75,8 @@ class CCAdminMenuForm extends CCGridForm
             }
         }
 
+        $addurl = ccl('admin', 'menu', 'additems', '3');
+        $help .= "<br />To add items click <a href=\"$addurl\"><b><u>here</u></b></a> (This will not save any of the work you've done below.)";
 
         $this->SetHelpText($help);
 
@@ -220,7 +222,7 @@ class CCMenuAdmin
     {
         if( !empty($revert) && ($revert == 'revert') )
         {
-            $this->RevertToParent();
+            $menu_api->RevertToParent();
             return;
         }
 
