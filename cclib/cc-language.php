@@ -475,7 +475,7 @@ class CCLanguageAdmin
         global $CC_GLOBALS;
 
         $form = new CCLanguageAdminForm();
-        CCPage::SetTitle("Language Support");
+        CCPage::SetTitle(_("Language Support"));
 
         if( empty($_POST['languageadmin']) || !$form->ValidateFields() )
         {
