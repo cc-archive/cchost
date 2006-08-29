@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -91,16 +91,6 @@ if (is_dir($cc_extras_dir))
        }
        closedir($cc_dh);
     }
-}
-
-// English (us) installations should rename cc-lang.php to something without a
-// php extension, then this no-op version of cct() will kick in and 
-// improve performance
-//
-if( !function_exists('cct') )
-{
-    function cct($t) { return( $t ); }
-
 }
 
 ?>
