@@ -72,7 +72,6 @@ ccextras/cc-format.js \
 ccextras/cc-import-files.php \
 ccextras/cc-howididit.php \
 cclib/cc-language.php \
-ccextras/cc-lang.inc \
 ccextras/cc-music-submit.php \
 ccextras/cc-mail.php \
 ccextras/cc-reviews.php \

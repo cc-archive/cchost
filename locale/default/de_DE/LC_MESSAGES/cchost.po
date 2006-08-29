@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-22 10:45-0700\n"
+"POT-Creation-Date: 2006-08-29 01:29-0700\n"
 "PO-Revision-Date: 2006-06-28 12:00+0000\n"
 "Last-Translator: Friedemann Bochow <f.bochow@milchhof.net>\n"
 "Language-Team: Deutsch <f.bochow@milchhof.net>\n"
@@ -167,37 +167,37 @@ msgstr "Abstimmung ist offen bis "
 msgid "Browse Contests"
 msgstr "Wettbewerbe durchsuchen"
 
-#: cclib/cc-contest.php:543
-msgid "<h3>This contest does not support online voting</h3>"
-msgstr "<h3>Dieser Wettbewerb unterst&uuml;tzt keine Online-Abstimmung</h3>"
+#: cclib/cc-contest.php:544
+msgid "This contest does not support online voting"
+msgstr "Dieser Wettbewerb unterst&uuml;tzt keine Online-Abstimmung"
 
-#: cclib/cc-contest.php:582
-msgid "<h3>Voting will open after submission period has ended</h3>"
-msgstr "<h3>Die Abstimmung wird nach dem Einsendeschluss er&ouml;ffnet</h3>"
+#: cclib/cc-contest.php:584
+msgid "Voting will open after submission period has ended"
+msgstr "Die Abstimmung wird nach dem Einsendeschluss er&ouml;ffnet"
 
-#: cclib/cc-contest.php:588
-msgid "<h3>Poll Results</h3>"
-msgstr "<h3>Umfrage-Ergebnisse</h3>"
+#: cclib/cc-contest.php:591
+msgid "Poll Results"
+msgstr "Umfrage-Ergebnisse"
 
-#: cclib/cc-contest.php:597
-msgid "<h3>Voting is only open to registered users</h3>"
-msgstr "<h3>Abstimmung nur f&uuml;r registrierte User</h3>"
+#: cclib/cc-contest.php:601
+msgid "Voting is only open to registered users"
+msgstr "Abstimmung nur f&uuml;r registrierte User"
 
-#: cclib/cc-contest.php:599
-msgid "<h3>Results will be shown here after the voting period is closed</h3>"
-msgstr "<h3>Die Ergebnisse werden nach Ende der Abstimmung gezeigt</h3>"
+#: cclib/cc-contest.php:604
+msgid "Results will be shown here after the voting period is closed"
+msgstr "Die Ergebnisse werden nach Ende der Abstimmung gezeigt"
 
-#: cclib/cc-contest.php:622
+#: cclib/cc-contest.php:627
 #, php-format
 msgid "Submit to: '%s'"
 msgstr "Senden an: '%s'"
 
-#: cclib/cc-contest.php:683
+#: cclib/cc-contest.php:688
 #, php-format
 msgid "Your upload has been entered in '%s'"
 msgstr "Dein Upload wurde eingetragen in '%s'"
 
-#: cclib/cc-contest.php:835
+#: cclib/cc-contest.php:840
 msgid "This contest entry is only visible to the owner and admins."
 msgstr "Dieser Wettbewerb ist nur f&uuml;r den Besitzer und Admins sichtbar."
 
@@ -536,12 +536,12 @@ msgid "Welcome to ccHost"
 msgstr "Willkommen bei ccHost"
 
 #: cclib/cc-page.php:684
-msgid "<<< Back"
-msgstr "<<< Zur&uuml;ck"
+msgid "Back"
+msgstr "Zur&uuml;ck"
 
 #: cclib/cc-page.php:694
-msgid "More >>>"
-msgstr "Mehr >>>"
+msgid "More"
+msgstr "Mehr"
 
 #: cclib/cc-poll.php:61
 msgid "Vote"
@@ -594,7 +594,6 @@ msgid "Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"
 msgstr "Remix %s erfolgreich beendet (Ergebnisse <a href=\"%s\">hier</a>)"
 
 #: cclib/cc-renderimage.php:169
-#, fuzzy
 msgid "Display Thumbnails"
 msgstr "Name f&uuml;r die Datei anzeigen"
 
@@ -651,8 +650,8 @@ msgid "Search"
 msgstr "Suche"
 
 #: cclib/cc-search.php:93
-msgid "<h1>Search using Google (tm)</h1>"
-msgstr "<h1>Suche mit Google (tm)</h1>"
+msgid "Search using Google (tm)"
+msgstr "Suche mit Google (tm)"
 
 #: cclib/cc-search.php:124
 msgid "Search Results"
@@ -763,7 +762,7 @@ msgstr "Datei"
 
 #: cclib/cc-uploadapi.php:955
 msgid "There was error in the file format<br />"
-msgstr "Fehler im Dateiformat"
+msgstr "Fehler im Dateiformat<br />"
 
 #: cclib/cc-user.php:94
 msgid "Security key does not match"
@@ -809,7 +808,7 @@ msgstr "URL Homepage"
 msgid "Make sure it starts with http://"
 msgstr "&Uuml;berpr&uuml;fe, ob sie mit http:// beginnt"
 
-#: cclib/cc-user.php:242 cclib/cc-language.php:432
+#: cclib/cc-user.php:242 cclib/cc-language.php:466
 msgid "Default Language:"
 msgstr "Standard-Sprache:"
 
@@ -969,7 +968,7 @@ msgid "Subject"
 msgstr "Subject"
 
 #: ccextras/cc-flag.php:62
-#, fuzzy, php-format
+#, php-format
 msgid "Flag %s \"%s\""
 msgstr "Markiere %s \"%s\""
 
@@ -1100,15 +1099,15 @@ msgstr "Deine Erfahrungen aus dieser Arbeit"
 msgid "Edit \"How I Did It\""
 msgstr "'Wie habe ich's gemacht?' bearbeiten"
 
-#: cclib/cc-language.php:303
+#: cclib/cc-language.php:334
 msgid "default"
 msgstr "Standard"
 
-#: cclib/cc-language.php:425
+#: cclib/cc-language.php:459
 msgid "Default Locale Preference:"
 msgstr "Lokale Standard-Einstellung:"
 
-#: cclib/cc-language.php:438
+#: cclib/cc-language.php:472
 msgid ""
 "Select the default locale preference and a default language and the system "
 "will try to translate menus, navigation tabs and anything else you might "
@@ -1120,7 +1119,7 @@ msgstr ""
 "&uuml;bersetzen. Ausdr&uuml;cke, die das &Uuml;bersetzungssystem erkennt, "
 "werden in den Men&uuml;punkten und Navigations-Tabs nicht ver&auml;ndert."
 
-#: cclib/cc-language.php:439
+#: cclib/cc-language.php:473
 msgid ""
 "The Locale Preference is a specific folder that contains specific language "
 "translations. The default is a folder of the same name. Inside these folders "
@@ -1131,7 +1130,7 @@ msgstr ""
 "\"default\". In diesen Ordnern befinden sich die jeweiligen Sprach&uuml;"
 "bersetzungen ."
 
-#: cclib/cc-language.php:440
+#: cclib/cc-language.php:474
 msgid ""
 "To create a specific translation, please copy the default folder with a "
 "unique name, and then select it as your Default Locale Preference. Then, "
@@ -1149,179 +1148,92 @@ msgstr "Remix senden"
 #: ccextras/cc-music-submit.php:49
 msgid ""
 "A remix using samples downloaded from this site. When submitting a remix "
-"make sure "
+"make sure to properly attribute the artist you sampled to comply with the "
+"Attribution part the Creative Commons license. The next screen will have a "
+"search function that allows you do just that."
 msgstr ""
 "Remix, der Samples benutzt, die von dieser Seite downgeloadet wurden. Wenn "
-"Du einen Remix sendest, beachte bitte, "
+"Du einen Remix sendest, beachte bitte, den gesampleten K&uuml;nstler richtig "
+"zu anzugeben, um die Kennzeichnungspflicht der Creative-Commons-Lizenz zu "
+"erf&uuml;llen. Der n&auml;chste Screen hat eine Suchfunktion, die genau das "
+"erm&ouml;glicht."
 
-#: ccextras/cc-music-submit.php:50
-msgid ""
-"to properly attribute the artist you sampled to comply with the Attribution "
-msgstr ""
-"den gesampleten K&uuml;nstler richtig zu anzugeben, um die "
-"Kennzeichnungspflicht "
-
-#: ccextras/cc-music-submit.php:51
-msgid ""
-"part the Creative Commons license. The next screen will have a search "
-"function "
-msgstr ""
-"der Creative-Commons-Lizenz zu erf&uuml;llen. Der n&auml;chste Screen hat "
-"eine Suchfunktion, "
-
-#: ccextras/cc-music-submit.php:52
-msgid "that allows you do just that."
-msgstr "die genau das erm&ouml;glicht."
-
-#: ccextras/cc-music-submit.php:58
+#: ccextras/cc-music-submit.php:55
 msgid "Use this form to submit a remix"
 msgstr "Verwende dieses Formular, um einen Remix zu senden"
 
-#: ccextras/cc-music-submit.php:62
+#: ccextras/cc-music-submit.php:59
 msgid "Submit an A Cappella"
 msgstr "A Capella senden"
 
-#: ccextras/cc-music-submit.php:64
+#: ccextras/cc-music-submit.php:61
 msgid ""
 "Stand alone vocal parts, either spoken word or sung. Mono recording with no "
-"effects  "
+"effects (reverb, delay, etc.) on them are best because they are the most "
+"flexible to work with. Many singers think they sound \"better\" with a lot "
+"of effects but it is always better to leave those choices to a producer/"
+"remixer to allow them to use their creative skills to the fullest potential."
 msgstr ""
 "Einzelne Vokalst&uuml;cke, gesprochen oder gesungen. Mono-Aufnahmen ohne "
-"Effekte "
+"Effekte (Reverb, Delay etc.) sind am besten, weil sie am flexibelsten zu "
+"bearbeiten sind. Viele S&auml;nger glauben, dass sie mit Effekten besser "
+"klingen, doch es ist immer ratsam, dies einem Producer/Remixer zu &uuml;"
+"berlassen, um ihm so zu erlauben, seine eigenen kreativen M&ouml;glichkeiten "
+"optimal zu nutzen."
 
 #: ccextras/cc-music-submit.php:65
-msgid ""
-"(reverb, delay, etc.) on them are best because they are the most flexible to "
-"work with. "
-msgstr ""
-"(Reverb, Delay etc.) sind am besten, weil sie am flexibelsten zu bearbeiten "
-"sind. "
-
-#: ccextras/cc-music-submit.php:66
-msgid ""
-"Many singers think they sound \"better\" with a lot of effects but it is "
-"always better to "
-msgstr ""
-"Viele S&auml;nger glauben, dass sie mit Effekten besser klingen, doch es ist "
-"immer ratsam, "
-
-#: ccextras/cc-music-submit.php:67
-msgid ""
-"leave those choices to a producer/remixer to allow them to use their "
-"creative skills to "
-msgstr ""
-"dies einem Producer/Remixer zu &uuml;berlassen, um ihm so zu erlauben, seine "
-"eigenen kreativen M&ouml;glichkeiten "
-
-#: ccextras/cc-music-submit.php:68
-msgid "the fullest potential."
-msgstr "optimal zu nutzen."
-
-#: ccextras/cc-music-submit.php:72
 msgid "Use this form to submit an a cappella"
 msgstr "Verwende dieses Formular, A Capella zu senden"
 
-#: ccextras/cc-music-submit.php:78
+#: ccextras/cc-music-submit.php:71
 msgid "Submit Samples"
 msgstr "Samples senden"
 
-#: ccextras/cc-music-submit.php:80
+#: ccextras/cc-music-submit.php:73
 msgid ""
 "Samples can be a loop, a one-shot note or drum hit or any other snippet of "
-"sound "
+"sound that might be useful to a producer or remixer. You are encouraged to "
+"make a collection of samples and upload them together in archive format "
+"(ZIP), however sound files are accepted as well. By far the most flexible "
+"samples to work with are mono and have no effects for acoustic instruments "
+"and minimal effects for synthesized sounds."
 msgstr ""
 "Samples k&ouml;nnen Loops sein, ein einzelner Ton oder Trommel-Sound oder "
-"irgendein anderer Soundschnipsel sein, "
+"irgendein anderer Soundschnipsel sein, der einem Producer/Remixer n&uuml;"
+"tzlich sein k&ouml;nnte. Du kannst eineSammlung von Samples anlegen und sie "
+"komplett im Archiv-Format (ZIP) hochladen, Sounddateien sind jedoch auch "
+"zugelassen. Am flexibelsten sind Mono-Samples ohne Effekte bei akustischen "
+"Instrumenten und mit nur minimalen Effekten bei synthetischen Sounds."
 
-#: ccextras/cc-music-submit.php:81
-msgid ""
-"that might be useful to a producer or remixer. You are encouraged to make a "
-"collection "
-msgstr ""
-"der einem Producer/Remixer n&uuml;tzlich sein k&ouml;nnte. Du kannst "
-"eineSammlung "
-
-#: ccextras/cc-music-submit.php:82
-msgid ""
-"of samples and upload them together in archive format (ZIP), however sound "
-"files are "
-msgstr ""
-"von Samples anlegen und sie komplett im Archiv-Format (ZIP) hochladen, "
-"Sounddateien sind jedoch "
-
-#: ccextras/cc-music-submit.php:83
-msgid "accepted as well. By far the most flexible "
-msgstr "auch zugelassen. Am flexibelsten "
-
-#: ccextras/cc-music-submit.php:84
-msgid ""
-"samples to work with are mono and have no effects for acoustic instruments "
-"and minimal "
-msgstr ""
-"sind Mono-Samples ohne Effekte bei akustischen Instrumenten und mit nur "
-"minimalen "
-
-#: ccextras/cc-music-submit.php:85
-msgid "effects for synthesized sounds."
-msgstr "Effekten bei synthetischen Sounds."
-
-#: ccextras/cc-music-submit.php:88
+#: ccextras/cc-music-submit.php:76
 msgid "Use this form to submit samples"
 msgstr "Verwende dieses Formular, um Samples zu senden"
 
-#: ccextras/cc-music-submit.php:95
+#: ccextras/cc-music-submit.php:83
 msgid "Submit a Fully Mixed Track"
 msgstr "Einen vollst&auml;ndig abgemischten Track senden"
 
-#: ccextras/cc-music-submit.php:97
+#: ccextras/cc-music-submit.php:85
 msgid ""
 "An original track that is fully mixed is <i>extremely unlikely</i> to be "
-"remixed because of "
+"remixed because of the extra work the producer or remixer has to do the "
+"extract the parts they actually wish to use. Before uploading your track "
+"here, consider uploading to one of several free hosting sites sponsored by "
+"Creative Commons such <a href=\"http://archive.org/audio\">Internet Archive</"
+"a> or <a href=\"http://ourmedia.org\">Our Media</a> both of which might be "
+"more appropriate places to post completely mixed tracks."
 msgstr ""
 "Es ist <i>extrem unwahrscheinlich</i>, dass ein Original-Track, der "
-"vollst&auml;ndig abgemischt ist, remixt wird, und zwar wegen der "
-
-#: ccextras/cc-music-submit.php:98
-msgid ""
-"the extra work the producer or remixer has to do the extract the parts they "
-"actually "
-msgstr ""
-"zus&auml;tzlichen Arbeit, die Producer/Remixer haben, um Teile zu "
-"extrahieren, die sie eigentlich "
-
-#: ccextras/cc-music-submit.php:99
-msgid "wish to use. Before uploading your track here, "
-msgstr "verwenden wollen. Bevor Du Deine Tracks hier hochl&auml;dst, "
-
-#: ccextras/cc-music-submit.php:100
-msgid ""
-"consider uploading to one of several free hosting sites sponsored by "
-"Creative Commons such "
-msgstr ""
+"vollst&auml;ndig abgemischt ist, remixt wird, und zwar wegen der zus&auml;"
+"tzlichen Arbeit, die Producer/Remixer haben, um Teile zu extrahieren, die "
+"sie eigentlich verwenden wollen. Bevor Du Deine Tracks hier hochl&auml;dst, "
 "bedenke ob Du ihn nicht lieber auf einen der verschiedenen Host-Seiten "
-"hochl&auml;dst, die von Creative Commons gesponsert werden, wie z.B."
+"hochl&auml;dst, die von Creative Commons gesponsert werden, wie z.B. <a href="
+"\"http://archive.org/audio\">Internet Archive</a> oder <a href=\"http://"
+"ourmedia.org\">Our Media</a>, die beide die passenderen Ortesein k&ouml;"
+"nnten, um vollst&auml;ndig abgemischte Tracks zu ver&ouml;ffentlichen."
 
-#: ccextras/cc-music-submit.php:101
-msgid ""
-"<a href=\"http://archive.org/audio\">Internet Archive</a> or <a href="
-"\"http://ourmedia.org\">"
-msgstr ""
-"<a href=\"http://archive.org/audio\">Internet Archive</a> oder <a href="
-"\"http://ourmedia.org\">"
-
-#: ccextras/cc-music-submit.php:102
-msgid ""
-"Our Media</a> both of which might be more appropriate places to post "
-"completely mixed "
-msgstr ""
-"Our Media</a>, die beide die passenderen Orte sein k&ouml;nnten, um "
-"vollst&auml;ndig abgemischte Tracks "
-
-#: ccextras/cc-music-submit.php:103
-msgid "tracks."
-msgstr "zu ver&ouml;ffentlichen."
-
-#: ccextras/cc-music-submit.php:107
+#: ccextras/cc-music-submit.php:89
 msgid "Use this form to submit a fully mixed track"
 msgstr ""
 "Verwende dieses Formular, um einen vollst&auml;ndig abgemischten Track zu "
@@ -1370,8 +1282,8 @@ msgstr "<br />abgegebene Kommentare f&uuml;r<br /> %s"
 
 #: ccextras/cc-reviews.php:271 ccextras/cc-reviews.php:289
 #: ccextras/cc-reviews.php:309 ccextras/cc-reviews.php:318
-#: ccextras/cc-reviews.php:407 ccextras/cc-reviews.php:639
-#: ccextras/cc-reviews.php:817 ccextras/cc-reviews.php:888
+#: ccextras/cc-reviews.php:407 ccextras/cc-reviews.php:643
+#: ccextras/cc-reviews.php:821 ccextras/cc-reviews.php:892
 msgid "Reviews"
 msgstr "Kommentare"
 
@@ -1379,7 +1291,7 @@ msgstr "Kommentare"
 msgid "review integration is not enabled"
 msgstr "Kommentieren ist nicht aktiviert"
 
-#: ccextras/cc-reviews.php:416 ccextras/cc-reviews.php:725
+#: ccextras/cc-reviews.php:416 ccextras/cc-reviews.php:729
 msgid "Write Review"
 msgstr "Kommentar schreiben"
 
@@ -1405,42 +1317,42 @@ msgstr "Du hast diesen Upload schon kommentiert"
 msgid "%s's Review of '%s'"
 msgstr "%s's Kommentar von '%s'"
 
-#: ccextras/cc-reviews.php:609
-#, php-format
-msgid "%s has left %s1 review</a> "
+#: ccextras/cc-reviews.php:611
+#, fuzzy, php-format
+msgid "%s has left %s1 review "
 msgstr "%s hat %s1 Kommentar abgegeben</a> "
 
-#: ccextras/cc-reviews.php:613
-#, php-format
-msgid "%s has left %s%d reviews</a> "
+#: ccextras/cc-reviews.php:615
+#, fuzzy, php-format
+msgid "%s has left %s%d reviews "
 msgstr "%s hat %s%d Kommentare abgegeben</a> "
 
-#: ccextras/cc-reviews.php:629
-#, php-format
-msgid "and has been reviewed %sonce</a> "
+#: ccextras/cc-reviews.php:633
+#, fuzzy, php-format
+msgid "and has been reviewed %sonce "
 msgstr "wurde %seinmal kommentiert </a> "
 
-#: ccextras/cc-reviews.php:633
-#, php-format
-msgid "and has been reviewed %s%d times</a> "
+#: ccextras/cc-reviews.php:637
+#, fuzzy, php-format
+msgid "and has been reviewed %s%d times "
 msgstr "und wurde %s%d mal kommentiert </a> "
 
-#: ccextras/cc-reviews.php:684
+#: ccextras/cc-reviews.php:688
 #, php-format
 msgid "Reviews (%s)"
 msgstr "Kommentare (%s)"
 
-#: ccextras/cc-reviews.php:795
+#: ccextras/cc-reviews.php:799
 #, php-format
 msgid "Reivews left for \"%s\" by %s"
 msgstr "Kommentare abgegeben f&uuml;r \"%s\" von %s"
 
-#: ccextras/cc-reviews.php:812
+#: ccextras/cc-reviews.php:816
 #, php-format
 msgid "Reviews left for %s"
 msgstr "Kommentare abgegeben f&uuml;r %s"
 
-#: ccextras/cc-reviews.php:939
+#: ccextras/cc-reviews.php:943
 msgid "Sorry, no reviews match"
 msgstr "Sorry, keine Kommentare passen"
 
@@ -1449,16 +1361,14 @@ msgid "Not Safe For Work"
 msgstr "Nicht sicher f&uuml;r die Bearbeitung"
 
 #: ccextras/cc-nswf.php:73
-msgid "Mark this upload as <a "
-msgstr "Diesen Upload als <a "
-
-#: ccextras/cc-nswf.php:74
-msgid "href=\"http://en.wikipedia.org/wiki/NSFW\" target=\"_blank\">NSFW</a> "
-msgstr "href=\"http://en.wikipedia.org/wiki/NSFW\" target=\"_blank\">NSFW</a> "
-
-#: ccextras/cc-nswf.php:75
-msgid "if it contains questionable language."
-msgstr "markieren, wenn er bedenkliche Ausdr&uuml;cke enth&auml;lt."
+#, fuzzy
+msgid ""
+"Mark this upload as <a href=\"http://en.wikipedia.org/wiki/NSFW\">NSFW</a> "
+"if it contains questionable language."
+msgstr ""
+"Diesen Upload als <a href=\"http://en.wikipedia.org/wiki/NSFW\" target="
+"\"_blank\">NSFW</a> markieren, wenn er bedenkliche Ausdr&uuml;cke enth&auml;"
+"lt."
 
 #: ccextras/cc-stats.php:48
 #, php-format
@@ -1924,7 +1834,6 @@ msgid "Download"
 msgstr "Download"
 
 #: mixter-lib/mixter-dump-listing.inc:42
-#, fuzzy
 msgid "length:"
 msgstr "L&auml;nge:"
 
@@ -1945,7 +1854,6 @@ msgid "Flag this upload for possible violation of terms"
 msgstr "Diesen Upload wegen m&ouml;glicher Verst&ouml;%szlig;e flaggen"
 
 #: mixter-lib/mixter-dump-listing.inc:47
-#, fuzzy
 msgid "featuring:"
 msgstr "Bewertungen:"
 

@@ -540,7 +540,8 @@ class CCContest
 
         if( !$record['contest_vote_online'] )
         {
-            print(_('<h3>This contest does not support online voting</h3>'));
+            print('<h3>' . 
+	          _('This contest does not support online voting') . '</h3>');
             cc_exit();
         }
 
@@ -579,13 +580,15 @@ class CCContest
         {
             if( $record['contest_taking_submissions'] )
             {
-                print(_('<h3>Voting will open after submission period has ended</h3>'));
+                print('<h3>' . 
+		_('Voting will open after submission period has ended') . 
+		'</h3>');
             }
             elseif( !$record['contest_voting_open'] )
             {
                 $data = $polls->GetPollingData($contest_short_name,'poll_numvotes');
                 $data = array_merge($data,$record);
-                print(_('<h3>Poll Results</h3>'));
+                print('<h3>' . _('Poll Results') . '</h3>');
                 $args['poll_data'] = $data;
                 $args['auto_execute'][] = 'polling_data';
                 $template = new CCTemplate($CC_GLOBALS['skin-map'] );
@@ -594,9 +597,11 @@ class CCContest
             else
             {
                 if( !CCUser::IsLoggedIn() )
-                    print(_('<h3>Voting is only open to registered users</h3>'));
+                    print('<h3>' . 
+		          _('Voting is only open to registered users') . 
+			  '</h3>');
                 else
-                    print(_('<h3>Results will be shown here after the voting period is closed</h3>'));
+                    print('<h3>' . _('Results will be shown here after the voting period is closed') . '</h3>');
             }
         }
 

@@ -27,7 +27,6 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_APP_INIT,   array( 'CCLanguage', 'OnInitApp'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,   array( 'CCLanguage', 'OnMapUrls'));
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,
                      array( 'CCLanguageAdmin',  'OnMapUrls'));
@@ -72,6 +71,14 @@ class CCLanguage
     var $_domain;
     
     /**
+     * @access private
+     * @var string
+     * The current web browsers' default autodetected language.
+     */
+    var $_browser_default_language;
+
+    
+    /**
      * Constructor
      * 
      * This method sets up the default language, preferences, etc for dealing
@@ -95,9 +102,8 @@ class CCLanguage
         // CCDebug::PrintVar($CC_GLOBALS);
     
         $this->_all_languages = array();
-    
         $this->_domain = $domain;
-    
+        $this->LoadBrowserDefaultLanguage();
         $this->LoadLanguages( $locale_dir );
    
         if ( isset($CC_GLOBALS['lang_locale_pref']) )
@@ -105,12 +111,27 @@ class CCLanguage
         else
     	    $this->SetLocalePref( $locale );
 
-        if ( !empty($CC_GLOBALS['user_language']) )
+        /* Sets the current language depending upon the user and
+	   global setting for languages with a couple of presets */
+
+	// tries to set the global users language with top priority
+	if ( 'default' == $CC_GLOBALS['user_language'] &&
+	     'default' == $CC_GLOBALS['lang'] ) {
+            $this->SetLanguage( $this->_browser_default_language );
+	} else if ( 'default' == $CC_GLOBALS['user_language'] ) {
+	    $this->SetLanguage( $CC_GLOBALS['lang'] );
+        } else if ( !empty($CC_GLOBALS['user_language']) ) {
             $this->SetLanguage( $CC_GLOBALS['user_language'] );
-        else if ( !empty($CC_GLOBALS['lang']) )
+	// next, tries to set the global selected for everyone
+        } else if ( !empty($CC_GLOBALS['lang']) ) {
             $this->SetLanguage( $CC_GLOBALS['lang'] );
-        else
+	// the next attempts language detection from the browser
+	} else if ( !empty($this->_browser_default_language ) ) {
+	    // echo $browser_language;
+            $this->SetLanguage( $this->_browser_default_language );
+        } else {
     	    $this->SetLanguage( $language );
+	}
     }
     
     /**
@@ -207,14 +228,14 @@ class CCLanguage
      */
     function SetLanguage ($lang_pref = CC_LANG)
     {
+	if ( $this->_language == $lang_pref )
+	    return true;
+	
         $lang_possible = 
             &$this->_all_languages['locale'][$this->_locale_pref]['language'];
-    
-        if ( $lang_pref == $this->_language )
-            return true;
    
-    // Yet again, the conditions to test for default language
-    // in order
+        // Yet again, the conditions to test for default language
+        // in order
         $lang_tests = array(&$lang_pref, 
                             $lang_pref . "_" . strtoupper($lang_pref));
     
@@ -301,6 +322,8 @@ class CCLanguage
 	// or set to nothing, then the default is to use the strings in the
 	// code
         $possible_langs['default'] = _('default');
+        $possible_langs[CC_LANG] = CC_LANG;
+        $possible_langs['autodetect'] = _('autodetect');
 	
 	return $possible_langs;
     }
@@ -327,6 +350,25 @@ class CCLanguage
     function GetDomain()
     {
         return $this->_domain;
+    }
+
+    /**
+     * Loads Browser Default Language into local variable and returns if
+     * already set.
+     *
+     * @return bool <code>true</code> if loads, <code>false</code> otherwise
+     */
+    function LoadBrowserDefaultLanguage()
+    {
+	// return true if this is set
+        if ( !empty($this->_browser_default_language) )
+	    return true;
+
+        list($this->_browser_default_language) =  
+	         explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE'], 2);
+
+        return !empty($this->_browser_default_language);
+        
     }
 
     /**
@@ -359,7 +401,6 @@ class CCLanguage
         echo "</pre>";
     }
 
-
     /**
     * Event handler for {@link CC_EVENT_APP_INIT}
     *
@@ -370,13 +411,12 @@ class CCLanguage
         global $CC_GLOBALS;
         // Basically need to init all the language stuff here...
         $this->Init();
-        // The CC_GLOBALS array are the active values and not hard settings
-        // in the database
-        $CC_GLOBALS['lang'] = &$this->_language;
-        $CC_GLOBALS['lang_xml'] = str_replace('_', '-', &$this->_language); 
+	// need the following for lang. encoding standards...arg
+        $CC_GLOBALS['lang_xml'] = str_replace('_', '-', $this->_language); 
         $CC_GLOBALS['lang_locale_pref'] = &$this->_locale_pref;
+	// TODO: should replace this with a singleton...
         $CC_GLOBALS['language'] = &$this;
-        //$this->DebugLanguages();
+        // $this->DebugLanguages();
     }
 } // end of CCLanguage class
 
@@ -527,8 +567,10 @@ class CCLanguageAdmin
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','language'),  array( 'CCLanguageAdmin', 'Language'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','language','save'),  array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','language'),  
+	    array( 'CCLanguageAdmin', 'Admin'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','language','save'),  
+	    array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
     }
 
 }

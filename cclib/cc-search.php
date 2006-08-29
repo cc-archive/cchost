@@ -90,7 +90,7 @@ class CCSearch
         CCPage::SetTitle(_("Search"));
         $form = new CCSearchForm();
         $form_html = $form->GenerateHTML();
-        $form_html .= _('<h1>Search using Google (tm)</h1>');
+        $form_html .= '<h1>' . _('Search using Google (tm)') . '</h1>';
         $site = preg_replace('#http://(.*)#','\1', cc_get_root_url() );
         $form_html .=<<<END
 <form method="GET" action="http://www.google.com/search">

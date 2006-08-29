@@ -28,7 +28,8 @@ $Id$
   <meta name="description" content="${site-meta-description}" />
   <meta name="robots" content="index, follow" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <!-- Current Language: ${lang} -->
+  <!-- Global Language: ${lang} -->
+  <!-- User Language: ${user_language} -->
   <tal:block repeat="head_link head_links">
   <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
   </tal:block>

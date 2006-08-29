@@ -71,10 +71,11 @@ define('CC_DYNAMIC_MENU_ITEM',  0x40 );
 
 /** 
  * Default language is nothing so that the default strings in the code are the 
- * default. In general however, language is general english and not en_US.
+ * default. This is en_EN because the original author strings are written by 
+ * english speakers
  * @see CCLanguage
  */
-define('CC_LANG', '');
+define('CC_LANG', 'en_EN');
 
 /**
  * This constant is the default locale folder to find i18n translations.
