@@ -601,19 +601,21 @@ class CCReview
         }
         else
         {
+	    // TODO: Convert this to language plurals
             $count = $record['user_num_reviews'];
             $byurl = url_args($url,'qtype=leftby');
             $link  = "<a href=\"$byurl\">";
+	    $link_close = "</a>";
             if( $count == 1 )
             {
-                $fmt   = _('%s has left %s1 review</a> ');
+                $fmt   = _('%s has left %s1 review ');
             }
             else
             {
-                $fmt   = _('%s has left %s%d reviews</a> ');
+                $fmt   = _('%s has left %s%d reviews ');
             }
             
-            $text  = sprintf($fmt, $name, $link, $count );
+            $text  = sprintf($fmt . $link_close, $name, $link, $count );
         }
 
         if( empty($record['user_num_reviewed']) )
@@ -623,17 +625,19 @@ class CCReview
         else
         {
             $count = $record['user_num_reviewed'];
+	    // TODO: Convert this to language plurals
             $link  = "<a href=\"$url\">";
+	    $link_close = "</a>";
             if( $count == 1 )
             {
-                $fmt   = _('and has been reviewed %sonce</a> ');
+                $fmt   = _('and has been reviewed %sonce ');
             }
             else
             {
-                $fmt   = _('and has been reviewed %s%d times</a> ');
+                $fmt   = _('and has been reviewed %s%d times ');
             }
             
-            $text  .= sprintf($fmt, $link, $count);
+            $text  .= sprintf($fmt . $link_close, $link, $count);
         }
 
         $record['user_fields'][] = array( 'label' => _('Reviews'), 

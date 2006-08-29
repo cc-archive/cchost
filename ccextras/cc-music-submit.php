@@ -46,10 +46,7 @@ class CCMusicForms
                 'remix' => array(
                         'text' => _('Submit a Remix'),
                         'submit_type' => 'Remix',
-                        'help' => _('A remix using samples downloaded from this site. When submitting a remix make sure ' .
-                                  'to properly attribute the artist you sampled to comply with the Attribution ' .
-                                  'part the Creative Commons license. The next screen will have a search function ' .
-                                  'that allows you do just that.'),
+                        'help' => _('A remix using samples downloaded from this site. When submitting a remix make sure to properly attribute the artist you sampled to comply with the Attribution part the Creative Commons license. The next screen will have a search function that allows you do just that.'),
                         'tags'  => array( CCUD_MEDIA_BLOG_UPLOAD, CCUD_REMIX ),
                         'weight' => 1,
                         'isremix' => true,
@@ -61,11 +58,7 @@ class CCMusicForms
                 'pella' => array(
                         'text' => _('Submit an A Cappella'),
                         'submit_type' => 'A Cappella',
-                        'help' => _('Stand alone vocal parts, either spoken word or sung. Mono recording with no effects  ' .
-                                  '(reverb, delay, etc.) on them are best because they are the most flexible to work with. ' .
-                                  'Many singers think they sound "better" with a lot of effects but it is always better to ' .
-                                  'leave those choices to a producer/remixer to allow them to use their creative skills to ' .
-                                  'the fullest potential.'),
+                        'help' => _('Stand alone vocal parts, either spoken word or sung. Mono recording with no effects (reverb, delay, etc.) on them are best because they are the most flexible to work with. Many singers think they sound "better" with a lot of effects but it is always better to leave those choices to a producer/remixer to allow them to use their creative skills to the fullest potential.'),
                         'tags'  => array( 'acappella', CCUD_MEDIA_BLOG_UPLOAD ),
                         'weight' => 10,
                         'isremix' => false,
@@ -77,12 +70,7 @@ class CCMusicForms
                 'samples' => array(
                         'text' => _('Submit Samples'),
                         'submit_type' => 'Sample',
-                         'help' => _('Samples can be a loop, a one-shot note or drum hit or any other snippet of sound ' .
-                                   'that might be useful to a producer or remixer. You are encouraged to make a collection ' .
-                                   'of samples and upload them together in archive format (ZIP), however sound files are ' .
-                                   'accepted as well. By far the most flexible '.
-                                   'samples to work with are mono and have no effects for acoustic instruments and minimal ' .
-                                   'effects for synthesized sounds.'),
+                         'help' => _('Samples can be a loop, a one-shot note or drum hit or any other snippet of sound that might be useful to a producer or remixer. You are encouraged to make a collection of samples and upload them together in archive format (ZIP), however sound files are accepted as well. By far the most flexible samples to work with are mono and have no effects for acoustic instruments and minimal effects for synthesized sounds.'),
                         'tags'  => array( 'sample', CCUD_MEDIA_BLOG_UPLOAD ),
                         'weight' => 15,
                         'form_help' => _('Use this form to submit samples'),
@@ -94,13 +82,7 @@ class CCMusicForms
                 'fullmix' => array(
                         'text' => _('Submit a Fully Mixed Track'),
                         'submit_type' => 'Original',
-                        'help' => _('An original track that is fully mixed is <i>extremely unlikely</i> to be remixed because of ' .
-                                  'the extra work the producer or remixer has to do the extract the parts they actually ' .
-                                  'wish to use. Before uploading your track here, ' .
-                                  'consider uploading to one of several free hosting sites sponsored by Creative Commons such ' .
-                                  '<a href="http://archive.org/audio">Internet Archive</a> or <a href="http://ourmedia.org">' .
-                                  'Our Media</a> both of which might be more appropriate places to post completely mixed ' .
-                                  'tracks.'),
+                        'help' => _('An original track that is fully mixed is <i>extremely unlikely</i> to be remixed because of the extra work the producer or remixer has to do the extract the parts they actually wish to use. Before uploading your track here, consider uploading to one of several free hosting sites sponsored by Creative Commons such <a href="http://archive.org/audio">Internet Archive</a> or <a href="http://ourmedia.org">Our Media</a> both of which might be more appropriate places to post completely mixed tracks.'),
                         'tags'  => array( CCUD_MEDIA_BLOG_UPLOAD, CCUD_ORIGINAL ),
                         'weight' => 50,
                         'enabled' => true,
