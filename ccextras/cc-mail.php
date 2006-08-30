@@ -249,7 +249,11 @@ class CCMailerAPI
     {
         global $CC_GLOBALS;
 
-        if( !CCUser::IsLoggedIn() )
+        if( 
+            !CCUser::IsAdmin() && 
+            !CCUser::IsAdmin($userto) && 
+            !CCUser::IsLoggedIn() 
+          )
         {
             CCPage::Prompt('Due to spamming issues we have to temporarily restrict email contacts ' . 
                            'to registered users only.');
