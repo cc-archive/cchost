@@ -38,6 +38,20 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,
  * (i18n) in php. It should be studied and used for sites that
  * want this type of support for their sites.
  *
+ * LINUX/OTHER NIXES: locale setting is very sensitive based on your system,
+ * installed locales, and how your .po and .mo files are formatted.
+ * If your locale doesn't work on a *nix (linux, etc) system, try to do
+ * a 'locale -a' from the commandline to see what locale's are installed
+ * on your system. Your installed locales are usually in /usr/lib/locale and
+ * are often generated from /etc/locale.gen with the locale-gen command.
+ * Please consult your system to see what type of locale system is installed 
+ * on your system. 
+ *
+ * WINDOWS: On windows machines, the 
+ * locale codes are not used and the full english name of languages is used.
+ * This has not been fully tested on windows systems and possibly might 
+ * break. There should be a workaround in an upcoming system
+ *
  */
 class CCLanguage
 {
@@ -377,15 +391,55 @@ class CCLanguage
      * a better option to call this after any objects are pulled from a 
      * session variable and/or after doing some checking on the current
      * run-time setup.
+     * 
+     * NOTE: Setting of the locale is dependent on what locales are installed
+     * on one's system: http://us2.php.net/manual/en/function.setlocale.php
+     * http://www.gentoo.org/doc/en/guide-localization.xml
      */
     function Init ()
     {
-        putenv("LANG=" . $this->_language ); 
-        setlocale(LC_ALL, $this->_language );
-        bindtextdomain($this->_domain, 
-                   CC_LANG_LOCALE . "/" . $this->_locale_pref );
-        textdomain($this->_domain);
+        // set the LANG environmental variable
+        if ( false == putenv("LANG=" . $this->_language ) )
+	    CCDebug::Log(sprintf("Could not set the env variable  LANG = %s", 
+	                         $this->_language));
+
+	// if locales are not installed in locale folder, they will not
+	// get set! This is usually in /usr/lib/locale
+	// Also, the backup language should always be the default language
+	// because of this...see the NOTE in the class description
+
+        $locale_set = setlocale(LC_ALL, $this->_language, 
+	                                $this->_language . ".utf8", 
+					CC_LANG);
+	if ( ( $locale_set != $this->_language && CC_LANG == $locale_set) || 
+	     empty($locale_set) )
+	{
+	    CCDebug::Log(
+	        sprintf("The language '%s' is not available, trying '%s'.", 
+		        $this->_language, $locale_set) );
+        }
+	    
+        $bindtextdomain_set = bindtextdomain($this->_domain, 
+                                  CC_LANG_LOCALE . "/" . $this->_locale_pref );
+	if ( empty($bindtextdomain_set) )
+	    CCDebug::Log("No locale pref selected, or empty path");
+	
+        $textdomain_set = textdomain($this->_domain);
+	if ( empty($textdomain_set) )
+	    CCDebug::Log("No textdomain set");
+	
     }
+
+    /**
+     * Gets NIX system locales 
+     * @returns array array of possible locales on a system
+     */
+    function GetSystemLocales()
+    {
+        exec('locale -a', $system_locales); /* if need -> $retval); */
+	return $system_locales;
+    }
+
     
     /**
      * This method is for generically testing what is happening inside
@@ -397,7 +451,10 @@ class CCLanguage
         echo "<pre>";
         // print_r( $this->_all_languages );
         // print_r( $this );
-	    print_r( $CC_GLOBALS );
+	// print_r( $CC_GLOBALS );
+	echo ( $this->_language );
+	// get system locals and print them out
+        print_r($this->GetSystemLocales());
         echo "</pre>";
     }
 
@@ -499,8 +556,16 @@ class CCLanguageAdmin
 
     function SavePage ()
     {
-        CCPage::SetTitle("Language Support");
-        CCPage::Prompt("Language support options saved.");
+        CCPage::SetTitle(_("Language Support"));
+        CCPage::Prompt(_("Language support options saved."));
+    }
+
+    function DiagnosticPage ()
+    {
+        global $CC_GLOBALS;
+        CCPage::SetTitle(_("Diagnostic") . " : " . _("Language") );
+        $CC_GLOBALS['language']->DebugLanguages();
+        // CCPage::Prompt(_("Language support options saved."));
     }
 
     /**
@@ -515,49 +580,15 @@ class CCLanguageAdmin
         {
             $items += array(
                 'language'   => array( 
-                                 'menu_text'  => 'Language',
+                                 'menu_text'  => _('Language'),
                                  'menu_group' => 'configure',
-                                 'help' => 'Configure Language use',
+                                 'help' => _('Configure Language use'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 40,
                                  'action' =>  ccl('admin','language')
                                  ),
                 );
         }
-    }
-
-    function Language($cclang='',$mode='u')
-    {
-        // if( empty($cclang) )
-        // {
-            $this->Admin();
-            return;
-        // }
-
-        // JON: thre rest is for the string editor which isn't connected
-	// up yet...
-
-        global $CC_GLOBALS;
-
-        $lang_file = "cclib/lang/$cclang/cc-translation-$mode.php";
-        if( file_exists($lang_file) )
-            include($lang_file);
-        else
-        {
-        }
-        $tablename = 'cc_translation_table_' . $mode;
-        $args = $CC_GLOBALS;
-        $tt =& $$tablename;
-            CCDebug::LogVar('tt',$tt);
-        natsort($tt);
-        $args['string_table'] = $tt;
-        $args['lang'] = $cclang;
-        $args['mode'] = $mode;
-        $template = new CCTemplate( 'ccextras/language.xml', true); // false would mean xml mode
-        $text = $template->SetAllAndParse( $args );
-        CCPage::AddScriptBlock('ajax_block');
-        CCPage::SetTitle("Language String Editor");
-        CCPage::AddPrompt('body_text',$text);
     }
 
     /**
@@ -570,6 +601,8 @@ class CCLanguageAdmin
         CCEvents::MapUrl( ccp('admin','language'),  
 	    array( 'CCLanguageAdmin', 'Admin'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( ccp('admin','language','save'),  
+	    array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','language','diagnostic'),  
 	    array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
     }
 
