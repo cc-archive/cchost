@@ -161,7 +161,7 @@ a:hover {
   padding: 0px;
   left: 0;
   border-right: solid 1px white;
-  background: url("ccmixter/sub_tab_bottom.gif") repeat-x bottom;
+  /* background: url("ccmixter/sub_tab_bottom.gif") repeat-x bottom; */
 }
 
 #cc_header li, #cc_sub_header li {
