@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 
 To see this file create a link to: media/viewfile/picks.xml
@@ -75,8 +75,8 @@ To see this file create a link to: media/viewfile/picks.xml
 <h1>ccMixter Radio</h1>
 <p>Enjoy ccMixter music based on some of the popular genres our remixers chose for their work.</p>
 <table class="pickspage">
-<tr><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=ambient+remix"><span
-tal:content="string: ambient" /></a></div></td>
+<tr><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=female_vocals+remix"><span
+tal:content="string: female vocals" /></a></div></td>
 <td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=chill+remix"><span
 tal:content="string: chill" /></a></div></td></tr>
 
