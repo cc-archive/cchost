@@ -47,73 +47,74 @@ class CCContestForm extends CCUploadForm
         $fields = array(
 
             'contest_friendly_name' => array (
-                        'label'      => 'Friendly Name',
-                        'form_tip'   => 'This is the one people actually see',
+                        'label'      => _('Friendly Name'),
+                        'form_tip'   => 
+			    _('This is the one people actually see'),
                         'formatter'  => 'textedit',
                         'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
             'contest_description' => array (
-                        'label'      => 'Description',
+                        'label'      => _('Description'),
                         'form_tip'   => '',
                         'formatter'  => 'textarea',
                         'flags'      => CCFF_POPULATE),
 
             'contest_bitmap' => array (
-                        'label'      => 'Logo',
-                        'form_tip'   => 'Image file',
+                        'label'      => _('Logo'),
+                        'form_tip'   => _('Image file'),
                         'formatter'  => 'avatar',
                         'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL ),
 
             'contest_publish' => array (
-                        'label'      => 'Contest is Online',
-                        'form_tip'   => 'Uncheck this to hide contest',
+                        'label'      => _('Contest is Online'),
+                        'form_tip'   => _('Uncheck this to hide contest'),
                         'formatter'  => 'checkbox',
                         'value'      => '1',
                         'flags'      => CCFF_POPULATE),
             
             'contest_open' => array (
-                        'label'      => 'Contest Opens',
-                        'form_tip'   => 'Entries are accepted after this date/time',
+                        'label'      => _('Contest Opens'),
+                        'form_tip'   => _('Entries are accepted after this date/time'),
                         'formatter'  => 'date',
                         'value'      => 'now',
                         'flags'      => CCFF_POPULATE),
                 
             'contest_deadline' => array (
-                        'label'      => 'Contest Deadline',
-                        'form_tip'   => 'Entries are not accepted after this date/time',
+                        'label'      => _('Contest Deadline'),
+                        'form_tip'   => _('Entries are not accepted after this date/time'),
                         'formatter'  => 'date',
                         'value'      => 'now +2 weeks',
                         'flags'      => CCFF_POPULATE),
                 
             'contest_auto_publish' => array (
-                        'label'      => 'Auto-Publish Entries',
+                        'label'      => _('Auto-Publish Entries'),
                         'form_tip'   => '',
                         'formatter'  => 'radio',
                         'options'      => array( 
-                                            '0' => 'Only admins can see entries until after the deadline',
-                                            '1' => 'Entries are made public upon upload' ),
+                                            '0' => _('Only admins can see entries until after the deadline'),
+                                            '1' => _('Entries are made public upon upload') ),
                         'value'      => '0',
                         'flags'      => CCFF_POPULATE),
 
             'contest_vote_online' => array (
-                        'label'      => 'Vote Online',
+                        'label'      => _('Vote Online'),
                         'form_tip'   => '',
                         'formatter'  => 'radio',
                         'options'      => array( 
-                                            '0' => 'Winner is determined offline',
-                                            '1' => 'Display a poll after deadline for entries has passed' ),
+                                            '0' => _('Winner is determined offline'),
+                                            '1' => _('Display a poll after deadline for entries has passed') ),
                         'value'      => '1',
                         'flags'      => CCFF_POPULATE),
 
             'contest_vote_deadline' => array (
-                        'label'      => 'Voting Deadline',
-                        'form_tip'   => 'When do polls close? (Only applies if you chose online voting above)',
+                        'label'      => _('Voting Deadline'),
+                        'form_tip'   => _('When do polls close? (Only applies if you chose online voting above)'),
                         'formatter'  => 'date',
                         'value'      => 'now +4 weeks',
                         'flags'      => CCFF_POPULATE),
 
             '_server_time' => array (
-                        'label'      => 'Current Server Time',
+                        'label'      => _('Current Server Time'),
                         'formatter'  => 'statictext',
                         'value'      => date('F d, Y h:i a'),
                         'flags'      => CCFF_NOUPDATE | CCFF_STATIC),
@@ -142,8 +143,9 @@ class CCCreateContestForm extends CCContestForm
 
         $fields = array(
                 'contest_short_name' => array (
-                        'label'      => 'Internal Name',
-                        'form_tip'   => 'Letters and numbers only, 25 or less',
+                        'label'      => _('Internal Name'),
+                        'form_tip'   => 
+			    _('Letters and numbers only, 25 or less'),
                         'formatter'  => 'shortcontestname',
                         'class'      => 'cc_form_input_short',
                         'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
@@ -200,7 +202,7 @@ class CCCreateContestForm extends CCContestForm
             $contests =& CCContests::GetTable();
             if( $contests->GetIDFromShortName($value) )
             {
-                $this->SetFieldError($fieldname, 'Name already exists');
+                $this->SetFieldError($fieldname, _('Name already exists'));
                 return(false);
             }
 
@@ -226,7 +228,7 @@ class CCEditContestForm extends CCContestForm
     function CCEditContestForm($R,$upload_dir)
     {
         $this->CCContestForm();
-        $this->SetSubmitText('Submit Contest Changes');
+        $this->SetSubmitText(_('Submit Contest Changes'));
         $this->SetFormFieldItem( 'contest_bitmap',    'upload_dir', $upload_dir );
         $this->SetHiddenField('contest_id',$R['contest_id']);
     }
@@ -254,10 +256,10 @@ class CCUploadContestSourceForm extends CCNewUploadForm
                         'formatter'  => 'radio',
                         'value'      => CCUD_CONTEST_MAIN_SOURCE,
                         'options'    => array( 
-                                           CCUD_CONTEST_MAIN_SOURCE
-                                                           => _('Main Remix Material'),
-                                           CCUD_CONTEST_SAMPLE_SOURCE
-                                                           => _('Sample (loop, layer, fragment, etc.)')),
+                                           CCUD_CONTEST_MAIN_SOURCE => 
+					       _('Main Remix Material'),
+                                           CCUD_CONTEST_SAMPLE_SOURCE => 
+					       _('Sample (loop, layer, fragment, etc.)')),
                         'flags'      => CCFF_NOUPDATE),
             );
         $this->AddFormFields($fields);
@@ -315,30 +317,29 @@ class CCContestAdmin
     }
 </style>
 <br />
-<h4>Things you might want to do now that your contest is in the system:</h4>
-<br />
-            <table class="contest_help">
-  <tr><th>Upload special files</th>
-     <td>Upload special files for the contest like pages, rules, etc. Click on 'Add Files' tab above.</td></tr>
-  <tr><th>Assign navigation tabs</th>
-     <td>Assign navigation tabs to files, rename, remove tabs. Do that <a href="$navtabs_url">here</a>.</td></tr>
-  <tr><th>Edit the Banner</th>
-     <td>Change the banner and other page content <a href="$tags_url">here</a>.</td></tr>
-  <tr><th>Edit 'Submit Files'</th>
-     <td>Create a blurb on the site's main submit page (the menu link 'Submit Files'). Do that <a href="$gsubmitform_url">here</a>.
-       (Or if you just want to change it for <b>{$CC_CFG_ROOT}</b> do that <a href=\"$submitform_url\">here</a>.)</td></tr>
-  <tr><th>Submit Sources</th>
-     <td>You might want to create a user that represents the contest source
-              rather than having the sources look like they came from a site administrator.
-              <ol><li>Pick a login name for the source provider user.</li>
-                  <li>Add that login name as an administrator <a href="$settings_url">here</a></li>
-                  <li>Log out, and then register the user.</li>
-                  <li>Log in as that user and come back to this screen.</li>
-                  <li>Submit Sources as that user so users will see the sources as coming from them.</li>
-                </ol>
-        </td></tr>
-    </table>
 EOF;
+        $html .= '<h4>' . _('Things you might want to do now that your contest is in the system:') . '</h4><br />' . 
+            '<table class="contest_help"><tr><th>' . 
+	    _('Upload special files') . '</th><td>' . 
+	    _("Upload special files for the contest like pages, rules, etc. Click on 'Add Files' tab above.") . '</td></tr>' . 
+           '<tr><th>' . _('Assign navigation tabs') . '</th>' . 
+           '<td>' . sprintf(_('Assign navigation tabs to files, rename, remove tabs. Do that <a href="%s">here</a>.'), $navtabs_url) . '</td></tr>' . 
+           '<tr><th>' . _('Edit the Banner') . '</th>' . 
+           '<td>' . _('Change the banner and other page content <a href="$tags_url">here</a>.') . '</td></tr>' . 
+           '<tr><th>' . _("Edit 'Submit Files'") . '</th>' . 
+           '<td>' . sprintf(_("Create a blurb on the site's main submit page (the menu link 'Submit Files'). Do that <a href=\"%s\">here</a>. Or, if you just want to change it for <b>%s</b>, do that <a href=\"%s\">here</a>."), $gsubmitform_url, $CC_CFG_ROOT, $submitform_url) . '</td></tr>' . 
+           '<tr><th>' . _('Submit Sources') . '</th>' . 
+           '<td>' . _('You might want to create a user that represents the contest source rather than having the sources look like they came from a site administrator.') .
+               '<ol><li>' . 
+	           _('Pick a login name for the source provider user.') . 
+		   '</li>' . 
+                  '<li>' . sprintf(_('Add that login name as an administrator <a href="%s">here</a>'), $settings_url) . '</li>' . 
+                  '<li>' . _('Log out, and then register the user.') . '</li>'.
+                  '<li>' . 
+		      _('Log in as that user and come back to this screen.') . 
+		  '</li>' . 
+                  '<li>' . _('Submit Sources as that user so users will see the sources as coming from them.') . '</li>' . 
+                '</ol></td></tr></table>';
 
         CCPage::PageArg('body_html',$html,'show_body_html');
     }
@@ -350,7 +351,7 @@ EOF;
     */
     function CreateContest($contest_api)
     {
-        CCPage::SetTitle('Create Contest');
+        CCPage::SetTitle(_('Create Contest'));
 
         $ok = false;
         $form = new CCCreateContestForm();
@@ -438,14 +439,14 @@ EOF;
                                    'function' => 'all' ),
 
              'submit'   =>    array(  'text'   => _('Submit Entry'),
-                                   'help'   => _('Submit an entry in the ') . $full_name . ' contest',
+                                   'help'   => sprintf(_('Submit an entry in the %s contest'), $full_name),
                                    'tags'   => '/contest/submit/' . $short_name,
                                    'limit'  => 1,
                                    'access' => CC_MUST_BE_LOGGED_IN,
                                    'function' => 'url' ),
 
              'edit'   =>    array(  'text'   => _('Admin'),
-                                   'help'   => 'Admin the contest',
+                                   'help'   => _('Admin the contest'),
                                    'tags'   => 'admin',
                                    'limit'  => 1,
                                    'access' => CC_ADMIN_ONLY,
@@ -454,38 +455,38 @@ EOF;
 
             $a['admin'] = array (
                 'home' => array (
-                    'text' => 'Admin Home',
-                    'help' => 'Main admin screen',
+                    'text' => _('Admin Home'),
+                    'help' => _('Main admin screen'),
                     'tags' => '/admin/contest/' . $short_name,
                     'limit' => '',
                     'access' => CC_ADMIN_ONLY,
                     'function' => 'url',
                     ),
                 'properties' => array (
-                    'text' => 'Properties',
-                    'help' => 'Edit contest properties',
+                    'text' => _('Properties'),
+                    'help' => _('Edit contest properties'),
                     'tags' => '/contest/edit/' . $short_name,
                     'limit' => '',
                     'access' => CC_ADMIN_ONLY,
                     'function' => 'url',
                     ),
              'submitsources' =>  array(  'text'   => 'Submit Sources',
-                   'help'   => 'Submit sources for the ' . $full_name . ' contest',
+                   'help'   => sprintf(_('Submit sources for the %s contest'), $full_name),
                    'tags'   => '/contest/submitsource/' . $short_name,
                    'limit'  => '',
                    'access' => CC_ADMIN_ONLY,
                    'function' => 'url' ),
                 'files' => array (
-                    'text' => 'Manage Files',
-                    'help' => 'Manage system files',
+                    'text' => _('Manage Files'),
+                    'help' => _('Manage system files'),
                     'tags' => '/admin/files',
                     'limit' => '',
                     'access' => CC_ADMIN_ONLY,
                     'function' => 'url',
                     ),
                 'addfiles' => array (
-                    'text' => 'Add Files',
-                    'help' => 'Add files to the system',
+                    'text' => _('Add Files'),
+                    'help' => _('Add files to the system'),
                     'tags' => '/admin/addfiles',
                     'limit' => '',
                     'access' => CC_ADMIN_ONLY,
@@ -509,7 +510,7 @@ EOF;
         if( !CCUser::IsAdmin() )
             return;
 
-        CCPage::Prompt('no implemento');
+        CCPage::Prompt(_('Not Implemented'));
     }
 
     /**
