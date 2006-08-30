@@ -214,8 +214,8 @@ class CCAdminMakeCfgRootForm extends CCForm
 
         $fields = array(
             'newcfgroot' => array(
-                'label'       => 'Name of virtual root',
-                'form_tip'    =>  'Must be characters and numbers only',
+                'label'       => _('Name of virtual root'),
+                'form_tip'    => _('Must be characters and numbers only'),
                  'class'      => 'cc_form_input_short',
                  'flags'      => CCFF_REQUIRED,
                  'formatter'  => 'cfg_root' ),
@@ -223,7 +223,7 @@ class CCAdminMakeCfgRootForm extends CCForm
 
         $this->AddFormFields($fields);
         $url = ccl( 'viewfile', 'howtovirtual.xml' );
-        $this->SetHelpText("Read more about why you would want to do this and what the consequences are <a href=\"$url\">here</a>.");
+        $this->SetHelpText(sprintf(_("Read more about why you would want to do this and what the consequences are <a href=\"%s\">here</a>."), $url));
     }
 
     /**
@@ -262,14 +262,14 @@ class CCAdminMakeCfgRootForm extends CCForm
             $value = $this->GetFormValue($fieldname);
             if( preg_match('/[^a-z0-9]/i',$value) || (strlen($value) > 25) )
             {
-                $this->SetFieldError($fieldname, 'Must be characters and numbers, no more than 25');
+                $this->SetFieldError($fieldname, _('Must be characters and numbers, no more than 25'));
                 return(false);
             }
             $configs =& CCConfigs::GetTable();
             $where['config_scope'] = $value;
             if( file_exists($value) || $configs->CountRows($where) > 0 )
             {
-                $this->SetFieldError($fieldname, 'That virtual root already exists');
+                $this->SetFieldError($fieldname, _('That virtual root already exists'));
                 return(false);
             }
             return(true);
@@ -320,8 +320,8 @@ class CCAdminRawForm extends CCGridForm
             }
         }
 
-        $this->SetSubmitText('Save Configuration');
-        $this->SetHelpText("Just be careful what you do here, it's easy to 'break the site'");
+        $this->SetSubmitText(_('Save Configuration'));
+        $this->SetHelpText(_("Just be careful what you do here, it's easy to 'break the site'"));
     }
 
     /**
@@ -374,11 +374,11 @@ class CCAdmin
         CCEvents::Invoke(CC_EVENT_ADMIN_MENU, array( &$global_items, CC_GLOBAL_SCOPE ) );
         $local_items = array();
         CCEvents::Invoke(CC_EVENT_ADMIN_MENU, array( &$local_items, CC_LOCAL_SCOPE) );
-        CCPage::SetTitle("Administer ccHost Site");
-        $args['global_title'] = 'Global Site Settings';
-        $args['global_help']  = 'These settings affect the entire site';
+        CCPage::SetTitle(_("Administer ccHost Site"));
+        $args['global_title'] = _('Global Site Settings');
+        $args['global_help']  = _('These settings affect the entire site');
         $args['global_items'] = $global_items;
-        $args['local_title'] = 'Virtual Root Settings';
+        $args['local_title'] = _('Virtual Root Settings');
         $configs =& CCConfigs::GetTable();
         $roots = $configs->GetConfigRoots();
         $root_list = array();
@@ -389,10 +389,10 @@ class CCAdmin
                                   'selected' => $root['config_scope'] == $CC_CFG_ROOT );
         }
         $args['config_roots'] = $root_list;
-        $args['local_help']  = 'Edit the settings for virtual root: ';
+        $args['local_help']  = _('Edit the settings for virtual root: ');
         if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
         {
-            $args['local_hint'] = 'Some of these settings may have been over written in other virtual roots';
+            $args['local_hint'] = _('Some of these settings may have been over written in other virtual roots');
         }
         else
         {
@@ -405,7 +405,8 @@ class CCAdmin
                 if( $configs->CountRows($where) )
                     $local_items[$config_name]['menu_text'] .= $star;
             }
-            $args['local_hint'] = $star . ' means this setting over writes the main site\'s values';
+            $args['local_hint'] = "$star " . 
+	        _("This setting over writes the main site's values");
         }
 
         $args['local_items'] = $local_items;
@@ -421,7 +422,7 @@ class CCAdmin
     */
     function Deep()
     {
-        CCPage::SetTitle("Edit Raw Configuation Data");
+        CCPage::SetTitle(_("Edit Raw Configuation Data"));
         if( empty($_POST['adminraw']) )
         {
             $form = new CCAdminRawForm();
@@ -439,7 +440,7 @@ class CCAdmin
                 $configs->Update($where);
             }
 
-            CCPage::Prompt("Configuration Changes Saved");
+            CCPage::Prompt(_("Configuration Changes Saved"));
         }
     }
 
@@ -452,7 +453,7 @@ class CCAdmin
         if( !CCUser::IsAdmin() )
             return;
 
-        CCPage::SetTitle("Create New Virtual Root");
+        CCPage::SetTitle(_("Create New Virtual Root"));
         $form = new CCAdminMakeCfgRootForm();
         if( !empty($_POST['adminmakecfgroot']) && $form->ValidateFields() )
         {
@@ -503,9 +504,9 @@ class CCAdmin
         {
             $surl = CCAdmin::_wheres_home();
 
-            $pretty_help =<<<END
-In order to enable Rewrite rules ('pretty URLs') you must include the following lines
-in your Apache configuration (virtual host or .htaccess):
+            $pretty_help .= _("In order to enable Rewrite rules ('pretty URLs'), you must include the following lines in your Apache configuration (virtual host or .htaccess): \n");
+
+            $pretty_help .=<<<END
 <div style="white-space:pre;font-family:Courier New, courier, serif">
 RewriteEngine On
 RewriteBase $surl
@@ -516,23 +517,21 @@ RewriteRule ^(.*)$ {$surl}index.php?ccm=/$1 [L,QSA]
 END;
     
             $perms = array(
-                    0777 => 'World can access (0777)',
-                    0775 => 'Owners and group only (0775)',
-                    0755 => 'Owners only (0755)' );
+                    0777 => _('World can access (0777)'),
+                    0775 => _('Owners and group only (0775)'),
+                    0755 => _('Owners only (0755)') );
 
             $fields['cookie-domain'] =
                array( 'label'       => 'Cookie Domain',
-                       'form_tip'      => 'This is the name used to set cookies on the client machine. Recommend  to leave this blank unless you are having problems.',
+                       'form_tip'      => _('This is the name used to set cookies on the client machine. Recommend  to leave this blank unless you are having problems.'),
                        'value'      => '',
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE  ); // do NOT require cookie domain, blank is legit
 
             $fields['file-perms'] =
-               array( 'label'       => 'Default File Permissions',
+               array( 'label'       => _('Default File Permissions'),
                        'form_tip'      => 
-                                 'chmod() access mask to use when writing new files. Do not edit this ' .
-                                 'unless you understand UNIX permissions, Apache, PHP CGI mode, ' .
-                                 'etc. Changing this value will affect future writes.',
+                                 _('chmod() access mask to use when writing new files. Do not edit this unless you understand UNIX permissions, Apache, PHP CGI mode, etc. Changing this value will affect future writes.'),
                        'value'      => '',
                        'options'    => $perms,
                        'formatter'  => 'select',
@@ -545,9 +544,9 @@ END;
                        'flags'      => CCFF_STATIC | CCFF_NOUPDATE);
 
             $fields['pretty-urls'] = 
-               array( 'label'       => 'Use URL Rewrite Rules',
+               array( 'label'       => _('Use URL Rewrite Rules'),
                        'form_tip' 
-                               => 'Check this if you want to use mod_rewrite for \'pretty\' URLs.',
+                               => _('Check this if you want to use mod_rewrite for \'pretty\' URLs.'),
                        'value'      => 0,
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE);
@@ -567,21 +566,21 @@ END;
             $items += array( 
                 'adminhelp'   => array( 'menu_text'  => 'Admin Help',
                                  'menu_group' => 'configure',
-                                 'help'      => 'Help on configuring the site',
+                                 'help'      => _('Help on configuring the site'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 10002,
                                  'action' =>  ccl('viewfile','adminhelp.xml')
                                  ),
                 'virtualhost'   => array( 'menu_text'  => 'Virtual ccHost',
                                  'menu_group' => 'configure',
-                                 'help' => 'Create a new virtual root',
+                                 'help' => _('Create a new virtual root'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 10001,
                                  'action' =>  ccl('admin','cfgroot')
                                  ),
                 'adminadvanced'   => array( 'menu_text'  => 'Global Setup',
                                  'menu_group' => 'configure',
-                                 'help'  => 'Cookies, ban message, admin email, 3rd party add ins, etc.',
+                                 'help'  => _('Cookies, ban message, admin email, 3rd party add ins, etc.'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 10000,
                                  'action' =>  ccl('admin','setup')
@@ -593,7 +592,7 @@ END;
             $items += array(
                 'settings'   => array( 'menu_text'  => 'Settings',
                                  'menu_group' => 'configure',
-                                 'help' => 'Style sheets, admins, home page, etc.',
+                                 'help' => _('Style sheets, admins, home page, etc.'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 1,
                                  'action' =>  ccl('admin','settings')
@@ -610,7 +609,7 @@ END;
     function OnBuildMenu()
     {
         $items = array( 
-            'configpage'   => array( 'menu_text'  => 'Manage Site',
+            'configpage'   => array( 'menu_text'  => _('Manage Site'),
                              'menu_group' => 'configure',
                              'access' => CC_ADMIN_ONLY,
                              'weight' => 1,
@@ -621,7 +620,7 @@ END;
         CCMenu::AddItems($items);
 
         $groups = array(
-                    'configure' => array( 'group_name' => 'Admin',
+                    'configure' => array( 'group_name' => _('Admin'),
                                           'weight'    => 100 ),
                     );
 
@@ -650,7 +649,7 @@ END;
     */
     function Setup()
     {
-        CCPage::SetTitle('Global Site Setup');
+        CCPage::SetTitle(_('Global Site Setup'));
         $form = new CCAdminConfigForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -664,7 +663,7 @@ END;
     {
         global $CC_CFG_ROOT;
 
-        CCPage::SetTitle("Settings for '$CC_CFG_ROOT'");
+        CCPage::SetTitle( _("Edit Settings:") . " '$CC_CFG_ROOT'");
         $form = new CCAdminSettingsForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -679,7 +678,7 @@ END;
     */
     function SaveConfig($form = '')
     {
-        CCPage::SetTitle("Saving Configuration");
+        CCPage::SetTitle(_("Saving Configuration"));
         if( empty($form) )
         {
             $form_name = CCUtil::StripText($_REQUEST['_name']);
@@ -694,7 +693,7 @@ END;
         if( $form->ValidateFields() )
         {
             $form->SaveToConfig();
-            CCPage::Prompt("Changes saved");
+            CCPage::Prompt(_("Changes Saved"));
         }
         else
         {
