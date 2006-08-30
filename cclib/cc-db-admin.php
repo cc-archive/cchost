@@ -51,25 +51,25 @@ class CCAdminDatabaseForm extends CCForm
         $this->CCForm();
         $fields = array( 
                     'db-name'        => 
-                       array( 'label'       => 'mysql Database Name',
+                       array( 'label'       => _('mysql Database Name'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
                     'db-server'        => 
-                       array( 'label'       => 'Location of Server ',
-                               'form_tip'   => 'Typically "localhost"',
+                       array( 'label'       => _('Location of Server '),
+                               'form_tip'   => _('Typically "localhost"'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
                     'db-user'        => 
-                       array( 'label'       => 'mysql User Name',
-                               'form_tip'   => 'This is the name used to connect to the mysql database.',
+                       array( 'label'       => _('mysql User Name'),
+                               'form_tip'   => _('This is the name used to connect to the mysql database.'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
                     'db-password'    => 
-                       array( 'label'       => 'mysql User Password',
-                               'form_tip'   => 'This is the password used to connect to the mysql database.',
+                       array( 'label'       => _('mysql User Password'),
+                               'form_tip'   => _('This is the password used to connect to the mysql database.'),
                                'nomd5'      => true,
                                'formatter'  => 'password',
                                'flags'      => CCFF_POPULATE  ),
@@ -105,7 +105,7 @@ class CCDatabaseAdmin
     */
     function Admin()
     {
-        CCPage::SetTitle('Database Configuration');
+        CCPage::SetTitle(_('Database Configuration'));
         $form = new CCAdminDatabaseForm();
         $config_db = CCDatabase::_config_db();
         if( empty($_POST['admindatabase']) || !$form->ValidateFields() )
@@ -146,7 +146,7 @@ END;
             //CCDebug::PrintVar($perms);
             chmod($config_db, $perms);
 
-            CCPage::Prompt(sprintf("Database configuration saved to $config_db (%04o)",$perms));
+            CCPage::Prompt(sprintf(_("Database configuration saved to %s (%04o)"), $config_db, $perms));
         }
 
     }

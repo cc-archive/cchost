@@ -301,8 +301,8 @@ class CCEditorials
         if( $scope != CC_GLOBAL_SCOPE )
         {
             $fields['editors'] =
-               array( 'label'       => 'Editorial staff',
-                       'form_tip'   => 'Comma separated list of login names for users with Editorial privelages',
+               array( 'label'       => _('Editorial staff'),
+                       'form_tip'   => _('Comma separated list of login names for users with Editorial privelages'),
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE );
         }

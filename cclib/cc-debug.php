@@ -168,7 +168,7 @@ class CCDebug
         }
         else
         {
-            $st = "No stack trace in this vesion of php";
+            $st = _("No stack trace in this vesion of php");
         }
 
         CCDebug::PrintVar($st,$template_safe);

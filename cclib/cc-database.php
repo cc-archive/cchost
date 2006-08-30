@@ -107,7 +107,7 @@ class CCDatabase
             }
             else
             {
-                trigger_error("Internal error, contact the super");
+                trigger_error(_("Internal error, contact the admin"));
             }
         }
         return( $qr );

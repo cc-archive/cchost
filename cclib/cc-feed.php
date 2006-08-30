@@ -133,9 +133,9 @@ class CCFeed
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields['feed-cache-flag'] =
-               array(  'label'      => 'Feed Caching',
+               array(  'label'      => _('Feed Caching'),
                        'form_tip'   =>
-                          'Feed caching can optimize replies for feed requests',
+                          _('Feed caching can optimize replies for feed requests'),
                        'value'      => '',
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE);
@@ -331,7 +331,7 @@ class CCFeed
                         if( !empty($records) )
                             $this->PrepRecords($records);
                         $qstring = '?remixesof=' . $username;
-                        $tagstr = 'Remixes of ' . $username;
+                        $tagstr = sprintf(_('Remixes of %s'), $username);
                     }
                 }
             }
@@ -348,7 +348,7 @@ class CCFeed
                         if( !empty($records) )
                             $this->PrepRecords($records);
                         $qstring = '?remixedby=' . $username;
-                        $tagstr = 'Uploads remixed by ' . $username;
+                        $tagstr = sprintf(_('Uploads remixed by %s'), $username);
                     }
                 }
             }
@@ -452,7 +452,7 @@ class CCFeed
 
             if ( ! is_dir(CC_DUMP_DIR) ) {
                 if ( ! mkdir(CC_DUMP_DIR, cc_default_dir_perm()) ) {
-                    echo sprintf('Could not open folder "%s"', CC_DUMP_DIR);
+                    echo sprintf(_('Could not open folder "%s"'), CC_DUMP_DIR);
                     return false;
                 }
             }
@@ -461,7 +461,7 @@ class CCFeed
             $f = fopen($dump_file_path,'w');
             if( !$f )
             {
-                echo sprintf('could not open "%s"', $dump_file_path);
+                echo sprintf(_('Could not open "%s"'), $dump_file_path);
                 return false;
             }
             else
@@ -470,7 +470,7 @@ class CCFeed
                 fclose($f);
                 chmod($dump_file_path,cc_default_file_perms());
                 if (isset($_REQUEST['all']))
-                    echo sprintf('%s written to server', 
+                    echo sprintf(_('%s written to server'), 
                                  $dump_file_path);
                 return true;
             }
