@@ -117,7 +117,7 @@ class CCFeeds extends CCFeed
         $this->_resort_records($records,$sort_order);
         $this->PrepRecords($records);
         $this->GenerateFeedFromRecords( $records, 
-                                       "Podcast this page" . $sub_title,
+                                       _("Podcast this page") . $sub_title,
                                        ccl('podcast','page'),
                                        'podcast');
     }
@@ -131,7 +131,8 @@ class CCFeeds extends CCFeed
         $where['user_name'] = $username;
         $records = $uploads->GetRecords($where);
         $this->PrepRecords($records);
-        $this->GenerateFeedFromRecords($records, "Podcast for $username",
+        $this->GenerateFeedFromRecords($records, 
+	                               sprintf(_("Podcast for %s"), $username),
                                        ccl('podcast','page',$username), 
                                        'podcast');
     }
