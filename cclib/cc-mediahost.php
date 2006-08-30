@@ -369,7 +369,13 @@ class CCMediaHost
 
             if( empty($record['upload_published']) )
             {
-                $record['publish_message'] = _('This file is only visible to the owner and admins.');
+                $puburl = ccl( 'files', 
+                               'publish', 
+                                $record['user_name'] ,
+                                $record['upload_id'] );
+                $pubtext = _('Publish now');
+                $publink = "<a href=\"$puburl\">$pubtext</a>";
+                $record['publish_message'] = _('This file is only visible to the owner and admins.') . '[ ' . $publink . ' ]';
                 $record['file_macros'][] = 'upload_not_published';
             }
 

@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -91,7 +91,7 @@ $Header$
       <table id="cc_file_info" cellpadding="0" cellspacing="0">
         <tr tal:condition="not: record/works_page">
           <tal:block define="upname php: CC_strchop('${record/upload_name}',37,$chop)" />
-          <td colspan="2"><h2><a href="${record/file_page_url}" tal:content="structure: upname"></a>
+          <td colspan="2"><h2><span class="${record/upload_name_cls}"><a href="${record/file_page_url}" tal:content="structure: upname"></a></span>
           </h2>
               
           </td>

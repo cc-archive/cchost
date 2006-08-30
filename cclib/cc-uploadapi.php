@@ -235,15 +235,14 @@ END;
 
         CCEvents::Invoke(CC_EVENT_UPLOAD_ROW, array( &$row ));
 
+        
         if( $row['upload_banned'] )
         {
-            if( strpos($row['upload_name'],'(moderated)') !== 0 )
-                $row['upload_name'] = '(moderated) ' . $row['upload_name'];
+            $row['upload_name_cls'] = 'cc_name_ban';
         }
         elseif( empty($row['upload_contest']) && !$row['upload_published'] )
         {
-            if( strpos($row['upload_name'],'(hidden)') !== 0 )
-                $row['upload_name'] = '(hidden) ' . $row['upload_name'];
+            $row['upload_name_cls'] = 'cc_name_hidden';
         }
 
         return $row;

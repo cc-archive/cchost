@@ -74,6 +74,9 @@ EOF;
         // File Info
         //
         //------------------------------------
+
+        $name_cls = $record['upload_name_cls'];
+
         $html .= '<table id="cc_file_info" cellpadding="0" cellspacing="0">';
 
         if( !$detail )
@@ -81,7 +84,8 @@ EOF;
             $html .=<<<EOF
          <tr>
             <td colspan="2">
-                <h2><a href="{$record['file_page_url']}" />{$record['upload_name']}</h2>
+                <h2><a href="{$record['file_page_url']}" ><span
+                  class="$name_cls" >{$record['upload_name']}</span></a></h2>
             </td>
         </tr>
 EOF;

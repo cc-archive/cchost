@@ -1181,6 +1181,17 @@ p#cc_record_listing_chopped {
 	color: brown;
 }        
         
+.cc_name_ban {
+   text-decoration: line-through;
+   color: red;
+   font-weight: normal;
+}
+
+.cc_name_hidden {
+   text-decoration: line-through;
+   color: #555;
+   font-weight: normal;
+}
 
 p.cc_small_byline {
     font-size:11px;    
