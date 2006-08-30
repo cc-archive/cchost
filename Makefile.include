@@ -1,7 +1,6 @@
 # This file includes the names of files we are including.
 
 DIST_FILES_STATIC=AUTHORS \
-	ChangeLog \
 	COPYING \
 	LICENSE.TXT \
 	README \
@@ -11,7 +10,9 @@ DIST_FILES_STATIC=AUTHORS \
 	cc-includes.php \
 	cc-non-ui.php \
 	index.php \
-	Makefile.include
+	Makefile.include \
+	Makefile.language \
+	POTFILES
 
 DIST_FOLDERS=ccadmin \
 	ccextras \
