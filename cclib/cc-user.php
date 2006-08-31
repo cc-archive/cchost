@@ -239,11 +239,11 @@ class CCUserProfileForm extends CCUploadForm
                                'flags'      => CCFF_POPULATE ),
 
                     'user_language' => 
-		       array(  'label'      => _("Default Language:"),
+               array(  'label'      => _("Default Language:"),
                                'formatter'  => 'select',
                                'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(), 
                                'flags'      => CCFF_POPULATE ),
-			       
+                   
                     'user_whatido' =>
                         array( 'label'      => _('What I Pound On'),
                                'form_tip'   => _('(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)'),
@@ -570,10 +570,13 @@ class CCUser
                     $fields['user_real_name'] = $username;
                 $users->Update($fields);
                 
-                CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $id, &$old_info));
-		// this sends us to the save page
-		// I added because problem with getting the new language
-		// visible as soon as changed upon save
+                CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, 
+                                 array( $id, &$old_info));
+                CCEvents::Invoke(CC_EVENT_TRANSLATE);
+
+                // this sends us to the save page
+                // I added because problem with getting the new language
+                // visible as soon as changed upon save
                 CCUtil::SendBrowserTo('profile/save');
             }
         }
@@ -590,11 +593,11 @@ class CCUser
     * now it is just a quick display on the page saying changes were saved
     * and is ncessary to display this message in the newly selected language.
     *
-    * @access	public
+    * @access   public
     */
     function SaveProfile ()
     {
-	CCPage::SetTitle(_("Edit Your Settings"));
+        CCPage::SetTitle(_("Edit Your Settings"));
         CCPage::Prompt(_("Changes were saved"));
     }
 
@@ -909,12 +912,12 @@ END;
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'people',           array('CCUser','UserPage'),
-	                                      CC_DONT_CARE_LOGGED_IN );
+                                          CC_DONT_CARE_LOGGED_IN );
         CCEvents::MapUrl( 'people/profile',   array('CCUser','EditProfile'),  
-	                                      CC_MUST_BE_LOGGED_IN );
+                                          CC_MUST_BE_LOGGED_IN );
         CCEvents::MapUrl( 'people/profile/save', array('CCUser','SaveProfile'),                                                  CC_MUST_BE_LOGGED_IN );
         CCEvents::MapUrl( 'people/addtofavs', array('CCUser','AddToFavs'),  
-	                                      CC_MUST_BE_LOGGED_IN );
+                                          CC_MUST_BE_LOGGED_IN );
     }
 
     /**

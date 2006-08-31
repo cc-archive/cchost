@@ -477,9 +477,9 @@ class CCSubmit
             $new_forms = array();
             foreach( $forms as $key => $form )
             {
-                cc_lang_translate($form,'text');
-                cc_lang_translate($form,'help');
-                cc_lang_translate($form,'form_help');
+                $form['text'] = _( $form['text'] );
+                $form['help'] = _( $form['help'] );
+                $form['form_help'] = _( $form['form_help'] );
                 $new_forms[$key] = $form;
             }
             $configs->SaveConfig('submit_forms',$new_forms,$root,false);

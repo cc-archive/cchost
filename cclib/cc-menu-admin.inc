@@ -297,7 +297,7 @@ class CCMenuAdmin
             $new_menu = array();
             foreach( $menu as $key => $item )
             {
-                cc_lang_translate($item,'menu_text');
+                $item['menu_text'] = _( ($item['menu_text']) );
                 $new_menu[$key] = $item;
             }
             $configs->SaveConfig('menu',$new_menu,$root,false);
@@ -306,7 +306,7 @@ class CCMenuAdmin
             $new_groups = array();
             foreach( $groups as $key => $group )
             {
-                cc_lang_translate($group,'group_name');
+                $group['group_name'] = _( ($group['group_name']) );
                 $new_groups[$key] = $group;
             }
             $configs->SaveConfig('groups',$new_groups,$root,false);
