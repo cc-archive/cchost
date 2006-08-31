@@ -28,8 +28,6 @@ if( file_exists('ccadmin') )
         'Please <a href="ccadmin/">follow these steps</a> for a successful ' . 
 	'setup.</body></html>');
 
-if( !function_exists('gettext') )
-   require_once('ccextras/cc-no-gettext.inc');
 
 define('IN_CC_HOST', true);
 
@@ -38,7 +36,7 @@ if( file_exists('.cc-ban.txt') )        // this file is written by doing
 
 require_once('cclib/cc-debug.php');
 
-CCDebug::Enable(false);                 // set this to 'true' if you are a
+CCDebug::Enable(true);                 // set this to 'true' if you are a
                                         // developer or otherwise customizing
                                         // the code. 
 
@@ -47,6 +45,13 @@ CCDebug::LogErrors( E_ALL & ~E_NOTICE );  // Log errors to a file during beta
                                           // when things go wrong on your site
 
 CCDebug::InstallErrorHandler(true);     
+
+// migrate this to cc-includes.php possibly
+if( !function_exists('gettext') ) {
+   require_once('ccextras/cc-no-gettext.inc');
+   CCDebug::Log("Function gettext doesn't exist, using " . 
+                "'ccextras/cc-no-gettext.inc'");
+}
 
 require_once('cc-includes.php');
 require_once('cc-custom.php');
