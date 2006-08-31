@@ -313,12 +313,6 @@ class CCLanguage
      */
     function GetPossibleLanguages()
     {
-        // HACK FIX: vs
-        // return( array( 'en' ) );
-
-        // return array_keys(
-        //    $this->_all_languages['locale'][$this->_locale_pref]['language']);
-
         $lang_list = 
 	    array_keys(
 	    $this->_all_languages['locale'][$this->_locale_pref]['language']);
@@ -398,9 +392,14 @@ class CCLanguage
      */
     function Init ()
     {
+        // set the LANGUAGE environmental variable
+        if ( false == putenv("LANGUAGE=" . $this->_language ) )
+	    CCDebug::Log(sprintf("Could not set the ENV variable LANGUAGE = %s",
+	                         $this->_language));
+
         // set the LANG environmental variable
         if ( false == putenv("LANG=" . $this->_language ) )
-	    CCDebug::Log(sprintf("Could not set the env variable  LANG = %s", 
+	    CCDebug::Log(sprintf("Could not set the ENV variable LANG = %s", 
 	                         $this->_language));
 
 	// if locales are not installed in locale folder, they will not
@@ -408,27 +407,43 @@ class CCLanguage
 	// Also, the backup language should always be the default language
 	// because of this...see the NOTE in the class description
 
-        $locale_set = setlocale(LC_ALL, $this->_language . ".utf8", 
+	// Try first what we want but with the .utf8, which is what the locale
+	// setting on most systems want (and is most compatible
+	// Then just try the standard lang encoding asked for, and then if 
+	// all else fails, just try the default language
+	// LC_ALL is said to be used, but it has nasty usage in some languages
+	// in swapping commas and periods! Thus try LC_MESSAGE if on one of
+	// those systems.
+	// It is supposedly not defined on WINDOWS, so am including it here
+	// for possible uncommenting if a problem is shown
+	//
+        // if (!defined('LC_MESSAGES')) define('LC_MESSAGES', 6);
+	$locale_set = setlocale(LC_ALL, $this->_language . ".utf8", 
 	                                $this->_language, 
 					CC_LANG);
+	// if we don't get the setting we want, make sure to complain!
 	if ( ( $locale_set != $this->_language && CC_LANG == $locale_set) || 
 	     empty($locale_set) )
 	{
 	    CCDebug::Log(
-	        sprintf("The language '%s' is not available, trying '%s'.", 
-		        $this->_language, $locale_set) );
+	        sprintf("Tried: setlocale to '%s', but could only set to '%s'.",                        $this->_language, $locale_set) );
         }
 	    
         $bindtextdomain_set = bindtextdomain($this->_domain, 
                                   CC_LANG_LOCALE . "/" . $this->_locale_pref );
 	if ( empty($bindtextdomain_set) )
-	    CCDebug::Log("No locale pref selected, or empty path");
+	    CCDebug::Log(
+	    sprintf("Tried: bindtextdomain, '%s', to directory, '%s', " . 
+	            "but received '%s'",
+	            $this->_domain, CC_LANG_LOCALE . "/" . $this->_locale_pref,
+		    $bindtextdomain_set) );
 	
         $textdomain_set = textdomain($this->_domain);
 	if ( empty($textdomain_set) )
-	    CCDebug::Log("No textdomain set");
+	    CCDebug::Log(sprintf("Tried: set textdomain to '%s', but got '%s'",
+	                         $this->_domain, $textdomain_set));
 	
-    }
+    } // end of method Init ()
 
     /**
      * Gets NIX system locales 
