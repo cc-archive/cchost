@@ -23,8 +23,8 @@
 # out of the way the ccadmin folder if the cc-config-db.php file exists
 #
 svn up
-if [ -e "../cc-config-db.php" ]; then
-    ./bin/cc-host-fix-livesetup.sh
+if [ -e "cc-config-db.php" ]; then
+    ./bin/cc-host-fix-live-setup.sh
 fi
 ./bin/cc-host-clear-caches.sh
 ./bin/cc-host-fix-permissions.sh
