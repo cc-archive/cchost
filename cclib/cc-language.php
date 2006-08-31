@@ -408,8 +408,8 @@ class CCLanguage
 	// Also, the backup language should always be the default language
 	// because of this...see the NOTE in the class description
 
-        $locale_set = setlocale(LC_ALL, $this->_language, 
-	                                $this->_language . ".utf8", 
+        $locale_set = setlocale(LC_ALL, $this->_language . ".utf8", 
+	                                $this->_language, 
 					CC_LANG);
 	if ( ( $locale_set != $this->_language && CC_LANG == $locale_set) || 
 	     empty($locale_set) )
@@ -554,18 +554,28 @@ class CCLanguageAdmin
         }
     }
 
+    /**
+     * Displays a page just saying the language options are saved at present.
+     */
     function SavePage ()
     {
         CCPage::SetTitle(_("Language Support"));
         CCPage::Prompt(_("Language support options saved."));
     }
 
+    /**
+     * This prints a page with diagnostics for the language code and so
+     * we can see what is happening on other peoples systems. I only allowed
+     * this if one is logged in and an admin.
+     */
     function DiagnosticPage ()
     {
         global $CC_GLOBALS;
         CCPage::SetTitle(_("Diagnostic") . " : " . _("Language") );
-        $CC_GLOBALS['language']->DebugLanguages();
-        // CCPage::Prompt(_("Language support options saved."));
+	$var_mixed = array("CC_GLOBALS", &$CC_GLOBALS, 
+	                   "SYSTEM LOCALES", 
+			   $CC_GLOBALS['language']->GetSystemLocales());
+	CCDebug::PrintVar($var_mixed);
     }
 
     /**
@@ -603,7 +613,7 @@ class CCLanguageAdmin
         CCEvents::MapUrl( ccp('admin','language','save'),  
 	    array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( ccp('admin','language','diagnostic'),  
-	    array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
+	    array( 'CCLanguageAdmin', 'DiagnosticPage'), CC_ADMIN_ONLY );
     }
 
 }

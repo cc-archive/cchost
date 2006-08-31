@@ -175,24 +175,30 @@ class CCDebug
     }
 
     /**
-    * The most useful function in the entire codbase. Display any variable for debugging
+    * The most useful function in the entire codbase. Display any variable for 
+    * debugging. It handles variables and arrays like butter.
     *
     * Use this method with any variable (include globals like $_REQUEST)
     *
     * This method EXITS THE SESSION (!!)
     * 
-    * This method is only enabled when CCDebug::Enable is frst called with 'true'
+    * This method is only enabled when CCDebug::Enable is first called with 
+    * 'true'
     * 
     * @see Enable
-    * @param mixed $var Reference to variable to dump to screen
+    * @param mixed $var_mixed Reference to variable or array to dump to screen
     * @param bool $template_safe true means you are NOT debugging code that displays HTML
     */
-    function PrintVar(&$var, $template_safe = true)
+    function PrintVar(&$var_mixed, $template_safe = true )
     {
         if( !CCDebug::IsEnabled() )
             return;
 
-        $t =& CCDebug::_textize($var);
+	if (is_array($var_mixed))
+	    foreach ($var_mixed as $var)
+                $t .= CCDebug::_textize($var);
+	else
+            $t =& CCDebug::_textize($var_mixed);
 
         $html = '<pre style="font-size: 10pt;">' .
                 htmlspecialchars($t) .
