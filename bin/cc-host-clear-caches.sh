@@ -14,37 +14,15 @@
 # represent and warrant to Creative Commons that your use
 # of the ccHost software will comply with the CC-GNU-GPL.
 # 
-# $Id$
+# $Id: $
 # 
 # Copyright 2005-2006, Creative Commons, www.creativecommons.org.
 # Copyright 2006, Jon Phillips, jon@rejon.org.
 #
-# Fixes the current setup so that ccHost will work. You have to move the 
-# ccadmin folder out of the way and also, if we have a backed up config file
-# then this script makes it default and saves the old one.
+# Clears cchost's caches
 #
 
+# bin/fix_permissions.sh
+rm -Rf cclib/phptal/phptal_cache/*.php
 
-CURR_DATE=`date +%F`
-
-
-if [ -e "ccadmin" ]
-then :
-    if [ -e "ccadmin_backup" ]
-    then :
-        mv ccadmin_backup ccadmin_backup_${CURR_DATE}
-    fi
-    mv ccadmin ccadmin_backup
-fi
-    
-if [ -e "cc-config-db.php.backup" ]
-then : 
-
-    if [ -e "cc-config-db.php" ]
-    then :
-        mv cc-config-db.php cc-config-db.php.backup_${CURR_DATE}
-    fi
-    mv cc-config-db.php.backup cc-config-db.php
-fi
-
-
+exit 0

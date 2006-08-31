@@ -1,23 +1,24 @@
 #! /usr/bin/perl -w
 # Try to detect markup errors in translations.
-
+#
+# $Id: $
+#
 # Author: Peter Moulder <pmoulder@mail.csse.monash.edu.au>
 # Author: Jon Phillips <jon@rejon.org>
 # Copyright (C) 2004 Monash University
 # Copyright (C) 2006 Creative Commons
 # Copyright (C) 2006 Jon Phillips
 # License: GNU GPL v2 or (at your option) any later version.
-
+#
 # Initial egrep version:
-#mydir=`dirname "$0"`
-#egrep '<b>[^<>]*(>|<([^/]|/([^b"]|b[^>])))' "$mydir"/*.po
+# mydir=`dirname "$0"`
+# egrep '<b>[^<>]*(>|<([^/]|/([^b"]|b[^>])))' "$mydir"/*.po
 # Somewhat simplified by use of negative lookahead in perl.
 # (The egrep version as written can't detect problems that span a line,
-# e.g. unterminated `<b>'.  One way of doing the s/"\n"//g thing would be with
-# tr and sed, but that requires a sed that allows arbitrary line lengths, which
-# many non-GNU seds don't.)
-
-
+# e.g. unterminated `<b>'.  One way of doing the s/"\n"//g thing would be 
+# with tr and sed, but that requires a sed that allows arbitrary line 
+# lengths, which many non-GNU seds don't.)
+#
 # JON: I adapted this tool to check for some more html and other tags that
 # might creep into our language files. Ideally, we don't want any HTML in
 # our strings and should find ways around this, unless absolutely possible, 

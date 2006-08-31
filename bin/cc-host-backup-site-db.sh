@@ -19,32 +19,26 @@
 # Copyright 2005-2006, Creative Commons, www.creativecommons.org.
 # Copyright 2006, Jon Phillips, jon@rejon.org.
 #
-# Fixes the current setup so that ccHost will work. You have to move the 
-# ccadmin folder out of the way and also, if we have a backed up config file
-# then this script makes it default and saves the old one.
+# Script for backing up your cchost database
+#
+# Usage:
+#
+#    $ DBUSER=editor ./backup_site_db.sh
 #
 
-
-CURR_DATE=`date +%F`
-
-
-if [ -e "ccadmin" ]
-then :
-    if [ -e "ccadmin_backup" ]
-    then :
-        mv ccadmin_backup ccadmin_backup_${CURR_DATE}
-    fi
-    mv ccadmin ccadmin_backup
-fi
-    
-if [ -e "cc-config-db.php.backup" ]
-then : 
-
-    if [ -e "cc-config-db.php" ]
-    then :
-        mv cc-config-db.php cc-config-db.php.backup_${CURR_DATE}
-    fi
-    mv cc-config-db.php.backup cc-config-db.php
+if [ -z ${DBHOST} ]; then
+    DBHOST=localhost
 fi
 
+if [ -z ${DBUSER} ]; then
+    DBUSER=localuser
+fi
 
+if [ -z ${DBTABLE} ]; then
+    DBTABLE=cchost
+    #DBTABLE=--all-databases
+fi
+
+mysqldump -h ${DBHOST} -u ${DBUSER} -p ${DBTABLE} > mysql_dump_${DBTABLE}_`date +%F`.sql
+
+exit 0

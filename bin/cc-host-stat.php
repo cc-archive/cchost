@@ -16,6 +16,9 @@
 *
 * $Id:$
 *
+* Copyright 2006, Creative Commons, www.creativecommons.org.
+* Copyright 2006, Victor Stone.
+* Copyright 2006, Jon Phillips, jon@rejon.org.
 */
 
 $help = '
