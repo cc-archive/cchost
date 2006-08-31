@@ -19,10 +19,14 @@
 # Copyright 2005-2006, Creative Commons, www.creativecommons.org.
 # Copyright 2006, Jon Phillips, jon@rejon.org.
 #
-# Clears cchost's caches
+# This script updates the current installation to the latest in svn and moves
+# out of the way the ccadmin folder if the cc-config-db.php file exists
 #
+svn up
+if [ -e "../cc-config-db.php" ]; then
+    ./bin/cc-host-fix-livesetup.sh
+fi
+./bin/cc-host-clear-caches.sh
+./bin/cc-host-fix-permissions.sh
 
-# bin/cc-host-fix-permissions.sh
-rm -Rf cclib/phptal/phptal_cache/*.php
-
-exit 0
+# exit 0
