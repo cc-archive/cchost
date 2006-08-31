@@ -393,6 +393,9 @@ class CCLanguage
     function Init ()
     {
         // set the LANGUAGE environmental variable
+	// This one for some reason makes a difference FU@#$%^&*!CK
+	// and when combined with bind_textdomain_codeset allows one
+	// to set locale independent of server locale setup!!!
         if ( false == putenv("LANGUAGE=" . $this->_language ) )
 	    CCDebug::Log(sprintf("Could not set the ENV variable LANGUAGE = %s",
 	                         $this->_language));
@@ -418,7 +421,11 @@ class CCLanguage
 	// for possible uncommenting if a problem is shown
 	//
         // if (!defined('LC_MESSAGES')) define('LC_MESSAGES', 6);
+	// yes, setlocale is case-sensitive...arg
 	$locale_set = setlocale(LC_ALL, $this->_language . ".utf8", 
+					$this->_language . ".UTF8",
+					$this->_language . ".utf-8",
+					$this->_language . ".UTF-8",
 	                                $this->_language, 
 					CC_LANG);
 	// if we don't get the setting we want, make sure to complain!
@@ -438,6 +445,11 @@ class CCLanguage
 	            $this->_domain, CC_LANG_LOCALE . "/" . $this->_locale_pref,
 		    $bindtextdomain_set) );
 	
+	// This is the magic key to not being bound by a system locale
+	if ( "UTF-8" != bind_textdomain_codeset($this->_domain, "UTF-8") )
+	    CCDebug::Log(
+	        sprintf("Tried: bind_textdomain_codeset '%s' to 'UTF-8'",
+	                $this->_domain));
         $textdomain_set = textdomain($this->_domain);
 	if ( empty($textdomain_set) )
 	    CCDebug::Log(sprintf("Tried: set textdomain to '%s', but got '%s'",
@@ -588,6 +600,8 @@ class CCLanguageAdmin
         global $CC_GLOBALS;
         CCPage::SetTitle(_("Diagnostic") . " : " . _("Language") );
 	$var_mixed = array("CC_GLOBALS", &$CC_GLOBALS, 
+			   "_SERVER VARIABLES", &$_SERVER,
+			   "_ENV VARIABLES", &$_ENV,
 	                   "SYSTEM LOCALES", 
 			   $CC_GLOBALS['language']->GetSystemLocales());
 	CCDebug::PrintVar($var_mixed);
