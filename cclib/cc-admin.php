@@ -504,7 +504,7 @@ class CCAdmin
         {
             $surl = CCAdmin::_wheres_home();
 
-            $pretty_help .= _("In order to enable Rewrite rules ('pretty URLs'), you must include the following lines in your Apache configuration (virtual host or .htaccess): \n");
+            $pretty_help = _("In order to enable Rewrite rules ('pretty URLs'), you must include the following lines in your Apache configuration (virtual host or .htaccess): \n");
 
             $pretty_help .=<<<END
 <div style="white-space:pre;font-family:Courier New, courier, serif">
