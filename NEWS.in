@@ -3,19 +3,47 @@ ccHost Release Notes
 
 Version: PROJECT_VERSION
 
-Text for the release goes here...
+New features (end-user)
+========================
+- Native forums support
+   Fully functioning hierarchical forums, totally integrated with user profiles
+   Admins can create forum groupings, sticky announcements,
+   move threads, etc.
 
-Features
-========
+- e-mail notifications
+   Registered users can get email notifications when they have
+   been reviewed, rated or remixed, when someone else has uploaded
+   or have been remixed
 
-	* No new features currently...
+- 'Recent reviews'
+  New sidebar content list out the latest reviewers in the system
 
-Bugfixes
-========
+- 'How I Did It' browser now sortable
+  Users can now sort based on artist or date
 
-	* No bugfixes currently... 
+- Stats and more stats
+ Now track number of reviews, forum messages and times remixed.
 
-Known Issues
-============
+New/Improved (admin):
+========================
+- FTP-less file manager
+- Bayesian rating scheme
+- Suggested tags in submit forms
+- Sub navigation tabs
+- File permissions now settable within ccHost
+- Thumbnails can be turned off
+- Spam flood protection
+- Configure min number of tags for BrowseTags
 
-	* No known issues currently...
+Compatibility:
+========================
+- PHP5 support
+- Sharedhost support (e.g. dreamhosters)
+
+Bugfix:
+========================
+- getID3 can be disabled
+
+Security:
+========================
+- Certain URLs allowed escaping out of mySQL
