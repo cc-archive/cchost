@@ -16,11 +16,6 @@ UPGRADE EXISTING ccHOST INSTALLATIONS
 
   3. Browse to: http://where_you_installed/?update=1
 
-Note to 1.x ccHost installations: phpBB2 is no
-longer used for reviews. There is a script for 
-importing existing phpBB2 format reviews into the
-new native reviewing system. Contact 
-fourstones@users.sourceforge.net for details.
 
 NEW INSTALL (Simple or Hosted Environment): 
 -------------------------------------------
@@ -38,6 +33,10 @@ running this installation:
 
  2. Browse to http://where_you_installed/ccadmin and
     follow all the instructions from then on. 
+
+UNIX Installations should read this:
+
+http://wiki.creativecommons.org/CcHost_File_Access
 
 
 NEW INSTALL (Advanced): 
@@ -82,8 +81,8 @@ at a UNIX command line you can use these steps to intall:
 
  6. Follow the instructions from there on...
 
-UNIX Installations Take Note: on the last screen of the 
-installation process you'll be prompted to read about
-specific issues regarding file permissions. DO NOT 
-SKIP THIS STEP!!!!
+UNIX Installations should read this:
+
+http://wiki.creativecommons.org/CcHost_File_Access
+
 

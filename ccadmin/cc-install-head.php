@@ -36,7 +36,8 @@
         font-family: Verdana;
         padding-bottom: 12px;
         vertical-align: top;
-        width: 45%;
+        width: 25%;
+        background-color: #ddd;
     }
     .fv
     {
@@ -50,10 +51,10 @@
     }
     .rqmsg
     {
-        float:right;
-        width:20%;
         border: 1px dotted brown;
         padding: 4px;
+        margin: 0px 10% 0px 10%;
+        text-align:center;
     }
     input[type='text']
     {

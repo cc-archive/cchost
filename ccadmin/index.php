@@ -138,6 +138,7 @@ function step_4()
     configuration, cache, media content and other files. You can change this in 'Global Settings' 
     once you've logged in as administrator.</p>
 
+    <p>Unix installations should further read <a href="http://wiki.creativecommons.org/CcHost_File_Access">ccHost File Access Policy and Troubleshooting</a>
     <h2>Go forth...</h2>
 
     <p>If you've done those steps you can browse to <a href="$root_url">$root_url</a> and log in as "<b>$admin</b>"
@@ -574,10 +575,11 @@ EOF;
     'rooturl'     => array( 'n' => 'Root URL',               'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
         'h' => 'The URL of your main installation' ),
 
-    '_help'        => array( 'n' => '',  'e' => '', 't'  => 'static', 'v' => $pretty_help , 'q' => 0, 'h' => ''),
-
     'pretty_urls'        => array( 'n' => 'Enabled \'pretty URLs\'',  'e' => '', 't'  => 'checkbox', 'v' => '' , 'q' => 0,
         'h' => '' ),
+
+    '_help'        => array( 'n' => '',  'e' => '', 't'  => 'static', 'v' => $pretty_help , 'q' => 0, 'h' => ''),
+
 
     'admin'       => array( 'n' => 'Admin name',             'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
         'h' => 'A ccHost account will be created with this name' ),
@@ -655,11 +657,11 @@ function print_install_form($f,$err='')
 
     $html =<<<END
 $err
-<div class="rqmsg">Fields marked '*' are required</div>
 <form action="?step=3" method="post">
-<table>
+<table class="install">
+<tr><td colspan="2" class="rqmsg">Fields marked '*' are required</td></tr>
      $fields
-<tr><td></td><td><input type="submit" value="Continue &gt;&gt;&gt;" /></td>
+<tr><td></td><td><input type="submit" value="Continue &gt;&gt;&gt;" /></td></tr>
 </table>
 </form>
 END;

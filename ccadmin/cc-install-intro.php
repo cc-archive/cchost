@@ -29,7 +29,7 @@ one database task.</p>
 <p> <? print $vmsg; ?></p></li>
 
 <li><b>mySQL</b>
-<p>Currently mySQL is the only database supported. ccHost 3.0 has been tested on several versio of mySQL 4 and 5.</p></li>
+<p>Currently mySQL is the only database supported. ccHost 3.0 has been tested mySQL 4 and 5.</p></li>
 
 <li><b>Create a Database</b>
 <p>Before you continue installing ccHost you need to create a database. If you are running at a hosted site
@@ -44,12 +44,12 @@ the administrators can either do it for you or have already told you how to do i
 
 <li><b>GetID3</b>
 
-<p>ccHost uses the <a href="http://www.getid3.org/">GetID3 library</a> to verify 
+<p>ccHost uses the <a href="http://www.getid3.org/">getID3 library</a> to verify 
 the formats of file uploads of all types of media and archive files. It also uses it to tag
 ID3 format files (like MP3s) with things like artist, song title, license, etc. Make sure to download at least version <b>1.7.2</b> or higher. You can download this version from
 <a href="http://www.getid3.org/#download">here</a>. </p>
 
-<p>Installing GetID3 is actually very simple: just unzip the library to a directory (e.g. <b class="d"><? print $id3suggest; ?></b>).</p>
+<p>Installing getID3 is actually very simple: just unzip the library to a directory (e.g. <b class="d"><? print $id3suggest; ?></b>).</p>
 
 </li>
 
