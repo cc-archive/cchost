@@ -29,25 +29,24 @@ one database task.</p>
 <p> <? print $vmsg; ?></p></li>
 
 <li><b>mySQL</b>
-<p>Currently mySQL is the only database supported by ccHost. No doubt this will change someday but for now
-this is the only one. While there is no known reason why it shouldn't work on any moderately recent version
-it should be noted the ccHost code has only been tested on a few version <b>4</b> installations.</p></li>
+<p>Currently mySQL is the only database supported. ccHost 3.0 has been tested on several versio of mySQL 4 and 5.</p></li>
 
 <li><b>Create a Database</b>
-<p>Before you continue installing ccHost you need to create a database. (If you are running at a hosted site
-the administrators can either do it for you or have already told you how to do it.) You will need the
-name of the database and the name and password of a user with CREATE TABLE (amongst other) rights. You'll have a chance
-to change users after you install the rest of the site. </p></li>
+<p>Before you continue installing ccHost you need to create a database. If you are running at a hosted site
+the administrators can either do it for you or have already told you how to do it. Take note of the following things:</p>
+<ul>
+  <li>The name of the database</li>
+  <li>The name of the database user</li>
+  <li>Password of the database user</li>
+  <li>The server the database is running on</li>
+</ul>
+<p>&nbsp;</p></li>
 
 <li><b>GetID3</b>
-<p>(Technically ccHost is 
-supposed to work even if you don't have this library installed but it has not been extensively
-tested so the safest thing for now is to just install it.)</p>
 
 <p>ccHost uses the <a href="http://www.getid3.org/">GetID3 library</a> to verify 
 the formats of file uploads of all types of media and archive files. It also uses it to tag
-ID3 format files (like MP3s) with things like artist, song title, license, etc. This site has been tested
-with version <b>1.7.2</b> and no others, therefore no other version of the library is supported. You can download this version from
+ID3 format files (like MP3s) with things like artist, song title, license, etc. Make sure to download at least version <b>1.7.2</b> or higher. You can download this version from
 <a href="http://www.getid3.org/#download">here</a>. </p>
 
 <p>Installing GetID3 is actually very simple: just unzip the library to a directory (e.g. <b class="d"><? print $id3suggest; ?></b>).</p>
