@@ -18,7 +18,12 @@
 *
 */
 
-error_reporting(E_ALL & ~E_NOTICE);
+if( version_compare(phpversion(),'4.4.3') < 0 )
+    $cc_error_level = E_ALL;
+else
+    $cc_error_level = E_ALL & ~E_NOTICE;
+
+error_reporting($cc_error_level); 
 
 if( !file_exists('cc-config-db.php') )
     die('<html><body>ccHost has not been properly installed. Please <a href="ccadmin/">
@@ -41,12 +46,8 @@ CCDebug::Enable(false);                 // set this to 'true' if you are a
                                         // developer or otherwise customizing
                                         // the code. 
                                         //
-                                        // Hint: You can also create a one line
-                                        // module where you set it true and drop
-                                        // that module with a .PHP extension into
-                                        // ccextras
 
-CCDebug::LogErrors( E_ALL & ~E_NOTICE );  // Log errors to a file during beta
+CCDebug::LogErrors( $cc_error_level );    // Log errors to a file during beta
                                           // this will help ccHost developers
                                           // when things go wrong on your site
 
@@ -57,7 +58,6 @@ if( !function_exists('gettext') )
 
 require_once('cc-includes.php');
 require_once('cc-custom.php');
-
 
 CCConfigs::Init();                      // config settings established here
 CCLogin::InitCurrentUser();             // user logged in 
