@@ -584,7 +584,7 @@ class CCUser
                 // this sends us to the save page
                 // I added because problem with getting the new language
                 // visible as soon as changed upon save
-                CCUtil::SendBrowserTo('profile/save');
+                CCUtil::SendBrowserTo(ccl('people','profile','save'));
             }
         }
 
