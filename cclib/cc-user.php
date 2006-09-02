@@ -237,13 +237,20 @@ class CCUserProfileForm extends CCUploadForm
                                'form_tip'   => _('Make sure it starts with http://'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
+            );
 
+        if( !empty($CC_GLOBALS['lang_per_user']) )
+        {
+            $fields += array( 
                     'user_language' => 
-               array(  'label'      => _("Default Language:"),
-                               'formatter'  => 'select',
-                               'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(), 
-                               'flags'      => CCFF_POPULATE ),
-                   
+                        array(  'label'      => _("Default Language:"),
+                            'formatter'  => 'select',
+                            'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(), 
+                            'flags'      => CCFF_POPULATE ),
+                );
+        }
+
+        $fields += array( 
                     'user_whatido' =>
                         array( 'label'      => _('What I Pound On'),
                                'form_tip'   => _('(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)'),

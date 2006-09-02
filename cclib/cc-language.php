@@ -113,6 +113,7 @@ class CCLanguage
                           $domain     = CC_LANG_LOCALE_DOMAIN )
     {
         global $CC_GLOBALS;
+        // CCDebug::StackTrace();
         // CCDebug::PrintVar($CC_GLOBALS);
     
         $this->_all_languages = array();
@@ -126,28 +127,65 @@ class CCLanguage
             $this->SetLocalePref( $locale );
 
         /* Sets the current language depending upon the user and
-       global setting for languages with a couple of presets */
+           global setting for languages with a couple of presets */
 
-    // tries to set the global users language with top priority
-    if ( 'default' == $CC_GLOBALS['user_language'] &&
-         'default' == $CC_GLOBALS['lang'] ) {
-            $this->SetLanguage( $this->_browser_default_language );
-    } else if ( 'default' == $CC_GLOBALS['user_language'] ) {
-        $this->SetLanguage( $CC_GLOBALS['lang'] );
-        } else if ( !empty($CC_GLOBALS['user_language']) ) {
-            $this->SetLanguage( $CC_GLOBALS['user_language'] );
-    // next, tries to set the global selected for everyone
-        } else if ( !empty($CC_GLOBALS['lang']) ) {
+        // The code is an example of how to do things once the
+        // user_language field is sure to work...
+        // it tries to set the global users language with top priority
+        /*
+        if ( 'default' == $CC_GLOBALS['user_language'] &&
+             'default' == $CC_GLOBALS['lang'] ) {
+                $this->SetLanguage( $this->_browser_default_language );
+        } else if ( 'default' == $CC_GLOBALS['user_language'] ) {
             $this->SetLanguage( $CC_GLOBALS['lang'] );
-    // the next attempts language detection from the browser
-    } else if ( !empty($this->_browser_default_language ) ) {
-        // echo $browser_language;
-            $this->SetLanguage( $this->_browser_default_language );
+            } else if ( !empty($CC_GLOBALS['user_language']) ) {
+                $this->SetLanguage( $CC_GLOBALS['user_language'] );
+        // next, tries to set the global selected for everyone
+            } else if ( !empty($CC_GLOBALS['lang']) ) {
+                $this->SetLanguage( $CC_GLOBALS['lang'] );
+        // the next attempts language detection from the browser
+        } else if ( !empty($this->_browser_default_language ) ) {
+            // echo $browser_language;
+                $this->SetLanguage( $this->_browser_default_language );
         } else {
+                $this->SetLanguage( $language );
+        }
+        */
+
+        if ( !empty($CC_GLOBALS['lang']) ) 
+        {
+            if ( 'default' == $CC_GLOBALS['lang'] ) 
+                $this->SetLanguage( $this->_browser_default_language );
+            else
+                $this->SetLanguage( $CC_GLOBALS['lang'] );
+        
+        } 
+        else if ( !empty($this->_browser_default_language ) ) 
+        {
+            $this->SetLanguage( $this->_browser_default_language );
+        } 
+        else 
+        {
             $this->SetLanguage( $language );
-    }
+        }
+
     }
     
+
+    /**
+     * Static function that returns boolean true if the
+     * PHP get_text module is compiled into this installation
+     *
+     * @return bool true if installation is get_text enabled
+     */
+    function IsEnabled()
+    {
+        static $_enabled;
+        if( !isset($_enabled) )
+            $_enabled = function_exists('gettext');
+        return $_enabled;
+    }
+
     /**
      * Loads all locale preference folders and languages into the 
      * $_all_languages array for use during runtime.
@@ -159,9 +197,9 @@ class CCLanguage
     function LoadLanguages ($locale_dir = CC_LANG_LOCALE, 
                             $po_fn = CC_LANG_PO_FN) 
     {
-    // try to head off any type of malicious search
-    if ( empty($locale_dir) || $locale_dir == '/' )
-        return false;
+        // try to head off any type of malicious search
+        if ( empty($locale_dir) || $locale_dir == '/' )
+            return false;
 
         // read in each locale preference folder
         $locale_dirs = glob( $locale_dir . '/*', GLOB_ONLYDIR ); 
@@ -211,8 +249,8 @@ class CCLanguage
         if ( $locale_pref == $this->_locale_pref )
             return true;
     
-    // these are the various possible settings ranked in order for
-    // setting this directory.
+        // these are the various possible settings ranked in order for
+        // setting this directory.
         $locale_tests = array(&$locale_pref, 
                               &$_SERVER['HTTP_HOST'], 
                               CC_PROJECT_NAME);
@@ -226,10 +264,10 @@ class CCLanguage
             }
         }
     
-    // NOTE: I have gone back and forth on whether or not to set this
-    // I think it is wisest to set as last precaution to the default
-    // and ideally also make some note in the error log stating what is up
-    $this->_locale_pref = CC_LANG_LOCALE_PREF;
+        // NOTE: I have gone back and forth on whether or not to set this
+        // I think it is wisest to set as last precaution to the default
+        // and ideally also make some note in the error log stating what is up
+        $this->_locale_pref = CC_LANG_LOCALE_PREF;
         return false;
     }
    
@@ -392,68 +430,83 @@ class CCLanguage
      */
     function Init ()
     {
+        if( !CCLanguage::IsEnabled() )
+        {
+            CCDebug::Log('Language is disabled, no init');
+            return;
+        }
+
         // set the LANGUAGE environmental variable
-    // This one for some reason makes a difference FU@#$%^&*!CK
-    // and when combined with bind_textdomain_codeset allows one
-    // to set locale independent of server locale setup!!!
+        // This one for some reason makes a difference FU@#$%^&*!CK
+        // and when combined with bind_textdomain_codeset allows one
+        // to set locale independent of server locale setup!!!
         if ( false == putenv("LANGUAGE=" . $this->_language ) )
-        CCDebug::Log(sprintf("Could not set the ENV variable LANGUAGE = %s",
+            CCDebug::Log(sprintf("Could not set the ENV variable LANGUAGE = %s",
                              $this->_language));
 
         // set the LANG environmental variable
         if ( false == putenv("LANG=" . $this->_language ) )
-        CCDebug::Log(sprintf("Could not set the ENV variable LANG = %s", 
+            CCDebug::Log(sprintf("Could not set the ENV variable LANG = %s", 
                              $this->_language));
 
-    // if locales are not installed in locale folder, they will not
-    // get set! This is usually in /usr/lib/locale
-    // Also, the backup language should always be the default language
-    // because of this...see the NOTE in the class description
+        // if locales are not installed in locale folder, they will not
+        // get set! This is usually in /usr/lib/locale
+        // Also, the backup language should always be the default language
+        // because of this...see the NOTE in the class description
 
-    // Try first what we want but with the .utf8, which is what the locale
-    // setting on most systems want (and is most compatible
-    // Then just try the standard lang encoding asked for, and then if 
-    // all else fails, just try the default language
-    // LC_ALL is said to be used, but it has nasty usage in some languages
-    // in swapping commas and periods! Thus try LC_MESSAGE if on one of
-    // those systems.
-    // It is supposedly not defined on WINDOWS, so am including it here
-    // for possible uncommenting if a problem is shown
-    //
+        // Try first what we want but with the .utf8, which is what the locale
+        // setting on most systems want (and is most compatible
+        // Then just try the standard lang encoding asked for, and then if 
+        // all else fails, just try the default language
+        // LC_ALL is said to be used, but it has nasty usage in some languages
+        // in swapping commas and periods! Thus try LC_MESSAGE if on one of
+        // those systems.
+        // It is supposedly not defined on WINDOWS, so am including it here
+        // for possible uncommenting if a problem is shown
+        //
         // if (!defined('LC_MESSAGES')) define('LC_MESSAGES', 6);
-    // yes, setlocale is case-sensitive...arg
-    $locale_set = setlocale(LC_ALL, $this->_language . ".utf8", 
-                    $this->_language . ".UTF8",
-                    $this->_language . ".utf-8",
-                    $this->_language . ".UTF-8",
-                                    $this->_language, 
-                    CC_LANG);
-    // if we don't get the setting we want, make sure to complain!
-    if ( ( $locale_set != $this->_language && CC_LANG == $locale_set) || 
-         empty($locale_set) )
-    {
-        CCDebug::Log(
-            sprintf("Tried: setlocale to '%s', but could only set to '%s'.",                        $this->_language, $locale_set) );
+        // yes, setlocale is case-sensitive...arg
+        $locale_set = setlocale(LC_ALL, $this->_language . ".utf8", 
+                        $this->_language . ".UTF8",
+                        $this->_language . ".utf-8",
+                        $this->_language . ".UTF-8",
+                        $this->_language, 
+                        CC_LANG);
+        // if we don't get the setting we want, make sure to complain!
+        if ( ( $locale_set != $this->_language && CC_LANG == $locale_set) || 
+             empty($locale_set) )
+        {
+            CCDebug::Log(
+                sprintf("Tried: setlocale to '%s', but could only set to '%s'.",                        $this->_language, $locale_set) );
         }
         
         $bindtextdomain_set = bindtextdomain($this->_domain, 
                                   CC_LANG_LOCALE . "/" . $this->_locale_pref );
-    if ( empty($bindtextdomain_set) )
-        CCDebug::Log(
-        sprintf("Tried: bindtextdomain, '%s', to directory, '%s', " . 
-                "but received '%s'",
-                $this->_domain, CC_LANG_LOCALE . "/" . $this->_locale_pref,
-            $bindtextdomain_set) );
-    
-    // This is the magic key to not being bound by a system locale
-    if ( "UTF-8" != bind_textdomain_codeset($this->_domain, "UTF-8") )
-        CCDebug::Log(
-            sprintf("Tried: bind_textdomain_codeset '%s' to 'UTF-8'",
-                    $this->_domain));
+        if ( empty($bindtextdomain_set) )
+            CCDebug::Log(
+                sprintf("Tried: bindtextdomain, '%s', to directory, '%s', " . 
+                        "but received '%s'",
+                        $this->_domain, CC_LANG_LOCALE . "/" . $this->_locale_pref,
+                        $bindtextdomain_set) );
+
+        // This is the magic key to not being bound by a system locale
+        if ( "UTF-8" != bind_textdomain_codeset($this->_domain, "UTF-8") )
+        {
+            CCDebug::Log(
+                sprintf("Tried: bind_textdomain_codeset '%s' to 'UTF-8'",
+                        $this->_domain));
+        }
+
         $textdomain_set = textdomain($this->_domain);
-    if ( empty($textdomain_set) )
-        CCDebug::Log(sprintf("Tried: set textdomain to '%s', but got '%s'",
-                             $this->_domain, $textdomain_set));
+        if ( empty($textdomain_set) )
+        {
+            CCDebug::Log(sprintf("Tried: set textdomain to '%s', but got '%s'",
+                                 $this->_domain, $textdomain_set));
+        }
+        else
+        {
+            // CCDebug::LogVar( 'lang', $this->_language );
+        }
     
     } // end of method Init ()
 
@@ -464,7 +517,7 @@ class CCLanguage
     function GetSystemLocales()
     {
         exec('locale -a', $system_locales); /* if need -> $retval); */
-    return $system_locales;
+        return $system_locales;
     }
 
     
@@ -474,13 +527,13 @@ class CCLanguage
      */
     function DebugLanguages ()
     {
-    global $CC_GLOBALS;
+        global $CC_GLOBALS;
         echo "<pre>";
         // print_r( $this->_all_languages );
         // print_r( $this );
-    // print_r( $CC_GLOBALS );
-    echo ( $this->_language );
-    // get system locals and print them out
+        // print_r( $CC_GLOBALS );
+        echo ( $this->_language );
+        // get system locals and print them out
         print_r($this->GetSystemLocales());
         echo "</pre>";
     }
@@ -495,10 +548,10 @@ class CCLanguage
         global $CC_GLOBALS;
         // Basically need to init all the language stuff here...
         $this->Init();
-    // need the following for lang. encoding standards...arg
+        // need the following for lang. encoding standards...arg
         $CC_GLOBALS['lang_xml'] = str_replace('_', '-', $this->_language); 
         $CC_GLOBALS['lang_locale_pref'] = &$this->_locale_pref;
-    // TODO: should replace this with a singleton...
+        // TODO: should replace this with a singleton...
         $CC_GLOBALS['language'] = &$this;
         // $this->DebugLanguages();
     }
@@ -514,37 +567,61 @@ class CCLanguageAdminForm extends CCForm
     function CCLanguageAdminForm()
     {
         global $CC_GLOBALS;
-
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('config');
-
         $this->CCForm();
+
+        $lang_enabled = CCLanguage::IsEnabled() ;
+
+        if( $lang_enabled )
+        {
+
 /*
-        $fields['lang_enabled'] = array(
-                                'label'      => _("Enabled language support:"),
-                                'formatter'  => 'checkbox',
-                                'value'      => $CC_GLOBALS['lang_enabled'],
-                                'flags'      => CCFF_POPULATE );
+            $configs =& CCConfigs::GetTable();
+            $settings = $configs->GetConfig('config');
+            $fields['lang_enabled'] = array(
+                                    'label'      => _("Enabled language support:"),
+                                    'formatter'  => 'checkbox',
+                                    'value'      => $CC_GLOBALS['lang_enabled'],
+                                    'flags'      => CCFF_POPULATE );
 */
-        $fields['lang_locale_pref'] = array(
-                                'label'      => _("Default Locale Preference:"),
-                                'formatter'  => 'select',
-                                'value'      => $settings['lang_locale_pref'],
-                                'options'    => $CC_GLOBALS['language']->GetPossibleLocalePrefs(),
-                                'flags'      => CCFF_POPULATE );
+            $fields['lang_locale_pref'] = array(
+                                    'label'      => _("Default Locale Preference:"),
+                                    'formatter'  => 'select',
+                                    'value'      => $CC_GLOBALS['lang_locale_pref'],
+                                    'options'    =>
+                                            $CC_GLOBALS['language']->GetPossibleLocalePrefs(),
+                                    'flags'      => CCFF_POPULATE );
 
-        $fields['lang'] = array(
-                                'label'      => _("Default Language:"),
-                                'formatter'  => 'select',
-                                'value'      => empty($settings['lang']) ? 'default' : $settings['lang'],
-                                'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(),
-                                'flags'      => CCFF_POPULATE );
+            $fields['lang'] = array(
+                                    'label'      => _("Default Language:"),
+                                    'formatter'  => 'select',
+                                    'value'      => empty($CC_GLOBALS['lang']) ? 
+                                                        'default' : $CC_GLOBALS['lang'],
+                                    'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(),
+                                    'flags'      => CCFF_POPULATE );
 
-        $help = "<p>" . _("Select the default locale preference and a default language and the system will try to translate menus, navigation tabs and anything else you might have customized. If the translation system does recognize the terms used, those menu items and navigation tabs will not change.") . "</p><p>" . 
-                    _("The Locale Preference is a specific folder that contains specific language translations. The default is a folder of the same name. Inside these folders are the specific language translations.") . "</p><p>" . 
-                _("To create a specific translation, please copy the default folder with a unique name, and then select it as your Default Locale Preference. Then, edit the .po files in specific language folders for customization.") . "</p>";
+            $beta_warning = 'This feature is <b style="color:red">
+                             EXPERIMENTAL</b> and should not be used in production
+                             installation. It is here for development purposes only.';
+
+            $fields['lang_per_user'] = array(
+                                    'label'      => _("Allow User to Set Language:"),
+                                    'formatter'  => 'checkbox',
+                                    'form_tip'   => $beta_warning,
+                                    'value'      => !empty($CC_GLOBALS['lang_per_user']),
+                                    'flags'      => CCFF_POPULATE );
+
+            $help = "<p>" . _("Select the default locale preference and a default language and the system will try to translate menus, navigation tabs and anything else you might have customized. If the translation system does recognize the terms used, those menu items and navigation tabs will not change.") . "</p><p>" . 
+                        _("The Locale Preference is a specific folder that contains specific language translations. The default is a folder of the same name. Inside these folders are the specific language translations.") . "</p><p>" . 
+                    _("To create a specific translation, please copy the default folder with a unique name, and then select it as your Default Locale Preference. Then, edit the .po files in specific language folders for customization.") . "</p>";
+            $this->AddFormFields($fields);
+        }
+        else // no get_text on this installation
+        {
+            $help = _("Language support requires that the PHP 'get_text' module be enabled on your PHP installation. Please consult your system administrator.");
+            $this->SetSubmitText(null);
+        }
+
         $this->SetFormHelp($help);
-        $this->AddFormFields($fields);
     }
 }
 
@@ -575,7 +652,7 @@ class CCLanguageAdmin
                 $values['lang_locale_pref'] = CC_LANG_LOCALE_PREF;
 
             $config =& CCConfigs::GetTable();    
-            // CCDebug::PrintVar($values);
+            //CCDebug::PrintVar($values);
             $config->SaveConfig('config',$values,CC_GLOBAL_SCOPE,true);
             CCEvents::Invoke(CC_EVENT_TRANSLATE);
             CCUtil::SendBrowserTo(ccl('admin','language', 'save'));
@@ -600,11 +677,10 @@ class CCLanguageAdmin
     {
         global $CC_GLOBALS;
         CCPage::SetTitle(_("Diagnostic") . " : " . _("Language") );
-        $var_mixed = array("CC_GLOBALS", &$CC_GLOBALS, 
-                           "_SERVER VARIABLES", &$_SERVER,
-                           "_ENV VARIABLES", &$_ENV,
-                           "SYSTEM LOCALES", 
-                           $CC_GLOBALS['language']->GetSystemLocales());
+        $var_mixed = array("CC_GLOBALS"        => &$CC_GLOBALS, 
+                           "_SERVER VARIABLES" => &$_SERVER,
+                           "_ENV VARIABLES"    => &$_ENV,
+                           "SYSTEM LOCALES"    => $CC_GLOBALS['language']->GetSystemLocales());
         CCDebug::PrintVar($var_mixed);
     }
 
@@ -639,11 +715,11 @@ class CCLanguageAdmin
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('admin','language'),  
-        array( 'CCLanguageAdmin', 'Admin'), CC_ADMIN_ONLY );
+                            array( 'CCLanguageAdmin', 'Admin'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( ccp('admin','language','save'),  
-        array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
+                            array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( ccp('admin','language','diagnostic'),  
-        array( 'CCLanguageAdmin', 'DiagnosticPage'), CC_ADMIN_ONLY );
+                            array( 'CCLanguageAdmin', 'DiagnosticPage'), CC_ADMIN_ONLY );
     }
 
 }

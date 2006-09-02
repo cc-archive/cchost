@@ -49,35 +49,60 @@ class CCAdminMenuForm extends CCGridForm
         {
             $revert_link = ccl('admin','menu','revert');
 
+            $rlink1 = "<a href=\"$revert_link\"><b><u>";
+            $rlink2 = "</b></u></a>";
+
             if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
             {
-                $help = "You can revert to factory defaults menu by clicking <a href=\"$revert_link\"><b><u>here</u></b></a> ".
-                        "(This will erase the customization you've done to the main menu, but not affect any virtual ccHosts" .
-                        " that you have customized menus for.)";
+                $help = _('You can revert to factory defaults menu by clicking %shere%s
+                        (This will erase the customization you have done to the main menu, 
+                         but not affect any virtual ccHosts menus that you have 
+                         customized.');
+                $help = sprintf($help,$rlink1,$rlink2);
             }
             else
             {
-                $help = "You can revert to your main configuration menu by clicking <a href=\"$revert_link\"><b><u>here</u></b></a> ".
-                $extra = "(This will erase the customization you've done to the <b>$CC_CFG_ROOT</b> menu.)";
+                $help = _('You can revert to your main configuration menu by clicking %shere%s
+                           This will erase the customization you have done to the %s menu.');
+                $help = sprintf($help,"<b>$CC_CFG_ROOT</b>");
             }
+
         }
         else
         {
             if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
             {
-                $help = "You're now editing the menu for the main configuration ('main')".
-                        "(This menu will be used by any virtual ccHost that you haven't customized.)";
+                $help = _('You are now editing the menu for the main configuration.
+                        (This menu will be used by any virtual ccHost that you have 
+                        not customized.)');
             }
             else
             {
-                $help = "You're now editing the menu for the <b>$CC_CFG_ROOT</b> virtual CCHost. "
-                       . "Any changes here will only be reflected in <b>$CC_CFG_ROOT</b>.";
+                $help = _('You are now editing the menu for the %s virtual CCHost.
+                         Any changes here will only be reflected in %s.');
+                $croot = "<b>$CC_CFG_ROOT</b>";
+                $help = sprintf($help,$croot,$croot);
             }
         }
 
-        $addurl = ccl('admin', 'menu', 'additems', '3');
-        $help .= "<br />To add items click <a href=\"$addurl\"><b><u>here</u></b></a> (This will not save any of the work you've done below.)";
+        if( !CCLanguage::IsEnabled() )
+        {
+            $exhelp =  _('WARNING: If you change the global language setting
+                    all customizations made here will be destroyed. Therefore, if you plan to
+                    set the language to something other than the default you should do it
+                    before editing here.');
 
+            $this->SetFormHelp($exhelp);
+        }
+
+        $this->SetHelpText($help);
+
+        $addurl = ccl('admin', 'menu', 'additems', '3');
+        $addlink1 = "<a href=\"$addurl\"><b><u>";
+        $addlink2 = '</b></u></a>';
+        $help = _('To add items click %shere%s
+                   (This will not save any of the work you have done below.)');
+        $help =  sprintf( $help, $addlink1, $addlink2 );
         $this->SetHelpText($help);
 
         uasort($menu,'cc_sort_user_menu');
@@ -286,8 +311,52 @@ class CCMenuAdmin
         $menu_api->Reset();
     }
 
+    /**
+     * Event handler for {@link CC_EVENT_TRANSLATE}
+     *
+     * This is called when the admin has picked a new language.
+     *
+     * The current implementation is simply to wipe out the cache
+     * but that DESTROYS all customization done to the menus.
+     * Clearly this is not the right thing. Any volunteers who
+     * wish to help make the menu cache multi-language aware
+     * speak now...
+     *
+     * @todo Make menu cache multi-language aware
+     * @param object $menu_api A pointer to a CCMenu object
+     */
     function OnTranslate($menu_api)
     {
+        $configs =& CCConfigs::GetTable();
+        $roots = $configs->GetConfigRoots();
+        foreach( $roots as $aroot )
+        {
+            $root = $aroot['config_scope'];
+            $configs->DeleteType('menu',$root);
+            $configs->DeleteType('groups',$root);
+            CCDebug::Log("Deleted menus for $root");
+        }
+
+
+        /*
+        * This is the code for translating the current menu into
+        * whatever the current language is.
+        *
+        * This is here strictly as a reference for how to traverse
+        * a menu and chache the results.
+        *
+        * The code itself is broken in several ways:
+        *
+        *  It assumes the current language is English
+        *  It overwrites whatever menu options were previously in the cache
+        *  It uses _() to translate, I'm told that's wrong
+        *  It will only translate 'known' strings, if the admin changed
+        *     even one characther (e.g. 'Forum' -> 'Forums') that the translation
+        *     for that word will fail and the user will the English version
+        *  ...
+        */
+
+        /*
         $configs =& CCConfigs::GetTable();
         $roots = $configs->GetConfigRoots();
         foreach( $roots as $aroot )
@@ -311,6 +380,7 @@ class CCMenuAdmin
             }
             $configs->SaveConfig('groups',$new_groups,$root,false);
         }
+        */
     }
 }
 

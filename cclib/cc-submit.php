@@ -124,6 +124,16 @@ class CCAdminSubmitFormForm extends CCUploadForm
                   );
 
     
+        if( !CCLanguage::IsEnabled() )
+        {
+            $help = _('WARNING: If you change the global language setting
+                    all customizations made here will be destroyed. Therefore, if you plan to
+                    set the language to something other than the default you should do it
+                    before editing here.');
+
+            $this->SetFormHelp($help);
+        }
+
         $this->AddFormFields( $fields );
         $this->EnableSubmitMessage(false);
     }
@@ -464,10 +474,47 @@ class CCSubmit
     }
 
     /**
-    * Event handler for {@link CC_EVENT_TRANSLATE}
+     * Event handler for {@link CC_EVENT_TRANSLATE}
+     *
+     * This is called when the admin has picked a new language.
+     *
+     * The current implementation is simply to wipe out the cache
+     * but that DESTROYS all customization done to the submit forms.
+     * Clearly this is not the right thing. Any volunteers who
+     * wish to help make the forms cache multi-language aware
+     * speak now...
+     *
+     * @todo Make submit forms cache multi-language aware
     */
     function OnTranslate()
     {
+        $configs =& CCConfigs::GetTable();
+        $roots = $configs->GetConfigRoots();
+        foreach( $roots as $aroot )
+        {
+            $root = $aroot['config_scope'];
+            $configs->DeleteType('submit_forms',$root);
+        }
+
+        /*
+        * This is the code for translating all submit forms into
+        * whatever the current language is.
+        *
+        * This is here strictly as a reference for how to traverse
+        * the forms in all the vroots and chache the results.
+        *
+        * The code itself is broken in several ways:
+        *
+        *  It assumes the current language is English
+        *  It overwrites whatever text were previously in the cache
+        *  It uses _() to translate, I'm told that's wrong
+        *  It will only translate 'known' strings, if the admin changed
+        *     even one characther (e.g. 'Forum' -> 'Forums') that the translation
+        *     for that word will fail and the user will the English version
+        *  ...
+        */
+
+        /*
         $configs =& CCConfigs::GetTable();
         $roots = $configs->GetConfigRoots();
         foreach( $roots as $aroot )
@@ -484,6 +531,7 @@ class CCSubmit
             }
             $configs->SaveConfig('submit_forms',$new_forms,$root,false);
         }
+        */
     }
 
 }

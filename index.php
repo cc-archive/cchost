@@ -21,12 +21,13 @@
 error_reporting(E_ALL & ~E_NOTICE);
 
 if( !file_exists('cc-config-db.php') )
-    die('<html><body>ccHost has not been properly installed</body></html>');
+    die('<html><body>ccHost has not been properly installed. Please <a href="ccadmin/">
+        follow these steps</a> for a successful
+        setup.</body></html>');
 
 if( file_exists('ccadmin') )
-    die('<html><body>ccHost Installation is not complete. ' . 
-        'Please <a href="ccadmin/">follow these steps</a> for a successful ' . 
-	'setup.</body></html>');
+    die('<html><body>ccHost Installation is not complete -- for security reasons you 
+         should rename "ccadmin". </body></html>');
 
 
 define('IN_CC_HOST', true);
@@ -39,6 +40,11 @@ require_once('cclib/cc-debug.php');
 CCDebug::Enable(false);                 // set this to 'true' if you are a
                                         // developer or otherwise customizing
                                         // the code. 
+                                        //
+                                        // Hint: You can also create a one line
+                                        // module where you set it true and drop
+                                        // that module with a .PHP extension into
+                                        // ccextras
 
 CCDebug::LogErrors( E_ALL & ~E_NOTICE );  // Log errors to a file during beta
                                           // this will help ccHost developers
@@ -46,21 +52,15 @@ CCDebug::LogErrors( E_ALL & ~E_NOTICE );  // Log errors to a file during beta
 
 CCDebug::InstallErrorHandler(true);     
 
-// migrate this to cc-includes.php possibly
-if( !function_exists('gettext') ) {
+if( !function_exists('gettext') )
    require_once('ccextras/cc-no-gettext.inc');
-   CCDebug::Log("Function gettext doesn't exist, using " . 
-                "'ccextras/cc-no-gettext.inc'");
-}
 
 require_once('cc-includes.php');
 require_once('cc-custom.php');
 
+
 CCConfigs::Init();                      // config settings established here
 CCLogin::InitCurrentUser();             // user logged in 
-
-if( CCUser::IsAdmin() )
-   CCDebug::Enable(true);
 
 CCEvents::Invoke(CC_EVENT_APP_INIT);    // Let all modules know it's safe to 
                                         // get in the waters
