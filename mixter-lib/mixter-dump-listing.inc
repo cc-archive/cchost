@@ -75,7 +75,7 @@ EOF;
         //
         //------------------------------------
 
-        $name_cls = $record['upload_name_cls'];
+        $name_cls = empty($record['upload_name_cls']) ? '' : $record['upload_name_cls'];
 
         $html .= '<table id="cc_file_info" cellpadding="0" cellspacing="0">';
 
