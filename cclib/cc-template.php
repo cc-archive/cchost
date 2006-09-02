@@ -88,7 +88,7 @@ class CCTemplate
         $res = $this->_template->execute();
         if( PEAR::isError($res) )
         {
-            print("There an error rendering this page.<br />");
+            print("There is an error rendering this page.<br /><a href=\"http://wiki.creativecommons.org/CcHost#Troubleshooting\">Help troubleshooting ccHost</a><br />");
             $dir = $CC_GLOBALS['php-tal-cache-dir'];
             if( is_dir($dir) && !is_writable($dir) )
             {
@@ -96,10 +96,6 @@ class CCTemplate
                 print("The $dir directory must be writable. We have tried to change it. Refresh this page to ".
                        "see if that worked. If not, you may have to ask your system's administrator for assitance to ".
                         "make that possible.");
-            }
-            else
-            {
-                print("Is your phptal cache directory ($dir) writable?");
             }
 
             if( $admin_dump )
