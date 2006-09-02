@@ -444,12 +444,12 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
     if( ($states['log_errors'] & $errno) != 0 )
     {
         global $CC_GLOBALS;
-        error_log($err,3,$CC_GLOBALS['logfile-dir'] . CC_ERROR_FILE);
+        if( !empty($CC_GLOBALS['logfile-dir']) )
+            error_log($err,3,$CC_GLOBALS['logfile-dir'] . CC_ERROR_FILE);
     }
 
     if( $states['enabled'] === true )
     {
-
         die($err);
     }
     else
