@@ -408,10 +408,13 @@ class CCLanguage
     {
     // return true if this is set
         if ( !empty($this->_browser_default_language) )
-        return true;
+            return true;
 
-        list($this->_browser_default_language) =  
-             explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE'], 2);
+        if( !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) )
+        {
+            list($this->_browser_default_language) =  
+                 explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE'], 2);
+        }
 
         return !empty($this->_browser_default_language);
         
