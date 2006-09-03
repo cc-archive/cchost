@@ -126,7 +126,7 @@ END;
             return $records;
         }
         $e = array();
-        return($e);
+        return $e;
     }
 
 }
