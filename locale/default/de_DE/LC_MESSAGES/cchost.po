@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-30 11:37-0700\n"
+"POT-Creation-Date: 2006-09-03 16:04-0700\n"
 "PO-Revision-Date: 2006-06-28 12:00+0000\n"
 "Last-Translator: Friedemann Bochow <f.bochow@milchhof.net>\n"
 "Language-Team: Deutsch <f.bochow@milchhof.net>\n"
@@ -177,7 +177,7 @@ msgid "Name"
 msgstr "Name"
 
 #: cclib/cc-navigator-admin.inc:443 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:621 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:631 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -860,7 +860,7 @@ msgstr "Verlorenes Passwort wiederfinden"
 msgid "Uploads"
 msgstr "Uploads"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:606 cclib/cc-user.php:622
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:616 cclib/cc-user.php:632
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr "Leute"
@@ -991,6 +991,48 @@ msgstr "Remixe bearbeiten f&uuml;r '%s'"
 msgid "Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"
 msgstr "Remix %s erfolgreich beendet (Ergebnisse <a href=\"%s\">hier</a>)"
 
+#: cclib/cc-menu-admin.inc:57
+#, php-format
+msgid ""
+"You can revert to factory defaults menu by clicking %shere%s (This will "
+"erase the customization you have done to the main menu, but not affect any "
+"virtual ccHosts menus that you have customized."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:62
+#, php-format
+msgid ""
+"You can revert to your main configuration menu by clicking %shere%s. This "
+"will erase the customization you have done to the %s menu."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:71
+msgid ""
+"You are now editing the menu for the main configuration. (This menu will be "
+"used by any virtual ccHost that you have not customized.)"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:75
+#, php-format
+msgid ""
+"You are now editing the menu for the %s virtual CCHost. Any changes here "
+"will only be reflected in %s."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:83
+msgid ""
+"WARNING: If you change the global language setting all customizations made "
+"here will be destroyed. Therefore, if you plan to set the language to "
+"something other than the default you should do it before editing here."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:93
+#, php-format
+msgid ""
+"To add items click %shere%s (This will not save any of the work you have "
+"done below.)"
+msgstr ""
+
 #: cclib/cc-renderimage.php:169
 msgid "Display Thumbnails"
 msgstr "Name f&uuml;r die Datei anzeigen"
@@ -1068,15 +1110,25 @@ msgstr "Suchgrenze erreicht"
 msgid "Users That Mentioned: "
 msgstr "User, die erw&auml;hnt haben: "
 
-#: cclib/cc-submit.php:213
+#: cclib/cc-submit.php:129
+msgid ""
+"WARNING: If you change the global language setting\n"
+"                    all customizations made here will be destroyed. "
+"Therefore, if you plan to\n"
+"                    set the language to something other than the default you "
+"should do it\n"
+"                    before editing here."
+msgstr ""
+
+#: cclib/cc-submit.php:223
 msgid "Pick Submission Type"
 msgstr "Art der Einsendung ausw&auml;hlen"
 
-#: cclib/cc-submit.php:418
+#: cclib/cc-submit.php:428
 msgid "Submit Files"
 msgstr "Dateien senden"
 
-#: cclib/cc-submit.php:455
+#: cclib/cc-submit.php:465
 msgid "Submit Forms"
 msgstr "Formulare senden"
 
@@ -1202,119 +1254,119 @@ msgstr "URL Homepage"
 msgid "Make sure it starts with http://"
 msgstr "&Uuml;berpr&uuml;fe, ob sie mit http:// beginnt"
 
-#: cclib/cc-user.php:242 cclib/cc-language.php:453
+#: cclib/cc-user.php:246 cclib/cc-language.php:598
 msgid "Default Language:"
 msgstr "Standard-Sprache:"
 
-#: cclib/cc-user.php:248 cclib/cc-user.php:423
+#: cclib/cc-user.php:255 cclib/cc-user.php:430
 msgid "What I Pound On"
 msgstr "Was ich nicht mag:"
 
-#: cclib/cc-user.php:249
+#: cclib/cc-user.php:256
 msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
 msgstr "(z.B. Vinylplatten, Gitarrenrock, ACID Pro, Vocals)"
 
-#: cclib/cc-user.php:254
+#: cclib/cc-user.php:261
 msgid "What I Like:"
 msgstr "Was ich mag:"
 
-#: cclib/cc-user.php:255
+#: cclib/cc-user.php:262
 msgid "(e.g. Django, Old Skool, Miles Davis, Acid House)"
 msgstr "(z.B. Django, Old Skool, Miles Davis, Acid House)"
 
-#: cclib/cc-user.php:260
+#: cclib/cc-user.php:267
 msgid "What I'm Looking For:"
 msgstr "Wonach ich suche:"
 
-#: cclib/cc-user.php:261
+#: cclib/cc-user.php:268
 msgid "List attributes of musicians you'd like to hook up with "
 msgstr "Liste Merkmale von Musikern auf, mit denen zu zusammenkommen mchtest "
 
-#: cclib/cc-user.php:262
+#: cclib/cc-user.php:269
 msgid "(e.g. Producer, singer, drummer)"
 msgstr "(z.B. Produzent, S&auml;nger, Drummer)"
 
-#: cclib/cc-user.php:373
+#: cclib/cc-user.php:380
 msgid "Home Page"
 msgstr "Homepage"
 
-#: cclib/cc-user.php:374
+#: cclib/cc-user.php:381
 msgid "About Me"
 msgstr "&Uuml;ber mich"
 
-#: cclib/cc-user.php:421
+#: cclib/cc-user.php:428
 msgid "What I Like"
 msgstr "Was ich mag"
 
-#: cclib/cc-user.php:425
+#: cclib/cc-user.php:432
 msgid "What I Look For"
 msgstr "Wonach ich suche"
 
-#: cclib/cc-user.php:549 cclib/cc-user.php:597
+#: cclib/cc-user.php:556 cclib/cc-user.php:607
 msgid "Edit Your Settings"
 msgstr "Einstellungen bearbeiten"
 
-#: cclib/cc-user.php:598
+#: cclib/cc-user.php:608
 msgid "Changes were saved"
 msgstr "&Auml;nderungen gespeichert"
 
-#: cclib/cc-user.php:650
+#: cclib/cc-user.php:660
 msgid "(select tag)"
 msgstr "(Tag ausw&auml;hlen)"
 
-#: cclib/cc-user.php:650
+#: cclib/cc-user.php:660
 msgid "(no tag)"
 msgstr "(kein Tag)"
 
-#: cclib/cc-user.php:710
+#: cclib/cc-user.php:720
 #, php-format
 msgid "Remove %s from my favorites"
 msgstr "%s aus meinen Favoriten entfernen"
 
-#: cclib/cc-user.php:712
+#: cclib/cc-user.php:722
 #, php-format
 msgid "Add %s to my favorites"
 msgstr "%s meinen Favoriten hinzuf&uuml;gen"
 
-#: cclib/cc-user.php:754
+#: cclib/cc-user.php:764
 msgid " has not uploaded any remixes yet."
 msgstr " hat noch keine Remixe hochgeladen."
 
-#: cclib/cc-user.php:773
+#: cclib/cc-user.php:783
 msgid "Uploads by "
 msgstr "Uploads von "
 
-#: cclib/cc-user.php:774
+#: cclib/cc-user.php:784
 msgid "Remixes of "
 msgstr "Remixe von"
 
-#: cclib/cc-user.php:775
+#: cclib/cc-user.php:785
 msgid "Remixed by "
 msgstr "Remixt von "
 
-#: cclib/cc-user.php:787
+#: cclib/cc-user.php:797
 #, php-format
 msgid "%s has been removed from your list of favorites"
 msgstr "%s wurden von Deiner Favoriten-Liste entfernt"
 
-#: cclib/cc-user.php:792
+#: cclib/cc-user.php:802
 #, php-format
 msgid "%s has been added to your list of favorites"
 msgstr "%s wurde Deiner Favoriten-Liste hinzugef&uuml;gt"
 
-#: cclib/cc-user.php:866
+#: cclib/cc-user.php:876
 msgid "Your Page"
 msgstr "Deine Seite"
 
-#: cclib/cc-user.php:873
+#: cclib/cc-user.php:883
 msgid "Edit Your Profile"
 msgstr "Profil bearbeiten"
 
-#: cclib/cc-user.php:884
+#: cclib/cc-user.php:894
 msgid "Visitors"
 msgstr "Besucher"
 
-#: cclib/cc-user.php:886
+#: cclib/cc-user.php:896
 msgid "Artists"
 msgstr "Knstler"
 
@@ -1493,19 +1545,23 @@ msgstr "Deine Erfahrungen aus dieser Arbeit"
 msgid "Edit \"How I Did It\""
 msgstr "'Wie habe ich's gemacht?' bearbeiten"
 
-#: cclib/cc-language.php:324
+#: cclib/cc-language.php:370
 msgid "default"
 msgstr "Standard"
 
-#: cclib/cc-language.php:326
+#: cclib/cc-language.php:372
 msgid "autodetect"
 msgstr ""
 
-#: cclib/cc-language.php:446
+#: cclib/cc-language.php:590
 msgid "Default Locale Preference:"
 msgstr "Lokale Standard-Einstellung:"
 
-#: cclib/cc-language.php:459
+#: cclib/cc-language.php:610
+msgid "Allow User to Set Language:"
+msgstr ""
+
+#: cclib/cc-language.php:616
 msgid ""
 "Select the default locale preference and a default language and the system "
 "will try to translate menus, navigation tabs and anything else you might "
@@ -1517,7 +1573,7 @@ msgstr ""
 "&uuml;bersetzen. Ausdr&uuml;cke, die das &Uuml;bersetzungssystem erkennt, "
 "werden in den Men&uuml;punkten und Navigations-Tabs nicht ver&auml;ndert."
 
-#: cclib/cc-language.php:460
+#: cclib/cc-language.php:617
 msgid ""
 "The Locale Preference is a specific folder that contains specific language "
 "translations. The default is a folder of the same name. Inside these folders "
@@ -1528,7 +1584,7 @@ msgstr ""
 "\"default\". In diesen Ordnern befinden sich die jeweiligen Sprach&uuml;"
 "bersetzungen ."
 
-#: cclib/cc-language.php:461
+#: cclib/cc-language.php:618
 msgid ""
 "To create a specific translation, please copy the default folder with a "
 "unique name, and then select it as your Default Locale Preference. Then, "
@@ -1539,9 +1595,33 @@ msgstr ""
 "Standardeinstellung ausw&auml;len. Dann die .po-Dateien in den jeweiligen "
 "Sprachordnern bearbeiten."
 
-#: cclib/cc-language.php:478
+#: cclib/cc-language.php:623
+msgid ""
+"Language support requires that the PHP 'get_text' module be enabled on your "
+"PHP installation. Please consult your system administrator."
+msgstr ""
+
+#: cclib/cc-language.php:642 cclib/cc-language.php:670
 msgid "Language Support"
 msgstr ""
+
+#: cclib/cc-language.php:671
+msgid "Language support options saved."
+msgstr ""
+
+#: cclib/cc-language.php:682
+msgid "Diagnostic"
+msgstr ""
+
+#: cclib/cc-language.php:682 cclib/cc-language.php:702
+#, fuzzy
+msgid "Language"
+msgstr "Standard-Sprache:"
+
+#: cclib/cc-language.php:704
+#, fuzzy
+msgid "Configure Language use"
+msgstr "&Auml;nderungen gespeichert"
 
 #: ccextras/cc-music-submit.php:47
 msgid "Submit a Remix"

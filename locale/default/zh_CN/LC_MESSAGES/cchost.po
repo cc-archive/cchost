@@ -1,20 +1,18 @@
-# This is a language file used for translation
-# Copyright (C) Creative Commons
-# Copyright (C) Jon Phillips
-# This file is distributed under the same license as the cchost package.
-# Lu Fang <lu@deerfang.org>, 2006.
-# Jon Phillips <jon@creativecommons.org>, 2006.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: cchost\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-30 11:37-0700\n"
-"PO-Revision-Date: 2006-08-19 22:14-0800\n"
+"POT-Creation-Date: 2006-09-03 16:04-0700\n"
+"PO-Revision-Date: 2006-09-03 15:38-0800\n"
 "Last-Translator: deerfang <lu@deerfang.org>\n"
-"Language-Team: cc-devel <cc-devel@lists.ibiblio.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: cclib/cc-admin.php:217
@@ -62,8 +60,9 @@ msgid "These settings affect the entire site"
 msgstr ""
 
 #: cclib/cc-admin.php:381
+#, fuzzy
 msgid "Virtual Root Settings"
-msgstr ""
+msgstr "编辑你的设置"
 
 #: cclib/cc-admin.php:392
 msgid "Edit the settings for virtual root: "
@@ -83,12 +82,14 @@ msgid "Edit Raw Configuation Data"
 msgstr ""
 
 #: cclib/cc-admin.php:443
+#, fuzzy
 msgid "Configuration Changes Saved"
-msgstr ""
+msgstr "更改已保存"
 
 #: cclib/cc-admin.php:456
+#, fuzzy
 msgid "Create New Virtual Root"
-msgstr ""
+msgstr "创建新帐户"
 
 #: cclib/cc-admin.php:507
 msgid ""
@@ -103,8 +104,9 @@ msgid ""
 msgstr ""
 
 #: cclib/cc-admin.php:532
+#, fuzzy
 msgid "Default File Permissions"
-msgstr ""
+msgstr "默认当前设定"
 
 #: cclib/cc-admin.php:534
 msgid ""
@@ -138,21 +140,23 @@ msgid "Style sheets, admins, home page, etc."
 msgstr ""
 
 #: cclib/cc-admin.php:612
+#, fuzzy
 msgid "Manage Site"
-msgstr ""
+msgstr "管理文件"
 
 #: cclib/cc-admin.php:623 cclib/cc-contest-admin.inc:448
 #: cclib/cc-mediahost.php:495
 msgid "Admin"
-msgstr ""
+msgstr "管理"
 
 #: cclib/cc-admin.php:652
 msgid "Global Site Setup"
 msgstr ""
 
 #: cclib/cc-admin.php:666
+#, fuzzy
 msgid "Edit Settings:"
-msgstr ""
+msgstr "编辑你的设置"
 
 #: cclib/cc-admin.php:681
 msgid "Saving Configuration"
@@ -160,7 +164,7 @@ msgstr ""
 
 #: cclib/cc-admin.php:696 cclib/cc-contest-admin.inc:543
 msgid "Changes Saved"
-msgstr ""
+msgstr "更改已保存"
 
 #: cclib/cc-navigator-admin.inc:43 cclib/cc-upload.php:55
 #: ccextras/cc-user-info-x.php:67
@@ -168,7 +172,7 @@ msgid "Name"
 msgstr "姓名"
 
 #: cclib/cc-navigator-admin.inc:443 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:621 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:631 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -188,11 +192,11 @@ msgstr "看所有最新上传"
 
 #: cclib/cc-navigator-admin.inc:455
 msgid "Remix"
-msgstr "重新混音"
+msgstr "再混音"
 
 #: cclib/cc-navigator-admin.inc:456
 msgid "See the latest remixes"
-msgstr "看最新混音"
+msgstr "看最新再混音"
 
 #: cclib/cc-navigator-admin.inc:461
 msgid "Original"
@@ -219,8 +223,9 @@ msgid "Only the funky stuff please!"
 msgstr "请只显Funky内容"
 
 #: cclib/cc-contest-admin.inc:50
+#, fuzzy
 msgid "Friendly Name"
-msgstr ""
+msgstr "全名"
 
 #: cclib/cc-contest-admin.inc:52
 msgid "This is the one people actually see"
@@ -228,15 +233,17 @@ msgstr ""
 
 #: cclib/cc-contest-admin.inc:57 cclib/cc-upload.php:87
 msgid "Description"
-msgstr ""
+msgstr "描述"
 
 #: cclib/cc-contest-admin.inc:63
+#, fuzzy
 msgid "Logo"
-msgstr ""
+msgstr "登陆"
 
 #: cclib/cc-contest-admin.inc:64
+#, fuzzy
 msgid "Image file"
-msgstr ""
+msgstr "图片"
 
 #: cclib/cc-contest-admin.inc:69
 #, fuzzy
@@ -322,15 +329,16 @@ msgstr "来源类型"
 
 #: cclib/cc-contest-admin.inc:260
 msgid "Main Remix Material"
-msgstr ""
+msgstr "主要再混音材料"
 
 #: cclib/cc-contest-admin.inc:262
 msgid "Sample (loop, layer, fragment, etc.)"
 msgstr "采样（循环，层，片断等）"
 
 #: cclib/cc-contest-admin.inc:354
+#, fuzzy
 msgid "Create Contest"
-msgstr ""
+msgstr "浏览比赛"
 
 #: cclib/cc-contest-admin.inc:413
 msgid "About"
@@ -350,44 +358,48 @@ msgstr "获胜者是......"
 
 #: cclib/cc-contest-admin.inc:427
 msgid "Sources"
-msgstr ""
+msgstr "来源"
 
+# 为何下载原材料
 #: cclib/cc-contest-admin.inc:428
 msgid "Download Source Material for "
-msgstr ""
+msgstr "下载原材料的对象"
 
 #: cclib/cc-contest-admin.inc:434
 msgid "Entries"
-msgstr ""
+msgstr "标签"
 
 #: cclib/cc-contest-admin.inc:441
 msgid "Submit Entry"
-msgstr ""
+msgstr "提交条目"
 
 #: cclib/cc-contest-admin.inc:442
-#, php-format
+#, fuzzy, php-format
 msgid "Submit an entry in the %s contest"
-msgstr ""
+msgstr "提交条目于"
 
 #: cclib/cc-contest-admin.inc:449
 msgid "Admin the contest"
 msgstr ""
 
 #: cclib/cc-contest-admin.inc:458
+#, fuzzy
 msgid "Admin Home"
-msgstr ""
+msgstr "管理"
 
 #: cclib/cc-contest-admin.inc:459
 msgid "Main admin screen"
 msgstr ""
 
 #: cclib/cc-contest-admin.inc:466
+#, fuzzy
 msgid "Properties"
-msgstr ""
+msgstr "编辑属性对象"
 
 #: cclib/cc-contest-admin.inc:467
+#, fuzzy
 msgid "Edit contest properties"
-msgstr ""
+msgstr "编辑属性对象"
 
 #: cclib/cc-contest-admin.inc:474
 #, php-format
@@ -397,19 +409,22 @@ msgstr ""
 #: cclib/cc-contest-admin.inc:480 cclib/cc-files.php:84 cclib/cc-files.php:87
 #: cclib/cc-mediahost.php:460
 msgid "Manage Files"
-msgstr ""
+msgstr "管理文件"
 
 #: cclib/cc-contest-admin.inc:481
+#, fuzzy
 msgid "Manage system files"
-msgstr ""
+msgstr "管理再混音"
 
 #: cclib/cc-contest-admin.inc:488
+#, fuzzy
 msgid "Add Files"
-msgstr ""
+msgstr "文件添加到"
 
 #: cclib/cc-contest-admin.inc:489
+#, fuzzy
 msgid "Add files to the system"
-msgstr ""
+msgstr "文件添加到"
 
 #: cclib/cc-contest-admin.inc:513
 msgid "Not Implemented"
@@ -417,69 +432,74 @@ msgstr ""
 
 #: cclib/cc-contest-admin.inc:583
 msgid "Upload succeeded"
-msgstr ""
+msgstr "上传成功"
 
 #: cclib/cc-contest.php:297
 msgid " is currently open and taking submissions."
-msgstr ""
+msgstr "现正开放并接受提交"
 
 #: cclib/cc-contest.php:301
 msgid "Submissions allowed until: "
-msgstr ""
+msgstr "允许提交直到："
 
 #: cclib/cc-contest.php:311
 msgid "(Only logged in users can submit entries.)"
-msgstr ""
+msgstr "（只有登陆用户可提交条目）"
 
 #: cclib/cc-contest.php:319
 msgid " is not taking submissions any more."
-msgstr ""
+msgstr "不再接受提交"
 
 #: cclib/cc-contest.php:323
 msgid "Submissions stopped after: "
-msgstr ""
+msgstr "提交截止于"
 
 #: cclib/cc-contest.php:334
 msgid "Voting is open until "
-msgstr ""
+msgstr "投票开放直至"
 
 #: cclib/cc-contest.php:495
 msgid "Browse Contests"
-msgstr ""
+msgstr "浏览比赛"
 
 #: cclib/cc-contest.php:544
+#, fuzzy
 msgid "This contest does not support online voting"
-msgstr ""
+msgstr "此比赛不设网上投票"
 
 #: cclib/cc-contest.php:584
+#, fuzzy
 msgid "Voting will open after submission period has ended"
-msgstr ""
+msgstr "投票会在提交期结束后开放"
 
 #: cclib/cc-contest.php:591
+#, fuzzy
 msgid "Poll Results"
-msgstr ""
+msgstr "投票结果"
 
 #: cclib/cc-contest.php:601
+#, fuzzy
 msgid "Voting is only open to registered users"
-msgstr ""
+msgstr "投票只对注册用户开放"
 
 #: cclib/cc-contest.php:604
+#, fuzzy
 msgid "Results will be shown here after the voting period is closed"
-msgstr ""
+msgstr "结果会在投票期结束后开放"
 
 #: cclib/cc-contest.php:627
 #, php-format
 msgid "Submit to: '%s'"
-msgstr ""
+msgstr "提交到："
 
 #: cclib/cc-contest.php:688
 #, php-format
 msgid "Your upload has been entered in '%s'"
-msgstr ""
+msgstr "你的上传被送入于"
 
 #: cclib/cc-contest.php:840
 msgid "This contest entry is only visible to the owner and admins."
-msgstr ""
+msgstr "只有主人和管理员可看此比赛条目"
 
 #: cclib/cc-database.php:110
 msgid "Internal error, contact the admin"
@@ -506,8 +526,9 @@ msgid "This is the name used to connect to the mysql database."
 msgstr ""
 
 #: cclib/cc-db-admin.php:71
+#, fuzzy
 msgid "mysql User Password"
-msgstr ""
+msgstr "检索密码"
 
 #: cclib/cc-db-admin.php:72
 msgid "This is the password used to connect to the mysql database."
@@ -528,42 +549,42 @@ msgstr ""
 
 #: cclib/cc-editorials.php:54
 msgid "Reviewer"
-msgstr ""
+msgstr "评论者"
 
 #: cclib/cc-editorials.php:60 ccextras/cc-reviews.php:55
 msgid "Review"
-msgstr ""
+msgstr "评论"
 
 #: cclib/cc-editorials.php:65 cclib/cc-mediahost.php:481
 #: ccextras/cc-topics.php:246
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #: cclib/cc-editorials.php:94
 msgid "Editors' Picks"
-msgstr ""
+msgstr "编辑之选"
 
 #: cclib/cc-editorials.php:120
 msgid "Invalid path"
-msgstr ""
+msgstr "非法路径"
 
 #: cclib/cc-editorials.php:124
 msgid "Edit Editorial"
-msgstr ""
+msgstr "编辑社论"
 
 #: cclib/cc-editorials.php:183
 #, php-format
 msgid "Editorial saved. See <a href=\"%s\">here</a> for results."
-msgstr ""
+msgstr "社论已保存。结果看这里"
 
 #: cclib/cc-editorials.php:247
 msgid "Editorial"
-msgstr ""
+msgstr "社论"
 
 #: cclib/cc-editorials.php:304
 #, fuzzy
 msgid "Editorial staff"
-msgstr "编辑特选"
+msgstr "社论"
 
 #: cclib/cc-editorials.php:305
 msgid "Comma separated list of login names for users with Editorial privelages"
@@ -580,7 +601,7 @@ msgstr ""
 #: cclib/cc-feed.php:334
 #, fuzzy, php-format
 msgid "Remixes of %s"
-msgstr "评论"
+msgstr "再混音来源"
 
 #: cclib/cc-feed.php:351
 #, fuzzy, php-format
@@ -613,27 +634,27 @@ msgstr ""
 
 #: cclib/cc-files.php:53
 msgid "Save File Properties"
-msgstr ""
+msgstr "保存文件属性"
 
 #: cclib/cc-files.php:71 cclib/cc-upload.php:155
 msgid "License"
-msgstr ""
+msgstr "执照"
 
 #: cclib/cc-files.php:72
 msgid "NOTE: You can only pick less restrictive license. Once you have done "
-msgstr ""
+msgstr "注意：完成以下操作后你只能挑选较少限制性的执照"
 
 #: cclib/cc-files.php:73
 msgid "that you can not re-license under a stricter license (on this site). "
-msgstr ""
+msgstr "你不能挑选更高限制性的执照（在本网站内）"
 
 #: cclib/cc-files.php:85
 msgid "Update the list of files used by this upload"
-msgstr ""
+msgstr "更新用过此上传的文件列表"
 
 #: cclib/cc-files.php:95
 msgid "Manage the 'I Sampled This' List"
-msgstr ""
+msgstr "管理“我采样”名单"
 
 #: cclib/cc-files.php:96
 msgid "Update the list of sources used by this upload"
@@ -641,11 +662,11 @@ msgstr ""
 
 #: cclib/cc-files.php:98 cclib/cc-mediahost.php:467
 msgid "Manage Remixes"
-msgstr ""
+msgstr "管理再混音"
 
 #: cclib/cc-files.php:170 cclib/cc-files.php:208
 msgid "Nickname"
-msgstr ""
+msgstr "绰号"
 
 #: cclib/cc-files.php:171 cclib/cc-files.php:209
 msgid "(e.g. 'lofi', 'hires') Leave blank to use default"
@@ -653,96 +674,96 @@ msgstr ""
 
 #: cclib/cc-files.php:233
 msgid "Manage files for: "
-msgstr ""
+msgstr "管理文件对象"
 
 #: cclib/cc-files.php:282 cclib/cc-files.php:355
 msgid "Edit Properties for "
-msgstr ""
+msgstr "编辑属性对象"
 
 #: cclib/cc-files.php:294
 #, php-format
 msgid "Changes saved (see <a href=\"%s\">results</a>)"
-msgstr ""
+msgstr "更改已保存"
 
 #: cclib/cc-files.php:357
 #, php-format
 msgid "Changes saved -- see <a href=\"%s\">'%s' page</a>"
-msgstr ""
+msgstr "更改已保存 -- 看"
 
 #: cclib/cc-files.php:361
 #, php-format
 msgid " or go back to <a href=\"%s\">Manage Files</a>"
-msgstr ""
+msgstr "或者回到"
 
 #: cclib/cc-files.php:380
 #, php-format
 msgid "Delete File '%s'"
-msgstr ""
+msgstr "删除文件"
 
 #: cclib/cc-files.php:401
 #, php-format
 msgid "Replace '%s'"
-msgstr ""
+msgstr "取代"
 
 #: cclib/cc-files.php:445
 #, php-format
 msgid "Nickname for '%s'"
-msgstr ""
+msgstr "绰号对象"
 
 #: cclib/cc-files.php:477
 #, php-format
 msgid "Add File to '%s'"
-msgstr ""
+msgstr "文件添加到"
 
 #: cclib/cc-form.php:82
 msgid "Submit"
-msgstr ""
+msgstr "提交"
 
 #: cclib/cc-form.php:772
 msgid "can not be left blank"
-msgstr ""
+msgstr "不能留空白"
 
 #: cclib/cc-form.php:1439
 msgid "Date is out of range"
-msgstr ""
+msgstr "日期排列错误"
 
 #: cclib/cc-form.php:1447
 msgid "Not a valid date"
-msgstr ""
+msgstr "错误日期"
 
 #: cclib/cc-form.php:1941 cclib/cc-form.php:1942
 msgid "File too big"
-msgstr ""
+msgstr "文件太大"
 
 #: cclib/cc-form.php:1943
 msgid "File was not fully uloaded"
-msgstr ""
+msgstr "文件未完全上传"
 
 #: cclib/cc-form.php:1944
 msgid "Missing file name"
-msgstr ""
+msgstr "缺少文件名"
 
 #: cclib/cc-login.php:116
 msgid ""
 "Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) "
 "has a line through it, the D does not."
-msgstr ""
+msgstr "在上面输入字符。正确输入为0-9和A-F字符。零（0）有一斜线穿过，D无斜线。"
 
 #: cclib/cc-login.php:136 cclib/cc-login.php:271 cclib/cc-login.php:326
 msgid "Login Name"
-msgstr ""
+msgstr "登陆名字"
 
 #: cclib/cc-login.php:138
 msgid "Must be letter, numbers or underscore (_), no longer than 25 characters"
-msgstr ""
+msgstr "必须是字母，数字或下横线(_)，不能多于25个字符"
 
 #: cclib/cc-login.php:141 cclib/cc-user.php:214
 msgid "e-mail"
-msgstr ""
+msgstr "电子邮件"
 
 #: cclib/cc-login.php:143 cclib/cc-user.php:215
 msgid "This address will never show on the site but is "
-msgstr ""
+msgstr "此地址将永远不会在这个网站上出现但它是"
 
 #: cclib/cc-login.php:144 cclib/cc-user.php:216
 msgid "required for creating a new account and password "
@@ -754,544 +775,600 @@ msgstr ""
 
 #: cclib/cc-login.php:155 cclib/cc-login.php:276 cclib/cc-user.php:209
 msgid "Password"
-msgstr ""
+msgstr "密码"
 
 #: cclib/cc-login.php:157
 msgid "Must be at least 5 characters"
-msgstr ""
+msgstr "最少必须五个字符"
 
 #: cclib/cc-login.php:169 ccextras/cc-flag.php:75 ccextras/cc-mail.php:201
 #: ccextras/cc-topics.php:106
 msgid "Security Key"
-msgstr ""
+msgstr "安全键"
 
 #: cclib/cc-login.php:180 cclib/cc-login.php:299
 msgid "Lost Password?"
-msgstr ""
+msgstr "忘了密码？"
 
 #: cclib/cc-login.php:183 cclib/cc-login.php:289 cclib/cc-login.php:302
 #: cclib/cc-login.php:333
 msgid "Click Here"
-msgstr ""
+msgstr "击这里"
 
 #: cclib/cc-login.php:189 cclib/cc-login.php:381
 msgid "Register"
-msgstr ""
+msgstr "注册"
 
 #: cclib/cc-login.php:224
 msgid " must letters, numbers or underscore (_)"
-msgstr ""
+msgstr "必须是字母，数字或下横线（_）"
 
 #: cclib/cc-login.php:230
 msgid " must be less than 25 characters"
-msgstr ""
+msgstr "必须少于25个字符"
 
 #: cclib/cc-login.php:245
 msgid "That username is already in use or is reserved by the system"
-msgstr ""
+msgstr "那个用户名已被使用或被系统储备"
 
 #: cclib/cc-login.php:281
 msgid "Remember Me"
-msgstr ""
+msgstr "记住我"
 
 #: cclib/cc-login.php:286 cclib/cc-login.php:331
 msgid "New User?"
-msgstr ""
+msgstr "新用户？"
 
 #: cclib/cc-login.php:308 cclib/cc-login.php:389 cclib/cc-login.php:535
 msgid "Log In"
-msgstr ""
+msgstr "登陆"
 
 #: cclib/cc-login.php:338
 msgid "Retrieve Password"
-msgstr ""
+msgstr "检索密码"
 
 #: cclib/cc-login.php:422
 msgid "Create A New Account"
-msgstr ""
+msgstr "创建新帐户"
 
 #: cclib/cc-login.php:424
 msgid "This site requires cookies to be enabled in your browser"
-msgstr ""
+msgstr "这个网站要求你的服务器接受cookies"
 
 #: cclib/cc-login.php:511
 msgid "Log Out"
-msgstr ""
+msgstr "注销"
 
 #: cclib/cc-login.php:532
 msgid "You new login information has been sent to your email address."
-msgstr ""
+msgstr "你新的登陆信息已发到你的电子邮件地址"
 
 #: cclib/cc-login.php:569
 msgid "This installation does not support this feature"
-msgstr ""
+msgstr "这个装置不支持此特性"
 
 #: cclib/cc-login.php:573
 msgid "Recover Lost Password"
-msgstr ""
+msgstr "恢复丢失的密码"
 
 #: cclib/cc-mediahost.php:54 cclib/cc-search.php:56
 msgid "Uploads"
-msgstr ""
+msgstr "上传的"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:606 cclib/cc-user.php:622
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:616 cclib/cc-user.php:632
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
-msgstr ""
+msgstr "人们"
 
 #: cclib/cc-mediahost.php:98
 msgid "Browse Uploads"
-msgstr ""
+msgstr "浏览上传"
 
 #: cclib/cc-mediahost.php:115
 msgid "Unknown File"
-msgstr ""
+msgstr "未知文件"
 
 #: cclib/cc-mediahost.php:116
 msgid "That file can not be found, it may have been removed by the owner."
-msgstr ""
+msgstr "无法找到这个文件，也许文件已被主人迁移"
 
 #: cclib/cc-mediahost.php:122
 msgid "This upload is not currently available for viewing."
-msgstr ""
+msgstr "这个上传尚未开放浏览"
 
 #: cclib/cc-mediahost.php:187
 #, php-format
 msgid "Upload succeeded. Click <a href=\"%s\">here</a> to see results."
-msgstr ""
+msgstr "上传成功。点击此看结果。"
 
 #: cclib/cc-mediahost.php:188 cclib/cc-mediahost.php:253
 msgid "This upload is <b>NOT</b> entered in any contest."
-msgstr ""
+msgstr "这个上传未参加任何比赛"
 
 #: cclib/cc-mediahost.php:286
 msgid "Published"
-msgstr ""
+msgstr "发表了的"
 
 #: cclib/cc-mediahost.php:286
 msgid "Unpublished"
-msgstr ""
+msgstr "未发表的"
 
 #: cclib/cc-mediahost.php:315
 msgid "Publish Now"
-msgstr ""
+msgstr "现在就发表"
 
 #: cclib/cc-mediahost.php:376
+#, fuzzy
 msgid "Publish now"
-msgstr ""
+msgstr "现在就发表"
 
 #: cclib/cc-mediahost.php:378
 msgid "This file is only visible to the owner and admins."
-msgstr ""
+msgstr "只有主人和管理员可见此文件"
 
 #: cclib/cc-mediahost.php:453 ccextras/cc-topics.php:249
 msgid "Edit"
-msgstr ""
+msgstr "编辑"
 
 #: cclib/cc-mediahost.php:474 cclib/cc-mediahost.php:606
 msgid "Publish"
-msgstr ""
+msgstr "发表"
 
 #: cclib/cc-mediahost.php:488
 msgid "I Sampled This"
-msgstr ""
+msgstr "我对此采样"
 
 #: cclib/cc-mediahost.php:601
 msgid "Unpublish"
-msgstr ""
+msgstr "未发表"
 
 #: cclib/cc-page.php:78
 msgid "Welcome to ccHost"
-msgstr ""
+msgstr "欢迎来到ccHost"
 
 #: cclib/cc-page.php:684
+#, fuzzy
 msgid "Back"
-msgstr ""
+msgstr "返回"
 
 #: cclib/cc-page.php:694
+#, fuzzy
 msgid "More"
 msgstr "更多"
 
 #: cclib/cc-poll.php:61
 msgid "Vote"
-msgstr ""
+msgstr "投票"
 
 #: cclib/cc-pools-ui.php:188
 msgid "Sample Pool: "
-msgstr ""
+msgstr "采样池"
 
 #: cclib/cc-pools-ui.php:212
 msgid "Sample Pool Item: "
-msgstr ""
+msgstr "采样池项目"
 
 #: cclib/cc-renderaudio.php:145
 msgid "Stream Sources"
-msgstr ""
+msgstr "流来源"
 
 #: cclib/cc-renderaudio.php:154
 msgid "Stream Entries"
-msgstr ""
+msgstr "流条目"
 
 #: cclib/cc-renderaudio.php:193
 msgid "Stream"
-msgstr ""
+msgstr "流"
 
 #: cclib/cc-remix.php:106
 msgid "Done Editing"
-msgstr ""
+msgstr "完成编辑"
 
 #: cclib/cc-remix.php:128 ccextras/cc-howididit.php:89
 msgid "Artist"
-msgstr ""
+msgstr "艺术家"
 
 #: cclib/cc-remix.php:131 ccextras/cc-topics.php:90 ccextras/cc-topics.php:142
 msgid "Title"
-msgstr ""
+msgstr "题目"
 
 #: cclib/cc-remix.php:134
 msgid "Full search"
-msgstr ""
+msgstr "完全搜索"
 
 #: cclib/cc-remix.php:181
 #, php-format
 msgid "Editing Remixes for '%s'"
-msgstr ""
+msgstr "编辑再混音对象"
 
 #: cclib/cc-remix.php:315
 #, php-format
 msgid "Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"
+msgstr "成功再混音。（点击这里看结果）"
+
+#: cclib/cc-menu-admin.inc:57
+#, php-format
+msgid ""
+"You can revert to factory defaults menu by clicking %shere%s (This will "
+"erase the customization you have done to the main menu, but not affect any "
+"virtual ccHosts menus that you have customized."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:62
+#, php-format
+msgid ""
+"You can revert to your main configuration menu by clicking %shere%s. This "
+"will erase the customization you have done to the %s menu."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:71
+msgid ""
+"You are now editing the menu for the main configuration. (This menu will be "
+"used by any virtual ccHost that you have not customized.)"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:75
+#, php-format
+msgid ""
+"You are now editing the menu for the %s virtual CCHost. Any changes here "
+"will only be reflected in %s."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:83
+msgid ""
+"WARNING: If you change the global language setting all customizations made "
+"here will be destroyed. Therefore, if you plan to set the language to "
+"something other than the default you should do it before editing here."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:93
+#, php-format
+msgid ""
+"To add items click %shere%s (This will not save any of the work you have "
+"done below.)"
 msgstr ""
 
 #: cclib/cc-renderimage.php:169
 msgid "Display Thumbnails"
-msgstr ""
+msgstr "显示指图"
 
 #: cclib/cc-renderimage.php:171
 msgid "Display thumbnails for image uploads"
-msgstr ""
+msgstr "显示图片上传指图"
 
 #: cclib/cc-renderimage.php:175
 msgid "Max Thumb X"
-msgstr ""
+msgstr "指图最宽值"
 
 #: cclib/cc-renderimage.php:177
 msgid "Leave this blank or 0 (zero) to use the image's natural size"
-msgstr ""
+msgstr "使用图像原始尺寸把此留空或填0"
 
 #: cclib/cc-renderimage.php:182
 msgid "Max Thumb Y"
-msgstr ""
+msgstr "指图最高值"
 
 #: cclib/cc-search.php:40
 msgid "Search Text"
-msgstr ""
+msgstr "搜索文字"
 
 #: cclib/cc-search.php:45
 msgid "Type"
-msgstr ""
+msgstr "类型"
 
 #: cclib/cc-search.php:48
 msgid "Any match"
-msgstr ""
+msgstr "任何相配"
 
 #: cclib/cc-search.php:49
 msgid "Match all"
-msgstr ""
+msgstr "全部相配"
 
 #: cclib/cc-search.php:50
 msgid "Exact Phrase"
-msgstr ""
+msgstr "精确表述"
 
 #: cclib/cc-search.php:53
 msgid "What"
-msgstr ""
+msgstr "什么"
 
 #: cclib/cc-search.php:57
 msgid "Users"
-msgstr ""
+msgstr "用户"
 
 #: cclib/cc-search.php:58
 msgid "Uploads and Users"
-msgstr ""
+msgstr "上传的和用户"
 
 #: cclib/cc-search.php:64 cclib/cc-search.php:90
 msgid "Search"
-msgstr ""
+msgstr "搜索"
 
 #: cclib/cc-search.php:93
+#, fuzzy
 msgid "Search using Google (tm)"
-msgstr ""
+msgstr "用Google搜索"
 
 #: cclib/cc-search.php:124
 msgid "Search Results"
-msgstr ""
+msgstr "搜索结果"
 
 #: cclib/cc-search.php:153
 #, php-format
 msgid "<a href=\"%s\">Search again...</a>"
-msgstr ""
+msgstr "<a href=\"%s\">再搜索</a>"
 
 #: cclib/cc-search.php:155
 msgid "Search limit reached. "
-msgstr ""
+msgstr "达到搜索限制"
 
 #: cclib/cc-search.php:255
 msgid "Users That Mentioned: "
+msgstr "用户提到："
+
+#: cclib/cc-submit.php:129
+msgid ""
+"WARNING: If you change the global language setting\n"
+"                    all customizations made here will be destroyed. "
+"Therefore, if you plan to\n"
+"                    set the language to something other than the default you "
+"should do it\n"
+"                    before editing here."
 msgstr ""
 
-#: cclib/cc-submit.php:213
+#: cclib/cc-submit.php:223
 msgid "Pick Submission Type"
-msgstr ""
+msgstr "挑选提交类型"
 
-#: cclib/cc-submit.php:418
+#: cclib/cc-submit.php:428
 msgid "Submit Files"
-msgstr ""
+msgstr "提交文件"
 
-#: cclib/cc-submit.php:455
+#: cclib/cc-submit.php:465
 msgid "Submit Forms"
-msgstr ""
+msgstr "提交论坛"
 
 #: cclib/cc-tags.php:549
 msgid "Tags "
-msgstr ""
+msgstr "索引"
 
 #: cclib/cc-tags.php:634
 msgid "Turn System Tags ON"
-msgstr ""
+msgstr "打开系统索引"
 
 #: cclib/cc-tags.php:639
 msgid "Turn System Tags OFF"
-msgstr ""
+msgstr "关闭系统索引"
 
 #: cclib/cc-tags.php:653 cclib/cc-upload.php:72
 msgid "Tags"
-msgstr ""
+msgstr "索引"
 
 #: cclib/cc-tags.php:689
 msgid "Browse Tags"
-msgstr ""
+msgstr "浏览索引"
 
 #: cclib/cc-upload.php:50 ccextras/cc-flag.php:163
 msgid "Upload"
-msgstr ""
+msgstr "上传"
 
 #: cclib/cc-upload.php:57
 msgid "Display name for file"
-msgstr ""
+msgstr "显示文件名字"
 
 #: cclib/cc-upload.php:74
 msgid "Comma separated list of terms"
-msgstr ""
+msgstr "用逗号分隔列表项目"
 
 #: cclib/cc-upload.php:78
 msgid "Popular Tags"
-msgstr ""
+msgstr "流行索引"
 
 #: cclib/cc-upload.php:83 cclib/cc-upload.php:112
 msgid "Click on these to automatically add to your upload."
-msgstr ""
+msgstr "点击这些自动加入你的上传"
 
 #: cclib/cc-upload.php:107
 msgid "Suggested Tags"
-msgstr ""
+msgstr "建议索引"
 
 #: cclib/cc-upload.php:176 ccextras/cc-topics.php:73
 msgid "This action can not be reversed..."
-msgstr ""
+msgstr "此操作不能倒退"
 
 #: cclib/cc-upload.php:177 ccextras/cc-topics.php:75
 #: ccextras/cc-forums-admin.inc:120
 #, php-format
 msgid "Delete \"%s\" ?"
-msgstr ""
+msgstr "删除"
 
 #: cclib/cc-upload.php:321
 msgid "Deleting File"
-msgstr ""
+msgstr "删除文件"
 
 #: cclib/cc-upload.php:331
 msgid "Upload has been deleted"
-msgstr ""
+msgstr "上传已被删除"
 
 #: cclib/cc-upload.php:369
 msgid "Specify file to upload"
-msgstr ""
+msgstr "指定上传文件"
 
 #: cclib/cc-upload.php:374
 msgid "Valid file types: "
-msgstr ""
+msgstr "有效文件类型"
 
 #: cclib/cc-upload.php:378
 msgid "File"
-msgstr ""
+msgstr "文件"
 
 #: cclib/cc-uploadapi.php:954
 msgid "There was error in the file format<br />"
-msgstr ""
+msgstr "文件格式有误"
 
 #: cclib/cc-user.php:94
 msgid "Security key does not match"
-msgstr ""
+msgstr "安全键不相配"
 
 #: cclib/cc-user.php:134
 msgid "Password does not match login name."
-msgstr ""
+msgstr "密码不与登陆名相配"
 
 #: cclib/cc-user.php:173
 msgid "Can't find that username"
-msgstr ""
+msgstr "无法找到那用户名"
 
 #: cclib/cc-user.php:202
 msgid "Full Name"
-msgstr ""
+msgstr "全名"
 
 #: cclib/cc-user.php:203
 msgid "Your display name for the site (not to be confused with"
-msgstr ""
+msgstr "你在此网站上显示的名字（不混淆于"
 
 #: cclib/cc-user.php:204
 msgid " your login name)."
-msgstr ""
+msgstr "你的登陆名"
 
 #: cclib/cc-user.php:222
 msgid "Image"
-msgstr ""
+msgstr "图片"
 
 #: cclib/cc-user.php:224
 msgid "Image file (can not be bigger than 93x93)"
-msgstr ""
+msgstr "图片文件（不能大于93x93）"
 
 #: cclib/cc-user.php:231
 msgid "About You"
-msgstr ""
+msgstr "关于你"
 
 #: cclib/cc-user.php:236
 msgid "Home Page URL"
-msgstr ""
+msgstr "主页URL"
 
 #: cclib/cc-user.php:237
 msgid "Make sure it starts with http://"
-msgstr ""
+msgstr "确定开始于http://"
 
-#: cclib/cc-user.php:242 cclib/cc-language.php:453
+#: cclib/cc-user.php:246 cclib/cc-language.php:598
 msgid "Default Language:"
-msgstr ""
+msgstr "默认语言："
 
-#: cclib/cc-user.php:248 cclib/cc-user.php:423
+#: cclib/cc-user.php:255 cclib/cc-user.php:430
 msgid "What I Pound On"
-msgstr ""
+msgstr "我用什么工具"
 
-#: cclib/cc-user.php:249
+#: cclib/cc-user.php:256
 msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
-msgstr ""
+msgstr "(例如黑胶，吉他，ACID Pro，人声的，拍子器）"
 
-#: cclib/cc-user.php:254
+#: cclib/cc-user.php:261
 msgid "What I Like:"
-msgstr ""
+msgstr "我喜欢："
 
-#: cclib/cc-user.php:255
+#: cclib/cc-user.php:262
 msgid "(e.g. Django, Old Skool, Miles Davis, Acid House)"
 msgstr ""
 
-#: cclib/cc-user.php:260
+#: cclib/cc-user.php:267
 msgid "What I'm Looking For:"
-msgstr ""
+msgstr "我在找："
 
-#: cclib/cc-user.php:261
+#: cclib/cc-user.php:268
 msgid "List attributes of musicians you'd like to hook up with "
-msgstr ""
+msgstr "列出你喜欢挂钩的音乐家的属性"
 
-#: cclib/cc-user.php:262
+#: cclib/cc-user.php:269
 msgid "(e.g. Producer, singer, drummer)"
-msgstr ""
+msgstr "（例如制作人，歌手，鼓手）"
 
-#: cclib/cc-user.php:373
+#: cclib/cc-user.php:380
 msgid "Home Page"
-msgstr ""
+msgstr "主页"
 
-#: cclib/cc-user.php:374
+#: cclib/cc-user.php:381
 msgid "About Me"
-msgstr ""
+msgstr "关于我"
 
-#: cclib/cc-user.php:421
+#: cclib/cc-user.php:428
 msgid "What I Like"
-msgstr ""
+msgstr "我喜欢什么"
 
-#: cclib/cc-user.php:425
+#: cclib/cc-user.php:432
 msgid "What I Look For"
-msgstr ""
+msgstr "我找什么"
 
-#: cclib/cc-user.php:549 cclib/cc-user.php:597
+#: cclib/cc-user.php:556 cclib/cc-user.php:607
 msgid "Edit Your Settings"
-msgstr ""
+msgstr "编辑你的设置"
 
-#: cclib/cc-user.php:598
+#: cclib/cc-user.php:608
 msgid "Changes were saved"
-msgstr ""
+msgstr "更改已保存"
 
-#: cclib/cc-user.php:650
+#: cclib/cc-user.php:660
 msgid "(select tag)"
-msgstr ""
+msgstr "（选择索引）"
 
-#: cclib/cc-user.php:650
+#: cclib/cc-user.php:660
 msgid "(no tag)"
-msgstr ""
+msgstr "（无索引）"
 
-#: cclib/cc-user.php:710
+#: cclib/cc-user.php:720
 #, php-format
 msgid "Remove %s from my favorites"
-msgstr ""
+msgstr "（从我最喜爱中除去）"
 
-#: cclib/cc-user.php:712
+#: cclib/cc-user.php:722
 #, php-format
 msgid "Add %s to my favorites"
-msgstr ""
+msgstr "添加到我最喜爱中"
 
-#: cclib/cc-user.php:754
+#: cclib/cc-user.php:764
 msgid " has not uploaded any remixes yet."
-msgstr ""
+msgstr "还未上传任何再混音"
 
-#: cclib/cc-user.php:773
+#: cclib/cc-user.php:783
 msgid "Uploads by "
-msgstr ""
+msgstr "上传者"
 
-#: cclib/cc-user.php:774
+#: cclib/cc-user.php:784
 msgid "Remixes of "
-msgstr ""
+msgstr "再混音来源"
 
-#: cclib/cc-user.php:775
+#: cclib/cc-user.php:785
 msgid "Remixed by "
-msgstr ""
+msgstr "再混音者"
 
-#: cclib/cc-user.php:787
+#: cclib/cc-user.php:797
 #, php-format
 msgid "%s has been removed from your list of favorites"
-msgstr ""
+msgstr "已从你最喜爱的列表中删去"
 
-#: cclib/cc-user.php:792
+#: cclib/cc-user.php:802
 #, php-format
 msgid "%s has been added to your list of favorites"
-msgstr ""
+msgstr "已经被加到你最喜欢的列表中"
 
-#: cclib/cc-user.php:866
+#: cclib/cc-user.php:876
 msgid "Your Page"
-msgstr ""
+msgstr "你的页面"
 
-#: cclib/cc-user.php:873
+#: cclib/cc-user.php:883
 msgid "Edit Your Profile"
-msgstr ""
+msgstr "编辑你的简介"
 
-#: cclib/cc-user.php:884
+#: cclib/cc-user.php:894
 msgid "Visitors"
-msgstr ""
+msgstr "访问者"
 
-#: cclib/cc-user.php:886
+#: cclib/cc-user.php:896
 msgid "Artists"
 msgstr "艺术家"
 
 #: ccextras/cc-archive.php:40
 msgid "Archive"
-msgstr ""
+msgstr "档案"
 
 #: ccextras/cc-archive.php:52
 #, php-format
@@ -1300,108 +1377,111 @@ msgstr ""
 
 #: ccextras/cc-archive.php:73
 msgid "Monthly Archive"
-msgstr ""
+msgstr "每月档案"
 
 #: ccextras/cc-bpm.php:115
 msgid "BPM (use '-' for range: 90-100)"
-msgstr ""
+msgstr "BPM (范围90-100用'-'）"
 
+# 每分钟拍子速
 #: ccextras/cc-bpm.php:127
 msgid "BPM"
-msgstr ""
+msgstr "BPM"
 
 #: ccextras/cc-bpm.php:128
 msgid "Tempo"
-msgstr ""
+msgstr "拍子"
 
 #: ccextras/cc-bpm.php:227
 #, php-format
 msgid "No records match that BPM. Go back to <a href=\"%s\">search again</a>"
-msgstr ""
+msgstr "没有记录与那BPM相配。返回到 <a href=\"%s\">再搜索</a>"
 
 #: ccextras/cc-flag.php:54 ccextras/cc-mail.php:165 ccextras/cc-mail.php:175
 msgid "From"
-msgstr ""
+msgstr "来自"
 
 #: ccextras/cc-flag.php:57
 msgid "Your email address (optional)"
-msgstr ""
+msgstr "你的电子邮箱地址（非必填）"
 
 #: ccextras/cc-flag.php:60 ccextras/cc-mail.php:186
 msgid "Subject"
-msgstr ""
+msgstr "主题"
 
 #: ccextras/cc-flag.php:62
 #, php-format
 msgid "Flag %s \"%s\""
-msgstr ""
+msgstr "标志"
 
 #: ccextras/cc-flag.php:65 ccextras/cc-mail.php:190
 msgid "Message"
-msgstr ""
+msgstr "消息"
 
 #: ccextras/cc-flag.php:133
 msgid "Flag Content"
-msgstr ""
+msgstr "标志内容"
 
 #: ccextras/cc-flag.php:171 ccextras/cc-forums.inc:214
 msgid "Topic"
-msgstr ""
+msgstr "话题"
 
 #: ccextras/cc-flag.php:176
 msgid "Content has been flagged"
-msgstr ""
+msgstr "内容已被做标志"
 
 #: ccextras/cc-format.php:92
 msgid "Quote:"
-msgstr ""
+msgstr "引用："
 
 #: ccextras/cc-format.php:275
 msgid "Select text and use the <br />buttons to apply format"
-msgstr ""
+msgstr "选择文字并用 <br />按钮来应用格式"
 
 #: ccextras/cc-import-files.php:41
 msgid "Path to file on server"
-msgstr ""
+msgstr "服务器上文件的路径"
 
 #: ccextras/cc-import-files.php:56
 msgid "Can not file a file by that name"
-msgstr ""
+msgstr "不能用那个名字建立文件"
 
 #: ccextras/cc-import-files.php:126
 msgid "Import files"
-msgstr ""
+msgstr "输入文件"
 
 #: ccextras/cc-import-files.php:128
 msgid ""
 "Use this form to import files already on your server into the ccHost system. "
 "WARNING: This form will <b>MOVE</b> your file from its original location."
 msgstr ""
+"用这个表格把已在你服务器上的文件输入ccHost系统。警告：这个表格会<b>移动</b> "
+"你文件的原始位置"
 
 #: ccextras/cc-import-files.php:179
 #, php-format
 msgid "Import succeeded. Click <a href=\"%s\">here</a> to see results."
-msgstr ""
+msgstr "成功输入。点击此处看结果"
 
 #: ccextras/cc-howididit.php:56
 msgid "Browse 'How I Did It'"
-msgstr ""
+msgstr "浏览“我是怎么做的”"
 
 #: ccextras/cc-howididit.php:92
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 #: ccextras/cc-howididit.php:95
 msgid "Upload Name"
-msgstr ""
+msgstr "上传名字"
 
 #: ccextras/cc-howididit.php:104
 msgid "Sort by:"
-msgstr ""
+msgstr "归类于"
 
 #: ccextras/cc-howididit.php:140 ccextras/cc-howididit.php:266
 msgid "How I Did It"
-msgstr ""
+msgstr "我是怎么做的"
 
 #: ccextras/cc-howididit.php:170
 msgid "Edit 'How I Did It' for "
@@ -1410,93 +1490,126 @@ msgstr ""
 #: ccextras/cc-howididit.php:200
 #, php-format
 msgid "Changes saved. Click <a href=\"%s\">here</a> to see results"
-msgstr ""
+msgstr "更改已保存。点击此处看结果"
 
 #: ccextras/cc-howididit.php:226
 msgid "Tools I Used"
-msgstr ""
+msgstr "我用过的工具"
 
 #: ccextras/cc-howididit.php:227
 msgid "What software, hardware, plug-ins, etc. did you use?"
-msgstr ""
+msgstr "你用了什么软件，硬件，插件程序等？"
 
 #: ccextras/cc-howididit.php:231
 msgid "Samples I Used"
-msgstr ""
+msgstr "我用过的采样"
 
 #: ccextras/cc-howididit.php:232
 msgid "Where did you find your samples? What kind of license are they under?"
-msgstr ""
+msgstr "你在哪里找你的采样？它们有什么样的执照？"
 
 #: ccextras/cc-howididit.php:236
 msgid "Original Samples"
-msgstr ""
+msgstr "原始采样"
 
 #: ccextras/cc-howididit.php:237
 msgid "What material did you create just for this work?"
-msgstr ""
+msgstr "只为这个作品你创造了什么材料？"
 
 #: ccextras/cc-howididit.php:241
 msgid "Process"
-msgstr ""
+msgstr "加工"
 
 #: ccextras/cc-howididit.php:242
 msgid "How did you put all the pieces together?"
-msgstr ""
+msgstr "你如何把所有部分放在一起的。"
 
 #: ccextras/cc-howididit.php:246
 msgid "Other Notes"
-msgstr ""
+msgstr "其它备忘录"
 
 #: ccextras/cc-howididit.php:247
 msgid "Share your feelings about the experience of creating this work"
-msgstr ""
+msgstr "分享你创作这件作品经历的感受"
 
 #: ccextras/cc-howididit.php:286
 msgid "Edit \"How I Did It\""
 msgstr ""
 
-#: cclib/cc-language.php:324
+#: cclib/cc-language.php:370
 msgid "default"
-msgstr ""
+msgstr "默认"
 
-#: cclib/cc-language.php:326
+#: cclib/cc-language.php:372
 msgid "autodetect"
 msgstr ""
 
-#: cclib/cc-language.php:446
+#: cclib/cc-language.php:590
 msgid "Default Locale Preference:"
+msgstr "默认当前设定"
+
+#: cclib/cc-language.php:610
+msgid "Allow User to Set Language:"
 msgstr ""
 
-#: cclib/cc-language.php:459
+#: cclib/cc-language.php:616
 msgid ""
 "Select the default locale preference and a default language and the system "
 "will try to translate menus, navigation tabs and anything else you might "
 "have customized. If the translation system does recognize the terms used, "
 "those menu items and navigation tabs will not change."
 msgstr ""
+"选择本地默认设置和一个默认语言，然后系统会尝试翻译菜单，浏览索引和所有你已指"
+"定的项目。如果翻译系统无法辨认用过的词语，那些菜单项目和浏览索引将不会改变。"
 
-#: cclib/cc-language.php:460
+#: cclib/cc-language.php:617
 msgid ""
 "The Locale Preference is a specific folder that contains specific language "
 "translations. The default is a folder of the same name. Inside these folders "
 "are the specific language translations."
 msgstr ""
+"“当前默认设定”是一个包含特殊语言翻译的特殊文件夹。默认是一个同样名字的文件"
+"夹。这些文件夹里是特殊语言翻译。"
 
-#: cclib/cc-language.php:461
+#: cclib/cc-language.php:618
 msgid ""
 "To create a specific translation, please copy the default folder with a "
 "unique name, and then select it as your Default Locale Preference. Then, "
 "edit the .po files in specific language folders for customization."
 msgstr ""
+"创立一个特殊翻译，请复制默认文件夹并起新文件夹名，然后把它选择为你的“默认当前"
+"设定”。然后编辑在特别语言文件夹中的 .po 文件来进行用户化。"
 
-#: cclib/cc-language.php:478
+#: cclib/cc-language.php:623
+msgid ""
+"Language support requires that the PHP 'get_text' module be enabled on your "
+"PHP installation. Please consult your system administrator."
+msgstr ""
+
+#: cclib/cc-language.php:642 cclib/cc-language.php:670
 msgid "Language Support"
+msgstr ""
+
+#: cclib/cc-language.php:671
+msgid "Language support options saved."
+msgstr ""
+
+#: cclib/cc-language.php:682
+msgid "Diagnostic"
+msgstr ""
+
+#: cclib/cc-language.php:682 cclib/cc-language.php:702
+#, fuzzy
+msgid "Language"
+msgstr "默认语言："
+
+#: cclib/cc-language.php:704
+msgid "Configure Language use"
 msgstr ""
 
 #: ccextras/cc-music-submit.php:47
 msgid "Submit a Remix"
-msgstr ""
+msgstr "提交一个再混音"
 
 #: ccextras/cc-music-submit.php:49
 msgid ""
@@ -1529,7 +1642,7 @@ msgstr ""
 
 #: ccextras/cc-music-submit.php:71
 msgid "Submit Samples"
-msgstr ""
+msgstr "提交采样"
 
 #: ccextras/cc-music-submit.php:73
 msgid ""
@@ -1633,7 +1746,7 @@ msgstr ""
 
 #: ccextras/cc-reviews.php:525
 msgid "You've already reviewed this upload"
-msgstr ""
+msgstr "你已评论过此上传"
 
 #: ccextras/cc-reviews.php:537
 #, php-format
@@ -1651,9 +1764,9 @@ msgid "%s has left %s%d reviews "
 msgstr ""
 
 #: ccextras/cc-reviews.php:633
-#, php-format
+#, fuzzy, php-format
 msgid "and has been reviewed %sonce "
-msgstr ""
+msgstr "上传已被删除"
 
 #: ccextras/cc-reviews.php:637
 #, php-format
@@ -1677,7 +1790,7 @@ msgstr ""
 
 #: ccextras/cc-reviews.php:943
 msgid "Sorry, no reviews match"
-msgstr ""
+msgstr "对不起，无评论符合"
 
 #: ccextras/cc-nswf.php:72 mixter-lib/mixter-dump-listing.inc:35
 msgid "Not Safe For Work"
@@ -1761,7 +1874,7 @@ msgstr ""
 
 #: ccextras/cc-topics.php:533
 msgid "Deleting Topic"
-msgstr ""
+msgstr "删除主题"
 
 #: ccextras/cc-topics.php:643
 #, php-format
@@ -1828,7 +1941,7 @@ msgstr ""
 
 #: ccextras/cc-notify.inc:118
 msgid "I've been remixed"
-msgstr "我已被重新混音"
+msgstr "我已被再混音"
 
 #: ccextras/cc-notify.inc:120
 msgid "I've been reviewed"
@@ -1876,7 +1989,7 @@ msgstr ""
 
 #: ccextras/cc-notify.inc:259
 msgid "Review notification"
-msgstr ""
+msgstr "评论通知"
 
 #: ccextras/cc-notify.inc:349
 #, php-format
@@ -1920,10 +2033,7 @@ msgid ""
 "\n"
 "Thank you,\n"
 "%s"
-msgstr ""
-"\n"
-"谢谢\n"
-"%s"
+msgstr "谢谢"
 
 #: ccextras/cc-notify.php:129
 msgid "Edit My Notifications"
@@ -2002,7 +2112,7 @@ msgstr ""
 
 #: ccextras/cc-forums.inc:406
 msgid "You do have proper permissions to see this forum"
-msgstr ""
+msgstr "你无浏览此论坛的适当权利"
 
 #: ccextras/cc-forums.inc:408
 msgid "Restricted Access"
@@ -2139,3 +2249,9 @@ msgstr ""
 #: mixter-lib/mixter-dump-listing.inc:47
 msgid "featuring:"
 msgstr "推介"
+
+#~ msgid "More >>>"
+#~ msgstr "更多"
+
+#~ msgid "the fullest potential."
+#~ msgstr "最有潜力"

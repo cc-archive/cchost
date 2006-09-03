@@ -54,16 +54,12 @@ class CCAdminMenuForm extends CCGridForm
 
             if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
             {
-                $help = _('You can revert to factory defaults menu by clicking %shere%s
-                        (This will erase the customization you have done to the main menu, 
-                         but not affect any virtual ccHosts menus that you have 
-                         customized.');
+                $help = _('You can revert to factory defaults menu by clicking %shere%s (This will erase the customization you have done to the main menu, but not affect any virtual ccHosts menus that you have customized.');
                 $help = sprintf($help,$rlink1,$rlink2);
             }
             else
             {
-                $help = _('You can revert to your main configuration menu by clicking %shere%s
-                           This will erase the customization you have done to the %s menu.');
+                $help = _('You can revert to your main configuration menu by clicking %shere%s. This will erase the customization you have done to the %s menu.');
                 $help = sprintf($help,"<b>$CC_CFG_ROOT</b>");
             }
 
@@ -72,14 +68,11 @@ class CCAdminMenuForm extends CCGridForm
         {
             if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
             {
-                $help = _('You are now editing the menu for the main configuration.
-                        (This menu will be used by any virtual ccHost that you have 
-                        not customized.)');
+                $help = _('You are now editing the menu for the main configuration. (This menu will be used by any virtual ccHost that you have not customized.)');
             }
             else
             {
-                $help = _('You are now editing the menu for the %s virtual CCHost.
-                         Any changes here will only be reflected in %s.');
+                $help = _('You are now editing the menu for the %s virtual CCHost. Any changes here will only be reflected in %s.');
                 $croot = "<b>$CC_CFG_ROOT</b>";
                 $help = sprintf($help,$croot,$croot);
             }
@@ -87,10 +80,7 @@ class CCAdminMenuForm extends CCGridForm
 
         if( !CCLanguage::IsEnabled() )
         {
-            $exhelp =  _('WARNING: If you change the global language setting
-                    all customizations made here will be destroyed. Therefore, if you plan to
-                    set the language to something other than the default you should do it
-                    before editing here.');
+            $exhelp =  _('WARNING: If you change the global language setting all customizations made here will be destroyed. Therefore, if you plan to set the language to something other than the default you should do it before editing here.');
 
             $this->SetFormHelp($exhelp);
         }
@@ -100,8 +90,7 @@ class CCAdminMenuForm extends CCGridForm
         $addurl = ccl('admin', 'menu', 'additems', '3');
         $addlink1 = "<a href=\"$addurl\"><b><u>";
         $addlink2 = '</b></u></a>';
-        $help = _('To add items click %shere%s
-                   (This will not save any of the work you have done below.)');
+        $help = _('To add items click %shere%s (This will not save any of the work you have done below.)');
         $help =  sprintf( $help, $addlink1, $addlink2 );
         $this->SetHelpText($help);
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccHost 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-30 11:37-0700\n"
+"POT-Creation-Date: 2006-09-03 16:04-0700\n"
 "PO-Revision-Date: 2006-08-28 20:14+0800\n"
 "Last-Translator: Jedi <JediLin@Gmail.com>\n"
 "Language-Team: Creative Commons Taiwan <contact@creativecommons.org.tw>\n"
@@ -178,7 +178,7 @@ msgid "Name"
 msgstr "登入名稱"
 
 #: cclib/cc-navigator-admin.inc:443 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:621 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:631 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -868,7 +868,7 @@ msgstr "回復遺失的密碼"
 msgid "Uploads"
 msgstr "已上傳的檔案"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:606 cclib/cc-user.php:622
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:616 cclib/cc-user.php:632
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr "使用者"
@@ -997,6 +997,48 @@ msgstr "正在編輯 '%s' 的重混"
 msgid "Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"
 msgstr "重混 %s 成功 (按<a href=\"%s\">這裡</a>查看結果)"
 
+#: cclib/cc-menu-admin.inc:57
+#, php-format
+msgid ""
+"You can revert to factory defaults menu by clicking %shere%s (This will "
+"erase the customization you have done to the main menu, but not affect any "
+"virtual ccHosts menus that you have customized."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:62
+#, php-format
+msgid ""
+"You can revert to your main configuration menu by clicking %shere%s. This "
+"will erase the customization you have done to the %s menu."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:71
+msgid ""
+"You are now editing the menu for the main configuration. (This menu will be "
+"used by any virtual ccHost that you have not customized.)"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:75
+#, php-format
+msgid ""
+"You are now editing the menu for the %s virtual CCHost. Any changes here "
+"will only be reflected in %s."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:83
+msgid ""
+"WARNING: If you change the global language setting all customizations made "
+"here will be destroyed. Therefore, if you plan to set the language to "
+"something other than the default you should do it before editing here."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:93
+#, php-format
+msgid ""
+"To add items click %shere%s (This will not save any of the work you have "
+"done below.)"
+msgstr ""
+
 #: cclib/cc-renderimage.php:169
 msgid "Display Thumbnails"
 msgstr "顯示縮圖"
@@ -1074,15 +1116,25 @@ msgstr "已達搜尋上限."
 msgid "Users That Mentioned: "
 msgstr "跟這些關鍵字有關的使用者:"
 
-#: cclib/cc-submit.php:213
+#: cclib/cc-submit.php:129
+msgid ""
+"WARNING: If you change the global language setting\n"
+"                    all customizations made here will be destroyed. "
+"Therefore, if you plan to\n"
+"                    set the language to something other than the default you "
+"should do it\n"
+"                    before editing here."
+msgstr ""
+
+#: cclib/cc-submit.php:223
 msgid "Pick Submission Type"
 msgstr "挑選上傳類別"
 
-#: cclib/cc-submit.php:418
+#: cclib/cc-submit.php:428
 msgid "Submit Files"
 msgstr "上傳檔案"
 
-#: cclib/cc-submit.php:455
+#: cclib/cc-submit.php:465
 msgid "Submit Forms"
 msgstr "上傳表單"
 
@@ -1209,122 +1261,122 @@ msgstr "首頁網址"
 msgid "Make sure it starts with http://"
 msgstr "請務必以 http:// 開頭"
 
-#: cclib/cc-user.php:242 cclib/cc-language.php:453
+#: cclib/cc-user.php:246 cclib/cc-language.php:598
 msgid "Default Language:"
 msgstr "預設語言:"
 
-#: cclib/cc-user.php:248 cclib/cc-user.php:423
+#: cclib/cc-user.php:255 cclib/cc-user.php:430
 msgid "What I Pound On"
 msgstr "我擅用"
 
-#: cclib/cc-user.php:249
+#: cclib/cc-user.php:256
 msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
 msgstr "(例如 vinyl, guitar, ACID Pro, vocals, beat slicer)"
 
-#: cclib/cc-user.php:254
+#: cclib/cc-user.php:261
 msgid "What I Like:"
 msgstr "我喜歡:"
 
-#: cclib/cc-user.php:255
+#: cclib/cc-user.php:262
 msgid "(e.g. Django, Old Skool, Miles Davis, Acid House)"
 msgstr "(例如 Django, Old Skool, Miles Davis, Acid House)"
 
-#: cclib/cc-user.php:260
+#: cclib/cc-user.php:267
 msgid "What I'm Looking For:"
 msgstr "我在找:"
 
-#: cclib/cc-user.php:261
+#: cclib/cc-user.php:268
 msgid "List attributes of musicians you'd like to hook up with "
 msgstr "請列出你想結交的音樂人特質"
 
-#: cclib/cc-user.php:262
+#: cclib/cc-user.php:269
 msgid "(e.g. Producer, singer, drummer)"
 msgstr "(例如 Producer, singer, drummer)"
 
-#: cclib/cc-user.php:373
+#: cclib/cc-user.php:380
 msgid "Home Page"
 msgstr "首頁"
 
-#: cclib/cc-user.php:374
+#: cclib/cc-user.php:381
 msgid "About Me"
 msgstr "關於我"
 
-#: cclib/cc-user.php:421
+#: cclib/cc-user.php:428
 msgid "What I Like"
 msgstr "我喜歡"
 
-#: cclib/cc-user.php:425
+#: cclib/cc-user.php:432
 msgid "What I Look For"
 msgstr "我在找"
 
-#: cclib/cc-user.php:549 cclib/cc-user.php:597
+#: cclib/cc-user.php:556 cclib/cc-user.php:607
 msgid "Edit Your Settings"
 msgstr "編輯您的設定"
 
-#: cclib/cc-user.php:598
+#: cclib/cc-user.php:608
 msgid "Changes were saved"
 msgstr "變更已儲存"
 
-#: cclib/cc-user.php:650
+#: cclib/cc-user.php:660
 msgid "(select tag)"
 msgstr "(選擇標籤)"
 
-#: cclib/cc-user.php:650
+#: cclib/cc-user.php:660
 msgid "(no tag)"
 msgstr "(沒有標籤)"
 
-#: cclib/cc-user.php:710
+#: cclib/cc-user.php:720
 #, php-format
 msgid "Remove %s from my favorites"
 msgstr "從我的最愛中移除 %s"
 
-#: cclib/cc-user.php:712
+#: cclib/cc-user.php:722
 #, php-format
 msgid "Add %s to my favorites"
 msgstr "把 %s 加進我的最愛"
 
-#: cclib/cc-user.php:754
+#: cclib/cc-user.php:764
 msgid " has not uploaded any remixes yet."
 msgstr " 還沒有上傳過任何重混作品."
 
 # VAR
-#: cclib/cc-user.php:773
+#: cclib/cc-user.php:783
 msgid "Uploads by "
 msgstr "由此使用者上傳: "
 
 # VAR
-#: cclib/cc-user.php:774
+#: cclib/cc-user.php:784
 msgid "Remixes of "
 msgstr "此使用者的重混作品: "
 
 # VAR
-#: cclib/cc-user.php:775
+#: cclib/cc-user.php:785
 msgid "Remixed by "
 msgstr "被此使用者取樣: "
 
-#: cclib/cc-user.php:787
+#: cclib/cc-user.php:797
 #, php-format
 msgid "%s has been removed from your list of favorites"
 msgstr "%s 已經從您的最愛清單中移除了"
 
-#: cclib/cc-user.php:792
+#: cclib/cc-user.php:802
 #, php-format
 msgid "%s has been added to your list of favorites"
 msgstr "%s 已經加入您的最愛清單了"
 
-#: cclib/cc-user.php:866
+#: cclib/cc-user.php:876
 msgid "Your Page"
 msgstr "您的頁面"
 
-#: cclib/cc-user.php:873
+#: cclib/cc-user.php:883
 msgid "Edit Your Profile"
 msgstr "編輯您的個人資料"
 
-#: cclib/cc-user.php:884
+#: cclib/cc-user.php:894
 msgid "Visitors"
 msgstr "訪客"
 
-#: cclib/cc-user.php:886
+#: cclib/cc-user.php:896
 msgid "Artists"
 msgstr "藝人"
 
@@ -1500,19 +1552,23 @@ msgstr "分享您創造這個作品的經驗及感受"
 msgid "Edit \"How I Did It\""
 msgstr "編輯 \"我的做法\""
 
-#: cclib/cc-language.php:324
+#: cclib/cc-language.php:370
 msgid "default"
 msgstr "預設"
 
-#: cclib/cc-language.php:326
+#: cclib/cc-language.php:372
 msgid "autodetect"
 msgstr ""
 
-#: cclib/cc-language.php:446
+#: cclib/cc-language.php:590
 msgid "Default Locale Preference:"
 msgstr "預設的介面語系偏好:"
 
-#: cclib/cc-language.php:459
+#: cclib/cc-language.php:610
+msgid "Allow User to Set Language:"
+msgstr ""
+
+#: cclib/cc-language.php:616
 msgid ""
 "Select the default locale preference and a default language and the system "
 "will try to translate menus, navigation tabs and anything else you might "
@@ -1523,7 +1579,7 @@ msgstr ""
 "能已經自訂過的東西翻譯成你指定的語言. 如果翻譯系統無法處理任何術語時, 那麼那 "
 "些選單項目及導覽標籤都將維持不變."
 
-#: cclib/cc-language.php:460
+#: cclib/cc-language.php:617
 msgid ""
 "The Locale Preference is a specific folder that contains specific language "
 "translations. The default is a folder of the same name. Inside these folders "
@@ -1532,7 +1588,7 @@ msgstr ""
 "所謂的介面語系偏好乃是個含有特定語言翻譯的資料夾. 預設就是一個叫 default 的"
 "資 料夾, 其中並含有許多特定的語言翻譯."
 
-#: cclib/cc-language.php:461
+#: cclib/cc-language.php:618
 msgid ""
 "To create a specific translation, please copy the default folder with a "
 "unique name, and then select it as your Default Locale Preference. Then, "
@@ -1542,9 +1598,33 @@ msgstr ""
 "預 設介面語系偏好中選擇這個新的資料夾. 接著, 再編輯特定語言資料夾中的 .po 檔"
 "案, 以符合你的需求."
 
-#: cclib/cc-language.php:478
+#: cclib/cc-language.php:623
+msgid ""
+"Language support requires that the PHP 'get_text' module be enabled on your "
+"PHP installation. Please consult your system administrator."
+msgstr ""
+
+#: cclib/cc-language.php:642 cclib/cc-language.php:670
 msgid "Language Support"
 msgstr ""
+
+#: cclib/cc-language.php:671
+msgid "Language support options saved."
+msgstr ""
+
+#: cclib/cc-language.php:682
+msgid "Diagnostic"
+msgstr ""
+
+#: cclib/cc-language.php:682 cclib/cc-language.php:702
+#, fuzzy
+msgid "Language"
+msgstr "預設語言:"
+
+#: cclib/cc-language.php:704
+#, fuzzy
+msgid "Configure Language use"
+msgstr "變更已儲存"
 
 #: ccextras/cc-music-submit.php:47
 msgid "Submit a Remix"
