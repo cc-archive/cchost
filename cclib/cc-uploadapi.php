@@ -244,6 +244,10 @@ END;
         {
             $row['upload_name_cls'] = 'cc_name_hidden';
         }
+        else
+        {
+            $row['upload_name_cls'] = '';
+        }
 
         return $row;
     }
