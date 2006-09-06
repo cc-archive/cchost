@@ -24,7 +24,7 @@
 $help = '
   usage: 
 
-  statcchost.php  [-s start_date_string] [-e end_date_string]
+  cc-host-stat.php  [-s start_date_string] [-e end_date_string]
 
   date strings are passed to strtotime()
   default start is \'7 days ago\'
@@ -52,7 +52,7 @@ $help = '
   NOTE: actually this script has not been tested in cli mode
 ';
 
-define('CC_HOST_ROOT_DIR', '..');
+define('CC_HOST_ROOT_DIR', '.');
 
 error_reporting(E_ALL);
 
@@ -112,20 +112,20 @@ for( $i = $count-1; $i >= 0; $i--)
         else
             $ainfo = $authorinfo[$author];
 
-        print( "$date     $ainfo\n\n");
+        print( "$date  $ainfo\n\n");
         foreach( $updates as $U )
         {
             $files = preg_split("/\n/",$U['f']);
             foreach( $files as $file )
             {
                 $f = preg_replace('#^\s+[A-Z]\s.*/trunk/(.*)$#','\1',$file);
-                print("     * {$f} {$U['r']}:\n");
+                print("\t* {$f} {$U['r']}:\n");
             }
             $comments = split("\n",$U['c']);
             foreach( $comments as $comment )
             {
                 $comment = trim($comment);
-                print("         $comment\n");
+                print(wordwrap("\t$comment\n", 70, "\n\t"));
             }
         }
         print("\n");

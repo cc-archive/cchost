@@ -5,45 +5,92 @@ Version: PROJECT_VERSION
 
 New features (end-user)
 ========================
-- Native forums support
-   Fully functioning hierarchical forums, totally integrated with user profiles
-   Admins can create forum groupings, sticky announcements,
-   move threads, etc.
 
-- e-mail notifications
-   Registered users can get email notifications when they have
-   been reviewed, rated or remixed, when someone else has uploaded
-   or have been remixed
+    Native forums support
+    ---------------------
+    Fully functioning hierarchical forums, totally integrated with user 
+    profiles Admins can create forum groupings, sticky announcements,
+    move threads, etc.
+    
 
-- 'Recent reviews'
-  New sidebar content list out the latest reviewers in the system
+    e-mail notifications
+    --------------------
+    Registered users can get email notifications when they have
+    been reviewed, rated or remixed, when someone else has uploaded
+    or have been remixed
 
-- 'How I Did It' browser now sortable
-  Users can now sort based on artist or date
 
-- Stats and more stats
- Now track number of reviews, forum messages and times remixed.
+    'Recent reviews'
+    ----------------
+    New sidebar content list out the latest reviewers in the system
+
+
+    'How I Did It' browser now sortable
+    -----------------------------------
+    Users can now sort based on artist or date
+
+
+    Stats and more stats
+    --------------------
+    Now track number of reviews, forum messages and times remixed.
+
+
+    Language Support (i18n Localization/Internationalization)
+    ----------------
+    ccHost now supports the Free and Open Source standard gettext language
+    utilities for language support. This is turned on by default in the
+    admin interface, but the end-user support is still experimental. There
+    are translation for Mainland Chinese, Taiwanese Chinese, Italian,
+    Brazilian Portuguese, and German at present.
+
+
+    XSPF 1.0 Playlist Support
+    -------------------------
+    We now have support for the xspf playlist standard as a feed.
+
+
+    Support for SVG file format (using getid3(
+    ---------------------------
+    If you use the latest getid3 which has support for scalable vector
+    graphics (SVG), ccHost supports this filetype onw.
+
+
+    Feed Dumping
+    ------------
+    ccHost includes a script and admin interface for dumping
+
 
 New/Improved (admin):
 ========================
-- FTP-less file manager
-- Bayesian rating scheme
-- Suggested tags in submit forms
-- Sub navigation tabs
-- File permissions now settable within ccHost
-- Thumbnails can be turned off
-- Spam flood protection
-- Configure min number of tags for BrowseTags
 
-Compatibility:
-========================
-- PHP5 support
-- Sharedhost support (e.g. dreamhosters)
+    * FTP-less file manager
+    * Bayesian rating scheme
+    * Suggested tags in submit forms
+    * Sub navigation tabs
+    * File permissions now settable within ccHost
+    * Thumbnails can be turned off
+    * Spam flood protection
+    * Configure min number of tags for BrowseTags
+    * Added more site metadata: description and keywors
 
-Bugfix:
-========================
-- getID3 can be disabled
 
-Security:
-========================
-- Certain URLs allowed escaping out of mySQL
+Compatibility
+=============
+
+    * PHP5 support
+    * Sharedhost support (e.g. dreamhosters)
+    * non-getid3 installatoin
+
+
+Bugfix
+======
+
+    * getID3 can be disabled
+
+
+Security
+========    
+    
+    * Certain URLs allowed escaping out of mySQL
+
+

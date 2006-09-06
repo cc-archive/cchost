@@ -3,6 +3,7 @@
 DIST_FILES_STATIC=AUTHORS \
 	COPYING \
 	LICENSE.TXT \
+	HACKING
 	README \
 	VERSION \
 	cc-custom.php \
@@ -12,7 +13,8 @@ DIST_FILES_STATIC=AUTHORS \
 	index.php \
 	Makefile.include \
 	Makefile.language \
-	POTFILES
+	POTFILES \
+	ChangeLog
 
 DIST_FOLDERS=ccadmin \
 	ccextras \
