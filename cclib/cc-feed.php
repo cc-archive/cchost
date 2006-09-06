@@ -222,7 +222,10 @@ class CCFeed
         // sometimes (like for REST API) we just want the channel info
 
         if( empty($tagstr) )
-            return( array() );
+        {
+            $a = array();
+            return $a;
+        }
 
         $users =& CCUsers::GetTable();
         $username = '';
@@ -351,6 +354,10 @@ class CCFeed
                         $tagstr = sprintf(_('Uploads remixed by %s'), $username);
                     }
                 }
+            }
+            else
+            {
+                $qstring = '';
             }
         }
         else
