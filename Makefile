@@ -20,6 +20,8 @@ PACKAGEDIR=packages
 DATETIME=$(shell date +%F_%H%M%S)
 SIGNPACKAGE=gpg --detach-sign --armor
 
+LAST_RELEASE_DATE=2006-04-04
+
 # must be multiple of 3 because only allowing tar.gz, tar.bz2, and zip
 MAX_SNAPSHOTS=90
 
@@ -35,6 +37,10 @@ all:	$(DIST_FILES_GENERATED) $(DIST_FILES_OTHER)
 
 press: all
 	[ -x `which txt2html` ] && txt2html --xhtml PRESS > PRESS.html
+
+ChangeLog: ChangeLog.in
+	sed -e "s/PROJECT_VERSION/$(RELEASE_NUM)/" $@.in > $@
+	php bin/cc-host-stat.php -s "$(LAST_RELEASE_DATE)" >> $@ 
 
 install: all
 	$(MAKE) -f Makefile.dist install
@@ -69,7 +75,7 @@ distprep: all
 	cp -Rfp $(DIST_FILES_STATIC) $(DIST_FILES_GENERATED) $(DIST_FOLDERS) \
 		$(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM)
 	cp -p Makefile.dist $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM)/Makefile
-    # copy our langauge stuff over if it exists
+	# copy our langauge stuff over if it exists
 	if [ -e Makefile.language ] && [ -e locale ]; then \
         cp -Rfp locale/ $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM); fi
 	# Get rid of all CVS folders in the packaging area

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-03 16:04-0700\n"
+"POT-Creation-Date: 2006-09-06 15:41-0700\n"
 "PO-Revision-Date: 2006-08-18 17:04+0100\n"
 "Last-Translator: Gianmaria Di Flumeri <gdiflumeri@gmail.com>\n"
 "Language-Team:  <gdiflumeri@gmail.com>\n"
@@ -600,27 +600,27 @@ msgstr ""
 msgid "Feed caching can optimize replies for feed requests"
 msgstr ""
 
-#: cclib/cc-feed.php:334
+#: cclib/cc-feed.php:337
 #, fuzzy, php-format
 msgid "Remixes of %s"
 msgstr "Remixes di"
 
-#: cclib/cc-feed.php:351
+#: cclib/cc-feed.php:354
 #, fuzzy, php-format
 msgid "Uploads remixed by %s"
 msgstr "Upload da %s"
 
-#: cclib/cc-feed.php:455
+#: cclib/cc-feed.php:462
 #, php-format
 msgid "Could not open folder \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:464
+#: cclib/cc-feed.php:471
 #, php-format
 msgid "Could not open \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:473
+#: cclib/cc-feed.php:480
 #, php-format
 msgid "%s written to server"
 msgstr ""
@@ -1213,7 +1213,7 @@ msgstr "Tipi di file validi"
 msgid "File"
 msgstr "File"
 
-#: cclib/cc-uploadapi.php:954
+#: cclib/cc-uploadapi.php:958
 msgid "There was error in the file format<br />"
 msgstr "Ci sono errori nel formato del file<br />"
 

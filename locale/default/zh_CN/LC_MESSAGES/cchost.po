@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-03 16:04-0700\n"
+"POT-Creation-Date: 2006-09-06 15:41-0700\n"
 "PO-Revision-Date: 2006-09-03 15:38-0800\n"
 "Last-Translator: deerfang <lu@deerfang.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -598,27 +598,27 @@ msgstr ""
 msgid "Feed caching can optimize replies for feed requests"
 msgstr ""
 
-#: cclib/cc-feed.php:334
+#: cclib/cc-feed.php:337
 #, fuzzy, php-format
 msgid "Remixes of %s"
 msgstr "再混音来源"
 
-#: cclib/cc-feed.php:351
+#: cclib/cc-feed.php:354
 #, fuzzy, php-format
 msgid "Uploads remixed by %s"
 msgstr "上传者"
 
-#: cclib/cc-feed.php:455
+#: cclib/cc-feed.php:462
 #, php-format
 msgid "Could not open folder \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:464
+#: cclib/cc-feed.php:471
 #, php-format
 msgid "Could not open \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:473
+#: cclib/cc-feed.php:480
 #, php-format
 msgid "%s written to server"
 msgstr ""
@@ -1202,7 +1202,7 @@ msgstr "有效文件类型"
 msgid "File"
 msgstr "文件"
 
-#: cclib/cc-uploadapi.php:954
+#: cclib/cc-uploadapi.php:958
 msgid "There was error in the file format<br />"
 msgstr "文件格式有误"
 

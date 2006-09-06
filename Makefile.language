@@ -87,7 +87,7 @@ MSGFMT = /usr/bin/msgfmt
 XGETTEXT = /usr/bin/xgettext -n
 XGETTEXT_PHP = $(XGETTEXT) -L PHP
 
-UPDATE_PO_SCRIPT = ./update_po_files.sh
+UPDATE_PO_SCRIPT = ./bin/update_po_files.sh
 
 all: $(POTFILE) $(POTFILES) $(CATALOGS)
 
