@@ -30,7 +30,7 @@ include Makefile.include
 
 DIST_FILES_OTHER=Makefile.dist
 
-all:	$(DIST_FILES_GENERATED) $(DIST_FILES_OTHER)
+all:	$(DIST_FILES_GENERATED) $(DIST_FILES_OTHER) ChangeLog
 	$(MAKE) -f Makefile.dist all
 	if [ -e Makefile.language ]; then \
 	    $(MAKE) -f Makefile.language all; fi
@@ -55,6 +55,7 @@ clean:
 	rm -f $(DIST_FILES_GENERATED)
 	$(MAKE) -f Makefile.dist clean
 	rm -f PRESS.html
+	rm -f ChangeLog
 	if [ -e Makefile.language ]; then \
 	    $(MAKE) -f Makefile.language clean; fi 
 
