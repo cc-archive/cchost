@@ -25,7 +25,7 @@ can help:
       language's i18n file directory
     * Find a new bug and report it
     * Help answer questions for new people on IRC or the mailing lists
-    * Write an article advocating ccPublisher 
+    * Write an article advocating ccHost 
 
 
 SVN Access
