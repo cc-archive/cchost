@@ -26,12 +26,13 @@ working on 4.4 and 5.  PHP 3 will never be supported.
 
 c.  MYSQL.  MySQL 4 is required.
 
-d.  GETID3.  Download the GetID3 (1.7.3) library from
+d.  GETID3.  Download the GetID3 (1.7.3 - 1.7.7 tested to work) library from
 http://www.getid3.org/#download, then untar and place into ccHost at
 cchost/getid3/. 
 
 Ratings, Editorial Picks, Reviews, Comments and Contest Polls are built into 
-the core ccHost. Support for phpBB2 is removed in this release.
+the core ccHost. Support for phpBB2 is removed in this release, as ccHost
+supports native forums.
 
 e.  BROWSER.  Should work on any browser.  COOKIES must be enabled in
 your browser in order to log in to a session.
@@ -40,13 +41,13 @@ your browser in order to log in to a session.
 3. New Installations/Upgrading from previous ccHost
 ------------------------------------------------------
 
-To install follow the instructions in ccadmin/INSTALL.TXT
+To install follow the instructions in ccadmin/INSTALL.txt.
 
 
 4. Known Issues
 ------------------------
 
-a. There are no major issues known with this release (See News)
+a. There are no major issues known with this release (See NEWS file)
 
 
 5. Contacts (Reporting Bugs)
@@ -58,7 +59,7 @@ https://lists.sourceforge.net/lists/listinfo/cctools-cchost
 Project WIKI with every link you ever wanted (including
 bug reporting) and some tips contributed by users:
 
-http://wiki.creativecommons.org/wiki/CcHost
+http://wiki.creativecommons.org/ccHost
 
 
 6. Licensing Information

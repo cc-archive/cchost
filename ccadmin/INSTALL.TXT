@@ -1,88 +1,103 @@
-$Header$
+Installation notes for ccHost 3.0
+=================================
 
 
-=========================================
-|  Installation notes for v2.0.0 RC     |
-=========================================
+Upgrading from 2.x to 3.0
+-------------------------
+
+This specific upgrade requires a few extra steps:
+
+    1. Make a BACKUP of your MySQL database (can be done via phpMyAdmin or from
+       the command line using mysqldump)
+
+    2. Make a BACKUP of your cchost directory onto your local machine (skip the
+       /people and /contests directories). If you skip this step and you made 
+       changes (to say ccfiles/home.xml) then ALL YOUR CHANGES WILL BE LOST 
+       FOREVER
+
+    3. Login to ccHost as your admin account and make sure to check 
+       'Remember me'
+    4. Unzip the cchost 3.0 package on your local machine
+
+    5. Copy everything under the cchost directory EXCEPT ccadmin over your 
+       server's ccHost directory
+
+    6. Delete the file ccextras/cc-language.php
+
+    7. Delete ALL files under cclib/phptal/phptal_cache
+
+    8. If you made changes to files in ccfiles (like home.xml), copy your 
+       local version over the ones on your server now.
+
+    9. Browse to: http://where_you_installed/?update=1 
 
 
-UPGRADE EXISTING ccHOST INSTALLATIONS
--------------------------------------
+New Install (Simple or Hosted Environment)
+------------------------------------------
 
-  1. Log in as administrator
+If you are using a shared server or other hosted site (like Dreamcast, etc.) 
+then your hosting service probably provided you with a web interface for 
+creating a database, doing file uploads and setting permissions for files and 
+directories. You will need to create a new database for ccHost BEFORE running 
+this installation:
 
-  2. Copy this installation over your current 
-     installation. 
+    1. Unzip the ccHost ZIP archive on your local system and copy the files to 
+       your server retaining the the directory structure.
 
-  3. Browse to: http://where_you_installed/?update=1
+    2. Browse to http://where_you_installed/ccadmin and follow all the 
+       instructions from then on. 
 
+    * UNIX/LINUX-based installations should read this:
 
-NEW INSTALL (Simple or Hosted Environment): 
--------------------------------------------
-If you are using a shared server or other hosted site 
-(like Dreamcast, etc.) then your hosting service
-probably provided you with a web interface for 
-creating a database, doing file uploads and setting
-permissions for files and directories. You will need 
-to create a new database for ccHost BEFORE 
-running this installation:
-
- 1. Unzip the ccHost ZIP archive on your local system
-    and copy the files to your server retaining the
-    the directory structure.
-
- 2. Browse to http://where_you_installed/ccadmin and
-    follow all the instructions from then on. 
-
-UNIX Installations should read this:
-
-http://wiki.creativecommons.org/CcHost_File_Access
+      http://wiki.creativecommons.org/CcHost_File_Access
 
 
-NEW INSTALL (Advanced): 
------------------------
+New Install (Advanced)
+----------------------
+
 If you have basic knowledge of using FTP and you are comfortable
 at a UNIX command line you can use these steps to intall: 
 
- 1. Unzip the ccHost ZIP or tar.bz2 archive on your local system and
-    copy the files (retaining the directory structure)
-    to your web server.
+    1. Unzip the ccHost ZIP, tar.gz, or tar.bz2 archive on your local system 
+       and copy the files (retaining the directory structure) to your web 
+       server.
 
-    For example:
-    cp -a cchost-1.0.3 /var/www/localhost/htdocs/cchost
-    chgrp -R apache /var/www/localhost/htdocs/cchost
-    chmod g+w /var/www/localhost/htdocs/cchost/
-    chmod -R g+w /var/www/localhost/htdocs/cchost/cclib/phptal/phptal_cache/
+       For example:
 
- 2. Install getID3.  Unpack the package, and then copy the getid3
-    directory to the location it will be accessed.  For example:
+       cp -a cchost-1.0.3 /var/www/localhost/htdocs/cchost
+       chgrp -R apache /var/www/localhost/htdocs/cchost
+       chmod g+w /var/www/localhost/htdocs/cchost/
+       chmod -R g+w /var/www/localhost/htdocs/cchost/cclib/phptal/phptal_cache/
 
-    tar xzf getid3.tar.gz
-    cp -a getid3/getid3 /var/www/localhost/htdocs/cchost/
+   2. Install getID3.  Unpack the package, and then copy the getid3 directory 
+      to the location it will be accessed.  For example:
 
- 3. Create a database instance and users to access it.  For example:
+      tar xzf getid3.tar.gz
+      cp -a getid3/getid3 /var/www/localhost/htdocs/cchost/
 
-    mysql -p -u root
+   3. Create a database instance and users to access it.  For example:
 
-    mysql> CREATE DATABASE cchost;
-    mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE ON cchost.* 
-    ->     TO 'cchost'@'localhost' IDENTIFIED BY 'password';
+      mysql -p -u root
 
-    Make sure to change 'password' (and maybe cchost) to something
-    unique to your site.
+      mysql> CREATE DATABASE cchost;
+      mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE ON cchost.* 
+      ->     TO 'cchost'@'localhost' IDENTIFIED BY 'password';
 
- 4. Create directory /var/log/cchost or other location to store log
-    files.  Must be writable by apache.  For example:
+      Make sure to change 'password' (and maybe cchost) to something
+      unique to your site.
 
-    mkdir /var/log/cchost
-    chown apache:apache /var/log/cchost
+   4. Create directory /var/log/cchost or other location to store log files.  
+      Must be writable by apache.  For example:
 
- 5. Browse to http://where_you_installed_cchost/ccadmin 
+      mkdir /var/log/cchost
+      chown apache:apache /var/log/cchost
 
- 6. Follow the instructions from there on...
+   5. Browse to http://where_you_installed_cchost/ccadmin 
 
-UNIX Installations should read this:
+   6. Follow the instructions from there on...
 
-http://wiki.creativecommons.org/CcHost_File_Access
+   * UNIX/Linux-based Installations should read this:
+
+     http://wiki.creativecommons.org/CcHost_File_Access
 
 
