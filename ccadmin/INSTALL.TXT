@@ -1,6 +1,9 @@
 Installation notes for ccHost 3.0
 =================================
 
+Please check the project website/wiki to see if there are updates to any of 
+these steps: http://wiki.creativecommons.org/CcHost#Install
+
 
 Upgrading from 2.x to 3.0
 -------------------------
