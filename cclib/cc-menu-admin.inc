@@ -78,7 +78,7 @@ class CCAdminMenuForm extends CCGridForm
             }
         }
 
-        if( !CCLanguage::IsEnabled() )
+        if( CCLanguage::IsEnabled() )
         {
             $exhelp =  _('WARNING: If you change the global language setting all customizations made here will be destroyed. Therefore, if you plan to set the language to something other than the default you should do it before editing here.');
 

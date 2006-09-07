@@ -124,7 +124,7 @@ class CCAdminSubmitFormForm extends CCUploadForm
                   );
 
     
-        if( !CCLanguage::IsEnabled() )
+        if( CCLanguage::IsEnabled() )
         {
             $help = _('WARNING: If you change the global language setting
                     all customizations made here will be destroyed. Therefore, if you plan to
