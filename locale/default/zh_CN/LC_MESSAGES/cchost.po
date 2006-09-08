@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-07 23:22-0700\n"
+"POT-Creation-Date: 2006-09-08 14:46-0700\n"
 "PO-Revision-Date: 2006-09-03 15:38-0800\n"
 "Last-Translator: deerfang <lu@deerfang.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -172,7 +172,7 @@ msgid "Name"
 msgstr "姓名"
 
 #: cclib/cc-navigator-admin.inc:443 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:631 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:633 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -855,7 +855,7 @@ msgstr "恢复丢失的密码"
 msgid "Uploads"
 msgstr "上传的"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:616 cclib/cc-user.php:632
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:618 cclib/cc-user.php:634
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr "人们"
@@ -1298,71 +1298,71 @@ msgstr "我喜欢什么"
 msgid "What I Look For"
 msgstr "我找什么"
 
-#: cclib/cc-user.php:556 cclib/cc-user.php:607
+#: cclib/cc-user.php:556 cclib/cc-user.php:609
 msgid "Edit Your Settings"
 msgstr "编辑你的设置"
 
-#: cclib/cc-user.php:608
+#: cclib/cc-user.php:610
 msgid "Changes were saved"
 msgstr "更改已保存"
 
-#: cclib/cc-user.php:660
+#: cclib/cc-user.php:662
 msgid "(select tag)"
 msgstr "（选择索引）"
 
-#: cclib/cc-user.php:660
+#: cclib/cc-user.php:662
 msgid "(no tag)"
 msgstr "（无索引）"
 
-#: cclib/cc-user.php:720
+#: cclib/cc-user.php:722
 #, php-format
 msgid "Remove %s from my favorites"
 msgstr "（从我最喜爱中除去）"
 
-#: cclib/cc-user.php:722
+#: cclib/cc-user.php:724
 #, php-format
 msgid "Add %s to my favorites"
 msgstr "添加到我最喜爱中"
 
-#: cclib/cc-user.php:764
+#: cclib/cc-user.php:766
 msgid " has not uploaded any remixes yet."
 msgstr "还未上传任何再混音"
 
-#: cclib/cc-user.php:783
+#: cclib/cc-user.php:785
 msgid "Uploads by "
 msgstr "上传者"
 
-#: cclib/cc-user.php:784
+#: cclib/cc-user.php:786
 msgid "Remixes of "
 msgstr "再混音来源"
 
-#: cclib/cc-user.php:785
+#: cclib/cc-user.php:787
 msgid "Remixed by "
 msgstr "再混音者"
 
-#: cclib/cc-user.php:797
+#: cclib/cc-user.php:799
 #, php-format
 msgid "%s has been removed from your list of favorites"
 msgstr "已从你最喜爱的列表中删去"
 
-#: cclib/cc-user.php:802
+#: cclib/cc-user.php:804
 #, php-format
 msgid "%s has been added to your list of favorites"
 msgstr "已经被加到你最喜欢的列表中"
 
-#: cclib/cc-user.php:876
+#: cclib/cc-user.php:878
 msgid "Your Page"
 msgstr "你的页面"
 
-#: cclib/cc-user.php:883
+#: cclib/cc-user.php:885
 msgid "Edit Your Profile"
 msgstr "编辑你的简介"
 
-#: cclib/cc-user.php:894
+#: cclib/cc-user.php:896
 msgid "Visitors"
 msgstr "访问者"
 
-#: cclib/cc-user.php:896
+#: cclib/cc-user.php:898
 msgid "Artists"
 msgstr "艺术家"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccHost 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-07 23:22-0700\n"
+"POT-Creation-Date: 2006-09-08 14:46-0700\n"
 "PO-Revision-Date: 2006-08-28 20:14+0800\n"
 "Last-Translator: Jedi <JediLin@Gmail.com>\n"
 "Language-Team: Creative Commons Taiwan <contact@creativecommons.org.tw>\n"
@@ -178,7 +178,7 @@ msgid "Name"
 msgstr "登入名稱"
 
 #: cclib/cc-navigator-admin.inc:443 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:631 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:633 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -868,7 +868,7 @@ msgstr "回復遺失的密碼"
 msgid "Uploads"
 msgstr "已上傳的檔案"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:616 cclib/cc-user.php:632
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:618 cclib/cc-user.php:634
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr "使用者"
@@ -1309,74 +1309,74 @@ msgstr "我喜歡"
 msgid "What I Look For"
 msgstr "我在找"
 
-#: cclib/cc-user.php:556 cclib/cc-user.php:607
+#: cclib/cc-user.php:556 cclib/cc-user.php:609
 msgid "Edit Your Settings"
 msgstr "編輯您的設定"
 
-#: cclib/cc-user.php:608
+#: cclib/cc-user.php:610
 msgid "Changes were saved"
 msgstr "變更已儲存"
 
-#: cclib/cc-user.php:660
+#: cclib/cc-user.php:662
 msgid "(select tag)"
 msgstr "(選擇標籤)"
 
-#: cclib/cc-user.php:660
+#: cclib/cc-user.php:662
 msgid "(no tag)"
 msgstr "(沒有標籤)"
 
-#: cclib/cc-user.php:720
+#: cclib/cc-user.php:722
 #, php-format
 msgid "Remove %s from my favorites"
 msgstr "從我的最愛中移除 %s"
 
-#: cclib/cc-user.php:722
+#: cclib/cc-user.php:724
 #, php-format
 msgid "Add %s to my favorites"
 msgstr "把 %s 加進我的最愛"
 
-#: cclib/cc-user.php:764
+#: cclib/cc-user.php:766
 msgid " has not uploaded any remixes yet."
 msgstr " 還沒有上傳過任何重混作品."
 
 # VAR
-#: cclib/cc-user.php:783
+#: cclib/cc-user.php:785
 msgid "Uploads by "
 msgstr "由此使用者上傳: "
 
 # VAR
-#: cclib/cc-user.php:784
+#: cclib/cc-user.php:786
 msgid "Remixes of "
 msgstr "此使用者的重混作品: "
 
 # VAR
-#: cclib/cc-user.php:785
+#: cclib/cc-user.php:787
 msgid "Remixed by "
 msgstr "被此使用者取樣: "
 
-#: cclib/cc-user.php:797
+#: cclib/cc-user.php:799
 #, php-format
 msgid "%s has been removed from your list of favorites"
 msgstr "%s 已經從您的最愛清單中移除了"
 
-#: cclib/cc-user.php:802
+#: cclib/cc-user.php:804
 #, php-format
 msgid "%s has been added to your list of favorites"
 msgstr "%s 已經加入您的最愛清單了"
 
-#: cclib/cc-user.php:876
+#: cclib/cc-user.php:878
 msgid "Your Page"
 msgstr "您的頁面"
 
-#: cclib/cc-user.php:883
+#: cclib/cc-user.php:885
 msgid "Edit Your Profile"
 msgstr "編輯您的個人資料"
 
-#: cclib/cc-user.php:894
+#: cclib/cc-user.php:896
 msgid "Visitors"
 msgstr "訪客"
 
-#: cclib/cc-user.php:896
+#: cclib/cc-user.php:898
 msgid "Artists"
 msgstr "藝人"
 

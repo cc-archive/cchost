@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-07 23:22-0700\n"
+"POT-Creation-Date: 2006-09-08 14:46-0700\n"
 "PO-Revision-Date: 2006-08-18 17:04+0100\n"
 "Last-Translator: Gianmaria Di Flumeri <gdiflumeri@gmail.com>\n"
 "Language-Team:  <gdiflumeri@gmail.com>\n"
@@ -175,7 +175,7 @@ msgid "Name"
 msgstr "Nome"
 
 #: cclib/cc-navigator-admin.inc:443 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:631 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:633 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -865,7 +865,7 @@ msgstr "Recupera Password"
 msgid "Uploads"
 msgstr "Uploads"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:616 cclib/cc-user.php:632
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:618 cclib/cc-user.php:634
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr "Gente"
@@ -1310,71 +1310,71 @@ msgstr "Cosa mi piace"
 msgid "What I Look For"
 msgstr "Cosa Cerco"
 
-#: cclib/cc-user.php:556 cclib/cc-user.php:607
+#: cclib/cc-user.php:556 cclib/cc-user.php:609
 msgid "Edit Your Settings"
 msgstr "Modifica le Tue Impostazioni"
 
-#: cclib/cc-user.php:608
+#: cclib/cc-user.php:610
 msgid "Changes were saved"
 msgstr "Modifiche salvate"
 
-#: cclib/cc-user.php:660
+#: cclib/cc-user.php:662
 msgid "(select tag)"
 msgstr "(seleziona categoria)"
 
-#: cclib/cc-user.php:660
+#: cclib/cc-user.php:662
 msgid "(no tag)"
 msgstr "(nessuna categoria)"
 
-#: cclib/cc-user.php:720
+#: cclib/cc-user.php:722
 #, php-format
 msgid "Remove %s from my favorites"
 msgstr "Rimuovii %s dai miei favoriti"
 
-#: cclib/cc-user.php:722
+#: cclib/cc-user.php:724
 #, php-format
 msgid "Add %s to my favorites"
 msgstr "Aggiungi %s ai miei favoriti"
 
-#: cclib/cc-user.php:764
+#: cclib/cc-user.php:766
 msgid " has not uploaded any remixes yet."
 msgstr "non ha caricato nessun remixes al momento"
 
-#: cclib/cc-user.php:783
+#: cclib/cc-user.php:785
 msgid "Uploads by "
 msgstr "Uploads da"
 
-#: cclib/cc-user.php:784
+#: cclib/cc-user.php:786
 msgid "Remixes of "
 msgstr "Remixes di"
 
-#: cclib/cc-user.php:785
+#: cclib/cc-user.php:787
 msgid "Remixed by "
 msgstr "Remixato da "
 
-#: cclib/cc-user.php:797
+#: cclib/cc-user.php:799
 #, php-format
 msgid "%s has been removed from your list of favorites"
 msgstr "%s e' stato rimosso dai tuoi favoriti"
 
-#: cclib/cc-user.php:802
+#: cclib/cc-user.php:804
 #, php-format
 msgid "%s has been added to your list of favorites"
 msgstr "%s e' stato aggiunto ai tuoi favoriti"
 
-#: cclib/cc-user.php:876
+#: cclib/cc-user.php:878
 msgid "Your Page"
 msgstr "La Tua Pagina"
 
-#: cclib/cc-user.php:883
+#: cclib/cc-user.php:885
 msgid "Edit Your Profile"
 msgstr "Modifica il Tuo Profilo"
 
-#: cclib/cc-user.php:894
+#: cclib/cc-user.php:896
 msgid "Visitors"
 msgstr "Visitatori"
 
-#: cclib/cc-user.php:896
+#: cclib/cc-user.php:898
 msgid "Artists"
 msgstr "Artisti"
 
