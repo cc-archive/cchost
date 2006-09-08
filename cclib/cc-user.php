@@ -579,7 +579,9 @@ class CCUser
                 
                 CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, 
                                  array( $id, &$old_info));
-                CCEvents::Invoke(CC_EVENT_TRANSLATE);
+
+                if( !empty($CC_GLOBALS['lang_per_user']) )
+                    CCEvents::Invoke(CC_EVENT_TRANSLATE);
 
                 // this sends us to the save page
                 // I added because problem with getting the new language
