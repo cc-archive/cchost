@@ -19,6 +19,7 @@ APPNAME = cchost
 PACKAGEDIR=packages
 DATETIME=$(shell date +%F_%H%M%S)
 SIGNPACKAGE=gpg --detach-sign --armor
+MD5SUM=md5sum
 
 LAST_RELEASE_DATE=2006-04-04
 
@@ -125,22 +126,45 @@ dist: tarball zip bzip rpms
 
 #gpg sign all the following packages baby!
 
-zip-sign: zip
+zip-gpg: zip
 	(cd $(PACKAGEDIR); $(SIGNPACKAGE) $(APPNAME)-$(RELEASE_NUM).zip)
 	
-tarball-sign: tarball
+tarball-gpg: tarball
 	(cd $(PACKAGEDIR); $(SIGNPACKAGE) $(APPNAME)-$(RELEASE_NUM).tar.gz)
 	 
-bzip-sign: bzip
+bzip-gpg: bzip
 	(cd $(PACKAGEDIR); $(SIGNPACKAGE) $(APPNAME)-$(RELEASE_NUM).tar.bz2)
 	
-rpms-sign: rpms 
+rpms-gpg: rpms 
 	@cd $(PACKAGEDIR); for i in `ls $(APPNAME)-$(RELEASE_NUM)*rpm`; \
 	do $(SIGNPACKAGE) $$i; done
 
-
-dist-sign-all: dist zip-sign tarball-sign bzip-sign rpms-sign
+dist-gpg-all: zip-sign tarball-sign bzip-sign rpms-sign
 	
+
+# md5sum sign all the following packages baby!
+
+zip-md5: zip
+	(cd $(PACKAGEDIR); $(MD5SUM) $(APPNAME)-$(RELEASE_NUM).zip \
+	 > $(APPNAME)-$(RELEASE_NUM).zip.DIGEST)
+	
+tarball-md5: tarball
+	(cd $(PACKAGEDIR); $(MD5SUM) $(APPNAME)-$(RELEASE_NUM).tar.gz \
+	 > $(APPNAME)-$(RELEASE_NUM).zip.DIGEST)
+	 
+bzip-md5: bzip
+	(cd $(PACKAGEDIR); $(MD5SUM) $(APPNAME)-$(RELEASE_NUM).tar.bz2 \
+	 > $(APPNAME)-$(RELEASE_NUM).zip.DIGEST)
+	
+rpms-md5: rpms 
+	@cd $(PACKAGEDIR); for i in `ls $(APPNAME)-$(RELEASE_NUM)*rpm`; \
+	do $(MD5SUM) $$i > $$i.DIGEST; done
+
+dist-md5-all: zip-sign tarball-sign bzip-sign rpms-sign
+
+# programmatically sign these packages 
+dist-sign-all: dist-md5-all dist-gpg-all 
+
 
 # the following datetime directives print date and time at the end of the list
 zip-datetime: distprep
