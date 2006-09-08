@@ -36,7 +36,7 @@ all:	$(DIST_FILES_GENERATED) $(DIST_FILES_OTHER) ChangeLog
 	if [ -e Makefile.language ]; then \
 	    $(MAKE) -f Makefile.language all; fi
 
-press: all
+press:
 	[ -x `which txt2html` ] && txt2html --xhtml PRESS > PRESS.html
 
 ChangeLog: ChangeLog.in

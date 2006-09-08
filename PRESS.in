@@ -1,10 +1,10 @@
-Creative Commons Sponsored Software ccHost Releases Version 3.0
+Creative Commons Sponsored Software ccHost Releases Version 3.0.1
 
 San Francisco, USA - September 8, 2006
 
 Creative Commons, a nonprofit organization that provides flexible
 copyright licenses for authors and artists along with the Creative
-Commons Developer Community released the ccHost 3.0 today. ccHost is an
+Commons Developer Community released the ccHost 3.0.1 today. ccHost is an.1
 Open Source web-based media sharing software. This major feature release
 comes on the heals of winning the Linux Journal Linux World Expo Award
 for "Best Open Source Solution" and combines approximately five months of
@@ -66,7 +66,7 @@ called "publishcchost" which allows one to publish a file to any ccHost
 installation from the command line.
 
 This release also focuses on addressing compatibility with modern ways
-software is installed on the web. ccHost 3.0 fully supports PHP 5 and
+software is installed on the web. ccHost 3.0.1 fully supports PHP 5 and
 has been tested thoroughly in shared hosting setups on Dreamhost and
 Freedesktop.org. Also, one outstanding bug has been squashed in that
 ccHost does not require getid3 for installation.
