@@ -60,12 +60,6 @@ New features (end-user)
     ccHost includes a script and admin interface for dumping
 
 
-    Breadcrumb Paths
-    ----------------
-    There is now a breadcrumbs path showing where one is in the hierarchy of
-    content they are browsing.
-
-
 New/Improved (admin):
 ========================
 
@@ -75,7 +69,6 @@ New/Improved (admin):
     * Sub navigation tabs
     * File permissions now settable within ccHost
     * Thumbnails can be turned on/off
-    * Spam flood protection
     * Configure min number of tags for BrowseTags
     * Ability to control cchost's chmod level
     * Added more site metadata: description and keywors

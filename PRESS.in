@@ -1,71 +1,147 @@
-Creative Commons Releases Open Source Software ccHost PROJECT_VERSION
+Creative Commons Sponsored Software ccHost Releases Version 3.0
 
-San Francisco, USA, April 3, 2006
+San Francisco, USA - September 8, 2006
 
-ccHost, an Open Source project that provides web-based infrastructure  
-to support collaboration, sharing, and storage of multi-media using  
-Creative Commons licenses and metadata, released version PROJECT_VERSION today.  
-These features most notably show up and are tested in Creative  
-Commons' project, ccMixter (http://www.ccmixter.org), a popular on- 
-line music social network service that supports legal media sharing  
-and remixing. ccHost is the Open Source Software engine powering  
-ccMixter. Anyone may download, install, and use ccHost to freely  
-build media sharing communities.
+Creative Commons, a nonprofit organization that provides flexible
+copyright licenses for authors and artists along with the Creative
+Commons Developer Community released the ccHost 3.0 today. ccHost is an
+Open Source web-based media sharing software. This major feature release
+comes on the heals of winning the Linux Journal Linux World Expo Award
+for "Best Open Source Solution" and combines approximately five months of
+development, usage, and testing into packages that anyone may download,
+install, and use to empower on-line media sharing communities. This
+release builds upon ccHost's novel support of collaboration, sharing,
+and storage of multi-media using the different Creative Commons licenses
+and metadata.
+
+These features most notably show up and are tested in Creative Commons'
+project, ccMixter (www.ccmixter.org), a popular on-line social network
+service that supports legal music sharing and remixing. ccHost is the
+Open Source Software engine powering ccmixter.org and which anyone may
+download, install, and use to freely build media sharing communities.
+
+Ryan Lerch, a developer from the project Open Clip Art Library
+(www.openclipart.org) says, "the new release of ccHost now includes
+features that we have wanted for some time. It now integrates powerful
+features that will enhance both the usability and efficiency of the Open
+Clip Art Library and will help us immensely in our goal of creating
+a comprehensive library of public domain clip art." The Open Clip Art
+Library is but one of several projects moving their projects to use the
+solid infrastructure ccHost provides.
+
+Major features in this release include native forums, infrastructure to
+support multiple languages, and an e-mail notification system. ccHost
+has replaced its dependency on phpbb2 with native fully-functioning
+hierarchical forums. They are totally integrated with user profiles and
+administrators may specifically control them.
+
+ccHost now supports multiple languages. There is new integration of
+the standard Open Source GNU gettext-based multi-language support
+tools. This allows for initial support for Italian, German, Mainland
+Chinese, Taiwanese Chinese, and Brazilian Portuguese in addition to
+English. The project encourages others to get involved in order to
+translate ccHost into more local languages.
+
+A user-requested feature now implemented is e-mail notifications. It
+allows registered users to get e-mail whey they have been reviewed,
+rated, remixed, or when someone else has uploaded a file and they want
+to be alerted.
+
+Other important features include recent reviews for the sidebars, the
+'How I Did It' browser sorting, and tons of statistics. Stats include
+number of reviews for uploads, an overview of forum messages, and times
+remixed, all to help a community know about itself. ccHost also supports
+XSPF 1.0 playlists as feeds, basic support for the new getid3 SVG module,
+and dumping of content from ccHost to a large feed file format (useful
+for search engines and external parsing).
+
+ccHost makes the lives of administrators much easier by adding an
+FTP-less file manager, a Bayesian rating scheme, sub-navigation tabs,
+spam flood protection, and setting of file-permissions. External to
+the core ccHost application are also several command line scripts
+which admins can use to powerfully help them in their maintenance
+of an installation. Of particular note is the inclusion of code from
+Brazil-based Bruno Dilly's Google Summer of Code project into a tool
+called "publishcchost" which allows one to publish a file to any ccHost
+installation from the command line.
+
+This release also focuses on addressing compatibility with modern ways
+software is installed on the web. ccHost 3.0 fully supports PHP 5 and
+has been tested thoroughly in shared hosting setups on Dreamhost and
+Freedesktop.org. Also, one outstanding bug has been squashed in that
+ccHost does not require getid3 for installation.
+
+The ccHost development community encourages new developers to
+contribute to the project. The future of ccHost is bright with upcoming
+development focusing on user and admin requests for features like further
+generalization of media support, better tools to support social networking
+features, and further language support.
+
+Chat with other developers on channel #cc on
+irc.freenode.org, join the project mailing list
+(https://lists.sourceforge.net/mailman/listinfo/cctools-cchost), and
+edit the project wiki page to help shape this project's future direction
+(http://wiki.creativecommons.org/wiki/ccHost).
+
 
 Project Website
 
 http://wiki.creativecommons.org/wiki/ccHost
 
+
 ccHost Download
 
-http://sourceforge.net/project/showfiles.php? 
+http://sourceforge.net/project/showfiles.php?
 group_id=80503&package_id=156675
+
 
 Feature Requests
 
 https://sourceforge.net/tracker/?group_id=80503&atid=559969
 
+
 Bug Reports
 
 https://sourceforge.net/tracker/?atid=559966&group_id=80503&func=browse
+
 
 Roadmap (Project Timeline)
 
 http://wiki.creativecommons.org/CcHost_Roadmap
 
+
 About ccHost
 
-The goal of this project is to spread media content that is licensed  
-under Creative Commons throughout the web in much the same way that  
-weblogs spread CC licensed text. ccHost is web-based infrastructure  
-that may be used to host and allow for commenting, remixing, and  
-distribution globally. The more installations of ccHost and its  
-variations, the more content there will be available for enjoyment  
-and artistic re-use in a sane and legal setting. ccHost is what is  
-used for the infamous Creative Commons ccMixter project, which  
-supports legal media sharing and remixing.
+The goal of this project is to spread media content that is licensed
+under Creative Commons throughout the web in much the same way that
+weblogs spread CC licensed text. ccHost is web-based infrastructure that
+may be used to host and allow for commenting, remixing, and distribution
+globally. The more installations of ccHost and its variations, the more
+content there will be available for enjoyment and artistic re-use in a
+sane and legal setting. ccHost is what is used for the infamous Creative
+Commons ccMixter project, which supports legal media sharing and remixing.
+
 
 About Creative Commons
 
-Creative Commons is a nonprofit organization  
-that promotes the creative re-use of intellectual and artistic works  
-- whether owned or in the public domain. Creative Commons licenses  
-provide a flexible range of protections and freedoms that build upon  
-the "all rights reserved" concept of traditional copyright to offer a  
-voluntary "some rights reserved" approach. Creative Commons is  
-sustained by the generous support of various foundations including  
-the John D. and Catherine T. MacArthur Foundation, the Omidyar  
-Network Fund, the Hewlett Foundation, and the Rockefeller Foundation,  
-as well as members of the public. For more information about Creative  
-Commons, visit http://creativecommons.org/.
+Creative Commons is a nonprofit organization that promotes the creative
+re-use of intellectual and artistic works - whether owned or in the
+public domain. Creative Commons licenses provide a flexible range of
+protections and freedoms that build upon the "all rights reserved" concept
+of traditional copyright to offer a voluntary "some rights reserved"
+approach. Creative Commons is sustained by the generous support of various
+foundations including the John D. and Catherine T. MacArthur Foundation,
+the Omidyar Network Fund, the Hewlett Foundation, and the Rockefeller
+Foundation, as well as members of the public.
+
+For general information, visit http://creativecommons.org/.
+
 
 Contact
 
-Eric Steuer
-Creative Director, Creative Commons
-eric@creativecommons.org
+Jon Phillips Developer, ccHost jon@creativecommons.org
+
 
 Press Kit
 
 http://creativecommons.org/presskit
-
