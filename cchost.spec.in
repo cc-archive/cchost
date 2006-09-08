@@ -68,11 +68,13 @@ and legal setting.
 # they can be removed as easily as make uninstall...so not much magic here
 # http://rpm.org/RPM-HOWTO/build.html
 %defattr(-,root,root,0755)
-%doc COPYING ChangeLog README NEWS PRESS LICENSE.TXT AUTHORS
+%doc COPYING ChangeLog README NEWS PRESS LICENSE.TXT AUTHORS HACKING VERSION
 %{_webdir}/*
 
 
 %changelog
+* Thu Sep  07 2006 Jon Phillips <jon@creativecommons.org> 3.0
+- Added a couple of files to the doc variable
 * Tue Mar  28 2006 Jon Phillips <jon@creativecommons.org> 2.0
 - Finishing packaging to add files to a web dir...which is currently /opt
 * Thu Feb  23 2006 Jon Phillips <jon@creativecommons.org> 1.1
