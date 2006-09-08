@@ -52,6 +52,8 @@ class CCTopicsFeed extends CCFeed
         else
             die('unknown feed type'); // blaaa!
 
+        $title = $this->_cct($title);
+
         $count = count($topics);
         for( $i = 0; $i < $count; $i++ )
         {
