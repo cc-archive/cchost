@@ -46,6 +46,40 @@ $Id$
        <tr><td id="fs_side" />
            <td id="fs_content">
 
+        <h2>Fort Minor Contest Winner!</h2>
+
+        <a href="${root-url}fortminor" class="logolink"><img 
+           src="${root-url}mixter-files/fmlogo.jpg" border="0" /></a>
+
+        <p>
+            Congratulations to <a href="${home-url}people/marc">marc kaschke</a> our
+            Fort Minor Remix Contest Grand Prize Winner for his remix  
+            "<a href="${home-url}files/marc/4492">Remember the Name (Kaschke & Mauer Remix)</a>"
+
+        </p>
+        <p>
+            <a href="${home-url}people/marc">marc</a> will be awarded a new 
+            Technics SL-1200MK5 turntable, 
+            courtesy of  Warner Bros. Records and Machine Shop Recordings. 
+        </p>
+            <h3><a href="${root-url}fortminor">More information about the Fort Minor contest</a>...</h3>
+
+            </td>
+          <td id="fs_side" />
+        </tr>
+       <tr><td id="fs_bot_left" /><td id="fs_bot">&nbsp;</td><td id="fs_bot_right" /></tr>
+    </table>
+    </div><!-- fs_container -->
+  </td>
+</tr>
+<tr>
+  <td>
+    <div id="fs_container">
+     <table id="fs_table" cellspacing="0" cellpadding="0" >
+       <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
+       <tr><td id="fs_side" />
+           <td id="fs_content">
+
             <div class="img_holder"><a href="${root-url}freesound"><img 
                   src="${root-url}mixter-files/freesound-logo.gif" border="0" /></a></div>
 
@@ -66,12 +100,9 @@ $Id$
         </tr>
        <tr><td id="fs_bot_left" /><td id="fs_bot">&nbsp;</td><td id="fs_bot_right" /></tr>
     </table>
-
-    </div>
+    </div><!-- fs_container -->
   </td>
-</tr>
-<tr>
-  <td colspan="2">
+  <td>
     <div  id="contests">
      <table id="fs_table" cellspacing="0" cellpadding="0" >
        <tr><td id="fs_top_left" />
@@ -80,21 +111,8 @@ $Id$
        <tr><td id="fs_side" />
            <td id="fs_content">
 
-        <h2 style="text-align:center;margin:2px;">Contests at ccMixter</h2>
+        <h2 style="text-align:center;margin:2px;">Crammed Discs</h2>
         
-        <a href="${root-url}fortminor" class="logolink"><img 
-           src="${root-url}mixter-files/fmlogo.jpg" border="0" /></a>
-        <p>
-            Fort Minor &mdash; the  hip-hop project 
-            led by Linkin Park's Mike Shinoda &mdash; is offering the  separated audio 
-            elements of "Remember the Name" online under a  Creative Commons BY-NC license, 
-            so that producers all over the world  can easily create new versions of the hit 
-            song. The winning remixer  will be awarded a new Technics SL-1200MK5 turntable, 
-            courtesy of  Warner Bros. Records and Machine Shop Recordings. 
-        </p>
-            <h3><a href="${root-url}fortminor">More information about the Fort Minor contest</a>...</h3>
-  
-        <hr />
 
         <a href="${root-url}crammed" class="logolink"><img 
            src="${root-url}mixter-files/crammed-logo.png" border="0" /></a>
@@ -106,7 +124,7 @@ $Id$
           stores.
         </p>
           <h3><a href="${root-url}crammed">More information about the Crammed Discs contest</a>...</h3>
-
+<!--
         <hr />
 
         <a href="${root-url}copyrightcriminals" class="logolink"><img 
@@ -118,7 +136,7 @@ $Id$
           prominently in the film and on a companion CD. 
         </p>
           <h3><a href="${root-url}copyrightcriminals">More information about the Copyright Criminals contest</a>...</h3>
-
+-->
             </td>
           <td id="fs_side" />
         </tr>
@@ -131,7 +149,6 @@ $Id$
 </table>
 
 
-<script>
   //<!--
   var tab_top = -41;
 
@@ -150,6 +167,5 @@ $Id$
   tabobj.obj.innerHTML = '<a href="http://creativecommons.org/">&nbsp;</a>';
   timed_tab_grow();
   //-->
-</script>
 
 </tal:block>

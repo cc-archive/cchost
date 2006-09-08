@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -49,13 +49,13 @@ height="100"
 alt="Fort Minor logo &copy; Fort Minor. Used with permission." title="Fort Minor logo &copy; Fort Minor. Used with permission." 
 />
 <h1 id="pagehead" style="color:#000; font-size: 28px;">Fort Minor Remix Contest</h1>
-
+<table style=""><tr><td>
+<div style="border: 1px solid brown; font-size: 16px; ;padding: 15px; color:brown;font-weight:bold;text-align:center;"><img 
+src="/mixter-files/marckaschke.jpg" style="float:right;margin:12px;" /><br />Congratulations to our grand prize winner <a href="${home-url}people/marc" style="white-space:nowrap;">marc kaschke</a> for his entry:<br /><br /> <a href="${home-url}files/marc/4492" style="white-space:nowrap;font-weight:bold;font-size:17px">Remember the Name (Kaschke & Mauer Remix)</a><br /><br />
+Congratulations marc!!</div></td></tr></table>
 
 <p>
 <a href="http://creativecommons.org/">Creative Commons</a>, <a href="http://www.warnerbrosrecords.com/">Warner Bros. Records</a>, and <a href="http://www.machineshoprecordings.com">Machine Shop Recordings</a> are proud to present the Fort Minor Remix Contest. <a href="http://fortminor.com/">Fort Minor</a> is offering the separated audio elements of "Remember the Name" online under a <a href="http://creativecommons.org/licenses/by-nc/2.5/">Creative Commons BY-NC license</a>, so that producers all over the world can easily create remixes of the hit song.
-</p>
-<p>
-All eligible entries have now been received, Fort Minor's Mike Shinoda will choose a winning remix. The producer of the winning remix will be awarded a new <a href="http://en.wikipedia.org/wiki/SL-1200">Technics SL-1200MK5</a> turntable, courtesy of Warner Bros. Records and Machine Shop Recordings.
 </p>
 <p>
 The contest entries included the vocal track from "Remember the Name."  You can download the album version of "Remember the Name" for free by visiting Fort Minor's <a href="http://www.myspace.com/fortminor">MySpace page</a>.
@@ -91,8 +91,10 @@ The contest entries included the vocal track from "Remember the Name."  You can 
 
 <h2 style="margin: 0px; font-size: 18px; font-weight: normal;">Prize</h2>
 
-<p>After all eligible entries have been received, Fort Minor's Mike Shinoda will choose a winning remix. The producer of the winning remix will receive a Technics SL-1200MK5  turntable, courtesy of Warner Bros. Records and Machine Shop  Recordings.</p>
-
+<p>
+All eligible entries have now been received and Fort Minor's Mike Shinoda has chosen 
+<a href="${home-url}files/marc/4492">a winning remix</a>. <a href="${home-url}people/marc">marc kaschke</a>, the producer of the winning remix will be awarded a new <a href="http://en.wikipedia.org/wiki/SL-1200">Technics SL-1200MK5</a> turntable, courtesy of Warner Bros. Records and Machine Shop Recordings.
+</p>
 
 <br />
 
