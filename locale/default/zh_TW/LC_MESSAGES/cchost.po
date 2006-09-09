@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ccHost 3.0\n"
 "Report-Msgid-Bugs-To: Jedi <JediLin@Gmail.com>\n"
 "POT-Creation-Date: 2006-09-08 14:46-0700\n"
-"PO-Revision-Date: 2006-09-09 13:34+0800\n"
+"PO-Revision-Date: 2006-09-09 14:34+0800\n"
 "Last-Translator: Jedi <JediLin@Gmail.com>\n"
 "Language-Team: Creative Commons Taiwan <contact@creativecommons.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 
 #: cclib/cc-admin.php:217
 msgid "Name of virtual root"
-msgstr ""
+msgstr "虛擬站台的名稱"
 
 #: cclib/cc-admin.php:218
 msgid "Must be characters and numbers only"
@@ -32,7 +32,7 @@ msgstr "只能使用字母跟數字"
 #: cclib/cc-admin.php:226
 #, php-format
 msgid "Read more about why you would want to do this and what the consequences are <a href=\"%s\">here</a>."
-msgstr ""
+msgstr "請閱讀<a href=\"%s\">此處</a>來弄清楚你為什麼會想要這麼做, 以及其結果又會如何."
 
 #: cclib/cc-admin.php:265
 #: cclib/cc-contest-admin.inc:199
@@ -41,27 +41,27 @@ msgstr "一定要是字母跟數字的組合, 而且不能超過 25 個字"
 
 #: cclib/cc-admin.php:272
 msgid "That virtual root already exists"
-msgstr ""
+msgstr "這個虛擬站台已經存在了"
 
 #: cclib/cc-admin.php:323
 msgid "Save Configuration"
-msgstr ""
+msgstr "儲存組態"
 
 #: cclib/cc-admin.php:324
 msgid "Just be careful what you do here, it's easy to 'break the site'"
-msgstr ""
+msgstr "請留意在此的作為, 一不小心就會把站台 '弄爛'"
 
 #: cclib/cc-admin.php:377
 msgid "Administer ccHost Site"
-msgstr ""
+msgstr "管理 ccHost 站台"
 
 #: cclib/cc-admin.php:378
 msgid "Global Site Settings"
-msgstr ""
+msgstr "全域站台設定"
 
 #: cclib/cc-admin.php:379
 msgid "These settings affect the entire site"
-msgstr ""
+msgstr "這些設定都會影響到整個站台"
 
 #: cclib/cc-admin.php:381
 msgid "Virtual Root Settings"
@@ -69,19 +69,19 @@ msgstr "虛擬站台設定"
 
 #: cclib/cc-admin.php:392
 msgid "Edit the settings for virtual root: "
-msgstr ""
+msgstr "編輯虛擬站台的設定: "
 
 #: cclib/cc-admin.php:395
 msgid "Some of these settings may have been over written in other virtual roots"
-msgstr ""
+msgstr "下列這些設定中, 有一些可能已經被其他虛擬站台所推翻了"
 
 #: cclib/cc-admin.php:409
 msgid "This setting over writes the main site's values"
-msgstr ""
+msgstr "下列這些設定推翻了主站台的設定值"
 
 #: cclib/cc-admin.php:425
 msgid "Edit Raw Configuation Data"
-msgstr ""
+msgstr "編輯原始的組態資料"
 
 #: cclib/cc-admin.php:443
 msgid "Configuration Changes Saved"
@@ -93,11 +93,11 @@ msgstr "建立新的虛擬站台"
 
 #: cclib/cc-admin.php:507
 msgid "In order to enable Rewrite rules ('pretty URLs'), you must include the following lines in your Apache configuration (virtual host or .htaccess): \n"
-msgstr ""
+msgstr "為了要能啟用 Rewrite 規則 ('美觀的網址'), 你得將下列這幾列指令放進 Apache 的組態檔 (虛擬站台或 .htaccess) 中: \n"
 
 #: cclib/cc-admin.php:526
 msgid "This is the name used to set cookies on the client machine. Recommend  to leave this blank unless you are having problems."
-msgstr ""
+msgstr "這是用來設定用戶端 cookie 的名稱. 除非遭遇了甚麼問題, 否則建議留空不填."
 
 #: cclib/cc-admin.php:532
 msgid "Default File Permissions"
@@ -105,31 +105,31 @@ msgstr "預設的檔案權限"
 
 #: cclib/cc-admin.php:534
 msgid "chmod() access mask to use when writing new files. Do not edit this unless you understand UNIX permissions, Apache, PHP CGI mode, etc. Changing this value will affect future writes."
-msgstr ""
+msgstr "寫入新檔案時要使用的 chmod() 存取遮罩. 除非你瞭解 UNIX 權限, Apache, PHP CGI 模式等, 否則請不要編輯這個設定. 這個設定值變更後將會影響所有未來寫入的檔案."
 
 #: cclib/cc-admin.php:547
 msgid "Use URL Rewrite Rules"
-msgstr ""
+msgstr "使用網址 Rewrite 規則"
 
 #: cclib/cc-admin.php:549
 msgid "Check this if you want to use mod_rewrite for 'pretty' URLs."
-msgstr ""
+msgstr "如果你想要用 mod_rewrite 來 '美化' 網址的話, 請核選此處."
 
 #: cclib/cc-admin.php:569
 msgid "Help on configuring the site"
-msgstr ""
+msgstr "關於組態站台的說明"
 
 #: cclib/cc-admin.php:576
 msgid "Create a new virtual root"
-msgstr ""
+msgstr "建立新的虛擬站台"
 
 #: cclib/cc-admin.php:583
 msgid "Cookies, ban message, admin email, 3rd party add ins, etc."
-msgstr ""
+msgstr "Cookies, 取締訊息, 管理員電子郵件, 第三方附加元件等."
 
 #: cclib/cc-admin.php:595
 msgid "Style sheets, admins, home page, etc."
-msgstr ""
+msgstr "樣式表, 管理員, 首頁等."
 
 #: cclib/cc-admin.php:612
 msgid "Manage Site"
@@ -143,7 +143,7 @@ msgstr "管理"
 
 #: cclib/cc-admin.php:652
 msgid "Global Site Setup"
-msgstr ""
+msgstr "全域站台設定"
 
 #: cclib/cc-admin.php:666
 msgid "Edit Settings:"
@@ -225,7 +225,7 @@ msgstr "綽號"
 
 #: cclib/cc-contest-admin.inc:52
 msgid "This is the one people actually see"
-msgstr ""
+msgstr "這是人們實際上會看到的稱呼"
 
 #: cclib/cc-contest-admin.inc:57
 #: cclib/cc-upload.php:87
@@ -246,63 +246,63 @@ msgstr "競賽上線了"
 
 #: cclib/cc-contest-admin.inc:70
 msgid "Uncheck this to hide contest"
-msgstr ""
+msgstr "取消這個核選框以隱藏競賽"
 
 #: cclib/cc-contest-admin.inc:76
 msgid "Contest Opens"
-msgstr ""
+msgstr "競賽開放時間"
 
 #: cclib/cc-contest-admin.inc:77
 msgid "Entries are accepted after this date/time"
-msgstr ""
+msgstr "這個日期/時間之後將接受送件"
 
 #: cclib/cc-contest-admin.inc:83
 msgid "Contest Deadline"
-msgstr ""
+msgstr "競賽截止日期"
 
 #: cclib/cc-contest-admin.inc:84
 msgid "Entries are not accepted after this date/time"
-msgstr ""
+msgstr "這個日期/時間之後將不再接受送件"
 
 #: cclib/cc-contest-admin.inc:90
 msgid "Auto-Publish Entries"
-msgstr ""
+msgstr "自動公開作品"
 
 #: cclib/cc-contest-admin.inc:94
 msgid "Only admins can see entries until after the deadline"
-msgstr ""
+msgstr "在截止日前只有管理員才能看到這些作品"
 
 #: cclib/cc-contest-admin.inc:95
 msgid "Entries are made public upon upload"
-msgstr ""
+msgstr "作品一經上傳即公諸於眾"
 
 #: cclib/cc-contest-admin.inc:100
 msgid "Vote Online"
-msgstr ""
+msgstr "線上票選"
 
 #: cclib/cc-contest-admin.inc:104
 msgid "Winner is determined offline"
-msgstr ""
+msgstr "得獎名單將另外決定"
 
 #: cclib/cc-contest-admin.inc:105
 msgid "Display a poll after deadline for entries has passed"
-msgstr ""
+msgstr "競賽截止收件後, 在通過初審的作品顯示投票區"
 
 #: cclib/cc-contest-admin.inc:110
 msgid "Voting Deadline"
-msgstr ""
+msgstr "投票截止日期"
 
 #: cclib/cc-contest-admin.inc:111
 msgid "When do polls close? (Only applies if you chose online voting above)"
-msgstr ""
+msgstr "投票何時要終止? (只有當你在前面選擇了線上投票時才適用)"
 
 #: cclib/cc-contest-admin.inc:117
 msgid "Current Server Time"
-msgstr ""
+msgstr "目前的系統時間"
 
 #: cclib/cc-contest-admin.inc:146
 msgid "Internal Name"
-msgstr ""
+msgstr "內部名稱"
 
 #: cclib/cc-contest-admin.inc:148
 msgid "Letters and numbers only, 25 or less"
@@ -310,11 +310,11 @@ msgstr "只能用字母跟數字, 而且不能超過 25 個字"
 
 #: cclib/cc-contest-admin.inc:205
 msgid "Name already exists"
-msgstr ""
+msgstr "這個名稱已存在"
 
 #: cclib/cc-contest-admin.inc:231
 msgid "Submit Contest Changes"
-msgstr ""
+msgstr "送出競賽變更"
 
 #: cclib/cc-contest-admin.inc:254
 msgid "Source Type:"
@@ -373,7 +373,7 @@ msgstr "送出參賽項目至 %s 競賽"
 
 #: cclib/cc-contest-admin.inc:449
 msgid "Admin the contest"
-msgstr ""
+msgstr "管理競賽"
 
 #: cclib/cc-contest-admin.inc:458
 msgid "Admin Home"
@@ -381,7 +381,7 @@ msgstr "管理功能首頁"
 
 #: cclib/cc-contest-admin.inc:459
 msgid "Main admin screen"
-msgstr ""
+msgstr "主管理畫面"
 
 #: cclib/cc-contest-admin.inc:466
 msgid "Properties"
@@ -394,7 +394,7 @@ msgstr "編輯競賽屬性"
 #: cclib/cc-contest-admin.inc:474
 #, php-format
 msgid "Submit sources for the %s contest"
-msgstr ""
+msgstr "送出給 %s 競賽使用的原始素材"
 
 #: cclib/cc-contest-admin.inc:480
 #: cclib/cc-files.php:84
@@ -417,7 +417,7 @@ msgstr "新增檔案到系統中"
 
 #: cclib/cc-contest-admin.inc:513
 msgid "Not Implemented"
-msgstr ""
+msgstr "這個功能還沒做出來"
 
 #: cclib/cc-contest-admin.inc:583
 msgid "Upload succeeded"
@@ -483,31 +483,31 @@ msgstr "您所上傳的檔案已經進入了 '%s'"
 
 #: cclib/cc-contest.php:840
 msgid "This contest entry is only visible to the owner and admins."
-msgstr "這項票選只有其擁有者及管理者看得到."
+msgstr "這項票選只有其擁有者及管理員看得到."
 
 #: cclib/cc-database.php:110
 msgid "Internal error, contact the admin"
-msgstr ""
+msgstr "內部錯誤, 請聯繫管理員"
 
 #: cclib/cc-db-admin.php:54
 msgid "mysql Database Name"
-msgstr ""
+msgstr "MySQL 資料庫名稱"
 
 #: cclib/cc-db-admin.php:59
 msgid "Location of Server "
-msgstr ""
+msgstr "伺服器位址"
 
 #: cclib/cc-db-admin.php:60
 msgid "Typically \"localhost\""
-msgstr ""
+msgstr "通常就是 \"localhost\""
 
 #: cclib/cc-db-admin.php:65
 msgid "mysql User Name"
-msgstr ""
+msgstr "MySQL 使用者名稱"
 
 #: cclib/cc-db-admin.php:66
 msgid "This is the name used to connect to the mysql database."
-msgstr ""
+msgstr "這是用來連線到 MySQL 資料庫的使用者名稱."
 
 #: cclib/cc-db-admin.php:71
 msgid "mysql User Password"
@@ -515,7 +515,7 @@ msgstr "MySQL 使用者密碼"
 
 #: cclib/cc-db-admin.php:72
 msgid "This is the password used to connect to the mysql database."
-msgstr ""
+msgstr "這是用來連線到 MySQL 資料庫的使用者密碼."
 
 #: cclib/cc-db-admin.php:108
 msgid "Database Configuration"
@@ -524,11 +524,11 @@ msgstr "資料庫組態"
 #: cclib/cc-db-admin.php:149
 #, php-format
 msgid "Database configuration saved to %s (%04o)"
-msgstr ""
+msgstr "資料庫組態已儲存至 %s (%04o)"
 
 #: cclib/cc-debug.php:171
 msgid "No stack trace in this vesion of php"
-msgstr ""
+msgstr "這一版的 PHP 沒有堆疊追蹤"
 
 #: cclib/cc-editorials.php:54
 msgid "Reviewer"
@@ -572,15 +572,15 @@ msgstr "編輯群"
 
 #: cclib/cc-editorials.php:305
 msgid "Comma separated list of login names for users with Editorial privelages"
-msgstr ""
+msgstr "要給予編輯群權限的使用者登入名稱清單, 以逗號分隔"
 
 #: cclib/cc-feed.php:136
 msgid "Feed Caching"
-msgstr ""
+msgstr "源料快取"
 
 #: cclib/cc-feed.php:138
 msgid "Feed caching can optimize replies for feed requests"
-msgstr ""
+msgstr "源料快取可以讓源料請求的回應最佳化"
 
 #: cclib/cc-feed.php:337
 #, php-format
@@ -595,21 +595,21 @@ msgstr "由 %s 上傳的重混作品"
 #: cclib/cc-feed.php:462
 #, php-format
 msgid "Could not open folder \"%s\""
-msgstr ""
+msgstr "無法開啟資料夾 \"%s\""
 
 #: cclib/cc-feed.php:471
 #, php-format
 msgid "Could not open \"%s\""
-msgstr ""
+msgstr "無法開啟 \"%s\""
 
 #: cclib/cc-feed.php:480
 #, php-format
 msgid "%s written to server"
-msgstr ""
+msgstr "%s 已寫入至伺服器"
 
 #: cclib/cc-feeds.php:120
 msgid "Podcast this page"
-msgstr ""
+msgstr "將本頁 podcast 出去"
 
 #: cclib/cc-feeds.php:135
 #, php-format
@@ -916,7 +916,7 @@ msgstr "即刻公諸於世"
 
 #: cclib/cc-mediahost.php:378
 msgid "This file is only visible to the owner and admins."
-msgstr "這個檔案只有擁有者和管理者才看得到."
+msgstr "這個檔案只有擁有者和管理員才看得到."
 
 #: cclib/cc-mediahost.php:453
 #: ccextras/cc-topics.php:249
@@ -1004,30 +1004,30 @@ msgstr "重混 %s 成功 (按<a href=\"%s\">這裡</a>查看結果)"
 #: cclib/cc-menu-admin.inc:57
 #, php-format
 msgid "You can revert to factory defaults menu by clicking %shere%s (This will erase the customization you have done to the main menu, but not affect any virtual ccHosts menus that you have customized."
-msgstr ""
+msgstr "你可以按下 %shere%s 來取回出廠預設值. 這麼一來將會抹除所有主選單上的自訂部分, 不過並不會影響到任何虛擬站台中的選單."
 
 #: cclib/cc-menu-admin.inc:62
 #, php-format
 msgid "You can revert to your main configuration menu by clicking %shere%s. This will erase the customization you have done to the %s menu."
-msgstr ""
+msgstr "你可以按下 %shere%s 來回復你的主站台組態的選單. 這麼一來將會抹除所有 %s 選單中, 你所自訂的部分."
 
 #: cclib/cc-menu-admin.inc:71
 msgid "You are now editing the menu for the main configuration. (This menu will be used by any virtual ccHost that you have not customized.)"
-msgstr ""
+msgstr "你現在正在編輯主站台組態的選單. 這個選單將會用於任何你還沒自訂過的 ccHost 虛擬站台."
 
 #: cclib/cc-menu-admin.inc:75
 #, php-format
 msgid "You are now editing the menu for the %s virtual CCHost. Any changes here will only be reflected in %s."
-msgstr ""
+msgstr "你現在正在編輯 ccHost %s 虛擬站台的選單. 任何此處的變更都將只對 %s 生效."
 
 #: cclib/cc-menu-admin.inc:83
 msgid "WARNING: If you change the global language setting all customizations made here will be destroyed. Therefore, if you plan to set the language to something other than the default you should do it before editing here."
-msgstr ""
+msgstr "警告: 如果你變更了全域語言設定, 那麼所有在此處所做的自訂修改都將毀於一旦. 換句話說, 如果你打算要設定某個預設值以外的語言的話, 就應該在編輯這裡之前套用."
 
 #: cclib/cc-menu-admin.inc:93
 #, php-format
 msgid "To add items click %shere%s (This will not save any of the work you have done below.)"
-msgstr ""
+msgstr "請按 %shere%s 以加入項目 (這將不會儲存任何你在底下所做的變更.)"
 
 #: cclib/cc-renderimage.php:169
 msgid "Display Thumbnails"
@@ -1114,6 +1114,10 @@ msgid ""
 "                    set the language to something other than the default you should do it\n"
 "                    before editing here."
 msgstr ""
+"警告: 如果你變更了全域語言設定, 那麼所有在此處\n"
+"                    所做的自訂修改都將毀於一旦. 換句話說, 如果你打算要\n"
+"                    設定某個預設值以外的語言的話, 就應該在編輯這裡之前\n"
+"                    套用."
 
 #: cclib/cc-submit.php:223
 msgid "Pick Submission Type"
@@ -1557,7 +1561,7 @@ msgstr "預設"
 
 #: cclib/cc-language.php:372
 msgid "autodetect"
-msgstr ""
+msgstr "自動偵測"
 
 #: cclib/cc-language.php:590
 msgid "Default Locale Preference:"
@@ -1565,7 +1569,7 @@ msgstr "預設的介面語系偏好:"
 
 #: cclib/cc-language.php:610
 msgid "Allow User to Set Language:"
-msgstr ""
+msgstr "允許使用者設定語言:"
 
 #: cclib/cc-language.php:616
 msgid "Select the default locale preference and a default language and the system will try to translate menus, navigation tabs and anything else you might have customized. If the translation system does recognize the terms used, those menu items and navigation tabs will not change."
@@ -1581,16 +1585,16 @@ msgstr "如果你想建立特定的翻譯, 請先將預設的 default 資料夾�
 
 #: cclib/cc-language.php:623
 msgid "Language support requires that the PHP 'get_text' module be enabled on your PHP installation. Please consult your system administrator."
-msgstr ""
+msgstr "語言支援需要在 PHP 中啟用 'get_text' 模組. 請詢問你的系統管理員."
 
 #: cclib/cc-language.php:642
 #: cclib/cc-language.php:670
 msgid "Language Support"
-msgstr ""
+msgstr "語言支援"
 
 #: cclib/cc-language.php:671
 msgid "Language support options saved."
-msgstr ""
+msgstr "語言支援選項已儲存."
 
 #: cclib/cc-language.php:682
 msgid "Diagnostic"
@@ -2121,7 +2125,7 @@ msgstr "討論串遺失了"
 
 #: ccextras/cc-forums.inc:402
 msgid "You must have admin rights to see this forum"
-msgstr "您得要有管理者權限才能查看這個討論區"
+msgstr "您得要有管理員權限才能查看這個討論區"
 
 #: ccextras/cc-forums.inc:404
 msgid "You must be logged in to see this forum"
