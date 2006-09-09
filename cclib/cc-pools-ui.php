@@ -378,7 +378,7 @@ class CCPoolUI
         $pools =& CCPools::GetTable();
         if( empty( $_POST['admineditpool'] ) )
         {
-            $row =& $pools->QueryKeyRow($pool_id);
+            $row = $pools->QueryKeyRow($pool_id);
             $form->PopulateValues($row);
         }
         else
