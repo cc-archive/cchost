@@ -1,0 +1,172 @@
+<refentry id="{@id}">
+ <refnamediv>
+    <refname>Troubleshooting</refname>
+    <refpurpose></refpurpose>
+ </refnamediv>
+
+{@toc}
+
+
+<refsect1 id="{@id fileaccess}">
+<title>File Access </title>
+<para>
+    By far the most common issue with new installs on Unix based systems 
+    involves file access permissions. The recommended way of dealing with 
+    this is to set the entire ccHost directory structure as all-access 
+    (0777) just while you get things going. If everything else is working 
+    then you should follow the 
+    <ulink url="http://wiki.creativecommons.org/CcHost_File_Access">ccHost file access guildlines</ulink>.
+</para>
+</refsect1>
+
+<refsect1 id="{@id errorrend}">
+<title>"There is an error rendering this page"</title>
+<para>
+    The most common reason you get this error message on new installations 
+    is because the <filename>cclib/phptal/phptal_cache</filename> directory 
+    is not writable by ccHost. You should make sure this is not the case by 
+    setting that directory's permission to 0777 and trying again.
+</para>
+<para>
+    The second most common reason are template errors during development of 
+    skins and other user interface testing. If you haven't already 
+    {@tutorial admin.troubleshoot.pkg#debugout Turn on debug messages} 
+    login as admin and try to render the page again. 
+</para>
+</refsect1>
+
+<refsect1 id="{@id downforup}">
+<title>"Down for upgrade, check back soon"</title>
+
+<para>
+    This is actually an indication that something is wrong in the code 
+    (i.e. a bug) or your installation. 
+    {@tutorial admin.troubleshoot.pkg#debugout Turn on debug messages} 
+    and try to access your site. The very least that will do is give 
+    ccHost developers the exact location of the problem. After you 
+    turn on debugging, look at your <filename>cc-errors.txt</filename> file and send that 
+    along to the developers so they can narrow down the issue for you.
+</para>
+</refsect1>
+
+<refsect1 id="{@id debugout}">
+<title>Outputting Debug Messages</title>
+
+<para>
+    In order to help ccHost developers troubleshoot your site you should 
+    enable debugging messages in your system. The easiest way to do this 
+    is to create a file called <filename>_DEBUG_.php</filename> with 
+    the following contents:
+</para>
+
+<example>
+&lt;?
+  CCDebug::Enable(true);
+?&gt;
+</example>
+
+<para>
+    and put that file into the '''ccextras''' directory.
+</para>
+<para>
+    Now repeat the steps that led you to the problem and hopefully you will 
+    get more detailed information about the error.
+</para>
+<para>
+    Make sure to remove this file in your production installation. 
+</para>
+</refsect1>
+
+<refsect1 id="{@id lostadmin}">
+<title>Lost Admin Password</title>
+
+<para>
+    If you have lost or forgotten your admin password and 
+    you don't have email set up on your site then the 
+    <command>Lost Password</command> feature will not
+    work. 
+</para>
+
+<para>
+    You can set the password from a terminal commandline 
+    using the <filename>mysql</filename> program. First
+    invoke mysql replacing the DBNAME and DBUSER below
+    with your database name and database user name:
+</para>
+
+<example>mysql DBNAME -u DBUSER -p</example>
+
+<para>
+After entering your password type the following command
+replacing NAME with your ccHost admin account
+name and PW with your ccHost admin account password:
+</para>
+
+<example>update cc_tbl_user set user_password = md5('PW') where user_name = 'NAME';</example>
+
+<note>Don't forget the semicolon at the end!</note>
+
+<para>
+  Upon success you'll something like: 
+</para>
+<example>Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0</example>
+
+<para>
+    Type <uri>exit</uri> at the mysql command line to exit.
+</para>
+
+</refsect1>
+
+<refsect1 id="{@id autologin}">
+<title>Can't Log In Hack</title>
+
+<para>
+    There might come a time when you need to log in but can't through
+    the normal login screen. The script below uses undocumented and 
+    otherwise unsupported features (in other words, no promise it 
+    will work) 
+    however it may do the trick. Here's are steps to using it:
+</para>
+
+<programlisting role="php"><![CDATA[
+<?
+if( !empty($_GET['alogin']) )
+{
+    $time = time()+60*60*24*30;
+    $val = array( $_GET['alogin'], md5($_GET['pw']) );
+    $val = serialize($val);
+    setcookie('lepsog2',$val,$time);
+    print('user ' . $_GET['alogin'] . ' cookie set');
+    exit;
+}
+?>
+]]></programlisting>
+
+<orderedlist class="tutlist">
+<listitem>
+    Cut and paste the code above into a file called <filename>autolog.php</filename>
+</listitem>
+<listitem>
+    Put the file into the root of you ccHost installation.
+</listitem>
+<listitem>
+    Send your browser to <example><uri>http://your_installation_root/autolog.php?alogin=USERNAME&amp;pw=PASSWORD</uri></example>
+    using your admin username and password. 
+</listitem>
+</orderedlist>
+
+<para>
+    If the account information was correct and valid, you should now be able to
+    perform commands such as restoring a configuration snapshot (see
+    {@tutorial admin.backup.pkg#config.save })
+</para>
+
+<note>
+    Once things are back to operational on your site for security reasons
+    you should immediately delete <filename>autolog.php</filename> and 
+    change your admin password.
+</note>
+</refsect1>
+
+</refentry> 

@@ -1,0 +1,128 @@
+<refentry id="{@id}">
+ <refnamediv>
+    <refname>Customizing Files</refname>
+    <refpurpose></refpurpose>
+ </refnamediv>
+
+{@toc}
+
+<!--------- BEGIN CUSTOM FILES    ----------------->
+
+<refsect1 id="{@id copy}">
+<title>Before You Do Anything Else</title>
+
+<para></para>
+
+<para>
+  Copy the entire directory <filename>ccfiles</filename> to something 
+  like <filename>myfiles</filename> at your root installation directory. 
+  In other words, <filename>ccfiles</filename> and <filename>myfiles</filename> 
+  must be at the same level.
+</para>
+
+<para>
+  Browse to <uri>admin/edit</uri> ({@tutorial admin.basic.pkg#urls.doc didn't work??})
+</para>
+
+<para>
+  Look for <command>media::config[files-root]</command> and 
+  replace <filename>ccfiles/</filename> with <filename>myfiles/</filename>.
+</para>
+
+<para>
+  Do not touch anything else and click <command>Submit</command>
+</para>
+
+<warning>
+   This technique uses the {@tutorial admin.advanced.pkg#adminedit}. Be very careful.
+</warning>
+
+<para>
+  Of course future versions of ccHost will make this step less silly and dangerous.
+</para>
+
+<note>
+    If you ignore this step you will lose all edits and changes you make to 
+    files the next time you upgrade your ccHost.
+</note>
+
+</refsect1>
+
+<refsect1 id="{@id home}">
+<title>Edit Your Home Page</title>
+
+<para>If no other command is specified, the system defaults to executing the <uri>homepage</uri> command. 
+Admins define the actions of the <uri>homepage</uri> command via the <command>Manage Site/Setting</command>.</para>
+
+<para>Assuming you have followed the instructions in the section {@tutorial admin.files.pkg#copy} the default home page is in your files directory called <filename>home.xml</filename>. Edit this file to create your custom home page. Before you get too frustrated you should probably read the section on {@tutorial admin.advanced.xhtml.pkg#rules XHTML do's and don'ts}.</para> 
+<para>If you want a different home page for a specific {@tutorial admin.advanced.pkg#vroots virtual root}:</para>
+<orderedlist class="tutlist">
+<listitem>Create a new file in your files directory called something like 
+        <filename>home2.xml</filename>.</listitem>
+<listitem>Go to <command>Manage Site</command>.</listitem>
+<listitem>Select your virtual root from the drop down selection box</listitem>
+<listitem>Select <command>Settings</command></listitem>
+<listitem>In the <command>Homepage</command> field change <filename>viewfile/home.xml</filename> to <filename>viewfile/home2.xml</filename>.</listitem>
+</orderedlist> 
+
+<refsect2 id="{@id home}">
+<title>Setting the 'Home' Tab</title>
+<para>Most sites with want a 'Home' tab in their navigator tabs and they will want to 
+have that tab highlighted when the root url of their site is requested. In order to set 
+that up follow these steps:</para>
+<orderedlist class="tutlist">
+  <listitem>Go to <command>Manage Site/Navigator Tab Sets</command></listitem>
+  <listitem>Click on <command>[ edit tabs ]</command> for the first tab set.</listitem>
+  <listitem>Set <command>Name</command> for the first tab to 'home'</listitem>
+  <listitem>Set <command>Text</command> for the first tab to 'Home'</listitem>
+  <listitem>For <command>Function</command> select "Execute URL"</listitem>
+  <listitem>Set <command>Data</command> to <uri>viewfile/home.xml</uri></listitem>
+  <listitem>Click on <command>Submit</command></listitem>
+  <listitem>Go to <command>Manage Site/Settings</command></listitem>
+  <listitem>For <command>Homepage</command> field enter <uri>view/media/home</uri></listitem>
+</orderedlist>
+<para>
+  The above steps makes some assumptions (e.g. your actual home file is called <filename>home.xml</filename> and your default tab set is called 'media', etc.). You should make the appropriate adjustments for your
+  setup.
+</para>
+</refsect2> 
+
+</refsect1> 
+
+<refsect1 id="{@id welcome}"> 
+<title>Edit Your Welcome Page</title>
+<para>Assuming you have followed the instructions in the section {@tutorial admin.files.pkg#copy} 
+the default welcome screen for newly registered users is in your files directory called <filename>welcome.xml</filename>.</para>
+<para>Edit this file to create your custom welcome page but before you get too frustrated you should probably read the section on {@tutorial admin.advanced.xhtml.pkg#rules XHTML do's and don'ts}.</para>
+</refsect1>
+
+<refsect1 id="{@id new}"> 
+<title>Create New Pages</title>
+<para>Creating a new page in your ccHost system is simply a matter of creating a new XML file in
+your files directory. If you haven't read the {@tutorial admin.files.pkg#copy} yet, now
+would be a good time and before you get too frustrated you should also read the section on {@tutorial admin.advanced.xhtml.pkg#rules XHTML do's and don'ts}.</para>
+</refsect1> 
+
+<refsect1 id="{@id view}"> 
+<title>Viewing Your Pages</title>
+<para>All XML files in your {@tutorial admin.files.pkg#copy files directory} are
+viewable in a ccHost page by using the <uri>viewfile</uri> command and the filename as the parameter:</para>
+<example><uri>http://example.com?ccm=/media/viewfile/terms_of_use.xml</uri> (Pretty URLs off)
+<uri>http://example.com/media/viewfile/privacy.xml</uri> (Pretty URLs on)</example> 
+<para>HINT: If you are using Apache's <command>mod_rewrite</command> module you can pretty the URLs up
+even more:</para>
+<example>
+RewriteRule ^terms$    /media/viewfile/terms_of_use.xml [L]
+RewriteRule ^privacy$  /media/viewfile/privacy.xml [L]
+</example>
+<para>Which would yield:</para>
+<example>
+<uri>http://example.com/terms</uri>
+<uri>http://example.com/privacy</uri>
+</example>
+</refsect1> 
+
+
+<!--------- END CUSTOM FILES   ----------------->
+
+</refentry> 

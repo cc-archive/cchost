@@ -1,0 +1,748 @@
+<refentry id="{@id}">
+ <refnamediv>
+    <refname>Customizing User Interface</refname>
+    <refpurpose></refpurpose>
+ </refnamediv>
+
+{@toc}
+
+<!--------- BEGIN CUSTOM UI ----------------->
+
+<refsect1 id="{@id menus}">
+<title>Menus and Menu Groups</title>
+
+<refsect2 id="{@id 10things}">
+<title>10 Things You Should Know About Menus</title>
+<orderedlist class="tutlist">
+<listitem>
+    There is only one menu per page. If you want a 'submenu' then create
+    a page of links. See {@tutorial admin.files.pkg#new}
+</listitem>
+<listitem>
+    Every menu item belongs to a 'Group' (a.k.a. Heading).
+</listitem> 
+<listitem>
+    Admins can rename and reorganize groups.
+</listitem>
+<listitem>
+    Admins can rename, reorganize, hide, restrict and re-assign menu items to different
+    groups
+</listitem>
+<listitem>
+    Admin can <emphasis>not</emphasis> add menu groups.
+</listitem>
+<listitem>
+    Admins can add menus item using
+    the <uri>admin/menu/additems/{num_items}</uri> command where <literal>num_items</literal> is 
+    the number of items to add. (In 3.0 a link to this command is in the menu editor.)
+</listitem>
+<listitem>
+    When none of the items in a group are visible to the current user, either because
+    they don't have access or the item is hidden, then the group heading will not display.
+</listitem>
+<listitem>
+   the author 
+</listitem>
+<listitem>
+   is a big liar...
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id add}">
+<title>Add a Menu Item</title>
+<para>
+    Admins can add menus item using
+    the <uri>admin/menu/additems/{num_items}</uri> command where <literal>num_items</literal> is 
+    the number of items to add. (In 3.0 a link to this command is in the menu editor.)
+</para>
+</refsect2>
+
+<refsect2 id="{@id delete}">
+<title>Delete a Menu Item</title>
+<para>There is no way to delete a menu item but you can 
+{@tutorial admin.ui.pkg#menus.hide hide items} so that no one
+will ever see them.</para>
+</refsect2>
+
+<refsect2 id="{@id function}">
+<title>Change What a Menu Item Says and Does</title>
+<orderedlist class="tutlist">
+<listitem>
+    Go to <command>Manage Site/Menus</command>
+</listitem>
+<listitem>
+    Under <command>Menu Text</command> edit the text users will see.
+</listitem>
+<listitem>
+    Under <command>Action</command> enter the ccHost command or 
+    URL that should happen when the item is clicked. See more about 
+    commands and URLs in the section 
+    {@tutorial admin.basic.pkg#urls}.
+</listitem>
+<listitem>
+   Click <command>Submit Menu Changes</command>.
+</listitem>
+</orderedlist>
+</refsect2>
+
+
+<refsect2 id="{@id access}">
+<title>Restrict a Menu Item From Users</title>
+<orderedlist class="tutlist">
+<listitem>
+    Go to <command>Manage Site/Menus</command>
+</listitem>
+<listitem>
+    Under <command>Access</command> select the group of users you wish 
+    to have access from the drop
+    down options next to the item you wish to restrict.
+</listitem>
+<listitem>
+   Click <command>Submit Menu Changes</command>.
+</listitem>
+</orderedlist>
+<note>Restricting access to menu items is not the same as restricting functionality!
+Read more about that in the section {@tutorial admin.basic.pkg#access}</note>
+</refsect2>
+
+<refsect2 id="{@id hide}">
+<title>Hide a Menu Item From All Users</title>
+<orderedlist class="tutlist">
+<listitem>
+    Go to <command>Manage Site/Menus</command>
+</listitem>
+<listitem>
+    Under <command>Access</command> select <command>Hide</command> from the drop
+    down options next to the item you wish to hide.
+</listitem>
+<listitem>
+   Click <command>Submit Menu Changes</command>.
+</listitem>
+</orderedlist>
+<note>Restricting access to menu items is not the same as restricting functionality!
+Read more about that in the section {@tutorial admin.basic.pkg#access}</note>
+</refsect2>
+
+<refsect2 id="{@id orde}">
+<title>Reorder Menu Items Within a Group</title>
+<orderedlist class="tutlist">
+<listitem>
+    Go to <command>Manage Site/Menus</command>
+</listitem>
+<listitem>
+    Under <command>Weight</command> edit a number next to each
+    item in the group you wish to reposition. It's like a ranking:
+    the number 1 is at the top.
+</listitem>
+<listitem>
+   Click <command>Submit Menu Changes</command>.
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id addgroup}">
+<title>Adding Menu Groups</title>
+<para>You can not add groups through the administrators screens.</para>
+</refsect2>
+
+<refsect2 id="{@id regroup}">
+<title>Move a Menu Item to Another Group</title>
+<orderedlist class="tutlist">
+<listitem>
+    Go to <command>Manage Site/Menus</command>
+</listitem>
+<listitem>
+    Under <command>Group</command> select the group you wish from the drop
+    down options next to the item you wish to move.
+</listitem>
+<listitem>
+   Click <command>Submit Menu Changes</command>.
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id renamegrp}">
+<title>Change a Menu Group Heading</title>
+<orderedlist class="tutlist">
+<listitem>
+    Go to <command>Manage Site/Menu Groups</command>
+</listitem>
+<listitem>
+    Under <command>Group Name</command> edit the text of the group
+    you wish to rename.
+</listitem>
+<listitem>
+   Click <command>Submit Group Changes</command>.
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id ordergrp}">
+<title>Reorder Menu Groups</title>
+<orderedlist class="tutlist">
+<listitem>
+    Go to <command>Manage Site/Menu Groups</command>
+</listitem>
+<listitem>
+    Under <command>Weight</command> edit a number next to each
+    group that represents their position. It's like a ranking:
+    the number 1 is at the top.
+</listitem>
+<listitem>
+   Click <command>Submit Group Changes</command>.
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id hidegrp}">
+<title>Hide a Whole Menu Groups From Users</title>
+<para>Groups are hidden automatically by the system when no menu items
+apply to the current users.</para>
+<para>The following conditions will lead to a group being hidden:</para>
+<unorderedlist class="tutlist">
+ <listitem>
+    There are no menu items in the group.
+ </listitem>
+ <listitem>
+      All the items in the group are marked as hidden (See {@tutorial admin.ui.pkg#menus.hide})
+ </listitem>
+ <listitem>
+      The user does not have proper access rights to any of the menu items. (See {@tutorial admin.ui.pkg#menus.access})
+ </listitem>
+ <listitem>
+      Some combination of the last two items.
+ </listitem>
+</unorderedlist>
+</refsect2>
+
+<refsect2 id="{@id example1}">
+<title>Example: Hook Up Forums Menu Item</title>
+<orderedlist class="tutlist">
+ <listitem>
+    Browse to <uri>admin/menu/additems/1</uri> That's the number one ('1') at the end. ({@tutorial admin.basic.pkg#urls.doc didn't work??})
+ </listitem>
+ <listitem>
+    That should put you into the menu editor with a new menu item that has text like 
+    <literal>Extra Item 1662444290</literal>.
+ </listitem>
+ <listitem>
+    Under <command>Menu Text</command> replace the 'Extra Item...' text with <literal>Forums</literal>.
+ </listitem>
+ <listitem>
+    Under <command>Groups</command> select 'Visitors'
+ </listitem>
+ <listitem>
+    Under <command>Weight</command> enter the number 100. This will put it at or near the bottom
+    of the Visitors group.
+ </listitem>
+ <listitem>
+    Under <command>Action</command> simply put <uri>forums</uri>. ccHost will recognize that as 
+    an internal command to display the main forum index. See {@tutorial reference.commands.pkg} for
+    all available commands.
+ </listitem>
+ <listitem>
+    Under <command>Access</command> select 'Everyone'
+ </listitem>
+ <listitem>
+    Click <command>Submit</command>.
+ </listitem>
+</orderedlist>
+</refsect2>
+
+<note>If you don't see your changes right away, click on the banner to take you to your home page. If you <emphasis>still</emphasis> don't see your new menu item under 'Visitors' group then something did not go
+right.</note>
+
+</refsect1>
+
+<refsect1 id="{@id tabs}">
+<title>Navigator Tab Sets</title>
+
+<refsect2 id="{@id 10things}">
+<title>10 Things You Should Know About Tab Sets</title>
+
+<orderedlist class="tutlist">
+<listitem>Every page in ccHost has a Navigator Tab Set that it uses by default.</listitem>
+<listitem>Admins can create as many tabs sets as they want.</listitem>
+<listitem>Admins can make any tab set the default. </listitem>
+<listitem>Every tab set has a unique name that the admin assigns when creating it.</listitem>
+<listitem>To access a specific tab set you use the <uri>view/{tab_set_name}</uri>.</listitem>
+<listitem>Every tab (in every tab set) has a name assigned to it by the admins when creating the tabs.</listitem>
+<listitem>To access a specific tab you use form of the <uri>view/{tab_set_name}/{tab_name}</uri>.</listitem>
+<listitem>Every tab set has a default tab (the first one) which is displayed if not specific tab is in the command.</listitem>
+<listitem>A tab in a set can be wired to produce a 'sub-tab set' which sits below the main tab set.</listitem>
+<listitem>You access specific sub-tabs via <uri>view/{tab_set_name}/{tab_name}/{sub_tab}</uri></listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id delete}">
+<title>Deleting a Tab</title>
+<orderedlist class="tutlist">
+<listitem>
+   Go to  <command>Manage Site/Navigator Tab Sets</command>
+</listitem>
+<listitem>
+   Select <command>[Edit tabs]</command>
+</listitem>
+<listitem>
+   Under <command>Delete</command> check to box next to the line that represents
+   the tab you want deleted.
+</listitem>
+<listitem>
+   Click <command>Submit</command>
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id add}">
+<title>Add a New Tab</title>
+<orderedlist class="tutlist">
+<listitem>
+   Go to  <command>Manage Site/Navigator Tab Sets</command>
+</listitem>
+<listitem>
+   Select <command>[Edit tabs]</command>
+</listitem>
+<listitem>
+    Click on the link that says "Click here to add a tab..." This will
+    add a new tab to the list (you may have to scroll down to see it).
+</listitem>
+<listitem>
+    Edit the various fields for the new tab to look and act the way
+    you want it. See {@tutorial admin.ui.pkg#tabs.function}.
+</listitem>
+<listitem>
+   Click <command>Submit</command>
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id function}">
+<title>Change What a Tab Says and Does</title>
+<orderedlist class="tutlist">
+<listitem>
+   Go to  <command>Manage Site/Navigator Tab Sets</command>
+</listitem>
+<listitem>
+   Select <command>[Edit tabs]</command>
+</listitem>
+<listitem>
+   Under <command>Text</command> enter the new text for the 
+  tab you want to change. (The <command>Help Hint</command> text
+  is what shows up when a user hovers the mouse over an 
+  unselected tab, it should provide more information about what will happen
+  when the user clicks on the tab.)
+</listitem>
+<listitem>
+  <para>The <command>Function</command> and <command>Data</command> fields work together to determine what happens when the tab is selected. </para>
+  <table>
+  <row><entry class="th">If 'Function' is set to...:</entry><entry class="th">Then 'Data' should be...</entry></row>
+  <row><entry class="tb">Match Any Tags</entry><entry>A comma separated list of tags. Displays a listing of uploads that have <emphasis>any</emphasis> of the tags specified.</entry></row>
+  <row><entry class="tb">Match All Tags</entry><entry>A comma separated list of tags. Displays a listing of uploads that have <emphasis>all</emphasis>> of the tags specified.</entry></row>
+  <row><entry class="tb">Execute URL</entry><entry>A command or {@tutorial admin.basic.pkg#urls URL to execute}.</entry></row>
+  <row><entry class="tb">Subtabs</entry><entry>The name of a subnaviation tab set that will appear on the screen under the current tab set. </entry></row>
+  </table>
+</listitem>
+<listitem>
+   Click <command>Submit</command>
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id order}">
+<title>Reorder Tabs</title>
+<orderedlist class="tutlist">
+<listitem>
+   Go to  <command>Manage Site/Navigator Tab Sets</command>
+</listitem>
+<listitem>
+   Select <command>[Edit tabs]</command>
+</listitem>
+<listitem>
+   Under <command>Order</command> use the numbers in the drop down
+   selection boxes to set the new order.
+</listitem>
+<listitem>
+   Click <command>Submit</command>
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id hide}">
+<title>Hide Tabs From Users</title>
+<orderedlist class="tutlist">
+<listitem>
+   Go to  <command>Manage Site/Navigator Tab Sets</command>
+</listitem>
+<listitem>
+   Select <command>[Edit tabs]</command>
+</listitem>
+<listitem>
+   Under <command>Access</command> select the restriction you want to apply to the 
+   individual tabs. You can essentially 'hide' a tab by restricting it's visibilty
+   to administrators only.
+</listitem>
+<listitem>
+   Click <command>Submit</command>
+</listitem>
+</orderedlist>
+  <note>Contests 
+            are a special case that hide certain tabs if they are not relevant, so even if you 
+            say the 'Submit Entry' tab is available to 'Everyone', it will be hidden if the contest
+            date has ended.
+  </note>
+<note>Restricting access to tabs is not the same as restricting functionality!
+Read more about that in the section {@tutorial admin.basic.pkg#access}</note>
+</refsect2>
+
+<refsect2 id="{@id new}">
+<title>Creating a New Tab Set</title>
+<orderedlist class="tutlist">
+<listitem>
+   Go to  <command>Manage Site/Navigator Tab Sets</command>
+</listitem>
+<listitem>
+   Select <command>[Add new tab set]</command>
+</listitem>
+<listitem>
+    Select <command>[Rename]</command> next to the new set.
+</listitem>
+<listitem>
+    Enter a short but meaningful name. (e.g. 'extras') and click <command>Submit</command>
+</listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id subtabs}">
+<title>Hooking up Sub-Tab Sets</title>
+<para>A 'sub-tab' is a set of secondary navigator tabs that are embedded into the page, typically 
+below the header. You see an example of that at <ulink url="http://ccmixter.org/view/media/samples">ccMixter</ulink>.</para>
+<para>There are two tab sets involved in this process: The <emphasis>main</emphasis> tab-set
+is the one that has a tab we will use to trigger the <emphasis>sub</emphasis> tab set. In the 
+ccMixter example we link to above, the main tab set is called 'media' and sits in the header.
+It has a tab called 'Samples' which you can access via <uri>/view/media/samples</uri>. When you browse there (e.g. click on the 'Samples' tab in the main set) you can see the samples
+sub-tab. You browse into a specific sub-tab by adding it's name to the URL:
+<uri>/view/media/samples/browse</uri> which is what happens when you
+click on the 'Browse' sub-tab.</para>
+
+<para>Follow these steps to create and hook up a sub-tab set:</para>
+<orderedlist class="tutlist">
+<listitem>
+    {@tutorial admin.ui.pkg#tabs.new Create a tab set} that will be used as 
+    the secondary sub-tab set set it up the way you want.
+</listitem>
+<listitem>
+    {@tutorial admin.ui.pkg#tabs.add Add a new tab} to the default (top most)
+    tab set.
+</listitem>
+<listitem>
+    Under <command>Function</command> select <command>Subtab</command>
+</listitem>
+<listitem>
+   For <command>Data</command> enter the sub-tab set's name. Now it's important 
+   to match the name exactly with the name you used in Step 1. above.
+</listitem>
+</orderedlist>
+
+</refsect2>
+
+</refsect1>
+
+<refsect1 id="{@id headfoot}">
+<title>Changing the Banner and Footer</title>
+
+<orderedlist class="tutlist">
+<listitem>
+  Go to <command>Manage Site/Titles and Footers</command>
+</listitem>
+<listitem>
+   Edit the <command>banner-html</command> and <command>footer</command> fields
+</listitem>
+<listitem>
+  Click <command>Submit Changes</command>
+</listitem>
+</orderedlist>
+
+<para>If you do not see your changes right away, click on the banner to take you to your home page.</para>
+<warning>Editing the <command>root-url</command> field in this form is available ony for the case
+where you change the directory structure of you web server or other rare and advanced
+cases. Change it to the wrong value and it will be very difficult to recover.</warning>
+
+<refsect2 id="{@id addlogo}">
+<title>Hack: Add a Logo to Your Banner</title>
+
+<para>The default skin (<literal>skin-simple</literal>) is a little finnicky and 
+requires a little nudging sometimes. Adding a logo to the banner could get 
+tricky if you don't know your way around. If the method in this tutorial isn't working
+for you, that is, you are not getting the exact results you would like, you
+should consider using the methods spelled out in the {@tutorial admin.skins.pkg}
+Section
+which part of a larger, more work intensive tutorial in which you create your skin.</para>
+
+<para>Meanwhile, this method requires so little actual work it's definitely worth 
+a try, however:</para>
+
+<warning>
+    Before jumping into this tutorial you {@tutorial admin.backup.pkg#config.save save your configuration} in case something goes wrong.
+</warning>
+
+<orderedlist class="tutlist">
+<listitem>
+  Go to <command>Manage Site/Manage files/Add Files</command>
+</listitem>
+<listitem>
+  Upload your logo using this form to your files directory (Make sure you've read {@tutorial admin.files.pkg#copy})
+</listitem>
+<listitem>
+  Go to <command>Manage Site/Titles and Footers</command>
+</listitem>
+<listitem>
+   In the <command>banner-html</command> field paste in HTML:
+<example>
+&lt;span style="white-space:nowrap"&gt;
+&lt;img style="float:right" 
+   src="http://path_to_your_install/myfiles/mylogo.gif" /&gt; 
+My ccHost!
+&lt;/span&gt;
+</example>
+</listitem>
+<listitem>
+  Click <command>Submit Changes</command>
+</listitem>
+</orderedlist>
+
+<para>If you do not see your changes right away, click on the banner to take you to your home page.</para>
+
+<para>Make sure the URL in the <literal>src</literal> attribute of the <literal>img</literal> tag is a fully 
+qualified URL to the logo file.</para>
+
+<para>If your banner text does not appear, or your logo bumps into the navigator tabs, or your logo is too far over to the left then add a style tag after everything else:</para>
+<example>
+&lt;span style="white-space:nowrap"&gt;
+&lt;img style="float:right" 
+   src="http://path_to_your_install/myfiles/mylogo.gif" /&gt; 
+My ccHost!
+&lt;/span&gt;
+<emphasis>&lt;style&gt;
+#cc_header h1 a {
+  width: 400px;
+}
+&lt;/style&gt;</emphasis>
+</example>
+
+<para>Adjust the number <literal>400px</literal> until you are satisfied with the results.</para>
+
+<para>If you would like the logo on the left then use <literal>float:left</literal> instead of 
+<literal>float:right</literal></para>
+
+<para>In that case, there is a very good chance that the site description will no longer be
+visible or obstructed. If that's the case add the following snippet:</para>
+
+<example>
+&lt;span style="white-space:nowrap"&gt;
+&lt;img style="float:left" 
+   src="http://path_to_your_install/myfiles/mylogo.gif" /&gt; 
+My ccHost!
+&lt;/span&gt;
+&lt;style&gt;
+#cc_header h1 a {
+  width: 400px;
+}
+<emphasis>#cc_header p {    
+  padding-left: 80px;
+}</emphasis>
+&lt;/style&gt;
+</example>
+
+<para>Adjust the number <literal>80px</literal> until you are satisfied with the results.</para>
+
+</refsect2>
+</refsect1>
+
+<refsect1 id="{@id submit}">
+<title>Submit Forms</title>
+<refsect2 id="{@id new}">
+<title>Create New Submit Form Type</title>
+<orderedlist class="tutlist">
+  <listitem>
+      Go to <command>Manage Site/Submit Forms</command>.
+  </listitem>
+  <listitem>
+      Click on <command>Add a new form type...</command>
+  </listitem>
+  <listitem>
+      Click <command>Enable</command> so users can see your new submit type.
+  </listitem>
+  <listitem>
+      The <command>Label</command> for a submit form type is strictly for admins
+      to identify the form type. Enter something that you will easily
+      recognize when managing these forms.
+  </listitem>
+  <listitem>
+      The <command>Caption</command> is used for both the title of 
+      and the link that invokes the actual submit form:
+      <simpara /><simpara /><graphic fileref="{$subdir}media/submit1.png" />
+  </listitem>
+  <listitem>
+      The <command>Description</command> is where you can get explicit about
+      the type of submission the form should be used for.
+  </listitem>
+  <listitem>
+      The <command>Tags</command> you specify here will be automatically
+      attached to all uploads that use this form. These tags will <emphasis>not</emphasis>
+      be editable by users and are therefore considered system tags.
+      <note>
+          You can rely on these tags when doing filtering in 
+          {@tutorial admin.ui.pkg#tabs Navigator Tabs })
+      </note>
+  </listitem>
+  <listitem>
+      Entering <command>Suggested Tags</command> will give uploaders a hint
+      as to what kind of tags should or could be used while submitting their
+      files. Those suggested tags will appear on the final submit form like this:
+      <simpara /><simpara /><graphic fileref="{$subdir}media/submit4.png" />
+  </listitem>
+  <listitem>
+      <command>Position</command> determines where, in relation to other
+      submit form types, this form type will display on the main submit
+      forms screen. It's like a ranking, 1 is highest.
+  </listitem>
+  <listitem>
+      The <command>Form Help Message</command> will display above the
+      final upload form:
+      <simpara /><simpara /><graphic fileref="{$subdir}media/submit3.png" />
+  </listitem>
+  <listitem>
+      If you check <command>Enable Remix Search</command> then the final 
+      submit will display the 'I Used Samples' search form:
+      <simpara /><simpara /><graphic fileref="{$subdir}media/submit2.png" />
+  </listitem>
+  <listitem>
+      Click <command>Submit</command> to commit your changes.
+  </listitem>
+</orderedlist>
+<note>
+  'Media Type Allows' is not currently enabled and no effect. Go to
+  <command>Manage Site/File Formats</command> to pick which types
+  of files are allowed for upload.
+</note>
+</refsect2>
+
+<refsect2 id="{@id disable}">
+<title>Delete/Disable Submit Form Type</title>
+<para>
+  You can not physically disable a submit type but if you follow
+  these steps the type will hidden from all users.
+</para>
+<orderedlist class="tutlist">
+  <listitem>
+      Go to <command>Manage Site/Submit Forms</command>.
+  </listitem>
+  <listitem>
+      Click on <command>[ Edit ]</command> next to the type of 
+      submit form you wish to disable.
+  </listitem>
+  <listitem>
+      Uncheck <command>Enable</command>
+  </listitem>
+  <listitem>
+      Click <command>Submit</command>
+  </listitem>
+</orderedlist>
+</refsect2>
+
+</refsect1>
+
+
+<refsect1 id="{@id sidebar}">
+<title>Sidebar Content</title>
+<para>The 'sidebar content' are the things that sit right below the menu and 
+even and look just like menu groups and items -- but they are not.</para>
+<para>They are actually tiny snippets of template code that
+can be anything from a static list of commands and links (just a menu group) 
+or generated dynamically each time a page is rendered (e.g. 'New Uploads')</para>
+<para>ccHost ships with several content blocks available for enabling
+and with a little cutting and pasting admins can create their own blocks.</para>
+
+<refsect2 id="{@id enable}">
+<title>Enabling/Disabling Sidebar Content</title>
+<orderedlist class="tutlist">
+  <listitem>
+     Go to <command>Manage Site/Sidebar Content</command>
+  </listitem>
+  <listitem>
+     Put a checkbox next to the content blocks you want to enable,
+     uncheck the ones that you wish to hide.
+  </listitem>
+  <listitem>
+     Click <command>Submit</command>
+  </listitem>
+</orderedlist>
+</refsect2>
+
+<refsect2 id="{@id custom}">
+<title>Adding Custom Sidebar Content</title>
+<para>In this example we'll add a simple list of links as an
+sidebar block.</para>
+
+<orderedlist class="tutlist">
+  <listitem>
+     Open the file <filename>cctemplates/custom.xml</filename> in a text editor.
+  </listitem>
+  <listitem>
+     Look for the first occurance of <literal>&lt;/tal:block&gt;</literal> (around 
+     line #23)
+  </listitem>
+  <listitem>
+     Put the following text <emphasis>after</emphasis> that line:
+  <example>
+  &lt;metal:block define-macro="My_Group"&gt;
+    &lt;p&gt;My Group&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;!-- Internal ccHost commands  --&gt;
+      &lt;li&gt;&lt;a href="${home-url}forums"&gt;Forums&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="${home-url}howididit/browse"&gt;Browse HIDI&lt;/a&gt;&lt;/li&gt;
+
+      &lt;!-- External links work great too --&gt;
+      &lt;li&gt;&lt;a href="http://openclipart.org"&gt;OCA Buddys&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/metal:block&gt;
+  </example>
+  </listitem>
+  <listitem>
+     To enable your new sidebar content see {@tutorial admin.ui.pkg#sidebar.enable}.
+  </listitem>
+</orderedlist>
+<para>There are a couple pieces of 'magic' that make the above work:</para>
+<unorderedlist class="tutlist">
+<listitem>
+   The <literal>define-macro</literal> attribute is what is used in the <command>Sidebar Content</command>
+   administrator's form. You <emphasis>must</emphasis> use only alpha-numeric characters and the 
+   undercore ('_'), no spaces!
+</listitem>
+<listitem>
+   Any <literal>define-macro</literal> attributes that <emphasis>start</emphasis> with an underscore ('_')
+   will be ignored by ccHost, including in the <command>Sidebar Content</command>
+   administrator's form. 
+</listitem>
+<listitem>
+   All text within a <literal>&lt;p&gt;</literal> tag is assumed to be a group name for display.
+</listitem>
+<listitem>
+   All text with a <literal>&lt;li&gt;</literal> tag is assumed to be a menu item.
+</listitem>
+</unorderedlist>
+<para>See {@tutorial admin.advanced.xhtml.pkg} if you would like to do anything more complicated.</para>
+</refsect2>
+
+</refsect1>
+
+<refsect1 id="{@id colors}">
+<title>Changing Color Schemes</title>
+<para>
+    Changing color schemes and other more advanced user interface 
+    topics are covered in the section {@tutorial admin.skins.pkg}.
+</para>
+</refsect1>
+
+</refentry>

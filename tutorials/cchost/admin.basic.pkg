@@ -1,0 +1,380 @@
+<refentry id="{@id}">
+ <refnamediv>
+    <refname>Basics </refname>
+    <refpurpose></refpurpose>
+ </refnamediv>
+
+{@toc}
+
+
+<!--------- BEGIN OF BASIC CONCEPTS ----------------->
+
+<refsect1 id="{@id urls}">
+<title>Understanding ccHost URLs</title>
+<para>Understanding how URLs work in ccHost is a very important concept that you should understand before doing anything else.</para>
+<refsect2 id="{@id parts}">
+<title>URL Parts</title>
+<para>ccHost URLs are composed of four main parts:</para>
+<orderedlist class="tutlist">
+  <listitem><important>Root URL of installation</important>
+     <para>This is the URL address of where <filename>index.php</filename> lives. For example: 
+       <uri>http://example.com</uri>, or <uri>http://example.com/cchost</uri>
+     </para>
+  </listitem>
+  <listitem><important>Virtual Root</important>
+    <para>Don't worry if you don't know what a 'ccHost virtual root' is, we'll get to it {@tutorial admin.advanced.pkg#vroots here} but for now assume it's the word <uri>media</uri>.
+    </para>
+  </listitem>
+  <listitem><important>Command</important>
+    <para>This part of the URL maps to an internal command in ccHost. This can be anything from
+  a request for a submit form, a feed, a record listing, etc. Examples are <uri>people</uri> which shows
+  a listing of the latest registered users who have uploaded or <uri>files</uri> which lists the latest
+  uploads.
+    </para>
+  </listitem>
+  <listitem><important>Parameters</important>
+    <para>Many if not most commands accept and even require parameters. For example, adding a specific user's name to the <uri>people</uri> command will display the user's main page, e.g. <uri>people/rejon</uri>
+    </para>
+  </listitem>
+</orderedlist>
+<para>You should refer to the {@tutorial reference.commands.pkg ccHost Command Reference} for a listing of all
+available commands.</para>
+<para>If you have enabled 'pretty URLs' in your installation then all the elements are strung together into one URL:</para>
+<example><uri>http://example.com/media/people/rejon</uri></example>
+<para>If not, then everything starting from the virtual root is prepended the following way:</para>
+<example><uri>http://example.com?ccm=/media/people/rejon</uri></example>
+</refsect2>
+
+
+<refsect2 id="{@id menus}">
+<title>URLs in Menus and Navigator Tabs</title>
+<para>
+In general when asked for an URL for menus or navigator tabs, all you enter is the command and parameters. The system will assume you want the command to execute in the current virtual root and already knows if your site uses pretty URLs or not. In fact you can change your installation to use pretty URLs later and all these menu
+items will continue to work.</para>
+
+<para>If you enter a fully qualified URL (anything that starts with <uri>http://</uri>) the menu and tab
+systems will redirect the browser to that url, no matter what the rest of the address it. 
+If the action URL does not start with <uri>http://</uri> then the system will assume this 
+is a ccHost command with parameters and attempt to execute it as outlined above.</para>
+
+</refsect2>
+
+<refsect2 id="{@id xhtml}">
+<title>URLs in XHTML Templates</title>
+<para>
+It is very important that you use <literal>${home-url}</literal> variable as a prefix to commands ({@tutorial admin.advanced.xhtml.pkg#vars.homeurl more about home-url}) in URLs when working in template files:</para>
+<example>
+  You can &lt;a href="{$home-url}submit"&gt;submit files&lt;/a&gt; to our site...
+</example>
+<para>The URL in the href attribute will auto-magically expand to something like:
+</para>
+<example>
+  <uri>http://yourserver.com/cchost?ccm=/myvroot/submit</uri>
+</example>
+<para>Don't put a trailing forward slash after the <literal>${home-url}</literal> but if you need a parameter
+then put one between the command and the parameter</para>
+<example>
+  Go to &lt;a href="{$home-url}people/{user_name}"&gt;your home page&lt;/a&gt; now
+</example>
+
+</refsect2>
+
+<refsect2 id="{@id vroot}">
+<title>Forcing Virtual Roots</title>
+<para>
+There may come a time where you want a menu item like <command>Register</command> or a navigator tab like 
+<command>Home</command> to go to a specific virtual root like <uri>media</uri>. In that case you will want
+to specifiy the full URL in the menu item or tab, like <uri>http://root-installation.com?ccm=/media/register</uri>. That way no matter what virtual root the user is in, they will be taken to the main register screen or
+in the case of a 'Home' tab simply <uri>http://root-installation</uri>.</para>
+
+<para>If you change your site to use pretty URLs at some point these URLs will continue work, they just 
+won't be, well, pretty. At that point you can edit these menu items to the pretty versions without the 
+<uri>?ccm=</uri>.</para>
+<warning>If you use pretty URLs in your menus and disable pretty URLs in the system, then those menu items are essentially broken. 
+</warning>
+
+</refsect2>
+
+<refsect2 id="{@id doc}">
+<title>URLs in This Document</title>
+<para>
+    In this documentation when asked to browse to a location, it will only say 
+    the command and parameters and assume you will prepend the proper parts that 
+    apply to your installation and virtual root configuration. For example, if you 
+    see a request like "browse to <uri>admin/menu/killcache</uri>" that you are 
+    expected to enter the following into your browser's address bar:
+</para>
+
+<example><uri>http://example.com?ccm=/<emphasis>media</emphasis>/admin/menu/killcache</uri>  (with pretty URLs OFF)
+<uri>http://example.com/<emphasis>media</emphasis>/admin/menu/killcache</uri> (with pretty URLs ON)</example>
+
+<para>
+    Note the addition of the virtual root <uri>media</uri> in both cases. 
+    If you are reading this, it is probably because you forgot to add that.
+</para>
+
+<para>
+    In some cases you may be asked to add a query, as in 'browse to 
+    <uri>command?query=foo</uri>'.
+</para>
+
+<para>
+    This would expand to:
+</para>
+
+<example><uri>http://example.com/media/command?query=foo</uri> (pretty URLs ON)
+<uri>http://example.com?cmd=/media/command<emphasis>&amp;</emphasis>query=foo</uri> (pretty URLs OFF)</example>
+
+<para>    
+    Note how the question mark became an
+    ampersand in the non-pretty URL version.
+</para>
+
+<para>
+    Most of the requests to browse to a command <emphasis>assume you are currently
+    logged in with administrative rights</emphasis>. 
+</para>
+
+</refsect2>
+
+</refsect1>
+
+<refsect1 id="{@id tagsvtags}">
+<title>Terminology: "tag" vs. "tag" vs. "tag"</title>
+<para>It is worth noting as quickly as possible that there are <emphasis>three</emphasis> different
+meanings of the word <command>tag</command> used when administering a ccHost installation. All
+three are conventions of the subsystems we use and 
+we felt it was better to use context as a disambiguator rather than inventing terms for processes
+everybody knows as 'tagging' -- albiet with different purposes.</para>
+<unorderedlist class="tutlist">
+  <listitem><emphasis>'Folksonomy' Tags</emphasis>
+      <para>
+        These kinds of tags are used to create categories of uploads. The system assigns
+        'system tags' and the users can enter their own tags on every upload. There is 
+        a menu item <command>Browse Tags</command> so visitors to your site can quickly
+        identify categories of your uploads.
+      </para>
+  </listitem>
+  <listitem><emphasis>HTML Template Tags</emphasis>
+      <para>
+        XHTML pages are made up of tags. ccHost generates the XHTML using XML scripts that 
+        contain specialized template tags. You use these tags when 
+        {@tutorial admin.advanced.xhtml.pkg customizing XHTML pages}.
+      </para>
+  </listitem>
+  <listitem><emphasis>MP3/ID3 Tags</emphasis>
+      <para>
+        The title, author and other meta data associated with an ID3 compliant media
+        file (like MP3s) are embedded directly into the media via ID3 tags. 
+      </para>
+  </listitem>
+</unorderedlist>
+</refsect1>
+
+<refsect1 id="{@id access}">
+<title>Access Rights</title>
+<para>The main access levels are <emphasis>Everyone</emphasis>, <emphasis>Registered Users</emphasis>
+and <emphasis>Administrators</emphasis>.</para>
+<para>The potentially confusing thing is that both internal commands and user interface elements (like menu items and navigator tabs) have security clearances
+but they have very different effects:</para>
+<note>Setting a security level on a menu or tab item does not restrict functionality, it only affects the
+visibility of the menu or tab item.</note>
+<para>In other words, you may have a menu item that invokes the <uri>editorial/picks</uri> command
+and mark the menu item as <emphasis>Administrators Only</emphasis> but that will only hide the menu
+item from everyone but Administrators, it would <emphasis>not</emphasis> prevent someone from entering
+that command into their browser directly and seeing the results of the command because that command happens
+to be registered interally for <emphasis>Everyone</emphasis>.</para>
+
+<para>Also note that the access permissions
+on commands only determine whether the code for that command will be executed or not. The code itself 
+may determine even stricture critieria for the command.</para>
+
+<para>In other words, a command might be marked as for <emphasis>Registered users only</emphasis>
+(e.g. <uri>editorial/submit/{upload_id}</uri>) but the code that implements that command may have
+further restrictions (only allows 'editors' to do the actual submit).</para>
+
+<para>There is also an implied 'ownership' built into the code for upload and user
+records. That means a command marked <emphasis>Registered users only</emphasis> like <uri>files/delete/{upload_id}</uri>
+is further restricted by who 'owns' the upload, that is: who uploaded the thing.</para>
+
+</refsect1>
+
+<refsect1 id="{@id dirstruct}">
+<title>Directory Structure Explained</title>
+
+<para>
+The following table describes the directory
+structure neccessary for your ccHost installation.
+</para>
+<table>
+  <row>
+      <entry class="fn"><uri>ccadmin</uri></entry>
+      <entry class="fd">
+          Installation directory. ccHost will not run until you
+          rename this directory.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>ccextras</uri></entry>
+      <entry class="fd">
+          Developers use this direcotry to add 
+          features to ccHost. Files that do not come
+          with the official should start with something 
+          <emphasis>other</emphasis> than the
+          <filename>cc-</filename> prefix. 
+          <note>
+            ccHost will look in thie directory and will automatically
+            load any file with a <filename>.php</filename> extension.
+            Therefore you should be careful what files you move here.
+          </note>
+          <para>
+          </para>
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>ccfiles</uri></entry>
+      <entry class="fd">
+          The default directory used by the <uri>viewfile</uri> command.
+          See {@tutorial admin.files.pkg#copy} for making your own
+          version of this.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>ccimages</uri></entry>
+      <entry class="fd">
+          ccHost security confirmation and other internal
+          modules that need images use these files. 
+          These are also where skins look for common images. The recommended
+          usage is to put your own images in <emphasis>another</emphasis> directory
+          in order to make ccHost updates easier.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>cclib</uri></entry>
+      <entry class="fd">
+          The main code directory. You should never touch the
+          contents unless specifically told to do so 
+          by ccHost developers.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>cctemplates</uri></entry>
+      <entry class="fd">
+          Directory for skins. The skin architecture is such that
+          you should not have to make any edits to exsiting files.
+          Doing so will cause problems when you update ccHost. 
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>contests</uri></entry>
+      <entry class="fd">
+          Created by ccHost the first time
+          a contest is created. It holds all contest sources
+          and entries partioned by contest name and then
+          by user below that. Having this structure makes it
+          easy locate all the entries in a contest once the
+          entry period has closed.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>locale</uri></entry>
+      <entry class="fd">
+          Internationalization files.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>people</uri></entry>
+      <entry class="fd">
+          Created by ccHost the first time someone 
+          uploads a file. It holds all non-contest
+          related user content and is divided by
+          user's login name.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>cc-config-db.php</uri></entry>
+      <entry class="fd">
+          This is a file in your root installation
+          created by ccHost installer and specifies
+          your installation's database access. ccHost
+          will not run without the presense of this file
+          and will not operate properly if the data
+          inside does not match your server's 
+          database access configuration.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>cc-error-msg.txt</uri></entry>
+      <entry class="fd">
+          This is a file in your root installation
+          used by the system when a fatal error 
+          has occurred to display a message to 
+          the user visiting your site. Edit this file 
+          to change the message seen by users when 
+          this happens.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn">
+         <uri>cc-includes.php</uri>, <uri>cc-non-ui.php</uri>
+      </entry>
+      <entry class="fd">
+          These are important system files, do not touch these
+          as they are essential to running your site.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>cc-custom.php</uri></entry>
+      <entry class="fd">
+          ccHost looks at this file to determine the
+          sidebar content. See {@tutorial admin.ui.pkg#sidebar}.
+      </entry>
+  </row>
+</table>
+
+<para>
+  The following table describes non-essential files and directories
+  that come with the installation package but are not used by
+  ccHost to operate your installation.
+</para>
+<table>
+  <row>
+      <entry class="fn"><uri>cctools</uri></entry>
+      <entry class="fd">
+          This directory has been depricated and will be removed in 
+          future releases. 
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>AUTHORS</uri>, 
+      <uri>COPYING</uri>, <uri>HACKING</uri>, <uri>LICENSE.TXT</uri>,
+      <uri>NEWS</uri>, <uri>POTS</uri>,
+      <uri>README</uri>, <uri>VERSION</uri>
+      <uri>ChangeLog</uri>
+      </entry>
+      <entry class="fd">
+          These are all informational files,
+          standard that comes with open source
+          projects. ccHost never actually looks
+          at these files.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn">
+        <uri>bin</uri>, <uri>cchost.spec</uri>, 
+        <uri>Makefile</uri>, <uri>Makefile.include</uri>, 
+        <uri>Makefile.language</uri>
+      </entry>
+      <entry class="fd">
+          Utility files and directory used by ccHost developers for helping with low level maintance. ccHost has
+          no depdency on these files and directory and they 
+          are not needed for normal ccHost web site operation.
+      </entry>
+  </row>
+</table>
+
+</refsect1>
+
+<!--------- END OF BASIC CONCEPTS ----------------->
+
+</refentry>

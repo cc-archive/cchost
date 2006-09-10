@@ -1,0 +1,20 @@
+<refentry id="{@id}">
+ <refnamediv>
+    <refname>Reference</refname>
+ </refnamediv>
+
+<para>
+  <warning>
+    This document has not been reviewed. Information could easily be wrong.
+  </warning>
+</para>
+
+<para>
+  <note>
+    This document applies to ccHost 3.0. Most of the document also applies to 
+    2.1 but just how much has not been verified.
+  </note>
+</para>
+
+
+</refentry>
