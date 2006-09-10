@@ -60,7 +60,7 @@ class CCAdminMenuForm extends CCGridForm
             else
             {
                 $help = _('You can revert to your main configuration menu by clicking %shere%s. This will erase the customization you have done to the %s menu.');
-                $help = sprintf($help,"<b>$CC_CFG_ROOT</b>");
+                $help = sprintf($help,$rlink1, $rlink2,"<b>$CC_CFG_ROOT</b>");
             }
 
         }
