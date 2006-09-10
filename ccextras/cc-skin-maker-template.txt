@@ -9,11 +9,13 @@
 
 <!-- 
     Our override of user_listing macro 
+    (The mapping was done in skin-%%name%%-map.xml, 
+     go there to disable this macro)
 -->
 <metal:block define-macro="user_listing">
 
    <!-- add %%name%% customization -->
-   <div class="%%name%%_hello">Hello from %%name%%</div>
+   <div class="%%name%%_hello">Hello from skin-%%name%%</div>
 
    <!-- now call the original user_listing -->
    <metal:block use-macro="user.xml/user_listing" />
@@ -21,7 +23,7 @@
 </metal:block>
 
 <!-- 
-      All disabled macros get mapped here 
+      All disabled macros should get mapped here 
 -->
 <metal:block define-macro="%%name%%_null_template">
 </metal:block>
@@ -36,23 +38,29 @@
 <!-- 
      %%name%% specific overrides of default macros
 
-     To disable a macro: map it to null_template
-     To override a macro: map it to an implemenation
-                          in skin-%%name%%.xml
+     To disable a macro: map it to %%name%%_null_template
+
+<tal:block define="macro_to_disable string:skin-%%name%%.xml/%%name%%_null_template;" />
+
+     To override a macro: map it to an implemenation in another file:
+
+<tal:block define="macro_to_replace string:file_with_replacement/replacement_macro;" />
+
 !-->
-<tal:block define="
-    comment_thread string:skin-%%name%%.xml/%%name%%_null_template;
-    user_listing string:skin-%%name%%.xml/user_listing;"
- />
+
+<!-- 
+     This override is just a demonstration that displays a message
+     in the user's profile.
+
+     Comment out the following line to disable the demonstration:
+!-->
+<tal:block define="user_listing string:skin-%%name%%.xml/user_listing;" />
  
 </tal:block>
 %%end%%
 %%css-begin%%
-@import url('skin-simple.css');
-
-
 /*
-* HOW TO USE THIS SKIN-%%name%%
+* HOW TO USE SKIN-%%name%%
 *
 * Some of the colors in this skin are determined here in the
 * style sheet, others are burned into the background graphics
@@ -63,6 +71,8 @@
 * elements to match.
 * 
 */
+
+@import url('skin-simple.css');
 
 /**********************
 * Change color header *
