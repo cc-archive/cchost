@@ -1,0 +1,317 @@
+%%-begin%%
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<phptal:block include="string:skin-%%name%%-map.xml" />
+
+<metal:block use-macro="${html_head}" />
+<metal:block use-macro="${main_body}" />
+
+<!-- 
+    Our override of user_listing macro 
+-->
+<metal:block define-macro="user_listing">
+
+   <!-- add %%name%% customization -->
+   <div class="%%name%%_hello">Hello from %%name%%</div>
+
+   <!-- now call the original user_listing -->
+   <metal:block use-macro="user.xml/user_listing" />
+
+</metal:block>
+
+<!-- 
+      All disabled macros get mapped here 
+-->
+<metal:block define-macro="%%name%%_null_template">
+</metal:block>
+
+</html>
+%%end%%
+%%map-begin%%
+<tal:block>
+
+<phptal:block include="string:skin-blank-map.xml" />
+
+<!-- 
+     %%name%% specific overrides of default macros
+
+     To disable a macro: map it to null_template
+     To override a macro: map it to an implemenation
+                          in skin-%%name%%.xml
+!-->
+<tal:block define="
+    comment_thread string:skin-%%name%%.xml/%%name%%_null_template;
+    user_listing string:skin-%%name%%.xml/user_listing;"
+ />
+ 
+</tal:block>
+%%end%%
+%%css-begin%%
+@import url('skin-simple.css');
+
+
+/*
+* HOW TO USE THIS SKIN-%%name%%
+*
+* Some of the colors in this skin are determined here in the
+* style sheet, others are burned into the background graphics
+* linked from here.
+*
+* In order to do a proper job of creating a unified color scheme
+* you should edit the colors here but also edit the graphical
+* elements to match.
+* 
+*/
+
+/**********************
+* Change color header *
+***********************/
+
+body {      /* area around the header  */
+  background: url("%%name%%/header-bg.gif") repeat-x;
+}
+#cc_header { /* main banner */
+  background: url("%%name%%/header.gif") bottom left repeat-x;
+}
+#cc_header h1 { /* top left corner */
+  background: url("%%name%%/header-tl.gif") top left no-repeat;
+}
+#cc_header form { /* top right corner */
+  background: url("%%name%%/header-tr.gif") no-repeat top right;
+}
+
+/*************************************
+* Main color background for the page *
+* This MUST be below the previous    *
+* body{} selector                    *
+**************************************/
+
+body {
+        background-color: #FFE2BF;
+}
+
+/*********************************
+* Change color of navigator tabs *
+**********************************/
+
+/***** Normal state *******/
+#cc_header li, #cc_sub_header li {  /* The tab */
+  background: transparent url("%%name%%/tab.gif") 100% -600px no-repeat;
+}
+
+#cc_header ul a, #cc_sub_header ul a  {  /* The link inside the tab */
+  background: transparent url("%%name%%/tab.gif") 0% -600px no-repeat;
+}
+
+/***** Selected state *******/
+#cc_header ul li.selected_tab a, #cc_sub_header ul li.selected_tab a {
+  background: transparent url("%%name%%/tab.gif") 0% 0px no-repeat;
+  color:#036;
+}
+
+#cc_header ul li.selected_tab, #cc_sub_header ul li.selected_tab  {
+  background: transparent url("%%name%%/tab.gif") 100% 0px no-repeat;
+  border-bottom: 1px solid #FFE2BF;  /* Make sure this is the same as body:background */
+}
+
+/****************************************
+* Change color of search form *
+*****************************************/
+#cc_header form #cc_submit {
+  background: #DDC4A6;
+}
+
+#cc_header form #search_text {
+  border:  1px solid #FFE2BF;
+  background: #DDC4A6 url('%%name%%/input.png') bottom repeat-x;
+}
+
+
+/**************************************************
+* Change the width of the main link in the header *
+***************************************************/
+#cc_header h1 a {  
+  width: 300px;    /* Use this value to expand or contract the link in the header */
+}
+
+/**********************************
+* Shift the text of main link and *
+* site description  to the right  *
+* to make way for our logo        *
+***********************************/
+
+#cc_header h1 a { /* main site link */
+  padding-left: 68px;
+}
+
+#cc_header p {    /* site description */
+  padding-left: 80px;
+}
+
+/**********************************
+* Change the color of the footer  *
+***********************************/
+
+.cc_rbroundbox { background: url('%%name%%/footer-nt.gif') repeat; }
+.cc_rbtop div { background: url('%%name%%/footer-tl.gif') no-repeat top left; }
+.cc_rbtop { background: url('%%name%%/footer-tr.gif') no-repeat top right; }
+.cc_rbbot div { background: url('%%name%%/footer-bl.gif') no-repeat bottom left; }
+.cc_rbbot { background: url('%%name%%/footer-br.gif') no-repeat bottom right; }
+
+
+/***************************************
+* Change the color of download, stream *
+* review and other command buttons     *
+***************************************/
+
+a#cc_streamfile,
+a#cc_downloadbutton, 
+a.cc_gen_button, 
+a#ratingscommand, 
+a#commentcommand, 
+a#replyremix  {
+    background: url('%%name%%/button-left.gif') no-repeat left top;
+}
+
+a.cc_gen_button span, 
+a#ratingscommand span, 
+a#commentcommand span, 
+a#replyremix span {
+    background: url('%%name%%/button-right.gif') no-repeat right top;
+}
+
+a#cc_downloadbutton span {
+    background: url('%%name%%/button-right-dl.gif') no-repeat right top;
+}
+
+a#cc_streamfile span {
+    background: url('%%name%%/button-right-play.gif') no-repeat right top;
+}
+
+.cc_file_download_popup { /* the little download popup div */
+    border: 1px solid #060;
+    background: #FFE2BF;
+}
+
+.cc_podcast_link {
+    background-image: url('%%name%%/flat-button-pod.gif');
+}
+
+.cc_stream_page_link {
+    background-image: url('%%name%%/flat-button-strm.gif');
+}
+
+/*********************
+* Change menu colors *
+**********************/
+
+#cc_leftside p { /* Menu header */
+  color: #543B1C;
+}
+
+#cc_leftside li a { /* Menu item */
+  color: #A97638;
+}
+
+.cc_more_menu_link { /* See more... link */
+  font-weight: normal;
+  margin-left: 18px;
+  font-size: smaller;
+  color: #900;
+}
+
+/************************
+* Generic Page Stuff    *
+*************************/
+#cc_centercontent h1, #page_title { /* Page title */
+    color: #543B1C;
+        border-bottom: 2px solid #543B1C;
+}
+
+
+a {                                     /* Default color for all links */
+   color: #A97638;
+}
+
+.cc_system_prompt {
+    background: #DDB7A6;
+    color: #543B1C;
+}
+
+/************************
+* Form colors           *
+*************************/
+.cc_form_label { /* Field labels */
+   color: #484;
+}
+
+.cc_form_tip {   /* Little help tips under the label */
+   color: #040;
+}
+
+.cc_form_submit {  /* Generic form submit button */
+   background-color: #DDB7A6;
+   color: black;
+}
+
+.cc_form_about,         /* Help text above forms */
+.cc_submit_form_help  { /* Submit form text */
+   color: #040;
+}
+
+.cc_form_about,    /* Help text above forms */
+.cc_submit_forms { /* 'Submit Files' form container */
+   border: 1px dotted #040;
+}
+
+.cc_submit_forms h2 { /* 'Submit Files' form title */
+   color: #040;
+}
+
+/************************
+* Color upload listing *
+*************************/
+
+#cc_record_listing h2 a { /* File name link */
+        color: #A97638;
+}        
+
+#cc_file_info th { /* Field headings */
+        color: black;
+}
+
+
+/************************
+* Colors on user page   *
+*************************/
+.cc_user_listing_table th,                /* Field headings */
+.cc_user_listing_table .cc_user_avatar {  /* Avatar background */
+        background: #FFC57F;
+        border: 1px solid #14253D;
+}
+
+
+/***********************
+*  Colors on remixes
+************************/
+#cc_downstream_mixes {
+    background-color:#DDB7A6; /* "Uses samples from..." box */
+}
+
+#cc_upstream_mixes {
+    background-color:#DDCFA6;   /* "Samples are used in..." box */
+}
+
+/***********************
+*  %%name%% Specific
+************************/
+.%%name%%_hello {
+    color: red;
+    font-weight: bold;
+    border: 1px solid red;
+    padding: 4px;
+    margin: 5px;
+}
+
+%%end%%
