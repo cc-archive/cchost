@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id$
+* $id$
 *
 */
 
@@ -163,6 +163,9 @@ class CCSkinMaker
                     break;
                 case 'map':
                     $fname .= '-map.xml';
+                    break;
+                case 'topics':
+                    $fname .= '-topics.css';
                     break;
                 default:
                     $fname .= '.xml';

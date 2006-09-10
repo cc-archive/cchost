@@ -315,3 +315,15 @@ a {                                     /* Default color for all links */
 }
 
 %%end%%
+%%topics-begin%%
+@import url('skin-simple-topics.css');
+
+/***************************************
+* Review and forum message text boxes 
+****************************************/
+.cc_topic_text,        
+.cc_topic_cmds {
+	background-color: #A95A38;
+	color: white;
+}
+%%end%%
