@@ -148,7 +148,7 @@ $Id$
 </tr>
 </table>
 
-
+<script>
   //<!--
   var tab_top = -41;
 
@@ -167,5 +167,5 @@ $Id$
   tabobj.obj.innerHTML = '<a href="http://creativecommons.org/">&nbsp;</a>';
   timed_tab_grow();
   //-->
-
+</script>
 </tal:block>
