@@ -14,42 +14,68 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
+*/
+/**
+*   CUSTOM TEMPLATE API 
+*
+*    Methods here were designed to be called from phpTAL templates:
+*
+*    example:
+*
+*    <tal:block define="php: records = CC_quick_list('remix');" />
+*
+* @package cchost
+* @subpackage admin
 */
 
 
 if( !defined('IN_CC_HOST') )
     die('Welcome to CC Host');
 
-/* 
-    CUSTOM TEMPLATE API 
-
-    Methods here are called from templates/custom.xml
-
-    It's pretty easy to break the site if you are not familiar with the
-    rest of the site
+/**
+* @deprecated
 */
-
 function CC_badcall($to)
 {
     print("there was a call to \"$to\" in a template");
     exit;
 }
 
+/**
+* Splits a comma separated string of tags into an array
+*
+* @param string $tagstr Comma separated string of tags
+* @return array $tagarray Arrya of tags
+*/
 function CC_split_tags($tagstr)
 {
     $a = explode(',',$tagstr);
     return($a);
 }
 
-// This allows templates to put up a string and go through the 
-// language engine...
+/**
+* Internationalize a string
+*
+* This allows templates to put up a string and go through the 
+* language engine. Always use this when outputting user visible
+* strings. (This doesn't really work yet, but use it anyway.)
+*
+* @param string $string String to translate
+* @return string $retstring Translated string
+*/
 function CC_lang($string)
 {
     return(_($string));
 }
 
+/**
+* Return a count of elements for the object or array
+*
+* @param mixed $obj Object or array to count
+* @return integer $count Count of elements or 0 if parameter is not an array or string
+*/
 function CC_count($obj)
 {
     if( isset($obj) && is_array($obj) )
@@ -57,11 +83,32 @@ function CC_count($obj)
     return( 0 );
 }
 
+/**
+* Test for the existance of an object
+*
+* phpTAL's exists() was not working consistantly and does
+* not like empty objects so this function is designed to help with that.
+*
+* @param mixed $obj Thing to test
+* @return boolean $result Same as php's empty()
+*/
 function CC_test($obj)
 {
     return( isset($obj) && !empty($obj) && !PEAR::IsError($obj) );
 }
 
+/**
+* Chop a string and append ellipse if over a given length.
+*
+* The third parameter '$dochop' allows for runtime decisions about
+* whether to chop or not. This is <i>much</i> faster than making the
+* branch descision in phpTAL.
+*
+* @param string $str String to potentially chop
+* @param integer $maxlen Maximum number of characters before adding ellipse
+* @param boolen $dochop If false then maxlen is ignored and string is returned
+* @return string $string Chopped string
+*/
 function CC_strchop($str,$maxlen,$dochop = true)
 {
     if( empty($dochop) || (strlen($str) <= $maxlen) )
@@ -69,6 +116,15 @@ function CC_strchop($str,$maxlen,$dochop = true)
     return( substr($str,0,$maxlen) . '...' );
 }
 
+/**
+* Format a date
+* 
+* Maps to: date(<i>fmt</i>,strtotime(<i>date</i>))
+*
+* @param string $date A string representation of a date
+* @param string $fmt A PHP date() formatter
+* @return string $datestring A formatted date string
+*/
 function CC_datefmt($date,$fmt)
 {
     if( empty($date) )
@@ -76,6 +132,18 @@ function CC_datefmt($date,$fmt)
     return( date($fmt,strtotime($date)) );
 }
 
+/**
+* Low level call to a CCTable derivation.
+*
+* A very specialized way of calling specific, no paramter method on
+* CCTable method 
+*
+* @see CCContests::GetOpenContests
+* @see CCConfigs::GetCOnfigRoots
+* @param string $tablename Name of CCTable derivative
+* @param string $func Name of method to call
+* @return mixed $retrun Return value of function
+*/
 function CC_query($tablename,$func)
 {
     if( substr($tablename,0,2) != 'CC' )
@@ -84,12 +152,30 @@ function CC_query($tablename,$func)
     return( $table->$func() );
 }
 
+/**
+* Get the records with the highest ratings as determined by admin
+*
+* Admins can determine what gets returned here in the 'Manage Ratings'
+* screens.
+* 
+* @param integer $limit Max number of records to return
+* @param string $since Date string to use as cutoff
+* @return array $records Records that are rated the highest
+*/
 function CC_ratings_chart($limit,$since='')
 {
     $retval = CCRating::GetChart($limit,$since);
     return($retval);
 }
 
+/**
+* Return a semi-colon separated list of upload_ids for a set of records
+*
+* This list of ids can then be used in URLs like streampage
+* 
+* @param array $records An array of records to get ids for
+* @return string $ids A semi-colon separated list of upload_ids
+*/
 function CC_ids_for_records(&$records)
 {
     $count = count($records);
@@ -103,6 +189,17 @@ function CC_ids_for_records(&$records)
     return($ids);
 }
 
+/**
+* Dump a variable to the screen
+*
+* For debugging purposes you can use this method while testing to get
+* the contents of any given thing.
+*
+* NOTE: Calling this will halt all execution
+*
+* @param mixed $obj Thing to dump to screen
+* @see CC_log_dump
+*/
 function CC_debug_dump($obj)
 {
     $isenabled = CCDebug::IsEnabled();
@@ -111,6 +208,17 @@ function CC_debug_dump($obj)
     CCDebug::Enable($isenabled);
 }
 
+/**
+* Dump a variable to the log file
+*
+* For debugging purposes you dump the contents of a 
+* variable to the log file. This function with <i>not</i>
+* halt execution of the program.
+* 
+* @param string $name Name of object, this will be output to the log for easy identification
+* @param mixed $obj Thing to dump
+* @see CC_debug_dump
+*/
 function CC_log_dump($name,$obj)
 {
     $isenabled = CCDebug::IsEnabled();
@@ -119,6 +227,16 @@ function CC_log_dump($name,$obj)
     CCDebug::Enable($isenabled);
 }
 
+/**
+* Returns a list of remote remixes waiting for admin approval
+*
+* This applies to situation where your installation is a source
+* pool for another site. That site has notified us that there
+* has been a remix of our material. This method returns the 
+* pool item records of those remixes.
+*
+* @return array $records Array of remote pool remixes waiting for admin approval
+*/ 
 function CC_pending_pool_remix()
 {
     if( CCUser::IsAdmin() )
@@ -135,8 +253,15 @@ function CC_pending_pool_remix()
     return( null );
 }
 
-function & 
-CC_quick_list($tag)
+/**
+* Return a list of 5 truncated records (the latest uploads) that match a given tag
+*
+* This method return ONLY two colums: file_page_url and upload_short_name
+*
+* @param string $tag a specific tag to search for
+* @return array $trunrecs An array of 5 truncated records
+*/
+function & CC_quick_list($tag)
 {
     return(array());
 
@@ -161,6 +286,9 @@ CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  'cc_tcache_kill' );
 CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    'cc_tcache_kill' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_tcache_kill' );
 
+/**
+* @private
+*/
 function cc_tcache_kill()
 {
     $configs =& CCConfigs::GetTable();
@@ -177,8 +305,33 @@ function cc_tcache_kill()
     }
 }
 
-function & 
-CC_cache_query($tags,$search_type='all',$sort_on='',$order='',$limit='',$with_menus=false,$with_remixes=false)
+/**
+* Fetch a list of records, cache if you have to or retrieve if you can
+*
+* This function perform a query the first time it is called and cache
+* the results. If a request is made for the exact same tags set then
+* the query is retrieved from the cache. This is the fast version of
+* CC_tag_query.
+*
+* The cache is automatically cleared whenever a new file has been 
+* uploaded, or an old one has been deleted or modified in any way
+* 
+* Note that $with_menus and $with_remixes <i>significantly</i> slows
+* down this call, even when cached.
+*
+* @param string $tags Comma separated tags to limit query
+* @param string $search_type Valid types are 'all' or 'any' referring to how to treat multiple tags
+* @param string $sort_on Name of field to sort on (default is 'upload_date')
+* @param string $order Valid orders are 'ASC' or 'DESC' (default is 'DESC')
+* @param integer $limit Maximum number of records to cache/retrieve
+* @param boolean $with_menus true means include all commands possible in each record
+* @param boolean $with_remixes true means include total remix history in each record
+* @return array $records An array of matching records
+* @see CC_tag_query
+*/
+function & CC_cache_query( 
+        $tags, $search_type='all', $sort_on='', $order='',
+        $limit='', $with_menus=false, $with_remixes=false)
 {
     global $CC_GLOBALS, $CC_CFG_ROOT;
     $cname = $CC_GLOBALS['php-tal-cache-dir'] . '/_ccc_' . $tags . '.txt';
@@ -217,8 +370,27 @@ CC_cache_query($tags,$search_type='all',$sort_on='',$order='',$limit='',$with_me
     return $rows;
 }
 
-function & 
-CC_tag_query($tags,$search_type='all',$sort_on='',$order='',$limit='',$with_menus=false,$with_remixes=false)
+/**
+* Fetch a list of records
+*
+* This is the (very) slow version of CC_cache_query. Try to use that
+* instead if you can.
+*
+* Note that $with_menus and $with_remixes <i>significantly</i> slows
+* down this call, even when cached.
+*
+* @param string $tags Comma separated tags to limit query
+* @param string $search_type Valid types are 'all' or 'any' referring to how to treat multiple tags
+* @param string $sort_on Name of field to sort on (default is 'upload_date')
+* @param string $order Valid orders are 'ASC' or 'DESC' (default is 'DESC')
+* @param integer $limit Maximum number of records to cache/retrieve
+* @param boolean $with_menus true means include all commands possible in each record
+* @param boolean $with_remixes true means include total remix history in each record
+* @return array $records An array of matching records
+* @see CC_cache_query
+*/
+function & CC_tag_query( 
+   $tags,$search_type='all',$sort_on='',$order='',$limit='',$with_menus=false,$with_remixes=false)
 {
     $uploads =& CCUploads::GetTable();
     $uploads->SetDefaultFilter(true,true); // second true means treat like anonymous
@@ -255,6 +427,10 @@ CC_tag_query($tags,$search_type='all',$sort_on='',$order='',$limit='',$with_menu
 }
 
 
+/**
+* @private
+* @deprecated
+*/
 function list_all_users()
 {
    $users = new CCUsers();
@@ -266,6 +442,16 @@ function list_all_users()
 
 if( class_exists('CCReviews') )
 {
+/**
+* Returns an array of reviewer names and links to their latest reviews
+*
+* The name is slightly misleading because it returns a list of reviews
+* but based on user name's. So if Joe reviewed 5 things, only  his 
+* very latest review would only appear in the return array.
+*
+* @param integer $limit Maximum number of records to return
+* @return array $review_records An array of latest reviews
+*/
     function CC_recent_reviews($limit=5)
     {
         $lim = 5 * $limit; // inc the limit to cover user's multiple reviews and banned,
