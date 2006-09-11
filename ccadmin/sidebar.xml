@@ -1,0 +1,73 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id: custom.xml 3281 2006-04-30 22:36:17Z fourstones $
+
+-->
+</tal:block>
+
+<tal:block replace="">
+<!--
+    Edit this file to add custom content to the sidebar.
+
+    skin-simple treats the <p> tags as group headings,
+    and links in <li> tags as menu items.
+
+    Always use underscores '_' in your macro names.
+
+    You can turn these macros on and off by going to
+    'Manage Site' and click on 'Sidebar Content'
+
+    Macro names that begin with underscore '_' will
+    be hidden from that view.
+    
+    You can including other macros (like from say
+    custom.xml by using the "use-macro" syntax:
+
+    <metal:block use-macro="filename/macro_name" />
+
+    For example:
+
+    <matal:block use-macro="custom.xml/Search_Box" />
+
+    To specify a ccHost command always use the ${home-url}
+    macro (no trailing backslash needed):
+
+    <li><a href="${home-url}viewfile/terms.xml">Terms</a></li>
+
+    If you are linking to a physical file then use ${root-url}
+
+    <li><a href="${root-url}somedir/somefile.mp3">Message from me</a></li>
+
+-->
+</tal:block>
+
+
+<metal:block define-macro="My_links">
+    <p>Links</p>
+    <ul>
+      <li><a href="http://creativecommons.org">Creative Commons</a></li>
+      <li><a href="http://ccmixter.org">ccMixter</a></li>
+      <li><a href="http://opsound.org">opsound.org</a></li>
+      <li><a href="http://openclipart.org">Open Clip Art</a></li>
+      <li><a href="http://freesound.iua.upf.edu/">freesound</a></li>
+      <li><a href="http://archive.org">archive.org</a></li>
+    </ul>
+</metal:block>
+
+</tal:block>

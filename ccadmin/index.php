@@ -103,7 +103,6 @@ function step_4()
     require_once('cclib/cc-table.php');
     require_once('cclib/cc-config.php');
 
-
     $configs =& CCConfigs::GetTable();
     $settings = $configs->GetConfig('settings');
     $config   = $configs->GetConfig('config');
@@ -292,6 +291,17 @@ function install_tables(&$f,&$errs)
     CCPool::InstallPools();
 
 //    print "Sample pools installed<br />";
+
+    $sidebar_src  = dirname( __FILE__ ) . '/sidebar.xml';
+    $sidebar_dest = 'cctemplates/sidebar.xml';
+
+    if( file_exists($sidebar_src) && !file_exists($sidebar_dest) )
+    {
+        copy( $sidebar_src, $sidebar_dest );
+        chmod( $sidebar_dest, 0777 );
+    }
+
+    print "Sidebar content installed<br />";
 
     $pw = md5( $f['pw']['v'] );
     $user = $f['admin']['v'];
