@@ -236,11 +236,23 @@ class CCMenu
     */
     function AddItems( $items, $save_now = false )
     {
+        global $CC_CFG_ROOT;
+
         $menu_items =& CCMenu::_menu_items();
         $menu_items = array_merge($menu_items,$items);
         if( $save_now )
         {
             $configs =& CCConfigs::GetTable();
+
+            // we don't want to add items to a config that
+            // doesn't have a menu
+            if( ($CC_CFG_ROOT != CC_GLOBAL_SCOPE) && 
+                !$configs->ScopeHasType( 'menu', $CC_CFG_ROOT ) )
+            {
+                $menu = $configs->GetConfig('menu', CC_GLOBAL_SCOPE );
+                $items = array_merge($menu,$items);
+            }
+
             $configs->SaveConfig( 'menu',   $items,  '',  true);
         }
     }
