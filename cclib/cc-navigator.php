@@ -131,6 +131,9 @@ class CCNavigator
         // Step 3. This displays the tab on the page
         $page_out->AddTabNaviator( $tab_info, 'page_tabs' );
 
+        if( empty($default_tab) )
+            return;
+
         $title = $default_tab['text'];
 
         if( $default_tab['function'] == 'sub' )
@@ -170,7 +173,7 @@ class CCNavigator
 
                 $action = CCEvents::ResolveUrl( $url, true );
                 if( empty($action) )
-                    $this->_signal_error();
+                    $this->_signal_error( __LINE__ );
                 else
                     CCEvents::PerformAction($action);
             }
@@ -240,7 +243,7 @@ class CCNavigator
         {
             if( $count == 0 )
             {
-                $this->_signal_error();
+                //$this->_signal_error( __LINE__ );
                 return;
             }
             $default_tab_name = $tab_keys[0];
@@ -304,7 +307,7 @@ class CCNavigator
     function _get_selected_page(&$page_name,&$default_tab_name,&$page)
     {
         $pages = $this->_get_pages();
-
+        
         $ok = !empty($pages);
         if( $ok )
         {
@@ -337,7 +340,7 @@ class CCNavigator
         }
         if( !$ok )
         {
-            $this->_signal_error();
+            $this->_signal_error( __LINE__ );
         }
 
         return( $ok );
@@ -347,9 +350,9 @@ class CCNavigator
     * Internal: fake out error
     * @access private
     */
-    function _signal_error()
+    function _signal_error($lineno)
     {
-        CCPage::SetTitle("System Error");
+        CCPage::SetTitle("System Error (" . CC_HOST_VERSION . ':' . $lineno . ')' );
         CCPage::SystemError('Invalid Path');
     }
 
