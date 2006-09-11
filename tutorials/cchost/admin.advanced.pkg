@@ -13,7 +13,7 @@
 <refsect1 id="{@id vroots}">
 <title>Virtual Roots</title>
 <para>If you just want to jump in and start customizing your site then you can put off knowing
-about virutal roots and substitute the word <uri>media</uri> every time you see the term virtual
+about virtual roots and substitute the word <uri>media</uri> every time you see the term virtual
 root. Once you are comfortable with your ccHost installation you will at least want to know
 about virtual roots because it is a very powerful and flexible feature of your installation.
 </para>
@@ -51,7 +51,7 @@ Make it short, lowercase, alpha only, easy to type
 
 <refsect2 id="{@id delete}">
 <title>Deleting a Virtual Root</title>
-<note>As of this writing there is no way (except programmatically) to delete a virtual root.
+<note>As of this writing there is no way (except pro grammatically) to delete a virtual root.
 Scripts can be made available from ccHost developers if you are really stuck but otherwise
 the best thing to do is ignore it, that is: never refer to it in any menu or navigator tab
 and your users will never know about it.</note>
@@ -90,7 +90,7 @@ to the domain and directory:</para>
 <warning>
     Needless to say there is <important>absolutely no verification</important> 
     of what you type in here and save. It is extremely easy to get things wrong 
-    and unrecoverably damage your site. That's why it's so much fun.
+    and irrecoverably damage your site. That's why it's so much fun.
 </warning>
 
 </refsect1>

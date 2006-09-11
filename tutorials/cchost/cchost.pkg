@@ -276,7 +276,7 @@ class joesoft_v_1_0 extends CCUpdate
     }
 } ]]></programlisting>
 <para>Now whenever someone installs your plugin they will have to (logged in as admin) update
-their site with by browing to:</para>
+their site with by browsing to:</para>
 <para>http://cchost_installation/?update=1</para>
 
 </refsect1>
@@ -422,7 +422,7 @@ class xxJoe extends CCForm           // this is not ]]></programlisting>
           'flags'   => CCFF_REQUIRED,
           ),
        'allow_im' => array(
-          'label'   => 'Enable Instant Messagings',
+          'label'   => 'Enable Instant Messaging',
           'form_tip'  => 'Enable instant messages notifications',
           'formatter' => 'checkbox',
           'flags'   => CCFF_NONE,
@@ -846,8 +846,8 @@ to edit user profile):</para>
  <refsect1 id="{@id hackhtml}">
 <title>Display HTML (Hack)</title>
 
-<para>If want to just hack in some HTML into page (not recommened, although understandable
-during developement). If have you haven't already, you first need to
+<para>If want to just hack in some HTML into page (not recommended, although understandable
+during development). If have you haven't already, you first need to
 create a module ({@tutorial cchost.pkg#newmod}) and bind a unique URL ({@tutorial cchost.pkg#url}). Then in the method that it's bound to do the following:</para>
 <programlisting role="php"><![CDATA[  
 function just_show_it()
@@ -918,7 +918,7 @@ pull the data into the template:</para>
 <para>In case you think this is 'low rent' many features at ccMixter (picks, charts,
 radio, etc.) are done using this method.</para>
 <h3>Method 2: Use a template to inject HTML onto page</h3>
-<para>In this method, you'll set up the data, create an instance of the tempalte in
+<para>In this method, you'll set up the data, create an instance of the template in
 code and merge the two, then display it as HTML.</para>
 
 <para>Create a template XML file and put it in ccfiles
@@ -1205,7 +1205,7 @@ debug environment ({@tutorial cchost.pkg#debug}) to inspect the data:</para>
  <refsect1 id="{@id uploadvsfile}">
 <title>"key" vs "id"</title>
 
-<para>The terms 'key' and 'id' are used interchangably throughout ccHost code. They
+<para>The terms 'key' and 'id' are used interchangeably throughout ccHost code. They
 both refer to the PRIMARY KEY column in any table which
 are unique numeric references within the table. </para>
 
@@ -1249,13 +1249,13 @@ data.</para>
 
 <h3>To Search For Your Custom Data</h3>
 <para>The only drawback to using this method is that searching for your data is extremely expensive
-(it takes a long time) and is strongly recommened you don't do it. See the documentaion for
+(it takes a long time) and is strongly recommended you don't do it. See the documentation for
 CCUploads::WhereForSerializedField if you really must or if
 searching on this data is critical then you should probably consider adding a 
 new column ({@tutorial cchost.pkg#newcol}) to cc_tbl_uploads or even better, a 
 new table ({@tutorial cchost.pkg#newtable}) instead using 
 the extra field.</para>
-<para>If you can get by with just searching for records with presense of your extra
+<para>If you can get by with just searching for records with presence of your extra
 data then you can add a system tag to the upload row when you add the data:</para>
 <programlisting role="php"><![CDATA[  function add_my_data($my_data,$upload_id)
 {

@@ -36,7 +36,7 @@ not display and the site will be broken until you fix these issues.</para>
         <literal>&lt;th&gt;</literal>, <literal>&lt;tr&gt;</literal> on down the line.
    </para>
   </listitem>
- <listitem><important>All Tags Must Be Symetrical</important>
+ <listitem><important>All Tags Must Be Symmetrical</important>
    <para>You can be not sloppy about when you close a tag, they have to been 
       closed in the exact reverse order they opened, </para>
       <warning><literal>&lt;b&gt; &lt;i&gt; Hello World &lt;/b&gt; &lt;/i&gt;</literal></warning> 
@@ -74,7 +74,7 @@ query.</para>
 <example><literal>&lt;h1&gt;Welcome to ${site-title}&lt;/h1&gt;
 &lt;h2&gt;${site-description}&lt;/h2&gt;</literal></example>
 <para>To make certain blocks conditional, use the <literal>tal:condition</literal> attribute on any XHTML
-tag. In the following example the DIV will only appear if the system detects the presense of the 'logged_in_as' variable. If that variable is there we assume the entire 'user_*' record is available to us:</para>
+tag. In the following example the DIV will only appear if the system detects the presence of the 'logged_in_as' variable. If that variable is there we assume the entire 'user_*' record is available to us:</para>
 <example><literal>&lt;div tal:condition="logged_in_as" &gt;Hello ${user_real_name}&lt;/div&gt;</literal></example>
 <para>Note that in the <literal>tal:condition</literal> attribute you do not use the <literal>${}</literal> syntax, 
 just the variable name.</para>

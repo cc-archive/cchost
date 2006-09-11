@@ -340,7 +340,7 @@ right.</note>
   <row><entry class="tb">Match Any Tags</entry><entry>A comma separated list of tags. Displays a listing of uploads that have <emphasis>any</emphasis> of the tags specified.</entry></row>
   <row><entry class="tb">Match All Tags</entry><entry>A comma separated list of tags. Displays a listing of uploads that have <emphasis>all</emphasis>> of the tags specified.</entry></row>
   <row><entry class="tb">Execute URL</entry><entry>A command or {@tutorial admin.basic.pkg#urls URL to execute}.</entry></row>
-  <row><entry class="tb">Subtabs</entry><entry>The name of a subnaviation tab set that will appear on the screen under the current tab set. </entry></row>
+  <row><entry class="tb">Subtabs</entry><entry>The name of a sub-navigation tab set that will appear on the screen under the current tab set. </entry></row>
   </table>
 </listitem>
 <listitem>
@@ -379,7 +379,7 @@ right.</note>
 </listitem>
 <listitem>
    Under <command>Access</command> select the restriction you want to apply to the 
-   individual tabs. You can essentially 'hide' a tab by restricting it's visibilty
+   individual tabs. You can essentially 'hide' a tab by restricting it's visibility
    to administrators only.
 </listitem>
 <listitem>
@@ -464,14 +464,14 @@ click on the 'Browse' sub-tab.</para>
 </orderedlist>
 
 <para>If you do not see your changes right away, click on the banner to take you to your home page.</para>
-<warning>Editing the <command>root-url</command> field in this form is available ony for the case
+<warning>Editing the <command>root-url</command> field in this form is available only for the case
 where you change the directory structure of you web server or other rare and advanced
 cases. Change it to the wrong value and it will be very difficult to recover.</warning>
 
 <refsect2 id="{@id addlogo}">
 <title>Hack: Add a Logo to Your Banner</title>
 
-<para>The default skin (<literal>skin-simple</literal>) is a little finnicky and 
+<para>The default skin (<literal>skin-simple</literal>) is a little finicky and 
 requires a little nudging sometimes. Adding a logo to the banner could get 
 tricky if you don't know your way around. If the method in this tutorial isn't working
 for you, that is, you are not getting the exact results you would like, you
@@ -690,7 +690,7 @@ sidebar block.</para>
      Open the file <filename>cctemplates/custom.xml</filename> in a text editor.
   </listitem>
   <listitem>
-     Look for the first occurance of <literal>&lt;/tal:block&gt;</literal> (around 
+     Look for the first occurrence of <literal>&lt;/tal:block&gt;</literal> (around 
      line #23)
   </listitem>
   <listitem>
@@ -718,7 +718,7 @@ sidebar block.</para>
 <listitem>
    The <literal>define-macro</literal> attribute is what is used in the <command>Sidebar Content</command>
    administrator's form. You <emphasis>must</emphasis> use only alpha-numeric characters and the 
-   undercore ('_'), no spaces!
+   underscore ('_'), no spaces!
 </listitem>
 <listitem>
    Any <literal>define-macro</literal> attributes that <emphasis>start</emphasis> with an underscore ('_')

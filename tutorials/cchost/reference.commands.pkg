@@ -22,7 +22,7 @@ the source code.</para>
 <note>It will save you time and heartache if understand how 
 {@tutorial admin.basic.pkg#access access rights work}</note>
 
-<para>Paramaters with curly braces <emphasis>{param}</emphasis> are required, parameters with square
+<para>Parameters with curly braces <emphasis>{param}</emphasis> are required, parameters with square
 brackets <emphasis>[param]</emphasis> are optional</para>
 
 <table class="cmdref">
@@ -30,357 +30,357 @@ brackets <emphasis>[param]</emphasis> are optional</para>
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Ed Picks</emphasis></entry></row>
 
 <row><entry><uri>editorial/picks/[upload_id]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCEditorials::ViewPicks</literal></entry></row>
+</entry><entry>{@link   CCEditorials::ViewPicks}<literal></literal></entry></row>
 <row><entry><uri>editorial/submit/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCEditorials::Submit</literal></entry></row>
+</entry><entry>{@link   CCEditorials::Submit}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Feeds</emphasis></entry></row>
       
 <row><entry><uri>feed/atom/{tags}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCFeedsAtom::GenerateFeedFromTags</literal></entry></row>
+</entry><entry>{@link   CCFeedsAtom::GenerateFeedFromTags}<literal></literal></entry></row>
 <row><entry><uri>feed/datadump/[tags]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCDataDump::GenerateFeed</literal></entry></row>
+</entry><entry>{@link   CCDataDump::GenerateFeed}<literal></literal></entry></row>
 <row><entry><uri>feed/rss</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCFeeds::GenerateFeedFromTags</literal></entry></row>
+</entry><entry>{@link   CCFeeds::GenerateFeedFromTags}<literal></literal></entry></row>
 <row><entry><uri>podcast/artist/{user_name}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCFeeds::PodcastUser</literal></entry></row>
+</entry><entry>{@link   CCFeeds::PodcastUser}<literal></literal></entry></row>
 <row><entry><uri>podcast/page</uri></entry><entry><emphasis>E</emphasis></entry><entry>
   requires query: <uri>?ids=id[;id...]</uri>
-</entry><entry><literal>   CCFeeds::PodcastPage</literal></entry></row>
+</entry><entry>{@link   CCFeeds::PodcastPage}<literal></literal></entry></row>
 <row><entry><uri>feed/xspf/{tags}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCFeedsXSPF::GenerateFeed</literal></entry></row>
+</entry><entry>{@link   CCFeedsXSPF::GenerateFeed}<literal></literal></entry></row>
 <row><entry><uri>feed/rss/reviews/[user_name]/[upload_id]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCReview::RssFeed</literal></entry></row>
+</entry><entry>{@link   CCReview::RssFeed}<literal></literal></entry></row>
 <row><entry><uri>feed/rss/forums</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCForums::RssFeed</literal></entry></row>
+</entry><entry>{@link   CCForums::RssFeed}<literal></literal></entry></row>
 <row><entry><uri>feed/rss/forums/user/{user_name}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCForums::RssFeed</literal></entry></row>
+</entry><entry>{@link   CCForums::RssFeed}<literal></literal></entry></row>
 <row><entry><uri>feed/rss/forums/thread/{thread_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCForums::RssFeed</literal></entry></row>
+</entry><entry>{@link   CCForums::RssFeed}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>File API</emphasis></entry></row>
 
 <row><entry><uri>file/manage</uri></entry><entry><emphasis>R</emphasis></entry><entry>
    Displays 'Manage Files' main screen
-</entry><entry><literal>   CCPhysicalFile::Manage</literal></entry></row>
+</entry><entry>{@link   CCPhysicalFile::Manage}<literal></literal></entry></row>
 <row><entry><uri>file/add/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
   Displays submit for file to be added to upload record
-</entry><entry><literal>   CCPhysicalFile::Add</literal></entry></row>
+</entry><entry>{@link   CCPhysicalFile::Add}<literal></literal></entry></row>
 <row><entry><uri>file/delete/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCPhysicalFile::Delete</literal></entry></row>
+</entry><entry>{@link   CCPhysicalFile::Delete}<literal></literal></entry></row>
 <row><entry><uri>file/jockey/{down|up}/{file_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCPhysicalFile::Jockey</literal></entry></row>
+</entry><entry>{@link   CCPhysicalFile::Jockey}<literal></literal></entry></row>
 <row><entry><uri>file/nickname/{file_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCPhysicalFile::Nicname</literal></entry></row>
+</entry><entry>{@link   CCPhysicalFile::Nicname}<literal></literal></entry></row>
 <row><entry><uri>file/replace/{file_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCPhysicalFile::Replace</literal></entry></row>
+</entry><entry>{@link   CCPhysicalFile::Replace}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Uploads</emphasis></entry></row>
 
 <row><entry><uri>files/[user_name]/[upload_id]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCMediaHost::Media</literal></entry></row>
+</entry><entry>{@link   CCMediaHost::Media}<literal></literal></entry></row>
 <row><entry><uri>files/delete/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCUpload::Delete</literal></entry></row>
+</entry><entry>{@link   CCUpload::Delete}<literal></literal></entry></row>
 <row><entry><uri>files/edit/{user_name}/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCPhysicalFile::Edit</literal></entry></row>
+</entry><entry>{@link   CCPhysicalFile::Edit}<literal></literal></entry></row>
 <row><entry><uri>files/publish/{user_name}/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCMediaHost::Publish</literal></entry></row>
+</entry><entry>{@link   CCMediaHost::Publish}<literal></literal></entry></row>
 <row><entry><uri>file/remixes/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
    Displays 'Manage Remixes' for upload
-</entry><entry><literal>   CCRemix::EditRemixes</literal></entry></row>
+</entry><entry>{@link   CCRemix::EditRemixes}<literal></literal></entry></row>
 <row><entry><uri>flag/upload/{upload_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCFlag::Flag</literal></entry></row>
+</entry><entry>{@link   CCFlag::Flag}<literal></literal></entry></row>
 <row><entry><uri>flag/topic/{topic_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCFlag::Flag</literal></entry></row>
+</entry><entry>{@link   CCFlag::Flag}<literal></literal></entry></row>
 <row><entry><uri>admin/throttle</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Displays upload throttle form
-</entry><entry><literal>   CCThrottle::Admin</literal></entry></row>
+</entry><entry>{@link   CCThrottle::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/throttlerules</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Displays upload throttle rules form
-</entry><entry><literal>   CCThrottle::Rules</literal></entry></row>
+</entry><entry>{@link   CCThrottle::Rules}<literal></literal></entry></row>
 <row><entry><uri>admin/upload/{upload_id}</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Edit an upload's system tags.
-</entry><entry><literal>   CCUpload::AdminUpload</literal></entry></row>
+</entry><entry>{@link   CCUpload::AdminUpload}<literal></literal></entry></row>
 <row><entry><uri>admin/ban/{upload_id}</uri></entry><entry><emphasis>A</emphasis></entry><entry>
      Ban and unban an upload
-</entry><entry><literal>   CCBan::Ban</literal></entry></row>
+</entry><entry>{@link   CCBan::Ban}<literal></literal></entry></row>
 <row><entry><uri>admin/renaming</uri></entry><entry><emphasis>A</emphasis></entry><entry>
      Displays renaming macros form
-</entry><entry><literal>   CCFileRename::AdminRenaming</literal></entry></row>
+</entry><entry>{@link   CCFileRename::AdminRenaming}<literal></literal></entry></row>
 <row><entry><uri>admin/id3tags</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Displays 'Configure ID3 Tagger' form.
-</entry><entry><literal>   CCID3Tagger::AdminTagger</literal></entry></row>
+</entry><entry>{@link   CCID3Tagger::AdminTagger}<literal></literal></entry></row>
 <row><entry><uri>admin/import</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Displays 'File Import' form
-</entry><entry><literal>   CCImportFiles::Import</literal></entry></row>
+</entry><entry>{@link   CCImportFiles::Import}<literal></literal></entry></row>
 <row><entry><uri>archive</uri></entry><entry><emphasis>E</emphasis></entry><entry>
       Display upload archive organized by month      
-</entry><entry><literal>   CCArchive::Archive</literal></entry></row>
+</entry><entry>{@link   CCArchive::Archive}<literal></literal></entry></row>
 <row><entry><uri>archive/month/{YYYY-MM}/[tags]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
       Display upload archive for a specific month      
-</entry><entry><literal>   CCArchive::Archive</literal></entry></row>
+</entry><entry>{@link   CCArchive::Archive}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Submit Forms</emphasis></entry></row>
 
 <row><entry><uri>submit/[form_type]/[user_name]</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCSubmit::Submit</literal></entry></row>
+</entry><entry>{@link   CCSubmit::Submit}<literal></literal></entry></row>
 <row><entry><uri>files/remix/[upload_id]</uri></entry><entry><emphasis>R</emphasis></entry><entry>
    Display 'Submit a Remix' form. Using upload_id will prefill search results.
    This is how 'I Sampled This...' is done.
-</entry><entry><literal>   CCSubmit::Remix</literal></entry></row>
+</entry><entry>{@link   CCSubmit::Remix}<literal></literal></entry></row>
 <row><entry><uri>admin/submit</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Dislays 'Manage Submit Forms' form
-</entry><entry><literal>   CCSubmit::Admin</literal></entry></row>
+</entry><entry>{@link   CCSubmit::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/newsubmitform</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCSubmit::NewForm</literal></entry></row>
+</entry><entry>{@link   CCSubmit::NewForm}<literal></literal></entry></row>
 <row><entry><uri>admin/editsubmitform/{form_type}</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCSubmit::EditForm</literal></entry></row>
+</entry><entry>{@link   CCSubmit::EditForm}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Render Uploads</emphasis></entry></row>
 
 <row><entry><uri>files/stream/{user_name}/{upload_id}.m3u</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCRenderAudio::StreamFiles</literal></entry></row>
+</entry><entry>{@link   CCRenderAudio::StreamFiles}<literal></literal></entry></row>
 <row><entry><uri>stream/page</uri></entry><entry><emphasis>E</emphasis></entry><entry>
     requires <uri>?ids={id}[;{id};]</uri> query
-</entry><entry><literal>   CCRenderAudio::StreamPage</literal></entry></row>
+</entry><entry>{@link   CCRenderAudio::StreamPage}<literal></literal></entry></row>
 <row><entry><uri>stream/radio</uri></entry><entry><emphasis>E</emphasis></entry><entry>
     requires <uri>?tags={tags}</uri> query
-</entry><entry><literal>   CCRenderAudio::StreamRadio</literal></entry></row>
+</entry><entry>{@link   CCRenderAudio::StreamRadio}<literal></literal></entry></row>
 <row><entry><uri>files/playflash/{user_name}/{upload_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCRenderFlash::Play</literal></entry></row>
+</entry><entry>{@link   CCRenderFlash::Play}<literal></literal></entry></row>
 <row><entry><uri>media/showimage/{user_name}/{upload_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
    (extra 'media' sic)
-</entry><entry><literal>   CCRenderImage::Show</literal></entry></row>
+</entry><entry>{@link   CCRenderImage::Show}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Forums</emphasis></entry></row>
 
 <row><entry><uri>forums/[forum_id]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCForums::Index</literal></entry></row>
+</entry><entry>{@link   CCForums::Index}<literal></literal></entry></row>
 <row><entry><uri>forums/people/{user_name}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
    Display forum topics for user
-</entry><entry><literal>   CCForums::User</literal></entry></row>
+</entry><entry>{@link   CCForums::User}<literal></literal></entry></row>
 <row><entry><uri>forums/post/{forum_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCForums::PostNew</literal></entry></row>
+</entry><entry>{@link   CCForums::PostNew}<literal></literal></entry></row>
 <row><entry><uri>thread/{thread_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCForums::ViewThread</literal></entry></row>
+</entry><entry>{@link   CCForums::ViewThread}<literal></literal></entry></row>
 <row><entry><uri>topics/delete/{topic_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCTopic::Delete</literal></entry></row>
+</entry><entry>{@link   CCTopic::Delete}<literal></literal></entry></row>
 <row><entry><uri>topics/edit/{topic_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCTopic::Edit</literal></entry></row>
+</entry><entry>{@link   CCTopic::Edit}<literal></literal></entry></row>
 <row><entry><uri>topics/quote/{topic_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCTopic::Quote</literal></entry></row>
+</entry><entry>{@link   CCTopic::Quote}<literal></literal></entry></row>
 <row><entry><uri>topics/reply/{topic_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCTopic::Reply</literal></entry></row>
+</entry><entry>{@link   CCTopic::Reply}<literal></literal></entry></row>
 <row><entry><uri>topics/view/{topic_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCTopic::View</literal></entry></row>
+</entry><entry>{@link   CCTopic::View}<literal></literal></entry></row>
 <row><entry><uri>format</uri></entry><entry><emphasis>E</emphasis></entry><entry>
   Ajax callback for 'preview' button
-</entry><entry><literal>   CCFormat::CallBack</literal></entry></row>
+</entry><entry>{@link   CCFormat::CallBack}<literal></literal></entry></row>
 <row><entry><uri>admin/forums</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCForums::Admin</literal></entry></row>
+</entry><entry>{@link   CCForums::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/forums/move/{thread_id}</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Displays 'Move Thread' form
-</entry><entry><literal>   CCForums::MoveThread</literal></entry></row>
+</entry><entry>{@link   CCForums::MoveThread}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>How I Did It</emphasis></entry></row>
 
 <row><entry><uri>howididit/{upload_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCHowIDidIt::HowIDidIt</literal></entry></row>
+</entry><entry>{@link   CCHowIDidIt::HowIDidIt}<literal></literal></entry></row>
 <row><entry><uri>howididit/browse</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCHowIDidIt::Browse</literal></entry></row>
+</entry><entry>{@link   CCHowIDidIt::Browse}<literal></literal></entry></row>
 <row><entry><uri>howididit/detail/{upload_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
    Ajax callback for just HIDI details.
-</entry><entry><literal>   CCHowIDidIt::Detail</literal></entry></row>
+</entry><entry>{@link   CCHowIDidIt::Detail}<literal></literal></entry></row>
 <row><entry><uri>edithowididit/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCHowIDidIt::EditHowIDidIt</literal></entry></row>
+</entry><entry>{@link   CCHowIDidIt::EditHowIDidIt}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>User</emphasis></entry></row>
 
 <row><entry><uri>login</uri></entry><entry><emphasis>U</emphasis></entry><entry>
-</entry><entry><literal>   CCLogin::Login</literal></entry></row>
+</entry><entry>{@link   CCLogin::Login}<literal></literal></entry></row>
 <row><entry><uri>logout</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCLogin::Logout</literal></entry></row>
+</entry><entry>{@link   CCLogin::Logout}<literal></literal></entry></row>
 <row><entry><uri>lostpassword</uri></entry><entry><emphasis>U</emphasis></entry><entry>
-</entry><entry><literal>   CCLogin::LostPassword</literal></entry></row>
+</entry><entry>{@link   CCLogin::LostPassword}<literal></literal></entry></row>
 <row><entry><uri>register</uri></entry><entry><emphasis>U</emphasis></entry><entry>
-</entry><entry><literal>   CCLogin::Register</literal></entry></row>
+</entry><entry>{@link   CCLogin::Register}<literal></literal></entry></row>
 <row><entry><uri>people/[user_name]/[tags]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCUser::UserPage</literal></entry></row>
+</entry><entry>{@link   CCUser::UserPage}<literal></literal></entry></row>
 <row><entry><uri>people/addtofavs/{user_name}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCUser::AddToFavs</literal></entry></row>
+</entry><entry>{@link   CCUser::AddToFavs}<literal></literal></entry></row>
 <row><entry><uri>people/contact/{user_name}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCMailerAPI::Contact</literal></entry></row>
+</entry><entry>{@link   CCMailerAPI::Contact}<literal></literal></entry></row>
 <row><entry><uri>people/notify/edit/[user_name]</uri></entry><entry><emphasis>R</emphasis></entry><entry>
   Optional parameter is other user to get notified about.
-</entry><entry><literal>   CCNotify::EditMyNotifications</literal></entry></row>
+</entry><entry>{@link   CCNotify::EditMyNotifications}<literal></literal></entry></row>
 <row><entry><uri>people/profile</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCUser::EditProfile</literal></entry></row>
+</entry><entry>{@link   CCUser::EditProfile}<literal></literal></entry></row>
 <row><entry><uri>admin/user/{user_id}/{cmd}</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       N.B. user id, not user name. cmd is delfiles, deluser or banip
-</entry><entry><literal>   CCUserAdmin::Admin</literal></entry></row>
+</entry><entry>{@link   CCUserAdmin::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/password/[user_id]</uri></entry><entry><emphasis>A</emphasis></entry><entry>
         Displays 'Change Password' form      
-</entry><entry><literal>   CCUserAdmin::ChangePassword</literal></entry></row>
+</entry><entry>{@link   CCUserAdmin::ChangePassword}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3" class="cmdcat"><emphasis>Sample Pools</emphasis></entry></row>
 
 <row><entry><uri>api</uri></entry><entry><emphasis>E</emphasis></entry><entry>
       Sample Pool API implementation
-</entry><entry><literal>   CCRestAPI::File</literal></entry></row>
+</entry><entry>{@link   CCRestAPI::File}<literal></literal></entry></row>
 <row><entry><uri>pools/pool/{pool_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCPoolUI::Pool</literal></entry></row>
+</entry><entry>{@link   CCPoolUI::Pool}<literal></literal></entry></row>
 <row><entry><uri>pools/item/{item_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCPoolUI::Item</literal></entry></row>
+</entry><entry>{@link   CCPoolUI::Item}<literal></literal></entry></row>
 <row><entry><uri>admin/pools</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCPoolUI::Admin</literal></entry></row>
+</entry><entry>{@link   CCPoolUI::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/pool/delete/{pool_id}</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCPoolUI::Delete</literal></entry></row>
+</entry><entry>{@link   CCPoolUI::Delete}<literal></literal></entry></row>
 <row><entry><uri>admin/pool/edit/{pool_id}</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCPoolUI::Edit</literal></entry></row>
+</entry><entry>{@link   CCPoolUI::Edit}<literal></literal></entry></row>
 <row><entry><uri>admin/pools/approve</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCPoolUI::Approve</literal></entry></row>
+</entry><entry>{@link   CCPoolUI::Approve}<literal></literal></entry></row>
 <row><entry><uri>admin/pools/approve/item</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCPoolUI::Manage</literal></entry></row>
+</entry><entry>{@link   CCPoolUI::Manage}<literal></literal></entry></row>
 <row><entry><uri>admin/pools/settings</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCPoolUI::Settings</literal></entry></row>
+</entry><entry>{@link   CCPoolUI::Settings}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Ratings/Reviews</emphasis></entry></row>
 
 <row><entry><uri>rate/{upload_id}/{score}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
   Ajax callback (when a user clicks on a star)
-</entry><entry><literal>   CCRating::Rate</literal></entry></row>
+</entry><entry>{@link   CCRating::Rate}<literal></literal></entry></row>
 <row><entry><uri>reviews/[user_name]/[upload_id]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
    Also accepts <uri>?qtype=leftby</uri> query.
-</entry><entry><literal>   CCReview::Reviews</literal></entry></row>
+</entry><entry>{@link   CCReview::Reviews}<literal></literal></entry></row>
 <row><entry><uri>reviews/post/{upload_id}</uri></entry><entry><emphasis>R</emphasis></entry><entry>
-</entry><entry><literal>   CCReview::PostReview</literal></entry></row>
+</entry><entry>{@link   CCReview::PostReview}<literal></literal></entry></row>
 <row><entry><uri>reviews/thread/{upload_id}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCReview::SeeThread</literal></entry></row>
+</entry><entry>{@link   CCReview::SeeThread}<literal></literal></entry></row>
 <row><entry><uri>admin/ratings</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCRating::Admin</literal></entry></row>
+</entry><entry>{@link   CCRating::Admin}<literal></literal></entry></row>
 
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Search</emphasis></entry></row>
       
 <row><entry><uri>search</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCSearch::Search</literal></entry></row>
+</entry><entry>{@link   CCSearch::Search}<literal></literal></entry></row>
 <row><entry><uri>search/people/{field}/{tags}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
   'field' is whatilike, whatido or lookinfo
-</entry><entry><literal>   CCSearch::OnUserSearch</literal></entry></row>
+</entry><entry>{@link   CCSearch::OnUserSearch}<literal></literal></entry></row>
 <row><entry><uri>search/results</uri></entry><entry><emphasis>E</emphasis></entry><entry>
    Use this for 'action' in forms
-</entry><entry><literal>   CCSearch::OnSearch</literal></entry></row>
+</entry><entry>{@link   CCSearch::OnSearch}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Folksonomy Tags</emphasis></entry></row>
 <row><entry><uri>tags/[tags]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCTag::OnBrowseTags</literal></entry></row>
+</entry><entry>{@link   CCTag::OnBrowseTags}<literal></literal></entry></row>
 <row><entry><uri>admin/tags</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Manage folksonomy tags
-</entry><entry><literal>   CCTag::Admin</literal></entry></row>
+</entry><entry>{@link   CCTag::Admin}<literal></literal></entry></row>
       
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Tab Navigator</emphasis></entry></row>
 <row><entry><uri>view/[tab_set]/[tab]/[subtab]</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCNavigator::View</literal></entry></row>
+</entry><entry>{@link   CCNavigator::View}<literal></literal></entry></row>
 <row><entry><uri>admin/tabs</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Navigator editor
-</entry><entry><literal>   CCNavigator::AdminTabs</literal></entry></row>
+</entry><entry>{@link   CCNavigator::AdminTabs}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>View File</emphasis></entry></row>
 
 <row><entry><uri>viewfile/{filename}</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCPageAdmin::ViewFile</literal></entry></row>
+</entry><entry>{@link   CCPageAdmin::ViewFile}<literal></literal></entry></row>
 <row><entry><uri>homepage</uri></entry><entry><emphasis>E</emphasis></entry><entry>
   The action for this command is determined by admins via the 'Settings' form.
-</entry><entry><literal>   CCPageAdmin::Homepage</literal></entry></row>
+</entry><entry>{@link   CCPageAdmin::Homepage}<literal></literal></entry></row>
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Misc. Admin Commands</emphasis></entry></row>
 
 <row><entry><uri>activity</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Display activity log
-</entry><entry><literal>   CCActivityLogAPI::ViewLog</literal></entry></row>
+</entry><entry>{@link   CCActivityLogAPI::ViewLog}<literal></literal></entry></row>
 <row><entry><uri>admin/cfgroot</uri></entry><entry><emphasis>A</emphasis></entry><entry>
      Displays 'New Virtual Root' form  
-</entry><entry><literal>   CCAdmin::NewConfigRoot</literal></entry></row>
+</entry><entry>{@link   CCAdmin::NewConfigRoot}<literal></literal></entry></row>
 <row><entry><uri>admin/content</uri></entry><entry><emphasis>A</emphasis></entry><entry>
      Displays 'Include Custom' form, let's the admin select modules to display on every page.
-</entry><entry><literal>   CCTemplateAdmin::OnAdminContent</literal></entry></row>
+</entry><entry>{@link   CCTemplateAdmin::OnAdminContent}<literal></literal></entry></row>
 <row><entry><uri>admin/database</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Change database access configuration. Reads and writes cc-config-db.php.
-</entry><entry><literal>   CCDatabaseAdmin::Admin</literal></entry></row>
+</entry><entry>{@link   CCDatabaseAdmin::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/edit</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Backdoor configuration editor.
-</entry><entry><literal>   CCAdmin::Deep</literal></entry></row>
+</entry><entry>{@link   CCAdmin::Deep}<literal></literal></entry></row>
 <row><entry><uri>admin/files</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Displays web based file manager.
-</entry><entry><literal>   CCFileMan::Files</literal></entry></row>
+</entry><entry>{@link   CCFileMan::Files}<literal></literal></entry></row>
 <row><entry><uri>admin/formats</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Displays file format choice form.
-</entry><entry><literal>   CCFileVerify::ConfigureFormats</literal></entry></row>
+</entry><entry>{@link   CCFileVerify::ConfigureFormats}<literal></literal></entry></row>
 <row><entry><uri>admin/language</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCLanguageAdmin::Admin</literal></entry></row>
+</entry><entry>{@link   CCLanguageAdmin::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/license</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCLicense::Admin</literal></entry></row>
+</entry><entry>{@link   CCLicense::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/massmail</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCMailerAPI::MassMail</literal></entry></row>
+</entry><entry>{@link   CCMailerAPI::MassMail}<literal></literal></entry></row>
 <row><entry><uri>admin/menu</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCMenu::Admin</literal></entry></row>
+</entry><entry>{@link   CCMenu::Admin}<literal></literal></entry></row>
 <row><entry><uri>admin/menu/additems/{numitems}</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCMenu::AddMenuItems</literal></entry></row>
+</entry><entry>{@link   CCMenu::AddMenuItems}<literal></literal></entry></row>
 <row><entry><uri>admin/menu/killcache</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCMenu::KillCache</literal></entry></row>
+</entry><entry>{@link   CCMenu::KillCache}<literal></literal></entry></row>
 <row><entry><uri>admin/menugroup</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCMenu::AdminGroup</literal></entry></row>
+</entry><entry>{@link   CCMenu::AdminGroup}<literal></literal></entry></row>
 <row><entry><uri>admin/settings</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCAdmin::Settings</literal></entry></row>
+</entry><entry>{@link   CCAdmin::Settings}<literal></literal></entry></row>
 <row><entry><uri>admin/setup</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Display 'Global Settings' form      
-</entry><entry><literal>   CCAdmin::Setup</literal></entry></row>
+</entry><entry>{@link   CCAdmin::Setup}<literal></literal></entry></row>
 <row><entry><uri>admin/site</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Main Admin menu
-</entry><entry><literal>   CCAdmin::Site</literal></entry></row>
+</entry><entry>{@link   CCAdmin::Site}<literal></literal></entry></row>
 <row><entry><uri>admin/templatetags</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Displays 'Header/Footer' form      
-</entry><entry><literal>   CCTemplateAdmin::OnAdminTags</literal></entry></row>
+</entry><entry>{@link   CCTemplateAdmin::OnAdminTags}<literal></literal></entry></row>
 <row><entry><uri>admin/templatetags/new</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Display 'Create a new template tag' form
-</entry><entry><literal>   CCTemplateAdmin::OnNewTags</literal></entry></row>
+</entry><entry>{@link   CCTemplateAdmin::OnNewTags}<literal></literal></entry></row>
 <row><entry><uri>import?i=path_to_file</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Import configuration
-</entry><entry><literal>   CCSettingsExporter::Import</literal></entry></row>
+</entry><entry>{@link   CCSettingsExporter::Import}<literal></literal></entry></row>
 <row><entry><uri>export</uri></entry><entry><emphasis>A</emphasis></entry><entry>
       Exports configuration to browser.
-</entry><entry><literal>   CCSettingsExporter::Export</literal></entry></row>
+</entry><entry>{@link   CCSettingsExporter::Export}<literal></literal></entry></row>
 <row><entry><uri>skin/body_begin</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCSkinExport::GetBodyHeader</literal></entry></row>
+</entry><entry>{@link   CCSkinExport::GetBodyHeader}<literal></literal></entry></row>
 <row><entry><uri>skin/body_end</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCSkinExport::GetFooter</literal></entry></row>
+</entry><entry>{@link   CCSkinExport::GetFooter}<literal></literal></entry></row>
 <row><entry><uri>skin/head</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCSkinExport::GetHeader</literal></entry></row>
+</entry><entry>{@link   CCSkinExport::GetHeader}<literal></literal></entry></row>
 
 
 <row class="cmdcat"><entry morerows="3"   class="cmdcat"><emphasis>Contests</emphasis></entry></row>
 
 <row><entry><uri>contest</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCContest::Contests</literal></entry></row>
+</entry><entry>{@link   CCContest::Contests}<literal></literal></entry></row>
 <row><entry><uri>contest/create</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCContest::CreateContest</literal></entry></row>
+</entry><entry>{@link   CCContest::CreateContest}<literal></literal></entry></row>
 <row><entry><uri>contest/edit</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCContest::EditContest</literal></entry></row>
+</entry><entry>{@link   CCContest::EditContest}<literal></literal></entry></row>
 <row><entry><uri>contest/stream</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCRenderAudio::StreamContest</literal></entry></row>
+</entry><entry>{@link   CCRenderAudio::StreamContest}<literal></literal></entry></row>
 <row><entry><uri>contest/streamsource</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCRenderAudio::StreamContestSource</literal></entry></row>
+</entry><entry>{@link   CCRenderAudio::StreamContestSource}<literal></literal></entry></row>
 <row><entry><uri>admin/contest</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCContest::Admin</literal></entry></row>
+</entry><entry>{@link   CCContest::Admin}<literal></literal></entry></row>
 <row><entry><uri>contest/submit</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCContest::SubmitEntry</literal></entry></row>
+</entry><entry>{@link   CCContest::SubmitEntry}<literal></literal></entry></row>
 <row><entry><uri>contest/submitsource</uri></entry><entry><emphasis>A</emphasis></entry><entry>
-</entry><entry><literal>   CCContest::SubmitSource</literal></entry></row>
+</entry><entry>{@link   CCContest::SubmitSource}<literal></literal></entry></row>
 <row><entry><uri>contest/userinfo</uri></entry><entry><emphasis>R</emphasis></entry><entry>
        Display extra contest user info.       
-</entry><entry><literal>   CCUserInfoX::UserInfo</literal></entry></row>
+</entry><entry>{@link   CCUserInfoX::UserInfo}<literal></literal></entry></row>
 <row><entry><uri>contests</uri></entry><entry><emphasis>E</emphasis></entry><entry>
-</entry><entry><literal>   CCContest::Contests</literal></entry></row>
+</entry><entry>{@link   CCContest::Contests}<literal></literal></entry></row>
 
 </table>      
 

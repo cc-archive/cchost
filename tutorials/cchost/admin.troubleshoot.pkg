@@ -15,7 +15,7 @@
     this is to set the entire ccHost directory structure as all-access 
     (0777) just while you get things going. If everything else is working 
     then you should follow the 
-    <ulink url="http://wiki.creativecommons.org/CcHost_File_Access">ccHost file access guildlines</ulink>.
+    <ulink url="http://wiki.creativecommons.org/CcHost_File_Access">ccHost file access guidelines</ulink>.
 </para>
 </refsect1>
 

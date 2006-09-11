@@ -104,7 +104,7 @@
 <para>
     In the file <filename>skin-myskin.css</filename> you see that skin
     derives it's styles from <filename>skin-simple</filename> but 
-    then stragetically overrides specific color values in and replaces 
+    then strategically overrides specific color values in and replaces 
     the background graphics to give us a completely different
     color scheme variation to <filename>skin-simple</filename>. Most of the 
     major color-able elements of the screen clearly grouped and 
@@ -178,7 +178,7 @@
     <filename>button-</filename>.
     For all action buttons the left side is always the same (
     <filename>button-left.gif</filename>). For the right side there are three
-    varations: plain, download and play.</para>
+    variations: plain, download and play.</para>
 
     <para>In all four files the upper band is used for normal state and the bottom
     for when the user hovers over the button. All four files must have the same 
@@ -206,7 +206,7 @@
   <para>When you change (or delete) the logo you will want to adjust the 
   site title and description in the CSS to align to your logo. Look for the section
   in the main CSS file that looks like the segment below and change the 
-  values that bolded below until the banner looks right.</para>
+  values in bold below until the banner looks right.</para>
 <example>
 /**********************************
 * Shift the text of main link and *

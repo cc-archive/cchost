@@ -16,7 +16,7 @@
 <listitem>
    You want a backup snapshot for disaster or other recovery. That is,
    you want to protect your site from yourself and other environmental
-   calamaties.
+   calamities.
 </listitem>
 <listitem>
    You want to create a "mirror" of your install on a <emphasis>different</emphasis> 
@@ -102,7 +102,7 @@ think about:</para>
 </para>
 <para>
     If you have both available then it depends on how often you back up
-    whether you want to make a simple commandline script that you run
+    whether you want to make a simple command line script that you run
     very regularly or if you prefer having a visual representation of the
     options available for you on the screen when you perform the export.
 </para>
@@ -287,7 +287,7 @@ mysql -u USERNAME -pPASSWORD -d DBNAME &lt; dbname.sql
     copy <filename>import.txt</filename>.
 </listitem>
 <listitem>
-    In <filename>import.txt</filename> search for all occurrances of the 
+    In <filename>import.txt</filename> search for all occurrences of the 
     root URL in your main setup (e.g. 
     <uri>http://example.com/cchost</uri>)
     and replace that with the root URL of your mirrored setup (e.g. 
@@ -386,7 +386,7 @@ fclose($f);
     If you plan to do extensive development on a site we highly
     recommend using a version control system like 
     <ulink url="http://subversion.tigris.org/">Subversion</ulink> (SVN). 
-    Using something like SVN will automate the sync'ing of multiple
+    Using something like SVN will automate the syncing of multiple
     machines.
 </para>
 <para>

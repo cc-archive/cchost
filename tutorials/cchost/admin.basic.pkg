@@ -84,7 +84,7 @@ then put one between the command and the parameter</para>
 <para>
 There may come a time where you want a menu item like <command>Register</command> or a navigator tab like 
 <command>Home</command> to go to a specific virtual root like <uri>media</uri>. In that case you will want
-to specifiy the full URL in the menu item or tab, like <uri>http://root-installation.com?ccm=/media/register</uri>. That way no matter what virtual root the user is in, they will be taken to the main register screen or
+to specify the full URL in the menu item or tab, like <uri>http://root-installation.com?ccm=/media/register</uri>. That way no matter what virtual root the user is in, they will be taken to the main register screen or
 in the case of a 'Home' tab simply <uri>http://root-installation</uri>.</para>
 
 <para>If you change your site to use pretty URLs at some point these URLs will continue work, they just 
@@ -145,7 +145,7 @@ won't be, well, pretty. At that point you can edit these menu items to the prett
 meanings of the word <command>tag</command> used when administering a ccHost installation. All
 three are conventions of the subsystems we use and 
 we felt it was better to use context as a disambiguator rather than inventing terms for processes
-everybody knows as 'tagging' -- albiet with different purposes.</para>
+everybody knows as 'tagging' -- albeit with different purposes.</para>
 <unorderedlist class="tutlist">
   <listitem><emphasis>'Folksonomy' Tags</emphasis>
       <para>
@@ -183,11 +183,11 @@ visibility of the menu or tab item.</note>
 and mark the menu item as <emphasis>Administrators Only</emphasis> but that will only hide the menu
 item from everyone but Administrators, it would <emphasis>not</emphasis> prevent someone from entering
 that command into their browser directly and seeing the results of the command because that command happens
-to be registered interally for <emphasis>Everyone</emphasis>.</para>
+to be registered integrally for <emphasis>Everyone</emphasis>.</para>
 
 <para>Also note that the access permissions
 on commands only determine whether the code for that command will be executed or not. The code itself 
-may determine even stricture critieria for the command.</para>
+may determine even stricture criteria for the command.</para>
 
 <para>In other words, a command might be marked as for <emphasis>Registered users only</emphasis>
 (e.g. <uri>editorial/submit/{upload_id}</uri>) but the code that implements that command may have
@@ -204,7 +204,7 @@ is further restricted by who 'owns' the upload, that is: who uploaded the thing.
 
 <para>
 The following table describes the directory
-structure neccessary for your ccHost installation.
+structure necessary for your ccHost installation.
 </para>
 <table>
   <row>
@@ -217,13 +217,13 @@ structure neccessary for your ccHost installation.
   <row>
       <entry class="fn"><uri>ccextras</uri></entry>
       <entry class="fd">
-          Developers use this direcotry to add 
+          Developers use this directory to add 
           features to ccHost. Files that do not come
           with the official should start with something 
           <emphasis>other</emphasis> than the
           <filename>cc-</filename> prefix. 
           <note>
-            ccHost will look in thie directory and will automatically
+            ccHost will look in this directory and will automatically
             load any file with a <filename>.php</filename> extension.
             Therefore you should be careful what files you move here.
           </note>
@@ -261,7 +261,7 @@ structure neccessary for your ccHost installation.
       <entry class="fn"><uri>cctemplates</uri></entry>
       <entry class="fd">
           Directory for skins. The skin architecture is such that
-          you should not have to make any edits to exsiting files.
+          you should not have to make any edits to existing files.
           Doing so will cause problems when you update ccHost. 
       </entry>
   </row>
@@ -270,7 +270,7 @@ structure neccessary for your ccHost installation.
       <entry class="fd">
           Created by ccHost the first time
           a contest is created. It holds all contest sources
-          and entries partioned by contest name and then
+          and entries partitioned by contest name and then
           by user below that. Having this structure makes it
           easy locate all the entries in a contest once the
           entry period has closed.
@@ -297,7 +297,7 @@ structure neccessary for your ccHost installation.
           This is a file in your root installation
           created by ccHost installer and specifies
           your installation's database access. ccHost
-          will not run without the presense of this file
+          will not run without the presence of this file
           and will not operate properly if the data
           inside does not match your server's 
           database access configuration.
@@ -341,7 +341,7 @@ structure neccessary for your ccHost installation.
   <row>
       <entry class="fn"><uri>cctools</uri></entry>
       <entry class="fd">
-          This directory has been depricated and will be removed in 
+          This directory has been deprecated and will be removed in 
           future releases. 
       </entry>
   </row>
@@ -366,8 +366,8 @@ structure neccessary for your ccHost installation.
         <uri>Makefile.language</uri>
       </entry>
       <entry class="fd">
-          Utility files and directory used by ccHost developers for helping with low level maintance. ccHost has
-          no depdency on these files and directory and they 
+          Utility files and directory used by ccHost developers for helping with low level maintenance. ccHost has
+          no dependency on these files and directory and they 
           are not needed for normal ccHost web site operation.
       </entry>
   </row>
