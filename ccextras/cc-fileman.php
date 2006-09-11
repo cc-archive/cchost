@@ -30,7 +30,6 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCFileMan',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCFileMan' , 'OnAdminMenu') );
 
 
-
 /**
 *
 *
@@ -95,26 +94,6 @@ class CCFileMan
         }
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
-    *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
-    */
-    function OnGetConfigFields($scope,&$fields)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $fields['files-root'] =
-               array(  'label'      => 'Admin files',
-                       'form_tip'   => 'This is where the viewfile/ url looks for .xml files',
-                       'value'      => 0,
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
-        }
-    }
 }
 
 
