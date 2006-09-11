@@ -110,14 +110,14 @@
     major color-able elements of the screen clearly grouped and 
     identified. One major exception is the text box 
     for reviews and forum topics which are found in 
-    <filename>skin-tutorial1-topics.css</filename>.
+    <filename>skin-myskin-topics.css</filename>.
 </para>
 
 <para>
     The color values in a hex format (e.g. <literal>#FFE2BF</literal>) the 
     CSS <literal>rgb()</literal> are fine too. There are countless
     helper pages on the web for dealing with colors in CSS (
-    <ulink url="http://del.icio.us/search/?fr=del_icio_us&p=css+rgb&type=all">de.lios.us</ulink>,
+    <ulink url="http://del.icio.us/search/?fr=del_icio_us&p=css+rgb&type=all">del.icio.us</ulink>,
     <ulink url="http://www.google.com/search?q=css+rgg">Google</ulink>);
 </para>
 
@@ -141,7 +141,7 @@
     <title>5. Changing the Banner, Footer and Tabs Background</title>
 
     <para>In order to change the tabs background you will need to edit
-    <filename>tutorial1/tab.gif</filename> in your graphical editor. The image below shows you 
+    <filename>myskin/tab.gif</filename> in your graphical editor. The image below shows you 
     what the different bands represents:</para>
 
     <graphic fileref="{$subdir}media/header_tab-tut.gif" />
@@ -200,7 +200,7 @@
   header. This is very effective way of ensuring the logo is placed exactly
   in the same place in relation to the banner no matter what browser or
   resolution the user is using. In this case that logo is in 
-  <filename>tutorial1/header.gif</filename>
+  <filename>myskin/header.gif</filename>
   and can easily be replaced or simply deleted using a graphical editor.</para>
 
   <para>When you change (or delete) the logo you will want to adjust the 
