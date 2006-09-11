@@ -340,10 +340,32 @@ class CCPage extends CCTemplate
         // 
         $configs =& CCConfigs::GetTable();
         $tmacs = $configs->GetConfig('tmacs');
+
+        $first_key = key($tmacs);
+
+        // older installs don't have file/ prefix,
+        // fix that right here...
+        if( strpos( $first_key, '/' ) === false )
+        {
+            $newmacs = array();
+            foreach( $tmacs as $K => $V )
+            {
+                if( strpos( $K, '/' ) === false )
+                    $K = "custom/$K";
+                $newmacs[$K] = $V;
+            }
+            $configs->SaveConfig('tmacs',$newmacs,'',false);
+            $tmacs = $newmacs;
+        }
+
+        reset($tmacs);
+
         foreach( $tmacs as $K => $V )
         {
             if( $V )
-                $page->_page_args['custom_macros'][] = "custom.xml/$K";
+            {
+                $page->_page_args['custom_macros'][] = str_replace( '/', '.xml/', $K );
+            }
         }
 
         /////////////////

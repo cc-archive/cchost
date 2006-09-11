@@ -21,6 +21,17 @@ $Id$
 -->
 </tal:block>
 
+
+<tal:block replace="">
+<!--
+    This file contains the factory defaults for the
+    Sidebar Content.
+
+    You should not edit this file, instead add content
+    in sidebar.xml
+-->
+</tal:block>
+
 <metal:block define-macro="_UBeenRemixed_admin_only">
    <tal:block define="ubeenargs php: CC_pending_pool_remix()" />
    <h2 tal:condition="ubeenargs" ><a href="${ubeenargs/url}">${ubeenargs/message}</a></h2>

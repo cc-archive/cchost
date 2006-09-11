@@ -135,19 +135,47 @@ class CCAdminTemplateMacrosForm extends CCEditConfigForm
     {
         global $CC_GLOBALS;
 
+        $troot = $CC_GLOBALS['template-root'];
+
         $this->CCEditConfigForm('tmacs');
 
-        $text = file_get_contents( $CC_GLOBALS['template-root'] . '/custom.xml' );
-        preg_match_all( '/define-macro="([^_][^"]*)"/s', $text, $m );
+        $fields = array();
+        $this->_get_macros_from_file('sidebar', $fields);
+        $this->_get_macros_from_file('custom',$fields);
+        $this->AddFormFields($fields);
+        $fname = "<b>{$troot}sidebar.xml</b>";
+        $this->SetHelpText( sprintf(_(
+                                'Pick which UI elements should appear on every page.
+                               Edit the file %s to add modules here.
+                               '),$fname) );
+    }
+
+    function _get_macros_from_file($filebase,&$fields)
+    {
+        global $CC_GLOBALS;
+
+        if( !$filebase )
+            return;
+
+        $fname = $CC_GLOBALS['template-root'] . '/' . $filebase . '.xml';
+        if( !file_exists($fname) || !is_file($fname) )
+            return;
+
+        $text = @file_get_contents( $fname );
+        if( empty($text) )
+            return;
+
+        $regex = '/define-macro="([^_][^"]*)"/s';
+        preg_match_all( $regex, $text, $m );
+
         foreach($m[1] as $T)
         {
-            $fields[$T] = array( 'label'     => str_replace('_',' ',$T),
+            $N = $filebase . '/' . $T;
+            $fields[$N] = array( 'label'     => str_replace('_',' ',$T),
+                                 'form_tip'  => $filebase != 'custom' ? "(in {$filebase}.xml)" : '',
                                  'formatter' => 'checkbox',
                                  'flags'     => CCFF_POPULATE );
         }
-        $this->AddFormFields($fields);
-        $this->SetHelpText("Pick which UI elements should appear on every page. " .
-                           "(These are template macros found in <b>custom.xml</b> .)");
     }
 }
 
