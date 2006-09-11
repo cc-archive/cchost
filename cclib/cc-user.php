@@ -910,7 +910,22 @@ END;
     function OnPatchMenu(&$menu)
     {
         $current_user_name = $this->CurrentUserName();
-        $menu['artist']['action']  =  str_replace('%login_name%',$current_user_name,$menu['artist']['action']);
+
+        // technically this isn't supposed to happen
+
+        if( empty($menu['artist']['action']) )
+        {
+            CCPage::Prompt('Attention: Menus have been corrupted');
+            return;  
+        }
+
+        // fwiw, this whole thing is a heck, what really
+        // should happen is that admins should be able
+        // to access *any* CC_GLOBAL variable in any menu
+        // item.
+
+        $menu['artist']['action']  =  
+              str_replace('%login_name%',$current_user_name,$menu['artist']['action']);
     }
 
     /**
