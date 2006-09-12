@@ -199,7 +199,7 @@ class CCPoolUI
 
         $pool_items =& CCPoolItems::GetTable();
         $where['pool_item_id'] = $id;
-        $item       =& $pool_items->QueryRow($where);
+        $item       = $pool_items->QueryRow($where);
         $item['works_page'] = true;
         CCPage::PageArg( 'chop', false );
         $remixpool  =& CCLocalPoolRemixes::GetTable();
