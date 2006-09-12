@@ -60,11 +60,11 @@ $Header$
            <span class="cc_topic_date" tal:content="php: CC_datefmt('${topic/topic_date}','M d h:i a')" />
           </td>
          <td class="cc_topic_thumb_head">
-            <a class="cc_user_link" 
+            <a tal:condition="reviewer/user_name" class="cc_user_link" 
                href="${home-url}people/${reviewer/user_name}">${reviewer/user_real_name}</a> 
             <span tal:content="php: CC_lang('review of');" /> <a class="cc_file_link" 
                    href="${topic/file_page_url}">${topic/upload_name}</a> 
-            <span tal:content="php: CC_lang('by');" /> <a  class="cc_user_link" 
+            <span tal:content="php: CC_lang('by');" /> <a  tal:condition="topic/user_real_name" class="cc_user_link" 
                    href="${topic/artist_page_url}">${topic/user_real_name}</a> 
          </td>
       </tr>
@@ -130,7 +130,7 @@ $Header$
 <metal:block define-macro="topic_head">
   <tr>
      <td class="cc_topic_reviewer"><a name="${topic/topic_id}" />
-       <a href="${topic/artist_page_url}" class="cc_user_link">${topic/user_real_name}</a>
+       <a tal:condition="topic/user_real_name" href="${topic/artist_page_url}" class="cc_user_link">${topic/user_real_name}</a>
      </td>
      <td  class="cc_topic_header">
         <span class="cc_topic_date" tal:content="php: CC_datefmt('${topic/topic_date}','F d, Y h:i a')" />
@@ -144,7 +144,7 @@ $Header$
     <tal:block repeat="topic topics">
       <tr>
          <td class="cc_topic_reviewer"><a name="${topic/topic_id}" />
-           <a href="${topic/artist_page_url}" class="cc_user_link">${topic/user_real_name}</a>
+           <a href="${topic/artist_page_url}" tal:condition="topic/user_real_name" class="cc_user_link">${topic/user_real_name}</a>
          </td>
          <td  class="cc_topic_header">
          <a tal:condition="topic/topic_permalink" class="cc_topic_permalink" href="${topic/topic_permalink}">permalink</a>
@@ -200,7 +200,7 @@ $Header$
           <tal:block condition="not: topic/topic_deleted">
             <tr>
                <td class="cc_topic_reviewer"><a name="${topic/topic_id}" />
-                 <a href="${topic/artist_page_url}" class="cc_user_link">${topic/user_real_name}</a>
+                 <a href="${topic/artist_page_url}" tal:condition="topic/user_real_name" class="cc_user_link">${topic/user_real_name}</a>
                </td>
                <td  class="cc_topic_header">
                   <span class="cc_topic_date" tal:content="php: CC_datefmt('${topic/topic_date}','F d, Y h:i a')" />
@@ -236,7 +236,7 @@ $Header$
   <table id="cc_file_info" cellpadding="0" cellspacing="0">
     <tr>
       <th tal:content="php: CC_lang('by:');" /> 
-      <td><metal:block use-macro="${upload_flag}" /><a href="${record/artist_page_url}" class="cc_user_link" 
+      <td><metal:block use-macro="${upload_flag}" /><a href="${record/artist_page_url}" class="cc_user_link" tal:condition="record/user_real_name" 
           tal:content="php: CC_strchop('${record/user_real_name}',35)" /></td>
     </tr>
     <tr>

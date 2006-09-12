@@ -220,7 +220,7 @@ class CCTopics extends CCTable
                                         '#' . $row['topic_id'];
         }
 
-        if( $row['user_id'] )
+        if( !empty($row['user_id']) )
         {
             // these are overrwritten by reviews
             $row['user_post_count'] = $row['user_num_posts'];
