@@ -239,7 +239,7 @@ class CCTemplateAdmin
 {
     function OnAdminContent()
     {
-        CCPage::SetTitle("Include Specialized Content");
+        CCPage::SetTitle("Sidebar Content");
         $form = new CCAdminTemplateMacrosForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
