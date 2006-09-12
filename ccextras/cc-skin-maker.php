@@ -145,6 +145,9 @@ class CCSkinMaker
 
     function CreateSkin($newname)
     {
+        global $CC_GLOBALS;
+        $template_dir = $CC_GLOBALS['template-root'];
+
         $macros = @file_get_contents('ccextras/cc-skin-maker-template.txt');
         if( empty($macros) )
             return _('Error reading skin template file');
@@ -155,7 +158,7 @@ class CCSkinMaker
         foreach( $m as $t )
         {
             $text = trim(str_replace('%%name%%', $newname, $t[2]));
-            $fname = 'cctemplates/skin-' . $newname;
+            $fname = $template_dir . 'skin-' . $newname;
             switch( $t[1] )
             {
                 case 'css':
@@ -189,12 +192,12 @@ class CCSkinMaker
             'header-tl.gif', 'header-tr.gif',
             'header.gif', 'input.png', 'tab.gif' );
 
-        CCUtil::MakeSubdirs('cctemplates/' . $newname, 0777);
+        CCUtil::MakeSubdirs($template_dir . $newname, 0777);
 
         foreach( $graphics as $g )
         {
             $src = 'ccextras/ccskin-graphics/' . $g;
-            $dst = 'cctemplates/' . $newname . '/' . $g;
+            $dst = $template_dir . $newname . '/' . $g;
 
             copy( $src, $dst );
             chmod( $dst, 0777 );
