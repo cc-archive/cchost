@@ -538,7 +538,13 @@ class CCReview
                 $reviews->Insert($values);
                 $this->Sync($upload_id,$values['topic_user']);
 
-                CCEvents::Invoke( CC_EVENT_REVIEW, array( &$values ) );
+                // EVENT_REVIEW expects a *real* row
+                // code in the handler will break if you don't
+                // give them one
+
+                $row = $reviews->QueryKeyRow($values['topic_id']);
+
+                CCEvents::Invoke( CC_EVENT_REVIEW, array( &$row ) );
 
                 $url = ccl('reviews',$R['user_name'],$upload_id);
                 CCUtil::SendBrowserTo($url);
