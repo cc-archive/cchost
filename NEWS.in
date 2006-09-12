@@ -3,6 +3,42 @@ ccHost Release Notes
 
 Version: PROJECT_VERSION
 
+3.0.2 NOTES:
+
+New features (admin)
+========================
+    
+    Skin Maker
+    ----------
+    You can generate custom skin skeleton based on skin-simple
+    greatly simplifying customization of your site.
+
+    Sidebar Editing
+    ---------------
+    You can now safely create your own sidebar content without
+    fear of updates writing over your work. See the ccadmin\INSTALL 
+    for details.
+
+Bug Fixes
+============
+    Fixed in 3.0.2
+    * More graceful error recovery when menu has been destroyed
+    * empty nav tab set was breaking site
+    * add items to empty menu caused havoc
+    * viewing sample pool item caused errors
+    * remixedby feeds caused errors
+    * deleted user's reviews caused errors
+    * podcast of deleted record broke feed
+    * editing menus for vroots broken
+    * editing properties for sample pools caused errors
+
+    Fixed in 3.0.1:
+    * saving user profile blows away menu and submit form changes
+    * title of review feed was not properly scrubbed for '&'
+
+
+3.0 NOTES:
+
 New features (end-user)
 ========================
 
