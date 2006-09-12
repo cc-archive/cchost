@@ -329,7 +329,10 @@ class CCTable
     function & GetRecordsFromKeys($keys)
     {
         if( empty($keys) )
-            return null;
+        {
+            $a = array();
+            return $a;
+        }
 
         $where = array();
         $name = $this->_key_field;
