@@ -319,6 +319,8 @@ class CCFeed
      */
     function _gen_feed_from_tags($template, $tagstr, $cache_type = 'rss')
     {
+        $qstring = '';
+
         if( empty($tagstr) )
         {
             if( !empty($_REQUEST['remixesof']) )
@@ -355,16 +357,11 @@ class CCFeed
                     }
                 }
             }
-            else
-            {
-                $qstring = '';
-            }
         }
         else
         {
             $tagstr = str_replace(' ',',',urldecode($tagstr));
             $this->_check_cache($cache_type,$tagstr);
-            $qstring = '';
         }
 
         if( empty($records) )
