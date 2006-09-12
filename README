@@ -47,14 +47,7 @@ To install follow the instructions in ccadmin/INSTALL.txt.
 4. Known Issues
 ------------------------
 
-There seems to be a problem when posting a review: the review
-itself is stored normally, however afterward the user is faced
-with an error screen. The behavoir is very rare and *may* be 
-exclusive to ccMixter because we have not been able to recreate 
-this on any other installation. Again, this is not a data loss
-bug and has not been seen anywhere but (very rarely) on one
-installation.
-
+* There are no known issues at this time
 
 
 5. Contacts (Reporting Bugs)
