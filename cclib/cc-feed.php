@@ -422,8 +422,10 @@ class CCFeed
         else
         {
             $args['feed_items'] = $records;
-            $rssdate    = $records[0]['rss_pubdate'];
-            $atomdate   = $records[0]['atom_pubdate'];
+            $first_index = key($records);
+            reset($records);
+            $rssdate    = $records[$first_index]['rss_pubdate'];
+            $atomdate   = $records[$first_index]['atom_pubdate'];
         }
 
 		$args['rss-build-date'] = 
