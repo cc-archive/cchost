@@ -1,12 +1,34 @@
-Installation notes for ccHost 3.0
-=================================
+Installation notes for ccHost 3.0.2
+====================================
 
 Please check the project website/wiki to see if there are updates to any of 
 these steps: http://wiki.creativecommons.org/CcHost#Install
 
+-- NOTE: For folks who have edited cctemplates/custom.xml:
+------------------------------------------------------------
+-- Copy cctemplates/custom.xml to cctemplates/sidebar.xml
+-- BEFORE installing this release. After you update you
+-- may see errors in the sidebar; ignore those and go to
+-- Manage Site and the Sidebar Content and re-select the
+-- the content you want. From now on: you never have to
+-- touch custom.xml again and you should do all your 
+-- edits in sidebar.xml which we will never update.
 
-Upgrading from 2.x to 3.0
--------------------------
+
+Upgrading from 3.0.x to 3.0.2
+------------------------------
+
+1. Make sure you logged in admin on your ccHost installation
+2. Unzip/tar the package to your local drive
+3. Copy the files (except for ccadmin) to you web server
+4. While Browse to http://your_installation_root/?update=1
+
+
+Upgrading from 2.x to 3.0.2
+----------------------------
+
+If you have edited cctemplates/custom.xml make sure to
+read the section above.
 
 This specific upgrade requires a few extra steps:
 
