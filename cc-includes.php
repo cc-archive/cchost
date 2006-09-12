@@ -70,7 +70,6 @@ require_once( 'cclib/cc-feeds-atom.php' );
 require_once( 'cclib/cc-navigator.php' );
 require_once( 'cclib/cc-ban.php' );
 require_once( 'cclib/cc-renderzip.php' );
-require_once( 'cclib/cc-magnet.php' );
 require_once( 'cclib/cc-ratings.php' );
 require_once( 'cclib/cc-editorials.php' );
 require_once( 'cclib/cc-pools-ui.php' );
