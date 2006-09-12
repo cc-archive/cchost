@@ -337,6 +337,14 @@ class CCUsers extends CCTable
     function & GetRecordFromID($userid)
     {
         $row = $this->QueryKeyRow($userid);
+        if( empty($row) )
+        {
+            // this is a pretty bad state of affairs
+            // the user account was deleted and the 
+            // caller doesn't know it
+            $a = array();
+            return $a;
+        }
         $r =& $this->GetRecordFromRow($row);
         return $r;
     }
