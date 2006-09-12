@@ -47,7 +47,14 @@ To install follow the instructions in ccadmin/INSTALL.txt.
 4. Known Issues
 ------------------------
 
-a. There are no major issues known with this release (See NEWS file)
+There seems to be a problem when posting a review: the review
+itself is stored normally, however afterward the user is faced
+with an error screen. The behavoir is very rare and *may* be 
+exclusive to ccMixter because we have not been able to recreate 
+this on any other installation. Again, this is not a data loss
+bug and has not been seen anywhere but (very rarely) on one
+installation.
+
 
 
 5. Contacts (Reporting Bugs)
@@ -79,5 +86,4 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
-
+$Id$
