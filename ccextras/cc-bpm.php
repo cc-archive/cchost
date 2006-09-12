@@ -26,11 +26,12 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCBPM' , 'OnGetConfigFields' ));
+
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,    array( 'CCBPM', 'OnFormFields'));
 CCEvents::AddHandler(CC_EVENT_FORM_POPULATE,  array( 'CCBPM', 'OnFormPopulate') );
 CCEvents::AddHandler(CC_EVENT_FORM_VERIFY,    array( 'CCBPM', 'OnFormVerify') );
 
-CCEvents::AddHandler(CC_EVENT_DO_SEARCH,      array( 'CCBPM', 'OnDoSearch') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCBPM', 'OnUploadDone') );
 
 /**
@@ -39,6 +40,26 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCBPM', 'OnUploadDone') );
 */
 class CCBPM
 {
+
+    /**
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
+    *
+    * Add global settings settings to config editing form
+    * 
+    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    * @param array  $fields Array of form fields to add fields to.
+    */
+    function OnGetConfigFields($scope,&$fields)
+    {
+        if( $scope == CC_GLOBAL_SCOPE )
+        {
+            $fields['do-bpm'] =
+               array(  'label'      => 'Include BPM in Upload Forms',
+                       'value'      => '',
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE);
+        }
+    }
 
     function CalcBPMTag($bpm)
     {
@@ -73,6 +94,11 @@ class CCBPM
     */
     function OnUploadDone($upload_id, $op)
     {
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['do-bpm']) )
+            return;
+
         if( ($op == CC_UF_NEW_UPLOAD || $op == CC_UF_PROPERTIES_EDIT) &&
             array_key_exists('upload_bpm',$_POST)
           )
@@ -96,27 +122,12 @@ class CCBPM
     */
     function OnFormFields(&$form,&$fields)
     {
-        if( strtolower( get_class($form) ) == 'ccsearchform' )
-        {
-            /*
-            *  Add BPM to search
-            */
-            $options = $fields['search_in']['options'];
-            $sorted = $options;
-            ksort($sorted);
-            $nextbit = 1;
-            foreach( $sorted as $key => $value )
-            {
-                if( $key & $nextbit )
-                {
-                    $nextbit <<= 1;
-                }
-            }
-            $options[$nextbit] = _('BPM (use \'-\' for range: 90-100)');
-            $fields['search_in']['options'] = $options;
-            $form->SetHiddenField('bpm_search',$nextbit);
-        }
-        elseif( is_subclass_of($form,'CCUploadMediaForm') ||
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['do-bpm']) )
+            return;
+
+        if( is_subclass_of($form,'CCUploadMediaForm') ||
                     is_subclass_of($form,'ccuploadmediaform') )
         {
             /*
@@ -140,6 +151,11 @@ class CCBPM
     */
     function OnFormPopulate(&$form,&$values)
     {
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['do-bpm']) )
+            return;
+
         if( !is_subclass_of($form,'CCUploadMediaForm') &&
                     !is_subclass_of($form,'ccuploadmediaform') )
         {
@@ -158,6 +174,11 @@ class CCBPM
     */
     function OnFormVerify(&$form,&$retval)
     {
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['do-bpm']) )
+            return;
+
         if( !is_subclass_of($form,'CCUploadMediaForm') &&
                     !is_subclass_of($form,'ccuploadmediaform') )
         {
@@ -179,68 +200,6 @@ class CCBPM
         return true;
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_DO_SEARCH}
-    * 
-    * @param boolean &$done_search Set this to true if you handle the search
-    */
-    function OnDoSearch(&$done_search)
-    {
-        if( empty($_POST['bpm_search']) )
-            return;
-
-        $bpm_field = CCUtil::StripText($_POST['bpm_search']);
-        if( !intval($bpm_field) )
-            return;
-
-        if( $_POST['search_in'] == $bpm_field )
-        {
-            if( !empty($_POST['search_text']) )
-            {
-                $q = trim($_POST['search_text']);
-                if(!empty($q) )
-                    $q = split('-',$q);
-            }
-
-            if( !empty($q) )
-            {
-                $uploads =& CCUploads::GetTable();
-                if( count($q) == 1 )
-                {
-                    if( !intval($q[0]) || $q[0] < 1 )
-                        return;
-
-                    list( , $where ) = $uploads->WhereForSerializedField('upload_extra', 'bpm', $q[0]);
-                }
-                else
-                {
-                    if( !intval($q[0]) || $q[0] < 1 || !intval($q[1]) || $q[0] >= $q[1] )
-                        return;
-                    list( $field, $regexp ) = $uploads->WhereForSerializedField('upload_extra', 'bpm', '[1-9]+');
-                    $where = "$regexp AND ($field >= {$q[0]}) AND ($field <= {$q[1]})";
-                }
-
-                $records = $uploads->GetRecords($where);
-                if( empty($records) )
-                {
-                    $url = ccl('search');
-                    CCPage::Prompt(sprintf(_("No records match that BPM. Go back to <a href=\"%s\">search again</a>"),$url));
-                }
-                else
-                {
-                    $count = count($records);
-                    for( $i = 0; $i < $count; $i++ )
-                    {
-                        $records[$i]['result_info'] = 'BPM: <span>' . $records[$i]['upload_extra']['bpm'] . '</span>';
-                    }
-            
-                    CCUpload::ListRecords($records);
-
-                    $done_search = true;
-                }
-            }
-        }
-    }
 }
 
 
