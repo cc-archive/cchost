@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-08 14:46-0700\n"
+"POT-Creation-Date: 2006-09-13 02:16-0700\n"
 "PO-Revision-Date: 2006-08-08 10:01-0300\n"
 "Last-Translator: Marcela <capitu@gmail.com>\n"
 "Language-Team: Brazillian Portuguese <LL@li.org>\n"
@@ -175,7 +175,7 @@ msgid "Name"
 msgstr "Nome"
 
 #: cclib/cc-navigator-admin.inc:443 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:633 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:641 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -555,7 +555,7 @@ msgid "Review"
 msgstr "Resenha"
 
 #: cclib/cc-editorials.php:65 cclib/cc-mediahost.php:481
-#: ccextras/cc-topics.php:246
+#: ccextras/cc-topics.php:248
 msgid "Delete"
 msgstr "Deletar"
 
@@ -597,27 +597,27 @@ msgstr ""
 msgid "Feed caching can optimize replies for feed requests"
 msgstr ""
 
-#: cclib/cc-feed.php:337
+#: cclib/cc-feed.php:339
 #, fuzzy, php-format
 msgid "Remixes of %s"
 msgstr "Remixes de"
 
-#: cclib/cc-feed.php:354
+#: cclib/cc-feed.php:356
 #, fuzzy, php-format
 msgid "Uploads remixed by %s"
 msgstr "Uploads remixados por"
 
-#: cclib/cc-feed.php:462
+#: cclib/cc-feed.php:461
 #, php-format
 msgid "Could not open folder \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:471
+#: cclib/cc-feed.php:470
 #, php-format
 msgid "Could not open \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:480
+#: cclib/cc-feed.php:479
 #, php-format
 msgid "%s written to server"
 msgstr ""
@@ -785,7 +785,7 @@ msgid "Must be at least 5 characters"
 msgstr "Deve ter pelo menos 5 caracteres"
 
 #: cclib/cc-login.php:169 ccextras/cc-flag.php:75 ccextras/cc-mail.php:201
-#: ccextras/cc-topics.php:106
+#: ccextras/cc-topics.php:108
 msgid "Security Key"
 msgstr "Chave de Segurança"
 
@@ -858,7 +858,7 @@ msgstr "Recuperar Senha Perdida"
 msgid "Uploads"
 msgstr "Uploads"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:618 cclib/cc-user.php:634
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:626 cclib/cc-user.php:642
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr "Pessoas"
@@ -912,7 +912,7 @@ msgstr "Publicar Agora"
 msgid "This file is only visible to the owner and admins."
 msgstr "Este arquivo só pode ser visto pelo dono e administradores."
 
-#: cclib/cc-mediahost.php:453 ccextras/cc-topics.php:249
+#: cclib/cc-mediahost.php:453 ccextras/cc-topics.php:251
 msgid "Edit"
 msgstr "Editar"
 
@@ -932,11 +932,11 @@ msgstr "Tirar do ar"
 msgid "Welcome to ccHost"
 msgstr "Bem Vindo ao ccHost"
 
-#: cclib/cc-page.php:684
+#: cclib/cc-page.php:706
 msgid "Back"
 msgstr "Voltar"
 
-#: cclib/cc-page.php:694
+#: cclib/cc-page.php:716
 msgid "More"
 msgstr "Mais"
 
@@ -972,7 +972,7 @@ msgstr "Fim da Edição"
 msgid "Artist"
 msgstr "Artista"
 
-#: cclib/cc-remix.php:131 ccextras/cc-topics.php:90 ccextras/cc-topics.php:142
+#: cclib/cc-remix.php:131 ccextras/cc-topics.php:92 ccextras/cc-topics.php:144
 msgid "Title"
 msgstr "Título"
 
@@ -1152,6 +1152,14 @@ msgstr "Tags"
 msgid "Browse Tags"
 msgstr "Ver Tags"
 
+#: cclib/cc-template.php:148
+#, php-format
+msgid ""
+"Pick which UI elements should appear on every page.\n"
+"                               Edit the file %s to add modules here.\n"
+"                               "
+msgstr ""
+
 #: cclib/cc-upload.php:50 ccextras/cc-flag.php:163
 msgid "Upload"
 msgstr "Upload"
@@ -1176,11 +1184,11 @@ msgstr "Clique neles para adicioná-los automaticamente ao seu upload."
 msgid "Suggested Tags"
 msgstr "Tags Sugeridas"
 
-#: cclib/cc-upload.php:176 ccextras/cc-topics.php:73
+#: cclib/cc-upload.php:176 ccextras/cc-topics.php:75
 msgid "This action can not be reversed..."
 msgstr "Esta ação não pode ser refeita..."
 
-#: cclib/cc-upload.php:177 ccextras/cc-topics.php:75
+#: cclib/cc-upload.php:177 ccextras/cc-topics.php:77
 #: ccextras/cc-forums-admin.inc:120
 #, php-format
 msgid "Delete \"%s\" ?"
@@ -1258,7 +1266,7 @@ msgstr "Não esqueça de colocar o http://"
 msgid "Default Language:"
 msgstr "Língua Padrão"
 
-#: cclib/cc-user.php:255 cclib/cc-user.php:430
+#: cclib/cc-user.php:255 cclib/cc-user.php:438
 msgid "What I Pound On"
 msgstr "O Que Eu Toco"
 
@@ -1286,87 +1294,87 @@ msgstr "Liste os atributos dos músicos que você gostaria de encontrar"
 msgid "(e.g. Producer, singer, drummer)"
 msgstr "(ex.: produtor, cantor, baterista)"
 
-#: cclib/cc-user.php:380
+#: cclib/cc-user.php:388
 msgid "Home Page"
 msgstr "Página Pessoal"
 
-#: cclib/cc-user.php:381
+#: cclib/cc-user.php:389
 msgid "About Me"
 msgstr "Sobre mim"
 
-#: cclib/cc-user.php:428
+#: cclib/cc-user.php:436
 msgid "What I Like"
 msgstr "O Que Eu Gosto"
 
-#: cclib/cc-user.php:432
+#: cclib/cc-user.php:440
 msgid "What I Look For"
 msgstr "O Que Estou Procurando"
 
-#: cclib/cc-user.php:556 cclib/cc-user.php:609
+#: cclib/cc-user.php:564 cclib/cc-user.php:617
 msgid "Edit Your Settings"
 msgstr "Editar Suas Configurações"
 
-#: cclib/cc-user.php:610
+#: cclib/cc-user.php:618
 msgid "Changes were saved"
 msgstr "Alterações salvas"
 
-#: cclib/cc-user.php:662
+#: cclib/cc-user.php:670
 msgid "(select tag)"
 msgstr "(selecionar tag)"
 
-#: cclib/cc-user.php:662
+#: cclib/cc-user.php:670
 msgid "(no tag)"
 msgstr "(sem tags)"
 
-#: cclib/cc-user.php:722
+#: cclib/cc-user.php:730
 #, php-format
 msgid "Remove %s from my favorites"
 msgstr "Remover %s de meus favoritos"
 
-#: cclib/cc-user.php:724
+#: cclib/cc-user.php:732
 #, php-format
 msgid "Add %s to my favorites"
 msgstr "Adicionar %s aos meus favoritos"
 
-#: cclib/cc-user.php:766
+#: cclib/cc-user.php:774
 msgid " has not uploaded any remixes yet."
 msgstr "não fez o upload de nenhum remix."
 
-#: cclib/cc-user.php:785
+#: cclib/cc-user.php:793
 msgid "Uploads by "
 msgstr "Uploads de"
 
-#: cclib/cc-user.php:786
+#: cclib/cc-user.php:794
 msgid "Remixes of "
 msgstr "Remixes de"
 
-#: cclib/cc-user.php:787
+#: cclib/cc-user.php:795
 msgid "Remixed by "
 msgstr "Remixado por"
 
-#: cclib/cc-user.php:799
+#: cclib/cc-user.php:807
 #, php-format
 msgid "%s has been removed from your list of favorites"
 msgstr "%s foi excluído de sua lista de favoritos"
 
-#: cclib/cc-user.php:804
+#: cclib/cc-user.php:812
 #, php-format
 msgid "%s has been added to your list of favorites"
 msgstr "%s foi adicionado à sua lista de favoritos"
 
-#: cclib/cc-user.php:878
+#: cclib/cc-user.php:886
 msgid "Your Page"
 msgstr "Sua Página"
 
-#: cclib/cc-user.php:885
+#: cclib/cc-user.php:893
 msgid "Edit Your Profile"
 msgstr "Editar Seu Perfil"
 
-#: cclib/cc-user.php:896
+#: cclib/cc-user.php:904
 msgid "Visitors"
 msgstr "Visitantes"
 
-#: cclib/cc-user.php:898
+#: cclib/cc-user.php:906
 msgid "Artists"
 msgstr "Artistas"
 
@@ -1383,23 +1391,13 @@ msgstr "Arquivo para %s"
 msgid "Monthly Archive"
 msgstr "Arquivo Mensal"
 
-#: ccextras/cc-bpm.php:115
-msgid "BPM (use '-' for range: 90-100)"
-msgstr "BPM (use '-' para intervalo: 90-100)"
-
-#: ccextras/cc-bpm.php:127
+#: ccextras/cc-bpm.php:138
 msgid "BPM"
 msgstr "BPM"
 
-#: ccextras/cc-bpm.php:128
+#: ccextras/cc-bpm.php:139
 msgid "Tempo"
 msgstr "Tempo"
-
-#: ccextras/cc-bpm.php:227
-#, php-format
-msgid "No records match that BPM. Go back to <a href=\"%s\">search again</a>"
-msgstr ""
-"Nenhuma gravação tem estas BPMs. Volte e <a href=\"%s\">busque novamente</a>"
 
 #: ccextras/cc-flag.php:54 ccextras/cc-mail.php:165 ccextras/cc-mail.php:175
 msgid "From"
@@ -1754,8 +1752,8 @@ msgstr "<br />Resenhas deixadas para<br /> %s"
 
 #: ccextras/cc-reviews.php:271 ccextras/cc-reviews.php:289
 #: ccextras/cc-reviews.php:309 ccextras/cc-reviews.php:318
-#: ccextras/cc-reviews.php:407 ccextras/cc-reviews.php:643
-#: ccextras/cc-reviews.php:821 ccextras/cc-reviews.php:892
+#: ccextras/cc-reviews.php:407 ccextras/cc-reviews.php:649
+#: ccextras/cc-reviews.php:827 ccextras/cc-reviews.php:898
 msgid "Reviews"
 msgstr "Resenhas"
 
@@ -1763,7 +1761,7 @@ msgstr "Resenhas"
 msgid "review integration is not enabled"
 msgstr "integração de resenha não está habilitada"
 
-#: ccextras/cc-reviews.php:416 ccextras/cc-reviews.php:729
+#: ccextras/cc-reviews.php:416 ccextras/cc-reviews.php:735
 msgid "Write Review"
 msgstr "Escrever Resenha"
 
@@ -1789,42 +1787,42 @@ msgstr "Você já resenhou este upload"
 msgid "%s's Review of '%s'"
 msgstr "%s's Resenha de  '%s'"
 
-#: ccextras/cc-reviews.php:611
+#: ccextras/cc-reviews.php:617
 #, php-format
 msgid "%s has left %s1 review "
 msgstr "%s deixou  %s1 resenha "
 
-#: ccextras/cc-reviews.php:615
+#: ccextras/cc-reviews.php:621
 #, php-format
 msgid "%s has left %s%d reviews "
 msgstr "%s deixou %s%d resenhas "
 
-#: ccextras/cc-reviews.php:633
+#: ccextras/cc-reviews.php:639
 #, php-format
 msgid "and has been reviewed %sonce "
 msgstr "e foi resenhado %suma vez "
 
-#: ccextras/cc-reviews.php:637
+#: ccextras/cc-reviews.php:643
 #, php-format
 msgid "and has been reviewed %s%d times "
 msgstr "e foi resenhado %s%d vezes "
 
-#: ccextras/cc-reviews.php:688
+#: ccextras/cc-reviews.php:694
 #, php-format
 msgid "Reviews (%s)"
 msgstr "Resenhas (%s)"
 
-#: ccextras/cc-reviews.php:799
+#: ccextras/cc-reviews.php:805
 #, php-format
 msgid "Reivews left for \"%s\" by %s"
 msgstr "Resenhas deixadas para \"%s\" por %s"
 
-#: ccextras/cc-reviews.php:816
+#: ccextras/cc-reviews.php:822
 #, php-format
 msgid "Reviews left for %s"
 msgstr "Resenhas deixadas para %s"
 
-#: ccextras/cc-reviews.php:943
+#: ccextras/cc-reviews.php:949
 msgid "Sorry, no reviews match"
 msgstr "Desculpe, resenhas não encontradas"
 
@@ -1880,41 +1878,41 @@ msgstr "As mais do ccMixter [beta]"
 msgid "ccMixter stats [beta]"
 msgstr "Estatísticas ccMixter  [beta]"
 
-#: ccextras/cc-topics.php:122 ccextras/cc-topics.php:283
-#: ccextras/cc-topics.php:469
+#: ccextras/cc-topics.php:124 ccextras/cc-topics.php:285
+#: ccextras/cc-topics.php:471
 msgid "Reply"
 msgstr "Responder"
 
-#: ccextras/cc-topics.php:130
+#: ccextras/cc-topics.php:132
 msgid "Text"
 msgstr "Texto"
 
-#: ccextras/cc-topics.php:225
+#: ccextras/cc-topics.php:227
 msgid "Posts"
 msgstr "Posts"
 
-#: ccextras/cc-topics.php:259
+#: ccextras/cc-topics.php:261
 msgid "Reply with quote"
 msgstr "Responder com citação"
 
-#: ccextras/cc-topics.php:275
+#: ccextras/cc-topics.php:277
 msgid "Reply to yourself"
 msgstr "Responder para você mesmo"
 
-#: ccextras/cc-topics.php:279
+#: ccextras/cc-topics.php:281
 #, php-format
 msgid "Reply to %s"
 msgstr "Responder para %s"
 
-#: ccextras/cc-topics.php:421
+#: ccextras/cc-topics.php:423
 msgid "Can not find that topic, it might have been deleted by the author"
 msgstr "Tópico não encontrado, deve ter sido apagado pelo autor"
 
-#: ccextras/cc-topics.php:533
+#: ccextras/cc-topics.php:535
 msgid "Deleting Topic"
 msgstr "Deletando Tópico"
 
-#: ccextras/cc-topics.php:643
+#: ccextras/cc-topics.php:645
 #, php-format
 msgid "Edit topic: '%s'"
 msgstr "Editar tópico: '%s'"
@@ -2322,6 +2320,15 @@ msgstr "Denuncie este upload por possível violação de regras"
 #: mixter-lib/mixter-dump-listing.inc:47
 msgid "featuring:"
 msgstr "notas:"
+
+#~ msgid "BPM (use '-' for range: 90-100)"
+#~ msgstr "BPM (use '-' para intervalo: 90-100)"
+
+#~ msgid ""
+#~ "No records match that BPM. Go back to <a href=\"%s\">search again</a>"
+#~ msgstr ""
+#~ "Nenhuma gravação tem estas BPMs. Volte e <a href=\"%s\">busque novamente</"
+#~ "a>"
 
 #~ msgid "Syndicate"
 #~ msgstr "Distribuir"

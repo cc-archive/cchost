@@ -43,3 +43,5 @@ chown ${USERNAME}:${WWWGROUP} ../*
 chmod 775 ./
 chown -Rf ${USERNAME}:${WWWGROUP} cclib/phptal/phptal_cache
 chmod 775 cclib/phptal/phptal_cache
+chmod 775 cctemplates
+chown ${USERNAME}:${WWWGROUP} cctemplates

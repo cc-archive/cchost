@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-08 14:46-0700\n"
+"POT-Creation-Date: 2006-09-13 02:16-0700\n"
 "PO-Revision-Date: 2006-09-03 15:38-0800\n"
 "Last-Translator: deerfang <lu@deerfang.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -172,7 +172,7 @@ msgid "Name"
 msgstr "姓名"
 
 #: cclib/cc-navigator-admin.inc:443 cclib/cc-mediahost.php:50
-#: cclib/cc-user.php:633 ccextras/cc-archive.php:39
+#: cclib/cc-user.php:641 ccextras/cc-archive.php:39
 #: ccextras/cc-reviews.php:285 ccextras/cc-forums.inc:237
 #: ccextras/cc-forums.inc:509
 msgid "Home"
@@ -556,7 +556,7 @@ msgid "Review"
 msgstr "评论"
 
 #: cclib/cc-editorials.php:65 cclib/cc-mediahost.php:481
-#: ccextras/cc-topics.php:246
+#: ccextras/cc-topics.php:248
 msgid "Delete"
 msgstr "删除"
 
@@ -598,27 +598,27 @@ msgstr ""
 msgid "Feed caching can optimize replies for feed requests"
 msgstr ""
 
-#: cclib/cc-feed.php:337
+#: cclib/cc-feed.php:339
 #, fuzzy, php-format
 msgid "Remixes of %s"
 msgstr "再混音来源"
 
-#: cclib/cc-feed.php:354
+#: cclib/cc-feed.php:356
 #, fuzzy, php-format
 msgid "Uploads remixed by %s"
 msgstr "上传者"
 
-#: cclib/cc-feed.php:462
+#: cclib/cc-feed.php:461
 #, php-format
 msgid "Could not open folder \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:471
+#: cclib/cc-feed.php:470
 #, php-format
 msgid "Could not open \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:480
+#: cclib/cc-feed.php:479
 #, php-format
 msgid "%s written to server"
 msgstr ""
@@ -782,7 +782,7 @@ msgid "Must be at least 5 characters"
 msgstr "最少必须五个字符"
 
 #: cclib/cc-login.php:169 ccextras/cc-flag.php:75 ccextras/cc-mail.php:201
-#: ccextras/cc-topics.php:106
+#: ccextras/cc-topics.php:108
 msgid "Security Key"
 msgstr "安全键"
 
@@ -855,7 +855,7 @@ msgstr "恢复丢失的密码"
 msgid "Uploads"
 msgstr "上传的"
 
-#: cclib/cc-mediahost.php:58 cclib/cc-user.php:618 cclib/cc-user.php:634
+#: cclib/cc-mediahost.php:58 cclib/cc-user.php:626 cclib/cc-user.php:642
 #: ccextras/cc-reviews.php:293 ccextras/cc-forums.inc:510
 msgid "People"
 msgstr "人们"
@@ -906,7 +906,7 @@ msgstr "现在就发表"
 msgid "This file is only visible to the owner and admins."
 msgstr "只有主人和管理员可见此文件"
 
-#: cclib/cc-mediahost.php:453 ccextras/cc-topics.php:249
+#: cclib/cc-mediahost.php:453 ccextras/cc-topics.php:251
 msgid "Edit"
 msgstr "编辑"
 
@@ -926,12 +926,12 @@ msgstr "未发表"
 msgid "Welcome to ccHost"
 msgstr "欢迎来到ccHost"
 
-#: cclib/cc-page.php:684
+#: cclib/cc-page.php:706
 #, fuzzy
 msgid "Back"
 msgstr "返回"
 
-#: cclib/cc-page.php:694
+#: cclib/cc-page.php:716
 #, fuzzy
 msgid "More"
 msgstr "更多"
@@ -968,7 +968,7 @@ msgstr "完成编辑"
 msgid "Artist"
 msgstr "艺术家"
 
-#: cclib/cc-remix.php:131 ccextras/cc-topics.php:90 ccextras/cc-topics.php:142
+#: cclib/cc-remix.php:131 ccextras/cc-topics.php:92 ccextras/cc-topics.php:144
 msgid "Title"
 msgstr "题目"
 
@@ -1148,6 +1148,14 @@ msgstr "索引"
 msgid "Browse Tags"
 msgstr "浏览索引"
 
+#: cclib/cc-template.php:148
+#, php-format
+msgid ""
+"Pick which UI elements should appear on every page.\n"
+"                               Edit the file %s to add modules here.\n"
+"                               "
+msgstr ""
+
 #: cclib/cc-upload.php:50 ccextras/cc-flag.php:163
 msgid "Upload"
 msgstr "上传"
@@ -1172,11 +1180,11 @@ msgstr "点击这些自动加入你的上传"
 msgid "Suggested Tags"
 msgstr "建议索引"
 
-#: cclib/cc-upload.php:176 ccextras/cc-topics.php:73
+#: cclib/cc-upload.php:176 ccextras/cc-topics.php:75
 msgid "This action can not be reversed..."
 msgstr "此操作不能倒退"
 
-#: cclib/cc-upload.php:177 ccextras/cc-topics.php:75
+#: cclib/cc-upload.php:177 ccextras/cc-topics.php:77
 #: ccextras/cc-forums-admin.inc:120
 #, php-format
 msgid "Delete \"%s\" ?"
@@ -1254,7 +1262,7 @@ msgstr "确定开始于http://"
 msgid "Default Language:"
 msgstr "默认语言："
 
-#: cclib/cc-user.php:255 cclib/cc-user.php:430
+#: cclib/cc-user.php:255 cclib/cc-user.php:438
 msgid "What I Pound On"
 msgstr "我用什么工具"
 
@@ -1282,87 +1290,87 @@ msgstr "列出你喜欢挂钩的音乐家的属性"
 msgid "(e.g. Producer, singer, drummer)"
 msgstr "（例如制作人，歌手，鼓手）"
 
-#: cclib/cc-user.php:380
+#: cclib/cc-user.php:388
 msgid "Home Page"
 msgstr "主页"
 
-#: cclib/cc-user.php:381
+#: cclib/cc-user.php:389
 msgid "About Me"
 msgstr "关于我"
 
-#: cclib/cc-user.php:428
+#: cclib/cc-user.php:436
 msgid "What I Like"
 msgstr "我喜欢什么"
 
-#: cclib/cc-user.php:432
+#: cclib/cc-user.php:440
 msgid "What I Look For"
 msgstr "我找什么"
 
-#: cclib/cc-user.php:556 cclib/cc-user.php:609
+#: cclib/cc-user.php:564 cclib/cc-user.php:617
 msgid "Edit Your Settings"
 msgstr "编辑你的设置"
 
-#: cclib/cc-user.php:610
+#: cclib/cc-user.php:618
 msgid "Changes were saved"
 msgstr "更改已保存"
 
-#: cclib/cc-user.php:662
+#: cclib/cc-user.php:670
 msgid "(select tag)"
 msgstr "（选择索引）"
 
-#: cclib/cc-user.php:662
+#: cclib/cc-user.php:670
 msgid "(no tag)"
 msgstr "（无索引）"
 
-#: cclib/cc-user.php:722
+#: cclib/cc-user.php:730
 #, php-format
 msgid "Remove %s from my favorites"
 msgstr "（从我最喜爱中除去）"
 
-#: cclib/cc-user.php:724
+#: cclib/cc-user.php:732
 #, php-format
 msgid "Add %s to my favorites"
 msgstr "添加到我最喜爱中"
 
-#: cclib/cc-user.php:766
+#: cclib/cc-user.php:774
 msgid " has not uploaded any remixes yet."
 msgstr "还未上传任何再混音"
 
-#: cclib/cc-user.php:785
+#: cclib/cc-user.php:793
 msgid "Uploads by "
 msgstr "上传者"
 
-#: cclib/cc-user.php:786
+#: cclib/cc-user.php:794
 msgid "Remixes of "
 msgstr "再混音来源"
 
-#: cclib/cc-user.php:787
+#: cclib/cc-user.php:795
 msgid "Remixed by "
 msgstr "再混音者"
 
-#: cclib/cc-user.php:799
+#: cclib/cc-user.php:807
 #, php-format
 msgid "%s has been removed from your list of favorites"
 msgstr "已从你最喜爱的列表中删去"
 
-#: cclib/cc-user.php:804
+#: cclib/cc-user.php:812
 #, php-format
 msgid "%s has been added to your list of favorites"
 msgstr "已经被加到你最喜欢的列表中"
 
-#: cclib/cc-user.php:878
+#: cclib/cc-user.php:886
 msgid "Your Page"
 msgstr "你的页面"
 
-#: cclib/cc-user.php:885
+#: cclib/cc-user.php:893
 msgid "Edit Your Profile"
 msgstr "编辑你的简介"
 
-#: cclib/cc-user.php:896
+#: cclib/cc-user.php:904
 msgid "Visitors"
 msgstr "访问者"
 
-#: cclib/cc-user.php:898
+#: cclib/cc-user.php:906
 msgid "Artists"
 msgstr "艺术家"
 
@@ -1379,23 +1387,14 @@ msgstr ""
 msgid "Monthly Archive"
 msgstr "每月档案"
 
-#: ccextras/cc-bpm.php:115
-msgid "BPM (use '-' for range: 90-100)"
-msgstr "BPM (范围90-100用'-'）"
-
 # 每分钟拍子速
-#: ccextras/cc-bpm.php:127
+#: ccextras/cc-bpm.php:138
 msgid "BPM"
 msgstr "BPM"
 
-#: ccextras/cc-bpm.php:128
+#: ccextras/cc-bpm.php:139
 msgid "Tempo"
 msgstr "拍子"
-
-#: ccextras/cc-bpm.php:227
-#, php-format
-msgid "No records match that BPM. Go back to <a href=\"%s\">search again</a>"
-msgstr "没有记录与那BPM相配。返回到 <a href=\"%s\">再搜索</a>"
 
 #: ccextras/cc-flag.php:54 ccextras/cc-mail.php:165 ccextras/cc-mail.php:175
 msgid "From"
@@ -1718,8 +1717,8 @@ msgstr ""
 
 #: ccextras/cc-reviews.php:271 ccextras/cc-reviews.php:289
 #: ccextras/cc-reviews.php:309 ccextras/cc-reviews.php:318
-#: ccextras/cc-reviews.php:407 ccextras/cc-reviews.php:643
-#: ccextras/cc-reviews.php:821 ccextras/cc-reviews.php:892
+#: ccextras/cc-reviews.php:407 ccextras/cc-reviews.php:649
+#: ccextras/cc-reviews.php:827 ccextras/cc-reviews.php:898
 msgid "Reviews"
 msgstr ""
 
@@ -1727,7 +1726,7 @@ msgstr ""
 msgid "review integration is not enabled"
 msgstr ""
 
-#: ccextras/cc-reviews.php:416 ccextras/cc-reviews.php:729
+#: ccextras/cc-reviews.php:416 ccextras/cc-reviews.php:735
 msgid "Write Review"
 msgstr ""
 
@@ -1753,42 +1752,42 @@ msgstr "你已评论过此上传"
 msgid "%s's Review of '%s'"
 msgstr ""
 
-#: ccextras/cc-reviews.php:611
+#: ccextras/cc-reviews.php:617
 #, php-format
 msgid "%s has left %s1 review "
 msgstr ""
 
-#: ccextras/cc-reviews.php:615
+#: ccextras/cc-reviews.php:621
 #, php-format
 msgid "%s has left %s%d reviews "
 msgstr ""
 
-#: ccextras/cc-reviews.php:633
+#: ccextras/cc-reviews.php:639
 #, fuzzy, php-format
 msgid "and has been reviewed %sonce "
 msgstr "上传已被删除"
 
-#: ccextras/cc-reviews.php:637
+#: ccextras/cc-reviews.php:643
 #, php-format
 msgid "and has been reviewed %s%d times "
 msgstr ""
 
-#: ccextras/cc-reviews.php:688
+#: ccextras/cc-reviews.php:694
 #, php-format
 msgid "Reviews (%s)"
 msgstr "评论"
 
-#: ccextras/cc-reviews.php:799
+#: ccextras/cc-reviews.php:805
 #, php-format
 msgid "Reivews left for \"%s\" by %s"
 msgstr ""
 
-#: ccextras/cc-reviews.php:816
+#: ccextras/cc-reviews.php:822
 #, php-format
 msgid "Reviews left for %s"
 msgstr ""
 
-#: ccextras/cc-reviews.php:943
+#: ccextras/cc-reviews.php:949
 msgid "Sorry, no reviews match"
 msgstr "对不起，无评论符合"
 
@@ -1842,41 +1841,41 @@ msgstr ""
 msgid "ccMixter stats [beta]"
 msgstr ""
 
-#: ccextras/cc-topics.php:122 ccextras/cc-topics.php:283
-#: ccextras/cc-topics.php:469
+#: ccextras/cc-topics.php:124 ccextras/cc-topics.php:285
+#: ccextras/cc-topics.php:471
 msgid "Reply"
 msgstr "回复"
 
-#: ccextras/cc-topics.php:130
+#: ccextras/cc-topics.php:132
 msgid "Text"
 msgstr "文字"
 
-#: ccextras/cc-topics.php:225
+#: ccextras/cc-topics.php:227
 msgid "Posts"
 msgstr "帖子"
 
-#: ccextras/cc-topics.php:259
+#: ccextras/cc-topics.php:261
 msgid "Reply with quote"
 msgstr ""
 
-#: ccextras/cc-topics.php:275
+#: ccextras/cc-topics.php:277
 msgid "Reply to yourself"
 msgstr ""
 
-#: ccextras/cc-topics.php:279
+#: ccextras/cc-topics.php:281
 #, php-format
 msgid "Reply to %s"
 msgstr ""
 
-#: ccextras/cc-topics.php:421
+#: ccextras/cc-topics.php:423
 msgid "Can not find that topic, it might have been deleted by the author"
 msgstr ""
 
-#: ccextras/cc-topics.php:533
+#: ccextras/cc-topics.php:535
 msgid "Deleting Topic"
 msgstr "删除主题"
 
-#: ccextras/cc-topics.php:643
+#: ccextras/cc-topics.php:645
 #, php-format
 msgid "Edit topic: '%s'"
 msgstr ""
@@ -2252,6 +2251,13 @@ msgstr ""
 #: mixter-lib/mixter-dump-listing.inc:47
 msgid "featuring:"
 msgstr "推介"
+
+#~ msgid "BPM (use '-' for range: 90-100)"
+#~ msgstr "BPM (范围90-100用'-'）"
+
+#~ msgid ""
+#~ "No records match that BPM. Go back to <a href=\"%s\">search again</a>"
+#~ msgstr "没有记录与那BPM相配。返回到 <a href=\"%s\">再搜索</a>"
 
 #~ msgid "More >>>"
 #~ msgstr "更多"
