@@ -142,7 +142,8 @@ function cc_response()
     <metal:block use-macro="${link_table}" />
     <h2>${admin_menu/local_title}</h2>
     <h3>${admin_menu/local_help}
-      <select onchange="document.location = '${root-url}' + this.options[this.options.selectedIndex].value + '/admin/site';">
+      <tal:block define="baseurl php:ccc();" />
+      <select onchange="document.location = '${baseurl}' + this.options[this.options.selectedIndex].value + '/admin/site';">
         <tal:block repeat="root admin_menu/config_roots">
           <option tal:condition="root/selected" selected="selected" value="${root/cfg}" tal:content="root/text" />
           <option tal:condition="not: root/selected" value="${root/cfg}" tal:content="root/text" />
