@@ -3,8 +3,6 @@ ccHost Release Notes
 
 Version: PROJECT_VERSION
 
-3.0.2 NOTES:
-
 New features (admin)
 ========================
     
@@ -21,7 +19,9 @@ New features (admin)
 
 Bug Fixes
 ============
+    
     Fixed in 3.0.2
+
     * More graceful error recovery when menu has been destroyed
     * empty nav tab set was breaking site
     * add items to empty menu caused havoc
@@ -31,13 +31,15 @@ Bug Fixes
     * podcast of deleted record broke feed
     * editing menus for vroots broken
     * editing properties for sample pools caused errors
+    * fixed up the xspf 1.0 feeds which were breaking
 
-    Fixed in 3.0.1:
+    Fixed in 3.0.1
+
     * saving user profile blows away menu and submit form changes
     * title of review feed was not properly scrubbed for '&'
 
 
-3.0 NOTES:
+Version: 3.0
 
 New features (end-user)
 ========================
