@@ -26,37 +26,14 @@
 </refsect1>
 
 <refsect1 id="{@id skinmaker}">
-<title>2. Get the Skin Maker Tool</title>
+<title>2. The Skin Maker Tool</title>
 
 <para>
-    In order to jumpstart the process of creating a skin, we've created 
-    a ccHost plugin tool called Skin Maker. Here are the steps for installation:
+    The Skin Maker is built into ccHost since version 3.0.2 
 </para>
-
-<note>
-    If you are in sync with the current SVN repository then you already
-    have the Skin Maker tool and you can skip down to 
-    {@tutorial admin.skins.pkg#skinmaker.invokesm this step}.
-</note>
-
 <orderedlist class="tutlist">
 <listitem>
-    Download 
-<ulink url="{$subdir}media/ccskin-maker.zip"><emphasis>Skin Maker ZIP</emphasis></ulink> 
-    (right-click and 'Save Target As..')
-</listitem>
-<listitem>
-    Unzip the archive to a directory on your local disk.    
-</listitem>
-<listitem>
-    Copy the contents of the <filename>ccextras</filename> directory to the same directory
-    on your web server.
-</listitem>
-<listitem>
-    Browse to <uri>admin/menu/killcache</uri>
-</listitem>
-<listitem id="{@id invokesm}">
-    Go to <command>Settings/Skin Maker</command>
+    Go to <command>Mangage Site/Skin Maker</command>.
 </listitem>
 <listitem>
     Enter a name like <literal>myskin</literal> and click <command>Submit</command>

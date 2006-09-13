@@ -685,9 +685,13 @@ and with a little cutting and pasting admins can create their own blocks.</para>
 <para>In this example we'll add a simple list of links as an
 sidebar block.</para>
 
+<note>
+    The following assumes you have at least 3.0.2 installed.
+</note>
+
 <orderedlist class="tutlist">
   <listitem>
-     Open the file <filename>cctemplates/custom.xml</filename> in a text editor.
+     Open the file <filename>cctemplates/sidebar.xml</filename> in a text editor.
   </listitem>
   <listitem>
      Look for the first occurrence of <literal>&lt;/tal:block&gt;</literal> (around 
