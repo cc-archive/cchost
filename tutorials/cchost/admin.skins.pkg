@@ -33,7 +33,7 @@
 </para>
 <orderedlist class="tutlist">
 <listitem>
-    Go to <command>Mangage Site/Skin Maker</command>.
+    Go to <command>Manage Site/Skin Maker</command>.
 </listitem>
 <listitem>
     Enter a name like <literal>myskin</literal> and click <command>Submit</command>
