@@ -402,6 +402,9 @@ class CCPage extends CCTemplate
         {
             $page->_page_args['logged_in_as'] = CCUser::CurrentUserName();
             $page->_page_args['logout_url'] = ccl('logout');
+            $page->_page_args['is_logged_in'] = 1;
+        } else {
+            $page->_page_args['is_logged_in'] = 0;
         }
         $page->_page_args['is_admin']  = $isadmin;
         $page->_page_args['not_admin'] = !$isadmin;

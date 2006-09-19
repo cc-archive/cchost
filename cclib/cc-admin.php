@@ -475,7 +475,7 @@ class CCAdmin
     {
         global $CC_CFG_ROOT;
         
-        $me = $_SERVER['SCRIPT_NAME'];
+        $me = $_SERVER['REQUEST_URI'];
         if( !empty($me) )
         {
             if( preg_match( "%^(.+/)$CC_CFG_ROOT%", $me, $m ) )
