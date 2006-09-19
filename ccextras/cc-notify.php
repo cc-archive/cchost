@@ -134,7 +134,7 @@ class CCNotify
                 $text = sprintf(_('Get Notified About %s'),$row['user_real_name']);
             }
 
-            $row['user_fields'][] = array( 'label' => _('Notifcations'), 
+            $row['user_fields'][] = array( 'label' => _('Notifications'), 
                                            'value' => "<a href=\"$url\">$text</a>" );
         }
     }
