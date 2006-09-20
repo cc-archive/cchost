@@ -366,19 +366,23 @@ class CCAdminRawForm extends CCGridForm
 */
 class CCAdmin
 {
-    function Site()
+    function _setup_global(&$args)
+    {
+        $global_items = array();
+        CCEvents::Invoke(CC_EVENT_ADMIN_MENU, array( &$global_items, CC_GLOBAL_SCOPE ) );
+        $args['global_title'] = ''; // _('Global Site Settings');
+        $args['global_help']  = _('These settings affect the entire site');
+        $args['global_items'] = $global_items;
+        $args['do_global'] = true;
+    }
+
+    function _setup_local(&$args)
     {
         global $CC_CFG_ROOT;
 
-        $global_items = array();
-        CCEvents::Invoke(CC_EVENT_ADMIN_MENU, array( &$global_items, CC_GLOBAL_SCOPE ) );
         $local_items = array();
         CCEvents::Invoke(CC_EVENT_ADMIN_MENU, array( &$local_items, CC_LOCAL_SCOPE) );
-        CCPage::SetTitle(_("Administer ccHost Site"));
-        $args['global_title'] = _('Global Site Settings');
-        $args['global_help']  = _('These settings affect the entire site');
-        $args['global_items'] = $global_items;
-        $args['local_title'] = _('Virtual Root Settings');
+        $args['local_title'] = ''; // _('Virtual Root Settings');
         $configs =& CCConfigs::GetTable();
         $roots = $configs->GetConfigRoots();
         $root_list = array();
@@ -410,7 +414,66 @@ class CCAdmin
         }
 
         $args['local_items'] = $local_items;
-        CCPage::PageArg('admin_menu', $args, 'admin_menu_page');
+        $args['do_local'] = true;
+    }
+
+    function _add_tabs($subtab)
+    {
+        $tabs = array();
+
+        $tabs[ 'global' ] = 
+            array(  'text'     => _('Global Settings'),
+                    'help'     => _('Global settings'),
+                    'tabname'  => 'global',
+                    'url'      => ccl('admin','site','global'),
+                );
+
+        $tabs[ 'local' ] = 
+            array(  'text'     => _('Virtual Root Settings'),
+                    'help'     => _('Virtual Root settings'),
+                    'tabname'  => 'local',
+                    'url'     => ccl('admin','site','local'),
+                );
+
+        $tabs[ $subtab ]['selected'] = true;
+        $normal = $subtab == 'global' ? 'local' : 'global';
+        $tabs[ $normal ]['normal'] = true;
+
+        $tabinfo = array(
+                'num_tabs' => 2,
+                'tab_width' => '50%',
+                'selected_text' => '',
+                'tags' => ccl('admin','site',$subtab),
+                'function' => 'url',
+                'tabs' => $tabs,
+                );
+
+        //$page =& CCPage::GetPage();
+        CCPage::PageArg('sub_nav_tabs',$tabinfo);
+    }
+
+    function Site($subtab='')
+    {
+        // CCPage::SetTitle(_('Administer ccHost Site'));
+
+        if( empty($subtab) )
+            $subtab = 'local';
+
+        $args = array();
+
+        $args['do_global'] = $args['do_local'] = false;
+
+        if( empty($subtab) || ($subtab == 'global') )
+            $this->_setup_global($args);
+        if( empty($subtab) || ($subtab == 'local') )
+            $this->_setup_local($args);
+
+        $args['subtab'] = '/' . $subtab;
+
+        if( $subtab )
+            $this->_add_tabs($subtab);
+
+        CCPage::PageArg('admin_menu', $args, 'admin_menu_page' );
     }
 
     /**
@@ -730,6 +793,31 @@ function cc_check_site_enabled()
         }
     }
 
+    if( !empty($CC_GLOBALS['disabled-msg']) && file_exists($CC_GLOBALS['disabled-msg']) )
+    {
+        $msgtext = file_get_contents($CC_GLOBALS['disabled-msg']);
+    }
+    else
+    {
+        // Do NOT internalize this string, config is not fully
+        // intialized, see the ccadmin installer
+
+        $msgtext = 'Site is under construction.';
+    }
+
+    if( !empty($CC_GLOBALS['skin']) )
+    {
+        $settings = $configs->GetConfig('settings');
+        $css = $settings['style-sheet'];
+        $css_link =<<<END
+            <link rel="stylesheet" type="text/css" href="$css" title="Default Style"/>
+END;
+    }
+    else
+    {
+        $css_link = '';
+    }
+
     $name = CC_ENABLE_KEY;
     $self = $_SERVER['PHP_SELF'];
     $html = "";
@@ -738,13 +826,13 @@ function cc_check_site_enabled()
 <html>
 <head>
     <title>ccHost</title>
-        <link rel="stylesheet" type="text/css" href="cctemplates/skin-ccmixter.css" title="Default Style"/>
+    $css_link
 </head>
 <body>
 <div class="cc_all_content" >
     <div class="cc_content">
         <div class="cc_form_about">
-        Site is under construction. 
+    $msgtext        
         </div>
 <form action="$self" method="post" class="cc_form" >
 <table class="cc_form_table">
