@@ -38,7 +38,7 @@ class v_3_1b extends CCUpdate
         CCPage::Prompt('Sample pool optimizations and Email rules installed');
     }
 
-    function _update_opt_pools()
+    function _update_mail_opts()
     {
         $vars['mail_anon'] = CC_MAIL_THROTTLED;
         $vars['mail_uploaders'] = CC_MAIL_THROTTLED;
