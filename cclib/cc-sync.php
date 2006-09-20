@@ -282,6 +282,20 @@ END;
             CCSync::User($p['upload_id'],0);
     }
 
+
+    function PoolSourceRemix($pool_sources)
+    {
+        $tree =& new CCPoolSources();
+        $pool_items =& CCPoolItems::GetTable();
+        foreach( $pool_sources as $PS )
+        {
+            $where['pool_tree_pool_parent'] = $PS['pool_item_id'];
+            $up['pool_item_num_remixes'] = $tree->CountRows($where);
+            $up['pool_item_id'] = $PS['pool_item_id'];
+            $pool_items->Update($up);
+        }
+    }
+
     /**
     * Method to call after a record has been rated.
     *

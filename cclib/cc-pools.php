@@ -695,6 +695,8 @@ END;
           pool_item_name         varchar(255) NOT NULL default '',
           pool_item_artist       varchar(255) NOT NULL default '',
           pool_item_approved     tinyint(0)   NOT NULL default 0,
+          pool_item_num_remixes  int(6)       NOT NULL default 0,
+          pool_item_num_sources  int(6)       NOT NULL default 0,
           pool_item_timestamp    int(30),
 
           PRIMARY KEY pool_item_id (pool_item_id)

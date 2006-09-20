@@ -306,6 +306,7 @@ class CCRemix
 
                     if( !empty($pool_sources) )
                     {
+                        CCSync::PoolSourceRemix($pool_sources);
                         CCPool::NotifyPoolsOfRemix($pool_sources,$url);
                     }
 

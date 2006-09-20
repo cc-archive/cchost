@@ -22,8 +22,8 @@ $Id$
 </tal:block>
 
 <tal:block define="
-    admin_menu_page string:misc.xml/admin_menu_page;   
-    ajax_block string:misc.xml/ajax_block;
+    admin_menu_page string:admin.xml/admin_menu_page;   
+    ajax_block string:page.xml/ajax_block;
     comment_thread string:comments.xml/comment_thread;
     comment_thread_list string:comments.xml/comment_thread_list;
     contest_listing string:contest.xml/contest_listing;
@@ -38,10 +38,10 @@ $Id$
     forum_topic string:forums.xml/forum_topic;
     forum_user string:forums.xml/forum_user;
     grow_textarea_script string:form.xml/grow_textarea_script;
-    howididit string:misc.xml/howididit;
-    howididit_browse string:misc.xml/howididit_browse;
-    howididit_detail string:misc.xml/howididit_detail;
-    howididit_link string:misc.xml/howididit_link;
+    howididit string:howididit.xml/howididit;
+    howididit_browse string:howididit.xml/howididit_browse;
+    howididit_detail string:howididit.xml/howididit_detail;
+    howididit_link string:upload_misc.xml/howididit_link;
     hide_form_on_submit_script string:form.xml/hide_form_on_submit_script;
     html_form string:form.xml/html_form;
     html_head string:page.xml/html_head;
@@ -58,17 +58,21 @@ $Id$
     pool_item_listing string:pool.xml/pool_item_listing;
     popular_tags string:tags.xml/popular_tags;
     popular_tags_script string:tags.xml/popular_tags_script;
-    prev_next_links string:misc.xml/prev_next_links;
-    ratings_field string:misc.xml/ratings_field;
+    prev_next_links string:page.xml/prev_next_links;
+    ratings_field string:upload_misc.xml/ratings_field;
     ratings_stars string:upload_misc.xml/ratings_stars;
     render_image string:misc.xml/render_image;
     remix_line string:upload.xml/remix_line;
-    show_activity_log string:misc.xml/show_activity_log;
+    show_activity_log string:admin.xml/show_activity_log;
+    show_banner string:page.xml/show_banner;
     show_beta_message string:page.xml/show_beta_message;
     show_body_html string:page.xml/show_body_html;
     show_box string:page.xml/show_box;
+    show_bread_crumbs string:page.xml/show_bread_crumbs;
     show_editor_picks string:misc.xml/show_editor_picks;
+    show_footer_block string:page.xml/show_footer_block;
     show_form_about string:form.xml/show_form_about;
+    show_logged_in_as string:page.xml/show_logged_in_as;
     show_macro_patterns string:misc.xml/show_macro_patterns;
     show_page_title string:page.xml/show_page_title;
     show_prompts string:page.xml/show_prompts;
@@ -76,6 +80,7 @@ $Id$
     show_remix_license string:remix_form.xml/show_remix_license;
     show_remix_parents string:upload.xml/show_remix_parents;
     show_remix_search string:remix_form.xml/show_remix_search;
+    show_sidebar string:page.xml/show_sidebar;
     show_sub_nav_tabs string:page.xml/show_sub_nav_tabs;
     show_zip_dir string:upload_misc.xml/show_zip_dir;
     submit_forms string:form.xml/submit_forms;

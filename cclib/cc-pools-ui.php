@@ -156,7 +156,7 @@ class CCAdminPoolsForm extends CCForm
 
 class CCPoolUI
 {
-    function Pool($pool_id='')
+    function Pool($pool_id='',$alpha='')
     {
         $pool_id = CCUtil::StripText($pool_id);
         if( empty($pool_id) )
@@ -167,16 +167,16 @@ class CCPoolUI
         if( empty( $pool ) )
             return;
 
-        // yea, I'm pretty sure there's a saner way to do this....
-
         $pool_items = new CCPoolItems();
-        $pool_items->GroupOnKey();
-        $j1 = $pool_items->AddJoin( new CCPoolRemixes(), 'pool_item_id' );
-        $j2 = $pool_items->AddJoin( new CCPoolSources(), 'pool_item_id' );
-        $where = "(pool_item_pool = $pool_id) AND (($j1.pool_tree_id > 0) OR ($j2.pool_tree_id > 0)) ";
-
+        $where =<<<END
+            (pool_item_pool = $pool_id) AND 
+            ((pool_item_num_remixes > 0) OR (pool_item_num_sources > 0))
+END;
+        if( !empty($alpha) )
+            $where .= " AND (pool_item_artist LIKE '{$alpha}%')";
+        $pool_items->SetSort('pool_item_artist','ASC');
         CCPage::AddPagingLinks($pool_items,$where);
-        $items = $pool_items->GetRecords($where);
+        $items = $pool_items->QueryRows($where);
         $count = count($items);
         $remixpool =&  CCLocalPoolRemixes::GetTable();
         $sourcepool =& CCLocalPoolSources::GetTable();
@@ -185,10 +185,39 @@ class CCPoolUI
             $this->_prep_for_display($items[$i], $remixpool,$sourcepool,true);
         }
 
+        $sql =<<<END
+            SELECT DISTINCT LOWER(SUBSTRING(`pool_item_artist`,1,1)) c
+               FROM `cc_tbl_pool_item` WHERE                  
+            (pool_item_pool = $pool_id) AND 
+            ((pool_item_num_remixes > 0) OR (pool_item_num_sources > 0))
+            ORDER BY c
+
+END;
+
+        $burl = ccl('pools','pool',$pool_id) . '/';
+        $chars = CCDatabase::QueryItems($sql);
+        $len = count($chars);
+        $alinks = array();
+        for( $i = 0; $i < $len; $i++ )
+        {
+            $c = $chars[$i];
+            if( $c == $alpha )
+            {
+                $alinks[] = array( 
+                                'url' => '', 
+                                'text' => "<b>$c</b>" );
+            }
+            else
+            {
+                $alinks[] = array( 
+                                'url' => $burl . $c, 
+                                'text' => $c );
+            }
+        }
         CCPage::SetTitle( _('Sample Pool: ') . $pool['pool_name'] );
         CCPage::PageArg( 'pool_info', $pool, 'pool_info_head' );
         CCPage::PageArg( 'pool_items', $items, 'pool_item_listing' );
-
+        CCPage::PageArg( 'pool_links', $alinks );
     }
 
     function Item($pool_item_id='')
