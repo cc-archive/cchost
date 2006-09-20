@@ -26,9 +26,113 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCMailerAPI' , 'OnAdminMenu') );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCMailerAPI' , 'OnMapUrls') );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCMailerAPI' , 'OnGetConfigFields') );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCMailerAPI' , 'OnAdminMenu') );
+
+define('CC_MAIL_NOTALLOWED',   '1' );
+define('CC_MAIL_ALLOWED',      '2' );
+define('CC_MAIL_FORWARD_ONLY', '4' );
+define('CC_MAIL_THROTTLED',    '8' );
+
+class CCMailAdminForm extends CCEditConfigForm
+{
+    function CCMailAdminForm()
+    {
+        $this->CCEditConfigForm('config');
+
+        $options = array(
+                CC_MAIL_NOTALLOWED    => _('Do not allow email'),
+                CC_MAIL_ALLOWED       => _('Allow (unrestricted)'),
+                CC_MAIL_THROTTLED     => _('Allow (throttled)' ),
+               );
+
+        $fields = array(
+            
+            'mail_sender' => 
+                array(
+                        'label'       => _('Admin email address'),
+                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED,
+                        'form_tip'   => _('Address used as return address for automated mail.'),
+                        'formatter'  => 'textedit' 
+                    ),
+
+/*
+            'mail_disabled' => 
+                array(
+                        'label'       => _('Disable All EMail'),
+                        'form_tip'   => _('Disables mail for all attempts'),
+                        'flags'      => CCFF_POPULATE,
+                        'formatter'  => 'checkbox',
+                    ),
+
+            'mail_disabled_msg' => 
+                array(
+                        'label'      => _('Disable eMail Message'),
+                        'form_tip'   => _('Message to users when email is diabled'),
+                        'flags'      => CCFF_POPULATE,
+                        'formatter'  => 'textarea',
+                    ),
+*/
+            'mail_anon' =>
+                array(
+                        'label'      => _('Anonymous Users'),
+                        'flags'      => CCFF_POPULATE,
+                        'form_tip'   => _('Rule applied to users not logged in.'),
+                        'options'    => $options,
+                        'formatter'  => 'select',
+                    ),
+
+            'mail_uploaders' =>
+                array(
+                        'label'      => _('Users With Uploads'),
+                        'form_tip'   => _('Rule applied to users that have uploaded media to this site.'),
+                        'flags'      => CCFF_POPULATE,
+                        'options'    => $options,
+                        'formatter'  => 'select',
+                    ),
+
+            'mail_registered' =>
+                array(
+                        'label'       => _('Users Without Uploads'),
+                        'form_tip'   => _('Rule that applies to registered users who have not uploaded anything.'),
+                        'flags'      => CCFF_POPULATE,
+                        'options'    => $options,
+                        'formatter'  => 'select',
+                    ),
+
+
+            'mail_throttle' =>
+                array(
+                        'label'       => _('eMail Flood Throttle'),
+                        'flags'      => CCFF_POPULATE,
+                        'formatter'  => 'textedit',
+                        'class'      => 'cc_form_input_short',
+                        'form_tip'   => _('Minimum allowed time (in minutes) between emails'), 
+                    ),
+
+            'mail_to_admin' =>
+                array(
+                        'label'       => _('Mail to Admin Acct:'),
+                        'form_tip'   => _('Who can send mail to admin accounts?'),
+                        'flags'      => CCFF_POPULATE,
+                        'options'    => array(
+                                            CC_DONT_CARE_LOGGED_IN => _('Everyone'),
+                                            CC_MUST_BE_LOGGED_IN   => _('Logged in users only')
+                                             ),
+                        'formatter'  => 'select',
+                    ),
+            );
+
+        $this->AddFormFields($fields);
+
+        $url   = ccl('admin','massmail');
+        $link1 = "<a href=\"$url\"><b>";
+        $link2 = "</b></a>";
+        $fmt   = _('Click %shere%s to send a mass mailing.');
+        $help  = sprintf($fmt,$link1,$link2);
+        $this->SetHelpText($help);
+    }
+}
 
 /**
 */
@@ -102,7 +206,7 @@ class CCMailer
 
         if( empty($this->_from) && empty($CC_GLOBALS['mail_sender']) )
         {
-            CCPage::SystemError("Mail has not been properly configured on the this system. Contact your administrator.");
+            $this->_confim_install();
             return;
         }
 
@@ -205,8 +309,6 @@ class CCContactMailerForm extends CCSecurityVerifierForm
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
             );
 
-        
-
         $this->AddFormFields($fields);
     }
 
@@ -215,78 +317,208 @@ class CCContactMailerForm extends CCSecurityVerifierForm
 class CCMailerAPI
 {
 
-    function _ok_to_contact($userto)
+    function IsMailEnabled()
     {
         global $CC_GLOBALS;
 
-        $curr_time = time();
-        if( !empty($CC_GLOBALS['user_extra']['last_email_send']) )
+        return empty($CC_GLOBALS['mail_disabled']);
+    }
+
+    function _confirm_install()
+    {
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['mail_sender']) )
         {
-            $last_email = $CC_GLOBALS['user_extra']['last_email_send'];
-            if( ($curr_time - $last_email) < (60 * 10) )
+            if( CCUser::IsAdmin() )
             {
-                CCPage::Prompt('You have exceeded the temporary quota of emails allowed.' );
-                return false;
-            }            
-        }   
+                $url = ccl('admin','mail');
+                $link1 = "<a href=\"$url\">";
+                $link2 = "</a>";
+                $fmt = _('Mail has not been properly configured on the this system. 
+                          Set an admin return mail address in %sConfigure Mail%s');
+                $msg = sprintf( $fmt, $link1, $link2 );
+            }
+            else
+            {
+                $msg = _('Mail has not been properly configured on this system. Contact
+                          your administrator through regular email.');
+            }
+
+            CCPage::SystemError( $msg );
+            return false;
+        }
 
         return true;
     }
 
-    function _mark_user_send()
+    function _ok_to_contact($userto)
     {
         global $CC_GLOBALS;
 
-        $users =& CCUsers::GetTable();
-        $row['user_extra'] = $CC_GLOBALS['user_extra'];
-        $row['user_extra']['last_email_send'] = time();
-        $row['user_extra'] = serialize($row['user_extra']);
-        $row['user_id'] = CCUser::CurrentUser();
-        $users->Update($row);
+        $rule = 0;
+        $ret = array(
+                'ok'   => false,
+                'msg'  => '',
+                'anon' => CCUser::IsLoggedIn(),
+                );
+
+        /*-----------------------
+        * Early bail outs
+        -------------------------*/
+        if( empty($CC_GLOBALS['mail_to_admin']) )
+        {
+            // admin forgot to run update
+
+            $ret['msg'] = _('Mail update was not properly installed');
+            return;
+        }
+        if( CCUser::IsAdmin() )
+        {
+            // this is admin, let it fly
+
+            $ret['ok'] = true;
+            return $ret;
+        }
+
+        /*-----------------------
+        * Validate request
+        -------------------------*/
+
+        if( CCUser::IsAdmin($userto) )
+        {
+            $access = $CC_GLOBALS['mail_to_admin'];
+
+            if( ($access == CC_DONT_CARE_LOGGED_IN) || CCUser::IsLoggedIn()  )
+            {
+                $ret['ok'] = true;
+            }
+            else
+            {
+                $ret['msg'] = _('Sorry, only logged in users can send mail to the admins');
+            }
+        }
+        else // Mail is not addressed to admin:
+        {
+            if( CCUser::IsLoggedIn() )
+            {
+                $user_id = CCUser::CurrentUser();
+                $uploads =& CCUploads::GetTable();
+                $where['user_id'] = $user_id;
+                $count = $uploads->CountRows($where);
+                if( empty($count) )
+                {
+                    $rule = $CC_GLOBALS['mail_registered'];
+                }
+                else
+                {
+                    $rule = $CC_GLOBALS['mail_uploader'];
+                }
+            }
+            else // user not logged in:
+            {
+                $rule = $CC_GLOBALS['mail_anon'];
+            }
+
+            /*-----------------------------------------
+            *
+            * We have the rule for the current user
+            *
+            *-----------------------------------------*/
+
+            if( ($rule & CC_MAIL_NOTALLOWED) == 0 )
+            {
+                $ret['msg'] = 'You are not authorized to send mail.';
+            }
+            else // mail seems to be allowed:
+            {
+                if( ($rule & CC_MAIL_THROTTLED) == 0 )
+                {
+                    $ret['ok'] = true;
+                }
+                else // user requires throttle check:
+                {
+                    $curr_time = time();
+                    if( empty($CC_GLOBALS['user_extra']['last_email_send']) )
+                    {
+                        $ret['ok'] = true;
+                    }
+                    else
+                    {
+                        $throttle = empty($CC_GLOBALS['mail_throttle']) ? (2) 
+                                        : $CC_GLOBALS['mail_throttle'];
+
+                        $last_email = $CC_GLOBALS['user_extra']['last_email_send'];
+
+                        if( ($curr_time - $last_email) < intval(60 * $throttle)  )
+                        {
+                            $ret['msg'] = _('You have exceeded the temporary quota of emails allowed.' );
+                        }            
+                        else
+                        {
+                            $ret['ok'] = true;
+                        }
+                    }   
+                }
+            }
+        }
+        
+        return $ret;
+    }
+
+    function _mark_user_send()
+    {
+        if( CCUser::IsLoggedIn() )
+        {
+            $row = array();            
+            $row['user_extra'] = CCUsers::CurrentUserField('upload_extra');
+            if( !is_array($row['user_extra']) )
+                $row['user_extra'] = unserialize($row['user_extra']);
+            $row['user_extra']['last_email_send'] = time();
+            $row['user_extra'] = serialize($row['user_extra']);
+            $row['user_id'] = CCUser::CurrentUser();
+            $users =& CCUsers::GetTable();
+            $users->Update($row);
+        }
     }
 
     function Contact($userto='')
     {
         global $CC_GLOBALS;
 
-        if( 
-            !CCUser::IsAdmin() && 
-            !CCUser::IsAdmin($userto) && 
-            !CCUser::IsLoggedIn() 
-          )
-        {
-            CCPage::Prompt('Due to spamming issues we have to temporarily restrict email contacts ' . 
-                           'to registered users only.');
-            return;
-        }
-
-        if( empty($CC_GLOBALS['mail_sender']) )
-        {
-            CCPage::SystemError("Mail has not been properly configured on the this system. Contact your administrator.");
-            return;
-        }
-
-        if( empty($userto) )
+        if( !$this->_confirm_install() )
             return;
 
-        CCPage::SetTitle("Send Mail to $userto");
-
-        global $CC_GLOBALS;
+        if(!empty($userto) )
+            return;
 
         $users =& CCUsers::GetTable();
         $where['user_name'] = $userto;
         $user_to = $users->QueryRow($where);
+        if( empty($user_to) )
+            return;
+
+        $title = sprintf(_('Send Mail to %s'), $userto);
+        CCPage::SetTitle($title);
+
+        $verify = $this->_ok_to_contact($userto);
+
+        if( !$verify['ok'] )
+        {
+            CCPage::Prompt( $verify['msg'] );
+            return;
+        }
+
+        // mail form expects records in the to/from
         $user_from = CCUser::IsLoggedIn() ? $CC_GLOBALS : '';
 
         $form = new CCContactMailerForm($user_to,$user_from);
 
-        $is_post = !empty( $_REQUEST['contactmailer'] );
-
-        if( !$is_post && !$this->_ok_to_contact($userto) )
-            return;
-
-        if( !$is_post || !$form->ValidateFields() )
+        if( empty( $_REQUEST['contactmailer'] ) || !$form->ValidateFields() )
         {
+            if( $verify['msg'] )
+                $form->SetHelpText($verify['msg']);
+
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
@@ -303,41 +535,32 @@ class CCMailerAPI
                 $mailer = $CC_MAILER;
 
             $from_email = empty($user_from) ? $fields['mail_from'] : $user_from['user_email'];
+            $from_name  = empty($user_from) ? $fields['mail_from'] : $user_from['user_name'];
+
             $mailer->From( $from_email );
             $mailer->To( $user_to['user_email'] );
             $mailer->Subject( $fields['mail_subject'] );
             $mailer->Body( $fields['mail_body'] );
-            $ok = $mailer->Send();
+            $mailer->Send();
 
-            $msg = _('Mail sent');
-            if( CCUser::IsAdmin() )
-                $msg .= " ($ok)";
+            CCPage::Prompt( _('Mail sent') );
 
-            CCPage::Prompt($msg);
-
+            // enabled debug to force log message
             CCDebug::Enable(true);
-            $from = empty($user_from) ? $fields['mail_from'] : $user_from['user_name'];
-            CCDebug::Log("Mail sent from $from -- to $userto");
-
+            CCDebug::Log("Mail sent from $from_name -- to $userto");
         }
     }
 
     function MassMail()
     {
-        if( !CCUser::IsAdmin() )
-            exit;
-
-        global $CC_GLOBALS;
-
-        if( empty($CC_GLOBALS['mail_sender']) )
-        {
-            $url = ccl('admin','setup');
-            CCPage::SystemError("Mail has not been properly configured on the this system. Set a return mail address in <a href=\"$url\">Global Settings</a>");
-            return;
-        }
         CCPage::SetTitle("Send Mail to Everybody");
 
-        global $CC_GLOBALS;
+        if( !CCUser::IsAdmin() )
+            die('Welcome to ccHost');
+
+        if( !$this->_confirm_install() )
+            return;
+
 
         $user_to['user_name'] = 'really';
         $user_to['user_real_name'] = 'Everyone';
@@ -346,7 +569,6 @@ class CCMailerAPI
         $user_from['user_id'] = CCUser::CurrentUser();
 
         $form = new CCContactMailerForm($user_to,$user_from);
-
 
         if( empty( $_REQUEST['contactmailer'] ) || !$form->ValidateFields() )
         {
@@ -393,11 +615,16 @@ class CCMailerAPI
             }
 
             $msg = "Mass mail: Sent $sent Messages";
-            if( CCUser::IsAdmin() )
-                $msg .= " ($ok)";
 
             CCPage::Prompt($msg);
         }
+    }
+
+    function Admin()
+    {
+        CCPage::SetTitle(_('Configure Mail'));
+        $form = new CCMailAdminForm();
+        CCPage::AddForm( $form->GenerateForm() );
     }
 
     /**
@@ -407,28 +634,11 @@ class CCMailerAPI
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('people','contact'),  array('CCMailerAPI', 'Contact'), CC_DONT_CARE_LOGGED_IN ); // CC_MUST_BE_LOGGED );
-        CCEvents::MapUrl( ccp('admin', 'massmail'),  array('CCMailerAPI', 'MassMail'), CC_ADMIN_ONLY); // CC_MUST_BE_LOGGED );
+        CCEvents::MapUrl( ccp('people','contact'),  array('CCMailerAPI', 'Contact'),  CC_DONT_CARE_LOGGED_IN ); // CC_MUST_BE_LOGGED );
+        CCEvents::MapUrl( ccp('admin', 'massmail'), array('CCMailerAPI', 'MassMail'), CC_ADMIN_ONLY); // CC_MUST_BE_LOGGED );
+        CCEvents::MapUrl( ccp('admin', 'mail'),     array('CCMailerAPI', 'Admin'),    CC_ADMIN_ONLY); // CC_MUST_BE_LOGGED );
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
-    *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
-    */
-    function OnGetConfigFields($scope,&$fields)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $fields['mail_sender'] = array(
-                'label'       => 'Admin email address',
-                 'flags'      => CCFF_POPULATE,
-                 'formatter'  => 'textedit' );
-        }
-    }
 
     /**
     * Event handler for {@link CC_EVENT_ADMIN_MENU}
@@ -440,14 +650,15 @@ class CCMailerAPI
     {
         if( $scope == CC_GLOBAL_SCOPE )
         {
-            $items += array( 
-            'massmail'   => array( 'menu_text'  => 'Mass Mailing',
-                             'menu_group' => 'configure',
-                             'access' => CC_ADMIN_ONLY,
-                             'help' => 'Send mail to all users',
-                             'weight' => 10001,
-                             'action' =>  ccl('admin','massmail')
-                             ),
+            $items += array(
+                'emailadmin'   => array( 
+                                 'menu_text'  => _('Email'),
+                                 'menu_group' => 'configure',
+                                 'help' => 'Configure system email address and access',
+                                 'access' => CC_ADMIN_ONLY,
+                                 'weight' => 65,
+                                 'action' =>  ccl('admin', 'mail')
+                                 ),
                 );
 
         }
