@@ -435,7 +435,7 @@ class CCLanguage
     {
         if( !CCLanguage::IsEnabled() )
         {
-            CCDebug::Log('Language is disabled, no init');
+            //CCDebug::Log('Language is disabled, no init');
             return;
         }
 
@@ -657,7 +657,7 @@ class CCLanguageAdmin
             $config =& CCConfigs::GetTable();    
             //CCDebug::PrintVar($values);
             $config->SaveConfig('config',$values,CC_GLOBAL_SCOPE,true);
-            CCEvents::Invoke(CC_EVENT_TRANSLATE);
+            //CCEvents::Invoke(CC_EVENT_TRANSLATE);
             CCUtil::SendBrowserTo(ccl('admin','language', 'save'));
         }
     }
