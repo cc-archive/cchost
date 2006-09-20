@@ -371,7 +371,7 @@ class CCMailerAPI
             // admin forgot to run update
 
             $ret['msg'] = _('Mail update was not properly installed');
-            return;
+            return $ret;
         }
         if( CCUser::IsAdmin() )
         {
@@ -489,7 +489,7 @@ class CCMailerAPI
         if( !$this->_confirm_install() )
             return;
 
-        if(!empty($userto) )
+        if( empty($userto) )
             return;
 
         $users =& CCUsers::GetTable();
