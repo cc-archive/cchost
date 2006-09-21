@@ -698,11 +698,11 @@ class CCTag
             return;
 
         $items += array( 
-            'tagalias'   => array( 'menu_text'  => 'Tag Aliases',
+            'tagalias'   => array( 'menu_text'  => 'Tags',
                              'menu_group' => 'configure',
                              'access' => CC_ADMIN_ONLY,
                              'weight' => 80,
-                             'help' => 'Edit tag aliases and reserve tags',
+                             'help' => 'Edit tag aliases, reserve tags, counts, etc.',
                              'action' =>  ccl('admin','tags')
                              ),
             );
