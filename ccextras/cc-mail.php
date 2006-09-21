@@ -412,7 +412,7 @@ class CCMailerAPI
                 }
                 else
                 {
-                    $rule = $CC_GLOBALS['mail_uploader'];
+                    $rule = $CC_GLOBALS['mail_uploaders'];
                 }
             }
             else // user not logged in:
@@ -426,40 +426,37 @@ class CCMailerAPI
             *
             *-----------------------------------------*/
 
-            if( ($rule & CC_MAIL_NOTALLOWED) == 0 )
+            if( ($rule & CC_MAIL_NOTALLOWED) == CC_MAIL_NOTALLOWED )
             {
                 $ret['msg'] = 'You are not authorized to send mail.';
             }
-            else // mail seems to be allowed:
+            elseif( ($rule & CC_MAIL_THROTTLED) == CC_MAIL_THROTTLED )
             {
-                if( ($rule & CC_MAIL_THROTTLED) == 0 )
+                $curr_time = time();
+                if( empty($CC_GLOBALS['user_extra']['last_email_send']) )
                 {
                     $ret['ok'] = true;
                 }
-                else // user requires throttle check:
+                else
                 {
-                    $curr_time = time();
-                    if( empty($CC_GLOBALS['user_extra']['last_email_send']) )
+                    $throttle = empty($CC_GLOBALS['mail_throttle']) ? (2) 
+                                    : $CC_GLOBALS['mail_throttle'];
+
+                    $last_email = $CC_GLOBALS['user_extra']['last_email_send'];
+
+                    if( ($curr_time - $last_email) < intval(60 * $throttle)  )
+                    {
+                        $ret['msg'] = _('You have exceeded the temporary quota of emails allowed.' );
+                    }            
+                    else
                     {
                         $ret['ok'] = true;
                     }
-                    else
-                    {
-                        $throttle = empty($CC_GLOBALS['mail_throttle']) ? (2) 
-                                        : $CC_GLOBALS['mail_throttle'];
-
-                        $last_email = $CC_GLOBALS['user_extra']['last_email_send'];
-
-                        if( ($curr_time - $last_email) < intval(60 * $throttle)  )
-                        {
-                            $ret['msg'] = _('You have exceeded the temporary quota of emails allowed.' );
-                        }            
-                        else
-                        {
-                            $ret['ok'] = true;
-                        }
-                    }   
-                }
+                }   
+            }
+            elseif( ($rule & CC_MAIL_ALLOWED) == CC_MAIL_ALLOWED )
+            {
+                $ret['ok'] = true;
             }
         }
         
@@ -471,7 +468,7 @@ class CCMailerAPI
         if( CCUser::IsLoggedIn() )
         {
             $row = array();            
-            $row['user_extra'] = CCUsers::CurrentUserField('upload_extra');
+            $row['user_extra'] = CCUser::CurrentUserField('user_extra');
             if( !is_array($row['user_extra']) )
                 $row['user_extra'] = unserialize($row['user_extra']);
             $row['user_extra']['last_email_send'] = time();
