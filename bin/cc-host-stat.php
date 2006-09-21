@@ -52,7 +52,11 @@ $help = '
   NOTE: actually this script has not been tested in cli mode
 ';
 
-define('CC_HOST_ROOT_DIR', '.');
+
+if( basename(getcwd()) == 'bin' )
+    define('CC_HOST_ROOT_DIR', '..');
+else
+    define('CC_HOST_ROOT_DIR', '.');
 
 error_reporting(E_ALL);
 
