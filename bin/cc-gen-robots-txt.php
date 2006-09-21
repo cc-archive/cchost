@@ -42,6 +42,7 @@ $disallows = array(
         '/podcast',
         '/stream',
         '/files/stream'
+        '/feed'
     );
 define('IN_CC_HOST', 1);
 include('cc-includes.php');
