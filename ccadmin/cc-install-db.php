@@ -534,11 +534,11 @@ END;
        'error-txt'           => 'cc-error-msg.txt',
        'logfile-dir'         => $vars['logfile_dir']['v'],
 
-       'mail_anon'           = CC_MAIL_THROTTLED,
-       'mail_uploaders'      = CC_MAIL_THROTTLED,
-       'mail_registered'     = CC_MAIL_THROTTLED,
-       'mail_throttle'       = 3,
-       'mail_to_admin'       = CC_DONT_CARE_LOGGED_IN,
+       'mail_anon'           => CC_MAIL_THROTTLED,
+       'mail_uploaders'      => CC_MAIL_THROTTLED,
+       'mail_registered'     => CC_MAIL_THROTTLED,
+       'mail_throttle'       => 3,
+       'mail_to_admin'       => CC_DONT_CARE_LOGGED_IN,
 
        'pretty-urls'         => $vars['pretty_urls']['v'],
 
