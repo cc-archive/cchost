@@ -54,9 +54,16 @@ class v_3_1a extends CCUpdate
         }
         elseif( !file_exists($sb_dest) )
         {
-            copy( $sb_src, $sb_dest );
-            chmod( $sb_dest, 0777 );
-            CCPage::Prompt('custom.xml was copied to sidebar.xml');
+            if( is_writable($sb_dest) )
+            {
+                copy( $sb_src, $sb_dest );
+                chmod( $sb_dest, 0777 );
+                CCPage::Prompt('custom.xml was copied to sidebar.xml');
+            }
+            else
+            {
+                CCPage::Prompt( "Tried to write: $sb_dest but it is not writable");
+            }
         }
         else
         {
