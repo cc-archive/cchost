@@ -93,14 +93,14 @@ class CCPathAdminForm extends CCEditConfigForm
                array( 'label'       => _('System Error Message'),
                        'form_tip'   => _('This file is displayed when the system encounters an error.'),
                        'value'      => 'cc-error-msg.txt',
-                       'formatter'  => 'localdir',
+                       'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
 
         $fields['disabled-msg'] =
                array( 'label'       => _('Site Disabled Message'),
                        'form_tip'   => _('This file is displayed when the admins have temporarily disabled the site.'),
                        'value'      => 'disabled-msg.txt',
-                       'formatter'  => 'localdir',
+                       'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE  );
 
         $fields['user-upload-root'] =
@@ -142,36 +142,36 @@ class CCPathAdminForm extends CCEditConfigForm
 
     function validator_sysdir($fieldname)
     {
-        if( $this->validator_textedit($fieldname) )
+        if( !$this->validator_textedit($fieldname) )
+            return false;
+
+        $dir = $this->GetFormValue($fieldname);
+        if( $dir )
         {
-            $dir = $this->GetFormValue($fieldname);
-            if( $dir )
+            $mustexist = $this->GetFormFieldItem($fieldname,'mustexist');
+
+            if( $mustexist && !file_exists($dir) )
             {
-                $mustexist = $this->GetFormFieldItem($fieldname,'mustexist');
-
-                if( $mustexist && !file_exists($dir) )
-                {
-                    $this->SetFieldError($fieldname, _('This directory or file does not exist'));
-                    return false;
-                }
-
-                $writable = $this->GetFormFieldItem($fieldname,'writable');
-
-                if( file_exists($dir) && !empty($writable) )
-                {
-                    if( !is_writable($dir) )
-                    {
-                        $this->SetFieldError($fieldname, _('This file or directory is not writable'));
-                        return false;
-                    }
-                }
-        
-                $slash_required = $this->GetFormFieldItem($fieldname,'slash');
-                $dir = CCUtil::CheckTrailingSlash($dir,$slash_required);
+                $this->SetFieldError($fieldname, _('This directory or file does not exist'));
+                return false;
             }
 
-            $this->SetFormValue($fieldname,$dir);
+            $writable = $this->GetFormFieldItem($fieldname,'writable');
+
+            if( file_exists($dir) && !empty($writable) )
+            {
+                if( !is_writable($dir) )
+                {
+                    $this->SetFieldError($fieldname, _('This file or directory is not writable'));
+                    return false;
+                }
+            }
+    
+            $slash_required = $this->GetFormFieldItem($fieldname,'slash');
+            $dir = CCUtil::CheckTrailingSlash($dir,$slash_required);
         }
+
+        $this->SetFormValue($fieldname,$dir);
 
         return true;
     }
