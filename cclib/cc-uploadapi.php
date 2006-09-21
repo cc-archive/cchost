@@ -553,6 +553,9 @@ class CCUploadAPI
         $where['upload_id'] = $upload_id;
         $uploads->DeleteWhere($where);
 
+        $tags =& CCTags::GetTable();
+        $tags->TagDelete($record['upload_tags']);
+
         CCSync::Delete($record);
     }
 
@@ -646,10 +649,12 @@ class CCUploadAPI
         {
             $db_args['upload_config'] = $CC_CFG_ROOT;
         }
+CCDebug::LogVar('dbargs',$db_args);
 
         $db_args['upload_extra']['relative_dir'] = $relative_dir;
         $db_args['upload_extra'] = serialize($db_args['upload_extra']);
         $uploads->Insert($db_args);
+
 
         $tags =& CCTags::GetTable();
         $tags->Update($db_args['upload_tags']);

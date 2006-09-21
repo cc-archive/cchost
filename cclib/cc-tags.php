@@ -113,7 +113,7 @@ class CCTags extends CCTable
         $this->TagDelete($tossed);
     }
 
-    function Insert($tags,$type)
+    function Insert($tags,$type,$update_type = true)
     {
         if( !is_array($tags) )
             $tags = CCTag::TagSplit($tags);
@@ -124,7 +124,7 @@ class CCTags extends CCTable
         $where = $this->GetWhereFilter($tags);
         $diff_tags = $this->QueryKeys($where);
         $new_tags = array_diff($tags,$diff_tags);
-        if( ($type & (CCTT_ADMIN | CCTT_SYSTEM)) != 0 )
+        if( $update_type && (($type & (CCTT_ADMIN | CCTT_SYSTEM)) != 0) )
         {
             $old_tags = array_diff($diff_tags,$new_tags);
             if( $old_tags )
@@ -133,19 +133,25 @@ class CCTags extends CCTable
                 // that are now being 'promoted' to system
                 // tags or admin tags:
 
+                $in_where = $this->_get_in_set($old_tags);
                 $upargs = array();
-                foreach( $old_tags as $old_tag )
-                {
-                    $upargs['tags_tag'] = $old_tag;
-                    $upargs['tags_type'] = $type;
-                    // Call parent because we really are just doing
-                    // a straight update of the record
-                    parent::Update($upargs);
-                }
+                $upargs['tags_type'] = $type;
+                $this->UpdateWhere($upargs,$in_where);
             }
         }
 
         $this->Add($new_tags,$type,0);
+    }
+
+    function _get_in_set($tags)
+    {
+        if( is_string($tags) )
+            $tags = CCTag::TagSplit($tags);
+        $tag_quoted = array();
+        foreach( $tags as $tag )
+            $tag_quoted[] = "'" . strtolower(addslashes($tag)) . "'";
+
+        return ' LOWER(tags_tag) IN (' . join(',',$tag_quoted) . ') ';
     }
 
     function TagDelete($tags)
@@ -278,19 +284,12 @@ class CCTags extends CCTable
         if( !is_array($tags) )
             $tags = CCTag::TagSplit($tags);
 
-        $where = array();
+        $in_where = $this->_get_in_set($tags);
 
-        foreach($tags as $tag)
-        {
-            $tag = strtolower(addslashes($tag));
-            $where[] = "( LOWER(tags_tag) = '$tag' )";
-        }
-
-        $ret_where = implode(' OR ',$where);
         if( $filter_type )
-            $ret_where = " (($ret_where) AND tags_type & $filter_type) ";
+            $in_where = " (($in_where) AND tags_type & $filter_type) ";
 
-        return($ret_where);
+        return $in_where;
     }
 
     function ExpandOnRow(&$row,$inkey,$baseurl,$outkey,$label='')
@@ -388,18 +387,18 @@ class CCAdminTagsForm extends CCForm
                 'value' => $text,
                 'flags' => CCFF_POPULATE
                 ),
+            'runnow' => array(
+                'label' => 'Run Now',
+                'form_tip' => 'Check this to run the alias rules now',
+                'formatter' =>  'checkbox',
+                'flags' => CCFF_NONE
+                ),
             'reserved' => array(
                 'label' => 'Reserved Tags',
                 'form_tip' => 'These tags will be reserved by the system. If a user tries to use these tags it will be removed.',
                 'formatter' =>  'textarea',
                 'value' => implode(', ',$admintags),
                 'flags' => CCFF_POPULATE
-                ),
-            'runnow' => array(
-                'label' => 'Run Now',
-                'form_tip' => 'Check this to run the alias rules now',
-                'formatter' =>  'checkbox',
-                'flags' => CCFF_NONE
                 ),
             'mintaglen' => array(
                 'label' => 'Minimum tag allowed',
@@ -462,6 +461,11 @@ class CCTag
             $tags =& CCTags::GetTable();
             $reserved = $form->GetFormValue('reserved');
             $run = false;
+
+            $cctBits = ~CCTT_ADMIN;
+            $sql = "UPDATE cc_tbl_tags SET tags_type = (tags_type & $cctBits)";
+            CCDatabase::Query($sql);
+
             if( !empty($reserved) )
             {
                 $tags->Insert($reserved,CCTT_ADMIN);
@@ -542,6 +546,31 @@ class CCTag
         $regex =  "/(^| |,)($needles)(,|\$)/";
 
         return( preg_match( $regex, $haystack ) );
+    }
+
+    function Reset()
+    {
+        $tags =& CCTags::GetTable();
+        $tags->DeleteWhere('1');
+        $ups = CCDatabase::Query('SELECT upload_id,upload_tags,upload_extra FROM cc_tbl_uploads');
+
+        while( $row = mysql_fetch_row($ups) )
+        {
+            // [ccud] => media,acappella
+            // [usertags] => female_vocals,melody
+            // [systags] => sampling_plus,audio,mp3,44k,mono,128kbps
+            $extra = unserialize($row[2]);
+            if( $extra['ccud'] )
+                $tags->Insert( $extra['ccud'], CCTT_ADMIN, false );
+            if( $extra['usertags'] )
+                $tags->Insert( $extra['usertags'], CCTT_USER, false );
+            if( $extra['systags'] )
+                $tags->Insert( $extra['systags'], CCTT_SYSTEM, false );
+
+            $tags->Update( $row[1] );
+        }
+
+        CCUtil::SendBrowserTo( ccl('tags') );
     }
 
     function OnBrowseTags($tagstr='')
@@ -630,14 +659,16 @@ class CCTag
         if( empty($_REQUEST['all']) )
         {
             $where .=  ' AND tags_type = ' . CCTT_USER;
-            $url_on = url_args( ccl('tags'), 'all=1' );
-            $switch_link = "<a href=\"$url_on\">" . _('Turn System Tags ON') . "</a>";
+            $switch_url = url_args( ccl('tags'), 'all=1' );
+            $switch_text = _('Turn System Tags ON');
         }
         else
         {
-            $url_off = ccl('tags');
-            $switch_link = "<a href=\"$url_off\">" . _('Turn System Tags OFF') . "</a>";
+            $switch_url = ccl('tags');
+            $switch_text = _('Turn System Tags OFF');
         }
+
+        $switch_link = "<table class=\"cc_tag_switch_link\"><tr><td><a class=\"cc_gen_button\" href=\"$switch_url\"><span>$switch_text</span></a></td></tr></table>";
 
         $records =& $tags->QueryRows($where);
         $count = count($records);
@@ -708,6 +739,7 @@ class CCTag
     {
         CCEvents::MapUrl( ccp('tags'), array('CCTag','OnBrowseTags'), CC_DONT_CARE_LOGGED_IN );
         CCEvents::MapUrl( ccp('admin','tags'), array('CCTag','Admin'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','tags','reset'), array('CCTag','Reset'), CC_ADMIN_ONLY );
     }
 }
 

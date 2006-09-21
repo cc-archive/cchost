@@ -961,6 +961,9 @@ input.cc_form_input_short {
     margin-top: 20px;
 }
 
+.cc_tag_switch_link {
+	float:right;
+}
 
 .cc_user_favs_link {
 
