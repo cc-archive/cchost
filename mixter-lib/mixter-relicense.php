@@ -108,7 +108,7 @@ class CCRelicense
         $args['relicensed_url'] = ccl('relicensed');
         $args['relicense_form'] = true;
 
-        return( $args );
+        return $args;
     }
 
     function _check_tree(&$flags,&$records,&$A,&$sources)

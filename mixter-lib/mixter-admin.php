@@ -142,7 +142,7 @@ class CCMixterAdmin
         CCPage::SetTitle("Edit $table/$key");
         $heads   =& CCDatabase::QueryRows("DESCRIBE $table");
         $keyfield = $heads[0]['Field'];
-        $record =& CCDatabase::QueryRow("SELECT * FROM $table WHERE $keyfield = '$key'");
+        $record = CCDatabase::QueryRow("SELECT * FROM $table WHERE $keyfield = '$key'");
         CCMixterAdmin::_htmlize($record);
 
         $types = array();
