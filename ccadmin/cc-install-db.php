@@ -22,6 +22,9 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+if( !defined('CC_MAIL_THROTTLED') )
+    define('CC_MAIL_THROTTLED', 8); // see ccextras/cc-mail.php
+
 function cc_install_tables(&$vars,&$msg)
 {
     // 
@@ -517,21 +520,34 @@ END;
 
     $arr = array ( 
        'cookie-domain'       => $vars['cookiedom']['v'] , 
+
        'site-disabled'       => 0,
        'enable-key'          => 'jimi',
        'enable-password'     => '_change_me_' . time(),
+
        'php-tal-dir'         => 'cclib/phptal/libs' , 
        'php-tal-cache-dir'   => 'cclib/phptal/phptal_cache',
        'user-upload-root'    => 'people' , 
        'contest-upload-root' => 'contests' , 
        'template-root'       => 'cctemplates/' , 
        'files-root'          => 'ccfiles/',
+       'error-txt'           => 'cc-error-msg.txt',
+       'logfile-dir'         => $vars['logfile_dir']['v'],
+
+       'mail_anon'           = CC_MAIL_THROTTLED,
+       'mail_uploaders'      = CC_MAIL_THROTTLED,
+       'mail_registered'     = CC_MAIL_THROTTLED,
+       'mail_throttle'       = 3,
+       'mail_to_admin'       = CC_DONT_CARE_LOGGED_IN,
+
        'pretty-urls'         => $vars['pretty_urls']['v'],
+
        'getid3-path'         => $vars['getid3']['v'] , 
        'getid3-v1'           => '1' , 
        'getid3-fileverify-enabled' => '1' , 
-       'logfile-dir'        => $vars['logfile_dir']['v'],
-       'ban-message'        => 'This upload is under review and is only visible to the owner and admins. Please contact the site administrator.',
+
+       'ban-message'        => 'This upload is under review and is only visible to the 
+                                owner and admins. Please contact the site administrator.',
        'cc-host-version'    => CC_HOST_VERSION,
        'allow-pool-ui'       => true,
        'allow-pool-search'   => true,
@@ -540,13 +556,15 @@ END;
        'lang'                => CC_LANG, // JON: This should be install option
        'lang_locale_pref'    => CC_LANG_LOCALE_PREF, // same here!
 
-       'v_1_2h'              => true, // mark this installation as having 
-                                      // ratings/remix count fields
+                                      // mark this installation as having: 
+       'v_1_2h'              => true, // ratings/remix count fields
        'v_1_2k'              => true, // reviews/topics
        'v_2_1a'              => true, // email notifications
        'v_3_0c'              => true, // forums
        'v_3_0f'              => true, // language
        'v_3_0g'              => true, // BPM tags
+       'v_3_1a'              => true, // sidebar.xml
+       'v_3_1b'              => true, // new mail ops, pool optimized
 
     );
 
