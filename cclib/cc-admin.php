@@ -807,6 +807,7 @@ function cc_check_site_enabled()
 
     if( !empty($CC_GLOBALS['skin']) )
     {
+        $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
         $css = $settings['style-sheet'];
         $css_link =<<<END

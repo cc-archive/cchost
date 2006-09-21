@@ -143,7 +143,7 @@ EOF;
         </tr>
 EOF;
 
-        // ------- Ratings
+        // -------- Ratings
 
         $html .=<<<EOF
         <tr>
@@ -360,9 +360,12 @@ EOF;
 EOF;
             $dl_items =& $record['local_menu']['download'];
             $dcount = count($dl_items);
+            if( $dcount )
+                $keys = array_keys($dl_items);
             for( $n = 0; $n < $dcount; $n++ )
             {
-                $mi =& $dl_items[$n];
+                $k = $keys[$n];
+                $mi =& $dl_items[$k];
                 $html .=<<<END
                   <p> <a href="{$mi['action']}" id="{$mi['id']}" type="{$mi['type']}" title="{$mi['tip']}"><span>{$mi['menu_text']}</span></a>
                   </p>
@@ -383,6 +386,7 @@ EOF;
 
         </div><!-- buttonpadding -->
 EOF;
+
         } // end if($detail)
 
         $html .=<<<EOF
@@ -417,9 +421,11 @@ EOF;
                 <div id="cc_history_wrapper">
 EOF;
                 $pcount = count($record['remix_parents']);
+                $keys = array_keys($record['remix_parents']);
                 for( $n = 0; $n < $pcount; $n++)
                 {
-                    $rs =& $record['remix_parents'][$n];
+                    $k = $keys[$n];
+                    $rs =& $record['remix_parents'][$k];
                     $hack = 14;
                     if( ($n == ($pcount-1)) && !empty($record['more_parents_link']) )
                     {
@@ -475,10 +481,12 @@ EOF;
 
 EOF;
                     $ccount = count($record['remix_children']);
+                    $keys = array_keys($record['remix_children']);
                     $more_link = empty($record['more_children_link']) ? '' : $record['more_children_link'];
                     for( $n = 0; $n < $ccount; $n++ )
                     {
-                        $rs =& $record['remix_children'][$n];
+                        $k = $keys[$n];
+                        $rs =& $record['remix_children'][$k];
                         $hack = 14;
                         if( ($n == ($ccount-1)) && $more_link )
                         {

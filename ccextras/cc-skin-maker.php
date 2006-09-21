@@ -127,9 +127,14 @@ class CCSkinMaker
         $macros = @file_get_contents('ccextras/cc-skin-maker-template.txt');
         if( empty($macros) )
             return _('Error reading skin template file');
+
+        $root_url = ccd();
+        $macros = str_replace('%%root-url%%',$root_url,$macros);
+
         $ok = preg_match_all('/%%([^-]*)-begin%%(.*)%%end%%/sU', $macros, $m, PREG_SET_ORDER );
         if( !$ok )
             return _('Error parsing skin template file');
+
 
         foreach( $m as $t )
         {

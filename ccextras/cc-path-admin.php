@@ -157,7 +157,7 @@ class CCPathAdminForm extends CCEditConfigForm
 
                 $writable = $this->GetFormFieldItem($fieldname,'writable');
 
-                if( !empty($writable) )
+                if( file_exists($dir) && !empty($writable) )
                 {
                     if( !is_writable($dir) )
                     {

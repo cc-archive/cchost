@@ -238,7 +238,7 @@ class CCMixterAdmin
         if( !is_dir($dir) )
         {
             mkdir($dir);
-            chmod($dir,CC_DEFAULT_DIR_PERM);
+            chmod($dir,0777);
         }
         $dir .= '/';
 
@@ -252,7 +252,7 @@ class CCMixterAdmin
                 $f = fopen($fname,'w');
                 fwrite($f,$fields['expression']);
                 fclose($f);
-                chmod($fname,CC_DEFAULT_FILE_PERMS);
+                chmod($fname,0777);
                 $x = false;
                 $form->SetFormFieldItem('filetoload','options',$this->_get_scripts($x));
             }
