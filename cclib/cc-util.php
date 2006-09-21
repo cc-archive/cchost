@@ -321,6 +321,28 @@ class CCUtil
         return hexdec($hexipbang[0]). '.' . hexdec($hexipbang[1]) . '.' . hexdec($hexipbang[2]) . '.' . hexdec($hexipbang[3]);
     }
 
+    function SplitPaths($paths, $must_have='')
+    {
+        $str = preg_replace('/(.*);?$/U', '\1', $paths);
+        $dirs = split(';',$str);
+        if( $must_have )
+        {
+            $must_have = CCUtil::CheckTrailingSlash($must_have,false);
+
+            if( empty($dirs) || 
+                (
+                    !in_array( $must_have . '/', $dirs  ) && 
+                    !in_array( $must_have, $dirs )
+                ) 
+            )
+            {
+                $dirs[] = $must_have;
+            }
+        }
+
+        return $dirs;
+    }
+
     function SearchPath($target,$look_here_first,$then_here,$real_path=true)
     {
         $hit = CCUtil::_inner_search($target,$look_here_first,$real_path);

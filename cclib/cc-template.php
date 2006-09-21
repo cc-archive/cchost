@@ -129,11 +129,7 @@ class CCTemplate
     {
         global $CC_GLOBALS;
 
-        $dirs = split(';',$CC_GLOBALS['template-root']);
-        if( empty($dirs) || (!in_array( 'cctemplates/', $dirs  ) && !in_array( 'cctemplates',$dirs )) )
-            $dirs[] = 'cctemplates';
-
-        return $dirs;
+        return CCUtil::SplitPaths( $CC_GLOBALS['template-root'], 'cctemplates' );
     }
 
     function SetAllAndPrint( $args, $admin_dump = false )

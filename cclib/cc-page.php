@@ -480,10 +480,8 @@ class CCPage extends CCTemplate
     function GetViewFilePath()
     {
         global $CC_GLOBALS;
-        $dirs = split(';', $CC_GLOBALS['files-root']);
-        if( !in_array('ccfiles',$dirs) && !in_array('ccfiles/',$dirs) )
-            $dirs[] = 'ccfiles';
-        return $dirs;
+
+        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccfiles' );
     }
     
     /**

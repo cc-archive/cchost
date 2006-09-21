@@ -20,7 +20,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-$cc_extras_dirs = split(';',$cc_extras_dirs);
+$cc_extras_dirs = CCUtil::SplitPaths($cc_extras_dirs);
 foreach( $cc_extras_dirs as $cc_extras_dir )
 {
     if (is_dir($cc_extras_dir)) 
