@@ -1,0 +1,64 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id$
+
+-->
+
+</tal:block>
+<metal:block define-macro="howididit">
+ <div class="cc_howididit">
+    <tal:block repeat="head howididit_fields">
+      <tal:block define="fkey repeat/head/key" />
+      <tal:block condition="howididit_info/$fkey" tal:on-error="">
+          <tal:block define="dtitle head/label" />
+          <tal:block define="dtext howididit_info/$fkey" />
+          <metal:block use-macro="${show_box}" />
+      </tal:block>
+    </tal:block>
+</div>
+</metal:block>
+
+<metal:block define-macro="howididit_browse">
+ <div class="cc_form_about">${howididit_help}</div>
+ <table class="cc_howididit_links"><tr> <th>${howididit_sort_cap}</th>
+    <td tal:repeat="sortlink howididit_sorts">
+      <a tal:condition="not: sortlink/selected" href="${sortlink/url}">${sortlink/text}</a>
+      <b tal:condition="sortlink/selected">${sortlink/text}</b>
+    </td>
+ </tr></table>
+ <select size="7" id="cc_howididit_browser"
+ onchange="cc_get_data('${howididit_url}/' + this.options[this.selectedIndex].value,'cc_howididit_detail','getting data...');"
+ >
+<tal:block repeat="item howididit_records" ><option value="${item/upload_id}">"${item/upload_name}" by ${item/user_real_name}</option></tal:block>
+ </select>
+ <div id="cc_howididit_detail"></div>
+</metal:block>
+
+<metal:block define-macro="howididit_detail">
+  <h3>
+  <tal:block condition="record/stream_link">
+      <a id="cc_streamfile" href="${record/stream_link/url}"><span tal:content="record/stream_link/text"/></a> 
+  </tal:block>
+<a href="${record/file_page_url}" tal:content="record/upload_name"></a>
+   <span tal:content="php: CC_lang('by:');" /> <a href="${record/artist_page_url}" class="cc_user_link" 
+          tal:content="record/user_real_name" />
+  </h3>
+  <metal:block use-macro="${howididit}" />
+</metal:block>
+</tal:block>
