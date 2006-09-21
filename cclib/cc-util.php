@@ -321,6 +321,30 @@ class CCUtil
         return hexdec($hexipbang[0]). '.' . hexdec($hexipbang[1]) . '.' . hexdec($hexipbang[2]) . '.' . hexdec($hexipbang[3]);
     }
 
+    function SearchPath($target,$look_here_first,$then_here,$real_path=true)
+    {
+        $hit = CCUtil::_inner_search($target,$look_here_first,$real_path);
+        if( $hit === false )
+            $hit = CCUtil::_inner_search($target,$then_here,$real_path);
+        return $hit;
+    }
+
+    function _inner_search($target,$path,$real_path)
+    {
+        $paths = split(';',$path);
+        if( $target{0} == '/' )
+            $target = substr($target,1);
+
+        foreach( $paths as $P )
+        {
+            $dir = CCUtil::CheckTrailingSlash($P,true);
+            $relpath = $dir . $target;
+            if( file_exists($relpath) )
+                return $real_path ? realpath($relpath) : $relpath;
+        }
+
+        return false;
+    }
 }
 
 ?>

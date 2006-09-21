@@ -424,8 +424,8 @@ class CCPage extends CCTemplate
         // 
         if( !empty($page->_body_template) )
         {
-            global $CC_GLOBALS;
-            $template = new CCTemplate( $CC_GLOBALS['files-root'] . $page->_body_template,true);
+            $vfile = $page->GetViewFile($page->_body_template);
+            $template = new CCTemplate( $vfile, true );
             $body =& $template->SetAllAndParse($page->_page_args, false, $isadmin);
             $page->AddPrompt('body_text',$body);
         }
@@ -470,6 +470,22 @@ class CCPage extends CCTemplate
             return( $page->SetAllAndParse($page->_page_args, false, CCUser::IsAdmin()) );
     }
 
+    function GetViewFile($filename)
+    {
+        global $CC_GLOBALS;
+
+        return CCUtil::SearchPath( $filename, $CC_GLOBALS['files-root'], 'ccfiles' );
+    }
+
+    function GetViewFilePath()
+    {
+        global $CC_GLOBALS;
+        $dirs = split(';', $CC_GLOBALS['files-root']);
+        if( !in_array('ccfiles',$dirs) && !in_array('ccfiles/',$dirs) )
+            $dirs[] = 'ccfiles';
+        return $dirs;
+    }
+    
     /**
     * Output a div with the class 'php_error_message'
     *
@@ -663,6 +679,7 @@ class CCPage extends CCTemplate
     *
     * @param object $table A instance of the CCTable being queried
     * @param string $sql_where The SQL WHERE clause to limit queries
+    * @param integer $limit Override system defaults for how many records in a page
     */
     function AddPagingLinks(&$table,$sql_where,$limit ='')
     {
@@ -677,7 +694,7 @@ class CCPage extends CCTemplate
                 $limit = 10;
         }
 
-        if( isset($_REQUEST['offset']) )
+        if( isset($_REQUEST['offset']) && (intval($_REQUEST['offset']) > 0) )
         {
             $got_offset = true;
             $offset = $_REQUEST['offset'];

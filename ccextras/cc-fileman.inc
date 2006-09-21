@@ -34,31 +34,12 @@ class CCFilesAddForm extends CCUploadForm
 {
     function CCFilesAddForm($dirs)
     {
-        global $CC_GLOBALS;
-
         $this->CCUploadForm();
 
-        $dir = $CC_GLOBALS['files-root'];
-
-        if( empty($dirs) )
-        {
-            $fields['targetdir'] = array( 'label' => 'Destination directory',
-                             'value' => $dir,
-                             'formatter' => 'statictext',
-                             'flags' => CCFF_STATIC | CCFF_NOUPDATE );
-        }
-        else
-        {
-            $targets = array( '[home]' => $CC_GLOBALS['files-root'] );
-            //$values = array_values($targets);
-            //$targets += array_combine($values,$values);
-            foreach( $dirs as $sdir )
-                $targets[$sdir] = $dir . $sdir;
-            $fields['targetdir'] = array( 'label' => 'Destination directory',
-                                      'formatter' => 'select',
-                                      'options'  => $targets,
-                                      'flags'   =>  CCFF_POPULATE);
-        }
+        $fields['targetdir'] = array( 'label' => 'Destination directory',
+                                  'formatter' => 'select',
+                                  'options'  => $dirs,
+                                  'flags'   =>  CCFF_POPULATE);
         
         $fields += array( 
             'file1' => array(  'label'      => 'Add file(s)',
@@ -93,9 +74,34 @@ class CCFilesAddForm extends CCUploadForm
 */
 class CCFileManAdmin
 {
+    function _dir_dive($dir,&$dirs)
+    {
+        if ($cc_dh = opendir($dir)) 
+        {
+           while (($cc_file = readdir($cc_dh)) !== false) 
+           {
+               if( $cc_file{0} == '.' )
+                   continue;
+               $pd = $dir . '/' . $cc_file;
+               $p = realpath( $pd );
+               if( is_dir($p) )
+               {
+                   $dirs[$pd] = $pd;
+                   $this->_dir_dive($p,$dir);
+               }
+           }
+           closedir($cc_dh);
+        }
+    }
+
     function Add($subdir='')
     {
         global $CC_GLOBALS;
+/*
+        $root = '';
+        $subdir = '';
+        $uurl = ccl('admin','files','manage');
+        $htmlD = $this->_get_file_path_select($root, $subdir, $uurl);
 
         //////////////////////////////
         //
@@ -107,8 +113,16 @@ class CCFileManAdmin
         else
             $dir = $root;
         $path = realpath($dir);
+*/
 
-        list( , $dirs ) = $this->_get_dir_contents($path,$dir,'');
+        $vdirs = CCPage::GetViewFilePath();
+
+        $dirs = array();
+        foreach($vdirs as $VD)
+        {
+            $dirs[$VD] = $VD;
+            $this->_dir_dive($VD,$dirs);
+        }
 
         $form = new CCFilesAddForm($dirs);
 
@@ -117,10 +131,8 @@ class CCFileManAdmin
             
             $form->GetFormValues($values);
 
-            if( !empty($values['targetdir']) && ($values['targetdir'] != '[home]') )
-            {
-                $path = realpath( $dir . '/' . $values['targetdir'] );
-            }
+            if( !empty($values['targetdir'])  )
+                $path = realpath( $values['targetdir'] );
 
             $ok = true;
             $uploads = 0;
@@ -164,7 +176,7 @@ class CCFileManAdmin
         CCPage::AddForm( $form->GenerateForm() );
     }
 
-    function Manage($tab='')
+    function Manage($tab='',$root='')
     {
         $navigator = new CCNavigator();
         $base_url = ccl('admin','files','manage');
@@ -173,9 +185,9 @@ class CCFileManAdmin
             $tab = 'files';
         $navigator->ShowSubTabs('fileman',$tab,$base_url,true);
         if( $tab == 'addfiles' )
-            $this->Add();
+            $this->Add($root);
         else
-            $this->Files();
+            $this->Files($root);
     }
 
     function _ensure_tabs()
@@ -203,17 +215,48 @@ class CCFileManAdmin
         }
     }
 
-    function Files()
+    function _get_file_path_select(&$root,&$subdir,$UB)
     {
         global $CC_GLOBALS;
 
-        $subdir = empty($_REQUEST['subdir'])  ? '' : $_REQUEST['subdir'];
+        if( empty($subdir) )
+            $subdir = empty($_REQUEST['subdir'])  ? '' : $_REQUEST['subdir'];
+        if( empty($root) )
+            $root = empty($_GET['rt']) ? '' : $_GET['rt'];
+
+        $tvdirs = CCPage::GetViewFilePath();
+        $CR     = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+
+        $htmlD =<<<END
+<select onchange=" document.location = '{$UB}/{$CR}rt=' + this.options[this.selectedIndex].value;">
+END;
+        $selected = '';
+        foreach( $tvdirs as $TVD )
+        {
+            if( empty($root) )
+                $root = $TVD;
+            else
+                $selected = $TVD == $root ? 'selected = "selected"' : '';
+            $htmlD .= "\n<option value='{$TVD}' $selected>$TVD</option>";
+        }
+
+        $htmlD .= '</select>' . "\n";
+
+        return $htmlD;
+    }
+
+    function Files()
+    {
+        $root = '';
+        $subdir = '';
+        $uurl = ccl('admin','files','manage');
+        $htmlD = $this->_get_file_path_select($root, $subdir, $uurl);
 
         //////////////////////////////
         //
         // figure out the pathing..
         //
-        $root = CCUtil::CheckTrailingSlash($CC_GLOBALS['files-root'],false);
+        $root = CCUtil::CheckTrailingSlash($root,false);
         if( $subdir )
             $dir =  CCUtil::CheckTrailingSlash( $root . '/' . $subdir, false );
         else
@@ -398,6 +441,7 @@ class CCFileManAdmin
 
 <form enctype="multipart/form-data" action="$url" method="post">
 <table class="ftable">
+    <tr><th>Path Root</th><td>$htmlD</td></tr>
 <tr><th>Files in "<span>$dir</span>"</th>
     <td><select onchange="filechanged(this);" size="8" ondblclick="ondirclicked(this);">
 END;
@@ -520,7 +564,7 @@ END;
         {
            while (($cc_file = readdir($cc_dh)) !== false) 
            {
-               if( $cc_file == '.' || $cc_file == '..' )
+               if( $cc_file{0} == '.' )
                    continue;
                $p = realpath( $dir . '/' . $cc_file );
                if( is_dir($p) )

@@ -244,7 +244,8 @@ class CCReview
         // Output the listing...
         //
         $args += $pagelinks;
-        $template = new CCTemplate($CC_GLOBALS['template-root'] . 'topics.xml');
+        $tfile = CCTemplate::GetTemplate('topics.xml');
+        $template = new CCTemplate($tfile);
         $html = $template->SetAllAndParse($args);
         CCPage::AddPrompt('body_text',$html);
 
@@ -512,7 +513,8 @@ class CCReview
             $reviews =& CCReviews::GetTable();
             $args['topics'] = $reviews->GetReviewsForUpload($upload_id,false,'DESC');
             $args['macro'] = 'post_review';
-            $template = new CCTemplate($CC_GLOBALS['template-root'] . 'topics.xml');
+            $tfile = CCTemplate::GetTemplate('topics.xml');
+            $template = new CCTemplate($tfile);
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
             $this->_add_links();
@@ -965,7 +967,8 @@ class CCReview
             $args['macro'] = 'recent_reviews';
             $args['topics'] = $up_results;
 
-            $template = new CCTemplate($CC_GLOBALS['template-root'] . 'topics.xml');
+            $tfile = CCTemplate::GetTemplate('topics.xml');
+            $template = new CCTemplate($tfile);
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
         }

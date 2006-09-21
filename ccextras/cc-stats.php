@@ -97,8 +97,7 @@ function cc_stats_on_map_urls()
 
 function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
 {
-    global $CC_GLOBALS;
-    $tname = $CC_GLOBALS['files-root'] . 'charts.xml';
+    $tname = CCPage::GetViewFile('charts.xml');
     $template = new CCTemplate( $tname );
     if( $type == 'upload' )
     {
@@ -177,7 +176,8 @@ function cc_stats_show()
     }
     else
     {
-        $template = new CCTemplate( $CC_GLOBALS['files-root'] . 'stats.xml' );
+        $tfile = CCPage::GetViewFile('stats.xml');
+        $template = new CCTemplate( $tfile );
         $args = array();
         $text = $template->SetAllAndParse($args);
         $f = fopen($file,'w');

@@ -187,7 +187,8 @@ class CCSampleBrowserAPI
 
         //CCDebug::PrintVar($args['records'][0],false);
 
-        $template = new CCTemplate( $CC_GLOBALS['files-root'] . 'sample_browser.xml' );
+        $vfile = CCPage::GetViewFile('sample_browser.xml');
+        $template = new CCTemplate( $vfile  );
         $html = $template->SetAllAndParse($args);
         print($html);
         exit;
@@ -213,7 +214,10 @@ class CCSampleBrowserAPI
         $args['default_msg']    = $this->_default_msg();
         $args['licenses']       = $this->_get_lic_filters();
 
-        $template = new CCTemplate( $CC_GLOBALS['files-root'] . 'sample_browser.xml' );
+        $tfile = CCPage::GetViewFile('sample_browser.xml');
+        if( $tfile === false ) // errrr
+            $tfile = CCTemplate::GetTemplate('sample_browser.xml');
+        $template = new CCTemplate( $tfile );
         $html = $template->SetAllAndParse($args);
         CCPage::AddPrompt('body_text',$html);
         CCPage::AddScriptBlock('ajax_block');

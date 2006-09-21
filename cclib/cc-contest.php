@@ -31,7 +31,6 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCContest' , 'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,    array( 'CCContest',  'OnUploadRow'));
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,    array( 'CCContest' , 'OnGetMacros'));
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCContest' , 'OnGetConfigFields' ));
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCContest', 'OnAdminMenu'));
 
 
@@ -930,26 +929,6 @@ END;
         //CCEvents::MapUrl( 'contest/poll/results', array( 'CCContest', 'PollResults'),     CC_DONT_CARE_LOGGED_IN );
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
-    *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
-    */
-    function OnGetConfigFields($scope,&$fields)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $fields['contest-upload-root'] =
-               array( 'label'       => 'Contest Upload Directory',
-                       'form_tip'   => 'Contest files will be uploaded/downloaded based from here.(This must accessable from the Web.)',
-                       'value'      => 'contests',
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
-        }
-    }
 }
 
 

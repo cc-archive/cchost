@@ -77,19 +77,5 @@ require_once( 'cclib/cc-submit.php' );
 require_once( 'cclib/cc-user-admin.php' );
 require_once( 'cclib/cc-language.php' );
 
-$cc_extras_dir = empty($_SERVER['CC_EXTRAS_DIR']) ? 'ccextras' : $_SERVER['CC_EXTRAS_DIR'];
-
-if (is_dir($cc_extras_dir)) 
-{
-    if ($cc_dh = opendir($cc_extras_dir)) 
-    {
-       while (($cc_file = readdir($cc_dh)) !== false) 
-       {
-           if( preg_match('/.*\.php$/',$cc_file) )
-               require_once( $cc_extras_dir . '/' . $cc_file);
-       }
-       closedir($cc_dh);
-    }
-}
 
 ?>

@@ -371,7 +371,7 @@ define('CC_EVENT_UPLOAD_DONE',         'uploaddone' );
 define('CC_EVENT_FILE_DONE',           'filedone' );
 
 /**
-* private
+* @access private
 */
 define('CC_EVENT_ED_PICK',             'edpick' );
 
@@ -655,6 +655,36 @@ define('CC_EVENT_DELETE_FILE',         'deletefile' );
 * @see CCEvents::AddHandler()
 */
 define('CC_EVENT_USER_DELETED',         'userdel' );
+
+/**
+* Notification Request: Form fields for system paths
+*
+* Call back (handler) prototype:
+*<code>
+*function OnSysPaths( &$fields )
+*</code>
+* Where $fields should appened with an array with 
+* the follow structure:
+*
+*<code>
+$fields['my_sys_dir'] =
+( 
+  'label'       => '',    // string: form label
+  'form_tip'   => '',    // string: help tip
+  'value'      => '',    // string: default value
+  'formatter'  => '',    // string: formatter/verifier (use 'sysdir' !!)
+  'writable'   => true,  // boolean: true means check for writable
+  'slash'      => true,  // boolean: true means add trailing fwd slash '/'
+  'flags'      => CCFF_POPULATE | CCFF_REQUIRED 
+                         // integer: drop the CCFF_REQUIRED if you code
+                         // can handle it
+);
+*
+</code>
+* @see CCEvents::AddHandler()
+*/ 
+define('CC_EVENT_SYSPATHS',               'syspaths' );
+
 
 /**#@+
 * @access private

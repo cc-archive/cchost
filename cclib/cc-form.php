@@ -1485,7 +1485,7 @@ END;
             $dir = $this->GetFormValue($fieldname);
             if( !file_exists($dir) )
             {
-                $this->SetFieldError($fieldname, "This directory doesn't exist");
+                $this->SetFieldError($fieldname, _('This file or directory does not exist'));
                 return(false);
             }
         }
@@ -1493,8 +1493,60 @@ END;
         return(true);
     }
 
+
     /**
-    * Accepts a regular expression as input
+    * Validates the user against a regex pattern
+    *
+    * The regex pattern to check against is sent via the
+    * the 'pattern' property
+    * 
+    * @param string $fieldsname Name of the HTML field
+    * @param string $value   value to be published into the field
+    * @param string $class   CSS class (rarely used)
+    * @returns string of HTML that represents the field
+    */
+    function generator_pattern($varname,$value='',$class='')
+    {
+        return $this->generator_textedit($varname,$value,$class) ;
+    }
+
+    /**
+    * Validates the user against a regex pattern
+    *
+    * @param string $fieldname Name of the field will be passed in.
+    * @returns bool $ok true means field validates, false means there were errors in user input
+    */
+    function validator_pattern($fieldname)
+    {
+        $pattern = $this->GetFormFieldItem( $fieldname, 'pattern' );
+
+        $ok = $this->validator_textedit($fieldname);
+
+        if( $ok )
+        {
+            if( empty($pattern) )
+                return true;  // hmmmmm
+
+            $value = $this->GetFormValue($fieldname);
+
+            $ok = preg_match( $pattern, $value );
+
+            if( !$ok )
+            {
+                $errmsg = $this->GetFormFieldItem( $fieldname, 'pattern_error' );
+                if( empty($errmsg) )
+                {
+                    $errmsg = _('Does match proper pattern');
+                }
+                $this->SetFieldError( $fieldname, $errmsg );
+            }
+        }
+
+        return $ok;
+    }
+
+    /**
+    * Accepts a regular expression as input and compiles to verify it
     * 
     * @param string $fieldsname Name of the HTML field
     * @param string $value   value to be published into the field

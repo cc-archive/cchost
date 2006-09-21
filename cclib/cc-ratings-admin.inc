@@ -78,12 +78,17 @@ class CCAdminRatingsForm extends CCEditConfigForm
             );
 
         $this->AddFormFields($fields);
-        $url = ccl('viewfile','picks.xml');
 
-        $help =<<<END
-            <p>The system uses the Bayesian method for calculating the ranking of 
-            an upload for the 'picks' page.
-END;
+        $help = _('The system uses the Bayesian method for calculating the ranking of 
+                            an upload for the picks page.');
+
+        $this->SetHelpText($help);
+
+        $murl = ccl('admin','ratings','manage');
+        $link1 = "<a href=\"$murl\"><b>";
+        $link2 = "</b></a>";
+        $text = _('To modify specific ratings click: %sManage Ratings%s');
+        $help = sprintf($text,$link1,$link2);
         $this->SetHelpText($help);
 
         // quick hack to make up for the fact that the admin forms

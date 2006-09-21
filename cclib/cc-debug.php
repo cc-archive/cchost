@@ -399,13 +399,14 @@ $CC_ERROR_STRING = '';
 //
 function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcontext=null)
 {
+    global $CC_GLOBALS;
+
     // these libraries just spew too much stuff
     // especially warning for php >4.1
     if( strpos($errfile,'phptal') !== false )
         return;
     if( strpos($errfile,'getid3') !== false )
         return;
-
     // same goes for PEAR in php 5
     if( strpos($errfile,'PEAR') !== false )
         return;
@@ -418,7 +419,7 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
         return;
     }
 
-    // just return if system if error is below threshold
+    // just return if system error is below threshold
     if( ($errno & error_reporting()) == 0 )
     {
         global $CC_ERROR_STRING;
@@ -428,6 +429,9 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
 
     $states =& CCDebug::_states();
 
+    //
+    // Format error message
+    //
     $date = date("Y-m-d H:i a");
     if( isset($_SERVER['REMOTE_ADDR']) )
     {
@@ -441,11 +445,13 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
     }
     $err  = "\"$errfile\"($errline): $errstr [$date][$ip][$url]\n";
 
+    //
+    // If within logging threshold, send out to some log file
+    //
     if( ($states['log_errors'] & $errno) != 0 )
     {
-        global $CC_GLOBALS;
-        if( !empty($CC_GLOBALS['logfile-dir']) )
-            error_log($err,3,$CC_GLOBALS['logfile-dir'] . CC_ERROR_FILE);
+        $logdir = empty($CC_GLOBALS['logfile-dir']) ? './' : $CC_GLOBALS['logfile-dir'];
+        error_log($err, 3, $logdir. CC_ERROR_FILE);
     }
 
     if( $states['enabled'] === true )
@@ -454,7 +460,12 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
     }
     else
     {
-        readfile(CC_ERROR_MSG_FILE);
+        //
+        // If debugging is NOT on then we want to show users a happy
+        // friendly lie, er, message
+        //
+        $txtmsg = empty( $CC_GLOBALS['error-txt'] ) ? CC_ERROR_MSG_FILE : $CC_GLOBALS['error-txt'];
+        readfile($txtmsg);
         exit;
     }
 }

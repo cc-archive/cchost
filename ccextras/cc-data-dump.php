@@ -126,7 +126,8 @@ class CCDataDump extends CCFeed
 
         // CCDebug::PrintVar( $args );
 
-        $template = new CCTemplate( $CC_GLOBALS['template-root'] . 'datadump.xml', false ); // false means xml mode
+        $tfile = CCTemplate::GetTemplate('datadump.xml');
+        $template = new CCTemplate( $tfile , false ); // false means xml mode
 
         $xml = $template->SetAllAndParse( $args );
 

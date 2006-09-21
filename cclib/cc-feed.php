@@ -433,8 +433,8 @@ class CCFeed
 		$args['atom-build-date'] = 
 		$args['atom-pub-date'] = $atomdate;
 
-
-        $template = new CCTemplate( $CC_GLOBALS['template-root'] . $template, false ); // false means xml mode
+        $tfile = CCTemplate::GetTemplate($template);
+        $template = new CCTemplate( $tfile, false ); // false means xml mode
         $xml = $template->SetAllAndParse( $args );
         if( !empty($records) && !empty($tagstr) )
             $this->_cache($xml,$cache_type,$tagstr);

@@ -140,6 +140,7 @@ class CCConfigs extends CCTable
     * @param string $type Type of data being saved (e.g. 'config', 'menu', etc.)
     * @param array  $arr  Name/value pairs in array to be saved
     * @param string $scope Scope to assigned to. If null the current scope is used. If $type is 'config' it is ALWAYS saved to CC_GLOBAL_SCOPE
+    * @param boolean $merge true means merge this array with existing values, false means delete all previous settings.
     */
     function SaveConfig($type,$arr,$scope='',$merge = true)
     {
@@ -196,6 +197,11 @@ class CCConfigs extends CCTable
 
         $CC_GLOBALS = $configs->GetConfig('config', CC_GLOBAL_SCOPE);
 
+        // First argument in ccm is the current virtual root (aka config root)
+        //
+        // note: ?ccm= will be in _REQUEST even if pretty urls are turned on,
+        // the pretty urls are translated before executing php
+        //
         $regex = '%/([^/\?]+)%';
         preg_match_all($regex,CCUtil::StripText($_REQUEST['ccm']),$a);
         $A =& $a[1];
@@ -204,22 +210,35 @@ class CCConfigs extends CCTable
 
         $hvers = $CC_GLOBALS['cc-host-version'] ; 
 
-        // a temp hack to allow UI disabled beta sites to process api calls
-
-        if( $CC_GLOBALS['site-disabled'] && (strstr($_SERVER['REQUEST_URI'],'/api/') === false) )
-            cc_check_site_enabled();
-        
-        $configs->_upgrade( $hvers );
+        $configs->_check_version( $hvers );
 
         $CC_GLOBALS['home-url'] = ccl();
 
         $settings = $configs->GetConfig('settings');
-        $CC_GLOBALS['skin-name']  = $settings['style-sheet'];
-        $CC_GLOBALS['skin']       = preg_replace('/.*skin-(.*)\.css/', '\1', $settings['style-sheet']);
-        $CC_GLOBALS['skin-map']   = $CC_GLOBALS['template-root'] . 'skin-' . $CC_GLOBALS['skin'] . '-map.xml';
-        $CC_GLOBALS['skin-page']  = $CC_GLOBALS['template-root'] . 'skin-' . $CC_GLOBALS['skin'] . '.xml';
 
+        // this variable is horribly name (by me, duh) I can't find 
+        // anywhere that it's used but I'll keep it here in case 
+        // 3rd parties have come to rely on it.
+        // e.g. cctemplates/skin-simple.css
+        $CC_GLOBALS['skin-name']  = $settings['style-sheet'];
+
+        $css = $settings['style-sheet'];
+        $skin  = preg_replace('/.*skin-(.*)\.css/', '\1', $css);
+        $troot = preg_replace('/(.*)skin-.*\.css/', '\1', $css);
+        $CC_GLOBALS['skin']       = $skin;
+        $CC_GLOBALS['skin-map']   = $troot . 'skin-' . $skin . '-map.xml';
+        $CC_GLOBALS['skin-page']  = $troot . 'skin-' . $skin . '.xml';
+
+        // 
+        // Notify third party integrations about our pretty url policy
+        // so when they build urls they know the proper format
+        //
         cc_setcookie('cc_purls', "'" . $CC_GLOBALS['pretty-urls'] . "'" ,null);
+
+        // allow admins to turn off user interface
+        //
+        if( $CC_GLOBALS['site-disabled'] )
+            cc_check_site_enabled();
     }
 
     /**
@@ -277,20 +296,11 @@ class CCConfigs extends CCTable
     */
     function SetValue($type,$name,$value,$scope='')
     {
-        $where = array();
-        if( !empty($scope) )
-            $where['config_scope'] = $scope;
-        $where['config_type'] = $type;
-        $rows = $this->QueryRows($where);
-        foreach( $rows as $row )
-        {
-            $arr = $row['config_data'];
-            $arr = unserialize($arr);
-            $arr[$name] = $value;
-            $args['config_id']   = $row['config_id'];
-            $args['config_data'] = serialize($arr);
-            $this->Update($args);
-        }
+        // If don't do this through SaveConfig, you
+        // bypass this session's config cache
+
+        $arr[$name] = $value;
+        $this->SaveConfig($type,$arr,$scope,true); // true means merge
     }
 
     /**
@@ -308,7 +318,7 @@ class CCConfigs extends CCTable
         $where['config_scope'] = $scope;
         $where['config_type']  = $type;
         $count = $this->CountRows($where);
-        return( !empty($count) );
+        return !empty($count);
     }
 
     /** 
@@ -346,34 +356,23 @@ class CCConfigs extends CCTable
             }
             $roots[$i]['scope_name'] = $title;
         }
-        return($roots);
+        return $roots;
     }
 
     /*
-    * @access private
-    * @deprecated See {@link cc-upload.php}
+    * Make sure the global cc-host-version is up to date
+    * 
     * @param string $config_in_db Version string to check against code
     */
-    function _upgrade($config_in_db)
+    function _check_version($config_in_db)
     {
-        global $CC_GLOBALS, $CC_CFG_ROOT;
+        global $CC_GLOBALS;
 
         if( version_compare($config_in_db, CC_HOST_VERSION) == 0 )
             return;
 
-        if( version_compare($config_in_db, '0.4.0') < 0 )
-        {
-            print('sorry but a re-install is required to upgrade to this version');
-            exit;
-        }
-
-        // just assume the map has changed
-        CCEvents::GetUrlMap(true);
-        CCMenu::GetMenu(true);
-
         $this->SetValue('config', 'cc-host-version', CC_HOST_VERSION, CC_GLOBAL_SCOPE);
-        $CC_GLOBALS = array_merge($CC_GLOBALS,$this->GetConfig('config', CC_GLOBAL_SCOPE));
-        CCPage::Prompt("ccHOST UPGRADED TO: " . CC_HOST_VERSION );
+        $CC_GLOBALS['cc-host-version']  = CC_HOST_VERSION;
     }
 
 }

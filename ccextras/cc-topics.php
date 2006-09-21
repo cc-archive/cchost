@@ -461,7 +461,8 @@ class CCTopic
             $args['root-url'] = cc_get_root_url();
             $args['topic'] = $record;
             $args['macro'] = 'post_reply';
-            $template = new CCTemplate($CC_GLOBALS['template-root'] . 'topics.xml');
+            $tfile = CCTemplate::GetTemplate('topics.xml');
+            $template = new CCTemplate($tfile);
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
             $this->AddLinks();
@@ -617,8 +618,8 @@ class CCTopic
             }
                 
             CCPage::AddScriptLink( ccd('ccextras','cc-topics.js') );
-
-            $css_file = $CC_GLOBALS['template-root'] . 'skin-' . $CC_GLOBALS['skin'] . '-topics.css';
+            $cname = 'skin-' . $CC_GLOBALS['skin'] . '-topics.css';
+            $css_file = CCTemplate::GetTemplate($cname,false);
             CCPage::AddLink('head_links', 'stylesheet', 'text/css', 
                                 ccd($css_file) , 'Default Style');
             $done = true;
@@ -647,7 +648,8 @@ class CCTopic
             $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
             $args['root-url'] = cc_get_root_url();
             $args['macro'] = 'post_edit';
-            $template = new CCTemplate($CC_GLOBALS['template-root'] . 'topics.xml');
+            $tfile = CCTemplate::GetTemplate('topics.xml');
+            $template = new CCTemplate($tfile);
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
             $this->AddLinks();
@@ -672,7 +674,8 @@ class CCTopic
         $args['show_cmds'] = true;
         $args['macro']     = 'one_topic';
         $args['topic']     = $topics->GetRecordFromID($topic_id);
-        $template = new CCTemplate($CC_GLOBALS['template-root'] . 'topics.xml');
+        $tfile = CCTemplate::GetTemplate('topics.xml');
+        $template = new CCTemplate($tfile);
         $html = $template->SetAllAndParse($args);
         CCPage::AddPrompt('body_text',$html);
         $this->AddLinks();

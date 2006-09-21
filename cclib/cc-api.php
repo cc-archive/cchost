@@ -284,8 +284,8 @@ class CCRestAPI
         global $CC_GLOBALS;
 
         // not really done here...
-
-        $template = new CCTemplate( $CC_GLOBALS['template-root'] . 'api.xml', false ); // false means xml mode
+        $tfile = CCTemplate::GetTemplate('api.xml');
+        $template = new CCTemplate( $tfile, false ); // false means xml mode
         $configs =& CCConfigs::GetTable();
         $args = array_merge($CC_CONFIGS,$configs->GetConfig('ttags'));
         $pools =& CCPools::GetTable();

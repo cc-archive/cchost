@@ -128,18 +128,12 @@ class CCRating
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $items += array( 
-                'ratingschart'   => array( 'menu_text'  => 'Ratings Settings',
+                'ratingschart'   => array( 'menu_text'  => 'Ratings',
                                  'menu_group' => 'configure',
                                  'help'      => 'Configure how ratings are calculated',
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 10,
                                  'action' =>  ccl('admin','ratings') ),
-                'ratingsmanage'   => array( 'menu_text'  => 'Ratings Manage',
-                                 'menu_group' => 'configure',
-                                 'help'      => 'View and edit current ratings',
-                                 'access' => CC_ADMIN_ONLY,
-                                 'weight' => 10,
-                                 'action' =>  ccl('admin','ratings','manage') )
                 );
         }
     }

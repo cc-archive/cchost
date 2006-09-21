@@ -72,7 +72,7 @@
 * 
 */
 
-@import url('skin-simple.css');
+@import url('../cctemplates/skin-simple.css');
 
 /**********************
 * Change color header *
@@ -326,7 +326,7 @@ a {                                     /* Default color for all links */
 
 %%end%%
 %%topics-begin%%
-@import url('skin-simple-topics.css');
+@import url('../cctemplates/skin-simple-topics.css');
 
 /***************************************
 * Review and forum message text boxes 

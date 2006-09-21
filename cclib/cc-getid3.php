@@ -37,6 +37,7 @@ define('CCGETID3_ENABLED_ID3V1',          'getid3-v1');
 
 CCEvents::AddHandler(CC_EVENT_APP_INIT,   '_verify_getid3_install' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCGetID3' , 'OnGetConfigFields' ));
+CCEvents::AddHandler(CC_EVENT_SYSPATHS, array( 'CCGetID3' , 'OnSysPaths' ));
 
 // todo: contact getID3() folks to aks why this function is missing
 // from their libs...
@@ -130,16 +131,12 @@ class CCGetID3
         static $file_formats;
 
         // TODO: Add full support to cchost for the all getid3 formats
-	// which are identified in the getid3.php file in the method
-	// GetFileFormatArray() which I get below
-	// Also, probably need to push upstream to get the description
-	// field into the description of the filetypes
-	$getid3_obj = CCGetID3::InitID3Obj();
+        // which are identified in the getid3.php file in the method
+        // GetFileFormatArray() which I get below
+        // Also, probably need to push upstream to get the description
+        // field into the description of the filetypes
+        $getid3_obj = CCGetID3::InitID3Obj();
         $getid3_file_formats = $getid3_obj->GetFileFormatArray();
-
-	// echo "<pre>";
-        // print_r( $getid3_file_formats );
-	// echo "</pre>";
 
         if( !empty($file_formats) )
             return($file_formats);
@@ -275,6 +272,15 @@ class CCGetID3
 
       }
 
+    function OnSysPaths(&$fields)
+    {
+        $fields[CCGETID3_PATH_KEY] =
+                        array( 'label'      => 'Path to GetID3 Library',
+                               'formatter'  => 'sysdir',
+                               'form_tip'   => 'Local server path to library (e.g. /usrer/lib/getid3/getid3)',
+                               'flags'      => CCFF_POPULATE | CCFF_REQUIRED  );
+    }
+
     /**
     * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
@@ -311,6 +317,9 @@ class CCGetID3
 function _verify_getid3_install()
 {
     global $CC_GLOBALS;
+
+    if( empty($CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY]) )
+        return;
 
     if( empty($CC_GLOBALS[CCGETID3_PATH_KEY]) )
     {

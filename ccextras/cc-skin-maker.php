@@ -35,44 +35,29 @@ class CCSkinMakerForm extends CCForm
     {
         $this->CCForm();
 
-        $templates = CCTemplateAdmin::GetTemplates('skin','css');
+        $tdirs = CCTemplate::GetTemplatePath();
 
-        $Ts = array();
-        foreach( $templates as $T )
-            $Ts[] = $T . '$';
-        $tor = join('|',$Ts);
-        $regex = '/^(?!' . $tor . ')[a-zA-Z0-9]+$/';
-        
-        $tname = join('|', $templates );
+        // array_combine not in 4.2
+        $template_dirs = array();
+        foreach( $tdirs as $TD )
+            $template_dirs[$TD] = $TD;
 
         $fields = array(
 
+            'createin' => 
+                       array( 'label'       => _('Create In'),
+                               'form_tip'   => _('The new skin will be created in this directory'),
+                               'formatter'  => 'select',
+                               'options'    => $template_dirs,
+                               'flags'      => CCFF_POPULATE),
             'name' => 
                        array( 'label'       => _('Name'),
-                               'form_tip'   => _('Name of your new skin (alpha-numeric only)'),
-                               'pattern_error'     => _('That skin already exists or the name is invalid.'),
-                               'formatter'  => 'cc_pattern',
-                               'pattern'    => $regex,
+                               'form_tip'   => _('Name of your new skin'),
+                               'pattern_error'     => _('Invalid characters in name'), 
+                               'formatter'  => 'skin',
+                               'pattern'    => '@^[_a-zA-Z0-9]+$@',
                                'class'      => 'cc_form_input_short',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED),
-/*
-            'based-on' => 
-                       array( 'label'       => _('Based on'),
-                               'form_tip'   => _('Your new skin will be derived from this'),
-                               'formatter'  => 'select',
-                               'options'    => CCTemplateAdmin::GetTemplates('skin','css'),
-                               'flags'      => CCFF_POPULATE ),
-            'type' => 
-                       array( 'label'       => _('Type of copy:'),
-                               'form_tip'   => _('You might not think so, but you probably want derivation'),
-                               'formatter'  => 'radio',
-                               'value'      => 'derive',
-                               'options'    => array(
-                                                   'full' => _('Perform full copy'),
-                                                   'derive' => _('Derivation only')
-                                                     ),
-                               'flags'      => CCFF_POPULATE ),
-*/
                 );
 
         $this->AddFormFields($fields);
@@ -83,41 +68,34 @@ class CCSkinMakerForm extends CCForm
 
         $this->SetFormHelp($help);
     }
-}
 
-function generator_cc_pattern($form,$varname,$value='',$class='')
-{
-    return $form->generator_textedit($varname,$value,$class) ;
-}
-
-function validator_cc_pattern($form,$fieldname)
-{
-    $pattern = $form->GetFormFieldItem( $fieldname, 'pattern' );
-
-    $ok = $form->validator_textedit($fieldname);
-
-    if( $ok )
+    function generator_skin($varname,$value='',$class='')
     {
-        if( empty($pattern) )
-            return true;  // hmmmmm
-
-        $value = $form->GetFormValue($fieldname);
-
-        $ok = preg_match( $pattern, $value );
-
-        if( !$ok )
-        {
-            $errmsg = $form->GetFormFieldItem( $fieldname, 'pattern_error' );
-            if( empty($errmsg) )
-            {
-                $errmsg = _('Does match proper pattern');
-            }
-            $form->SetFieldError( $fieldname, $errmsg );
-        }
+        return $this->generator_pattern($varname,$value,$class) ;
     }
 
-    return $ok;
+    function validator_skin($fieldname)
+    {
+        $ok = $this->validator_pattern($fieldname);
+        if( $ok )
+        {
+            $name = $this->GetFormValue($fieldname);
+            $dir = CCUtil::CheckTrailingSlash($this->GetFormValue('createin'),true);
+            $fname = $dir . $name;
+            $templates = CCTemplateAdmin::GetTemplates('skin','css');
+            $ok = !in_array( $fname, $templates );
+            if( !$ok )
+            {
+                $error_msg = _('That skin already exists');
+                $this->SetFieldError($fieldname,$error_msg);
+            }
+        }
+
+        return $ok;
+    }
+
 }
+
 
 class CCSkinMaker
 {
@@ -132,7 +110,7 @@ class CCSkinMaker
         {
             $form->GetFormValues($values);
 
-            $msg = $this->CreateSkin($values['name']);
+            $msg = $this->CreateSkin($values['name'],$values['createin']);
 
             CCPage::Prompt($msg);
 
@@ -143,11 +121,9 @@ class CCSkinMaker
         }
     }
 
-    function CreateSkin($newname)
+    function CreateSkin($newname,$template_dir)
     {
-        global $CC_GLOBALS;
-        $template_dir = $CC_GLOBALS['template-root'];
-
+        $template_dir = CCUtil::CheckTrailingSlash($template_dir,true);
         $macros = @file_get_contents('ccextras/cc-skin-maker-template.txt');
         if( empty($macros) )
             return _('Error reading skin template file');

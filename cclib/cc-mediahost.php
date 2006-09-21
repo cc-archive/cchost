@@ -297,8 +297,7 @@ class CCMediaHost
     function _get_upload_dir($username)
     {
         global $CC_GLOBALS;
-        $upload_root = empty($CC_GLOBALS['user-upload-root']) ? 'people' : 
-                               $CC_GLOBALS['user-upload-root'];
+        $upload_root = CCUser::GetPeopleDir();
         return( $upload_root . '/' . $username );
     }
 
@@ -708,16 +707,7 @@ class CCMediaHost
     */
     function OnGetConfigFields($scope,&$fields)
     {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $fields['user-upload-root'] =
-               array( 'label'       => 'Media Upload Directory',
-                       'form_tip'   => 'Files will be uploaded/downloaded here.(This must accessable from the Web.)',
-                       'value'      => 'people',
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
-        }
-        else
+        if( $scope != CC_GLOBAL_SCOPE )
         {
             $fields['upload-auto-pub'] =
                        array( 'label'       => 'Auto Publish Uploads',

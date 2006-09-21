@@ -142,7 +142,8 @@ class CCBlogPing
         global $CC_GLOBALS;
 
         /*
-        $template = new CCTemplate( $CC_GLOBALS['template-root'] . 'blog_ping.xml', false ); // false means XML
+        $tfile = CCTemplate:GetTemplate( 'blog_ping.xml' );
+        $template = new CCTemplate( $tfile , false ); // false means XML
         $args = array( 'something' => 'value' );
         $xml = $template->SetAllAndParse($args);
         */

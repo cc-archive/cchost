@@ -50,6 +50,49 @@ function cc_init_template_lib()
 }
 
 /**
+* See class PHPTAL_SourceResolver
+*/
+class CCTemplateSourceResolver
+{
+    /**
+     * Resolve a template source path.
+     *
+     * This method is invoked each time a template source has to be
+     * located.
+     *
+     * This method must returns a PHPTAL_SourceLocator object which
+     * 'point' to the template source and is able to retrieve it.
+     *
+     * If the resolver does not handle this kind of path, it must return
+     * 'false' so PHPTAL will ask other resolvers.
+     *
+     * @param string $path       -- path to resolve
+     *
+     * @param string $repository -- templates repository if specified on
+     *                              on template creation. 
+     *
+     * @param string $callerPath -- caller realpath when a template look
+     *                              for an external template or macro,
+     *                              this should be usefull for relative urls
+     *
+     * @return PHPTAL_SourceLocator | false 
+     */
+    function resolve($path, $repository=false, $callerPath=false)
+    {
+        // the default PHPTAL resolver will look in the
+        // calling template's dir and also in any
+        // repository (whatever that is)
+
+        $hit = CCTemplate::GetTemplate($path);
+        if( $hit )
+        {
+            $locator  = new PHPTAL_SourceLocator($hit);
+            return $locator;
+        }
+        return false;
+    }
+}
+/**
 */
 class CCTemplate
 {
@@ -70,9 +113,28 @@ class CCTemplate
         {
             $this->_template = new PHPTAL($this->_template_file);
             $this->_template->setOutputMode($this->_html_mode ? PHPTAL_XHTML : PHPTAL_XML );
+            $resolver = new CCTemplateSourceResolver();
+            $this->_template->addSourceResolver(&$resolver);
         }
     }
 
+    function GetTemplate($filename,$real_path=true)
+    {
+        global $CC_GLOBALS;
+
+        return CCUtil::SearchPath($filename,$CC_GLOBALS['template-root'],'cctemplates/',$real_path);
+    }
+
+    function GetTemplatePath()
+    {
+        global $CC_GLOBALS;
+
+        $dirs = split(';',$CC_GLOBALS['template-root']);
+        if( empty($dirs) || (!in_array( 'cctemplates/', $dirs  ) && !in_array( 'cctemplates',$dirs )) )
+            $dirs[] = 'cctemplates';
+
+        return $dirs;
+    }
 
     function SetAllAndPrint( $args, $admin_dump = false )
     {
@@ -133,17 +195,13 @@ class CCAdminTemplateMacrosForm extends CCEditConfigForm
 {
     function CCAdminTemplateMacrosForm()
     {
-        global $CC_GLOBALS;
-
-        $troot = $CC_GLOBALS['template-root'];
-
         $this->CCEditConfigForm('tmacs');
 
         $fields = array();
         $this->_get_macros_from_file('sidebar', $fields);
         $this->_get_macros_from_file('custom',$fields);
         $this->AddFormFields($fields);
-        $fname = "<b>{$troot}sidebar.xml</b>";
+        $fname = '<b>' . CCTemplate::GetTemplate('sidebar.xml') .  '</b>';
         $this->SetHelpText( sprintf(_(
                                 'Pick which UI elements should appear on every page.
                                Edit the file %s to add modules here.
@@ -152,12 +210,11 @@ class CCAdminTemplateMacrosForm extends CCEditConfigForm
 
     function _get_macros_from_file($filebase,&$fields)
     {
-        global $CC_GLOBALS;
-
         if( !$filebase )
             return;
 
-        $fname = $CC_GLOBALS['template-root'] . '/' . $filebase . '.xml';
+        $fname = CCTemplate::GetTemplate( $filebase . '.xml' );
+
         if( !file_exists($fname) || !is_file($fname) )
             return;
 
@@ -294,22 +351,31 @@ class CCTemplateAdmin
     function GetTemplates($prefix,$ext)
     {
         global $CC_GLOBALS;
-    
-        $dir = $CC_GLOBALS['template-root'];
+        
         $files = array();
+        $tdirs = split(';',$CC_GLOBALS['template-root']);
+        if( !in_array( 'cctemplates/', $tdirs ) && !in_array( 'cctemplates', $tdirs ) )
+            $tdirs[] = 'cctemplates';
+        foreach( $tdirs as $tdir )
+            CCTemplateAdmin::_scour_dir($files, $tdir, $prefix, $ext );
+
+        return $files;
+    }
+
+    function _scour_dir(&$files, $dir, $prefix, $ext)
+    {
         if ($dh = opendir($dir)) 
         {
             while (($file = readdir($dh)) !== false) 
             {
                 if( preg_match( "/^$prefix-([^-]+)\.$ext/", $file, $m ) )
                 {
-                    $files[ $dir . $file ] = $m[1];
+                    $files[ $dir . '/' . $file ] = $dir . '/' . $m[1];
                 }
             }
             closedir($dh);
         }
 
-        return( $files );
     }
 
     /**
