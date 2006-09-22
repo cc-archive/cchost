@@ -229,6 +229,9 @@ END;
         $pool_items =& CCPoolItems::GetTable();
         $where['pool_item_id'] = $id;
         $item       = $pool_items->QueryRow($where);
+        if( empty($item) )
+            return;
+
         $item['works_page'] = true;
         CCPage::PageArg( 'chop', false );
         $remixpool  =& CCLocalPoolRemixes::GetTable();
