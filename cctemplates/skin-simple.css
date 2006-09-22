@@ -969,6 +969,11 @@ input.cc_form_input_short {
 
 }
 
+.cc_user_index {
+	margin: 7px;
+	border: 1px solid #BBC;
+	padding: 3px;
+}
 
 .cc_user_listing_table {
 	margin-bottom: 42px;

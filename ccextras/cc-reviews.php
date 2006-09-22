@@ -143,9 +143,9 @@ class CCReview
             $user_row  = $users->QueryRow("user_name = '$user_name'");
             if( empty($user_row) )
             {
-                $user_name = '';
-                $upload_id = '';
                 CCPage::Prompt(_('Can not find that user'));
+                CCUtil::Send404(false);
+                return;
             }
 
             if( !empty($upload_id) )
@@ -154,7 +154,8 @@ class CCReview
                 if( empty($R) )
                 {
                     CCPage::Prompt(_('Can not find that upload, it may have been removed by the owner'));
-                    $upload_id = '';
+                    CCUtil::Send404(false);
+                    return;
                 }
             }
         }
@@ -489,6 +490,7 @@ class CCReview
         if( empty($R) )
         {
             CCPage::Prompt(_('Can not find that upload.'));
+            CCUtil::Send404(false);
             return;
         }
 

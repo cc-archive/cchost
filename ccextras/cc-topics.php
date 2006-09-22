@@ -421,6 +421,7 @@ class CCTopic
         if( empty($record) )
         {
             CCPage::Prompt(_('Can not find that topic, it might have been deleted by the author'));
+            CCUtil::Send404(false);
             return;
         }
 

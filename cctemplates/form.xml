@@ -52,7 +52,6 @@ function cc_grow_textarea(elemname)
 </metal:block>
 
 <metal:block define-macro="hide_form_on_submit_script">
-<div class="cc_submit_form_message" style="display:none" id="form_submit_message">${form_submit_message}</div>
 <script type="text/javascript">
 //<!--
 
@@ -68,14 +67,19 @@ function cc_hide_form_and_submit()
   }
   else
   {
-    var the_form;
-    var message_div;
-    the_form = new cc_obj('${form_id}');
-    the_form.style.display = 'none';
-    message_div = new cc_obj('cc_form_submit_message');
-    message_div.style.display = 'block';
+    cc_show_hide_form('${form_id}','none','block');
   }
   return(true);
+}
+
+function cc_show_hide_form(form_id,form_display,msg_display)
+{
+    var the_form;
+    var message_div;
+    the_form = new cc_obj(form_id);
+    the_form.style.display = form_display;
+    message_div = new cc_obj('cc_form_submit_message');
+    message_div.style.display = msg_display;
 }
 
 function cc_init_form_capture()
@@ -92,14 +96,15 @@ cc_init_form_capture();
 </metal:block>
 
 <metal:block define-macro="html_form">
-    <div tal:condition="exists: show_form_submit_message" id="cc_form_submit_message" style="display:none;" >
-      <h2 tal:content="php: CC_lang('Upload in progress');" />
-      <p  tal:content="php: CC_lang('This might take a while..');" />
-      <p  tal:content="php: CC_lang('Do not close your browser or click on any links, that may cancel your upload (!)');" />
+    <div tal:condition="exists: form_hide_msg" id="cc_form_submit_message" style="display:none;" >
+      <h2>${form_hide_msg/title}</h2>
+      <tal:block repeat="msg form_hide_msg/paras">
+         <p>${msg}</p>
+      </tal:block>
     </div>
 
-    <form action="${form_action}" method="${form_method}" class="cc_form" 
-        id="${form_id}" tal:attributes="enctype form-data | nothing" >
+    <form action="${form_action}" method="${form_method}" class="cc_form" name="${form_id}"
+        id="${form_id}" tal:attributes="enctype form-data | nothing"  >
 
         <tal:block condition="form_macros" repeat="macro_name form_macros" >
           <tal:block define="tname ${macro_name}" />
@@ -117,7 +122,6 @@ cc_init_form_capture();
         <input tal:condition="html_hidden_fields" tal:repeat="hfield html_hidden_fields"
                type="hidden" name="${hfield/hidden_name}" id="${hfield/hidden_name}" 
                value="${hfield/hidden_value}" />
-
     </form>
 </metal:block>
 

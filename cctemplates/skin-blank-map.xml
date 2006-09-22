@@ -82,6 +82,7 @@ $Id$
     show_remix_search string:remix_form.xml/show_remix_search;
     show_sidebar string:page.xml/show_sidebar;
     show_sub_nav_tabs string:page.xml/show_sub_nav_tabs;
+    show_user_index string:user.xml/show_user_index;
     show_zip_dir string:upload_misc.xml/show_zip_dir;
     submit_forms string:form.xml/submit_forms;
     tags string:tags.xml/tags;

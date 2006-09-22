@@ -686,15 +686,57 @@ class CCUser
     {
         $this->_build_bread_crumb_trail($username,$tagfilter);
 
+        $users = new CCUsers();
+
         if( empty($username) )
         {
-            $uploads = new CCUploads();
-            $uploads->_key_field = 'user_id'; // cheese alert!
-            $uploads->GroupOnKey();
-            $uploads->SetOrder('user_registered','DESC');
-            CCPage::AddPagingLinks($uploads,'');
-            $records =& $uploads->GetRecords('');
+            $alpha = '';
+            $where = 'user_num_uploads > 0';
+            if( !isset($_GET['p']) )
+            {
+                $users->SetOrder('user_registered','DESC');
+            }
+            else
+            {
+                $alpha = CCUtil::StripText($_GET['p']);
+                $where = "($where) AND (user_name LIKE '{$alpha}%')";
+                $users->SetOrder('user_name','ASC');
+            }
+
+            CCPage::AddPagingLinks($users,$where);
+            $records =& $users->GetRecords($where);
             CCPage::PageArg('user_record',$records,'user_listings');
+
+
+            $sql =<<<END
+                SELECT DISTINCT LOWER(SUBSTRING(user_name,1,1)) c
+                   FROM `cc_tbl_user` 
+                   WHERE user_num_uploads > 0
+                ORDER BY c
+END;
+
+            $burl = ccl('people');
+            $chars = CCDatabase::QueryItems($sql);
+            $len = count($chars);
+            $alinks = array();
+            for( $i = 0; $i < $len; $i++ )
+            {
+                $c = $chars[$i];
+                if( $c == $alpha )
+                {
+                    $alinks[] = array( 
+                                    'url' => '', 
+                                    'text' => "<b>$c</b>" );
+                }
+                else
+                {
+                    $alinks[] = array( 
+                                    'url' => $burl . '?p=' . $c, 
+                                    'text' => $c );
+                }
+            }
+
+            CCPage::PageArg('user_index',$alinks);
         }
         else
         {
@@ -702,6 +744,12 @@ class CCUser
             $users  = new CCUsers(); // we'll be slamming
             $users->AddExtraColumn('1 as artist_page');
             $records  = $users->GetRecords($where);
+            if( empty($records) )
+            {
+                CCPage::Prompt(_('Don\'t know that user'));
+                CCUtil::Send404(false);
+                return;
+            }
             $itsme = $username == $this->CurrentUserName();
             $R =& $records[0];
             $name = $R['user_real_name'];

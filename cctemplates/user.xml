@@ -22,14 +22,23 @@ $Header$
 </tal:block>
 
 <metal:block define-macro="user_listings">
+    <metal:block use-macro="${show_user_index}" />
     <div class="cc_user_short_listing">
       <metal:block use-macro="${user_listing_short}" />
     </div>
    <metal:block use-macro="${prev_next_links}" />
 </metal:block>
 
+<metal:block define-macro="show_user_index">
+  <div tal:condition="exists: user_index" class="cc_user_index">
+    <table><tr>
+        <td tal:repeat="link user_index"><a href="${link/url}">${link/text}</a>&nbsp; </td>
+    </tr></table>
+  </div>
+</metal:block>
+
 <metal:block define-macro="user_listing_short">
-  <table cellspacing="0" cellpadding="0" class="cc_user_listing_table">
+  <table cellspacing="2" cellpadding="0" class="cc_user_listing_table">
   <tal:block repeat="record user_record">
     <tr>
         <td class="cc_user_avatar" >
@@ -44,6 +53,17 @@ $Header$
             <br />
         </td>
     </tr>
+    <tal:block tal:condition="not: record/result_info">
+        <tr tal:condition="record/ratings_score">
+          <th tal:content="php: _('Ratings')" />
+          <td><metal:block use-macro="${ratings_stars}" /></td>
+        </tr>
+        <tr tal:repeat="uf record/user_fields">
+          <th tal:content="uf/label" />
+          <td>$uf/value</td>
+        </tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+    </tal:block>
     <tr tal:condition="record/result_info"><td colspan="2"><div class="cc_search_result_info">${record/result_info}</div></td></tr>
   </tal:block>
   </table>

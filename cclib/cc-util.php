@@ -178,6 +178,17 @@ class CCUtil
         return( !empty($_SERVER['HTTP_HOST']) );
     }
 
+    function Send404($exit=true)
+    {
+        header("HTTP/1.0 404 Not Found");
+        if( $exit )
+        {
+            print('file not found');
+            exit;
+        }
+    }
+
+
     function MakeSubdirs($pathname,$mode='')
     {
         if( empty($mode) )

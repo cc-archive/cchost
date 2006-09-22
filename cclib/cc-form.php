@@ -547,6 +547,15 @@ class CCForm
         return( $this->_template_macro );
     }
 
+    /**
+    * Retrieves the value that will be put into the HTML forms 'id' attribute
+    *
+    * @returns string $form_id
+    */
+    function GetFormID()
+    {
+        return strtolower(substr(get_class($this),2));
+    }
 
     /**
      * Prepares form variables for display.
@@ -606,7 +615,7 @@ class CCForm
             }
         }
 
-        $id = strtolower(substr(get_class($this),2));
+        $id = $this->GetFormID();
         $this->_template_vars['form_id'] = $id;
 
         return( $this );
@@ -1763,7 +1772,7 @@ class CCGridForm extends CCForm
 
         $this->_template_vars['html_form_grid_rows'] =& $rows;
 
-        $id = strtolower(substr(get_class($this),2));
+        $id = $this->GetFormID();
         $this->_template_vars['form_id'] = $id;
 
         return( $this );
@@ -2099,6 +2108,14 @@ class CCUploadForm extends CCForm
     function DoSubmitMessage()
     {
         CCPage::PageArg('show_form_submit_message',true);
+        $hidemsg = array(
+                'title' => _('Upload in progress'),
+                'paras' => array( 
+                   _('This might take a while...'),
+                   _('Do not close your browser or click on any links, that may cancel your upload (!)')
+                   )
+             );
+        CCPage::PageArg('form_hide_msg',$hidemsg);
         CCPage::AddScriptBlock('hide_form_on_submit_script',true); // true means put at end of page
     }
 }

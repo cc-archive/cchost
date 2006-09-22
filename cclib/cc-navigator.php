@@ -354,6 +354,7 @@ class CCNavigator
     {
         CCPage::SetTitle("System Error (" . CC_HOST_VERSION . ':' . $lineno . ')' );
         CCPage::SystemError('Invalid Path');
+        CCPage::Send404();
     }
 
     /**

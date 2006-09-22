@@ -230,7 +230,10 @@ END;
         $where['pool_item_id'] = $id;
         $item       = $pool_items->QueryRow($where);
         if( empty($item) )
+        {
+            CCUtil::Send404(true);
             return;
+        }
 
         $item['works_page'] = true;
         CCPage::PageArg( 'chop', false );

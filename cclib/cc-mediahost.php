@@ -114,6 +114,7 @@ class CCMediaHost
                 {
                     CCPage::SetTitle(_('Unknown File'));
                     CCPage::Prompt(_('That file can not be found, it may have been removed by the owner.'));
+                    CCUtil::Send404(false);
                 }
                 else
                 {
