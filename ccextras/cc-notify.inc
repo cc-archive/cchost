@@ -362,8 +362,10 @@ This is a notification of a reply to a review thread
 
     function OnEdPick($upload_id)
     {
+        /*
         $notifications =& CCNotifications::GetTable();
         $notify_rows = $notifications->QueryRows($where);
+        */
     }
 
     /**
