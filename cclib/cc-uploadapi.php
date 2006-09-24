@@ -649,10 +649,10 @@ class CCUploadAPI
         {
             $db_args['upload_config'] = $CC_CFG_ROOT;
         }
-CCDebug::LogVar('dbargs',$db_args);
 
         $db_args['upload_extra']['relative_dir'] = $relative_dir;
         $db_args['upload_extra'] = serialize($db_args['upload_extra']);
+        $db_args['upload_date'] = date( 'Y-m-d H:i:s' );
         $uploads->Insert($db_args);
 
 
