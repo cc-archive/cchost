@@ -436,8 +436,8 @@ END;
                                     _('What I Like'));
             $tags->ExpandOnRow($row,'user_whatido',  ccl('search/people', 'whatido'),'user_tag_links', 
                                     _('What I Pound On'));
-            $tags->ExpandOnRow($row,'user_lookinfor',ccl('search/people', 'whatido'),'user_tag_links',
-                                    _('What I Look For'));
+            $tags->ExpandOnRow($row,'user_lookinfor',ccl('search/people', 'lookinfor'),'user_tag_links',
+                                    _('What I Look For'), true);
 
             CCEvents::Invoke( CC_EVENT_USER_ROW, array( &$row ) );
         }

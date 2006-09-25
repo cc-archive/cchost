@@ -251,9 +251,72 @@ END;
 
     function OnUserSearch($field,$tag)
     {
-        $field = 'user_' . $field;
-        CCPage::SetTitle(_("Users That Mentioned: ") . $tag);
-        CCUser::ListRecords( "$field LIKE '%$tag%'" );
+        if( $field == 'lookinfor' )
+        {
+            CCPage::SetTitle(_('Browse "What I Pound On"'));
+
+            $org_tag = $tag;
+            $tag = strtolower($tag);
+            $users = new CCUsers();
+            $where = "(LOWER(user_whatido) REGEXP '(^| |,)($tag)(,|\$)' )";
+            $count = $users->CountRows($where);
+            $got_tag = $count > 0;
+            $first_letter = $tag{0};
+            $where = "user_whatido > ''";
+            $users->SetSort('user_registered','DESC');
+            $rows = $users->QueryRows($where,'user_name,user_real_name,LOWER(user_whatido) as wid');
+            $whatidos = array();
+            $base = ccl('people') . '/';
+            foreach( $rows as $row )
+            {
+                $wids = split(',',$row['wid']);
+                unset($row['user_whatido']);
+                foreach($wids as $wid)
+                    $whatidos[strtolower($wid)][] = 
+                       "<a href=\"{$base}{$row['user_name']}\">{$row['user_real_name']}</a>";
+            }
+
+            ksort($whatidos);
+            $wid_links = array();
+            $html =<<<EOF
+<style>
+#wid_table td, #wid_table th {
+  vertical-align: top;
+}
+#wid_table th {
+  text-align: right;
+  font-weight: normal;
+  font-style: italic;
+  padding-right: 4px;
+  background-color: #CCF;
+}
+</style>
+<table id="wid_table">
+EOF;
+            $got_first_letter = false;
+            foreach( $whatidos as $wid => $alinks )
+            {
+                $html .= '<tr><th>' . $wid;
+                if( ($got_tag && ($wid == $tag)) ||
+                    (!$got_tag && ($first_letter == $wid{0}) )
+                   )
+                {
+                    $html .= '<a name="' . $org_tag . '" />';
+                }
+                $html .= '</th><td>' .
+                            join(', ',$alinks) . '</td></tr>' . "\n";
+            }
+
+            $html .= '</table>';
+
+            CCPage::PageArg('body_html',$html,'show_body_html');
+        }
+        else
+        {
+            $field = 'user_' . $field;
+            CCPage::SetTitle(_("Users That Mentioned: ") . $tag);
+            CCUser::ListRecords( "$field LIKE '%$tag%'" );
+        }
     }
 
 
