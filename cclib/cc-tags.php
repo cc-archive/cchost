@@ -292,12 +292,12 @@ class CCTags extends CCTable
         return $in_where;
     }
 
-    function ExpandOnRow(&$row,$inkey,$baseurl,$outkey,$label='')
+    function ExpandOnRow(&$row,$inkey,$baseurl,$outkey,$label='',$usehash=false)
     {
-        $this->ExpandOnRowA($row,$inkey,$baseurl,$outkey,$label, $row );
+        $this->ExpandOnRowA($row,$inkey,$baseurl,$outkey,$label, $row, $usehash );
     }
 
-    function ExpandOnRowA(&$row,$inkey,$baseurl,$outkey,$label, &$outrow )
+    function ExpandOnRowA(&$row,$inkey,$baseurl,$outkey,$label, &$outrow, $usehash )
     {
         if( empty($row[$inkey]) )
             return;
@@ -316,6 +316,9 @@ class CCTags extends CCTable
         {
             $taglink = array( 'tagurl' => $baseurl . '/' . $tag,
                               'tag'    => $tag );
+
+            if( $usehash )
+                $taglink['tagurl'] .= '#' . $tag;
 
             if( empty($label) )
             {
