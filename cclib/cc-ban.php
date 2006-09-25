@@ -50,6 +50,8 @@ class CCBan
     */
     function Ban($upload_id)
     {
+        global $CC_GLOBALS;
+
         if( !CCUser::IsAdmin() )
             return;
 
@@ -64,6 +66,17 @@ class CCBan
                      "banned" );
         CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $upload_id, CC_UF_PROPERTIES_EDIT, array(&$row) ) );
         CCPage::Prompt("The upload has been marked as " . $yn[ $new_ban_flag ] );
+
+        if( $new_ban_flag && !empty($CC_GLOBALS['ban-email-enable']) )
+        {
+            $text = str_replace('%title%',$row['upload_name'],$CC_GLOBALS['ban-email']);
+            $mailer = new CCMailer();
+            $mailer->To($row['user_email']);
+            $mailer->Subject( 'Your upload has been moderated' );
+            $mailer->Body($text);
+            $ok = $mailer->Send();
+            CCPage::Prompt(_('Moderation email notificaiton sent'));
+        }
     }
     
     /**
@@ -84,6 +97,18 @@ class CCBan
                        'value'      => '',
                        'formatter'  => 'textarea',
                        'flags'      => CCFF_POPULATE | CCFF_NOSTRIP | CCFF_HTML);
+            $fields['ban-email-enable'] =
+               array(  'label'      => 'Email owner when banned',
+                       'form_tip'   => 'Send an email message to owner when an upload is banned.',
+                       'value'      => '',
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE);
+            $fields['ban-email'] =
+               array(  'label'      => 'Ban Message',
+                       'form_tip'   => 'Email Message sent to owner when banned',
+                       'value'      => '',
+                       'formatter'  => 'textarea',
+                       'flags'      => CCFF_POPULATE);
         }
     }
 
