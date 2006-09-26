@@ -359,7 +359,7 @@ class CCAdminTagsForm extends CCForm
             $text .= $row['tag_alias_tag'] . '=&gt;' . $row['tag_alias_alias'] . "\n";
         }
         if( empty($text) )
-            $text = "hiphop=&gt;hip_hop\nblack_and_white=>bw\nnaccapella=&gt;acappella\na_capella=&gt;acappella\n";
+            $text = "hiphop=&gt;hip_hop\nblack_and_white=>bw\naccapella=&gt;acappella\na_capella=&gt;acappella\n";
 
         // Get admin reserved tags
         //
