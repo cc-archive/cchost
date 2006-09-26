@@ -58,6 +58,8 @@ class CCUpdate
             else
                 CCPage::Prompt($update . ' already installed');
         }
+
+        CCMenu::KillCache();
     }
 
 

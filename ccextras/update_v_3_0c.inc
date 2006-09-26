@@ -101,7 +101,6 @@ END;
         $this->_check_for_field('cc_tbl_user',   'user_num_posts', 'INT(11) unsigned');
 
         CCPage::Prompt("Forums installed");
-        CCMenu::KillCache();
     }
 }
 

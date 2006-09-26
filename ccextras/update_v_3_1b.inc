@@ -37,11 +37,6 @@ class v_3_1b extends CCUpdate
         $this->_update_paths();
 
         CCPage::Prompt('Sample pool performance, Email rules, system paths installed');
-
-        // we have to kill the cache for
-        // path editor, mail configs 
-
-        CCMenu::KillCache();
    }
 
     function _update_paths()

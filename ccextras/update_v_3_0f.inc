@@ -41,7 +41,6 @@ class v_3_0f extends CCUpdate
         $this->_check_for_field('cc_tbl_user', 'user_language', 'varchar(255) NOT NULL default \'\'');
 
         CCPage::Prompt("User Languages Installed");
-        CCMenu::KillCache();
     }
 
     function _update_settings()
@@ -57,7 +56,6 @@ class v_3_0f extends CCUpdate
         $configs->SaveConfig('ttag',$newtags);
 
         CCPage::Prompt("Added Meta Template Tags");
-        CCMenu::KillCache();
     }
 }
 

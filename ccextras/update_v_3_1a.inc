@@ -33,10 +33,6 @@ class v_3_1a extends CCUpdate
     function Update()
     {
         $this->_update_sidebar_content();
-
-        // we have to kill the cache for
-        // skin maker:
-        CCMenu::KillCache();
     }
 
     function _update_sidebar_content()

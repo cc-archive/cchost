@@ -56,7 +56,6 @@ END;
         CCDatabase::Query($sql);
 
         CCPage::Prompt("Notifications installed");
-        CCMenu::KillCache();
     }
 }
 
