@@ -121,7 +121,7 @@ class CCMixterAdmin
         CCPage::SetTitle("Dump $table/$key");
         $heads   =& CCDatabase::QueryRows("DESCRIBE $table");
         $keyfield = $heads[0]['Field'];
-        $record =& CCDatabase::QueryRow("SELECT * FROM $table WHERE $keyfield = '$key'");
+        $record = CCDatabase::QueryRow("SELECT * FROM $table WHERE $keyfield = '$key'");
         CCMixterAdmin::_htmlize($record);
         $T = new CCTemplate('mixter-lib/mixter-admin.xml');
         global $CC_CFG_ROOT;
