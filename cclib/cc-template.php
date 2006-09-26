@@ -114,7 +114,7 @@ class CCTemplate
             $this->_template = new PHPTAL($this->_template_file);
             $this->_template->setOutputMode($this->_html_mode ? PHPTAL_XHTML : PHPTAL_XML );
             $resolver = new CCTemplateSourceResolver();
-            $this->_template->addSourceResolver(&$resolver);
+            $this->_template->addSourceResolver($resolver);
         }
     }
 
