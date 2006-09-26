@@ -353,7 +353,10 @@ class CCTemplateAdmin
         if( !in_array( 'cctemplates/', $tdirs ) && !in_array( 'cctemplates', $tdirs ) )
             $tdirs[] = 'cctemplates';
         foreach( $tdirs as $tdir )
+        {
+            $tdir = CCUtil::CheckTrailingSlash($tdir,false);
             CCTemplateAdmin::_scour_dir($files, $tdir, $prefix, $ext );
+        }
 
         return $files;
     }
