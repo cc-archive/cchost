@@ -1004,7 +1004,11 @@ END;
     function generator_radio($varname,$value=null,$class='')
     {
         $options = $this->GetFormFieldItem($varname,'options');
-        $html = '';
+        $nobr = $this->GetFormFieldItem($varname,'nobr');
+        if( $nobr )
+            $html = '<span style="white-space:nowrap">';
+        else
+            $html = '';
         foreach( $options as $ovalue => $otext )
         {
             if( !isset($value) )
@@ -1016,9 +1020,19 @@ END;
                 $selected = '';
 
             $html .= "<input type=\"radio\" id=\"$varname\" name=\"$varname\" value=\"$ovalue\" ".
-                    "$selected class=\"$class\" /><label>$otext</label><br />" ;
+                    "$selected class=\"$class\" />";
+            
+            if( !empty($otext) )
+                $html .= "<label>$otext</label>";
+
+            if( empty($nobr) )
+            {
+                $html .= '<br />';
+            }
         }
 
+        if( $nobr )
+            $html .= '</span>';
         return($html);
     }
 
@@ -1614,6 +1628,8 @@ class CCGridForm extends CCForm
     var $_grid_rows;
     var $_column_heads;
     var $_is_normalized;
+    var $_meta_row;
+    var $_add_row_caption;
     /**#@-*/
 
     /**
@@ -1644,6 +1660,18 @@ class CCGridForm extends CCForm
     }
 
     /**
+     * Specify the meta information for rows added dynamically by the user.
+     *
+     * @param array  meta_row Meta information of insertable row
+     * @param string caption Caption for 'add row' button
+     */
+    function AddMetaRow($meta_row,$caption)
+    {
+        $this->_meta_row = $meta_row;
+        $this->_add_row_caption = $caption;
+    }
+
+    /**
      * Add a row of column headers. 
      *
      * This should be called once to setup the column headers
@@ -1654,6 +1682,30 @@ class CCGridForm extends CCForm
     function SetColumnHeader(&$heads)
     {
         $this->_column_heads = $heads;
+    }
+
+    function & _get_form_field( $name )
+    {
+        $field =& parent::_get_form_field($name);
+
+        if( empty($field) && 
+            isset($this->_meta_row) 
+            )
+        {
+            $keys = array_keys($this->_meta_row);
+            $c = count($keys);
+            for( $i = 0; $i < $c; $i++ )
+            {
+                if( $this->_meta_row[ $keys[$i] ]['element_name'] == $name )
+                {
+                    $field =& $this->_meta_row[ $keys[$i] ];
+                    break;
+                }
+            }
+        }
+
+        return $field;
+
     }
 
     /**
@@ -1741,31 +1793,13 @@ class CCGridForm extends CCForm
         foreach( $keys as $key )
         {
             $grid_row =& $this->_grid_rows[$key];
-            $count2 = count($grid_row);
-            $template_row = array();
             $form_error = '';
-            for( $n = 0; $n < $count2; $n++ )
-            {
-                $grid_cell =& $grid_row[$n];
-                $generator  = 'generator_' . $grid_cell['formatter'];
-                $value = empty($grid_cell['value']) ? '' : $grid_cell['value'];
-                
-                $class = empty($grid_cell['class']) ? '' : $grid_cell['class'];
+            $template_row = $this->_build_row($grid_row,$form_error);
 
-                if( !empty($grid_cell['form_error']) )
-                {
-                    $form_error .= '   ' . $grid_cell['form_error'];
-                    $class .= "\" style='background:pink' ";
-                }
-
-                $template_row[] = array( 'form_grid_element' => 
-                               $this->$generator( $grid_cell['element_name'], $value, $class ));
-            }
- 
             $rows[] = array(  'html_form_grid_fields' => $template_row, 
                                      'grid_row' => ++$i,
                                      'form_error' => $form_error,
-                                     'num_columns' => $count2
+                                     'num_columns' => count($grid_row)
                                   );
         }
 
@@ -1775,7 +1809,51 @@ class CCGridForm extends CCForm
         $id = $this->GetFormID();
         $this->_template_vars['form_id'] = $id;
 
+        if( !empty($this->_meta_row) )
+        {
+            $d = '';
+            $mrow = $this->_build_row($this->_meta_row,$d);
+            /*
+                $mrow_text = '';
+                foreach( $mrow as $MR )
+                    $mrow_text .= '<td>' . $MR['form_grid_element'] . '</td>';
+                $this->_template_vars['html_meta_row'] = str_replace("'", "\'", $mrow_text );
+            */
+            $mrows = array();
+            foreach( $mrow as $MR )
+                $mrows[] = str_replace("'", "\'", $MR['form_grid_element']);
+            $this->_template_vars['html_meta_row'] = $mrows;
+            $this->_template_vars['html_form_grid_num_rows'] = count($rows);
+            $this->_template_vars['html_form_grid_num_cols'] = count($mrow);
+            $this->_template_vars['html_add_row_caption'] = $this->_add_row_caption;
+        }
+
         return( $this );
+    }
+
+    function _build_row(&$grid_row,&$form_error)
+    {
+        $count2 = count($grid_row);
+        $template_row = array();
+        for( $n = 0; $n < $count2; $n++ )
+        {
+            $grid_cell =& $grid_row[$n];
+            $generator  = 'generator_' . $grid_cell['formatter'];
+            $value = empty($grid_cell['value']) ? '' : $grid_cell['value'];
+            
+            $class = empty($grid_cell['class']) ? '' : $grid_cell['class'];
+
+            if( !empty($grid_cell['form_error']) )
+            {
+                $form_error .= '   ' . $grid_cell['form_error'];
+                $class .= "\" style='background:pink' ";
+            }
+
+            $template_row[] = array( 'form_grid_element' => 
+                           $this->$generator( $grid_cell['element_name'], $value, $class ));
+        }
+
+        return $template_row;
     }
 
     /**
