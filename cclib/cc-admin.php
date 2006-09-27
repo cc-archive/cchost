@@ -678,6 +678,12 @@ END;
                              'weight' => 1,
                              'action' =>  ccp('admin','site')
                              ),
+            'configsite'   => array( 'menu_text'  => _('Global Settings'),
+                             'menu_group' => 'configure',
+                             'access' => CC_ADMIN_ONLY,
+                             'weight' => 1,
+                             'action' =>  ccp('admin','site','global')
+                             ),
                 );
 
         CCMenu::AddItems($items);
