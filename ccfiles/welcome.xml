@@ -34,8 +34,7 @@ $Header$
 
 <tal:block condition="is_admin">
 <p>You are logged in as an adiminstrator</p>
-<p>Use the 'Configure Site' menu option to customize this installation.</p>
-<p>The text for this file is in ${files-root}welcome.xml.</p>
+<p>Use the 'Manage Site' menu option to customize this installation.</p>
 </tal:block>
 
 <ul>

@@ -92,7 +92,7 @@ class CCPathAdminForm extends CCEditConfigForm
         $fields['error-txt'] =
                array( 'label'       => _('System Error Message'),
                        'form_tip'   => _('This file is displayed when the system encounters an error.'),
-                       'value'      => 'cc-error-msg.txt',
+                       'value'      => 'error-msg.txt',
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
 
@@ -185,7 +185,7 @@ class CCPathAdmin
 {
     function Admin()
     {
-        CCPage::SetTitle(_('System Files'));
+        CCPage::SetTitle(_('Paths and Files'));
         $form = new CCPathAdminForm();
         CCPage::AddForm($form->GenerateForm());
     }
@@ -204,7 +204,7 @@ class CCPathAdmin
 
             $items += array(
                 'pathman'   => array( 
-                                 'menu_text'  => _('System Files'),
+                                 'menu_text'  => _('Paths'),
                                  'menu_group' => 'configure',
                                  'help' => 'Configure where ccHost looks for stuff',
                                  'access' => CC_ADMIN_ONLY,
