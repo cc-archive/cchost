@@ -25,7 +25,7 @@ if( !defined('IN_CC_HOST') )
 if( !defined('CC_MAIL_THROTTLED') )
     define('CC_MAIL_THROTTLED', 8); // see ccextras/cc-mail.php
 
-function cc_install_tables(&$vars,&$msg)
+function cc_install_tables(&$vars,&$msg,$local_base_dir)
 {
     // 
     // USERS
@@ -526,14 +526,18 @@ END;
        'enable-password'     => '_change_me_' . time(),
 
        'php-tal-dir'         => 'cclib/phptal/libs' , 
-       'php-tal-cache-dir'   => 'cclib/phptal/phptal_cache',
+       'php-tal-cache-dir'   => $local_base_dir . '/temp',
        'user-upload-root'    => 'people' , 
        'contest-upload-root' => 'contests' , 
-       'template-root'       => 'cctemplates/' , 
-       'files-root'          => 'ccfiles/',
-       'error-txt'           => 'cc-error-msg.txt',
+       'template-root'       => $local_base_dir . '/skins/;cctemplates/' , 
+       'files-root'          => $local_base_dir . '/viewfile/;ccfiles/',
+       'extra-lib'           => $local_base_dir . '/lib/',
+       'error-txt'           => $local_base_dir . '/error-msg.txt',
+       'disabled-msg'        => $local_base_dir . '/disabled-msg.txt',
+       'install-user-root'   => $local_base_dir . '/',
        'logfile-dir'         => $vars['logfile_dir']['v'],
 
+       'mail_sender'         => $vars['admin-email'],
        'mail_anon'           => CC_MAIL_THROTTLED,
        'mail_uploaders'      => CC_MAIL_THROTTLED,
        'mail_registered'     => CC_MAIL_THROTTLED,

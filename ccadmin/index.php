@@ -21,10 +21,18 @@
 
 error_reporting(E_ALL);
 
+if( empty($_SERVER['REQUEST_URI']) )
+{
+    $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
+}
+
 define('IN_CC_HOST', true);
 define('IN_CC_INSTALL', true);
 
 chdir('..');
+
+if( !empty($_REQUEST['rewritehelp']) )
+    get_rewrite_help();
 
 $step = empty($_REQUEST['step']) ? '1' : $_REQUEST['step'];
 
@@ -39,7 +47,7 @@ function step_1()
     $v = split('\.',phpversion());
     if( intval($v[0]) < 4 )
     {
-        $vmsg = "<div class=\"err\">It doesn't look like you're running on PHP 4, you can't run ccHost until you upgrade.</span>";
+        $vmsg = "<div class='err'>It doesn't look like you're running on PHP 4, you can't run ccHost until you upgrade.</span>";
     }
     elseif( $v[0] >= 5 )
     {
@@ -115,7 +123,7 @@ function step_4()
 
     $rnum = rand();
 
-    $html =<<<END
+    $html =<<<EOF
 
     <h2>Securing the Site</h2>
 
@@ -143,17 +151,11 @@ function step_4()
     <p>If you've done those steps you can browse to <a href="$root_url">$root_url</a> and log in as "<b>$admin</b>"
     and continue setting up and configuring the site.</p>
 
-END;
+EOF;
 
     print($html);
 }
 
-function step_4a()
-{
-    define('HEAD_INCLUDED',1);
-
-    include ( dirname(__FILE__) . '/cc-install-perms.php' );
-}
 
 function step_3a()
 {
@@ -225,7 +227,7 @@ function step_3a()
     if( !empty($ini_location) )
     {
         $inimsg = "These can be updated in your global php initialization file which appears to be located at
-     <span class=\"file_name\">$ini_location</span>.";
+     <span class='file_name'>$ini_location</span>.";
     }
     else
     {
@@ -248,10 +250,10 @@ EOF;
     $html = '';
     foreach( $v as $n => $d )
     {
-        $html .= "<tr><td class=\"r\"><b>$n</b></td><td>{$d['m']}</td><td class=\"c\"";
+        $html .= "<tr><td class='r'><b>$n</b></td><td>{$d['m']}</td><td class='c'";
         if( !$d['k'] )
-            $html .= " style=\"color:red\" ";
-        $html .= ">{$d['v']}</td><td class=\"c\">{$d['s']}</td></tr>\n";
+            $html .= " style='color:red' ";
+        $html .= ">{$d['v']}</td><td class='c'>{$d['s']}</td></tr>\n";
     }
     print($html);
 ?>
@@ -279,7 +281,13 @@ function install_tables(&$f,&$errs)
     
     CCDebug::Enable(true) ;
 
-    if( !cc_install_tables($f,$errs) )
+    $local_base_dir = $f['localdir']['v'];
+
+    install_local_files($local_base_dir);
+
+    print "Local files installed  to <b>{$local_base_dir}/*</b> <br />";
+
+    if( !cc_install_tables($f,$errs,$local_base_dir) )
         return(false);
 
     print "Created tables<br />";
@@ -292,22 +300,13 @@ function install_tables(&$f,&$errs)
 
 //    print "Sample pools installed<br />";
 
-    $sidebar_src  = dirname( __FILE__ ) . '/sidebar.xml';
-    $sidebar_dest = 'cctemplates/sidebar.xml';
-
-    if( file_exists($sidebar_src) && !file_exists($sidebar_dest) )
-    {
-        copy( $sidebar_src, $sidebar_dest );
-        chmod( $sidebar_dest, 0777 );
-    }
-
-    print "Sidebar content installed<br />";
-
     $pw = md5( $f['pw']['v'] );
     $user = $f['admin']['v'];
     $date = date('Y-m-d H:i:00');
+    $email = $f['admin-email']['v'];
     $sql =<<<END
-        INSERT INTO cc_tbl_user (user_name,user_real_name,user_password,user_registered) VALUES ('$user','$user','$pw','$date')
+        INSERT INTO cc_tbl_user (user_name,user_real_name,user_password,user_registered,user_email) 
+            VALUES ('$user','$user','$pw','$date','$email')
 END;
 
     if( !mysql_query($sql) )
@@ -320,6 +319,43 @@ END;
 
     return( true );
 
+}
+
+function install_local_files($local_dir)
+{
+    @mkdir( 'people');
+    @mkdir( 'contests');
+    mkdir( $local_dir . '/viewfile' );
+    mkdir( $local_dir . '/skins' );
+    mkdir( $local_dir . '/lib' );
+    mkdir( $local_dir . '/temp' );
+
+    chmod( 'people',   0777 );
+    chmod( 'contests', 0777 );
+    chmod( $local_dir . '/viewfile', 0777 );
+    chmod( $local_dir . '/skins', 0777 );
+    chmod( $local_dir . '/lib', 0777 );
+    chmod( $local_dir . '/temp', 0777 );
+
+    docopy( 'sidebar.xml', $local_dir, 'skins');
+    docopy( 'home.xml', $local_dir, 'viewfile');
+    docopy( 'welcome.xml', $local_dir, 'viewfile');
+    docopy( 'error-msg.txt', $local_dir, '');
+    docopy( 'disabled-msg.txt', $local_dir, '');
+}
+
+function docopy($file,$local_dir,$subdir)
+{
+    $src = dirname( __FILE__ )   . '/' . $file;
+    if( $subdir )
+        $local_dir .= '/' . $subdir;
+    $dest = $local_dir . '/' . $file;
+
+    if( file_exists($src) && !file_exists($dest) )
+    {
+        copy( $src, $dest);
+        chmod( $dest, 0777 );
+    }
 }
 
 function clean_post()
@@ -354,6 +390,7 @@ function verify_fields(&$f,&$errs)
     verify_password($f,$ok);
     verify_mysql($f,$ok);
     verify_getid3($f,$ok);
+    verify_localdirs($f,$ok);
 
     $f['rooturl']['v']     = empty($f['rooturl']['v']) ? ''     : check_dir($f['rooturl']['v'],     true);
     $f['getid3']['v']      = empty($f['getid3']['v']) ? ''      : check_dir($f['getid3']['v'],      false);
@@ -366,6 +403,57 @@ function verify_fields(&$f,&$errs)
 
 }
 
+function verify_localdirs(&$f,&$ok)
+{
+    $local_dir = $f['localdir']['v'];
+    if( !file_exists($local_dir) )
+    {
+        if( !@mkdir( $local_dir ) )
+        {
+            $f['localdir']['e'] = 'Error creating directory';
+            $ok = false;
+            return;
+        }
+    }
+
+    if( !@chmod( $local_dir, 0777 ) )
+    {
+        $f['localdir']['e'] = 'Error changing permissions';
+        $ok = false;
+        return;
+    }
+
+    $writable = is_writeable($local_dir);
+    if( $writable )
+    {
+        $rand = $local_dir . '/test_' . rand();
+        $fh = @fopen($rand,'w');
+        if( $fh )
+        {
+            if( !@fwrite($fh,'hello') )
+            {
+                $writable = false;
+            }
+            fclose($fh);
+            if( !@chmod( $rand, 0777 ) )
+            {
+                $f['localdir']['e'] = 'Error changing file permissions';
+                $ok = false;
+            }
+            unlink($rand);
+        }
+        else
+        {
+            $writable = false;
+        }
+    }
+
+    if( $ok && !$writable )
+    {
+        $f['localdir']['e'] = 'Error: could not write to directory';
+        $ok = false;
+    }
+}
 
 function verify_password(&$f,&$ok)
 {
@@ -411,7 +499,7 @@ function verify_mysql(&$f, &$ok)
             $url = "http://www.php.net/manual/en/faq.databases.php#faq.databases.mysql.php5";
 
             $f['database']['e'] = "MySQL does not seem to be installed into PHP<br />The problem might be related to".
-                                    " <a href=\"$url\" target=\"_blank\">this</a>, or you might need to enable it as an extension in your settings file, php.ini";
+                                    " <a href='$url' target='_blank'>this</a>, or you might need to enable it as an extension in your settings file, php.ini";
             $ok = false;
         }
         else
@@ -494,7 +582,7 @@ function get_default_values()
     $v['dbserver']   = 'localhost';
     $v['admin']      = 'admin';
     $v['site-description'] = 'Download, Sample, Cut-up, Share.';
-
+    $v['localdir'] = get_local_base_dir();
     return($v);
 }
 
@@ -529,20 +617,64 @@ function get_php_ini_location()
 
 function get_cchost_local_root()
 {
-    $dir = getcwd();
-    $dir = preg_replace('#/ccadmin/?#','',$dir);
+    $dir = dirname(dirname(__FILE__));
     return $dir;
 }
 
-function get_install_fields($values)
+function get_local_base_dir()
+{
+    $short_name = '';
+    if( !empty($_SERVER['HTTP_HOST']) &&
+        ($_SERVER['HTTP_HOST'] != 'localhost')  &&
+        preg_match( '#^([^\.]+)\.?([^\.]+)?#', $_SERVER['HTTP_HOST'], $m )
+      )
+    {
+        $short_name = $m[1] == 'www' ? (empty($m[2]) ? $m[0] : $m[2]) : $m[1];
+    }
+    else
+    {
+        $short_name = 'local';
+    }
+
+    $short_name .= '_files';
+
+    $i = 0;
+    $short_base = $short_name;
+    while( file_exists($short_name) )
+    {
+        $short_name = $short_base . ++$i;
+    }
+
+    return $short_name;
+}
+
+function get_rewrite_help()
 {
         $sbase = get_script_base();
         $local_root = get_cchost_local_root();
 
         $pretty_help =<<<EOF
-In order to enable Rewrite rules ('pretty URLs') you must locate or create the file <span class="file_name">$local_root/.htaccess</span> and include the following lines:
+<html>
+<head>
+<style>
+body { font-size: 13px; font-family: verdana; }
+</style>
+</head>
+<body>
 
-<div style="text-align:left;white-space:pre;font-family:Courier New, courier, serif;font-size:smaller;
+All ccHost URLs look something like:<pre>
+http://example.com/cchost/?ccm=/media/people/rejon
+</pre>
+
+The '?ccm=/' in the middle of that is considered 'ugly.' The 'pretty' version would like:
+<pre>
+http://example.com/cchost/media/people/rejon
+</pre>
+If you are running on Apache you can use Rewrite rules ('pretty URLs') to have that.
+
+In order to enable Rewrite rules you must locate or create the file <span class="file_name">$local_root/.htaccess</span> and include the following lines:
+
+<div style="text-align:left;white-space:pre;font-family:Courier New, courier, serif;
   margin-bottom: 12px;">
 RewriteEngine On
 RewriteBase $sbase
@@ -554,7 +686,7 @@ RewriteRule ^(.*)$ {$sbase}index.php?ccm=/$1 [L,QSA]
 Optionally if you have access to your global Apache configuration files you can add
 the following <i>instead</i>:
 
-<div style="text-align:left;white-space:pre;font-family:Courier New, courier, serif;font-size:smaller;
+<div style="text-align:left;white-space:pre;font-family:Courier New, courier, serif;
   margin-bottom: 12px;">
 &lt;Directory "$local_root"&gt;
   RewriteEngine On
@@ -567,7 +699,19 @@ the following <i>instead</i>:
 
 This method is preferred for performance reasons but you'll need to restart Apache in order for this 
 version to take effect.
+</body>
+</head>
 EOF;
+    
+    print $pretty_help;
+    exit;
+}
+
+function get_install_fields($values)
+{
+        $sbase = get_script_base();
+        $local_root = get_cchost_local_root();
+
         // n - Name
         // t - Input type (see print_install_form())
         // e - Error (filled in at _POST)
@@ -585,17 +729,21 @@ EOF;
     'rooturl'     => array( 'n' => 'Root URL',               'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
         'h' => 'The URL of your main installation' ),
 
-    'pretty_urls'        => array( 'n' => 'Enabled \'pretty URLs\'',  'e' => '', 't'  => 'checkbox', 'v' => '' , 'q' => 0,
-        'h' => '' ),
+    'localdir'     => array( 'n' => 'Your files root',        'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
+        'h' => 'Directory where we put files specific to your site.' ),
 
-    '_help'        => array( 'n' => '',  'e' => '', 't'  => 'static', 'v' => $pretty_help , 'q' => 0, 'h' => ''),
 
+    'pretty_urls'        => array( 'n' => 'Use \'pretty URLs\'',  'e' => '', 't'  => 'checkbox', 'v' => '' , 'q' => 0,
+        'h' => "<a href='#' onclick=\"javascript: window.open ('?rewritehelp=1','rwwindow','resizable=1,width=550,height=500'); return false;\">What's this?</a>"  ),
 
     'admin'       => array( 'n' => 'Admin name',             'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
         'h' => 'A ccHost account will be created with this name' ),
 
     'pw'          => array( 'n' => 'Admin password',         'e' => '', 't' => 'password', 'v' => '' , 'q' => 1,
         'h' => '(Remember this, you\'ll need it. Must be at least 5 characters long, letters and numbers only.)' ),
+
+    'admin-email'       => array( 'n' => 'Site email',       'e' => '', 't' => 'text', 'v' => '' , 'q' => 0,
+        'h' => 'Default return address when ccHost sends email' ),
 
     'database'    => array( 'n' => 'Database name',          'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
         'h' => 'Name of the mySQL database to use (this must exist already)' ),
@@ -607,7 +755,7 @@ EOF;
         'h' => 'Password for the mySQL database account ' ),
 
     'dbserver'    => array( 'n' => 'Database server',        'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
-        'h' => 'Almost always \'localhost\'' ),
+        'h' => 'Almost always \'localhost\' unless your hosting service told you otherwise' ),
 
     'logfile_dir' => array( 'n' => 'Path to ccHost logfiles',      'e' => '', 't'  => 'text', 'v' => '' , 'q' => 0,
         'h' => 'Where should ccHost write log files to? (e.g. \'/var/log/cchost\')' ),
@@ -617,7 +765,7 @@ EOF;
                  "getid3.php in it, e.g. '$local_root/getid3/getid3')" ),
 
     'cookiedom'   => array( 'n' => 'Cookie Domain',          'e' => '', 't'  => 'text', 'v' => '' , 'q' => 0,
-        'h' => 'Leaving this blank is fine (and may be necessary in some configurations'),
+        'h' => 'Leaving this blank is fine (and even necessary in many configurations)'),
     );
                                    
                                       
@@ -637,33 +785,33 @@ function print_install_form($f,$err='')
         if( $data['t'] == 'static' )
         {
             $fields .= "<tr><td></td>".
-                       "<td class=\"fv\">{$data['v']}</td></tr>\n";
+                       "<td class='fv'>{$data['v']}</td></tr>\n";
             continue;
         }
 
         $required = $data['q'] ? '<span class="rq">*</span>' : '';
 
         if( $data['e'] )
-            $fields .= "<tr><td></td><td class=\"fe\">{$data['e']}</td></tr>\n";
+            $fields .= "<tr><td></td><td class='fe'>{$data['e']}</td></tr>\n";
 
-        $fields .= "<tr><td class=\"fh\">$required{$data['n']}: <div class=\"ft\">{$data['h']}</div></td>".
-                   "<td class=\"fv\"><input type=\"{$data['t']}\" " .
-                   "id=\"$id\" name=\"$id\" ";
+        $fields .= "<tr><td class='fh'>$required{$data['n']}: <div class='ft'>{$data['h']}</div></td>".
+                   "<td class='fv'><input type='{$data['t']}' " .
+                   "id='$id' name='$id' ";
 
         if( $data['t'] == 'checkbox' )
         {
             if( $data['v'] )
-                $fields .= " checked=\"checked\" ";
+                $fields .= " checked='checked' ";
         }
         else
         {
-            $fields .= "value=\"{$data['v']}\" ";
+            $fields .= "value='{$data['v']}' ";
         }
         
         $fields .= "/></td></tr>\n";
     }
     if( $err )
-        $err = "<div class=\"err\">$err</div>";
+        $err = "<div class='err'>$err</div>";
 
     $html =<<<END
 $err
