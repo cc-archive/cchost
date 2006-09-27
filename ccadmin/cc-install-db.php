@@ -537,7 +537,7 @@ END;
        'install-user-root'   => $local_base_dir . '/',
        'logfile-dir'         => $vars['logfile_dir']['v'],
 
-       'mail_sender'         => $vars['admin-email'],
+       'mail_sender'         => $vars['admin-email']['v'],
        'mail_anon'           => CC_MAIL_THROTTLED,
        'mail_uploaders'      => CC_MAIL_THROTTLED,
        'mail_registered'     => CC_MAIL_THROTTLED,
