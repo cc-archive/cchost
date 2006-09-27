@@ -815,7 +815,7 @@ function cc_check_site_enabled()
     {
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
-        $css = $settings['style-sheet'];
+        $css = ccd($settings['style-sheet']);
         $css_link =<<<END
             <link rel="stylesheet" type="text/css" href="$css" title="Default Style"/>
 END;
