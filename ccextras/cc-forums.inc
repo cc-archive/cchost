@@ -70,6 +70,8 @@ class CCForumAPI
         $threads =& CCForumThreads::GetTable();
         $this->_add_last_topic_join($threads);
         $threads->SetOffsetAndLimit(0,1);
+        $threads->SetSort('forum_thread_date', 'DESC');
+
 
         //
         // and finally Topics
