@@ -30,17 +30,7 @@ $Id$
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <tal:block condition="lang"><!-- Global Language: ${lang} --></tal:block>
   <tal:block condition="user_language"><!-- User Language: ${user_language} --></tal:block>
-  <tal:block repeat="head_link head_links">
-  <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
-  </tal:block>
-  <script type="text/javascript" src="${root-url}cctemplates/cc_obj.js" />
-  <tal:block condition="script_blocks" repeat="script script_blocks">
-    <tal:block define="tscript ${script}" />
-    <metal:block use-macro="${tscript}" />
-  </tal:block>
-  <tal:block condition="script_links" repeat="slink script_links">
-    <script type="text/javascript" src="${slink}" />
-  </tal:block>
+  <metal:block use-macro="${print_head_links}" />
   </head>
 </metal:block>
 
@@ -102,10 +92,7 @@ $Id$
     </div><!-- wrapper2 -->
   </div><!-- wrapper1 -->
 
-  <tal:block condition="end_script_blocks" repeat="script end_script_blocks">
-    <tal:block define="tscript ${script}" />
-    <metal:block use-macro="${tscript}" />
-  </tal:block>
+  <metal:block use-macro="${show_end_script_blocks}" />
 
   </body>
 </metal:block>
@@ -156,6 +143,20 @@ $Id$
       <a class="cc_gen_button" href="${next_link}"><span tal:content="more_text" /></a>
     </td>
   </tr></table>
+</metal:block>
+
+<metal:block define-macro="print_head_links">
+  <tal:block repeat="head_link head_links">
+      <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
+  </tal:block>
+  <script type="text/javascript" src="${root-url}cctemplates/cc_obj.js" />
+  <tal:block condition="script_blocks" repeat="script script_blocks">
+    <tal:block define="tscript ${script}" />
+    <metal:block use-macro="${tscript}" />
+  </tal:block>
+  <tal:block condition="script_links" repeat="slink script_links">
+    <script type="text/javascript" src="${slink}" />
+  </tal:block>
 </metal:block>
 
 <metal:block define-macro="show_banner">
@@ -242,6 +243,13 @@ $Id$
     </div><!-- /cc_rbcontent -->
     <div class="cc_rbbot"><div></div></div>
   </div><!-- /cc_rbroundbox -->
+</metal:block>
+
+<metal:block define-macro="show_end_script_blocks" >
+  <tal:block condition="end_script_blocks" repeat="script end_script_blocks">
+    <tal:block define="tscript ${script}" />
+    <metal:block use-macro="${tscript}" />
+  </tal:block>
 </metal:block>
 
 </tal:block>

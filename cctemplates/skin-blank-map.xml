@@ -59,6 +59,7 @@ $Id$
     popular_tags string:tags.xml/popular_tags;
     popular_tags_script string:tags.xml/popular_tags_script;
     prev_next_links string:page.xml/prev_next_links;
+    print_head_links string:page.xml/print_head_links;
     ratings_field string:upload_misc.xml/ratings_field;
     ratings_stars string:upload_misc.xml/ratings_stars;
     render_image string:misc.xml/render_image;
@@ -70,6 +71,7 @@ $Id$
     show_box string:page.xml/show_box;
     show_bread_crumbs string:page.xml/show_bread_crumbs;
     show_editor_picks string:misc.xml/show_editor_picks;
+    show_end_script_blocks string:page.xml/show_end_script_blocks;
     show_footer_block string:page.xml/show_footer_block;
     show_form_about string:form.xml/show_form_about;
     show_logged_in_as string:page.xml/show_logged_in_as;
