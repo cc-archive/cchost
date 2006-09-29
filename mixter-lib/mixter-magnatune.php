@@ -199,7 +199,7 @@ class CCMagnatune
     {
         global $CC_GLOBALS;
 
-        $template = new CCTemplate( $CC_GLOBALS['files-root'] . 'magnatune_preview.xml' );
+        $template = new CCTemplate( 'magnatune_preview.xml' );
         $html = $template->SetAllAndParse($args);
         print($html);
         exit;
