@@ -39,7 +39,7 @@ class v_3_1a extends CCUpdate
     {
         global $CC_GLOBALS;
 
-        $troot = $CC_GLOBALS['template-root'];
+        $troot = 'cctemplates/'; // 
 
         $sb_src  = $troot . 'custom.xml';
         $sb_dest = $troot . 'sidebar.xml';

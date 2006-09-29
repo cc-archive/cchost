@@ -126,8 +126,7 @@ class CCFeedsXSPF extends CCFeed
 
         // CCDebug::PrintVar( $args );
 
-        $template = new CCTemplate( $CC_GLOBALS['template-root'] .
-                    'xspf_10.xml', false ); // false means xml mode
+        $template = new CCTemplate( 'xspf_10.xml', false ); // false means xml mode
 
         $xml = $template->SetAllAndParse( $args );
 
