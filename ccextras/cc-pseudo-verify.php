@@ -67,7 +67,7 @@ class CCPseudoVerify
     {
         require_once('ccextras/cc-pseudo-verify.inc');
         $api = new CCPseudoVerifyAPI();
-        return $api->FileValidate(&$formatinfo);
+        return $api->FileValidate($formatinfo);
     }
 
     /**

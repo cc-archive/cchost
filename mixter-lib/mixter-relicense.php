@@ -68,7 +68,7 @@ class CCRelicense
         {
             $R =& $records[$i];
 
-            $parents = $sources->GetSources(&$R,false);
+            $parents = $sources->GetSources($R,false);
 
             $A = array();
             foreach( $cols as $col )

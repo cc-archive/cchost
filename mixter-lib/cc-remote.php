@@ -67,7 +67,7 @@ class CCRemote
         $results = cc_remote_transfer_queue();
 
         $qrecs = cc_remote_get_records();
-        _cc_show_remoting_menu(&$qrecs);
+        _cc_show_remoting_menu($qrecs);
         if( empty($results) )
         {
             CCPage::Prompt( _('No files were transfered') );
