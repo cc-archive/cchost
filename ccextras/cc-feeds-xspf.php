@@ -105,20 +105,27 @@ class CCFeedsXSPF extends CCFeed
                 $format_info = 
                  &$args['feed_items'][$i]['files'][$j]['file_format_info'];
 
-                switch ( $format_info['ch'] )
+                if( empty($format_info['ch']) )
                 {
-                    case 'mono':
-                        $format_info['ch_num'] = 1;
-                        break;
-                    case 'stereo':
-                        $format_info['ch_num'] = 2;
-                        break;
-                    default:
-                        $format_info['ch_num'] = 
-                            $format_info['ch'];
+                    $format_info['ch_num'] = 0;
+                }
+                else
+                {
+                    switch ( $format_info['ch'] )
+                    {
+                        case 'mono':
+                            $format_info['ch_num'] = 1;
+                            break;
+                        case 'stereo':
+                            $format_info['ch_num'] = 2;
+                            break;
+                        default:
+                            $format_info['ch_num'] = 
+                                $format_info['ch'];
+                    }
                 }
 
-                if ( $format_info['sr'] )
+                if ( !empty($format_info['sr']) )
                     $format_info['sr_num'] = 
                         str_replace('k', '', $format_info['sr']);
             }
