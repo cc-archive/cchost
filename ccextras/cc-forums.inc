@@ -542,10 +542,14 @@ EOF;
         }
         elseif( $type == 'thread' )
         {
+            if( intval($param) == 0 )
+                exit; // hack 
             $where = "(topic_thread  = $param) ";
             $threads = new CCForumThreads();
             $threads->AddJoin( new CCTopics(), 'forum_thread_oldest' );
             $topic_name = $threads->QueryItemFromKey('topic_name',$param);
+            if( empty($topic_name) )
+                exit; // hack 
             $title = sprintf( _('Feed for topic: %s'), $topic_name );
         }
         else
