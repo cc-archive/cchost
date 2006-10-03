@@ -135,6 +135,9 @@ END;
             return;
         }
         $type = CCUtil::StripText($_REQUEST['search_type']);
+        if( empty($_REQUEST['search_in']) )
+            die('missing "search in" field'); // I think this is a hack attempt
+
         $what = intval($_REQUEST['search_in']);
 
         $results = array();
