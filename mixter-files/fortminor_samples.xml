@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -92,11 +92,11 @@ These are uncompressed WAVs marked with BPM (85) and key (C) information. They a
         </p>
                   
        <ul class="rawlist"><li>
-       <a class="samplink" href="http://mixlog.creativecommons.org/mixter-files/fortminor/fortminor_wav_vox.zip">A Cappellas</a> (82.9 MB ZIP)
+       <a class="samplink" href="http://ccmixter.org/mixter-files/fortminor/fortminor_wav_vox.zip">A Cappellas</a> (82.9 MB ZIP)
        </li><li>
-       <a class="samplink" href="http://mixlog.creativecommons.org/mixter-files/fortminor/fortminor_wav_beats.zip">Beat Tracks</a> (88.7 MB ZIP)
+       <a class="samplink" href="http://ccmixter.org/mixter-files/fortminor/fortminor_wav_beats.zip">Beat Tracks</a> (88.7 MB ZIP)
        </li><li>
-       <a class="samplink" href="http://mixlog.creativecommons.org/mixter-files/fortminor/fortminor_wav_pitched.zip">Pitched Instruments Tracks</a> (65.6 MB ZIP)
+       <a class="samplink" href="http://ccmixter.org/mixter-files/fortminor/fortminor_wav_pitched.zip">Pitched Instruments Tracks</a> (65.6 MB ZIP)
        </li>
 
        </ul>
