@@ -45,6 +45,7 @@ function & _mixter_dump_records(&$records,$xclass)
     $str_Mactip  = _('Mac: Control-click select \'Save Link As\'');
     $str_flagtip = _('Flag this upload for possible violation of terms');
     $str_feature = _('featuring:');
+    $str_last_ed = _('last change:');
 
     $chop = CCPage::GetPageArg('chop');
 
@@ -114,6 +115,22 @@ EOF;
               <th>$str_feature</th>
               <td><span class="cc_featuring">{$record['upload_extra']['featuring']}</td>
             </tr>
+EOF;
+        }
+
+        if( $detail && isset($record['upload_last_edit']) )
+        {
+            $last_date = date('F d, Y h:i a', strtotime($record['upload_last_edit']));
+            $last_op = empty($record['last_op_str']) ? '' : '(' . $record['last_op_str'] . ')';
+
+            $html .=<<<EOF
+          <tr>
+            <th>$str_last_ed</th>
+            <td>
+              <span class="cc_last_op">$last_date</span>
+              <span class="cc_last_op_str">$last_op</span>
+            </td>
+          </tr>
 EOF;
         }
 

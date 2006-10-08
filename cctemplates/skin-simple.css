@@ -1245,6 +1245,10 @@ p.cc_small_byline {
 	color: #AAA;
 }
 
+.cc_last_op_str {
+	color: #999;
+	}
+
 .cc_works_page #cc_file_info {
     width: 60%;
 	margin-bottom: 12px;

@@ -89,6 +89,7 @@ CREATE TABLE cc_tbl_uploads
       upload_extra        mediumtext       NOT NULL default '',  
       upload_tags         mediumtext       NOT NULL default '',
       upload_date         datetime         NOT NULL,
+      upload_last_edit    datetime         NOT NULL,
       upload_description  mediumtext       NOT NULL default '',
       upload_published    int(1) unsigned  NOT NULL,
       upload_banned       int(1) unsigned  NOT NULL default 0,
@@ -569,6 +570,7 @@ END;
        'v_3_0g'              => true, // BPM tags
        'v_3_1a'              => true, // sidebar.xml
        'v_3_1b'              => true, // new mail ops, pool optimized
+       'v_3_1d'              => true, // upload_last_edit
 
     );
 

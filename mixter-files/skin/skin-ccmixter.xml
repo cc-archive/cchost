@@ -22,9 +22,22 @@ $Header$
 -->
 </tal:block>
 
+
 <phptal:block include="string:skin-ccmixter-map.xml" />
 
 <metal:block use-macro="${html_head}" />
 <metal:block use-macro="${main_body}" />
+
+
+<metal:block define-macro="ccmhtml_form">
+
+    <tal:block condition="php: '$form_id' != 'userprofileform'" >
+       <metal:block use-macro="form.xml/html_form" /> 
+    </tal:block>
+    <tal:block condition="php: '$form_id' == 'userprofileform'" >
+       <h2>wahoo!</h2>
+    </tal:block>
+
+</metal:block>
 
 </html>
