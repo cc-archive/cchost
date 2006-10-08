@@ -82,7 +82,7 @@ tal:content="string: chill" /></a></div></td></tr>
 
 <tr><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=downtempo+remix"><span
 tal:content="string: downtempo" /></a></div></td><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=experimental+remix"><span
-tal:content="string: experimetal" /></a></div></td></tr>
+tal:content="string: experimental" /></a></div></td></tr>
 
 <tr><td ><div class="cc_stream_page_link"><a href="${home-url}stream/radio/playlist.m3u?tags=funky+remix"><span
 tal:content="string: funky" /></a></div></td>

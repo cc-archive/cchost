@@ -99,7 +99,7 @@ li { display: inline; }
         </tr>
       </table>
     </form>
-   <metal:block use-macro="../cctemplates/misc.xml/prev_next_links" />
+   <metal:block use-macro="${prev_next_links}" />
 </div>
 </metal:block>
 
