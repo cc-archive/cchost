@@ -31,8 +31,7 @@ $Header$
 </tal:block>
 <tal:block define="
     list_file string:upload_quick.xml/list_file;
-    list_files string:upload_quick.xml/list_files;
-    html_form string:skin-ccmixter.xml/ccmhtml_form;"
+    list_files string:upload_quick.xml/list_files;"
  />
  
 </tal:block>
