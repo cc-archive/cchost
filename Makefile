@@ -21,7 +21,7 @@ DATETIME=$(shell date +%F_%H%M%S)
 SIGNPACKAGE=gpg --detach-sign --armor
 MD5SUM=md5sum
 
-LAST_RELEASE_DATE=2006-04-04
+LAST_RELEASE_DATE=2006-09-07
 
 # must be multiple of 3 because only allowing tar.gz, tar.bz2, and zip
 MAX_SNAPSHOTS=90
