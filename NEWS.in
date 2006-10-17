@@ -3,23 +3,128 @@ ccHost Release Notes
 
 Version: PROJECT_VERSION
 
+This release is an 'admin' release with only a few feature. It is 
+geared toward addressing the needs specifically called out with the 
+3.0 release.
+
+New features (user)
+========================
+
+Show Last Updated Date
+-----------------------
+ccHost is now tracking the last time a major change
+was made to an upload (files added, deleted, etc.)
+and displays it along with the operation on the 
+upload's main page.
+
+'What I Look For/Pound On' Browser
+-----------------------------------
+These two user profile fields are now cross referenced
+in a new browser. Click on a 'looking for' link in a 
+user's profile and you this:
+
+http://ccmixter.org/media/search/people/lookinfor/acid#acid
+
+Alpha-Browser of Users
+-----------------------
+The generic 'people' page now allows for browsing by
+first letter of name. Example here:
+
+http://ccmixter.org/media/people?p=n
+
+
 New features (admin)
 ========================
-    
-    Skin Maker
-    ----------
-    You can generate custom skin skeleton based on skin-simple
-    greatly simplifying customization of your site.
 
-    Sidebar Editing
-    ---------------
-    You can now safely create your own sidebar content without
-    fear of updates writing over your work. See the ccadmin\INSTALL 
-    for details.
+Paths Admin
+-------------------
+As of this release, all paths used by ccHost can be specified
+by admin including templates, caches, plugins, etc. This is
+the last update that requires customization be done within
+the ccHost tree and the last update admins will be required
+to move their customization files 'out of the way' when doing
+an update.
+
+Major Sample Pool Improvements
+------------------------------
+Sample pools has been greatly optimized (several
+times faster for display) and users can now browse by
+artists' first initial. Example is here:
+
+http://ccmixter.org/freesound/pools/pool/4/n
+
+
+Site Disabling
+---------------
+Admins can temporarily disable the site in a 'friendly' way
+that doesn't look like the site is broken. 
+
+
+eMail Notifications on Moderation
+---------------------------------
+Admins can decide whether to automatically notify via email owners
+of recently moderated (banned) uploads and specify the message to
+be sent.
+
+
+New eMail Rules Engine
+-----------------------
+Admins can configure who can mail how often based on several criteria
+including who they are mailing to. This is an attempt to strike a 
+balance between spamming and legitamate contact between community
+members.
+
+
+Experimental: Psuedo-Verification of Uploads
+--------------------------------------------
+For file formats unknown to getID3, admins can now specify a 
+'fall-back' handler built into ccHost that will try to identify
+the file via the signature at the beginning of the file. This
+allows for a much wider (if less secure) variety of files not
+supported before (e.g. plain text, auto-cad, pdf, etc.) This
+feature is experimental and potentially (if not likely) a 
+source of virus and trojan distribution if not used very
+carefully.
+
 
 Bug Fixes
 ============
     
+    Fixed in 3.1
+
+    * 'Array' is not a suitable email address
+    * don't try to process bogus requests in pools ui
+    * fixed double-slashing skin name in Settings
+    * forum index was showing sticky thread as latest
+    * image should be uploader's url in xspf
+    * more php5 compat
+    * notify on edpick code was incomplete
+    * removing admin tags didn't work
+    * search from top bar was broken for non-pretty urls
+    * should not assume all uploads are audio in xspf
+    * tag count was off after upload Delete
+    * template paths were choking on xspf
+    * timestamp on upload was taken at wrong time
+    * typo in default aliases
+
+    Other UI Tweaks, Tools and Optimizations in 3.1
+
+    * admin: cc-gen-robots-txt.php tool
+    * admin: moved mixter specific skin out
+    * admin: new url admin/tags/reset to resync counts
+    * admin: subdue error on hack attempts
+    * admin: we now kill menu cache on every call to update=1
+    * code: more refactoring for easier overriding
+    * code: refactored form handler
+    * code: template refactoring
+    * optimization: pools ui optimization (now usuable)
+    * ui: now returning more consistant 404s on bogus requests
+    * ui: 'system tags' link a pretty button now
+    * ui: more descriptive menu text for tags
+    * ui: refactor admin UI in templates
+    * ui: stylesheet needs to be fully pathed during site disabling
+
+
     Fixed in 3.0.2
 
     * More graceful error recovery when menu has been destroyed
