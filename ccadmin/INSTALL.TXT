@@ -1,80 +1,33 @@
-Installation notes for ccHost 3.0.2
+Installation notes for ccHost 3.1
 ====================================
 
 Please check the project website/wiki to see if there are updates to any of 
 these steps: http://wiki.creativecommons.org/CcHost#Install
 
--- NOTE: For folks who have edited cctemplates/custom.xml:
-------------------------------------------------------------
--- Copy cctemplates/custom.xml to cctemplates/sidebar.xml
--- BEFORE installing this release. After you update you
--- may see errors in the sidebar; ignore those and go to
--- Manage Site and the Sidebar Content and re-select the
--- the content you want. From now on: you never have to
--- touch custom.xml again and you should do all your 
--- edits in sidebar.xml which we will never update.
-
-
-Upgrading from 3.0.x to 3.0.2
-------------------------------
-
-1. Make sure you logged in admin on your ccHost installation
-2. Unzip/tar the package to your local drive
-3. Copy the files (except for ccadmin) to you web server
-4. While Browse to http://your_installation_root/?update=1
-
-
-Upgrading from 2.x to 3.0.2
-----------------------------
-
-If you have edited cctemplates/custom.xml make sure to
-read the section above.
-
-This specific upgrade requires a few extra steps:
-
-    1. Make a BACKUP of your MySQL database (can be done via phpMyAdmin or from
-       the command line using mysqldump)
-
-    2. Make a BACKUP of your cchost directory onto your local machine (skip the
-       /people and /contests directories). If you skip this step and you made 
-       changes (to say ccfiles/home.xml) then ALL YOUR CHANGES WILL BE LOST 
-       FOREVER
-
-    3. Login to ccHost as your admin account and make sure to check 
-       'Remember me'
-    4. Unzip the cchost 3.0 package on your local machine
-
-    5. Copy everything under the cchost directory EXCEPT ccadmin over your 
-       server's ccHost directory
-
-    6. Delete the file ccextras/cc-language.php
-
-    7. Delete ALL files under cclib/phptal/phptal_cache
-
-    8. If you made changes to files in ccfiles (like home.xml), copy your 
-       local version over the ones on your server now.
-
-    9. Browse to: http://where_you_installed/?update=1 
 
 
 New Install (Simple or Hosted Environment)
 ------------------------------------------
 
-If you are using a shared server or other hosted site (like Dreamcast, etc.) 
+If you are using a shared server or other hosted site (like Dreamhost, etc.) 
 then your hosting service probably provided you with a web interface for 
 creating a database, doing file uploads and setting permissions for files and 
-directories. You will need to create a new database for ccHost BEFORE running 
-this installation:
+directories. 
 
-    1. Unzip the ccHost ZIP archive on your local system and copy the files to 
+    1. Create a new database for ccHost using whatever means your hosting
+       environment makes available to you. During the creation take note
+       of the following information:
+
+         - database name
+	 - database user
+	 - database user's password
+	 - database's server location
+
+    2. Unzip the ccHost ZIP archive on your local system and copy the files to 
        your server retaining the the directory structure.
 
-    2. Browse to http://where_you_installed/ccadmin and follow all the 
+    3. Browse to http://where_you_installed/ccadmin and follow all the 
        instructions from then on. 
-
-    * UNIX/LINUX-based installations should read this:
-
-      http://wiki.creativecommons.org/CcHost_File_Access
 
 
 New Install (Advanced)
@@ -89,10 +42,9 @@ at a UNIX command line you can use these steps to intall:
 
        For example:
 
-       cp -a cchost-1.0.3 /var/www/localhost/htdocs/cchost
+       cp -a cchost-3.1.0 /var/www/localhost/htdocs/cchost
        chgrp -R apache /var/www/localhost/htdocs/cchost
        chmod g+w /var/www/localhost/htdocs/cchost/
-       chmod -R g+w /var/www/localhost/htdocs/cchost/cclib/phptal/phptal_cache/
 
    2. Install getID3.  Unpack the package, and then copy the getid3 directory 
       to the location it will be accessed.  For example:
@@ -121,8 +73,104 @@ at a UNIX command line you can use these steps to intall:
 
    6. Follow the instructions from there on...
 
-   * UNIX/Linux-based Installations should read this:
 
-     http://wiki.creativecommons.org/CcHost_File_Access
+Upgrading to 3.1
+------------------------------
 
+ccHost 3.1 represents a significant change in how we handle
+your customized files and paths. The main purpose of this
+update is to ensure that updating in the future will be as
+painless as possible. In other words, we have learned our
+lessons and the hoop-jumping days of moving your custom
+files around before an update will no longer be necessary...
+after this update. 
 
+During this update you'll create a directory structure that
+will house all your custom and temporary files and then never 
+have to worry about it.
+
+NOTE: As always, the first thing you should is make a backup of 
+your MySQL database as well as your ccHost directory tree. See
+our administor's guide on backing up if you need specific help
+on how to do this:
+
+http://mirrors.creativecommons.org/cchost/docs/cchost/tutorial_admin.backup.pkg.html
+
+NOTE TO SVN and 3x DAILY BUILD USERS: If you are up to date 
+with the current SVN code base and you have already used
+Global Settings/Paths to customize your install then you can
+just log in as administrator and skip down to Step 8 below.
+
+Here are the steps for this update:
+
+1. Make sure you logged in admin on your ccHost installation
+   with the 'remember me' option CHECKED ON.
+
+2. If you have a file called ccextras/cc-language.php delete that 
+   file now
+
+3. Create a directory under your ccHost web root that looks like:
+
+     - local_files
+       |
+       |- lib
+       |
+       |- skins
+       |
+       |- temp
+       |
+       |- viewfile
+
+   Make sure these directories are writable to PHP scripts. To
+   ease the update you should make all these globally accessable
+   (0777) for now.
+
+   After the update you can rename and move these files around
+   but the updater will look for this specific structure just 
+   to make the transition easier.
+
+4. MOVE all custom modules (.php, .inc, etc) you installed into 
+   ccextras to local_files/lib (make sure to update any include() 
+   statements you might have to reflect the move)
+
+5. COPY custom skins you installed in cctemplates to 
+   local_files/skins. 
+   
+   Make sure to update any references to cctemplates, 
+   including implicit ones, (e.g. @import('skin-simple.css') 
+   becomes @import('../../cctemplates/skin-simple.css')) 
+   to reflect the move.
+
+6. If you edited cctemplates/custom.xml COPY it to 
+   cctemplates/sidebar.xml
+
+7. MOVE all custom files you installed or edited (e.g. home.xml) in
+   ccfiles to local_files/viewfile. Make sure to update any references
+   (e.g. <IMG src="" ) to reflect the move.
+
+8. Unzip the ccHost 3.1 package on your local machine
+
+9. Copy everything EXCEPT the ccadmin directory over your server's 
+   ccHost directory. 
+
+10. Browse to http://your_installation_root/?update=1
+
+11. If you are using your own skin go to 'Manage Site/Settings' to
+    tell ccHost to use the version in local_files/skins.
+
+    NOTE: You skin may be 'trashed' during this process and 
+    your pages appear totally without styling. The site
+    should continue to function however, you'll just be
+    scrolling a lot more until you can reset the skin settings.
+
+    After successfully reseting your skin settings you should
+    remove the skin from cctemplates and never touch that 
+    directory again.
+
+Again, this really is the very last time this will happen. The 
+new system of using admin configured paths for looking for files
+means that you can scribble all you want in your directories, never 
+touch the cc* directories again and always have a simple install
+from now on.
+
+$Id$
