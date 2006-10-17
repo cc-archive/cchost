@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-02 00:26-0700\n"
+"POT-Creation-Date: 2006-10-16 17:06-0700\n"
 "PO-Revision-Date: 2006-09-03 15:38-0800\n"
 "Last-Translator: deerfang <lu@deerfang.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1227,21 +1227,21 @@ msgstr "用Google搜索"
 msgid "Search Results"
 msgstr "搜索结果"
 
-#: cclib/cc-search.php:153
+#: cclib/cc-search.php:156
 #, php-format
 msgid "<a href=\"%s\">Search again...</a>"
 msgstr "<a href=\"%s\">再搜索</a>"
 
-#: cclib/cc-search.php:155
+#: cclib/cc-search.php:158
 msgid "Search limit reached. "
 msgstr "达到搜索限制"
 
-#: cclib/cc-search.php:256
+#: cclib/cc-search.php:259
 #, fuzzy
 msgid "Browse \"What I Pound On\""
 msgstr "我用什么工具"
 
-#: cclib/cc-search.php:317
+#: cclib/cc-search.php:320
 msgid "Users That Mentioned: "
 msgstr "用户提到："
 
@@ -2428,16 +2428,16 @@ msgstr ""
 msgid "Feed for topics by %s"
 msgstr "主题提要作者"
 
-#: ccextras/cc-forums.inc:549
+#: ccextras/cc-forums.inc:553
 #, php-format
 msgid "Feed for topic: %s"
 msgstr "主题提要"
 
-#: ccextras/cc-forums.inc:553
+#: ccextras/cc-forums.inc:557
 msgid "Forums Feed"
 msgstr "论坛提要"
 
-#: ccextras/cc-forums.inc:569
+#: ccextras/cc-forums.inc:573
 msgid "Contents requires login"
 msgstr "内容要求登陆"
 
@@ -2516,6 +2516,10 @@ msgstr ""
 #: mixter-lib/mixter-dump-listing.inc:47
 msgid "featuring:"
 msgstr "推介"
+
+#: mixter-lib/mixter-dump-listing.inc:48
+msgid "last change:"
+msgstr ""
 
 #~ msgid ""
 #~ "that you can not re-license under a stricter license (on this site). "

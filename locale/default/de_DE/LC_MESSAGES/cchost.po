@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-02 00:26-0700\n"
+"POT-Creation-Date: 2006-10-16 17:06-0700\n"
 "PO-Revision-Date: 2006-06-28 12:00+0000\n"
 "Last-Translator: Friedemann Bochow <f.bochow@milchhof.net>\n"
 "Language-Team: Deutsch <f.bochow@milchhof.net>\n"
@@ -1229,21 +1229,21 @@ msgstr "Suche mit Google (tm)"
 msgid "Search Results"
 msgstr "Suchergebnisse"
 
-#: cclib/cc-search.php:153
+#: cclib/cc-search.php:156
 #, php-format
 msgid "<a href=\"%s\">Search again...</a>"
 msgstr "<a href=\"%s\">Neue Suche...</a>"
 
-#: cclib/cc-search.php:155
+#: cclib/cc-search.php:158
 msgid "Search limit reached. "
 msgstr "Suchgrenze erreicht"
 
-#: cclib/cc-search.php:256
+#: cclib/cc-search.php:259
 #, fuzzy
 msgid "Browse \"What I Pound On\""
 msgstr "Was ich nicht mag:"
 
-#: cclib/cc-search.php:317
+#: cclib/cc-search.php:320
 msgid "Users That Mentioned: "
 msgstr "User, die erw&auml;hnt haben: "
 
@@ -2512,16 +2512,16 @@ msgstr "Forum-Posts f&uuml;r %s"
 msgid "Feed for topics by %s"
 msgstr "Feed f&uuml;r Themen von"
 
-#: ccextras/cc-forums.inc:549
+#: ccextras/cc-forums.inc:553
 #, php-format
 msgid "Feed for topic: %s"
 msgstr "Feed f&uuml;r Thema:"
 
-#: ccextras/cc-forums.inc:553
+#: ccextras/cc-forums.inc:557
 msgid "Forums Feed"
 msgstr "Foren-Feed"
 
-#: ccextras/cc-forums.inc:569
+#: ccextras/cc-forums.inc:573
 msgid "Contents requires login"
 msgstr "Inhalt erfordert Login"
 
@@ -2600,6 +2600,10 @@ msgstr "Diesen Upload wegen m&ouml;glicher Verst&ouml;%szlig;e flaggen"
 #: mixter-lib/mixter-dump-listing.inc:47
 msgid "featuring:"
 msgstr "Bewertungen:"
+
+#: mixter-lib/mixter-dump-listing.inc:48
+msgid "last change:"
+msgstr ""
 
 #~ msgid ""
 #~ "that you can not re-license under a stricter license (on this site). "
