@@ -10,6 +10,7 @@ DIST_FILES_STATIC=AUTHORS \
 	cc-error-msg.txt \
 	cc-includes.php \
 	cc-non-ui.php \
+	cc-inc-extras.php \
 	index.php \
 	Makefile.include \
 	Makefile.language \
