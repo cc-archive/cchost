@@ -11,40 +11,20 @@
 <refsect1 id="{@id copy}">
 <title>Before You Do Anything Else</title>
 
-<para></para>
-
 <para>
-  Copy the entire directory <filename>ccfiles</filename> to something 
-  like <filename>myfiles</filename> at your root installation directory. 
-  In other words, <filename>ccfiles</filename> and <filename>myfiles</filename> 
-  must be at the same level.
+  It is important to understand the role of the various 
+  {@tutorial admin.basic.pkg#paths directories involved} 
+  in a ccHost installation. Using the correct directory 
+  structure and setting up the corresponding paths in the 
+  <command>Global Settings/Paths</command> configuration screen 
+  means that you never have to worry about losing any 
+  work or configuration when you update to a newer version
+  of ccHost.
 </para>
 
-<para>
-  Browse to <uri>admin/edit</uri> ({@tutorial admin.basic.pkg#urls.doc didn't work??})
-</para>
-
-<para>
-  Look for <command>media::config[files-root]</command> and 
-  replace <filename>ccfiles/</filename> with <filename>myfiles/</filename>.
-</para>
-
-<para>
-  Do not touch anything else and click <command>Submit</command>
-</para>
-
-<warning>
-   This technique uses the {@tutorial admin.advanced.pkg#adminedit}. Be very careful.
-</warning>
-
-<para>
-  Of course future versions of ccHost will make this step less silly and dangerous.
-</para>
-
-<note>
-    If you ignore this step you will lose all edits and changes you make to 
-    files the next time you upgrade your ccHost.
-</note>
+<para>The install program for 3.1 and above has set you
+up with a default structure that you are welcome use as is. Future
+upgrades of ccHost will never interfere with that structure.</para>
 
 </refsect1>
 
@@ -54,7 +34,7 @@
 <para>If no other command is specified, the system defaults to executing the <uri>homepage</uri> command. 
 Admins define the actions of the <uri>homepage</uri> command via the <command>Manage Site/Setting</command>.</para>
 
-<para>Assuming you have followed the instructions in the section {@tutorial admin.files.pkg#copy} the default home page is in your files directory called <filename>home.xml</filename>. Edit this file to create your custom home page. Before you get too frustrated you should probably read the section on {@tutorial admin.advanced.xhtml.pkg#rules XHTML do's and don'ts}.</para> 
+<para>Assuming you have followed the instructions in the section {@tutorial admin.files.pkg#copy} the default home page is in your <filename>viewfile</filename> directory called <filename>home.xml</filename>. Edit this file to create your custom home page. Before you get too frustrated you should probably read the section on {@tutorial admin.advanced.xhtml.pkg#rules XHTML do's and don'ts}.</para> 
 <para>If you want a different home page for a specific {@tutorial admin.advanced.pkg#vroots virtual root}:</para>
 <orderedlist class="tutlist">
 <listitem>Create a new file in your files directory called something like 
@@ -92,20 +72,20 @@ that up follow these steps:</para>
 <refsect1 id="{@id welcome}"> 
 <title>Edit Your Welcome Page</title>
 <para>Assuming you have followed the instructions in the section {@tutorial admin.files.pkg#copy} 
-the default welcome screen for newly registered users is in your files directory called <filename>welcome.xml</filename>.</para>
+the default welcome screen for newly registered users is in your <filename>viewfile</filename> directory called <filename>welcome.xml</filename>.</para>
 <para>Edit this file to create your custom welcome page but before you get too frustrated you should probably read the section on {@tutorial admin.advanced.xhtml.pkg#rules XHTML do's and don'ts}.</para>
 </refsect1>
 
 <refsect1 id="{@id new}"> 
 <title>Create New Pages</title>
 <para>Creating a new page in your ccHost system is simply a matter of creating a new XML file in
-your files directory. If you haven't read the {@tutorial admin.files.pkg#copy} yet, now
+your <filename>viewfile</filename> directory. If you haven't read the {@tutorial admin.files.pkg#copy} yet, now
 would be a good time and before you get too frustrated you should also read the section on {@tutorial admin.advanced.xhtml.pkg#rules XHTML do's and don'ts}.</para>
 </refsect1> 
 
 <refsect1 id="{@id view}"> 
 <title>Viewing Your Pages</title>
-<para>All XML files in your {@tutorial admin.files.pkg#copy files directory} are
+<para>All XML files in your {@tutorial admin.files.pkg#copy viewfile directory} are
 viewable in a ccHost page by using the <uri>viewfile</uri> command and the filename as the parameter:</para>
 <example><uri>http://example.com?ccm=/media/viewfile/terms_of_use.xml</uri> (Pretty URLs off)
 <uri>http://example.com/media/viewfile/privacy.xml</uri> (Pretty URLs on)</example> 

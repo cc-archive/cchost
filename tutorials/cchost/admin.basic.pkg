@@ -147,14 +147,6 @@ three are conventions of the subsystems we use and
 we felt it was better to use context as a disambiguator rather than inventing terms for processes
 everybody knows as 'tagging' -- albeit with different purposes.</para>
 <unorderedlist class="tutlist">
-  <listitem><emphasis>'Folksonomy' Tags</emphasis>
-      <para>
-        These kinds of tags are used to create categories of uploads. The system assigns
-        'system tags' and the users can enter their own tags on every upload. There is 
-        a menu item <command>Browse Tags</command> so visitors to your site can quickly
-        identify categories of your uploads.
-      </para>
-  </listitem>
   <listitem><emphasis>HTML Template Tags</emphasis>
       <para>
         XHTML pages are made up of tags. ccHost generates the XHTML using XML scripts that 
@@ -167,6 +159,30 @@ everybody knows as 'tagging' -- albeit with different purposes.</para>
         The title, author and other meta data associated with an ID3 compliant media
         file (like MP3s) are embedded directly into the media via ID3 tags. 
       </para>
+  </listitem>
+  <listitem><emphasis>'Folksonomy' Tags</emphasis>
+      <para>
+        These kinds of tags are used to create categories of uploads. There is 
+        a menu item <command>Browse Tags</command> so visitors to your site can quickly
+        identify categories of uploads at your site.
+      </para>
+      <para>
+        Just to confuse things even further there are three types of folksonomy tags:
+      </para>
+      <orderedlist>
+          <listitem><emphasis>User tags</emphasis>: The uploader assigns these tags
+           during the upload process and can edit them through the <command>Edit</command>
+           link on the upload's main page.</listitem>
+          <listitem><emphasis>System tags</emphasis>: These are tags controlled
+          internally by the system, usually by file verifiers and have to
+          do with the internal data formats (e.g. 'stereo', 'image', etc.).
+          Neither users or admins can edit these tags directly.</listitem>
+          <listitem><emphasis>Admin tags</emphasis>: These are tags that controlled
+          by the admin through the use of the <command>Manage Site/Submit Forms</command> and 
+          <command>Global Settings/Tags</command> settings pages and on individual uploads through
+          the <command>Admin</command> link on the upload's main page. Users can not edit
+          these tags.</listitem>
+      </orderedlist>
   </listitem>
 </unorderedlist>
 </refsect1>
@@ -199,12 +215,28 @@ is further restricted by who 'owns' the upload, that is: who uploaded the thing.
 
 </refsect1>
 
-<refsect1 id="{@id dirstruct}">
-<title>Directory Structure Explained</title>
+<refsect1 id="{@id paths}">
+<title>Where ccHost Looks for Files</title>
+<para>Starting in ccHost version 3.1 admins have full control over where ccHost
+looks for files and writes logs and temporary files during the course of building a page.</para>
+<para>If you installed 3.1 or later, the installation program created a directory
+structure with a name you specified under your root installation that you should, 
+but are not obliged to, use for your customizing your site.</para>
+
+<para>If you installed before 3.1 we recommend you setup a similar structure, but again,
+you don't have to if you have another system that works for you.</para>
+
+<para>The <command>Global Settings/Paths</command> configuration screen gives you
+full control of where and how ccHost looks for files.</para>
+
+<refsect2 id="{@id dirstruct}">
+<title>Directories Explained</title>
 
 <para>
-The following table describes the directory
-structure necessary for your ccHost installation.
+The following tables explains both the system and admin directories. 
+These are here for 
+reference in relation to the <command>Global Settings/Paths</command> 
+configuration screen. 
 </para>
 <table>
   <row>
@@ -217,15 +249,13 @@ structure necessary for your ccHost installation.
   <row>
       <entry class="fn"><uri>ccextras</uri></entry>
       <entry class="fd">
-          Developers use this directory to add 
-          features to ccHost. Files that do not come
-          with the official should start with something 
-          <emphasis>other</emphasis> than the
-          <filename>cc-</filename> prefix. 
+          ccHost Developers use this directory to add 
+          features to ccHost. 
           <note>
-            ccHost will look in this directory and will automatically
+            ccHost will always look in this directory first, before
+            looking in any of the 'Plugins Path' directories and
             load any file with a <filename>.php</filename> extension.
-            Therefore you should be careful what files you move here.
+            You can not change this behavior.
           </note>
           <para>
           </para>
@@ -235,8 +265,8 @@ structure necessary for your ccHost installation.
       <entry class="fn"><uri>ccfiles</uri></entry>
       <entry class="fd">
           The default directory used by the <uri>viewfile</uri> command.
-          See {@tutorial admin.files.pkg#copy} for making your own
-          version of this.
+          You can replace this functionality by editing the 'viewfile
+          Path' field.
       </entry>
   </row>
   <row>
@@ -244,9 +274,10 @@ structure necessary for your ccHost installation.
       <entry class="fd">
           ccHost security confirmation and other internal
           modules that need images use these files. 
-          These are also where skins look for common images. The recommended
-          usage is to put your own images in <emphasis>another</emphasis> directory
-          in order to make ccHost updates easier.
+          These are also where skins look for common images. 
+          You put your custom images into a directory based
+          off one of the directories in the 'Skins Path' 
+          field.
       </entry>
   </row>
   <row>
@@ -260,9 +291,11 @@ structure necessary for your ccHost installation.
   <row>
       <entry class="fn"><uri>cctemplates</uri></entry>
       <entry class="fd">
-          Directory for skins. The skin architecture is such that
+          Directory for factory skins. The skin architecture is such that
           you should not have to make any edits to existing files.
-          Doing so will cause problems when you update ccHost. 
+          Doing so will cause problems when you update ccHost. Your
+          skins should be based off one of the directories in the 
+          'Skins Path' field.
       </entry>
   </row>
   <row>
@@ -292,6 +325,82 @@ structure necessary for your ccHost installation.
       </entry>
   </row>
   <row>
+      <entry class="fn"><uri>my_files</uri></entry>
+      <entry class="fd">
+          Created by the ccHost install program. 
+          You use this directory for all customizations
+          to your site.
+          <note>The actual name of this directory depends on
+          what you named it during the install process.</note>
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>my_files/cc-error-msg.txt</uri></entry>
+      <entry class="fd">
+          This is a file 
+          used by the system when a fatal error 
+          has occurred to display a message to 
+          the user visiting your site. Edit this file (HTML allowed)
+          to change the message seen by users when 
+          this happens or direct the system to another file
+          in the 'System Error Message' field.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>my_files/disabled-msg.txt</uri></entry>
+      <entry class="fd">
+          This is a file 
+          used by the system when the admin has disabled 
+          the site. Edit this file (HTML allowed)
+          to change the message seen by users when 
+          this happens or direct the system to another file
+          in the 'Site Disabled Message' field.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>my_files/lib</uri></entry>
+      <entry class="fd">
+          ccHost will look in this directory for extra
+          modules to load. Any file with a .php extension
+          will be loaded and parsed to be very careful
+          what files go in there. You change where ccHost
+          looks for these files or add additional directories
+          using the 'Plugin Path's field.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>my_files/skins</uri></entry>
+      <entry class="fd">
+          ccHost will look in this directory for resolve
+          all HTML template searches, including the main
+          skin page and sidebar.xml. You change where ccHost
+          looks for these files or add additional directories
+          using the 'Skins' field.
+          <note>When calling for template from <emphasis>within</emphasis>
+          another template, the system will look at the 'current'
+          directory -- that is: the directory of the calling template
+          -- before looking at any of the 'Skins' paths.</note>
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>my_files/temp</uri></entry>
+      <entry class="fd">
+          ccHost use this directory temporary files. It
+          is always safe to delete any files here as the 
+          system will re-create them if needed.
+      </entry>
+  </row>
+  <row>
+      <entry class="fn"><uri>my_files/viewfile</uri></entry>
+      <entry class="fd">
+          ccHost will look in this directory for files
+          appened to the 'viewfile' command. For example:
+          <uri>viewfile/home.xml</uri>. You change where ccHost
+          looks for these files or add additional directories
+          using the 'viewfile Command' field.
+      </entry>
+  </row>
+  <row>
       <entry class="fn"><uri>cc-config-db.php</uri></entry>
       <entry class="fd">
           This is a file in your root installation
@@ -304,19 +413,9 @@ structure necessary for your ccHost installation.
       </entry>
   </row>
   <row>
-      <entry class="fn"><uri>cc-error-msg.txt</uri></entry>
-      <entry class="fd">
-          This is a file in your root installation
-          used by the system when a fatal error 
-          has occurred to display a message to 
-          the user visiting your site. Edit this file 
-          to change the message seen by users when 
-          this happens.
-      </entry>
-  </row>
-  <row>
       <entry class="fn">
-         <uri>cc-includes.php</uri>, <uri>cc-non-ui.php</uri>
+         <uri>cc-includes.php</uri>, <uri>cc-non-ui.php</uri>,
+         <uri>cc-inc-extras.php</uri>
       </entry>
       <entry class="fd">
           These are important system files, do not touch these
@@ -326,8 +425,12 @@ structure necessary for your ccHost installation.
   <row>
       <entry class="fn"><uri>cc-custom.php</uri></entry>
       <entry class="fd">
-          ccHost looks at this file to determine the
+          These are helper routines used by the
           sidebar content. See {@tutorial admin.ui.pkg#sidebar}.
+          You should not touch this file. 
+          If you wish to have custom versions of this, you should
+          include a new .php source in one of the directories
+          in the 'Plugin Paths' field.
       </entry>
   </row>
 </table>
@@ -372,6 +475,7 @@ structure necessary for your ccHost installation.
       </entry>
   </row>
 </table>
+</refsect2>
 
 </refsect1>
 

@@ -870,7 +870,7 @@ function just_show_it()
 extremely unlikely to be replaced by template writers. Typically these
 are admin displays, but may in rare cases, involve end user scenarios.</para>
 <para>The upside of doing things this way is that you don't have to change
-any of the skin template files and force users to update the cctemplates
+any of the skin template files and force users to update the <filename>skins</filename>
 directory. The downside is that skin authors will not be able to fully incorporate your
 display with their skin and it's far less flexible to customize.
 </para>
@@ -991,7 +991,7 @@ to the skins engine and can be over ridden by skin authors who may may want
 to customize it. If these are not concerns for you then you might consider the 
 'special case' ({@tutorial cchost.pkg#indhtml}) method of displaying HTML.</para>
 <para>The basic steps in this method:
-<ol><li>Create a new template file and put it into cctemplates directory (e.g.
+<ol><li>Create a new template file and put it into <filename>skins</filename> directory (e.g.
 fancy.xml).
 </li>
 <li>Create a new template macro using the metal-macro syntax:
@@ -1002,7 +1002,7 @@ fancy.xml).
 </metal:block>
  ]]></programlisting>
 <ul><li>Optional: If you have specific styles you should not put them into the
-template macro, instead you should put them at the end of the cctemplates/skin-simple.css.<br />
+template macro, instead you should put them at the end of the skins/skin-yourskin.css.<br />
 <programlisting role="php"><![CDATA[  .fancy_div {
   font-size: 14px;
   color: green;
@@ -1010,7 +1010,7 @@ template macro, instead you should put them at the end of the cctemplates/skin-s
 <br /></li></ul>
 </li>
 <li>Map the name of your new macro so it can be over ridden (redirected) in the future. Do
-this is cctemplates/skin-simple-map.xml:
+this is skins/skin-yourskin-map.xml:
 <programlisting role="php"><![CDATA[  <tal:block define="
     fancy_html string:fancy.xml/fancy_html;
     ...

@@ -373,12 +373,16 @@ fclose($f);
 <title>Saving Custom Files</title>
 
 <para>
+    All of the files in your {@tutorial admin.basic.pkg#paths custom file directories} 
+    should be copied while keeping the exact directory sturcture relative to your root
+    installation.
+</para>
+<para>
     If you are doing a full backup of your system then save everything under your 
     root installation (might as well). You will probably want to save the 
     {@tutorial admin.backup.pkg#userfiles content files} separately
     because of their size.
 </para>
-
 <refsect2 id="{@id mirror}">
 <title>Mirroring Custom Files</title>
 
@@ -395,13 +399,6 @@ fclose($f);
     directory (see {@tutorial admin.files.pkg#copy}) to your mirror.
 </para>
 
-<para>
-    If you have custom skins then don't forget to copy your 
-    <filename>cctemplates</filename> as well.
-</para>
-<para>
-    See {@tutorial admin.basic.pkg#dirstruct}
-</para>
 </refsect2>
 
 </refsect1>

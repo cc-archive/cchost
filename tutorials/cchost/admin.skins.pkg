@@ -73,7 +73,7 @@
 <title>4. Changing the Text, Border and Background Colors</title>
 <para>
     The Skin Maker tool created three files in your 
-    <filename>cctemplates</filename> directory as well
+    <filename>skins</filename> directory as well
     a new directory called <filename>myskin</filename>
     with the graphics files it requires.
 </para>

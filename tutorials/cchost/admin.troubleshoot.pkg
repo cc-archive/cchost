@@ -12,7 +12,8 @@
 <para>
     By far the most common issue with new installs on Unix based systems 
     involves file access permissions. The recommended way of dealing with 
-    this is to set the entire ccHost directory structure as all-access 
+    this is to set your entire {@tutorial admin.basic.pkg#paths custome directory structure} 
+    as all-access 
     (0777) just while you get things going. If everything else is working 
     then you should follow the 
     <ulink url="http://wiki.creativecommons.org/CcHost_File_Access">ccHost file access guidelines</ulink>.
@@ -22,16 +23,15 @@
 <refsect1 id="{@id errorrend}">
 <title>"There is an error rendering this page"</title>
 <para>
-    The most common reason you get this error message on new installations 
-    is because the <filename>cclib/phptal/phptal_cache</filename> directory 
-    is not writable by ccHost. You should make sure this is not the case by 
-    setting that directory's permission to 0777 and trying again.
-</para>
-<para>
-    The second most common reason are template errors during development of 
+    A common reason for this are template errors during development of 
     skins and other user interface testing. If you haven't already 
     {@tutorial admin.troubleshoot.pkg#debugout Turn on debug messages} 
     login as admin and try to render the page again. 
+</para>
+<para>
+    There might also be a pathing issue with your 
+    {@tutorial admin.basic.pkg#paths custome directory structure}. You see
+    your paths configuration by performing a <uri>export</uri> command. ({@tutorial admin.basic.pkg#urls.doc Didn't work??}) 
 </para>
 </refsect1>
 
@@ -66,7 +66,7 @@
 </example>
 
 <para>
-    and put that file into the '''ccextras''' directory.
+    and put that file into your {@tutorial admin.basic.pkg#paths libs} directory.
 </para>
 <para>
     Now repeat the steps that led you to the problem and hopefully you will 
