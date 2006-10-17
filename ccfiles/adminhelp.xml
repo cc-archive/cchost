@@ -75,7 +75,7 @@ td.tb {
 </p>
 <p>
   You create custom HTML pages by authoring <a href="http://www.google.com/search?q=well-formed+xhtml"><b>well-formed XHTML</b></a> files and putting 
-  them in the <b>ccfiles</b> directory.
+  them in the <b>viewfile</b> directory.
 </p>
 <p>
   To view the files you can browse to 
@@ -98,7 +98,8 @@ td.tb {
   <b>Creating a Skin</b>
 </p>
 <p>
-  Currently there is no interactive way to change styles on the site. The most current 
+  Currently there is no interactive way to change styles on the site. If you are familiar
+  with XHTML, CSS and basic programming principles you can <a href="${home-url}admin/skin/create">create a new skeleton skin</a> use that as a basis. The most current 
   instructions for how to create a skin can be found at the <a 
   href="http://wiki.creativecommons.org/CcHost_Skins">ccHost Developer's Wiki</a>.
 </p>
