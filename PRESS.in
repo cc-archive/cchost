@@ -1,15 +1,11 @@
-Creative Commons Sponsored Software ccHost Releases Version 3.0.1
+Creative Commons Sponsored Software ccHost Releases Version 3.1
 
-San Francisco, USA - September 8, 2006
+San Francisco, USA - October 17, 2006
 
 Creative Commons, a nonprofit organization that provides flexible
 copyright licenses for authors and artists along with the Creative
-Commons Developer Community released the ccHost 3.0.1 today. ccHost is an.1
-Open Source web-based media sharing software. This major feature release
-comes on the heals of winning the Linux Journal Linux World Expo Award
-for "Best Open Source Solution" and combines approximately five months of
-development, usage, and testing into packages that anyone may download,
-install, and use to empower on-line media sharing communities. This
+Commons Developer Community released the ccHost 3.1 today. ccHost is an
+Open Source web-based media sharing software. This
 release builds upon ccHost's novel support of collaboration, sharing,
 and storage of multi-media using the different Creative Commons licenses
 and metadata.
@@ -19,57 +15,6 @@ project, ccMixter (www.ccmixter.org), a popular on-line social network
 service that supports legal music sharing and remixing. ccHost is the
 Open Source Software engine powering ccmixter.org and which anyone may
 download, install, and use to freely build media sharing communities.
-
-Ryan Lerch, a developer from the project Open Clip Art Library
-(www.openclipart.org) says, "the new release of ccHost now includes
-features that we have wanted for some time. It now integrates powerful
-features that will enhance both the usability and efficiency of the Open
-Clip Art Library and will help us immensely in our goal of creating
-a comprehensive library of public domain clip art." The Open Clip Art
-Library is but one of several projects moving their projects to use the
-solid infrastructure ccHost provides.
-
-Major features in this release include native forums, infrastructure to
-support multiple languages, and an e-mail notification system. ccHost
-has replaced its dependency on phpbb2 with native fully-functioning
-hierarchical forums. They are totally integrated with user profiles and
-administrators may specifically control them.
-
-ccHost now supports multiple languages. There is new integration of
-the standard Open Source GNU gettext-based multi-language support
-tools. This allows for initial support for Italian, German, Mainland
-Chinese, Taiwanese Chinese, and Brazilian Portuguese in addition to
-English. The project encourages others to get involved in order to
-translate ccHost into more local languages.
-
-A user-requested feature now implemented is e-mail notifications. It
-allows registered users to get e-mail whey they have been reviewed,
-rated, remixed, or when someone else has uploaded a file and they want
-to be alerted.
-
-Other important features include recent reviews for the sidebars, the
-'How I Did It' browser sorting, and tons of statistics. Stats include
-number of reviews for uploads, an overview of forum messages, and times
-remixed, all to help a community know about itself. ccHost also supports
-XSPF 1.0 playlists as feeds, basic support for the new getid3 SVG module,
-and dumping of content from ccHost to a large feed file format (useful
-for search engines and external parsing).
-
-ccHost makes the lives of administrators much easier by adding an
-FTP-less file manager, a Bayesian rating scheme, sub-navigation tabs,
-spam flood protection, and setting of file-permissions. External to
-the core ccHost application are also several command line scripts
-which admins can use to powerfully help them in their maintenance
-of an installation. Of particular note is the inclusion of code from
-Brazil-based Bruno Dilly's Google Summer of Code project into a tool
-called "publishcchost" which allows one to publish a file to any ccHost
-installation from the command line.
-
-This release also focuses on addressing compatibility with modern ways
-software is installed on the web. ccHost 3.0.1 fully supports PHP 5 and
-has been tested thoroughly in shared hosting setups on Dreamhost and
-Freedesktop.org. Also, one outstanding bug has been squashed in that
-ccHost does not require getid3 for installation.
 
 The ccHost development community encourages new developers to
 contribute to the project. The future of ccHost is bright with upcoming
