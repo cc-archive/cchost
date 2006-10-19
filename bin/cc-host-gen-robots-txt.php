@@ -41,7 +41,7 @@ $disallows = array(
         '/people/contact',
         '/podcast',
         '/stream',
-        '/files/stream'
+        '/files/stream',
         '/feed'
     );
 define('IN_CC_HOST', 1);
