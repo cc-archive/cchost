@@ -48,7 +48,7 @@ define('CC_PROJECT_NAME', 'CC_APP_NAME');
 /**
 * Current Version
 */
-define('CC_HOST_VERSION', '3.2');
+define('CC_HOST_VERSION', '3.2SVN');
 
 define( 'CC_GLOBAL_SCOPE', 'media' );
 define( 'CC_LOCAL_SCOPE',  'local' );

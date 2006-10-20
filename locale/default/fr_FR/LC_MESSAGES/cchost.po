@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-18 09:49-0700\n"
+"POT-Creation-Date: 2006-10-19 21:31-0700\n"
 "PO-Revision-Date: 2006-07-27 22:47+0000\n"
 "Last-Translator: Denis Jacquerye <moyogo@gmail.com>\n"
 "Language-Team: Denis Jacquerye <moyogo@gmail.com>\n"
@@ -1127,31 +1127,31 @@ msgid ""
 "done below.)"
 msgstr ""
 
-#: cclib/cc-renderflash.php:91
+#: cclib/cc-renderflash.php:96
 msgid "Play"
 msgstr ""
 
-#: cclib/cc-renderimage.php:101
+#: cclib/cc-renderimage.php:104
 msgid "Show"
 msgstr ""
 
-#: cclib/cc-renderimage.php:169
+#: cclib/cc-renderimage.php:172
 msgid "Display Thumbnails"
 msgstr ""
 
-#: cclib/cc-renderimage.php:171
+#: cclib/cc-renderimage.php:174
 msgid "Display thumbnails for image uploads"
 msgstr ""
 
-#: cclib/cc-renderimage.php:175
+#: cclib/cc-renderimage.php:178
 msgid "Max Thumb X"
 msgstr ""
 
-#: cclib/cc-renderimage.php:177
+#: cclib/cc-renderimage.php:180
 msgid "Leave this blank or 0 (zero) to use the image's natural size"
 msgstr ""
 
-#: cclib/cc-renderimage.php:182
+#: cclib/cc-renderimage.php:185
 msgid "Max Thumb Y"
 msgstr ""
 

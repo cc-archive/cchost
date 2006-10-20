@@ -61,6 +61,7 @@ require_once( 'cclib/cc-formatinfo.php');
 require_once( 'cclib/cc-license.php' );
 require_once( 'cclib/cc-mediahost.php' );
 require_once( 'cclib/cc-search.php' );
+require_once( 'cclib/cc-render.php' );
 require_once( 'cclib/cc-renderaudio.php' );
 require_once( 'cclib/cc-renderimage.php' );
 require_once( 'cclib/cc-renderflash.php' );

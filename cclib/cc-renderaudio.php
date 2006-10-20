@@ -40,7 +40,7 @@ CCEvents::AddHandler(CC_EVENT_LISTING_RECORDS, array( 'CCRenderAudio', 'OnListin
 
 /**
 */
-class CCRenderAudio
+class CCRenderAudio extends CCRender
 {
     /**
     * Handler for {@link CC_EVENT_LISTING_RECORDS}

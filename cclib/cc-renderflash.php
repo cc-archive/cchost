@@ -33,15 +33,20 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCRenderFlash', 'OnMapUrls'
 * @package cchost
 * @subpackage video
 */
-class CCRenderFlash
+class CCRenderFlash extends CCRender
 {
+    function Play($username,$upload_id) {
+        Show($username,$upload_id);
+    }
 
-    function Play($username,$upload_id)
+    function Show($username,$upload_id)
     {
+        /*
         $uploads =& CCUploads::GetTable();
         $record =& $uploads->GetRecordFromID($upload_id);
         CCUpload::EnsureFiles($record,true);
-        $url = $record['files'][0]['download_url'];
+        $url = $record['files'][0]['download_url']; */
+        parent::Show();
         list( $w, $h ) = CCUploads::GetFormatInfo($record,'dim');
         $html =<<<END
 <html>

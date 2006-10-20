@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-18 09:49-0700\n"
+"POT-Creation-Date: 2006-10-19 21:31-0700\n"
 "PO-Revision-Date: 2006-08-31 11:28+0000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1165,31 +1165,31 @@ msgid ""
 "done below.)"
 msgstr ""
 
-#: cclib/cc-renderflash.php:91
+#: cclib/cc-renderflash.php:96
 msgid "Play"
 msgstr ""
 
-#: cclib/cc-renderimage.php:101
+#: cclib/cc-renderimage.php:104
 msgid "Show"
 msgstr ""
 
-#: cclib/cc-renderimage.php:169
+#: cclib/cc-renderimage.php:172
 msgid "Display Thumbnails"
 msgstr "Hiện hình thu nhỏ"
 
-#: cclib/cc-renderimage.php:171
+#: cclib/cc-renderimage.php:174
 msgid "Display thumbnails for image uploads"
 msgstr "Hiển thị các hình thu nhỏ của ảnh tải lên"
 
-#: cclib/cc-renderimage.php:175
+#: cclib/cc-renderimage.php:178
 msgid "Max Thumb X"
 msgstr "Hình nhỏ đa X"
 
-#: cclib/cc-renderimage.php:177
+#: cclib/cc-renderimage.php:180
 msgid "Leave this blank or 0 (zero) to use the image's natural size"
 msgstr "Bỏ trống hay nhập 0 (số không) để hiển thị kích cỡ gốc của ảnh"
 
-#: cclib/cc-renderimage.php:182
+#: cclib/cc-renderimage.php:185
 msgid "Max Thumb Y"
 msgstr "Hình nhỏ thiểu Y"
 

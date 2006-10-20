@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-18 09:49-0700\n"
+"POT-Creation-Date: 2006-10-19 21:31-0700\n"
 "PO-Revision-Date: 2006-09-03 15:38-0800\n"
 "Last-Translator: deerfang <lu@deerfang.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1154,31 +1154,31 @@ msgid ""
 "done below.)"
 msgstr ""
 
-#: cclib/cc-renderflash.php:91
+#: cclib/cc-renderflash.php:96
 msgid "Play"
 msgstr ""
 
-#: cclib/cc-renderimage.php:101
+#: cclib/cc-renderimage.php:104
 msgid "Show"
 msgstr ""
 
-#: cclib/cc-renderimage.php:169
+#: cclib/cc-renderimage.php:172
 msgid "Display Thumbnails"
 msgstr "显示指图"
 
-#: cclib/cc-renderimage.php:171
+#: cclib/cc-renderimage.php:174
 msgid "Display thumbnails for image uploads"
 msgstr "显示图片上传指图"
 
-#: cclib/cc-renderimage.php:175
+#: cclib/cc-renderimage.php:178
 msgid "Max Thumb X"
 msgstr "指图最宽值"
 
-#: cclib/cc-renderimage.php:177
+#: cclib/cc-renderimage.php:180
 msgid "Leave this blank or 0 (zero) to use the image's natural size"
 msgstr "使用图像原始尺寸把此留空或填0"
 
-#: cclib/cc-renderimage.php:182
+#: cclib/cc-renderimage.php:185
 msgid "Max Thumb Y"
 msgstr "指图最高值"
 

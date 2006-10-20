@@ -32,7 +32,7 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderZip', 'OnUpload
 * @package cchost
 * @subpackage archive
 */
-class CCRenderZip
+class CCRenderZip extends CCRender
 {
     /**
     * Event handler for {@link CC_EVENT_UPLOAD_ROW}

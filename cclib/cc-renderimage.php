@@ -35,7 +35,7 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS, array( 'CCRenderImage' , 'OnGet
 * @package cchost
 * @subpackage image
 */
-class CCRenderImage
+class CCRenderImage extends CCRender
 {
 
     /**
@@ -50,10 +50,13 @@ class CCRenderImage
 
     function Show($username,$upload_id)
     {
+        /* 
         $uploads =& CCUploads::GetTable();
         $record =& $uploads->GetRecordFromID($upload_id);
         CCUpload::EnsureFiles($record,true);
         $url = $record['files'][0]['download_url'];
+        */
+        parent::Show();
         $html =<<< END
 <html>
 <body>
@@ -128,9 +131,34 @@ END;
 
         if( !empty($settings['thumbnail-x']) && !empty($settings['thumbnail-y']) )
         {
-            $maxx =  $settings['thumbnail-x'];
+
+            if ( $settings['thumbnail-constrain-y'] )
+            {
+                $thumbnailx = str_replace('px', '', $settings['thumbnail-x']);
+                $thumbnaily = str_replace('px', '', $settings['thumbnail-y']);
+
+                // right now assuming first record is image...which is bad
+                // should really not assume and show thumbnails for all
+                list($orig_width, $orig_height) = 
+                   getimagesize($record['files'][0]['local_path']);
+                // echo "$orig_width X $orig_height <br />"; 
+                $zoom_factor = $thumbnaily / $orig_height ;
+                $maxx = round($zoom_factor * $orig_width);
+                /* 
+                echo $thumbnaily . " / " . $orig_height;
+                echo "<br />";
+                echo $zoom_factor . " * " . $orig_width . " + " . $orig_width . "<br />";
+                echo $zoom_factor . " * " . $orig_width;
+                echo "<br />";
+                print_r($maxx);
+                */
+            }
+            else
+                $maxx =  $settings['thumbnail-x'];
+
             if( strpos($maxx,'px') === false )
                 $maxx .= 'px';
+
             $maxy =  $settings['thumbnail-y'];
             if( strpos($maxy,'px') === false )
                 $maxy .= 'px';
@@ -171,6 +199,12 @@ END;
                        'form_tip'   => _('Display thumbnails for image uploads'),
                        'flags'      => CCFF_POPULATE);
 
+            $fields['thumbnail-constrain-y'] = 
+               array( 'label'       => _('Constrain Thumbnail Proportion'),
+                       'formatter'  => 'checkbox',
+                       'form_tip'   => _('Constrain proportion of image to the original image\'s height (y value)'),
+                       'flags'      => CCFF_POPULATE);
+
             $fields['thumbnail-x'] = 
                array( 'label'       => _('Max Thumb X'),
                        'formatter'  => 'textedit',
@@ -183,6 +217,7 @@ END;
                        'formatter'  => 'textedit',
                        'class'      => 'cc_form_input_short',
                        'flags'      => CCFF_POPULATE );
+
         }
     }
 }
