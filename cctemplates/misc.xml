@@ -33,8 +33,8 @@ $Id$
 
 <metal:block define-macro="render_image">
     <div class="cc_image_thumbnail">
-        <div class="cc_image_thumbnail_title" tal:content="php: CC_lang('Thumbnail');"></div>
-        <img class="cc_image_thumbnail_img" src="${record/thumbnail_url}" style="${record/thumbnail_style}" />
+        <div class="cc_image_thumbnail_title"></div>
+        <img class="cc_image_thumbnail_img" src="${record/thumbnail_url}" style="${record/thumbnail_style}" alt="thumbnail" />
     </div>
 </metal:block>
 
