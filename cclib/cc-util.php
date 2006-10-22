@@ -86,6 +86,20 @@ function cc_exit()
 */
 class CCUtil
 {
+    function Strip(&$mixed) 
+    {
+        if( is_array($mixed) )
+        {
+            $keys = array_keys($mixed);
+            foreach( $keys as $key )
+                CCUtil::Strip($mixed[$key]);
+        }
+        else
+        {
+            CCUtil::StripText($mixed);
+        }
+    }
+
     function StripText(&$text)
     {
         if( is_integer($text) )
@@ -103,9 +117,8 @@ class CCUtil
             if( is_array($mixed) )
             {
                 $keys = array_keys($mixed);
-                $c = count($keys);
-                for( $i = 0; $i < $c; $i++ )
-                    $mixed[$keys[$i]] = CCUtil::StripSlash($mixed[$keys[$i]]);
+                foreach( $keys as $key )
+                    $mixed[$key] = CCUtil::StripSlash($mixed[$key]);
             }
             else
             {
@@ -113,6 +126,13 @@ class CCUtil
             }
         }
         return($mixed);
+    }
+
+    function CleanNumbers($keys)
+    {
+        if( is_array($keys) )
+            $keys = join(':',$keys);
+        return preg_split('/([^0-9]+)/',$str,0,PREG_SPLIT_NO_EMPTY);;
     }
 
     function TextToHTML($text,$convert_nl=true)
