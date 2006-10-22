@@ -132,7 +132,7 @@ class CCUtil
     {
         if( is_array($keys) )
             $keys = join(':',$keys);
-        return preg_split('/([^0-9]+)/',$str,0,PREG_SPLIT_NO_EMPTY);;
+        return preg_split('/([^0-9]+)/',$keys,0,PREG_SPLIT_NO_EMPTY);
     }
 
     function TextToHTML($text,$convert_nl=true)
