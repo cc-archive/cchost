@@ -104,7 +104,7 @@ class CCBan
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE);
             $fields['ban-email'] =
-               array(  'label'      => 'Ban Message',
+               array(  'label'      => 'Ban Email Message',
                        'form_tip'   => 'Email Message sent to owner when banned',
                        'value'      => '',
                        'formatter'  => 'textarea',
