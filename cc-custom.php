@@ -254,6 +254,18 @@ function CC_pending_pool_remix()
 }
 
 /**
+* Return the values current stored in the configs tables
+*
+* @param string $configName Name of settings (e.g. 'chart', 'licenses')
+* @return mixed Raw config value as stored in db
+*/
+function CC_get_config($configName)
+{
+    $configs =& CCConfigs::GetTable();
+    return $configs->GetConfig($configName);
+}
+
+/**
 * Return a list of 5 truncated records (the latest uploads) that match a given tag
 *
 * This method return ONLY two colums: file_page_url and upload_short_name
