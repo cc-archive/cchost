@@ -79,9 +79,11 @@ class CCRatings extends CCTable
         if( !CCUser::IsLoggedIn() )
             return true;
 
-        if( !empty($CC_GLOBALS['ratings_ban']) )
+        $configs =& CCConfigs::GetTable();
+        $chart = $configs->GetConfig('chart');
+        if( !empty($chart['ratings_ban']) )
         {
-            $banlist = CCTag::TagSplit($CC_GLOBALS['ratings_ban']);
+            $banlist = CCTag::TagSplit($chart['ratings_ban']);
             $username = CCUser::CurrentUserName();
             if( in_array($username,$banlist) )
                 return true;
@@ -130,7 +132,7 @@ class CCRating
             $items += array( 
                 'ratingschart'   => array( 'menu_text'  => 'Ratings',
                                  'menu_group' => 'configure',
-                                 'help'      => 'Configure how ratings are calculated',
+                                 'help'      => 'How ratings are calculated, who can rate, etc.',
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 10,
                                  'action' =>  ccl('admin','ratings') ),
@@ -252,14 +254,16 @@ class CCRating
     */
     function OnUploadListing(&$record)
     {
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        $ratings =& CCRatings::GetTable();
+        $configs    =& CCConfigs::GetTable();
+        $settings   = $configs->GetConfig('settings'); // local
+        $chart      = $configs->GetConfig('chart');    // global
+        $ratings    =& CCRatings::GetTable();           
+        $ratings_on = !empty($chart['ratings']) && !empty($settings['ratings']);
 
         $is_me = $record['upload_user'] == CCUser::CurrentUser();
 
         if( $is_me || 
-            empty($settings['ratings']) || 
+            !$ratings_on || 
             !empty($record['upload_banned']) || 
             $ratings->IsRateBlocked($record) )
         {
@@ -270,7 +274,7 @@ class CCRating
             $record['ok_to_rate'] = true;
         }
 
-        if( empty($settings['ratings']) || empty($record['upload_score']) )
+        if( !$ratings_on || empty($record['upload_score']) )
             return;
 
         $this->_fill_scores($record,'upload');
@@ -339,25 +343,22 @@ class CCRating
     */
     function OnGetConfigFields($scope,&$fields)
     {
+        global $CC_CFG_ROOT;
+
         if( $scope != CC_GLOBAL_SCOPE )
         {
+            $url = ccl('admin','ratings');
+            $link1 = "<a href=\"$url\">";
+            $link2 = '</a>';
+            $help = _('Allow ratings for %s virtual root. (Click %shere%s to configure global ratings)');
+
             $fields['ratings'] =
                array(  'label'      => 'Ratings',
-                       'form_tip'   => 'Allow users to rate uploads',
+                       'form_tip'   => sprintf($help,$CC_CFG_ROOT,$link1,$link2),
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE,
                     );
         }
-
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $fields['ratings_ban'] =
-                           array(  'label'      => 'Ratings Ban List',
-                                   'form_tip'   => 'Users not allowed to rate',
-                                   'formatter'  => 'textarea',
-                                   'flags'      => CCFF_POPULATE);
-        }
-
     }
 
     /**

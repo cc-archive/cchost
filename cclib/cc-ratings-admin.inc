@@ -44,6 +44,12 @@ class CCAdminRatingsForm extends CCEditConfigForm
         $url = ccl('admin','ratings','recalc');
 
         $fields = array( 
+                    'ratings' =>
+                       array(  'label'      => 'Ratings',
+                               'form_tip'   => 'Allow users to rate uploads',
+                               'formatter'  => 'checkbox',
+                               'flags'      => CCFF_POPULATE,
+                            ),
                     'bayesian-min' =>  
                        array(  'label'      => 'Chart minimum',
                                'form_tip'   => 'Mininum number of ratings an upload must have to seen in charts',
@@ -74,6 +80,11 @@ class CCAdminRatingsForm extends CCEditConfigForm
                                'form_tip'   => 'Recalculate rating during submit. NOTE: This can take a very, very (very) long time if you have a lot of uploads.',
                                'value'      => '<a href="$url" class="cc_gen_button"><span>Recalc</span></a>',
                                'formatter'  => 'checkbox',
+                               'flags'      => CCFF_POPULATE),
+                    'ratings_ban' =>
+                       array(  'label'      => 'Ratings Ban List',
+                               'form_tip'   => 'Users not allowed to rate',
+                               'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE),
             );
 
