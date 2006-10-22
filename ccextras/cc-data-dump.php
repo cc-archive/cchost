@@ -25,8 +25,9 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS, 
-    array( 'CCDataDump', 'OnMapUrls'));
+// there in the base class
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCDataDump',  'OnApiQueryFormat')); 
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCDataDump', 'OnMapUrls'));
 
 define('CC_FEED_DATADUMP', 'datadump');
 
@@ -34,7 +35,7 @@ define('CC_FEED_DATADUMP', 'datadump');
 * XML Feed generator for xml format for audio
 *
 * NOTE: Kill the cache for the menu if you are adding new menu items:
-* http://cchost.localhost/?ccm=/media/admin/menu/killcache
+* http://cchost.localhost/?update=1
 */
 class CCDataDump extends CCFeed
 {
@@ -48,9 +49,13 @@ class CCDataDump extends CCFeed
     * @param string $feed_url The URL that represents this result set 
     */
     function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
-                                     $cache_type = CC_FEED_DATADUMP)
+                                     $cache_type = CC_FEED_DATADUMP, $sub_title='')
     {
+
         global $CC_GLOBALS;
+
+        if( empty($sub_title) )  // backwords compat
+            $sub_title = $tagstr;
 
         $configs         =& CCConfigs::GetTable();
         $template_tags   = $configs->GetConfig('ttag');
@@ -59,20 +64,28 @@ class CCDataDump extends CCFeed
         $args = $CC_GLOBALS;
         $args += $template_tags;
 
-        if( empty($tagstr) )
+        if( empty($feed_url) )
         {
             $args['feed_url']            = cc_get_root_url();
+        }
+        else
+        {
+            $args['feed_url'] = $feed_url;
+        }
+
+        if( empty($sub_title) )
+        {
             $args['channel_title']       = $site_title;
             $args['feed_subject']        = $site_title;
         }
         else
         {
-            $args['feed_url'] = $feed_url;
-            $args['channel_title'] = "$site_title ($tagstr)";
-            $args['feed_subject'] = "$site_title ($tagstr)";
+            $args['channel_title'] = "$site_title ($sub_title)";
+            $args['feed_subject'] = "$site_title ($sub_title)";
         }
 
         $args['channel_description'] = utf8_encode($this->_cct($template_tags['site-description']));
+        $args['feed_url'] = htmlentities($args['feed_url']);
 
         if( empty($records) )
         {
@@ -105,6 +118,9 @@ class CCDataDump extends CCFeed
                 $format_info = 
                  &$args['feed_items'][$i]['files'][$j]['file_format_info'];
 
+                if( empty($format_info['ch']) )
+                    $format_info['ch'] = '';
+
                 switch ( $format_info['ch'] )
                 {
                     case 'mono':
@@ -118,7 +134,15 @@ class CCDataDump extends CCFeed
                             $format_info['ch'];
                 }
 
-                if ( $format_info['sr'] )
+                if( empty($format_info['br']) )
+                    $format_info['br'] = '';
+
+                if( empty($format_info['ps']) )
+                    $format_info['ps'] = '0:0';
+
+                if( empty($format_info['sr']) )
+                    $format_info['sr_num'] = '';
+                else 
                     $format_info['sr_num'] = 
                         str_replace('k', '', $format_info['sr']);
             }
@@ -131,7 +155,7 @@ class CCDataDump extends CCFeed
 
         $xml = $template->SetAllAndParse( $args );
 
-        if( $this->_is_caching_on() && empty($records) && !empty($tagstr) )
+        if( !empty($records) && !empty($tagstr) )
             $this->_cache($xml,$cache_type,$tagstr);
 
         $this->_output_xml($xml);

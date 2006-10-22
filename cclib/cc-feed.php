@@ -19,7 +19,7 @@
 */
 
 /**
- * Base module for generating feeds
+ * Base module for generating feeds and handling generic feed events
  *
  * @package cchost
  * @subpackage api
@@ -31,6 +31,10 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigFields') );
+CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCFeed',  'OnUploadDelete'));
+CCEvents::AddHandler(CC_EVENT_DELETE_FILE,        array( 'CCFeed',  'OnFileDelete'));
+CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCFeed',  'OnUploadDone'));
+CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,        array( 'CCFeed',  'OnRenderPage'));
 
 /**
  * The number of items in a feed.
@@ -58,7 +62,7 @@ define ( 'CC_FEED_DEFAULT_TAG', 'audio' );
 //define('CC_FEED_CACHE_ON', true);
 
 /**
- * Abstract class to be used for generating feeds.
+ * Bass class to be used for generating feeds.
  *
  * @package cchost
  * @subpackage api
@@ -87,6 +91,10 @@ class CCFeed
     var $_dump_file_name; 
 
     // No default constructor
+
+    //---------------------------
+    // EVENT HANDLERS 
+    //---------------------------
 
     /**
      * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
@@ -142,6 +150,65 @@ class CCFeed
         }
     }
 
+    //
+    // Derived class call here, otherwise we'd lose the 'this' pointer
+    //
+    function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
+    {
+        if( $args['format'] != $this->_feed_type )
+            return;
+
+        if( empty($args['feed_url']) )
+        {
+            $qstring = '';
+            $amp = '';
+            foreach( $args as $K => $V )
+            {
+                if( !empty($V) )
+                    $qstring .= $amp . $K . '=' . $V;
+                $amp = '&';
+            }
+            $args['feed_url'] = url_args( ccl('api','query'), $qstring );
+        }
+
+        if( !empty($args['ids']) )
+        {
+            $ids = $args['ids'];
+            $st[] = $args['sub_title'];
+            $st[] = dechex(crc32(is_array( $ids ) ? join(';',$ids) : $ids));
+            $sub_title = join(' ', $st);
+        }
+        else if( empty($args['sub_title']) )
+        {
+            if( $args['remixesof'] )
+                $sub_title = sprintf( _('Remixes of %s'), $args['remixesof'] );
+            elseif( $args['remixedby'] )
+                $sub_title = sprintf( _('Remixed by %s'), $args['remixedby'] );
+            elseif( $args['tags'] )
+                $sub_title = $args['tags'];
+            else
+                $sub_title = '';
+        }
+
+        if( !empty($sub_title) )
+            $args['sub_title'] = $sub_title;
+
+        if( !empty($args['caller_feed']) )
+        {
+            $this->SetIsDump( $args['caller_feed']->GetIsDump() );
+            $this->SetDumpFileName( $args['caller_feed']->GetDumpFileName() );
+        }
+
+        $this->PrepRecords($records);
+        // this call exits the session:
+        $this->GenerateFeedFromRecords( $records, 
+                                        $args['tags'], 
+                                        $args['feed_url'],
+                                        $this->_feed_type,
+                                        empty($args['sub_title']) ? '' : $args['sub_title'] );
+    }
+
+
     /**
      * Internal: Checks to see if the cache is on or off.
      *
@@ -150,7 +217,10 @@ class CCFeed
     function _is_caching_on()
     {
         global $CC_GLOBALS;
-        return( !empty($CC_GLOBALS['feed-cache-flag']) );
+
+        return !$this->_is_full_dump() && 
+                !empty($CC_GLOBALS['feed-cache-flag']) 
+              ;
     }
 
     /**
@@ -210,61 +280,6 @@ class CCFeed
         }
     }
 
-    /**
-     * Internal: Generate and return a feed-ready set of records for a given 
-     * tag query
-     *
-     * @param string $tagstr Tag query
-     * @returns string $xml Feed text
-     */
-    function & _get_tag_data($tagstr)
-    {
-        // sometimes (like for REST API) we just want the channel info
-
-        if( empty($tagstr) )
-        {
-            $a = array();
-            return $a;
-        }
-
-        $users =& CCUsers::GetTable();
-        $username = '';
-        $tags = CCTag::TagSplit($tagstr);
-        foreach( $tags as $tag )
-        {
-            $where['user_name'] = $tag;
-            if( $users->CountRows($where) == 1 )
-            {
-                $username = $tag;
-                $tags = array_diff( $tags, array($username) );
-                break;
-            }
-        }
-
-        $uploads =& CCUploads::GetTable();
-
-        if ( !$this->_is_full_dump() )
-            $uploads->SetOffsetAndLimit(0,CC_FEED_NUM_ITEMS);  
-
-        $uploads->SetOrder('upload_date','DESC');
-
-        if( !empty($tags) )
-        {
-            $tagstr = implode(',',$tags);
-            $uploads->SetTagFilter($tagstr,'all');
-        }
-
-        if( empty($username) )
-            $where = array();
-
-        $records =& $uploads->GetRecords($where);
-
-        //CCDebug::PrintVar($tags);
-
-        CCFeed::PrepRecords($records);
-
-        return $records;
-    }
 
     /**
      * Returns true is user is requesting an entire dump
@@ -275,7 +290,7 @@ class CCFeed
      */
     function _is_full_dump()
     {
-        return $this->_is_dump || (CCUser::IsAdmin() && !empty($_REQUEST['all']) && ($_REQUEST['all'] == 1));
+        return $this->_is_dump;
     }
 
     /**
@@ -288,92 +303,6 @@ class CCFeed
         return( preg_replace('&[^a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]&','',$str ) );
     }
 
-    /**
-     * @access private
-     */
-    function _resort_records(&$records,&$sort_order)
-    {
-        if( !empty($sort_order) )
-        {
-            $sorted = array();
-            $count = count($records);
-            for( $i = 0; $i < $count; $i++ )
-            {
-                $sorted[ $sort_order[ $records[$i]['upload_id'] ] ] = $records[$i];
-            }
-            $records = $sorted;
-            $sorted = null;
-            ksort($records);
-        }
-    }
-
-    /**
-     * Internal helper to generate XML from tags
-     *
-     * This method with print XML to the browser.
-     *
-     * @param string $template Relative path to template file to merge
-     * @param string $tagstr Comma seperated list tags 
-     * @param string $cache_type e.g. 'rss', 'atom', etc.
-     * @see _gen_feed_from_records
-     */
-    function _gen_feed_from_tags($template, $tagstr, $cache_type = 'rss')
-    {
-        $qstring = '';
-
-        if( empty($tagstr) )
-        {
-            if( !empty($_REQUEST['remixesof']) )
-            {
-                $username = CCUtil::StripText($_REQUEST['remixesof']);
-                if( !empty($username) )
-                {
-                    $user_id = CCUser::IDFromName($username);
-                    if( !empty($user_id) )
-                    {
-                        $remixes =& CCRemixSources::GetTable();
-                        $records =& $remixes->GetRemixesOf($user_id);
-                        if( !empty($records) )
-                            $this->PrepRecords($records);
-                        $qstring = '?remixesof=' . $username;
-                        $tagstr = sprintf(_('Remixes of %s'), $username);
-                    }
-                }
-            }
-            elseif( !empty($_REQUEST['remixedby']) )
-            {
-                $username = CCUtil::StripText($_REQUEST['remixedby']);
-                if( !empty($username) )
-                {
-                    $user_id = CCUser::IDFromName($username);
-                    if( !empty($user_id) )
-                    {
-                        $remixes =& CCRemixes::GetTable();
-                        $records =& $remixes->GetRemixedBy($user_id);
-                        if( !empty($records) )
-                            $this->PrepRecords($records);
-                        $qstring = '?remixedby=' . $username;
-                        $tagstr = sprintf(_('Uploads remixed by %s'), $username);
-                    }
-                }
-            }
-        }
-        else
-        {
-            $tagstr = str_replace(' ',',',urldecode($tagstr));
-            $this->_check_cache($cache_type,$tagstr);
-        }
-
-        if( empty($records) )
-            $records =& $this->_get_tag_data($tagstr);
-
-        $this->_gen_feed_from_records( $template,
-                                       $records,
-                                       $tagstr,
-                                       ccl('tags',$tagstr) . $qstring,
-                                       $cache_type);
-    }
-
 
     /**
      * Internal helper to generate XML from a set of records
@@ -382,10 +311,16 @@ class CCFeed
      *
      * @param string $template Relative path to template file to merge
      * @param array &$records Array of records to merge with template
+     * @param string $records Array of records to merge with template
      * @param string $feed_url URL that represents this feed
      * @param string $cache_type e.g. 'rss', 'atom', etc.
      */
-    function _gen_feed_from_records($template,&$records,$tagstr,$feed_url,$cache_type)
+    function _gen_feed_from_records( $template, 
+                                     &$records,
+                                      $tagstr,
+                                      $feed_url,
+                                      $cache_type,
+                                      $feed_sub_title='')
     {
         global $CC_GLOBALS;
 
@@ -397,20 +332,29 @@ class CCFeed
         $args += $template_tags;
 
         $args['root_url'] = cc_get_root_url();
-        $args['raw_feed_url'] = cc_get_root_url() . $_SERVER['REQUEST_URI'];
+        $args['raw_feed_url'] = htmlentities(cc_get_root_url() . $_SERVER['REQUEST_URI']);
 
-        if( empty($tagstr) )
+        if( empty($feed_sub_title) )
         {
-            $args['feed_url']            = $args['root_url'];
-            $args['channel_title']       = $site_title;
-            $args['feed_subject']        = $site_title;
+            $args['channel_title'] = 
+            $args['feed_subject']  = $site_title;
+        }
+        else
+        {
+            $args['channel_title'] = 
+            $args['feed_subject'] = "$site_title ($feed_sub_title)";
+        }
+
+        if( empty($feed_url) )
+        {
+            $args['feed_url'] = $args['root_url'];
         }
         else
         {
             $args['feed_url'] = $feed_url;
-            $args['channel_title'] = "$site_title ($tagstr)";
-            $args['feed_subject'] = "$site_title ($tagstr)";
         }
+        
+        $args['feed_url'] = htmlentities($args['feed_url']);
 
         $args['channel_description'] = utf8_encode($this->_cct($template_tags['site-description']));
 
@@ -437,7 +381,11 @@ class CCFeed
         $template = new CCTemplate( $tfile, false ); // false means xml mode
         $xml = $template->SetAllAndParse( $args );
         if( !empty($records) && !empty($tagstr) )
+        {
+            // this will exit the session if feed is 
+            // in the cache.
             $this->_cache($xml,$cache_type,$tagstr);
+        }
 
         $this->_output_xml($xml);
         // testing against user agent tests if we are through web browser
@@ -475,9 +423,6 @@ class CCFeed
                 fwrite($f,$xml);
                 fclose($f);
                 chmod($dump_file_path,cc_default_file_perms());
-                if (isset($_REQUEST['all']))
-                    echo sprintf(_('%s written to server'), 
-                                 $dump_file_path);
                 return true;
             }
         }
@@ -495,8 +440,6 @@ class CCFeed
     */
     function PrepRecords(&$records)
     {
-        $remix_api = new CCRemix();
-
         $keys = array_keys($records);
         $count = count($keys);
         for( $i = 0; $i < $count; $i++ )
@@ -533,9 +476,25 @@ class CCFeed
             $row['upload_name']        = utf8_encode($this->_cct($row['upload_name']));
             $row['user_real_name']     = utf8_encode($this->_cct($row['user_real_name']));
 
+            $remix_api = new CCRemix();
             $remix_api->OnUploadListing( $row );
         }
 
+    }
+
+    function SetQueryOptions($options)
+    {
+        $this->_query_opts = $options;
+    }
+
+    function GetQueryOptions()
+    {
+        return isset($this->_query_opts) ? $this->_query_opts : array();
+    }
+
+    function GetLimit()
+    {
+        return CC_FEED_NUM_ITEMS;
     }
 
     /** 
@@ -546,22 +505,48 @@ class CCFeed
      */
     function GenerateFeed ($tags='')
     {
-        $tags = str_replace(' ',',',urldecode($tags));
+        $query = new CCQuery();
+        $args['tags'] = $tags;
+        $args['limit']  = $this->GetLimit();
+        $args = $query->ProcessUriArgs($args);
+
+        $type = $this->GetFeedType();
         // check_cache already checks to see if it is on
-        $this->_check_cache($this->GetFeedType(),$tags);
-        $qstring = '';
+        // this will exit session if found
+        $this->_check_cache($type,$args['tags']);
+        
+        $args['format']   = $type;
+        $args['feed_url'] = ccl('feed',$type,$tags);
 
-        /*
-        if( empty($tags) )
-            $tags = CC_FEED_DEFAULT_TAG;
-        else
-            $tags .= ',' . CC_FEED_DEFAULT_TAG;
-        */
-        $records =& $this->_get_tag_data($tags);
+        $args = array_merge( $args, $this->GetQueryOptions() );
 
-        return ( $this->GenerateFeedFromRecords( $records,
-                                                 $tags,
-                                                 ccl('tags',$tags) . $qstring));
+        if( empty($tags) && !$this->IsDump() )
+        {
+            // this is for backwards compat with <3.1 in which
+            // the sample pool api would call this method with
+            // an empty tagstr on purpose to generate an empty
+            // RSS header with channel info
+            // 
+            $fake_recs = array();
+
+            // So we pretend like we've been called back from the
+            // query engine...
+
+            // this method will exit the session
+            $this->OnApiQueryFormat( $fake_recs, $args, $result, $result_mime );
+        }
+
+        $args['caller_feed'] = $this;
+
+        $query->Query($args);
+    }
+
+    /**
+    * @deprecated Use GenerateFeed instead
+    */
+    function GenerateFeedFromTags($tags='')
+    {
+        $this->GenerateFeed($tags);
     }
 
     /**
@@ -610,6 +595,56 @@ class CCFeed
     function GetFeedType ()
     {
         return $this->_feed_type;
+    }
+
+    /**
+    * Adds the cute orange buttons to the page
+    *
+    * DO NOT CALL THIS from a CC_EVENT_ADD_FEED_LINKS event handler
+    * That will call recursion. Feeds should call CCPage::AddLink
+    * to add their links. Everybody else calls this.
+    *
+    * @param string $tagstr Tags to add to hrefs of links
+    */
+    function AddFeedLinks($tagstr,$qstring='',$help_text='')
+    {
+        CCFeed::_inner_add_feed_links($tagstr,$qstring,$help_text);
+        global $CC_GLOBALS;
+        $CC_GLOBALS['page-has-feed-links'] = 1;
+    }
+
+    function _inner_add_feed_links($tagstr,$qstring='',$help_text='')
+    {
+        CCEvents::Invoke( CC_EVENT_ADD_FEED_LINKS, array( $tagstr, $qstring, $help_text) );
+    }
+
+    /**
+    * Event handler for {@link CC_EVENT_RENDER_PAGE}
+    *
+    */
+    function OnRenderPage()
+    {
+        global $CC_GLOBALS;
+        $skip = array_key_exists('page-has-feed-links',$CC_GLOBALS) &&
+                    $CC_GLOBALS['page-has-feed-links'] == 1;
+
+        // If our AddLinks was already called directly (perfectly
+        // reasonable) then we don't want this to happen
+
+        if( $skip )
+            return;
+
+        // If our AddLinks was NOT already called directly then
+        // if the admin has a 'default feed' they to display
+
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('settings');
+        if( !empty($settings['default-feed-tags']) )
+        {
+            CCFeed::_inner_add_feed_links($settings['default-feed-tags'],'',
+                                           _('Syndicate'));
+        }
+
     }
 
     /**

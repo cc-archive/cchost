@@ -32,11 +32,13 @@ if( !defined('IN_CC_HOST') )
 */
 define('RADIO_PROMO_INTERVAL', 4); 
 
+define('CC_MAX_PLAYLIST', 100 );
+
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,     array( 'CCRenderAudio', 'OnUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,      array( 'CCRenderAudio', 'OnUploadRow'));
-//CCEvents::AddHandler(CC_EVENT_CONTEST_ROW,     array( 'CCRenderAudio', 'OnContestRow'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,        array( 'CCRenderAudio', 'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_LISTING_RECORDS, array( 'CCRenderAudio', 'OnListingRecords')); 
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT, array( 'CCRenderAudio', 'OnApiQueryFormat')); 
 
 /**
 */
@@ -63,56 +65,12 @@ class CCRenderAudio extends CCRender
 
     function StreamPage()
     {
-        $sort_order = array();
-
-        if( !empty($_REQUEST['ids']) )
-        {
-            $ids = $_REQUEST['ids'];
-            $ids = explode(';',$ids);
-            $ids = array_unique($ids);
-            $where_id = array();
-            foreach($ids as $id)
-                $where_id[] = " (upload_id = $id) ";
-            $where = implode('OR',$where_id);
-            $i = 0;
-            foreach($ids as $id)
-            {
-                $sort_order[$id] = $i++;
-                $where_id[] = " (upload_id = $id) ";
-            }
-            $where = implode('OR',$where_id);
-            if( empty($_REQUEST['nosort']) )
-                $sort_order = array();
-            $tags = '';
-        }
-        elseif( !empty($_REQUEST['tags']) )
-        {
-            $tags = CCUtil::StripText($_REQUEST['tags']);
-            $tags = str_replace(' ',',',urldecode($tags));
-            if( empty($tags) )
-                return;
-            $where = '';
-        }
-        else
-        {
-            return;
-        }
-
-        $this->_stream_files($where,$tags,'',$sort_order);
+        $this->_stream_files();
     }
 
     function StreamRadio()
     {
-        if( !empty($_REQUEST['tags']) )
-        {
-            $tags = CCUtil::StripText($_REQUEST['tags']);
-            $tags = str_replace(' ',',',urldecode($tags));
-        }
-
-        if( empty($tags) )
-            return;
-
-        $this->_stream_files('',$tags,'',null,true);
+        $this->_stream_files('',true);
     }
 
     /**
@@ -122,41 +80,11 @@ class CCRenderAudio extends CCRender
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'contest/streamsource', array('CCRenderAudio', 'StreamContestSource'),  CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'contest/stream',       array('CCRenderAudio', 'StreamContest'),        CC_DONT_CARE_LOGGED_IN );
         CCEvents::MapUrl( 'files/stream',         array('CCRenderAudio', 'StreamFiles'),          CC_DONT_CARE_LOGGED_IN );
         CCEvents::MapUrl( 'stream/page',          array('CCRenderAudio', 'StreamPage'),           CC_DONT_CARE_LOGGED_IN );
         CCEvents::MapUrl( 'stream/radio',         array('CCRenderAudio', 'StreamRadio'),          CC_DONT_CARE_LOGGED_IN );
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_CONTEST_ROW}
-    *
-    * @param array &$record Contest row to massage before display
-    */
-    function OnContestRow(&$record)
-    {
-        $contest = $record['contest_short_name'];
-
-        if( $this->_contest_has_audio($record['contest_id'],CCUD_CONTEST_ALL_SOURCES) )
-		{
-			$record['render_source_link'] = 
-					 array(  'href'     => ccl( 'contest', 'streamsource', $contest . '.m3u' ),
-							 'title'    => _('Stream Sources'),
-							 'id'       => 'cc_streamfile' );
-		}
-
-        if( $this->_contest_has_audio($record['contest_id'],CCUD_CONTEST_ENTRY ) )
-		{
-			if( CCUser::IsAdmin() || $record['contest_can_browse_entries'] )
-			{
-				$record['render_entries_link'] = 
-					 array(  'title'  => _('Stream Entries'),
-							 'id'         => 'cc_streamfile',
-							 'href'     => ccl( 'contest', 'stream', $contest. '.m3u' ) );
-			}
-		}
-    }
 
     /**
     * Event handler for {@link CC_EVENT_UPLOAD_ROW}
@@ -220,37 +148,11 @@ class CCRenderAudio extends CCRender
                          'action'     => $link['url'] );
     }
 
-
-    function StreamContestSource($contest_with_m3u)
-    {
-        list( $name ) = explode('.',$contest_with_m3u);
-        $this->_stream_contest_files($name,CCUD_CONTEST_ALL_SOURCES);
-    }
-
-    function StreamContest($contest_with_m3u)
-    {
-        list( $contest_short_name ) = explode('.',$contest_with_m3u);
-        $contests =& CCContests::GetTable();
-        $record =& $contests->GetRecordFromShortName($contest_short_name);
-        if( CCUser::IsAdmin() || $record['contest_can_browse_entries'] )
-            $this->_stream_contest_files($contest_short_name,CCUD_CONTEST_ENTRY);
-        else
-            CCUtil::AccessError(__FILE__,__LINE__);
-    }
-
-    function _stream_contest_files($contest_short_name,$systags)
-    {
-        $contests =& CCContests::GetTable();
-        $contest_id = $contests->GetIDFromShortName($contest_short_name);
-        $where['upload_contest'] = $contest_id;
-        $this->_stream_files($where,$systags);
-    }
-
     function StreamFiles($user,$upload_id_with_m3u)
     {
         list( $upload_id ) = explode('.',$upload_id_with_m3u);
         $where['upload_id'] = $upload_id;
-        $this->_stream_files($where,'');
+        $this->_stream_files($where);
     }
 
     function _contest_has_audio($contest_id,$tag)
@@ -267,87 +169,68 @@ class CCRenderAudio extends CCRender
         return count($records) > 0 ;
     }
 
-    function _stream_files($where,$tags,$type='',$sort_order=array(),$isRadio = false)
+    function _clean_tags()
     {
-        if( empty($type) )
-            $type = 'all';
+        if( !empty($_REQUEST['tags']) )
+        {
+            $tags = CCUtil::StripText($_REQUEST['tags']);
+            return str_replace(' ',',',urldecode($tags));
+        }
 
-        $uploads =& CCUploads::GetTable();
-        
+        return '';
+    }
+
+    function _stream_files($where = '',$isRadio = false)
+    {
+        $args['where'] = $where;
         if( $isRadio )
         {
-            $uploads->SetOrder('RAND()');
-            $uploads->SetTagFilter('site_promo');
-            $promos = $uploads->GetRecords('');
-            if( empty($promos) )
-            {
-                $isRadio = false;
-            }
-            else
-            {
-                $promo_count = count($promos);
-                $promo = 0;
-                $pgap = RADIO_PROMO_INTERVAL;
-            }
+            $args['promo_tag'] = 'site_promo';
+            $args['rand'] = 1;
         }
-        elseif( empty($_REQUEST['nosort']) )
-        {
-            $uploads->SetOrder('upload_date','DESC');
-        }
+        $args['format'] = 'm3u';
+        $query = new CCQuery();
+        $args = $query->ProcessUriArgs($args);
+        list( $results, $mime ) = $query->Query($args);
+        header("Content-type: $mime");
+        print $results;
+        exit;
+    }
 
-        if( $tags )
-            $tags .= ',audio';
-        else
-            $tags = 'audio';
+    function OnApiQueryFormat( &$records, $args, &$results, &$results_mime )
+    {
+        if( $args['format'] != 'm3u' )
+            return;
 
-        $uploads->SetTagFilter($tags,$type);
-        $records =& $uploads->GetRecords($where);
-        CCFeeds::_resort_records($records,$sort_order);
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('remote_files');
+        $remoting = !empty($settings['enable_streaming']);
+
         $streamfile = '';
-        $count = count($records);
-        for( $i = 0; $i < $count; $i++ )
+        $n = count($records);
+        for( $i = 0; $i < $n; $i++ )
         {
-            if( $isRadio && ( !$i || ($i % $pgap == 0) ) )
-            {
-                $p = $promos[ $promo++ % $promo_count ];
-                CCUpload::EnsureFiles($p,true);
-                $url = $this->_get_streamable_url($p,0);
-                $streamfile .=  $url. "\n";
-            }
-            CCUpload::EnsureFiles($records[$i],true);
-            $fcount = count($records[$i]['files']);
-            $files =& $records[$i]['files'];
-            for( $n = 0; $n < $fcount; $n++)
-                if( $files[$n]['file_format_info']['media-type'] == 'audio' )
+            $R =& $records[$i];
+            $fcount = count($R['files']);
+            $files =& $R['files'];
+            for( $fn = 0; $fn < $fcount; $fn++)
+                if( $files[$fn]['file_format_info']['media-type'] == 'audio' )
                     break;
-            if( $n == $fcount )
+            if( $fn == $fcount )
                 continue; // this really never should happen
-            $surl = $this->_get_streamable_url($records[$i],$n);
+
+            if( $remoting && !empty($R['files'][$fn]['file_extra']['remote_url']) )
+                $surl = $R['files'][$fn]['file_extra']['remote_url'];
+            else
+                $surl = $R['files'][$fn]['download_url'];
+
             $url = str_replace(' ', '%20', $surl );
             $streamfile .=  $url . "\n";
         }
 
-        header("Content-type: audio/x-mpegurl");
-        print($streamfile);
-        exit;
+        $results = $streamfile;
+        $results_mime = 'audio/x-mpegurl';
     }
-
-    function _get_streamable_url(&$R,$n)
-    {
-        if( !empty($R['files'][$n]['file_extra']['remote_url']) )
-        {
-            $configs =& CCConfigs::GetTable();
-            $settings = $configs->GetConfig('remote_files');
-            if( !empty($settings['enable_streaming']) )
-            {
-                $url = $R['files'][$n]['file_extra']['remote_url'];
-                return $url;
-            }
-        }
-        
-        return $R['files'][$n]['download_url'];
-    }
-
 }
 
 

@@ -31,6 +31,9 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCFeedsXSPF', 'OnMapUrls'));
 
+// implemented in the base class
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsXSPF', 'OnApiQueryFormat')); 
+
 define('CC_FEED_XSPF', 'xspf');
 
 /**
@@ -43,10 +46,18 @@ class CCFeedsXSPF extends CCFeed
 {
     var $_feed_type = CC_FEED_XSPF;
 
+    function GetMaxItems()
+    {
+        return 100; // eh, why not
+    }
+
     function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
-                                     $cache_type= CC_FEED_XSPF)
+                                     $cache_type= CC_FEED_XSPF,$sub_title='')
     {
         global $CC_GLOBALS;
+
+        if( empty($sub_title) )  // backwords compat
+            $sub_title = $tagstr;
 
         $configs         =& CCConfigs::GetTable();
         $template_tags   = $configs->GetConfig('ttag');
@@ -56,21 +67,30 @@ class CCFeedsXSPF extends CCFeed
         $args += $template_tags;
 
         $args['root_url'] = cc_get_root_url();
-        $args['raw_feed_url'] = cc_get_root_url() . $_SERVER['REQUEST_URI'];
+        $args['raw_feed_url'] = htmlentities(cc_get_root_url() . $_SERVER['REQUEST_URI']);
 
 
-        if( empty($tagstr) )
+        if( empty($feed_url) )
         {
-            $args['feed_url']            = cc_get_root_url();
+            $args['feed_url'] = cc_get_root_url();
+        }
+        else
+        {
+            $args['feed_url'] = $feed_url;
+        }
+
+        if( empty($sub_title) )
+        {
             $args['channel_title']       = $site_title;
             $args['feed_subject']        = $site_title;
         }
         else
         {
-            $args['feed_url'] = $feed_url;
-            $args['channel_title'] = "$site_title ($tagstr)";
-            $args['feed_subject'] = "$site_title ($tagstr)";
+            $args['channel_title'] = "$site_title ($sub_title)";
+            $args['feed_subject'] = "$site_title ($sub_title)";
         }
+
+        $args['feed_url'] = htmlentities($args['feed_url']);
 
         $args['channel_description'] = utf8_encode($this->_cct($template_tags['site-description']));
 
@@ -90,49 +110,6 @@ class CCFeedsXSPF extends CCFeed
         // to build a registration link
         $args['home_registration'] = $args['home-url'] . 'register';
 
-        for ($i=0; $i < count($args['feed_items']); $i++)
-        {
-            // make up a release date YYYYMMDD
-            if ( $args['feed_items'][$i]['upload_date'] )
-                $args['feed_items'][$i]['upload_date_fmt'] =
-                    date("Ymd", 
-                        strtotime($args['feed_items'][$i]['upload_date']));
-
-
-            for ($j=0; $j < count($args['feed_items'][$i]['files']); $j++)
-            {
-                $file = &$args['feed_items'][$i]['files'][$j];
-                $format_info = 
-                 &$args['feed_items'][$i]['files'][$j]['file_format_info'];
-
-                if( empty($format_info['ch']) )
-                {
-                    $format_info['ch_num'] = 0;
-                }
-                else
-                {
-                    switch ( $format_info['ch'] )
-                    {
-                        case 'mono':
-                            $format_info['ch_num'] = 1;
-                            break;
-                        case 'stereo':
-                            $format_info['ch_num'] = 2;
-                            break;
-                        default:
-                            $format_info['ch_num'] = 
-                                $format_info['ch'];
-                    }
-                }
-
-                if ( !empty($format_info['sr']) )
-                    $format_info['sr_num'] = 
-                        str_replace('k', '', $format_info['sr']);
-            }
-        }
-
-        // CCDebug::PrintVar( $args );
-
         $template = new CCTemplate( 'xspf_10.xml', false ); // false means xml mode
 
         $xml = $template->SetAllAndParse( $args );
@@ -142,10 +119,6 @@ class CCFeedsXSPF extends CCFeed
 
         $this->_output_xml($xml);
     	exit;
-
-
-        // $this->_gen_feed_from_records('xspf_10.xml',$records,$tagstr,
-        //                              $feed_url,$cache_type);
     }
 
     /**

@@ -34,21 +34,27 @@
  * TODO: Should probably have more error output for bad CLI options.
  */
 
+if( file_exists('../cclib') )
+    chdir('..');
+
 // The current feed types available.
-$feed_types = array('datadump', 'atom', 'rss');
-// chdir('..');
+$feed_types = array('datadump', 'atom', 'rss', 'xspf');
+
+
 /**
  * Prints usage help options.
  */
-function print_help ()
+function print_help ($opts=array(),$args='')
 {
     global $feed_types;
     foreach ($feed_types as $type) {
         $feed_types_str .= "$type ";
     }
 
+    $all_types = join(',',$feed_types);
+
     echo         "\nThis app dumps listings of tagged content to files in \n",
-                 "different feed formats (rss, atom, etc).\n\n",
+                 "different feed formats ($all_types).\n\n",
          sprintf("Usage: \n\tphp %s [OPTION]...\n\n", $_SERVER['argv'][0]),
                  "Possible Arguments:\n\n",
                  "  -h\t\t\tGet help for this commandline program.\n",
@@ -68,6 +74,13 @@ function print_help ()
          sprintf("\tphp %s -t audio,sample -a\n",
                  $_SERVER['argv'][0]),
                  "\n";
+
+    if( $opts )
+    {
+        print_missing($opts,$args);
+        exit(0);
+    }
+            
     exit(1);
 }
 
@@ -77,23 +90,16 @@ function print_help ()
  */
 function dump_feed ($feed_type, $dump_file_name, $tag_str)
 {
-    switch ($feed_type)
+    $dumper = new CCFeed();
+    $dumper->_feed_type = $feed_type;
+    $dumper->SetIsDump(true);
+    if( $dump_file_name )
     {
-        case 'atom':
-            $dataDump = new CCFeedsAtom();
-        break;
-        case 'rss':
-            $dataDump = new CCFeeds();
-        break;
-        case 'datadump':
-        default: // default is FEED_CUSTOM
-            $dataDump = new CCDataDump();
-        break;
+        $dumper->SetDumpFileName($dump_file_name);
     }
-
-    $dataDump->SetIsDump(true);
-    $dataDump->SetDumpFileName($dump_file_name);
-    $dataDump->GenerateFeed($tag_str);
+    $opts['limit'] = 0;
+    $dumper->SetQueryOptions($opts);
+    $dumper->GenerateFeed($tag_str);
 }
 
 /**
@@ -101,20 +107,21 @@ function dump_feed ($feed_type, $dump_file_name, $tag_str)
  */
 function dump_feeds_all($tag_str = '')
 {
-    // these are all the current feed types
-    $dumpAtom     = new CCFeedsAtom();
-    $dumpRSS      = new CCFeeds();
-    $dumpDataDump = new CCDataDump();
-
-    // this way can iterate through any future settings we need
-    foreach (array(&$dumpAtom, &$dumpRSS, &$dumpDataDump) as $dump)
-    {
-        $dump->SetIsDump(true);
-        $dump->GenerateFeed($tag_str);
-    }
+    global $feed_types;
+    foreach( $feed_types as $feed_type)
+        dump_feed($feed_type,'',$tag_str);
 }
 
-
+function print_missing($opt, $valid)
+{
+    foreach( $valid as $V )
+    {
+        if( empty($opt[$V]) )
+            print("\n\n ===> Missing '$V' parameter\n\n");
+        elseif( empty($V) )
+            print("\n\n ===> Missing value for '$V' parameter\n\n");
+    }
+}
 
 // The following is necessary to cycle through startup of the sites
 // engine.
@@ -122,52 +129,41 @@ function dump_feeds_all($tag_str = '')
 
 error_reporting(E_ALL & ~E_NOTICE);
 
-if( !file_exists('cc-config-db.php') )
-    die('<html><body>ccHost has not been properly installed</body></html>');
-
-if( file_exists('ccadmin') )
-    die('<html><body>ccHost Installation is not complete.</body></html>');
-
-if( !function_exists('gettext') )
-    require_once('ccextras/cc-no-gettext.inc');
-
 define('IN_CC_HOST', true);
-
-//if( file_exists('.cc-ban.txt') )        // this file is written by doing
-//    require_once('.cc-ban.txt');        // per-user account management...
-
 require_once('cclib/cc-debug.php');
-
 CCDebug::Enable(false);                 // set this to 'true' if you are a
-                                        // developer or otherwise customizing
-                                        // the code. 
-
-CCDebug::LogErrors( E_ALL & ~E_NOTICE );  // Log errors to a file during beta
-                                          // this will help ccHost developers
-                                          // when things go wrong on your site
-
-CCDebug::InstallErrorHandler(true);     
-
+if( !function_exists('gettext') )
+   require_once('ccextras/cc-no-gettext.inc');  
 require_once('cc-includes.php');
-require_once('cc-custom.php');
-
 CCConfigs::Init();                      // config settings established here
-CCLogin::InitCurrentUser();             // user logged in 
-CCEvents::Invoke(CC_EVENT_APP_INIT);    // Let all modules know it's safe to 
-                                        // get in the waters
+$cc_extras_dirs = 'ccextras';
+include('cc-inc-extras.php');
+CCEvents::Invoke(CC_EVENT_APP_INIT);
 
-CCEvents::PerformAction();              // process incoming url 
+/**
+* here is some sample code that could be used on a Windows
+* system where 'getopt' is not implemented -- the only trick
+* is that you disable phptal/libs/PEAR.php in order to avoid
+* conflicts
 
-// CCPage::Show();                         // show the resulting page
+if( !function_exists('getopt') )
+{
+    print("\n\n ===> getopt doesn't exist, trying to find the PEAR version...\n\n");
+    @include('go-pear-bundle/Getopt.php');
+    if( !class_exists('Console_Getopt') )
+        die("\n\nnope, try putting your PEAR directory into the include path");
 
-CCDebug::InstallErrorHandler(false); 
-
-CCEvents::Invoke(CC_EVENT_APP_DONE);
-
-
-// END: of startup of site engine
-
-
+    function getopt($str)
+    {
+        global $argv;
+        list( $ropts ) = Console_Getopt::getopt($argv,$str);
+        $opts = array();
+        foreach( $ropts as $a  )
+            $opts[$a[0]] = $a[1];
+        return $opts;
+    }
+}
+*/
 
 // parse command line options
 $opt = getopt('hao:f:t:');
@@ -193,7 +189,7 @@ else if ( !empty($opt['o']) && !empty($opt['f']) && !empty($opt['t']) )
     }
     dump_feed($opt['f'],$opt['o'],$opt['t']);
 } else {
-    print_help();
+    print_help($opt, array( 'o', 'f', 't' ));
 }
 
 

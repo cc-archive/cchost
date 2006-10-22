@@ -32,7 +32,6 @@ if( !defined('IN_CC_HOST') )
 */
 require_once('cclib/cc-feedreader.php');
 
-CCEvents::AddHandler(CC_EVENT_APP_INIT, array('CCRestAPI', 'OnInitApp'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array('CCRestAPI', 'OnMapUrls'));
 
 
@@ -57,18 +56,11 @@ class CCRestAPI
         return( $url . $args );
     }
 
-    function OnInitApp()
-    {
-        $urlmap =& CCEvents::GetUrlMap();
-        if( empty( $urlmap[ ccp('api','info') ] ) )
-            CCEvents::GetUrlMap(true);
-    }
-
     function Info($feeds = null)
     {
         if( !isset($feeds) )
-            $feeds = new CCFeeds();
-        $feeds->GenerateFeedFromTags('');
+            $feeds = new CCFeedsRss();
+        $feeds->GenerateFeed('');
     }
 
     function Search()
@@ -104,8 +96,9 @@ class CCRestAPI
 
     function _get_upload_id_from_guid($guid)
     {
-        if( is_integer($guid) )
-            return($guid);
+        if( intval($guid) > 0 )
+            return $guid;
+
         if( is_string($guid) )
         {
             $guid = urldecode(CCUtil::StripText($guid));
@@ -114,7 +107,8 @@ class CCRestAPI
                 return($m[1]);
             }
         }
-        return(null);
+        
+        return null;
     }
 
     function File($guid='')
@@ -122,7 +116,7 @@ class CCRestAPI
         if( empty($guid) )
             $guid = urldecode($_REQUEST['guid']);
 
-        $feeds = new CCFeeds();
+        $feeds = new CCFeedsRSS();
 
         $upload_id = CCRestAPI::_get_upload_id_from_guid($guid);
 
@@ -131,6 +125,7 @@ class CCRestAPI
 
         $uploads =& CCUploads::GetTable();
         $record =& $uploads->GetRecordFromID($upload_id);
+
         $records = array( $record );
         $feeds->PrepRecords($records);
         $feeds->GenerateFeedFromRecords(
@@ -323,6 +318,13 @@ class CCRestAPI
         
     }
 
+    function Version()
+    {
+        header("Content-type: text/plain");
+        print '2.0';
+        exit;
+    }
+
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
@@ -337,6 +339,7 @@ class CCRestAPI
         CCEvents::MapUrl( ccp('api','isampledthis'),         array( 'CCRestAPI', 'ISampledThis'), CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( ccp('api','pools'),                array( 'CCRestAPI', 'Pools'), CC_DONT_CARE_LOGGED_IN);
         CCEvents::MapUrl( ccp('api','poolregister'),         array( 'CCRestAPI', 'PoolRegister'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('api','version'),         array( 'CCRestAPI', 'Version'), CC_DONT_CARE_LOGGED_IN);
     }
     
 }

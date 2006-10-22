@@ -66,7 +66,8 @@ require_once( 'cclib/cc-renderaudio.php' );
 require_once( 'cclib/cc-renderimage.php' );
 require_once( 'cclib/cc-renderflash.php' );
 require_once( 'cclib/cc-feed.php' );
-require_once( 'cclib/cc-feeds.php' );
+require_once( 'cclib/cc-feeds.php' );  // required for backwards compat
+require_once( 'cclib/cc-feeds-rss.php' );
 require_once( 'cclib/cc-feeds-atom.php' );
 require_once( 'cclib/cc-navigator.php' );
 require_once( 'cclib/cc-ban.php' );
@@ -77,6 +78,7 @@ require_once( 'cclib/cc-pools-ui.php' );
 require_once( 'cclib/cc-submit.php' );
 require_once( 'cclib/cc-user-admin.php' );
 require_once( 'cclib/cc-language.php' );
+require_once( 'cclib/cc-query.php' );
 
 
 ?>

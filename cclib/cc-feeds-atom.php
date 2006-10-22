@@ -30,6 +30,10 @@ if( !defined('IN_CC_HOST') )
 
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCFeedsAtom', 'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_ADD_FEED_LINKS,     array( 'CCFeedsAtom',  'OnAddFeedLinks')); 
+
+// this is in the base class
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsAtom', 'OnApiQueryFormat')); 
 
 define('CC_FEED_ATOM', 'atom');
 
@@ -45,16 +49,27 @@ class CCFeedsAtom extends CCFeed
 
 
     function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
-                                     $cache_type= CC_FEED_ATOM)
+                                     $cache_type= CC_FEED_ATOM, $sub_title='')
     {
         $this->_gen_feed_from_records('atom_10.xml',$records,$tagstr,
-                                      $feed_url,$cache_type);
+                                      $feed_url,$cache_type,$sub_title);
     }
 
-    // $tagstr = CC_FEED_DEFAULT_TAG
-    function GenerateFeedFromTags($tagstr = '')
+    function OnAddFeedLinks($tagstr,$qstring='',$help_text='')
     {
-        $this->_gen_feed_from_tags('atom_10.xml',$tagstr,CC_FEED_ATOM);
+        if( !empty($tagstr) )
+        {
+            $tags = CCTag::TagSplit($tagstr);
+            $utags = urlencode(implode(' ',$tags));
+            $atom_feed_url = ccl('feed',CC_FEED_ATOM,$utags);
+        }
+        else
+        {
+            $atom_feed_url = url_args( ccl('feed',CC_FEED_ATOM), $qstring );
+        }
+
+        CCPage::AddLink( 'head_links', 'alternate', 'application/atom+xml', 
+                         $atom_feed_url, "ATOM 1.0");
     }
 
     /**
@@ -64,8 +79,7 @@ class CCFeedsAtom extends CCFeed
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('feed','atom'),  
-                          array( 'CCFeedsAtom', 'GenerateFeedFromTags'), 
+        CCEvents::MapUrl( ccp('feed',CC_FEED_ATOM),  array( 'CCFeedsAtom', 'GenerateFeed'), 
 			         CC_DONT_CARE_LOGGED_IN);
     }
 
