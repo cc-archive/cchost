@@ -98,6 +98,8 @@ class CCUtil
         {
             CCUtil::StripText($mixed);
         }
+
+        return $mixed;
     }
 
     function StripText(&$text)
