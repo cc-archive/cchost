@@ -442,6 +442,7 @@ class CCPseudoVerifyAPI
             $FI['tags'] = $FF['tags'];
             $FI['default-ext'] = $FF['default-ext'];
             $FI['media-type'] = $FF['media-type'];
+            $FI['mime_type'] = '';
             $formatinfo->SetData( $FI );
             $formatinfo->_errors = '';
         }
