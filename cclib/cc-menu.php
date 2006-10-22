@@ -216,9 +216,11 @@ class CCMenu
     */
     function KillCache()
     {
+        $configs =& CCConfigs::GetTable();
+        $configs->DeleteType('urlmap',CC_GLOBAL_SCOPE);
         CCEvents::GetUrlMap(true);
         CCMenu::Reset();
-        CCPage::Prompt("Menu cache has been cleared");
+        CCPage::Prompt("Menu/URL cache has been cleared");
     }
 
     /**
