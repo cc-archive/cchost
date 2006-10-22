@@ -324,9 +324,10 @@ class CCTable
     * Returns an array of records given keys (aka 'id')
     *
     * @param array $key array of keys to look up
+    * @param boolean $clean Set to true if keys came from URL and need 'cleaning'
     * @return array $records Array of full records (as opposed to raw database rows)
     */
-    function & GetRecordsFromKeys($keys)
+    function & GetRecordsFromKeys($keys,$clean=true)
     {
         if( empty($keys) )
         {
@@ -334,12 +335,12 @@ class CCTable
             return $a;
         }
 
-        $where = array();
-        $name = $this->_key_field;
-        foreach( $keys as $key)
-            $where[] = "( $name = '$key' )";
-        $where = implode( ' OR ', $where );
+        if( $clean )
+            $keys = CCUtil::CleanNumbers($keys);
+
+        $where = '(' . $this->_key_field . ' IN (' . join(',',$keys) . '))';
         $records =& $this->GetRecords($where);
+
         return $records;
     }
 
