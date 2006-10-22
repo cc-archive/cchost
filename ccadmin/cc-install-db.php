@@ -545,6 +545,8 @@ END;
        'mail_throttle'       => 3,
        'mail_to_admin'       => CC_DONT_CARE_LOGGED_IN,
 
+       'ratings'             => true,
+
        'pretty-urls'         => $vars['pretty_urls']['v'],
 
        'getid3-path'         => $vars['getid3']['v'] , 
@@ -571,6 +573,8 @@ END;
        'v_3_1a'              => true, // sidebar.xml
        'v_3_1b'              => true, // new mail ops, pool optimized
        'v_3_1d'              => true, // upload_last_edit
+       'v_3_1e'              => true, // local path struct
+       'v_3_2b'              => true, // move ratings
 
     );
 
