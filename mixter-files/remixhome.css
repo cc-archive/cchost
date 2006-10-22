@@ -1,0 +1,104 @@
+/*
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id$
+
+*/
+#outerframe {
+   width: 100%;
+}
+
+#outerframe td {
+  vertical-align: top;
+}
+
+
+#djback {
+  width: 500px;
+  height: 500px;
+  background: url('ccMixterDJHat2.png') no-repeat top left;
+}
+
+#channel_intro {
+   margin: 21px 0px 0px 50px;
+   width: 400px;
+}
+
+#channel_intro h3 {
+  text-align: center;
+  font-size: 13px;
+  font-family: Verdana;
+  margin-bottom: 8px;
+}
+
+#channels {
+  margin: 220px 0px 0px 30px;
+  width: 440px;
+}
+
+#channels td {
+    vertical-align: top;
+    text-align: left;
+}
+
+.cbutton {
+   vertical-align: middle;
+   margin: 1px;
+   padding: 2px;
+   border-top: 2px solid #CCE;
+   border-left: 2px solid #CCE;
+   border-bottom: 1px solid black;
+   border-right: 1px solid black;
+   height: 16px;
+   cursor: pointer;
+}
+
+.cbutton_selected {
+  background-color: #EEF;
+  color: #006;
+}
+
+.cvalue {
+  display:none;
+}
+
+#channel_form {
+  padding: 0px;
+  margin: 0px;
+}
+
+#options {
+  margin: 6px 0px 0px 28px;
+}
+
+#options td {
+    vertical-align: top;
+    padding-right: 8px;
+}
+
+#score, #sinceu, #limit {
+  font-size: 11px;
+}
+
+#countresults {
+  font-style: italic;
+  margin: 0px;
+}
+
+#gobuttons cc_stream_page_link,
+#gobuttons cc_pod_page_link {
+  margin-bottom: 6px;
+}
