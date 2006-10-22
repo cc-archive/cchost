@@ -75,16 +75,15 @@ class CCPageAdmin
     */
     function Homepage()
     {
-        CCPage::SetTitle(_("Welcome to ccHost"));
         CCPage::ViewFile('home.xml');
     }
 
     /**
-    * Display a file in hte client area of the page (wrapper)
+    * Display a file in the client area of the page (wrapper)
     *
     * @see CCPage::ViewFile()
     */
-    function ViewFile($template)
+    function ViewFile($template='')
     {
         CCPage::ViewFile($template);
     }
@@ -176,6 +175,7 @@ class CCPage extends CCTemplate
         $this->_page_args['chop'] = true;
         $this->_page_args['bread_crumbs'] = array();
         $this->_page_args['crumb_seperator'] = ' &raquo; ';
+        //$this->_page_args['page-skip-title'] = false;
     }
 
     /**
@@ -198,16 +198,43 @@ class CCPage extends CCTemplate
     * variables are available to the file so, for example, macro substitions
     * will work.
     * 
-    * @param string $template Name of file (in the 'ccfiles' directory) to parse and display
+    * @param string $template Name of file (in the 'viewfile' directory) to parse and display
     */
-    function ViewFile($template)
+    function ViewFile($template='')
     {
+        if( empty($template) )
+            CCUtil::SendBrowserTo(ccl());
+
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
            $page =& CCPage::GetPage();
          else
            $page =& $this;
-        
-        $page->_body_template = $template;
+
+        $file = $page->GetViewFile($template);
+        if( empty($file) )
+        {
+            $page->Prompt( sprintf(_("Can't find %s template"),$template) );
+            CCUtil::Send404();
+        }
+        else
+        {
+            if( empty($page->_page_args['page-title']) )
+            {
+                // um, bit of a hack but I can't figure out another
+                // to have the <h1> tag in the file end up in the title 
+                // of the browser (?),
+                $r1 = '<h1[^>]*>(.*)</h1'; // normal h1
+                $r2 = '<h1[^>]+((_|CC_Lang)\([\'"]([^\)]+)[\'"]\))[^<]+/>'; // lang'ized
+                $contents = file_get_contents($file); 
+                if( preg_match("#(($r1)|($r2))#Uis",$contents,$m) )
+                {
+                    // inner most capture
+                    $page->_page_args['page-caption'] = stripslashes($m[ count($m) - 1 ]); 
+                }
+            }
+              
+            $page->_body_template = $file;
+        }
     }
 
     /**
@@ -420,12 +447,11 @@ class CCPage extends CCTemplate
         // Step 5
         //
         // Populate a custom body template
-        //
+        // This code assumes GetViewFile has already been called on _body_template
         // 
         if( !empty($page->_body_template) )
         {
-            $vfile = $page->GetViewFile($page->_body_template);
-            $template = new CCTemplate( $vfile, true );
+            $template = new CCTemplate( $page->_body_template, true );
             $body =& $template->SetAllAndParse($page->_page_args, false, $isadmin);
             $page->AddPrompt('body_text',$body);
         }

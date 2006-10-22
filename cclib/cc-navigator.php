@@ -153,7 +153,7 @@ class CCNavigator
 
                 $page_out->PageArg('sub_nav_tabs',$sub_tab_info);
 
-                $title = '';
+                $title .= ' :: ' . $default_tab['text'];
 
             }
         }
@@ -182,12 +182,9 @@ class CCNavigator
                 // 4b. Let folks know they can subscribe to this query
                 //     TODO: although the query isn't limited to this vroot!!
 
-                if( !empty($title) )
-                    $page_out->SetTitle($title);
-
                 $tagstr = $default_tab['tags'];
                 $taghelp = strlen($tagstr) > 10 ? substr($tagstr,0,8) . '...' : $tagstr;
-                CCFeeds::AddFeedLinks($tagstr,'','Tags: ' . $taghelp);
+                CCFeed::AddFeedLinks($tagstr,'','Tags: ' . $taghelp);
 
                 // 4c. Limit queries to this vroot 
                 if( $default_tab['limit'] )
@@ -199,6 +196,12 @@ class CCNavigator
                 //     database
 
                 CCUpload::ListMultipleFiles($where,$default_tab['tags'],$default_tab['function']);
+            }
+
+            if( !empty($title) )
+            {
+                $page_out->PageArg('backup-title',$title);
+                //$page_out->PageArg('skip-title',true);
             }
         }
     }
