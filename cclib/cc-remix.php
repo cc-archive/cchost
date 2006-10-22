@@ -312,9 +312,13 @@ class CCRemix
 
                     CCSync::Remix($remixid,$remix_sources);
 
+                    CCEvents::Invoke(CC_EVENT_SOURCES_CHANGED, array( $remixid, &$remix_sources) );
+
                     $msg = $is_update ? 'update' : 'upload';
-                    $prompt = sprintf(_("Remix %s succeeded (click <a href=\"%s\">here</a> to see results)"),
-                        $msg, $url);
+                    $link1 = "<a href=\"$url\">";
+                    $link2 = '</a>';
+                    $prompt = sprintf(_("Remix %s succeeded (click %shere%s to see results)"),
+                        $msg, $link1, $link2);
                     CCPage::Prompt($prompt);
                     return(true);
                 }

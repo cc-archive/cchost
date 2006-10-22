@@ -26,9 +26,10 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCTag', 'OnBuildMenu'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCTag', 'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCTag', 'OnAdminMenu'));
+CCEvents::AddHandler(CC_EVENT_MAIN_MENU,        array( 'CCTag', 'OnBuildMenu'));
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,         array( 'CCTag', 'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,       array( 'CCTag', 'OnAdminMenu'));
+CCEvents::AddHandler(CC_EVENT_SOURCES_CHANGED,  array( 'CCTag', 'OnSourcesChanged') );
 
 /**
 */
@@ -36,7 +37,8 @@ define('CC_MAX_TAG_LEN',  25);
 define('CC_MIN_TAG_LEN',  3);
 define('CC_MIN_TAG_SHOW',  0);
 
-define('CC_TAG_SPLITTER', '/\W+/');
+// deprecated...
+// define('CC_TAG_SPLITTER', ...
 
 class CCTagAliases extends CCTable
 {
@@ -381,11 +383,15 @@ class CCAdminTagsForm extends CCForm
 
         $minshow = isset($CC_GLOBALS['tags-min-show']) ? $CC_GLOBALS['tags-min-show'] : CC_MIN_TAG_SHOW;
 
+        $inherit = isset($CC_GLOBALS['tags-inherit']) ? join(',',$CC_GLOBALS['tags-inherit']) : '';
+
         $fields = array(
             'aliases' => array(
                 'label' => 'Aliases',
-                'form_tip' => 'Put one alias on each line, use a "=&gt;" to indicate what the user entered tag should become.' .
-                              ' (e.g. <b>drums and base=&gt;DNB</b> will turn all user entries \'drums and bass\' in to \'DNB\')',
+                'form_tip' => _('Put one alias on each line, use a "=&gt;" to 
+                                 indicate what the user entered tag should become. 
+                                (e.g. <b>drums and base=&gt;DNB</b> will turn all user entries 
+                                \'drums and bass\' in to \'DNB\')'),
                 'formatter' =>  'textarea',
                 'value' => $text,
                 'flags' => CCFF_POPULATE
@@ -425,6 +431,13 @@ class CCAdminTagsForm extends CCForm
                 'formatter' =>  'textedit',
                 'class' => 'cc_form_input_short',
                 'value'   => $minshow,
+                'flags' => CCFF_POPULATE
+                ),
+            'inherittags' => array(
+                'label' => 'Inherited tags',
+                'form_tip' => 'Remixes will automatically \'inherit\' these tags from their sources',
+                'formatter' =>  'textedit',
+                'value'   => $inherit,
                 'flags' => CCFF_POPULATE
                 ),
             );
@@ -469,7 +482,12 @@ class CCTag
             $sql = "UPDATE cc_tbl_tags SET tags_type = (tags_type & $cctBits)";
             CCDatabase::Query($sql);
 
-            if( !empty($reserved) )
+            if( empty($reserved) )
+            {
+                $where = "(tags_type & $cctBits)";
+                $run = $tags->CountRows($where) > 0;
+            }
+            else
             {
                 $tags->Insert($reserved,CCTT_ADMIN);
                 $run = true;
@@ -478,10 +496,22 @@ class CCTag
             $min = $form->GetFormValue('mintaglen');
             $max = $form->GetFormValue('maxtaglen');
             $minshow = $form->GetFormValue('mintagshow');
+
+            // there's a bit of hole here:
+            // If the admin DELETES an inherit tag we
+            // don't update tracks with that tag and the user
+            // is stuck with it until they do 'Edit Remixes'
+            //
+            $inherit_tags = CCTag::TagSplit($form->GetFormValue('inherittags'));
+            $tags->Insert($inherit_tags,CCTT_ADMIN);
+
+
             $configs =& CCConfigs::GetTable();
             $configs->SetValue('config','tags-min-length',$min,CC_GLOBAL_SCOPE);
             $configs->SetValue('config','tags-max-length',$max,CC_GLOBAL_SCOPE);
             $configs->SetValue('config','tags-min-show',$minshow,CC_GLOBAL_SCOPE);
+            $configs->SetValue('config','tags-inherit',$inherit_tags,CC_GLOBAL_SCOPE);
+
             global $CC_GLOBALS;
             $CC_GLOBALS['tags-min-length'] = $min;
             $CC_GLOBALS['tags-max-length'] = $max;
@@ -508,26 +538,35 @@ class CCTag
                 CCPage::Prompt("Changes Saved");
             }
 
-            if( $run && !empty($_POST['runnow']) )
-            {
-                /* slow way:
-                $uploads =& CCUploads::GetTable();
-                $ids = $uploads->QueryKeys();
-                foreach($ids as $id)
-                {
-                    CCUploadAPI::_recalc_upload_tags( $id );
-                }
-                */
-                $ups = CCDatabase::Query('SELECT upload_id,upload_extra FROM cc_tbl_uploads');
-                while( $row = mysql_fetch_row($ups) )
-                {
-                    $extra = unserialize($row[1]);
-                    if( empty($extra['usertags']) )
-                        continue;
-                    CCUploadAPI::_recalc_upload_tags( $row[0] );
-                }
+            $run_requested = !empty($_POST['runnow']);
 
-                CCPage::Prompt("Tags updated with new alias rules");
+            if( $run )
+            {
+                if( $run_requested )
+                {
+                    /* slow way:
+                    $uploads =& CCUploads::GetTable();
+                    $ids = $uploads->QueryKeys();
+                    foreach($ids as $id)
+                    {
+                        CCUploadAPI::_recalc_upload_tags( $id );
+                    }
+                    */
+                    $ups = CCDatabase::Query('SELECT upload_id,upload_extra FROM cc_tbl_uploads');
+                    while( $row = mysql_fetch_row($ups) )
+                    {
+                        $extra = unserialize($row[1]);
+                        if( empty($extra['usertags']) )
+                            continue;
+                        CCUploadAPI::_recalc_upload_tags( $row[0] );
+                    }
+
+                    CCPage::Prompt(_('Tags updated with new alias rules'));
+                }
+                else
+                {
+                    CCPage::Prompt(_('Tags settings were updated but new alias rules were not performed'));
+                }
             }
         }
     }
@@ -536,7 +575,12 @@ class CCTag
     {
         if( empty($tagstr) )
             return( array() );
-        return( preg_split(CC_TAG_SPLITTER,$tagstr) );
+        if( is_array($tagstr) )
+            return $tagstr;
+        $ok = preg_match_all( "/(?:(^|\W))(-?\w+)/", $tagstr, $m); 
+        if( $ok )
+            return $m[2];
+        return array();
     }
 
     function InTag($needles,$haystack)
@@ -591,7 +635,7 @@ class CCTag
 
     function BrowseTags($tagstr,$search_type='all')
     {
-        $currtags = preg_split(CC_TAG_SPLITTER,$tagstr);
+        $currtags = CCTag::TagSplit($tagstr);
         $uploads =& CCUploads::GetTable();
         $uploads->SetTagFilter($currtags,$search_type);
         $uploads->SetOrder('upload_date','DESC');
@@ -610,7 +654,7 @@ class CCTag
                 $all_tags[] = $records[$i]['upload_tags'];
         }
         $all_tags = implode(',',$all_tags);
-        $all_tags = array_unique( preg_split(CC_TAG_SPLITTER,$all_tags) );
+        $all_tags = array_unique( CCTag::TagSplit($all_tags) );
         $alltags  = array_diff($all_tags,$currtags);
         sort($alltags);
         CCPage::PageArg('all_tags', $alltags);
@@ -743,6 +787,44 @@ class CCTag
         CCEvents::MapUrl( ccp('tags'), array('CCTag','OnBrowseTags'), CC_DONT_CARE_LOGGED_IN );
         CCEvents::MapUrl( ccp('admin','tags'), array('CCTag','Admin'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( ccp('admin','tags','reset'), array('CCTag','Reset'), CC_ADMIN_ONLY );
+    }
+
+    /**
+    * Event handler for {@link CC_EVENT_SOURCES_CHANGED}
+    * 
+    * @param integer $upload_id ID of upload row
+    * @param array &$src_uploads Array of remix sources
+    */
+    function OnSourcesChanged($upload_id, &$src_uploads )
+    {
+        global $CC_GLOBALS;
+        
+        if( empty($CC_GLOBALS['tags-inherit']) )
+            return;
+        
+        $inherit_tags = $this->TagSplit($CC_GLOBALS['tags-inherit']);
+        if( empty($inherit_tags) )
+            return;
+
+        $intersect = array();
+
+        $n = count($src_uploads);
+        for( $i = 0; $i < $n; $i++ )
+        {
+            $tags = $this->TagSplit($src_uploads[$i]['upload_tags']);
+            $intersect = array_merge($intersect, array_intersect($tags,$inherit_tags) );
+        }
+
+        if( empty($intersect) )
+        {
+            // just incase this upload HAD the itags, 
+            // this call would remove them...
+            CCUploadAPI::UpdateCCUD($upload_id,'',$inherit_tags);
+        }
+        else
+        {
+            CCUploadAPI::UpdateCCUD($upload_id,$intersect,'');
+        }
     }
 }
 

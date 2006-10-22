@@ -399,7 +399,16 @@ END;
                 $tagsarr = CCTag::TagSplit($this->_tags);
                 foreach( $tagsarr as $tag )
                 {
-                    $tagands[] = "(upload_tags REGEXP '(^| |,)($tag)(,|\$)' )";
+                    if( $tag{0} == '-' )
+                    {
+                        $tag = substr($tag,1);
+                        $not = ' NOT ';
+                    }
+                    else
+                    {
+                        $not = '';
+                    }
+                    $tagands[] = "(upload_tags $not REGEXP '(^| |,)($tag)(,|\$)' )";
                 }
                 $filter = implode( ' AND ', $tagands );
             }
