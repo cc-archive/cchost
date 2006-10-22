@@ -23,7 +23,7 @@ $Id$
 
 <metal:block define-macro="html_head">
   <head>
-  <title>${site-title}<tal:block condition="page-title"> ${page-title}</tal:block></title>
+  <title>${site-title} <tal:block content="page-caption | page-title | backup-title | nothing" /></title>
   <meta name="keywords" tal:condition="site-meta-keywords" content="${site-meta-keywords}" />
   <meta name="description" tal:condition="site-meta-description" content="${site-meta-description}" />
   <meta name="robots" content="index, follow" />
@@ -149,6 +149,7 @@ $Id$
   <tal:block repeat="head_link head_links">
       <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
   </tal:block>
+  <script type="text/javascript" src="${root-url}cctemplates/prototype.js" />
   <script type="text/javascript" src="${root-url}cctemplates/cc_obj.js" />
   <tal:block condition="script_blocks" repeat="script script_blocks">
     <tal:block define="tscript ${script}" />
