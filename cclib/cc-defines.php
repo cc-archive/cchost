@@ -167,7 +167,7 @@ define('CC_EVENT_APP_DONE',            'done');
 *<code>
 * function OnBuildMenu()
 *</code>
-* The callback needs to call {@link CCMenu::AddItems{}} in order place items into the menu.
+* The callback needs to call {@link CCMenu::AddItems()} in order place items into the menu.
 * @see CCEvents::AddHandler()
 * @see CCMenu::GetMenu()
 */
@@ -355,6 +355,18 @@ define('CC_EVENT_UPLOAD_FILES',        'uploadfiles' );
 * @see CC_EVENT_FILE_DONE
 */
 define('CC_EVENT_UPLOAD_DONE',         'uploaddone' );
+
+/**
+* Notification Event: 'I Sampled This' list changed (or created) 
+*
+* Call back (handler) prototype:
+*<code>
+*function OnFileDone($upload_id, &$sources)
+*</code>
+* @see CCEvents::AddHandler()
+* @see CC_EVENT_UPLOAD_DONE
+*/
+define('CC_EVENT_SOURCES_CHANGED',      'srcchange' );
 
 /**
 * Notification Event: A new physical file has been uploaded or changed.
@@ -685,6 +697,41 @@ $fields['my_sys_dir'] =
 */ 
 define('CC_EVENT_SYSPATHS',               'syspaths' );
 
+/**
+* Request for Action Event: api/query request with unknown format
+*
+* Triggered when caller has requested a query in a 
+* format unknown to the default handler.
+*
+* The respondant can exit the session if the request is fullfilled
+* or put the results and the mime type to return (if not 'html')
+* into the last two parameters
+*
+* Event handler prototype:
+*<code>
+*function OnApiQueryFormat( &$records, $calling_args, &$result, &$result_mime );
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_API_QUERY_FORMAT',         'apiqueryformat');
+
+
+/**
+* Request for Action Event: Add feed links to header/footer
+*
+* Called when page is requesting feeds for header and the
+* little orange feed links
+*
+* Respondend is responsible for adding the proper links using
+* {@link CCPage::AddLink()}
+*
+* Event handler prototype:
+*<code>
+*function OnAddFeedLinks($tagstr, $qstring,$help_text)
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_ADD_FEED_LINKS', 'addfeedlinks');
 
 /**#@+
 * @access private
