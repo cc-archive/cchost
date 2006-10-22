@@ -102,8 +102,17 @@ class CCQuery
         // get the '+' out of the tag str
         $args['tags'] = str_replace( ' ', ',', urldecode($args['tags']));
         
-        if( !empty($CC_GLOBALS['querylimit']) && ($CC_GLOBALS['querylimit'] < $args['limit']) )
+        if
+        ( 
+            !empty($CC_GLOBALS['querylimit']) && 
+            (
+                empty($args['limit']) ||
+                ($CC_GLOBALS['querylimit'] < $args['limit']) 
+            )
+        )
+        {
             $args['limit'] = $CC_GLOBALS['querylimit'];
+        }
 
         $k = array_keys($args);
         $n = count($k);
