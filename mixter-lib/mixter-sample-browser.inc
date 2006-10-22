@@ -18,14 +18,32 @@
 *
 */
 
+/**
+* A note about this module:
+*
+* This was written a few months before the 
+* CCQuery class and prototype.js were introduced into the codebase.
+* About 1/4 of this code would vanish if it was ever ported to
+* to use those technologies.
+*
+* The idea would be to load an args array with the tags and
+* other search terms, plus with a format of 
+* 'html' and $args['template'] = 'sample_browser.xml'
+*
+*/
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*
+*/
 define( 'CC_TS_POPULAR', 1 );
 define( 'CC_TS_ALPHA',   2 );
 define( 'CC_TS_DEFAULT', CC_TS_ALPHA );
 
 define( 'CC_TS_MINTAGS', 3 );
+
 
 class CCSampleBrowserAPI
 {
@@ -289,7 +307,7 @@ class CCSampleBrowserAPI
         //CCDebug::Enable(true);
 
         $all_tags = strtolower( join(',', $tagstrs ) );
-        $all_tags = preg_split(CC_TAG_SPLITTER,$all_tags);
+        $all_tags = CCTag::TagSplit($all_tags);
 
         if( !empty( $_GET['ts'] ) )
             $ts = intval($_GET['ts']);
