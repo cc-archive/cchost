@@ -144,7 +144,7 @@ END;
                 list($orig_width, $orig_height) = 
                    getimagesize($record['files'][0]['local_path']);
                 // echo "$orig_width X $orig_height <br />"; 
-                if ( $orig_height > 0 )
+                if ( $orig_height > 0 && $orig_width > 0 )
                 {
                     $zoom_factor = $thumbnaily / $orig_height ;
                     $maxx = round($zoom_factor * $orig_width);
