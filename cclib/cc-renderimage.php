@@ -131,6 +131,8 @@ END;
 
         if( !empty($settings['thumbnail-x']) && !empty($settings['thumbnail-y']) )
         {
+            // set as a default
+            $maxx =  $settings['thumbnail-x'];
 
             if ( $settings['thumbnail-constrain-y'] )
             {
@@ -142,19 +144,20 @@ END;
                 list($orig_width, $orig_height) = 
                    getimagesize($record['files'][0]['local_path']);
                 // echo "$orig_width X $orig_height <br />"; 
-                $zoom_factor = $thumbnaily / $orig_height ;
-                $maxx = round($zoom_factor * $orig_width);
-                /* 
-                echo $thumbnaily . " / " . $orig_height;
-                echo "<br />";
-                echo $zoom_factor . " * " . $orig_width . " + " . $orig_width . "<br />";
-                echo $zoom_factor . " * " . $orig_width;
-                echo "<br />";
-                print_r($maxx);
-                */
+                if ( $orig_height > 0 )
+                {
+                    $zoom_factor = $thumbnaily / $orig_height ;
+                    $maxx = round($zoom_factor * $orig_width);
+                    /*
+                    echo $thumbnaily . " / " . $orig_height;
+                    echo "<br />";
+                    echo $zoom_factor . " * " . $orig_width . " + " . $orig_width . "<br />";
+                    echo $zoom_factor . " * " . $orig_width;
+                    echo "<br />";
+                    print_r($maxx);
+                    */
+                }
             }
-            else
-                $maxx =  $settings['thumbnail-x'];
 
             if( strpos($maxx,'px') === false )
                 $maxx .= 'px';
