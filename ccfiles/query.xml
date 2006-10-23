@@ -1,0 +1,357 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id$
+
+-->
+</tal:block>
+<style>
+
+#ptable,
+#ftable { 
+  border-top: 2px solid #bbb; 
+  margin-top: 23px;
+}
+
+#ptable td,
+#ftable td { 
+  border-bottom: 1px solid #bbb; 
+  padding: 4px; 
+  vertical-align: top; 
+  font-family: Verdana;
+}
+
+.code {
+  margin:20px 0px 20px 20px;
+  font-family:Courier New;
+}
+
+.note {
+  font-family:Comic Sans MS, arial;
+  background-color:#ffff00;
+}
+
+h2 { 
+ background-color: #CCE;
+ padding: 2px;
+}
+
+h3 {
+ background-color: #DDE;
+ width: 50%;
+ padding: 2px;
+</style>
+
+<h1> ccHost Query/Formatter Engine [beta]</h1> 
+
+<p class="note">
+This is preliminary documentation -- things are changing quickly
+</p>
+
+<p>
+The ccHost Query Engine is a powerful and extensible engine for retrieving and displaying upload records.
+</p>
+
+<p>
+ There are two sides to the same engine, the input parameters and output formats all reachable to one degree or another from the browser, code or templates or any combination.
+</p>
+
+<h2> Input Parameters </h2> 
+
+<p>
+From the browser (GET and POST) the input parameters URI query string (GET) or form fields and values (POST) send to the api/query command.
+</p>
+
+<div class="code">
+  /media/api/query?limit=5&tags=remix+chill&amp;sort=upload_name&amp;format=html&amp;template=links
+</div> 
+
+<p>
+When using the 'docwrite' format this can be used from a &lt;script&gt; tag as the "src" attribute:
+</p>
+
+<div class="code">
+  &lt;script type="text/javascript" 
+  src="http://ccmixter.org/media/api/query?limit=5&tags=remix+chill&amp;sort=upload_name&amp;format=docwrite&amp;template=links"&gt;
+  &lt;/script&gt;
+</div>
+
+<p>Results from ccMixter:</p>
+
+<div style="width:70%;margin-left: 30px;">
+  <script type="text/javascript" 
+  src="http://ccdev15.dreamhosters.com/media/api/query?limit=5&tags=remix+chill&sort=upload_name&format=docwrite&template=links">
+  </script>
+</div>
+
+<p>
+All feed URIs are 'query enabled' which means most input parameters will work the same as a call to api/query with the notable exception that the 'format' parameter is ignored.
+</p>
+
+<p>
+These URIs return exactly the same thing:
+</p>
+
+<div class="code">
+/media/api/query?format=atom&remixesof=teru&tags=funky<br /><br />
+/media/feed/atom/funky?remixesof=teru
+</div>
+
+
+<h3>Reference</h3> 
+ 
+These are currently supported arguments:
+
+<table id="ptable" border="0" cellpadding="0" cellspacing="0"> 
+ <tbody> <tr> <th> param</th><th>description</th><th>default</th></tr> 
+<tr> <td> tags
+</td><td> uploads must have these tags
+</td> <td> 
+</td> </tr> <tr> <td> type
+</td> <td> specifies whether the upload must have 'all' the tags or 'any' of the tags
+</td> <td> all
+</td> </tr> <tr> <td> reqtags
+</td> <td> These are tags added to whatever tags are specified in tags and type. This has the effect of an 'all' type of operation against tags and type. Typical usage:
+<div class="code">reqtags=audio
+<br />
+ tags=chill+female_vocals
+<br />
+ type=any
+<br />
+  </div>  
+  In this case only records that match <b>audio</b> AND (<b>chill </b>or <b>female_vocals</b>) tags
+</td>  <td>  
+</td>  </tr>  <tr>  <td>  sort
+</td>  <td>  results will be sorted on this column. There are many, many columns, here are some that might be the most useful:
+<br />
+  <ul>  <li>  upload_date</li>  <li>  upload_name</li>  <li>  user_name</li>  <li>  user_real_name</li>  </ul>  </td>  <td>  upload_date
+</td>  </tr>  <tr>  <td>  ord
+</td>  <td>  either 'ASC' or 'DESC'
+</td>  <td>  DESC
+</td>  </tr>  <tr>  <td>  ids
+</td>  <td>  a semi-colon separated list of upload ids to return formatted. Note: you should take care this list could get very long and easy to overflow a GET request if done programmatically.
+</td>  <td>  ''
+</td>  </tr>  <tr>  <td>  nosort
+</td>  <td>  this value is either '1' or '0' and tells the engine to NOT sort the ids, but to display as passed in.
+</td>  <td>  0
+</td>  </tr>  <tr>  <td>  rand
+</td>  <td>  either '1' or '0' to determine return records in a random order. This overrides sort, nosort and ord.
+</td>  <td>  0
+</td>  </tr>  <tr>  <td>  limit
+</td>  <td>  Limits the number of records returned. The actual top limit for browser GET/POST requests is limited by the admin of that ccHost site. (Hint: 200 is a lot). Programmatic requests can set the limit to '0' to get all matching records
+</td>  <td>  
+</td>  </tr>  <tr>  <td>  offset
+</td>  <td>  Return records starting at offset. Perfect for paging through search results
+</td>  <td>  0
+</td>  </tr>  <tr>  <td>  sinceu
+</td>  <td>  Return records since this date, UNIX time format (as returned by php's time())
+</td>  <td>  0
+</td>  </tr>  <tr>  <td>  sinced
+</td>  <td>  Return records since this date, text format (e.g. '2005-01-30', 'two weeks ago', etc.)
+</td>  <td>  ''
+</td>  </tr>  <tr>  <td>  lic
+</td>  <td>  Return records only of this license. Values allowed:
+<br />
+  <ul>  <li>  by</li>  <li>  nc</li>  <li>  sa&nbsp; (for sharealike)
+</li>  <li>  nod (for noderivs)</li>  <li>  byncsa</li>  <li>  byncnd</li>  <li>  s (for sampling)</li>  <li>  splus</li>  <li>  ncsplus</li>  <li>  pd (for publicdomain)</li>  </ul>  Don't specifiy a 'lic' or leave it empty ('') to return all
+</td>  <td>  ''
+</td>  </tr>  <tr>  <td>  score
+</td>  <td>  A minium rating score for the uploads returned. This 'score' is 100 times the star rating. For example, an upload rated 3.45 has a score of 345. Valid values are 0 or 100 to return all records or any value between 100 and 500.
+</td>  <td>  0
+</td>  </tr>  <tr>  <td>  user
+</td>  <td>  Only return records from this user
+</td>  <td>  
+</td>  </tr>  <tr>  <td>  remixesof
+</td>  <td>  Only return records that are remixes of this user
+</td>  <td>  
+</td>  </tr>  <tr>  <td>  remixedby
+</td>  <td>  Only return records that are remixes by this user (same as user=someuser&amp;reqtags=remix)
+</td>  <td>  
+</td>  </tr>  <tr>  <td>  promo_tag
+</td>  <td>  Uploads with this tag will be mixed into the output stream at promo_gap intervals. (For ccMixter this tag is <b>site_promo</b>)
+</td>  <td>  
+</td>  </tr>  <tr>  <td>  promo_gap
+</td>  <td>  Updloads with whatever the promo_tag is are mixed into the output stream at this interval
+</td>  <td>  4
+</td>  </tr>  <tr>  <td>  q
+</td>  <td>  Query search string that is matched against tags, user name, upload name and upload description. <span style="background-color:#ffff66; FONT-STYLE:italic">(This is currently disabled for browser access)</span>
+</td>  <td>  
+</td>  </tr>  
+
+<tr>  <td>  where
+</td>  <td>  mySQL 'WHERE' expression appended to everything else. This will always be disabled for browser access.
+</td>  <td>  
+</td>  </tr>  
+
+
+<tr>  <td>  mod
+</td>  <td>  Moderated uploads (admins only). Valid values are 1 or 0
+</td>  <td>  0
+</td>  </tr>  
+
+<tr>  <td>  unpub
+</td>  <td>  Unpublished uploads (admins and upload owners only). Valid values are 1 or 0
+</td>  <td>  0
+</td>  </tr>  
+
+<tr>  <td>  format
+</td>  <td>  Determines what the return upload records will be formatted as (see 'Output Formats' below)
+</td>  <td>php
+</td>  </tr>  <tr>  <td>  template
+</td>  <td>  Short name of a format template (only used by format=html and format=docwrite)
+</td>  <td>
+</td>  </tr>  <tr>  <td>  template_tags
+</td>  <td>  Name/value touples sent into the template for format=html and format=docwrite. The is name is combined with a prefix of 'format_' on the ccHost installation. Currently supported are:
+  <ul>
+    <li>links - links to the uploads's page</li>
+    <li>links_by - upload page links with user page links</li>
+    <li>links_dl - upload page links with media download links</li>
+    <li>links_stream - upload page links with media stream links</li>
+    <li>links_ul - upload page links formatted in a &lt;ul&gt;</li> 
+    <li>links_med - more verbose listing with license, description, etc.</li>
+  </ul>
+</td>  <td>
+</td>  </tr>  <tr>  <td>  chop
+</td>  <td>  Long upload names and user names are truncated at this length (only used by format=html and format=docwrite).
+</td>  <td>
+</td>  </tr>  </tbody>  
+</table> 
+
+
+ <h2> Output Formats </h2> 
+ 
+ <p>The following is the list of currently known values for the 'format' input parameter:</p>
+
+<table id="ftable" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td width="10%"> php
+</td> <td> Returns records in an array.
+</td> <td> n/a
+</td> </tr> <tr> <td width="10%"> phps
+</td> <td> Returns records as a php serialized string
+</td> <td> text/plain
+</td> </tr> <tr> <td width="10%"> count
+</td> <td> Return only the count of the records for the query in the form: [count]
+</td> <td> text/plain
+</td> </tr> <tr> <td width="10%"> ids
+</td> <td> Return only the upload IDs as a semi-colon list
+</td> <td> text/plain
+</td> </tr> <tr> <td width="10%"> js
+</td> <td> Records returned in JSON format as an array of objects:
+<br />
+ [{field:value,field:value...},{field:value,...}]
+</td> <td> application/javascript
+</td> </tr> <tr> <td width="10%"> json
+</td> <td> Same as js but the value will be in a X-JSON header, not the body
+</td> <td> application/javascript
+</td> </tr> <tr> <td width="10%"> csv
+</td> <td> <a href="http://www.creativyst.com/Doc/Articles/CSV/CSV01.htm#FileFormat" title="Comma separated text">Comma separated text</a> &nbsp;
+</td> <td> text/plain
+</td> </tr> <tr> <td width="10%"> rss
+</td> <td> RSS 2.0
+</td> <td> text/xml+rss
+</td> </tr> <tr> <td width="10%"> atom
+</td> <td> ATOM
+</td> <td> text/xml+atom
+</td> </tr> <tr> <td width="10%"> xspf
+</td> <td> XSPF
+</td> <td> text/xml+xspf
+</td> </tr> <tr> <td width="10%"> xml
+</td> <td> Straight XML:
+<br />
+ &lt;records&gt;
+<br />
+ &nbsp; &lt;record type="object" id="<span style="FONT-STYLE:italic">upload_id</span>"&gt;
+<br />
+ &nbsp;&nbsp;&nbsp;&nbsp; &lt;<span style="FONT-STYLE:italic">field_name</span>&gt;<span style="FONT-STYLE:italic">value</span>&lt;/<span style="FONT-STYLE:italic">field_name</span>&gt;
+<br />
+ &nbsp;&nbsp;&nbsp;&nbsp; ...
+<br />
+ &nbsp; &lt;/record&gt;
+<br />
+ &nbsp; ...
+<br />
+ &lt;/records&gt;
+</td> <td> text/xml
+</td> </tr> <tr> <td width="10%"> html
+</td> <td> Returns records formatted as HTML as determined by the 'template' input parameter.
+</td> <td> text/html
+</td> </tr> <tr> <td width="10%"> docwrite
+</td> <td> Same as html but wraps all lines in javascript document.write. Useful for including
+ &lt;script&gt; tags.
+</td> <td> application/javascript
+</td> </tr> <!--tr> <td width="10%"> 
+</td> <td> 
+</td> <td> 
+</td> </tr --> 
+</tbody> </table> 
+
+
+
+<h2> Examples </h2> 
+
+<p>Base URL is /media/api/query:</p>
+
+Return the last 5 five upload by teru:
+<div class="code">
+  ?<b>user</b>=teru&amp;<b>limit</b>=5&amp;<b>format</b>=html&amp;<b>template</b>=links&amp;<b>chop</b>=12
+</div>
+
+Return all the remixes of brad sucks since the last time we checked:
+<div class="code">
+ ?<b>remixesof</b>=bradsucks&amp;<b>format</b>=rss&amp;<b>sinced</b>=2006-10-15+10:00
+</div>
+
+ Return a radio station style playlist of chill
+<div class="code">
+  ?<b>rand</b>=1&amp;<b>format</b>=xspf&amp;<b>tags</b>=cill+ambient&amp;<b>type</b>=any&amp;<b>reqtags</b>=audio&amp;<b>promo_tag</b>=site_promo
+</div>
+
+<h3> Programmatic </h3> 
+
+<p>From code you use the CCQuery object's Query method passing parameters in a single array:</p>
+
+ <div class="code">$$args['tags']&nbsp;&nbsp; = 'remix,chill';
+<br />
+ $$args['sort']&nbsp;&nbsp; = 'upload_name';
+<br />
+ $$args['format'] = 'php';
+<br />
+ $$query = new <b>CCQuery</b>();
+<br />
+ list( $$results, ) = $$query-&gt;<b>Query</b>($$args);
+ </div> 
+
+ 
+To combine arguments with browser GET/POST parameters, call the method ProcessUriArgs first
+
+<div class="code"> 
+  $$args = $$query-&gt;<b>ProcessUriArgs</b>($$args); // your args have precendent
+  <br />
+  list( $$results, ) = $$query-&gt;Query($$args);
+</div> 
+
+<h3> phpTAL Template </h3> 
+ 
+<p>
+ The easiest way to call from a template is using the psuedo JSON format with the function cc_query_json():<span class="note">Not checked in yet</span>
+</p>
+ 
+<div class="code">
+&lt;tal:block define="records php:<b>cc_query_engine</b>('tags:remix+chill,sort:upload_name,format:php');" /&gt;
+</div> 
+
+</tal:block>
