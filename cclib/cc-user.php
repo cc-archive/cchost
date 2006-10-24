@@ -377,6 +377,8 @@ class CCUsers extends CCTable
 
             $row['user_avatar_url'] = ccd( $avatar_dir , $row['user_image'] );
         }
+        else
+            $row['user_avatar_url'] = false;
 
         $row['user_homepage_html'] = '';
         if( !empty($row['user_homepage']) )

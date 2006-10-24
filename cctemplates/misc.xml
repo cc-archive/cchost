@@ -92,7 +92,7 @@ $Id$
 
  <table tal:repeat="ep editorial_picks" class="cc_pick_ed_table" cellpadding="0" cellspacing="0">
      <tr>
-        <td style="width:100px;height:100px;"><img tal:condition="ep/user_avatar_url" src="${ep/user_avatar_url}" /></td>
+        <td style="width:100px;height:100px;"><img tal:condition="ep/user_avatar_url" src="${ep/user_avatar_url}" /><img tal:condition="not: ep/user_avatar_url" src="/ccimages/person.png" /></td>
         <td >
             <h2><a href="${ep/file_page_url}">${ep/upload_name}</a></h2>
             <p class="cc_small_byline">by <a href="${ep/artist_page_url}">${ep/user_real_name}</a></p>

@@ -30,7 +30,7 @@ $Header$
     <title>${channel_title}</title>
     <link>${home-url}</link>
     <description>${channel_description}</description>
-    <language>en-us</language>
+    <language>${lang_xml}</language>
 
     <pubDate>${rss-pub-date}</pubDate>
     <lastBuildDate>${rss-build-date}</lastBuildDate>

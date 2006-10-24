@@ -109,6 +109,7 @@ $Header$
       <tr>
          <td class="cc_topic_avatar"><a tal:condition="topic/user_avatar_url" href="${topic/artist_page_url}"><img 
                  src="${topic/user_avatar_url}" /></a>
+                 <a tal:condition="not: topic/user_avatar_url" href="${topic/artist_page_url}"><img src="/ccimages/person.png" /></a>
          </td>
          <td  class="cc_topic_text">
            <div class="cc_topic_text_div" id="topic_text_${topic/topic_id}">
@@ -158,6 +159,7 @@ $Header$
                  href="${topic/user_post_url">${topic/user_post_count} ${topic/user_post_text}</a></div><a 
                  tal:condition="topic/user_avatar_url" href="${topic/artist_page_url}"><img 
                  src="${topic/user_avatar_url}" /></a>
+                 <a tal:condition="not: topic/user_avatar_url" href="${topic/artist_page_url}"><img src="/ccimages/person.png" /></a>
                  <div class="cc_topic_admin" 
                      tal:condition="topic/user_is_admin" tal:content="php: CC_lang('Admin')" />
          </td>
