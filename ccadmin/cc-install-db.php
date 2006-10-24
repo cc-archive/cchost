@@ -560,6 +560,7 @@ END;
        'allow-pool-search'   => true,
        'allow-pool-register' => false,
        'file-perms'          => 0777, 
+       'querylimit'          => 100,
        'lang'                => CC_LANG, // JON: This should be install option
        'lang_locale_pref'    => CC_LANG_LOCALE_PREF, // same here!
 
