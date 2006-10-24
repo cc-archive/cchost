@@ -169,9 +169,8 @@ class CCDataDump extends CCFeed
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'feed/datadump',
-                          array( 'CCDataDump', 'GenerateFeed'),
-                          CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'feed/datadump', array( 'CCDataDump', 'GenerateFeed'), CC_DONT_CARE_LOGGED_IN,
+                    ccs(__FILE__)   );
     }
 }
 

@@ -389,8 +389,12 @@ class CCNavigator
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'view',             array('CCNavigator', 'View'),            CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'admin/tabs',       array('CCNavigator', 'AdminTabs'),       CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'view',             array('CCNavigator', 'View'),            
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[tab_set]/[tab]/[subtab]',
+            _('Perform view tabs actions') );
+        CCEvents::MapUrl( 'admin/tabs',       array('CCNavigator', 'AdminTabs'),       
+            CC_ADMIN_ONLY, ccs(__FILE__), '',
+            _('Display admin navigator tabs form')  );
     }
 
 }

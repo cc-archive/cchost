@@ -128,9 +128,9 @@ class CCFeedsXSPF extends CCFeed
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('feed','xspf'),  
-                          array( 'CCFeedsXSPF', 'GenerateFeed'), 
-			         CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('feed','xspf'),  array( 'CCFeedsXSPF', 'GenerateFeed'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[tags]?query_param', _('Generate XSPF playlist'),
+            CC_AG_FEEDS );
     }
 
 } // end of class CCFeeds

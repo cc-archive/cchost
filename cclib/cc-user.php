@@ -994,12 +994,12 @@ END;
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'people',           array('CCUser','UserPage'),
-                                          CC_DONT_CARE_LOGGED_IN );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[username]/[tags]', _('Display people page or user profile'), CC_AG_USER );
         CCEvents::MapUrl( 'people/profile',   array('CCUser','EditProfile'),  
-                                          CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( 'people/profile/save', array('CCUser','SaveProfile'),                                                  CC_MUST_BE_LOGGED_IN );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', _('Edit user profile'), CC_AG_USER );
+        CCEvents::MapUrl( 'people/profile/save', array('CCUser','SaveProfile'),                              CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
         CCEvents::MapUrl( 'people/addtofavs', array('CCUser','AddToFavs'),  
-                                          CC_MUST_BE_LOGGED_IN );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', _('Add/Remove favorite users'), CC_AG_USER );
     }
 
     /**

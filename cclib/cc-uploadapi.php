@@ -385,7 +385,21 @@ END;
     function _get_select($where,$columns='*')
     {
         $where = $this->_where_to_string($where);
+        $where = $this->_tags_to_where($where);
 
+        if( !empty($this->_filter) )
+        {
+            if( empty($where) )
+                $where = $this->_filter;
+            else
+                $where = "$where AND \n ({$this->_filter})";
+        }
+
+        return( parent::_get_select($where,$columns) );
+    }
+
+    function _tags_to_where($where)
+    {
         if( !empty($this->_tags) )
         {
             if( $this->_tag_filter_type == 'any' )
@@ -418,17 +432,10 @@ END;
                 $where = "$where AND ($filter)";
         }
 
-        if( !empty($this->_filter) )
-        {
-            if( empty($where) )
-                $where = $this->_filter;
-            else
-                $where = "$where AND \n ({$this->_filter})";
-        }
-
-        return( parent::_get_select($where,$columns) );
+        return $where;
     }
 }
+
 
 /**
 * Wrapper for cc_tbl_files SQL table

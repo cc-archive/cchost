@@ -717,12 +717,15 @@ class CCLanguageAdmin
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','language'),  
-                            array( 'CCLanguageAdmin', 'Admin'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','language','save'),  
-                            array( 'CCLanguageAdmin', 'SavePage'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','language'),  array( 'CCLanguageAdmin', 'Admin'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show language admin form'), CC_AG_MISC_ADMIN );
+
+        CCEvents::MapUrl( ccp('admin','language','save'),  array( 'CCLanguageAdmin', 'SavePage'), 
+            CC_ADMIN_ONLY, ccs(__FILE__) );
+
         CCEvents::MapUrl( ccp('admin','language','diagnostic'),  
-                            array( 'CCLanguageAdmin', 'DiagnosticPage'), CC_ADMIN_ONLY );
+                            array( 'CCLanguageAdmin', 'DiagnosticPage'), 
+            CC_ADMIN_ONLY, ccs(__FILE__) );
     }
 
 }

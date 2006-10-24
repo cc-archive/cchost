@@ -464,7 +464,7 @@ class CCRemix
             // checked off some remix sources
             //
             $remix_check_boxes = array_keys($_POST[$field]);
-            $remix_sources = $table->GetRecordsFromKeys($remix_check_boxes);
+            $remix_sources = $table->GetRecordsFromKeys($remix_check_boxes,true);
             if( !empty($remix_sources) )
             {
                 $form->SetTemplateVar( $field, $remix_sources );
@@ -622,7 +622,8 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('file','remixes'), array( 'CCRemix', 'EditRemixes'), CC_MUST_BE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('file','remixes'), array( 'CCRemix', 'EditRemixes'), 
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{upload_id}', _("Displays 'Manage Remixes' for upload"), CC_AG_UPLOAD );
     }
 
 

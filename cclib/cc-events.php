@@ -259,11 +259,17 @@ class CCEvents
     * @param mixed $callback Method to be called 
     * @param integer $permissions CC_* flags to mask off unauthorized users
     */
-    function MapUrl( $url, $callback, $permissions )
+    function MapUrl( $url, $callback, $permissions, $module='', $doc_param='',
+                                                                $doc_summary='',
+                                                                $doc_group = '' )
     {
-        $action              = new CCAction();
-        $action->callback    = $callback;
-        $action->permissions = $permissions;
+        $action     = new CCAction();
+        $action->cb = $callback;
+        $action->pm = $permissions;
+        $action->md = $module;
+        $action->dp = $doc_param;
+        $action->ds = $doc_summary;
+        $action->dg = $doc_group;
         $paths =& CCEvents::_paths();
         $paths[$url] = $action;
     }
@@ -292,23 +298,23 @@ class CCEvents
 
         if( isset($action) )
         {
-            if( ($action->permissions & CCMenu::GetAccessMask() ) == 0 )
+            if( ($action->pm & CCMenu::GetAccessMask() ) == 0 )
                 $action = CCEvents::ResolveUrl('/homepage');
 
-            if( is_string($action->callback) )
+            if( is_string($action->cb) )
             {
-                $method = $action->callback;
+                $method = $action->cb;
             }
             else
             {
-                if( is_string($action->callback[0]) )
+                if( is_string($action->cb[0]) )
                 {
-                    $obj = new $action->callback[0];
-                    $method = array( &$obj, $action->callback[1] );
+                    $obj = new $action->cb[0];
+                    $method = array( &$obj, $action->cb[1] );
                 }
                 else
                 {
-                    $method = $action->callback;
+                    $method = $action->cb;
                 }
             }
             

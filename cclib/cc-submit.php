@@ -443,11 +443,21 @@ class CCSubmit
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('files','remix'),  array('CCSubmit','Remix'),   CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('submit'),         array('CCSubmit','Submit'),   CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('admin','submit'), array('CCSubmit','Admin'),    CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','editsubmitform'), array('CCSubmit','EditForm'),    CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','newsubmitform'), array('CCSubmit','NewForm'),    CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('files','remix'),  array('CCSubmit','Remix'),   
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[upload_id]', 
+            _("Display 'Submit a Remix' form. Using upload_id will prefill search results. " .
+               "This is how 'I Sampled This...' is done."), CC_AG_SUBMIT_FORM );
+        CCEvents::MapUrl( ccp('submit'),         array('CCSubmit','Submit') ,   
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[form_type]/[user_name]', 
+            _('Display submit form types or submit an upload'), CC_AG_SUBMIT_FORM );
+        CCEvents::MapUrl( ccp('admin','submit'), array('CCSubmit','Admin'),    
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _("Dislays 'Manage Submit Forms' form"), 
+            CC_AG_SUBMIT_FORM );
+        CCEvents::MapUrl( ccp('admin','editsubmitform'), array('CCSubmit','EditForm'),    
+            CC_ADMIN_ONLY, ccs(__FILE__), '{form_type}', _('Edit a submit form type'), 
+            CC_AG_SUBMIT_FORM );
+        CCEvents::MapUrl( ccp('admin','newsubmitform'), array('CCSubmit','NewForm'),    
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Create a new submit form type'), CC_AG_SUBMIT_FORM );
     }
 
     /**

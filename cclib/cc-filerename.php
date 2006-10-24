@@ -72,7 +72,9 @@ class CCFileRename
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/renaming',  array( 'CCFileRename', 'AdminRenaming'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/renaming',  array( 'CCFileRename', 'AdminRenaming'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show admin file renaming'),
+            CC_AG_UPLOAD );
     }
 
     /**

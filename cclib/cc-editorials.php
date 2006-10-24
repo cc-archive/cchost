@@ -284,8 +284,10 @@ class CCEditorials
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'editorial/submit',   array('CCEditorials','Submit'),   CC_MUST_BE_LOGGED_IN);
-        CCEvents::MapUrl( 'editorial/picks',    array('CCEditorials','ViewPicks'),    CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'editorial/submit',   array('CCEditorials','Submit'),   
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{upload_id}', _('Display submit editorial form'), CC_AG_EDPICK );
+        CCEvents::MapUrl( 'editorial/picks',    array('CCEditorials','ViewPicks'),    
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[upload_id]', _('Display ed picks'), CC_AG_EDPICK );
     }
 
     /**

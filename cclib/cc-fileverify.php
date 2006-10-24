@@ -288,7 +288,8 @@ class CCFileVerify
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/formats',  array('CCFileVerify', 'ConfigureFormats'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/formats',  array('CCFileVerify', 'ConfigureFormats'), 
+            CC_ADMIN_ONLY, ccs(__FILE__) ); // don't doc this, it's going to move
     }
 
     /**

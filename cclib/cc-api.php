@@ -332,14 +332,22 @@ class CCRestAPI
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('api','info'),                 array( 'CCRestAPI', 'Info'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','search'),               array( 'CCRestAPI', 'Search'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','file'),                 array( 'CCRestAPI', 'File'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','ubeensampled'),         array( 'CCRestAPI', 'UBeenRemixed'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','isampledthis'),         array( 'CCRestAPI', 'ISampledThis'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','pools'),                array( 'CCRestAPI', 'Pools'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','poolregister'),         array( 'CCRestAPI', 'PoolRegister'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','version'),         array( 'CCRestAPI', 'Version'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('api','info'),                 array( 'CCRestAPI', 'Info'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('api','search'),               array( 'CCRestAPI', 'Search'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('api','file'),                 array( 'CCRestAPI', 'File'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('api','ubeensampled'),         array( 'CCRestAPI', 'UBeenRemixed'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('api','isampledthis'),         array( 'CCRestAPI', 'ISampledThis'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('api','pools'),                array( 'CCRestAPI', 'Pools'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('api','poolregister'),         array( 'CCRestAPI', 'PoolRegister'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('api','version'),         array( 'CCRestAPI', 'Version'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
     }
     
 }

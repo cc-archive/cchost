@@ -245,7 +245,8 @@ class CCFormat
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('format'), array('CCFormat','CallBack'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('format'), array('CCFormat','CallBack'), CC_DONT_CARE_LOGGED_IN,
+                ccs(__FILE__));
     }
 
     function CallBack($cmd)

@@ -274,13 +274,24 @@ class CCForums
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('thread'),              array( 'CCForums', 'ViewThread'),  CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('forums'),              array( 'CCForums', 'Index'),   CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('forums','post'),       array( 'CCForums', 'PostNew'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('forums','people'),     array( 'CCForums', 'User'),    CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('feed','rss','forums'), array( 'CCForums', 'RssFeed'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('admin','forums'),      array( 'CCForums', 'Admin'),   CC_ADMIN_ONLY);
-        CCEvents::MapUrl( ccp('admin','forums','move'), array( 'CCForums', 'MoveThread'),   CC_ADMIN_ONLY);
+        CCEvents::MapUrl( ccp('thread'),              array( 'CCForums', 'ViewThread'),  
+                CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{thread_id}', _('View a forum thread'), CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('forums'),              array( 'CCForums', 'Index'),   
+                CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[forum_id]', _('View forums index or specific forum'), CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('forums','post'),       array( 'CCForums', 'PostNew'), 
+                CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{forum_id}', _('Post a new topic'), CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('forums','people'),     array( 'CCForums', 'User'),    
+                CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}', _('Display forum topics for user'), CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('feed','rss','forums'), array( 'CCForums', 'RssFeed'), 
+                CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), 
+                array(  'feed/rss/forums', 
+                        'feed/rss/forums/user/{user_name}',
+                        'feed/rss/forums/thread/{thread_id}' ), 
+                _('Various forum feeds'), CC_AG_FEEDS );
+        CCEvents::MapUrl( ccp('admin','forums'),      array( 'CCForums', 'Admin'),   
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Configure forums'), CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('admin','forums','move'), array( 'CCForums', 'MoveThread'),   
+            CC_ADMIN_ONLY, ccs(__FILE__), '{thread_id}', _('Displays \'Move Thread\' form'), CC_AG_FORUMS );
     }
 
 }

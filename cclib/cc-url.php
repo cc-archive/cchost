@@ -113,6 +113,14 @@ function cca()
 }
 
 /**
+* Relative source code paths
+*/
+function ccs($file)
+{
+    return str_replace( str_replace('\\','/',getcwd()) . '/', '', str_replace('\\','/',$file) );
+}
+
+/**
 * Internal helper for getting root pretty url
 *
 */

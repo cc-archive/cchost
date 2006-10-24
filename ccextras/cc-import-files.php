@@ -110,7 +110,8 @@ class CCImportFiles
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','import'),  array( 'CCImportFiles', 'Import'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','import'),  array( 'CCImportFiles', 'Import'), CC_ADMIN_ONLY,
+            ccs(__FILE__), '', _('Displays \'File Import\' form'), CC_AG_UPLOADS );
     }
 
     /**

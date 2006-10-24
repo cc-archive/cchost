@@ -147,8 +147,8 @@ class CCChannels
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','channels'),
-             array( 'CCChannels', 'Admin'),  CC_ADMIN_ONLY);
+        CCEvents::MapUrl( ccp('admin','channels'), array( 'CCChannels', 'Admin'),  CC_ADMIN_ONLY,
+              ccs(__FILE__), '', _('Configure channels/radio interface'), CC_AG_RENDER );
     }
 
     /**

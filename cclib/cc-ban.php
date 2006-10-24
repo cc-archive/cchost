@@ -177,7 +177,8 @@ class CCBan
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/ban',   array('CCBan','Ban'),  CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/ban',   array('CCBan','Ban'),  
+            CC_ADMIN_ONLY, ccs(__FILE__), '{upload_id}', _('Ban/unban an upload') , CC_AG_MISC_ADMIN );
     }
 }
 

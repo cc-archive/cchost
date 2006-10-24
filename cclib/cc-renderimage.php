@@ -45,7 +45,8 @@ class CCRenderImage extends CCRender
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('media','showimage'), array('CCRenderImage','Show'), CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( ccp('media','showimage'), array('CCRenderImage','Show'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}/{upload_id}', _('Display bitmap'), CC_AG_RENDER );
     }
 
     function Show($username,$upload_id)

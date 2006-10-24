@@ -368,9 +368,12 @@ class CCRating
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('rate'),                  array('CCRating','Rate'), CC_MUST_BE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('admin','ratings'),       array('CCRating','Admin'), CC_ADMIN_ONLY);
-        CCEvents::MapUrl( ccp('admin','ratings','recalc'), array('CCRating','Recalc'), CC_ADMIN_ONLY);
+        CCEvents::MapUrl( ccp('rate'),                  array('CCRating','Rate'), 
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('admin','ratings'),       array('CCRating','Admin'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display admin ratings form'), CC_AG_RATINGS );
+        CCEvents::MapUrl( ccp('admin','ratings','recalc'), array('CCRating','Recalc'), 
+            CC_ADMIN_ONLY, ccs(__FILE__) );
     }
 }
 

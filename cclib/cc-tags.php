@@ -784,9 +784,12 @@ class CCTag
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('tags'), array('CCTag','OnBrowseTags'), CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('admin','tags'), array('CCTag','Admin'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','tags','reset'), array('CCTag','Reset'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('tags'), array('CCTag','OnBrowseTags'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[tags]', _('Browse Tags'), CC_AG_TAGS );
+        CCEvents::MapUrl( ccp('admin','tags'), array('CCTag','Admin'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Admin Tags'), CC_AG_TAGS ); 
+        CCEvents::MapUrl( ccp('admin','tags','reset'), array('CCTag','Reset'), 
+            CC_ADMIN_ONLY, ccs(__FILE__));
     }
 
     /**

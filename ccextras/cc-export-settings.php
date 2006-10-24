@@ -143,8 +143,10 @@ class CCSettingsExporter
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('export'),  array( 'CCSettingsExporter', 'Export'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('import'),  array( 'CCSettingsExporter', 'Import'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('export'),  array( 'CCSettingsExporter', 'Export'), CC_ADMIN_ONLY,
+                ccs(__FILE__), '', _('Exports configuration to browser'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( ccp('import'),  array( 'CCSettingsExporter', 'Import'), CC_ADMIN_ONLY,
+                ccs(__FILE__), '?i=path_to_file', _('Import configuration'), CC_AG_MISC_ADMIN );
     }
 
 }

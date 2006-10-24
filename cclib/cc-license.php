@@ -273,7 +273,8 @@ class CCLicense
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/license',  array('CCLicense', 'Admin'), CC_ADMIN_ONLY  );
+        CCEvents::MapUrl( 'admin/license',  array('CCLicense', 'Admin'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show admin license form'), CC_AG_MISC_ADMIN   );
     }
 
     /**

@@ -145,12 +145,17 @@ class CCFeedsRSS extends CCFeed
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('feed',CC_FEED_RSS),  array( 'CCFeedsRSS',
-                          'GenerateFeed'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('feed',CC_FEED_RSS),  array( 'CCFeedsRSS', 'GenerateFeed'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[tags]', 
+            _('Feed generator RSS'), CC_AG_FEEDS );
+
         CCEvents::MapUrl( ccp('podcast','page'),  array( 'CCFeedsRSS', 'PodcastPage'),
-                          CC_DONT_CARE_LOGGED_IN);
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', 
+            _('Feed generator RSS Podcast'), CC_AG_FEEDS );
+
         CCEvents::MapUrl( ccp('podcast','artist'),  array( 'CCFeedsRSS', 'PodcastUser'),
-                          CC_DONT_CARE_LOGGED_IN);
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{username}', 
+            _('Feed generator RSS Podcast'), CC_AG_FEEDS );
     }
 
 } // end of class CCFeedsRSS

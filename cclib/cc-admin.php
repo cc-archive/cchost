@@ -703,12 +703,18 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/site',     array('CCAdmin', 'Site'),       CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'admin/save',     array('CCAdmin', 'SaveConfig'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'admin/setup',    array('CCAdmin', 'Setup'),      CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'admin/settings', array('CCAdmin', 'Settings'),   CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'admin/edit',     array('CCAdmin', 'Deep'),       CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'admin/cfgroot',  array('CCAdmin', 'NewConfigRoot'),       CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/save',     array('CCAdmin', 'SaveConfig'), 
+            CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( 'admin/site',     array('CCAdmin', 'Site'),       
+            CC_ADMIN_ONLY, ccs(__FILE__), '[local|global]', _('Joint virtual root and global settings menu') , CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( 'admin/setup',    array('CCAdmin', 'Setup'),      
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Global settings menu'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( 'admin/settings', array('CCAdmin', 'Settings'),   
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Virtual root settings menu'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( 'admin/edit',     array('CCAdmin', 'Deep'),       
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Raw config editing'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( 'admin/cfgroot',  array('CCAdmin', 'NewConfigRoot'),       
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display form to create a new virtual root'), CC_AG_MISC_ADMIN );
     }
 
     /**

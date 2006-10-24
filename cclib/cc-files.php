@@ -536,12 +536,13 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'file/add',     array('CCPhysicalFile','Add'),     CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( 'file/replace', array('CCPhysicalFile','Replace'), CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( 'file/jockey',  array('CCPhysicalFile','Jockey'),  CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( 'file/delete',  array('CCPhysicalFile','Delete'),  CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( 'file/nickname',array('CCPhysicalFile','Nicname'), CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( 'file/manage',  array('CCPhysicalFile','Manage'), CC_MUST_BE_LOGGED_IN );
+        CCEvents::MapUrl( 'file/add',     array('CCPhysicalFile','Add'),     CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/replace', array('CCPhysicalFile','Replace'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/jockey',  array('CCPhysicalFile','Jockey'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/delete',  array('CCPhysicalFile','Delete'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/nickname',array('CCPhysicalFile','Nicname'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/manage',  array('CCPhysicalFile','Manage'), 
+            CC_MUST_BE_LOGGED_IN , ccs(__FILE__), '', _('Show file manager'), CC_AG_MISC_ADMIN );
     }
 
 }

@@ -501,10 +501,14 @@ class CCMenu
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/menu',            array('CCMenu', 'Admin'),         CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'admin/menu/killcache',  array('CCMenu', 'KillCache'),     CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( 'admin/menu/additems',   array('CCMenu', 'AddMenuItems'),  CC_ADMIN_ONLY);
-        CCEvents::MapUrl( 'admin/menugroup',       array('CCMenu', 'AdminGroup'),    CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/menu',            array('CCMenu', 'Admin'),        
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display admin menu form'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( 'admin/menu/killcache',  array('CCMenu', 'KillCache'),         
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Remove menu/url cache'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( 'admin/menu/additems',   array('CCMenu', 'AddMenuItems'),  
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Add menu items'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( 'admin/menugroup',       array('CCMenu', 'AdminGroup'),    
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display admin menu groups form'), CC_AG_MISC_ADMIN  );
     }
 
     /**

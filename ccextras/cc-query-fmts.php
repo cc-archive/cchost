@@ -56,8 +56,10 @@ class CCQueryFormats
 
                 $text = '[';
                 $count = count($records);
+                $comm = '';
                 for( $i = 0; $i < $count; $i++ )
                 {
+                    $text .= $comm;
                     $R =& $records[$i];
                     $keys = array_keys($R);
                     $comma = '';
@@ -69,6 +71,7 @@ class CCQueryFormats
                             $comma = ',';
                         }
                     }
+                    $comm = ',';
                 }
                 $text .= ']';
                 $results = array( $text, $mime ); 

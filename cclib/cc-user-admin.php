@@ -360,8 +360,10 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/password',   array('CCUserAdmin','ChangePassword'),  CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'admin/user',       array('CCUserAdmin','Admin'),           CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/password',   array('CCUserAdmin','ChangePassword'),  
+            CC_ADMIN_ONLY, ccs(__FILE__), '{userid}', _('Show admin "Account Management" form'), CC_AG_USER );
+        CCEvents::MapUrl( 'admin/user',       array('CCUserAdmin','Admin'),           
+            CC_ADMIN_ONLY, ccs(__FILE__), '{userid}', _('Admin a user IP, profile, etc.'), CC_AG_USER );
 
     }
 

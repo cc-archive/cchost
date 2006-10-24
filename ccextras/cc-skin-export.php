@@ -129,15 +129,15 @@ class CCSkinExport
     {
         CCEvents::MapUrl( ccp('skin','head'),   
                           array( 'CCSkinExport', 'GetHeader'),    
-                          CC_DONT_CARE_LOGGED_IN);
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
 
         CCEvents::MapUrl( ccp('skin','body_begin'),   
                           array( 'CCSkinExport', 'GetBodyHeader'),    
-                          CC_DONT_CARE_LOGGED_IN);
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
 
         CCEvents::MapUrl( ccp('skin','body_end'),   
                           array( 'CCSkinExport', 'GetFooter'),    
-                          CC_DONT_CARE_LOGGED_IN);
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
     }
 
 }

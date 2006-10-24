@@ -26,6 +26,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCUpload',  'OnApiQueryFormat')); 
+
 /**
  * Base class for forms that uplaod media files.
  * 
@@ -278,6 +280,41 @@ class CCUpload
 
         CCUpload::ListRecords($records,$macro);
     }
+
+    function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
+    {
+        extract($args);
+
+        if( strtolower($format) != 'list' )
+            return;
+
+        CCPage::SetTitle(_('Query Results'));
+
+        if( !empty($template) )
+        {
+            $dochop = isset($chop) && $chop > 0;
+            $chop   = isset($chop) ? $chop : 25;
+
+            CCPage::PageArg('chop',$chop);
+            CCPage::PageArg('dochop',$dochop);
+
+            if( empty($macro) )
+            {
+                CCPage::PageArg('_query_macro',$template);
+            }
+            else
+            {
+                CCPage::PageArg( '_query_macro', $template . '/' . $macro );
+            }
+
+            $macro = '_query_macro';
+        }
+
+        $this->ListRecords(&$records, empty($macro) ? '' : $macro);
+
+        $result = true;
+    }
+
 
     function ListRecords( &$records, $macro = '' )
     {

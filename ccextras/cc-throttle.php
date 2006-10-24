@@ -459,8 +459,10 @@ class CCThrottle
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','throttle'),  array( 'CCThrottle', 'Admin'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','throttlerules'),  array( 'CCThrottle', 'Rules'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','throttle'),  array( 'CCThrottle', 'Admin'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display throttle settings form'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( ccp('admin','throttlerules'),  array( 'CCThrottle', 'Rules'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display throttle rules form'), CC_AG_MISC_ADMIN );
     }
 
 }

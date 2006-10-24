@@ -917,14 +917,22 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'contest',               array( 'CCContest', 'Contests'),      CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'contests',              array( 'CCContest', 'Contests'),      CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'contest/submit',        array( 'CCContest', 'SubmitEntry'),   CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'contest/submitsource',  array( 'CCContest', 'SubmitSource'),  CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'contest/create',        array( 'CCContest', 'CreateContest'), CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'contest/edit',          array( 'CCContest', 'EditContest'),   CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'contest/vote',          array( 'CCContest', 'Vote'),          CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'admin/contest',          array( 'CCContest', 'Admin'),        CC_ADMIN_ONLY);
+        CCEvents::MapUrl( 'contest',               array( 'CCContest', 'Contests'),      
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[contestname]', _('Display Contests home page'), CC_AG_CONTESTS );
+        CCEvents::MapUrl( 'contests',              array( 'CCContest', 'Contests'),      
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[contestname]', _('Alias for /contest'), CC_AG_CONTESTS );
+        CCEvents::MapUrl( 'contest/submit',        array( 'CCContest', 'SubmitEntry'),   
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{contestname}', _('Display contest entry form'), CC_AG_CONTESTS );
+        CCEvents::MapUrl( 'contest/submitsource',  array( 'CCContest', 'SubmitSource'),  
+            CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display contest source upload form'), CC_AG_CONTESTS );
+        CCEvents::MapUrl( 'contest/create',        array( 'CCContest', 'CreateContest'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display new contest form'), CC_AG_CONTESTS );
+        CCEvents::MapUrl( 'contest/edit',          array( 'CCContest', 'EditContest'),   
+            CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display contest properties form'), CC_AG_CONTESTS );
+        CCEvents::MapUrl( 'contest/vote',          array( 'CCContest', 'Vote'),          
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
+        CCEvents::MapUrl( 'admin/contest',          array( 'CCContest', 'Admin'),        
+            CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display admin contest forms'), CC_AG_CONTESTS );
 
         //CCEvents::MapUrl( 'contest/poll/results', array( 'CCContest', 'PollResults'),     CC_DONT_CARE_LOGGED_IN );
     }

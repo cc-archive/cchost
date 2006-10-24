@@ -472,6 +472,10 @@ class CCFeed
             if( !empty($row['upload_description_text']) )
                 $row['upload_description'] =  $row['upload_description_text'];
 
+            if( !empty($row['upload_description_html']) )
+                $row['upload_description_html'] = 
+                        utf8_encode($this->_cct($row['upload_description_html']));
+
             $row['upload_description'] = utf8_encode($this->_cct($row['upload_description']));
             $row['upload_name']        = utf8_encode($this->_cct($row['upload_name']));
             $row['user_real_name']     = utf8_encode($this->_cct($row['user_real_name']));

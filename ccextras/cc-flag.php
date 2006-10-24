@@ -123,7 +123,9 @@ class CCFlag
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('flag'), array('CCFlag','Flag'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('flag'), array('CCFlag','Flag'), CC_DONT_CARE_LOGGED_IN,
+                ccs(__FILE__), '(upload|topic)/{upload_id}', _('Users flag an upload or topic'),
+                CC_AG_UPLOADS );
     }
 
     function Flag($type,$id)

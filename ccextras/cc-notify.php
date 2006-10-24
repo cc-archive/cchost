@@ -146,7 +146,7 @@ class CCNotify
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('people', 'notify', 'edit'), array('CCNotify','EditMyNotifications'), CC_MUST_BE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('people', 'notify', 'edit'), array('CCNotify','EditMyNotifications'), CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[username]', _('Display notify options form. Optional parameter is other user to get notified about.'), CC_AG_USER );
     }
 
     /**

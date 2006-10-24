@@ -985,10 +985,14 @@ class CCReview
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('reviews'),        array( 'CCReview', 'Reviews'),  CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('reviews','post'), array( 'CCReview', 'PostReview'),  CC_MUST_BE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('reviews','thread'), array( 'CCReview', 'SeeThread'),    CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('feed','rss','reviews'), array( 'CCReview', 'RssFeed'),  CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('reviews'),        array( 'CCReview', 'Reviews'),  
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[user_name]/[upload_id]', _('See reviews by a person or for a specific upload'), CC_AG_REVIEWS );
+        CCEvents::MapUrl( ccp('reviews','post'), array( 'CCReview', 'PostReview'),  
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[upload_id]', _('Display a review form'), CC_AG_REVIEWS );
+        CCEvents::MapUrl( ccp('reviews','thread'), array( 'CCReview', 'SeeThread'),    
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('feed','rss','reviews'), array( 'CCReview', 'RssFeed'),  
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[user_name]/[upload_id]', _('Reviews by a person or for a specific upload'), CC_AG_FEEDS );
     }
 
 }

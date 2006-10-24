@@ -459,7 +459,7 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
         die($err);
     }
     else
-    {
+    { print($err);
         //
         // If debugging is NOT on then we want to show users a happy
         // friendly lie, er, message

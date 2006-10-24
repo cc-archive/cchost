@@ -82,7 +82,9 @@ class CCActivityLogAPI
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('activity'),  array('CCActivityLogAPI','ViewLog'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('activity'),  array('CCActivityLogAPI','ViewLog'), CC_ADMIN_ONLY,
+                         ccs(__FILE__) , '[clear]',
+                        _('Show activity log'), CC_AG_MISC_ADMIN );
     }
 
     /**

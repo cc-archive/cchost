@@ -325,10 +325,20 @@ class CCHowIDidIt
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('howididit'),      array('CCHowIDidIt','HowIDidIt'),   CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('howididit','browse'), array('CCHowIDidIt','Browse'),  CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('howididit','detail'), array('CCHowIDidIt','Detail'),  CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('edithowididit'),  array('CCHowIDidIt','EditHowIDidIt'),   CC_MUST_BE_LOGGED_IN );
+        CCEvents::MapUrl( ccp('howididit'),      array('CCHowIDidIt','HowIDidIt'),   
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{upload_id}', 
+            _('Show How I Did Page for an upload'), CC_AG_HIDI );
+
+        CCEvents::MapUrl( ccp('howididit','browse'), array('CCHowIDidIt','Browse'),  
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), 
+            _('Show How I Did browser'), CC_AG_HIDI  );
+
+        CCEvents::MapUrl( ccp('howididit','detail'), array('CCHowIDidIt','Detail'),  
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__)  );
+
+        CCEvents::MapUrl( ccp('edithowididit'),  array('CCHowIDidIt','EditHowIDidIt'),   
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{upload_id}', 
+            _('Edit How I Did Page'), CC_AG_HIDI );
     }
 
 }

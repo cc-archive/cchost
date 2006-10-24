@@ -214,7 +214,9 @@ class CCID3Tagger
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/id3tags',  array('CCID3Tagger', 'AdminTagger'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/id3tags',  array('CCID3Tagger', 'AdminTagger'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display ID3 configuration form'),
+            CC_AG_UPLOAD );
     }
 
     /**

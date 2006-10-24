@@ -103,7 +103,8 @@ class CCDisableSite
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','disable'), array('CCDisableSite','Admin'), CC_ADMIN_ONLY);
+        CCEvents::MapUrl( ccp('admin','disable'), array('CCDisableSite','Admin'), CC_ADMIN_ONLY,
+                    ccs(__FILE__), '', _('Disable site from non-admin users'), CC_AG_MISC_ADMIN);
     }
 
 

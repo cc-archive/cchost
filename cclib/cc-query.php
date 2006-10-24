@@ -50,6 +50,9 @@ class CCQuery
         // Results
         //
 
+        if( $value === true ) // handled elsewhere 
+            return;           // return and show the page
+
         // We didn't find anything, slap back a 404
         //
         if( empty($value) ) 
@@ -125,6 +128,10 @@ class CCQuery
 
     function GetDefaultArgs()
     {
+        global $CC_GLOBALS;
+
+        $limit = empty($CC_GLOBALS['querylimit']) ? 0 : $CC_GLOBALS['querylimit'];
+
         return array(
                     'tags' => '',
                     'reqtags' => '',
@@ -138,7 +145,7 @@ class CCQuery
                     'nosort' => false,
                     'rand' => false,
 
-                    'limit' => 15,
+                    'limit' => $limit,
                     'offset' => 0,
 
                     'sinceu' => 0,
@@ -154,6 +161,8 @@ class CCQuery
                     'remixedby' => '',
 
                     'where' => '',
+                    'mod'   => 0,
+                    'unsub' => 0,
 
                     'format' => 'php', 
 
@@ -164,12 +173,43 @@ class CCQuery
     {
         extract($args);
 
-        $uploads =& CCUploads::GetTable();
+        if( empty($remixesof) )
+        {
+            // Get a new table so we can smash it about
+
+            $uploads = new CCUploads();
+        }
+        else
+        {
+            // in this case the query will be done elsewhere
+            // and we want to use the global table to set things
+            // up like sort and tags
+            // 
+            // The global instance of the table will be pretty 
+            // useless after that because it will have this 
+            // query's state smashed into it, but oh well
+            //
+            $uploads = CCUploads::GetTable();
+        }
 
         $uploads->SetDefaultFilter(true,true); // query as anon
         
         if( empty($format) )
             $format = 'undefined';
+
+        // this is sort of a macro that expands here...
+
+        if( !empty($remixedby) )
+        {
+            $user = $remixedby;
+
+            if( empty($reqtags) )
+                $reqtags = 'remix';
+            elseif( !CCTag::InTag('remix',$reqtags) )
+                $reqtags .= ',remix';
+        }
+
+        // sort
 
         if( !empty($rand) )
         {
@@ -181,6 +221,8 @@ class CCQuery
                 $ord = 'ASC';
             $uploads->SetOrder($sort,$ord);
         }
+
+        // radio tag plugs
 
         $insert_promos = false;
 
@@ -224,14 +266,6 @@ class CCQuery
             $tags = '';
         }
 
-        if( !empty($reqtags) )
-        {
-            if( $tags )
-                $tags .= ',' . $reqtags;
-            else
-                $tags = $reqtags;
-        }
-
         if( empty($type) )
             $type = 'all';
 
@@ -244,119 +278,166 @@ class CCQuery
             $uploads->SetOffsetAndLimit( $offset, $limit );
         }
 
+        // ----------- WHERE ------------------
+
+        if( empty($where) )
+        {
+            $where = array();
+        }
+        else 
+        {
+            $tempwhere = $where;
+            $where = array();
+            $where[] = $uploads->_where_to_string($tempwhere); // ugh sorry
+        }
+
+        if( !empty($reqtags) )
+        {
+            // a bit sleazy but it works and will continue to 
+            
+            $dummyup = new CCUploads();
+            $dummyup->SetDefaultFilter(false); // shut all other filtering off
+            $dummyup->SetTagFilter($reqtags,'all');
+            $where[] = $dummyup->_tags_to_where(''); /* *cough* */
+        }
+
+
+        if( !isset($ids) )
+        {
+            $ids = '';
+        }
+        elseif( !empty($ids) )
+        {
+            // this will do a security check in case someone tries
+            // to escape out of sql
+            $ids = array_unique(preg_split('/([^0-9]+)/',$ids,0,PREG_SPLIT_NO_EMPTY));
+            if( $ids )
+                $where[] = "(upload_id IN (" . join(',',$ids) . '))';
+        }
+
+        // Check for date limit
+
+        $since = 0;
+
+        if( !empty($sinced) )     // text date
+        {
+            $since = strtotime($sinced);
+            if( $since < 1 )
+                die('invalid date string');
+        }
+        elseif( !empty($sinceu) ) // unix time
+        {
+            if( $sinceu{0} === '_' )
+                $sinceu = substr($sinceu,1);
+            $since = $sinceu;
+        }
+
+        if( !empty($since) )
+        {
+            $after = date( 'Y-m-d H:i', $since );
+            // CCDebug::PrintVar($after);
+            $where[] = "(upload_date > '$after')";
+        }
+
+        // Ratings...
+
+        if( !empty($score) )
+        {
+            $where[] = "(upload_score >= $score)";
+        }
+
+        // User...
+
+        if( !empty($user) )
+        {
+            $where[] = "(user_name = '$user')";
+        }
+
+        // License 
+
+        if( !empty($lic) )
+        {
+            $license = $this->_lic_query_to_key($lic);
+            $where[] = "(license_id = '$license')";
+        }
+
+        // Search string 
+
+        if( !empty($q) )
+        {
+            $where[] = "(LOWER(CONCAT(upload_description,upload_tags,user_real_name,user_name,upload_name)) LIKE '%$q%'";
+        }
+
+        // banned
+
+        if( !empty($mod)  )
+        {
+            if( CCUser::IsAdmin() )
+            {
+                $uploads->SetDefaultFilter(false,false); // query as anon
+                $where[] = '(upload_banned=1)';
+            }
+            else
+            {
+                CCUtil::Send404();
+            }
+        }
+
+        // unpublished
+
+        if( !empty($unpub) )
+        {
+            if( CCUser::IsAdmin() )
+            {
+                $uploads->SetDefaultFilter(false,false); // query as anon
+                $where[] = '(upload_published<1)';
+            }
+            else
+            {
+                $uploads->SetDefaultFilter(false,false); // query as anon
+                $uid = CCUser::CurrentUser();
+
+                $where[] = "((upload_published<1) AND (upload_user=$uid))";
+            }
+        }
+
+        $where = join(' AND ', $where);
+
+        // ------------- END WHERE ---------------------
+
+
+        // ------------- DO THE QUERY ---------------------
+
         if( !empty($remixesof) )
         {
             $user_id = CCUser::IDFromName($remixesof);
             if( !empty($user_id) )
             {
                 $remixes =& CCRemixSources::GetTable();
-                $records =& $remixes->GetRemixesOf($user_id,$format == 'count');
+                $records =& $remixes->GetRemixesOf($user_id,$format=='count',$where);
             }
         }
-        elseif( !empty($remixedby) )
+        elseif( $format == 'count' )
         {
-            $user_id = CCUser::IDFromName($remixedby);
-            if( !empty($user_id) )
-            {
-                $remixes =& CCRemixes::GetTable();
-                $records =& $remixes->GetRemixedBy($user_id,$format == 'count');
-            }
+            $records = $uploads->CountRows($where);
         }
-        else
+        elseif( $format == 'ids' )
         {
-            // ----------- WHERE ------------------//
-
-            if( empty($where) )
-            {
-                $where = array();
-            }
-            else 
-            {
-                $tempwhere = $where;
-                $where = array();
-                $where[] = $uploads->_where_to_string($tempwhere); // ugh sorry
-            }
-
-            if( !isset($ids) )
-                $ids = '';
-
-            if( !empty($ids) )
-            {
-                // this will do a security check in case someone tries
-                // to escape out of sql
-                $ids = array_unique(preg_split('/([^0-9]+)/',$ids,0,PREG_SPLIT_NO_EMPTY));
-                if( $ids )
-                    $where[] = "(upload_id IN (" . join(',',$ids) . '))';
-            }
-
-            // Check for date limit
-
-            $since = 0;
-
-            if( !empty($sinced) )     // text date
-            {
-                $since = strtotime($sinced);
-            }
-            elseif( !empty($sinceu) ) // unix time
-            {
-                if( $sinceu{0} === '_' )
-                    $sinceu = substr($sinceu,1);
-                $since = $sinceu;
-            }
-
-            if( !empty($since) )
-            {
-                $after = date( 'Y-m-d', $since );
-                $where[] = "(upload_date > '$after')";
-            }
-
-            // Ratings...
-
-            if( !empty($score) )
-            {
-                $where[] = "(upload_score >= $score)";
-            }
-
-            // User...
-
-            if( !empty($user) )
-            {
-                $where[] = "(user_name = '$user')";
-            }
-
-            // License 
-
-            if( !empty($lic) )
-            {
-                $license = $this->_lic_query_to_key($lic);
-                $where[] = "(license_id = '$license')";
-            }
-
-            // Search string 
-
-            if( !empty($q) )
-            {
-                $where[] = "(LOWER(CONCAT(upload_description,upload_tags,user_real_name,user_name,upload_name)) LIKE '%$q%'";
-            }
-
-            $where = join(' AND ', $where);
-
-            // ------------- END WHERE ---------------------
-
-            if( $format == 'count' )
-                $records = $uploads->CountRows($where);
-            elseif( $format == 'ids' )
-                $records = $uploads->QueryKeys($where);
-            else
-                $records =& $uploads->GetRecords($where);
+            $records = $uploads->QueryKeys($where);
         }
+        else 
+        {
+            $records =& $uploads->GetRecords($where);
+        }
+
+        // ------------- END QUERY ---------------------
 
         if( $format == 'count' )
         {
             if( $limit )
                 $records = min($records,$limit);
 
-            return( array( "[$records]", 'text/plain' ) );
+            return( array( "[$records][$limit]", 'text/plain' ) );
         }
         elseif( $format == 'ids' )
         {
@@ -365,7 +446,7 @@ class CCQuery
             return( array( $text, 'text/plain' ) );
         }
 
-        // Do NOT return here if records are empty, 
+        // Do NOT return at this point if records are empty, 
         // an empty feed is still valid
 
         if( empty($records) )
@@ -379,6 +460,10 @@ class CCQuery
             $this->_resort_records($records,$sort_order);
         }
 
+        //---------------------------------------------
+        // Clean up the sensitive fields and insert
+        // any radio promos
+        //
         $n = count($records);
         for( $i = 0; $i < $n; $i++ )
         {
@@ -467,8 +552,8 @@ class CCQuery
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('api','query'),   array( 'CCQuery', 'QueryURL'), CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('admin','query'), array( 'CCQuery', 'Admin'),  CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('api','query'),   array( 'CCQuery', 'QueryURL'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Browser query interface'), CC_AG_SEARCH );
     }
 
     /**

@@ -646,13 +646,27 @@ class CCMediaHost
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('files'),                array('CCMediaHost','Media'),     CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('files','publish'),      array('CCMediaHost','Publish'),   CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('files','edit'),         array('CCPhysicalFile','Edit'),   CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('files','delete'),       array('CCUpload','Delete'),       CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('download'),             array('CCUpload','Download'),     CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( ccp('admin','upload'),       array('CCUpload','AdminUpload'),  CC_ADMIN_ONLY );
-        CCEvents::MapUrl( ccp('admin','editcommands'), array('CCUpload','EditCommands'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('files'),                array('CCMediaHost','Media'),     
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[user_name]/[upload_id]', 
+            _('List files'), CC_AG_UPLOAD );
+
+        CCEvents::MapUrl( ccp('files','publish'),      array('CCMediaHost','Publish'),   
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{user_name}/{upload_id}', 
+            _('Publish/unpublish an upload'), CC_AG_UPLOAD  );
+
+        CCEvents::MapUrl( ccp('files','edit'),         array('CCPhysicalFile','Edit'),   
+            CC_MUST_BE_LOGGED_IN, 'cclib/cc-files.php', 
+            '{user_name}/{upload_id}', 
+            _('Edit properties for an upload'), CC_AG_UPLOAD  );
+
+        CCEvents::MapUrl( ccp('files','delete'),       array('CCUpload','Delete'),       
+            CC_MUST_BE_LOGGED_IN, 'cclib/cc-upload.php', 
+            '{upload_id}', _('Show confirm delete choice'), CC_AG_UPLOAD  );
+
+        CCEvents::MapUrl( ccp('admin','upload'),       array('CCUpload','AdminUpload'),  
+            CC_ADMIN_ONLY, 'cclib/cc-upload.php', 
+            '{upload_id}', _('Show admin upload form'), CC_AG_UPLOAD  );
+
     }
 
     /**

@@ -693,11 +693,16 @@ class CCTopic
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('topics','reply'),  array( 'CCTopic', 'Reply'),   CC_MUST_BE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('topics','quote'),  array( 'CCTopic', 'Quote'),   CC_MUST_BE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('topics','delete'), array( 'CCTopic', 'Delete'),  CC_MUST_BE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('topics','edit'),   array( 'CCTopic', 'Edit'),    CC_MUST_BE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('topics','view'),   array( 'CCTopic', 'View'),    CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('topics','reply'),  array( 'CCTopic', 'Reply'),   
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[topicid]/[isquote]', _('Display topic reply form') , CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('topics','quote'),  array( 'CCTopic', 'Quote'),   
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Display quote reply form') , CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('topics','delete'), array( 'CCTopic', 'Delete'),  
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Delete a topic') , CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('topics','edit'),   array( 'CCTopic', 'Edit'),    
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Display an edit topic form') , CC_AG_FORUMS );
+        CCEvents::MapUrl( ccp('topics','view'),   array( 'CCTopic', 'View'),    
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{topicid}', _('Display a topic thread') , CC_AG_FORUMS );
     }
 
 }

@@ -90,7 +90,9 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('archive'), array('CCArchive','Archive'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('archive'), array('CCArchive','Archive'), CC_DONT_CARE_LOGGED_IN,
+               ccs(__FILE__), '[month/{YYYY-MM}][/tags])', _('Display upload archive for a specific month'),
+            CC_AG_UPLOADS );
     }
 
 }

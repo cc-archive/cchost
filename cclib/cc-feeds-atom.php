@@ -80,7 +80,8 @@ class CCFeedsAtom extends CCFeed
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('feed',CC_FEED_ATOM),  array( 'CCFeedsAtom', 'GenerateFeed'), 
-			         CC_DONT_CARE_LOGGED_IN);
+			         CC_DONT_CARE_LOGGED_IN,ccs(__FILE__), '', 
+            _('Feed generator RSS Podcast'), CC_AG_FEEDS );
     }
 
 } // end of class CCFeeds

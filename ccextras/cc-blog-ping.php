@@ -173,7 +173,8 @@ class CCBlogPing
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','ping'),  array( 'CCBlogPing', 'Admin'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( ccp('admin','ping'),  array( 'CCBlogPing', 'Admin'), CC_ADMIN_ONLY,
+                    ccs(__FILE__) );
     }
 
 }

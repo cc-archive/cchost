@@ -195,7 +195,8 @@ class CCSkinMaker
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','skin','create'), array('CCSkinMaker','Create'), CC_ADMIN_ONLY);
+        CCEvents::MapUrl( ccp('admin','skin','create'), array('CCSkinMaker','Create'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', CC_AG_MISC_ADMIN );
     }
 
     /**

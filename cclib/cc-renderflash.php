@@ -105,7 +105,7 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('files','playflash'),   array('CCRenderFlash', 'Play'), CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('files','playflash'),   array('CCRenderFlash', 'Play'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}/{upload_id}', _('Display Flash'), CC_AG_RENDER );
     }
 
 }

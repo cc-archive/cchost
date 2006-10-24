@@ -64,9 +64,12 @@ class CCFileMan
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','files','manage'), array('CCFileMan','Manage'), CC_ADMIN_ONLY);
-        CCEvents::MapUrl( ccp('admin','files'),          array('CCFileMan','Files'),  CC_ADMIN_ONLY);
-        CCEvents::MapUrl( ccp('admin','addfiles'),       array('CCFileMan','Add'),    CC_ADMIN_ONLY);
+        CCEvents::MapUrl( ccp('admin','files','manage'), array('CCFileMan','Manage'), CC_ADMIN_ONLY,
+                ccs(__FILE__), '', _('Web based file manager'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( ccp('admin','files'),          array('CCFileMan','Files'),  CC_ADMIN_ONLY,
+                ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('admin','addfiles'),       array('CCFileMan','Add'),    CC_ADMIN_ONLY,
+                ccs(__FILE__) );
     }
 
     /**

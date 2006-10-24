@@ -88,10 +88,7 @@ class CCRemixTree extends CCTable
         return $records;
     }
 
-    /**
-    * @access private
-    */
-    function & _get_user_stat($user_id,$count_only)
+    function _get_sql($user_id,$count_only,$where)
     {
         if( $count_only )
             $cols = 'COUNT(*)';
@@ -110,23 +107,73 @@ class CCRemixTree extends CCTable
             $extra_where
 END;
 
-        if( $count_only )
-        {
-            $count = CCDataBase::QueryItem($sql);
-            return $count;
-        }
+        return $sql;
+    }
 
-        $ids = CCDatabase::QueryItems($sql);
-        if( !empty($ids) )
+    /**
+    * @access private
+    */
+    function & _get_user_stat($user_id,$count_only,$where)
+    {
+        $empty_ret = array();
+
+        if( empty($where) )
         {
+            // <= 3.1 backward compat code...
+
+            $sql = $this->_get_sql($user_id,$count_only,$where);
+
+            if( $count_only  )
+            {
+                $count = CCDatabase::QueryItem($sql);
+                return $count;
+            }
+
+            $ids = CCDatabase::QueryItems($sql);
+            if( !empty($ids) )
+            {
+                $uploads =& CCUploads::GetTable();
+                $uploads->SetOrder('upload_date','DESC');
+                $records =& $uploads->GetRecordsFromKeys($ids);
+                return $records;
+            }
+            return $empty_ret;
+        }
+        else
+        {
+            // >3.1
+            //
+            // this code was added after the '$where' paramater
+            // was added to make highly conditional searches
+            // on 'remixesof' possible
+            //
+            
+            $sql = $this->_get_sql($user_id,false,$where);
+            $ids = CCDatabase::QueryItems($sql);
+
+            if( empty($ids) )
+            {
+                if( $count_only )
+                {
+                    $count = 0;
+                    return $count;
+                }
+                return $empty_ret;
+            }
+
+            $where = "($where) AND upload_id IN (" . join(',', $ids) . ')';
+
             $uploads =& CCUploads::GetTable();
-            $uploads->SetOrder('upload_date','DESC');
-            $records =& $uploads->GetRecordsFromKeys($ids);
-            $uploads->SetOrder('');
+
+            if( $count_only )
+            {
+                $count = $uploads->CountRows($where);
+                return $count;
+            }
+
+            $records =& $uploads->GetRecords($where);
             return $records;
         }
-        $e = array();
-        return $e;
     }
 
 }
@@ -169,9 +216,9 @@ class CCRemixSources extends CCRemixTree
         return $s;
     }
 
-    function & GetRemixesOf($user_id,$count_only=false)
+    function & GetRemixesOf($user_id,$count_only=false,$cond='')
     {
-        $rof =& $this->_get_user_stat($user_id,$count_only);
+        $rof =& $this->_get_user_stat($user_id,$count_only,$cond);
         return $rof;
     }
 
@@ -230,9 +277,9 @@ class CCRemixes extends CCRemixTree
         return $r;
     }
 
-    function & GetRemixedBy($user_id,$count_only=false)
+    function & GetRemixedBy($user_id,$count_only=false,$cond)
     {
-        $rby =& $this->_get_user_stat($user_id,$count_only);
+        $rby =& $this->_get_user_stat($user_id,$count_only,$cond);
         return $rby;
     }
 

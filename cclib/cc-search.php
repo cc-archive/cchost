@@ -75,9 +75,12 @@ class CCSearch
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'search',         array('CCSearch','Search'),       CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'search/people',  array('CCSearch','OnUserSearch'), CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'search/results', array('CCSearch','OnSearch'),     CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'search',         array('CCSearch','Search'),       
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Display search form'), CC_AG_SEARCH );
+        CCEvents::MapUrl( 'search/people',  array('CCSearch','OnUserSearch'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{field}/{tags}', _("'field' is whatilike, whatido or lookinfo"), CC_AG_SEARCH );
+        CCEvents::MapUrl( 'search/results', array('CCSearch','OnSearch'),     
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _("Use this for 'action' in forms"), CC_AG_SEARCH );
     }
 
     function Search()

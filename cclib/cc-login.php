@@ -405,11 +405,16 @@ class CCLogin
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'register',       array( 'CCLogin', 'Register'),        CC_ONLY_NOT_LOGGED_IN );
-        CCEvents::MapUrl( 'login',          array( 'CCLogin', 'Login'),           CC_ONLY_NOT_LOGGED_IN );
-        CCEvents::MapUrl( 'logout',         array( 'CCLogin', 'Logout'),          CC_MUST_BE_LOGGED_IN );
-        CCEvents::MapUrl( 'lostpassword',   array( 'CCLogin', 'LostPassword'),    CC_ONLY_NOT_LOGGED_IN );
-        CCEvents::MapUrl( 's',              array( 'CCLogin', 'OnSecurityCallback'),  CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'register',       array( 'CCLogin', 'Register'),        
+            CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__), '', _('Show register form'), CC_AG_USER );
+        CCEvents::MapUrl( 'login',          array( 'CCLogin', 'Login'),           
+            CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__), '', _('Show login form'), CC_AG_USER  );
+        CCEvents::MapUrl( 'logout',         array( 'CCLogin', 'Logout'),          
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Logout current user'), CC_AG_USER  );
+        CCEvents::MapUrl( 'lostpassword',   array( 'CCLogin', 'LostPassword'),    
+            CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__), '', _('Show lost password form'), CC_AG_USER  );
+        CCEvents::MapUrl( 's',              array( 'CCLogin', 'OnSecurityCallback'),  
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
     }
 
     /**

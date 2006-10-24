@@ -536,23 +536,29 @@ END;
     */
     function OnMapUrls()
     {
-        global $CC_GLOBALS;
-
-        $enabled = empty($CC_GLOBALS['allow-pool-ui']) ? false : $CC_GLOBALS['allow-pool-ui'];
-
-        if( $enabled )
-        {
-            CCEvents::MapUrl( ccp( 'pools', 'pool'),     array( 'CCPoolUI', 'Pool'),    CC_DONT_CARE_LOGGED_IN );
-            CCEvents::MapUrl( ccp( 'pools', 'item' ),    array( 'CCPoolUI', 'Item'),    CC_DONT_CARE_LOGGED_IN );
-
-            CCEvents::MapUrl( ccp( 'admin', 'pools'),                array( 'CCPoolUI', 'Admin'),    CC_ADMIN_ONLY );
-            CCEvents::MapUrl( ccp( 'admin', 'pools', 'settings' ),   array( 'CCPoolUI', 'Settings'), CC_ADMIN_ONLY );
-            CCEvents::MapUrl( ccp( 'admin', 'pools', 'manage' ),     array( 'CCPoolUI', 'Manage'),   CC_ADMIN_ONLY );
-            CCEvents::MapUrl( ccp( 'admin', 'pool',  'edit' ),       array( 'CCPoolUI', 'Edit'),     CC_ADMIN_ONLY );
-            CCEvents::MapUrl( ccp( 'admin', 'pool',  'delete' ),     array( 'CCPoolUI', 'Delete'),   CC_ADMIN_ONLY );
-            CCEvents::MapUrl( ccp( 'admin', 'pools', 'approve' ),    array( 'CCPoolUI', 'Approve'),   CC_ADMIN_ONLY );
-            CCEvents::MapUrl( ccp( 'admin', 'pools', 'approve', 'item' ),    array( 'CCPoolUI', 'ApproveItem'),   CC_ADMIN_ONLY );
-        }
+        CCEvents::MapUrl( ccp( 'pools', 'pool'),     array( 'CCPoolUI', 'Pool'),    
+            CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid}', 
+            _('Show sample pool'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'pools', 'item' ),    array( 'CCPoolUI', 'Item'),    
+            CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolitemid}', 
+            _('Show a sample pool item'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'pools'),                array( 'CCPoolUI', 'Admin'),    
+            CC_ADMIN_ONLY , ccs(__FILE__) , '', _('Display admin pools menu'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'pools', 'settings' ),   array( 'CCPoolUI', 'Settings'), 
+            CC_ADMIN_ONLY , ccs(__FILE__) , '', _('Display pool admin settings form'), 
+            CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'pools', 'manage' ),     array( 'CCPoolUI', 'Manage'),   
+            CC_ADMIN_ONLY , ccs(__FILE__) , '', _('Display list of pools to admin'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'pool',  'edit' ),       array( 'CCPoolUI', 'Edit'),     
+            CC_ADMIN_ONLY , ccs(__FILE__) , '{poolid}', _('Edit properties of pool'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'pool',  'delete' ),     array( 'CCPoolUI', 'Delete'),   
+            CC_ADMIN_ONLY , ccs(__FILE__) , '{poolid}', _('Delete a sample pool'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'pools', 'approve' ),    array( 'CCPoolUI', 'Approve'),   
+            CC_ADMIN_ONLY , ccs(__FILE__) , '', _('Display admin pool approval menu'), 
+            CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'pools', 'approve', 'item' ),    
+            array( 'CCPoolUI', 'ApproveItem'),   CC_ADMIN_ONLY , ccs(__FILE__) , '{poolitem}', 
+            _('Approve a remote remix'), CC_AG_SAMPLE_POOL );
     }
 
     /**
