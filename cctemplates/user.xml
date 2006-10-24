@@ -43,7 +43,7 @@ $Header$
     <tr>
         <td class="cc_user_avatar" >
            <a tal:condition="record/user_avatar_url" href="${record/artist_page_url}"><img src="${record/user_avatar_url}" /></a>
-           <a tal:condition="not: record/user_avatar_url" href="${record/artist_page_url}"><img src="/ccimages/person.png" /></a>
+           <a tal:condition="not: record/user_avatar_url" href="${record/artist_page_url}"><img src="${root-url}ccimages/person.png" /></a>
         </td>
         <td >
             <h3>${record/user_real_name}</h3>
@@ -75,7 +75,7 @@ $Header$
     <tr>
         <td class="cc_user_avatar" >
            <a tal:condition="record/user_avatar_url" href="${record/artist_page_url}"><img src="${record/user_avatar_url}" /></a>
-           <a tal:condition="not: record/user_avatar_url" href="${record/artist_page_url}"><img src="/ccimages/person.png" /></a>
+           <a tal:condition="not: record/user_avatar_url" href="${record/artist_page_url}"><img src="${root-url}ccimages/person.png" /></a>
         </td>
         <td>
             <h3 class="cc_user_name">${record/user_name} 
