@@ -130,11 +130,6 @@ $Id$
 </table>
 
 </div>
-<script>
-baseCmd = '${home-url}api/query';
-sitePromoTag = '<tal:block condition="exists:site_promo_tag">${site_promo_tag}</tal:block>';
-</script>
-<script src="${root-url}cctemplates/radio.js" ></script>
 
 </td>
 <td>
@@ -151,5 +146,10 @@ sitePromoTag = '<tal:block condition="exists:site_promo_tag">${site_promo_tag}</
 
 </form>
 
+<script>
+baseCmd = '${home-url}api/query';
+sitePromoTag = '<tal:block condition="exists:site_promo_tag">${site_promo_tag}</tal:block>';
+</script>
+<script src="${root-url}cctemplates/radio.js" ></script>
 
 </tal:block>

@@ -437,7 +437,7 @@ class CCQuery
             if( $limit )
                 $records = min($records,$limit);
 
-            return( array( "[$records][$limit]", 'text/plain' ) );
+            return( array( "[$records]", 'text/plain' ) );
         }
         elseif( $format == 'ids' )
         {
