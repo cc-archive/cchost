@@ -87,7 +87,7 @@ When using the 'docwrite' format this can be used from a &lt;script&gt; tag as t
 
 <div class="code">
   &lt;script type="text/javascript" 
-  src="http://ccmixter.org/media/api/query?limit=5&tags=remix+chill&amp;sort=upload_name&amp;format=docwrite&amp;template=links"&gt;
+  src="http://ccmixter.org/media/api/query?limit=5&tags=remix+chill&amp;sort=name&amp;format=docwrite&amp;template=links"&gt;
   &lt;/script&gt;
 </div>
 
@@ -95,7 +95,7 @@ When using the 'docwrite' format this can be used from a &lt;script&gt; tag as t
 
 <div style="width:70%;margin-left: 30px;">
   <script type="text/javascript" 
-  src="http://ccdev15.dreamhosters.com/media/api/query?limit=5&tags=remix+chill&sort=upload_name&format=docwrite&template=links">
+  src="http://ccmixter.org/media/api/query?limit=5&tags=remix+chill&sort=name&format=docwrite&template=links">
   </script>
 </div>
 
