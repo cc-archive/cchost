@@ -117,7 +117,7 @@ class CCQuery
                             : $CC_GLOBALS['querylimit'];
         }
 
-        if( empty($args['limit']) || ($admin_limit < $args['limit']) )
+        if( !empty($admin_limit) && (empty($args['limit']) || ($admin_limit < $args['limit'])) )
         {
             $args['limit'] = $admin_limit;
         }
@@ -429,6 +429,7 @@ class CCQuery
         }
         elseif( $format == 'count' )
         {
+            $uploads->SetOffsetAndLimit( 0, 0 );
             $records = $uploads->CountRows($where);
         }
         elseif( $format == 'ids' )
@@ -452,9 +453,6 @@ class CCQuery
 
         if( $format == 'count' )
         {
-            if( $limit )
-                $records = min($records,$limit);
-
             return( array( "[$records]", 'text/plain' ) );
         }
         elseif( $format == 'ids' )
