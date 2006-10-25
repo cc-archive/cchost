@@ -250,6 +250,8 @@ class CCQuery
             $promo_recs = array();
             $promo = 0;
             $promo_count = count($promos);
+            if( !empty($promos) )
+                $promo_keys = array_keys($promos);
         }
 
         if( isset($tags) )
@@ -481,17 +483,18 @@ class CCQuery
         // any radio promos
         //
         $n = count($records);
+        $rkeys = array_keys($records);
         for( $i = 0; $i < $n; $i++ )
         {
-            $R =& $records[$i];
+            $R =& $records[ $rkeys[$i] ];
             $this->_clean_rec($R,$format);
             
-            CCUpload::EnsureFiles($records[$i],true);
+            CCUpload::EnsureFiles($R,true);
             if( $insert_promos )
             {
                 if( !$i || ($i % $promo_gap == 0) )
                 {
-                    $p = $promos[ $promo++ % $promo_count ];
+                    $p = $promos[ $promo_keys[$promo++ % $promo_count] ];
                     $this->_clean_rec($p,$format);
                     CCUpload::EnsureFiles($p,true);
                     $promo_recs[] = $p;
