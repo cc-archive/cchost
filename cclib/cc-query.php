@@ -282,7 +282,7 @@ class CCQuery
 
         $uploads->SetTagFilter($tags,$type);
 
-        if( !(empty($limit) && empty($offset)) )
+        if( !empty($limit) )
         {
             if( empty($offset) )
                 $offset = 0;
@@ -311,7 +311,6 @@ class CCQuery
             $dummyup->SetTagFilter($reqtags,'all');
             $where[] = $dummyup->_tags_to_where(''); /* *cough* */
         }
-
 
         if( !isset($ids) )
         {
