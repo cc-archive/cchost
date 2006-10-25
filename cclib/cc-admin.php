@@ -308,12 +308,15 @@ class CCAdminRawForm extends CCGridForm
             $c    = count($arr);
             $keys = array_keys($arr);
 
-            if( !$keys || (is_array( $arr[$keys[0]] ) ||  is_object( $arr[$keys[0]] )) )
+            if( !$keys )
                 continue;
 
             for( $i = 0; $i < $c; $i++ )
             {
                 $name = $keys[$i];
+                $value = $arr[$name];
+                if( is_array( $value ) ||  is_object( $value) )
+                    continue;
                 $a = $this->_make_field($row,$id,$i,$name,$arr[$name]);
                 $uid = $name . '_' . $id . '_' . $i;
                 $this->AddGridRow( $uid, $a );
