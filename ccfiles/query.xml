@@ -78,7 +78,7 @@ From the browser (GET and POST) the input parameters URI query string (GET) or f
 </p>
 
 <div class="code">
-  /media/api/query?limit=5&tags=remix+chill&amp;sort=upload_name&amp;format=html&amp;template=links
+  /media/api/query?limit=5&tags=remix+chill&amp;sort=name&amp;format=html&amp;template=links
 </div> 
 
 <p>
@@ -379,7 +379,7 @@ Return all the remixes of brad sucks since the last time we checked:
 
  <div class="code">$$args['tags']&nbsp;&nbsp; = 'remix,chill';
 <br />
- $$args['sort']&nbsp;&nbsp; = 'upload_name';
+ $$args['sort']&nbsp;&nbsp; = 'name';
 <br />
  $$args['format'] = 'php';
 <br />
@@ -404,7 +404,7 @@ To combine arguments with browser GET/POST parameters, call the method ProcessUr
 </p>
  
 <div class="code">
-&lt;tal:block define="records php:<b>cc_query_engine</b>('tags:remix+chill,sort:upload_name,format:php');" /&gt;
+&lt;tal:block define="records php:<b>cc_query_engine</b>('tags:remix+chill,sort:name,format:php');" /&gt;
 </div> 
 
 </tal:block>
