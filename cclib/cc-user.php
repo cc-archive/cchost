@@ -279,6 +279,32 @@ class CCUserProfileForm extends CCUploadForm
 
 }
 
+class CCDefaultAvatarForm extends CCUploadForm
+{
+    function CCDefaultAvatarForm($avatar_dir)
+    {
+        global $CC_GLOBALS;
+
+        $this->CCUploadForm();
+
+        $path = empty($CC_GLOBALS['default_user_image']) ? '' : $CC_GLOBALS['default_user_image'];
+        $fields = array( 
+                    'default_user_image' =>
+                       array(  'label'      => _('Image'),
+                               'formatter'  => 'avatar',
+                               'form_tip'   => _('Image file (can not be bigger than 93x93)'),
+                               'upload_dir' => $avatar_dir,
+                               'value'      => basename($path),
+                               'maxwidth'   => 93,
+                               'maxheight'  => 94,
+                               'flags'      => CCFF_NONE ),
+                        );
+
+        $this->AddFormFields( $fields );
+        $this->EnableSubmitMessage(false);
+    }
+
+}
 
 class CCUsers extends CCTable
 {
@@ -377,8 +403,15 @@ class CCUsers extends CCTable
 
             $row['user_avatar_url'] = ccd( $avatar_dir , $row['user_image'] );
         }
+        elseif( !empty($CC_GLOBALS['default_user_image']) )
+        {
+            $row['user_avatar_url'] = ccd($CC_GLOBALS['default_user_image']);
+            //CCDebug::PrintVar($row['user_avatar_url']);
+        }
         else
+        {
             $row['user_avatar_url'] = false;
+        }
 
         $row['user_homepage_html'] = '';
         if( !empty($row['user_homepage']) )
@@ -476,9 +509,29 @@ class CCUser
         return( !empty($CC_GLOBALS['user_name']) );
     }
 
+    function IsSuper($name='')
+    {
+        if( !CCUtil::IsHTTP() )
+            return true;
+
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['supers']) )
+            return false; // err...
+
+        if( empty($name) )
+            $name = CCUser::CurrentUserName();
+        $ok = !empty($name) && (preg_match( "/(^|\W|,)$name(\W|,|$)/i",$CC_GLOBALS['supers']) > 0);
+
+        return $ok;
+    }
+
     function IsAdmin($name='')
     {
         if( !CCUtil::IsHTTP() )
+            return true;
+
+        if( CCUser::IsSuper($name) )
             return true;
 
         static $_admins;
@@ -603,6 +656,38 @@ class CCUser
         if( !$ok )
             CCPage::AddForm( $form->GenerateForm() );
     }
+
+    function DefaultAvatar()
+    {
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['avatar-dir']) )
+            $upload_dir = $this->GetUploadDir(CCUser::CurrentUserName());
+        else
+            $upload_dir = $CC_GLOBALS['avatar-dir'];
+
+        CCPage::SetTitle(_("Set Default User Avatar"));
+        $form  = new CCDefaultAvatarForm($upload_dir );
+
+        if( !empty($_POST['defaultavatar']) && $form->ValidateFields() )
+        {
+            $form->FinalizeAvatarUpload('default_user_image', $upload_dir);
+            $form->GetFormValues($fields);
+            if( $fields['default_user_image'] )
+                $args['default_user_image'] = 
+                    join('/', array($upload_dir,$fields['default_user_image']));
+            else
+                $args['default_user_image'] = 0;
+            $configs =& CCConfigs::GetTable();
+            $configs->SaveConfig('config',$args);
+            CCPage::Prompt(_('Default avatar set'));
+        }
+        else
+        {
+            CCPage::AddForm( $form->GenerateForm() );
+        }
+    }
+
 
     /**
     *
@@ -1000,6 +1085,8 @@ END;
         CCEvents::MapUrl( 'people/profile/save', array('CCUser','SaveProfile'),                              CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
         CCEvents::MapUrl( 'people/addtofavs', array('CCUser','AddToFavs'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', _('Add/Remove favorite users'), CC_AG_USER );
+        CCEvents::MapUrl( 'people/avatar', array('CCUser','DefaultAvatar'),  
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Set the default user avatar'), CC_AG_USER );
     }
 
     /**
