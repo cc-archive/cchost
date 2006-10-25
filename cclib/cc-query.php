@@ -495,7 +495,7 @@ class CCQuery
                 if( !$i || ($i % $promo_gap == 0) )
                 {
                     $p = $promos[ $promo++ % $promo_count ];
-                    $this->_clean_rec($p);
+                    $this->_clean_rec($p,$format);
                     CCUpload::EnsureFiles($p,true);
                     $promo_recs[] = $p;
                 }
