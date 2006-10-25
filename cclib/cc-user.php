@@ -59,6 +59,9 @@ class CCSecurityVerifierForm extends CCForm
      */
     function generator_securitykey($varname,$value='',$class='')
     {
+        $label = $this->GetFormFieldItem($varname,'label');
+        if( empty($label) )
+            $this->SetFormFieldItem($varname,'label','&nbsp;');
         $keys =& CCSecurityKeys::GetTable();
         $hash = $keys->GenKey();
         $id = $keys->AddKey($hash);
