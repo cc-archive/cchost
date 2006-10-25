@@ -137,9 +137,33 @@ These are currently supported arguments:
   In this case only records that match <b>audio</b> AND (<b>chill </b>or <b>female_vocals</b>) tags
 </td>  <td>  
 </td>  </tr>  <tr>  <td>  sort
-</td>  <td>  results will be sorted on this column. There are many, many columns, here are some that might be the most useful:
-<br />
-  <ul>  <li>  upload_date</li>  <li>  upload_name</li>  <li>  user_name</li>  <li>  user_real_name</li>  </ul>  </td>  <td>  upload_date
+</td>  <td>  results will be sorted on one of these values:
+  <ul>  
+       <li>user - artist login name</li>            
+       <li>fullname - artist full name</li>        
+       <li>name - upload name </li>            
+       <li>lic - license</li>             
+       <li>date - upload date </li>            
+       <li>last_edit - upload's last edit</li>       
+       <li>remixes - total number of remixes</li>         
+       <li>local_remixes - number of remixes at this site</li>   
+       <li>pool_remixes - number of remixes at remote sites</li>    
+       <li>sources - total number of sources </li>         
+       <li>local_sources - number of sources at this site</li>   
+       <li>pool_sources - number of remote sources</li>    
+       <li>score - rating for upload</li>           
+       <li>num_scores - number of times rated</li>      
+       <li>registered - artist sign up date </li>      
+       <li>user_remixes - number of remixes for artist</li>    
+       <li>remixed - number of times artist has been remixed </li>         
+       <li>uploads - number of uploads by artist</li>         
+       <li>userscore - overall rating for user </li>       
+       <li>user_num_scores - number of times user has been rated</li> 
+       <li>user_reviews - number reviews left by artist </li>    
+       <li>user_reviewed - number of reviews left for artist </li>   
+       <li>posts - number of forum posts by artist </li>           
+       <li>id - internal upload id </li>              
+  </ul>  </td>  <td>  date
 </td>  </tr>  <tr>  <td>  ord
 </td>  <td>  either 'ASC' or 'DESC'
 </td>  <td>  DESC
@@ -211,12 +235,9 @@ These are currently supported arguments:
 
 <tr>  <td>  format
 </td>  <td>  Determines what the return upload records will be formatted as (see 'Output Formats' below)
-</td>  <td>php
+</td>  <td>page
 </td>  </tr>  <tr>  <td>  template
-</td>  <td>  Short name of a format template (only used by format=html and format=docwrite)
-</td>  <td>
-</td>  </tr>  <tr>  <td>  template_tags
-</td>  <td>  Name/value touples sent into the template for format=html and format=docwrite. The is name is combined with a prefix of 'format_' on the ccHost installation. Currently supported are:
+</td>  <td>  For format=html or docwrite only. The template name is expaned to format_<i>template</i>.xml and the resulting template file must reside in the 'Skins' ccHost path. Currently supported are:
   <ul>
     <li>links - links to the uploads's page</li>
     <li>links_by - upload page links with user page links</li>
@@ -225,9 +246,29 @@ These are currently supported arguments:
     <li>links_ul - upload page links formatted in a &lt;ul&gt;</li> 
     <li>links_med - more verbose listing with license, description, etc.</li>
   </ul>
+</td>  <td>med
+</td>  </tr>  
+
+<tr>  <td>  macro
+</td>  <td>  For format=page only. Name of a macro in the current skin. 
+</td>  <td>  list_records
+</td>  </tr>  
+
+<tr>  <td>  tmacro
+</td>  <td>  For format=page only. Name of template and macro to use for listing.
+e.g. mytemplate.xml/mymacro The template file must be in the 'Skin' ccHost path.
+</td>  <td>  uploads.xml/list_records
+</td>  </tr>  
+
+<tr>  <td>  template_tags
+</td>  <td>  For format=html, docwrite and page only. (Programmable interface only) Name/value touples sent into the template. 
 </td>  <td>
-</td>  </tr>  <tr>  <td>  chop
-</td>  <td>  Long upload names and user names are truncated at this length (only used by format=html and format=docwrite).
+</td>  </tr>  
+
+
+
+<tr>  <td>  chop
+</td>  <td>  Long upload names and user names are truncated at this length (only used by formats html, docwrite and list).
 </td>  <td>
 </td>  </tr>  </tbody>  
 </table> 
@@ -289,11 +330,23 @@ These are currently supported arguments:
 </td> </tr> <tr> <td width="10%"> html
 </td> <td> Returns records formatted as HTML as determined by the 'template' input parameter.
 </td> <td> text/html
-</td> </tr> <tr> <td width="10%"> docwrite
+</td> </tr> 
+
+<tr> <td width="10%"> docwrite
 </td> <td> Same as html but wraps all lines in javascript document.write. Useful for including
  &lt;script&gt; tags.
 </td> <td> application/javascript
-</td> </tr> <!--tr> <td width="10%"> 
+</td> </tr> 
+
+<tr> <td width="10%"> page
+</td> <td> Returns an entire page in the current skin listing the records. A 'macro' parameter
+means use the current skin's version of that macro. A 'tmacro' parameter can be used to
+specify a macro in a template file not in the current skin. Without either the default
+listing macro for that skin is used.
+</td> <td> text/html
+</td> </tr> 
+
+<!--tr> <td width="10%"> 
 </td> <td> 
 </td> <td> 
 </td> </tr --> 
@@ -312,7 +365,7 @@ Return the last 5 five upload by teru:
 
 Return all the remixes of brad sucks since the last time we checked:
 <div class="code">
- ?<b>remixesof</b>=bradsucks&amp;<b>format</b>=rss&amp;<b>sinced</b>=2006-10-15+10:00
+ ?<b>remixesof</b>=bradsucks&amp;<b>format</b>=rss&amp;<b>sinced</b>=2006-10-22+15:24GMT
 </div>
 
  Return a radio station style playlist of chill
