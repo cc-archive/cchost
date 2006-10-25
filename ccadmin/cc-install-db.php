@@ -53,18 +53,18 @@ CREATE TABLE cc_tbl_user
       user_extra       mediumtext      NOT NULL default '',
       user_last_known_ip varchar(25)     NOT NULL default '',
       
-      user_num_remixes INT(7) unsigned,
-      user_num_remixed INT(7) unsigned,
-      user_num_uploads INT(7) unsigned,
+      user_num_remixes INT(7) unsigned NOT NULL default 0,
+      user_num_remixed INT(7) unsigned NOT NULL default 0,
+      user_num_uploads INT(7) unsigned NOT NULL default 0,
       
-      user_score       INT(11) unsigned,
-      user_num_scores  INT(11) unsigned,
-      user_rank        INT(11) unsigned,
+      user_score       INT(11) unsigned NOT NULL default 0,
+      user_num_scores  INT(11) unsigned NOT NULL default 0,
+      user_rank        INT(11) unsigned NOT NULL default 0,
 
-      user_num_reviews  INT(7) unsigned,
-      user_num_reviewed INT(7) unsigned,
+      user_num_reviews  INT(7) unsigned NOT NULL default 0,
+      user_num_reviewed INT(7) unsigned NOT NULL default 0,
 
-      user_num_posts    INT(11) unsigned,
+      user_num_posts    INT(11) unsigned NOT NULL default 0,
 
       PRIMARY KEY user_id (user_id)
     )
@@ -95,14 +95,14 @@ CREATE TABLE cc_tbl_uploads
       upload_banned       int(1) unsigned  NOT NULL default 0,
       upload_topic_id     int(11) unsigned  NOT NULL default 0,
 
-      upload_num_remixes       INT(7) unsigned,
-      upload_num_pool_remixes  INT(7) unsigned,
-      upload_num_sources       INT(7) unsigned,
-      upload_num_pool_sources  INT(7) unsigned,
+      upload_num_remixes       INT(7) unsigned NOT NULL default 0,
+      upload_num_pool_remixes  INT(7) unsigned NOT NULL default 0,
+      upload_num_sources       INT(7) unsigned NOT NULL default 0,
+      upload_num_pool_sources  INT(7) unsigned NOT NULL default 0,
 
-      upload_score        INT(11) unsigned,
-      upload_num_scores   INT(11) unsigned,
-      upload_rank         INT(11) unsigned,
+      upload_score        INT(11) unsigned NOT NULL default 0,
+      upload_num_scores   INT(11) unsigned NOT NULL default 0,
+      upload_rank         INT(11) unsigned NOT NULL default 0,
 
       PRIMARY KEY upload_id (upload_id)
     )
