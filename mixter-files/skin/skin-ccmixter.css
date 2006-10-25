@@ -18,3 +18,9 @@
 */
 
 @import url('/cctemplates/skin-simple.css');
+
+.cc_more_menu_link {
+	font-weight: normal;
+	margin-left: 10px;
+}
+
