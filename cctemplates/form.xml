@@ -148,8 +148,12 @@ cc_init_form_capture();
     <tal:block repeat="field html_form_fields">
       <tr tal:condition="field/form_error" class="cc_form_error_row"><td></td><td class="cc_form_error">${field/form_error}</td></tr>
       <tr class="cc_form_row">
+        <tal:block define="span 2" />
+        <tal:block condition="field/label">
         <td class="cc_form_label">${field/label}<div tal:condition="field/form_tip" class="cc_form_tip">${field/form_tip}</div></td>
-        <td class="cc_form_element">
+        <tal:block define="span 1" />
+        </tal:block>
+        <td colcpan="${span}" class="cc_form_element">
           <tal:block condition="field/macro" ><tal:block define="tname ${field/macro}" /><metal:block use-macro="${tname}" /></tal:block>
           ${field/form_element}
         </td>
