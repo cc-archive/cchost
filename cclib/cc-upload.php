@@ -285,30 +285,35 @@ class CCUpload
     {
         extract($args);
 
-        if( strtolower($format) != 'list' )
+        if( strtolower($format) != 'page' )
             return;
 
         CCPage::SetTitle(_('Query Results'));
 
-        if( !empty($template) )
+        if( !empty($tmacro) )
         {
             $dochop = isset($chop) && $chop > 0;
             $chop   = isset($chop) ? $chop : 25;
 
             CCPage::PageArg('chop',$chop);
             CCPage::PageArg('dochop',$dochop);
-
-            if( empty($macro) )
-            {
-                CCPage::PageArg('_query_macro',$template);
-            }
-            else
-            {
-                CCPage::PageArg( '_query_macro', $template . '/' . $macro );
-            }
-
+            CCPage::PageArg( '_query_macro', $macro );
             $macro = '_query_macro';
         }
+
+        if( !empty($template_args) )
+        {
+            foreach( $template_argas as $K => $V )
+                CCPage::PageArg($K,$V);
+        }
+
+        // we don't know WHAT shape the global table is in but
+        // we have the latest where used so we use that for
+        // paging (as it happens the query url will recognize offset
+        // in it)
+
+        $temp_up = new CCUploads();
+        CCPage::AddPagingLinks($temp_up,$last_where);
 
         $this->ListRecords(&$records, empty($macro) ? '' : $macro);
 

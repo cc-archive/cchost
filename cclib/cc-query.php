@@ -104,17 +104,22 @@ class CCQuery
 
         // get the '+' out of the tag str
         $args['tags'] = str_replace( ' ', ',', urldecode($args['tags']));
-        
-        if
-        ( 
-            !empty($CC_GLOBALS['querylimit']) && 
-            (
-                empty($args['limit']) ||
-                ($CC_GLOBALS['querylimit'] < $args['limit']) 
-            )
-        )
+
+        if( $args['format'] == 'page' )
         {
-            $args['limit'] = $CC_GLOBALS['querylimit'];
+            $configs      =& CCConfigs::GetTable();
+            $settings     = $configs->GetConfig('settings');
+            $admin_limit  = $settings['max-listing'];
+        }
+        else
+        {
+            $admin_limit = empty($CC_GLOBALS['querylimit']) ? 0
+                            : $CC_GLOBALS['querylimit'];
+        }
+
+        if( empty($args['limit']) || ($admin_limit < $args['limit']) )
+        {
+            $args['limit'] = $admin_limit;
         }
 
         $k = array_keys($args);
@@ -122,6 +127,9 @@ class CCQuery
         for( $i = 0; $i < $n; $i++)
             if( is_string($args[$k[$i]]) && (strpos($args[$k[$i]],'\'') !== false) )
                 die('Illegal value in query');
+    
+        if( !empty($sort) )
+            $args['validated_sort'] = $this->_validate_sort_fields($sort);
 
         return $args;
     }
@@ -140,7 +148,7 @@ class CCQuery
                     'promo_tag' => '',  // site_promo for ccMixter
                     'promo_gap' => 4,
 
-                    'sort' => 'upload_date',
+                    'sort' => 'date',
                     'ord'  => 'DESC',
                     'nosort' => false,
                     'rand' => false,
@@ -164,7 +172,7 @@ class CCQuery
                     'mod'   => 0,
                     'unsub' => 0,
 
-                    'format' => 'php', 
+                    'format' => 'page', 
 
                     );
     }
@@ -195,7 +203,7 @@ class CCQuery
         $uploads->SetDefaultFilter(true,true); // query as anon
         
         if( empty($format) )
-            $format = 'undefined';
+            $format = 'page';
 
         // this is sort of a macro that expands here...
 
@@ -211,15 +219,18 @@ class CCQuery
 
         // sort
 
+        if( empty($validated_sort) && !empty($sort) )
+            $validated_sort = $this->_validate_sort_fields($sort);
+
         if( !empty($rand) )
         {
             $uploads->SetOrder('RAND()');
         }
-        elseif( !empty($sort) && empty($nosort) )
+        elseif( !empty($validated_sort) && empty($nosort) )
         {
             if( empty($ord) )
                 $ord = 'ASC';
-            $uploads->SetOrder($sort,$ord);
+            $uploads->SetOrder($validated_sort,$ord);
         }
 
         // radio tag plugs
@@ -432,6 +443,14 @@ class CCQuery
 
         // ------------- END QUERY ---------------------
 
+        if( !empty($dump_query) && CCUser::IsAdmin() )
+        {
+            $x[] = compact( array_keys($args) );
+            $x[] = $uploads->_last_sql;
+            $x[] = $records;
+            CCDebug::PrintVar($x,false);
+        }
+
         if( $format == 'count' )
         {
             if( $limit )
@@ -468,7 +487,7 @@ class CCQuery
         for( $i = 0; $i < $n; $i++ )
         {
             $R =& $records[$i];
-            $this->_clean_rec($R);
+            $this->_clean_rec($R,$format);
             
             CCUpload::EnsureFiles($records[$i],true);
             if( $insert_promos )
@@ -508,6 +527,9 @@ class CCQuery
 
                 $args = compact( array_keys($args) );
 
+                // used for paging and godknows what else
+                $args['last_where'] = $uploads->_last_where; // here's a back door...
+
                 CCEvents::Invoke( CC_EVENT_API_QUERY_FORMAT, 
                                     array( &$records, $args, &$results, &$results_mime ) );
 
@@ -518,8 +540,11 @@ class CCQuery
         return array( &$records, '' );
     }
 
-    function _clean_rec(&$R)
+    function _clean_rec(&$R,$format)
     {
+        if( in_array( $format, array( 'page', 'php' ) ) )
+            return;
+
         $fields = array( 'user_email', 'user_password', 'user_last_known_ip' );
         foreach( $fields as $f )
             if( isset($R[$f]) ) unset($R[$f]);
@@ -600,6 +625,53 @@ class CCQuery
             return '??';
 
         return $translator[$query_lic];
+    }
+
+    function _validate_sort_fields($fields)
+    {
+        // this is at least partially done for security
+        // reasons to avoid sql injection
+
+        $valid = array(
+            'user'               => 'user_name',
+            'fullname'           => 'user_real_name',
+            'registered'         => 'user_registered',
+            'user_remixes'       => 'user_num_remixes',
+            'remixed'            => 'user_num_remixed',
+            'uploads'            => 'user_num_uploads',
+            'userscore'          => 'user_score',
+            'user_num_scores'    => 'user_num_scores',
+            'userrank'           => 'user_rank',
+            'user_reviews'       => 'user_num_reviews',
+            'user_reviewed'      => 'user_num_reviewed',
+            'posts'              => 'user_num_posts',
+            'id'                 => 'upload_id',
+            'name'               => 'upload_name',
+            'lic'                => 'upload_license',
+            'date'               => 'upload_date',
+            'last_edit'          => 'upload_last_edit',
+            'remixes'            => '(upload_num_remixes+upload_num_pool_remixes)',
+            'local_remixes'      => 'upload_num_remixes',
+            'pool_remixes'       => 'upload_num_pool_remixes',
+            'sources'            => '(upload_num_sources+upload_num_pool_sources)',
+            'local_sources'      => 'upload_num_sources',
+            'pool_sources'       => 'upload_num_pool_sources',
+            'score'              => 'upload_score',
+            'num_scores'         => 'upload_num_scores',
+            'rank'               => 'upload_rank',
+            );
+
+        $out = array();
+
+        $fields = preg_split('/[\s\+,]+/',$fields);
+        foreach( $fields as $F )
+        {
+            if( empty($valid[$F]) )
+                return null;
+            $out[] = $valid[$F];
+        }
+
+        return '( ' . join(',',$out) . ') ';
     }
 
 } // end of class CCQuery
