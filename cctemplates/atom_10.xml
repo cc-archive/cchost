@@ -33,6 +33,7 @@ $Header$
       <author>
         <name>${item/user_real_name}</name>
       </author>
+      <logo>${item/user_avatar_url}</logo>
       <link rel="alternate" href="${item/file_page_url}" type="text/html" />
       <link rel="enclosure" href="${item/files/0/download_url}"               
                         length="${item/files/0/file_rawsize}" 
