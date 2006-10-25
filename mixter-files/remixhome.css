@@ -17,6 +17,11 @@ of the ccHost software will comply with the CC-GNU-GPL.
 $Id$
 
 */
+
+#channel_title {
+	display: none;
+}
+
 #outerframe {
    width: 100%;
 }

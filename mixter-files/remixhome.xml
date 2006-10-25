@@ -20,8 +20,7 @@ $Id$
 
 -->
 </tal:block>
-<style>h1 { display: none; }</style>
-<h1>Random Remix Radio</h1>
+
 <link href="${root-url}mixter-files/remixhome.css" 
    rel="stylesheet" type="text/css"  title="Default Style" />
 <phptal:block include="string:channels.xml" />

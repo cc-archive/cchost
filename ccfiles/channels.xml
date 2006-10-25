@@ -39,7 +39,7 @@ $Id$
   vertical-align: top;
 }
 </style>
-<h1 tal:content="php:_('Remix Radio');" />
+<h1 id="channel_title" tal:content="php:_('Remix Radio');" />
 <form id="channel_form">
 <table cellpadding="0" cellspacing="0" id="outerframe">
 <tr><td style="width:510px">
