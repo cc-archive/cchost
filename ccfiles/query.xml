@@ -68,13 +68,13 @@ The ccHost Query Engine is a powerful and extensible engine for retrieving and d
 </p>
 
 <p>
- There are two sides to the same engine, the input parameters and output formats all reachable to one degree or another from the browser, code or templates or any combination.
+ There are two sides to the same engine, the input parameters and output formats. The engine can be invoked from the the browser, code or templates or any combination.
 </p>
 
 <h2> Input Parameters </h2> 
 
 <p>
-From the browser (GET and POST) the input parameters URI query string (GET) or form fields and values (POST) send to the api/query command.
+From the browser the input parameters can be either a URI query string (GET) or form fields and values (POST) send to the "api/query" command.
 </p>
 
 <div class="code">
