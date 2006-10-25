@@ -48,9 +48,10 @@ class CCTable
     var $_direction;
     var $_group_on;
     /** 
-    * Debug
+    * Hacks (?)
     */
     var $_last_sql;
+    var $_last_where;
     /**#@-*/
 
     /**#@+
@@ -435,7 +436,10 @@ class CCTable
         $where = $this->_where_to_string($where);
 
         if( $where )
+        {
+            $this->_last_where = $where;
             $where = "WHERE $where";
+        }
 
         $order = '';
         if( $this->_order )
@@ -452,8 +456,7 @@ class CCTable
 
         $this->_add_offset_limit($sql);
 
-        if( CCDebug::IsEnabled() )
-            $this->_last_sql = $sql;
+        $this->_last_sql = $sql;
 
         return($sql);
     }
