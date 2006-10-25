@@ -29,6 +29,7 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 require_once('cclib/cc-defines-events.php');
+require_once('cclib/cc-defines-access.php');
 
 /**
  * The name of this software. This is to not be changed.
@@ -58,16 +59,6 @@ define( 'CC_LOCAL_SCOPE',  'local' );
 define('CC_1MG', 1024 * 1024);
 
 define('CC_USER_COOKIE', 'lepsog2');
-
-// Access flags
-define('CC_MUST_BE_LOGGED_IN',   1 );
-define('CC_ONLY_NOT_LOGGED_IN',  2 );
-define('CC_DONT_CARE_LOGGED_IN', 4 );
-define('CC_ADMIN_ONLY',          8 );
-define('CC_OWNER_ONLY',          0x10 );
-
-define('CC_DISABLED_MENU_ITEM', 0x20 );
-define('CC_DYNAMIC_MENU_ITEM',  0x40 );
 
 /* LANGUAGE DEFINES */
 

@@ -51,13 +51,17 @@ class CCUpdate
            closedir($cc_dh);
         }
 
+        $prompts = array();
         foreach( $updates as $update )
         {
             if( empty($CC_GLOBALS[$update])  )
                 $this->_do_update($update);
             else
-                CCPage::Prompt($update . ' already installed');
+                $prompts[] = $update;
         }
+
+        $prompts = join(', ',$prompts);
+        CCPage::Prompt($prompts . ' updates already installed');
 
         CCMenu::KillCache();
     }

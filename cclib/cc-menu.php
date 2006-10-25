@@ -317,6 +317,9 @@ class CCMenu
 
             if( CCUser::IsAdmin() )
                 $mask |= CC_ADMIN_ONLY;
+
+            if( CCUser::IsSuper() )
+                $mask |= CC_SUPER_ONLY;
         }
         else
         {

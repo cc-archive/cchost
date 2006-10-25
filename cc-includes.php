@@ -35,6 +35,7 @@ require_once( 'cclib/cc-pools.php');
 require_once( 'cclib/cc-form.php' );
 require_once( 'cclib/cc-menu.php' );
 require_once( 'cclib/cc-admin.php' );
+require_once( 'cclib/cc-access.php' );
 require_once( 'cclib/cc-template.php' );
 require_once( 'cclib/cc-page.php' );
 require_once( 'cclib/cc-user.php' );

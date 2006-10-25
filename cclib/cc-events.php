@@ -270,6 +270,7 @@ class CCEvents
         $action->dp = $doc_param;
         $action->ds = $doc_summary;
         $action->dg = $doc_group;
+        $action->url = $url;
         $paths =& CCEvents::_paths();
         $paths[$url] = $action;
     }
@@ -298,7 +299,9 @@ class CCEvents
 
         if( isset($action) )
         {
-            if( ($action->pm & CCMenu::GetAccessMask() ) == 0 )
+            $pm = CCEvents::_get_action_perms($action);
+
+            if( ($pm & CCMenu::GetAccessMask() ) == 0 )
                 $action = CCEvents::ResolveUrl('/homepage');
 
             if( is_string($action->cb) )
@@ -328,6 +331,18 @@ class CCEvents
             CCUtil::Send404(false);
             CCPage::SystemError("Invalid path");
         }
+    }
+
+    /**
+    * @access private
+    */
+    function _get_action_perms($action)
+    {
+        $configs =& CCConfigs::GetTable();
+        $accmap = $configs->GetConfig('accmap');
+        if( empty($accmap[$action->url]) )
+            return $action->pm;
+        return $accmap[$action->url];
     }
 
     /**
