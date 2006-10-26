@@ -176,6 +176,12 @@ class CCFileManAdmin
         CCPage::AddForm( $form->GenerateForm() );
     }
 
+    function Edit()
+    {
+        CCPage::Prompt("edit: " . $_REQUEST['file']);
+        // CCPage::AddForm( $form->GenerateForm() );
+    }
+
     function Manage($tab='',$root='')
     {
         $navigator = new CCNavigator();
@@ -491,10 +497,15 @@ END;
         $html .=<<<END
 </table>
 <table id="fileopstable" $show class="ftable">
-  <tr><th>Download <span id="fname_dl">&nbsp;$currfile</span></th>
+  <tr><th>Download </th>
       <td><a id="dl_link_href" href="" class="cc_gen_button" style="width: 50%"><span 
                id="dl_link_text">&nbsp;$currfile</span></a><br />
             (right/control click on the link above to download)</td>
+  </tr>
+  <tr><th>Edit </th>
+      <td><a id="edit_link_href" href="" class="cc_gen_button" style="width: 50%"><span 
+               id="edit_link_text">&nbsp;$currfile</span></a><br />
+      </td>
   </tr>
   <tr><th>Rename <span id="fname_ren">&nbsp;$currfile</span> to:</th>
       <td>$rename_error<input type="text" length="35" id="rename" name="rename" />
@@ -530,10 +541,14 @@ function filechanged(obj)
    var ulink = new cc_obj( 'dl_link_href' );
    ulink.obj.href = url;
    var utext = new cc_obj( 'dl_link_text' );
+   var elink = new cc_obj( 'edit_link_href' );
+   elink.obj.href = "edit?file=" + url;
+   var etext = new cc_obj( 'edit_link_text' );
    var rtext = new cc_obj( 'fname_rep' );
    var dtext = new cc_obj( 'fname_del' );
    var ftext = new cc_obj( 'filename' );
    cc_set_text(utext.obj,fname);
+   cc_set_text(etext.obj,fname);
    cc_set_text(rtext.obj,fname);
    cc_set_text(dtext.obj,fname);
    cc_set_text(ftext.obj,fname);
@@ -570,7 +585,7 @@ END;
                if( is_dir($p) )
                    $dirs[htmlentities($purl . '?subdir=' . $cc_file)] = $cc_file;
                else
-                   $files[htmlentities(ccd($dir,$cc_file))] =  $cc_file;
+                   $files[htmlentities("/$dir/$cc_file")] =  $cc_file;
            }
            closedir($cc_dh);
         }
