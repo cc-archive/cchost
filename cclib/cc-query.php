@@ -181,23 +181,21 @@ class CCQuery
     {
         extract($args);
 
+        // Get a new table so we can smash it about
+
         if( empty($remixesof) )
         {
-            // Get a new table so we can smash it about
-
+            // normally we create our own instance
+            // and crush it
             $uploads = new CCUploads();
         }
         else
         {
-            // in this case the query will be done elsewhere
-            // and we want to use the global table to set things
-            // up like sort and tags
-            // 
-            // The global instance of the table will be pretty 
-            // useless after that because it will have this 
-            // query's state smashed into it, but oh well
-            //
-            $uploads = CCUploads::GetTable();
+            // here the query is done somewhere 
+            // else so we take our chances that
+            // the state will not affect too mucy
+            // code
+            $uploads =& CCUploads::GetTable();
         }
 
         $uploads->SetDefaultFilter(true,true); // query as anon
@@ -386,7 +384,7 @@ class CCQuery
         {
             if( CCUser::IsAdmin() )
             {
-                $uploads->SetDefaultFilter(false,false); // query as anon
+                $uploads->SetDefaultFilter(false,false); 
                 $where[] = '(upload_banned=1)';
             }
             else
@@ -401,15 +399,22 @@ class CCQuery
         {
             if( CCUser::IsAdmin() )
             {
-                $uploads->SetDefaultFilter(false,false); // query as anon
+                $uploads->SetDefaultFilter(false,false); 
                 $where[] = '(upload_published<1)';
             }
             else
             {
-                $uploads->SetDefaultFilter(false,false); // query as anon
                 $uid = CCUser::CurrentUser();
+                if( empty($uid) )
+                {
+                    CCUtil::Send404();
+                }
+                else
+                {
+                    $uploads->SetDefaultFilter(false,false); 
 
-                $where[] = "((upload_published<1) AND (upload_user=$uid))";
+                    $where[] = "((upload_published<1) AND (upload_user=$uid))";
+                }
             }
         }
 

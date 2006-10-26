@@ -509,22 +509,26 @@ class CCFeed
      */
     function GenerateFeed ($tags='')
     {
-        $query = new CCQuery();
+        $type = $this->GetFeedType();
+
+        $is_remix_feed = !empty($_GET['remixesof']) || !empty($_GET['remixesby']);
+        
         $args['tags'] = $tags;
-        $args['limit']  = $this->GetLimit();
+        $args['format']   = $type;
+        $args['feed_url'] = ccl('feed',$type,$tags);
+        if( !$is_remix_feed )
+            $args['limit']  = $this->GetLimit();
+
+        $query = new CCQuery();
         $args = $query->ProcessUriArgs($args);
 
-        $type = $this->GetFeedType();
         // check_cache already checks to see if it is on
         // this will exit session if found
         $this->_check_cache($type,$args['tags']);
         
-        $args['format']   = $type;
-        $args['feed_url'] = ccl('feed',$type,$tags);
-
         $args = array_merge( $args, $this->GetQueryOptions() );
 
-        if( empty($tags) && !$this->GetIsDump() )
+        if( !$is_remix_feed && empty($tags) && !$this->GetIsDump() )
         {
             // this is for backwards compat with <3.1 in which
             // the sample pool api would call this method with
@@ -537,7 +541,7 @@ class CCFeed
             // query engine...
 
             // this method will exit the session
-            //$this->OnApiQueryFormat( $fake_recs, $args, $result, $result_mime );
+            $this->OnApiQueryFormat( $fake_recs, $args, $result, $result_mime );
         }
 
         $args['caller_feed'] = $this;
