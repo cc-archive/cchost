@@ -72,7 +72,7 @@ $Id$
 
 <metal:block define-macro="recent_reviews">
   <tal:block condition="hot_topics">
-    <h3><tal:block content="php: _('Most Acitvely Reviewed Uploads');" />
+    <h3><tal:block content="php: _('Most Actively Reviewed Uploads');" />
       <tal:block define="oneweek php: date('Y-m-d', strtotime('1 week ago'));" />
       <tal:block define="onemonth php:date('Y-m-d', strtotime('1 month ago'));" />
       <select id="cc_hot_topic_picker">

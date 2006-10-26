@@ -132,6 +132,10 @@
   color: green;
 }
 
+#cc_hot_topic_picker {
+  font-size: 11px;
+}
+
 .cc_topic_thumb_head {
    padding: 13px 0px 0px 9px;
    vertical-align: top;
