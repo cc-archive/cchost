@@ -153,7 +153,7 @@ a:hover {
 #cc_sub_header {
   position: relative;
   height: 33px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 #cc_sub_header ul {
@@ -501,6 +501,13 @@ a.cc_external_link  {
 
 .cc_admin_menu_title {
 
+}
+
+#cc_admin_menu_page {
+    padding-top: 0;
+    margin-top: -1px;
+    border: 1px solid #ccc;
+    padding: 1%;
 }
 
 .cc_beta_message {
