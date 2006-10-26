@@ -20,21 +20,17 @@ $Id$
 
 function updateGroup(gid)
 {
-//    if( gid && prevGroup && (gid == prevGroup) )
-//        return;
     if( prevGroup )
     {
         pc = $('acc_knob_' + prevGroup);
         Element.classNames(pc).remove('acc_knob_selected');
         pc = $('acc_group_' + prevGroup);
         Element.classNames(pc).remove('acc_group_selected');
-//        Element.hide(pc);
     }
     pc = $('acc_knob_' + gid);
     Element.classNames(pc).add('acc_knob_selected');
     pc = $('acc_group_' + gid);
     Element.classNames(pc).add('acc_group_selected');
-//    Element.show(pc);
     prevGroup = gid;
 }
 
