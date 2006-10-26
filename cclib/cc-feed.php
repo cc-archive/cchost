@@ -524,7 +524,7 @@ class CCFeed
 
         $args = array_merge( $args, $this->GetQueryOptions() );
 
-        if( empty($tags) && !$this->IsDump() )
+        if( empty($tags) && !$this->GetIsDump() )
         {
             // this is for backwards compat with <3.1 in which
             // the sample pool api would call this method with
@@ -537,7 +537,7 @@ class CCFeed
             // query engine...
 
             // this method will exit the session
-            $this->OnApiQueryFormat( $fake_recs, $args, $result, $result_mime );
+            //$this->OnApiQueryFormat( $fake_recs, $args, $result, $result_mime );
         }
 
         $args['caller_feed'] = $this;
