@@ -116,6 +116,50 @@ class CCReviews extends CCTopics
 */
 class CCReview
 {
+    function HotTopics($since)
+    {
+        $baseurl = ccl('reviews') . '/';
+        $baseup  = ccl('files') . '/';
+        $baseus  = ccl('people') . '/';
+
+        $sql =<<<END
+            SELECT count(*) as cnt, 
+                   ups.upload_name, 
+                   user_real_name,
+                   CONCAT( '$baseurl', user_name, '/', upload_id ) as revurl,
+                   CONCAT( '$baseup', user_name, '/', upload_id ) as file_page_url,
+                   CONCAT( '$baseus', user_name ) as artist_page_url
+            FROM (
+                SELECT * FROM `cc_tbl_topics`
+                WHERE (topic_upload >1)
+                    AND ((topic_type = 'review')OR (topic_type = 'reply'))
+                    AND (topic_date > '$since')
+                ORDER BY topic_date DESC
+                ) AS tbl
+            JOIN cc_tbl_uploads ups ON tbl.topic_upload = ups.upload_id
+            JOIN cc_tbl_user    user ON ups.upload_user = user.user_id
+            GROUP BY tbl.topic_upload
+            ORDER BY  cnt DESC 
+            LIMIT 7
+END;
+
+        $hot_topics = CCDatabase::QueryRows($sql);
+        if( empty($hot_topics) )
+        {
+            print('<span>' . _('Sorry, no hot topics yet') . '</span>');
+            exit;
+        }
+        
+        $args['hot_topics'] = $hot_topics;
+        $args['noskin'] = true;
+        $args['hottopics'] = '';
+        $args['macro'] = 'topics.xml/hot_topics';
+        $template = new CCTemplate('topics.xml');
+        $html = $template->SetAllAndParse($args);
+        print $html;
+        exit;
+    }
+
     function Reviews( $user_name='', $upload_id='' )
     {
         global $CC_GLOBALS;
@@ -180,8 +224,9 @@ class CCReview
                 $pagelinks = CCPage::AddPagingLinks($uploads,$where, NUM_REVIEWS_PER_PAGE,$args);
 
                 CCPage::SetTitle(_('Recent Reviews'));
-                $args['topics'] =& $uploads->GetRecords($where);
-                $args['macro'] = 'recent_reviews';
+                $args['topics']     =& $uploads->GetRecords($where);
+                $args['macro']      = 'recent_reviews';
+                $args['hot_topics'] = true;
             }
             else
             {
@@ -968,9 +1013,10 @@ class CCReview
             $args['root-url'] = cc_get_root_url() . '/';
             $args['macro'] = 'recent_reviews';
             $args['topics'] = $up_results;
+            $args['hot_topics'] = false;
 
-            $tfile = CCTemplate::GetTemplate('topics.xml');
-            $template = new CCTemplate($tfile);
+            //$tfile = CCTemplate::GetTemplate();
+            $template = new CCTemplate('topics.xml');
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
         }
@@ -986,13 +1032,24 @@ class CCReview
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('reviews'),        array( 'CCReview', 'Reviews'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[user_name]/[upload_id]', _('See reviews by a person or for a specific upload'), CC_AG_REVIEWS );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[user_name]/[upload_id]', 
+            _('See reviews by a person or for a specific upload'), CC_AG_REVIEWS );
+
         CCEvents::MapUrl( ccp('reviews','post'), array( 'CCReview', 'PostReview'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[upload_id]', _('Display a review form'), CC_AG_REVIEWS );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[upload_id]', 
+            _('Display a review form'), CC_AG_REVIEWS );
+
+        CCEvents::MapUrl( ccp('feed','rss','reviews'), array( 'CCReview', 'RssFeed'),  
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[user_name]/[upload_id]', 
+            _('Reviews by a person or for a specific upload'), CC_AG_FEEDS );
+
+        // ajax callbacks...
+
         CCEvents::MapUrl( ccp('reviews','thread'), array( 'CCReview', 'SeeThread'),    
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('feed','rss','reviews'), array( 'CCReview', 'RssFeed'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[user_name]/[upload_id]', _('Reviews by a person or for a specific upload'), CC_AG_FEEDS );
+
+        CCEvents::MapUrl( ccp('reviews','hottopics'), array( 'CCReview', 'HotTopics'),    
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
     }
 
 }

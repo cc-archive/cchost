@@ -150,6 +150,6 @@ $Id$
 baseCmd = '${home-url}api/query';
 sitePromoTag = '<tal:block condition="exists:site_promo_tag">${site_promo_tag}</tal:block>';
 </script>
-<script src="${root-url}cctemplates/radio.js" ></script>
+<script src="${root-url}cctemplates/js/radio.js" ></script>
 
 </tal:block>

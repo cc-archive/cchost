@@ -26,8 +26,6 @@ $Header$
     <tal:block define="lang_get_ratings php: CC_lang('getting ratings...');" />
     <script>
     //<!--
-    var home_url = '${home-url}';
-    var root_url = '${root-url}';
     var lang_get_ratings = '${lang_get_ratings}';
     //-->
     </script>

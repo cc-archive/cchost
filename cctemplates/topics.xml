@@ -16,12 +16,14 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
 
-<phptal:block include="string:skin-${skin}-map.xml" />
+<tal:block condition="skin">
+  <phptal:block include="string:skin-${skin}-map.xml" />
+</tal:block>
 
 <tal:block define="topic_flag_tip php: CC_lang('Flag this topic for possible violation of terms');" />
 <tal:block define="upload_flag_tip php: CC_lang('Flag this upload for possible violation of terms');" />
@@ -51,7 +53,37 @@ $Header$
   <metal:block use-macro="recent_reviews" />
 </metal:block>
 
+<metal:block define-macro="hot_topics">
+    <table class="cc_topic_table">
+      <tal:block define="by php:_('by');" />
+      <tal:block define="for php:_('for');" />
+      <tr tal:repeat="HT hot_topics">
+        <td>
+          <a class ="cc_hot_review" 
+            href="${HT/revurl}" tal:content="php: sprintf(_('%d reviews'),${HT/cnt});" /> 
+          ${for}:
+          <a class="cc_file_link" href="${HT/file_page_url}">${HT/upload_name}</a>  
+          ${by}
+          <a class="cc_user_link" href="${HT/artist_page_url}">${HT/user_real_name}</a>
+        </td>
+      </tr>
+    </table>
+</metal:block>
+
 <metal:block define-macro="recent_reviews">
+  <tal:block condition="hot_topics">
+    <h3><tal:block content="php: _('Most Acitvely Reviewed Uploads');" />
+      <tal:block define="oneweek php: date('Y-m-d', strtotime('1 week ago'));" />
+      <tal:block define="onemonth php:date('Y-m-d', strtotime('1 month ago'));" />
+      <select id="cc_hot_topic_picker">
+        <option value="${oneweek}" selected="selected" tal:content="php: _('Past week');" />
+        <option value="${onemonth}" tal:content="php: _('Past month');" />
+        <option value="2004-01-01" tal:content="php: _('All-time');" />
+      </select>
+    </h3>
+    <div id="cc_hot_topics_div"></div>
+    <h3><tal:block content="php: _('Most Recently Reviewed Uploads');" /></h3>
+  </tal:block>
   <table class="cc_topic_table" cellspacing="0" cellpadding="0">
     <tal:block repeat="topic topics">
       <tal:block define="reviewer topic/reviewer" />
@@ -279,4 +311,6 @@ $Header$
         <metal:block use-macro="${show_box}" />
       </tal:block>
 </metal:block>
+
+
 </tal:block>

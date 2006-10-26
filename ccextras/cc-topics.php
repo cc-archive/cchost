@@ -618,7 +618,7 @@ class CCTopic
                 CCPage::AddScriptBlock('dl_popup_script',true);
             }
                 
-            CCPage::AddScriptLink( ccd('ccextras','cc-topics.js') );
+            CCPage::AddScriptLink( ccd('cctemplates', 'js', 'cc-topics.js'), false );
             $cname = 'skin-' . $CC_GLOBALS['skin'] . '-topics.css';
             $css_file = CCTemplate::GetTemplate($cname,false);
             CCPage::AddLink('head_links', 'stylesheet', 'text/css', 

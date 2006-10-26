@@ -13,13 +13,29 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
-function cc_topics_quote(topicid)
+function cc_update_hot_topics()
 {
-	//home_url + 'topics/replyinline/' + topicid + '?u=' + url,
-	// document.location;
+    var box = $('cc_hot_topic_picker');
+    if( !box.observing )
+    {
+        Event.observe(box, 'change', function (e)
+            {
+                cc_update_hot_topics();
+            }
+        );
+
+    }
+    var date = box.options[ box.selectedIndex ].value;
+    var url = home_url + 'reviews/hottopics/' + date;
+    var myAjax = new Ajax.Updater( 
+                    'cc_hot_topics_div',
+                     url, 
+                    { method: 'get' });    
+
 }
 
+window.onload = cc_update_hot_topics;

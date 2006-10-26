@@ -34,7 +34,7 @@ $Id$
    </table>
    </div>
 </tal:block>
-<script src="${root-url}cctemplates/access.js"></script>
+<script src="${root-url}cctemplates/js/access.js"></script>
 </metal:block>
 
 </div>

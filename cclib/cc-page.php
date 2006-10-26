@@ -175,7 +175,7 @@ class CCPage extends CCTemplate
         $this->_page_args['chop'] = true;
         $this->_page_args['bread_crumbs'] = array();
         $this->_page_args['crumb_seperator'] = ' &raquo; ';
-        //$this->_page_args['page-skip-title'] = false;
+        $this->_page_args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
     }
 
     /**
@@ -595,7 +595,7 @@ class CCPage extends CCTemplate
     * 
     * @param string $script_url Path to .js file
     */
-    function AddScriptLink($script_url)
+    function AddScriptLink($script_url,$top=true)
     {
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
             $page =& CCPage::GetPage();
@@ -603,10 +603,11 @@ class CCPage extends CCTemplate
             $page =& $this;
 
         $arr = array();
-        if( !empty($page->_page_args['script_links']) )
-            $arr = $page->_page_args['script_links'];
+        $arr_name = $top ? 'script_links' : 'end_script_links';
+        if( !empty($page->_page_args[$arr_name]) )
+            $arr = $page->_page_args[$arr_name];
         $arr[] = $script_url;
-        $page->_page_args['script_links'] = array_unique($arr);
+        $page->_page_args[$arr_name] = array_unique($arr);
     }
 
     /**

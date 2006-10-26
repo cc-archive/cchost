@@ -127,6 +127,11 @@
   color: brown;
 }
 
+.cc_topic_table a.cc_hot_review {
+  font-weight: bold;
+  color: green;
+}
+
 .cc_topic_thumb_head {
    padding: 13px 0px 0px 9px;
    vertical-align: top;

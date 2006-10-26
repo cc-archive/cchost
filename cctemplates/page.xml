@@ -30,6 +30,13 @@ $Id$
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <tal:block condition="lang"><!-- Global Language: ${lang} --></tal:block>
   <tal:block condition="user_language"><!-- User Language: ${user_language} --></tal:block>
+  <script>
+  //<!--
+  var home_url = '${home-url}';
+  var root_url = '${root-url}';
+  var q        = '${q}';
+  //-->
+  </script>
   <metal:block use-macro="${print_head_links}" />
   </head>
 </metal:block>
@@ -149,7 +156,7 @@ $Id$
   <tal:block repeat="head_link head_links">
       <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
   </tal:block>
-  <script type="text/javascript" src="${root-url}cctemplates/prototype.js" />
+  <script type="text/javascript" src="${root-url}cctemplates/js/prototype.js" />
   <script type="text/javascript" src="${root-url}cctemplates/cc_obj.js" />
   <tal:block condition="script_blocks" repeat="script script_blocks">
     <tal:block define="tscript ${script}" />
@@ -250,6 +257,9 @@ $Id$
   <tal:block condition="end_script_blocks" repeat="script end_script_blocks">
     <tal:block define="tscript ${script}" />
     <metal:block use-macro="${tscript}" />
+  </tal:block>
+  <tal:block condition="end_script_links" repeat="eslink end_script_links">
+    <script type="text/javascript" src="${eslink}" />
   </tal:block>
 </metal:block>
 
