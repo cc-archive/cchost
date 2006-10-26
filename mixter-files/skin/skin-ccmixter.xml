@@ -1,8 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<phptal:block include="string:skin-ccmixter-map.xml" />
+<metal:block use-macro="${html_head}" />
+<metal:block use-macro="${main_body}" />
+<metal:block define-macro="print_head_links">
+ <metal:block use-macro="${old_head_links}" />
+ <META name="verify-v1" content="PEEIrYmur1ilJAiOk6Ky5lEDaJYIltd3L3qgUsbdGco=" />
+</metal:block>
 <tal:block replace="">
 <!--
-
 Creative Commons has made the contents of this file
 available under a CC-GNU-GPL license:
 
@@ -17,15 +23,8 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
-
+$Id$
 -->
 </tal:block>
-
-
-<phptal:block include="string:skin-ccmixter-map.xml" />
-
-<metal:block use-macro="${html_head}" />
-<metal:block use-macro="${main_body}" />
 
 </html>

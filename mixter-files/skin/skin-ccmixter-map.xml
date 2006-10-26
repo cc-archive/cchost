@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -29,9 +29,13 @@ $Header$
   with optimized versions
 -->
 </tal:block>
+
+<tal:block define="old_head_links print_head_links" />
+
 <tal:block define="
     list_file string:upload_quick.xml/list_file;
-    list_files string:upload_quick.xml/list_files;"
+    list_files string:upload_quick.xml/list_files;
+    print_head_links string:skin-ccmixter.xml/print_head_links;"
  />
  
 </tal:block>
