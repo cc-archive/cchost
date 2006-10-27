@@ -41,7 +41,7 @@
   </tal:block>
  </table>
  <i class="cc_tagline"><span>
-    <tal:block define="format_signature format_sig | string:format_sig.xml/signature" />
+    <tal:block define="format_signature format_sig | string:format_signature.xml/signature" />
     <metal:block use-macro="${format_signature}" />
  </span></i>
 </div>
