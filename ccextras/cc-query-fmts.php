@@ -116,6 +116,17 @@ class CCQueryFormats
                 if( !empty($template_args) )
                     $targs = array_merge($template_args);
 
+                // normally we wouldn't go through extra step of
+                // actually looking up the template, but since
+                // this is a public api we want to be friendly
+                // about it...
+                $found_template = CCTemplate::GetTemplate($tname);
+                if( !$found_template )
+                {
+                    print("\"$template\" is not a valid template");
+                    exit;
+                }
+
                 $templateObj = new CCTemplate($tname);
                 $text = $templateObj->SetAllAndParse($targs);
                 
