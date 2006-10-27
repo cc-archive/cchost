@@ -95,7 +95,7 @@ class CCQueryFormats
                     $xml .= "   </record>\n";
                 }
                 $xml .= "</records>\n";
-                $results = $array( $xml, 'text/xml' );
+                $results = array( $xml, 'text/xml' );
                 break;
             }
             
