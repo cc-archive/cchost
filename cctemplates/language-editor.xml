@@ -1,0 +1,146 @@
+<tal:block>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id$
+
+-->
+</tal:block>
+<metal:block define-macro="language_editor">
+
+<style>
+.org_title {
+    font-weight: bold;
+    margin: 4px 0px 3px 10px;
+}
+.org_string {
+    padding: 3px;
+    margin: 0px 0px 3px 14px;
+}
+.commit_link {
+    display: block;
+    font-weight: bold;
+    font-size: 12px;
+    margin: 4px;
+    background: #333;
+    color: #AAF;
+    padding: 3px;
+    width: 20%;
+    text-align: center;
+    text-decoration: none;
+}
+
+.commit_link:hover {
+    color: white;
+    text-decoration: none;
+ }
+
+</style>
+<script>
+//<!--
+//var _domain = "${domain}";
+
+function on_get_lstring(listbox)
+{
+    var hash = listbox.options[listbox.selectedIndex].value;
+    do_get_string(hash,'');
+}
+
+function get_domain()
+{
+    var obj = new cc_obj( 'domain' );
+    var domain = obj.obj.value;
+    if( !domain )
+    {
+        alert('${LE/msg_missing_domain}');
+        return;
+    }
+    return domain;
+}
+
+function do_get_string(hash,cmd)
+{
+   var domain = get_domain();
+   if( !domain )
+      return;
+
+   var url = home_url + 'admin/language/getstring/' + 
+      domain + "/" + hash;
+   if( cmd.length > 0 )
+      url += '/' + cmd;
+
+   /* some combinations of browsers and servers just don't beleive it
+      when I ask them to not-cache and IE's http obj is caching, losing
+      the editor's latest changes. So, we fake the url with the current
+      timestamp. */
+   var t = (new Date()).getTime();
+   url += q + 't=' + t;
+
+   cc_get_data(url, "div_editor","Getting string data...");
+}
+
+function do_edit_string(hash)
+{
+    var domain = get_domain();
+    if( !domain )
+        return;
+    var obj = new cc_obj( 'translated' );
+    var translated;
+    if(obj.obj.innerHTML)
+        translated = obj.obj.innerHTML;
+    else if( obj.obj.value )
+        translated = obj.obj.value;
+    else
+    {
+        alert("you're browser doesn't support this feature");
+        return;
+    }
+    translated = escape(translated);
+   /* some combinations of browsers and servers just don't beleive it
+      when I ask them to not-cache and IE's http obj is caching, preventing
+      reverts in the same edit session. So, we fake the url with the current
+      timestamp. */
+    var t = (new Date()).getTime();
+    var url = "${home-url}admin/language/edit/" + domain + "/" + 
+            "/" + hash + "?string=" + translated + '&t=' + t;
+    cc_get_data( url, "div_editor","Saving string data..." );
+}
+
+-->
+</script>
+
+<table><tr><td style="vertical-align: top">
+<select id="string_table" size="20" style="font-size:10px" 
+            onchange="on_get_lstring(this,'get_loops_button')">
+  <tal:block repeat="lstr LE/string_table">
+    <option value="${repeat/lstr/key}" tal:content="php: CC_strchop('$lstr/0',40)" />
+  </tal:block>
+</select>
+</td><td style="vertical-align: top">
+     <div class="org_title">Domain:</div>
+     <div style="padding-left:11px"><input id="domain" name="domain" value="${LE/domain}" /></div>
+     <script>
+      var domainObj = new cc_obj('domain');
+     </script>
+<div id="div_editor">
+</div>
+</td>
+</tr></table>
+
+</metal:block>
+
+</tal:block>
