@@ -511,7 +511,7 @@ class CCFeed
     {
         $type = $this->GetFeedType();
 
-        $is_remix_feed = !empty($_GET['remixesof']) || !empty($_GET['remixesby']);
+        $is_remix_feed = !empty($_GET['remixesof']) || !empty($_GET['remixedby']);
         
         $args['tags'] = $tags;
         $args['format']   = $type;
