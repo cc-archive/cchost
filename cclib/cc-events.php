@@ -297,6 +297,8 @@ class CCEvents
         if( !isset($action) )
             $action = CCEvents::ResolveUrl();
 
+        $method = false;
+
         if( isset($action) )
         {
             $pm = CCEvents::_get_action_perms($action);
@@ -307,20 +309,32 @@ class CCEvents
             if( is_string($action->cb) )
             {
                 $method = $action->cb;
+                if( !function_exists($method) && !function_exists(strtolower($method)) )
+                    CCEvents::_load_action($action);
             }
             else
             {
                 if( is_string($action->cb[0]) )
                 {
-                    $obj = new $action->cb[0];
+                    $cname = $action->cb[0];
+                    if( !class_exists($cname) && !class_exists(strtolower($cname)) )
+                        CCEvents::_load_action($action);
+                    $obj = new $cname;
                     $method = array( &$obj, $action->cb[1] );
                 }
                 else
                 {
                     $method = $action->cb;
+                    if( !method_exists($method) && !method_exists(strtolower($method)) )
+                        CCEvents::load_action($action);
                 }
             }
             
+
+        }
+
+        if( $method )
+        {
             if( !isset($action->args) )
                 $action->args = array();
 
@@ -330,6 +344,19 @@ class CCEvents
         {
             CCUtil::Send404(false);
             CCPage::SystemError("Invalid path");
+        }
+    }
+
+    function _load_action($action)
+    {
+        if( empty($action->md) )
+        {
+            CCUtil::Send404(false);
+            CCPage::SystemError("Can't find module");
+        }
+        else
+        {
+            require_once($action->md);
         }
     }
 
