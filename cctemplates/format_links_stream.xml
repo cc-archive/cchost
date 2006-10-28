@@ -1,8 +1,9 @@
 <div id="cc_list">
 <tal:block define="by php:_('by');" /> 
+<tal:block define="stream php:_('stream');" /> 
 <div tal:repeat="R records">
-  <span tal:condition="R/stream_link">
-    <a href="${R/stream_link/url}" class="cc_streamlink">&nbsp;</a> 
+  <span tal:condition="exists: R/stream_link">
+    <a href="${R/stream_link/url}" class="cc_streamlink">${stream}</a> 
   </span>
   <tal:block define="upname php: CC_strchop('${R/upload_name}',${chop},${dochop});" />
   <tal:block define="user   php: CC_strchop('${R/user_real_name}',${chop},${dochop});" />
