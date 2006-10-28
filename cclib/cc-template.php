@@ -423,12 +423,19 @@ class CCTemplateAdmin
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'admin/templatetags',     array('CCTemplateAdmin','OnAdminTags'),         
-            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Displays \'Header/Footer\' form'), CC_AG_MISC_ADMIN );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+            _('Displays \'Header/Footer\' form'), CC_AG_CONFIG );
+
         CCEvents::MapUrl( 'admin/content',          array('CCTemplateAdmin','OnAdminContent'),      
-            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Displays \'Sidebar\' form, let\'s the admin select modules to display on every page.'), CC_AG_MISC_ADMIN );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+            _('Displays \'Sidebar\' form, let\'s the admin select modules to display on every page.'), 
+            CC_AG_CONFIG );
+
         CCEvents::MapUrl( 'admin/templatetags/new', array('CCTemplateAdmin','OnNewTags'),           
-            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display \'Create a new template tag\' form'), CC_AG_MISC_ADMIN );
-        CCEvents::MapUrl( 'people/customize',       array('CCTemplateAdmin','OnPeopleCustomize'),   
+            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+            _('Display \'Create a new template tag\' form'), CC_AG_CONFIG );
+
+        CCEvents::MapUrl( 'people/customize',array('CCTemplateAdmin','OnPeopleCustomize'),   
             CC_ADMIN_ONLY, ccs(__FILE__) );
     }
 

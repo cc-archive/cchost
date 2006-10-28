@@ -48,32 +48,33 @@ define('CC_DYNAMIC_MENU_ITEM',  0x40 );
 *
 * These for intended for documenation only
 */
-define('CC_AG_ED_PICKS', 1 );
+define('CC_AG_ED_PICKS', '_edp' );
 define('CC_AG_EDPICK',CC_AG_ED_PICKS ); 
-define('CC_AG_FEEDS', 2 );
+define('CC_AG_FEEDS', '_fds' );
 define('CC_AG_FEED', CC_AG_FEEDS );
-define('CC_AG_FILE_API', 3 );
-define('CC_AG_UPLOADS', 4 );
+define('CC_AG_FILE_API', '_fapi' );
+define('CC_AG_UPLOADS', '_ups' );
 define('CC_AG_UPLOAD', CC_AG_UPLOADS );
-define('CC_AG_SUBMIT_FORMS', 5 );
+define('CC_AG_SUBMIT_FORMS', '_frm' );
 define('CC_AG_SUBMIT_FORM', CC_AG_SUBMIT_FORMS );
-define('CC_AG_RENDER', 6 );
-define('CC_AG_FORUMS', 7 );
+define('CC_AG_RENDER', '_rnd' );
+define('CC_AG_FORUMS', '_fum' );
 define('CC_AG_FORUM', CC_AG_FORUMS ); 
-define('CC_AG_HIDI', 8 );
-define('CC_AG_USER', 9 );
-define('CC_AG_SAMPLE_POOLS', 10 );
+define('CC_AG_HIDI', '_hdi' );
+define('CC_AG_USER', '_usr' );
+define('CC_AG_SAMPLE_POOLS', '_pls' );
 define('CC_AG_SAMPLE_POOL', CC_AG_SAMPLE_POOLS );
-define('CC_AG_REVIEWS', 11 );
+define('CC_AG_REVIEWS', '_rvw' );
 define('CC_AG_RATINGS', CC_AG_REVIEWS );
-define('CC_AG_SEARCH', 12 );
-define('CC_AG_TAGS', 13 );
-define('CC_AG_NAVTABS', 14 );
-define('CC_AG_VIEWFILE', 15 );
-define('CC_AG_MISC_ADMIN', 16 );
+define('CC_AG_SEARCH', '_src' );
+define('CC_AG_TAGS', '_tag' );
+define('CC_AG_NAVTABS', '_nav');
+define('CC_AG_VIEWFILE', '_vwf' );
+define('CC_AG_MISC_ADMIN', '_mad' );
 define('CC_AG_ADMIN_MISC', CC_AG_MISC_ADMIN );
-define('CC_AG_CONTESTS', 17 );
-define('CC_AG_QUERY', 18 );
+define('CC_AG_CONTESTS', '_cnt' );
+define('CC_AG_QUERY', '_agq' );
+define('CC_AG_CONFIG', '_cfg' );
  
 function cc_get_access_groups()
 {
@@ -96,6 +97,7 @@ function cc_get_access_groups()
         CC_AG_MISC_ADMIN    => _('Misc. Admin Commands')   ,
         CC_AG_CONTESTS     => _('Contests')   ,
         CC_AG_QUERY        => _('Query')   ,
+        CC_AG_CONFIG       => _('Site Admin'),
         );
 }
 

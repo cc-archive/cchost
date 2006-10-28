@@ -223,7 +223,8 @@ class CCPathAdmin
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('admin','paths'), array('CCPathAdmin','Admin'), CC_ADMIN_ONLY
-            , ccs(__FILE__), '', _('Display path settings form.'), CC_AG_MISC_ADMIN );
+            , ccs(__FILE__), '', 
+            _('Display path settings form.'), CC_AG_CONFIG );
     }
 
 

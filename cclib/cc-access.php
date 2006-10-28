@@ -206,7 +206,11 @@ function cc_get_url_map($doconly=1)
             $V->pmu = $pm;
             $V->url = $K;
             $V->pmd = $roles[ $pm ];
-            $groups[ $group_names[$V->dg] ][$K] = $V;
+            if( array_key_exists($V->dg,$group_names) )
+                $gn = $group_names[$V->dg];
+            else
+                $gn = $V->dg;
+            $groups[ $gn ][$K] = $V;
         }
         ksort($groups);
         foreach( $groups as $G => $V )

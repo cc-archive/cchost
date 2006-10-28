@@ -529,7 +529,8 @@ class CCMixterAdmin
         CCEvents::MapUrl( 'mixter/eval',         array('CCMixterAdmin', 'pEval'),         CC_ADMIN_ONLY );
         CCEvents::MapUrl( 'mixter/errors',       array('CCMixterAdmin', 'DumpErrorLog'),  CC_ADMIN_ONLY );
         CCEvents::MapUrl( 'mixter/log',          array('CCMixterAdmin', 'DumpLog'),  CC_ADMIN_ONLY );
-        CCEvents::MapUrl( 'phpinfo',             array('CCMixterAdmin', 'Phpinfo'),       CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'phpinfo',             array('CCMixterAdmin', 'Phpinfo'),       
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('See phpinfo() results'), 'mixter only' );
         CCEvents::MapUrl( 'live',                array('CCMixterAdmin', 'GetLiveInfo'),       CC_ADMIN_ONLY );
     }
 }

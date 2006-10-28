@@ -542,7 +542,7 @@ END;
         CCEvents::MapUrl( 'file/delete',  array('CCPhysicalFile','Delete'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
         CCEvents::MapUrl( 'file/nickname',array('CCPhysicalFile','Nicname'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
         CCEvents::MapUrl( 'file/manage',  array('CCPhysicalFile','Manage'), 
-            CC_MUST_BE_LOGGED_IN , ccs(__FILE__), '', _('Show file manager'), CC_AG_MISC_ADMIN );
+            CC_MUST_BE_LOGGED_IN , ccs(__FILE__), '', _('Show "Manage Files" form'), CC_AG_UPLOADS );
     }
 
 }

@@ -391,10 +391,10 @@ class CCNavigator
     {
         CCEvents::MapUrl( 'view',             array('CCNavigator', 'View'),            
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[tab_set]/[tab]/[subtab]',
-            _('Perform view tabs actions') );
+            _('Perform view tabs actions'), CC_AG_CONFIG );
         CCEvents::MapUrl( 'admin/tabs',       array('CCNavigator', 'AdminTabs'),       
             CC_ADMIN_ONLY, ccs(__FILE__), '',
-            _('Display admin navigator tabs form')  );
+            _('Display admin navigator tabs form'), CC_AG_CONFIG  );
     }
 
 }

@@ -632,11 +632,16 @@ class CCMailerAPI
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('people','contact'),  array('CCMailerAPI', 'Contact'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[username]', _('Display email contact form'), CC_AG_MISC_ADMIN ); 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[username]', 
+            _('Display email contact form'), CC_AG_USER ); 
+
         CCEvents::MapUrl( ccp('admin', 'massmail'), array('CCMailerAPI', 'MassMail'), 
-            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display mass email contact form'), CC_AG_MISC_ADMIN ); 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+            _('Display mass email contact form'), CC_AG_MISC_ADMIN ); 
+
         CCEvents::MapUrl( ccp('admin', 'mail'),     array('CCMailerAPI', 'Admin'),    
-            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display admin mail settings form'), CC_AG_MISC_ADMIN ); 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+            _('Display admin mail settings form'), CC_AG_MISC_ADMIN ); 
     }
 
 
