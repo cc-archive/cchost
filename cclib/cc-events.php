@@ -253,6 +253,7 @@ class CCEvents
     *  //  http://cchost.org/media/foo/bar   $this->HandleFooBar()
     *  //  http://cchost.org/media/foo/BAZ   $this->HandleFoo('BAZ')
     *  //
+    * </code>
     * 
     * Functions and methods mapped to URLs can be loaded 'on demand',
     * that is, the file the handler is in does not be included before
@@ -296,7 +297,6 @@ class CCEvents
     * like your company or organization's name.
     *
     * 
-    * </code>
     * @param string $url What the incoming url looks like stripped of domain and vroot
     * @param mixed $callback Method to be called 
     * @param integer $permissions CC_* flags to mask off unauthorized users
