@@ -564,6 +564,8 @@ END;
        'lang'                => CC_LANG, // JON: This should be install option
        'lang_locale_pref'    => CC_LANG_LOCALE_PREF, // same here!
 
+       'supers'              => $vars['admin']['v'], 
+
                                       // mark this installation as having: 
        'v_1_2h'              => true, // ratings/remix count fields
        'v_1_2k'              => true, // reviews/topics
