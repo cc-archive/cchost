@@ -1,0 +1,119 @@
+<div>
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id$
+
+-->
+</tal:block>
+
+<metal:block define-macro="publicize" >
+<div id="pubintro">
+  <img tal:condition="PUB/user_avatar_url" src="${PUB/user_avatar_url}" />
+  <div>${PUB/intro}</div>
+</div>
+<div id="pubinstructions">
+  <p>${PUB/step1}</p>
+</div>
+<form id="puboptions_form">
+<table id="puboptions1">
+<tr>
+  <th>${PUB/typeoflinks}</th>
+  <td>
+      <select onchange="flip_link_type(this)" id="ty">
+        <option value="remix">${PUB/yourremixes}</option>
+        <option value="${PUB/user_name}">${PUB/othersremixes}</option>
+        <option value="all">${PUB/allyourups}</option>
+      </select>
+  </td>
+</tr>
+<tr>
+  <th>${PUB/numlinks}</th>
+  <td>
+      <select id="limit" name="limit" onchange="update_target()">
+        <option value="1">${PUB/justone}</option>
+        <option value="5" selected="selected">${PUB/last5}</option>
+        <option value="10">${PUB/last10}</option>
+        <option value="50">${PUB/abunch}</option>
+      </select>
+  </td>
+</tr>
+<tr>
+  <th>
+      ${PUB/format}
+  </th>
+  <td>
+      <select id="template" name="template" onchange="update_target()">
+        <option value="links" selected="selected">${PUB/plainlinks}  </option>
+        <option value="links_by" >                ${PUB/linkswithby} </option>
+        <option value="links_stream">             ${PUB/linkswstream}</option>
+        <option value="links_dl">                 ${PUB/linkswdl}    </option>
+        <option value="med">                      ${PUB/linksmed}    </option>
+      </select>
+  </td>
+</tr>
+<tr>
+  <th>
+      Chop: <span id="chophelp">${PUB/chophelp}</span>
+  </th>
+  <td>
+      <select id="chop" name="chop" onchange="update_target()">
+        <option value="10">                     ${PUB/chars10} </option>
+        <option value="20"  selected="selected">${PUB/chars20}  </option>
+        <option value="25">                     ${PUB/chars25}  </option>
+        <option value="0">                      ${PUB/dontchop} </option>
+      </select>
+  </td>
+</tr>
+</table>
+<span id="type_target"></span>
+</form>
+
+<div id="pubinstructions">
+    <p>${PUB/step2}</p>
+</div>
+
+<p id="target_text_p">
+    <textarea id="target_text" name="target_text">
+    </textarea>
+</p>
+
+<div id="preview_container">
+    <table id="seehtml">
+      <tr><td><a href="#" onclick="toggle_preview(); return false;" class="cc_gen_button">
+        <span id="preview_button">${PUB/seehtml}</span></a></td></tr>
+    </table>
+    <b>${PUB/preview}:</b>
+    <p id="preview_warn" style="display:block">${PUB/previewwarn}</p>
+    <p id="html_warn" style="display:none">${PUB/htmlwarn}</p>
+    <div id="preview_block">
+      <div id="preview" style="display:block">
+      </div>
+      <div id="src_preview" style="display:none;">
+      </div>
+    </div>
+</div>
+<script>
+//<!--
+seeHTML = '${PUB/seehtml}';
+showFormatted = '${PUB/showformatted}';
+username = '${PUB/user_name}';
+//-->
+</script>
+<script type="text/javascript" src="${root-url}cctemplates/js/publicize.js"></script>
+</metal:block>
+</div>
