@@ -252,7 +252,19 @@ class CCTopics extends CCTable
 
             }
 
-            if( $this->_can_reply() )
+            if( CCUser::IsAdmin() )
+            {
+                if( empty($row['topic_locked']) )
+                    $text = _('Lock');
+                else
+                    $text = _('Unlock');
+
+                $row['commands']['edit'] = array( 'url' => ccl('topics','lock',$row['topic_id']),
+                                                  'script' => '',
+                                                  'text' => $text );
+            }
+
+            if( $this->_can_reply($row) )
             {
                 $text = $this->GetReplyText($row);
                 
@@ -367,9 +379,10 @@ END;
         return parent::_get_select($where,$columns);
     }
 
-    function _can_reply()
+    function _can_reply(&$row)
     {
-        return CCUser::IsLoggedIn();
+        return (CCUser::IsLoggedIn() && empty($row['topic_locked'])) ||
+                CCUser::IsAdmin();
     }
 
 }
@@ -686,6 +699,49 @@ class CCTopic
         CCPage::SetTitle($title);
     }
 
+    function Lock($topic_id)
+    {
+        CCPage::SetTitle(_('Locking and Unlocking Topic Replies'));
+
+        $topics =& CCTopics::GetTable();
+        $topic = $topics->QueryKeyRow($topic_id);
+        if( empty($topic) )
+        {
+            CCPage::Prompt(_('Topic does not exist'));
+            return;
+        }
+
+        $topics->GetTree($topic);
+        $lock = !$topic['topic_locked'];
+        $this->_lock_tree($topic,$topics,$lock);
+
+        $prompt = $lock ? _('Topic has been locked') 
+                        : _('Topic has been unlocked');
+
+        if( !empty($_SERVER['HTTP_REFERER']) )
+        {
+            $prompt .= ' <a href="' . $_SERVER['HTTP_REFERER'] . '">' .
+                       _('Return to previous page') . '</a>';   
+        }
+
+        CCPage::Prompt($prompt);
+    }
+
+    function _lock_tree(&$topic,$topics,$lock)
+    {
+        $args['topic_id']     = $topic['topic_id'];
+        $args['topic_locked'] = $lock;
+        $topics->Update($args);
+        if( !empty($topic['topic_children']) )
+        {
+            $c = count($topic['topic_children']);
+            for( $i = 0; $i < $c; $i++ )
+            {
+                $this->_lock_tree($topic['topic_children'][$i],$topics,$lock);
+            }
+        }
+    }
+
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
@@ -694,15 +750,28 @@ class CCTopic
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('topics','reply'),  array( 'CCTopic', 'Reply'),   
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[topicid]/[isquote]', _('Display topic reply form') , CC_AG_FORUMS );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[topicid]/[isquote]', 
+            _('Display topic reply form') , CC_AG_FORUMS );
+
         CCEvents::MapUrl( ccp('topics','quote'),  array( 'CCTopic', 'Quote'),   
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Display quote reply form') , CC_AG_FORUMS );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', 
+            _('Display quote reply form') , CC_AG_FORUMS );
+
         CCEvents::MapUrl( ccp('topics','delete'), array( 'CCTopic', 'Delete'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Delete a topic') , CC_AG_FORUMS );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', 
+            _('Delete a topic') , CC_AG_FORUMS );
+
         CCEvents::MapUrl( ccp('topics','edit'),   array( 'CCTopic', 'Edit'),    
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Display an edit topic form') , CC_AG_FORUMS );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', 
+            _('Display an edit topic form') , CC_AG_FORUMS );
+
         CCEvents::MapUrl( ccp('topics','view'),   array( 'CCTopic', 'View'),    
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{topicid}', _('Display a topic thread') , CC_AG_FORUMS );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{topicid}', 
+            _('Display a topic thread') , CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('topics','lock'),   array( 'CCTopic', 'Lock'),    
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{topicid}', 
+            _('Lock a topic thread from replies') , CC_AG_FORUMS );
     }
 
 }

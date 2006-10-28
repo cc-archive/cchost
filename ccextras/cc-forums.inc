@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: cc-reviews.php 3291 2006-05-11 06:27:20Z fourstones $
+* $Id$
 *
 */
 
@@ -121,7 +121,7 @@ class CCForumAPI
         }
 
         CCTopic::AddLinks();
-        CCPage::SetTitle('Forums');
+        CCPage::SetTitle(('Forums'));
         CCPage::PageArg('forums',$visible_groups,'forum_index');
     }
 
@@ -390,7 +390,7 @@ EOF;
         {
             $this->_build_bread_crumb_trail(1);
             CCPage::SetTitle( _('Thread Missing') );
-            CCPage::Prompt('That topic thread does not exist');
+            CCPage::Prompt(_('That topic thread does not exist'));
             return;
         }
 
