@@ -16,14 +16,24 @@
      <div>
         <tal:block define="upname php: CC_strchop('${R/upload_name}',${chop},${dochop});" />
         <tal:block define="user   php: CC_strchop('${R/user_real_name}',${chop},${dochop});" />
-        <a href="${R/license_url}" title="${R/license_name}" class="cc_liclogo">
+        <a href="${R/license_url}" 
+          title="${R/license_name}" class="cc_liclogo">
             <img src="${root-url}ccimages/lics/small-${R/license_logo}" />
         </a>
-        <a class="cc_file_link" href="${R/file_page_url}">${upname}</a> ${by}
-        <a class="cc_user_link" href="${R/artist_page_url}" >${user}</a>
-        <span class="cc_upload_date">${R/upload_date_format}</span>
+        <a class="cc_file_link" href="${R/file_page_url}">
+          ${upname}
+        </a> ${by}
+        <a class="cc_user_link" href="${R/artist_page_url}" >
+          ${user}
+        </a>
+        <span class="cc_upload_date">
+          ${R/upload_date_format}
+        </span>
         <a tal:condition="R/files/0/download_url" 
-            class="cc_download_url" href="${R/files/0/download_url}">download</a>
+            class="cc_download_url" 
+            href="${R/files/0/download_url}">
+            ${R/files/0/file_nicname}
+        </a>
      </div>
      <tal:block define="tag_array R/usertag_links" />
      <div tal:condition="tag_array" class="cc_tags">
@@ -40,8 +50,8 @@
   </tr>
   </tal:block>
  </table>
- <i class="cc_tagline"><span>
+ <i class="cc_tagline">
     <tal:block define="format_signature format_sig | string:format_signature.xml/signature" />
     <metal:block use-macro="${format_signature}" />
- </span></i>
+ </i>
 </div>

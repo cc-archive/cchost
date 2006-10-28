@@ -81,6 +81,8 @@ $Id$
 }
 
 #src_preview {
+  white-space: pre;
+  overflow: scroll;
 }
 
 #seehtml {

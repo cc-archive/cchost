@@ -6,8 +6,12 @@
   </span>
   <tal:block define="upname php: CC_strchop('${R/upload_name}',${chop},${dochop});" />
   <tal:block define="user   php: CC_strchop('${R/user_real_name}',${chop},${dochop});" />
-  <a href="${R/file_page_url}"   class="cc_file_link">${upname}</a> ${by} 
-  <a class="cc_user_link" href="${R/artist_page_url}" >${user}</a>
+  <a href="${R/file_page_url}"   class="cc_file_link">
+    ${upname}
+  </a> ${by} 
+  <a class="cc_user_link" href="${R/artist_page_url}" >
+    ${user}
+  </a>
 </div>
 <i class="cc_tagline">
     <tal:block define="format_signature format_sig | string:format_signature.xml/signature" />
