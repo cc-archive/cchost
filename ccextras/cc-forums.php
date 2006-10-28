@@ -152,10 +152,11 @@ class CCForums
 
         $name = $record['user_real_name'];
         $url   = ccl('forums', 'people', $record['user_name']);
-        $link1 = "<a href=\"%s\">";
+        $link1 = "<a href=\"$url\">";
         $link2 = '</a>';
         
-        $text = sprintf( _("%s has posted %s%d forum messages%s"), $name, $link1,  
+        $text = sprintf( _("%s has posted %s%d forum messages%s"), 
+                           $name, $link1,  
                                       $record['user_num_posts'], $link2 );
 
         $record['user_fields'][] = array( 'label' => _('Forum posts'), 
