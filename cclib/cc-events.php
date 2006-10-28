@@ -254,10 +254,56 @@ class CCEvents
     *  //  http://cchost.org/media/foo/BAZ   $this->HandleFoo('BAZ')
     *  //
     * 
+    * Functions and methods mapped to URLs can be loaded 'on demand',
+    * that is, the file the handler is in does not be included before
+    * the URL is process. You specify the name of the file in the 
+    * 'module' parameter. The path should be either fully qualified
+    * or relative to the cchost document root. 
+    *
+    * Functions mapped to URLs are 'self documenting', that is: the
+    * documentation for public URLs are stored with the mapping so
+    * it is always (theoretically) always up to date. The documentation
+    * gleaned from here is mainly targeted at site admins. URLs used as
+    * 'commands' (something an admin should or could put into a 
+    * menu or nav tab) REALLY should be documented, otherwise there
+    * is a good chance the admin won't know about it or how to use
+    * it. 
+    *
+    * URLs that used for 'internal' purposes like form POST or part
+    * of a stateful AJAX protocol should not be documented since they
+    * are unlikely to be useful to admins.
+    *
+    * Also note: ONLY documented URLs are used in admin/access, the
+    *            form that allows super admins to change the access
+    *            rights.
+    *
+    * For the 'doc_param' argument you should specify URL parameters
+    * you allow or require. The notation is: curly braces {} used
+    * for required parameters and square brackets [] used for the
+    * optional one.
+    * 
+    *   '{user_id}/[upload_id]'
+    *
+    * In the example above, user_id is required, upload_id is optional.
+    *
+    * 'doc_summary' is a short description of what the URL is used
+    * for. If the URL displays a form, say which one. If it is an AJAX
+    * call, say that.
+    *
+    * 'doc_group' is used to group URLs into functionality categories. 
+    * Stock ccHost groups names can be found in cc-defines-access.php
+    * But you can use any string to group your custom URL commands,
+    * like your company or organization's name.
+    *
+    * 
     * </code>
     * @param string $url What the incoming url looks like stripped of domain and vroot
     * @param mixed $callback Method to be called 
     * @param integer $permissions CC_* flags to mask off unauthorized users
+    * @param string $module Name of the file to load before attempting to call handler
+    * @param string $doc_param Documentation of params allowed and required
+    * @param string $doc_summary Brief descriptions of the functionality of the handler
+    * @param string $doc_group Documenation category to use for this handler
     */
     function MapUrl( $url, $callback, $permissions, $module='', $doc_param='',
                                                                 $doc_summary='',
