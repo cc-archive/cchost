@@ -191,7 +191,8 @@ class CCSubmit
             $this->ShowSubmitTypes($types);
             return;
         }
-        $type =& $allowed[0];
+
+        $type =& $allowed[$formtype];
 
         if( empty($type['quota_reached']) && !empty($type['enabled']))
         {
