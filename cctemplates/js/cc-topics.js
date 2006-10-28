@@ -23,7 +23,8 @@ function cc_update_hot_topics()
     if( !box )
         return;
     if( !box.observing )
-    {
+    {   
+        box.observing = true;
         Event.observe(box, 'change', function (e)
             {
                 cc_update_hot_topics();
