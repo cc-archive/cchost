@@ -101,7 +101,7 @@ $Id$
     <p id="preview_warn" style="display:block">${PUB/previewwarn}</p>
     <p id="html_warn" style="display:none">${PUB/htmlwarn}</p>
     <div id="preview_block">
-      <div id="preview" style="display:block">
+      <div id="preview" style="display:block"><span>&nbsp;</span>
       </div>
       <div id="src_preview" style="display:none;">
       </div>

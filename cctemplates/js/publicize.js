@@ -42,12 +42,23 @@ function update_target()
 {
    var url = home_url + 'api/query' + q + Form.serialize('puboptions_form');
    var text = '<' + 'script type="text/javascript" src="' + url + '&format=docwrite" ><' + '/script>';
-   $('target_text').innerHTML = text;
+   var tt = $('target_text');
+   if( tt.value )
+       tt.value = text;
+   else
+       tt.innerHTML = text;
+
    var myAjax = new Ajax.Request( 
      url + '&format=html', 
     { method: 'get', 
       onComplete: function(req) {
-        $('preview').innerHTML = req.responseText;
+       var prev = $('preview');
+       if( prev.innerHTML )
+            prev.innerHTML = req.responseText;
+       else if( prev.innerText )
+            prev.innerText = req.responseText;
+       else
+           alert('wups');
         $('src_preview').innerHTML = req.responseText.escapeHTML();
         }
         
