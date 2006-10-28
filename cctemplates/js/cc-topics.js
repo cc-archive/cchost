@@ -20,6 +20,8 @@
 function cc_update_hot_topics()
 {
     var box = $('cc_hot_topic_picker');
+    if( !box )
+        return;
     if( !box.observing )
     {
         Event.observe(box, 'change', function (e)
