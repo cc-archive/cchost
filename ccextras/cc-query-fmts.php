@@ -104,7 +104,23 @@ class CCQueryFormats
             {
                 if( empty($template) )
                     $template = 'med';
-                $tname = 'format_' . $template . '.xml';
+                $tname = 'formats/' . $template . '.xml';
+
+                // normally we wouldn't go through extra step of
+                // actually looking up the template, but since
+                // this is a public api we want to be friendly
+                // about it...
+
+                if( !CCTemplate::GetTemplate($tname) )
+                {
+                    // developer might not have put it in skins/formats dir
+                    $tname = $template . '.xml';
+                    if( !CCTemplate::GetTemplate($tname) )
+                    {
+                        print("\"$template\" is not a valid template");
+                        exit;
+                    }
+                }
 
                 $configs =& CCConfigs::GetTable();
                 $targs = $configs->GetConfig('ttag');
@@ -116,16 +132,6 @@ class CCQueryFormats
                 if( !empty($template_args) )
                     $targs = array_merge($template_args);
 
-                // normally we wouldn't go through extra step of
-                // actually looking up the template, but since
-                // this is a public api we want to be friendly
-                // about it...
-                $found_template = CCTemplate::GetTemplate($tname);
-                if( !$found_template )
-                {
-                    print("\"$template\" is not a valid template");
-                    exit;
-                }
 
                 $templateObj = new CCTemplate($tname);
                 $text = $templateObj->SetAllAndParse($targs);
