@@ -422,14 +422,15 @@ class CCTopic
 {
     function Reply($topic_id,$is_quote = false)
     {
-        if( !CCTopics::_can_reply() )
-            exit; // for now...
-
         global $CC_GLOBALS;
 
         $form =  new CCTopicReplyForm();
         $topics =& CCTopics::GetTable();
         $record = $topics->GetRecordFromID($topic_id);
+
+        if( !CCTopics::_can_reply($record) )
+            exit; // for now...
+
 
         if( empty($record) )
         {
@@ -592,6 +593,7 @@ class CCTopic
                 $args4['topic_deleted'] = 1;
                 $topics->Update($args4);
                 CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, $topic_id ));
+
             }
         }
         else
