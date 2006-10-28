@@ -181,7 +181,7 @@ class CCSubmit
         {
             if( empty($types[$formtype]) )
                 return;
-            $allowed[] =& $types[$formtype];
+            $allowed[$formtype] =& $types[$formtype];
         }
 
         CCEvents::Invoke(CC_EVENT_UPLOAD_ALLOWED, array( &$allowed ) );
@@ -191,7 +191,6 @@ class CCSubmit
             $this->ShowSubmitTypes($types);
             return;
         }
-
         $type =& $allowed[0];
 
         if( empty($type['quota_reached']) && !empty($type['enabled']))
@@ -215,6 +214,11 @@ class CCSubmit
                 $api->SubmitOriginal( $type['text'], $type['tags'], $type['form_help'], $username, $etc  );
             }
         }
+        else
+        {
+            CCUtil::SendBrowserTo(ccl('submit'));
+        }
+        
 
     }
 
@@ -447,15 +451,19 @@ class CCSubmit
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[upload_id]', 
             _("Display 'Submit a Remix' form. Using upload_id will prefill search results. " .
                "This is how 'I Sampled This...' is done."), CC_AG_SUBMIT_FORM );
+
         CCEvents::MapUrl( ccp('submit'),         array('CCSubmit','Submit') ,   
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[form_type]/[user_name]', 
             _('Display submit form types or submit an upload'), CC_AG_SUBMIT_FORM );
+
         CCEvents::MapUrl( ccp('admin','submit'), array('CCSubmit','Admin'),    
             CC_ADMIN_ONLY, ccs(__FILE__), '', _("Dislays 'Manage Submit Forms' form"), 
             CC_AG_SUBMIT_FORM );
+
         CCEvents::MapUrl( ccp('admin','editsubmitform'), array('CCSubmit','EditForm'),    
             CC_ADMIN_ONLY, ccs(__FILE__), '{form_type}', _('Edit a submit form type'), 
             CC_AG_SUBMIT_FORM );
+
         CCEvents::MapUrl( ccp('admin','newsubmitform'), array('CCSubmit','NewForm'),    
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Create a new submit form type'), CC_AG_SUBMIT_FORM );
     }
