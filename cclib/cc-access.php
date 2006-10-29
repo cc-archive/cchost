@@ -29,7 +29,7 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCAccess' , 'OnMapUrls') );
-//CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCAccess' , 'OnGetConfigFields') );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCAccess' , 'OnAdminMenu') );
 
 /**
  *
@@ -168,6 +168,29 @@ class CCAccess
             $configs->SaveConfig( 'accmap', $accmap, CC_GLOBAL_SCOPE, false );
             CCPage::Prompt(_('Access map changes saved'));
         }
+    }
+
+    function OnAdminMenu( &$items, $scope )
+    {
+        if( !CCUser::IsSuper() || $scope == CC_LOCAL_SCOPE )
+            return;
+
+        $items += array( 
+            'superusers'   => array( 'menu_text'  => _('Super Users'),
+                             'menu_group' => 'configure',
+                             'help'      => _('Edit list of super users'),
+                             'access' => CC_SUPER_ONLY,
+                             'weight' => 20,
+                             'action' =>  ccl('admin','super')
+                             ),
+            'access'   => array( 'menu_text'  => _('Restrict Access'),
+                             'menu_group' => 'configure',
+                             'help' => _('Restrict access to commands'),
+                             'access' => CC_SUPER_ONLY,
+                             'weight' => 21,
+                             'action' =>  ccl('admin','access')
+                             ),
+            );
     }
 
     /**

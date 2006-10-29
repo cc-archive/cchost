@@ -369,13 +369,28 @@ class CCAdminRawForm extends CCGridForm
 */
 class CCAdmin
 {
+    function _check_access($args)
+    {
+        if( CCUser::IsSuper() )
+            return $args;
+        
+        $cleaned = array();
+        foreach( $args as $K => $mi )
+        {
+            if( CCEvents::CheckAccess($mi['action']) )
+                $cleaned[$K] = $mi;
+        }
+
+        return $cleaned;
+    }
+
     function _setup_global(&$args)
     {
         $global_items = array();
         CCEvents::Invoke(CC_EVENT_ADMIN_MENU, array( &$global_items, CC_GLOBAL_SCOPE ) );
         $args['global_title'] = ''; // _('Global Site Settings');
         $args['global_help']  = _('These settings affect the entire site');
-        $args['global_items'] = $global_items;
+        $args['global_items'] = $this->_check_access($global_items);
         $args['do_global'] = true;
     }
 
@@ -416,7 +431,7 @@ class CCAdmin
 	        _("This setting over writes the main site's values");
         }
 
-        $args['local_items'] = $local_items;
+        $args['local_items'] = $this->_check_access($local_items);
         $args['do_local'] = true;
     }
 
@@ -466,9 +481,9 @@ class CCAdmin
 
         $args['do_global'] = $args['do_local'] = false;
 
-        if( empty($subtab) || ($subtab == 'global') )
+        if( $subtab == 'global' )
             $this->_setup_global($args);
-        if( empty($subtab) || ($subtab == 'local') )
+        if( $subtab == 'local' )
             $this->_setup_local($args);
 
         $args['subtab'] = '/' . $subtab;

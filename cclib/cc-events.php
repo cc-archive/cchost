@@ -406,6 +406,30 @@ class CCEvents
         }
     }
 
+    function CheckAccess($url)
+    {
+        static $_accmap;
+        static $_urlmap;
+        static $_mask;
+        static $_ccl;
+
+        if( !isset($_accmap) )
+        {
+            $configs =& CCConfigs::GetTable();
+            $_accmap = $configs->GetConfig('accmap');
+            $_mask   = CCMenu::GetAccessMask();
+            $_ccl    = ccl();
+            $_urlmap = CCEvents::GetUrlMap();
+        }
+        if( strpos($url,'viewfile') !== false )
+            return true;
+        $url = str_replace( $_ccl, '', $url);
+        if( !empty($_accmap[$url]) )
+            return ($_accmap[$url] & $_mask) != 0;
+        // viewfile commands? arguments? ah!!
+        return empty($_urlmap[$url]) || ($_urlmap[$url]->pm & $_mask) != 0;
+    }
+
     /**
     * @access private
     */
