@@ -141,6 +141,7 @@ function cc_install_licenses()
                        'license_logo'       => 'nc-sampling_plus.gif',
                        'license_strict'     => 180,
                        'license_text'       => _('<strong>Noncommercial Sampling Plus</strong>: People can take and transform <strong>pieces</strong> of your work for <strong>noncommercial</strong> purposes only. <strong>Noncommercial</strong> copying and distribution (like file-sharing) of the <strong>entire work</strong> are also allowed.'),
+                       ),
                  array( 'license_id'        => 'publicdomain' ,
                         'license_url'       => 'http://creativecommons.org/licenses/publicdomain',
                        'license_name'       => 'Public Domain',
