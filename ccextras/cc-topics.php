@@ -259,9 +259,20 @@ class CCTopics extends CCTable
                 else
                     $text = _('Unlock');
 
-                $row['commands']['edit'] = array( 'url' => ccl('topics','lock',$row['topic_id']),
+                $row['commands']['lock'] = array( 'url' => ccl('topics','lock',$row['topic_id']),
                                                   'script' => '',
                                                   'text' => $text );
+                
+                $tree =& CCTopicTree::GetTable();
+                $awhere['topic_tree_child'] = $row['topic_id'];
+                $has_children = $tree->CountRows($awhere);
+                if( $has_children )
+                {
+                    $row['commands']['killbranch'] 
+                        = array( 'url' => ccl('topics','delete',$row['topic_id'],'branch'),
+                                                      'script' => '',
+                                                      'text' => _('Delete branch') );
+                }
             }
 
             if( $this->_can_reply($row) )
@@ -544,8 +555,10 @@ class CCTopic
         cc_exit();
     }
 
-    function Delete($topic_id)
+    function Delete($topic_id,$branch=false)
     {
+        if( $branch && !CCUser::IsAdmin() )
+            cc_exit();
         $this->CheckTopicAccess($topic_id);
         $topics =& CCTopics::GetTable();
         CCPage::SetTitle(_("Deleting Topic"));
@@ -560,19 +573,19 @@ class CCTopic
         }
         else
         {
-            $this->DeleteTopic($topic_id);
+            $this->DeleteTopic($topic_id,$branch);
             //CCPage::Prompt(_("Topic has been deleted"));
             CCUtil::SendBrowserTo();
         }
     }
 
-    function DeleteTopic($topic_id)
+    function DeleteTopic($topic_id,$branch=false)
     {
         $topics =& CCTopics::GetTable();
         $tree =& CCTopicTree::GetTable();
         $arg1['topic_tree_child'] = $topic_id;
         $parent_id = $tree->QueryItem('topic_tree_parent',$arg1);
-        if( $parent_id )
+        if( $parent_id && !$branch )
         {
             $arg2['topic_tree_parent'] = $topic_id;
             $child_count = $tree->CountRows($arg2);
@@ -599,12 +612,11 @@ class CCTopic
                 $args4['topic_deleted'] = 1;
                 $topics->Update($args4);
                 CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, $topic_id ));
-
             }
         }
         else
         {
-            // top level topic, wipe it's tree...
+            // top level topic or branch flag is set, wipe it's tree...
             CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_DEEP, $topic_id ));
             $this->_delete_tree($topic_id);
         }
@@ -758,19 +770,19 @@ class CCTopic
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('topics','reply'),  array( 'CCTopic', 'Reply'),   
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '[topicid]/[isquote]', 
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}/[isquote]', 
             _('Display topic reply form') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('topics','quote'),  array( 'CCTopic', 'Quote'),   
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', 
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}', 
             _('Display quote reply form') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('topics','delete'), array( 'CCTopic', 'Delete'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', 
-            _('Delete a topic') , CC_AG_FORUMS );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}', 
+            _('Display delete topic form') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('topics','edit'),   array( 'CCTopic', 'Edit'),    
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', 
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}', 
             _('Display an edit topic form') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('topics','view'),   array( 'CCTopic', 'View'),    
