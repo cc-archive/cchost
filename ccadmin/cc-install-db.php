@@ -379,6 +379,7 @@ CREATE TABLE cc_tbl_topics
       topic_date       datetime        NOT NULL,
       topic_edited     datetime        NOT NULL,
       topic_deleted    int(2) unsigned  NOT NULL,
+      topic_locked     int(2) unsigned  NOT NULL,
 
       topic_name         mediumtext       NOT NULL default '',
       topic_text         mediumtext       NOT NULL default '',
@@ -578,6 +579,9 @@ END;
        'v_3_1d'              => true, // upload_last_edit
        'v_3_1e'              => true, // local path struct
        'v_3_2b'              => true, // move ratings
+       'v_3_2c'              => true, // thumbnail constraings
+       'v_3_2d'              => true, // null db fields, super users
+       'v_3_2e'              => true, // topic locking field
 
     );
 
