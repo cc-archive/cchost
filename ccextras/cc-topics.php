@@ -584,6 +584,12 @@ class CCTopic
                 CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_SHALLOW, $topic_id ));
                 // delete from topics
                 $topics->DeleteKey($topic_id);
+                // If the parent is marked as deleted, nuke it
+                $old_show_val = $topics->ShowDeleted(true);
+                $mark = $topics->QueryItemFromKey('topic_deleted',$parent_id);
+                $topics->ShowDeleted($old_show_val);
+                if( $mark )
+                    $this->DeleteTopic($parent_id); // recurse 'up'
             }
             else
             {
