@@ -282,33 +282,6 @@ class CCUserProfileForm extends CCUploadForm
 
 }
 
-class CCDefaultAvatarForm extends CCUploadForm
-{
-    function CCDefaultAvatarForm($avatar_dir)
-    {
-        global $CC_GLOBALS;
-
-        $this->CCUploadForm();
-
-        $path = empty($CC_GLOBALS['default_user_image']) ? '' : $CC_GLOBALS['default_user_image'];
-        $fields = array( 
-                    'default_user_image' =>
-                       array(  'label'      => _('Image'),
-                               'formatter'  => 'avatar',
-                               'form_tip'   => _('Image file (can not be bigger than 93x93)'),
-                               'upload_dir' => $avatar_dir,
-                               'value'      => basename($path),
-                               'maxwidth'   => 93,
-                               'maxheight'  => 94,
-                               'flags'      => CCFF_NONE ),
-                        );
-
-        $this->AddFormFields( $fields );
-        $this->EnableSubmitMessage(false);
-    }
-
-}
-
 class CCUsers extends CCTable
 {
     function CCUsers()
@@ -442,7 +415,8 @@ class CCUsers extends CCTable
         if( CCUser::IsAdmin() )
         {
             $url = ccl('admin','user',$row['user_id']);
-            $row['user_fields'][] = array( 'label' => '', 'value' => "<a href=\"$url\" class=\"cc_user_admin_link\">Account Management</a>" );
+            $ac_label = _('Account Management');
+            $row['user_fields'][] = array( 'label' => '', 'value' => "<a href=\"$url\" class=\"cc_user_admin_link\">$ac_label</a>" );
         }
 
         if( $expand )
@@ -660,38 +634,6 @@ class CCUser
             CCPage::AddForm( $form->GenerateForm() );
     }
 
-    function DefaultAvatar()
-    {
-        global $CC_GLOBALS;
-
-        if( empty($CC_GLOBALS['avatar-dir']) )
-            $upload_dir = $this->GetUploadDir(CCUser::CurrentUserName());
-        else
-            $upload_dir = $CC_GLOBALS['avatar-dir'];
-
-        CCPage::SetTitle(_("Set Default User Avatar"));
-        $form  = new CCDefaultAvatarForm($upload_dir );
-
-        if( !empty($_POST['defaultavatar']) && $form->ValidateFields() )
-        {
-            $form->FinalizeAvatarUpload('default_user_image', $upload_dir);
-            $form->GetFormValues($fields);
-            if( $fields['default_user_image'] )
-                $args['default_user_image'] = 
-                    join('/', array($upload_dir,$fields['default_user_image']));
-            else
-                $args['default_user_image'] = 0;
-            $configs =& CCConfigs::GetTable();
-            $configs->SaveConfig('config',$args);
-            CCPage::Prompt(_('Default avatar set'));
-        }
-        else
-        {
-            CCPage::AddForm( $form->GenerateForm() );
-        }
-    }
-
-
     /**
     *
     * This just displays a message about the changes being saved.
@@ -896,20 +838,17 @@ END;
                     }
                     else
                     {
-                        $msg =<<<END
-You've registered an account and logged in, but you haven't uploaded any remixes yet.
+                        $msg = _('You\'ve registered an account and logged in, but you haven\'t uploaded any remixes yet.');
+                        $msg .= '<br /><br />' . _('Use the \'Submit Files\' menu items on the left to start uploading your files.');
 
-Use the 'Submit Files' menu items on the left to start uploading your sampled tracks and sample libraries.
-END;
-
-                         $R['user_fields'][] = array( 'label' => '', 
+                        $R['user_fields'][] = array( 'label' => '', 
                                                       'value' => _($msg) );
-
                     }
                 }
                 else
                 {
-                        $msg = $name . _(' has not uploaded any remixes yet.');                         $R['user_fields'][] = array( 'label' => '', 
+                        $msg = sprintf(_('%s has not uploaded any remixes yet.'), $name);                      
+                        $R['user_fields'][] = array( 'label' => '', 
                                                       'value' => $msg );
                 }
             }
@@ -997,9 +936,9 @@ END;
     {
         if( empty($record) )
         {
-            $patterns['%artist%'] = "Artist name";
-            $patterns['%login%']  = "Artist login name";
-            $patterns['%artist_page%']   = "Artist page URL";
+            $patterns['%artist%'] = _('Artist name');
+            $patterns['%login%']  = _('Artist login name');
+            $patterns['%artist_page%']   = _('Artist page URL');
         }
         else
         {
@@ -1061,7 +1000,7 @@ END;
 
         if( empty($menu['artist']['action']) )
         {
-            CCPage::Prompt('Attention: Menus have been corrupted');
+            CCPage::Prompt(_('Attention: Menus have been corrupted'));
             return;  
         }
 
@@ -1082,14 +1021,19 @@ END;
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'people',           array('CCUser','UserPage'),
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[username]/[tags]', _('Display people page or user profile'), CC_AG_USER );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[username]/[tags]', 
+            _('Display people page or user profile'), CC_AG_USER );
+
         CCEvents::MapUrl( 'people/profile',   array('CCUser','EditProfile'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', _('Edit user profile'), CC_AG_USER );
-        CCEvents::MapUrl( 'people/profile/save', array('CCUser','SaveProfile'),                              CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', 
+            _('Edit user profile'), CC_AG_USER );
+
+        CCEvents::MapUrl( 'people/profile/save', array('CCUser','SaveProfile'),    
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
+
         CCEvents::MapUrl( 'people/addtofavs', array('CCUser','AddToFavs'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', _('Add/Remove favorite users'), CC_AG_USER );
-        CCEvents::MapUrl( 'people/avatar', array('CCUser','DefaultAvatar'),  
-            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Set the default user avatar'), CC_AG_USER );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', 
+            _('Add/Remove favorite users'), CC_AG_USER );
     }
 
     /**
@@ -1105,8 +1049,8 @@ END;
         if( $scope != CC_GLOBAL_SCOPE )
         {
             $fields['admins'] =
-               array(  'label'      => 'Site Administrators',
-                       'form_tip'   => 'List login names of site admins.<br /> (e.g. admin, fightmaster, sally)',
+               array(  'label'      => _('Site Administrators'),
+                       'form_tip'   => _('List login names of site admins. (e.g. admin, fightmaster, sally)'),
                        'value'      => 'Admin',
                        'formatter'  => 'tagsedit',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );

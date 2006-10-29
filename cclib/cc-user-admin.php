@@ -27,6 +27,39 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCUserAdmin', 'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCUserAdmin', 'OnAdminMenu'));
+
+/**
+* Change the default avatar used by new users
+*
+*/
+class CCDefaultAvatarForm extends CCUploadForm
+{
+    function CCDefaultAvatarForm($avatar_dir)
+    {
+        global $CC_GLOBALS;
+
+        $this->CCUploadForm();
+
+        $path = empty($CC_GLOBALS['default_user_image']) ? '' : $CC_GLOBALS['default_user_image'];
+        $fields = array( 
+                    'default_user_image' =>
+                       array(  'label'      => _('Image'),
+                               'formatter'  => 'avatar',
+                               'form_tip'   => _('Image file (can not be bigger than 93x93)'),
+                               'upload_dir' => $avatar_dir,
+                               'value'      => basename($path),
+                               'maxwidth'   => 93,
+                               'maxheight'  => 94,
+                               'flags'      => CCFF_NONE ),
+                        );
+
+        $this->AddFormFields( $fields );
+        $this->EnableSubmitMessage(false);
+    }
+
+}
+
 
 /**
 * Change a user's password
@@ -144,6 +177,37 @@ class CCIPManageForm extends CCGridForm
 
 class CCUserAdmin
 {
+    function DefaultAvatar()
+    {
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['avatar-dir']) )
+            $upload_dir = CCUser::GetUploadDir(CCUser::CurrentUserName());
+        else
+            $upload_dir = $CC_GLOBALS['avatar-dir'];
+
+        CCPage::SetTitle(_("Set Default User Avatar"));
+        $form  = new CCDefaultAvatarForm($upload_dir );
+
+        if( !empty($_POST['defaultavatar']) && $form->ValidateFields() )
+        {
+            $form->FinalizeAvatarUpload('default_user_image', $upload_dir);
+            $form->GetFormValues($fields);
+            if( $fields['default_user_image'] )
+                $args['default_user_image'] = 
+                    ccp($upload_dir,$fields['default_user_image']);
+            else
+                $args['default_user_image'] = 0;
+            $configs =& CCConfigs::GetTable();
+            $configs->SaveConfig('config',$args);
+            CCPage::Prompt(_('Default avatar set'));
+        }
+        else
+        {
+            CCPage::AddForm( $form->GenerateForm() );
+        }
+    }
+
     function ChangePassword($user_id ='')
     {
         CCPage::SetTitle("Change a User's Password");
@@ -354,6 +418,28 @@ END;
     }
 
     /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
+    function OnAdminMenu(&$items,$scope)
+    {
+        if( $scope != CC_GLOBAL_SCOPE )
+            return;
+
+        $items += array( 
+            'defaultavatar'   => array( 'menu_text'  => _('Default User Avatar'),
+                             'menu_group' => 'configure',
+                             'help' => _('Upload a default avatar for new users'),
+                             'weight' => 50,
+                             'action' =>  ccl('admin','avatar'),
+                             'access' => CC_ADMIN_ONLY
+                             )
+            );
+    }
+
+    /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
     * @see CCEvents::MapUrl()
@@ -361,10 +447,16 @@ END;
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'admin/password',   array('CCUserAdmin','ChangePassword'),  
-            CC_ADMIN_ONLY, ccs(__FILE__), '{userid}', _('Show admin "Account Management" form'), CC_AG_USER );
-        CCEvents::MapUrl( 'admin/user',       array('CCUserAdmin','Admin'),           
-            CC_ADMIN_ONLY, ccs(__FILE__), '{userid}', _('Admin a user IP, profile, etc.'), CC_AG_USER );
+            CC_ADMIN_ONLY, ccs(__FILE__), '{userid}', 
+            _('Show admin "Account Management" form'), CC_AG_USER );
 
+        CCEvents::MapUrl( 'admin/user',       array('CCUserAdmin','Admin'),           
+            CC_ADMIN_ONLY, ccs(__FILE__), '{userid}', 
+            _('Admin a user IP, profile, etc.'), CC_AG_USER );
+
+        CCEvents::MapUrl( 'admin/avatar', array('CCUserAdmin','DefaultAvatar'),  
+            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+            _('Set the default user avatar'), CC_AG_USER );
     }
 
 }
