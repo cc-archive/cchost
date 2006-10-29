@@ -176,6 +176,7 @@ class CCPage extends CCTemplate
         $this->_page_args['bread_crumbs'] = array();
         $this->_page_args['crumb_seperator'] = ' &raquo; ';
         $this->_page_args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+        $this->_page_args['get'] = $_GET;
     }
 
     /**
