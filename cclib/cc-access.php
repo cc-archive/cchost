@@ -193,7 +193,7 @@ function cc_get_url_map($doconly=1)
     $configs =& CCConfigs::GetTable();
     $accmap = $configs->GetConfig('accmap');
 
-    $map =& CCEvents::GetUrlMap();
+    $map = CCEvents::GetUrlMap();
     if( $doconly )
     {
         $groups = array();
