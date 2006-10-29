@@ -205,7 +205,7 @@ class CCUtil
         header("HTTP/1.0 404 Not Found");
         if( $exit )
         {
-            print('file not found');
+            print(_('file not found'));
             exit;
         }
     }

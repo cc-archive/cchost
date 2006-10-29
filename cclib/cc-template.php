@@ -146,20 +146,18 @@ class CCTemplate
         $res = $this->_template->execute();
         if( PEAR::isError($res) )
         {
-            print("There is an error rendering this page.<br /><a href=\"http://wiki.creativecommons.org/CcHost#Troubleshooting\">Help troubleshooting ccHost</a><br />");
+            print(_("There is an error rendering this page.") . "<br /><a href=\"http://wiki.creativecommons.org/CcHost#Troubleshooting\">" . _('Help troubleshooting ccHost') . "</a><br />");
             $dir = $CC_GLOBALS['php-tal-cache-dir'];
             if( is_dir($dir) && !is_writable($dir) )
             {
                 chmod($dir,0777);
-                print("The $dir directory must be writable. We have tried to change it. Refresh this page to ".
-                       "see if that worked. If not, you may have to ask your system's administrator for assitance to ".
-                        "make that possible.");
+                print(sprintf(_("The %s directory must be writable. We have tried to change it. Refresh this page to see if that worked. If not, you may have to ask your system's administrator for assitance to make that possible."), $dir));
             }
 
             if( 1 ) // $admin_dump )
             {
                 print("<pre >");
-                print("<b>Here is the information returned from the template engine:</b>\n\n");
+                print("<b>" . _('Here is the information returned from the template engine:') . "</b>\n\n");
                 print_r($res);
                 print("</pre>");
             }
@@ -198,10 +196,7 @@ class CCAdminTemplateMacrosForm extends CCEditConfigForm
         $this->_get_macros_from_file('custom',$fields);
         $this->AddFormFields($fields);
         $fname = '<b>' . CCTemplate::GetTemplate('sidebar.xml') .  '</b>';
-        $this->SetHelpText( sprintf(_(
-                                'Pick which UI elements should appear on every page.
-                               Edit the file %s to add modules here.
-                               '),$fname) );
+        $this->SetHelpText( sprintf(_('Pick which UI elements should appear on every page. Edit the file %s to add modules here.'),$fname) );
     }
 
     function _get_macros_from_file($filebase,&$fields)
@@ -259,9 +254,7 @@ class CCAdminTemplateTagsForm extends CCEditConfigForm
         $this->SetSubmitText("Submit Changes");
         $newtaglink = ccl('admin', 'templatetags', 'new' );
         global $CC_CFG_ROOT;
-        $this->SetHelpText("These values are used on each page for '$CC_CFG_ROOT'. " .
-                            "If you have customized the ".
-                           "templates you can create new tags by <a href=\"$newtaglink\">clicking here</a>.");
+        $this->SetHelpText(sprintf(_("These values are used on each page for %s"), $CC_CFG_ROOT) . sprintf(_("If you have customized the templates you can create new tags by %sclicking here%s."), "<a href=\"$newtaglink\">", "</a>"));
     }
 }
 
@@ -276,7 +269,7 @@ class CCNewTemplateTagForm extends CCForm
         $this->CCForm();
 
         $fields['newtag'] =
-                   array(  'label'       => 'Tag Name',
+                   array(  'label'       => _('Tag Name'),
                            'formatter'   => 'textedit',
                            'flags'       => CCFF_REQUIRED | CCFF_NOUPDATE) ;
 
@@ -292,7 +285,7 @@ class CCTemplateAdmin
 {
     function OnAdminContent()
     {
-        CCPage::SetTitle("Sidebar Content");
+        CCPage::SetTitle(_("Sidebar Content"));
         $form = new CCAdminTemplateMacrosForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -301,7 +294,7 @@ class CCTemplateAdmin
     {
         if( empty($_POST) )
         {
-            CCPage::SetTitle("Custom Skin");
+            CCPage::SetTitle(_("Custom Skin"));
             $form = new CCPickStyleSheetForm();
             $form->SetHandler( ccl('people','customize',$username) ); // otherwise it's global
             CCPage::AddForm( $form->GenerateForm() );
@@ -321,14 +314,14 @@ class CCTemplateAdmin
 
     function OnAdminTags()
     {
-        CCPage::SetTitle("Edit Template Tags");
+        CCPage::SetTitle(_("Edit Template Tags"));
         $form = new CCAdminTemplateTagsForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
 
     function OnNewTags()
     {
-        CCPage::SetTitle("Addd a New Template Tag");
+        CCPage::SetTitle(_("Add a New Template Tag"));
         $form = new CCNewTemplateTagForm();
         if( empty($_POST['newtemplatetag']) )
         {
@@ -389,12 +382,12 @@ class CCTemplateAdmin
             return;
 
         $items += array( 
-            'ttag'   => array( 'menu_text'  => 'Titles and Footers',
-                             'menu_group' => 'configure',
-                             'help' => 'Edit what the banner and footer on each page says',
-                             'weight' => 50,
-                             'action' =>  ccl('admin','templatetags'),
-                             'access' => CC_ADMIN_ONLY
+            'ttag'   => array('menu_text'   => _('Titles and Footers'),
+                              'menu_group'  => 'configure',
+                              'help'        => _('Edit what the banner and footer says on each page.'),
+                              'weight'      => 50,
+                              'action'      =>  ccl('admin','templatetags'),
+                              'access'      => CC_ADMIN_ONLY
                              ),
             /*
             'usercss'   => array( 'menu_text'  => 'Your Skin',
@@ -404,12 +397,12 @@ class CCTemplateAdmin
                              'access' => CC_MUST_BE_LOGGED_IN
                              ),
             */
-            'tmacs'  => array( 'menu_text'  => 'Sidebar Content',
-                             'menu_group' => 'configure',
-                             'help' => 'Pick what features are available on the side bar',
-                             'weight' => 53,
-                             'action' =>  ccl('admin','content'),
-                             'access' => CC_ADMIN_ONLY
+            'tmacs'  => array( 'menu_text'  => _('Sidebar Content'),
+                             'menu_group'   => 'configure',
+                             'help'         => _('Pick what features are available on the side bar.'),
+                             'weight'       => 53,
+                             'action'       =>  ccl('admin','content'),
+                             'access'       => CC_ADMIN_ONLY
                              ),
                 );
 
@@ -424,16 +417,16 @@ class CCTemplateAdmin
     {
         CCEvents::MapUrl( 'admin/templatetags',     array('CCTemplateAdmin','OnAdminTags'),         
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
-            _('Displays \'Header/Footer\' form'), CC_AG_CONFIG );
+            _("Displays 'Header/Footer' form"), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/content',          array('CCTemplateAdmin','OnAdminContent'),      
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
-            _('Displays \'Sidebar\' form, let\'s the admin select modules to display on every page.'), 
+            _("Displays 'Sidebar' form, let's the admin select modules to display on every page."), 
             CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/templatetags/new', array('CCTemplateAdmin','OnNewTags'),           
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
-            _('Display \'Create a new template tag\' form'), CC_AG_CONFIG );
+            _("Display 'Create a new template tag' form"), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'people/customize',array('CCTemplateAdmin','OnPeopleCustomize'),   
             CC_ADMIN_ONLY, ccs(__FILE__) );

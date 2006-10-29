@@ -135,14 +135,12 @@ class CCNewUserForm extends CCUserForm
                     'user_name' =>
                         array( 'label'      => _('Login Name'),
                                'formatter'  => 'newusername',
-                               'form_tip'   => _('Must be letter, numbers or underscore (_), no longer than 25 characters'),
+                               'form_tip'   => _('This must consist of letters, numbers or underscores (_) and be no longer than 25 characters.'),
                                'flags'      => CCFF_REQUIRED  ),
                     'user_email' =>
                        array( 'label'       => _('e-mail'),
                                'formatter'  => 'email',
-                               'form_tip'   => _('This address will never show on the site but is '.
-                                                'required for creating a new account and password '.
-                                                'recovery in case you forget it.'),
+                               'form_tip'   => _('This address will never show on the site. It is required for creating a new account and for password recovery in case you forget your private password.'),
                                'flags'      => CCFF_REQUIRED ),
                 );
 
@@ -154,7 +152,7 @@ class CCNewUserForm extends CCUserForm
                     'user_password' =>
                        array( 'label'       => _('Password'),
                                'formatter'  => 'password',
-                               'form_tip'   => _('Must be at least 5 characters'),
+                               'form_tip'   => _('This must be at least 5 characters long.'),
                                'flags'      => CCFF_REQUIRED )
                 );
         }
@@ -179,8 +177,9 @@ class CCNewUserForm extends CCUserForm
                     '_lost_password' =>
                        array( 'label'       => _('Lost Password?'),
                                'formatter'  => 'statictext',
-                               'value'      => '<a href="' . ccl('lostpassword') . '">' 
-                                                      . _('Click Here') . '</a>',
+                               'value'      => '<a href="' . 
+                                               ccl('lostpassword') . '">' 
+                                               . _('Click Here') . '</a>',
                                'flags'      => CCFF_NONE | CCFF_NOUPDATE  | CCFF_STATIC),
                         );
         }
@@ -221,13 +220,13 @@ class CCNewUserForm extends CCUserForm
 
             if( preg_match('/[^A-Za-z0-9_]/', $value) )
             {
-                $this->SetFieldError($fieldname,_(" must letters, numbers or underscore (_)"));
+                $this->SetFieldError($fieldname," " . _("This must letters, numbers or underscores (_)"));
                 return(false);
             }
 
             if( strlen($value) > 25 )
             {
-                $this->SetFieldError($fieldname,_(" must be less than 25 characters"));
+                $this->SetFieldError($fieldname, " " . _("This must be less than 25 characters."));
                 return(false);
             }
 
@@ -242,7 +241,7 @@ class CCNewUserForm extends CCUserForm
 
             if( $user )
             {
-                $this->SetFieldError($fieldname,_("That username is already in use or is reserved by the system"));
+                $this->SetFieldError($fieldname,_("That username is already in use or is reserved by the system."));
                 return(false);
             }
 
@@ -298,8 +297,9 @@ class CCUserLoginForm extends CCUserForm
                     '_lost_password' =>
                        array( 'label'       => _('Lost Password?'),
                                'formatter'  => 'statictext',
-                               'value'      => '<a href="' . ccl('lostpassword') . '">' .
-                                                 _('Click Here') . '</a>',
+                               'value'      => '<a href="' . 
+                                               ccl('lostpassword') . '">' .
+                                               _('Click Here') . '</a>',
                                'flags'      => CCFF_NONE | CCFF_NOUPDATE  | CCFF_STATIC),
                     );
         }
@@ -357,14 +357,17 @@ class CCLogin
         if( $scope == CC_GLOBAL_SCOPE && class_exists('CCMailer') )
         {
             $fields['reg-type'] =
-               array(  'label'      => 'Registration Confirmation',
-                       'form_tip'   => 'What type of registrations confirmation should there be',
+               array(  'label'      => _('Registration Confirmation'),
+                       'form_tip'   => _('What type of registrations confirmation should the system use.'),
                        'value'      => 'usermail',
                        'formatter'  => 'select',
                        'options'    => array( 
-                                        CC_REG_USER_EMAIL => 'Send user email with new password',
-                                        CC_REG_ADMIN_EMAIL => 'Send admin email to confirm new login information',
-                                        CC_REG_NO_CONFIRM => 'On screen confirm (no emails used)'
+                                        CC_REG_USER_EMAIL => 
+                                        _('Send user email with new password'),
+                                        CC_REG_ADMIN_EMAIL => 
+                                        _('Send admin email to confirm new login information'),
+                                        CC_REG_NO_CONFIRM => 
+                                        _('On screen confirm (no emails used)')
                                         ),
                        'flags'      => CCFF_POPULATE  ); // do NOT require cookie domain, blank is legit
         }
@@ -378,7 +381,8 @@ class CCLogin
     function OnBuildMenu()
     {
         $items = array(
-            'register'  => array( 'menu_text'  => _('Register'),
+            'register'  => array( 
+                             'menu_text'  => _('Register'),
                              'access'  => CC_ONLY_NOT_LOGGED_IN,
                              'menu_group' => 'artist',
                              'weight' => 5,
@@ -386,7 +390,8 @@ class CCLogin
                              ),
 
 
-            'login'  => array( 'menu_text'  => _('Log In'),
+            'login'  => array( 
+                             'menu_text'  => _('Log In'),
                              'access'  => CC_ONLY_NOT_LOGGED_IN,
                              'menu_group' => 'artist',
                              'weight' => 1,
@@ -471,17 +476,17 @@ class CCLogin
                 {
                     if( $reg_type == CC_REG_ADMIN_EMAIL )
                     {
-                        $why = 'A new account has been requested by: ' . $fields['user_name'] . ' email: ' .
-                                $fields['user_email'] . ' from IP: ' . $_SERVER['REMOTE_ADDR'];
+                        $why = _('A new account has been requested by:') . ' ' . $fields['user_name'] . ' ' . _('email') . ': ' .
+                                $fields['user_email'] . ' ' . _('from IP:') . ' ' . $_SERVER['REMOTE_ADDR'];
                         $to = $CC_GLOBALS['mail_sender'];
                     }
                     else
                     {
-                        $why = 'You are receiving this email because you requested a new account.';
+                        $why = _('You are receiving this email because you requested a new account.');
                         $to =  $fields['user_email'];
                     }
 
-                    $this->_send_login_info($fields['user_name'],"New Account Registration",$why,$new_password,$to);
+                    $this->_send_login_info($fields['user_name'], _("New Account Registration"),$why,$new_password,$to);
                     $url =  ccl('login','new','confirm');
 
                 }
@@ -512,7 +517,7 @@ class CCLogin
 
         cc_setcookie(CC_USER_COOKIE,'',time());
         unset($_COOKIE[CC_USER_COOKIE]);
-        CCPage::Prompt('You have been logged out');
+        CCPage::Prompt(_('You are now logged out'));
         CCPage::SetTitle(_("Log Out"));
         unset($CC_GLOBALS['user_name']);
         unset($CC_GLOBALS['user_id']);
@@ -534,7 +539,7 @@ class CCLogin
         if( empty($_POST['userlogin']) || !$form->ValidateFields() )
         {
             if( !empty($confirm) )
-                CCPage::Prompt(_("You new login information has been sent to your email address."));
+                CCPage::Prompt(_("Your new login information has been sent to your email address."));
 
             CCEvents::Invoke(CC_EVENT_LOGIN_FORM,array(&$form));
             CCPage::SetTitle(_("Log In"));
@@ -571,7 +576,7 @@ class CCLogin
     {
         if( !class_exists('CCMailer') )
         {
-            CCPage::Prompt(_('This installation does not support this feature'));
+            CCPage::Prompt(_('This installation does not support this feature.'));
             return;
         }
 
@@ -594,9 +599,9 @@ class CCLogin
             $users->Update($args);
             CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $args['user_id'] , &$row));
 
-            $why = 'You are receiving this email because you requested a new password.';
-            $this->_send_login_info($user_name,"Recover Lost Password",$why,$new_password,$row['user_email']);
-            CCPage::Prompt("New password has been sent to your email address");
+            $why = _('You are receiving this email because you requested a new password.');
+            $this->_send_login_info($user_name,_("Recover Lost Password"),$why,$new_password,$row['user_email']);
+            CCPage::Prompt(_("New password has been sent to your email address."));
         }
 
     }
@@ -614,24 +619,18 @@ class CCLogin
         $mailer = new CCMailer();
         $mailer->To($to);
         $url = ccl('login');
-        $msg =<<<END
-Howdy from %s!
+        $msg =
+            _("Hi from %s!") . "\n\n%s\n\n" . 
+            _("Please visit: %s") . "\n\n" . 
+            _("Use the following information to log in:") . "\n\n" . 
+            _('Login name: %s') . "\n" . 
+            _('Password: %s') . "\n" . 
+            _('You should then edit your profile and change the password to whatever you like.') . 
+            _('Thanks') . ",\n" . 
+            _('Admin') . ", %s\n";
 
-%s
-
-Please visit: %s
-
-and use the following information to log in:
-
-Login name: %s
-Password: %s
-    
-You should then edit your profile and change the password to whatever you like.
-
-Thanks,
-Admin at %s
-END;
-        $msg = sprintf(_($msg),$site_name,$why,$url,$user_name,$new_password,$site_name);
+        $msg = sprintf(_($msg),$site_name,$why,$url,$user_name,$new_password,
+                               $site_name);
         $mailer->Body($msg);
         $mailer->Subject($site_name . ': ' . $subject);
         $mailer->Send();

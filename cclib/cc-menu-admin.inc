@@ -269,7 +269,7 @@ class CCMenuAdmin
 
             $configs->SaveConfig( 'menu', $copy, '', false);
 
-            CCPage::Prompt(_('Menu changes have been saved'));
+            CCPage::Prompt(_("Menu changes have been saved."));
         
             $menu_api->Reset();
         }            

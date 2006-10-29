@@ -173,7 +173,7 @@ class CCUserForm extends CCSecurityVerifierForm
 
             if( empty($this->record) )
             {
-                $this->SetFieldError($fieldname,_("Can't find that username"));
+                $this->SetFieldError($fieldname,_("Cannot find that username"));
                 return(false);
             }
 
@@ -203,8 +203,7 @@ class CCUserProfileForm extends CCUploadForm
         $fields = array( 
                     'user_real_name' =>
                         array( 'label'      => _('Full Name'),
-                               'form_tip'   => _('Your display name for the site (not to be confused with' .
-                                                ' your login name).'),
+                               'form_tip'   => _('Your display name for the site (not to be confused with your login name).'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
@@ -215,16 +214,14 @@ class CCUserProfileForm extends CCUploadForm
 
                     'user_email' =>
                        array(  'label'      => _('e-mail'),
-                               'form_tip'   => _('This address will never show on the site but is '.
-                                                'required for creating a new account and password '.
-                                                'recovery in case you forget it.'),
+                               'form_tip'   => _('This address will never show on the site but is required for creating a new account and password recovery in case you forget it.'),
                                'formatter'  => 'email',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
                     'user_image' =>
                        array(  'label'      => _('Image'),
                                'formatter'  => 'avatar',
-                               'form_tip'   => _('Image file (can not be bigger than 93x93)'),
+                               'form_tip'   => _('Image file (cannot be bigger than 93x93)'),
                                'upload_dir' => $avatar_dir,
                                'maxwidth'   => 93,
                                'maxheight'  => 94,
@@ -778,7 +775,7 @@ END;
             $records  = $users->GetRecords($where);
             if( empty($records) )
             {
-                CCPage::Prompt(_('Don\'t know that user'));
+                CCPage::Prompt(_("The system does not know that user."));
                 CCUtil::Send404(false);
                 return;
             }
@@ -807,9 +804,9 @@ END;
                 $current_favs = strtolower($this->CurrentUserField('user_favorites'));
                 $favs = CCTag::TagSplit($current_favs);
                 if( in_array( strtolower($R['user_name']), $favs ) )
-                    $msg = sprintf(_("Remove %s from my favorites"),$name );
+                    $msg = sprintf(_("Remove name, %s, from my favorites"),$name );
                 else
-                    $msg = sprintf(_("Add %s to my favorites"),$name);
+                    $msg = sprintf(_("Add name, %s, to my favorites"),$name);
                 $R['user_favs_link'] = array( 'text' => $msg,
                                              'link' => ccl('people','addtofavs',$username) );
             }
@@ -838,17 +835,15 @@ END;
                     }
                     else
                     {
-                        $msg = _('You\'ve registered an account and logged in, but you haven\'t uploaded any remixes yet.');
-                        $msg .= '<br /><br />' . _('Use the \'Submit Files\' menu items on the left to start uploading your files.');
+                        $msg = _("You've registered an account and logged in, but you haven't uploaded any remixes.") . '<br /><br />' . _("Use the 'Submit Files' menu items on the left to start uploading.");
 
-                        $R['user_fields'][] = array( 'label' => '', 
+                         $R['user_fields'][] = array( 'label' => '', 
                                                       'value' => _($msg) );
                     }
                 }
                 else
                 {
-                        $msg = sprintf(_('%s has not uploaded any remixes yet.'), $name);                      
-                        $R['user_fields'][] = array( 'label' => '', 
+                        $msg = sprintf(_('%s has not uploaded any remixes.'), $name);                         $R['user_fields'][] = array( 'label' => '', 
                                                       'value' => $msg );
                 }
             }
@@ -867,9 +862,9 @@ END;
     function _show_feed_links($username)
     {
         CCPage::PageArg('artist_page',$username);
-        CCFeeds::AddFeedLinks($username,'',_('Uploads by ').$username);
-        CCFeeds::AddFeedLinks('','remixesof=' .$username,_('Remixes of ').$username);
-        CCFeeds::AddFeedLinks('','remixedby=' .$username,_('Remixed by ').$username);
+        CCFeeds::AddFeedLinks($username,'',sprintf(_('Uploads by %s'), $username) );
+        CCFeeds::AddFeedLinks('','remixesof=' .$username, sprintf(_('Remixes of %s'), $username) );
+        CCFeeds::AddFeedLinks('','remixedby=' .$username, sprintf(_('Remixed by %s'), $username) );
     }
 
     function AddToFavs($user_to_add_or_remove)
@@ -881,12 +876,12 @@ END;
         if( in_array( $user_to_add_or_remove, $favs ) )
         {
             $favs = array_diff($favs,array($user_to_add_or_remove));
-            $msg = sprintf(_("%s has been removed from your list of favorites"),$user_to_add_or_remove);
+            $msg = sprintf(_("User, %s, has been removed from your list of favorites."), $user_to_add_or_remove);
         }
         else
         {
             $favs[] = $user_to_add_or_remove;
-            $msg = sprintf(_("%s has been added to your list of favorites"),$user_to_add_or_remove);
+            $msg = sprintf(_("User, %s, has been added to your list of favorites."), $user_to_add_or_remove);
         }
         $new_favs = implode(',',$favs);
         $users =& CCUsers::GetTable();
@@ -936,14 +931,14 @@ END;
     {
         if( empty($record) )
         {
-            $patterns['%artist%'] = _('Artist name');
-            $patterns['%login%']  = _('Artist login name');
-            $patterns['%artist_page%']   = _('Artist page URL');
+            $patterns['%artist%']       = _("Artist name");
+            $patterns['%login%']        = _("Artist login name");
+            $patterns['%artist_page%']  = _("Artist page URL");
         }
         else
         {
-            $patterns['%artist%']        = $record['user_real_name'];
-            $patterns['%login%']         = $record['user_name'];
+            $patterns['%artist%']       = $record['user_real_name'];
+            $patterns['%login%']        = $record['user_name'];
 
             if( !empty($record['artist_page_url']) )
                 $patterns['%artist_page%']   = $record['artist_page_url'];

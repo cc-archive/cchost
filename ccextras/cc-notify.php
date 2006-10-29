@@ -162,7 +162,7 @@ class CCNotify
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields['notify'] =
-               array(  'label'      => 'Allow email notifcations',
+               array(  'label'      => 'Allow email notifications',
                        'form_tip'   => 'Is it ok to let users get notified on activity on their accounts and others?',
                        'value'      => 0,
                        'formatter'  => 'checkbox',

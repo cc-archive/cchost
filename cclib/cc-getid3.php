@@ -58,12 +58,13 @@ class CCGetID3
     {
         global $CC_GLOBALS;
         $getid3path = $CC_GLOBALS[CCGETID3_PATH_KEY] . '/getid3.php';
-        $msg = 'GetID3 library integration are not properly installed: <br />path does not exists<br />';
+        $msg = _('GetID3 library integration is not properly installed:') . '<br />' . _("The path does not exist") . '<br />';
+
 
         if( CCUser::IsAdmin() )
-            $msg .= '<a href="' . ccl('admin','setup') . '">click here</a> to edit configuration';
+            $msg .= '<a href="' . ccl('admin','setup') . '">' . sprintf(_('Click here%s to edit configuration', '</a>'));
         else
-            $msg .= 'Please ask the site administrator to correct this';
+            $msg .= _('Please ask the site administrator to correct this.');
 
         CCPage::SystemError($msg);
     }
@@ -74,8 +75,7 @@ class CCGetID3
     */
     function NotConfigured()
     {
-        CCPage::SystemError("GetID3 library integration are not properly installed: <br />".
-                          "Please ask the site administrator to configure properly.");
+        CCPage::SystemError(_("GetID3 library integration is not properly installed:") . "<br />". _("Please ask the site administrator to configure properly."));
     }
 
     /**
@@ -145,109 +145,109 @@ class CCGetID3
 
          $file_formats['audio-aiff-aiff'] =  array(
            'name'       => 'aif',
-           'description' => 'AIFF Audio',
+           'description' => 'AIFF ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['audio-au-au'] =  array(
            'name'       => 'au',
-           'description' => 'Java (AU) Audio',
+           'description' => 'Java (AU) ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['audio-flac-flac'] =  array(
            'name'       => 'flac',
-           'description' => 'FLAC Audio',
+           'description' => 'FLAC ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['audio-midi-midi'] =  array(
            'name'       => 'mid',
-           'description' => 'MIDI Audio',
+           'description' => 'MIDI ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['audio-mp3-mp3'] =  array(
            'name'       => 'mp3',
-           'description' => 'MP3 Audio',
+           'description' => 'MP3 ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['audio-ogg-vorbis'] =  array(
            'name'       => 'ogg',
-           'description' => 'OGG/Vorbis Audio',
+           'description' => 'OGG/Vorbis ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['audio-real-real'] =  array(
            'name'       => 'rm',
-           'description' => 'Real Audio',
+           'description' => 'Real ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['audio-riff-wav'] =  array(
            'name'       => 'wav',
-           'description' => 'WAV (Riff) Audio',
+           'description' => 'WAV (Riff) ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['audio-asf-wma'] =  array(
            'name'       => 'wma',
-           'description' => 'Windows Media Audio',
+           'description' => 'Windows Media ' . _('Audio'),
            'enabled' => true,
            'mediatype' => 'audio',
            );
          $file_formats['archive-zip-'] =  array(
            'name'       => 'zip',
-           'description' => 'ZIP Archive',
+           'description' => 'ZIP ' . _('Archive'),
            'enabled' => true,
            'mediatype' => 'archive',
            );
          $file_formats['video-riff-avi'] =  array(
            'name'       => 'avi',
-           'description' => 'Windows Video',
+           'description' => 'Windows ' . _('Video'),
            'enabled' => true,
            'mediatype' => 'video',
            );
          $file_formats['video-quicktime-quicktime'] =  array(
            'name'       => 'mov',
-           'description' => 'Quicktime Video',
+           'description' => 'Quicktime ' . _('Video'),
            'enabled' => true,
            'mediatype' => 'video',
            );
          $file_formats['video-real-real'] =  array(
            'name'       => 'rmvb',
-           'description' => 'Real Video',
+           'description' => 'Real ' . _('Video'),
            'enabled' => true,
            'mediatype' => 'video',
            );
          $file_formats['video-asf-wmv'] =  array(
            'name'       => 'wmv',
-           'description' => 'Windows Media Video',
+           'description' => 'Windows Media ' . _('Video'),
            'enabled' => true,
            'mediatype' => 'video',
            );
          $file_formats['image-bmp-bmp'] =  array(
            'name'       => 'bmp',
-           'description' => 'Windows BMP Image',
+           'description' => 'Windows BMP ' . _('Image'),
            'enabled' => true,
            'mediatype' => 'image',
            );
          $file_formats['image-gif-gif'] =  array(
            'name'       => 'gif',
-           'description' => 'GIF Image',
+           'description' => 'GIF ' . _('Image'),
            'enabled' => true,
            'mediatype' => 'image',
            );
          $file_formats['image-jpg-jpg'] =  array(
            'name'       => 'jpg',
-           'description' => 'JPG Image',
+           'description' => 'JPG ' . _('Image'),
            'enabled' => true,
            'mediatype' => 'image',
            );
          $file_formats['image-png-png'] =  array(
            'name'       => 'png',
-           'description' => 'PNG Image',
+           'description' => 'PNG ' . _('Image'),
            'enabled' => true,
            'mediatype' => 'image',
            );
@@ -256,14 +256,14 @@ class CCGetID3
 	 if ( isset($getid3_file_formats['svg']) )
              $file_formats['image-xml-svg'] = array(
                  'name'       => 'svg',
-                 'description' => 'Scalable Vector Graphic',
+                 'description' => 'Scalable Vector Graphic ' . _('Image'),
                  'enabled' => true,
                  'mediatype' => 'image',
              );  
 	 if ( isset($getid3_file_formats['swf']) )
              $file_formats['video-swf-swf'] =  array(
                  'name'       => 'swf',
-                 'description' => 'Flash Video',
+                 'description' => 'Flash ' . _('Video'),
                  'enabled' => true,
                  'mediatype' => 'video',
              );
@@ -275,9 +275,9 @@ class CCGetID3
     function OnSysPaths(&$fields)
     {
         $fields[CCGETID3_PATH_KEY] =
-                        array( 'label'      => 'Path to GetID3 Library',
+                        array( 'label'      => _('Path to GetID3 Library'),
                                'formatter'  => 'sysdir',
-                               'form_tip'   => 'Local server path to library (e.g. /usrer/lib/getid3/getid3)',
+                               'form_tip'   => _('Local server path to library (e.g. /usrer/lib/getid3/getid3)'),
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED  );
     }
 
@@ -294,19 +294,19 @@ class CCGetID3
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields[CCGETID3_FILEVERIFY_ENABLED_KEY] =
-                            array( 'label'      => 'GetID3 File Verify Enabled',
+                            array( 'label'      => _('GetID3 File Verify Enabled'),
                                    'formatter'  => 'checkbox',
                                    'flags'      => CCFF_POPULATE);
 
             $fields[CCGETID3_PATH_KEY] =
-                            array( 'label'      => 'Path to GetID3 Library',
+                            array( 'label'      => _('Path to GetID3 Library'),
                                    'formatter'  => 'textedit',
-                                   'form_tip'   => 'Local server path to library (e.g. /usrer/lib/getid3/getid3)',
+                                   'form_tip'   => _('Local server path to library (e.g. /usrer/lib/getid3/getid3)'),
                                    'flags'      => CCFF_POPULATE | CCFF_REQUIRED  );
 
            $fields[CCGETID3_ENABLED_ID3V1] =
-                        array( 'label'      => 'Tag ID3v1',
-                               'form_tip'   => 'Tag old style v1 tags as well as v2',
+                        array( 'label'      => _('Tag ID3v1'),
+                               'form_tip'   => _('Tag old style v1 tags as well as v2'),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE );
         }

@@ -47,8 +47,8 @@ class CCAdminRenameForm  extends CCEditConfigForm
     {
         $this->CCEditConfigForm('name-masks');
         
-        $patterns['%title%'] = "Title";
-        $patterns['%site%']  = "Site name";
+        $patterns['%title%'] = _("Title");
+        $patterns['%site%']  = _("Site name");
         $dummy = array();
         $masks = array();
         CCEvents::Invoke( CC_EVENT_GET_MACROS, array( $dummy, $dummy, &$patterns, &$masks ) );
@@ -68,7 +68,7 @@ class CCAdminRenameForm  extends CCEditConfigForm
         }
 
         $fields['upload-replace-sp'] =
-                        array( 'label'      => "Replace space with '_'",
+                        array( 'label'      => _("Replace space with '_'"),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE );
 

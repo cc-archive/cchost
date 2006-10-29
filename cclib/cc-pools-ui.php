@@ -50,32 +50,32 @@ class CCAdminEditPoolForm extends CCForm
         $this->CCForm();
         $fields = array( 
             'pool_name' =>  
-               array(  'label'      => 'Name',
+               array(  'label'      => _('Name'),
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
             'pool_short_name' =>  
-               array(  'label'      => 'Internal Name',
+               array(  'label'      => _('Internal Name'),
                        'formatter'  => 'statictext',
                        'flags'      => CCFF_NOUPDATE | CCFF_STATIC ),
             'pool_description' =>
-               array(  'label'      => 'Description',
+               array(  'label'      => _('Description'),
                        'formatter'  => 'textarea',
                        'flags'      => CCFF_POPULATE ),
             'pool_api_url' =>  
-               array(  'label'      => 'API URL',
+               array(  'label'      => _('API URL'),
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE ),
             'pool_site_url' =>  
-               array(  'label'      => 'Site URL',
+               array(  'label'      => _('Site URL'),
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE ),
             'pool_banned' =>  
-               array(  'label'      => 'Banned',
-                       'form_tip'   => 'Ignore communications from this pool',
+               array(  'label'      => _('Banned'),
+                       'form_tip'   => _('Ignore communications from this pool'),
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE ),
             'pool_search' =>  
-               array(  'label'      => "Allow to be searched remotely",
+               array(  'label'      => _("Allow to be searched remotely"),
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE ),
             );
@@ -105,15 +105,15 @@ class CCAdminPoolsForm extends CCForm
                            'flags'      => CCFF_POPULATE ),
             */
             'pool-remix-throttle' =>
-                   array(  'label'      => 'Remote Remix Throttle',
-                           'form_tip'   => 'Maximum remote unnapproved remixes.',
+                   array(  'label'      => _('Remote Remix Throttle'),
+                           'form_tip'   => _('Maximum remote unnapproved remixes.'),
                            'formatter'  => 'textedit',
                            'class'      => 'cc_form_input_short',
                            'flags'      => CCFF_POPULATE  ),
 
             'pool-pull-hub' =>  
-                   array(  'label'      => 'Add a sample pool to your site:',
-                           'form_tip'   => 'Must be the URL to the site\'s pool API (e.g. http://ccmixter.org/media/api)',
+                   array(  'label'      => _('Add a sample pool to your site:'),
+                           'form_tip'   => _("This must be the URL to the site's pool API (e.g. http://ccmixter.org/media/api)."),
                            'formatter'  => 'doitnow',
                            'nowbutton'  => 'Add Now',
                            'flags'      => CCFF_POPULATE ),
@@ -214,7 +214,7 @@ END;
                                 'text' => $c );
             }
         }
-        CCPage::SetTitle( _('Sample Pool: ') . $pool['pool_name'] );
+        CCPage::SetTitle( _('Sample Pool:') . " " . $pool['pool_name'] );
         CCPage::PageArg( 'pool_info', $pool, 'pool_info_head' );
         CCPage::PageArg( 'pool_items', $items, 'pool_item_listing' );
         CCPage::PageArg( 'pool_links', $alinks );
@@ -261,25 +261,25 @@ END;
 
     function Admin()
     {
-        CCPage::SetTitle("Sample Pools Administration");
+        CCPage::SetTitle(_("Sample Pools Administration"));
         $args =
             array(
                 array( 'action' => ccl( 'admin', 'pools', 'settings' ),
-                       'menu_text' => 'Sample Pool Settings',
-                       'help' => 'Edit global settings for interacting with remote pools' ),
+                       'menu_text' => _('Sample Pool Settings'),
+                       'help' => _('Edit global settings for interacting with remote pools') ),
                 array( 'action' => ccl( 'admin', 'pools', 'manage' ),
-                       'menu_text' => 'Manage Sample Pools',
-                       'help' => 'Manage pools known to this site.' ),
+                       'menu_text' => _('Manage Sample Pools'),
+                       'help' => _('Manage pools known to this site.') ),
                 array( 'action' => ccl( 'admin', 'pools', 'approve' ),
-                       'menu_text' => 'Approve Remote Remixes',
-                       'help' => 'Validate pending remote remixes.' ),
+                       'menu_text' => _('Approve Remote Remixes'),
+                       'help' => _('Validate pending remote remixes.') ),
                );
         CCPage::PageArg( 'link_table_items', $args, 'link_table' );
     }
 
     function Approve($submit='')
     {
-        CCPage::SetTitle("Approve Pending Remixes");
+        CCPage::SetTitle(_("Approve Pending Remixes"));
         if( $submit )
         {
             $ids = $_POST['approve'];
@@ -307,11 +307,11 @@ END;
         $args['records'] = $remixes->GetUnapproved();
         if( empty($args['records']) )
         {
-            CCPage::Prompt("There are no pending remote remixes");
+            CCPage::Prompt(_("There are no pending remote remixes"));
         }
         else
         {
-            $args['heads'] = array( 'Show', 'Remix', 'Download from Site', 'by Remixer', 'Original' );
+            $args['heads'] = array( _('Show'), _('Remix'), _('Download from Site'), _('by Remixer'), _('Original') );
             $args['approve_url'] = ccl( 'admin', 'pools', 'approve', 'submit' );
             //CCDebug::PrintVar($args);
             CCPage::PageArg( 'pool_info', $args, 'pool_approvals' );
@@ -320,7 +320,7 @@ END;
 
     function Manage()
     {
-        CCPage::SetTitle("Manage Sample Pools");
+        CCPage::SetTitle(_("Manage Sample Pools"));
         $pools =& CCPools::GetTable();
         $rows = $pools->QueryRows('');
         $args = array();
@@ -328,7 +328,7 @@ END;
         {
             $args[] = array( 
                         'action' => ccl( 'admin', 'pool', 'edit', $pool_row['pool_id'] ),
-                       'menu_text' => '[EDIT]',
+                       'menu_text' => '[' . _('EDIT') . ']',
                        'help' => $pool_row['pool_name'] 
                      );
         }
@@ -338,7 +338,7 @@ END;
 
     function Settings()
     {
-        CCPage::SetTitle( 'Sample Pools Settings' );
+        CCPage::SetTitle( _('Sample Pools Settings') );
         $form = new CCAdminPoolsForm();
         $form->ValidateFields(); // you have to call this to get values out... hmmm
         $values = array();
@@ -348,7 +348,7 @@ END;
         {
             if( empty($values['pool-push-hub']) )
             {
-                $form->SetFieldError( 'pool-push-hub', "can not be left blank" );
+                $form->SetFieldError( 'pool-push-hub', _("This can not be left blank.") );
             }
             else
             {
@@ -359,7 +359,7 @@ END;
                 //CCDebug::PrintVar($xml);
                 if( $xml && ($xml->status['status'] == 'ok') )
                 {
-                    CCPage::Prompt('Registration with sample pool succeeded');
+                    CCPage::Prompt(_('Registration with sample pool succeeded.'));
                 }
             }
         }
@@ -368,7 +368,7 @@ END;
             $form->GetFormValues($values);
             if( empty($values['pool-pull-hub']) )
             {
-                $form->SetFieldError( 'pool-pull-hub', "can not be left blank" );
+                $form->SetFieldError( 'pool-pull-hub', _("This can not be left blank.") );
             }
             else
             {
@@ -391,7 +391,7 @@ END;
                 }
                 else
                 {
-                    CCPage::Prompt("That Sample Pool is already registered here");
+                    CCPage::Prompt(_("That Sample Pool is already registered here."));
                 }
             }
         }
@@ -399,7 +399,7 @@ END;
         {
             $configs =& CCConfigs::GetTable();
             $configs->SaveConfig($this->_typename, $values);
-            CCPage::Prompt("Settings saved");
+            CCPage::Prompt(_("Settings saved"));
         }
 
         CCPage::AddForm( $form->GenerateForm() );
@@ -407,7 +407,7 @@ END;
 
     function Edit($pool_id)
     {
-        CCPage::SetTitle("Edit Pool Information");
+        CCPage::SetTitle(_("Edit Pool Information"));
         $form = new CCAdminEditPoolForm();
         $show = true;
         $pools =& CCPools::GetTable();
@@ -430,7 +430,7 @@ END;
             $form->GetFormValues($values);
             $values['pool_id'] = $pool_id;
             $pools->Update($values);
-            CCPage::Prompt("Changes to pool saved");
+            CCPage::Prompt(_("Changes to pool saved"));
             $this->Manage();
         }
     }
@@ -442,7 +442,7 @@ END;
         $pools->DeleteKey($pool_id);
         CCPage::Prompt("Pool deleted");
         */
-        CCPage::Prompt("no implemento");
+        CCPage::Prompt(_("This is not implemented."));
     }
 
     /**
@@ -579,9 +579,9 @@ END;
         if( $enabled )
         {
             $items += array( 
-                'pool' => array( 'menu_text'  => 'Sample Pools',
+                'pool' => array( 'menu_text'  => _('Sample Pools'),
                                  'menu_group' => 'configure',
-                                 'help' => 'Sub menu for managing sample pools',
+                                 'help' => _('Sub menu for managing sample pools'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 10000,
                                  'action' =>  ccl('admin','pools')

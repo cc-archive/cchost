@@ -45,53 +45,52 @@ class CCAdminRatingsForm extends CCEditConfigForm
 
         $fields = array( 
                     'ratings' =>
-                       array(  'label'      => 'Ratings',
-                               'form_tip'   => 'Allow users to rate uploads',
+                       array(  'label'      => _('Ratings'),
+                               'form_tip'   => _('Allow users to rate uploads'),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE,
                             ),
                     'bayesian-min' =>  
-                       array(  'label'      => 'Chart minimum',
-                               'form_tip'   => 'Mininum number of ratings an upload must have to seen in charts',
+                       array(  'label'      => _('Chart minimum'),
+                               'form_tip'   => _('Mininum number of ratings an upload must have to seen in charts'),
                                'class'      => 'cc_form_input_short',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
                     'cut-off' =>  
-                       array(  'label'      => 'Cut Off Point',
-                               'form_tip'   => 'Only chart uploads since this time',
+                       array(  'label'      => _('Cut Off Point'),
+                               'form_tip'   => _('Only chart uploads since this time'),
                                'formatter'  => 'select',
-                               'options'    => array( '1 day ago' => 'The day before',
-                                                      '3 days ago' => 'The previous 3 days',
-                                                      '1 week ago' => 'The previous week',
-                                                      '2 weeks ago' => 'The previous 2 weeks',
-                                                      '1 month ago' => 'The previous month',
-                                                      'forever' => 'Since forever and ever',
+                               'options'    => array( '1 day ago' => _('The day before'),
+                                                      '3 days ago' => _('The previous 3 days'),
+                                                      '1 week ago' => _('The previous week'),
+                                                      '2 weeks ago' => _('The previous 2 weeks'),
+                                                      '1 month ago' => _('The previous month'),
+                                                      'forever' => _('Since forever and ever'),
                                                         ),
                                'value'      => '2 weeks ago',
                                'flags'      => CCFF_POPULATE),
                     'list-min' =>  
-                       array(  'label'      => 'Listing minium',
-                               'form_tip'   => 'Minium number of ratings an upload must have to display ratings in listing',
+                       array(  'label'      => _('Listing minium'),
+                               'form_tip'   => _('The minimum number of ratings an upload must have to display ratings in listing.'),
                                'class'      => 'cc_form_input_short',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE),
                     'recalc_now' =>  
-                       array(  'label'      => 'Recalc now',
-                               'form_tip'   => 'Recalculate rating during submit. NOTE: This can take a very, very (very) long time if you have a lot of uploads.',
+                       array(  'label'      => _('Recalculate now'),
+                               'form_tip'   => _('Recalculate rating during submit. NOTE: This can take a very, very (very) long time if you have a lot of uploads.'),
                                'value'      => '<a href="$url" class="cc_gen_button"><span>Recalc</span></a>',
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE),
                     'ratings_ban' =>
-                       array(  'label'      => 'Ratings Ban List',
-                               'form_tip'   => 'Users not allowed to rate',
+                       array(  'label'      => _('Ratings Ban List'),
+                               'form_tip'   => _('Users not allowed to rate'),
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE),
             );
 
         $this->AddFormFields($fields);
 
-        $help = _('The system uses the Bayesian method for calculating the ranking of 
-                            an upload for the picks page.');
+        $help = _('The system uses the Bayesian method for calculating the ranking of an upload for the picks page.');
 
         $this->SetHelpText($help);
 
@@ -128,11 +127,11 @@ class CCRatingsAdmin
             $username = $users->QueryItemFromKey('user_name',$user_id);
             if( !empty($_SERVER['HTTP_REFERER']) )
             {
-                $backlink = '<p style="width: 250px"><a class="cc_gen_button" href="' . $_SERVER['HTTP_REFERER'] . '"><span>Cancel without doing anything</span></a></p>';
+                $backlink = '<p style="width: 250px"><a class="cc_gen_button" href="' . $_SERVER['HTTP_REFERER'] . '"><span>' . _('Cancel without doing anything.') . '</span></a></p>';
             }
             else
             {
-                $backlink = '<p>Use your browser &lArr; BACK button to cancel the operation</p>';
+                $backlink = '<p>' . _('Use your browser &lArr; BACK button to cancel the operation') . '</p>';
             }
             
             $ratings =& CCRatings::GetTable();
@@ -141,26 +140,25 @@ class CCRatingsAdmin
 
             $banlist = CCTag::TagSplit($CC_GLOBALS['ratings_ban']);
             $isbanned = in_array($username,$banlist);
-            $bantext = $isbanned ? 'UnBan' : 'Ban';
+            $bantext = $isbanned ? _('UnBan') : _('Ban');
 
-            CCPage::SetTitle('Manage a User\'s Ratings [BETA]');
+            CCPage::SetTitle(_("Manage a User's Ratings"));
             $deluser_url = ccl('admin','ratings','user',$user_id,$ratings_id,'deluser','confirmed');
             $delrate_url = ccl('admin','ratings','user',$user_id,$ratings_id,'delete','confirmed');
             $banuser_url = ccl('admin','ratings','user',$user_id,$ratings_id,'ban','confirmed');
-            $html =<<<EOF
-            $backlink
-                <hr style="width:50%" />
-            <p style="width: 250px"><a class="cc_gen_button" href="$banuser_url"><span style="color:red">$bantext $username from future rating</span></a></p>            
-                <hr style="width:50%" />
-                <h3><b>Warning</b>: Deleting $username's rating for "$upload_name" can not
-                be undone. <br /><span style="color:red">This action has no undo.</span></h3>
-            <p style="width: 250px"><a class="cc_gen_button" href="$delrate_url"><span style="color:red">DELETE $username's Rating for this upload</span></a></p>            
-                <hr style="width:50%" />
-                <h3><b>Warning</b>: Deleting $username's ratings means <i>all</i>
-            of the ratings $username <i>ever</i> gave will be removed. <br /><span style="color:red">This
-            action has no undo.</span></h3>
-            <p style="width: 250px"><a class="cc_gen_button" href="$deluser_url"><span style="color:red">DELETE ALL $username's RATINGS</span></a></p>
-EOF;
+            $html =
+            $backlink .
+            '<hr style="width:50%" />' . 
+            '<p style="width: 250px"><a class="cc_gen_button" href="' . $banuser_url . '"><span style="color:red">' . sprintf('%s from future rating', "$bantext $username") . "</span></a></p>\n" . 
+            '<hr style="width:50%" />' . 
+            '<h3><b>' . _('Warning') . '</b>: ' . 
+            sprintf(_('Deleting rating for %s for "%s" can not be undone.'), $username, $upload_name) . '<br /><span style="color:red">' . _('This action has no undo.') . "</span></h3>\n\n" .
+            '<p style="width: 250px"><a class="cc_gen_button" href="' . $delrate_url . '"><span style="color:red">' . sprintf(_('DELETE rating for %s for this upload.'), $username) . "</span></a></p>\n" . 
+            '<hr style="width:50%" />' . 
+            '<h3><b>' . _('Warning') . '</b>: ' . sprintf(_('Deleting ratings for %s means <i>all</i> of the ratings %s <i>ever</i> gave will be removed.'), $username, $username) . '<br /><span style="color:red">' . 
+            _('This action has no undo.') . "</span></h3>\n" . 
+            '<p style="width: 250px"><a class="cc_gen_button" href="' . $deluser_url . '"><span style="color:red">' . sprintf(_('DELETE ALL RATINGS for %s.'), $username) . '</span></a></p>';
+
             CCPage::AddPrompt('body_text',$html);
             return true;
         }
@@ -197,12 +195,12 @@ EOF;
             if( $isbanned )
             {
                 $banlist = array_diff( $banlist, array( $username ) );
-                $bantext = 'Unbanned';
+                $bantext = _('Unbanned');
             }
             else
             {
                 $banlist[] = $username;
-                $bantext   = 'Banned';
+                $bantext   = _('Banned');
             }
             $arr['ratings_ban'] = join(', ',$banlist);
             $configs =& CCConfigs::GetTable();
@@ -221,7 +219,7 @@ EOF;
     */
     function _admin_ratings_chart()
     {
-        CCPage::SetTitle("Configure Ratings Chart Engine");
+        CCPage::SetTitle(_("Configure Ratings Chart Engine"));
         $form = new CCAdminRatingsForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -264,7 +262,7 @@ EOF;
             $users->Update($args);
         }
 
-        CCPage::Prompt("$count user scores and $upcount uploads recalculated");
+        CCPage::Prompt(sprintf(_("%s user scores and %s uploads recalculated", $count, $upcount)));
     }
 
     /**
@@ -300,7 +298,8 @@ EOF;
 
         if( $cmd == 'user' )
         {
-            $ui_handled = $this->_manage_user_rating($user_id,$ratings_id,$cmd2,$confirmed);
+            $ui_handled = $this->_manage_user_rating($user_id,$ratings_id,
+                                                     $cmd2,$confirmed);
             if( $ui_handled )
                 return;
         }
@@ -325,19 +324,20 @@ EOF;
 
             if( $msgid == 'deluser' )
             {
-                CCPage::Prompt("User's ratings deleted");
+                CCPage::Prompt(_("User's ratings deleted"));
             }
             elseif( $msgid== 'delete' ) 
             {
-                CCPage::Prompt("Rating deleted");
+                CCPage::Prompt(_("Rating deleted"));
             }
             elseif( $msgid == 'ban' )
             {
-                CCPage::Prompt( "Updated ban list" );
+                CCPage::Prompt(_("Updated ban list"));
             }
 
         }
 
+        // TODO: This needs to be moved to a real stylesheet outside this code.
         $html =<<<END
             <style>
                 .rt th { 
@@ -386,7 +386,7 @@ EOF;
             </style>
 END;
 
-        CCPage::SetTitle('Manage Ratings [BETA]');
+        CCPage::SetTitle(_('Manage Ratings'));
 
         $arrows['DESC'] = '&dArr;';
         $arrows['ASC']  = '&uArr;';
@@ -394,7 +394,7 @@ END;
         $F = array(
                     'rid' => array( 'ratings_id',
                                      'ASC', 
-                                     'ID',
+                                     _('ID'),
                                      '',
                                      '',
                                      'ratings_id',
@@ -403,7 +403,7 @@ END;
                                      ),
                     'ruse' => array( 'reviewer',
                                      'ASC',
-                                     'Reviewer',
+                                     _('Reviewer'),
                                      '',
                                      'pview',
                                      'revr.user_name',
@@ -412,7 +412,7 @@ END;
                                      ),
                     'rscr' => array( 'ratings_score',
                                      'ASC',
-                                      'Rating',
+                                     _('Rating'),
                                      '',
                                      '',
                                      'ratings_score',
@@ -421,7 +421,7 @@ END;
                                      ),
                     'rip' => array( 'ratings_ip',
                                      'ASC',
-                                      'IP',
+                                     _('IP'),
                                      '',
                                      'iview',
                                      'ratings_ip',
@@ -430,7 +430,7 @@ END;
                                      ),
                     'upid' => array( 'upload_name',
                                      'ASC',
-                                     'Upload',
+                                     _('Upload'),
                                      '',
                                      'uview',
                                      'upload_name',
@@ -561,7 +561,7 @@ END;
                 $copy = $q;
                 $copy['s'] = $prev;
                 $u = $this->_burl( $base, $copy );
-                $prevlink = "<a class=\"cc_gen_button\" href=\"$u\"><span>&lArr; Prev</span></a>";
+                $prevlink = "<a class=\"cc_gen_button\" href=\"$u\"><span>&lArr; " . _('Previous') . "</span></a>";
             }
 
             if( $offset + 50 < $total_rows )
@@ -569,14 +569,14 @@ END;
                 $copy = $q;
                 $copy['s'] = $offset + 50;
                 $u = $this->_burl( $base, $copy );
-                $nextlink = "<a class=\"cc_gen_button\" href=\"$u\"><span>Next &rArr;</span></a>";
+                $nextlink = "<a class=\"cc_gen_button\" href=\"$u\"><span>" . _('Next') . " &rArr;</span></a>";
             }
 
         }
 
         if( !empty($q['f']) )
         {
-            $html .= "Current filters: ";
+            $html .= _("Current filters: ");
             $slash = '';
             foreach( $q['f'] as $field => $value )
             {
@@ -584,7 +584,7 @@ END;
                 unset($copy['f'][$field]);
                 unset($copy['s']);
                 $u = $this->_burl( $base, $copy );
-                $html .= "$slash<b>$value</b> <a href=\"$u\">(remove)</a>  ";
+                $html .= "$slash<b>$value</b> <a href=\"$u\">(" . _('remove') . ")</a>  ";
                 $slash = ' --- ';
             }
             $html .= '<br /><br />';
@@ -610,7 +610,7 @@ END;
             $value = $fs[2] . ' ' . $fs[3];
             $head .= "<th><a href=\"$u\">$value</a></th>\n";
         }
-        $form .= '<td colspan="2"><input type="submit" name="dofilter" value="&lArr; filter" /></td></tr>' ;
+        $form .= '<td colspan="2"><input type="submit" name="dofilter" value="&lArr; ' . _('filter') . '" /></td></tr>' ;
         $head .= '<td colspan="2"></td></tr>' ;
 
         $html .= $form . "\n" . $head . "\n" ;
@@ -630,10 +630,10 @@ END;
             $purl = ccl('people',$R['reviewer']);
             $surl = ccl('files',$R['reviewee'],$R['ratings_upload']);
 
-            $v['pview'] = "<a class=\"btn\" href=\"$purl\">view</a></div>"; 
-            $v['uview'] = "<a class=\"btn\" href=\"$surl\">view</a></div>";
+            $v['pview'] = "<a class=\"btn\" href=\"$purl\">" . _('view') . "</a></div>"; 
+            $v['uview'] = "<a class=\"btn\" href=\"$surl\">" . _('view') . "</a></div>";
             $v['iview'] = 
-                "<a class=\"btn\" href=\"http://www.dnsstuff.com/tools/whois.ch?ip={$R['ratings_ip']}\">IP</a>";
+                "<a class=\"btn\" href=\"http://www.dnsstuff.com/tools/whois.ch?ip={$R['ratings_ip']}\">" . _('IP') . "</a>";
             foreach( $F as $fs )
             {   
                 $field = $fs[0];
@@ -648,7 +648,7 @@ END;
 
             $durl = ccl('admin','ratings','user', $R['ratings_user'], $R['ratings_id']);
 
-            $html .= "<td><a class=\"rbtn\" href=\"$durl\"> &lArr; edit</a></td>";
+            $html .= "<td><a class=\"rbtn\" href=\"$durl\"> &lArr; " . _('edit') . "</a></td>";
             $html .= "<td ></td>";
             $html .= "</tr>\n";
         }

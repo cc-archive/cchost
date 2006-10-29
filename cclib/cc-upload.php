@@ -176,7 +176,7 @@ class CCConfirmDeleteForm extends CCForm
     {
         $this->CCForm();
         $this->SetHelpText(_("This action can not be reversed..."));
-        $this->SetSubmitText(sprintf(_("Delete \"%s\" ?"),$pretty_name));
+        $this->SetSubmitText(sprintf(_("Are you sure you want to delete '%s'?"),$pretty_name));
     }
 }
 
@@ -197,19 +197,19 @@ class CCAdminUploadForm extends CCForm
 
         $fields = array(
             'ccud' => array(
-                'label' => 'Internal Tags',
-                'form_tip' => 'Be careful when editing these, it\'s easy to confuse the system',
-                'value' => $record['upload_extra']['ccud'],
+                'label'     => _('Internal Tags'),
+                'form_tip'  => _("Be careful when editing these, it is easy to confuse the system"),
+                'value'     => $record['upload_extra']['ccud'],
                 'formatter' => 'textedit',
-                'flags' => CCFF_REQUIRED | CCFF_POPULATE
+                'flags'     => CCFF_REQUIRED | CCFF_POPULATE
                 ),
-            'popular_tags' =>
-                        array( 'label'      => 'System Tags',
+            'popular_tags'  =>
+                        array( 'label'      => _('System Tags'),
                                'target'     => 'ccud',
                                'tags'       => $sys_tags,
                                'formatter'  => 'metalmacro',
                                'macro'      => 'popular_tags',
-                               'form_tip'   => 'Click on these to automatically add',
+                               'form_tip'   => _('Click on these to automatically add them.'),
                                'flags'      => CCFF_STATIC | CCFF_NOUPDATE 
                 ),
             );
@@ -245,7 +245,7 @@ class CCUpload
         if( empty($record) )
             return;
         $name = $record['upload_name'];
-        CCPage::SetTitle("Administrator Functions for '$name'");
+        CCPage::SetTitle(sprintf(_("Administrator Functions for '%s'", $name)));
         $form = new CCAdminUploadForm($record);
         if( empty($_POST['adminupload']) || !$form->ValidateFields() )
         {
@@ -256,7 +256,7 @@ class CCUpload
             $form->GetFormValues($values);
             CCUploadAPI::UpdateCCUD($upload_id,$values['ccud'],$record['upload_extra']['ccud']);
             $url = $record['file_page_url'];
-            CCPage::Prompt("Changes saved to '$name', click <a href=\"$url\">here</a> to see results");
+            CCPage::Prompt(sprintf(_("Changes saved to '%s'. Click %s to see results"), "$name <a href=\"$url\">" . _('here') . '</a>'));
         }
     }
 
@@ -370,7 +370,7 @@ class CCUpload
         else
         {
             CCUploadAPI::DeleteUpload($upload_id);
-            CCPage::Prompt(_("Upload has been deleted"));
+            CCPage::Prompt(_("Upload has been deleted."));
         }
     }
 
@@ -408,12 +408,12 @@ class CCUpload
 
         if( empty($types) )
         {
-            $form_tip = _('Specify file to upload');
+            $form_tip = _('Specify the file to upload.');
         }
         else
         {
             $types = implode(', ',$types);
-            $form_tip = _("Valid file types: ") . $types;
+            $form_tip = _("Valid file types") . ": " . $types;
         }
 
         $fields[$field_name] = 

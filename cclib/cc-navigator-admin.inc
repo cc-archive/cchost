@@ -44,7 +44,7 @@ class CCRenameNavTabForm extends CCForm
                                'value'      => $name,
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => 'This name will be used in the url to show the tabs',
+                               'form_tip'   => _('This name will be used in the url to show the tabs.'),
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED)
                 );
                     
@@ -72,13 +72,16 @@ class CCEditTabsForm extends CCGridForm
         $url = ccl('viewfile','adminhelp.xml') . '#navhelp';
         $addtab = ccl('admin','tabs',$page_name,'addtab');
 
-        $help =<<<END
-<p><a href="$url"><b>Click here</b> for help with editing navigator tab sets.</a></p>
-<p><a href="$addtab"><b>Click here</b> to add another tab.</a></p>
-<p>(Clickings on these links will not save your form.)</p>
-END;
+        $help =
+'<p>' . _('%sClick here%s for help with editing navigator tab sets.') .
+"</p>\n<p>" . _('%sClick here%s to add another tab.') . "</p>\n<p><i>" . 
+_('Clicking on these links will not save your form.') . '</i></p>';
+
+        $help = sprintf($help, "<a href=\"$url\"><b>", "</b></a>", 
+                               "<a href=\"$addtab\"><b>", "</b></a>");
+
         $this->SetHelpText($help);
-        $heads = array('Delete', 'Order', 'Name', 'Text', 'Help Hint', 'Function', /*'Limit', */'Data', 'Access' );
+        $heads = array(_('Delete'), _('Order'), _('Name'), _('Text'), _('Help Hint'), _('Function'), /*'Limit', */_('Data'), _('Access') );
 
         $this->SetColumnHeader($heads);
 
@@ -134,10 +137,10 @@ END;
                     'element_name'  => "mi[$name][function]",
                     'value'      => $page[$name]['function'],
                     'formatter'  => 'select',
-                    'options'    => array( 'any' => 'Match Any Tags',
-                                           'all' => 'Match All Tags',
-                                           'url' => 'Execute URL',
-                                           'sub' => 'SubTabs'
+                    'options'    => array( 'any' => _('Match Any Tags'),
+                                           'all' => _('Match All Tags'),
+                                           'url' => _('Execute URL'),
+                                           'sub' => _('SubTabs')
                                             ),
                     'flags'      => CCFF_NONE ),
 /*
@@ -157,9 +160,9 @@ END;
                     'element_name'  => "mi[$name][access]",
                     'value'      => $page[$name]['access'],
                     'formatter'  => 'select',
-                    'options'    => array( CC_MUST_BE_LOGGED_IN   => 'Logged in users only',
-                                           CC_DONT_CARE_LOGGED_IN => "Everyone",
-                                           CC_ADMIN_ONLY          => "Administrators only" ),
+                    'options'    => array( CC_MUST_BE_LOGGED_IN   => _('Logged in users only'),
+                                           CC_DONT_CARE_LOGGED_IN => _("Everyone"),
+                                           CC_ADMIN_ONLY          => _("Administrators only") ),
                     'flags'      => CCFF_NONE ),
                 );
 
@@ -221,7 +224,7 @@ class CCNavigatorAdmin
                 $form = new CCRenameNavTabForm($page_name);
                 if( empty($_POST['renamenavtab']) || !$form->ValidateFields() )
                 {
-                    CCPage::SetTitle('Rename Navigator Tabs Set');
+                    CCPage::SetTitle(_('Rename Navigator Tabs Set'));
                     CCPage::AddForm( $form->GenerateForm() );
                 }
                 else
@@ -254,9 +257,11 @@ class CCNavigatorAdmin
                     $pname = $keys[$i];
                     $html .= '<tr><td>Tab set: <b>' . $pname . '</b></td>';
                     $url = ccl('admin','tabs',$pname,'rename');
-                    $html .= "<td><a href=\"$url\">[Rename]</a></td>";
+                    $html .= "<td><a href=\"$url\">[" . _('Rename') . 
+                             "]</a></td>";
                     $url = ccl('admin','tabs',$pname,'edit');
-                    $html .= "<td><a href=\"$url\">[Edit tabs]</a></td>";
+                    $html .= "<td><a href=\"$url\">[" . _('Edit tabs') . 
+                             "]</a></td>";
                     if( $i == 0 )
                     {
                         $html .= '<td></td><td></td>';
@@ -264,17 +269,20 @@ class CCNavigatorAdmin
                     else
                     {
                         $url = ccl('admin','tabs',$pname,'deletepage');
-                        $html .= "<td><a href=\"$url\">[Delete]</a></td><td></td>";
+                        $html .= "<td><a href=\"$url\">[" . _('Delete') . 
+                                 "]</a></td><td></td>";
                         $url = ccl('admin','tabs',$pname,'makedefault');
-                        $html .= "<td></td><td><a href=\"$url\">[Make default]</a></td>";
+                        $html .= "<td></td><td><a href=\"$url\">[" . 
+                                 _('Make default') . "]</a></td>";
                     }
                     $html .= "</tr>";
                 }
                 $html .= "</table>";
                 $url = url_args( ccl('admin','tabs'), 'cmd=addpage' );
-                $html .= "<p><b><a href=\"$url\">[Add new tab set]</a></p>";
+                $html .= "<p><b><a href=\"$url\">[" . _('Add new tab set') . 
+                         "]</a></p>";
 
-                CCPage::SetTitle("Manage Navigator Tab Sets");
+                CCPage::SetTitle(_("Manage Navigator Tab Sets"));
                 CCPage::AddPrompt('body_text',$html);
 
                 break;
@@ -287,8 +295,8 @@ class CCNavigatorAdmin
                 while( array_key_exists( 'newtab' . $i , $page ) )
                     $i++;
 
-                $page['newtab' . $i] = array(  'text'   => 'TabText',
-                                               'help'   => 'TabHelperText',
+                $page['newtab' . $i] = array(  'text'   => _('Tab Text'),
+                                               'help'   => _('Tab Helper Text'),
                                                'tags'   => 'media',
                                                'limit'  => 0,
                                                'access' => CC_DONT_CARE_LOGGED_IN,
@@ -303,7 +311,7 @@ class CCNavigatorAdmin
 
             case 'edit':
             {
-                CCPage::SetTitle("Edit Navigator Tabs for '$page_name'");
+                CCPage::SetTitle(_("Edit Navigator Tabs:") . " '$page_name'");
                 if( empty($page) )
                     $page = $pages[$page_name];
                 $form = new CCEditTabsForm($page,$page_name);
@@ -440,7 +448,7 @@ class CCNavigatorAdmin
     function _get_seed_page()
     {
         $a = array(
-             'home' =>  array(  'text'   => _('Home'),
+             'home' =>     array(  'text'   => _('Home'),
                                    'help'   => _('Home page'),
                                    'tags'   => '/viewfile/home.xml',
                                    'limit'  => 0,
@@ -463,8 +471,8 @@ class CCNavigatorAdmin
                                    'limit'  => 0,
                                    'tags'   => 'original',
                                    'access' => CC_DONT_CARE_LOGGED_IN,
-                                   'function' => 'any' ),
-             'picks'   =>    array(  'text'   => _('Picks'),
+                                   'function'=> 'any' ),
+             'picks'   =>    array('text'   => _('Picks'),
                                    'help'   => _('See picks by the Editorial Staff'),
                                    'limit'  => 0,
                                    'tags'   => 'editorial_pick',

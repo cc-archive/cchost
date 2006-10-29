@@ -282,7 +282,7 @@ END;
         if( empty($record['files']) )
         {
             CCDebug::StackTrace();
-            trigger_error('Invalid call to GetFormatInfo');
+            trigger_error(_('Invalid call to GetFormatInfo'));
         }
         $file = $record['files'][0];
         if( empty($file['file_format_info']) )
@@ -976,7 +976,7 @@ class CCUploadAPI
             $errors = $format_info->GetErrors();
             if( !empty($errors) )
             {
-                $msg = _("There was error in the file format<br />") . implode("<br />", $errors );
+                $msg = _("There was error in the file format") . "<br />" . implode("<br />", $errors );
                 CCDebug::Log($msg);
                 return( $msg );
             }
@@ -1082,11 +1082,13 @@ class CCUploadAPI
 
             if( !$ok )
             {
-                $msg = "Rename to $new_path failed ($is_up)";
+                $msg = sprintf(_("Rename to new path, %s, failed (%s)"), 
+                                 $new_path, $is_up);
             }
             elseif( !file_exists($new_path) )
             {
-                $msg = "Move to $new_path failed ($is_up)";
+                $msg = sprintf(_("Move to new path, %s, failed (%s)"), 
+                                 $new_path, $is_up);
                 $ok = false;
             }
 

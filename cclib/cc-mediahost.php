@@ -51,24 +51,30 @@ class CCMediaHost
         
         if( empty($username) )
         {
-            $trail[] = array( 'url' => ccl('media','files'), 'text' => _('Uploads') );
+            $trail[] = array( 'url' => ccl('media','files'), 
+                              'text' => _('Uploads') );
         }
         else
         {
-            $trail[] = array( 'url' => ccl('people'), 'text' => _('People') );
+            $trail[] = array( 'url' => ccl('people'), 
+                              'text' => _('People') );
             $users =& CCUsers::GetTable();
-            $user_real_name = $users->QueryItem('user_real_name',"user_name = '$username'");
+            $user_real_name = $users->QueryItem('user_real_name',
+                                                "user_name = '$username'");
             if( !empty($user_real_name) )
             {
-                $trail[] = array( 'url' => ccl('people',$username), 'text' => $user_real_name );
+                $trail[] = array( 'url' => ccl('people',$username), 
+                                           'text' => $user_real_name );
                 if( !empty($upload_id) )
                 {
                     $uploads =& CCUploads::GetTable();
-                    $upload_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
+                    $upload_name = $uploads->QueryItemFromKey('upload_name',
+                                                              $upload_id);
                     if( !empty($upload_name) )
                     {
                         $upload_name = '"' . $upload_name . '"';
-                        $trail[] = array( 'url' => ccl('files',$username,$upload_id), 
+                        $trail[] = array( 'url' => ccl('files',$username,
+                                                       $upload_id), 
                                            'text' => $upload_name );
                     }
                 }
@@ -113,7 +119,8 @@ class CCMediaHost
                 if( empty($row) )
                 {
                     CCPage::SetTitle(_('Unknown File'));
-                    CCPage::Prompt(_('That file can not be found, it may have been removed by the owner.'));
+                    CCPage::Prompt(_('The file cannot be found.') . ' ' . 
+                                   _('It may have been removed by the owner.'));
                     CCUtil::Send404(false);
                 }
                 else
@@ -185,7 +192,7 @@ class CCMediaHost
                     $uploads =& CCUploads::GetTable();
                     $record = $uploads->GetRecordFromID($upload_id);
                     $url = $this->_get_file_page_url($record);
-                    CCPage::Prompt(sprintf(_("Upload succeeded. Click <a href=\"%s\">here</a> to see results."),$url));
+                    CCPage::Prompt(sprintf(_("Upload succeeded. Click %s to see results."),  "<a href=\"$url\">" . _('here') . "</a>"));
                     CCPage::Prompt(_("This upload is <b>NOT</b> entered in any contest."));
                     return;
                 }
@@ -396,13 +403,13 @@ class CCMediaHost
     {
         if( empty($record) )
         {
-            $patterns['%source_title%']  = "'Sampled from' title";
-            $patterns['%source_artist%'] = "'Sampled from' artist";
-            $patterns['%url%']           = 'Download URL';
-            $patterns['%song_page%']     = 'File page URL';
-            $patterns['%unique_id%']     = 'Guaranteed to be unique number';
-            $mask['song']  = "Pattern to use for original works";
-            $mask['remix'] = "Pattern to use for Remixes";
+            $patterns['%source_title%']  = _("'Sampled from' title");
+            $patterns['%source_artist%'] = _("'Sampled from' artist");
+            $patterns['%url%']           = _('Download URL');
+            $patterns['%song_page%']     = _('File page URL');
+            $patterns['%unique_id%']     = _('Guaranteed to be unique number');
+            $mask['song']  = _("Pattern to use for original works");
+            $mask['remix'] = _("Pattern to use for Remixes");
             return;
         }
 
@@ -725,8 +732,8 @@ class CCMediaHost
         if( $scope != CC_GLOBAL_SCOPE )
         {
             $fields['upload-auto-pub'] =
-                       array( 'label'       => 'Auto Publish Uploads',
-                               'form_tip'   => 'Uncheck this if you want to verify uploads before they are made public',
+                       array( 'label'       => _('Auto Publish Uploads'),
+                               'form_tip'   => _('Uncheck this if you want to verify uploads before they are made public.'),
                                'value'      => true,
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE );

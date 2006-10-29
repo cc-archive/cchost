@@ -355,8 +355,8 @@ class CCNavigator
     */
     function _signal_error($lineno)
     {
-        CCPage::SetTitle("System Error (" . CC_HOST_VERSION . ':' . $lineno . ')' );
-        CCPage::SystemError('Invalid Path');
+        CCPage::SetTitle(_("System Error") . " (" . CC_HOST_VERSION . ':' . $lineno . ')' );
+        CCPage::SystemError(_('Invalid Path'));
         CCUtil::Send404();
     }
 
@@ -372,12 +372,13 @@ class CCNavigator
             return;
 
         $items += array( 
-            'tab_pages'   => array(  'menu_text'  => 'Navigator Tab Sets',
-                             'menu_group' => 'configure',
-                             'help' => 'Create and edit navigator tabs',
-                             'access' => CC_ADMIN_ONLY,
-                             'weight' => 4,
-                             'action' =>  ccl('admin','tabs') ),
+            'tab_pages' => array(  
+                           'menu_text'  => _('Navigator Tab Sets'),
+                           'menu_group' => 'configure',
+                           'help'       => _('Create and edit navigator tabs'),
+                           'access' => CC_ADMIN_ONLY,
+                           'weight' => 4,
+                           'action' =>  ccl('admin','tabs') ),
              );
 
     }

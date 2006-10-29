@@ -387,58 +387,55 @@ class CCAdminTagsForm extends CCForm
 
         $fields = array(
             'aliases' => array(
-                'label' => 'Aliases',
-                'form_tip' => _('Put one alias on each line, use a "=&gt;" to 
-                                 indicate what the user entered tag should become. 
-                                (e.g. <b>drums and base=&gt;DNB</b> will turn all user entries 
-                                \'drums and bass\' in to \'DNB\')'),
+                'label'     => _('Aliases'),
+                'form_tip'  => _("Put one alias on each line, use a '=&gt;' to indicate what the user entered tag should become (e.g. <b>drums and base=&gt;DNB</b> will turn all user entries 'drums and bass' in to 'DNB')"),
                 'formatter' =>  'textarea',
-                'value' => $text,
-                'flags' => CCFF_POPULATE
+                'value'     => $text,
+                'flags'     => CCFF_POPULATE
                 ),
             'runnow' => array(
-                'label' => 'Run Now',
-                'form_tip' => 'Check this to run the alias rules now',
+                'label'     => _('Run Now'),
+                'form_tip'  => _('Check this to run the alias rules now.'),
                 'formatter' =>  'checkbox',
-                'flags' => CCFF_NONE
+                'flags'     => CCFF_NONE
                 ),
             'reserved' => array(
-                'label' => 'Reserved Tags',
-                'form_tip' => 'These tags will be reserved by the system. If a user tries to use these tags it will be removed.',
+                'label'     => _('Reserved Tags'),
+                'form_tip'  => _('These tags will be reserved by the system. If a user tries to use these tags it will be removed.'),
                 'formatter' =>  'textarea',
-                'value' => implode(', ',$admintags),
-                'flags' => CCFF_POPULATE
+                'value'     => implode(', ',$admintags),
+                'flags'     => CCFF_POPULATE
                 ),
             'mintaglen' => array(
-                'label' => 'Minimum tag allowed',
-                'form_tip' => 'Tags shorter than this length will be thrown away',
+                'label'     => _('Minimum tag length allowed'),
+                'form_tip'  => _('Tags shorter than this length will be thrown away.'),
                 'formatter' =>  'textedit',
-                'class' => 'cc_form_input_short',
-                'value'   => $min,
-                'flags' => CCFF_POPULATE
+                'class'     => 'cc_form_input_short',
+                'value'     => $min,
+                'flags'     => CCFF_POPULATE
                 ),
             'maxtaglen' => array(
-                'label' => 'Maximum tag allowed',
-                'form_tip' => 'Tags longer than this will be truncated',
+                'label'     => _('Maximum tag allowed'),
+                'form_tip'  => _('Tags longer than this will be truncated'),
                 'formatter' =>  'textedit',
-                'class' => 'cc_form_input_short',
-                'value'   => $max,
-                'flags' => CCFF_POPULATE
+                'class'     => 'cc_form_input_short',
+                'value'     => $max,
+                'flags'     => CCFF_POPULATE
                 ),
             'mintagshow' => array(
-                'label' => 'Minimum display tags',
-                'form_tip' => 'Minimum number of tags to display in "Browse Tags"',
+                'label'     => _('Minimum display tags'),
+                'form_tip'  => _('Minimum number of tags to display in "Browse Tags"'),
                 'formatter' =>  'textedit',
-                'class' => 'cc_form_input_short',
-                'value'   => $minshow,
-                'flags' => CCFF_POPULATE
+                'class'     => 'cc_form_input_short',
+                'value'     => $minshow,
+                'flags'     => CCFF_POPULATE
                 ),
             'inherittags' => array(
-                'label' => 'Inherited tags',
-                'form_tip' => 'Remixes will automatically \'inherit\' these tags from their sources',
+                'label'     => _('Inherited tags'),
+                'form_tip'  => _("Remixes will automatically 'inherit' these tags from their sources"),
                 'formatter' =>  'textedit',
-                'value'   => $inherit,
-                'flags' => CCFF_POPULATE
+                'value'     => $inherit,
+                'flags'     => CCFF_POPULATE
                 ),
             );
 
@@ -463,7 +460,7 @@ class CCTag
 {
     function Admin()
     {
-        CCPage::SetTitle('Admin Tags');
+        CCPage::SetTitle(_('Admin') . ' ' . _('Tags'));
         $form = new CCAdminTagsForm();
         if( empty($_POST['admintags']) || !$form->ValidateFields() )
         {
@@ -535,7 +532,7 @@ class CCTag
                 $columns = array( 'tag_alias_tag', 'tag_alias_alias' );
                 $aliases->InsertBatch($columns,$values);
                 $run = true;
-                CCPage::Prompt("Changes Saved");
+                CCPage::Prompt(_("Changes Saved"));
             }
 
             $run_requested = !empty($_POST['runnow']);
@@ -622,7 +619,7 @@ class CCTag
 
     function OnBrowseTags($tagstr='')
     {
-        CCPage::SetTitle(_("Tags ") . $tagstr);
+        CCPage::SetTitle(_("Tags") . " $tagstr");
 
         if( empty($tagstr) )
         {
@@ -685,7 +682,7 @@ class CCTag
         CCPage::PageArg("base_addtag_url", $base_addtag_url);
         CCPage::PageArg("base_tag_url", ccl('tags'));
         $taghelp = strlen($tagstr) > 10 ? substr($tagstr,0,8) . '...' : $tagstr;
-        CCFeeds::AddFeedLinks($tagstr,'','Tags: ' . $taghelp );
+        CCFeeds::AddFeedLinks($tagstr,'',_('Tags') . ': ' . $taghelp );
 
     }
 
@@ -745,11 +742,11 @@ class CCTag
             return;
 
         $items += array( 
-            'tagalias'   => array( 'menu_text'  => 'Tags',
+            'tagalias'   => array( 'menu_text'  => _('Tags'),
                              'menu_group' => 'configure',
                              'access' => CC_ADMIN_ONLY,
                              'weight' => 80,
-                             'help' => 'Edit tag aliases, reserve tags, counts, etc.',
+                             'help' => _('Edit tag aliases, reserve tags, counts, etc.'),
                              'action' =>  ccl('admin','tags')
                              ),
             );

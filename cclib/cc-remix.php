@@ -153,7 +153,7 @@ class CCRemix
         if( !empty($pools) )
         {
             array_unshift( $pools, array( 'pool_id' => -1,
-                                          'pool_name' => 'This site' ));
+                                          'pool_name' => _('This site') ));
             $sel_pool = empty($_POST['pool']) ? -1 : $_POST['pool'];
             $count = count($pools);
             for( $i = 0; $i < $count; $i++ )
@@ -314,10 +314,10 @@ class CCRemix
 
                     CCEvents::Invoke(CC_EVENT_SOURCES_CHANGED, array( $remixid, &$remix_sources) );
 
-                    $msg = $is_update ? 'update' : 'upload';
+                    $msg = $is_update ? _('update') : _('upload');
                     $link1 = "<a href=\"$url\">";
                     $link2 = '</a>';
-                    $prompt = sprintf(_("Remix %s succeeded (click %shere%s to see results)"),
+                    $prompt = sprintf(_("Remix %s succeeded (click %shere%s to see the results)."),
                         $msg, $link1, $link2);
                     CCPage::Prompt($prompt);
                     return(true);

@@ -29,7 +29,8 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCPhysicalFile', 'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCPhysicalFile', 
+                                                   'OnMapUrls'));
 
 /**
  * This class is used to edit the values of media already in the system
@@ -69,8 +70,7 @@ class CCEditFileForm extends CCUploadMediaForm
                 $select_fields[ $lic['license_id'] ] = $lic['license_name'];
             $fields['upload_license'] = 
                 array( 'label' => _('License'),
-                   'form_tip' => _('NOTE: You can only pick less restrictive license. Once you have done ' .
-                                 'that you can not re-license under a stricter license (on this site). '),
+                   'form_tip' => _('NOTE: You can only pick less restrictive license. Once you have done that you can not re-license under a stricter license (on this site). '),
                    'formatter' => 'select',
                    'value'     => $record['license_id'],
                    'options'   => $select_fields,
@@ -83,7 +83,7 @@ class CCEditFileForm extends CCUploadMediaForm
         $fields['upload_man_files'] =
                 array( 'label'              => _("Manage Files"),
                        'form_tip'           => _('Update the list of files used by this upload'),
-                       'value'              => "<a class='cc_file_command' href=\"$url\">" .
+                       'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                     _('Manage Files') . "</a>",
                        'formatter'          => 'statictext',
                        'flags'              => CCFF_STATIC | CCFF_NOUPDATE );
@@ -94,7 +94,7 @@ class CCEditFileForm extends CCUploadMediaForm
         $fields['upload_remixes'] =
                 array( 'label'              => _("Manage the 'I Sampled This' List"),
                        'form_tip'           => _('Update the list of sources used by this upload'),
-                       'value'              => "<a class='cc_file_command' href=\"$url\">" .
+                       'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                    _('Manage Remixes') . "</a>",
                        'formatter'          => 'statictext',
                        'flags'              => CCFF_STATIC | CCFF_NOUPDATE );
@@ -242,21 +242,18 @@ class CCPhysicalFile
                        'upload_nicname_url'      => ccl('file','nickname'),
                     );
         
-        $help =<<<END
-<p>This is where you add or replace files associated with '<a href="%s">%s</a>'.</p>
-<p>Use this screen to upload associated files. Common reasons to upload multiple files:</p>
-            <ol><li>Multiple resolutions of the main file (different bit rates, aspect ratios, etc.)</li>
-            <li>Multiple formats of the same file (e.g. mp3, ogg, wma, etc. for audio)</li>
-            <li>Samples associated with the upload such as solo tracks or layers.</li>
-            <li>Streamable audio or image previews for an archive (e.g. ZIP) upload.</li>
-            </ol>
-<p>HINT: Use the 'Nickname' to distinguish between different uploads (e.g. 'LoRes', 'Hires', etc.) The 
-            default value is based on the file format (extension).</p>
+        $help = '<p>' . sprintf(_('This is where you add or replace files associated with \'%s\''), '<a href="%s">%s</a>.') . "</p>\n" . 
+        '<p>' . _('Use this screen to upload associated files. Common reasons to upload multiple files:') . "</p>" . 
 
-<p>HINT: The file at the top of the list is used for all default streaming and podcasting
-commands.</p>
+            '<ol><li>' . _('There are multiple resolutions of the main file (different bit rates, aspect ratios, etc.).') . '</li>' . 
+            '<li>' . _('There are multiple formats of the same file (e.g. mp3, ogg, wma, etc. for audio).') . '</li>' .
+            '<li>' . _('There are samples associated with the upload such as solo tracks or layers.') . '</li>' . 
+            '<li>' . _('There are streamable audio or image previews for an archive (e.g. ZIP) upload.') . '</li>' . 
+            '</ol>' . 
+        
+        '<p>' . _('HINT: Use the \'Nickname\' to distinguish between different uploads (e.g. \'LoRes\', \'Hires\', etc.) The default value is based on the file format (extension).') . '</p>' .
+'<p>' . _('HINT: The file at the top of the list is used for all default streaming and podcasting commands.') . '</p>';
             
-END;
         $args['form_about'] = sprintf(_($help),$record['file_page_url'],$record['upload_name']);
         
         CCPage::PageArg('field', $args, 'edit_files_links' );
@@ -279,7 +276,7 @@ END;
         $uploads =& CCUploads::GetTable();
         $record = $uploads->GetRecordFromID($upload_id);
         $pretty_name = $record['upload_name'];
-        CCPage::SetTitle(_("Edit Properties for ") . $pretty_name);
+        CCPage::SetTitle(_("Edit Properties: ") . $pretty_name);
         $form = new CCEditFileForm($userid,$record);
         $show = true;
         if( empty($_POST['editfile']) )
@@ -291,7 +288,7 @@ END;
             if( $form->ValidateFields() )
             {
                 CCUpload::PostProcessEditUploadForm($form, $record, $record['upload_extra']['relative_dir'] );
-                $msg = sprintf(_("Changes saved (see <a href=\"%s\">results</a>)"),$record['file_page_url']);
+                $msg = sprintf(_("Changes saved (see %s)"), '<a href="' . $record['file_page_url'] . '">' . _('results') . '</a>');
                 CCPage::Prompt($msg);
                 $show = false;
             }
@@ -352,13 +349,13 @@ END;
         $uploads =& CCUploads::GetTable();
         $record = $uploads->GetRecordFromID($upload_id);
         $pretty_name = $record['upload_name'];
-        CCPage::SetTitle(_("Edit Properties for ") . $pretty_name);
+        CCPage::SetTitle(_("Edit Properties: ") . $pretty_name);
         $path = $record['file_page_url'];
-        $msg= sprintf(_("Changes saved -- see <a href=\"%s\">'%s' page</a>"),$path,$pretty_name);
+        $msg= sprintf(_("Changes saved, see %s."), '<a href="' . $path . '">' . $pretty_name . ' ' . _('page') . '</a>');
         if( $is_manage )
         {
             $url = ccl('file','manage',$upload_id);
-            $msg .= sprintf(_(" or go back to <a href=\"%s\">Manage Files</a>"),$url);
+            $msg .= sprintf(_("Or, go back to <a href=\"%s\">Manage Files</a>."),$url);
         }
         CCPage::Prompt($msg);
     }

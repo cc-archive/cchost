@@ -49,8 +49,10 @@ class CCPageAdmin
     */
     function OnMapUrl()
     {
-        CCEvents::MapUrl( 'viewfile', array( 'CCPageAdmin', 'ViewFile' ),  CC_DONT_CARE_LOGGED_IN );
-        CCEvents::MapUrl( 'homepage', array( 'CCPageAdmin', 'Homepage' ),  CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'viewfile', array( 'CCPageAdmin', 'ViewFile' ),  
+                          CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'homepage', array( 'CCPageAdmin', 'Homepage' ),  
+                          CC_DONT_CARE_LOGGED_IN );
     }
 
     /**
@@ -101,18 +103,18 @@ class CCPageAdmin
         if( $scope != CC_GLOBAL_SCOPE )
         {
             $fields['homepage'] =
-               array(  'label'      => 'Homepage',
-                       'form_tip'   => 'example: contest/mycontest<br />or: files<br />or: viewfile/home.xml',
-                       'value'      => '',
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE);
+                array(  'label'      => _('Homepage'),
+                        'form_tip'   => sprintf(_('example: contest/mycontest %s or files: viewfile/home.xml'), '<br />'),
+                       'value'       => '',
+                       'formatter'   => 'textedit',
+                       'flags'       => CCFF_POPULATE);
 
             $fields['style-sheet'] =
-                       array( 'label'       => 'Skin Style',
-                               'form_tip'   => 'Default style sheet for this view',
-                               'formatter'  => 'select',
-                               'options'    => CCTemplateAdmin::GetTemplates('skin','css'),
-                               'flags'      => CCFF_POPULATE );
+                array( 'label'       => _('Skin Style'),
+                       'form_tip'    => _('Default style sheet for this view'),
+                       'formatter'   => 'select',
+                       'options'     => CCTemplateAdmin::GetTemplates('skin','css'),
+                       'flags'       => CCFF_POPULATE );
 /*
             $fields['page-template'] =
                        array( 'label'       => 'Page Template',
@@ -121,15 +123,14 @@ class CCPageAdmin
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED);
 */
             $fields['max-listing'] =
-                       array( 'label'       => 'Max Items Per Page',
-                               'form_tip'   => 'Maximum number of uploads, users in a listing',
-                               'class'      => 'cc_form_input_short',
-                               'formatter'  => 'textedit',
-                               'flags'      => CCFF_POPULATE | CCFF_REQUIRED);
+                array( 'label'       => _('Max Items Per Page'),
+                       'form_tip'    => _('Maximum number of uploads, users in a listing'),
+                       'class'       => 'cc_form_input_short',
+                       'formatter'   => 'textedit',
+                       'flags'       => CCFF_POPULATE | CCFF_REQUIRED);
             $fields['default-feed-tags'] =
-                       array( 'label'       => 'Default Feed Tags',
-                               'form_tip'   => 'Comma separated list of tags to use when no other feed is specificed.'
-                                               . ' (e.g. audio,remix) Leave blank for no default feed.',
+                array( 'label'       => _('Default Feed Tags'),
+                       'form_tip'    => _('Comma separated list of tags to use when no other feed is specificed (e.g. audio,remix).') . ' ' . _('Leave blank for no default feed.'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE);
         }
@@ -304,8 +305,11 @@ class CCPage extends CCTemplate
     * @param string $css Name of the css file (inlcuding relative path)
     * @param string $title Title of link
     */
-    function SetStyleSheet( $css, $title = 'Style Sheet' )
+    function SetStyleSheet( $css, $title = '' )
     {
+        // NOTE: Can't have default parameter and localize it.
+        if ( '' == $title )
+            $title = _('Style Sheet');
         CCPage::AddLink( 'head_links', 'stylesheet', 'text/css', ccd($css), $title );
     }
 
@@ -407,7 +411,7 @@ class CCPage extends CCTemplate
             $cookiename = 'style-sheet-' . CCUser::CurrentUserName();
             if( !empty($_COOKIE[$cookiename]) )
             {
-                $page->SetStyleSheet($_COOKIE[$cookiename],"User Styles");
+                $page->SetStyleSheet($_COOKIE[$cookiename],_("User Styles"));
                 $style_set = true;
             }
         }
@@ -416,7 +420,7 @@ class CCPage extends CCTemplate
 
         if( !$style_set )
         {
-            $page->SetStyleSheet($settings['style-sheet'],'Default Style');
+            $page->SetStyleSheet($settings['style-sheet'],_('Default Style'));
         }
 
         $isadmin = CCUser::IsAdmin();

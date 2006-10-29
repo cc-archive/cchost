@@ -28,8 +28,10 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCID3Tagger', 'OnAdminMenu') );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCID3Tagger', 'OnMapUrls') );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCID3Tagger', 
+                                                   'OnAdminMenu') );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCID3Tagger', 
+                                                   'OnMapUrls') );
 
 $CC_ID3_TAGGER = new CCID3Tagger();
 
@@ -198,7 +200,7 @@ class CCID3Tagger
         $items += array( 
             'id3-tag-masks'   => array( 'menu_text'  => 'ID3 Tagger',
                              'menu_group' => 'configure',
-                             'help' => 'Configure how to tag ID3 compatible files (e.g. MP3s)',
+                             'help' => _('Configure how to tag ID3 compatible files (e.g. MP3s)'),
                              'access' => CC_ADMIN_ONLY,
                              'weight' => 60,
                              'action' =>  ccl('admin','id3tags')

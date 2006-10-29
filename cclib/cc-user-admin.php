@@ -78,7 +78,7 @@ class CCChangePasswordForm extends CCUserForm
 
         $fields = array( 
                     'user_name' =>
-                        array( 'label'      => 'Login Name',
+                        array( 'label'      => _('Login Name'),
                                'formatter'  => 'username',
                                'value'      => $username,
                                'flags'      => CCFF_REQUIRED ),
@@ -89,14 +89,14 @@ class CCChangePasswordForm extends CCUserForm
                                'form_tip'   => '',
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
-                       array( 'label'       => 'Security Key',
+                       array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
                                'form_tip'   => CCSecurityKeys::GetSecurityTip(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE),
 
                     'user_password' =>
-                       array( 'label'       => 'New Password',
+                       array( 'label'       => _('New Password'),
                                'formatter'  => 'password',
                                'flags'      => CCFF_REQUIRED ),
 
@@ -117,7 +117,7 @@ class CCDeleteUserFilesForm extends CCUserForm
 
         $fields = array( 
                     'user_name' =>
-                        array( 'label'      => 'Login Name',
+                        array( 'label'      => _('Login Name'),
                                'formatter'  => 'statictext',
                                'value'   => $username,
                                'flags'      => CCFF_NOUPDATE | CCFF_STATIC ),
@@ -128,7 +128,7 @@ class CCDeleteUserFilesForm extends CCUserForm
                                'form_tip'   => '',
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
-                       array( 'label'       => 'Security Key',
+                       array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
                                'form_tip'   => CCSecurityKeys::GetSecurityTip(),
@@ -149,7 +149,7 @@ class CCIPManageForm extends CCGridForm
     {
         $this->CCGridForm();
 
-        $heads = array( "Delete", "Regular Expression Mask");
+        $heads = array( _("Delete"), _("Regular Expression Mask"));
         $this->SetColumnHeader($heads);
 
         $i = 1;
@@ -210,7 +210,7 @@ class CCUserAdmin
 
     function ChangePassword($user_id ='')
     {
-        CCPage::SetTitle("Change a User's Password");
+        CCPage::SetTitle(_("Change a User's Password"));
 
         $form = new CCChangePasswordForm($user_id);
 
@@ -228,7 +228,7 @@ class CCUserAdmin
             $user_id = $users->QueryKey($where);
             $dummy = array();
             CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $user_id, &$dummy));
-            CCPage::Prompt("User password changed");
+            CCPage::Prompt(_("User password changed"));
         }
     }
 
@@ -246,7 +246,7 @@ class CCUserAdmin
 
         $username = $record['user_name'];
 
-        CCPage::SetTitle("Manage User Account for " . $username );
+        CCPage::SetTitle(sprintf(_("Manage User Account for %s"), $username ));
 
         switch( $cmd )
         {
@@ -286,37 +286,38 @@ class CCUserAdmin
         if( $num_uploads )
         {
             $args[] = array( 'action' => $delfileslink,
-                             'menu_text' => $spanR . 'Delete All Files For ' . $uq . $spanC,
-                             'help' => 'This action can not be un-done ' );;
+                             'menu_text' => $spanR . 
+                                sprintf(_('Delete All Files For %s'), $uq . $spanC),
+                             'help' => _('This action can not be un-done') . ' ' );
         }
         else
         {
             $args[] = array( 'action' => '',
                              'menu_text' => '',
-                             'help' => $uq . ' does not have any uploads to delete.' );
+                             'help' => sprintf(_('%s does not have any uploads to delete.'), $uq ) );
         }
 
-        $args[] = array( 'action' => $deluserlink,
-                         'menu_text' => $spanR . "Delete $uq Account" . $spanC,
-                         'help' =>'This action can not be un-done');
+        $args[] = array( 'action'    => $deluserlink,
+                         'menu_text' => $spanR . sprintf(_("Delete %s Account"), $uq) . $spanC,
+                         'help'      => _('This action can not be undone.'));
 
         if( !empty($record['user_last_known_ip']) )
         {
             $ip = ' (' . CCUtil::DecodeIP(substr($record['user_last_known_ip'],0,8)) . ')';
-            $args[] = array( 'action' => $ban_ip_link,
-                             'menu_text' => "Manage IP address for " . $uq . $ip,
-                             'help' => 'Allow/Deny access to site' );
+            $args[] = array( 'action'    => $ban_ip_link,
+                             'menu_text' => sprintf(_("Manage IP address for %s"), $uq . $ip),
+                             'help'      => _('Allow or Deny access to the site.') );
         }
         else
         {
-            $args[] = array( 'action' => '',
+            $args[] = array( 'action'    => '',
                              'menu_text' => '',
-                             'help' => "(Can not  ban $uq IP because it has not been recorded)" );
+                             'help'      => sprintf(_("(Cannot ban %s IP because it has not been recorded)"), $uq) );
         }
 
         $args[] = array( 'action' => $change_pass,
-                         'menu_text' => "Change Password for " . $uq,
-                         'help' => 'Create A New Password For This Account' );
+                         'menu_text' => sprintf(_("Change Password for %s"), $uq),
+                         'help' => _('Create A New Password For This Account') );
         CCPage::PageArg('link_table_items',$args,'link_table');
 
     }
@@ -339,14 +340,15 @@ class CCUserAdmin
             foreach( $ids as $id )
                 CCUploadAPI::DeleteUpload($id);
             $url = ccl('people',$record['user_name']);
-            return("Files have been deleted for {$record['user_name']}. See <a href=\"$url\">here</a> if you don't believe us.");
+
+            return( sprintf(_("Files have been deleted for user, %s."), $record['user_name']) . sprintf(_("See %s if you don't believe us."), "<a href=\"$url\">here</a>") );
         }
     }
 
     function _del_user(&$record)
     {
         $username = $record['user_name'];
-        $prompt = "Delete Account for '$username'";
+        $prompt = sprintf(_("Delete Account for user, %s"), $username);
         $form = new CCDeleteUserFilesForm($username,$prompt);
         if( empty($_POST['deleteuserfiles']) || !$form->ValidateFields() )
         {
@@ -359,7 +361,7 @@ class CCUserAdmin
             $users =& CCUsers::GetTable();
             $where['user_id'] = $record['user_id'];
             $users->DeleteWhere($where);
-            CCPage::Prompt("User account for {$record['user_name']} has been deleted.");
+            CCPage::Prompt(sprintf(_("User account for user, %s, has been deleted."), $record['user_name']));
         }
     }
 
@@ -386,7 +388,7 @@ class CCUserAdmin
         else
         {
             $this->_save_banned_ips();
-            return( "New IP Information Saved" );
+            return( _("New IP Information Saved") );
         }
     }
 

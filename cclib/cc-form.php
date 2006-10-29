@@ -778,7 +778,7 @@ class CCForm
         $value = $this->GetFormValue($fieldname);
         if( ($flags & CCFF_REQUIRED) && empty($value) )
         {
-            $this->SetFieldError( $fieldname, _("can not be left blank") );
+            $this->SetFieldError( $fieldname, _("This cannot be left blank.") );
             return(false);
         }
         return( true );
@@ -883,7 +883,7 @@ class CCForm
             $value = $this->GetFormValue($fieldname);
             if( strlen($value) > $maxlen )
             {
-                $this->SetFieldError( $fieldname, "can not be longer then $maxlen characters" );
+                $this->SetFieldError( $fieldname, sprintf(_("This can not be longer then %s characters"), $maxlen) );
                 return(false);
             }
         }
@@ -1134,12 +1134,12 @@ END;
 
             if( strlen($value) < 5 )
             {
-                $this->SetFieldError($fieldname," must be at least 5 characters");
+                $this->SetFieldError($fieldname," " . _("This must be at least 5 characters."));
                 return(false);
             }
             if( preg_match('/[^A-Za-z0-9]/', $value) )
             {
-                $this->SetFieldError($fieldname, " must letters or numbers");
+                $this->SetFieldError($fieldname, " " . _('This must be letters or numbers.'));
                 return(false);
             }
 
@@ -1191,7 +1191,7 @@ END;
 
             if( !preg_match( $regex, $value ) )
             {
-                $this->SetFieldError($fieldname,"Not a valid email address");
+                $this->SetFieldError($fieldname, _("This is not a valid email address."));
                 return(false);
             }
 
@@ -1459,7 +1459,7 @@ END;
 
                 if( $out_of_range )
                 {
-                    $this->SetFieldError($fieldname, _("Date is out of range") );
+                    $this->SetFieldError($fieldname, _("The date is out of range.") );
                     $ok = false;
                 }
             }
@@ -1467,7 +1467,7 @@ END;
         }
         else
         {
-            $this->SetFieldError($fieldname, _("Not a valid date") );
+            $this->SetFieldError($fieldname, _("This is not a valid date.") );
             $ok = false;
         }
 
@@ -1508,7 +1508,7 @@ END;
             $dir = $this->GetFormValue($fieldname);
             if( !file_exists($dir) )
             {
-                $this->SetFieldError($fieldname, _('This file or directory does not exist'));
+                $this->SetFieldError($fieldname, _('This file or directory does not exist.'));
                 return(false);
             }
         }
@@ -1559,7 +1559,7 @@ END;
                 $errmsg = $this->GetFormFieldItem( $fieldname, 'pattern_error' );
                 if( empty($errmsg) )
                 {
-                    $errmsg = _('Does match proper pattern');
+                    $errmsg = _('This does match a proper pattern.');
                 }
                 $this->SetFieldError( $fieldname, $errmsg );
             }
@@ -1974,7 +1974,7 @@ class CCUploadForm extends CCForm
                   '<input type="checkbox" id="' . $varname . '_delete" name="' . $varname . '_delete" />'.
                   '<input type="hidden"   id="' . $varname . '_file"   name="' . $varname . '_file" ' .
                       'value="' . $value . '" />'.
-                         ' Delete this image';
+                         ' ' . _('Delete this image');
             }
         }
 
@@ -2008,7 +2008,7 @@ class CCUploadForm extends CCForm
 
             if( $image_size === false )
             {
-                $this->SetFieldError($fieldname,"File does not appear to be an image");
+                $this->SetFieldError($fieldname,_("This file does not appear to be an image."));
                 $retval = false;
             }
             else
@@ -2024,12 +2024,12 @@ class CCUploadForm extends CCForm
                     list( $width, $height ) = $image_size;
                     if( !$width || !$height )
                     {
-                        $this->SetFieldError($fieldname,"Image size could not be determined");
+                        $this->SetFieldError($fieldname,_("The image size could not be determined."));
                         $retval = false;
                     }
                     else if( ($width > $maxwidth) || ($height > $maxheight ) )
                     {
-                        $this->SetFieldError($fieldname,"Image must be no larger than 93px x 93px");
+                        $this->SetFieldError($fieldname,_("The image must be no larger than 93px x 93px."));
                         $retval = false;
                     }
                 }
@@ -2077,10 +2077,14 @@ class CCUploadForm extends CCForm
 
         if( $filesobj['error'] != 0 )
         {
-            $problems = array( UPLOAD_ERR_INI_SIZE  => _('File too big'),
-                               UPLOAD_ERR_FORM_SIZE => _('File too big'),
-                               UPLOAD_ERR_PARTIAL   => _('File was not fully uloaded'),
-                               UPLOAD_ERR_NO_FILE   => _('Missing file name'));
+            $problems = array( UPLOAD_ERR_INI_SIZE  => 
+                                    _('The file is too big.'),
+                               UPLOAD_ERR_FORM_SIZE => 
+                                    _('The file is too big.'),
+                               UPLOAD_ERR_PARTIAL   => 
+                                    _('The file was not fully uploaded.'),
+                               UPLOAD_ERR_NO_FILE   => 
+                                    _('Missing file name'));
 
             $this->SetFieldError($fieldname, $problems[$filesobj['error']]);
             return(false);
@@ -2190,7 +2194,7 @@ class CCUploadForm extends CCForm
                 'title' => _('Upload in progress'),
                 'paras' => array( 
                    _('This might take a while...'),
-                   _('Do not close your browser or click on any links, that may cancel your upload (!)')
+                   _('Do not close your browser or click on any links. Doing this might cancel your upload.')
                    )
              );
         CCPage::PageArg('form_hide_msg',$hidemsg);

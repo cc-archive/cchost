@@ -117,7 +117,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
     }
     $args['root-url'] = cc_get_root_url();
     $text = $template->SetAllAndParse($args);
-    CCPage::SetTitle(_("ccMixter Charts [beta]"));
+    CCPage::SetTitle(_("Charts "));
     CCPage::AddPrompt('body_text',$text);
 }
 
@@ -177,6 +177,7 @@ function cc_stats_show()
     else
     {
         $tfile = CCPage::GetViewFile('stats.xml');
+        print_r($tfile);
         $template = new CCTemplate( $tfile );
         $args = array();
         $text = $template->SetAllAndParse($args);
@@ -186,7 +187,7 @@ function cc_stats_show()
         chmod($file,cc_default_file_perms());
     }
 
-    CCPage::SetTitle(_("ccMixter stats [beta]"));
+    CCPage::SetTitle(_("Charts"));
     CCPage::AddPrompt('body_text',$text);
 }
 
@@ -244,7 +245,10 @@ function cc_stats_percent_remixed($tag)
 END;
     $rows = CCDatabase::QueryRows($sql);
     $ret['remixed'] = count($rows);
-    $ret['percent'] = round($ret['remixed'] / $ret['total'] * 100);
+    if ( $ret['total'] > 0 )
+        $ret['percent'] = round($ret['remixed'] / $ret['total'] * 100);
+    else
+        $ret['percent'] = 0;
     $uploads->SetTagFilter('');
     return $ret;
 }

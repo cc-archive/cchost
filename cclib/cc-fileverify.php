@@ -164,7 +164,7 @@ class CCFileVerify
 
         if( empty( $tags['fileformat'] ) )
         {
-            $formatinfo->SetErrors('Unknown format');
+            $formatinfo->SetErrors(_('Unknown format'));
         }
         elseif( !empty($tags['error']) )
         {
@@ -183,7 +183,7 @@ class CCFileVerify
                     $allowed = $configs->GetConfig('format-allow');
                     if( empty($allowed[$name]) )
                     {
-                        $formatinfo->SetErrors("File type is not allowed");
+                        $formatinfo->SetErrors(_("File type is not allowed"));
                     }
                     else
                     {
@@ -195,7 +195,7 @@ class CCFileVerify
             }
             else
             {
-                $formatinfo->SetErrors("Unknown data format");
+                $formatinfo->SetErrors(_("Unknown data format"));
             }
         }
         
@@ -203,7 +203,7 @@ class CCFileVerify
         if( !$retval && empty($errs) )
         {
             // a sleazy catch-all 
-            $formatinfo->SetErrors('File can not be verified');
+            $formatinfo->SetErrors(_('File can not be verified'));
         }
 
         return( $retval );
@@ -221,7 +221,7 @@ class CCFileVerify
     {
         if( empty($record) )
         {
-            $patterns['%ext%']      = "File extention";
+            $patterns['%ext%']      = "File extension";
             $patterns['%filename%'] = "%title% + %ext% ";
             return;
         }
@@ -271,10 +271,10 @@ class CCFileVerify
             return;
 
         $items += array( 
-        'format-allow'   => array( 'menu_text'  => 'File Formats',
+        'format-allow'   => array( 'menu_text'  => _('File Formats'),
                          'menu_group' => 'configure',
                          'access' => CC_ADMIN_ONLY,
-                          'help'  => 'Pick which file formats are allowed to be uploaded',
+                          'help'  => _('Pick which file formats are allowed to be uploaded'),
                          'weight' => 10,
                          'action' =>  ccl('admin','formats')
                          ),
@@ -299,7 +299,7 @@ class CCFileVerify
     */
     function ConfigureFormats()
     {
-        CCPage::SetTitle("Edit Allowable File Formats");
+        CCPage::SetTitle(_("Edit Allowable File Formats"));
 
         $form = new CCAdminFileVerifyForm($this);
         CCPage::AddForm( $form->GenerateForm() );

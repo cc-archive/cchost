@@ -65,7 +65,7 @@ class CCAdminLicenseForm extends CCForm
             $value = $populate && in_array( $row['license_id'], $config_lics ) ? 'checked' : '';
 
             $fields[ $row['license_id'] ] = 
-                       array( 'label'       => 'Enabled:',
+                       array( 'label'       => _('Enabled:'),
                                'value'      => $value,
                                'license'    => $row,
                                'formatter'  => 'metalmacro',
@@ -157,8 +157,8 @@ class CCLicense
     {
         if( empty($record) )
         {
-            $patterns['%license_url%'] = "License URL";
-            $patterns['%license%']     = "License name";
+            $patterns['%license_url%'] = _("License URL");
+            $patterns['%license%']     = _("License name");
         }
         else
         {
@@ -228,12 +228,12 @@ class CCLicense
             return;
 
         $items += array( 
-            'licenses'=> array('menu_text'  => 'License',
-                                 'menu_group' => 'configure',
-                                 'access'     => CC_ADMIN_ONLY,
-                                 'help'   => 'Pick which licenses a user is allowed to select from',
-                                 'weight'     => 16,
-                                 'action'     => ccl('admin','license') )
+            'licenses'=> array( 'menu_text'  => _('License'),
+                                'menu_group' => 'configure',
+                                'access'     => CC_ADMIN_ONLY,
+                                'help'       => _('Pick which licenses a user is allowed to select from'),
+                                'weight'     => 16,
+                                'action'     => ccl('admin','license') )
                         );
     }
 
@@ -242,7 +242,7 @@ class CCLicense
     */
     function Admin()
     {
-        CCPage::SetTitle("Configure Licenses");
+        CCPage::SetTitle(_("Configure Licenses"));
         if( empty($_POST['adminlicense']) )
         {
             $form = new CCAdminLicenseForm(true);
@@ -261,7 +261,7 @@ class CCLicense
                 }
                 $configs =& CCConfigs::GetTable();
                 $configs->SaveConfig('licenses',$config_lics,'',false);
-                CCPage::Prompt("Licenses Updated");
+                CCPage::Prompt(_("Licenses Updated"));
             }
         }
     }

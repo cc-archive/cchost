@@ -156,9 +156,9 @@ END;
         }
 
         $url = ccl('search');
-        $msg = sprintf(_("<a href=\"%s\">Search again...</a>"),$url);
+        $msg = sprintf("<a href=\"%s\">%s</a>",$url, _('Search Again...'));
         if( $limit_reached )
-            $msg = _("Search limit reached. ") . $msg;
+            $msg = _("Search limit reached.") . " $msg";
         CCPage::Prompt($msg);
 
     }
@@ -284,6 +284,7 @@ END;
 
             ksort($whatidos);
             $wid_links = array();
+            // TODO: This should really go into a stylesheet proper.
             $html =<<<EOF
 <style>
 #wid_table td, #wid_table th {
@@ -320,7 +321,7 @@ EOF;
         else
         {
             $field = 'user_' . $field;
-            CCPage::SetTitle(_("Users That Mentioned: ") . $tag);
+            CCPage::SetTitle(_("Users that Mentioned the Following:") . " $tag");
             CCUser::ListRecords( "$field LIKE '%$tag%'" );
         }
     }

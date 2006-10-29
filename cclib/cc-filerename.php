@@ -55,12 +55,12 @@ class CCFileRename
 
         $items += array( 
             'name-masks' => array( 'menu_text'  => 'Upload Renaming',
-                             'menu_group' => 'configure',
-                             'help'   => 'Configure how uploads are automatically renamed',
-                             'access' => CC_ADMIN_ONLY,
-                             'weight' => 30,
-                             'action' =>  ccl('admin','renaming'),
-                             ),
+                                   'menu_group' => 'configure',
+                                   'help'       => 'Configure how uploads are automatically renamed',
+                                   'access' => CC_ADMIN_ONLY,
+                                   'weight' => 30,
+                                   'action' =>  ccl('admin','renaming'),
+                       ),
             );
 
     }
@@ -72,7 +72,8 @@ class CCFileRename
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/renaming',  array( 'CCFileRename', 'AdminRenaming'), 
+        CCEvents::MapUrl( 'admin/renaming',  array( 'CCFileRename', 
+                                                    'AdminRenaming'), 
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show admin file renaming'),
             CC_AG_UPLOAD );
     }
