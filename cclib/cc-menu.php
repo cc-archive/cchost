@@ -31,7 +31,6 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCMenu', 'OnAdminMenu'));
 CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCMenu', 'OnBuildMenu'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCMenu', 'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_TRANSLATE,    array( 'CCMenu', 'OnTranslate'));
 
 
 /**
@@ -220,7 +219,7 @@ class CCMenu
         $configs->DeleteType('urlmap',CC_GLOBAL_SCOPE);
         CCEvents::GetUrlMap(true);
         CCMenu::Reset();
-        CCPage::Prompt("Menu/URL cache has been cleared");
+        CCPage::Prompt(_('Menu/URL cache has been cleared'));
     }
 
     /**
@@ -434,17 +433,17 @@ class CCMenu
             return;
 
         $items += array( 
-            'menu'   => array( 'menu_text'  => 'Menus',
+            'menu'   => array( 'menu_text'  => _('Menus'),
                              'menu_group' => 'configure',
                              'access' => CC_ADMIN_ONLY,
                              'weight' => 60,
-                             'help' => 'Edit the menus',
+                             'help' => _('Edit the menus'),
                              'action' =>  ccl('admin','menu')
                              ),
-            'groups' => array( 'menu_text'  => 'Menu Groups',
+            'groups' => array( 'menu_text'  => _('Menu Groups'),
                              'menu_group' => 'configure',
                              'access' => CC_ADMIN_ONLY,
-                             'help'  => 'Edit the menu groups',
+                             'help'  => _('Edit the menu groups'),
                              'weight' => 61,
                              'action' =>  ccl('admin','menugroup')
                              ),
@@ -468,7 +467,6 @@ class CCMenu
                     );
 
         CCMenu::AddGroups($groups);
-
     }
 
     /**
@@ -485,10 +483,10 @@ class CCMenu
         {
             $rand = rand();
             $items['additem' . $rand] = 
-                array( 'menu_text'  => 'Extra Item ' . $rand ,
+                array( 'menu_text'  => _('Extra Item') . ' ' . $rand ,
                     'menu_group' => 'artist',
                     'weight' => 1,
-                    'action' =>  ccp('replace','me'),
+                    'action' =>  ccp( _('replace_me') ),
                     'access' => CC_ADMIN_ONLY
                     );
         }
@@ -532,8 +530,12 @@ class CCMenu
         $configs =& CCConfigs::GetTable();
         $configs->DeleteType('menu',$CC_CFG_ROOT);
         $this->Reset();
-        CCPage::Prompt("Menus have been reset for <b>$CC_CFG_ROOT</b>");
-        CCPage::SetTitle("Reset Menus");
+        CCPage::Prompt( sprintf(
+                                 _('Menus have been reset for %s'),  
+                                 "<b>$CC_CFG_ROOT</b>"
+                              )
+                      );
+        CCPage::SetTitle(_('Reset Menus'));
     }
 
     /**
@@ -554,16 +556,6 @@ class CCMenu
         require_once('cclib/cc-menu-admin.inc');
         $menu_admin = new CCMenuAdmin();
         $menu_admin->AdminGroup($this);
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_TRANSLATE}
-    */
-    function OnTranslate()
-    {
-        require_once('cclib/cc-menu-admin.inc');
-        $menu_admin = new CCMenuAdmin();
-        $menu_admin->OnTranslate($this);
     }
 
 }

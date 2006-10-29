@@ -97,12 +97,18 @@ class CCAdminMenuForm extends CCGridForm
         uasort($menu,'cc_sort_user_menu');
         uasort($groups,'cc_weight_sorter');
 
-        $heads = array( "Menu Text", "Group", "Weight", "Action", "Access" );
+        $heads = array( _('Menu Text'), _('Group'), _('Weight'), _('Action'), _('Access'), );
         $this->SetColumnHeader($heads);
 
         $group_select = array();
         foreach( $groups as $groupname => $groupinfo )
             $group_select[$groupname] = $groupinfo['group_name'];
+
+        $access_ops = array( CC_MUST_BE_LOGGED_IN   => _('Logged in users only'),
+                           CC_ONLY_NOT_LOGGED_IN  => _('Anonymous users only'),
+                           CC_DONT_CARE_LOGGED_IN => _('Everyone'),
+                           CC_ADMIN_ONLY          => _('Administrators only'),
+                           CC_DISABLED_MENU_ITEM  => _('Hide'), );
 
         foreach( $menu as $keyname => $menuitem )
         {
@@ -133,11 +139,7 @@ class CCAdminMenuForm extends CCGridForm
                     'element_name'  => "mi[$keyname][access]",
                     'value'      => $menuitem['access'],
                     'formatter'  => 'select',
-                    'options'    => array( CC_MUST_BE_LOGGED_IN   => 'Logged in users only',
-                                           CC_ONLY_NOT_LOGGED_IN  => 'Anonymous users only',
-                                           CC_DONT_CARE_LOGGED_IN => "Everyone",
-                                           CC_ADMIN_ONLY          => "Administrators only",
-                                           CC_DISABLED_MENU_ITEM  => "Hide" ),
+                    'options'    => $access_ops,
                     'flags'      => CCFF_NONE ),
                 );
 
@@ -148,7 +150,7 @@ class CCAdminMenuForm extends CCGridForm
             */
         }
 
-        $this->SetSubmitText('Submit Menu Changes');
+        $this->SetSubmitText(_('Submit Menu Changes'));
     }
 }
 
@@ -165,7 +167,7 @@ class CCAdminMenuGroupsForm extends CCGridForm
     {
         $this->CCGridForm();
 
-        $heads = array( "Group Name", "Weight" );
+        $heads = array( _('Group Name'), _('Weight') );
         $this->SetColumnHeader($heads);
 
         foreach( $groups as $keyname => $group )
@@ -187,7 +189,7 @@ class CCAdminMenuGroupsForm extends CCGridForm
             $this->AddGridRow( $keyname, $a );
         }
         
-        $this->SetSubmitText('Submit Group Changes');
+        $this->SetSubmitText(_('Submit Group Changes'));
     }
 }
 
@@ -240,7 +242,7 @@ class CCMenuAdmin
             return;
         }
 
-        CCPage::SetTitle("Edit Menus");
+        CCPage::SetTitle(_('Edit Menus'));
 
         $configs =& CCConfigs::GetTable();
 
@@ -267,7 +269,7 @@ class CCMenuAdmin
 
             $configs->SaveConfig( 'menu', $copy, '', false);
 
-            CCPage::Prompt("Menu changes have been saved");
+            CCPage::Prompt(_('Menu changes have been saved'));
         
             $menu_api->Reset();
         }            
@@ -279,7 +281,7 @@ class CCMenuAdmin
     */
     function AdminGroup($menu_api)
     {
-        CCPage::SetTitle("Edit Menu Groups");
+        CCPage::SetTitle(_('Edit Menu Groups'));
 
         $configs =& CCConfigs::GetTable();
 
@@ -294,82 +296,10 @@ class CCMenuAdmin
             $groups = $_POST['grp'];
             array_walk($groups,'cc_strip_groups');
             $configs->SaveConfig('groups',$groups,'',false);
-            CCPage::Prompt("Menu group changes have been saved");
+            CCPage::Prompt(_('Menu group changes have been saved'));
         }            
 
         $menu_api->Reset();
-    }
-
-    /**
-     * Event handler for {@link CC_EVENT_TRANSLATE}
-     *
-     * This is called when the admin has picked a new language.
-     *
-     * The current implementation is simply to wipe out the cache
-     * but that DESTROYS all customization done to the menus.
-     * Clearly this is not the right thing. Any volunteers who
-     * wish to help make the menu cache multi-language aware
-     * speak now...
-     *
-     * @todo Make menu cache multi-language aware
-     * @param object $menu_api A pointer to a CCMenu object
-     */
-    function OnTranslate($menu_api)
-    {
-        $configs =& CCConfigs::GetTable();
-        $roots = $configs->GetConfigRoots();
-        foreach( $roots as $aroot )
-        {
-            $root = $aroot['config_scope'];
-            $configs->DeleteType('menu',$root);
-            $configs->DeleteType('groups',$root);
-            CCDebug::Log("Deleted menus for $root");
-        }
-
-
-        /*
-        * This is the code for translating the current menu into
-        * whatever the current language is.
-        *
-        * This is here strictly as a reference for how to traverse
-        * a menu and chache the results.
-        *
-        * The code itself is broken in several ways:
-        *
-        *  It assumes the current language is English
-        *  It overwrites whatever menu options were previously in the cache
-        *  It uses _() to translate, I'm told that's wrong
-        *  It will only translate 'known' strings, if the admin changed
-        *     even one characther (e.g. 'Forum' -> 'Forums') that the translation
-        *     for that word will fail and the user will the English version
-        *  ...
-        */
-
-        /*
-        $configs =& CCConfigs::GetTable();
-        $roots = $configs->GetConfigRoots();
-        foreach( $roots as $aroot )
-        {
-            $root = $aroot['config_scope'];
-            $menu = $configs->GetConfig('menu',$root);
-            $new_menu = array();
-            foreach( $menu as $key => $item )
-            {
-                $item['menu_text'] = _( ($item['menu_text']) );
-                $new_menu[$key] = $item;
-            }
-            $configs->SaveConfig('menu',$new_menu,$root,false);
-
-            $groups = $configs->GetConfig('groups',$root);
-            $new_groups = array();
-            foreach( $groups as $key => $group )
-            {
-                $group['group_name'] = _( ($group['group_name']) );
-                $new_groups[$key] = $group;
-            }
-            $configs->SaveConfig('groups',$new_groups,$root,false);
-        }
-        */
     }
 }
 
