@@ -315,7 +315,7 @@ class CCUpload
         $temp_up = new CCUploads();
         CCPage::AddPagingLinks($temp_up,$last_where);
 
-        $this->ListRecords(&$records, empty($macro) ? '' : $macro);
+        $this->ListRecords($records, empty($macro) ? '' : $macro);
 
         $result = true;
     }
