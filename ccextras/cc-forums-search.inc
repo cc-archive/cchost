@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: cc-reviews.php 3291 2006-05-11 06:27:20Z fourstones $
+* $Id$
 *
 */
 

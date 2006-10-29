@@ -214,14 +214,14 @@ class CCForums
         $fsa->PostNew($this,$forum_id);
     }
 
-    function ViewThread($thread_id)
+    function ViewThread($thread_id='')
     {
         require_once('ccextras/cc-forums.inc');
         $fsa = new CCForumAPI();
         $fsa->ViewThread($this,$thread_id);
     }
 
-    function User($username)
+    function User($username='')
     {
         require_once('ccextras/cc-forums.inc');
         $fsa = new CCForumAPI();

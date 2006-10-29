@@ -264,7 +264,7 @@ class CCTopics extends CCTable
                                                   'text' => $text );
                 
                 $tree =& CCTopicTree::GetTable();
-                $awhere['topic_tree_child'] = $row['topic_id'];
+                $awhere['topic_tree_parent'] = $row['topic_id'];
                 $has_children = $tree->CountRows($awhere);
                 if( $has_children )
                 {
@@ -320,6 +320,25 @@ class CCTopics extends CCTable
         }
     }
 
+    function GetDescendantsIDs($topic_id)
+    {
+        $results = array();
+        $topic_tree = CCTopicTree::GetTable();
+        $this->_inner_get_descendants_ids($topic_id,$results,$topic_tree);
+        return $results;
+    }
+
+    function _inner_get_descendants_ids($parent_id,&$results,&$tree)
+    {
+        $w['topic_tree_parent'] = $parent_id;
+        $children = $tree->QueryRows($w);
+        foreach( $children as $child )
+        {
+            $results[] = $child['topic_tree_child'];
+            $this->_inner_get_descendants_ids($child['topic_tree_child'],$results,$tree);
+        }
+    }
+
     function GetTree(&$record,$sort='')
     {
         // this will return recs marked as deleted
@@ -330,6 +349,15 @@ class CCTopics extends CCTable
             $order = '';
 
         $parent_id = $record['topic_id'];
+
+        // upon second look: this CAN'T be even close to the most 
+        // efficient way to do this... why isn't this
+        //
+        //  select * from cc_tbl_topics_tree
+        //        join cc_tbl_topics on topic_id = topic_tree_child
+        //        where topic_tree_parent = $parent_id
+        //
+        // ????
         $sql =<<<END
             SELECT children.*, children.topic_text as topic_text_html, 
                                children.topic_text as topic_text_plain

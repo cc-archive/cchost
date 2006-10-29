@@ -100,9 +100,11 @@ class CCForumAPI
                     $F['num_threads']   = $threads->CountRows($wf);
 
                     $latest_post = $threads->QueryRow($wf);
+
                     if( !empty($latest_post) )
                     {
-                        $url = ccl('thread',$latest_post['forum_thread_id']) . '#' . $latest_post['topic_id'];
+                        $url = ccl('thread',$latest_post['forum_thread_id']) . '#' . 
+                                                $latest_post['topic_id'];
                         $latest_post['permalink'] = $url;
                         $latest_post['user_url'] = ccl('people',$latest_post['user_name']);
                     }
@@ -269,25 +271,39 @@ EOF;
         $topics->AddJoin( $topic_threads, 'topic_thread' );
         $topic = $topics->QueryKeyRow($topic_id);
         $thread_id = $topic['forum_thread_id'];
+
+        // if this topic has children, then those are newer
+
         if( $topic['forum_thread_oldest'] == $topic_id )
         {
             // no more topics left in this thread
             $topic_threads->DeleteKey( $thread_id );
         }
-        elseif( $topic['forum_thread_newest'] == $topic_id )
+        else
         {
-            // the thread is not as new as it used to be
+            if( !($is_newest = ($topic['forum_thread_newest'] == $topic_id)) )
+            {
+                $children = $topics->GetDescendantsIDs($topic_id);
+                foreach( $children as $child_id )
+                    if( ($is_newest = ($topic['forum_thread_newest'] == $child_id)) )
+                        break;
+            }
 
-            // get the next newest topic
-            $topics->SetOffsetAndLimit( 0, 2 );
-            $w['topic_thread'] = $thread_id;
-            $rows = $topics->QueryRows($w);
-            $newest_row =& $rows[1];
+            if( $is_newest )
+            {
+                // the thread is not as new as it used to be
 
-            $tf['forum_thread_newest'] = $newest_row['topic_id'];
-            $tf['forum_thread_date']   = $newest_row['topic_date'];
-            $tf['forum_thread_id']     = $thread_id;
-            $topic_threads->Update($tf);
+                // get the next newest valid topic
+                $w = "(topic_thread = $thread_id) AND (topic_date < '{$topic['topic_date']}')";
+                $topics->SetOrder('topic_date','desc');
+                $topics->SetOffsetAndLimit( 0, 1 );
+                $newest_row = $topics->QueryRow($w);
+
+                $tf['forum_thread_newest'] = $newest_row['topic_id'];
+                $tf['forum_thread_date']   = $newest_row['topic_date'];
+                $tf['forum_thread_id']     = $thread_id;
+                $topic_threads->Update($tf);
+            }
         }
 
         $this->_del_sync($topic_id, $deltype == CCTDF_DEEP);
@@ -381,11 +397,18 @@ EOF;
         global $CC_GLOBALS;
 
         $threads =& CCForumThreads::GetTable();
-        $thread_row = $threads->QueryKeyRow($thread_id);
-        $topic_id = $thread_row['forum_thread_oldest'];
+        if( empty($thread_id) )
+        {
+            $row = array();
+        }
+        else
+        {
+            $thread_row = $threads->QueryKeyRow($thread_id);
+            $topic_id = $thread_row['forum_thread_oldest'];
 
-        $topics =& CCTopics::GetTable();
-        $row = $topics->GetRecordFromID($topic_id);
+            $topics =& CCTopics::GetTable();
+            $row = $topics->GetRecordFromID($topic_id);
+        }
         if( empty($row) )
         {
             $this->_build_bread_crumb_trail(1);
