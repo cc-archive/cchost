@@ -63,6 +63,9 @@ $Id$
         <option value="links_stream">             ${PUB/linkswstream}</option>
         <option value="links_dl">                 ${PUB/linkswdl}    </option>
         <option value="med">                      ${PUB/linksmed}    </option>
+        <tal:block condition="PUB/extra_formats" repeat="fmt PUB/extra_formats">
+          <option value="${fmt/format}">${fmt/name}</option>
+        </tal:block>
       </select>
   </td>
 </tr>

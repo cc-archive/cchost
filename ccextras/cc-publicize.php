@@ -36,6 +36,8 @@ class CCPublicize
 {
     function Publicize($user='')
     {
+        global $CC_GLOBALS;
+
         if( empty($user) )
         {
             if( !($user = CCUser::CurrentUserName()) )
@@ -111,11 +113,48 @@ class CCPublicize
                                You can still get an idea of what of the formatting will look
                                like here:');
 
+        $args['extra_formats'] = array();
+        if( !empty($CC_GLOBALS['pubwizex']) )
+        {
+            $exformats = preg_split('/\s*,\s*/',$CC_GLOBALS['pubwizex']);
+            foreach($exformats as $exformat )
+            {
+                $file = $this->_find_fmt_template($exformat);
+                if( $file )
+                {
+                    $text = file_get_contents($file);
+                    if( preg_match('/FORMAT_NAME\s+_\([\'"](.*)[\'"]\);/U',$text,$m) )
+                    {
+                        $name = $m[1];
+                    }
+                    else
+                    {
+                        $name = $text;
+                    }
+                    $args['extra_formats'][] = array( 'format' => $exformat, 'name' => _($name) );
+                }
+            }
+        }
+
         CCPage::SetTitle( $title );
         CCPage::AddLink('head_links', 'stylesheet', 'text/css', 
             ccd('cctemplates/publicize.css'), 'Default Style');
         CCPage::PageArg('publicize', 'publicize.xml/publicize');
         CCPage::PageArg('PUB', $args, 'publicize');
+    }
+
+    function _find_fmt_template($name)
+    {
+        $trythese = array( $name, 
+                           'formats/' . $name . '.xml',
+                           $name . '.xml',
+                           'formats/' . $name );
+
+        foreach( $trythese as $trythis )
+            if( ($file = CCTemplate::GetTemplate($trythis)) )
+                return $file;
+
+        return false;
     }
 
     /**
@@ -137,11 +176,18 @@ class CCPublicize
                 );
 
             $fields['pubwiz'] =
-               array(  'label'      => _('Show "Publicize Wizard"'),
+               array(  'label'      => _('Show "Publicize Wizard" to'),
                        'form_tip'   => _('Allows visitors to create HTML snippets for their blogs'),
                        'weight'      => 600,
                        'options'    => $options,
                        'formatter'  => 'select',
+                       'flags'      => CCFF_POPULATE );
+
+            $fields['pubwizex'] =
+               array(  'label'      => _('Extra publicize formats'),
+                       'form_tip'   => _('Comma separated format templates. These can be in a \'formats\' directory in your Skins path. (e.g. mplayer, my_links, my_big_links)'),
+                       'weight'      => 601,
+                       'formatter'  => 'textarea',
                        'flags'      => CCFF_POPULATE );
         }
 
