@@ -117,6 +117,8 @@ class CCFeedsRSS extends CCFeed
             $tags = CCTag::TagSplit($tagstr);
             $utags = urlencode(implode(' ',$tags));
             $rss_feed_url  = ccl('feed','rss', $utags);
+            if( !empty($qstring) )
+                $rss_feed_url = url_args( $rss_feed_url, $qstring );
         }
         else
         {

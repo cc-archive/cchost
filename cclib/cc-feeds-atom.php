@@ -62,6 +62,8 @@ class CCFeedsAtom extends CCFeed
             $tags = CCTag::TagSplit($tagstr);
             $utags = urlencode(implode(' ',$tags));
             $atom_feed_url = ccl('feed',CC_FEED_ATOM,$utags);
+            if( !empty($qstring) )
+                $atom_feed_url = url_args( $atom_feed_url, $qstring );
         }
         else
         {
