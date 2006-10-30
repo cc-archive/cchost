@@ -177,7 +177,6 @@ function cc_stats_show()
     else
     {
         $tfile = CCPage::GetViewFile('stats.xml');
-        print_r($tfile);
         $template = new CCTemplate( $tfile );
         $args = array();
         $text = $template->SetAllAndParse($args);
