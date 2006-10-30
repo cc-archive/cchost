@@ -35,6 +35,8 @@ class CCQueryFormats
 {
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
+        global $CC_GLOBALS;
+
         extract($args);
 
         $results = array();
@@ -123,12 +125,14 @@ class CCQueryFormats
                 }
 
                 $configs =& CCConfigs::GetTable();
-                $targs = $configs->GetConfig('ttag');
+                $targs = array_merge($configs->GetConfig('ttag'),$args);
                 $targs['root-url'] = cc_get_root_url() . '/';
                 $targs['home-url'] = ccl();
                 $targs['records']  =& $records;
                 $targs['dochop']   = isset($chop) && $chop > 0;
                 $targs['chop']     = isset($chop) ? $chop : 25;
+                $targs['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+
                 if( !empty($template_args) )
                     $targs = array_merge($template_args);
 
