@@ -513,7 +513,8 @@ class CCFeed
 
         $is_remix_feed = !empty($_GET['remixesof']) || !empty($_GET['remixedby']);
         
-        $args['tags'] = $tags;
+        if( !empty($tags) )
+            $args['tags'] = $tags;
         $args['format']   = $type;
         $args['feed_url'] = ccl('feed',$type,$tags);
         if( !$is_remix_feed )
@@ -528,7 +529,7 @@ class CCFeed
         
         $args = array_merge( $args, $this->GetQueryOptions() );
 
-        if( !$is_remix_feed && empty($tags) && !$this->GetIsDump() )
+        if( !$is_remix_feed && empty($args['tags']) && !$this->GetIsDump() )
         {
             // this is for backwards compat with <3.1 in which
             // the sample pool api would call this method with
