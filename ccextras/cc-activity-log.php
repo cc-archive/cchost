@@ -82,9 +82,9 @@ class CCActivityLogAPI
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('activity'),  array('CCActivityLogAPI','ViewLog'), CC_ADMIN_ONLY,
-                         ccs(__FILE__) , '[clear]',
-                        _('Show activity log'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( ccp('activity'), array('CCActivityLogAPI','ViewLog'),
+                         CC_ADMIN_ONLY, ccs(__FILE__) , '[clear]',
+                         _('Show activity log'), CC_AG_MISC_ADMIN );
     }
 
     /**
@@ -96,13 +96,13 @@ class CCActivityLogAPI
     */
     function ViewLog($arg='')
     {
-        CCPage::SetTitle('View Activity Log');
+        CCPage::SetTitle(_('View Activity Log'));
         $logs =& CCActivityLog::GetTable();
 
         if( $arg == 'clear' )
         {
             $logs->DeleteWhere('1');
-            CCPage::Prompt("Log Cleared");
+            CCPage::Prompt(_('Log Cleared'));
             return;
         }
 

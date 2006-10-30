@@ -54,7 +54,7 @@ class CCBPM
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields['do-bpm'] =
-               array(  'label'      => 'Include BPM in Upload Forms',
+               array(  'label'      => _('Include BPM in Upload Forms'),
                        'value'      => '',
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE);

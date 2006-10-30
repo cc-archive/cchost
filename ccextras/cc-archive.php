@@ -25,7 +25,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCArchive' , 'OnMapUrls') );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCArchive' , 'OnMapUrls') );
 
 /**
 *
@@ -49,7 +49,7 @@ class CCArchive
                 if( !empty($tags) )
                     $trail[] = array( 'url' => ccl('archive','month',$arg1,$tags), 'text' => $tags);
 
-                CCPage::SetTitle( sprintf(_('Archive for %s'),$tstr) . ' [BETA]' );
+                CCPage::SetTitle( sprintf(_('Archive for %s'),$tstr) );
                 $month = $m[1];
                 $where = "SUBSTRING(upload_date,1,7) = '${m[1]}'";
                 CCUpload::ListMultipleFiles($where,$tags,'all');
@@ -70,7 +70,7 @@ class CCArchive
 END;
         $dates = CCDatabase::QueryRows($sql);
 
-        CCPage::SetTitle( _('Monthly Archive') . ' [BETA]' );
+        CCPage::SetTitle( _('Monthly Archive') );
         $html = '<ul>';
         foreach( $dates as $date )
         {
@@ -90,9 +90,11 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('archive'), array('CCArchive','Archive'), CC_DONT_CARE_LOGGED_IN,
-               ccs(__FILE__), '[month/{YYYY-MM}][/tags])', _('Display upload archive for a specific month'),
-            CC_AG_UPLOADS );
+        CCEvents::MapUrl( ccp('archive'), array('CCArchive','Archive'), 
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), 
+                          '[month/{YYYY-MM}][/tags])', 
+                          _('Display upload archive for a specific month'),
+                          CC_AG_UPLOADS );
     }
 
 }

@@ -75,7 +75,7 @@ class CCBlogPing
 
     function Admin()
     {
-        CCPage::SetTitle("Administer Blog Notification");
+        CCPage::SetTitle(_('Administer Blog Notification'));
         $form = new CCAdminBlogPingForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -94,9 +94,9 @@ class CCBlogPing
         {
             $items += array(
                 'blog-ping'   => array( 
-                                 'menu_text'  => 'Blog ping',
-                                 'menu_group' => 'configure',
-                                 'help' => 'Ping your blog on new uploads',
+                                 'menu_text'    => _('Blog ping'),
+                                 'menu_group'   => 'configure',
+                                 'help'         => _('Ping your blog on new uploads'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 40,
                                  'action' =>  ccl('admin','ping')
@@ -173,8 +173,8 @@ class CCBlogPing
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','ping'),  array( 'CCBlogPing', 'Admin'), CC_ADMIN_ONLY,
-                    ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('admin','ping'),  array( 'CCBlogPing', 'Admin'), 
+                          CC_ADMIN_ONLY, ccs(__FILE__) );
     }
 
 }
