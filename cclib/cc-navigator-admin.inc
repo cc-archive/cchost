@@ -140,7 +140,8 @@ _('Clicking on these links will not save your form.') . '</i></p>';
                     'options'    => array( 'any' => _('Match Any Tags'),
                                            'all' => _('Match All Tags'),
                                            'url' => _('Execute URL'),
-                                           'sub' => _('SubTabs')
+                                           'sub' => _('SubTabs'),
+                                           'qry' => _('Query')
                                             ),
                     'flags'      => CCFF_NONE ),
 /*
@@ -353,15 +354,24 @@ class CCNavigatorAdmin
                                 $data = $tab['tags'];
                             }
                         }
-                        elseif( $tab['function'] == 'sub' )
-                        {
-                            // this is the name of sub-navigation tabs set
-                            $data = $tab['tags'];
-                        }
-                        else
+                        elseif( ($tab['function'] == 'any') ||
+                                ($tab['function'] == 'all') )
                         {
                             // this is just tags...
                             $data = CCTags::Normalize($tab['tags']);
+                        }
+                        elseif( $tab['function'] == 'qry' )
+                        {
+                            $data = $tab['tags'];
+
+                            // do we want to wash the query? default is 'page' so
+                            // it works to just leave it out...
+                            // $data = preg_replace('/format=[^;$]+/', '', $tab['tags'] );
+                        }
+                        else
+                        {
+                            // this is the name of sub-navigation tabs set
+                            $data = $tab['tags'];
                         }
 
                         // handle duplicate sort order requests

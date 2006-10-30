@@ -134,7 +134,7 @@ class CCNavigator
         if( empty($default_tab) )
             return;
 
-        $title = $default_tab['text'];
+        $qname = $title = $default_tab['text'];
 
         if( $default_tab['function'] == 'sub' )
         {
@@ -155,7 +155,9 @@ class CCNavigator
 
                 // but populate the title bar
 
-                $page_out->PageArg('backup-title',$title . ' :: ' . $default_tab['text']);
+                $qname = $title . ' :: ' . $default_tab['text'];
+
+                $page_out->PageArg('backup-title',$qname);
 
                 // but yo, don't force title under subtabs, 
 
@@ -182,25 +184,30 @@ class CCNavigator
                 else
                     CCEvents::PerformAction($action);
             }
-            elseif( $default_tab['function'] != 'sub' )
+            else
             {
-                // 4b. Let folks know they can subscribe to this query
-                //     TODO: although the query isn't limited to this vroot!!
+                // 4b. Everything else is a type of query
+                //
 
-                $tagstr = $default_tab['tags'];
-                $taghelp = strlen($tagstr) > 10 ? substr($tagstr,0,8) . '...' : $tagstr;
-                CCFeed::AddFeedLinks($tagstr,'','Tags: ' . $taghelp);
+                if( $default_tab['function'] == 'qry' )
+                {
+                    $qstring = $default_tab['tags'];
+                    parse_str($default_tab['tags'],$args);
+                }
+                else 
+                {
+                    $qstring = 'tags=' . $default_tab['tags'] .
+                               '&type=' . $default_tab['function'];
+                    $args['tags'] = $default_tab['tags'];
+                    $args['type'] = $default_tab['function'];
+                }
 
-                // 4c. Limit queries to this vroot 
-                if( $default_tab['limit'] )
-                    $where['upload_config'] = $CC_CFG_ROOT;  // todo: this needs to be thought out a bit
-                else
-                    $where = '';
+                $args['feed'] = $qname;
+                $args['qstring'] = $qstring;
 
-                // 4d. The tab is a tag-based query of the uploads
-                //     database
-
-                CCUpload::ListMultipleFiles($where,$default_tab['tags'],$default_tab['function']);
+                $query = new CCQuery();
+                $args = $query->ProcessAdminArgs($args);
+                $query->Query($args);
             }
 
             if( !empty($title) )
@@ -397,6 +404,7 @@ class CCNavigator
         CCEvents::MapUrl( 'view',             array('CCNavigator', 'View'),            
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[tab_set]/[tab]/[subtab]',
             _('Perform view tabs actions'), CC_AG_CONFIG );
+
         CCEvents::MapUrl( 'admin/tabs',       array('CCNavigator', 'AdminTabs'),       
             CC_ADMIN_ONLY, ccs(__FILE__), '',
             _('Display admin navigator tabs form'), CC_AG_CONFIG  );
