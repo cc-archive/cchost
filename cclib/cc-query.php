@@ -105,22 +105,7 @@ class CCQuery
         // get the '+' out of the tag str
         $args['tags'] = str_replace( ' ', ',', urldecode($args['tags']));
 
-        if( $args['format'] == 'page' )
-        {
-            $configs      =& CCConfigs::GetTable();
-            $settings     = $configs->GetConfig('settings');
-            $admin_limit  = $settings['max-listing'];
-        }
-        else
-        {
-            $admin_limit = empty($CC_GLOBALS['querylimit']) ? 0
-                            : $CC_GLOBALS['querylimit'];
-        }
-
-        if( !empty($admin_limit) && (empty($args['limit']) || ($admin_limit < $args['limit'])) )
-        {
-            $args['limit'] = $admin_limit;
-        }
+        $this->_check_limit($args);
 
         $k = array_keys($args);
         $n = count($k);
@@ -132,6 +117,59 @@ class CCQuery
             $args['validated_sort'] = $this->_validate_sort_fields($sort);
 
         return $args;
+    }
+
+    function ProcessAdminArgs($args,$extra_args=array())
+    {
+        if( is_string($args) )
+            parse_str($args,$args);
+
+        $args = array_merge($this->GetDefaultArgs(),$args);
+        $args = array_merge($args,$extra_args); // Calling code can override 
+
+        if( $args['tags'] )
+        {
+            // clean up tags 
+            $args['tags'] = join(',',CCTag::TagSplit($args['tags']));
+        }
+
+        $this->_check_limit($args);
+
+        if( !empty($sort) )
+            $args['validated_sort'] = $this->_validate_sort_fields($sort);
+
+        return $args;
+    }
+
+    function SerializeArgs($args,$skip_format=true)
+    {
+        $keys = array_keys($args);
+        $default_args = $this->GetDefaultArgs();
+        $str = '';
+        $fmtargs = array( 'format', 'template', 'tmacro', 'macro', 'paging' );
+        foreach( $keys as $K )
+        {
+            // I have to believe skipping qstring is the right thing here...
+            if( $K == 'qstring' || $K == 'ccm' )
+                continue;
+
+            if( $skip_format && in_array( $K, $fmtargs ) ) 
+                continue;
+
+            if( array_key_exists($K,$default_args) )
+            {
+                if( $args[$K] == $default_args[$K] )
+                    continue;
+            }
+            if( empty($args[$K]) ) // um, is this right? what if 
+                continue;          // it overrides a default for some random formatter?
+
+            if( !empty($str) )
+                $str .= '&';
+            $str .= $K . '=' . $args[$K];
+        }
+
+        return $str;
     }
 
     function GetDefaultArgs()
@@ -173,12 +211,20 @@ class CCQuery
                     'unsub' => 0,
 
                     'format' => 'page', 
+                    'paging' => true,
+                    'title'  => '',
 
                     );
     }
 
     function Query($args)
     {
+        // do this before we start messing around with
+        // the args...
+
+        if( !isset( $args['qstring']) )
+            $args['qstring'] = $this->SerializeArgs($args);
+
         extract($args);
 
         // Get a new table so we can smash it about
@@ -376,6 +422,13 @@ class CCQuery
         if( !empty($q) )
         {
             $where[] = "(LOWER(CONCAT(upload_description,upload_tags,user_real_name,user_name,upload_name)) LIKE '%$q%'";
+        }
+
+        // vroot 
+
+        if( !empty($vroot) )
+        {
+            $where[] = "(upload_config = '$vroot')";
         }
 
         // banned
@@ -677,6 +730,34 @@ class CCQuery
         }
 
         return '( ' . join(',',$out) . ') ';
+    }
+
+    function _get_get_offset(&$args)
+    {
+        if( !empty($args['getoffset']) && !empty($_GET['offset']) )
+            $args['offset'] = sprintf('%0d',$_GET['offset']);
+    }
+
+    function _check_limit(&$args)
+    {
+        global $CC_GLOBALS;
+
+        if( $args['format'] == 'page' )
+        {
+            $configs      =& CCConfigs::GetTable();
+            $settings     = $configs->GetConfig('settings');
+            $admin_limit  = $settings['max-listing'];
+        }
+        else
+        {
+            $admin_limit = empty($CC_GLOBALS['querylimit']) ? 0
+                            : $CC_GLOBALS['querylimit'];
+        }
+
+        if( !empty($admin_limit) && (empty($args['limit']) || ($admin_limit < $args['limit'])) )
+        {
+            $args['limit'] = $admin_limit;
+        }
     }
 
 } // end of class CCQuery
