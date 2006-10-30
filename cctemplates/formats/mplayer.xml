@@ -1,0 +1,20 @@
+<div id="cc_mplayer">
+<!-- FORMAT_NAME _("Fabricio Zuardi's Music Player (Requires Flash)"); -->
+<tal:block define="h height | 15" />
+<!-- see http://http://musicplayer.sourceforge.net -->
+<tal:block define="url php: urlencode(${home-url} . 'api/query' . ${q} . ${qstring} . '&format=xspf');" />
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+    codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" 
+    id="xspf_player" align="middle" height="${h}" width="400">
+  <param name="allowScriptAccess" value="sameDomain" />
+  <param name="movie" 
+    value="http://musicplayer.sourceforge.net/xspf_player_slim.swf?playlist_url=${url}&autoplay=true" />
+  <param name="quality" value="high" />
+  <param name="bgcolor" value="#e6e6e6" />
+  <embed src="http://musicplayer.sourceforge.net/xspf_player_slim.swf?playlist_url=${url}&autoplay=true" 
+     quality="high" bgcolor="#e6e6e6" name="xspf_player" allowscriptaccess="sameDomain" 
+     type="application/x-shockwave-flash" 
+     pluginspage="http://www.macromedia.com/go/getflashplayer" 
+     align="center" height="${h}" width="400" />
+</object>
+</div>

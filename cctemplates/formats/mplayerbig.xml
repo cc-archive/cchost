@@ -1,0 +1,5 @@
+<tal:block>
+<tal:block replace="">FORMAT_NAME _("Fabricio Zuardi's Music Player BIG (Requires Flash)");</tal:block>
+<tal:block define="height 153" />
+<phptal:block include="string:mplayer.xml" />
+</tal:block>
