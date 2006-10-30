@@ -382,6 +382,38 @@ function & CC_cache_query(
     return $rows;
 }
 
+function CC_get_config_roots()
+{
+    $configs = CCConfigs::GetTable();
+    $roots = $configs->GetConfigRoots();
+    $keys = array_keys($roots);
+    foreach( $keys as $k )
+        $roots[$k]['url'] = ccc($roots[$k]['config_scope']);
+    return $roots;
+}
+
+/*
+  hold on...
+function cc_query_fmt($qstring)
+{
+    if( empty($qstring) )
+        return array();
+    
+    if( !preg_match_all( '/(?:,|^)(.*):(.*)(?=,|$)/U',$qstring,$m,PREG_SET_ORDER) )
+        return array();
+
+    $query = new CCQuery();
+    $args = $query->GetDefaultArgs();
+    $args['format'] = 'php';
+    foreach( $m as $match )
+    {
+        $args[$match[1]] = $match[2];
+    }
+
+    return $query->Query($args);
+}
+*/
+
 /**
 * Fetch a list of records
 *

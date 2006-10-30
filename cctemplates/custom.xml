@@ -57,8 +57,8 @@ $Id$
 <metal:block define-macro="Virtual_Roots">
   <p tal:content="php: CC_lang('Mini Sites');" />
   <ul>
-    <li tal:repeat="item php: CC_query('CCConfigs','GetConfigRoots')">
-      <a href="${root-url}${item/config_scope}">${item/scope_name}</a>
+    <li tal:repeat="item php: CC_get_config_roots()">
+      <a href="${item/url}">${item/scope_name}</a>
     </li>
   </ul>
 </metal:block>
