@@ -288,7 +288,8 @@ class CCUpload
         if( strtolower($format) != 'page' )
             return;
 
-        CCPage::SetTitle(_('Query Results'));
+        if( !empty($title) )
+            CCPage::SetTitle($title);
 
         if( !empty($tmacro) )
         {
@@ -316,6 +317,16 @@ class CCUpload
         CCPage::AddPagingLinks($temp_up,$last_where);
 
         $this->ListRecords($records, empty($macro) ? '' : $macro);
+
+        if( !empty($feed) )
+        {
+            // Let folks know they can subscribe to this query
+
+            $feed = strlen($feed) > 10 ? substr($feed,0,8) . '...' : $feed;
+            $tags = empty($tags) ? '' : $tags;
+            $qstring = empty($qstring) ? '' : $qstring;
+            CCFeed::AddFeedLinks( $tags, $qstring, $feed);
+        }
 
         $result = true;
     }
