@@ -27,12 +27,13 @@
 
 error_reporting(E_ALL);
 
-
 /**
 * Install licenses to use in this installation
 */
 function cc_install_licenses()
 {
+    // @todo -- domains
+
     $default_licenses= array( 
                 array( 'license_id'         => 'attribution',
                        'license_url'        => "http://creativecommons.org/licenses/by/2.5/",
