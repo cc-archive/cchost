@@ -539,7 +539,15 @@ class CCLogin
         if( empty($_POST['userlogin']) || !$form->ValidateFields() )
         {
             if( !empty($confirm) )
-                CCPage::Prompt(_("Your new login information has been sent to your email address."));
+            {
+                $reg_type = empty($CC_GLOBALS['reg-type']) ? null : $CC_GLOBALS['reg-type'];
+                if( $reg_type == CC_REG_ADMIN_EMAIL )
+                    $rmsg = _('You registration request has been forwarded to the site administrators.');
+                elseif( $reg_type == CC_REG_USER_EMAIL )
+                    $rmsg = _("Your new login information has been sent to your email address.");
+                if( !empty($rmsg) )
+                    CCPage::Prompt($rmsg);
+            }
 
             CCEvents::Invoke(CC_EVENT_LOGIN_FORM,array(&$form));
             CCPage::SetTitle(_("Log In"));
