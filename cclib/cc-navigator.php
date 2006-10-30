@@ -153,8 +153,13 @@ class CCNavigator
 
                 $page_out->PageArg('sub_nav_tabs',$sub_tab_info);
 
-                $title .= ' :: ' . $default_tab['text'];
+                // but populate the title bar
 
+                $page_out->PageArg('backup-title',$title . ' :: ' . $default_tab['text']);
+
+                // but yo, don't force title under subtabs, 
+
+                $title = ''; 
             }
         }
 
@@ -200,8 +205,7 @@ class CCNavigator
 
             if( !empty($title) )
             {
-                $page_out->PageArg('backup-title',$title);
-                //$page_out->PageArg('skip-title',true);
+                $page_out->SetTitle($title);
             }
         }
     }

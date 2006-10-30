@@ -212,7 +212,11 @@ class CCPage extends CCTemplate
          else
            $page =& $this;
 
-        $file = $page->GetViewFile($template);
+        if( !($file = $page->GetViewFile($template)) && !preg_match('/\.xml$/',$template) )
+        {
+            $file = $page->GetViewFile($template . '.xml');
+        }
+
         if( empty($file) )
         {
             $page->Prompt( sprintf(_("Can't find %s template"),$template) );
@@ -220,22 +224,26 @@ class CCPage extends CCTemplate
         }
         else
         {
-            if( empty($page->_page_args['page-title']) )
-            {
-                // um, bit of a hack but I can't figure out another
-                // to have the <h1> tag in the file end up in the title 
-                // of the browser (?),
-                $r1 = '<h1[^>]*>(.*)</h1'; // normal h1
-                $r2 = '<h1[^>]+((_|CC_Lang)\([\'"]([^\)]+)[\'"]\))[^<]+/>'; // lang'ized
-                $contents = file_get_contents($file); 
-                if( preg_match("#(($r1)|($r2))#Uis",$contents,$m) )
-                {
-                    // inner most capture
-                    $page->_page_args['page-caption'] = stripslashes($m[ count($m) - 1 ]); 
-                }
-            }
-              
             $page->_body_template = $file;
+        }
+    }
+
+    function _check_for_title(&$page,$contents)
+    {
+        // um, bit of a hack but I can't figure out another
+        // to have the <h1> tag in the file end up in the title 
+        // of the browser (?),
+        $r1 = '<h1[^>]*>(.*)</h1'; // normal h1
+        $r2 = '<h1[^>]+((_|CC_Lang)\([\'"]([^\)]+)[\'"]\))[^<]+/>'; // lang'ized
+        if( preg_match("#(($r1)|($r2))#Uis",$contents,$m) )
+        {
+
+            // inner most capture will be used for title bar
+            $page->_page_args['page-caption'] = stripslashes($m[ count($m) - 1 ]);
+
+            // disable the tempalte's H1 code
+            $page->_page_args['page-title'] = '';
+            $page->_reject_title = true;
         }
     }
 
@@ -285,7 +293,19 @@ class CCPage extends CCTemplate
     */
     function SetTitle( $title )
     {
-        CCPage::PageArg('page-title',$title);
+        if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
+           $page =& CCPage::GetPage();
+         else
+           $page =& $this;
+
+        if( empty($page->_reject_title) )
+        {
+            CCPage::PageArg('page-title',$title);
+        }
+        else
+        {
+            CCPage::PageArg('page-title',false);
+        }
     }
 
     /**
@@ -461,6 +481,17 @@ class CCPage extends CCTemplate
             $page->AddPrompt('body_text',$body);
         }
 
+        // wow...
+        if( !empty($page->_page_args['prompts']) )
+        {
+            $prompts = $page->_page_args['prompts'];
+            foreach( $prompts as $P )
+                if( $P['name'] = 'body_text' )
+                    $page->_check_for_title($page,$P['value']);
+        }
+        if( !empty($page->_page_args['body_html']) )
+            $page->_check_for_title($page,$page->_page_args['body_html']);
+
         /////////////////
         // Step 6
         //
@@ -490,7 +521,7 @@ class CCPage extends CCTemplate
         if( !empty($_REQUEST['dump_page']) && $isadmin )
              CCDebug::PrintVar($page->_page_args,false);
 
-        //CCDebug::LogVar('page environment',$page->_page_args);
+        // CCDebug::LogVar('page environment',$page->_page_args);
     
         if( !empty($CC_GLOBALS['no-cache']) )
             CCEvents::_send_no_cache_headers();
