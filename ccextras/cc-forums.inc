@@ -484,7 +484,7 @@ EOF;
 
         CCPage::PageArg('show_cmds', true);
         CCPage::PageArg('forum_cmds', $commands );
-        CCPage::PageArg('topics',&$records,'forum_topic');
+        CCPage::PageArg('topics', $records,'forum_topic');
 
         $name = $row['topic_name'];
         $title = sprintf('"%s"',$name);
@@ -605,7 +605,7 @@ EOF;
             $url = ccl('feed','rss','forums');
 
         $feed = new CCTopicsFeed();
-        $feed->Feed(&$records,$title,'rss',$url);
+        $feed->Feed($records,$title,'rss',$url);
 
     }
 
