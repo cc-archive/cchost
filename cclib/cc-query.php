@@ -134,6 +134,7 @@ class CCQuery
         }
 
         $this->_check_limit($args);
+        $this->_get_get_offset($args);
 
         if( !empty($sort) )
             $args['validated_sort'] = $this->_validate_sort_fields($sort);
@@ -734,7 +735,7 @@ class CCQuery
 
     function _get_get_offset(&$args)
     {
-        if( !empty($args['getoffset']) && !empty($_GET['offset']) )
+        if( empty($args['nogetoffset']) && !empty($_GET['offset']) )
             $args['offset'] = sprintf('%0d',$_GET['offset']);
     }
 
