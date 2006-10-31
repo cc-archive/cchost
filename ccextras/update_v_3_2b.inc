@@ -34,7 +34,7 @@ class v_3_2b extends CCUpdate
     {
         $this->_update_ratings();
 
-        CCPage::Prompt('ratings installed');
+        CCPage::Prompt(_('Ratings Installed'));
    }
 
     function _update_ratings()

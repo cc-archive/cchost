@@ -42,7 +42,7 @@ class v_3_2c extends CCUpdate
         $configs =& CCConfigs::GetTable();
         $configs->SaveConfig('ttag',$newtags);
 
-        CCPage::Prompt("Added Thumbnail Constrain Tag");
+        CCPage::Prompt(_("Added Thumbnail Constrain Tag"));
     }
 }
 

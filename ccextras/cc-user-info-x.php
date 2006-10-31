@@ -80,7 +80,7 @@ class CCUserInfoForm extends CCForm
                 'flags'     => CCFF_POPULATE | CCFF_REQUIRED),
             'ux_birthdate' => array(
                 'label'     => _('Date of birth'),
-                'form_tip'  => _('You must be 15 or older to be elligable'),
+                'form_tip'  => _('You must be 15 or older to be eligible'),
                 'formatter' => 'date',
                 'day_only'  => true,
                 'value'     => date('Y-m-d', $fifteen_yo),
@@ -91,15 +91,9 @@ class CCUserInfoForm extends CCForm
 
         $this->AddFormFields($fields);
 
-        $help =<<<END
-The information on this screen will be never appear on the site but is necessary in order to
-officially enter you into the contest and make sure the contest is fair as well as give us 
-a way to reach you if you win. All the fields must be filled in with the proper information or
-your entry will be disqualified.<br /><br />
-You must be <b>at least 15 years old</b> to participate in this contest.<br /><br />
-You will be able to edit this information if it changes before the contest closes by
-clicking on the '<b>Edit Your Profile</b>' link on the left.
-END;
+        $help = _('The information on this screen will be never appear on the site. However, it is necessary in order to officially enter you into the contest and make sure the contest is fair as well as give us a way to reach you if you win.') . ' ' . _('All the fields must be filled in with the proper information or your entry will be disqualified.') . '<br /><br />' . _('You must be <b>at least 15 years old</b> to participate in this contest.') . '<br /><br />' . 
+_('You will be able to edit this information if it changes before the contest closes by clicking on the <b>Edit Your Profile</b> link in the sidebar menu.');
+
         $this->SetFormHelp(_($help));
     }
 }
@@ -222,7 +216,7 @@ class CCUserInfoX
                     continue;
                 $nice_name = $contests->GetFriendlyNameFromShortName($contest);
                 $url = ccl('contest','userinfo',$contest,'edit');
-                $value = "<a style=\"width:180px\" href=\"$url\" class=\"cc_gen_button\"><span>For \"$nice_name\"</span></a>";
+                $value = "<a style=\"width:180px\" href=\"$url\" class=\"cc_gen_button\"><span>\"$nice_name\"</span></a>";
                 $fields[ $contest . '_uinfo_link'] = 
                             array( 'label'      => _('Contest Entry Info'),
                                    'form_tip'   => _('Edit your personal contest information'),

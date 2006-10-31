@@ -34,7 +34,7 @@ class v_3_1d extends CCUpdate
     {
         $this->_update_last_edit();
 
-        CCPage::Prompt('Last edit column installed');
+        CCPage::Prompt(_('Last edit column installed'));
    }
 
 

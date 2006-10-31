@@ -48,7 +48,7 @@ class v_3_2d extends CCUpdate
             $configs->SaveConfig('config',$newcfg,'',true);
         }
 
-        CCPage::Prompt("Super admins created from admins");
+        CCPage::Prompt(_("Super admins created from admins"));
     }
 
     function _update_null_fields()
@@ -82,7 +82,7 @@ class v_3_2d extends CCUpdate
         );
 
       $this->_update_table('cc_tbl_uploads',$uploads);
-      CCPage::Prompt('Null table columns updated');
+      CCPage::Prompt(_('Null table columns updated'));
     }
 
     function _update_table($table,$defs)

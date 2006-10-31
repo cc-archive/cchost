@@ -187,7 +187,7 @@ END;
             $user_row  = $users->QueryRow("user_name = '$user_name'");
             if( empty($user_row) )
             {
-                CCPage::Prompt(_('Can not find that user'));
+                CCPage::Prompt(_('Cannot find that user'));
                 CCUtil::Send404(false);
                 return;
             }
@@ -197,7 +197,7 @@ END;
                 $R = $uploads->GetRecordFromID($upload_id);
                 if( empty($R) )
                 {
-                    CCPage::Prompt(_('Can not find that upload, it may have been removed by the owner'));
+                    CCPage::Prompt(_('Cannot find that upload. It may have been removed by the owner.'));
                     CCUtil::Send404(false);
                     return;
                 }
@@ -253,13 +253,13 @@ END;
                     $link_query = 'qtype=leftby';
                 }
                    
-                $title = sprintf(_("Reviews left $title_for_by %s"),$user_real);
+                $title = sprintf(_("Reviews left %s"), "$title_for_by $user_real");
                 CCPage::SetTitle($title);
                 
                 $pagelinks = CCPage::AddPagingLinks($uploads,$where,NUM_REVIEWS_PER_PAGE);
                 $args['topics'] =& $uploads->GetRecords($where);
 
-                $left_text = sprintf(_("See reviews left $link_for_by %s"),$user_real);
+                $left_text = sprintf(_("See reviews left %s"), "$link_for_by $user_real");
                 $left_url = ccl('reviews',$user_name);
                 if( $link_query )
                     $left_url = url_args($left_url,$link_query);
@@ -303,13 +303,12 @@ END;
             if( $upload_id )
             {
                 $url = ccl('feed','rss','reviews',$user_name,$upload_id);
-                $help = sprintf( _('<br />Reviews left for<br /> "%s"'), CC_strchop($R['upload_name'],16) );
+                $help = '<br />' . sprintf( _('Reviews left for "%s"'), '<br /> ' . CC_strchop($R['upload_name'],16) );
             }
             else
             {
                 $url = ccl('feed','rss','reviews',$user_name);
-                $help = sprintf( _('<br />Reviews left for<br /> %s'), 
-                                        CC_strchop($user_row['user_real_name'],16) );
+                $help = '<br />' . sprintf( _('Reviews left for "%s"'), '<br /> ' . CC_strchop($user_row['user_real_name'],16) );
             }
         }
         else
@@ -387,7 +386,7 @@ END;
 
         if( empty($CC_GLOBALS['reviews_enabled']) )
         {
-            CCPage::Prompt(_("review integration is not enabled"));
+            CCPage::Prompt(_("Review integration is not enabled."));
             exit;
         }
 
@@ -458,7 +457,8 @@ END;
         {
             $row['commands']['new_review'] = 
                                      array( 
-                                        'url' => ccl('reviews','post',$upload_id ),
+                                        'url' => ccl('reviews','post',
+                                                     $upload_id ),
                                         'script' => '',
                                         'text' => _('Write Review') );
         }
@@ -526,7 +526,7 @@ END;
 
         if( empty($CC_GLOBALS['reviews_enabled']) )
         {
-            CCPage::Prompt("review integration is not enabled");
+            CCPage::Prompt(_('Review integration is not enabled.'));
             return;
         }
 
@@ -534,7 +534,7 @@ END;
         $R = $uploads->GetRecordFromID($upload_id);
         if( empty($R) )
         {
-            CCPage::Prompt(_('Can not find that upload.'));
+            CCPage::Prompt(_('Cannot find that upload.'));
             CCUtil::Send404(false);
             return;
         }
@@ -551,7 +551,7 @@ END;
             $R['local_menu'] = CCUpload::GetRecordLocalMenu($R);
             unset($R['local_menu']['comment']);
 
-            CCPage::SetTitle(sprintf(_("Write a Review for '%s'"),$R['upload_name']));
+            CCPage::SetTitle(sprintf(_('Write a Review for "%s"'),$R['upload_name']));
 
             $form->GenerateForm();
             $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
@@ -571,7 +571,7 @@ END;
             if( !$this->_can_review($R) )
             {
                 // submit was hit twice
-                CCPage::Prompt(_("You've already reviewed this upload"));
+                CCPage::Prompt(_("You have already reviewed this upload."));
             }
             else
             {
@@ -583,7 +583,8 @@ END;
                 $values['topic_user'] = CCUser::CurrentUser();
                 $values['topic_type'] = 'review';
                 $user_real = CCUser::CurrentUserField('user_real_name');
-                $values['topic_name'] = sprintf(_("%s's Review of '%s'"),$user_real,$R['upload_name']);
+                $values['topic_name'] = sprintf(_("Review of '%s' by '%s'"), 
+                                                $R['upload_name'], $user_real);
                 $reviews->Insert($values);
                 $this->Sync($upload_id,$values['topic_user']);
 
@@ -652,25 +653,19 @@ END;
             if( empty($record['user_num_reviewed']) )
                 return;
 
-            $text = sprintf('%s has not left any reviews ',$name);
+            $text = sprintf('%s has not left any reviews', $name) . ' ';
         }
         else
         {
-	    // TODO: Convert this to language plurals
             $count = $record['user_num_reviews'];
             $byurl = url_args($url,'qtype=leftby');
             $link  = "<a href=\"$byurl\">";
-	    $link_close = "</a>";
-            if( $count == 1 )
-            {
-                $fmt   = _('%s has left %s1 review ');
-            }
-            else
-            {
-                $fmt   = _('%s has left %s%d reviews ');
-            }
+	        $link_close = "</a>";
             
-            $text  = sprintf($fmt . $link_close, $name, $link, $count );
+            $fmt = N_('%s has left %s%d review.%s',
+                      '%s has left %s%d reviews.%s', $count );
+            
+            $text  = sprintf($fmt, $name, $link, $count, $link_close );
         }
 
         if( empty($record['user_num_reviewed']) )
@@ -680,24 +675,18 @@ END;
         else
         {
             $count = $record['user_num_reviewed'];
-	    // TODO: Convert this to language plurals
             $link  = "<a href=\"$url\">";
-	    $link_close = "</a>";
-            if( $count == 1 )
-            {
-                $fmt   = _('and has been reviewed %sonce ');
-            }
-            else
-            {
-                $fmt   = _('and has been reviewed %s%d times ');
-            }
-            
-            $text  .= sprintf($fmt . $link_close, $link, $count);
+	        $link_close = "</a>";
+
+            $fmt = N_('%s has been reviewed %s%d time.%s',
+                      '%s has been reviewed %s%d times.%s', $count);
+
+            $text  .= sprintf($fmt, $name, $link, $count, $link_close);
         }
 
-        $record['user_fields'][] = array( 'label' => _('Reviews'), 
-                                          'value' => $text,
-                                          'id' => 'user_review_stats' );
+        $record['user_fields'][] = array( 'label'   => _('Reviews'), 
+                                          'value'   => $text,
+                                          'id'      => 'user_review_stats' );
 
     }
 
@@ -851,7 +840,7 @@ END;
                 if( !empty($upload_name) )
                 {
                     $w['topic_upload'] = $upload_id;
-                    $title = sprintf( _('Reivews left for "%s" by %s'), $upload_name, $user_real_name );
+                    $title = sprintf( _('Reviews left for %s by %s'), $upload_name, $user_real_name );
                 }
             }
             else
@@ -898,8 +887,8 @@ END;
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields['reviews_enabled'] =
-               array(  'label'      => 'Enable Reviews',
-                       'form_tip'   => 'Allow users to reivew uploads',
+               array(  'label'      => _('Enable Reviews'),
+                       'form_tip'   => _('Allow users to review uploads'),
                        'value'      => '1',
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE );
@@ -995,7 +984,7 @@ END;
 
         if( empty($count) )
         {
-            CCPage::Prompt(_('Sorry, no reviews match'));
+            CCPage::Prompt(_('Sorry, no reviews match.'));
         }
         else
         {

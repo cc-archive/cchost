@@ -49,15 +49,13 @@ class CCLanguageEditor
         $tt = $this->_get_lang_file($domain);
         $encoded = htmlentities($tt[$hash][0]);
         $string = $tt[$hash][ $cmd == 'revert' ? 0 : 1 ];
-        $html =<<<END
-     <div class="org_title">Original String</div>
-     <div class="org_string">$encoded</div>
-     <div class="org_title">Translates to:</div>
-     <textarea id="translated" name="translated" rows="11" cols = "45">$string</textarea>
-     <div><br /><a id="commentcommand" href="#" onclick='do_edit_string("$hash")'><span>Commit Changes</span></a> &nbsp; &nbsp; to: $target_file</div><br />
-     <div><br /><a id="commentcommand" href="#" onclick='do_get_string("$hash","revert")'><span>Revert</span></a></div>
-END;
-
+        $html =
+     '<div class="org_title">' . _('Original String') . '</div>
+     <div class="org_string">' . $encoded . '</div>
+     <div class="org_title">' . _('Translates to') . ':</div>
+     <textarea id="translated" name="translated" rows="11" cols = "45">' . $string . '</textarea>
+     <div><br /><a id="commentcommand" href="#" onclick="do_edit_string("' . $hash . '")"><span>' . _('Commit Changes') . '</span></a> &nbsp; &nbsp; ' . _('to') . ': ' . $target_file . '</div><br />
+     <div><br /><a id="commentcommand" href="#" onclick="do_get_string("' . $hash . '","revert")"><span>' . _('Revert') . '</span></a></div>';
        print $html;
        exit;
     }
@@ -65,7 +63,7 @@ END;
     function EditString($domain,$hash)
     {
         if( empty($hash) ) {
-            print("Invalid hash");
+            print(_("Invalid hash"));
             exit;
         }
 
@@ -77,7 +75,7 @@ END;
         fwrite($f,$text);
         fclose($f);
         chmod($target_file,cc_default_file_perms());
-        print("Changes saved");
+        print(_("Changes saved"));
         exit;
     }
 
@@ -124,7 +122,7 @@ END;
         $pot_file = "cchost.pot";
         if( !file_exists($pot_file) )
         {
-            CCPage::SystemError(_('Can not find language map') . " ($pot_file)" );
+            CCPage::SystemError(_('The system cannot find the language map') . ": ($pot_file)" );
             return;
         }
         $this->_parse_pot_file($pot_file,$lang_file);

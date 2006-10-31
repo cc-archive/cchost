@@ -42,7 +42,7 @@ class CCPublicize
         {
             if( !($user = CCUser::CurrentUserName()) )
             {
-                CCPage::Prompt(_('Don\'t know what user to publicize!'));
+                CCPage::Prompt(_("Don't know what user to publicize!"));
                 return;
             }
         }
@@ -62,23 +62,22 @@ class CCPublicize
         {
             $args['intro'] = _('Do you have a blog or web page? You can display a list of up-to-the-minute links to your latest remixes directly on your page.');
             $args['yourremixes'] = _('Your remixes');
-            $args['othersremixes'] = _('Other peoples\'s remixes of you.');
-            $args['allyourups'] = _('All your uploads');
+            $args['othersremixes'] = _("Other peoples's remixes of you.");
+            $args['allyourups'] = _('All of your uploads');
             $title = _('Publicize Yourself');
         }
         else
         {
-            $args['intro'] = sprintf( _('Do you have a blog or web page? You can display a list of up-to-the-minute links to %s\'s latest remixes directly on your page.'), 
-                            '<b>' . $record['user_real_name'] . '</b>' );
-            $args['yourremixes'] = sprintf( _('%s\'s remixes'), $record['user_real_name'] );
-            $args['othersremixes'] = sprintf( _('Other peoples\'s remixes of %s'),
+            $args['intro'] = sprintf( _("Do you have a blog or web page? You can display a list of up-to-the-minute links to latest remixes of %s directly on your page."), '<b>' . $record['user_real_name'] . '</b>' );
+            $args['yourremixes'] = sprintf( _("%s's remixes"), $record['user_real_name'] );
+            $args['othersremixes'] = sprintf( _("Other peoples's remixes of %s"),
                                          $record['user_real_name'] );
             $args['allyourups'] = sprintf( _('All %s\'s uploads'), $record['user_real_name'] );
             $title = sprintf( _('Publicize %s'), $record['user_real_name'] );
         }
 
-        $args['step1'] = _('1. Select from these options:');
-        $args['step2'] = _('2. Then copy the text from this field and paste into your page:');
+        $args['step1'] = _('1. Select from the following options:');
+        $args['step2'] = _('2. Then copy the text from this field and paste it into your page:');
 
         $args['typeoflinks'] = _('Type of links:');
         $args['numlinks']    = _('Number of links:');
@@ -100,18 +99,14 @@ class CCPublicize
         $args['chars10']     = _('10 characters');
         $args['chars20']     = _('20 characters');     
         $args['chars25']     = _('25 characters');     
-        $args['dontchop']    = _('Don\'t do any chopping');
+        $args['dontchop']    = _("Don't do any chopping");
 
         $args['seehtml']       = _('Show raw HTML');
         $args['showformatted'] = _('Show Formatted');
         
         $args['preview'] = _('Preview');
-        $args['previewwarn'] = _('This preview has been pre-formatted, how this will actually 
-                                  look on your web page will change depending on your style settings.');
-        $args['htmlwarn'] = _('Make sure to copy from the box above, not what is showing below because 
-                               the actual content of this HTML will change based on the upload activity. 
-                               You can still get an idea of what of the formatting will look
-                               like here:');
+        $args['previewwarn'] = _('This preview is pre-formatted. How this will actually look on your web page will change depending on your stylesheet settings.');
+        $args['htmlwarn'] = _('Make sure to copy from the box above, not what is showing below because the actual content of this HTML will change based on the upload activity. You can still get an idea of what of the formatting will look like here:');
 
         $args['extra_formats'] = array();
         if( !empty($CC_GLOBALS['pubwizex']) )

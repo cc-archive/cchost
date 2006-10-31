@@ -112,7 +112,7 @@ class CCForumsSearchAPI
 
         if( empty($count) )
         {
-            CCPage::Prompt(_('Sorry, no topics match'));
+            CCPage::Prompt(_('Sorry, no topics match.'));
         }
         else
         {

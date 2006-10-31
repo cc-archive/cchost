@@ -37,19 +37,19 @@ class CCDisableSiteForm extends CCEditConfigForm
 
 
         $fields['site-disabled'] =
-               array( 'label'       => 'Disable Site',
-                       'form_tip'   => 'Check this to disable your site from users',
+               array(  'label'      => _('Disable Site'),
+                       'form_tip'   => _('Check this to disable your site from users'),
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE);
         $fields['enable-password'] =
-               array( 'label'       => 'Admin Password',
-                       'form_tip'   => 'This password will allow admins to continue passed disabling.',
+               array( 'label'       => _('Admin Password'),
+                       'form_tip'   => _('This password will allow admins to continue passed disabling.'),
                        'formatter'  => 'password',
                        'nomd5'      => true,
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
         $fields['disabled-msg'] =
-               array( 'label'       => 'Site Disabled Message',
-                       'form_tip'   => 'This file is displayed when the admins have temporarily disabled the site.',
+               array( 'label'       => _('Site Disabled Message'),
+                       'form_tip'   => _('This file is displayed when the admins have temporarily disabled the site.'),
                        'value'      => 'disabled-msg.txt',
                        'formatter'  => 'localdir',
                        'flags'      => CCFF_POPULATE  );
@@ -85,12 +85,12 @@ class CCDisableSite
 
             $items += array(
                 'disablesite'   => array( 
-                                 'menu_text'  => _('Disable Site'),
-                                 'menu_group' => 'configure',
-                                 'help' => 'Disable site when doing maintainence.',
-                                 'access' => CC_ADMIN_ONLY,
-                                 'weight' => 60,
-                                 'action' =>  ccl('admin', 'disable')
+                                 'menu_text'    => _('Disable Site'),
+                                 'menu_group'   => 'configure',
+                                 'help'         => _('Disable site when doing maintainence.'),
+                                 'access'       => CC_ADMIN_ONLY,
+                                 'weight'       => 60,
+                                 'action'       =>  ccl('admin', 'disable')
                                  ),
                 );
         }
@@ -103,8 +103,11 @@ class CCDisableSite
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','disable'), array('CCDisableSite','Admin'), CC_ADMIN_ONLY,
-                    ccs(__FILE__), '', _('Disable site from non-admin users'), CC_AG_MISC_ADMIN);
+        CCEvents::MapUrl( ccp('admin','disable'), 
+                          array('CCDisableSite','Admin'), CC_ADMIN_ONLY,
+                          ccs(__FILE__), '', 
+                          _('Disable site from non-admin users'), 
+                          CC_AG_MISC_ADMIN);
     }
 
 

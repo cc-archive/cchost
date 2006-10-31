@@ -260,7 +260,7 @@ class CCForums
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $items += array( 
-                'forumadmin'   => array( 'menu_text'  => 'Forum',
+                'forumadmin'   => array( 'menu_text'  => _('Forum'),
                                  'menu_group' => 'configure',
                                  'help'      => _('Config forums access, groups, etc.'),
                                  'access' => CC_ADMIN_ONLY,
@@ -306,7 +306,7 @@ class CCForums
 
         CCEvents::MapUrl( ccp('admin','forums','move'), array( 'CCForums', 'MoveThread'),   
                 CC_ADMIN_ONLY, ccs(__FILE__), '{thread_id}', 
-                _('Displays \'Move Thread\' form'), CC_AG_FORUMS );
+                _("Displays 'Move Thread' form"), CC_AG_FORUMS );
     }
 
 }

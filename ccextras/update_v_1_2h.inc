@@ -139,7 +139,7 @@ END;
                 $users->Update($row);
         }
 
-        CCPage::Prompt("Upgraded remix fields");
+        CCPage::Prompt(_("Upgraded remix fields"));
     }
 
     function update_ratings()
@@ -191,7 +191,7 @@ END;
                 $users->Update($row);
         }
 
-        CCPage::Prompt("Ratings info updated");
+        CCPage::Prompt(_("Ratings info updated"));
     }
 }
 

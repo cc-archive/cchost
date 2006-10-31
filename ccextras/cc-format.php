@@ -45,7 +45,7 @@ function _cc_format_links()
         CCPage::AddScriptBlock('ajax_block');
         CCPage::AddScriptBlock('dl_popup_script',true);
         CCPage::AddScriptLink( ccd('ccextras','cc-format.js') );
-        CCPage::AddLink('head_links', 'stylesheet', 'text/css', ccd('ccextras','cc-format.css') , 'Default Style');
+        CCPage::AddLink('head_links', 'stylesheet', 'text/css', ccd('ccextras','cc-format.css') , _('Default Style'));
         $done = true;
     }
 }
@@ -57,12 +57,14 @@ function generator_cc_format($form, $fieldname, $value, $class )
     $textarea = $form->generator_textarea($fieldname,$value,$class);
 
     $url = ccl('format','preview') . '/';
-    $html =<<<END
-        <div class="cc_box" style="display:none" id="format_preview_$fieldname">
-            <h3>    <input type="button" onclick="cc_hide_preview('$fieldname')" value="x" class="cc_close_preview" />
-Preview:</h3>
-        <div class="cc_format_preview" id="format_inner_preview_$fieldname"></div>
-            </div>
+    $html = 
+        '<div class="cc_box" style="display:none" id="format_preview_' . $fieldname . '">
+            <h3>    <input type="button" onclick="cc_hide_preview(\'' . $fieldname . '\')" value="x" class="cc_close_preview" />
+' . _('Preview') . ':</h3>
+        <div class="cc_format_preview" id="format_inner_preview_' . $fieldname . '"></div>
+            </div>';
+
+    $html .=<<<END
         <div class="cc_ed_buttons">
     <input type="button" onclick="cc_apply_format('$fieldname','b');" value="b" style="font-weight: bold;" />
     <input type="button" onclick="cc_apply_format('$fieldname','i');" value="i" style="font-style:italic;" />
@@ -273,7 +275,7 @@ class CCFormat
         $fields_we_like = array( 'user_description', 'upload_description', 
                                   'editorial_review', 'topic_text' );
 
-        $help = _('Select text and use the <br />buttons to apply format');
+        $help = _('Select text and use the buttons to apply format');
 
 
         $count = count($fields);
@@ -308,15 +310,15 @@ class CCFormat
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields['format'] =
-               array(  'label'      => 'Allow User Text Formatting',
-                       'form_tip'   => 'Allow users to format text (bold, italic, etc.)',
+               array(  'label'      => _('Allow User Text Formatting'),
+                       'form_tip'   => _('Allow users to format text (bold, italic, etc.)'),
                        'value'      => 0,
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
 
             $fields['adminformat'] =
-               array(  'label'      => 'Allow Admin Text Formatting',
-                       'form_tip'   => 'Allow admins to format text',
+               array(  'label'      => _('Allow Admin Text Formatting'),
+                       'form_tip'   => _('Allow admins to format text'),
                        'value'      => 0,
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );

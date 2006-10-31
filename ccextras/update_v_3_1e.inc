@@ -56,7 +56,7 @@ class v_3_1e extends CCUpdate
         {
             $msg = 'no changes were made';
         }
-        CCPage::Prompt('Path structures checked: ' . $msg);
+        CCPage::Prompt(_('Path structures checked:') . " $msg");
     }
 
 }

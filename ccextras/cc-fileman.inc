@@ -36,13 +36,14 @@ class CCFilesAddForm extends CCUploadForm
     {
         $this->CCUploadForm();
 
-        $fields['targetdir'] = array( 'label' => 'Destination directory',
-                                  'formatter' => 'select',
-                                  'options'  => $dirs,
-                                  'flags'   =>  CCFF_POPULATE);
+        $fields['targetdir'] = 
+                        array( 'label'      => _('Destination directory'),
+                               'formatter'  => 'select',
+                               'options'    => $dirs,
+                               'flags'      =>  CCFF_POPULATE);
         
         $fields += array( 
-            'file1' => array(  'label'      => 'Add file(s)',
+            'file1' => array(  'label'      => _('Add file(s)'),
                                'formatter'  => 'upload',
                                'form_tip'   => '',
                                'flags'      => CCFF_NONE  ),
@@ -146,7 +147,7 @@ class CCFileManAdmin
                     $realpath = $path . '/' . $newfile;
                     if( file_exists($realpath) )
                     {
-                        $form->SetFieldError($fname,"The file '$realpath' already exists");
+                        $form->SetFieldError($fname, sprintf(_("The file , '%s', already exists."), $realpath));
                         $ok = false;
                     }
                     else
@@ -167,9 +168,9 @@ class CCFileManAdmin
             }
 
             if( !$ok )
-                CCPage::Prompt("There were problems uploading (see below)");
+                CCPage::Prompt(_('There were problems uploading (see below).'));
             elseif( $uploads )
-                CCPage::Prompt("$uploads files uploaded ok");
+                CCPage::Prompt(_(sprintf('The files, %s, were uploaded okay.'), $uploads) );
 
         }
 
@@ -203,14 +204,14 @@ class CCFileManAdmin
         if( empty($pages['fileman']) )
         {
             $pages['fileman'] = array(
-                 'files'   =>    array('text'   => 'Manage Files',
-                                       'help'   => 'Manage files your viewfile directory',
+                 'files'   =>    array('text'   => _('Manage Files'),
+                                       'help'   => _('Manage files your viewfile directory'),
                                        'tags'   => '/files',
                                        'limit'  => 0,
                                        'access' => CC_ADMIN_ONLY,
                                        'function' => 'url' ),
-                 'addfiles'   =>  array(  'text'   => 'Add Files',
-                                       'help'   => 'Add files to the system',
+                 'addfiles'   =>  array(  'text'   => _('Add Files'),
+                                       'help'   => _('Add files to the system'),
                                        'tags'   => 'addfiles',
                                        'limit'  => 0,
                                        'access' => CC_ADMIN_ONLY,
@@ -285,14 +286,14 @@ END;
             $newdir = $_POST['new_dir'];
             if( empty($newdir) )
             {
-                $newdir_error = '<div class="ferr">Can\'t leave this blank</div>';
+                $newdir_error = '<div class="ferr">' . _("Can't leave this blank") . '</div>';
             }
             else
             {
                 $realpath = $path . '/' . $newdir;
                 if( file_exists($realpath) || is_dir($realpath) ) // redundant, no?
                 {
-                    CCPage::Prompt('That directory already exists');
+                    CCPage::Prompt(_('The directory you selected already exists'));
                 }
                 else
                 {
@@ -300,11 +301,11 @@ END;
                 }
                 if( $ok )
                 {
-                    $msg = 'Directory created ok';
+                    $msg = _('The directory is successfully created.');
                 }
                 else
                 {
-                    $msg = 'There was a problem creating the directory ';
+                    $msg = _('There is a problem creating the directory.') . ' ';
                 }
 
                 CCPage::Prompt($msg);
@@ -316,12 +317,12 @@ END;
 
             if( empty($workfile) )
             {
-                $rename_error = '<div class="ferr">no file selected for renaming</div>';
+                $rename_error = '<div class="ferr">' . _('There is no file selected for renaming.') . '</div>';
                 $ops_err = true;
             }
             elseif( empty($_POST['rename']) )
             {
-                $rename_error = '<div class="ferr">can no be blank</div>';
+                $rename_error = '<div class="ferr">' . _('This cannot be left blank.') . '</div>';
                 $ops_err = true;
             }
             else
@@ -330,7 +331,7 @@ END;
                 $newname = realpath($dir) . '/' . $_POST['rename'];
                 if( file_exists($newname) )
                 {
-                    $rename_error = '<div class="ferr">a file with that name already exists</div>';
+                    $rename_error = '<div class="ferr">' . _('A file with that name already exists.') . '</div>';
                     $ops_err = true;
                 }
                 else
@@ -343,7 +344,7 @@ END;
                     }
                     else
                     {
-                        $rename_error = '<div class="ferr">could not rename the file</div>';
+                        $rename_error = '<div class="ferr">' . _('That file could not be renamed.') . '</div>';
                         $ops_err = true;
                     }
                 }
@@ -355,12 +356,12 @@ END;
 
             if( empty($workfile) )
             {
-                $replace_error = '<div class="ferr">no file selected for replacement</div>';
+                $replace_error = '<div class="ferr">' . _('No file selected for replacement.') . '</div>';
                 $ops_err = true;
             }
             elseif( empty($_FILES) || empty($_FILES['replace']) )
             {
-                $replace_error = '<div class="ferr">can no be blank</div>';
+                $replace_error = '<div class="ferr">' . _('This cannot be left blank.') . '</div>';
                 $ops_err = true;
             }
             else
@@ -379,11 +380,11 @@ END;
 
                 if( $ok )
                 {
-                    $msg = 'replaced ' . $workfile;
+                    $msg = _('replaced') . ' ' . $workfile;
                 }
                 else
                 {
-                    $msg = 'ERROR: could not replace ' . $workfile;
+                    $msg = _('ERROR') . ': ' . sprintf(_("Could not replace file, '%s'."), $workfile);
                 }
 
                 CCPage::Prompt( $msg );
@@ -395,12 +396,12 @@ END;
 
             if( empty($_POST['delete']) )
             {
-                $delete_error = '<div class="ferr">please confirm delete by checking here:</div>';
+                $delete_error = '<div class="ferr">' . _('Please confirm deletion by checking here:') . '</div>';
                 $ops_err = true;
             }
             elseif( empty($workfile) )
             {
-                $delete_error = '<div class="ferr">no file selected for deletion</div>';
+                $delete_error = '<div class="ferr">' . _('There is no file selected for deletion.') . '</div>';
                 $ops_err = true;
             }
             else
@@ -412,9 +413,9 @@ END;
                     $ok = unlink($realpath);
 
                 if( $ok )
-                    $msg = $workfile . ' has been deleted';
+                    $msg = sprintf(_('The file, %s, is now deleted.'), $workfile);
                 else
-                    $msg = 'could not delete ' . $workfile;
+                    $msg = sprintf(_('The file, %s, could not be deleted.'), $workfile);
 
                 CCPage::Prompt( $msg );
             }
@@ -428,7 +429,7 @@ END;
 
         if( empty($files) && empty($dirs)  && $subdir )
         {
-            CCPage::Prompt('Directory is empty, use "Add Files" to populate');
+            CCPage::Prompt(_('The directory is empty.') . ' ' . _('Use "Add Files" to populate.') );
             return;
         }
         //////////////////////////////
@@ -443,14 +444,13 @@ END;
 
         $html = $this->_get_styles();
 
-        $html .=<<<END
+        $html .=
+"<form enctype=\"multipart/form-data\" action=\"$url\" method=\"post\">
+<table class=\"ftable\">
+    <tr><th>" . _('Path Root') . "</th><td>$htmlD</td></tr>
+<tr><th>Files in \"<span>$dir</span>\"</th>
+    <td><select onchange=\"filechanged(this);\" size=\"8\" ondblclick=\"ondirclicked(this);\">";
 
-<form enctype="multipart/form-data" action="$url" method="post">
-<table class="ftable">
-    <tr><th>Path Root</th><td>$htmlD</td></tr>
-<tr><th>Files in "<span>$dir</span>"</th>
-    <td><select onchange="filechanged(this);" size="8" ondblclick="ondirclicked(this);">
-END;
         if( $subdir )
         {
             $purl = preg_replace('@^([^\?]+)(\?.*)$@','\1',$url);
@@ -482,71 +482,70 @@ END;
 END;
         if( empty($subdir) )
         {
-            $html .=<<<END
-<tr>
-    <th>Create directory in "<span>$dir</span>"</th>
-    <td>$newdir_error<input type="text" length="35" id="new_dir" name="new_dir" />
-        <input type="submit" name="newdir_submit" id="newdir_submit" value="Create Dir."/>
+            $html .=
+'<tr>
+    <th>' . sprintf(_('Create directory in %s'), "<span>$dir</span>") . "</th>
+    <td>$newdir_error<input type=\"text\" length=\"35\" id=\"new_dir\" name=\"new_dir\" />
+        <input type=\"submit\" name=\"newdir_submit\" id=\"newdir_submit\" value=\"" . _('Create Directory') . "\"/>
     </td>
-</tr>
-END;
+</tr>";
         }
 
         $show = $ops_err || $currfile ? '' : 'style="display:none"';
 
-        $html .=<<<END
-</table>
-<table id="fileopstable" $show class="ftable">
-  <tr><th>Download </th>
+        $html .=
+'</table>
+<table id="fileopstable" ' . $show . ' class="ftable">
+  <tr><th>' . _('Download') . ' </th>
       <td><a id="dl_link_href" href="" class="cc_gen_button" style="width: 50%"><span 
-               id="dl_link_text">&nbsp;$currfile</span></a><br />
-            (right/control click on the link above to download)</td>
+               id="dl_link_text">&nbsp;' . $currfile . '</span></a><br />
+            ' . _('(right/control click on the link above to download this file.)') . '</td>
   </tr>
-  <tr><th>Edit </th>
+  <tr><th>' . _('Edit') . ' </th>
       <td><a id="edit_link_href" href="" class="cc_gen_button" style="width: 50%"><span 
-               id="edit_link_text">&nbsp;$currfile</span></a><br />
+               id="edit_link_text">&nbsp;' . $currfile . '</span></a><br />
       </td>
   </tr>
-  <tr><th>Rename <span id="fname_ren">&nbsp;$currfile</span> to:</th>
-      <td>$rename_error<input type="text" length="35" id="rename" name="rename" />
-          <input type="submit" name="rename_submit" id="rename_submit" value="Rename" /></td>
+  <tr><th>' . sprintf(_('Rename file, %s, to:'), "<span id=\"fname_ren\">&nbsp;$currfile</span>") . '</th>
+      <td>' . $rename_error . '<input type="text" length="35" id="rename" name="rename" />
+          <input type="submit" name="rename_submit" id="rename_submit" value="' . _('Rename') . '" /></td>
   </tr>
-  <tr><th>Replace <span id="fname_rep">&nbsp;$currfile</span> with:<br />
-             <span style="color:red;">No confirm - no undo!</span></th>
-      <td>$replace_error<input type="file" id="replace" name="replace" />
-          <input type="submit" name="replace_submit" id="replace_submit" value="Replace" /></td>
+  <tr><th>' . sprintf(_('Replace file, %s, with:'), "<span id=\"fname_rep\">&nbsp;$currfile</span>") . '<br />
+             <span style="color:red;">' . _('There is NO CONFIRM and NO UNDO!') . '</span></th>
+      <td>' . $replace_error . '<input type="file" id="replace" name="replace" />
+          <input type="submit" name="replace_submit" id="replace_submit" value="' . _('Replace') . '" /></td>
   </tr>
-  <tr><th>Delete <span id="fname_del">&nbsp;$currfile</span><br />
-             <span style="color:red;">No confirm - no undo!</span></th>
-      <td>$delete_error<input type="checkbox" id="delete" name="delete" />
-          <input type="submit" name="delete_submit" id="delete_submit" value="Delete" /></td>
+  <tr><th>' . sprintf(_('Delete file, %s'), "<span id=\"fname_del\">&nbsp;$currfile</span><br />") . '
+             <span style="color:red;">' . _('There is NO CONFIRM and NO UNDO!') . '</span></th>
+      <td>' . $delete_error . '<input type="checkbox" id="delete" name="delete" />
+          <input type="submit" name="delete_submit" id="delete_submit" value="' . _('Delete') . '" /></td>
   </tr>
 </table>
-<input type="hidden" id="filename" name="filename" value="$currfile" />
+<input type="hidden" id="filename" name="filename" value="' . $currfile . '" />
 </form>
 <script>
 function filechanged(obj)
 {
-   var fileopstable = new cc_obj('fileopstable');
+   var fileopstable = new cc_obj(\'fileopstable\');
    var fname = obj.options[obj.options.selectedIndex].text;
-   if( (fname.charAt(0) == '[') && (fname.charAt(fname.length-1) == ']') )
+   if( (fname.charAt(0) == \'[\') && (fname.charAt(fname.length-1) == \']\') )
    {
-        fileopstable.style.display = 'none';
+        fileopstable.style.display = \'none\';
         return;
    }
 
-   fileopstable.style.display = 'block';
+   fileopstable.style.display = \'block\';
 
    var url = obj.options[obj.options.selectedIndex].value;
-   var ulink = new cc_obj( 'dl_link_href' );
+   var ulink = new cc_obj( "dl_link_href" );
    ulink.obj.href = url;
-   var utext = new cc_obj( 'dl_link_text' );
-   var elink = new cc_obj( 'edit_link_href' );
+   var utext = new cc_obj( "dl_link_text" );
+   var elink = new cc_obj( "edit_link_href" );
    elink.obj.href = "edit?file=" + url;
-   var etext = new cc_obj( 'edit_link_text' );
-   var rtext = new cc_obj( 'fname_rep' );
-   var dtext = new cc_obj( 'fname_del' );
-   var ftext = new cc_obj( 'filename' );
+   var etext = new cc_obj( "edit_link_text" );
+   var rtext = new cc_obj( "fname_rep" );
+   var dtext = new cc_obj( "fname_del" );
+   var ftext = new cc_obj( "filename" );
    cc_set_text(utext.obj,fname);
    cc_set_text(etext.obj,fname);
    cc_set_text(rtext.obj,fname);
@@ -557,14 +556,13 @@ function filechanged(obj)
 function ondirclicked(obj)
 {
    var vdirname = obj.options[obj.options.selectedIndex].text;
-   if( (vdirname.charAt(0) == '[') && (vdirname.charAt(vdirname.length-1) == ']') )
+   if( (vdirname.charAt(0) == \'[\') && (vdirname.charAt(vdirname.length-1) == \']\') )
    {
         var url = obj.options[obj.options.selectedIndex].value;
         document.location = url;
    }
 }
-</script>
-END;
+</script>';
 
         CCPage::PageArg('body_html',$html,'show_body_html');
 

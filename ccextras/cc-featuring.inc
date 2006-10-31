@@ -44,7 +44,7 @@ class CCFeaturingAPI
     {
         if( empty($record) )
         {
-            $patterns['%feat%'] = 'Collaborating artists';
+            $patterns['%feat%'] = _('Collaborating artists');
             return;
         }
 

@@ -119,7 +119,8 @@ class CCQueryFormats
                     $tname = $template . '.xml';
                     if( !CCTemplate::GetTemplate($tname) )
                     {
-                        print("\"$template\" is not a valid template");
+                        print(sprintf(_('"%s" is not a valid template'), 
+                                      $template));
                         exit;
                     }
                 }

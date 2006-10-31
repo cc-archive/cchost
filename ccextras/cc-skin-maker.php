@@ -62,9 +62,7 @@ class CCSkinMakerForm extends CCForm
 
         $this->AddFormFields($fields);
 
-        $help = _('Using this form you can create the basic structure of a new skin based
-                   on skin-simple. 
-                   Please consult the administrator\'s guide for editing skins.');
+        $help = _("Using this form you may create the basic structure of a new skin based on skin-simple.") . ' ' . _("Please consult the administrator's guide for editing skins.");
 
         $this->SetFormHelp($help);
     }
@@ -86,7 +84,7 @@ class CCSkinMakerForm extends CCForm
             $ok = !in_array( $fname, $templates );
             if( !$ok )
             {
-                $error_msg = _('That skin already exists');
+                $error_msg = _('That skin already exists.');
                 $this->SetFieldError($fieldname,$error_msg);
             }
         }
@@ -157,7 +155,7 @@ class CCSkinMaker
             }
             $f = fopen($fname,'w');
             if( !$f )
-                return _('Error writing :' . $fname);
+                return _('Error writing' . ': ' . $fname);
             fwrite($f,$text);
             fclose($f);
             chmod($fname,0777);
@@ -186,7 +184,7 @@ class CCSkinMaker
 
         $url = ccl('admin', 'settings');
         $link = sprintf( "<a href=\"$url\">%s</a>", _('Settings'));
-        return sprintf(_('Skin "%s" written successfully. Use %s to select now.'),$newname,$link);
+        return sprintf(_('Skin, %s, written successfully. Use %s to select now.'), $newname, $link);
     }
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
@@ -213,12 +211,12 @@ class CCSkinMaker
 
             $items += array(
                 'skinmaker'   => array( 
-                                 'menu_text'  => 'Skin Maker',
-                                 'menu_group' => 'configure',
-                                 'help' => 'Skin creation helper',
-                                 'access' => CC_ADMIN_ONLY,
-                                 'weight' => 2,
-                                 'action' =>  ccl('admin','skin','create')
+                                 'menu_text'    => _('Skin Maker'),
+                                 'menu_group'   => 'configure',
+                                 'help'         => _('Skin creation helper'),
+                                 'access'       => CC_ADMIN_ONLY,
+                                 'weight'       => 2,
+                                 'action'       =>  ccl('admin','skin','create')
                                  ),
                 );
         }

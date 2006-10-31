@@ -80,7 +80,7 @@ END;
         $this->_check_for_field('cc_tbl_user','user_num_reviews',  'INT(7) unsigned');
         $this->_check_for_field('cc_tbl_user','user_num_reviewed', 'INT(7) unsigned');
 
-        CCPage::Prompt("Reviews installed");
+        CCPage::Prompt(_("Reviews installed"));
     }
 
 }

@@ -47,36 +47,35 @@ class CCAdminThrottleForm extends CCEditConfigForm
     {
         $this->CCEditConfigForm('throttle',CC_GLOBAL_SCOPE);
         $fields['enabled'] = array (
-                        'label'      => 'Enable Throttling',
-                        'value'      => 0,
-                        'formatter'  => 'checkbox',
-                        'flags'      => CCFF_POPULATE );
+           'label'      => _('Enable Throttling'),
+           'value'      => 0,
+           'formatter'  => 'checkbox',
+           'flags'      => CCFF_POPULATE );
 
         $fields['user-exceptions'] = array (
-                        'label'      => 'User exceptions',
-                        'form_tip'   => 'Comma separted list of user login names that are excempt from throttling. ' .
-                                        '(Administrators are automatically excempt.) ',
-                        'formatter'  => 'textedit',
-                        'flags'      => CCFF_POPULATE );
+           'label'      => _('User exceptions'),
+           'form_tip'   => _('Comma separted list of user login names that are exempt from throttling.') . ' ' . _('Administrators are automatically exempt from throttling.') . ' ',
+           'formatter'  => 'textedit',
+           'flags'      => CCFF_POPULATE );
 
-        $msg = "You are not authorized to submit this type of file. Please contact the site administrator for details.";
+        $msg = _("You are not authorized to submit this type of file.") . ' ' . _('Please contact the site administrator for details.');
 
         $fields['quota-msg'] = array (
-                        'label'      => 'Quota Message',
-                        'form_tip'   => 'Message to users who are outside the bounds of the throttle',
-                        'value'      => $msg,
-                        'formatter'  => 'textarea',
-                        'flags'      => CCFF_POPULATE );
+           'label'      => _('Quota Message'),
+           'form_tip'   => _('Message to users who are outside the bounds of the throttle'),
+           'value'      => $msg,
+           'formatter'  => 'textarea',
+           'flags'      => CCFF_POPULATE );
 
         $url = ccl('admin','throttlerules');
-        $text = "<a href=\"$url\">Edit Upload Throttle Rules</a>";
+        $text = sprintf(_('%sEdit Upload Throttle Rules%s'), "<a href=\"$url\">" , "</a>");
 
         $fields['rules'] = array (
-                    'label'      => 'Rules',
-                    'form_tip'   => 'Edit the rules govering the upload throttle',
-                    'value'      => $text,
-                    'formatter'  => 'statictext',
-                    'flags'      => CCFF_NOUPDATE | CCFF_STATIC );
+           'label'      => _('Rules'),
+           'form_tip'   => _('Edit the rules governing the upload throttle'),
+           'value'      => $text,
+           'formatter'  => 'statictext',
+           'flags'      => CCFF_NOUPDATE | CCFF_STATIC );
 
 
         $this->AddFormFields( $fields );
@@ -99,7 +98,7 @@ class CCAdminThrottleRulesForm extends CCGridForm
     {
         $this->CCGridForm();
 
-        $html = "<input type=\"submit\" name=\"addrule\" id=\"addrule\" value=\"Add A Rule\" />";
+        $html = "<input type=\"submit\" name=\"addrule\" id=\"addrule\" value=\"" . _('Add A Rule') . "\" />";
         $this->SetFormHelp($html);
 
         if( empty($rules) )
@@ -112,7 +111,8 @@ class CCAdminThrottleRulesForm extends CCGridForm
         // [allow/disallow] type: [submit-form-types/all] [stop/nostop]
         // 
 
-        $heads = array( 'Delete', 'Order', '', '', '', '', '', '', '', '', '' );
+        $heads = array( _('Delete'), _('Order'), 
+                        '', '', '', '', '', '', '', '', '' );
         $this->SetColumnHeader($heads);
 
         $configs =& CCConfigs::GetTable();
@@ -123,28 +123,28 @@ class CCAdminThrottleRulesForm extends CCGridForm
             CCEvents::Invoke( CC_EVENT_SUBMIT_FORM_TYPES, array( &$form_submit_types ) );
         }
 
-        $submit_types['all'] = 'All types';
+        $submit_types['all'] = _('All types');
         foreach( $form_submit_types as $type_name => $type_data )
         {
             $submit_types[$type_name] = $type_data['submit_type'];
         }
 
         $time_periods = array(
-                '1 days ago' => '24 hours',
-                '1 weeks ago' => '7 days',
-                '2 weeks ago' => '2 weeks',
-                '1 months ago' => '1 month',
-                'forever'      => 'forever'
+                '1 days ago'    => _('24 hours'),
+                '1 weeks ago'   => _('7 days'),
+                '2 weeks ago'   => _('2 weeks'),
+                '1 months ago'  => _('1 month'),
+                'forever'       => _('forever')
         );
 
         $allow_pick = array(
-                'forbid' => 'Forbid',
-                'allow'  => 'Allow'
+                'forbid'        => _('Forbid'),
+                'allow'         => _('Allow')
                 );
 
         $stop_pick = array(
-                'stop'     => 'Stop here if rule is true',
-                'continue' => 'Continue to next rule'
+                'stop'          => _('Stop here if rule is true'),
+                'continue'      => _('Continue to next rule')
                 );
 
         $count = count($rules);
@@ -157,71 +157,71 @@ class CCAdminThrottleRulesForm extends CCGridForm
             $field = array(
                       array(
                         'element_name'  => "rule[$i][delete]",
-                        'value'      => 0,
-                        'formatter'  => 'checkbox',
-                        'flags'      => CCFF_NONE),
+                        'value'         => 0,
+                        'formatter'     => 'checkbox',
+                        'flags'         => CCFF_NONE),
                       array(
                         'element_name'  => "rule[$i][order]",
-                        'value'      => $i + 1,
-                        'options'    => $numbers,
-                        'formatter'  => 'select',
-                        'flags'      => CCFF_NONE),
+                        'value'         => $i + 1,
+                        'options'       => $numbers,
+                        'formatter'     => 'select',
+                        'flags'         => CCFF_NONE),
                       array(
                         'element_name'  => 'stat1' . $i,
-                        'value'      => 'If user has ',
-                        'formatter'  => 'statictext',
-                        'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
+                        'value'         => _('If user has '),
+                        'formatter'     => 'statictext',
+                        'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
                       array(
                         'element_name'  => "rule[$i][num_uploads]",
-                        'value'      => $rules[$i]['num_uploads'],
-                        'class'      => 'cc_form_input_short',
-                        'formatter'  => 'textedit',
-                        'flags'      => CCFF_REQUIRED | CCFF_POPULATE ),
+                        'value'         => $rules[$i]['num_uploads'],
+                        'class'         => 'cc_form_input_short',
+                        'formatter'     => 'textedit',
+                        'flags'         => CCFF_REQUIRED | CCFF_POPULATE ),
                       array(
                         'element_name'  => 'stat2' . $i,
-                        'value'      => '# of: ',
-                        'formatter'  => 'statictext',
-                        'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
+                        'value'         => _('# of:') . ' ',
+                        'formatter'     => 'statictext',
+                        'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
                       array(
                         'element_name'  => "rule[$i][limit_by_type]",
-                        'value'      => $rules[$i]['limit_by_type'],
-                        'formatter'  => 'select',
-                        'options'    => $submit_types,
-                        'flags'      => CCFF_POPULATE  ),
+                        'value'         => $rules[$i]['limit_by_type'],
+                        'formatter'     => 'select',
+                        'options'       => $submit_types,
+                        'flags'         => CCFF_POPULATE  ),
                       array(
                         'element_name'  => 'stat3' . $i,
-                        'value'      => 'since: ',
-                        'formatter'  => 'statictext',
-                        'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
+                        'value'         => _('since:') . ' ',
+                        'formatter'     => 'statictext',
+                        'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
                       array(
                         'element_name'  => "rule[$i][time_period]",
-                        'value'      => $rules[$i]['time_period'],
-                        'formatter'  => 'select',
-                        'options'    => $time_periods,
-                        'flags'      => CCFF_POPULATE ),
+                        'value'         => $rules[$i]['time_period'],
+                        'formatter'     => 'select',
+                        'options'       => $time_periods,
+                        'flags'         => CCFF_POPULATE ),
                       array(
                         'element_name'  => 'stat4' . $i,
-                        'value'      => 'then: ',
-                        'formatter'  => 'statictext',
-                        'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
+                        'value'         => _('then:') . ' ',
+                        'formatter'     => 'statictext',
+                        'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
                       array(
                         'element_name'  => "rule[$i][allow]",
-                        'value'      => $rules[$i]['allow'],
-                        'formatter'  => 'select',
-                        'options'    => $allow_pick,
-                        'flags'      => CCFF_POPULATE ),
+                        'value'         => $rules[$i]['allow'],
+                        'formatter'     => 'select',
+                        'options'       => $allow_pick,
+                        'flags'         => CCFF_POPULATE ),
                       array(
                         'element_name'  => "rule[$i][allow_type]",
-                        'value'      => $rules[$i]['allow_type'],
-                        'formatter'  => 'select',
-                        'options'    => $submit_types,
-                        'flags'      => CCFF_POPULATE ),
+                        'value'         => $rules[$i]['allow_type'],
+                        'formatter'     => 'select',
+                        'options'       => $submit_types,
+                        'flags'         => CCFF_POPULATE ),
                       array(
                         'element_name'  => "rule[$i][stop]",
-                        'value'      => $rules[$i]['stop'],
-                        'formatter'  => 'select',
-                        'options'    => $stop_pick,
-                        'flags'      => CCFF_POPULATE ),
+                        'value'         => $rules[$i]['stop'],
+                        'formatter'     => 'select',
+                        'options'       => $stop_pick,
+                        'flags'         => CCFF_POPULATE ),
                 );
 
                 $this->AddGridRow( $i, $field );
@@ -360,7 +360,7 @@ class CCThrottle
 
     function Admin()
     {
-        CCPage::SetTitle("Administer Upload Throttle");
+        CCPage::SetTitle(_("Administer Upload Throttle"));
         $form = new CCAdminThrottleForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -368,18 +368,18 @@ class CCThrottle
     function Rules()
     {
         $configs =& CCConfigs::GetTable();
-        CCPage::SetTitle("Upload Throttle Rules");
+        CCPage::SetTitle(_("Upload Throttle Rules"));
 
         if( !empty($_POST['addrule']) )
         {
             $rules = $_POST['rule'];
             $rules[] =
-                    array( 'num_uploads' => 15,
-                           'limit_by_type' => 'all',
-                           'time_period'      => 'forever',
-                            'allow'        => 'forbid',
-                            'allow_type'   => 'all',
-                            'stop'        => 'stop' );
+                    array( 'num_uploads'    => 15,
+                           'limit_by_type'  => 'all',
+                           'time_period'    => 'forever',
+                           'allow'          => 'forbid',
+                           'allow_type'     => 'all',
+                           'stop'           => 'stop' );
 
             $form = new CCAdminThrottleRulesForm($rules);
             $tmpl = $form->GenerateForm();
@@ -392,12 +392,12 @@ class CCThrottle
             if( empty($throttle_rules) )
             {
                 $throttle_rules[] =
-                        array( 'num_uploads' => 3,
-                               'limit_by_type' => 'all',
-                               'time_period'      => '1 days ago',
-                                'allow'        => 'forbid',
-                                'allow_type'   => 'all',
-                                'stop'        => 'stop' );
+                        array( 'num_uploads'    => 3,
+                               'limit_by_type'  => 'all',
+                               'time_period'    => '1 days ago',
+                               'allow'          => 'forbid',
+                               'allow_type'     => 'all',
+                               'stop'           => 'stop' );
             }
 
             $form = new CCAdminThrottleRulesForm($throttle_rules);
@@ -439,13 +439,13 @@ class CCThrottle
         {
             $items += array(
                 'throttle'   => array( 
-                                 'menu_text'  => 'Upload Throttles',
-                                 'menu_group' => 'configure',
-                                 'help' => 'Limit the number and types of uploads per user',
-                                 'access' => CC_ADMIN_ONLY,
-                                 'weight' => 40,
-                                 'action' =>  ccl('admin','throttle')
-                                 ),
+                    'menu_text'     => _('Upload Throttles'),
+                    'menu_group'    => 'configure',
+                    'help'          => _('Limit the number and types of uploads per user'),
+                    'access'        => CC_ADMIN_ONLY,
+                    'weight'        => 40,
+                    'action'        => ccl('admin','throttle')
+                    ),
                 );
         }
     }

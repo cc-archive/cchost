@@ -61,7 +61,7 @@ class CCUpdate
         }
 
         $prompts = join(', ',$prompts);
-        CCPage::Prompt($prompts . ' updates already installed');
+        CCPage::Prompt(_('Updates already installed:') . ' ' . $prompts);
 
         CCMenu::KillCache();
     }

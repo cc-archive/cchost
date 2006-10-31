@@ -62,7 +62,7 @@ class CCEditUserNotificationForm extends CCForm
     {
         $this->CCForm();
 
-        $betatxt = "This feature is in BETA. If you have any problems <a href=\"http://ccmixter.org/media/people/contact/admin\"><b>let us know</b></a>.<br /><br />";
+        $betatxt = sprintf(_("This feature is new. If you have any problems, %slet us know%s"), '<a href=\"http://ccmixter.org/media/people/contact/admin\"><b>', '</b></a>.<br /><br />');
 
         $this->SetFormHelp( $betatxt . _('Notify me by email when:') );
 
@@ -90,7 +90,7 @@ class CCNotifyAPI
 
     function EditMyNotifications($other_user_name='')
     {
-        CCPage::SetTitle(_('My Notifications') . ' [BETA]' );
+        CCPage::SetTitle(_('My Notifications'));
 
         // figure out what fields we are editing
 
@@ -115,13 +115,13 @@ class CCNotifyAPI
             // to get notified when people affect her work
 
             $fields = array(
-                array( 'label' => _('I\'ve been remixed'),
+                array( 'label' => _("I've been remixed"),
                        'flag' => CC_NTFY_IVE_BEEN_REMIXED, ),
-                array( 'label' => _('I\'ve been reviewed'),
+                array( 'label' => _("I've been reviewed"),
                        'flag' => CC_NTFY_IVE_BEEN_REVIEWED, ),
-                array( 'label' => _('I\'ve been replied to'),
+                array( 'label' => _("I've been replied to"),
                        'flag' => CC_NTFY_REVIEW_REPLY, ),
-                array( 'label' => _('I\'ve been rated'),
+                array( 'label' => _("I've been rated"),
                        'flag' => CC_NTFY_IVE_BEEN_RATED, ),
 /*
                 array( 'label' => _('Any upload has been editor picked'),
@@ -210,14 +210,10 @@ class CCNotifyAPI
         $notify_row = $notifications->QueryRow($where);
         if( $notify_row )
         {
-            $body = _('
+            $body = "\n\n" . 
+                    _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 
+                    _('This is a notification that "%s" has just received a rating of %d.00') . "\n\n%s\n";
 
-PLEASE DO NOT RESPOND TO THIS EMAIL
-
-This is a notification that "%s" has just received a rating of %d.00
-
-%s
-');
             $body = sprintf($body, $record['upload_name'],
                                    $rating,
                                    $record['file_page_url'] );
@@ -243,14 +239,10 @@ This is a notification that "%s" has just received a rating of %d.00
             {
                 $reviews =& CCReviews::GetTable();
                 $review_rec = $reviews->GetRecordFromRow($review);
-                $body = _('
-
-PLEASE DO NOT RESPOND TO THIS EMAIL
-
-This is a notification that "%s" has been reviewed by %s
-
-%s
-');
+                $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . 
+                "\n\n" . 
+                _('This is a notification that "%s" has been reviewed by %s') .
+                "\n\n%s\n";
                 $upload_name = $uploads->QueryItemFromKey('upload_name',$review['topic_upload']);
                 $body = sprintf($body,$upload_name,
                                       $review_rec['user_real_name'],
@@ -345,16 +337,10 @@ This is a notification that "%s" has been reviewed by %s
 
         $url = $topic_rec['topic_permalink'];
 
-        $subject = 'Topic Reply Notification';
-        $body = _('
-
-PLEASE DO NOT RESPOND TO THIS EMAIL
-
-This is a notification of a reply to a review thread 
-"%s":
-
-%s
-');
+        $subject = _('Topic Reply Notification');
+        $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 
+        'This is a notification of a reply to a review thread, "%s":' . 
+        "\n\n%s\n";
         $body = sprintf( $body, $C['topic_name'], $url );
 
         $this->_do_notify($subject,$body,$notify_rows);
@@ -434,16 +420,9 @@ This is a notification of a reply to a review thread
         $site_name = $ttags['site-title'];
         
         $subject = sprintf(_('Upload by %s'),$record['user_real_name']);
-        $body = _('
-
-PLEASE DO NOT RESPOND TO THIS EMAIL
-
-This is a notification that %s has just uploaded new material to %s
-
-"%s"
-%s
-
-');
+        $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 
+        _('This is a notification that %s has just uploaded new material to %s')
+        . "\n\n%s\n";
         $body = sprintf($body, $record['user_real_name'],
                                $ttags['site-title'],
                                $record['upload_name'],
@@ -451,16 +430,16 @@ This is a notification that %s has just uploaded new material to %s
 
         if( $parents )
         {
-            $body .= _("which uses samples from:\n");
+            $body .= _("It uses samples from:\n");
             $count = count($parents);
             for( $i = 0; $i < $count; $i++ )
             {
                 $R =& $parents[$i];
-                $body .= "\n \"{$R['upload_name']}\" by {$R['user_real_name']}\n";
+                $body .= sprintf(_('%s by %s'), "\n \"{$R['upload_name']}\"", "{$R['user_real_name']}\n");
             }
         }
 
-        $body .= sprintf(_("\nThank you,\n%s"), $ttags['site-title']);
+        $body .= "\n" . sprintf(_("Thank you, %s"), "\n" . $ttags['site-title']);
 
         $this->_do_notify($subject, $body, $notify_rows);
     }

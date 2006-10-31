@@ -38,7 +38,7 @@ class CCImportForm extends CCNewUploadForm
         $this->CCNewUploadForm($uid);
 
         $this->SetFormFieldItem( 'upload_file_name', 'formatter', 'importer');
-        $this->SetFormFieldItem( 'upload_file_name', 'label', _('Path to file on server') );
+        $this->SetFormFieldItem( 'upload_file_name', 'label', _('Path to file on this server') );
     }
 
     function generator_importer($varname,$value='',$class='')
@@ -53,7 +53,7 @@ class CCImportForm extends CCNewUploadForm
             $name = $this->GetFormValue($fieldname);
             if( !file_exists($name) || !is_file($name) )
             {
-                $this->SetFieldError($fieldname,_('Can not file a file by that name'));
+                $this->SetFieldError($fieldname,_('Cannot file a file by that name'));
             }
             else
             {
@@ -83,9 +83,9 @@ class CCImportFiles
         {
             $items += array(
                 'importer'   => array( 
-                                 'menu_text'  => 'Import Files',
+                                 'menu_text'  => _('Import Files'),
                                  'menu_group' => 'configure',
-                                 'help' => 'Import files from your server into ccHost',
+                                 'help' => _('Import files from your server into ccHost'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 40,
                                  'action' =>  ccl('admin','import')
@@ -111,7 +111,7 @@ class CCImportFiles
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('admin','import'),  array( 'CCImportFiles', 'Import'), CC_ADMIN_ONLY,
-            ccs(__FILE__), '', _('Displays \'File Import\' form'), CC_AG_UPLOADS );
+            ccs(__FILE__), '', _("Displays 'File Import' form"), CC_AG_UPLOADS );
     }
 
     /**
@@ -126,7 +126,7 @@ class CCImportFiles
     {
         $page_title = _('Import files');
         $tags = CCUD_ORIGINAL;
-        $form_help = _('Use this form to import files already on your server into the ccHost system. WARNING: This form will <b>MOVE</b> your file from its original location.');
+        $form_help = _('Use this form to import files already on your server into this ccHost system. WARNING: This form will <b>MOVE</b> your file from its original location to one specified by this ccHost system.');
 
         CCPage::SetTitle($page_title);
         if( empty($username) )
@@ -177,7 +177,7 @@ class CCImportFiles
                     $uploads =& CCUploads::GetTable();
                     $record = $uploads->GetRecordFromID($upload_id);
                     $url = $media_host->_get_file_page_url($record);
-                    CCPage::Prompt(sprintf(_("Import succeeded. Click <a href=\"%s\">here</a> to see results."),$url));
+                    CCPage::Prompt(sprintf(_("Import succeeded. Click %s to see results."), "<a href=\"$url\">here</a>"));
                     return;
                 }
             }

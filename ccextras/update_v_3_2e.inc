@@ -39,7 +39,7 @@ class v_3_2e extends CCUpdate
     {
         $this->_check_for_field('cc_tbl_topics', 'topic_locked', 'int(2) unsigned  NOT NULL');
 
-        CCPage::Prompt("Topic lock field added");
+        CCPage::Prompt(_("Topic lock field added"));
     }
 
 }

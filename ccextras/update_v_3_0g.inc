@@ -49,7 +49,7 @@ class v_3_0g extends CCUpdate
             if( $tag )
                 CCUploadAPI::UpdateCCUD($row['upload_id'],$tag,'');
         }
-        CCPage::Prompt("BPM info updated");
+        CCPage::Prompt(_("BPM info updated"));
     }
 
 }

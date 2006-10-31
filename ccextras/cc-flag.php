@@ -47,7 +47,7 @@ class CCFlagContentForm extends CCSecurityVerifierForm
 
         $this->CCSecurityVerifierForm();
 
-        $text = _("This $type contains material that may violate the terms of the site");
+        $text = sprintf(_("This %s contains material that may violate the terms of the site"), $type);
 
         $fields = array( 
                     'mail_from' => array(
@@ -124,7 +124,7 @@ class CCFlag
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('flag'), array('CCFlag','Flag'), CC_DONT_CARE_LOGGED_IN,
-                ccs(__FILE__), '(upload|topic)/{upload_id}', _('Users flag an upload or topic'),
+                ccs(__FILE__), '(upload|topic)/{upload_id}', _('Users flag an upload or topic.'),
                 CC_AG_UPLOADS );
     }
 
@@ -218,14 +218,14 @@ END;
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields['flagging'] =
-               array(  'label'      => 'Flagging',
-                       'form_tip'   => 'Allow users to directly flag something as a possible violation of terms of this site',
+               array(  'label'      => _('Flagging'),
+                       'form_tip'   => _('This allows users to directly flag something as a possible violation of terms of this site.'),
                        'value'      => 0,
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE );
             $fields['flag_msg'] =
-               array(  'label'      => 'Flag form message',
-                       'form_tip'   => 'This text will appear on the mail form to users who flag content',
+               array(  'label'      => _('Flag form message'),
+                       'form_tip'   => _('This text will appear on the mail form to users who flag content.'),
                        'value'      => 0,
                        'formatter'  => 'textarea',
                        'flags'      => CCFF_POPULATE );

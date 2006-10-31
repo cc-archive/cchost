@@ -36,44 +36,24 @@ class CCPseudoVerifyAdminForm extends CCGridForm
     {
         $this->CCGridForm();
 
-        $help = _('Use this screen to allow uploads of less common and hard to verify
-                   file types. Unlike other common media types the degree of support
-                   for verifying the efficacy of these file types range greatly. 
-                   <p>A guide to using this screen:</p>
-                   <p>The <b>Del</b>ete option
-                   only applies to types that you add here. Otherwise the types displayed 
-                   here are culled from your current getID3 installation. (If you upgrade 
-                   getID3, you should come back here
-                   and the new types will automatcially show up.)</p>
-                   <p><b>D/S/V</b> Here you chose what kind of support you wish to have
-                   for the file type:</p>
-                   <ul><li><b>D</b>isable the use of this file type, users will see an
-                   error if they try to upload this type.</li>
-                   <li><b>S</b>ignature check only. This will allow the file type to
-                   be uploaded but
-                   with only <i>very</i> minimal amount of verification. In other
-                   words, if a virus is embedded into an Office document, this check
-                   will not be able to detect it.</li>
-                   <li>Attempt to <b>V</b>erify using the getID3 library. This will only
-                   work if your version of getID3 supports full analysis of the file 
-                   type. Many file types in this list require special tools to be
-                   installed (see your helperapps directory for details). Others are
-                   simply unsupported in which case you have to fall back to <b>S</b>ignature 
-                   check only.</li>
-                   </ul>
-                   <p>Make sure to enter the file\'s <b>Ext</b>ension.</p>
-                   <p><b>Tags</b> will be added to every file uploaded of this type.</p>
-                   <p><b>Signature</b> is only relevant if you chose the <b>S</b>ignature
-                   option</p>
-                   <p>Use the <b>Add Format</b> button to extend this table and add
-                   formats. Because these are not known to getID3, you must use
-                   the <b>S</b>ignature only option, otherwise your users will see
-                   an error message when trying to upload.</p>
-');
+        $help = _('Use this screen to allow uploads of less common and hard to verify file types. Unlike other common media types the degree of support for verifying the efficacy of these file types range greatly.') . "\n" .
+                '<p>' . _('A guide to using this screen') . ":</p>\n" .
+                '<p>' . _('The <b>Del</b>ete option only applies to types that you add here. Otherwise the types displayed here are culled from your current getID3 installation. (If you upgrade getID3, you should come back here and the new types will automatcially show up.)') . "</p>\n" . 
+                '<p>' . _('<b>D/S/V</b> Here you chose what kind of support you wish to have for the file type') . ":</p>\n" . 
+                '<ul><li>' . _('<b>D</b>isable the use of this file type, users will see an error if they try to upload this type.') . "</li>\n" . 
+                '<li>' . _('<b>S</b>ignature check only. This will allow the file type to be uploaded but with only <i>very</i> minimal amount of verification. In other words, if a virus is embedded into an Office document, this check will not be able to detect it.') . "</li>\n" . 
+                '<li>' . _('Attempt to <b>V</b>erify using the getID3 library. This will only work if your version of getID3 supports full analysis of the file type. Many file types in this list require special tools to be installed (see your helperapps directory for details). Others are simply unsupported in which case you have to fall back to <b>S</b>ignature check only.') . "</li>\n" . 
+                '</ul>' . 
+                '<p>' . _("Make sure to enter the file's <b>Ext</b>ension.") . 
+                "</p>\n" . 
+                "<p>" . _('<b>Tags</b> will be added to every file uploaded of this type.') . "</p>\n" . 
+                '<p>' . _('<b>Signature</b> is only relevant if you chose the <b>S</b>ignature option') . "</p>\n" . 
+                '<p>' . _('Use the <b>Add Format</b> button to extend this table and add formats. Because these are not known to getID3, you must use the <b>S</b>ignature only option, otherwise your users will see an error message when trying to upload.') . "</p>\n";
+
         $this->SetFormHelp($help);
 
         $heads = array( 
-            _('Del.'), 
+            _('Delete'), 
                 _('D/S/V'), 
              _('Type'), _('Ext.'), 
             _('Description'), 
@@ -205,7 +185,7 @@ class CCPseudoVerifyAPI
 				'bonk' => _('Bonk v0.9+'),
 				'la'   => _('Lossless Audio'),
 				'lpac' => _('Lossless Predictive Audio Compression'),
-				'mac'  => _('Monkey\'s Audio Compressor'),
+				'mac'  => _("Monkey's Audio Compressor"),
 				'mod'  => _('MODule (assorted sub-formats)'),
 				'it'   => _('MODule (Impulse Tracker)'),
 				'xm'   => _('MODule (eXtended Module)'),
@@ -286,7 +266,7 @@ class CCPseudoVerifyAPI
 
     function Admin()
     {
-        CCPage::SetTitle(_('Configure Pseudo Verifier') . ' [BETA]');
+        CCPage::SetTitle(_('Configure Pseudo Verifier'));
 
         $form = new CCPseudoVerifyAdminForm();
 
@@ -366,7 +346,7 @@ class CCPseudoVerifyAPI
 
         if( !$got_ext )
         {
-            $formatinfo->SetErrors( 'Can not determine file type');
+            $formatinfo->SetErrors( _('Cannot determine file type'));
             return false;
         }
 
@@ -374,7 +354,7 @@ class CCPseudoVerifyAPI
         $pv = $configs->GetConfig('pseudo-verify');
         if( empty($pv[$m[1]]) )
         {
-            $formatinfo->SetErrors( _('Unknown pseudo format'));
+            $formatinfo->SetErrors( _('Unknown pseudo-format'));
             return false;
         }
 
@@ -382,7 +362,7 @@ class CCPseudoVerifyAPI
 
         if( $FF['action'] == CC_PV_DISABLE )
         {
-            $formatinfo->SetErrors( _('That file format is not allowed'));
+            $formatinfo->SetErrors( _('That file format is not allowed.'));
             return false;
         }
 
@@ -404,7 +384,7 @@ class CCPseudoVerifyAPI
 
             if( empty( $tags['fileformat'] ) )
             {
-                $formatinfo->SetErrors('Unknown format');
+                $formatinfo->SetErrors(_('Unknown format'));
             }
             elseif( !empty($tags['error']) )
             {

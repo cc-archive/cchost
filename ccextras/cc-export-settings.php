@@ -40,7 +40,7 @@ class CCSettingsExporter
             $fname = CCUtil::StripText($_REQUEST['i']);
         if( empty($fname) )
         {
-            CCPage::Prompt("No import file specified in URL");
+            CCPage::Prompt(_('No import file specified in the URL.'));
             return;
         }
 
@@ -56,8 +56,8 @@ class CCSettingsExporter
         for( $i = 0; $i < $c; $i++ )
             $d[$i]['config_data'] = serialize($d[$i]['config_data']);
         $configs->InsertBatch( $columns, $cc_host_config_export );
-        CCPage::SetTitle('Import Settings');
-        CCPage::Prompt('Settings have been imported');
+        CCPage::SetTitle(_('Import Settings'));
+        CCPage::Prompt(_('Settings have been imported'));
     }
 
     /**
@@ -143,10 +143,13 @@ class CCSettingsExporter
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('export'),  array( 'CCSettingsExporter', 'Export'), CC_ADMIN_ONLY,
-                ccs(__FILE__), '', _('Exports configuration to browser'), CC_AG_MISC_ADMIN );
-        CCEvents::MapUrl( ccp('import'),  array( 'CCSettingsExporter', 'Import'), CC_ADMIN_ONLY,
-                ccs(__FILE__), '?i=path_to_file', _('Import configuration'), CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( ccp('export'), array( 'CCSettingsExporter', 'Export'),
+                          CC_ADMIN_ONLY, ccs(__FILE__), '', 
+                          _('Exports configuration to browser'), 
+                          CC_AG_MISC_ADMIN );
+        CCEvents::MapUrl( ccp('import'), array( 'CCSettingsExporter', 'Import'),
+                          CC_ADMIN_ONLY, ccs(__FILE__), '?i=path_to_file', 
+                          _('Import configuration'), CC_AG_MISC_ADMIN );
     }
 
 }

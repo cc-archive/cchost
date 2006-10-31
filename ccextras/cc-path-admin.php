@@ -39,8 +39,7 @@ class CCPathAdminForm extends CCEditConfigForm
 
         $fields['files-root'] =
                array( 'label'       => 'viewfile ' . _('Path'),
-                       'form_tip'   => _('ccHost will look here for files used with the "viewfile" command 
-                                        before it looks in ccfiles'),
+                       'form_tip'   => _('ccHost will look here for files used with the "viewfile" command before it looks in ccfiles'),
                        'value'      => 'ccfiles/',
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE  );
@@ -60,7 +59,7 @@ class CCPathAdminForm extends CCEditConfigForm
                        'flags'      => CCFF_POPULATE );
 
         $fields['php-tal-cache-dir'] =
-               array( 'label'       => $wflag . 'Cache Directory',
+               array( 'label'       => $wflag . _('Cache Directory'),
                        'form_tip'   => _('Used by the system to write cached page templates and other temporary files.'),
                        'value'      => 'cclib/phptal/phptal_cache',
                        'writable'   => true,
@@ -83,7 +82,7 @@ class CCPathAdminForm extends CCEditConfigForm
 
         $fields['avatar-dir'] =
                array(  'label'      => $wflag . _('Avatar Directory'),
-                       'form_tip'   => _('If blank then avatars are assumed to be in the user\'s upload directory.'),
+                       'form_tip'   => _("If blank, avatars are assumed to be in the user's upload directory."),
                        'writable'   => true,
                        'value'      => 'localdir',
                        'formatter'  => 'textedit',
@@ -105,7 +104,7 @@ class CCPathAdminForm extends CCEditConfigForm
 
         $fields['user-upload-root'] =
                array( 'label'       => $wflag . _('Media Upload Directory'),
-                       'form_tip'   => _('Files will be uploaded to/downloaded from here.'),
+                       'form_tip'   => _('Files will be uploaded to and downloaded from here.'),
                        'value'      => 'people',
                        'writable'   => true,
                        'formatter'  => 'sysdir',
@@ -114,7 +113,7 @@ class CCPathAdminForm extends CCEditConfigForm
 
         $fields['contest-upload-root'] =
                array( 'label'       => $wflag . _('Contest Upload Directory'),
-                       'form_tip'   => _('Contest sources and entries will be uploaded/downloaded here.'),
+                       'form_tip'   => _('Contest sources and entries will be uploaded and downloaded here.'),
                        'value'      => 'contests',
                        'writable'   => true,
                        'formatter'  => 'sysdir',
@@ -125,12 +124,9 @@ class CCPathAdminForm extends CCEditConfigForm
 
         $this->AddFormFields($fields);
 
-        $help = _('NOTE: Changing the values here will not move any files around. You are
-                 responsible for that and the system will not work until the directories
-                 match these values');
+        $help = _('NOTE:') . ' '. _('Changing the values here will not move any files around. You are responsible for that and the system will not work until the directories match these values.');
         $this->SetHelpText($help);
-        $help = _(sprintf('NOTE: Fields with %s need to be set up
-                 so that PHP script has full write access.',$wflag));
+        $help = _('NOTE:') . ' ' . _(sprintf('Fields with %s need to be set up so that PHP scripts have full write access.', $wflag));
         $this->SetHelpText($help);
 
     }
@@ -152,7 +148,7 @@ class CCPathAdminForm extends CCEditConfigForm
 
             if( $mustexist && !file_exists($dir) )
             {
-                $this->SetFieldError($fieldname, _('This directory or file does not exist'));
+                $this->SetFieldError($fieldname, _('This directory or file does not exist.'));
                 return false;
             }
 
@@ -162,7 +158,7 @@ class CCPathAdminForm extends CCEditConfigForm
             {
                 if( !is_writable($dir) )
                 {
-                    $this->SetFieldError($fieldname, _('This file or directory is not writable'));
+                    $this->SetFieldError($fieldname, _('This file or directory is not writable.'));
                     return false;
                 }
             }
@@ -204,9 +200,9 @@ class CCPathAdmin
 
             $items += array(
                 'pathman'   => array( 
-                                 'menu_text'  => _('Paths'),
-                                 'menu_group' => 'configure',
-                                 'help' => 'Configure where ccHost looks for stuff',
+                                 'menu_text'    => _('Paths'),
+                                 'menu_group'   => 'configure',
+                                 'help'         => _('Configure where ccHost looks for stuff'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 60,
                                  'action' =>  ccl('admin', 'paths')

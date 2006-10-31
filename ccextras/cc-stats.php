@@ -41,40 +41,17 @@ function cc_stats_on_user_row(&$row)
     $username = $row['user_real_name'];
 
     if( empty( $row['user_num_remixes'] ) )
-    {
         if(  empty( $row['user_num_remixed'] ) )
             return;
 
-        $str = sprintf(_("%s has no remixes"),$username);
-    }
-    else
-    {
-        if( $row['user_num_remixes'] == 1 )
-        {
-            $str = sprintf(_("%s has 1 remix"),$username);
-        }
-        else
-        {
-            $str = sprintf(_("%s has %d remixes"),$username,$row['user_num_remixes']);
-        }
-    }
+    $str = N_( "%s has %d remix.",
+               "%s has %d remixes.", $row['user_num_remixes'] );
 
-    if( empty( $row['user_num_remixed'] ) )
-    {
-        $str .= _(' and has not been remixed');
-    }
-    else
-    {
-        if( $row['user_num_remixed'] == 1 )
-        {
-            $str .= _( ' and has been remixed once' );
-        }
-        else
-        {
-            $str .= sprintf( _(' and has been remixed %d times'), 
-                               $row['user_num_remixed'] );
-        }
-    }
+    $str = sprintf($str, $username, $row['user_num_remixes']);
+
+    $str .= ' ' . N_( '%s has been remixed %d time.',
+                      '%s has been remixed %d times.', 
+                      $row['user_num_remixed'] );
     
     $row['user_fields'][] = array( 'label' => _('Stats'),
                                    'value' => $str,
@@ -117,7 +94,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
     }
     $args['root-url'] = cc_get_root_url();
     $text = $template->SetAllAndParse($args);
-    CCPage::SetTitle(_("Charts "));
+    CCPage::SetTitle(_("Charts"));
     CCPage::AddPrompt('body_text',$text);
 }
 

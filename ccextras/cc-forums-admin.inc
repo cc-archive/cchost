@@ -97,7 +97,7 @@ class CCForumAddGroupForm extends CCForm
             'forum_group_weight' => array( 
                     'label'     => _('Weight'),
                     'formatter' => 'textedit',
-                    'form_tip'  => _('Lower number places forum group higher in listing'),
+                    'form_tip'  => _('A lower number places forum group higher in listing.'),
                     'class'     => 'cc_form_input_short',
                     'flags'     => CCFF_REQUIRED | CCFF_POPULATE,
                      ),
@@ -111,13 +111,11 @@ class CCForumConfirmDeleteForm extends CCForm
 {
     function CCForumConfirmDeleteForm($pretty_name)
     {
-        $help = _('
-This action will delete <b>ALL</b> topics ever posted in the forum. There is <b>NO UNDO</b>
-so once you delete the forum <b>ALL</b> messages will be gone forever.');
+        $help = _('This action will delete <b>ALL</b> topics ever posted in the forum. There is <b>NO UNDO</b>. Once you delete the forum, <b>ALL</b> messages will be gone forever.');
 
         $this->CCForm();
         $this->SetHelpText($help);
-        $this->SetSubmitText(sprintf(_("Delete Forum \"%s\" ?"),$pretty_name));
+        $this->SetSubmitText(sprintf(_("Delete Forum, '%s' ?"), $pretty_name));
     }
 }
 
@@ -138,7 +136,7 @@ class CCForumMoveThreadForm extends CCForm
 
         $fields = array(
             'forum_id' => array( 
-                    'label'     => 'Forum:',
+                    'label'     => _('Forum') . ':',
                     'formatter' => 'select',
                     'form_tip'  => _('Move thread to this fourm'),
                     'options'   => $options,

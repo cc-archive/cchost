@@ -30,14 +30,14 @@ if( !defined('IN_CC_HOST') )
 */
 require_once('cclib/cc-feeds.php');
 
-define('CC_EVENT_TOPIC_ROW', 'topicrow');
+define('CC_EVENT_TOPIC_ROW',    'topicrow');
 define('CC_EVENT_TOPIC_DELETE', 'topicdelete');
-define('CC_EVENT_TOPIC_REPLY', 'topicreply');
+define('CC_EVENT_TOPIC_REPLY',  'topicreply');
 
 // Topic Delete Flags
-define('CCTDF_MARK', 'mark');
-define('CCTDF_SHALLOW', 'shallow');
-define('CCTDF_DEEP', 'deep');
+define('CCTDF_MARK',            'mark');
+define('CCTDF_SHALLOW',         'shallow');
+define('CCTDF_DEEP',            'deep');
 
 define('CC_MAX_TOPIC_FEED_ITEMS', 30 );
 
@@ -47,10 +47,11 @@ class CCTopicsFeed extends CCFeed
 {
     function Feed(&$topics,$title,$feed_type,$feed_url)
     {
+        // TODO: Fix this to be generic for feed types...
         if( $feed_type == 'rss' )
             $template = 'rss_20_topics.xml';
         else
-            die('unknown feed type'); // blaaa!
+            die(_('You have requested an unknown feed type.')); // blaaa!
 
         $title = $this->_cct($title);
 
@@ -72,9 +73,10 @@ class CCConfirmTopicDeleteForm extends CCForm
     function CCConfirmTopicDeleteForm($pretty_name)
     {
         $this->CCForm();
-        $this->SetHelpText(_("This action can not be reversed...") );
+        $this->SetHelpText(_("This action cannot be reversed...") );
         // this line was different in svn:
-        $this->SetSubmitText(sprintf(_("Delete \"%s\" ?"),$pretty_name));
+        $this->SetSubmitText(sprintf(_('Are you sure you want to delete "%s"?'),
+                                     $pretty_name));
     }
 }
 
@@ -89,16 +91,16 @@ class CCTopicForm extends CCSecurityVerifierForm
         if( $visible_title )
         {
             $fields['topic_name'] = array(
-                            'label'       => _('Title'),
-                            'formatter'   => 'textedit',
-                            'flags'      => CCFF_REQUIRED | CCFF_POPULATE);
+                            'label'         => _('Title'),
+                            'formatter'     => 'textedit',
+                            'flags'         => CCFF_REQUIRED | CCFF_POPULATE);
         }
 
         $fields += array( 
                     'topic_text' => array(
-                            'label'       => $label_text,
-                            'formatter'   => 'textarea',
-                            'flags'      => CCFF_REQUIRED | CCFF_POPULATE),
+                            'label'         => $label_text,
+                            'formatter'     => 'textarea',
+                            'flags'         => CCFF_REQUIRED | CCFF_POPULATE),
                     'user_mask' =>
                        array( 'label'       => '',
                                'formatter'  => 'securitykey',
@@ -121,7 +123,7 @@ class CCTopicReplyForm extends CCTopicForm
 {
     function CCTopicReplyForm()
     {
-        $this->CCTopicForm(_('Reply'),'Submit Reply');
+        $this->CCTopicForm(_('Reply'), 'Submit Reply');
     }
 }
 
@@ -129,7 +131,7 @@ class CCTopicEditForm extends CCTopicForm
 {
     function CCTopicEditForm($static_title=true)
     {
-        $this->CCTopicForm(_('Text'),'Submit Changes');
+        $this->CCTopicForm(_('Text'), 'Submit Changes');
         if( $static_title )
         {
             $flags = CCFF_STATIC | CCFF_NOUPDATE | CCFF_POPULATE;
@@ -143,7 +145,7 @@ class CCTopicEditForm extends CCTopicForm
         $f['topic_name'] = array(
                             'label'       => _('Title'),
                             'formatter'   => $type,
-                            'flags'      => $flags
+                            'flags'       => $flags
                             );
 
         //ugh -- don't do this
@@ -473,7 +475,8 @@ class CCTopic
 
         if( empty($record) )
         {
-            CCPage::Prompt(_('Can not find that topic, it might have been deleted by the author'));
+            CCPage::Prompt(_('Cannot find that topic.') . ' ' . 
+                           _('It might have been deleted by the author.'));
             CCUtil::Send404(false);
             return;
         }
@@ -595,7 +598,7 @@ class CCTopic
             $topics =& CCTopics::GetTable();
             $pretty_name = $topics->QueryItemFromKey('topic_name',$topic_id);
             if( empty($pretty_name) )
-                $pretty_name = 'Topic';
+                $pretty_name = _('Topic');
             $form = new CCConfirmTopicDeleteForm($pretty_name);
             CCPage::AddForm( $form->GenerateForm() );
         }
@@ -622,7 +625,8 @@ class CCTopic
                 // one parent, no children:
                 // delete from tree
                 $tree->DeleteWhere($arg1);
-                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_SHALLOW, $topic_id ));
+                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_SHALLOW, 
+                                                                $topic_id ));
                 // delete from topics
                 $topics->DeleteKey($topic_id);
                 // If the parent is marked as deleted, nuke it
@@ -639,13 +643,15 @@ class CCTopic
                 $args4['topic_id'] = $topic_id;
                 $args4['topic_deleted'] = 1;
                 $topics->Update($args4);
-                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, $topic_id ));
+                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, 
+                                                                $topic_id ));
             }
         }
         else
         {
             // top level topic or branch flag is set, wipe it's tree...
-            CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_DEEP, $topic_id ));
+            CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_DEEP, 
+                                                            $topic_id ));
             $this->_delete_tree($topic_id);
         }
     }
@@ -679,7 +685,8 @@ class CCTopic
                 CCPage::AddScriptBlock('dl_popup_script',true);
             }
                 
-            CCPage::AddScriptLink( ccd('cctemplates', 'js', 'cc-topics.js'), false );
+            CCPage::AddScriptLink( ccd('cctemplates', 'js', 'cc-topics.js'), 
+                                       false );
             $cname = 'skin-' . $CC_GLOBALS['skin'] . '-topics.css';
             $css_file = CCTemplate::GetTemplate($cname,false);
             CCPage::AddLink('head_links', 'stylesheet', 'text/css', 
@@ -763,8 +770,8 @@ class CCTopic
         $lock = !$topic['topic_locked'];
         $this->_lock_tree($topic,$topics,$lock);
 
-        $prompt = $lock ? _('Topic has been locked') 
-                        : _('Topic has been unlocked');
+        $prompt = $lock ? _('Topic is now locked') 
+                        : _('Topic is now unlocked');
 
         if( !empty($_SERVER['HTTP_REFERER']) )
         {

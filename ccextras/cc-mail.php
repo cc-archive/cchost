@@ -103,7 +103,7 @@ class CCMailAdminForm extends CCEditConfigForm
 
             'mail_throttle' =>
                 array(
-                        'label'       => _('eMail Flood Throttle'),
+                        'label'       => _('E-mail Flood Throttle'),
                         'flags'      => CCFF_POPULATE,
                         'formatter'  => 'textedit',
                         'class'      => 'cc_form_input_short',
@@ -112,7 +112,7 @@ class CCMailAdminForm extends CCEditConfigForm
 
             'mail_to_admin' =>
                 array(
-                        'label'       => _('Mail to Admin Acct:'),
+                        'label'       => _('Mail to Admin Acct'),
                         'form_tip'   => _('Who can send mail to admin accounts?'),
                         'flags'      => CCFF_POPULATE,
                         'options'    => array(
@@ -294,7 +294,7 @@ class CCContactMailerForm extends CCSecurityVerifierForm
                             'label'       => _('Message'),
                             'formatter'   => 'textarea',
                             'maxlength'   => 1000,
-                            'form_tip'    => 'Message is limited to 1,000 characters',
+                            'form_tip'    => _('Message is limited to 1,000 characters'),
                             'flags'      => CCFF_REQUIRED ),
                     'user_mask' =>
                        array( 'label'       => '',
@@ -335,14 +335,12 @@ class CCMailerAPI
                 $url = ccl('admin','mail');
                 $link1 = "<a href=\"$url\">";
                 $link2 = "</a>";
-                $fmt = _('Mail has not been properly configured on the this system. 
-                          Set an admin return mail address in %sConfigure Mail%s');
+                $fmt = _('Mail has not been properly configured on the this system.') . ' ' . _('Set an admin return mail address in %sConfigure Mail%s');
                 $msg = sprintf( $fmt, $link1, $link2 );
             }
             else
             {
-                $msg = _('Mail has not been properly configured on this system. Contact
-                          your administrator through regular email.');
+                $msg = _('Mail has not been properly configured on this system.') . ' ' . _('Contact your administrator through regular email.');
             }
 
             CCPage::SystemError( $msg );
@@ -370,7 +368,7 @@ class CCMailerAPI
         {
             // admin forgot to run update
 
-            $ret['msg'] = _('Mail update was not properly installed');
+            $ret['msg'] = _('Mail update is not properly installed');
             return $ret;
         }
         if( CCUser::IsAdmin() )
@@ -395,7 +393,7 @@ class CCMailerAPI
             }
             else
             {
-                $ret['msg'] = _('Sorry, only logged in users can send mail to the admins');
+                $ret['msg'] = _('Sorry, only logged in users may send mail to the admins.');
             }
         }
         else // Mail is not addressed to admin:
@@ -428,7 +426,7 @@ class CCMailerAPI
 
             if( ($rule & CC_MAIL_NOTALLOWED) == CC_MAIL_NOTALLOWED )
             {
-                $ret['msg'] = 'You are not authorized to send mail.';
+                $ret['msg'] = _('You are not authorized to send mail.');
             }
             elseif( ($rule & CC_MAIL_THROTTLED) == CC_MAIL_THROTTLED )
             {
@@ -550,7 +548,7 @@ class CCMailerAPI
 
     function MassMail()
     {
-        CCPage::SetTitle("Send Mail to Everybody");
+        CCPage::SetTitle(_("Send Mail to Everybody"));
 
         if( !CCUser::IsAdmin() )
             die('Welcome to ccHost');
@@ -559,11 +557,11 @@ class CCMailerAPI
             return;
 
 
-        $user_to['user_name'] = 'really';
-        $user_to['user_real_name'] = 'Everyone';
-        $user_from['user_name'] = 'really';
-        $user_from['user_real_name'] = 'You';
-        $user_from['user_id'] = CCUser::CurrentUser();
+        $user_to['user_name']        = _('really');
+        $user_to['user_real_name']   = _('EVERYONE');
+        $user_from['user_name']      = _('really');
+        $user_from['user_real_name'] = _('You');
+        $user_from['user_id']        = CCUser::CurrentUser();
 
         $form = new CCContactMailerForm($user_to,$user_from);
 
@@ -611,7 +609,7 @@ class CCMailerAPI
                 $mailer->BCC('');
             }
 
-            $msg = "Mass mail: Sent $sent Messages";
+            $msg = sprintf(_("Mass mail: Sent %s Messages"), $sent);
 
             CCPage::Prompt($msg);
         }
@@ -659,7 +657,7 @@ class CCMailerAPI
                 'emailadmin'   => array( 
                                  'menu_text'  => _('Email'),
                                  'menu_group' => 'configure',
-                                 'help' => 'Configure system email address and access',
+                                 'help' => _('Configure system email address and access'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 65,
                                  'action' =>  ccl('admin', 'mail')

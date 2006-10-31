@@ -26,8 +26,10 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 // there in the base class
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCDataDump',  'OnApiQueryFormat')); 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCDataDump', 'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCDataDump',  
+                                                         'OnApiQueryFormat')); 
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCDataDump', 
+                                                         'OnMapUrls'));
 
 define('CC_FEED_DATADUMP', 'datadump');
 

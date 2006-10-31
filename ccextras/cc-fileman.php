@@ -86,9 +86,9 @@ class CCFileMan
 
             $items += array(
                 'fileman'   => array( 
-                                 'menu_text'  => 'Manage files',
+                                 'menu_text'  => _('Manage files'),
                                  'menu_group' => 'configure',
-                                 'help' => 'Manage files in the ' . $CC_GLOBALS['files-root'] . ' directory',
+                                 'help' => sprintf(_('Manage files in the directory, %s.'), $CC_GLOBALS['files-root']),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 60,
                                  'action' =>  ccl('admin','files','manage')

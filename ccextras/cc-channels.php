@@ -125,7 +125,7 @@ class CCChannels
             $b['site_promo_tag'] = $_POST['site_promo_tag'];
             $configs->SaveConfig('config',$b,CC_GLOBAL_SCOPE,true);
 
-            CCPage::Prompt("Channel information saved");
+            CCPage::Prompt(_('Channel information saved'));
         }
 
     }
@@ -147,8 +147,11 @@ class CCChannels
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','channels'), array( 'CCChannels', 'Admin'),  CC_ADMIN_ONLY,
-              ccs(__FILE__), '', _('Configure channels/radio interface'), CC_AG_RENDER );
+        CCEvents::MapUrl( ccp('admin','channels'), 
+                          array( 'CCChannels', 'Admin'),  CC_ADMIN_ONLY,
+                          ccs(__FILE__), '', 
+                          _('Configure channels/radio interface'), 
+                          CC_AG_RENDER );
     }
 
     /**

@@ -96,10 +96,7 @@ class CCHowIDidIt
                            'selected' => $sort == 'upload_name' ),
             );
 
-        $help = 'Remixers are encouraged to specify the tools and process they used to create ' .
-                'submissions to this site. Below is a list of submissions that the author has ' .
-                'annotated with these special notes. Click on any submission to see the ' .
-                'author\'s notes.';
+        $help = _("Remixers are encouraged to specify the tools and process they used to create submissions to this site. Below is a list of submissions that the author has annotated with these special notes. Click on any submission to see the 'author's notes.");
 
         CCPage::PageArg('howididit_sort_cap', _('Sort by:'));
         CCPage::PageArg('howididit_sorts', $sorts );
@@ -197,7 +194,7 @@ class CCHowIDidIt
                 $uploads->Update($args);
                 CCUploadAPI::UpdateCCUD($upload_id,'how_i_did_it','');
                 $url = ccl('howididit',$upload_id);
-                CCPage::Prompt(sprintf(_("Changes saved. Click <a href=\"%s\">here</a> to see results"),$url));
+                CCPage::Prompt(sprintf(_("Changes saved. Click %s to see results"), "<a href=\"$url\">here</a>"));
             }
             else
             {
@@ -212,8 +209,8 @@ class CCHowIDidIt
                 CCUploadAPI::UpdateCCUD($upload_id,'','how_i_did_it');
 
                 $url = $record['file_page_url'];
-                $msg = "No 'How I Did It' for this record. Click <a href=\"%s\">here</a> to go back to the upload's page";
-                CCPage::Prompt(sprintf(_($msg),$url));
+                $msg = _("No 'How I Did It' for this record. Click %s to go back to the upload's page");
+                CCPage::Prompt(sprintf($msg,"<a href=\"$url\">here</a>"));
             }
                     
         }
@@ -224,7 +221,7 @@ class CCHowIDidIt
         $fields = array(
             'tools' => array(
                 'label'     => _('Tools I Used'),
-                'form_tip'  => _('What software, hardware, plug-ins, etc. did you use?'),
+                'form_tip'  => _('What software, hardware, and plug-ins did you use?'),
                 'formatter' => 'textarea',
                 'flags'     => CCFF_POPULATE),
             'samples' => array(
@@ -244,7 +241,7 @@ class CCHowIDidIt
                 'flags'     => CCFF_POPULATE),
             'other' => array(
                 'label'     => _('Other Notes'),
-                'form_tip'  => _('Share your feelings about the experience of creating this work'),
+                'form_tip'  => _('Share your feelings about the experience of creating this work.'),
                 'formatter' => 'textarea',
                 'flags'     => CCFF_POPULATE)
             );
@@ -327,18 +324,18 @@ class CCHowIDidIt
     {
         CCEvents::MapUrl( ccp('howididit'),      array('CCHowIDidIt','HowIDidIt'),   
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{upload_id}', 
-            _('Show How I Did Page for an upload'), CC_AG_HIDI );
+            _('Show How I Did It Page for an upload'), CC_AG_HIDI );
 
         CCEvents::MapUrl( ccp('howididit','browse'), array('CCHowIDidIt','Browse'),  
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), 
-            _('Show How I Did browser'), CC_AG_HIDI  );
+            _('Show How I Did It browser'), CC_AG_HIDI  );
 
         CCEvents::MapUrl( ccp('howididit','detail'), array('CCHowIDidIt','Detail'),  
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__)  );
 
         CCEvents::MapUrl( ccp('edithowididit'),  array('CCHowIDidIt','EditHowIDidIt'),   
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{upload_id}', 
-            _('Edit How I Did Page'), CC_AG_HIDI );
+            _('Edit How I Did It Page'), CC_AG_HIDI );
     }
 
 }

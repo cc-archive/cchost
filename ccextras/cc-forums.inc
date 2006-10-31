@@ -413,7 +413,7 @@ EOF;
         {
             $this->_build_bread_crumb_trail(1);
             CCPage::SetTitle( _('Thread Missing') );
-            CCPage::Prompt(_('That topic thread does not exist'));
+            CCPage::Prompt(_('That topic thread does not exist.'));
             return;
         }
 
@@ -424,11 +424,11 @@ EOF;
         if( ($mask & $forum_row['forum_read_access']) == 0 )
         {
             if( ($forum_row['forum_read_access'] & CC_ADMIN_ONLY) != 0 )
-                $msg = _('You must have admin rights to see this forum');
+                $msg = _('You must have admin rights to see this forum.');
             elseif( ($forum_row['forum_read_access'] & CC_MUST_BE_LOGGED_IN) != 0 )
-                $msg = _('You must be logged in to see this forum');
+                $msg = _('You must be logged in to see this forum.');
             else
-                $msg = _('You do have proper permissions to see this forum');
+                $msg = _('You do have proper permissions to see this forum.');
 
             CCPage::SetTitle(_('Restricted Access'));
             CCPage::Prompt($msg);
@@ -442,7 +442,7 @@ EOF;
 
             if( $closed )
             {
-                $commands[] = array( 'url' => 0, 'msg' => _('Thread is closed to new comments') );
+                $commands[] = array( 'url' => 0, 'msg' => _('Thread is closed to new comments.') );
             }
             else
             {

@@ -45,8 +45,7 @@ class v_3_1a extends CCUpdate
         $sb_dest = $troot . 'sidebar.xml';
         if( !file_exists($sb_src) )
         {
-            CCPage::Prompt('Warning: The default Sidebar content file (custom.xml) was not
-                            found so no copy was made');
+            CCPage::Prompt(_('WARNING') . ': ' . _('The default Sidebar content file (custom.xml) was not found. So, no copy was made.'));
         }
         elseif( !file_exists($sb_dest) )
         {
@@ -54,16 +53,16 @@ class v_3_1a extends CCUpdate
             {
                 copy( $sb_src, $sb_dest );
                 chmod( $sb_dest, 0777 );
-                CCPage::Prompt('custom.xml was copied to sidebar.xml');
+                CCPage::Prompt(('custom.xml was copied to sidebar.xml'));
             }
             else
             {
-                CCPage::Prompt( "Tried to write: $sb_dest but it is not writable");
+                CCPage::Prompt(sprintf(_("Tried to write to %s, but it is not writable."), $sb_dest) );
             }
         }
         else
         {
-            CCPage::Prompt('sidebar.xml alrady exists so custom.xml was not copied');
+            CCPage::Prompt(_('sidebar.xml already exists so custom.xml was not copied'));
         }
 
     }

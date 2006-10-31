@@ -36,7 +36,7 @@ class v_3_1b extends CCUpdate
         $this->_update_mail_opts();
         $this->_update_paths();
 
-        CCPage::Prompt('Sample pool performance, Email rules, system paths installed');
+        CCPage::Prompt(_('Sample pool performance, Email rules, system paths installed'));
    }
 
     function _update_paths()

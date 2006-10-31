@@ -55,7 +55,7 @@ END;
 
         CCDatabase::Query($sql);
 
-        CCPage::Prompt("Notifications installed");
+        CCPage::Prompt(_("Notifications installed"));
     }
 }
 
