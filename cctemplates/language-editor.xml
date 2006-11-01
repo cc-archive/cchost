@@ -78,7 +78,7 @@ $Id$
 //<!--
 var myGlobalHandlers = {
     onCreate: function(){
-        ed_status(${LE/str_waiting));
+        ed_status('${LE/str_waiting)');
     },
 
     onComplete: function(req,t,json) {
@@ -120,7 +120,7 @@ function get_domain()
     currentDomain = $$F('domain'); 
     if( !currentDomain )
     {
-        alert(${LE/str_missing_domain});
+        alert('${LE/str_missing_domain}');
         return false;
     }
     return true;
