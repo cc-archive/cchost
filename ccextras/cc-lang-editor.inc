@@ -28,7 +28,7 @@ if( !defined('IN_CC_HOST') )
 
 class CCLanguageEditor
 {
-    function Language($domain='default')
+    function Language($domain='default',$writearg=0)
     {
         global $CC_GLOBALS;
 
@@ -36,37 +36,46 @@ class CCLanguageEditor
         $args = array();
         $args['string_table'] = $tt;
         $args['domain'] = $domain;
-        $args['msg_missing_domain'] = _('You must specify a target domain');
+        $args['str_select_a_string'] =     _('Select a string');
+        $args['str_domain'] =              _('Domain'); 
+        $args['str_generate_pot'] =        _('Generate pot');
+        $args['str_original_string'] =     _('Original String');    
+        $args['str_copy_this_string'] =    _('copy this string');   
+        $args['str_translates_to'] =       _('Translates to');      
+        $args['str_commit_and_advance'] =  _('Commit and Advance'); 
+        $args['str_commit'] =              _('Commit');
+        $args['str_revert'] =              _('Revert');          
+        $args['str_will_be_saved_to'] =    _('Will be saved to');
+        $args['str_missing_domain'] =      _('You must specify a target domain');
+        $args['str_waiting'] =             _('waiting...');
 
         CCPage::PageArg('langeditor', 'language-editor.xml/language_editor');
         CCPage::PageArg('LE',$args,'langeditor');
         CCPage::SetTitle(_('Language Domain String Editor'));
+
     }
 
-    function GetString($domain,$hash,$cmd='')
+    function GetString($domain,$hash)
     {
-        $target_file = "locale/$domain/cchost.lang";
+        require_once('cclib/zend/json-encoder.php');
         $tt = $this->_get_lang_file($domain);
-        $encoded = htmlentities($tt[$hash][0]);
-        $string = $tt[$hash][ $cmd == 'revert' ? 0 : 1 ];
-        $html =
-     '<div class="org_title">' . _('Original String') . '</div>
-     <div class="org_string">' . $encoded . '</div>
-     <div class="org_title">' . _('Translates to') . ':</div>
-     <textarea id="translated" name="translated" rows="11" cols = "45">' . $string . '</textarea>
-     <div><br /><a id="commentcommand" href="#" onclick="do_edit_string("' . $hash . '")"><span>' . _('Commit Changes') . '</span></a> &nbsp; &nbsp; ' . _('to') . ': ' . $target_file . '</div><br />
-     <div><br /><a id="commentcommand" href="#" onclick="do_get_string("' . $hash . '","revert")"><span>' . _('Revert') . '</span></a></div>';
-       print $html;
-       exit;
+        $json['msgid']       = $tt[$hash][0];
+        $json['msgstr']      = $tt[$hash][1];
+        $json['context']     = $tt[$hash][2];
+        $json['target_file'] = "locale/$domain/cchost.lang";
+        $js = CCZend_Json_Encoder::encode($json);
+        header( "X-JSON: $js" );
+        header( 'Content-type: text/plain' );
+        print($js);
+        exit;
     }
 
     function EditString($domain,$hash)
     {
         if( empty($hash) ) {
-            print(_("Invalid hash"));
+            print("Invalid hash");
             exit;
         }
-
         $tt = $this->_get_lang_file($domain);
         $tt[$hash][1] = CCUtil::StripSlash(urldecode($_REQUEST['string']));
         $text = serialize($tt);
@@ -75,14 +84,31 @@ class CCLanguageEditor
         fwrite($f,$text);
         fclose($f);
         chmod($target_file,cc_default_file_perms());
-        print(_("Changes saved"));
+        $this->_return_stat( _('String saved to:') . $target_file);
+    }
+
+    function WritePot($domain)
+    {
+        $target_file = $this->_write_pot_file($domain);
+        $this->_return_stat( _('pot file written:') . $target_file);
+    }
+    
+    function _return_stat($msg)
+    {
+        require_once('cclib/zend/json-encoder.php');
+        $json['statmsg'] = $msg;
+        $js = CCZend_Json_Encoder::encode($json);
+        header( "X-JSON: $js" );
+        header( 'Content-type: text/plain' );
+        print($js);
         exit;
     }
 
     function _parse_pot_file($pot_file,$fname)
     {
         $text = file_get_contents($pot_file);
-        $regex2 = '/msgid (.*)msgstr(.*)\n\n/sU';
+        //$regex2 = '/msgid (.*)msgstr(.*)\n\n/sU';
+        $regex2 = '/#:(.*)(#,.*)?msgid (.*)msgstr(.*)\n\n/sU';
         preg_match_all($regex2,$text,$matches,PREG_SET_ORDER);
 
         $regex3 = '/"(.+)"$/mSU';
@@ -91,14 +117,21 @@ class CCLanguageEditor
         $sort = array();
         foreach( $matches as $m)
         {
-            preg_match_all($regex3,$m[1],$t);
+            preg_match_all($regex3,$m[3],$t);
             $msgid = str_replace('\'','\\\'', join( "\n", $t[1] ));
             if( !$msgid )
                 continue;
-            preg_match_all($regex3,$m[2],$t);
-            $msgstr = str_replace('\'','\\\'',join( "\n", $t[1] ));
+            if( $m[4] )
+            {
+                preg_match_all($regex3,$m[4],$t);
+                $msgstr = str_replace('\'','\\\'',join( "\n", $t[1] ));
+            }
+            else
+            {
+                $msgstr = '';
+            }
             $key = sprintf('%08X',crc32($msgid));
-            $hash[ $key ] = array( $msgid, $msgstr );
+            $hash[ $key ] = array( $msgid, $msgstr, $m[1] );
             $sort[ trim($msgid) ] = $key;
         }
 
@@ -115,6 +148,63 @@ class CCLanguageEditor
         chmod($fname,0777);
     }
 
+    function _write_pot_file($domain)
+    {
+        $txt =<<<END
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\\n"
+"Report-Msgid-Bugs-To: \\n"
+"POT-Creation-Date: 2006-10-29 13:33-0800\\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n"
+"Language-Team: LANGUAGE <LL@li.org>\\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\\n"
+"Content-Transfer-Encoding: 8bit\\n"
+END;
+        $intext = file_get_contents( 'locale/' . $domain . '/cchost.lang' );
+        $I = unserialize($intext);
+        $keys = array_keys($I);
+        $c = count($keys);
+        $heads = array( 'msgid: ', 'msgstr: ' );
+
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $e =& $I[$keys[$i]];
+
+            $txt .= "\n#:{$e[2]}";
+            for( $n = 0; $n < 2; $n++ )
+            {
+                $txt .= $heads[$n];
+                $strs = split("\n",$e[$n]);
+                if( count($strs) > 1  ) 
+                {
+                    $txt .= "\"\"\n";
+                    foreach( $strs as $s )
+                        $txt .= "\"$s\"\n";
+                }
+                else
+                {
+                    $txt .= "\"{$strs[0]}\"\n";
+                }
+            }
+        }
+
+        $outname = 'locale/' . $domain . '/cchost.pot';
+        $f = fopen($outname,'w');
+        fwrite($f,$txt);
+        fclose($f);
+        chmod($outname,0777);
+        return $outname;
+    }
+
     function _create_lang_file($domain)
     {
         CCUtil::MakeSubdirs("locale/$domain");
@@ -122,7 +212,7 @@ class CCLanguageEditor
         $pot_file = "cchost.pot";
         if( !file_exists($pot_file) )
         {
-            CCPage::SystemError(_('The system cannot find the language map') . ": ($pot_file)" );
+            CCPage::SystemError(_('Can not find language map') . " ($pot_file)" );
             return;
         }
         $this->_parse_pot_file($pot_file,$lang_file);

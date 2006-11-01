@@ -41,17 +41,17 @@ class CCLanguageEditorAPI
                             array( 'CCLanguageEditor', 'Language'), CC_ADMIN_ONLY, 
                             'ccextras/cc-lang-editor.inc');
 
-        CCEvents::MapUrl( ccp('admin','language','edit'),  
+        CCEvents::MapUrl( ccp('admin','terms','edit'),  
                             array( 'CCLanguageEditor', 'EditString'), CC_ADMIN_ONLY, 
                             'ccextras/cc-lang-editor.inc');
 
-        CCEvents::MapUrl( ccp('admin','language','getstring'),  
+        CCEvents::MapUrl( ccp('admin','terms','getstring'),  
                             array( 'CCLanguageEditor', 'GetString'), CC_ADMIN_ONLY, 
                             'ccextras/cc-lang-editor.inc');
 
-        CCEvents::MapUrl( ccp('admin','language','translate'),  
-                            array( 'CCLanguageEditor', 'Translate'), CC_ADMIN_ONLY, 
-                            'ccextras/cc-lang-editor.inc'); 
+        CCEvents::MapUrl( ccp('admin','terms','writepot'),  
+                            array( 'CCLanguageEditor', 'WritePot'), CC_ADMIN_ONLY, 
+                            'ccextras/cc-lang-editor.inc');
     }
 
 }
