@@ -662,8 +662,8 @@ END;
             $link  = "<a href=\"$byurl\">";
 	        $link_close = "</a>";
             
-            $fmt = N_('%s has left %s%d review.%s',
-                      '%s has left %s%d reviews.%s', $count );
+            $fmt = ngettext('%s has left %s%d review.%s',
+                            '%s has left %s%d reviews.%s', $count );
             
             $text  = sprintf($fmt, $name, $link, $count, $link_close );
         }
@@ -678,8 +678,8 @@ END;
             $link  = "<a href=\"$url\">";
 	        $link_close = "</a>";
 
-            $fmt = N_('%s has been reviewed %s%d time.%s',
-                      '%s has been reviewed %s%d times.%s', $count);
+            $fmt = ngettext('%s has been reviewed %s%d time.%s',
+                            '%s has been reviewed %s%d times.%s', $count);
 
             $text  .= sprintf($fmt, $name, $link, $count, $link_close);
         }

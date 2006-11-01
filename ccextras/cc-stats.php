@@ -44,12 +44,12 @@ function cc_stats_on_user_row(&$row)
         if(  empty( $row['user_num_remixed'] ) )
             return;
 
-    $str = N_( "%s has %d remix.",
+    $str = ngettext( "%s has %d remix.",
                "%s has %d remixes.", $row['user_num_remixes'] );
 
     $str = sprintf($str, $username, $row['user_num_remixes']);
 
-    $str .= ' ' . N_( '%s has been remixed %d time.',
+    $str .= ' ' . ngettext( '%s has been remixed %d time.',
                       '%s has been remixed %d times.', 
                       $row['user_num_remixed'] );
     
