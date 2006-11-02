@@ -36,10 +36,6 @@ CCDebug::Log("Function gettext doesn't exist, using '" . basename(__FILE__) . '"
 * require_once('cclib/php-gettext/gettext.inc');
 */
 
-function gettext($t)
-{
-    return $t;
-}
 
 // alias to gettext and what we prefer
 function _($t)
@@ -48,9 +44,9 @@ function _($t)
 }
 
 // call for gettext plurals
-function ngettext($t)
+function ngettext($t1,$t2,$num)
 {
-    return $t;
+    return $num == 1 ? $t1 : $t2;
 }
 
 function bindtextdomain()
