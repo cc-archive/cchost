@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-29 13:33-0800\n"
+"POT-Creation-Date: 2006-10-31 17:47-0800\n"
 "PO-Revision-Date: 2006-08-31 11:28+0000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,7 +166,7 @@ msgid "Manage Site"
 msgstr "Quản lý tập tin"
 
 #: cclib/cc-admin.php:710 cclib/cc-contest-admin.inc:448
-#: cclib/cc-login.php:630 cclib/cc-mediahost.php:502 cclib/cc-tags.php:463
+#: cclib/cc-login.php:638 cclib/cc-mediahost.php:502 cclib/cc-tags.php:463
 msgid "Admin"
 msgstr "Quản trị"
 
@@ -243,17 +243,18 @@ msgstr ""
 msgid "Clicking on these links will not save your form."
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:84 cclib/cc-navigator-admin.inc:272
+#: cclib/cc-navigator-admin.inc:84 cclib/cc-navigator-admin.inc:273
 #: cclib/cc-editorials.php:65 cclib/cc-mediahost.php:488
-#: cclib/cc-user-admin.php:152 ccextras/cc-topics.php:248
+#: cclib/cc-user-admin.php:152 ccextras/cc-throttle.php:114
+#: ccextras/cc-topics.php:250 ccextras/cc-fileman.inc:521
 msgid "Delete"
 msgstr "Xoá bỏ"
 
-#: cclib/cc-navigator-admin.inc:84
+#: cclib/cc-navigator-admin.inc:84 ccextras/cc-throttle.php:114
 msgid "Order"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:84 ccextras/cc-topics.php:132
+#: cclib/cc-navigator-admin.inc:84 ccextras/cc-topics.php:134
 msgid "Text"
 msgstr "Thân"
 
@@ -293,108 +294,112 @@ msgstr ""
 msgid "SubTabs"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:163 cclib/cc-menu-admin.inc:107
+#: cclib/cc-navigator-admin.inc:144
+msgid "Query"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:164 cclib/cc-menu-admin.inc:107
 #: ccextras/cc-mail.php:120
 msgid "Logged in users only"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:164 cclib/cc-menu-admin.inc:109
+#: cclib/cc-navigator-admin.inc:165 cclib/cc-menu-admin.inc:109
 #: ccextras/cc-mail.php:119 ccextras/cc-forums-admin.inc:67
 msgid "Everyone"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:165 cclib/cc-menu-admin.inc:110
+#: cclib/cc-navigator-admin.inc:166 cclib/cc-menu-admin.inc:110
 msgid "Administrators only"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:227
+#: cclib/cc-navigator-admin.inc:228
 msgid "Rename Navigator Tabs Set"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:260
+#: cclib/cc-navigator-admin.inc:261 ccextras/cc-fileman.inc:511
 #, fuzzy
 msgid "Rename"
 msgstr "Tên"
 
-#: cclib/cc-navigator-admin.inc:263
+#: cclib/cc-navigator-admin.inc:264
 #, fuzzy
 msgid "Edit tabs"
 msgstr "Sửa"
 
-#: cclib/cc-navigator-admin.inc:276
+#: cclib/cc-navigator-admin.inc:277
 #, fuzzy
 msgid "Make default"
 msgstr "mặc định"
 
-#: cclib/cc-navigator-admin.inc:282
+#: cclib/cc-navigator-admin.inc:283
 msgid "Add new tab set"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:285
+#: cclib/cc-navigator-admin.inc:286
 msgid "Manage Navigator Tab Sets"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:298
+#: cclib/cc-navigator-admin.inc:299
 #, fuzzy
 msgid "Tab Text"
 msgstr "Thân"
 
-#: cclib/cc-navigator-admin.inc:299
+#: cclib/cc-navigator-admin.inc:300
 msgid "Tab Helper Text"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:314
+#: cclib/cc-navigator-admin.inc:315
 msgid "Edit Navigator Tabs:"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:451 cclib/cc-mediahost.php:50
+#: cclib/cc-navigator-admin.inc:461 cclib/cc-mediahost.php:50
 #: cclib/cc-user.php:670 ccextras/cc-archive.php:39
-#: ccextras/cc-reviews.php:332 ccextras/cc-forums.inc:239
-#: ccextras/cc-forums.inc:511
+#: ccextras/cc-reviews.php:331 ccextras/cc-forums.inc:241
+#: ccextras/cc-forums.inc:534
 msgid "Home"
 msgstr "Nhà"
 
-#: cclib/cc-navigator-admin.inc:452
+#: cclib/cc-navigator-admin.inc:462
 msgid "Home page"
 msgstr "Trang chủ"
 
-#: cclib/cc-navigator-admin.inc:457
+#: cclib/cc-navigator-admin.inc:467
 msgid "All"
 msgstr "Tất cả"
 
-#: cclib/cc-navigator-admin.inc:458
+#: cclib/cc-navigator-admin.inc:468
 msgid "See all the latest uploads"
 msgstr "Xem mọi tập tin đã tải lên gần nhất"
 
-#: cclib/cc-navigator-admin.inc:463 cclib/cc-pools-ui.php:314
+#: cclib/cc-navigator-admin.inc:473 cclib/cc-pools-ui.php:314
 msgid "Remix"
 msgstr "Hoà lại"
 
-#: cclib/cc-navigator-admin.inc:464
+#: cclib/cc-navigator-admin.inc:474
 msgid "See the latest remixes"
 msgstr "Xem các tập tin đã hoà lại gần nhất"
 
-#: cclib/cc-navigator-admin.inc:469 cclib/cc-pools-ui.php:314
+#: cclib/cc-navigator-admin.inc:479 cclib/cc-pools-ui.php:314
 msgid "Original"
 msgstr "Gốc"
 
-#: cclib/cc-navigator-admin.inc:470 cclib/cc-contest-admin.inc:435
+#: cclib/cc-navigator-admin.inc:480 cclib/cc-contest-admin.inc:435
 msgid "See recently uploaded originals"
 msgstr "Xem các tập tin gốc đã tải lên gần nhất"
 
-#: cclib/cc-navigator-admin.inc:475
+#: cclib/cc-navigator-admin.inc:485
 msgid "Picks"
 msgstr "Kén"
 
-#: cclib/cc-navigator-admin.inc:476
+#: cclib/cc-navigator-admin.inc:486
 msgid "See picks by the Editorial Staff"
 msgstr "Xem các tập tin đã chọn lọc bởi Nhóm Soạn Giả"
 
-#: cclib/cc-navigator-admin.inc:481
+#: cclib/cc-navigator-admin.inc:491
 msgid "Funky"
 msgstr "Tuyệt"
 
-#: cclib/cc-navigator-admin.inc:482
+#: cclib/cc-navigator-admin.inc:492
 msgid "Only the funky stuff please!"
 msgstr "Chỉ hiển thị đồ tuyệt diệu !"
 
@@ -663,7 +668,7 @@ msgid "Submit sources for the %s contest"
 msgstr ""
 
 #: cclib/cc-contest-admin.inc:480 cclib/cc-files.php:84 cclib/cc-files.php:87
-#: cclib/cc-mediahost.php:467
+#: cclib/cc-mediahost.php:467 ccextras/cc-fileman.inc:207
 msgid "Manage Files"
 msgstr "Quản lý tập tin"
 
@@ -672,12 +677,12 @@ msgstr "Quản lý tập tin"
 msgid "Manage system files"
 msgstr "Quản lý sự hoà lại"
 
-#: cclib/cc-contest-admin.inc:488
+#: cclib/cc-contest-admin.inc:488 ccextras/cc-fileman.inc:213
 #, fuzzy
 msgid "Add Files"
 msgstr "Thêm tập tin vào « %s »"
 
-#: cclib/cc-contest-admin.inc:489
+#: cclib/cc-contest-admin.inc:489 ccextras/cc-fileman.inc:214
 #, fuzzy
 msgid "Add files to the system"
 msgstr "Thêm tập tin vào « %s »"
@@ -914,11 +919,11 @@ msgstr ""
 msgid "Could not open \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:653
+#: cclib/cc-feed.php:654
 msgid "Syndicate"
 msgstr ""
 
-#: cclib/cc-feeds-atom.php:84
+#: cclib/cc-feeds-atom.php:86
 msgid "Feed generator RSS Podcast"
 msgstr ""
 
@@ -1116,7 +1121,8 @@ msgstr ""
 msgid "Submit"
 msgstr "Đệ trình"
 
-#: cclib/cc-form.php:781
+#: cclib/cc-form.php:781 ccextras/cc-fileman.inc:325
+#: ccextras/cc-fileman.inc:364
 #, fuzzy
 msgid "This cannot be left blank."
 msgstr "không thể là trống"
@@ -1299,14 +1305,14 @@ msgstr "Giấy phép"
 msgid "Show admin license form"
 msgstr ""
 
-#: cclib/cc-lics-install.php:47
+#: cclib/cc-lics-install.php:48
 msgid ""
 "<strong>Attribution</strong>: People can copy, distribute, perform, display, "
 "transform and make money from your work for any purpose as long they give "
 "you credit (attribution)."
 msgstr ""
 
-#: cclib/cc-lics-install.php:59
+#: cclib/cc-lics-install.php:60
 msgid ""
 "<strong>Attribution Noncommercial</strong>: People can copy, distribute, "
 "perform, display and transform your work for any purpose as long they give "
@@ -1314,7 +1320,7 @@ msgid ""
 "purposes."
 msgstr ""
 
-#: cclib/cc-lics-install.php:71
+#: cclib/cc-lics-install.php:72
 msgid ""
 "<strong>Attribution Share Alike</strong>: People can copy, distribute, "
 "perform, display, transform and make money from your work for any purpose as "
@@ -1323,14 +1329,14 @@ msgid ""
 "same license."
 msgstr ""
 
-#: cclib/cc-lics-install.php:83
+#: cclib/cc-lics-install.php:84
 msgid ""
 "<strong>Attribution NoDerivatives</strong>: People can copy, distribute, "
 "perform, and display your work \"as is\" (without changes) for any purpose "
 "(e.g. file sharing) as long they give you credit (attribution)."
 msgstr ""
 
-#: cclib/cc-lics-install.php:95
+#: cclib/cc-lics-install.php:96
 msgid ""
 "<strong>Attribution Noncommercial Share-Alike</strong>: People can copy, "
 "distribute, perform, display, transform your work for <b>non commercial "
@@ -1339,7 +1345,7 @@ msgid ""
 "resulting work under this same license."
 msgstr ""
 
-#: cclib/cc-lics-install.php:107
+#: cclib/cc-lics-install.php:108
 msgid ""
 "<strong>Attribution Noncommercial No Derivatives</strong>: People can copy, "
 "distribute, perform, display, your work \"as is\" (without modifcations) for "
@@ -1347,7 +1353,7 @@ msgid ""
 "(attribution)."
 msgstr ""
 
-#: cclib/cc-lics-install.php:119
+#: cclib/cc-lics-install.php:120
 msgid ""
 "<strong>Sampling</strong>: People can take and transform <strong>pieces</"
 "strong> of your work for any purpose other than advertising, which is "
@@ -1355,7 +1361,7 @@ msgid ""
 "also prohibited."
 msgstr ""
 
-#: cclib/cc-lics-install.php:131
+#: cclib/cc-lics-install.php:132
 msgid ""
 "<strong>Sampling Plus</strong>: People can take and transform "
 "<strong>pieces</strong> of your work for any purpose other than advertising, "
@@ -1364,7 +1370,7 @@ msgid ""
 "Hence, \"<strong>plus</strong>\"."
 msgstr ""
 
-#: cclib/cc-lics-install.php:143
+#: cclib/cc-lics-install.php:144
 msgid ""
 "<strong>Noncommercial Sampling Plus</strong>: People can take and transform "
 "<strong>pieces</strong> of your work for <strong>noncommercial</strong> "
@@ -1372,7 +1378,7 @@ msgid ""
 "file-sharing) of the <strong>entire work</strong> are also allowed."
 msgstr ""
 
-#: cclib/cc-lics-install.php:154
+#: cclib/cc-lics-install.php:156
 msgid ""
 "<strong>Public Domain</strong>: This choice suggests you want to dedicate "
 "your work to the public domain, the commons of information and expression "
@@ -1421,7 +1427,7 @@ msgstr "Phải có ít nhất 5 ký tự"
 
 #: cclib/cc-login.php:167 cclib/cc-user-admin.php:92
 #: cclib/cc-user-admin.php:131 ccextras/cc-flag.php:75
-#: ccextras/cc-mail.php:305 ccextras/cc-topics.php:108
+#: ccextras/cc-mail.php:305 ccextras/cc-topics.php:110
 msgid "Security Key"
 msgstr "Khoá bảo mật"
 
@@ -1461,7 +1467,7 @@ msgstr "Nhớ tôi"
 msgid "New User?"
 msgstr "Người dùng mới ?"
 
-#: cclib/cc-login.php:308 cclib/cc-login.php:394 cclib/cc-login.php:545
+#: cclib/cc-login.php:308 cclib/cc-login.php:394 cclib/cc-login.php:553
 msgid "Log In"
 msgstr "Đăng nhập"
 
@@ -1545,62 +1551,66 @@ msgstr ""
 msgid "Log Out"
 msgstr "Đăng xuất"
 
-#: cclib/cc-login.php:542
+#: cclib/cc-login.php:545
+msgid "You registration request has been forwarded to the site administrators."
+msgstr ""
+
+#: cclib/cc-login.php:547
 #, fuzzy
 msgid "Your new login information has been sent to your email address."
 msgstr ""
 "Thông tin đăng nhập mới của bạn đã được gởi cho địa chỉ thư điện tử của bạn."
 
-#: cclib/cc-login.php:579
+#: cclib/cc-login.php:587
 #, fuzzy
 msgid "This installation does not support this feature."
 msgstr "Bản cài đặt này không hỗ trợ tính năng này"
 
-#: cclib/cc-login.php:583 cclib/cc-login.php:603
+#: cclib/cc-login.php:591 cclib/cc-login.php:611
 msgid "Recover Lost Password"
 msgstr "Phục hồi mật khẩu bị mất"
 
-#: cclib/cc-login.php:602
+#: cclib/cc-login.php:610
 msgid "You are receiving this email because you requested a new password."
 msgstr ""
 
-#: cclib/cc-login.php:604
+#: cclib/cc-login.php:612
 #, fuzzy
 msgid "New password has been sent to your email address."
 msgstr ""
 "Thông tin đăng nhập mới của bạn đã được gởi cho địa chỉ thư điện tử của bạn."
 
-#: cclib/cc-login.php:623
+#: cclib/cc-login.php:631
 #, php-format
 msgid "Hi from %s!"
 msgstr ""
 
-#: cclib/cc-login.php:624
+#: cclib/cc-login.php:632
 #, php-format
 msgid "Please visit: %s"
 msgstr ""
 
-#: cclib/cc-login.php:625
+#: cclib/cc-login.php:633
 msgid "Use the following information to log in:"
 msgstr ""
 
-#: cclib/cc-login.php:626
+#: cclib/cc-login.php:634
 #, fuzzy, php-format
 msgid "Login name: %s"
 msgstr "Tên đăng nhập"
 
-#: cclib/cc-login.php:627
+#: cclib/cc-login.php:635
 #, fuzzy, php-format
 msgid "Password: %s"
 msgstr "Mật khẩu"
 
-#: cclib/cc-login.php:628
+#: cclib/cc-login.php:636
 msgid ""
 "You should then edit your profile and change the password to whatever you "
 "like."
 msgstr ""
 
-#: cclib/cc-login.php:629
+#: cclib/cc-login.php:637
 #, fuzzy
 msgid "Thanks"
 msgstr "Thẻ"
@@ -1610,7 +1620,7 @@ msgid "Uploads"
 msgstr "Đồ tải lên"
 
 #: cclib/cc-mediahost.php:60 cclib/cc-user.php:655 cclib/cc-user.php:671
-#: ccextras/cc-reviews.php:340 ccextras/cc-forums.inc:512
+#: ccextras/cc-reviews.php:339 ccextras/cc-forums.inc:535
 msgid "People"
 msgstr "Người"
 
@@ -1700,7 +1710,8 @@ msgstr ""
 msgid "Pattern to use for Remixes"
 msgstr ""
 
-#: cclib/cc-mediahost.php:460 ccextras/cc-topics.php:251
+#: cclib/cc-mediahost.php:460 ccextras/cc-topics.php:253
+#: ccextras/cc-fileman.inc:504
 msgid "Edit"
 msgstr "Sửa"
 
@@ -2027,28 +2038,28 @@ msgstr "Xem lại"
 msgid "edit"
 msgstr "Sửa"
 
-#: cclib/cc-navigator.php:358
+#: cclib/cc-navigator.php:369
 msgid "System Error"
 msgstr ""
 
-#: cclib/cc-navigator.php:359
+#: cclib/cc-navigator.php:370
 #, fuzzy
 msgid "Invalid Path"
 msgstr "Đường dẫn không hợp lệ"
 
-#: cclib/cc-navigator.php:376
+#: cclib/cc-navigator.php:387
 msgid "Navigator Tab Sets"
 msgstr ""
 
-#: cclib/cc-navigator.php:378
+#: cclib/cc-navigator.php:389
 msgid "Create and edit navigator tabs"
 msgstr ""
 
-#: cclib/cc-navigator.php:395
+#: cclib/cc-navigator.php:406
 msgid "Perform view tabs actions"
 msgstr ""
 
-#: cclib/cc-navigator.php:398
+#: cclib/cc-navigator.php:410
 msgid "Display admin navigator tabs form"
 msgstr ""
 
@@ -2092,31 +2103,31 @@ msgstr ""
 msgid "Leave blank for no default feed."
 msgstr ""
 
-#: cclib/cc-page.php:218
+#: cclib/cc-page.php:222
 #, fuzzy, php-format
 msgid "Can't find %s template"
 msgstr "Không tìm thấy tên người dùng đó"
 
-#: cclib/cc-page.php:312
+#: cclib/cc-page.php:332
 msgid "Style Sheet"
 msgstr ""
 
-#: cclib/cc-page.php:414
+#: cclib/cc-page.php:434
 #, fuzzy
 msgid "User Styles"
 msgstr "Người dùng"
 
-#: cclib/cc-page.php:423
+#: cclib/cc-page.php:443 ccextras/cc-format.php:48
 #, fuzzy
 msgid "Default Style"
 msgstr "Ngôn ngữ mặc định:"
 
-#: cclib/cc-page.php:756
+#: cclib/cc-page.php:787
 #, fuzzy
 msgid "Back"
 msgstr "<<< Lùi"
 
-#: cclib/cc-page.php:766
+#: cclib/cc-page.php:797
 #, fuzzy
 msgid "More"
 msgstr "Thêm..."
@@ -2351,8 +2362,8 @@ msgid "Artist"
 msgstr "Nghệ sĩ"
 
 #: cclib/cc-remix.php:131 cclib/cc-filetagger-admin.inc:55
-#: cclib/cc-filerename-admin.inc:50 ccextras/cc-topics.php:92
-#: ccextras/cc-topics.php:144
+#: cclib/cc-filerename-admin.inc:50 ccextras/cc-topics.php:94
+#: ccextras/cc-topics.php:146
 msgid "Title"
 msgstr "Tựa"
 
@@ -2858,7 +2869,7 @@ msgstr "Nhấn vào những thẻ này để thêm tự động vào đồ tải
 msgid "Suggested Tags"
 msgstr "Thẻ đã đề nghị"
 
-#: cclib/cc-upload.php:178 ccextras/cc-topics.php:75
+#: cclib/cc-upload.php:178
 msgid "This action can not be reversed..."
 msgstr "Không thể hoàn nguyên hành động này..."
 
@@ -2896,31 +2907,26 @@ msgid "Changes saved to '%s'. Click %s to see results"
 msgstr ""
 "Các thay đổi đã được lưu. Nhấn vào <a href=\"%s\">đây</a> để xem kết quả"
 
-#: cclib/cc-upload.php:291
-#, fuzzy
-msgid "Query Results"
-msgstr "Kết quả tìm kiếm"
-
-#: cclib/cc-upload.php:363
+#: cclib/cc-upload.php:374
 msgid "Deleting File"
 msgstr "Đang xoá bỏ tập tin"
 
-#: cclib/cc-upload.php:373
+#: cclib/cc-upload.php:384
 #, fuzzy
 msgid "Upload has been deleted."
 msgstr "Đồ tải lên đã được xoá bỏ"
 
-#: cclib/cc-upload.php:411
+#: cclib/cc-upload.php:422
 #, fuzzy
 msgid "Specify the file to upload."
 msgstr "Hãy xác định tập tin cần tải lên"
 
-#: cclib/cc-upload.php:416
+#: cclib/cc-upload.php:427
 #, fuzzy
 msgid "Valid file types"
 msgstr "Kiểu tập tin hợp lệ: "
 
-#: cclib/cc-upload.php:420
+#: cclib/cc-upload.php:431
 msgid "File"
 msgstr "Tập tin"
 
@@ -3304,17 +3310,39 @@ msgstr "Luồng"
 msgid "Replace space with '_'"
 msgstr ""
 
-#: ccextras/cc-export-settings.php:147
+#: ccextras/cc-export-settings.php:43
+msgid "No import file specified in the URL."
+msgstr ""
+
+#: ccextras/cc-export-settings.php:59
+#, fuzzy
+msgid "Import Settings"
+msgstr "Sửa thiết lập"
+
+#: ccextras/cc-export-settings.php:60
+#, fuzzy
+msgid "Settings have been imported"
+msgstr "Thông báo đã được cập nhật"
+
+#: ccextras/cc-export-settings.php:148
 msgid "Exports configuration to browser"
 msgstr ""
 
-#: ccextras/cc-export-settings.php:149
+#: ccextras/cc-export-settings.php:152
 #, fuzzy
 msgid "Import configuration"
 msgstr "Thông báo đánh giá"
 
 #: ccextras/cc-activity-log.php:87
 msgid "Show activity log"
+msgstr ""
+
+#: ccextras/cc-activity-log.php:99
+msgid "View Activity Log"
+msgstr ""
+
+#: ccextras/cc-activity-log.php:105
+msgid "Log Cleared"
 msgstr ""
 
 #: ccextras/cc-archive.php:52
@@ -3326,8 +3354,25 @@ msgstr "Kho cho %s"
 msgid "Monthly Archive"
 msgstr "Kho hàng tháng"
 
-#: ccextras/cc-archive.php:94
+#: ccextras/cc-archive.php:96
 msgid "Display upload archive for a specific month"
+msgstr ""
+
+#: ccextras/cc-blog-ping.php:78
+#, fuzzy
+msgid "Administer Blog Notification"
+msgstr "Sửa thông báo của tôi"
+
+#: ccextras/cc-blog-ping.php:97
+msgid "Blog ping"
+msgstr ""
+
+#: ccextras/cc-blog-ping.php:99
+msgid "Ping your blog on new uploads"
+msgstr ""
+
+#: ccextras/cc-bpm.php:57
+msgid "Include BPM in Upload Forms"
 msgstr ""
 
 #: ccextras/cc-bpm.php:138
@@ -3337,6 +3382,11 @@ msgstr "BPM"
 #: ccextras/cc-bpm.php:139
 msgid "Tempo"
 msgstr "Nhịp độ"
+
+#: ccextras/cc-flag.php:50
+#, php-format
+msgid "This %s contains material that may violate the terms of the site"
+msgstr ""
 
 #: ccextras/cc-flag.php:54 ccextras/cc-mail.php:269 ccextras/cc-mail.php:279
 msgid "From"
@@ -3360,14 +3410,15 @@ msgid "Message"
 msgstr "Thư"
 
 #: ccextras/cc-flag.php:127
-msgid "Users flag an upload or topic"
+msgid "Users flag an upload or topic."
 msgstr ""
 
 #: ccextras/cc-flag.php:135
 msgid "Flag Content"
 msgstr "Đặt cờ trên nội dung"
 
-#: ccextras/cc-flag.php:173 ccextras/cc-forums.inc:216
+#: ccextras/cc-flag.php:173 ccextras/cc-topics.php:601
+#: ccextras/cc-forums.inc:218
 msgid "Topic"
 msgstr "Đề tài"
 
@@ -3383,21 +3434,72 @@ msgstr ""
 msgid "Thank you, your message has been sent"
 msgstr ""
 
-#: ccextras/cc-format.php:92
+#: ccextras/cc-flag.php:221
+msgid "Flagging"
+msgstr ""
+
+#: ccextras/cc-flag.php:222
+msgid ""
+"This allows users to directly flag something as a possible violation of "
+"terms of this site."
+msgstr ""
+
+#: ccextras/cc-flag.php:227
+msgid "Flag form message"
+msgstr ""
+
+#: ccextras/cc-flag.php:228
+msgid "This text will appear on the mail form to users who flag content."
+msgstr ""
+
+#: ccextras/cc-format.php:63
+#, fuzzy
+msgid "Preview"
+msgstr "Xem lại"
+
+#: ccextras/cc-format.php:94
 msgid "Quote:"
 msgstr "Trích dẫn:"
 
-#: ccextras/cc-format.php:276
-msgid "Select text and use the <br />buttons to apply format"
+#: ccextras/cc-format.php:278
+#, fuzzy
+msgid "Select text and use the buttons to apply format"
 msgstr "Hãy chọn đoạn rồi dùng những <br />cái nút để định dạng nó"
 
+#: ccextras/cc-format.php:313
+msgid "Allow User Text Formatting"
+msgstr ""
+
+#: ccextras/cc-format.php:314
+msgid "Allow users to format text (bold, italic, etc.)"
+msgstr ""
+
+#: ccextras/cc-format.php:320
+msgid "Allow Admin Text Formatting"
+msgstr ""
+
+#: ccextras/cc-format.php:321
+msgid "Allow admins to format text"
+msgstr ""
+
 #: ccextras/cc-import-files.php:41
-msgid "Path to file on server"
+#, fuzzy
+msgid "Path to file on this server"
 msgstr "Đường dẫn đến tập tin trên máy phục vụ"
 
 #: ccextras/cc-import-files.php:56
-msgid "Can not file a file by that name"
+#, fuzzy
+msgid "Cannot file a file by that name"
 msgstr "Không thể phân loại tập tin theo tên này"
+
+#: ccextras/cc-import-files.php:86
+#, fuzzy
+msgid "Import Files"
+msgstr "Nhập tập tin"
+
+#: ccextras/cc-import-files.php:88
+msgid "Import files from your server into ccHost"
+msgstr ""
 
 #: ccextras/cc-import-files.php:114
 msgid "Displays 'File Import' form"
@@ -3408,19 +3510,21 @@ msgid "Import files"
 msgstr "Nhập tập tin"
 
 #: ccextras/cc-import-files.php:129
+#, fuzzy
 msgid ""
-"Use this form to import files already on your server into the ccHost system. "
-"WARNING: This form will <b>MOVE</b> your file from its original location."
+"Use this form to import files already on your server into this ccHost "
+"system. WARNING: This form will <b>MOVE</b> your file from its original "
+"location to one specified by this ccHost system."
 msgstr ""
 "Dùng đơn này để nhập khẩu tập tin nằm trên máy phục vụ của bạn vào hệ thống "
 "ccHost. CẢNH BÁO : đơn này sẽ <b>DI CHUYỂN</b> tập tin từ vị trí gốc, không "
 "phải chỉ sao chép nó."
 
 #: ccextras/cc-import-files.php:180
-#, php-format
-msgid "Import succeeded. Click <a href=\"%s\">here</a> to see results."
+#, fuzzy, php-format
+msgid "Import succeeded. Click %s to see results."
 msgstr ""
-"Tập tin đã được nhập khẩu. Nhấn vào <a href=\"%s\">đây</a> để xem kết quả."
+"Tập tin đã được tải lên. Nhấn vào <a href=\"%s\">đây</a> để xem kết quả."
 
 #: ccextras/cc-howididit.php:56
 msgid "Browse 'How I Did It'"
@@ -3436,82 +3540,99 @@ msgstr "tỷ lệ"
 msgid "Upload Name"
 msgstr "Tải lên"
 
-#: ccextras/cc-howididit.php:104
+#: ccextras/cc-howididit.php:99
+msgid ""
+"Remixers are encouraged to specify the tools and process they used to create "
+"submissions to this site. Below is a list of submissions that the author has "
+"annotated with these special notes. Click on any submission to see the "
+"'author's notes."
+msgstr ""
+
+#: ccextras/cc-howididit.php:101
 #, fuzzy
 msgid "Sort by:"
 msgstr "Kiểu nguồn:"
 
-#: ccextras/cc-howididit.php:140 ccextras/cc-howididit.php:266
+#: ccextras/cc-howididit.php:137 ccextras/cc-howididit.php:263
 msgid "How I Did It"
 msgstr "Phương pháp của tôi"
 
-#: ccextras/cc-howididit.php:170
+#: ccextras/cc-howididit.php:167
 msgid "Edit 'How I Did It' for "
 msgstr "Sửa « Phương pháp của tôi » cho "
 
-#: ccextras/cc-howididit.php:200
-#, php-format
-msgid "Changes saved. Click <a href=\"%s\">here</a> to see results"
+#: ccextras/cc-howididit.php:197
+#, fuzzy, php-format
+msgid "Changes saved. Click %s to see results"
 msgstr ""
 "Các thay đổi đã được lưu. Nhấn vào <a href=\"%s\">đây</a> để xem kết quả"
 
-#: ccextras/cc-howididit.php:226
+#: ccextras/cc-howididit.php:212
+#, php-format
+msgid ""
+"No 'How I Did It' for this record. Click %s to go back to the upload's page"
+msgstr ""
+
+#: ccextras/cc-howididit.php:223
 msgid "Tools I Used"
 msgstr "Công cụ đã dùng"
 
-#: ccextras/cc-howididit.php:227
-msgid "What software, hardware, plug-ins, etc. did you use?"
+#: ccextras/cc-howididit.php:224
+#, fuzzy
+msgid "What software, hardware, and plug-ins did you use?"
 msgstr "Bạn đã sử dụng phần mềm, phần cứng, bổ sung v.v. nào?"
 
-#: ccextras/cc-howididit.php:231
+#: ccextras/cc-howididit.php:228
 msgid "Samples I Used"
 msgstr "Mẫu đã dùng"
 
-#: ccextras/cc-howididit.php:232
+#: ccextras/cc-howididit.php:229
 msgid "Where did you find your samples? What kind of license are they under?"
 msgstr "Bạn đã tìm các mẫu ở đây? Chúng nằm dưới giấy phép nào?"
 
-#: ccextras/cc-howididit.php:236
+#: ccextras/cc-howididit.php:233
 msgid "Original Samples"
 msgstr "Mẫu gốc"
 
-#: ccextras/cc-howididit.php:237
+#: ccextras/cc-howididit.php:234
 msgid "What material did you create just for this work?"
 msgstr "Dành cho sản phẩm này, bạn đã tạo nguyên liệu nào?"
 
-#: ccextras/cc-howididit.php:241
+#: ccextras/cc-howididit.php:238
 msgid "Process"
 msgstr "Thủ tục"
 
-#: ccextras/cc-howididit.php:242
+#: ccextras/cc-howididit.php:239
 msgid "How did you put all the pieces together?"
 msgstr "Bạn đã hợp nhất các đoạn này như thế nào?"
 
-#: ccextras/cc-howididit.php:246
+#: ccextras/cc-howididit.php:243
 msgid "Other Notes"
 msgstr "Ghi chú thêm"
 
-#: ccextras/cc-howididit.php:247
-msgid "Share your feelings about the experience of creating this work"
+#: ccextras/cc-howididit.php:244
+#, fuzzy
+msgid "Share your feelings about the experience of creating this work."
 msgstr ""
 "Chia sẻ những sự xúc động mà bạn đã trải qua trong khi cấu tạo sản phẩm này"
 
-#: ccextras/cc-howididit.php:286
+#: ccextras/cc-howididit.php:283
 msgid "Edit \"How I Did It\""
 msgstr "Sửa « Phương pháp của tôi »"
 
-#: ccextras/cc-howididit.php:330
-msgid "Show How I Did Page for an upload"
-msgstr ""
-
-#: ccextras/cc-howididit.php:334
+#: ccextras/cc-howididit.php:327
 #, fuzzy
-msgid "Show How I Did browser"
+msgid "Show How I Did It Page for an upload"
+msgstr "Sửa « Phương pháp của tôi » cho "
+
+#: ccextras/cc-howididit.php:331
+#, fuzzy
+msgid "Show How I Did It browser"
 msgstr "Duyệt « Phương pháp của tôi »"
 
-#: ccextras/cc-howididit.php:341
+#: ccextras/cc-howididit.php:338
 #, fuzzy
-msgid "Edit How I Did Page"
+msgid "Edit How I Did It Page"
 msgstr "Sửa « Phương pháp của tôi »"
 
 #: cclib/cc-language.php:370
@@ -3711,7 +3832,7 @@ msgid "Rule that applies to registered users who have not uploaded anything."
 msgstr ""
 
 #: ccextras/cc-mail.php:106
-msgid "eMail Flood Throttle"
+msgid "E-mail Flood Throttle"
 msgstr ""
 
 #: ccextras/cc-mail.php:110
@@ -3719,7 +3840,7 @@ msgid "Minimum allowed time (in minutes) between emails"
 msgstr ""
 
 #: ccextras/cc-mail.php:115
-msgid "Mail to Admin Acct:"
+msgid "Mail to Admin Acct"
 msgstr ""
 
 #: ccextras/cc-mail.php:116
@@ -3739,62 +3860,100 @@ msgstr "Cho"
 msgid "Your email address"
 msgstr "Địa chỉ thư điện tử của bạn"
 
+#: ccextras/cc-mail.php:297
+msgid "Message is limited to 1,000 characters"
+msgstr ""
+
+#: ccextras/cc-mail.php:338
+msgid "Mail has not been properly configured on the this system."
+msgstr ""
+
 #: ccextras/cc-mail.php:338
 #, php-format
-msgid ""
-"Mail has not been properly configured on the this system. \n"
-"                          Set an admin return mail address in %sConfigure "
-"Mail%s"
+msgid "Set an admin return mail address in %sConfigure Mail%s"
 msgstr ""
 
-#: ccextras/cc-mail.php:344
-msgid ""
-"Mail has not been properly configured on this system. Contact\n"
-"                          your administrator through regular email."
+#: ccextras/cc-mail.php:343
+msgid "Mail has not been properly configured on this system."
 msgstr ""
 
-#: ccextras/cc-mail.php:373
-msgid "Mail update was not properly installed"
+#: ccextras/cc-mail.php:343
+msgid "Contact your administrator through regular email."
 msgstr ""
 
-#: ccextras/cc-mail.php:398
+#: ccextras/cc-mail.php:371
 #, fuzzy
-msgid "Sorry, only logged in users can send mail to the admins"
+msgid "Mail update is not properly installed"
+msgstr "khả năng hợp nhất bài phê bình chưa được bật"
+
+#: ccextras/cc-mail.php:396
+#, fuzzy
+msgid "Sorry, only logged in users may send mail to the admins."
 msgstr "(Chỉ người dùng đã đăng nhập có khả năng đệ trình mục.)"
 
-#: ccextras/cc-mail.php:449
+#: ccextras/cc-mail.php:429
+msgid "You are not authorized to send mail."
+msgstr ""
+
+#: ccextras/cc-mail.php:447
 msgid "You have exceeded the temporary quota of emails allowed."
 msgstr ""
 
-#: ccextras/cc-mail.php:498
+#: ccextras/cc-mail.php:496
 #, fuzzy, php-format
 msgid "Send Mail to %s"
 msgstr "Thêm tập tin vào « %s »"
 
-#: ccextras/cc-mail.php:543
+#: ccextras/cc-mail.php:541
 msgid "Mail sent"
 msgstr "Thư đã được gởi"
 
-#: ccextras/cc-mail.php:622
+#: ccextras/cc-mail.php:551
+#, fuzzy
+msgid "Send Mail to Everybody"
+msgstr "Thêm tập tin vào « %s »"
+
+#: ccextras/cc-mail.php:560 ccextras/cc-mail.php:562
+msgid "really"
+msgstr ""
+
+#: ccextras/cc-mail.php:561
+msgid "EVERYONE"
+msgstr ""
+
+#: ccextras/cc-mail.php:563
+msgid "You"
+msgstr ""
+
+#: ccextras/cc-mail.php:612
+#, php-format
+msgid "Mass mail: Sent %s Messages"
+msgstr ""
+
+#: ccextras/cc-mail.php:620
 msgid "Configure Mail"
 msgstr ""
 
-#: ccextras/cc-mail.php:636
+#: ccextras/cc-mail.php:634
 msgid "Display email contact form"
 msgstr ""
 
-#: ccextras/cc-mail.php:640
+#: ccextras/cc-mail.php:638
 msgid "Display mass email contact form"
 msgstr ""
 
-#: ccextras/cc-mail.php:644
+#: ccextras/cc-mail.php:642
 msgid "Display admin mail settings form"
 msgstr ""
 
-#: ccextras/cc-mail.php:660
+#: ccextras/cc-mail.php:658
 #, fuzzy
 msgid "Email"
 msgstr "địa chỉ thư"
+
+#: ccextras/cc-mail.php:660
+msgid "Configure system email address and access"
+msgstr ""
 
 #: ccextras/cc-reviews.php:149
 #, fuzzy
@@ -3802,49 +3961,58 @@ msgid "Sorry, no hot topics yet"
 msgstr "Tiếc là không có đề tài khớp được"
 
 #: ccextras/cc-reviews.php:190
-msgid "Can not find that user"
+#, fuzzy
+msgid "Cannot find that user"
 msgstr "Không tìm thấy người dùng đó"
 
 #: ccextras/cc-reviews.php:200
-msgid "Can not find that upload, it may have been removed by the owner"
+#, fuzzy
+msgid "Cannot find that upload. It may have been removed by the owner."
 msgstr "Không tìm thấy đồ tải lên đó ; người dùng có thể đã gỡ bỏ nó"
 
 #: ccextras/cc-reviews.php:226
 msgid "Recent Reviews"
 msgstr "Bài phê bình gần đây"
 
+#: ccextras/cc-reviews.php:256
+#, fuzzy, php-format
+msgid "Reviews left %s"
+msgstr "Bài phê bình được viết cho %s"
+
+#: ccextras/cc-reviews.php:262
+#, fuzzy, php-format
+msgid "See reviews left %s"
+msgstr "Bài phê bình được viết cho %s"
+
 #: ccextras/cc-reviews.php:278
 #, php-format
 msgid "Reviews for \"%s\""
 msgstr "Bài phê bình cho « %s »"
 
-#: ccextras/cc-reviews.php:306
-#, php-format
-msgid "<br />Reviews left for<br /> \"%s\""
-msgstr "<br />Bài phê bình còn lại cho<br /> « %s »"
+#: ccextras/cc-reviews.php:306 ccextras/cc-reviews.php:311
+#, fuzzy, php-format
+msgid "Reviews left for \"%s\""
+msgstr "Bài phê bình được viết cho %s"
 
-#: ccextras/cc-reviews.php:311
-#, php-format
-msgid "<br />Reviews left for<br /> %s"
-msgstr "<br />Bài phê bình còn lại cho<br /> %s"
-
-#: ccextras/cc-reviews.php:318 ccextras/cc-reviews.php:336
-#: ccextras/cc-reviews.php:356 ccextras/cc-reviews.php:365
-#: ccextras/cc-reviews.php:454 ccextras/cc-reviews.php:698
-#: ccextras/cc-reviews.php:876 ccextras/cc-reviews.php:947
+#: ccextras/cc-reviews.php:317 ccextras/cc-reviews.php:335
+#: ccextras/cc-reviews.php:355 ccextras/cc-reviews.php:364
+#: ccextras/cc-reviews.php:453 ccextras/cc-reviews.php:687
+#: ccextras/cc-reviews.php:865 ccextras/cc-reviews.php:936
 msgid "Reviews"
 msgstr "Bài phê bình"
 
-#: ccextras/cc-reviews.php:390
-msgid "review integration is not enabled"
+#: ccextras/cc-reviews.php:389 ccextras/cc-reviews.php:529
+#, fuzzy
+msgid "Review integration is not enabled."
 msgstr "khả năng hợp nhất bài phê bình chưa được bật"
 
-#: ccextras/cc-reviews.php:463 ccextras/cc-reviews.php:784
+#: ccextras/cc-reviews.php:463 ccextras/cc-reviews.php:773
 msgid "Write Review"
 msgstr "Viết bài phê bình"
 
 #: ccextras/cc-reviews.php:537
-msgid "Can not find that upload."
+#, fuzzy
+msgid "Cannot find that upload."
 msgstr "Không tìm thấy đồ tải lên đó."
 
 #: ccextras/cc-reviews.php:548
@@ -3852,68 +4020,72 @@ msgid "create new"
 msgstr "tạo mới"
 
 #: ccextras/cc-reviews.php:554
-#, php-format
-msgid "Write a Review for '%s'"
+#, fuzzy, php-format
+msgid "Write a Review for \"%s\""
 msgstr "Viết bài phê bình cho « %s »"
 
 #: ccextras/cc-reviews.php:574
-msgid "You've already reviewed this upload"
+#, fuzzy
+msgid "You have already reviewed this upload."
 msgstr "Bạn đã phê bình đồ tải lên này"
 
 #: ccextras/cc-reviews.php:586
-#, php-format
-msgid "%s's Review of '%s'"
+#, fuzzy, php-format
+msgid "Review of '%s' by '%s'"
 msgstr "Bài phê bình của %s cho « %s »"
 
-#: ccextras/cc-reviews.php:666
+#: ccextras/cc-reviews.php:665
 #, fuzzy, php-format
-msgid "%s has left %s1 review "
-msgstr "%s đã viết %s1 bài phê bình</a>"
+msgid "%s has left %s%d review.%s"
+msgid_plural "%s has left %s%d reviews.%s"
+msgstr[0] "%s đã viết %s%d bài phê bình</a> "
 
-#: ccextras/cc-reviews.php:670
+#: ccextras/cc-reviews.php:681
 #, fuzzy, php-format
-msgid "%s has left %s%d reviews "
-msgstr "%s đã viết %s%d bài phê bình</a> "
+msgid "%s has been reviewed %s%d time.%s"
+msgid_plural "%s has been reviewed %s%d times.%s"
+msgstr[0] "đã được phê bình %s%d lần</a>"
 
-#: ccextras/cc-reviews.php:688
-#, fuzzy, php-format
-msgid "and has been reviewed %sonce "
-msgstr "đã được phê bình %smột lần</a>"
-
-#: ccextras/cc-reviews.php:692
-#, fuzzy, php-format
-msgid "and has been reviewed %s%d times "
-msgstr "đã được phê bình %s%d lần</a>"
-
-#: ccextras/cc-reviews.php:743
+#: ccextras/cc-reviews.php:732
 #, php-format
 msgid "Reviews (%s)"
 msgstr "Bài phê bình (%s)"
 
-#: ccextras/cc-reviews.php:854
-#, php-format
-msgid "Reivews left for \"%s\" by %s"
+#: ccextras/cc-reviews.php:843
+#, fuzzy, php-format
+msgid "Reviews left for %s by %s"
 msgstr "Bài phê bình được viết cho « %s » bởi %s"
 
-#: ccextras/cc-reviews.php:871
+#: ccextras/cc-reviews.php:860
 #, php-format
 msgid "Reviews left for %s"
 msgstr "Bài phê bình được viết cho %s"
 
-#: ccextras/cc-reviews.php:998
-msgid "Sorry, no reviews match"
+#: ccextras/cc-reviews.php:890
+#, fuzzy
+msgid "Enable Reviews"
+msgstr "Bài phê bình"
+
+#: ccextras/cc-reviews.php:891
+#, fuzzy
+msgid "Allow users to review uploads"
+msgstr "Xem mọi tập tin đã tải lên gần nhất"
+
+#: ccextras/cc-reviews.php:987
+#, fuzzy
+msgid "Sorry, no reviews match."
 msgstr "Tiếc là không có bài phê bình khớp được"
 
-#: ccextras/cc-reviews.php:1036
+#: ccextras/cc-reviews.php:1025
 msgid "See reviews by a person or for a specific upload"
 msgstr ""
 
-#: ccextras/cc-reviews.php:1040
+#: ccextras/cc-reviews.php:1029
 #, fuzzy
 msgid "Display a review form"
 msgstr "Hiển thị tên cho tập tin"
 
-#: ccextras/cc-reviews.php:1044
+#: ccextras/cc-reviews.php:1033
 msgid "Reviews by a person or for a specific upload"
 msgstr ""
 
@@ -3922,51 +4094,158 @@ msgid "Not Safe For Work"
 msgstr "Vô lễ"
 
 #: ccextras/cc-nswf.php:73
-msgid ""
-"Mark this upload as <a href=\"http://en.wikipedia.org/wiki/NSFW\">NSFW</a> "
-"if it contains questionable language."
-msgstr ""
+#, fuzzy, php-format
+msgid "Mark this upload as %s if it contains questionable language."
+msgstr "nếu nó chứa từ ngữ thô tục nào."
 
-#: ccextras/cc-stats.php:48
-#, php-format
-msgid "%s has no remixes"
-msgstr "%s không có đồ hoà lại"
+#: ccextras/cc-stats.php:47
+#, fuzzy, php-format
+msgid "%s has %d remix."
+msgid_plural "%s has %d remixes."
+msgstr[0] "%s có %d đồ hoà lại"
 
-#: ccextras/cc-stats.php:54
-#, php-format
-msgid "%s has 1 remix"
-msgstr "%s có 1 đồ hoà lại"
+#: ccextras/cc-stats.php:52
+#, fuzzy, php-format
+msgid "%s has been remixed %d time."
+msgid_plural "%s has been remixed %d times."
+msgstr[0] " và đã được hoà lại %d lần"
 
-#: ccextras/cc-stats.php:58
-#, php-format
-msgid "%s has %d remixes"
-msgstr "%s có %d đồ hoà lại"
-
-#: ccextras/cc-stats.php:64
-msgid " and has not been remixed"
-msgstr " và chưa được hoà lại"
-
-#: ccextras/cc-stats.php:70
-msgid " and has been remixed once"
-msgstr " và đã được hoà lại một lần"
-
-#: ccextras/cc-stats.php:74
-#, php-format
-msgid " and has been remixed %d times"
-msgstr " và đã được hoà lại %d lần"
-
-#: ccextras/cc-stats.php:79
+#: ccextras/cc-stats.php:56
 msgid "Stats"
 msgstr "Thống kê"
 
-#: ccextras/cc-stats.php:120
-msgid "Charts "
-msgstr ""
-
-#: ccextras/cc-stats.php:190
+#: ccextras/cc-stats.php:97 ccextras/cc-stats.php:166
 #, fuzzy
 msgid "Charts"
 msgstr "Cái gì"
+
+#: ccextras/cc-throttle.php:50
+msgid "Enable Throttling"
+msgstr ""
+
+#: ccextras/cc-throttle.php:56
+msgid "User exceptions"
+msgstr ""
+
+#: ccextras/cc-throttle.php:57
+msgid ""
+"Comma separted list of user login names that are exempt from throttling."
+msgstr ""
+
+#: ccextras/cc-throttle.php:57
+msgid "Administrators are automatically exempt from throttling."
+msgstr ""
+
+#: ccextras/cc-throttle.php:61
+msgid "You are not authorized to submit this type of file."
+msgstr ""
+
+#: ccextras/cc-throttle.php:61
+msgid "Please contact the site administrator for details."
+msgstr ""
+
+#: ccextras/cc-throttle.php:64
+#, fuzzy
+msgid "Quota Message"
+msgstr "Thư"
+
+#: ccextras/cc-throttle.php:65
+msgid "Message to users who are outside the bounds of the throttle"
+msgstr ""
+
+#: ccextras/cc-throttle.php:71
+#, php-format
+msgid "%sEdit Upload Throttle Rules%s"
+msgstr ""
+
+#: ccextras/cc-throttle.php:74
+msgid "Rules"
+msgstr ""
+
+#: ccextras/cc-throttle.php:75
+msgid "Edit the rules governing the upload throttle"
+msgstr ""
+
+#: ccextras/cc-throttle.php:101
+#, fuzzy
+msgid "Add A Rule"
+msgstr "Thêm tập tin vào « %s »"
+
+#: ccextras/cc-throttle.php:126
+#, fuzzy
+msgid "All types"
+msgstr "Kiểu tập tin hợp lệ: "
+
+#: ccextras/cc-throttle.php:133
+msgid "24 hours"
+msgstr ""
+
+#: ccextras/cc-throttle.php:134
+msgid "7 days"
+msgstr ""
+
+#: ccextras/cc-throttle.php:135
+msgid "2 weeks"
+msgstr ""
+
+#: ccextras/cc-throttle.php:136
+msgid "1 month"
+msgstr ""
+
+#: ccextras/cc-throttle.php:137
+msgid "forever"
+msgstr ""
+
+#: ccextras/cc-throttle.php:141
+msgid "Forbid"
+msgstr ""
+
+#: ccextras/cc-throttle.php:142
+#, fuzzy
+msgid "Allow"
+msgstr "Tất cả"
+
+#: ccextras/cc-throttle.php:146
+msgid "Stop here if rule is true"
+msgstr ""
+
+#: ccextras/cc-throttle.php:147
+msgid "Continue to next rule"
+msgstr ""
+
+#: ccextras/cc-throttle.php:171
+msgid "If user has "
+msgstr ""
+
+#: ccextras/cc-throttle.php:182
+msgid "# of:"
+msgstr ""
+
+#: ccextras/cc-throttle.php:193
+msgid "since:"
+msgstr ""
+
+#: ccextras/cc-throttle.php:204
+#, fuzzy
+msgid "then:"
+msgstr "ngày:"
+
+#: ccextras/cc-throttle.php:363
+msgid "Administer Upload Throttle"
+msgstr ""
+
+#: ccextras/cc-throttle.php:371
+msgid "Upload Throttle Rules"
+msgstr ""
+
+#: ccextras/cc-throttle.php:442
+#, fuzzy
+msgid "Upload Throttles"
+msgstr "Đồ tải lên và người dùng"
+
+#: ccextras/cc-throttle.php:444
+msgid "Limit the number and types of uploads per user"
+msgstr ""
 
 #: ccextras/cc-throttle.php:463
 msgid "Display throttle settings form"
@@ -3976,107 +4255,126 @@ msgstr ""
 msgid "Display throttle rules form"
 msgstr ""
 
-#: ccextras/cc-topics.php:77
-#, php-format
-msgid "Delete \"%s\" ?"
-msgstr "Xoá bỏ « %s » ?"
+#: ccextras/cc-topics.php:54
+msgid "You have requested an unknown feed type."
+msgstr ""
 
-#: ccextras/cc-topics.php:124 ccextras/cc-topics.php:308
-#: ccextras/cc-topics.php:498
+#: ccextras/cc-topics.php:76
+#, fuzzy
+msgid "This action cannot be reversed..."
+msgstr "Không thể hoàn nguyên hành động này..."
+
+#: ccextras/cc-topics.php:78
+#, php-format
+msgid "Are you sure you want to delete \"%s\"?"
+msgstr ""
+
+#: ccextras/cc-topics.php:126 ccextras/cc-topics.php:310
+#: ccextras/cc-topics.php:529
 msgid "Reply"
 msgstr "Trả lời"
 
-#: ccextras/cc-topics.php:227
+#: ccextras/cc-topics.php:229
 msgid "Posts"
 msgstr "Bài"
 
-#: ccextras/cc-topics.php:258
+#: ccextras/cc-topics.php:260
 msgid "Lock"
 msgstr ""
 
-#: ccextras/cc-topics.php:260
+#: ccextras/cc-topics.php:262
 #, fuzzy
 msgid "Unlock"
 msgstr "Gỡ dính"
 
-#: ccextras/cc-topics.php:274
+#: ccextras/cc-topics.php:276
 #, fuzzy
 msgid "Delete branch"
 msgstr "Đang xoá bỏ đề tài"
 
-#: ccextras/cc-topics.php:284
+#: ccextras/cc-topics.php:286
 msgid "Reply with quote"
 msgstr "Trả lời có trích dẫn"
 
-#: ccextras/cc-topics.php:300
+#: ccextras/cc-topics.php:302
 msgid "Reply to yourself"
 msgstr "Trả lời cho mình"
 
-#: ccextras/cc-topics.php:304
+#: ccextras/cc-topics.php:306
 #, php-format
 msgid "Reply to %s"
 msgstr "Trả lời cho %s"
 
-#: ccextras/cc-topics.php:448
-msgid "Can not find that topic, it might have been deleted by the author"
+#: ccextras/cc-topics.php:478
+#, fuzzy
+msgid "Cannot find that topic."
+msgstr "Không tìm thấy đồ tải lên đó."
+
+#: ccextras/cc-topics.php:479
+#, fuzzy
+msgid "It might have been deleted by the author."
 msgstr "Không tìm thấy đề tài đó, tác giả có thể đã xoá bỏ nó"
 
-#: ccextras/cc-topics.php:564
+#: ccextras/cc-topics.php:595
 msgid "Deleting Topic"
 msgstr "Đang xoá bỏ đề tài"
 
-#: ccextras/cc-topics.php:680
+#: ccextras/cc-topics.php:715
 #, php-format
 msgid "Edit topic: '%s'"
 msgstr "Sửa đề tài: « %s »"
 
-#: ccextras/cc-topics.php:724
+#: ccextras/cc-topics.php:759
 msgid "Locking and Unlocking Topic Replies"
 msgstr ""
 
-#: ccextras/cc-topics.php:730
+#: ccextras/cc-topics.php:765
 msgid "Topic does not exist"
 msgstr ""
 
-#: ccextras/cc-topics.php:738
+#: ccextras/cc-topics.php:773
 #, fuzzy
-msgid "Topic has been locked"
+msgid "Topic is now locked"
 msgstr "Đồ tải lên đã được xoá bỏ"
 
-#: ccextras/cc-topics.php:739
+#: ccextras/cc-topics.php:774
 #, fuzzy
-msgid "Topic has been unlocked"
+msgid "Topic is now unlocked"
 msgstr "Đồ tải lên đã được xoá bỏ"
 
-#: ccextras/cc-topics.php:744
+#: ccextras/cc-topics.php:779
 msgid "Return to previous page"
 msgstr ""
 
-#: ccextras/cc-topics.php:774
+#: ccextras/cc-topics.php:809
 #, fuzzy
 msgid "Display topic reply form"
 msgstr "Trả lời cho đề tài"
 
-#: ccextras/cc-topics.php:778
+#: ccextras/cc-topics.php:813
 msgid "Display quote reply form"
 msgstr ""
 
-#: ccextras/cc-topics.php:782
+#: ccextras/cc-topics.php:817
 #, fuzzy
 msgid "Display delete topic form"
 msgstr "Trả lời cho đề tài"
 
-#: ccextras/cc-topics.php:786
+#: ccextras/cc-topics.php:821
 msgid "Display an edit topic form"
 msgstr ""
 
-#: ccextras/cc-topics.php:790
+#: ccextras/cc-topics.php:825
 #, fuzzy
 msgid "Display a topic thread"
 msgstr "Hiển thị tên cho tập tin"
 
-#: ccextras/cc-topics.php:794
+#: ccextras/cc-topics.php:829
 msgid "Lock a topic thread from replies"
+msgstr ""
+
+#: ccextras/cc-update.php:64
+msgid "Updates already installed:"
 msgstr ""
 
 #: ccextras/cc-user-info-x.php:68
@@ -4104,20 +4402,65 @@ msgid "Date of birth"
 msgstr "Ngày sinh"
 
 #: ccextras/cc-user-info-x.php:83
-msgid "You must be 15 or older to be elligable"
+#, fuzzy
+msgid "You must be 15 or older to be eligible"
 msgstr "Người đủ tư cách có ít nhất 15 tuổi"
 
-#: ccextras/cc-user-info-x.php:150
+#: ccextras/cc-user-info-x.php:94
+msgid ""
+"The information on this screen will be never appear on the site. However, it "
+"is necessary in order to officially enter you into the contest and make sure "
+"the contest is fair as well as give us a way to reach you if you win."
+msgstr ""
+
+#: ccextras/cc-user-info-x.php:94
+msgid ""
+"All the fields must be filled in with the proper information or your entry "
+"will be disqualified."
+msgstr ""
+
+#: ccextras/cc-user-info-x.php:94
+msgid ""
+"You must be <b>at least 15 years old</b> to participate in this contest."
+msgstr ""
+
+#: ccextras/cc-user-info-x.php:95
+msgid ""
+"You will be able to edit this information if it changes before the contest "
+"closes by clicking on the <b>Edit Your Profile</b> link in the sidebar menu."
+msgstr ""
+
+#: ccextras/cc-user-info-x.php:144
 msgid "Contest Entry User Information"
 msgstr "Thông tin về người dùng nhập vào cuộc thi"
 
-#: ccextras/cc-user-info-x.php:227
+#: ccextras/cc-user-info-x.php:221
 msgid "Contest Entry Info"
 msgstr "Thông tin nhập cuộc thi"
 
-#: ccextras/cc-user-info-x.php:228
+#: ccextras/cc-user-info-x.php:222
 msgid "Edit your personal contest information"
 msgstr "Hiệu chỉnh thông tin cá nhân cho cuộc thi"
+
+#: ccextras/update_v_1_2h.inc:142
+#, fuzzy
+msgid "Upgraded remix fields"
+msgstr "Tải lên bởi %s"
+
+#: ccextras/update_v_1_2h.inc:194
+#, fuzzy
+msgid "Ratings info updated"
+msgstr "Thông báo đánh giá"
+
+#: ccextras/update_v_1_2k.inc:83
+#, fuzzy
+msgid "Reviews installed"
+msgstr "Bài phê bình (%s)"
+
+#: ccextras/cc-notify.inc:65
+#, php-format
+msgid "This feature is new. If you have any problems, %slet us know%s"
+msgstr ""
 
 #: ccextras/cc-notify.inc:67
 msgid "Notify me by email when:"
@@ -4157,16 +4500,14 @@ msgstr "Tôi đã nhận đánh giá"
 msgid "Notifications have been updated"
 msgstr "Thông báo đã được cập nhật"
 
-#: ccextras/cc-notify.inc:213
-#, php-format
-msgid ""
-"\n"
-"\n"
-"PLEASE DO NOT RESPOND TO THIS EMAIL\n"
-"\n"
-"This is a notification that \"%s\" has just received a rating of %d.00\n"
-"\n"
-"%s\n"
+#: ccextras/cc-notify.inc:214 ccextras/cc-notify.inc:242
+#: ccextras/cc-notify.inc:341 ccextras/cc-notify.inc:423
+msgid "PLEASE DO NOT RESPOND TO THIS EMAIL"
+msgstr ""
+
+#: ccextras/cc-notify.inc:215
+#, fuzzy, php-format
+msgid "This is a notification that \"%s\" has just received a rating of %d.00"
 msgstr ""
 "\n"
 "\n"
@@ -4176,20 +4517,13 @@ msgstr ""
 "\n"
 "%s\n"
 
-#: ccextras/cc-notify.inc:225
+#: ccextras/cc-notify.inc:221
 msgid "Ratings notification"
 msgstr "Thông báo đánh giá"
 
-#: ccextras/cc-notify.inc:246
-#, php-format
-msgid ""
-"\n"
-"\n"
-"PLEASE DO NOT RESPOND TO THIS EMAIL\n"
-"\n"
-"This is a notification that \"%s\" has been reviewed by %s\n"
-"\n"
-"%s\n"
+#: ccextras/cc-notify.inc:244
+#, fuzzy, php-format
+msgid "This is a notification that \"%s\" has been reviewed by %s"
 msgstr ""
 "\n"
 "\n"
@@ -4199,47 +4533,23 @@ msgstr ""
 "\n"
 "%s\n"
 
-#: ccextras/cc-notify.inc:259
+#: ccextras/cc-notify.inc:251
 msgid "Review notification"
 msgstr "Thông báo bài phê bình"
 
-#: ccextras/cc-notify.inc:349
-#, php-format
-msgid ""
-"\n"
-"\n"
-"PLEASE DO NOT RESPOND TO THIS EMAIL\n"
-"\n"
-"This is a notification of a reply to a review thread \n"
-"\"%s\":\n"
-"\n"
-"%s\n"
-msgstr ""
-"\n"
-"\n"
-"KHÔNG NÊN TRẢ LỜI CHO LÁ THƯ NÀY\n"
-"\n"
-"Thư này thông báo rằng nhánh phê bình « %s » mới nhận trả lời:\n"
-"\n"
-"%s\n"
+#: ccextras/cc-notify.inc:340
+#, fuzzy
+msgid "Topic Reply Notification"
+msgstr "Sửa thông báo của tôi"
 
-#: ccextras/cc-notify.inc:436
+#: ccextras/cc-notify.inc:422
 #, php-format
 msgid "Upload by %s"
 msgstr "Tải lên bởi %s"
 
-#: ccextras/cc-notify.inc:437
-#, php-format
-msgid ""
-"\n"
-"\n"
-"PLEASE DO NOT RESPOND TO THIS EMAIL\n"
-"\n"
-"This is a notification that %s has just uploaded new material to %s\n"
-"\n"
-"\"%s\"\n"
-"%s\n"
-"\n"
+#: ccextras/cc-notify.inc:424
+#, fuzzy, php-format
+msgid "This is a notification that %s has just uploaded new material to %s"
 msgstr ""
 "\n"
 "\n"
@@ -4251,20 +4561,164 @@ msgstr ""
 "%s\n"
 "\n"
 
-#: ccextras/cc-notify.inc:454
-msgid "which uses samples from:\n"
+#: ccextras/cc-notify.inc:433
+#, fuzzy
+msgid "It uses samples from:\n"
 msgstr "mà dùng mẫu từ :\n"
 
-#: ccextras/cc-notify.inc:463
-#, php-format
-msgid ""
-"\n"
-"Thank you,\n"
-"%s"
+#: ccextras/cc-notify.inc:438
+#, fuzzy, php-format
+msgid "%s by %s"
+msgstr "Tải lên bởi %s"
+
+#: ccextras/cc-notify.inc:442
+#, fuzzy, php-format
+msgid "Thank you, %s"
 msgstr ""
 "\n"
 "Cám ơn bạn,\n"
 "%s"
+
+#: ccextras/cc-fileman.inc:40
+msgid "Destination directory"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:46
+#, fuzzy
+msgid "Add file(s)"
+msgstr "Thêm tập tin vào « %s »"
+
+#: ccextras/cc-fileman.inc:150
+#, php-format
+msgid "The file , '%s', already exists."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:171
+msgid "There were problems uploading (see below)."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:208
+msgid "Manage files your viewfile directory"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:289
+msgid "Can't leave this blank"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:296
+msgid "The directory you selected already exists"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:304
+msgid "The directory is successfully created."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:308
+msgid "There is a problem creating the directory."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:320
+msgid "There is no file selected for renaming."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:334
+msgid "A file with that name already exists."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:347
+#, fuzzy
+msgid "That file could not be renamed."
+msgstr "Không thể hoàn nguyên hành động này..."
+
+#: ccextras/cc-fileman.inc:359
+msgid "No file selected for replacement."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:383
+#, fuzzy
+msgid "replaced"
+msgstr "Thay thế « %s »"
+
+#: ccextras/cc-fileman.inc:387
+msgid "ERROR"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:387
+#, php-format
+msgid "Could not replace file, '%s'."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:399
+msgid "Please confirm deletion by checking here:"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:404
+msgid "There is no file selected for deletion."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:416
+#, fuzzy, php-format
+msgid "The file, %s, is now deleted."
+msgstr "Tập tin quá lớn"
+
+#: ccextras/cc-fileman.inc:418
+#, php-format
+msgid "The file, %s, could not be deleted."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:432
+msgid "The directory is empty."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:432
+msgid "Use \"Add Files\" to populate."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:450
+msgid "Path Root"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:487
+#, php-format
+msgid "Create directory in %s"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:489
+#, fuzzy
+msgid "Create Directory"
+msgstr "Duyệt cuộc thi"
+
+#: ccextras/cc-fileman.inc:499 mixter-lib/mixter-dump-listing.inc:41
+msgid "Download"
+msgstr "Tải xuống"
+
+#: ccextras/cc-fileman.inc:502
+msgid "(right/control click on the link above to download this file.)"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:509
+#, fuzzy, php-format
+msgid "Rename file, %s, to:"
+msgstr "Quản lý tập tin cho : "
+
+#: ccextras/cc-fileman.inc:513
+#, php-format
+msgid "Replace file, %s, with:"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:514 ccextras/cc-fileman.inc:519
+msgid "There is NO CONFIRM and NO UNDO!"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:516
+#, fuzzy
+msgid "Replace"
+msgstr "Thay thế « %s »"
+
+#: ccextras/cc-fileman.inc:518
+#, fuzzy, php-format
+msgid "Delete file, %s"
+msgstr "Xoá bỏ tập tin « %s »"
 
 #: ccextras/cc-notify.php:129
 msgid "Edit My Notifications"
@@ -4286,9 +4740,35 @@ msgid ""
 "notified about."
 msgstr ""
 
+#: ccextras/cc-notify.php:165
+#, fuzzy
+msgid "Allow email notifications"
+msgstr "Thông báo bài phê bình"
+
+#: ccextras/cc-notify.php:166
+msgid ""
+"Is it ok to allow users get notified on activity on their accounts and "
+"others?"
+msgstr ""
+
+#: ccextras/update_v_2_1a.inc:58
+#, fuzzy
+msgid "Notifications installed"
+msgstr "Thông báo"
+
 #: ccextras/cc-fileman.php:68
 msgid "Web based file manager"
 msgstr ""
+
+#: ccextras/cc-fileman.php:89
+#, fuzzy
+msgid "Manage files"
+msgstr "Quản lý tập tin"
+
+#: ccextras/cc-fileman.php:91
+#, fuzzy, php-format
+msgid "Manage files in the directory, %s."
+msgstr "Quản lý tập tin cho : "
 
 #: ccextras/cc-forums.php:122
 msgid "New Topic Text"
@@ -4304,9 +4784,14 @@ msgstr "Đệ trình đơn"
 msgid "%s has posted %s%d forum messages%s"
 msgstr "%s đã gởi <a href=\"%s\">%d thông điệp cho diễn đàn</a>"
 
-#: ccextras/cc-forums.php:162 ccextras/cc-forums.inc:514
+#: ccextras/cc-forums.php:162 ccextras/cc-forums.inc:537
 msgid "Forum posts"
 msgstr "Bài diễn đàn"
+
+#: ccextras/cc-forums.php:263 ccextras/cc-forums-admin.inc:139
+#: ccextras/cc-forums.inc:228
+msgid "Forum"
+msgstr "Diễn đàn"
 
 #: ccextras/cc-forums.php:265
 msgid "Config forums access, groups, etc."
@@ -4347,8 +4832,14 @@ msgid "Forum Topics"
 msgstr "Đề tài diễn đàn"
 
 #: ccextras/cc-forums-search.inc:115
-msgid "Sorry, no topics match"
+#, fuzzy
+msgid "Sorry, no topics match."
 msgstr "Tiếc là không có đề tài khớp được"
+
+#: ccextras/update_v_3_0c.inc:103
+#, fuzzy
+msgid "Forums installed"
+msgstr "Nguồn tin tức diễn đàn"
 
 #: ccextras/cc-forums-admin.inc:38
 #, fuzzy
@@ -4389,210 +4880,209 @@ msgid "Forum Group Name"
 msgstr ""
 
 #: ccextras/cc-forums-admin.inc:100
-msgid "Lower number places forum group higher in listing"
+msgid "A lower number places forum group higher in listing."
 msgstr ""
 
 #: ccextras/cc-forums-admin.inc:114
 msgid ""
-"\r\n"
 "This action will delete <b>ALL</b> topics ever posted in the forum. There is "
-"<b>NO UNDO</b>\r\n"
-"so once you delete the forum <b>ALL</b> messages will be gone forever."
+"<b>NO UNDO</b>. Once you delete the forum, <b>ALL</b> messages will be gone "
+"forever."
 msgstr ""
 
-#: ccextras/cc-forums-admin.inc:120
+#: ccextras/cc-forums-admin.inc:118
 #, fuzzy, php-format
-msgid "Delete Forum \"%s\" ?"
+msgid "Delete Forum, '%s' ?"
 msgstr "Xoá bỏ « %s » ?"
 
-#: ccextras/cc-forums-admin.inc:143
+#: ccextras/cc-forums-admin.inc:141
 #, fuzzy
 msgid "Move thread to this fourm"
 msgstr "Chuyển nhánh"
 
-#: ccextras/cc-forums-admin.inc:170
+#: ccextras/cc-forums-admin.inc:168
 #, php-format
 msgid "Move topic: %s"
 msgstr "Chuyển đề tài: %s"
 
-#: ccextras/cc-forums-admin.inc:214
+#: ccextras/cc-forums-admin.inc:212
 msgid "Change Thread Sticky Flag"
 msgstr "Đổi cờ dính nhánh"
 
-#: ccextras/cc-forums-admin.inc:219
+#: ccextras/cc-forums-admin.inc:217
 #, php-format
 msgid "Sticky status changed for thread. %sGo back to thread%s"
 msgstr ""
 
-#: ccextras/cc-forums-admin.inc:236
+#: ccextras/cc-forums-admin.inc:234
 msgid "Change Thread Open Status"
 msgstr "Đổi trạng thái mở nhánh"
 
-#: ccextras/cc-forums-admin.inc:241
+#: ccextras/cc-forums-admin.inc:239
 #, php-format
 msgid "Open status changed for thread. %sGo back to thread%s"
 msgstr ""
 
-#: ccextras/cc-forums-admin.inc:272
+#: ccextras/cc-forums-admin.inc:270
 #, php-format
 msgid "You must %sadd groups%s before you can add forums"
 msgstr ""
 
-#: ccextras/cc-forums-admin.inc:294
+#: ccextras/cc-forums-admin.inc:292
 #, fuzzy
 msgid "Edit Forum Properties"
 msgstr "Sửa tài sản cho "
 
-#: ccextras/cc-forums-admin.inc:322 ccextras/cc-forums-admin.inc:421
+#: ccextras/cc-forums-admin.inc:320 ccextras/cc-forums-admin.inc:419
 #, fuzzy
 msgid "Delete Forum"
 msgstr "Xoá bỏ"
 
-#: ccextras/cc-forums-admin.inc:348
+#: ccextras/cc-forums-admin.inc:346
 msgid "Add Forum Group"
 msgstr ""
 
-#: ccextras/cc-forums-admin.inc:364
+#: ccextras/cc-forums-admin.inc:362
 #, fuzzy
 msgid "Edit Forum Group Properties"
 msgstr "Sửa tài sản cho "
 
-#: ccextras/cc-forums-admin.inc:392
+#: ccextras/cc-forums-admin.inc:390
 #, fuzzy
 msgid "Delete Forum Group"
 msgstr "Đang xoá bỏ đề tài"
 
-#: ccextras/cc-forums-admin.inc:402
+#: ccextras/cc-forums-admin.inc:400
 #, php-format
 msgid "Group is not empty. %sReturn to forums.%s"
 msgstr ""
 
-#: ccextras/cc-forums-admin.inc:417
+#: ccextras/cc-forums-admin.inc:415
 #, fuzzy
 msgid "Add Forum"
 msgstr "Diễn đàn"
 
-#: ccextras/cc-forums-admin.inc:419
+#: ccextras/cc-forums-admin.inc:417
 #, fuzzy
 msgid "Edit Forum"
 msgstr "Diễn đàn"
 
-#: ccextras/cc-forums-admin.inc:424
+#: ccextras/cc-forums-admin.inc:422
 msgid "Add Group"
 msgstr ""
 
-#: ccextras/cc-forums-admin.inc:426
+#: ccextras/cc-forums-admin.inc:424
 msgid "Edit Group"
 msgstr ""
 
-#: ccextras/cc-forums-admin.inc:428
+#: ccextras/cc-forums-admin.inc:426
 #, fuzzy
 msgid "Delete Group"
 msgstr "Đang xoá bỏ đề tài"
 
-#: ccextras/cc-forums-admin.inc:433
+#: ccextras/cc-forums-admin.inc:431
 #, fuzzy
 msgid "Forum Admin"
 msgstr "Nguồn tin tức diễn đàn"
 
-#: ccextras/cc-forums-admin.inc:455
+#: ccextras/cc-forums-admin.inc:453
 #, php-format
 msgid "Forum has been permanantly deleted. %sReturn to forums.%s"
 msgstr ""
 
-#: ccextras/cc-forums.inc:156
+#: ccextras/cc-forums.inc:158
 msgid "Post new topic"
 msgstr "Gởi đề tài mới"
 
-#: ccextras/cc-forums.inc:226
-msgid "Forum"
-msgstr "Diễn đàn"
-
-#: ccextras/cc-forums.inc:240
+#: ccextras/cc-forums.inc:242
 msgid "Forums"
 msgstr "Diễn đàn"
 
-#: ccextras/cc-forums.inc:338
+#: ccextras/cc-forums.inc:354
 msgid "Post New Topic"
 msgstr "Gởi đề tài mới"
 
-#: ccextras/cc-forums.inc:392
+#: ccextras/cc-forums.inc:415
 msgid "Thread Missing"
 msgstr "Thiếu nhánh"
 
-#: ccextras/cc-forums.inc:393
-msgid "That topic thread does not exist"
+#: ccextras/cc-forums.inc:416
+msgid "That topic thread does not exist."
 msgstr ""
 
-#: ccextras/cc-forums.inc:404
-msgid "You must have admin rights to see this forum"
+#: ccextras/cc-forums.inc:427
+#, fuzzy
+msgid "You must have admin rights to see this forum."
 msgstr "Chỉ người có quyền quản trị có khả năng xem diễn đàn này"
 
-#: ccextras/cc-forums.inc:406
-msgid "You must be logged in to see this forum"
+#: ccextras/cc-forums.inc:429
+#, fuzzy
+msgid "You must be logged in to see this forum."
 msgstr "Chỉ người đã đăng nhập có khả năng xem diễn đàn này"
 
-#: ccextras/cc-forums.inc:408
-msgid "You do have proper permissions to see this forum"
+#: ccextras/cc-forums.inc:431
+#, fuzzy
+msgid "You do have proper permissions to see this forum."
 msgstr "Bạn có quyền xem diễn đàn này"
 
-#: ccextras/cc-forums.inc:410
+#: ccextras/cc-forums.inc:433
 msgid "Restricted Access"
 msgstr "Truy cập bị hạn chế"
 
-#: ccextras/cc-forums.inc:422
-msgid "Thread is closed to new comments"
+#: ccextras/cc-forums.inc:445
+#, fuzzy
+msgid "Thread is closed to new comments."
 msgstr "Nhánh không cho phép chú thích mới"
 
-#: ccextras/cc-forums.inc:427
+#: ccextras/cc-forums.inc:450
 msgid "Post topic reply"
 msgstr "Trả lời cho đề tài"
 
-#: ccextras/cc-forums.inc:433
+#: ccextras/cc-forums.inc:456
 msgid "Move thread"
 msgstr "Chuyển nhánh"
 
-#: ccextras/cc-forums.inc:435
+#: ccextras/cc-forums.inc:458
 msgid "Open"
 msgstr "Mở"
 
-#: ccextras/cc-forums.inc:435
+#: ccextras/cc-forums.inc:458
 msgid "Close"
 msgstr "Đóng"
 
-#: ccextras/cc-forums.inc:440
+#: ccextras/cc-forums.inc:463
 msgid "Unstick"
 msgstr "Gỡ dính"
 
-#: ccextras/cc-forums.inc:440
+#: ccextras/cc-forums.inc:463
 msgid "Stick"
 msgstr "Dính"
 
-#: ccextras/cc-forums.inc:500
+#: ccextras/cc-forums.inc:523
 #, php-format
 msgid "Reply to: \"%s\""
 msgstr "Trả lời cho : « %s »"
 
-#: ccextras/cc-forums.inc:507
+#: ccextras/cc-forums.inc:530
 #, php-format
 msgid "Forum Posts for %s"
 msgstr "Bài diễn đàn cho %s"
 
-#: ccextras/cc-forums.inc:541
+#: ccextras/cc-forums.inc:564
 #, php-format
 msgid "Feed for topics by %s"
 msgstr "Nguồn cung cấp đề tài bởi %s"
 
-#: ccextras/cc-forums.inc:553
+#: ccextras/cc-forums.inc:576
 #, php-format
 msgid "Feed for topic: %s"
 msgstr "Nguồn cung cấp đề tài: %s"
 
-#: ccextras/cc-forums.inc:557
+#: ccextras/cc-forums.inc:580
 msgid "Forums Feed"
 msgstr "Nguồn tin tức diễn đàn"
 
-#: ccextras/cc-forums.inc:573
+#: ccextras/cc-forums.inc:596
 msgid "Contents requires login"
 msgstr "Nội dung cần thiết bạn đăng nhập"
 
@@ -4644,10 +5134,6 @@ msgstr "(chưa có ai lấy mẫu từ cái này)"
 msgid "Samples are used in:"
 msgstr "Mẫu được dùng trong:"
 
-#: mixter-lib/mixter-dump-listing.inc:41
-msgid "Download"
-msgstr "Tải xuống"
-
 #: mixter-lib/mixter-dump-listing.inc:42
 #, fuzzy
 msgid "length:"
@@ -4682,6 +5168,65 @@ msgstr ""
 msgid "See phpinfo() results"
 msgstr ""
 
+#, fuzzy
+#~ msgid "Query Results"
+#~ msgstr "Kết quả tìm kiếm"
+
+#~ msgid "Import succeeded. Click <a href=\"%s\">here</a> to see results."
+#~ msgstr ""
+#~ "Tập tin đã được nhập khẩu. Nhấn vào <a href=\"%s\">đây</a> để xem kết quả."
+
+#~ msgid "Changes saved. Click <a href=\"%s\">here</a> to see results"
+#~ msgstr ""
+#~ "Các thay đổi đã được lưu. Nhấn vào <a href=\"%s\">đây</a> để xem kết quả"
+
+#~ msgid "<br />Reviews left for<br /> \"%s\""
+#~ msgstr "<br />Bài phê bình còn lại cho<br /> « %s »"
+
+#~ msgid "<br />Reviews left for<br /> %s"
+#~ msgstr "<br />Bài phê bình còn lại cho<br /> %s"
+
+#, fuzzy
+#~ msgid "%s has left %s1 review "
+#~ msgstr "%s đã viết %s1 bài phê bình</a>"
+
+#, fuzzy
+#~ msgid "and has been reviewed %sonce "
+#~ msgstr "đã được phê bình %smột lần</a>"
+
+#~ msgid "%s has no remixes"
+#~ msgstr "%s không có đồ hoà lại"
+
+#~ msgid "%s has 1 remix"
+#~ msgstr "%s có 1 đồ hoà lại"
+
+#~ msgid " and has not been remixed"
+#~ msgstr " và chưa được hoà lại"
+
+#~ msgid " and has been remixed once"
+#~ msgstr " và đã được hoà lại một lần"
+
+#~ msgid "Delete \"%s\" ?"
+#~ msgstr "Xoá bỏ « %s » ?"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "PLEASE DO NOT RESPOND TO THIS EMAIL\n"
+#~ "\n"
+#~ "This is a notification of a reply to a review thread \n"
+#~ "\"%s\":\n"
+#~ "\n"
+#~ "%s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "KHÔNG NÊN TRẢ LỜI CHO LÁ THƯ NÀY\n"
+#~ "\n"
+#~ "Thư này thông báo rằng nhánh phê bình « %s » mới nhận trả lời:\n"
+#~ "\n"
+#~ "%s\n"
+
 #~ msgid "Changes saved (see <a href=\"%s\">results</a>)"
 #~ msgstr "Các thay đổi đã được lưu (xem <a href=\"%s\">kết quả</a>)"
 
@@ -4714,10 +5259,6 @@ msgstr ""
 
 #~ msgid "ccMixter stats [beta]"
 #~ msgstr "Thống kê ccMixter [B]"
-
-#, fuzzy
-#~ msgid "Uploads remixed by %s"
-#~ msgstr "Tải lên bởi %s"
 
 #, fuzzy
 #~ msgid "Podcast for %s"
@@ -4894,6 +5435,3 @@ msgstr ""
 #~ msgstr ""
 #~ "href=\"http://en.wikipedia.org/wiki/NSFW\" target=\"_blank\">NSFW</a> (vô "
 #~ "lễ)"
-
-#~ msgid "if it contains questionable language."
-#~ msgstr "nếu nó chứa từ ngữ thô tục nào."

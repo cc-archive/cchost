@@ -45,3 +45,5 @@ chown -Rf ${USERNAME}:${WWWGROUP} cclib/phptal/phptal_cache
 chmod 775 cclib/phptal/phptal_cache
 chmod 775 cctemplates
 chown ${USERNAME}:${WWWGROUP} cctemplates
+chmod 775 locale
+chown -Rf ${USERNAME}:${WWWGROUP} locale

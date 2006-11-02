@@ -36,6 +36,7 @@ error_reporting($cc_error_level);
 */
 if( !file_exists('cc-config-db.php') )
 {
+    /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
     die('<html><body>ccHost has not been properly installed. 
         Please <a href="ccadmin/">
         follow these steps</a> for a successful
@@ -103,8 +104,9 @@ CCConfigs::Init();
 *  update)
 */
 if( file_exists('ccadmin') )
-    die('<html><body>ccHost Installation is not complete -- for security reasons you 
-         should rename "ccadmin". </body></html>');
+    die('<html><body>' . _('ccHost installation is not complete.') . ' ' . 
+        _('For security reasons, you should rename "ccadmin".') .  
+        '</body></html>');
 
 /*
 *  Pick up 3rd party PHP modules

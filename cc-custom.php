@@ -39,7 +39,7 @@ if( !defined('IN_CC_HOST') )
 */
 function CC_badcall($to)
 {
-    print("there was a call to \"$to\" in a template");
+    print( sprintf(_('A bad call happened to "%s" in a template.'), $to) );
     exit;
 }
 
@@ -245,7 +245,8 @@ function CC_pending_pool_remix()
         if( $pool_remixes->HasUnapproved() )
         {
             $args['url'] = ccl( 'admin', 'pools', 'approve' ) ;
-            $args['message'] = "You've been remixed!<br />Click here to make them visible!";
+            $args['message'] = _("You've been remixed!") . '<br />' . 
+                               _('Click here to make them visible!');
             return( $args );
         }
     }
