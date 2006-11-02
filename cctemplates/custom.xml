@@ -121,4 +121,16 @@ $Id$
   <a href="${home-url}reviews" class="cc_more_menu_link" tal:content="php: CC_Lang('More reviews...')" />    
 </metal:block>
 
+
+<metal:block define-macro="Support_CC">
+<p><a href="http://creativecommons.org/support/">
+<img src="http://creativecommons.org/images/support/2006/spread-3.gif" border="0" />
+</a>
+</p>
+</metal:block>
+
+
+
+
+
 </tal:block>
