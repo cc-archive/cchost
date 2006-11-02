@@ -663,7 +663,7 @@ END;
 	        $link_close = "</a>";
             
             $fmt = ngettext('%s has left %s%d review.%s',
-                            '%s has left %s%d reviews.%s', $count );
+                            '%s has left %s%d reviews.%s', $count ) . ' ';
             
             $text  = sprintf($fmt, $name, $link, $count, $link_close );
         }

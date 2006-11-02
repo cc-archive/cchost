@@ -52,6 +52,8 @@ function cc_stats_on_user_row(&$row)
     $str .= ' ' . ngettext( '%s has been remixed %d time.',
                       '%s has been remixed %d times.', 
                       $row['user_num_remixed'] );
+
+    $str = sprintf($str, $username, $row['user_num_remixed']);
     
     $row['user_fields'][] = array( 'label' => _('Stats'),
                                    'value' => $str,
