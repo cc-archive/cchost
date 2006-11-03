@@ -99,11 +99,15 @@ class CCTemplate
     var $_template_file;
     var $_html_mode;
     var $_template;
+    var $_raw_src;
+    var $_raw_src_id;
 
-    function CCTemplate($template_file, $html_mode = true)
+    function CCTemplate($template, $html_mode = true, $is_raw_source=false,$raw_src_id='')
     {
-        $this->_template_file = $template_file;
+        $this->_template_file = $is_raw_source ? '' : $template;
         $this->_html_mode     = $html_mode;
+        $this->_raw_src       = $is_raw_source ? $template : '';
+        $this->_raw_src_id    = $raw_src_id;
     }
 
     function _init_lib()
@@ -112,6 +116,8 @@ class CCTemplate
         if( empty($this->_template) )
         {
             $this->_template = new PHPTAL($this->_template_file);
+            if( !empty($this->_raw_source) )
+                $this->_template->SetSource($this->_raw_source,$this->_raw_source_id);
             $this->_template->setOutputMode($this->_html_mode ? PHPTAL_XHTML : PHPTAL_XML );
             $resolver = new CCTemplateSourceResolver();
             $this->_template->addSourceResolver($resolver);
@@ -179,6 +185,48 @@ class CCTemplate
         return $res;
     }
 
+}
+
+/**
+* The function is designed for ajax callbacks, get in, get out
+*
+*/
+function cc_show_template($template_name='',$macro='')
+{
+    global $CC_GLOBALS;
+
+    if( empty($template_name) )
+    {
+        print(_('must specify a template'));
+        CCUtil::Send404();
+        exit;
+    }
+
+    if( strpos('.xml',$template_name) === false )
+        $template_name .= '.xml';
+
+    if( !CCTemplate::GetTemplate($template_name) )
+    {
+        print(_("can't file template: $template_name"));
+        CCUtil::Send404();
+        exit;
+    }
+
+    if( empty($macro) )
+    {
+        $t = new CCTemplate($template_name);
+        $configs =& CCConfigs::GetTable();
+        $args = array_merge($configs->GetConfig('ttag'),$CC_GLOBALS);
+        $args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+        $args['get'] = $_GET;
+        $t->SetAllAndPrint($args);
+        exit;
+    }
+
+    CCPage::ShowHeaderFooter(false,false);
+    $template_name .= "/$macro";
+    CCPage::PageArg('exec_this',$template_name);
+    CCPage::PageArg('is_ajax',true,'exec_this');
 }
 
 /**
@@ -430,6 +478,9 @@ class CCTemplateAdmin
 
         CCEvents::MapUrl( 'people/customize',array('CCTemplateAdmin','OnPeopleCustomize'),   
             CC_ADMIN_ONLY, ccs(__FILE__) );
+
+        CCEvents::MapUrl( 'viewtemplate',     'cc_show_template',         
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
     }
 
 }
