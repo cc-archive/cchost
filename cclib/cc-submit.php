@@ -33,7 +33,6 @@ define('CC_FORM_TYPE_LOGO_DIR', 'ccimages/form_types' );
 CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCSubmit',  'OnBuildMenu'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCSubmit',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCSubmit', 'OnAdminMenu'));
-CCEvents::AddHandler(CC_EVENT_TRANSLATE,    array( 'CCSubmit', 'OnTranslate'));
 
 /**
 * @package cchost
@@ -46,94 +45,84 @@ class CCAdminSubmitFormForm extends CCUploadForm
         $this->CCUploadForm();
         $fields = array( 
                     'enabled' =>
-                        array( 'label'      => 'Enable',
-                               'form_tip'   => 'Uncheck this to make this form type invisible to the user',
+                        array( 'label'      => _('Enable'),
+                               'form_tip'   => _('Uncheck this to make this form type invisible to the user'),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE ),
 
                     'submit_type' =>
-                        array( 'label' => 'Label',
-                               'form_tip'   => 'e.g. Home Movie',
+                        array( 'label' => _('Label'),
+                               'form_tip'   => _('e.g. Home Movie'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
                             
                     'text' =>
-                        array( 'label'      => 'Caption',
-                               'form_tip'   => 'e.g. Submit a Home Movie',
+                        array( 'label'      => _('Caption'),
+                               'form_tip'   => _('e.g. Submit a Home Movie'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'logo' =>
-                       array(  'label'      => 'Logo',
+                       array(  'label'      => _('Logo'),
                                'formatter'  => 'avatar',
-                               'form_tip'   => 'Image file',
+                               'form_tip'   => _('Image file'),
                                'upload_dir' => CC_FORM_TYPE_LOGO_DIR,
                                'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL  ),
 
                     'help' =>
-                        array( 'label' => 'Description',
-                               'form_tip' => 'This is the description shown when displaying all form types',
+                        array( 'label' => _('Description'),
+                               'form_tip' => _('This is the description shown when displaying all form types'),
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE ),
 
                     'tags' =>
-                        array( 'label' => 'Tags',
+                        array( 'label' => _('Tags'),
                                'form_tip'   => 'Comma separted list of tags that will be automatically associated with uploads. (e.g. home_movie, super8)',
                                'formatter'  => 'tagsedit',
                                'isarray'    => true,
                                'flags'      => CCFF_POPULATE ),
 
                     'suggested_tags' =>
-                        array( 'label' => 'Suggested Tags',
+                        array( 'label' => _('Suggested Tags'),
                                'form_tip'   => 'Comma separted list of tags that will the user can optionally attach to the submission.',
                                'formatter'  => 'tagsedit',
                                'isarray'    => true,
                                'flags'      => CCFF_POPULATE ),
 
                     'weight' =>
-                        array( 'label' => 'Position',
-                               'form_tip'   => 'Lower number means further up on the submit page, higher number means more toward the bottom.',
+                        array( 'label' => _('Position'),
+                               'form_tip'   => _('Lower number means further up on the submit page, higher number means more toward the bottom.'),
                                'class'      => 'cc_form_input_short',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'form_help' =>
-                        array( 'label' => 'Form Help Message',
-                                'form_tip' => 'This is a message displayed at the top of the form.',
+                        array( 'label' => _('Form Help Message'),
+                                'form_tip' => _('This is a message displayed at the top of the form.'),
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE ),
 
                     'isremix' =>
-                        array( 'label'      => 'Enable Remix Search',
-                               'form_tip'   => 'Check this if you want the form to include a remix search box',
+                        array( 'label'      => _('Enable Remix Search'),
+                               'form_tip'   => _('Check this if you want the form to include a remix search box'),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE ),
 
                     'media_types' =>
-                        array( 'label' => 'Media Type Allows',
-                               'form_tip'   => "Comma separted list of allowable file type. Valid types are 'audio', 'video', 'image', 'archive'",
+                        array( 'label' => _('Media Type Allows'),
+                               'form_tip'   => _("Comma separted list of allowable file type. Valid types are 'audio', 'video', 'image', 'archive'"),
                                'isarray'    => true,
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'action' =>
-                        array( 'label' => 'Handler URL',
-                               'form_tip'   => 'Redirect this submission from the default handler (advanced usage)',
+                        array( 'label' => _('Handler URL'),
+                               'form_tip'   => _('Redirect this submission from the default Submit Form handler (advanced usage)'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
                   );
 
     
-        if( CCLanguage::IsEnabled() )
-        {
-            $help = _('WARNING: If you change the global language setting
-                    all customizations made here will be destroyed. Therefore, if you plan to
-                    set the language to something other than the default you should do it
-                    before editing here.');
-
-            $this->SetFormHelp($help);
-        }
-
         $this->AddFormFields( $fields );
         $this->EnableSubmitMessage(false);
     }
@@ -295,7 +284,7 @@ class CCSubmit
     {
         global $CC_CFG_ROOT;
 
-        CCPage::SetTitle("Manage Submit Forms");
+        CCPage::SetTitle(_('Manage Submit Forms'));
         $form_types = $this->_get_form_types(false);
 
         if( $cmd == 'revert' )
@@ -305,9 +294,9 @@ class CCSubmit
             $where['config_type'] = 'submit_forms';
             $configs->DeleteWhere($where);
             if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
-                CCPage::Prompt("Submit forms have been reverted to factory defaults");
+                CCPage::Prompt(_('Submit forms have been reverted to factory defaults'));
             else
-                CCPage::Prompt("Submit forms have been reverted to global settings");
+                CCPage::Prompt(_('Submit forms have been reverted to global settings'));
 
         }
         else
@@ -316,18 +305,26 @@ class CCSubmit
             foreach( $form_types as $key => $data)
             {
                 $args[] = array( 'action' => ccl('admin','editsubmitform',$key ),
-                                 'menu_text' => 'Edit',
+                                 'menu_text' => _('Edit'),
                                  'help' => $data['submit_type'] );
             }
             CCPage::PageArg('link_table_items',$args,'link_table');
 
             $url = ccl('admin','submit','revert');
+            $link1 = "<a href=\"$url\">";
+            $link2 = '</a>';
             if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
-                CCPage::Prompt("If you wish to revert all changes to factory defaults <a href=\"$url\">click here</a> WARNING: there is no undo.");
+            {
+                $prompt = sprintf( _('If you wish to revert all changes to factory defaults %sclick here%s. WARNING: there is no undo.'), $link1, $link2 );
+            }
             else
-                CCPage::Prompt("If you wish to remove all submit form changes for $CC_CFG_ROOT and revert to the global settings <a href=\"$url\">click here</a>. WARNING: there is no undo.");
+            {
+                $prompt = sprintf( _('If you wish to remove all submit form changes for %s and revert to the global settings %sclick here%s. WARNING: there is no undo.'), 
+                    '<b>'.$CC_CFG_ROOT.'</b>', $link1, $link2 );
+            }
+            CCPage::Prompt($prompt);
             $url = ccl('admin','newsubmitform');
-            CCPage::Prompt("<a href=\"$url\">Add a new form type...</a>");
+            CCPage::Prompt("<a href=\"$url\">" . _('Add a new form type...') . '</a>');
         }
     }
 
@@ -337,7 +334,7 @@ class CCSubmit
         if( empty($form_types[$form_type_key]) )
             return;
 
-        $msg = "Editing Submit Form for: " . $form_types[$form_type_key]['submit_type'];
+        $msg = sprintf(_('Editing Submit Form for: %s'), $form_types[$form_type_key]['submit_type'] );
         CCPage::SetTitle($msg);
         $ok = false;
 
@@ -353,7 +350,10 @@ class CCSubmit
             $urlx = ccl('admin','submit');
             $urly = ccl('submit');
             $form_name = $form_types[$form_type_key]['submit_type'];
-            CCPage::Prompt("Submit form changes saved. Go back to <a href=\"$urlx\">Manage Submit Forms</a> or see the <a href=\"$urly\">$form_name</a>");
+            $link1 = "<a href=\"$urlx\">";
+            CCPage::Prompt(
+                sprintf( _('Submit form changes saved. Go back to %sManage Submit Forms%s or see the %s'), $link1, '</a>', "<a href=\"$urly\">$form_name</a>")
+                );
             $ok = true;
         }
 
@@ -365,22 +365,30 @@ class CCSubmit
 
     function NewForm()
     {
-        CCPage::SetTitle("Create a New Submit Form");
+        CCPage::SetTitle( _('Create a New Submit Form') );
 
         $form = new CCAdminSubmitFormForm();
         if( !empty($_POST['adminsubmitform']) && $form->ValidateFields() )
         {
             $form_types = $this->_get_form_types(false);
+            $form_label = strtolower($form->GetFormValue('submit_type'));
+            $form_label = preg_replace('/[^a-z]+/', '', $form_label);
+            if( empty($form_label) )
+                $form_label = 'userform';
             $i = 1;
             $keys = array_keys($form_types);
-            while( in_array( 'userform' . $i, $keys ) )
-                $i++;
-            $form_type_key = 'userform' . $i;
+            $safe_form_label = $form_label;
+            while( in_array( $safe_form_label, $keys ) )
+                $safe_form_label = $form_label . $i++;
+            $form_type_key = $safe_form_label;
             $this->_save_form($form,$form_type_key,$form_types);
             $form_name = $form_types[$form_type_key]['submit_type'];
             $urlz = ccl('admin','submit');
             $urlf = ccl('submit');
-            CCPage::Prompt("New form type saved. Go back to <a href=\"$urlz\">Manage Submit Forms</a> or see the <a href=\"$urlf\">$form_name</a>");
+            $link1 = "<a href=\"$urlz\">";
+            CCPage::Prompt(
+                sprintf( _('New Form type saved. Go back to %sManage Submit Forms%s or see the %s'), $link1, '</a>', "<a href=\"$urlf\">$form_name</a>")
+                );
         }
         else
         {
@@ -392,8 +400,17 @@ class CCSubmit
     {
         $form->FinalizeAvatarUpload('logo', CC_FORM_TYPE_LOGO_DIR );
         $form->GetFormValues($values);
+        $this->SaveFormType($values,$form_type_key,$form_types);
+    }
+
+    function SaveFormType($values,$form_type_key,$form_types='')
+    {
+        if( empty($form_types) )
+            $form_types = $this->_get_form_types(false);
+
         if( empty($values['logo']) && !empty($form_types[$form_type_key]['logo']) )
              $values['logo'] = $form_types[$form_type_key]['logo']; // wtf
+
         if( empty($values['tags']) )
         {
             $values['tags'] = 'media';
@@ -405,16 +422,21 @@ class CCSubmit
             if( !in_array( 'media', $values['tags'] ) )
                 $values['tags'][] = 'media';
         }
+
         if( empty($values['weight']) )
             $values['weight'] = 1;
+
         if( !empty($values['action']) )
         {
             if( substr($values['action'],0,7) != 'http://' )
             {
+                // shouldn't this be ('#^/#', '', ...) ???
+
                 $url = preg_replace('#/?(.*)$#','\1',$values['action']);
                 $values['action'] = ccl($url);
             }
         }
+
         $form_types[$form_type_key] = $values;
         $form_types = $this->_sort_form_types($form_types,false);
         $configs =& CCConfigs::GetTable();
@@ -490,67 +512,6 @@ class CCSubmit
                                  ),
                 );
         }
-    }
-
-    /**
-     * Event handler for {@link CC_EVENT_TRANSLATE}
-     *
-     * This is called when the admin has picked a new language.
-     *
-     * The current implementation is simply to wipe out the cache
-     * but that DESTROYS all customization done to the submit forms.
-     * Clearly this is not the right thing. Any volunteers who
-     * wish to help make the forms cache multi-language aware
-     * speak now...
-     *
-     * @todo Make submit forms cache multi-language aware
-    */
-    function OnTranslate()
-    {
-        $configs =& CCConfigs::GetTable();
-        $roots = $configs->GetConfigRoots();
-        foreach( $roots as $aroot )
-        {
-            $root = $aroot['config_scope'];
-            $configs->DeleteType('submit_forms',$root);
-        }
-
-        /*
-        * This is the code for translating all submit forms into
-        * whatever the current language is.
-        *
-        * This is here strictly as a reference for how to traverse
-        * the forms in all the vroots and chache the results.
-        *
-        * The code itself is broken in several ways:
-        *
-        *  It assumes the current language is English
-        *  It overwrites whatever text were previously in the cache
-        *  It uses _() to translate, I'm told that's wrong
-        *  It will only translate 'known' strings, if the admin changed
-        *     even one characther (e.g. 'Forum' -> 'Forums') that the translation
-        *     for that word will fail and the user will the English version
-        *  ...
-        */
-
-        /*
-        $configs =& CCConfigs::GetTable();
-        $roots = $configs->GetConfigRoots();
-        foreach( $roots as $aroot )
-        {
-            $root = $aroot['config_scope'];
-            $forms = $configs->GetConfig('submit_forms',$root);
-            $new_forms = array();
-            foreach( $forms as $key => $form )
-            {
-                $form['text'] = _( $form['text'] );
-                $form['help'] = _( $form['help'] );
-                $form['form_help'] = _( $form['form_help'] );
-                $new_forms[$key] = $form;
-            }
-            $configs->SaveConfig('submit_forms',$new_forms,$root,false);
-        }
-        */
     }
 
 }
