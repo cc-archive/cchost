@@ -302,7 +302,8 @@ class CCAdminTemplateTagsForm extends CCEditConfigForm
         $this->SetSubmitText("Submit Changes");
         $newtaglink = ccl('admin', 'templatetags', 'new' );
         global $CC_CFG_ROOT;
-        $this->SetHelpText(sprintf(_("These values are used on each page for %s"), $CC_CFG_ROOT) . sprintf(_("If you have customized the templates you can create new tags by %sclicking here%s."), "<a href=\"$newtaglink\">", "</a>"));
+        $this->SetHelpText(
+            sprintf(_('These values are used on each page for %s. If you have customized the templates you can create new tags by %sclicking here%s.'), $CC_CFG_ROOT, "<a href=\"$newtaglink\">", "</a>"));
     }
 }
 
