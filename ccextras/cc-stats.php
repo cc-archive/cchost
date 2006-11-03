@@ -48,27 +48,62 @@ function cc_stats_on_user_row(&$row)
 
     if( empty( $num_remixes ) )
     {
-        $text = sprintf( _('%s has no remixes'), $username ) . ' ';
+        if( empty( $num_remixed ) )
+        {
+            $text = sprintf( _('%s has no remixes and has not been remixed'), $username );
+        }
+        else
+        {
+            $fmt = ngettext( '%s has no remixes and has been remixed %d time.',
+                             '%s has no remixes and has been remixed %d times.', $num_remixed );
+
+            $text= sprintf( $fmt, $username, $num_remixed );
+        }
     }
     else
     {
-        $fmt = ngettext( "%s has %d remix",
-                         "%s has %d remixes", $num_remixes );
+        if( empty($num_remixed) )
+        {
+            $fmt = ngettext( '%s has %d remix and has not been remixed',
+                             '%s has %d remixes and has not been remixed', $num_remixes );
 
-        $text = sprintf( $fmt, $username, $num_remixes ) . ' ';
+            $text = sprintf( $fmt, $username, $num_remixes );
+        }
+        else
+        {
+            if( $num_remixes == 1 )
+            {
+                if( $num_remixed == 1 )
+                {
+                    $text = sprintf( _('%s has one remix and has been remixed once'), $username );
+                }
+                else
+                {
+                    $fmt = ngettext( '%s has 1 remix and has been remixed %d time.',
+                                     '%s has 1 remixes and has been remixed %d times.', $num_remixed );
+
+                    $text = sprintf( $fmt, $username, $num_remixed );
+                }
+            }
+            else
+            {
+                if( $num_remixed == 1 )
+                {
+                    $fmt = ngettext( '%s has %d remix and has been remixed 1 time.',
+                                     '%s has %d remixes and has been remixed 1 time.', $num_remixes );
+
+                    $text = sprintf( $fmt, $username, $num_remixes );
+                }
+                else
+                {
+                    $text = sprintf( _('%s has %d remixes and has been remixed %d times.'),
+                                        $username, $num_remixes, $num_remixed );
+                }
+            }
+        }
+
     }
 
-    if( empty( $num_remixed ) )
-    {
-        $text .= _('and has not been remixed');
-    }
-    else
-    {
-        $fmt = ngettext( "and has been remixed %d time.",
-                         "and has been remixed %d times.", $num_remixed );
-
-        $text .= sprintf( $fmt, $num_remixed );
-    }
 
     $row['user_fields'][] = array( 'label' => _('Stats'),
                                    'value' => $text,
