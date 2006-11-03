@@ -244,17 +244,16 @@ EOF;
                     if( $row['contest_vote_online'] )
                         $deadline = strtotime($row['contest_vote_deadline']);
 
-                    // not used anywhere ????
-                    // $row['contest_show_results'] = true;
-
                     if( $now < $deadline )
                         $row['contest_voting_open'] = true;
                     else
+                    {
                         $row['contest_over'] = true;
+                    }
                 }
                 else
                 {
-                    $row['contest_over'] = true;
+                    //$row['contest_over'] = true;
                 }
             }
         }
@@ -312,18 +311,36 @@ EOF;
         }
         else
         {
-            $row['contest_states'][] = 
-                array( 'css_class' => 'cc_contest_closed',
-                       'text'      => $row['contest_friendly_name'] . 
-                                      _(' is not taking submissions any more.') );
+            if( $row['contest_over'] )
+            {
+                $row['contest_states'][] = 
+                    array( 'css_class' => 'cc_contest_closed',
+                           'text'      => $row['contest_friendly_name'] . 
+                                          _(' is not taking submissions any more.') );
 
-            $row['contest_states'][] = 
-                array( 'css_class' => 'cc_contest_closed',
-                       'text'      => _('Submissions stopped after: ') );
+                $row['contest_states'][] = 
+                    array( 'css_class' => 'cc_contest_closed',
+                           'text'      => _('Submissions stopped after: ') );
 
-            $row['contest_states'][] = 
-                array( 'css_class' => '',
-                       'text'      => $row['contest_deadline_fmt'] );
+                $row['contest_states'][] = 
+                    array( 'css_class' => '',
+                           'text'      => $row['contest_deadline_fmt'] );
+            }
+            else
+            {
+                $row['contest_states'][] = 
+                    array( 'css_class' => 'cc_contest_closed',
+                           'text'      => $row['contest_friendly_name'] . 
+                                          _(' is not taking submissions yet.') );
+
+                $row['contest_states'][] = 
+                    array( 'css_class' => 'cc_contest_closed',
+                           'text'      => _('Submissions starts after: ') );
+
+                $row['contest_states'][] = 
+                    array( 'css_class' => '',
+                           'text'      => $row['contest_open'] );
+            }
         }
 
         if( $row['contest_voting_open'] )
