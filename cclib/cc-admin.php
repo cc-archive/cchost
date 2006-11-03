@@ -304,7 +304,7 @@ class CCAdminRawForm extends CCGridForm
         foreach( $rows as $row )
         {
             $id   = $row['config_id'];
-            $arr  = unserialize( $row['config_data'] );
+            $arr  = $configs->CfgUnserialize( $row['config_type'], $row['config_data'] );
             $c    = count($arr);
             $keys = array_keys($arr);
 
@@ -517,7 +517,8 @@ class CCAdmin
             {
                 CCUtil::StripSlash($data);
                 $where['config_id'] = $id;
-                $where['config_data'] = serialize($data);
+                $type = $configs->QueryItemFromKey('config_type',$id);
+                $where['config_data'] = $configs->CfgSerialize($type,$data);
                 $configs->Update($where);
             }
 

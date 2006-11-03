@@ -28,14 +28,32 @@ if( !defined('IN_CC_HOST') )
 
 class CCLanguageEditor
 {
-    function Language($domain='default',$writearg=0)
+    function Language($domain='default',$zone=0)
     {
         global $CC_GLOBALS;
 
         $tt = $this->_get_lang_file($domain);
+        if( !intval($zone) || $zone > 4 )
+            $zone = 0;
+        $part = count($tt) / 5;
+        $start = $part * $zone;
+        $end = $start + $part;
+        $strs = array();
+        $keys = array_keys($tt);
+        for( $i = $start; $i < $end; $i++ )
+        {
+            $e = $tt[$keys[$i]];
+            if( empty($e[1]) )
+                $e[0] = '*' . $e[0];
+            $strs[$keys[$i]] = $e;
+        }
+
+
         $args = array();
-        $args['string_table'] = $tt;
+        $args['string_table'] = $strs;
         $args['domain'] = $domain;
+        $args['what_part'] = $zone;
+
         $args['str_select_a_string'] =     _('Select a string');
         $args['str_domain'] =              _('Domain'); 
         $args['str_generate_pot'] =        _('Generate pot');
@@ -48,6 +66,10 @@ class CCLanguageEditor
         $args['str_will_be_saved_to'] =    _('Will be saved to');
         $args['str_missing_domain'] =      _('You must specify a target domain');
         $args['str_waiting'] =             _('waiting...');
+        $args['str_part1'] =               _('Part 1');
+        $args['str_part2'] =               _('Part 2');
+        $args['str_part3'] =               _('Part 3');
+        $args['str_part4'] =               _('Part 4');
 
         CCPage::PageArg('langeditor', 'language-editor.xml/language_editor');
         CCPage::PageArg('LE',$args,'langeditor');
@@ -114,7 +136,6 @@ class CCLanguageEditor
         $regex3 = '/"(.+)"$/mSU';
 
         $hash = array();
-        $sort = array();
         foreach( $matches as $m)
         {
             preg_match_all($regex3,$m[3],$t);
@@ -130,22 +151,51 @@ class CCLanguageEditor
             {
                 $msgstr = '';
             }
-            $key = sprintf('%08X',crc32($msgid));
+            $key = CCUtil::HashString($msgid);
             $hash[ $key ] = array( $msgid, $msgstr, $m[1] );
-            $sort[ trim($msgid) ] = $key;
         }
 
-        ksort($sort,SORT_STRING);
-        $sorted = array();
-        foreach( $sort as $key )
-            $sorted[$key] = $hash[$key];
+        $this->_merge_config_strings($hash);
 
-        $text = serialize($sorted);
+        uasort($hash,'_cc_str_cmp');
+
+        $text = serialize($hash);
 
         $f = fopen($fname,'w');
         fwrite($f,$text);
         fclose($f);
         chmod($fname,0777);
+    }
+
+    function _merge_config_strings(&$hash)
+    {
+        $changed = false;
+        $configs =& CCConfigs::GetTable();
+        // don't do this through GetConfig becuase
+        // that will translate the strings
+        $args['config_type'] = 'strhash';
+        $row = $configs->QueryRow($args);
+        if( empty($row) )
+            return false;
+        $hashtable = unserialize($row['config_data']);
+        $hashkeys = array_keys($hashtable);
+        $cstr = '#: config';
+        foreach( $hashkeys as $hkey )
+        {
+            if( empty($hash[ $hkey ]) )
+            {
+                $str = $hashtable[ $hkey ];
+                $hash[ $hkey ] = array( $str , '', 'config' );
+                $changed = true;
+            }
+            else
+            {
+                if( strpos($hash[ $hkey ][2], $cstr ) === false )
+                    $hash[ $hkey ][2] .= "\n#: config";
+            }
+        }
+
+        return $changed;
     }
 
     function _write_pot_file($domain)
@@ -227,7 +277,11 @@ END;
         $text = file_get_contents($fname);
         return unserialize($text);
     }
+
 }
 
-
+function _cc_str_cmp($a,$b)
+{
+    return strncasecmp($a[0],$b[0],25);
+}
 ?>

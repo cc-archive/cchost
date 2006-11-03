@@ -126,6 +126,8 @@ class CCConfigs extends CCTable
                 $arr = array();
             }
             
+            $arr = $this->_hash_to_string($type,$arr);
+
             $cache[$scope][$type] = $arr;
         }
 
@@ -154,6 +156,8 @@ class CCConfigs extends CCTable
         $where['config_type'] = $type;
         $where['config_scope'] = $scope;
         $key = $this->QueryKey($where);
+        $original = $arr;
+        $arr = $this->_string_to_hash($type,$arr);
         $where['config_data'] = serialize($arr);
         if( $key )
         {
@@ -176,11 +180,11 @@ class CCConfigs extends CCTable
         if( $merge && !empty($cache[$where['config_scope']][$where['config_type']]))
         {
             $loc =& $cache[$where['config_scope']][$where['config_type']];
-            $loc = array_merge($loc,$arr);
+            $loc = array_merge($loc,$original);
         }
         else
         {
-            $cache[$where['config_scope']][$where['config_type']] = $arr;
+            $cache[$where['config_scope']][$where['config_type']] = $original;
         }
            
     }
@@ -375,6 +379,267 @@ class CCConfigs extends CCTable
         $CC_GLOBALS['cc-host-version']  = CC_HOST_VERSION;
     }
 
+    function _hash($force=false)
+    {
+        static $_hash;
+        if( $force || !isset($_hash) )
+        {
+            $where['config_type'] = 'strhash';
+            $where['config_scope'] = CC_GLOBAL_SCOPE;
+            $row = $this->QueryRow($where);
+            if( empty($row) )
+            {
+                $_hash = array();
+            }
+            else
+            {
+                $_hash = unserialize($row['config_data']);
+
+                // run 'em through gettext()
+                $keys = array_keys($_hash);
+                $count = count($_hash);
+                for( $i = 0; $i < $count; $i++ )
+                    $_hash[$keys[$i]] = _($_hash[$keys[$i]]);
+            }
+        }
+
+        return $_hash;
+    }
+
+    function _get_clang_map()
+    {
+        $where['config_type'] = 'clangmap';
+        $where['config_scope'] = CC_GLOBAL_SCOPE;
+        $row = $this->QueryRow($where);
+        if( empty($row) )
+        {
+            return array();
+        }
+        else
+        {
+            return unserialize($row['config_data']);
+        }
+    }
+
+    function CfgSerialize($config_type,$data)
+    {
+        $data = $this->_string_to_hash($config_type,$data);
+        return serialize($data);
+    }
+
+    function CfgUnserialize($config_type,$data)
+    {
+        if( is_string($data) )
+            $data = unserialize($data);
+        return $this->_hash_to_string($config_type,$data);
+    }
+
+
+    function _hash_to_string($type,$data)
+    {
+        if( $type == 'clangmap' || $type == 'strhash')
+            return $data;
+
+        $cmap = $this->_get_clang_map();
+        $hash = $this->_hash();
+        if( !empty($cmap[$type]) && !empty($hash) )
+        {
+            $h2s = new CCConfigHashToString($cmap[$type],$data,$hash);
+            $data = $h2s->Run();
+        }
+        return $data;
+    }
+
+    function _string_to_hash($type,$data)
+    {
+        if( $type == 'clangmap' || $type == 'strhash')
+            return $data;
+
+        $cmap = $this->_get_clang_map();
+        $hash = $this->_hash();
+        if( !empty($cmap[$type]) )
+        {
+            $s2h = new CCConfigStringToHash($cmap[$type],$data,$hash);
+            $data = $s2h->Run();
+            $newhash = $s2h->GetNewHash();
+            if( $newhash )
+            {
+                $args['config_type'] = 'strhash';
+                $args['config_scope'] = CC_GLOBAL_SCOPE;
+                $id = $this->QueryKey($args);
+                $args['config_data'] = serialize($newhash);
+                if( empty($id) )
+                {
+                    $args['config_id'] = $this->NextID();
+                    $this->Insert($args);
+                }
+                else
+                {
+                    $args['config_id'] = $id;
+                    $this->Update($args);
+                }
+                $this->_hash(true); // reset in memory cache
+            }
+        }
+        return $data;
+    }
 }
- 
+
+class CCConfigHashToString extends CCConfigi18nParser
+{
+    var $_data, $_hash, $_map;
+
+    function CCConfigHashToString($map,$data,$hash)
+    {
+        $this->CCConfigi18nParser();
+        $this->_data = $data;
+        $this->_hash = $hash;
+        $this->_map  = $map;
+    }
+
+    function Run()
+    {
+        $this->_do_level( '', '', $this->_map, $this->_data, array() );
+        return $this->_data;
+    }
+
+    function OnConfigString( $d1, $d2, $data, $fieldname, $stack )
+    {
+        if( empty($this->_hash[$data[$fieldname]]) )
+            return;
+        $str = str_replace('\'', '\\\'', $this->_hash[$data[$fieldname]]);
+        $stack[] = $fieldname;
+        $index = "['" . join("']['",$stack) . "']";
+        $estring = "\$this->_data{$index} = '$str';";
+        eval($estring);
+    }
+
+}
+
+class CCConfigStringToHash extends CCConfigi18nParser
+{
+    var $_data, $_hash, $_map, $_changed;
+
+    function CCConfigStringToHash($map,$data,$hash)
+    {
+        $this->CCConfigi18nParser();
+        $this->_data = $data;
+        $this->_hash = $hash;
+        $this->_map  = $map;
+        $this->_changed = false;
+    }
+
+    function Run()
+    {
+        $this->_do_level( '', '', $this->_map, $this->_data, array() );
+        return $this->_data;
+    }
+
+    function GetNewHash()
+    {
+        return $this->_changed ? $this->_hash : array();
+    }
+
+    function OnConfigString( $d1, $d2, $data, $fieldname, $stack )
+    {
+        $str = $data[$fieldname];
+        $hash = CCUtil::HashString($str);
+        if( empty($this->_hash[$hash]) )
+        {
+            $this->_hash[$hash] = $str;
+            $this->_changed = true;
+        }
+        $stack[] = $fieldname;
+        $index = "['" . join("']['",$stack) . "']";
+        $estring = "\$this->_data{$index} = '$hash';";
+        eval($estring);
+    }
+
+}
+
+class CCConfigi18nParser
+{
+    function CCConfigi18nParser()
+    {
+        $this->_stop = false;
+    }
+
+
+    function OnConfigString(                //  ex.1         ex.2
+                            $vroot,         // media        magnatune
+                            $config_type,   // config       tab_pages
+                            $data,          // 
+                            $fieldname,     // ban_message  text
+                            $stack          // empty()      array( 'view', 'home' )
+
+                                            //
+                                            // Path from root is
+                                            // stack+fieldname:
+                                            //
+                                            // ex.1: $data['ban_message']
+                                            //
+                                            // ex.2: $data['view']['home']['text']
+                            )
+    {
+    }
+
+    function Stop()
+    {
+        $this->_stop = true;
+    }
+
+    function Run()
+    {
+        $configs =& CCConfigs::GetTable();
+        $cmap = $configs->GetConfig('clangmap');
+        $vroots = $configs->GetConfigRoots();
+        foreach( $vroots as $vroot_info )
+        {
+            $vroot = $vroot_info['config_scope'];
+            foreach( $cmap as $config_type => $map)
+            {
+                $data = $configs->GetConfig($config_type,$vroot);
+                $this->_do_level( $vroot,$config_type, $map, $data, array() );
+                if( $this->_stop )
+                    return;
+            }
+        }
+
+    }
+
+
+    function _do_level( $vroot,$config_type, $map, $data, $stack )
+    {
+        foreach( $map as $fieldname => $ops )
+        {
+            if( $fieldname == '*' )
+            {
+                foreach( $data as $dname => $ddata )
+                {
+                    $cstack = $stack;
+                    $cstack[] = $dname;
+                    $this->_do_level($vroot, $config_type, $ops, $ddata, $cstack);
+                }
+            }
+            else
+            {
+                if( !empty($data[$fieldname]) )
+                {
+                    $this->OnConfigString(
+                            $vroot,
+                            $config_type,
+                            $data,
+                            $fieldname,
+                            $stack
+                            );
+
+                    if( $this->_stop )
+                        return;
+                }
+            }
+        }
+    }
+}
+
+
 ?>

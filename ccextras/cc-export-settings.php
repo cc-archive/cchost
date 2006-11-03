@@ -54,7 +54,7 @@ class CCSettingsExporter
         $d =& $cc_host_config_export;
         $c = count($d);
         for( $i = 0; $i < $c; $i++ )
-            $d[$i]['config_data'] = serialize($d[$i]['config_data']);
+            $d[$i]['config_data'] = $configs->CfgSerialize($d[$i]['config_type'],$d[$i]['config_data']);
         $configs->InsertBatch( $columns, $cc_host_config_export );
         CCPage::SetTitle(_('Import Settings'));
         CCPage::Prompt(_('Settings have been imported'));
@@ -68,17 +68,22 @@ class CCSettingsExporter
         $configs =& CCConfigs::GetTable();
         $allrows = $configs->QueryRows('');
 
-        header("Content-type: text/plain");
+        header("Content-type: application/text-editor");
 
         $level = 0;
         print("<?\n\nif( !defined('IN_CC_HOST') ) exit; \n\n\$cc_host_config_export = array ( \n\n ");
         foreach( $allrows as $row )
         {
+            if( $row['config_type'] == 'strhash' && empty($_REQUEST['h']) )
+                continue;
+            if( $row['config_type'] == 'urlmap' && empty($_REQUEST['u']) )
+                continue;
+
             print( "    array( \n" .
                    "        'config_type'  => '{$row['config_type']}',\n" .
                    "        'config_scope' => '{$row['config_scope']}',\n" .
                    "        'config_data'  => " );
-            $data = unserialize($row['config_data']);
+            $data = $configs->CfgUnserialize($row['config_type'],$row['config_data']);
             $this->_dump_data($data,0);
             print( "     ),\n" );
         }

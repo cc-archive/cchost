@@ -32,8 +32,13 @@ $Id$
   margin-right: 12px;
 }
 
-#string_table {
+#what_part,#string_table {
   font-size:10px; 
+}
+#what_part {
+  margin-righ: 60%;
+}
+#string_table {
   width: 225px;
   height: 340px;
   margin-top: 14px;
@@ -78,7 +83,7 @@ $Id$
 //<!--
 var myGlobalHandlers = {
     onCreate: function(){
-        ed_status('${LE/str_waiting)');
+        ed_status('${LE/str_waiting}');
     },
 
     onComplete: function(req,t,json) {
@@ -150,9 +155,20 @@ function commit_string()
             "/" + currentHash + q + "string=" + msgstr + 
             '&t=' + (new Date()).getTime();
 
+    clear_string();
+
     debug_url(url);
 
     new Ajax.Request( url, {method:'get'});
+}
+
+function clear_string()
+{
+    var e = $$('string_table');
+    var opts = e.options;
+    var str = opts[e.selectedIndex].text;
+    if( str.charAt(0) == '*' )
+        opts[e.selectedIndex].text = str.substring(1);    
 }
 
 function revert_to()
@@ -205,9 +221,18 @@ function commit_and_next()
     get_string();
 }
 
+function change_part(box)
+{
+    if( !get_domain() )
+        return false;
+
+    var part = $$F(box);
+    var url = home_url + 'admin/terms/' + currentDomain + '/' + part;
+    document.location = url;
+}
+
 function debug_url(url)
 {
-    return;
     $$('strlink').href = url;
     $$('strlink').innerHTML = url;
 }
@@ -218,6 +243,12 @@ function debug_url(url)
     <td>
       <fieldset id="string_list">
         <legend>${LE/str_select_a_string}</legend>
+        <select id="what_part" onchange="change_part(this);">
+            <option value="0">${LE/str_part1}</option>
+            <option value="1">${LE/str_part2}</option>
+            <option value="2">${LE/str_part3}</option>
+            <option value="3">${LE/str_part4}</option>
+        </select><br />
         <select id="string_table" name="string_table" size="20" onchange="get_string();">
           <tal:block repeat="lstr LE/string_table">
             <option value="${repeat/lstr/key}" tal:content="php: CC_strchop('$lstr/0',40)" />
@@ -293,5 +324,8 @@ function debug_url(url)
   </tr>
 </table>
 <div><a id="strlink" href=""></a></div>
+<script>
+$$('what_part').selectedIndex = ${LE/what_part};
+</script>
 </metal:block>
 </tal:block>

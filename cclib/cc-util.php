@@ -210,6 +210,10 @@ class CCUtil
         }
     }
 
+    function HashString($str)
+    {
+        return '' . sprintf('%08X',crc32(trim($str)));
+    }
 
     function MakeSubdirs($pathname,$mode='')
     {

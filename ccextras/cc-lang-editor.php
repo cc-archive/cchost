@@ -52,6 +52,11 @@ class CCLanguageEditorAPI
         CCEvents::MapUrl( ccp('admin','terms','writepot'),  
                             array( 'CCLanguageEditor', 'WritePot'), CC_ADMIN_ONLY, 
                             'ccextras/cc-lang-editor.inc');
+
+        CCEvents::MapUrl( ccp('admin','terms','genconfig'),  
+                            array( 'CCLanguageEditor', 'GenConfigStrings'), CC_ADMIN_ONLY, 
+                            'ccextras/cc-lang-editor.inc');
+
     }
 
 }
