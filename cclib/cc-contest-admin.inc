@@ -326,7 +326,7 @@ EOF;
            '<td>' . sprintf(_('Assign navigation tabs to files, rename, remove tabs. Do that <a href="%s">here</a>.'), $navtabs_url) . '</td></tr>' . 
            '<tr><th>' . _('Edit the Banner') . '</th>' . 
            '<td>' . sprintf(_("Change the banner and other page content %shere%s."),
-                                "<a href=\"$tags_url\">",'</a>') . 
+                                "<a href=\"$tags_url\">",'</a>') 
                 . '</td></tr>' . 
            '<tr><th>' . _("Edit 'Submit Files'") . '</th>' . 
            '<td>' . sprintf(_("Create a blurb on the site's main submit page (the menu link 'Submit Files'). Do that <a href=\"%s\">here</a>. Or, if you just want to change it for <b>%s</b>, do that <a href=\"%s\">here</a>."), $gsubmitform_url, $CC_CFG_ROOT, $submitform_url) . '</td></tr>' . 
