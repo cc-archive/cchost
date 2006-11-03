@@ -286,8 +286,7 @@ class CCContestAdmin
     {
         global $CC_CFG_ROOT;
 
-        $submitform_url = ccc($contest_short_name, 'admin','submit');
-        $gsubmitform_url = ccc(CC_GLOBAL_SCOPE, 'admin','submit');
+        $editsubmitform_url = ccc(CC_GLOBAL_SCOPE, 'admin','editsubmitform', $contest_short_name );
         $navtabs_url    = ccc($contest_short_name, 'admin', 'tabs' );
         $settings_url   = ccc($contest_short_name, 'admin', 'settings' );
         $tags_url       = ccc($contest_short_name, 'admin', 'templatetags' );
@@ -318,30 +317,50 @@ class CCContestAdmin
 </style>
 <br />
 EOF;
-        $html .= '<h4>' . _('Things you might want to do now that your contest is in the system:') . '</h4><br />' . 
-            '<table class="contest_help"><tr><th>' . 
-	    _('Upload special files') . '</th><td>' . 
-	    _("Upload special files for the contest like pages, rules, etc. Click on 'Add Files' tab above.") . '</td></tr>' . 
-           '<tr><th>' . _('Assign navigation tabs') . '</th>' . 
-           '<td>' . sprintf(_('Assign navigation tabs to files, rename, remove tabs. Do that <a href="%s">here</a>.'), $navtabs_url) . '</td></tr>' . 
-           '<tr><th>' . _('Edit the Banner') . '</th>' . 
-           '<td>' . sprintf(_("Change the banner and other page content %shere%s."),
-                                "<a href=\"$tags_url\">",'</a>') 
-                . '</td></tr>' . 
-           '<tr><th>' . _("Edit 'Submit Files'") . '</th>' . 
-           '<td>' . sprintf(_("Create a blurb on the site's main submit page (the menu link 'Submit Files'). Do that <a href=\"%s\">here</a>. Or, if you just want to change it for <b>%s</b>, do that <a href=\"%s\">here</a>."), $gsubmitform_url, $CC_CFG_ROOT, $submitform_url) . '</td></tr>' . 
-           '<tr><th>' . _('Submit Sources') . '</th>' . 
-           '<td>' . _('You might want to create a user that represents the contest source rather than having the sources look like they came from a site administrator.') .
-               '<ol><li>' . 
-	           _('Pick a login name for the source provider user.') . 
-		   '</li>' . 
-                  '<li>' . sprintf(_('Add that login name as an administrator <a href="%s">here</a>'), $settings_url) . '</li>' . 
-                  '<li>' . _('Log out, and then register the user.') . '</li>'.
-                  '<li>' . 
-		      _('Log in as that user and come back to this screen.') . 
-		  '</li>' . 
-                  '<li>' . _('Submit Sources as that user so users will see the sources as coming from them.') . '</li>' . 
-                '</ol></td></tr></table>';
+            $_strs = sprintf( _('Contest Admin Page
+::Things you might want to do now that your contest is in the system...
+::Upload special files
+::Upload special files for the contest like pages, rules, etc. Click on Add Files tab above.
+::Assign navigation tabs
+::Assign navigation tabs to files, rename, remove tabs. Do that %shere%s. 
+::Edit the Banner
+::Change the banner and other page content %shere%s. 
+::Edit Submit Files
+::Edit the Submit Form %shere%s
+::Submit Sources
+::You should create a user that represents the contest source rather than having the sources look like they came from a site administrator.
+::Pick a login name for the source provider user.
+::Add that login name as an administrator %shere%s 
+::Log out, and then register the user.
+::Log in as that user and come back to this screen.
+::Submit Sources as that user so users will see the sources as coming from them.'),
+
+                    "<a href=\"$navtabs_url\">", '</a>',
+                    "<a href=\"$tags_url\">",'</a>',
+                    "<a href=\"$editsubmitform_url\">", '</a>', 
+                    "<a href=\"$settings_url\">", '</a>');
+
+        $_s = split('::',$_strs);
+
+        $html .=<<<EOF
+        <h1> {$_s[0]} </h1>
+        <p>  {$_s[1]}  </p>
+<table class="contest_help">
+<tr><th>  {$_s[2]} </th><td>  {$_s[3]}  </td></tr>  
+<tr><th>  {$_s[4]} </th><td>  {$_s[5]}  </td></tr>  
+<tr><th>  {$_s[6]}  </th><td>  {$_s[7]}  </td></tr>  
+<tr><th>  {$_s[8]}  </th><td>  {$_s[9]}  </td></tr>  
+<tr><th>  {$_s[10]} </th><td>  {$_s[11]} 
+            <ol>
+                <li>  {$_s[12]}  </li>  
+                <li>  {$_s[13]}  </li>  
+                <li>  {$_s[14]} </li>
+                <li>  {$_s[15]}  </li>  
+                <li>  {$_s[16]}  </li>  
+            </ol>
+            </td></tr>
+</table>;
+EOF;
 
         CCPage::PageArg('body_html',$html,'show_body_html');
     }
@@ -386,15 +405,50 @@ EOF;
             $settings['homepage'] = 'view';
             $configs->SaveConfig('settings',$settings,$contest_short_name,false);
 
+            $submit_form = $this->_get_submit_form($contest_short_name,$long_name,
+                                                $fields['contest_bitmap'],
+                                                ccc( $contest_short_name, 'contest',
+                                                      'submit', $contest_short_name ) );
+            $submit_api = new CCSubmit();
+            $submit_api->SaveFormType($submit_form,$contest_short_name);
+
+            // don't do this below, it's a pain...
+
+            /*
             // set the title of the vconfig to the contest friendly name
             $template_tags   = $configs->GetConfig('ttag');
-            $template_tags['banner-html'] = $template_tags['site-title'] . ' - ' . $long_name;
+            $template_tags['banner-html'] = $long_name;
             $configs->SaveConfig('ttag',$template_tags,$contest_short_name,false);
+            */
 
             $url = ccc($contest_short_name,'view','contest','edit');
 
             CCUtil::SendBrowserTo( $url );
         }
+
+    }
+
+    function _get_submit_form($short_name,$full_name,$logo,$entry_url)
+    {
+        return array(
+                    'enabled' => false,
+                    'submit_type' => sprintf( _('%s Entry Form'), $full_name ),
+                    'text' => sprintf(_('Submit a %s Entry'),$full_name ),
+                    'logo' => $logo,
+                    'help' => sprintf( _('Use this form to enter the %s. Please make 
+                                         sure you\'ve read and understood the contest rules.'), 
+                                         $full_name ),
+                    'tags' => '', 
+                    'suggested_tags' => '',
+                    'weight' => 1,
+                    'form_help' => sprintf( 
+                            _('This form is only for the %s. Do not use form for any other 
+                                kind of upload. Please make sure you\'ve read and understood the 
+                                contest rules.'), $full_name ),
+                    'isremix' => true,
+                    'media_types' => '',
+                    'action' => $entry_url,
+                  );
 
     }
 
