@@ -414,7 +414,7 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
     // errno will be 0 when caller uses the '@' prefix
     // comment these two lines if want these errors logged
     // anyway
-    if( !$errno || ($errno == 2048) ) // E_STRICT, sorry, we don't care about 
+    if( !$errno ) // || ($errno == 2048) ) // E_STRICT, sorry, we don't care about 
     {                                 // deprecated stuff
         return;
     }
