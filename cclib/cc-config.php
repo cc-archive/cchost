@@ -351,7 +351,7 @@ class CCConfigs extends CCTable
             $tags = $this->QueryItem('config_data',$where);
             if( !empty($tags) )
             {
-                $tags = unserialize($tags);
+                $tags = $this->CfgUnserialize('ttag',$tags);
                 $title = $tags['site-title'];
             }
             else
