@@ -170,7 +170,8 @@ class CCFileManAdmin
             if( !$ok )
                 CCPage::Prompt(_('There were problems uploading (see below).'));
             elseif( $uploads )
-                CCPage::Prompt(_(sprintf('The files, %s, were uploaded okay.'), $uploads) );
+                CCPage::Prompt(
+                        sprintf( _('The files, %s, were uploaded okay.'), $uploads) );
 
         }
 
@@ -502,7 +503,9 @@ END;
             ' . _('(right/control click on the link above to download this file.)') . '</td>
   </tr>
   <tr><th>' . _('Edit') . ' </th>
-      <td><a id="edit_link_href" href="" class="cc_gen_button" style="width: 50%"><span 
+      <td><a id="edit_link_href" href="javascript:// do edit" 
+      class="cc_gen_button" onclick="alert(\'no implemented yet\'); return false;" 
+      style="width: 50%"><span 
                id="edit_link_text">&nbsp;' . $currfile . '</span></a><br />
       </td>
   </tr>
