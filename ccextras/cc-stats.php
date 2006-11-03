@@ -38,25 +38,40 @@ CCEvents::AddHandler(CC_EVENT_USER_ROW,       'cc_stats_on_user_row' );
  
 function cc_stats_on_user_row(&$row)
 {
+    if( empty($row['artist_page']) )
+        return;
+
     $username = $row['user_real_name'];
 
-    if( empty( $row['user_num_remixes'] ) )
-        if(  empty( $row['user_num_remixed'] ) )
-            return;
+    $num_remixes = $row['user_num_remixes'];
+    $num_remixed = $row['user_num_remixed'];
 
-    $str = ngettext( "%s has %d remix.",
-               "%s has %d remixes.", $row['user_num_remixes'] );
+    if( empty( $num_remixes ) )
+    {
+        $text = sprintf( _('%s has no remixes'), $username ) . ' ';
+    }
+    else
+    {
+        $fmt = ngettext( "%s has %d remix",
+                         "%s has %d remixes", $num_remixes );
 
-    $str = sprintf($str, $username, $row['user_num_remixes']);
+        $text = sprintf( $fmt, $username, $num_remixes ) . ' ';
+    }
 
-    $str .= ' ' . ngettext( '%s has been remixed %d time.',
-                      '%s has been remixed %d times.', 
-                      $row['user_num_remixed'] );
+    if( empty( $num_remixed ) )
+    {
+        $text .= _('and has not been remixed');
+    }
+    else
+    {
+        $fmt = ngettext( "and has been remixed %d time.",
+                         "and has been remixed %d times.", $num_remixed );
 
-    $str = sprintf($str, $username, $row['user_num_remixed']);
-    
+        $text .= sprintf( $fmt, $num_remixed );
+    }
+
     $row['user_fields'][] = array( 'label' => _('Stats'),
-                                   'value' => $str,
+                                   'value' => $text,
                                    'id'    => 'user_num_remixes' );
 }
 

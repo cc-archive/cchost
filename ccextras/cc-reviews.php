@@ -653,7 +653,7 @@ END;
             if( empty($record['user_num_reviewed']) )
                 return;
 
-            $text = sprintf('%s has not left any reviews', $name) . ' ';
+            $text = sprintf( _('%s has not left any reviews'), $name) . ' ';
         }
         else
         {
@@ -670,7 +670,7 @@ END;
 
         if( empty($record['user_num_reviewed']) )
         {
-            $text .= ' and has not been reviewed';
+            $text .= _('and has not been reviewed');
         }
         else
         {
@@ -678,10 +678,10 @@ END;
             $link  = "<a href=\"$url\">";
 	        $link_close = "</a>";
 
-            $fmt = ngettext('%s has been reviewed %s%d time.%s',
-                            '%s has been reviewed %s%d times.%s', $count);
+            $fmt = ngettext('and has been reviewed %s%d time%s.',
+                            'and has been reviewed %s%d times%s.', $count);
 
-            $text  .= sprintf($fmt, $name, $link, $count, $link_close);
+            $text  .= sprintf($fmt, $link, $count, $link_close);
         }
 
         $record['user_fields'][] = array( 'label'   => _('Reviews'), 
