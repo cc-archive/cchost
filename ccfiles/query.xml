@@ -371,9 +371,13 @@ e.g. mytemplate.xml/mymacro The template file must be in the 'Skin' ccHost path.
 </td> </tr>
 
 <tr> <td width="10%"> js
-</td> <td> Records returned in JSON format as an array of objects:
-<br />
+</td> <td> Records returned in JSON format as an array of objects. Care should
+be taken because records can be get large, it's easy to get eat up a browser's 
+memory with more than a few records. Below is the layout (there might be 
+arrays nested in fields):
+<span class="code">
  [{field:value,field:value...},{field:value,...}]
+</span>
 </td> <td> application/javascript
 </td> </tr>
 
@@ -501,5 +505,5 @@ To combine arguments with browser GET/POST parameters, call the method ProcessUr
 &lt;tal:block define="records php:<b>cc_query_engine</b>('tags:remix+chill,sort:name,format:php');" /&gt;
 </div> 
 
-<div style="font-style:italic">Last updated: 10/28/2006 1:02am</div>
+<div style="font-style:italic">Last updated: 11/3/2006 5:20PM</div>
 </tal:block>
