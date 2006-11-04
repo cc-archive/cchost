@@ -241,7 +241,7 @@ don't do any additional sort, '0' means do whatever is in the 'sort' and 'ord' p
 </td>  <td class="def"> 
 </td>  </tr>
 
-<tr>  <td>  user
+<tr>  <td>  user, u
 </td>  <td>  Only return records from this user
 </td>  <td class="def">  
 </td>  </tr>
@@ -287,12 +287,12 @@ don't do any additional sort, '0' means do whatever is in the 'sort' and 'ord' p
 </td>  <td class="def">
 </td>  </tr>  
 
-<tr>  <td>  format
+<tr>  <td>  format, f
 </td>  <td>  Return records in this format. (see 'Output Formats' below)
 </td>  <td class="def">page
 </td>  </tr>  
 
-<tr>  <td>  template
+<tr>  <td>  template, t
 </td>  <td>  Return records formatted by this template. For format=html or docwrite only. The template must reside in the 'Skins' ccHost path or optionally in a directory called 'formats' below. <br />
 Currently supported are:
   <ul>
@@ -308,7 +308,7 @@ Currently supported are:
 </td>  <td class="def">med
 </td>  </tr>  
 
-<tr>  <td>  macro
+<tr>  <td>  macro, m
 </td>  <td>  Return records formatted by the specified macro from the current skin. For format=page only. 
 </td>  <td class="def">  list_records
 </td>  </tr>  
@@ -321,6 +321,21 @@ e.g. mytemplate.xml/mymacro The template file must be in the 'Skin' ccHost path.
 
 <tr>  <td>  template_tags
 </td>  <td>  For format=html, docwrite and page only. (Programmable interface only) Name/value touples sent into the template. 
+</td>  <td class="def">
+</td>  </tr>  
+
+<tr>  <td>  title
+</td>  <td>  For format=page only. Display value as page title and browser caption.
+</td>  <td class="def">
+</td>  </tr>  
+
+<tr>  <td>  feed
+</td>  <td>  For format=page only. Display value as feed button's caption.
+</td>  <td class="def">
+</td>  </tr>  
+
+<tr>  <td>  vroot
+</td>  <td>  Return records that were uploaded only in this virtual root. (ex. vroot=magnatune)
 </td>  <td class="def">
 </td>  </tr>  
 
