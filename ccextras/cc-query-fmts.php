@@ -56,23 +56,16 @@ class CCQueryFormats
 
                 $mime = $format == 'js' ? 'text/javascript' : 'text/plain';
 
+                require_once('cclib/zend/json-encoder.php');
+
                 $text = '[';
                 $count = count($records);
                 $comm = '';
                 for( $i = 0; $i < $count; $i++ )
                 {
                     $text .= $comm;
-                    $R =& $records[$i];
-                    $keys = array_keys($R);
-                    $comma = '';
-                    foreach( $keys as $key )
-                    {
-                        if( !is_array($R[$key]) )
-                        {
-                            $text .= $comma . $key . ":'" . addslashes($R[$key]) . "'";
-                            $comma = ',';
-                        }
-                    }
+                    $filtered = array_filter($records[$i]);
+                    $text .= CCZend_Json_Encoder::encode($filtered);
                     $comm = ',';
                 }
                 $text .= ']';
