@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: cc-feeds-atom.php 3503 2006-06-18 07:09:30Z kidproto $
+* $Id$
 *
 */
 
