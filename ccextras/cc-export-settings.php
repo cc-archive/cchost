@@ -26,7 +26,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCSettingsExporter',  'OnMapUrls'));
+if( empty($no_ui) )
+    CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCSettingsExporter',  'OnMapUrls'));
 
 /**
 *
@@ -34,30 +35,60 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCSettingsExporter',  'OnMapUrls
 */
 class CCSettingsExporter
 {
-    function Import()
+    function Import($fname='')
     {
+        global $no_ui;
+
         if( !empty($_REQUEST['i']) )
             $fname = CCUtil::StripText($_REQUEST['i']);
+
         if( empty($fname) )
         {
-            CCPage::Prompt(_('No import file specified in the URL.'));
-            return;
+            $msg = _('No import file specified in the URL.');
+            if( empty($no_ui) )
+            {
+                CCPage::Prompt($msg);
+                return;
+            }
+            die($msg);
         }
 
         include($fname);
 
-        // CCDebug::PrintVar($cc_host_config_export);
-
         $configs =& CCConfigs::GetTable();
         $configs->DeleteWhere('1');
-        $columns = array( 'config_type', 'config_scope', 'config_data' );
         $d =& $cc_host_config_export;
+
         $c = count($d);
+
         for( $i = 0; $i < $c; $i++ )
-            $d[$i]['config_data'] = $configs->CfgSerialize($d[$i]['config_type'],$d[$i]['config_data']);
-        $configs->InsertBatch( $columns, $cc_host_config_export );
-        CCPage::SetTitle(_('Import Settings'));
-        CCPage::Prompt(_('Settings have been imported'));
+        {
+            if( $d[$i]['config_type'] == 'clangmap' )
+            {
+                // gotta add the language map before serializing 
+                // string will work
+                $d[$i]['config_data'] = serialize($d[$i]['config_data']);
+                $configs->Insert($d[$i]);
+                unset($d[$i]);
+                break;
+            }
+        }
+
+        $keys = array_keys($d);
+        $c = count($keys);
+        $columns = array( 'config_type', 'config_scope', 'config_data' );
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $k = $keys[$i];
+            //print('doing:' .$d[$k]['config_type'] . "\n");
+            $d[$k]['config_data'] = $configs->CfgSerialize($d[$k]['config_type'],$d[$k]['config_data']);
+        }
+        $configs->InsertBatch( $columns, $d );
+        if( empty($no_ui) )
+        {
+            CCPage::SetTitle(_('Import Settings'));
+            CCPage::Prompt(_('Settings have been imported'));
+        }
     }
 
     /**
@@ -65,16 +96,23 @@ class CCSettingsExporter
     */
     function Export()
     {
+        global $no_ui;
+
         $configs =& CCConfigs::GetTable();
         $allrows = $configs->QueryRows('');
 
-        header("Content-type: application/text-editor");
+        if( empty($no_ui) )
+            header("Content-type: application/text-editor");
 
         $level = 0;
+        
         print("<?\n\nif( !defined('IN_CC_HOST') ) exit; \n\n\$cc_host_config_export = array ( \n\n ");
+        
+        $dohash =  empty($_REQUEST['h']);
+
         foreach( $allrows as $row )
         {
-            if( $row['config_type'] == 'strhash' && empty($_REQUEST['h']) )
+            if( $row['config_type'] == 'strhash' && $dohash )
                 continue;
             if( $row['config_type'] == 'urlmap' && empty($_REQUEST['u']) )
                 continue;
@@ -83,10 +121,17 @@ class CCSettingsExporter
                    "        'config_type'  => '{$row['config_type']}',\n" .
                    "        'config_scope' => '{$row['config_scope']}',\n" .
                    "        'config_data'  => " );
-            $data = $configs->CfgUnserialize($row['config_type'],$row['config_data']);
+
+            if( $dohash )
+                $data = $configs->CfgUnserialize($row['config_type'],$row['config_data']);
+            else
+                $data = unserialize($row['config_data']);
+
             $this->_dump_data($data,0);
+
             print( "     ),\n" );
         }
+
         print("   ); \n\n ?>" );
         exit;
     }
@@ -152,6 +197,7 @@ class CCSettingsExporter
                           CC_ADMIN_ONLY, ccs(__FILE__), '', 
                           _('Exports configuration to browser'), 
                           CC_AG_MISC_ADMIN );
+
         CCEvents::MapUrl( ccp('import'), array( 'CCSettingsExporter', 'Import'),
                           CC_ADMIN_ONLY, ccs(__FILE__), '?i=path_to_file', 
                           _('Import configuration'), CC_AG_MISC_ADMIN );
