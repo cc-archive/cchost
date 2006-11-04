@@ -175,7 +175,7 @@ class CCConfirmDeleteForm extends CCForm
     function CCConfirmDeleteForm($pretty_name)
     {
         $this->CCForm();
-        $this->SetHelpText(_("This action can not be reversed..."));
+        $this->SetHelpText(_('This action can not be reversed...'));
         $this->SetSubmitText(sprintf(_("Are you sure you want to delete '%s'?"),$pretty_name));
     }
 }
@@ -256,7 +256,9 @@ class CCUpload
             $form->GetFormValues($values);
             CCUploadAPI::UpdateCCUD($upload_id,$values['ccud'],$record['upload_extra']['ccud']);
             $url = $record['file_page_url'];
-            CCPage::Prompt(sprintf(_("Changes saved to '%s'. Click %s to see results"), "$name <a href=\"$url\">" . _('here') . '</a>'));
+            $link1 = "<a href=\"$url\">";
+            CCPage::Prompt(sprintf(_("Changes saved to '%s'. Click %shere%s to see results"), 
+                        $name, $link1, '</a>'));
         }
     }
 
