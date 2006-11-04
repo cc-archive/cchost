@@ -102,6 +102,9 @@ class CCQuery
 
         $args = array_merge($args,$extra_args); 
 
+        // alias short to long
+        $this->_arg_alias($args);
+
         // get the '+' out of the tag str
         $args['tags'] = str_replace( ' ', ',', urldecode($args['tags']));
 
@@ -127,6 +130,9 @@ class CCQuery
         $args = array_merge($this->GetDefaultArgs(),$args);
         $args = array_merge($args,$extra_args); // Calling code can override 
 
+        // alias short to long
+        $this->_arg_alias($args);
+
         if( $args['tags'] )
         {
             // clean up tags 
@@ -147,6 +153,10 @@ class CCQuery
         $keys = array_keys($args);
         $default_args = $this->GetDefaultArgs();
         $str = '';
+
+        // alias short to long
+        $this->_arg_alias($args);
+
         $fmtargs = array( 'format', 'template', 'tmacro', 'macro', 'paging' );
         foreach( $keys as $K )
         {
@@ -599,14 +609,44 @@ class CCQuery
         return array( &$records, '' );
     }
 
+    function _arg_alias(&$args)
+    {
+        $aliases = array( 'f' => 'format',
+                          't' => 'template',
+                          'm' => 'macro',
+                          'r' => 'remixinfo',
+                          'u' => 'user',
+                       );
+
+        foreach( $aliases as $short => $long )
+        {
+            if( isset($args[$short]) )
+            {
+                $args[$long] = $args[$short];
+                unset( $args[$short] );
+            }
+        }
+    }
+
     function _clean_rec(&$R,$format)
     {
         if( in_array( $format, array( 'page', 'php' ) ) )
             return;
 
-        $fields = array( 'user_email', 'user_password', 'user_last_known_ip' );
+        $fields = array( 'user_email', 'user_password', 'user_last_known_ip', 'user_extra',
+                        'upload_taglinks', 'usertag_links', 'user_fields', 'upload_extra',
+                        'local_menu', 'ratings', 'flag_url' );
         foreach( $fields as $f )
             if( isset($R[$f]) ) unset($R[$f]);
+        if( !empty($R['files']) )
+        {
+            $keys = array_keys($R['files']);
+            $fields = array( 'file_extra', 'local_path' );
+            foreach( $keys as $key )
+                foreach( $fields as $f )
+                    if( isset($R['files'][$key][$f]) ) unset($R['files'][$key][$f]);
+        }
+
     }
 
 
