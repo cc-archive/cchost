@@ -245,7 +245,7 @@ class CCUpload
         if( empty($record) )
             return;
         $name = $record['upload_name'];
-        CCPage::SetTitle(sprintf(_("Administrator Functions for '%s'", $name)));
+        CCPage::SetTitle(sprintf(_("Administrator Functions for '%s'"), $name));
         $form = new CCAdminUploadForm($record);
         if( empty($_POST['adminupload']) || !$form->ValidateFields() )
         {
