@@ -400,7 +400,7 @@ class CCSubmit
     {
         $form->FinalizeAvatarUpload('logo', CC_FORM_TYPE_LOGO_DIR );
         $form->GetFormValues($values);
-        $this->SaveFormType($values,$form_type_key,$form_types);
+        $form_types = $this->SaveFormType($values,$form_type_key,$form_types);
     }
 
     function SaveFormType($values,$form_type_key,$form_types='')
@@ -441,6 +441,7 @@ class CCSubmit
         $form_types = $this->_sort_form_types($form_types,false);
         $configs =& CCConfigs::GetTable();
         $configs->SaveConfig('submit_forms',$form_types,'',false);
+        return $form_types;
     }
 
     /**
