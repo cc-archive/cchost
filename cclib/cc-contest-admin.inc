@@ -406,7 +406,7 @@ EOF;
             $configs->SaveConfig('settings',$settings,$contest_short_name,false);
 
             $submit_form = $this->_get_submit_form($contest_short_name,$long_name,
-                                                $fields['contest_bitmap'],
+                                                '', // todo: bitmap comes later
                                                 ccc( $contest_short_name, 'contest',
                                                       'submit', $contest_short_name ) );
             $submit_api = new CCSubmit();
