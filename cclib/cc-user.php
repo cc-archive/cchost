@@ -508,13 +508,9 @@ class CCUser
         if( CCUser::IsSuper($name) )
             return true;
 
-        static $_admins;
-        if( !isset($_admins) )
-        {
-            $configs =& CCConfigs::GetTable();
-            $settings = $configs->GetConfig('settings');
-            $_admins = $settings['admins'];
-        }
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('settings');
+        $_admins = $settings['admins'];
 
         if( empty($name) )
             $name = CCUser::CurrentUserName();
