@@ -61,6 +61,8 @@ class CCSettingsExporter
 
         $c = count($d);
 
+        $got_string_map = false;
+
         for( $i = 0; $i < $c; $i++ )
         {
             if( $d[$i]['config_type'] == 'clangmap' )
@@ -70,8 +72,18 @@ class CCSettingsExporter
                 $d[$i]['config_data'] = serialize($d[$i]['config_data']);
                 $configs->Insert($d[$i]);
                 unset($d[$i]);
+                $got_string_map = true;
                 break;
             }
+        }
+
+        if( !$got_string_map )
+        {
+            // this should only happen in cases of 
+            // transitioning between 3.2 and earlier
+            // versions.
+
+            $configs->SaveDefaultCfgStringMap();
         }
 
         $keys = array_keys($d);
