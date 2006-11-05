@@ -78,6 +78,16 @@ $Id$
   background-color: #EFE;
   border: 1px solid #9B9;
 }
+#search {
+ margin-top: 14px;
+ width: 100%;
+}
+#search input {
+  font-size: 10px;
+  font-family: Verdana;
+  width: 120px;
+  }
+
 </style>
 <script>
 //<!--
@@ -217,8 +227,12 @@ function copy_string()
 function commit_and_next()
 {
     commit_string();
-    $$('string_table').selectedIndex++;
-    get_string();
+    try
+    {
+      $$('string_table').selectedIndex++;
+      get_string();
+    	
+    } catch (e) {}
 }
 
 function change_part(box)
@@ -231,8 +245,24 @@ function change_part(box)
     document.location = url;
 }
 
+function do_search()
+{
+    if( !get_domain() )
+        return false;
+
+    var query = $$F('q');
+    if( !query )
+    {
+      alert( '${LE/str_empty_search}' );
+      return false;
+    }
+    var url = home_url + 'admin/terms/' + currentDomain + q + 'q=' + query;
+    document.location = url;
+}
+
 function debug_url(url)
 {
+    return;
     $$('strlink').href = url;
     $$('strlink').innerHTML = url;
 }
@@ -248,12 +278,16 @@ function debug_url(url)
             <option value="1">${LE/str_part2}</option>
             <option value="2">${LE/str_part3}</option>
             <option value="3">${LE/str_part4}</option>
+            <option value="3">${LE/str_part5}</option>
         </select><br />
         <select id="string_table" name="string_table" size="20" onchange="get_string();">
           <tal:block repeat="lstr LE/string_table">
             <option value="${repeat/lstr/key}" tal:content="php: CC_strchop('$lstr/0',40)" />
           </tal:block>
-        </select>
+        </select><div id="search">
+              <a id="commentcommand"  href="javascript://search" 
+                    onclick="do_search(); return false;"><span tal:content="LE/str_search" /></a>&nbsp;
+                 <input id="q" name="q" type="text" value="${LE/str_query}" /></div>
       </fieldset>
       <div id="edstatus" style="display:none">&nbsp;</div>
     </td>

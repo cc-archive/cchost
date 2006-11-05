@@ -33,21 +33,30 @@ class CCLanguageEditor
         global $CC_GLOBALS;
 
         $tt = $this->_get_lang_file($domain);
-        if( !intval($zone) || $zone > 4 )
-            $zone = 0;
-        $part = count($tt) / 5;
-        $start = $part * $zone;
-        $end = $start + $part;
-        $strs = array();
-        $keys = array_keys($tt);
-        for( $i = $start; $i < $end; $i++ )
-        {
-            $e = $tt[$keys[$i]];
-            if( empty($e[1]) )
-                $e[0] = '*' . $e[0];
-            $strs[$keys[$i]] = $e;
-        }
+        $q = empty($_REQUEST['q']) ? '' : CCUtil::Strip($_REQUEST['q']);
 
+        if( empty($q) )
+        {
+            if( !intval($zone) || $zone > 4 )
+                $zone = 0;
+            $part = count($tt) / 5;
+            $start = $part * $zone;
+            $end = $start + $part;
+            $strs = array();
+            $keys = array_keys($tt);
+            for( $i = $start; $i < $end; $i++ )
+            {
+                $e = $tt[$keys[$i]];
+                if( empty($e[1]) )
+                    $e[0] = '*' . $e[0];
+                $strs[$keys[$i]] = $e;
+            }
+        }
+        else
+        {
+            $this->_filter_search = '/' . preg_quote($q) . '/i';
+            $strs = array_filter($tt, array( $this, '_search_strings' ) );
+        }
 
         $args = array();
         $args['string_table'] = $strs;
@@ -70,11 +79,20 @@ class CCLanguageEditor
         $args['str_part2'] =               _('Part 2');
         $args['str_part3'] =               _('Part 3');
         $args['str_part4'] =               _('Part 4');
+        $args['str_part5'] =               _('Part 5');
+        $args['str_search'] =              _('Search');
+        $args['str_empty_search'] =        _('No search string!');
+        $args['str_query'] =               $q;
 
         CCPage::PageArg('langeditor', 'language-editor.xml/language_editor');
         CCPage::PageArg('LE',$args,'langeditor');
         CCPage::SetTitle(_('Language Domain String Editor'));
 
+    }
+
+    function _search_strings($str)
+    {
+        return preg_match( $this->_filter_search, $str[0] );
     }
 
     function GetString($domain,$hash)
