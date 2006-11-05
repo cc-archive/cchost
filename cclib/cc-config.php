@@ -300,8 +300,8 @@ class CCConfigs extends CCTable
     */
     function SetValue($type,$name,$value,$scope='')
     {
-        // If don't do this through SaveConfig, you
-        // bypass this session's config cache
+        // If you don't do this through SaveConfig, you
+        // bypass this session's config cache and translations
 
         $arr[$name] = $value;
         $this->SaveConfig($type,$arr,$scope,true); // true means merge
@@ -338,6 +338,11 @@ class CCConfigs extends CCTable
         $this->DeleteWhere($where);
     }
 
+    /*
+    * Return an array of known virtual roots
+    *
+    * @return array $root_records 
+    */
     function GetConfigRoots()
     {
         $sql = $this->_get_select('','DISTINCT config_scope');
@@ -379,6 +384,9 @@ class CCConfigs extends CCTable
         $CC_GLOBALS['cc-host-version']  = CC_HOST_VERSION;
     }
 
+    /*
+    * @access private
+    */
     function _hash($force=false)
     {
         static $_hash;
@@ -406,6 +414,62 @@ class CCConfigs extends CCTable
         return $_hash;
     }
 
+    /**
+    * Mark config strings as needed translation.
+    *
+    * Call this method if you are repsonsible for a configuration 
+    * structure and that structure has strings in them that need 
+    * to be translated. This includes menu texts or any message
+    * that is displayed or email out from your site.
+    *<code>
+    $fields['config_type'] =
+    ( 
+      'field_to_translate'       => true,    // string: form label
+    );
+    *
+    </code>
+    *
+    *
+    * In some cases the strings might be nested inside arrays. For
+    * that case you should use an asterisk (*) at the array level:
+    * 
+    *<code>
+    $fields['config_type'] =
+    ( 
+        '*' => 
+            array(
+                'field_to_translate'       => true,    // string: form label
+                )
+    );
+    *
+    </code>
+    *
+    * You can nest '*' arrays as many times as you need.
+    *
+    * @param array $fields Config string map segment
+    */ 
+    function AddCfgStringMap($fields)
+    {
+        $where['config_type'] = 'clangmap';
+        $where['config_scope'] = CC_GLOBAL_SCOPE;
+        $row = $this->QueryRow($where);
+        if( empty($row) )
+        {
+            $where['config_data'] = serialize($fields);
+            $this->Insert($where);
+        }
+        else
+        {
+            $data = unserialize($row['config_data']);
+            $data = array_merge($data,$fields);
+            $row['config_data'] = serialize($data);
+            $this->Update($row);
+        }
+    }
+
+    /*
+    * @access private
+    */
     function _get_clang_map()
     {
         $where['config_type'] = 'clangmap';
@@ -421,12 +485,26 @@ class CCConfigs extends CCTable
         }
     }
 
+    /*
+    * For manually converting config data using i18n smarts
+    *
+    * This is unsed only by modules that manipulate raw config 
+    * data (which is very rare).
+    *
+    */
     function CfgSerialize($config_type,$data)
     {
         $data = $this->_string_to_hash($config_type,$data);
         return serialize($data);
     }
 
+    /*
+    * For manually converting config data using i18n smarts
+    *
+    * This is unsed only by modules that manipulate raw config 
+    * data (which is very rare).
+    *
+    */
     function CfgUnserialize($config_type,$data)
     {
         if( is_string($data) )
@@ -434,7 +512,9 @@ class CCConfigs extends CCTable
         return $this->_hash_to_string($config_type,$data);
     }
 
-
+    /*
+    * @private
+    */
     function _hash_to_string($type,$data)
     {
         if( $type == 'clangmap' || $type == 'strhash')
@@ -450,6 +530,9 @@ class CCConfigs extends CCTable
         return $data;
     }
 
+    /*
+    * @private
+    */
     function _string_to_hash($type,$data)
     {
         if( $type == 'clangmap' || $type == 'strhash')
@@ -483,8 +566,104 @@ class CCConfigs extends CCTable
         }
         return $data;
     }
+
+    /**
+    * Stores the system's default language map
+    *
+    * Basically this exists to satify new installs and 
+    * update v_3_2f_vs3
+    *
+    * FWIW this is WAY too much special knowledge for this
+    * to be here, but posting an event can't be done during
+    * install. For now we'll have to rely on future updates
+    * to call AddCfgStringMap.
+    * 
+    * 
+    */
+    function SaveDefaultCfgStringMap()
+    {
+        $map = array ( 
+
+            'tab_pages' =>
+            array( 
+                    '*' => array (
+                        '*' => array (
+                            'text' => true,
+                            'help'=> true,
+                            ),
+                        ),
+             ),
+
+            'config' =>  // config_type
+             array( 
+                    'ban-message'=> true,
+                    'flag_msg' => true,
+                    'ban-email' => true,
+                 ),
+
+            'channels' =>
+                array(
+                    '*' => array(
+                        'text' => true,
+                        )
+                     ),
+
+            'id3-tag-masks' =>
+            array( 
+                    'copyright'=> true,
+             ),
+
+            'throttle' =>
+            array( 
+                    'quota-msg'=> true,
+             ),
+
+            'ttag' =>
+            array( 
+                    'site-title'=> true,
+                    'banner-html'=> true,
+                    'site-description'=> true,
+                    'footer'=> true,
+                    'site-license'=> true,
+                    'site-meta-description'=> true,
+                    'site-meta-keywords'=> true,
+                    'beta_message'=> true,
+             ),
+
+            'submit_forms' =>
+            array( 
+                    '*' => array (
+                        'text'=> true,
+                        'submit_type'=> true,
+                        'help'=> true,
+                        'form_help'=> true,
+                        ),
+             ),
+
+            'groups' =>
+            array( 
+                    '*' => array (
+                        'group_name'=> true,
+                        ),
+             ),
+
+            'menu' =>
+            array( 
+                    '*' => array (
+                        'menu_text'=> true,
+                        ),
+             ),
+        ); 
+
+        $this->SaveConfig('clangmap', $map,
+                               CC_GLOBAL_SCOPE, false );
+
+    }
 }
 
+/*
+* Class used by CCConfig to i18n strings
+*/
 class CCConfigHashToString extends CCConfigi18nParser
 {
     var $_data, $_hash, $_map;
@@ -516,6 +695,9 @@ class CCConfigHashToString extends CCConfigi18nParser
 
 }
 
+/*
+* Class used by CCConfig to i18n strings
+*/
 class CCConfigStringToHash extends CCConfigi18nParser
 {
     var $_data, $_hash, $_map, $_changed;
@@ -557,6 +739,14 @@ class CCConfigStringToHash extends CCConfigi18nParser
 
 }
 
+/*
+* Class used by CCConfig to i18n strings
+*
+* This class will walk a config structure and call 
+* OnConfigStrings for every match in the language
+* map
+*
+*/
 class CCConfigi18nParser
 {
     function CCConfigi18nParser()
