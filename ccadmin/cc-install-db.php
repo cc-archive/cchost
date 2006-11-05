@@ -518,6 +518,11 @@ END;
 
     $configs =& CCConfigs::GetTable();
 
+    // First, create a string map so that incoming strings 
+    // will be i18n'ized properly
+
+    $configs->SaveDefaultCfgStringMap();
+
     // -------------------- config -------------------------------
 
     $arr = array ( 
@@ -582,6 +587,7 @@ END;
        'v_3_2c'              => true, // thumbnail constraings
        'v_3_2d'              => true, // null db fields, super users
        'v_3_2e'              => true, // topic locking field
+       'v_3_2f_vs3'          => true, // cfg strings are now i18n
 
     );
 
