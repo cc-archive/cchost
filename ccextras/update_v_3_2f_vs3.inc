@@ -37,23 +37,16 @@ class v_3_2f_vs3 extends CCUpdate
 
     function _update_config_lang_map()
     {
-        // grab all current rows
-        // these have non-hashed strings
-        // in them
-
         $configs =& CCConfigs::GetTable();
-        $allrows = $configs->QueryRows('');
 
         // write the map so serialize will work 
         // properly
 
-        $config_lang_map = $this->_get_lang_map();
-
-        $configs->SaveConfig('clangmap', $config_lang_map,
-                               CC_GLOBAL_SCOPE, false );
+        $configs->SaveDefaultCfgStringMap();
 
         // now hash all the strings in config...
 
+        $allrows = $configs->QueryRows('');
         foreach( $allrows as $R )
         {
             // by doing it this way, we asure that even
@@ -62,90 +55,12 @@ class v_3_2f_vs3 extends CCUpdate
             // are already there...
             $data = $configs->GetConfig($R['config_type'],$R['config_scope']);
             $configs->SaveConfig($R['config_type'],$data,$R['config_scope'],false);
-
-
-            $configs->GetConfig($R['config_type'],$R['config_scope']);
         }
 
         CCPage::Prompt( _('Configuration i18n Information Saved') );
     }
 
-    function _get_lang_map()
-    {
-        return array ( 
 
-            'tab_pages' =>
-            array( 
-                    '*' => array (
-                        '*' => array (
-                            'text' => true,
-                            'help'=> true,
-                            ),
-                        ),
-             ),
-
-            'config' =>  // config_type
-             array( 
-                    'ban-message'=> true,
-                    'flag_msg' => true,
-                    'ban-email' => true,
-                 ),
-
-            'channels' =>
-                array(
-                    '*' => array(
-                        'text' => true,
-                        )
-                     ),
-
-            'id3-tag-masks' =>
-            array( 
-                    'copyright'=> true,
-             ),
-
-            'throttle' =>
-            array( 
-                    'quota-msg'=> true,
-             ),
-
-            'ttag' =>
-            array( 
-                    'site-title'=> true,
-                    'banner-html'=> true,
-                    'site-description'=> true,
-                    'footer'=> true,
-                    'site-license'=> true,
-                    'site-meta-description'=> true,
-                    'site-meta-keywords'=> true,
-                    'beta_message'=> true,
-             ),
-
-            'submit_forms' =>
-            array( 
-                    '*' => array (
-                        'text'=> true,
-                        'submit_type'=> true,
-                        'help'=> true,
-                        'form_help'=> true,
-                        ),
-             ),
-
-            'groups' =>
-            array( 
-                    '*' => array (
-                        'group_name'=> true,
-                        ),
-             ),
-
-            'menu' =>
-            array( 
-                    '*' => array (
-                        'menu_text'=> true,
-                        ),
-             ),
-        ); 
-
-    }
 }
 
 ?>
