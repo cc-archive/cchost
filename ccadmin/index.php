@@ -110,6 +110,9 @@ function step_4()
     require_once('cclib/cc-database.php');
     require_once('cclib/cc-table.php');
     require_once('cclib/cc-config.php');
+    require_once('cclib/cc-util.php');
+    if( !function_exists('gettext') )
+       require_once('ccextras/cc-no-gettext.inc'); // ugh, ccextras
 
     $configs =& CCConfigs::GetTable();
     $settings = $configs->GetConfig('settings');
@@ -278,6 +281,9 @@ function install_tables(&$f,&$errs)
     require_once( 'cclib/cc-pools.php' );
     require_once( dirname(__FILE__) . '/cc-install-db.php');
     require_once( 'cclib/cc-lics-install.php');
+    require_once( 'cclib/cc-util.php' );
+    if( !function_exists('gettext') )
+       require_once('ccextras/cc-no-gettext.inc'); // ugh, ccextras
     
     CCDebug::Enable(true) ;
 
@@ -323,12 +329,13 @@ END;
 
 function install_local_files($local_dir)
 {
+    // is it right to disable warning here?
     @mkdir( 'people');
     @mkdir( 'contests');
-    mkdir( $local_dir . '/viewfile' );
-    mkdir( $local_dir . '/skins' );
-    mkdir( $local_dir . '/lib' );
-    mkdir( $local_dir . '/temp' );
+    @mkdir( $local_dir . '/viewfile' );
+    @mkdir( $local_dir . '/skins' );
+    @mkdir( $local_dir . '/lib' );
+    @mkdir( $local_dir . '/temp' );
 
     chmod( 'people',   0777 );
     chmod( 'contests', 0777 );
