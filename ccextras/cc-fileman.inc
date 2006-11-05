@@ -450,7 +450,7 @@ END;
 <table class=\"ftable\">
     <tr><th>" . _('Path Root') . "</th><td>$htmlD</td></tr>
 <tr><th>Files in \"<span>$dir</span>\"</th>
-    <td><select onchange=\"filechanged(this);\" size=\"8\" ondblclick=\"ondirclicked(this);\">";
+    <td><select id=\"dirlistselect\" onchange=\"filechanged(this);\" size=\"8\" ondblclick=\"ondirclicked(this);\">";
 
         if( $subdir )
         {
@@ -565,6 +565,9 @@ function ondirclicked(obj)
         document.location = url;
    }
 }
+
+filechanged($("dirlistselect"));
+
 </script>';
 
         CCPage::PageArg('body_html',$html,'show_body_html');
