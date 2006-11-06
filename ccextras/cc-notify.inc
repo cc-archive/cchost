@@ -62,9 +62,7 @@ class CCEditUserNotificationForm extends CCForm
     {
         $this->CCForm();
 
-        $betatxt = sprintf(_("This feature is new. If you have any problems, %slet us know%s"), '<a href=\"http://ccmixter.org/media/people/contact/admin\"><b>', '</b></a>.<br /><br />');
-
-        $this->SetFormHelp( $betatxt . _('Notify me by email when:') );
+        $this->SetFormHelp( _('Notify me by email when:') );
 
         $F = array();
         $count = count($fields);
@@ -422,7 +420,7 @@ class CCNotifyAPI
         $subject = sprintf(_('Upload by %s'),$record['user_real_name']);
         $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 
         _('This is a notification that %s has just uploaded new material to %s')
-        . "\n\n%s\n";
+        . "\n\n\"%s\"\n\n%s\n";
         $body = sprintf($body, $record['user_real_name'],
                                $ttags['site-title'],
                                $record['upload_name'],
@@ -439,7 +437,7 @@ class CCNotifyAPI
             }
         }
 
-        $body .= "\n" . sprintf(_("Thank you, %s"), "\n" . $ttags['site-title']);
+        $body .= "\n" . sprintf(_("Thank you, %s"), "\n" . "\n" . $ttags['site-title']);
 
         $this->_do_notify($subject, $body, $notify_rows);
     }
