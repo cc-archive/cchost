@@ -35,10 +35,11 @@
             ${R/files/0/file_nicname}
         </a>
      </div>
-     <tal:block define="tag_array R/usertag_links" />
-     <div tal:condition="tag_array" class="cc_tags">
-        <metal:block use-macro="tags.xml/taglinks" />
-     </div>
+     <tal:block condition="exists: R/usertag_links" define="tag_array  R/usertag_links">
+       <div tal:condition="exists: tag_array" class="cc_tags">
+          <metal:block use-macro="tags.xml/taglinks" />
+       </div>
+     </tal:block>
      <div tal:condition="R/upload_description_html" class="cc_description" >
        ${R/upload_description_html}
      </div>
