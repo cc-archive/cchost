@@ -43,6 +43,8 @@ class CCQueryFormats
 
         $format = strtolower($format); // just in case he screwed the case
 
+        $query = new CCQuery();
+
         switch( $format )
         {
             case 'json':
@@ -59,12 +61,15 @@ class CCQueryFormats
                 require_once('cclib/zend/json-encoder.php');
 
                 $text = '[';
-                $count = count($records);
+                $k = array_keys($records);
+                $count = count($k);
                 $comm = '';
                 for( $i = 0; $i < $count; $i++ )
                 {
+                    $R =& $records[$k[$i]];
                     $text .= $comm;
-                    $filtered = array_filter($records[$i]);
+                    $query->CleanRec($R);
+                    $filtered = array_filter($R);
                     $text .= CCZend_Json_Encoder::encode($filtered);
                     $comm = ',';
                 }
@@ -76,14 +81,16 @@ class CCQueryFormats
             case 'xml':
             {
                 $xml = "<records>\n";
-                $count = count($records);
+                $k = array_keys($records);
+                $count = count($k);
                 if( $count > 0 )
                 {
-                    $keys = array_keys($records[0]);
+                    $keys = array_keys($records[$k[0]]);
                     $idname = $keys[0];
                     for( $i = 0; $i < $count; $i++ )
                     {
-                        $R =& $records[$i];
+                        $R =& $records[$k[$i]];
+                        $query->CleanRec($R);
                         $xml .= "   <record type=\"object\" id=\"{$R[$idname]}\">\n";
                         $this->_dump_xml_obj($R,$xml);
                         $xml .= "   </record>\n";
@@ -118,6 +125,11 @@ class CCQueryFormats
                     }
                 }
 
+                $k = array_keys($records);
+                $count = count($k);
+                for( $i = 0; $i < $count; $i++ )
+                    $query->CleanRec($records[$k[$i]]);
+
                 $configs =& CCConfigs::GetTable();
                 $targs = array_merge($configs->GetConfig('ttag'),$args);
                 $targs['root-url'] = cc_get_root_url() . '/';
@@ -129,7 +141,6 @@ class CCQueryFormats
 
                 if( !empty($template_args) )
                     $targs = array_merge($template_args);
-
 
                 $templateObj = new CCTemplate($tname);
                 $text = $templateObj->SetAllAndParse($targs);
@@ -152,7 +163,8 @@ class CCQueryFormats
 
             case 'csv':
             {
-                $count = count($records);
+                $k = array_keys($records);
+                $count = count($k);
                 // this is scary if called from the browser 
                 // and there are gazillion records but not
                 // every record exactly the same layout
@@ -163,14 +175,15 @@ class CCQueryFormats
                 $keys = array();
                 for( $i = 0; $i < $count; $i++ )
                 {
-                    $keys = array_unique(array_merge( $keys, array_keys($records[$i]) ));
+                    $keys = array_unique(array_merge( $keys, array_keys($records[$k[$i]]) ));
                 }
 
                 $text = join(',',$keys) . "\n";
 
                 for( $i = 0; $i < $count; $i++ )
                 {
-                    $R =& $records[$i];
+                    $R =& $records[$k[$i]];
+                    $query->CleanRec($R);
                     $fields = array();
                     foreach( $keys as $key )
                     {
