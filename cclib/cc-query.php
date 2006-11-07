@@ -80,10 +80,6 @@ class CCQuery
         if( !empty($req['where']) )
             unset($req['where']);
 
-        // for now disalow text queries from browser:
-        if( !empty($req['q']) )
-            unset($req['q']);
-
         CCUtil::Strip($req);
 
         // ------------------------------------------------------
@@ -106,7 +102,12 @@ class CCQuery
         $this->_arg_alias($args);
 
         // get the '+' out of the tag str
-        $args['tags'] = str_replace( ' ', ',', urldecode($args['tags']));
+        if( !empty($args['tags']) )
+            $args['tags'] = str_replace( ' ', ',', urldecode($args['tags']));
+
+        // queries might need decoding
+        if( !empty($args['query']) )
+            $args['query'] = urldecode($args['query']);
 
         $this->_check_limit($args);
 
@@ -192,7 +193,8 @@ class CCQuery
         return array(
                     'tags' => '',
                     'reqtags' => '',
-                    'type' => 'all',
+                    'type' => '', // type will default to 'all' if tags are there
+                                  // and 'match' if query is there
 
                     'promo_tag' => '',  // site_promo for ccMixter
                     'promo_gap' => 4,
@@ -309,7 +311,7 @@ class CCQuery
                 $promo_keys = array_keys($promos);
         }
 
-        if( isset($tags) )
+        if( !empty($tags) )
         {
             if( empty($user) )
             {
@@ -328,16 +330,12 @@ class CCQuery
                     }
                 }
             }
-        }
-        else
-        {
-            $tags = '';
-        }
 
-        if( empty($type) )
-            $type = 'all';
+            if( !empty($tags) && (empty($type) || ($type == 'match')) )
+                $type = 'all';
 
-        $uploads->SetTagFilter($tags,$type);
+            $uploads->SetTagFilter($tags,$type);
+        }
 
         if( !empty($limit) )
         {
@@ -430,9 +428,32 @@ class CCQuery
 
         // Search string 
 
-        if( !empty($q) )
+        if( !empty($query) )
         {
-            $where[] = "(LOWER(CONCAT(upload_description,upload_tags,user_real_name,user_name,upload_name)) LIKE '%$q%'";
+            $query = strtolower($query);
+
+            if( empty($type) )
+                $type = 'match';
+
+            $qf = 'LOWER(CONCAT_WS(\' \', upload_description,upload_tags,'             
+                                   .'user_real_name,user_name,upload_name))';
+
+            $uploads->AddExtraColumn($qf . ' as qsearch');
+            switch( $type )
+            {
+                case 'match':
+                    $where[] = "($qf LIKE '%$query%')";
+                    break;
+
+                case 'any':
+                case 'all':
+                    $qterms = $this->_get_search_terms($query);
+                    $qsearch = array();
+                    foreach( $qterms as $qt )
+                        $qsearch[] = "($qf LIKE '%$qt%')";
+                    $where[] = '(' . join( $type == 'all' ? 'AND' : 'OR', $qsearch ) . ')';
+                    break;
+            }
         }
 
         // vroot 
@@ -616,6 +637,7 @@ class CCQuery
                           'm' => 'macro',
                           'r' => 'remixinfo',
                           'u' => 'user',
+                          'q' => 'query',
                        );
 
         foreach( $aliases as $short => $long )
@@ -779,6 +801,12 @@ class CCQuery
             $args['offset'] = sprintf('%0d',$_GET['offset']);
     }
 
+    function _get_search_terms($query)
+    {
+        preg_match_all('/("(.*)"|(.*)(?:$|\s))/U',$query,$qterms );
+        return array_filter( array_merge( $qterms[2], $qterms[3] ), 
+                                   create_function('$t','return !empty($t);') );
+    }
     function _check_limit(&$args)
     {
         global $CC_GLOBALS;

@@ -65,33 +65,14 @@ class CCRestAPI
 
     function Search()
     {
-        $feeds = new CCFeeds();
+        if( empty( $_REQUEST['query'] ) && empty( $_REQUEST['q'] ) )
+            $this->Info();
 
-        if( empty( $_REQUEST['query'] ) )
-            $this->Info($feeds);
-
-        $query = CCUtil::StripText( urldecode($_REQUEST['query']) );
-        if( empty($query) )
-            $this->Info($feeds);
-
-        $feeds->_check_cache('search',$query);
-
-        if( !empty($_REQUEST['type']) )
-            $type = CCUtil::StripText($_REQUEST['type']);
-        if( empty($type) || !in_array( $type, array( 'any', 'all', 'phrase')) )
-            $type = 'any';
-
-        $results = array();
-        CCSearch::DoSearch( $query, $type, CC_SEARCH_UPLOADS, $results  );
-
-        $feeds->PrepRecords($results[CC_SEARCH_UPLOADS]);
-
-        $feeds->GenerateFeedFromRecords(
-                        $results[CC_SEARCH_UPLOADS],
-                        $query,
-                        ccl( 'api', 'search', $query ),
-                        'search'
-                        );
+        $queryapi = new CCQuery();
+        if( empty($_REQUEST['format']) )
+            $args['format'] = 'rss';
+        $args = $queryapi->ProcessUriArgs($args);
+        $queryapi->Query($args);
     }
 
     function _get_upload_id_from_guid($guid)
