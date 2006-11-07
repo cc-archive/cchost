@@ -77,17 +77,17 @@ class CCQueryFormats
             {
                 $xml = "<records>\n";
                 $count = count($records);
-                for( $i = 0; $i < $count; $i++ )
+                if( $count > 0 )
                 {
-                    $R =& $records[$i];
-                    $xml .= "   <record type=\"object\" id=\"{$R['upload_id']}\">\n";
-                    $keys = array_keys($R);
-                    foreach( $keys as $key )
+                    $keys = array_keys($records[0]);
+                    $idname = $keys[0];
+                    for( $i = 0; $i < $count; $i++ )
                     {
-                        if( !is_array( $R[$key] ) )
-                            $xml .= "      <$key>" . htmlentities($R[$key]) . "</$key>\n";
+                        $R =& $records[$i];
+                        $xml .= "   <record type=\"object\" id=\"{$R[$idname]}\">\n";
+                        $this->_dump_xml_obj($R,$xml);
+                        $xml .= "   </record>\n";
                     }
-                    $xml .= "   </record>\n";
                 }
                 $xml .= "</records>\n";
                 $results = array( $xml, 'text/xml' );
@@ -213,33 +213,28 @@ class CCQueryFormats
         exit;
     }
 
-    function _clean_rec(&$R)
+    function _dump_xml_obj($obj,&$xml)
     {
-        $fields = array( 'user_email', 'user_password', 'user_last_known_ip' );
-        foreach( $fields as $f )
-            if( isset($R[$f]) ) unset($R[$f]);
-    }
-
-
-    /**
-     * @access private
-     */
-    function _resort_records(&$records,&$sort_order)
-    {
-        if( !empty($sort_order) )
+        $keys = array_keys($obj);
+        foreach( $keys as $key )
         {
-            $sorted = array();
-            $count = count($records);
-            for( $i = 0; $i < $count; $i++ )
+            if( is_array( $obj[$key] ) )
             {
-                $sorted[ $sort_order[ $records[$i]['upload_id'] ] ] = $records[$i];
+                if( is_integer($key) )
+                    $keyname = 'rec_' . $key;
+                else
+                    $keyname = $key;
+                $xml .= "      <$keyname>\n";
+                $this->_dump_xml_obj( $obj[$key], $xml );
+                $xml .= "      </$keyname>\n";
             }
-            $records = $sorted;
-            $sorted = null;
-            ksort($records);
+            else
+            {
+                if( !empty($obj[$key]) )
+                    $xml .= "      <$key>" . htmlentities($obj[$key]) . "</$key>\n";
+            }
         }
     }
-
 } // end of class CCQueryFormats
 
 
