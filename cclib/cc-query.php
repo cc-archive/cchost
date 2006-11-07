@@ -194,7 +194,7 @@ class CCQuery
                     'tags' => '',
                     'reqtags' => '',
                     'type' => '', // type will default to 'all' if tags are there
-                                  // and 'match' if query is there
+                                  // and 'phrase' if query is there
 
                     'promo_tag' => '',  // site_promo for ccMixter
                     'promo_gap' => 4,
@@ -230,19 +230,11 @@ class CCQuery
                     );
     }
 
-    function Query($args)
+    function & _get_query_table($args)
     {
-        // do this before we start messing around with
-        // the args...
-
-        if( !isset( $args['qstring']) )
-            $args['qstring'] = $this->SerializeArgs($args);
-
-        extract($args);
-
         // Get a new table so we can smash it about
 
-        if( empty($remixesof) )
+        if( empty($args['remixesof']) )
         {
             // normally we create our own instance
             // and crush it
@@ -258,203 +250,29 @@ class CCQuery
         }
 
         $uploads->SetDefaultFilter(true,true); // query as anon
-        
-        if( empty($format) )
-            $format = 'page';
 
-        // this is sort of a macro that expands here...
+        return $uploads;
+    }
 
-        if( !empty($remixedby) )
+    function & _get_query_fields($for)
+    {
+        switch( $for )
         {
-            $user = $remixedby;
-
-            if( empty($reqtags) )
-                $reqtags = 'remix';
-            elseif( !CCTag::InTag('remix',$reqtags) )
-                $reqtags .= ',remix';
+            case 'date':
+                return 'upload_date';
+            case 'score':
+                return 'upload_score';
+            case 'search':
+                return "upload_description,upload_tags,user_real_name,user_name,upload_name";
         }
+        return '';
+    }
 
-        // sort
-
-        if( empty($validated_sort) && !empty($sort) )
-            $validated_sort = $this->_validate_sort_fields($sort);
-
-        if( !empty($rand) )
-        {
-            $uploads->SetOrder('RAND()');
-        }
-        elseif( !empty($validated_sort) && empty($nosort) )
-        {
-            if( empty($ord) )
-                $ord = 'ASC';
-            $uploads->SetOrder($validated_sort,$ord);
-        }
-
-        // radio tag plugs
-
-        $insert_promos = false;
-
-        if( !empty($promo_tag) )
-        {
-            $temp_uploads = new CCUploads();
-            $temp_uploads->SetOrder('RAND()');
-            $temp_uploads->SetTagFilter($promo_tag); 
-            $promos = $temp_uploads->GetRecords('');
-            $insert_promos = !empty($promos);
-
-            // initialize these rather than in the 
-            // record loop below...
-            $promo_recs = array();
-            $promo = 0;
-            $promo_count = count($promos);
-            if( !empty($promos) )
-                $promo_keys = array_keys($promos);
-        }
-
-        if( !empty($tags) )
-        {
-            if( empty($user) )
-            {
-                // one of the 'tags' may be a user name
-                $users =& CCUsers::GetTable();
-                $username = '';
-                $tagarr = CCTag::TagSplit($tags);
-                foreach( $tagarr as $tag )
-                {
-                    $twhere['user_name'] = $tag;
-                    if( $users->CountRows($twhere) == 1 )
-                    {
-                        $user = $tag;
-                        $tags = join(',',array_diff( $tagarr, array($user) ));
-                        break;
-                    }
-                }
-            }
-
-            if( !empty($tags) && (empty($type) || ($type == 'match')) )
-                $type = 'all';
-
-            $uploads->SetTagFilter($tags,$type);
-        }
-
-        if( !empty($limit) )
-        {
-            if( empty($offset) )
-                $offset = 0;
-            $uploads->SetOffsetAndLimit( $offset, $limit );
-        }
-
-        // ----------- WHERE ------------------
-
-        if( empty($where) )
-        {
-            $where = array();
-        }
-        else 
-        {
-            $tempwhere = $where;
-            $where = array();
-            $where[] = $uploads->_where_to_string($tempwhere); // ugh sorry
-        }
-
-        if( !empty($reqtags) )
-        {
-            // a bit sleazy but it works and will continue to 
-            
-            $dummyup = new CCUploads();
-            $dummyup->SetDefaultFilter(false); // shut all other filtering off
-            $dummyup->SetTagFilter($reqtags,'all');
-            $where[] = $dummyup->_tags_to_where(''); /* *cough* */
-        }
-
-        if( !isset($ids) )
-        {
-            $ids = '';
-        }
-        elseif( !empty($ids) )
-        {
-            // this will do a security check in case someone tries
-            // to escape out of sql
-            $ids = array_unique(preg_split('/([^0-9]+)/',$ids,0,PREG_SPLIT_NO_EMPTY));
-            if( $ids )
-                $where[] = "(upload_id IN (" . join(',',$ids) . '))';
-        }
-
-        // Check for date limit
-
-        $since = 0;
-
-        if( !empty($sinced) )     // text date
-        {
-            $since = strtotime($sinced);
-            if( $since < 1 )
-                die('invalid date string');
-        }
-        elseif( !empty($sinceu) ) // unix time
-        {
-            if( $sinceu{0} === '_' )
-                $sinceu = substr($sinceu,1);
-            $since = $sinceu;
-        }
-
-        if( !empty($since) )
-        {
-            $after = date( 'Y-m-d H:i', $since );
-            // CCDebug::PrintVar($after);
-            $where[] = "(upload_date > '$after')";
-        }
-
-        // Ratings...
-
-        if( !empty($score) )
-        {
-            $where[] = "(upload_score >= $score)";
-        }
-
-        // User...
-
-        if( !empty($user) )
-        {
-            $where[] = "(user_name = '$user')";
-        }
-
-        // License 
-
-        if( !empty($lic) )
-        {
-            $license = $this->_lic_query_to_key($lic);
-            $where[] = "(license_id = '$license')";
-        }
-
-        // Search string 
-
-        if( !empty($query) )
-        {
-            $query = strtolower($query);
-
-            if( empty($type) )
-                $type = 'match';
-
-            $qf = 'LOWER(CONCAT_WS(\' \', upload_description,upload_tags,'             
-                                   .'user_real_name,user_name,upload_name))';
-
-            $uploads->AddExtraColumn($qf . ' as qsearch');
-            switch( $type )
-            {
-                case 'match':
-                    $where[] = "($qf LIKE '%$query%')";
-                    break;
-
-                case 'any':
-                case 'all':
-                    $qterms = $this->_get_search_terms($query);
-                    $qsearch = array();
-                    foreach( $qterms as $qt )
-                        $qsearch[] = "($qf LIKE '%$qt%')";
-                    $where[] = '(' . join( $type == 'all' ? 'AND' : 'OR', $qsearch ) . ')';
-                    break;
-            }
-        }
+    function _get_table_where($where,$uploads,$args)
+    {
+        $orgwhere = $where;
+        extract($args);
+        $where = $orgwhere;
 
         // vroot 
 
@@ -503,6 +321,213 @@ class CCQuery
             }
         }
 
+        return $where;
+    }
+
+    function Query($args)
+    {
+        // do this before we start messing around with
+        // the args...
+
+        if( !isset( $args['qstring']) )
+            $args['qstring'] = $this->SerializeArgs($args);
+
+        $table =& $this->_get_query_table($args);
+
+        extract($args);
+
+        if( empty($format) )
+            $format = 'page';
+
+        // this is sort of a macro that expands here...
+
+        if( !empty($remixedby) )
+        {
+            $user = $remixedby;
+
+            if( empty($reqtags) )
+                $reqtags = 'remix';
+            elseif( !CCTag::InTag('remix',$reqtags) )
+                $reqtags .= ',remix';
+        }
+
+        // sort
+
+        if( empty($validated_sort) && !empty($sort) )
+            $validated_sort = $this->_validate_sort_fields($sort);
+
+        if( !empty($rand) )
+        {
+            $table->SetOrder('RAND()');
+        }
+        elseif( !empty($validated_sort) && empty($nosort) )
+        {
+            if( empty($ord) )
+                $ord = 'ASC';
+            $table->SetOrder($validated_sort,$ord);
+        }
+
+        // radio tag plugs
+
+        $insert_promos = false;
+
+        if( !empty($promo_tag) )
+        {
+            $temp_uploads = new CCUploads();
+            $temp_uploads->SetOrder('RAND()');
+            $temp_uploads->SetTagFilter($promo_tag); 
+            $promos = $temp_uploads->GetRecords('');
+            $insert_promos = !empty($promos);
+
+            // initialize these rather than in the 
+            // record loop below...
+            $promo_recs = array();
+            $promo = 0;
+            $promo_count = count($promos);
+            if( !empty($promos) )
+                $promo_keys = array_keys($promos);
+        }
+
+        if( !empty($tags) )
+        {
+            if( empty($user) )
+            {
+                // one of the 'tags' may be a user name
+                $users =& CCUsers::GetTable();
+                $username = '';
+                $tagarr = CCTag::TagSplit($tags);
+                foreach( $tagarr as $tag )
+                {
+                    $twhere['user_name'] = $tag;
+                    if( $users->CountRows($twhere) == 1 )
+                    {
+                        $user = $tag;
+                        $tags = join(',',array_diff( $tagarr, array($user) ));
+                        break;
+                    }
+                }
+            }
+
+            if( !empty($tags) )
+            {
+                if( method_exists($table,'SetTagFilter') )
+                {
+                    if( (empty($type) || ($type == 'phrase')) )
+                        $type = 'all';
+
+                    $table->SetTagFilter($tags,$type);
+                }
+            }
+        }
+
+        if( !empty($limit) )
+        {
+            if( empty($offset) )
+                $offset = 0;
+            $table->SetOffsetAndLimit( $offset, $limit );
+        }
+
+        // ----------- WHERE ------------------
+
+        if( empty($where) )
+        {
+            $where = array();
+        }
+        else 
+        {
+            $tempwhere = $where;
+            $where = array();
+            $where[] = $table->_where_to_string($tempwhere); // ugh sorry
+        }
+
+        if( !empty($reqtags) )
+        {
+            if( method_exists( $table, '_tags_to_where' ) )
+            {
+                // a bit sleazy but it works and will continue to 
+                
+                $tname = get_class($table);
+                $dummyup = new $tname();
+                if( method_exists( $dummyup, 'SetDefaultFilter') )
+                    $dummyup->SetDefaultFilter(false); // shut all other filtering off
+                $dummyup->SetTagFilter($reqtags,'all');
+                $where[] = $dummyup->_tags_to_where(''); /* *cough* */
+            }
+        }
+
+        if( !isset($ids) )
+        {
+            $ids = '';
+        }
+        elseif( !empty($ids) )
+        {
+            // this will do a security check in case someone tries
+            // to escape out of sql
+            $ids = array_unique(preg_split('/([^0-9]+)/',$ids,0,PREG_SPLIT_NO_EMPTY));
+            $keyf = $table->_key_field;
+            if( $ids )
+                $where[] = "($keyf IN (" . join(',',$ids) . '))';
+        }
+
+        // Check for date limit
+
+        $since = 0;
+
+        if( !empty($sinced) )     // text date
+        {
+            $since = strtotime($sinced);
+            if( $since < 1 )
+                die('invalid date string');
+        }
+        elseif( !empty($sinceu) ) // unix time
+        {
+            if( $sinceu{0} === '_' )
+                $sinceu = substr($sinceu,1);
+            $since = $sinceu;
+        }
+
+        if( !empty($since) )
+        {
+            $after = date( 'Y-m-d H:i', $since );
+            $datef = $this->_get_query_field('date');
+            if( !empty($datef) )
+                $where[] = "($datef > '$after')";
+        }
+
+        // Ratings...
+
+        if( !empty($score) )
+        {
+            $scoref = $this->_get_query_field('score');
+            if( !empty($scoref) )
+                $where[] = "($scoref >= $score)";
+        }
+
+        // User...
+
+        if( !empty($user) )
+        {
+            $where[] = "(user_name = '$user')";
+        }
+
+        // License 
+
+        if( !empty($lic) )
+        {
+            $license = $this->_lic_query_to_key($lic);
+            $where[] = "(license_id = '$license')";
+        }
+
+        // Search string 
+
+        if( !empty($query) )
+        {
+            $columns = $this->_get_query_feild('search');
+            $where = $this->_build_search_query($type,$query,$columns,$where);
+        }
+
+        $where = $this->_get_table_where($where,$table,$args);
+
         $where = join(' AND ', $where);
 
         // ------------- END WHERE ---------------------
@@ -512,6 +537,8 @@ class CCQuery
 
         if( !empty($remixesof) )
         {
+            // yes, this should live somewhere else
+
             $user_id = CCUser::IDFromName($remixesof);
             if( !empty($user_id) )
             {
@@ -521,16 +548,16 @@ class CCQuery
         }
         elseif( $format == 'count' )
         {
-            $uploads->SetOffsetAndLimit( 0, 0 );
-            $records = $uploads->CountRows($where);
+            $table->SetOffsetAndLimit( 0, 0 );
+            $records = $table->CountRows($where);
         }
         elseif( $format == 'ids' )
         {
-            $records = $uploads->QueryKeys($where);
+            $records = $table->QueryKeys($where);
         }
         else 
         {
-            $records =& $uploads->GetRecords($where);
+            $records =& $table->GetRecords($where);
         }
 
         // ------------- END QUERY ---------------------
@@ -565,7 +592,7 @@ class CCQuery
             $i = 0;
             foreach($ids as $id)
                 $sort_order[$id] = $i++;
-            $this->_resort_records($records,$sort_order);
+            $this->_resort_records($records,$sort_order,$table->_key_field);
         }
 
         //---------------------------------------------
@@ -577,16 +604,14 @@ class CCQuery
         for( $i = 0; $i < $n; $i++ )
         {
             $R =& $records[ $rkeys[$i] ];
-            $this->_clean_rec($R,$format);
+            //$this->CleanRec($R,$format);
             
-            CCUpload::EnsureFiles($R,true);
             if( $insert_promos )
             {
                 if( !$i || ($i % $promo_gap == 0) )
                 {
                     $p = $promos[ $promo_keys[$promo++ % $promo_count] ];
-                    $this->_clean_rec($p,$format);
-                    CCUpload::EnsureFiles($p,true);
+                    //$this->CleanRec($p,$format);
                     $promo_recs[] = $p;
                 }
                 $promo_recs[] = $R;
@@ -618,7 +643,7 @@ class CCQuery
                 $args = compact( array_keys($args) );
 
                 // used for paging and godknows what else
-                $args['last_where'] = $uploads->_last_where; // here's a back door...
+                $args['last_where'] = $table->_last_where; // here's a back door...
 
                 CCEvents::Invoke( CC_EVENT_API_QUERY_FORMAT, 
                                     array( &$records, $args, &$results, &$results_mime ) );
@@ -650,16 +675,15 @@ class CCQuery
         }
     }
 
-    function _clean_rec(&$R,$format)
+    function CleanRec(&$R)
     {
-        if( in_array( $format, array( 'page', 'php' ) ) )
-            return;
-
         $fields = array( 'user_email', 'user_password', 'user_last_known_ip', 'user_extra',
                         'upload_taglinks', 'usertag_links', 'user_fields', 'upload_extra',
                         'local_menu', 'ratings', 'flag_url' );
+        
         foreach( $fields as $f )
             if( isset($R[$f]) ) unset($R[$f]);
+
         if( !empty($R['files']) )
         {
             $keys = array_keys($R['files']);
@@ -675,7 +699,7 @@ class CCQuery
     /**
      * @access private
      */
-    function _resort_records(&$records,&$sort_order)
+    function _resort_records(&$records,&$sort_order,$sort_key)
     {
         if( !empty($sort_order) )
         {
@@ -683,7 +707,7 @@ class CCQuery
             $count = count($records);
             for( $i = 0; $i < $count; $i++ )
             {
-                $sorted[ $sort_order[ $records[$i]['upload_id'] ] ] = $records[$i];
+                $sorted[ $sort_order[ $records[$i][$sort_key] ] ] = $records[$i];
             }
             $records = $sorted;
             $sorted = null;
@@ -748,48 +772,56 @@ class CCQuery
         return $translator[$query_lic];
     }
 
+    function GetValidSortFields()
+    {
+        return array(
+            'name'               => array( _('Upload name'), 'upload_name'),
+            'lic'                => array( _('Upload license'), 'upload_license'),
+            'date'               => array( _('Upload date'), 'upload_date'),
+            'last_edit'          => array( _('Upload last edited'), 'upload_last_edit'),
+            'remixes'            => array( _('Upload\'s remixes'), 
+                                                  '(upload_num_remixes+upload_num_pool_remixes)'),
+            'local_remixes'      => array( _('Upload\'s local remixes'), 'upload_num_remixes'),
+            'pool_remixes'       => array( _('Upload\'s remote remixes'), 
+                                                   'upload_num_pool_remixes'),
+            'sources'            => array( _('Upload\'s sources'),  
+                                                   '(upload_num_sources+upload_num_pool_sources)'),
+            'local_sources'      => array( _('Upload\'s local sources'), 'upload_num_sources'),
+            'pool_sources'       => array( _('Upload\'s sample pool sources'), 
+                                                    'upload_num_pool_sources'),
+            'score'              => array( _('Upload\'s ratings'), 'upload_score'),
+            'num_scores'         => array( _('Number of ratings'), 'upload_num_scores'),
+            'rank'               => array( _('Upload ranking'), 'upload_rank'),
+            'user'               => array( _('Artist login name'), 'user_name'),
+            'fullname'           => array( _('Artist name'), 'user_real_name'),
+            'registered'         => array( _('Artist registered'), 'user_registered'),
+            'user_remixes'       => array( _('Number of remixes'), 'user_num_remixes'),
+            'remixed'            => array( _('Number of times remixed'), 'user_num_remixed'),
+            'uploads'            => array( _('Number of uploads'), 'user_num_uploads'),
+            'userscore'          => array( _('Artists\'s average rating'), 'user_score'),
+            'user_num_scores'    => array( _('Number of ratings'), 'user_num_scores'),
+            'userrank'           => array( _('Artist\'s ranking'), 'user_rank'),
+            'user_reviews'       => array( _('Reviews left by artist'), 'user_num_reviews'),
+            'user_reviewed'      => array( _('Reviews left for artist'), 'user_num_reviewed'),
+            'posts'              => array( _('Forum topics by artist'), 'user_num_posts'),
+            'id'                 => array( _('Internal upload id'), 'upload_id'),
+            );
+    }
+
     function _validate_sort_fields($fields)
     {
         // this is at least partially done for security
         // reasons to avoid sql injection
 
-        $valid = array(
-            'user'               => 'user_name',
-            'fullname'           => 'user_real_name',
-            'registered'         => 'user_registered',
-            'user_remixes'       => 'user_num_remixes',
-            'remixed'            => 'user_num_remixed',
-            'uploads'            => 'user_num_uploads',
-            'userscore'          => 'user_score',
-            'user_num_scores'    => 'user_num_scores',
-            'userrank'           => 'user_rank',
-            'user_reviews'       => 'user_num_reviews',
-            'user_reviewed'      => 'user_num_reviewed',
-            'posts'              => 'user_num_posts',
-            'id'                 => 'upload_id',
-            'name'               => 'upload_name',
-            'lic'                => 'upload_license',
-            'date'               => 'upload_date',
-            'last_edit'          => 'upload_last_edit',
-            'remixes'            => '(upload_num_remixes+upload_num_pool_remixes)',
-            'local_remixes'      => 'upload_num_remixes',
-            'pool_remixes'       => 'upload_num_pool_remixes',
-            'sources'            => '(upload_num_sources+upload_num_pool_sources)',
-            'local_sources'      => 'upload_num_sources',
-            'pool_sources'       => 'upload_num_pool_sources',
-            'score'              => 'upload_score',
-            'num_scores'         => 'upload_num_scores',
-            'rank'               => 'upload_rank',
-            );
-
+        $valid = $this->GetValidSortFields();
         $out = array();
 
         $fields = preg_split('/[\s\+,]+/',$fields);
         foreach( $fields as $F )
         {
-            if( empty($valid[$F]) )
+            if( empty($valid[$F][1]) )
                 return null;
-            $out[] = $valid[$F];
+            $out[] = $valid[$F][1];
         }
 
         return '( ' . join(',',$out) . ') ';
@@ -799,6 +831,35 @@ class CCQuery
     {
         if( empty($args['nogetoffset']) && !empty($_GET['offset']) )
             $args['offset'] = sprintf('%0d',$_GET['offset']);
+    }
+
+    function _build_search_query($types,$query,$colums,$where)
+    {
+        $query = strtolower($query);
+
+        if( empty($type) )
+            $type = 'phrase';
+
+        $qf = "LOWER(CONCAT_WS(\' \', $columns))";
+    
+        $uploads->AddExtraColumn($qf . ' as qsearch');
+        switch( $type )
+        {
+            case 'phrase':
+                $where[] = "($qf LIKE '%$query%')";
+                break;
+
+            case 'any':
+            case 'all':
+                $qterms = $this->_get_search_terms($query);
+                $qsearch = array();
+                foreach( $qterms as $qt )
+                    $qsearch[] = "($qf LIKE '%$qt%')";
+                $where[] = '(' . join( $type == 'all' ? 'AND' : 'OR', $qsearch ) . ')';
+                break;
+        }
+
+        return $where;
     }
 
     function _get_search_terms($query)
