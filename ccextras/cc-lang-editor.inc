@@ -28,11 +28,134 @@ if( !defined('IN_CC_HOST') )
 
 class CCLanguageEditor
 {
-    function Language($domain='default',$zone=0)
+    function Menu($seldom='',$sellang='',$msg='')
+    {
+        $lang = new CCLanguage();
+        $langs = $lang->GetAllLanguages();
+
+        $dirs = glob( CC_LANG_LOCALE . '/*', GLOB_ONLYDIR );
+        foreach( $dirs as $dir )
+        {
+            $dom = basename($dir);
+            if( empty($langs[CC_LANG_LOCALE][$dom]) )
+                $langs[CC_LANG_LOCALE][$dom] = array( 'path' => $dir );
+
+            $langdirs = glob( $dir . '/*', GLOB_ONLYDIR );
+            $langinfo = array();
+            foreach( $langdirs as $langdir )
+            {
+                $langname = basename($langdir);
+                if( empty($langs[CC_LANG_LOCALE][$dom]['language'][$langname]) )
+                {
+                    $langs[CC_LANG_LOCALE][$dom]['language'][$langname] = 
+                            array( 'path' => $langdir );
+                }
+            }
+        }
+
+        $args['locales'] = $langs['locale'];
+
+        if( !empty($sellang) )
+        {
+            $args['locales'][$seldom]['language'][$sellang]['selected'] = 'selected';
+        }
+        elseif( !empty($seldom) )
+        {
+            $args['locales'][$seldom]['selected'] = 'selected';
+        }
+
+        $args['localedirs'] = 
+        $args['syslocales'] = @$lang->GetSystemLocales();
+
+        $args['str_explain'][]         = _('ccHost can be configured to host many different 
+            media types. A site that specializes in a particular media type might have a 
+            different "personality" than another media type. For example the terms used
+            in a community music remixing site may not be appropriate for a legal document
+            sharing site or a personal picture blog');
+        $args['str_explain'][]         = _('That is what we mean by a "language terms domain."
+            If the default terms used by ccHost do not fit your type of domain, you should create
+            a new domain (e.g. called \'legaldocs\'), add a language (use \'en_US\' for 
+            stateside English) and edit the terms to fit your needs.');
+        $args['str_explain'][]         = _('After you are done editing, you can set the site\'s
+            language preferences to use your new domain and language term set and internation
+            translators can use this screen to create tranlations of that domain\'s language
+            terms.');
+
+        $args['str_createnewdomain'] = _('Create a new domain:');
+        $args['str_go']              = _('Go');
+        $args['str_createnewlang']   = _('Create a new language/term set in:');
+        $args['str_editanexisting']  = _('Edit an existing language/term set:');
+        $args['str_nodomname']       = _('Missing domain name');
+        $args['str_missinglangname'] = _('Missing language name');
+        $args['msg']                 = $msg;
+
+        CCPage::PageArg('language_editor_menu', 'language-editor.xml/language_editor_menu');
+        CCPage::PageArg('LEM',$args,'language_editor_menu');
+        CCPage::SetTitle(_('Language Domain Terms Editor'));
+    }
+
+    function MakeDomain($domname='')
+    {
+        $domname = CCUtil::Strip($domname);
+        if( empty($domname) )
+        {
+            $this->Menu('','',_('Not a valid domain name'));
+        }
+        else
+        {
+            $dompath = 'locale/' . $domname;
+            if( file_exists($dompath) )
+            {
+                $this->Menu('','',_('A file or directory of that name already exists'));
+            }
+            else
+            {
+                CCUtil::MakeSubdirs($dompath);
+                $this->Menu($domname,'',_('Created domain'));
+            }
+        }
+    }
+
+    function MakeLanguage($domain='',$lang='')
+    {
+        $domain = CCUtil::Strip($domain);
+        $lang   = CCUtil::Strip($lang);
+        if( empty($domain) || empty($lang) )
+        {
+            $this->Menu( '', '', _('Not a valid domain or language name'));
+        }
+        else
+        {
+            $langpath = 'locale/' . $domain . '/' . $lang . '/LC_MESSAGES';
+            if( file_exists($langpath) )
+            {
+                $this->Menu($domain,$lang,
+                    _('A file or directory of that name already exist, you can edit it now.'));
+            }
+            else
+            {
+                CCUtil::MakeSubdirs($langpath);
+                $this->Menu($domain,$lang,_('Created language path, you must edit the language before using it.'));
+            }
+        }
+    }
+
+    function Editor($domain='',$language='',$zone=0)
     {
         global $CC_GLOBALS;
 
-        $tt = $this->_get_lang_file($domain);
+        CCPage::SetTitle(_('Language Terms Editor'));
+
+        $domain     = CCUtil::Strip($domain);
+        $language   = CCUtil::Strip($language);
+
+        if( empty($domain) || empty($language) )
+        {
+            CCPage::Prompt(_('Missing domain or language'));
+            return;
+        }
+
+        $tt = $this->_get_lang_file($domain,$language);
         $q = empty($_REQUEST['q']) ? '' : CCUtil::Strip($_REQUEST['q']);
 
         if( empty($q) )
@@ -56,21 +179,30 @@ class CCLanguageEditor
         {
             $this->_filter_search = '/' . preg_quote($q) . '/i';
             $strs = array_filter($tt, array( $this, '_search_strings' ) );
+            $k = array_keys($strs);
+            $c = count($k);
+            for( $i = 0; $i < $c; $i++ )
+            {
+                $e =& $strs[$k[$i]];
+                if( empty($e[1]) )
+                    $e[0] = '*' . $e[0];
+            }
         }
 
         $args = array();
         $args['string_table'] = $strs;
         $args['domain'] = $domain;
+        $args['language'] = $language;
         $args['what_part'] = $zone;
 
         $args['str_select_a_string'] =     _('Select a string');
         $args['str_domain'] =              _('Domain'); 
-        $args['str_generate_pot'] =        _('Generate pot');
+        $args['str_generate_pot'] =        _('Generate po');
         $args['str_original_string'] =     _('Original String');    
         $args['str_copy_this_string'] =    _('copy this string');   
         $args['str_translates_to'] =       _('Translates to');      
-        $args['str_commit_and_advance'] =  _('Commit and Advance'); 
-        $args['str_commit'] =              _('Commit');
+        $args['str_commit_and_advance'] =  _('Save String and Advance'); 
+        $args['str_commit'] =              _('Save String');
         $args['str_revert'] =              _('Revert');          
         $args['str_will_be_saved_to'] =    _('Will be saved to');
         $args['str_missing_domain'] =      _('You must specify a target domain');
@@ -82,12 +214,14 @@ class CCLanguageEditor
         $args['str_part5'] =               _('Part 5');
         $args['str_search'] =              _('Search');
         $args['str_empty_search'] =        _('No search string!');
+        $args['str_currently_ed'] =        _('Current editing:');
+        $args['str_save_to'] =             _('Save to...');
+        $args['str_missing_language'] =    _('Missing language');
+        $args['str_clear'] =               _('Clear Search');
         $args['str_query'] =               $q;
 
-        CCPage::PageArg('langeditor', 'language-editor.xml/language_editor');
-        CCPage::PageArg('LE',$args,'langeditor');
-        CCPage::SetTitle(_('Language Domain String Editor'));
-
+        CCPage::PageArg('language_editor', 'language-editor.xml/language_editor');
+        CCPage::PageArg('LE',$args,'language_editor');
     }
 
     function _search_strings($str)
@@ -95,14 +229,15 @@ class CCLanguageEditor
         return preg_match( $this->_filter_search, $str[0] );
     }
 
-    function GetString($domain,$hash)
+
+    function GetString($domain,$lang,$hash)
     {
         require_once('cclib/zend/json-encoder.php');
-        $tt = $this->_get_lang_file($domain);
+        $tt = $this->_get_lang_file($domain,$lang);
         $json['msgid']       = $tt[$hash][0];
         $json['msgstr']      = $tt[$hash][1];
         $json['context']     = $tt[$hash][2];
-        $json['target_file'] = "locale/$domain/cchost.lang";
+        $json['target_file'] = "locale/$domain/$lang/cchost.lang";
         $js = CCZend_Json_Encoder::encode($json);
         header( "X-JSON: $js" );
         header( 'Content-type: text/plain' );
@@ -110,16 +245,16 @@ class CCLanguageEditor
         exit;
     }
 
-    function EditString($domain,$hash)
+    function EditString($domain,$lang,$hash)
     {
         if( empty($hash) ) {
             print("Invalid hash");
             exit;
         }
-        $tt = $this->_get_lang_file($domain);
+        $tt = $this->_get_lang_file($domain,$lang);
         $tt[$hash][1] = CCUtil::StripSlash(urldecode($_REQUEST['string']));
         $text = serialize($tt);
-        $target_file = "locale/$domain/cchost.lang";
+        $target_file = "locale/$domain/$lang/cchost.lang";
         $f = fopen($target_file,'w');
         fwrite($f,$text);
         fclose($f);
@@ -127,10 +262,10 @@ class CCLanguageEditor
         $this->_return_stat( _('String saved to:') . $target_file);
     }
 
-    function WritePot($domain)
+    function WritePot($domain,$lang)
     {
-        $target_file = $this->_write_pot_file($domain);
-        $this->_return_stat( _('pot file written:') . $target_file);
+        $target_file = $this->_write_pot_file($domain,$lang);
+        $this->_return_stat( _('po file written:') . $target_file);
     }
     
     function _return_stat($msg)
@@ -197,47 +332,104 @@ class CCLanguageEditor
             return false;
         $hashtable = unserialize($row['config_data']);
         $hashkeys = array_keys($hashtable);
-        $cstr = '#: config';
+        $cstr = ' config';
         foreach( $hashkeys as $hkey )
         {
             if( empty($hash[ $hkey ]) )
             {
                 $str = $hashtable[ $hkey ];
-                $hash[ $hkey ] = array( $str , '', 'config' );
+                $hash[ $hkey ] = array( $str , '', " config\n");
                 $changed = true;
             }
             else
             {
                 if( strpos($hash[ $hkey ][2], $cstr ) === false )
-                    $hash[ $hkey ][2] .= "\n#: config";
+                    $hash[ $hkey ][2] .=  "#: config\n";
             }
         }
 
         return $changed;
     }
 
-    function _write_pot_file($domain)
+    function _create_lang_file($domain,$language)
     {
+        $lang_file = "locale/$domain/$language/cchost.lang";
+        $pot_file = "locale/$domain/$language/LC_MESSAGES/cchost.po";
+        if( !file_exists($pot_file) )
+        {
+            $pot_file = "cchost.pot";
+            if( !file_exists($pot_file) )
+            {
+                CCPage::SystemError(_('Can not find language map') . " ($pot_file)" );
+                return;
+            }
+        }
+        $this->_parse_pot_file($pot_file,$lang_file);
+    }
+
+    function _get_lang_file($domain,$language)
+    {
+        $fname = "locale/$domain/$language/cchost.lang";
+        if( !file_exists($fname) )
+        {
+            $this->_create_lang_file($domain,$language);
+
+            // config merge has already happened
+            // so just return...
+            $text = file_get_contents($fname);
+            return unserialize($text);
+        }
+
+        $text = file_get_contents($fname);
+        $tt = unserialize($text);
+        if( $this->_merge_config_strings($tt) ) // true if changed
+        {
+            // write out the new merged .lang
+            $text = serialize($tt);
+            $f = fopen($fname,'w');
+            fwrite($f,$text);
+            fclose($f);
+            chmod($fname,0777);
+        }
+        return $tt;
+    }
+
+    function _write_pot_file($domain,$lang)
+    {
+
+        global $CC_GLOBALS;
+
+        $year = date('Y');
+        $user = $CC_GLOBALS['user_real_name'];
+        $email = $CC_GLOBALS['user_email'];
+        $admin_email = $CC_GLOBALS['mail_sender'];
+        $date = gmdate('Y-m-d H:i+0000');
+        $configs =& CCConfigs::GetTable();
+        $ttag = $configs->GetConfig('ttag');
+        $proj = $ttag['site-title'];
+        $ver = $CC_GLOBALS['cc-host-version'];
+
         $txt =<<<END
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This is a language file used for translation
+# This file is distributed under the same license as the cchost package.
+# Copyright (C) Creative Commons <info@creativecommons.org>, $year.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\\n"
-"Report-Msgid-Bugs-To: \\n"
-"POT-Creation-Date: 2006-10-29 13:33-0800\\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n"
-"Language-Team: LANGUAGE <LL@li.org>\\n"
+"Project-Id-Version: ccHost: $ver\\n"
+"Report-Msgid-Bugs-To: $email\\n"
+"POT-Creation-Date: $date\\n"
+"PO-Revision-Date: $date\\n"
+"Last-Translator: $user <$email>\\n"
+"Language-Team: $proj-language <$admin_email>\\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\\n"
-"Content-Transfer-Encoding: 8bit\\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2;plural=(n>1);\n"
+"X-Generator: ccHost\n"
 END;
-        $intext = file_get_contents( 'locale/' . $domain . '/cchost.lang' );
+        $intext = file_get_contents( "locale/$domain/$lang/cchost.lang" );
         $I = unserialize($intext);
         $keys = array_keys($I);
         $c = count($keys);
@@ -265,35 +457,12 @@ END;
             }
         }
 
-        $outname = 'locale/' . $domain . '/cchost.pot';
+        $outname = "locale/$domain/$lang/LC_MESSAGES/cchost.po";
         $f = fopen($outname,'w');
         fwrite($f,$txt);
         fclose($f);
         chmod($outname,0777);
         return $outname;
-    }
-
-    function _create_lang_file($domain)
-    {
-        CCUtil::MakeSubdirs("locale/$domain");
-        $lang_file = "locale/$domain/cchost.lang";
-        $pot_file = "cchost.pot";
-        if( !file_exists($pot_file) )
-        {
-            CCPage::SystemError(_('Can not find language map') . " ($pot_file)" );
-            return;
-        }
-        $this->_parse_pot_file($pot_file,$lang_file);
-    }
-
-    function _get_lang_file($domain)
-    {
-        $fname = "locale/$domain/cchost.lang";
-        if( !file_exists($fname) )
-            $this->_create_lang_file($domain);
-
-        $text = file_get_contents($fname);
-        return unserialize($text);
     }
 
 }

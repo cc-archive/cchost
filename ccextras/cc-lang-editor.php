@@ -38,7 +38,11 @@ class CCLanguageEditorAPI
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('admin','terms'),  
-                            array( 'CCLanguageEditor', 'Language'), CC_ADMIN_ONLY, 
+                            array( 'CCLanguageEditor', 'Menu'), CC_ADMIN_ONLY, 
+                            'ccextras/cc-lang-editor.inc');
+
+        CCEvents::MapUrl( ccp('admin','termseditor'),  
+                            array( 'CCLanguageEditor', 'Editor'), CC_ADMIN_ONLY, 
                             'ccextras/cc-lang-editor.inc');
 
         CCEvents::MapUrl( ccp('admin','terms','edit'),  
@@ -57,6 +61,17 @@ class CCLanguageEditorAPI
                             array( 'CCLanguageEditor', 'GenConfigStrings'), CC_ADMIN_ONLY, 
                             'ccextras/cc-lang-editor.inc');
 
+        CCEvents::MapUrl( ccp('admin','terms','makedomain'),  
+                            array( 'CCLanguageEditor', 'MakeDomain'), CC_ADMIN_ONLY, 
+                            'ccextras/cc-lang-editor.inc');
+
+        CCEvents::MapUrl( ccp('admin','terms','makelanguage'),  
+                            array( 'CCLanguageEditor', 'MakeLanguage'), CC_ADMIN_ONLY, 
+                            'ccextras/cc-lang-editor.inc');
+
+        CCEvents::MapUrl( ccp('admin','terms','saveto'),  
+                            array( 'CCLanguageEditor', 'SaveTo'), CC_ADMIN_ONLY, 
+                            'ccextras/cc-lang-editor.inc');
     }
 
 }

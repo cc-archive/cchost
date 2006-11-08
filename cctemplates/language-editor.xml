@@ -20,6 +20,147 @@ $Id$
 
 -->
 </tal:block>
+
+<metal:block define-macro="language_editor_menu">
+<style>
+.h {
+  font-weight: bold;
+  text-align: right;
+}
+#msg {
+  height: 25px;
+  text-align: center;
+  margin: 4px;
+  font-weight: bold;
+  padding: 4px;
+  color: orange;
+}
+
+#explain {
+  margin: 5px;
+  padding: 8px;
+  /*
+  background-color: #DDF;
+  border: 1px solid black;
+  */
+}
+#explain div {
+  margin: 0px 0px 12px 0px;
+  padding: 6px;
+}
+</style>
+<script>
+//<!--
+function create_new_domain()
+{
+    var domname = $$F('newdomainname');
+    if( !domname )
+    {
+        alert('${LEM/str_nodomname}');
+        return false;
+    }
+
+    var url = home_url + 'admin/terms/makedomain/' + domname + '#menu';
+    document.location = url;
+}
+
+function create_new_language()
+{
+    var newlanguage = $$F('newlangname');
+    if( !newlanguage )
+    {
+        alert('${LEM/str_missinglangname}');
+        return false;
+    }
+    var domain = $$F('domains');
+    var url = home_url + 'admin/terms/makelanguage/' + domain + '/' + newlanguage + '#menu';
+    document.location = url;    
+}
+
+function edit_existing_language()
+{
+    var path = $$F('domlangs');
+    path = path.substr('locale'.length);
+    var url = home_url + 'admin/termseditor' + path;
+    document.location = url;
+}
+
+//-->
+</script>
+  <div class="cc_form_about" id="explain">
+    <div tal:repeat="ex LEM/str_explain">${ex}</div>
+  </div>
+  <a name="menu"></a>
+   <table>
+      <tr>
+        <td colspan="3" >
+          <div id="msg"><span>${LEM/msg}</span></div>
+        </td>
+      </tr>
+      <tr>
+        <td  class="h" colspan="2">
+            ${LEM/str_createnewdomain}
+        </td>
+        <td>
+            <input type="text" id="newdomainname" name="newdomainname" />
+        </td>
+        <td> 
+            <a class="cc_gen_button" id="createdomaingo" href="javascript://new domain"
+              onclick="create_new_domain()"><span>${LEM/str_go}</span></a>
+        </td>
+             
+      </tr>
+      <tr>
+          <td class="h">
+              ${LEM/str_createnewlang}
+          </td>
+          <td>
+              <select id="domains" name="domains">
+                  <tal:block repeat="D LEM/locales">
+                      <option value="${repeat/D/key}" tal:attributes="selected D/selected">${repeat/D/key}</option>
+                  </tal:block>
+              </select>
+          </td>
+        <td>
+            <tal:block condition="LEM/syslocales">
+              <select id="newlangname">
+                  <option tal:repeat="newlang LEM/syslocales" value="${newlang}">${newlang}</option>
+              </select>
+            </tal:block>
+            <tal:block condition="not: LEM/syslocales">
+              <input type="text" id="newlangname" name="newlangname" />
+            </tal:block>
+        </td>
+        <td> 
+            <a class="cc_gen_button" href="javascript://new language"
+                    onclick="create_new_language()"><span>${LEM/str_go}</span></a>
+        </td>
+      </tr>
+      <tr>
+          <td class="h" colspan="2">
+             ${LEM/str_editanexisting}
+          </td>
+          <td>
+          <select id="domlangs" name="domlangs">
+               <tal:block repeat="doms LEM/locales">
+                  <tal:block define="thisdom repeat/doms/key" />
+                  <tal:block repeat="langs doms/language">
+                      <option value="${langs/path}"
+                          tal:attributes="selected langs/selected;"
+                          >${thisdom} / ${repeat/langs/key}</option>
+                  </tal:block>
+               </tal:block>
+          </select>
+          </td>
+        <td> 
+            <a id="commentcommand" href="javascript://edit language"
+                    onclick="edit_existing_language()"><span>${LEM/str_go}</span></a>
+        </td>
+      </tr>
+   </table>
+   <div style="height:200px;">&nbsp;</div>
+</metal:block>
+
 <metal:block define-macro="language_editor">
 
 <style>
@@ -40,7 +181,7 @@ $Id$
 }
 #string_table {
   width: 225px;
-  height: 340px;
+  height: 290px;
   margin-top: 14px;
 }
 #editor_table td {
@@ -127,15 +268,25 @@ function ed_status(msg,append)
     }
 }
 
-currentDomain = '';
+currentDomain = '${LE/domain}';
+currentLanguage = '${LE/language}';
 currentHash = '';
 
 function get_domain()
 {
-    currentDomain = $$F('domain'); 
     if( !currentDomain )
     {
         alert('${LE/str_missing_domain}');
+        return false;
+    }
+    return true;
+}
+
+function get_language()
+{
+    if( !currentLanguage )
+    {
+        alert('${LE/str_missing_language}');
         return false;
     }
     return true;
@@ -145,8 +296,11 @@ function commit_pot()
 {
     if( !get_domain() )
         return;
+    if( !get_language() )
+        return;
   
-    var url = home_url + 'admin/terms/writepot/' + currentDomain + 
+    var url = home_url + 'admin/terms/writepot/' + currentDomain + '/' 
+                + currentLanguage + '/' +
                 q + 't=' + (new Date()).getTime();
 
     debug_url(url);
@@ -154,15 +308,31 @@ function commit_pot()
     new Ajax.Request( url, {method:'get'});
 }
 
+function save_to()
+{
+    if( !get_domain() )
+        return;
+    if( !get_language() )
+        return;
+    
+    var url = home_url + "admin/terms/saveto/" + currentDomain + 
+            '/' + currentLanguage;
+
+    document.location = url;
+}
+
 function commit_string()
 {
     if( !get_domain() )
+        return;
+    if( !get_language() )
         return;
     
     var msgstr = escape($$F('msgstr'));
 
     var url = home_url + "admin/terms/edit/" + currentDomain + 
-            "/" + currentHash + q + "string=" + msgstr + 
+            '/' + currentLanguage +
+            '/' + currentHash + q + "string=" + msgstr + 
             '&t=' + (new Date()).getTime();
 
     clear_string();
@@ -191,9 +361,12 @@ function get_string()
 {
     if( !get_domain() )
         return;
+    if( !get_language() )
+        return;
 
     var hash = currentHash = $$F('string_table');
-    var url = home_url + 'admin/terms/getstring/' + currentDomain + "/" + hash;
+    var url = home_url + 'admin/terms/getstring/' + currentDomain + '/'
+                + currentLanguage + '/' + hash;
     debug_url(url);
 
     Element.hide('editor');
@@ -239,9 +412,19 @@ function change_part(box)
 {
     if( !get_domain() )
         return false;
+    if( !get_language() )
+        return;
 
     var part = $$F(box);
-    var url = home_url + 'admin/terms/' + currentDomain + '/' + part;
+    var url = home_url + 'admin/termseditor/' + currentDomain + '/' +
+              currentLanguage + '/' + part;
+    document.location = url;
+}
+
+function clear_search()
+{
+    var url = home_url + 'admin/termseditor/' + currentDomain + '/' +
+              currentLanguage;
     document.location = url;
 }
 
@@ -256,9 +439,12 @@ function do_search()
       alert( '${LE/str_empty_search}' );
       return false;
     }
-    var url = home_url + 'admin/terms/' + currentDomain + q + 'q=' + query;
+    var url = home_url + 'admin/termseditor/' + currentDomain + '/'
+             + currentLanguage + q + 'q=' + escape(query);
+
     document.location = url;
 }
+
 
 function debug_url(url)
 {
@@ -288,6 +474,10 @@ function debug_url(url)
               <a id="commentcommand"  href="javascript://search" 
                     onclick="do_search(); return false;"><span tal:content="LE/str_search" /></a>&nbsp;
                  <input id="q" name="q" type="text" value="${LE/str_query}" /></div>
+              <div tal:condition="LE/str_query"><br /><a id="commentcommand" 
+                    href="javascript://clear search"
+                   onclick="clear_search(); return false;"><span tal:content="LE/str_clear" /></a></div>
+           
       </fieldset>
       <div id="edstatus" style="display:none">&nbsp;</div>
     </td>
@@ -297,7 +487,7 @@ function debug_url(url)
         <table>
           <tr>
             <td>
-              <input id="domain" name="domain" value="${LE/domain}" />
+              ${LE/str_currently_ed} ${LE/domain}/${LE/language}
             </td>
             <td>
               <a id="commentcommand" href="javascript://write pot" 
@@ -306,6 +496,15 @@ function debug_url(url)
               </a>
             </td>
           </tr>
+          <!-- tr>
+            <td />
+            <td>
+              <a id="commentcommand" href="javascript://write pot" 
+                    onclick="save_to(); return false;">
+                <span>${LE/str_save_to}</span>
+              </a>
+            </td>
+          </tr -->
         </table>
       </fieldset>
       <div id="editor" style="display:none">
@@ -321,7 +520,7 @@ function debug_url(url)
         </fieldset>
         <fieldset>
           <legend>${LE/str_translates_to}</legend>
-          <textarea id="msgstr" name="msgstr" rows="11" cols = "45">
+          <textarea id="msgstr" name="msgstr" rows="6" cols = "45">
             
           </textarea>
           <table>
