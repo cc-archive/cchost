@@ -162,7 +162,7 @@ class CCQuery
         foreach( $keys as $K )
         {
             // I have to believe skipping qstring is the right thing here...
-            if( $K == 'qstring' || $K == 'ccm' )
+            if( $K == 'qstring' || $K == 'ccm' || $K == 'view' )
                 continue;
 
             if( $skip_format && in_array( $K, $fmtargs ) ) 
@@ -227,6 +227,8 @@ class CCQuery
                     'paging' => true,
                     'title'  => '',
 
+                    'view' => 'upload'
+
                     );
     }
 
@@ -254,7 +256,7 @@ class CCQuery
         return $uploads;
     }
 
-    function & _get_query_fields($for)
+    function _get_query_field($for)
     {
         switch( $for )
         {
