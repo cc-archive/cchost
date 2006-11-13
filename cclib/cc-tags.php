@@ -220,7 +220,7 @@ class CCTags extends CCTable
         {
             if( empty($tag) )
                 continue;
-            $tag = preg_replace('/[^\w_]+/','_',$tag);
+            $tag = preg_replace('/[^-\w_]+/','_',$tag);
             $tag = trim($tag,'_');
             if( strlen($tag) < $min)
                 continue;
