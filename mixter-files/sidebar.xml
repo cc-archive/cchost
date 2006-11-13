@@ -27,7 +27,9 @@ $Id$
 </tal:block>
 
 <metal:block define-macro="Latest_ccRemixes">
-    <metal:block use-macro="custom.xml/Latest_Remixes" />
+    <tal:block define="latest_title php: CC_lang('New Remixes')" />
+    <tal:block define="latest_tag  string:remix,-digital_distortion" />
+    <metal:block use-macro="custom.xml/_query_latest" />
     <a href="${home-url}view/media/remix/latest" class="cc_more_menu_link" tal:content="php: _('More new remixes...')" />
     <metal:block use-macro="custom.xml/Recent_Reviews" />
     <metal:block use-macro="sidebar.xml/Support_CC" />
