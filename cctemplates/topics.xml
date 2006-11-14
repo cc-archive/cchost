@@ -127,10 +127,13 @@ $Id$
 </metal:block>
 
 <metal:block define-macro="xlat_links">
-    <div class="cc_topics_xlat_div">
-          <div tal:condition="topic/translations" class="cc_topics_xlat_links">
+    <div class="cc_topics_xlat_div" tal:condition="topic/translations" >
+          <div class="cc_topics_xlat_links">
+            <a href="${topic/topic_permalink}" class="xlat_link"
+                id="xlat_${topic/topic_id}_${topic/topic_id}" tal:content="php:_('Original')" />, 
             <tal:block repeat="xlat topic/translations">
-              <a href="${xlat/topic_permalink}">${xlat/topic_i18n_language}</a><tal:block
+              <a href="${xlat/topic_permalink}" class="xlat_link" 
+                id="xlat_${xlat/topic_id}_${topic/topic_id}">${xlat/topic_i18n_language}</a><tal:block
               condition="not: repeat/xlat/end">, </tal:block>
             </tal:block>
           </div>

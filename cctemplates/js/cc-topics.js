@@ -41,4 +41,19 @@ function cc_update_hot_topics()
 
 }
 
-window.onload = cc_update_hot_topics;
+cc_update_hot_topics();
+
+$$('.xlat_link').each( function(element) {
+      element.href = 'javascript:// xlat link ' + element.id;
+      Event.observe(element,'click', function (event)
+            {
+                var id = Event.element(event).id;
+                var topic_id = id.match(/[0-9]+$/);
+                var xlat_id = id.match(/_([0-9]+)_/)[1];
+                var url = home_url + 'topics/gettext/' + xlat_id;
+                var ajax = new Ajax.Updater(
+                                'topic_text_' + topic_id,
+                                url,
+                                { method: 'get' });
+            });
+});

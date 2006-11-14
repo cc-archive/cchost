@@ -924,6 +924,19 @@ class CCTopic
         }
     }
 
+    function GetText($topic_id='')
+    {
+        $topics =& CCTopics::GetTable();
+        $topic_id = intval(CCUtil::Strip($topic_id));
+        if( empty($topic_id) || (!($record = $topics->GetRecordFromId($topic_id))) )
+        {
+            print('no such topic');
+            exit;
+        }
+        print( $record['topic_text_html'] );
+        exit;
+    }
+
     function Edit($topic_id)
     {
         $this->CheckTopicAccess($topic_id);
@@ -1072,6 +1085,10 @@ class CCTopic
         CCEvents::MapUrl( ccp('topics','reply'),  array( 'CCTopic', 'Reply'),   
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}/[isquote]', 
             _('Display topic reply form') , CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('topics','gettext'),  array( 'CCTopic', 'GetText'),   
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{topic_id}', 
+            _('Ajax callback to get topic text') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('topics','translate'),  array( 'CCTopic', 'Translate'),   
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}', 
