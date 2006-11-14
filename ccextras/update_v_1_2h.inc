@@ -74,14 +74,21 @@ END;
 
     function update_remixes()
     {
-        $this->_check_for_field('cc_tbl_uploads','upload_num_remixes',      'INT(7) unsigned');
-        $this->_check_for_field('cc_tbl_uploads','upload_num_pool_remixes', 'INT(7) unsigned');
-        $this->_check_for_field('cc_tbl_uploads','upload_num_sources',      'INT(7) unsigned');
-        $this->_check_for_field('cc_tbl_uploads','upload_num_pool_sources', 'INT(7) unsigned');
+        $this->_check_for_field('cc_tbl_uploads','upload_num_remixes',      
+                        'INT(7) unsigned NOT NULL default 0');
+        $this->_check_for_field('cc_tbl_uploads','upload_num_pool_remixes', 
+                        'INT(7) unsigned NOT NULL default 0');
+        $this->_check_for_field('cc_tbl_uploads','upload_num_sources',      
+                        'INT(7) unsigned NOT NULL default 0');
+        $this->_check_for_field('cc_tbl_uploads','upload_num_pool_sources', 
+                        'INT(7) unsigned NOT NULL default 0');
 
-        $this->_check_for_field('cc_tbl_user','user_num_remixes', 'INT(7) unsigned');
-        $this->_check_for_field('cc_tbl_user','user_num_remixed', 'INT(7) unsigned');
-        $this->_check_for_field('cc_tbl_user','user_num_uploads', 'INT(7) unsigned');
+        $this->_check_for_field('cc_tbl_user','user_num_remixes', 
+                        'INT(7) unsigned NOT NULL default 0');
+        $this->_check_for_field('cc_tbl_user','user_num_remixed', 
+                        'INT(7) unsigned NOT NULL default 0');
+        $this->_check_for_field('cc_tbl_user','user_num_uploads', 
+                        'INT(7) unsigned NOT NULL default 0');
 
         $sql[] =<<<END
             SELECT COUNT(*) as upload_num_remixes, tree_parent as upload_id
