@@ -155,7 +155,7 @@ $Id$
       <tr>
         <th tal:content="php: CC_lang('license:');" /> 
         <td><a href="${record/license_url}" 
-                  about="${menu/download/0/action}" 
+                  tal:attributes="about menu/download/0/action | nothing"
                   rel="license"
                   title="${record/license_name}" ><img 
                   src="${root-url}ccimages/lics/small-${record/license_logo}" /></a></td>

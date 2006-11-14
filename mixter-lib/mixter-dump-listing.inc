@@ -240,12 +240,17 @@ EOF;
         }
 
         $rurl = $root_url . '/ccimages/lics/small';
+        if( empty($record['local_menu']['download']) )
+            $about = '';
+        else
+            $about = "about=\"{$record['local_menu']['download'][0]['action']}\"";
+
         $html .=<<<EOF
         <tr>
             <th>$str_license</th>
             <td><a href="{$record['license_url']}" 
                  rel="license"
-                 about="{$record['local_menu']['download'][0]['action']}"
+                 $about         
                  title="{$record['license_name']}" ><img 
                   src="$rurl-{$record['license_logo']}" /></a></td>
         </tr>
