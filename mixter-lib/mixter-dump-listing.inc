@@ -243,7 +243,10 @@ EOF;
         $html .=<<<EOF
         <tr>
             <th>$str_license</th>
-            <td><a href="{$record['license_url']}" title="{$record['license_name']}" ><img 
+            <td><a href="{$record['license_url']}" 
+                 rel="license"
+                 about="{$record['local_menu']['download'][0]['action']}"
+                 title="{$record['license_name']}" ><img 
                   src="$rurl-{$record['license_logo']}" /></a></td>
         </tr>
 EOF;

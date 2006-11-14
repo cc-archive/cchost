@@ -154,7 +154,10 @@ $Id$
       </tal:block>
       <tr>
         <th tal:content="php: CC_lang('license:');" /> 
-        <td><a href="${record/license_url}" title="${record/license_name}" ><img 
+        <td><a href="${record/license_url}" 
+                  about="${menu/download/0/action}" 
+                  rel="license"
+                  title="${record/license_name}" ><img 
                   src="${root-url}ccimages/lics/small-${record/license_logo}" /></a></td>
       </tr>
         <tr tal:condition="record/upload_extra/nsfw">
