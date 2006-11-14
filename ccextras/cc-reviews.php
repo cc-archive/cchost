@@ -101,7 +101,6 @@ class CCReviews extends CCTopics
         $this->SetSort('topic_date',$sort);
 
         $records =& $this->GetRecords($where);
-
         if( $deep )
             $this->GetTreeFromRecords($records);
  
@@ -167,14 +166,12 @@ END;
         // 
         // These args will be passed to the template
         //
-        $args = $CC_GLOBALS;
-        $args['root-url'] = cc_get_root_url() . '/';
+        $args = array();
 
         //
         // Setup the page and initialize useful things
         //
         $this->_add_links();
-        $pagelinks = array();
         $users =& CCUsers::GetTable();
         $uploads = new CCUploads(); // get a new one because we step on it
         $uploads->SetDefaultFilter(true,true);
@@ -221,11 +218,11 @@ END;
                 //
                 // This is just a 'recent review' listing for the whole site
                 //
-                $pagelinks = CCPage::AddPagingLinks($uploads,$where, NUM_REVIEWS_PER_PAGE,$args);
+                CCPage::AddPagingLinks($uploads,$where, NUM_REVIEWS_PER_PAGE);
 
                 CCPage::SetTitle(_('Recent Reviews'));
-                $args['topics']     =& $uploads->GetRecords($where);
-                $args['macro']      = 'recent_reviews';
+                $topics             =& $uploads->GetRecords($where);
+                $macro              = 'recent_reviews';
                 $args['hot_topics'] = true;
             }
             else
@@ -256,8 +253,8 @@ END;
                 $title = sprintf(_("Reviews left %s"), "$title_for_by $user_real");
                 CCPage::SetTitle($title);
                 
-                $pagelinks = CCPage::AddPagingLinks($uploads,$where,NUM_REVIEWS_PER_PAGE);
-                $args['topics'] =& $uploads->GetRecords($where);
+                CCPage::AddPagingLinks($uploads,$where,NUM_REVIEWS_PER_PAGE);
+                $topics =& $uploads->GetRecords($where);
 
                 $left_text = sprintf(_("See reviews left %s"), "$link_for_by $user_real");
                 $left_url = ccl('reviews',$user_name);
@@ -265,7 +262,7 @@ END;
                     $left_url = url_args($left_url,$link_query);
                 $args['left_link'] = array( 'url' => $left_url, 
                                             'text' => $left_text );
-                $args['macro'] = 'left_reviews';
+                $macro = 'left_reviews';
             }
         }
         else
@@ -282,18 +279,17 @@ END;
             // todo: this should have paging (!)
             $reviews =& CCReviews::GetTable();
             $args['record'] = $R;
-            $args['topics'] = $reviews->GetReviewsForUpload($upload_id,true,'ASC');
-            $args['macro'] = 'list_reviews';
+            $topics = $reviews->GetReviewsForUpload($upload_id,true,'ASC');
+            $macro = 'list_reviews';
         }
 
         //
         // Output the listing...
         //
-        $args += $pagelinks;
-        $tfile = CCTemplate::GetTemplate('topics.xml');
-        $template = new CCTemplate($tfile);
-        $html = $template->SetAllAndParse($args);
-        CCPage::AddPrompt('body_text',$html);
+        CCPage::PageArg('review_list_macro', 'topics.xml/' . $macro );
+        foreach( $args as $argname => $arg )
+            CCPage::PageArg($argname,$arg);
+        CCPage::PageArg('topics',$topics,'review_list_macro');
 
         //
         // Attach feed buttons
@@ -553,17 +549,27 @@ END;
 
             CCPage::SetTitle(sprintf(_('Write a Review for "%s"'),$R['upload_name']));
 
+            $reviews =& CCReviews::GetTable();
+            $topics = $reviews->GetReviewsForUpload($upload_id,false,'DESC');
+            /* 
+                WRONG WAY 
             $form->GenerateForm();
             $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
             $args['root-url'] = cc_get_root_url() . '/';
             $args['record'] = $R;
-            $reviews =& CCReviews::GetTable();
-            $args['topics'] = $reviews->GetReviewsForUpload($upload_id,false,'DESC');
+            $args['topics'] = $topics;
             $args['macro'] = 'post_review';
-            $tfile = CCTemplate::GetTemplate('topics.xml');
+            $tfile = CCTemplate::GetTemplate('topics .xml');
             $template = new CCTemplate($tfile);
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
+            */
+
+            CCPage::PageArg('record',$R);
+            CCPage::PageArg('review_post_macro','topics.xml/post_review');
+            CCPage::PageArg('topics',$topics,'review_post_macro');
+            CCPage::AddForm( $form->GenerateForm() );
+
             $this->_add_links();
         }
         else
@@ -996,6 +1002,9 @@ END;
                 $up_results[$i]['topic_search_result_info'] = CCSearch::_highlight_results($extra,$terms);
             }
 
+            /*
+                WRONG WAY
+
             global $CC_GLOBALS;
 
             $args = $CC_GLOBALS;
@@ -1005,9 +1014,14 @@ END;
             $args['hot_topics'] = false;
 
             //$tfile = CCTemplate::GetTemplate();
-            $template = new CCTemplate('topics.xml');
+            $template = new CCTemplate('topics .xml');
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
+            */
+
+            CCPage::PageArg( 'hot_topics', false );
+            CCPage::PageArg( 'topic_results_macro', 'topics.xml/recent_reviews');
+            CCPage::PageArg( 'topics', $up_results, 'topic_results_macro' );
         }
 
         $done_search = true;

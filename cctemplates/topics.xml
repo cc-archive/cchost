@@ -21,14 +21,8 @@ $Id$
 -->
 </tal:block>
 
-<tal:block condition="skin">
-  <phptal:block include="string:skin-${skin}-map.xml" />
-</tal:block>
 
-<tal:block define="topic_flag_tip php: CC_lang('Flag this topic for possible violation of terms');" />
-<tal:block define="upload_flag_tip php: CC_lang('Flag this upload for possible violation of terms');" />
-
-<div class="cc_topic_page">
+<div tal:condition="macro" class="cc_topic_page">
   <metal:block use-macro="${macro}" />
 </div>
 
@@ -36,7 +30,6 @@ $Id$
   <metal:block use-macro="topics.xml/list_review_record" />
   <hr />
   <a name="edit" />
-  <metal:block use-macro="${html_form}" />
 </metal:block>
 
 <metal:block define-macro="post_reply">
@@ -44,13 +37,12 @@ $Id$
   <metal:block use-macro="topics.xml/one_topic" />
 <br />
   <a name="edit" />
-  <metal:block use-macro="${html_form}" />
 </metal:block>
 
 <metal:block define-macro="left_reviews">
   <div class="cc_topic_left"><a id="commentcommand" href="${left_link/url}"><span>${left_link/text</span></a></div>
   <br clear="right" />
-  <metal:block use-macro="recent_reviews" />
+  <metal:block use-macro="topics.xml/recent_reviews" />
 </metal:block>
 
 <metal:block define-macro="hot_topics">
@@ -126,7 +118,6 @@ $Id$
 
 <metal:block define-macro="post_edit">
   <a name="edit" />
-  <metal:block use-macro="${html_form}" />
 </metal:block>
 
 <metal:block define-macro="list_reviews">
@@ -135,15 +126,30 @@ $Id$
   <metal:block use-macro="topics.xml/list_topics" />
 </metal:block>
 
+<metal:block define-macro="xlat_links">
+    <div class="cc_topics_xlat_div">
+          <div tal:condition="topic/translations" class="cc_topics_xlat_links">
+            <tal:block repeat="xlat topic/translations">
+              <a href="${xlat/topic_permalink}">${xlat/topic_i18n_language}</a><tal:block
+              condition="not: repeat/xlat/end">, </tal:block>
+            </tal:block>
+          </div>
+          <div tal:condition="topic/translation_of" class="cc_topics_xlat_links">
+            <a href="${topic/translation_of/topic_permalink}">${topic/str_translation_of}</a>
+          </div>
+    </div>
+</metal:block>
+
 <metal:block define-macro="one_topic">
   <table class="cc_topic_table" cellspacing="0" cellpadding="0">
-      <metal:block use-macro="topic_head" />
+      <metal:block use-macro="topics.xml/topic_head" />
       <tr>
          <td class="cc_topic_avatar"><a tal:condition="topic/user_avatar_url" href="${topic/artist_page_url}"><img 
                  src="${topic/user_avatar_url}" /></a>
                  <a tal:condition="not: topic/user_avatar_url" href="${topic/artist_page_url}"><img src="${root-url}ccimages/person.png" /></a>
          </td>
          <td  class="cc_topic_text">
+           <metal:block use-macro="topics.xml/xlat_links" />
            <div class="cc_topic_text_div" id="topic_text_${topic/topic_id}">
               ${topic/topic_text_html}
            </div>
@@ -151,7 +157,7 @@ $Id$
       </tr>
       <tr tal:condition="show_cmds" >
          <td />
-         <metal:block use-macro="topic_cmds" />
+         <metal:block use-macro="topics.xml/topic_cmds" />
       </tr>
       <tr tal:condition="not: show_cmds" >
         <td />
@@ -197,6 +203,7 @@ $Id$
                      tal:condition="topic/user_is_admin" tal:content="php: CC_lang('Admin')" />
          </td>
          <td  class="cc_topic_text">
+           <metal:block use-macro="topics.xml/xlat_links" />
            <div class="cc_topic_text_div" id="topic_text_${topic/topic_id}">
               ${topic/topic_text_html}
            </div>
@@ -288,7 +295,7 @@ $Id$
     <tr tal:condition="exists: record/flag_url">
       <td />
       <td>
-         <a class="cc_flag_link" href="${record/flag_url}"><span>$upload_flag_tip</span></a>
+         <a class="cc_flag_link" href="${record/flag_url}"><span>${upload_flag_tip}</span></a>
       </td>
     </tr>
     <tr>
@@ -320,5 +327,32 @@ $Id$
       </tal:block>
 </metal:block>
 
+<metal:block define-macro="xlat_list">
+  <table class="cc_forum_short">
+    <tal:block repeat="topic topics">
+      <tr>
+        <td>
+           <span class="cc_topic_date" tal:content="php: CC_datefmt('${topic/topic_date}','M d, Y  h:i a  ')" />
+          </td>
+         <td> <a href="${topic/topic_permalink}">${topic/topic_name}</a>
+         </td>
+      </tr>
+      <tr>
+        <td />
+        <td>
+          ${str_current_translations} 
+          <tal:block condition="topic/translations">
+            <tal:block repeat="xlat topic/translations">
+              <a href="${xlat/topic_permalink}">${xlat/topic_i18n_language}</a><tal:block
+                condition="not: repeat/xlat/end">, </tal:block>
+            </tal:block>
+          </tal:block>
+          <tal:block condition="not: topic/translations"> <i>${str_none}</i></tal:block>
+        </td>
+      </tr>
+    </tal:block>
+  </table>
+  <metal:block use-macro="${prev_next_links}" />
+</metal:block>
 
 </tal:block>

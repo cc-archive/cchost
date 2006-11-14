@@ -263,3 +263,18 @@
   vertical-align: bottom;
   padding: 0px 4px 13px 4px;
 }
+
+.cc_topics_xlat_div {
+	width: 100%;
+}
+
+.cc_topics_xlat_links {
+	text-align: right;
+	font-variant: small-caps;
+	padding: 1px 4px 1px 4px;
+	background-color: white;
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	margin: 6px;
+	float: right;
+}

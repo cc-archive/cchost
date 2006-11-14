@@ -82,7 +82,7 @@ class CCConfirmTopicDeleteForm extends CCForm
 
 class CCTopicForm extends CCSecurityVerifierForm
 {
-    function CCTopicForm($label_text,$submit_text,$visible_title = false)
+    function CCTopicForm($label_text,$submit_text,$visible_title = false,$show_xlat = true)
     {
         $this->CCSecurityVerifierForm();
 
@@ -101,6 +101,19 @@ class CCTopicForm extends CCSecurityVerifierForm
                             'label'         => $label_text,
                             'formatter'     => 'textarea',
                             'flags'         => CCFF_REQUIRED | CCFF_POPULATE),
+                    );
+
+        if( CCUser::IsAdmin() && $show_xlat )
+        {
+            $fields += array( 
+                        'topic_can_xlat' => array(
+                                'label'         => _('Allow Translations'),
+                                'formatter'     => 'checkbox',
+                                'flags'         => CCFF_POPULATE)
+                        );
+        }
+
+        $fields += array( 
                     'user_mask' =>
                        array( 'label'       => '',
                                'formatter'  => 'securitykey',
@@ -114,6 +127,7 @@ class CCTopicForm extends CCSecurityVerifierForm
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
                     );
 
+
         $this->AddFormFields($fields);
         $this->SetSubmitText($submit_text);
     }
@@ -123,7 +137,27 @@ class CCTopicReplyForm extends CCTopicForm
 {
     function CCTopicReplyForm()
     {
-        $this->CCTopicForm(_('Reply'), 'Submit Reply');
+        $this->CCTopicForm(_('Reply'), _('Submit Reply'));
+    }
+}
+
+class CCTopicTranslateForm extends CCTopicForm
+{
+    function CCTopicTranslateForm($title)
+    {
+        $this->CCTopicForm(_('Translate'), _('Submit Translation'), true, false );
+
+        $fields = array( 
+
+        'topic_i18n_language' => array(
+                'label'         => _('Language'),
+                'form_tip'      => _('Your language, in your language (e.g. Italiano, Magyar, etc.)'),
+                'formatter'     => 'textedit',
+                'flags'         => CCFF_REQUIRED | CCFF_POPULATE),
+            );
+
+        $this->InsertFormFields( &$fields, 'after', 'topic_name' );
+        $this->SetFormValue('topic_name',htmlentities($title));
     }
 }
 
@@ -153,6 +187,66 @@ class CCTopicEditForm extends CCTopicForm
     }
 }
 
+class CCTopicsi18n extends CCTable
+{
+    function CCTopicsi18n()
+    {
+        $this->CCTable('cc_tbl_topic_i18n', 'topic_i18n_topic');
+        $this->AddJoin( new CCTopics(), 'topic_i18n_xlat_topic' );
+    }
+
+    /**
+    * Returns static singleton of table wrapper.
+    * 
+    * Use this method instead of the constructor to get
+    * an instance of this class.
+    * 
+    * @returns object $table An instance of this table
+    */
+    function & GetTable()
+    {
+        static $table;
+        if( !isset($table) )
+            $table = new CCTopicsi18n();
+        return $table;
+    }
+
+    function & GetTranslations($topic_id)
+    {
+        $w['topic_i18n_topic'] = $topic_id;
+        $rows = $this->QueryRows($w);
+        $keys = array_keys($rows);
+        $topics =& CCTopics::GetTable();
+        foreach( $keys as $key )
+        {
+            $R =& $rows[$key];
+            if( empty($R['topic_id']) )
+            {
+                // now featuring: Insta-sync!
+                $delw['topic_i18n_topic'] = $topic_id;
+                $delw['topic_i18n_xlat_topic'] = $R['topic_i18n_xlat_topic'];
+                $this->DeleteWhere($delw);
+                unset($rows[$key]);
+                continue;
+            }
+            // force xlat off so we don't recurse
+            $R['topic_can_xlat'] = 0;
+            $topics->GetRecordFromRow($R);
+            if( empty($R['topic_permalink']) )
+                $R['topic_permalink'] = ccl('topics','view',$R['topic_id']);
+        }
+        return $rows;
+    }
+
+    function GetTranslationOf($topic_id,$topics)
+    {
+        $w['topic_i18n_xlat_topic'] = $topic_id;
+        $id = $this->QueryKey($w);
+        $row = $topics->QueryKeyRow($id);
+        $row['topic_can_xlat'] = 0;
+        return $topics->GetRecordFromRow($row);
+    }
+}
 
 /**
 * Base class wrapper for topics table
@@ -215,6 +309,16 @@ class CCTopics extends CCTable
     {
         $this->_attach_user($row);
 
+        if( $row['topic_can_xlat'] )
+        {
+            $translations =& CCTopicsi18n::GetTable();
+            $row['translations'] = $translations->GetTranslations($row['topic_id']);
+        }
+        else
+        {
+            $row['translations'] = false;
+        }
+
         if( $row['topic_thread'] )
         {
             // these are overrwritten by reviews
@@ -230,6 +334,13 @@ class CCTopics extends CCTable
             $row['user_post_url']   = ccl( 'forums', 'people', $row['user_name'] );
         }
 
+        if( $row['topic_type'] == 'xlat' )
+        {
+            $translations =& CCTopicsi18n::GetTable();
+            $row['translation_of'] = $translations->GetTranslationOf($row['topic_id'],$this);
+            $row['str_translation_of'] = _('Translation of...');
+        }
+
         CCEvents::Invoke(CC_EVENT_TOPIC_ROW,array(&$row) );
 
         if( isset($row['topic_is_feed']) )
@@ -242,6 +353,15 @@ class CCTopics extends CCTable
         {
             if( !isset($row['commands']) )
                 $row['commands'] = array();
+
+            if( $row['topic_can_xlat'] && CCUser::IsLoggedIn() )
+            {
+                $row['commands']['xlat'] = array( 
+                                            'url' => ccl('topics','translate',$row['topic_id'])
+                                                             . '#edit',
+                                            'script' => '',
+                                            'text' => _('Translate') );
+            }
 
             if( CCUser::IsAdmin() || (CCUser::CurrentUser() == $row['topic_user']) )
             {
@@ -290,6 +410,7 @@ class CCTopics extends CCTable
                                             'text' => $text );
 
             }
+
         }
 
         return $row;
@@ -461,31 +582,126 @@ class CCTopicTree extends CCTable
 
 class CCTopic
 {
-    function Reply($topic_id,$is_quote = false)
+    function _verify_topic($topic_id,&$topics,&$record,$is_translate=false)
     {
-        global $CC_GLOBALS;
+        $topic_id = intval(CCUtil::Strip($topic_id));
+        if( empty($topic_id) )
+        {
+            CCPage::Prompt(_('no topic specified.'));
+            CCUtil::Send404(false); // just a hack
+            return false;
+        }
 
-        $form =  new CCTopicReplyForm();
-        $topics =& CCTopics::GetTable();
+        $topics = CCTopics::GetTable();
         $record = $topics->GetRecordFromID($topic_id);
 
         if( !CCTopics::_can_reply($record) )
-            exit; // for now...
-
+        {
+            if( !$is_translate || empty($record['topic_can_xlat']) || !CCUser::IsLoggedIn() )
+            {
+                CCPage::Prompt(_('You are not authorized to post here.'));
+                return false;
+            }
+        }
 
         if( empty($record) )
         {
             CCPage::Prompt(_('Cannot find that topic.') . ' ' . 
                            _('It might have been deleted by the author.'));
             CCUtil::Send404(false);
+            return false;
+        }
+
+        return true;
+    }
+
+    function _list_translatable_topics()
+    {
+        CCPage::SetTitle(_('Topics for Translation'));
+
+        $topics =& CCTopics::GetTable();
+        $w['topic_can_xlat'] = 1;
+        CCPage::AddPagingLinks($topics,$w);
+        $results = $topics->GetRecords($w);
+        $translations = CCTopicsi18n::GetTable();
+        $keys = array_keys($results);
+        foreach( $keys as $key )
+        {
+            $R =& $results[$key];
+            $R['translations'] = $translations->GetTranslations($R['topic_id']);
+        }
+
+        CCPage::PageArg('str_none',_('(There are no translations for this topic)'));
+        CCPage::PageArg('str_current_translations',_('Current translations') . ': ');
+        CCPage::PageArg('topic_short_macro','topics.xml/xlat_list');
+        CCPage::PageArg('topics',$results,'topic_short_macro');
+        $this->AddLinks();
+
+    }
+
+    function Translate($topic_id='')
+    {
+        if( empty($topic_id) )
+        {
+            $this->_list_translatable_topics();
             return;
         }
+
+        $topics = '';
+        $record = array();
+
+        if( !$this->_verify_topic($topic_id,$topics,$record,true) )
+            return;
+
+        CCPage::SetTitle( sprintf(_('Translation of "%s"'), $record['topic_name']) );
+
+        $form = new CCTopicTranslateForm($record['topic_name']);
+        if( empty($_POST['topictranslate']) || !$form->ValidateFields() )
+        {
+            CCPage::PageArg('post_translation_macro','topics.xml/post_reply');
+            CCPage::PageArg('topic',$record,'post_translation_macro');
+            CCPage::AddForm( $form->GenerateForm() );
+            $this->AddLinks();
+        }
+        else
+        {
+            $form->GetFormValues($values);
+            $next_id = $topics->NextID();
+
+            $xlat_args['topic_i18n_language'] = $values['topic_i18n_language'];
+            $xlat_args['topic_i18n_topic'] = $record['topic_id'];
+            $xlat_args['topic_i18n_xlat_topic'] = $next_id;
+            $translations =& CCTopicsi18n::GetTable();
+            $translations->Insert($xlat_args);
+            
+            unset($values['topic_i18n_language']);
+
+            $values['topic_id']    = $next_id;
+            $values['topic_date']  = date('Y-m-d H:i:s',time());
+            $values['topic_user']  = CCUser::CurrentUser();
+            $values['topic_type']  = 'xlat';
+            $values['topic_forum'] = 
+            $values['topic_thread'] = 0;
+            $topics->Insert($values);
+
+            CCUtil::SendBrowserTo( ccl('topics','view',$next_id) );
+         }
+    }
+
+    function Reply($topic_id='',$is_quote = false)
+    {
+        $topics = null;
+        $record = null;
+
+        if( !$this->_verify_topic($topic_id,$topics,$record) )
+            return;
 
         // this is a round about way of doing form validation
         // but we do this in case we have to shove a 'quote' 
         // into the field, we only want to do that the very
         // first time the user comes into the form
 
+        $form = new CCTopicReplyForm();
         $did_validation = false;
         $validated = false;
         if( !empty($_POST['topicreply']) )
@@ -513,15 +729,24 @@ class CCTopic
                 $form->SetFormValue( 'topic_text', $quote_text);
             }
 
+            /*
+                WRONG WAY:
             $form->GenerateForm();
             $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
             $args['root-url'] = cc_get_root_url();
             $args['topic'] = $record;
+
             $args['macro'] = 'post_reply';
-            $tfile = CCTemplate::GetTemplate('topics.xml');
+            $tfile = CCTemplate::GetTemplate('topics .xml');
             $template = new CCTemplate($tfile);
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
+            */
+
+            CCPage::PageArg('post_reply_macro','topics.xml/post_reply');
+            CCPage::PageArg('topic',$record,'post_reply_macro');
+            CCPage::AddForm( $form->GenerateForm() );
+
             $this->AddLinks();
         }
         else
@@ -691,6 +916,10 @@ class CCTopic
             $css_file = CCTemplate::GetTemplate($cname,false);
             CCPage::AddLink('head_links', 'stylesheet', 'text/css', 
                                 ccd($css_file) , 'Default Style');
+
+            CCPage::PageArg('topic_flag_tip',_('Flag this topic for possible violation of terms'));
+            CCPage::PageArg('upload_flag_tip', _('Flag this upload for possible violation of terms'));
+
             $done = true;
         }
     }
@@ -713,14 +942,22 @@ class CCTopic
         if( !$inpost || !$form->ValidateFields() )
         {
             CCPage::SetTitle(sprintf(_("Edit topic: '%s'"),$record['topic_name']));
+            /*
+                WRONG WAY 
             $form->GenerateForm();
             $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
             $args['root-url'] = cc_get_root_url();
             $args['macro'] = 'post_edit';
-            $tfile = CCTemplate::GetTemplate('topics.xml');
+            $tfile = CCTemplate::GetTemplate('topics .xml');
             $template = new CCTemplate($tfile);
             $html = $template->SetAllAndParse($args);
             CCPage::AddPrompt('body_text',$html);
+            */
+    
+            CCPage::PageArg( 'post_edit_macro', 'topics.xml/post_edit' );
+            CCPage::PageArg( '_bogus', true, 'post_edit_macro'); 
+            CCPage::AddForm( $form->GenerateForm() );
+
             $this->AddLinks();
         }
         else
@@ -733,24 +970,52 @@ class CCTopic
         }
     }
 
-    function View($topic_id)
+    function View($topic_id='')
     {
         global $CC_GLOBALS;
 
+        CCPage::SetTitle(_('View Topic'));
+
+        $topic_id = intval(CCUtil::Strip($topic_id));
+        if( empty($topic_id) )
+        {
+            CCPage::Prompt(_('No topic specified'));
+            CCUtil::Send404(false);
+            return;
+        }
+
         $topics =& CCTopics::GetTable();
+        $topic = $topics->GetRecordFromID($topic_id);;
+
+        if( empty($topic) )
+        {
+            CCPage::Prompt(_('Topic does not exist. (May have been deleted by author.)'));
+            CCUtil::Send404(false);
+            return;
+        }
+
+        /*
+            WRONG WAY 
         $args = $CC_GLOBALS;
         $args['root-url']  = cc_get_root_url();
         $args['show_cmds'] = true;
         $args['macro']     = 'one_topic';
         $args['topic']     = $topics->GetRecordFromID($topic_id);
-        $tfile = CCTemplate::GetTemplate('topics.xml');
+        $tfile = CCTemplate::GetTemplate('topics .xml');
         $template = new CCTemplate($tfile);
         $html = $template->SetAllAndParse($args);
         CCPage::AddPrompt('body_text',$html);
+        */
+
+
+        CCPage::PageArg( 'one_topic_macro','topics.xml/one_topic');
+        CCPage::PageArg( 'show_cmds', true );
+        CCPage::PageArg( 'topic', $topic, 'one_topic_macro' );
+
         $this->AddLinks();
 
-        $name = $args['topic']['topic_name'];
-        $title = sprintf('"%s"',$name);
+        $name = $topic['topic_name'];
+        $title = $name{0} == '"' ? $name : "$name";
         CCPage::SetTitle($title);
     }
 
@@ -807,6 +1072,10 @@ class CCTopic
         CCEvents::MapUrl( ccp('topics','reply'),  array( 'CCTopic', 'Reply'),   
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}/[isquote]', 
             _('Display topic reply form') , CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('topics','translate'),  array( 'CCTopic', 'Translate'),   
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}', 
+            _('Display topic translate form') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('topics','quote'),  array( 'CCTopic', 'Quote'),   
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{topic_id}', 
