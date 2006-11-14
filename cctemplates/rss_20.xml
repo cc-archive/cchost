@@ -4,6 +4,7 @@
    xmlns:cc="http://backend.userland.com/creativeCommonsRssModule"   
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+   xmlns:media="http://search.yahoo.com/mrss/"
    >
 <tal:block replace="">
 <!--
@@ -40,6 +41,8 @@ $Header$
       <link>${item/file_page_url}</link>
       <pubDate>${item/rss_pubdate}</pubDate>
       <dc:creator>${item/user_real_name}</dc:creator>
+      <media:thumbnail tal:condition="item/user_avatar_url" url="${item/user_avatar_url}" />
+      <media:thumbnail tal:condition="not: item/user_avatar_url" url="${root-url}ccimages/person.png" />
       <description>${item/upload_description} </description>
       <content:encoded><![CDATA[${item/upload_description_html}]]></content:encoded>
       <enclosure url="${item/files/0/download_url}" 
