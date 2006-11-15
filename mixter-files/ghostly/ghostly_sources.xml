@@ -20,6 +20,11 @@ h1 {
 </style>
 
 <h1>Christopher Willits  / "Colors Shifting" Remix Contest Sources</h1>
+<tal:block define="before php: date('Y-m-d H:i') LT '2006-11-15 10:40' " />
+<tal:block condition="before">
+<p>Sources will be available at 9AM PST</p>
+</tal:block>
+<tal:block condition="not: before">
 <img src="${root-url}mixter-files/ghostly/Willits_1.jpg" style="float:right; margin: 10px" />
 <p>Ghostly Records and Christopher Willits have made the studio tracks available
 for "Colors Shifting" under a <a href="http://creativecommons.org/licenses/by-nc/2.5">Creative Commons Attribution Non-Commercial (2.5) License</a>.</p>
@@ -61,5 +66,5 @@ frequency ranges of the instrumental tracks mixed together, and the original dis
 <p>
 <a href="${home-url}files/cwillits/7779">Go to the distortion tracks download page (FLAC)</a>
 </p>
-
+</tal:block>
 </div>
