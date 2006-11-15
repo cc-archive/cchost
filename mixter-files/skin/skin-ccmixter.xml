@@ -1,12 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<phptal:block include="string:skin-ccmixter-map.xml" />
-<metal:block use-macro="${html_head}" />
-<metal:block use-macro="${main_body}" />
-<metal:block define-macro="print_head_links">
- <metal:block use-macro="${old_head_links}" />
- <META name="verify-v1" content="PEEIrYmur1ilJAiOk6Ky5lEDaJYIltd3L3qgUsbdGco=" />
-</metal:block>
 <tal:block replace="">
 <!--
 Creative Commons has made the contents of this file
@@ -26,5 +19,24 @@ of the ccHost software will comply with the CC-GNU-GPL.
 $Id$
 -->
 </tal:block>
+
+
+<phptal:block include="string:skin-ccmixter-map.xml" />
+
+<metal:block use-macro="${html_head}" />
+<metal:block use-macro="${main_body}" />
+
+<metal:block define-macro="print_head_links">
+ <metal:block use-macro="${old_head_links}" />
+ <META name="verify-v1" content="PEEIrYmur1ilJAiOk6Ky5lEDaJYIltd3L3qgUsbdGco=" />
+</metal:block>
+
+<metal:block define-macro="show_footer_block">
+ <tal:block define="rid_id php: substr('' . rand(),0,10);" />
+ <style>#_ccm_mail_link_${rid_id} { display: none; }</style>
+ <a id="_ccm_mail_link_${rid_id}" class="cc_hide" href="/emails/indexe.php?contact=${rid_id}" rel="nofollow"><img
+  src="/AUTHORS" />&nbsp;email comment</a>
+ <metal:block use-macro="${old_show_footer_block}" />
+</metal:block>
 
 </html>
