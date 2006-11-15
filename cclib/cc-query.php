@@ -19,7 +19,7 @@
 */
 
 /**
-* RSS Module feed generator
+* Query API
 *
 * @package cchost
 * @subpackage api
@@ -140,7 +140,7 @@ class CCQuery
             $args['tags'] = join(',',CCTag::TagSplit($args['tags']));
         }
 
-        $this->_check_limit($args);
+        //$this->_check_limit($args);
         $this->_get_get_offset($args);
 
         if( !empty($sort) )
@@ -394,12 +394,20 @@ class CCQuery
         {
             if( empty($user) )
             {
+                $contests =& CCContests::GetTable();
+                $contest_names = $contests->QueryRows('','contest_short_name');
+                $cnames = array();
+                foreach( $contest_names as $contest_name )
+                    $cnames[] = $contest_name['contest_short_name'];
+
                 // one of the 'tags' may be a user name
                 $users =& CCUsers::GetTable();
                 $username = '';
                 $tagarr = CCTag::TagSplit($tags);
                 foreach( $tagarr as $tag )
                 {
+                    if( in_array(  $tag, $cnames ) )
+                        continue;
                     $twhere['user_name'] = $tag;
                     if( $users->CountRows($twhere) == 1 )
                     {
@@ -557,7 +565,12 @@ class CCQuery
         {
             $records = $table->QueryKeys($where);
         }
-        else 
+        elseif( !empty($cols) )
+        {
+            $columns = $this->_get_cols($cols);
+            $records =& $table->QueryRows($where,$columns);
+        }
+        else
         {
             $records =& $table->GetRecords($where);
         }
@@ -890,6 +903,24 @@ class CCQuery
         {
             $args['limit'] = $admin_limit;
         }
+    }
+
+    function _get_cols($str)
+    {
+        $shorts = preg_split('/[,\s+]/',$str);
+        $t = array(
+                'n' => 'upload_name',
+                'u' => 'user_name,user_real_name',
+                'd' => 'upload_date',
+                'lu' => 'license_url,license_logo,upload_license',
+                's' => 'upload_score'
+            );
+        $cols = array( 'upload_id', 'user_id' );
+        foreach( $shorts as $short )
+            if( !empty($t[$short]) )
+                $cols[] = $t[$short];
+
+        return join(',',$cols);
     }
 
 } // end of class CCQuery
