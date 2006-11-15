@@ -23,19 +23,14 @@ $Id$
 
 <phptal:block include="string:skin-blank-map.xml" />
 
-<tal:block replace="">
-<!--
-  just use blank's map but over writing remix listing
-  with optimized versions
--->
-</tal:block>
-
 <tal:block define="old_head_links print_head_links" />
+<tal:block define="old_show_footer_block show_footer_block" />
 
 <tal:block define="
     list_file string:upload_quick.xml/list_file;
     list_files string:upload_quick.xml/list_files;
-    print_head_links string:skin-ccmixter.xml/print_head_links;"
- />
+    print_head_links string:skin-ccmixter.xml/print_head_links;
+    show_footer_block string:skin-ccmixter.xml/show_footer_block;" />
+
  
 </tal:block>
