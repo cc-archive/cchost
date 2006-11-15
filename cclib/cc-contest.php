@@ -226,26 +226,33 @@ EOF;
         if( $row['contest_publish'] > 0 )
         {
             $open     = strtotime($row['contest_open']);
+            $entries  = strtotime($row['contest_entries_accept']);
             $deadline = strtotime($row['contest_deadline']);
             $now      = time();
             if( ($now > $open) && ($now < $deadline) )
             {
-                $row['contest_taking_submissions'] = true;
+                if( $now > $entries )
+                {
+                    $row['contest_taking_submissions'] = true;
 
-                if( $row['contest_auto_publish'] )
-                    $row['contest_can_browse_entries'] = true;
+                    if( $row['contest_auto_publish'] )
+                        $row['contest_can_browse_entries'] = true;
+                }
             }
             else
             {
                 if( $now > $open )
                 {
-                    $row['contest_can_browse_entries'] = true;
+                    if( $now > $entries )
+                        $row['contest_can_browse_entries'] = true;
 
                     if( $row['contest_vote_online'] )
                         $deadline = strtotime($row['contest_vote_deadline']);
 
                     if( $now < $deadline )
+                    {
                         $row['contest_voting_open'] = true;
+                    }
                     else
                     {
                         $row['contest_over'] = true;

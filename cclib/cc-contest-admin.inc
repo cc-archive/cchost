@@ -72,13 +72,21 @@ class CCContestForm extends CCUploadForm
                         'value'      => '1',
                         'flags'      => CCFF_POPULATE),
             
+                
             'contest_open' => array (
-                        'label'      => _('Contest Opens'),
-                        'form_tip'   => _('Entries are accepted after this date/time'),
+                        'label'      => _('Sources Available'),
+                        'form_tip'   => _('Sources are made visible after this date'),
                         'formatter'  => 'date',
                         'value'      => 'now',
                         'flags'      => CCFF_POPULATE),
                 
+            'contest_entries_accept' => array (
+                        'label'      => _('Entries Accepted'),
+                        'form_tip'   => _('Entries are accepted after this date/time'),
+                        'formatter'  => 'date',
+                        'value'      => 'now',
+                        'flags'      => CCFF_POPULATE),
+
             'contest_deadline' => array (
                         'label'      => _('Contest Deadline'),
                         'form_tip'   => _('Entries are not accepted after this date/time'),
