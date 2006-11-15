@@ -172,6 +172,7 @@ CREATE TABLE cc_tbl_contests
       contest_open            datetime         NOT NULL,
       contest_deadline        datetime         NOT NULL,
       contest_created         datetime         NOT NULL,
+      contest_entries_accept  datetime         NOT NULL,
       contest_auto_publish    int(1)           NOT NULL,
       contest_publish         int(1)           NOT NULL,
       contest_vote_online     int(1)           NOT NULL,
@@ -378,8 +379,9 @@ CREATE TABLE cc_tbl_topics
       topic_type       varchar(100) NOT NULL default '',
       topic_date       datetime        NOT NULL,
       topic_edited     datetime        NOT NULL,
-      topic_deleted    int(2) unsigned  NOT NULL,
-      topic_locked     int(2) unsigned  NOT NULL,
+      topic_deleted    int(2) unsigned  NOT NULL default 0,
+      topic_locked     int(2) unsigned  NOT NULL default 0,
+      topic_can_xlat   INT(1) unsigned NOT NULL default 0,
 
       topic_name         mediumtext       NOT NULL default '',
       topic_text         mediumtext       NOT NULL default '',
@@ -389,6 +391,22 @@ CREATE TABLE cc_tbl_topics
       topic_thread     INT(11) unsigned NOT NULL,
 
       PRIMARY KEY topic_id (topic_id)
+    )
+END;
+
+    // 
+    // Topics Tranlsation Tree
+    //
+    $drops [] = 'cc_tbl_topic_i18n';
+        $sql[] =<<<END
+
+CREATE TABLE cc_tbl_topic_i18n
+    (
+      topic_i18n_topic       int(11) unsigned,
+      topic_i18n_xlat_topic  int(11) unsigned,
+      topic_i18n_language    varchar(100)      NOT NULL default '',
+      
+      KEY `topic_i18n_topic` (`topic_i18n_topic`)
     )
 END;
 
@@ -588,6 +606,8 @@ END;
        'v_3_2d'              => true, // null db fields, super users
        'v_3_2e'              => true, // topic locking field
        'v_3_2f_vs3'          => true, // cfg strings are now i18n
+       'v_3_2g_ti18n'        => true, // topic translation table
+       'v_3_2h_cntst'        => true, // contest srcs avail date
 
     );
 
