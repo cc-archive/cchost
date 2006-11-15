@@ -45,11 +45,13 @@ $disallows = array(
         '/feed',
         '/publicize',
     );
+if( !function_exists('_') ) {
+    function _($s) { return $s; } }
 define('IN_CC_HOST', 1);
 include('cc-includes.php');
 $configs =& CCConfigs::GetTable();
 $vroots = $configs->GetConfigRoots();
-$text = "User-agent: *\n";
+$text = "User-agent: *\nDisallow: /emails\n";
 foreach( $vroots as $VR )
 {
     foreach( $disallows as $DA )
