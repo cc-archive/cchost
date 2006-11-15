@@ -97,6 +97,17 @@ $Id$
              therefore available to all remixers, safe, legal and sane.</p>
 </div>
 
+<tal:block define="before php: date('Y-m-d H:i') LT '2006-11-15 10:40' " />
+
+<div tal:condition="not: before" class="item_row">
+  <div class="logo"><img id="ghostly_logo" src="${root-url}mixter-files/ghostly/ghostsm.png" /></div>
+  <div class="plug_link"><a href="${root-url}ghostly/view/contest/sources">Sample packs here...</a></div>
+  <p>Christopher Willits is a bay area recording artist with unique talents as a guitar
+  player and sound designer. His sound is lush and deep with crisp ambient tones and 
+  subtle harmonies, perfect as the basis for any remix looking for an open airy quality. The separated audio tracks to his song "Colors Shifting"
+  are available under CC license here at ccMixter.</p>
+</div>
+
 <div class="item_row">
   <div class="logo"><img id="mixstar_logo" src="${root-url}mixter-files/ccMixStar.gif" /></div>
   <div class="plug_link"><a href="${home-url}people/samplepacks">Sample packs here...</a></div>
