@@ -123,7 +123,7 @@ class CCQuery
         return $args;
     }
 
-    function ProcessAdminArgs($args,$extra_args=array())
+    function ProcessAdminArgs($args,$extra_args=array(),$check_limit=true)
     {
         if( is_string($args) )
             parse_str($args,$args);
@@ -140,7 +140,8 @@ class CCQuery
             $args['tags'] = join(',',CCTag::TagSplit($args['tags']));
         }
 
-        //$this->_check_limit($args);
+        if( $check_limit )
+            $this->_check_limit($args);
         $this->_get_get_offset($args);
 
         if( !empty($sort) )
