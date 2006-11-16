@@ -107,7 +107,7 @@ class CCEvents
             $handlers = $events[$eventname];
         else
             $handlers = array();
-        $handlers[] = $callback;
+        $handlers[] = array( $callback, $includefile );
         $events[$eventname] = $handlers;
     }
 
@@ -175,14 +175,32 @@ class CCEvents
         {
             foreach( $events[$eventname] as $handler )
             {
-                if( is_array($handler) && is_string($handler[0]))
+                $callback = $handler[0];
+                if( is_array($callback) )
                 {
-                    $class = $handler[0];
-                    $method = $handler[1];
-                    $obj = new $class;
-                    $handler = array( $obj, $method );
+                    if( is_string($callback[0]) )
+                    {
+                        $class = $callback[0];
+                        if( !class_exists($class) && !class_exists(strtolower($class)) )
+                        {
+                            if( !CCEvents::_load_event_handler($handler) )
+                                return;
+                        }
+                        $obj = new $class;
+                    }
+                    
+                    $callback = array( $obj, $callback[1] );
                 }
-                $results[] = call_user_func_array($handler,$args);
+                else
+                {
+                    if( !function_exists($callback) && !function_exists(strtolower($callback)) )
+                    {
+                        if( !CCEvents::_load_event_handler($handler) )
+                            return;
+                    }
+
+                }
+                $results[] = call_user_func_array($callback,$args);
             }
         }
 
@@ -391,6 +409,23 @@ class CCEvents
             CCUtil::Send404(false);
             CCPage::SystemError("Invalid path");
         }
+    }
+
+    function _load_event_handler($handler)
+    {
+        if( empty($handler[1]) )
+        {
+            CCUtil::Send404(false);
+            CCPage::SystemError(_("Can't find module"));
+            CCDebug::PrintVar($handler,false);
+            return false;
+        }
+        else
+        {
+            require_once($handler[1]);
+        }
+
+        return true;
     }
 
     function _load_action($action)
