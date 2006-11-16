@@ -533,7 +533,7 @@ class CCQuery
 
         if( !empty($query) )
         {
-            $columns = $this->_get_query_feild('search');
+            $columns = $this->_get_query_field('search');
             $where = $this->_build_search_query($type,$query,$columns,$where);
         }
 
