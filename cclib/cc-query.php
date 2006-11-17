@@ -534,7 +534,7 @@ class CCQuery
         if( !empty($query) )
         {
             $columns = $this->_get_query_field('search');
-            $where = $this->_build_search_query($type,$query,$columns,$where);
+            $where = $this->_build_search_query($type,$query,$columns,$where,$table);
         }
 
         $where = $this->_get_table_where($where,$table,$args);
@@ -849,16 +849,16 @@ class CCQuery
             $args['offset'] = sprintf('%0d',$_GET['offset']);
     }
 
-    function _build_search_query($types,$query,$colums,$where)
+    function _build_search_query($types,$query,$columns,$where,$table)
     {
         $query = strtolower($query);
 
         if( empty($type) )
             $type = 'phrase';
 
-        $qf = "LOWER(CONCAT_WS(\' \', $columns))";
+        $qf = "LOWER(CONCAT_WS(' ', $columns))";
     
-        $uploads->AddExtraColumn($qf . ' as qsearch');
+        $table->AddExtraColumn($qf . ' as qsearch');
         switch( $type )
         {
             case 'phrase':
