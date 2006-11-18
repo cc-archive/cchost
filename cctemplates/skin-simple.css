@@ -1725,6 +1725,17 @@ p.cc_songbreak {
 	background: url('ccmixter/nt.gif') repeat; 
 	padding: 4px 4px 8px 15px;
 }
+
+.cc_pool_item_lic {
+  float: right; 
+  width: 64px; 
+  background: white;
+  padding: 2px;
+  text-align: center;
+  border-top:1px solid black;
+  border-left:1px solid black;
+}
+
 .cc_pool_item_listing h2 {
 	margin: 2px;
 }

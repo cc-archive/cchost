@@ -43,11 +43,16 @@ $Header$
 
 <metal:block define-macro="pool_item_listing">
   <div class="cc_pool_item_listing" tal:repeat="item pool_items" >
+        <div class="cc_pool_item_lic" 
+                  tal:condition="item/license_name"><a href="${item/license_url}" 
+                  rel="license"
+                  title="${item/license_name}" ><img align="center"
+                  src="${root-url}ccimages/lics/small-${item/license_logo}" /></a></div>
     <h2><a href="${item/file_page_url}" >${item/pool_item_name}</a></h2>
     <p class="cc_small_by_line" tal:condition="item/pool_item_artist">
-      <tal:block content="php: CC_lang('by')" /> ${item/pool_item_artist}
+      <tal:block content="php: _('by')" /> ${item/pool_item_artist}
     </p>
-    <p><tal:block content="php: CC_lang('from the sample pool:')" /> 
+    <p><tal:block content="php: _('from the sample pool:')" /> 
       <a href="${item/pool_item_pool_url}">${item/pool_name}</a>
     </p>
     <p><tal:block content="php: CC_lang('External link:')" />
