@@ -138,8 +138,18 @@ class CCRatingsAdmin
             $ratings->AddJoin( new CCUploads(), 'ratings_upload');
             $upload_name = $ratings->QueryItemFromKey('upload_name',$ratings_id);
 
-            $banlist = CCTag::TagSplit($CC_GLOBALS['ratings_ban']);
-            $isbanned = in_array($username,$banlist);
+            $config =& CCConfigs::GetTable();
+            $chart = $config->GetConfig('chart');
+            if( !empty($chart['ratings_ban']) )
+            {
+                $banlist = CCTag::TagSplit($chart['ratings_ban']);
+                $isbanned = in_array($username,$banlist);
+            }
+            else
+            {
+                $isbanned = false;
+            }
+
             $bantext = $isbanned ? _('UnBan') : _('Ban');
 
             CCPage::SetTitle(_("Manage a User's Ratings"));
@@ -190,7 +200,9 @@ class CCRatingsAdmin
         {
             $users    =& CCUsers::GetTable();
             $username = $users->QueryItemFromKey('user_name',$user_id);
-            $banlist  = CCTag::TagSplit($CC_GLOBALS['ratings_ban']);
+            $configs =& CCConfigs::GetTable();
+            $chart = $configs->GetConfig('chart');
+            $banlist  = empty($chart['ratings_ban']) ? array() : CCTag::TagSplit($chart['ratings_ban']);
             $isbanned = in_array($username,$banlist);
             if( $isbanned )
             {
@@ -204,7 +216,7 @@ class CCRatingsAdmin
             }
             $arr['ratings_ban'] = join(', ',$banlist);
             $configs =& CCConfigs::GetTable();
-            $configs->SaveConfig( 'config', $arr, CC_GLOBAL_SCOPE, true );
+            $configs->SaveConfig( 'chart', $arr, '', true );
         }
 
         $url = ccl('admin','ratings','msg', $cmd );
