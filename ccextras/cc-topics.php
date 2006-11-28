@@ -156,7 +156,7 @@ class CCTopicTranslateForm extends CCTopicForm
                 'flags'         => CCFF_REQUIRED | CCFF_POPULATE),
             );
 
-        $this->InsertFormFields( &$fields, 'after', 'topic_name' );
+        $this->InsertFormFields( $fields, 'after', 'topic_name' );
         $this->SetFormValue('topic_name',htmlentities($title));
     }
 }
