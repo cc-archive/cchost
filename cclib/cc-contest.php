@@ -695,6 +695,22 @@ END;
                 $form->SetHelpText($formhelp);
             if( empty($_POST['submitcontestentry']) )
             {
+                // here's a whacky unnatural side-effect for ya:
+                // inherited tags are considered evil (like 'digital_distortion')
+                // so we don't want to encourage the use of them so we tell
+                // the template to uncheck the box by default
+
+                if( !empty($CC_GLOBALS['tags-inherit']) )
+                {
+                    $keys = array_keys($records);
+                    $inherit = join(',',$CC_GLOBALS['tags-inherit']);
+                    foreach( $keys as $key )
+                    {
+                        $R =& $records[$key];
+                        $R['no_check'] = CCTag::InTag($inherit,$R['upload_tags']);
+                    }
+                }
+
                 $form->SetTemplateVar( 'remix_sources', $records );
                 CCPage::AddForm( $form->GenerateForm() );
             }
