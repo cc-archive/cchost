@@ -119,9 +119,20 @@ $Header$
 
 <metal:block define-macro="local_remixes">
   <div class="${remix_class}">
-    <tal:block repeat="source local_remixes">
-        <p><tal:block content="php: CC_lang('I sampled this')" />: <input type="checkbox" tal:attributes="checked checkflag"
-        name="remix_sources[${source/upload_id}]" id="remix_sources[${source/upload_id}]" />
+    <tal:block repeat="source local_remixes"  >
+        <p><tal:block content="php: CC_lang('I sampled this')" />: 
+        <tal:block define="no_check source/no_check | nothing" on-error="" />
+        <tal:block condition="no_check" >
+            <input type="checkbox" 
+                name="remix_sources[${source/upload_id}]" 
+                id="remix_sources[${source/upload_id}]" />
+        </tal:block>
+        <tal:block condition="not: no_check" >
+            <input type="checkbox" 
+                tal:attributes="checked checkflag" 
+                name="remix_sources[${source/upload_id}]" 
+                id="remix_sources[${source/upload_id}]" />
+        </tal:block>
         <label for="remix_sources[${source/upload_id}]"> ${source/upload_name}</label>
         <tal:block content="php: CC_lang('by')" /> ${source/user_real_name}</p>
     </tal:block>
