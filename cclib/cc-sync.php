@@ -403,7 +403,7 @@ END;
             $rank = ($v / ($v+$m)) * $A + ($m / ($v+$m)) * $C;
         }
 
-        $R[$prefix . '_rank'] = $rank;
+        $R[$prefix . '_rank'] = number_format( $rank, 3 );
     }
 
     /**
