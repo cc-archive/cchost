@@ -406,8 +406,8 @@ class CCEvents
         }
         else
         {
-            CCUtil::Send404(false);
-            CCPage::SystemError("Invalid path");
+            CCUtil::Send404(true);
+            //CCPage::SystemError("Invalid path");
         }
     }
 
@@ -472,9 +472,20 @@ class CCEvents
     {
         $configs =& CCConfigs::GetTable();
         $accmap = $configs->GetConfig('accmap');
-        if( empty($accmap[$action->url]) )
-            return $action->pm;
-        return $accmap[$action->url];
+        if( isset($action->url) )
+        {
+            if( empty($accmap[$action->url]) )
+                return $action->pm;
+            return $accmap[$action->url];
+        }
+        else
+        {
+            // emergency code while I work this out 
+            // url map is corrupted
+            $w['config_type'] = 'urlmap';
+            $configs->DeleteWhere($w);
+            trigger_error("URLMAP was deleted");
+        }
     }
 
     /**
