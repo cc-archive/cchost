@@ -278,8 +278,11 @@ class CCConfigs extends CCTable
         else
         {
             $where['config_scope'] = $rootname;
-            if( !$this->CountRows($where) )
-                $rootname = CC_GLOBAL_SCOPE;
+            $rows = $this->QueryRows($where);
+            if( empty($rows) || ($rows[0]['config_scope'] != $rootname) ) // check for case
+            {
+                CCUtil::Send404(true);
+            }
         }
         $CC_CFG_ROOT = $rootname;
         cc_setcookie('cc_cfg_root',$rootname,null);
