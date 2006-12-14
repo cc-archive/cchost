@@ -210,6 +210,25 @@ class CCUtil
         }
     }
 
+    function CheckModifiedDate($contentDate) 
+    {
+        if( is_string($contentDate) )
+            $contentDate = strtotime($contentDate);
+
+        $ifModifiedSince = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) 
+                                ? stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE']) 
+                                : false;
+
+        if( $ifModifiedSince && (strtotime($ifModifiedSince) >= $contentDate) ) 
+        {
+            header('HTTP/1.0 304 Not Modified');
+            die; // stop processing
+        }
+
+        $lastModified = gmdate('D, d M Y H:i:s', $contentDate) . ' GMT';
+        header('Last-Modified: ' . $lastModified);
+    }
+
     function HashString($str)
     {
         return '' . sprintf('%08X',crc32(trim($str)));
