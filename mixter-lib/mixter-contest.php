@@ -22,26 +22,19 @@
 *
 * How to close a contest:
 *
-* 1. Edit the method kill_(contest_name) to reflect the current
-*    submit forms. (HINT: use http://ccmixter.org/media/export to
-*    get the current submit forms config, cut and paste the 'submitforms'
-*    section into the method, then edit so it's current.)
-* 
-* 2. Go to http://ccmixter.org?kill(contest_name)=1
+* 1. Fill out the form at to http://ccmixter.org/media/contest/snap
 *
-* 3. Go to http://ccmixter.org/media/contest/snap
+*    This step might take a while depending on how many entries in 
+*    the contest. You should end up at the home page for the final 
+*    entries. Note the URL, this what you give to whoever is picking 
+*    up the entries.
 *
-* 4. Fill out the form, hit submit. This step might take a while
-*    depending on how many entries in the contest. You should end
-*    up at the home page for the final entries. Note the URL, this
-*    what you give to whoever is picking up the entries.
-*
-* 5. Open a shell and go to mixter's web root directory. Execute
+* 2. Open a shell and go to mixter's web root directory. Execute
 *    the shell script called (contest_name)_snap.sh This step will 
 *    copy all the entries from the upload directory to the final
 *    entries so it might take a while.
 *
-* 6. To remove the artist's name and track name from the mp3s go to:
+* 3. To remove the artist's name and track name from the mp3s go to:
 *    http://ccmixter.org/media/contest/tagentries/(contest_name)
 *
 * 
@@ -50,8 +43,6 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCevents::AddHandler( CC_EVENT_MAP_URLS, array( 'MixterContest', 'OnMapUrls' ) );
-
-CCEvents::AddHandler(CC_EVENT_APP_INIT,array( 'MixterContest', 'kill_crammed'));
 
 class MxSnapContestForm extends CCForm
 {
@@ -90,6 +81,11 @@ class MxSnapContestForm extends CCForm
                  'label' => 'Output Directory',
                  'formatter' => 'select',
                  'options'  => $dirs,
+                 'flags' => CCFF_NONE,
+                 ),
+             'killsubmit' => array(
+                 'label' => 'Delete Contest Submit Form',
+                 'formatter' => 'checkbox',
                  'flags' => CCFF_NONE,
                  ),
          );
@@ -167,6 +163,17 @@ class MixterContest
     {
         CCDebug::Enable(true);
         extract($values);
+
+        if( !empty($killsubmit) )
+        {
+            $configs =& CCConfigs::GetTable();
+            $forms = $configs->GetConfig('submit_forms');
+            if( !empty($forms[$contest]) )
+            {
+                unset($forms[$contest]);
+                $configs->SaveConfig('submit_forms',$forms,'media',false);
+            }
+        }
 
         $uploads =& CCUploads::GetTable();
         $uploads->SetTagFilter("$contest,contest_entry",
@@ -325,118 +332,6 @@ END;
         $url = ccd($path_to_index);
         CCUtil::SendBrowserTo($url);
     }
-
-    function kill_crammed()
-    {
-        if( !CCUser::IsAdmin() || empty($_GET['killcrammed']) )
-            return;
-
-        $data = array (
-                'remix' => array (
-                    'enabled' => 1,
-                    'submit_type' => 'Remix',
-                    'text' => 'Submit a Remix',
-                    'help' => 'A remix using samples downloaded from this site. When submitting a remix make sure to properly attribute the artist you sampled to comply with the Attribution part the Creative Commons license. The next screen will have a search function that allows you do just that.',
-                    'tags' => array (
-                        0 => 'media',
-                        1 => 'remix',
-                        ),
-                    'suggested_tags' => '',
-                    'weight' => 5,
-                    'form_help' => 'There is 10Mg limit on uploads.<br />
-    Please do not submit until you have read <a href="/terms"><b>our terms of use</b></a>.<br />
-    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.',
-                    'isremix' => 1,
-                    'media_types' => 'audio',
-                    'action' => '',
-                    'logo' => 'mixter-remix.gif',
-                    'type_key' => 'remix',
-                    ),
-                'pella' => array (
-                    'enabled' => 1,
-                    'submit_type' => 'A Cappella',
-                    'text' => 'Submit an A Cappella',
-                    'help' => 'Stand alone vocal parts, either spoken word or sung. Mono recording with no effects  (reverb, delay, etc.) on them are best because they are the most flexible to work with. Many singers think they sound "better" with a lot of effects but it is always better to leave those choices to a producer/remixer to allow them to use their creative skills to the fullest potential.',
-                    'tags' => array (
-                        0 => 'acappella',
-                        1 => 'media',
-                        ),
-                    'suggested_tags' => 'melody,rap,spoken_word',
-                    'weight' => 10,
-                    'form_help' => 'There is 10Mg limit on uploads.<br />
-    Please do not submit until you have read <a href="/terms"><b>our terms of use</b></a>.<br />
-    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.',
-                    'isremix' => '',
-                    'media_types' => 'audio',
-                    'action' => '',
-                    'logo' => 'mixter-pella.gif',
-                    'type_key' => 'pella',
-                    ),
-                'samples' => array (
-                    'enabled' => 1,
-                    'submit_type' => 'Sample',
-                    'text' => 'Submit Samples',
-                    'help' => 'Samples can be a loop, a one-shot note or drum hit or any other snippet of sound that might be useful to a producer or remixer. You are encouraged to make a collection of samples and upload them together in archive format (ZIP), however sound files are accepted as well. By far the most flexible samples to work with are mono and have no effects for acoustic instruments and minimal effects for synthesized sounds.',
-                    'tags' => array (
-                        0 => 'sample',
-                        1 => 'media',
-                        ),
-                    'suggested_tags' => '',
-                    'weight' => 15,
-                    'form_help' => 'There is 10Mg limit on uploads.<br />
-    Please do not submit until you have read <a href="/terms"><b>our terms of use</b></a>.<br />
-    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.',
-                    'isremix' => '',
-                    'media_types' => 'audio,archive',
-                    'action' => '',
-                    'logo' => 'mixter-loop.gif',
-                    'type_key' => 'samples',
-                    ),
-                'userform1' => array (
-                    'enabled' => 1,
-                    'submit_type' => 'ccMixter Radio Promo',
-                    'text' => 'Submit a ccMixter Radio Promo',
-                    'help' => 'Submit a 5-10 second promo to be used in ccMixter radio streams. Make sure to mention the site, feel free to mention yourself (e.g. "This is Dr. Concoction and you\'re listening to c. c. Mixter dot org radio")',
-                    'tags' => array (
-                        0 => 'site_promo',
-                        1 => 'media',
-                        ),
-                    'weight' => 40,
-                    'form_help' => 'Submit a 5-10 second promo to be used in ccMixter radio streams. Anything deemed too long for a radio promo will be deleted immediately.',
-                    'isremix' => '',
-                    'media_types' => 'audio',
-                    'logo' => 'mixter-promo.png',
-                    'type_key' => 'userform1',
-                    ),
-                'fullmix' => array (
-                    'enabled' => 1,
-                    'submit_type' => 'Original',
-                    'text' => 'Submit a Fully Mixed Track',
-                    'help' => 'An original track that is fully mixed is <i>extremely unlikely</i> to be remixed because of the extra work the producer or remixer has to do the extract the parts they actually wish to use. Before uploading your track here, consider uploading to one of several free hosting sites sponsored by Creative Commons such <a href="http://archive.org/audio">Internet Archive</a> or <a href="http://ourmedia.org">Our Media</a> both of which might be more appropriate places to post completely mixed tracks.',
-                    'tags' => array (
-                        0 => 'media',
-                        1 => 'original',
-                        ),
-                    'suggested_tags' => '',
-                    'weight' => 50,
-                    'form_help' => 'There is 10Mg limit on uploads.<br />
-    Please do not submit until you have read <a href="/terms"><b>our terms of use</b></a>.<br />
-    Having trouble? <a href="/media/viewfile/isitlegal.xml#upload_problems"><b>click here</b></a>.
-    <p style="color:red">The Fort Minor contest is <b>over</b>.</p>',
-                    'isremix' => '',
-                    'media_types' => 'audio',
-                    'action' => '',
-                    'logo' => 'mixter-mixed.gif',
-                    'type_key' => 'fullmix',
-                    ),
-               );
-
-        $configs =& CCCOnfigs::GetTable();
-        $configs->SaveConfig('submit_forms',$data,'media',false);
-
-        CCPage::Prompt('crammed killed');
-    }
-
 }
 
 ?>
