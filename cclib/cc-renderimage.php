@@ -130,6 +130,23 @@ END;
         if( empty($settings['thumbnail-on']) )
             return;
 
+
+        CCUpload::EnsureFiles($record,true);
+        $image_index = 0;
+        $count = count($record['files']);
+        // finds out where the thumbnail is...
+        for( $image_index = 0; $image_index < $count; $image_index++ )
+        {
+            if( $record['files'][$image_index]['file_format_info']['media-type'] == 'image' )
+                break;
+        }
+
+        // Basically, make sure that there is something here to get 
+        // dimensions with
+        if( empty( $record['files'][$image_index]['download_url'] ) &&
+            empty( $record['files'][$image_index]['local_path'] ) )
+            return;
+        
         if( !empty($settings['thumbnail-x']) && !empty($settings['thumbnail-y']) )
         {
             // set as a default
@@ -140,23 +157,20 @@ END;
                 $thumbnailx = str_replace('px', '', $settings['thumbnail-x']);
                 $thumbnaily = str_replace('px', '', $settings['thumbnail-y']);
 
-                // right now assuming first record is image...which is bad
-                // should really not assume and show thumbnails for all
-                list($orig_width, $orig_height) = 
-                   getimagesize($record['files'][0]['local_path']);
+                // CCDebug::PrintVar($record);
+                
+                if ( $record['files'][$image_index]['local_path'] )  
+                    list($orig_width, $orig_height) = 
+                        getimagesize($record['files'][$image_index]['local_path']);
+                else
+                    list($orig_width, $orig_height) = 
+                        getimagesize($record['files'][$image_index]['download_url']);
+
                 // echo "$orig_width X $orig_height <br />"; 
                 if ( $orig_height > 0 && $orig_width > 0 )
                 {
                     $zoom_factor = $thumbnaily / $orig_height ;
                     $maxx = round($zoom_factor * $orig_width);
-                    /*
-                    echo $thumbnaily . " / " . $orig_height;
-                    echo "<br />";
-                    echo $zoom_factor . " * " . $orig_width . " + " . $orig_width . "<br />";
-                    echo $zoom_factor . " * " . $orig_width;
-                    echo "<br />";
-                    print_r($maxx);
-                    */
                 }
             }
 
@@ -173,14 +187,7 @@ END;
             $record['thumbnail_style'] = '';
         }
 
-        CCUpload::EnsureFiles($record,true);
-        $image_index = 0;
-        $count = count($record['files']);
-        for( $image_index = 0; $image_index < $count; $image_index++ )
-        {
-            if( $record['files'][$image_index]['file_format_info']['media-type'] == 'image' )
-                break;
-        }
+        
         $record['file_macros'][]   = 'render_image';
         $record['thumbnail_url']   = $record['files'][$image_index]['download_url'];
     }
