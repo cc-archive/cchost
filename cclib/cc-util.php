@@ -108,7 +108,7 @@ class CCUtil
      * @param string $var
      * @return string
      */
-    function HTMLEncode(&$text)
+    function HTMLEncode($text)
     {
         return htmlentities($text, ENT_COMPAT, 'UTF-8') ;
     }

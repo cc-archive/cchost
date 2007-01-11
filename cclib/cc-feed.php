@@ -332,7 +332,7 @@ class CCFeed
         $args += $template_tags;
 
         $args['root_url'] = cc_get_root_url();
-        $args['raw_feed_url'] = htmlentities(cc_get_root_url() . $_SERVER['REQUEST_URI']);
+        $args['raw_feed_url'] = CCUtil::HTMLEncode(cc_get_root_url() . $_SERVER['REQUEST_URI']);
 
         if( empty($feed_sub_title) )
         {
