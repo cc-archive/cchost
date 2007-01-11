@@ -175,6 +175,8 @@ class CCTemplate
 
         if( $doprint )
         {
+            // Force UTF-8 necessary for some languages (chinese,japanese,etc)
+            header('Content-type: text/html; charset=' . CC_ENCODING) ;
             // --- BEGIN hack for ZA
             if( substr($res,0,5) == '<html' )
             {
