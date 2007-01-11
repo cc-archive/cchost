@@ -101,13 +101,15 @@ class CCTemplate
     var $_template;
     var $_raw_src;
     var $_raw_src_id;
-
+    
     function CCTemplate($template, $html_mode = true, $is_raw_source=false,$raw_src_id='')
     {
         $this->_template_file = $is_raw_source ? '' : $template;
         $this->_html_mode     = $html_mode;
         $this->_raw_src       = $is_raw_source ? $template : '';
         $this->_raw_src_id    = $raw_src_id;
+        $this->_encoding      = CC_ENCODING;
+        $this->_quoteStyle    = CC_QUOTE_STYLE;
     }
 
     function _init_lib()

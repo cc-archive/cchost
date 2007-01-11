@@ -110,7 +110,7 @@ class CCUtil
      */
     function HTMLEncode($text)
     {
-        return htmlentities($text, ENT_COMPAT, 'UTF-8') ;
+        return htmlentities($text, CC_QUOTE_STYLE, CC_ENCODING) ;
     }
 
 

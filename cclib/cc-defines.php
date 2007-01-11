@@ -60,6 +60,16 @@ define('CC_1MG', 1024 * 1024);
 
 define('CC_USER_COOKIE', 'lepsog2');
 
+/**
+ * Need this for defining default encoding across the board
+ */
+define('CC_ENCODING', 'UTF-8');
+
+/**
+ * Need this for defining default dealing with special characters.
+ */
+define('CC_QUOTE_STYLE', ENT_COMPAT);
+
 /* LANGUAGE DEFINES */
 
 /** 
