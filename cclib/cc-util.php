@@ -102,6 +102,18 @@ class CCUtil
         return $mixed;
     }
 
+    /**
+     * Encodes HTML safely for UTF-8. Use instead of htmlentities.
+     *
+     * @param string $var
+     * @return string
+     */
+    function HTMLEncode(&$text)
+    {
+        return htmlentities($text, ENT_COMPAT, 'UTF-8') ;
+    }
+
+
     function StripText(&$text)
     {
         if( is_integer($text) )
@@ -142,7 +154,7 @@ class CCUtil
         if( empty($text) )
             return('');
 
-        $text = str_replace('--','&#8212;', htmlentities($text));
+        $text = str_replace('--','&#8212;', CCUtil::HTMLEncode($text));
         
         if( $convert_nl )
             $text = nl2br($text);
