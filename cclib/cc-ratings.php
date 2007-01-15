@@ -89,13 +89,27 @@ class CCRatings extends CCTable
                 return true;
         }
 
+        $user_id = CCUser::CurrentUser();
+        $upload_id = $record['upload_id'];
+
+        if( !empty($chart['requires-review']) ) 
+        {
+            if( class_exists('CCReviews') )
+            {
+                $reviews =& CCReviews::GetTable();
+                $rev_q['topic_user'] = $user_id;
+                $rev_q['topic_upload'] = $upload_id;
+                $count = $reviews->CountRows($rev_q);
+                if( intval($count) < 1 )
+                    return true;
+            }
+        }
+
         $remote_ip = $_SERVER['REMOTE_ADDR'];
         $ip = CCUtil::EncodeIP($remote_ip);
         if( $ip == substr($record['user_last_known_ip'],0,8) )
             return true;
         
-        $user_id = CCUser::CurrentUser();
-        $upload_id = $record['upload_id'];
         $where =<<<END
             (  
                 ( ratings_user = '$user_id' ) 

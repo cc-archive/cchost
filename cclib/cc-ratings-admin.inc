@@ -69,11 +69,10 @@ class CCAdminRatingsForm extends CCEditConfigForm
                                                         ),
                                'value'      => '2 weeks ago',
                                'flags'      => CCFF_POPULATE),
-                    'list-min' =>  
-                       array(  'label'      => _('Listing minium'),
-                               'form_tip'   => _('The minimum number of ratings an upload must have to display ratings in listing.'),
-                               'class'      => 'cc_form_input_short',
-                               'formatter'  => 'textedit',
+                    'requires-review' =>  
+                       array(  'label'      => _('Review required'),
+                               'form_tip'   => _('Check this if review is required to also rate. (This will disable \'anonymous rating.\')'),
+                               'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE),
                     'recalc_now' =>  
                        array(  'label'      => _('Recalculate now'),
