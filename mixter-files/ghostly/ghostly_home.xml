@@ -12,7 +12,20 @@
   </style>
   
 <h1>Christopher Willits  / "Colors Shifting" Remix Contest</h1>
+<div style="margin:8px; padding:8px; border:1px solid #77F">
+<tal:block define="Rs php:CC_cache_query('ghostly,winner')" />
+<tal:block define="R Rs/0" />
+<table><tr><td>
+<img src="${R/user_avatar_url}" style="margin: 6px;" />
+</td><td>
+<h2>Congratulations to Our Winner!</h2>
+<h3><a href="${R/file_page_url}">${R/upload_name}</a> by <a href="${R/artist_page_url}">${R/user_real_name}</a></h3>
+<p><a id="cc_streamfile" href="${root-url}/media/files/stream/ghostly/${R/upload_id}.m3u"><span>Stream</span></a> </p>
 
+<p><i>We received a bunch of submissions and a great handfull of notable stuff, but Patrick's remix definitely showed the best overall production of the group. He guided the samples into his own vision, and made it his own.</i><p style="text-align: right; font-weight: bold;">Christopher Willits</p></p>
+<p>Thanks to our sponsors Ghostly, XLR8R, Creative Commons and of course Christopher for a great contest!</p>
+</td></tr></table>
+</div>
 <p>
   <div class="willits_photo"><img src="${root-url}mixter-files/ghostly/Willits_1.jpg" alt="Christopher Willits" border="0" align="right"/><br/><small>Photo &copy; <a href="http://www.ghostly.com/press/">Ghostly International</a>, used with permission.</small></div>
   <a href="http://creativecommons.org/">Creative Commons</a>, <a href="http://ghostly.com/">Ghostly International</a> and <a href="http://xlr8r.com/">XLR8R Magazine</a> are pleased to present the Christopher Willits / "Colors Shifting" Remix Contest.  <a href="http://www.christopherwillits.com/">Christopher Willits</a> &mdash; a Bay Area-based musician and multimedia artist &mdash; is offering the audio source files from the song "Colors Shifting" online under a Creative Commons Attribution-NonCommercial license, so that producers worldwide can use the sounds in remixes and new compositions.</p>
