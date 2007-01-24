@@ -46,16 +46,14 @@ $Id$
        <tr><td id="fs_side" />
            <td id="fs_content">
 
-        <h2>Christopher Willits Remix Contest</h2>
+        <h2>Vieux Farka Toure Remix Contest</h2>
 
-        <a href="${root-url}ghostly" class="logolink" style="margin:2px;"><img 
-           src="${root-url}mixter-files/ghostly/ghostsm.png" border="0" /></a>
+        <a href="${root-url}vieux" class="logolink" style="margin:2px;"><img 
+           src="${root-url}mixter-files/vieux/vieux-small.jpg" border="0" /></a>
 
-    <h3><a href="${root-url}ghostly">Winner Announced!!</a></h3>
         <p>
-Creative Commons, Ghostly International and XLR8R Magazine are pleased to present the Christopher Willits "Colors Shifting" Remix Contest. Christopher Willits is offering the audio source files from the song "Colors Shifting" online under a Creative Commons Attribution-NonCommercial license, so that producers worldwide can use the sounds in remixes and new compositions.
-        </p>
-            <p><a href="${root-url}ghostly">More information about the Christopher Willits contest</a>...</p>
+<a href="http://www.creativecommons.org">Creative Commons</a>, <a href="http://www.modiba.net/">Modiba Productions</a> and <a href="http://www.globalbeatfusion.com/">Global Beat Fusion</a> are pleased to present the <a href="http://www.vieuxfarkatoure.com/">Vieux Farka Toure</a>  / "Ana" Remix Contest.  Vieux Farka Toure, a highly talented guitarist, singer, songwriter, and percussionist from Mali, is offering the audio source files from the song "Ana" online under a Creative Commons Attribution-NonCommercial license, so that producers worldwide can use the sounds in remixes and new compositions.        </p>
+            <p><a href="${root-url}vieux">More information about the Vieux "Ana" contest</a>...</p>
 
             </td>
           <td id="fs_side" />
@@ -103,6 +101,7 @@ Creative Commons, Ghostly International and XLR8R Magazine are pleased to presen
 
         <h2>Previous contests...</h2>
 
+        <a href="/ghostly">Christopher Willits</a><br />
         <a href="/fortminor">Fort Minor</a><br />
         <a href="/crammed">Crammed Discs</a> Cibelle, DJ Dolores, Apollo Nove<br />
         <a href="/copyrightcriminals">Copyright Criminals</a><br />

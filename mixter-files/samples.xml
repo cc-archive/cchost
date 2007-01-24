@@ -1,4 +1,4 @@
-<div>
+﻿<div>
 <tal:block replace="">
 <!--
 
@@ -76,6 +76,10 @@ $Id$
 #magnatune_logo {
   border: 1px solid black;
   }
+#vieux_logo {
+  margin: 14px;
+}
+
 </style>
 <p id="intro">
 <img src="http://creativecommons.org/images/public/somerights20.gif" style="margin: 14px;float:right" />All of the samples featured on this page are licensed under the <a href="http://creativecommons.org">Creative Commons</a> family of license agreements. That means you don't need an account with ccMixter to download, share and remix these samples because they are all in the Commons. Please see the specific license attached to a sample for what restrictions may apply before you use the sample in your remix.</p>
@@ -89,6 +93,17 @@ $Id$
            <td id="fs_content">
 
 <div class="item_row">
+  <div class="logo"><img id="vieux_logo" src="${root-url}mixter-files/vieux/vieux-small.jpg" /></div>
+  <div class="plug_link"><a href="${root-url}vieux/view/contest/sources">Sample packs here...</a></div>
+  <p>
+    International star Vieux Farka Toure from the Republic of Mali has crafted a globalminded style all his own with 
+    original compositions displaying  flourishes of rock and reggae amidst Saharan Blues and traditional Malian melodies. 
+    Vieux Farka Toure's version of Mali blues are brilliantly represented on the separated audio tracks to his 
+    song "Ana" which are available under CC license here at ccMixter.
+  </p>
+</div>
+
+<div class="item_row">
   <div class="logo"><img id="freesounds_logo" src="${root-url}mixter-files/freesound-logo.gif" /></div>
   <div class="plug_link"><a href="${root-url}freesound">Read more about freesounds...</a></div>
   <p>ccMixter has teamed up with the <a href="${root-url}freesound">freesound project</a> 
@@ -97,9 +112,7 @@ $Id$
              therefore available to all remixers, safe, legal and sane.</p>
 </div>
 
-<tal:block define="before php: date('Y-m-d H:i') LT '2006-11-15 10:40' " />
-
-<div tal:condition="not: before" class="item_row">
+<div class="item_row">
   <div class="logo"><img id="ghostly_logo" src="${root-url}mixter-files/ghostly/ghostsm.png" /></div>
   <div class="plug_link"><a href="${root-url}ghostly/view/contest/sources">Sample packs here...</a></div>
   <p>Christopher Willits is a bay area recording artist with unique talents as a guitar
