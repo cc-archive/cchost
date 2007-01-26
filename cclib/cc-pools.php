@@ -503,6 +503,7 @@ class CCPool
         $args['pool_site_url']     = empty($C['link']) ? $pool_site_api_url : $C['link'];
         $args['pool_ip']           = CCUtil::EncodeIP($_SERVER['REMOTE_ADDR']);
         $args['pool_banned']       = false;
+        $args['pool_auto_approve'] = false;
 
         $pools->Insert($args);
 
@@ -548,7 +549,7 @@ class CCPool
         $args['pool_item_name']          = $item['title'];
         $args['pool_item_artist']        = $item['artist'];
         $args['pool_item_description']   = $item['description'];
-        $args['pool_item_approved']      = false;
+        $args['pool_item_approved']      = $pool['pool_auto_approve'];
         $args['pool_item_timestamp']     = $item['date_timestamp'];
 
         $extra = array( 'guid'   => $item['guid'],
@@ -668,6 +669,7 @@ class CCPool
           pool_ip          varchar(10) NOT NULL default '',
           pool_banned      tinyint(1) NOT NULL default 0,
           pool_search      tinyint(1) NOT NULL default 0,
+          pool_auto_approve tinyint(1) NOT NULL default 0,
           pool_default_license  varchar(50) NOT NULL default '',
 
           PRIMARY KEY pool_id (pool_id)

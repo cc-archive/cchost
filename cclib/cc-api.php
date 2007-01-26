@@ -193,7 +193,7 @@ class CCRestAPI
 
         $guid_url = $this->MakeUrl( $poolsiteurl, 'file', 'guid=' . urlencode($remixguid) );
 
-        $rss = CCFeeds::ReadFeed( $guid_url );
+        //$rss = CCFeeds::ReadFeed( $guid_url );
 
         $fr = new CCFeedReader();
         $rss = $fr->cc_parse_url($guid_url);
@@ -239,6 +239,11 @@ class CCRestAPI
         $remtreeargs['pool_tree_parent'] = $upload_id;
         $remtreeargs['pool_tree_pool_child'] = $pool_item['pool_item_id'];
         $pool_tree->Insert($remtreeargs);
+
+        $upload_pool_count = $uploads->QueryItemFromKey( 'upload_num_pool_remixes', $upload_id );
+        $sync_args['upload_id'] = $upload_id;
+        $sync_args['upload_num_pool_remixes'] = intval($upload_pool_count) + 1;
+        $uploads->Update($sync_args);
 
         $this->success_exit();
     }

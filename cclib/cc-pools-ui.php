@@ -74,6 +74,10 @@ class CCAdminEditPoolForm extends CCForm
                        'form_tip'   => _('Ignore communications from this pool'),
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE ),
+            'pool_auto_approve' =>  
+               array(  'label'      => _('Auto-approve Remote Remixes'),
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE ),
             'pool_search' =>  
                array(  'label'      => _("Allow to be searched remotely"),
                        'formatter'  => 'checkbox',
@@ -508,7 +512,7 @@ END;
             CCRemix::_mark_row($row,'has_parents','remix_parents',$parents,'more_parents_link');
         }
 
-        if( !empty($row['upload_num_pool_remixes']) )
+        //if( !empty($row['upload_num_pool_remixes']) )
         {
 
             $sql =<<<END
@@ -525,6 +529,7 @@ END;
             //$remixes =& CCPoolRemixes::GetTable();
             //$children = $remixes->GetApprovedRemixes($row);
 
+            if( $children )
             CCRemix::_mark_row($row,'has_children','remix_children',$children,'more_children_link');
         }
     }
