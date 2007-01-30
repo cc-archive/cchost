@@ -27,18 +27,18 @@ we're just think they are cool and want to use their samples.)
 
 <h3 style="text-align: left">Remixers at JamGlue</h3>
 
-<p>Members of JamGlue are encouraged to create their remixes
+<p style="font-size:13px">Members of JamGlue are encouraged to create their remixes
 directly on their site using original source material from either their site or.... (<a 
 href="http://ccmixter.org/media/files/tazzista/6590">drum roll)</a> here at ccMixter. When a JamGlue remix uses 
 sources from here our 'Samples are used in' field will reflect the remix with a link to it...
 </p>
-<p style="text-align:center"><img src="${root-url}mixter-files/jamglue-1.png" /></p>
+<p style="text-align:center;margin:35px;border:2px solid black;"><img src="${root-url}mixter-files/jamglue-1.png" /></p>
 
 
 
 <h3 style="text-align: left">Remixers at ccMixter</h3>
 
-<p>Not only does JamGlue host remixes made on their website, but they have a pretty 
+<p style="font-size:13px">Not only does JamGlue host remixes made on their website, but they have a pretty 
 <a href="http://www.jamglue.com/people/fridge">amazing sample collection</a> as well. Here at ccMixter
 we've added JamGlue to the remix upload form's search capability so you can use their samples
 in remixes posted here. See the <a href="{$root-url}freesound">freesound page</a> for how to
