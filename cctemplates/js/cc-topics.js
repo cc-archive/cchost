@@ -17,6 +17,7 @@
 *
 */
 
+
 function cc_update_hot_topics()
 {
     var box = $('cc_hot_topic_picker');
@@ -45,6 +46,8 @@ cc_update_hot_topics();
 
 $$('.xlat_link').each( function(element) {
       element.href = 'javascript:// xlat link ' + element.id;
+
+
       Event.observe(element,'click', function (event)
             {
                 var id = Event.element(event).id;

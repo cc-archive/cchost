@@ -18,7 +18,6 @@ $Id$
 
 */
 
-
 function getURL()
 {
     return (baseCmd + '?' + Form.serialize('channel_form') + '&tags=' + 

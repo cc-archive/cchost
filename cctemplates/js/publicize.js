@@ -16,7 +16,6 @@ of the ccHost software will comply with the CC-GNU-GPL.
 $Id$
 */
 
-
 function flip_link_type(box)
 {
   var text = '';
