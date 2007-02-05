@@ -22,77 +22,11 @@ $Id$
 </tal:block>
 
 <metal:block define-macro="grow_textarea_script">
-<script type="text/javascript">
-//<!--
-function cc_grow_textarea(elemname)
-{
-  var elemobj;
-  var elemlink;
-  elemobj = new cc_obj(elemname);
-  if( elemobj )
-  {
-      elemlink = new cc_obj('grow_' + elemname);
-      if( elemobj.style.height == '100px' )
-      {
-          cc_set_text(elemlink.obj,'[ - ]');
-          elemobj.style.height = '300px';
-          elemobj.style.width = '450px';
-      }
-      else
-      {
-          cc_set_text(elemlink.obj,'[ + ]');
-          elemobj.style.height = '100px';
-          elemobj.style.width = '300px';
-      }
-      elemobj.obj.focus();
-  }
-}
-//-->
-</script>
+<script type="text/javascript" src="${root-url}js/upload_form.js" />
 </metal:block>
 
 <metal:block define-macro="hide_form_on_submit_script">
-<script type="text/javascript">
-//<!--
-
-function cc_hide_form_and_submit()
-{
-  if( navigator.userAgent.indexOf('Safari') > -1 )
-  {
-    var submit_button = new cc_obj('form_submit');
-    if( submit_button )
-    {
-      submit_button.obj.value = "Submission in process, please wait...";
-    }
-  }
-  else
-  {
-    cc_show_hide_form('${form_id}','none','block');
-  }
-  return(true);
-}
-
-function cc_show_hide_form(form_id,form_display,msg_display)
-{
-    var the_form;
-    var message_div;
-    the_form = new cc_obj(form_id);
-    the_form.style.display = form_display;
-    message_div = new cc_obj('cc_form_submit_message');
-    message_div.style.display = msg_display;
-}
-
-function cc_init_form_capture()
-{
-  var submit_button = new cc_obj('form_submit');
-  if( submit_button )
-    submit_button.obj.onclick = cc_hide_form_and_submit;
-}
-
-cc_init_form_capture();
-
-//-->
-</script>
+<script type="text/javascript" src="${root-url}js/upload_form.js" />
 </metal:block>
 
 <metal:block define-macro="html_form">

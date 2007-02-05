@@ -1,7 +1,7 @@
 
 /*
-   $Header$
-   generated on 2006-05-30
+   $Id$
+   generated on 2007-02-05
 */
 
 
@@ -197,6 +197,10 @@ a.cc_external_link  {
 
 }
 
+.cc_featuring {
+
+}
+
 .cc_feed_button {
 
 }
@@ -269,6 +273,10 @@ a.cc_external_link  {
 
 }
 
+.cc_forum_all_times {
+
+}
+
 .cc_forum_cmds {
 
 }
@@ -297,11 +305,19 @@ a.cc_external_link  {
 
 }
 
+.cc_forum_msg {
+
+}
+
 .cc_forum_name {
 
 }
 
 .cc_forum_short {
+
+}
+
+.cc_forum_sticky {
 
 }
 
@@ -333,14 +349,6 @@ a.cc_external_link  {
 
 }
 
-.cc_howididit {
-
-}
-
-.cc_howididit_link {
-
-}
-
 .cc_image_thumbnail {
 
 }
@@ -353,6 +361,14 @@ a.cc_external_link  {
 
 }
 
+.cc_last_op {
+
+}
+
+.cc_last_op_str {
+
+}
+
 .cc_license_image {
 
 }
@@ -362,10 +378,6 @@ a.cc_external_link  {
 }
 
 .cc_list_list_space {
-
-}
-
-.cc_log_view {
 
 }
 
@@ -417,6 +429,14 @@ a.cc_external_link  {
 
 }
 
+.cc_player_button cc_player_hear {
+
+}
+
+.cc_player_label {
+
+}
+
 .cc_podcast_link {
 
 }
@@ -446,6 +466,10 @@ a.cc_external_link  {
 }
 
 .cc_pool_item_external_link {
+
+}
+
+.cc_pool_item_lic {
 
 }
 
@@ -558,10 +582,6 @@ a.cc_external_link  {
 }
 
 .cc_submit_form_help {
-
-}
-
-.cc_submit_form_message {
 
 }
 
@@ -685,6 +705,14 @@ a.cc_external_link  {
 
 }
 
+.cc_topics_xlat_div {
+
+}
+
+.cc_topics_xlat_links {
+
+}
+
 .cc_upload_banned {
 
 }
@@ -698,6 +726,10 @@ a.cc_external_link  {
 }
 
 .cc_user_favs_link {
+
+}
+
+.cc_user_index {
 
 }
 
@@ -741,23 +773,11 @@ a.cc_external_link  {
 
 }
 
-.vlink {
-
-}
-
-.vlinktd {
+.xlat_link {
 
 }
 
 #cc_action_buttons {
-
-}
-
-#cc_admin_hint {
-
-}
-
-#cc_admin_menu_page {
 
 }
 
@@ -805,11 +825,11 @@ a.cc_external_link  {
 
 }
 
-#cc_howididit_browser {
+#cc_hot_topic_picker {
 
 }
 
-#cc_howididit_detail {
+#cc_hot_topics_div {
 
 }
 
@@ -881,10 +901,6 @@ a.cc_external_link  {
 
 }
 
-#form_submit_message {
-
-}
-
 #movedownfile {
 
 }
@@ -914,6 +930,10 @@ a.cc_external_link  {
 }
 
 #rl {
+
+}
+
+#search {
 
 }
 

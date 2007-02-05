@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -28,22 +28,7 @@ $Header$
     </tal:block>
 </metal:block>
 
-<metal:block define-macro="popular_tags_script">
-<script type="text/javascript">
-//<!--
-function cc_add_tag(tag,fieldname)
-{
-  f = new cc_obj(fieldname);  
-  tagstr = f.obj.value;
-  tags = tagstr.split(',');
-  tags.push(tag);
-  tagstr = tags.join(',');
-  if( tagstr.charAt(0) == ',' )
-    tagstr = tagstr.substr(1);
-  f.obj.value = tagstr;
-}
-//-->
-</script>
+<metal:block define-macro="popular_tags_script"><!-- deprecated script block -->
 </metal:block>
 
 <metal:block define-macro="popular_tags">

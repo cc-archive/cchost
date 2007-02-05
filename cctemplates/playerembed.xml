@@ -1,0 +1,19 @@
+<tal:block>
+
+
+<metal:block define-macro="eplayer">
+  <link href="${root-url}cctemplates/playerembed.css" rel="stylesheet" type="text/css" title="Default Style" />
+  <tal:block define="poptions player_options | nothing" />
+  <script type="text/javascript" src="${root-url}cctemplates/js/playerembed.js"></script>
+  <script type="text/javascript" src="${root-url}cctemplates/js/swfobject.js"></script>
+  <div id="flash_goes_here"></div>
+  <script type="text/javascript">
+    var swfObj = new SWFObject('${site-root}cclib/fplayer/ccmixter2.swf', 'uploadMovie', '1', '1', '8', "#FFFFFF" );
+    swfObj.addVariable('allowScriptAccess','always');
+    swfObj.write('flash_goes_here');
+    var flashVersion = deconcept.SWFObjectUtil.getPlayerVersion();
+    new ccEmbeddedPlayer( { $poptions }, flashVersion['major'] );
+  </script>
+</metal:block>
+
+</tal:block>

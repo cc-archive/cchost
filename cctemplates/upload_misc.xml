@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -92,8 +92,11 @@ $Header$
       </tr>
       <tal:block repeat="grp menu">
         <tr tal:repeat="item grp">
-          <td><a href="${item/action}" tal:attributes="type item/type | nothing"  tal:on-error=""
-                id="${item/id}"><span tal:content="item/menu_text" /></a></td>
+              <tal:block define="parent_id item/parent_id | nothing" />
+          <td id="${parent_id}" >
+              <tal:block define="classname item/class | nothing" />
+              <a href="${item/action}" tal:attributes="type item/type | nothing"  tal:on-error=""
+                class="${classname}" id="${item/id}"><span tal:content="item/menu_text" /></a></td>
         </tr>
       </tal:block>
     </table>
@@ -105,10 +108,10 @@ $Header$
           <a id="cc_streamfile" href="${record/stream_link/url}"><span tal:content="record/stream_link/text"/></a> 
       </tal:block>
       <tal:block condition="menu/download">
-          <a id="cc_downloadbutton" href="javascript: void(0);" onclick="cc_show_dl_box(event,'${record/upload_id}');" >
+          <a id="cc_downloadbutton" href="javascript: void(0);" onclick="cc_show_dl_box(event,'${record/upload_id}',this);" >
               <span tal:content="php: CC_lang('Download')" />
           </a>
-          <div class="cc_file_download_popup" id="dlmenu${record/upload_id}" style="display:none">
+          <div class="cc_file_download_popup" id="dlmenu${record/upload_id}" style="display:none;position:absolute;">
               <p>
                   <tal:block content="php: CC_lang('IE: Right-click select \'Save Target As\'')" /><br />
                   <tal:block content="php: CC_lang('Mac: Control-click select \'Save Link As\'')" /><br />
@@ -116,6 +119,12 @@ $Header$
               <p tal:repeat="mi menu/download" ><a href="${mi/action}" id="${mi/id}" type="${mi/type}" title="${mi/tip}"><span tal:content="mi/menu_text" /></a>
               </p>
           </div>
+      </tal:block>
+      <tal:block condition="menu/playlist">
+       <tal:block define="plm menu/playlist/playlist_menu" />
+       <div id="${plm/parent_id}">
+          <a id="commentcommand" class="${plm/class}" href="${plm/action}"><span>${plm/menu_text}</span></a>
+       </div>
       </tal:block>
       <tal:block condition="menu/comment/comments">
         <a id="commentcommand" 

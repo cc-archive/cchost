@@ -157,6 +157,8 @@ $Id$
       <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
   </tal:block>
   <script type="text/javascript" src="${root-url}cctemplates/js/prototype.js" />
+  <script type="text/javascript" src="${root-url}cctemplates/js/selector-addon-v1.js" />
+  <script type="text/javascript" src="${root-url}cctemplates/js/mini-rico.js" />
   <script type="text/javascript" src="${root-url}cctemplates/cc_obj.js" />
   <tal:block condition="script_blocks" repeat="script script_blocks">
     <tal:block define="tscript ${script}" />
@@ -201,10 +203,8 @@ $Id$
         <ul><li tal:repeat="menu_item menu_group/menu_items"><a tal:attributes="href menu_item/action" >${menu_item/menu_text}</a></li></ul>
       </tal:block>
 
-      <tal:block condition="custom_macros" repeat="custom_macro custom_macros" >
-        <metal:block use-macro="${custom_macro}" />
-      </tal:block>
-            
+      <metal:block use-macro="${show_sidebar_macros}" />
+
       <p>
       <span tal:condition="feed_links" tal:repeat="feed_link feed_links" class="cc_feed_link">
         <a class="cc_feed_button" type="${feed_link/type}" href="${feed_link/href}" 
@@ -215,9 +215,15 @@ $Id$
   </div><!-- leftside -->
 </metal:block>
 
+<metal:block define-macro="show_sidebar_macros">
+  <tal:block condition="custom_macros" repeat="custom_macro custom_macros" >
+    <metal:block use-macro="${custom_macro}" />
+  </tal:block>
+</metal:block>
+
 <metal:block define-macro="show_logged_in_as">
   <div class="cc_logged_in_as" tal:condition="logged_in_as">Logged in as: 
-    <div class="cc_logged_in_name">${logged_in_as}</div> <a href="${logout_url}" tal:content="php: CC_lang('log out')"></a>
+    <div class="cc_logged_in_name">${logged_in_as}</div> <a href="${logout_url}" tal:content="php: _('log out')"></a>
   </div>
 </metal:block>
 
