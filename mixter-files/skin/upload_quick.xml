@@ -16,7 +16,7 @@ responsible for your use of the ccHost software and you
 represent and warrant to Creative Commons that your use
 of the ccHost software will comply with the CC-GNU-GPL.
 
-$Header$
+$Id$
 
 -->
 </tal:block>
@@ -44,6 +44,8 @@ $Header$
   </div> <!-- record_listing -->
   <div style=""><br clear="all"/></div>
   </div>
+  <metal:block use-macro="playerembed.xml/eplayer" />
+  <metal:block use-macro="playlist.xml/playlist_menu" />
 </metal:block>
 
 <metal:block define-macro="list_files">
@@ -55,6 +57,8 @@ $Header$
   <tal:block define="listing php: mixter_list_files($file_records,'$xclass');" />
   ${listing}
   <metal:block use-macro="${prev_next_links}" />
+  <metal:block use-macro="playerembed.xml/eplayer" />
+  <metal:block use-macro="playlist.xml/playlist_menu" />
 </metal:block>
 
 </tal:block>
