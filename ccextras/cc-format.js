@@ -13,10 +13,9 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
-
 
 function cc_trim(str,c)
 {
