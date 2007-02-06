@@ -78,6 +78,7 @@ ccPlaylistMenu.prototype = {
     inOpen: false,
     windowHooked: false,
     openInfo: null,
+    transport: null,
 
     initialize: function(options) {
         this.options = Object.extend( { autoHook: true }, options || {} );
@@ -106,6 +107,8 @@ ccPlaylistMenu.prototype = {
     },
 
     onMenuButtonClick: function(e,id) {
+        if( this.transport )
+            return;
 
         this._close_info();
         var pid = 'pl_menu_' + id;
@@ -152,7 +155,7 @@ ccPlaylistMenu.prototype = {
 
     _refresh_menu: function( id, pid ) {
         var url = home_url + 'api/playlist/with/' + id + q + 'f=html&m=playlist_popup'
-        new Ajax.Request( url, { method: 'get', onComplete: this._req_with.bind(this,pid) } );
+        this.transport = new Ajax.Request( url, { method: 'get', onComplete: this._req_with.bind(this,pid) } );
     },
 
     _req_with: function( pid, resp ) {
@@ -173,12 +176,13 @@ ccPlaylistMenu.prototype = {
         {
             alert(err);
         }
+        this.transport = null;
     },
 
     onMenuItemClick: function( event, url, pid ) {
         var p = $(pid);
         ccThinking.Enable(event);
-        new Ajax.Request( url, { method: 'get', onComplete: this._req_status.bind(this,pid) } );
+        this.transport = new Ajax.Request( url, { method: 'get', onComplete: this._req_status.bind(this,pid) } );
         Event.stop( event );
     },
 
@@ -194,6 +198,7 @@ ccPlaylistMenu.prototype = {
         {
             alert(err);
         }
+        this.transport = null;
     },
     
     _open_menu: function(pid) {
@@ -212,6 +217,9 @@ ccPlaylistMenu.prototype = {
     },
 
     onInfoClick: function(event, upload_id ) {
+        if( this.transport )
+            return;
+
         this._close_menu();
         var old_id = this._close_info();
         var info_id = '__plinfo__' + upload_id;
@@ -232,7 +240,7 @@ ccPlaylistMenu.prototype = {
                        'style="display:none;position:absolute;height:auto;top:'+y+'px;left:'+x+'px"></div>';
             new Insertion.After(Event.element(event),html);
             ccThinking.Enable(event);
-            new Ajax.Request( url, { method: 'get', onComplete: this._resp_info.bind(this, info_id ) } );
+            this.transport = new Ajax.Request( url, { method: 'get', onComplete: this._resp_info.bind(this, info_id ) } );
         }
         this.inOpen = true;
     },
@@ -259,6 +267,7 @@ ccPlaylistMenu.prototype = {
             x = 100;
         info.style.left = x + 'px';
         new ccDelayAndFade( 0, info, 1.0, 40, 10); 
+        this.transport = null;
     },
 
     CloseMenus: function() {
