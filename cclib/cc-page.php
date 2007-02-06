@@ -529,14 +529,14 @@ class CCPage extends CCTemplate
         if( !empty($CC_GLOBALS['no-cache']) )
             CCEvents::_send_no_cache_headers();
 
-        CCDebug::Chronometer($page_print);
+        //CCDebug::Chronometer($page_print);
 
         if( $print )
             $page->SetAllAndPrint($page->_page_args, CCUser::IsAdmin() );
         else
             return( $page->SetAllAndParse($page->_page_args, false, CCUser::IsAdmin()) );
 
-        CCDebug::Log( "Page print: " . CCDebug::Chronometer($page_print) );
+        //CCDebug::Log( "Page print: " . CCDebug::Chronometer($page_print) );
     }
 
     function GetViewFile($filename)
