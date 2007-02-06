@@ -42,8 +42,8 @@ function _cc_format_links()
     static $done;
     if( !isset($done) )
     {
-        CCPage::AddScriptBlock('ajax_block');
-        CCPage::AddScriptBlock('dl_popup_script',true);
+        require_once('cclib/cc-page.php');
+        CCPage::AddScriptLink( ccd('cctemplates', 'dl_popup.js' ), false );
         CCPage::AddScriptLink( ccd('ccextras','cc-format.js') );
         CCPage::AddLink('head_links', 'stylesheet', 'text/css', ccd('ccextras','cc-format.css') , _('Default Style'));
         $done = true;
@@ -116,7 +116,25 @@ function _cc_format_url(&$m)
         $text = strlen($url) > 30 ? substr($url,0,27) . '...' : $url;
     else
         $text = $m[2];
+    /*
+    if( strpos($url,'?') !== false )
+    {
+        $parts = explode('?',$url);
+        $url = $parts[0] . '?' . urlencode($parts[1]);
+    }
+    */
     return( " <a title=\"$url\" class=\"cc_format_link\" href=\"$url\">$text</a>" );
+}
+
+/**
+* Called from templates to test/convert bbCode-lite text to HTML formatted
+*
+*/
+function cc_format_text($text)
+{
+    if( _cc_is_formatting_on() )
+        return _cc_format_format($text);
+    return $text;
 }
 
 function validator_cc_format($form, $fieldname)
@@ -272,6 +290,8 @@ class CCFormat
         if( !_cc_can_format_edit() )
             return;
 
+        // deprecated way of doing this, use 'want_formatting' form field instead
+        //
         $fields_we_like = array( 'user_description', 'upload_description', 
                                   'editorial_review', 'topic_text' );
 
@@ -282,9 +302,11 @@ class CCFormat
         $keys = array_keys($fields);
         for( $i = 0; $i < $count; $i++ )
         {
-            if( in_array( $keys[$i], $fields_we_like ) )
+            $K =& $keys[$i];
+
+            if( in_array( $K, $fields_we_like ) || !empty($fields[$K]['want_formatting'] ) )
             {
-                $F =& $fields[ $keys[$i] ];
+                $F =& $fields[ $K ];
                 if( $F['formatter'] == 'textarea' )
                 {
                     $F['formatter'] = 'cc_format';

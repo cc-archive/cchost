@@ -82,7 +82,6 @@ class CCUpdate
         $configs =& CCConfigs::GetTable();
         $args[$flag] = 1;
         $configs->SaveConfig('config', $args, CC_GLOBAL_SCOPE, true );
-        
     }
 
     function _table_exists($tablename)

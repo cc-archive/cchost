@@ -26,88 +26,9 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_APP_INIT,    array( 'CCPseudoVerify', 'Install' ));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCPseudoVerify', 'OnMapUrls' ));
-CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS, array( 'CCPseudoVerify', 'OnGetSysTags'));
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCPseudoVerify', 'OnAdminMenu'));
+CCEvents::AddHandler(CC_EVENT_INIT_VALIDATOR,    array( 'CCPseudoVerify', 'Install' )    , 'ccextras/cc-pseudo-verify.inc' );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCPseudoVerify', 'OnMapUrls' )  , 'ccextras/cc-pseudo-verify.inc' );
+CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,       array( 'CCPseudoVerify', 'OnGetSysTags'), 'ccextras/cc-pseudo-verify.inc' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCPseudoVerify', 'OnAdminMenu') , 'ccextras/cc-pseudo-verify.inc' );
 
-$old_validator = null;
-
-class CCPseudoVerify
-{
-    function OnMapUrls()
-    {
-        CCEvents::MapUrl( ccp('admin','pverify'), array( 'CCPseudoVerify', 'Admin' ),
-                          CC_ADMIN_ONLY, ccs(__FILE__), '', 
-                          _('Display verification options form.'), CC_AG_UPLOADS );
-    }
-
-    function Admin()
-    {
-        require_once('ccextras/cc-pseudo-verify.inc');
-        $api = new CCPseudoVerifyAPI();
-        $api->Admin();
-    }
-
-   function Install()
-   {  
-       global $old_validator, $CC_UPLOAD_VALIDATOR;
-
-       $old_validator = $CC_UPLOAD_VALIDATOR;
-       $CC_UPLOAD_VALIDATOR = $this;
-   }
-
-   function GetValidFileTypes(&$types)
-   {
-        require_once('ccextras/cc-pseudo-verify.inc');
-        $api = new CCPseudoVerifyAPI();
-        return $api->GetValidFileTypes($types);
-   }
-
-    function FileValidate(&$formatinfo)
-    {
-        require_once('ccextras/cc-pseudo-verify.inc');
-        $api = new CCPseudoVerifyAPI();
-        return $api->FileValidate($formatinfo);
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_GET_SYSTAGS}
-    *
-    * @param array $record Record we're getting tags for 
-    * @param array $file Specific file record we're getting tags for
-    * @param array $tags Place to put the appropriate tags.
-    */
-    function OnGetSysTags(&$record,&$file,&$tags)
-    {
-        if( empty($file['file_format_info']['tags']) )
-            return;
-
-        $newtags = CCTag::TagSplit($file['file_format_info']['tags']);
-    
-        $tags = array_merge($tags,$newtags);
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_ADMIN_MENU}
-    *
-    * @param array &$items Menu items go here
-    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    */
-    function OnAdminMenu(&$items, $scope)
-    {
-        if( $scope != CC_GLOBAL_SCOPE )
-            return;
-
-        $items += array( 
-            'pverify'   => array( 'menu_text'  => _('Pseudo Verify'),
-                         'menu_group' => 'configure',
-                         'access' => CC_ADMIN_ONLY,
-                          'help'  => _('Configure usage of exotic and other dangerous file types'),
-                         'weight' => 1000,
-                         'action' =>  ccl('admin','pverify')
-                         ),
-            );
-    }
-
-}
+?>

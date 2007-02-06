@@ -56,28 +56,6 @@ class CCNotifications extends CCTable
 }
 
 
-class CCEditUserNotificationForm extends CCForm
-{
-    function CCEditUserNotificationForm($fields)
-    {
-        $this->CCForm();
-
-        $this->SetFormHelp( _('Notify me by email when:') );
-
-        $F = array();
-        $count = count($fields);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $F['f_' . $fields[$i]['flag']] =
-                        array( 'label'      => $fields[$i]['label'],
-                               'formatter'  => 'checkbox',
-                               'flags'      => CCFF_POPULATE,
-                        );
-        }
-
-        $this->AddFormFields( $F );
-    }
-}
 
 /**
 *
@@ -144,6 +122,8 @@ class CCNotifyAPI
         }
         $current_notifications = $notifications->QueryRow($args);
         
+        require_once('ccextras/cc-notify-forms.php');
+
         $form = new CCEditUserNotificationForm($fields);
 
         if( !empty($_POST['editusernotification']) )
@@ -453,7 +433,7 @@ class CCNotifyAPI
         {
             $user_ids[] = $notifies[$i]['notify_user'];
         }
-        require_once('ccextras/cc-mail.php');
+        require_once('ccextras/cc-mail.inc');
 
         $user_ids = array_unique($user_ids);
 

@@ -26,6 +26,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-upload-forms.php');
+
 /**
 * @package cchost
 * @subpackage io
@@ -47,15 +49,15 @@ class CCFilesAddForm extends CCUploadForm
                                'formatter'  => 'upload',
                                'form_tip'   => '',
                                'flags'      => CCFF_NONE  ),
-            'file2' => array(  'label'      => '',
+            'file2' => array(  'label'      => '&nbsp;',
                                'formatter'  => 'upload',
                                'form_tip'   => '',
                                'flags'      => CCFF_NONE  ),
-            'file3' => array(  'label'      => '',
+            'file3' => array(  'label'      => '&nbsp;',
                                'formatter'  => 'upload',
                                'form_tip'   => '',
                                'flags'      => CCFF_NONE  ),
-            'file4' => array(  'label'      => '',
+            'file4' => array(  'label'      => '&nbsp;',
                                'formatter'  => 'upload',
                                'form_tip'   => '',
                                'flags'      => CCFF_NONE  ),

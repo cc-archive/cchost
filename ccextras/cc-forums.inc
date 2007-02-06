@@ -26,6 +26,89 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*/
+require_once('ccextras/cc-topics.inc');
+
+
+/**
+* Wrapper for cc_tbl_forums table
+*/
+class CCForum extends CCTable
+{
+    function CCForum()
+    {
+        $this->CCTable('cc_tbl_forums','forum_id');
+        $this->AddJoin( new CCForumGroups(), 'forum_group' );
+        $this->SetSort( 'forum_group_weight,forum_weight', 'ASC' );
+    }
+
+    function & GetTable()
+    {
+        static $_table;
+        if( !isset($_table) )
+            $_table = new CCForum();
+        return $_table;
+    }
+}
+
+/**
+* Wrapper for cc_tbl_forums_groups
+*
+* String a UI artifact to group things on the make forum page
+*/
+class CCForumGroups extends CCTable
+{
+    function CCForumGroups()
+    {
+        $this->CCTable('cc_tbl_forum_groups','forum_group_id');
+        $this->SetSort('forum_group_weight','ASC');
+    }
+
+    function & GetTable()
+    {
+        static $_table;
+        if( !isset($_table) )
+            $_table = new CCForumGroups();
+        return $_table;
+    }
+}
+
+/**
+* Wrapper for cc_tbl_forum_threads table
+*
+* Keeps forum topics organized by threads, remembers the
+* first topic (that defines the thread), the forum, and
+* the latest post in the thread (that defines the age of 
+* the thread.
+*/
+class CCForumThreads extends CCTable
+{
+    function CCForumThreads()
+    {
+        $this->CCTable('cc_tbl_forum_threads','forum_thread_id');
+        $this->SetSort('forum_thread_sticky DESC, forum_thread_date', 'DESC');
+    }
+
+    function & GetTable()
+    {
+        static $_table;
+        if( !isset($_table) )
+            $_table = new CCForumThreads();
+        return $_table;
+    }
+}
+
+/**
+* Form for posting topics to the current forum
+class CCForumPostForm extends CCTopicForm
+{
+    function CCForumPostForm()
+    {
+        $this->CCTopicForm( _('New Topic Text'), _('Submit Topic'), true );
+    }
+}
+*/
 
 /**
 * Forums API
@@ -33,7 +116,7 @@ if( !defined('IN_CC_HOST') )
 */
 class CCForumAPI
 {
-    function Index($api, $forum_id='')
+    function Index($forum_id='')
     {
         if( !empty($forum_id) )
         {
@@ -256,7 +339,9 @@ EOF;
         CCPage::AddBreadCrumbs($trail);
     }
 
-    function OnTopicDelete($api, $deltype,$topic_id)
+
+
+    function OnTopicDelete($deltype,$topic_id)
     {
         // CCTDF_SHALLOW 
         // CCTDF_MARK
@@ -265,6 +350,8 @@ EOF;
         // we're not physically deleting
         if( $deltype == CCTDF_MARK ) 
             return;
+
+        $api = new CCForums();
 
         $topics = new CCTopics();
         $topic_threads = new CCForumThreads();
@@ -328,6 +415,11 @@ EOF;
         $users->Update($args);
     }
 
+    function OnTopicReply(&$reply, &$original)
+    {
+        $this->_on_new_topic($reply);
+    }
+
     function _on_new_topic(&$topic)
     {
         if( empty($topic['topic_thread']) )
@@ -340,8 +432,9 @@ EOF;
         $users->Update($args);
     }
 
-    function PostNew($api,$forum_id)
+    function PostNew($forum_id)
     {
+        $api = new CCForums();
         $forums =& CCForum::GetTable();
         $row = $forums->QueryKeyRow($forum_id);
         $mask = CCMenu::GetAccessMask();
@@ -353,8 +446,9 @@ EOF;
 
         CCPage::SetTitle( _('Post New Topic') );
 
-        $form = new CCForumPostForm();
-        if( empty($_POST['forumpost']) || !$form->ValidateFields() )
+        require_once('ccextras/cc-topics-forms.inc');
+        $form = new CCTopicForm( _('New Topic Text'), _('Submit Topic'), true );
+        if( empty($_POST['topic']) || !$form->ValidateFields() )
         {
             CCPage::AddForm( $form->GenerateForm() );
         }
@@ -392,9 +486,11 @@ EOF;
         }
     }
 
-    function ViewThread($api,$thread_id)
+    function ViewThread($thread_id)
     {
         global $CC_GLOBALS;
+
+        $api = new CCForums();
 
         $threads =& CCForumThreads::GetTable();
         if( empty($thread_id) )
@@ -495,7 +591,7 @@ EOF;
         $this->_build_bread_crumb_trail($row['topic_forum'],$row['topic_name']);
     }
 
-    function User($api,$username)
+    function User($username)
     {
         $users =& CCUsers::GetTable();
         $w['user_name'] = $username;
@@ -527,22 +623,29 @@ EOF;
         $this->_add_feed_links( '', $username);
 
         CCPage::PageArg('topics',$rows,'forum_user');
-        CCPage::SetTitle( sprintf( _("Forum Posts for %s"), $user_real_name ) );
+        CCPage::SetTitle( sprintf( _("Forum Posts by %s"), $user_real_name ) );
         CCTopic::AddLinks();
 
-        $trail = array();
-        $trail[] = array( 'url' => ccl(),                    'text' => _('Home') );
-        $trail[] = array( 'url' => ccl('people'),            'text' => _('People') );
-        $trail[] = array( 'url' => ccl('people', $username), 'text' => $user_real_name );
-        $trail[] = array( 'url' => '',                       'text' => _('Forum posts') );
-        CCPage::AddBreadCrumbs($trail);
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('settings');
+        if( empty($settings['newuserpage']) )
+        {
+            $trail = array();
+            $trail[] = array( 'url' => ccl(),                    'text' => _('Home') );
+            $trail[] = array( 'url' => ccl('people'),            'text' => _('People') );
+            $trail[] = array( 'url' => ccl('people', $username), 'text' => $user_real_name );
+            $trail[] = array( 'url' => '',                       'text' => _('Forum posts') );
+            CCPage::AddBreadCrumbs($trail);
+        }
 
     }
 
 
-    function RssFeed($api, $type='',$param='')
+    function RssFeed( $type='',$param='')
     {
         global $CC_GLOBALS;
+
+        $api = new CCForums();
 
         // yes, yes, this should be an admin option
 

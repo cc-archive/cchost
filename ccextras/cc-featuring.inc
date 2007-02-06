@@ -30,7 +30,7 @@ if( !defined('IN_CC_HOST') )
 *
 *
 */
-class CCFeaturingAPI
+class CCFeaturing
 {
     /**
     * Event handler for {@link CC_EVENT_GET_MACROS}
@@ -136,6 +136,23 @@ class CCFeaturingAPI
         return true;
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_FORM_POPULATE}
+    * 
+    * @param object &$form CCForm object
+    * @param array &$values Current values being applied to form fields
+    */
+    function OnFormPopulate(&$form,&$values)
+    {
+        if( !is_subclass_of($form,'CCUploadMediaForm') &&
+                    !is_subclass_of($form,'ccuploadmediaform') )
+        {
+            return;
+        }
+
+        if( !empty($values['upload_extra']['featuring']) )
+            $form->SetFormValue('upload_featuring',$values['upload_extra']['featuring']);
+    }
 }
 
 ?>

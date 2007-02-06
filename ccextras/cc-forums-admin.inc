@@ -26,6 +26,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-form.php');
+require_once('ccextras/cc-forums.inc');
 
 class CCForumAddForm extends CCForm
 {
@@ -155,8 +157,69 @@ class CCForumMoveThreadForm extends CCForm
 */
 class CCForumsAdmin
 {
-    function MoveThread($api,$thread_id)
+    /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
+    function OnAdminMenu(&$items,$scope)
     {
+        if( $scope == CC_GLOBAL_SCOPE )
+        {
+            $items += array( 
+                'forumadmin'   => array( 'menu_text'  => _('Forum'),
+                                 'menu_group' => 'configure',
+                                 'help'      => _('Configure forums access, groups, etc.'),
+                                 'access' => CC_ADMIN_ONLY,
+                                 'weight' => 5,
+                                 'action' =>  ccl('admin','forums') ),
+                );
+        }
+    }
+
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
+    function OnMapUrls()
+    {
+        CCEvents::MapUrl( ccp('thread'),              array( 'CCForumAPI', 'ViewThread'),  
+                CC_DONT_CARE_LOGGED_IN, 'ccextras/cc-forums.inc', '{thread_id}', 
+                _('View a forum thread'), CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('forums'),              array( 'CCForumAPI', 'Index'),   
+                CC_DONT_CARE_LOGGED_IN, 'ccextras/cc-forums.inc', '[forum_id]', 
+                _('View forums index or specific forum'), CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('forums','post'),       array( 'CCForumAPI', 'PostNew'), 
+                CC_DONT_CARE_LOGGED_IN, 'ccextras/cc-forums.inc', '{forum_id}', 
+                _('Post a new topic'), CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('forums','people'),     array( 'CCForumAPI', 'User'),    
+                CC_DONT_CARE_LOGGED_IN, 'ccextras/cc-forums.inc', '{user_name}', 
+                _('Display forum topics for user'), CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('feed','rss','forums'), array( 'CCForumAPI', 'RssFeed'), 
+                CC_DONT_CARE_LOGGED_IN, 'ccextras/cc-forums.inc', 
+                array(  'feed/rss/forums', 
+                        'feed/rss/forums/user/{user_name}',
+                        'feed/rss/forums/thread/{thread_id}' ), 
+                _('Various forum feeds'), CC_AG_FEEDS );
+
+        CCEvents::MapUrl( ccp('admin','forums'),      array( 'CCForumsAdmin', 'Admin'),   
+                CC_ADMIN_ONLY, ccs(__FILE__), '', 
+                _('Configure forums'), CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('admin','forums','move'), array( 'CCForumsAdmin', 'MoveThread'),   
+                CC_ADMIN_ONLY, ccs(__FILE__), '{thread_id}', 
+                _("Displays 'Move Thread' form"), CC_AG_FORUMS );
+    }
+
+    function MoveThread($thread_id)
+    {
+        $api = new CCForums();
         $threads =& CCForumThreads::GetTable();
         $threads->AddJoin( new CCTopics(), 'forum_thread_oldest' );
         $row = $threads->QueryKeyRow($thread_id);
@@ -240,7 +303,7 @@ class CCForumsAdmin
     }
 
 
-    function Admin($param1,$param2,$param3)
+    function Admin( $param1='', $param2='', $param3='' )
     {
         if( $param1 == 'stick' )
         {

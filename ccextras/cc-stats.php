@@ -169,6 +169,7 @@ function _cc_stats_filter($since)
 
 function & cc_stats_chart_upload_data($sort_on,$dir='DESC',$since='')
 {
+    require_once('cclib/cc-upload-table.php');
     $uploads =& CCUploads::GetTable();
     $records =& _cc_stats_get_data($uploads,$sort_on,$dir,$since);
     return $records;
@@ -176,6 +177,7 @@ function & cc_stats_chart_upload_data($sort_on,$dir='DESC',$since='')
 
 function & cc_stats_chart_user_data($sort_on,$dir='DESC',$since='')
 {
+    require_once('cclib/cc-upload-table.php');
     $uploads =& CCUsers::GetTable();
     $records =& _cc_stats_get_data($uploads,$sort_on,$dir,$since);
     return $records;
@@ -248,6 +250,7 @@ END;
 
 function cc_stats_total_uploads($tag='')
 {
+    require_once('cclib/cc-upload-table.php');
     $uploads =& CCUploads::GetTable();
     if( !empty($tag) )
         $uploads->SetTagFilter($tag);
@@ -259,6 +262,7 @@ function cc_stats_total_uploads($tag='')
 
 function cc_stats_percent_remixed($tag)
 {
+    require_once('cclib/cc-upload-table.php');
     $uploads =& CCUploads::GetTable();
     $uploads->SetTagFilter($tag);
     $ret['type'] = $tag;
@@ -295,6 +299,7 @@ END;
 
 function cc_stats_most_of_type($tag,$max=20)
 {
+    require_once('cclib/cc-upload-table.php');
     $uploads = new CCUploads();
     $uploads->_key_field = 'user_id';
     $uploads->SetTagFilter($tag);
@@ -323,6 +328,7 @@ END;
     $rows = CCDatabase::QueryRows($sql);
     $count = count($rows);
     $records = array();
+    require_once('cclib/cc-upload-table.php');
     $uploads =& CCUploads::GetTable();
     for( $i = 0; $i < $count; $i++ )
     {

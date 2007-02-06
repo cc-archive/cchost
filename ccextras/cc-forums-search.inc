@@ -41,7 +41,7 @@ class CCForumsSearchAPI
     * @param object &$form CCForm object
     * @param object &$fields Current array of form fields
     */
-    function OnFormFields($api, &$form,&$fields)
+    function OnFormFields(&$form,&$fields)
     {
         if( strtolower( get_class($form) ) == 'ccsearchform' )
         {
@@ -70,7 +70,7 @@ class CCForumsSearchAPI
     * 
     * @param boolean &$done_search Set this to true if you handle the search
     */
-    function OnDoSearch($api, &$done_search)
+    function OnDoSearch(&$done_search)
     {
         if( $done_search )
             return;
@@ -100,6 +100,7 @@ class CCForumsSearchAPI
         $fields = array( 'topic_name', 'topic_text' );
         $filter = CCSearch::BuildFilter($fields, $qlower, $type);
 
+        require_once('ccextras/cc-forums.inc');
         $topics = new CCTopics();
         $topics->AddJoin( new CCForum(), 'topic_forum' );
         $topics->SetSort('topic_date','DESC');
