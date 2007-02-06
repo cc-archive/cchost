@@ -48,7 +48,7 @@ function CC_recent_reviews_impl($limit=5)
                        // unpublished
     $uploads = new CCUploads();
     $uploads->SetDefaultFilter(true,true);
-    $reviews =& CCReviews::GetTable();
+    $reviews = new CCReviews();
     $reviews->SetOrder('topic_date','DESC');
     $reviews->SetOffsetAndLimit(0,$lim);
     $rows = $reviews->QueryRows('');
