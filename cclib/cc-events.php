@@ -150,6 +150,8 @@ class CCEvents
     */
     function Invoke($eventname,$args=array())
     {
+        //CCDebug::Log("Invoking: $eventname");
+
         $hook_list =& CCEvents::_hooks();
         if( !empty($hook_list) )
         {
@@ -170,7 +172,15 @@ class CCEvents
 
         $events  =& CCEvents::_events();
         $results = array();
-        
+
+            if( CCEvents::_watch() )
+            {
+                $x[] = $eventname;
+                $x[] = $events[$eventname];
+                CCDebug::PrintVar($x,false);
+            }
+
+
         if( array_key_exists($eventname,$events) )
         {
             foreach( $events[$eventname] as $handler )
@@ -186,6 +196,8 @@ class CCEvents
                             if( !CCEvents::_load_event_handler($handler) )
                                 return;
                         }
+                        if( !class_exists($class) && !class_exists(strtolower($class)) )
+                            CCDebug::PrintVar($handler);
                         $obj = new $class;
                     }
                     
@@ -210,10 +222,23 @@ class CCEvents
     /**
     * @access private
     */
+
+    function & _watch()
+    {
+        static $watch = false;
+        return $watch;
+    }
+
+    function SetWatch($bool)
+    {
+        $w =& CCEvents::_watch();
+        $w = $bool;
+    }
+
     function & _hooks()
     {
         static $_hook_list;
-        return( $_hook_list);
+        return $_hook_list;
     }
 
     /**
@@ -415,9 +440,10 @@ class CCEvents
     {
         if( empty($handler[1]) )
         {
-            CCUtil::Send404(false);
-            CCPage::SystemError(_("Can't find module"));
-            CCDebug::PrintVar($handler,false);
+            //CCDebug::PrintVar($handler,false);
+            $hx = serialize($handler);
+            print(_("Can't find module") . ' ' . $hx);
+            CCUtil::Send404(true);
             return false;
         }
         else

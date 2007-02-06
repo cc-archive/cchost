@@ -28,11 +28,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCFeedsRSS',  'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_ADD_FEED_LINKS,     array( 'CCFeedsRSS',  'OnAddFeedLinks')); 
-
-// this is in the base class
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsRSS',  'OnApiQueryFormat')); 
+require_once('cclib/cc-feed.php');
 
 define('CC_FEED_RSS', 'rss');
 

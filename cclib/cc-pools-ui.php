@@ -30,6 +30,8 @@ if( !defined('IN_CC_HOST') )
 
 /**
 */
+<<<<<<< .mine
+=======
 
 require_once('cclib/cc-feedreader.php');
 
@@ -158,6 +160,7 @@ class CCAdminPoolsForm extends CCForm
 }
 
 
+>>>>>>> .r5178
 class CCPoolUI
 {
     function Pool($pool_id='',$alpha='')
@@ -165,6 +168,8 @@ class CCPoolUI
         $pool_id = CCUtil::StripText($pool_id);
         if( empty($pool_id) )
             return;
+
+        require_once('cclib/cc-pools.php');
 
         $pools =& CCPools::GetTable();
         $pool = $pools->QueryKeyRow($pool_id);
@@ -230,6 +235,7 @@ END;
         if( empty($id) )
             return;
 
+        require('cclib/cc-pools.php');
         $pool_items =& CCPoolItems::GetTable();
         $where['pool_item_id'] = $id;
         $item       = $pool_items->QueryRow($where);
@@ -253,6 +259,8 @@ END;
 
     function _prep_for_display(&$item, &$remixpool,&$sourcepool)
     {
+        require_once('cclib/cc-remix.php');
+
         $children = $remixpool->GetRemixes($item);
         CCRemix::_mark_row($item,'has_children','remix_children',$children,'more_children_link',false);
         $parents = $sourcepool->GetSources($item);
@@ -289,6 +297,7 @@ END;
             $ids = $_POST['approve'];
             if( !empty($ids) )
             {
+                require_once('cclib/cc-pools.php');
                 $pool_items = CCPoolItems::GetTable();
                 foreach( $ids as $id )
                 {
@@ -307,6 +316,7 @@ END;
                 }
             }
         }
+        require_once('cclib/cc-pools.php');
         $remixes =& CCPoolRemixes::GetTable();
         $args['records'] = $remixes->GetUnapproved();
         if( empty($args['records']) )
@@ -325,6 +335,7 @@ END;
     function Manage()
     {
         CCPage::SetTitle(_("Manage Sample Pools"));
+        require_once('cclib/cc-pools.php');
         $pools =& CCPools::GetTable();
         $rows = $pools->QueryRows('');
         $args = array();
@@ -342,6 +353,9 @@ END;
 
     function Settings()
     {
+        require_once('cclib/cc-feedreader.php');
+        require_once('cclib/cc-pools-forms.php');
+
         CCPage::SetTitle( _('Sample Pools Settings') );
         $form = new CCAdminPoolsForm();
         $form->ValidateFields(); // you have to call this to get values out... hmmm
@@ -412,8 +426,13 @@ END;
     function Edit($pool_id)
     {
         CCPage::SetTitle(_("Edit Pool Information"));
+
+        require_once('cclib/cc-pools-forms.php');
+        require_once('cclib/cc-pools.php');
+
         $form = new CCAdminEditPoolForm();
         $show = true;
+
         $pools =& CCPools::GetTable();
         if( empty( $_POST['admineditpool'] ) )
         {
@@ -490,6 +509,8 @@ END;
                    CONCAT('$phome', pool_item_pool) as pool_item_pool_url 
                 FROM cc_tbl_pool_item 
 END;
+
+        require_once('cclib/cc-remix.php');
 
         if( !empty($row['upload_num_pool_sources']) )
         {

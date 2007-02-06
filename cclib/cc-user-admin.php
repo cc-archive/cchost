@@ -26,8 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCUserAdmin', 'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCUserAdmin', 'OnAdminMenu'));
+require_once('cclib/cc-user.inc');
 
 /**
 * Change the default avatar used by new users
@@ -92,7 +91,7 @@ class CCChangePasswordForm extends CCUserForm
                        array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => CCSecurityKeys::GetSecurityTip(),
+                               'form_tip'   => CCSecurityVerifierForm::GetSecurityTip(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE),
 
                     'user_password' =>
@@ -131,7 +130,7 @@ class CCDeleteUserFilesForm extends CCUserForm
                        array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => CCSecurityKeys::GetSecurityTip(),
+                               'form_tip'   => CCSecurityVerifierForm::GetSecurityTip(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE),
                         );
 
@@ -434,7 +433,7 @@ END;
             'defaultavatar'   => array( 'menu_text'  => _('Default User Avatar'),
                              'menu_group' => 'configure',
                              'help' => _('Upload a default avatar for new users'),
-                             'weight' => 50,
+                             'weight' => 18,
                              'action' =>  ccl('admin','avatar'),
                              'access' => CC_ADMIN_ONLY
                              )

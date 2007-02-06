@@ -30,6 +30,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-form.php');
+
 /**
 * Admin form for editing menus
 */
@@ -234,11 +236,11 @@ class CCMenuAdmin
     /**
     * Displays and processes a form that allows admins to edit the main menu
     */
-    function Admin($menu_api, $revert='')
+    function Admin($revert='')
     {
         if( !empty($revert) && ($revert == 'revert') )
         {
-            $menu_api->RevertToParent();
+            CCMenu::RevertToParent();
             return;
         }
 
@@ -271,7 +273,7 @@ class CCMenuAdmin
 
             CCPage::Prompt(_("Menu changes have been saved."));
         
-            $menu_api->Reset();
+            CCMenu::Reset();
         }            
 
     }
@@ -279,7 +281,7 @@ class CCMenuAdmin
     /**
     * Displays and processes a form that allows admins to edit the main menu's groups
     */
-    function AdminGroup($menu_api)
+    function AdminGroup()
     {
         CCPage::SetTitle(_('Edit Menu Groups'));
 
@@ -299,7 +301,7 @@ class CCMenuAdmin
             CCPage::Prompt(_('Menu group changes have been saved'));
         }            
 
-        $menu_api->Reset();
+        CCMenu::Reset();
     }
 }
 

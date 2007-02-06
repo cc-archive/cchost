@@ -28,8 +28,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCAccess' , 'OnMapUrls') );
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCAccess' , 'OnAdminMenu') );
+require_once('cclib/cc-admin.php');
 
 /**
  *
@@ -56,6 +55,7 @@ class CCAdminSuperForm extends CCEditConfigForm
             );
 
         $this->AddFormFields($fields);
+        $this->SetModule( ccs(__FILE__) );
     }
 
 }
@@ -244,5 +244,7 @@ function cc_get_url_map($doconly=1)
     }
     return $map;
 }
+
+
 
 ?>

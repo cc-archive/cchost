@@ -28,10 +28,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCMenu', 'OnAdminMenu'));
-CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCMenu', 'OnBuildMenu'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCMenu', 'OnMapUrls'));
-
 
 /**
 * API for handling menus 
@@ -502,8 +498,8 @@ class CCMenu
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/menu',            array('CCMenu', 'Admin'),        
-            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+        CCEvents::MapUrl( 'admin/menu',            array('CCMenuAdmin', 'Admin'),
+            CC_ADMIN_ONLY, 'cclib/cc-menu-admin.inc', '', 
             _('Display admin menu form'), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/menu/killcache',  array('CCMenu', 'KillCache'),         
@@ -514,8 +510,8 @@ class CCMenu
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
             _('Add menu items'), CC_AG_CONFIG );
 
-        CCEvents::MapUrl( 'admin/menugroup',       array('CCMenu', 'AdminGroup'),    
-            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+        CCEvents::MapUrl( 'admin/menugroup',       array('CCMenuAdmin', 'AdminGroup'),    
+            CC_ADMIN_ONLY, 'cclib/cc-menu-admin.inc', '', 
             _('Display admin menu groups form'), CC_AG_CONFIG  );
     }
 
@@ -536,26 +532,6 @@ class CCMenu
                               )
                       );
         CCPage::SetTitle(_('Reset Menus'));
-    }
-
-    /**
-    * Displays and processes a form that allows admins to edit the main menu
-    */
-    function Admin($revert='')
-    {
-        require_once('cclib/cc-menu-admin.inc');
-        $menu_admin = new CCMenuAdmin();
-        $menu_admin->Admin($this,$revert);
-    }
-
-    /**
-    * Displays and processes a form that allows admins to edit the main menu's groups
-    */
-    function AdminGroup()
-    {
-        require_once('cclib/cc-menu-admin.inc');
-        $menu_admin = new CCMenuAdmin();
-        $menu_admin->AdminGroup($this);
     }
 
 }

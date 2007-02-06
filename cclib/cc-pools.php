@@ -31,6 +31,7 @@ if( !defined('IN_CC_HOST') )
 /**
 */
 require_once('cclib/cc-feedreader.php');
+require_once('cclib/cc-remix-tree.php');
 
 /**
 * Remote sample pools we know about
@@ -83,6 +84,8 @@ class CCPoolItems extends CCTable
 
         if( !defined('IN_CC_INSTALL') )
         {
+            require_once('cclib/cc-license.php');
+
             $this->AddJoin( new CCLicenses(), 'pool_item_license' );
 
             $baseurl = ccl('pools','item') . '/'; 
@@ -240,6 +243,9 @@ class CCPoolRemixes extends CCPoolTree
 
     function & GetUnapproved()
     {
+        require_once('cclib/cc-upload-table.php');
+        require_once('cclib/cc-pools.php');
+
         $j1 = $this->AddJoin( new CCUploads(),   'pool_tree_parent' );
         $j2 = $this->AddJoin( new CCPoolItems(), 'pool_tree_pool_child' );
         $j3 = $this->AddJoin( new CCUsers(),     $j1 . '.upload_user' );
@@ -430,6 +436,10 @@ class CCPool
         }
         else
         {
+            $parts = split(':',$api_url);
+            if( !empty($parts[1]) )
+                require_once($parts[1]);
+            $api_url = $parts[0];
             $obj = new $api_url();
             $retval = array( 'pool_items', $obj->LocalSearch($pool_id,$query,$type) );
         }

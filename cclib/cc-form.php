@@ -672,9 +672,15 @@ class CCForm
             {
                 $validator = 'validator_' . $form_fields['formatter'];
                 if( method_exists($this,$validator) )
+                {
                     $ret = $this->$validator($fieldname);
+                }
                 else
+                {
+                    if( !empty($form_fields['formatter_module']) )
+                        require_once($form_fields['formatter_module']);
                     $ret = $validator($this,$fieldname);
+                }
                 $retval = $retval && $ret;
             }
         }
@@ -929,7 +935,7 @@ class CCForm
      */
     function generator_textarea($varname,$value='',$class='')
     {
-        CCPage::AddScriptBlock('grow_textarea_script');
+        CCPage::AddScriptLink( ccd('cctemplates', 'js', 'grow_textarea.js'), false );
 
         $html =<<<END
             <textarea style="width:300px;height:100px;" id="$varname" name="$varname" class="$class">$value</textarea><br />
@@ -1233,6 +1239,7 @@ END;
     */
     function validator_tagsedit($fieldname)
     {
+        require_once('cclib/cc-tags.inc');
         $value = $this->GetFormValue($fieldname);
         $tags =& CCTags::GetTable();
         $value = $tags->Normalize($value);
@@ -2198,7 +2205,7 @@ class CCUploadForm extends CCForm
                    )
              );
         CCPage::PageArg('form_hide_msg',$hidemsg);
-        CCPage::AddScriptBlock('hide_form_on_submit_script',true); // true means put at end of page
+        CCPage::AddScriptLink( ccd('cctemplates', 'js', 'upload_form_hide.js'), false ); // false means bottom of page
     }
 }
 

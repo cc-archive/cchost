@@ -28,415 +28,126 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCContest' , 'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,    array( 'CCContest',  'OnUploadRow'));
-CCEvents::AddHandler(CC_EVENT_GET_MACROS,    array( 'CCContest' , 'OnGetMacros'));
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCContest', 'OnAdminMenu'));
-
-
-/**
-* Form used for uploading a contest entry
-*
-*/
-class CCSubmitContestEntryForm extends CCPostRemixForm
-{
-    /**
-    * Constructor
-    *
-    * @param array $R Database record of contest this entry is for
-    */
-    function CCSubmitContestEntryForm($R)
-    {
-        // $R['contest_user']
-        $this->CCPostRemixForm( CCUser::CurrentUser() );
-        $this->SetHiddenField('upload_contest',$R['contest_id']);
-        // er, and I don't think line does anything...
-        $this->SetTemplateVar('remix_search', true);
-   }
-}
-
-
 //-------------------------------------------------------------------
 
 /**
-* Wrapper for database Contest table
+* Contest High Volume API and event callbacks
 *
 */
-class CCContests extends CCTable
+class CCContestHV
 {
-    var $_publish_filter;
-
     /**
-    * Constructor -- don't use new, use GetTable() instead
+    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *
-    * @see GetTable
-    */
-    function CCContests()
-    {
-        $this->CCTable('cc_tbl_contests','contest_id');
-        $this->AddJoin(new CCUsers(),'contest_user');
-
-        if( !CCUser::IsAdmin() )
-            $_publish_filter = '(contest_publish > 0)';
-    }
-
-    /**
-    * Returns static singleton of table wrapper.
-    * 
-    * Use this method instead of the constructor to get
-    * an instance of this class.
-    * 
-    * @returns object $table An instance of this table
-    */
-    function & GetTable()
-    {
-        static $_table;
-        if( !isset($_table) )
-            $_table = new CCContests();
-        return($_table);
-    }
-
-    /**
-    * Returns the display name for a contest given the short (internal) name
-    *
-    * @param string $name Short (internal) name of contest
-    * @return string $long_name Display (friendly) name of contest
-    */
-    function GetFriendlyNameFromShortName($name)
-    {
-        $where['contest_short_name'] = $name;
-        return( $this->QueryItem( 'contest_friendly_name', $where ) );
-    }
-
-    /**
-    * Returns the database ID for a contest given the short (internal) name
-    *
-    * @param string $name Short (internal) name of contest
-    * @return integer $id Database ID of contest
-    */
-    function GetIDFromShortName($name)
-    {
-        $where['contest_short_name'] = $name;
-        return( $this->QueryItem( 'contest_id', $where ) );
-    }
-
-    /**
-    * Returns the display ready record for a contest given the short (internal) name
-    *
-    * This will return a full record (as opposed to raw database row) for a contest
-    *
-    * @param string $name Short (internal) name of contest
-    * @return array $record Full record (as opposed to raw db row) for contest
-    */
-    function & GetRecordFromShortName($name)
-    {
-        $where['contest_short_name'] = $name;
-        $row = $this->QueryRow($where);
-        return( $this->GetRecordFromRow($row) );
-    }
-
-    /**
-    * Returns a series of full display ready records of contests
-    *
+    * @param array &$record Upload row to massage with display data 
     * @see CCTable::GetRecordFromRow()
-    * @see CCTable::Query()
-    * @param mixed $where array or string specifying row filter
-    * @param bool  $expand true if you need the local command menus for each row
-    * @param integer $offset Offset into database
-    * @param integer $limit Number of records to return
-    * @returns array $records Array of display ready records from Contests table
     */
-    function & GetRecords($where='',$expand=true, $offset=0, $limit=0)
+    function OnUploadRow( &$record )
     {
-        $this->SetOffsetAndLimit($offset,$limit);
-        $qr = $this->Query($where);
-        $this->SetOffsetAndLimit(0,0);
-        $records = array();
-        while( $row = mysql_fetch_assoc($qr) )
-        {
-            $record = $this->GetRecordFromRow($row,$expand);
-            $records[] = $record;
-        }
-
-        $ret =& $records;
-        return $ret;
-    }
-
-    /**
-    * Returns the display ready records for the currently open contests
-    *
-
-    * @see CCTable::GetRecordForRow()
-    * @param bool  $expand true if you need the local command menus for each row
-    * @param integer $limit Number of contests to return
-    * @returns array $records Array of display ready records from Contests table
-    */
-    function & GetOpenContests($expand=false,$limit=0)
-    {
-        $where =<<<EOF
-         contest_publish 
-           AND
-         NOW() > contest_open
-           AND 
-         (
-           (NOW() < contest_deadline) OR 
-           (NOW() < contest_vote_deadline)
-         )
-EOF;
-        $r = $this->GetRecords($where,$expand,0,$limit);
-        return $r;
-    }
-
-    /**
-    * Returns the display ready records for contests no longer open
-    *
-    * @see CCTable::GetRecordForRow()
-    * @param bool  $expand true if you need the local command menus for each row
-    * @returns array $records Array of display ready records from Contests table
-    */
-    function & GetPastContests($expand=false)
-    {
-        $where = '(contest_deadline < NOW()) AND (contest_vote_deadline < NOW())';
-        return( $this->GetRecords($where,$expand) );
-    }
-
-    /**
-    * Populate a database row for a contest with specific state flags
-    *
-    * Upon return there will be several boolean flags regarding the
-    * current state of this contest. 
-    *
-    * <code>
-    * $a['contest_taking_submissions']  // true if NOW is before deadline
-    * $a['contest_voting_open']         // true if voting is allowed and NOW is after deadline but before voting deadline
-    * $a['contest_show_results']        // true if voting is allowed and NOW is after voting deadline
-    * $a['contest_can_browse_entries']  // true if browing is always allowed or NOW is after contest deadline
-    * $a['contest_over']                // true is NOW after all submissions and voting
-    *  </code>
-    *
-    * @param array $row Reference to contest database row
-    */
-    function GetOpenStatus(&$row)
-    {
-        $row['contest_taking_submissions'] = false;
-        $row['contest_voting_open']        = false;
-        $row['contest_show_results']       = false;
-        $row['contest_can_browse_entries'] = false;
-        $row['contest_over']               = false;
-        if( $row['contest_publish'] > 0 )
-        {
-            $open     = strtotime($row['contest_open']);
-            $entries  = strtotime($row['contest_entries_accept']);
-            $deadline = strtotime($row['contest_deadline']);
-            $now      = time();
-            if( ($now > $open) && ($now < $deadline) )
-            {
-                if( $now > $entries )
-                {
-                    $row['contest_taking_submissions'] = true;
-
-                    if( $row['contest_auto_publish'] )
-                        $row['contest_can_browse_entries'] = true;
-                }
-            }
-            else
-            {
-                if( $now > $open )
-                {
-                    if( $now > $entries )
-                        $row['contest_can_browse_entries'] = true;
-
-                    if( $row['contest_vote_online'] )
-                        $deadline = strtotime($row['contest_vote_deadline']);
-
-                    if( $now < $deadline )
-                    {
-                        $row['contest_voting_open'] = true;
-                    }
-                    else
-                    {
-                        $row['contest_over'] = true;
-                    }
-                }
-                else
-                {
-                    //$row['contest_over'] = true;
-                }
-            }
-        }
-    }
-
-    /**
-    *  Converts a raw database row to a semantically rich (display ready) record
-    *
-    * @param array $row Reference to database row
-    * @param bool  $expand true if you want to include local menu commands for each record
-    */
-    function & GetRecordFromRow(&$row,$expand = true)
-    {
-        if( !$row['contest_id'] )
+        if( empty($record['upload_contest']) )
             return;
 
-        $this->GetOpenStatus($row);
+        $systags = CCUploads::SplitTags($record);
 
-        $row['contest_url']               = ccc( $row['contest_short_name'] );
-        $row['contest-homepage']          = false;
+        $isentry  = in_array( CCUD_CONTEST_ENTRY, $systags);
+        $issource = !$isentry && (in_array( CCUD_CONTEST_MAIN_SOURCE, $systags ) ||
+                                 in_array( CCUD_CONTEST_SAMPLE_SOURCE, $systags) );
 
-        $row['contest_description_html'] = CCUtil::TextToHTML($row['contest_description']);
-
-        if( $row['contest_bitmap'] )
+        if( $issource  )
+            $relative = $this->_get_upload_dir($record);
+        elseif( $isentry )
+            $relative = $this->_get_user_upload_dir($record);
+        else
+            return;
+        
+        $record['relative_dir']  = $relative;
+        for( $i = 0; $i < count($record['files']); $i++ )
         {
-            $relative = CCContest::_get_upload_dir($row);
-            $row['contest_bitmap_url'] =  ccd( $relative, $row['contest_bitmap'] );
+            $record['files'][$i]['download_url']  = ccd( $relative, $record['files'][$i]['file_name'] );
+            $record['files'][$i]['local_path']    = cca( $relative, $record['files'][$i]['file_name']);
         }
 
-        $row['contest_deadline_fmt']      = date(' l F jS, Y \a\t g:ia',
-                                              strtotime($row['contest_deadline']));
-        $row['contest_vote_deadline_fmt'] = date(' l F jS, Y \a\t g:ia',
-                                              strtotime($row['contest_vote_deadline']));
-        if( $row['contest_taking_submissions'] )
+        $record['file_page_url'] = $this->_get_file_page_url($record);
+    }
+
+
+    /**
+    * Internal helper for getting the upload page's URL
+    *
+    * @param array $record Upload database record (may be incomplete)
+    */
+    function _get_file_page_url(&$record)
+    {
+        return( ccl('files',$record['user_name'],$record['upload_id']) );
+    }
+
+    /**
+    * Internal helper method
+    *
+    * Returns the upload directory associated with the username (or one
+    * found in the record
+    *
+    * @param array $record Database record with contest name in it
+    * @param string $username For this user (if blank, $record is assumed to have a username in it)
+    * @returns string $dir User's upload directory for this contest
+    */
+    function _get_user_upload_dir( $record, $username='' )
+    {
+        $basedir = CCContestHV::_get_upload_dir($record);
+        if( empty($username) )
+            $username = $record['user_name'];
+
+        return( $basedir . '/' . $username );
+    }
+
+    /**
+    * Internal helper method
+    *
+    * Returns the base upload directory associated with a contest
+    *
+    * @param mixter $name_or_row Either short contest name or database record with contest name in it
+    */
+    function _get_upload_dir($name_or_row)
+    {
+        global $CC_GLOBALS;
+
+        $name = is_string($name_or_row) ? $name_or_row : CCContestHV::GetContestNameFromRecord($name_or_row);
+        $base_dir = empty($CC_GLOBALS['contest-upload-root']) ? 'contests' : 
+                            $CC_GLOBALS['contest-upload-root'];
+
+        return( $base_dir . '/' . $name );
+    }
+
+    function GetContestNameFromRecord($row) 
+    {
+        global $CC_GLOBALS;
+
+        if( !empty($row['contest_short_name']) )
+            return $row['contest_short_name'];
+
+        if( empty($CC_GLOBALS['contests']) )
         {
-            $row['contest_states'][] = 
-                array( 'css_class' => 'cc_contest_open',
-                       'text'      => $row['contest_friendly_name'] . 
-                                      _(' is currently open and taking submissions.') );
+            // this will happen one time when upgrading to 4
 
-            $row['contest_states'][] = 
-                array( 'css_class' => 'cc_contest_open',
-                       'text'      => _('Submissions allowed until: '));
+            require_once('cclib/cc-contest-admin.inc');
+            $CC_GLOBALS['contests'] = CCContestAdmin::UpgradeGlobals();
+        }
 
-			$row['contest_states'][] = 
-                array( 'css_class' => '',
-                       'text'      => $row['contest_deadline_fmt'] );
+        $name = '';
 
-            if( !CCUser::IsLoggedIn() )
+        if( empty($row['contest_short_name']) )
+        {
+            if( !empty($row['upload_contest']) )
             {
-				$row['contest_states'][] = 
-					array( 'css_class' => 'cc_contest_open',
-						   'text'      => _('(Only logged in users can submit entries.)') );
+                $name = $CC_GLOBALS['contests'][ $row['upload_contest'] ];
             }
         }
         else
         {
-            if( $row['contest_over'] )
-            {
-                $row['contest_states'][] = 
-                    array( 'css_class' => 'cc_contest_closed',
-                           'text'      => $row['contest_friendly_name'] . 
-                                          _(' is not taking submissions any more.') );
-
-                $row['contest_states'][] = 
-                    array( 'css_class' => 'cc_contest_closed',
-                           'text'      => _('Submissions stopped after: ') );
-
-                $row['contest_states'][] = 
-                    array( 'css_class' => '',
-                           'text'      => $row['contest_deadline_fmt'] );
-            }
-            else
-            {
-                $row['contest_states'][] = 
-                    array( 'css_class' => 'cc_contest_closed',
-                           'text'      => $row['contest_friendly_name'] . 
-                                          _(' is not taking submissions yet.') );
-
-                $row['contest_states'][] = 
-                    array( 'css_class' => 'cc_contest_closed',
-                           'text'      => _('Submissions starts after: ') );
-
-                $row['contest_states'][] = 
-                    array( 'css_class' => '',
-                           'text'      => $row['contest_open'] );
-            }
+            $name = $name['contest_short_name'];
         }
 
-        if( $row['contest_voting_open'] )
-        {
-            $row['contest_states'][] = 
-                array( 'css_class' => 'cc_contest_voting_status',
-                       'text'      => _('Voting is open until ') .
-                                      $row['contest_vote_deadline_fmt'] ) ;
-
-        }
-
-        if( $row['contest_vote_online'] )
-            $row['contest_vote_url'] = ccl('contest', 'vote', $row['contest_short_name'] );
-
-        if( $expand )
-        {
-            CCEvents::Invoke(CC_EVENT_CONTEST_ROW,array(&$row));
-        }
-
-        return( $row );
-    }
-
-    /**
-    * Verifies that the current user is allowed to vote in the current contest
-    *
-    * @param array $record Contest record to check
-    */ 
-    function OKToVote(&$record)
-    {
-        return( empty($_REQUEST['polls']) && CCUser::IsLoggedIn() && 
-                   $record['contest_voting_open'] && 
-                  !CCPoll::AlreadyVoted($record['contest_short_name']) );
-
-    }
-
-    /**
-    * Overwrites base class to add specific publishing and other filters
-    * 
-    * @param mixed $where string or array representing WHERE clause
-    * @param string $columns SELECT will be limited to these columns
-    * @return string $select Fully formed SELECT statement
-    */
-    function _get_select($where,$columns='*')
-    {
-        $where = $this->_where_to_string($where);
-
-        if( !empty($this->_publish_filter) )
-        {
-            if( empty($where) )
-                $where = $this->_publish_filter;
-            else
-                $where = '($where) AND ({$this->_publish_filter})';
-        }
-        $sql = parent::_get_select($where,$columns);
-        return($sql);
-
-    }
-}
-
-//-------------------------------------------------------------------
-
-/**
-* Contest API and event callbacks
-*
-*/
-class CCContest
-{
-    /**
-    * Handler for contest/create
-    *
-    * Show a contest create form and handles POST
-    */
-    function CreateContest()
-    {
-        require_once('cclib/cc-contest-admin.inc');
-        $admin_api = new CCContestAdmin();
-        $admin_api->CreateContest($this);
-    }
-
-    /**
-    * Handler for admin/contest
-    *
-    * Show a contest create form and handles POST
-    */
-    function Admin($contest_short_name)
-    {
-        require_once('cclib/cc-contest-admin.inc');
-        $admin_api = new CCContestAdmin();
-        $admin_api->Admin($this,$contest_short_name);
+        return $name;
     }
 
     /**
@@ -447,9 +158,10 @@ class CCContest
     */
     function OnTabDisplay( &$page )
     {
+        require_once('cclib/cc-contest-table.inc');
         $contests =& CCContests::GetTable();
         $short_name = $page['handler']['args']['contest'];
-        $record = $contests->GetRecordFromShortName($short_name);
+        $contest = $contests->GetRecordFromShortName($short_name);
 
         if( !empty($page['winners']) )
         {
@@ -467,16 +179,18 @@ class CCContest
             }
         }
 
-        if( !$record['contest_taking_submissions'] )
+        if( !$contest['contest_taking_submissions'] )
         {
             unset($page['submit']);
         }
 
-        if( !CCUser::IsAdmin() && !$record['contest_can_browse_entries'] )
+        if( !CCUser::IsAdmin() && !$contest['contest_can_browse_entries'] )
         {
             unset($page['entries']);
         }
     }
+<<<<<<< .mine
+=======
 
 
     /**
@@ -977,6 +691,7 @@ END;
         //CCEvents::MapUrl( 'contest/poll/results', array( 'CCContest', 'PollResults'),     CC_DONT_CARE_LOGGED_IN );
     }
 
+>>>>>>> .r5178
 }
 
 

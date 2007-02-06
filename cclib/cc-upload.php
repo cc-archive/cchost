@@ -26,199 +26,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCUpload',  'OnApiQueryFormat')); 
-
-/**
- * Base class for forms that uplaod media files.
- * 
- */
-class CCUploadMediaForm extends CCUploadForm 
-{
-    /**
-     * Constructor.
-     * 
-     * Sets up basic editing fields for name, tags, description and the
-     * file upload itself. Invokes the CC_UPLOAD_VALIDATOR 
-     * to get a list of valid file types allowed for upload.
-     *
-     * @access public
-     * @param integer $user_id This id represents the 'owner' of the media
-     */
-    function CCUploadMediaForm($user_id,$file_field = true)
-    {
-        global $CC_CFG_ROOT;
-
-        $this->CCUploadForm();
-        $this->SetSubmitText(_('Upload'));
-        $this->SetHiddenField('upload_user', $user_id);
-        $this->SetHiddenField('upload_config', $CC_CFG_ROOT);
-
-        $fields['upload_name'] =
-                        array( 'label'      => _('Name'),
-                               'formatter'  => 'textedit',
-                               'form_tip'   => _('Display name for file'),
-                               'flags'      => CCFF_POPULATE );
-
-        if( $file_field )
-        {
-            CCUpload::GetUploadField($fields,'upload_file_name');
-        }
-
-        $tags =& CCTags::GetTable();
-        $where['tags_type'] = CCTT_USER;
-        $tags->SetOffsetAndLimit(0,'25');
-        $tags->SetOrder('tags_count','DESC');
-        $pop_tags = $tags->QueryKeys($where);
-
-        $fields['upload_tags'] =
-                        array( 'label'      => _('Tags'),
-                               'formatter'  => 'tagsedit',
-                               'form_tip'   => _('Comma separated list of terms'),
-                               'flags'      => CCFF_NONE );
-
-        $fields['popular_tags'] =
-                        array( 'label'      => _('Popular Tags'),
-                               'target'     => 'upload_tags',
-                               'tags'       => $pop_tags,
-                               'formatter'  => 'metalmacro',
-                               'macro'      => 'popular_tags',
-                               'form_tip'   => _('Click on these to automatically add to your upload.'),
-                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
-
-        $fields['upload_description'] =
-                        array( 'label'      => _('Description'),
-                               'formatter'  => 'textarea',
-                               'flags'      => CCFF_POPULATE );
-        
-        $this->AddFormFields( $fields );
-
-        $this->_extra = array();
-
-        CCPage::AddScriptBlock('popular_tags_script');
-    }
-
-    function AddSuggestedTags($suggested_tags)
-    {
-        if( empty($suggested_tags) )
-            return;
-
-        if( !is_array($suggested_tags) )
-            $suggested_tags = CCTag::TagSplit($suggested_tags);
-
-        $fields['suggested_tags'] =
-                        array( 'label'      => _('Suggested Tags'),
-                               'target'     => 'upload_tags',
-                               'tags'       => $suggested_tags,
-                               'formatter'  => 'metalmacro',
-                               'macro'      => 'popular_tags',
-                               'form_tip'   => _('Click on these to automatically add to your upload.'),
-                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
-
-        $this->InsertFormFields( $fields, 'before', 'popular_tags' );
-    }
-
-}
-
-/**
- * Extend this class for forms that upload new media to the system.
- *
- */
-class CCNewUploadForm extends CCUploadMediaForm
-{
-    /**
-     * Constructor.
-     *
-     * Tweaks the bass class state to be in line with
-     * new uploads, original or remixes.
-     *
-     * @access public
-     * @param integer $userid The upload will be 'owned' by this user
-     * @param integer $show_lic Set this to display license choices
-     */
-    function CCNewUploadForm($userid, $show_lic = true)
-    {
-        $this->CCUploadMediaForm($userid);
-
-        $this->SetHiddenField('upload_date', date( 'Y-m-d H:i:s' ) );
-
-        if( $show_lic )
-        {
-            $licenses =& CCLicenses::GetTable();
-            $lics     = $licenses->GetEnabled();
-            $count    = count($lics);
-            if( $count == 1 )
-            {
-                $this->SetHiddenField('upload_license',$lics[0]['license_id']);
-            }
-            elseif( $count > 1 )
-            {
-                $fields = array( 
-                    'upload_license' =>
-                                array( 'label'      => _('License'),
-                                       'formatter'  => 'metalmacro',
-                                       'flags'      => CCFF_POPULATE,
-                                       'macro'      => 'license_choice',
-                                       'license_choice' => $lics
-                                )
-                            );
-                
-                $this->AddFormFields( $fields );
-            }
-        }
-        
-    }
-
-}
-
-class CCConfirmDeleteForm extends CCForm
-{
-    function CCConfirmDeleteForm($pretty_name)
-    {
-        $this->CCForm();
-        $this->SetHelpText(_('This action can not be reversed...'));
-        $this->SetSubmitText(sprintf(_("Are you sure you want to delete '%s'?"),$pretty_name));
-    }
-}
-
-/**
-* @package cchost
-* @subpackage admin
-*/
-class CCAdminUploadForm extends CCForm
-{
-    function CCAdminUploadForm(&$record)
-    {
-        $this->CCForm();
-
-        $tags =& CCTags::GetTable();
-        $where['tags_type'] = CCTT_SYSTEM;
-        $tags->SetOrder('tags_tag','ASC');
-        $sys_tags = $tags->QueryKeys($where);
-
-        $fields = array(
-            'ccud' => array(
-                'label'     => _('Internal Tags'),
-                'form_tip'  => _("Be careful when editing these, it is easy to confuse the system"),
-                'value'     => $record['upload_extra']['ccud'],
-                'formatter' => 'textedit',
-                'flags'     => CCFF_REQUIRED | CCFF_POPULATE
-                ),
-            'popular_tags'  =>
-                        array( 'label'      => _('System Tags'),
-                               'target'     => 'ccud',
-                               'tags'       => $sys_tags,
-                               'formatter'  => 'metalmacro',
-                               'macro'      => 'popular_tags',
-                               'form_tip'   => _('Click on these to automatically add them.'),
-                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE 
-                ),
-            );
-
-        $this->AddFormFields($fields);
-        CCPage::AddScriptBlock('popular_tags_script');
-
-    }
-}
 
 // -----------------------------
 //  Upload UI
@@ -246,6 +53,7 @@ class CCUpload
             return;
         $name = $record['upload_name'];
         CCPage::SetTitle(sprintf(_("Administrator Functions for '%s'"), $name));
+        require_once('cclib/cc-upload-forms.php');
         $form = new CCAdminUploadForm($record);
         if( empty($_POST['adminupload']) || !$form->ValidateFields() )
         {
@@ -254,6 +62,10 @@ class CCUpload
         else
         {
             $form->GetFormValues($values);
+            
+            require_once('cclib/cc-uploadapi.php');
+
+
             CCUploadAPI::UpdateCCUD($upload_id,$values['ccud'],$record['upload_extra']['ccud']);
             $url = $record['file_page_url'];
             $link1 = "<a href=\"$url\">";
@@ -300,7 +112,7 @@ class CCUpload
 
             CCPage::PageArg('chop',$chop);
             CCPage::PageArg('dochop',$dochop);
-            CCPage::PageArg( '_query_macro', $macro );
+            CCPage::PageArg( '_query_macro', $tmacro );
             $macro = '_query_macro';
         }
 
@@ -310,15 +122,30 @@ class CCUpload
                 CCPage::PageArg($K,$V);
         }
 
+        $menu  = empty($nomenu);
+        $srcs  = empty($nosrc);
+        $macro = empty($macro) ? '' : $macro;
+
         // we don't know WHAT shape the global table is in but
         // we have the latest where used so we use that for
         // paging (as it happens the query url will recognize offset
         // in it)
 
         $temp_up = new CCUploads();
+        
+        if( !empty($playlist) )  /// HHHHHHAAAAACK
+        {
+            // aaaaah!!!
+            require_once('ccextras/cc-cart-table.inc');
+            $temp_up->AddJoin( new CCPlaylistItems(), 'upload_id', 'LEFT OUTER', 'cart_item_upload' );
+        }
+
+        global $CC_GLOBALS;
+        $CC_GLOBALS['fplay_args'][] = $qstring;
+
         CCPage::AddPagingLinks($temp_up,$last_where);
 
-        $this->ListRecords($records, empty($macro) ? '' : $macro);
+        $this->ListRecords($records, $macro, $menu, $srcs );
 
         if( !empty($feed) )
         {
@@ -334,7 +161,7 @@ class CCUpload
     }
 
 
-    function ListRecords( &$records, $macro = '' )
+    function ListRecords( &$records, $macro = '', $menu = true, $srcs = true )
     {
         if( empty($macro) )
             $macro = 'list_files';
@@ -343,12 +170,13 @@ class CCUpload
 
         for( $i = 0; $i < $count; $i++ )
         {
-            $records[$i]['local_menu'] = CCUpload::GetRecordLocalMenu($records[$i]);
-            CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, array(&$records[$i]));
+            if( $menu )
+                $records[$i]['local_menu'] = CCUpload::GetRecordLocalMenu($records[$i]);
+            if( $srcs )
+                CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, array(&$records[$i]));
         }
 
         CCPage::PageArg( 'file_records', $records, $macro);
-        CCPage::AddScriptBlock('ajax_block');
 
         if( CCUser::IsAdmin() && !empty($_REQUEST['dump_rec']) )
             CCDebug::PrintVar($records[0],false);
@@ -377,11 +205,13 @@ class CCUpload
         if( empty($_POST['confirmdelete']) )
         {
             $pretty_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
+            require_once('cclib/cc-upload-forms.php');
             $form = new CCConfirmDeleteForm($pretty_name);
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
         {
+            require_once('cclib/cc-uploadapi.php');
             CCUploadAPI::DeleteUpload($upload_id);
             CCPage::Prompt(_("Upload has been deleted."));
         }
@@ -413,6 +243,8 @@ class CCUpload
 
     function GetUploadField(&$fields,$field_name = 'upload_file_name')
     {
+        CCEvents::Invoke(CC_EVENT_INIT_VALIDATOR);
+
         global $CC_UPLOAD_VALIDATOR;
 
         $types = array();
@@ -451,6 +283,8 @@ class CCUpload
 
         unset($values['upload_file_name']);
 
+        require_once('cclib/cc-uploadapi.php');
+
         $ret = CCUploadAPI::PostProcessNewUpload(   $values, 
                                                     $current_path,
                                                     $new_name,
@@ -471,6 +305,8 @@ class CCUpload
     function PostProcessEditUploadForm($form, $record, $relative_dir)
     {
         $form->GetFormValues($upload_args);
+
+        require_once('cclib/cc-uploadapi.php');
 
         $ret = CCUploadAPI::PostProcessEditUpload( $upload_args, $record, $relative_dir );
 

@@ -30,14 +30,13 @@ if( !defined('IN_CC_HOST') )
 */
 define('CC_FORM_TYPE_LOGO_DIR', 'ccimages/form_types' );
 
-CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCSubmit',  'OnBuildMenu'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCSubmit',  'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCSubmit', 'OnAdminMenu'));
-
 /**
 * @package cchost
 * @subpackage admin
 */
+
+require_once('cclib/cc-form.php');
+
 class CCAdminSubmitFormForm extends CCUploadForm
 {
     function CCAdminSubmitFormForm()
@@ -194,6 +193,7 @@ class CCSubmit
 
             $etc['suggested_tags'] = empty($type['suggested_tags']) ? '' : $type['suggested_tags'];
 
+            require_once('cclib/cc-mediahost.php');
             $api = new CCMediaHost();
             if( $type['isremix'] )
             {

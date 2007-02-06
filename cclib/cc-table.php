@@ -189,14 +189,15 @@ class CCTable
     * @param string $other_cctable Instance of a CCTable class to JOIN with
     * @param string $joinfield Name of field in <b>this</b> table that the key field of the <b>other</b> table will join on.
     * @param string $jointype Valid mySQL type of JOIN 
+    * @param string $other_key Column in other table (default is that table's key)
     * @return mixed $name JOIN token. Hold onto this and pass to RemoveJoin if you don't want the next Query() to use the join.
     * @see RemoveJoin
     */
-    function AddJoin($other_cctable, $joinfield, $jointype = 'LEFT OUTER' )
+    function AddJoin($other_cctable, $joinfield, $jointype = 'LEFT OUTER', $other_key='' )
     {
         $name      = 'j' . $this->_join_num++;
         $othername = $other_cctable->_table_name;
-        $otherkey  = $other_cctable->_key_field;
+        $otherkey  = empty($other_key) ? $other_cctable->_key_field : $other_key;
 
         if( !strstr($joinfield,'.') )
             $jfield = $this->_table_name . '.' . $joinfield;
@@ -449,6 +450,7 @@ class CCTable
         if( $columns == '*' && $this->_extra_columns )
             $extra = ',' . implode(',',$this->_extra_columns);
         $join = implode(' ', $this->_joins);
+
         $group = $this->_group_on_key ? "\nGROUP BY " . $this->_key_field : '';
         if( empty($group) && $this->_group_on )
             $group = "\nGROUP BY " . $this->_group_on;
@@ -558,6 +560,29 @@ class CCTable
         while( $r = mysql_fetch_row($qr) )
             $keys[] = $r[0];
         return($keys);
+    }
+
+    /**
+    * Return all rows matching specific keys 
+    * 
+    * <code>
+    * $rows = $table->QueryKeyRows( array( 300, 9, 4465) );
+    * foreach( $rows as $row )
+    * //...
+    * </code>
+    * 
+    * @param mixed $keys Array or comma sep. string of keys to match
+    * @see Query
+    * @return array $rows Table records that match keys
+    */
+    function QueryKeyRows($keys)
+    {
+        if( is_array($keys) )
+            $keys = join(',',$keys);
+        if( empty($keys) )
+            return array();
+        $where = "{$this->_key_field} IN ({$keys})";
+        return $this->QueryRows($where);
     }
 
     /**
@@ -810,6 +835,30 @@ class CCTable
         $sql = "UPDATE $this->_table_name SET " . substr($sets,0,-2) . $where;
         CCDatabase::Query($sql);
         $this->_last_sql = $sql;
+    }
+
+    /**
+    * Increment a count field
+    *
+    * @param string  $field Name of the field to inc
+    * @param integer $key   Record key/id
+    */
+    function Inc($field,$key)
+    {
+        $sql = "UPDATE {$this->_table_name} SET {$field} = {$field} + 1 WHERE {$this->_key_field} = {$key}";
+        CCDatabase::Query($sql);
+    }
+
+    /**
+    * Decrement a count field
+    *
+    * @param string  $field Name of the field to inc
+    * @param integer $key   Record key/id
+    */
+    function Dec($field,$key)
+    {
+        $sql = "UPDATE {$this->_table_name} SET {$field} = {$field} - 1 WHERE {$this->_key_field} = {$key}";
+        CCDatabase::Query($sql);
     }
 
     /**

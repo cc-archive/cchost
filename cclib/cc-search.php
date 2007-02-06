@@ -26,7 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCSearch', 'OnMapUrls') );
+require_once('cclib/cc-form.php');
 
 /**
 */
@@ -152,6 +152,8 @@ END;
         }
         if( !empty($results[CC_SEARCH_UPLOADS]) )
         {
+            require_once('cclib/cc-upload.php');
+
             CCUpload::ListRecords($results[CC_SEARCH_UPLOADS]);
         }
 
@@ -210,6 +212,8 @@ END;
                                   'user_name', 'user_real_name');
             else
                 $fields = $afields;
+
+            require_once('cclib/cc-upload-table.php');
 
             $filter = CCSearch::BuildFilter($fields, $qlower, $type);
             $uploads =& CCUploads::GetTable();
@@ -322,7 +326,8 @@ EOF;
         {
             $field = 'user_' . $field;
             CCPage::SetTitle(_("Users that Mentioned the Following:") . " $tag");
-            CCUser::ListRecords( "$field LIKE '%$tag%'" );
+            require_once('cclib/cc-user.inc');
+            CCUserAPI::ListRecords( "$field LIKE '%$tag%'" );
         }
     }
 

@@ -35,10 +35,6 @@ define('CCGETID3_FILEVERIFY_ENABLED_KEY', 'getid3-fileverify-enabled');
 define('CCGETID3_FILETAGGER_ENABLED_KEY', 'getid3-filetagger-enabled');
 define('CCGETID3_ENABLED_ID3V1',          'getid3-v1');
 
-CCEvents::AddHandler(CC_EVENT_APP_INIT,   '_verify_getid3_install' );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCGetID3' , 'OnGetConfigFields' ));
-CCEvents::AddHandler(CC_EVENT_SYSPATHS, array( 'CCGetID3' , 'OnSysPaths' ));
-
 // todo: contact getID3() folks to aks why this function is missing
 // from their libs...
 function IsValidDottedIP($str) { return(true); }

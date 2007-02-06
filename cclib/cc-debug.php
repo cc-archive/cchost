@@ -259,8 +259,11 @@ class CCDebug
     */
     function Log($msg)
     {
+        //print('hello ' . $msg . '<br />');
+
         if( !CCDebug::IsEnabled() )
             return;
+        
         $ip   = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'cmdline';
         $msg = '[' . $ip . ' - ' . date("Y-m-d h:i a") . '] ' . $msg . "\n";
         global $CC_GLOBALS;
@@ -459,7 +462,8 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
         die($err);
     }
     else
-    { print($err);
+    { 
+        print( "ERROR($errno) " . $err);
         //
         // If debugging is NOT on then we want to show users a happy
         // friendly lie, er, message

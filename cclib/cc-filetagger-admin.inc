@@ -28,6 +28,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-admin.php');
+
 /**
 * Admin form for upload ID3 tagging rules
 */
@@ -48,6 +50,7 @@ class CCAdminTaggerForm  extends CCEditConfigForm
 
         $fields = array();
 
+        require_once('cclib/cc-filetagger.php');
         $standard_tags =& CCID3Tagger::_get_standard_tags();
         $this->AddFormFields( $standard_tags );
 
@@ -59,7 +62,7 @@ class CCAdminTaggerForm  extends CCEditConfigForm
                                                       &$patterns, $dummy ) );
         ksort($patterns);
         $this->CallFormMacro('macro_patterns','show_macro_patterns',$patterns);
-        $this->SetHiddenField('_file', 'cclib/' . basename(__FILE__), CCFF_HIDDEN);
+        $this->SetModule( ccs(__FILE__) );
     }
 
 }

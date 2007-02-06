@@ -21,6 +21,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-form.php');
+
 /**
 * Module for handling admin UI for navigation tabs
 *
@@ -188,8 +190,10 @@ class CCNavigatorAdmin
     *
     * @param string $page_name Specific page to edit or if null, manages all pages
     */
-    function AdminTabs($nav_api, $page_name='',$cmd='')
+    function AdminTabs($page_name='',$cmd='')
     {
+        $nav_api = new CCNavigator();
+
         $pages = $nav_api->_get_pages();
 
         if( empty($page_name) )
@@ -358,6 +362,7 @@ class CCNavigatorAdmin
                                 ($tab['function'] == 'all') )
                         {
                             // this is just tags...
+                            require_once('cclib/cc-tags.inc');
                             $data = CCTags::Normalize($tab['tags']);
                         }
                         elseif( $tab['function'] == 'qry' )
@@ -499,6 +504,45 @@ class CCNavigatorAdmin
         return( $a );
     }
 
+
+    /**
+    * Event handler for {@link CC_EVENT_MAP_URLS}
+    *
+    * @see CCEvents::MapUrl()
+    */
+    function OnMapUrls()
+    {
+        CCEvents::MapUrl( 'view',             array('CCNavigator', 'View'),            
+            CC_DONT_CARE_LOGGED_IN, 'cclib/cc-navigator.php', '[tab_set]/[tab]/[subtab]',
+            _('Perform view tabs actions'), CC_AG_CONFIG );
+
+        CCEvents::MapUrl( 'admin/tabs',       array('CCNavigatorAdmin', 'AdminTabs'),       
+            CC_ADMIN_ONLY, ccs(__FILE__), '',
+            _('Display admin navigator tabs form'), CC_AG_CONFIG  );
+    }
+
+    /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
+    function OnAdminMenu(&$items, $scope)
+    {
+        if( $scope == CC_GLOBAL_SCOPE )
+            return;
+
+        $items += array( 
+            'tab_pages' => array(  
+                           'menu_text'  => _('Navigator Tab Sets'),
+                           'menu_group' => 'configure',
+                           'help'       => _('Create and edit navigator tabs'),
+                           'access' => CC_ADMIN_ONLY,
+                           'weight' => 4,
+                           'action' =>  ccl('admin','tabs') ),
+             );
+
+    }
 
 }
 

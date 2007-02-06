@@ -29,31 +29,12 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCNavigator',  'OnAdminMenu'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCNavigator',  'OnMapUrls'));
-
-
 /**
 * Tab navigator API
 *
 */
 class CCNavigator
 {
-    /**
-    * Catch all function for handling all the variations of admin/tabs URLs.
-    *
-    * Shows and processes various forms related administering tab navigation including
-    * the creation, editing and deleteing of tab pages, and the same functions for 
-    * individual tabs on every page.
-    *
-    * @param string $page_name Specific page to edit or if null, manages all pages
-    */
-    function AdminTabs($page_name='',$ucmd1='',$ucmd2='')
-    {
-        require_once('cclib/cc-navigator-admin.inc');
-        $nav_admin_api = new CCNavigatorAdmin();
-        $nav_admin_api->AdminTabs($this,$page_name,$ucmd1,$ucmd2);
-    }
 
     /**
     * Display a tabbed navigator and the selected page
@@ -176,13 +157,23 @@ class CCNavigator
 
                 $url = $default_tab['tags'];
                 if( strtolower(substr($url,0,7)) == 'http://' )
+                {
                     CCUtil::SendBrowserTo($url);
+                }
 
-                $action = CCEvents::ResolveUrl( $url, true );
+                $pieces = explode('?',$url);
+                if( !empty($pieces[1]) )
+                {
+                    parse_str($pieces[1],$qargs);
+                    $_GET = array_merge($_GET,$qargs);
+                }
+
+                $action = CCEvents::ResolveUrl( $pieces[0], true );
                 if( empty($action) )
                     $this->_signal_error( __LINE__ );
                 else
-                    CCEvents::PerformAction($action);
+                   CCEvents::PerformAction($action);
+                
             }
             else
             {
@@ -205,6 +196,8 @@ class CCNavigator
                 $args['feed'] = $qname;
                 $args['qstring'] = $qstring;
 
+                require_once('cclib/cc-query.php');
+
                 $query = new CCQuery();
                 $args = $query->ProcessAdminArgs($args);
                 $query->Query($args);
@@ -226,6 +219,8 @@ class CCNavigator
         //         of tabs and other hacks
         if( !empty($page['handler']) )
         {
+            if( !empty($page['handler']['module']) )
+                require_once($page['handler']['module']);
             $handler = $page['handler']['method'];
             if( is_array($handler) && is_string($handler[0]))
             {
@@ -371,46 +366,6 @@ class CCNavigator
         CCUtil::Send404();
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_ADMIN_MENU}
-    *
-    * @param array &$items Menu items go here
-    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    */
-    function OnAdminMenu(&$items, $scope)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-            return;
-
-        $items += array( 
-            'tab_pages' => array(  
-                           'menu_text'  => _('Navigator Tab Sets'),
-                           'menu_group' => 'configure',
-                           'help'       => _('Create and edit navigator tabs'),
-                           'access' => CC_ADMIN_ONLY,
-                           'weight' => 4,
-                           'action' =>  ccl('admin','tabs') ),
-             );
-
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_MAP_URLS}
-    *
-    * @see CCEvents::MapUrl()
-    */
-    function OnMapUrls()
-    {
-        CCEvents::MapUrl( 'view',             array('CCNavigator', 'View'),            
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[tab_set]/[tab]/[subtab]',
-            _('Perform view tabs actions'), CC_AG_CONFIG );
-
-        CCEvents::MapUrl( 'admin/tabs',       array('CCNavigator', 'AdminTabs'),       
-            CC_ADMIN_ONLY, ccs(__FILE__), '',
-            _('Display admin navigator tabs form'), CC_AG_CONFIG  );
-    }
-
 }
-
 
 ?>

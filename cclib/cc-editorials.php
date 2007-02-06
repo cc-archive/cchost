@@ -28,49 +28,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCEditorials',  'OnBuildUploadMenu'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCEditorials',  'OnUploadMenu'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCEditorials',  'OnUploadRow'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCEditorials',  'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCEditorials' , 'OnGetConfigFields') );
-CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,        array( 'CCEditorials',  'OnGetSysTags'));
 
-/**
-* Form for writing editorial picks
-*
-*/
-class CCEditorialForm extends CCForm
-{
-    /** 
-    * Constructor
-    *
-    */
-    function CCEditorialForm($reviewer)
-    {
-        $this->CCForm();
-
-        $fields = array( 
-            'reviewer' =>
-                        array( 'label'      => _('Reviewer'),
-                               'formatter'  => 'statictext',
-                               'flags'      => CCFF_NOUPDATE | CCFF_STATIC,
-                               'value'      => $reviewer,
-                        ),
-            'editorial_review' =>
-                        array( 'label'      => _('Review'),
-                               'formatter'  => 'textarea',
-                               'flags'      => CCFF_NONE,
-                        ),
-            'editorial_delete' =>
-                        array( 'label'      => _('Delete'),
-                               'formatter'  => 'checkbox',
-                               'flags'      => CCFF_NONE,
-                        ),
-                    );
-        
-        $this->AddFormFields( $fields );
-    }
-}
 
 /**
 * Editorial Picks API
@@ -91,6 +49,8 @@ class CCEditorials
     */
     function ViewPicks($upload_id = '')
     {
+        require_once('cclib/cc-upload-table.php');
+
         CCPage::SetTitle( _("Editors' Picks") );
         $tag   = empty($upload_id) ? 'editorial_pick' : '';
         $where = empty($upload_id) ? '' : array( 'upload_id' => $upload_id );
@@ -130,6 +90,8 @@ class CCEditorials
 
         $editorials = $uploads->GetExtraField($record, 'edpicks');
 
+        require_once('cclib/cc-editorials.inc');
+
         $form = new CCEditorialForm($reviewer_name);
         $showform = true;
 
@@ -163,6 +125,8 @@ class CCEditorials
                 // use upload id to force commits at each stage
 
                 $uploads->SetExtraField($upload_id,'edpicks',$editorials);
+
+                require_once('cclib/cc-uploadapi.php');
 
                 if( empty($editorials) )
                 {

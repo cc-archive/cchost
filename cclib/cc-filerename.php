@@ -29,19 +29,17 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,       array( 'CCFileRename', 'OnAdminMenu') );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,        array( 'CCFileRename', 'OnMapUrls') );
-
-/**
-*/
-$CC_RENAMER = new CCFileRename();
-
 /**
 * File renaming policy API
 *
 */
 class CCFileRename
 {
+    function OnUploadRenamer( &$renamer )
+    {
+        $renamer = $this;
+    }
+
     /**
     * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
@@ -101,8 +99,8 @@ class CCFileRename
     * use. All respondents are responsible for retuning the macro in the mask as
     * well as the value associated with the upload record.
     *
-    * This method is called by checking for the global '$CC_RENAMER' and then
-    * calling $CC_RENAMER->Rename($record,$newname).
+    * This method is called by checking for a global renamer module (through
+    * the UPLOAD_RENAMER event and then calling $renamer->Rename($record,$newname).
     *
     * If everything works out OK, this method will populate the $newname arg
     *
@@ -111,9 +109,11 @@ class CCFileRename
     * // get $file record from CCFiles table 
     * // $relative_dir is determined by owner module (media blog, contest, etc.)
     *
-    * if( isset($CC_RENAMER) )
+    * $renamer = null;
+    * CCEvents::Invoke( CC_EVENT_UPLOAD_RENAMER, array(&$renamer) );
+    * if( isset($renamer) )
     * {
-    *    if( $CC_RENAMER->Rename($record,$newname )
+    *    if( $renamer->Rename($record,$newname )
     *    {
     *        $oldname = $file['file_name'];
     *        rename( cca($relative_dir,$oldname), cca($relative_dir,$newname) );

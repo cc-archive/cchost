@@ -113,7 +113,7 @@ END;
     /**
     * @access private
     */
-    function & _get_user_stat($user_id,$count_only,$where)
+    function & _get_user_stat($user_id,$count_only,$where,$cols='')
     {
         $empty_ret = array();
 
@@ -134,7 +134,15 @@ END;
             {
                 $uploads =& CCUploads::GetTable();
                 $uploads->SetOrder('upload_date','DESC');
-                $records =& $uploads->GetRecordsFromKeys($ids);
+                if( $cols )
+                {
+                    $where = 'upload_id IN (' . join(',',$ids) . ')';
+                    $records = $uploads->QueryRows($where,$cols);
+                }
+                else
+                {
+                    $records =& $uploads->GetRecordsFromKeys($ids);
+                }
                 return $records;
             }
             return $empty_ret;
@@ -216,9 +224,9 @@ class CCRemixSources extends CCRemixTree
         return $s;
     }
 
-    function & GetRemixesOf($user_id,$count_only=false,$cond='')
+    function & GetRemixesOf($user_id,$count_only=false,$cond='',$cols='')
     {
-        $rof =& $this->_get_user_stat($user_id,$count_only,$cond);
+        $rof =& $this->_get_user_stat($user_id,$count_only,$cond,$cols);
         return $rof;
     }
 

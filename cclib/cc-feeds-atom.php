@@ -29,13 +29,9 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCFeedsAtom', 'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_ADD_FEED_LINKS,     array( 'CCFeedsAtom',  'OnAddFeedLinks')); 
-
-// this is in the base class
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsAtom', 'OnApiQueryFormat')); 
-
 define('CC_FEED_ATOM', 'atom');
+
+require_once('cclib/cc-feed.php');
 
 /**
 * Atom Feed generator and reader for site

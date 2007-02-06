@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: cc-renderimage.php 3560 2006-06-26 16:56:38Z fourstones $
+* $Id$
 *
 */
 
@@ -26,6 +26,9 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-upload-table.php');
+require_once('cclib/cc-upload.php');
+
 /**
 * @package cchost
 * @subpackage render
@@ -34,10 +37,12 @@ class CCRender
 {
     function Show($username,$upload_id)
     {
+        /*
         $uploads =& CCUploads::GetTable();
         $record =& $uploads->GetRecordFromID($upload_id);
         CCUpload::EnsureFiles($record,true);
         $url = $record['files'][0]['download_url'];
+        */
 
         /*
         $html =<<< END

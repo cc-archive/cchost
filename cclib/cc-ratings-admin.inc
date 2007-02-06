@@ -28,6 +28,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-admin.php');
 
 /**
 * Form for admin ui for ratings
@@ -104,6 +105,7 @@ class CCAdminRatingsForm extends CCEditConfigForm
         // don't know how to include this file
         // ALSO: gives us a chance to recalc ratings if we have to
         $this->SetHandler( ccl('admin', 'ratings', 'savesettings') );
+        $this->SetModule( ccs(__FILE__) );
 
     }
 }
@@ -252,6 +254,7 @@ class CCRatingsAdmin
         $count = count($rows);
         for( $i = 0; $i < $count; $i++ )
         {
+            require_once('cclib/cc-sync.php');
             CCSync::_calc_rank($chart,$rows[$i]);
             $args['upload_id'] = $rows[$i]['upload_id'];
             $args['upload_rank'] = $rows[$i]['upload_rank'];
@@ -273,7 +276,7 @@ class CCRatingsAdmin
             $users->Update($args);
         }
 
-        CCPage::Prompt(sprintf(_("%s user scores and %s uploads recalculated", $count, $upcount)));
+        CCPage::Prompt(sprintf(_("%d user scores and %d uploads recalculated"), $count, $upcount));
     }
 
     /**

@@ -32,8 +32,6 @@ if( !defined('IN_CC_HOST') )
 */
 require_once('cclib/cc-feedreader.php');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS, array('CCRestAPI', 'OnMapUrls'));
-
 
 /**
 * @package cchost
@@ -59,7 +57,10 @@ class CCRestAPI
     function Info($feeds = null)
     {
         if( !isset($feeds) )
+        {
+            require_once('cclib/cc-feeds-rss.php');
             $feeds = new CCFeedsRss();
+        }
         $feeds->GenerateFeed('');
     }
 

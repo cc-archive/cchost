@@ -212,12 +212,14 @@ class CCUtil
         return( !empty($_SERVER['HTTP_HOST']) );
     }
 
-    function Send404($exit=true)
+    function Send404($exit=true,$file='',$line='')
     {
-        header("HTTP/1.0 404 Not Found");
+    //    header("HTTP/1.0 404 Not Found");
         if( $exit )
         {
-            print(_('file not found'));
+            if( $file )
+                $file = ' ' . ccs($file) . ' (' . $line . ')';
+            print(_('file not found') . $file );
             exit;
         }
     }

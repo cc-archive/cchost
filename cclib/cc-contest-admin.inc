@@ -28,6 +28,10 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-upload-forms.php');
+require_once('cclib/cc-contest-table.inc');
+require_once('cclib/cc-contest.php');
+
 /**
 * Base class for contest creating/editing form
 *
@@ -93,7 +97,8 @@ class CCContestForm extends CCUploadForm
                         'formatter'  => 'date',
                         'value'      => 'now +2 weeks',
                         'flags'      => CCFF_POPULATE),
-                
+
+            /*
             'contest_auto_publish' => array (
                         'label'      => _('Auto-Publish Entries'),
                         'form_tip'   => '',
@@ -120,6 +125,7 @@ class CCContestForm extends CCUploadForm
                         'formatter'  => 'date',
                         'value'      => 'now +4 weeks',
                         'flags'      => CCFF_POPULATE),
+            */
 
             '_server_time' => array (
                         'label'      => _('Current Server Time'),
@@ -131,6 +137,12 @@ class CCContestForm extends CCUploadForm
 
         $this->AddFormFields( $fields );
         $this->SetHiddenField( 'contest_user', CCUser::CurrentUser() );
+
+        // back compat 
+        $this->SetHiddenField( 'contest_auto_publish', 1 );
+        $this->SetHiddenField('contest_vote_online', 0 );
+        $this->SetHiddenField( 'contest_vote_deadline', '1 years from now' );
+
         $this->EnableSubmitMessage(false);
     }
 }
@@ -285,6 +297,20 @@ class CCUploadContestSourceForm extends CCNewUploadForm
 */
 class CCContestAdmin
 {
+    function UpgradeGlobals()
+    {
+        $contests =& CCContests::GetTable();
+        $rows = $contests->QueryRows('','contest_id,contest_short_name');
+        $c = array();
+        foreach( $rows as $row )
+            $c[$row['contest_id']] = $row['contest_short_name'];
+        $args['contests'] = $c;
+        $configs =& CCConfigs::GetTable();
+        $configs->SaveConfig('config',$args);
+        return $args['contests'];
+    }
+
+
     /**
     * Handler for contest/create
     *
@@ -392,7 +418,7 @@ EOF;
         {
             $contest_short_name = $form->GetFormValue('contest_short_name');
 
-            $upload_dir = $contest_api->_get_upload_dir($contest_short_name);
+            $upload_dir = CCContestHV::_get_upload_dir($contest_short_name);
             $form->FinalizeAvatarUpload('contest_bitmap', $upload_dir);
 
             $form->SetHiddenField('contest_created', date('Y-m-d H:i') );
@@ -417,6 +443,8 @@ EOF;
                                                 '', // todo: bitmap comes later
                                                 ccc( $contest_short_name, 'contest',
                                                       'submit', $contest_short_name ) );
+
+            require_once('cclib/cc-submit.php');
             $submit_api = new CCSubmit();
             $submit_api->SaveFormType($submit_form,$contest_short_name);
 
@@ -470,7 +498,8 @@ EOF;
     {
         $a['contest'] = array(
              'handler' => array(
-                                 'method' => array( 'CCContest', 'OnTabDisplay' ),
+                                 'method' => array( 'CCContestHV', 'OnTabDisplay' ),
+                                 'module' => 'cclib/cc-contest.php',
                                  'args' => array( 'contest' => $short_name ),
                                  'access' => 0 ),
 
@@ -591,7 +620,7 @@ EOF;
 
         $record = $contests->GetRecordFromShortName($contest_short_name) ;
 
-        $upload_dir = $contest_api->_get_upload_dir($contest_short_name);
+        $upload_dir = CCContestHV::_get_upload_dir($contest_short_name);
         $form = new CCEditContestForm($record,$upload_dir);
         if( empty($_POST['editcontest']) || !$form->ValidateFields() )
         {
@@ -599,7 +628,7 @@ EOF;
         }
         else
         {
-            $upload_dir = $contest_api->_get_upload_dir($contest_short_name);
+            $upload_dir = CCContestHV::_get_upload_dir($contest_short_name);
             $form->FinalizeAvatarUpload('contest_bitmap', $upload_dir);
             $form->GetFormValues($fields);
             $contests =& CCContests::GetTable();
@@ -624,19 +653,19 @@ EOF;
             return;
 
         $contests =& CCContests::GetTable();
-        $record =& $contests->GetRecordFromShortName($contest_short_name);
-        $form = new CCUploadContestSourceForm($record);
+        $contest =& $contests->GetRecordFromShortName($contest_short_name);
+        $form = new CCUploadContestSourceForm($contest);
         if( !empty($_POST['uploadcontestsource']) )
         {
             CCUser::CheckCredentials($_POST['upload_user']);
 
             if( $form->ValidateFields() )
             {
-                $ccud_tags = array( $record['contest_short_name'],
+                $ccud_tags = array( $contest['contest_short_name'],
                                     CCUD_ORIGINAL,
                                    $form->GetFormValue('ccud_tags') );                                
 
-                $relative_dir = $contest_api->_get_upload_dir($record);
+                $relative_dir = CCContestHV::_get_upload_dir($contest);
 
                 $id = CCUpload::PostProcessNewUploadForm(  $form,
                                                            $ccud_tags,
@@ -645,7 +674,7 @@ EOF;
                 if( $id )
                 {
                     CCPage::Prompt(_('Upload succeeded'));
-                    $form = new CCUploadContestSourceForm($record); // this clears the form
+                    $form = new CCUploadContestSourceForm($contest); // this clears the form
                 }
             }
         }

@@ -29,12 +29,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCBan',  'OnBuildUploadMenu'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCBan',  'OnUploadMenu'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCBan',  'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCBan',  'OnUploadRow'));
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCBan',  'OnGetConfigFields') );
-
 /**
 * Ban API used by admins to moderate uploads
 *
@@ -70,12 +64,16 @@ class CCBan
         if( $new_ban_flag && !empty($CC_GLOBALS['ban-email-enable']) )
         {
             $text = str_replace('%title%',$row['upload_name'],$CC_GLOBALS['ban-email']);
-            $mailer = new CCMailer();
-            $mailer->To($row['user_email']);
-            $mailer->Subject( 'Your upload has been moderated' );
-            $mailer->Body($text);
-            $ok = $mailer->Send();
-            CCPage::Prompt(_('Moderation email notificaiton sent'));
+            if( file_exists('ccextras/cc-mail.inc') )
+            {
+                require_once('ccextras/cc-mail.inc');
+                $mailer = new CCMailer();
+                $mailer->To($row['user_email']);
+                $mailer->Subject( 'Your upload has been moderated' );
+                $mailer->Body($text);
+                $ok = $mailer->Send();
+                CCPage::Prompt(_('Moderation email notificaiton sent'));
+            }
         }
     }
     

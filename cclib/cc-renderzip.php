@@ -26,7 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderZip', 'OnUploadRow'));
+require_once('cclib/cc-render.php');
 
 /**
 * @package cchost

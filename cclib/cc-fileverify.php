@@ -25,14 +25,10 @@
 * @subpackage io
 */
 
+require_once('cclib/cc-admin.php');
+
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
-
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,          array( 'CCFileVerify', 'OnAdminMenu') );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,            array( 'CCFileVerify', 'OnMapUrls') );
-CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,         array( 'CCFileVerify', 'OnGetSysTags'));
-CCEvents::AddHandler(CC_EVENT_GET_MACROS,          array( 'CCFileVerify', 'OnGetMacros'));
-CCEvents::AddHandler(CC_EVENT_APP_INIT,            array( 'CCFileVerify', 'Install' ));
 
 $CC_UPLOAD_VALIDATOR = null; // new CCFileVerify();
 
@@ -64,6 +60,7 @@ class CCAdminFileVerifyForm extends CCEditConfigForm
         }
 
         $this->AddFormFields( $fields );
+        $this->SetModule( ccs(__FILE__) );
     }
 }
 

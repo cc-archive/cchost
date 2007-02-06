@@ -32,81 +32,6 @@ if( !defined('IN_CC_HOST') )
 */
 define('CC_REMIX_SEARCH_LIMIT', 30 );
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING, array( 'CCRemix', 'OnUploadListing'));
-CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  array( 'CCRemix', 'OnUploadDelete'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCRemix' ,'OnMapUrls') );
-
-/**
- * Base class for uploading remixes form
- *
- * Note: derived classes must call SetHandler()
- * @access public
- */
-class CCPostRemixForm extends CCNewUploadForm
-{
-    /**
-     * Constructor
-     *
-     * Sets up form as a remix form. Initializes 'remix search' box.
-     
-     * @access public
-     * @param integer $userid The remix will be 'owned' by owned by this user
-     */
-    function CCPostRemixForm($userid,$show_pools=false)
-    {
-        $this->CCNewUploadForm($userid,false);
-
-        if( $show_pools )
-            CCRemix::_add_pool_to_form($this);
-
-        CCRemix::_setup_search_fields($this);
-    }
-
-    /**
-     * Overrides the base class and only displays fields if search results is not empty.
-     *
-     */
-    function GenerateForm()
-    {
-        if( $this->TemplateVarExists('remix_sources') || $this->TemplateVarExists('pool_sources')  )
-        {
-            parent::GenerateForm(false);
-        }
-        else
-        {
-            $this->EnableSubmitMessage(false);
-            $this->SetSubmitText(null);
-            parent::GenerateForm(true); // hiddenonly = true
-        }
-
-        return( $this );
-    }
-
-}
-
-
-class CCEditRemixesForm extends CCForm
-{
-    /**
-     * Constructor
-     *
-     * Sets up form as a remix editing form. Initializes 'remix search' box.
-     *
-     * @param bool $show_pools (reserved)
-     */
-    function CCEditRemixesForm($show_pools=false)
-    {
-        $this->CCForm();
-
-        if( $show_pools )
-            CCRemix::_add_pool_to_form($this);
-
-        CCRemix::_setup_search_fields($this);
-
-        $this->SetSubmitText(_('Done Editing'));
-    }
-}
-
 
 /**
  * Remix API
@@ -147,6 +72,7 @@ class CCRemix
     */
     function _add_pool_to_form(&$form)
     {
+        require_once('cclib/cc-pools.php');
         $pool_table =& CCPools::GetTable(); // tada!!!
         $where = "pool_api_url > '' AND pool_search > 0 AND pool_banned < 1";
         $pools = $pool_table->QueryRows($where);
@@ -174,6 +100,7 @@ class CCRemix
     {
         global $CC_GLOBALS;
 
+        require_once('cclib/cc-upload.php');
         CCUpload::CheckFileAccess(CCUser::CurrentUserName(),$upload_id);
 
         $uploads =& CCUploads::GetTable();
@@ -181,6 +108,7 @@ class CCRemix
         $msg = sprintf(_("Editing Remixes for '%s'"),$name);
         CCPage::SetTitle($msg);
         $pools    = empty($CC_GLOBALS['allow-pool-search']) ? false : $CC_GLOBALS['allow-pool-search'];
+        require_once('cclib/cc-remix-forms.php');
         $form = new CCEditRemixesForm($pools);
         $show = false;
         if( empty($_REQUEST['editremixes']) )
@@ -217,6 +145,8 @@ class CCRemix
     */
     function OnPostRemixForm(&$form, $relative_dir, $ccud = CCUD_REMIX, $remixid = '')
     {
+        require_once('cclib/cc-upload-table.php');
+        require_once('cclib/cc-pools.php');
         $is_update  = !empty($remixid);
         $uploads    =& CCUploads::GetTable();
         $pool_items =& CCPoolItems::GetTable();
@@ -253,6 +183,7 @@ class CCRemix
 
                 if( $is_update )
                 {
+                    require_once('cclib/cc-sync.php');
                     CCSync::RemixDetach($remixid);
                     $where1['tree_child'] = $remixid;
                     $remixes->DeleteWhere($where1);
@@ -293,6 +224,8 @@ class CCRemix
 
                         if( CCTag::InTag( CCUD_ORIGINAL . ',' . CCUD_REMIX, $current_tags ) )
                         {
+                            require_once('cclib/cc-uploadapi.php');
+
                             $ccuda = array( CCUD_ORIGINAL, CCUD_REMIX  );
 
                             CCUploadAPI::UpdateCCUD( $remixid, $ccuda[$have_sources], $ccuda[!$have_sources] );
@@ -310,6 +243,7 @@ class CCRemix
                         CCPool::NotifyPoolsOfRemix($pool_sources,$url);
                     }
 
+                    require_once('cclib/cc-sync.php');
                     CCSync::Remix($remixid,$remix_sources);
 
                     CCEvents::Invoke(CC_EVENT_SOURCES_CHANGED, array( $remixid, &$remix_sources) );
@@ -398,6 +332,8 @@ class CCRemix
                         $limit = CC_REMIX_SEARCH_LIMIT;
                         $fields = array();
                 }
+
+                require_once('cclib/cc-search.php');
 
                 CCSearch::DoSearch( $query, 'all', CC_SEARCH_UPLOADS, $results, $limit, $fields );
                 $count = 0;

@@ -28,9 +28,9 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPageAdmin', 'OnMapUrl') );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPageAdmin', 'OnGetConfigFields') );
-CCEvents::AddHandler(CC_EVENT_APP_INIT,           array( 'CCPageAdmin', 'OnAppInit') );
+require_once('cclib/cc-template.php');
+require_once('cclib/cc-menu.php');
+require_once('cclib/cc-navigator.php');
 
 /**
 * Page template administration API
@@ -100,6 +100,8 @@ class CCPageAdmin
     */
     function OnGetConfigFields($scope,&$fields)
     {
+        require_once('cclib/cc-template.inc');
+
         if( $scope != CC_GLOBAL_SCOPE )
         {
             $fields['homepage'] =
@@ -178,16 +180,17 @@ class CCPage extends CCTemplate
         $this->_page_args['crumb_seperator'] = ' &raquo; ';
         $this->_page_args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
         $this->_page_args['get'] = $_GET;
+        $this->_page_args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
     }
 
     /**
     * Returns the a singleton instance of the page that will be displayed
     * 
     */
-    function & GetPage()
+    function & GetPage($force = false)
     {
         static $_page;
-        if( empty($_page) )
+        if( empty($_page) || $force )
             $_page = new CCPage();
         return($_page);
     }
@@ -518,7 +521,7 @@ class CCPage extends CCTemplate
 
         CCEvents::Invoke(CC_EVENT_RENDER_PAGE, array( &$page ) );
 
-        if( !empty($_REQUEST['dump_page']) && $isadmin )
+        if( !empty($_REQUEST['dump_page']) ) // && $isadmin )
              CCDebug::PrintVar($page->_page_args,false);
 
         // CCDebug::LogVar('page environment',$page->_page_args);
@@ -526,10 +529,14 @@ class CCPage extends CCTemplate
         if( !empty($CC_GLOBALS['no-cache']) )
             CCEvents::_send_no_cache_headers();
 
+        CCDebug::Chronometer($page_print);
+
         if( $print )
             $page->SetAllAndPrint($page->_page_args, CCUser::IsAdmin() );
         else
             return( $page->SetAllAndParse($page->_page_args, false, CCUser::IsAdmin()) );
+
+        CCDebug::Log( "Page print: " . CCDebug::Chronometer($page_print) );
     }
 
     function GetViewFile($filename)

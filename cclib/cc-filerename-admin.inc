@@ -29,6 +29,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-admin.php');
+
 /**
 * Admin form for upload renaming rules
 */
@@ -55,8 +57,6 @@ class CCAdminRenameForm  extends CCEditConfigForm
         ksort($patterns);
         $this->CallFormMacro('macro_patterns','show_macro_patterns',$patterns);
 
-        $this->SetHiddenField('_file', 'cclib/' . basename(__FILE__), CCFF_HIDDEN);
-
         $fields = array();
 
         foreach( $masks as $mask => $label )
@@ -73,6 +73,7 @@ class CCAdminRenameForm  extends CCEditConfigForm
                                'flags'      => CCFF_POPULATE );
 
         $this->AddFormFields($fields);
+        $this->SetModule( ccs(__FILE__) );
     }
 }
 

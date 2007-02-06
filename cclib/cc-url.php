@@ -56,6 +56,11 @@ function ccc()
     return( cc_get_root_url() . $arg . $cmdurl );
 }
 
+function cc_current_url()
+{
+    return ccc($_REQUEST['ccm']);
+}
+
 /**
 * Simple concat of args with URL path separator
 */

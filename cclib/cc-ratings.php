@@ -28,13 +28,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCRating' , 'OnGetConfigFields' ));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING,     array( 'CCRating',  'OnUploadListing'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCRating',  'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCRating' , 'OnAdminMenu') );
-CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCRating' , 'OnUserRow') );
-CCEvents::AddHandler(CC_EVENT_USER_DELETED,       array( 'CCRating' , 'OnUserDelete') );
-
 /**
 * Ratings table wrapper
 *
@@ -94,15 +87,13 @@ class CCRatings extends CCTable
 
         if( !empty($chart['requires-review']) ) 
         {
-            if( class_exists('CCReviews') )
-            {
-                $reviews =& CCReviews::GetTable();
-                $rev_q['topic_user'] = $user_id;
-                $rev_q['topic_upload'] = $upload_id;
-                $count = $reviews->CountRows($rev_q);
-                if( intval($count) < 1 )
-                    return true;
-            }
+            require_once('ccextras/cc-reviews-table.inc');
+            $reviews =& CCReviews::GetTable();
+            $rev_q['topic_user'] = $user_id;
+            $rev_q['topic_upload'] = $upload_id;
+            $count = $reviews->CountRows($rev_q);
+            if( intval($count) < 1 )
+                return true;
         }
 
         $remote_ip = $_SERVER['REMOTE_ADDR'];
@@ -225,6 +216,9 @@ class CCRating
     {
         if( empty($score) )
             return;
+        
+        require_once('cclib/cc-upload-table.php');
+        require_once('cclib/cc-sync.php');
 
         $uploads =& CCUploads::GetTable();
         $record =& $uploads->GetRecordFromID($upload_id);
@@ -292,47 +286,9 @@ class CCRating
         if( !$ratings_on || empty($record['upload_score']) )
             return;
 
-        $this->_fill_scores($record,'upload');
-    }
+        require_once('cclib/cc-ratings.inc');
 
-    /**
-    * @access private
-    */
-    function _fill_scores(&$record,$prefix)
-    {
-        $average = $record[$prefix . '_score'] / 100;
-        $count = $record[$prefix . '_num_scores'];
-        $stars = floor($average);
-        $half  = ($record[$prefix . '_score'] % 100) > 25;
-
-        for( $i = 0; $i < $stars; $i++ )
-            $record['ratings'][] = 'full';
-
-        if( $half )
-        {
-            $record['ratings'][] = 'half';
-            $i++;
-        }
-        
-        for( ; $i < 5; $i++ )
-            $record['ratings'][] = 'empty';
-        
-        $record['ratings_score'] = number_format($average,2) . '/' . $count;
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_USER_ROW}
-    *
-    * Add extra data to a user row before display
-    *
-    * @param array &$record User record to massage
-    */
-    function OnUserRow(&$record)
-    {
-        if( !empty($record['user_num_scores']) ) // && $row['user_num_scores'] > 10 )
-        {
-            $this->_fill_scores($record,'user');
-        }
+        CCRatingsHV::_fill_scores($record,'upload');
     }
 
     /**

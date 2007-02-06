@@ -28,11 +28,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCID3Tagger', 
-                                                   'OnAdminMenu') );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCID3Tagger', 
-                                                   'OnMapUrls') );
-
 $CC_ID3_TAGGER = new CCID3Tagger();
 
 

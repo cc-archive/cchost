@@ -28,10 +28,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCAdmin' , 'OnAdminMenu') );
-CCEvents::AddHandler(CC_EVENT_MAIN_MENU,          array( 'CCAdmin' , 'OnBuildMenu') );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCAdmin' , 'OnMapUrls') );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCAdmin' , 'OnGetConfigFields') );
+require_once('cclib/cc-form.php');
 
 /**
  * Derive from this class to let the user modify the app's config 
@@ -108,10 +105,21 @@ class CCEditConfigForm extends CCForm
     {
         $this->CCForm();
         $this->SetHandler( ccl('admin', 'save') );
-        $classname = __CLASS__;
+        $classname = __CLASS__; // err, cruft?
         $this->SetHiddenField( '_name', get_class($this), CCFF_HIDDEN | CCFF_NOUPDATE );
         $this->_typename = $config_type;
         $this->_scope = $scope;
+    }
+
+    /**
+     * Config forms might be in modules not currently loaded. This method allows forms to specify 
+     * which module to load during POST
+     *
+     * @param string $module name of file to load to process form POST
+     */
+    function SetModule($module)
+    {
+        $this->SetHiddenField('_file', $module, CCFF_HIDDEN | CCFF_NOUPDATE );
     }
 
     /**
@@ -172,6 +180,7 @@ class CCAdminConfigForm extends CCEditConfigForm
         $fields = array();
         CCEvents::Invoke( CC_EVENT_GET_CONFIG_FIELDS, array( CC_GLOBAL_SCOPE, &$fields ) );
         $this->AddFormFields($fields);
+        $this->SetModule( ccs(__FILE__) );
    }
 }
 
@@ -195,6 +204,7 @@ class CCAdminSettingsForm extends CCEditConfigForm
         $fields = array();
         CCEvents::Invoke( CC_EVENT_GET_CONFIG_FIELDS, array( CC_LOCAL_SCOPE, &$fields ) );
         $this->AddFormFields($fields);
+        $this->SetModule( ccs(__FILE__) );
    }
 }
 
@@ -388,6 +398,8 @@ class CCAdmin
     {
         $global_items = array();
         CCEvents::Invoke(CC_EVENT_ADMIN_MENU, array( &$global_items, CC_GLOBAL_SCOPE ) );
+        uasort($global_items,'cc_weight_sorter');
+        //CCDebug::PrintVar($global_items,false);
         $args['global_title'] = ''; // _('Global Site Settings');
         $args['global_help']  = _('These settings affect the entire site');
         $args['global_items'] = $this->_check_access($global_items);
@@ -400,6 +412,7 @@ class CCAdmin
 
         $local_items = array();
         CCEvents::Invoke(CC_EVENT_ADMIN_MENU, array( &$local_items, CC_LOCAL_SCOPE) );
+        uasort($local_items,'cc_weight_sorter');
         $args['local_title'] = ''; // _('Virtual Root Settings');
         $configs =& CCConfigs::GetTable();
         $roots = $configs->GetConfigRoots();
@@ -650,21 +663,21 @@ END;
                                  'menu_group' => 'configure',
                                  'help'      => _('Help on configuring the site'),
                                  'access' => CC_ADMIN_ONLY,
-                                 'weight' => 10002,
+                                 'weight' => 1,
                                  'action' =>  ccl('viewfile','adminhelp.xml')
                                  ),
                 'virtualhost'   => array( 'menu_text'  => 'Virtual ccHost',
                                  'menu_group' => 'configure',
                                  'help' => _('Create a new virtual root'),
                                  'access' => CC_ADMIN_ONLY,
-                                 'weight' => 10001,
+                                 'weight' => 1003,
                                  'action' =>  ccl('admin','cfgroot')
                                  ),
                 'adminadvanced'   => array( 'menu_text'  => 'Global Setup',
                                  'menu_group' => 'configure',
                                  'help'  => _('Cookies, ban message, admin email, 3rd party add ins, etc.'),
                                  'access' => CC_ADMIN_ONLY,
-                                 'weight' => 10000,
+                                 'weight' => 2,
                                  'action' =>  ccl('admin','setup')
                                  ),
                     );
@@ -782,6 +795,9 @@ END;
     */
     function SaveConfig($form = '')
     {
+        if( empty($_POST) )
+            return;
+
         CCPage::SetTitle(_("Saving Configuration"));
         if( empty($form) )
         {
@@ -807,94 +823,5 @@ END;
 
 }
 
-
-/**
-* @access private
-*/
-function cc_check_site_enabled()
-{
-    global $CC_GLOBALS;
-
-    $enable_password = $CC_GLOBALS['enable-password'];
-
-    if( !empty($_COOKIE[CC_ENABLE_KEY]) )
-    {
-        if( $_COOKIE[CC_ENABLE_KEY] == $enable_password  )
-        {
-            return;
-        }
-    }
-
-    if( !empty($_POST[CC_ENABLE_KEY]) )
-    {
-        if( $_POST[CC_ENABLE_KEY] == $enable_password  )
-        {
-            setcookie( CC_ENABLE_KEY, $enable_password , time()+60*60*24*14, '/' );
-            return;
-        }
-    }
-
-    if( !empty($CC_GLOBALS['disabled-msg']) && file_exists($CC_GLOBALS['disabled-msg']) )
-    {
-        $msgtext = file_get_contents($CC_GLOBALS['disabled-msg']);
-    }
-    else
-    {
-        // Do NOT internalize this string, config is not fully
-        // intialized, see the ccadmin installer
-
-        $msgtext = 'Site is under construction.';
-    }
-
-    if( !empty($CC_GLOBALS['skin']) )
-    {
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        $css = ccd($settings['style-sheet']);
-        $css_link =<<<END
-            <link rel="stylesheet" type="text/css" href="$css" title="Default Style"/>
-END;
-    }
-    else
-    {
-        $css_link = '';
-    }
-
-    $name = CC_ENABLE_KEY;
-    $self = $_SERVER['PHP_SELF'];
-    $html = "";
-    $html .=<<<END
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-    <title>ccHost</title>
-    $css_link
-</head>
-<body>
-<div class="cc_all_content" >
-    <div class="cc_content">
-        <div class="cc_form_about">
-    $msgtext        
-        </div>
-<form action="$self" method="post" class="cc_form" >
-<table class="cc_form_table">
-    <tr class="cc_form_row">
-        <td class="cc_form_label">Admin password:</td>
-        <td class="cc_form_element">
-            <input type='password' id="$name" name="$name" /></td>
-    </tr>
-    <tr class="cc_form_row">
-        <td class="cc_form_label"></td>
-        <td class="cc_form_element">
-            <input type='submit' value="submit" /></td>
-    </tr>
-</table>
-</form></div></div>
-</body>
-</html>
-END;
-    print($html);
-    exit;
-}
 
 ?>

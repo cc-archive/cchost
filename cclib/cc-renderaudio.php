@@ -34,11 +34,7 @@ define('RADIO_PROMO_INTERVAL', 4);
 
 define('CC_MAX_PLAYLIST', 100 );
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,     array( 'CCRenderAudio', 'OnUploadMenu'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,      array( 'CCRenderAudio', 'OnUploadRow'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,        array( 'CCRenderAudio', 'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_LISTING_RECORDS, array( 'CCRenderAudio', 'OnListingRecords')); 
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT, array( 'CCRenderAudio', 'OnApiQueryFormat')); 
+require_once('cclib/cc-render.php');
 
 /**
 */
@@ -116,10 +112,10 @@ class CCRenderAudio extends CCRender
         //if( !CCUploads::IsMediaType($record,'audio') )
         //    return(null);
 
-        if( empty($record['contest_id']) )
+        if( empty($record['upload_contest']) )
             $fakename = $record['user_name'];
         else
-            $fakename = $record['contest_short_name'];
+            $fakename = CCContestHV::GetContestNameFromRecord($record);
 
         $link['url'] = ccl( 'files', 'stream', 
                                     $fakename, 
@@ -195,6 +191,7 @@ class CCRenderAudio extends CCRender
             $args['rand'] = 1;
         }
         $args['format'] = 'm3u';
+        require_once('cclib/cc-query.php');
         $query = new CCQuery();
         $args = $query->ProcessUriArgs($args);
         list( $results, $mime ) = $query->Query($args);

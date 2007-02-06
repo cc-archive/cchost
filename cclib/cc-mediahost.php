@@ -27,15 +27,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCMediaHost',  'OnBuildUploadMenu'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCMediaHost',  'OnUploadMenu'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCMediaHost',  'OnUploadRow'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCMediaHost',  'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_GET_MACROS,         array( 'CCMediaHost',  'OnGetMacros'));
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCMediaHost' , 'OnGetConfigFields') );
-CCEvents::AddHandler(CC_EVENT_LISTING_RECORDS,    array( 'CCMediaHost' , 'OnListingRecords') );
-
-
 /**
 * Main API for media blogging
 */
@@ -67,6 +58,8 @@ class CCMediaHost
                                            'text' => $user_real_name );
                 if( !empty($upload_id) )
                 {
+                    require_once('cclib/cc-upload-table.php');
+
                     $uploads =& CCUploads::GetTable();
                     $upload_name = $uploads->QueryItemFromKey('upload_name',
                                                               $upload_id);
@@ -102,6 +95,7 @@ class CCMediaHost
         if( empty($username) )
         {
             CCPage::SetTitle(_("Browse Uploads"));
+            require_once('cclib/cc-upload.php');
             CCUpload::ListMultipleFiles();
         }
         else
@@ -137,11 +131,11 @@ class CCMediaHost
             CCPage::PageArg( 'chop', false );
             $record = $uploads->GetRecordFromRow($row);
             CCPage::SetTitle( empty($title) ? $record['upload_name'] : $title);
+            require_once('cclib/cc-upload.php');
             $record['local_menu'] = CCUpload::GetRecordLocalMenu($record);
             $arg = array( &$record );
             CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, $arg );
             CCPage::PageArg( 'file_records', $arg, 'list_file' );
-            CCPage::AddScriptBlock('ajax_block');
             if( CCUser::IsAdmin() && !empty($_REQUEST['dump_rec']) )
                 CCDebug::PrintVar($record,false);
             CCEvents::Invoke(CC_EVENT_LISTING_RECORDS, array( $arg ) );
@@ -172,6 +166,9 @@ class CCMediaHost
             CCUser::CheckCredentials($username);
             $uid = CCUser::IDFromName($username);
         }
+
+        require_once('cclib/cc-upload-forms.php');
+
         $form = new CCNewUploadForm($uid);
         
         if( !empty($etc['suggested_tags']) )
@@ -226,6 +223,7 @@ class CCMediaHost
         $username = CCUser::CurrentUserName();
         $userid   = CCUser::CurrentUser();
         $pools    = empty($CC_GLOBALS['allow-pool-search']) ? false : $CC_GLOBALS['allow-pool-search'];
+        require_once('cclib/cc-remix-forms.php');
         $form     = new CCPostRemixForm($userid,$pools);
 
         $this->_add_publish_field($form);
@@ -646,7 +644,7 @@ class CCMediaHost
                             );
         }
 
-        CCPage::AddScriptBlock('dl_popup_script',true);
+        CCPage::AddScriptLink( ccd('cctemplates', 'dl_popup.js'), false );
     }
 
     /**

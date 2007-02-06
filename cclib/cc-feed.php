@@ -30,12 +30,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigFields') );
-CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCFeed',  'OnUploadDelete'));
-CCEvents::AddHandler(CC_EVENT_DELETE_FILE,        array( 'CCFeed',  'OnFileDelete'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCFeed',  'OnUploadDone'));
-CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,        array( 'CCFeed',  'OnRenderPage'));
-
 /**
  * The number of items in a feed.
  */
@@ -56,6 +50,7 @@ define ( 'CC_FEED_DUMP_FILE', 'dump.xml' );
  */
 define ( 'CC_FEED_DEFAULT_TAG', 'audio' );
 
+require_once('cclib/cc-query.php');
 
 /**
  */
@@ -440,6 +435,11 @@ class CCFeed
     */
     function PrepRecords(&$records)
     {
+        global $CC_GLOBALS;
+
+        // this is a hack for upload listing
+        $CC_GLOBALS['works_page'] = true;
+
         $keys = array_keys($records);
         $count = count($keys);
         for( $i = 0; $i < $count; $i++ )
@@ -473,15 +473,17 @@ class CCFeed
                 $row['upload_description'] =  $row['upload_description_text'];
 
             if( !empty($row['upload_description_html']) )
-                $row['upload_description_html'] = 
-                        utf8_encode($this->_cct($row['upload_description_html']));
+            {
+                //$_amp_text = str_replace('&','&amp;',$row['upload_description_html']);
+                $_amp_text = $row['upload_description_html'];
+                $row['upload_description_html'] = utf8_encode($this->_cct($_amp_text));
+            }
 
             $row['upload_description'] = utf8_encode($this->_cct($row['upload_description']));
             $row['upload_name']        = utf8_encode($this->_cct($row['upload_name']));
             $row['user_real_name']     = utf8_encode($this->_cct($row['user_real_name']));
 
-            $remix_api = new CCRemix();
-            $remix_api->OnUploadListing( $row );
+            CCEvents::Invoke( CC_EVENT_UPLOAD_LISTING, array( &$row ) );
         }
 
     }

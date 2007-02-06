@@ -257,6 +257,25 @@ define('CC_EVENT_UPLOAD_FILES',        'uploadfiles' );
 define('CC_EVENT_UPLOAD_DONE',         'uploaddone' );
 
 /**
+* Request for data Event: Request for validators
+*
+* A somewhat hacky way to initialize the CC_UPLOAD_VALIDATOR global
+* variable. (This is not the prescribed way to handle a situation
+* like this but is this way for historical reasons.)
+*
+* After this event is triggered it is a assumed that the global
+* will have an object (if installed) that implements a CCFileVerify
+* interface.
+*
+* Call back (handler) prototype:
+*<code>
+* function OnInitValidator(  )
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_INIT_VALIDATOR',  'initvalidator' );
+
+/**
 * Notification Event: 'I Sampled This' list changed (or created) 
 *
 * Call back (handler) prototype:
@@ -598,7 +617,7 @@ $fields['my_sys_dir'] =
 define('CC_EVENT_SYSPATHS',               'syspaths' );
 
 /**
-* Request for Action Event: api/query request with unknown format
+* Request for Data Event: api/query request with unknown format
 *
 * Triggered when caller has requested a query in a 
 * format unknown to the default handler.
@@ -617,12 +636,27 @@ define('CC_EVENT_API_QUERY_FORMAT',         'apiqueryformat');
 
 
 /**
-* Request for Action Event: Add feed links to header/footer
+* Request for Data Event: api/query request for file renamer
+*
+* Triggered when caller has requested the module responsible
+* for renaming uploads
+*
+*
+* Event handler prototype:
+*<code>
+*function OnUploadRenamer( &$renamer );
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_UPLOAD_RENAMER',         'getrenamer');
+
+/**
+* Request for Data Event: Add feed links to header/footer
 *
 * Called when page is requesting feeds for header and the
 * little orange feed links
 *
-* Respondend is responsible for adding the proper links using
+* Respondant is responsible for adding the proper links using
 * {@link CCPage::AddLink()}
 *
 * Event handler prototype:
@@ -632,6 +666,34 @@ define('CC_EVENT_API_QUERY_FORMAT',         'apiqueryformat');
 * @see CCEvents::AddHandler()
 */
 define('CC_EVENT_ADD_FEED_LINKS', 'addfeedlinks');
+
+
+/**
+* Request for Data Event: Add tabs to user profile page
+*
+* Called when user profile page is being rendered
+*
+* {@link CCPage::AddLink()}
+*
+* Event handler prototype/example:
+*<code>
+*function OnUserProfileTabs(&$tabs)
+*{
+*    $tabs['reviews'] = array(
+*        'text' => 'Reviews',
+*        'help' => 'Reviews',
+*        'tags' => "reviews", // this is appended to media/people/username/...
+*        'access' => CC_DONT_CARE_LOGGED_IN,
+*        'function' => 'url',
+*        'user_cb' => array( 'CCReviews', 'UserReviewsTab' ), // callback handler
+*        'user_cb_mod' => 'ccextras/cc-reviews.inc',          // handler's module
+*        );
+*}
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_USER_PROFILE_TABS', 'utabs');
+
 
 /**#@+
 * @access private

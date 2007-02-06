@@ -28,8 +28,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCQuery',  'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCQuery' , 'OnGetConfigFields') );
+require_once('cclib/cc-tags.php');
 
 /**
 */
@@ -73,6 +72,9 @@ class CCQuery
 
         if( empty($req) )
             return $extra_args;
+
+        if( !empty($req['ccm']) )
+            unset($req['ccm']);
 
         // ------------------------------------------------------
         // Security
@@ -160,6 +162,7 @@ class CCQuery
         $this->_arg_alias($args);
 
         $fmtargs = array( 'format', 'template', 'tmacro', 'macro', 'paging' );
+
         foreach( $keys as $K )
         {
             // I have to believe skipping qstring is the right thing here...
@@ -176,6 +179,9 @@ class CCQuery
             }
             if( empty($args[$K]) ) // um, is this right? what if 
                 continue;          // it overrides a default for some random formatter?
+
+            if( is_object($args[$K]) )
+                continue;
 
             if( !empty($str) )
                 $str .= '&';
@@ -235,6 +241,8 @@ class CCQuery
 
     function & _get_query_table($args)
     {
+        require_once('cclib/cc-upload-table.php');
+
         // Get a new table so we can smash it about
 
         if( empty($args['remixesof']) )
@@ -310,15 +318,14 @@ class CCQuery
             }
             else
             {
-                $uid = CCUser::CurrentUser();
-                if( empty($uid) )
+                if( !CCUser::IsLoggedIn() )
                 {
                     CCUtil::Send404();
                 }
                 else
                 {
+                    $uid = CCUser::CurrentUser();
                     $uploads->SetDefaultFilter(false,false); 
-
                     $where[] = "((upload_published<1) AND (upload_user=$uid))";
                 }
             }
@@ -331,6 +338,30 @@ class CCQuery
     {
         // do this before we start messing around with
         // the args...
+
+        // Playlist
+        $playlist_join = false;
+        $playlist_dyn = false;
+        if( !empty($args['playlist']) )
+        {
+            // and this should REALLY be somewhere else
+            require_once('ccextras/cc-cart-table.inc');
+            $carts =& CCPlaylist::GetTable();
+            $plrow = $carts->QueryKeyRow($args['playlist']);
+            if( !empty($plrow) )
+            {
+                if( $plrow['cart_dynamic'] )
+                {
+                    parse_str( $plrow['cart_dynamic'], $plqargs );
+                    $args = array_merge( $args, $plqargs );
+                    $playlist_dyn = true;
+                }
+                else
+                {
+                    $playlist_join = true;
+                }
+            }
+        }
 
         if( !isset( $args['qstring']) )
             $args['qstring'] = $this->SerializeArgs($args);
@@ -363,7 +394,7 @@ class CCQuery
         {
             $table->SetOrder('RAND()');
         }
-        elseif( !empty($validated_sort) && empty($nosort) )
+        elseif( !empty($validated_sort) && (empty($ids) || empty($nosort))  )
         {
             if( empty($ord) )
                 $ord = 'ASC';
@@ -395,11 +426,12 @@ class CCQuery
         {
             if( empty($user) )
             {
-                $contests =& CCContests::GetTable();
+                $contests = new CCTable('cc_tbl_contests','contest_short_name');
                 $contest_names = $contests->QueryRows('','contest_short_name');
                 $cnames = array();
                 foreach( $contest_names as $contest_name )
                     $cnames[] = $contest_name['contest_short_name'];
+
 
                 // one of the 'tags' may be a user name
                 $users =& CCUsers::GetTable();
@@ -451,6 +483,15 @@ class CCQuery
             $where[] = $table->_where_to_string($tempwhere); // ugh sorry
         }
 
+        if( $playlist_join )
+        {
+            if( !$playlist_dyn && !empty($nosort) )
+                $table->SetOrder('cart_item_order','ASC');
+            $table->AddJoin( new CCPlaylistItems(), 'upload_id', 'LEFT OUTER', 'cart_item_upload' );
+            $where[] = "(cart_item_cart = $playlist)";
+        
+        }
+
         if( !empty($reqtags) )
         {
             if( method_exists( $table, '_tags_to_where' ) )
@@ -483,6 +524,8 @@ class CCQuery
         // Check for date limit
 
         $since = 0;
+
+//            CCDebug::PrintVar($sinc,false);
 
         if( !empty($sinced) )     // text date
         {
@@ -539,12 +582,16 @@ class CCQuery
 
         $where = $this->_get_table_where($where,$table,$args);
 
+
         $where = join(' AND ', $where);
 
         // ------------- END WHERE ---------------------
 
 
         // ------------- DO THE QUERY ---------------------
+
+        if( !empty($cols) )
+            $columns = $this->_get_cols($cols);
 
         if( !empty($remixesof) )
         {
@@ -553,8 +600,9 @@ class CCQuery
             $user_id = CCUser::IDFromName($remixesof);
             if( !empty($user_id) )
             {
+                require_once('cclib/cc-remix-tree.php');
                 $remixes =& CCRemixSources::GetTable();
-                $records =& $remixes->GetRemixesOf($user_id,$format=='count',$where);
+                $records =& $remixes->GetRemixesOf($user_id,$format=='count',$where,empty($cols)?'':$columns);
             }
         }
         elseif( $format == 'count' )
@@ -566,9 +614,8 @@ class CCQuery
         {
             $records = $table->QueryKeys($where);
         }
-        elseif( !empty($cols) )
+        elseif( !empty($columns) )
         {
-            $columns = $this->_get_cols($cols);
             $records =& $table->QueryRows($where,$columns);
         }
         else
@@ -581,7 +628,7 @@ class CCQuery
         if( !empty($dump_query) && CCUser::IsAdmin() )
         {
             $x[] = compact( array_keys($args) );
-            $x[] = $uploads->_last_sql;
+            $x[] = $table->_last_sql;
             $x[] = $records;
             CCDebug::PrintVar($x,false);
         }
@@ -767,7 +814,7 @@ class CCQuery
 
     function _lic_query_to_key($query_lic)
     {
-        $tranlator = array( 
+        $translator = array( 
             'by' => 'attribution',
             'nc' => 'noncommercial', 
             'sa' => 'share-alike'   , 
@@ -884,6 +931,7 @@ class CCQuery
         return array_filter( array_merge( $qterms[2], $qterms[3] ), 
                                    create_function('$t','return !empty($t);') );
     }
+
     function _check_limit(&$args)
     {
         global $CC_GLOBALS;
@@ -910,13 +958,19 @@ class CCQuery
     {
         $shorts = preg_split('/[,\s+]/',$str);
         $t = array(
-                'n' => 'upload_name',
-                'u' => 'user_name,user_real_name',
-                'd' => 'upload_date',
-                'lu' => 'license_url,license_logo,upload_license',
-                's' => 'upload_score'
+                'a' => 'upload_num_scores as a',
+                'b' => '(upload_num_remixes+upload_num_pool_remixes) as b',
+                'c' => '(upload_num_sources+upload_num_pool_sources) as c',
+                'd' => 'upload_date as d',
+                'i' => 'upload_id as i',
+                'l' => 'upload_license as l',
+                'n' => 'upload_name as n',
+                'r' => 'user_real_name as r',
+                's' => 'upload_score as s',
+                't' => 'upload_tags as t',
+                'u' => 'user_name as u',
             );
-        $cols = array( 'upload_id', 'user_id' );
+        $cols = array(); // array( 'upload_id', 'user_id' );
         foreach( $shorts as $short )
             if( !empty($t[$short]) )
                 $cols[] = $t[$short];

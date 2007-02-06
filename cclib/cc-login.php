@@ -27,95 +27,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCLogin' , 'OnGetConfigFields') );
-CCEvents::AddHandler(CC_EVENT_MAIN_MENU,  array( 'CCLogin',  'OnBuildMenu'));
-CCEvents::AddHandler(CC_EVENT_APP_INIT,   array( 'CCLogin',  'InitCurrentUser'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,   array( 'CCLogin',  'OnMapUrls'));
-
-/**
-* Wrapper for cc_tbl_keys database table, used in register spam prevention
-*/
-class CCSecurityKeys extends CCTable
-{
-    /**
-    * Constructor (use GetTable() to get an instance of this table)
-    *
-    * @see GetTable
-    */
-    function CCSecurityKeys()
-    {
-        $this->CCTable('cc_tbl_keys','keys_id');
-    }
-
-    /**
-    * Returns static singleton of table wrapper.
-    * 
-    * Use this method instead of the constructor to get
-    * an instance of this class.
-    * 
-    * @returns object $table An instance of this table
-    */
-    function & GetTable()
-    {
-        static $_table;
-        if( !isset($_table) )
-            $_table = new CCSecurityKeys();
-        return( $_table );
-    }
-
-    /**
-    * Add a key record to the database and returns a key that should match later
-    *
-    * @returns integer $id ID of this key
-    */
-    function AddKey($key)
-    {
-        $this->CleanUp();
-        $ip = $_SERVER["REMOTE_ADDR"];
-        $dbargs['keys_key']  = $key;
-        $dbargs['keys_ip']   = $ip;
-        $dbargs['keys_time'] = date('Y-m-d H:i');
-        $this->Insert($dbargs);
-        $id = $this->QueryKey("keys_key = '$key' AND keys_ip = '$ip'");
-        return($id);
-    }
-
-    /**
-    * Clean up utility function, empties the database of record over an hour old.
-    */
-    function CleanUp()
-    {
-        $this->DeleteWhere('keys_time < DATE_SUB(NOW(), INTERVAL 1 HOUR)');
-    }
-
-    /** 
-    * Verify a key/id pair are a match
-    */
-    function IsMatch($key,$id)
-    {
-        $ip = $_SERVER["REMOTE_ADDR"];
-        $real_id = $this->QueryKey("keys_key = '$key' AND keys_ip = '$ip'");
-        return( $real_id === $id );
-    }
-
-    /**
-    * Generate a fairly unique, kinda sorta unpredictable key that
-    * doesn't use confusing characters like l1 oO0 8B zZ2 and 9g.
-    */
-    function GenKey()
-    {
-        $hash = md5(uniqid(rand(),true));
-	    return( substr($hash,intval($hash[0],16),5) );
-    }
-
-    /**
-    * Static function to return standard form tip for security field.
-    */
-    function GetSecurityTip()
-    {
-        return _('Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) has a line through it, the D does not.');
-    }
-}
+require_once('cclib/cc-user.inc');
+require_once('cclib/cc-seckeys.php');
 
 /**
 * Registeration form
@@ -167,7 +80,7 @@ class CCNewUserForm extends CCUserForm
                        array( 'label'       => _('Security Key'),
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => CCSecurityKeys::GetSecurityTip(),
+                               'form_tip'   => CCSecurityVerifierForm::GetSecurityTip(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
             );
 
@@ -235,6 +148,7 @@ class CCNewUserForm extends CCUserForm
 
             if( empty($user) )
             {
+                require_once('cclib/cc-tags.inc');
                 $tags =& CCTags::GetTable();
                 $user = $tags->QueryKeyRow($value);
             }
@@ -567,9 +481,7 @@ class CCLogin
             cc_setcookie(CC_USER_COOKIE,$val,$time);
             if( $do_ui )
             {
-                CCMenu::Reset();
-                $userapi = new CCUser();
-                $userapi->UserPage($CC_GLOBALS['user_name']);
+                CCUtil::SendBrowserTo( ccl('people',$CC_GLOBALS['user_name'] ) );
             }
             $ok = true;
         }
@@ -624,6 +536,7 @@ class CCLogin
         $configs =& CCConfigs::GetTable();
         $ttags = $configs->GetConfig('ttag');
         $site_name = $ttags['site-title'];
+        require_once('ccextras/cc-mail.inc');
         $mailer = new CCMailer();
         $mailer->To($to);
         $url = ccl('login');
@@ -642,30 +555,6 @@ class CCLogin
         $mailer->Body($msg);
         $mailer->Subject($site_name . ': ' . $subject);
         $mailer->Send();
-    }
-
-    /**
-    * Digs around the cookies looking for an auto-login. If succeeds, populate CC_GLOBALS with user data
-    */
-    function InitCurrentUser()
-    {
-        global $CC_GLOBALS;
-
-        if( !empty($_COOKIE[CC_USER_COOKIE]) )
-        {
-            $users =& CCUsers::GetTable();
-            $val = $_COOKIE[CC_USER_COOKIE];
-            if( is_string($val) )
-            {
-                $val = unserialize(stripslashes($val));
-                $record = $users->GetRecordFromName( $val[0] );
-                if( !empty( $record ) && ($record['user_password'] == $val[1]) )
-                {
-                    $CC_GLOBALS = array_merge($CC_GLOBALS,$record);
-                    $users->SaveKnownIP();
-                }
-            }
-        }
     }
 
     /**

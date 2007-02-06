@@ -28,9 +28,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCPhysicalFile', 
-                                                   'OnMapUrls'));
+require_once('cclib/cc-upload-forms.php');
 
 /**
  * This class is used to edit the values of media already in the system
@@ -226,6 +224,7 @@ class CCPhysicalFile
         $upload_id = CCUtil::StripText($upload_id);
         if( empty($upload_id) || !intval($upload_id) )
             return;
+        require_once('cclib/cc-upload-table.php');
         $uploads =& CCUploads::GetTable();
         $record = $uploads->GetRecordFromKey($upload_id);
         if( empty($record) )
@@ -270,6 +269,7 @@ class CCPhysicalFile
     */
     function Edit($username,$upload_id)
     {
+        require_once('cclib/cc-upload.php');
         CCUpload::CheckFileAccess($username,$upload_id);
 
         $userid = CCUser::IDFromName($username);
@@ -482,6 +482,7 @@ class CCPhysicalFile
             $relative_dir = $record['upload_extra']['relative_dir'];
             $nicname      = $values['file_nicname'];
 
+            require_once('cclib/cc-uploadapi.php');
             $ret = CCUploadAPI::PostProcessFileAdd( $record,
                                                  $nicname,
                                                  $current_path,
@@ -501,7 +502,10 @@ class CCPhysicalFile
         }
 
         if( $show )
+        {
+            require_once('cclib/cc-page.php');
             CCPage::AddForm( $form->GenerateForm() );
+        }
 
     }
 
@@ -520,9 +524,11 @@ class CCPhysicalFile
     {
         if( !$upload_id )
         {
+            require_once('cclib/cc-uploadapi.php');
             $files =& CCFiles::GetTable();
             $upload_id = $files->QueryItemFromKey('file_upload',$file_id);
         }
+        require_once('cclib/cc-upload.php');
         CCUpload::CheckFileAccess(CCUser::CurrentUser(),$upload_id);
     }
 
