@@ -205,7 +205,8 @@ class CCTemplateMacro extends CCTemplate
     {
         $args['auto_macro'] = $this->_mtemplate . '/' . $this->_mmacro;
         $args['auto_execute'] = array( 'auto_macro' );
-        return parent::SetAllAndParse($args,$doprint,$admin_dump);
+        $ret = parent::SetAllAndParse($args,$doprint,$admin_dump);
+        return $ret;
     }
 }
 
