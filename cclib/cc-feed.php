@@ -474,8 +474,7 @@ class CCFeed
 
             if( !empty($row['upload_description_html']) )
             {
-                //$_amp_text = str_replace('&','&amp;',$row['upload_description_html']);
-                $_amp_text = $row['upload_description_html'];
+                $_amp_text = $this->_clean_urls($row['upload_description_html']);
                 $row['upload_description_html'] = utf8_encode($this->_cct($_amp_text));
             }
 
@@ -658,6 +657,11 @@ class CCFeed
 
     }
 
+    function _clean_urls($text)
+    {
+        return preg_replace_callback("/(?:href|title)\s?=['\"][^'\"]+\?([^'\"]+)['\"]/U",'_cc_encode_feed_url', $text);
+    }
+
     /**
      * This sets the feed type as a string which is used in various places
      * like identifying the cache and other necessary strings for referencing
@@ -674,6 +678,9 @@ class CCFeed
 
 } // end of primarily abstract class CCFeed
 
-
+function _cc_encode_feed_url($m) 
+{
+    return str_replace($m[1],urlencode($m[1]),$m[0]);
+}
 
 ?>
