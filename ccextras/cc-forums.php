@@ -26,6 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('ccextras/cc-topics.php');
 
 define('CC_MAX_USER_TOPICS', 30 );
 define('CC_MAX_FEED_TOPICS', 25 );
@@ -79,7 +80,14 @@ class CCForums
             return;
 
         $name = $record['user_real_name'];
-        $url   = ccl('forums', 'people', $record['user_name']);
+
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('settings');
+        if( empty($settings['newuserpage']) )
+            $url = ccl('forums', 'people', $record['user_name']);
+        else
+            $url = ccl('people',$record['user_name'],'topics');
+
         $link1 = "<a href=\"$url\">";
         $link2 = '</a>';
         

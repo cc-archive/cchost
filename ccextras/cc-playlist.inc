@@ -95,7 +95,7 @@ class CCPlaylists
                 $qstr = preg_replace('/promo_tag=[^&]+/','',$qstring);
                 $url = url_args( ccl('playlist','save'), $qstr );
                 $link1 = "[url=$url]";
-                $msg1 .= "\n\n" . sprintf(_('You can also save this playlist %s to customize it by click %shere%s'),
+                $msg1 .= "\n\n" . sprintf(_('You can also save this playlist %s to customize it by clicking %shere%s'),
                                         $wpromo, $link1,$link2);
             }
             $args = $this->_add_menu($args,$args['playlist']['cart_id']);

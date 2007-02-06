@@ -81,7 +81,13 @@ class CCReviewsHV
             return;
 
         $name = $record['user_real_name'];
-        $url   = ccl('reviews',$record['user_name']);
+
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('settings');
+        if( empty($settings['newuserpage']) )
+            $url = ccl('reviews',$record['user_name']);
+        else
+            $url = ccl('people',$record['user_name'],'reviews');
 
         if( empty($record['user_num_reviews']) )
         {
