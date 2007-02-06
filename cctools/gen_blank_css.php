@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 if( isset($_SERVER['REMOTE_ADDR']) )
@@ -67,7 +67,7 @@ $date = date('Y-m-d');
 $css =<<<END
 
 /*
-   \$Header$
+   \$Id$
    generated on $date
 */
 

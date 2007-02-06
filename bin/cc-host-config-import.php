@@ -21,17 +21,21 @@
 * Copyright 2006, Jon Phillips, jon@rejon.org.
 */
 
-
-if( empty($argv[1]) ) usage();
+if( empty($fname) )
+    if( empty($argv[1]) ) 
+        usage();
+    else
+        $fname = $argv[1];
 
 error_reporting(E_ALL);
 
 if( preg_match( '#[\\\\/]bin$#', getcwd() ) )
     chdir('..');
 
-$no_ui = 1;
 define('IN_CC_HOST',1);
+$no_ui = true;
 require_once('ccextras/cc-export-settings.php');
+
 require_once('cclib/cc-table.php');
 require_once('cclib/cc-database.php');
 require_once('cclib/cc-config.php');
@@ -42,7 +46,7 @@ if( !function_exists('gettext') )
     require_once('ccextras/cc-no-gettext.inc');
 
 $ex = new CCSettingsExporter();
-$ex->Import($argv[1]);
+$ex->Import($fname,true);
 
 print('Config imported');
 

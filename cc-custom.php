@@ -164,6 +164,7 @@ function CC_query($tablename,$func)
 */
 function CC_ratings_chart($limit,$since='')
 {
+    require_once('cclib/cc-ratings.php');
     $retval = CCRating::GetChart($limit,$since);
     return($retval);
 }
@@ -437,6 +438,7 @@ function cc_query_fmt($qstring)
 function & CC_tag_query( 
    $tags,$search_type='all',$sort_on='',$order='',$limit='',$with_menus=false,$with_remixes=false)
 {
+    require_once('cclib/cc-upload-table.php');
     $uploads =& CCUploads::GetTable();
     $uploads->SetDefaultFilter(true,true); // second true means treat like anonymous
     $uploads->SetTagFilter(CCUtil::StripText($tags),$search_type);
@@ -472,6 +474,18 @@ function & CC_tag_query(
 }
 
 
+function CC_recent_reviews($limit=5)
+{
+    require_once('ccextras/cc-reviews-table.inc');
+    return CC_recent_reviews_impl($limit);
+}
+
+function CC_recent_playlists()
+{
+    require_once('ccextras/cc-playlist.php');
+    return CC_recent_playlists_impl();
+}
+
 /**
 * @private
 * @deprecated
@@ -484,55 +498,18 @@ function list_all_users()
    return $records;
 }
 
-
-if( class_exists('CCReviews') )
+function & CC_get_details($upload_id,$menu=true)
 {
-/**
-* Returns an array of reviewer names and links to their latest reviews
-*
-* The name is slightly misleading because it returns a list of reviews
-* but based on user name's. So if Joe reviewed 5 things, only  his 
-* very latest review would only appear in the return array.
-*
-* @param integer $limit Maximum number of records to return
-* @return array $review_records An array of latest reviews
-*/
-    function CC_recent_reviews($limit=5)
-    {
-        $lim = 5 * $limit; // inc the limit to cover user's multiple reviews and banned,
-                           // unpublished
-        $uploads = new CCUploads();
-        $uploads->SetDefaultFilter(true,true);
-        $reviews =& CCReviews::GetTable();
-        $reviews->SetOrder('topic_date','DESC');
-        $reviews->SetOffsetAndLimit(0,$lim);
-        $rows = $reviews->QueryRows('');
-        $reviewers = array();
-        $reviews = array();
-        $count = count($rows);
-        $users =& CCUsers::GetTable();
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $R =& $rows[$i];
-            if( in_array($R['user_name'],$reviewers) )
-                continue;
-
-            // weed out unpublished and banned recs
-            $uprow = $uploads->QueryKeyRow($R['topic_upload']);
-            if( !empty($uprow) )
-            {
-                $reviewers[] = $R['user_name'];
-                $reviewee = $users->QueryItemFromKey('user_name',$uprow['upload_user']);
-                $R['topic_permalink'] = ccl( 'reviews', $reviewee,
-                                             $R['topic_upload'] . '#' . $R['topic_id'] );
-                $reviews[] = $R;
-                if( count($reviews) == $limit )
-                    break;
-            }
-        }
-
-        return $reviews;
-    }
+    global $CC_GLOBALS;
+    $CC_GLOBALS['works_page'] = 1;
+    require_once('cclib/cc-upload.php');
+    require_once('cclib/cc-upload-table.php');
+    $uploads =& CCUploads::GetTable();
+    $rec = $uploads->GetRecordFromID($upload_id);
+    $rec['works_page'] = true;
+    if( $menu )
+        $rec['local_menu'] = CCUpload::GetRecordLocalMenu($rec);
+    CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, array(&$rec));
+    return $rec;
 }
-
 ?>

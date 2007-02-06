@@ -20,66 +20,9 @@
 
 
 require_once( 'cc-non-ui.php');
-
-// App specific non-UI
 require_once( 'cclib/cc-events.php');
-require_once( 'cclib/cc-sync.php' );
-require_once( 'cclib/cc-uploadapi.php');
-require_once( 'cclib/cc-remix-tree.php');
-require_once( 'cclib/cc-api.php');
-require_once( 'cclib/cc-pools.php');
-
-//
-// Essential UI
-//
-require_once( 'cclib/cc-form.php' );
-require_once( 'cclib/cc-menu.php' );
-require_once( 'cclib/cc-admin.php' );
-require_once( 'cclib/cc-access.php' );
-require_once( 'cclib/cc-template.php' );
-require_once( 'cclib/cc-page.php' );
+require_once( 'cclib/cc-handlers.inc');
 require_once( 'cclib/cc-user.php' );
-
-
-
-//
-//  EEEEvvvverything else
-//
-require_once( 'cclib/cc-login.php' );
-require_once( 'cclib/cc-tags.php' );
-require_once( 'cclib/cc-db-admin.php' );
-require_once( 'cclib/cc-poll.php' );
-require_once( 'cclib/cc-upload.php' );
-require_once( 'cclib/cc-files.php' );
-require_once( 'cclib/cc-remix.php' );
-require_once( 'cclib/cc-macro.php' );
-require_once( 'cclib/cc-getid3.php' );
-require_once( 'cclib/cc-filerename.php');
-require_once( 'cclib/cc-filetagger.php');
-require_once( 'cclib/cc-fileverify.php');
-require_once( 'cclib/cc-contest.php' );
-require_once( 'cclib/cc-formatinfo.php');
-require_once( 'cclib/cc-license.php' );
-require_once( 'cclib/cc-mediahost.php' );
-require_once( 'cclib/cc-search.php' );
-require_once( 'cclib/cc-render.php' );
-require_once( 'cclib/cc-renderaudio.php' );
-require_once( 'cclib/cc-renderimage.php' );
-require_once( 'cclib/cc-renderflash.php' );
-require_once( 'cclib/cc-feed.php' );
-require_once( 'cclib/cc-feeds.php' );  // required for backwards compat
-require_once( 'cclib/cc-feeds-rss.php' );
-require_once( 'cclib/cc-feeds-atom.php' );
-require_once( 'cclib/cc-navigator.php' );
-require_once( 'cclib/cc-ban.php' );
-require_once( 'cclib/cc-renderzip.php' );
-require_once( 'cclib/cc-ratings.php' );
-require_once( 'cclib/cc-editorials.php' );
-require_once( 'cclib/cc-pools-ui.php' );
-require_once( 'cclib/cc-submit.php' );
-require_once( 'cclib/cc-user-admin.php' );
-require_once( 'cclib/cc-language.php' );
-require_once( 'cclib/cc-query.php' );
-
+require_once( 'cclib/cc-upload-table.php' );
 
 ?>

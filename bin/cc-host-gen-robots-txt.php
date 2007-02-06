@@ -31,8 +31,8 @@ error_reporting(E_ALL);
 if( preg_match( '#[\\\\/]bin$#', getcwd() ) )
     chdir('..');
 
-if( file_exists('robots.txt') )
-    die('robots.txt already exists, I do not want to write over it so delete your current one.');
+//if( file_exists('robots.txt') )
+//    die('robots.txt already exists, I do not want to write over it so delete your current one.');
 
 $disallows = array(
         '/tags',
@@ -44,18 +44,27 @@ $disallows = array(
         '/files/stream',
         '/feed',
         '/publicize',
+        '/files',
     );
+$media_only = array( 
+    '/people',
+    '/reviews',
+);
 if( !function_exists('_') ) {
     function _($s) { return $s; } }
 define('IN_CC_HOST', 1);
 include('cc-includes.php');
 $configs =& CCConfigs::GetTable();
 $vroots = $configs->GetConfigRoots();
-$text = "User-agent: *\nDisallow: /emails\n";
+$text = "User-agent: *\nDisallow: /emails/\n";
 foreach( $vroots as $VR )
 {
+    $scope = $VR['config_scope'];
     foreach( $disallows as $DA )
-        $text .= "Disallow: /{$VR['config_scope']}{$DA}\n";
+        $text .= "Disallow: /{$scope}{$DA}/\n";
+    if( $scope != 'media' )
+        foreach( $media_only as $DA )
+            $text .= "Disallow: /{$scope}{$DA}/\n";
 }
 
 $f = fopen('robots.txt','w');

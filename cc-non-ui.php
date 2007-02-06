@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Header$
+* $Id$
 *
 */
 
@@ -22,6 +22,7 @@
 // Essential Non-UI
 //
 require_once( 'cclib/cc-defines.php' );
+require_once( 'cclib/cc-database.php' );
 require_once( 'cclib/cc-util.php' );
 require_once( 'cclib/cc-debug.php' );
 require_once( 'cclib/cc-database.php' );

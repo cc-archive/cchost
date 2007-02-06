@@ -18,15 +18,7 @@
 *
 */
 
-/*
-*  The code was originally written for PHP 4 and while we 
-*  would rather run under E_ALL it seems impossible without 
-*  100s of changes, so we push it as far as possible for 5
-*/
-if( version_compare(phpversion(),'4.4.3') < 0 )
-    $cc_error_level = E_ALL;
-else
-    $cc_error_level = E_ALL & ~E_NOTICE;
+$cc_error_level = E_ALL;
 
 error_reporting($cc_error_level); 
 
@@ -96,6 +88,7 @@ require_once('cc-custom.php');
 */
 CCConfigs::Init();
 
+
 /*
 *  We don't want to encourage ccHost installations to have 
 *  their installation directories open to the public. We 
@@ -120,7 +113,7 @@ if( !empty($CC_GLOBALS['extra-lib']) )
 /*
 *  User is logged in after this call
 */
-CCLogin::InitCurrentUser();             
+CCUser::InitCurrentUser();             
 
 /*
 *  Let all the modules know that config is set
