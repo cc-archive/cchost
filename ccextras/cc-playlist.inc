@@ -163,8 +163,18 @@ class CCPlaylists
 
     function Bump($upload_id='')
     {
-        $this->_test_pl($upload_id,0,true,false,false);
-        // rrrrg
+        if( empty($upload_id) )
+            CCUtil::Send404();
+        global $CC_GLOBALS;
+        $fname = $CC_GLOBALS['logfile-dir'] . 'bump_count.txt';
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $user = CCUser::CurrentUserName();
+        $file = fopen($fname,'a');
+        $time = date('Y-m-d H:i:s');
+        fwrite( $file, "$time,$upload_id,$user,$ip\n");
+        fclose($file);
+        chmod($fname, 0777 );
+        exit;
     }
 
     function MoveUp($upload_id='',$playlist_id='')

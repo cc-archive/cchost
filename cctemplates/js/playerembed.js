@@ -252,14 +252,13 @@ ccEmbeddedPlayer.prototype = {
     },
 
     Play: function( element, href ) {
-
         var id = element.id;
-
+        var url = home_url + 'api/playlist/bump/' + id;
+        $D('phoning home: ' + url);
+        new Ajax.Request( url, { method: 'get' } );
         if( !$(id + '_player') )
             this._create_indv_controls(id);
-
         this._create_pl_controls();
-
         var prevCurrButton = this.currButton;
         this._stop_element();
         if( element != prevCurrButton )
