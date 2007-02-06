@@ -651,6 +651,22 @@ define('CC_EVENT_API_QUERY_FORMAT',         'apiqueryformat');
 define('CC_EVENT_UPLOAD_RENAMER',         'getrenamer');
 
 /**
+* Request for Data Event: api/query request for ID3 file tagger
+*
+* Triggered when caller has requested the module responsible
+* for tagging files 
+*
+*
+* Event handler prototype:
+*<code>
+*function OnUploadID3Tagger( &$tagger );
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_UPLOAD_ID3TAGGER',         'getid3tagger');
+
+
+/**
 * Request for Data Event: Add feed links to header/footer
 *
 * Called when page is requesting feeds for header and the

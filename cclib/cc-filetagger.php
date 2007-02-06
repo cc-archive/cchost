@@ -28,8 +28,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-$CC_ID3_TAGGER = new CCID3Tagger();
-
 
 /**
 * ID3 Tagging policy API
@@ -37,6 +35,16 @@ $CC_ID3_TAGGER = new CCID3Tagger();
 */
 class CCID3Tagger 
 {
+
+    function OnUploadID3Tagger( &$tagger )
+    {
+        // test the global for backward compat
+        if( isset($CC_ID3_TAGGER) )
+            $tagger = $CC_ID3_TAGGER;
+        else
+            $tagger = $this;
+    }
+
     /**
     * Method that does the ID3 tagging according to rules set by user
     *
@@ -230,5 +238,9 @@ class CCID3Tagger
     }
 
 }
+
+// this global is deprecated, use CC_EVENT_UPLOAD_ID3TAGGER event instead
+$CC_ID3_TAGGER = null; // new CCID3Tagger();
+
 
 ?>

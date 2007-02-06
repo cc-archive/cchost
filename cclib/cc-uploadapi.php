@@ -708,9 +708,10 @@ class CCUploadAPI
 
         // Run the file through the ID3 tagger
         //
-        global $CC_ID3_TAGGER;
-        if( isset($CC_ID3_TAGGER) )
-            $CC_ID3_TAGGER->TagFile( $record, $file_args['local_path'] );
+        $tagger = null;
+        CCEvents::Invoke( CC_EVENT_UPLOAD_ID3TAGGER, array( &$tagger ) );
+        if( isset($tagger) )
+            $tagger->TagFile( $record, $file_args['local_path'] );
 
         return $msg;
     }

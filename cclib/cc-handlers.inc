@@ -70,6 +70,8 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,       array( 'CCFileRename', 'OnAdminM
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,         array( 'CCFileRename', 'OnMapUrls'),       'cclib/cc-filerename.php' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_RENAMER,   array( 'CCFileRename', 'OnUploadRenamer'), 'cclib/cc-filerename.php' );
 
+CCEvents::AddHandler(CC_EVENT_UPLOAD_ID3TAGGER,   array( 'CCID3Tagger', 'OnUploadID3Tagger'), 'cclib/cc-filetagger.php' );
+
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCPhysicalFile', 'OnMapUrls'), 'cclib/cc-files.php');
 
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCID3Tagger', 'OnAdminMenu'), 'cclib/cc-filetagger.php' );
