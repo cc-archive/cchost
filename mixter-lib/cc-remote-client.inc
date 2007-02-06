@@ -5,6 +5,9 @@ if( !defined('IN_CC_HOST') )
 
 if( class_exists('CCPage') || class_exists('ccpage') )
 {
+    require_once('cclib/cc-admin.php');
+    require_once('cclib/cc-upload-table.php');
+
     /**
     * Form for admin ui for ftp remoting
     */
@@ -73,8 +76,7 @@ if( class_exists('CCPage') || class_exists('ccpage') )
         
             _cc_show_remoting_menu($queue);
 
-            $this->SetHiddenField('_file', 'mixter-lib/cc-remote-client.inc', CCFF_HIDDEN);
-            
+            $this->SetModule( ccs(__FILE__) );
         }
     }
 

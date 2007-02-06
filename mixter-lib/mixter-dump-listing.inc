@@ -46,6 +46,7 @@ function & _mixter_dump_records(&$records,$xclass)
     $str_flagtip = _('Flag this upload for possible violation of terms');
     $str_feature = _('featuring:');
     $str_last_ed = _('last change:');
+    $str_play    = _('Play:');
 
     $chop = CCPage::GetPageArg('chop');
 
@@ -89,6 +90,19 @@ EOF;
                   class="$name_cls" >{$record['upload_name']}</span></a></h2>
             </td>
         </tr>
+EOF;
+        }
+
+        // flash player 
+        if( !empty($record['fplay_url']) )
+        {
+            $url = $record['fplay_url'];
+
+            $html .=<<<EOF
+            <tr>
+                <th><span class="cc_player_label">{$str_play}</span> </th>
+                <td><a class="cc_player_button cc_player_hear" id="_ep_{$upload_id}" href="{$url}"> </a></td>
+            </tr>
 EOF;
         }
 
@@ -240,7 +254,7 @@ EOF;
         }
 
         $rurl = $root_url . '/ccimages/lics/small';
-        if( empty($record['local_menu']['download']) )
+        if( empty($record['local_menu']['download'][0]['action']) )
             $about = '';
         else
             $about = "about=\"{$record['local_menu']['download'][0]['action']}\"";
@@ -347,10 +361,12 @@ EOF;
                 for( $m = 0; $m < $gcount; $m++ )
                 {
                     $item =& $grp[$gkeys[$m]];
-                    $type = empty($item['type']) ? '' : 'type="' . $item['type'] . '"';
+                    $type  = empty($item['type']) ? '' : 'type="' . $item['type'] . '"';
+                    $class = empty($item['class']) ? '' : 'class="' . $item['class'] . '"';
+                    $parent_id = empty($item['parent_id']) ? '' : 'id="' . $item['parent_id'] . '"';
                     $html .=<<<END
                     <tr>
-                      <td><a href="{$item['action']}" $type 
+                      <td {$parent_id} ><a href="{$item['action']}" $type $class
                             id="{$item['id']}"><span>{$item['menu_text']}</span></a></td>
                     </tr>
 END;
@@ -376,8 +392,8 @@ EOF;
 
             $html .=<<<EOF
               <a id="cc_downloadbutton" href="javascript: void(0);" 
-                     onclick="cc_show_dl_box(event,'$upload_id');" ><span>$str_down</span></a>
-              <div class="cc_file_download_popup" id="dlmenu$upload_id" style="display:none">
+                     onclick="cc_show_dl_box(event,'$upload_id',this);" ><span>$str_down</span></a>
+              <div class="cc_file_download_popup" id="dlmenu$upload_id" style="display:none;position:absolute;">
                   <p>
                       $str_IEtip<br />
                       $str_Mactip<br />
@@ -399,11 +415,21 @@ END;
 
             $html .= '</div>';
 
+            if( !empty($record['local_menu']['playlist']) )
+            {
+                $M =& $record['local_menu']['playlist']['playlist_menu'];
+                $html .=<<<END
+                <div id="{$M['parent_id']}">
+                <a id="commentcommand" class="cc_playlist_button" href="{$M['action']}"><span>{$M['menu_text']}</span></a>
+                </div>
+END;
+            }
+
             if( !empty($record['local_menu']['comment']['comments']) )
             {
+                $M =& $record['local_menu']['comment']['comments'];
                 $html .=<<<EOF
-            <a id="commentcommand"  
-            href="{$record['local_menu']['comment']['comments']['action']}"><span>{$record['local_menu']['comment']['comments']['menu_text']}</span></a>
+            <a id="commentcommand" href="{$M['action']}"><span>{$M['menu_text']}</span></a>
 EOF;
             }
 

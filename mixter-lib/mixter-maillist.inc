@@ -21,7 +21,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCevents::AddHandler( CC_EVENT_MAP_URLS, array( 'MixterMailList', 'OnMapUrls' ) );
+require_once('cclib/cc-form.php');
+require_once('cclib/cc-upload-table.php');
 
 class MxMailListForm extends CCForm
 {

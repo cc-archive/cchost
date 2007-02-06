@@ -45,8 +45,23 @@ define( 'CC_TS_DEFAULT', CC_TS_ALPHA );
 define( 'CC_TS_MINTAGS', 3 );
 
 
-class CCSampleBrowserAPI
+class CCSampleBrowser
 {
+    function OnMapUrls()
+    {
+        CCEvents::MapUrl( ccp('samples'),   array('CCMixter', 'Samples'),  
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+
+        CCEvents::MapUrl( ccp('samples','list'),   array('CCSampleBrowser', 'SamplesList'),  
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('samples','browse'),   array('CCSampleBrowser', 'SamplesBrowse'),  
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('samples','stream'),   array('CCSampleBrowser', 'SamplesStream'),  
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('samples','search'),   array('CCSampleBrowser', 'SamplesSearch'),  
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+    }
+
     function SamplesSearch()
     {
         if( empty($_GET['term']) )
@@ -238,7 +253,6 @@ class CCSampleBrowserAPI
         $template = new CCTemplate( $tfile );
         $html = $template->SetAllAndParse($args);
         CCPage::AddPrompt('body_text',$html);
-        CCPage::AddScriptBlock('ajax_block');
     }
 
     function _get_lic_filters()
@@ -307,6 +321,7 @@ class CCSampleBrowserAPI
         //CCDebug::Enable(true);
 
         $all_tags = strtolower( join(',', $tagstrs ) );
+        require_once('cclib/cc-tags.php');
         $all_tags = CCTag::TagSplit($all_tags);
 
         if( !empty( $_GET['ts'] ) )
