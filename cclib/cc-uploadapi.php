@@ -44,6 +44,8 @@ class CCUploadAPI
 
     function DeleteUpload($upload_id)
     {
+        require_once('cclib/cc-sync.php');
+
         $uploads =& CCUploads::GetTable();
         $record = $uploads->GetRecordFromID($upload_id);    
 

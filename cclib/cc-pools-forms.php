@@ -67,6 +67,10 @@ class CCAdminEditPoolForm extends CCForm
                        'form_tip'   => _('Ignore communications from this pool'),
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE ),
+            'pool_auto_approve' =>  
+               array(  'label'      => _('Auto-approve Remote Remixes'),
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE ),
             'pool_search' =>  
                array(  'label'      => _("Allow to be searched remotely"),
                        'formatter'  => 'checkbox',

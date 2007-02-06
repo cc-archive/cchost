@@ -39,6 +39,7 @@ class v_1_2h extends CCUpdate
 
     function calc_rankings()
     {
+        require_once('cclib/cc-sync.php');
         $configs =& CCConfigs::GetTable();
         $chart = $configs->GetConfig('chart');
         $uploads = new CCTable('cc_tbl_uploads','upload_id');

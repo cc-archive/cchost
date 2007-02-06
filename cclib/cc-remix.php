@@ -147,6 +147,8 @@ class CCRemix
     {
         require_once('cclib/cc-upload-table.php');
         require_once('cclib/cc-pools.php');
+        require_once('cclib/cc-sync.php');
+
         $is_update  = !empty($remixid);
         $uploads    =& CCUploads::GetTable();
         $pool_items =& CCPoolItems::GetTable();
@@ -183,7 +185,6 @@ class CCRemix
 
                 if( $is_update )
                 {
-                    require_once('cclib/cc-sync.php');
                     CCSync::RemixDetach($remixid);
                     $where1['tree_child'] = $remixid;
                     $remixes->DeleteWhere($where1);
@@ -243,7 +244,6 @@ class CCRemix
                         CCPool::NotifyPoolsOfRemix($pool_sources,$url);
                     }
 
-                    require_once('cclib/cc-sync.php');
                     CCSync::Remix($remixid,$remix_sources);
 
                     CCEvents::Invoke(CC_EVENT_SOURCES_CHANGED, array( $remixid, &$remix_sources) );

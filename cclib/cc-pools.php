@@ -416,6 +416,7 @@ class CCPool
         $query = urlencode($query);
         if( substr($api_url,0,7) == 'http://' )
         {
+            require_once('cclib/cc-api.php');
             $query_url = CCRestAPI::MakeUrl( $api_url, 'search', 'query=' . $query );
             //CCDebug::PrintVar($query_url);
             //CCDebug::LogVar('query_url',$query_url);
@@ -449,9 +450,11 @@ class CCPool
 
     function NotifyPoolsOfRemix($pool_items, $remixguid)
     {
+        require_once('cclib/snoopy/Snoopy.class.php');
+        require_once('cclib/cc-api.php');
+
         $myurl = urlencode(ccl('api'));
         $remixguid = urlencode($remixguid);
-        require_once('cclib/snoopy/Snoopy.class.php');
         $snoopy = new Snoopy();
         $snoopy->accept = 'text/*, application/xml'; // heaven forbid this points to a media file
         //$snoopy->_httpmethod = 'HEAD';
@@ -482,6 +485,8 @@ class CCPool
 
     function AddPool($pool_site_api_url)
     {
+        require_once('cclib/cc-api.php');
+
         $info_url = CCRestAPI::MakeUrl( $pool_site_api_url, 'info' );
         $fr = new CCFeedReader();
         $rss = $fr->cc_parse_url( $info_url );

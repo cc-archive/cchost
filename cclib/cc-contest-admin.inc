@@ -457,6 +457,8 @@ EOF;
             $configs->SaveConfig('ttag',$template_tags,$contest_short_name,false);
             */
 
+            CCContestAdmin::UpgradeGlobals();
+
             $url = ccc($contest_short_name,'view','contest','edit');
 
             CCUtil::SendBrowserTo( $url );

@@ -242,6 +242,7 @@ class CCRatingsAdmin
     */
     function Recalc()
     {
+        require_once('cclib/cc-sync.php');
         $configs =& CCConfigs::GetTable();
         $chart = $configs->GetConfig('chart');
 
@@ -254,7 +255,6 @@ class CCRatingsAdmin
         $count = count($rows);
         for( $i = 0; $i < $count; $i++ )
         {
-            require_once('cclib/cc-sync.php');
             CCSync::_calc_rank($chart,$rows[$i]);
             $args['upload_id'] = $rows[$i]['upload_id'];
             $args['upload_rank'] = $rows[$i]['upload_rank'];
@@ -724,7 +724,11 @@ END;
         $uwhere['upload_id'] = $upload_id;
         $record = $uploads->QueryRow($uwhere);
         if( !empty($record) )
+        {
+            require_once('cclib/cc-sync.php');
             CCSync::Ratings($record,$ratings);
+        }
+
         if( $redir ) 
             CCUtil::SendBrowserTo(); 
     }

@@ -147,7 +147,7 @@ END;
             }
             else
             {
-                $upload_dir = $this->_get_user_upload_dir( $C, $username );
+                $upload_dir = CCContestHV::_get_user_upload_dir( $C, $username );
 
                 if( $form->ValidateFields() )
                 {
@@ -349,7 +349,7 @@ END;
         $contest = $contests->QueryKeyRow($contest_id);
 
         if( !empty($record['upload_id']) )
-            $patterns['%song_page%'] = $this->_get_file_page_url($record,$contest['contest_short_name']);
+            $patterns['%song_page%'] = CCContestHV::_get_file_page_url($record,$contest['contest_short_name']);
 
         $patterns['%contest%']          = $contest['contest_short_name'];
         $patterns['%contest_fullname%'] = $contest['contest_friendly_name'];
