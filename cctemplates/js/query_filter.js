@@ -32,6 +32,7 @@ ccQueryBrowserFilters.prototype = {
                                                     ['editorial_pick',      'ed picks' ],
                                                     ['remix,hip_hop',       'hip hop'], 
                                                     ['remix,downtempo',     'downtempo'], 
+                                                    ['remix,funky',         'funky'], 
                                                     ['remix,female_vocals', 'female vocals'],
                                                     ['remix,chill',         'chill'],
                                                     ['remix,experimental',  'experimental'],
