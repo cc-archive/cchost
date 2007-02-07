@@ -97,14 +97,7 @@ index.php \
 cctools/gen_blank_css.php \
 cctools/index.htm \
 mixter-lib/mixter-dump-listing.inc \
-mixter-lib/mixter-admin.php \
 mixter-lib/mixter-dump-listing.php \
-mixter-lib/mixter-magnatune.php \
-mixter-lib/mixter-redir.php \
-mixter-lib/mixter-relicense.php \
-mixter-lib/mixter.php \
-mixter-lib/mixter-maillist.php \
-mixter-lib/mixter-contest.php \
 cc-custom.php \
 cc-includes.php \
 cc-non-ui.php
