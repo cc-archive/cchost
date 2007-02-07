@@ -28,23 +28,41 @@ $Id$
     vertical-align: top;
 }
 </style>
-<div class="hs"><h1>Congratulations</h1><h1>You've installed ccHost ${cc-host-version}</h1>
+<div class="hs">
+  <tal:block condition="install_done">
 
-<tal:block condition="is_admin">
-Here are some places to start :<ul><li>To change css-skins use <a class="cc_menu_link" href="${home-url}admin/settings">Settings</a></li>
-<li>Change the <a class="cc_menu_link" href="${home-url}admin/content">Page Contents</a></li>
-<li>To add administrators use <a class="cc_menu_link" href="${home-url}admin/settings">Settings</a></li>
-<li>Edit the <a class="cc_menu_link" href="${home-url}admin/menu">Menus</a></li>
-<li>Pick the allowable <a class="cc_menu_link" href="${home-url}admin/formats">File Formats</a></li></ul>
-</tal:block>
+        <h2>Congratulations</h2>
+        <h2>ccHost ${cc-host-version} Home Page</h2>
 
-<tal:block condition="not_admin">
-You need to be logged in as Admin to configure the site.
-</tal:block>
+        <p>Here are some places to start :</p>
 
+        <tal:block condition="is_admin">
+            <p>You are logged in as an adiminstrator</p>
+            <p>Use the 'Manage Site' menu option to customize this installation.</p>
+        </tal:block>
 
-<p>
-The text for this file is in ${files-root}home.xml .
-</p>
+        <ul>
+          <li>
+              To change your password and other personal settings: 
+              <a class="cc_menu_link" href="${home-url}people/profile">Edit Profile</a>
+          </li>
+        </ul>
+
+        <tal:block condition="not_admin">
+            <p>(You need to be logged in as Admin to configure the site.)</p>
+        </tal:block>
+    
+  </tal:block>
+
+  <tal:block condition="not: install_done">
+    <tal:block condition="not_admin">
+      <p>Please <a href="${home-url}login">login as admin</a> to finish the installation.</p>
+    </tal:block>
+    <tal:block condition="is_admin">
+      <p>You're <i>almost</i> done!</p>
+      <p>Please <a href="${home-url}?update=1">CLICK HERE</a> to finish your ccHost installation.</p>
+    </tal:block>
+  </tal:block>
 </div>
+
 </div>

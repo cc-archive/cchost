@@ -28,23 +28,41 @@ $Id$
     vertical-align: top;
 }
 </style>
-<div class="hs"><h2>Congratulations</h2><h2>Welcome to ccHost ${cc-host-version}</h2>
+<div class="hs">
+  <tal:block condition="install_done">
 
-<p>Here are some places to start :</p>
+        <h2>Congratulations</h2>
+        <h2>Welcome to ccHost ${cc-host-version}</h2>
 
-<tal:block condition="is_admin">
-<p>You are logged in as an adiminstrator</p>
-<p>Use the 'Manage Site' menu option to customize this installation.</p>
-<p>The text for this file is in ${install-user-root}viewfile/welcome.xml.</p>
-</tal:block>
+        <p>Here are some places to start :</p>
 
-<ul>
-<li>To change your password and other personal settings: 
-<a class="cc_menu_link" href="${home-url}people/profile/${user_name}">Edit Profile</a></li>
-</ul>
+        <tal:block condition="is_admin">
+            <p>You are logged in as an adiminstrator</p>
+            <p>Use the 'Manage Site' menu option to customize this installation.</p>
+        </tal:block>
 
-<tal:block condition="not_admin">
-<p>(You need to be logged in as Admin to configure the site.)</p>
-</tal:block>
+        <ul>
+          <li>
+              To change your password and other personal settings: 
+              <a class="cc_menu_link" href="${home-url}people/profile/">Edit Profile</a>
+          </li>
+        </ul>
+
+        <tal:block condition="not_admin">
+            <p>(You need to be logged in as Admin to configure the site.)</p>
+        </tal:block>
+    
+  </tal:block>
+
+  <tal:block condition="not: install_done">
+    <tal:block condition="not_admin">
+      <p>Please <a href="${home-url}login">login as admin</a> to finish the installation.</p>
+    </tal:block>
+    <tal:block condition="is_admin">
+      <p>You're <i>almost</i> done!</p>
+      <p>Please <a href="${home-url}?update=1">CLICK HERE</a> to finish your ccHost installation.</p>
+    </tal:block>
+  </tal:block>
+</div>
 
 </div>

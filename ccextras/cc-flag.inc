@@ -30,6 +30,7 @@ if( !defined('IN_CC_HOST') )
 */
 
 require_once('ccextras/cc-topics.inc');
+require_once('cclib/cc-user.inc');
 
 /**
 */
@@ -158,6 +159,7 @@ Flagger: $user
 $user_text
 -------------------------------------                
 END;
+            require_once('ccextras\cc-mail.inc');
             $mailer = new CCMailer();
             $mailer->To($CC_GLOBALS['mail_sender']);
             $mailer->Subject( $type . ' Flagged' );

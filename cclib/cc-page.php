@@ -51,6 +51,8 @@ class CCPageAdmin
     {
         CCEvents::MapUrl( 'viewfile', array( 'CCPageAdmin', 'ViewFile' ),  
                           CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'docs',     array( 'CCPageAdmin', 'ViewFile' ),  
+                          CC_DONT_CARE_LOGGED_IN );
         CCEvents::MapUrl( 'homepage', array( 'CCPageAdmin', 'Homepage' ),  
                           CC_DONT_CARE_LOGGED_IN );
     }
@@ -181,6 +183,7 @@ class CCPage extends CCTemplate
         $this->_page_args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
         $this->_page_args['get'] = $_GET;
         $this->_page_args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
+        $this->_page_args['install_done'] = false;
     }
 
     /**
