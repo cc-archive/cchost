@@ -54,20 +54,30 @@ class CCUserPage
         if( empty($pages['person']) )
         {
             // no admin tab 
+            $originalTab = $tab;
             $tabs = $this->_get_tabs($username,$tab);
+            $tagfilter = '';
             CCPage::PageArg('sub_nav_tabs',$tabs);
+            if( empty($tabs['tabs'][$originalTab]) )
+            {
+                // HACK
+                // for legacy reasons, we treat this like an upload tag query
+                $tagfilter = $originalTab; 
+            }
             $cb_tabs = $tabs['tabs'][$tab];
             if( !empty($cb_tabs['user_cb_mod']) )
                 require_once($cb_tabs['user_cb_mod']);
             if( is_array($cb_tabs['user_cb']) && is_string($cb_tabs['user_cb'][0]) )
                 $cb_tabs['user_cb'][0] = new $cb_tabs['user_cb'][0]();
 
-            call_user_func_array( $cb_tabs['user_cb'], array( $username ) );
+            call_user_func_array( $cb_tabs['user_cb'], array( $username, $tagfilter ) );
         }
         else
         {
             CCPage::PageArg('sub_nav_tabs',$pages['person'] );
         }
+
+        $this->_setup_fplay(null,$username);
     }
 
     function Profile($username)
@@ -88,14 +98,19 @@ class CCUserPage
         } 
     }
 
-    function Uploads($username)
+    function Uploads($username,$tagfilter='')
     {
         //CCPage::PageArg('browse_user','query_browser.xml/browse_user');
         //CCPage::PageArg('user_to_browse', $username, 'browse_user');
-        $this->_setup_fplay(null,$username);
+
         $where['user_name'] = $username;
+        $users =& CCUsers::GetTable();
+        $title = $users->QueryItem('user_real_name',$where);
+        if( !empty($tagfilter) )
+            $title .= ' (' . $tagfilter .')';
+        CCPage::SetTitle($title);
         require_once('cclib/cc-upload.php');
-        CCUpload::ListMultipleFiles($where,''); // $tagfilter);
+        CCUpload::ListMultipleFiles($where,$tagfilter);
         $this->_show_feed_links($username);
     }
 
@@ -113,15 +128,6 @@ class CCUserPage
     {
         $tabs = 
             array (
-                'profile' => array (
-                    'text' => 'Profile',
-                    'help' => 'Profile',
-                    'tags' => "profile",
-                    'limit' => '',
-                    'access' => 4,
-                    'function' => 'url',
-                    'user_cb' => array( $this, 'Profile' ),
-                    ),
                 'uploads' => array (
                     'text' => 'Uploads',
                     'help' => 'Uploads',
@@ -130,6 +136,15 @@ class CCUserPage
                     'access' => 4,
                     'function' => 'url',
                     'user_cb' => array( $this, 'Uploads' ),
+                    ),
+                'profile' => array (
+                    'text' => 'Profile',
+                    'help' => 'Profile',
+                    'tags' => "profile",
+                    'limit' => '',
+                    'access' => 4,
+                    'function' => 'url',
+                    'user_cb' => array( $this, 'Profile' ),
                     ),
             );
     

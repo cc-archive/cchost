@@ -238,7 +238,7 @@ class CCPlaylists
             require_once('cclib/cc-query.php');
             $query = new CCQuery();
             if( $args['playlist']['cart_subtype'] == 'default' )
-                $qstring = $query->ProcessUriArgs();
+                $qstring = $query->ProcessUriArgs(array('format' => 'playlist'));
             else
                 $qstring = $args['playlist']['cart_dynamic'];
             $qargs = $query->ProcessAdminArgs($qstring,array('format'=>'php'),false);
