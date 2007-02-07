@@ -159,7 +159,7 @@ Flagger: $user
 $user_text
 -------------------------------------                
 END;
-            require_once('ccextras\cc-mail.inc');
+            require_once('ccextras/cc-mail.inc');
             $mailer = new CCMailer();
             $mailer->To($CC_GLOBALS['mail_sender']);
             $mailer->Subject( $type . ' Flagged' );
