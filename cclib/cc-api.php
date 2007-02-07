@@ -231,7 +231,7 @@ class CCRestAPI
 
         if( empty($pool_item) )
         {
-            $pool_item =& CCPool::AddItemtoPool( $pool, $item );
+            $pool_item = CCPool::AddItemtoPool( $pool, $item );
             if( is_string($pool_item) )
                 $this->error_exit($pool_item);
         }

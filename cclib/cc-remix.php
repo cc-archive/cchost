@@ -418,15 +418,11 @@ class CCRemix
     */
     function StrictestLicense( &$form, &$rows )
     {
+        require_once('cclib/cc-lics-chart.inc');
         $license = '';
-        $strict = 0;
         foreach( $rows as $row )
         {
-            if( !$license || ($strict < $row['license_strict'] ) )
-            {
-                $strict  = $row['license_strict'];
-                $license = $row['license_id'];
-            }
+            $license = $license ? cc_stricter_license( $row['license_id'], $license ) : $row['license_id'];
         }
 
         $form->CallFormMacro( 'remix_license', 'show_remix_license' );

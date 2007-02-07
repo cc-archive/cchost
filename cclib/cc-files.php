@@ -51,6 +51,9 @@ class CCEditFileForm extends CCUploadMediaForm
         $this->SetFormValue('upload_tags', $record['upload_extra']['usertags']);
         $this->SetSubmitText(_('Save File Properties'));
 
+        /*
+            This code is just broken (conceptually that is) need to revisit with lawyers
+
         $licenses =& CCLicenses::GetTable();
 
         // Get the licenses that are looser than this one
@@ -74,6 +77,8 @@ class CCEditFileForm extends CCUploadMediaForm
                    'options'   => $select_fields,
                    'flags'     => CCFF_NONE );
         }
+
+        */
 
         $url = ccl('file','manage',$record['upload_id'] );
 
