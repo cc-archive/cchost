@@ -17,7 +17,7 @@ class CCPlaylistHV
 
     function OnUploadRow( &$record ) 
     {
-        if( !cc_playlist_enabled() || empty($record['stream_link']) )
+        if( !cc_playlist_enabled() )
         {
             $record['fplay_url'] = '';
         }
@@ -26,11 +26,24 @@ class CCPlaylistHV
             $configs =& CCConfigs::GetTable();
             $settings = $configs->GetConfig('remote_files');
             $remoting = !empty($settings['enable_streaming']);
-            if( !$remoting || empty($record['files'][0]['file_extra']['remote_url'] ) )
-                $url = $record['files'][0]['download_url'];
-            else
-                $url = $record['files'][0]['file_extra']['remote_url'];
-            $record['fplay_url'] = $url;
+            $fkeys = array_keys($record['files']);
+            foreach( $fkeys as $fkey )
+            {
+                $F =& $record['files'][$fkey];
+
+                // Flash only understands MP3s with a 44k sample rate
+                if( !empty($F['file_format_info']['sr']) && 
+                    ($F['file_format_info']['format-name'] == 'audio-mp3-mp3') && 
+                    ($F['file_format_info']['sr'] == '44k') )
+                {
+                    if( !$remoting || empty($F['file_extra']['remote_url'] ) )
+                        $url = $F['download_url'];
+                    else
+                        $url = $F['file_extra']['remote_url'];
+                    $record['fplay_url'] = $url;
+                    break;
+                }
+            }
         }
     }
 

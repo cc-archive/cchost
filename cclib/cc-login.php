@@ -268,7 +268,7 @@ class CCLogin
     */
     function OnGetConfigFields($scope,&$fields)
     {
-        if( $scope == CC_GLOBAL_SCOPE && class_exists('CCMailer') )
+        if( $scope == CC_GLOBAL_SCOPE )
         {
             $fields['reg-type'] =
                array(  'label'      => _('Registration Confirmation'),
@@ -494,12 +494,6 @@ class CCLogin
     */
     function LostPassword()
     {
-        if( !class_exists('CCMailer') )
-        {
-            CCPage::Prompt(_('This installation does not support this feature.'));
-            return;
-        }
-
         CCPage::SetTitle(_("Recover Lost Password"));
         $form = new CCLostPasswordForm();
         if( empty($_POST['lostpassword']) || !$form->ValidateFields() )

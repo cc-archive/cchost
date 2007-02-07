@@ -95,6 +95,7 @@ class MixterMailList
             $uploads->SetOrder('user_email','ASC');
             $rows = $uploads->QueryRows('','user_email');
 
+            require_once('ccextras/cc-mail.inc');
             $mailer = new CCMailer();
             $from = $mailer->DefaultFrom();
             $mailer->From( $from );

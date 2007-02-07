@@ -32,8 +32,10 @@ class CCRunOnce
     {
         global $CC_GLOBALS,$CC_CFG_ROOT;
 
-        if( empty($CC_GLOBALS['run_once']) || empty($CC_GLOBALS['user_extra']) )
+        if( empty($CC_GLOBALS['run_once']) || !isset($CC_GLOBALS['user_extra']) )
+        {
             return;
+        }
 
         $run_pages = CCTag::TagSplit($CC_GLOBALS['run_once']);
         $key = 'run7';

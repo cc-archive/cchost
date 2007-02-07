@@ -35,6 +35,8 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCRunOnce' , 'OnGetCon
 
 function cc_run_once()
 {
+    global $CC_GLOBALS;
+
     if( !empty($_POST) )
     {
         // in case user is posting a form we let this one go
@@ -48,12 +50,14 @@ function cc_run_once()
     }
 
     if( !CCUser::IsLoggedIn() )
+    {
         return;
-
-    global $CC_GLOBALS;
+    }
 
     if( empty($CC_GLOBALS['run_once']) )
+    {
         return;
+    }
 
     require_once('ccextras/cc-run-once.inc');
     $run_once = new CCRunOnce();
