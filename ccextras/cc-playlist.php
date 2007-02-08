@@ -126,10 +126,20 @@ function CC_recent_playlists_impl()
         return;
 
     require_once('ccextras/cc-cart-table.inc');
+    $sql =<<<EOF
+SELECT DISTINCT cart_id
+FROM `cc_tbl_cart_items`
+JOIN cc_tbl_uploads ON upload_id = cart_item_upload
+JOIN cc_tbl_cart ON cart_id = cart_item_cart
+WHERE (cart_user != upload_user) AND (cart_num_items > 3)
+LIMIT 5 
+EOF;
+    $cart_ids = CCDatabase::QueryItems($sql);
+
     $carts = new CCPlaylist(true);
     $carts->SetOrder('cart_date','DESC');
     $carts->SetOffsetAndLimit(0,5);
-    $where = '(cart_num_items > 3 OR cart_dynamic > \'\') AND cart_subtype <> "default" ';
+    $where = 'cart_id in (' . join(',',$cart_ids) . ')';
     return $carts->QueryRows($where);
 }
 
