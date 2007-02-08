@@ -583,21 +583,28 @@ END;
         $msg = '';
         if( in_array( $user_to_add_or_remove, $favs ) )
         {
+            CCPage::SetTitle(_('Removed from favorites'));
             $favs = array_diff($favs,array($user_to_add_or_remove));
-            $msg = sprintf(_("User, %s, has been removed from your list of favorites."), $user_to_add_or_remove);
+            $msg = sprintf(_("%s has been removed from your list of favorites."), $user_to_add_or_remove);
         }
         else
         {
+            CCPage::SetTitle(_('Added to favorites'));
             $favs[] = $user_to_add_or_remove;
-            $msg = sprintf(_("User, %s, has been added to your list of favorites."), $user_to_add_or_remove);
+            $msg = sprintf(_("%s has been added to your list of favorites."), $user_to_add_or_remove);
         }
         $new_favs = implode(',',$favs);
         $users =& CCUsers::GetTable();
         $args['user_id'] = CCUser::CurrentUser();
         $args['user_favorites'] = $new_favs;
         $users->Update($args);
+        $url = ccl('people', CCUser::CurrentUserName() );
+        $link1 = "<a href=\"$url\">";
+        $url = ccl('people',$user_to_add_or_remove);
+        $link1a = "<a href=\"$url\">";
+        $link2 = '</a>';
+        $msg .= ' ' . sprintf(_("Go back to %syour profile page%s or %s%s's%s"),$link1,$link2,$link1a,$user_to_add_or_remove,$link2);
         CCPage::Prompt($msg);
-        $this->UserPage($this->CurrentUserName());
     }
 
 
