@@ -122,7 +122,7 @@ class CCNotifyAPI
         }
         $current_notifications = $notifications->QueryRow($args);
         
-        require_once('ccextras/cc-notify-forms.php');
+        require_once('ccextras/cc-notify-forms.inc');
 
         $form = new CCEditUserNotificationForm($fields);
 
