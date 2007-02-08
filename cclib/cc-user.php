@@ -340,6 +340,22 @@ class CCUsers extends CCTable
             $row['user_fields'][] = array( 'label' => '', 'value' => "<a href=\"$url\" class=\"cc_user_admin_link\">$ac_label</a>" );
         }
 
+        if( !empty($row['artist_page']) ) 
+        {
+            if( CCUser::IsLoggedIn() && ($row['user_id'] != CCUser::CurrentUser()) )
+            {
+                $current_favs = strtolower(CCUser::CurrentUserField('user_favorites'));
+                $favs = CCTag::TagSplit($current_favs);
+                if( in_array( strtolower($row['user_name']), $favs ) )
+                    $msg = sprintf(_("Remove %s from my favorites"),$row['user_real_name'] );
+                else
+                    $msg = sprintf(_("Add %s to my favorites"),$row['user_real_name']);
+                $row['user_favs_link'] = array( 'text' => $msg,
+                                             'link' => ccl('people','addtofavs',$row['user_name']) );
+            }
+
+        }
+
         if( $expand )
         {
             require_once('cclib/cc-tags.php');

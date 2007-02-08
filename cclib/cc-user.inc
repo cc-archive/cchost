@@ -515,18 +515,6 @@ END;
 
             CCPage::SetTitle($name);
 
-            if( !$itsme && CCUser::IsLoggedIn() )
-            {
-                $current_favs = strtolower(CCUser::CurrentUserField('user_favorites'));
-                $favs = CCTag::TagSplit($current_favs);
-                if( in_array( strtolower($R['user_name']), $favs ) )
-                    $msg = sprintf(_("Remove name, %s, from my favorites"),$name );
-                else
-                    $msg = sprintf(_("Add name, %s, to my favorites"),$name);
-                $R['user_favs_link'] = array( 'text' => $msg,
-                                             'link' => ccl('people','addtofavs',$username) );
-            }
-
             $uploads =& CCUploads::GetTable();
             $show_user = true;
             $show_records = false;

@@ -973,7 +973,7 @@ input.cc_form_input_short {
 }
 
 .cc_user_favs_link {
-
+	font-weight: bold;
 }
 
 .cc_user_index {
