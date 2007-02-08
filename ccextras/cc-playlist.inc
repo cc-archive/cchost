@@ -399,22 +399,16 @@ class CCPlaylists
 
     function Browse($user='')
     {
+        require_once('cclib/cc-page.php');
+
         $where = 'cart_subtype <> "default"';
         if( !empty($user) )
             $where .= ' AND cart_user = ' . CCUser::IDFromName($user);
-        $rows = $this->_browse($where);
-        $this->_output($rows);
-    }
-
-    function _browse($where = array(), $limit_arg = 20, $offset_arg = 0)
-    {
         $carts = new CCPlaylist(true);
-        $offset = empty($_REQUEST['offset']) ? $offset_arg  : intval($_REQUEST['offset']);
-        $limit  = empty($_REQUEST['limit']) ? $limit_arg : intval($_REQUEST['limit']);
-        $carts->SetOffsetAndLimit($offset,$limit);
         $carts->SetOrder('cart_date','desc');
-        $rows = $carts->QueryRows($where);
-        return $rows;
+        $args = CCPage::AddPagingLinks($carts,$where,20);
+        $args['records'] = $carts->QueryRows($where);
+        $this->_output($args,'',true);
     }
 
     function _add($upload_id='',$playlist_id='')
@@ -536,7 +530,7 @@ class CCPlaylists
         return sprintf( _("%s's Playlist (%d) "),$CC_GLOBALS['user_real_name'], $num + 1);
     }
 
-    function _output($obj,$pmacro='')
+    function _output($obj,$pmacro='',$merge=false)
     {
         $format = CCUtil::Strip($_GET['f']);
         if( empty($format) )
@@ -578,7 +572,10 @@ class CCPlaylists
                 $targs['macro'] = $macro;
                 $targs['root-url'] = cc_get_root_url() . '/';
                 $targs['home-url'] = ccl();
-                $targs['args'] = $obj;
+                if( $merge )
+                    $targs = array_merge($targs,$obj);
+                else
+                    $targs['args'] = $obj;
                 $tobj->SetAllAndPrint($targs);
                 break;
         }

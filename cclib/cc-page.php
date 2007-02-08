@@ -793,22 +793,26 @@ class CCPage extends CCTemplate
 
             if( $offset )
             {
-               $url = url_args( $current_url, 'offset=' . ($offset - $limit) );
+               $prev_offs = 'offset=' . ($offset - $limit);
+               $url = url_args( $current_url, $prev_offs );
                $back_text = '<<< ' . _('Back');
                CCPage::PageArg('back_text',$back_text);
                CCPage::PageArg('prev_link',$url);
                $args['prev_link'] = $url;
                $args['back_text'] = $back_text;
+               $args['prev_offs'] = $prev_offs;
 
             }
             if( $offset + $limit < $all_row_count )
             {
-               $url = url_args( $current_url, 'offset=' . ($offset + $limit) );
+               $next_offs = 'offset=' . ($offset + $limit);
+               $url = url_args( $current_url, $next_offs );
                $more_text = _('More') . ' >>>';
                CCPage::PageArg('more_text',$more_text);
                CCPage::PageArg('next_link',$url);
                $args['next_link'] = $url;
                $args['more_text'] = $more_text;
+               $args['next_offs'] = $next_offs;
             }
 
             $table->SetOffsetAndLimit($offset,$limit);

@@ -379,10 +379,17 @@ var ccPlaylistBrowserObject = {
     initialize: function(container_id,options) {
         this.options = Object.extend( { }, options || {} );
         this.container_id = container_id;
-        var url = home_url + 'api/playlist/browse';
-        if( this.options.user )
-            url += '/' + this.options.user;
-        url += q + 'f=html&m=playlist_browse';
+        this._get_carts();
+    },
+
+    _get_carts: function(url) {
+        if( !url )
+        {
+            url = home_url + 'api/playlist/browse';
+            if( this.options.user )
+                url += '/' + this.options.user;
+            url += q + 'f=html&m=playlist_browse';
+        }
         new Ajax.Request( url, { method: 'get', onComplete: this._resp_browse.bind(this) } );
     },
 
@@ -397,11 +404,22 @@ var ccPlaylistBrowserObject = {
 
             Event.observe( this.container_id, 'mouseover', this.onListHover.bindAsEventListener(this) );
             Event.observe( this.container_id, 'click',     this.onListClick.bindAsEventListener(this) );
+            var me = this;
+            $$('#cc_prev_next_links a').each( function(a) {
+                Event.observe( a, 'click', me.onPrevNext.bindAsEventListener(me,a.href) );
+                a.href = 'javascript:// prev-next';
+            });
         }
         catch (err)
         {
             this._report_error('pl: ',err);
         }
+    },
+
+    onPrevNext: function(e,href) {
+        //var offs = href.match(/\?(.*)$/)[1];
+        this._get_carts(href);
+        Event.stop(e);
     },
 
     onListClick: function(event) {
