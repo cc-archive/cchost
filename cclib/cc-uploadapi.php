@@ -45,6 +45,8 @@ class CCUploadAPI
     function DeleteUpload($upload_id)
     {
         require_once('cclib/cc-sync.php');
+        require_once('cclib/cc-remix-tree.php');
+        require_once('cclib/cc-tags.inc');
 
         $uploads =& CCUploads::GetTable();
         $record = $uploads->GetRecordFromID($upload_id);    

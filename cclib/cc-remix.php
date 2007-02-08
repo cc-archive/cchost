@@ -101,6 +101,9 @@ class CCRemix
         global $CC_GLOBALS;
 
         require_once('cclib/cc-upload.php');
+        require_once('cclib/cc-remix-tree.php');
+        require_once('cclib/cc-remix-forms.php');
+
         CCUpload::CheckFileAccess(CCUser::CurrentUserName(),$upload_id);
 
         $uploads =& CCUploads::GetTable();
@@ -108,7 +111,6 @@ class CCRemix
         $msg = sprintf(_("Editing Remixes for '%s'"),$name);
         CCPage::SetTitle($msg);
         $pools    = empty($CC_GLOBALS['allow-pool-search']) ? false : $CC_GLOBALS['allow-pool-search'];
-        require_once('cclib/cc-remix-forms.php');
         $form = new CCEditRemixesForm($pools);
         $show = false;
         if( empty($_REQUEST['editremixes']) )

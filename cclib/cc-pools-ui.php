@@ -28,6 +28,9 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to ccHost');
 
+require_once('cclib/cc-pools.php');
+
+
 /**
 */
 class CCPoolUI
@@ -37,8 +40,6 @@ class CCPoolUI
         $pool_id = CCUtil::StripText($pool_id);
         if( empty($pool_id) )
             return;
-
-        require_once('cclib/cc-pools.php');
 
         $pools =& CCPools::GetTable();
         $pool = $pools->QueryKeyRow($pool_id);
@@ -166,7 +167,6 @@ END;
             $ids = $_POST['approve'];
             if( !empty($ids) )
             {
-                require_once('cclib/cc-pools.php');
                 $pool_items = CCPoolItems::GetTable();
                 foreach( $ids as $id )
                 {
@@ -185,7 +185,6 @@ END;
                 }
             }
         }
-        require_once('cclib/cc-pools.php');
         $remixes =& CCPoolRemixes::GetTable();
         $args['records'] = $remixes->GetUnapproved();
         if( empty($args['records']) )
@@ -204,7 +203,7 @@ END;
     function Manage()
     {
         CCPage::SetTitle(_("Manage Sample Pools"));
-        require_once('cclib/cc-pools.php');
+
         $pools =& CCPools::GetTable();
         $rows = $pools->QueryRows('');
         $args = array();
@@ -297,7 +296,6 @@ END;
         CCPage::SetTitle(_("Edit Pool Information"));
 
         require_once('cclib/cc-pools-forms.php');
-        require_once('cclib/cc-pools.php');
 
         $form = new CCAdminEditPoolForm();
         $show = true;

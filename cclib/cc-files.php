@@ -385,6 +385,7 @@ class CCPhysicalFile
         }
         else
         {
+            require_once('cclib/cc-uploadapi.php');
             CCUploadAPI::PostProcessFileDelete( $file_id, $upload_id );
             $this->_title_and_prompt($upload_id,true);
         }
