@@ -79,38 +79,40 @@
         </div>
       </div>
     </td></tr></table>
-  <table class="cc_pl_table" >
-    <tr tal:repeat="item args/records">
-      <td class="cc_playlist_item"   id="_pli_${item/upload_id}" >
+  <div class="cc_pl_div" >
+    <div class="trr" tal:repeat="item args/records">
+      <div class="tdc cc_playlist_item"   id="_pli_${item/upload_id}" >
+        <tal:block define="iun php:CC_strchop(${item/upload_name},30,true);" />
         <span> <a class="cc_playlist_pagelink" id="_plk_${item/upload_id}" target="_parent" 
-        href="${item/file_page_url}">${item/upload_name}</a> </span> by 
-        <a target="_parent" href="${item/artist_page_url}">${item/user_real_name}</a> 
-      </td>
-      <td><a class="cc_playlist_i" id="_plinfo_${item/upload_id}"> </a></td>
-      <td tal:condition="args/is_logged_in" id="playlist_menu_${item/upload_id}" class="cc_playlist_action">
+            href="${item/file_page_url}">${iun}</a> </span> by 
+        <tal:block define="iurn php:CC_strchop(${item/user_real_name},30,true);" />
+        <a target="_parent" href="${item/artist_page_url}">${iurn}</a> 
+      </div>
+      <div class="tdc"><a class="cc_playlist_i" id="_plinfo_${item/upload_id}"> </a></div>
+      <div tal:condition="args/is_logged_in" id="playlist_menu_${item/upload_id}" class="cc_playlist_action tdc">
               <a  class="cc_playlist_button" 
                   href="javascript://playlist_menu_${item/upload_id}"><span>Add To...</span></a>
-      </td>
+      </div>
       <tal:block condition="args/is_owner">  <tal:block condition="not:R/cart_dynamic">
-          <td>
-            <tal:block condition="not: repeat/item/start">
-              <a class="cc_playlist_move_up" id="_epcmd_${R/cart_id}_${item/upload_id}" href="javascript://move up">
-                <span tal:content="php:_('move up')" /></a>
-            </tal:block>
-          </td>
-          <td>
-            <tal:block condition="not: repeat/item/end">
-              <a class="cc_playlist_move_down" id="_epcmd_${R/cart_id}_${item/upload_id}" href="javascript://move down">
-                  <span tal:content="php:_('move down')" /></a>
-            </tal:block>
-          </td>
+          <tal:block define="updisp string:none; dndisp string:none" />
+          <tal:block define="updisp string:block" condition="not: repeat/item/start" />
+          <tal:block define="dndisp string:block" condition="not: repeat/item/end"   />
+          <div class="tdc moveupdown" >
+              <a style="display:${updisp}" class="cc_playlist_move_up movecmd" id="_epcmd_${R/cart_id}_${item/upload_id}" href="javascript://move up">
+                <span tal:content="php:_('up')" /></a>
+          </div>
+          <div class="tdc moveupdown">
+              <a style="display:${dndisp}" class="cc_playlist_move_down movecmd" id="_epcmd_${R/cart_id}_${item/upload_id}" href="javascript://move down">
+                  <span tal:content="php:_('dn')" /></a>
+          </div>
       </tal:block></tal:block>
-      <td tal:condition="item/fplay_url" class="cc_playlist_pcontainer" >
+      <div tal:condition="item/fplay_url" class="tdc cc_playlist_pcontainer" >
         <a  class="cc_player_button cc_player_hear" 
           id="_ep_${R/cart_id}_${item/upload_id}" href="${item/fplay_url}"> </a>
-      </td>
-    </tr>
-  </table>
+      </div>
+      <div class="hrc"> </div>
+    </div>
+  </div>
   <span id="pl_user_${R/cart_id}" tal:condition="args/is_logged_in" />
   <span id="pl_owner_${R/cart_id}" tal:condition="args/is_owner" />
   <br clear="right" /><!-- *cough* -->

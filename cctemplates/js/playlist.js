@@ -99,6 +99,9 @@ ccPlaylistMenu.prototype = {
             Event.observe( pli, 'click', me.onInfoClick.bindAsEventListener( me, upload_id ) );
             found = true;
         });
+
+        this.hookUpDown(parent);
+
         if( found && !this.windowHooked ) {
             Event.observe( window, 'click', this.onWindowClick.bindAsEventListener(this));
             this.windowHooked = true;
@@ -284,7 +287,74 @@ ccPlaylistMenu.prototype = {
 
     onWindowClick: function(e) {
         this.CloseMenus();
+    },
+
+    hookUpDown: function(parent) {
+        var me = this;
+        new SelectorLiteAddon([ 'a.cc_playlist_move_up']).get(parent).each( function(link) {
+            Event.observe(link, 'click', me.onMoveUpClick.bindAsEventListener(me) );
+        });
+        new SelectorLiteAddon([ 'a.cc_playlist_move_down']).get(parent).each( function(link) {
+            Event.observe(link, 'click', me.onMoveDownClick.bindAsEventListener(me) );
+        });
+    },
+
+    onMoveUpClick: function(event) {
+        this._do_move('up',event);
+    },
+
+    onMoveDownClick: function(event) {
+        this._do_move('down',event);
+    },
+
+    _do_move: function( dir, event ) {
+        var link = Event.element(event);
+        while( !link.href )
+            link = link.parentNode;
+        var link_id = link.id;
+        var ids = link_id.match(/([0-9]+)_([0-9]+)$/);
+        var url = home_url + 'api/playlist/move' + dir + '/' + ids[2] + '/' + ids[1];
+        new Ajax.Request( url, { method: 'get' } ); // , onComplete: this._resp_move.bind(this,ids[1]) } ); 
+        var this_row = link.parentNode.parentNode;
+        var other_row = null;
+        if( dir == 'up' )
+            other_row = Element.previous(this_row);
+        else
+            other_row = Element.next(this_row);
+
+        var this_links  = new SelectorLiteAddon([ 'a.movecmd' ]).get(this_row);
+        var other_links = new SelectorLiteAddon([ 'a.movecmd' ]).get(other_row);
+        var other_displays = [ other_links[0].style.display,  other_links[1].style.display ];
+        other_links[0].style.display = this_links[0].style.display;
+        other_links[1].style.display = this_links[1].style.display;
+        this_links[0].style.display = other_displays[0];
+        this_links[1].style.display = other_displays[1];;
+        
+        var this_html = this_row.innerHTML;
+        this_row.innerHTML = other_row.innerHTML;
+        other_row.innerHTML = this_html;
+
+
+        // yes, this is all a big leak on IE
+        this.hookUpDown(this_row);
+        this.hookUpDown(other_row);
+
+        Event.stop(event);
+    },
+
+    _resp_move: function( cart_id, resp, json ) {
+        try
+        {
+            $('_pld_' + cart_id)._dirty_div = true;
+            this.openPlaylist( '_pl_' + cart_id );
+        }
+        catch (err)
+        {
+            this._report_error( 'move: ', err );
+        }
+
     }
+
 }
 
 /************************************************
@@ -553,21 +623,6 @@ var ccPlaylistBrowserObject = {
             // hook the menus, info button, et. al.
             this.playlistMenu.hookElements(e);
 
-            //
-            // hook the 'owner' functions (probably should in the menu class)
-            //
-            var u_owner = 'pl_owner_' + cart_id;
-            if( $(u_owner) )
-            {
-                new SelectorLiteAddon([ 'a.cc_playlist_move_up']).get(e).each( function(link) {
-                    Event.observe(link, 'click', me.onMoveUpClick.bindAsEventListener(me) );
-                });
-                new SelectorLiteAddon([ 'a.cc_playlist_move_down']).get(e).each( function(link) {
-                    Event.observe(link, 'click', me.onMoveDownClick.bindAsEventListener(me) );
-                });
-
-            }
-
             e._dirty_div = false;
             e.style.display = 'block';
         }
@@ -576,37 +631,6 @@ var ccPlaylistBrowserObject = {
             this._report_error( 'detail: ', err );
         }
         this.openingRec = false;
-    },
-
-    onMoveUpClick: function(event) {
-        this._do_move('up',event);
-    },
-
-    onMoveDownClick: function(event) {
-        this._do_move('down',event);
-    },
-
-    _do_move: function( dir, event ) {
-        var link = Event.element(event);
-        while( !link.href )
-            link = link.parentNode;
-        var ids = link.id.match(/([0-9]+)_([0-9]+)$/);
-        var url = home_url + 'api/playlist/move' + dir + '/' + ids[2] + '/' + ids[1];
-        new Ajax.Request( url, { method: 'get', onComplete: this._resp_move.bind(this,ids[1]) } ); 
-        Event.stop(event);
-    },
-
-    _resp_move: function( cart_id, resp, json ) {
-        try
-        {
-            $('_pld_' + cart_id)._dirty_div = true;
-            this.openPlaylist( '_pl_' + cart_id );
-        }
-        catch (err)
-        {
-            this._report_error( 'move: ', err );
-        }
-
     },
 
     onListHover: function(event) {
