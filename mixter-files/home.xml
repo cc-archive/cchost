@@ -209,7 +209,7 @@ div.f { /* 'read more' link container */
   if( ccEPlayer && ccEPlayer.flashOK )
   {
     $('teru').style.display = 'block';
-    setTimeout(start_teru,100);
+    //setTimeout(start_teru,100);
   }
   else
   {
