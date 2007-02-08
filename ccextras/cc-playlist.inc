@@ -254,7 +254,7 @@ class CCPlaylists
 
             $w['cart_item_cart'] = $playlist_id;
             $offset = empty($_REQUEST['offset']) ? 0 : intval($_REQUEST['offset']);
-            $limit  = empty($_REQUEST['limit']) ? 20 : intval($_REQUEST['limit']);
+            $limit  = empty($_REQUEST['limit']) ? 0 : intval($_REQUEST['limit']);
             $cart_items->SetOffsetAndLimit($offset,$limit);
             $cart_items->SetOrder('cart_item_order','ASC');
             $rows = $cart_items->QueryRows($w);
