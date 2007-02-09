@@ -77,7 +77,7 @@ class CCUploads extends CCTable
         $this->_filter = '';
 
         if( !$set )
-            return;
+            return '';
 
         // if the current user is admin, don't put 
         // any filters on the listings
@@ -100,6 +100,7 @@ class CCUploads extends CCTable
 
         } // endif for non-admin users filters
 
+        return $this->_filter;
     }
 
 
