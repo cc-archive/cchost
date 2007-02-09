@@ -332,33 +332,36 @@ class CCPlaylists
             $user = CCUser::CurrentUser();
             $args['is_logged_in'] = true;
 
-            if( $args['playlist']['cart_user'] ==  $user )
+            if( !$is_popup )
             {
-                $args['is_owner'] = true;
-                $args['menu'][] = array( 'url' => ccl( 'playlist', 'edit', $playlist_id ),
-                                            'class' => '',
-                                            'id'    => '',
-                                            'text' => _('Edit Properties') );
-
-                if( !$is_dynamic && !empty($args['records']) )
+                if( $args['playlist']['cart_user'] ==  $user )
                 {
-                    $args['menu'][] = array( 'url' => ccl( 'playlist', 'editorder', $playlist_id ),
-                                                            'class' => '',
-                                                            'id'    => '',
-                                                            'text' => _('Reorder Playlist') );
+                    $args['is_owner'] = true;
+                    $args['menu'][] = array( 'url' => ccl( 'playlist', 'edit', $playlist_id ),
+                                                'class' => '',
+                                                'id'    => '',
+                                                'text' => _('Edit Properties') );
 
-                    $args['menu'][] = array( 'url' => ccl( 'playlist', 'empty', $playlist_id ),
-                                                            'class' => '',
-                                                            'id'    => '',
-                                                            'text' => _('Empty Playlist') );
-                }
+                    if( !$is_dynamic && !empty($args['records']) )
+                    {
+                        $args['menu'][] = array( 'url' => ccl( 'playlist', 'editorder', $playlist_id ),
+                                                                'class' => '',
+                                                                'id'    => '',
+                                                                'text' => _('Reorder Playlist') );
 
-                if( $args['playlist']['cart_subtype'] != 'favorites' )
-                {
-                    $args['menu'][] = array( 'url' => ccl( 'playlist', 'delete', $playlist_id ),
-                                            'class' => '',
-                                            'id'    => '',
-                                            'text' => _('Delete Playist') );
+                        $args['menu'][] = array( 'url' => ccl( 'playlist', 'empty', $playlist_id ),
+                                                                'class' => '',
+                                                                'id'    => '',
+                                                                'text' => _('Empty Playlist') );
+                    }
+
+                    if( $args['playlist']['cart_subtype'] != 'favorites' )
+                    {
+                        $args['menu'][] = array( 'url' => ccl( 'playlist', 'delete', $playlist_id ),
+                                                'class' => '',
+                                                'id'    => '',
+                                                'text' => _('Delete Playist') );
+                    }
                 }
             }
         }
