@@ -100,9 +100,6 @@ END;
         $uploads = new CCUploads(); // get a new one because we step on it
         $uploads->SetDefaultFilter(true,true);
 
-        //
-        // Set up bread crumb trail
-        //
         if( !empty($user_name) )
         {
             $user_row  = $users->QueryRow("user_name = '$user_name'");
@@ -125,9 +122,12 @@ END;
             }
         }
 
+        //
+        // Set up bread crumb trail
+        //
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
-        if( empty($settings['newuserpage']) )
+        if( !empty($upload_id) || empty($settings['newuserpage']) )
         {
             $this->_build_bread_crumb_trail($user_name,$upload_id);
         }
@@ -137,6 +137,7 @@ END;
         //
         if( empty($upload_id) )
         {
+
             $uploads->AddJoin( new CCReviews(true), 'upload_id');
             $uploads->SetSort('topic_date','DESC');
             $uploads->AddExtraColumn('0 as topic_search_result_info');
