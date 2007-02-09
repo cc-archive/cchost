@@ -418,11 +418,14 @@ END;
             if( !empty($record['local_menu']['playlist']) )
             {
                 $M =& $record['local_menu']['playlist']['playlist_menu'];
-                $html .=<<<END
-                <div id="{$M['parent_id']}">
-                <a id="commentcommand" class="cc_playlist_button" href="{$M['action']}"><span>{$M['menu_text']}</span></a>
-                </div>
+                if( !empty($M['parent_id']) ) // this can happen on banned or hidden admin records
+                {
+                    $html .=<<<END
+                    <div id="{$M['parent_id']}">
+                    <a id="commentcommand" class="cc_playlist_button" href="{$M['action']}"><span>{$M['menu_text']}</span></a>
+                    </div>
 END;
+                }
             }
 
             if( !empty($record['local_menu']['comment']['comments']) )
