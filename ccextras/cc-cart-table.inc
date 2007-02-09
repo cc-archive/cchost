@@ -130,17 +130,22 @@ class CCPlaylistItems extends CCCartItems
 
     function AddJoin($other_cctable, $joinfield, $jointype = 'LEFT OUTER' )
     {
-        if( get_class($other_cctable) == 'cccart' || is_subclass_of($other_cctable, 'CCCart') )
-            $this->_has_cart_join = true;
-        return parent::AddJoin( $other_cctable, $joinfield, $jointype  );
+        $join = parent::AddJoin( $other_cctable, $joinfield, $jointype  );
+        $other_class = strtolower(get_class($other_cctable));
+        if(  $other_class == 'cccart' || is_subclass_of($other_cctable, 'CCCart') )
+            $this->_cart_join = $join;
+
+        if( $other_class  == 'ccuploads' || is_subclass_of($other_cctable, 'CCUploads') )
+            $this->_upload_filter = $other_cctable->SetDefaultFilter(true,true);
+        return $join;
     }
 
     // overwrite parent's version to add type limit
     function _get_select($where,$columns='*')
     {
-        if( !empty($this->_has_cart_join) )
+        if( !empty($this->_cart_join) )
         {
-            $w = "cart_item_type = 'playlist'";
+            $w = "cart_type = 'playlist'";
 
             if( empty($where) )
             {
@@ -151,6 +156,12 @@ class CCPlaylistItems extends CCCartItems
                 $where = $this->_where_to_string($where);
                 $where .= " AND ($w)";
             }
+        }
+
+        if( !empty($this->_upload_filter) )
+        {
+            $where = $this->_where_to_string($where);
+            $where .= " AND ({$this->_upload_filter})";
         }
 
         return parent::_get_select($where,$columns);

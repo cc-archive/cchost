@@ -17,7 +17,7 @@ class CCPlaylistHV
 
     function OnUploadRow( &$record ) 
     {
-        if( !cc_playlist_enabled() )
+        if( !cc_playlist_enabled() || empty($record['upload_published']) || !empty($record['upload_banned']) )
         {
             $record['fplay_url'] = '';
         }
@@ -94,7 +94,7 @@ class CCPlaylistHV
     */
     function OnUploadMenu(&$menu,&$record)
     {
-        if( !cc_playlist_enabled() )
+        if( !cc_playlist_enabled() || empty($record['upload_published']) || !empty($record['upload_banned']) )
             return;
 
         if( CCUser::IsLoggedIn() )
@@ -142,6 +142,29 @@ EOF;
     $carts->SetOffsetAndLimit(0,5);
     $where = 'cart_id in (' . join(',',$cart_ids) . ')';
     return $carts->QueryRows($where);
+}
+
+function CC_popular_playlist_tracks()
+{ 
+    require_once('ccextras/cc-cart-table.inc');
+    /*
+select count(*) as cnt , cart_item_upload , upload_name
+from cc_tbl_cart_items 
+join cc_tbl_uploads on upload_id = cart_item_upload
+group by cart_item_upload order by cnt desc    
+*/
+    $items =& CCPlaylistItems::GetTable();
+    $items->AddExtraColumn( 'count(*) as track_count' );
+    $j1 = $items->AddJoin( new CCPlaylist(), 'cart_item_cart' );
+    $uploads = new CCUploads();
+    $j2 = $items->AddJoin( $uploads, 'cart_item_upload' );
+    $j3 = $items->AddJoin( new CCUsers(), $j2 . '.upload_user' );
+    $items->GroupOn( 'cart_item_upload' );
+    $items->SetOrder( 'track_count', 'DESC' );
+    $items->SetOffsetAndLimit(0,25);
+    $rows = $items->QueryRows('');
+    $rows = $uploads->GetRecordsFromRows($rows);
+    return $rows;
 }
 
 ?>
