@@ -79,7 +79,7 @@
         </div>
       </div>
     </td></tr></table>
-  <div class="cc_pl_div" >
+  <div class="cc_pl_div" id="_cart_${R/cart_id}">
     <div class="trr" tal:repeat="item args/records">
       <div class="tdc cc_playlist_item"   id="_pli_${item/upload_id}" >
         <tal:block define="iun php:CC_strchop(${item/upload_name},30,true);" />
@@ -93,19 +93,6 @@
               <a  class="cc_playlist_button" 
                   href="javascript://playlist_menu_${item/upload_id}"><span>Add To...</span></a>
       </div>
-      <tal:block condition="args/is_owner">  <tal:block condition="not:R/cart_dynamic">
-          <tal:block define="updisp string:none; dndisp string:none" />
-          <tal:block define="updisp string:block" condition="not: repeat/item/start" />
-          <tal:block define="dndisp string:block" condition="not: repeat/item/end"   />
-          <div class="tdc moveupdown" >
-              <a style="display:${updisp}" class="cc_playlist_move_up movecmd" id="_epcmd_${R/cart_id}_${item/upload_id}" href="javascript://move up">
-                <span tal:content="php:_('up')" /></a>
-          </div>
-          <div class="tdc moveupdown">
-              <a style="display:${dndisp}" class="cc_playlist_move_down movecmd" id="_epcmd_${R/cart_id}_${item/upload_id}" href="javascript://move down">
-                  <span tal:content="php:_('dn')" /></a>
-          </div>
-      </tal:block></tal:block>
       <div tal:condition="item/fplay_url" class="tdc cc_playlist_pcontainer" >
         <a  class="cc_player_button cc_player_hear" 
           id="_ep_${R/cart_id}_${item/upload_id}" href="${item/fplay_url}"> </a>
@@ -223,5 +210,74 @@
   </script>
 </metal:block>
 
+<metal:block define-macro="playlist_edit_order">
+<script language="JavaScript" type="text/javascript" src="${site-root}cctemplates/js/tool-man/source/org/tool-man/core.js"></script>
+<script language="JavaScript" type="text/javascript" src="${site-root}cctemplates/js/tool-man/source/org/tool-man/events.js"></script>
+<script language="JavaScript" type="text/javascript" src="${site-root}cctemplates/js/tool-man/source/org/tool-man/css.js"></script>
+<script language="JavaScript" type="text/javascript" src="${site-root}cctemplates/js/tool-man/source/org/tool-man/coordinates.js"></script>
+<script language="JavaScript" type="text/javascript" src="${site-root}cctemplates/js/tool-man/source/org/tool-man/drag.js"></script>
+<script language="JavaScript" type="text/javascript" src="${site-root}cctemplates/js/tool-man/source/org/tool-man/dragsort.js"></script>
+<script language="JavaScript" type="text/javascript" src="${site-root}cctemplates/js/tool-help.js"></script>
+<style>
+	#tracks {
+		font-family: verdana;
+		list-style-type: none;
+		margin: 0px;
+		padding: 0px;
+		width: 300px;
+	}
+	#tracks li {
+		cursor: move;
+		position: relative;
+		float: left;
+		margin: 3px 2px 0px 0px;
+		width: 430px;
+    font-size: 11px;
+		border: 1px solid #000;
+		text-align: left;
+		padding: 2px 0px 2px 24px;
+		background-color: #eeeeff;
+	}
+  #tracks li span { display: none; }
+</style>
+<h2>${args/playlist/cart_name} <span style="font-weight: normal;font-size:11px;color:green;">(drag and drop names to order the list)</span></h2>
+<div id="savedorder" style="display:none"> </div>
+<ul id="tracks" class="box">
+  <li tal:repeat="R args/records"><i>${R/upload_name}</i> by ${R/user_real_name}<span>${R/cart_item_id}</span></li>
+</ul>
+
+<form style="clear:left; margin: 10px 0px 0px 60px" method="post" action="${args/postbackurl}" onsubmit="dopost()">
+  <input type="hidden" id="idorder" name="idorder" value="" />
+  <tal:block define="submit_text php:_('Submit Track Order');" />
+<br /><br /><br />
+  <input type="submit" value="${submit_text}" />
+</form>
+
+<script>
+<!--
+var dragsort = ToolMan.dragsort();
+var junkdrawer = ToolMan.junkdrawer();
+
+dragsort.makeListSortable(document.getElementById("tracks"), verticalOnly, saveOrder);
+
+function verticalOnly(item) {
+  item.toolManDragGroup.verticalOnly();
+}
+
+function saveOrder(item) {
+  var group = item.toolManDragGroup;
+  var list = group.element.parentNode;
+  var id = list.getAttribute("id");
+  if (id == null) return;
+  group.register('dragend', function() {
+    var so =document.getElementById("savedorder");
+    so.innerHTML = junkdrawer.serializeList(list); // .match(/((?:span>)[0-9]+)/);
+  });
+}
+
+//-->
+</script>
+
+</metal:block>
 
 </tal:block>

@@ -37,19 +37,19 @@ var ccThinking = {
         if( !this.div )
         {
             this.div = document.createElement('div');
-            this.div.style.display = 'none';
+            this.div.hide();
             this.div.className = 'cc_playlist_thinking';
             this.div.innerHTML = 'thinking...';
             document.body.appendChild(this.div);
         }
         this.div.style.top  = this.currY + 'px';
         this.div.style.left = this.currX + 'px';
-        this.div.style.display = 'block';
+        this.div.show();
     },
 
     _hide_popup: function() {
         if( this.div )
-            this.div.style.display = 'none';
+            this.div.hide();
     },
 
     onComplete: function(req,t,json) {
@@ -89,18 +89,16 @@ ccPlaylistMenu.prototype = {
     hookElements: function(parent) {
         var me = this;
         var found = false;
-        new SelectorLiteAddon([ 'a.cc_playlist_button']).get(parent).each( function(e) {
+        $$('.cc_playlist_button', parent).each( function(e) {
             var id = e.href.match( /([0-9]+$)/ )[1];
             Event.observe( e, 'click', me.onMenuButtonClick.bindAsEventListener( me, id ) );
             found = true;
         });
-        new SelectorLiteAddon([ 'a.cc_playlist_i']).get(parent).each( function(pli) {
+        $$('.cc_playlist_i',parent).each( function(pli) {
             var upload_id = pli.id.match(/[0-9]+$/);
             Event.observe( pli, 'click', me.onInfoClick.bindAsEventListener( me, upload_id ) );
             found = true;
         });
-
-        this.hookUpDown(parent);
 
         if( found && !this.windowHooked ) {
             Event.observe( window, 'click', this.onWindowClick.bindAsEventListener(this));
@@ -126,7 +124,7 @@ ccPlaylistMenu.prototype = {
         {
             if( $(pid).needRefresh ) 
             {
-                $(pid).style.display = 'block';
+                $(pid).show();
                 this._refresh_menu( id, pid );
             }
             else
@@ -194,7 +192,22 @@ ccPlaylistMenu.prototype = {
         {
             var p = $(pid);
             p.needRefresh = true;
-            p.innerHTML = json ? json : resp.responseText;
+            if( json )
+            {
+                if( json.message )
+                {
+                    p.innerHTML = json.message;
+                    this.onJSONCommand(json);
+                }
+                else
+                {
+                    p.innerHTML = json;
+                }
+            }
+            else
+            {
+                p.innerHTML = resp.responseText;
+            }
             new ccDelayAndFade( 1000, p, 0, 1500, 20, { complete: this._close_menu.bind(this) } );
         }
         catch (err)
@@ -207,14 +220,14 @@ ccPlaylistMenu.prototype = {
     _open_menu: function(pid) {
         var pp = $(pid);
         this.openMenu = pp;
-        pp.style.display = 'block';
+        pp.show();
         new ccDelayAndFade( 0, pp, 1, 250, 4 );
     },
 
     _close_menu: function() {
         if( this.openMenu )
         {
-            this.openMenu.style.display = 'none';
+            this.openMenu.hide();
             this.openMenu = null;
         }
     },
@@ -232,7 +245,7 @@ ccPlaylistMenu.prototype = {
         if( $(info_id) )
         {
             this.openInfo = $(info_id);
-            this.openInfo.style.display = 'block';
+            this.openInfo.show();
             this.openInfo.style.width = "auto";
         }
         else
@@ -252,7 +265,7 @@ ccPlaylistMenu.prototype = {
         if( this.openInfo )
         {
             var old_id = this.openInfo.id;
-            this.openInfo.style.display = 'none';
+            this.openInfo.hide();
             this.openInfo = null;
             return old_id;
         }
@@ -263,7 +276,7 @@ ccPlaylistMenu.prototype = {
         var info = $(info_id);
         info.style.opacity = 0;
         info.innerHTML = resp.responseText;
-        info.style.display = 'block';
+        info.show();
         this.openInfo = info;
         var x = (document.body.offsetWidth/2) - (info.offsetWidth/2);
         if( x < 0 )
@@ -289,72 +302,25 @@ ccPlaylistMenu.prototype = {
         this.CloseMenus();
     },
 
-    hookUpDown: function(parent) {
-        var me = this;
-        new SelectorLiteAddon([ 'a.cc_playlist_move_up']).get(parent).each( function(link) {
-            Event.observe(link, 'click', me.onMoveUpClick.bindAsEventListener(me) );
-        });
-        new SelectorLiteAddon([ 'a.cc_playlist_move_down']).get(parent).each( function(link) {
-            Event.observe(link, 'click', me.onMoveDownClick.bindAsEventListener(me) );
-        });
-    },
+    /* 
+    *
+    * playlist stuff ... doesn't really belong here yet here it is... 
+    *
+    */
 
-    onMoveUpClick: function(event) {
-        this._do_move('up',event);
-    },
-
-    onMoveDownClick: function(event) {
-        this._do_move('down',event);
-    },
-
-    _do_move: function( dir, event ) {
-        var link = Event.element(event);
-        while( !link.href )
-            link = link.parentNode;
-        var link_id = link.id;
-        var ids = link_id.match(/([0-9]+)_([0-9]+)$/);
-        var url = home_url + 'api/playlist/move' + dir + '/' + ids[2] + '/' + ids[1];
-        new Ajax.Request( url, { method: 'get' } ); // , onComplete: this._resp_move.bind(this,ids[1]) } ); 
-        var this_row = link.parentNode.parentNode;
-        var other_row = null;
-        if( dir == 'up' )
-            other_row = Element.previous(this_row);
-        else
-            other_row = Element.next(this_row);
-
-        var this_links  = new SelectorLiteAddon([ 'a.movecmd' ]).get(this_row);
-        var other_links = new SelectorLiteAddon([ 'a.movecmd' ]).get(other_row);
-        var other_displays = [ other_links[0].style.display,  other_links[1].style.display ];
-        other_links[0].style.display = this_links[0].style.display;
-        other_links[1].style.display = this_links[1].style.display;
-        this_links[0].style.display = other_displays[0];
-        this_links[1].style.display = other_displays[1];;
-        
-        var this_html = this_row.innerHTML;
-        this_row.innerHTML = other_row.innerHTML;
-        other_row.innerHTML = this_html;
-
-
-        // yes, this is all a big leak on IE
-        this.hookUpDown(this_row);
-        this.hookUpDown(other_row);
-
-        Event.stop(event);
-    },
-
-    _resp_move: function( cart_id, resp, json ) {
-        try
+    onJSONCommand: function(json) {
+        if( json.command = 'delete' )
         {
-            $('_pld_' + cart_id)._dirty_div = true;
-            this.openPlaylist( '_pl_' + cart_id );
+            var id = '_ep_' + json.cart_id + '_' + json.upload_id;
+            var this_row = $(id);
+            if( this_row )
+            {
+                while( !this_row.hasClassName('trr') )
+                    this_row = this_row.parentNode;
+                this_row.remove();
+            }
         }
-        catch (err)
-        {
-            this._report_error( 'move: ', err );
-        }
-
     }
-
 }
 
 /************************************************
@@ -395,7 +361,7 @@ ccPlayerMethods = {
                 if( ccEPlayer.flashOK )
                     Event.observe( play_win, 'click', this.onPlayWin.bindAsEventListener(this,playlist_id) );
                 else
-                    play_win.style.display = 'none';
+                    play_win.hide();
             }
         }
     },
@@ -509,41 +475,31 @@ var ccPlaylistBrowserObject = {
             {
                 // close the 'current' playlist
 
-                $(this.openRec).style.display = 'none';
+                $(this.openRec).hide();
             }
             if( $(detailId) )
             {
                 var element = $(detailId);
 
-                if( element._dirty_div )
+                if( this.openRec == detailId )
                 {
-                    // this will happen owner of playlist does move up/down
+                    // all we did was close the currently open one
 
-                    this.openRec = detailId;            
-                    this.refreshDetails( cart_id );
+                    this.openRec = '';
                 }
                 else
                 {
-                    if( this.openRec == detailId )
-                    {
-                        // all we did was close the currently open one
+                    // this is a request to open another playlist and
+                    // we already have it cached and it's not changed
+                    // so just open it...
 
-                        this.openRec = '';
-                    }
-                    else
-                    {
-                        // this is a request to open another playlist and
-                        // we already have it cached and it's not changed
-                        // so just open it...
-
-                        element.style.display = 'block';
-                        this.openRec = detailId;
-                        // reset sel line because of painting probs
-                        Element.removeClassName( this.openRec, 'cc_playlist_sel' );
-                    }
-                
-                    this.openingRec = false;
+                    element.show();
+                    this.openRec = detailId;
+                    // reset sel line because of painting probs
+                    this.openRec.removeClassName( 'cc_playlist_sel' );
                 }
+            
+                this.openingRec = false;
             }
             else
             {
@@ -618,13 +574,12 @@ var ccPlaylistBrowserObject = {
             var me = this;
 
             if( !this.playlistMenu )
-                this.playlistMenu = new ccPlaylistMenu( { autoHook: false } );
+                this.playlistMenu = new ccPlaylistMenu( { autoHook: false, playlist: this } );
 
             // hook the menus, info button, et. al.
             this.playlistMenu.hookElements(e);
 
-            e._dirty_div = false;
-            e.style.display = 'block';
+            e.show();
         }
         catch (err)
         {
@@ -635,11 +590,11 @@ var ccPlaylistBrowserObject = {
 
     onListHover: function(event) {
         var e = Event.element(event);
-        if( Element.hasClassName( e, 'cc_playlist_line' ) )
+        if( e.hasClassName( 'cc_playlist_line' ) )
         {
             if( this.selected )
-                Element.removeClassName( this.selected, 'cc_playlist_sel' );
-            Element.addClassName( e, 'cc_playlist_sel' );
+                this.selected.removeClassName('cc_playlist_sel' );
+            e.addClassName( 'cc_playlist_sel' );
             this.selected = e;
         }
     },

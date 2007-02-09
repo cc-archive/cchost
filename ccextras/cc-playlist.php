@@ -132,6 +132,7 @@ FROM `cc_tbl_cart_items`
 JOIN cc_tbl_uploads ON upload_id = cart_item_upload
 JOIN cc_tbl_cart ON cart_id = cart_item_cart
 WHERE (cart_user != upload_user) AND (cart_num_items > 3)
+ORDER BY cart_date DESC
 LIMIT 5 
 EOF;
     $cart_ids = CCDatabase::QueryItems($sql);

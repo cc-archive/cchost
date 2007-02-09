@@ -154,11 +154,21 @@ SelectorLiteAddon.prototype = {
 //Overwrite the $$ function.
 var $$old=$$;
 
+
 var $$=function(a,b) {
 
-  //expression is too complicated, forward the call to prototype's function!
-  if (b || a.indexOf("[")>=0) return $$old.apply(this,arguments);
-  
-  //Otherwise use our addon!
-  return new SelectorLiteAddon(a.split(/\s+/)).get();
+    // Hacked by VS for ccHost
+    //expression is too complicated, forward the call to prototype's function!
+    // original: if (b || a.indexOf("[")>=0) return $$old.apply(this,arguments);
+
+    if (a.indexOf("[")>=0) 
+        return $$old.apply(this,arguments);
+
+    //Otherwise use our addon!
+    if( a.search(/^\.[^ ]+$/) != -1 )
+    { 
+        b = b || document;
+        return b.getElementsByClassName(a.substring(1));
+    }
+    return new SelectorLiteAddon(a.split(/\s+/)).get(b | document);
 }

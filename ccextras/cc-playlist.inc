@@ -134,6 +134,8 @@ class CCPlaylists
         CCEvents::MapUrl( ccp('playlist','save'),   array( 'CCPlaylists', 'Save'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
         CCEvents::MapUrl( ccp('playlist','editquery'),   array( 'CCPlaylists', 'EditQuery'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
 
+        CCEvents::MapUrl( ccp('playlist','editorder'),   array( 'CCPlaylists', 'EditOrder'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
+
         CCEvents::MapUrl( ccp('playlist','browse'), array( 'CCPlaylists', 'BrowsePL'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ); 
 
         CCEvents::MapUrl( ccp('playlist','popup'), array( 'CCPlaylists', 'Popup'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ); 
@@ -177,6 +179,41 @@ class CCPlaylists
         exit;
     }
 
+    function EditOrder($playlist_id='')
+    {
+        $this->_test_pl(0,$playlist_id,false,true,true);
+        CCPage::SetTitle(_('Edit Playlist Order'));
+        if( empty($_POST) )
+        {
+            CCPage::PageArg('noproto',true);
+            CCPage::PageArg('editor','playlist.xml/playlist_edit_order');
+            $args = $this->_get_playlist_info($playlist_id);
+            $args['postbackurl'] = ccl('playlist','editorder',$playlist_id);
+            CCPage::PageArg('args',$args,'editor');
+        }
+        else
+        {
+            if( !empty($_POST['idorder']) )
+            {
+                $ids = split(',',$_POST['idorder']);
+                if( !empty($ids) )
+                {
+                    $cart_items =& CCCartItems::GetTable();
+                    $i = 0;
+                    foreach( $ids as $id )
+                    {
+                        $up['cart_item_id'] = $id;
+                        $up['cart_item_order'] = $i++;
+                        $cart_items->Update($up);
+                    }
+                }
+            }
+
+            $url = ccl('playlist','browse',$playlist_id);
+            CCUtil::SendBrowserTo($url);
+        }
+    }
+
     function MoveUp($upload_id='',$playlist_id='')
     {
         $this->_test_pl($upload_id,$playlist_id,true,true,true);
@@ -218,8 +255,11 @@ class CCPlaylists
         $cart_items->DeleteWhere($w);
         $carts =& CCPlaylist::GetTable();
         $carts->Inc('cart_num_items',$playlist_id);
-        $msg = _('Track has been removed from playlist');
-        $this->_output($msg);
+        $args['command'] = 'delete';
+        $args['upload_id'] = $upload_id;
+        $args['cart_id'] = $playlist_id;
+        $args['message'] = _('Track has been removed from playlist');
+        $this->_output($args); // for now...
     }
 
     function View($playlist_id='')
@@ -302,6 +342,11 @@ class CCPlaylists
 
                 if( !$is_dynamic && !empty($args['records']) )
                 {
+                    $args['menu'][] = array( 'url' => ccl( 'playlist', 'editorder', $playlist_id ),
+                                                            'class' => '',
+                                                            'id'    => '',
+                                                            'text' => _('Reorder Playlist') );
+
                     $args['menu'][] = array( 'url' => ccl( 'playlist', 'empty', $playlist_id ),
                                                             'class' => '',
                                                             'id'    => '',

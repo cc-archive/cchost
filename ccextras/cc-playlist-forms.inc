@@ -44,6 +44,19 @@ class CCPlaylistForm extends CCForm
                                    'flags'      => CCFF_NOUPDATE | CCFF_STATIC ),
                 );
         }
+        else
+        {
+            $url = ccl('playlist','editorder',$playlist_id);
+            $fields += array(
+                '_dynlink' => 
+                            array( 'label'      => _('Track Order'),
+                                   'value'      => "<a href=\"$url\">" . _('Edit track order') . '</a>',
+                                   'formatter'  => 'statictext',
+                                   'form_tip'   => _('Edit the order in which the tracks play'),
+                                   'flags'      => CCFF_NOUPDATE | CCFF_STATIC ),
+                );
+        }
+
         $this->AddFormFields($fields);
     }
 }

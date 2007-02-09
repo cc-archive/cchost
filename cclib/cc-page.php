@@ -184,6 +184,7 @@ class CCPage extends CCTemplate
         $this->_page_args['get'] = $_GET;
         $this->_page_args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
         $this->_page_args['install_done'] = false;
+        $this->_page_args['noproto'] = false;
     }
 
     /**

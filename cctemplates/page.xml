@@ -156,16 +156,18 @@ $Id$
   <tal:block repeat="head_link head_links">
       <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
   </tal:block>
-  <script type="text/javascript" src="${root-url}cctemplates/js/prototype.js" />
-  <script type="text/javascript" src="${root-url}cctemplates/js/selector-addon-v1.js" />
-  <script type="text/javascript" src="${root-url}cctemplates/js/mini-rico.js" />
-  <script type="text/javascript" src="${root-url}cctemplates/cc_obj.js" />
-  <tal:block condition="script_blocks" repeat="script script_blocks">
-    <tal:block define="tscript ${script}" />
-    <metal:block use-macro="${tscript}" />
-  </tal:block>
-  <tal:block condition="script_links" repeat="slink script_links">
-    <script type="text/javascript" src="${slink}" />
+  <tal:block condition="not: noproto" >
+    <script type="text/javascript" src="${root-url}cctemplates/js/prototype.js" />
+    <script type="text/javascript" src="${root-url}cctemplates/js/selector-addon-v1.js" />
+    <script type="text/javascript" src="${root-url}cctemplates/js/mini-rico.js" />
+    <script type="text/javascript" src="${root-url}cctemplates/cc_obj.js" />
+    <tal:block condition="script_blocks" repeat="script script_blocks">
+      <tal:block define="tscript ${script}" />
+      <metal:block use-macro="${tscript}" />
+    </tal:block>
+    <tal:block condition="script_links" repeat="slink script_links">
+      <script type="text/javascript" src="${slink}" />
+    </tal:block>
   </tal:block>
 </metal:block>
 
@@ -260,12 +262,14 @@ $Id$
 </metal:block>
 
 <metal:block define-macro="show_end_script_blocks" >
-  <tal:block condition="end_script_blocks" repeat="script end_script_blocks">
-    <tal:block define="tscript ${script}" />
-    <metal:block use-macro="${tscript}" />
-  </tal:block>
-  <tal:block condition="end_script_links" repeat="eslink end_script_links">
-    <script type="text/javascript" src="${eslink}" />
+  <tal:block condition="not: noproto" >
+    <tal:block condition="end_script_blocks" repeat="script end_script_blocks">
+      <tal:block define="tscript ${script}" />
+      <metal:block use-macro="${tscript}" />
+    </tal:block>
+    <tal:block condition="end_script_links" repeat="eslink end_script_links">
+      <script type="text/javascript" src="${eslink}" />
+    </tal:block>
   </tal:block>
 </metal:block>
 

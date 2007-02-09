@@ -98,7 +98,8 @@ ccEmbeddedPlayer.prototype = {
 
     hookElements: function(parent) {
         var me = this;
-        return new SelectorLiteAddon([ 'a.' + this.options.cButton ]).get(parent).inject( [], function(arr, e) {
+        // return new SelectorLiteAddon([ 'a.' + this.options.cButton ]).get(parent).inject( [], function(arr, e) {
+        return $$('.' + this.options.cButton, parent).inject( [], function(arr, e) {
                 if( e.href.match(/\.mp3$/) )
                 {
                     var  href;
@@ -275,8 +276,8 @@ ccEmbeddedPlayer.prototype = {
 
     onPauseClick: function(e) {
         var element = Event.element(e), i = this.paused ? 1 : 0, cls = [ this.options.cPlay, this.options.cPause ];
-        Element.removeClassName( element, cls[ i ] );
-        Element.addClassName( element, cls[ i ^ 1 ] );
+        element.removeClassName( cls[ i ] );
+        element.addClassName( cls[ i ^ 1 ] );
         this.paused = !this.paused;
         this.flash.ccPlayPause();
     },
@@ -291,8 +292,8 @@ ccEmbeddedPlayer.prototype = {
     },
 
     _start_element: function(song) {
-        Element.removeClassName( this.currButton, this.options.cHear );
-        Element.addClassName( this.currButton, this.options.cStop );
+        this.currButton.removeClassName( this.options.cHear );
+        this.currButton.addClassName( this.options.cStop );
         this.playing = true;
         this.paused  = false;
         this._show_player('block');
@@ -303,13 +304,13 @@ ccEmbeddedPlayer.prototype = {
     _stop_element: function() {
         if( !this.currButton )
             return;
-        Element.removeClassName( this.currButton, this.options.cStop );
-        Element.addClassName( this.currButton, this.options.cHear );
-        var pause_id = this.currButton.id + '_pause';
-        if( $(pause_id) && Element.hasClassName( pause_id, this.options.cPause ) )
+        this.currButton.removeClassName( this.options.cStop );
+        this.currButton.addClassName( this.options.cHear );
+        var pause = $(this.currButton.id + '_pause');
+        if( pause && pause.hasClassName( this.options.cPause ) )
         {
-            Element.removeClassName( pause_id, this.options.cPause );
-            Element.addClassName( pause_id, this.options.cPlay );            
+            pause.removeClassName( this.options.cPause );
+            pause.addClassName( this.options.cPlay );            
         }
         this._show_player('none');
         this.playing = false;
@@ -368,13 +369,13 @@ ccEmbeddedPlayer.prototype = {
     },
 
     onVolumeIn: function(e) {
-        var knob_id = this._get_base_id('_knob');
-        Element.addClassName( knob_id, this.options.cVolumeHover );
+        var knob = $(this._get_base_id('_knob'));
+        knob.addClassName( this.options.cVolumeHover );
     },
 
     onVolumeOut: function(e) {
-        var knob_id = this._get_base_id('_knob');
-        Element.removeClassName( knob_id, this.options.cVolumeHover );
+        var knob = $(this._get_base_id('_knob'));
+        knob.removeClassName( this.options.cVolumeHover );
     },
 
     _set_vol: function(e) {
