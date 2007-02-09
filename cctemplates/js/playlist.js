@@ -37,19 +37,19 @@ var ccThinking = {
         if( !this.div )
         {
             this.div = document.createElement('div');
-            this.div.hide();
+            this.div.style.display = 'none';
             this.div.className = 'cc_playlist_thinking';
             this.div.innerHTML = 'thinking...';
             document.body.appendChild(this.div);
         }
         this.div.style.top  = this.currY + 'px';
         this.div.style.left = this.currX + 'px';
-        this.div.show();
+        this.div.style.display = 'block';
     },
 
     _hide_popup: function() {
         if( this.div )
-            this.div.hide();
+            this.div.style.display = 'none';
     },
 
     onComplete: function(req,t,json) {
@@ -124,7 +124,7 @@ ccPlaylistMenu.prototype = {
         {
             if( $(pid).needRefresh ) 
             {
-                $(pid).show();
+                $(pid).style.display = 'block';
                 this._refresh_menu( id, pid );
             }
             else
@@ -220,14 +220,14 @@ ccPlaylistMenu.prototype = {
     _open_menu: function(pid) {
         var pp = $(pid);
         this.openMenu = pp;
-        pp.show();
+        pp.style.display = 'block';
         new ccDelayAndFade( 0, pp, 1, 250, 4 );
     },
 
     _close_menu: function() {
         if( this.openMenu )
         {
-            this.openMenu.hide();
+            this.openMenu.style.display = 'none';
             this.openMenu = null;
         }
     },
@@ -245,7 +245,7 @@ ccPlaylistMenu.prototype = {
         if( $(info_id) )
         {
             this.openInfo = $(info_id);
-            this.openInfo.show();
+            this.openInfo.style.display = 'block';
             this.openInfo.style.width = "auto";
         }
         else
@@ -265,7 +265,7 @@ ccPlaylistMenu.prototype = {
         if( this.openInfo )
         {
             var old_id = this.openInfo.id;
-            this.openInfo.hide();
+            this.openInfo.style.display = 'none';
             this.openInfo = null;
             return old_id;
         }
@@ -276,7 +276,7 @@ ccPlaylistMenu.prototype = {
         var info = $(info_id);
         info.style.opacity = 0;
         info.innerHTML = resp.responseText;
-        info.show();
+        info.style.display = 'block';
         this.openInfo = info;
         var x = (document.body.offsetWidth/2) - (info.offsetWidth/2);
         if( x < 0 )
@@ -315,7 +315,7 @@ ccPlaylistMenu.prototype = {
             var this_row = $(id);
             if( this_row )
             {
-                while( !this_row.hasClassName('trr') )
+                while( !Element.hasClassName(this_row,'trr') )
                     this_row = this_row.parentNode;
                 this_row.remove();
             }
@@ -361,7 +361,7 @@ ccPlayerMethods = {
                 if( ccEPlayer.flashOK )
                     Event.observe( play_win, 'click', this.onPlayWin.bindAsEventListener(this,playlist_id) );
                 else
-                    play_win.hide();
+                    play_win.style.display = 'none';
             }
         }
     },
@@ -471,11 +471,12 @@ var ccPlaylistBrowserObject = {
             var cart_id = $(id).id.replace('_pl_','');
             var detailId = '_pld_' + cart_id;
             this.openingRec = true;
+
             if( this.openRec.length > 0 )
             {
                 // close the 'current' playlist
 
-                $(this.openRec).hide();
+                $(this.openRec).style.display = 'none';
             }
             if( $(detailId) )
             {
@@ -493,10 +494,10 @@ var ccPlaylistBrowserObject = {
                     // we already have it cached and it's not changed
                     // so just open it...
 
-                    element.show();
+                    element.style.display = 'block';
                     this.openRec = detailId;
                     // reset sel line because of painting probs
-                    this.openRec.removeClassName( 'cc_playlist_sel' );
+                    Element.removeClassName( this.openRec, 'cc_playlist_sel' );
                 }
             
                 this.openingRec = false;
@@ -579,7 +580,7 @@ var ccPlaylistBrowserObject = {
             // hook the menus, info button, et. al.
             this.playlistMenu.hookElements(e);
 
-            e.show();
+            e.style.display = 'block';
         }
         catch (err)
         {
@@ -590,11 +591,12 @@ var ccPlaylistBrowserObject = {
 
     onListHover: function(event) {
         var e = Event.element(event);
-        if( e.hasClassName( 'cc_playlist_line' ) )
+
+        if( Element.hasClassName( e, 'cc_playlist_line' ) )
         {
             if( this.selected )
-                this.selected.removeClassName('cc_playlist_sel' );
-            e.addClassName( 'cc_playlist_sel' );
+                Element.removeClassName(this.selected, 'cc_playlist_sel' );
+            Element.addClassName( e, 'cc_playlist_sel' );
             this.selected = e;
         }
     },

@@ -276,8 +276,8 @@ ccEmbeddedPlayer.prototype = {
 
     onPauseClick: function(e) {
         var element = Event.element(e), i = this.paused ? 1 : 0, cls = [ this.options.cPlay, this.options.cPause ];
-        element.removeClassName( cls[ i ] );
-        element.addClassName( cls[ i ^ 1 ] );
+        Element.removeClassName( element, cls[ i ] );
+        Element.addClassName( element, cls[ i ^ 1 ] );
         this.paused = !this.paused;
         this.flash.ccPlayPause();
     },
@@ -292,8 +292,8 @@ ccEmbeddedPlayer.prototype = {
     },
 
     _start_element: function(song) {
-        this.currButton.removeClassName( this.options.cHear );
-        this.currButton.addClassName( this.options.cStop );
+        Element.removeClassName( this.currButton, this.options.cHear );
+        Element.addClassName( this.currButton, this.options.cStop );
         this.playing = true;
         this.paused  = false;
         this._show_player('block');
@@ -304,13 +304,13 @@ ccEmbeddedPlayer.prototype = {
     _stop_element: function() {
         if( !this.currButton )
             return;
-        this.currButton.removeClassName( this.options.cStop );
-        this.currButton.addClassName( this.options.cHear );
+        Element.removeClassName( this.currButton, this.options.cStop );
+        Element.addClassName( this.currButton, this.options.cHear );
         var pause = $(this.currButton.id + '_pause');
-        if( pause && pause.hasClassName( this.options.cPause ) )
+        if( pause && Element.hasClassName( pause, this.options.cPause ) )
         {
-            pause.removeClassName( this.options.cPause );
-            pause.addClassName( this.options.cPlay );            
+            Element.removeClassName( pause, this.options.cPause );
+            Element.addClassName( pause, this.options.cPlay );            
         }
         this._show_player('none');
         this.playing = false;
@@ -370,12 +370,12 @@ ccEmbeddedPlayer.prototype = {
 
     onVolumeIn: function(e) {
         var knob = $(this._get_base_id('_knob'));
-        knob.addClassName( this.options.cVolumeHover );
+        Element.addClassName( knob, this.options.cVolumeHover );
     },
 
     onVolumeOut: function(e) {
         var knob = $(this._get_base_id('_knob'));
-        knob.removeClassName( this.options.cVolumeHover );
+        Element.removeClassName( knob, this.options.cVolumeHover );
     },
 
     _set_vol: function(e) {
