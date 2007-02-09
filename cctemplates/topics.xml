@@ -124,6 +124,10 @@ $Id$
   <metal:block use-macro="topics.xml/list_review_record" />
   <br />
   <metal:block use-macro="topics.xml/list_topics" />
+  <tal:block condition="enable_playlists">
+    <metal:block use-macro="playerembed.xml/eplayer" />
+    <metal:block use-macro="playlist.xml/playlist_menu" />
+  </tal:block>
 </metal:block>
 
 <metal:block define-macro="xlat_links">
