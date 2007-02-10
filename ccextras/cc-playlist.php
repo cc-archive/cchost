@@ -162,9 +162,15 @@ group by cart_item_upload order by cnt desc
     $items->GroupOn( 'cart_item_upload' );
     $items->SetOrder( 'track_count', 'DESC' );
     $items->SetOffsetAndLimit(0,25);
-    $rows = $items->QueryRows('');
+    $where = 'cart_user != user_id';
+    $rows = $items->QueryRows($where);
     $rows = $uploads->GetRecordsFromRows($rows);
-    return $rows;
+    $keys = array_keys($rows);
+    $ids = array();
+    foreach( $keys as $K )
+        $ids[] = $rows[$K]['upload_id'];
+    $ids = join(',',$ids);
+    return array( 'recs' => $rows, 'ids' => $ids );
 }
 
 ?>

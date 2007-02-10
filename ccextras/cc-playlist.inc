@@ -114,7 +114,7 @@ class CCPlaylists
         require_once('cclib/cc-page.php');
         $args['playlist_user'] = $user;
         CCPage::PageArg( 'playlist_show_browser', 'playlist.xml/playlist_show_browser' );
-        CCPage::PageArg( 'plargs', $args, 'playlist_show_browser' );
+        CCPage::PageArg( 'args', $args, 'playlist_show_browser' );
     }
 
     function OnMapUrls()
@@ -416,14 +416,29 @@ class CCPlaylists
     {
         $playlist_id = intval(CCUtil::Strip($playlist_id));
         $fulllist = empty($playlist_id) || ($playlist_id < 1);
-
         require_once('cclib/cc-page.php');
         if( $fulllist )
         {
-            CCPage::SetTitle(_('Browse Playlists') );
+            if( !empty($_GET['id']) )
+            {
+                $upload_id = intval(CCUtil::Strip($_GET['id']));
+                if( empty($upload_id) || ($upload_id < 1) )
+                    CCUtil::Send404();
+                $uploads =& CCUploads::GetTable();
+                $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
+                if( empty($name) )
+                    CCUtil::Send404();
+                $args['upload_id'] = $upload_id;
+                CCPage::SetTitle(sprintf(_('Browse Playlists Featuring "%s"'),$name) );
+            }
+            else
+            {
+                $args['upload_id'] = 0;
+                CCPage::SetTitle(_('Browse Playlists') );
+            }
+
             CCPage::PageArg('playlist_show_browser', 'playlist.xml/playlist_show_browser' );
-            $dummy = array();
-            CCPage::PageArg('args',$dummy,'playlist_show_browser');
+            CCPage::PageArg('args',$args,'playlist_show_browser');
         }
         else
         {
@@ -460,11 +475,36 @@ class CCPlaylists
         require_once('cclib/cc-page.php');
 
         $where = 'cart_subtype <> "default"';
+
         if( !empty($user) )
+        {
             $where .= ' AND cart_user = ' . CCUser::IDFromName($user);
+        }
+
         $carts = new CCPlaylist(true);
         $carts->SetOrder('cart_date','desc');
-        $args = CCPage::AddPagingLinks($carts,$where,20);
+
+        if( empty($_GET['upload_id']) )
+        {
+            $args = CCPage::AddPagingLinks($carts,$where,20);
+        }
+        else
+        {
+            $upload_id = CCUtil::Strip($_GET['upload_id']);
+            $this->_test_pl($upload_id,0,true,false,false);
+            $uploads =& CCUploads::GetTable();
+
+            // this will weed out banned and non-published uploads (and bad ids)
+            $record = $uploads->QueryKeyRow($upload_id);
+            if( empty($record) )
+                CCUtil::Send404();
+            $items = new CCPlaylistItems();
+            $items->_key_field = 'cart_item_cart'; // here's that hack again
+            $carts->AddJoin( $items, 'cart_id' );
+            $where .= ' AND cart_item_upload = ' . $upload_id;
+            $args = array();
+        }
+        
         $args['records'] = $carts->QueryRows($where);
         $this->_output($args,'',true);
     }

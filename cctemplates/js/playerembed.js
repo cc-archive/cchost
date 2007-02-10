@@ -56,8 +56,10 @@ ccEmbeddedPlayer.prototype = {
             cVol:    'cc_player_volume',          // volume slider
             cKnob:   'cc_player_knob',            // volume slider knob
             cPos:    'cc_player_pos',             // position slider
-            cSlider: 'cc_player_slider',          // position slider 
+            cPosBk:  'cc_player_pos_bk',          // position slider background
+            cSlider: 'cc_player_slider',          // current position slider 
             cVolumeHover: 'cc_player_knob_hover', // class added to volume knob hovering
+            pos_msg:   'loading...',
 
             // hehavoir mod
                                                   // there are two different set of controls:
@@ -98,7 +100,6 @@ ccEmbeddedPlayer.prototype = {
 
     hookElements: function(parent) {
         var me = this;
-        // return new SelectorLiteAddon([ 'a.' + this.options.cButton ]).get(parent).inject( [], function(arr, e) {
         return $$('.' + this.options.cButton, parent).inject( [], function(arr, e) {
                 if( e.href.match(/\.mp3$/) )
                 {
@@ -162,9 +163,9 @@ ccEmbeddedPlayer.prototype = {
             if( this.options.showProgress )
             {
                 this.options.controls +=
-                      '<div class="#{pos_class}" id="#{pos_id}" >' +
-                            '<div class="#{slider_class}" id="#{slider_id}"></div>' +
-                      '</div>';
+                          '<div class="#{pos_class}" id="#{pos_id}" >' +
+                                '<div class="#{slider_class}" id="#{slider_id}"></div>' +
+                          '</div>'; 
             }
 
             this.options.controls += '</div>';
@@ -192,8 +193,12 @@ ccEmbeddedPlayer.prototype = {
             knob_id:       id + '_knob',
             pos_class:     me.options.cPos,
             pos_id:        id + '_pos',
+            pos_bk:        me.options.cPosBk,
+            pos_bk_id:     id + '_posbk',
+            pos_msg:       me.options.pos_msg,
             slider_class:  me.options.cSlider,
             slider_id:     id + '_slider',
+            
 
             prev_button_class: me.options.cPrev,
             prev_id:           id + '_prev',
@@ -206,6 +211,11 @@ ccEmbeddedPlayer.prototype = {
             $(id).innerHTML = html;
         else
             new Insertion.After(id, html );
+
+        if( $(vars.pos_bk_id) )
+        {
+            Position.clone(vars.pos_id,vars.pos_bk_id,{setWidth: false,setHeight: false});
+        }
 
         Event.observe( vars.player_id, 'click', this.onPlayerClick.bindAsEventListener(this) );
 
