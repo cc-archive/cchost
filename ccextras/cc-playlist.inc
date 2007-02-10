@@ -188,6 +188,8 @@ class CCPlaylists
             CCPage::PageArg('noproto',true);
             CCPage::PageArg('editor','playlist.xml/playlist_edit_order');
             $args = $this->_get_playlist_info($playlist_id);
+            if( empty($args) )
+                CCUtil::Send404();
             $args['postbackurl'] = ccl('playlist','editorder',$playlist_id);
             CCPage::PageArg('args',$args,'editor');
         }
@@ -266,6 +268,8 @@ class CCPlaylists
     {
         $this->_test_pl(0,$playlist_id,false,true,false);
         $args = $this->_get_playlist_info($playlist_id);
+        if( empty($args) )
+            CCUtil::Send404();
         $this->_output($args);
     }
 
@@ -273,6 +277,8 @@ class CCPlaylists
     {
         $carts = new CCPlaylist(true);
         $args['playlist'] = $carts->GetRecordFromID($playlist_id);
+        if( empty($args['playlist']) )
+            return null;
         if( $args['playlist']['cart_dynamic'] || ($args['playlist']['cart_subtype'] == 'default') )
         {
             require_once('cclib/cc-query.php');
@@ -423,6 +429,8 @@ class CCPlaylists
         {
             $this->_test_pl(0,$playlist_id,false,true,false);
             $args = $this->_get_playlist_info($playlist_id);
+            if( empty($args) )
+                CCUtil::Send404();
             CCPage::SetTitle(sprintf(_('Playlist: %s'),$args['playlist']['cart_name']) );
             CCPage::PageArg('playlist_show_one', 'playlist.xml/playlist_show_one' );
             CCPage::PageArg('args',$args,'playlist_show_one');
@@ -438,6 +446,8 @@ class CCPlaylists
             $playlist_id = $pl['cart_id'];
         }
         $args = $this->_get_playlist_info($playlist_id,true);
+        if( empty($args) )
+            CCUtil::Send404();
         require_once('cclib/cc-page.php');
         CCPage::SetTitle(sprintf(_('Playlist: %s'),$args['playlist']['cart_name']));
         CCPage::PageArg('playlist_popup_window', 'playlist.xml/playlist_popup_window' );

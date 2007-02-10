@@ -122,7 +122,7 @@ $Id$
       </tal:block>
       <tal:block condition="menu/playlist">
        <tal:block define="plm menu/playlist/playlist_menu" />
-       <div id="${plm/parent_id}">
+       <div tal:condition="plm/parent_id" id="${plm/parent_id}">
           <a id="commentcommand" class="${plm/class}" href="${plm/action}"><span>${plm/menu_text}</span></a>
        </div>
       </tal:block>

@@ -56,8 +56,7 @@ class CCTopicsFeed extends CCFeed
             $T['topic_name']       = utf8_encode($this->_cct($T['topic_name']));
             $T['topic_text_plain'] = utf8_encode($this->_cct($T['topic_text_plain']));
             $T['user_real_name']   = utf8_encode($this->_cct($T['user_real_name']));
-            $T['topic_text_html']  = utf8_encode($this->_cct($this->_clean_urls($T['topic_text_html'])));
-
+            $T['topic_text_html']  = $this->_clean_urls($T['topic_text_html']);
         }
 
         $this->_gen_feed_from_records($template,$topics,$title,$feed_url,$feed_type);

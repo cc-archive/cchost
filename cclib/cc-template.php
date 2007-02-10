@@ -145,7 +145,7 @@ class CCTemplate
     function & SetAllAndParse( $args, $doprint = false, $admin_dump = false )
     {
         global $CC_GLOBALS;
-        $admin_dump = true; // $admin_dump || CCUser::IsAdmin();
+        $admin_dump = $admin_dump || CCUser::IsAdmin();
         $this->_init_lib();
         $this->_template->setAll($args);
         $res = $this->_template->execute();
@@ -159,7 +159,7 @@ class CCTemplate
                 print(sprintf(_("The %s directory must be writable. We have tried to change it. Refresh this page to see if that worked. If not, you may have to ask your system's administrator for assitance to make that possible."), $dir));
             }
 
-            if( 1 ) // $admin_dump )
+            if( $admin_dump )
             {
                 print("<pre >");
                 print("<b>" . _('Here is the information returned from the template engine:') . "</b>\n\n");
@@ -172,14 +172,18 @@ class CCTemplate
 
         if( $doprint )
         {
-            // Force UTF-8 necessary for some languages (chinese,japanese,etc)
-            //header('Content-type: text/html; charset=' . CC_ENCODING) ;
-            // --- BEGIN hack for ZA
-            if( substr($res,0,5) == '<html' )
+            if( $this->_html_mode )
             {
-                print('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+                // Force UTF-8 necessary for some languages (chinese,japanese,etc)
+                header('Content-type: text/html; charset=' . CC_ENCODING) ;
+                // --- BEGIN hack for ZA
+                if( substr($res,0,5) == '<html' )
+                {
+                    print('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+                }
+                // --- END hack for ZA
             }
-            // --- END hack for ZA
+
             print(trim($res));
         }
 

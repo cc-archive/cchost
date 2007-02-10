@@ -382,6 +382,8 @@ class CCFeed
             $this->_cache($xml,$cache_type,$tagstr);
         }
 
+        if( substr($xml,0,5) != '<?xml' )
+            print('<?xml version="1.0" encoding="utf-8" ?>' . "\n");
         $this->_output_xml($xml);
         // testing against user agent tests if we are through web browser
         if ( isset($_SERVER["HTTP_USER_AGENT"]) )
@@ -474,8 +476,7 @@ class CCFeed
 
             if( !empty($row['upload_description_html']) )
             {
-                $_amp_text = $this->_clean_urls($row['upload_description_html']);
-                $row['upload_description_html'] = utf8_encode($this->_cct($_amp_text));
+                $row['upload_description_html'] = '<![CDATA[' . utf8_encode($this->_clean_urls($row['upload_description_html'])) . ']]>';
             }
 
             $row['upload_description'] = utf8_encode($this->_cct($row['upload_description']));
