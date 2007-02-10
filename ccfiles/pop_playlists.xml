@@ -74,6 +74,7 @@ function play_all()
 <br clear="right" /><!-- *cough* -->
 
   <link rel="stylesheet" type="text/css" href="${root-url}cctemplates/playlist.css" title="Default Style" />
+  <link rel="stylesheet" type="text/css" href="${root-url}cctemplates/detail.css"   title="Default Style" />
 <script src="${root-url}cctemplates/js/playlist.js" ></script>
 <metal:block use-macro="playerembed.xml/eplayer" />
 <script>
