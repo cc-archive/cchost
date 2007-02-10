@@ -743,6 +743,18 @@ class CCPlaylists
         }
 
     }
+
+    /**
+    * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
+    * 
+    * @param array $record Upload database record
+    */
+    function OnUploadDelete(&$record)
+    {
+        $cart_items =& CCCartItems::GetTable();
+        $w['cart_item_upload'] = $record['upload_id'];
+        $cart_items->DeleteWhere($w);
+    }
 }
 
 ?>

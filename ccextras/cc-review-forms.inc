@@ -101,6 +101,15 @@ class CCReviewFormAPI
             CCPage::PageArg('record',$R);
             CCPage::PageArg('review_post_macro','topics.xml/post_review');
             CCPage::PageArg('topics',$topics,'review_post_macro');
+            // ug sorry about this
+            if( function_exists('cc_playlist_enabled') && cc_playlist_enabled() )
+            {
+                CCPage::PageArg('eplayer', 'playerembed.xml/eplayer');
+                CCPage::PageArg('playlistmenu', 'playlist.xml/playlist_menu');
+                CCPage::PageArg('dummy1', true, 'eplayer');
+                CCPage::PageArg('dummy2', true, 'playlistmenu');
+            }
+            
             CCPage::AddForm( $form->GenerateForm() );
 
             CCReview::_add_links();
