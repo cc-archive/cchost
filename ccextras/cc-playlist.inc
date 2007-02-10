@@ -113,6 +113,7 @@ class CCPlaylists
     {
         require_once('cclib/cc-page.php');
         $args['playlist_user'] = $user;
+        $args['upload_id'] = 0;
         CCPage::PageArg( 'playlist_show_browser', 'playlist.xml/playlist_show_browser' );
         CCPage::PageArg( 'args', $args, 'playlist_show_browser' );
     }
