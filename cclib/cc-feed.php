@@ -478,7 +478,7 @@ class CCFeed
 
             if( !empty($row['upload_description_html']) )
             {
-                $row['upload_description_html'] = '<![CDATA[' . utf8_encode($this->_clean_urls($row['upload_description_html'])) . ']]>';
+                $row['upload_description_html'] = utf8_encode($this->_clean_urls($row['upload_description_html'])) ;
             }
 
             $row['upload_description'] = utf8_encode($this->_cct($row['upload_description']));
