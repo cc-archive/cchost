@@ -382,8 +382,10 @@ class CCFeed
             $this->_cache($xml,$cache_type,$tagstr);
         }
 
+        # forces xml declaration line if not the first 5 characters
         if( substr($xml,0,5) != '<?xml' )
-            print('<?xml version="1.0" encoding="utf-8" ?>' . "\n");
+            $xml = '<?xml version="1.0" encoding="utf-8" ?>' . "\n" . $xml;
+
         $this->_output_xml($xml);
         // testing against user agent tests if we are through web browser
         if ( isset($_SERVER["HTTP_USER_AGENT"]) )
@@ -397,10 +399,9 @@ class CCFeed
      */
     function _output_xml (&$xml)
     {
+
         if( $this->_is_full_dump() )
         {
-            header("Content-type: text/plain");
-
             if ( ! is_dir(CC_DUMP_DIR) ) {
                 if ( ! mkdir(CC_DUMP_DIR, cc_default_dir_perm()) ) {
                     echo sprintf(_('Could not open folder "%s"'), CC_DUMP_DIR);
@@ -425,7 +426,8 @@ class CCFeed
         }
         else
         {
-            header("Content-type: text/xml"); // this should enforce a utf-8
+            // this should enforce a utf-8
+            header("Content-type: text/xml; charset=" . CC_ENCODING); 
             print($xml);
         }
     }

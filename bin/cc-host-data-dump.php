@@ -37,6 +37,26 @@
 if( file_exists('../cclib') )
     chdir('..');
 
+
+// The following is necessary to cycle through startup of the sites
+// engine.
+
+
+error_reporting(E_ALL & ~E_NOTICE);
+
+define('IN_CC_HOST', true);
+require_once('cclib/cc-debug.php');
+CCDebug::Enable(false);                 // set this to 'true' if you are a
+if( !function_exists('gettext') )
+   require_once('ccextras/cc-no-gettext.inc');  
+require_once('cc-includes.php');
+CCConfigs::Init();                      // config settings established here
+$cc_extras_dirs = 'ccextras';
+include('cc-inc-extras.php');
+require_once('cclib/cc-feed.php');
+CCEvents::Invoke(CC_EVENT_APP_INIT);
+
+
 // The current feed types available.
 $feed_types = array('datadump', 'atom', 'rss', 'xspf');
 
@@ -123,22 +143,6 @@ function print_missing($opt, $valid)
     }
 }
 
-// The following is necessary to cycle through startup of the sites
-// engine.
-
-
-error_reporting(E_ALL & ~E_NOTICE);
-
-define('IN_CC_HOST', true);
-require_once('cclib/cc-debug.php');
-CCDebug::Enable(false);                 // set this to 'true' if you are a
-if( !function_exists('gettext') )
-   require_once('ccextras/cc-no-gettext.inc');  
-require_once('cc-includes.php');
-CCConfigs::Init();                      // config settings established here
-$cc_extras_dirs = 'ccextras';
-include('cc-inc-extras.php');
-CCEvents::Invoke(CC_EVENT_APP_INIT);
 
 /**
 * here is some sample code that could be used on a Windows
