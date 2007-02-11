@@ -34,12 +34,16 @@ ccEmbeddedPlayer.prototype = {
     draggingVol:     false,
     playlist:        [],
     playlist_cursor: 0,
+    bump_done:       false,
 
     initialize: function( options, flashMajorVersion ) {
         
         this.flashOK = flashMajorVersion >= 8;
 
         this.options = {
+
+            doBumpCount: true,               // true means call back server for every Play
+            bumpMinimum: 25,                 // percentage of song play before calling bump
 
             // classes applied and assumed
 
@@ -263,10 +267,8 @@ ccEmbeddedPlayer.prototype = {
     },
 
     Play: function( element, href ) {
+        this.bump_done = false;
         var id = element.id;
-        var url = home_url + 'api/playlist/bump/' + id;
-        $D('phoning home: ' + url);
-        new Ajax.Request( url, { method: 'get' } );
         if( !$(id + '_player') )
             this._create_indv_controls(id);
         this._create_pl_controls();
@@ -277,6 +279,11 @@ ccEmbeddedPlayer.prototype = {
             this.currButton = element;
             this._start_element(href);
         }
+    },
+
+    doBump: function(id) {
+        var url = home_url + 'api/playlist/bump/' + id;
+        new Ajax.Request( url, { method: 'get' } );
     },
 
     onPlayerClick: function(e) {
@@ -340,13 +347,15 @@ ccEmbeddedPlayer.prototype = {
 
     _set_fill_val: function(id,ax) {
         if( !$(id) || isNaN(ax) )
-            return;
+            return null;
         var val = Math.floor(ax);
+        var intval = val;
         if( val < 1 )
             val = '1px';
         else
             val += 'px';
         $(id).style.width = val;
+        return intval;
     },
 
     _get_base_id: function(postfix) {
@@ -360,7 +369,12 @@ ccEmbeddedPlayer.prototype = {
     },
 
     onSongPos: function (ax) {
-        this._set_fill_val(this._get_base_id('_slider'), ax);
+        var val = this._set_fill_val(this._get_base_id('_slider'), ax);
+        if( this.options.doBumpCount && !this.bump_done && (val > this.options.bumpMinimum) )
+        {
+            this.bump_done = true;
+            this.doBump(this.currButton.id);
+        }
     },
 
     onVolumeDown: function(e) {

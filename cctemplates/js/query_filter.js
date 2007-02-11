@@ -28,7 +28,7 @@ ccQueryBrowserFilters.prototype = {
 
         this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', 
                                          vals: [  
-                                                    ['remix', 'default (remix)' ],
+                                                    ['remix,44k', 'default (remix)' ],
                                                     ['editorial_pick',      'ed picks' ],
                                                     ['remix,hip_hop',       'hip hop'], 
                                                     ['remix,downtempo',     'downtempo'], 
