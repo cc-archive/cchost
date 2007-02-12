@@ -48,7 +48,7 @@ $Id$
      <li tal:repeat="pl_list pl_lists"><a href="${home-url}playlist/browse/${pl_list/cart_id}" 
           tal:content="php: CC_strchop('${pl_list/cart_name}',12);" /></li>
   </ul>
-  <a href="${home-url}view/media/playlists" class="cc_more_menu_link" tal:content="php: CC_Lang('More playlists...')" />    
+  <a href="${root-url}media/view/media/playlists" class="cc_more_menu_link" tal:content="php: CC_Lang('More playlists...')" />    
 </metal:block>
 
 
