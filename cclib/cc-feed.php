@@ -387,10 +387,7 @@ class CCFeed
             $xml = '<?xml version="1.0" encoding="utf-8" ?>' . "\n" . $xml;
 
         $this->_output_xml($xml);
-        // testing against user agent tests if we are through web browser
-        if ( isset($_SERVER["HTTP_USER_AGENT"]) )
-            exit(0);
-        // }
+        exit(0);
     }
 
     /**
