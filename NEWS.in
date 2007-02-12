@@ -1,251 +1,263 @@
 ccHost Release Notes
 ====================
 
-Version: 3.1
+Version 4.0
 
-This release is an 'admin' release with only a few feature. It is 
-geared toward addressing the needs specifically called out with the 
-3.0 release.
+This version marks a major feature release with something for 
+end users, admins and devleopers.
 
-New features (user)
-========================
-
-Show Last Updated Date
------------------------
-ccHost is now tracking the last time a major change
-was made to an upload (files added, deleted, etc.)
-and displays it along with the operation on the 
-upload's main page.
-
-'What I Look For/Pound On' Browser
------------------------------------
-These two user profile fields are now cross referenced
-in a new browser. Click on a 'looking for' link in a 
-user's profile and you this:
-
-http://ccmixter.org/media/search/people/lookinfor/acid#acid
-
-Alpha-Browser of Users
------------------------
-The generic 'people' page now allows for browsing by
-first letter of name. Example here:
-
-http://ccmixter.org/media/people?p=n
-
-
-New features (admin)
-========================
-
-Paths Admin
--------------------
-As of this release, all paths used by ccHost can be specified
-by admin including templates, caches, plugins, etc. This is
-the last update that requires customization be done within
-the ccHost tree and the last update admins will be required
-to move their customization files 'out of the way' when doing
-an update.
-
-Major Sample Pool Improvements
-------------------------------
-Sample pools has been greatly optimized (several
-times faster for display) and users can now browse by
-artists' first initial. Example is here:
-
-http://ccmixter.org/freesound/pools/pool/4/n
-
-
-Site Disabling
----------------
-Admins can temporarily disable the site in a 'friendly' way
-that doesn't look like the site is broken. 
-
-
-eMail Notifications on Moderation
----------------------------------
-Admins can decide whether to automatically notify via email owners
-of recently moderated (banned) uploads and specify the message to
-be sent.
-
-
-New eMail Rules Engine
------------------------
-Admins can configure who can mail how often based on several criteria
-including who they are mailing to. This is an attempt to strike a 
-balance between spamming and legitamate contact between community
-members.
-
-
-Experimental: Psuedo-Verification of Uploads
---------------------------------------------
-For file formats unknown to getID3, admins can now specify a 
-'fall-back' handler built into ccHost that will try to identify
-the file via the signature at the beginning of the file. This
-allows for a much wider (if less secure) variety of files not
-supported before (e.g. plain text, auto-cad, pdf, etc.) This
-feature is experimental and potentially (if not likely) a 
-source of virus and trojan distribution if not used very
-carefully.
-
-
-Bug Fixes
-============
-    
-    Fixed in 3.1
-
-    * 'Array' is not a suitable email address
-    * don't try to process bogus requests in pools ui
-    * fixed double-slashing skin name in Settings
-    * forum index was showing sticky thread as latest
-    * image should be uploader's url in xspf
-    * more php5 compat
-    * notify on edpick code was incomplete
-    * removing admin tags didn't work
-    * search from top bar was broken for non-pretty urls
-    * should not assume all uploads are audio in xspf
-    * tag count was off after upload Delete
-    * template paths were choking on xspf
-    * timestamp on upload was taken at wrong time
-    * typo in default aliases
-
-    Other UI Tweaks, Tools and Optimizations in 3.1
-
-    * admin: cc-gen-robots-txt.php tool
-    * admin: moved mixter specific skin out
-    * admin: new url admin/tags/reset to resync counts
-    * admin: subdue error on hack attempts
-    * admin: we now kill menu cache on every call to update=1
-    * code: more refactoring for easier overriding
-    * code: refactored form handler
-    * code: template refactoring
-    * optimization: pools ui optimization (now usuable)
-    * ui: now returning more consistant 404s on bogus requests
-    * ui: 'system tags' link a pretty button now
-    * ui: more descriptive menu text for tags
-    * ui: refactor admin UI in templates
-    * ui: stylesheet needs to be fully pathed during site disabling
-
-
-    Fixed in 3.0.2
-
-    * More graceful error recovery when menu has been destroyed
-    * empty nav tab set was breaking site
-    * add items to empty menu caused havoc
-    * viewing sample pool item caused errors
-    * remixedby feeds caused errors
-    * deleted user's reviews caused errors
-    * podcast of deleted record broke feed
-    * editing menus for vroots broken
-    * editing properties for sample pools caused errors
-    * fixed up the xspf 1.0 feeds which were breaking
-
-    Fixed in 3.0.1
-
-    * saving user profile blows away menu and submit form changes
-    * title of review feed was not properly scrubbed for '&'
-
-
-Version: 3.0
-
-New features (end-user)
-========================
-
-    Native forums support
-    ---------------------
-    Fully functioning hierarchical forums, totally integrated with user 
-    profiles Admins can create forum groupings, sticky announcements,
-    move threads, etc.
-    
-
-    e-mail notifications
-    --------------------
-    Registered users can get email notifications when they have
-    been reviewed, rated or remixed, when someone else has uploaded
-    or have been remixed
-
-
-    'Recent reviews'
-    ----------------
-    New sidebar content list out the latest reviewers in the system
-
-
-    'How I Did It' browser now sortable
-    -----------------------------------
-    Users can now sort based on artist or date
-
-
-    Stats and more stats
-    --------------------
-    Now track number of reviews, forum messages and times remixed.
-
-
-    Language Support (i18n Localization/Internationalization)
-    ----------------
-    ccHost now supports the Free and Open Source standard gettext language
-    utilities for language support. This is turned on by default in the
-    admin interface, but the end-user support is still experimental. There
-    are translation for Mainland Chinese, Taiwanese Chinese, Italian,
-    Brazilian Portuguese, and German at present.
-
-
-    XSPF 1.0 Playlist Support
-    -------------------------
-    We now have support for the xspf playlist standard as a feed.
-
-
-    Support for SVG file format (using getid3(
-    ---------------------------
-    If you use the latest getid3 which has support for scalable vector
-    graphics (SVG), ccHost supports this filetype onw.
-
-
-    Feed Dumping
-    ------------
-    ccHost includes a script and admin interface for dumping
-
-
-New/Improved (admin):
-========================
-
-    * FTP-less file manager
-    * Bayesian rating scheme
-    * Suggested tags in submit forms
-    * Sub navigation tabs
-    * File permissions now settable within ccHost
-    * Thumbnails can be turned on/off
-    * Configure min number of tags for BrowseTags
-    * Ability to control cchost's chmod level
-    * Added more site metadata: description and keywors
-    * Added phpdoc generation to the repository
-    * Added capability to make snapshots of the packages and the installation
-    * Removed old-style ChangeLog and added capability to just pull the latest
-      from our repository.
-    * Cleaned up, added proper licenses, and added some new maintenance 
-      scripts to our bin folder.
-    * Added basic admin language support screens
-    * Added Google Summer of Code script, publishcchost which allows one to
-      publish a file to an installation of ccHost from the commandline
-
-
-Compatibility
+New Features
 =============
 
-    * PHP5 support
-    * Sharedhost support (e.g. dreamhosters)
-    * non-getid3 installatoin
+- Playlists/Favortes 
+  
+  Users can collect their favorite uploads into lists. If the the upload has
+  audio in it, all items will be treated like a playlist.
 
+- Embedded MP3 player
 
-Bugfix
-======
+  Audio uploads can now be played directly in the browser with a customized
+  embedded MP3 player.
 
-    * getID3 can be disabled
-    * fixed template tags
-    * Removed old phpbb2 dependency and issues associated with it
-    * thumbnails now display once more
+- Remix Radio Channels
 
+  A 'remix radio' with configurable streaming channels allows users to 
+  decide what they want to hear and how.
 
-Security
-========    
-    
-    * Certain URLs allowed escaping out of mySQL
+- "Publicize" Users
 
+  Anyone can include a list of links (or audio player) on their blogs or 
+  other websites by cutting and pasting customized code for any artist
+  on the site.
+
+- Query Engine
+
+  A very powerful query engine now sits at the heart of most of the
+  ccHost installation. There are dozens of parameters to control the
+  output which can be formatted as feeds, playlists, plain text or
+  dozens of specialized HTML formats. The engine is avaiable
+  from URLs in the browser, Navigators Tabs, templates and (of 
+  course) directly from plug-in code.
+
+- 'Run Once' Pages
+
+   Admins can configure several 'run once' pages that their registered
+   users will see once and then never again. Perfect for 'Welcome' 
+   screen or pledge drives.
+
+-  Default User Avatar
+ 
+   Admins can set a specific default user avatar for new users.
+
+-  New 'Super-Admin' Group
+
+   A group of users can be added as 'super-admin' and each URL in the system
+   can be assigned to any level of user.
+
+Improvements
+=============
+
+- Performance Boost
+
+  The entire page loading mechanism has been revamped. While remaining
+  backwards ccmpatible with previous installations page response times
+  have improved by as much as 2-4 times 3.1. (Sites with custom code
+  will have some minor adjustments to make.)
+
+- New License Merging 
+
+  Remixing a new work from different licensed material is now up to
+  CC spec.
+
+- Auto-approve Sample Pools
+
+  Admins now longer have to manually approve remote remixes as they come
+  in from 'trusted' remote pools.
+
+- Reviews/Ratings Changes
+
+  Ratings can now be dependant on reviews and a new ranking system based
+  on favorites and (for audio) embedded plays along with user ratings.
+
+- International Encoding
+
+  Universal encoding is now enforced throughout the site
+
+- Forums Improvments/Features
+
+  Individual topics can be translated by your internations community. Threads
+  can be locked and branches can be deleted.
+
+- AJAX Everywhere
+
+  ccHost has standardized on prototype.js and (pieces of) the Rico library
+  for the browser and Zend's JSON encoder on the server to created performant, 
+  highly interactive user interface.
+
+- New Language Editor
+
+  Now translators and admins have an easy to use string editor to create 
+  internation tranlations and domain specific installations without touching
+  the code.
+
+- Feeds, Streaming, Playlists and Sample Pool use New Query Engine
+
+  All feeds and Sample Pool searches are now using the query engine with
+  means you can now add parameters to do things like offset paging 
+  and dozens of other features.
+
+- Most Active Reviews
+
+  Are now displayed at the top of the 'recent reviews' page.
+
+- Exclude Tags from Search
+
+  A '-' in front of tags will exclude them searches. remix,-downtempo
+  will return all remixes that do NOT have the 'downtempo' tag
+
+An edited SVN LOG:
+------------------
+-Fixed the headers in feeds and for data dumps, tested atom, rss and datadumps
+-Updated to 4.0, testing out strings, made sure local installation updates ok,
+-pool item display broken
+-bugfix: UBeenRemixed had php4 error_exit
+-calculating StrictestLicense is now more accurate
+-playlist: only allow 44k mp3s (per flash)
+-add 'install done' global config so new installs do ?update=1
+-bugfix: urls with query strings broke feeds
+-bugfix: invoking 'recent reviews' multiple times was broken
+-embedded mp3 player
+-auto-approve pools
+-admin can now tie ratings to reviews if they want
+-Added forcing of new define, CC_ENCODING which is set to UTF-8 so that all
+-Added UTF-8 safe function for htmlentitites
+-new policy: bad vroot (including wrong case) now returns 404
+-new feature: run a page once per user
+-bugfix: rank decimal could overrun db field (rare)
+-hack for unchecking distorted tracks
+-show lic in pool item
+-dev: module load events
+-'more remix' link broken from vroots
+-bugfix: contest entries (e.g. fortminor) was not listing where contest name and username was the same
+-admin feat: contest now have separate src avail date from entry accept date
+-don't output 'about' for banned uploads
+-extra meta data on license url
+-Added yahoo media RSS namespace and support for avatar thumbnail for lisa...
+-feature: translate forum message
+-bugfix: folks who updated from 1.2 were broken
+-more language editor
+-nested xml output now works
+-user tags are no longer there
+-missing %s in upload message
+-bugfix: missing part 5
+-bugfix: advance on last item threw exception
+-feature: search for strings
+-create a i18n string map if none exists
+-dump all strings from cctemplates into gettext style
+-bugfix: download button was not being initialized properly
+-bugfix: rare cases where vroot settings were wrong so admins were unknown
+-cli config export/import
+-set Id keyword expansion
+-import needs to save  hash map first
+-fixed id macro
+-cleaned up strings - got rid of html tags, consolidated 16 strs (hopefully it will make sense)
+-now create a submit form type on new contest
+-file was not gettext'ized
+-added SaveFormType api
+-bugfix: contest was marked over before it began
+-zend's json-encoder.php
+-Added dummy wrappers for ngettext and gettext to protect our asses if gettext is not installed....
+-bugfix: missing quotes on strings
+-lang editor part 2 (done?)
+-bugfix: paging records broken from tabs
+-made Publicize admin extensible
+-Fabricio's flash music player
+-admin feature: Nav tabs now query enabled
+-honor query strings on page's feed links
+-no allow feeds to get tags from either query string or url
+-new query params for 'page' format:
+- 'title' will seen in browser caption and <h1>
+-'feed' triggers appearance of 'XML' buttons
+-added ProcessAdminArgs to cover for admins/skin writers
+-viewfile doesn't require .xml anymore
+-docs is alias for viewfile
+-<h1> tags in viewfiles and templates are honored over code
+-navtabs will populate browser title bar if no one else will
+-Converted to i18n...
+-bugfix: misleading confirm msg on new registrations
+-php5: pass by ref
+-bugfix: 'Mini Site's sidebar was broken for non-pretty urls
+-admin: hooked up super user features to admin menu
+-php5: removed call-time ref
+-i8nt string, removed cruft
+-admin feat: delete a topic branch in one step
+-topic lock field
+-feature: lock an individual thread
+-bugfix: remix throttle leaked on 'i sampled this'
+-bugfix: kept reconnecting event
+-bugfix: don't try to put a stream link there isn't one
+-delay load URL mapped functions
+-bugfix: straight xml formatter was broken
+-bugfix: remixedby were broken
+-hiked admin box further up for IE's sake
+-ui: reset subtab margin, hiked admin box up for same effect
+-typo and font tweak
+-dev: created js dir and started moving javascripts there
+-dev: made home/root_url and 'q' available to all pages
+-feature: most active reviews
+-got rid of cruft
+-new form "smarts" misaligned security key
+-bugfix: some ids= queries were breaking
+-bugfix: no admin limit would set limit to 0 in all cases
+-sidebar tweaks
+-bugfix: bad nav paths called undefined func
+-bugfix: radio was broke
+-bugfix: edit settings was broken
+-make int fields non-null
+-non null db fields
+-Fixed so always get a person or the generic icon if person has no icon...that'll get ppl. to change their image quick...
+-super UserPage DefaultAvatar uploading
+-left buttons
+-admin feature: let admin edit access to every url
+-dev: skip form label td if nothing there
+-sync to new page format
+-bugfix: raw edit broken by arrays in global config
+-query page solidified
+-dev: save off last where condition (enables page query)
+-Added logo of artist to each feed
+-events are here now
+-new MapUrl params to save off module and doc info
+-added query limit default
+-updated so that it works on non-root installs like http://openclipart.org/cchost/media...
+-Added default user icon for people who don't have their image installed...
+-Added generic person icon
+-Fixed a funky space at the beginning of by: AUTHOR NAME in basic cchost installs
+-Added quick fix for getimagesize error
+-Added new tag for thumbnail constrain...without this will break usage of thumbnails...
+-query doc
+-bugfix: Strip returned null breaking podcast artist
+-bugfix: blank limit were squeaking through limit check
+-ui: no more empty browser titles
+-admin: consolidated ratings settings into one screen
+-geek feature: minus ('-') tag will exclude uploads
+-admin: 'inherited tags' forces remixes to inherit certain tags
+-bugfix: checknumbers broke query/format of IDs
+-new events: remix sources changed,
+-ui: channels (radio)
+-dev: new query/format generator engine
+-bugfix: some templates broke without a mime-type
+-dev: prototype 1.5rc
+-ui: no more empty captions
+-dev: prototype 1.5rc
+-mixter: new remix home page
+-dev: just a comment about using query engine
+-admin ui: cleaned up caption
+-dev: new param for QueryKeys to clean ids from _GET
+-bugfix: clearing menu cache was merging, not delting
+-dev: new apis for cleaning get/post args
+-dev: new template api to get raw config info
+-dev:Abstracted cc-render class
+-bugfix: parse error and rename to conform with rest of bin
+-Update zh_TW locale to 3.1.0 (Only 1 string modified since last submit.)
+-Updated version number to 3.2SVN for development to continue! Have fun!
 
