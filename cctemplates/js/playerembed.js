@@ -371,13 +371,13 @@ ccEmbeddedPlayer.prototype = {
         {
             if( this.currSongPos == (this.lastSongPos + 1) )
             {
-                this.lastSongPos = this.currSongPos;
-                if( this.currSong > this.options.bumpMinimum )
+                if( this.currSongPos > this.options.bumpMinimum )
                 {
                     this.bump_done = true;
                     this.doBump(this.currButton.id);
                 }
             }
+            this.lastSongPos = this.currSongPos;
         }
     },
 
