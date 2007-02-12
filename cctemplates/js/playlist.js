@@ -427,6 +427,10 @@ var ccPlaylistBrowserObject = {
             url += q + 'f=html&m=playlist_browse';
             if( this.options.upload )
                 url += '&upload_id=' + this.options.upload;
+            if( this.options.hot )
+                url += '&hot=1';
+            if( this.options.since )
+                url += '&since=' + this.options.since;
         }
         new Ajax.Request( url, { method: 'get', onComplete: this._resp_browse.bind(this) } );
     },

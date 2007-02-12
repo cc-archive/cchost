@@ -176,4 +176,21 @@ group by cart_item_upload order by cnt desc
     return array( 'recs' => $rows, 'ids' => $ids );
 }
 
+function CC_hot_playlists_impl($since)
+{
+    require_once('ccextras/cc-cart-table.inc');
+    $carts =& new CCPlaylists(true); // true means include user info
+    $carts->SetOrder('cart_num_plays','DESC');
+    if( $since )
+    {
+        $date = date('Y-m-d', strtotime($since));
+        $where = "cart_date >= '$date'";
+    }
+    else
+    {
+        $where = '';
+    }
+    return $carts->GetRecords($where);
+}
+
 ?>

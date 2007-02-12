@@ -479,6 +479,12 @@ function CC_recent_playlists()
     return CC_recent_playlists_impl();
 }
 
+function CC_hot_playlists()
+{
+    require_once('ccextras/cc-playlist.php');
+    return CC_hot_playlists_impl();
+}
+
 /**
 * @private
 * @deprecated

@@ -195,10 +195,8 @@
   <div id="playlist_browser" class="grid"><span>getting playlists...</span></div>
   <tal:block define="player_options string:autoHook: false" />
   <metal:block use-macro="playerembed.xml/eplayer" />
-  <tal:block define="pluser args/playlist_user | nothing" on-error='' />
-  <tal:block define="upid  args/upload_id" />
   <script>
-    new ccPlaylistBrowser( 'playlist_browser', { user: '${pluser}', upload: ${upid} } );
+    new ccPlaylistBrowser( 'playlist_browser', ${args} );
   </script>
 </metal:block>
 

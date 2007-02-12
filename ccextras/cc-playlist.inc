@@ -112,10 +112,16 @@ class CCPlaylists
     function User($user)
     {
         require_once('cclib/cc-page.php');
-        $args['playlist_user'] = $user;
-        $args['upload_id'] = 0;
+        $args = $this->_args_to_json( array( 'user' => $user ) );
         CCPage::PageArg( 'playlist_show_browser', 'playlist.xml/playlist_show_browser' );
         CCPage::PageArg( 'args', $args, 'playlist_show_browser' );
+    }
+
+    function _args_to_json($args)
+    {
+            // user: '${pluser}', upload: ${upid},  
+        require_once('cclib/zend/json-encoder.php');
+        return CCZend_Json_Encoder::encode($args);
     }
 
     function OnMapUrls()
@@ -434,15 +440,22 @@ class CCPlaylists
                 $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
                 if( empty($name) )
                     CCUtil::Send404();
-                $args['upload_id'] = $upload_id;
+                $args['upload'] = $upload_id;
                 CCPage::SetTitle(sprintf(_('Browse Playlists Featuring "%s"'),$name) );
             }
             else
             {
-                $args['upload_id'] = 0;
-                CCPage::SetTitle(_('Browse Playlists') );
+                if( !empty($_GET['since']) )
+                    $args['since'] = date('Y-m-d', strtotime($_GET['since']));
+                $args['hot'] = !empty($_GET['hot']);
+                if( $args['hot'] )
+                    $title = _('Hot Playlists');
+                else
+                    $title = _('New Playlists');
+                CCPage::SetTitle($title);
             }
 
+            $args = $this->_args_to_json($args);
             CCPage::PageArg('playlist_show_browser', 'playlist.xml/playlist_show_browser' );
             CCPage::PageArg('args',$args,'playlist_show_browser');
         }
@@ -487,8 +500,15 @@ class CCPlaylists
             $where .= ' AND cart_user = ' . CCUser::IDFromName($user);
         }
 
+        if( !empty($_GET['since']) )
+            $where .= " AND cart_date >= '{$_GET['since']}'";
+
         $carts = new CCPlaylist(true);
-        $carts->SetOrder('cart_date','desc');
+
+        if( empty($_GET['hot']) )
+            $carts->SetOrder('cart_date','desc');
+        else
+            $carts->SetOrder('cart_num_plays','desc');
 
         if( empty($_GET['upload_id']) )
         {
@@ -511,7 +531,9 @@ class CCPlaylists
             $args = array();
         }
         
+
         $args['records'] = $carts->QueryRows($where);
+
         $this->_output($args,'',true);
     }
 
