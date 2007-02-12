@@ -1,4 +1,4 @@
-Installation notes for ccHost 3.1
+Installation notes for ccHost 4.0
 ====================================
 
 Please check the project website/wiki to see if there are updates to any of 
@@ -74,10 +74,25 @@ at a UNIX command line you can use these steps to intall:
    6. Follow the instructions from there on...
 
 
-Upgrading to 3.1
+Upgrading from 3.1
 ------------------------------
 
-ccHost 3.1 represents a significant change in how we handle
+  -1. Make a backup of your database.
+   1. Login as admin to your existing site
+   2. Copy the 4.0 files (everything EXCEPT the ccadmin directory)
+      over your existing site
+   3. Browse to you home page with an additional ?update=1 (for
+      pretty url sites) or &update=1 (for non-pretty url).
+  
+If your see errors or have problems, delete all the files in your temp
+cache directory (standard is local_files/temp or could be
+cclib/phptal/phptal_cache), browse to your site again (no need
+for the update=1 again).
+
+Upgrading from 3.0
+------------------------------
+
+ccHost 3.1 represented a significant change in how we handle
 your customized files and paths. The main purpose of this
 update is to ensure that updating in the future will be as
 painless as possible. In other words, we have learned our
