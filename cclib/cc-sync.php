@@ -437,16 +437,21 @@ END;
             $quploads->Update($row);
         }
 
-        $configs =& CCConfigs::GetTable();
-        $chart = $configs->GetConfig('chart');
+        global $CC_GLOBALS;
 
-        foreach( $queries as $query )
+        if( !empty($CC_GLOBALS['ratings_rank']) ) 
         {
-            $row = $quploads->QueryKeyrow($query[0]);
-            CCSync::_calc_rank($chart,$row,'upload');
-            $args['upload_id'] = $row['upload_id'];
-            $args['upload_rank'] = $row['upload_rank'];
-            $quploads->Update($args);
+            $configs =& CCConfigs::GetTable();
+            $chart = $configs->GetConfig('chart');
+
+            foreach( $queries as $query )
+            {
+                $row = $quploads->QueryKeyrow($query[0]);
+                CCSync::_calc_rank($chart,$row,'upload');
+                $args['upload_id'] = $row['upload_id'];
+                $args['upload_rank'] = $row['upload_rank'];
+                $quploads->Update($args);
+            }
         }
     }
 

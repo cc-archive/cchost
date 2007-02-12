@@ -70,7 +70,9 @@ class CCRatings extends CCTable
         global $CC_GLOBALS;
 
         if( !CCUser::IsLoggedIn() )
+        {
             return true;
+        }
 
         $configs =& CCConfigs::GetTable();
         $chart = $configs->GetConfig('chart');
@@ -79,7 +81,9 @@ class CCRatings extends CCTable
             $banlist = CCTag::TagSplit($chart['ratings_ban']);
             $username = CCUser::CurrentUserName();
             if( in_array($username,$banlist) )
+            {
                 return true;
+            }
         }
 
         $user_id = CCUser::CurrentUser();
@@ -93,13 +97,17 @@ class CCRatings extends CCTable
             $rev_q['topic_upload'] = $upload_id;
             $count = $reviews->CountRows($rev_q);
             if( intval($count) < 1 )
+            {
                 return true;
+            }
         }
 
         $remote_ip = $_SERVER['REMOTE_ADDR'];
         $ip = CCUtil::EncodeIP($remote_ip);
         if( $ip == substr($record['user_last_known_ip'],0,8) )
+        {
             return true;
+        }
         
         $where =<<<END
             (  
@@ -215,7 +223,9 @@ class CCRating
     function Rate($upload_id,$score=0)
     {
         if( empty($score) )
+        {
             return;
+        }
         
         require_once('cclib/cc-upload-table.php');
         require_once('cclib/cc-sync.php');
@@ -247,7 +257,8 @@ class CCRating
         $args = $CC_GLOBALS;
         $args['root-url'] = ccd();
         $args['auto_execute'] = array( 'ratings_stars' );
-        $this->OnUploadListing($record);
+        $record =& $uploads->GetRecordFromID($upload_id);
+        CCRatingsHV::_fill_scores($record,'upload');
         $args['record'] = $record;
         $template = new CCTemplate( $CC_GLOBALS['skin-map'] );
         $template->SetAllAndPrint($args);

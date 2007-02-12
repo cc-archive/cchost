@@ -55,7 +55,7 @@ class CCAdminRatingsForm extends CCEditConfigForm
                     'ratings_rank' =>
                        array(  'label'      => _('Using Ratings As Rank'),
                                'form_tip'   => _('Use the ratings to determine chart rankings'),
-                               'formatter'  => 'textarea',
+                               'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE),
 
                     'bayesian-min' =>  
