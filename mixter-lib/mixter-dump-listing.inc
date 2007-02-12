@@ -364,12 +364,15 @@ EOF;
                     $type  = empty($item['type']) ? '' : 'type="' . $item['type'] . '"';
                     $class = empty($item['class']) ? '' : 'class="' . $item['class'] . '"';
                     $parent_id = empty($item['parent_id']) ? '' : 'id="' . $item['parent_id'] . '"';
-                    $html .=<<<END
-                    <tr>
-                      <td {$parent_id} ><a href="{$item['action']}" $type $class
-                            id="{$item['id']}"><span>{$item['menu_text']}</span></a></td>
-                    </tr>
+                    if( !empty($item['action']) )
+                    {
+                        $html .=<<<END
+                        <tr>
+                          <td {$parent_id} ><a href="{$item['action']}" $type $class
+                                id="{$item['id']}"><span>{$item['menu_text']}</span></a></td>
+                        </tr>
 END;
+                    }
                 }
             }
 
