@@ -275,7 +275,10 @@ class CCMediaHost
         $fileid = intval($fileid);
         $username = CCUtil::StripText($username);
         if( !CCUser::IsAdmin() )
+        {
+            require_once('cclib/cc-upload.php');
             CCUpload::CheckFileAccess($username,$fileid);
+        }
 
         $uploads =& CCUploads::GetTable();
         $row = $uploads->QueryKeyRow($fileid);
