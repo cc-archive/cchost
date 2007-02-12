@@ -295,7 +295,7 @@ class CCUserAPI
             $username = CCUser::CurrentUserName();
 
         if( empty($CC_GLOBALS['avatar-dir']) )
-            $upload_dir = $this->GetUploadDir($username);
+            $upload_dir = CCUser::GetUploadDir($username);
         else
             $upload_dir = $CC_GLOBALS['avatar-dir'];
 
