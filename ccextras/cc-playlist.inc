@@ -147,6 +147,11 @@ class CCPlaylists
                                             'ccextras/cc-playlist-forms.inc' ); 
         CCEvents::MapUrl( ccp('playlist','edit'),           array( 'CCPlaylistManage', 'Edit'), CC_MUST_BE_LOGGED_IN,   
                                             'ccextras/cc-playlist-forms.inc' ); 
+        CCEvents::MapUrl( ccp('admin','playlists'),           array( 'CCPlaylistManage', 'Admin'), CC_ADMIN_ONLY,   
+                                            'ccextras/cc-playlist-forms.inc' ); 
+
+        CCEvents::MapUrl( ccp('admin','playlists','recalc'),           array( 'CCPlaylistManage', 'Recalc'), CC_ADMIN_ONLY,   
+                                            'ccextras/cc-playlist-forms.inc' ); 
 
             /*, 'ccextras/cc-forums.inc', '{user_name}', 
             _('Display forum topics for user'), CC_AG_FORUMS ); */
@@ -714,34 +719,6 @@ class CCPlaylists
         {
             CCUtil::Send404();
         }
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
-    *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
-    */
-    function OnGetConfigFields($scope,&$fields)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $fields['enable_playlists'] =
-               array(  'label'      => _('Enable Playlists'),
-                       'weight'      => 600,
-                       'formatter'  => 'checkbox',
-                       'flags'      => CCFF_POPULATE );
-
-            $fields['playlist_promo_tag'] =
-               array(  'label'      => _('Promomotion tag for playlist'),
-                       'form_tip'   => _('Uploads with this tag will be mixed in with dynamic playlists'),
-                       'weight'      => 601,
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE );
-        }
-
     }
 
     /**

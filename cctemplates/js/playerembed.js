@@ -28,13 +28,15 @@ ccEmbeddedPlayer.prototype = {
     flashOK:         false,
 	playing:         false,
     paused:          false,
-    sliderPos:       0,
+    sliderPos:       0,         // mouse tracking
     volumePos:       50,
     currButton:      null,
     draggingVol:     false,
     playlist:        [],
     playlist_cursor: 0,
     bump_done:       false,
+    currSongPos:     0,        // player tracking
+    lastSongPos:     0, 
 
     initialize: function( options, flashMajorVersion ) {
         
@@ -267,7 +269,6 @@ ccEmbeddedPlayer.prototype = {
     },
 
     Play: function( element, href ) {
-        this.bump_done = false;
         var id = element.id;
         if( !$(id + '_player') )
             this._create_indv_controls(id);
@@ -279,11 +280,6 @@ ccEmbeddedPlayer.prototype = {
             this.currButton = element;
             this._start_element(href);
         }
-    },
-
-    doBump: function(id) {
-        var url = home_url + 'api/playlist/bump/' + id;
-        new Ajax.Request( url, { method: 'get' } );
     },
 
     onPlayerClick: function(e) {
@@ -314,6 +310,7 @@ ccEmbeddedPlayer.prototype = {
         this.playing = true;
         this.paused  = false;
         this._show_player('block');
+        this.resetBump();
         this.flash.ccPlaySong(song);
         this._set_vol_num();
     },
@@ -369,12 +366,29 @@ ccEmbeddedPlayer.prototype = {
     },
 
     onSongPos: function (ax) {
-        var val = this._set_fill_val(this._get_base_id('_slider'), ax);
-        if( this.options.doBumpCount && !this.bump_done && (val > this.options.bumpMinimum) )
+        this.currSongPos = this._set_fill_val(this._get_base_id('_slider'), ax);
+        if( this.options.doBumpCount && !this.bump_done )
         {
-            this.bump_done = true;
-            this.doBump(this.currButton.id);
+            if( this.currSongPos == (this.lastSongPos + 1) )
+            {
+                this.lastSongPos = this.currSongPos;
+                if( this.currSong > this.options.bumpMinimum )
+                {
+                    this.bump_done = true;
+                    this.doBump(this.currButton.id);
+                }
+            }
         }
+    },
+
+    resetBump: function() {
+        this.bump_done = false;
+        this.currSongPos = this.lastSongPos = 0;
+    },
+
+    doBump: function(id) {
+        var url = home_url + 'api/playlist/bump/' + id;
+        new Ajax.Request( url, { method: 'get' } );
     },
 
     onVolumeDown: function(e) {

@@ -394,27 +394,20 @@ function CC_get_config_roots()
     return $roots;
 }
 
-/*
-  hold on...
 function cc_query_fmt($qstring)
 {
     if( empty($qstring) )
         return array();
     
-    if( !preg_match_all( '/(?:,|^)(.*):(.*)(?=,|$)/U',$qstring,$m,PREG_SET_ORDER) )
-        return array();
-
+    parse_str($qstring,$args);
+    require_once('cclib/cc-query.php');
     $query = new CCQuery();
-    $args = $query->GetDefaultArgs();
-    $args['format'] = 'php';
-    foreach( $m as $match )
-    {
-        $args[$match[1]] = $match[2];
-    }
-
-    return $query->Query($args);
+    if( empty($args['format']) )
+        $args['format'] = 'php';
+    $args = $query->ProcessAdminArgs($args);
+    list( $results ) = $query->Query($args);
+    return $results;
 }
-*/
 
 /**
 * Fetch a list of records

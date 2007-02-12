@@ -5,13 +5,15 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPlaylists',  'OnMapUrls'),          'ccextras/cc-playlist.inc' );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPlaylists' , 'OnGetConfigFields') , 'ccextras/cc-playlist.inc' );
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCPlaylists',  'OnApiQueryFormat'),   'ccextras/cc-playlist.inc' ); 
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCPlaylists',  'OnUploadDelete'),     'ccextras/cc-playlist.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPlaylistHV', 'OnUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCPlaylistHV', 'OnBuildUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCPlaylistHV', 'OnUserProfileTabs'));
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCPlaylistHV', 'OnUploadRow'));
+
+//CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPlaylists' , 'OnGetConfigFields') , 'ccextras/cc-playlist.inc' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCPlaylistManage',  'OnAdminMenu'),     'ccextras/cc-playlist-forms.inc' );
 
 class CCPlaylistHV 
 {

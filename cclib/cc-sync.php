@@ -307,6 +307,8 @@ END;
     */
     function Ratings(&$record,&$ratings)
     {
+        global $CC_GLOBALS;
+
         $where['ratings_upload'] = $record['upload_id'];
         $average = $ratings->QueryItem( 'AVG(ratings_score)', $where );
         $count = $ratings->CountRows($where);
@@ -316,11 +318,14 @@ END;
         $R2['upload_score'] = $average;
         $R2['upload_num_scores'] = $count;
 
-        $configs =& CCConfigs::GetTable();
-        $C = $configs->GetConfig('chart',CC_GLOBAL_SCOPE);
-        $record = array_merge($record,$R2);
-        CCSync::_calc_rank($C,$record);
-        $R2['upload_rank'] = $record['upload_rank'];
+        if( !empty($CC_GLOBALS['ratings_rank']) ) 
+        {
+            $configs =& CCConfigs::GetTable();
+            $C = $configs->GetConfig('chart',CC_GLOBAL_SCOPE);
+            $record = array_merge($record,$R2);
+            CCSync::_calc_rank($C,$record);
+            $R2['upload_rank'] = $record['upload_rank'];
+        }
 
         $uploads =& CCUploads::GetTable();
         $uploads->Update($R2);
@@ -333,6 +338,8 @@ END;
     */
     function _user_ratings($user_id)
     {
+        global $CC_GLOBALS;
+
         $sql =<<<END
             SELECT AVG(upload_score)
                FROM cc_tbl_uploads
@@ -355,13 +362,16 @@ END;
         $users = new CCTable('cc_tbl_user','user_id');
         $users->Update($uargs);
 
-        $row = $users->QueryKeyRow($user_id);
-        $configs =& CCConfigs::GetTable();
-        $chart = $configs->GetConfig('chart');
-        CCSync::_calc_rank($chart,$row,'user');
-        $u2args['user_id'] = $user_id;
-        $u2args['user_rank'] = $row['user_rank'];
-        $users->Update($u2args);
+        if( !empty($CC_GLOBALS['ratings_rank']) ) 
+        {
+            $row = $users->QueryKeyRow($user_id);
+            $configs =& CCConfigs::GetTable();
+            $chart = $configs->GetConfig('chart');
+            CCSync::_calc_rank($chart,$row,'user');
+            $u2args['user_id'] = $user_id;
+            $u2args['user_rank'] = $row['user_rank'];
+            $users->Update($u2args);
+        }
     }
 
     /**

@@ -519,7 +519,15 @@ class CCFeed
         $args['format']   = $type;
         $args['feed_url'] = ccl('feed',$type,$tags);
         if( !$is_remix_feed )
+        {
             $args['limit']  = $this->GetLimit();
+            if( !empty($_GET['limit']) )
+            {
+                $g_limit = CCUtil::Strip($_GET['limit']);
+                if( intval($g_limit) > 0 && $g_limit < $args['limit'] )
+                    $args['limit'] = $g_limit;
+            }
+        }
 
         $query = new CCQuery();
         $args = $query->ProcessUriArgs($args);

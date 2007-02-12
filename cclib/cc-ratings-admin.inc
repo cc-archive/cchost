@@ -51,6 +51,13 @@ class CCAdminRatingsForm extends CCEditConfigForm
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE,
                             ),
+
+                    'ratings_rank' =>
+                       array(  'label'      => _('Using Ratings As Rank'),
+                               'form_tip'   => _('Use the ratings to determine chart rankings'),
+                               'formatter'  => 'textarea',
+                               'flags'      => CCFF_POPULATE),
+
                     'bayesian-min' =>  
                        array(  'label'      => _('Chart minimum'),
                                'form_tip'   => _('Mininum number of ratings an upload must have to seen in charts'),
@@ -86,6 +93,7 @@ class CCAdminRatingsForm extends CCEditConfigForm
                                'form_tip'   => _('Users not allowed to rate'),
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE),
+
             );
 
         $this->AddFormFields($fields);
@@ -240,7 +248,7 @@ class CCRatingsAdmin
     /**
     * Implementation of racalculate all ratings in system
     */
-    function Recalc()
+    function Recalc($with_ui=true)
     {
         require_once('cclib/cc-sync.php');
         $configs =& CCConfigs::GetTable();
@@ -276,7 +284,8 @@ class CCRatingsAdmin
             $users->Update($args);
         }
 
-        CCPage::Prompt(sprintf(_("%d user scores and %d uploads recalculated"), $count, $upcount));
+        if( $with_ui )
+            CCPage::Prompt(sprintf(_("%d user scores and %d uploads recalculated"), $count, $upcount));
     }
 
     /**

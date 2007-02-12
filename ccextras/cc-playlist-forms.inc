@@ -7,6 +7,7 @@ if( !defined('IN_CC_HOST') )
 require_once('ccextras/cc-cart-table.inc');
 require_once('ccextras/cc-playlist.inc');
 require_once('cclib/cc-form.php');
+require_once('cclib/cc-admin.php');
 
 class CCPlaylistForm extends CCForm
 {
@@ -81,8 +82,107 @@ class CCConfirmPlaylistEmptyForm extends CCForm
     }
 }
 
+class CCAdminPlaylistsForm extends CCEditConfigForm
+{
+    function CCAdminPlaylistsForm()
+    {
+        $this->CCEditConfigForm('config',CC_GLOBAL_SCOPE);
+        $this->SetModule(ccs(__FILE__));
+        $fields = array(
+
+            'enable_playlists' =>
+               array(  'label'      => _('Enable Playlists'),
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE ),
+
+            'playlist_promo_tag' =>
+               array(  'label'      => _('Promomotion tag for playlist'),
+                       'form_tip'   => _('Uploads with this tag will be mixed in with dynamic playlists'),
+                       'formatter'  => 'textedit',
+                       'flags'      => CCFF_POPULATE ),
+
+            'playlist_excl_user' =>
+               array(  'label'      => _('Playlist Abuse List'),
+                       'form_tip'   => _('Users who have abused playlists'),
+                       'formatter'  => 'textarea',
+                       'flags'      => CCFF_POPULATE ),
+
+            'playlist_rank' =>
+               array(  'label'      => _('Use Playlist For Rankings'),
+                       'form_tip'   => _('Use playlists stats to rank uploads'),
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE ),
+
+            'playlist_feat' =>
+               array(  'label'      => _('Featured Song'),
+                       'form_tip'   => _('This will be excluded from rankings and play counts. (Use the numberic upload id)'),
+                       'class'      => 'cc_form_input_short',
+                       'formatter'  => 'textedit',
+                       'flags'      => CCFF_POPULATE ),
+
+            'playlist_minsec' =>
+               array(  'label'      => _('Minimum Play Time'),
+                       'form_tip'   => _('The minimum number of seconds before a song gets credit for a Play'),
+                       'class'      => 'cc_form_input_short',
+                       'formatter'  => 'textedit',
+                       'flags'      => CCFF_POPULATE ),
+
+            'playlist_weigh_play' =>
+               array(  'label'      => _('Weight: Play'),
+                       'form_tip'   => _('How much do plays influence rankings'),
+                       'formatter'  => 'textedit',
+                       'flags'      => CCFF_POPULATE ),
+
+            'playlist_weigh_add' =>
+               array(  'label'      => _('Weight: Add'),
+                       'form_tip'   => _('How much do adds to playlists influence rankings'),
+                       'formatter'  => 'textedit',
+                       'flags'      => CCFF_POPULATE ),
+
+            'playlist_weigh_rate' =>
+               array(  'label'      => _('Weight: Rate'),
+                       'form_tip'   => _('How much do user ratings influence rankings (set this to zero to ignore ratings)'),
+                       'formatter'  => 'textedit',
+                       'flags'      => CCFF_POPULATE ),
+
+                );
+
+
+        $this->AddFormFields($fields);
+    }
+}
+
 class CCPlaylistManage
 {
+    function Admin()
+    {
+        CCPage::SetTitle(_('Admin Playlists'));
+        $form = new CCAdminPlaylistsForm();
+        CCPage::AddForm($form->GenerateForm());
+    }
+
+    /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
+    function OnAdminMenu(&$items,$scope)
+    {
+        if( $scope == CC_GLOBAL_SCOPE )
+        {
+            $items += array( 
+                'playlists'   => array( 'menu_text'  => 'Playlists',
+                                 'menu_group' => 'configure',
+                                 'help'      => _('Manage Playlists'),
+                                 'access' => CC_ADMIN_ONLY,
+                                 'weight' => 700,
+                                 'action' =>  ccl('admin','playlists')
+                                 ),
+                );
+        }
+    }
+
     function Edit($playlist_id='')
     {
         $playlist_id = intval(CCUtil::Strip($playlist_id));
@@ -170,6 +270,17 @@ class CCPlaylistManage
             $carts->DeleteKey($playlist_id);
             $this->_send_prompt(_('Playlist has been deleted.'));
         }
+    }
+
+    function Recalc()
+    {
+        global $CC_GLOBALS;
+        require_once('ccextras/cc-playlist-rank.inc');
+        $msg = calc_plays();
+        if( empty($msg) )
+            CCPage::Prompt(_('Playlists rankings recalcuated'));
+        else
+            CCPage::Prompt($msg);
     }
 }
 
