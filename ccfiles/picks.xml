@@ -38,6 +38,7 @@ function pickwinplay(qstring)
                 "resizable=1,scrollbars=1," + dim );
 }
 </script>
+
 <metal:block define-macro="picks">
   <h3 tal:content="pick_title" />
   <tal:block define="chart php: cc_query_fmt($qstring);" />
@@ -145,9 +146,10 @@ function pickwinplay(qstring)
         <metal:block use-macro="picks" />
     </td>
     <td>
+        <tal:block define="settings php:CC_get_config('chart');" />
         <tal:block define="pick_title php:_('What\'s Hot Right Now');
                            ed_pick 0;
-                           qstring string:sort=rank&dir=DESC&sinced=2 weeks ago&limit=20;" />
+                           qstring string:tags=remix&sort=rank&dir=DESC&sinced=${settings/cut-off}&limit=20;" />
         <metal:block use-macro="picks" />
     </td>
   </tr>
@@ -155,7 +157,7 @@ function pickwinplay(qstring)
     <td>
         <tal:block define="pick_title php:_('All Time Hot List');
                            ed_pick 0;
-                           qstring string:sort=rank&dir=DESC&limit=10;" />
+                           qstring string:tags=remix&sort=rank&dir=DESC&limit=10;" />
         <metal:block use-macro="picks" />
     </td>
   </tr>
