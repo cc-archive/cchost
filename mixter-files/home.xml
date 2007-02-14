@@ -39,9 +39,12 @@ $Id$
       <p><b>Podcasters, directors and music lovers</b> If you're into music, browse this site to hear some of the <a href="${root-url}media/view/media/picks">great remixes</a> people have built from sampling music on this site, all licensed for use under Creative Commons license.</p>
 
       <div id="teru" style="display:none;text-align: center;height:45px; border:1px solid black;margin:3px 10px 4px 10px;padding:4px;background-color:#EEF;">
-        Now playing: <a href="${home-url}files/teru/8443">Get On It (vroom, vroom..)</a> by <a href="${home-url}people/teru">teru</a> 
+      <tal:block define="feat php: CC_get_details(${playlist_feat},false);" />
+        Now playing: <a href="${feat/file_page_url}" tal:content="php: CC_strchop(${feat/upload_name},40);" /> by 
+        <a href="${feat/artist_page_url}" tal:content="php: CC_strchop(${feat/user_real_name},40);" />
+
         <div style="margin-left: 30%;padding:8px;" class="cc_playlist_pcontainer" > <a class="cc_player_button cc_player_hear" 
-          id="_ep_1_8443" href="http://ccmixtermedia.org/userfiles/teru_-_Get_On_It_(vroum_vroum_mix).mp3"> </a>
+          id="_ep_1_${feat/upload_id}" href="${feat/fplay_url"> </a>
         </div>
       </div>
     </div>
