@@ -26,9 +26,9 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_INIT_VALIDATOR,    array( 'CCPseudoVerify', 'Install' )    , 'ccextras/cc-pseudo-verify.inc' );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCPseudoVerify', 'OnMapUrls' )  , 'ccextras/cc-pseudo-verify.inc' );
-CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,       array( 'CCPseudoVerify', 'OnGetSysTags'), 'ccextras/cc-pseudo-verify.inc' );
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCPseudoVerify', 'OnAdminMenu') , 'ccextras/cc-pseudo-verify.inc' );
+CCEvents::AddHandler(CC_EVENT_INIT_VALIDATOR,    array( 'CCPseudoVerifyAPI', 'Install' )    , 'ccextras/cc-pseudo-verify.inc' );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCPseudoVerifyAPI', 'OnMapUrls' )  , 'ccextras/cc-pseudo-verify.inc' );
+CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,       array( 'CCPseudoVerifyAPI', 'OnGetSysTags'), 'ccextras/cc-pseudo-verify.inc' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCPseudoVerifyAPI', 'OnAdminMenu') , 'ccextras/cc-pseudo-verify.inc' );
 
 ?>
