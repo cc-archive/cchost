@@ -172,7 +172,7 @@ class CCPseudoVerifyAPI
 {
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','pverify'), array( 'CCPseudoVerify', 'Admin' ),
+        CCEvents::MapUrl( ccp('admin','pverify'), array( 'CCPseudoVerifyAPI', 'Admin' ),
                           CC_ADMIN_ONLY, ccs(__FILE__), '', 
                           _('Display verification options form.'), CC_AG_UPLOADS );
     }
