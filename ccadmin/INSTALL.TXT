@@ -42,7 +42,7 @@ at a UNIX command line you can use these steps to intall:
 
        For example:
 
-       cp -a cchost-3.1.0 /var/www/localhost/htdocs/cchost
+       cp -a cchost-4.0.0 /var/www/localhost/htdocs/cchost
        chgrp -R apache /var/www/localhost/htdocs/cchost
        chmod g+w /var/www/localhost/htdocs/cchost/
 
@@ -78,11 +78,15 @@ Upgrading from 3.1
 ------------------------------
 
   -1. Make a backup of your database.
+
    1. Login as admin to your existing site
+
    2. Copy the 4.0 files (everything EXCEPT the ccadmin directory)
       over your existing site
-   3. Browse to you home page with an additional ?update=1 (for
-      pretty url sites) or &update=1 (for non-pretty url).
+
+   3. Browse to you home page with:
+        ?update=1 (for pretty url sites) or 
+	&update=1 (for non-pretty url)
   
 If your see errors or have problems, delete all the files in your temp
 cache directory (standard is local_files/temp or could be

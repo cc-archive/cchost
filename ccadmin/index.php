@@ -49,10 +49,6 @@ function step_1()
     {
         $vmsg = "<div class='err'>It doesn't look like you're running on PHP 4, you can't run ccHost until you upgrade.</span>";
     }
-    elseif( $v[0] >= 5 )
-    {
-        $vmsg = "<div style='color:orange'>WARNING: Version 5 of PHP is currently being tested with this code however there are production installations running ccHost on PHP5.</div>"; 
-    }      
     else
     {
         $vmsg = "It looks like you're running on a supported version of PHP";
@@ -91,6 +87,7 @@ function step_3()
     $errs = '';
 
     $ok =        verify_fields($f,$errs);
+    $ok = $ok && install_htaccess($f,$errs);
     $ok = $ok && install_db_config($f,$errs);
     $ok = $ok && install_tables($f,$errs);
     if( !$ok )
@@ -268,6 +265,67 @@ EOF;
 
 }
 
+function install_htaccess(&$f,&$err)
+{
+	if($f['pretty_urls']['v']!="on") 
+        return true;
+
+	$sbase = get_script_base();
+    $test_string = "RewriteRule ^(.*)\$ {$sbase}index.php?ccm=/\$1 [L,QSA]";
+    $text =<<<EOF
+RewriteEngine On
+RewriteBase $sbase
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+$test_string
+EOF;
+
+    $fname = '.htaccess';
+
+	if( file_exists($fname) )
+	{
+        $contents = @file_get_contents($fname);
+        if( !empty($contents) && strpos($contents,$test_string) !== false )
+        {
+            print("Using existing .htaccess for Pretty URLs<br />");
+            return true;
+        }
+
+		$msg = "<span style='color:brown'>You already have an existing .htaccess file. 'Pretty URLs' has been disabled. You may enable it later in ccHost.</span><br />";
+        print($msg);
+		$f['pretty_urls']['v'] = "";
+	}
+    else
+    {
+        $fh = @fopen($fname,'w+');
+        if( !$fh )
+        {
+            $err = "Could not open a .htaccess file for writing in ccHost directory.";
+            $f['pretty_urls']['v'] = "";
+        }
+        else
+        {
+            if( fwrite($fh,$text) === false )
+            {
+                $err = "Could not write to .htaccess file in ccHost directory. Please make sure the directory is writable and try again.";
+                $f['pretty_urls']['v'] = "";
+            }
+
+            fclose($fh);
+
+            if( empty($err) )
+            {
+                chmod($fname, 0777); // cc_default_file_perms());
+                print(".htaccess written for Pretty URLs<br />");
+            }
+        }
+    }
+
+
+    return( empty($err) );
+}
+
+
 function install_tables(&$f,&$errs)
 {
     //print("<pre>");print_r($f);print("</pre>");exit;
@@ -347,6 +405,7 @@ function install_local_files($local_dir)
     docopy( 'sidebar.xml', $local_dir, 'skins');
     docopy( 'home.xml', $local_dir, 'viewfile');
     docopy( 'welcome.xml', $local_dir, 'viewfile');
+    docopy( 'DEBUG.php', $local_dir, 'lib');
     docopy( 'error-msg.txt', $local_dir, '');
     docopy( 'disabled-msg.txt', $local_dir, '');
 }
@@ -540,12 +599,13 @@ function verify_mysql(&$f, &$ok)
                 $table_ok = false;
                 $qr = mysql_query("SHOW TABLES");
                 $row = mysql_fetch_row($qr);
-                if( $row[0] == 'table_test' )
+                if( !empty($row[0]) )
                 {
                     $qr = mysql_query("DESCRIBE table_test");
                     $row = mysql_fetch_row($qr);
                     $ok = $table_ok = $row[0] == 'test_column';
                 }
+
                 if( !$table_ok )
                 {
                     $f['database']['e'] = "Error creating tables: " . mysql_error();
@@ -679,7 +739,7 @@ http://example.com/cchost/media/people/rejon
 </pre>
 If you are running on Apache you can use Rewrite rules ('pretty URLs') to have that.
 
-In order to enable Rewrite rules you must locate or create the file <span class="file_name">$local_root/.htaccess</span> and include the following lines:
+If you enable Rewrite rules we will try to write the file <span class="file_name">$local_root/.htaccess</span> and include the following lines:
 
 <div style="text-align:left;white-space:pre;font-family:Courier New, courier, serif;
   margin-bottom: 12px;">
@@ -741,7 +801,7 @@ function get_install_fields($values)
 
 
     'pretty_urls'        => array( 'n' => 'Use \'pretty URLs\'',  'e' => '', 't'  => 'checkbox', 'v' => '' , 'q' => 0,
-        'h' => "<a href='#' onclick=\"javascript: window.open ('?rewritehelp=1','rwwindow','resizable=1,width=550,height=500'); return false;\">What's this?</a>"  ),
+        'h' => "<a href='#' onclick=\"javascript: window.open ('?rewritehelp=1','rwwindow','resizable=1,width=550,height=550'); return false;\">What's this?</a>"  ),
 
     'admin'       => array( 'n' => 'Admin name',             'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
         'h' => 'A ccHost account will be created with this name' ),

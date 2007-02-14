@@ -526,25 +526,11 @@ END;
             {
                 if( $itsme )
                 {
-                    if( empty($R['user_extra']['seen_welcome']) )
-                    {
-                        CCPage::ViewFile('welcome.xml');
-                        $show_user = false;
-                        $extra = $R['user_extra'];
-                        $extra['seen_welcome'] = true;
-                        $uargs['user_extra'] = serialize($extra);
-                        $uargs['user_id'] = $R['user_id'];
-                        $users =& CCUsers::GetTable();
-                        $users->Update($uargs);
-                    }
-                    else
-                    {
-                        $msg = _("You've registered an account and logged in, but you haven't uploaded any remixes.") . '<br /><br />' . 
-                               _("Use the 'Submit Files' menu items on the left to start uploading.");
+                    $msg = _("You've registered an account and logged in, but you haven't uploaded any remixes.") . '<br /><br />' . 
+                           _("Use the 'Submit Files' menu items on the left to start uploading.");
 
-                         $R['user_fields'][] = array( 'label' => '', 
-                                                      'value' => _($msg) );
-                    }
+                     $R['user_fields'][] = array( 'label' => '', 
+                                                  'value' => _($msg) );
                 }
                 else
                 {

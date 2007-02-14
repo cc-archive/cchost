@@ -589,7 +589,16 @@ END;
        'lang_locale_pref'    => CC_LANG_LOCALE_PREF, // same here!
 
        'supers'              => $vars['admin']['v'], 
+       'run_once'            => 'welcome',
+       'install_done'        => false,
 
+        /*
+            As of ccHost 4.0:
+
+            There is no longer any need to change this structure
+            for every update. The installation will guide the
+            admin through a ?update=1 step during install.
+       */
                                       // mark this installation as having: 
        'v_1_2h'              => true, // ratings/remix count fields
        'v_1_2k'              => true, // reviews/topics
