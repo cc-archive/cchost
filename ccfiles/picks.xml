@@ -149,7 +149,7 @@ function pickwinplay(qstring)
         <tal:block define="settings php:CC_get_config('chart');" />
         <tal:block define="pick_title php:_('What\'s Hot Right Now');
                            ed_pick 0;
-                           qstring string:tags=remix&sort=rank&dir=DESC&sinced=${settings/cut-off}&limit=20;" />
+                           qstring string:tags=remix,-digital_distortion&sort=rank&dir=DESC&sinced=${settings/cut-off}&limit=20;" />
         <metal:block use-macro="picks" />
     </td>
   </tr>
