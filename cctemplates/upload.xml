@@ -98,7 +98,7 @@ $Id$
         </tr>
         <tr tal:condition="record/fplay_url">
             <th><span class="cc_player_label" tal:content="php:_('Play:');" /> </th>
-            <td><a class="cc_player_button cc_player_hear" id="_ep_{$record/upload_id}" href="{$record/fplay_url}"> </a></td>
+            <td><a class="cc_player_button cc_player_hear" id="_ep_${record/upload_id}" href="${record/fplay_url}"> </a></td>
         </tr>
         <tr>
           <th tal:content="php: CC_lang('by:');" /> 
