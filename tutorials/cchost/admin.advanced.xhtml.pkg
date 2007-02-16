@@ -10,91 +10,137 @@
 
 <refsect1 id="{@id rules}"> 
 <title>Rules for Editing XHTML</title>
-<para>The template engine used by ccHost is <emphasis>extremely</emphasis> sensitive to the
-strict rules of XML so consider this section a kind of <important>Do's and Don'ts</important>. But
-keep in mind these are not merely suggestions, if you don't follow these rules your pages will
-not display and the site will be broken until you fix these issues.</para>
+<para>
+    The template engine used by ccHost is <emphasis>extremely</emphasis> sensitive to the
+    strict rules of XML so consider this section a kind of <important>Do's and Don'ts</important>. But
+    keep in mind these are not merely suggestions, if you don't follow these rules your pages will
+    not display and the site will be broken until you fix these issues.
+</para>
 <unorderedlist class="tutlist">
- <listitem><important>The Entire Document Must Be Enclosed</important>
-   <para>Since your XHTML is going in the middle of the page you do not want any
-   <literal>&lt;html&gt;</literal> or <literal>&lt;body&gt;</literal> tags, but 
-   the document must be enclosed in something so you might as well put a 
-   <literal>&lt;div&gt;</literal> tag at the very top and a <literal>&lt;/div&gt;</literal> 
-   at the very bottom. If you object to having a "visible" tag, you can use a
-   <literal>&lt;tal:block&gt;</literal>  <literal>&lt;/tal:block&gt;</literal> pair.
-   </para>
-  </listitem>
- <listitem><important>All Tags Must Be 'Closed'</important>
-   <para>A tag like <literal>&lt;hr&gt;</literal> is considered to be 'open' and must be closed.
-        To close a tag you must include a forward slash before the end: <literal>&lt;hr/&gt;</literal>,
-        this goes for <literal>&lt;br /&gt;</literal> <literal>&lt;img src="" /&gt;</literal>
-   </para>
-  </listitem>
- <listitem><important>All Tags Must Be Matched</important>
-   <para>A tag like <literal>&lt;p&gt;</literal> must have a matching <literal>&lt;/p&gt;</literal>.
-        Same goes for all the table tags you've been lax about <literal>&lt;td&gt;</literal>,
-        <literal>&lt;th&gt;</literal>, <literal>&lt;tr&gt;</literal> on down the line.
-   </para>
-  </listitem>
- <listitem><important>All Tags Must Be Symmetrical</important>
-   <para>You can be not sloppy about when you close a tag, they have to been 
-      closed in the exact reverse order they opened, </para>
+    <listitem><important>The Entire Document Must Be Enclosed</important>
+     <para>
+         Since your XHTML is going in the middle of the page you do not want any
+         <literal>&lt;html&gt;</literal> or <literal>&lt;body&gt;</literal> tags, but 
+         the document must be enclosed in something so you might as well put a 
+         <literal>&lt;div&gt;</literal> tag at the very top and a <literal>&lt;/div&gt;</literal> 
+         at the very bottom. If you object to having a "visible" tag, you can use a
+         <literal>&lt;tal:block&gt;</literal>  <literal>&lt;/tal:block&gt;</literal> pair.
+      </para>
+    </listitem>
+    <listitem><important>All Tags Must Be 'Closed'</important>
+      <para>
+          A tag like <literal>&lt;hr&gt;</literal> is considered to be 'open' and must be closed.
+          To close a tag you must include a forward slash before the end: <literal>&lt;hr/&gt;</literal>,
+          this goes for <literal>&lt;br /&gt;</literal> <literal>&lt;img src="" /&gt;</literal>
+      </para>
+    </listitem>
+    <listitem><important>All Tags Must Be Matched</important>
+      <para>
+          A tag like <literal>&lt;p&gt;</literal> must have a matching <literal>&lt;/p&gt;</literal>.
+          Same goes for all the table tags you've been lax about <literal>&lt;td&gt;</literal>,
+          <literal>&lt;th&gt;</literal>, <literal>&lt;tr&gt;</literal> on down the line.
+      </para>
+    </listitem>
+    <listitem><important>All Tags Must Be Symmetrical</important>
+      <para>
+          You can be not sloppy about when you close a tag, they have to been 
+          closed in the exact reverse order they opened, 
+      </para>
       <warning><literal>&lt;b&gt; &lt;i&gt; Hello World &lt;/b&gt; &lt;/i&gt;</literal></warning> 
-      <para>will break your site because the 'b' tag can't close until the 'i' tag is closed.
-   </para>
-  </listitem>
- <listitem><important>All Attributes Must Be Quoted</important>
+      <para>
+          will break your site because the 'b' tag can't close until the 'i' tag is closed.
+      </para>
+    </listitem>
+    <listitem><important>All Attributes Must Be Quoted</important>
       <warning><literal>&lt;table colspan=3&gt; </literal></warning> 
-      <para>The above line will cause an error and break your site. You must put quotes around
-      all attributes.</para>
+      <para>
+          The above line will cause an error and break your site. You must put quotes around
+          all attributes.
+      </para>
       <example><literal>&lt;table colspan="3"&gt; </literal></example> 
-  </listitem>
- <listitem><important>All Attributes Must Have Values</important>
+    </listitem>
+    <listitem><important>All Attributes Must Have Values</important>
       <warning><literal>&lt;option selected &gt; </literal></warning> 
-      <para>The above line will cause an error and break your site. Every attribute
-      must have a value, even it's <literal>""</literal>. The accepted way to 
-      handle the case above is:</para>
+      <para>
+          The above line will cause an error and break your site. Every attribute
+          must have a value, even it's <literal>""</literal>. The accepted way to 
+          handle the case above is:
+      </para>
       <example><literal>&lt;option selected="selected"&gt; </literal></example> 
-  </listitem>
+    </listitem>
 </unorderedlist>
 </refsect1> 
 
 <refsect1 id="{@id vars}"> 
 <title>Variables Available in XHTML </title>
-<para>You can individualize your pages by using variables that are recalculated every time
-the page is rendered. For example, if the user is logged you can personalize the page
-based on if they have uploaded anything to your site.</para>
-<para>Rather than list the possible variables here, you can employ the same method
-used by skin writers as described at the <ulink url="http://wiki.creativecommons.org/CcHost_Skins#Viewing_Variables">ccHost Wiki</ulink> to
-print out all the variables available in your system using the <uri>?dump_page=1</uri> 
-query.</para>
-<para>You can access these variables on your page with this syntax:</para>
+<para>
+    You can individualize your pages by using variables that are recalculated every time
+    the page is rendered. For example, if the user is logged you can personalize the page
+    based on if they have uploaded anything to your site.</para>
+    <para>Rather than list the possible variables here, you can employ the same method
+    used by skin writers as described at the 
+    <ulink url="http://wiki.creativecommons.org/CcHost_Skins#Viewing_Variables">ccHost Wiki</ulink> to
+    print out all the variables available in your system using the <uri>?dump_page=1</uri> 
+    query.
+</para>
+<para>
+    You can access these variables on your page with this syntax:
+</para>
+
 <example><literal>${variable_name}</literal></example>
+
 <para>For example:</para>
+
 <example><literal>&lt;h1&gt;Welcome to ${site-title}&lt;/h1&gt;
 &lt;h2&gt;${site-description}&lt;/h2&gt;</literal></example>
-<para>To make certain blocks conditional, use the <literal>tal:condition</literal> attribute on any XHTML
-tag. In the following example the DIV will only appear if the system detects the presence of the 'logged_in_as' variable. If that variable is there we assume the entire 'user_*' record is available to us:</para>
+
+<para>
+    To make certain blocks conditional, use the <literal>tal:condition</literal> attribute on any XHTML
+    tag. In the following example the DIV will only appear if the system detects the presence of the 
+    'logged_in_as' variable. If that variable is there we assume the entire 'user_*' record is available to us:
+</para>
+
 <example><literal>&lt;div tal:condition="logged_in_as" &gt;Hello ${user_real_name}&lt;/div&gt;</literal></example>
-<para>Note that in the <literal>tal:condition</literal> attribute you do not use the <literal>${}</literal> syntax, 
-just the variable name.</para>
-<para>Alternately, you can use the <literal>not:</literal> syntax (do not forget the ':') to show something else:</para>
+
+<para>
+    Note that in the <literal>tal:condition</literal> attribute you do not use the <literal>${}</literal> syntax, 
+    just the variable name.
+</para>
+
+<para>
+    Alternately, you can use the <literal>not:</literal> syntax (do not forget the ':') to show something else:
+</para>
+
 <example><literal>&lt;div tal:condition="not: logged_in_as" &gt;
    Hey you should &lt;a href="${home-url}register"&gt;register with us!&lt;/a&gt;
 &lt;/div&gt;</literal></example>
 
-<refsect2 id="{@id homeurl}"> 
-<title>${home-url} vs. ${root-url}</title>
-<para>There are two variables that represent the site's URL in the XHTML templates:</para>
-<para><literal>home-url</literal> includes the current virtual root and accounts for pretty URLs while <literal>root-url</literal> does neither. In both cases they including the trailing backslash.</para>
+    <refsect2 id="{@id homeurl}"> 
+    <title>${home-url} vs. ${root-url} and ${q}</title>
+    <para>
+        There are two variables that represent the site's URL in the XHTML templates:
+    </para>
+    <para>
+        <literal>home-url</literal> includes the current virtual root and accounts for pretty URLs 
+        while <literal>root-url</literal> does neither. In both cases they including the trailing backslash.
+    </para>
+    <para>
+        Typical <literal>home-url</literal> expands to something like 
+        <uri>http://myserver.com/cchost?ccm=/media/</uri>, typical root-url for the same page is 
+        <uri>http://myserver.com/cchost/</uri>.
+    </para>
+    <para>
+        Always use the <literal>home-url</literal> whenever you can. The one exception is physical files
+        on your server like images, style sheets, etc. in which case you want to start with <literal>root-url</literal>
+    </para>
+    <para>
+        The variable simply called <literal>q</literal> (lower case 'q') which stands for 'question mark.' It 
+        maps to either '?' or '&amp;' depending on whether you are configured to use pretty-urls or not. You should 
+        use it instead of the actual '?' character whenever you are building urls in templates.
+    </para>
 
-<para>Typical <literal>home-url</literal> expands to something like <uri>http://myserver.com/cchost?ccm=/media/</uri>, typical root-url for the same page is 
-<uri>http://myserver.com/cchost/</uri>.</para>
-
-<para>Always use the <literal>home-url</literal> whenever you can. The one exception is physical files
-on your server like images, style sheets, etc. in which case you want to start with <literal>root-url</literal>
-</para>
-</refsect2>
+    <example><uri>&lt;a href="${home-url}api/query${q}tags=remix"&gt;See remixes...&lt;/a&gt;</uri></example>
+    </refsect2>
 
 </refsect1>
 
@@ -102,129 +148,34 @@ on your server like images, style sheets, etc. in which case you want to start w
 <refsect1 id="{@id code}"> 
 <title>Working With Dynamic Data in XHTML</title>
 
-<para>You can work with dynamic data retrieved from the ccHost system in two steps:</para>
+<para>
+    You can work with dynamic data retrieved from the ccHost system in two steps:
+</para>
+
 <orderedlist class="tutlist">
- <listitem>Get the data from ccHost into a template variable using a <literal>tal:block</literal> tag.
- </listitem>
- <listitem>Display the template variable using XHTML tags using the <literal>tal:repeat</literal>
-    for arrays and lists.
- </listitem>
- </orderedlist>
+   <listitem>
+      Get the data from ccHost into a template variable using a <literal>tal:block</literal> tag.
+   </listitem>
+   <listitem>
+      Display the template variable using XHTML tags using the <literal>tal:repeat</literal>
+      for arrays and lists.
+   </listitem>
+</orderedlist>
 
-<refsect2 id="{@id get}"> 
-<title>Get the Dynamic Data</title>
- <para>For this step there are several PHP functions in ccHost for retrieving dynamic data that are defined
-   in <filename>cc-custom.php</filename>. The official developer documenation for these functions
-   can be found <ulink url="http://mirrors.creativecommons.org/cchost/docs/cchost/_cc-custom_php.html">here</ulink>.
-  </para>
-  <para>The most useful one is called <function>CC_tag_query</function>. Use this function to 
-   retrieve a set of upload records based on tags and put the results into a template variable like this:</para>
-<example>
-&lt;tal:block define="records php: CC_tag_query( 'remix,hip_hop', 
-                                                 'all', 
-                                                 'upload_date', 
-                                                 'DESC', 
-                                                  20);" /&gt;
-</example>
-   <para>In the above example we are request a maximum of 20 uploads that match both ('all') tags 
-   <literal>remix</literal> and <literal>hip_hop</literal>, sorted by date of upload starting from
-   the newest one first ('DESC').</para>
-   <para>The parameters to <function>CC_tag_query</function> in order are::</para>
-   <blockquote>
-   <unorderedlist class="tutlist">
-     <listentry>
-         <para><important>Tags</important></para>
-         <para>Any comma separated list of tags in your system. There is no default, if you 
-         leave this blank ALL records will be returned.</para>
-     </listentry>
-     <listentry>
-         <para><important>Search Type</important></para>
-         <para>'all' means the record must match all tags specified, 'any' means if
-                the record has any of the tags it will be returned.
-         </para>
-     </listentry>
-     <listentry>
-         <para><important>Sort Column</important></para>
-         <para>The column to sort on. The most common columns
-           that you'll use will probably be <literal>upload_date</literal>, 
-           <literal>upload_name</literal> and <literal>user_real_name</literal>.
-           The default sort order is whatever the database engine decides.
-          </para>
-     </listentry>
-     <listentry>
-         <para><important>Sort Direction</important></para>
-         <para>Either 'DESC' or 'ASC'</para>
-     </listentry>
-     <listentry>
-         <para><important>Maximum Number of Records to Return</important></para>
-         <para>You probably don't want to go much over 20 for performance 
-            reasons. Putting a number like 300 in this parameter could grind
-            your system down. This function is tuned for display, not 
-            data mining or number crunching applications.</para>
-     </listentry>
-  </unorderedlist>
-  </blockquote>
-  <para>There is another performance consideration: If this method will be 
-  called with the parameters constantly changing (like with user input) then
-  go ahead and use <function>CC_tag_query</function>. But if this function
-  is going to be called over and over again with the exact same parameters
-  (like on every page) then you should replace it with <function>CC_cache_query</function>
-  which takes exactly the same parameters and returns exactly the same results
-  except a whole heck of lot faster after the first call.</para>
-</refsect2> 
+  <refsect2 id="{@id get}"> 
+  <title>Get the Dynamic Data</title>
+    <para>
+        For this step there are several PHP functions in ccHost for retrieving dynamic data that are defined
+        in <filename>cc-custom.php</filename>. The official developer documenation for these functions
+        can be found <ulink url="http://mirrors.creativecommons.org/cchost/docs/cchost/_cc-custom_php.html">here</ulink>.
+    </para>
+    <note>
+        In versions previous to ccHost 4.0 this section referred to the <function>CC_tag_query</function>. This still
+        works but has been deprecated in favor <function>cc_query_fmt</function> which is based on 
+        the {@tutorial admin.query.pkg Query/Formatter Engine}
+    </note>
+  </refsect2> 
 
-<refsect2 id="{@id show}"> 
-<title>Display the Dynamic Data</title>
-<para>Once you get a record, it is pretty straightforward to display it.</para>
-<para>Let's say we want to feature the very latest upload on our home page. We'll 
-get one record from the upload database, the newest one:</para>
-<example>
-&lt;tal:block define="records php:CC_tag_query( '',
-                                             '',
-                                             'upload_date',
-                                             'DESC',
-                                             1)" /&gt;
-</example>
-<para>Now remember that <literal>records</literal> is an array. In phpTAL to get at the first (and
-in this case the only) element in the array you index it like this: <literal>records/0</literal>.
-Once we figure that out we start displaying the fields:</para>
-<example>
-&lt;h2&gt;Our newest uploads is:&lt;/h2&gt;
-&lt;div&gt;
-  &lt;b&gt;${records/0/upload_name}&lt;/b&gt; 
-  by ${records/0/user_real_name}
-  &lt;p&gt;
-    Check it out 
-    &lt;a href="${records/0/file_page_url}"&gt;here&lt;/a&gt;!
-  &lt;/p&gt;
-&lt;/div&gt;
-</example>
-<para>There are countless fields in the record, if you want to see them all use the following line
-after you called <function>CC_tag_query</function>:</para>
-<example>
-&lt;tal:block define="x php:CC_debug_dump(${records/0})" /&gt;
-</example>
-<para>If we want to show the 5 latest we use the <literal>tal:repeat</literal> attribute
-and lose the <literal>/0</literal> index because we'll be iterating over all the records
-like this:</para>
-<example>
-&lt;tal:block define="records php:CC_tag_query( '',
-                                            '',
-                                            'upload_date',
-                                            'DESC',
-                                            5)" /&gt; 
-
-&lt;h2&gt;Our newest uploads are:&lt;/h2&gt;
-&lt;div tal:repeat="record records"&gt;
-  &lt;b&gt;${record/upload_name}&lt;/b&gt; 
-  by ${record/user_real_name}
-  &lt;p&gt;
-    Check it out 
-    &lt;a href="${record/file_page_url}"&gt;here&lt;/a&gt;!
-  &lt;/p&gt;
-&lt;/div&gt;
-</example>
-</refsect2> 
 </refsect1>
 
 <refsect1 id="{@id custom}"> 

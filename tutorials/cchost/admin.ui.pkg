@@ -341,6 +341,7 @@ right.</note>
   <row><entry class="tb">Match All Tags</entry><entry>A comma separated list of tags. Displays a listing of uploads that have <emphasis>all</emphasis>> of the tags specified.</entry></row>
   <row><entry class="tb">Execute URL</entry><entry>A command or {@tutorial admin.basic.pkg#urls URL to execute}.</entry></row>
   <row><entry class="tb">Subtabs</entry><entry>The name of a sub-navigation tab set that will appear on the screen under the current tab set. </entry></row>
+  <row><entry class="tb">Query</entry><entry>Accepts a query string. Learn {@tutorial admin.query.pkg more about queries} (you'll be glad you did.)</entry></row>
   </table>
 </listitem>
 <listitem>

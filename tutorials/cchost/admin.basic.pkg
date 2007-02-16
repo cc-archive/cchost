@@ -105,8 +105,8 @@ won't be, well, pretty. At that point you can edit these menu items to the prett
     expected to enter the following into your browser's address bar:
 </para>
 
-<example><uri>http://example.com?ccm=/<emphasis>media</emphasis>/admin/menu/killcache</uri>  (with pretty URLs OFF)
-<uri>http://example.com/<emphasis>media</emphasis>/admin/menu/killcache</uri> (with pretty URLs ON)</example>
+<example><uri>http://example.com?ccm=/<emphasis>media</emphasis>/login</uri>  (with pretty URLs OFF)
+<uri>http://example.com/<emphasis>media</emphasis>/login</uri> (with pretty URLs ON)</example>
 
 <para>
     Note the addition of the virtual root <uri>media</uri> in both cases. 
@@ -201,9 +201,11 @@ item from everyone but Administrators, it would <emphasis>not</emphasis> prevent
 that command into their browser directly and seeing the results of the command because that command happens
 to be registered integrally for <emphasis>Everyone</emphasis>.</para>
 
+<param>In order to change the access to the actual command use <uri>admin/access</uri> command.</param>
+
 <para>Also note that the access permissions
-on commands only determine whether the code for that command will be executed or not. The code itself 
-may determine even stricture criteria for the command.</para>
+on commands only determine whether the code for that command is initially invoked. The code itself 
+may determine even stricter criteria for the command.</para>
 
 <para>In other words, a command might be marked as for <emphasis>Registered users only</emphasis>
 (e.g. <uri>editorial/submit/{upload_id}</uri>) but the code that implements that command may have
@@ -212,6 +214,12 @@ further restrictions (only allows 'editors' to do the actual submit).</para>
 <para>There is also an implied 'ownership' built into the code for upload and user
 records. That means a command marked <emphasis>Registered users only</emphasis> like <uri>files/delete/{upload_id}</uri>
 is further restricted by who 'owns' the upload, that is: who uploaded the thing.</para>
+
+	<title>Super Admins</title>
+	<para>From <emphasis>Global Settings</emphasis> you can assign a small group of users 'super access'
+	which overrides normal admin privileges.</para>
+	<para>You can use the <uri>admin/access</uri> command to determine which commands in the system
+	are restricted to this group and this group only.</para>
 
 </refsect1>
 
@@ -264,7 +272,7 @@ configuration screen.
   <row>
       <entry class="fn"><uri>ccfiles</uri></entry>
       <entry class="fd">
-          The default directory used by the <uri>viewfile</uri> command.
+          The default directory used by the <uri>viewfile</uri> (a.k.a. <uri>docs</uri>) command.
           You can replace this functionality by editing the 'viewfile
           Path' field.
       </entry>
@@ -394,10 +402,11 @@ configuration screen.
       <entry class="fn"><uri>my_files/viewfile</uri></entry>
       <entry class="fd">
           ccHost will look in this directory for files
-          appened to the 'viewfile' command. For example:
-          <uri>viewfile/home.xml</uri>. You change where ccHost
+          appened to the 'viewfile' (a.k.a. 'docs') command. For example:
+          <uri>docs/home</uri>. You change where ccHost
           looks for these files or add additional directories
-          using the 'viewfile Command' field.
+          using the 'viewfile Command' field. Also note that the .xml 
+	  extension is optional in the command.
       </entry>
   </row>
   <row>
