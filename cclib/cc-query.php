@@ -576,8 +576,8 @@ class CCQuery
 
         if( !empty($query) )
         {
-            $columns = $this->_get_query_field('search');
-            $where = $this->_build_search_query($type,$query,$columns,$where,$table);
+            $scolumns = $this->_get_query_field('search');
+            $where = $this->_build_search_query($type,$query,$scolumns,$where,$table);
         }
 
         $where = $this->_get_table_where($where,$table,$args);
@@ -622,6 +622,7 @@ class CCQuery
         {
             $records =& $table->GetRecords($where);
         }
+
 
         // ------------- END QUERY ---------------------
 
@@ -786,7 +787,7 @@ class CCQuery
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('api','query'),   array( 'CCQuery', 'QueryURL'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Browser query interface'), CC_AG_SEARCH );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Browser query interface'), CC_AG_QUERY );
     }
 
     /**

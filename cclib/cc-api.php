@@ -69,6 +69,7 @@ class CCRestAPI
         if( empty( $_REQUEST['query'] ) && empty( $_REQUEST['q'] ) )
             $this->Info();
 
+        require_once('cclib/cc-query.php');
         $queryapi = new CCQuery();
         if( empty($_REQUEST['format']) )
             $args['format'] = 'rss';
@@ -320,21 +321,20 @@ class CCRestAPI
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('api','info'),                 array( 'CCRestAPI', 'Info'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Display header info for site'), CC_AG_SAMPLE_POOL ); 
+
         CCEvents::MapUrl( ccp('api','search'),               array( 'CCRestAPI', 'Search'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Search pool for sources'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp('api','file'),                 array( 'CCRestAPI', 'File'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[guid]', _('Display info for file'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp('api','ubeensampled'),         array( 'CCRestAPI', 'UBeenRemixed'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('api','isampledthis'),         array( 'CCRestAPI', 'ISampledThis'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '',_('Notification this pool has been sampled remotely'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp('api','pools'),                array( 'CCRestAPI', 'Pools'), 
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
         CCEvents::MapUrl( ccp('api','poolregister'),         array( 'CCRestAPI', 'PoolRegister'), 
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
         CCEvents::MapUrl( ccp('api','version'),         array( 'CCRestAPI', 'Version'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Display version info for site'), CC_AG_SAMPLE_POOL );
     }
     
 }

@@ -1,9 +1,36 @@
 <?
+/*
+* Creative Commons has made the contents of this file
+* available under a CC-GNU-GPL license:
+*
+* http://creativecommons.org/licenses/GPL/2.0/
+*
+* A copy of the full license can be found as part of this
+* distribution in the file LICENSE.TXT.
+* 
+* You may use the ccHost software in accordance with the
+* terms of that license. You agree that you are solely 
+* responsible for your use of the ccHost software and you
+* represent and warrant to Creative Commons that your use
+* of the ccHost software will comply with the CC-GNU-GPL.
+*
+* $Id$
+*
+*/
 
+/**
+* Implements playlist feature
+*
+* @package cchost
+* @subpackage feature
+*/
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+/**
+*
+*/
 require_once('ccextras/cc-cart-table.inc');
 
 class CCPlaylists
@@ -126,41 +153,55 @@ class CCPlaylists
 
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('api','playlist','new'),      array( 'CCPlaylists', 'NewPL'),   CC_MUST_BE_LOGGED_IN,   ccs(__FILE__)); 
-        CCEvents::MapUrl( ccp('api','playlist','add'),      array( 'CCPlaylists', 'Add'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('api','playlist','browse'),   array( 'CCPlaylists', 'Browse'),  CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('api','playlist','view'),     array( 'CCPlaylists', 'View'),    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('api','playlist','remove'),   array( 'CCPlaylists', 'Remove'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('api','playlist','bump'),     array( 'CCPlaylists', 'Bump'),    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ); 
+        CCEvents::MapUrl( ccp('api','playlist','new'),      array( 'CCPlaylists', 'NewPL'),   CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+         '[upload_id]', _('Create a new playlist, optionally starting with upload_id'), CC_AG_PLAYLIST );
+        CCEvents::MapUrl( ccp('api','playlist','add'),      array( 'CCPlaylists', 'Add'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+         '{upload_id},{playlist_id}', _('Add upload to playlist'), CC_AG_PLAYLIST );
+        CCEvents::MapUrl( ccp('api','playlist','browse'),   array( 'CCPlaylists', 'Browse'),  CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),
+         '[username]', _('Playlist playlists, optionally just for user'), CC_AG_PLAYLIST );
+        CCEvents::MapUrl( ccp('api','playlist','view'),     array( 'CCPlaylists', 'View'),    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),
+         '{playlist}', _('Display contents of playlist'), CC_AG_PLAYLIST );
+        CCEvents::MapUrl( ccp('api','playlist','remove'),   array( 'CCPlaylists', 'Remove'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+         '{upload_id},{playlist_id}', _('Remove upload from playlist'), CC_AG_PLAYLIST );
+        CCEvents::MapUrl( ccp('api','playlist','bump'),     array( 'CCPlaylists', 'Bump'),    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ,
+                   '{update_id}', _('Bump playlist count'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('api','playlist','with'),     array( 'CCPlaylists', 'With'),    CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('api','playlist','moveup'),   array( 'CCPlaylists', 'MoveUp'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('api','playlist','movedown'), array( 'CCPlaylists', 'MoveDown'),CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
+        CCEvents::MapUrl( ccp('api','playlist','with'),     array( 'CCPlaylists', 'With'),    CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+                   '{upload_id}', _('Return playlists with-w/o this upload'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','create'), array( 'CCPlaylists', 'Create'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('playlist','save'),   array( 'CCPlaylists', 'Save'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('playlist','editquery'),   array( 'CCPlaylists', 'EditQuery'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
+        CCEvents::MapUrl( ccp('playlist','create'), array( 'CCPlaylists', 'Create'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ,
+                   '', _('Display create playlist form'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('playlist','save'),   array( 'CCPlaylists', 'Save'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+                   '', _('Save dynamic playlist'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('playlist','editquery'),   array( 'CCPlaylists', 'EditQuery'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+                   '', _('Display edit query form'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','editorder'),   array( 'CCPlaylists', 'EditOrder'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ); 
+        CCEvents::MapUrl( ccp('playlist','editorder'),   array( 'CCPlaylists', 'EditOrder'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+                   '', _('Display reorder playlist form'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','browse'), array( 'CCPlaylists', 'BrowsePL'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ); 
+        CCEvents::MapUrl( ccp('playlist','browse'), array( 'CCPlaylists', 'BrowsePL'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ,
+                   '{playlist_id}', _('Display browse playlist UI'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','popup'), array( 'CCPlaylists', 'Popup'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ); 
+        CCEvents::MapUrl( ccp('playlist','popup'), array( 'CCPlaylists', 'Popup'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ,
+                   '{playlist_id}', _('Display playlist for popup'), CC_AG_PLAYLIST ); 
 
         CCEvents::MapUrl( ccp('playlist','empty'),          array( 'CCPlaylistManage', 'EmptyPL'),   CC_MUST_BE_LOGGED_IN,   
-                                            'ccextras/cc-playlist-forms.inc' ); 
+                                            'ccextras/cc-playlist-forms.inc' ,
+                   '{playlist_id}', _('Display empty playlist UI'), CC_AG_PLAYLIST ); 
         CCEvents::MapUrl( ccp('playlist','delete'),         array( 'CCPlaylistManage', 'DeletePL'),  CC_MUST_BE_LOGGED_IN,   
-                                            'ccextras/cc-playlist-forms.inc' ); 
+                                            'ccextras/cc-playlist-forms.inc' ,
+                   '{playlist_id}', _('Display delete playlist form'), CC_AG_PLAYLIST ); 
         CCEvents::MapUrl( ccp('playlist','edit'),           array( 'CCPlaylistManage', 'Edit'), CC_MUST_BE_LOGGED_IN,   
-                                            'ccextras/cc-playlist-forms.inc' ); 
+                                            'ccextras/cc-playlist-forms.inc' ,
+                   '{playlist_id}', _('Display edit playlist props form'), CC_AG_PLAYLIST ); 
         CCEvents::MapUrl( ccp('admin','playlists'),           array( 'CCPlaylistManage', 'Admin'), CC_ADMIN_ONLY,   
-                                            'ccextras/cc-playlist-forms.inc' ); 
+                                            'ccextras/cc-playlist-forms.inc' ,
+                   '', _('Display admin playlist form'), CC_AG_PLAYLIST ); 
 
         CCEvents::MapUrl( ccp('admin','playlists','recalc'),           array( 'CCPlaylistManage', 'Recalc'), CC_ADMIN_ONLY,   
-                                            'ccextras/cc-playlist-forms.inc' ); 
+                                            'ccextras/cc-playlist-forms.inc' ,
+                   '', _('Playlist api'), CC_AG_PLAYLIST ); 
 
-            /*, 'ccextras/cc-forums.inc', '{user_name}', 
-            _('Display forum topics for user'), CC_AG_FORUMS ); */
     }
 
     function Save()
@@ -226,38 +267,6 @@ class CCPlaylists
             $url = ccl('playlist','browse',$playlist_id);
             CCUtil::SendBrowserTo($url);
         }
-    }
-
-    function MoveUp($upload_id='',$playlist_id='')
-    {
-        $this->_test_pl($upload_id,$playlist_id,true,true,true);
-        $cart_items =& CCPlaylistItems::GetTable();
-        $w['cart_item_cart'] = $playlist_id;
-        $w['cart_item_upload'] = $upload_id;
-        $cart_item = $cart_items->QueryRow($w);
-        $w2['cart_item_cart'] = $playlist_id;
-        $w2['cart_item_order'] = intval($cart_item['cart_item_order']) - 1;
-        $other_pos = $cart_items->QueryKey($w2);
-        $cart_items->Inc('cart_item_order',$other_pos);
-        $cart_items->Dec('cart_item_order',$cart_item['cart_item_id']);
-        $cmd['refresh'] = 1;
-        $this->_output($cmd);
-    }
-
-    function MoveDown($upload_id='',$playlist_id='')
-    {
-        $this->_test_pl($upload_id,$playlist_id,true,true,true);
-        $cart_items =& CCPlaylistItems::GetTable();
-        $w['cart_item_cart'] = $playlist_id;
-        $w['cart_item_upload'] = $upload_id;
-        $cart_item = $cart_items->QueryRow($w);
-        $w2['cart_item_cart'] = $playlist_id;
-        $w2['cart_item_order'] = intval($cart_item['cart_item_order']) + 1;
-        $other_pos = $cart_items->QueryKey($w2);
-        $cart_items->Dec('cart_item_order',$other_pos);
-        $cart_items->Inc('cart_item_order',$cart_item['cart_item_id']);
-        $cmd['refresh'] = 1;
-        $this->_output($cmd);
     }
 
     function Remove($upload_id='',$playlist_id='')

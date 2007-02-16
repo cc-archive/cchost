@@ -92,12 +92,20 @@ class CCEvents
     * then the class should as little creation overhead as possible since there might be many, 
     * many others waiting for the same event (like when building the main menu). 
     *  
-    * The <b>$includefile</b> paramater is not currently implemented but will provide
-    * a way to dynamically load an entire file that has the callback implementation.
+    * The <b>$includefile</b> paramater indicates what module to load before calling the
+    * handler. The recommended usage is:
+    *
+    * 1. Put the CCEvent::AddHandler call in a .php file in the Plugins Path
+    * 2. For "high volume" events (e.g. {@link CC_EVENT_UPLOAD_ROW}) put the handler 
+    *    into the same file, in which case <b>$includefile</b> does not need to be 
+    *    specified since all .php modules are already in memory
+    * 3. For "lo volume" events (e.g. {@link CC_EVENT_MAP_URLS}) put the handler in
+    *    a .ini file and specify the location (relative to the ccHost root install)
+    *    
     *  
     * @param string $eventname Unique system-wide name for the event
     * @param mixed  $callback Either string method name or extended callback array
-    * @param string $includefile (not used)
+    * @param string $includefile Location of module with event handler, relative to ccHost install
     * @see Invoke
     */
     function AddHandler($eventname, $callback, $includefile='')

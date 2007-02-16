@@ -19,6 +19,13 @@
 */
 
 
+/**
+* Implements playlist feature
+*
+* @package cchost
+* @subpackage feature
+*/
+
 /*
 * This module is designed to be called from either inside a browser session
 * or from the command line (like from a cron job)

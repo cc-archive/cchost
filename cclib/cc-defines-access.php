@@ -75,10 +75,14 @@ define('CC_AG_ADMIN_MISC', CC_AG_MISC_ADMIN );
 define('CC_AG_CONTESTS', '_cnt' );
 define('CC_AG_QUERY', '_agq' );
 define('CC_AG_CONFIG', '_cfg' );
+define('CC_AG_API', '_api' );
+define('CC_AG_PLAYLIST', '_play' );
  
 function cc_get_access_groups()
 {
-    return array( 
+    return array(  
+        CC_AG_PLAYLIST     => _('Playlists')   ,
+        CC_AG_API          => _('API')   ,
         CC_AG_ED_PICKS     => _('Ed Picks')   ,
         CC_AG_FEEDS        => _('Feeds')   ,
         CC_AG_FILE_API     => _('File API')   ,
@@ -94,7 +98,7 @@ function cc_get_access_groups()
         CC_AG_TAGS         => _('Folksonomy Tags')   ,
         CC_AG_NAVTABS      => _('Navigator Tabs')   ,
         CC_AG_VIEWFILE     => _('Viewfile')   ,
-        CC_AG_MISC_ADMIN    => _('Misc. Admin Commands')   ,
+        CC_AG_MISC_ADMIN   => _('Misc. Admin Commands')   ,
         CC_AG_CONTESTS     => _('Contests')   ,
         CC_AG_QUERY        => _('Query')   ,
         CC_AG_CONFIG       => _('Site Admin'),

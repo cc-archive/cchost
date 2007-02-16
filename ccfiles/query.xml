@@ -573,7 +573,7 @@ Here we return a radio station style playlist of chill in XSPF format
 <h3> Stream URLs </h3> 
 <p>Streaming is slightly special case because there are several M3U format players that will only
 response to 'files' with a '.m3u' extension. Adding a 'fake' file name to the query URL will be
-ignored so the safest thing to is something like:
+ignored so the safest thing to is something like:</p>
 
 <div class="code">
 /media/api/query/<b>fake.m3u</b>?f=m3u&remixesof=teru&tags=funky<br />

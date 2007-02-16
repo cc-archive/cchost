@@ -50,11 +50,11 @@ class CCPageAdmin
     function OnMapUrl()
     {
         CCEvents::MapUrl( 'viewfile', array( 'CCPageAdmin', 'ViewFile' ),  
-                          CC_DONT_CARE_LOGGED_IN );
+                          CC_DONT_CARE_LOGGED_IN, '', '{docfilename}', _('Displays XHTML template'), CC_AG_VIEWFILE  );
         CCEvents::MapUrl( 'docs',     array( 'CCPageAdmin', 'ViewFile' ),  
-                          CC_DONT_CARE_LOGGED_IN );
+                          CC_DONT_CARE_LOGGED_IN, '', '{docfilename}', _('Displays XHTML template (alias for viewfile)'), CC_AG_VIEWFILE );
         CCEvents::MapUrl( 'homepage', array( 'CCPageAdmin', 'Homepage' ),  
-                          CC_DONT_CARE_LOGGED_IN );
+                          CC_DONT_CARE_LOGGED_IN, '', '', _('Displays home page assigned in config'), CC_AG_VIEWFILE );
     }
 
     /**
