@@ -99,6 +99,7 @@ class CCRestAPI
         if( empty($guid) )
             $guid = urldecode($_REQUEST['guid']);
 
+        require_once('cclib/cc-feeds-rss.php');
         $feeds = new CCFeedsRSS();
 
         $upload_id = CCRestAPI::_get_upload_id_from_guid($guid);
@@ -128,6 +129,9 @@ class CCRestAPI
     function UBeenRemixed()
     {
         global $CC_GLOBALS;
+
+        require_once('cclib/cc-pools.php');
+        require_once('cclib/cc-feedreader.php');
 
         $guid        = $_REQUEST['guid'];
         $remixguid   = $_REQUEST['remixguid'];
@@ -160,6 +164,7 @@ class CCRestAPI
         // Check for spam throttle
         $ip = CCUtil::EncodeIP( $_SERVER['REMOTE_ADDR'] );
         $where = "(pool_ip = '$ip' OR pool_api_url = '$poolsiteurl')";
+
         $pools =& CCPools::GetTable();
         $matching_pools = $pools->QueryRows($where);
         $pool_items =& CCPoolItems::GetTable();
