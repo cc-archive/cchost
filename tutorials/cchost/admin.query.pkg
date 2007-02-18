@@ -77,19 +77,12 @@ Sample Browser, and dozens of other places.
 		<para>
       When creating and editing navigator tabs specify <emphasis>Query</emphasis> as the Function
       and use the Data field to enter your query request. The default format is 'page' which will
-      return a page of results formatted with the standard upload listing.
+      return a page of results formatted with the standard upload listing. See {@tutorial admin.tutnav.pkg}
 		</para>
+
     <para>
       <note>
-        HINT: Experiment first from your normal browser window. For example, try browsing to 
-        <uri>media/api/query?tags=jazz&amp;sort=name&amp;dir=asc</uri> to see what the results
-        might look like. After you've come up with the right query, copy after the '?' to
-        the Navigator tab's 'Data' field.
-      </note>
-    </para>
-    <para>
-      <note>
-        HINT: You also embed a query into an XHTML template using any of the methods below,
+        HINT: You can also embed a query into an XHTML template using any of the methods below,
         then use the <command>Execute URL</command> as the Function and <uri>docs/your_template</uri>
         as the 'Data' field.
       </note>

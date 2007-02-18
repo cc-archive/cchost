@@ -1,0 +1,195 @@
+<refentry id="{@id}">
+ <refnamediv>
+    <refname>Tutorial: Gallery View</refname>
+    <refpurpose></refpurpose>
+ </refnamediv>
+
+{@toc}
+
+<!--------- BEGIN CUSTOM FILES    ----------------->
+
+<refsect1 id="{@id tutorial}">
+<title>1. Purpose of the Tutorial</title>
+
+<para>
+  Most ccHost installations want more control over customizing the upload
+  listing. In this tutorial we will customize the listing by making 
+  a gallery type view instead of the skin-simple (ccMixter type) default
+  <emphasis>without</emphasis> creating a new skin.
+ </para>
+<para>
+  This tutorial ties together several elements of the system
+  for a specific goal: to customize the listings of uploads. 
+  We'll create a small template, invoke it from a Query 
+  request and put the results into a Navigation Tab. 
+</para>
+
+</refsect1>
+
+<refsect1 id="{@id template}">
+<title>2. Creating the Template</title>
+
+  <para>
+      Place the XML below into a file called <filename>gallery.xml</filename> into 
+      your {@tutorial admin.basic.pkg.#paths Skins Path}.
+  </para>
+
+<example><literal>
+&lt;tal:block&gt;
+&lt;!-- the line about is needed because valid XML always has 
+     an 'outter most' tag --&gt;
+
+&lt;!-- Below is our macro for displaying records in gallery format.
+     You can put other macros in this file using the same metal:block
+     syntax --&gt;
+
+&lt;metal:block define-macro="gallery"&gt;
+  &lt;table&gt;
+
+   &lt;!-- Use php to chunk the array into rows and columns --&gt;
+
+   &lt;tal:block define="rows php:array_chunk(${file_records}, 3);" /&gt;
+
+   &lt;!-- Use phpTAL to repeat over the rows... --&gt;
+
+   &lt;tr tal:repeat="col rows"&gt;
+
+         &lt;!--  ... and columns. The use of the variable name 'record' has a little
+               magic in it because it will be used by other macros we invoke below --&gt;
+
+         &lt;td tal:repeat="record col" style="vertical-align:top;width:33%;" &gt;
+
+            &lt;!-- Just for decoration, we make a little border around the cell --&gt;
+
+            &lt;div style="margin:3px;border: 1px solid blue;padding:4px; height:110px;"&gt;
+
+              &lt;!-- Artist avatar: --&gt;
+
+              &lt;img src="${record/user_avatar_url}" style="float:left;margin:7px" /&gt;
+
+                 &lt;!-- Link and name of the upload: --&gt;
+
+                 &lt;a href="${record/file_page_url}"&gt;${record/upload_name}&lt;/a&gt;&lt;br /&gt;
+
+                 &lt;!-- Link and name of the artist: --&gt;
+
+                 by &lt;a href="${record/artist_page_url}"&gt;${record/user_real_name}&lt;/a&gt;&lt;br /&gt;
+                 &lt;br /&gt;
+
+                 &lt;!-- By using tal:condition we make sure the ratings will only show
+                      for uploads that have been rated --&gt;
+
+                &lt;div tal:condition="record/ratings_score"&gt;
+                  
+                  &lt;!-- Here we invoke another macro elsewhere in the current skin.
+                       That macro happens to expect an upload in a variable called
+                       'record' which we defined above using the tal:repeat syntax --&gt;
+
+                  &lt;metal:block use-macro="${ratings_stars}" /&gt;
+
+                &lt;/div&gt;
+
+                &lt;!-- Below we define a DIV but only if the upload uses samples (parents)
+                     which are stored as an array --&gt;
+
+                &lt;div tal:condition="record/has_parents"&gt;
+                   Uses samples from: 
+
+                   &lt;!-- Iterate over the upload's parents. 
+
+                        We use the sampled artist's name but link to the actual item
+                        that was sampled
+                   
+                        The 'not:' section below is how we put in a 'comma' into the list, 
+                        until the end of the list --&gt;
+
+                   &lt;tal:block repeat="P record/remix_parents"&gt;
+                      &lt;a href="${P/file_page_url}"&gt;
+                      ${P/user_real_name}&lt;/a&gt;&lt;tal:block condition="not: repeat/P/end" &gt;, &lt;/tal:block&gt;
+                   &lt;/tal:block&gt;
+                &lt;/div&gt;
+
+                &lt;!-- This is CSS layout stuff: Since we float the user avatar, we want to make sure
+                     the decorative div includes the space below it, so we clear it with a BR --&gt;
+
+                &lt;br style="clear:both;" /&gt;
+
+             &lt;/div&gt;  &lt;!-- END OF CELL --&gt;
+
+   &lt;/tr&gt; &lt;!-- END OF ROW --&gt;
+  &lt;/table&gt;
+&lt;/metal:block&gt;
+
+&lt;/tal:block&gt;
+</literal></example>
+
+</refsect1>
+
+<refsect1 id="{@id testq}">
+<title>3. Test the Query</title>
+  <para>
+      With the template and macro in the proper path we're ready to test what it looks like. See 
+      {@tutorial admin.query.pkg}.
+  </para>
+
+<example>
+<uri>http://your_install.com/media/api/query?tags=remix&amp;m=gallery&&amp;t=gallery.xml</uri> (pretty-url version)
+<uri>http://your_install.com?ccm=media/api/query&tags=remix&&amp;m=gallery&&amp;t=gallery.xml</uri>
+</example>
+
+	<refsect2 id="{@id browser}">
+  <title>The 'page' Output Format</title>
+      <para>
+          A query request typically specifies an output <literal>format</literal>. The default format is 
+          'page' which tells ccHost to list the contents in a browser page using the current skin. If you specify 
+          a <literal>macro</literal> parameter, then ccHost will look for that macro in the current skin. If you want 
+          to use a macro <emphasis>not</emphasis> in the current skin (like our tutorial) then you have to specify a 
+          <literal>template</literal> parameter as well which refers to the template file to look in for the macro.
+      </para>
+  </refsect2>
+
+	<refsect2 id="{@id breakdown}">
+  <title>Query Explained</title>
+      <orderedlist class="tutlist">
+        <listitem>
+            <emphasis>tags=remix</emphasis> - this specifies that we are only interested in uploads that are
+            tagged <literal>remix</literal>. You can add other tags separated by a plus sign '+'. (e.g.
+            <literal>tags=remix+downtempo</literal>
+        </listitem>
+        <listitem>
+            <emphasis>t=gallery.xml</emphasis> - 't' is the short form for the query paramater <literal>template</literal>.
+            The file is assumed to be in your <command>Skins Path</command>.
+        </listitem>
+        <listitem>
+            <emphasis>m=gallery</emphasis> - 'm' is the short form for the query paramater <literal>macro</literal>.
+        </listitem>
+      </orderedlist>
+  </refsect2>
+
+</refsect1>
+
+<refsect1 id="{@id hookup}">
+<title>4. Hook Up the Navigator</title>
+    <orderedlist class="tutlist">
+        <listitem>
+            Go to <command>Manage Site</command>
+        </listitem>
+        <listitem>
+            Then <command>Navigator Tab Sets</command>
+        </listitem>
+        <listitem>
+            Next to the tab set <literal>media</literal> click on <literal>[Edit tabs]</literal>
+        </listitem>
+        <listitem>
+            Click on <literal>Click here to add another tab.</literal> Your new tab will appear at the
+            bottom of the list of tabs.
+        </listitem>
+        <listitem>
+            Fill out the fields and select <command>Query</command> for 'Function' and under <command>Data</command>
+            type in our query <literal>tags=remix&amp;t=gallery.xml&amp;m=galler</literal>.
+        </listitem>
+    </orderedlist>
+
+</refsect1>
+
+</refentry> 
