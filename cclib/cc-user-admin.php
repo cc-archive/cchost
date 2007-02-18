@@ -336,6 +336,7 @@ class CCUserAdmin
             $uploads =& CCUploads::GetTable();
             $where['upload_user'] = $record['user_id'];
             $ids = $uploads->QueryKeys($where);
+            require_once('cclib/cc-uploadapi.php');
             foreach( $ids as $id )
                 CCUploadAPI::DeleteUpload($id);
             $url = ccl('people',$record['user_name']);

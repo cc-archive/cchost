@@ -65,7 +65,6 @@ class CCUpload
             
             require_once('cclib/cc-uploadapi.php');
 
-
             CCUploadAPI::UpdateCCUD($upload_id,$values['ccud'],$record['upload_extra']['ccud']);
             $url = $record['file_page_url'];
             $link1 = "<a href=\"$url\">";
@@ -125,6 +124,9 @@ class CCUpload
         $menu  = empty($nomenu);
         $srcs  = empty($nosrc);
         $macro = empty($macro) ? '' : $macro;
+
+        if( !empty($macro) && !empty($template) )
+            CCPage::PageArg($macro,$template . '/' . $macro);
 
         // we don't know WHAT shape the global table is in but
         // we have the latest where used so we use that for

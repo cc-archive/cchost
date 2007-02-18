@@ -131,6 +131,7 @@ class CCTag
             $intersect = array_merge($intersect, array_intersect($tags,$inherit_tags) );
         }
 
+        require_once('cclib/cc-uploadapi.php');
         if( empty($intersect) )
         {
             // just incase this upload HAD the itags, 
