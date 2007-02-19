@@ -64,6 +64,7 @@ class CCUpdate
         CCPage::Prompt(_('Updates already installed:') . ' ' . $prompts);
 
         CCMenu::KillCache();
+        CCTemplate::ClearCache();
     }
 
 

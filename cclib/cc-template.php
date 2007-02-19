@@ -190,6 +190,18 @@ class CCTemplate
         return $res;
     }
 
+    function ClearCache()
+    {
+        global $CC_GLOBALS;
+
+        // $CC_GLOBALS['php-tal-cache-dir'] 
+        $files = glob( $CC_GLOBALS['php-tal-cache-dir'] . '/*.php' );
+        $ok = true;
+        foreach( $files as $F )
+            $ok = unlink($F); // let the errors fly;
+        if( $ok )
+            CCPage::Prompt(_('Template cache has been cleared.'));
+    }
 }
 
 class CCTemplateMacro extends CCTemplate
