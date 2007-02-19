@@ -44,7 +44,7 @@ class CCSettingsExporter
 
         if( empty($fname) )
         {
-            $msg = _('No import file specified in the URL.');
+            $msg = _('ERROR: No import file specified.');
             if( empty($no_ui) )
             {
                 CCPage::Prompt($msg);
@@ -54,6 +54,9 @@ class CCSettingsExporter
         }
 
         include($fname);
+
+        if( empty($cc_host_config_export) )
+            die(_('ERROR: could not read config file'));
 
         $configs =& CCConfigs::GetTable();
         $configs->DeleteWhere('1');
