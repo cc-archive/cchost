@@ -22,12 +22,6 @@
 */
 
 
-if( empty($fname) )
-    if( empty($argv[1]) ) 
-        usage();
-    else
-        $fname = $argv[1];
-
 error_reporting(E_ALL);
 
 if( preg_match( '#[\\\\/]bin$#', getcwd() ) )
@@ -46,25 +40,6 @@ if( !function_exists('gettext') )
     require_once('ccextras/cc-no-gettext.inc');
 
 $ex = new CCSettingsExporter();
-$ex->Import($fname,true);
+$ex->Export();
 
-print('Config imported');
-
-function usage()
-{
-    global $argv;
-
-    $msg =<<<END
-usage:
-
-php-cli {$argv[0]} path_to_exported_config
-
-A configuration from either the browser using
-the /media/export or cc-host-config-export script
-
-END;
-
-    print($msg);
-    exit;
-}
 ?>
