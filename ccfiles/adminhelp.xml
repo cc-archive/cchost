@@ -20,126 +20,15 @@ $Id$
 
 -->
 </tal:block>
-<style>
-#adminhelp
-{
-  font-style : Verdana;
-  font-size: 11px;
-}
-#adminhelp li
-{
-   margin-bottom: 5px;
-}
-
-#adminhelp li b
-{
-  display: block;
-  margin-bottom: 2px;
-  text-decoration: underline;
-} 
-td.tb {
-  vertical-align: top;
-  text-align: right;
-  font-style: italic;
-  width: 190px;
-  padding-bottom: 23px;
- }
- #adminhelp a {
-   font-weight: bold;
- }
-</style>
 <div id="adminhelp">
 
+<a name="navhelp" />
 <h1>Newest Information</h1>
 <p>
-  The official ccHost Administrator's Guide is currently being worked. Please
+  The official ccHost 4.0 Administrator's Guide is online. Please
   check <a href="http://wiki.creativecommons.org/CcHost#Administration">ccHost Administrator's Wiki</a>
-  for the latest changes.
+  for the latest information about ccHost, including the Admin's guide.
 </p>
-
-<h1>Some admin tips and how-tos</h1>
-<h2>How to change the look of the site</h2>
-<p>
-  There are several ways to change the look of the site depending on how much 
-  you want to change.
-</p>
-<p>
-  <b>Changing Elements on the Page</b>
-</p>
-
-<p>
-  Use the 'Manage Site' menu item to change the look and feel of the site.
-</p>
-<p>
-  <b>Adding custom files</b>
-</p>
-<p>
-  You create custom HTML pages by authoring <a href="http://www.google.com/search?q=well-formed+xhtml"><b>well-formed XHTML</b></a> files and putting 
-  them in the <b>viewfile</b> directory.
-</p>
-<p>
-  To view the files you can browse to 
-</p>
-<p>
-  ${home-url}viewfile/<i>your_file_name.xml</i>
-</p>
-<p>
-  You can use the last part: viewfile/<i>your_file_name.xml</i> as menu and navigation 
-  URL actions.
-</p>
-<p>
-  HINT: These files are parsed as <a href="http://phptal.motion-twin.com/manual/php4/index.html"><b>PHPTAL</b></a> files which can include php calls into 
-  the runtime system when rendering. 
-</p>
-<p>
-  Many features of ccMixter are implemented with PHPTAL enhanced xml files.
-</p>
-<p>
-  <b>Creating a Skin</b>
-</p>
-<p>
-  Currently there is no interactive way to change styles on the site. If you are familiar
-  with XHTML, CSS and basic programming principles you can <a href="${home-url}admin/skin/create">create a new skeleton skin</a> use that as a basis. The most current 
-  instructions for how to create a skin can be found at the <a 
-  href="http://wiki.creativecommons.org/CcHost_Skins">ccHost Developer's Wiki</a>.
-</p>
-<p>
-  <b>Creating a Virtual Site</b>
-</p>
-<p>
-  ccHost can create 'virtual' installations without modifying your
-  server installation. Read more about this feature <a href="${home-url}viewfile/howtovirtual.xml">here</a>.
-</p>
-<p>
-<a name="navhelp" />
-<h2>Editing Navigator Tab Sets</h2>
-</p>
-<div>
-  <ul class="cc_tab_edit_help">
-     <li><b>Name</b> 
-       This is used in the url. For example: if the tab set is called 'mytabs' and the tab name is 'funky' you can browse to the page and highlight that tab by using <code>${home-url}view/mytabs/<i>funky</i></code>
-     </li>
-    <li><b>Order</b> The order (from left to right) in which the tabs will appear.</li>
-    <li><b>Text</b> This is the text that is used in the tab itself.</li>
-    <li><b>Help Hint</b> The text that displays when the user hovers over an unselected tab.</li>
-    <li><b>Access</b> This is where (like the menus) you decide who gets to see the items. <i>Contests 
-          are a special case</i> that hide certain tabs if they are not relevant, so even if you 
-          say the 'Submit Entry' tab is available to 'Everyone', it will be hidden if the contest
-          date has ended.</li>
-  </ul>
-  <p>The Function and Data fields work together to determin what happens when the user
-    clicks on the tab. </p>
-  <table>
-  <tr><th>If 'Function' is set to...:</th><th>Then 'Data' should be...</th></tr>
-  <tr><td class='tb'>Match Any Tags</td><td>A comma separated list of tags. The user will see a listing of 
-           uploads that have <i>any</i> of the tags specified.</td></tr>
-  <tr><td class='tb'>Match All Tags</td><td>A comma separated list of tags. The user will see a listing of 
-           uploads that have <i>all</i> of the tags specified.</td></tr>
-  <tr><td class='tb'>Execute URL</td><td>A url to execute. If the url does <i>not</i> start with 'http://' then
-    system will assume it is an internal ccHost URL (e.g. 'viewfile/myhelp.xml' or 'files/submit'). If it does start with 'http://' then the user's browser will be redirected to that web address.</td></tr>
-  <tr><td class='tb'>Subtabs</td><td>The name of a subnaviation tab set that will appear on the screen <i>under</i> the current tab set. (As of 3/2006 only the top tab set can have a sub-tab set).</td></tr>
-
-  </table>
-</div> 
+ 
 
 </div>

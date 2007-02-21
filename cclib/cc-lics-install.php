@@ -28,9 +28,9 @@
 error_reporting(E_ALL);
 
 /**
-* Install licenses to use in this installation
+* Get 2.5 licenses to use in this installation
 */
-function cc_install_licenses()
+function cc_get_lic_fields_2_5()
 {
     // @todo -- domains
 
@@ -43,7 +43,7 @@ function cc_install_licenses()
                        'license_required'   => 'Attribution,Notice',
                        'license_logo'       => 'by.gif',
                        'license_tag'        => 'attribution',
-                       'license_enabled'    => true,
+                       'license_enabled'    => false,
                        'license_strict'     => 10,
                        'license_text'       => _('<strong>Attribution</strong>: People can copy, distribute, perform, display, transform and make money from your work for any purpose as long they give you credit (attribution).')
                        ),
@@ -55,7 +55,7 @@ function cc_install_licenses()
                        'license_required'   => 'Attribution,Notice',
                        'license_logo'       => 'by-nc.gif',
                        'license_tag'        => 'non_commercial',
-                       'license_enabled'    => true,
+                       'license_enabled'    => false,
                        'license_strict'     => 20,
                        'license_text'       => _('<strong>Attribution Noncommercial</strong>: People can copy, distribute, perform, display and transform your work for any purpose as long they give you credit (attribution). People may <i>not</i> use your work for commercial purposes.')
                        ),
@@ -67,7 +67,7 @@ function cc_install_licenses()
                        'license_required'   => 'Attribution,Notice,ShareAlike',
                        'license_logo'       => 'by-sa.gif',
                        'license_tag'        => 'share_alike',
-                       'license_enabled'    => true,
+                       'license_enabled'    => false,
                        'license_strict'     => 90,
                        'license_text'       => _('<strong>Attribution Share Alike</strong>: People can copy, distribute, perform, display, transform and make money from your work for any purpose as long they give you credit (attribution). If someone  alters, transforms, or builds upon this work, they have to distribute the resulting work under this same license.')
                        ),
@@ -91,7 +91,7 @@ function cc_install_licenses()
                        'license_required'   => 'Attribution,Notice,ShareAlike',
                        'license_logo'       => 'by-nc-sa.gif',
                        'license_tag'        => 'non_commercial_share_alike',
-                       'license_enabled'    => true,
+                       'license_enabled'    => false,
                        'license_strict'     => 90,
                        'license_text'       => _('<strong>Attribution Noncommercial Share-Alike</strong>: People can copy, distribute, perform, display, transform your work for <b>non commercial purposes only</b> as long they give you credit (attribution). If someone  alters, transforms, or builds upon this work, they have to distribute the resulting work under this same license.')
                        ),
@@ -106,6 +106,92 @@ function cc_install_licenses()
                        'license_enabled'    => false,
                        'license_strict'     => 40,
                        'license_text'       => _('<strong>Attribution Noncommercial No Derivatives</strong>: People can copy, distribute, perform, display, your work "as is" (without modifcations) for <b>non commercial purposes only</b> as long they give you credit (attribution).')
+                       ),
+                 );
+
+    return $default_licenses;
+}
+
+
+/**
+* Get 3.0 licenses to use in this installation
+*/
+function cc_get_lic_fields_3_0()
+{
+    // @todo -- domains
+
+    $default_licenses= array( 
+                array( 'license_id'         => 'attribution_3',
+                       'license_url'        => "http://creativecommons.org/licenses/by/3.0/",
+                       'license_name'       => 'Attribution (3.0)',
+                       'license_permits'    => 'DerivativeWorks,Reproduction,Distribution',
+                       'license_prohibits'  => '',
+                       'license_required'   => 'Attribution,Notice',
+                       'license_logo'       => 'by-3.png',
+                       'license_tag'        => 'attribution',
+                       'license_enabled'    => true,
+                       'license_strict'     => 10,
+                       'license_text'       => _('<strong>Attribution</strong> 3.0: People can copy, distribute, perform, display, transform and make money from your work for any purpose as long they give you credit (attribution).')
+                       ),
+                array( 'license_id'         => 'noncommercial_3', 
+                        'license_url'       => "http://creativecommons.org/licenses/by-nc/3.0/",
+                       'license_name'       => 'Attribution Noncommercial  (3.0)',
+                       'license_permits'    => 'DerivativeWorks,Reproduction,Distribution',
+                       'license_prohibits'  => 'CommercialUse',
+                       'license_required'   => 'Attribution,Notice',
+                       'license_logo'       => 'by-nc-3.png',
+                       'license_tag'        => 'non_commercial',
+                       'license_enabled'    => true,
+                       'license_strict'     => 20,
+                       'license_text'       => _('<strong>Attribution Noncommercial</strong>  3.0: People can copy, distribute, perform, display and transform your work for any purpose as long they give you credit (attribution). People may <i>not</i> use your work for commercial purposes.')
+                       ),
+                array( 'license_id'         => 'share-alike_3'   , 
+                        'license_url'       => "http://creativecommons.org/licenses/by-sa/3.0/",
+                       'license_name'       => 'Attribution Share-Alike  (3.0)',
+                       'license_permits'    => 'DerivativeWorks,Reproduction,Distribution',
+                       'license_prohibits'  => '',
+                       'license_required'   => 'Attribution,Notice,ShareAlike',
+                       'license_logo'       => 'by-sa-3.png',
+                       'license_tag'        => 'share_alike',
+                       'license_enabled'    => true,
+                       'license_strict'     => 90,
+                       'license_text'       => _('<strong>Attribution Share Alike</strong>  3.0: People can copy, distribute, perform, display, transform and make money from your work for any purpose as long they give you credit (attribution). If someone  alters, transforms, or builds upon this work, they have to distribute the resulting work under this same license.')
+                       ),
+                array( 'license_id'         => 'noderives_3'   , 
+                        'license_url'       => "http://creativecommons.org/licenses/by-nd/3.0/",
+                       'license_name'       => 'Attribution Non-derivative  (3.0)',
+                       'license_permits'    => 'Reproduction,Distribution',
+                       'license_prohibits'  => 'DerivativeWorks',
+                       'license_required'   => 'Attribution,Notice',
+                       'license_logo'       => 'by-nd-3.png',
+                       'license_tag'        => 'no_derivitives',
+                       'license_enabled'    => false,
+                       'license_strict'     => 30,
+                       'license_text'       => _('<strong>Attribution NoDerivatives</strong>  3.0: People can copy, distribute, perform, and display your work "as is" (without changes) for any purpose (e.g. file sharing) as long they give you credit (attribution).')
+                       ),
+                array( 'license_id'         => 'by-nc-sa_3'   , 
+                        'license_url'       => "http://creativecommons.org/licenses/by-nc-sa/3.0/",
+                       'license_name'       => 'Attribution Noncommercial Share-Alike  (3.0)',
+                       'license_permits'    => 'DerivativeWorks,Reproduction,Distribution',
+                       'license_prohibits'  => 'CommercialUse',
+                       'license_required'   => 'Attribution,Notice,ShareAlike',
+                       'license_logo'       => 'by-nc-sa-3.png',
+                       'license_tag'        => 'non_commercial_share_alike',
+                       'license_enabled'    => true,
+                       'license_strict'     => 90,
+                       'license_text'       => _('<strong>Attribution Noncommercial Share-Alike</strong>  3.0: People can copy, distribute, perform, display, transform your work for <b>non commercial purposes only</b> as long they give you credit (attribution). If someone  alters, transforms, or builds upon this work, they have to distribute the resulting work under this same license.')
+                       ),
+                array( 'license_id'         => 'by-nc-nd_3'   , 
+                        'license_url'       => "http://creativecommons.org/licenses/by-nc-nd/3.0/",
+                       'license_name'       => 'Attribution Noncommercial No-Derivs  (3.0)',
+                       'license_permits'    => 'Reproduction,Distribution',
+                       'license_prohibits'  => 'CommercialUse',
+                       'license_required'   => 'Attribution,Notice',
+                       'license_logo'       => 'by-nc-nd-3.png',
+                       'license_tag'        => 'non_commercial_no_derivs',
+                       'license_enabled'    => false,
+                       'license_strict'     => 40,
+                       'license_text'       => _('<strong>Attribution Noncommercial No Derivatives</strong>  3.0: People can copy, distribute, perform, display, your work "as is" (without modifcations) for <b>non commercial purposes only</b> as long they give you credit (attribution).')
                        ),
                 array( 'license_id'         => 'sampling'   , 
                         'license_url'       => 'http://creativecommons.org/licenses/sampling/1.0/',
@@ -157,20 +243,45 @@ function cc_install_licenses()
                        ),
                  );
 
-    $licenses =  new CCTable('cc_tbl_licenses','license_id');
-    $licenses->DeleteWhere('1');
+    return $default_licenses;
+}
 
-    $active = array();
-    foreach( $default_licenses as $lic )
+
+function cc_install_licenses( $lic_infos = array(  '3_0' ), $nuke_db = true )
+{
+
+    $licenses =  new CCTable('cc_tbl_licenses','license_id');
+
+    if( $nuke_db )
+        $licenses->DeleteWhere('1');
+
+    foreach( $lic_infos as $LI )
     {
-        if( $lic['license_enabled'] )
-            $active[] = $lic['license_id'];
-        unset($lic['license_enabled']);
-        $licenses->Insert($lic);
+        $getter = 'cc_get_lic_fields_' . $LI;
+        $default_licenses = call_user_func($getter);
+
+        $active = array();
+        foreach( $default_licenses as $lic )
+        {
+            if( $lic['license_enabled'] )
+                $active[] = $lic['license_id'];
+            unset($lic['license_enabled']);
+            if( !$nuke_db )
+            {
+                $key['license_id'] = $lic['license_id'];
+                $count = $licenses->CountRows($key);
+                if( $count )
+                    continue;
+            }
+            $licenses->Insert($lic);
+        }
     }
 
-    $configs =& CCConfigs::GetTable();
-    $configs->SaveConfig('licenses',$active,CC_GLOBAL_SCOPE,false);
+    if( $nuke_db )
+    {
+        $configs =& CCConfigs::GetTable();
+        $configs->SaveConfig('licenses',$active,CC_GLOBAL_SCOPE,false);
+    }
 }
 
 ?>
