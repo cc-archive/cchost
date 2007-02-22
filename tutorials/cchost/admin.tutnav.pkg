@@ -114,10 +114,16 @@
 
                 &lt;br style="clear:both;" /&gt;
 
-             &lt;/div&gt;  &lt;!-- END OF CELL --&gt;
+             &lt;/div&gt;  
+       &lt;/td&gt;  &lt;!-- END OF CELL --&gt;
 
    &lt;/tr&gt; &lt;!-- END OF ROW --&gt;
   &lt;/table&gt;
+
+  &lt;!-- Add prev/next links --&gt;
+  
+  &lt;metal:block use-macro="${prev_next_links}" /&gt;
+
 &lt;/metal:block&gt;
 
 &lt;/tal:block&gt;

@@ -14,11 +14,7 @@
       in {@tutorial admin.advanced.xhtml.pkg} and {@tutorial admin.skins.pkg} 
   </para>
   <para>
-      <note>We are currently at version 4 of this code base and we've been very careful (if not
-      perfect) about maintaining backwards compatibility. For Web developers unfamiliar with
-      the concept: that means your library doesn't break your code out of 'necessitity' 
-      you when you upgrade to the next version. It also means there are 3 versions of cruft floating
-      around inside the ccHost code. While it is tempting to dig around to cut/paste out pieces
+      <note>While it is tempting to dig around in ccHost code to cut/paste out pieces
       there are many places that today would be considered, er, less than 'best practices.' By
       reading this document you can at least begin to recognize what is supposed to be happening
       in some of the 'older' code.
@@ -215,7 +211,7 @@ function some_method_2($arg1, $arg2, $arg3 )
           There's a lot of common code in ccHost and sometimes it's difficult
           to figure out who is calling what in what context. If you're seeing an
           error in common code make sure to 
-          ({@tutorial cchost.pkg#debug.enable} turn on debug mode)
+          ({@tutorial cchost.pkg#debug.enable turn on debug mode})
           and insert the following line where the error is occurring:
         </para>
         <programlisting role="php"><![CDATA[  CCDebug::StackTrace(); ]]></programlisting>
@@ -1087,7 +1083,7 @@ to edit user profile):</para>
 <refsect2 id="{@id hackhtml}">
 <title>Display HTML (Squirt)</title>
 
-<para>({@tutorial cchost.pkg#modules.url} Bind a URL) to a method and you can squirt directly into the page:</para>
+<para>{@tutorial cchost.pkg#modules.url Bind a URL} to a method and you can squirt directly into the page:</para>
 
 <programlisting role="php"><![CDATA[  
 function just_show_it()
@@ -1110,7 +1106,8 @@ function just_show_it()
               Put an XML file into the <command>viewfile Path</command> and you can invoke php code from 
               within it. (See the {@tutorial admin.query.pkg#examples.templates admin Query tutorial} 
               for an example.) The advantage of this method is that you don't have to bind a new URL to
-              see the results, just use the <filename>viewfile</filename> command. The disadvantage is that
+              see the results, just use the <filename>viewfile</filename> (a.k.a. <filename>docs</filename>) 
+              command. The disadvantage is that
               this method is totally unsuitable for even mildly complex code.
           </para>
 
@@ -1205,6 +1202,16 @@ function use_my_template($extra_tags='')
 }
  ]]></programlisting>
 
+    </refsect2>
+
+    <refsect2 id="{@id query}">
+    <title>Display HTML (For a Query)</title>
+
+    <para>
+      If the all you are listing out are upload records you definitely use the {@tutorial admin.query.pkg Query API} and a custom
+      template. You don't need to bind any urls or write any PHP code at all to set that up. The admin docs have a 
+      {@tutorial admin.tutnav.pkg example of how that works}.
+    </para>
     </refsect2>
 
 </refsect1> <!----------- END OF HTML ----------------------->
