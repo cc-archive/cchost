@@ -64,7 +64,6 @@ $Id$
                       <p>You're <i>almost</i> done!</p>
                       <p>Please <a href="${home-url}${q}update=1">CLICK HERE</a> to finish your ccHost installation.</p>
                 </div>
-                </tal:block>
                 <tal:block condition="exists:get/update">
                    <script>
                       var msg = 'OK! You are done! <a href="${root-url}">CLICK HERE</a> to start using ccHost';
