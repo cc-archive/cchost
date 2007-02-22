@@ -525,7 +525,7 @@ class CCMenu
         global $CC_CFG_ROOT;
         $configs =& CCConfigs::GetTable();
         $configs->DeleteType('menu',$CC_CFG_ROOT);
-        $this->Reset();
+        CCMenu::Reset();
         CCPage::Prompt( sprintf(
                                  _('Menus have been reset for %s'),  
                                  "<b>$CC_CFG_ROOT</b>"
