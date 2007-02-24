@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-11 12:32-0800\n"
+"POT-Creation-Date: 2007-02-23 22:15-0800\n"
 "PO-Revision-Date: 2006-07-27 22:47+0000\n"
 "Last-Translator: Denis Jacquerye <moyogo@gmail.com>\n"
 "Language-Team: Denis Jacquerye <moyogo@gmail.com>\n"
@@ -160,7 +160,7 @@ msgid "Manage Site"
 msgstr ""
 
 #: cclib/cc-admin.php:724 cclib/cc-contest-admin.inc:543
-#: cclib/cc-login.php:545 cclib/cc-mediahost.php:500
+#: cclib/cc-login.php:545 cclib/cc-mediahost.php:503
 msgid "Admin"
 msgstr "Admin"
 
@@ -200,6 +200,26 @@ msgstr ""
 msgid "Changes Saved"
 msgstr "Changements sauvergardés"
 
+#: cclib/cc-api.php:329
+msgid "Display header info for site"
+msgstr ""
+
+#: cclib/cc-api.php:332
+msgid "Search pool for sources"
+msgstr ""
+
+#: cclib/cc-api.php:334
+msgid "Display info for file"
+msgstr ""
+
+#: cclib/cc-api.php:336
+msgid "Notification this pool has been sampled remotely"
+msgstr ""
+
+#: cclib/cc-api.php:342
+msgid "Display version info for site"
+msgstr ""
+
 #: cclib/cc-ban.php:75
 msgid "Moderation email notificaiton sent"
 msgstr ""
@@ -231,7 +251,7 @@ msgid "Clicking on these links will not save your form."
 msgstr ""
 
 #: cclib/cc-navigator-admin.inc:86 cclib/cc-navigator-admin.inc:277
-#: cclib/cc-mediahost.php:486 cclib/cc-user-admin.php:151
+#: cclib/cc-mediahost.php:489 cclib/cc-user-admin.php:151
 #: ccextras/cc-fileman.inc:526
 msgid "Delete"
 msgstr ""
@@ -600,7 +620,7 @@ msgid "Submit sources for the %s contest"
 msgstr ""
 
 #: cclib/cc-contest-admin.inc:575 cclib/cc-files.php:87 cclib/cc-files.php:90
-#: cclib/cc-mediahost.php:465 ccextras/cc-fileman.inc:210
+#: cclib/cc-mediahost.php:468 ccextras/cc-fileman.inc:210
 msgid "Manage Files"
 msgstr ""
 
@@ -706,7 +726,7 @@ msgstr ""
 msgid "Comma separated list of login names for users with Editorial privelages"
 msgstr ""
 
-#: cclib/cc-events.php:445
+#: cclib/cc-events.php:453
 msgid "Can't find module"
 msgstr ""
 
@@ -728,17 +748,17 @@ msgstr ""
 msgid "Remixed by %s"
 msgstr ""
 
-#: cclib/cc-feed.php:406
+#: cclib/cc-feed.php:404
 #, php-format
 msgid "Could not open folder \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:415
+#: cclib/cc-feed.php:413
 #, php-format
 msgid "Could not open \"%s\""
 msgstr ""
 
-#: cclib/cc-feed.php:656
+#: cclib/cc-feed.php:663
 msgid "Syndicate"
 msgstr ""
 
@@ -766,7 +786,7 @@ msgstr ""
 msgid "Update the list of sources used by this upload"
 msgstr ""
 
-#: cclib/cc-files.php:101 cclib/cc-mediahost.php:472
+#: cclib/cc-files.php:101 cclib/cc-mediahost.php:475
 msgid "Manage Remixes"
 msgstr ""
 
@@ -1112,7 +1132,55 @@ msgid ""
 "(attribution)."
 msgstr ""
 
-#: cclib/cc-lics-install.php:120
+#: cclib/cc-lics-install.php:134
+msgid ""
+"<strong>Attribution</strong> 3.0: People can copy, distribute, perform, "
+"display, transform and make money from your work for any purpose as long "
+"they give you credit (attribution)."
+msgstr ""
+
+#: cclib/cc-lics-install.php:146
+msgid ""
+"<strong>Attribution Noncommercial</strong>  3.0: People can copy, "
+"distribute, perform, display and transform your work for any purpose as long "
+"they give you credit (attribution). People may <i>not</i> use your work for "
+"commercial purposes."
+msgstr ""
+
+#: cclib/cc-lics-install.php:158
+msgid ""
+"<strong>Attribution Share Alike</strong>  3.0: People can copy, distribute, "
+"perform, display, transform and make money from your work for any purpose as "
+"long they give you credit (attribution). If someone  alters, transforms, or "
+"builds upon this work, they have to distribute the resulting work under this "
+"same license."
+msgstr ""
+
+#: cclib/cc-lics-install.php:170
+msgid ""
+"<strong>Attribution NoDerivatives</strong>  3.0: People can copy, "
+"distribute, perform, and display your work \"as is\" (without changes) for "
+"any purpose (e.g. file sharing) as long they give you credit (attribution)."
+msgstr ""
+
+#: cclib/cc-lics-install.php:182
+msgid ""
+"<strong>Attribution Noncommercial Share-Alike</strong>  3.0: People can "
+"copy, distribute, perform, display, transform your work for <b>non "
+"commercial purposes only</b> as long they give you credit (attribution). If "
+"someone  alters, transforms, or builds upon this work, they have to "
+"distribute the resulting work under this same license."
+msgstr ""
+
+#: cclib/cc-lics-install.php:194
+msgid ""
+"<strong>Attribution Noncommercial No Derivatives</strong>  3.0: People can "
+"copy, distribute, perform, display, your work \"as is\" (without "
+"modifcations) for <b>non commercial purposes only</b> as long they give you "
+"credit (attribution)."
+msgstr ""
+
+#: cclib/cc-lics-install.php:206
 msgid ""
 "<strong>Sampling</strong>: People can take and transform <strong>pieces</"
 "strong> of your work for any purpose other than advertising, which is "
@@ -1120,7 +1188,7 @@ msgid ""
 "also prohibited."
 msgstr ""
 
-#: cclib/cc-lics-install.php:132
+#: cclib/cc-lics-install.php:218
 msgid ""
 "<strong>Sampling Plus</strong>: People can take and transform "
 "<strong>pieces</strong> of your work for any purpose other than advertising, "
@@ -1129,7 +1197,7 @@ msgid ""
 "Hence, \"<strong>plus</strong>\"."
 msgstr ""
 
-#: cclib/cc-lics-install.php:144
+#: cclib/cc-lics-install.php:230
 msgid ""
 "<strong>Noncommercial Sampling Plus</strong>: People can take and transform "
 "<strong>pieces</strong> of your work for <strong>noncommercial</strong> "
@@ -1137,7 +1205,7 @@ msgid ""
 "file-sharing) of the <strong>entire work</strong> are also allowed."
 msgstr ""
 
-#: cclib/cc-lics-install.php:156
+#: cclib/cc-lics-install.php:242
 msgid ""
 "<strong>Public Domain</strong>: This choice suggests you want to dedicate "
 "your work to the public domain, the commons of information and expression "
@@ -1390,96 +1458,96 @@ msgstr ""
 msgid "This upload is <b>NOT</b> entered in any contest."
 msgstr ""
 
-#: cclib/cc-mediahost.php:292
+#: cclib/cc-mediahost.php:295
 msgid "Published"
 msgstr ""
 
-#: cclib/cc-mediahost.php:292
+#: cclib/cc-mediahost.php:295
 msgid "Unpublished"
 msgstr ""
 
-#: cclib/cc-mediahost.php:320
+#: cclib/cc-mediahost.php:323
 msgid "Publish Now"
 msgstr ""
 
-#: cclib/cc-mediahost.php:381
+#: cclib/cc-mediahost.php:384
 msgid "Publish now"
 msgstr ""
 
-#: cclib/cc-mediahost.php:383
+#: cclib/cc-mediahost.php:386
 msgid "This file is only visible to the owner and admins."
 msgstr ""
 
-#: cclib/cc-mediahost.php:404
+#: cclib/cc-mediahost.php:407
 msgid "'Sampled from' title"
 msgstr ""
 
-#: cclib/cc-mediahost.php:405
+#: cclib/cc-mediahost.php:408
 msgid "'Sampled from' artist"
 msgstr ""
 
-#: cclib/cc-mediahost.php:406
+#: cclib/cc-mediahost.php:409
 msgid "Download URL"
 msgstr ""
 
-#: cclib/cc-mediahost.php:407
+#: cclib/cc-mediahost.php:410
 msgid "File page URL"
 msgstr ""
 
-#: cclib/cc-mediahost.php:408
+#: cclib/cc-mediahost.php:411
 msgid "Guaranteed to be unique number"
 msgstr ""
 
-#: cclib/cc-mediahost.php:409
+#: cclib/cc-mediahost.php:412
 msgid "Pattern to use for original works"
 msgstr ""
 
-#: cclib/cc-mediahost.php:410
+#: cclib/cc-mediahost.php:413
 msgid "Pattern to use for Remixes"
 msgstr ""
 
-#: cclib/cc-mediahost.php:458 cclib/cc-submit.php:308
+#: cclib/cc-mediahost.php:461 cclib/cc-submit.php:308
 #: ccextras/cc-fileman.inc:507
 msgid "Edit"
 msgstr ""
 
-#: cclib/cc-mediahost.php:479 cclib/cc-mediahost.php:611
+#: cclib/cc-mediahost.php:482 cclib/cc-mediahost.php:614
 msgid "Publish"
 msgstr ""
 
-#: cclib/cc-mediahost.php:493
+#: cclib/cc-mediahost.php:496
 msgid "I Sampled This"
 msgstr ""
 
-#: cclib/cc-mediahost.php:606
+#: cclib/cc-mediahost.php:609
 msgid "Unpublish"
 msgstr ""
 
-#: cclib/cc-mediahost.php:659
+#: cclib/cc-mediahost.php:662
 msgid "List files"
 msgstr ""
 
-#: cclib/cc-mediahost.php:663
+#: cclib/cc-mediahost.php:666
 msgid "Publish/unpublish an upload"
 msgstr ""
 
-#: cclib/cc-mediahost.php:668
+#: cclib/cc-mediahost.php:671
 msgid "Edit properties for an upload"
 msgstr ""
 
-#: cclib/cc-mediahost.php:672
+#: cclib/cc-mediahost.php:675
 msgid "Show confirm delete choice"
 msgstr ""
 
-#: cclib/cc-mediahost.php:676
+#: cclib/cc-mediahost.php:679
 msgid "Show admin upload form"
 msgstr ""
 
-#: cclib/cc-mediahost.php:736
+#: cclib/cc-mediahost.php:739
 msgid "Auto Publish Uploads"
 msgstr ""
 
-#: cclib/cc-mediahost.php:737
+#: cclib/cc-mediahost.php:740
 msgid "Uncheck this if you want to verify uploads before they are made public."
 msgstr ""
 
@@ -1536,7 +1604,7 @@ msgstr ""
 msgid "Reset Menus"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:49 cclib/cc-ratings.php:139
+#: cclib/cc-ratings-admin.inc:49 cclib/cc-ratings.php:147
 msgid "Ratings"
 msgstr ""
 
@@ -1545,214 +1613,222 @@ msgstr ""
 msgid "Allow users to rate uploads"
 msgstr "Voir les fichiers les plus récents"
 
-#: cclib/cc-ratings-admin.inc:55
-msgid "Chart minimum"
-msgstr ""
-
 #: cclib/cc-ratings-admin.inc:56
-msgid "Mininum number of ratings an upload must have to seen in charts"
+msgid "Using Ratings As Rank"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:61
-msgid "Cut Off Point"
+#: cclib/cc-ratings-admin.inc:57
+msgid "Use the ratings to determine chart rankings"
 msgstr ""
 
 #: cclib/cc-ratings-admin.inc:62
-msgid "Only chart uploads since this time"
+msgid "Chart minimum"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:64
-msgid "The day before"
-msgstr ""
-
-#: cclib/cc-ratings-admin.inc:65
-msgid "The previous 3 days"
-msgstr ""
-
-#: cclib/cc-ratings-admin.inc:66
-msgid "The previous week"
-msgstr ""
-
-#: cclib/cc-ratings-admin.inc:67
-msgid "The previous 2 weeks"
+#: cclib/cc-ratings-admin.inc:63
+msgid "Mininum number of ratings an upload must have to seen in charts"
 msgstr ""
 
 #: cclib/cc-ratings-admin.inc:68
-msgid "The previous month"
+msgid "Cut Off Point"
 msgstr ""
 
 #: cclib/cc-ratings-admin.inc:69
-msgid "Since forever and ever"
+msgid "Only chart uploads since this time"
+msgstr ""
+
+#: cclib/cc-ratings-admin.inc:71
+msgid "The day before"
+msgstr ""
+
+#: cclib/cc-ratings-admin.inc:72
+msgid "The previous 3 days"
+msgstr ""
+
+#: cclib/cc-ratings-admin.inc:73
+msgid "The previous week"
 msgstr ""
 
 #: cclib/cc-ratings-admin.inc:74
-msgid "Review required"
+msgid "The previous 2 weeks"
 msgstr ""
 
 #: cclib/cc-ratings-admin.inc:75
+msgid "The previous month"
+msgstr ""
+
+#: cclib/cc-ratings-admin.inc:76
+msgid "Since forever and ever"
+msgstr ""
+
+#: cclib/cc-ratings-admin.inc:81
+msgid "Review required"
+msgstr ""
+
+#: cclib/cc-ratings-admin.inc:82
 msgid ""
 "Check this if review is required to also rate. (This will disable 'anonymous "
 "rating.')"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:79
+#: cclib/cc-ratings-admin.inc:86
 msgid "Recalculate now"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:80
+#: cclib/cc-ratings-admin.inc:87
 msgid ""
 "Recalculate rating during submit. NOTE: This can take a very, very (very) "
 "long time if you have a lot of uploads."
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:85
+#: cclib/cc-ratings-admin.inc:92
 msgid "Ratings Ban List"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:86
+#: cclib/cc-ratings-admin.inc:93
 msgid "Users not allowed to rate"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:93
+#: cclib/cc-ratings-admin.inc:101
 msgid ""
 "The system uses the Bayesian method for calculating the ranking of an upload "
 "for the picks page."
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:100
+#: cclib/cc-ratings-admin.inc:108
 #, php-format
 msgid "To modify specific ratings click: %sManage Ratings%s"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:131
+#: cclib/cc-ratings-admin.inc:139
 msgid "Cancel without doing anything."
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:135
+#: cclib/cc-ratings-admin.inc:143
 msgid "Use your browser &lArr; BACK button to cancel the operation"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:154
+#: cclib/cc-ratings-admin.inc:162
 msgid "UnBan"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:154
+#: cclib/cc-ratings-admin.inc:162
 msgid "Ban"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:156
+#: cclib/cc-ratings-admin.inc:164
 msgid "Manage a User's Ratings"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:165 cclib/cc-ratings-admin.inc:169
+#: cclib/cc-ratings-admin.inc:173 cclib/cc-ratings-admin.inc:177
 msgid "Warning"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:166
+#: cclib/cc-ratings-admin.inc:174
 #, php-format
 msgid "Deleting rating for %s for \"%s\" can not be undone."
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:166 cclib/cc-ratings-admin.inc:170
+#: cclib/cc-ratings-admin.inc:174 cclib/cc-ratings-admin.inc:178
 msgid "This action has no undo."
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:167
+#: cclib/cc-ratings-admin.inc:175
 #, php-format
 msgid "DELETE rating for %s for this upload."
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:169
+#: cclib/cc-ratings-admin.inc:177
 #, php-format
 msgid ""
 "Deleting ratings for %s means <i>all</i> of the ratings %s <i>ever</i> gave "
 "will be removed."
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:171
+#: cclib/cc-ratings-admin.inc:179
 #, php-format
 msgid "DELETE ALL RATINGS for %s."
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:211
+#: cclib/cc-ratings-admin.inc:219
 msgid "Unbanned"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:216
+#: cclib/cc-ratings-admin.inc:224
 msgid "Banned"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:235
+#: cclib/cc-ratings-admin.inc:243
 #, fuzzy
 msgid "Configure Ratings Chart Engine"
 msgstr "Changements sauvergardés"
 
-#: cclib/cc-ratings-admin.inc:279
+#: cclib/cc-ratings-admin.inc:288
 #, php-format
 msgid "%d user scores and %d uploads recalculated"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:341
+#: cclib/cc-ratings-admin.inc:350
 msgid "User's ratings deleted"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:345
+#: cclib/cc-ratings-admin.inc:354
 msgid "Rating deleted"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:349
+#: cclib/cc-ratings-admin.inc:358
 msgid "Updated ban list"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:403
+#: cclib/cc-ratings-admin.inc:412
 msgid "Manage Ratings"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:411
+#: cclib/cc-ratings-admin.inc:420
 msgid "ID"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:420
+#: cclib/cc-ratings-admin.inc:429
 msgid "Reviewer"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:429
+#: cclib/cc-ratings-admin.inc:438
 msgid "Rating"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:438 cclib/cc-ratings-admin.inc:650
+#: cclib/cc-ratings-admin.inc:447 cclib/cc-ratings-admin.inc:659
 msgid "IP"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:447
+#: cclib/cc-ratings-admin.inc:456
 msgid "Upload"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:578
+#: cclib/cc-ratings-admin.inc:587
 msgid "Previous"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:586
+#: cclib/cc-ratings-admin.inc:595
 msgid "Next"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:593
+#: cclib/cc-ratings-admin.inc:602
 msgid "Current filters: "
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:601
+#: cclib/cc-ratings-admin.inc:610
 msgid "remove"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:627
+#: cclib/cc-ratings-admin.inc:636
 msgid "filter"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:647 cclib/cc-ratings-admin.inc:648
+#: cclib/cc-ratings-admin.inc:656 cclib/cc-ratings-admin.inc:657
 msgid "view"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:665
+#: cclib/cc-ratings-admin.inc:674
 msgid "edit"
 msgstr ""
 
@@ -1762,6 +1838,18 @@ msgstr ""
 
 #: cclib/cc-navigator.php:365
 msgid "Invalid Path"
+msgstr ""
+
+#: cclib/cc-page.php:53
+msgid "Displays XHTML template"
+msgstr ""
+
+#: cclib/cc-page.php:55
+msgid "Displays XHTML template (alias for viewfile)"
+msgstr ""
+
+#: cclib/cc-page.php:57
+msgid "Displays home page assigned in config"
 msgstr ""
 
 #: cclib/cc-page.php:110
@@ -1971,18 +2059,18 @@ msgstr ""
 msgid "Sub menu for managing sample pools"
 msgstr ""
 
-#: cclib/cc-ratings.php:141
+#: cclib/cc-ratings.php:149
 msgid "How ratings are calculated, who can rate, etc."
 msgstr ""
 
-#: cclib/cc-ratings.php:324
+#: cclib/cc-ratings.php:335
 #, php-format
 msgid ""
 "Allow ratings for %s virtual root. (Click %shere%s to configure global "
 "ratings)"
 msgstr ""
 
-#: cclib/cc-ratings.php:345
+#: cclib/cc-ratings.php:356
 msgid "Display admin ratings form"
 msgstr ""
 
@@ -2437,35 +2525,40 @@ msgstr ""
 msgid "Here is the information returned from the template engine:"
 msgstr ""
 
+#: cclib/cc-template.php:203
+#, fuzzy
+msgid "Template cache has been cleared."
+msgstr "Copie sur le serveur réussie"
+
 #: cclib/cc-upload.php:55
 #, php-format
 msgid "Administrator Functions for '%s'"
 msgstr ""
 
-#: cclib/cc-upload.php:72
+#: cclib/cc-upload.php:71
 #, fuzzy, php-format
 msgid "Changes saved to '%s'. Click %shere%s to see results"
 msgstr "Changements sauvergardés"
 
-#: cclib/cc-upload.php:204
+#: cclib/cc-upload.php:206
 msgid "Deleting File"
 msgstr ""
 
-#: cclib/cc-upload.php:216
+#: cclib/cc-upload.php:218
 #, fuzzy
 msgid "Upload has been deleted."
 msgstr "Copie sur le serveur réussie"
 
-#: cclib/cc-upload.php:256
+#: cclib/cc-upload.php:258
 #, fuzzy
 msgid "Specify the file to upload."
 msgstr "Voir les fichiers les plus récents"
 
-#: cclib/cc-upload.php:261
+#: cclib/cc-upload.php:263
 msgid "Valid file types"
 msgstr ""
 
-#: cclib/cc-upload.php:265
+#: cclib/cc-upload.php:267
 msgid "File"
 msgstr ""
 
@@ -2562,47 +2655,47 @@ msgstr ""
 msgid "Create A New Password For This Account"
 msgstr ""
 
-#: cclib/cc-user-admin.php:343
+#: cclib/cc-user-admin.php:344
 #, php-format
 msgid "Files have been deleted for user, %s."
 msgstr ""
 
-#: cclib/cc-user-admin.php:343
+#: cclib/cc-user-admin.php:344
 #, php-format
 msgid "See %s if you don't believe us."
 msgstr ""
 
-#: cclib/cc-user-admin.php:350
+#: cclib/cc-user-admin.php:351
 #, php-format
 msgid "Delete Account for user, %s"
 msgstr ""
 
-#: cclib/cc-user-admin.php:363
+#: cclib/cc-user-admin.php:364
 #, php-format
 msgid "User account for user, %s, has been deleted."
 msgstr ""
 
-#: cclib/cc-user-admin.php:390
+#: cclib/cc-user-admin.php:391
 msgid "New IP Information Saved"
 msgstr ""
 
-#: cclib/cc-user-admin.php:433
+#: cclib/cc-user-admin.php:434
 msgid "Default User Avatar"
 msgstr ""
 
-#: cclib/cc-user-admin.php:435
+#: cclib/cc-user-admin.php:436
 msgid "Upload a default avatar for new users"
 msgstr ""
 
-#: cclib/cc-user-admin.php:452
+#: cclib/cc-user-admin.php:453
 msgid "Show admin \"Account Management\" form"
 msgstr ""
 
-#: cclib/cc-user-admin.php:456
+#: cclib/cc-user-admin.php:457
 msgid "Admin a user IP, profile, etc."
 msgstr ""
 
-#: cclib/cc-user-admin.php:460
+#: cclib/cc-user-admin.php:461
 msgid "Set the default user avatar"
 msgstr ""
 
