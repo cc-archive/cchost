@@ -106,9 +106,7 @@ class CCAccessEditForm extends CCForm
 
         $this->AddFormFields($fields);
 
-        $help = _('Use this form to decide who has acces to which commands. (This does
-                  not affect which menu items are shown, use the Manage Site/Menu
-                  form for controlling that.)');
+        $help = _('Use this form to decide who has acces to which commands. (This does not affect which menu items are shown, use the Manage Site/Menu form for controlling that.)');
         
         $this->SetFormHelp($help);
     }

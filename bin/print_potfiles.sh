@@ -6,12 +6,16 @@
 # POTFILES.in for then editing to make sure you have the files you want.
 #
 
-echo '# List of source files containing translatable strings.
+#PRINTS POTFILES.in
+# echo '# List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 # If majorly out of order, use bin/print_potfiles.sh to regenerate
-[encoding: UTF-8]'
+# [encoding: UTF-8]'
 
-find . -name "*.php" -o -name "*.inc" | xargs grep -l "_(.*)" | sort | sed -e 's/\.\///'
+# find . -name "*.php" -o -name "*.inc" | xargs grep -l "_(.*)" | sort | sed -e 's/\.\///'
 
-# TO ADD ' \' onto end of lines, add -e 's/$/ \\/'
+# PRINTS POTFILES
+
+echo -e "POTFILES = \\"
+find . -name "*.php" -o -name "*.inc" | xargs grep -l "_(.*)" | sort | sed -e 's/\.\///' -e 's/$/ \\/'
 

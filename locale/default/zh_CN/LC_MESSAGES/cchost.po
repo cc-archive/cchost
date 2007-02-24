@@ -3,17 +3,3540 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#: ccextras/cc-playlist-forms.inc:48 ccextras/cc-playlist-forms.inc:59
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-23 22:15-0800\n"
+"POT-Creation-Date: 2007-02-23 23:36-0800\n"
 "PO-Revision-Date: 2006-09-03 15:38-0800\n"
 "Last-Translator: deerfang <lu@deerfang.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: cc-custom.php:42
+#, php-format
+msgid "A bad call happened to \"%s\" in a template."
+msgstr ""
+
+#: cc-custom.php:249
+#, fuzzy
+msgid "You've been remixed!"
+msgstr "我已被再混音"
+
+#: cc-custom.php:250
+msgid "Click here to make them visible!"
+msgstr ""
+
+#: ccextras/cc-activity-log.php:87
+msgid "Show activity log"
+msgstr ""
+
+#: ccextras/cc-activity-log.php:99
+msgid "View Activity Log"
+msgstr ""
+
+#: ccextras/cc-activity-log.php:105
+msgid "Log Cleared"
+msgstr ""
+
+#: ccextras/cc-archive.inc:40 ccextras/cc-forums.inc:324
+#: ccextras/cc-forums.inc:634 ccextras/cc-reviews.inc:257
+#: cclib/cc-mediahost.php:41 cclib/cc-navigator-admin.inc:466
+#: cclib/cc-user.inc:379
+msgid "Home"
+msgstr "主页"
+
+#: ccextras/cc-archive.inc:41 cclib/cc-getid3.php:198
+msgid "Archive"
+msgstr "档案"
+
+#: ccextras/cc-archive.inc:53
+#, fuzzy, php-format
+msgid "Archive for %s"
+msgstr "档案"
+
+#: ccextras/cc-archive.inc:74
+msgid "Monthly Archive"
+msgstr "每月档案"
+
+#: ccextras/cc-archive.inc:97
+msgid "Display upload archive for a specific month"
+msgstr ""
+
+#: ccextras/cc-blog-ping.inc:71
+#, fuzzy
+msgid "Administer Blog Notification"
+msgstr "评论通知"
+
+#: ccextras/cc-blog-ping.inc:90
+msgid "Blog ping"
+msgstr ""
+
+#: ccextras/cc-blog-ping.inc:92
+msgid "Ping your blog on new uploads"
+msgstr ""
+
+#: ccextras/cc-bpm.inc:49
+msgid "Include BPM in Upload Forms"
+msgstr ""
+
+# 每分钟拍子速
+#: ccextras/cc-bpm.inc:130
+msgid "BPM"
+msgstr "BPM"
+
+#: ccextras/cc-bpm.inc:131
+msgid "Tempo"
+msgstr "拍子"
+
+#: ccextras/cc-channels.inc:42
+#, php-format
+msgid "Uploads with these tags %s will be mixed in with streams."
+msgstr ""
+
+#: ccextras/cc-channels.inc:47 ccextras/cc-fileman.inc:526
+#: ccextras/cc-pseudo-verify.inc:60 ccextras/cc-throttle.inc:111
+#: ccextras/cc-topics.inc:248 cclib/cc-editorials.inc:60
+#: cclib/cc-mediahost.php:489 cclib/cc-navigator-admin.inc:86
+#: cclib/cc-navigator-admin.inc:277 cclib/cc-user-admin.php:151
+msgid "Delete"
+msgstr "删除"
+
+#: ccextras/cc-channels.inc:48 ccextras/cc-playlist-forms.inc:51
+#: ccextras/cc-pseudo-verify.inc:64 cclib/cc-submit.php:78
+#: cclib/cc-tags.inc:444 cclib/cc-tags.inc:517 cclib/cc-tags.inc:560
+#: cclib/cc-tags.inc:577 cclib/cc-tags.inc:626 cclib/cc-upload-forms.php:76
+#: mixter-lib/mixter-sample-browser.inc:183
+msgid "Tags"
+msgstr "索引"
+
+#: ccextras/cc-channels.inc:49 cclib/cc-submit.php:59
+#, fuzzy
+msgid "Caption"
+msgstr "评级"
+
+#: ccextras/cc-channels.inc:100
+msgid "Add Channel"
+msgstr ""
+
+#: ccextras/cc-channels.inc:109
+#, fuzzy
+msgid "Configure Channels"
+msgstr "更改已保存"
+
+#: ccextras/cc-channels.inc:128
+#, fuzzy
+msgid "Channel information saved"
+msgstr "更改已保存"
+
+#: ccextras/cc-channels.inc:153
+msgid "Configure channels/radio interface"
+msgstr ""
+
+#: ccextras/cc-channels.inc:169
+#, fuzzy
+msgid "Channels Page"
+msgstr "更改已保存"
+
+#: ccextras/cc-disable-site.inc:39 ccextras/cc-disable-site.inc:69
+#: ccextras/cc-disable-site.inc:88
+#, fuzzy
+msgid "Disable Site"
+msgstr "管理文件"
+
+#: ccextras/cc-disable-site.inc:40
+msgid "Check this to disable your site from users"
+msgstr ""
+
+#: ccextras/cc-disable-site.inc:44
+#, fuzzy
+msgid "Admin Password"
+msgstr "密码"
+
+#: ccextras/cc-disable-site.inc:45
+msgid "This password will allow admins to continue passed disabling."
+msgstr ""
+
+#: ccextras/cc-disable-site.inc:50 ccextras/cc-path-admin.inc:98
+msgid "Site Disabled Message"
+msgstr ""
+
+#: ccextras/cc-disable-site.inc:51 ccextras/cc-path-admin.inc:99
+msgid ""
+"This file is displayed when the admins have temporarily disabled the site."
+msgstr ""
+
+#: ccextras/cc-disable-site.inc:90
+msgid "Disable site when doing maintainence."
+msgstr ""
+
+#: ccextras/cc-disable-site.inc:109
+msgid "Disable site from non-admin users"
+msgstr ""
+
+#: ccextras/cc-export-settings.inc:47
+msgid "ERROR: No import file specified."
+msgstr ""
+
+#: ccextras/cc-export-settings.inc:59
+msgid "ERROR: could not read config file"
+msgstr ""
+
+#: ccextras/cc-export-settings.inc:104
+#, fuzzy
+msgid "Import Settings"
+msgstr "编辑你的设置"
+
+#: ccextras/cc-export-settings.inc:105
+#, fuzzy
+msgid "Settings have been imported"
+msgstr "更改已保存"
+
+#: ccextras/cc-export-settings.inc:213
+msgid "Exports configuration to browser"
+msgstr ""
+
+#: ccextras/cc-export-settings.inc:218
+msgid "Import configuration"
+msgstr ""
+
+#: ccextras/cc-featuring.inc:47
+msgid "Collaborating artists"
+msgstr ""
+
+#: ccextras/cc-featuring.inc:61
+#, php-format
+msgid "(ft. %s)"
+msgstr ""
+
+#: ccextras/cc-featuring.inc:102
+#, fuzzy
+msgid "Featured Artists"
+msgstr "艺术家"
+
+#: ccextras/cc-featuring.inc:103
+msgid "List any colloborating artists"
+msgstr ""
+
+#: ccextras/cc-feeds-xspf.inc:129
+msgid "Generate XSPF playlist"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:42
+msgid "Destination directory"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:48
+#, fuzzy
+msgid "Add file(s)"
+msgstr "文件添加到"
+
+#: ccextras/cc-fileman.inc:152
+#, php-format
+msgid "The file , '%s', already exists."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:173
+msgid "There were problems uploading (see below)."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:176
+#, fuzzy, php-format
+msgid "The files, %s, were uploaded okay."
+msgstr "文件未完全上传"
+
+#: ccextras/cc-fileman.inc:210 cclib/cc-contest-admin.inc:575
+#: cclib/cc-files.php:87 cclib/cc-files.php:90 cclib/cc-mediahost.php:468
+msgid "Manage Files"
+msgstr "管理文件"
+
+#: ccextras/cc-fileman.inc:211
+msgid "Manage files your viewfile directory"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:216 cclib/cc-contest-admin.inc:583
+#, fuzzy
+msgid "Add Files"
+msgstr "文件添加到"
+
+#: ccextras/cc-fileman.inc:217 cclib/cc-contest-admin.inc:584
+#, fuzzy
+msgid "Add files to the system"
+msgstr "文件添加到"
+
+#: ccextras/cc-fileman.inc:292
+msgid "Can't leave this blank"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:299
+msgid "The directory you selected already exists"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:307
+msgid "The directory is successfully created."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:311
+msgid "There is a problem creating the directory."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:323
+msgid "There is no file selected for renaming."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:328 ccextras/cc-fileman.inc:367
+#: cclib/cc-form.php:787
+#, fuzzy
+msgid "This cannot be left blank."
+msgstr "不能留空白"
+
+#: ccextras/cc-fileman.inc:337
+msgid "A file with that name already exists."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:350
+#, fuzzy
+msgid "That file could not be renamed."
+msgstr "此操作不能倒退"
+
+#: ccextras/cc-fileman.inc:362
+msgid "No file selected for replacement."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:386
+#, fuzzy
+msgid "replaced"
+msgstr "取代"
+
+#: ccextras/cc-fileman.inc:390
+msgid "ERROR"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:390
+#, php-format
+msgid "Could not replace file, '%s'."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:402
+msgid "Please confirm deletion by checking here:"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:407
+msgid "There is no file selected for deletion."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:419
+#, fuzzy, php-format
+msgid "The file, %s, is now deleted."
+msgstr "文件太大"
+
+#: ccextras/cc-fileman.inc:421
+#, php-format
+msgid "The file, %s, could not be deleted."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:435
+msgid "The directory is empty."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:435
+msgid "Use \"Add Files\" to populate."
+msgstr ""
+
+#: ccextras/cc-fileman.inc:453
+msgid "Path Root"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:490
+#, php-format
+msgid "Create directory in %s"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:492
+#, fuzzy
+msgid "Create Directory"
+msgstr "浏览比赛"
+
+#: ccextras/cc-fileman.inc:502 mixter-lib/mixter-dump-listing.inc:41
+msgid "Download"
+msgstr "下载"
+
+#: ccextras/cc-fileman.inc:505
+msgid "(right/control click on the link above to download this file.)"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:507 ccextras/cc-topics.inc:251
+#: cclib/cc-mediahost.php:461 cclib/cc-submit.php:308
+msgid "Edit"
+msgstr "编辑"
+
+#: ccextras/cc-fileman.inc:514
+#, fuzzy, php-format
+msgid "Rename file, %s, to:"
+msgstr "管理文件对象"
+
+#: ccextras/cc-fileman.inc:516 cclib/cc-navigator-admin.inc:265
+#, fuzzy
+msgid "Rename"
+msgstr "姓名"
+
+#: ccextras/cc-fileman.inc:518
+#, php-format
+msgid "Replace file, %s, with:"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:519 ccextras/cc-fileman.inc:524
+msgid "There is NO CONFIRM and NO UNDO!"
+msgstr ""
+
+#: ccextras/cc-fileman.inc:521
+#, fuzzy
+msgid "Replace"
+msgstr "取代"
+
+#: ccextras/cc-fileman.inc:523
+#, fuzzy, php-format
+msgid "Delete file, %s"
+msgstr "删除文件"
+
+#: ccextras/cc-fileman.php:68
+msgid "Web based file manager"
+msgstr ""
+
+#: ccextras/cc-fileman.php:89
+#, fuzzy
+msgid "Manage files"
+msgstr "管理文件"
+
+#: ccextras/cc-fileman.php:91
+#, fuzzy, php-format
+msgid "Manage files in the directory, %s."
+msgstr "管理文件对象"
+
+#: ccextras/cc-flag.inc:45
+#, php-format
+msgid "This %s contains material that may violate the terms of the site"
+msgstr ""
+
+#: ccextras/cc-flag.inc:49 ccextras/cc-mail.inc:270 ccextras/cc-mail.inc:280
+msgid "From"
+msgstr "来自"
+
+#: ccextras/cc-flag.inc:52
+msgid "Your email address (optional)"
+msgstr "你的电子邮箱地址（非必填）"
+
+#: ccextras/cc-flag.inc:55 ccextras/cc-mail.inc:291
+msgid "Subject"
+msgstr "主题"
+
+#: ccextras/cc-flag.inc:57
+#, fuzzy, php-format
+msgid "Flag %s \"%s\""
+msgstr "标志"
+
+#: ccextras/cc-flag.inc:60 ccextras/cc-mail.inc:295
+msgid "Message"
+msgstr "消息"
+
+#: ccextras/cc-flag.inc:70 ccextras/cc-mail.inc:306
+#: ccextras/cc-topics-forms.inc:84 cclib/cc-login.php:80
+#: cclib/cc-user-admin.php:91 cclib/cc-user-admin.php:130
+msgid "Security Key"
+msgstr "安全键"
+
+#: ccextras/cc-flag.inc:98
+msgid "Users flag an upload or topic."
+msgstr ""
+
+#: ccextras/cc-flag.inc:106
+msgid "Flag Content"
+msgstr "标志内容"
+
+#: ccextras/cc-flag.inc:136 cclib/cc-ratings-admin.inc:456
+#: cclib/cc-upload-forms.php:52
+msgid "Upload"
+msgstr "上传"
+
+#: ccextras/cc-flag.inc:144 ccextras/cc-forums.inc:301
+#: ccextras/cc-topics.inc:710
+msgid "Topic"
+msgstr "话题"
+
+#: ccextras/cc-flag.inc:149
+msgid "Content has been flagged"
+msgstr "内容已被做标志"
+
+#: ccextras/cc-flag.inc:171
+msgid "An error occurred trying to contact the site"
+msgstr ""
+
+#: ccextras/cc-flag.inc:175
+msgid "Thank you, your message has been sent"
+msgstr ""
+
+#: ccextras/cc-flag.inc:193
+msgid "Flagging"
+msgstr ""
+
+#: ccextras/cc-flag.inc:194
+msgid ""
+"This allows users to directly flag something as a possible violation of "
+"terms of this site."
+msgstr ""
+
+#: ccextras/cc-flag.inc:199
+#, fuzzy
+msgid "Flag form message"
+msgstr "消息"
+
+#: ccextras/cc-flag.inc:200
+msgid "This text will appear on the mail form to users who flag content."
+msgstr ""
+
+#: ccextras/cc-format.inc:48 ccextras/cc-format.php:48 cclib/cc-page.php:450
+#, fuzzy
+msgid "Default Style"
+msgstr "默认语言："
+
+#: ccextras/cc-format.inc:63 ccextras/cc-format.php:63
+#: ccextras/cc-publicize.php:107
+#, fuzzy
+msgid "Preview"
+msgstr "评论"
+
+#: ccextras/cc-format.inc:94 ccextras/cc-format.php:94
+msgid "Quote:"
+msgstr "引用："
+
+#: ccextras/cc-format.inc:278 ccextras/cc-format.php:298
+#, fuzzy
+msgid "Select text and use the buttons to apply format"
+msgstr "选择文字并用 <br />按钮来应用格式"
+
+#: ccextras/cc-format.inc:313 ccextras/cc-format.php:335
+msgid "Allow User Text Formatting"
+msgstr ""
+
+#: ccextras/cc-format.inc:314 ccextras/cc-format.php:336
+msgid "Allow users to format text (bold, italic, etc.)"
+msgstr ""
+
+#: ccextras/cc-format.inc:320 ccextras/cc-format.php:342
+msgid "Allow Admin Text Formatting"
+msgstr ""
+
+#: ccextras/cc-format.inc:321 ccextras/cc-format.php:343
+msgid "Allow admins to format text"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:40
+#, fuzzy
+msgid "Forum Name"
+msgstr "全名"
+
+#: ccextras/cc-forums-admin.inc:45 ccextras/cc-playlist-forms.inc:56
+#: ccextras/cc-pseudo-verify.inc:63 cclib/cc-contest-admin.inc:61
+#: cclib/cc-pools-forms.php:54 cclib/cc-submit.php:72
+#: cclib/cc-upload-forms.php:91
+msgid "Description"
+msgstr "描述"
+
+#: ccextras/cc-forums-admin.inc:50 ccextras/cc-forums-admin.inc:100
+#: cclib/cc-menu-admin.inc:102 cclib/cc-menu-admin.inc:172
+#, fuzzy
+msgid "Weight"
+msgstr "什么"
+
+#: ccextras/cc-forums-admin.inc:52
+msgid "Lower number places forum higher in listing"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:57
+#, fuzzy
+msgid "Post Access"
+msgstr "加工"
+
+#: ccextras/cc-forums-admin.inc:60 ccextras/cc-forums-admin.inc:70
+#, fuzzy
+msgid "Registered Users"
+msgstr "注册"
+
+#: ccextras/cc-forums-admin.inc:61 ccextras/cc-forums-admin.inc:71
+#, fuzzy
+msgid "Admins Only"
+msgstr "管理"
+
+#: ccextras/cc-forums-admin.inc:66
+#, fuzzy
+msgid "Read Access"
+msgstr "限制进入"
+
+#: ccextras/cc-forums-admin.inc:69 ccextras/cc-mail.inc:119
+#: cclib/cc-menu-admin.inc:111 cclib/cc-navigator-admin.inc:167
+msgid "Everyone"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:76
+#, fuzzy
+msgid "Forum Group"
+msgstr "论坛主题"
+
+#: ccextras/cc-forums-admin.inc:95
+msgid "Forum Group Name"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:102
+msgid "A lower number places forum group higher in listing."
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:116
+msgid ""
+"This action will delete <b>ALL</b> topics ever posted in the forum. There is "
+"<b>NO UNDO</b>. Once you delete the forum, <b>ALL</b> messages will be gone "
+"forever."
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:120
+#, fuzzy, php-format
+msgid "Delete Forum, '%s' ?"
+msgstr "删除"
+
+#: ccextras/cc-forums-admin.inc:141 ccextras/cc-forums-admin.inc:171
+#: ccextras/cc-forums.inc:311
+msgid "Forum"
+msgstr "论坛"
+
+#: ccextras/cc-forums-admin.inc:143
+msgid "Move thread to this fourm"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:173
+msgid "Configure forums access, groups, etc."
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:190
+msgid "View a forum thread"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:194
+msgid "View forums index or specific forum"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:198
+#, fuzzy
+msgid "Post a new topic"
+msgstr "发表新主题"
+
+#: ccextras/cc-forums-admin.inc:202
+#, fuzzy
+msgid "Display forum topics for user"
+msgstr "显示文件名字"
+
+#: ccextras/cc-forums-admin.inc:209
+msgid "Various forum feeds"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:213
+msgid "Configure forums"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:217
+msgid "Displays 'Move Thread' form"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:231
+#, php-format
+msgid "Move topic: %s"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:275
+msgid "Change Thread Sticky Flag"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:280
+#, php-format
+msgid "Sticky status changed for thread. %sGo back to thread%s"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:297
+msgid "Change Thread Open Status"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:302
+#, php-format
+msgid "Open status changed for thread. %sGo back to thread%s"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:333
+#, php-format
+msgid "You must %sadd groups%s before you can add forums"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:355
+#, fuzzy
+msgid "Edit Forum Properties"
+msgstr "编辑属性对象"
+
+#: ccextras/cc-forums-admin.inc:383 ccextras/cc-forums-admin.inc:482
+#, fuzzy
+msgid "Delete Forum"
+msgstr "删除"
+
+#: ccextras/cc-forums-admin.inc:409
+msgid "Add Forum Group"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:425
+#, fuzzy
+msgid "Edit Forum Group Properties"
+msgstr "编辑属性对象"
+
+#: ccextras/cc-forums-admin.inc:453
+#, fuzzy
+msgid "Delete Forum Group"
+msgstr "删除主题"
+
+#: ccextras/cc-forums-admin.inc:463
+#, php-format
+msgid "Group is not empty. %sReturn to forums.%s"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:478
+#, fuzzy
+msgid "Add Forum"
+msgstr "论坛"
+
+#: ccextras/cc-forums-admin.inc:480
+#, fuzzy
+msgid "Edit Forum"
+msgstr "论坛"
+
+#: ccextras/cc-forums-admin.inc:485
+msgid "Add Group"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:487
+msgid "Edit Group"
+msgstr ""
+
+#: ccextras/cc-forums-admin.inc:489
+#, fuzzy
+msgid "Delete Group"
+msgstr "删除主题"
+
+#: ccextras/cc-forums-admin.inc:494
+#, fuzzy
+msgid "Forum Admin"
+msgstr "论坛提要"
+
+#: ccextras/cc-forums-admin.inc:516
+#, php-format
+msgid "Forum has been permanantly deleted. %sReturn to forums.%s"
+msgstr ""
+
+#: ccextras/cc-forums-search.inc:62
+msgid "Forum Topics"
+msgstr "论坛主题"
+
+#: ccextras/cc-forums-search.inc:116
+#, fuzzy
+msgid "Sorry, no topics match."
+msgstr "对不起，无主题相关"
+
+#: ccextras/cc-forums.inc:241
+msgid "Post new topic"
+msgstr "发表新主题"
+
+#: ccextras/cc-forums.inc:325 cclib/cc-defines-access.php:92
+msgid "Forums"
+msgstr "论坛"
+
+#: ccextras/cc-forums.inc:447
+msgid "Post New Topic"
+msgstr "发表新主题"
+
+#: ccextras/cc-forums.inc:450
+msgid "New Topic Text"
+msgstr "新题目文字"
+
+#: ccextras/cc-forums.inc:450
+#, fuzzy
+msgid "Submit Topic"
+msgstr "提交论坛"
+
+#: ccextras/cc-forums.inc:511
+msgid "Thread Missing"
+msgstr ""
+
+#: ccextras/cc-forums.inc:512
+msgid "That topic thread does not exist."
+msgstr ""
+
+#: ccextras/cc-forums.inc:523
+#, fuzzy
+msgid "You must have admin rights to see this forum."
+msgstr "你无浏览此论坛的适当权利"
+
+#: ccextras/cc-forums.inc:525
+#, fuzzy
+msgid "You must be logged in to see this forum."
+msgstr "你无浏览此论坛的适当权利"
+
+#: ccextras/cc-forums.inc:527
+#, fuzzy
+msgid "You do have proper permissions to see this forum."
+msgstr "你无浏览此论坛的适当权利"
+
+#: ccextras/cc-forums.inc:529
+msgid "Restricted Access"
+msgstr "限制进入"
+
+#: ccextras/cc-forums.inc:541
+msgid "Thread is closed to new comments."
+msgstr ""
+
+#: ccextras/cc-forums.inc:546
+msgid "Post topic reply"
+msgstr "发表主题回复"
+
+#: ccextras/cc-forums.inc:552
+msgid "Move thread"
+msgstr ""
+
+#: ccextras/cc-forums.inc:554
+msgid "Open"
+msgstr "打开"
+
+#: ccextras/cc-forums.inc:554
+msgid "Close"
+msgstr "关闭"
+
+#: ccextras/cc-forums.inc:559
+msgid "Unstick"
+msgstr ""
+
+#: ccextras/cc-forums.inc:559
+msgid "Stick"
+msgstr ""
+
+#: ccextras/cc-forums.inc:619
+#, php-format
+msgid "Reply to: \"%s\""
+msgstr ""
+
+#: ccextras/cc-forums.inc:626
+#, fuzzy, php-format
+msgid "Forum Posts by %s"
+msgstr "论坛帖子"
+
+#: ccextras/cc-forums.inc:635 ccextras/cc-reviews.inc:265
+#: cclib/cc-mediahost.php:51 cclib/cc-user.inc:364 cclib/cc-user.inc:380
+msgid "People"
+msgstr "人们"
+
+#: ccextras/cc-forums.inc:637 ccextras/cc-forums.php:98
+msgid "Forum posts"
+msgstr "论坛帖子"
+
+#: ccextras/cc-forums.inc:667
+#, php-format
+msgid "Feed for topics by %s"
+msgstr "主题提要作者"
+
+#: ccextras/cc-forums.inc:679
+#, php-format
+msgid "Feed for topic: %s"
+msgstr "主题提要"
+
+#: ccextras/cc-forums.inc:683
+msgid "Forums Feed"
+msgstr "论坛提要"
+
+#: ccextras/cc-forums.inc:699
+msgid "Contents requires login"
+msgstr "内容要求登陆"
+
+#: ccextras/cc-forums.php:94
+#, php-format
+msgid "%s has posted %s%d forum messages%s"
+msgstr ""
+
+#: ccextras/cc-howididit.inc:54
+msgid "Browse 'How I Did It'"
+msgstr "浏览“我是怎么做的”"
+
+#: ccextras/cc-howididit.inc:86 cclib/cc-remix.php:53
+msgid "Artist"
+msgstr "艺术家"
+
+#: ccextras/cc-howididit.inc:89
+msgid "Date"
+msgstr "日期"
+
+#: ccextras/cc-howididit.inc:92
+msgid "Upload Name"
+msgstr "上传名字"
+
+#: ccextras/cc-howididit.inc:96
+msgid ""
+"Remixers are encouraged to specify the tools and process they used to create "
+"submissions to this site. Below is a list of submissions that the author has "
+"annotated with these special notes. Click on any submission to see the "
+"'author's notes."
+msgstr ""
+
+#: ccextras/cc-howididit.inc:98
+msgid "Sort by:"
+msgstr "归类于"
+
+#: ccextras/cc-howididit.inc:135 ccextras/cc-howididit.php:47
+#: cclib/cc-defines-access.php:93
+msgid "How I Did It"
+msgstr "我是怎么做的"
+
+#: ccextras/cc-howididit.inc:168
+#, fuzzy
+msgid "Edit 'How I Did It' for "
+msgstr "我是怎么做的"
+
+#: ccextras/cc-howididit.inc:198
+#, fuzzy, php-format
+msgid "Changes saved. Click %s to see results"
+msgstr "更改已保存。点击此处看结果"
+
+#: ccextras/cc-howididit.inc:213
+#, php-format
+msgid ""
+"No 'How I Did It' for this record. Click %s to go back to the upload's page"
+msgstr ""
+
+#: ccextras/cc-howididit.inc:224
+msgid "Tools I Used"
+msgstr "我用过的工具"
+
+#: ccextras/cc-howididit.inc:225
+#, fuzzy
+msgid "What software, hardware, and plug-ins did you use?"
+msgstr "你用了什么软件，硬件，插件程序等？"
+
+#: ccextras/cc-howididit.inc:229
+msgid "Samples I Used"
+msgstr "我用过的采样"
+
+#: ccextras/cc-howididit.inc:230
+msgid "Where did you find your samples? What kind of license are they under?"
+msgstr "你在哪里找你的采样？它们有什么样的执照？"
+
+#: ccextras/cc-howididit.inc:234
+msgid "Original Samples"
+msgstr "原始采样"
+
+#: ccextras/cc-howididit.inc:235
+msgid "What material did you create just for this work?"
+msgstr "只为这个作品你创造了什么材料？"
+
+#: ccextras/cc-howididit.inc:239
+msgid "Process"
+msgstr "加工"
+
+#: ccextras/cc-howididit.inc:240
+msgid "How did you put all the pieces together?"
+msgstr "你如何把所有部分放在一起的。"
+
+#: ccextras/cc-howididit.inc:244
+msgid "Other Notes"
+msgstr "其它备忘录"
+
+#: ccextras/cc-howididit.inc:245
+#, fuzzy
+msgid "Share your feelings about the experience of creating this work."
+msgstr "分享你创作这件作品经历的感受"
+
+#: ccextras/cc-howididit.inc:263
+#, fuzzy
+msgid "Show How I Did It Page for an upload"
+msgstr "浏览“我是怎么做的”"
+
+#: ccextras/cc-howididit.inc:267
+#, fuzzy
+msgid "Show How I Did It browser"
+msgstr "浏览“我是怎么做的”"
+
+#: ccextras/cc-howididit.inc:274
+#, fuzzy
+msgid "Edit How I Did It Page"
+msgstr "我是怎么做的"
+
+#: ccextras/cc-howididit.php:67
+msgid "Edit \"How I Did It\""
+msgstr ""
+
+#: ccextras/cc-import-files.inc:42
+#, fuzzy
+msgid "Path to file on this server"
+msgstr "服务器上文件的路径"
+
+#: ccextras/cc-import-files.inc:57
+#, fuzzy
+msgid "Cannot file a file by that name"
+msgstr "不能用那个名字建立文件"
+
+#: ccextras/cc-import-files.inc:87
+#, fuzzy
+msgid "Import Files"
+msgstr "输入文件"
+
+#: ccextras/cc-import-files.inc:89
+msgid "Import files from your server into ccHost"
+msgstr ""
+
+#: ccextras/cc-import-files.inc:115
+#, fuzzy
+msgid "Displays 'File Import' form"
+msgstr "显示文件名字"
+
+#: ccextras/cc-import-files.inc:128
+msgid "Import files"
+msgstr "输入文件"
+
+#: ccextras/cc-import-files.inc:130
+#, fuzzy
+msgid ""
+"Use this form to import files already on your server into this ccHost "
+"system. WARNING: This form will <b>MOVE</b> your file from its original "
+"location to one specified by this ccHost system."
+msgstr ""
+"用这个表格把已在你服务器上的文件输入ccHost系统。警告：这个表格会<b>移动</b> "
+"你文件的原始位置"
+
+#: ccextras/cc-import-files.inc:183
+#, fuzzy, php-format
+msgid "Import succeeded. Click %s to see results."
+msgstr "上传成功。点击此看结果。"
+
+#: ccextras/cc-lang-editor.inc:70
+msgid ""
+"ccHost can be configured to host many different media types. A site that "
+"specializes in a particular media type might have a different \"personality"
+"\" than another media type. For example the terms used in a community music "
+"remixing site may not be appropriate for a legal document sharing site or a "
+"personal picture blog"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:71
+msgid ""
+"That is what we mean by a \"language terms domain.\" If the default terms "
+"used by ccHost do not fit your type of domain, you should create a new "
+"domain (e.g. called legaldocs), add a language (use 'en_US' for stateside "
+"English) and edit the terms to fit your needs."
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:72
+msgid ""
+"After you are done editing, you can set the site's language preferences to "
+"use your new domain and language term set and internation translators can "
+"use this screen to create tranlations of that domain's language terms."
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:74
+#, fuzzy
+msgid "Create a new domain:"
+msgstr "创建新帐户"
+
+#: ccextras/cc-lang-editor.inc:75 mixter-lib/mixter-sample-browser.inc:246
+msgid "Go"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:76
+msgid "Create a new language/term set in:"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:77
+msgid "Edit an existing language/term set:"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:78
+#, fuzzy
+msgid "Missing domain name"
+msgstr "缺少文件名"
+
+#: ccextras/cc-lang-editor.inc:79
+#, fuzzy
+msgid "Missing language name"
+msgstr "缺少文件名"
+
+#: ccextras/cc-lang-editor.inc:84
+msgid "Language Domain Terms Editor"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:92
+msgid "Not a valid domain name"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:99
+msgid "A file or directory of that name already exists"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:104
+#, fuzzy
+msgid "Created domain"
+msgstr "浏览比赛"
+
+#: ccextras/cc-lang-editor.inc:115
+msgid "Not a valid domain or language name"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:123
+msgid "A file or directory of that name already exist, you can edit it now."
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:128
+msgid "Created language path, you must edit the language before using it."
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:137
+msgid "Language Terms Editor"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:144
+#, fuzzy
+msgid "Missing domain or language"
+msgstr "缺少文件名"
+
+#: ccextras/cc-lang-editor.inc:188
+msgid "Select a string"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:189
+msgid "Domain"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:190
+msgid "Generate po"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:191
+#, fuzzy
+msgid "Original String"
+msgstr "原始"
+
+#: ccextras/cc-lang-editor.inc:192
+msgid "copy this string"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:193
+msgid "Translates to"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:194
+msgid "Save String and Advance"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:195
+msgid "Save String"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:196
+#, fuzzy
+msgid "Revert"
+msgstr "评论者"
+
+#: ccextras/cc-lang-editor.inc:197
+msgid "Will be saved to"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:198
+msgid "You must specify a target domain"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:199
+#, fuzzy
+msgid "waiting..."
+msgstr "评级"
+
+#: ccextras/cc-lang-editor.inc:200
+msgid "Part 1"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:201
+msgid "Part 2"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:202
+msgid "Part 3"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:203
+msgid "Part 4"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:204
+msgid "Part 5"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:205 cclib/cc-defines-access.php:97
+#: cclib/cc-search.php:64 cclib/cc-search.php:93
+#: mixter-lib/mixter-print-page.php:96
+msgid "Search"
+msgstr "搜索"
+
+#: ccextras/cc-lang-editor.inc:206
+msgid "No search string!"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:207
+msgid "Current editing:"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:208
+msgid "Save to..."
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:209
+#, fuzzy
+msgid "Missing language"
+msgstr "缺少文件名"
+
+#: ccextras/cc-lang-editor.inc:210
+#, fuzzy
+msgid "Clear Search"
+msgstr "搜索"
+
+#: ccextras/cc-lang-editor.inc:252
+msgid "String saved to:"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:258
+msgid "po file written:"
+msgstr ""
+
+#: ccextras/cc-lang-editor.inc:353
+#, fuzzy
+msgid "Can not find language map"
+msgstr "无法找到那用户名"
+
+#: ccextras/cc-last-edit.php:96
+msgid "File deleted"
+msgstr ""
+
+#: ccextras/cc-last-edit.php:99
+#, fuzzy
+msgid "File replaced"
+msgstr "取代"
+
+#: ccextras/cc-last-edit.php:102
+#, fuzzy
+msgid "File added"
+msgstr "主页URL"
+
+#: ccextras/cc-mail.inc:44
+msgid "Do not allow email"
+msgstr ""
+
+#: ccextras/cc-mail.inc:45
+msgid "Allow (unrestricted)"
+msgstr ""
+
+#: ccextras/cc-mail.inc:46
+#, fuzzy
+msgid "Allow (throttled)"
+msgstr "上传的和用户"
+
+#: ccextras/cc-mail.inc:53
+#, fuzzy
+msgid "Admin email address"
+msgstr "你的email地址"
+
+#: ccextras/cc-mail.inc:55
+msgid "Address used as return address for automated mail."
+msgstr ""
+
+#: ccextras/cc-mail.inc:78
+msgid "Anonymous Users"
+msgstr ""
+
+#: ccextras/cc-mail.inc:80
+msgid "Rule applied to users not logged in."
+msgstr ""
+
+#: ccextras/cc-mail.inc:87
+#, fuzzy
+msgid "Users With Uploads"
+msgstr "浏览上传"
+
+#: ccextras/cc-mail.inc:88
+msgid "Rule applied to users that have uploaded media to this site."
+msgstr ""
+
+#: ccextras/cc-mail.inc:96
+#, fuzzy
+msgid "Users Without Uploads"
+msgstr "浏览上传"
+
+#: ccextras/cc-mail.inc:97
+msgid "Rule that applies to registered users who have not uploaded anything."
+msgstr ""
+
+#: ccextras/cc-mail.inc:106
+#, fuzzy
+msgid "E-mail Flood Throttle"
+msgstr "上传的和用户"
+
+#: ccextras/cc-mail.inc:110
+msgid "Minimum allowed time (in minutes) between emails"
+msgstr ""
+
+#: ccextras/cc-mail.inc:115
+msgid "Mail to Admin Acct"
+msgstr ""
+
+#: ccextras/cc-mail.inc:116
+msgid "Who can send mail to admin accounts?"
+msgstr ""
+
+#: ccextras/cc-mail.inc:120 cclib/cc-menu-admin.inc:109
+#: cclib/cc-navigator-admin.inc:166
+msgid "Logged in users only"
+msgstr ""
+
+#: ccextras/cc-mail.inc:131
+#, php-format
+msgid "Click %shere%s to send a mass mailing."
+msgstr ""
+
+#: ccextras/cc-mail.inc:262
+msgid "To"
+msgstr ""
+
+#: ccextras/cc-mail.inc:272
+msgid "Your email address"
+msgstr "你的email地址"
+
+#: ccextras/cc-mail.inc:298
+msgid "Message is limited to 1,000 characters"
+msgstr ""
+
+#: ccextras/cc-mail.inc:339
+msgid "Mail has not been properly configured on the this system."
+msgstr ""
+
+#: ccextras/cc-mail.inc:339
+#, php-format
+msgid "Set an admin return mail address in %sConfigure Mail%s"
+msgstr ""
+
+#: ccextras/cc-mail.inc:344
+msgid "Mail has not been properly configured on this system."
+msgstr ""
+
+#: ccextras/cc-mail.inc:344
+msgid "Contact your administrator through regular email."
+msgstr ""
+
+#: ccextras/cc-mail.inc:372
+msgid "Mail update is not properly installed"
+msgstr ""
+
+#: ccextras/cc-mail.inc:397
+#, fuzzy
+msgid "Sorry, only logged in users may send mail to the admins."
+msgstr "（只有登陆用户可提交条目）"
+
+#: ccextras/cc-mail.inc:430
+msgid "You are not authorized to send mail."
+msgstr ""
+
+#: ccextras/cc-mail.inc:448
+msgid "You have exceeded the temporary quota of emails allowed."
+msgstr ""
+
+#: ccextras/cc-mail.inc:497
+#, fuzzy, php-format
+msgid "Send Mail to %s"
+msgstr "文件添加到"
+
+#: ccextras/cc-mail.inc:542
+msgid "Mail sent"
+msgstr ""
+
+#: ccextras/cc-mail.inc:552
+#, fuzzy
+msgid "Send Mail to Everybody"
+msgstr "文件添加到"
+
+#: ccextras/cc-mail.inc:561 ccextras/cc-mail.inc:563
+msgid "really"
+msgstr ""
+
+#: ccextras/cc-mail.inc:562
+msgid "EVERYONE"
+msgstr ""
+
+#: ccextras/cc-mail.inc:564
+msgid "You"
+msgstr ""
+
+#: ccextras/cc-mail.inc:613
+#, php-format
+msgid "Mass mail: Sent %s Messages"
+msgstr ""
+
+#: ccextras/cc-mail.inc:621
+msgid "Configure Mail"
+msgstr ""
+
+#: ccextras/cc-mail.inc:635
+#, fuzzy
+msgid "Display email contact form"
+msgstr "显示文件名字"
+
+#: ccextras/cc-mail.inc:639
+#, fuzzy
+msgid "Display mass email contact form"
+msgstr "显示文件名字"
+
+#: ccextras/cc-mail.inc:643
+#, fuzzy
+msgid "Display admin mail settings form"
+msgstr "显示文件名字"
+
+#: ccextras/cc-mail.inc:659
+#, fuzzy
+msgid "Email"
+msgstr "电子邮件"
+
+#: ccextras/cc-mail.inc:661
+msgid "Configure system email address and access"
+msgstr ""
+
+#: ccextras/cc-music-submit.php:47
+msgid "Submit a Remix"
+msgstr "提交一个再混音"
+
+#: ccextras/cc-music-submit.php:49
+msgid ""
+"A remix using samples downloaded from this site. When submitting a remix "
+"make sure to properly attribute the artist you sampled to comply with the "
+"Attribution part the Creative Commons license. The next screen will have a "
+"search function that allows you do just that."
+msgstr ""
+
+#: ccextras/cc-music-submit.php:55
+msgid "Use this form to submit a remix"
+msgstr ""
+
+#: ccextras/cc-music-submit.php:59
+msgid "Submit an A Cappella"
+msgstr ""
+
+#: ccextras/cc-music-submit.php:61
+msgid ""
+"Stand alone vocal parts, either spoken word or sung. Mono recording with no "
+"effects (reverb, delay, etc.) on them are best because they are the most "
+"flexible to work with. Many singers think they sound \"better\" with a lot "
+"of effects but it is always better to leave those choices to a producer/"
+"remixer to allow them to use their creative skills to the fullest potential."
+msgstr ""
+
+#: ccextras/cc-music-submit.php:65
+msgid "Use this form to submit an a cappella"
+msgstr ""
+
+#: ccextras/cc-music-submit.php:71
+msgid "Submit Samples"
+msgstr "提交采样"
+
+#: ccextras/cc-music-submit.php:73
+msgid ""
+"Samples can be a loop, a one-shot note or drum hit or any other snippet of "
+"sound that might be useful to a producer or remixer. You are encouraged to "
+"make a collection of samples and upload them together in archive format "
+"(ZIP), however sound files are accepted as well. By far the most flexible "
+"samples to work with are mono and have no effects for acoustic instruments "
+"and minimal effects for synthesized sounds."
+msgstr ""
+
+#: ccextras/cc-music-submit.php:76
+msgid "Use this form to submit samples"
+msgstr ""
+
+#: ccextras/cc-music-submit.php:83
+msgid "Submit a Fully Mixed Track"
+msgstr ""
+
+#: ccextras/cc-music-submit.php:85
+msgid ""
+"An original track that is fully mixed is <i>extremely unlikely</i> to be "
+"remixed because of the extra work the producer or remixer has to do the "
+"extract the parts they actually wish to use. Before uploading your track "
+"here, consider uploading to one of several free hosting sites sponsored by "
+"Creative Commons such <a href=\"http://archive.org/audio\">Internet Archive</"
+"a> or <a href=\"http://ourmedia.org\">Our Media</a> both of which might be "
+"more appropriate places to post completely mixed tracks."
+msgstr ""
+
+#: ccextras/cc-music-submit.php:89
+msgid "Use this form to submit a fully mixed track"
+msgstr ""
+
+#: ccextras/cc-notify-forms.inc:37
+msgid "Notify me by email when:"
+msgstr ""
+
+#: ccextras/cc-notify.inc:69
+msgid "My Notifications"
+msgstr ""
+
+#: ccextras/cc-notify.inc:82
+#, php-format
+msgid "%s has been remixed"
+msgstr ""
+
+#: ccextras/cc-notify.inc:84
+#, php-format
+msgid "%s uploads something new"
+msgstr ""
+
+#: ccextras/cc-notify.inc:94
+msgid "I've been remixed"
+msgstr "我已被再混音"
+
+#: ccextras/cc-notify.inc:96
+msgid "I've been reviewed"
+msgstr "我已被评论"
+
+#: ccextras/cc-notify.inc:98
+msgid "I've been replied to"
+msgstr ""
+
+#: ccextras/cc-notify.inc:100
+msgid "I've been rated"
+msgstr "我已被评级"
+
+#: ccextras/cc-notify.inc:152
+msgid "Notifications have been updated"
+msgstr ""
+
+#: ccextras/cc-notify.inc:192 ccextras/cc-notify.inc:220
+#: ccextras/cc-notify.inc:319 ccextras/cc-notify.inc:401
+msgid "PLEASE DO NOT RESPOND TO THIS EMAIL"
+msgstr ""
+
+#: ccextras/cc-notify.inc:193
+#, php-format
+msgid "This is a notification that \"%s\" has just received a rating of %d.00"
+msgstr ""
+
+#: ccextras/cc-notify.inc:199
+msgid "Ratings notification"
+msgstr ""
+
+#: ccextras/cc-notify.inc:222
+#, php-format
+msgid "This is a notification that \"%s\" has been reviewed by %s"
+msgstr ""
+
+#: ccextras/cc-notify.inc:229
+msgid "Review notification"
+msgstr "评论通知"
+
+#: ccextras/cc-notify.inc:318
+#, fuzzy
+msgid "Topic Reply Notification"
+msgstr "评论通知"
+
+#: ccextras/cc-notify.inc:400
+#, php-format
+msgid "Upload by %s"
+msgstr "上传者"
+
+#: ccextras/cc-notify.inc:402
+#, php-format
+msgid "This is a notification that %s has just uploaded new material to %s"
+msgstr ""
+
+#: ccextras/cc-notify.inc:411
+#, fuzzy
+msgid "It uses samples from:\n"
+msgstr "用采样来自："
+
+#: ccextras/cc-notify.inc:416
+#, fuzzy, php-format
+msgid "%s by %s"
+msgstr "上传者"
+
+#: ccextras/cc-notify.inc:420
+#, fuzzy, php-format
+msgid "Thank you, %s"
+msgstr ""
+"\n"
+"谢谢,\n"
+"%s"
+
+#: ccextras/cc-notify.php:129
+msgid "Edit My Notifications"
+msgstr ""
+
+#: ccextras/cc-notify.php:134
+#, php-format
+msgid "Get Notified About %s"
+msgstr ""
+
+#: ccextras/cc-notify.php:137
+#, fuzzy
+msgid "Notifications"
+msgstr "评论通知"
+
+#: ccextras/cc-notify.php:149
+msgid ""
+"Display notify options form. Optional parameter is other user to get "
+"notified about."
+msgstr ""
+
+#: ccextras/cc-notify.php:165
+#, fuzzy
+msgid "Allow email notifications"
+msgstr "评论通知"
+
+#: ccextras/cc-notify.php:166
+msgid ""
+"Is it ok to allow users get notified on activity on their accounts and "
+"others?"
+msgstr ""
+
+#: ccextras/cc-nswf.php:72 mixter-lib/mixter-dump-listing.inc:35
+msgid "Not Safe For Work"
+msgstr ""
+
+#: ccextras/cc-nswf.php:73
+#, php-format
+msgid "Mark this upload as %s if it contains questionable language."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:40
+msgid "Path"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:41
+msgid ""
+"ccHost will look here for files used with the \"viewfile\" command before it "
+"looks in ccfiles"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:47
+msgid "Skins Path"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:48
+msgid "Directory for template engine to find skins"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:53
+#, fuzzy
+msgid "Logfile Directory"
+msgstr "浏览比赛"
+
+#: ccextras/cc-path-admin.inc:54
+msgid "Log files and error files will be written here."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:61
+#, fuzzy
+msgid "Cache Directory"
+msgstr "浏览比赛"
+
+#: ccextras/cc-path-admin.inc:62
+msgid ""
+"Used by the system to write cached page templates and other temporary files."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:69
+msgid "PHPTal Libs Directory"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:70
+msgid "It is a bad idea to change this."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:76
+msgid "Plugins Path"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:77
+msgid "ccHost will look here for extra PHP modules after it looks in ccextras."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:83
+#, fuzzy
+msgid "Avatar Directory"
+msgstr "浏览比赛"
+
+#: ccextras/cc-path-admin.inc:84
+msgid "If blank, avatars are assumed to be in the user's upload directory."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:91
+msgid "System Error Message"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:92
+msgid "This file is displayed when the system encounters an error."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:105
+#, fuzzy
+msgid "Media Upload Directory"
+msgstr "浏览比赛"
+
+#: ccextras/cc-path-admin.inc:106
+msgid "Files will be uploaded to and downloaded from here."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:114
+#, fuzzy
+msgid "Contest Upload Directory"
+msgstr "浏览比赛"
+
+#: ccextras/cc-path-admin.inc:115
+msgid "Contest sources and entries will be uploaded and downloaded here."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:126 ccextras/cc-path-admin.inc:128
+msgid "NOTE:"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:126
+msgid ""
+"Changing the values here will not move any files around. You are responsible "
+"for that and the system will not work until the directories match these "
+"values."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:150
+msgid "This directory or file does not exist."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:160
+msgid "This file or directory is not writable."
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:183
+msgid "Paths and Files"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:202
+#, fuzzy
+msgid "Paths"
+msgstr "帖子"
+
+#: ccextras/cc-path-admin.inc:204
+msgid "Configure where ccHost looks for stuff"
+msgstr ""
+
+#: ccextras/cc-path-admin.inc:222
+#, fuzzy
+msgid "Display path settings form."
+msgstr "显示文件名字"
+
+#: ccextras/cc-playlist-forms.inc:46 ccextras/cc-skin-maker.inc:52
+#: ccextras/cc-user-info-x.inc:66 cclib/cc-navigator-admin.inc:45
+#: cclib/cc-navigator-admin.inc:86 cclib/cc-pools-forms.php:46
+#: cclib/cc-upload-forms.php:57
+msgid "Name"
+msgstr "姓名"
+
+#: ccextras/cc-playlist-forms.inc:53
+msgid "(e.g. chill, high_energy, guitar_stuff)"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:68
+msgid "Dynamic Query"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:69
+msgid "Edit dynamic query"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:71
+msgid "Edit the dynamic query for this playlist"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:80
+msgid "Track Order"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:81
+msgid "Edit track order"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:83
+msgid "Edit the order in which the tracks play"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:97 ccextras/cc-playlist-forms.inc:107
+#: cclib/cc-upload-forms.php:182
+msgid "This action can not be reversed..."
+msgstr "此操作不能倒退"
+
+#: ccextras/cc-playlist-forms.inc:98
+msgid "Are you sure you want to delete this playlist?"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:108
+msgid "Are you sure you want to empty all contents this playlist?"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:121
+msgid "Enable Playlists"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:126
+msgid "Promomotion tag for playlist"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:127
+msgid "Uploads with this tag will be mixed in with dynamic playlists"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:132
+msgid "Playlist Abuse List"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:133
+msgid "Users who have abused playlists"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:138
+msgid "Use Playlist For Rankings"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:139
+#, fuzzy
+msgid "Use playlists stats to rank uploads"
+msgstr "看所有最新上传"
+
+#: ccextras/cc-playlist-forms.inc:144
+#, fuzzy
+msgid "Featured Song"
+msgstr "推介"
+
+#: ccextras/cc-playlist-forms.inc:145
+msgid ""
+"This will be excluded from rankings and play counts. (Use the numberic "
+"upload id)"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:151
+msgid "Minimum Play Time"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:152
+msgid "The minimum number of seconds before a song gets credit for a Play"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:158
+#, fuzzy
+msgid "Weight: Play"
+msgstr "什么"
+
+#: ccextras/cc-playlist-forms.inc:159
+msgid "How much do plays influence rankings"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:164
+#, fuzzy
+msgid "Weight: Add"
+msgstr "什么"
+
+#: ccextras/cc-playlist-forms.inc:165
+msgid "How much do adds to playlists influence rankings"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:170
+#, fuzzy
+msgid "Weight: Rate"
+msgstr "什么"
+
+#: ccextras/cc-playlist-forms.inc:171
+msgid ""
+"How much do user ratings influence rankings (set this to zero to ignore "
+"ratings)"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:186
+#, fuzzy
+msgid "Admin Playlists"
+msgstr "管理"
+
+#: ccextras/cc-playlist-forms.inc:204
+#, fuzzy
+msgid "Manage Playlists"
+msgstr "管理文件"
+
+#: ccextras/cc-playlist-forms.inc:221
+#, fuzzy
+msgid "Edit Playlist Properties"
+msgstr "编辑属性对象"
+
+#: ccextras/cc-playlist-forms.inc:245
+#, fuzzy
+msgid "Playlist has been updated."
+msgstr "上传已被删除"
+
+#: ccextras/cc-playlist-forms.inc:254 ccextras/cc-playlist.inc:725
+#, php-format
+msgid "Return to %syour playlists%s"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:261 ccextras/cc-playlist.inc:382
+msgid "Empty Playlist"
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:271
+msgid "Playlist is now empty."
+msgstr ""
+
+#: ccextras/cc-playlist-forms.inc:286
+#, fuzzy
+msgid "Delete Playlist"
+msgstr "删除文件"
+
+#: ccextras/cc-playlist-forms.inc:298
+#, fuzzy
+msgid "Playlist has been deleted."
+msgstr "上传已被删除"
+
+#: ccextras/cc-playlist-forms.inc:308
+msgid "Playlists rankings recalcuated"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:46
+msgid "Create Dynamic Playlist"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:53
+#, fuzzy
+msgid "Create Playlist"
+msgstr "浏览比赛"
+
+#: ccextras/cc-playlist.inc:64
+#, php-format
+msgid "Edit Dynamic Playlist: \"%s\""
+msgstr ""
+
+#: ccextras/cc-playlist.inc:72
+msgid "Save Playlist Query"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:85
+msgid "Dynamic playlist changed."
+msgstr ""
+
+#: ccextras/cc-playlist.inc:110
+#, php-format
+msgid ""
+"No records match your dynamic playlist query. You can try again by "
+"modifiying your query %shere%s"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:118
+#, php-format
+msgid ""
+"This is a 'dynamic' playlist which means it will change depending on the "
+"latest uploads to this site. You can bookmark this playlist, or you can drag "
+"%sthis link%s to your browser toolbar. "
+msgstr ""
+
+#: ccextras/cc-playlist.inc:121
+msgid "(without the promo tracks)"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:125
+#, php-format
+msgid "You can also save this playlist %s to customize it by clicking %shere%s"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:132 ccextras/cc-playlist.inc:608
+msgid "Dynamic Playlist"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:157
+msgid "Create a new playlist, optionally starting with upload_id"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:159
+msgid "Add upload to playlist"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:161
+msgid "Playlist playlists, optionally just for user"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:163
+#, fuzzy
+msgid "Display contents of playlist"
+msgstr "显示图片上传指图"
+
+#: ccextras/cc-playlist.inc:165
+msgid "Remove upload from playlist"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:167
+msgid "Bump playlist count"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:170
+msgid "Return playlists with-w/o this upload"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:173
+#, fuzzy
+msgid "Display create playlist form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-playlist.inc:175
+msgid "Save dynamic playlist"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:177
+#, fuzzy
+msgid "Display edit query form"
+msgstr "参赛资料"
+
+#: ccextras/cc-playlist.inc:180
+#, fuzzy
+msgid "Display reorder playlist form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-playlist.inc:183
+msgid "Display browse playlist UI"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:186
+#, fuzzy
+msgid "Display playlist for popup"
+msgstr "显示文件名字"
+
+#: ccextras/cc-playlist.inc:190
+msgid "Display empty playlist UI"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:193
+#, fuzzy
+msgid "Display delete playlist form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-playlist.inc:196
+#, fuzzy
+msgid "Display edit playlist props form"
+msgstr "编辑属性对象"
+
+#: ccextras/cc-playlist.inc:199
+#, fuzzy
+msgid "Display admin playlist form"
+msgstr "显示文件名字"
+
+#: ccextras/cc-playlist.inc:203
+msgid "Playlist api"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:238
+msgid "Edit Playlist Order"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:284
+#, fuzzy
+msgid "Track has been removed from playlist"
+msgstr "已从你最喜爱的列表中删去"
+
+#: ccextras/cc-playlist.inc:344
+#, fuzzy
+msgid "Play All Tracks"
+msgstr "全部相配"
+
+#: ccextras/cc-playlist.inc:350
+msgid "Play in window"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:370
+#, fuzzy
+msgid "Edit Properties"
+msgstr "编辑属性对象"
+
+#: ccextras/cc-playlist.inc:377
+msgid "Reorder Playlist"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:390
+#, fuzzy
+msgid "Delete Playist"
+msgstr "删除文件"
+
+#: ccextras/cc-playlist.inc:411
+#, fuzzy, php-format
+msgid "%s's Favorites"
+msgstr "添加到我最喜爱中"
+
+#: ccextras/cc-playlist.inc:453
+#, php-format
+msgid "Browse Playlists Featuring \"%s\""
+msgstr ""
+
+#: ccextras/cc-playlist.inc:461
+msgid "Hot Playlists"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:463
+#, fuzzy
+msgid "New Playlists"
+msgstr "密码"
+
+#: ccextras/cc-playlist.inc:477 ccextras/cc-playlist.inc:495
+#, php-format
+msgid "Playlist: %s"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:557
+msgid "Upload is already in list"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:581
+msgid "Track added to playlist"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:635
+msgid "New playlist created"
+msgstr ""
+
+#: ccextras/cc-playlist.inc:652
+msgid " and track added."
+msgstr ""
+
+#: ccextras/cc-playlist.inc:665
+#, php-format
+msgid "%s's Playlist (%d) "
+msgstr ""
+
+#: ccextras/cc-playlist.php:108
+msgid "Add to Playlist"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:43
+msgid ""
+"Use this screen to allow uploads of less common and hard to verify file "
+"types. Unlike other common media types the degree of support for verifying "
+"the efficacy of these file types range greatly."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:44
+msgid "A guide to using this screen"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:45
+msgid ""
+"The <b>Del</b>ete option only applies to types that you add here. Otherwise "
+"the types displayed here are culled from your current getID3 installation. "
+"(If you upgrade getID3, you should come back here and the new types will "
+"automatcially show up.)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:46
+msgid ""
+"<b>D/S/V</b> Here you chose what kind of support you wish to have for the "
+"file type"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:47
+msgid ""
+"<b>D</b>isable the use of this file type, users will see an error if they "
+"try to upload this type."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:48
+msgid ""
+"<b>S</b>ignature check only. This will allow the file type to be uploaded "
+"but with only <i>very</i> minimal amount of verification. In other words, if "
+"a virus is embedded into an Office document, this check will not be able to "
+"detect it."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:49
+msgid ""
+"Attempt to <b>V</b>erify using the getID3 library. This will only work if "
+"your version of getID3 supports full analysis of the file type. Many file "
+"types in this list require special tools to be installed (see your "
+"helperapps directory for details). Others are simply unsupported in which "
+"case you have to fall back to <b>S</b>ignature check only."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:51
+msgid "Make sure to enter the file's <b>Ext</b>ension."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:53
+msgid "<b>Tags</b> will be added to every file uploaded of this type."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:54
+msgid ""
+"<b>Signature</b> is only relevant if you chose the <b>S</b>ignature option"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:55
+msgid ""
+"Use the <b>Add Format</b> button to extend this table and add formats. "
+"Because these are not known to getID3, you must use the <b>S</b>ignature "
+"only option, otherwise your users will see an error message when trying to "
+"upload."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:61
+msgid "D/S/V"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:62 cclib/cc-search.php:45
+msgid "Type"
+msgstr "类型"
+
+#: ccextras/cc-pseudo-verify.inc:62
+msgid "Ext."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:64
+msgid "Signature"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:80
+msgid "Plain Text (ASCII)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:112
+#, fuzzy
+msgid "Add Format"
+msgstr "论坛"
+
+#: ccextras/cc-pseudo-verify.inc:177
+#, fuzzy
+msgid "Display verification options form."
+msgstr "编辑属性对象"
+
+#: ccextras/cc-pseudo-verify.inc:217
+msgid "Pseudo Verify"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:220
+msgid "Configure usage of exotic and other dangerous file types"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:238
+msgid "Dolby AC-3 / Dolby Digital"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:239
+msgid "AAC - ADIF format"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:240
+msgid "AAC - ADTS format"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:241
+msgid "Audio Visual Research"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:242
+msgid "Bonk v0.9+"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:243
+msgid "Lossless Audio"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:244
+msgid "Lossless Predictive Audio Compression"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:245
+msgid "Monkey's Audio Compressor"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:246
+msgid "MODule (assorted sub-formats)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:247
+msgid "MODule (Impulse Tracker)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:248
+msgid "MODule (eXtended Module)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:249
+msgid "MODule (ScreamTracker)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:250
+msgid "Musepack / MPEGplus"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:251
+msgid "OptimFROG"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:252
+msgid "RKive AUdio compressor"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:253
+msgid "MKW Shorten"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:254
+msgid "TTA Lossless Audio Compressor"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:255
+#, fuzzy
+msgid "Creative Voice"
+msgstr "浏览比赛"
+
+#: ccextras/cc-pseudo-verify.inc:256
+msgid "Vector Quantization Format"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:257
+msgid "WavPack (v4.0+)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:258
+msgid "Bink / Smacker"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:259
+msgid "FLash Video"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:260
+msgid "Mastroka (audio/video)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:261
+msgid "Moving Pictures Experts Group (audio/video)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:262
+msgid "Nullsoft Streaming Video"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:263
+msgid "WAV / AVI / CD-audio / SDSS"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:264
+msgid "Kodak Photo CD"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:265
+msgid "Tagged Information File Format"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:266
+msgid "(ISO) CD-ROM Image"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:267
+msgid "RAR compressed data"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:268
+msgid "SZIP compressed data"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:269
+msgid "TAR compressed data"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:270
+msgid "GZIP compressed data"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:271
+msgid "Adobe PDF"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:272
+msgid "Office (Word, Excel, Powerpoint, etc.)"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:326
+msgid "Configure Pseudo Verifier"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:366
+#, fuzzy
+msgid "New pseudo verification options saved"
+msgstr "评论通知"
+
+#: ccextras/cc-pseudo-verify.inc:406
+msgid "Cannot determine file type"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:414
+#, fuzzy
+msgid "Unknown pseudo-format"
+msgstr "未知文件"
+
+#: ccextras/cc-pseudo-verify.inc:422
+#, fuzzy
+msgid "That file format is not allowed."
+msgstr "文件未完全上传"
+
+#: ccextras/cc-pseudo-verify.inc:444 cclib/cc-fileverify.php:164
+#, fuzzy
+msgid "Unknown format"
+msgstr "未知文件"
+
+#: ccextras/cc-pseudo-verify.inc:459
+msgid "Could not open file."
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:467
+msgid "Invalid signature for file type"
+msgstr ""
+
+#: ccextras/cc-pseudo-verify.inc:474
+msgid "Invalid action request"
+msgstr ""
+
+#: ccextras/cc-publicize.php:45
+msgid "Don't know what user to publicize!"
+msgstr ""
+
+#: ccextras/cc-publicize.php:54
+msgid "This feature is not enabled here"
+msgstr ""
+
+#: ccextras/cc-publicize.php:63
+msgid ""
+"Do you have a blog or web page? You can display a list of up-to-the-minute "
+"links to your latest remixes directly on your page."
+msgstr ""
+
+#: ccextras/cc-publicize.php:64
+#, fuzzy
+msgid "Your remixes"
+msgstr "你的email地址"
+
+#: ccextras/cc-publicize.php:65
+msgid "Other peoples's remixes of you."
+msgstr ""
+
+#: ccextras/cc-publicize.php:66
+#, fuzzy
+msgid "All of your uploads"
+msgstr "看所有最新上传"
+
+#: ccextras/cc-publicize.php:67
+msgid "Publicize Yourself"
+msgstr ""
+
+#: ccextras/cc-publicize.php:71
+#, php-format
+msgid ""
+"Do you have a blog or web page? You can display a list of up-to-the-minute "
+"links to latest remixes of %s directly on your page."
+msgstr ""
+
+#: ccextras/cc-publicize.php:72
+#, fuzzy, php-format
+msgid "%s's remixes"
+msgstr "还未上传任何再混音"
+
+#: ccextras/cc-publicize.php:73
+#, php-format
+msgid "Other peoples's remixes of %s"
+msgstr ""
+
+#: ccextras/cc-publicize.php:75
+#, fuzzy, php-format
+msgid "All %s's uploads"
+msgstr "看所有最新上传"
+
+#: ccextras/cc-publicize.php:76 ccextras/cc-publicize.php:209
+#, fuzzy, php-format
+msgid "Publicize %s"
+msgstr "发表"
+
+#: ccextras/cc-publicize.php:79
+msgid "1. Select from the following options:"
+msgstr ""
+
+#: ccextras/cc-publicize.php:80
+msgid "2. Then copy the text from this field and paste it into your page:"
+msgstr ""
+
+#: ccextras/cc-publicize.php:82
+msgid "Type of links:"
+msgstr ""
+
+#: ccextras/cc-publicize.php:83
+msgid "Number of links:"
+msgstr ""
+
+#: ccextras/cc-publicize.php:84
+#, fuzzy
+msgid "Format:"
+msgstr "论坛"
+
+#: ccextras/cc-publicize.php:86
+msgid "Just the very latest one"
+msgstr ""
+
+#: ccextras/cc-publicize.php:87
+msgid "The 5 latest"
+msgstr ""
+
+#: ccextras/cc-publicize.php:88
+msgid "The 10 latest"
+msgstr ""
+
+#: ccextras/cc-publicize.php:89
+msgid "A whole bunch (up to a 50)"
+msgstr ""
+
+#: ccextras/cc-publicize.php:92
+msgid "Plain links"
+msgstr ""
+
+#: ccextras/cc-publicize.php:93
+msgid "Links with attribution"
+msgstr ""
+
+#: ccextras/cc-publicize.php:94
+msgid "Links with a stream link"
+msgstr ""
+
+#: ccextras/cc-publicize.php:95
+msgid "Links with a download link"
+msgstr ""
+
+#: ccextras/cc-publicize.php:96
+msgid "Verbose (!)"
+msgstr ""
+
+#: ccextras/cc-publicize.php:97
+msgid "Cut off links if they are larger than:"
+msgstr ""
+
+#: ccextras/cc-publicize.php:99
+msgid "10 characters"
+msgstr ""
+
+#: ccextras/cc-publicize.php:100
+msgid "20 characters"
+msgstr ""
+
+#: ccextras/cc-publicize.php:101
+msgid "25 characters"
+msgstr ""
+
+#: ccextras/cc-publicize.php:102
+msgid "Don't do any chopping"
+msgstr ""
+
+#: ccextras/cc-publicize.php:104
+msgid "Show raw HTML"
+msgstr ""
+
+#: ccextras/cc-publicize.php:105
+msgid "Show Formatted"
+msgstr ""
+
+#: ccextras/cc-publicize.php:108
+msgid ""
+"This preview is pre-formatted. How this will actually look on your web page "
+"will change depending on your stylesheet settings."
+msgstr ""
+
+#: ccextras/cc-publicize.php:109
+msgid ""
+"Make sure to copy from the box above, not what is showing below because the "
+"actual content of this HTML will change based on the upload activity. You "
+"can still get an idea of what of the formatting will look like here:"
+msgstr ""
+
+#: ccextras/cc-publicize.php:168 cclib/cc-defines-access.php:113
+msgid "Everybody"
+msgstr ""
+
+#: ccextras/cc-publicize.php:169
+msgid "Current User Only"
+msgstr ""
+
+#: ccextras/cc-publicize.php:170
+msgid "Nobody (Turn this feature off)"
+msgstr ""
+
+#: ccextras/cc-publicize.php:174
+msgid "Show \"Publicize Wizard\" to"
+msgstr ""
+
+#: ccextras/cc-publicize.php:175
+msgid "Allows visitors to create HTML snippets for their blogs"
+msgstr ""
+
+#: ccextras/cc-publicize.php:182
+msgid "Extra publicize formats"
+msgstr ""
+
+#: ccextras/cc-publicize.php:183
+msgid ""
+"Comma separated format templates. These can be in a 'formats' directory in "
+"your Skins path. (e.g. mplayer, my_links, my_big_links)"
+msgstr ""
+
+#: ccextras/cc-publicize.php:208
+msgid "Publicize yourself"
+msgstr ""
+
+#: ccextras/cc-publicize.php:211
+#, fuzzy
+msgid "Publicize"
+msgstr "发表了的"
+
+#: ccextras/cc-query-browser.php:80 cclib/cc-mediahost.php:97
+msgid "Browse Uploads"
+msgstr "浏览上传"
+
+#: ccextras/cc-query-fmts.inc:127
+#, fuzzy, php-format
+msgid "\"%s\" is not a valid template"
+msgstr "错误日期"
+
+#: ccextras/cc-review-forms.inc:38 cclib/cc-editorials.inc:55
+msgid "Review"
+msgstr "评论"
+
+#: ccextras/cc-review-forms.inc:56 ccextras/cc-reviews.inc:315
+msgid "Review integration is not enabled."
+msgstr ""
+
+#: ccextras/cc-review-forms.inc:64
+#, fuzzy
+msgid "Cannot find that upload."
+msgstr "无法找到那用户名"
+
+#: ccextras/cc-review-forms.inc:77
+#, fuzzy
+msgid "create new"
+msgstr "浏览比赛"
+
+#: ccextras/cc-review-forms.inc:83
+#, fuzzy, php-format
+msgid "Write a Review for \"%s\""
+msgstr "评论"
+
+#: ccextras/cc-review-forms.inc:122
+#, fuzzy
+msgid "You have already reviewed this upload."
+msgstr "你已评论过此上传"
+
+#: ccextras/cc-review-forms.inc:134
+#, fuzzy, php-format
+msgid "Review of '%s' by '%s'"
+msgstr "主题提要作者"
+
+#: ccextras/cc-review-forms.inc:178 ccextras/cc-reviews.inc:243
+#: ccextras/cc-reviews.inc:261 ccextras/cc-reviews.inc:281
+#: ccextras/cc-reviews.inc:290 ccextras/cc-reviews.inc:380
+#: ccextras/cc-reviews.inc:541 ccextras/cc-reviews.inc:612
+#: ccextras/cc-reviews.php:128
+msgid "Reviews"
+msgstr ""
+
+#: ccextras/cc-review-forms.inc:229 ccextras/cc-reviews.inc:663
+#, fuzzy
+msgid "Sorry, no reviews match."
+msgstr "对不起，无评论符合"
+
+#: ccextras/cc-reviews.inc:71
+#, fuzzy
+msgid "Sorry, no hot topics yet"
+msgstr "对不起，无主题相关"
+
+#: ccextras/cc-reviews.inc:108
+#, fuzzy
+msgid "Cannot find that user"
+msgstr "无法找到那用户名"
+
+#: ccextras/cc-reviews.inc:118
+#, fuzzy
+msgid "Cannot find that upload. It may have been removed by the owner."
+msgstr "无法找到这个文件，也许文件已被主人迁移"
+
+#: ccextras/cc-reviews.inc:153
+#, fuzzy
+msgid "Recent Reviews"
+msgstr "评论"
+
+#: ccextras/cc-reviews.inc:183
+#, fuzzy, php-format
+msgid "Reviews left %s"
+msgstr "评论"
+
+#: ccextras/cc-reviews.inc:189
+#, fuzzy, php-format
+msgid "See reviews left %s"
+msgstr "评论"
+
+#: ccextras/cc-reviews.inc:205
+#, fuzzy, php-format
+msgid "Reviews for \"%s\""
+msgstr "评论"
+
+#: ccextras/cc-reviews.inc:232 ccextras/cc-reviews.inc:237
+#, fuzzy, php-format
+msgid "Reviews left for \"%s\""
+msgstr "评论"
+
+#: ccextras/cc-reviews.inc:396 ccextras/cc-reviews.php:64
+msgid "Write Review"
+msgstr ""
+
+#: ccextras/cc-reviews.inc:519
+#, fuzzy, php-format
+msgid "Reviews left for %s by %s"
+msgstr "主题提要作者"
+
+#: ccextras/cc-reviews.inc:536
+#, fuzzy, php-format
+msgid "Reviews left for %s"
+msgstr "评论"
+
+#: ccextras/cc-reviews.inc:566
+#, fuzzy
+msgid "Enable Reviews"
+msgstr "管理再混音"
+
+#: ccextras/cc-reviews.inc:567
+#, fuzzy
+msgid "Allow users to review uploads"
+msgstr "看所有最新上传"
+
+#: ccextras/cc-reviews.inc:709
+msgid "See reviews by a person or for a specific upload"
+msgstr ""
+
+#: ccextras/cc-reviews.inc:713
+#, fuzzy
+msgid "Display a review form"
+msgstr "显示文件名字"
+
+#: ccextras/cc-reviews.inc:717
+msgid "Reviews by a person or for a specific upload"
+msgstr ""
+
+#: ccextras/cc-reviews.php:97
+#, fuzzy, php-format
+msgid "%s has not left any reviews"
+msgstr "还未上传任何再混音"
+
+#: ccextras/cc-reviews.php:106
+#, php-format
+msgid "%s has left %s%d review.%s"
+msgid_plural "%s has left %s%d reviews.%s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ccextras/cc-reviews.php:114
+#, fuzzy
+msgid "and has not been reviewed"
+msgstr "上传已被删除"
+
+#: ccextras/cc-reviews.php:122
+#, fuzzy, php-format
+msgid "and has been reviewed %s%d time%s."
+msgid_plural "and has been reviewed %s%d times%s."
+msgstr[0] "上传已被删除"
+msgstr[1] "上传已被删除"
+
+#: ccextras/cc-reviews.php:175
+#, php-format
+msgid "Reviews (%s)"
+msgstr "评论"
+
+#: ccextras/cc-run-once.inc:71
+msgid "Run Once"
+msgstr ""
+
+#: ccextras/cc-run-once.inc:72
+msgid ""
+"Comma separated list of xml files in viewfiles directory that registered "
+"users will see once."
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:46
+#, fuzzy
+msgid "Create In"
+msgstr "浏览比赛"
+
+#: ccextras/cc-skin-maker.inc:47
+msgid "The new skin will be created in this directory"
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:53
+msgid "Name of your new skin"
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:54
+msgid "Invalid characters in name"
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:63
+msgid ""
+"Using this form you may create the basic structure of a new skin based on "
+"skin-simple."
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:63
+msgid "Please consult the administrator's guide for editing skins."
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:86
+msgid "That skin already exists."
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:102
+#, fuzzy
+msgid "Create a New Skin"
+msgstr "创建新帐户"
+
+#: ccextras/cc-skin-maker.inc:126
+msgid "Error reading skin template file"
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:133
+msgid "Error parsing skin template file"
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:157
+msgid "Error writing"
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:185
+#, fuzzy
+msgid "Settings"
+msgstr "编辑你的设置"
+
+#: ccextras/cc-skin-maker.inc:186
+#, php-format
+msgid "Skin, %s, written successfully. Use %s to select now."
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:213
+msgid "Skin Maker"
+msgstr ""
+
+#: ccextras/cc-skin-maker.inc:215
+msgid "Skin creation helper"
+msgstr ""
+
+#: ccextras/cc-stats.php:53
+#, fuzzy, php-format
+msgid "%s has no remixes and has not been remixed"
+msgstr "上传已被删除"
+
+#: ccextras/cc-stats.php:57
+#, fuzzy, php-format
+msgid "%s has no remixes and has been remixed %d time."
+msgid_plural "%s has no remixes and has been remixed %d times."
+msgstr[0] "上传已被删除"
+msgstr[1] "上传已被删除"
+
+#: ccextras/cc-stats.php:67
+#, php-format
+msgid "%s has %d remix and has not been remixed"
+msgid_plural "%s has %d remixes and has not been remixed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ccextras/cc-stats.php:78
+#, fuzzy, php-format
+msgid "%s has one remix and has been remixed once"
+msgstr "上传已被删除"
+
+#: ccextras/cc-stats.php:82
+#, fuzzy, php-format
+msgid "%s has 1 remix and has been remixed %d time."
+msgid_plural "%s has 1 remixes and has been remixed %d times."
+msgstr[0] "上传已被删除"
+msgstr[1] "上传已被删除"
+
+#: ccextras/cc-stats.php:92
+#, fuzzy, php-format
+msgid "%s has %d remix and has been remixed 1 time."
+msgid_plural "%s has %d remixes and has been remixed 1 time."
+msgstr[0] "上传已被删除"
+msgstr[1] "上传已被删除"
+
+#: ccextras/cc-stats.php:99
+#, fuzzy, php-format
+msgid "%s has %d remixes and has been remixed %d times."
+msgstr "上传已被删除"
+
+#: ccextras/cc-stats.php:108
+msgid "Stats"
+msgstr ""
+
+#: ccextras/cc-stats.php:149 ccextras/cc-stats.php:220
+#, fuzzy
+msgid "Charts"
+msgstr "什么"
+
+#: ccextras/cc-throttle.inc:47
+msgid "Enable Throttling"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:53
+msgid "User exceptions"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:54
+msgid ""
+"Comma separted list of user login names that are exempt from throttling."
+msgstr ""
+
+#: ccextras/cc-throttle.inc:54
+msgid "Administrators are automatically exempt from throttling."
+msgstr ""
+
+#: ccextras/cc-throttle.inc:58
+msgid "You are not authorized to submit this type of file."
+msgstr ""
+
+#: ccextras/cc-throttle.inc:58
+msgid "Please contact the site administrator for details."
+msgstr ""
+
+#: ccextras/cc-throttle.inc:61
+#, fuzzy
+msgid "Quota Message"
+msgstr "消息"
+
+#: ccextras/cc-throttle.inc:62
+msgid "Message to users who are outside the bounds of the throttle"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:68
+#, fuzzy, php-format
+msgid "%sEdit Upload Throttle Rules%s"
+msgstr "上传的和用户"
+
+#: ccextras/cc-throttle.inc:71
+msgid "Rules"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:72
+msgid "Edit the rules governing the upload throttle"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:98
+#, fuzzy
+msgid "Add A Rule"
+msgstr "文件添加到"
+
+#: ccextras/cc-throttle.inc:111 cclib/cc-navigator-admin.inc:86
+msgid "Order"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:123
+#, fuzzy
+msgid "All types"
+msgstr "有效文件类型"
+
+#: ccextras/cc-throttle.inc:130
+msgid "24 hours"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:131
+msgid "7 days"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:132
+msgid "2 weeks"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:133
+msgid "1 month"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:134
+msgid "forever"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:138
+msgid "Forbid"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:139
+#, fuzzy
+msgid "Allow"
+msgstr "所有"
+
+#: ccextras/cc-throttle.inc:143
+msgid "Stop here if rule is true"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:144
+msgid "Continue to next rule"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:168
+msgid "If user has "
+msgstr ""
+
+#: ccextras/cc-throttle.inc:179
+msgid "# of:"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:190
+msgid "since:"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:201
+#, fuzzy
+msgid "then:"
+msgstr "日期"
+
+#: ccextras/cc-throttle.inc:360
+#, fuzzy
+msgid "Administer Upload Throttle"
+msgstr "上传的和用户"
+
+#: ccextras/cc-throttle.inc:368
+#, fuzzy
+msgid "Upload Throttle Rules"
+msgstr "上传的和用户"
+
+#: ccextras/cc-throttle.inc:439
+#, fuzzy
+msgid "Upload Throttles"
+msgstr "上传的和用户"
+
+#: ccextras/cc-throttle.inc:441
+msgid "Limit the number and types of uploads per user"
+msgstr ""
+
+#: ccextras/cc-throttle.inc:460
+#, fuzzy
+msgid "Display throttle settings form"
+msgstr "编辑属性对象"
+
+#: ccextras/cc-throttle.inc:462
+#, fuzzy
+msgid "Display throttle rules form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-topics-forms.inc:37
+#, fuzzy
+msgid "This action cannot be reversed..."
+msgstr "此操作不能倒退"
+
+#: ccextras/cc-topics-forms.inc:39
+#, php-format
+msgid "Are you sure you want to delete \"%s\"?"
+msgstr ""
+
+#: ccextras/cc-topics-forms.inc:55 ccextras/cc-topics-forms.inc:141
+#: cclib/cc-filerename-admin.inc:52 cclib/cc-filetagger-admin.inc:58
+#: cclib/cc-remix.php:56
+msgid "Title"
+msgstr "题目"
+
+#: ccextras/cc-topics-forms.inc:71
+#, fuzzy
+msgid "Allow Translations"
+msgstr "评论通知"
+
+#: ccextras/cc-topics-forms.inc:101 ccextras/cc-topics.inc:309
+#: ccextras/cc-topics.inc:636
+msgid "Reply"
+msgstr "回复"
+
+#: ccextras/cc-topics-forms.inc:101
+#, fuzzy
+msgid "Submit Reply"
+msgstr "提交一个再混音"
+
+#: ccextras/cc-topics-forms.inc:109 ccextras/cc-topics.inc:241
+#, fuzzy
+msgid "Translate"
+msgstr "等级"
+
+#: ccextras/cc-topics-forms.inc:109
+#, fuzzy
+msgid "Submit Translation"
+msgstr "提交条目"
+
+#: ccextras/cc-topics-forms.inc:114 cclib/cc-language.inc:149
+#: cclib/cc-language.inc:169
+#, fuzzy
+msgid "Language"
+msgstr "默认语言："
+
+#: ccextras/cc-topics-forms.inc:115
+msgid "Your language, in your language (e.g. Italiano, Magyar, etc.)"
+msgstr ""
+
+#: ccextras/cc-topics-forms.inc:129 cclib/cc-navigator-admin.inc:86
+msgid "Text"
+msgstr "文字"
+
+#: ccextras/cc-topics.inc:49
+msgid "You have requested an unknown feed type."
+msgstr ""
+
+#: ccextras/cc-topics.inc:211
+msgid "Posts"
+msgstr "帖子"
+
+#: ccextras/cc-topics.inc:219
+msgid "Translation of..."
+msgstr ""
+
+#: ccextras/cc-topics.inc:258
+msgid "Lock"
+msgstr ""
+
+#: ccextras/cc-topics.inc:260
+msgid "Unlock"
+msgstr ""
+
+#: ccextras/cc-topics.inc:274
+#, fuzzy
+msgid "Delete branch"
+msgstr "删除主题"
+
+#: ccextras/cc-topics.inc:284
+msgid "Reply with quote"
+msgstr ""
+
+#: ccextras/cc-topics.inc:301
+msgid "Reply to yourself"
+msgstr ""
+
+#: ccextras/cc-topics.inc:305
+#, fuzzy, php-format
+msgid "Reply to %s"
+msgstr "回复"
+
+#: ccextras/cc-topics.inc:468
+msgid "no topic specified."
+msgstr ""
+
+#: ccextras/cc-topics.inc:480
+msgid "You are not authorized to post here."
+msgstr ""
+
+#: ccextras/cc-topics.inc:487
+#, fuzzy
+msgid "Cannot find that topic."
+msgstr "无法找到那用户名"
+
+#: ccextras/cc-topics.inc:488
+#, fuzzy
+msgid "It might have been deleted by the author."
+msgstr "无法找到这个文件，也许文件已被主人迁移"
+
+#: ccextras/cc-topics.inc:498
+msgid "Topics for Translation"
+msgstr ""
+
+#: ccextras/cc-topics.inc:512
+msgid "(There are no translations for this topic)"
+msgstr ""
+
+#: ccextras/cc-topics.inc:513
+msgid "Current translations"
+msgstr ""
+
+#: ccextras/cc-topics.inc:534
+#, php-format
+msgid "Translation of \"%s\""
+msgstr ""
+
+#: ccextras/cc-topics.inc:704
+msgid "Deleting Topic"
+msgstr "删除主题"
+
+#: ccextras/cc-topics.inc:803
+msgid "Flag this topic for possible violation of terms"
+msgstr ""
+
+#: ccextras/cc-topics.inc:804 mixter-lib/mixter-dump-listing.inc:46
+msgid "Flag this upload for possible violation of terms"
+msgstr ""
+
+#: ccextras/cc-topics.inc:841
+#, fuzzy, php-format
+msgid "Edit topic: '%s'"
+msgstr "提交到："
+
+#: ccextras/cc-topics.inc:874
+#, fuzzy
+msgid "View Topic"
+msgstr "话题"
+
+#: ccextras/cc-topics.inc:879
+msgid "No topic specified"
+msgstr ""
+
+#: ccextras/cc-topics.inc:889
+#, fuzzy
+msgid "Topic does not exist. (May have been deleted by author.)"
+msgstr "无法找到这个文件，也许文件已被主人迁移"
+
+#: ccextras/cc-topics.inc:921
+msgid "Locking and Unlocking Topic Replies"
+msgstr ""
+
+#: ccextras/cc-topics.inc:927
+#, fuzzy
+msgid "Topic does not exist"
+msgstr "上传已被删除"
+
+#: ccextras/cc-topics.inc:935
+#, fuzzy
+msgid "Topic is now locked"
+msgstr "上传已被删除"
+
+#: ccextras/cc-topics.inc:936
+#, fuzzy
+msgid "Topic is now unlocked"
+msgstr "上传已被删除"
+
+#: ccextras/cc-topics.inc:941
+msgid "Return to previous page"
+msgstr ""
+
+#: ccextras/cc-topics.inc:971
+#, fuzzy
+msgid "Display topic reply form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-topics.inc:975
+msgid "Ajax callback to get topic text"
+msgstr ""
+
+#: ccextras/cc-topics.inc:979
+#, fuzzy
+msgid "Display topic translate form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-topics.inc:983
+#, fuzzy
+msgid "Display quote reply form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-topics.inc:987
+#, fuzzy
+msgid "Display delete topic form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-topics.inc:991
+#, fuzzy
+msgid "Display an edit topic form"
+msgstr "发表主题回复"
+
+#: ccextras/cc-topics.inc:995
+#, fuzzy
+msgid "Display a topic thread"
+msgstr "显示文件名字"
+
+#: ccextras/cc-topics.inc:999
+msgid "Lock a topic thread from replies"
+msgstr ""
+
+#: ccextras/cc-update.php:64
+msgid "Updates already installed:"
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:67
+#, fuzzy
+msgid "Your legal name"
+msgstr "你的email地址"
+
+#: ccextras/cc-user-info-x.inc:71
+msgid "Phone Number"
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:72
+msgid "A phone number to reach you"
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:76
+msgid "Country"
+msgstr "国家"
+
+#: ccextras/cc-user-info-x.inc:77
+msgid "The country of your legal residence"
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:81
+msgid "Date of birth"
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:82
+msgid "You must be 15 or older to be eligible"
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:93
+msgid ""
+"The information on this screen will be never appear on the site. However, it "
+"is necessary in order to officially enter you into the contest and make sure "
+"the contest is fair as well as give us a way to reach you if you win."
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:93
+msgid ""
+"All the fields must be filled in with the proper information or your entry "
+"will be disqualified."
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:93
+msgid ""
+"You must be <b>at least 15 years old</b> to participate in this contest."
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:94
+msgid ""
+"You will be able to edit this information if it changes before the contest "
+"closes by clicking on the <b>Edit Your Profile</b> link in the sidebar menu."
+msgstr ""
+
+#: ccextras/cc-user-info-x.inc:143
+#, fuzzy
+msgid "Contest Entry User Information"
+msgstr "参赛资料"
+
+#: ccextras/cc-user-info-x.inc:221
+msgid "Contest Entry Info"
+msgstr "参赛资料"
+
+#: ccextras/cc-user-info-x.inc:222
+msgid "Edit your personal contest information"
+msgstr ""
+
+#: ccextras/update_v_1_2h.inc:150
+#, fuzzy
+msgid "Upgraded remix fields"
+msgstr "上传者"
+
+#: ccextras/update_v_1_2h.inc:202
+msgid "Ratings info updated"
+msgstr ""
+
+#: ccextras/update_v_1_2k.inc:83
+#, fuzzy
+msgid "Reviews installed"
+msgstr "评论"
+
+#: ccextras/update_v_2_1a.inc:58
+#, fuzzy
+msgid "Notifications installed"
+msgstr "评论通知"
+
+#: ccextras/update_v_3_0c.inc:103
+#, fuzzy
+msgid "Forums installed"
+msgstr "论坛提要"
+
+#: ccextras/update_v_3_0f.inc:43
+#, fuzzy
+msgid "User Languages Installed"
+msgstr "论坛提要"
+
+#: ccextras/update_v_3_0f.inc:50
+#, fuzzy, php-format
+msgid "This is a %s based site."
+msgstr "错误日期"
+
+#: ccextras/update_v_3_0f.inc:53
+#, fuzzy
+msgid "remix"
+msgstr "再混音"
+
+#: ccextras/update_v_3_0f.inc:53
+#, fuzzy
+msgid "sharing"
+msgstr "评级"
+
+#: ccextras/update_v_3_0f.inc:54
+#, fuzzy
+msgid "media"
+msgstr "编辑"
+
+#: ccextras/update_v_3_0f.inc:58
+msgid "Added Meta Template Tags"
+msgstr ""
+
+#: ccextras/update_v_3_0g.inc:52
+msgid "BPM info updated"
+msgstr ""
+
+#: ccextras/update_v_3_1a.inc:48
+msgid "WARNING"
+msgstr ""
+
+#: ccextras/update_v_3_1a.inc:48
+msgid ""
+"The default Sidebar content file (custom.xml) was not found. So, no copy was "
+"made."
+msgstr ""
+
+#: ccextras/update_v_3_1a.inc:60
+#, php-format
+msgid "Tried to write to %s, but it is not writable."
+msgstr ""
+
+#: ccextras/update_v_3_1a.inc:65
+msgid "sidebar.xml already exists so custom.xml was not copied"
+msgstr ""
+
+#: ccextras/update_v_3_1b.inc:39
+msgid "Sample pool performance, Email rules, system paths installed"
+msgstr ""
+
+#: ccextras/update_v_3_1d.inc:37
+#, fuzzy
+msgid "Last edit column installed"
+msgstr "论坛提要"
+
+#: ccextras/update_v_3_1e.inc:59
+msgid "Path structures checked:"
+msgstr ""
+
+#: ccextras/update_v_3_2b.inc:37
+#, fuzzy
+msgid "Ratings Installed"
+msgstr "评论"
+
+#: ccextras/update_v_3_2c.inc:45
+msgid "Added Thumbnail Constrain Tag"
+msgstr ""
+
+#: ccextras/update_v_3_2d.inc:51
+msgid "Super admins created from admins"
+msgstr ""
+
+#: ccextras/update_v_3_2d.inc:85
+msgid "Null table columns updated"
+msgstr ""
+
+#: ccextras/update_v_3_2e.inc:42
+msgid "Topic lock field added"
+msgstr ""
+
+#: ccextras/update_v_3_2f_vs3.inc:60
+#, fuzzy
+msgid "Configuration i18n Information Saved"
+msgstr "更改已保存"
+
+#: ccextras/update_v_3_2g_ti18n.inc:37
+#, fuzzy
+msgid "Topics i18n installed"
+msgstr "评论通知"
+
+#: ccextras/update_v_3_2h_cntst.inc:37
+msgid "Contest entry dates updated"
+msgstr ""
+
+#: ccextras/update_v_4_carts.inc:37
+#, fuzzy
+msgid "Carts installed"
+msgstr "论坛提要"
+
+#: ccextras/update_v_4_cartsex.inc:37
+#, fuzzy
+msgid "Carts extensions installed"
+msgstr "评论通知"
+
+#: ccextras/update_v_4_cnttabs.inc:37
+msgid "Contest tab pages updated"
+msgstr ""
+
+#: ccextras/update_v_4_instdone.inc:38
+#, fuzzy
+msgid "Installation Complete"
+msgstr "这个装置不支持此特性"
+
+#: ccextras/update_v_4_lics3.inc:42
+#, fuzzy
+msgid "3.0 Licenses Installed"
+msgstr "执照"
+
+#: ccextras/update_v_4_poolauto.inc:37
+msgid "Auto pool approve flag created"
+msgstr ""
+
+#: ccextras/update_v_4_uphide.inc:42
+#, fuzzy
+msgid "Database optimization installed"
+msgstr "评论通知"
+
+#: cclib/cc-access.php:50
+#, fuzzy
+msgid "Super Admins"
+msgstr "论坛提要"
+
+#: cclib/cc-access.php:51
+#, fuzzy
+msgid "Comma separated list of super site admins"
+msgstr "用逗号分隔列表项目"
+
+#: cclib/cc-access.php:109
+msgid ""
+"Use this form to decide who has acces to which commands. (This does not "
+"affect which menu items are shown, use the Manage Site/Menu form for "
+"controlling that.)"
+msgstr ""
+
+#: cclib/cc-access.php:141
+#, fuzzy
+msgid "Edit Super Admins"
+msgstr "编辑你的设置"
+
+#: cclib/cc-access.php:148
+msgid "Edit Access Rights"
+msgstr ""
+
+#: cclib/cc-access.php:167
+msgid "Access map changes saved"
+msgstr ""
+
+#: cclib/cc-access.php:177
+#, fuzzy
+msgid "Super Users"
+msgstr "用户"
+
+#: cclib/cc-access.php:179
+msgid "Edit list of super users"
+msgstr ""
+
+#: cclib/cc-access.php:184
+#, fuzzy
+msgid "Restrict Access"
+msgstr "限制进入"
+
+#: cclib/cc-access.php:186
+#, fuzzy
+msgid "Restrict access to commands"
+msgstr "限制进入"
 
 #: cclib/cc-admin.php:227
 msgid "Name of virtual root"
@@ -163,7 +3686,7 @@ msgid "Manage Site"
 msgstr "管理文件"
 
 #: cclib/cc-admin.php:724 cclib/cc-contest-admin.inc:543
-#: cclib/cc-login.php:545 cclib/cc-mediahost.php:503
+#: cclib/cc-login.php:545 cclib/cc-mediahost.php:503 cclib/cc-tags.inc:626
 msgid "Admin"
 msgstr "管理"
 
@@ -203,7 +3726,7 @@ msgstr "编辑你的设置"
 msgid "Saving Configuration"
 msgstr ""
 
-#: cclib/cc-admin.php:816 cclib/cc-contest-admin.inc:638
+#: cclib/cc-admin.php:816 cclib/cc-contest-admin.inc:638 cclib/cc-tags.inc:698
 msgid "Changes Saved"
 msgstr "更改已保存"
 
@@ -238,200 +3761,6 @@ msgstr ""
 msgid "Ban/unban an upload"
 msgstr ""
 
-#: cclib/cc-navigator-admin.inc:45 cclib/cc-navigator-admin.inc:86
-msgid "Name"
-msgstr "姓名"
-
-#: cclib/cc-navigator-admin.inc:49
-msgid "This name will be used in the url to show the tabs."
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:78
-#, php-format
-msgid "%sClick here%s for help with editing navigator tab sets."
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:79
-#, php-format
-msgid "%sClick here%s to add another tab."
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:80
-msgid "Clicking on these links will not save your form."
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:86 cclib/cc-navigator-admin.inc:277
-#: cclib/cc-mediahost.php:489 cclib/cc-user-admin.php:151
-#: ccextras/cc-fileman.inc:526
-msgid "Delete"
-msgstr "删除"
-
-#: cclib/cc-navigator-admin.inc:86
-msgid "Order"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:86
-msgid "Text"
-msgstr "文字"
-
-#: cclib/cc-navigator-admin.inc:86
-msgid "Help Hint"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:86
-msgid "Function"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:86
-#, fuzzy
-msgid "Data"
-msgstr "日期"
-
-#: cclib/cc-navigator-admin.inc:86 cclib/cc-menu-admin.inc:102
-#, fuzzy
-msgid "Access"
-msgstr "加工"
-
-#: cclib/cc-navigator-admin.inc:142
-#, fuzzy
-msgid "Match Any Tags"
-msgstr "全部相配"
-
-#: cclib/cc-navigator-admin.inc:143
-#, fuzzy
-msgid "Match All Tags"
-msgstr "全部相配"
-
-#: cclib/cc-navigator-admin.inc:144
-msgid "Execute URL"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:145
-msgid "SubTabs"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:146
-msgid "Query"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:166 cclib/cc-menu-admin.inc:109
-msgid "Logged in users only"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:167 cclib/cc-menu-admin.inc:111
-#: ccextras/cc-forums-admin.inc:69
-msgid "Everyone"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:168 cclib/cc-menu-admin.inc:112
-msgid "Administrators only"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:232
-msgid "Rename Navigator Tabs Set"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:265 ccextras/cc-fileman.inc:516
-#, fuzzy
-msgid "Rename"
-msgstr "姓名"
-
-#: cclib/cc-navigator-admin.inc:268
-#, fuzzy
-msgid "Edit tabs"
-msgstr "编辑"
-
-#: cclib/cc-navigator-admin.inc:281
-#, fuzzy
-msgid "Make default"
-msgstr "默认"
-
-#: cclib/cc-navigator-admin.inc:287
-msgid "Add new tab set"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:290
-msgid "Manage Navigator Tab Sets"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:303
-#, fuzzy
-msgid "Tab Text"
-msgstr "文字"
-
-#: cclib/cc-navigator-admin.inc:304
-msgid "Tab Helper Text"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:319
-msgid "Edit Navigator Tabs:"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:466 cclib/cc-mediahost.php:41
-#: ccextras/cc-forums.inc:324 ccextras/cc-forums.inc:634
-msgid "Home"
-msgstr "主页"
-
-#: cclib/cc-navigator-admin.inc:467
-msgid "Home page"
-msgstr "主页"
-
-#: cclib/cc-navigator-admin.inc:472
-msgid "All"
-msgstr "所有"
-
-#: cclib/cc-navigator-admin.inc:473
-msgid "See all the latest uploads"
-msgstr "看所有最新上传"
-
-#: cclib/cc-navigator-admin.inc:478 cclib/cc-pools-ui.php:196
-msgid "Remix"
-msgstr "再混音"
-
-#: cclib/cc-navigator-admin.inc:479
-msgid "See the latest remixes"
-msgstr "看最新再混音"
-
-#: cclib/cc-navigator-admin.inc:484 cclib/cc-pools-ui.php:196
-msgid "Original"
-msgstr "原始"
-
-#: cclib/cc-navigator-admin.inc:485 cclib/cc-contest-admin.inc:530
-msgid "See recently uploaded originals"
-msgstr "看最新上传的原始材料"
-
-#: cclib/cc-navigator-admin.inc:490
-msgid "Picks"
-msgstr "精选"
-
-#: cclib/cc-navigator-admin.inc:491
-msgid "See picks by the Editorial Staff"
-msgstr "编辑成员的精选"
-
-#: cclib/cc-navigator-admin.inc:496
-msgid "Funky"
-msgstr "Funky"
-
-#: cclib/cc-navigator-admin.inc:497
-msgid "Only the funky stuff please!"
-msgstr "请只显Funky内容"
-
-#: cclib/cc-navigator-admin.inc:517
-msgid "Perform view tabs actions"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:521
-msgid "Display admin navigator tabs form"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:537
-msgid "Navigator Tab Sets"
-msgstr ""
-
-#: cclib/cc-navigator-admin.inc:539
-msgid "Create and edit navigator tabs"
-msgstr ""
-
 #: cclib/cc-contest-admin.inc:54
 #, fuzzy
 msgid "Friendly Name"
@@ -440,11 +3769,6 @@ msgstr "全名"
 #: cclib/cc-contest-admin.inc:56
 msgid "This is the one people actually see"
 msgstr ""
-
-#: cclib/cc-contest-admin.inc:61 cclib/cc-submit.php:72
-#: ccextras/cc-forums-admin.inc:45
-msgid "Description"
-msgstr "描述"
 
 #: cclib/cc-contest-admin.inc:67 cclib/cc-submit.php:65
 #, fuzzy
@@ -494,7 +3818,7 @@ msgstr ""
 msgid "Current Server Time"
 msgstr ""
 
-#: cclib/cc-contest-admin.inc:166
+#: cclib/cc-contest-admin.inc:166 cclib/cc-pools-forms.php:50
 msgid "Internal Name"
 msgstr ""
 
@@ -609,6 +3933,10 @@ msgstr "下载原材料的对象"
 msgid "Entries"
 msgstr "标签"
 
+#: cclib/cc-contest-admin.inc:530 cclib/cc-navigator-admin.inc:485
+msgid "See recently uploaded originals"
+msgstr "看最新上传的原始材料"
+
 #: cclib/cc-contest-admin.inc:536
 msgid "Submit Entry"
 msgstr "提交条目"
@@ -646,25 +3974,10 @@ msgstr "编辑属性对象"
 msgid "Submit sources for the %s contest"
 msgstr ""
 
-#: cclib/cc-contest-admin.inc:575 cclib/cc-files.php:87 cclib/cc-files.php:90
-#: cclib/cc-mediahost.php:468 ccextras/cc-fileman.inc:210
-msgid "Manage Files"
-msgstr "管理文件"
-
 #: cclib/cc-contest-admin.inc:576
 #, fuzzy
 msgid "Manage system files"
 msgstr "管理再混音"
-
-#: cclib/cc-contest-admin.inc:583 ccextras/cc-fileman.inc:216
-#, fuzzy
-msgid "Add Files"
-msgstr "文件添加到"
-
-#: cclib/cc-contest-admin.inc:584 ccextras/cc-fileman.inc:217
-#, fuzzy
-msgid "Add files to the system"
-msgstr "文件添加到"
 
 #: cclib/cc-contest-admin.inc:608
 msgid "Not Implemented"
@@ -673,6 +3986,104 @@ msgstr ""
 #: cclib/cc-contest-admin.inc:678
 msgid "Upload succeeded"
 msgstr "上传成功"
+
+#: cclib/cc-contest-dep.inc:78
+msgid "Browse Contests"
+msgstr "浏览比赛"
+
+#: cclib/cc-contest-dep.inc:116
+#, fuzzy
+msgid "This contest does not support online voting"
+msgstr "此比赛不设网上投票"
+
+#: cclib/cc-contest-dep.inc:156
+#, fuzzy
+msgid "Voting will open after submission period has ended"
+msgstr "投票会在提交期结束后开放"
+
+#: cclib/cc-contest-dep.inc:163
+#, fuzzy
+msgid "Poll Results"
+msgstr "投票结果"
+
+#: cclib/cc-contest-dep.inc:173
+#, fuzzy
+msgid "Voting is only open to registered users"
+msgstr "投票只对注册用户开放"
+
+#: cclib/cc-contest-dep.inc:176
+#, fuzzy
+msgid "Results will be shown here after the voting period is closed"
+msgstr "结果会在投票期结束后开放"
+
+#: cclib/cc-contest-table.inc:274
+msgid " is currently open and taking submissions."
+msgstr "现正开放并接受提交"
+
+#: cclib/cc-contest-table.inc:278
+msgid "Submissions allowed until: "
+msgstr "允许提交直到："
+
+#: cclib/cc-contest-table.inc:288
+msgid "(Only logged in users can submit entries.)"
+msgstr "（只有登陆用户可提交条目）"
+
+#: cclib/cc-contest-table.inc:298
+msgid " is not taking submissions any more."
+msgstr "不再接受提交"
+
+#: cclib/cc-contest-table.inc:302
+msgid "Submissions stopped after: "
+msgstr "提交截止于"
+
+#: cclib/cc-contest-table.inc:313
+#, fuzzy
+msgid " is not taking submissions yet."
+msgstr "不再接受提交"
+
+#: cclib/cc-contest-table.inc:317
+#, fuzzy
+msgid "Submissions starts after: "
+msgstr "提交截止于"
+
+#: cclib/cc-contest-table.inc:329
+msgid "Voting is open until "
+msgstr "投票开放直至"
+
+#: cclib/cc-contest.inc:119
+#, fuzzy, php-format
+msgid "Submit to: '%s'"
+msgstr "提交到："
+
+#: cclib/cc-contest.inc:196
+#, fuzzy, php-format
+msgid "Your upload has been entered in '%s'"
+msgstr "你的上传被送入于"
+
+#: cclib/cc-contest.inc:367
+#, fuzzy
+msgid "Display contest entry form"
+msgstr "参赛资料"
+
+#: cclib/cc-contest.inc:369
+#, fuzzy
+msgid "Display contest source upload form"
+msgstr "显示图片上传指图"
+
+#: cclib/cc-contest.inc:371
+#, fuzzy
+msgid "Display new contest form"
+msgstr "显示文件名字"
+
+#: cclib/cc-contest.inc:373
+#, fuzzy
+msgid "Display contest properties form"
+msgstr "编辑属性对象"
+
+#: cclib/cc-contest.inc:375
+#, fuzzy
+msgid "Display admin contest forms"
+msgstr "显示文件名字"
 
 #: cclib/cc-database.php:110
 msgid "Internal error, contact the admin"
@@ -719,6 +4130,108 @@ msgstr ""
 #: cclib/cc-debug.php:171
 msgid "No stack trace in this vesion of php"
 msgstr ""
+
+#: cclib/cc-defines-access.php:84
+msgid "Playlists"
+msgstr ""
+
+#: cclib/cc-defines-access.php:85
+msgid "API"
+msgstr ""
+
+#: cclib/cc-defines-access.php:86
+#, fuzzy
+msgid "Ed Picks"
+msgstr "精选"
+
+#: cclib/cc-defines-access.php:87
+msgid "Feeds"
+msgstr ""
+
+#: cclib/cc-defines-access.php:88
+#, fuzzy
+msgid "File API"
+msgstr "文件"
+
+#: cclib/cc-defines-access.php:89 cclib/cc-mediahost.php:46
+#: cclib/cc-search.php:56
+msgid "Uploads"
+msgstr "上传的"
+
+#: cclib/cc-defines-access.php:90 cclib/cc-submit.php:507
+msgid "Submit Forms"
+msgstr "提交论坛"
+
+#: cclib/cc-defines-access.php:91
+#, fuzzy
+msgid "Render"
+msgstr "姓名"
+
+#: cclib/cc-defines-access.php:94
+#, fuzzy
+msgid "User"
+msgstr "用户"
+
+#: cclib/cc-defines-access.php:95 cclib/cc-pools-ui.php:475
+#, fuzzy
+msgid "Sample Pools"
+msgstr "采样池"
+
+#: cclib/cc-defines-access.php:96
+#, fuzzy
+msgid "Ratings/Reviews"
+msgstr "评级"
+
+#: cclib/cc-defines-access.php:98
+msgid "Folksonomy Tags"
+msgstr ""
+
+#: cclib/cc-defines-access.php:99
+msgid "Navigator Tabs"
+msgstr ""
+
+#: cclib/cc-defines-access.php:100
+msgid "Viewfile"
+msgstr ""
+
+#: cclib/cc-defines-access.php:101
+msgid "Misc. Admin Commands"
+msgstr ""
+
+#: cclib/cc-defines-access.php:102
+#, fuzzy
+msgid "Contests"
+msgstr "浏览比赛"
+
+#: cclib/cc-defines-access.php:103 cclib/cc-navigator-admin.inc:146
+msgid "Query"
+msgstr ""
+
+#: cclib/cc-defines-access.php:104
+#, fuzzy
+msgid "Site Admin"
+msgstr "管理"
+
+#: cclib/cc-defines-access.php:111
+#, fuzzy
+msgid "Registered users"
+msgstr "注册"
+
+#: cclib/cc-defines-access.php:112 cclib/cc-menu-admin.inc:110
+msgid "Anonymous users only"
+msgstr ""
+
+#: cclib/cc-defines-access.php:114
+msgid "Admin/Moderators"
+msgstr ""
+
+#: cclib/cc-defines-access.php:115
+msgid "Super admins"
+msgstr ""
+
+#: cclib/cc-editorials.inc:49 cclib/cc-ratings-admin.inc:429
+msgid "Reviewer"
+msgstr "评论者"
 
 #: cclib/cc-editorials.php:54
 msgid "Editors' Picks"
@@ -771,12 +4284,12 @@ msgstr ""
 msgid "Feed caching can optimize replies for feed requests"
 msgstr ""
 
-#: cclib/cc-feed.php:179
+#: cclib/cc-feed.php:179 cclib/cc-user-page.php:123 cclib/cc-user.inc:560
 #, fuzzy, php-format
 msgid "Remixes of %s"
 msgstr "再混音来源"
 
-#: cclib/cc-feed.php:181
+#: cclib/cc-feed.php:181 cclib/cc-user-page.php:124 cclib/cc-user.inc:561
 #, fuzzy, php-format
 msgid "Remixed by %s"
 msgstr "再混音者"
@@ -795,8 +4308,31 @@ msgstr ""
 msgid "Syndicate"
 msgstr ""
 
-#: cclib/cc-feeds-atom.php:82
+#: cclib/cc-feeds-atom.php:82 cclib/cc-feeds-rss.php:152
+#: cclib/cc-feeds-rss.php:156
 msgid "Feed generator RSS Podcast"
+msgstr ""
+
+#: cclib/cc-feeds-rss.php:57
+msgid "Podcast this page"
+msgstr ""
+
+#: cclib/cc-feeds-rss.php:88
+#, fuzzy, php-format
+msgid "Podcast for %s"
+msgstr "密码"
+
+#: cclib/cc-feeds-rss.php:148
+msgid "Feed generator RSS"
+msgstr ""
+
+#: cclib/cc-filerename-admin.inc:53 cclib/cc-filetagger-admin.inc:59
+#, fuzzy
+msgid "Site name"
+msgstr "流"
+
+#: cclib/cc-filerename-admin.inc:71
+msgid "Replace space with '_'"
 msgstr ""
 
 #: cclib/cc-filerename.php:75
@@ -945,11 +4481,6 @@ msgstr ""
 msgid "Display ID3 configuration form"
 msgstr ""
 
-#: cclib/cc-fileverify.php:164
-#, fuzzy
-msgid "Unknown format"
-msgstr "未知文件"
-
 #: cclib/cc-fileverify.php:183
 #, fuzzy
 msgid "File type is not allowed"
@@ -979,12 +4510,6 @@ msgstr ""
 #: cclib/cc-form.php:82
 msgid "Submit"
 msgstr "提交"
-
-#: cclib/cc-form.php:787 ccextras/cc-fileman.inc:328
-#: ccextras/cc-fileman.inc:367
-#, fuzzy
-msgid "This cannot be left blank."
-msgstr "不能留空白"
 
 #: cclib/cc-form.php:892
 #, fuzzy, php-format
@@ -1097,10 +4622,6 @@ msgstr ""
 msgid "Audio"
 msgstr "管理"
 
-#: cclib/cc-getid3.php:198
-msgid "Archive"
-msgstr "档案"
-
 #: cclib/cc-getid3.php:204 cclib/cc-getid3.php:210 cclib/cc-getid3.php:216
 #: cclib/cc-getid3.php:222 cclib/cc-getid3.php:262
 msgid "Video"
@@ -1108,6 +4629,7 @@ msgstr ""
 
 #: cclib/cc-getid3.php:228 cclib/cc-getid3.php:234 cclib/cc-getid3.php:240
 #: cclib/cc-getid3.php:246 cclib/cc-getid3.php:255 cclib/cc-user-admin.php:46
+#: cclib/cc-user.inc:222
 msgid "Image"
 msgstr "图片"
 
@@ -1130,6 +4652,121 @@ msgstr ""
 #: cclib/cc-getid3.php:305
 msgid "Tag old style v1 tags as well as v2"
 msgstr ""
+
+#: cclib/cc-language.inc:57
+msgid "Default Locale Preference:"
+msgstr "默认当前设定"
+
+#: cclib/cc-language.inc:65 cclib/cc-user.inc:246
+msgid "Default Language:"
+msgstr "默认语言："
+
+#: cclib/cc-language.inc:77
+#, fuzzy
+msgid "Allow User to Set Language:"
+msgstr "看所有最新上传"
+
+#: cclib/cc-language.inc:83
+msgid ""
+"Select the default locale preference and a default language and the system "
+"will try to translate menus, navigation tabs and anything else you might "
+"have customized. If the translation system does recognize the terms used, "
+"those menu items and navigation tabs will not change."
+msgstr ""
+"选择本地默认设置和一个默认语言，然后系统会尝试翻译菜单，浏览索引和所有你已指"
+"定的项目。如果翻译系统无法辨认用过的词语，那些菜单项目和浏览索引将不会改变。"
+
+#: cclib/cc-language.inc:84
+msgid ""
+"The Locale Preference is a specific folder that contains specific language "
+"translations. The default is a folder of the same name. Inside these folders "
+"are the specific language translations."
+msgstr ""
+"“当前默认设定”是一个包含特殊语言翻译的特殊文件夹。默认是一个同样名字的文件"
+"夹。这些文件夹里是特殊语言翻译。"
+
+#: cclib/cc-language.inc:85
+msgid ""
+"To create a specific translation, please copy the default folder with a "
+"unique name, and then select it as your Default Locale Preference. Then, "
+"edit the .po files in specific language folders for customization."
+msgstr ""
+"创立一个特殊翻译，请复制默认文件夹并起新文件夹名，然后把它选择为你的“默认当前"
+"设定”。然后编辑在特别语言文件夹中的 .po 文件来进行用户化。"
+
+#: cclib/cc-language.inc:90
+msgid ""
+"Language support requires that the PHP 'gettext' module be enabled on your "
+"PHP installation. Please consult your system administrator."
+msgstr ""
+
+#: cclib/cc-language.inc:109 cclib/cc-language.inc:137
+#, fuzzy
+msgid "Language Support"
+msgstr "默认语言："
+
+#: cclib/cc-language.inc:138
+msgid "Language support options saved."
+msgstr ""
+
+#: cclib/cc-language.inc:149
+msgid "Diagnostic"
+msgstr ""
+
+#: cclib/cc-language.inc:171
+#, fuzzy
+msgid "Configure Language use"
+msgstr "更改已保存"
+
+#: cclib/cc-language.inc:188
+#, fuzzy
+msgid "Show language admin form"
+msgstr "管理文件对象"
+
+#: cclib/cc-language.php:363
+msgid "default"
+msgstr "默认"
+
+#: cclib/cc-language.php:365
+msgid "autodetect"
+msgstr ""
+
+#: cclib/cc-license.inc:64
+#, fuzzy
+msgid "Enabled:"
+msgstr "管理再混音"
+
+#: cclib/cc-license.inc:95
+#, fuzzy
+msgid "License URL"
+msgstr "执照"
+
+#: cclib/cc-license.inc:96
+#, fuzzy
+msgid "License name"
+msgstr "执照"
+
+#: cclib/cc-license.inc:147 cclib/cc-upload-forms.php:161
+msgid "License"
+msgstr "执照"
+
+#: cclib/cc-license.inc:150
+msgid "Pick which licenses a user is allowed to select from"
+msgstr ""
+
+#: cclib/cc-license.inc:161
+msgid "Configure Licenses"
+msgstr ""
+
+#: cclib/cc-license.inc:180
+#, fuzzy
+msgid "Licenses Updated"
+msgstr "执照"
+
+#: cclib/cc-license.inc:193
+#, fuzzy
+msgid "Show admin license form"
+msgstr "管理文件对象"
 
 #: cclib/cc-lics-install.php:48
 msgid ""
@@ -1274,7 +4911,7 @@ msgid ""
 "than 25 characters."
 msgstr "必须是字母，数字或下横线(_)，不能多于25个字符"
 
-#: cclib/cc-login.php:54
+#: cclib/cc-login.php:54 cclib/cc-user.inc:216
 msgid "e-mail"
 msgstr "电子邮件"
 
@@ -1284,7 +4921,7 @@ msgid ""
 "account and for password recovery in case you forget your private password."
 msgstr ""
 
-#: cclib/cc-login.php:66 cclib/cc-login.php:189
+#: cclib/cc-login.php:66 cclib/cc-login.php:189 cclib/cc-user.inc:211
 msgid "Password"
 msgstr "密码"
 
@@ -1292,11 +4929,6 @@ msgstr "密码"
 #, fuzzy
 msgid "This must be at least 5 characters long."
 msgstr "最少必须五个字符"
-
-#: cclib/cc-login.php:80 cclib/cc-user-admin.php:91
-#: cclib/cc-user-admin.php:130
-msgid "Security Key"
-msgstr "安全键"
 
 #: cclib/cc-login.php:91 cclib/cc-login.php:212
 msgid "Lost Password?"
@@ -1472,18 +5104,6 @@ msgstr ""
 msgid "Thanks"
 msgstr "索引"
 
-#: cclib/cc-mediahost.php:46 cclib/cc-search.php:56
-msgid "Uploads"
-msgstr "上传的"
-
-#: cclib/cc-mediahost.php:51 ccextras/cc-forums.inc:635
-msgid "People"
-msgstr "人们"
-
-#: cclib/cc-mediahost.php:97
-msgid "Browse Uploads"
-msgstr "浏览上传"
-
 #: cclib/cc-mediahost.php:115
 msgid "Unknown File"
 msgstr "未知文件"
@@ -1565,11 +5185,6 @@ msgstr ""
 msgid "Pattern to use for Remixes"
 msgstr ""
 
-#: cclib/cc-mediahost.php:461 cclib/cc-submit.php:308
-#: ccextras/cc-fileman.inc:507
-msgid "Edit"
-msgstr "编辑"
-
 #: cclib/cc-mediahost.php:482 cclib/cc-mediahost.php:614
 msgid "Publish"
 msgstr "发表"
@@ -1610,6 +5225,107 @@ msgstr ""
 
 #: cclib/cc-mediahost.php:740
 msgid "Uncheck this if you want to verify uploads before they are made public."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:59
+#, php-format
+msgid ""
+"You can revert to factory defaults menu by clicking %shere%s (This will "
+"erase the customization you have done to the main menu, but not affect any "
+"virtual ccHosts menus that you have customized."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:64
+#, php-format
+msgid ""
+"You can revert to your main configuration menu by clicking %shere%s. This "
+"will erase the customization you have done to the %s menu."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:73
+msgid ""
+"You are now editing the menu for the main configuration. (This menu will be "
+"used by any virtual ccHost that you have not customized.)"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:77
+#, php-format
+msgid ""
+"You are now editing the menu for the %s virtual CCHost. Any changes here "
+"will only be reflected in %s."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:85
+msgid ""
+"WARNING: If you change the global language setting all customizations made "
+"here will be destroyed. Therefore, if you plan to set the language to "
+"something other than the default you should do it before editing here."
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:95
+#, php-format
+msgid ""
+"To add items click %shere%s (This will not save any of the work you have "
+"done below.)"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:102
+#, fuzzy
+msgid "Menu Text"
+msgstr "文字"
+
+#: cclib/cc-menu-admin.inc:102
+msgid "Group"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:102
+msgid "Action"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:102 cclib/cc-navigator-admin.inc:86
+#, fuzzy
+msgid "Access"
+msgstr "加工"
+
+#: cclib/cc-menu-admin.inc:112 cclib/cc-navigator-admin.inc:168
+msgid "Administrators only"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:113
+msgid "Hide"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:155
+#, fuzzy
+msgid "Submit Menu Changes"
+msgstr "提交论坛"
+
+#: cclib/cc-menu-admin.inc:172
+#, fuzzy
+msgid "Group Name"
+msgstr "全名"
+
+#: cclib/cc-menu-admin.inc:194
+#, fuzzy
+msgid "Submit Group Changes"
+msgstr "提交论坛"
+
+#: cclib/cc-menu-admin.inc:247
+#, fuzzy
+msgid "Edit Menus"
+msgstr "编辑你的设置"
+
+#: cclib/cc-menu-admin.inc:274
+#, fuzzy
+msgid "Menu changes have been saved."
+msgstr "更改已保存"
+
+#: cclib/cc-menu-admin.inc:286
+msgid "Edit Menu Groups"
+msgstr ""
+
+#: cclib/cc-menu-admin.inc:301
+msgid "Menu group changes have been saved"
 msgstr ""
 
 #: cclib/cc-menu.php:218
@@ -1665,6 +5381,558 @@ msgstr ""
 
 #: cclib/cc-menu.php:534
 msgid "Reset Menus"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:49
+msgid "This name will be used in the url to show the tabs."
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:78
+#, php-format
+msgid "%sClick here%s for help with editing navigator tab sets."
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:79
+#, php-format
+msgid "%sClick here%s to add another tab."
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:80
+msgid "Clicking on these links will not save your form."
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:86
+msgid "Help Hint"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:86
+msgid "Function"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:86
+#, fuzzy
+msgid "Data"
+msgstr "日期"
+
+#: cclib/cc-navigator-admin.inc:142
+#, fuzzy
+msgid "Match Any Tags"
+msgstr "全部相配"
+
+#: cclib/cc-navigator-admin.inc:143
+#, fuzzy
+msgid "Match All Tags"
+msgstr "全部相配"
+
+#: cclib/cc-navigator-admin.inc:144
+msgid "Execute URL"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:145
+msgid "SubTabs"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:232
+msgid "Rename Navigator Tabs Set"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:268
+#, fuzzy
+msgid "Edit tabs"
+msgstr "编辑"
+
+#: cclib/cc-navigator-admin.inc:281
+#, fuzzy
+msgid "Make default"
+msgstr "默认"
+
+#: cclib/cc-navigator-admin.inc:287
+msgid "Add new tab set"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:290
+msgid "Manage Navigator Tab Sets"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:303
+#, fuzzy
+msgid "Tab Text"
+msgstr "文字"
+
+#: cclib/cc-navigator-admin.inc:304
+msgid "Tab Helper Text"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:319
+msgid "Edit Navigator Tabs:"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:467
+msgid "Home page"
+msgstr "主页"
+
+#: cclib/cc-navigator-admin.inc:472
+msgid "All"
+msgstr "所有"
+
+#: cclib/cc-navigator-admin.inc:473
+msgid "See all the latest uploads"
+msgstr "看所有最新上传"
+
+#: cclib/cc-navigator-admin.inc:478 cclib/cc-pools-ui.php:196
+msgid "Remix"
+msgstr "再混音"
+
+#: cclib/cc-navigator-admin.inc:479
+msgid "See the latest remixes"
+msgstr "看最新再混音"
+
+#: cclib/cc-navigator-admin.inc:484 cclib/cc-pools-ui.php:196
+msgid "Original"
+msgstr "原始"
+
+#: cclib/cc-navigator-admin.inc:490
+msgid "Picks"
+msgstr "精选"
+
+#: cclib/cc-navigator-admin.inc:491
+msgid "See picks by the Editorial Staff"
+msgstr "编辑成员的精选"
+
+#: cclib/cc-navigator-admin.inc:496
+msgid "Funky"
+msgstr "Funky"
+
+#: cclib/cc-navigator-admin.inc:497
+msgid "Only the funky stuff please!"
+msgstr "请只显Funky内容"
+
+#: cclib/cc-navigator-admin.inc:517
+msgid "Perform view tabs actions"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:521
+msgid "Display admin navigator tabs form"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:537
+msgid "Navigator Tab Sets"
+msgstr ""
+
+#: cclib/cc-navigator-admin.inc:539
+msgid "Create and edit navigator tabs"
+msgstr ""
+
+#: cclib/cc-navigator.php:364
+msgid "System Error"
+msgstr ""
+
+#: cclib/cc-navigator.php:365
+#, fuzzy
+msgid "Invalid Path"
+msgstr "非法路径"
+
+#: cclib/cc-page.php:53
+msgid "Displays XHTML template"
+msgstr ""
+
+#: cclib/cc-page.php:55
+msgid "Displays XHTML template (alias for viewfile)"
+msgstr ""
+
+#: cclib/cc-page.php:57
+#, fuzzy
+msgid "Displays home page assigned in config"
+msgstr "显示文件名字"
+
+#: cclib/cc-page.php:110
+#, fuzzy
+msgid "Homepage"
+msgstr "主页"
+
+#: cclib/cc-page.php:111
+#, php-format
+msgid "example: contest/mycontest %s or files: viewfile/home.xml"
+msgstr ""
+
+#: cclib/cc-page.php:117
+msgid "Skin Style"
+msgstr ""
+
+#: cclib/cc-page.php:118
+msgid "Default style sheet for this view"
+msgstr ""
+
+#: cclib/cc-page.php:130
+msgid "Max Items Per Page"
+msgstr ""
+
+#: cclib/cc-page.php:131
+msgid "Maximum number of uploads, users in a listing"
+msgstr ""
+
+#: cclib/cc-page.php:136
+msgid "Default Feed Tags"
+msgstr ""
+
+#: cclib/cc-page.php:137
+msgid ""
+"Comma separated list of tags to use when no other feed is specificed (e.g. "
+"audio,remix)."
+msgstr ""
+
+#: cclib/cc-page.php:137
+msgid "Leave blank for no default feed."
+msgstr ""
+
+#: cclib/cc-page.php:229
+#, fuzzy, php-format
+msgid "Can't find %s template"
+msgstr "无法找到那用户名"
+
+#: cclib/cc-page.php:339
+msgid "Style Sheet"
+msgstr ""
+
+#: cclib/cc-page.php:441
+#, fuzzy
+msgid "User Styles"
+msgstr "用户"
+
+#: cclib/cc-page.php:799
+#, fuzzy
+msgid "Back"
+msgstr "返回"
+
+#: cclib/cc-page.php:811
+#, fuzzy
+msgid "More"
+msgstr "更多"
+
+#: cclib/cc-poll.php:61
+msgid "Vote"
+msgstr "投票"
+
+#: cclib/cc-pools-forms.php:58
+msgid "API URL"
+msgstr ""
+
+#: cclib/cc-pools-forms.php:62
+#, fuzzy
+msgid "Site URL"
+msgstr "执照"
+
+#: cclib/cc-pools-forms.php:66 cclib/cc-ratings-admin.inc:224
+msgid "Banned"
+msgstr ""
+
+#: cclib/cc-pools-forms.php:67
+msgid "Ignore communications from this pool"
+msgstr ""
+
+#: cclib/cc-pools-forms.php:71
+msgid "Auto-approve Remote Remixes"
+msgstr ""
+
+#: cclib/cc-pools-forms.php:75
+msgid "Allow to be searched remotely"
+msgstr ""
+
+#: cclib/cc-pools-forms.php:105
+msgid "Remote Remix Throttle"
+msgstr ""
+
+#: cclib/cc-pools-forms.php:106
+msgid "Maximum remote unnapproved remixes."
+msgstr ""
+
+#: cclib/cc-pools-forms.php:112
+#, fuzzy
+msgid "Add a sample pool to your site:"
+msgstr "采样池项目"
+
+#: cclib/cc-pools-forms.php:113
+msgid ""
+"This must be the URL to the site's pool API (e.g. http://ccmixter.org/media/"
+"api)."
+msgstr ""
+
+#: cclib/cc-pools-ui.php:96
+#, fuzzy
+msgid "Sample Pool:"
+msgstr "采样池"
+
+#: cclib/cc-pools-ui.php:127
+msgid "Sample Pool Item: "
+msgstr "采样池项目"
+
+#: cclib/cc-pools-ui.php:146
+#, fuzzy
+msgid "Sample Pools Administration"
+msgstr "采样池"
+
+#: cclib/cc-pools-ui.php:150
+#, fuzzy
+msgid "Sample Pool Settings"
+msgstr "采样池"
+
+#: cclib/cc-pools-ui.php:151
+msgid "Edit global settings for interacting with remote pools"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:153 cclib/cc-pools-ui.php:205
+#, fuzzy
+msgid "Manage Sample Pools"
+msgstr "采样池"
+
+#: cclib/cc-pools-ui.php:154
+msgid "Manage pools known to this site."
+msgstr ""
+
+#: cclib/cc-pools-ui.php:156
+msgid "Approve Remote Remixes"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:157
+msgid "Validate pending remote remixes."
+msgstr ""
+
+#: cclib/cc-pools-ui.php:164
+msgid "Approve Pending Remixes"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:192
+msgid "There are no pending remote remixes"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:196 cclib/cc-renderimage.php:102
+msgid "Show"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:196
+#, fuzzy
+msgid "Download from Site"
+msgstr "下载"
+
+#: cclib/cc-pools-ui.php:196
+#, fuzzy
+msgid "by Remixer"
+msgstr "再混音"
+
+#: cclib/cc-pools-ui.php:214
+msgid "EDIT"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:227
+#, fuzzy
+msgid "Sample Pools Settings"
+msgstr "采样池"
+
+#: cclib/cc-pools-ui.php:237 cclib/cc-pools-ui.php:257
+#, fuzzy
+msgid "This can not be left blank."
+msgstr "不能留空白"
+
+#: cclib/cc-pools-ui.php:248
+msgid "Registration with sample pool succeeded."
+msgstr ""
+
+#: cclib/cc-pools-ui.php:280
+msgid "That Sample Pool is already registered here."
+msgstr ""
+
+#: cclib/cc-pools-ui.php:288
+msgid "Settings saved"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:296
+msgid "Edit Pool Information"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:323
+#, fuzzy
+msgid "Changes to pool saved"
+msgstr "更改已保存"
+
+#: cclib/cc-pools-ui.php:335
+msgid "This is not implemented."
+msgstr ""
+
+#: cclib/cc-pools-ui.php:434
+#, fuzzy
+msgid "Show sample pool"
+msgstr "采样池"
+
+#: cclib/cc-pools-ui.php:437
+#, fuzzy
+msgid "Show a sample pool item"
+msgstr "采样池项目"
+
+#: cclib/cc-pools-ui.php:439
+#, fuzzy
+msgid "Display admin pools menu"
+msgstr "显示文件名字"
+
+#: cclib/cc-pools-ui.php:441
+msgid "Display pool admin settings form"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:444
+msgid "Display list of pools to admin"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:446
+#, fuzzy
+msgid "Edit properties of pool"
+msgstr "编辑属性对象"
+
+#: cclib/cc-pools-ui.php:448
+msgid "Delete a sample pool"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:450
+msgid "Display admin pool approval menu"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:454
+msgid "Approve a remote remix"
+msgstr ""
+
+#: cclib/cc-pools-ui.php:477
+msgid "Sub menu for managing sample pools"
+msgstr ""
+
+#: cclib/cc-query.php:790
+msgid "Browser query interface"
+msgstr ""
+
+#: cclib/cc-query.php:806
+#, fuzzy
+msgid "Limit Queries"
+msgstr "提交文件"
+
+#: cclib/cc-query.php:807
+msgid ""
+"Limit the number of records returned from api/query (0 or blank means "
+"unlimited - HINT: that's a bad idea)"
+msgstr ""
+
+#: cclib/cc-query.php:841
+#, fuzzy
+msgid "Upload name"
+msgstr "上传名字"
+
+#: cclib/cc-query.php:842
+#, fuzzy
+msgid "Upload license"
+msgstr "上传成功"
+
+#: cclib/cc-query.php:843
+#, fuzzy
+msgid "Upload date"
+msgstr "上传名字"
+
+#: cclib/cc-query.php:844
+#, fuzzy
+msgid "Upload last edited"
+msgstr "上传已被删除"
+
+#: cclib/cc-query.php:845
+#, fuzzy
+msgid "Upload's remixes"
+msgstr "上传名字"
+
+#: cclib/cc-query.php:847
+#, fuzzy
+msgid "Upload's local remixes"
+msgstr "上传的和用户"
+
+#: cclib/cc-query.php:848
+#, fuzzy
+msgid "Upload's remote remixes"
+msgstr "上传的和用户"
+
+#: cclib/cc-query.php:850
+#, fuzzy
+msgid "Upload's sources"
+msgstr "上传成功"
+
+#: cclib/cc-query.php:852
+#, fuzzy
+msgid "Upload's local sources"
+msgstr "上传的和用户"
+
+#: cclib/cc-query.php:853
+#, fuzzy
+msgid "Upload's sample pool sources"
+msgstr "采样池项目"
+
+#: cclib/cc-query.php:855
+#, fuzzy
+msgid "Upload's ratings"
+msgstr "上传的和用户"
+
+#: cclib/cc-query.php:856 cclib/cc-query.php:865
+msgid "Number of ratings"
+msgstr ""
+
+#: cclib/cc-query.php:857
+#, fuzzy
+msgid "Upload ranking"
+msgstr "上传名字"
+
+#: cclib/cc-query.php:858 cclib/cc-user.inc:610
+#, fuzzy
+msgid "Artist login name"
+msgstr "你的登陆名"
+
+#: cclib/cc-query.php:859 cclib/cc-user.inc:609
+#, fuzzy
+msgid "Artist name"
+msgstr "艺术家"
+
+#: cclib/cc-query.php:860
+msgid "Artist registered"
+msgstr ""
+
+#: cclib/cc-query.php:861
+msgid "Number of remixes"
+msgstr ""
+
+#: cclib/cc-query.php:862
+msgid "Number of times remixed"
+msgstr ""
+
+#: cclib/cc-query.php:863
+msgid "Number of uploads"
+msgstr ""
+
+#: cclib/cc-query.php:864
+msgid "Artists's average rating"
+msgstr ""
+
+#: cclib/cc-query.php:866
+#, fuzzy
+msgid "Artist's ranking"
+msgstr "艺术家"
+
+#: cclib/cc-query.php:867
+#, fuzzy
+msgid "Reviews left by artist"
+msgstr "评论"
+
+#: cclib/cc-query.php:868
+#, fuzzy
+msgid "Reviews left for artist"
+msgstr "评论"
+
+#: cclib/cc-query.php:869
+#, fuzzy
+msgid "Forum topics by artist"
+msgstr "主题提要作者"
+
+#: cclib/cc-query.php:870
+msgid "Internal upload id"
 msgstr ""
 
 #: cclib/cc-ratings-admin.inc:49 cclib/cc-ratings.php:147
@@ -1820,10 +6088,6 @@ msgstr ""
 msgid "Unbanned"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:224
-msgid "Banned"
-msgstr ""
-
 #: cclib/cc-ratings-admin.inc:243
 #, fuzzy
 msgid "Configure Ratings Chart Engine"
@@ -1855,10 +6119,6 @@ msgstr "管理再混音"
 msgid "ID"
 msgstr ""
 
-#: cclib/cc-ratings-admin.inc:429
-msgid "Reviewer"
-msgstr "评论者"
-
 #: cclib/cc-ratings-admin.inc:438
 #, fuzzy
 msgid "Rating"
@@ -1867,10 +6127,6 @@ msgstr "评级"
 #: cclib/cc-ratings-admin.inc:447 cclib/cc-ratings-admin.inc:659
 msgid "IP"
 msgstr ""
-
-#: cclib/cc-ratings-admin.inc:456
-msgid "Upload"
-msgstr "上传"
 
 #: cclib/cc-ratings-admin.inc:587
 msgid "Previous"
@@ -1904,251 +6160,6 @@ msgstr "评论"
 msgid "edit"
 msgstr "编辑"
 
-#: cclib/cc-navigator.php:364
-msgid "System Error"
-msgstr ""
-
-#: cclib/cc-navigator.php:365
-#, fuzzy
-msgid "Invalid Path"
-msgstr "非法路径"
-
-#: cclib/cc-page.php:53
-msgid "Displays XHTML template"
-msgstr ""
-
-#: cclib/cc-page.php:55
-msgid "Displays XHTML template (alias for viewfile)"
-msgstr ""
-
-#: cclib/cc-page.php:57
-#, fuzzy
-msgid "Displays home page assigned in config"
-msgstr "显示文件名字"
-
-#: cclib/cc-page.php:110
-#, fuzzy
-msgid "Homepage"
-msgstr "主页"
-
-#: cclib/cc-page.php:111
-#, php-format
-msgid "example: contest/mycontest %s or files: viewfile/home.xml"
-msgstr ""
-
-#: cclib/cc-page.php:117
-msgid "Skin Style"
-msgstr ""
-
-#: cclib/cc-page.php:118
-msgid "Default style sheet for this view"
-msgstr ""
-
-#: cclib/cc-page.php:130
-msgid "Max Items Per Page"
-msgstr ""
-
-#: cclib/cc-page.php:131
-msgid "Maximum number of uploads, users in a listing"
-msgstr ""
-
-#: cclib/cc-page.php:136
-msgid "Default Feed Tags"
-msgstr ""
-
-#: cclib/cc-page.php:137
-msgid ""
-"Comma separated list of tags to use when no other feed is specificed (e.g. "
-"audio,remix)."
-msgstr ""
-
-#: cclib/cc-page.php:137
-msgid "Leave blank for no default feed."
-msgstr ""
-
-#: cclib/cc-page.php:229
-#, fuzzy, php-format
-msgid "Can't find %s template"
-msgstr "无法找到那用户名"
-
-#: cclib/cc-page.php:339
-msgid "Style Sheet"
-msgstr ""
-
-#: cclib/cc-page.php:441
-#, fuzzy
-msgid "User Styles"
-msgstr "用户"
-
-#: cclib/cc-page.php:450 ccextras/cc-format.php:48
-#, fuzzy
-msgid "Default Style"
-msgstr "默认语言："
-
-#: cclib/cc-page.php:799
-#, fuzzy
-msgid "Back"
-msgstr "返回"
-
-#: cclib/cc-page.php:811
-#, fuzzy
-msgid "More"
-msgstr "更多"
-
-#: cclib/cc-poll.php:61
-msgid "Vote"
-msgstr "投票"
-
-#: cclib/cc-pools-ui.php:96
-#, fuzzy
-msgid "Sample Pool:"
-msgstr "采样池"
-
-#: cclib/cc-pools-ui.php:127
-msgid "Sample Pool Item: "
-msgstr "采样池项目"
-
-#: cclib/cc-pools-ui.php:146
-#, fuzzy
-msgid "Sample Pools Administration"
-msgstr "采样池"
-
-#: cclib/cc-pools-ui.php:150
-#, fuzzy
-msgid "Sample Pool Settings"
-msgstr "采样池"
-
-#: cclib/cc-pools-ui.php:151
-msgid "Edit global settings for interacting with remote pools"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:153 cclib/cc-pools-ui.php:205
-#, fuzzy
-msgid "Manage Sample Pools"
-msgstr "采样池"
-
-#: cclib/cc-pools-ui.php:154
-msgid "Manage pools known to this site."
-msgstr ""
-
-#: cclib/cc-pools-ui.php:156
-msgid "Approve Remote Remixes"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:157
-msgid "Validate pending remote remixes."
-msgstr ""
-
-#: cclib/cc-pools-ui.php:164
-msgid "Approve Pending Remixes"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:192
-msgid "There are no pending remote remixes"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:196 cclib/cc-renderimage.php:102
-msgid "Show"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:196
-#, fuzzy
-msgid "Download from Site"
-msgstr "下载"
-
-#: cclib/cc-pools-ui.php:196
-#, fuzzy
-msgid "by Remixer"
-msgstr "再混音"
-
-#: cclib/cc-pools-ui.php:214
-msgid "EDIT"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:227
-#, fuzzy
-msgid "Sample Pools Settings"
-msgstr "采样池"
-
-#: cclib/cc-pools-ui.php:237 cclib/cc-pools-ui.php:257
-#, fuzzy
-msgid "This can not be left blank."
-msgstr "不能留空白"
-
-#: cclib/cc-pools-ui.php:248
-msgid "Registration with sample pool succeeded."
-msgstr ""
-
-#: cclib/cc-pools-ui.php:280
-msgid "That Sample Pool is already registered here."
-msgstr ""
-
-#: cclib/cc-pools-ui.php:288
-msgid "Settings saved"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:296
-msgid "Edit Pool Information"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:323
-#, fuzzy
-msgid "Changes to pool saved"
-msgstr "更改已保存"
-
-#: cclib/cc-pools-ui.php:335
-msgid "This is not implemented."
-msgstr ""
-
-#: cclib/cc-pools-ui.php:434
-#, fuzzy
-msgid "Show sample pool"
-msgstr "采样池"
-
-#: cclib/cc-pools-ui.php:437
-#, fuzzy
-msgid "Show a sample pool item"
-msgstr "采样池项目"
-
-#: cclib/cc-pools-ui.php:439
-#, fuzzy
-msgid "Display admin pools menu"
-msgstr "显示文件名字"
-
-#: cclib/cc-pools-ui.php:441
-msgid "Display pool admin settings form"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:444
-msgid "Display list of pools to admin"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:446
-#, fuzzy
-msgid "Edit properties of pool"
-msgstr "编辑属性对象"
-
-#: cclib/cc-pools-ui.php:448
-msgid "Delete a sample pool"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:450
-msgid "Display admin pool approval menu"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:454
-msgid "Approve a remote remix"
-msgstr ""
-
-#: cclib/cc-pools-ui.php:475
-#, fuzzy
-msgid "Sample Pools"
-msgstr "采样池"
-
-#: cclib/cc-pools-ui.php:477
-msgid "Sub menu for managing sample pools"
-msgstr ""
-
 #: cclib/cc-ratings.php:149
 msgid "How ratings are calculated, who can rate, etc."
 msgstr ""
@@ -2164,30 +6175,9 @@ msgstr ""
 msgid "Display admin ratings form"
 msgstr ""
 
-#: cclib/cc-renderaudio.php:81
-msgid "Stream audio file"
-msgstr ""
-
-#: cclib/cc-renderaudio.php:84
-msgid "Stream all audio on page"
-msgstr ""
-
-#: cclib/cc-renderaudio.php:87
-msgid "Stream audio results of query"
-msgstr ""
-
-#: cclib/cc-renderaudio.php:123
-msgid "Stream"
-msgstr "流"
-
-#: cclib/cc-remix.php:53
-msgid "Artist"
-msgstr "艺术家"
-
-#: cclib/cc-remix.php:56 cclib/cc-filetagger-admin.inc:58
-#: cclib/cc-filerename-admin.inc:52
-msgid "Title"
-msgstr "题目"
+#: cclib/cc-remix-forms.php:101
+msgid "Done Editing"
+msgstr "完成编辑"
 
 #: cclib/cc-remix.php:59
 msgid "Full search"
@@ -2222,107 +6212,21 @@ msgstr "成功再混音。（点击这里看结果）"
 msgid "Displays 'Manage Remixes' for upload"
 msgstr "显示图片上传指图"
 
-#: cclib/cc-menu-admin.inc:59
-#, php-format
-msgid ""
-"You can revert to factory defaults menu by clicking %shere%s (This will "
-"erase the customization you have done to the main menu, but not affect any "
-"virtual ccHosts menus that you have customized."
+#: cclib/cc-renderaudio.php:81
+msgid "Stream audio file"
 msgstr ""
 
-#: cclib/cc-menu-admin.inc:64
-#, php-format
-msgid ""
-"You can revert to your main configuration menu by clicking %shere%s. This "
-"will erase the customization you have done to the %s menu."
+#: cclib/cc-renderaudio.php:84
+msgid "Stream all audio on page"
 msgstr ""
 
-#: cclib/cc-menu-admin.inc:73
-msgid ""
-"You are now editing the menu for the main configuration. (This menu will be "
-"used by any virtual ccHost that you have not customized.)"
+#: cclib/cc-renderaudio.php:87
+msgid "Stream audio results of query"
 msgstr ""
 
-#: cclib/cc-menu-admin.inc:77
-#, php-format
-msgid ""
-"You are now editing the menu for the %s virtual CCHost. Any changes here "
-"will only be reflected in %s."
-msgstr ""
-
-#: cclib/cc-menu-admin.inc:85
-msgid ""
-"WARNING: If you change the global language setting all customizations made "
-"here will be destroyed. Therefore, if you plan to set the language to "
-"something other than the default you should do it before editing here."
-msgstr ""
-
-#: cclib/cc-menu-admin.inc:95
-#, php-format
-msgid ""
-"To add items click %shere%s (This will not save any of the work you have "
-"done below.)"
-msgstr ""
-
-#: cclib/cc-menu-admin.inc:102
-#, fuzzy
-msgid "Menu Text"
-msgstr "文字"
-
-#: cclib/cc-menu-admin.inc:102
-msgid "Group"
-msgstr ""
-
-#: cclib/cc-menu-admin.inc:102 cclib/cc-menu-admin.inc:172
-#: ccextras/cc-forums-admin.inc:50 ccextras/cc-forums-admin.inc:100
-#, fuzzy
-msgid "Weight"
-msgstr "什么"
-
-#: cclib/cc-menu-admin.inc:102
-msgid "Action"
-msgstr ""
-
-#: cclib/cc-menu-admin.inc:110
-msgid "Anonymous users only"
-msgstr ""
-
-#: cclib/cc-menu-admin.inc:113
-msgid "Hide"
-msgstr ""
-
-#: cclib/cc-menu-admin.inc:155
-#, fuzzy
-msgid "Submit Menu Changes"
-msgstr "提交论坛"
-
-#: cclib/cc-menu-admin.inc:172
-#, fuzzy
-msgid "Group Name"
-msgstr "全名"
-
-#: cclib/cc-menu-admin.inc:194
-#, fuzzy
-msgid "Submit Group Changes"
-msgstr "提交论坛"
-
-#: cclib/cc-menu-admin.inc:247
-#, fuzzy
-msgid "Edit Menus"
-msgstr "编辑你的设置"
-
-#: cclib/cc-menu-admin.inc:274
-#, fuzzy
-msgid "Menu changes have been saved."
-msgstr "更改已保存"
-
-#: cclib/cc-menu-admin.inc:286
-msgid "Edit Menu Groups"
-msgstr ""
-
-#: cclib/cc-menu-admin.inc:301
-msgid "Menu group changes have been saved"
-msgstr ""
+#: cclib/cc-renderaudio.php:123
+msgid "Stream"
+msgstr "流"
 
 #: cclib/cc-renderflash.php:93
 msgid "Play"
@@ -2370,10 +6274,6 @@ msgstr "指图最高值"
 msgid "Search Text"
 msgstr "搜索文字"
 
-#: cclib/cc-search.php:45
-msgid "Type"
-msgstr "类型"
-
 #: cclib/cc-search.php:48
 msgid "Any match"
 msgstr "任何相配"
@@ -2397,10 +6297,6 @@ msgstr "用户"
 #: cclib/cc-search.php:58
 msgid "Uploads and Users"
 msgstr "上传的和用户"
-
-#: cclib/cc-search.php:64 cclib/cc-search.php:93
-msgid "Search"
-msgstr "搜索"
 
 #: cclib/cc-search.php:79
 #, fuzzy
@@ -2460,11 +6356,6 @@ msgstr ""
 msgid "e.g. Home Movie"
 msgstr ""
 
-#: cclib/cc-submit.php:59
-#, fuzzy
-msgid "Caption"
-msgstr "评级"
-
 #: cclib/cc-submit.php:60
 msgid "e.g. Submit a Home Movie"
 msgstr ""
@@ -2473,11 +6364,7 @@ msgstr ""
 msgid "This is the description shown when displaying all form types"
 msgstr ""
 
-#: cclib/cc-submit.php:78
-msgid "Tags"
-msgstr "索引"
-
-#: cclib/cc-submit.php:85
+#: cclib/cc-submit.php:85 cclib/cc-upload-forms.php:112
 msgid "Suggested Tags"
 msgstr "建议索引"
 
@@ -2612,9 +6499,164 @@ msgstr ""
 msgid "Create a new submit form type"
 msgstr ""
 
-#: cclib/cc-submit.php:507
-msgid "Submit Forms"
-msgstr "提交论坛"
+#: cclib/cc-tags.inc:359
+msgid "Aliases"
+msgstr ""
+
+#: cclib/cc-tags.inc:360
+msgid ""
+"Put one alias on each line, use a '=&gt;' to indicate what the user entered "
+"tag should become (e.g. <b>drums and base=&gt;DNB</b> will turn all user "
+"entries 'drums and bass' in to 'DNB')"
+msgstr ""
+
+#: cclib/cc-tags.inc:366
+msgid "Run Now"
+msgstr ""
+
+#: cclib/cc-tags.inc:367
+msgid "Check this to run the alias rules now."
+msgstr ""
+
+#: cclib/cc-tags.inc:372
+#, fuzzy
+msgid "Reserved Tags"
+msgstr "建议索引"
+
+#: cclib/cc-tags.inc:373
+msgid ""
+"These tags will be reserved by the system. If a user tries to use these tags "
+"it will be removed."
+msgstr ""
+
+#: cclib/cc-tags.inc:379
+msgid "Minimum tag length allowed"
+msgstr ""
+
+#: cclib/cc-tags.inc:380
+msgid "Tags shorter than this length will be thrown away."
+msgstr ""
+
+#: cclib/cc-tags.inc:387
+msgid "Maximum tag allowed"
+msgstr ""
+
+#: cclib/cc-tags.inc:388
+msgid "Tags longer than this will be truncated"
+msgstr ""
+
+#: cclib/cc-tags.inc:395
+msgid "Minimum display tags"
+msgstr ""
+
+#: cclib/cc-tags.inc:396
+msgid "Minimum number of tags to display in \"Browse Tags\""
+msgstr ""
+
+#: cclib/cc-tags.inc:403
+msgid "Inherited tags"
+msgstr ""
+
+#: cclib/cc-tags.inc:404
+msgid "Remixes will automatically 'inherit' these tags from their sources"
+msgstr ""
+
+#: cclib/cc-tags.inc:539
+msgid "Turn System Tags ON"
+msgstr "打开系统索引"
+
+#: cclib/cc-tags.inc:544
+msgid "Turn System Tags OFF"
+msgstr "关闭系统索引"
+
+#: cclib/cc-tags.inc:581
+msgid "Edit tag aliases, reserve tags, counts, etc."
+msgstr ""
+
+#: cclib/cc-tags.inc:596 cclib/cc-tags.inc:617
+msgid "Browse Tags"
+msgstr "浏览索引"
+
+#: cclib/cc-tags.inc:619
+#, fuzzy
+msgid "Admin Tags"
+msgstr "管理"
+
+#: cclib/cc-tags.inc:725
+msgid "Tags updated with new alias rules"
+msgstr ""
+
+#: cclib/cc-tags.inc:729
+msgid "Tags settings were updated but new alias rules were not performed"
+msgstr ""
+
+#: cclib/cc-template.inc:41
+msgid "must specify a template"
+msgstr ""
+
+#: cclib/cc-template.inc:88
+#, php-format
+msgid ""
+"Pick which UI elements should appear on every page. Edit the file %s to add "
+"modules here."
+msgstr ""
+
+#: cclib/cc-template.inc:148
+#, php-format
+msgid ""
+"These values are used on each page for %s. If you have customized the "
+"templates you can create new tags by %sclicking here%s."
+msgstr ""
+
+#: cclib/cc-template.inc:164
+#, fuzzy
+msgid "Tag Name"
+msgstr "姓名"
+
+#: cclib/cc-template.inc:181 cclib/cc-template.inc:293
+#, fuzzy
+msgid "Sidebar Content"
+msgstr "标志内容"
+
+#: cclib/cc-template.inc:190
+msgid "Custom Skin"
+msgstr ""
+
+#: cclib/cc-template.inc:210
+msgid "Edit Template Tags"
+msgstr ""
+
+#: cclib/cc-template.inc:217
+msgid "Add a New Template Tag"
+msgstr ""
+
+#: cclib/cc-template.inc:278
+msgid "Titles and Footers"
+msgstr ""
+
+#: cclib/cc-template.inc:280
+msgid "Edit what the banner and footer says on each page."
+msgstr ""
+
+#: cclib/cc-template.inc:295
+msgid "Pick what features are available on the side bar."
+msgstr ""
+
+#: cclib/cc-template.inc:313
+#, fuzzy
+msgid "Displays 'Header/Footer' form"
+msgstr "显示文件名字"
+
+#: cclib/cc-template.inc:317
+msgid ""
+"Displays 'Sidebar' form, let's the admin select modules to display on every "
+"page."
+msgstr ""
+
+#: cclib/cc-template.inc:322
+#, fuzzy
+msgid "Display 'Create a new template tag' form"
+msgstr "显示文件名字"
 
 #: cclib/cc-template.php:154
 msgid "There is an error rendering this page."
@@ -2640,6 +6682,50 @@ msgstr ""
 #, fuzzy
 msgid "Template cache has been cleared."
 msgstr "上传已被删除"
+
+#: cclib/cc-upload-forms.php:59
+#, fuzzy
+msgid "Display name for file"
+msgstr "显示文件名字"
+
+#: cclib/cc-upload-forms.php:78
+msgid "Comma separated list of terms"
+msgstr "用逗号分隔列表项目"
+
+#: cclib/cc-upload-forms.php:82
+msgid "Popular Tags"
+msgstr "流行索引"
+
+#: cclib/cc-upload-forms.php:87 cclib/cc-upload-forms.php:117
+msgid "Click on these to automatically add to your upload."
+msgstr "点击这些自动加入你的上传"
+
+#: cclib/cc-upload-forms.php:183
+#, php-format
+msgid "Are you sure you want to delete '%s'?"
+msgstr ""
+
+#: cclib/cc-upload-forms.php:205
+msgid "Internal Tags"
+msgstr ""
+
+#: cclib/cc-upload-forms.php:206
+msgid "Be careful when editing these, it is easy to confuse the system"
+msgstr ""
+
+#: cclib/cc-upload-forms.php:212
+#, fuzzy
+msgid "System Tags"
+msgstr "打开系统索引"
+
+#: cclib/cc-upload-forms.php:217
+#, fuzzy
+msgid "Click on these to automatically add them."
+msgstr "点击这些自动加入你的上传"
+
+#: cclib/cc-upload-table.php:243
+msgid "Invalid call to GetFormatInfo"
+msgstr ""
 
 #: cclib/cc-upload.php:55
 #, php-format
@@ -2820,6 +6906,206 @@ msgstr ""
 msgid "Set the default user avatar"
 msgstr ""
 
+#: cclib/cc-user-page.php:91 cclib/cc-user.inc:493
+#, fuzzy
+msgid "The system does not know that user."
+msgstr "无法找到那用户名"
+
+#: cclib/cc-user-page.php:122 cclib/cc-user.inc:559
+#, fuzzy, php-format
+msgid "Uploads by %s"
+msgstr "上传者"
+
+#: cclib/cc-user-page.php:169
+#, php-format
+msgid "PLAY %s"
+msgstr ""
+
+#: cclib/cc-user.inc:90
+msgid "Security key does not match"
+msgstr "安全键不相配"
+
+#: cclib/cc-user.inc:100
+msgid ""
+"Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) "
+"has a line through it, the D does not."
+msgstr "在上面输入字符。正确输入为0-9和A-F字符。零（0）有一斜线穿过，D无斜线。"
+
+#: cclib/cc-user.inc:137
+msgid "Password does not match login name."
+msgstr "密码不与登陆名相配"
+
+#: cclib/cc-user.inc:176
+#, fuzzy
+msgid "Cannot find that username"
+msgstr "无法找到那用户名"
+
+#: cclib/cc-user.inc:205
+msgid "Full Name"
+msgstr "全名"
+
+#: cclib/cc-user.inc:206
+#, fuzzy
+msgid ""
+"Your display name for the site (not to be confused with your login name)."
+msgstr "你在此网站上显示的名字（不混淆于"
+
+#: cclib/cc-user.inc:217
+msgid ""
+"This address will never show on the site but is required for creating a new "
+"account and password recovery in case you forget it."
+msgstr ""
+
+#: cclib/cc-user.inc:224
+#, fuzzy
+msgid "Image file (cannot be bigger than 93x93)"
+msgstr "图片文件（不能大于93x93）"
+
+#: cclib/cc-user.inc:231
+msgid "About You"
+msgstr "关于你"
+
+#: cclib/cc-user.inc:236
+msgid "Home Page URL"
+msgstr "主页URL"
+
+#: cclib/cc-user.inc:237
+msgid "Make sure it starts with http://"
+msgstr "确定开始于http://"
+
+#: cclib/cc-user.inc:255 cclib/cc-user.php:388
+msgid "What I Pound On"
+msgstr "我用什么工具"
+
+#: cclib/cc-user.inc:256
+msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
+msgstr "(例如黑胶，吉他，ACID Pro，人声的，拍子器）"
+
+#: cclib/cc-user.inc:261
+msgid "What I Like:"
+msgstr "我喜欢："
+
+#: cclib/cc-user.inc:262
+msgid "(e.g. Django, Old Skool, Miles Davis, Acid House)"
+msgstr ""
+
+#: cclib/cc-user.inc:267
+msgid "What I'm Looking For:"
+msgstr "我在找："
+
+#: cclib/cc-user.inc:268
+msgid "List attributes of musicians you'd like to hook up with "
+msgstr "列出你喜欢挂钩的音乐家的属性"
+
+#: cclib/cc-user.inc:302 cclib/cc-user.inc:355
+msgid "Edit Your Settings"
+msgstr "编辑你的设置"
+
+#: cclib/cc-user.inc:356
+msgid "Changes were saved"
+msgstr "更改已保存"
+
+#: cclib/cc-user.inc:409
+msgid "(select tag)"
+msgstr "（选择索引）"
+
+#: cclib/cc-user.inc:409
+msgid "(no tag)"
+msgstr "（无索引）"
+
+#: cclib/cc-user.inc:529
+msgid ""
+"You've registered an account and logged in, but you haven't uploaded any "
+"remixes."
+msgstr ""
+
+#: cclib/cc-user.inc:530
+msgid "Use the 'Submit Files' menu items on the left to start uploading."
+msgstr ""
+
+#: cclib/cc-user.inc:537
+#, fuzzy, php-format
+msgid "%s has not uploaded any remixes."
+msgstr "还未上传任何再混音"
+
+#: cclib/cc-user.inc:572
+#, fuzzy
+msgid "Removed from favorites"
+msgstr "（从我最喜爱中除去）"
+
+#: cclib/cc-user.inc:574
+#, fuzzy, php-format
+msgid "%s has been removed from your list of favorites."
+msgstr "已从你最喜爱的列表中删去"
+
+#: cclib/cc-user.inc:578
+#, fuzzy
+msgid "Added to favorites"
+msgstr "添加到我最喜爱中"
+
+#: cclib/cc-user.inc:580
+#, fuzzy, php-format
+msgid "%s has been added to your list of favorites."
+msgstr "已经被加到你最喜欢的列表中"
+
+#: cclib/cc-user.inc:592
+#, php-format
+msgid "Go back to %syour profile page%s or %s%s's%s"
+msgstr ""
+
+#: cclib/cc-user.inc:611
+#, fuzzy
+msgid "Artist page URL"
+msgstr "主页URL"
+
+#: cclib/cc-user.inc:633
+msgid "Your Page"
+msgstr "你的页面"
+
+#: cclib/cc-user.inc:640
+msgid "Edit Your Profile"
+msgstr "编辑你的简介"
+
+#: cclib/cc-user.inc:651
+msgid "Visitors"
+msgstr "访问者"
+
+#: cclib/cc-user.inc:653
+msgid "Artists"
+msgstr "艺术家"
+
+#: cclib/cc-user.inc:670
+#, fuzzy
+msgid "Display people page or user profile"
+msgstr "显示文件名字"
+
+#: cclib/cc-user.inc:674
+#, fuzzy
+msgid "Edit user profile"
+msgstr "编辑你的简介"
+
+#: cclib/cc-user.inc:681
+#, fuzzy
+msgid "Add/Remove favorite users"
+msgstr "（从我最喜爱中除去）"
+
+#: cclib/cc-user.inc:697
+#, fuzzy
+msgid "Site Administrators"
+msgstr "采样池"
+
+#: cclib/cc-user.inc:698
+msgid "List login names of site admins. (e.g. admin, fightmaster, sally)"
+msgstr ""
+
+#: cclib/cc-user.inc:704
+msgid "Use Subtabs on User Page"
+msgstr ""
+
+#: cclib/cc-user.inc:705
+msgid "Uncheck this for skins that use legacy user profile page"
+msgstr ""
+
 #: cclib/cc-user.php:175
 msgid "Attention: Menus have been corrupted"
 msgstr ""
@@ -2854,10 +7140,6 @@ msgstr ""
 msgid "What I Like"
 msgstr "我喜欢什么"
 
-#: cclib/cc-user.php:388
-msgid "What I Pound On"
-msgstr "我用什么工具"
-
 #: cclib/cc-user.php:390
 msgid "What I Look For"
 msgstr "我找什么"
@@ -2866,863 +7148,6 @@ msgstr "我找什么"
 msgid "file not found"
 msgstr ""
 
-#: cclib/cc-filetagger-admin.inc:59 cclib/cc-filerename-admin.inc:53
-#, fuzzy
-msgid "Site name"
-msgstr "流"
-
-#: cclib/cc-filerename-admin.inc:71
-msgid "Replace space with '_'"
-msgstr ""
-
-#: ccextras/cc-activity-log.php:87
-msgid "Show activity log"
-msgstr ""
-
-#: ccextras/cc-activity-log.php:99
-msgid "View Activity Log"
-msgstr ""
-
-#: ccextras/cc-activity-log.php:105
-msgid "Log Cleared"
-msgstr ""
-
-#: ccextras/cc-format.php:63
-#, fuzzy
-msgid "Preview"
-msgstr "评论"
-
-#: ccextras/cc-format.php:94
-msgid "Quote:"
-msgstr "引用："
-
-#: ccextras/cc-format.php:298
-#, fuzzy
-msgid "Select text and use the buttons to apply format"
-msgstr "选择文字并用 <br />按钮来应用格式"
-
-#: ccextras/cc-format.php:335
-msgid "Allow User Text Formatting"
-msgstr ""
-
-#: ccextras/cc-format.php:336
-msgid "Allow users to format text (bold, italic, etc.)"
-msgstr ""
-
-#: ccextras/cc-format.php:342
-msgid "Allow Admin Text Formatting"
-msgstr ""
-
-#: ccextras/cc-format.php:343
-msgid "Allow admins to format text"
-msgstr ""
-
-#: ccextras/cc-howididit.php:47
-msgid "How I Did It"
-msgstr "我是怎么做的"
-
-#: ccextras/cc-howididit.php:67
-msgid "Edit \"How I Did It\""
-msgstr ""
-
-#: cclib/cc-language.php:363
-msgid "default"
-msgstr "默认"
-
-#: cclib/cc-language.php:365
-msgid "autodetect"
-msgstr ""
-
-#: ccextras/cc-music-submit.php:47
-msgid "Submit a Remix"
-msgstr "提交一个再混音"
-
-#: ccextras/cc-music-submit.php:49
-msgid ""
-"A remix using samples downloaded from this site. When submitting a remix "
-"make sure to properly attribute the artist you sampled to comply with the "
-"Attribution part the Creative Commons license. The next screen will have a "
-"search function that allows you do just that."
-msgstr ""
-
-#: ccextras/cc-music-submit.php:55
-msgid "Use this form to submit a remix"
-msgstr ""
-
-#: ccextras/cc-music-submit.php:59
-msgid "Submit an A Cappella"
-msgstr ""
-
-#: ccextras/cc-music-submit.php:61
-msgid ""
-"Stand alone vocal parts, either spoken word or sung. Mono recording with no "
-"effects (reverb, delay, etc.) on them are best because they are the most "
-"flexible to work with. Many singers think they sound \"better\" with a lot "
-"of effects but it is always better to leave those choices to a producer/"
-"remixer to allow them to use their creative skills to the fullest potential."
-msgstr ""
-
-#: ccextras/cc-music-submit.php:65
-msgid "Use this form to submit an a cappella"
-msgstr ""
-
-#: ccextras/cc-music-submit.php:71
-msgid "Submit Samples"
-msgstr "提交采样"
-
-#: ccextras/cc-music-submit.php:73
-msgid ""
-"Samples can be a loop, a one-shot note or drum hit or any other snippet of "
-"sound that might be useful to a producer or remixer. You are encouraged to "
-"make a collection of samples and upload them together in archive format "
-"(ZIP), however sound files are accepted as well. By far the most flexible "
-"samples to work with are mono and have no effects for acoustic instruments "
-"and minimal effects for synthesized sounds."
-msgstr ""
-
-#: ccextras/cc-music-submit.php:76
-msgid "Use this form to submit samples"
-msgstr ""
-
-#: ccextras/cc-music-submit.php:83
-msgid "Submit a Fully Mixed Track"
-msgstr ""
-
-#: ccextras/cc-music-submit.php:85
-msgid ""
-"An original track that is fully mixed is <i>extremely unlikely</i> to be "
-"remixed because of the extra work the producer or remixer has to do the "
-"extract the parts they actually wish to use. Before uploading your track "
-"here, consider uploading to one of several free hosting sites sponsored by "
-"Creative Commons such <a href=\"http://archive.org/audio\">Internet Archive</"
-"a> or <a href=\"http://ourmedia.org\">Our Media</a> both of which might be "
-"more appropriate places to post completely mixed tracks."
-msgstr ""
-
-#: ccextras/cc-music-submit.php:89
-msgid "Use this form to submit a fully mixed track"
-msgstr ""
-
-#: ccextras/cc-reviews.php:64
-msgid "Write Review"
-msgstr ""
-
-#: ccextras/cc-reviews.php:97
-#, fuzzy, php-format
-msgid "%s has not left any reviews"
-msgstr "还未上传任何再混音"
-
-#: ccextras/cc-reviews.php:106
-#, php-format
-msgid "%s has left %s%d review.%s"
-msgid_plural "%s has left %s%d reviews.%s"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ccextras/cc-reviews.php:114
-#, fuzzy
-msgid "and has not been reviewed"
-msgstr "上传已被删除"
-
-#: ccextras/cc-reviews.php:122
-#, fuzzy, php-format
-msgid "and has been reviewed %s%d time%s."
-msgid_plural "and has been reviewed %s%d times%s."
-msgstr[0] "上传已被删除"
-msgstr[1] "上传已被删除"
-
-#: ccextras/cc-reviews.php:128
-msgid "Reviews"
-msgstr ""
-
-#: ccextras/cc-reviews.php:175
-#, php-format
-msgid "Reviews (%s)"
-msgstr "评论"
-
-#: ccextras/cc-nswf.php:72 mixter-lib/mixter-dump-listing.inc:35
-msgid "Not Safe For Work"
-msgstr ""
-
-#: ccextras/cc-nswf.php:73
-#, php-format
-msgid "Mark this upload as %s if it contains questionable language."
-msgstr ""
-
-#: ccextras/cc-stats.php:53
-#, fuzzy, php-format
-msgid "%s has no remixes and has not been remixed"
-msgstr "上传已被删除"
-
-#: ccextras/cc-stats.php:57
-#, fuzzy, php-format
-msgid "%s has no remixes and has been remixed %d time."
-msgid_plural "%s has no remixes and has been remixed %d times."
-msgstr[0] "上传已被删除"
-msgstr[1] "上传已被删除"
-
-#: ccextras/cc-stats.php:67
-#, php-format
-msgid "%s has %d remix and has not been remixed"
-msgid_plural "%s has %d remixes and has not been remixed"
-msgstr[0] ""
-msgstr[1] ""
-
-#: ccextras/cc-stats.php:78
-#, fuzzy, php-format
-msgid "%s has one remix and has been remixed once"
-msgstr "上传已被删除"
-
-#: ccextras/cc-stats.php:82
-#, fuzzy, php-format
-msgid "%s has 1 remix and has been remixed %d time."
-msgid_plural "%s has 1 remixes and has been remixed %d times."
-msgstr[0] "上传已被删除"
-msgstr[1] "上传已被删除"
-
-#: ccextras/cc-stats.php:92
-#, fuzzy, php-format
-msgid "%s has %d remix and has been remixed 1 time."
-msgid_plural "%s has %d remixes and has been remixed 1 time."
-msgstr[0] "上传已被删除"
-msgstr[1] "上传已被删除"
-
-#: ccextras/cc-stats.php:99
-#, fuzzy, php-format
-msgid "%s has %d remixes and has been remixed %d times."
-msgstr "上传已被删除"
-
-#: ccextras/cc-stats.php:108
-msgid "Stats"
-msgstr ""
-
-#: ccextras/cc-stats.php:149 ccextras/cc-stats.php:220
-#, fuzzy
-msgid "Charts"
-msgstr "什么"
-
-#: ccextras/cc-update.php:64
-msgid "Updates already installed:"
-msgstr ""
-
-#: ccextras/update_v_1_2h.inc:150
-#, fuzzy
-msgid "Upgraded remix fields"
-msgstr "上传者"
-
-#: ccextras/update_v_1_2h.inc:202
-msgid "Ratings info updated"
-msgstr ""
-
-#: ccextras/update_v_1_2k.inc:83
-#, fuzzy
-msgid "Reviews installed"
-msgstr "评论"
-
-#: ccextras/cc-notify.inc:69
-msgid "My Notifications"
-msgstr ""
-
-#: ccextras/cc-notify.inc:82
-#, php-format
-msgid "%s has been remixed"
-msgstr ""
-
-#: ccextras/cc-notify.inc:84
-#, php-format
-msgid "%s uploads something new"
-msgstr ""
-
-#: ccextras/cc-notify.inc:94
-msgid "I've been remixed"
-msgstr "我已被再混音"
-
-#: ccextras/cc-notify.inc:96
-msgid "I've been reviewed"
-msgstr "我已被评论"
-
-#: ccextras/cc-notify.inc:98
-msgid "I've been replied to"
-msgstr ""
-
-#: ccextras/cc-notify.inc:100
-msgid "I've been rated"
-msgstr "我已被评级"
-
-#: ccextras/cc-notify.inc:152
-msgid "Notifications have been updated"
-msgstr ""
-
-#: ccextras/cc-notify.inc:192 ccextras/cc-notify.inc:220
-#: ccextras/cc-notify.inc:319 ccextras/cc-notify.inc:401
-msgid "PLEASE DO NOT RESPOND TO THIS EMAIL"
-msgstr ""
-
-#: ccextras/cc-notify.inc:193
-#, php-format
-msgid "This is a notification that \"%s\" has just received a rating of %d.00"
-msgstr ""
-
-#: ccextras/cc-notify.inc:199
-msgid "Ratings notification"
-msgstr ""
-
-#: ccextras/cc-notify.inc:222
-#, php-format
-msgid "This is a notification that \"%s\" has been reviewed by %s"
-msgstr ""
-
-#: ccextras/cc-notify.inc:229
-msgid "Review notification"
-msgstr "评论通知"
-
-#: ccextras/cc-notify.inc:318
-#, fuzzy
-msgid "Topic Reply Notification"
-msgstr "评论通知"
-
-#: ccextras/cc-notify.inc:400
-#, php-format
-msgid "Upload by %s"
-msgstr "上传者"
-
-#: ccextras/cc-notify.inc:402
-#, php-format
-msgid "This is a notification that %s has just uploaded new material to %s"
-msgstr ""
-
-#: ccextras/cc-notify.inc:411
-#, fuzzy
-msgid "It uses samples from:\n"
-msgstr "用采样来自："
-
-#: ccextras/cc-notify.inc:416
-#, fuzzy, php-format
-msgid "%s by %s"
-msgstr "上传者"
-
-#: ccextras/cc-notify.inc:420
-#, fuzzy, php-format
-msgid "Thank you, %s"
-msgstr ""
-"\n"
-"谢谢,\n"
-"%s"
-
-#: ccextras/cc-fileman.inc:42
-msgid "Destination directory"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:48
-#, fuzzy
-msgid "Add file(s)"
-msgstr "文件添加到"
-
-#: ccextras/cc-fileman.inc:152
-#, php-format
-msgid "The file , '%s', already exists."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:173
-msgid "There were problems uploading (see below)."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:176
-#, fuzzy, php-format
-msgid "The files, %s, were uploaded okay."
-msgstr "文件未完全上传"
-
-#: ccextras/cc-fileman.inc:211
-msgid "Manage files your viewfile directory"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:292
-msgid "Can't leave this blank"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:299
-msgid "The directory you selected already exists"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:307
-msgid "The directory is successfully created."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:311
-msgid "There is a problem creating the directory."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:323
-msgid "There is no file selected for renaming."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:337
-msgid "A file with that name already exists."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:350
-#, fuzzy
-msgid "That file could not be renamed."
-msgstr "此操作不能倒退"
-
-#: ccextras/cc-fileman.inc:362
-msgid "No file selected for replacement."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:386
-#, fuzzy
-msgid "replaced"
-msgstr "取代"
-
-#: ccextras/cc-fileman.inc:390
-msgid "ERROR"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:390
-#, php-format
-msgid "Could not replace file, '%s'."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:402
-msgid "Please confirm deletion by checking here:"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:407
-msgid "There is no file selected for deletion."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:419
-#, fuzzy, php-format
-msgid "The file, %s, is now deleted."
-msgstr "文件太大"
-
-#: ccextras/cc-fileman.inc:421
-#, php-format
-msgid "The file, %s, could not be deleted."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:435
-msgid "The directory is empty."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:435
-msgid "Use \"Add Files\" to populate."
-msgstr ""
-
-#: ccextras/cc-fileman.inc:453
-msgid "Path Root"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:490
-#, php-format
-msgid "Create directory in %s"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:492
-#, fuzzy
-msgid "Create Directory"
-msgstr "浏览比赛"
-
-#: ccextras/cc-fileman.inc:502 mixter-lib/mixter-dump-listing.inc:41
-msgid "Download"
-msgstr "下载"
-
-#: ccextras/cc-fileman.inc:505
-msgid "(right/control click on the link above to download this file.)"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:514
-#, fuzzy, php-format
-msgid "Rename file, %s, to:"
-msgstr "管理文件对象"
-
-#: ccextras/cc-fileman.inc:518
-#, php-format
-msgid "Replace file, %s, with:"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:519 ccextras/cc-fileman.inc:524
-msgid "There is NO CONFIRM and NO UNDO!"
-msgstr ""
-
-#: ccextras/cc-fileman.inc:521
-#, fuzzy
-msgid "Replace"
-msgstr "取代"
-
-#: ccextras/cc-fileman.inc:523
-#, fuzzy, php-format
-msgid "Delete file, %s"
-msgstr "删除文件"
-
-#: ccextras/cc-notify.php:129
-msgid "Edit My Notifications"
-msgstr ""
-
-#: ccextras/cc-notify.php:134
-#, php-format
-msgid "Get Notified About %s"
-msgstr ""
-
-#: ccextras/cc-notify.php:137
-#, fuzzy
-msgid "Notifications"
-msgstr "评论通知"
-
-#: ccextras/cc-notify.php:149
-msgid ""
-"Display notify options form. Optional parameter is other user to get "
-"notified about."
-msgstr ""
-
-#: ccextras/cc-notify.php:165
-#, fuzzy
-msgid "Allow email notifications"
-msgstr "评论通知"
-
-#: ccextras/cc-notify.php:166
-msgid ""
-"Is it ok to allow users get notified on activity on their accounts and "
-"others?"
-msgstr ""
-
-#: ccextras/update_v_2_1a.inc:58
-#, fuzzy
-msgid "Notifications installed"
-msgstr "评论通知"
-
-#: ccextras/cc-fileman.php:68
-msgid "Web based file manager"
-msgstr ""
-
-#: ccextras/cc-fileman.php:89
-#, fuzzy
-msgid "Manage files"
-msgstr "管理文件"
-
-#: ccextras/cc-fileman.php:91
-#, fuzzy, php-format
-msgid "Manage files in the directory, %s."
-msgstr "管理文件对象"
-
-#: ccextras/cc-forums.php:94
-#, php-format
-msgid "%s has posted %s%d forum messages%s"
-msgstr ""
-
-#: ccextras/cc-forums.php:98 ccextras/cc-forums.inc:637
-msgid "Forum posts"
-msgstr "论坛帖子"
-
-#: ccextras/cc-forums-search.inc:62
-msgid "Forum Topics"
-msgstr "论坛主题"
-
-#: ccextras/cc-forums-search.inc:116
-#, fuzzy
-msgid "Sorry, no topics match."
-msgstr "对不起，无主题相关"
-
-#: ccextras/update_v_3_0c.inc:103
-#, fuzzy
-msgid "Forums installed"
-msgstr "论坛提要"
-
-#: ccextras/cc-forums-admin.inc:40
-#, fuzzy
-msgid "Forum Name"
-msgstr "全名"
-
-#: ccextras/cc-forums-admin.inc:52
-msgid "Lower number places forum higher in listing"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:57
-#, fuzzy
-msgid "Post Access"
-msgstr "加工"
-
-#: ccextras/cc-forums-admin.inc:60 ccextras/cc-forums-admin.inc:70
-#, fuzzy
-msgid "Registered Users"
-msgstr "注册"
-
-#: ccextras/cc-forums-admin.inc:61 ccextras/cc-forums-admin.inc:71
-#, fuzzy
-msgid "Admins Only"
-msgstr "管理"
-
-#: ccextras/cc-forums-admin.inc:66
-#, fuzzy
-msgid "Read Access"
-msgstr "限制进入"
-
-#: ccextras/cc-forums-admin.inc:76
-#, fuzzy
-msgid "Forum Group"
-msgstr "论坛主题"
-
-#: ccextras/cc-forums-admin.inc:95
-msgid "Forum Group Name"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:102
-msgid "A lower number places forum group higher in listing."
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:116
-msgid ""
-"This action will delete <b>ALL</b> topics ever posted in the forum. There is "
-"<b>NO UNDO</b>. Once you delete the forum, <b>ALL</b> messages will be gone "
-"forever."
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:120
-#, fuzzy, php-format
-msgid "Delete Forum, '%s' ?"
-msgstr "删除"
-
-#: ccextras/cc-forums-admin.inc:141 ccextras/cc-forums-admin.inc:171
-#: ccextras/cc-forums.inc:311
-msgid "Forum"
-msgstr "论坛"
-
-#: ccextras/cc-forums-admin.inc:143
-msgid "Move thread to this fourm"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:173
-msgid "Configure forums access, groups, etc."
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:190
-msgid "View a forum thread"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:194
-msgid "View forums index or specific forum"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:198
-#, fuzzy
-msgid "Post a new topic"
-msgstr "发表新主题"
-
-#: ccextras/cc-forums-admin.inc:202
-#, fuzzy
-msgid "Display forum topics for user"
-msgstr "显示文件名字"
-
-#: ccextras/cc-forums-admin.inc:209
-msgid "Various forum feeds"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:213
-msgid "Configure forums"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:217
-msgid "Displays 'Move Thread' form"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:231
-#, php-format
-msgid "Move topic: %s"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:275
-msgid "Change Thread Sticky Flag"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:280
-#, php-format
-msgid "Sticky status changed for thread. %sGo back to thread%s"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:297
-msgid "Change Thread Open Status"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:302
-#, php-format
-msgid "Open status changed for thread. %sGo back to thread%s"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:333
-#, php-format
-msgid "You must %sadd groups%s before you can add forums"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:355
-#, fuzzy
-msgid "Edit Forum Properties"
-msgstr "编辑属性对象"
-
-#: ccextras/cc-forums-admin.inc:383 ccextras/cc-forums-admin.inc:482
-#, fuzzy
-msgid "Delete Forum"
-msgstr "删除"
-
-#: ccextras/cc-forums-admin.inc:409
-msgid "Add Forum Group"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:425
-#, fuzzy
-msgid "Edit Forum Group Properties"
-msgstr "编辑属性对象"
-
-#: ccextras/cc-forums-admin.inc:453
-#, fuzzy
-msgid "Delete Forum Group"
-msgstr "删除主题"
-
-#: ccextras/cc-forums-admin.inc:463
-#, php-format
-msgid "Group is not empty. %sReturn to forums.%s"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:478
-#, fuzzy
-msgid "Add Forum"
-msgstr "论坛"
-
-#: ccextras/cc-forums-admin.inc:480
-#, fuzzy
-msgid "Edit Forum"
-msgstr "论坛"
-
-#: ccextras/cc-forums-admin.inc:485
-msgid "Add Group"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:487
-msgid "Edit Group"
-msgstr ""
-
-#: ccextras/cc-forums-admin.inc:489
-#, fuzzy
-msgid "Delete Group"
-msgstr "删除主题"
-
-#: ccextras/cc-forums-admin.inc:494
-#, fuzzy
-msgid "Forum Admin"
-msgstr "论坛提要"
-
-#: ccextras/cc-forums-admin.inc:516
-#, php-format
-msgid "Forum has been permanantly deleted. %sReturn to forums.%s"
-msgstr ""
-
-#: ccextras/cc-forums.inc:241
-msgid "Post new topic"
-msgstr "发表新主题"
-
-#: ccextras/cc-forums.inc:301
-msgid "Topic"
-msgstr "话题"
-
-#: ccextras/cc-forums.inc:325
-msgid "Forums"
-msgstr "论坛"
-
-#: ccextras/cc-forums.inc:447
-msgid "Post New Topic"
-msgstr "发表新主题"
-
-#: ccextras/cc-forums.inc:450
-msgid "New Topic Text"
-msgstr "新题目文字"
-
-#: ccextras/cc-forums.inc:450
-#, fuzzy
-msgid "Submit Topic"
-msgstr "提交论坛"
-
-#: ccextras/cc-forums.inc:511
-msgid "Thread Missing"
-msgstr ""
-
-#: ccextras/cc-forums.inc:512
-msgid "That topic thread does not exist."
-msgstr ""
-
-#: ccextras/cc-forums.inc:523
-#, fuzzy
-msgid "You must have admin rights to see this forum."
-msgstr "你无浏览此论坛的适当权利"
-
-#: ccextras/cc-forums.inc:525
-#, fuzzy
-msgid "You must be logged in to see this forum."
-msgstr "你无浏览此论坛的适当权利"
-
-#: ccextras/cc-forums.inc:527
-#, fuzzy
-msgid "You do have proper permissions to see this forum."
-msgstr "你无浏览此论坛的适当权利"
-
-#: ccextras/cc-forums.inc:529
-msgid "Restricted Access"
-msgstr "限制进入"
-
-#: ccextras/cc-forums.inc:541
-msgid "Thread is closed to new comments."
-msgstr ""
-
-#: ccextras/cc-forums.inc:546
-msgid "Post topic reply"
-msgstr "发表主题回复"
-
-#: ccextras/cc-forums.inc:552
-msgid "Move thread"
-msgstr ""
-
-#: ccextras/cc-forums.inc:554
-msgid "Open"
-msgstr "打开"
-
-#: ccextras/cc-forums.inc:554
-msgid "Close"
-msgstr "关闭"
-
-#: ccextras/cc-forums.inc:559
-msgid "Unstick"
-msgstr ""
-
-#: ccextras/cc-forums.inc:559
-msgid "Stick"
-msgstr ""
-
-#: ccextras/cc-forums.inc:619
-#, php-format
-msgid "Reply to: \"%s\""
-msgstr ""
-
-#: ccextras/cc-forums.inc:626
-#, fuzzy, php-format
-msgid "Forum Posts by %s"
-msgstr "论坛帖子"
-
-#: ccextras/cc-forums.inc:667
-#, php-format
-msgid "Feed for topics by %s"
-msgstr "主题提要作者"
-
-#: ccextras/cc-forums.inc:679
-#, php-format
-msgid "Feed for topic: %s"
-msgstr "主题提要"
-
-#: ccextras/cc-forums.inc:683
-msgid "Forums Feed"
-msgstr "论坛提要"
-
-#: ccextras/cc-forums.inc:699
-msgid "Contents requires login"
-msgstr "内容要求登陆"
-
 #: index.php:100
 #, fuzzy
 msgid "ccHost installation is not complete."
@@ -3730,6 +7155,77 @@ msgstr "这个装置不支持此特性"
 
 #: index.php:101
 msgid "For security reasons, you should rename \"ccadmin\"."
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:97
+msgid "There are no published or unbanned uploads queued for upload"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:101
+msgid "Clear Transfer Queue"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:105
+msgid "Run Transfer Queue Now"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:109
+msgid "View Transfer Queue"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:113
+#, php-format
+msgid "There are %d files in the queue"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:116
+msgid "Manage Transfer Queue"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:119
+msgid "Transfer Queue Settings"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:212
+msgid "file no longer remoted"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:217
+msgid "transfer queue cleared"
+msgstr ""
+
+#: mixter-lib/cc-remote-client.inc:299
+msgid "View Remoting Queue"
+msgstr ""
+
+#: mixter-lib/cc-remote.inc:66 mixter-lib/cc-remote.php:65
+#, fuzzy
+msgid "Transfering files"
+msgstr "管理文件"
+
+#: mixter-lib/cc-remote.inc:74 mixter-lib/cc-remote.php:73
+msgid "No files were transfered"
+msgstr ""
+
+#: mixter-lib/cc-remote.inc:82 mixter-lib/cc-remote.php:81
+msgid "Files transfered:<br />"
+msgstr ""
+
+#: mixter-lib/cc-remote.inc:97 mixter-lib/cc-remote.php:96
+#, fuzzy
+msgid "File did not remote"
+msgstr "文件未完全上传"
+
+#: mixter-lib/cc-remote.inc:98 mixter-lib/cc-remote.php:97
+msgid "See log for possible details"
+msgstr ""
+
+#: mixter-lib/cc-remote.inc:154 mixter-lib/cc-remote.php:153
+msgid "Remote Transfers"
+msgstr ""
+
+#: mixter-lib/mixter-admin.inc:422
+msgid "See phpinfo() results"
 msgstr ""
 
 #: mixter-lib/mixter-dump-listing.inc:28
@@ -3796,10 +7292,6 @@ msgstr ""
 msgid "Mac: Control-click select 'Save Link As'"
 msgstr ""
 
-#: mixter-lib/mixter-dump-listing.inc:46
-msgid "Flag this upload for possible violation of terms"
-msgstr ""
-
 #: mixter-lib/mixter-dump-listing.inc:47
 msgid "featuring:"
 msgstr "推介"
@@ -3812,19 +7304,83 @@ msgstr ""
 msgid "Play:"
 msgstr ""
 
-#: cc-custom.php:42
-#, php-format
-msgid "A bad call happened to \"%s\" in a template."
+#: mixter-lib/mixter-print-page.php:92
+msgid "Skip the site navigation to go directly to the content"
 msgstr ""
 
-#: cc-custom.php:249
+#: mixter-lib/mixter-print-page.php:93
 #, fuzzy
-msgid "You've been remixed!"
-msgstr "我已被再混音"
+msgid "Skip to content"
+msgstr "标志内容"
 
-#: cc-custom.php:250
-msgid "Click here to make them visible!"
+#: mixter-lib/mixter-print-page.php:94
+msgid "Main Site Sections"
 msgstr ""
+
+#: mixter-lib/mixter-print-page.php:95
+msgid "Advanced search"
+msgstr ""
+
+#: mixter-lib/mixter-print-page.php:97
+msgid "getting ratings..."
+msgstr ""
+
+#: mixter-lib/mixter-sample-browser.inc:70
+msgid "Enter a search phrase first..."
+msgstr ""
+
+#: mixter-lib/mixter-sample-browser.inc:82
+#, fuzzy
+msgid "Search phrase"
+msgstr "搜索文字"
+
+#: mixter-lib/mixter-sample-browser.inc:117
+msgid ""
+"Select a combination of tags from the list or enter a phrase and hit 'Go' ..."
+msgstr ""
+
+#: mixter-lib/mixter-sample-browser.inc:216
+#, php-format
+msgid "Could not find any matches for  \"%s\"..."
+msgstr ""
+
+#: mixter-lib/mixter-sample-browser.inc:243
+#, fuzzy
+msgid "Search using tags:"
+msgstr "用Google搜索"
+
+#: mixter-lib/mixter-sample-browser.inc:244
+msgid "Search for phrase:"
+msgstr ""
+
+#: mixter-lib/mixter-sample-browser.inc:245
+msgid "Limit to BPM:"
+msgstr ""
+
+#: mixter-lib/mixter-sample-browser.inc:278
+#, fuzzy
+msgid "Pick License"
+msgstr "执照"
+
+#: mixter-lib/mixter-sample-browser.inc:404
+#, fuzzy
+msgid "Match any tags"
+msgstr "全部相配"
+
+#: mixter-lib/mixter-sample-browser.inc:407
+#, fuzzy
+msgid "Match all tags"
+msgstr "全部相配"
+
+#: mixter-lib/mixter-sample-browser.inc:423
+#, fuzzy
+msgid "Popular only"
+msgstr "流行索引"
+
+#: mixter-lib/mixter-sample-browser.inc:426
+#, fuzzy
+msgid "Show all"
+msgstr "采样池"
 
 #, fuzzy
 #~ msgid "Edit 'Submit Files'"
@@ -3838,564 +7394,14 @@ msgstr ""
 #~ msgid "Log out, and then register the user."
 #~ msgstr "投票只对注册用户开放"
 
-#~ msgid " is currently open and taking submissions."
-#~ msgstr "现正开放并接受提交"
-
-#~ msgid "Submissions allowed until: "
-#~ msgstr "允许提交直到："
-
-#~ msgid "(Only logged in users can submit entries.)"
-#~ msgstr "（只有登陆用户可提交条目）"
-
-#~ msgid " is not taking submissions any more."
-#~ msgstr "不再接受提交"
-
-#~ msgid "Submissions stopped after: "
-#~ msgstr "提交截止于"
-
-#~ msgid "Voting is open until "
-#~ msgstr "投票开放直至"
-
-#~ msgid "Browse Contests"
-#~ msgstr "浏览比赛"
-
-#, fuzzy
-#~ msgid "This contest does not support online voting"
-#~ msgstr "此比赛不设网上投票"
-
-#, fuzzy
-#~ msgid "Voting will open after submission period has ended"
-#~ msgstr "投票会在提交期结束后开放"
-
-#, fuzzy
-#~ msgid "Poll Results"
-#~ msgstr "投票结果"
-
-#, fuzzy
-#~ msgid "Voting is only open to registered users"
-#~ msgstr "投票只对注册用户开放"
-
-#, fuzzy
-#~ msgid "Results will be shown here after the voting period is closed"
-#~ msgstr "结果会在投票期结束后开放"
-
-#~ msgid "Submit to: '%s'"
-#~ msgstr "提交到："
-
-#~ msgid "Your upload has been entered in '%s'"
-#~ msgstr "你的上传被送入于"
-
 #~ msgid "This contest entry is only visible to the owner and admins."
 #~ msgstr "只有主人和管理员可看此比赛条目"
-
-#, fuzzy
-#~ msgid "Display contest entry form"
-#~ msgstr "参赛资料"
-
-#, fuzzy
-#~ msgid "Display contest source upload form"
-#~ msgstr "显示图片上传指图"
-
-#, fuzzy
-#~ msgid "Display new contest form"
-#~ msgstr "显示文件名字"
-
-#, fuzzy
-#~ msgid "Display contest properties form"
-#~ msgstr "编辑属性对象"
-
-#, fuzzy
-#~ msgid "Display admin contest forms"
-#~ msgstr "显示文件名字"
-
-#~ msgid "Review"
-#~ msgstr "评论"
-
-#~ msgid "License"
-#~ msgstr "执照"
 
 #, fuzzy
 #~ msgid ""
 #~ "NOTE: You can only pick less restrictive license. Once you have done that "
 #~ "you can not re-license under a stricter license (on this site). "
 #~ msgstr "注意：完成以下操作后你只能挑选较少限制性的执照"
-
-#, fuzzy
-#~ msgid "License URL"
-#~ msgstr "执照"
-
-#, fuzzy
-#~ msgid "License name"
-#~ msgstr "执照"
-
-#, fuzzy
-#~ msgid "Licenses Updated"
-#~ msgstr "执照"
-
-#~ msgid ""
-#~ "Type in the characters above. Valid characters are 0-9 and A-F. The zero "
-#~ "(0) has a line through it, the D does not."
-#~ msgstr ""
-#~ "在上面输入字符。正确输入为0-9和A-F字符。零（0）有一斜线穿过，D无斜线。"
-
-#, fuzzy
-#~ msgid "Add a sample pool to your site:"
-#~ msgstr "采样池项目"
-
-#~ msgid "Done Editing"
-#~ msgstr "完成编辑"
-
-#, fuzzy
-#~ msgid "Reserved Tags"
-#~ msgstr "建议索引"
-
-#~ msgid "Turn System Tags ON"
-#~ msgstr "打开系统索引"
-
-#~ msgid "Turn System Tags OFF"
-#~ msgstr "关闭系统索引"
-
-#~ msgid "Browse Tags"
-#~ msgstr "浏览索引"
-
-#, fuzzy
-#~ msgid "Admin Tags"
-#~ msgstr "管理"
-
-#, fuzzy
-#~ msgid "Tag Name"
-#~ msgstr "姓名"
-
-#, fuzzy
-#~ msgid "Sidebar Content"
-#~ msgstr "标志内容"
-
-#~ msgid "Comma separated list of terms"
-#~ msgstr "用逗号分隔列表项目"
-
-#~ msgid "Popular Tags"
-#~ msgstr "流行索引"
-
-#~ msgid "Click on these to automatically add to your upload."
-#~ msgstr "点击这些自动加入你的上传"
-
-#~ msgid "This action can not be reversed..."
-#~ msgstr "此操作不能倒退"
-
-#, fuzzy
-#~ msgid "System Tags"
-#~ msgstr "打开系统索引"
-
-#, fuzzy
-#~ msgid "Click on these to automatically add them."
-#~ msgstr "点击这些自动加入你的上传"
-
-#~ msgid "Security key does not match"
-#~ msgstr "安全键不相配"
-
-#~ msgid "Password does not match login name."
-#~ msgstr "密码不与登陆名相配"
-
-#, fuzzy
-#~ msgid "Cannot find that username"
-#~ msgstr "无法找到那用户名"
-
-#~ msgid "Full Name"
-#~ msgstr "全名"
-
-#, fuzzy
-#~ msgid ""
-#~ "Your display name for the site (not to be confused with your login name)."
-#~ msgstr "你在此网站上显示的名字（不混淆于"
-
-#, fuzzy
-#~ msgid "Image file (cannot be bigger than 93x93)"
-#~ msgstr "图片文件（不能大于93x93）"
-
-#~ msgid "About You"
-#~ msgstr "关于你"
-
-#~ msgid "Home Page URL"
-#~ msgstr "主页URL"
-
-#~ msgid "Make sure it starts with http://"
-#~ msgstr "确定开始于http://"
-
-#~ msgid "Default Language:"
-#~ msgstr "默认语言："
-
-#~ msgid "(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)"
-#~ msgstr "(例如黑胶，吉他，ACID Pro，人声的，拍子器）"
-
-#~ msgid "What I Like:"
-#~ msgstr "我喜欢："
-
-#~ msgid "What I'm Looking For:"
-#~ msgstr "我在找："
-
-#~ msgid "List attributes of musicians you'd like to hook up with "
-#~ msgstr "列出你喜欢挂钩的音乐家的属性"
-
-#~ msgid "Edit Your Settings"
-#~ msgstr "编辑你的设置"
-
-#~ msgid "Changes were saved"
-#~ msgstr "更改已保存"
-
-#~ msgid "(select tag)"
-#~ msgstr "（选择索引）"
-
-#~ msgid "(no tag)"
-#~ msgstr "（无索引）"
-
-#, fuzzy
-#~ msgid "The system does not know that user."
-#~ msgstr "无法找到那用户名"
-
-#, fuzzy
-#~ msgid "Uploads by %s"
-#~ msgstr "上传者"
-
-#, fuzzy
-#~ msgid "User, %s, has been removed from your list of favorites."
-#~ msgstr "已从你最喜爱的列表中删去"
-
-#, fuzzy
-#~ msgid "User, %s, has been added to your list of favorites."
-#~ msgstr "已经被加到你最喜欢的列表中"
-
-#, fuzzy
-#~ msgid "Artist name"
-#~ msgstr "艺术家"
-
-#, fuzzy
-#~ msgid "Artist login name"
-#~ msgstr "你的登陆名"
-
-#~ msgid "Your Page"
-#~ msgstr "你的页面"
-
-#~ msgid "Edit Your Profile"
-#~ msgstr "编辑你的简介"
-
-#~ msgid "Visitors"
-#~ msgstr "访问者"
-
-#~ msgid "Artists"
-#~ msgstr "艺术家"
-
-#, fuzzy
-#~ msgid "Edit user profile"
-#~ msgstr "编辑你的简介"
-
-#, fuzzy
-#~ msgid "Add/Remove favorite users"
-#~ msgstr "（从我最喜爱中除去）"
-
-#, fuzzy
-#~ msgid "Import Settings"
-#~ msgstr "编辑你的设置"
-
-#, fuzzy
-#~ msgid "Settings have been imported"
-#~ msgstr "更改已保存"
-
-#~ msgid "Monthly Archive"
-#~ msgstr "每月档案"
-
-# 每分钟拍子速
-#~ msgid "BPM"
-#~ msgstr "BPM"
-
-#~ msgid "Tempo"
-#~ msgstr "拍子"
-
-#~ msgid "From"
-#~ msgstr "来自"
-
-#~ msgid "Your email address (optional)"
-#~ msgstr "你的电子邮箱地址（非必填）"
-
-#~ msgid "Subject"
-#~ msgstr "主题"
-
-#~ msgid "Flag %s \"%s\""
-#~ msgstr "标志"
-
-#~ msgid "Message"
-#~ msgstr "消息"
-
-#~ msgid "Flag Content"
-#~ msgstr "标志内容"
-
-#~ msgid "Content has been flagged"
-#~ msgstr "内容已被做标志"
-
-#, fuzzy
-#~ msgid "Path to file on this server"
-#~ msgstr "服务器上文件的路径"
-
-#, fuzzy
-#~ msgid "Cannot file a file by that name"
-#~ msgstr "不能用那个名字建立文件"
-
-#, fuzzy
-#~ msgid "Import Files"
-#~ msgstr "输入文件"
-
-#~ msgid "Import files"
-#~ msgstr "输入文件"
-
-#, fuzzy
-#~ msgid ""
-#~ "Use this form to import files already on your server into this ccHost "
-#~ "system. WARNING: This form will <b>MOVE</b> your file from its original "
-#~ "location to one specified by this ccHost system."
-#~ msgstr ""
-#~ "用这个表格把已在你服务器上的文件输入ccHost系统。警告：这个表格会<b>移动</"
-#~ "b> 你文件的原始位置"
-
-#, fuzzy
-#~ msgid "Import succeeded. Click %s to see results."
-#~ msgstr "上传成功。点击此看结果。"
-
-#~ msgid "Browse 'How I Did It'"
-#~ msgstr "浏览“我是怎么做的”"
-
-#~ msgid "Date"
-#~ msgstr "日期"
-
-#~ msgid "Upload Name"
-#~ msgstr "上传名字"
-
-#~ msgid "Sort by:"
-#~ msgstr "归类于"
-
-#, fuzzy
-#~ msgid "Changes saved. Click %s to see results"
-#~ msgstr "更改已保存。点击此处看结果"
-
-#~ msgid "Tools I Used"
-#~ msgstr "我用过的工具"
-
-#, fuzzy
-#~ msgid "What software, hardware, and plug-ins did you use?"
-#~ msgstr "你用了什么软件，硬件，插件程序等？"
-
-#~ msgid "Samples I Used"
-#~ msgstr "我用过的采样"
-
-#~ msgid ""
-#~ "Where did you find your samples? What kind of license are they under?"
-#~ msgstr "你在哪里找你的采样？它们有什么样的执照？"
-
-#~ msgid "Original Samples"
-#~ msgstr "原始采样"
-
-#~ msgid "What material did you create just for this work?"
-#~ msgstr "只为这个作品你创造了什么材料？"
-
-#~ msgid "Process"
-#~ msgstr "加工"
-
-#~ msgid "How did you put all the pieces together?"
-#~ msgstr "你如何把所有部分放在一起的。"
-
-#~ msgid "Other Notes"
-#~ msgstr "其它备忘录"
-
-#, fuzzy
-#~ msgid "Share your feelings about the experience of creating this work."
-#~ msgstr "分享你创作这件作品经历的感受"
-
-#, fuzzy
-#~ msgid "Show How I Did It browser"
-#~ msgstr "浏览“我是怎么做的”"
-
-#, fuzzy
-#~ msgid "Edit How I Did It Page"
-#~ msgstr "我是怎么做的"
-
-#~ msgid "Default Locale Preference:"
-#~ msgstr "默认当前设定"
-
-#~ msgid ""
-#~ "Select the default locale preference and a default language and the "
-#~ "system will try to translate menus, navigation tabs and anything else you "
-#~ "might have customized. If the translation system does recognize the terms "
-#~ "used, those menu items and navigation tabs will not change."
-#~ msgstr ""
-#~ "选择本地默认设置和一个默认语言，然后系统会尝试翻译菜单，浏览索引和所有你已"
-#~ "指定的项目。如果翻译系统无法辨认用过的词语，那些菜单项目和浏览索引将不会改"
-#~ "变。"
-
-#~ msgid ""
-#~ "The Locale Preference is a specific folder that contains specific "
-#~ "language translations. The default is a folder of the same name. Inside "
-#~ "these folders are the specific language translations."
-#~ msgstr ""
-#~ "“当前默认设定”是一个包含特殊语言翻译的特殊文件夹。默认是一个同样名字的文件"
-#~ "夹。这些文件夹里是特殊语言翻译。"
-
-#~ msgid ""
-#~ "To create a specific translation, please copy the default folder with a "
-#~ "unique name, and then select it as your Default Locale Preference. Then, "
-#~ "edit the .po files in specific language folders for customization."
-#~ msgstr ""
-#~ "创立一个特殊翻译，请复制默认文件夹并起新文件夹名，然后把它选择为你的“默认"
-#~ "当前设定”。然后编辑在特别语言文件夹中的 .po 文件来进行用户化。"
-
-#, fuzzy
-#~ msgid "Language"
-#~ msgstr "默认语言："
-
-#, fuzzy
-#~ msgid "Admin email address"
-#~ msgstr "你的email地址"
-
-#, fuzzy
-#~ msgid "Users With Uploads"
-#~ msgstr "浏览上传"
-
-#~ msgid "Your email address"
-#~ msgstr "你的email地址"
-
-#, fuzzy
-#~ msgid "Sorry, only logged in users may send mail to the admins."
-#~ msgstr "（只有登陆用户可提交条目）"
-
-#, fuzzy
-#~ msgid "Send Mail to %s"
-#~ msgstr "文件添加到"
-
-#, fuzzy
-#~ msgid "Send Mail to Everybody"
-#~ msgstr "文件添加到"
-
-#, fuzzy
-#~ msgid "Email"
-#~ msgstr "电子邮件"
-
-#, fuzzy
-#~ msgid "Sorry, no hot topics yet"
-#~ msgstr "对不起，无主题相关"
-
-#, fuzzy
-#~ msgid "Cannot find that user"
-#~ msgstr "无法找到那用户名"
-
-#, fuzzy
-#~ msgid "Cannot find that upload. It may have been removed by the owner."
-#~ msgstr "无法找到这个文件，也许文件已被主人迁移"
-
-#, fuzzy
-#~ msgid "Reviews left %s"
-#~ msgstr "评论"
-
-#, fuzzy
-#~ msgid "Reviews left for \"%s\""
-#~ msgstr "评论"
-
-#, fuzzy
-#~ msgid "Cannot find that upload."
-#~ msgstr "无法找到那用户名"
-
-#, fuzzy
-#~ msgid "You have already reviewed this upload."
-#~ msgstr "你已评论过此上传"
-
-#, fuzzy
-#~ msgid "Reviews left for %s by %s"
-#~ msgstr "主题提要作者"
-
-#, fuzzy
-#~ msgid "Allow users to review uploads"
-#~ msgstr "看所有最新上传"
-
-#, fuzzy
-#~ msgid "Sorry, no reviews match."
-#~ msgstr "对不起，无评论符合"
-
-#, fuzzy
-#~ msgid "Display a review form"
-#~ msgstr "显示文件名字"
-
-#, fuzzy
-#~ msgid "%s has %d remix."
-#~ msgid_plural "%s has %d remixes."
-#~ msgstr[0] "还未上传任何再混音"
-#~ msgstr[1] "还未上传任何再混音"
-
-#, fuzzy
-#~ msgid "Add A Rule"
-#~ msgstr "文件添加到"
-
-#, fuzzy
-#~ msgid "All types"
-#~ msgstr "有效文件类型"
-
-#, fuzzy
-#~ msgid "Allow"
-#~ msgstr "所有"
-
-#, fuzzy
-#~ msgid "then:"
-#~ msgstr "日期"
-
-#, fuzzy
-#~ msgid "Upload Throttles"
-#~ msgstr "上传的和用户"
-
-#, fuzzy
-#~ msgid "This action cannot be reversed..."
-#~ msgstr "此操作不能倒退"
-
-#~ msgid "Reply"
-#~ msgstr "回复"
-
-#~ msgid "Posts"
-#~ msgstr "帖子"
-
-#, fuzzy
-#~ msgid "Delete branch"
-#~ msgstr "删除主题"
-
-#, fuzzy
-#~ msgid "Cannot find that topic."
-#~ msgstr "无法找到那用户名"
-
-#, fuzzy
-#~ msgid "It might have been deleted by the author."
-#~ msgstr "无法找到这个文件，也许文件已被主人迁移"
-
-#~ msgid "Deleting Topic"
-#~ msgstr "删除主题"
-
-#, fuzzy
-#~ msgid "Topic is now locked"
-#~ msgstr "上传已被删除"
-
-#, fuzzy
-#~ msgid "Topic is now unlocked"
-#~ msgstr "上传已被删除"
-
-#, fuzzy
-#~ msgid "Display topic reply form"
-#~ msgstr "发表主题回复"
-
-#, fuzzy
-#~ msgid "Display delete topic form"
-#~ msgstr "发表主题回复"
-
-#, fuzzy
-#~ msgid "Display a topic thread"
-#~ msgstr "显示文件名字"
-
-#~ msgid "Country"
-#~ msgstr "国家"
-
-#~ msgid "Contest Entry Info"
-#~ msgstr "参赛资料"
 
 #, fuzzy
 #~ msgid "Query Results"

@@ -804,8 +804,7 @@ class CCQuery
         {
             $fields['querylimit'] =
                array(  'label'      => _('Limit Queries'),
-                       'form_tip'   => _('Limit the number of records returned from api/query (0
-                                        or blank means unlimited - HINT: that\'s a bad idea)'),
+                       'form_tip'   => _("Limit the number of records returned from api/query (0 or blank means unlimited - HINT: that's a bad idea)"),
                        'value'      => 200,
                        'class'      => 'cc_form_input_short',
                        'formatter'  => 'textedit',

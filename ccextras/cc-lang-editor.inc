@@ -67,19 +67,9 @@ class CCLanguageEditor
         $args['localedirs'] = 
         $args['syslocales'] = @$lang->GetSystemLocales();
 
-        $args['str_explain'][]         = _('ccHost can be configured to host many different 
-            media types. A site that specializes in a particular media type might have a 
-            different "personality" than another media type. For example the terms used
-            in a community music remixing site may not be appropriate for a legal document
-            sharing site or a personal picture blog');
-        $args['str_explain'][]         = _('That is what we mean by a "language terms domain."
-            If the default terms used by ccHost do not fit your type of domain, you should create
-            a new domain (e.g. called \'legaldocs\'), add a language (use \'en_US\' for 
-            stateside English) and edit the terms to fit your needs.');
-        $args['str_explain'][]         = _('After you are done editing, you can set the site\'s
-            language preferences to use your new domain and language term set and internation
-            translators can use this screen to create tranlations of that domain\'s language
-            terms.');
+        $args['str_explain'][]         = _('ccHost can be configured to host many different media types. A site that specializes in a particular media type might have a different "personality" than another media type. For example the terms used in a community music remixing site may not be appropriate for a legal document sharing site or a personal picture blog');
+        $args['str_explain'][]         = _('That is what we mean by a "language terms domain." If the default terms used by ccHost do not fit your type of domain, you should create a new domain (e.g. called legaldocs), add a language (use \'en_US\' for stateside English) and edit the terms to fit your needs.');
+        $args['str_explain'][]         = _("After you are done editing, you can set the site's language preferences to use your new domain and language term set and internation translators can use this screen to create tranlations of that domain's language terms.");
 
         $args['str_createnewdomain'] = _('Create a new domain:');
         $args['str_go']              = _('Go');
