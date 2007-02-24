@@ -6,10 +6,11 @@ Version 4.0
 This version marks a major feature release with something for 
 end users, admins and devleopers.
 
+
 New Features
 =============
 
-- Playlists/Favortes 
+- Playlists/Favorites 
   
   Users can collect their favorite uploads into lists. If the the upload has
   audio in it, all items will be treated like a playlist.
@@ -41,18 +42,25 @@ New Features
 
 - 'Run Once' Pages
 
-   Admins can configure several 'run once' pages that their registered
-   users will see once and then never again. Perfect for 'Welcome' 
-   screen or pledge drives.
+  Admins can configure several 'run once' pages that their registered
+  users will see once and then never again. Perfect for 'Welcome' 
+  screen or pledge drives.
 
--  Default User Avatar
+- Default User Avatar
  
-   Admins can set a specific default user avatar for new users.
+  Admins can set a specific default user avatar for new users.
 
--  New 'Super-Admin' Group
+- New 'Super-Admin' Group
 
-   A group of users can be added as 'super-admin' and each URL in the system
-   can be assigned to any level of user.
+  A group of users can be added as 'super-admin' and each URL in the system
+  can be assigned to any level of user.
+
+- Added new Creative Commons 3.0 licenses
+
+  The newly released Creative Commons 3.0 licenses are available from the 
+  virtual root licenses selector. You must select these manually for the
+  time being.
+
 
 Improvements
 =============
@@ -114,6 +122,7 @@ Improvements
 
   A '-' in front of tags will exclude them searches. remix,-downtempo
   will return all remixes that do NOT have the 'downtempo' tag
+
 
 An edited SVN LOG:
 ------------------

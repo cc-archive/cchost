@@ -1,10 +1,10 @@
-Creative Commons Sponsored Software ccHost Releases Version 3.1
+Creative Commons Sponsored Software ccHost Releases Version 4.0
 
-San Francisco, USA - October 17, 2006
+San Francisco, USA - February 26, 2007
 
 Creative Commons, a nonprofit organization that provides flexible
 copyright licenses for authors and artists along with the Creative
-Commons Developer Community released the ccHost 3.1 today. ccHost is an
+Commons Developer Community released the ccHost 4.0 today. ccHost is an
 Open Source web-based media sharing software. This
 release builds upon ccHost's novel support of collaboration, sharing,
 and storage of multi-media using the different Creative Commons licenses
@@ -15,6 +15,16 @@ project, ccMixter (www.ccmixter.org), a popular on-line social network
 service that supports legal music sharing and remixing. ccHost is the
 Open Source Software engine powering ccmixter.org and which anyone may
 download, install, and use to freely build media sharing communities.
+
+This 4.0 release is a 2-3X performance boost over the last major version.
+This release also includes playlists/favorites, an embedded mp3 player, 
+and a remix radio channels for audio content. A new feature that builds
+upon ccHost's usage of standards is the "Publicize" feature whereby
+anyone can include lists of information about their profile from 
+ccHost so that their info may be used around the web in easy-to-use 
+formats. Also of note with this release is the inclusion of the
+recently released Creative Commons 3.0 Licenses, which are
+selectable as an administrator.
 
 The ccHost development community encourages new developers to
 contribute to the project. The future of ccHost is bright with upcoming
@@ -84,9 +94,12 @@ For general information, visit http://creativecommons.org/.
 
 Contact
 
-Jon Phillips Developer, ccHost jon@creativecommons.org
+Jon Phillips
+Community Developer
+jon@creativecommons.org
 
 
 Press Kit
 
 http://creativecommons.org/presskit
+
