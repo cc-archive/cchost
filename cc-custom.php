@@ -142,10 +142,13 @@ function CC_datefmt($date,$fmt)
 * @see CCConfigs::GetCOnfigRoots
 * @param string $tablename Name of CCTable derivative
 * @param string $func Name of method to call
+* @param string $module Name of file to include with our new addhandler code
 * @return mixed $retrun Return value of function
 */
-function CC_query($tablename,$func)
+function CC_query($tablename,$func,$module='')
 {
+    if( !empty($module) )
+        require_once($module);
     if( substr($tablename,0,2) != 'CC' )
         return(array());
     $table = new $tablename;
