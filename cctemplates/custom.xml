@@ -63,7 +63,7 @@ function ppage() {
 <metal:block define-macro="List_Contests">
   <p tal:content="php: CC_Lang('Open Contests')" />
   <ul>
-    <li tal:repeat="item php: CC_query('CCContests','GetOpenContests')">
+    <li tal:repeat="item php: CC_query('CCContests','GetOpenContests', 'cclib/cc-contest.inc')">
       <a href="${item/contest_url}" class="cc_contest_open">${item/contest_friendly_name}</a>
     </li>
   </ul>
