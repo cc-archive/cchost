@@ -15,14 +15,14 @@
 %define buildver PROJECT_VERSION
 %define specrel 1
 
-# CVS versions are pre-releases and must be treated differently than "real"
-# releases, because otherwise we end up with a version "xyzCVS", which rpm
+# SVN versions are pre-releases and must be treated differently than "real"
+# releases, because otherwise we end up with a version "xyzSVN", which rpm
 # thinks is "newer" than a version "xyz", although in fact it's the other way
-# around. The fix for this is to strip off the "CVS" from the version number
+# around. The fix for this is to strip off the "SVN" from the version number
 # and use it in the "release" field instead.
-%define rawversion %(echo "%{buildver}" | %{__sed} -e 's@CVS$@@')
-%define cvsrelease %(echo "%{buildver}" | %{__sed} -e 's@^.*CVS$@CVS@')
-%define releasever %(if [ "%{cvsrelease}" = "CVS" ]; then echo "0.CVS.%{specrel}"; else echo "%{specrel}"; fi)
+%define rawversion %(echo "%{buildver}" | %{__sed} -e 's@SVN$@@')
+%define cvsrelease %(echo "%{buildver}" | %{__sed} -e 's@^.*SVN$@SVN@')
+%define releasever %(if [ "%{cvsrelease}" = "SVN" ]; then echo "0.SVN.%{specrel}"; else echo "%{specrel}"; fi)
 
 %define _webdir /opt/%{name}
 

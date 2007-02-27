@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 00:16-0800\n"
+"POT-Creation-Date: 2007-02-26 23:16-0800\n"
 "PO-Revision-Date: 2006-09-03 15:38-0800\n"
 "Last-Translator: deerfang <lu@deerfang.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,12 +21,12 @@ msgstr ""
 msgid "A bad call happened to \"%s\" in a template."
 msgstr ""
 
-#: cc-custom.php:249
+#: cc-custom.php:252
 #, fuzzy
 msgid "You've been remixed!"
 msgstr "我已被再混音"
 
-#: cc-custom.php:250
+#: cc-custom.php:253
 msgid "Click here to make them visible!"
 msgstr ""
 
@@ -4055,32 +4055,32 @@ msgstr "投票开放直至"
 msgid "Submit to: '%s'"
 msgstr "提交到："
 
-#: cclib/cc-contest.inc:196
+#: cclib/cc-contest.inc:199
 #, fuzzy, php-format
 msgid "Your upload has been entered in '%s'"
 msgstr "你的上传被送入于"
 
-#: cclib/cc-contest.inc:367
+#: cclib/cc-contest.inc:370
 #, fuzzy
 msgid "Display contest entry form"
 msgstr "参赛资料"
 
-#: cclib/cc-contest.inc:369
+#: cclib/cc-contest.inc:372
 #, fuzzy
 msgid "Display contest source upload form"
 msgstr "显示图片上传指图"
 
-#: cclib/cc-contest.inc:371
+#: cclib/cc-contest.inc:374
 #, fuzzy
 msgid "Display new contest form"
 msgstr "显示文件名字"
 
-#: cclib/cc-contest.inc:373
+#: cclib/cc-contest.inc:376
 #, fuzzy
 msgid "Display contest properties form"
 msgstr "编辑属性对象"
 
-#: cclib/cc-contest.inc:375
+#: cclib/cc-contest.inc:378
 #, fuzzy
 msgid "Display admin contest forms"
 msgstr "显示文件名字"

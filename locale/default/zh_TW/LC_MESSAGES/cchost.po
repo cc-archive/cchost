@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccHost 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 00:16-0800\n"
+"POT-Creation-Date: 2007-02-26 23:16-0800\n"
 "PO-Revision-Date: 2006-11-17 12:53+0800\n"
 "Last-Translator: Jedi <JediLin@Gmail.com>\n"
 "Language-Team: Creative Commons Taiwan <contact@creativecommons.org.tw>\n"
@@ -27,12 +27,12 @@ msgstr ""
 msgid "A bad call happened to \"%s\" in a template."
 msgstr ""
 
-#: cc-custom.php:249
+#: cc-custom.php:252
 #, fuzzy
 msgid "You've been remixed!"
 msgstr "我被重混過了"
 
-#: cc-custom.php:250
+#: cc-custom.php:253
 #, fuzzy
 msgid "Click here to make them visible!"
 msgstr "%s請按這裡%s新增另一個頁籤."
@@ -4073,28 +4073,28 @@ msgstr "票選時間開放至 "
 msgid "Submit to: '%s'"
 msgstr "上傳至: '%s'"
 
-#: cclib/cc-contest.inc:196
+#: cclib/cc-contest.inc:199
 #, php-format
 msgid "Your upload has been entered in '%s'"
 msgstr "您所上傳的檔案已經進入了 '%s'"
 
-#: cclib/cc-contest.inc:367
+#: cclib/cc-contest.inc:370
 msgid "Display contest entry form"
 msgstr "顯示競賽項目表單"
 
-#: cclib/cc-contest.inc:369
+#: cclib/cc-contest.inc:372
 msgid "Display contest source upload form"
 msgstr "顯示競賽項目素材上傳表單"
 
-#: cclib/cc-contest.inc:371
+#: cclib/cc-contest.inc:374
 msgid "Display new contest form"
 msgstr "顯示新的競賽表單"
 
-#: cclib/cc-contest.inc:373
+#: cclib/cc-contest.inc:376
 msgid "Display contest properties form"
 msgstr "顯示競賽屬性表單"
 
-#: cclib/cc-contest.inc:375
+#: cclib/cc-contest.inc:378
 msgid "Display admin contest forms"
 msgstr "顯示管理競賽表單"
 

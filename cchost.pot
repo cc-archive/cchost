@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 00:16-0800\n"
+"POT-Creation-Date: 2007-02-26 23:16-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,11 +23,11 @@ msgstr ""
 msgid "A bad call happened to \"%s\" in a template."
 msgstr ""
 
-#: cc-custom.php:249
+#: cc-custom.php:252
 msgid "You've been remixed!"
 msgstr ""
 
-#: cc-custom.php:250
+#: cc-custom.php:253
 msgid "Click here to make them visible!"
 msgstr ""
 
@@ -3817,28 +3817,28 @@ msgstr ""
 msgid "Submit to: '%s'"
 msgstr ""
 
-#: cclib/cc-contest.inc:196
+#: cclib/cc-contest.inc:199
 #, php-format
 msgid "Your upload has been entered in '%s'"
 msgstr ""
 
-#: cclib/cc-contest.inc:367
+#: cclib/cc-contest.inc:370
 msgid "Display contest entry form"
 msgstr ""
 
-#: cclib/cc-contest.inc:369
+#: cclib/cc-contest.inc:372
 msgid "Display contest source upload form"
 msgstr ""
 
-#: cclib/cc-contest.inc:371
+#: cclib/cc-contest.inc:374
 msgid "Display new contest form"
 msgstr ""
 
-#: cclib/cc-contest.inc:373
+#: cclib/cc-contest.inc:376
 msgid "Display contest properties form"
 msgstr ""
 
-#: cclib/cc-contest.inc:375
+#: cclib/cc-contest.inc:378
 msgid "Display admin contest forms"
 msgstr ""
 

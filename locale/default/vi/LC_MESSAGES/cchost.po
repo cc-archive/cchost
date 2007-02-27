@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-24 00:16-0800\n"
+"POT-Creation-Date: 2007-02-26 23:16-0800\n"
 "PO-Revision-Date: 2006-08-31 11:28+0000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,12 +24,12 @@ msgstr ""
 msgid "A bad call happened to \"%s\" in a template."
 msgstr ""
 
-#: cc-custom.php:249
+#: cc-custom.php:252
 #, fuzzy
 msgid "You've been remixed!"
 msgstr "Tôi đã được hoà lại"
 
-#: cc-custom.php:250
+#: cc-custom.php:253
 msgid "Click here to make them visible!"
 msgstr ""
 
@@ -4093,32 +4093,32 @@ msgstr "Có thể bỏ phiếu đến "
 msgid "Submit to: '%s'"
 msgstr "Đệ trình cho : « %s »"
 
-#: cclib/cc-contest.inc:196
+#: cclib/cc-contest.inc:199
 #, php-format
 msgid "Your upload has been entered in '%s'"
 msgstr "Tập tin tải lên của bạn đã được nhập vào « %s »"
 
-#: cclib/cc-contest.inc:367
+#: cclib/cc-contest.inc:370
 #, fuzzy
 msgid "Display contest entry form"
 msgstr "Thông tin nhập cuộc thi"
 
-#: cclib/cc-contest.inc:369
+#: cclib/cc-contest.inc:372
 #, fuzzy
 msgid "Display contest source upload form"
 msgstr "Hiển thị các hình thu nhỏ của ảnh tải lên"
 
-#: cclib/cc-contest.inc:371
+#: cclib/cc-contest.inc:374
 #, fuzzy
 msgid "Display new contest form"
 msgstr "Hiển thị tên cho tập tin"
 
-#: cclib/cc-contest.inc:373
+#: cclib/cc-contest.inc:376
 #, fuzzy
 msgid "Display contest properties form"
 msgstr "Sửa tài sản cho "
 
-#: cclib/cc-contest.inc:375
+#: cclib/cc-contest.inc:378
 #, fuzzy
 msgid "Display admin contest forms"
 msgstr "Hiển thị tên cho tập tin"
