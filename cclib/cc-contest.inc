@@ -124,7 +124,10 @@ class CCContest
         $username  = CCUser::CurrentUserName();
         $uid       = CCUser::CurrentUser();
 
-        if( $CC_GLOBALS['cc_mixter_installed'] )
+        //TODO: This is a test that we changed to !empty so that any
+        //      current installations can work. Otherwise, re-enable for
+        //      testing.
+        if( !empty($CC_GLOBALS['cc_mixter_installed']) )
         {
             $formhelp =<<<END
    Having upload problems? Click <a 
@@ -375,9 +378,9 @@ END;
             CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display admin contest forms'), CC_AG_CONTESTS );
 
 
-        CCEvents::MapUrl( 'contest',               array( 'CCContestDep', 'Contests'),      
+        CCEvents::MapUrl( 'contest',               array( 'CCContestDeprecated', 'Contests'),      
             CC_DONT_CARE_LOGGED_IN, 'cclib/cc-contest-dep.inc'); // , '[contestname]', _('Display Contests home page'), CC_AG_CONTESTS );
-        CCEvents::MapUrl( 'contests',              array( 'CCContestDep', 'Contests'),      
+        CCEvents::MapUrl( 'contests',              array( 'CCContestDeprecated', 'Contests'),      
             CC_DONT_CARE_LOGGED_IN, 'cclib/cc-contest-dep.inc'); // , '[contestname]', _('Alias for /contest'), CC_AG_CONTESTS );
 
         //CCEvents::MapUrl( 'contest/vote',          array( 'CCContest', 'Vote'),          
