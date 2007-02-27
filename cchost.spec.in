@@ -35,8 +35,10 @@ License:	GPL
 Group:		Applications/Internet
 URL:		http://sourceforge.net/projects/cctools/
 BuildArch:	noarch
-# Source:		http://dl.sf.net/cctools/cchost-%{buildver}.tar.gz
-Source:     %{name}-%{version}.tar.gz
+#Source:		http://dl.sf.net/cctools/cchost-%{buildver}.tar.gz
+#Source:     %{name}-%{version}.tar.gz
+Source0:	http://dl.sf.net/cctools/cchost-%{buildver}.tar.gz
+Source1:    %{name}-%{version}.tar.gz
 Requires:	php >= 4.3, mysql >= 4 
 BuildRoot:	%{_tmppath}/%{name}-%{buildver}-%{release}-root
 
@@ -74,6 +76,9 @@ and legal setting.
 
 
 %changelog
+* Tue Feb  27 2007 Jon Phillips <jon@creativecommons.org> 3.0
+- Having some glitches in rolling RPMs and trying to solve so we can release
+  with RPMs.
 * Thu Sep  07 2006 Jon Phillips <jon@creativecommons.org> 3.0
 - Added a couple of files to the doc variable
 * Tue Mar  28 2006 Jon Phillips <jon@creativecommons.org> 2.0
