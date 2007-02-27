@@ -35,7 +35,8 @@ License:	GPL
 Group:		Applications/Internet
 URL:		http://sourceforge.net/projects/cctools/
 BuildArch:	noarch
-Source:		http://dl.sf.net/cctools/cchost-%{buildver}.tar.bz2
+# Source:		http://dl.sf.net/cctools/cchost-%{buildver}.tar.gz
+Source:     %{name}-%{version}.tar.gz
 Requires:	php >= 4.3, mysql >= 4 
 BuildRoot:	%{_tmppath}/%{name}-%{buildver}-%{release}-root
 

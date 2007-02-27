@@ -92,7 +92,7 @@ distclean: clean
 	rm -rf $(PACKAGEDIR)
 
 rpm:	tarball
-	rpmbuild --define "_rpmdir `pwd`" \
+	rpmbuild -v --define "_rpmdir `pwd`" \
 		 --define '_build_name_fmt %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm' \
 		 -tb $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM).tar.gz
 	mv *.rpm $(PACKAGEDIR)
