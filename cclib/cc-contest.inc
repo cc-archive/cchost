@@ -30,6 +30,7 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cclib/cc-contest-table.inc');
 require_once('cclib/cc-remix-forms.php');
+require_once('cclib/cc-contest.php');
 
 /**
 * Form used for uploading a contest entry
