@@ -631,8 +631,8 @@ class CCMediaHost
         foreach( $record['files'] as $file )
         {
             // NOTE: This hopefully didn't break anything ;)
-            if ( ! isset($file['download_url']) )
-                continue;
+            #if ( ! isset($file['download_url']) )
+            #    continue;
 
             $tip = $file['file_name'];
             $menu[$weight] = array(
