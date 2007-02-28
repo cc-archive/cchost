@@ -376,6 +376,8 @@ class CCUserAPI
 
     function _build_bread_crumb_trail($username,$tagfilter)
     {
+        require_once('cclib/cc-tags.php');
+
         $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
         $trail[] = array( 'url' => ccl('people'), 'text' => _('People') );
         if( !empty($username) )
