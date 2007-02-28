@@ -461,7 +461,7 @@ $Id$
 
   <tr>
     <td>
-<input type="button" value="Clear all" disabled="disabled" onclick="clear_all(this);" id="btn_clear"/>
+<input type="button" value="Clear all" disabled="disabled" onclick="clear_all(this);" id="btn_clear" />
     </td>
   </tr>
 
@@ -471,7 +471,7 @@ $Id$
 <span id="search_caption" >${search_caption}</span>
 <input id="sampsearch" type="text" />
 
-<input type="button" value="${search_text}" onclick="do_search(this);" id="btn_search"/>
+<input type="button" value="${search_text}" onclick="do_search(this);" id="btn_search" />
 </div>
 
 

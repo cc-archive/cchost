@@ -148,11 +148,11 @@ $Id$
 <style> #rl { white-space:nowrap;vertical-align:middle; } </style>
 <tal:block define="us string:ccimages/stars/star-full.gif" />
 <tal:block define="u string:$root-url$us" />
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="500" /><label><img src="${u}"/><img src="${u}"/><img src="${u}"/><img src="${u}"/><img src="${u}"/></label></div>
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="400" /><label><img src="${u}"/><img src="${u}"/><img src="${u}"/><img src="${u}"/></label></div>
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="300" checked="checked"/><label><img src="${u}"/><img src="${u}"/><img src="${u}"/></label></div>
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="200" /><label><img src="${u}"/><img src="${u}"/></label></div>
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="100" /><label><img src="${u}"/></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="500" /><label><img src="${u}" /><img src="${u}" /><img src="${u}"/><img src="${u}" /><img src="${u}" /></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="400" /><label><img src="${u}" /><img src="${u}" /><img src="${u}" /><img src="${u}" /></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="300" checked="checked" /><label><img src="${u}" /><img src="${u}" /><img src="${u}" /></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="200" /><label><img src="${u}" /><img src="${u}" /></label></div>
+<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="100" /><label><img src="${u}" /></label></div>
 </metal:block>
 
 

@@ -489,7 +489,7 @@ END;
 '<tr>
     <th>' . sprintf(_('Create directory in %s'), "<span>$dir</span>") . "</th>
     <td>$newdir_error<input type=\"text\" length=\"35\" id=\"new_dir\" name=\"new_dir\" />
-        <input type=\"submit\" name=\"newdir_submit\" id=\"newdir_submit\" value=\"" . _('Create Directory') . "\"/>
+        <input type=\"submit\" name=\"newdir_submit\" id=\"newdir_submit\" value=\"" . _('Create Directory') . "\" />
     </td>
 </tr>";
         }

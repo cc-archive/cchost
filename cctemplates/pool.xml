@@ -72,7 +72,7 @@ $Id$
     <table>
       <tr><th tal:repeat="head pool_info/heads">${head}</th></tr>
       <tr tal:repeat="r pool_info/records">
-         <td><input type="checkbox" name="approve[]" value="${r/pool_item_id}" checked="checked"/></td>
+         <td><input type="checkbox" name="approve[]" value="${r/pool_item_id}" checked="checked" /></td>
          <td><a href="${r/pool_item_url}" target="_blank" class="cc_pool_item_external_link">${r/pool_item_name}</a></td>
          <td><a href="${r/pool_item_download_url}" class="cc_pool_download_link">${r/pool_name}</a></td>
          <td>${r/pool_item_artist}</td>

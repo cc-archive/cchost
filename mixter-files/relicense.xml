@@ -170,7 +170,7 @@ they are 'stuck' with the old, more restrictive version.</p>
       <td class="rname" id="orgname">${org/upload_name}</td>
       <td id="currlic">${org/license_name}</td>
       <td><input type="radio" value="keep" name="relicid[${org/upload_id}]" /></td>
-      <td class="pick"><input type="radio" value="attribution" name="relicid[${org/upload_id}]" checked="checked"  /></td>
+      <td class="pick"><input type="radio" value="attribution" name="relicid[${org/upload_id}]" checked="checked" /></td>
       <td class="closeb" ><input type="radio" value="noncommercial" name="relicid[${org/upload_id}]" /></td>
     </tr>
     <tr><td class="lastrow" colspan="5">&nbsp;</td></tr>
@@ -230,7 +230,7 @@ they are 'stuck' with the old, more restrictive version.</p>
     <tr><td class="lastrow" colspan="5">&nbsp;</td></tr>
   </tal:block>
 </table>
-<div id="submitdiv"><input type="submit" name="relicensenow" value="Submit my relicense choices now"/></div>
+<div id="submitdiv"><input type="submit" name="relicensenow" value="Submit my relicense choices now" /></div>
 <div id="submitdiv"><input type="submit" name="relicenselater"
   value="I'll relicense 'manually' later (or not at all)" /></div>
 </form>
