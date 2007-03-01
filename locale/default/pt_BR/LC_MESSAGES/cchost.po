@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cchost\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-27 14:39-0800\n"
+"POT-Creation-Date: 2007-02-28 15:52-0800\n"
 "PO-Revision-Date: 2006-08-08 10:01-0300\n"
 "Last-Translator: Marcela <capitu@gmail.com>\n"
 "Language-Team: Brazillian Portuguese <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgstr ""
 #: ccextras/cc-archive.inc:40 ccextras/cc-forums.inc:324
 #: ccextras/cc-forums.inc:634 ccextras/cc-reviews.inc:257
 #: cclib/cc-mediahost.php:41 cclib/cc-navigator-admin.inc:466
-#: cclib/cc-user.inc:379
+#: cclib/cc-user.inc:381
 msgid "Home"
 msgstr "Principal"
 
@@ -841,7 +841,7 @@ msgid "Forum Posts by %s"
 msgstr "Mensagens de Fórum para %s"
 
 #: ccextras/cc-forums.inc:635 ccextras/cc-reviews.inc:265
-#: cclib/cc-mediahost.php:51 cclib/cc-user.inc:364 cclib/cc-user.inc:380
+#: cclib/cc-mediahost.php:51 cclib/cc-user.inc:364 cclib/cc-user.inc:382
 msgid "People"
 msgstr "Pessoas"
 
@@ -4111,37 +4111,37 @@ msgstr "Inscrições finalizadas depois de:"
 msgid "Voting is open until "
 msgstr "Votações abertas até:"
 
-#: cclib/cc-contest.inc:119
+#: cclib/cc-contest.inc:120
 #, php-format
 msgid "Submit to: '%s'"
 msgstr "Inscrever-se em: '%s'"
 
-#: cclib/cc-contest.inc:199
+#: cclib/cc-contest.inc:200
 #, php-format
 msgid "Your upload has been entered in '%s'"
 msgstr "Seu upload foi inscrito em '%s'"
 
-#: cclib/cc-contest.inc:370
+#: cclib/cc-contest.inc:371
 #, fuzzy
 msgid "Display contest entry form"
 msgstr "Informação de Inscrição no Concurso"
 
-#: cclib/cc-contest.inc:372
+#: cclib/cc-contest.inc:373
 #, fuzzy
 msgid "Display contest source upload form"
 msgstr "Editar Propriedades para"
 
-#: cclib/cc-contest.inc:374
+#: cclib/cc-contest.inc:375
 #, fuzzy
 msgid "Display new contest form"
 msgstr "Mostrar nome do arquivo"
 
-#: cclib/cc-contest.inc:376
+#: cclib/cc-contest.inc:377
 #, fuzzy
 msgid "Display contest properties form"
 msgstr "Editar Propriedades para"
 
-#: cclib/cc-contest.inc:378
+#: cclib/cc-contest.inc:379
 #, fuzzy
 msgid "Display admin contest forms"
 msgstr "Mostrar nome do arquivo"
@@ -4346,12 +4346,12 @@ msgstr ""
 msgid "Feed caching can optimize replies for feed requests"
 msgstr ""
 
-#: cclib/cc-feed.php:179 cclib/cc-user-page.php:123 cclib/cc-user.inc:560
+#: cclib/cc-feed.php:179 cclib/cc-user-page.php:123 cclib/cc-user.inc:562
 #, fuzzy, php-format
 msgid "Remixes of %s"
 msgstr "Remixes de"
 
-#: cclib/cc-feed.php:181 cclib/cc-user-page.php:124 cclib/cc-user.inc:561
+#: cclib/cc-feed.php:181 cclib/cc-user-page.php:124 cclib/cc-user.inc:563
 #, fuzzy, php-format
 msgid "Remixed by %s"
 msgstr "Remixado por"
@@ -5953,12 +5953,12 @@ msgstr ""
 msgid "Upload ranking"
 msgstr "Upload"
 
-#: cclib/cc-query.php:858 cclib/cc-user.inc:610
+#: cclib/cc-query.php:858 cclib/cc-user.inc:612
 #, fuzzy
 msgid "Artist login name"
 msgstr "seu nome de login)."
 
-#: cclib/cc-query.php:859 cclib/cc-user.inc:609
+#: cclib/cc-query.php:859 cclib/cc-user.inc:611
 #, fuzzy
 msgid "Artist name"
 msgstr "Artista"
@@ -6980,12 +6980,12 @@ msgstr ""
 msgid "Set the default user avatar"
 msgstr ""
 
-#: cclib/cc-user-page.php:91 cclib/cc-user.inc:493
+#: cclib/cc-user-page.php:91 cclib/cc-user.inc:495
 #, fuzzy
 msgid "The system does not know that user."
 msgstr "Nome de usuário não encontrado"
 
-#: cclib/cc-user-page.php:122 cclib/cc-user.inc:559
+#: cclib/cc-user-page.php:122 cclib/cc-user.inc:561
 #, fuzzy, php-format
 msgid "Uploads by %s"
 msgstr "Upload de %s"
@@ -7079,104 +7079,104 @@ msgstr "Editar Suas Configurações"
 msgid "Changes were saved"
 msgstr "Alterações salvas"
 
-#: cclib/cc-user.inc:409
+#: cclib/cc-user.inc:411
 msgid "(select tag)"
 msgstr "(selecionar tag)"
 
-#: cclib/cc-user.inc:409
+#: cclib/cc-user.inc:411
 msgid "(no tag)"
 msgstr "(sem tags)"
 
-#: cclib/cc-user.inc:529
+#: cclib/cc-user.inc:531
 msgid ""
 "You've registered an account and logged in, but you haven't uploaded any "
 "remixes."
 msgstr ""
 
-#: cclib/cc-user.inc:530
+#: cclib/cc-user.inc:532
 msgid "Use the 'Submit Files' menu items on the left to start uploading."
 msgstr ""
 
-#: cclib/cc-user.inc:537
+#: cclib/cc-user.inc:539
 #, fuzzy, php-format
 msgid "%s has not uploaded any remixes."
 msgstr "não fez o upload de nenhum remix."
 
-#: cclib/cc-user.inc:572
+#: cclib/cc-user.inc:574
 #, fuzzy
 msgid "Removed from favorites"
 msgstr "Remover %s de meus favoritos"
 
-#: cclib/cc-user.inc:574
+#: cclib/cc-user.inc:576
 #, fuzzy, php-format
 msgid "%s has been removed from your list of favorites."
 msgstr "%s foi excluído de sua lista de favoritos"
 
-#: cclib/cc-user.inc:578
+#: cclib/cc-user.inc:580
 #, fuzzy
 msgid "Added to favorites"
 msgstr "Adicionar %s aos meus favoritos"
 
-#: cclib/cc-user.inc:580
+#: cclib/cc-user.inc:582
 #, fuzzy, php-format
 msgid "%s has been added to your list of favorites."
 msgstr "%s foi adicionado à sua lista de favoritos"
 
-#: cclib/cc-user.inc:592
+#: cclib/cc-user.inc:594
 #, php-format
 msgid "Go back to %syour profile page%s or %s%s's%s"
 msgstr ""
 
-#: cclib/cc-user.inc:611
+#: cclib/cc-user.inc:613
 #, fuzzy
 msgid "Artist page URL"
 msgstr "URL da Página Pessoal"
 
-#: cclib/cc-user.inc:633
+#: cclib/cc-user.inc:635
 msgid "Your Page"
 msgstr "Sua Página"
 
-#: cclib/cc-user.inc:640
+#: cclib/cc-user.inc:642
 msgid "Edit Your Profile"
 msgstr "Editar Seu Perfil"
 
-#: cclib/cc-user.inc:651
+#: cclib/cc-user.inc:653
 msgid "Visitors"
 msgstr "Visitantes"
 
-#: cclib/cc-user.inc:653
+#: cclib/cc-user.inc:655
 msgid "Artists"
 msgstr "Artistas"
 
-#: cclib/cc-user.inc:670
+#: cclib/cc-user.inc:672
 #, fuzzy
 msgid "Display people page or user profile"
 msgstr "Mostrar nome do arquivo"
 
-#: cclib/cc-user.inc:674
+#: cclib/cc-user.inc:676
 #, fuzzy
 msgid "Edit user profile"
 msgstr "Editar Seu Perfil"
 
-#: cclib/cc-user.inc:681
+#: cclib/cc-user.inc:683
 #, fuzzy
 msgid "Add/Remove favorite users"
 msgstr "Remover %s de meus favoritos"
 
-#: cclib/cc-user.inc:697
+#: cclib/cc-user.inc:699
 #, fuzzy
 msgid "Site Administrators"
 msgstr "Grupo de Trechos:"
 
-#: cclib/cc-user.inc:698
+#: cclib/cc-user.inc:700
 msgid "List login names of site admins. (e.g. admin, fightmaster, sally)"
 msgstr ""
 
-#: cclib/cc-user.inc:704
+#: cclib/cc-user.inc:706
 msgid "Use Subtabs on User Page"
 msgstr ""
 
-#: cclib/cc-user.inc:705
+#: cclib/cc-user.inc:707
 msgid "Uncheck this for skins that use legacy user profile page"
 msgstr ""
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ccHost 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-27 14:39-0800\n"
+"POT-Creation-Date: 2007-02-28 15:52-0800\n"
 "PO-Revision-Date: 2006-11-17 12:53+0800\n"
 "Last-Translator: Jedi <JediLin@Gmail.com>\n"
 "Language-Team: Creative Commons Taiwan <contact@creativecommons.org.tw>\n"
@@ -52,7 +52,7 @@ msgstr ""
 #: ccextras/cc-archive.inc:40 ccextras/cc-forums.inc:324
 #: ccextras/cc-forums.inc:634 ccextras/cc-reviews.inc:257
 #: cclib/cc-mediahost.php:41 cclib/cc-navigator-admin.inc:466
-#: cclib/cc-user.inc:379
+#: cclib/cc-user.inc:381
 msgid "Home"
 msgstr "首頁"
 
@@ -818,7 +818,7 @@ msgid "Forum Posts by %s"
 msgstr "%s 的討論區文章"
 
 #: ccextras/cc-forums.inc:635 ccextras/cc-reviews.inc:265
-#: cclib/cc-mediahost.php:51 cclib/cc-user.inc:364 cclib/cc-user.inc:380
+#: cclib/cc-mediahost.php:51 cclib/cc-user.inc:364 cclib/cc-user.inc:382
 msgid "People"
 msgstr "使用者"
 
@@ -4068,33 +4068,33 @@ msgstr "參選作品即將於截止於: "
 msgid "Voting is open until "
 msgstr "票選時間開放至 "
 
-#: cclib/cc-contest.inc:119
+#: cclib/cc-contest.inc:120
 #, php-format
 msgid "Submit to: '%s'"
 msgstr "上傳至: '%s'"
 
-#: cclib/cc-contest.inc:199
+#: cclib/cc-contest.inc:200
 #, php-format
 msgid "Your upload has been entered in '%s'"
 msgstr "您所上傳的檔案已經進入了 '%s'"
 
-#: cclib/cc-contest.inc:370
+#: cclib/cc-contest.inc:371
 msgid "Display contest entry form"
 msgstr "顯示競賽項目表單"
 
-#: cclib/cc-contest.inc:372
+#: cclib/cc-contest.inc:373
 msgid "Display contest source upload form"
 msgstr "顯示競賽項目素材上傳表單"
 
-#: cclib/cc-contest.inc:374
+#: cclib/cc-contest.inc:375
 msgid "Display new contest form"
 msgstr "顯示新的競賽表單"
 
-#: cclib/cc-contest.inc:376
+#: cclib/cc-contest.inc:377
 msgid "Display contest properties form"
 msgstr "顯示競賽屬性表單"
 
-#: cclib/cc-contest.inc:378
+#: cclib/cc-contest.inc:379
 msgid "Display admin contest forms"
 msgstr "顯示管理競賽表單"
 
@@ -4298,13 +4298,13 @@ msgstr "源料快取"
 msgid "Feed caching can optimize replies for feed requests"
 msgstr "源料快取可以讓源料請求的回應最佳化"
 
-#: cclib/cc-feed.php:179 cclib/cc-user-page.php:123 cclib/cc-user.inc:560
+#: cclib/cc-feed.php:179 cclib/cc-user-page.php:123 cclib/cc-user.inc:562
 #, php-format
 msgid "Remixes of %s"
 msgstr "%s 的重混作品"
 
 # VAR
-#: cclib/cc-feed.php:181 cclib/cc-user-page.php:124 cclib/cc-user.inc:561
+#: cclib/cc-feed.php:181 cclib/cc-user-page.php:124 cclib/cc-user.inc:563
 #, fuzzy, php-format
 msgid "Remixed by %s"
 msgstr "被此使用者取樣: "
@@ -5923,12 +5923,12 @@ msgstr ""
 msgid "Upload ranking"
 msgstr "上傳的檔案"
 
-#: cclib/cc-query.php:858 cclib/cc-user.inc:610
+#: cclib/cc-query.php:858 cclib/cc-user.inc:612
 #, fuzzy
 msgid "Artist login name"
 msgstr "跟登入名稱搞混了, 這是兩回事)."
 
-#: cclib/cc-query.php:859 cclib/cc-user.inc:609
+#: cclib/cc-query.php:859 cclib/cc-user.inc:611
 #, fuzzy
 msgid "Artist name"
 msgstr "藝人"
@@ -6963,12 +6963,12 @@ msgstr ""
 msgid "Set the default user avatar"
 msgstr ""
 
-#: cclib/cc-user-page.php:91 cclib/cc-user.inc:493
+#: cclib/cc-user-page.php:91 cclib/cc-user.inc:495
 #, fuzzy
 msgid "The system does not know that user."
 msgstr "不知道這個使用者"
 
-#: cclib/cc-user-page.php:122 cclib/cc-user.inc:559
+#: cclib/cc-user-page.php:122 cclib/cc-user.inc:561
 #, fuzzy, php-format
 msgid "Uploads by %s"
 msgstr "由 %s 上傳的檔案"
@@ -7064,104 +7064,104 @@ msgstr "編輯您的設定"
 msgid "Changes were saved"
 msgstr "變更已儲存"
 
-#: cclib/cc-user.inc:409
+#: cclib/cc-user.inc:411
 msgid "(select tag)"
 msgstr "(選擇標籤)"
 
-#: cclib/cc-user.inc:409
+#: cclib/cc-user.inc:411
 msgid "(no tag)"
 msgstr "(沒有標籤)"
 
-#: cclib/cc-user.inc:529
+#: cclib/cc-user.inc:531
 msgid ""
 "You've registered an account and logged in, but you haven't uploaded any "
 "remixes."
 msgstr ""
 
-#: cclib/cc-user.inc:530
+#: cclib/cc-user.inc:532
 msgid "Use the 'Submit Files' menu items on the left to start uploading."
 msgstr ""
 
-#: cclib/cc-user.inc:537
+#: cclib/cc-user.inc:539
 #, fuzzy, php-format
 msgid "%s has not uploaded any remixes."
 msgstr " 還沒有上傳過任何重混作品."
 
-#: cclib/cc-user.inc:572
+#: cclib/cc-user.inc:574
 #, fuzzy
 msgid "Removed from favorites"
 msgstr "從我的最愛中移除 %s"
 
-#: cclib/cc-user.inc:574
+#: cclib/cc-user.inc:576
 #, fuzzy, php-format
 msgid "%s has been removed from your list of favorites."
 msgstr "%s 已經從您的最愛清單中移除了"
 
-#: cclib/cc-user.inc:578
+#: cclib/cc-user.inc:580
 #, fuzzy
 msgid "Added to favorites"
 msgstr "把 %s 加進我的最愛"
 
-#: cclib/cc-user.inc:580
+#: cclib/cc-user.inc:582
 #, fuzzy, php-format
 msgid "%s has been added to your list of favorites."
 msgstr "%s 已經加入您的最愛清單了"
 
-#: cclib/cc-user.inc:592
+#: cclib/cc-user.inc:594
 #, php-format
 msgid "Go back to %syour profile page%s or %s%s's%s"
 msgstr ""
 
-#: cclib/cc-user.inc:611
+#: cclib/cc-user.inc:613
 #, fuzzy
 msgid "Artist page URL"
 msgstr "首頁網址"
 
-#: cclib/cc-user.inc:633
+#: cclib/cc-user.inc:635
 msgid "Your Page"
 msgstr "您的頁面"
 
-#: cclib/cc-user.inc:640
+#: cclib/cc-user.inc:642
 msgid "Edit Your Profile"
 msgstr "編輯您的個人資料"
 
-#: cclib/cc-user.inc:651
+#: cclib/cc-user.inc:653
 msgid "Visitors"
 msgstr "訪客"
 
-#: cclib/cc-user.inc:653
+#: cclib/cc-user.inc:655
 msgid "Artists"
 msgstr "藝人"
 
-#: cclib/cc-user.inc:670
+#: cclib/cc-user.inc:672
 #, fuzzy
 msgid "Display people page or user profile"
 msgstr "顯示檔案名稱"
 
-#: cclib/cc-user.inc:674
+#: cclib/cc-user.inc:676
 #, fuzzy
 msgid "Edit user profile"
 msgstr "編輯您的個人資料"
 
-#: cclib/cc-user.inc:681
+#: cclib/cc-user.inc:683
 #, fuzzy
 msgid "Add/Remove favorite users"
 msgstr "從我的最愛中移除 %s"
 
-#: cclib/cc-user.inc:697
+#: cclib/cc-user.inc:699
 #, fuzzy
 msgid "Site Administrators"
 msgstr "取樣庫: "
 
-#: cclib/cc-user.inc:698
+#: cclib/cc-user.inc:700
 msgid "List login names of site admins. (e.g. admin, fightmaster, sally)"
 msgstr ""
 
-#: cclib/cc-user.inc:704
+#: cclib/cc-user.inc:706
 msgid "Use Subtabs on User Page"
 msgstr ""
 
-#: cclib/cc-user.inc:705
+#: cclib/cc-user.inc:707
 msgid "Uncheck this for skins that use legacy user profile page"
 msgstr ""
 
