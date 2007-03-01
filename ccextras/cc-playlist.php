@@ -167,11 +167,21 @@ LIMIT 5
 EOF;
     $cart_ids = CCDatabase::QueryItems($sql);
 
-    $carts = new CCPlaylist(true);
-    $carts->SetOrder('cart_date','DESC');
-    $carts->SetOffsetAndLimit(0,5);
-    $where = 'cart_id in (' . join(',',$cart_ids) . ')';
-    return $carts->QueryRows($where);
+	$carts = new CCPlaylist(true);
+	$carts->SetOrder('cart_date','DESC');
+	$carts->SetOffsetAndLimit(0,5);
+
+	if( empty($cart_ids) )
+	{
+		$playlists = $carts->QueryRows('');
+	}
+	else
+	{
+		$where = 'cart_id in (' . join(',',$cart_ids) . ')';
+		$playlists = $carts->QueryRows($where);
+	}
+
+	return $playlists;
 }
 
 function CC_popular_playlist_tracks()
