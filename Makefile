@@ -102,7 +102,24 @@ srpm:	tarball
 		 -ts $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM).tar.gz
 	mv *.rpm $(PACKAGEDIR)
 
-rpms:	tarball
+# NOTE: I made the following because tar was not working with our current
+# procedure.
+rpms: tarball
+	mkdir -p $(PACKAGEDIR)/SOURCES
+	mkdir -p $(PACKAGEDIR)/RPMS
+	mkdir -p $(PACKAGEDIR)/SRPMS
+	mkdir -p $(PACKAGEDIR)/SPECS
+	mkdir -p $(PACKAGEDIR)/BUILD
+
+	cp -Rf $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM).tar.gz $(PACKAGEDIR)/SOURCES
+
+	rpmbuild --define "_topdir `pwd`/$(PACKAGEDIR)" \
+		     --define '_build_name_fmt %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm' \
+		 	 -ba cchost.spec
+		 #-ta $(PACKAGEDIR)/$(APPNAME)-$(RELEASE_NUM).tar.gz
+	# mv *.rpm $(PACKAGEDIR)
+
+rpms_broke:	tarball
 	rpmbuild --define "_rpmdir `pwd`" \
 		 --define "_srcrpmdir `pwd`" \
 		 --define '_build_name_fmt %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm' \
