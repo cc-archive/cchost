@@ -31,10 +31,10 @@ function & cc_license_chart()
                     'nc-sampling+' =>   'nc-sampling+', 
                     'sampling+' =>   'nc-sampling+', 
                     'sampling' =>   'nc-sampling+', 
-                    'share-alike' =>   'nc-sampling+', 
-                    'by-nc-sa' =>   'nc-sampling+', 
-                    'noncommercial' =>   'nc-sampling+', 
-                    'attribution' =>   'nc-sampling+', 
+                    'share-alike_3' =>   'nc-sampling+', 
+                    'by-nc-sa_3' =>   'nc-sampling+', 
+                    'noncommercial_3' =>   'nc-sampling+', 
+                    'attribution_3' =>   'nc-sampling+', 
                     'publicdomain' =>   'nc-sampling+', 
                 ),
 
@@ -43,10 +43,10 @@ function & cc_license_chart()
                     'nc-sampling+' =>   'nc-sampling+', 
                     'sampling+' =>   'sampling+', 
                     'sampling' =>   'sampling+', 
-                    'share-alike' =>   'sampling+', 
-                    'by-nc-sa' =>   'nc-sampling+', 
-                    'noncommercial' =>  'nc-sampling+' , 
-                    'attribution' =>   'sampling+', 
+                    'share-alike_3' =>   'sampling+', 
+                    'by-nc-sa_3' =>   'nc-sampling+', 
+                    'noncommercial_3' =>  'nc-sampling+' , 
+                    'attribution_3' =>   'sampling+', 
                     'publicdomain' =>   'sampling+', 
                 ),
 
@@ -55,59 +55,59 @@ function & cc_license_chart()
                     'nc-sampling+' =>  'nc-sampling+' , 
                     'sampling+' =>   'nc-sampling+', 
                     'sampling' =>   'sampling', 
-                    'share-alike' =>   'sampling', 
-                    'by-nc-sa' =>  'nc-sampling+' , 
-                    'noncommercial' =>   'nc-sampling+', 
-                    'attribution' =>   'sampling', 
+                    'share-alike_3' =>   'sampling', 
+                    'by-nc-sa_3' =>  'nc-sampling+' , 
+                    'noncommercial_3' =>   'nc-sampling+', 
+                    'attribution_3' =>   'sampling', 
                     'publicdomain' =>   'sampling', 
                 ),
 
-            'share-alike' =>   array
+            'share-alike_3' =>   array
                 (
                     'nc-sampling+' =>  'nc-sampling+'  , 
                     'sampling+' =>   'sampling+' , 
                     'sampling' =>   'sampling' , 
-                    'share-alike' =>   'share-alike', 
-                    'by-nc-sa' =>   'by-nc-sa', 
-                    'noncommercial' =>  'by-nc-sa' , 
-                    'attribution' =>   'share-alike', 
-                    'publicdomain' =>  'share-alike' , 
+                    'share-alike_3' =>   'share-alike_3', 
+                    'by-nc-sa_3' =>   'by-nc-sa_3', 
+                    'noncommercial_3' =>  'by-nc-sa_3' , 
+                    'attribution_3' =>   'share-alike_3', 
+                    'publicdomain' =>  'share-alike_3' , 
                 ),
 
-            'by-nc-sa' =>   array
+            'by-nc-sa_3' =>   array
                 (
                     'nc-sampling+' =>  'nc-sampling+' , 
                     'sampling+' =>   'nc-sampling+', 
                     'sampling' =>   'nc-sampling+', 
-                    'share-alike' =>  'by-nc-sa', 
-                    'by-nc-sa' =>   'by-nc-sa', 
-                    'noncommercial' =>  'by-nc-sa' , 
-                    'attribution' =>  'by-nc-sa' , 
-                    'publicdomain' =>   'by-nc-sa', 
+                    'share-alike_3' =>  'by-nc-sa_3', 
+                    'by-nc-sa_3' =>   'by-nc-sa_3', 
+                    'noncommercial_3' =>  'by-nc-sa_3' , 
+                    'attribution_3' =>  'by-nc-sa_3' , 
+                    'publicdomain' =>   'by-nc-sa_3', 
                 ),
 
-            'noncommercial' =>   array
+            'noncommercial_3' =>   array
                 (
                     'nc-sampling+' =>   'nc-sampling+' , 
                     'sampling+' =>   'nc-sampling+' , 
                     'sampling' =>   'nc-sampling+' , 
-                    'share-alike' =>  'by-nc-sa'  , 
-                    'by-nc-sa' =>  'by-nc-sa'  , 
-                    'noncommercial' =>  'noncommercial' , 
-                    'attribution' =>   'noncommercial', 
-                    'publicdomain' =>   'noncommercial', 
+                    'share-alike_3' =>  'by-nc-sa_3'  , 
+                    'by-nc-sa_3' =>  'by-nc-sa_3'  , 
+                    'noncommercial_3' =>  'noncommercial_3' , 
+                    'attribution_3' =>   'noncommercial_3', 
+                    'publicdomain' =>   'noncommercial_3', 
                 ),
 
-            'attribution' =>   array
+            'attribution_3' =>   array
                 (
                     'nc-sampling+' =>  'nc-sampling+' , 
                     'sampling+' =>   'sampling+', 
                     'sampling' =>   'sampling' , 
-                    'share-alike' =>  'share-alike'  , 
-                    'by-nc-sa' =>  'by-nc-sa'  , 
-                    'noncommercial' =>  'noncommercial' , 
-                    'attribution' =>   'attribution', 
-                    'publicdomain' =>   'attribution', 
+                    'share-alike_3' =>  'share-alike_3'  , 
+                    'by-nc-sa_3' =>  'by-nc-sa_3'  , 
+                    'noncommercial_3' =>  'noncommercial_3' , 
+                    'attribution_3' =>   'attribution_3', 
+                    'publicdomain' =>   'attribution_3', 
                 ),
 
             'publicdomain' =>   array
@@ -115,10 +115,10 @@ function & cc_license_chart()
                     'nc-sampling+' =>  'nc-sampling+' , 
                     'sampling+' =>   'sampling+', 
                     'sampling' =>   'sampling' , 
-                    'share-alike' =>  'share-alike'  , 
-                    'by-nc-sa' =>  'by-nc-sa'  , 
-                    'noncommercial' =>  'noncommercial' , 
-                    'attribution' =>   'attribution', 
+                    'share-alike_3' =>  'share-alike_3'  , 
+                    'by-nc-sa_3' =>  'by-nc-sa_3'  , 
+                    'noncommercial_3' =>  'noncommercial_3' , 
+                    'attribution_3' =>   'attribution_3', 
                     'publicdomain' =>   'publicdomain' , 
                 ),
 
@@ -130,6 +130,19 @@ function & cc_license_chart()
 
 function cc_stricter_license( $lic1,$lic2 )
 {
+    $update = array
+        (
+            'share-alike' =>  'share-alike_3'  , 
+            'by-nc-sa' =>  'by-nc-sa_3'  , 
+            'noncommercial' =>  'noncommercial_3' , 
+            'attribution' =>   'attribution_3', 
+        );
+
+    if( array_key_exists($lic1,$update) )
+        $lic1 = $update[$lic1];
+    if( array_key_exists($lic2,$update) )
+        $lic2 = $update[$lic2];
+
     $chart = function_exists('custom_lic_chart') ? $custom_lic_chart() : cc_license_chart();
     if( !empty($chart[$lic1][$lic2]) )
         return $chart[$lic1][$lic2];
