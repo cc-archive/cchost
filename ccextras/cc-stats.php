@@ -153,7 +153,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
 function _cc_stats_filter($since)
 {
     $x = 'wired,admin,criminals,militiamix,fortminor,cibelle,djdolores,apollonove';
-    require_once('cclib/cc-tags.inc');
+    require_once('cclib/cc-tags.php');
     $x = CCTag::TagSplit($x);
     $where = array();
     foreach($x as $u)
