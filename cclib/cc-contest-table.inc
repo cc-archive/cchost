@@ -247,7 +247,7 @@ EOF;
     function & GetRecordFromRow(&$row,$expand = true)
     {
         if( !$row['contest_id'] )
-            return;
+            return $row;
 
         $this->GetOpenStatus($row);
 
