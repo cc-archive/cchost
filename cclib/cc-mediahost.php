@@ -598,7 +598,7 @@ class CCMediaHost
             $menu['manageremixes']['access'] = CC_DISABLED_MENU_ITEM;
         }
 
-        $ismediablog = CCUploads::InTags(CCUD_MEDIA_BLOG_UPLOAD,$record);
+        $ismediablog = CCUploads::InTags(CCUD_MEDIA_BLOG_UPLOAD,$record) || $isadmin;
 
 
         if( $ismediablog && (($isowner && $this->_is_auto_pub()) || $isadmin) )
