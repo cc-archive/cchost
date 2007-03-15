@@ -61,7 +61,7 @@ looped or, if you want to cut your own samples, the original solo tracks from th
   You can download the a cappellas and pre-cut loops here. Right-click (Mac: control-click) on the buttons below
   and select 'Save Target As..'.
 </p>
-<tal:block define="srcs php:cc_query_fmt('tags=djvadim,contest_sample&unpub=1')" />
+<tal:block define="srcs php:cc_query_fmt('tags=djvadim,contest_sample')" />
 <table class="looptable">
   <tal:block repeat="R srcs">
   <tr>
