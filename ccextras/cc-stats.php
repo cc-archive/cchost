@@ -152,7 +152,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
 
 function _cc_stats_filter($since)
 {
-    $x = 'wired,admin,criminals,militiamix,fortminor,cibelle,djdolores,apollonove';
+    $x = 'wired,admin,criminals,militiamix,fortminor,cibelle,djdolores,apollonove,vieux,djvadim,cwillits';
     require_once('cclib/cc-tags.php');
     $x = CCTag::TagSplit($x);
     $where = array();
@@ -195,6 +195,15 @@ function & _cc_stats_get_data(&$table,$sort_on,$dir,$since)
 }
 
 
+function cc_stats_lics($tag)
+{
+    $uploads = new CCUploads();
+    $uploads->GroupOn('upload_license');
+    $uploads->SetTagFilter($tag);
+    $uploads->SetSort('cnt');
+    $rows = $uploads->QueryRows('','COUNT(*) as cnt,license_name');
+    return $rows;
+}
 
 function cc_stats_show()
 {
