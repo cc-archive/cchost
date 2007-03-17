@@ -112,4 +112,18 @@ table.statstable {
 </table>
 
 
+      <table class="statstable">
+      <tr><th class="shead" colspan="2">Licenses for Samples</th></tr>
+      <tal:block repeat="Rsx php:cc_stats_lics('sample')"  >
+        <tr><td>${Rsx/license_name}</td><td>${Rsx/cnt}</td></tr>
+      </tal:block>
+      </table>
+
+      <table class="statstable">
+      <tr><th class="shead" colspan="2">Licenses for A Cappellas</th></tr>
+      <tal:block repeat="Rp php:cc_stats_lics('acappella')"  >
+        <tr><td>${Rp/license_name}</td><td>${Rp/cnt}</td></tr>
+      </tal:block>
+      </table>
+
 </div>
