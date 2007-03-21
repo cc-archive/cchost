@@ -37,6 +37,10 @@
 if( file_exists('../cclib') )
     chdir('..');
 
+// NOTE: at present you might have to increase this memory_limit depending on 
+// your configuration.
+ini_set('memory_limit', '80M');
+
 
 // The following is necessary to cycle through startup of the sites
 // engine.
