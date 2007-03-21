@@ -100,6 +100,7 @@ class CCRemix
     {
         global $CC_GLOBALS;
 
+        require_once('cclib/cc-pools.php');
         require_once('cclib/cc-upload.php');
         require_once('cclib/cc-remix-tree.php');
         require_once('cclib/cc-remix-forms.php');
