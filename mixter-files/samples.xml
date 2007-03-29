@@ -76,7 +76,7 @@ $Id$
 #magnatune_logo {
   border: 1px solid black;
   }
-#vieux_logo {
+#vieux_logo, #djvadim_logo {
   margin: 14px;
 }
 
@@ -91,6 +91,18 @@ $Id$
           <td id="fs_top_right" /></tr>
        <tr><td id="fs_side" />
            <td id="fs_content">
+
+<div class="item_row">
+  <div class="logo"><img id="djvadim_logo" src="${root-url}mixter-files/djvadim/vadim_avatar.png" /></div>
+  <div class="plug_link"><a href="${root-url}djvadim/view/contest/sources">Sample packs here...</a></div>
+  <p>
+    ccMixter is especially proud to host samples and original studio tracks
+    from international superstar DJ Vadim's BBE Music release of 
+    "<a href="http://bbemusic.com/data.pl?release=BBECD080">The Sound Catcher</a>."
+    DJ Vadim put these samples into the Commons so we can all learn, share and remix the separated audio tracks to his 
+    songs "Kill Kill Kill" and "Talk to Me" which are available under CC license here at ccMixter.
+  </p>
+</div>
 
 <div class="item_row">
   <div class="logo"><img id="vieux_logo" src="${root-url}mixter-files/vieux/vieux-small.jpg" /></div>
