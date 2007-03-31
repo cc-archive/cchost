@@ -23,6 +23,11 @@ $Id$
 </tal:block>
 
 <link rel="stylesheet" type="text/css" href="${root-url}mixter-files/home.css" title="Default Style"/>          
+<style>
+p.peep {
+  margin-left: 12px;
+}
+</style>
 <h1 class="user">Welcome to ccMixter</h1>
 
 <table class="maintable">
@@ -45,11 +50,11 @@ $Id$
 href="http://soundblog.spaces.live.com/?_c11_blogpart_blogpart=blogview&_c=blogpart&partqs=amonth%3d2%26ayear%3d2007">Dave's Imaginary Sound Spaces</a></p>
 
 
-      <p>This is a community music site featuring remixes licensed under <a href="http://creativecommons.org/">Creative Commons</a>, where you can listen to, sample, mash-up, or interact with music in whatever way you want.</p>
+      <p class="peep">This is a community music site featuring remixes licensed under <a href="http://creativecommons.org/">Creative Commons</a>, where you can listen to, sample, mash-up, or interact with music in whatever way you want.</p>
 
-      <p><b>Remixers</b>&nbsp;&nbsp;&nbsp;If you're into sampling, remixing and mash-ups grab the  <a href="${root-url}media/view/media/samples">sample packs</a> and <a href="${root-url}media/view/media/pells">a cappellas</a> for download and you can upload your version back into ccMixter, for others to enjoy and re-sample. All legal.</p>
+      <p class="peep"><b>Remixers</b>&nbsp;&nbsp;&nbsp;If you're into sampling, remixing and mash-ups grab the  <a href="${root-url}media/view/media/samples">sample packs</a> and <a href="${root-url}media/view/media/pells">a cappellas</a> for download and you can upload your version back into ccMixter, for others to enjoy and re-sample. All legal.</p>
 
-      <p><b>Podcasters, directors and music lovers</b> &nbsp;&nbsp;&nbsp;If you're into music, browse this site to hear some of the <a href="${root-url}media/view/media/picks">great remixes</a> people have built from sampling music on this site, all licensed for use under Creative Commons license.</p>
+      <p class="peep"><b>Podcasters, directors and music lovers</b> &nbsp;&nbsp;&nbsp;If you're into music, browse this site to hear some of the <a href="${root-url}media/view/media/picks">great remixes</a> people have built from sampling music on this site, all licensed for use under Creative Commons license.</p>
 
     </div>
   </td>
