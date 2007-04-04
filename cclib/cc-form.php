@@ -1193,7 +1193,7 @@ END;
         {
             $value = $this->GetFormValue($fieldname);
 
-            $regex = "/^[A-Z0-9]+([\._\-A-Z0-9]+)?@[A-Z0-9\.\-_]+\.{1}[A-Z0-9\-_]{2,7}$/i";
+            $regex = "/^[A-Z0-9]+([\._\-A-Z0-9+]+)?@[A-Z0-9\.\-_]+\.{1}[A-Z0-9\-_]{2,7}$/i";
 
             if( !preg_match( $regex, $value ) )
             {
