@@ -238,18 +238,6 @@ ccCollab.prototype = {
     },
 
     addUser: function( username, fullname, userrole, usercredit ) {
-
-        var template = '<div class="user_line" id="_user_line_#{user_name}">' +
-          '<div class="user" ><a href="#{home-url}people/#{user_name}">#{user_real_name}</a></div>' +
-          '<div class="role">#{role}</div>' +
-          '<div class="credit" id="_credit_#{user_name}">#{credit}</div>' +
-          '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><span>credit</span></a></div>' +
-          '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><span>remove</span></a></div>' +
-          '<div>' +
-          '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>send email</span></a> ' +
-          '</div>' +
-         '</div>';
-
         var vars = {
                 user_name: username,
                 user_real_name: fullname,
@@ -257,11 +245,14 @@ ccCollab.prototype = {
                 credit: usercredit
             };
         
-        var html = new Template( template ).evaluate( vars );
+        var html = new Template( collab_template ).evaluate( vars );
         new Insertion.Before( 'user_inserter', html );
 
-        Event.observe( '_user_remove_' + username, 'click', this.onUserRemove.bindAsEventListener(this,username) );
-        Event.observe( '_user_credit_' + username, 'click', this.onUserCredit.bindAsEventListener(this,username) );
-        Event.observe( '_contact_'     + username, 'click', this.onUserContact.bindAsEventListener(this,username) );
+        if( $('_user_remove_' + username) )
+            Event.observe( '_user_remove_' + username, 'click', this.onUserRemove.bindAsEventListener(this,username) );
+        if( $('_user_credit_' + username) )
+            Event.observe( '_user_credit_' + username, 'click', this.onUserCredit.bindAsEventListener(this,username) );
+        if( $('_contact_' + username) )
+            Event.observe( '_contact_'     + username, 'click', this.onUserContact.bindAsEventListener(this,username) );
     }
 }

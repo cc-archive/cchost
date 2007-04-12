@@ -7,7 +7,7 @@
 
     <fieldset>
       <legend tal:content="php: _('Info')" />
-      <div style="float:right" >
+      <div tal:condition="collab/is_owner" style="float:right" >
         <a id="commentcommand" href="${home-url}collab/edit/${collab_id}"><span>edit</span></a>
       </div>
       <div class="cc_collab_by">Created by: <a href="${home-url}people/${collab/collab/user_name}">${collab/collab/user_real_name}</a> 
@@ -17,7 +17,7 @@
 
   <div class="cc_collab_fields">
     <fieldset>
-      <legend tal:content="php: _('Users')" />
+      <legend tal:content="php: _('Artists')" />
       <div class="user_lines">
         <div id="user_inserter"><!-- --></div>
       </div>
@@ -32,8 +32,9 @@
           <div class="file_line" id="_file_line_${upload/upload_id}">
             <div class="file_info"><a class="fname" href="${upload/file_page_url}">${upload/upload_name}</a> by
                    <a href="${upload/artist_page_url}">${upload/user_real_name}</a></div>
-            <div><a href="javascript://remove " id="_remove_${upload/upload_id}"  class="file_cmd file_remove"><span>remove</span></a></div>
-            <div><a href="javascript://publish" id="_publish_${upload/upload_id}" class="file_cmd file_publish">
+
+            <div tal:condition="collab/is_owner" ><a href="javascript://remove " id="_remove_${upload/upload_id}"  class="file_cmd file_remove"><span>remove</span></a></div>
+            <div tal:condition="collab/is_owner" ><a href="javascript://publish" id="_publish_${upload/upload_id}" class="file_cmd file_publish">
                 <span id="_pubtext_${upload/upload_id}"><tal:block condition="upload/upload_published">hide</tal:block>
                 <tal:block condition="not: upload/upload_published">publish</tal:block></span></a>
             </div>
@@ -52,8 +53,9 @@
       </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset tal:condition="collab/is_member" >
       <legend tal:content="php: _('Conversation')" />
+      <p>This conversation thread is private and only visible to members of the project:</p>
       <tal:block define="topics collab/topics" />
       <metal:block use-macro="topics.xml/list_topics" />
       <div class="c_commands">
@@ -62,6 +64,23 @@
     </fieldset>
   </div>
 
+  <script>
+
+    var collab_template = '<div class="user_line" id="_user_line_#{user_name}">' +
+            '<div class="user" ><a href="#{home-url}people/#{user_name}">#{user_real_name}</a></div>' +
+            '<div class="role">#{role}</div>' +
+            '<div class="credit" id="_credit_#{user_name}">#{credit}</div>' +
+  <tal:block condition="collab/is_owner">
+            '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><span>credit</span></a></div>' +
+            '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><span>remove</span></a></div>' +
+  </tal:block>
+  <tal:block condition="collab/is_member">
+            '<div>' +
+            '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>send email</span></a> ' +
+            '</div>' +
+  </tal:block>
+           '</div>';
+  </script>
   <script src="${root-url}cctemplates/js/mini-rico.js" ></script>
   <script src="${root-url}cctemplates/js/autocomp.js" ></script>
   <script src="${root-url}cctemplates/js/collab.js" ></script>

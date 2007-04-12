@@ -356,6 +356,7 @@ class CCCollab
         if( CCUser::IsAdmin() )
         {
             $is_owner = true;
+            $is_member = true;
         }
         else
         {
@@ -363,16 +364,10 @@ class CCCollab
 
             if( !$is_owner )
             {
-                $found = false;
+                $is_member = false;
                 foreach( $collab_users as $CU )
-                    if( $found = ($curr_user == $CU['user_id']) )
+                    if( $is_member = ($curr_user == $CU['user_id']) )
                         break;
-
-                if( !$found ) 
-                {
-                    CCPage::Prompt(_("You are not a member of this collaboration project"));
-                    CCUtil::Send404();
-                }
             }
         }
 
@@ -391,18 +386,19 @@ class CCCollab
         $collab_topics =& $users->GetRecordsFromRows($collab_topics);
 
         $args = array(
-                'is_owner' => $is_owner,
-                'collab'   => $collab_row,
-                'users'    => $collab_users,
-                'uploads'  => $collab_uploads,
-                'topics'   => $collab_topics );
+                'is_owner'  => $is_owner,
+                'is_member' => $is_member,
+                'collab'    => $collab_row,
+                'users'     => $collab_users,
+                'uploads'   => $collab_uploads,
+                'topics'    => $collab_topics );
 
         CCPage::PageArg( 'show_collab', 'collab.xml/show_collab' );
         CCPage::PageArg( 'collab', $args, 'show_collab' );
 
     }
 
-    function Upload($collab_id='', $upload_id='',$cmd='')
+    function Upload( $collab_id='', $upload_id='', $cmd='' )
     {
         $ok = !empty($collab_id) && !empty($upload_id) && !empty($cmd);
         if( $ok )
@@ -640,7 +636,7 @@ class CCCollab
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('collab'),        array( 'CCCollab', 'View'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}' );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}' );
 
         CCEvents::MapUrl( ccp('collab','create'), array( 'CCCollab', 'Create'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
