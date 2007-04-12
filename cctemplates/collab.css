@@ -1,0 +1,170 @@
+.cc_collab {
+}
+
+legend {
+	/* border: 1px solid black; */
+	padding: 3px 3px 3px 11px;
+	font-weight: bold;
+	font-variant: small-caps;
+	background: #88D;
+	color: white;
+	letter-spacing: 1em;
+}
+
+fieldset {
+	margin-bottom: 14px;
+}
+
+.cc_collab_by {
+	margin: 8px;
+}
+
+.cc_collab_desc {
+	background: #DDE;
+	border: 1px solid #ACA;
+	padding: 4px;
+}
+
+.cc_collab_header div {
+	float: left;
+	margin-right: 20px;
+}
+
+#collab_ajax_msg {
+	height: 20px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.ajaxmsg_msg {
+	color: green;
+}
+
+.ajaxmsg_error {
+	color: red;
+}
+
+.user_line, .file_line {
+	margin: 4px;
+	padding: 3px;
+	clear: left;
+}
+
+a.fname {
+	font-weight: bold;
+	color: brown;
+}
+
+.user_line {
+	height: 14px;
+	background-color: #DDE;
+}
+
+.file_line {
+	background-color: #DDE;
+	border: 1px solid #ACA;
+	margin-bottom: 11px;
+}
+
+.file_dl_table {
+	margin: 5px;
+	clear: left;
+}
+
+.file_dl_table .nic {
+	font-weight: bold;
+	padding-right: 14px;
+}
+
+.file_dl_table .down_button {
+    display: block;
+    width: 17px;
+    height: 17px;
+	background: url('ccmixter/down-button-fg.gif');
+}
+
+.file_dl_table .down_button:hover {
+	background: url('ccmixter/down-button-bg.gif');
+}
+
+.user_line .user {
+	width: 22%;
+}
+
+.user_line .role {
+	width: 50px;
+}
+
+.user_line .credit {
+	width: 150px;
+}
+
+.file_list .tags, .user_line .role {
+	font-size: 10px;
+	color: #777;
+}
+
+.file_list .file_info {
+	width: 30%;
+}
+
+.user_line div, .file_line div {
+	float: left;
+	padding: 1px 10px 1px 5px;
+	/* background-color: #DDE; */
+}
+
+.user_break {
+	clear: left;
+}
+
+#invite_container {
+	margin-top: 5px;
+}
+
+#invite_container .cc_autocomp_edit {
+	margin: 4px 0px 5px 0px;
+}
+
+#invite_container .cc_autocomp_list {
+    background-color: #FFF;
+}
+
+#invite_container #_ap_stat_tags {
+	font-weight: bold;
+}
+
+#invite_container p.cc_autocomp_line {
+	margin: 1px;
+}
+
+#invite_container p.cc_autocomp_selected {
+    background-color: #CCC;
+}
+
+#invite_container p.cc_autocomp_picked {
+	font-style: italic;
+	color: blue;
+}
+
+#invite_container .cc_autocomp_list {
+	margin-top: 3px;
+	cursor: pointer;
+	width: 220px;
+}
+
+#invite_container .cc_autocomp_clear {
+	display: block;
+	text-align: right;
+	width: 110px;
+	float: right;
+}
+
+.cc_autocomp_stat {
+	display: block;
+	margin-bottom: 4px;
+}
+
+#invite_container .cc_autocomp_border {
+    border: 1px solid #666;
+}

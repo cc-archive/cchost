@@ -1,0 +1,76 @@
+<tal:block>
+<metal:block define-macro="show_collab">
+  <div id="collab_ajax_msg"><!-- --></div>
+  <tal:block define="collab_id collab/collab/collab_id" />
+  <link rel="stylesheet" type="text/css" href="${root-url}cctemplates/collab.css" title="Default Style" />
+  <link rel="stylesheet" type="text/css" href="${root-url}cctemplates/skin-simple-topics.css" title="Default Style" />
+
+    <fieldset>
+      <legend tal:content="php: _('Info')" />
+      <div style="float:right" >
+        <a id="commentcommand" href="${home-url}collab/edit/${collab_id}"><span>edit</span></a>
+      </div>
+      <div class="cc_collab_by">Created by: <a href="${home-url}people/${collab/collab/user_name}">${collab/collab/user_real_name}</a> 
+          ${collab/collab/collab_date}</div>
+      <div class="cc_collab_desc">${collab/collab/collab_desc}</div>
+    </fieldset>
+
+  <div class="cc_collab_fields">
+    <fieldset>
+      <legend tal:content="php: _('Users')" />
+      <div class="user_lines">
+        <div id="user_inserter"><!-- --></div>
+      </div>
+      <div id="invite_container">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend tal:content="php: _('Files')" />
+      <div class="file_list">
+        <tal:block repeat="upload collab/uploads">
+          <div class="file_line" id="_file_line_${upload/upload_id}">
+            <div class="file_info"><a class="fname" href="${upload/file_page_url}">${upload/upload_name}</a> by
+                   <a href="${upload/artist_page_url}">${upload/user_real_name}</a></div>
+            <div><a href="javascript://remove " id="_remove_${upload/upload_id}"  class="file_cmd file_remove"><span>remove</span></a></div>
+            <div><a href="javascript://publish" id="_publish_${upload/upload_id}" class="file_cmd file_publish">
+                <span id="_pubtext_${upload/upload_id}"><tal:block condition="upload/upload_published">hide</tal:block>
+                <tal:block condition="not: upload/upload_published">publish</tal:block></span></a>
+            </div>
+            <div class="tags"><tal:block repeat="tag upload/usertag_links">${tag/tag} </tal:block></div>
+            <br />
+            <table class="file_dl_table">
+                <tal:block repeat="file upload/files">
+                    <tr><td class="nic">${file/file_nicname}</td>
+                        <td><a href="${file/download_url}" class="down_button"> </a></td>
+                        <td>${file/file_name}</td>
+                    </tr>
+                </tal:block>
+            </table>
+          </div>
+        </tal:block>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend tal:content="php: _('Conversation')" />
+      <tal:block define="topics collab/topics" />
+      <metal:block use-macro="topics.xml/list_topics" />
+      <div class="c_commands">
+         <a href="${home-url}collab/topic/add/${collab_id}" id="commentcommand"><span>Add Topic</span></a>
+      </div>
+    </fieldset>
+  </div>
+
+  <script src="${root-url}cctemplates/js/mini-rico.js" ></script>
+  <script src="${root-url}cctemplates/js/autocomp.js" ></script>
+  <script src="${root-url}cctemplates/js/collab.js" ></script>
+  <script>
+     var cu = new ccCollab('${collab_id}');
+     <tal:block repeat="user collab/users">
+        cu.addUser( '${user/user_name}', '${user/user_real_name}', '${user/collab_user_role}', '${user/collab_user_credit}' );
+     </tal:block>
+  </script>
+</metal:block>
+
+</tal:block>
