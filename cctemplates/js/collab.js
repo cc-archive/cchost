@@ -45,6 +45,7 @@ ccCollab.prototype = {
     },
 
     onUploadPublish: function( e, id ) {
+        this.msg( 'thinking...', 'working' );
         var url = home_url + 'collab/upload/' + this.collab_id + '/' + id + '/publish';
         new Ajax.Request( url, { method: 'get', onComplete: this._req_publishupload.bind(this) } );
     },
@@ -64,6 +65,7 @@ ccCollab.prototype = {
 
 
     onUploadRemove: function( e, id ) {
+        this.msg( 'thinking...', 'working' );
         var url = home_url + 'collab/upload/' + this.collab_id + '/' + id + '/remove';
         new Ajax.Request( url, { method: 'get', onComplete: this._req_removeupload.bind(this) } );
     },
@@ -139,6 +141,7 @@ ccCollab.prototype = {
     },
 
     onCreditOk: function(e, user_name) {
+        this.msg( 'thinking...', 'working' );
         var value = $('credit_edit').value;
         var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/credit?credit=' + value;
         new Ajax.Request( url, { method: 'get', onComplete: this._req_credituser.bind(this) } );
@@ -146,6 +149,7 @@ ccCollab.prototype = {
     },
 
     onContactOk: function(e, user_name) {
+        this.msg( 'thinking...', 'working' );
         var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/contact';
         new Ajax.Request( url, { method: 'post', 
                                  parameters: 'text=' + $('contact_edit').innerHTML,
@@ -187,6 +191,7 @@ ccCollab.prototype = {
     },
 
     onUserRemove: function( e, user_name ) {
+        this.msg( 'thinking...', 'working' );
         var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/remove';
         new Ajax.Request( url, { method: 'get', onComplete: this._req_removeuser.bind(this) } );
     },
