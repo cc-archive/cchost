@@ -363,9 +363,12 @@ class CCCollab
         {
             $is_owner = $curr_user == $collab_row['collab_user'];
 
-            if( !$is_owner )
+            if( $is_owner )
             {
-                $is_member = false;
+                $is_member = true;
+            }
+            else
+            {
                 foreach( $collab_users as $CU )
                     if( $is_member = ($curr_user == $CU['user_id']) )
                         break;
