@@ -85,7 +85,7 @@
   <script src="${root-url}cctemplates/js/autocomp.js" ></script>
   <script src="${root-url}cctemplates/js/collab.js" ></script>
   <script>
-     var cu = new ccCollab('${collab_id}');
+     var cu = new ccCollab('${collab_id}','${collab/is_member}','${collab/is_owner}');
      <tal:block repeat="user collab/users">
         cu.addUser( '${user/user_name}', '${user/user_real_name}', '${user/collab_user_role}', '${user/collab_user_credit}' );
      </tal:block>

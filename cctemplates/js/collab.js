@@ -26,22 +26,25 @@ ccCollab.prototype = {
     userCredit: null,
     userContact: null,
 
-    initialize: function(collab) {
+    initialize: function(collab,is_member,is_owner) {
         this.collab_id = collab;
-        var pickFunk = this.onUserPick.bind(this);
-        this.autoComp =  new ccAutoComplete( {  url: home_url + 'browse' + q + 'user_lookup=', onPick: pickFunk } );
-        var container = $('invite_container');
-        container.innerHTML = this.autoComp.genControls( 'collab_user', '', 'invite other artists' );
-        this.autoComp.hookUpEvents();
-        var me = this;
-        $$('.file_remove').each( function(a) {
-            var id = a.id.match(/[0-9]+$/);
-            Event.observe( a, 'click', me.onUploadRemove.bindAsEventListener(me,id) );
-        });
-        $$('.file_publish').each( function(a) {
-            var id = a.id.match(/[0-9]+$/);
-            Event.observe( a, 'click', me.onUploadPublish.bindAsEventListener(me,id) );
-        });
+        if( is_member )
+        {
+            var pickFunk = this.onUserPick.bind(this);
+            this.autoComp =  new ccAutoComplete( {  url: home_url + 'browse' + q + 'user_lookup=', onPick: pickFunk } );
+            var container = $('invite_container');
+            container.innerHTML = this.autoComp.genControls( 'collab_user', '', 'invite other artists' );
+            this.autoComp.hookUpEvents();
+            var me = this;
+            $$('.file_remove').each( function(a) {
+                var id = a.id.match(/[0-9]+$/);
+                Event.observe( a, 'click', me.onUploadRemove.bindAsEventListener(me,id) );
+            });
+            $$('.file_publish').each( function(a) {
+                var id = a.id.match(/[0-9]+$/);
+                Event.observe( a, 'click', me.onUploadPublish.bindAsEventListener(me,id) );
+            });
+        }
     },
 
     onUploadPublish: function( e, id ) {
