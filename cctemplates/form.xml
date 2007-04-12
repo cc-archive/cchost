@@ -36,7 +36,11 @@ $Id$
          <p>${msg}</p>
       </tal:block>
     </div>
-
+    <tal:block condition="form_id">
+        <script>
+          form_id = '${form_id}';
+        </script>
+    </tal:block>
     <form action="${form_action}" method="${form_method}" class="cc_form" name="${form_id}"
         id="${form_id}" tal:attributes="enctype form-data | nothing"  >
 
