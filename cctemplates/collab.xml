@@ -28,6 +28,9 @@
     <fieldset>
       <legend tal:content="php: _('Files')" />
       <div class="file_list">
+        <tal:block condition="not: collab/hasfiles">
+          <p>There are no files available for viewing in this project right now.</p>
+        </tal:block>
         <tal:block repeat="upload collab/uploads">
           <div class="file_line" id="_file_line_${upload/upload_id}">
             <div class="file_info"><a class="fname" href="${upload/file_page_url}">${upload/upload_name}</a> by

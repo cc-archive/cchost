@@ -352,6 +352,7 @@ class CCCollab
         $collab_users = $users->QueryRows($w1);
 
         $curr_user = CCUser::CurrentUser();
+        $is_member = false;
 
         if( CCUser::IsAdmin() )
         {

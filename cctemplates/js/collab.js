@@ -155,7 +155,7 @@ ccCollab.prototype = {
         this.msg( 'thinking...', 'working' );
         var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/contact';
         new Ajax.Request( url, { method: 'post', 
-                                 parameters: 'text=' + $('contact_edit').innerHTML,
+                                 parameters: 'text=' + $('contact_edit').value,
                                  onComplete: this._req_contactuser.bind(this) } );
         this.closeContact();
     },
