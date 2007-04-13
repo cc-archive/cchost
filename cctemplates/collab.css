@@ -180,3 +180,11 @@ a.fname {
 #invite_container .cc_autocomp_border {
     border: 1px solid #666;
 }
+
+#upform {
+	margin-left: 5%;
+}
+
+#upform, #upform select, #upform option, #upform input, #upform button {
+	font-size: 11px;
+}

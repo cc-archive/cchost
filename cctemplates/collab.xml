@@ -27,33 +27,19 @@
 
     <fieldset>
       <legend tal:content="php: _('Files')" />
-      <div class="file_list">
-        <tal:block condition="not: collab/hasfiles">
-          <p>There are no files available for viewing in this project right now.</p>
-        </tal:block>
-        <tal:block repeat="upload collab/uploads">
-          <div class="file_line" id="_file_line_${upload/upload_id}">
-            <div class="file_info"><a class="fname" href="${upload/file_page_url}">${upload/upload_name}</a> by
-                   <a href="${upload/artist_page_url}">${upload/user_real_name}</a></div>
-
-            <div tal:condition="collab/is_owner" ><a href="javascript://remove " id="_remove_${upload/upload_id}"  class="file_cmd file_remove"><span>remove</span></a></div>
-            <div tal:condition="collab/is_owner" ><a href="javascript://publish" id="_publish_${upload/upload_id}" class="file_cmd file_publish">
-                <span id="_pubtext_${upload/upload_id}"><tal:block condition="upload/upload_published">hide</tal:block>
-                <tal:block condition="not: upload/upload_published">publish</tal:block></span></a>
-            </div>
-            <div class="tags"><tal:block repeat="tag upload/usertag_links">${tag/tag} </tal:block></div>
-            <br />
-            <table class="file_dl_table">
-                <tal:block repeat="file upload/files">
-                    <tr><td class="nic">${file/file_nicname}</td>
-                        <td><a href="${file/download_url}" class="down_button"> </a></td>
-                        <td>${file/file_name}</td>
-                    </tr>
-                </tal:block>
-            </table>
-          </div>
-        </tal:block>
+      <div class="file_list" id="file_list">
       </div>
+      <tal:block condition="collab/is_member">
+        <iframe style="display:none" name="upload_frame"></iframe>
+        <form target="upload_frame" enctype="multipart/form-data" action="${home-url}collab/upload/file/${collab_id}" 
+                method="post" id="upform" name="upform">Upload file: <select name="uptype" id="uptype">
+               <option value="remix">remix</option><option value="sample">sample</option><option value="acappella">a cappella</option></select>
+          <input type="file" id="upfile" name="upfile" /> name: <input name="upname" id="upname" type="text" /><select name="lic" id="lic">
+            <tal:block repeat="lic collab/lics"><option value="${lic/license_id}">${lic/license_name}</option></tal:block>
+          </select>
+          <button id="fileok">ok</button>
+        </form>
+      </tal:block>
     </fieldset>
 
     <fieldset tal:condition="collab/is_member" >
@@ -67,8 +53,11 @@
     </fieldset>
   </div>
 
-  <script>
 
+  <script src="${root-url}cctemplates/js/mini-rico.js" ></script>
+  <script src="${root-url}cctemplates/js/autocomp.js" ></script>
+  <script src="${root-url}cctemplates/js/collab.js" ></script>
+  <script>
     var collab_template = '<div class="user_line" id="_user_line_#{user_name}">' +
             '<div class="user" ><a href="#{home-url}people/#{user_name}">#{user_real_name}</a></div>' +
             '<div class="role">#{role}</div>' +
@@ -83,16 +72,42 @@
             '</div>' +
   </tal:block>
            '</div>';
-  </script>
-  <script src="${root-url}cctemplates/js/mini-rico.js" ></script>
-  <script src="${root-url}cctemplates/js/autocomp.js" ></script>
-  <script src="${root-url}cctemplates/js/collab.js" ></script>
-  <script>
      var cu = new ccCollab('${collab_id}','${collab/is_member}','${collab/is_owner}');
+     cu.updateFiles('${collab_id}');
      <tal:block repeat="user collab/users">
         cu.addUser( '${user/user_name}', '${user/user_real_name}', '${user/collab_user_role}', '${user/collab_user_credit}' );
      </tal:block>
+    function upload_done(upload_id)
+    {
+      cu.updateFiles('${collab_id}');
+    }
+
   </script>
+</metal:block>
+
+<metal:block define-macro="show_collab_files">
+    <tal:block repeat="upload uploads">
+      <div class="file_line" id="_file_line_${upload/upload_id}">
+        <div class="file_info"><a class="fname" href="${upload/file_page_url}">${upload/upload_name}</a> by
+               <a href="${upload/artist_page_url}">${upload/user_real_name}</a></div>
+
+        <div tal:condition="is_owner" ><a href="javascript://remove " id="_remove_${upload/upload_id}"  class="file_cmd file_remove"><span>remove</span></a></div>
+        <div tal:condition="is_owner" ><a href="javascript://publish" id="_publish_${upload/upload_id}" class="file_cmd file_publish">
+            <span id="_pubtext_${upload/upload_id}"><tal:block condition="upload/upload_published">hide</tal:block>
+            <tal:block condition="not: upload/upload_published">publish</tal:block></span></a>
+        </div>
+        <div class="tags"><tal:block repeat="tag upload/usertag_links">${tag/tag} </tal:block></div>
+        <br />
+        <table class="file_dl_table">
+            <tal:block repeat="file upload/files">
+                <tr><td class="nic">${file/file_nicname}</td>
+                    <td><a href="${file/download_url}" class="down_button"> </a></td>
+                    <td>${file/file_name}</td>
+                </tr>
+            </tal:block>
+        </table>
+      </div>
+    </tal:block>
 </metal:block>
 
 </tal:block>

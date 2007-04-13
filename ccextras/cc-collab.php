@@ -209,7 +209,6 @@ class CCCollab
 
         global $CC_GLOBALS;
 
-
         if( is_subclass_of($form,'CCUploadMediaForm') ||
                     is_subclass_of($form,'ccuploadmediaform') )
         {
@@ -257,23 +256,19 @@ class CCCollab
         {
             if( !empty($_POST['collab']) )
             {
-                $collab_uploads = new CCCollabUploads();
-                $w['collab_upload_upload'] = $upload_id;
-                $rows = $collab_uploads->QueryRows($w);
-                $collab = $_POST['collab'];
-                $found = false;
-                foreach( $rows as $row )
-                {
-                    if( $found = ($row['collab_upload_collab'] == $collab) )
-                        break;
-                }
-                if( !$found )
-                {
-                    $w['collab_upload_collab'] = $collab;
-                    $collab_uploads->Insert($w);
-                }
+                $this->_add_upload($_POST['collab'],$upload_id);
             }
         }
+    }
+
+    function _add_upload($collab_id,$upload_id)
+    {
+        $collab_uploads = new CCCollabUploads();
+        $w['collab_upload_upload'] = $upload_id;
+        $w['collab_upload_collab'] = $collab_id;
+        $rows = $collab_uploads->QueryRows($w);
+        if( empty($rows) )
+            $collab_uploads->Insert($w);
     }
 
     function Create()
@@ -330,7 +325,7 @@ class CCCollab
         }
     }
 
-    function View($collab_id='')
+    function _collab_row($collab_id)
     {
         if( empty($collab_id) )
             CCUtil::Send404();
@@ -342,15 +337,56 @@ class CCCollab
         if( empty($collab_row) )
             CCUtil::Send404();
 
+        return $collab_row;
+    }
+
+    function View($collab_id='')
+    {
+        $collab_row = $this->_collab_row($collab_id);
+
         CCPage::SetTitle(sprintf( _('Collaboration Project: "%s"'), $collab_row['collab_name'] ));
 
         $collab_row['collab_desc'] = _cc_format_format($collab_row['collab_desc']);
 
+        $collab_users = $this->_get_collab_users($collab_id);
+
+        list( $is_owner, $is_member ) = $this->_get_user_acccess($collab_row,$collab_users);
+
+        $topics = new CCCollabTopics();
+        $w3['topic_upload'] = $collab_id;
+        $collab_topics = $topics->QueryRows($w3);
+        for( $i = 0; $i < count($collab_topics); $i++ )
+            $collab_topics[$i]['commands'] = array(); // for now...
+        $users =& CCUsers::GetTable();
+        $collab_topics =& $users->GetRecordsFromRows($collab_topics);
+
+        require_once('cclib/cc-license.php');
+        $licenses =& CCLicenses::GetTable();
+        $lics     = $licenses->GetEnabled();
+
+        $args = array(
+                'is_owner'  => $is_owner,
+                'is_member' => $is_member,
+                'collab'    => $collab_row,
+                'users'     => $collab_users,
+                'lics'      => $lics,
+                'topics'    => $collab_topics );
+
+        CCPage::PageArg( 'show_collab', 'collab.xml/show_collab' );
+        CCPage::PageArg( 'collab', $args, 'show_collab' );
+
+    }
+
+    function _get_collab_users($collab_id)
+    {
         $users = new CCCollabUsers();
         $users->AddJoin( new CCUsers(), 'collab_user_user' );
         $w1['collab_user_collab'] = $collab_id;
-        $collab_users = $users->QueryRows($w1);
+        return $users->QueryRows($w1);
+    }
 
+    function _get_user_acccess($collab_row,$collab_users=array())
+    {
         $curr_user = CCUser::CurrentUser();
         $is_member = false;
 
@@ -369,37 +405,42 @@ class CCCollab
             }
             else
             {
+                if( empty($collab_users) )
+                    $collab_users = $this->_get_collab_users($collab_row['collab_id']);
+
                 foreach( $collab_users as $CU )
                     if( $is_member = ($curr_user == $CU['user_id']) )
                         break;
             }
         }
 
+        return array( $is_owner, $is_member );
+    }
+
+    function GetUploads( $collab_id='' )
+    {
+        $collab_row = $this->_collab_row($collab_id);
+        list( $is_owner, $is_member ) = $this->_get_user_acccess($collab_row);
         $uploads = new CCUploads();
+        $uploads->SetOrder('upload_date','DESC');
         $uploads->AddJoin( new CCCollabUploads(), 'upload_id' );
-        $uploads->SetDefaultFilter(false); // allow unpublished collab files through
+        if( $is_member )
+            $uploads->SetDefaultFilter(false); // allow unpublished collab files through
         $w2['collab_upload_collab'] = $collab_id;
         $collab_uploads = $uploads->GetRecords($w2);
-
-        $topics = new CCCollabTopics();
-        $w3['topic_upload'] = $collab_id;
-        $collab_topics = $topics->QueryRows($w3);
-        for( $i = 0; $i < count($collab_topics); $i++ )
-            $collab_topics[$i]['commands'] = array(); // for now...
-        $users =& CCUsers::GetTable();
-        $collab_topics =& $users->GetRecordsFromRows($collab_topics);
-
-        $args = array(
-                'is_owner'  => $is_owner,
-                'is_member' => $is_member,
-                'collab'    => $collab_row,
-                'users'     => $collab_users,
-                'uploads'   => $collab_uploads,
-                'topics'    => $collab_topics );
-
-        CCPage::PageArg( 'show_collab', 'collab.xml/show_collab' );
-        CCPage::PageArg( 'collab', $args, 'show_collab' );
-
+        if( empty($collab_uploads) )
+        {
+            print(_('There are no visible uploads right now'));
+        }
+        else
+        {
+            $template = new CCTemplateMacro( 'collab.xml', 'show_collab_files' );
+            $args['uploads'] = $collab_uploads;
+            $args['is_owner'] = $is_owner;
+            $args['is_member'] = $is_member;
+            $template->SetAllAndPrint($args,'uploads');
+        }
+        exit;
     }
 
     function Upload( $collab_id='', $upload_id='', $cmd='' )
@@ -594,7 +635,8 @@ class CCCollab
         $this->_output($args);
     }
 
-    function _output($args) {
+    function _output($args) 
+    {
         require_once('cclib/zend/json-encoder.php');
         $text = CCZend_Json_Encoder::encode($args);
         header( "X-JSON: $text");
@@ -632,6 +674,135 @@ class CCCollab
         }
     }
 
+    function UploadFile($collab_id)
+    {
+        global $CC_GLOBALS;
+
+        $collabs = new CCCollabs();
+        $collabs->AddJoin( new CCUsers(), 'collab_user' );
+        $collab_row = $collabs->QueryKeyRow($collab_id);
+
+        CCUtil::Strip($_POST);
+
+        if( empty($collab_row) || empty($_POST['upname']) )
+            CCUtil::Send404();
+
+        $values['upload_name']        = $_POST['upname'];
+        $values['upload_published']   = 0;
+        $values['upload_description'] = sprintf( _('This is part of the %s collaboration project.'),
+                                             '[url=' . ccl('collab',$collab_id) . '"]' 
+                                              . $collab_row['collab_name'] . '[/url]' );
+
+        require_once('cclib/cc-mediahost.php');
+        $media_host = new CCMediaHost();
+        $new_path = $media_host->_get_upload_dir($CC_GLOBALS['user_name']);
+
+        $files = new CCCollabUploads();
+        $w['collab_upload_collab'] = $collab_id;
+        $collab_ids = $files->QueryItems('collab_upload_upload',$w);
+
+        $ccud = $_POST['uptype'];
+        $uploads = new CCuploads();
+        if( $ccud == 'remix' && !empty($collab_ids) )
+        {
+            $uploads->SetTagFilter('-remix','all');
+            $sources = $uploads->QueryKeyRows($collab_ids);
+            $uploads->SetTagFilter('');
+        }
+        else
+        {
+            $sources = array();
+        }
+
+        $values['upload_license'] = $_POST['lic'];
+        $values['upload_user'] = CCUser::CurrentUser();
+
+        require_once('cclib/cc-uploadapi.php');
+        $ret = CCUploadAPI::PostProcessNewUpload(   $values, 
+                                                    $_FILES['upfile']['tmp_name'],
+                                                    $values['upload_name'],
+                                                    array( $ccud, 'media'),
+                                                    '', // $user_tags,
+                                                    $new_path,
+                                                    $sources );
+
+        if( intval($ret) > 0 )
+        {
+            $this->_add_upload($collab_id,$ret);
+            $collab_ids[] = $ret;
+            $this->_sync_collab_sources($collab_ids);
+        }
+
+        $html =<<<EOF
+        <html>
+        <body>
+        <script>
+            if( window.parent.upload_done )
+                window.parent.upload_done('$ret');
+            else
+                alert('can not see it');
+        </script>
+        </body>
+        </html>
+EOF;
+        print($html);
+        exit;
+    }
+
+    function _sync_collab_sources($collab_ids)
+    {
+        // attach all collab samples and pells to remixes...
+
+        if( count($collab_ids) < 2 )
+            return; // there's only one (or none) uploads, nothing to attach
+
+        $uploads = new CCuploads();
+        $uploads->SetDefaultFilter(false); // allow hidden files;
+        $keys = join(',',$collab_ids);
+        $where = "upload_id IN ({$keys})";
+
+        $uploads->SetTagFilter('-remix','all');
+        $source_ids = $uploads->QueryKeys($where);
+        $uploads->SetTagFilter('remix','any');
+        $remix_ids = $uploads->QueryKeys($where);
+
+        $uploads->SetTagFilter('');
+        
+        if( count($source_ids) == 0 || count($remix_ids) == 0 )
+            return; // there are only sources (or remixes), nothing to attach
+
+        // check for existing remix sources, we want to preserve
+        // non-collab sources and add any new ones we found here...
+
+        require_once('cclib/cc-sync.php');
+        $remix_tree = new CCTable('cc_tbl_tree','tree_parent');
+        foreach( $remix_ids as $remix_id )
+        {
+            $w['tree_child'] = $remix_id;
+            $tree_source_ids = $remix_tree->QueryItems('tree_parent',$w);
+            $new_sources = array_diff( $source_ids, $tree_source_ids);
+            if( $new_sources )
+            {
+                $source_rows = $uploads->QueryKeyRows($new_sources);
+                $remixer = $uploads->QueryItemFromKey('upload_user',$remix_id);
+                $parents = array();
+                foreach( $source_rows as $source )
+                {
+                    if( $remixer == $source['upload_user'] )
+                        continue; // still can't remix yourself
+
+                    $parents[] = $source;
+                    $insert = array( 'tree_child' => $remix_id,
+                                     'tree_parent' => $source['upload_id'] );
+                    $remix_tree->Insert($insert);
+                }
+                if( !empty($parents) )
+                    CCSync::Remix($remix_id,$parents);
+            }
+        }
+
+    }
+
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
@@ -657,6 +828,12 @@ class CCCollab
         // remove, publish
         CCEvents::MapUrl( ccp('collab','upload'), array( 'CCCollab', 'Upload'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id},{cmd}'  );
+
+        CCEvents::MapUrl( ccp('collab','upload','update'), array( 'CCCollab', 'GetUploads'),  
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+
+        CCEvents::MapUrl( ccp('collab','upload','file'), array( 'CCCollab', 'UploadFile'),  
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
     }
 
     /**

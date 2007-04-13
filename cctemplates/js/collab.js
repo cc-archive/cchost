@@ -35,16 +35,31 @@ ccCollab.prototype = {
             var container = $('invite_container');
             container.innerHTML = this.autoComp.genControls( 'collab_user', '', 'invite other artists' );
             this.autoComp.hookUpEvents();
-            var me = this;
-            $$('.file_remove').each( function(a) {
-                var id = a.id.match(/[0-9]+$/);
-                Event.observe( a, 'click', me.onUploadRemove.bindAsEventListener(me,id) );
-            });
-            $$('.file_publish').each( function(a) {
-                var id = a.id.match(/[0-9]+$/);
-                Event.observe( a, 'click', me.onUploadPublish.bindAsEventListener(me,id) );
-            });
+            if( $('fileok') )
+                Event.observe( 'fileok', 'click', this.onFileSubmitOK.bindAsEventListener(this) );
         }
+    },
+
+    updateFiles: function(collab_id) {
+        var url = home_url + 'collab/upload/update/' + this.collab_id ;
+        new Ajax.Request( url, { method: 'get', onComplete: this._req_updatefiles.bind(this) } );
+    },
+
+    _req_updatefiles: function( resp ) {
+        $('file_list').innerHTML = resp.responseText;
+        var me = this;
+        $$('.file_remove').each( function(a) {
+            var id = a.id.match(/[0-9]+$/);
+            Event.observe( a, 'click', me.onUploadRemove.bindAsEventListener(me,id) );
+        });
+        $$('.file_publish').each( function(a) {
+            var id = a.id.match(/[0-9]+$/);
+            Event.observe( a, 'click', me.onUploadPublish.bindAsEventListener(me,id) );
+        });
+    },
+
+    onFileSubmitOK: function( e ) {
+        $('upform').submit();            
     },
 
     onUploadPublish: function( e, id ) {
