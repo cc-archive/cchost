@@ -626,6 +626,10 @@ class CCCollab
                     {
                         $users =& CCUsers::GetTable();
                         $user_email = $users->QueryItemFromKey('user_email',$user_id);
+                        $url = ccl('collab',$collab_id);
+                        $collabs = new CCCollabs();
+                        $collab_name = $collabs->QueryItemFromKey('collab_name',$collab_id);
+                        $text .= "\n\nProject: \"$collab_name\"\n$url\n";
                         $this->_mail_out( $collab_id, _('Private message'), $text, $user_email );
                         $args['msg'] = _('Message sent');
                     }
