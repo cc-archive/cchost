@@ -444,6 +444,12 @@ class CCCollab
         }
         else
         {
+            $me = CCUser::CurrentUser();
+            $n = count($collab_uploads);
+            for( $i = 0; $i < $n; $i++ )
+            {
+                $collab_uploads[$i]['is_collab_owner'] = $is_owner || ($collab_uploads[$i]['upload_user'] == $me);
+            }
             $template = new CCTemplateMacro( 'collab.xml', 'show_collab_files' );
             $args['uploads'] = $collab_uploads;
             $args['is_owner'] = $is_owner;
@@ -729,53 +735,63 @@ class CCCollab
 
         CCUtil::Strip($_POST);
 
-        if( empty($collab_row) || empty($_POST['upname']) )
-            CCUtil::Send404();
+        $ret = 0;
+        $msg = '';
+        $bad = empty($collab_row)  || empty($_FILES) || empty($_FILES['upfile']) || ($_FILES['upfile']['error'] != 0); 
 
-        $values['upload_name']        = $_POST['upname'];
-        $values['upload_published']   = 0;
-        $values['upload_description'] = sprintf( _('This is part of the %s collaboration project.'),
-                                             '[url=' . ccl('collab',$collab_id) . '"]' 
-                                              . $collab_row['collab_name'] . '[/url]' );
-
-        require_once('cclib/cc-mediahost.php');
-        $media_host = new CCMediaHost();
-        $new_path = $media_host->_get_upload_dir($CC_GLOBALS['user_name']);
-
-        $files = new CCCollabUploads();
-        $w['collab_upload_collab'] = $collab_id;
-        $collab_ids = $files->QueryItems('collab_upload_upload',$w);
-
-        $ccud = $_POST['uptype'];
-        $uploads = new CCuploads();
-        if( $ccud == 'remix' && !empty($collab_ids) )
+        if( !$bad )
         {
-            $uploads->SetTagFilter('-remix','all');
-            $sources = $uploads->QueryKeyRows($collab_ids);
-            $uploads->SetTagFilter('');
-        }
-        else
-        {
-            $sources = array();
-        }
 
-        $values['upload_license'] = $_POST['lic'];
-        $values['upload_user'] = CCUser::CurrentUser();
+            $fname = empty($_POST['upname']) ? $_FILES['upfile']['name'] : $_POST['upname'];
+            $values['upload_name']        = $fname;
+            $values['upload_published']   = 0;
+            $values['upload_description'] = sprintf( _('This is part of the %s collaboration project.'),
+                                                 '[url=' . ccl('collab',$collab_id) . '"]' 
+                                                  . $collab_row['collab_name'] . '[/url]' );
 
-        require_once('cclib/cc-uploadapi.php');
-        $ret = CCUploadAPI::PostProcessNewUpload(   $values, 
-                                                    $_FILES['upfile']['tmp_name'],
-                                                    $values['upload_name'],
-                                                    array( $ccud, 'media'),
-                                                    '', // $user_tags,
-                                                    $new_path,
-                                                    $sources );
+            require_once('cclib/cc-mediahost.php');
+            $media_host = new CCMediaHost();
+            $new_path = $media_host->_get_upload_dir($CC_GLOBALS['user_name']);
 
-        if( intval($ret) > 0 )
-        {
-            $this->_add_upload($collab_id,$ret);
-            $collab_ids[] = $ret;
-            $this->_sync_collab_sources($collab_ids);
+            $files = new CCCollabUploads();
+            $w['collab_upload_collab'] = $collab_id;
+            $collab_ids = $files->QueryItems('collab_upload_upload',$w);
+
+            $ccud = $_POST['uptype'];
+            $uploads = new CCuploads();
+            if( $ccud == 'remix' && !empty($collab_ids) )
+            {
+                $uploads->SetTagFilter('-remix','all');
+                $sources = $uploads->QueryKeyRows($collab_ids);
+                $uploads->SetTagFilter('');
+            }
+            else
+            {
+                $sources = array();
+            }
+
+            $values['upload_license'] = $_POST['lic'];
+            $values['upload_user'] = CCUser::CurrentUser();
+
+            require_once('cclib/cc-uploadapi.php');
+            $ret = CCUploadAPI::PostProcessNewUpload(   $values, 
+                                                        $_FILES['upfile']['tmp_name'],
+                                                        $values['upload_name'],
+                                                        array( $ccud, 'media'),
+                                                        '', // $user_tags,
+                                                        $new_path,
+                                                        $sources );
+
+            if( intval($ret) > 0 )
+            {
+                $this->_add_upload($collab_id,$ret);
+                $collab_ids[] = $ret;
+                $this->_sync_collab_sources($collab_ids);
+            }
+            else
+            {
+                $msg = $ret;
+            }
         }
 
         $html =<<<EOF
@@ -783,7 +799,7 @@ class CCCollab
         <body>
         <script>
             if( window.parent.upload_done )
-                window.parent.upload_done('$ret');
+                window.parent.upload_done('$ret','$msg');
             else
                 alert('can not see it');
         </script>

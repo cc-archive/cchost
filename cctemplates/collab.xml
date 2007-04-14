@@ -30,7 +30,7 @@
       <div class="file_list" id="file_list">
       </div>
       <tal:block condition="collab/is_member">
-        <iframe style="display:none" name="upload_frame"></iframe>
+        <iframe style="display:none;" name="upload_frame"></iframe>
         <form target="upload_frame" enctype="multipart/form-data" action="${home-url}collab/upload/file/${collab_id}" 
                 method="post" id="upform" name="upform">Upload file: <select name="uptype" id="uptype">
                <option value="remix">remix</option><option value="sample">sample</option><option value="acappella">a cappella</option></select>
@@ -78,10 +78,18 @@
      <tal:block repeat="user collab/users">
         cu.addUser( '${user/user_name}', '${user/user_real_name}', '${user/collab_user_role}', '${user/collab_user_credit}' );
      </tal:block>
-    function upload_done(upload_id)
+    function upload_done(upload_id,msg)
     {
       $('upcover').style.display = 'none';
-      cu.updateFiles('${collab_id}');
+      if( upload_id )
+      {
+        cu.updateFiles('${collab_id}');
+        cu.msg('Upload succeeded.','green');
+      }
+      else
+      {
+        cu.msg('Upload failed: ' . msg,'red');
+      }
     }
 
   </script>
@@ -93,11 +101,13 @@
         <div class="file_info"><a class="fname" href="${upload/file_page_url}">${upload/upload_name}</a> by
                <a href="${upload/artist_page_url}">${upload/user_real_name}</a></div>
 
-        <div tal:condition="is_owner" ><a href="javascript://remove " id="_remove_${upload/upload_id}"  class="file_cmd file_remove"><span>remove</span></a></div>
-        <div tal:condition="is_owner" ><a href="javascript://publish" id="_publish_${upload/upload_id}" class="file_cmd file_publish">
-            <span id="_pubtext_${upload/upload_id}"><tal:block condition="upload/upload_published">hide</tal:block>
-            <tal:block condition="not: upload/upload_published">publish</tal:block></span></a>
-        </div>
+        <tal:block condition="upload/is_collab_owner">
+          <div><a href="javascript://remove " id="_remove_${upload/upload_id}"  class="file_cmd file_remove"><span>remove</span></a></div>
+          <div><a href="javascript://publish" id="_publish_${upload/upload_id}" class="file_cmd file_publish">
+              <span id="_pubtext_${upload/upload_id}"><tal:block condition="upload/upload_published">hide</tal:block>
+              <tal:block condition="not: upload/upload_published">publish</tal:block></span></a>
+          </div>
+        </tal:block>
         <div class="tags"><tal:block repeat="tag upload/usertag_links">${tag/tag} </tal:block></div>
         <br />
         <table class="file_dl_table">
