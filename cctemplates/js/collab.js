@@ -59,6 +59,8 @@ ccCollab.prototype = {
     },
 
     onFileSubmitOK: function( e ) {
+        Position.clone( $('upform') , $('upcover'));
+        $('upcover').style.display = 'block';
         $('upform').submit();            
     },
 

@@ -39,6 +39,7 @@
           </select>
           <button id="fileok">ok</button>
         </form>
+        <div id="upcover" style="position:absolute;display:none;background-color:white;"><img style="margin-left:45%" src="${root-url}ccimages/spinner.gif" /></div>
       </tal:block>
     </fieldset>
 
@@ -79,6 +80,7 @@
      </tal:block>
     function upload_done(upload_id)
     {
+      $('upcover').style.display = 'none';
       cu.updateFiles('${collab_id}');
     }
 

@@ -256,7 +256,12 @@ class CCCollab
         {
             if( !empty($_POST['collab']) )
             {
-                $this->_add_upload($_POST['collab'],$upload_id);
+                $collab_id = $_POST['collab'];
+                $this->_add_upload($collab_id,$upload_id);
+                $files = new CCCollabUploads();
+                $w['collab_upload_collab'] = $collab_id;
+                $collab_ids = $files->QueryItems('collab_upload_upload',$w);
+                $this->_sync_collab_sources($collab_ids);
             }
         }
     }
@@ -268,7 +273,12 @@ class CCCollab
         $w['collab_upload_collab'] = $collab_id;
         $rows = $collab_uploads->QueryRows($w);
         if( empty($rows) )
+        {
             $collab_uploads->Insert($w);
+            $url = ccl( 'collab', $collab_id );
+            $text = _('A new file has been posted to your collaboration project') . "\n\n$url\n\n" . _('Thanks');
+            $this->_mail_out( $collab_id, _('New Upload'), $text); 
+        }
     }
 
     function Create()
@@ -610,13 +620,7 @@ class CCCollab
                     {
                         $users =& CCUsers::GetTable();
                         $user_email = $users->QueryItemFromKey('user_email',$user_id);
-                        require_once('ccextras/cc-mail.inc');
-                        $mailer = new CCMailer();
-                        $mailer->To($user_email);
-                        $mailer->From( $CC_GLOBALS['user_email'] );
-                        $mailer->Subject( _('Collaboration Message') );
-                        $mailer->Body( $text );
-                        $mailer->Send();
+                        $this->_mail_out( $collab_id, _('Private message'), $text, $user_email );
                         $args['msg'] = _('Message sent');
                     }
                     break;
@@ -633,6 +637,34 @@ class CCCollab
         }
 
         $this->_output($args);
+    }
+
+    function _mail_out( $collab_id, $sub_head, $body, $emails='')
+    {
+        global $CC_GLOBALS;
+
+        $from = $CC_GLOBALS['user_email'];
+        if( empty($emails) )
+        {
+            $collab_users = $this->_get_collab_users($collab_id);
+            $emails = array();
+            foreach( $collab_users as $CU )
+                $emails[] = $CU['user_email'];
+            $emails = array_diff( array_unique($emails), array( $from) );
+            if( empty($emails) )
+                return;
+            $emails = join( ',', $emails );
+        }
+
+        $collabs = new CCCollabs();
+        $collab_row = $collabs->QueryKeyRow($collab_id);
+        require_once('ccextras/cc-mail.inc');
+        $mailer = new CCMailer();
+        $mailer->To( $emails );
+        $mailer->From( $from );
+        $mailer->Subject( _('Project') . ' "' . $collab_row['collab_name'] .'" ' . $sub_head );
+        $mailer->Body( $body );
+        @$mailer->Send();
     }
 
     function _output($args) 
@@ -666,6 +698,10 @@ class CCCollab
             $values['topic_user'] = CCUser::CurrentUser();
             $values['topic_type'] = 'collab';
             $topics->Insert($values);
+
+            $url = ccl( 'collab', $collab_id );
+            $text = _('A new topic has been posted to your collaboration project') . "\n\n$url\n\n" . _('Thanks');
+            $this->_mail_out( $collab_id, _('Topic Post'), $text); 
 
             //CCEvents::Invoke( CC_EVENT_REVIEW, array( &$row ) );
 
