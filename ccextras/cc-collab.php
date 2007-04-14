@@ -653,18 +653,27 @@ class CCCollab
             $emails = array_diff( array_unique($emails), array( $from) );
             if( empty($emails) )
                 return;
-            $emails = join( ',', $emails );
+        }
+        else
+        {
+            if( !is_array($emails) )
+                $emails = array($emails);
         }
 
         $collabs = new CCCollabs();
         $collab_row = $collabs->QueryKeyRow($collab_id);
         require_once('ccextras/cc-mail.inc');
         $mailer = new CCMailer();
-        $mailer->To( $emails );
         $mailer->From( $from );
         $mailer->Subject( _('Project') . ' "' . $collab_row['collab_name'] .'" ' . $sub_head );
         $mailer->Body( $body );
-        @$mailer->Send();
+        foreach( $emails as $email )
+        {
+            $mailer->To( $email );
+            $ok = @$mailer->Send();
+            if( !$ok )
+                CCDebug::Log("Trying to send notify mail to '$email': '$ok'");
+        }
     }
 
     function _output($args) 
