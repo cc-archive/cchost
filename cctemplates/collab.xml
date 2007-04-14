@@ -60,7 +60,7 @@
   <script src="${root-url}cctemplates/js/collab.js" ></script>
   <script>
     var collab_template = '<div class="user_line" id="_user_line_#{user_name}">' +
-            '<div class="user" ><a href="#{home-url}people/#{user_name}">#{user_real_name}</a></div>' +
+            '<div class="user" ><a href="'+home_url+'people/#{user_name}">#{user_real_name}</a></div>' +
             '<div class="role">#{role}</div>' +
             '<div class="credit" id="_credit_#{user_name}">#{credit}</div>' +
   <tal:block condition="collab/is_owner">
