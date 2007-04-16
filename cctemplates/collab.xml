@@ -97,7 +97,7 @@
 
 <metal:block define-macro="show_collab_files">
     <tal:block repeat="upload uploads">
-      <div class="file_line" id="_file_line_${upload/upload_id}">
+      <div class="file_line ${upload/collab_type}_line" id="_file_line_${upload/upload_id}">
         <div class="file_info"><a class="fname" href="${upload/file_page_url}">${upload/upload_name}</a> by
                <a href="${upload/artist_page_url}">${upload/user_real_name}</a></div>
 
@@ -107,8 +107,10 @@
               <span id="_pubtext_${upload/upload_id}"><tal:block condition="upload/upload_published">hide</tal:block>
               <tal:block condition="not: upload/upload_published">publish</tal:block></span></a>
           </div>
+          <div><a href="javascript://tags" id="_tags_${upload/upload_id}" class="file_cmd file_tags">tags</a></div>
         </tal:block>
-        <div class="tags"><tal:block repeat="tag upload/usertag_links">${tag/tag} </tal:block></div>
+        <div class="ccud">${upload/collab_type}</div>
+        <div class="tags" id="_user_tags_${upload/upload_id}">${upload/upload_extra/usertags}</div>
         <br />
         <table class="file_dl_table">
             <tal:block repeat="file upload/files">

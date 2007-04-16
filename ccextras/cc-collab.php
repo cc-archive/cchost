@@ -29,7 +29,7 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCCollab',  'OnMapUrls')         , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCCollab', 'OnFormFields')      , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCCollab', 'OnUploadDone')      , 'ccextras/cc-collab.inc' );
-//CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCCollabFormAPI',  'OnFormFields')      , 'ccextras/cc-collab-forms.inc' );
+CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCCollab',  'OnUploadDelete')    , 'ccextras/cc-collab.inc' );
 
 /**
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCCollabsHV',  'OnBuildUploadMenu') );
@@ -38,7 +38,6 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCCollabsHV',  'OnUplo
 CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCCollabsHV',  'OnUserRow')      );
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCCollabsHV',  'OnUserProfileTabs')      );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCCollab' , 'OnGetConfigFields') , 'ccextras/cc-collab.inc' );
-CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCCollab',  'OnUploadDelete')    , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_TOPIC_ROW,          array( 'CCCollab' , 'OnTopicRow')        , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCCollab' , 'OnTopicDelete')     , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_DO_SEARCH,          array( 'CCCollabFormAPI',  'OnDoSearch')        , 'ccextras/cc-collab-forms.inc' );
@@ -192,6 +191,13 @@ class CCCollabTopicForm extends CCTopicForm
 */
 class CCCollab
 {
+
+    function OnUploadDelete($record)
+    {
+        $collab_uploads = new CCCollabUploads();
+        $w['collab_upload_upload'] = $record['upload_id'];
+        $collab_uploads->DeleteWhere($w);
+    }
 
     /**
     * Event handler for {@link CC_EVENT_FORM_FIELDS}
@@ -446,9 +452,13 @@ class CCCollab
         {
             $me = CCUser::CurrentUser();
             $n = count($collab_uploads);
+            $upkeys = array_keys($collab_uploads);
             for( $i = 0; $i < $n; $i++ )
             {
-                $collab_uploads[$i]['is_collab_owner'] = $is_owner || ($collab_uploads[$i]['upload_user'] == $me);
+                $R =& $collab_uploads[$upkeys[$i]];
+                $R['is_collab_owner'] = $is_owner || ($R['upload_user'] == $me);
+                $R['collab_type'] = preg_match( '/(^|,| )remix(,| $)/',$R['upload_extra']['ccud']) ? 'remix' : 'sample';
+                $R['collab_tags'] = $R['collab_type'] . ' ' . preg_replace( '/[, ]+/', ' ', $R['upload_extra']['usertags']);
             }
             $template = new CCTemplateMacro( 'collab.xml', 'show_collab_files' );
             $args['uploads'] = $collab_uploads;
@@ -729,6 +739,50 @@ class CCCollab
         }
     }
 
+    function UpdateTags($collab_id,$upload_id)
+    {
+        $bad = empty($upload_id) || empty($_GET['tags']); 
+
+        if( !$bad )
+        {
+            $tags = CCUtil::Strip($_GET['tags']);
+            $bad = empty($tags);
+            if( $bad )
+                $args['error'] = _('Missing arguments');
+        }
+
+        if( !$bad )
+        {
+            $uploads = new CCUploads();
+            $uploads->SetDefaultFilter(false); // allow unpublished collab files through
+            $record = $uploads->GetRecordFromID($upload_id);
+            $bad != empty($record);
+            if( $bad )
+                $args['error'] = _('Upload record not found');
+        }
+
+        if( !$bad )
+        {
+            require_once('cclib/cc-tags.php');
+            require_once('cclib/cc-tags.inc');
+            $old_user_tags = CCTag::TagSplit($record['upload_extra']['usertags']);
+            $old_tags = CCTag::TagSplit($record['upload_tags']);
+            $new_user_tags = CCTag::TagSplit($_GET['tags']);
+            $tags = new CCTags();
+            $new_user_tags = $tags->CheckAliases($tags->CleanSystemTags($new_user_tags));
+            $record['upload_extra']['usertags'] = $new_user_tags;
+            $up['upload_extra'] = serialize($record['upload_extra']);
+            $up['upload_tags'] = join( ', ', array_merge( array_diff( $old_tags, $old_user_tags ), CCTag::TagSplit($new_user_tags) ));
+            $up['upload_id'] = $upload_id;
+            $uploads->Update($up);
+            $args['msg'] = _('Tags updated');
+            $args['user_tags'] = $new_user_tags;
+            $args['upload_id'] = $upload_id;
+        }
+
+        $this->_output($args);
+    }
+
     function UploadFile($collab_id)
     {
         global $CC_GLOBALS;
@@ -895,10 +949,13 @@ EOF;
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id},{cmd}'  );
 
         CCEvents::MapUrl( ccp('collab','upload','update'), array( 'CCCollab', 'GetUploads'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}'  );
 
         CCEvents::MapUrl( ccp('collab','upload','file'), array( 'CCCollab', 'UploadFile'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}'  );
+
+        CCEvents::MapUrl( ccp('collab','upload','tags'), array( 'CCCollab', 'UpdateTags'),  
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}'  );
     }
 
     /**

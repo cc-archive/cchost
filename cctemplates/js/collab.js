@@ -56,6 +56,10 @@ ccCollab.prototype = {
             var id = a.id.match(/[0-9]+$/);
             Event.observe( a, 'click', me.onUploadPublish.bindAsEventListener(me,id) );
         });
+        $$('.file_tags').each( function(a) {
+            var id = a.id.match(/[0-9]+$/);
+            Event.observe( a, 'click', me.onUploadTags.bindAsEventListener(me,id) );
+        });
     },
 
     onFileSubmitOK: function( e ) {
@@ -103,8 +107,29 @@ ccCollab.prototype = {
         }
     },
 
+    onUploadTags: function(e, id) {
+        this.closeContact();
+        this.closeCredit();
+        if( this.uploadTags && (this.uploadTags != id) )
+            this.closeTags();
+        var file_line = $("_file_line_" + id);
+        this.uploadTags = id;
+        var tags = $('_user_tags_' + id ).innerHTML;
+        var html = '<div id="tags_editor" style="position:absolute;background:white;padding: 10px;">tags (e.g. bass, beat, keys): <input type="text" id="tags_edit" value="' + tags +
+                     '" /> <a href="javascript://ok tags" id="ok_tags">ok</a> ' +
+                     '<a href="javascript://ok edit" id="cancel_tags">cancel</a></div>';
+        new Insertion.Before(file_line,html);
+        Position.clone( file_line, $('tags_editor'), { setHeight: false } );
+        //file_line.style.display = 'none';
+        this.okTagsWatcher = this.onTagsOk.bindAsEventListener(this,id);
+        this.cancelTagsWatcher = this.onTagsCancel.bindAsEventListener(this,id);
+        Event.observe( 'ok_tags',     'click', this.okTagsWatcher );
+        Event.observe( 'cancel_tags', 'click', this.cancelTagsWatcher );
+    },
+
     onUserCredit: function(e, user_name) {
         this.closeContact();
+        this.closeTags();
         if( this.userCredit && (this.userCredit != user_name) )
             this.closeCredit();
         var user_line = $("_user_line_" + user_name);
@@ -123,7 +148,8 @@ ccCollab.prototype = {
     },
 
     onUserContact: function(e, user_name) {
-        this.closeContact();
+        this.closeTags();
+        this.closeCredit();
         if( this.userContact && (this.userContact != user_name) )
             this.closeContact();
         var user_line = $("_user_line_" + user_name);
@@ -138,6 +164,16 @@ ccCollab.prototype = {
         this.cancelContactWatcher = this.onContactCancel.bindAsEventListener(this,user_name);
         Event.observe( 'ok_contact',     'click', this.okContactWatcher );
         Event.observe( 'cancel_contact', 'click', this.cancelContactWatcher );
+    },
+
+    closeTags: function() {
+        if( this.uploadTags ) {
+            Event.stopObserving( 'ok_tags',     'click', this.okTagsWatcher );
+            Event.stopObserving( 'cancel_tags', 'click', this.cancelTagsWatcher );
+            $('tags_editor').remove();
+            $("_file_line_" + this.uploadTags).style.display = 'block';
+            this.uploadTags = null;
+        }
     },
 
     closeContact: function() {
@@ -159,6 +195,15 @@ ccCollab.prototype = {
             this.userCredit = null;
         }
     },
+
+    onTagsOk: function(e, id) {
+        this.msg( 'thinking...', 'working' );
+        var value = $('tags_edit').value;
+        var url = home_url + 'collab/upload/tags/' + this.collab_id + '/' + id + '?tags=' + value;
+        new Ajax.Request( url, { method: 'get', onComplete: this._req_tagsupload.bind(this) } );
+        this.closeTags();
+    },
+
 
     onCreditOk: function(e, user_name) {
         this.msg( 'thinking...', 'working' );
@@ -202,12 +247,29 @@ ccCollab.prototype = {
         }
     },
 
+    _req_tagsupload: function(resp,json) {
+        if( json.error )
+        {
+            this.msg( json.error, 'error' );
+        }
+        else
+        {
+            if( json.msg )
+                this.msg( json.msg, 'msg' );
+            $("_user_tags_" + json.upload_id).innerHTML = json.user_tags;
+        }
+    },
+
     onCreditCancel: function(e, user_name) {
         this.closeCredit();
     },
 
     onContactCancel: function(e, user_name) {
         this.closeContact();
+    },
+
+    onTagsCancel: function(e, user_name) {
+        this.closeTags();
     },
 
     onUserRemove: function( e, user_name ) {

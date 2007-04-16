@@ -78,6 +78,11 @@ a.fname {
 	margin-bottom: 11px;
 }
 
+.remix_line {
+	background-color: white;
+}
+
+
 .file_dl_table {
 	margin: 5px;
 	clear: left;
