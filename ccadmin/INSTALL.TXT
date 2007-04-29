@@ -34,7 +34,7 @@ New Install (Advanced)
 ----------------------
 
 If you have basic knowledge of using FTP and you are comfortable
-at a UNIX command line you can use these steps to intall: 
+at a Unix/Linux command line you can use these steps to install: 
 
     1. Unzip the ccHost ZIP, tar.gz, or tar.bz2 archive on your local system 
        and copy the files (retaining the directory structure) to your web 

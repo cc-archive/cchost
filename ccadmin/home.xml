@@ -38,7 +38,7 @@ $Id$
           <p>Here are some places to start :</p>
 
           <tal:block condition="is_admin">
-              <p>You are logged in as an adiminstrator</p>
+              <p>You are logged in as an administrator</p>
               <p>Use the 'Manage Site' menu option to customize this installation.</p>
           </tal:block>
 

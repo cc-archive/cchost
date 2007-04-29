@@ -268,7 +268,7 @@ class CCEditorials
         {
             $fields['editors'] =
                array( 'label'       => _('Editorial staff'),
-                       'form_tip'   => _('Comma separated list of login names for users with Editorial privelages'),
+                       'form_tip'   => _('Comma-separated list of login names for users with editorial privileges'),
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE );
         }

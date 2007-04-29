@@ -29,7 +29,7 @@ one database task.</p>
 <p> <? print $vmsg; ?></p></li>
 
 <li><b>mySQL</b>
-<p>Currently mySQL is the only database supported. ccHost 3.0 has been tested mySQL 4 and 5.</p></li>
+<p>Currently mySQL is the only database supported. ccHost 3.0 has been tested with mySQL 4 and 5.</p></li>
 
 <li><b>Create a Database</b>
 <p>Before you continue installing ccHost you need to create a database. If you are running at a hosted site

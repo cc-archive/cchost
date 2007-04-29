@@ -133,19 +133,19 @@ function step_4()
     <p>In addition it is highly recommended that you change 
     access permissions in order to secure the site from unauthorized usage. </p>
     
-    <p>For example from a UNIX command line you do both these operations with
+    <p>For example from a Unix/Linux command line you do both operations with
     these commands from the root of your cchost installation:</p>
     <pre>
     mv ccadmin ccadmin-$rnum
     chmod 700 ccadmin-$rnum
     </pre>
 
-    <p><b>For UNIX</b> In order to facilitate an easy installation, ccHost is initalially 
+    <p><b>For Unix/Linux</b> In order to facilitate an easy installation, ccHost is initially 
     configured with <b>$perms</b> as the default mask used when creating
     configuration, cache, media content and other files. You can change this in 'Global Settings' 
     once you've logged in as administrator.</p>
 
-    <p>Unix installations should further read <a href="http://wiki.creativecommons.org/CcHost_File_Access">ccHost File Access Policy and Troubleshooting</a>
+    <p>For Unix/Linux installations you should further read <a href="http://wiki.creativecommons.org/CcHost_File_Access">ccHost File Access Policy and Troubleshooting</a>
     <h2>Go forth...</h2>
 
     <p>If you've done those steps you can browse to <a href="$root_url">$root_url</a> and log in as "<b>$admin</b>"
@@ -167,7 +167,7 @@ function step_3a()
 
     $v['upload_max_filesize']['v'] = ini_get('upload_max_filesize');
     $v['upload_max_filesize']['s'] = '10M';
-    $v['upload_max_filesize']['m'] = 'Determines the overall maxium file upload size. (Typical MP3 song is encoded at 1M per minute.)';
+    $v['upload_max_filesize']['m'] = 'Determines the overall maximum file upload size. (Typical MP3 song is encoded at 1M per minute.)';
     preg_match('/([0-9]*)/',$v['upload_max_filesize']['v'],$m);
     $i = intval($m[1]);
     $v['upload_max_filesize']['i'] = $i;
@@ -175,7 +175,7 @@ function step_3a()
 
     $v['post_max_size']['v'] = ini_get('post_max_size');
     $v['post_max_size']['s'] = '10M';
-    $v['post_max_size']['m'] = 'Determines the maxium file upload size from an HTML form.';
+    $v['post_max_size']['m'] = 'Determines the maximum file upload size from an HTML form.';
     preg_match('/([0-9]*)/',$v['post_max_size']['v'],$m);
     $i = intval($m[1]);
     $v['post_max_size']['k'] = $i < 10 ? false : true;
