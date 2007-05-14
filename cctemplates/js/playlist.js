@@ -460,6 +460,10 @@ var ccPlaylistBrowserObject = {
 
     onPrevNext: function(e,href) {
         //var offs = href.match(/\?(.*)$/)[1];
+        this.openRec = '';
+        this.openingRec = false;
+        this.browsingAway = false;
+
         this._get_carts(href);
         Event.stop(e);
     },
