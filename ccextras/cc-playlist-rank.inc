@@ -72,8 +72,41 @@ function update_playlist_counts()
         $uploads->Update($row);
 }
 
+function calc_one_play($upload_id)
+{
+    global $CC_GLOBALS;
+    $fname = $CC_GLOBALS['logfile-dir'] . 'bump_count*.txt';
+    $files = glob($fname);
+    $count = 0;
+    print("<html><pre style='font-family:verdana;font-size:11px'>");
+    foreach( glob($fname) as $filename )
+    {
+        print("$filename--------------\n");
+        $lines = @file($filename);
+        $reg = "/($upload_id),.*,([0-9\.]+)$/";
+        $ips = array();
+        foreach( $lines as $line )
+            if( preg_match( $reg, $line, $m ) && !in_array( $m[2], $ips ) )
+            {
+                $ips[] = $m[2];
+                ++$count;
+                print($line);
+            }
+    }
+    print("\nCOUNT: $count</pre></html>");
+    exit;
+}
+
 function calc_plays()
 {
+    CCDebug::Enable(true);
+
+    if( !empty($_GET['track']) )
+    {
+        calc_one_play($_GET['track']);
+        return;
+    }
+
     global $CC_GLOBALS;
     $fname = $CC_GLOBALS['logfile-dir'] . 'bump_count.txt';
     if( !file_exists($fname) )
@@ -81,7 +114,7 @@ function calc_plays()
 
     $lines = @file($fname);
     $farchive = $CC_GLOBALS['logfile-dir'] . 'bump_count_' . date('YmdHis') . '.txt';
-    rename($fname,$farchive);
+    //rename($fname,$farchive);
 
     $song_of_the_day = empty($CC_GLOBALS['playlist_feat']) ? '' : '_ep_1_' . $CC_GLOBALS['playlist_feat'];
     $min_seconds = empty($CC_GLOBALS['playlist_minsec']) ? 60 : $CC_GLOBALS['playlist_minsec'];
@@ -147,13 +180,18 @@ function calc_plays()
     $counts = array(); // free up mem
 
     $sql = array();
+
+    // CCDebug::PrintVar($tracks,false);
     foreach( $tracks as $T )
         $sql[] = "UPDATE cc_tbl_uploads SET upload_num_plays = upload_num_plays + {$T[0]} WHERE upload_id = {$T[1]}";
+    $tracks = array();
     CCDatabase::Query($sql);
     $sql = array();
     foreach( $plists as $P )
         $sql[] = "UPDATE cc_tbl_cart SET cart_num_plays = cart_num_plays + ${P[0]} WHERE cart_id = {$P[1]}";
+    $plists = array();
     CCDatabase::Query($sql);
+
 
     if( !empty($CC_GLOBALS['playlist_rank']) )
     {
@@ -173,7 +211,7 @@ function calc_plays()
             require_once('cclib/cc-ratings-admin.inc');
             $api = new CCRatingsAdmin();
             $api->Recalc(false);
-            $ratesql = "+((upload_rank/5) * $wrate)";
+            $ratesql = "+(upload_rank * $wrate)";
         }
 
         update_playlist_counts();

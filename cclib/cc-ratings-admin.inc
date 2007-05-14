@@ -259,28 +259,31 @@ class CCRatingsAdmin
 
         $uploads =& CCUploads::GetTable();
         $where = 'upload_num_scores >= ' . $chart['bayesian-min'];
-        $rows = $uploads->QueryRows($where);
-        $count = count($rows);
+        $sql = "SELECT * FROM cc_tbl_uploads WHERE $where";
+        $qr = mysql_query($sql) or die( mysql_error() );
+        $count = mysql_num_rows($qr);
         for( $i = 0; $i < $count; $i++ )
         {
-            CCSync::_calc_rank($chart,$rows[$i]);
-            $args['upload_id'] = $rows[$i]['upload_id'];
-            $args['upload_rank'] = $rows[$i]['upload_rank'];
+            $row = mysql_fetch_assoc($qr);
+            CCSync::_calc_rank($chart,$row);
+            $args['upload_id'] = $row['upload_id'];
+            $args['upload_rank'] = $row['upload_rank'];
             $uploads->Update($args);
         }
         $upcount = $count;
-        $count   = 0;
 
         $args = array();
         $users =& CCUsers::GetTable();
         $where = 'user_num_scores > ' . $chart['bayesian-min'];
-        $rows = $users->QueryRows($where);
-        $count = count($rows);
+        $sql = "SELECT * FROM cc_tbl_user WHERE $where";
+        $qr = mysql_query($sql);
+        $count = mysql_num_rows($qr);
         for( $i = 0; $i < $count; $i++ )
         {
-            CCSync::_calc_rank($chart,$rows[$i],'user');
-            $args['user_id'] = $rows[$i]['user_id'];
-            $args['user_rank'] = $rows[$i]['user_rank'];
+            $row = mysql_fetch_assoc($qr);
+            CCSync::_calc_rank($chart,$row,'user');
+            $args['user_id'] = $row['user_id'];
+            $args['user_rank'] = $row['user_rank'];
             $users->Update($args);
         }
 
