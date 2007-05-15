@@ -470,7 +470,7 @@ var ccPlaylistBrowserObject = {
         this.openRec = '';
         this.openingRec = false;
         this.selected = null;
-        this.browsingAway = true;
+        this.browsingAway = false;
 
         this._get_carts(href);
         Event.stop(e);
