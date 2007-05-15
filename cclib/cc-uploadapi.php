@@ -122,7 +122,8 @@ class CCUploadAPI
         //
         $file_args = array();
         $file_args['file_extra'] = array();
-        $errs = CCUploadAPI::_do_verify_file_format($current_path,$file_args);
+        $errs = CCUploadAPI::_do_verify_file_size($current_path);
+	$errs .= CCUploadAPI::_do_verify_file_format($current_path,$file_args);
         if( $errs )
         {
             CCUploadAPI::_cleanup_upload_file($current_path,$is_temp);
@@ -473,6 +474,39 @@ class CCUploadAPI
         }
 
         CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $new_args['upload_id'], CC_UF_PROPERTIES_EDIT, array(&$old_record) ) );
+    }
+
+    function _do_verify_file_size($current_path)
+    {
+        global $CC_GLOBALS;
+        if( empty($CC_GLOBALS['enable_quota']) )
+            return( null );
+        $users = new CCUsers();
+        $record = $users->QueryKeyRow($CC_GLOBALS['user_id']);
+        $quota = empty($record['user_quota']) ? $CC_GLOBALS['default_quota'] : $record['user_quota'];
+        $size = filesize($current_path);
+        $upload_root = CCUser::GetPeopleDir();
+        $upload_root = realpath($upload_root) . '/' . $CC_GLOBALS['user_name'];
+
+        $total = $size;
+        if( is_dir($upload_root) )
+        {
+            $handle = opendir($upload_root);
+            while( $entry = readdir( $handle ) )
+            {
+                if ($entry == '.' || $entry == '..')
+                    continue;
+                $total += filesize($upload_root . '/' . $entry);
+            }
+        }
+
+        if( $total > ( $quota * 1024000 ) && $quota > 0 )
+        {
+            $msg = _("You have not enough space") . "<br />";
+            return ( $msg );
+        }
+
+        return( null );
     }
 
     function _do_verify_file_format($current_path,&$file_args)
