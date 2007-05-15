@@ -402,6 +402,8 @@ ccPagePlayer.prototype = Object.extend( {}, ccPlayerMethods );
 *
 *************************************************/
 
+var ccdbg = '';
+
 var ccPlaylistBrowserObject = {
 
     selected: null,
@@ -432,7 +434,8 @@ var ccPlaylistBrowserObject = {
             if( this.options.since )
                 url += '&since=' + this.options.since;
         }
-        new Ajax.Request( url, { method: 'get', onComplete: this._resp_browse.bind(this) } );
+        var me = this;
+        new Ajax.Request( url, { method: 'get', onComplete: me._resp_browse.bind(me) } );
     },
 
     /*
@@ -444,8 +447,12 @@ var ccPlaylistBrowserObject = {
         {
             $(this.container_id).innerHTML = resp.responseText;
 
-            Event.observe( this.container_id, 'mouseover', this.onListHover.bindAsEventListener(this) );
-            Event.observe( this.container_id, 'click',     this.onListClick.bindAsEventListener(this) );
+            if( !$(this.container_id)._cc_hooked ) 
+            {
+                Event.observe( this.container_id, 'mouseover', this.onListHover.bindAsEventListener(this) );
+                Event.observe( this.container_id, 'click',     this.onListClick.bindAsEventListener(this) );
+                $(this.container_id)._cc_hooked = true;
+            }
             var me = this;
             $$('#cc_prev_next_links a').each( function(a) {
                 Event.observe( a, 'click', me.onPrevNext.bindAsEventListener(me,a.href) );
@@ -462,7 +469,8 @@ var ccPlaylistBrowserObject = {
         //var offs = href.match(/\?(.*)$/)[1];
         this.openRec = '';
         this.openingRec = false;
-        this.browsingAway = false;
+        this.selected = null;
+        this.browsingAway = true;
 
         this._get_carts(href);
         Event.stop(e);
@@ -480,14 +488,15 @@ var ccPlaylistBrowserObject = {
         {
             var cart_id = $(id).id.replace('_pl_','');
             var detailId = '_pld_' + cart_id;
+
             this.openingRec = true;
 
             if( this.openRec.length > 0 )
             {
                 // close the 'current' playlist
-
                 $(this.openRec).style.display = 'none';
             }
+
             if( $(detailId) )
             {
                 var element = $(detailId);
@@ -495,7 +504,6 @@ var ccPlaylistBrowserObject = {
                 if( this.openRec == detailId )
                 {
                     // all we did was close the currently open one
-
                     this.openRec = '';
                 }
                 else
@@ -503,7 +511,6 @@ var ccPlaylistBrowserObject = {
                     // this is a request to open another playlist and
                     // we already have it cached and it's not changed
                     // so just open it...
-
                     element.style.display = 'block';
                     this.openRec = detailId;
                     // reset sel line because of painting probs
@@ -582,8 +589,6 @@ var ccPlaylistBrowserObject = {
             // hook the .mp3 links
             this.hook_playlist(cart_id,e);
             
-            var me = this;
-
             if( !this.playlistMenu )
                 this.playlistMenu = new ccPlaylistMenu( { autoHook: false, playlist: this } );
 

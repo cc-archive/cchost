@@ -277,7 +277,7 @@ class CCPlaylists
         $w['cart_item_cart'] = $playlist_id;
         $cart_items->DeleteWhere($w);
         $carts =& CCPlaylist::GetTable();
-        $carts->Inc('cart_num_items',$playlist_id);
+        $carts->Dec('cart_num_items',$playlist_id);
         $args['command'] = 'delete';
         $args['upload_id'] = $upload_id;
         $args['cart_id'] = $playlist_id;
@@ -502,7 +502,7 @@ class CCPlaylists
     {
         require_once('cclib/cc-page.php');
 
-        $where = 'cart_subtype <> "default"';
+        $where = '(cart_subtype <> "default") AND (cart_num_items > 0)';
 
         if( !empty($user) )
         {

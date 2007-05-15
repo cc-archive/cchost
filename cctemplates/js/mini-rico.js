@@ -17,9 +17,15 @@
 *
 */
 
+var ccdbg = '';
+
 function $D(msg) {
     if( $('debug') )
         $('debug').innerHTML = msg + '<br />' + $('debug').innerHTML;
+    else if( !msg )
+        ccdbg = '';
+    else
+        ccdbg += '\n' + msg;
 }
 
 ccDelayAndFade = Class.create();
