@@ -114,7 +114,7 @@ function calc_plays()
 
     $lines = @file($fname);
     $farchive = $CC_GLOBALS['logfile-dir'] . 'bump_count_' . date('YmdHis') . '.txt';
-    //rename($fname,$farchive);
+    rename($fname,$farchive);
 
     $song_of_the_day = empty($CC_GLOBALS['playlist_feat']) ? '' : '_ep_1_' . $CC_GLOBALS['playlist_feat'];
     $min_seconds = empty($CC_GLOBALS['playlist_minsec']) ? 60 : $CC_GLOBALS['playlist_minsec'];
