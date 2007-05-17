@@ -1,0 +1,97 @@
+﻿<tal:block>
+  <style>
+    h2 a {
+      margin-top: 25px;
+	  font-size: 22px;
+	  border-top: 1px solid #999;
+	  padding: 4px 3px 4px 20px;
+	  background-color: #DDF;
+    }
+    
+	h3 span {
+	  font-size: 11px;
+	  font-weight: normal;
+	}
+	.caveats li {
+		margin-bottom: 16px;
+	}
+	.intro {
+		padding: 18px;
+	}
+	.dldiv {
+        margin-bottom: 25px;
+    }
+	.dldiv p {
+	  margin: 8px;
+	  font-style: italic;
+	  padding-top: 12px;
+	}
+	.dldiv #cc_downloadbutton {
+		 display: block;
+		 margin: 5px;
+		 width: 220px;
+	}
+  table.looptable td {
+    vertical-align: top;
+  }
+  b.uname {
+    font-size: 14px;
+    color: brown;
+  }
+  </style>
+
+<h1>DJ Vadim / "Kill Kill Kill" "Talk to Me" Remix Contest Sources</h1>
+  <div style="width: 91px; height: 91px; margin: 17px; float: right;" ><img 
+  src="${root-url}mixter-files/djvadim/vadim_avatar.png" align="right" alt="[ DJ Vadim ]" /></div>
+<p>
+DJ Vadim is offering audio source files from the song "Kill Kill Kill" and "Talk to Me" online under a <a 
+href="http://creativecommons.org/licenses/by-nc/2.5">Creative Commons Attribution-NonCommercial</a> license, so that 
+producers worldwide can use the sounds in remixes and new compositions. The sources are available both as a selection of 
+looped or, if you want to cut your own samples, the original solo tracks from the entire recording session are available as well.
+</p>
+
+<p>
+	In order to use these files you need an 'unzip' utility (for Windows we suggest the fine and free <a href="http://www.7-zip.org/">7-zip</a>)
+  and the <a href="http://flac.sourceforge.net/download.html">FLAC decoder</a>.
+</p>
+<br style="clear:both" />
+<hr />
+<h2>Ready for Remixing</h2>
+<p>
+  You can download the a cappellas and pre-cut loops here. Right-click (Mac: control-click) on the buttons below
+  and select 'Save Target As..'.
+</p>
+<tal:block define="srcs php:cc_query_fmt('tags=djvadim,contest_sample')" />
+<table class="looptable">
+  <tal:block repeat="R srcs">
+  <tr>
+    <td><b class="uname">${R/upload_name}</b> </td>
+    <td>[<a href="${R/file_page_url}">details</a>]</td>
+    <td style="padding-left:40px">
+      <table>
+        <tal:block repeat="F R/files">
+          <tr><td><a id="cc_downloadbutton" href="${F/download_url}"><span>${F/file_nicname} ${F/file_filesize}</span></a></td></tr>
+        </tal:block>
+      </table>
+      <br />
+    </td>
+  </tr>
+  </tal:block>
+</table>
+
+<hr />
+<h2>Raw Studio Tracks</h2>
+
+<p>
+	If the pre-cut loops aren't doing it for you can cut your own samples out of the original studio tracks, including the 
+  a cappellas.
+</p>
+<p>
+		To download right click (control on Mac) on these buttons and select 'Save Target As...'
+</p>
+
+<div class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/djvadim/ccmixter.org_djvadim_talk_to_me.zip"><span>talk_to_me.zip (33.7 MB)</span></a> 
+        <p>(FLAC compressed WAV files in ZIP archive)</p></div>
+<div class="dldiv"><a id="cc_downloadbutton" href="http://ccmixtermedia.org/djvadim/ccmixter.org_djvadim_killkillkill.zip"><span>killkillkill.zip (33.1 MB)</span></a> <p>(FLAC compressed WAV files in ZIP archive)</p></div>
+		
+</tal:block>
