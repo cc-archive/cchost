@@ -55,7 +55,7 @@ class CCQuotaAdminForm extends CCGridForm
         $this->SetColumnHeader($heads);
 
         $users = new CCUsers();
-        $where = "user_quota <> $default";
+        $where = "user_quota > 0";
         $records =& $users->GetRecords($where);
         $count = 0;
         foreach( $records as $user  )
@@ -127,13 +127,6 @@ class CCQuotaAPI
             $b['default_quota'] = empty($_POST['default_quota']) ? '0' : $_POST['default_quota'];
             $configs->SaveConfig('config',$b,CC_GLOBAL_SCOPE,true);
 
-            /*
-            $users =& CCUsers::GetTable();
-            $fields['user_quota'] = $b['default_quota'];
-            $where = "1";
-            $users->UpdateWhere($fields,$where);
-            */
-
             if( !empty($_POST['S']) )
                 $this->UpdateQuota($_POST['S']);
             if( !empty($_POST['new']) )
@@ -149,15 +142,21 @@ class CCQuotaAPI
         CCUtil::StripSlash($arr);
         foreach( $arr as $fields )
         {
+            $users =& CCUsers::GetTable();
+            $where['user_name'] = $fields['name'];
+            $user_id = $users->QueryKey($where);
+            $quota['user_id'] = $user_id;
+        
             if( empty($fields['delete']) )
             {
-                $users =& CCUsers::GetTable();
-                $where['user_name'] = $fields['name'];
-                $user_id = $users->QueryKey($where);
-                $quota['user_id'] = $user_id;
                 $quota['user_quota'] = $fields['quota'];
-                $users->Update($quota);
             }
+            else
+            {
+                $quota['user_quota'] = 0; 
+            }
+
+            $users->Update($quota);   
         }
     }
 
