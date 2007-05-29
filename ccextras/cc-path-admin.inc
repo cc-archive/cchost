@@ -132,6 +132,8 @@ class CCPathAdminForm extends CCEditConfigForm
 
     function generator_sysdir($fname,$value='',$class='')
     {
+        if( !empty($value) && strlen($value) > 80 )
+            return $this->generator_textarea($fname,$value,$class);
         return $this->generator_textedit($fname,$value,$class);
     }
 
