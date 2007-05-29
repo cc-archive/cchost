@@ -193,3 +193,23 @@ a.fname {
 #upform, #upform select, #upform option, #upform input, #upform button {
 	font-size: 11px;
 }
+
+#collabs_table td {
+	padding: 3px 14px 3px 10px;
+}
+
+#collabs_table th {
+	background-color: #666;
+	padding: 2px;
+	color: white;
+}
+
+.collab_name {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+a.collab_upload {
+	color: brown;
+	font-weight: bold;
+}
