@@ -424,11 +424,13 @@ class CCUtil
     function _inner_search($target,$path,$real_path)
     {
         $paths = split(';',$path);
+
         if( $target{0} == '/' )
             $target = substr($target,1);
 
         foreach( $paths as $P )
         {
+            $P = trim($P);
             $dir = CCUtil::CheckTrailingSlash($P,true);
             $relpath = $dir . $target;
             if( file_exists($relpath) )

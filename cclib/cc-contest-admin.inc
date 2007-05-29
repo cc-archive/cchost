@@ -310,6 +310,22 @@ class CCContestAdmin
         return $args['contests'];
     }
 
+    function PublishSources($contest_short_name)
+    {
+        $uploads = new CCUploads();
+        $uploads->SetDefaultFilter(false,false);
+        $tags = $contest_short_name . ',-contest_entry';
+        $uploads->SetTagFilter( $tags, 'all' );
+        $keys = $uploads->QueryKeys();
+        foreach( $keys as $key )
+        {
+            $w['upload_id'] = $key;
+            $w['upload_published'] = 1;
+            $uploads->Update($w);
+        }
+        $url = ccl('tags', $tags );
+        CCUtil::SendBrowserTo($url);
+    }
 
     /**
     * Handler for contest/create
@@ -324,6 +340,7 @@ class CCContestAdmin
         $navtabs_url    = ccc($contest_short_name, 'admin', 'tabs' );
         $settings_url   = ccc($contest_short_name, 'admin', 'settings' );
         $tags_url       = ccc($contest_short_name, 'admin', 'templatetags' );
+        $publish_url    = ccc($contest_short_name, 'contest', 'publish_sources',$contest_short_name );
 
         $html =<<<EOF
 <style>
@@ -367,12 +384,15 @@ EOF;
 ::Add that login name as an administrator %shere%s 
 ::Log out, and then register the user.
 ::Log in as that user and come back to this screen.
-::Submit Sources as that user so users will see the sources as coming from them.'),
+::Submit Sources as that user so users will see the sources as coming from them.
+::Make Sources Public
+::By defualt, contest sources are un-published. Publish the contest sources (make them visible) %shere%s'),
 
                     "<a href=\"$navtabs_url\">", '</a>',
                     "<a href=\"$tags_url\">",'</a>',
                     "<a href=\"$editsubmitform_url\">", '</a>', 
-                    "<a href=\"$settings_url\">", '</a>');
+                    "<a href=\"$settings_url\">", '</a>',
+                    "<a href=\"$publish_url\">", '</a>');
 
         $_s = split('::',$_strs);
 
@@ -393,7 +413,8 @@ EOF;
                 <li>  {$_s[16]}  </li>  
             </ol>
             </td></tr>
-</table>;
+<tr><th>{$_s[17]}</th><td>{$_s[18]}</td></tr>
+</table>
 EOF;
 
         CCPage::PageArg('body_html',$html,'show_body_html');

@@ -90,6 +90,17 @@ class CCContest
 
 
     /**
+    * Handler for contest/publicize_sources
+    */
+    function PublishSources($contest_short_name)
+    {
+        require_once('cclib/cc-contest-admin.inc');
+        $admin_api = new CCContestAdmin();
+        $admin_api->PublishSources($contest_short_name);
+    }
+
+
+    /**
     * Handles contest/[name]/edit and POST results from form
     *
     * @param string $contest_short_name Short (internal) name of contest
@@ -371,6 +382,10 @@ END;
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{contestname}', _('Display contest entry form'), CC_AG_CONTESTS );
         CCEvents::MapUrl( 'contest/submitsource',  array( 'CCContest', 'SubmitSource'),  
             CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display contest source upload form'), CC_AG_CONTESTS );
+
+        CCEvents::MapUrl( 'contest/publish_sources',  array( 'CCContest', 'PublishSources'),  
+            CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Publish contest sources'), CC_AG_CONTESTS );
+
         CCEvents::MapUrl( 'contest/create',        array( 'CCContest', 'CreateContest'), 
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display new contest form'), CC_AG_CONTESTS );
         CCEvents::MapUrl( 'contest/edit',          array( 'CCContest', 'EditContest'),   
