@@ -339,8 +339,52 @@ class CCCollab
         return $collab_row;
     }
 
+    function ViewAll()
+    {
+        $collabs = new CCCollabs();
+        $collabs->SetOrder( 'collab_date','DESC');
+        CCPage::AddPagingLinks($collabs,'');
+        $rows = $collabs->QueryRows('');
+
+        // users
+        $users = new CCCollabUsers();
+        $users->AddJoin( new CCUsers(), 'collab_user_user' );
+
+        // uploads (remixes)
+        $uploads = new CCUploads();
+        $uploads->AddJoin( new CCCollabUploads(), 'upload_id' );
+        $uploads->SetTagFilter('remix');
+        $uploads->SetOffsetandLimit(0,1);
+
+        $c = count($rows);
+        $keys = array_keys($rows);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $rows[$keys[$i]];
+            $w1['collab_user_collab'] = $R['collab_id'];
+            $R['users'] = $users->QueryRows($w1);
+
+            $w2['collab_upload_collab'] = $R['collab_id'];
+            $R['uploads'] = $uploads->GetRecords($w2);
+        }
+
+        $args = array(
+                'collab_rows'  => $rows,
+                );
+        CCPage::PageArg( 'show_collabs', 'collab.xml/show_collabs' );
+        CCPage::PageArg( 'collabs', $args, 'show_collabs' );
+        CCPage::SetTitle( _('Collaborations') );
+    }
+
     function View($collab_id='')
     {
+        $collab_id = CCUtil::Strip($collab_id);
+        if( empty($collab_id) )
+        {
+            $this->ViewAll();
+            return;
+        }
+
         $collab_row = $this->_collab_row($collab_id);
 
         CCPage::SetTitle(sprintf( _('Collaboration Project: "%s"'), $collab_row['collab_name'] ));
