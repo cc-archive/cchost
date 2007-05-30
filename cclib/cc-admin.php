@@ -813,6 +813,21 @@ END;
         if( $form->ValidateFields() )
         {
             $form->SaveToConfig();
+
+            $form->GetFormValues($values);
+
+            if( empty($values['virtual_delete']) )
+            {
+                $files =& CCFiles::GetTable();
+                $where['file_virtual_delete'] = 1;
+                $files->DeleteWhere($where);
+
+                $uploads =& CCUploads::GetTable();
+                $where = array();
+                $where['upload_virtual_delete'] = 1;
+                $uploads->DeleteWhere($where);
+            }
+
             CCPage::Prompt(_("Changes Saved"));
         }
         else
