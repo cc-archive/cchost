@@ -66,14 +66,15 @@ href="http://soundblog.spaces.live.com/?_c11_blogpart_blogpart=blogview&_c=blogp
        <tr><td id="fs_side" />
            <td id="fs_content">
 
-        <h2>DJ Vadim Remix Contest</h2>
+        <h2>(&copy;urve)&trade; Remix Contest</h2>
 
-        <a href="${root-url}djvadim" class="logolink" style="margin:2px;"><img 
-           src="${root-url}mixter-files/djvadim/vadim_avatar.png" border="0" /></a>
+        <a href="${root-url}curve" class="logolink" style="margin:2px;"><img 
+           src="${root-url}mixter-files/curve/curve_logo.png" border="0" style="border: 1px solid black;" /></a>
 
         <p>
-          <a href="http://www.creativecommons.org">Creative Commons</a>, <a href="http://bbemusic.com">BBE Music</a> and <a href="http://www.djvadim.com/">DJ Vadim</a> are pleased to present the DJ Vadim / "Kill Kill Kill" "Talk to Me" Remix Contest.  The superstar DJ is offering the audio source files from the songs "Kill Kill Kill" and "Talk to Me" online under a Creative Commons <a href="http://creativecommons.org/licenses/by-nc/3.0">Attribution-NonCommercial</a> license, so that producers worldwide can use the sounds in remixes and new compositions.</p>
-            <p><a href="${root-url}djvadim">More information about the DJ Vadim contest</a>...</p>
+          <a href="http://www.creativecommons.org">Creative Commons</a> and <a href="http://curvemusic.net">(&copy;urve)&trade;</a> are pleased to present a remix contest featuring Tamy and Zone.  The audio source files from several songs are now online under 
+          a Creative Commons <a href="http://creativecommons.org/licenses/by-nc/3.0">Attribution-NonCommercial</a> license, so that producers worldwide can use the sounds in remixes and new compositions.</p>
+            <p><a href="${root-url}curve">More information about the contest</a>...</p>
 
             </td>
           <td id="fs_side" />
@@ -91,7 +92,7 @@ href="http://soundblog.spaces.live.com/?_c11_blogpart_blogpart=blogview&_c=blogp
        <tr><td id="fs_side" />
            <td id="fs_content">
 
-            <div class="img_holder"><a href="${root-url}freesound"><img 
+            <div class="img_holder" ><a href="${root-url}freesound" ><img 
                   src="${root-url}mixter-files/freesound-logo.gif" border="0" /></a></div>
 
             <p>ccMixter has teamed up with the <a href="${root-url}freesound">freesound project</a> 
@@ -121,6 +122,7 @@ href="http://soundblog.spaces.live.com/?_c11_blogpart_blogpart=blogview&_c=blogp
 
         <h2>Previous contests...</h2>
 
+        <a href="/djvadim">DJ Vadim</a><br />
         <a href="/vieux">Vieux Farka Toure</a><br />
         <a href="/ghostly">Christopher Willits</a><br />
         <a href="/fortminor">Fort Minor</a><br />
