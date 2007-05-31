@@ -44,8 +44,6 @@ class CCUploadAPI
 
     function DeleteUpload($upload_id)
     {
-        global $CC_GLOBALS;
-
         require_once('cclib/cc-sync.php');
         require_once('cclib/cc-remix-tree.php');
         require_once('cclib/cc-tags.inc');
@@ -73,31 +71,12 @@ class CCUploadAPI
             $path = realpath($relative_dir . '/' . $file['file_name']);
             if( file_exists($path) )
                 @unlink($path);
-            if( empty($CC_GLOBALS['virtual_delete']) )
-            {
-                $where['file_id'] = $file['file_id'];
-                $files->DeleteWhere($where);
-            }
-            else
-            {
-                $uargs['file_virtual_delete'] = 1;
-                $uargs['file_id'] = $file['file_id'];
-                $files->Update($uargs);
-            }
+            $where['file_id'] = $file['file_id'];
+            $files->DeleteWhere($where);
         }
-        if( empty($CC_GLOBALS['virtual_delete']) )
-        {
-            $where = array();
-            $where['upload_id'] = $upload_id;
-            $uploads->DeleteWhere($where);
-        }
-        else
-        {
-            $uargs =array();
-            $uargs['upload_virtual_delete'] = 1;
-            $uargs['upload_id'] = $upload_id;
-            $uploads->Update($uargs);
-        }
+        $where = array();
+        $where['upload_id'] = $upload_id;
+        $uploads->DeleteWhere($where);
 
         $tags =& CCTags::GetTable();
         $tags->TagDelete($record['upload_tags']);
@@ -299,8 +278,6 @@ class CCUploadAPI
 
     function PostProcessFileDelete( $file_id, &$upload_id )
     {
-        global $CC_GLOBALS;
-
         CCEvents::Invoke( CC_EVENT_DELETE_FILE, array( $file_id ) );
 
         $files =& CCFiles::GetTable();
@@ -313,17 +290,8 @@ class CCUploadAPI
         if( file_exists($path) )
             @unlink($path);
 
-        if( empty($CC_GLOBALS['virtual_delete']) )
-        {
-            $where['file_id'] = $file_id;
-            $files->DeleteWhere($where);
-        }
-        else
-        {
-            $uargs['file_virtual_delete'] = 1;
-            $uargs['file_id'] = $file_id;
-            $files->Update($uargs);
-        }
+        $where['file_id'] = $file_id;
+        $files->DeleteWhere($where);
 
         CCUploadAPI::_recalc_upload_tags($upload_id);
     }

@@ -74,22 +74,10 @@ class CCUploads extends CCTable
     */
     function SetDefaultFilter($set,$anon_user=false)
     {
-        global $CC_GLOBALS;
-
         $this->_filter = '';
 
         if( !$set )
             return '';
-
-        if( !empty($CC_GLOBALS['virtual_delete']) )
-        {
-            $this->_filter .= "upload_virtual_delete = 0";
-
-            if( !CCUser::IsAdmin() )
-            {
-                $this->_filter .= " AND";
-            }
-        }
 
         // if the current user is admin, don't put 
         // any filters on the listings
