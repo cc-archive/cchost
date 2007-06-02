@@ -23,6 +23,9 @@
 # have all the authority.
 #
 
+DEFAULT_CHMOD=775
+DEFAULT_LOCAL_DIR=cchost_files
+
 echo "What username do you want the files to have? [DEFAULT = `whoami`]"
 read USERNAME
 echo "What is your webserver's group? [DEFAULT = apache]"
@@ -39,11 +42,17 @@ then :
 fi
 
 # Make sure that you are in the group apache
-chown ${USERNAME}:${WWWGROUP} ../*
-chmod 775 ./
-chown -Rf ${USERNAME}:${WWWGROUP} cclib/phptal/phptal_cache
-chmod 775 cclib/phptal/phptal_cache
-chmod 775 cctemplates
+chown ${USERNAME}:${WWWGROUP} ./
+chmod $DEFAULT_CHMOD ./
+chown -R ${USERNAME}:${WWWGROUP} cclib/phptal/phptal_cache
+chmod $DEFAULT_CHMOD cclib/phptal/phptal_cache
+chmod $DEFAULT_CHMOD cctemplates
 chown ${USERNAME}:${WWWGROUP} cctemplates
-chmod 775 locale
-chown -Rf ${USERNAME}:${WWWGROUP} locale
+chmod $DEFAULT_CHMOD locale
+chown -R ${USERNAME}:${WWWGROUP} locale
+
+if [ -e "$DEFAULT_LOCAL_DIR" ];
+then :
+    chown -R ${USERNAME}:${WWWGROUP} $DEFAULT_LOCAL_DIR
+    chmod -R $DEFAULT_CHMOD $DEFAULT_LOCAL_DIR
+fi

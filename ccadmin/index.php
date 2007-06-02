@@ -26,6 +26,17 @@ if( empty($_SERVER['REQUEST_URI']) )
     $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
 }
 
+if( file_exists('../cc-config-db.php') )
+{
+    /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
+    die('<html><body>ccHost has detected \'../cc-config.db.php\' exists. 
+         Please move this file out of the way before proceeding with 
+         visiting your current URL/path for successful installation.
+         </body></html>');
+}
+
+
+
 define('IN_CC_HOST', true);
 define('IN_CC_INSTALL', true);
 
