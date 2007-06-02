@@ -278,7 +278,7 @@ class CCConfigs extends CCTable
         else
         {
             $where['config_scope'] = $rootname;
-            $rows = $this->QueryRows($where);
+            $rows = $this->QueryRows($where, 'config_scope');
             if( empty($rows) || ($rows[0]['config_scope'] != $rootname) ) // check for case
             {
                 CCUtil::Send404(true);
