@@ -40,15 +40,19 @@
   }
   </style>
 
-<h1 id='ccttite'>Creative Commons Salman Magnatune Remix Contest Sources</h1>
+<H2  >
+  CREATIVE COMMONS &amp; MAGNATUNE PRESENT:
+</H2>
 
-<div style="width: 130px; height: 130px; margin: 17px; float: right;" >
-  <img src="${root-url}mixter-files/curve/curve_logo.png" align="right" alt="[ DJ Vadim ]" />
+<h1 id='ccttite'>Salman Ahman "Natchoongi" Remix Contest</h1>
+
+<div style="margin: 17px; float: left;" >
+  <img src="${root-url}mixter-files/salman/salman-small.jpg" align="left" alt="[ Salman ]" />
 </div>
 
 <p>
 
-The audio source files for several tracks from Zone's 'MADRUGADA' and Tamy's 'Sou Mais Bossa' albums are
+The audio source files Salman's <i>Natchoongi</i> are
 available here under a <a 
 href="http://creativecommons.org/licenses/by-nc/2.5">Creative Commons Attribution-NonCommercial</a> license, so that 
 producers worldwide can use the sounds in remixes and new compositions. The sources are available both as a selection of 
@@ -66,7 +70,7 @@ looped or, if you want to cut your own samples, some of the original solo tracks
   You can download the a cappellas and pre-cut loops here. Right-click (Mac: control-click) on the buttons below
   and select 'Save Target As..'.
 </p>
-<tal:block define="srcs php:cc_query_fmt('tags=curve,contest_sample')" />
+<tal:block define="srcs php:cc_query_fmt('tags=salman,contest_sample')" />
 <table class="looptable">
   <tal:block repeat="R srcs">
   <tr>
@@ -107,18 +111,33 @@ looped or, if you want to cut your own samples, some of the original solo tracks
 		To download right click (control on Mac) on these buttons and select 'Save Target As...'
 </p>
 
-<div class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/curve/ccmixter.org_curvemusic_instr.zip"><span>guitar/percussion (29.4 MB) </span> </a> 
-        <p>(FLAC compressed WAV files in ZIP archive)</p></div>
-<div class="dldiv"><a id="cc_downloadbutton" href="http://ccmixtermedia.org/curve/ccmixter.org_curvemusic_vocals.zip"><span>vocals (41 MB) </span> </a> <p>(FLAC compressed WAV files in ZIP archive)</p></div>
+<div class="dldiv" style="display:none" >
+  <a id="cc_downloadbutton" href="http://ccmixtermedia.org/salman/Salman_ccmixter_VOCALS-snippets.zip">
+    <span>Vocal Snippets (6.9 MB) </span> 
+  </a> 
+  <p>(FLAC compressed WAV files in ZIP archive)</p>
+</div>
+
+<div class="dldiv">
+  <a id="cc_downloadbutton" href="http://ccmixtermedia.org/salman/Salman_ccmixter_VOCALS.zip">
+    <span>Main Vocals (60.7 MB) </span> 
+  </a> 
+  <p>(FLAC compressed WAV files in ZIP archive)</p>
+</div>
+
+<div class="dldiv">
+  <a id="cc_downloadbutton" href="http://ccmixtermedia.org/salman/salman_ccmixter_guitars.zip">
+    <span>Guitars (50.5 MB) </span> 
+  </a> 
+  <p>(FLAC compressed WAV files in ZIP archive)</p>
+</div>
+
+<div class="dldiv">
+  <a id="cc_downloadbutton" href="http://ccmixtermedia.org/salman/salman_ccmixter_perc.zip">
+    <span>Percussion (34.5 MB) </span> 
+  </a> 
+  <p>(FLAC compressed WAV files in ZIP archive)</p>
+</div>
+
 		
-<script>
-function settitle()
-{
-   var sbuck = $('ccttite');
-  sbuck.innerHTML = 'Creative Commons (&copy;urve)music&trade; Remix Contest Sources';
-}
-
-setTimeout( settitle, '1' );
-</script>
-
 </tal:block>
