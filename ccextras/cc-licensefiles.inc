@@ -44,6 +44,8 @@ class CCLicensefiles
         $file_name = $files->QueryItemFromKey('file_name',$id);
         $file_dir = $people_dir . '/' . $name . '/' . $file_name;
 
+        $file_format_info = unserialize( $files->QueryItem('file_format_info','file_id = ' . $id) );
+
         $licenses =& CCLicenses::GetTable();
         $license = $licenses->QueryKeyRow($row['upload_license']);
 
@@ -52,42 +54,41 @@ class CCLicensefiles
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
-   <Work rdf:about="http://www.openclipart.org/incoming/2004/04/contents/barcode_ean13.svg">
+   <Work rdf:about="">
       <dc:title>'.$row['upload_name'].'</dc:title>
-      <dc:date>'.substr($row['upload_date'],0,4).'</dc:date>
       <dc:description>'.$row['upload_description'].'</dc:description>
-      <dc:creator><Agent>
-          <dc:title>'.$row['user_real_name'].'</dc:title>
-      </Agent></dc:creator>
-      <dc:rights><Agent>
-          <dc:title>'.$row['user_real_name'].'</dc:title>
-      </Agent></dc:rights>
+      <dc:subject>'.$row['upload_tags'].'</dc:subject>
+      <dc:creator><Agent><dc:title>'.$row['user_real_name'].'</dc:title></Agent></dc:creator>
+      <dc:rights><Agent><dc:title>'.$row['user_real_name'].'</dc:title></Agent></dc:rights>
+      <dc:date>'.substr($row['upload_date'],0,10).'</dc:date>
+      <dc:format>'.$file_format_info['mime_type'].'</dc:format>
+      <dc:type></dc:type>
       <license rdf:resource="'.$license['license_url'].'" />
    </Work>
-       <Work rdf:about="urn:sha1:'.CCLicense::_hex_to_base32( sha1_file( $file_dir ) ).'">
-          <license rdf:resource="'.$license['license_url'].'" />
-       </Work>
    <License rdf:about="'.$license['license_url'].'">';
 
     $permits = explode(',',$license['license_permits']);
 
     foreach( $permits as $pt )
     {
-        $rdf .= "\n" . '      <permits rdf:resource="http://web.resource.org/cc/'.$pt.'" />';
+        if( !$pt )
+            $rdf .= "\n" . '      <permits rdf:resource="http://web.resource.org/cc/'.$pt.'" />';
     }
 
     $required = explode(',',$license['license_required']);
 
     foreach( $required as $rd )
     {
-        $rdf .= "\n" . '      <permits rdf:resource="http://web.resource.org/cc/'.$rd.'" />';
+        if( !$rd )
+            $rdf .= "\n" . '      <permits rdf:resource="http://web.resource.org/cc/'.$rd.'" />';
     }
 
     $prohibits = explode(',',$license['license_prohibits']);
 
     foreach( $prohibits as $ph )
     {
-        $rdf .= "\n" . '      <prohibits rdf:resource="http://web.resource.org/cc/'.$ph.'" />';
+        if( !$rdf )
+            $rdf .= "\n" . '      <prohibits rdf:resource="http://web.resource.org/cc/'.$ph.'" />';
     }
 
    $rdf .= "\n" . '   </License>
