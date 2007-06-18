@@ -37,17 +37,19 @@ p.peep {
     <div id="mainbox">
       <img src="${root-url}mixter-files/ccdj.gif" alt="" border="0" height="100" />
 
-<table>
-  <tr>
-  <td style="padding:4px;color: #999; font-size: 40px; font-family: 'Times New Roman',serif; font-weight: bold; text-align: left;" valign="top" width="20">&ldquo;</td>
+      <table>
+        <tr>
+        <td style="padding:4px;color: #999; font-size: 40px; font-family: 'Times New Roman',serif; font-weight: bold; text-align: left;" valign="top" width="20">&ldquo;</td>
 
-  <td style="text-align:justify;">Make no mistake, ccMixter is the complete package. No other remix site commands the same level of respect amongst musicians, producers and content creators.
-  </td>
-  <td style="padding:4px;color: #999; font-size: 40px; font-family: 'Times New Roman',serif; font-weight: bold; text-align: right;" valign="top" width="20">&rdquo;</td>
-  </tr>
-</table>
-<p style="text-align:right;font-style:italic;margin:0px 4px 35px 0px;"><a style="font-weight:normal"
-href="http://soundblog.spaces.live.com/?_c11_blogpart_blogpart=blogview&_c=blogpart&partqs=amonth%3d2%26ayear%3d2007">Dave's Imaginary Sound Spaces</a></p>
+        <td style="text-align:justify;">Make no mistake, ccMixter is the complete package. No other remix site commands the same level of respect amongst musicians, producers and content creators.
+        </td>
+        <td style="padding:4px;color: #999; font-size: 40px; font-family: 'Times New Roman',serif; font-weight: bold; text-align: right;" valign="top" width="20">&rdquo;</td>
+        </tr>
+      </table>
+
+
+      <p style="text-align:right;font-style:italic;margin:0px 4px 35px 0px;"><a style="font-weight:normal"
+      href="http://soundblog.spaces.live.com/?_c11_blogpart_blogpart=blogview&_c=blogpart&partqs=amonth%3d2%26ayear%3d2007">Dave's Imaginary Sound Spaces</a></p>
 
 
       <p class="peep">This is a community music site featuring remixes licensed under <a href="http://creativecommons.org/">Creative Commons</a>, where you can listen to, sample, mash-up, or interact with music in whatever way you want.</p>
@@ -56,8 +58,9 @@ href="http://soundblog.spaces.live.com/?_c11_blogpart_blogpart=blogview&_c=blogp
 
       <p class="peep"><b>Podcasters, directors and music lovers</b> &nbsp;&nbsp;&nbsp;If you're into music, browse this site to hear some of the <a href="${root-url}media/view/media/picks">great remixes</a> people have built from sampling music on this site, all licensed for use under Creative Commons license.</p>
 
-    </div>
+    </div> <!-- mainbox -->
   </td>
+
   <td >
 
     <div id="fs_container">
@@ -66,46 +69,66 @@ href="http://soundblog.spaces.live.com/?_c11_blogpart_blogpart=blogview&_c=blogp
        <tr><td id="fs_side" />
            <td id="fs_content">
 
-        <h2>(&copy;urve)&trade; Remix Contest</h2>
 
-        <a href="${root-url}curve" class="logolink" style="margin:2px;"><img 
-           src="${root-url}mixter-files/curve/curve_logo.png" border="0" style="border: 1px solid black;" /></a>
+<H2  >
+  CREATIVE COMMONS &amp; MAGNATUNE PRESENT:
+</H2>
 
+        <h2>Salman Ahmad Remix Contest</h2>
+
+
+        <a href="${root-url}salman" class="logolink" style="margin:2px;float:left;"><img 
+           src="${root-url}mixter-files/salman/salman-small.jpg" border="0" style="border: 1px solid black;" /></a>
         <p>
-          <a href="http://www.creativecommons.org">Creative Commons</a> and <a href="http://curvemusic.net">(&copy;urve)&trade;</a> are pleased to present a remix contest featuring Tamy and Zone.  The audio source files from several songs are now online under 
+          <a href="http://www.creativecommons.org">Creative Commons</a>, International superstar Salman Ahmad and <a href="http://magnatune.com">Magantune</a> are pleased to present a remix contest where the winners 
+          will be signed to a record deal with Magnatune (the "We Are Not Evil") label.  The audio source files 
+          for the contest are now online under 
           a Creative Commons <a href="http://creativecommons.org/licenses/by-nc/3.0">Attribution-NonCommercial</a> license, so that producers worldwide can use the sounds in remixes and new compositions.</p>
-            <p><a href="${root-url}curve">More information about the contest</a>...</p>
+            <p><a href="${root-url}salman">More information about the contest</a>...</p>
 
             </td>
           <td id="fs_side" />
         </tr>
        <tr><td id="fs_bot_left" /><td id="fs_bot">&nbsp;</td><td id="fs_bot_right" /></tr>
     </table>
-    </div><!-- fs_container willits -->
+    </div><!-- fs_container contest-->
   </td>
 </tr>
+
 <tr>
   <td>
-    <div id="fs_container" style="display:none" >
+    <div id="fs_container" >
      <table id="fs_table" cellspacing="0" cellpadding="0" >
        <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
        <tr><td id="fs_side" />
            <td id="fs_content">
 
-            <div class="img_holder" ><a href="${root-url}freesound" ><img 
-                  src="${root-url}mixter-files/freesound-logo.gif" border="0" /></a></div>
+              <div style="display:none">
+                  <div class="img_holder" ><a href="${root-url}freesound" ><img 
+                        src="${root-url}mixter-files/freesound-logo.gif" border="0" /></a></div>
 
-            <p>ccMixter has teamed up with the <a href="${root-url}freesound">freesound project</a> 
-             to share information about freesound's <b>20,000 samples</b> and track remixes
-             across the two sites. It's all part of the Creative Commons Sample Pool and 
-             therefore available to all remixers, safe, legal and sane.</p>
+                  <p>ccMixter has teamed up with the <a href="${root-url}freesound">freesound project</a> 
+                   to share information about freesound's <b>20,000 samples</b> and track remixes
+                   across the two sites. It's all part of the Creative Commons Sample Pool and 
+                   therefore available to all remixers, safe, legal and sane.</p>
 
-            <p>Check out our freesound support, <i>new sample packs</i> and 
-            the new <i>samples browser</i> that makes it easy to find all the
-            CC licensed samples by the Beastie Boys, Fort Minor, Chuck D., My Morning Jacket,
-            Theivery Corp., DJ Dolores and Cibelle and hundreds more...</p>
+                  <p>Check out our freesound support, <i>new sample packs</i> and 
+                  the new <i>samples browser</i> that makes it easy to find all the
+                  CC licensed samples by the Beastie Boys, Fort Minor, Chuck D., My Morning Jacket,
+                  Theivery Corp., DJ Dolores and Cibelle and hundreds more...</p>
 
-            <h3><a href="${root-url}media/view/media/samples">All about samples at ccMixter</a>...</h3>
+                  <h3><a href="${root-url}media/view/media/samples">All about samples at ccMixter</a>...</h3>
+              </div> <!-- hidden -->
+
+              <h2>(&copy;urve)&trade; Remix Contest</h2>
+
+              <a href="${root-url}curve" class="logolink" style="margin:2px;"><img 
+              src="${root-url}mixter-files/curve/curve_logo.png" border="0" style="border: 1px solid black;" /></a>
+
+              <p>
+              <a href="http://www.creativecommons.org">Creative Commons</a> and <a href="http://curvemusic.net">(&copy;urve)&trade;</a> are pleased to present a remix contest featuring Tamy and Zone.  The audio source files from several songs are now online under 
+              a Creative Commons <a href="http://creativecommons.org/licenses/by-nc/3.0">Attribution-NonCommercial</a> license, so that producers worldwide can use the sounds in remixes and new compositions.</p>
+              <p><a href="${root-url}curve">More information about the contest</a>...</p>
 
             </td>
           <td id="fs_side" />
