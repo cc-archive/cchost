@@ -449,6 +449,11 @@ class CCPseudoVerifyAPI
             }
             else
             {
+                if( !empty($tags['zip']) )
+                {
+                    $this->_walk_zip_files(null,$tags['zip']['files'],"",$zipdir);
+                    $FF['zipdir'] = $zipdir;
+                }
                 $retval = true;
             }
         }
@@ -480,6 +485,8 @@ class CCPseudoVerifyAPI
             $FI['default-ext'] = $FF['default-ext'];
             $FI['media-type'] = $FF['media-type'];
             $FI['mime_type'] = '';
+            if( !empty($FF['zipdir']) )
+                $FI['zipdir'] = $FF['zipdir'];
             $formatinfo->SetData( $FI );
             $formatinfo->_errors = '';
         }
@@ -487,6 +494,28 @@ class CCPseudoVerifyAPI
         return $retval;
     }
 
+    /**
+    * Internal: Build an array with a listing of files contained in the zip file
+    *
+    * @access private
+    */
+    function _walk_zip_files($k,$v,$curdir,&$R)
+    {
+        if( is_array($v) )
+        {
+            foreach( $v as $k2 => $v2 )
+                $this->_walk_zip_files($k2,$v2,"$curdir$k/",$R);
+        }
+        else
+        {
+            if( $v > CC_1MG )
+                $v = number_format($v/CC_1MG,2) . "MB";
+            elseif ( $v > 1000 )
+                $v = number_format($v/1024,2) . "KB";
+
+            $R['files'][] = "$curdir$k  ($v)";
+        }
+    }
 
 }
 ?>
