@@ -654,6 +654,8 @@ EOF;
             $upload_dir = CCContestHV::_get_upload_dir($contest_short_name);
             $form->FinalizeAvatarUpload('contest_bitmap', $upload_dir);
             $form->GetFormValues($fields);
+            if( empty($fields['contest_vote_online']) ) // make sure this is a numeric value
+                $fields['contest_vote_online'] = 0;
             $contests =& CCContests::GetTable();
             $contests->Update($fields);
             CCPage::Prompt(_('Changes Saved'));
