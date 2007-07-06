@@ -97,45 +97,6 @@ p.peep {
 
 <tr>
   <td>
-    <div id="fs_container" >
-     <table id="fs_table" cellspacing="0" cellpadding="0" >
-       <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
-       <tr><td id="fs_side" />
-           <td id="fs_content">
-
-              <div style="display:none">
-                  <div class="img_holder" ><a href="${root-url}freesound" ><img 
-                        src="${root-url}mixter-files/freesound-logo.gif" border="0" /></a></div>
-
-                  <p>ccMixter has teamed up with the <a href="${root-url}freesound">freesound project</a> 
-                   to share information about freesound's <b>20,000 samples</b> and track remixes
-                   across the two sites. It's all part of the Creative Commons Sample Pool and 
-                   therefore available to all remixers, safe, legal and sane.</p>
-
-                  <p>Check out our freesound support, <i>new sample packs</i> and 
-                  the new <i>samples browser</i> that makes it easy to find all the
-                  CC licensed samples by the Beastie Boys, Fort Minor, Chuck D., My Morning Jacket,
-                  Theivery Corp., DJ Dolores and Cibelle and hundreds more...</p>
-
-                  <h3><a href="${root-url}media/view/media/samples">All about samples at ccMixter</a>...</h3>
-              </div> <!-- hidden -->
-
-              <h2>(&copy;urve)&trade; Remix Contest</h2>
-
-              <a href="${root-url}curve" class="logolink" style="margin:2px;"><img 
-              src="${root-url}mixter-files/curve/curve_logo.png" border="0" style="border: 1px solid black;" /></a>
-
-              <p>
-              <a href="http://www.creativecommons.org">Creative Commons</a> and <a href="http://curvemusic.net">(&copy;urve)&trade;</a> are pleased to present a remix contest featuring Tamy and Zone.  The audio source files from several songs are now online under 
-              a Creative Commons <a href="http://creativecommons.org/licenses/by-nc/3.0">Attribution-NonCommercial</a> license, so that producers worldwide can use the sounds in remixes and new compositions.</p>
-              <p><a href="${root-url}curve">More information about the contest</a>...</p>
-
-            </td>
-          <td id="fs_side" />
-        </tr>
-       <tr><td id="fs_bot_left" /><td id="fs_bot">&nbsp;</td><td id="fs_bot_right" /></tr>
-    </table>
-    </div><!-- fs_container -->
 
     <div id="fs_container">
      <table id="fs_table" cellspacing="0" cellpadding="0" >
@@ -147,6 +108,7 @@ p.peep {
 
         <a href="/djvadim">DJ Vadim</a><br />
         <a href="/vieux">Vieux Farka Toure</a><br />
+        <a href="/curve">(&copy;urve)&trade; </a><br />
         <a href="/ghostly">Christopher Willits</a><br />
         <a href="/fortminor">Fort Minor</a><br />
         <a href="/crammed">Crammed Discs</a> Cibelle, DJ Dolores, Apollo Nove<br />
