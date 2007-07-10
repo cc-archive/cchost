@@ -1,0 +1,83 @@
+
+<div style="font-family: Verdana; font-size:11px">
+
+<link rel="stylesheet" type="text/css" href="${root-url}mixter-files/home.css" title="Default Style"/>   
+
+<h1>BBE Music and ccMixter</h1>
+
+<div style="width: 70%; margin-left: 10%;">
+    <div id="fs_container">
+     <table id="fs_table" cellspacing="0" cellpadding="0" >
+       <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
+       <tr><td id="fs_side" />
+           <td id="fs_content">
+
+<div style="float: right; margin: 8px;" ><a href="http://bbemusic.com/"><img src="${root-url}mixter-files/djvadim/bbe-logo.jpg" /></a></div>
+<p>We are proud to welcome <a href="http://bbemusic.com/">BBE Music</a> and the <a href="http://www.one-self.net/">One Self</a> collective
+collaboration to the Creative Commons 
+Sample Pool. To get things rolling, BBE is releasing the studio tracks, including the a cappellas from DJ Vadim's
+"<a href="http://www.bbemusic.com/djvadim/">Soundcatcher</a>" album under a Creative Commons 
+<a href="http://creativecommons.org/licenses/by-nc/3.0/">Attribution-NonCommercial 3.0</a> license.
+(BBE Music is not officially affiliated with Creative Commons or ccMixter,
+we just think they define cool and want to use their samples.)
+</p>
+            </td>
+          <td id="fs_side" />
+        </tr>
+       <tr><td id="fs_bot_left" /><td id="fs_bot">&nbsp;</td><td id="fs_bot_right" /></tr>
+    </table>
+    </div>
+
+<div style="
+            background: url('/mixter-files/djvadim/sc_cover_faded.jpg') repeat-y  top right; 
+            padding: 20px 110px 20px 0px;
+">
+
+<h3 style="text-align: left">Remixers</h3>
+
+<p style="font-size:13px">
+    Download the samples on this page, create new remixes, create an account
+    here at ccMixter (if you don't have one already) and upload your remix here.
+    BBE will be collecting the best remixes and playing on them on the BBE
+    radio shows in London and Spain, encourporating them into videos and other
+    One Self projects.
+</p>
+
+<div id="sources">
+</div>
+
+<p>
+  NOTE: we have <a href="http://ccmixter.org/media/thread/611">strict policies about copyright material</a>. No wink-wink. Violators
+  will be banned from the site.
+</p>
+
+</div>
+
+<script>
+
+function showBBESources( resp )
+{
+    $$('sources').innerHTML = resp.responseText;
+}
+
+function getSources()
+{
+    try
+    {
+      var url = root_url + 'mixter-lib/mixter-bbe.php?bbe_format=1';
+      var myAjax = new Ajax.Request( url, { onComplete: showBBESources, method: 'get'} );
+      $$('sources').innerHTML = 'getting bbe xsources';
+    }
+    catch (e)
+    {
+      $$('sources').innerHTML = 'error';
+    }
+}
+
+
+getSources();
+
+</script>
+
+</div>
+</div>
