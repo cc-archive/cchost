@@ -38,13 +38,19 @@ EOF;
 
 if( !empty($_REQUEST['bbe_post']) )
 {
- error_reporting(E_ALL); 
-   $text = $_POST['bbe_1'];
-    $f = fopen('../mixter-files/bbe_1.txt','w'); fwrite($f,$text); fclose($f);
-    $text = $_POST['bbe_2'];
-    $f = fopen('../mixter-files/bbe_2.txt','w'); fwrite($f,$text); fclose($f);
+    error_reporting(E_ALL); 
+    bbe_write(1);
+    bbe_write(2);
     header("Location: /bbe");
     exit;
 }
 
+function bbe_write($num)
+{
+    $name = 'bbe_' . $num;
+    $text = $_POST[$name];
+    if( get_magic_quotes_gpc() == 1 )
+        $text = trim(stripslashes( $text ));
+    $f = fopen("../mixter-files/$name.txt",'w'); fwrite($f,$text); fclose($f);
+ }
 ?>
