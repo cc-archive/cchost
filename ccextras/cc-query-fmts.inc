@@ -213,7 +213,7 @@ class CCQueryFormats
                                 $fields[] = $R[$key];
                         }
                     }
-                    $text .= join( ',', $fields );
+                    $text .= join( ',', $fields ) . "\n";
                 }
                 $results = array( $text, 'plain/text' );
                 break;
