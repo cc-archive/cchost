@@ -502,22 +502,26 @@ class CCPlaylists
     {
         require_once('cclib/cc-page.php');
 
-        $where = '(cart_subtype <> "default") AND (cart_num_items > 0)';
+        $where = '1 '; 
 
-        if( !empty($user) )
+        $carts = new CCPlaylist(true);
+
+        if( empty($user) )
+        {
+            $where .= 'AND (cart_subtype <> "default") AND (cart_num_items > 0)';
+        }
+        else
         {
             $where .= ' AND cart_user = ' . CCUser::IDFromName($user);
         }
-
-        if( !empty($_GET['since']) )
-            $where .= " AND cart_date >= '{$_GET['since']}'";
-
-        $carts = new CCPlaylist(true);
 
         if( empty($_GET['hot']) )
             $carts->SetOrder('cart_date','desc');
         else
             $carts->SetOrder('cart_num_plays','desc');
+
+        if( !empty($_GET['since']) )
+            $where .= " AND cart_date >= '{$_GET['since']}'";
 
         if( empty($_GET['upload_id']) )
         {
@@ -540,7 +544,6 @@ class CCPlaylists
             $args = array();
         }
         
-
         $args['records'] = $carts->QueryRows($where);
 
         $this->_output($args,'',true);
@@ -626,6 +629,7 @@ class CCPlaylists
         $new_row['cart_desc']    = $desc;
         $new_row['cart_date']    = date('Y-m-d H:i:s');
         $new_row['cart_dynamic'] = $query;
+        $new_row['cart_tags']    = '';
         $carts->Insert($new_row);
         return $new_row;
     }
