@@ -47,7 +47,7 @@ class CCDownloadHV
                 $menu[$weight]['action'] = ccl( 'download', $record['user_name'], $file['file_id'] );
                 if(!empty($CC_GLOBALS['counter']))
                 {
-                    $menu[$weight]['menu_text'] .= " count: " . $file['file_num_download'];
+                    $menu[$weight]['menu_text'] .= " " . _('downloads') . ": " . $file['file_num_download'];
                 }
             }
         }
