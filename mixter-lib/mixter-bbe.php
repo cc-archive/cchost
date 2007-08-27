@@ -16,6 +16,7 @@ if( !empty($_GET['bbe_edit']) )
 {
     $f1 = @file_get_contents('mixter-files/bbe_1.txt');
     $f2 = @file_get_contents('mixter-files/bbe_2.txt');
+    $f3 = @file_get_contents('mixter-files/bbe_3.txt');
     $html =<<<EOF
     <style>
         textarea {
@@ -29,6 +30,7 @@ if( !empty($_GET['bbe_edit']) )
     <form action="/mixter-lib/mixter-bbe.php?bbe_post=1" method="post">
     <textarea name="bbe_1">$f1</textarea><br />
     <textarea name="bbe_2">$f2</textarea><br />
+    <textarea name="bbe_3">$f3</textarea><br />
     <input type="submit" value="submit changes" />
     </form>
 EOF;
@@ -41,6 +43,7 @@ if( !empty($_REQUEST['bbe_post']) )
     error_reporting(E_ALL); 
     bbe_write(1);
     bbe_write(2);
+    bbe_write(3);
     header("Location: /bbe");
     exit;
 }
