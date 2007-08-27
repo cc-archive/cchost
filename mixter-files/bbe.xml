@@ -44,7 +44,7 @@ ${bbetext}
 <tal:block define="bbetext php:file_get_contents('mixter-files/bbe_2.txt');" />
 ${bbetext}
 </p>
-<tal:block define="bbemsg string:(Hold on... we are getting the links to the BBE sources... If this takes a while it's because the servers are busy and you should try again later.)" />
+<tal:block define="bbemsg php:file_get_contents('mixter-files/bbe_3.txt');" />
 <div id="sources">
 <span class="bbemsg" >${bbemsg}</span>
 </div>
