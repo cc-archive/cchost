@@ -1,5 +1,10 @@
 
 <div style="font-family: Verdana; font-size:11px">
+<style>
+.bbemsg {
+  color: #944;
+}
+</style>
 
 <link rel="stylesheet" type="text/css" href="${root-url}mixter-files/home.css" title="Default Style"/>   
 
@@ -39,8 +44,9 @@ ${bbetext}
 <tal:block define="bbetext php:file_get_contents('mixter-files/bbe_2.txt');" />
 ${bbetext}
 </p>
-
+<tal:block define="bbemsg string:(Hold on... we are getting the links to the BBE sources... If this takes a while it's because the servers are busy and you should try again later.)" />
 <div id="sources">
+<span class="bbemsg" >${bbemsg}</span>
 </div>
 
 <p>
@@ -63,7 +69,7 @@ function getSources()
     {
       var url = root_url + 'mixter-lib/mixter-bbe.php?bbe_format=1';
       var myAjax = new Ajax.Request( url, { onComplete: showBBESources, method: 'get'} );
-      $$('sources').innerHTML = 'getting bbe xsources';
+      $$('sources').innerHTML = '<span class="bbemsg" >${bbemsg}</span>';
     }
     catch (e)
     {
