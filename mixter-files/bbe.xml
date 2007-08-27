@@ -12,7 +12,11 @@
        <tr><td id="fs_side" />
            <td id="fs_content">
 
-<div style="float: right; margin: 8px;" ><a href="http://bbemusic.com/"><img src="${root-url}mixter-files/djvadim/bbe-logo.jpg" /></a></div>
+<div style="float: right; margin: 8px;" >
+<a href="http://bbemusic.com/"><img src="${root-url}mixter-files/djvadim/bbe-logo.jpg" /></a>
+<br />
+<a href="http://creativecommons.org"><img src="${root-url}mixter-files/cc-logo.png" /></a>
+</div>
 <p>
 <tal:block define="bbetext php:file_get_contents('mixter-files/bbe_1.txt');" />
 ${bbetext}
