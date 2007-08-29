@@ -2143,7 +2143,9 @@ class CCUploadForm extends CCForm
             {
                 CCUtil::MakeSubdirs($imagedir);
 
-                $realpath = realpath( $imagedir) . '/' . $filesobj['name'];
+                $clean_name = preg_replace('/[^a-z0-9\._-]/','_',$filesobj['name']);
+
+                $realpath = realpath( $imagedir) . '/' . $clean_name ;
 
                 if( file_exists($realpath) )
                     unlink($realpath);
