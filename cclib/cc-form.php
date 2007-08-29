@@ -2145,8 +2145,15 @@ class CCUploadForm extends CCForm
 
                 $clean_name = preg_replace('/[^a-z0-9\._-]/','_',$filesobj['name']);
 
+                if( $clean_name != $filesobj['name'] )
+                {
+                    $filesobj['name'] = $clean_name;
+                    $this->SetFormValue($fieldname,$filesobj);
+                }
+
                 $realpath = realpath( $imagedir) . '/' . $clean_name ;
 
+                
                 if( file_exists($realpath) )
                     unlink($realpath);
 
