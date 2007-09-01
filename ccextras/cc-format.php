@@ -64,6 +64,8 @@ function generator_cc_format($form, $fieldname, $value, $class )
         <div class="cc_format_preview" id="format_inner_preview_' . $fieldname . '"></div>
             </div>';
 
+    $thumbs_up_tiny = ccr('ccimages/thumbs_up_tiny.png');
+
     $html .=<<<END
         <div class="cc_ed_buttons">
     <input type="button" onclick="cc_apply_format('$fieldname','b');" value="b" style="font-weight: bold;" />
@@ -75,6 +77,7 @@ function generator_cc_format($form, $fieldname, $value, $class )
     <input type="button" onclick="cc_apply_format('$fieldname','blue');" value="B" style="color:blue" />
     <input type="button" onclick="cc_apply_format('$fieldname','big');" value="+" style="" />
     <input type="button" onclick="cc_apply_format('$fieldname','small');" value="-" style="" />
+    <button onclick="cc_apply_format('$fieldname','up'); return false;" style="" ><img src="$thumbs_up_tiny" /></button>
     <input type="button" onclick="cc_format_preview('$fieldname')" id="preview_$fieldname" value="preview" style="font-size:smaller;" />
     </div>
         $textarea
@@ -85,12 +88,14 @@ END;
 
 function _cc_format_unformat($text)
 {
-    $attrs = '(b|i|u|red|green|blue|big|small|url|quote)';
+    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up)';
     return preg_replace("#\[/?$attrs(=[^\]]+)?\]#U",'',$text);
 }
 
 function _cc_format_format($text)
 {
+    $thumbs_up = ccr('ccimages/thumbs_up.png');
+
     $quote = _('Quote:');
     require_once('cclib/smartypants/smartypants.php');
     $attrs = '(b|i|u|red|green|blue|big|small)';
@@ -99,6 +104,8 @@ function _cc_format_format($text)
     $text = preg_replace( "#\[/$attrs\]#", '</span>', $text );
     $text = preg_replace( "/\[quote=?([^\]]+)?\]/", '<span class="quote"><span>'. $quote . ' $1</span>', $text );
     $text = preg_replace( "#\[/quote\]#", '</span>', $text );
+    $text = preg_replace( "/\[up]/", "<img class=\"cc_thumbs_up\" src=\"$thumbs_up\" />", $text );
+    $text = preg_replace( "#\[/up\]#", '', $text );
     $text = SmartyPants($text);
     $urls = array( '@(?:^|[^">=\]])(http://[^\s$]+)@m',
                    '@\[url\]([^\[]+)\[/url\]@' ,
