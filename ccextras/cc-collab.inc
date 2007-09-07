@@ -831,7 +831,7 @@ class CCCollab
             $values['upload_name']        = $fname;
             $values['upload_published']   = 0;
             $values['upload_description'] = sprintf( _('This is part of the %s collaboration project.'),
-                                                 '[url=' . ccl('collab',$collab_id) . '"]' 
+                                                 '[url=' . ccl('collab',$collab_id) . ']' 
                                                   . $collab_row['collab_name'] . '[/url]' );
 
             require_once('cclib/cc-mediahost.php');
@@ -869,6 +869,7 @@ class CCCollab
 
             if( intval($ret) > 0 )
             {
+                $uploads->SetExtraField( $ret, 'collab', $collab_id );
                 $this->_add_upload($collab_id,$ret);
                 $collab_ids[] = $ret;
                 $this->_sync_collab_sources($collab_ids);
