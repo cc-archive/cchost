@@ -81,29 +81,35 @@
       </div>
     </td></tr></table>
   <div class="cc_pl_div" id="_cart_${R/cart_id}">
-    <div class="trr" tal:repeat="item args/records">
-      <div class="tdc cc_playlist_item"   id="_pli_${item/upload_id}" >
-        <tal:block define="iun php:CC_strchop(${item/upload_name},30,true);" />
-        <span> <a class="cc_playlist_pagelink" id="_plk_${item/upload_id}" target="_parent" 
-            href="${item/file_page_url}">${iun}</a> </span> by 
-        <tal:block define="iurn php:CC_strchop(${item/user_real_name},30,true);" />
-        <a target="_parent" href="${item/artist_page_url}">${iurn}</a> 
-      </div>
-      <div class="tdc"><a class="cc_playlist_i" id="_plinfo_${item/upload_id}"> </a></div>
-      <div tal:condition="args/is_logged_in" id="playlist_menu_${item/upload_id}" class="cc_playlist_action tdc">
-              <a  class="cc_playlist_button" 
-                  href="javascript://playlist_menu_${item/upload_id}"><span>Add To...</span></a>
-      </div>
-      <div tal:condition="item/fplay_url" class="tdc cc_playlist_pcontainer" >
-        <a  class="cc_player_button cc_player_hear" 
-          id="_ep_${R/cart_id}_${item/upload_id}" href="${item/fplay_url}"> </a>
-      </div>
-      <div class="hrc"> </div>
-    </div>
+    <tal:block define="reguser args/is_logged_in" />
+    <tal:block define="records args/records" />
+    <metal:block use-macro="playlist.xml/playlist_list_lines" />
   </div>
   <span id="pl_user_${R/cart_id}" tal:condition="args/is_logged_in" />
   <span id="pl_owner_${R/cart_id}" tal:condition="args/is_owner" />
   <br clear="right" /><!-- *cough* -->
+</metal:block>
+
+<metal:block define-macro="playlist_list_lines">
+  <div class="trr" tal:repeat="item records">
+    <div class="tdc cc_playlist_item"   id="_pli_${item/upload_id}" >
+      <tal:block define="iun php:CC_strchop(${item/upload_name},30,true);" />
+      <span> <a class="cc_playlist_pagelink" id="_plk_${item/upload_id}" target="_parent" 
+          href="${item/file_page_url}">${iun}</a> </span> by 
+      <tal:block define="iurn php:CC_strchop(${item/user_real_name},30,true);" />
+      <a target="_parent" href="${item/artist_page_url}">${iurn}</a> 
+    </div>
+    <div class="tdc"><a class="cc_playlist_i" id="_plinfo_${item/upload_id}"> </a></div>
+    <div tal:condition="reguser" id="playlist_menu_${item/upload_id}" class="cc_playlist_action tdc">
+            <a  class="cc_playlist_button" 
+                href="javascript://playlist_menu_${item/upload_id}"><span>Add To...</span></a>
+    </div>
+    <div tal:condition="item/fplay_url" class="tdc cc_playlist_pcontainer" >
+      <a  class="cc_player_button cc_player_hear" 
+        id="_ep_${R/cart_id}_${item/upload_id}" href="${item/fplay_url}"> </a>
+    </div>
+    <div class="hrc"> </div>
+  </div>
 </metal:block>
 
 <metal:block define-macro="playlist_list_window_cart">
