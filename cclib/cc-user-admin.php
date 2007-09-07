@@ -73,35 +73,33 @@ class CCChangePasswordForm extends CCUserForm
     {
         $this->CCUserForm();
 
-        $username = empty($user_id) ? '' : CCUser::GetUserName($user_id);
+        $users =& CCUsers::GetTable();
+        $row = $users->QueryKeyRow($user_id);
+        $username = $row['user_name'];
+        $email = $row['user_email'];
 
         $fields = array( 
-                    'user_name' =>
+                    'lname' =>
                         array( 'label'      => _('Login Name'),
-                               'formatter'  => 'username',
+                               'formatter'  => 'statictext',
                                'value'      => $username,
-                               'flags'      => CCFF_REQUIRED ),
-
-                    'user_mask' =>
-                       array( 'label'       => '',
-                               'formatter'  => 'securitykey',
-                               'form_tip'   => '',
-                               'flags'      => CCFF_NOUPDATE),
-                    'user_confirm' =>
-                       array( 'label'       => _('Security Key'),
-                               'formatter'  => 'textedit',
-                               'class'      => 'cc_form_input_short',
-                               'form_tip'   => CCSecurityVerifierForm::GetSecurityTip(),
-                               'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE),
+                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
 
                     'user_password' =>
                        array( 'label'       => _('New Password'),
                                'formatter'  => 'password',
+                               'flags'      => CCFF_NONE ),
+
+                    'user_email' =>
+                       array(   'label'       => _('email'),
+                               'value'      => $email,
+                               'formatter'  => 'textedit',
                                'flags'      => CCFF_REQUIRED ),
 
                     );
 
         $this->AddFormFields( $fields );
+        $this->SetHiddenField('user_name',$username);
     }
 }
 
@@ -209,8 +207,9 @@ class CCUserAdmin
 
     function ChangePassword($user_id ='')
     {
-        CCPage::SetTitle(_("Change a User's Password"));
+        CCPage::SetTitle(_("Change a User's Password/E-mail"));
 
+        $users =& CCUsers::GetTable();
         $form = new CCChangePasswordForm($user_id);
 
         if( empty($_POST['changepassword']) || !$form->ValidateFields() )
@@ -220,14 +219,14 @@ class CCUserAdmin
         else
         {
             $form->GetFormValues($values);
-            $arg['user_password'] = md5($values['user_password']);
-            $where = "LOWER(user_name) = '" . strtolower($values['user_name']) . "'";
-            $users =& CCUsers::GetTable();
+            if( empty($values['user_password']) )
+                unset($values['user_password']);
+            $where = "LOWER(user_name) = '{$values['user_name']}'";
             $users->UpdateWhere($values,$where);
             $user_id = $users->QueryKey($where);
             $dummy = array();
-            CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $user_id, &$dummy));
-            CCPage::Prompt(_("User password changed"));
+            CCEvents::Invoke( CC_EVENT_USER_PROFILE_CHANGED, array( $user_id, &$dummy ) );
+            CCUtil::SendBrowserTo( ccl('admin','user',$user_id) );
         }
     }
 
@@ -238,12 +237,18 @@ class CCUserAdmin
         if( empty($record) )
             return;
 
+        $username = $record['user_name'];
+
         $delfileslink = ccl('admin','user',$user_id,'delfiles');
         $deluserlink = ccl('admin','user',$user_id,'deluser');
         $ban_ip_link = ccl('admin','user',$user_id,'banip');
         $change_pass = ccl('admin','password',$user_id);
+        $activity_user = url_args( ccl('activity'), 'user=' . $username );
 
-        $username = $record['user_name'];
+        $ip = empty($record['user_last_known_ip']) ? '' : CCUtil::DecodeIP(substr($record['user_last_known_ip'],0,8)); 
+        if( $ip )        
+            $activity_ip = url_args( ccl('activity'), 'ip=' . $ip );
+
 
         CCPage::SetTitle(sprintf(_("Manage User Account for %s"), $username ));
 
@@ -300,12 +305,16 @@ class CCUserAdmin
                          'menu_text' => $spanR . sprintf(_("Delete %s Account"), $uq) . $spanC,
                          'help'      => _('This action can not be undone.'));
 
-        if( !empty($record['user_last_known_ip']) )
+        if( !empty($ip) )
         {
-            $ip = ' (' . CCUtil::DecodeIP(substr($record['user_last_known_ip'],0,8)) . ')';
+
             $args[] = array( 'action'    => $ban_ip_link,
-                             'menu_text' => sprintf(_("Manage IP address for %s"), $uq . $ip),
+                             'menu_text' => sprintf(_("Manage IP address for %s"), $uq . ' (' .  $ip . ')'),
                              'help'      => _('Allow or Deny access to the site.') );
+
+            $args[] = array( 'action'    => $activity_ip,
+                             'menu_text' => sprintf(_("Activity for %s"), $ip ),
+                             'help'      => _('See Activity Log for this IP address.') );
         }
         else
         {
@@ -315,8 +324,14 @@ class CCUserAdmin
         }
 
         $args[] = array( 'action' => $change_pass,
-                         'menu_text' => sprintf(_("Change Password for %s"), $uq),
-                         'help' => _('Create A New Password For This Account') );
+                         'menu_text' => sprintf(_("Change Password/E-mail for %s"), $uq),
+                         'help' => _('Create A New Password and Change E-mail For This Account') );
+
+
+        $args[] = array( 'action'    => $activity_user,
+                         'menu_text' => sprintf(_("Activity for %s"), $uq ),
+                         'help'      => _('See Activity Log for this user.') );
+
         CCPage::PageArg('link_table_items',$args,'link_table');
 
     }
