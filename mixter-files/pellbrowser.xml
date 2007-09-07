@@ -102,8 +102,7 @@ verify which license applies to each a cappella.
     <tal:block repeat="R feats">
         <div class="featured_pell">
             <div class="feat_avatar" >
-                <a href="${R/artist_page_url}"><img src="http://ccmixter.org/people/lazztunes07/BlueCover.jpg" />
-                <!-- img src="${R/user_avatar_url}"  !--></a>
+                <a href="${R/artist_page_url}"><img src="${R/user_avatar_url}" /></a>
             </div>
             <a class="feat_title" href="${R/file_page_url}">${R/upload_name}</a>
             <a class="feat_user"  href="${R/artist_page_url}">${R/user_real_name}</a>
