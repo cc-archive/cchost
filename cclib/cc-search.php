@@ -259,7 +259,7 @@ END;
         return( $at_limit );
     }
 
-    function OnUserSearch($field,$tag)
+    function OnUserSearch($field,$tag='')
     {
         if( $field == 'lookinfor' )
         {
@@ -271,7 +271,7 @@ END;
             $where = "(LOWER(user_whatido) REGEXP '(^| |,)($tag)(,|\$)' )";
             $count = $users->CountRows($where);
             $got_tag = $count > 0;
-            $first_letter = $tag{0};
+            $first_letter = $tag ? $tag{0} : '';
             $where = "user_whatido > ''";
             $users->SetSort('user_registered','DESC');
             $rows = $users->QueryRows($where,'user_name,user_real_name,LOWER(user_whatido) as wid');
@@ -305,8 +305,12 @@ END;
 <table id="wid_table">
 EOF;
             $got_first_letter = false;
+            $show_all = empty($_GET['filter']);
             foreach( $whatidos as $wid => $alinks )
             {
+                if( !$show_all && (count($alinks) < 2) )
+                    continue;
+
                 $html .= '<tr><th>' . $wid;
                 if( ($got_tag && ($wid == $tag)) ||
                     (!$got_tag && ($first_letter == $wid{0}) )
