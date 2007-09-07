@@ -70,8 +70,7 @@ p.peep {
            <td id="fs_content">
 
 
-        <h2>Entire DJ Vadim Album Tracks Released under CC</h2>
-
+        <h2>DJ Vadim Album Tracks Released under CC</h2>
 
         <a href="${root-url}bbe" class="logolink" style="margin:2px;float:left;width:175px;"><img 
            src="${root-url}mixter-files/djvadim/bbe-logo.jpg" border="0" style="border: 1px solid black;" /></a>
@@ -102,6 +101,7 @@ p.peep {
         <h2>Previous contests...</h2>
 
         <a href="/djvadim">DJ Vadim</a><br />
+        <a href="/salman">Salman Ahmad</a><br />
         <a href="/vieux">Vieux Farka Toure</a><br />
         <a href="/curve">(&copy;urve)&trade; </a><br />
         <a href="/ghostly">Christopher Willits</a><br />
