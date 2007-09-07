@@ -235,7 +235,10 @@ class CCTemplateAdmin
         global $CC_GLOBALS;
         
         $files = array();
-        $tdirs = split(';',$CC_GLOBALS['template-root']);
+        $_tdirs = split(';',$CC_GLOBALS['template-root']);
+        $tdirs = array();
+        foreach( $_tdirs as $_tdir )
+            $tdirs[] = trim($_tdir);
         if( !in_array( 'cctemplates/', $tdirs ) && !in_array( 'cctemplates', $tdirs ) )
             $tdirs[] = 'cctemplates';
         foreach( $tdirs as $tdir )
