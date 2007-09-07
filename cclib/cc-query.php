@@ -572,6 +572,16 @@ class CCQuery
             $where[] = "(license_id = '$license')";
         }
 
+        if( isset($remixmax) )
+        {
+            $where[] = "(upload_num_remixes <= '$remixmax')";
+        }
+
+        if( isset($remixmin) )
+        {
+            $where[] = "(upload_num_remixes >= '$remixmin')";
+        }
+        
         // Search string 
 
         if( !empty($query) )
