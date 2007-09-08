@@ -101,7 +101,7 @@ ccPlaylistMenu.prototype = {
         });
 
         if( found && !this.windowHooked ) {
-            Event.observe( window, 'click', this.onWindowClick.bindAsEventListener(this));
+            Event.observe( document.body /* window */, 'click', this.onWindowClick.bindAsEventListener(this));
             this.windowHooked = true;
         }
 
@@ -300,6 +300,7 @@ ccPlaylistMenu.prototype = {
 
     onWindowClick: function(e) {
         this.CloseMenus();
+        return true;
     },
 
     /* 
