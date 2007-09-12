@@ -1,5 +1,7 @@
 <div>
 <h1>A Cappella Browser</h1>
+<link rel="stylesheet" type="text/css" href="${root-url}cctemplates/playlist.css" title="Default Style" />
+<link rel="stylesheet" type="text/css" href="${root-url}cctemplates/detail.css"   title="Default Style" />
 <style>
 
 #type_picker_container, #bpm_picker_container, #limit_picker_container {
@@ -29,6 +31,10 @@
   border: 1px solid black;
   padding: 8px;
   background-color: #DDD;
+}
+
+.cc_playlist_item {
+  width: 290px;
 }
 
 #featured h3 {
@@ -148,8 +154,6 @@ verify which license applies to each a cappella.
   </div>
 <div id="bottom_breaker">&nbsp;</div>
 
-<link rel="stylesheet" type="text/css" href="${root-url}cctemplates/playlist.css" title="Default Style" />
-<link rel="stylesheet" type="text/css" href="${root-url}cctemplates/detail.css"   title="Default Style" />
 <script src="${root-url}cctemplates/js/playlist.js" ></script>
 
 <metal:block use-macro="playerembed.xml/eplayer" />
@@ -233,7 +237,6 @@ ccPellBrowser.prototype = {
     },
 
     onHideRemixedClick: function() {
-      this.hideRemixed ^= 1;
       this.refreshCount();
     },
 
@@ -248,6 +251,8 @@ ccPellBrowser.prototype = {
         this.query = 'tags=' + this.currType;
         if( this.currBPM != '-' )
             this.query += '+' + this.currBPM;
+      var checkbox = $('hide_remixed');
+      this.hideRemixed = checkbox.checked ? 1 : 0;
         if( this.hideRemixed )
             this.query += '&remixmax=0';
     },
