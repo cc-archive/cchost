@@ -4,12 +4,12 @@
 <link rel="stylesheet" type="text/css" href="${root-url}cctemplates/detail.css"   title="Default Style" />
 <style>
 
-#type_picker_container, #bpm_picker_container, #limit_picker_container {
+#type_picker_container, #bpm_picker_container, #limit_picker_container, #lic_picker  {
   float: left;
   margin-right: 11px;
 }
 
-#type_picker, #bpm_picker, #limit_picker {
+#type_picker, #bpm_picker, #limit_picker, #lic_picker {
   font-size: 11px;
 }
 
@@ -106,6 +106,9 @@
   <div id="limit_picker_container">
     Display: <select id="limit_picker"></select>
   </div>
+  <div id="lic_picker_container">
+    <select id="lic_picker"></select>
+  </div>
   <div id="hide_container"><input type="checkbox" id="hide_remixed" /> Hide remixed pells</div>
 </div>
 
@@ -185,12 +188,24 @@ ccPellBrowser.prototype = {
     },
 
     hookElements: function() {
+      var url = home_url + 'samples/lics/acappella';
+      this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.hookElements2.bind(this) } );
+    },
+
+    hookElements2: function(resp,lics) {
+      var lic_picker = $('lic_picker');
+      var i = 0;
+      lics.each( function(t) {
+        lic_picker.options[i++] = new Option( t['text'], t['value']);
+      });
+      Event.observe( lic_picker, 'change', this.refreshCount.bindAsEventListener( this ) );
+
       Event.observe( $('browser_prev'), 'click', this.onPrevClick.bindAsEventListener( this ) );
       Event.observe( $('browser_next'), 'click', this.onNextClick.bindAsEventListener( this ) );
       Event.observe( $('hide_remixed'), 'click', this.onHideRemixedClick.bindAsEventListener( this ) );
 
       var type_picker = $('type_picker');
-      var i = 0;
+      i = 0;
       this.allTypes.each( function(t) {
         type_picker.options[i++] = new Option( t[1], t[0] );
       } );
@@ -251,10 +266,13 @@ ccPellBrowser.prototype = {
         this.query = 'tags=' + this.currType;
         if( this.currBPM != '-' )
             this.query += '+' + this.currBPM;
-      var checkbox = $('hide_remixed');
-      this.hideRemixed = checkbox.checked ? 1 : 0;
-        if( this.hideRemixed )
-            this.query += '&remixmax=0';
+        var lic_picker = $('lic_picker');
+        if( lic_picker.selectedIndex > 0 )
+            this.query += '+' + lic_picker.options[ lic_picker.selectedIndex ].value;
+        var checkbox = $('hide_remixed');
+        this.hideRemixed = checkbox.checked ? 1 : 0;
+          if( this.hideRemixed )
+              this.query += '&remixmax=0';
     },
 
     refreshCount: function() {

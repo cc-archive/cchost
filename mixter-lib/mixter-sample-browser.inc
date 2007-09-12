@@ -60,6 +60,10 @@ class CCSampleBrowser
                             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
         CCEvents::MapUrl( ccp('samples','search'),   array('CCSampleBrowser', 'SamplesSearch'),  
                             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+
+        CCEvents::MapUrl( ccp('samples','lics'),   array('CCSampleBrowser', 'LicsForTags'),  
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+
     }
 
     function SamplesSearch()
@@ -245,7 +249,7 @@ class CCSampleBrowser
         $args['bpm_caption']    = _('Limit to BPM:');
         $args['search_text']    = _('Go');
         $args['default_msg']    = $this->_default_msg();
-        $args['licenses']       = $this->_get_lic_filters();
+        $args['licenses']       = $this->_get_lic_filters('sample');
 
         $tfile = CCPage::GetViewFile('sample_browser.xml');
         if( $tfile === false ) // errrr
@@ -255,11 +259,23 @@ class CCSampleBrowser
         CCPage::AddPrompt('body_text',$html);
     }
 
-    function _get_lic_filters()
+
+    function LicsForTags($tag_filter)
+    {
+        $lics = $this->_get_lic_filters($tag_filter,true);
+        require_once('cclib/zend/json-encoder.php');
+        $text = CCZend_Json_Encoder::encode($lics);
+        header( "X-JSON: $text");
+        header( 'Content-type: text/plain');
+        print($text);
+        return;
+    }
+
+    function _get_lic_filters($tag_filter,$collapse=false)
     {
         $uploads = new CCUploads();
-        $uploads->GroupOn('upload_license');
-        $uploads->SetTagFilter('sample');
+        $uploads->GroupOn($collapse ? 'license_tag' : 'upload_license');
+        $uploads->SetTagFilter($tag_filter);
         $used_lics = $uploads->QueryItems('upload_license','');
         $in = array();
         foreach( $used_lics as $ul )
@@ -275,12 +291,12 @@ class CCSampleBrowser
             $sellic = $_GET['lic'];
         $lics = array();
         $lics[] = array( 'value' => '-', 
-                       'text' => '-- ' . _('Pick License'),
+                       'text' => '-- ' . _('All Licenses'),
                        'selected' => $sellic == '-'
                      );
         foreach( $rows as $row )
         {
-            $lics[] = array( 'value' => $row['license_id'],
+            $lics[] = array( 'value' => $collapse ? $row['license_tag'] : $row['license_id'],
                              'text'  => trim($row['license_name']),
                              'selected' => $sellic == $row['license_id'] );
         }
