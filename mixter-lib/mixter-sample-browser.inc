@@ -268,7 +268,7 @@ class CCSampleBrowser
         header( "X-JSON: $text");
         header( 'Content-type: text/plain');
         print($text);
-        return;
+        exit;
     }
 
     function _get_lic_filters($tag_filter,$collapse=false)
