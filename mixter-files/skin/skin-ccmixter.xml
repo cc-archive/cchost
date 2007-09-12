@@ -39,4 +39,7 @@ $Id$
  <metal:block use-macro="${old_show_footer_block}" />
 </metal:block>
 
+<metal:block define-macro="ratings_stars" >
+  ${record/ratings_score} say DAAAAAM<img src="${root-url}/ccimages/rate_it.png" />
+</metal:block>
 </html>

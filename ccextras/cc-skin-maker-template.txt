@@ -55,7 +55,15 @@
      Comment out the following line to disable the demonstration:
 !-->
 <tal:block define="user_listing string:skin-%%name%%.xml/user_listing;" />
- 
+
+<!-- used internally -->
+<tal:block condition="auto_execute" repeat="ae auto_execute" >
+  <tal:block condition="php: skin == '%%name'">
+    <tal:block define="tname ${ae}" />
+    <metal:block use-macro="${tname}" />
+  </tal:block>
+</tal:block>
+
 </tal:block>
 %%end%%
 %%css-begin%%

@@ -145,6 +145,8 @@ class CCTemplate
     function & SetAllAndParse( $args, $doprint = false, $admin_dump = false )
     {
         global $CC_GLOBALS;
+        if( empty($args['skin']) && !empty($CC_GLOBALS['skin']) )
+            $args['skin'] = $CC_GLOBALS['skin'];
         $admin_dump = $admin_dump || CCUser::IsAdmin();
         $this->_init_lib();
         $this->_template->setAll($args);

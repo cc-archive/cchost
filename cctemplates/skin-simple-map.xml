@@ -29,4 +29,11 @@ $Id$
 -->
 </tal:block>
 
+<tal:block condition="auto_execute" repeat="ae auto_execute" >
+  <tal:block condition="php: skin == 'simple'">
+    <tal:block define="tname ${ae}" />
+    <metal:block use-macro="${tname}" />
+  </tal:block>
+</tal:block>
+
 </tal:block>

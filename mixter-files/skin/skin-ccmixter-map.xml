@@ -30,7 +30,15 @@ $Id$
     list_file string:upload_quick.xml/list_file;
     list_files string:upload_quick.xml/list_files;
     print_head_links string:skin-ccmixter.xml/print_head_links;
+    ratings_stars string:skin-ccmixter.xml/ratings_stars;
     show_footer_block string:skin-ccmixter.xml/show_footer_block;" />
+
+<tal:block condition="auto_execute" repeat="ae auto_execute" >
+  <tal:block condition="php: skin == 'ccmixter'">
+    <tal:block define="tname ${ae}" />
+    <metal:block use-macro="${tname}" />
+  </tal:block>
+</tal:block>
 
  
 </tal:block>
