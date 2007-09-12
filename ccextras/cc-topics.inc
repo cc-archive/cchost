@@ -382,6 +382,18 @@ END;
         $record['topic_children'] = $rows;
     }
 
+    // overwrite parent's version: some installations
+    // don't have the default for _tags field setup
+    // properly
+    function Insert(&$values)
+    {
+        if( !isset($values['topic_tags']) )
+        {
+            $values['topic_tags'] = '';
+        }
+        return parent::Insert($values);
+    }
+
     // overwrite parent's version to add type limit
     function _get_select($where,$columns='*')
     {
