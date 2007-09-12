@@ -305,22 +305,7 @@ $Id$
          <a class="cc_flag_link" href="${record/flag_url}"><span>${upload_flag_tip}</span></a>
       </td>
     </tr>
-    <tr>
-      <tal:block condition="record/ratings_score"      define="rate_head_show string:inline" />
-      <tal:block condition="not: record/ratings_score" define="rate_head_show string:none" />
-      <th><span id="cc_rate_head_${record/upload_id}" style="display: ${rate_head_show}" 
-            tal:content="php: CC_lang('ratings:');"  />
-      </th>
-      <td id="cc_rate_block_${record/upload_id}">
-        <metal:block use-macro="${ratings_stars}" />
-      </td>
-    </tr>
-      <tr tal:condition="record/ok_to_rate" >
-        <th /> 
-        <td>
-          <metal:block use-macro="${dl_edit_ratings}" />
-        </td>
-      </tr>
+    <metal:block use-macro="${ratings_show}" />
   </table>
   <tal:block define="menu record/local_menu" />
   <metal:block use-macro="${dl_action_buttons}" />

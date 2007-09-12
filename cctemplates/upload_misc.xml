@@ -50,35 +50,68 @@ $Id$
   <div class="cc_upload_banned">${record/banned_message}</div>
 </metal:block>
 
+<metal:block define-macro="ratings_show" >
+    <tal:block condition="not: record/thumbs_up"><metal:block use-macro="${ratings_with_stars}" /></tal:block>
+    <tal:block condition="record/thumbs_up"><metal:block use-macro="${ratings_with_thumb}" /></tal:block>
+</metal:block>
+
+<metal:block define-macro="ratings_with_thumb" >
+  <tr>
+    <td colspan="2" class="cc_ratings_thumb"><span id="cc_rate_head_${record/upload_id}"></span>
+      <div class="cc_rate_it_line">
+        <div tal:condition="record/ok_to_rate" class="rcmd" id="cc_star_block_${record/upload_id}" > <a id="ratingscommand" 
+                onclick="cc_star_pick(${record/upload_id},5)"
+                href="javascript://say DAAAAAAAAAAAAAM!"><span tal:content="php: _('say Love It!')" /></a></div>
+
+        <a tal:condition="record/reviews_link" href="${record/reviews_link/url}" class="rvlink" tal:content="record/reviews_link/text" />
+
+        <span id="cc_rate_block_${record/upload_id}" class="rate_block">
+          <tal:block condition="record/ratings_score">${record/ratings_score} <span tal:content="php: _('say Love It!')" /></tal:block>
+        </span>
+      </div>
+    </td>
+  </tr>
+</metal:block>
+
+<metal:block define-macro="ratings_with_stars" >
+  <tr>
+    <tal:block condition="record/ratings_score"      define="rate_head_show string:inline" />
+    <tal:block condition="not: record/ratings_score" define="rate_head_show string:none" />
+    <th class="cc_ratings_head" style="vertical-align: middle"><span id="cc_rate_head_${record/upload_id}" style="display: ${rate_head_show};" 
+          tal:content="php: CC_lang('ratings:');"  />
+    </th>
+    <td id="cc_rate_block_${record/upload_id}">
+      <metal:block use-macro="${ratings_stars}" />
+    </td>
+  </tr>
+  <tr tal:condition="record/ok_to_rate" >
+    <th />
+    <td>
+      <metal:block use-macro="${dl_edit_ratings}" />
+    </td>
+  </tr>
+  <tr  tal:condition="record/reviews_link">
+    <th />
+    <td><a href="${record/reviews_link/url}" tal:content="record/reviews_link/text" />
+    </td>
+  </tr>
+</metal:block>
+
 <metal:block define-macro="ratings_stars" >
   <tal:block condition="record/ratings_score">
-      <tal:block condition="not: record/thumbs_up">
+    <tal:block condition="record/thumbs_up">
+          <tal:block condition="record/ratings_score">${record/ratings_score} <span tal:content="php: _('say Love It!')" /></tal:block>
+    </tal:block>
+    <tal:block condition="not: record/thumbs_up">
           <tal:block repeat="i record/ratings"><img 
             src="${root-url}ccimages/stars/star-${i}.gif" height="17" width="17" /></tal:block> 
           <span tal:condition="record/ratings_score">(${record/ratings_score})</span>
-      </tal:block>
-      <tal:block condition="record/thumbs_up">
-          <table cellpadding="0" cellspacing="0" style="height: 15px">
-            <tr>
-              <td><span tal:content="php: sprintf(_(' %d say DAAAAAM'),'${record/ratings_score}');" /></td>
-              <td id="ratingsimage">&nbsp;</td>
-              <td tal:condition="record/ok_to_rate" id="cc_star_block_${record/upload_id}" >
-                <a id="ratingscommand" onclick="cc_star_pick(${record/upload_id},5)"  
-                    href="javascript://thumbs up!"><span tal:content="php: _('Say DAAAAAM');" /></a></td>
-            </tr>
-        </table>
-      </tal:block>
+    </tal:block>
   </tal:block>
 </metal:block>
 
 
 <metal:block define-macro="dl_edit_ratings">
-    <tal:block condition="not: record/thumbs_up">
-        <metal:block use-macro="upload_misc.xml/old_edit_stars" />
-    </tal:block>
-</metal:block>
-
-<metal:block define-macro="old_edit_stars">
     <div id="cc_star_block_${record/upload_id}" class="cc_star_wrapper">
         <ul class="cc_ratingslist" >
         <li><img onclick="cc_star_pick(${record/upload_id},1)"  

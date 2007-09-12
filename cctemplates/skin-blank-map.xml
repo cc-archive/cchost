@@ -61,7 +61,10 @@ $Id$
     prev_next_links string:page_misc.xml/prev_next_links;
     print_head_links string:page.xml/print_head_links;
     ratings_field string:upload_misc.xml/ratings_field;
+    ratings_show string:upload_misc.xml/ratings_show;
     ratings_stars string:upload_misc.xml/ratings_stars;
+    ratings_with_stars string:upload_misc.xml/ratings_with_stars;
+    ratings_with_thumb string:upload_misc.xml/ratings_with_thumb;
     render_image string:misc.xml/render_image;
     remix_line string:upload.xml/remix_line;
     show_activity_log string:admin.xml/show_activity_log;

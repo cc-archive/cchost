@@ -21,6 +21,59 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+function & _mixter_dump_ratings(&$record)
+{
+    $html = '';
+
+    if( empty($record['ok_to_rate']) && empty($record['ratings_score']) && empty($record['reviews_link'])  )
+        return $html;
+
+    $upload_id = $record['upload_id'];
+    $root_url  = cc_get_root_url();
+
+    $html = <<<EOF
+
+    <!-- ratings -->
+    <tr>
+        <td colspan="2" style="padding:4px 0px 4px 2px;vertical-align:bottom;"><span id="cc_rate_head_$upload_id"></span>
+        <div class="cc_rate_it_line">
+EOF;
+
+    if( !empty($record['ok_to_rate']) )
+    {
+        $html .= <<<EOF
+            <div class="rcmd" id="cc_star_block_$upload_id" > <a id="ratingscommand" onclick="cc_star_pick($upload_id,5)"
+                href="javascript://say DAAAAAAAAAAAAAM!"><span>Say <b>DAAAAM</b></span></a></div>
+EOF;
+    }
+
+    if( !empty($record['reviews_link']) )
+    {
+        $html .=<<<EOF
+            <a href="{$record['reviews_link']['url']}" class="rvlink">{$record['reviews_link']['text']}</a>
+EOF;
+    }
+
+    $html .= <<<EOF
+        <span id="cc_rate_block_$upload_id" class="rate_block">
+EOF;
+
+    if( !empty($record['ratings_score']) )
+    {
+        $html .= <<<EOF
+            {$record['upload_num_scores']} say <b>DAAAAAM</b><img src="{$root_url}/ccimages/rate_it.png" />
+EOF;
+    }
+
+
+    $html .= "</span></div></td></tr>\n<!-- end ratings -->\n";
+
+    // ---- End of Ratings 
+
+    return $html;
+
+}
+
 function & _mixter_dump_records(&$records,$xclass)
 {
     global $CC_GLOBALS;
@@ -28,8 +81,6 @@ function & _mixter_dump_records(&$records,$xclass)
     $str_by      = _('by:');
     $str_date    = _('date:');
     $str_tags    = _('tags:');
-    $str_ratings = _('ratings:');
-    $str_rate    = _('rate');
     $str_license = _('license:');
     $str_nsfw_t  = _('This upload might be ');
     $str_nsfw    = _('Not Safe For Work');
@@ -259,47 +310,7 @@ EOF;
 EOF;
         }
 
-        if( !empty($record['ok_to_rate']) || !empty($record['ok_to_rate']) || !empty($record['reviews_link'])  )
-        {
-            $html .=<<<EOF
-
-            <!-- ratings -->
-            <tr>
-                <td colspan="2" style="padding:4px 0px 4px 2px;vertical-align:bottom;"><span id="cc_rate_head_$upload_id"></span>
-                <div class="cc_rate_it_line">
-EOF;
-
-            if( !empty($record['ok_to_rate']) )
-            {
-                $html .= <<<EOF
-                    <div class="rcmd" id="cc_star_block_$upload_id" > <a id="ratingscommand" onclick="cc_star_pick($upload_id,5)"
-                        href="javascript://say DAAAAAAAAAAAAAM!"><span>Say <b>DAAAAM</b></span></a></div>
-EOF;
-            }
-
-            if( !empty($record['reviews_link']) )
-            {
-                $html .=<<<EOF
-                    <a href="{$record['reviews_link']['url']}" class="rvlink">{$record['reviews_link']['text']}</a>
-EOF;
-            }
-
-            $html .= <<<EOF
-                <span id="cc_rate_block_$upload_id" class="rate_block">
-EOF;
-
-            if( !empty($record['ratings_score']) )
-            {
-                $html .= <<<EOF
-                    {$record['upload_num_scores']} say <b>DAAAAAM</b><img src="{$root_url}/ccimages/rate_it.png" />
-EOF;
-            }
-
-
-            $html .= "</span></div></td></tr>\n<!-- end ratings -->\n";
-
-            // ---- End of Ratings 
-        }
+        $html .= _mixter_dump_ratings($record);
 
         if( !empty($record['upload_extra']['edpicks']) )
         {         
