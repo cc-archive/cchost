@@ -52,6 +52,12 @@ class CCAdminRatingsForm extends CCEditConfigForm
                                'flags'      => CCFF_POPULATE,
                             ),
 
+                    'thumbs_up' =>
+                       array(  'label'      => _('Use \'Thumbs Up\' style '),
+                               'form_tip'   => _('Use \'Thumbs Up\' instead of star ratings system'),
+                               'formatter'  => 'checkbox',
+                               'flags'      => CCFF_POPULATE),
+
                     'ratings_rank' =>
                        array(  'label'      => _('Using Ratings As Rank'),
                                'form_tip'   => _('Use the ratings to determine chart rankings'),

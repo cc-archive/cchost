@@ -456,6 +456,10 @@ a.cc_external_link  {
 }
 
 
+th.cc_ratings_head {
+	vertical-align: middle;
+}
+
 #ratings_score {
     margin-left: 6px;
     margin-right: 8px;
@@ -1050,10 +1054,10 @@ a.cc_gen_button:hover span {
     background-position: 100% -23px;
 }
 
-
 /* Download / Stream Buttons */
 
-a#cc_downloadbutton, a#ratingscommand, a#commentcommand, a#replyremix  {
+a#cc_downloadbutton, a#ratingscommand, a#commentcommand,
+a#commentcommand, a#replyremix  {
     float: left;
     display: block;
     background: url('ccmixter/buttonleft.gif') no-repeat left top;
@@ -1072,6 +1076,9 @@ a#cc_downloadbutton, a#ratingscommand, a#commentcommand, a#replyremix  {
 a#ratingscommand, a#commentcommand, a#replyremix {
 	font-size: 9px;
 	font-weight: normal;
+}
+
+a#commentcommand, a#replyremix {
 	margin-bottom: 6px;
 }
 
@@ -1082,9 +1089,24 @@ a#cc_downloadbutton span, a#ratingscommand span, a#commentcommand span, a#replyr
     background: url('ccmixter/downloadright.gif') no-repeat right top;
 }
 
-a#ratingscommand span, a#commentcommand span, a#replyremix span {
+a#commentcommand span, a#replyremix span {
     padding: 5px 7px 6px 2px;
     background: url('ccmixter/plainright.gif') no-repeat right top;
+}
+
+#ratingsimage {
+    background: url('../ccimages/rate_it.png') no-repeat left top;
+	width: 15px;
+	height: 11px;
+}
+
+a#ratingscommand span {
+    padding: 5px 18px 6px 2px;
+    background: url('ccmixter/ratingsright.gif') no-repeat right top;
+}
+
+a#ratingscommand {
+	margin: 0px;
 }
 
 a#cc_downloadbutton:hover, a#ratingscommand:hover, a#commentcommand:hover, a#replyremix:hover {

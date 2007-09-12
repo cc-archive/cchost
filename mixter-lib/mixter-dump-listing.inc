@@ -115,12 +115,46 @@ EOF;
             $flag_link = '';
         }
 
-        $html .=<<<EOF
-        <tr>
-          <th>$str_by</th>
-          <td>$flag_link<a href="{$record['artist_page_url']}" class="cc_user_link">{$record['user_real_name']}</a></td>
-        </tr>
+        // attribution (including collab projects)
+        //
+        if( empty($record['upload_extra']['collab']) )
+        {
+            $html .=<<<EOF
+            <tr>
+              <th>$str_by</th>
+              <td>$flag_link<a href="{$record['artist_page_url']}" class="cc_user_link">{$record['user_real_name']}</a></td>
+            </tr>
 EOF;
+        }
+        else
+        {
+            require_once('ccextras/cc-collab.inc');
+            $collab_id = $record['upload_extra']['collab'];
+            $collaborators = CCCollab::_get_collab_users($collab_id);
+            $collab_links = '';
+            $comma = '';
+
+            foreach( $collaborators as $CLB )
+            {
+                $collab_links .= $comma . '<a href="' . ccl('people',$CLB['user_name']) . '">' 
+                                        . $CLB['user_real_name'] . '</a>';
+                $comma = ', ';
+            }
+
+            $collabs = CCCollabs::GetTable();
+            $collab_name = $collabs->QueryItemFromKey('collab_name',$collab_id);
+            $collab_url = ccl('collab',$collab_id);
+            $html .=<<<EOF
+            <tr>
+              <th>attribution:</th>
+              <td><a  href="{$collab_url}"><span style="font-weight:bold">{$collab_name}</span></a></td>
+            </tr>
+            <tr>
+              <th>collaborators:</th>
+              <td>{$collab_links}</td>
+            </tr>
+EOF;
+        }
 
         if( $detail && !empty($record['upload_extra']['featuring']) )
         {
@@ -174,61 +208,6 @@ EOF;
         </tr>
 EOF;
 
-        // -------- Ratings
-
-        $html .=<<<EOF
-        <tr>
-            <th><span id="cc_rate_head_$upload_id" style="display: $rate_head_show">$str_ratings</span>
-            </th>
-EOF;
-
-        $html .= "<td id=\"cc_rate_block_$upload_id\">";
-
-        if( !empty($record['ratings_score']) )
-        {
-            $rcount = count($record['ratings']);
-            $rurl = $root_url . '/ccimages/stars/star';
-            for( $n = 0; $n < $rcount; $n++)
-            {
-                $star =& $record['ratings'][$n];
-
-                $html .= "<img src=\"$rurl-$star.gif\" height=\"17\" width=\"17\" />";
-            }
-
-            $html .= '<span>(' . $record['ratings_score'] . ')</span>';
-        }
-
-        $html .= "</td></tr>";
-
-        if( !empty($record['ok_to_rate']) )
-        {
-            $emptystar = $root_url . '/ccimages/stars/star-empty.gif';
-            $html .=<<<EOF
-        <tr>
-            <th /> 
-            <td>
-    <div id="cc_star_block_$upload_id" class="cc_star_wrapper">
-    <ul class="cc_ratingslist" >
-EOF;
-            for( $n = 1; $n < 6; $n++ )
-            {
-                $id = 'cc_star_' . $upload_id . '_' . $n;
-                $html .=<<<EOF
-    <li><img onclick="cc_star_pick($upload_id,$n)"  
-       src="$emptystar" id="$id" 
-       onmouseover="cc_star_hover_on($upload_id,$n)" 
-       onmouseout="cc_star_hover_off($upload_id,$n)" /></li>
-EOF;
-            }
-
-            $html .=<<<EOF
-    </ul> <div class="cc_ratings_arrow"> <span>$str_rate</span></div>
-    </div>
-            </td>
-        </tr>
-EOF;
-        }
-
         if( $detail )
         {
             if( !empty($record['files'][0]['file_format_info']['ps']) )
@@ -280,14 +259,46 @@ EOF;
 EOF;
         }
 
-        if( !empty($record['reviews_link']) )
+        if( !empty($record['ok_to_rate']) || !empty($record['ok_to_rate']) || !empty($record['reviews_link'])  )
         {
             $html .=<<<EOF
-        <tr>
-            <th />
-            <td><a href="{$record['reviews_link']['url']}">{$record['reviews_link']['text']}</a></td>
-        </tr>
+
+            <!-- ratings -->
+            <tr>
+                <td colspan="2" style="padding:4px 0px 4px 2px;vertical-align:bottom;"><span id="cc_rate_head_$upload_id"></span>
+                <div class="cc_rate_it_line">
 EOF;
+
+            if( !empty($record['ok_to_rate']) )
+            {
+                $html .= <<<EOF
+                    <div class="rcmd" id="cc_star_block_$upload_id" > <a id="ratingscommand" onclick="cc_star_pick($upload_id,5)"
+                        href="javascript://say DAAAAAAAAAAAAAM!"><span>Say <b>DAAAAM</b></span></a></div>
+EOF;
+            }
+
+            if( !empty($record['reviews_link']) )
+            {
+                $html .=<<<EOF
+                    <a href="{$record['reviews_link']['url']}" class="rvlink">{$record['reviews_link']['text']}</a>
+EOF;
+            }
+
+            $html .= <<<EOF
+                <span id="cc_rate_block_$upload_id" class="rate_block">
+EOF;
+
+            if( !empty($record['ratings_score']) )
+            {
+                $html .= <<<EOF
+                    {$record['upload_num_scores']} say <b>DAAAAAM</b><img src="{$root_url}/ccimages/rate_it.png" />
+EOF;
+            }
+
+
+            $html .= "</span></div></td></tr>\n<!-- end ratings -->\n";
+
+            // ---- End of Ratings 
         }
 
         if( !empty($record['upload_extra']['edpicks']) )

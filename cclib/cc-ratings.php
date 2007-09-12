@@ -69,6 +69,8 @@ class CCRatings extends CCTable
     {
         global $CC_GLOBALS;
 
+        $upload_id = $record['upload_id'];
+
         if( !CCUser::IsLoggedIn() )
         {
             return true;
@@ -87,7 +89,6 @@ class CCRatings extends CCTable
         }
 
         $user_id = CCUser::CurrentUser();
-        $upload_id = $record['upload_id'];
 
         if( !empty($chart['requires-review']) ) 
         {
@@ -101,6 +102,7 @@ class CCRatings extends CCTable
                 return true;
             }
         }
+
 
         $remote_ip = $_SERVER['REMOTE_ADDR'];
         $ip = CCUtil::EncodeIP($remote_ip);
@@ -292,6 +294,7 @@ class CCRating
         else
         {
             $record['ok_to_rate'] = true;
+            $record['thumbs_up'] = !empty($chart['thumbs_up']);
         }
 
         if( !$ratings_on || empty($record['upload_score']) )

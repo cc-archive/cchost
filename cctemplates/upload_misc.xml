@@ -51,36 +51,57 @@ $Id$
 </metal:block>
 
 <metal:block define-macro="ratings_stars" >
-  <tal:block condition="record/ratings_score" repeat="i record/ratings"><img 
-    src="${root-url}ccimages/stars/star-${i}.gif" height="17" width="17" /></tal:block> 
-  <span tal:condition="record/ratings_score">(${record/ratings_score})</span>
+  <tal:block condition="record/ratings_score">
+      <tal:block condition="not: record/thumbs_up">
+          <tal:block repeat="i record/ratings"><img 
+            src="${root-url}ccimages/stars/star-${i}.gif" height="17" width="17" /></tal:block> 
+          <span tal:condition="record/ratings_score">(${record/ratings_score})</span>
+      </tal:block>
+      <tal:block condition="record/thumbs_up">
+          <table cellpadding="0" cellspacing="0" style="height: 15px">
+            <tr>
+              <td><span tal:content="php: sprintf(_(' %d say DAAAAAM'),'${record/ratings_score}');" /></td>
+              <td id="ratingsimage">&nbsp;</td>
+              <td tal:condition="record/ok_to_rate" id="cc_star_block_${record/upload_id}" >
+                <a id="ratingscommand" onclick="cc_star_pick(${record/upload_id},5)"  
+                    href="javascript://thumbs up!"><span tal:content="php: _('Say DAAAAAM');" /></a></td>
+            </tr>
+        </table>
+      </tal:block>
+  </tal:block>
 </metal:block>
 
 
 <metal:block define-macro="dl_edit_ratings">
-   <div id="cc_star_block_${record/upload_id}" class="cc_star_wrapper">
-    <ul class="cc_ratingslist" >
-    <li><img onclick="cc_star_pick(${record/upload_id},1)"  
-       src="${root-url}ccimages/stars/star-empty.gif" id="cc_star_${record/upload_id}_1" 
-       onmouseover="cc_star_hover_on(${record/upload_id},1)" 
-       onmouseout="cc_star_hover_off(${record/upload_id},1)" /></li>
-    <li><img onclick="cc_star_pick(${record/upload_id},2)"  
-       src="${root-url}ccimages/stars/star-empty.gif"  id="cc_star_${record/upload_id}_2" 
-       onmouseover="cc_star_hover_on(${record/upload_id},2)" 
-       onmouseout="cc_star_hover_off(${record/upload_id},2)" /></li>
-    <li><img onclick="cc_star_pick(${record/upload_id},3)"  
-       src="${root-url}ccimages/stars/star-empty.gif"  id="cc_star_${record/upload_id}_3" 
-       onmouseover="cc_star_hover_on(${record/upload_id},3)"  
-       onmouseout="cc_star_hover_off(${record/upload_id},3)" /></li>
-    <li><img onclick="cc_star_pick(${record/upload_id},4)"  
-       src="${root-url}ccimages/stars/star-empty.gif"  id="cc_star_${record/upload_id}_4" 
-       onmouseover="cc_star_hover_on(${record/upload_id},4)"  
-       onmouseout="cc_star_hover_off(${record/upload_id},4)" /></li>
-    <li><img onclick="cc_star_pick(${record/upload_id},5)" 
-       src="${root-url}ccimages/stars/star-empty.gif"  id="cc_star_${record/upload_id}_5" 
-       onmouseover="cc_star_hover_on(${record/upload_id},5)"  
-       onmouseout="cc_star_hover_off(${record/upload_id},5)" /></li>
-    </ul> <div class="cc_ratings_arrow"> <span tal:content="php: CC_lang('rate');" /></div>
+    <tal:block condition="not: record/thumbs_up">
+        <metal:block use-macro="upload_misc.xml/old_edit_stars" />
+    </tal:block>
+</metal:block>
+
+<metal:block define-macro="old_edit_stars">
+    <div id="cc_star_block_${record/upload_id}" class="cc_star_wrapper">
+        <ul class="cc_ratingslist" >
+        <li><img onclick="cc_star_pick(${record/upload_id},1)"  
+           src="${root-url}ccimages/stars/star-empty.gif" id="cc_star_${record/upload_id}_1" 
+           onmouseover="cc_star_hover_on(${record/upload_id},1)" 
+           onmouseout="cc_star_hover_off(${record/upload_id},1)" /></li>
+        <li><img onclick="cc_star_pick(${record/upload_id},2)"  
+           src="${root-url}ccimages/stars/star-empty.gif"  id="cc_star_${record/upload_id}_2" 
+           onmouseover="cc_star_hover_on(${record/upload_id},2)" 
+           onmouseout="cc_star_hover_off(${record/upload_id},2)" /></li>
+        <li><img onclick="cc_star_pick(${record/upload_id},3)"  
+           src="${root-url}ccimages/stars/star-empty.gif"  id="cc_star_${record/upload_id}_3" 
+           onmouseover="cc_star_hover_on(${record/upload_id},3)"  
+           onmouseout="cc_star_hover_off(${record/upload_id},3)" /></li>
+        <li><img onclick="cc_star_pick(${record/upload_id},4)"  
+           src="${root-url}ccimages/stars/star-empty.gif"  id="cc_star_${record/upload_id}_4" 
+           onmouseover="cc_star_hover_on(${record/upload_id},4)"  
+           onmouseout="cc_star_hover_off(${record/upload_id},4)" /></li>
+        <li><img onclick="cc_star_pick(${record/upload_id},5)" 
+           src="${root-url}ccimages/stars/star-empty.gif"  id="cc_star_${record/upload_id}_5" 
+           onmouseover="cc_star_hover_on(${record/upload_id},5)"  
+           onmouseout="cc_star_hover_off(${record/upload_id},5)" /></li>
+        </ul> <div class="cc_ratings_arrow"> <span tal:content="php: CC_lang('rate');" /></div>
     </div>
 </metal:block>
 
@@ -92,7 +113,7 @@ $Id$
       </tr>
       <tal:block repeat="grp menu">
         <tr tal:repeat="item grp">
-              <tal:block define="parent_id item/parent_id | nothing" />
+          <tal:block define="parent_id item/parent_id | nothing" />
           <td id="${parent_id}" >
               <tal:block define="classname item/class | nothing" />
               <a href="${item/action}" tal:attributes="type item/type | nothing"  tal:on-error=""

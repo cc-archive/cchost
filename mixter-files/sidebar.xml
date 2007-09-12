@@ -35,10 +35,25 @@ $Id$
     <metal:block use-macro="custom.xml/Recent_Reviews" />
 </metal:block>
 
+
+<metal:block define-macro="bookmarks">
+<div style="margin: 8px 0px 4px 0px">
+<script type="text/javascript">
+  addthis_url    = location.href;   
+  addthis_title  = document.title;  
+  addthis_pub    = 'fourstones';     
+</script>
+<script type="text/javascript" src="http://s7.addthis.com/js/addthis_widget.php?v=12" ></script>
+</div>
+
+</metal:block>
+
 <metal:block define-macro="ccM_Sidebar">
     <metal:block use-macro="custom.xml/Ratings_Chart" />
     <metal:block use-macro="custom.xml/Editorial_Picks" />
     <metal:block use-macro="custom.xml/Recent_Reviews" />
+
+
 </metal:block>
 
 <metal:block define-macro="ccRecent_Playlists">

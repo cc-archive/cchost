@@ -35,24 +35,46 @@ class CCRatingsHV
     */
     function _fill_scores(&$record,$prefix)
     {
+        $configs =& CCConfigs::GetTable();
+        $ratings_config = $configs->GetConfig('chart');
+
         $average = $record[$prefix . '_score'] / 100;
         $count = $record[$prefix . '_num_scores'];
         $stars = floor($average);
-        $half  = ($record[$prefix . '_score'] % 100) > 25;
 
-        for( $i = 0; $i < $stars; $i++ )
-            $record['ratings'][] = 'full';
-
-        if( $half )
+        if( empty($ratings_config['thumbs_up']) )
         {
-            $record['ratings'][] = 'half';
-            $i++;
+            $record['thumbs_up'] = 0;
+
+            $half  = ($record[$prefix . '_score'] % 100) > 25;
+
+            for( $i = 0; $i < $stars; $i++ )
+                $record['ratings'][] = 'full';
+
+            if( $half )
+            {
+                $record['ratings'][] = 'half';
+                $i++;
+            }
+            
+            for( ; $i < 5; $i++ )
+                $record['ratings'][] = 'empty';
+            
+            $record['ratings_score'] = number_format($average,2) . '/' . $count;
         }
-        
-        for( ; $i < 5; $i++ )
-            $record['ratings'][] = 'empty';
-        
-        $record['ratings_score'] = number_format($average,2) . '/' . $count;
+        else
+        {
+            $record['thumbs_up'] = 1;
+
+            if( $stars >= 4 )
+            {
+                $record['ratings_score'] = $count;
+            }
+            else
+            {
+                $record['ratings_score'] = 0;                    
+            }
+        }
     }
 
     /**
@@ -69,6 +91,5 @@ class CCRatingsHV
             $this->_fill_scores($record,'user');
         }
     }
-
 }
 ?>

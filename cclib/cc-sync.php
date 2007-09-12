@@ -315,7 +315,7 @@ END;
         $stars = (floor($average/100) << 8);
         $half  = fmod($average/100,$stars) > 0.25;
         $R2['upload_id'] = $record['upload_id'];
-        $R2['upload_score'] = $average;
+        $R2['upload_score'] = floor($average);
         $R2['upload_num_scores'] = $count;
 
         if( !empty($CC_GLOBALS['ratings_rank']) ) 
@@ -347,7 +347,7 @@ END;
                GROUP BY upload_user
 END;
 
-        $uargs['user_score'] = CCDatabase::QueryItem($sql);
+        $uargs['user_score'] = floor( CCDatabase::QueryItem($sql) );
 
         $sql =<<<END
             SELECT SUM(upload_num_scores)
