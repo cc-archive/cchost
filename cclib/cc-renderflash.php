@@ -73,6 +73,10 @@ END;
             if( !empty($link) )
                 $record['script_link'] = $link;
         }
+        else
+        {
+            $record['script_link'] = '';
+        }
     }
 
     function _get_stream_link(&$record)
