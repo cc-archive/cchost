@@ -43,7 +43,7 @@ EOF;
     {
         $html .= <<<EOF
             <div class="rcmd" id="cc_star_block_$upload_id" > <a id="ratingscommand" onclick="cc_star_pick($upload_id,5)"
-                href="javascript://say DAAAAAAAAAAAAAM!"><span>Say <b>DAAAAM</b></span></a></div>
+                href="javascript://say DAAAAAAAAAAAAAM!"><span>Recommend</span></a></div>
 EOF;
     }
 
@@ -61,7 +61,7 @@ EOF;
     if( !empty($record['ratings_score']) )
     {
         $html .= <<<EOF
-            {$record['upload_num_scores']} say <b>DAAAAAM</b><img src="{$root_url}/ccimages/rate_it.png" />
+            {$record['upload_num_scores']} Recommends</b><img src="{$root_url}/ccimages/rate_it.png" />
 EOF;
     }
 

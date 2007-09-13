@@ -61,12 +61,12 @@ $Id$
       <div class="cc_rate_it_line">
         <div tal:condition="record/ok_to_rate" class="rcmd" id="cc_star_block_${record/upload_id}" > <a id="ratingscommand" 
                 onclick="cc_star_pick(${record/upload_id},5)"
-                href="javascript://say DAAAAAAAAAAAAAM!"><span tal:content="php: _('say Love It!')" /></a></div>
+                href="javascript://say DAAAAAAAAAAAAAM!"><span tal:content="php: _('Recommend')" /></a></div>
 
         <a tal:condition="record/reviews_link" href="${record/reviews_link/url}" class="rvlink" tal:content="record/reviews_link/text" />
 
         <span id="cc_rate_block_${record/upload_id}" class="rate_block">
-          <tal:block condition="record/ratings_score">${record/ratings_score} <span tal:content="php: _('say Love It!')" /></tal:block>
+          <tal:block condition="record/ratings_score">${record/ratings_score} <span tal:content="php: _('Recommend!')" /></tal:block>
         </span>
       </div>
     </td>
@@ -100,7 +100,7 @@ $Id$
 <metal:block define-macro="ratings_stars" >
   <tal:block condition="record/ratings_score">
     <tal:block condition="record/thumbs_up">
-          <tal:block condition="record/ratings_score">${record/ratings_score} <span tal:content="php: _('say Love It!')" /></tal:block>
+          <tal:block condition="record/ratings_score">${record/ratings_score} <span tal:content="php: _('Recommend!')" /></tal:block>
     </tal:block>
     <tal:block condition="not: record/thumbs_up">
           <tal:block repeat="i record/ratings"><img 

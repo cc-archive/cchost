@@ -40,7 +40,7 @@ $Id$
 </metal:block>
 
 <metal:block define-macro="ratings_stars" >
-  ${record/ratings_score} say DAAAAAM<img src="${root-url}/ccimages/rate_it.png" />
+  ${record/ratings_score} Recommends<img src="${root-url}/ccimages/rate_it.png" />
 </metal:block>
 
 <metal:block define-macro="ratings_show" >
