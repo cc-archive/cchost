@@ -28,5 +28,12 @@ function mixter_list_files(&$records,$xclass)
     return $html;
 }
 
+function mixter_dump_ratings(&$record)
+{
+    require_once('mixter-lib/mixter-dump-listing.inc');
+    $html =& _mixter_dump_ratings($record);
+    return $html;
+}
+
 
 ?>
