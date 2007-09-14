@@ -274,11 +274,16 @@ class CCRatingsAdmin
                 $diff = 60 * 10; // hard wired 10 min interval between automated recalcs
                 $now = time();
                 if( !empty($chart['last_recalc']) && (($chart['last_recalc'] + $diff) < $now ) )
+                {
                     return;
+                }
             }
 
+            // clear chart ranks
             $sql = 'UPDATE cc_tbl_uploads SET upload_rank = 0';
             CCDatabase::Query($sql);
+
+            // now weigh time into newest uploads
 
             $cutoff_t = strtotime( empty($chart['cut-off'] ) ? '2 weeks ago' : $chart['cut-off'] );
             $cutoff = date('Y-m-d H:i:s', $cutoff_t);
@@ -306,7 +311,7 @@ EOF;
                 CCDatabase::Query($stm[0]);
 
             $chart['last_recalc'] = time();
-            $config->SaveConfig('chart',$chart);
+            $configs->SaveConfig('chart',$chart);
         }
         else
         {
