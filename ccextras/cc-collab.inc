@@ -26,78 +26,10 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-class CCCollabs extends CCTable
-{
-    function CCCollabs()
-    {
-        $this->CCTable('cc_tbl_collabs','collab_id');
-    }
-
-    /**
-    * Returns static singleton of table wrapper.
-    * 
-    * Use this method instead of the constructor to get
-    * an instance of this class.
-    * 
-    * @returns object $table An instance of this table
-    */
-    function & GetTable()
-    {
-        static $_table;
-        if( !isset($_table) )
-            $_table = new CCCollabs();
-        return( $_table );
-    }
-}
-
-class CCCollabUploads extends CCTable
-{
-    function CCCollabUploads()
-    {
-        $this->CCTable('cc_tbl_collab_uploads','collab_upload_upload');
-    }
-
-    /**
-    * Returns static singleton of table wrapper.
-    * 
-    * Use this method instead of the constructor to get
-    * an instance of this class.
-    * 
-    * @returns object $table An instance of this table
-    */
-    function & GetTable()
-    {
-        static $_table;
-        if( !isset($_table) )
-            $_table = new CCCollabUploads();
-        return( $_table );
-    }
-}
-
-class CCCollabUsers extends CCTable
-{
-    function CCCollabUsers()
-    {
-        $this->CCTable('cc_tbl_collab_users','collab_user_collab');
-    }
-
-    /**
-    * Returns static singleton of table wrapper.
-    * 
-    * Use this method instead of the constructor to get
-    * an instance of this class.
-    * 
-    * @returns object $table An instance of this table
-    */
-    function & GetTable()
-    {
-        static $_table;
-        if( !isset($_table) )
-            $_table = new CCCollabUsers();
-        return( $_table );
-    }
-}
-
+/**
+*/
+require_once('cclib/cc-form.php');
+require_once('ccextras/cc-collab-tables.inc');
 require_once('ccextras/cc-topics.inc');
 
 class CCCollabTopics extends CCTopics
@@ -125,12 +57,6 @@ class CCCollabTopics extends CCTopics
         return $table;
     }
 }
-
-
-/**
-*/
-require_once('cclib/cc-form.php');
-
 
 class CCCollabForm extends CCForm
 {

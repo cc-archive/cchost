@@ -179,26 +179,20 @@ EOF;
         }
         else
         {
-            require_once('ccextras/cc-collab.inc');
             $collab_id = $record['upload_extra']['collab'];
-            $collaborators = CCCollab::_get_collab_users($collab_id);
-            $collab_links = '';
-            $comma = '';
-
-            foreach( $collaborators as $CLB )
+            $rurl = $record['collab']['base_purl'];
+            $culinks = array();
+            foreach( $record['collab']['users'] as $U )
             {
-                $collab_links .= $comma . '<a href="' . ccl('people',$CLB['user_name']) . '">' 
-                                        . $CLB['user_real_name'] . '</a>';
-                $comma = ', ';
+                $xurl = $url . '/' . $U['user_name'];
+                $culinks[] = "<a href=\"$xurl\">{$U['user_real_name']}</a>";
             }
-
-            $collabs = CCCollabs::GetTable();
-            $collab_name = $collabs->QueryItemFromKey('collab_name',$collab_id);
+            $collab_links = join( ', ', $culinks );
             $collab_url = ccl('collab',$collab_id);
             $html .=<<<EOF
             <tr>
-              <th>attribution:</th>
-              <td><a  href="{$collab_url}"><span style="font-weight:bold">{$collab_name}</span></a></td>
+              <th>project:</th>
+              <td><a  href="{$collab_url}"><span style="font-weight:bold">{$record['collab']['collab_name']}</span></a></td>
             </tr>
             <tr>
               <th>collaborators:</th>

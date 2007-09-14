@@ -30,5 +30,23 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCCollab',  'OnMapUrls
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCCollab', 'OnFormFields')      , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCCollab', 'OnUploadDone')      , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCCollab',  'OnUploadDelete')    , 'ccextras/cc-collab.inc' );
+CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCCollabHV',  'OnUploadRow') );
+
+class CCCollabHV 
+{
+    function OnUploadRow(&$record)
+    {
+        if( empty($record['upload_extra']['collab']) )
+            return;
+
+        $collab_id = $record['upload_extra']['collab'];
+        require_once('ccextras/cc-collab.inc');
+        $collabs = new CCCollabs();
+        $record['collab'] = $collabs->QueryKeyRow($collab_id);
+        $api = new CCCollab();
+        $record['collab']['users'] = $api->_get_collab_users($collab_id);
+        $record['collab']['base_purl'] = ccl('people');
+    }
+}
 
 ?>
