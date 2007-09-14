@@ -47,7 +47,7 @@ class CCPlaylistHV
 
     function OnUploadRow( &$record ) 
     {
-        if( !cc_playlist_enabled() || empty($record['upload_published']) || !empty($record['upload_banned']) )
+        if( !cc_playlist_enabled() || (!CCUser::IsAdmin() && (empty($record['upload_published']) || !empty($record['upload_banned'])) ) )
         {
             $record['fplay_url'] = '';
         }
