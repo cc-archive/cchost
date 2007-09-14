@@ -30,13 +30,6 @@ if( !defined('IN_CC_HOST') )
 */
 require_once('ccextras/cc-topics.php');
 
-CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,    array( 'CCFormat', 'OnFormFields'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCFormat', 'OnMapUrls'));
-CCEvents::AddHandler(CC_EVENT_USER_ROW,       array( 'CCFormat', 'OnUserRow'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,     array( 'CCFormat', 'OnUploadRow'));
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFormat' , 'OnGetConfigFields') );
-CCEvents::AddHandler(CC_EVENT_TOPIC_ROW,     array( 'CCFormat' , 'OnTopicRow') );
-
 function _cc_format_links()
 {
     static $done;
@@ -50,7 +43,7 @@ function _cc_format_links()
     }
 }
 
-function generator_cc_format($form, $fieldname, $value, $class )
+function _generator_cc_format($form, $fieldname, $value, $class )
 {
     _cc_format_links();
 
@@ -64,6 +57,8 @@ function generator_cc_format($form, $fieldname, $value, $class )
         <div class="cc_format_preview" id="format_inner_preview_' . $fieldname . '"></div>
             </div>';
 
+    $thumbs_up_tiny = ccr('ccimages/thumbs_up_tiny.png');
+
     $html .=<<<END
         <div class="cc_ed_buttons">
     <input type="button" onclick="cc_apply_format('$fieldname','b');" value="b" style="font-weight: bold;" />
@@ -75,6 +70,7 @@ function generator_cc_format($form, $fieldname, $value, $class )
     <input type="button" onclick="cc_apply_format('$fieldname','blue');" value="B" style="color:blue" />
     <input type="button" onclick="cc_apply_format('$fieldname','big');" value="+" style="" />
     <input type="button" onclick="cc_apply_format('$fieldname','small');" value="-" style="" />
+    <button onclick="cc_apply_format('$fieldname','up'); return false;" style="" ><img src="$thumbs_up_tiny" /></button>
     <input type="button" onclick="cc_format_preview('$fieldname')" id="preview_$fieldname" value="preview" style="font-size:smaller;" />
     </div>
         $textarea
@@ -85,12 +81,14 @@ END;
 
 function _cc_format_unformat($text)
 {
-    $attrs = '(b|i|u|red|green|blue|big|small|url|quote)';
+    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up)';
     return preg_replace("#\[/?$attrs(=[^\]]+)?\]#U",'',$text);
 }
 
 function _cc_format_format($text)
 {
+    $thumbs_up = ccr('ccimages/thumbs_up.png');
+
     $quote = _('Quote:');
     require_once('cclib/smartypants/smartypants.php');
     $attrs = '(b|i|u|red|green|blue|big|small)';
@@ -99,6 +97,8 @@ function _cc_format_format($text)
     $text = preg_replace( "#\[/$attrs\]#", '</span>', $text );
     $text = preg_replace( "/\[quote=?([^\]]+)?\]/", '<span class="quote"><span>'. $quote . ' $1</span>', $text );
     $text = preg_replace( "#\[/quote\]#", '</span>', $text );
+    $text = preg_replace( "/\[up]/", "<img class=\"cc_thumbs_up\" src=\"$thumbs_up\" />", $text );
+    $text = preg_replace( "#\[/up\]#", '', $text );
     $text = SmartyPants($text);
     $urls = array( '@(?:^|[^">=\]])(http://[^\s$]+)@m',
                    '@\[url\]([^\[]+)\[/url\]@' ,
@@ -116,29 +116,17 @@ function _cc_format_url(&$m)
         $text = strlen($url) > 30 ? substr($url,0,27) . '...' : $url;
     else
         $text = $m[2];
+    /*
+    if( strpos($url,'?') !== false )
+    {
+        $parts = explode('?',$url);
+        $url = $parts[0] . '?' . urlencode($parts[1]);
+    }
+    */
     return( " <a title=\"$url\" class=\"cc_format_link\" href=\"$url\">$text</a>" );
 }
 
-function validator_cc_format($form, $fieldname)
-{
-    return $form->validator_textarea($fieldname);
-}
 
-function _cc_can_format_edit()
-{
-    global $CC_GLOBALS;
-
-    return !empty($CC_GLOBALS['format']) ||
-           (!empty($CC_GLOBALS['adminformat']) && CCUser::IsAdmin());
-}
-
-function _cc_is_formatting_on()
-{
-    global $CC_GLOBALS;
-
-    return !empty($CC_GLOBALS['format']) ||
-           !empty($CC_GLOBALS['adminformat']);
-}
 
 /**
 *
@@ -272,6 +260,8 @@ class CCFormat
         if( !_cc_can_format_edit() )
             return;
 
+        // deprecated way of doing this, use 'want_formatting' form field instead
+        //
         $fields_we_like = array( 'user_description', 'upload_description', 
                                   'editorial_review', 'topic_text' );
 
@@ -282,9 +272,11 @@ class CCFormat
         $keys = array_keys($fields);
         for( $i = 0; $i < $count; $i++ )
         {
-            if( in_array( $keys[$i], $fields_we_like ) )
+            $K =& $keys[$i];
+
+            if( in_array( $K, $fields_we_like ) || !empty($fields[$K]['want_formatting'] ) )
             {
-                $F =& $fields[ $keys[$i] ];
+                $F =& $fields[ $K ];
                 if( $F['formatter'] == 'textarea' )
                 {
                     $F['formatter'] = 'cc_format';
