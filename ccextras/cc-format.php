@@ -50,7 +50,10 @@ function generator_cc_format($form, $fieldname, $value, $class )
 function cc_format_text($text)
 {
     if( _cc_is_formatting_on() )
+    {
+        require_once('ccextras/cc-format.inc');
         return _cc_format_format($text);
+    }
     return $text;
 }
 

@@ -315,6 +315,7 @@ class CCCollab
 
         CCPage::SetTitle(sprintf( _('Collaboration Project: "%s"'), $collab_row['collab_name'] ));
 
+        require_once('ccextras/cc-format.inc');
         $collab_row['collab_desc'] = _cc_format_format($collab_row['collab_desc']);
 
         $collab_users = $this->_get_collab_users($collab_id);
