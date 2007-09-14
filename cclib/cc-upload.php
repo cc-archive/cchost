@@ -142,6 +142,12 @@ class CCUpload
             $temp_up->AddJoin( new CCPlaylistItems(), 'upload_id', 'LEFT OUTER', 'cart_item_upload' );
         }
 
+        if( !empty($reccby) ) // hehe and another
+        {
+            require_once('cclib/cc-ratings.php');
+            $temp_up->AddJoin( new CCRatings(), 'upload_id', '', 'ratings_upload' );
+        }
+
         global $CC_GLOBALS;
         $CC_GLOBALS['fplay_args'][] = $qstring;
 

@@ -243,6 +243,11 @@ don't do any additional sort, '0' means do whatever is in the 'sort' and 'ord' p
 </td>  <td class="def">  
 </td>  </tr>
 
+<tr>  <td>  reccby
+</td>  <td>  Only return records that are rated 5 by this user (aka "Recommended by...")
+</td>  <td class="def">  
+</td>  </tr>
+
 <tr>  <td>  promo_tag
 </td>  <td>  Uploads with this tag will be mixed into the output stream at promo_gap intervals. (For ccMixter this tag is <b>site_promo</b>)
 </td>  <td class="def">  

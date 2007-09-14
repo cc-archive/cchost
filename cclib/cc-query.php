@@ -432,7 +432,6 @@ class CCQuery
                 foreach( $contest_names as $contest_name )
                     $cnames[] = $contest_name['contest_short_name'];
 
-
                 // one of the 'tags' may be a user name
                 $users =& CCUsers::GetTable();
                 $username = '';
@@ -492,6 +491,25 @@ class CCQuery
         
         }
 
+        // Recommended by
+
+        if( !empty($reccby) )
+        {
+            $userid = CCUser::IDFromName($reccby);
+            if( empty($userid) )
+            {
+                $where[] = "(0)";
+            }
+            else
+            {
+                require_once('cclib/cc-ratings.php');
+                $table->AddJoin( new CCRatings(), 'upload_id', '', 'ratings_upload' );
+                $where[] = "(ratings_user = $userid) AND (ratings_score > 400)";  // only show '5's
+            }
+        }
+
+        // Required tags
+
         if( !empty($reqtags) )
         {
             if( method_exists( $table, '_tags_to_where' ) )
@@ -506,6 +524,8 @@ class CCQuery
                 $where[] = $dummyup->_tags_to_where(''); /* *cough* */
             }
         }
+
+        // A specific set of IDs
 
         if( !isset($ids) )
         {
@@ -524,8 +544,6 @@ class CCQuery
         // Check for date limit
 
         $since = 0;
-
-//            CCDebug::PrintVar($sinc,false);
 
         if( !empty($sinced) )     // text date
         {
