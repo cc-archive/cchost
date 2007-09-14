@@ -65,19 +65,7 @@ class CCRatingsHV
         else
         {
             $record['thumbs_up'] = 1;
-
-            // new uploads with have no stars,
-            // old cruddy uploads with have bad
-            // ratings
-
-            if( !$stars || $stars >= 4 )
-            {
-                $record['ratings_score'] = $count;
-            }
-            else
-            {
-                $record['ratings_score'] = 0;                    
-            }
+            $record['ratings_score'] = $count;
         }
     }
 

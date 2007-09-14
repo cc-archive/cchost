@@ -281,7 +281,7 @@ class CCRating
         $chart      = $configs->GetConfig('chart');    // global
         $ratings    =& CCRatings::GetTable();           
         $ratings_on = !empty($chart['ratings']) && !empty($settings['ratings']);
-
+                
         $is_me = $record['upload_user'] == CCUser::CurrentUser();
 
         if( $is_me || 
@@ -294,8 +294,13 @@ class CCRating
         else
         {
             $record['ok_to_rate'] = true;
-            $record['thumbs_up'] = !empty($chart['thumbs_up']);
         }
+
+        // ugh, this is a temp fix until I can figure out the real
+        // thing to do about all these ratings/ranking feilds
+
+        if( ($record['thumbs_up'] = !empty($chart['thumbs_up'])) != false )
+            $record['upload_score'] = $record['upload_num_scores'];
 
         if( !$ratings_on || empty($record['upload_score']) )
             return;
