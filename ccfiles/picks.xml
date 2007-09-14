@@ -155,9 +155,14 @@ function pickwinplay(qstring)
   </tr>
   <tr>
     <td>
+        <tal:block replace="">
+            NOTE: the follow query applies to a system using the 'Recommend!' version of the
+            rating system. If you use the 5-star system you should copy this file to your
+            local 'viewfiles' directory and change 'num_scores' below to 'rank'
+        </tal:block>
         <tal:block define="pick_title php:_('All Time Hot List');
                            ed_pick 0;
-                           qstring string:tags=remix&sort=rank&dir=DESC&limit=10;" />
+                           qstring string:tags=remix&sort=num_scores&dir=DESC&limit=10;" />
         <metal:block use-macro="picks" />
     </td>
   </tr>

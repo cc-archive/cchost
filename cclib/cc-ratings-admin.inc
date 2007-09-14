@@ -47,14 +47,14 @@ class CCAdminRatingsForm extends CCEditConfigForm
         $fields = array( 
                     'ratings' =>
                        array(  'label'      => _('Ratings'),
-                               'form_tip'   => _('Allow users to rate uploads'),
+                               'form_tip'   => _('Allow users to rate/recommend uploads'),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE,
                             ),
 
                     'thumbs_up' =>
-                       array(  'label'      => _('Use \'Thumbs Up\' style '),
-                               'form_tip'   => _('Use \'Thumbs Up\' instead of star ratings system'),
+                       array(  'label'      => _('Use \'Recommend\' style '),
+                               'form_tip'   => _('Use \'Recommend!\' instead of star ratings system'),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE),
 
@@ -70,6 +70,7 @@ class CCAdminRatingsForm extends CCEditConfigForm
                                'class'      => 'cc_form_input_short',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
+
                     'cut-off' =>  
                        array(  'label'      => _('Cut Off Point'),
                                'form_tip'   => _('Only chart uploads since this time'),
@@ -83,17 +84,20 @@ class CCAdminRatingsForm extends CCEditConfigForm
                                                         ),
                                'value'      => '2 weeks ago',
                                'flags'      => CCFF_POPULATE),
+
                     'requires-review' =>  
                        array(  'label'      => _('Review required'),
                                'form_tip'   => _('Check this if review is required to also rate. (This will disable \'anonymous rating.\')'),
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE),
+
                     'recalc_now' =>  
                        array(  'label'      => _('Recalculate now'),
                                'form_tip'   => _('Recalculate rating during submit. NOTE: This can take a very, very (very) long time if you have a lot of uploads.'),
                                'value'      => '<a href="$url" class="cc_gen_button"><span>Recalc</span></a>',
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE),
+
                     'ratings_ban' =>
                        array(  'label'      => _('Ratings Ban List'),
                                'form_tip'   => _('Users not allowed to rate'),
@@ -256,41 +260,89 @@ class CCRatingsAdmin
     */
     function Recalc($with_ui=true)
     {
-        require_once('cclib/cc-sync.php');
+/*
+        ALTER TABLE `cc_tbl_uploads` ADD INDEX `update` ( `upload_date` ) 
+*/
         $configs =& CCConfigs::GetTable();
         $chart = $configs->GetConfig('chart');
+        $is_thumbs_up = !empty($chart['thumbs_up']);
 
-        if( empty($chart['bayesian-min']) )
-            $chart['bayesian-min'] = 5;
-
-        $uploads =& CCUploads::GetTable();
-        $where = 'upload_num_scores >= ' . $chart['bayesian-min'];
-        $sql = "SELECT * FROM cc_tbl_uploads WHERE $where";
-        $qr = mysql_query($sql) or die( mysql_error() );
-        $count = mysql_num_rows($qr);
-        for( $i = 0; $i < $count; $i++ )
+        if( $is_thumbs_up )
         {
-            $row = mysql_fetch_assoc($qr);
-            CCSync::_calc_rank($chart,$row);
-            $args['upload_id'] = $row['upload_id'];
-            $args['upload_rank'] = $row['upload_rank'];
-            $uploads->Update($args);
+            if( !$with_ui ) // with UI implies admin wants to force a recalc
+            {
+                $diff = 60 * 10; // hard wired 10 min interval between automated recalcs
+                $now = time();
+                if( !empty($chart['last_recalc']) && (($chart['last_recalc'] + $diff) < $now ) )
+                    return;
+            }
+
+            $sql = 'UPDATE cc_tbl_uploads SET upload_rank = 0';
+            CCDatabase::Query($sql);
+
+            $cutoff_t = strtotime( empty($chart['cut-off'] ) ? '2 weeks ago' : $chart['cut-off'] );
+            $cutoff = date('Y-m-d H:i:s', $cutoff_t);
+            $sql =<<<EOF
+            
+SELECT CONCAT( 'UPDATE cc_tbl_uploads SET upload_rank =',
+                TRUNCATE (
+                    (
+                        (pow( count( ratings_upload ) , 3 ) ) / 
+                        (
+                            (UNIX_TIMESTAMP( upload_date ) - UNIX_TIMESTAMP( '2007-08-30' )) / 1000
+                        )
+                    ) *1000,
+                    0
+                    ),
+                ' WHERE upload_id = ',
+                upload_id
+        ) AS stm 
+FROM cc_tbl_ratings, cc_tbl_uploads 
+WHERE ratings_upload = upload_id AND upload_date > '$cutoff' 
+GROUP BY ratings_upload
+EOF;
+            $qr = CCDatabase::Query($sql);
+            while( $stm = mysql_fetch_row($qr) )
+                CCDatabase::Query($stm[0]);
+
+            $chart['last_recalc'] = time();
+            $config->SaveConfig('chart',$chart);
         }
-        $upcount = $count;
-
-        $args = array();
-        $users =& CCUsers::GetTable();
-        $where = 'user_num_scores > ' . $chart['bayesian-min'];
-        $sql = "SELECT * FROM cc_tbl_user WHERE $where";
-        $qr = mysql_query($sql);
-        $count = mysql_num_rows($qr);
-        for( $i = 0; $i < $count; $i++ )
+        else
         {
-            $row = mysql_fetch_assoc($qr);
-            CCSync::_calc_rank($chart,$row,'user');
-            $args['user_id'] = $row['user_id'];
-            $args['user_rank'] = $row['user_rank'];
-            $users->Update($args);
+            require_once('cclib/cc-sync.php');
+            if( empty($chart['bayesian-min']) )
+                $chart['bayesian-min'] = 5;
+
+            $uploads =& CCUploads::GetTable();
+            $where = 'upload_num_scores >= ' . $chart['bayesian-min'];
+            $sql = "SELECT * FROM cc_tbl_uploads WHERE $where";
+            $qr = mysql_query($sql) or die( mysql_error() );
+            $count = mysql_num_rows($qr);
+            for( $i = 0; $i < $count; $i++ )
+            {
+                $row = mysql_fetch_assoc($qr);
+                CCSync::_calc_rank($chart,$row);
+                $args['upload_id'] = $row['upload_id'];
+                $args['upload_rank'] = $row['upload_rank'];
+                $uploads->Update($args);
+            }
+            $upcount = $count;
+
+            $args = array();
+            $users =& CCUsers::GetTable();
+            $where = 'user_num_scores > ' . $chart['bayesian-min'];
+            $sql = "SELECT * FROM cc_tbl_user WHERE $where";
+            $qr = mysql_query($sql);
+            $count = mysql_num_rows($qr);
+            for( $i = 0; $i < $count; $i++ )
+            {
+                $row = mysql_fetch_assoc($qr);
+                CCSync::_calc_rank($chart,$row,'user');
+                $args['user_id'] = $row['user_id'];
+                $args['user_rank'] = $row['user_rank'];
+                $users->Update($args);
+            }
         }
 
         if( $with_ui )

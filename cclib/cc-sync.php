@@ -117,7 +117,8 @@ END;
 
         // Update the internal artists' counters for the
         // owner of the former upload as well as the owners
-        // of any parents or children
+        // of any parents or children, this includes
+        // the user's rating/ranking
 
         foreach( $user_ids as $user_id )
             CCSync::User(0,$user_id);
@@ -137,7 +138,7 @@ END;
     * @param $upload_id integer Any file id that belongs to this artist (can be null)
     * @param $user_id   integer User id to sync (can be null if upload_id is present) 
     */
-    function User($upload_id,$user_id)
+    function User($upload_id,$user_id,$do_ranking=true)
     {
         if( empty($user_id) )
         {
@@ -204,12 +205,18 @@ END;
             $users->Update($row);
         }
 
-        CCSync::_user_ratings($user_id);
+        if( $do_ranking )
+            CCSync::_user_ratings($user_id);
     }
 
+    /**
+    *   A new upload that hasn't sampled anything doesn't
+    *   affect anything but the user uploader's counts.
+    *
+    */
     function NewUpload($upload_id)
     {
-        CCSync::User($upload_id,0);
+        CCSync::User($upload_id,0,false); // no need to recalc user rank
     }
 
     /**
@@ -309,26 +316,36 @@ END;
     {
         global $CC_GLOBALS;
 
+        $configs =& CCConfigs::GetTable();
+        $C = $configs->GetConfig('chart',CC_GLOBAL_SCOPE);
+        $is_thumbs_up = !empty($C['thumbs_up']) ;
         $where['ratings_upload'] = $record['upload_id'];
-        $average = $ratings->QueryItem( 'AVG(ratings_score)', $where );
         $count = $ratings->CountRows($where);
-        $stars = (floor($average/100) << 8);
-        $half  = fmod($average/100,$stars) > 0.25;
         $R2['upload_id'] = $record['upload_id'];
-        $R2['upload_score'] = floor($average);
         $R2['upload_num_scores'] = $count;
 
-        if( !empty($CC_GLOBALS['ratings_rank']) ) 
+        if( !$is_thumbs_up )
         {
-            $configs =& CCConfigs::GetTable();
-            $C = $configs->GetConfig('chart',CC_GLOBAL_SCOPE);
-            $record = array_merge($record,$R2);
-            CCSync::_calc_rank($C,$record);
-            $R2['upload_rank'] = $record['upload_rank'];
-        }
+            $average = $ratings->QueryItem( 'AVG(ratings_score)', $where );
+            $stars = (floor($average/100) << 8);
+            $half  = fmod($average/100,$stars) > 0.25;
+            $R2['upload_score'] = floor($average);
 
+            if( !empty($CC_GLOBALS['ratings_rank']) ) 
+            {
+                $record = array_merge($record,$R2);
+                CCSync::_calc_rank($C,$record);
+                $R2['upload_rank'] = $record['upload_rank'];
+            }
+        }
         $uploads =& CCUploads::GetTable();
         $uploads->Update($R2);
+
+        if( $is_thumbs_up )
+        {
+            require_once('cclib/cc-ratings-admin.inc');
+            CCRatingsAdmin::Recalc(false);
+        }
 
         CCSync::_user_ratings($record['upload_user']);
     }
@@ -340,11 +357,14 @@ END;
     {
         global $CC_GLOBALS;
 
+        $configs =& CCConfigs::GetTable();
+        $chart = $configs->GetConfig('chart');
+        $is_thumbs_up = !empty($chart['thumbs_up']);
+
         $sql =<<<END
             SELECT AVG(upload_score)
                FROM cc_tbl_uploads
                WHERE upload_user = '$user_id' AND upload_score > 0
-               GROUP BY upload_user
 END;
 
         $uargs['user_score'] = floor( CCDatabase::QueryItem($sql) );
@@ -353,20 +373,19 @@ END;
             SELECT SUM(upload_num_scores)
                FROM cc_tbl_uploads
                WHERE upload_user = '$user_id'
-               GROUP BY upload_user
 END;
 
         $uargs['user_num_scores'] = CCDatabase::QueryItem($sql);
         $uargs['user_id'] = $user_id;
+        if( $is_thumbs_up )
+            $uargs['user_rank'] = $uargs['user_num_scores'];
 
         $users = new CCTable('cc_tbl_user','user_id');
         $users->Update($uargs);
 
-        if( !empty($CC_GLOBALS['ratings_rank']) ) 
+        if( !$is_thumbs_up && !empty($CC_GLOBALS['ratings_rank']) ) 
         {
             $row = $users->QueryKeyRow($user_id);
-            $configs =& CCConfigs::GetTable();
-            $chart = $configs->GetConfig('chart');
             CCSync::_calc_rank($chart,$row,'user');
             $u2args['user_id'] = $user_id;
             $u2args['user_rank'] = $row['user_rank'];
@@ -380,6 +399,16 @@ END;
     */
     function _calc_rank(&$C,&$R,$prefix='upload')
     {
+        if( !empty($C['thumbs_up']) )
+        {
+            if( $prefix == 'user' )
+            {
+                $R['user_rank'] = CCDatabase::QueryItem(
+                              "SELECT SUM(upload_num_scores) FROM cc_tbl_uploads WHERE upload_user = {$R['user_id']}");
+            }
+            return;
+        }
+
         /*
             rank = (v / (v+m)) * A + (m / (v+m)) * C
 
@@ -413,7 +442,7 @@ END;
             $rank = ($v / ($v+$m)) * $A + ($m / ($v+$m)) * $C;
         }
 
-        $R[$prefix . '_rank'] = number_format( $rank, 3 );
+        $R[$prefix . '_rank'] = floor( $rank );
     }
 
     /**
