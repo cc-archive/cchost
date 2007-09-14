@@ -1,43 +1,55 @@
 <tal:block>
-
 <metal:block define-macro="show_collabs">
-   <link rel="stylesheet" type="text/css" href="${root-url}cctemplates/collab.css" title="Default Style" />
+  <link rel="stylesheet" type="text/css" href="${root-url}cctemplates/playlist.css" title="Default Style" />
    <style>
-  .hear_button {
-    background: url('${root-url}cctemplates/ccmixter/hear-button-fg.gif');
-    display: block;
-    width: 17px;
-    height: 17px;
+  .collab_entry {
+    background: url('${root-url}cctemplates/ccmixter/bg_head.gif') top repeat-x;
+    margin: 4px;
+    padding: 6px;
   }
-  .hear_button:hover {
-    background: url('${root-url}cctemplates/ccmixter/hear-button-bg.gif');
+  .collab_name {
+    font-weight: bold;
+    font-size: 13px;
+    color: brown;
+    margin: 0px 0px 4px 0px;
+  }
+  .collab_date {
+    color: #888;
+    font-style: italic;
+    margin: 4px;
+    display: block;
+    float: right;
+    width: 90px;
+    text-align: right;
   }
    </style>
-    <table id="collabs_table">
-        <tr>
-          <th>Collaboration Name</th>
-          <th>Start Date</th>
-          <th>Participants</th>
-          <th>Project</th>
-        </tr>
-    <tal:block repeat="row collabs/collab_rows">
-        <tr>
-          <td><a class="collab_name" href="${home-url}collab/${row/collab_id}">${row/collab_name}</a></td>
-          <td><span tal:content="php: CC_datefmt('${row/collab_date}','F d, Y');" /></td>
-          <td>
+<table style="width:95%" >
+ <tal:block define="rows php:array_chunk(${collabs/collab_rows}, 2);" />
+   <tr tal:repeat="col rows">
+       <td tal:repeat="row col" style="vertical-align: top;width:50%;">
+        <div class="collab_entry">
+            <span class="collab_date" tal:content="php: CC_datefmt('${row/collab_date}','M d, Y');" />
+            <a class="collab_name" href="${home-url}collab/${row/collab_id}" tal:content="php: CC_strchop('${row/collab_name}',35);" />
+            <br />
             <tal:block repeat="u row/users">
-              <a href="${home-url}people/${u/user_name}">${u/user_real_name}</a>&nbsp;
+                <a href="${home-url}people/${u/user_name}">${u/user_real_name}</a><tal:block  
+                      condition="not: repeat/u/end" >, </tal:block>
             </tal:block>
-          </td>
-          <td>
-            <tal:block repeat="ups row/uploads">
-                <a href="${home-url}api/query?f=m3u&ids=${ups/upload_id};" class="hear_button">&nbsp; </a>&nbsp;
-              <a class="collab_upload" href="${ups/file_page_url}">${ups/upload_name}</a>
-            </tal:block> 
-          </td>
-        </tr>
-    </tal:block>
-    </table>
+            <tal:block condition="row/uploads">
+                <tal:block repeat="item row/uploads" >
+                    <div tal:condition="item/fplay_url" class="tdc cc_playlist_pcontainer" ><a  class="cc_player_button cc_player_hear" 
+                        id="_ep_1_${item/upload_id}" href="${item/fplay_url}"> </a>
+                    </div>
+                </tal:block>
+            </tal:block>
+            <br style="clear:both" />
+        </div>
+  </td>
+  </tr>
+</table>
+<metal:block use-macro="${prev_next_links}" />
+
+<metal:block use-macro="playerembed.xml/eplayer" />
 </metal:block>
 
 <metal:block define-macro="show_collab">

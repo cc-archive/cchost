@@ -343,7 +343,7 @@ class CCCollab
     {
         $collabs = new CCCollabs();
         $collabs->SetOrder( 'collab_date','DESC');
-        CCPage::AddPagingLinks($collabs,'');
+        CCPage::AddPagingLinks($collabs,'',10);
         $rows = $collabs->QueryRows('');
 
         // users
