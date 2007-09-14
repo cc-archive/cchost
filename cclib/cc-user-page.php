@@ -126,9 +126,14 @@ class CCUserPage
 
     function _get_tabs($user,&$default_tab_name)
     {
-        $tabs = 
-            array (
-                'uploads' => array (
+        $users =& CCUsers::GetTable();
+        $record = $users->GetRecordFromName($user);
+
+        $tabs = array();
+
+        if( $record['user_num_uploads'] )
+        {
+            $tabs['uploads'] = array (
                     'text' => 'Uploads',
                     'help' => 'Uploads',
                     'tags' => "uploads",
@@ -136,8 +141,10 @@ class CCUserPage
                     'access' => 4,
                     'function' => 'url',
                     'user_cb' => array( $this, 'Uploads' ),
-                    ),
-                'profile' => array (
+                    );
+        }
+
+        $tabs['profile'] = array (
                     'text' => 'Profile',
                     'help' => 'Profile',
                     'tags' => "profile",
@@ -145,10 +152,17 @@ class CCUserPage
                     'access' => 4,
                     'function' => 'url',
                     'user_cb' => array( $this, 'Profile' ),
-                    ),
             );
     
-        CCEvents::Invoke( CC_EVENT_USER_PROFILE_TABS, array( &$tabs ) );
+        CCEvents::Invoke( CC_EVENT_USER_PROFILE_TABS, array( &$tabs, &$record ) );
+
+        $keys = array_keys($tabs);
+        for( $i = 0; $i < count($keys); $i++ )
+        {
+            $K = $keys[$i];
+            $tabs[$K]['tags'] = str_replace('%user_name%',$user,$tabs[$K]['tags']);
+        }
+
         require_once('cclib/cc-navigator.php');
         $navapi = new CCNavigator();
         $url = ccl('people',$user);

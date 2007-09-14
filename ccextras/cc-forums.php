@@ -54,8 +54,11 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCForumsAdmin',  'OnAd
 */
 class CCForums
 {
-    function OnUserProfileTabs( &$tabs )
+    function OnUserProfileTabs( &$tabs, &$record )
     {
+        if( empty($record['user_num_posts']) )
+            return;
+
         $tabs['topics'] = array(
                     'text' => 'Topics',
                     'help' => 'Forums Topics',

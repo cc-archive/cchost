@@ -176,8 +176,11 @@ class CCReviewsHV
         }
     }
 
-    function OnUserProfileTabs( &$tabs )
+    function OnUserProfileTabs( &$tabs, &$record )
     {
+        if( empty($record['user_num_reviews']) )
+            return;
+
         $tabs['reviews'] = array(
                     'text' => 'Reviews',
                     'help' => 'Reviews',

@@ -77,10 +77,18 @@ class CCPlaylistHV
         }
     }
 
-    function OnUserProfileTabs( &$tabs )
+    function OnUserProfileTabs( &$tabs, &$record )
     {
         if( !cc_playlist_enabled() )
             return;
+
+        require_once('ccextras/cc-cart-table.inc');
+        $carts = new CCPlaylist(false);
+        $w['cart_user'] = $record['user_id'];
+        $num = $carts->CountRows($w);
+        if( empty($num) )
+            return;
+
         $tabs['playlists'] = array(
                     'text' => 'Playlists',
                     'help' => 'Playlists',
