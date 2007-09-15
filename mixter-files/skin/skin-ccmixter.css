@@ -75,3 +75,16 @@ a#ratingscommand span {
 .sample_line {
 	background: green url('sample_back.gif') bottom right no-repeat;
 }
+
+ #file_list .remix_line {
+	background: url('remix_back.gif') bottom right no-repeat;
+	background-color: #EEE;
+	border-top: 3px solid #DDE;
+	border-left: 3px solid #DDE;
+	border-bottom: 2px solid #AAA;
+	border-right: 2px solid #AAA;
+}
+
+.file_line .ccud {
+	display: none;
+}
