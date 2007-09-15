@@ -71,3 +71,7 @@ a#ratingscommand span {
 .rate_block {
 	padding-left:8px;
 }
+
+.sample_line {
+	background: green url('sample_back.gif') bottom right no-repeat;
+}
