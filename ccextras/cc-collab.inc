@@ -28,7 +28,6 @@ if( !defined('IN_CC_HOST') )
 
 /**
 */
-require_once('cclib/cc-form.php');
 require_once('ccextras/cc-collab-tables.inc');
 require_once('ccextras/cc-topics.inc');
 
@@ -55,42 +54,6 @@ class CCCollabTopics extends CCTopics
         if( !isset($table) )
             $table = new CCCollabTopics();
         return $table;
-    }
-}
-
-class CCCollabForm extends CCForm
-{
-    function CCCollabForm()
-    {
-        $this->CCForm();
-
-        $fields = array( 
-                    'collab_name' =>
-                       array( 'label'       => _('Name of collaboration project'),
-                               'formatter'  => 'textedit',
-                               'form_tip'   => '',
-                               'flags'      => CCFF_REQUIRED | CCFF_POPULATE),
-                          
-                    'collab_desc' =>
-                       array( 'label'       => _('Description'),
-                               'formatter'  => 'textarea',
-                               'want_formatting' => true,
-                               'flags'      => CCFF_POPULATE),
-                    );
-
-        $this->AddFormFields($fields);
-    }
-}
-
-
-require_once('ccextras/cc-topics-forms.inc');
-
-
-class CCCollabTopicForm extends CCTopicForm
-{
-    function CCCollabTopicForm()
-    {
-        $this->CCTopicForm(_('Collobration Discussion'),'Submit Topic');
     }
 }
 
@@ -173,10 +136,7 @@ class CCCollab
             {
                 $collab_id = $_POST['collab'];
                 $this->_add_upload($collab_id,$upload_id);
-                $files = new CCCollabUploads();
-                $w['collab_upload_collab'] = $collab_id;
-                $collab_ids = $files->QueryItems('collab_upload_upload',$w);
-                $this->_sync_collab_sources($collab_ids);
+                $this->Sync($collab_id);
             }
         }
     }
@@ -196,8 +156,17 @@ class CCCollab
         }
     }
 
+    function Sync($collab_id)
+    {
+        $files = new CCCollabUploads();
+        $w['collab_upload_collab'] = $collab_id;
+        $collab_ids = $files->QueryItems('collab_upload_upload',$w);
+        $this->_sync_collab_sources($collab_ids);
+    }
+
     function Create()
     {
+        require_once('ccextras/cc-collab-forms.inc');
         $form =  new CCCollabForm();
         if( empty($_POST['collab']) || !$form->ValidateFields() )
         {
@@ -224,12 +193,48 @@ class CCCollab
         }
     }
 
+    function _delete_confirmed($collab_id)
+    {
+        $topics =& CCCollabTopics::GetTable();
+        $w['topic_upload'] = $collab_id;
+        $topics->DeleteWhere($w);
+        $cuploads =& CCCollabUploads::GetTable();
+        $w2['collab_upload_collab'] = $collab_id;
+        $rows = $cuploads->QueryRows($w2);
+        $uploads =& CCUploads::GetTable();
+        foreach( $rows as $row )
+            $uploads->SetExtraField($row['collab_upload_upload'],'collab',0);
+        $cuploads->DeleteWhere($w2);
+        $users =& CCCollabUsers::GetTable();
+        $users->DeleteKey($collab_id);
+        $collabs =& CCCollabs::GetTable();
+        $collabs->DeleteKey($collab_id);
+        CCPage::SetTitle(_('Remove Collaboration'));
+        CCPage::Prompt(_('Collaboration has been removed.'));
+    }
+
     function Edit($collab_id='')
     {
         if( empty($collab_id) )
             CCUtil::Send404();
 
+        if( !empty($_POST['confirmdelete']) )
+        {
+            $this->_delete_confirmed($collab_id);
+            return;
+        }
+        require_once('ccextras/cc-collab-forms.inc');
         $form =  new CCCollabForm();
+        $fields = array( 
+                    'collab_delete' =>
+                       array( 'label'       => _('Remove (delete) this project.'),
+                               'formatter'  => 'checkbox',
+                               'form_tip'   => _('This will not delete the files.'),
+                               'flags'      => CCFF_NONE),
+                    );
+                          
+        $form->AddFormFields($fields);
+
         $is_post = !empty($_POST['collab']);
         $collabs = new CCCollabs();
         if( !$is_post || !$form->ValidateFields() )
@@ -243,10 +248,28 @@ class CCCollab
         else
         {
             $form->GetFormValues($values);
-            $values['collab_id'] = $collab_id;
-            $collabs->Update($values);
-            $url = ccl('collab',$values['collab_id']);
-            CCUtil::SendBrowserTo($url);
+            if( !empty($values['collab_delete']) )
+            {
+                CCPage::SetTitle(_('Remove Collaboration'));
+                $row = $this->_collab_row($collab_id);
+                require_once('cclib/cc-upload-forms.php');
+                $name = $row['collab_name'];
+                $form = new CCConfirmDeleteForm($name);
+                $help = sprintf(_('This will remove (delete) the "%s" collaboration project. This will not remove or delete
+                           the files in the project, just the project itself.'),$name);
+                $form->SetFormHelp($help);
+                $help = sprintf(_('%sThere is no UNDO%s'),'<span style="color:red">', '</span>');
+                $form->SetFormHelp($help);
+                CCPage::AddForm( $form->GenerateForm() );
+            }
+            else
+            {
+                unset($values['collab_delete']);
+                $values['collab_id'] = $collab_id;
+                $collabs->Update($values);
+                $url = ccl('collab',$values['collab_id']);
+                CCUtil::SendBrowserTo($url);
+            }
         }
     }
 
@@ -664,6 +687,8 @@ class CCCollab
     {
         global $CC_GLOBALS, $CC_CFG_ROOT;
 
+        require_once('ccextras/cc-collab-forms.inc');
+
         $form = new CCCollabTopicForm();
 
         if( empty($_POST['collabtopic']) || !$form->ValidateFields() )
@@ -680,6 +705,7 @@ class CCCollab
             $values['topic_date'] = date('Y-m-d H:i:s',time());
             $values['topic_user'] = CCUser::CurrentUser();
             $values['topic_type'] = 'collab';
+            $values['topic_name'] = '';
             $topics->Insert($values);
 
             $url = ccl( 'collab', $collab_id );
@@ -837,6 +863,7 @@ EOF;
 
         $uploads->SetTagFilter('-remix','all');
         $source_ids = $uploads->QueryKeys($where);
+
         $uploads->SetTagFilter('remix','any');
         $remix_ids = $uploads->QueryKeys($where);
 
@@ -855,6 +882,7 @@ EOF;
             $w['tree_child'] = $remix_id;
             $tree_source_ids = $remix_tree->QueryItems('tree_parent',$w);
             $new_sources = array_diff( $source_ids, $tree_source_ids);
+
             if( $new_sources )
             {
                 $source_rows = $uploads->QueryKeyRows($new_sources);
@@ -889,7 +917,11 @@ EOF;
 
         CCEvents::MapUrl( ccp('collab','create'), array( 'CCCollab', 'Create'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
+
         CCEvents::MapUrl( ccp('collab','edit'), array( 'CCCollab', 'Edit'),  
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+
+        CCEvents::MapUrl( ccp('collab','sync'), array( 'CCCollab', 'Sync'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
 
         CCEvents::MapUrl( ccp('collab','topic','add'), array( 'CCCollab', 'PostTopic'),  
@@ -912,26 +944,6 @@ EOF;
         CCEvents::MapUrl( ccp('collab','upload','tags'), array( 'CCCollab', 'UpdateTags'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}'  );
     }
-
-    /**
-    * Event handler for {@link CC_EVENT_USER_ROW}
-    *
-    * Add extra data to a user row before display
-    *
-    * @param array &$record User record to massage
-    */
-    function OnUserRow(&$record)
-    {
-        if( empty($record['artist_page']) )
-            return;
-
-        /*
-        $record['user_fields'][] = array( 'label'   => _('Reviews'), 
-                                          'value'   => $text,
-                                          'id'      => 'user_review_stats' );
-        */
-    }
-
 }
 
 
