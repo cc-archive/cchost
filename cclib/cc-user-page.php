@@ -36,7 +36,7 @@ class CCUserPage
         $settings = $configs->GetConfig('settings');
 
         $uid = CCUser::IDFromName($username);
-        if( empty($uid) )
+        if( $username && empty($uid) )
         {
             CCUtil::Send404(false);
             CCPage::SetTitle(_('People'));
