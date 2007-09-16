@@ -200,6 +200,7 @@ class CCDebug
 
         if( $template_safe )
         {
+            require_once('cclib/cc-page.php');
             CCPage::PrintPage( $html );
         }
         else
