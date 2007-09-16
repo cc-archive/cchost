@@ -208,8 +208,9 @@ class CCUserProfileForm extends CCUploadForm
                                'flags'      => CCFF_POPULATE ),
 
                     'user_password' =>
-                       array( 'label'       => _('Password'),
+                       array(  'label'      => _('Password'),
                                'formatter'  => 'password',
+                               'form_tip'   => _('Leave this blank to keep your same password. If you change it you will need to log in again.'),
                                'flags'      => CCFF_SKIPIFNULL ),
 
                     'user_email' =>
@@ -304,6 +305,8 @@ class CCUserAPI
         $form  = new CCUserProfileForm($id, $upload_dir );
         $ok    = false;
 
+        $old_password = $form->record['user_password'];
+
         if( empty($_POST['userprofile']) )
         {
             $form->PopulateValues( $form->record );
@@ -329,10 +332,19 @@ class CCUserAPI
                 if( !empty($CC_GLOBALS['lang_per_user']) )
                     CCEvents::Invoke(CC_EVENT_TRANSLATE);
 
-                // this sends us to the save page
-                // I added because problem with getting the new language
-                // visible as soon as changed upon save
-                CCUtil::SendBrowserTo(ccl('people','profile','save'));
+                if( !empty($fields['user_password']) && ( $fields['user_password'] != $old_password ) )
+                {
+                    $url = ccl('login');
+                }
+                else
+                {
+                    // this sends us to the save page
+                    // I added because problem with getting the new language
+                    // visible as soon as changed upon save
+                    $url = ccl('people','profile','save');
+                }
+
+                CCUtil::SendBrowserTo($url);
             }
         }
 
