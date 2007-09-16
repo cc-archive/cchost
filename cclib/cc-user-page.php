@@ -35,6 +35,15 @@ class CCUserPage
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
 
+        $uid = CCUser::IDFromName($username);
+        if( empty($uid) )
+        {
+            CCUtil::Send404(false);
+            CCPage::SetTitle(_('People'));
+            CCPage::Prompt( $username . '? ' . _('Sorry, we don\'t know who that is...'));
+            return;
+        }
+
         if( empty($settings['newuserpage']) || empty($username) )
         {
             // legacy handling...
