@@ -395,8 +395,10 @@ END;
     }
 
     // overwrite parent's version to add type limit
-    function _get_select($where,$columns='*')
+    function _where_to_string($where)
     {
+        $where = parent::_where_to_string($where) . '';
+
         if( !empty($this->_type_limit) )
         {
             $w = "topic_type = '" . $this->_type_limit . "'";
@@ -407,7 +409,6 @@ END;
             }
             else
             {
-                $where = $this->_where_to_string($where);
                 $where .= " AND ($w)";
             }
         }
@@ -422,13 +423,11 @@ END;
             }
             else
             {
-                $where = $this->_where_to_string($where);
                 $where .= " AND ($w)";
             }
         }
 
-
-        return parent::_get_select($where,$columns);
+        return $where;
     }
 
     function _can_reply(&$row)
