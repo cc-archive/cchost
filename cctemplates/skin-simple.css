@@ -1057,7 +1057,7 @@ a.cc_gen_button:hover span {
 /* Download / Stream Buttons */
 
 a#cc_downloadbutton, a#ratingscommand, a#commentcommand,
-a#commentcommand, a#replyremix  {
+a#commentcommand, a#replyremix, a#sharecommand  {
     float: left;
     display: block;
     background: url('ccmixter/buttonleft.gif') no-repeat left top;
@@ -1073,12 +1073,12 @@ a#commentcommand, a#replyremix  {
 }
 
 
-a#ratingscommand, a#commentcommand, a#replyremix {
+a#ratingscommand, a#commentcommand, a#replyremix, a#sharecommand {
 	font-size: 9px;
 	font-weight: normal;
 }
 
-a#commentcommand, a#replyremix {
+a#commentcommand, a#replyremix, a#sharecommand {
 	margin-bottom: 6px;
 }
 
@@ -1105,17 +1105,27 @@ a#ratingscommand span {
     background: url('ccmixter/ratingsright.gif') no-repeat right top;
 }
 
+a#sharecommand span {
+    padding: 5px 80px 6px 2px;
+    background: url('ccmixter/shareright.gif') no-repeat right top;
+	text-align: center;
+	display: block;
+	color: black;
+	font-weight: bold;
+}
+
+
 a#ratingscommand {
 	margin: 0px;
 }
 
-a#cc_downloadbutton:hover, a#ratingscommand:hover, a#commentcommand:hover, a#replyremix:hover {
+a#cc_downloadbutton:hover, a#ratingscommand:hover, a#sharecommand:hover, a#commentcommand:hover, a#replyremix:hover {
     background-position: 0% -23px;
     color:black;
 }
 
 a#cc_downloadbutton:hover span, a#ratingscommand:hover span, 
-a#commentcommand:hover span, a#replyremix:hover span {
+a#commentcommand:hover span, a#replyremix:hover span,a#sharecommand:hover span  {
     background-position: 100% -23px;
 }
 
@@ -1156,11 +1166,24 @@ a#cc_streamfile:hover span {
 .cc_works_page  #cc_action_buttons a#cc_downloadbutton,
 .cc_works_page  #cc_action_buttons a#ratingscommand,
 .cc_works_page  #cc_action_buttons a#commentcommand,
-.cc_works_page  #cc_action_buttons a#replyremix
+.cc_works_page  #cc_action_buttons a#replyremix,
+.cc_works_page  #cc_action_buttons a#sharecommand
 {
     float: none;
     margin: 7px 0px 3px 0px;
 	display: block;
+}
+
+.cc_works_page  #cc_action_buttons a#sharecommand span
+{
+	color: #BBB;
+	font-weight: normal;
+    background: url('ccmixter/shareright2.gif') no-repeat right top;
+}
+
+.cc_works_page  #cc_action_buttons a#sharecommand:hover span
+{
+    background-position: 100% -23px;
 }
 
 .cc_works_page #cc_action_buttons a {
