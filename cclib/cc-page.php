@@ -233,6 +233,7 @@ class CCPage extends CCTemplate
         {
             $page->_body_template = $file;
         }
+
     }
 
     function _check_for_title(&$page,$contents)
@@ -539,21 +540,18 @@ class CCPage extends CCTemplate
             $page->SetAllAndPrint($page->_page_args, CCUser::IsAdmin() );
         else
             return( $page->SetAllAndParse($page->_page_args, false, CCUser::IsAdmin()) );
-
         //CCDebug::Log( "Page print: " . CCDebug::Chronometer($page_print) );
     }
 
-    function GetViewFile($filename)
+    function GetViewFile($filename,$real_path=true)
     {
         global $CC_GLOBALS;
-
-        return CCUtil::SearchPath( $filename, $CC_GLOBALS['files-root'], 'ccfiles' );
+        return CCUtil::SearchPath( $filename, $CC_GLOBALS['files-root'], 'ccfiles', $real_path );
     }
 
     function GetViewFilePath()
     {
         global $CC_GLOBALS;
-
         return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccfiles' );
     }
     
