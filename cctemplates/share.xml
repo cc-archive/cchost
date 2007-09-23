@@ -1,0 +1,66 @@
+<tal:block>
+<metal:block define-macro="share_popup">
+
+<style>
+
+#share_div {
+  margin: 4px;
+}
+
+#share_table td {
+  vertical-align: center;
+  padding: 2px;
+  border: 1px solid #DDD;
+}
+
+#share_table td a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding-right: 20px;
+}
+
+#share_table td img {
+  margin: 2px;
+  float: left;
+}
+
+#share_table td a:hover {
+  text-decoration: none;
+}
+
+#share_table td:hover {
+  border:  1px solid #00F;
+}
+
+.linkhead {
+  font-size: 13px;
+  color: green;
+  margin: 12px 0px 8px 0px;
+}
+
+#linktype {
+  font-size: 11px;
+}
+
+#linktext {
+  width: 420px;
+  height: 80px;
+  font-size: 11px;
+}
+
+</style>
+<script type="text/javascript" src="${root-url}cctemplates/js/share.js" ></script>
+<div id="share_div">
+
+</div>
+
+
+<tal:block define="share_title php:addslashes(${PUB/bookmark_title});" />
+<script type="text/javascript">
+new ccShareLinks( { url: '${PUB/bookmark_url}', title:'${share_title}', inPopUp: false} );
+</script>
+
+</metal:block>
+
+</tal:block>
