@@ -410,7 +410,7 @@ class CCPublicize
         require_once('ccextras/cc-publicize-forms.inc');
         $form = new CCShareLinkForm($type,$record);
 
-        if( empty($_POST['emaillink']) || !$form->ValidateFields())
+        if( empty($_POST['sharelink']) || !$form->ValidateFields())
         {
             CCPage::AddForm( $form->GenerateForm() );
         }
