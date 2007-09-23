@@ -379,12 +379,14 @@ EOF;
                     $item =& $grp[$gkeys[$m]];
                     $type  = empty($item['type']) ? '' : 'type="' . $item['type'] . '"';
                     $class = empty($item['class']) ? '' : 'class="' . $item['class'] . '"';
+                    $title = empty($item['tip']) ? '' : 'title="' . $item['tip'] . '"';
+                    $onclick = empty($item['onclick']) ? '' : 'onclick="' . $item['onclick'] . '"';
                     $parent_id = empty($item['parent_id']) ? '' : 'id="' . $item['parent_id'] . '"';
                     if( !empty($item['action']) )
                     {
                         $html .=<<<END
                         <tr>
-                          <td {$parent_id} ><a href="{$item['action']}" $type $class
+                          <td {$parent_id} ><a href="{$item['action']}" $type $class $onclick $title
                                 id="{$item['id']}"><span>{$item['menu_text']}</span></a></td>
                         </tr>
 END;
@@ -433,6 +435,15 @@ END;
             }
 
             $html .= '</div>';
+
+            if( !empty($record['local_menu']['share']) )
+            {
+                $mi =& $record['local_menu']['share']['share_link'];
+                $onclick = empty($mi['onlick']) ? '' : "onclick=\"{$mi['onclick']}\"";
+                $html .=<<<END
+                    <p><a href="{$mi['action']}" id="{$mi['id']}" $onclick  title="{$mi['tip']}"><span>{$mi['menu_text']}</span></a></p>
+END;
+            }
 
             if( !empty($record['local_menu']['playlist']) )
             {
