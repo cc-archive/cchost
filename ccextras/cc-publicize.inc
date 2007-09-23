@@ -425,8 +425,14 @@ class CCPublicize
             else
                 $mailer = $CC_MAILER;
 
+            if( empty($fields['mail_from']) )
+            {
+                $users =& CCUsers::GetTable();
+                $row = $users->QueryKeyRow($fields['mail_from_id']);
+                $fields['mail_from'] = $row['user_email'];
+            }
             $mailer->From( $fields['mail_from'] );
-            $mailer->To( $user_to['user_email'] );
+            $mailer->To( $fields['mail_to'] );
             $mailer->Subject( $fields['mail_subject'] );
             $mailer->Body( $fields['mail_body'] );
             $mailer->Send();
