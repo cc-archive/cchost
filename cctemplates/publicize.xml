@@ -1,4 +1,4 @@
-<div>
+<tal:block>
 <tal:block replace="">
 <!--
 
@@ -22,7 +22,7 @@ $Id$
 </tal:block>
 
 <metal:block define-macro="publicize" >
-<div id="pubintro">
+<div id="pubintro" tal:condition="PUB/intro" >
   <img tal:condition="PUB/user_avatar_url" src="${PUB/user_avatar_url}" />
   <div>${PUB/intro}</div>
 </div>
@@ -31,58 +31,21 @@ $Id$
 </div>
 <form id="puboptions_form">
 <table id="puboptions1">
-<tr>
-  <th>${PUB/typeoflinks}</th>
-  <td>
-      <select onchange="flip_link_type(this)" id="ty">
-        <option value="remix">${PUB/yourremixes}</option>
-        <option value="${PUB/user_name}">${PUB/othersremixes}</option>
-        <option value="all">${PUB/allyourups}</option>
-      </select>
-  </td>
-</tr>
-<tr>
-  <th>${PUB/numlinks}</th>
-  <td>
-      <select id="limit" name="limit" onchange="update_target()">
-        <option value="1">${PUB/justone}</option>
-        <option value="5" selected="selected">${PUB/last5}</option>
-        <option value="10">${PUB/last10}</option>
-        <option value="50">${PUB/abunch}</option>
-      </select>
-  </td>
-</tr>
-<tr>
-  <th>
-      ${PUB/format}
-  </th>
-  <td>
-      <select id="template" name="template" onchange="update_target()">
-        <option value="links" selected="selected">${PUB/plainlinks}  </option>
-        <option value="links_by" >                ${PUB/linkswithby} </option>
-        <option value="links_stream">             ${PUB/linkswstream}</option>
-        <option value="links_dl">                 ${PUB/linkswdl}    </option>
-        <option value="med">                      ${PUB/linksmed}    </option>
-        <tal:block condition="PUB/extra_formats" repeat="fmt PUB/extra_formats">
-          <option value="${fmt/format}">${fmt/name}</option>
-        </tal:block>
-      </select>
-  </td>
-</tr>
-<tr>
-  <th>
-      Chop: <span id="chophelp">${PUB/chophelp}</span>
-  </th>
-  <td>
-      <select id="chop" name="chop" onchange="update_target()">
-        <option value="10">                     ${PUB/chars10} </option>
-        <option value="20"  selected="selected">${PUB/chars20}  </option>
-        <option value="25">                     ${PUB/chars25}  </option>
-        <option value="0">                      ${PUB/dontchop} </option>
-      </select>
-  </td>
+<tr tal:repeat="combo PUB/combos">
+    <th>${combo/title}<span class="pubhelp" tal:condition="combo/help" tal:content="combo/help" /></th>
+    <td>
+        <select id="${combo/id}" name="${combo/name}" class="${combo/class}">
+            <tal:block repeat="opt combo/opts">
+                <option value="${opt/value}" tal:condition="opt/selected" selected="selected">${opt/text}</option>
+                <option value="${opt/value}" tal:condition="not: opt/selected" >${opt/text}</option>
+            </tal:block>
+        </select>
+    </td>
 </tr>
 </table>
+<tal:block repeat="hide PUB/hiddens">
+  <input type="hidden" value="${hide/value}" name="${hide/name}" id="${hide/name}" />
+</tal:block>
 <span id="type_target"></span>
 </form>
 
@@ -97,7 +60,7 @@ $Id$
 
 <div id="preview_container">
     <table id="seehtml">
-      <tr><td><a href="#" onclick="toggle_preview(); return false;" class="cc_gen_button">
+      <tr><td><a href="javascript://toggle preview" id="preview_button_link" class="cc_gen_button">
         <span id="preview_button">${PUB/seehtml}</span></a></td></tr>
     </table>
     <b>${PUB/preview}:</b>
@@ -110,13 +73,15 @@ $Id$
       </div>
     </div>
 </div>
+<script type="text/javascript" src="${root-url}cctemplates/js/publicize.js"></script>
 <script>
 //<!--
 seeHTML = '${PUB/seehtml}';
 showFormatted = '${PUB/showformatted}';
 username = '${PUB/user_name}';
+new ccPublicize('${PUB/user_name}');
 //-->
 </script>
-<script type="text/javascript" src="${root-url}cctemplates/js/publicize.js"></script>
+
 </metal:block>
-</div>
+</tal:block>
