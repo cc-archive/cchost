@@ -49,12 +49,27 @@
   font-size: 11px;
 }
 
+#share_email {
+  margin-left: 40%;
+  width: 200px;
+}
+
+#share_email span {
+}
+
+#inner_share {
+  background: url('${root-url}ccimages/shareicons/email.gif') no-repeat top left;
+  padding-left: 55px;
+}
 </style>
 <script type="text/javascript" src="${root-url}cctemplates/js/share.js" ></script>
 <div id="share_div">
 
 </div>
 
+<div id="share_email">
+   <a href="${PUB/email_url}" class="cc_gen_button" ><span><div id="inner_share" tal:content="php: _('Email a friend')" /></span></a>
+</div>
 
 <tal:block define="share_title php:addslashes(${PUB/bookmark_title});" />
 <script type="text/javascript">
