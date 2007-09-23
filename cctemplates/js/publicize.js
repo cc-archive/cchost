@@ -16,41 +16,47 @@ of the ccHost software will comply with the CC-GNU-GPL.
 $Id$
 */
 
-function flip_link_type(box)
-{
-  var text = '';
-  switch( box.selectedIndex )
-  {
-    case 1:
-      text = '<' + 'input type="hidden" name="remixesof" value="' + username + '" />';
-      break;
-    case 0:
-      text = '<' + 'input type="hidden" name="tags" value="remix" />';
-      // fall thru:
-    case 2:
-      text += '<' + 'input type="hidden" name="user" value="' + username + '" />';
-      break;
-   }
+ccPublicize = Class.create();
 
-   $('type_target').innerHTML = text;
+ccPublicize.prototype = {
 
-   update_target();
-}
+    is_preview: true,
+    username: '',
 
-function update_target()
-{
-   var url = home_url + 'api/query' + q + Form.serialize('puboptions_form');
-   var text = '<' + 'script type="text/javascript" src="' + url + '&format=docwrite" ><' + '/script>';
-   var tt = $('target_text');
-   if( tt.value )
-       tt.value = text;
-   else
-       tt.innerHTML = text;
+    initialize: function(username) {
 
-   var myAjax = new Ajax.Request( 
-     url + '&format=html', 
-    { method: 'get', 
-      onComplete: function(req) {
+        this.username = username;
+        var me = this;
+
+        $$('.queryparam').each( function(e) {
+                Event.observe( e, 'click', me.updateTarget.bindAsEventListener(me) );
+        });
+
+        if( $('usertypechanger') )
+        {
+            Event.observe( 'usertypechanger', 'click', me.updateUserType.bindAsEventListener(me) );
+            this.updateUserType();
+        }
+
+        if( $('preview_button_link') )
+            Event.observe( 'preview_button_link', 'click', me.togglePreview.bindAsEventListener(me) );
+    },
+
+    updateTarget: function(){
+
+       var url = home_url + 'api/query' + q + Form.serialize('puboptions_form');
+       var text = '<' + 'script type="text/javascript" src="' + url + '&format=docwrite" ><' + '/script>';
+       var tt = $('target_text');
+       if( tt.value )
+           tt.value = text;
+       else
+           tt.innerHTML = text;
+
+       new Ajax.Request( url + '&format=html', { method: 'get', onComplete: this.resp_updateTarget } );    
+    },
+
+    resp_updateTarget: function(req) {
+
        var prev = $('preview');
        if( prev.innerHTML )
             prev.innerHTML = req.responseText;
@@ -59,21 +65,38 @@ function update_target()
        else
            alert('wups');
         $('src_preview').innerHTML = req.responseText.escapeHTML();
+    },
+
+    updateUserType: function() {
+
+        var box = $('usertypechanger');
+        var text = '';
+        switch( box.selectedIndex )
+        {
+            case 1:
+                text = '<' + 'input type="hidden" name="remixesof" value="' + this.username + '" />';
+                break;
+            case 0:
+                text = '<' + 'input type="hidden" name="tags" value="remix" />';
+                // fall thru:
+            case 2:
+                text += '<' + 'input type="hidden" name="user" value="' + this.username + '" />';
+                break;
         }
-        
-    } );    
+
+        $('type_target').innerHTML = text;
+
+        this.updateTarget();
+    },
+
+    togglePreview: function() {
+
+        this.is_preview = !this.is_preview;
+        Element.show($( this.is_preview ? 'preview' : 'src_preview' ));
+        Element.hide($( this.is_preview ? 'src_preview' : 'preview' ));
+        Element.show($( this.is_preview ? 'preview_warn' : 'html_warn' ));
+        Element.hide($( this.is_preview ? 'html_warn' : 'preview_warn' ));
+        $('preview_button').innerHTML = this.is_preview ? seeHTML : showFormatted;
+    }
 }
 
-is_preview = true;
-
-function toggle_preview()
-{
-   is_preview = !is_preview;
-   Element.show($( is_preview ? 'preview' : 'src_preview' ));
-   Element.hide($( is_preview ? 'src_preview' : 'preview' ));
-   Element.show($( is_preview ? 'preview_warn' : 'html_warn' ));
-   Element.hide($( is_preview ? 'html_warn' : 'preview_warn' ));
-   $('preview_button').innerHTML = is_preview ? seeHTML : showFormatted;
-}
-
-flip_link_type($('ty'));
