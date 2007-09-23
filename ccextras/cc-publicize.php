@@ -26,14 +26,60 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCPublicize', 'OnUserRow') );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPublicize', 'OnMapUrls'));
+CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCPublicize',  'OnUserRow') );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPublicize',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPublicize' , 'OnGetConfigFields') );
+CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCPublicize',  'OnBuildUploadMenu') );
+CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPublicize',  'OnUploadMenu') );
 
 /**
 */
 class CCPublicize
 {
+    /**
+    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
+    * 
+    * The menu items gathered here are for the 'local' menu at each upload display
+    * 
+    * @param array $menu The menu being built, put menu items here.
+    * @see CCMenu::GetLocalMenu()
+    */
+    function OnBuildUploadMenu(&$menu)
+    {
+        $rurl = ccr('ccimages','shareicons') . '/';
+        $menu['share_link'] = 
+                     array(  'menu_text'  => '+', // _('Share'),
+                             'weight'     => 10,
+                             'group_name' => 'share',
+                             'tip'        => _('Bookmark, share, embed...'),
+                             'access'     => CC_DONT_CARE_LOGGED_IN,
+                        );
+    }
+
+    /**
+    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
+    * 
+    * The handler is called when a menu is being displayed with
+    * a specific record. All dynamic changes are made here
+    * 
+    * @param array $menu The menu being displayed
+    * @param array $record The database record the menu is for
+    * @see CCMenu::GetLocalMenu()
+    */
+    function OnUploadMenu(&$menu,&$record)
+    {
+        $url = ccl('share', $record['upload_id'] );
+        $jscript = "window.open( '$url', 'cchostsharewin', 'status=1,toolbar=0,location=0,menubar=0,directories=0,resizable=1,scrollbars=1,height=480,width=550');";
+
+        $menu['share_link']['id']      = 'sharecommand';
+        $menu['share_link']['class']   = "cc_share_button";
+        /*
+        $menu['share_link']['action']  = "javascript://Share!";
+        $menu['share_link']['onclick'] = $jscript;
+        */
+        $menu['share_link']['action']  = $url;
+    }
+
     function Publicize($user='')
     {
         global $CC_GLOBALS;
@@ -46,69 +92,172 @@ class CCPublicize
                 return;
             }
         }
-    
-        $itsme  = $user == CCUser::CurrentUserName();
 
+        $itsme  = $user == CCUser::CurrentUserName();
         if( !$this->_pub_wizard_allowd($itsme) )
         {
             CCPage::Prompt(_('This feature is not enabled here'));
             return;
         }
 
-        $users  =& CCUsers::GetTable();
-        $record =& $users->GetRecordFromName($user);
-        $args = $record;
-        if( $itsme )
+        $this->_share('user',$user,$itsme);
+    }
+
+    function Share($id)
+    {
+        require_once('cclib/cc-page.php');
+        $uploads =& CCUploads::GetTable();
+        $record = $uploads->GetRecordFromID($id);
+        if( empty($record) )
         {
-            $args['intro'] = _('Do you have a blog or web page? You can display a list of up-to-the-minute links to your latest remixes directly on your page.');
-            $args['yourremixes'] = _('Your remixes');
-            $args['othersremixes'] = _("Other peoples's remixes of you.");
-            $args['allyourups'] = _('All of your uploads');
-            $title = _('Publicize Yourself');
+            CCPage::Prompt(_("Don't know what upload to share!"));
+            return;
+        }
+        $this->_share('upload',$record);
+    }
+
+    
+    function _share($type,$arg1,$arg2='')
+    {
+        global $CC_GLOBALS;
+
+        $args['intro'] = '';
+        $args['step1'] = _('1. Select from the following options:');
+        $args['step2'] = _('2. Then copy the text from this field and paste it into your page:');
+        $args['hiddens'] = array();
+
+        $combos = array();
+
+        if( $type == 'user' )
+        {
+            $users  =& CCUsers::GetTable();
+            $record =& $users->GetRecordFromName($arg1);
+            
+            $args['bookmark_url'] = $record['artist_page_url'];
+            $configs =& CCConfigs::GetTable();
+            $template_tags = $configs->GetConfig('ttag');
+            $args['bookmark_title'] = $record['user_real_name'] . ' @ ' . $template_tags['site-title'];
+
+            $args = array_merge( $args, $record );
+            
+            if( $arg2 ) // $itsme 
+            {
+                $args['intro'] = _('Do you have a blog or web page? You can display a list of up-to-the-minute links to your latest remixes directly on your page.');
+                $yourremixes = _('Your remixes');
+                $othersremixes = _("Other peoples's remixes of you.");
+                $allyourups = _('All of your uploads');
+                $title = _('Publicize Yourself');
+            }
+            else
+            {
+                $args['intro'] = sprintf( _("Do you have a blog or web page? You can display a list of up-to-the-minute links to latest remixes of %s directly on your page."), '<b>' . $record['user_real_name'] . '</b>' ) . ' ' .
+                    sprintf(_('Use the links above to share %s\'s with your social network or follow the instructions below to embed a link in your web page, blog, MySpace page, etc.'), '<b>' . $record['user_real_name'] . '</b>' );
+                $yourremixes = sprintf( _("%s's remixes"), $record['user_real_name'] );
+                $othersremixes = sprintf( _("Other peoples's remixes of %s"),
+                                             $record['user_real_name'] );
+                $allyourups = sprintf( _('All %s\'s uploads'), $record['user_real_name'] );
+                $title = sprintf( _('Publicize %s'), $record['user_real_name'] );
+            }
+            $opts['title'] = _('Type of links:');
+            $opts['name']  = '';
+            $opts['class']  =
+            $opts['id']    = 'usertypechanger';
+            $opts['help']  = '';
+            $opts['opts'] = array( 
+                    array( 'value'    => 'remix',
+                           'selected' => true,
+                           'text'     => $yourremixes ),
+                    array( 'value'    => $record['user_name'],
+                           'selected' => false,
+                           'text'     => $othersremixes ),
+                    array( 'value'    => 'all',
+                           'selected' => false,
+                           'text'     => $allyourups )
+                    );
+            $combos[] = $opts;
+
+            $do_num_links = true;
+            $do_chop = true;
         }
         else
         {
-            $args['intro'] = sprintf( _("Do you have a blog or web page? You can display a list of up-to-the-minute links to latest remixes of %s directly on your page."), '<b>' . $record['user_real_name'] . '</b>' );
-            $args['yourremixes'] = sprintf( _("%s's remixes"), $record['user_real_name'] );
-            $args['othersremixes'] = sprintf( _("Other peoples's remixes of %s"),
-                                         $record['user_real_name'] );
-            $args['allyourups'] = sprintf( _('All %s\'s uploads'), $record['user_real_name'] );
-            $title = sprintf( _('Publicize %s'), $record['user_real_name'] );
+            if( $type == 'upload' )
+            {
+                $record =& $arg1;
+                
+                $args['intro'] = _('Use the links above to share this upload with your social network or follow the instructions below to embed a link in your web page, blog, MySpace page, etc.');
+
+                $args['bookmark_url'] = $record['file_page_url'];
+                $args['bookmark_title'] = $record['upload_name'];
+
+                $args = array_merge( $args, $record );
+                $title = sprintf( _('Share \'%s\''), $record['upload_name'] );
+            }
+
+            $args['hiddens'][] = array( 'value' => $record['upload_id'], 'name' => 'ids' );
+            $do_num_links = false;
+            $do_chop = false;
+            $args['user_name'] = '';
         }
 
-        $args['step1'] = _('1. Select from the following options:');
-        $args['step2'] = _('2. Then copy the text from this field and paste it into your page:');
+        if( $do_num_links )
+        {
+            $opts = array();
+            $opts['title'] = _('Number of links:');
+            $opts['name']  =
+            $opts['id']    = 'limit';
+            $opts['class'] = 'queryparam';
+            $opts['help']  = '';
+            $opts['opts']  = array(
+                    array( 'value'     => '1',
+                           'selected'  => false,
+                           'text'      => _('Just the very latest one') ),
+                    array( 'value'     => '5',
+                           'selected'  => true,
+                           'text'      => _('The 5 latest')),
+                    array( 'value'     => '10',
+                           'selected'  => false,
+                           'text'      => _('The 10 latest')),
+                    array( 'value'     => '50',
+                           'selected'  => false,
+                           'text'      => _('A whole bunch (up to a 50)'))
+                );
+            $combos[] = $opts;
 
-        $args['typeoflinks'] = _('Type of links:');
-        $args['numlinks']    = _('Number of links:');
-        $args['format']      = _('Format:');
-        
-        $args['justone'] = _('Just the very latest one');
-        $args['last5']   = _('The 5 latest');
-        $args['last10']  = _('The 10 latest');
-        $args['abunch']  = _('A whole bunch (up to a 50)');
-        
+            $s = 's';
+        }
+        else
+        {
+            $s = '';
+        }
 
-        $args['plainlinks']   = _('Plain links');
-        $args['linkswithby']  = _('Links with attribution');
-        $args['linkswstream'] = _('Links with a stream link');
-        $args['linkswdl']     = _('Links with a download link');
-        $args['linksmed']     = _('Verbose (!)');
-        $args['chophelp']     = _('Cut off links if they are larger than:');
-        
-        $args['chars10']     = _('10 characters');
-        $args['chars20']     = _('20 characters');     
-        $args['chars25']     = _('25 characters');     
-        $args['dontchop']    = _("Don't do any chopping");
+        /*
+            Formats
+        */
+        $opts = array();
+        $opts['title'] = _('Format:');
+        $opts['help']  = '';
+        $opts['class'] = 'queryparam';
+        $opts['name']  =
+        $opts['id']    = 'template';
+        $opts['opts']  = array(
+                array( 'value'  => 'links',
+                       'selected'  => true,
+                       'text'   => $s ? _("Plain links") : _("Plain link")),
+                array( 'value'  => 'links_by',
+                       'selected'  => false,
+                       'text'   => $s ? _("Links with attribution") : _("Link with attribution")),
+                array( 'value'  => 'links_stream',
+                       'selected'  => false,
+                       'text'   => $s ? _('Links with a stream link') : _('Link with a stream link')),
+                array( 'value'  => 'links_dl',
+                       'selected'  => false,
+                       'text'   => $s ? _('Links with a download link') : _('Link with a download link')),
+                array( 'value'  => 'med',
+                       'selected'  => false,
+                       'text'   => _('Verbose (!)')),
+            );
 
-        $args['seehtml']       = _('Show raw HTML');
-        $args['showformatted'] = _('Show Formatted');
-        
-        $args['preview'] = _('Preview');
-        $args['previewwarn'] = _('This preview is pre-formatted. How this will actually look on your web page will change depending on your stylesheet settings.');
-        $args['htmlwarn'] = _('Make sure to copy from the box above, not what is showing below because the actual content of this HTML will change based on the upload activity. You can still get an idea of what of the formatting will look like here:');
-
-        $args['extra_formats'] = array();
         if( !empty($CC_GLOBALS['pubwizex']) )
         {
             $exformats = preg_split('/\s*,\s*/',$CC_GLOBALS['pubwizex']);
@@ -126,16 +275,100 @@ class CCPublicize
                     {
                         $name = $text;
                     }
-                    $args['extra_formats'][] = array( 'format' => $exformat, 'name' => _($name) );
+                    $opts['opts'][] = array( 'value' => $exformat, 'selected' => false, 'text' => $name );
                 }
             }
         }
 
+        $combos[] = $opts;
+
+        /*
+            Chop
+        */
+        if( $do_chop )
+        {
+            $opts = array();
+            $opts['title'] = _('Chop:');
+            $opts['class'] = 'queryparam';
+            $opts['name']  =
+            $opts['id']    = 'chop';
+            $opts['help']  = _('Cut off links larger than:');
+            $opts['opts']  = array(
+                    array( 'value'  => '10',
+                           'selected'  => true,
+                           'text'   => _("10 characters")),
+                    array( 'value'  => '20',
+                           'selected'  => false,
+                           'text'   => _("20 characters")),
+                    array( 'value'  => '25',
+                           'selected'  => false,
+                           'text'   => _("25 characters")),
+                    array( 'value'  => '0',
+                           'selected'  => false,
+                           'text'   => _("Don't do any chopping")),
+                );
+            $combos[] = $opts;
+        }
+
+        $args['combos'] =& $combos;
+
+        $args['seehtml']       = _('Show raw HTML');
+        $args['showformatted'] = _('Show Formatted');
+        
+        $args['preview'] = _('Preview');
+        $args['previewwarn'] = _('This preview is pre-formatted. How this will actually look on your web page will change depending on your stylesheet settings.');
+        $args['htmlwarn'] = _('Make sure to copy from the box above, not what is showing below because the actual content of this HTML will change based on the upload activity. You can still get an idea of what of the formatting will look like here:');
+
         CCPage::SetTitle( $title );
-        CCPage::AddLink('head_links', 'stylesheet', 'text/css', 
-            ccd('cctemplates/publicize.css'), 'Default Style');
+        $sites = CCPage::GetViewFile('sharesites.js',false);
+
+        CCPage::AddScriptLink( ccd($sites) );
+        CCPage::AddLink('head_links', 'stylesheet', 'text/css', ccd('cctemplates/publicize.css'), 'Default Style');
+        CCPage::PageArg('share', 'share.xml/share_popup' );
         CCPage::PageArg('publicize', 'publicize.xml/publicize');
-        CCPage::PageArg('PUB', $args, 'publicize');
+        CCPage::PageArg('PUB', $args, 'share');
+        CCPage::PageArg('dummy', array(), 'publicize');
+
+        if( !empty($record) )
+        {
+            $this->_build_bread_crumb_trail($record['user_name'], empty($record['upload_id']) ? '' : $record['upload_id']);
+        }
+    }
+
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail($username,$upload_id)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        
+        $trail[] = array( 'url' => ccl('people'), 
+                          'text' => _('People') );
+        $users =& CCUsers::GetTable();
+        $user_real_name = $users->QueryItem('user_real_name',
+                                            "user_name = '$username'");
+        if( !empty($user_real_name) )
+        {
+            $trail[] = array( 'url' => ccl('people',$username), 
+                                       'text' => $user_real_name );
+            if( !empty($upload_id) )
+            {
+                $uploads =& CCUploads::GetTable();
+                $upload_name = $uploads->QueryItemFromKey('upload_name',
+                                                          $upload_id);
+                if( !empty($upload_name) )
+                {
+                    $upload_name = '"' . $upload_name . '"';
+                    $trail[] = array( 'url' => ccl('files',$username,
+                                                   $upload_id), 
+                                       'text' => $upload_name );
+                }
+            }
+        }
+
+        $trail[] = array( 'url' => '', 'text' => _('Share') );
+
+        CCPage::AddBreadCrumbs($trail);
     }
 
     function _find_fmt_template($name)
@@ -166,7 +399,7 @@ class CCPublicize
         {
             $options = array(
                 CC_DONT_CARE_LOGGED_IN => _('Everybody'),
-                CC_MUST_BE_LOGGED_IN   => _('Current User Only'),
+                CC_MUST_BE_LOGGED_IN   => _('Registered User Only'),
                 0                      => _('Nobody (Turn this feature off)'),
                 );
 
@@ -236,6 +469,9 @@ class CCPublicize
     {
         CCEvents::MapUrl( ccp('publicize'),  array( 'CCPublicize', 'Publicize'), 
                 CC_DONT_CARE_LOGGED_IN);
+
+        CCEvents::MapUrl( 'share', array( 'CCPublicize', 'Share' ),  
+                CC_DONT_CARE_LOGGED_IN, '', '{id}', _('Displays Share/Embed PopupWindow'), CC_AG_UPLOADS  );
     }
 
 } // end of class CCQueryFormats
