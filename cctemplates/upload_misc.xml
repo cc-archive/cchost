@@ -174,6 +174,11 @@ $Id$
               </p>
           </div>
       </tal:block>
+      <tal:block condition="menu/share">
+        <tal:block define="mi menu/share/share_link" />
+              <p><a href="${mi/action}" id="${mi/id}" onlick="${mi/onclick}" title="${mi/tip}"><span tal:content="mi/menu_text" /></a>
+              </p>      
+        </tal:block>
       <tal:block condition="menu/playlist">
        <tal:block define="plm menu/playlist/playlist_menu" />
        <div tal:condition="plm/parent_id" id="${plm/parent_id}">
@@ -195,18 +200,6 @@ $Id$
 
 <metal:block define-macro="howididit_link">
   <div style="width:150px;margin:12px;"><a class="cc_gen_button" href="${record/howididit_link/action}"><span>"${record/howididit_link/text}"</span></a></div>
-</metal:block>
-
-
-<metal:block define-macro="ratings_field">
-<style> #rl { white-space:nowrap;vertical-align:middle; } </style>
-<tal:block define="us string:ccimages/stars/star-full.gif" />
-<tal:block define="u string:$root-url$us" />
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="500" /><label><img src="${u}" /><img src="${u}" /><img src="${u}"/><img src="${u}" /><img src="${u}" /></label></div>
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="400" /><label><img src="${u}" /><img src="${u}" /><img src="${u}" /><img src="${u}" /></label></div>
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="300" checked="checked" /><label><img src="${u}" /><img src="${u}" /><img src="${u}" /></label></div>
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="200" /><label><img src="${u}" /><img src="${u}" /></label></div>
-<div id="rl"><input type="radio" id="ratings_score" name="ratings_score" value="100" /><label><img src="${u}" /></label></div>
 </metal:block>
 
 
