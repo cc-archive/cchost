@@ -439,14 +439,13 @@ class CCPublicize
             $mailer->From( $fields['mail_from'] );
             $mailer->To( $fields['mail_to'] );
             $mailer->Subject( $fields['mail_subject'] );
-            $mailer->Body( $fields['mail_body'] );
-            @$mailer->Send($body);
+            $mailer->Body( $body );
+            @$mailer->Send();
 
             CCDebug::Enable(true);
             CCDebug::Log("Email share from {$fields['mail_from']} to {$fields['mail_to']} re: {$regarding}");
 
             CCPage::Prompt( _('Mail sent') );
-
         }
     }
 
