@@ -92,13 +92,18 @@ class CCShareLinkForm extends CCSecurityVerifierForm
                             'formatter'   => 'textedit',
                             'value'      => $subject,
                             'flags'      => CCFF_NONE ),
-                    'mail_body' => array(
+                    'mail_body_static' => array(
                             'label'       => _('Message'),
+                            'formatter'   => 'statictext',
+                            'value'       => $body, 
+                            'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
+                    'mail_body' => array(
+                            'label'       => _('Personal Message'),
                             'formatter'   => 'textarea',
-                            'value'       => $body,
+                            'value'       => '',
                             'maxlength'   => 1000,
-                            'form_tip'    => _('Message is limited to 1,000 characters'),
-                            'flags'      => CCFF_REQUIRED ),
+                            'form_tip'    => _('Add your personal message here. (Limited to 1,000 characters)'),
+                            'flags'      => CCFF_NONE ),
                     'user_mask' =>
                        array( 'label'       => '',
                                'formatter'  => 'securitykey',
@@ -113,6 +118,8 @@ class CCShareLinkForm extends CCSecurityVerifierForm
             );
 
         $this->AddFormFields($fields);
+
+        $this->SetHiddenField('mail_stock_body',urlencode($body));
 
         $help = sprintf( _('Use this form to tell your friends about %s'), '<b>' . $about . '</b>' );
 

@@ -431,11 +431,12 @@ class CCPublicize
                 $row = $users->QueryKeyRow($fields['mail_from_id']);
                 $fields['mail_from'] = $row['user_email'];
             }
+            $body = urldecode($fields['mail_stock_body']) . "\n\n" . $fields['mail_body'];
             $mailer->From( $fields['mail_from'] );
             $mailer->To( $fields['mail_to'] );
             $mailer->Subject( $fields['mail_subject'] );
             $mailer->Body( $fields['mail_body'] );
-            $mailer->Send();
+            $mailer->Send($body);
 
             CCPage::Prompt( _('Mail sent') );
         }
