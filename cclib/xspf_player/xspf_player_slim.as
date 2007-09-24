@@ -26,8 +26,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 stop();
 //constants
-DEFAULT_PLAYLIST_URL = "http://webjay.org/by/hideout/allshows.xspf";
-DEFAULT_WELCOME_MSG = "Hideout XSPF Music Player - by Fabricio Zuardi";
+DEFAULT_PLAYLIST_URL = "/media/api/query?limit=1&fmt=xspf&tags=mp3";
+DEFAULT_WELCOME_MSG = "ccHost XSPF Music Player - by Fabricio Zuardi";
 LOADING_PLAYLIST_MSG = "Loading Playlist...";
 DEFAULT_LOADED_PLAYLIST_MSG = "- click to start"
 DEFAULT_INFOBUTTON_TXT = "Track Info"
@@ -333,10 +333,6 @@ my_cm.customItems.push(new ContextMenuItem("Play!", playTrack));
 my_cm.customItems.push(new ContextMenuItem("Next", nextTrack));
 my_cm.customItems.push(new ContextMenuItem("Previous", prevTrack));
 my_cm.customItems.push(new ContextMenuItem("Download this song", function(){getURL(playlist_array[track_index].location)},true));
-my_cm.customItems.push(new ContextMenuItem("Add song to Webjay playlist", function(){getURL("http://webjay.org/poster?media="+escape(playlist_array[track_index].location))}));
-my_cm.customItems.push(new ContextMenuItem("About Hideout", function(){getURL("http://www.hideout.com.br")},true));
-//my_cm.customItems.push(new ContextMenuItem("Crossfade", function(){}));
-//my_cm.customItems.push(new ContextMenuItem("Mando Diao - Paralyzed", function(){}));
 my_cm.hideBuiltInItems();
 this.menu = my_cm;
 resizeUI();

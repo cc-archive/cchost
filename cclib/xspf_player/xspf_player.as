@@ -25,8 +25,8 @@ autoload=true;
 //playlist_url = "http%3A%2F%2Fwebjay%2Eorg%2Fby%2Flucas%5Fgonze%2Flaconic%2Exspf"
 //playlist_url= "http://hideout.com.br/tests/hideout2325.xspf"
 //constants
-DEFAULT_PLAYLIST_URL = "http://hideout.com.br/shows/allshows.xspf";
-DEFAULT_WELCOME_MSG = "Hideout XSPF Music Player - by Fabricio Zuardi";
+DEFAULT_PLAYLIST_URL = "/media/api/query?limit=1&fmt=xspf&tags=mp3";
+DEFAULT_WELCOME_MSG = "ccHost XSPF Music Player - by Fabricio Zuardi";
 LOADING_PLAYLIST_MSG = "Loading Playlist...";
 DEFAULT_LOADED_PLAYLIST_MSG = "- click to start"
 DEFAULT_INFOBUTTON_TXT = "Info"
