@@ -389,12 +389,16 @@ class CCPublicize
                 if( !empty($arg1) )
                     $record = $users->GetRecordFromName($arg1);
                 $ok = !empty($record);
+                if( $ok )
+                    $regarding = $record['user_name'];
                 break;
             case 'upload':
                 $uploads =& CCUploads::GetTable();
                 if( !empty($arg1) )
                     $record = $uploads->GetRecordFromID($arg1);
                 $ok = !empty($record);
+                if( $ok )
+                    $regarding = $record['upload_id'] . '/' . $record['upload_name'];
                 break;
             default:
                 $ok = false;
@@ -436,9 +440,13 @@ class CCPublicize
             $mailer->To( $fields['mail_to'] );
             $mailer->Subject( $fields['mail_subject'] );
             $mailer->Body( $fields['mail_body'] );
-            $mailer->Send($body);
+            @$mailer->Send($body);
+
+            CCDebug::Enable(true);
+            CCDebug::Log("Email share from {$fields['mail_from']} to {$fields['mail_to']} re: {$regarding}");
 
             CCPage::Prompt( _('Mail sent') );
+
         }
     }
 
