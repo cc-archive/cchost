@@ -169,7 +169,7 @@ class CCFeed
         if( !empty($args['ids']) )
         {
             $ids = $args['ids'];
-            $st[] = $args['sub_title'];
+            $st[] = empty($args['sub_title']) ? '' : $args['sub_title'];
             $st[] = dechex(crc32(is_array( $ids ) ? join(';',$ids) : $ids));
             $sub_title = join(' ', $st);
         }
