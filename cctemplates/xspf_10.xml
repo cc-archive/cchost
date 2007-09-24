@@ -30,7 +30,7 @@ $Id$
 
 <trackList>
     <track tal:condition="feed_items" tal:repeat="item feed_items">
-        <location>${item/files/0/download_url}</location>
+        <location>${item/download_url}</location>
         <identifier>${item/upload_id}</identifier>
         <title>${item/upload_name}</title>
         <creator>${item/user_name}</creator>
