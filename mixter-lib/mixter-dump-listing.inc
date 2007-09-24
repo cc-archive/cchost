@@ -134,11 +134,13 @@ EOF;
 
         if( !$detail )
         {
+            $upname = CC_strchop($record['upload_name'],31);
+
             $html .=<<<EOF
          <tr>
             <td colspan="2">
                 <h2><a href="{$record['file_page_url']}" ><span
-                  class="$name_cls" >{$record['upload_name']}</span></a></h2>
+                  class="$name_cls" >{$upname}</span></a></h2>
             </td>
         </tr>
 EOF;
