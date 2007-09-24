@@ -109,6 +109,7 @@ class CCEditConfigForm extends CCForm
         $this->SetHiddenField( '_name', get_class($this), CCFF_HIDDEN | CCFF_NOUPDATE );
         $this->_typename = $config_type;
         $this->_scope = $scope;
+
     }
 
     /**
@@ -796,7 +797,10 @@ END;
     function SaveConfig($form = '')
     {
         if( empty($_POST) )
+	{	
+            CCPage::Prompt(_("Error Saving"));
             return;
+	}
 
         CCPage::SetTitle(_("Saving Configuration"));
         if( empty($form) )
