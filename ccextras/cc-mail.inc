@@ -150,6 +150,7 @@ class CCMailer
     {
         $this->_to          = "";
         $this->_from        = "";
+        $this->_replyto     = "";
         $this->_cc          = array();
         $this->_bcc         = array();
         $this->_subject     = "";
@@ -194,6 +195,11 @@ class CCMailer
         $this->_from = $from;
     }
 
+    function ReplyTo($replyto)
+    {
+        $this->_replyto = $replyto;
+    }
+
     function DefaultFrom()
     {
         global $CC_GLOBALS;
@@ -218,6 +224,7 @@ class CCMailer
 
         $subject = '[' . $ttags['site-title'] . '] ' . $this->_subject;
         $from    = empty($this->_from) ? $default_from : $this->_from;
+        $replyto = empty($this->_replyto) ? $from : $this->_replyto;
         $bcc     = empty($this->_bcc) ? '' : implode( ', ', $this->_bcc );
         $cc      = empty($this->_cc)  ? '' : implode( ', ', $this->_cc  );
         $to      = $this->_to;
@@ -226,6 +233,7 @@ class CCMailer
         $headers  = "MIME-Version: 1.0\r\n";
         $headers .= "Content-type: text/plain; charset=us-ascii\r\n";
         $headers .= "From: $from\r\n";
+        $headers .= "Reply-To: $replyto\r\n";
 
         /*
         stuff to consider:
