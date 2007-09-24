@@ -65,6 +65,7 @@ class CCFeedsXSPF extends CCFeed
 
         $args['root_url'] = cc_get_root_url();
         $args['raw_feed_url'] = htmlentities(cc_get_root_url() . $_SERVER['REQUEST_URI']);
+        $args['sub_title'] = $sub_title;
 
 
         if( empty($feed_url) )
@@ -97,6 +98,13 @@ class CCFeedsXSPF extends CCFeed
         }
         else
         {
+            $keys = array_keys($records);
+            $c = count($keys);
+            for( $i = 0; $i < $c; $i++ )
+            {
+                $R =& $records[ $keys[$i] ];
+                $R['download_url'] = empty($R['fplay_url']) ? $R['files'][0]['download_url'] : $R['fplay_url'];
+            }
             $args['feed_items'] = $records;
             $date = $records[0]['rss_pubdate'];
         }
