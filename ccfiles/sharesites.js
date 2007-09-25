@@ -107,13 +107,25 @@ var ccShareSites =
             'windows_live',
             'Windows Live', 
             'https://favorites.live.com/quickadd.aspx?marklet=1&mkt=en-us&url=%url%&title=%title%&top=1',
-            root_url + '/ccimages/shareicons/windows_live.gif'
+            'https://favorites.live.com/favicon.ico'
         ],
         [
             'tailrank',
             'Tailrank', 
             'http://tailrank.com/share/?link_href=%url%&title=%title%',
             root_url + '/ccimages/shareicons/tailrank.gif'
+        ],
+        [
+            'bloglines',
+            'Bloglines', 
+            'http://www.bloglines.com/sub/%url%',
+            'http://www.bloglines.com/favicon.ico'
+        ],
+        [
+            'slashdot',
+            'Slashdot', 
+            'http://slashdot.org/bookmark.pl?url=%url%&title=%title%',
+            'http://images.slashdot.org/favicon.gif'
         ]
     ]
 ];
