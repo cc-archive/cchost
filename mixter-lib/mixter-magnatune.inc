@@ -66,13 +66,23 @@ if( !defined('IN_CC_HOST') )
 
 class CCMagnatune
 {
+    function Maintain()
+    {
+        $sql =<<<EOF
+INSERT INTO magnatune_loop_artists 
+SELECT DISTINCT loop_artist, artist, artistdesc FROM magnatune_loops, magnatune_song_info WHERE loop_artist = page ORDER BY artist
+EOF;
+        
+    }
+
     function Loops()
     {
+        $this->check_for_loop_artists();
+
         $args['loop_preview_url']  = ccc('magnatune','view','contest','sources') . '#loops';
         $args['album_preview_url'] = ccc('library', 'albumlist') . '#catalog';
 
-        $sql = 'SELECT DISTINCT loop_artist, artist, artistdesc FROM magnatune_loops, magnatune_song_info WHERE loop_artist = page '.
-               'ORDER BY artist';
+        $sql = 'SELECT * FROM magnatune_loop_artists';
         $args['artists'] = CCDatabase::QueryRows($sql);
 
         $filter = '';
@@ -99,6 +109,7 @@ class CCMagnatune
                 $albums_by_artist[$row['artist']] = $row;
             $albums_by_artist[$row['artist']]['albums'][] = $row;
         }
+
 
         $g = empty($args['current_genre']) ? 'all' : $args['current_genre'];
         $sql = "SELECT DISTINCT magnatunegenres FROM magnatune_song_info";
@@ -175,7 +186,7 @@ class CCMagnatune
 
         $artist_name = CCDatabase::QueryItem("SELECT artist FROM magnatune_song_info WHERE page = '$loop_artist' LIMIT 1");
         $loops = CCDatabase::QueryRows("SELECT * FROM magnatune_loops WHERE loop_artist = '$loop_artist'");
-        $args['preview_macro'] = 'loop_preview';
+        $args['preview_macro'] = 'magnatune_preview.xml/loop_preview';
         $args['mt']['loop_stream_url']   = ccl('library','loopstream');
         $args['mt']['loop_preview'] = array( 'loop_artist' => $loop_artist,
                                        'loop_artist_name' => $artist_name,
@@ -188,7 +199,7 @@ class CCMagnatune
         $sql = "SELECT download_mp3, trackname, songid, artist, albumname ".
                "FROM magnatune_song_info WHERE albumsku = '$album_pick'";
         $songs = CCDatabase::QueryRows($sql);
-        $args['preview_macro'] = 'album_preview';
+        $args['preview_macro'] = 'magnatune_preview.xml/album_preview';
         $args['mt']['song_stream_url']   = ccl('library','songstream');
         $args['mt']['album_preview'] = array( 'album' => addslashes($songs[0]['albumname']),
                                         'artist' => addslashes($songs[0]['artist']),
@@ -252,6 +263,67 @@ class CCMagnatune
         CCEvents::MapUrl( ccp('library','albumlist'),  array('CCMagnatune','AlbumList'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
         CCEvents::MapUrl( ccp('library','looplist'),   array('CCMagnatune','LoopList'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
         CCEvents::MapUrl( ccp('mt','csv'),             array('CCMagnatune','csv'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
+    }
+
+    function check_for_loop_artists()
+    {
+        $tables = CCDatabase::ShowTables();
+        if( in_array( 'magnatune_loop_artists', $tables ) )
+            return;
+
+        $sql =<<<EOF
+
+CREATE TABLE `magnatune_loop_artists` (
+  `loop_artist` varchar(255) NOT NULL,
+  `artist` varchar(255) NOT NULL,
+  `artistdesc` varchar(255) NOT NULL
+);
+EOF;
+
+        CCDatabase::Query($sql);
+
+        $sql =<<<EOF
+INSERT INTO `magnatune_loop_artists` (`loop_artist`, `artist`, `artistdesc`) VALUES 
+('artemis', 'Artemis', 'Trip-hop/electro-pop with siren vocals'),
+('beth_quist', 'Beth Quist', 'electro-Balkan/Indian meets New Age.'),
+('thornside', 'Burnshee Thornside', 'funny, funky blues'),
+('cargo_cult', 'Cargo Cult', 'electro-rock with a tribal, world flair.'),
+('chris_juergensen', 'Chris Juergensen', 'Crystalline Jazz Guitar/Rip Roaring Blues'),
+('electric_frankenstein', 'Electric Frankenstein', 'high energy punk rock & roll'),
+('emmas_mini', 'Emmas Mini', 'glamorously femme electropop'),
+('falik', 'Falik', 'middle-eastern infused with electronica.'),
+('farallon', 'Farallon Recorder Quartet', 'renaissance recorder ensemble'),
+('four_stones', 'Four Stones', 'groove soaked ambient chill'),
+('hans_christian', 'Hans Christian', 'new age meets Indian cello'),
+('ivilion', 'Ivilion', 'massive tribal ambient compositions.'),
+('jade_leary', 'Jade Leary', 'darkly beautiful psych rock'),
+('jag', 'Jag', 'authentic 1920''s solo blues guitar'),
+('jan_hanford', 'Jan Hanford', 'solo piano'),
+('jay_kishor', 'Jay Kishor', 'Indian classical sitar and surbahar.'),
+('jeff_wahl', 'Jeff Wahl', 'acoustic new age and jazz guitar.'),
+('johannesburg', 'Johannesburg Philharmonic', '19th century symphonic.'),
+('john_williams', 'John Williams', 'bluesy and jazzy guitar'),
+('lizzi', 'Lizzi', 'groovy downtempo rock'),
+('masley', 'Michael Masley', '21st century hammered dulcimer.'),
+('norine', 'Norine Braun', 'jazzed up, funk-tinged eclectic pop.'),
+('rcr', 'Rocket City Riot', 'high energy rock and roll'),
+('elijah', 'Saint Elijah Childrens Choir', 'Ukrainian children''s choir'),
+('seismic_anamoly', 'Seismic Anamoly', 'instrumental hard rock'),
+('serenissima', 'Serenissima', 'virtuoso Baroque violin sonatas'),
+('shiva_in_exile', 'Shiva in Exile', 'Gothic Arab/Indian World Music'),
+('solace', 'Solace', 'classical middle-eastern with excursions into electronica.'),
+('soulprint', 'SoulPrint', 'soulful hard rock'),
+('spinecar', 'Spinecar', 'heavy modern rock.'),
+('thursday_group', 'Thursday Group', 'progressive Jazz.'),
+('tim_rayborn', 'Tim Rayborn', 'Middle Eastern and medieval European music'),
+('trancevision', 'TranceVision', 'entrancing world Pop'),
+('paternoster', 'Vito Paternoster', 'Bach on the Cello'),
+('wickedboy', 'Wicked boy', 'a wicked mix of ambient/jungle/trash trance'),
+('williamson', 'Williamson', 'instrumental electronic space pop');
+
+EOF;
+
+        CCDatabase::Query($sql);
     }
 }
 
