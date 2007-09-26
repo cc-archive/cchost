@@ -166,7 +166,7 @@ class CCNewTemplateTagForm extends CCForm
                            'flags'       => CCFF_REQUIRED | CCFF_NOUPDATE) ;
 
         $this->AddFormFields($fields);
-        $this->SetModule( ccs(__FILE__) );
+       // $this->SetModule( ccs(__FILE__) );
     }
 }
 
