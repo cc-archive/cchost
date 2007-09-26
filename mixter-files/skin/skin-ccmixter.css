@@ -19,6 +19,10 @@
 
 @import url('/cctemplates/skin-simple.css');
 
+#cc_header h1 a {
+  width: 180px;
+}
+
 .cc_more_menu_link {
 	font-weight: normal;
 	margin-left: 10px;
