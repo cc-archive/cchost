@@ -114,10 +114,30 @@ function & _mixter_dump_records(&$records,$xclass)
         $root_url       = cc_get_root_url();
         $detail         = !empty($record['works_page']);
 
-        if( !$detail )
+        $aboutsha1 = '';
+        foreach( $record['files'] as $F )
+        {
+            if( !empty($F['file_extra']['sha1']) )
+            {
+                $aboutsha1 = 'about="urn:sha1:' . $F['file_extra']['sha1'] . "\"\n";
+                break;
+            }
+        }
+
+        $micro_decs =<<<EOF
+            $aboutsha1 xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:hmedia="http://www.microformats.org/2007/12/hmedia/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"               
+EOF;
+
+        if( $detail )
+        {
+            $html .= "<div $micro_decs >";
+        }
+        else
         {
             $html .=<<<EOF
-  <div id="cc_record_listing"> 
+  <div id="cc_record_listing" $micro_decs > 
     <div class="$xclass">
 EOF;
         }
@@ -175,7 +195,7 @@ EOF;
             $html .=<<<EOF
             <tr>
               <th>$str_by</th>
-              <td>$flag_link<a href="{$record['artist_page_url']}" class="cc_user_link">{$record['user_real_name']}</a></td>
+              <td>$flag_link<a rel="dc:creator" href="{$record['artist_page_url']}" class="cc_user_link">{$record['user_real_name']}</a></td>
             </tr>
 EOF;
         }
@@ -232,7 +252,7 @@ EOF;
         $html .=<<<EOF
         <tr>
           <th>$str_date</th>
-          <td>$date</td>
+          <td property="dc:date">$date</td>
         </tr>
         <tr>
           <th>$str_tags</th>
@@ -263,7 +283,7 @@ EOF;
                 $html .=<<<EOF
                 <tr>
                     <th>$str_length</th>
-                    <td>$ps</td>
+                    <td property="hmedia:duration">$ps</td>
                 </tr>
 EOF;
             }
@@ -384,11 +404,12 @@ EOF;
                     $title = empty($item['tip']) ? '' : 'title="' . $item['tip'] . '"';
                     $onclick = empty($item['onclick']) ? '' : 'onclick="' . $item['onclick'] . '"';
                     $parent_id = empty($item['parent_id']) ? '' : 'id="' . $item['parent_id'] . '"';
+                    $rel = (empty($item['id']) || ($item['id'] != 'cc_downloadbutton')) ? '' : 'rel="hmedia:download"';
                     if( !empty($item['action']) )
                     {
                         $html .=<<<END
                         <tr>
-                          <td {$parent_id} ><a href="{$item['action']}" $type $class $onclick $title
+                          <td {$parent_id} ><a href="{$item['action']}" $type $class $onclick $title $rel
                                 id="{$item['id']}"><span>{$item['menu_text']}</span></a></td>
                         </tr>
 END;
@@ -431,7 +452,7 @@ EOF;
                 $k = $keys[$n];
                 $mi =& $dl_items[$k];
                 $html .=<<<END
-                  <p> <a href="{$mi['action']}" id="{$mi['id']}" type="{$mi['type']}" title="{$mi['tip']}"><span>{$mi['menu_text']}</span></a>
+                  <p> <a rel="hmedia:download" href="{$mi['action']}" id="{$mi['id']}" type="{$mi['type']}" title="{$mi['tip']}"><span>{$mi['menu_text']}</span></a>
                   </p>
 END;
             }
@@ -616,7 +637,11 @@ EOF;
 
         } // not skip remixes
 
-        if( !$detail )
+        if( $detail )
+        {
+            $html .= '</div>'; // microdecs
+        }
+        else
         {
             $html .=<<<EOF
 
