@@ -505,6 +505,7 @@ class CCQuery
                 require_once('cclib/cc-ratings.php');
                 $table->AddJoin( new CCRatings(), 'upload_id', '', 'ratings_upload' );
                 $where[] = "(ratings_user = $userid) AND (ratings_score > 400)";  // only show '5's
+                $table->SetOrder('ratings_id', 'DESC');
             }
         }
 
