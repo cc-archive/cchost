@@ -521,4 +521,17 @@ function cc_get_value($arr,$key)
         return $arr[$key];
     return null;
 }
+
+if( !function_exists('array_combine') )
+{
+    function array_combine($keys,$values)
+    {
+        $c = count($keys);
+        $dest = array();
+        for( $i = 0; $i < $c; $i++ )
+            $dest[$keys[$i]] = $values[$i];
+
+        return $dest;
+    }
+}
 ?>
