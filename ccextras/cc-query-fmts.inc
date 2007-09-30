@@ -153,6 +153,9 @@ class CCQueryFormats
                 if( !empty($template_args) )
                     $targs = array_merge($targs,$template_args);
 
+                if( !empty($qstring) )
+                    $targs['qstring'] = $qstring;
+
                 $text = $templateObj->SetAllAndParse($targs);
                 
                 if( $format == 'docwrite' )
