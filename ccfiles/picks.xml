@@ -41,16 +41,16 @@ function pickwinplay(qstring)
 
 <metal:block define-macro="picks">
   <h3 tal:content="pick_title" />
-  <tal:block define="chart php: cc_query_fmt($qstring);" />
+  <tal:block define="chart php: cc_query_fmt(${qstring});" />
   <tal:block condition="chart" >
     <table cellspacing="0" cellpadding="0" id="edpick_stream_links">
       <tr>
         <td>
-          <div class="cc_podcast_link"><a href="${home-url}podcast/page?$qstring"><span tal:content="pod_title" /></a></div>
+          <div class="cc_podcast_link"><a href="${home-url}podcast/page?${qstring}"><span tal:content="pod_title" /></a></div>
         </td>
         <td>
           <div class="cc_stream_page_link">
-            <a href="${home-url}stream/page/playlist.m3u?$qstring"><span tal:content="stream_title" /></a></div>
+            <a href="${home-url}stream/page/playlist.m3u?${qstring}"><span tal:content="stream_title" /></a></div>
         </td>
         <td tal:condition="enable_playlists" >
           <div class="cc_stream_page_link">
@@ -140,30 +140,25 @@ function pickwinplay(qstring)
 <table class="pickspage">
   <tr>
     <td rowspan="2" style="padding-right: 25px;">
-        <tal:block define="pick_title php:_('Editors\' Picks');
-                           ed_pick 1;
+        <tal:block define="ed_pick 1;
+                           pick_title php:_('Editors\' Picks');
                            qstring string:tags=editorial_pick&sort=date&dir=DESC&limit=22;" />
-        <metal:block use-macro="picks" />
+        <metal:block use-macro="picks.xml/picks" />
     </td>
     <td>
         <tal:block define="settings php:CC_get_config('chart');" />
         <tal:block define="pick_title php:_('What\'s Hot Right Now');
                            ed_pick 0;
-                           qstring string:tags=remix,-digital_distortion&sort=rank&dir=DESC&sinced=${settings/cut-off}&limit=20;" />
-        <metal:block use-macro="picks" />
+                           qstring php: 'tags=remix,-digital_distortion&sort=rank&dir=DESC&sinced=' . ${settings/cut-off} . '&limit=20';" />
+        <metal:block use-macro="picks.xml/picks" />
     </td>
   </tr>
   <tr>
     <td>
-        <tal:block replace="">
-            NOTE: the follow query applies to a system using the 'Recommend!' version of the
-            rating system. If you use the 5-star system you should copy this file to your
-            local 'viewfiles' directory and change 'num_scores' below to 'rank'
-        </tal:block>
         <tal:block define="pick_title php:_('All Time Hot List');
                            ed_pick 0;
-                           qstring string:tags=remix&sort=num_scores&dir=DESC&limit=10;" />
-        <metal:block use-macro="picks" />
+                           qstring string:tags=remix&sort=score&dir=DESC&limit=10;" />
+        <metal:block use-macro="picks.xml/picks" />
     </td>
   </tr>
 </table>

@@ -40,7 +40,7 @@ $Id$
 </metal:block>
 
 <metal:block define-macro="left_reviews">
-  <div class="cc_topic_left"><a id="commentcommand" href="${left_link/url}"><span>${left_link/text</span></a></div>
+  <div class="cc_topic_left"><a id="commentcommand" href="${left_link/url}"><span>${left_link/text}</span></a></div>
   <br clear="right" />
   <metal:block use-macro="topics.xml/recent_reviews" />
 </metal:block>
@@ -313,7 +313,7 @@ $Id$
   <br style="clear:both" />
       <tal:block condition="record/upload_description_html">
         <tal:block define="says php: CC_lang('says'); 
-                           dtitle string:${record/user_real_name} ${says}; 
+                           dtitle php: ${record/user_real_name} . ' ' . ${says}; 
                            dtext  record/upload_description_html" />
         <metal:block use-macro="${show_box}" />
       </tal:block>

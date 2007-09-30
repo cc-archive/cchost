@@ -112,20 +112,23 @@
   <script src="${root-url}cctemplates/js/autocomp.js" ></script>
   <script src="${root-url}cctemplates/js/collab.js" ></script>
   <script>
-    var collab_template = '<div class="user_line" id="_user_line_#{user_name}">' +
-            '<div class="user" ><a href="'+home_url+'people/#{user_name}">#{user_real_name}</a></div>' +
-            '<div class="role">#{role}</div>' +
-            '<div class="credit" id="_credit_#{user_name}">#{credit}</div>' +
+    var collab_template = '<' + 'div class="user_line" id="_user_line_#{user_name}">' +
+            '<' + 'div class="user" ><' + 'a href="'+home_url+'people/#{user_name}">#{user_real_name}<' + '/a><' + '/div>' +
+            '<' + 'div class="role">#{role}<' + '/div>' +
+            '<' + 'div class="credit" id="_credit_#{user_name}">#{credit}<' + '/div>' +
   <tal:block condition="collab/is_owner">
-            '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><span>credit</span></a></div>' +
-            '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><span>remove</span></a></div>' +
+     '<' + 'div><' + 'a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
+              + 'span>credit<' + '/span><' + '/a><' + '/div>' +
+     '<' + 'div><' + 'a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
+              + 'span>remove<' + '/span><' + '/a><' + '/div>' +
   </tal:block>
   <tal:block condition="collab/is_member">
-            '<div>' +
-            '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>send email</span></a> ' +
-            '</div>' +
+            '<' + 'div>' +
+            '    <' + 'a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><' + 'span>send email' 
+                 + '<' + '/span><' + '/a> ' +
+            '<' + '/div>' +
   </tal:block>
-           '</div>';
+           '<' + '/div>';
      var cu = new ccCollab('${collab_id}','${collab/is_member}','${collab/is_owner}');
      cu.updateFiles('${collab_id}');
      <tal:block repeat="user collab/users">

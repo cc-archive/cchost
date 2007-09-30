@@ -1,6 +1,6 @@
 <tal:block>
 <div id="cc_mplayer">
-<!-- FORMAT_NAME _("Fabricio Zuardi's Button Player (Requires Flash)"); -->
+<script>// FORMAT_NAME _("Fabricio Zuardi's Button Player (Requires Flash)"); </script>
 <!-- see http://http://musicplayer.sourceforge.net -->
 <tal:block define="url php: urlencode(${home-url} . 'api/query' . ${q} . ${qstring} . '&format=xspf');" />
 <div>
@@ -12,7 +12,7 @@
     value="${root-url}cclib/xspf_player/musicplayer.swf?&playlist_url=${url}&" />
     </object>
   </div>
-  <span class="cc_songinfo"><a href="${records/0/file_page_url}" class="cc_songtitle">${records/0/upload_name}</a> by <a href="${records/0/artist_page_url}"  class="cc_artistname">${records/0/user_real_name}</a></span>  <i class="cc_tagline"><span>
+  <span class="cc_songinfo"><a href="${records/0/file_page_url}" class="cc_songtitle">${records/0/upload_name}</a> by <a href="${records/0/artist_page_url}"  class="cc_artistname">${records/0/user_real_name}</a></span>&nbsp;<i class="cc_tagline"><span>
     <tal:block define="format_signature format_sig | string:format_signature.xml/signature" />
     <metal:block use-macro="${format_signature}" />
  </span></i>

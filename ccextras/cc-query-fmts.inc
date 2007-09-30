@@ -143,17 +143,15 @@ class CCQueryFormats
                 for( $i = 0; $i < $count; $i++ )
                     $query->CleanRec($records[$k[$i]]);
 
-                $configs =& CCConfigs::GetTable();
-                $targs = array_merge($configs->GetConfig('ttag'),$args);
-                $targs['root-url'] = cc_get_root_url() . '/';
-                $targs['home-url'] = ccl();
+                require_once('cclib/cc-page.php');
+
+                $targs = array_merge( CCPage::GetDefaultPageArgs(), $CC_GLOBALS );
                 $targs['records']  =& $records;
                 $targs['dochop']   = isset($chop) && $chop > 0;
                 $targs['chop']     = isset($chop) ? $chop : 25;
-                $targs['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
 
                 if( !empty($template_args) )
-                    $targs = array_merge($template_args);
+                    $targs = array_merge($targs,$template_args);
 
                 $text = $templateObj->SetAllAndParse($targs);
                 

@@ -26,11 +26,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-require_once('ccextras/cc-topics.php');
-
 define('CC_MAX_USER_TOPICS', 30 );
 define('CC_MAX_FEED_TOPICS', 25 );
-define('CC_EVENT_FORUM_POST', 'forumpost' );
 
 
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCForumsSearchAPI',  'OnFormFields'), 'ccextras/cc-forums-search.inc');

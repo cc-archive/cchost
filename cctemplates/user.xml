@@ -54,14 +54,14 @@ $Id$
             <br />
         </td>
     </tr>
-    <tal:block tal:condition="not: record/result_info">
+    <tal:block condition="not: exists: record/result_info">
         <tr tal:condition="record/ratings_score">
           <th tal:content="php: _('Ratings')" />
           <td><metal:block use-macro="${ratings_stars}" /></td>
         </tr>
         <tr tal:repeat="uf record/user_fields">
           <th tal:content="uf/label" />
-          <td>$uf/value</td>
+          <td>${uf/value}</td>
         </tr>
         <tr><td colspan="2">&nbsp;</td></tr>
     </tal:block>

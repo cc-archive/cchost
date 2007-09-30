@@ -68,6 +68,7 @@ $Id$
     render_image string:misc.xml/render_image;
     remix_line string:upload.xml/remix_line;
     show_activity_log string:admin.xml/show_activity_log;
+    show_activity_menu string:admin.xml/show_activity_menu;
     show_banner string:page.xml/show_banner;
     show_beta_message string:page_misc.xml/show_beta_message;
     show_body_html string:page_misc.xml/show_body_html;
@@ -103,8 +104,8 @@ $Id$
  
 <metal:block define-macro="null_block"></metal:block>
 
-<tal:block condition="auto_execute" repeat="ae auto_execute" >
-  <tal:block condition="php: skin == 'blank'">
+<tal:block condition="php: ${skin} == 'blank'">
+  <tal:block condition="auto_execute" repeat="ae auto_execute" >
     <tal:block define="tname ${ae}" />
     <metal:block use-macro="${tname}" />
   </tal:block>

@@ -446,6 +446,7 @@ class CCAdmin
         }
 
         $args['local_items'] = $this->_check_access($local_items);
+        $args['delete_url'] = $CC_CFG_ROOT == CC_GLOBAL_SCOPE ? '' : url_args( ccl( 'admin/cfgroot' ), 'vroot=del' );
         $args['do_local'] = true;
     }
 
@@ -549,19 +550,44 @@ class CCAdmin
         if( !CCUser::IsAdmin() )
             return;
 
-        CCPage::SetTitle(_("Create New Virtual Root"));
-        $form = new CCAdminMakeCfgRootForm();
-        if( !empty($_POST['adminmakecfgroot']) && $form->ValidateFields() )
+        if( empty($_GET['vroot']) )
         {
-            $form->GetFormValues($fields);
-            $new_cfg_root = $fields['newcfgroot'];
-            $configs =& CCConfigs::GetTable();
-            $settings = $configs->GetConfig('settings');
-            $configs->SaveConfig('settings',$settings,$new_cfg_root);
-            CCUtil::SendBrowserTo( ccc( $new_cfg_root, 'admin', 'settings' ) );
-        }
+            CCPage::SetTitle(_("Create New Virtual Root"));
+            $form = new CCAdminMakeCfgRootForm();
+            if( !empty($_POST['adminmakecfgroot']) && $form->ValidateFields() )
+            {
+                $form->GetFormValues($fields);
+                $new_cfg_root = $fields['newcfgroot'];
+                $configs =& CCConfigs::GetTable();
+                $settings = $configs->GetConfig('settings');
+                $configs->SaveConfig('settings',$settings,$new_cfg_root);
+                CCUtil::SendBrowserTo( ccc( $new_cfg_root, 'admin', 'settings' ) );
+            }
 
-        CCPage::AddForm( $form->GenerateForm() );
+            CCPage::AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            global $CC_CFG_ROOT;
+
+            if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
+                return;
+
+            if( empty($_POST['confirmdelete']) )
+            {
+                require_once('cclib/cc-upload-forms.php');
+                $form = new CCConfirmDeleteForm($CC_CFG_ROOT);
+                CCPage::AddForm( $form->GenerateForm() );
+            }
+            else
+            {
+                $configs =& CCConfigs::GetTable();
+                $w['config_scope'] = $CC_CFG_ROOT;
+                $configs->DeleteWhere($w);
+                $url = ccl( 'media/admin/site/local' );
+                CCUtil::SendBrowserTo($url);
+            }
+        }
     }
 
     /**

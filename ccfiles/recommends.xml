@@ -87,7 +87,7 @@
 
 <div id="featured">
     <h3 tal:content="php: sprintf(_('Recommended by %s'),${get/fullname});" />
-        <div class="featured_info" tal:content="feats php:sprintf(_('%s recommends these uploads.'),${get/fullname});" />
+        <div class="featured_info" tal:content="php: sprintf(_('%s recommends these uploads.'),${get/fullname});" />
 </div>
 
 <div id="browser">

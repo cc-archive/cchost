@@ -27,11 +27,6 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 define('NUM_REVIEWS_PER_PAGE', 20);
-define('CC_EVENT_REVIEW','review');
-
-require_once('ccextras/cc-topics.php'); // for EVENT_TOPIC_*
-
-
 
 /**
 */

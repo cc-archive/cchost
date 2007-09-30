@@ -12,7 +12,7 @@
     swfObj.addVariable('allowScriptAccess','always');
     swfObj.write('flash_goes_here');
     var flashVersion = deconcept.SWFObjectUtil.getPlayerVersion();
-    new ccEmbeddedPlayer( { $poptions }, flashVersion['major'] );
+    new ccEmbeddedPlayer( { ${poptions} }, flashVersion['major'] );
   </script>
 </metal:block>
 

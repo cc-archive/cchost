@@ -172,19 +172,36 @@ class CCPage extends CCTemplate
         global $CC_GLOBALS;
 
         $this->CCTemplate( $CC_GLOBALS['skin-page'] );
+        $this->_page_args = array(); 
+    }
+
+    function GetDefaultPageArgs()
+    {
+        global $CC_GLOBALS;
 
         $configs =& CCConfigs::GetTable();
-        $this->_page_args = $configs->GetConfig('ttag');
-        $this->_page_args['show_body_header'] = true;
-        $this->_page_args['show_body_footer'] = true;
-        $this->_page_args['chop'] = true;
-        $this->_page_args['bread_crumbs'] = array();
-        $this->_page_args['crumb_seperator'] = ' &raquo; ';
-        $this->_page_args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
-        $this->_page_args['get'] = $_GET;
-        $this->_page_args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
-        $this->_page_args['install_done'] = false;
-        $this->_page_args['noproto'] = false;
+        $args = $configs->GetConfig('ttag');
+        $args['show_body_header'] = true;
+        $args['show_body_footer'] = true;
+        $args['chop'] = true;
+        $args['bread_crumbs'] = array();
+        $args['crumb_seperator'] = ' &raquo; ';
+        $args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+        $args['get'] = $_GET;
+        $args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
+        $args['install_done'] = false;
+        $args['noproto'] = false;
+        if( CCUser::IsLoggedIn() )
+        {
+            $args['logged_in_as'] = CCUser::CurrentUserName();
+            $args['logout_url'] = ccl('logout');
+            $args['is_logged_in'] = 1;
+        } else {
+            $args['is_logged_in'] = 0;
+        }
+        $args['is_admin']  = CCUser::IsAdmin();
+        $args['not_admin'] = !$args['is_admin'];
+        return $args;
     }
 
     /**
@@ -390,7 +407,7 @@ class CCPage extends CCTemplate
         //
         // Merge config into already existing page args
         //
-        $page->_page_args = array_merge($page->_page_args,$CC_GLOBALS); // is this right?
+        $page->_page_args = array_merge($page->GetDefaultPageArgs(),$page->_page_args,$CC_GLOBALS); // is this right?
 
         /////////////////
         // Step 1a
@@ -458,16 +475,7 @@ class CCPage extends CCTemplate
         //
         // Populate current user's name
         //
-        if( CCUser::IsLoggedIn() )
-        {
-            $page->_page_args['logged_in_as'] = CCUser::CurrentUserName();
-            $page->_page_args['logout_url'] = ccl('logout');
-            $page->_page_args['is_logged_in'] = 1;
-        } else {
-            $page->_page_args['is_logged_in'] = 0;
-        }
-        $page->_page_args['is_admin']  = $isadmin;
-        $page->_page_args['not_admin'] = !$isadmin;
+        // (do this at ctor now)
 
         /////////////////
         // Step 4
@@ -546,13 +554,36 @@ class CCPage extends CCTemplate
     function GetViewFile($filename,$real_path=true)
     {
         global $CC_GLOBALS;
-        return CCUtil::SearchPath( $filename, $CC_GLOBALS['files-root'], 'ccfiles', $real_path );
+        if( defined('PHPTAL_DEAD') && PHPTAL_DEAD )
+        {
+            $cpaths = CCPage::GetViewFilePath();
+            $paths = join(';',$cpaths);
+            $ret = CCUtil::SearchPath( $filename . '.php', $paths, 'ccfiles', $real_path );
+            if( !$ret )
+                $ret = CCUtil::SearchPath( $filename, $paths, 'ccfiles', $real_path );
+            return $ret;
+        }
+        else
+        {
+            return CCUtil::SearchPath( $filename, $CC_GLOBALS['files-root'], 'ccfiles', $real_path );
+        }
     }
 
     function GetViewFilePath()
     {
         global $CC_GLOBALS;
-        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccfiles' );
+        if( defined('PHPTAL_DEAD') && PHPTAL_DEAD )
+        {
+            $paths = preg_split('/;(\s+)?/',$CC_GLOBALS['files-root']);
+            $cpaths = array();
+            foreach( $paths as $P )
+                $cpaths[] = 'compiled/' . trim($P);
+            return $cpaths;
+        }
+        else
+        {
+            return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccfiles' );
+        }
     }
     
     /**

@@ -30,7 +30,7 @@ if( !defined('IN_CC_HOST') )
 
 
 /**
-* Notification Event: App session init
+* Request for Data Event: App session init
 *
 * Event triggered after app session has been initialized, all
 * modules are loaded, user is logged in.
@@ -44,7 +44,7 @@ if( !defined('IN_CC_HOST') )
 define('CC_EVENT_APP_INIT',            'init');
 
 /**
-* Notification Event: App session done
+* Request for Data Event: App session done
 *
 * Event triggered after app session has executed the
 * incoming URL and page has been displayed 
@@ -190,7 +190,7 @@ define('CC_EVENT_UPLOAD_ROW',          'uploadrow' );
 define('CC_EVENT_UPLOAD_LISTING',      'uploadlisting' );
 
 /*
-* Notification Event: A list of records is being displayed
+* Request for Data Event: A list of records is being displayed
 *
 * Triggered when a <i>multiple upload records</i> are about
 * to be displayed. The ccHost rendering system uses this event 
@@ -209,7 +209,7 @@ define('CC_EVENT_UPLOAD_LISTING',      'uploadlisting' );
 define('CC_EVENT_LISTING_RECORDS',     'listingrecs' );
 
 /**
-* Notification Event: File info has been attached to record
+* Request for Data Event: File info has been attached to record
 *
 * Triggered by {@link CCFiles::FilesForUpload} after the during
 * {@link CC_EVENT_UPLOAD_ROW} event processing after the information
@@ -452,7 +452,7 @@ define('CC_EVENT_GET_MACROS',          'getmacros' );
 define('CC_EVENT_SUBMIT_FORM_TYPES',   'submitformtypes' );
 
 /**
-* Notification Event: Page is about to be rendered
+* Request for Data Event: Page is about to be rendered
 *
 * Triggered just before the page object does a merge
 * with the environment variables and the current
@@ -469,7 +469,7 @@ define('CC_EVENT_SUBMIT_FORM_TYPES',   'submitformtypes' );
 define('CC_EVENT_RENDER_PAGE',         'renderpage');
 
 /**#@+
-* Notification Event: Phase of form processing.
+* Request for Data Event: Phase of form processing.
 *
 * $form paramater is an insance of {@link CCForm}
 * @see CCEvents::AddHandler()
@@ -517,7 +517,7 @@ define('CC_EVENT_FORM_VERIFY',         'formverify' );
 /**#@-*/
 
 /**
-* Notification Event: Advanced search hook
+* Request for Data Event: Advanced search hook
 *
 * Triggered <i>before</i> the default search takes place. This
 * gives a chance for modules to hook the search request and
@@ -711,14 +711,101 @@ define('CC_EVENT_ADD_FEED_LINKS', 'addfeedlinks');
 define('CC_EVENT_USER_PROFILE_TABS', 'utabs');
 
 
+/**
+* Notification Event: Upload moderated
+*
+* Event handler prototype:
+*<code>
+*function OnUploadedModerated($record)
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_UPLOAD_MODERATED', 'uploadmoderated');
+
+/**
+* Notification Event: User IP Banned
+*
+* Event handler prototype:
+*<code>
+*function OnUserIPBannded($record)
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_USER_IP_BANNED', 'useripbanned');
+
+
+
+/**
+* Notification Event: New User Registered 
+*
+* Event handler prototype:
+*<code>
+*function OnUserRegistered($fields,&$status)
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_USER_REGISTERED',      'userreg' );
+
+/**
+* Notification Event: User profile information changed
+*
+* Event handler prototype:
+*<code>
+*function OnUserProfiledChanged($user_id,&$row)
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_USER_PROFILE_CHANGED', 'userprof' );
+
+
+/**
+* Notification Event: User logged in with login form
+*
+* Event handler prototype:
+*<code>
+*function OnLogin()
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_LOGIN', 'userlogin' );
+
+
+/**
+* Request for Data Event: Login form is being invoked
+*
+* Event handler prototype:
+*<code>
+*function OnLoginForm(&$form)
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_LOGIN_FORM',           'loginform' );
+
+/**
+* Notification Event: User logged out
+*
+* Event handler prototype:
+*<code>
+*function OnLogout()
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_LOGOUT',               'logout' );
+
+/**
+* Notification Event: Lost Password
+*
+* Event handler prototype:
+*<code>
+*function OnLostPassword()
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_LOST_PASSWORD', 'lostpassword' );
+
 /**#@+
 * @access private
 */
-define('CC_EVENT_USER_REGISTERED',      'userreg' );
-define('CC_EVENT_USER_PROFILE_CHANGED', 'userprof' );
-define('CC_EVENT_LOGIN_FORM',           'loginform' );
-define('CC_EVENT_LOGOUT',               'logout' );
-
 define('CC_EVENT_TRANSLATE',            'translate' );
 /**#@-*/
 

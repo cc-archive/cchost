@@ -195,7 +195,7 @@ $Id$
 
 <metal:block define-macro="upload_flag">
 <tal:block condition="exists: record/flag_url"><a class="cc_flag_url" 
-   title="$upload_flag_tip" href="${record/flag_url}"><span></span></a> </tal:block>
+   title="${upload_flag_tip}" href="${record/flag_url}"><span></span></a> </tal:block>
 </metal:block>
 
 <metal:block define-macro="howididit_link">

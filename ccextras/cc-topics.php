@@ -26,10 +26,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define('CC_EVENT_TOPIC_ROW',    'topicrow');
-define('CC_EVENT_TOPIC_DELETE', 'topicdelete');
-define('CC_EVENT_TOPIC_REPLY',  'topicreply');
-
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCTopic',  'OnMapUrls'), 'ccextras/cc-topics.inc');
 
 ?>

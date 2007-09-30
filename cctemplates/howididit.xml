@@ -25,9 +25,9 @@ $Id$
  <div class="cc_howididit">
     <tal:block repeat="head howididit_fields">
       <tal:block define="fkey repeat/head/key" />
-      <tal:block condition="howididit_info/$fkey" tal:on-error="">
+      <tal:block define="dtext php:cc_get_value(${howididit_info},${fkey});" />
+      <tal:block condition="dtext">
           <tal:block define="dtitle head/label" />
-          <tal:block define="dtext howididit_info/$fkey" />
           <metal:block use-macro="${show_box}" />
       </tal:block>
     </tal:block>
@@ -42,9 +42,14 @@ $Id$
       <b tal:condition="sortlink/selected">${sortlink/text}</b>
     </td>
  </tr></table>
- <select size="7" id="cc_howididit_browser"
- onchange="cc_get_data('${howididit_url}/' + this.options[this.selectedIndex].value,'cc_howididit_detail','getting data...');"
- >
+ <script>
+    function hidi_select()
+    {
+      var sel = $('cc_howididit_browser');
+      cc_get_data('${howididit_url}' + '/' + sel.options[sel.selectedIndex].value,'cc_howididit_detail','getting data...');
+    }
+ </script>
+ <select size="7" id="cc_howididit_browser" onchange="hidi_select();">
 <tal:block repeat="item howididit_records" ><option value="${item/upload_id}">"${item/upload_name}" by ${item/user_real_name}</option></tal:block>
  </select>
  <div id="cc_howididit_detail"></div>

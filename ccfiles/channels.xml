@@ -51,7 +51,7 @@ $Id$
 
 <div id="channel_intro">
  <h3 tal:content="php: _('Create Your Own Remix Radio Station');" />
- <p tal:content="php: _('Create your own stream or podcast from a random pool of remixes in ${site-title} by selecting a style and other choices.');" /> 
+ <p tal:content="php: sprintf(_('Create your own stream or podcast from a random pool of remixes in %s by selecting a style and other choices.'),${site-title}) ;" /> 
 </div>
 
 </td></tr>
@@ -64,7 +64,7 @@ $Id$
   <tr>
     <tal:block repeat="C R">
        <tal:block define="T php:str_replace(',','+',${C/tags});" />
-       <tal:block define="K string:tags$repeat/R/key$repeat/C/key" />
+       <tal:block define="K php: 'tags' . ${repeat/R/key} . ${repeat/C/key}" />
        <td><div id="${K}" class="cbutton">${C/text}<span id="cvalue_${K}" class="cvalue">${T}</span></div></td>
     </tal:block>
   </tr>

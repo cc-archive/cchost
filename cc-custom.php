@@ -514,4 +514,11 @@ function & CC_get_details($upload_id,$menu=true)
     CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, array(&$rec));
     return $rec;
 }
+
+function cc_get_value($arr,$key)
+{
+    if( is_array($arr) && array_key_exists($key,$arr) )
+        return $arr[$key];
+    return null;
+}
 ?>

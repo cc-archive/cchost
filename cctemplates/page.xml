@@ -104,54 +104,6 @@ $Id$
   </body>
 </metal:block>
 
-
-<metal:block define-macro="show_prompts">
-    <tal:block repeat="prompt prompts">
-        <div class="cc_${prompt/name}">${prompt/value}</div>
-    </tal:block>
-</metal:block>
-
-<metal:block define-macro="show_beta_message">
-   <div class="cc_beta_message">${beta_message}</div>
-</metal:block>
-
-<metal:block define-macro="show_box">
-  <div class="cc_box">
-    <h3 tal:content="dtitle" />
-    <p tal:content="structure dtext" />
-  </div>
-</metal:block>
-
-<metal:block define-macro="show_sub_nav_tabs">
-  <div id="cc_sub_header" >
-  <ul >
-     <tal:block repeat="tab sub_nav_tabs/tabs">
-       <li tal:condition="exists: tab/selected" class="selected_tab" >
-           <a href="${tab/url}" tal:content="tab/text" /></li>
-          <li tal:condition="exists: tab/normal" ><a tal:content="tab/text"  href="${tab/url}" title="${tab/help}" /></li>
-     </tal:block>
-  </ul>
-  </div>
-</metal:block>
-
-<metal:block define-macro="show_body_html">
-  ${body_html}
-</metal:block>
-
-<metal:block define-macro="ajax_block"><!-- deprecated ajax block --></metal:block>
-
-<metal:block define-macro="prev_next_links">
-  <table id="cc_prev_next_links"><tr>
-    <td tal:condition="prev_link">
-      <a class="cc_gen_button" href="${prev_link}"><span tal:content="back_text" /></a>
-    </td>
-    <td class="cc_list_list_space">&nbsp</td>
-    <td tal:condition="next_link">
-      <a class="cc_gen_button" href="${next_link}"><span tal:content="more_text" /></a>
-    </td>
-  </tr></table>
-</metal:block>
-
 <metal:block define-macro="print_head_links">
   <tal:block repeat="head_link head_links">
       <link rel="${head_link/rel}" type="${head_link/type}" href="${head_link/href}" title="${head_link/title}"/>
@@ -179,8 +131,9 @@ $Id$
       <p tal:condition="site-description" tal:content="site-description" />
       <ul tal:condition="tab_info" tal:attributes="title php: CC_Lang('Main Site Sections');" >
          <tal:block define="rtabs php: array_reverse(${tab_info/tabs},true);" />
-         <tal:block repeat="tab rtabs"><li tal:condition="exists: tab/selected" class="selected_tab" ><a href="${tab/url}" tal:content="tab/text" /></li>
-              <li tal:condition="exists: tab/normal" ><a tal:content="tab/text"  href="${tab/url}" title="${tab/help}" /></li>
+         <tal:block repeat="tab rtabs">
+            <li tal:condition="exists: tab/selected" class="selected_tab" ><a href="${tab/url}" tal:content="tab/text" /></li>
+            <li tal:condition="exists: tab/normal" ><a tal:content="tab/text"  href="${tab/url}" title="${tab/help}" /></li>
               </tal:block>
       </ul>
       <form tal:condition="sticky_search"  id="cc_search" action="${home-url}search/results" method="post" >
@@ -226,25 +179,6 @@ $Id$
 <metal:block define-macro="show_logged_in_as">
   <div class="cc_logged_in_as" tal:condition="logged_in_as">Logged in as: 
     <div class="cc_logged_in_name">${logged_in_as}</div> <a href="${logout_url}" tal:content="php: _('log out')"></a>
-  </div>
-</metal:block>
-
-<metal:block define-macro="show_bread_crumbs">
-  <div class="cc_breadcrumbs" >
-    <tal:block repeat="crumb bread_crumbs">
-      <tal:block condition="not: repeat/crumb/end" ><a href="${crumb/url}"><span>${crumb/text}</span></a>  &raquo; </tal:block>
-      <span tal:condition="repeat/crumb/end" tal:content="crumb/text" />
-    </tal:block>
-    <tal:block condition="crumb_tags">
-      <select onchange="document.location = this.options[this.selectedIndex].value;" style="font-size:smaller;">
-         <tal:block repeat="tagopt crumb_tags">
-            <option tal:condition="tagopt/selected" selected="selected" 
-                                 value="${tagopt/url}">${tagopt/text}</option>
-            <option tal:condition="not: tagopt/selected" 
-                                 value="${tagopt/url}">${tagopt/text}</option>
-         </tal:block>
-      </select>
-    </tal:block>
   </div>
 </metal:block>
 

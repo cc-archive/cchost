@@ -120,7 +120,7 @@ function ppage() {
 
 <metal:block define-macro="_query_latest">
   <p tal:content="latest_title" />
-  <tal:block define="qrecords php: CC_cache_query('$latest_tag','all','upload_date','DESC',5);" />
+  <tal:block define="qrecords php: CC_cache_query('${latest_tag}','all','upload_date','DESC',5);" />
   <ul tal:condition="qrecords">
     <li tal:repeat="qrecord qrecords"><a href="${qrecord/file_page_url}">${qrecord/upload_short_name}</a></li>
   </ul>

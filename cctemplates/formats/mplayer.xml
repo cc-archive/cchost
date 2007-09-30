@@ -1,6 +1,6 @@
 <tal:block>
 <div id="cc_mplayer">
-<!-- FORMAT_NAME _("Fabricio Zuardi's Music Player (Requires Flash)"); -->
+<script>// FORMAT_NAME _("Fabricio Zuardi's Music Player (Requires Flash)"); </script>
 <tal:block define="h height | 15" /><tal:block define="ply player | string:xspf_player_slim.swf" />
 <tal:block define="w 400" />
 <!-- see http://http://musicplayer.sourceforge.net -->

@@ -229,7 +229,7 @@ class CCPublicize
                     }
                     else
                     {
-                        $name = $text;
+                        $name = preg_replace( '/\..*$/', '', basename($file) );
                     }
                     $opts['opts'][] = array( 'value' => $exformat, 'selected' => false, 'text' => $name );
                 }
@@ -277,7 +277,6 @@ class CCPublicize
 
         CCPage::SetTitle( $title );
         $sites = CCPage::GetViewFile('sharesites.js',false);
-
         CCPage::AddScriptLink( ccd($sites) );
         CCPage::AddLink('head_links', 'stylesheet', 'text/css', ccd('cctemplates/publicize.css'), 'Default Style');
         CCPage::PageArg('share', 'share.xml/share_popup' );

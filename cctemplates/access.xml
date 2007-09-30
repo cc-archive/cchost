@@ -1,4 +1,4 @@
-<div>
+<tal:block>
 <tal:block replace="">
 <!--
 
@@ -37,4 +37,4 @@ $Id$
 <script src="${root-url}cctemplates/js/access.js"></script>
 </metal:block>
 
-</div>
+</tal:block>

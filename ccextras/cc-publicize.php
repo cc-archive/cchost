@@ -78,6 +78,7 @@ class CCPublicizeHV
         $menu['share_link']['onclick'] = $jscript;
         */
         $menu['share_link']['action']  = $url;
+        $menu['share_link']['onclick'] = '';
     }
 
     /**

@@ -211,7 +211,7 @@ class CCSampleBrowser
         $args['records']         =& $recs;
         $args['results_caption'] = sprintf( 'returns %d results', count($args['records']) );
         $args['term']            = $term;
-        $args['browser_macro']   = 'browser_list';
+        $args['browser_macro']   = 'sample_browser.xml/browser_list';
         $args['term_caption']    = $term_caption;
 
         if( empty($args['records']) )
@@ -243,7 +243,7 @@ class CCSampleBrowser
         $args['tag_sorts']      =& $this->_get_tag_sorts();
         $args['tag_filters']    =& $this->_get_tag_filters();
         $args['tag_limiters']   =& $this->_get_tag_limiters();
-        $args['browser_macro']  = 'browser_page';
+        $args['browser_macro']  = 'sample_browser.xml/browser_page';
         $args['picker_caption'] = _('Search using tags:');
         $args['search_caption'] = _('Search for phrase:');
         $args['bpm_caption']    = _('Limit to BPM:');

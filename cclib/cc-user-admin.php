@@ -402,6 +402,7 @@ class CCUserAdmin
         }
         else
         {
+            CCEvents::Invoke( CC_EVENT_USER_IP_BANNED, array( &$record, $ip ) );
             $this->_save_banned_ips();
             return( _("New IP Information Saved") );
         }

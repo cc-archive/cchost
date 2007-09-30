@@ -433,10 +433,10 @@ class CCLogin
         unset($_COOKIE[CC_USER_COOKIE]);
         CCPage::Prompt(_('You are now logged out'));
         CCPage::SetTitle(_("Log Out"));
+        CCEvents::Invoke( CC_EVENT_LOGOUT, array( $CC_GLOBALS['user_name'] ) );
         unset($CC_GLOBALS['user_name']);
         unset($CC_GLOBALS['user_id']);
         CCMenu::Reset();
-        CCEvents::Invoke( CC_EVENT_LOGOUT );
     }
 
     /**
@@ -471,6 +471,7 @@ class CCLogin
         else
         {
             $CC_GLOBALS = array_merge($CC_GLOBALS,$form->record);
+            CCEvents::Invoke(CC_EVENT_LOGIN );
             
             if( $form->GetFormValue('user_remember') == 1 )
                 $time = time()+60*60*24*30;
@@ -511,7 +512,7 @@ class CCLogin
             $args['user_id'] = $row['user_id'];
             $args['user_password'] = md5($new_password);
             $users->Update($args);
-            CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $args['user_id'] , &$row));
+            CCEvents::Invoke(CC_EVENT_LOST_PASSWORD, array( $args['user_id'] , &$row));
 
             $why = _('You are receiving this email because you requested a new password.');
             $this->_send_login_info($user_name,_("Recover Lost Password"),$why,$new_password,$row['user_email']);

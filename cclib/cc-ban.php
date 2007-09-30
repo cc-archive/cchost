@@ -50,7 +50,7 @@ class CCBan
             return;
 
         $uploads =& CCUploads::GetTable();
-        $row = $uploads->QueryKeyRow($upload_id);
+        $row = $uploads->GetRecordFromID($upload_id);
         $new_ban_flag = $row['upload_banned'] ^= 1;
         $args['upload_id'] = $upload_id;
         $args['upload_banned'] = $new_ban_flag;
@@ -58,7 +58,7 @@ class CCBan
         CCPage::SetTitle("Banning upload: '" . $row['upload_name'] . "'");
         $yn = array( "no longer banned",
                      "banned" );
-        CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $upload_id, CC_UF_PROPERTIES_EDIT, array(&$row) ) );
+        CCEvents::Invoke( CC_EVENT_UPLOAD_MODERATED, array( &$row, $yn[ $new_ban_flag ]  ) );
         CCPage::Prompt("The upload has been marked as " . $yn[ $new_ban_flag ] );
 
         if( $new_ban_flag && !empty($CC_GLOBALS['ban-email-enable']) )
