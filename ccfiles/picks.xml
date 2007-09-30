@@ -161,7 +161,7 @@ function pickwinplay(qstring)
     <td>
         <tal:block define="pick_title php:_('All Time Hot List');
                            ed_pick 0;
-                           qstring string:tags=remix&sort=score&dir=DESC&limit=10;" />
+                           qstring string:tags=remix&sort=num_scores&dir=DESC&limit=10;" />
         <metal:block use-macro="picks.xml/picks" />
     </td>
   </tr>
