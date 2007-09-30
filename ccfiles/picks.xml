@@ -147,9 +147,13 @@ function pickwinplay(qstring)
     </td>
     <td>
         <tal:block define="settings php:CC_get_config('chart');" />
+        <tal:block replace="">
+          <!-- note that the query below only really works for 'recommend' style ratings,
+           for 5-star ratings you should replace 'num_scores' with 'rank' -->
+        </tal:block>
         <tal:block define="pick_title php:_('What\'s Hot Right Now');
                            ed_pick 0;
-                           qstring php: 'tags=remix,-digital_distortion&sort=rank&dir=DESC&sinced=' . ${settings/cut-off} . '&limit=20';" />
+                           qstring php: 'tags=remix,-digital_distortion&sort=num_scores&dir=DESC&sinced=' . ${settings/cut-off} . '&limit=12';" />
         <metal:block use-macro="picks.xml/picks" />
     </td>
   </tr>
