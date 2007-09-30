@@ -27,10 +27,11 @@
 
 #featured {
   float: right;
-  width: 28%;
+  width: 160px;
   border: 1px solid black;
   padding: 8px;
   background-color: #DDD;
+  overflow: hidden;
 }
 
 .cc_playlist_item {
@@ -51,6 +52,7 @@
   background-color: #DDF;
   padding: 7px;
   margin-bottom: 5px;
+  overflow:hidden;
 }
 
 .clear_me {
