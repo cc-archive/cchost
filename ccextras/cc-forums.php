@@ -26,6 +26,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('ccextras/cc-extras-events.php');
+
 define('CC_MAX_USER_TOPICS', 30 );
 define('CC_MAX_FEED_TOPICS', 25 );
 
