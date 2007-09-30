@@ -223,9 +223,10 @@ class CCUserAdmin
                 unset($values['user_password']);
             $where = "LOWER(user_name) = '{$values['user_name']}'";
             $users->UpdateWhere($values,$where);
-            $user_id = $users->QueryKey($where);
+            $row = $users->QueryRow($where);
+            $user_id = $row['user_id'];
             $dummy = array();
-            CCEvents::Invoke( CC_EVENT_USER_PROFILE_CHANGED, array( $user_id, &$dummy ) );
+            CCEvents::Invoke( CC_EVENT_USER_PROFILE_CHANGED, array( $user_id, &$row ) );
             CCUtil::SendBrowserTo( ccl('admin','user',$user_id) );
         }
     }
@@ -371,7 +372,7 @@ class CCUserAdmin
         }
         else
         {
-            CCEvents::Invoke( CC_EVENT_USER_DELETED, array( $record['user_id'] ) );
+            CCEvents::Invoke( CC_EVENT_USER_DELETED, array( $record['user_id'], &$record ) );
             $this->_del_user_files($record);
             $users =& CCUsers::GetTable();
             $where['user_id'] = $record['user_id'];
