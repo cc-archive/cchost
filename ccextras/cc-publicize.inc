@@ -89,7 +89,7 @@ class CCPublicize
             $template_tags = $configs->GetConfig('ttag');
             $args['bookmark_title'] = $record['user_real_name'] . ' @ ' . $template_tags['site-title'];
 
-            $args['email_url'] = ccl( 'email', 'user', $user );
+            $args['email_url'] = ccl( 'email', 'user', $arg1 );
 
             $args = array_merge( $args, $record );
             
