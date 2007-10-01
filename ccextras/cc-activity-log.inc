@@ -118,7 +118,13 @@ class CCActivityLogTemp extends CCTable
     */
     function CCActivityLogTemp()
     {
-        $this->CCTable('cc_tbl_activity_log_temp','activity_log_id');
+        $name = $this->_tname();
+        $this->CCTable($name,'activity_log_id');
+    }
+
+    function _tname() 
+    {
+        return 'cc_tbl_activity_log_' . CCUser::CurrentUserName();
     }
 
     /**
@@ -132,10 +138,12 @@ class CCActivityLogTemp extends CCTable
     function & GetTable()
     {
         $tables = CCDatabase::ShowTables();
-        if( !in_array( 'cc_tbl_activity_log_temp', $tables ) )
+        $name = CCActivityLogTemp::_tname();
+        if( !in_array( $name, $tables ) )
         {
+
             $sql =<<<EOF
-CREATE TABLE `cc_tbl_activity_log_temp` (
+CREATE TABLE `$name` (
   `activity_log_id` int(11) unsigned NOT NULL auto_increment,
   `activity_log_event` varchar(255) NOT NULL default '',
   `activity_log_date` datetime default NULL,
@@ -277,30 +285,22 @@ class CCActivityLogAPI
         {
             if( empty($_GET['file']) )
             {
-                if( empty($_GET['user']) && empty($_GET['ip']) )
+                //
+                // view directory of archive files
+                //
+                CCPage::SetTitle(_("Activity Log Archive"));
+        
+                $files = glob( $logdir . 'activity-log*.*' );
+                $html = '<table id="activity_log_archive">';
+                foreach( $files as $file )
                 {
-                    //
-                    // view directory of archive files
-                    //
-                    CCPage::SetTitle(_("Activity Log Archive"));
-            
-                    $files = glob( $logdir . 'activity-log*.*' );
-                    $html = '<table id="activity_log_archive">';
-                    foreach( $files as $file )
-                    {
-                        $name = basename($file,'.csv');
-                        $url = url_args( ccl('activity','archive'), 'file=' . $name );
-                        $html .= "<tr><td><a href=\"$url\">$name</a></td></tr>";
-                    }
-                    $html .= '</table>';
-                    CCPage::AddPrompt('body_text',$html);
-                    return;
+                    $name = basename($file,'.csv');
+                    $url = url_args( ccl('activity','archive'), 'file=' . $name );
+                    $html .= "<tr><td><a href=\"$url\">$name</a></td></tr>";
                 }
-
-                $searchterm = empty($_GET['ip']) ? $_GET['user'] : $_GET['ip'];
-                $logs = CCActivityLogTemp::GetTable();
-                if( !isset($_GET['offset']) )
-                    $this->_do_archive_search($logs,$logdir,$searchterm);
+                $html .= '</table>';
+                CCPage::AddPrompt('body_text',$html);
+                return;
             }
             else
             {
@@ -333,24 +333,27 @@ class CCActivityLogAPI
             if( !empty($_GET['ip']) )
             {
                 $ip = CCUtil::StripText($_GET['ip']);
-                if( !empty($ip) )
-                    $where['activity_log_ip'] = $ip;
                 $searchterm = $ip;
             }
-            if( !empty($_GET['user']) )
+            else if( !empty($_GET['user']) )
             {
                 $name = CCUtil::StripText($_GET['user']);
-                if( !empty($name) )
-                    $where['activity_log_user_name'] = $name;
                 $searchterm = $name;
             }
         }
 
+        if( !empty($searchterm) )
+        {
+            $logs = CCActivityLogTemp::GetTable();
+            if( !isset($_GET['offset']) )
+                $this->_do_archive_search($logs,$logdir,$searchterm);
+        }
+
         CCPage::AddPagingLinks($logs,'',50);
         $logs->SetOrder('activity_log_date','DESC');
-        $rows = $logs->QueryRows($where);
+        $rows = $logs->QueryRows('');
         CCPage::PageArg( 'act-searchterm', $searchterm );
-        CCPage::PageArg( 'activity-url', ccl( 'activity', $arg ) );
+        CCPage::PageArg( 'activity-url', ccl( 'activity' ) );
         CCPage::PageArg('activity_log',$rows,'show_activity_log');
     }
 
@@ -377,16 +380,28 @@ class CCActivityLogAPI
 
     function _do_archive_search($logs,$logdir,$term)
     {
+        $logs->DeleteWhere('1');
+
+        $term = strtolower(trim($term));
+
+        $sql =<<<EOF
+INSERT INTO {$logs->_table_name}
+ SELECT * FROM `cc_tbl_activity_log` WHERE 
+    LOWER(CONCAT(activity_log_user_name,activity_log_ip,`activity_log_param_1`,`activity_log_param_2`,`activity_log_param_3`))
+    LIKE "%$term%"
+EOF;
+        CCDatabase::Query($sql);
+    
         $files = glob( $logdir . 'activity-log*.*' );
         $lines = array();
         foreach( $files as $file )
         {
             $contents = file_get_contents($file);
-            preg_match_all( "/^(.*$term.*)$/Um", $contents, $m );
+            preg_match_all( "/^(.*$term.*)$/Uim", $contents, $m );
             if( !empty($m[1]) )
                 $lines = array_merge($lines,$m[1]);
         }
-        $logs->DeleteWhere('1');
+
         $count = min(151,count($lines));
         $this->_do_import_text($lines,$logs,0,$count);
     }
