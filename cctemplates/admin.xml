@@ -75,12 +75,12 @@ $Id$
         <td><a class="cc_gen_button" href="${home-url}activity/clear"><span tal:content="php: _('Export and Clear')" /></a></td>
       </tal:block>
       <td><a class="cc_gen_button" href="${home-url}activity/admin"><span tal:content="php: _('Options')" /></a></td>
-      <td style="width: 300px;"><form method="get" action="${home-url}activity/archive" id="actsearch" 
+      <td style="width: 300px;"><form method="get" action="${home-url}activity" id="actsearch" 
            style="position:relative;left:1px;top:1px;border: 1px solid black;height: 30px;width:250px; background-color: #CCC;">
            <tal:block define="st act-searchterm | nothing" />
             <input name="user" id="user" value="${st}" 
                 style="font-size:11px;font-family:Verdana;position:absolute; left: 6px; top:6px; width: 100px;"/>
-            <a style="position:absolute; left: 120px; top: 4px; width:100px;" class="cc_gen_button" href="javascript: $$('actsearch').submit();"><span tal:content="php: _('Search Archives')" /></a></form></td>
+            <a style="position:absolute; left: 120px; top: 4px; width:100px;" class="cc_gen_button" href="javascript: $$('actsearch').submit();"><span tal:content="php: _('Search')" /></a></form></td>
     </tr>
   </table>
 </metal:block>
