@@ -18,6 +18,8 @@
 *
 */
 
+$_TV = array();
+
 $cc_error_level = E_ALL;
 
 error_reporting($cc_error_level); 
