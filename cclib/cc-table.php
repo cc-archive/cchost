@@ -408,7 +408,7 @@ class CCTable
     function _where_to_string($where)
     {
         if( empty($where) )
-            return($where);
+            return('');
 
         if( is_string($where) )
             return($where);
