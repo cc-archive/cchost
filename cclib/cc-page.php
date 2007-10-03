@@ -554,36 +554,15 @@ class CCPage extends CCTemplate
     function GetViewFile($filename,$real_path=true)
     {
         global $CC_GLOBALS;
-        if( defined('PHPTAL_DEAD') && PHPTAL_DEAD )
-        {
-            $cpaths = CCPage::GetViewFilePath();
-            $paths = join(';',$cpaths);
-            $ret = CCUtil::SearchPath( $filename . '.php', $paths, 'ccfiles', $real_path );
-            if( !$ret )
-                $ret = CCUtil::SearchPath( $filename, $paths, 'ccfiles', $real_path );
-            return $ret;
-        }
-        else
-        {
-            return CCUtil::SearchPath( $filename, $CC_GLOBALS['files-root'], 'ccfiles', $real_path );
-        }
+        $files = array( $filename . '.php',
+                        $filename );
+        return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccfiles', $real_path );
     }
 
     function GetViewFilePath()
     {
         global $CC_GLOBALS;
-        if( defined('PHPTAL_DEAD') && PHPTAL_DEAD )
-        {
-            $paths = preg_split('/;(\s+)?/',$CC_GLOBALS['files-root']);
-            $cpaths = array();
-            foreach( $paths as $P )
-                $cpaths[] = 'compiled/' . trim($P);
-            return $cpaths;
-        }
-        else
-        {
-            return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccfiles' );
-        }
+        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccfiles' );
     }
     
     /**

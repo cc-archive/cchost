@@ -415,6 +415,18 @@ class CCUtil
 
     function SearchPath($target,$look_here_first,$then_here,$real_path=true)
     {
+        if( !is_array($target) )
+            $target = array( $target );
+        foreach( $target as $T )
+        {
+            if( file_exists($T) )
+            {
+                if( $real_path )
+                    return realpath($T);
+                return $target;
+            }
+        }
+
         $hit = CCUtil::_inner_search($target,$look_here_first,$real_path);
         if( $hit === false )
             $hit = CCUtil::_inner_search($target,$then_here,$real_path);
@@ -425,16 +437,24 @@ class CCUtil
     {
         $paths = split(';',$path);
 
-        if( $target{0} == '/' )
-            $target = substr($target,1);
+        $files = array();
+        foreach( $target as $T )
+        {
+            if( $T{0} == '/' )
+                $T = substr($T,1);
+            $files[] = $T;
+        }
 
         foreach( $paths as $P )
         {
             $P = trim($P);
             $dir = CCUtil::CheckTrailingSlash($P,true);
-            $relpath = $dir . $target;
-            if( file_exists($relpath) )
-                return $real_path ? realpath($relpath) : $relpath;
+            foreach( $files as $T )
+            {
+                $relpath = $dir . $T;
+                if( file_exists($relpath) )
+                    return $real_path ? realpath($relpath) : $relpath;
+            }
         }
 
         return false;

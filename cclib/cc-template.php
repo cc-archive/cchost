@@ -28,107 +28,51 @@ if( !defined('IN_CC_HOST') )
 
 /**
 */
-function cc_init_template_lib()
-{
-    static $_init = 0;
-    if( !empty($_init) )
-        return;
-    
-    $_init = true;
-
-    global $CC_GLOBALS;
-
-    set_include_path(get_include_path() . PATH_SEPARATOR . $CC_GLOBALS['php-tal-dir'] );
-
-    define('PHPTAL_CACHE_DIR', $CC_GLOBALS['php-tal-cache-dir'] . '/') ;
-    //define('PHPTAL_NO_CACHE', true) ;
-    require_once($CC_GLOBALS['php-tal-dir'] . "/PHPTAL.php"); 
-
-}
-
-/**
-* See class PHPTAL_SourceResolver
-*/
-class CCTemplateSourceResolver
-{
-    /**
-     * Resolve a template source path.
-     *
-     * This method is invoked each time a template source has to be
-     * located.
-     *
-     * This method must returns a PHPTAL_SourceLocator object which
-     * 'point' to the template source and is able to retrieve it.
-     *
-     * If the resolver does not handle this kind of path, it must return
-     * 'false' so PHPTAL will ask other resolvers.
-     *
-     * @param string $path       -- path to resolve
-     *
-     * @param string $repository -- templates repository if specified on
-     *                              on template creation. 
-     *
-     * @param string $callerPath -- caller realpath when a template look
-     *                              for an external template or macro,
-     *                              this should be usefull for relative urls
-     *
-     * @return PHPTAL_SourceLocator | false 
-     */
-    function resolve($path, $repository=false, $callerPath=false)
-    {
-        // the default PHPTAL resolver will look in the
-        // calling template's dir and also in any
-        // repository (whatever that is)
-
-        $hit = CCTemplate::GetTemplate($path);
-        if( $hit )
-        {
-            $locator  = new PHPTAL_SourceLocator($hit);
-            return $locator;
-        }
-        return false;
-    }
-}
-/**
-*/
 class CCTemplate
 {
-    var $_template_file;
-    var $_html_mode;
-    var $_template;
-    var $_raw_src;
-    var $_raw_src_id;
-    
-    function CCTemplate($template, $html_mode = true, $is_raw_source=false,$raw_src_id='')
+    function CCTemplate($template, $html_mode = true)
     {
-        $this->_template_file = $is_raw_source ? '' : $template;
-        $this->_html_mode     = $html_mode;
-        $this->_raw_src       = $is_raw_source ? $template : '';
-        $this->_raw_src_id    = $raw_src_id;
-        $this->_encoding      = CC_ENCODING;
-        $this->_quoteStyle    = CC_QUOTE_STYLE;
+        $this->filename  = $template;
+        $this->html_mode = $html_mode;
     }
 
-    function _init_lib()
+    function & SetAllAndParse($args, $doprint = false, $admin_dump = false)
     {
-        cc_init_template_lib();
-        if( empty($this->_template) )
+        ob_start();
+        $this->SetAllAndPrint($args,$doprint,$admin_dump);
+        $t = ob_get_contents();
+        ob_end_clean();
+        return($t);
+    }
+
+    function SetAllAndPrint($args, $admin_dump = false)
+    {
+        global $CC_GLOBALS, $_TV;
+
+        if( empty($args['skin']) && !empty($CC_GLOBALS['skin']) )
+            $args['skin'] = $CC_GLOBALS['skin'];
+        $_TV = $args;
+        if( $this->html_mode )
         {
-            $this->_template = new PHPTAL($this->_template_file);
-            if( !empty($this->_raw_source) )
-                $this->_template->SetSource($this->_raw_source,$this->_raw_source_id);
-            $this->_template->setOutputMode($this->_html_mode ? PHPTAL_XHTML : PHPTAL_XML );
-            $resolver = new CCTemplateSourceResolver();
-            $this->_template->addSourceResolver($resolver);
+            // Force UTF-8 necessary for some languages (chinese,japanese,etc)
+            header('Content-type: text/html; charset=' . CC_ENCODING) ;
         }
+        _template_call_template($this->filename);
     }
 
     function GetTemplate($filename,$real_path=true)
     {
         global $CC_GLOBALS;
 
-        return CCUtil::SearchPath($filename,$CC_GLOBALS['template-root'],'cctemplates/',$real_path);
+        $files = array( $filename . '.php',
+                        $filename,
+                        $filename . '.htm',
+                        $filename . '.html' );
+
+        return CCUtil::SearchPath( $files, $CC_GLOBALS['template-root'], 'cchost_files/viewfile', $real_path );
+     
     }
+
 
     function GetTemplatePath()
     {
@@ -136,74 +80,57 @@ class CCTemplate
 
         return CCUtil::SplitPaths( $CC_GLOBALS['template-root'], 'cctemplates' );
     }
+}
 
-    function SetAllAndPrint( $args, $admin_dump = false )
+function _template_call_template($file)
+{
+    global $_TV;
+
+    CCDebug::Log("{$_SERVER['REQUEST_URI']} Calling for: $file");
+
+    if( !preg_match('#[\./]#',$file) && !empty($_TV[$file]) )
     {
-        $this->SetAllAndParse( $args, true, $admin_dump );
+        $file = $_TV[$file];
+        CCDebug::Log("Alias for: $file");
+    }
+        
+    if( preg_match( '/\.php$/', $file ) && file_exists($file) )
+    {
+        require_once($file);
+        return;
     }
 
-    function & SetAllAndParse( $args, $doprint = false, $admin_dump = false )
+    if( preg_match( '/\.xml$/', $file ) )
     {
-        global $CC_GLOBALS;
-        if( empty($args['skin']) && !empty($CC_GLOBALS['skin']) )
-            $args['skin'] = $CC_GLOBALS['skin'];
-        $admin_dump = $admin_dump || CCUser::IsAdmin();
-        $this->_init_lib();
-        $this->_template->setAll($args);
-        $res = $this->_template->execute();
-        if( PEAR::isError($res) )
+        $filename = $file;
+    }
+    else
+    {
+        $parts = split('/', $file);
+        $filename = $parts[0];
+        if( !empty($parts[1]) )
         {
-            print(_("There is an error rendering this page.") . "<br /><a href=\"http://wiki.creativecommons.org/CcHost#Troubleshooting\">" . _('Help troubleshooting ccHost') . "</a><br />");
-            $dir = $CC_GLOBALS['php-tal-cache-dir'];
-            if( is_dir($dir) && !is_writable($dir) )
+            $basename = preg_replace( '/[^a-zA-Z0-9]+/', '_', basename($filename,'.xml') );
+            $funcname = '_t_' . $basename . '_' . $parts[1];
+            if( function_exists($funcname) )
             {
-                chmod($dir,0777);
-                print(sprintf(_("The %s directory must be writable. We have tried to change it. Refresh this page to see if that worked. If not, you may have to ask your system's administrator for assitance to make that possible."), $dir));
+                $funcname();
+                return;
             }
-
-            if( $admin_dump )
-            {
-                print("<pre >");
-                print("<b>" . _('Here is the information returned from the template engine:') . "</b>\n\n");
-                print_r($res);
-                print("</pre>");
-            }
-
-            exit;
         }
-
-        if( $doprint )
-        {
-            if( $this->_html_mode )
-            {
-                // Force UTF-8 necessary for some languages (chinese,japanese,etc)
-                header('Content-type: text/html; charset=' . CC_ENCODING) ;
-                // --- BEGIN hack for ZA
-                if( substr($res,0,5) == '<html' )
-                {
-                    print('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
-                }
-                // --- END hack for ZA
-            }
-
-            print(trim($res));
-        }
-
-        return $res;
     }
-
-    function ClearCache()
+    
+    $path = CCTemplate::GetTemplate($filename,true);
+    if( empty($path) )
     {
-        global $CC_GLOBALS;
-
-        // $CC_GLOBALS['php-tal-cache-dir'] 
-        $files = glob( $CC_GLOBALS['php-tal-cache-dir'] . '/*.php' );
-        $ok = true;
-        foreach( $files as $F )
-            $ok = unlink($F); // let the errors fly;
-        if( $ok )
-            CCPage::Prompt(_('Template cache has been cleared.'));
+        print( "<h3>Can't find $file</h3>");
+        CCDebug::StackTrace();
     }
+
+    //print("Performing: $path " . (empty($funcname) ? '' : $funcname) . "<br \>\n");
+    require_once($path);
+    if( !empty($funcname) )
+        $funcname();
 }
 
 class CCTemplateMacro extends CCTemplate
@@ -219,11 +146,11 @@ class CCTemplateMacro extends CCTemplate
         $this->_mmacro = $macro;
     }
 
-    function & SetAllAndParse( $args, $doprint = false, $admin_dump = false )
+    function SetAllAndPrint( $args, $doprint = false, $admin_dump = false )
     {
-        $args['auto_macro'] = $this->_mtemplate . '/' . $this->_mmacro;
-        $args['auto_execute'] = array( 'auto_macro' );
-        $ret = parent::SetAllAndParse($args,$doprint,$admin_dump);
+        //$args['auto_macro'] = 
+        $args['auto_execute'] = array( $this->_mtemplate . '/' . $this->_mmacro );
+        $ret = parent::SetAllAndPrint($args,$doprint,$admin_dump);
         return $ret;
     }
 }

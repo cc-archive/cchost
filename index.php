@@ -57,7 +57,7 @@ if( file_exists('.cc-ban.txt') )
 * it on as quickly as possible.
 */
 require_once('cclib/cc-debug.php');
-
+CCDebug::Enable(true);
 /*
 * Logging errors to a file this will help ccHost developers
 * when things go wrong on your site
