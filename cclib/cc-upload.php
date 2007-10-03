@@ -98,6 +98,10 @@ class CCUpload
     {
         extract($args);
 
+        if( !empty($cols) )
+        {
+            die("Can't specify 'cols' with page format");
+        }
         if( strtolower($format) != 'page' )
             return;
 
