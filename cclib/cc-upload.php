@@ -98,12 +98,13 @@ class CCUpload
     {
         extract($args);
 
+        if( strtolower($format) != 'page' )
+            return;
+
         if( !empty($cols) )
         {
             die("Can't specify 'cols' with page format");
         }
-        if( strtolower($format) != 'page' )
-            return;
 
         if( !empty($title) )
             CCPage::SetTitle($title);
