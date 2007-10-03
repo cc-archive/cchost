@@ -397,7 +397,34 @@ EOF;
         CCPage::PageArg( 'collab_script', $script );
         CCPage::PageArg( 'show_collab', 'collab.xml/show_collab' );
         CCPage::PageArg( 'collab', $args, 'show_collab' );
+        $this->_build_bread_crumb_trail($collab_row['collab_name'] );
+    }
 
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail($collab_name)
+    {
+        $trail[] = array( 'url' => ccl(), 
+                          'text' => _('Home') );
+        
+        if( !empty($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'],'media/remix/collab') )
+        {
+            $trail[] = array( 'url' => ccl('view','media','remix'), 
+                              'text' => _('Remixes') );
+
+            $trail[] = array( 'url' => ccl('view','media','remix','collab'), 
+                              'text' => _('Collaborations') );
+        }
+        else
+        {
+            $trail[] = array( 'url' => ccl('collab'), 
+                              'text' => _('Collaborations') );
+        }
+
+        $trail[] = array( 'url' => '', 'text' => $collab_name );
+
+        CCPage::AddBreadCrumbs($trail);
     }
 
     function _get_collab_users($collab_id)
