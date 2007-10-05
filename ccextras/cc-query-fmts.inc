@@ -120,15 +120,9 @@ class CCQueryFormats
 
                     if( !CCTemplate::GetTemplate($tname) )
                     {
-                        // developer might not have put it in skins/formats dir
-                        $tname = $template . '.xml';
-                        if( !CCTemplate::GetTemplate($tname) )
-                        {
-                            print(sprintf(_('"%s" is not a valid template'), 
-                                          $template));
-                            exit;
-                        }
-                
+                        print(sprintf(_('"%s" is not a valid template'), 
+                                      $template));
+                        exit;
                     }
                         
                     $templateObj = new CCTemplate($tname);

@@ -134,6 +134,13 @@ class MixterContest
                     $tagwriter->filename = $d;
                     $tagwriter->tag_data = $tags;
                     $res = $tagwriter->WriteTags();
+                    if( empty($res) )
+                    {
+                        print("<pre>");
+                        print_r($tagwriter);
+                        print("</pre>");
+                        exit;
+                    }
                     print("$name: $res<br />");
                 }
             }
@@ -225,7 +232,7 @@ END;
              if( empty($R['user_extra']
                   ['user_info'][$contest]) )
              {
-                $nouserinfo[] = $user_name;
+                $nouserinfo[] = $username;
              }
              else
              {

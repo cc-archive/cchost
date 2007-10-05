@@ -368,10 +368,13 @@ class CCQuery
 
         $table =& $this->_get_query_table($args);
 
-        extract($args);
+        if( empty($args['format']) )
+        {
+            $args['format'] = 'page';
+            //$args['template'] = 'page_listing';
+        }
 
-        if( empty($format) )
-            $format = 'page';
+        extract($args);
 
         // this is sort of a macro that expands here...
 

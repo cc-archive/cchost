@@ -548,8 +548,10 @@ EOF;
                     if( is_array($v) )
                     {
                         $k = array_keys($v);
-                        $str = CC_strchop($v[$k[0]],25);
-                        if( isset($v[$k[1]]) && is_string($v[$k[1]]) )
+                        $str = '';
+                        if( is_string($v[$k[0]]) )
+                            $str = CC_strchop($v[$k[0]],25);
+                        if( !empty($k[1]) && !empty($v[$k[1]]) && is_string($v[$k[1]]) )
                             $str .= ' ' . CC_strchop($v[$k[1]],25);
                     }
                     else

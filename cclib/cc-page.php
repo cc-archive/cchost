@@ -156,7 +156,6 @@ class CCPageAdmin
 */
 class CCPage extends CCTemplate
 {
-    var $_page_args;
     var $_body_template;
 
     /**
@@ -172,37 +171,14 @@ class CCPage extends CCTemplate
         global $CC_GLOBALS;
 
         $this->CCTemplate( $CC_GLOBALS['skin-page'] );
-        $this->_page_args = array(); 
+
+        $this->_t_args['show_body_header'] = true;
+        $this->_t_args['show_body_footer'] = true;
+        $this->_t_args['chop'] = true;
+        $this->_t_args['bread_crumbs'] = array();
+        $this->_t_args['crumb_seperator'] = ' &raquo; ';
     }
 
-    function GetDefaultPageArgs()
-    {
-        global $CC_GLOBALS;
-
-        $configs =& CCConfigs::GetTable();
-        $args = $configs->GetConfig('ttag');
-        $args['show_body_header'] = true;
-        $args['show_body_footer'] = true;
-        $args['chop'] = true;
-        $args['bread_crumbs'] = array();
-        $args['crumb_seperator'] = ' &raquo; ';
-        $args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
-        $args['get'] = $_GET;
-        $args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
-        $args['install_done'] = false;
-        $args['noproto'] = false;
-        if( CCUser::IsLoggedIn() )
-        {
-            $args['logged_in_as'] = CCUser::CurrentUserName();
-            $args['logout_url'] = ccl('logout');
-            $args['is_logged_in'] = 1;
-        } else {
-            $args['is_logged_in'] = 0;
-        }
-        $args['is_admin']  = CCUser::IsAdmin();
-        $args['not_admin'] = !$args['is_admin'];
-        return $args;
-    }
 
     /**
     * Returns the a singleton instance of the page that will be displayed
@@ -264,10 +240,10 @@ class CCPage extends CCTemplate
         {
 
             // inner most capture will be used for title bar
-            $page->_page_args['page-caption'] = stripslashes($m[ count($m) - 1 ]);
+            $page->_t_args['page-caption'] = stripslashes($m[ count($m) - 1 ]);
 
             // disable the tempalte's H1 code
-            $page->_page_args['page-title'] = '';
+            $page->_t_args['page-title'] = '';
             $page->_reject_title = true;
         }
     }
@@ -286,10 +262,7 @@ class CCPage extends CCTemplate
          else
            $page =& $this;
 
-        $page->_page_args[$name] = $value;
-
-        if( !empty($macroname) )
-            $page->_page_args['macro_names'][] = $macroname;
+        $page->SetArg($name,$value,$macroname);
     }
 
     /**
@@ -305,8 +278,8 @@ class CCPage extends CCTemplate
          else
            $page =& $this;
 
-        if( isset($page->_page_args[$name]) )
-            return $page->_page_args[$name];
+        if( isset($page->_t_args[$name]) )
+            return $page->_t_args[$name];
 
         return '';
     }
@@ -371,8 +344,8 @@ class CCPage extends CCTemplate
          else
            $page =& $this;
 
-        $page->_page_args['show_body_header'] = $show_header;
-        $page->_page_args['show_body_footer'] = $show_footer;
+        $page->_t_args['show_body_header'] = $show_header;
+        $page->_t_args['show_body_footer'] = $show_footer;
     }
 
     /**
@@ -407,7 +380,7 @@ class CCPage extends CCTemplate
         //
         // Merge config into already existing page args
         //
-        $page->_page_args = array_merge($page->GetDefaultPageArgs(),$page->_page_args,$CC_GLOBALS); // is this right?
+        $page->_t_args = array_merge($page->_t_args,$CC_GLOBALS); // is this right?
 
         /////////////////
         // Step 1a
@@ -441,7 +414,7 @@ class CCPage extends CCTemplate
         {
             if( $V )
             {
-                $page->_page_args['custom_macros'][] = str_replace( '/', '.xml/', $K );
+                $page->_t_args['custom_macros'][] = str_replace( '/', '.xml/', $K );
             }
         }
 
@@ -482,7 +455,7 @@ class CCPage extends CCTemplate
         //
         // Populate menu
         //
-        $page->_page_args['menu_groups'] = CCMenu::GetMenu();
+        $page->_t_args['menu_groups'] = CCMenu::GetMenu();
 
         /////////////////
         // Step 5
@@ -493,20 +466,20 @@ class CCPage extends CCTemplate
         if( !empty($page->_body_template) )
         {
             $template = new CCTemplate( $page->_body_template, true );
-            $body =& $template->SetAllAndParse($page->_page_args, false, $isadmin);
+            $body =& $template->SetAllAndParse($page->_t_args, false, $isadmin);
             $page->AddPrompt('body_text',$body);
         }
 
         // wow...
-        if( !empty($page->_page_args['prompts']) )
+        if( !empty($page->_t_args['prompts']) )
         {
-            $prompts = $page->_page_args['prompts'];
+            $prompts = $page->_t_args['prompts'];
             foreach( $prompts as $P )
                 if( $P['name'] = 'body_text' )
                     $page->_check_for_title($page,$P['value']);
         }
-        if( !empty($page->_page_args['body_html']) )
-            $page->_check_for_title($page,$page->_page_args['body_html']);
+        if( !empty($page->_t_args['body_html']) )
+            $page->_check_for_title($page,$page->_t_args['body_html']);
 
         /////////////////
         // Step 6
@@ -514,7 +487,7 @@ class CCPage extends CCTemplate
         // Show the current set of tabs at the top of the screen
         //
         // 
-        if( empty($CC_GLOBALS['hide_sticky_tabs']) && empty($page->_page_args['tab_info']) )
+        if( empty($CC_GLOBALS['hide_sticky_tabs']) && empty($page->_t_args['tab_info']) )
         {
             $naviator_api = new CCNavigator();
             $naviator_api->ShowTabs($page);
@@ -528,16 +501,16 @@ class CCPage extends CCTemplate
         // 
         if( empty($CC_GLOBALS['hide_sticky_search']) )
         {
-            $page->_page_args['sticky_search'] = true;
-            $page->_page_args['advanced_search_url'] = ccl('search');
+            $page->_t_args['sticky_search'] = true;
+            $page->_t_args['advanced_search_url'] = ccl('search');
         }
 
         CCEvents::Invoke(CC_EVENT_RENDER_PAGE, array( &$page ) );
 
         if( !empty($_REQUEST['dump_page']) ) // && $isadmin )
-             CCDebug::PrintVar($page->_page_args,false);
+             CCDebug::PrintVar($page->_t_args,false);
 
-        // CCDebug::LogVar('page environment',$page->_page_args);
+        // CCDebug::LogVar('page environment',$page->_t_args);
     
         if( !empty($CC_GLOBALS['no-cache']) )
             CCEvents::_send_no_cache_headers();
@@ -545,9 +518,9 @@ class CCPage extends CCTemplate
         //CCDebug::Chronometer($page_print);
 
         if( $print )
-            $page->SetAllAndPrint($page->_page_args, CCUser::IsAdmin() );
+            $page->SetAllAndPrint($page->_t_args, CCUser::IsAdmin() );
         else
-            return( $page->SetAllAndParse($page->_page_args, false, CCUser::IsAdmin()) );
+            return( $page->SetAllAndParse($page->_t_args, false, CCUser::IsAdmin()) );
         //CCDebug::Log( "Page print: " . CCDebug::Chronometer($page_print) );
     }
 
@@ -616,8 +589,8 @@ class CCPage extends CCTemplate
          else
            $page =& $this;
 
-        $page->_page_args = array_merge($page->_page_args, $form->GetTemplateVars());
-        $page->_page_args['macro_names'][] = $form->GetTemplateMacro();
+        $page->_t_args = array_merge($page->_t_args, $form->GetTemplateVars());
+        $page->_t_args['macro_names'][] = $form->GetTemplateMacro();
     }
  
     /**
@@ -640,8 +613,8 @@ class CCPage extends CCTemplate
 
         $group = $place_at_end ? 'end_script_blocks' : 'script_blocks';
 
-        if( empty($page->_page_args[$group]) || !in_array($script_macro_name,$page->_page_args[$group]) )
-            $page->_page_args[$group][] = $script_macro_name;
+        if( empty($page->_t_args[$group]) || !in_array($script_macro_name,$page->_t_args[$group]) )
+            $page->_t_args[$group][] = $script_macro_name;
     }
 
     /**
@@ -659,10 +632,10 @@ class CCPage extends CCTemplate
 
         $arr = array();
         $arr_name = $top ? 'script_links' : 'end_script_links';
-        if( !empty($page->_page_args[$arr_name]) )
-            $arr = $page->_page_args[$arr_name];
+        if( !empty($page->_t_args[$arr_name]) )
+            $arr = $page->_t_args[$arr_name];
         $arr[] = $script_url;
-        $page->_page_args[$arr_name] = array_unique($arr);
+        $page->_t_args[$arr_name] = array_unique($arr);
     }
 
     /**
@@ -678,8 +651,8 @@ class CCPage extends CCTemplate
         else
             $page =& $this;
 
-        $page->_page_args['tab_info'] = $tab_info;
-        $page->_page_args['page_tabs'] = $macro;
+        $page->_t_args['tab_info'] = $tab_info;
+        $page->_t_args['page_tabs'] = $macro;
     }
 
 
@@ -703,7 +676,7 @@ class CCPage extends CCTemplate
         else
             $page =& $this;
 
-        $page->_page_args['bread_crumbs'] = $trail;
+        $page->_t_args['bread_crumbs'] = $trail;
     }
 
     /**
@@ -724,7 +697,7 @@ class CCPage extends CCTemplate
          else
            $page =& $this;
 
-        $page->_page_args[$placement][] = array(   'rel'       => $rel,
+        $page->_t_args[$placement][] = array(   'rel'       => $rel,
                                                    'type'      => $type,
                                                    'href'      => $href,
                                                    'title'     => $title,
@@ -745,13 +718,13 @@ class CCPage extends CCTemplate
          else
            $page =& $this;
 
-        $page->_page_args['prompts'][] = array(  'name' => $name,
+        $page->_t_args['prompts'][] = array(  'name' => $name,
                                                  'value' => $value );
 
-        if( empty($page->_page_args['macro_names']) )
-            $page->_page_args['macro_names'][] = 'show_prompts';
-        elseif( !in_array( 'show_prompts', $page->_page_args['macro_names'] ) )
-            array_unshift($page->_page_args['macro_names'],'show_prompts');
+        if( empty($page->_t_args['macro_names']) )
+            $page->_t_args['macro_names'][] = 'show_prompts';
+        elseif( !in_array( 'show_prompts', $page->_t_args['macro_names'] ) )
+            array_unshift($page->_t_args['macro_names'],'show_prompts');
     }
 
     /**

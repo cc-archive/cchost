@@ -320,6 +320,7 @@ class CCCollab
         $args = array(
                 'collab_rows'  => $rows,
                 );
+
         CCPage::PageArg( 'show_collabs', 'collab.xml/show_collabs' );
         CCPage::PageArg( 'collabs', $args, 'show_collabs' );
         CCPage::SetTitle( _('Collaborations') );
@@ -365,9 +366,65 @@ class CCCollab
                 'lics'      => $lics,
                 'topics'    => $collab_topics );
 
+        $script =<<<EOF
+    var collab_template = '<div class="user_line" id="_user_line_#{user_name}">' +
+            '<div class="user" ><a href="'+home_url+'people/#{user_name}">#{user_real_name}</a></div>' +
+            '<div class="role">#{role}</div>' +
+            '<div class="credit" id="_credit_#{user_name}">#{credit}</div>' +
+EOF;
+        if( $is_owner )
+        {
+            $script .=<<<EOF
+     '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
+              + 'span>credit</span></a></div>' +
+     '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
+              + 'span>remove</span></a></div>' +
+EOF;
+        }
+
+        if( $is_member )
+        {
+            $script .=<<<EOF
+            '<div>' +
+            '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>send email' 
+                 + '</span></a> ' +
+            '</div>' +
+EOF;
+        }
+
+        $script .= "'</div>'";
+
+        CCPage::PageArg( 'collab_script', $script );
         CCPage::PageArg( 'show_collab', 'collab.xml/show_collab' );
         CCPage::PageArg( 'collab', $args, 'show_collab' );
+        $this->_build_bread_crumb_trail($collab_row['collab_name'] );
+    }
 
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail($collab_name)
+    {
+        $trail[] = array( 'url' => ccl(), 
+                          'text' => _('Home') );
+        
+        if( !empty($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'],'media/remix/collab') )
+        {
+            $trail[] = array( 'url' => ccl('view','media','remix'), 
+                              'text' => _('Remixes') );
+
+            $trail[] = array( 'url' => ccl('view','media','remix','collab'), 
+                              'text' => _('Collaborations') );
+        }
+        else
+        {
+            $trail[] = array( 'url' => ccl('collab'), 
+                              'text' => _('Collaborations') );
+        }
+
+        $trail[] = array( 'url' => '', 'text' => $collab_name );
+
+        CCPage::AddBreadCrumbs($trail);
     }
 
     function _get_collab_users($collab_id)

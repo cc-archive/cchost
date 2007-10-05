@@ -32,8 +32,36 @@ class CCTemplate
 {
     function CCTemplate($template, $html_mode = true)
     {
+        global $CC_GLOBALS;
+
         $this->filename  = $template;
         $this->html_mode = $html_mode;
+
+        $configs =& CCConfigs::GetTable();
+        $this->_t_args = $configs->GetConfig('ttag');
+        $this->_t_args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+        $this->_t_args['get'] = $_GET;
+        $this->_t_args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
+        $this->_t_args['install_done'] = false;
+        $this->_t_args['noproto'] = false;
+        if( CCUser::IsLoggedIn() )
+        {
+            $this->_t_args['logged_in_as'] = CCUser::CurrentUserName();
+            $this->_t_args['logout_url'] = ccl('logout');
+            $this->_t_args['is_logged_in'] = 1;
+        } else {
+            $this->_t_args['is_logged_in'] = 0;
+        }
+        $this->_t_args['is_admin']  = CCUser::IsAdmin();
+        $this->_t_args['not_admin'] = !$this->_t_args['is_admin'];
+    }
+
+    function SetArg($name,$value='',$macroname='')
+    {
+        $this->_t_args[$name] = $value;
+
+        if( !empty($macroname) )
+            $this->_t_args['macro_names'][] = $macroname;
     }
 
     function & SetAllAndParse($args, $doprint = false, $admin_dump = false)
@@ -66,10 +94,13 @@ class CCTemplate
 
         $files = array( $filename . '.php',
                         $filename,
+                        $filename . '.xml.php',
                         $filename . '.htm',
                         $filename . '.html' );
 
-        return CCUtil::SearchPath( $files, $CC_GLOBALS['template-root'], 'cchost_files/viewfile', $real_path );
+        $f = CCUtil::SearchPath( $files, $CC_GLOBALS['template-root'], 'cchost_files/viewfile', $real_path );
+        //CCDebug::PrintVar($f,false);
+        return $f;
      
     }
 
@@ -86,6 +117,15 @@ function _template_call_template($file)
 {
     global $_TV;
 
+    // forms of calling:
+    //
+    // [path_to][file][macroname]
+    //
+    // 'macroname' (alone)   - look this up in _TV
+    // 'file.ext/macroname'  - load file, call macro
+    // 'file.ext'            - load file
+    //
+
     CCDebug::Log("{$_SERVER['REQUEST_URI']} Calling for: $file");
 
     if( !preg_match('#[\./]#',$file) && !empty($_TV[$file]) )
@@ -94,36 +134,46 @@ function _template_call_template($file)
         CCDebug::Log("Alias for: $file");
     }
         
-    if( preg_match( '/\.php$/', $file ) && file_exists($file) )
+    if( preg_match( '/\.(xml|htm|html|php|inc)$/', $file, $m ) )
     {
-        require_once($file);
-        return;
-    }
+        // this is no macro on the end
 
-    if( preg_match( '/\.xml$/', $file ) )
-    {
+        if( is_file($file) )
+        {
+            // a full path was passed in, we're done
+            require_once($file);
+            return;
+        }
+
         $filename = $file;
     }
     else
     {
-        $parts = split('/', $file);
-        $filename = $parts[0];
-        if( !empty($parts[1]) )
+        $macro  = basename($file);
+        // call dirname to strip off the macro this is the filepart 
+        $file_path = dirname($file);
+        if( !empty($file_path) && ($file_path != '.') )
         {
-            $basename = preg_replace( '/[^a-zA-Z0-9]+/', '_', basename($filename,'.xml') );
-            $funcname = '_t_' . $basename . '_' . $parts[1];
+            $file_name = basename($file_path); // this is the actual file
+            $ext = array_pop( explode('.', $file_name ) );
+            $basename = preg_replace( '/[^a-zA-Z0-9]+/', '_', basename($file_name, '.' . $ext) );
+            $funcname = '_t_' . $basename . '_' . $macro;
             if( function_exists($funcname) )
             {
+                // the file is already in memory, just call the function
                 $funcname();
                 return;
             }
+            $filename = $file_path;
         }
     }
-    
-    $path = CCTemplate::GetTemplate($filename,true);
+
+    if( !empty($filename) )
+        $path = CCTemplate::GetTemplate($filename,true);
+
     if( empty($path) )
     {
-        print( "<h3>Can't find $file</h3>");
+        print( "<h3>Can't find template: <span style='color:red'>$file</span></h3>");
         CCDebug::StackTrace();
     }
 

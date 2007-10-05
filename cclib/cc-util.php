@@ -417,6 +417,7 @@ class CCUtil
     {
         if( !is_array($target) )
             $target = array( $target );
+
         foreach( $target as $T )
         {
             if( file_exists($T) )
