@@ -108,7 +108,8 @@ class CCUser
         $id     = CCUser::CurrentUser();
         $argid  = intval($usernameorid);
         $name   = CCUser::CurrentUserName();
-        if( !$id || (($id !== $argid) && ($name != $usernameorid)) )
+        $bad = !$id || (($id !== $argid) && (strcmp($name,$usernameorid) != 0)) ;
+        if( $bad )
         {
            CCUtil::AccessError();
         }

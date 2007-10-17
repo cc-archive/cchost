@@ -246,7 +246,7 @@ class CCUpload
             CCUtil::AccessError();
         CCUser::CheckCredentials($usernameorid);
         $uploads =& CCUploads::GetTable();
-        if( !intval($usernameorid) )
+        if( preg_match('/[a-zA-Z]/',$usernameorid) )
             $usernameorid = CCUser::IDFromName($usernameorid);
         $fileowner = $uploads->QueryItemFromKey('upload_user',$upload_id);
         // $s = "arg: $usernameorid / owner: $fileowner";
