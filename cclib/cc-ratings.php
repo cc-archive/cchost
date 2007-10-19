@@ -276,6 +276,11 @@ class CCRating
     */
     function OnUploadListing(&$record)
     {
+        CCRating::GetRatingsInfo($record);
+    }
+
+    function GetRatingsInfo(&$record)
+    {
         $configs    =& CCConfigs::GetTable();
         $settings   = $configs->GetConfig('settings'); // local
         $chart      = $configs->GetConfig('chart');    // global

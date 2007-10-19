@@ -36,9 +36,8 @@ function _cc_format_links()
     if( !isset($done) )
     {
         require_once('cclib/cc-page.php');
-        CCPage::AddScriptLink( ccd('cctemplates', 'dl_popup.js' ), false );
-        CCPage::AddScriptLink( ccd('ccextras','cc-format.js') );
-        CCPage::AddLink('head_links', 'stylesheet', 'text/css', ccd('ccextras','cc-format.css') , _('Default Style'));
+        CCPage::AddScriptLink( 'js/cc-format.js' );
+        CCPage::SetStyleSheet( 'css/cc-format.css');
         $done = true;
     }
 }

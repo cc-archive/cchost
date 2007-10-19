@@ -111,7 +111,7 @@ class CCQueryFormats
                     if( empty($template) )
                         $template = 'med';
 
-                    $tname = 'formats/' . $template . '.xml';
+                    $tname = 'formats/' . $template;
 
                     // normally we wouldn't go through extra step of
                     // actually looking up the template, but since
@@ -139,7 +139,7 @@ class CCQueryFormats
 
                 require_once('cclib/cc-page.php');
 
-                $targs = array_merge( CCPage::GetDefaultPageArgs(), $CC_GLOBALS );
+                $targs = $CC_GLOBALS;
                 $targs['records']  =& $records;
                 $targs['dochop']   = isset($chop) && $chop > 0;
                 $targs['chop']     = isset($chop) ? $chop : 25;

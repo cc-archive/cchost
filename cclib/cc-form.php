@@ -631,9 +631,8 @@ class CCForm
     function GenerateHTML()
     {
         global $CC_GLOBALS;
-        $template = new CCTemplate( $CC_GLOBALS['skin-map'] );
+        $template = new CCTemplateMacro( '', $this->_template_macro );
         $this->GenerateForm();
-        $this->_template_vars['auto_execute'] = array ( $this->_template_macro );
         return( $template->SetAllAndParse($this->_template_vars) );
     }
 
@@ -935,7 +934,7 @@ class CCForm
      */
     function generator_textarea($varname,$value='',$class='')
     {
-        CCPage::AddScriptLink( ccd('cctemplates', 'js', 'grow_textarea.js'), false );
+        CCPage::AddScriptLink( 'js/grow_textarea.js', false );
 
         $html =<<<END
             <textarea style="width:300px;height:100px;" id="$varname" name="$varname" class="$class">$value</textarea><br />
@@ -2214,7 +2213,7 @@ class CCUploadForm extends CCForm
                    )
              );
         CCPage::PageArg('form_hide_msg',$hidemsg);
-        CCPage::AddScriptLink( ccd('cctemplates', 'js', 'upload_form_hide.js'), false ); // false means bottom of page
+        CCPage::AddScriptLink( 'js/upload_form_hide.js', false ); // false means bottom of page
     }
 }
 

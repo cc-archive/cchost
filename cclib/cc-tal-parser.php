@@ -6,6 +6,25 @@ $Id$
 */
 error_reporting(E_ALL);
 
+/*
+template language, to hide php
+
+%macro(name)%
+%end_macro%
+
+%loop(array,item)%
+%end_loop%
+
+%if(condition)%
+%end_if%
+
+%var(name)%
+
+%call_macro(name)%
+
+%not_empty%
+
+*/
 require_once('cclib/htmlparser/htmlparser.inc');
 
 if( !defined( 'TC_PRETTY' ) )

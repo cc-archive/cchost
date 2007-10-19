@@ -165,7 +165,9 @@ _('Clicking on these links will not save your form.') . '</i></p>';
                     'formatter'  => 'select',
                     'options'    => array( CC_MUST_BE_LOGGED_IN   => _('Logged in users only'),
                                            CC_DONT_CARE_LOGGED_IN => _("Everyone"),
-                                           CC_ADMIN_ONLY          => _("Administrators only") ),
+                                           CC_ADMIN_ONLY          => _("Administrators only"),
+                                           CC_ONLY_NOT_LOGGED_IN  => _("Anonymous users only"),
+                                        ),
                     'flags'      => CCFF_NONE ),
                 );
 

@@ -28,47 +28,6 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cclib/cc-admin.php');
 
-/**
-* The function is designed for ajax callbacks, get in, get out
-*
-*/
-function cc_show_template($template_name='',$macro='')
-{
-    global $CC_GLOBALS;
-
-    if( empty($template_name) )
-    {
-        print(_('must specify a template'));
-        CCUtil::Send404();
-        exit;
-    }
-
-    if( strpos('.xml',$template_name) === false )
-        $template_name .= '.xml';
-
-    if( !CCTemplate::GetTemplate($template_name) )
-    {
-        print(_("can't file template: $template_name"));
-        CCUtil::Send404();
-        exit;
-    }
-
-    if( empty($macro) )
-    {
-        $t = new CCTemplate($template_name);
-        $configs =& CCConfigs::GetTable();
-        $args = array_merge($configs->GetConfig('ttag'),$CC_GLOBALS);
-        $args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
-        $args['get'] = $_GET;
-        $t->SetAllAndPrint($args);
-        exit;
-    }
-
-    CCPage::ShowHeaderFooter(false,false);
-    $template_name .= "/$macro";
-    CCPage::PageArg('exec_this',$template_name);
-    CCPage::PageArg('is_ajax',true,'exec_this');
-}
 
 /**
 * @package cchost
@@ -166,7 +125,6 @@ class CCNewTemplateTagForm extends CCForm
                            'flags'       => CCFF_REQUIRED | CCFF_NOUPDATE) ;
 
         $this->AddFormFields($fields);
-       // $this->SetModule( ccs(__FILE__) );
     }
 }
 
@@ -235,12 +193,7 @@ class CCTemplateAdmin
         global $CC_GLOBALS;
         
         $files = array();
-        $_tdirs = split(';',$CC_GLOBALS['template-root']);
-        $tdirs = array();
-        foreach( $_tdirs as $_tdir )
-            $tdirs[] = trim($_tdir);
-        if( !in_array( 'cctemplates/', $tdirs ) && !in_array( 'cctemplates', $tdirs ) )
-            $tdirs[] = 'cctemplates';
+        $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], 'ccskins');
         foreach( $tdirs as $tdir )
         {
             $tdir = CCUtil::CheckTrailingSlash($tdir,false);
@@ -256,14 +209,18 @@ class CCTemplateAdmin
         {
             while (($file = readdir($dh)) !== false) 
             {
-                if( preg_match( "/^$prefix-([^-]+)\.$ext/", $file, $m ) )
+                if( is_dir("$dir/$file") )
                 {
-                    $files[ $dir . '/' . $file ] = $dir . '/' . $m[1];
+                    if( $file{0} != '.' )
+                        CCTemplateAdmin::_scour_dir($files,"$dir/$file",$prefix,$ext);
+                }
+                else if( preg_match( "/^$prefix-([^-]+)\.$ext/", $file, $m ) )
+                {
+                    $files[ $dir . '/' . $file ] = $m[1];
                 }
             }
             closedir($dh);
         }
-
     }
 
     /**
@@ -327,8 +284,6 @@ class CCTemplateAdmin
         CCEvents::MapUrl( 'people/customize',array('CCTemplateAdmin','OnPeopleCustomize'),   
             CC_ADMIN_ONLY, ccs(__FILE__) );
 
-        CCEvents::MapUrl( 'viewtemplate',     'cc_show_template',         
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
     }
 
 }

@@ -26,6 +26,11 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+global $CC_GLOBALS;
+
+$CC_GLOBALS['template-stack'] = array();
+$CC_GLOBALS['map-stack'] = array();
+
 /**
 */
 class CCTemplate
@@ -44,16 +49,7 @@ class CCTemplate
         $this->_t_args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
         $this->_t_args['install_done'] = false;
         $this->_t_args['noproto'] = false;
-        if( CCUser::IsLoggedIn() )
-        {
-            $this->_t_args['logged_in_as'] = CCUser::CurrentUserName();
-            $this->_t_args['logout_url'] = ccl('logout');
-            $this->_t_args['is_logged_in'] = 1;
-        } else {
-            $this->_t_args['is_logged_in'] = 0;
-        }
-        $this->_t_args['is_admin']  = CCUser::IsAdmin();
-        $this->_t_args['not_admin'] = !$this->_t_args['is_admin'];
+        $this->_t_args['ajax'] = !empty($_REQUEST['ajax']);
     }
 
     function SetArg($name,$value='',$macroname='')
@@ -79,13 +75,33 @@ class CCTemplate
 
         if( empty($args['skin']) && !empty($CC_GLOBALS['skin']) )
             $args['skin'] = $CC_GLOBALS['skin'];
-        $_TV = $args;
+
+        if( CCUser::IsLoggedIn() )
+        {
+            $args['logged_in_as'] = CCUser::CurrentUserName();
+            $args['logout_url'] = ccl('logout');
+            $args['is_logged_in'] = 1;
+        } else {
+            $args['is_logged_in'] = 0;
+        }
+        $args['is_admin']  = CCUser::IsAdmin();
+        $args['not_admin'] = !$args['is_admin'];
+
+        $_TV = array_merge( $_TV, $args );
         if( $this->html_mode )
         {
             // Force UTF-8 necessary for some languages (chinese,japanese,etc)
             header('Content-type: text/html; charset=' . CC_ENCODING) ;
         }
+
         _template_call_template($this->filename);
+        if( !empty($args['auto_execute']) )
+        {
+            _template_push_path($this->filename);
+            foreach( $args['auto_execute'] as $exec )
+                _template_call_template($exec);
+            _template_pop_path();
+        }
     }
 
     function GetTemplate($filename,$real_path=true)
@@ -98,24 +114,104 @@ class CCTemplate
                         $filename . '.htm',
                         $filename . '.html' );
 
-        $f = CCUtil::SearchPath( $files, $CC_GLOBALS['template-root'], 'cchost_files/viewfile', $real_path );
-        //CCDebug::PrintVar($f,false);
-        return $f;
-     
+        return _template_search($files,$real_path);
     }
 
 
     function GetTemplatePath()
     {
         global $CC_GLOBALS;
-
-        return CCUtil::SplitPaths( $CC_GLOBALS['template-root'], 'cctemplates' );
+        return array_unique(array_merge( $CC_GLOBALS['template-stack'], 
+                                         $CC_GLOBALS['map-stack'], 
+                                         CCUtil::SplitPaths( $CC_GLOBALS['template-root'], 'ccskins' ) ));
     }
+
+    function ClearCache() { return true; }
+}
+
+function _template_search($file, $real_path = false )
+{
+    $dirs = CCTemplate::GetTemplatePath();
+    return CCUtil::SearchPath( $file, $dirs, '', $real_path);
+}
+
+function _template_compat_required()
+{
+    global $_TV,$CC_GLOBALS;
+
+    if( !empty($_TV['template_compat']) )
+        return;
+
+    $pi = pathinfo( $CC_GLOBALS['skin-file'] );
+    $sp = split( '\.', $pi['basename'] );
+    $pi['filename'] = $sp[0];
+
+    $_TV['style_sheets'][] = $pi['filename'] . '.css';
+
+    if( empty($_TV['head_links']) )
+    {
+        foreach( $_TV['style_sheets'] as $css )
+        {
+            $_TV['head_links'][] = array(
+                    'rel' => 'stylesheet',
+                    'type' => 'text/css',
+                    'href' => ccd($pi['dirname'] . '/' . $css),
+                    'title' => 'Default Style'
+                );
+        }
+    }
+
+    if( !empty($_TV['file_records']) )
+    {
+        $k = array_keys($_TV['file_records']);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $_TV['file_records'][$k[$i]];
+            $R['local_menu'] = cc_get_upload_menu($R);
+            cc_get_ratings_info($R);
+        }
+    }
+
+    $_TV['template_compat'] = true;
+}
+
+function _template_inner_include($path,$funcname='')
+{
+    _template_push_path($path);
+    require_once($path);
+    if( !empty($funcname) )
+        $funcname();
+    _template_pop_path();
+}
+
+function _template_import_map($map)
+{
+    _template_push_path($map,'map-stack');
+    require_once($map);
+}
+
+function _template_pop_path()
+{
+    global $CC_GLOBALS;
+    array_shift( $CC_GLOBALS['template-stack'] );
+}
+
+function _template_push_path($path,$index='template-stack')
+{
+    global $CC_GLOBALS;
+
+    $path = dirname($path);
+    if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') 
+        $dir = str_replace( '\\', '/', str_replace( getcwd() . '\\', '', $path ) );
+    else
+        $dir = str_replace( getcwd() . '/', '', $path );
+    array_unshift( $CC_GLOBALS[$index], $dir );
 }
 
 function _template_call_template($file)
 {
-    global $_TV;
+    global $_TV, $CC_GLOBALS;
 
     // forms of calling:
     //
@@ -126,14 +222,11 @@ function _template_call_template($file)
     // 'file.ext'            - load file
     //
 
-    CCDebug::Log("{$_SERVER['REQUEST_URI']} Calling for: $file");
+    $funcname = '';
 
     if( !preg_match('#[\./]#',$file) && !empty($_TV[$file]) )
-    {
         $file = $_TV[$file];
-        CCDebug::Log("Alias for: $file");
-    }
-        
+
     if( preg_match( '/\.(xml|htm|html|php|inc)$/', $file, $m ) )
     {
         // this is no macro on the end
@@ -141,7 +234,7 @@ function _template_call_template($file)
         if( is_file($file) )
         {
             // a full path was passed in, we're done
-            require_once($file);
+            _template_inner_include($file);
             return;
         }
 
@@ -166,6 +259,10 @@ function _template_call_template($file)
             }
             $filename = $file_path;
         }
+        else
+        {
+            $filename = $file;
+        }
     }
 
     if( !empty($filename) )
@@ -177,10 +274,7 @@ function _template_call_template($file)
         CCDebug::StackTrace();
     }
 
-    //print("Performing: $path " . (empty($funcname) ? '' : $funcname) . "<br \>\n");
-    require_once($path);
-    if( !empty($funcname) )
-        $funcname();
+    _template_inner_include($path,$funcname);
 }
 
 class CCTemplateMacro extends CCTemplate
@@ -198,8 +292,8 @@ class CCTemplateMacro extends CCTemplate
 
     function SetAllAndPrint( $args, $doprint = false, $admin_dump = false )
     {
-        //$args['auto_macro'] = 
-        $args['auto_execute'] = array( $this->_mtemplate . '/' . $this->_mmacro );
+        $fname = empty($this->_mtemplate) ? '' : $this->_mtemplate . '/';
+        $args['auto_execute'] = array( $fname . $this->_mmacro );
         $ret = parent::SetAllAndPrint($args,$doprint,$admin_dump);
         return $ret;
     }

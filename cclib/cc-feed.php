@@ -482,7 +482,7 @@ class CCFeed
             $row['upload_name']        = utf8_encode($this->_cct($row['upload_name']));
             $row['user_real_name']     = utf8_encode($this->_cct($row['user_real_name']));
 
-            CCEvents::Invoke( CC_EVENT_UPLOAD_LISTING, array( &$row ) );
+            // CCEvents::Invoke( CC_EVENT_UPLOAD_LISTING, array( &$row ) );
         }
 
     }

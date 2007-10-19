@@ -162,8 +162,7 @@ class CCContestDeprecated
                 $data = array_merge($data,$C);
                 print('<h3>' . _('Poll Results') . '</h3>');
                 $args['poll_data'] = $data;
-                $args['auto_execute'][] = 'polling_data';
-                $template = new CCTemplate($CC_GLOBALS['skin-map'] );
+                $template = new CCTemplate('','polling_data');
                 $template->SetAllAndParse($args,true);
             }
             else

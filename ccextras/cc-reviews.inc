@@ -341,8 +341,7 @@ END;
             $row['username'] = $row['user_real_name'];
         }
 
-        $template = new CCTemplate( $CC_GLOBALS['skin-map'] );
-        $args['auto_execute'][] = 'comment_thread_list';
+        $template = new CCTemplateMacro( '', 'comment_thread_list' );
         $args['posts'] = $revs;
         if( $this->_can_review($upload_id) )
         {
@@ -357,8 +356,7 @@ END;
         $user_name = $uploads->QueryItemFromKey('user_name',$upload_id);
         $args['view_topic_url'] = ccl( 'reviews',$user_name, $upload_id  );
 
-        $html = $template->SetAllAndParse($args,false,true);
-        print $html;
+        $template->SetAllAndPrint($args,false,true);
         exit;
 
     }

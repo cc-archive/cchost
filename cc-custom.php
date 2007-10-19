@@ -20,11 +20,7 @@
 /**
 *   CUSTOM TEMPLATE API 
 *
-*    Methods here were designed to be called from phpTAL templates:
-*
-*    example:
-*
-*    <tal:block define="php: records = CC_quick_list('remix');" />
+*    Methods here were designed to be called from templates:
 *
 * @package cchost
 * @subpackage admin
@@ -34,68 +30,6 @@
 if( !defined('IN_CC_HOST') )
     die('Welcome to CC Host');
 
-/**
-* @deprecated
-*/
-function CC_badcall($to)
-{
-    print( sprintf(_('A bad call happened to "%s" in a template.'), $to) );
-    exit;
-}
-
-/**
-* Splits a comma separated string of tags into an array
-*
-* @param string $tagstr Comma separated string of tags
-* @return array $tagarray Arrya of tags
-*/
-function CC_split_tags($tagstr)
-{
-    $a = explode(',',$tagstr);
-    return($a);
-}
-
-/**
-* Internationalize a string
-*
-* This allows templates to put up a string and go through the 
-* language engine. Always use this when outputting user visible
-* strings. (This doesn't really work yet, but use it anyway.)
-*
-* @param string $string String to translate
-* @return string $retstring Translated string
-*/
-function CC_lang($string)
-{
-    return(_($string));
-}
-
-/**
-* Return a count of elements for the object or array
-*
-* @param mixed $obj Object or array to count
-* @return integer $count Count of elements or 0 if parameter is not an array or string
-*/
-function CC_count($obj)
-{
-    if( isset($obj) && is_array($obj) )
-        return( count($obj) );
-    return( 0 );
-}
-
-/**
-* Test for the existance of an object
-*
-* phpTAL's exists() was not working consistantly and does
-* not like empty objects so this function is designed to help with that.
-*
-* @param mixed $obj Thing to test
-* @return boolean $result Same as php's empty()
-*/
-function CC_test($obj)
-{
-    return( isset($obj) && !empty($obj) && !PEAR::IsError($obj) );
-}
 
 /**
 * Chop a string and append ellipse if over a given length.
@@ -132,103 +66,9 @@ function CC_datefmt($date,$fmt)
     return( date($fmt,strtotime($date)) );
 }
 
-/**
-* Low level call to a CCTable derivation.
-*
-* A very specialized way of calling specific, no paramter method on
-* CCTable method 
-*
-* @see CCContests::GetOpenContests
-* @see CCConfigs::GetCOnfigRoots
-* @param string $tablename Name of CCTable derivative
-* @param string $func Name of method to call
-* @param string $module Name of file to include with our new addhandler code
-* @return mixed $retrun Return value of function
-*/
-function CC_query($tablename,$func,$module='')
+function cc_not_empty(&$val)
 {
-    if( !empty($module) )
-        require_once($module);
-    if( substr($tablename,0,2) != 'CC' )
-        return(array());
-    $table = new $tablename;
-    return( $table->$func() );
-}
-
-/**
-* Get the records with the highest ratings as determined by admin
-*
-* Admins can determine what gets returned here in the 'Manage Ratings'
-* screens.
-* 
-* @param integer $limit Max number of records to return
-* @param string $since Date string to use as cutoff
-* @return array $records Records that are rated the highest
-*/
-function CC_ratings_chart($limit,$since='')
-{
-    require_once('cclib/cc-ratings.php');
-    $retval = CCRating::GetChart($limit,$since);
-    return($retval);
-}
-
-/**
-* Return a semi-colon separated list of upload_ids for a set of records
-*
-* This list of ids can then be used in URLs like streampage
-* 
-* @param array $records An array of records to get ids for
-* @return string $ids A semi-colon separated list of upload_ids
-*/
-function CC_ids_for_records(&$records)
-{
-    $count = count($records);
-    $ids = '';
-    for( $i = 0; $i < $count; $i++ )
-    {
-        $ids .= $records[$i]['upload_id'];
-        if( $i != $count - 1 )
-            $ids .= ';';
-    }
-    return($ids);
-}
-
-/**
-* Dump a variable to the screen
-*
-* For debugging purposes you can use this method while testing to get
-* the contents of any given thing.
-*
-* NOTE: Calling this will halt all execution
-*
-* @param mixed $obj Thing to dump to screen
-* @see CC_log_dump
-*/
-function CC_debug_dump($obj)
-{
-    $isenabled = CCDebug::IsEnabled();
-    CCDebug::Enable(true);
-    CCDebug::PrintVar($obj,false);
-    CCDebug::Enable($isenabled);
-}
-
-/**
-* Dump a variable to the log file
-*
-* For debugging purposes you dump the contents of a 
-* variable to the log file. This function with <i>not</i>
-* halt execution of the program.
-* 
-* @param string $name Name of object, this will be output to the log for easy identification
-* @param mixed $obj Thing to dump
-* @see CC_debug_dump
-*/
-function CC_log_dump($name,$obj)
-{
-    $isenabled = CCDebug::IsEnabled();
-    CCDebug::Enable(true);
-    CCDebug::LogVar($name,$obj);
-    CCDebug::Enable($isenabled);
+    return isset($val) && !empty($val) ? $val : '';
 }
 
 /**
@@ -276,17 +116,30 @@ function CC_get_config($configName)
 * This method return ONLY two colums: file_page_url and upload_short_name
 *
 * @param string $tag a specific tag to search for
+* @param boolean $cache cache the results
 * @return array $trunrecs An array of 5 truncated records
 */
-function & CC_quick_list($tag)
+function & CC_quick_list($tags,$cache=1)
 {
-    return(array());
+    global $CC_GLOBALS, $CC_CFG_ROOT;
+
+    if( $cache )
+    {
+        $cname = $CC_GLOBALS['php-tal-cache-dir'] . '/_ccc_' . $tags . '.txt';
+        if( file_exists($cname) )
+        {
+            include($cname);
+            return $rows;
+        }
+    }
 
     $furl = ccl('files') . '/';
 
+    $tag = str_replace(',','|',$tags);
+
     $sql =<<<END
         SELECT CONCAT('$furl',user_name,'/',upload_id) as file_page_url,
-               SUBSTRING(upload_name,1,10) as upload_short_name
+               SUBSTRING(upload_name,1,15) as upload_short_name
         FROM cc_tbl_uploads
         JOIN cc_tbl_user on upload_user = user_id
         WHERE upload_tags REGEXP '(^| |,)($tag)(,|$)'
@@ -294,9 +147,27 @@ function & CC_quick_list($tag)
         LIMIT 5
 END;
 
-     $rows =& CCDatabase::QueryRows($sql);
+    $rows =& CCDatabase::QueryRows($sql);
 
-     return $rows;
+    if( $cache && ($CC_CFG_ROOT == CC_GLOBAL_SCOPE) )
+    {
+        $data = serialize($rows);
+        $data = str_replace("'","\\'",$data);
+        $text = '<? /* This is a temporary file created by ccHost. It is safe to delete. */ ' .
+                 "\n" . '$rows = unserialize(\'' . $data . '\'); ?>';
+        $f = fopen($cname,'w+');
+        fwrite($f,$text);
+        fclose($f);
+        chmod($cname,cc_default_file_perms());
+        $configs =& CCConfigs::GetTable();
+        $tcache = $configs->GetConfig('tcache',CC_GLOBAL_SCOPE);
+        if( !in_array($cname,$tcache) )
+        {
+            $tcache[] = $cname;
+            $configs->SaveConfig('tcache',$tcache,CC_GLOBAL_SCOPE);
+        }
+    }
+    return $rows;
 }
 
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  'cc_tcache_kill' );
@@ -313,13 +184,196 @@ function cc_tcache_kill()
     if( !empty($tcache) )
     {
         foreach($tcache as $cname)
-        {
             if( file_exists($cname) )
-            {
                 @unlink($cname);
-            }
-        }
+        $tcache = array( '' );
+        $configs->SaveConfig('tcache',$tcache,CC_GLOBAL_SCOPE);
     }
+}
+
+function CC_get_config_roots()
+{
+    $configs = CCConfigs::GetTable();
+    $roots = $configs->GetConfigRoots();
+    $keys = array_keys($roots);
+    foreach( $keys as $k )
+        $roots[$k]['url'] = ccc($roots[$k]['config_scope']);
+    return $roots;
+}
+
+function cc_query_fmt($qstring)
+{
+    if( empty($qstring) )
+        return array();
+    
+    parse_str($qstring,$args);
+    require_once('cclib/cc-query.php');
+    $query = new CCQuery();
+    if( empty($args['format']) )
+        $args['format'] = 'php';
+    $args = $query->ProcessAdminArgs($args);
+    list( $results ) = $query->Query($args);
+    return $results;
+}
+
+function CC_recent_reviews($limit=5)
+{
+    require_once('ccextras/cc-reviews-table.inc');
+    return CC_recent_reviews_impl($limit);
+}
+
+function CC_recent_playlists()
+{
+    require_once('ccextras/cc-playlist.php');
+    return CC_recent_playlists_impl();
+}
+
+function CC_hot_playlists()
+{
+    require_once('ccextras/cc-playlist.php');
+    return CC_hot_playlists_impl();
+}
+
+function & CC_get_details($upload_id,$menu=true)
+{
+    global $CC_GLOBALS;
+    require_once('cclib/cc-upload.php');
+    require_once('cclib/cc-upload-table.php');
+    $uploads =& CCUploads::GetTable();
+    $rec = $uploads->GetRecordFromID($upload_id);
+    $CC_GLOBALS['works_page'] = 1;  // this assumes we're calling 
+    $rec['works_page'] = true;      // in an ajax context (!)
+    if( $menu )
+        $rec['local_menu'] = CCUpload::GetRecordLocalMenu($rec);
+    $recs = array( &$rec );
+    cc_get_remix_history( $recs, 0 );
+    return $rec;
+}
+
+function cc_get_upload_menu(&$record)
+{
+    require_once('cclib/cc-upload.php');
+    return CCUpload::GetRecordLocalMenu($record);
+}
+
+function cc_get_ratings_info(&$record)
+{
+    require_once('cclib/cc-ratings.php');
+    CCRating::GetRatingsInfo($record);
+}
+function cc_get_remix_history(&$records,$max)
+{
+    require_once('cclib/cc-remix-hv.php');
+    CCRemixHV::GetRemixHistory($records,$max);
+    require_once('cclib/cc-pools-hv.php');
+    CCPoolHV::GetPoolHistory( $records, $max );
+}
+
+function cc_get_value($arr,$key)
+{
+    if( is_array($arr) && array_key_exists($key,$arr) )
+        return $arr[$key];
+    return null;
+}
+
+if( !function_exists('array_combine') )
+{
+    function array_combine($keys,$values)
+    {
+        $c = count($keys);
+        $dest = array();
+        for( $i = 0; $i < $c; $i++ )
+            $dest[$keys[$i]] = $values[$i];
+
+        return $dest;
+    }
+}
+
+/**#@+
+* @access private
+* @deprecated
+*/
+function list_all_users()
+{
+   $users = new CCUsers();
+   $users->SetOrder('user_name');
+   $records = $users->GetRecords('');
+   return $records;
+}
+
+function CC_badcall($to)
+{
+    print( sprintf(_('A bad call happened to "%s" in a template.'), $to) );
+    exit;
+}
+
+function CC_split_tags($tagstr)
+{
+    $a = explode(',',$tagstr);
+    return($a);
+}
+
+function CC_lang($string)
+{
+    return(_($string));
+}
+
+function CC_count($obj)
+{
+    if( isset($obj) && is_array($obj) )
+        return( count($obj) );
+    return( 0 );
+}
+
+function CC_test($obj)
+{
+    return( isset($obj) && !empty($obj) && !PEAR::IsError($obj) );
+}
+
+function CC_query($tablename,$func,$module='')
+{
+    if( !empty($module) )
+        require_once($module);
+    if( substr($tablename,0,2) != 'CC' )
+        return(array());
+    $table = new $tablename;
+    return( $table->$func() );
+}
+
+function CC_ratings_chart($limit,$since='')
+{
+    require_once('cclib/cc-ratings.php');
+    $retval = CCRating::GetChart($limit,$since);
+    return($retval);
+}
+
+function CC_ids_for_records(&$records)
+{
+    $count = count($records);
+    $ids = '';
+    for( $i = 0; $i < $count; $i++ )
+    {
+        $ids .= $records[$i]['upload_id'];
+        if( $i != $count - 1 )
+            $ids .= ';';
+    }
+    return($ids);
+}
+
+function CC_debug_dump($obj)
+{
+    $isenabled = CCDebug::IsEnabled();
+    CCDebug::Enable(true);
+    CCDebug::PrintVar($obj,false);
+    CCDebug::Enable($isenabled);
+}
+
+function CC_log_dump($name,$obj)
+{
+    $isenabled = CCDebug::IsEnabled();
+    CCDebug::Enable(true);
+    CCDebug::LogVar($name,$obj);
+    CCDebug::Enable($isenabled);
 }
 
 /**
@@ -386,32 +440,6 @@ function & CC_cache_query(
     }
     return $rows;
 }
-
-function CC_get_config_roots()
-{
-    $configs = CCConfigs::GetTable();
-    $roots = $configs->GetConfigRoots();
-    $keys = array_keys($roots);
-    foreach( $keys as $k )
-        $roots[$k]['url'] = ccc($roots[$k]['config_scope']);
-    return $roots;
-}
-
-function cc_query_fmt($qstring)
-{
-    if( empty($qstring) )
-        return array();
-    
-    parse_str($qstring,$args);
-    require_once('cclib/cc-query.php');
-    $query = new CCQuery();
-    if( empty($args['format']) )
-        $args['format'] = 'php';
-    $args = $query->ProcessAdminArgs($args);
-    list( $results ) = $query->Query($args);
-    return $results;
-}
-
 /**
 * Fetch a list of records
 *
@@ -470,68 +498,6 @@ function & CC_tag_query(
 }
 
 
-function CC_recent_reviews($limit=5)
-{
-    require_once('ccextras/cc-reviews-table.inc');
-    return CC_recent_reviews_impl($limit);
-}
+/**#@-*/
 
-function CC_recent_playlists()
-{
-    require_once('ccextras/cc-playlist.php');
-    return CC_recent_playlists_impl();
-}
-
-function CC_hot_playlists()
-{
-    require_once('ccextras/cc-playlist.php');
-    return CC_hot_playlists_impl();
-}
-
-/**
-* @private
-* @deprecated
-*/
-function list_all_users()
-{
-   $users = new CCUsers();
-   $users->SetOrder('user_name');
-   $records = $users->GetRecords('');
-   return $records;
-}
-
-function & CC_get_details($upload_id,$menu=true)
-{
-    global $CC_GLOBALS;
-    $CC_GLOBALS['works_page'] = 1;
-    require_once('cclib/cc-upload.php');
-    require_once('cclib/cc-upload-table.php');
-    $uploads =& CCUploads::GetTable();
-    $rec = $uploads->GetRecordFromID($upload_id);
-    $rec['works_page'] = true;
-    if( $menu )
-        $rec['local_menu'] = CCUpload::GetRecordLocalMenu($rec);
-    CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, array(&$rec));
-    return $rec;
-}
-
-function cc_get_value($arr,$key)
-{
-    if( is_array($arr) && array_key_exists($key,$arr) )
-        return $arr[$key];
-    return null;
-}
-
-if( !function_exists('array_combine') )
-{
-    function array_combine($keys,$values)
-    {
-        $c = count($keys);
-        $dest = array();
-        for( $i = 0; $i < $c; $i++ )
-            $dest[$keys[$i]] = $values[$i];
-
-        return $dest;
-    }
-}
 ?>

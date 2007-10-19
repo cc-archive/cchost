@@ -125,20 +125,15 @@ class CCMediaHost
                 }
                 return;
             }
+
+            CCPage::SetTitle( empty($title) ? $row['upload_name'] : $title);
             global $CC_GLOBALS;
             $CC_GLOBALS['works_page'] = true;
             $row['works_page'] = true;
             CCPage::PageArg( 'chop', false );
             $record = $uploads->GetRecordFromRow($row);
-            CCPage::SetTitle( empty($title) ? $record['upload_name'] : $title);
-            require_once('cclib/cc-upload.php');
-            $record['local_menu'] = CCUpload::GetRecordLocalMenu($record);
-            $arg = array( &$record );
-            CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, $arg );
-            CCPage::PageArg( 'file_records', $arg, 'list_file' );
-            if( CCUser::IsAdmin() && !empty($_REQUEST['dump_rec']) )
-                CCDebug::PrintVar($record,false);
-            CCEvents::Invoke(CC_EVENT_LISTING_RECORDS, array( $arg ) );
+            $macro = empty($GLOBAL['file_page_template']) ? 'list_file' : 'file_page_template';
+            CCPage::PageArg( 'record', $record, $macro );
         }
     }
 
@@ -647,7 +642,7 @@ class CCMediaHost
                             );
         }
 
-        CCPage::AddScriptLink( ccd('cctemplates', 'dl_popup.js'), false );
+        // CCPage::AddScriptLink( ccd('cctemplates', 'dl_popup.js'), false );
     }
 
     /**

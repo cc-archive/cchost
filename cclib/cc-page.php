@@ -113,19 +113,16 @@ class CCPageAdmin
                        'formatter'   => 'textedit',
                        'flags'       => CCFF_POPULATE);
 
-            $fields['style-sheet'] =
-                array( 'label'       => _('Skin Style'),
-                       'form_tip'    => _('Default style sheet for this view'),
+            $fields['skin-file'] =
+                array( 'label'       => _('Skin'),
+                       'form_tip'    => _('Default skin for this view'),
                        'formatter'   => 'select',
-                       'options'     => CCTemplateAdmin::GetTemplates('skin','css'),
+                       'options'     => CCTemplateAdmin::GetTemplates('skin','php'),
                        'flags'       => CCFF_POPULATE );
-/*
-            $fields['page-template'] =
-                       array( 'label'       => 'Page Template',
-                               'form_tip'   => 'Default page template for this view',
-                               'formatter'  => 'textedit',
-                               'flags'      => CCFF_POPULATE | CCFF_REQUIRED);
-*/
+            $fields['skin'] =
+                array( 'label'       => '',
+                       'formatter'   => 'skin_grabber',
+                       'flags'       => CCFF_POPULATE);
             $fields['max-listing'] =
                 array( 'label'       => _('Max Items Per Page'),
                        'form_tip'    => _('Maximum number of uploads, users in a listing'),
@@ -140,6 +137,18 @@ class CCPageAdmin
         }
 
     }
+}
+
+function generator_skin_grabber($form,$varname,$value='',$class='')
+{
+    return( "<input type='hidden' id=\"$varname\" name=\"$varname\" value=\"$value\" />" );
+}
+
+function validator_skin_grabber($form,$fieldname)
+{
+    preg_match( '/skin-(.+)\.[^\.]{3,4}$/', $_POST['skin-file'], $m );
+    $form->SetFormValue( $fieldname, $m[1] );
+    return true;
 }
 
 /**
@@ -170,7 +179,7 @@ class CCPage extends CCTemplate
     {
         global $CC_GLOBALS;
 
-        $this->CCTemplate( $CC_GLOBALS['skin-page'] );
+        $this->CCTemplate( $CC_GLOBALS['skin-file'] );
 
         $this->_t_args['show_body_header'] = true;
         $this->_t_args['show_body_footer'] = true;
@@ -325,10 +334,12 @@ class CCPage extends CCTemplate
     */
     function SetStyleSheet( $css, $title = '' )
     {
-        // NOTE: Can't have default parameter and localize it.
-        if ( '' == $title )
-            $title = _('Style Sheet');
-        CCPage::AddLink( 'head_links', 'stylesheet', 'text/css', ccd($css), $title );
+        if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
+           $page =& CCPage::GetPage();
+         else
+           $page =& $this;
+
+        $page->_t_args['style_sheets'][] = $css;
     }
 
     /**
@@ -434,13 +445,6 @@ class CCPage extends CCTemplate
             }
         }
 
-        $settings = $configs->GetConfig('settings');
-
-        if( !$style_set )
-        {
-            $page->SetStyleSheet($settings['style-sheet'],_('Default Style'));
-        }
-
         $isadmin = CCUser::IsAdmin();
 
         /////////////////
@@ -529,13 +533,13 @@ class CCPage extends CCTemplate
         global $CC_GLOBALS;
         $files = array( $filename . '.php',
                         $filename );
-        return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccfiles', $real_path );
+        return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccskins/pages', $real_path );
     }
 
     function GetViewFilePath()
     {
         global $CC_GLOBALS;
-        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccfiles' );
+        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccskins/pages' );
     }
     
     /**

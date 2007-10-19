@@ -112,11 +112,10 @@ class CCHowIDidIt
         global $CC_GLOBALS;
         $args = $CC_GLOBALS;
         $args['root-url'] = ccd();
-        $args['auto_execute'] = array( 'howididit_detail' );
         $args['record'] = $record;
         $args['howididit_fields'] = $this->_get_fields();
         $args['howididit_info'] = $this->_get_data($record);
-        $template = new CCTemplate( $CC_GLOBALS['skin-map'] );
+        $template = new CCTemplateMacro( '', 'howididit_detail' );
         print( $template->SetAllAndParse($args) );
         exit;
     }

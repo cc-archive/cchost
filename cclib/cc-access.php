@@ -74,8 +74,7 @@ class CCAccessEditForm extends CCForm
     {
         $this->CCForm();
     
-        CCPage::AddLink('head_links', 'stylesheet', 'text/css', 
-            ccd('cctemplates/access.css'), 'Default Style');
+        CCPage::SetStyleSheet( 'access.css' );
         CCPage::PageArg('access_editor', 'access.xml/access_editor');
 
         $map = cc_get_url_map();

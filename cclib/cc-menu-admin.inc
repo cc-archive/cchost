@@ -99,7 +99,7 @@ class CCAdminMenuForm extends CCGridForm
         uasort($menu,'cc_sort_user_menu');
         uasort($groups,'cc_weight_sorter');
 
-        $heads = array( _('Menu Text'), _('Group'), _('Weight'), _('Action'), _('Access'), );
+        $heads = array( _('Menu Text'), _('Group'), _('Weight'), _('Action'), _('Id'), _('Access'), );
         $this->SetColumnHeader($heads);
 
         $group_select = array();
@@ -138,6 +138,11 @@ class CCAdminMenuForm extends CCGridForm
                     'formatter'  => 'textedit',
                     'flags'      => CCFF_REQUIRED ),
                   array(
+                    'element_name'  => "mi[$keyname][id]",
+                    'value'      => empty($menuitem['id']) ? $this->makeid($menuitem['menu_text']) : $menuitem['id'],
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED ),
+                  array(
                     'element_name'  => "mi[$keyname][access]",
                     'value'      => $menuitem['access'],
                     'formatter'  => 'select',
@@ -153,6 +158,11 @@ class CCAdminMenuForm extends CCGridForm
         }
 
         $this->SetSubmitText(_('Submit Menu Changes'));
+    }
+
+    function makeid($text) 
+    {
+        return 'mi_' . strtolower(preg_replace('/[^a-z0-9]+/i', '', $text));
     }
 }
 
@@ -266,6 +276,7 @@ class CCMenuAdmin
                 $copy[$name]['menu_group'] = CCUtil::StripText($edits['menu_group']);
                 $copy[$name]['weight']     = CCUtil::StripText($edits['weight']);
                 $copy[$name]['access']     = CCUtil::StripText($edits['access']) ;
+                $copy[$name]['id']         = CCUtil::StripText($edits['id']) ;
                 $copy[$name]['action']     = htmlspecialchars(urldecode($edits['action'])) ;
             }
 

@@ -1,0 +1,74 @@
+<?
+
+function _t_file_macros_license_rdf()
+{
+    global $_TV;
+
+}
+
+function _t_file_macros_show_zip_dir()
+{
+    global $_TV;
+
+    $R =& $_TV['record'];
+    foreach( $R['zipdirs'] as $zip )
+    {
+        print "<p class=\"zipdir_title\">{$GLOBALS['str_zip_title']}</p>\n" .
+              "<ul class=\"cc_zipdir\">\n";
+        foreach( $zip['dir']['files'] as $F )
+            print "<li>{$F}</li>\n";
+        print "</ul>\n";
+    }
+}
+
+function _t_file_macros_request_reviews()
+{
+    global $_TV;
+?>
+<div id="requested_reviews"></div>
+<script>
+//<!--
+url = '<?= $_TV['record']['comment_thread_url'] ?>' + q + 'ajax=1';
+new Ajax.Updater( 'requested_reviews', url, { method: 'get' } );
+//-->
+</script>
+<?
+}
+
+function _t_file_macros_print_recent_reviews()
+{
+    global $_TV;
+
+    print "<p class=\"recent_reviews\">{$GLOBALS['str_recent_reviews']}</p>\n" .
+          "<ul id=\"recent_reviews\">\n";
+    foreach( $_TV['posts'] as $post )
+    {
+        $text = CC_strchop($post['post_text'],50);
+        print "<li><span class=\"poster_name\">{$post['username']}</span> <a href=\"{$post['post_url']}\">{$text}</a></li>\n";
+    }
+    print "</ul>\n";
+    print "<a href=\"{$_TV['view_topic_url']}\">{$GLOBALS['str_read_all']}</a>\n";
+}
+
+function _t_file_macros_print_howididit_link()
+{
+    global $_TV;
+
+    print "<a href\"{$_TV['record']['howididit_link']['action']}\">{$_TV['record']['howididit_link']['text']}</a><br \>\n";
+}
+
+function _t_file_macros_upload_not_published()
+{
+    global $_TV;
+
+    print "<div class=\"unpublished\">{$_TV['record']['publish_message']}</div>";
+}
+
+function _t_file_macros_upload_banned() 
+{
+    global $_TV;
+
+    print "<div class=\"upload_banned\">{$_TV['record']['banned_message']}</div>";
+}
+
+?>

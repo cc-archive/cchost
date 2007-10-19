@@ -802,10 +802,10 @@ class CCTopic
             }
             else
             {
-                CCPage::AddScriptLink( ccd('cc_templates', 'dl_popup.js'), false );
+                //CCPage::AddScriptLink( ccd('cc_templates', 'dl_popup.js'), false );
             }
                 
-            CCPage::AddScriptLink( ccd('cctemplates', 'js', 'cc-topics.js'), false );
+            CCPage::AddScriptLink( 'js/cc-topics.js', false );
             $cname = 'skin-' . $CC_GLOBALS['skin'] . '-topics.css';
             $css_file = CCTemplate::GetTemplate($cname,false);
             CCPage::AddLink('head_links', 'stylesheet', 'text/css', 

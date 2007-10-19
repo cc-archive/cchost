@@ -366,6 +366,9 @@ class CCQuery
         if( !isset( $args['qstring']) )
             $args['qstring'] = $this->SerializeArgs($args);
 
+        global $CC_GLOBALS;
+        $CC_GLOBALS['qstring'] = $args['qstring'];
+
         $table =& $this->_get_query_table($args);
 
         if( empty($args['format']) )

@@ -276,9 +276,8 @@ class CCPublicize
         $args['htmlwarn'] = _('Make sure to copy from the box above, not what is showing below because the actual content of this HTML will change based on the upload activity. You can still get an idea of what of the formatting will look like here:');
 
         CCPage::SetTitle( $title );
-        $sites = CCPage::GetViewFile('sharesites.js',false);
-        CCPage::AddScriptLink( ccd($sites) );
-        CCPage::AddLink('head_links', 'stylesheet', 'text/css', ccd('cctemplates/publicize.css'), 'Default Style');
+        CCPage::AddScriptLink( 'sharesites.js' );
+        CCPage::SetStyleSheet('publicize.css');
         CCPage::PageArg('share', 'share.xml/share_popup' );
         CCPage::PageArg('publicize', 'publicize.xml/publicize');
         CCPage::PageArg('PUB', $args, 'share');

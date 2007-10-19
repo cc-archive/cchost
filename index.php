@@ -18,8 +18,9 @@
 *
 */
 
+$CC_GLOBALS   = array();
+$CC_CFG_ROOT  = '';
 $_TV = array();
-
 $cc_error_level = E_ALL;
 
 error_reporting($cc_error_level); 
@@ -58,6 +59,8 @@ if( file_exists('.cc-ban.txt') )
 */
 require_once('cclib/cc-debug.php');
 CCDebug::Enable(true);
+CCDebug::Chronometer($_t);
+
 /*
 * Logging errors to a file this will help ccHost developers
 * when things go wrong on your site
@@ -138,5 +141,7 @@ CCPage::Show();
 */
 CCDebug::InstallErrorHandler(false); 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
+
+print "<pre>Page time: " . CCDebug::Chronometer($_t) . " / skin: {$CC_GLOBALS['skin']}</pre>";
 
 ?>

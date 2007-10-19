@@ -125,7 +125,7 @@ CCEvents::AddHandler(CC_EVENT_APP_INIT,           array( 'CCPageAdmin', 'OnAppIn
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCPoolUI',  'OnMapUrls'), 'cclib/cc-pools-ui.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,     array( 'CCPoolUI',  'OnAdminMenu'), 'cclib/cc-pools-ui.php'  );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING, array( 'CCPoolUI',  'OnUploadListing'), 'cclib/cc-pools-ui.php' );
+CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING, array( 'CCPoolHV',  'OnUploadListing'), 'cclib/cc-pools-hv.php' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  array( 'CCPoolUI',  'OnUploadDelete'), 'cclib/cc-pools-ui.php' );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCQuery',  'OnMapUrls'), 'cclib/cc-query.php' );
@@ -138,7 +138,7 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCRating' , 'OnAdminMe
 CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCRatingsHV' , 'OnUserRow'), 'cclib/cc-ratings.inc'  );
 CCEvents::AddHandler(CC_EVENT_USER_DELETED,       array( 'CCRating' , 'OnUserDelete'), 'cclib/cc-ratings.php'  );
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING, array( 'CCRemix', 'OnUploadListing'), 'cclib/cc-remix.php' );
+CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING, array( 'CCRemixHV', 'OnUploadListing'), 'cclib/cc-remix-hv.php' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  array( 'CCRemix', 'OnUploadDelete'), 'cclib/cc-remix.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCRemix' ,'OnMapUrls'), 'cclib/cc-remix.php'  );
 

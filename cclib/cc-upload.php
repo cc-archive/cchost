@@ -101,24 +101,8 @@ class CCUpload
         if( strtolower($format) != 'page' )
             return;
 
-        if( !empty($cols) )
-        {
-            die("Can't specify 'cols' with page format");
-        }
-
         if( !empty($title) )
             CCPage::SetTitle($title);
-
-        if( !empty($tmacro) )
-        {
-            $dochop = isset($chop) && $chop > 0;
-            $chop   = isset($chop) ? $chop : 25;
-
-            CCPage::PageArg('chop',$chop);
-            CCPage::PageArg('dochop',$dochop);
-            CCPage::PageArg( '_query_macro', $tmacro );
-            $macro = '_query_macro';
-        }
 
         if( !empty($template_args) )
         {
@@ -126,12 +110,19 @@ class CCUpload
                 CCPage::PageArg($K,$V);
         }
 
-        $menu  = empty($nomenu);
-        $srcs  = empty($nosrc);
-        $macro = empty($macro) ? '' : $macro;
-
-        if( !empty($macro) && !empty($template) )
-            CCPage::PageArg($macro,$template . '/' . $macro);
+        $macro = !empty($macro) ? $macro : (!empty($tmacro) ? $tmacro : (!empty($template) ? $template : ''));
+        if( !empty($macro) )
+        {
+            $dochop = isset($chop) && $chop > 0;
+            $chop   = isset($chop) ? $chop : 25;
+            CCPage::PageArg('chop',$chop);
+            CCPage::PageArg('dochop',$dochop);
+            CCPage::PageArg( 'records', $records, $macro );
+            $uploads =& CCUploads::GetTable();
+            CCPage::AddPagingLinks($uploads,$last_where); // ??
+            $result = true;
+            return;
+        }
 
         // we don't know WHAT shape the global table is in but
         // we have the latest where used so we use that for
@@ -158,7 +149,10 @@ class CCUpload
 
         CCPage::AddPagingLinks($temp_up,$last_where);
 
-        $this->ListRecords($records, $macro, $menu, $srcs );
+        if( empty($macro) )
+            $macro = 'list_files';
+
+        CCPage::PageArg( 'file_records', $records, $macro);
 
         if( !empty($feed) )
         {
@@ -174,27 +168,12 @@ class CCUpload
     }
 
 
-    function ListRecords( &$records, $macro = '', $menu = true, $srcs = true )
+    function ListRecords( &$records, $macro = '')
     {
         if( empty($macro) )
             $macro = 'list_files';
 
-        $count = count($records);
-
-        for( $i = 0; $i < $count; $i++ )
-        {
-            if( $menu )
-                $records[$i]['local_menu'] = CCUpload::GetRecordLocalMenu($records[$i]);
-            if( $srcs )
-                CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, array(&$records[$i]));
-        }
-
         CCPage::PageArg( 'file_records', $records, $macro);
-
-        if( CCUser::IsAdmin() && !empty($_REQUEST['dump_rec']) )
-            CCDebug::PrintVar($records[0],false);
-
-        CCEvents::Invoke( CC_EVENT_LISTING_RECORDS, array( &$records ) );
     }
 
     function GetRecordLocalMenu(&$record)

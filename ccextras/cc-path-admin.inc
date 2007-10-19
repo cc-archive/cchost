@@ -37,9 +37,9 @@ class CCPathAdminForm extends CCEditConfigForm
         $wflag = '<span style="color:red">**</span>';
 
         $fields['files-root'] =
-               array( 'label'       => 'viewfile ' . _('Path'),
-                       'form_tip'   => _('ccHost will look here for files used with the "viewfile" command before it looks in ccfiles'),
-                       'value'      => 'ccfiles/',
+               array( 'label'       => 'docs ' . _('Path'),
+                       'form_tip'   => _('ccHost will look here for files used with the "docs" command before it looks in ccskins/pages'),
+                       'value'      => '',
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE  );
 
@@ -58,20 +58,21 @@ class CCPathAdminForm extends CCEditConfigForm
                        'flags'      => CCFF_POPULATE );
 
         $fields['php-tal-cache-dir'] =
-               array( 'label'       => $wflag . _('Cache Directory'),
-                       'form_tip'   => _('Used by the system to write cached page templates and other temporary files.'),
-                       'value'      => 'cclib/phptal/phptal_cache',
+               array( 'label'       => $wflag . _('Temp Directory'),
+                       'form_tip'   => _('Used by the system to write temporary files.'),
+                       'value'      => '',
                        'writable'   => true,
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
 
+/*
         $fields['php-tal-dir'] =
                array( 'label'       => _('PHPTal Libs Directory'),
                        'form_tip'   => _('It is a bad idea to change this.'),
                        'value'      => 'cclib/phptal/libs',
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
-
+*/
         $fields['extra-lib'] =
                array( 'label'       => _('Plugins Path'),
                        'form_tip'   => _('ccHost will look here for extra PHP modules after it looks in ccextras.'),

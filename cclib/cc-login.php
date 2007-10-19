@@ -307,6 +307,7 @@ class CCLogin
             'login'  => array( 
                              'menu_text'  => _('Log In'),
                              'access'  => CC_ONLY_NOT_LOGGED_IN,
+                             'id'     => 'menu_item_login',
                              'menu_group' => 'artist',
                              'weight' => 1,
                              'action' => ccp('login')

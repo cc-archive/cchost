@@ -434,9 +434,10 @@ class CCUtil
         return $hit;
     }
 
-    function _inner_search($target,$path,$real_path)
+    function _inner_search($target,$paths,$real_path)
     {
-        $paths = split(';',$path);
+        if( !is_array($paths) )
+            $paths = split(';',$paths);
 
         $files = array();
         foreach( $target as $T )

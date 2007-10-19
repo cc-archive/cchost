@@ -174,10 +174,6 @@ div.f { /* 'read more' link container */
   </td>
 </tr>
 </table>
-
-<link rel="stylesheet" type="text/css" href="${root-url}cctemplates/playlist.css" title="Default Style" />
-<script src="${root-url}cctemplates/js/playlist.js" ></script>
-<metal:block use-macro="playerembed.xml/eplayer" />
 <script>
   //<!--
   var tab_top = -41;

@@ -254,7 +254,7 @@ class CCMailer
         if (!empty($bcc)) 
             $headers .= "Bcc: $bcc\r\n";
 
-        return mail( $to, $subject, $message, $headers);
+        return @mail( $to, $subject, $message, $headers);
     }
 } 
 

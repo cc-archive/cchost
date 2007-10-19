@@ -29,9 +29,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-$CC_GLOBALS   = array();
-$CC_CFG_ROOT  = '';
-
 /**
 *  Wrapper for config table
 *
@@ -212,32 +209,12 @@ class CCConfigs extends CCTable
 
         $configs->SetCfgRoot( empty($A[0]) ? CC_GLOBAL_SCOPE : $A[0] );
 
-        $hvers = $CC_GLOBALS['cc-host-version'] ; 
-
-        $configs->_check_version( $hvers );
-
         $CC_GLOBALS['home-url'] = ccl();
 
         $settings = $configs->GetConfig('settings');
-
-        // this variable is horribly name (by me, duh) I can't find 
-        // anywhere that it's used but I'll keep it here in case 
-        // 3rd parties have come to rely on it.
-        // e.g. cctemplates/skin-simple.css
-        $CC_GLOBALS['skin-name']  = $settings['style-sheet'];
-
-        $css = $settings['style-sheet'];
-        $skin  = preg_replace('/.*skin-(.*)\.css/', '\1', $css);
-        $troot = preg_replace('/(.*)skin-.*\.css/', '\1', $css);
-        $CC_GLOBALS['skin']       = $skin;
-        $CC_GLOBALS['skin-map']   = $troot . 'skin-' . $skin . '-map.xml';
-        $CC_GLOBALS['skin-page']  = $troot . 'skin-' . $skin . '.xml';
-
-        // 
-        // Notify third party integrations about our pretty url policy
-        // so when they build urls they know the proper format
-        //
-        cc_setcookie('cc_purls', "'" . $CC_GLOBALS['pretty-urls'] . "'" ,null);
+        $CC_GLOBALS['skin']      = $settings['skin'];
+        $CC_GLOBALS['skin-file'] = $settings['skin-file'];
+        $CC_GLOBALS['skin-map']  = preg_replace( '/(skin-[^\.]+)(\.xml)?\.php/', '$1-map$2.php', $CC_GLOBALS['skin-file'] );
 
         // allow admins to turn off user interface
         //
