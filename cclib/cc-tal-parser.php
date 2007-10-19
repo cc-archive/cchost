@@ -8,7 +8,8 @@ error_reporting(E_ALL);
 
 require_once('cclib/htmlparser/htmlparser.inc');
 
-define( "TC_PRETTY", 1 );
+if( !defined( 'TC_PRETTY' ) )
+    define( "TC_PRETTY", 1 );
 
 if( TC_PRETTY )
     define( "TCR_LF", "\n" ); 
@@ -335,7 +336,15 @@ class CCTALCompiler
         $OUT = '';
         $this->inPHP = false;
         $this->php_bracket(true,$OUT);
-        $OUT .= 'global $_TV;' . "\n";
+        $OUT .=<<<EOF
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+
+global \$_TV;
+
+_template_compat_required();
+
+EOF;
 
         // catch
         // <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
