@@ -1,10 +1,9 @@
 <?
-global $_TV;
 
 
 //------------------------------------- 
-function _t_collab_show_collabs() {
-   global $_TV;
+function _t_collab_show_collabs($T,&$A) {
+   
 
 ?><link  rel="stylesheet" type="text/css" href="<?= $_TV['root-url']?>cctemplates/playlist.css" title="Default Style"></link>
 <style >
@@ -106,8 +105,8 @@ if ( !empty($_TV['item']['fplay_url'])) {
 
 
 //------------------------------------- 
-function _t_collab_show_collab() {
-   global $_TV;
+function _t_collab_show_collab($T,&$A) {
+   
 
 ?><div  id="collab_ajax_msg"></div>
 <?
@@ -258,8 +257,8 @@ for( $ci106= 0; $ci106< $cc106; ++$ci106)
 
 
 //------------------------------------- 
-function _t_collab_show_collab_files() {
-   global $_TV;
+function _t_collab_show_collab_files($T,&$A) {
+   
 
 $carr107 = $_TV['uploads'];
 $cc107= count( $carr107);

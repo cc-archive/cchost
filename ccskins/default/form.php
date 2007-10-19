@@ -1,10 +1,10 @@
 <?
-global $_TV;
+
 
 
 //------------------------------------- 
-function _t_form_grow_textarea_script() {
-   global $_TV;
+function _t_form_grow_textarea_script($T,&$_TV) {
+   
 
 ?><script  type="text/javascript" src="<?= $_TV['root-url']?>js/upload_form.js"></script>
 <?
@@ -12,8 +12,8 @@ function _t_form_grow_textarea_script() {
 
 
 //------------------------------------- 
-function _t_form_hide_form_on_submit_script() {
-   global $_TV;
+function _t_form_hide_form_on_submit_script($T,&$_TV) {
+   
 
 ?><script  type="text/javascript" src="<?= $_TV['root-url']?>js/upload_form.js"></script>
 <?
@@ -21,8 +21,8 @@ function _t_form_hide_form_on_submit_script() {
 
 
 //------------------------------------- 
-function _t_form_html_form() {
-   global $_TV;
+function _t_form_html_form($T,&$_TV) {
+   
 
 if ( isset($_TV['form_hide_msg']) ) {
 
@@ -64,16 +64,16 @@ for( $ci102= 0; $ci102< $cc102; ++$ci102)
 { 
    $_TV['macro_name'] = $carr102[ $ck102[ $ci102 ] ];
    $_TV['tname'] = $_TV['macro_name'];
-_template_call_template($_TV['tname']);
+$T->Call($_TV['tname']);
 } // END: for loop
 } // END: if
 
 if ( !empty($_TV['html_form_grid_columns'])) {
-_template_call_template('form.xml/grid_form_fields');
+$T->Call('form.xml/grid_form_fields');
 } // END: if
 
 if ( !empty($_TV['html_form_fields'])) {
-_template_call_template('form.xml/form_fields');
+$T->Call('form.xml/form_fields');
 } // END: if
 
 if ( !empty($_TV['submit_text'])) {
@@ -137,8 +137,8 @@ if ( isset($_TV['html_add_row_caption']) ) {
 
 
 //------------------------------------- 
-function _t_form_form_fields() {
-   global $_TV;
+function _t_form_form_fields($T,&$_TV) {
+   
 
     print "<table  class=\"cc_form_table\">\n";
 
@@ -166,7 +166,7 @@ function _t_form_form_fields() {
 
         if ( !empty($_TV['field']['macro'])) {
             $_TV['tname'] = $_TV['field']['macro'];
-            _template_call_template($_TV['tname']);
+            $T->Call($_TV['tname']);
         } // END: if
 
         ?><?= $_TV['field']['form_element']?></td><?
@@ -187,8 +187,8 @@ function _t_form_form_fields() {
 
 
 //------------------------------------- 
-function _t_form_grid_form_fields() {
-   global $_TV;
+function _t_form_grid_form_fields($T,&$_TV) {
+   
 
 ?><table  class="cc_grid_form_table" id="table_<?= $_TV['form_id']?>">
 <tr  class="cc_grid_form_header_row">
@@ -245,8 +245,8 @@ for( $ci108= 0; $ci108< $cc108; ++$ci108)
 
 
 //------------------------------------- 
-function _t_form_submit_forms() {
-   global $_TV;
+function _t_form_submit_forms($T,&$_TV) {
+   
 
 ?><div  class="cc_submit_forms_outer">
 <?
@@ -291,8 +291,8 @@ if ( !empty($_TV['submit_info']['quota_reached'])) {
 
 
 //------------------------------------- 
-function _t_form_show_form_about() {
-   global $_TV;
+function _t_form_show_form_about($T,&$_TV) {
+   
 
 $carr110 = $_TV['form_about'];
 $cc110= count( $carr110);

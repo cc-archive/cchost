@@ -1,9 +1,7 @@
 <?
 
-function _t_admin_print_admin_menu()
+function _t_admin_print_admin_menu($T,&$_TV)
 {
-    global $_TV;
-
     $menu = $_TV['admin_menu'];
 
     if( empty($menu['do_local']) )
@@ -26,7 +24,7 @@ function _t_admin_print_admin_menu()
         $_TV['end_script_blocks'][] = 'admin.php/print_admin_menu_hook';
     }
 
-    _template_call_template('print_client_menu');
+    $T->Call('print_client_menu');
 }
 
 function _t_admin_print_admin_menu_hook()

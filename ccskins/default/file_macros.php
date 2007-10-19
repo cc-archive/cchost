@@ -1,14 +1,14 @@
 <?
 
-function _t_file_macros_license_rdf()
+function _t_file_macros_license_rdf($T,&$A)
 {
-    global $_TV;
+    
 
 }
 
-function _t_file_macros_show_zip_dir()
+function _t_file_macros_show_zip_dir($T,&$A)
 {
-    global $_TV;
+    
 
     $R =& $_TV['record'];
     foreach( $R['zipdirs'] as $zip )
@@ -21,9 +21,9 @@ function _t_file_macros_show_zip_dir()
     }
 }
 
-function _t_file_macros_request_reviews()
+function _t_file_macros_request_reviews($T,&$A)
 {
-    global $_TV;
+    
 ?>
 <div id="requested_reviews"></div>
 <script>
@@ -35,9 +35,9 @@ new Ajax.Updater( 'requested_reviews', url, { method: 'get' } );
 <?
 }
 
-function _t_file_macros_print_recent_reviews()
+function _t_file_macros_print_recent_reviews($T,&$A)
 {
-    global $_TV;
+    
 
     print "<p class=\"recent_reviews\">{$GLOBALS['str_recent_reviews']}</p>\n" .
           "<ul id=\"recent_reviews\">\n";
@@ -50,23 +50,23 @@ function _t_file_macros_print_recent_reviews()
     print "<a href=\"{$_TV['view_topic_url']}\">{$GLOBALS['str_read_all']}</a>\n";
 }
 
-function _t_file_macros_print_howididit_link()
+function _t_file_macros_print_howididit_link($T,&$A)
 {
-    global $_TV;
+    
 
     print "<a href\"{$_TV['record']['howididit_link']['action']}\">{$_TV['record']['howididit_link']['text']}</a><br \>\n";
 }
 
-function _t_file_macros_upload_not_published()
+function _t_file_macros_upload_not_published($T,&$A)
 {
-    global $_TV;
+    
 
     print "<div class=\"unpublished\">{$_TV['record']['publish_message']}</div>";
 }
 
-function _t_file_macros_upload_banned() 
+function _t_file_macros_upload_banned($T,&$A) 
 {
-    global $_TV;
+    
 
     print "<div class=\"upload_banned\">{$_TV['record']['banned_message']}</div>";
 }

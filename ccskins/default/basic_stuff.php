@@ -1,18 +1,16 @@
 <?
 
-global $_TV;
-
-function _t_basic_stuff_print_prompts()
+function _t_basic_stuff_print_prompts($T,&$_TV)
 {
-    global $_TV;
+    
 
     foreach( $_TV['prompts'] as $prompt )
         ?><div class="cc_<?= $prompt['name'] ?>"><?= $prompt['value'] ?></div><?
 }
 
-function _t_basic_stuff_print_bread_crumbs()
+function _t_basic_stuff_print_bread_crumbs($T,&$_TV)
 {
-   global $_TV;
+   
 
     ?><div  class="cc_breadcrumbs">
     <?
@@ -67,9 +65,9 @@ function _t_basic_stuff_print_bread_crumbs()
 } // END: function show_bread_crumbs
 
 
-function _t_basic_stuff_print_client_menu()
+function _t_basic_stuff_print_client_menu($T,&$_TV)
 {
-    global $_TV;
+    
 
     $items = $_TV['client_menu'];
     $count = count($items);
@@ -91,9 +89,9 @@ function _t_basic_stuff_print_client_menu()
         print "<div class=\"client_menu_hint\">{$_TV['client_menu_hint']}</div>\n";
 }
 
-function _t_basic_stuff_prev_next_links() 
+function _t_basic_stuff_prev_next_links($T,&$_TV) 
 {
-    global $_TV;
+    
 
     print '<table  id="cc_prev_next_links"><tr >';
 

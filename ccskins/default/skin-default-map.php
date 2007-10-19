@@ -1,7 +1,7 @@
 <?
 
-global $_TV;
-
+function _t_skin_default_map_init($T,&$_TV)
+{
 $_TV['html_head']               = 'page.php/html_head';
 $_TV['main_body']               = 'page.php/main_body';
 $_TV['print_head_links']        = 'page.php/print_head_links';
@@ -11,7 +11,7 @@ $_TV['print_sub_nav_tabs']      = 'page.php/print_sub_nav_tabs';
 $_TV['print_end_script_blocks'] = 'page.php/print_end_script_blocks';
 $_TV['print_footer']            = 'page.php/print_footer';
 
-$_TV['print_menu']         = 'menu.php';
+$_TV['print_menu']         = 'menu.tpl';
 
 $_TV['list_files']         = 'formats/upload_list.xml';
 $_TV['list_file']          = 'formats/upload_page.xml';
@@ -85,5 +85,5 @@ $GLOBALS['str_video']          = _('Video');
 $GLOBALS['str_web_blog']       = _('Web / Blog / MySpace');
 $GLOBALS['str_zip_title']      = _('Contents of ZIP Archive');
 
-
+}
 ?>

@@ -1,10 +1,10 @@
 <?
-global $_TV;
+
 
 
 //------------------------------------- 
-function _t_playerembed_eplayer() {
-   global $_TV;
+function _t_playerembed_eplayer($T,&$A) {
+   
 
 ?><link  href="<?= $_TV['root-url']?>cctemplates/playerembed.css" rel="stylesheet" type="text/css" title="Default Style"></link>
 <?

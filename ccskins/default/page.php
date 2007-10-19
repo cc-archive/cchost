@@ -1,10 +1,10 @@
 <?
 
-global $_TV;
 
-function _t_page_html_head()
+
+function _t_page_html_head($T,&$_TV)
 {
-    global $_TV;
+    
 
     if( !empty($_TV['ajax']) )
         return;
@@ -39,21 +39,21 @@ EOF;
 
     print $HTML;
 
-    _template_call_template('print_head_links');
+    $T->Call('print_head_links');
 
     print "\n</head>\n";
 }
 
 
-function _t_page_print_head_links()
+function _t_page_print_head_links($T,&$_TV)
 {
-    global $_TV;
+    
 
     if( !empty($_TV['style_sheets']) )
     {
         foreach( $_TV['style_sheets'] as $css )
         {
-            $path = _template_search($css);
+            $path = $T->Search($css);
             if( empty($path) ) die( "Can't find stylesheet '$css'" );
             $path = ccd($path);
             print "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$path}\" title=\"Default Style\" />\n";
@@ -64,7 +64,7 @@ function _t_page_print_head_links()
     {
         foreach( $_TV['script_links'] as $script_link )
         {
-            $path = _template_search($script_link);
+            $path = $T->Search($script_link);
             if( empty($path) ) die( "Can't find script '$script_link'" );
             $path = ccd($path);
             print "<script type=\"text/javascript\" src=\"${path}\" ></script>\n";
@@ -74,7 +74,7 @@ function _t_page_print_head_links()
     if( !empty($_TV['script_blocks']) )
     {
         foreach( $_TV['script_blocks'] as $script_block )
-            _template_call_template($script_block);
+            $T->Call($script_block);
     }
 
     if( !empty($_TV['head_links']) )
@@ -83,15 +83,15 @@ function _t_page_print_head_links()
 
 }
 
-function _t_page_print_banner()
+function _t_page_print_banner($T,&$_TV)
 {
-    global $_TV;
+    
 
     print('<div id="banner">' . "\n");
 
     if( !empty($_TV['sticky_search']) )
     {
-        $path = ccd(_template_search('images/find.png'));
+        $path = ccd($T->Search('images/find.png'));
         print "<div id=\"banner_search\"><a id=\"search_site_link\" href=\"{$_TV['advanced_search_url']}\">" .
               "<img src=\"{$path}\" />" .
               "<h3>{$GLOBALS['str_find']}</h3>{$GLOBALS['str_findcontent']}</a></div>";
@@ -119,23 +119,23 @@ EOF;
         print "<div id=\"site_description\">{$_TV['site-description']}</div>";
 
     if( !empty($_TV['tab_info']) )
-        _template_call_template('print_tabs');
+        $T->Call('print_tabs');
 
     print("</div><!-- banner -->\n");
 }
 
-function _t_page_print_tabs()
+function _t_page_print_tabs($T,&$_TV)
 {
-    global $_TV;
+    
 
     $tabs = $_TV['tab_info']['tabs'];
     page_inner_print_tabs($tabs,'tabs');
 }
 
 
-function _t_page_print_sub_nav_tabs()
+function _t_page_print_sub_nav_tabs($T,&$_TV)
 {
-    global $_TV;
+    
 
     $tabs = $_TV['sub_nav_tabs']['tabs'];
     page_inner_print_tabs($tabs,'sub_tabs');
@@ -143,7 +143,7 @@ function _t_page_print_sub_nav_tabs()
 
 function page_inner_print_tabs($tabs,$id)
 {
-    global $_TV;
+    
 
     print "<ul id=\"{$id}\" >\n";
     foreach( $tabs as $tab )
@@ -154,9 +154,9 @@ function page_inner_print_tabs($tabs,$id)
     print '</ul>';
 }
 
-function _t_page_main_body()
+function _t_page_main_body($T,&$_TV)
 {
-    global $_TV;
+    
 
     if( !empty($_TV['show_body_header']) && empty($_TV['ajax']) )
     {
@@ -170,8 +170,8 @@ function _t_page_main_body()
 
 EOF;
 
-        _template_call_template('print_banner');
-        _template_call_template('print_menu');
+        $T->Call('print_banner');
+        $T->Call('print_menu');
 
         print("<div id=\"main_content\">\n");
 
@@ -180,21 +180,21 @@ EOF;
 
 
     if( !empty($_TV['bread_crumbs'] ) )
-        _template_call_template('print_bread_crumbs');
+        $T->Call('print_bread_crumbs');
 
     if( !empty($_TV['sub_nav_tabs'] ) )
-        _template_call_template('print_sub_nav_tabs');
+        $T->Call('print_sub_nav_tabs');
 
     if( !empty($_TV['page-title'] ) )
         print "<h1 class=\"title\">{$_TV['page-title']}</h1>\n";
 
     if( !empty($_TV['macro_names'] ) ) 
         foreach( $_TV['macro_names'] as $macro )
-            _template_call_template($macro);
+            $T->Call($macro);
 
     if( !empty($_TV['inc_names'] ) ) 
         foreach( $_TV['inc_names'] as $inc_name )
-            _template_call_template($inc_name);
+            $T->Call($inc_name);
 
     if( empty($_TV['ajax']) )
     {
@@ -202,8 +202,8 @@ EOF;
 
         if( !empty($_TV['show_body_footer']) )
         {
-            _template_call_template('print_footer');
-            _template_call_template('print_end_script_blocks');
+            $T->Call('print_footer');
+            $T->Call('print_end_script_blocks');
         }
 
         print "\n</body>\n</html>\n";
@@ -211,9 +211,9 @@ EOF;
 
 }
 
-function _t_page_print_end_script_blocks() 
+function _t_page_print_end_script_blocks($T,&$_TV) 
 {
-    global $_TV;
+    
 
     if ( !empty($_TV['end_script_blocks'])) 
     {
@@ -221,7 +221,7 @@ function _t_page_print_end_script_blocks()
         $cc111= count( $carr111);
         $ck111= array_keys( $carr111);
         for( $ci111= 0; $ci111< $cc111; ++$ci111)
-            _template_call_template($carr111[ $ck111[ $ci111 ] ]);
+            $T->Call($carr111[ $ck111[ $ci111 ] ]);
     } 
 
     if ( !empty($_TV['end_script_links'])) 
@@ -241,9 +241,9 @@ function _t_page_print_end_script_blocks()
 } // END: function show_end_script_blocks
 
 
-function _t_page_print_footer() 
+function _t_page_print_footer($T,&$_TV) 
 {
-    global $_TV;
+    
 
     print "\n<div id=\"footer\">\n<div id=\"license\">{$_TV['site-license']}</div>\n{$_TV['footer']}</div>\n";
 }
