@@ -1,10 +1,9 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global $_TV;
-
-_template_compat_required();
-?><div >
+function _t_dev_notes_init($T,&$targs) {
+    $T->CompatRequired();
+}?><div >
 
 <p >This page has been decommissioned. Developer documentation can be found 
 directly at <a  href="http://mirrors.creativecommons.org/cchost/docs/">http://mirrors.creativecommons.org/cchost/docs</a>

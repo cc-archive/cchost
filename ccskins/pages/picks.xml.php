@@ -1,12 +1,11 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global $_TV;
+function _t_picks_init($T,&$targs) {
+    $T->CompatRequired();
+}?><div >
 
-_template_compat_required();
-?><div >
-
-<?$_TV['_by'] = _('by');$_TV['pod_title'] = _('Podcast');$_TV['stream_title'] = _('Stream');$_TV['play_title'] = _('Play');?><script >
+<?$A['_by'] = _('by');$A['pod_title'] = _('Podcast');$A['stream_title'] = _('Stream');$A['play_title'] = _('Play');?><script >
 function pickwinplay(qstring)
 {
   var url = home_url + 'playlist/popup' + q + qstring;
@@ -16,32 +15,31 @@ function pickwinplay(qstring)
 }
 </script>
 <?
-function _t_picks_picks() {
-   global $_TV;
-?><h3 ><?= $_TV['pick_title']?></h3>
-<?$_TV['chart'] = cc_query_fmt($_TV['qstring']);if ( !empty($_TV['chart'])) {?><table  cellspacing="0" cellpadding="0" id="edpick_stream_links">
+function _t_picks_picks($T,&$A) {
+  ?><h3 ><?= $A['pick_title']?></h3>
+<?$A['chart'] = cc_query_fmt($A['qstring']);if ( !empty($A['chart'])) {?><table  cellspacing="0" cellpadding="0" id="edpick_stream_links">
 <tr >
 <td >
-<div  class="cc_podcast_link"><a  href="<?= $_TV['home-url']?>podcast/page?<?= $_TV['qstring']?>"><span ><?= $_TV['pod_title']?></span></a></div>
+<div  class="cc_podcast_link"><a  href="<?= $A['home-url']?>podcast/page?<?= $A['qstring']?>"><span ><?= $A['pod_title']?></span></a></div>
 </td>
 <td >
 <div  class="cc_stream_page_link">
-<a  href="<?= $_TV['home-url']?>stream/page/playlist.m3u?<?= $_TV['qstring']?>"><span ><?= $_TV['stream_title']?></span></a></div>
+<a  href="<?= $A['home-url']?>stream/page/playlist.m3u?<?= $A['qstring']?>"><span ><?= $A['stream_title']?></span></a></div>
 </td>
-<?if ( !empty($_TV['enable_playlists'])) {?><td >
+<?if ( !empty($A['enable_playlists'])) {?><td >
 <div  class="cc_stream_page_link">
-<a  href="javascript://play win" onclick="pickwinplay(<?= $_TV['qstring']?>);"><span ><?= $_TV['play_title']?></span></a></div>
+<a  href="javascript://play win" onclick="pickwinplay(<?= $A['qstring']?>);"><span ><?= $A['play_title']?></span></a></div>
 </td><?}?></tr>
 </table>
-<?$carr101 = $_TV['chart'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $_TV['item'] = $carr101[ $ck101[ $ci101 ] ];   ?><div ><a  href="<?= $_TV['item']['file_page_url']?>" class="cc_file_link"><?= $_TV['item']['upload_name']?></a>
+<?$carr101 = $A['chart'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $A['item'] = $carr101[ $ck101[ $ci101 ] ];   ?><div ><a  href="<?= $A['item']['file_page_url']?>" class="cc_file_link"><?= $A['item']['upload_name']?></a>
 <br  />
-<span ><?= $_TV['_by']?>
-<a  href="<?= $_TV['item']['artist_page_url']?>"><?= $_TV['item']['user_real_name']?></a></span>
-<?if ( !empty($_TV['ed_pick'])) {$carr102 = $_TV['item']['upload_extra']['edpicks'];$cc102= count( $carr102);$ck102= array_keys( $carr102);for( $ci102= 0; $ci102< $cc102; ++$ci102){    $_TV['editorial'] = $carr102[ $ck102[ $ci102 ] ];   ?><p >
+<span ><?= $A['_by']?>
+<a  href="<?= $A['item']['artist_page_url']?>"><?= $A['item']['user_real_name']?></a></span>
+<?if ( !empty($A['ed_pick'])) {$carr102 = $A['item']['upload_extra']['edpicks'];$cc102= count( $carr102);$ck102= array_keys( $carr102);for( $ci102= 0; $ci102< $cc102; ++$ci102){    $A['editorial'] = $carr102[ $ck102[ $ci102 ] ];   ?><p >
 <i >
-<?= CC_strchop($_TV['editorial']['review_text'],40)?>
-<a  href="<?= $_TV['editorial']['review_url']?>">(more) </a></i>
-</p><?}}?></div><?}}if ( !($_TV['chart']) ) {?><div >No chart</div><?}}?><h1 ><?= _('Editors\' Picks and Hot Tracks');?></h1>
+<?= CC_strchop($A['editorial']['review_text'],40)?>
+<a  href="<?= $A['editorial']['review_url']?>">(more) </a></i>
+</p><?}}?></div><?}}if ( !($A['chart']) ) {?><div >No chart</div><?}}?><h1 ><?= _('Editors\' Picks and Hot Tracks');?></h1>
 <style >
 .pickspage td
 {
@@ -102,25 +100,25 @@ function _t_picks_picks() {
 }
 
 .pickspage .cc_podcast_link {
-   background: url('<?= $_TV['site-root']?>cctemplates/ccmixter/mixter-button-o-small.gif') no-repeat;
+   background: url('<?= $A['site-root']?>cctemplates/ccmixter/mixter-button-o-small.gif') no-repeat;
 }
 .pickspage .cc_stream_page_link {
-   background: url('<?= $_TV['site-root']?>cctemplates/ccmixter/mixter-button-b-small.gif') no-repeat;
+   background: url('<?= $A['site-root']?>cctemplates/ccmixter/mixter-button-b-small.gif') no-repeat;
 }
 
 </style>
 <table  class="pickspage">
 <tr >
 <td  rowspan="2" style="padding-right: 25px;">
-<?$_TV['ed_pick'] = 1;$_TV['pick_title'] = _('Editors\' Picks');$_TV['qstring'] = 'tags=editorial_pick&sort=date&dir=DESC&limit=22';_template_call_template('picks.xml/picks');
+<?$A['ed_pick'] = 1;$A['pick_title'] = _('Editors\' Picks');$A['qstring'] = 'tags=editorial_pick&sort=date&dir=DESC&limit=22';$T->Call('picks.xml/picks');
 ?></td>
 <td >
-<?$_TV['settings'] = CC_get_config('chart');$_TV['pick_title'] = _('What\'s Hot Right Now');$_TV['ed_pick'] = 0;$_TV['qstring'] = 'tags=remix,-digital_distortion&sort=num_scores&dir=DESC&sinced=' . $_TV['settings']['cut-off'] . '&limit=12';_template_call_template('picks.xml/picks');
+<?$A['settings'] = CC_get_config('chart');$A['pick_title'] = _('What\'s Hot Right Now');$A['ed_pick'] = 0;$A['qstring'] = 'tags=remix,-digital_distortion&sort=num_scores&dir=DESC&sinced=' . $A['settings']['cut-off'] . '&limit=12';$T->Call('picks.xml/picks');
 ?></td>
 </tr>
 <tr >
 <td >
-<?$_TV['pick_title'] = _('All Time Hot List');$_TV['ed_pick'] = 0;$_TV['qstring'] = 'tags=remix&sort=num_scores&dir=DESC&limit=10';_template_call_template('picks.xml/picks');
+<?$A['pick_title'] = _('All Time Hot List');$A['ed_pick'] = 0;$A['qstring'] = 'tags=remix&sort=num_scores&dir=DESC&limit=10';$T->Call('picks.xml/picks');
 ?></td>
 </tr>
 </table>

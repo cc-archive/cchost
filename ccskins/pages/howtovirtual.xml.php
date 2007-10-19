@@ -1,10 +1,9 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global $_TV;
-
-_template_compat_required();
-?><div >
+function _t_howtovirtual_init($T,&$targs) {
+    $T->CompatRequired();
+}?><div >
 
 <style >
 li { margin-bottom: 7px; }
@@ -29,11 +28,11 @@ hoops.
 </p>
 <h2 >Creating a Virtual Personal Media Weblog</h2>
 
-Use <a  href="<?= $_TV['home-url']?>admin/cfgroot">this form</a> to create a new virtual root.
+Use <a  href="<?= $A['home-url']?>admin/cfgroot">this form</a> to create a new virtual root.
 
 <p >After naming the virtual root you can then use that name in the URL address to access it. For example, 
 let's say you name your new root '<b >myroot</b>', to access that root simply tack it on to the domain and directory 
-you installed ccHost into: <b ><?= $_TV['root-url']?>myroot</b>.</p>
+you installed ccHost into: <b ><?= $A['root-url']?>myroot</b>.</p>
 <p >Most of the configuration settings you make will only be applied to your
 new virtual site, so each site can have it's own skin, menus, it's own admins, page
 content, navigation tabs, rules for file naming, MP3/ID3 tagging, etc.</p>
@@ -74,8 +73,8 @@ And whatever else you can think of.
 [note: If you are running on Apache and have mod_rewrite
 enabled then you can use 'pretty urls' as they are in
 the above examples. Otherwise, you'll need to put '?ccm=/' 
-into every address (e.g. Every time you see "<?= $_TV['root-url']?>" you
-need to substitute with "<?= $_TV['root-url']?><b >?ccm=/</b>"). ]
+into every address (e.g. Every time you see "<?= $A['root-url']?>" you
+need to substitute with "<?= $A['root-url']?><b >?ccm=/</b>"). ]
 </p>
 </div>
 </div>

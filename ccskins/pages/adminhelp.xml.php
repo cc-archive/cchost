@@ -1,10 +1,9 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global $_TV;
-
-_template_compat_required();
-?><div >
+function _t_adminhelp_init($T,&$targs) {
+    $T->CompatRequired();
+}?><div >
 
 <div  id="adminhelp">
 <a  name="navhelp"></a>

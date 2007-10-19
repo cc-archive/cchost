@@ -1,10 +1,9 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global $_TV;
-
-_template_compat_required();
-?><style >
+function _t_channels_init($T,&$targs) {
+    $T->CompatRequired();
+}?><style >
 .cvalue {
   display:none;
 }
@@ -32,13 +31,13 @@ _template_compat_required();
 <tr ><td  id="cell1">
 <div  id="channel_intro">
 <h3 ><?= _('Create Your Own Remix Radio Station');?></h3>
-<p ><?= sprintf(_('Create your own stream or podcast from a random pool of remixes in %s by selecting a style and other choices.'),$_TV['site-title']) ;?></p>
+<p ><?= sprintf(_('Create your own stream or podcast from a random pool of remixes in %s by selecting a style and other choices.'),$A['site-title']) ;?></p>
 </div>
 </td></tr>
 <tr ><td  id="cell2">
-<?$_TV['channels'] = CC_get_config('channels');?><table  id="channels" cellspacing="0" cellpadding="0">
-<?$_TV['channel_rows'] = array_chunk($_TV['channels'],5);$carr101 = $_TV['channel_rows'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $_TV['R'] = $carr101[ $ck101[ $ci101 ] ];   ?><tr >
-<?$carr102 = $_TV['R'];$cc102= count( $carr102);$ck102= array_keys( $carr102);for( $ci102= 0; $ci102< $cc102; ++$ci102){    $_TV['C'] = $carr102[ $ck102[ $ci102 ] ];   $_TV['T'] = str_replace(',','+',$_TV['C']['tags']);$_TV['K'] = 'tags' . $ck102[$ci102] . $ck102[$ci102];?><td ><div  id="<?= $_TV['K']?>" class="cbutton"><?= $_TV['C']['text']?><span  id="cvalue_<?= $_TV['K']?>" class="cvalue"><?= $_TV['T']?></span></div></td>
+<?$A['channels'] = CC_get_config('channels');?><table  id="channels" cellspacing="0" cellpadding="0">
+<?$A['channel_rows'] = array_chunk($A['channels'],5);$carr101 = $A['channel_rows'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $A['R'] = $carr101[ $ck101[ $ci101 ] ];   ?><tr >
+<?$carr102 = $A['R'];$cc102= count( $carr102);$ck102= array_keys( $carr102);for( $ci102= 0; $ci102< $cc102; ++$ci102){    $A['C'] = $carr102[ $ck102[ $ci102 ] ];   $A['T'] = str_replace(',','+',$A['C']['tags']);$A['K'] = 'tags' . $ck102[$ci102] . $ck102[$ci102];?><td ><div  id="<?= $A['K']?>" class="cbutton"><?= $A['C']['text']?><span  id="cvalue_<?= $A['K']?>" class="cvalue"><?= $A['T']?></span></div></td>
 <?}?></tr>
 <?}?></table>
 </td></tr>
@@ -58,13 +57,13 @@ _template_compat_required();
 </td>
 <td >
 <span  class="opt_label"><?= _('Since:')?></span>
-<?$_TV['oneday'] = strtotime('1 day ago');$_TV['oneweek'] = strtotime('1 week ago');$_TV['twoweeks'] = strtotime('2 weeks ago');$_TV['onemonth'] = strtotime('1 month ago');$_TV['threemonths'] = strtotime('3 months ago');$_TV['oneyear'] = strtotime('1 year ago');?><select  id="sinceu" name="sinceu">
-<option  value="<?= $_TV['oneday']?>"><?= _('Yesterday');?></option>
-<option  value="<?= $_TV['oneweek']?>"><?= _('Last week');?></option>
-<option  value="<?= $_TV['twoweeks']?>"><?= _('2 weeks ago');?></option>
-<option  value="<?= $_TV['onemonth']?>"><?= _('Last month');?></option>
-<option  value="<?= $_TV['threemonths']?>" selected="selected"><?= _('3 months ago');?></option>
-<option  value="<?= $_TV['oneyear']?>"><?= _('Last year');?></option>
+<?$A['oneday'] = strtotime('1 day ago');$A['oneweek'] = strtotime('1 week ago');$A['twoweeks'] = strtotime('2 weeks ago');$A['onemonth'] = strtotime('1 month ago');$A['threemonths'] = strtotime('3 months ago');$A['oneyear'] = strtotime('1 year ago');?><select  id="sinceu" name="sinceu">
+<option  value="<?= $A['oneday']?>"><?= _('Yesterday');?></option>
+<option  value="<?= $A['oneweek']?>"><?= _('Last week');?></option>
+<option  value="<?= $A['twoweeks']?>"><?= _('2 weeks ago');?></option>
+<option  value="<?= $A['onemonth']?>"><?= _('Last month');?></option>
+<option  value="<?= $A['threemonths']?>" selected="selected"><?= _('3 months ago');?></option>
+<option  value="<?= $A['oneyear']?>"><?= _('Last year');?></option>
 <option  value="0"><?= _('all time');?></option>
 </select>
 </td>
@@ -100,7 +99,7 @@ _template_compat_required();
 </table>
 </form>
 <script >
-baseCmd = '<?= $_TV['home-url']?>api/query';
-sitePromoTag = '<?if ( isset($_TV['site_promo_tag']) ) {?><?= $_TV['site_promo_tag']?><?}?>';
+baseCmd = '<?= $A['home-url']?>api/query';
+sitePromoTag = '<?if ( isset($A['site_promo_tag']) ) {?><?= $A['site_promo_tag']?><?}?>';
 </script>
-<script  src="<?= $_TV['root-url']?>cctemplates/js/radio.js"></script>
+<script  src="<?= $A['root-url']?>cctemplates/js/radio.js"></script>

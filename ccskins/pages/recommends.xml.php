@@ -1,13 +1,12 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global $_TV;
-
-_template_compat_required();
-?><div >
+function _t_recommends_init($T,&$targs) {
+    $T->CompatRequired();
+}?><div >
 <h1 >Recommends Browser</h1>
-<link  rel="stylesheet" type="text/css" href="<?= $_TV['root-url']?>cctemplates/playlist.css" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $_TV['root-url']?>cctemplates/detail.css" title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $A['root-url']?>cctemplates/playlist.css" title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $A['root-url']?>cctemplates/detail.css" title="Default Style"></link>
 <style >
 
 #limit_picker_container, #stream_link_container, #play_link_container {
@@ -91,8 +90,8 @@ _template_compat_required();
 <a  href="javascript://play win" id="play_link"><span ><?= _('Play');?></span></a></div>
 </div>
 <div  id="featured">
-<h3 ><?= sprintf(_('Recommended by %s'),$_TV['get']['fullname']);?></h3>
-<div  class="featured_info"><?= sprintf(_('%s recommends these uploads.'),$_TV['get']['fullname']);?></div>
+<h3 ><?= sprintf(_('Recommended by %s'),$A['get']['fullname']);?></h3>
+<div  class="featured_info"><?= sprintf(_('%s recommends these uploads.'),$A['get']['fullname']);?></div>
 </div>
 <div  id="browser">
   getting data...
@@ -111,13 +110,13 @@ _template_compat_required();
 </span>
 </div>
 <div  id="bottom_breaker">&nbsp;</div>
-<script  src="<?= $_TV['root-url']?>cctemplates/js/playlist.js"></script>
-<?_template_call_template('playerembed.xml/eplayer');
+<script  src="<?= $A['root-url']?>cctemplates/js/playlist.js"></script>
+<?$T->Call('playerembed.xml/eplayer');
 ?><script >
 //<!--
 
-var ruser = '<?= $_TV['get']['ruser']?>';
-var fullname = '<?= $_TV['get']['fullname']?>';
+var ruser = '<?= $A['get']['ruser']?>';
+var fullname = '<?= $A['get']['fullname']?>';
 
 ccReccommendBrowser = Class.create();
 

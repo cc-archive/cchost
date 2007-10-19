@@ -1,10 +1,9 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global $_TV;
-
-_template_compat_required();
-?><style >
+function _t_query_init($T,&$targs) {
+    $T->CompatRequired();
+}?><style >
 
 #ptable,
 #ftable { 
@@ -698,9 +697,9 @@ From ccHost templates use <b >cc_query_fmt</b> to get the records returned:
 <div  class="code" style="white-space:pre">
 &lt;tal:block define="records php:<b >cc_query_fmt</b>('tags=remix,chill&sort=name');" /&gt;
 &lt;div tal:repeat="record records"&gt;
-   &lt;a href="$<?= $_TV['record']['file_page_url']?>" &gt;$<?= $_TV['record']['upload_name']?>&lt/a&gt;
+   &lt;a href="$<?= $A['record']['file_page_url']?>" &gt;$<?= $A['record']['upload_name']?>&lt/a&gt;
    by 
-   &lt;a href="$<?= $_TV['record']['artist_page_url']?>" &gt;$<?= $_TV['record']['user_real_name']?>&lt/a&gt;
+   &lt;a href="$<?= $A['record']['artist_page_url']?>" &gt;$<?= $A['record']['user_real_name']?>&lt/a&gt;
 &lt;/div&gt;
 </div>
 <div  style="font-style:italic">Last updated: 2/12/2007 </div>

@@ -1,10 +1,9 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global $_TV;
-
-_template_compat_required();
-?><style >
+function _t_pool_api_doc_init($T,&$targs) {
+    $T->CompatRequired();
+}?><style >
 #doctable td {
     vetical-align: top;
 }
