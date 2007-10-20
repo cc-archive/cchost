@@ -1,11 +1,7 @@
 <?
 
-
-
 function _t_page_html_head($T,&$_TV)
 {
-    
-
     if( !empty($_TV['ajax']) )
         return;
 
@@ -47,8 +43,6 @@ EOF;
 
 function _t_page_print_head_links($T,&$_TV)
 {
-    
-
     if( !empty($_TV['style_sheets']) )
     {
         foreach( $_TV['style_sheets'] as $css )
@@ -85,8 +79,6 @@ function _t_page_print_head_links($T,&$_TV)
 
 function _t_page_print_banner($T,&$_TV)
 {
-    
-
     print('<div id="banner">' . "\n");
 
     if( !empty($_TV['sticky_search']) )
@@ -126,8 +118,6 @@ EOF;
 
 function _t_page_print_tabs($T,&$_TV)
 {
-    
-
     $tabs = $_TV['tab_info']['tabs'];
     page_inner_print_tabs($tabs,'tabs');
 }
@@ -135,16 +125,12 @@ function _t_page_print_tabs($T,&$_TV)
 
 function _t_page_print_sub_nav_tabs($T,&$_TV)
 {
-    
-
     $tabs = $_TV['sub_nav_tabs']['tabs'];
     page_inner_print_tabs($tabs,'sub_tabs');
 }
 
 function page_inner_print_tabs($tabs,$id)
 {
-    
-
     print "<ul id=\"{$id}\" >\n";
     foreach( $tabs as $tab )
     {
@@ -156,8 +142,6 @@ function page_inner_print_tabs($tabs,$id)
 
 function _t_page_main_body($T,&$_TV)
 {
-    
-
     if( !empty($_TV['show_body_header']) && empty($_TV['ajax']) )
     {
         print("<body>\n");
@@ -177,7 +161,6 @@ EOF;
 
         print "<a name=\"content\"></a>\n";
     }
-
 
     if( !empty($_TV['bread_crumbs'] ) )
         $T->Call('print_bread_crumbs');
@@ -213,8 +196,6 @@ EOF;
 
 function _t_page_print_end_script_blocks($T,&$_TV) 
 {
-    
-
     if ( !empty($_TV['end_script_blocks'])) 
     {
         $carr111 = $_TV['end_script_blocks'];
@@ -243,8 +224,6 @@ function _t_page_print_end_script_blocks($T,&$_TV)
 
 function _t_page_print_footer($T,&$_TV) 
 {
-    
-
     print "\n<div id=\"footer\">\n<div id=\"license\">{$_TV['site-license']}</div>\n{$_TV['footer']}</div>\n";
 }
 

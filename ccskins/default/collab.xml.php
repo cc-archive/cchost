@@ -2,13 +2,15 @@
 
 
 //------------------------------------- 
-function _t_collab_show_collabs($T,&$A) {
+function _t_collab_show_collabs($T,&$_TV) {
    
+    $css = ccd($T->Search( 'css/playlist.css' ));
+    $bg  = ccd($T->Search( 'images/bg_fade.gif' )); 
 
-?><link  rel="stylesheet" type="text/css" href="<?= $_TV['root-url']?>cctemplates/playlist.css" title="Default Style"></link>
+?><link  rel="stylesheet" type="text/css" href="<?= $css ?>" title="Default Style"></link>
 <style >
   .collab_entry {
-    background: url('<?= $_TV['root-url']?>cctemplates/ccmixter/bg_head.gif') top repeat-x;
+    background: url('<?= $bg ?>') top repeat-x;
     margin: 4px;
     padding: 6px;
   }
@@ -105,7 +107,7 @@ if ( !empty($_TV['item']['fplay_url'])) {
 
 
 //------------------------------------- 
-function _t_collab_show_collab($T,&$A) {
+function _t_collab_show_collab($T,&$_TV) {
    
 
 ?><div  id="collab_ajax_msg"></div>
@@ -257,7 +259,7 @@ for( $ci106= 0; $ci106< $cc106; ++$ci106)
 
 
 //------------------------------------- 
-function _t_collab_show_collab_files($T,&$A) {
+function _t_collab_show_collab_files($T,&$_TV) {
    
 
 $carr107 = $_TV['uploads'];

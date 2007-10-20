@@ -1,26 +1,38 @@
-<?
-global $_TV;
-?>
 <style>
+/* big div sections */
+
 .upload {
     margin: 15px; /* 0px 4px 0px; */
     padding: 4px;
     border-bottom: 1px dashed #8E8;
 }
+.upload_avatar {
+    width: 95px;
+    height: 95px;
+    float: left;
+    margin-right: 8px;
+}
 .upload_info {
     width: 340px;
     float: left;
 }
+#remix_info {
+    width: 335px;
+    float: left;
+}
+.list_menu {
+    float: left;
+    width: 150px;
+}
+
+/* other stuff */
+
 .lic_link {
     float: right;
     margin-right: 12px;
 }
 .upload_date {
     color: #888;
-}
-.list_menu {
-    float: left;
-    width: 200px;
 }
 .list_menu a {
     display: block;
@@ -31,24 +43,25 @@ global $_TV;
 .remix_more_link {
     font-style: italic;
 }
-#remix_info {
-    width: 335px;
-    float: left;
-}
 #remix_info h2 {
     font-size:12px;
     font-weight:normal;
     margin: 0px;
 }
-
+.playerdiv {
+    white-space: nowrap;
+}
+.playerlabel {
+    display: block;
+    float: left;
+}
 </style>
 <?
-$carr103 = empty($_TV['records']) ? $_TV['file_records'] : $_TV['records'];
+$carr103 = empty( $A['records'] ) ? $A['file_records'] : $A['records'];
 $cc103   = count( $carr103);
 $ck103   = array_keys( $carr103);
 
 cc_get_remix_history($carr103,3);
-
 
 print "<div id=\"upload_listing\">\n";
 
@@ -59,7 +72,7 @@ for( $ci103= 0; $ci103< $cc103; ++$ci103)
 
     print "  <div class=\"upload\" ><!--  %%% {$R['upload_name']}  %%% -->\n";
 
-    helper_list_info($R);
+    helper_list_info($R,$A);
     helper_list_menu($R);
     helper_list_remixex($R);
 
@@ -67,7 +80,13 @@ for( $ci103= 0; $ci103< $cc103; ++$ci103)
 }
 print "</div><!-- end listing -->\n";
 
-_template_call_template('prev_next_links');
+$T->Call('prev_next_links');
+
+if( !empty($A['enable_playlists']) )
+{
+    $T->Call('playerembed.xml/eplayer');
+    $T->Call('playlist.xml/playlist_menu');
+}
 
 function helper_list_menu(&$R)
 {
@@ -152,10 +171,8 @@ function helper_list_menu_item(&$item)
         print '</span>';
 }
 
-function helper_list_info(&$R)
+function helper_list_info(&$R,&$A)
 {
-    global $_TV;
-
     $furl = $R['file_page_url'];
     $aurl = $R['artist_page_url'];
     $name = CC_StrChop($R['upload_name'],27);
@@ -163,12 +180,13 @@ function helper_list_info(&$R)
     $date = CC_datefmt($R['upload_date'],'M d, Y h:i a');
 
     $html =<<<EOF
+    <div class="upload_avatar"><img src="{$R['user_avatar_url']}" /></div>
     <div class="upload_info">
-        <a class="lic_link" href="${R['license_url']}" 
+        <a class="lic_link" href="{$R['license_url']}" 
                   {$about_url}
                   rel="license"
                   title="{$R['license_name']}" >
-                  <img src="{$_TV['root-url']}ccimages/lics/small-{$R['license_logo']}" /></a> 
+                  <img src="{$A['root-url']}ccimages/lics/small-{$R['license_logo']}" /></a> 
         <a href="{$furl}" class="upload_link">{$name}</a><br /> {$GLOBALS['str_by']} <a href="{$aurl}">{$R['user_real_name']}</a>
         <div class="upload_date">$date </div>
         <div class="taglinks">
@@ -187,10 +205,10 @@ EOF;
     
     print "\n     </div><!-- tags -->\n    ";
     
-    if( !empty($R['fplay_url']) )
+    if( !empty($A['enable_playlists']) && !empty($R['fplay_url']) )
     {
-        print "        <div>{$GLOBALS['str_play']}: <a class=\"cc_player_button cc_player_hear\" id=\"_ep_{$R['upload_id']}\"> </a>\n" .
-              "<script> \$('_ep_${R['upload_id']}').href = \"{$R['fplay_url']}\"; </script></div>\n";
+        print "        <div class=\"playerdiv\"><span class=\"playerlabel\">{$GLOBALS['str_play']}: </span><a class=\"cc_player_button cc_player_hear\" id=\"_ep_{$R['upload_id']}\"> </a></div>\n" .
+              "<script> \$('_ep_${R['upload_id']}').href = \"{$R['fplay_url']}\"; </script>\n";
     }
 
     print "    </div><!-- upload info -->\n";

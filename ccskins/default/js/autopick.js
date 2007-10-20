@@ -42,18 +42,26 @@ ccAutoPick.prototype = {
     },
 
     hookUpEvents: function() {
-        Event.observe( this.options.listID, 'click',     this.onListClick.bindAsEventListener(this) );
-        Event.observe( this.options.listID, 'mouseover', this.onListHover.bindAsEventListener(this) );
-        Event.observe( this.options.listID, 'keyup',     this.onListKey.bindAsEventListener(this) );
-        Event.observe( this.options.showID, 'click',     this.onShowClick.bindAsEventListener(this) );
-        Event.observe( this.options.clearID, 'click',    this.onClearClick.bindAsEventListener(this) );
+        try
+        {            
+            Event.observe( this.options.listID, 'click',     this.onListClick.bindAsEventListener(this) );
+            Event.observe( this.options.listID, 'mouseover', this.onListHover.bindAsEventListener(this) );
+            Event.observe( this.options.listID, 'keyup',     this.onListKey.bindAsEventListener(this) );
+            Event.observe( this.options.showID, 'click',     this.onShowClick.bindAsEventListener(this) );
+            Event.observe( this.options.clearID, 'click',    this.onClearClick.bindAsEventListener(this) );
 
-        $(this.options.listID).style.display = 'none';
+            $(this.options.listID).style.display = 'none';
 
-        var url = this.options.url;
+            var url = this.options.url;
 
-        new Ajax.Request( url, { onComplete: this._reponse_lookup.bind(this),
-                                 method: 'get' } );
+            new Ajax.Request( url, { onComplete: this._reponse_lookup.bind(this),
+                                     method: 'get' } );
+        }
+        catch (e)
+        {
+            alert(e);
+        }
+
     },
 
     genControls: function(id,value,pre_text) {
@@ -81,7 +89,7 @@ ccAutoPick.prototype = {
                     '<span class="cc_autocomp_stat" id="' + stat_id + '"><i>' + pre_text + '</i></span> ' +
                '</td></tr>' +
                '<tr><td>' +
-                   '<a class="cc_autocomp_clear" style="display:'+clear_display+'" href="javascript://show list" id="' + clear_id + '">clear</a>  '  + 
+                   '<a class="cc_autocomp_clear" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + '">clear</a>  '  + 
                    '<a class="cc_autocomp_show" href="javascript://show list" id="' + show_id + '">show list</a>'  + 
                '</td></tr>' +
                '<tr><td><input type="hidden" name="' + id + '" id="' + id + '" value="' + value + '" />' +

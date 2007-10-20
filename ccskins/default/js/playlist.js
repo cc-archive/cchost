@@ -256,6 +256,8 @@ ccPlaylistMenu.prototype = {
                        'style="display:none;position:absolute;height:auto;top:'+y+'px;left:'+x+'px"></div>';
             new Insertion.After(Event.element(event),html);
             ccThinking.Enable(event);
+            //var link = '<a href="' + url + '">' + url + '</a>';
+            //$(info_id).innerHTML = link; $(info_id).style.display = 'block'; return;
             this.transport = new Ajax.Request( url, { method: 'get', onComplete: this._resp_info.bind(this, info_id ) } );
         }
         this.inOpen = true;
@@ -274,7 +276,7 @@ ccPlaylistMenu.prototype = {
 
     _resp_info: function( info_id, resp ) {
         var info = $(info_id);
-        info.style.opacity = 0;
+        //info.style.opacity = 0;
         info.innerHTML = resp.responseText;
         info.style.display = 'block';
         this.openInfo = info;
@@ -282,7 +284,7 @@ ccPlaylistMenu.prototype = {
         if( x < 0 )
             x = 100;
         info.style.left = x + 'px';
-        new ccDelayAndFade( 0, info, 1.0, 40, 10); 
+        //new ccDelayAndFade( 0, info, 1.0, 40, 10); 
         this.transport = null;
     },
 
@@ -436,6 +438,8 @@ var ccPlaylistBrowserObject = {
                 url += '&since=' + this.options.since;
         }
         var me = this;
+        //var link = '<a href="' + url + '">' + url + '</a>';
+        //$(this.container_id).innerHTML = link; return;
         new Ajax.Request( url, { method: 'get', onComplete: me._resp_browse.bind(me) } );
     },
 

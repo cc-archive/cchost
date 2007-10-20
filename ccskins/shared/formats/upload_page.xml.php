@@ -18,8 +18,6 @@
 *
 */
 
-global $_TV;
-
 ?>
 <style>
 #upload_menu_box {
@@ -142,7 +140,7 @@ global $_TV;
 <?
 
 
-$R =& $_TV['record'];
+$R =& $A['record'];
 
 $r_args = array( &$R );
 cc_get_ratings_info($R);
@@ -152,17 +150,17 @@ $R['local_menu'] = cc_get_upload_menu($R);
 //CCDebug::PrintVar($R,false);
 
 print "<div id=\"upload_sidebar_box\">\n";
-helper_upload_do_sidebar($R);
+helper_upload_do_sidebar($R,$A,$T);
 print    "</div><!-- sidebar box -->\n";
 
 helper_upload_date($R);
 
 print "<div id=\"upload_menu_box\">\n";
-helper_uploads_do_menus($R);
+helper_uploads_do_menus($R,$A,$T);
 print "</div><!-- upload_menu_box -->\n";
 
 print "<div id=\"upload_middle\">\n";
-helper_upload_main_info($R);
+helper_upload_main_info($R,$A,$T);
 print '</div><!-- upload_middle -->';
 
 
@@ -214,10 +212,8 @@ print '</div><!-- upload_middle -->';
 
 */
 
-function helper_uploads_do_menus(&$R)
+function helper_uploads_do_menus(&$R,&$A)
 {
-    global $_TV;
-
     $menu = $R['local_menu'];
 
     /** OWNER menu *****/
@@ -365,8 +361,6 @@ function helper_upload_menu_item(&$item)
 
 function helper_upload_date(&$R)
 {
-    global $_TV;
-
     $date = CC_datefmt($R['upload_date'],'M d, Y h:i a');
     if( empty($R['upload_last_edit']) )
     {
@@ -382,10 +376,8 @@ function helper_upload_date(&$R)
     print "<div id=\"date_box\">{$GLOBALS['str_date']}: $date $mod_date</div>\n";
 }
 
-function helper_upload_do_sidebar(&$R)
+function helper_upload_do_sidebar(&$R,&$A,$T)
 {
-    global $_TV;
-
     /*----------------------------------
         License 
     ------------------------------------*/
@@ -404,7 +396,7 @@ function helper_upload_do_sidebar(&$R)
         [license_text] => <strong>Attribution Noncommercial</strong>
     */
 
-    print "<div class=\"cc_round_box\" id=\"license_info\"><p><img src=\"{$_TV['root-url']}ccimages/lics/{$R['license_logo']}\" />".
+    print "<div class=\"cc_round_box\" id=\"license_info\"><p><img src=\"{$A['root-url']}ccimages/lics/{$R['license_logo']}\" />".
           "  <div id=\"license_info_t\" >\n" .
           "    {$GLOBALS['str_lic']}<br />Creative Commons<br />" .
           "<a href=\"{$R['license_url']}\">" .
@@ -419,10 +411,11 @@ function helper_upload_do_sidebar(&$R)
         $E = $R['upload_extra']['edpicks'];
         $keys = array_keys($E);
         $pick = $E[ $keys[0] ];
-        $url = $_TV['home-url'] . 'people/' . $pick['reviewer'];
+        $url = $A['home-url'] . 'people/' . $pick['reviewer'];
+        $img = $T->URL('images/big-red-star.gif');
         print "<div class=\"cc_round_box\" id=\"pick_box\">" .
               "<h2>{$GLOBALS['str_edpick']}</h2>" .
-              "<p><img src=\"/cchost_files/skins/ccmixter/images/big-red-star.gif\" />" .
+              "<p><img src=\"$img\" />" .
               $pick['review'] . "</p><div class=\"pick_reviewer\">{$pick['reviewer']}</div></div>\n";
     }
 
@@ -431,17 +424,18 @@ function helper_upload_do_sidebar(&$R)
     ------------------------------------*/
 
     if( !empty($R['remix_parents']) )
-        helper_upload_remix_info( $GLOBALS['str_uses'], 'downloadicon-big.gif', $R['remix_parents'] );
+        helper_upload_remix_info( $GLOBALS['str_uses'], 'downloadicon-big.gif', $R['remix_parents'], $T );
 
     if( !empty($R['remix_children']) )
-        helper_upload_remix_info( $GLOBALS['str_usedby'], 'uploadicon-big.gif', $R['remix_children'] );
+        helper_upload_remix_info( $GLOBALS['str_usedby'], 'uploadicon-big.gif', $R['remix_children'], $T );
 }
 
 
-function helper_upload_remix_info($caption,$icon,$p)
+function helper_upload_remix_info($caption,$icon,$p,$T)
 {
+    $icon = $T->URL('images/' . $icon);
     print "<div class=\"cc_round_box\" id=\"remix_info\">" .
-          "<h2>{$caption}</h2>\n<p><img src=\"/cchost_files/skins/ccmixter/images/{$icon}\" />";
+          "<h2>{$caption}</h2>\n<p><img src=\"{$icon}\" />";
 
     $c = count($p);
     $max = 25;
@@ -470,10 +464,8 @@ function helper_upload_remix_info($caption,$icon,$p)
     Attribution/Description
 ------------------------------------*/
 
-function helper_upload_main_info(&$R)
+function helper_upload_main_info(&$R,&$A,$T)
 {
-    global $_TV;
-
     print "<div class=\"cc_round_box_bw\">\n";
 
     print '<table cellspacing="0" cellpadding="0" id="credit_info">';
@@ -484,18 +476,14 @@ function helper_upload_main_info(&$R)
     }
     else
     {
-        $GLOBALS['str_project'] = _('Project');
-        $GLOBALS['str_credit'] = _('Credit');
-        $GLOBALS['str_featuring'] = _('Featuring');
-
         $C =& $R['collab'];
-        $url = $_TV['home-url'] . 'collab/' . $C['collab_id'];
+        $url = $A['home-url'] . 'collab/' . $C['collab_id'];
         print "<tr><th>{$GLOBALS['str_project']}:</th><td><a href=\"$url\">{$C['collab_name']}</a></td></tr>\n" . 
               "<tr><th>{$GLOBALS['str_credit']}:</th><td>";
         $comma = '';
         foreach( $C['users'] as $U )
         {
-            $url = $_TV['home-url'] . 'people/' . $U['user_name'];
+            $url = $A['home-url'] . 'people/' . $U['user_name'];
             print "$comma<a href=\"{$url}\">{$U['user_real_name']}</a> ";
             if( empty($U['collab_user_credit']) )
                 $credit = $U['collab_user_role'];
@@ -551,10 +539,10 @@ function helper_upload_main_info(&$R)
         // might be (review links, zip dirs, etc.)
 
         print "<div class=\"cc_round_box\">\n";
-        $_TV['record'] =& $R;
+        $A['record'] =& $R;
         foreach( $R['file_macros'] as $M )
         {
-            _template_call_template($M);
+            $T->Call($M);
         }
         print "</div>\n";
     }

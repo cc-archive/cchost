@@ -48,6 +48,7 @@ ccQueryBrowserFilters.prototype = {
                                                   [ 'any', 'Match any tags' ]
                                                ]
                                           };
+        /*
         this.score      = { name: 'Ratings', fmt: 'dropdown', param: 'score',
                                          vals: [  [ '*', 'all'],
                                                   [ 500, '5.00' ], 
@@ -57,6 +58,7 @@ ccQueryBrowserFilters.prototype = {
                                                   [ 300, '3.0 or better' ]
                                                ]
                           };
+        */
         this.lic  = { name: 'License', fmt: 'dropdown', param: 'lic',
                                          vals: [  [ '*', 'all'],
                                                   [ 'by', 'attribution'],
@@ -91,6 +93,7 @@ ccQueryBrowserFilters.prototype = {
                                                   [ 50 ]
                                                ]
                           };
+
         // this should be "playlist mode"
         // this.rand       = { name: 'Random Sort', fmt: 'checkbox', param: 'rand' };
 
@@ -153,7 +156,8 @@ ccQueryBrowserFilters.prototype = {
 
         $H(this).each( function(af) {
             var f = af[1];
-            formInfo.html += '<div><span class="th">' + f.name + ':</span><span class="field">' 
+            if( f.fmt )
+              formInfo.html += '<div><span class="th">' + f.name + ':</span><span class="field">' 
                         + formatter[f.fmt](f,0) + '</span></div>\n';
         });
 

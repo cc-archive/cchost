@@ -85,5 +85,16 @@ $GLOBALS['str_video']          = _('Video');
 $GLOBALS['str_web_blog']       = _('Web / Blog / MySpace');
 $GLOBALS['str_zip_title']      = _('Contents of ZIP Archive');
 
+$GLOBALS['str_remove_from']   = _('Remove from');
+$GLOBALS['str_add_to']   = _('Add to');
+$GLOBALS['str_new_playlist'] = _('new playlist');
+$GLOBALS['str_created_by'] = _('created by');
+$GLOBALS['str_dynamic'] = _('dynamic');
+$GLOBALS['str_items'] = _('items');  // as in: number of items
+
+$GLOBALS['str_project'] = _('Project');
+$GLOBALS['str_credit'] = _('Credit');
+$GLOBALS['str_featuring'] = _('Featuring');
+
 }
 ?>
