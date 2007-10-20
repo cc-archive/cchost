@@ -26,11 +26,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-global $CC_GLOBALS;
-
-$CC_GLOBALS['template-stack'] = array();
-$CC_GLOBALS['map-stack'] = array();
-
 /**
 */
 class CCTemplate
@@ -43,21 +38,30 @@ class CCTemplate
         $this->html_mode = $html_mode;
 
         $configs =& CCConfigs::GetTable();
-        $this->_t_args = $configs->GetConfig('ttag');
-        $this->_t_args['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
-        $this->_t_args['get'] = $_GET;
-        $this->_t_args['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
-        $this->_t_args['install_done'] = false;
-        $this->_t_args['noproto'] = false;
-        $this->_t_args['ajax'] = !empty($_REQUEST['ajax']);
+        $this->vars = $configs->GetConfig('ttag');
+        $this->vars['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+        $this->vars['get'] = $_GET;
+        $this->vars['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
+        $this->vars['install_done'] = false;
+        $this->vars['noproto'] = false;
+        $this->vars['ajax'] = !empty($_REQUEST['ajax']);
+
+        $this->template_stack = array();
+        $this->map_stack = array();
+        $this->files = array();
     }
 
     function SetArg($name,$value='',$macroname='')
     {
-        $this->_t_args[$name] = $value;
+        $this->vars[$name] = $value;
 
         if( !empty($macroname) )
-            $this->_t_args['macro_names'][] = $macroname;
+            $this->vars['macro_names'][] = $macroname;
+    }
+
+    function AddMacro($macro)
+    {
+        $this->vars['macro_names'][] = $macro;
     }
 
     function & SetAllAndParse($args, $doprint = false, $admin_dump = false)
@@ -71,211 +75,297 @@ class CCTemplate
 
     function SetAllAndPrint($args, $admin_dump = false)
     {
-        global $CC_GLOBALS, $_TV;
+        global $CC_GLOBALS;
 
-        if( empty($args['skin']) && !empty($CC_GLOBALS['skin']) )
-            $args['skin'] = $CC_GLOBALS['skin'];
+        $this->vars = array_merge($CC_GLOBALS,$this->vars,$args);
+
+        if( empty($this->vars['skin']) && !empty($CC_GLOBALS['skin']) )
+            $this->vars['skin'] = $CC_GLOBALS['skin'];
 
         if( CCUser::IsLoggedIn() )
         {
-            $args['logged_in_as'] = CCUser::CurrentUserName();
-            $args['logout_url'] = ccl('logout');
-            $args['is_logged_in'] = 1;
+            $this->vars['logged_in_as'] = CCUser::CurrentUserName();
+            $this->vars['logout_url'] = ccl('logout');
+            $this->vars['is_logged_in'] = 1;
         } else {
-            $args['is_logged_in'] = 0;
+            $this->vars['is_logged_in'] = 0;
         }
-        $args['is_admin']  = CCUser::IsAdmin();
-        $args['not_admin'] = !$args['is_admin'];
+        $this->vars['is_admin']  = CCUser::IsAdmin();
+        $this->vars['not_admin'] = !$this->vars['is_admin'];
 
-        $_TV = array_merge( $_TV, $args );
         if( $this->html_mode )
         {
             // Force UTF-8 necessary for some languages (chinese,japanese,etc)
             header('Content-type: text/html; charset=' . CC_ENCODING) ;
         }
 
-        _template_call_template($this->filename);
-        if( !empty($args['auto_execute']) )
+        $this->Call($this->filename);
+        if( !empty($this->vars['auto_execute']) )
         {
-            _template_push_path($this->filename);
-            foreach( $args['auto_execute'] as $exec )
-                _template_call_template($exec);
-            _template_pop_path();
+            $this->_push_path($this->filename);
+            foreach( $this->vars['auto_execute'] as $exec )
+                $this->Call($exec);
+            $this->_pop_path();
         }
+    }
+
+    function Call($file)
+    {
+        global $CC_GLOBALS;
+
+        // forms of calling:
+        //
+        // [path_to][file][macroname]
+        //
+        // 'macroname' (alone)   - look this up in _TV
+        // 'file.ext/macroname'  - load file, call macro
+        // 'file.ext'            - load file
+        //
+
+        $funcname = '';
+
+        if( !preg_match('#[\./]#',$file) && !empty($this->vars[$file]) )
+            $file = $this->vars[$file];
+
+        if( preg_match( '/\.(xml|htm|html|php|inc|tpl)$/', $file, $m ) )
+        {
+            // this is no macro on the end
+
+            if( is_file($file) )
+            {
+                // a full path was passed in, we're done
+                $this->_inner_include($file);
+                return;
+            }
+
+            $filename = $file;
+        }
+        else
+        {
+            $macro  = basename($file);
+            // call dirname to strip off the macro this is the filepart 
+            $file_path = dirname($file);
+            if( !empty($file_path) && ($file_path != '.') )
+            {
+                $file_name = basename($file_path); // this is the actual file
+                $ext = array_pop( explode('.', $file_name ) );
+                $basename = preg_replace( '/[^a-zA-Z0-9]+/', '_', basename($file_name, '.' . $ext) );
+                $funcname = '_t_' . $basename . '_' . $macro;
+                if( function_exists($funcname) )
+                {
+                    // the file is already in memory, just call the function
+                    $funcname($this,$this->vars);
+                    return;
+                }
+                $filename = $file_path;
+            }
+            else
+            {
+                $filename = $file;
+            }
+        }
+
+        if( !empty($filename) )
+            $path = $this->GetTemplate($filename,true);
+
+        if( empty($path) )
+        {
+            print( "<h3>Can't find template: <span style='color:red'>$file</span></h3>");
+            CCDebug::StackTrace();
+        }
+
+        $this->_inner_include($path,$funcname);
     }
 
     function GetTemplate($filename,$real_path=true)
     {
-        global $CC_GLOBALS;
-
-        $files = array( $filename . '.php',
+        $files = array( $filename . '.tpl',
+                        $filename . '.php',
                         $filename,
+                        $filename . '.xml.tpl',
                         $filename . '.xml.php',
                         $filename . '.htm',
                         $filename . '.html' );
 
-        return _template_search($files,$real_path);
-    }
+        if( empty($this) || ((strtolower(get_class($this)) != 'cctemplate') && 
+                                  !is_subclass_of($this,'CCTemplate') ) )
+        {
+            global $CC_GLOBALS;
+            return CCUtil::SearchPath( $files, $CC_GLOBALS['template-root'], 'ccskins', $real_path);
+        }
 
+        return $this->Search($files,$real_path);
+    }
 
     function GetTemplatePath()
     {
         global $CC_GLOBALS;
-        return array_unique(array_merge( $CC_GLOBALS['template-stack'], 
-                                         $CC_GLOBALS['map-stack'], 
+        return array_unique(array_merge( $this->template_stack,
+                                         $this->map_stack, 
                                          CCUtil::SplitPaths( $CC_GLOBALS['template-root'], 'ccskins' ) ));
     }
 
-    function ClearCache() { return true; }
-}
-
-function _template_search($file, $real_path = false )
-{
-    $dirs = CCTemplate::GetTemplatePath();
-    return CCUtil::SearchPath( $file, $dirs, '', $real_path);
-}
-
-function _template_compat_required()
-{
-    global $_TV,$CC_GLOBALS;
-
-    if( !empty($_TV['template_compat']) )
-        return;
-
-    $pi = pathinfo( $CC_GLOBALS['skin-file'] );
-    $sp = split( '\.', $pi['basename'] );
-    $pi['filename'] = $sp[0];
-
-    $_TV['style_sheets'][] = $pi['filename'] . '.css';
-
-    if( empty($_TV['head_links']) )
+    function URL($partial)
     {
-        foreach( $_TV['style_sheets'] as $css )
-        {
-            $_TV['head_links'][] = array(
-                    'rel' => 'stylesheet',
-                    'type' => 'text/css',
-                    'href' => ccd($pi['dirname'] . '/' . $css),
-                    'title' => 'Default Style'
-                );
-        }
+        return ccd( $this->Search($partial,false) );
     }
 
-    if( !empty($_TV['file_records']) )
+    function Search($file, $real_path = false )
     {
-        $k = array_keys($_TV['file_records']);
-        $c = count($k);
-        for( $i = 0; $i < $c; $i++ )
-        {
-            $R =& $_TV['file_records'][$k[$i]];
-            $R['local_menu'] = cc_get_upload_menu($R);
-            cc_get_ratings_info($R);
-        }
+        $dirs = $this->GetTemplatePath();
+        return CCUtil::SearchPath( $file, $dirs, '', $real_path);
     }
 
-    $_TV['template_compat'] = true;
-}
 
-function _template_inner_include($path,$funcname='')
-{
-    _template_push_path($path);
-    require_once($path);
-    if( !empty($funcname) )
-        $funcname();
-    _template_pop_path();
-}
-
-function _template_import_map($map)
-{
-    _template_push_path($map,'map-stack');
-    require_once($map);
-}
-
-function _template_pop_path()
-{
-    global $CC_GLOBALS;
-    array_shift( $CC_GLOBALS['template-stack'] );
-}
-
-function _template_push_path($path,$index='template-stack')
-{
-    global $CC_GLOBALS;
-
-    $path = dirname($path);
-    if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') 
-        $dir = str_replace( '\\', '/', str_replace( getcwd() . '\\', '', $path ) );
-    else
-        $dir = str_replace( getcwd() . '/', '', $path );
-    array_unshift( $CC_GLOBALS[$index], $dir );
-}
-
-function _template_call_template($file)
-{
-    global $_TV, $CC_GLOBALS;
-
-    // forms of calling:
-    //
-    // [path_to][file][macroname]
-    //
-    // 'macroname' (alone)   - look this up in _TV
-    // 'file.ext/macroname'  - load file, call macro
-    // 'file.ext'            - load file
-    //
-
-    $funcname = '';
-
-    if( !preg_match('#[\./]#',$file) && !empty($_TV[$file]) )
-        $file = $_TV[$file];
-
-    if( preg_match( '/\.(xml|htm|html|php|inc)$/', $file, $m ) )
+    function ImportMap($map)
     {
-        // this is no macro on the end
-
-        if( is_file($file) )
-        {
-            // a full path was passed in, we're done
-            _template_inner_include($file);
-            return;
-        }
-
-        $filename = $file;
+        $map = $this->Search($map);
+        $this->_push_path($map,'map_stack');
+        $this->_parse($map);
     }
-    else
+
+    function _parse($file)
     {
-        $macro  = basename($file);
-        // call dirname to strip off the macro this is the filepart 
-        $file_path = dirname($file);
-        if( !empty($file_path) && ($file_path != '.') )
+        if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') 
+            $file = str_replace( '\\', '/', $file );
+
+        if( !in_array( $file, $this->files ) )
         {
-            $file_name = basename($file_path); // this is the actual file
-            $ext = array_pop( explode('.', $file_name ) );
-            $basename = preg_replace( '/[^a-zA-Z0-9]+/', '_', basename($file_name, '.' . $ext) );
-            $funcname = '_t_' . $basename . '_' . $macro;
-            if( function_exists($funcname) )
+            preg_match( '#([^/]+)\.([a-z]+)$#i', $file, $m );
+            if( empty($m[1]) ) { unset($this->vars); CCDebug::StackTrace(); }
+            $bfunc = '_t_' . preg_replace('/[^a-z]+/i','_',$m[1]) . '_';
+            $OB = '<';
+            $OB .= '?';
+            $CB = '?';
+            $CB .= '>';
+            $OE = $OB . '=';
+
+            // these will be visible to included/eval'd code
+
+            $A =& $this->vars;
+            $T = $this;
+
+            if( $m[2] == 'tpl' )
             {
-                // the file is already in memory, just call the function
-                $funcname();
-                return;
+                $text = file_get_contents($file);
+                $translations = array(
+                    "/%macro\(([^\)]+)\)%/"         =>   "$OB function $bfunc$1(\$T,&\$A) { $CB",
+                    "/%end_macro%/"                 =>   "$OB } $CB",
+                    "/%loop\(([^,]+),([^\)]+)\)%/"  =>   "$OB if( !empty(\$A['$1']) ) foreach( \$A['$1'] as \$$2 ) { $CB",
+                    "/%loop_item\(([^,]+),([^,]+),([^\)]+)\)%/"  =>   "$OB foreach( \$$1['$2'] as \$$3 ) { $CB",
+                    "/%end_loop%/"                  =>   "$OB } $CB",
+                    "/%if\((.+)\)%/U"               =>   "$OB if( $1 ) { $CB",
+                    "/%end_if%/"                    =>   "$OB } $CB",
+                    "/%var\(([^\)]+)\)%/"           =>   "$OE \$A['$1'] $CB",
+                    "/%item\(([^,]+),([^\)]+)\)%/"  =>   "$OE \$$1['$2'] $CB",
+                    "/%call_macro\(([^\)]+)\)%/"    =>   "$OB \$T->Call(\$A['$1']); $CB",
+                    "/%call_macroi\(([^\)]+)\)%/"   =>   "$OB \$T->Call($1); $CB",
+                    "/%not_empty_item\(([^,]+),([^\)]+)\)%/"  =>   "$OE cc_not_empty(\$$1['$2']) $CB",
+                    "/%include_map\(([^\)]+)\)%/"   =>   "$OB \$T->ImportMap('$1'); $CB",
+                    "/%if_not_empty\(([^\)]+)\)%/"  =>   "$OB if( !empty(\$A['$1']) ) { $CB",
+                    "/%if_empty\(([^\)]+)\)%/"      =>   "$OB if( empty(\$A['$1']) ) { $CB",
+                    "/%url\(([^\)]+)\)%/"           =>   "$OE \$T->URL('$1') $CB",
+                    "/%define\(([^,]+),([^\)]+)\)%/"=>   "$OB \$A['$1'] = '$2'; $CB",
+                    "/%add_stylesheet\(([^\)]+)\)%/"=>   "$OB \$A['style_sheets'][] = '$1'; $CB",
+                    "/%import_map\(([^\)]+)\)%/"    =>   "$OB \$T->ImportMap('$1'); $CB",
+                    "/%string_def\(([^,]+),([^\)]+\))\)%/" =>   "$OB \$GLOBALS['str_$1'] = $2; $CB",
+                    );
+
+                $parsed = preg_replace( array_keys($translations), array_values($translations), $text );
+
+//print("<br /><br /><br /><br /><br />");
+//if( strstr($file,'map') )
+//CCDebug::PrintVar($parsed,false);
+
+                eval( '?>' . $parsed);
             }
-            $filename = $file_path;
+            else
+            {
+                require_once($file);
+            }
+
+            $init_func = $bfunc . 'init';
+
+            if( function_exists($init_func) )
+                $init_func($this,$this->vars);
         }
-        else
-        {
-            $filename = $file;
-        }
+
     }
 
-    if( !empty($filename) )
-        $path = CCTemplate::GetTemplate($filename,true);
 
-    if( empty($path) )
+    function ClearCache() { return true; }
+
+    function _inner_include($path,$funcname='')
     {
-        print( "<h3>Can't find template: <span style='color:red'>$file</span></h3>");
-        CCDebug::StackTrace();
+        $this->_push_path($path);
+        $this->_parse($path);
+        if( !empty($funcname) )
+            $funcname($this,$this->vars);
+        $this->_pop_path();
     }
 
-    _template_inner_include($path,$funcname);
+    function _pop_path()
+    {
+        array_shift( $this->template_stack );
+    }
+
+    function _push_path($path,$index='template_stack')
+    {
+        if( is_array($path) )
+        {
+            unset($this->vars);
+            CCDebug::StackTrace();
+        }
+        $path = dirname($path);
+        if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') 
+            $dir = str_replace( '\\', '/', str_replace( getcwd() . '\\', '', $path ) );
+        else
+            $dir = str_replace( getcwd() . '/', '', $path );
+        array_unshift( $this->$index, $dir );
+    }
+
+    function CompatRequired()
+    {
+        if( !empty($this->vars['template_compat']) )
+            return;
+
+        global $CC_GLOBALS;
+
+        $pi = pathinfo( $CC_GLOBALS['skin-file'] );
+        $sp = split( '\.', $pi['basename'] );
+        $pi['filename'] = $sp[0];
+
+        $this->vars['style_sheets'][] = $pi['filename'] . '.css';
+
+        if( empty($this->vars['head_links']) )
+        {
+            foreach( $this->vars['style_sheets'] as $css )
+            {
+                $this->vars['head_links'][] = array(
+                        'rel' => 'stylesheet',
+                        'type' => 'text/css',
+                        'href' => ccd($pi['dirname'] . '/' . $css),
+                        'title' => 'Default Style'
+                    );
+            }
+        }
+
+        if( !empty($this->vars['file_records']) )
+        {
+            $k = array_keys($this->vars['file_records']);
+            $c = count($k);
+            for( $i = 0; $i < $c; $i++ )
+            {
+                $R =& $this->vars['file_records'][$k[$i]];
+                $R['local_menu'] = cc_get_upload_menu($R);
+                cc_get_ratings_info($R);
+            }
+        }
+
+        $this->vars['template_compat'] = true;
+    }
 }
+
 
 class CCTemplateMacro extends CCTemplate
 {
@@ -293,7 +383,7 @@ class CCTemplateMacro extends CCTemplate
     function SetAllAndPrint( $args, $doprint = false, $admin_dump = false )
     {
         $fname = empty($this->_mtemplate) ? '' : $this->_mtemplate . '/';
-        $args['auto_execute'] = array( $fname . $this->_mmacro );
+        $args['auto_execute'] = empty($this->_mmacro) ? array($this->_mtemplate) : array( $fname . $this->_mmacro );
         $ret = parent::SetAllAndPrint($args,$doprint,$admin_dump);
         return $ret;
     }

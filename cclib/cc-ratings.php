@@ -255,14 +255,11 @@ class CCRating
             CCEvents::Invoke( CC_EVENT_RATED, array( $R, $score/100, &$record ) );
         }
 
-        global $CC_GLOBALS;
-        $args = $CC_GLOBALS;
-        $args['root-url'] = ccd();
-        $args['auto_execute'] = array( 'ratings_stars' );
+        $args = array();
         $record =& $uploads->GetRecordFromID($upload_id);
         CCRatingsHV::_fill_scores($record,'upload');
         $args['record'] = $record;
-        $template = new CCTemplate( $CC_GLOBALS['skin-map'] );
+        $template = new CCTemplateMacro( '', 'ratings_stars' );
         $template->SetAllAndPrint($args);
         exit;
     }

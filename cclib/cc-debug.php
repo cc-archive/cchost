@@ -187,7 +187,7 @@ class CCDebug
     * @param mixed $var Reference to variable to dump to screen
     * @param bool $template_safe true means you are NOT debugging code that displays HTML
     */
-    function PrintVar(&$var, $template_safe = true)
+    function PrintVar(&$var, $template_safe = false)
     {
         if( !CCDebug::IsEnabled() )
             return;

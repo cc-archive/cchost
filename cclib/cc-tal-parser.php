@@ -16,13 +16,19 @@ template language, to hide php
 %end_loop%
 
 %if(condition)%
+%if_empty(name)%
+%if_not_empty(name)%
 %end_if%
 
 %var(name)%
 
 %call_macro(name)%
 
-%not_empty%
+%include_map(path_to_map)%
+
+%url(file)%
+
+%define(name,value)%
 
 */
 require_once('cclib/htmlparser/htmlparser.inc');
@@ -37,11 +43,12 @@ else
 
 class CCTALCompiler
 {
-    function CCTALCompiler()
+    function CCTALCompiler($use_compat=true)
     {
         $this->inPHP = false;
         $this->outputSuspended = 0;
         $this->var_count = 100;
+        $this->use_compat = $use_compat;
     }
 
     function echo_brackets($bracket)
@@ -71,7 +78,7 @@ class CCTALCompiler
         else
         {
             $parts = split('/',$t);
-            $text = '$_TV';
+            $text = '$A';
             for( $i = 0; $i < count($parts); $i++ )
             {
                 $P = trim($parts[$i]);
@@ -184,7 +191,7 @@ class CCTALCompiler
         {
             $arr_expr = $this->parse_value($args[1],false);
         }
-        $var_name = '$_TV[\'' . trim($args[0]) . '\']';
+        $var_name = '$A[\'' . trim($args[0]) . '\']';
         $this->php_bracket(true, $OUT);
         $OUT .= TCR_LF .
                 $arr_name . ' = ' . $arr_expr . ';' . TCR_LF .
@@ -238,7 +245,7 @@ class CCTALCompiler
             $args = split(' \| ',$m[2]);
             if( count($args) == 1 )
             {
-                $OUT .= "\$_TV['$name'] = ";
+                $OUT .= "\$A['$name'] = ";
                 if( $args[0] == "null" )
                     $OUT .= "'';" . TCR_LF;
                 else if( intval($args[0]) || $args[0] === '0')
@@ -248,7 +255,7 @@ class CCTALCompiler
             }
             else
             {
-                $this->do_OR("\$_TV['$name'] =",$OUT,$args);
+                $this->do_OR("\$A['$name'] =",$OUT,$args);
             }
         }
     }
@@ -355,15 +362,21 @@ class CCTALCompiler
         $OUT = '';
         $this->inPHP = false;
         $this->php_bracket(true,$OUT);
+        $tname = '_t_' . $basename . '_init';
         $OUT .=<<<EOF
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-global \$_TV;
-
-_template_compat_required();
-
 EOF;
+        if( $this->use_compat )
+        {
+            $OUT .=<<<EOF
+
+function _t_{$basename}_init(\$T,&\$targs) {
+    \$T->CompatRequired();
+}
+EOF;
+        }
 
         // catch
         // <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -503,7 +516,7 @@ EOF;
                                     {
                                         $value = substr($attrs['include'],strlen('string:'));
                                         $this->php_bracket(true, $OUT);
-                                        $OUT .= "_template_call_template('$value');" . TCR_LF;
+                                        $OUT .= "\$T->Call('$value');" . TCR_LF;
                                         unset($attrs['include']);
                                     }
                                     if( count($attrs) )
@@ -569,7 +582,7 @@ EOF;
                                         else
                                             $OUT .= "\n";
                                         $tname = '_t_' . $basename . '_' . $attrs['define-macro'];
-                                        $OUT .= "function $tname() {\n   global \$_TV;\n";
+                                        $OUT .= "function $tname(\$T,&\$A) {\n  ";
                                         $node_stack[0]['funcblock'] = true;
                                     }
                                     elseif( isset($attrs['use-macro']) )
@@ -580,7 +593,7 @@ EOF;
                                         else
                                             $value = "'$value'";
                                         $this->php_bracket(true, $OUT);
-                                        $OUT .= "_template_call_template($value);\n";
+                                        $OUT .= "\$T->Call($value);\n";
                                     }
                                     break;
                                 }

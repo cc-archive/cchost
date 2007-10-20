@@ -275,7 +275,7 @@ class CCRestAPI
         $tfile = CCTemplate::GetTemplate('api.xml');
         $template = new CCTemplate( $tfile, false ); // false means xml mode
         $configs =& CCConfigs::GetTable();
-        $args = array_merge($CC_CONFIGS,$configs->GetConfig('ttags'));
+        $args = array_merge($CC_GLOBALS,$configs->GetConfig('ttags'));
         $pools =& CCPools::GetTable();
         $args['feed_items'] = $pools->QueryRows('');
         $xml = $template->SetAllAndParse($args);
@@ -286,6 +286,8 @@ class CCRestAPI
 
     function PoolRegister()
     {
+        global $CC_GLOBALS;
+
         if( empty($CC_GLOBALS['allow-pool-register']) )
             $this->error_exit("remote registration not allowed at this site");
 

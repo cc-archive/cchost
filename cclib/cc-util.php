@@ -424,7 +424,7 @@ class CCUtil
             {
                 if( $real_path )
                     return realpath($T);
-                return $target;
+                return $T;
             }
         }
 
