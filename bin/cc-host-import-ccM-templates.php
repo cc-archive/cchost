@@ -20,7 +20,7 @@ function main()
 {
     chdir('..');
     define('IN_CC_HOST',1);
-    define('TC_PRETTY', 0 );
+    define('TC_PRETTY', 1 );
     require_once('cclib/cc-tal-parser.php');
 
     recur_mkdir( 'cchost_files/pages' );

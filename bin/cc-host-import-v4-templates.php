@@ -23,6 +23,10 @@ function main()
     define('TC_PRETTY', 0 );
     require_once('cclib/cc-tal-parser.php');
 
+    recur_mkdir( 'ccskins/pages' );
+
+    do_file( 'cctemplates/custom.xml', 'ccskins/pages/custom.xml.php' );
+
     recur_mkdir( 'ccskins/simple' );
     $files = glob('cctemplates/*.xml');
     foreach( $files as $F )
