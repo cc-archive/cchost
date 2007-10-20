@@ -84,19 +84,6 @@ class CCReviewFormAPI
 
             $reviews =& CCReviews::GetTable();
             $topics = $reviews->GetReviewsForUpload($upload_id,false,'DESC');
-            /* 
-                WRONG WAY 
-            $form->GenerateForm();
-            $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
-            $args['root-url'] = cc_get_root_url() . '/';
-            $args['record'] = $R;
-            $args['topics'] = $topics;
-            $args['macro'] = 'post_review';
-            $tfile = CCTemplate::GetTemplate('topics .xml');
-            $template = new CCTemplate($tfile);
-            $html = $template->SetAllAndParse($args);
-            CCPage::AddPrompt('body_text',$html);
-            */
 
             CCPage::PageArg('record',$R);
             CCPage::PageArg('review_post_macro','topics.xml/post_review');
@@ -104,10 +91,8 @@ class CCReviewFormAPI
             // ug sorry about this
             if( function_exists('cc_playlist_enabled') && cc_playlist_enabled() )
             {
-                CCPage::PageArg('eplayer', 'playerembed.xml/eplayer');
-                CCPage::PageArg('playlistmenu', 'playlist.xml/playlist_menu');
-                CCPage::PageArg('dummy1', true, 'eplayer');
-                CCPage::PageArg('dummy2', true, 'playlistmenu');
+                CCPage::PageMacro('playerembed.xml/eplayer');
+                CCPage::PageMacro('playlist.xml/playlist_menu');
             }
             
             CCPage::AddForm( $form->GenerateForm() );
@@ -238,26 +223,8 @@ class CCReviewFormAPI
                 $up_results[$i]['topic_search_result_info'] = CCSearch::_highlight_results($extra,$terms);
             }
 
-            /*
-                WRONG WAY
-
-            global $CC_GLOBALS;
-
-            $args = $CC_GLOBALS;
-            $args['root-url'] = cc_get_root_url() . '/';
-            $args['macro'] = 'recent_reviews';
-            $args['topics'] = $up_results;
-            $args['hot_topics'] = false;
-
-            //$tfile = CCTemplate::GetTemplate();
-            $template = new CCTemplate('topics .xml');
-            $html = $template->SetAllAndParse($args);
-            CCPage::AddPrompt('body_text',$html);
-            */
-
             CCPage::PageArg( 'hot_topics', false );
-            CCPage::PageArg( 'topic_results_macro', 'topics.xml/recent_reviews');
-            CCPage::PageArg( 'topics', $up_results, 'topic_results_macro' );
+            CCPage::PageArg( 'topics', $up_results, 'topics.xml/recent_reviews');
         }
 
         $done_search = true;

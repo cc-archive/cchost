@@ -111,21 +111,21 @@ class CCQueryFormats
                     if( empty($template) )
                         $template = 'med';
 
-                    $tname = 'formats/' . $template;
+                    $tname = CCTemplate::GetTemplate('formats/' . $template);
 
                     // normally we wouldn't go through extra step of
                     // actually looking up the template, but since
                     // this is a public api we want to be friendly
                     // about it...
 
-                    if( !CCTemplate::GetTemplate($tname) )
+                    if( !$tname )
                     {
                         print(sprintf(_('"%s" is not a valid template'), 
                                       $template));
                         exit;
                     }
                         
-                    $templateObj = new CCTemplate($tname);
+                    $templateObj = new CCTemplateMacro($tname,'');
                 }
                 else
                 {

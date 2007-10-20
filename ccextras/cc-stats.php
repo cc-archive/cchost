@@ -126,28 +126,25 @@ function cc_stats_on_map_urls()
 
 function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
 {
-    $tname = CCPage::GetViewFile('charts.xml');
-    $template = new CCTemplate( $tname );
     if( $type == 'upload' )
     {
         $sort_on = 'upload_' . $sort_on;
-        $args['upload_recs'] =& cc_stats_chart_upload_data($sort_on,$dir);
-        $count = count($args['upload_recs']);
+        $upload_recs =& cc_stats_chart_upload_data($sort_on,$dir);
+        $count = count($upload_recs);
         for( $i = 0; $i < $count; $i++ )
         {
-            CCEvents::Invoke( CC_EVENT_UPLOAD_LISTING, array( &$args['upload_recs'][$i] ) );
+            CCEvents::Invoke( CC_EVENT_UPLOAD_LISTING, array( &$upload_recs[$i] ) );
             //CCDebug::PrintVar($args['upload_recs'][0],false);
         }
+        CCPage::PageArg('upload_recs',$upload_recs,'charts.xml' );
     }
     else
     {
         $sort_on = 'user_' . $sort_on;
-        $args['user_recs'] =& cc_stats_chart_user_data($sort_on,$dir);
+        $user_recs =& cc_stats_chart_user_data($sort_on,$dir);
+        CCPage::PageArg('user_recs',$user_recs, 'charts.xml' );
     }
-    $args['root-url'] = cc_get_root_url();
-    $text = $template->SetAllAndParse($args);
     CCPage::SetTitle(_("Charts"));
-    CCPage::AddPrompt('body_text',$text);
 }
 
 function _cc_stats_filter($since)
