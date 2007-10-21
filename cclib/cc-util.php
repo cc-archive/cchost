@@ -428,17 +428,20 @@ class CCUtil
             }
         }
 
-        $hit = CCUtil::_inner_search($target,$look_here_first,$real_path);
-        if( $hit === false )
-            $hit = CCUtil::_inner_search($target,$then_here,$real_path);
+        if( !is_array($look_here_first) )
+            $look_here_first = split(';',$look_here_first);
+
+        if( !is_array($then_here) )
+            $then_here = split(';',$then_here);
+
+        $paths = array_merge($look_here_first, $then_here);
+
+        $hit = CCUtil::_inner_search($target,$paths,$real_path);
         return $hit;
     }
 
     function _inner_search($target,$paths,$real_path)
     {
-        if( !is_array($paths) )
-            $paths = split(';',$paths);
-
         $files = array();
         foreach( $target as $T )
         {
@@ -454,6 +457,7 @@ class CCUtil
             foreach( $files as $T )
             {
                 $relpath = $dir . $T;
+                CCDebug::Log("Checking: $relpath");
                 if( file_exists($relpath) )
                     return $real_path ? realpath($relpath) : $relpath;
             }

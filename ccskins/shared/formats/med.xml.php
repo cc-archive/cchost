@@ -50,7 +50,7 @@ $_TV['upname'] = CC_strchop($_TV['R']['upload_name'],$_TV['chop'],$_TV['dochop']
 $_TV['user'] = CC_strchop($_TV['R']['user_real_name'],$_TV['chop'],$_TV['dochop']);
 
 ?><a  href="<?= $_TV['R']['license_url']?>" title="<?= $_TV['R']['license_name']?>" class="cc_liclogo">
-<img  src="<?= $_TV['root-url']?>ccimages/lics/small-<?= $_TV['R']['license_logo']?>" />
+<img  src="<?= $T->URL('images/lics/small-' . $_TV['R']['license_logo']); ?>" />
 </a>
 <a  class="cc_file_link" href="<?= $_TV['R']['file_page_url']?>">
           <?= $_TV['upname']?>

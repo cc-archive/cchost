@@ -52,7 +52,7 @@ function _t_playlist_playlist_list($T,&$A) {
 </li><?}?></ul>
 <?}?></td><td >
 <?if ( !empty($A['args']['feed_q'])) {?><div  class="cc_playlist_feed"><a  target="_parent" href="<?= $A['args']['feed_q']?>">
-<img  src="<?= $A['root-url']?>ccimages/feed-icon16x16.png" /></a></div>
+<img  src="<?= $T->URL('images/feed-icon16x16.png') ?>" /></a></div>
 <?}$A['R'] = $A['args']['playlist'];?><a  target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $A['R']['cart_id']?>"><div  class="cc_playlist_title"><?= $A['R']['cart_name']?></div>
 </a>
 <span  class="cc_playlist_date">

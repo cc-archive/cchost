@@ -232,13 +232,8 @@ class CCTemplate
         if( !in_array( $file, $this->files ) )
         {
             preg_match( '#([^/]+)\.([a-z]+)$#i', $file, $m );
-            if( empty($m[1]) ) { unset($this->vars); CCDebug::StackTrace(); }
+
             $bfunc = '_t_' . preg_replace('/[^a-z]+/i','_',$m[1]) . '_';
-            $OB = '<';
-            $OB .= '?';
-            $CB = '?';
-            $CB .= '>';
-            $OE = $OB . '=';
 
             // these will be visible to included/eval'd code
 
@@ -247,36 +242,8 @@ class CCTemplate
 
             if( $m[2] == 'tpl' )
             {
-                $text = file_get_contents($file);
-                $translations = array(
-                    "/%macro\(([^\)]+)\)%/"         =>   "$OB function $bfunc$1(\$T,&\$A) { $CB",
-                    "/%end_macro%/"                 =>   "$OB } $CB",
-                    "/%loop\(([^,]+),([^\)]+)\)%/"  =>   "$OB if( !empty(\$A['$1']) ) foreach( \$A['$1'] as \$$2 ) { $CB",
-                    "/%loop_item\(([^,]+),([^,]+),([^\)]+)\)%/"  =>   "$OB foreach( \$$1['$2'] as \$$3 ) { $CB",
-                    "/%end_loop%/"                  =>   "$OB } $CB",
-                    "/%if\((.+)\)%/U"               =>   "$OB if( $1 ) { $CB",
-                    "/%end_if%/"                    =>   "$OB } $CB",
-                    "/%var\(([^\)]+)\)%/"           =>   "$OE \$A['$1'] $CB",
-                    "/%item\(([^,]+),([^\)]+)\)%/"  =>   "$OE \$$1['$2'] $CB",
-                    "/%call_macro\(([^\)]+)\)%/"    =>   "$OB \$T->Call(\$A['$1']); $CB",
-                    "/%call_macroi\(([^\)]+)\)%/"   =>   "$OB \$T->Call($1); $CB",
-                    "/%not_empty_item\(([^,]+),([^\)]+)\)%/"  =>   "$OE cc_not_empty(\$$1['$2']) $CB",
-                    "/%include_map\(([^\)]+)\)%/"   =>   "$OB \$T->ImportMap('$1'); $CB",
-                    "/%if_not_empty\(([^\)]+)\)%/"  =>   "$OB if( !empty(\$A['$1']) ) { $CB",
-                    "/%if_empty\(([^\)]+)\)%/"      =>   "$OB if( empty(\$A['$1']) ) { $CB",
-                    "/%url\(([^\)]+)\)%/"           =>   "$OE \$T->URL('$1') $CB",
-                    "/%define\(([^,]+),([^\)]+)\)%/"=>   "$OB \$A['$1'] = '$2'; $CB",
-                    "/%add_stylesheet\(([^\)]+)\)%/"=>   "$OB \$A['style_sheets'][] = '$1'; $CB",
-                    "/%import_map\(([^\)]+)\)%/"    =>   "$OB \$T->ImportMap('$1'); $CB",
-                    "/%string_def\(([^,]+),([^\)]+\))\)%/" =>   "$OB \$GLOBALS['str_$1'] = $2; $CB",
-                    );
-
-                $parsed = preg_replace( array_keys($translations), array_values($translations), $text );
-
-//print("<br /><br /><br /><br /><br />");
-//if( strstr($file,'map') )
-//CCDebug::PrintVar($parsed,false);
-
+                require_once('cclib/cc-tpl-parser.php');
+                $parsed = cc_tpl_parse_file($file,$bfunc);
                 eval( '?>' . $parsed);
             }
             else
@@ -288,6 +255,8 @@ class CCTemplate
 
             if( function_exists($init_func) )
                 $init_func($this,$this->vars);
+
+            $this->files[] = $file;
         }
 
     }

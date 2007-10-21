@@ -214,7 +214,7 @@ class CCConfigs extends CCTable
         $settings = $configs->GetConfig('settings');
         $CC_GLOBALS['skin']      = $settings['skin'];
         $CC_GLOBALS['skin-file'] = $settings['skin-file'];
-        $CC_GLOBALS['skin-map']  = preg_replace( '/(skin-[^\.]+)(\.xml)?\.php/', '$1-map$2.php', $CC_GLOBALS['skin-file'] );
+        $CC_GLOBALS['skin-map']  = str_replace('skin.', 'map.', $settings['skin-file'] );
 
         // allow admins to turn off user interface
         //

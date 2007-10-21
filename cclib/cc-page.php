@@ -220,7 +220,6 @@ class CCPage extends CCTemplate
            $page =& CCPage::GetPage();
          else
            $page =& $this;
-
         if( !($file = $page->GetViewFile($template)) && !preg_match('/\.xml$/',$template) )
         {
             $file = $page->GetViewFile($template . '.xml');
@@ -412,26 +411,6 @@ class CCPage extends CCTemplate
         // 
         $configs =& CCConfigs::GetTable();
         $tmacs = $configs->GetConfig('tmacs');
-
-        $first_key = key($tmacs);
-
-        // older installs don't have file/ prefix,
-        // fix that right here...
-        if( strpos( $first_key, '/' ) === false )
-        {
-            $newmacs = array();
-            foreach( $tmacs as $K => $V )
-            {
-                if( strpos( $K, '/' ) === false )
-                    $K = "custom/$K";
-                $newmacs[$K] = $V;
-            }
-            $configs->SaveConfig('tmacs',$newmacs,'',false);
-            $tmacs = $newmacs;
-        }
-
-        reset($tmacs);
-
         foreach( $tmacs as $K => $V )
         {
             if( $V )
@@ -543,13 +522,13 @@ class CCPage extends CCTemplate
         $files = array( $filename . '.php',
                         $filename . '.tpl',
                         $filename );
-        return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccskins/pages', $real_path );
+        return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccskins/shared', $real_path );
     }
 
     function GetViewFilePath()
     {
         global $CC_GLOBALS;
-        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccskins/pages' );
+        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccskins/shared' );
     }
     
     /**

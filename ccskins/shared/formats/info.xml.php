@@ -37,7 +37,7 @@ for( $ci102= 0; $ci102< $cc102; ++$ci102)
 } // END: if
 
 ?><a  href="<?= $A['R']['license_url']?>" title="<?= $A['R']['license_name']?>" class="cc_liclogo">
-<img  src="<?= $A['root-url']?>ccimages/lics/small-<?= $A['R']['license_logo']?>" />
+<img  src="<?= $T->URL('images/lics/small-' . $A['R']['license_logo']); ?>" />
 </a>
 <?
 

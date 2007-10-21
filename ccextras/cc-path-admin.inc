@@ -38,7 +38,7 @@ class CCPathAdminForm extends CCEditConfigForm
 
         $fields['files-root'] =
                array( 'label'       => 'docs ' . _('Path'),
-                       'form_tip'   => _('ccHost will look here for files used with the "docs" command before it looks in ccskins/pages'),
+                       'form_tip'   => _('ccHost will look here for files used with the "docs" command before it looks in ccskins/shared'),
                        'value'      => '',
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE  );

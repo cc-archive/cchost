@@ -396,7 +396,7 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
         [license_text] => <strong>Attribution Noncommercial</strong>
     */
 
-    print "<div class=\"cc_round_box\" id=\"license_info\"><p><img src=\"{$A['root-url']}ccimages/lics/{$R['license_logo']}\" />".
+    print "<div class=\"cc_round_box\" id=\"license_info\"><p><img src=\"" . $T->URL('images/lics/' . $R['license_logo'] ) . "\" />".
           "  <div id=\"license_info_t\" >\n" .
           "    {$GLOBALS['str_lic']}<br />Creative Commons<br />" .
           "<a href=\"{$R['license_url']}\">" .

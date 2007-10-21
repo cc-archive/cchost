@@ -167,7 +167,8 @@ for( $ci105= 0; $ci105< $cc105; ++$ci105)
 ?></select>
 <button  id="fileok">ok</button>
 </form>
-<div  id="upcover" style="position:absolute;display:none;background-color:white;"><img  style="margin-left:45%" src="<?= $_TV['root-url']?>ccimages/spinner.gif" /></div>
+<div  id="upcover" style="position:absolute;display:none;background-color:white;">
+<img  style="margin-left:45%" src="<?= $T->URL('images/spinner.gif') ?>" /></div>
 <?
 } // END: if
 

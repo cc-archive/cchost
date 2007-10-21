@@ -28,7 +28,7 @@ if( !defined('IN_CC_HOST') )
 
 /**
 */
-define('CC_FORM_TYPE_LOGO_DIR', 'ccimages/form_types' );
+define('CC_FORM_TYPE_LOGO_DIR', 'ccskins/shared/images/form_types' ); // this should be a call to CCTemplate::Search
 
 /**
 * @package cchost

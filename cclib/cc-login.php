@@ -574,7 +574,7 @@ class CCLogin
         if( empty($hash) || ($ip != $_SERVER['REMOTE_ADDR']) )
             exit;
         $ord  = ord($hash[$offset]);
-        $fname = sprintf("ccimages/hex/f%x.png",$ord);
+        $fname = CCTemplate::Search( sprintf("images/hex/f%x.png",$ord) );
         header ("Content-Type: image/png");
         readfile($fname);
         exit;

@@ -29,25 +29,25 @@ var ccShareSites =
             'delicious',                                        // unique ID
             'del.icio.us',                                      // display text 
             'http://del.icio.us/post?url=%url%&title=%title%',  // bookmark URL
-            root_url + '/ccimages/shareicons/delicious.gif'     // icon
+            root_url + '/ccskins/shared/images/shareicons/delicious.gif'     // icon
         ], 
         [
             'digg' ,
             'Digg',
             'http://digg.com/submit?phase=2&url=%url%&title=%title%',
-            root_url + '/ccimages/shareicons/digg.gif'
+            root_url + '/ccskins/shared/images/shareicons/digg.gif'
         ],
         [
             'furl' ,
             'Furl',
             'http://furl.net/storeIt.jsp?u=%url%&t=%title%',
-            root_url + '/ccimages/shareicons/furl.gif'
+            root_url + '/ccskins/shared/images/shareicons/furl.gif'
         ],
         [
             'netscape',
             'Netscape',
             'http://www.netscape.com/submit/?U=%url%&T=%title%',
-            root_url + '/ccimages/shareicons/netscape.gif'
+            root_url + '/ccskins/shared/images/shareicons/netscape.gif'
         ]
     ],
     [
@@ -55,25 +55,25 @@ var ccShareSites =
             'yahoo_myweb',
             'Yahoo! My Web',
             'http://myweb2.search.yahoo.com/myresults/bookmarklet?u=%url%&t=%title%',
-            root_url + '/ccimages/shareicons/yahoo_myweb.gif'
+            root_url + '/ccskins/shared/images/shareicons/yahoo_myweb.gif'
         ],
         [
             'stumbleupon',
             'StumbleUpon', 
             'http://www.stumbleupon.com/submit?url=%url%&title=%title%',
-            root_url + '/ccimages/shareicons/stumbleupon.gif'
+            root_url + '/ccskins/shared/images/shareicons/stumbleupon.gif'
         ], 
         [
             'google_bmarks',
             'Boooookmarks', 
             'http://www.google.com/bookmarks/mark?op=edit&bkmk=%url%&title=%title%',
-            root_url + '/ccimages/shareicons/google_bmarks.gif'
+            root_url + '/ccskins/shared/images/shareicons/google_bmarks.gif'
         ], 
         [
             'technorati',
             'Technorati', 
             'http://www.technorati.com/faves?add=%url%',
-            root_url + '/ccimages/shareicons/technorati.gif'
+            root_url + '/ccskins/shared/images/shareicons/technorati.gif'
         ]
     ],
     [
@@ -81,25 +81,25 @@ var ccShareSites =
             'blinklist',
             'BlinkList',
             'http://blinklist.com/index.php?Action=Blink/addblink.php&Url=%url%&Title=%title%',
-            root_url + '/ccimages/shareicons/blinklist.gif'
+            root_url + '/ccskins/shared/images/shareicons/blinklist.gif'
         ], 
         [
             'newsvine',
             'Newsvine', 
             'http://www.newsvine.com/_wine/save?u=%url%&h=%title%',
-            root_url + '/ccimages/shareicons/newsvine.gif'
+            root_url + '/ccskins/shared/images/shareicons/newsvine.gif'
         ], 
         [
             'magnolia',
             'ma.gnolia',
             'http://ma.gnolia.com/bookmarklet/add?url=%url%&title=%title%',
-            root_url + '/ccimages/shareicons/magnolia.gif'
+            root_url + '/ccskins/shared/images/shareicons/magnolia.gif'
         ], 
         [
             'reddit',
             'reddit',
             'http://reddit.com/submit?url=%url%&title=%title%',
-            root_url + '/ccimages/shareicons/reddit.gif'
+            root_url + '/ccskins/shared/images/shareicons/reddit.gif'
         ]
     ],
     [
@@ -113,7 +113,7 @@ var ccShareSites =
             'tailrank',
             'Tailrank', 
             'http://tailrank.com/share/?link_href=%url%&title=%title%',
-            root_url + '/ccimages/shareicons/tailrank.gif'
+            root_url + '/ccskins/shared/images/shareicons/tailrank.gif'
         ],
         [
             'bloglines',

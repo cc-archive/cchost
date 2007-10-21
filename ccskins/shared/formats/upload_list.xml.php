@@ -72,7 +72,7 @@ for( $ci103= 0; $ci103< $cc103; ++$ci103)
 
     print "  <div class=\"upload\" ><!--  %%% {$R['upload_name']}  %%% -->\n";
 
-    helper_list_info($R,$A);
+    helper_list_info($R,$A,$T);
     helper_list_menu($R);
     helper_list_remixex($R);
 
@@ -171,14 +171,14 @@ function helper_list_menu_item(&$item)
         print '</span>';
 }
 
-function helper_list_info(&$R,&$A)
+function helper_list_info(&$R,&$A,$T)
 {
     $furl = $R['file_page_url'];
     $aurl = $R['artist_page_url'];
     $name = CC_StrChop($R['upload_name'],27);
     $about_url =  empty($R['local_menu']['download'][0]['action']) ? '' : "about=\"{$R['local_menu']['download'][0]['action']}\"";
     $date = CC_datefmt($R['upload_date'],'M d, Y h:i a');
-
+    $licurl = $T->URL('images/lics/small-' . $R['license_logo']);
     $html =<<<EOF
     <div class="upload_avatar"><img src="{$R['user_avatar_url']}" /></div>
     <div class="upload_info">
@@ -186,7 +186,7 @@ function helper_list_info(&$R,&$A)
                   {$about_url}
                   rel="license"
                   title="{$R['license_name']}" >
-                  <img src="{$A['root-url']}ccimages/lics/small-{$R['license_logo']}" /></a> 
+                  <img src="{$licurl}" /></a> 
         <a href="{$furl}" class="upload_link">{$name}</a><br /> {$GLOBALS['str_by']} <a href="{$aurl}">{$R['user_real_name']}</a>
         <div class="upload_date">$date </div>
         <div class="taglinks">

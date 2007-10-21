@@ -56,7 +56,7 @@ function _generator_cc_format($form, $fieldname, $value, $class )
         <div class="cc_format_preview" id="format_inner_preview_' . $fieldname . '"></div>
             </div>';
 
-    $thumbs_up_tiny = ccr('ccimages/thumbs_up_tiny.png');
+    $thumbs_up_tiny = CCTemplate::Search( 'images/thumbs_up_tiny.png' );
 
     $html .=<<<END
         <div class="cc_ed_buttons">
@@ -86,7 +86,7 @@ function _cc_format_unformat($text)
 
 function _cc_format_format($text)
 {
-    $thumbs_up = ccr('ccimages/thumbs_up.png');
+    $thumbs_up = CCTemplate::Search('images/thumbs_up.png');
 
     $quote = _('Quote:');
     require_once('cclib/smartypants/smartypants.php');
