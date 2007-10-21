@@ -1,9 +1,7 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-function _t_channels_init($T,&$targs) {
-    $T->CompatRequired();
-}?><style >
+?><style >
 .cvalue {
   display:none;
 }
@@ -102,4 +100,4 @@ function _t_channels_init($T,&$targs) {
 baseCmd = '<?= $A['home-url']?>api/query';
 sitePromoTag = '<?if ( isset($A['site_promo_tag']) ) {?><?= $A['site_promo_tag']?><?}?>';
 </script>
-<script  src="<?= $A['root-url']?>cctemplates/js/radio.js"></script>
+<script  src="<?= $T->URL('js/radio.js') ?>" ></script>

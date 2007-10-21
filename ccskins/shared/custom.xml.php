@@ -1,32 +1,57 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-function _t_custom_init($T,&$targs) {
-    $T->CompatRequired();
-}
-function _t_custom__UBeenRemixed_admin_only($T,&$A) {
-  $A['ubeenargs'] = CC_pending_pool_remix();if ( !empty($A['ubeenargs'])) {?><h2 ><a  href="<?= $A['ubeenargs']['url']?>"><?= $A['ubeenargs']['message']?></a></h2><?}}
-function _t_custom_Play_this_page($T,&$A) {
-  }
 function _t_custom_Podcast_and_Stream_Links($T,&$A) {
-  if ( !empty($A['upload_ids'])) {?><p >
-<div  class="cc_podcast_link"><a  href="<?= $A['home-url']?>podcast/page?ids=<?= $A['upload_ids']?>"><span ><?= _('PODCAST this page')?></span></a></div>
-<?if ( !empty($A['artist_page'])) {?><div  class="cc_podcast_link"><a  href="<?= $A['home-url']?>podcast/artist/<?= $A['artist_page']?>"><span >PODCAST <?= $A['artist_page']?></span></a></div><?}if ( !empty($A['can_stream_page'])) {?><div  class="cc_stream_page_link"><a  href="<?= $A['home-url']?>stream/page/playlist.m3u?ids=<?= $A['upload_ids']?>"><span ><?= _('STREAM this page')?></span></a></div><?}?></p><?}if ( !empty($A['enable_playlists'])) {if ( !empty($A['fplay_args'])) {$A['fqstring'] = join('&',$A['fplay_args']);if( !empty($A['get']['offset']) ) { $A['offs'] = $A['get']['offset']; } else {  $A['offs'] = 0;} if( !empty($A['fplay_title']) ) { $A['fplayt'] = $A['fplay_title']; } else {  $A['fplayt'] = _('PLAY this page'); } ?><script >
+
+    if( empty($A['artist_page']) ) 
+    { 
+        if( empty($A['qstring']) ) 
+            return;
+
+        $qstring = $A['qstring']; 
+    }
+    else 
+    {
+        $qstring = 'user=' . $A['artist_page'];
+    }
+
+    $qstring .= '&limit=15';
+    $q = $A['q'];
+
+    print "<p>{$GLOBALS['str_media']}</p>\n<ul>\n";
+
+    if ( !empty($A['enable_playlists'])) 
+    {
+        $script = true;
+        if( !empty($A['get']['offset']) ) { $A['offs'] = $A['get']['offset']; } else {  $A['offs'] = 0;} 
+        if( !empty($A['fplay_title']) ) { $fplayt = $A['fplay_title']; } else {  $fplayt = $GLOBALS['str_play_this_page']; } 
+        print "<li><a id=\"mi_play_page\" href=\"javascript://play page\" onclick=\"ppage()\">{$fplayt}</a></li>\n";
+    }
+    else
+    {
+        $script = false;
+    }
+
+    print "<li><a id=\"mi_stream_page\" href=\"{$A['home-url']}api/query/stream.m3u{$q}f=m3u&{$qstring}\">{$GLOBALS['str_stream_this_page']}</a></li>\n" .
+          "<li><a id=\"mi_podcast_page\" title=\"{$GLOBALS['str_drag_this_link']}\" href=\"{$A['home-url']}api/query/{$q}f=rss&{$qstring}\">{$GLOBALS['str_podcast_this_page']}</a></li>\n" .
+          "</ul>\n";
+
+    if( $script )
+    {
+        ?>
+<script>
 function ppage() { 
-    var url = home_url + 'playlist/popup' + q + 'offset=<?= $A['offs']?>&<?= $A['fqstring']?>';
+    var url = home_url + 'playlist/popup' + q + 'offset=<?= $A['offs']?>&<?= $qstring ?>';
     var dim = "height=300,width=550";
     var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                   "resizable=1,scrollbars=1," + dim );
 }
 </script>
-<?if ( !isset($A['upload_ids']) ) {?><br  /><?}?><div  class="cc_stream_page_link"><a  href="javascript://open player" onclick="ppage(); return false;"><span ><?= $A['fplayt']?></span></a></div><?}}}
-function _t_custom_List_Contests($T,&$A) {
-  ?><p ><?= CC_Lang('Open Contests')?></p>
-<ul >
-<?$carr101 =  CC_query('CCContests','GetOpenContests', 'cclib/cc-contest.inc');$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $A['item'] = $carr101[ $ck101[ $ci101 ] ];   ?><li >
-<a  href="<?= $A['item']['contest_url']?>" class="cc_contest_open"><?= $A['item']['contest_friendly_name']?></a>
-</li><?}?></ul>
-<?}
+        <?
+    }
+
+}
+
 function _t_custom_Virtual_Roots($T,&$A) {
   ?><p ><?= _('Mini Sites');?></p>
 <ul >
