@@ -21,6 +21,10 @@ a:hover {
 	text-decoration: underline;
 }
 
+.hide {
+	display: none;
+}
+
 /*
     Generic Page 
 */
@@ -206,21 +210,25 @@ a.more_menu_link {
 	text-decoration: underline;
 }
 
-#mi_stream_page, #mi_play_page, #mi_podcast_page {
+.menu_group #mi_stream_page, .menu_group #mi_play_page, .menu_group #mi_podcast_page {
 	height: 20px;
 	padding-left: 22px;
 	display: block;
 }
 
+.menu_group #mi_play_page {
+    margin-top: 5px;
+}
+
+
 #mi_stream_page {
-	background: url('../images/menu-stream.png') top left no-repeat;
+	background: url('../../shared/images/menu-stream.png') top left no-repeat;
 }
 #mi_play_page {
-    margin-top: 5px;
-	background: url('../images/menu-play.png') top left no-repeat;
+	background: url('../../shared/images/menu-play.png') top left no-repeat;
 }
 #mi_podcast_page {
-	background: url('../images/menu-podcast.png') top left no-repeat;
+	background: url('../../shared/images/menu-podcast.png') top left no-repeat;
 }
 
 /*

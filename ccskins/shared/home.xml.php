@@ -1,10 +1,6 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-function _t_home_init($T,&$targs) {
-    $T->CompatRequired();
-}?><div >
-
 <style >
 .hs
 {

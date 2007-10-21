@@ -5,7 +5,7 @@ function _t_page_html_head($T,&$_TV)
     if( !empty($_TV['ajax']) )
         return;
 
-    $caption = !empty($_TV['page-caption']) ? $_TV['page-caption'] : (!empty($_TV['page-title']) ? $_TV['page-title'] : (!empty($_TV['backup-title']) ? $_TV['backup-title'] : ('')));
+    $caption = !empty($_TV['page-title']) ? $_TV['page-title'] : '';
 
     $HTML =<<<EOF
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 //EN">
@@ -142,24 +142,30 @@ function page_inner_print_tabs($tabs,$id)
 
 function _t_page_main_body($T,&$_TV)
 {
-    if( !empty($_TV['show_body_header']) && empty($_TV['ajax']) )
+    if( !empty($_TV['show_body_header'])  )
     {
-        print("<body>\n");
-
-        $HTML =<<<EOF
-        <body>
-        <div class="hide">
-          <a href="#content">{$GLOBALS['str_skip']}</a>
-        </div>
+        if( empty($_TV['ajax']) )
+        {
+            $HTML =<<<EOF
+<body>
+<div class="hide">
+  <a href="#content">{$GLOBALS['str_skip']}</a>
+</div>
 
 EOF;
+            print $HTML;
 
-        $T->Call('print_banner');
-        $T->Call('print_menu');
+            $T->Call('print_banner');
+            $T->Call('print_menu');
 
-        print("<div id=\"main_content\">\n");
+            print("<div id=\"main_content\">\n");
 
-        print "<a name=\"content\"></a>\n";
+            print "<a name=\"content\"></a>\n";
+        }
+        else
+        {
+            print("<body>\n");
+        }
     }
 
     if( !empty($_TV['bread_crumbs'] ) )
@@ -168,12 +174,15 @@ EOF;
     if( !empty($_TV['sub_nav_tabs'] ) )
         $T->Call('print_sub_nav_tabs');
 
-    if( !empty($_TV['page-title'] ) )
-        print "<h1 class=\"title\">{$_TV['page-title']}</h1>\n";
+    $T->Call('print_page_title');
+
+    print '<a name="content" />' . "\n";
 
     if( !empty($_TV['macro_names'] ) ) 
         foreach( $_TV['macro_names'] as $macro )
-            $T->Call($macro);
+    {
+        $T->Call($macro);
+    }
 
     if( !empty($_TV['inc_names'] ) ) 
         foreach( $_TV['inc_names'] as $inc_name )
@@ -192,6 +201,22 @@ EOF;
         print "\n</body>\n</html>\n";
     }
 
+}
+
+function _t_page_print_page_title($T,&$_TV) 
+{
+    if( !empty($_TV['page-title'] ) )
+    {
+        print "<h1 class=\"title\">{$_TV['page-title']}</h1>";
+        if( empty($_TV['ajax']) )
+        {
+            $title = addslashes($_TV['page-title']);
+            $html =<<<EOF
+<script>document.title = '{$_TV['site-title']} {$title}';</script>
+EOF;
+            print $html;
+        }
+    }
 }
 
 function _t_page_print_end_script_blocks($T,&$_TV) 
