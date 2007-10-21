@@ -1,0 +1,63 @@
+/*
+* Creative Commons has made the contents of this file
+* available under a CC-GNU-GPL license:
+*
+* http://creativecommons.org/licenses/GPL/2.0/
+*
+* A copy of the full license can be found as part of this
+* distribution in the file LICENSE.TXT.
+* 
+* You may use the ccHost software in accordance with the
+* terms of that license. You agree that you are solely 
+* responsible for your use of the ccHost software and you
+* represent and warrant to Creative Commons that your use
+* of the ccHost software will comply with the CC-GNU-GPL.
+*
+* $Id$
+*
+*/
+
+/*--------------------------------------------------------
+	Rounded Boxes
+--------------------------------------------------------*/
+
+/* rounded boxes */
+/* set the image to use and establish the lower-right position */ 
+.cssbox, .cssbox_body, .cssbox_head, .cssbox_head h2 
+{ background: transparent url('../images/backbox.png') no-repeat bottom right; } 
+
+.cssbox_bw, .cssbox_body_bw, .cssbox_head_bw, .cssbox_head_bw h2 
+{ background: transparent url('../images/backbox-bw.png') no-repeat bottom right; } 
+
+/* width: 335px !important; /* intended total box width - padding-right(next) */ 
+          /* width: 320px; /* IE Win = width - padding */ 
+		  
+.cssbox, .cssbox_bw { padding-right: 15px; /* the gap on the right edge of the image (not content padding) */ 
+		  margin: 0px auto; /* use to position the box */ 
+} 
+
+/* set the top-right image */ 
+.cssbox_head, .cssbox_head_bw { background-position: top right; 
+               margin-right: -15px; /* pull the right image over on top of border */ 
+			   padding-right: 40px; /* right-image-gap + right-inside padding */ 
+} 
+
+/* set the top-left image */ 
+.cssbox_head h2, .cssbox_head_bw h2 
+{ background-position: top left; 
+				  margin: 0; /* reset main site styles*/ 
+				  border: 0; /* ditto */ 
+				  padding: 20px 0 10px 40px; /* padding-left = image gap + interior padding ... no padding-right */ 
+				  height: auto !important; height: 1%; /* IE Holly Hack */ 
+				  font-size: 13px;
+			      font-family: Verdana;
+} 
+
+/* set the lower-left corner image */ 
+.cssbox_body, .cssbox_body_bw
+{ background-position: bottom left; 
+               margin-right: 25px; /* interior-padding right */ 
+			   padding: 2px 0 25px 40px; /* mirror .cssbox_head right/left */ 
+			   font-size: 11px;
+			   font-family: Verdana;
+} 
