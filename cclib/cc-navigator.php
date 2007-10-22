@@ -115,7 +115,7 @@ class CCNavigator
         if( empty($default_tab) )
             return;
 
-        $qname = $title = $default_tab['text'];
+        $qname = $default_tab['text'];
 
         if( $default_tab['function'] == 'sub' )
         {
@@ -133,16 +133,6 @@ class CCNavigator
                                       $sub_tab_info );
 
                 $page_out->PageArg('sub_nav_tabs',$sub_tab_info);
-
-                // but populate the title bar
-
-                $qname = $title . ' :: ' . $default_tab['text'];
-
-                $page_out->PageArg('backup-title',$qname);
-
-                // but yo, don't force title under subtabs, 
-
-                $title = ''; 
             }
         }
 
@@ -201,11 +191,6 @@ class CCNavigator
                 $query = new CCQuery();
                 $args = $query->ProcessAdminArgs($args);
                 $query->Query($args);
-            }
-
-            if( !empty($title) )
-            {
-                $page_out->SetTitle($title);
             }
         }
     }

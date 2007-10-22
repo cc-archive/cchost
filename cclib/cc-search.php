@@ -92,10 +92,11 @@ class CCSearch
 
         CCPage::SetTitle(_("Search"));
         $form = new CCSearchForm();
-        $form_html = $form->GenerateHTML();
-        $form_html .= '<h1>' . _('Search using Google (tm)') . '</h1>';
+        CCPage::AddForm( $form->GenerateForm() );
+
+        $google = '<h1>' . _('Search using Google (tm)') . '</h1>';
         $site = preg_replace('#http://(.*)#','\1', cc_get_root_url() );
-        $form_html .=<<<END
+        $google  .=<<<END
 <form method="GET" action="http://www.google.com/search">
 <input type="hidden" name="ie" value="utf-8" />
 <input type="hidden" name="oe" value="utf-8" />
@@ -112,8 +113,7 @@ class CCSearch
 </form>
 END;
 
-        CCPage::AddPrompt('body_text',$form_html);
-
+        CCPage::AddContent($google);
     }
 
 
@@ -324,7 +324,7 @@ EOF;
 
             $html .= '</table>';
 
-            CCPage::PageArg('body_html',$html,'show_body_html');
+            CCPage::AddContent($html);
         }
         else
         {

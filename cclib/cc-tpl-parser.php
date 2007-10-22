@@ -71,7 +71,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/(<\?=?) var\(([^\)]+)\)%/e"    =>   "cc_tpl_parse_var('$1 ','$2', ' ?>');",
         "/(<\?=?) var_check\(([^\)]+)\)%/e"    =>   "cc_tpl_parse_var_check('$1 ','$2', ' ?>');",
         "/<\? loop\(([^,]+),([^\)]+)\)%/e"  =>   "cc_tpl_parse_loop('$1','$2');",
-        "/(<\?=?) call_macro\(([^\)]+)\)%/e"    =>   "cc_tpl_parse_call_macro('$1 ','$2');",
+        "/(<\?=?) call(?:_macro)?\(([^\)]+)\)%/e"    =>   "cc_tpl_parse_call_macro('$1 ','$2');",
         "/<\? if_(not_)?(?:empty|null)\(([^\)]+)\)%/e"  => "cc_tpl_parse_if_null('$1','$2');"  ,
         "/<\? define\(([^,]+),([^\)]+)\)%/e"=>   "cc_tpl_parse_define('$1','$2');",
 

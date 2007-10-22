@@ -166,6 +166,7 @@ function validator_skin_grabber($form,$fieldname)
 class CCPage extends CCTemplate
 {
     var $_body_template;
+    var $_have_forms;
 
     /**
     * Constructor
@@ -186,6 +187,7 @@ class CCPage extends CCTemplate
         $this->vars['chop'] = true;
         $this->vars['bread_crumbs'] = array();
         $this->vars['crumb_seperator'] = ' &raquo; ';
+        $this->_have_forms = false;
     }
 
 
@@ -235,25 +237,6 @@ class CCPage extends CCTemplate
             $page->_body_template = $file;
         }
 
-    }
-
-    function _check_for_title(&$page,$contents)
-    {
-        // um, bit of a hack but I can't figure out another
-        // to have the <h1> tag in the file end up in the title 
-        // of the browser (?),
-        $r1 = '<h1[^>]*>(.*)</h1'; // normal h1
-        $r2 = '<h1[^>]+((_|CC_Lang)\([\'"]([^\)]+)[\'"]\))[^<]+/>'; // lang'ized
-        if( preg_match("#(($r1)|($r2))#Uis",$contents,$m) )
-        {
-
-            // inner most capture will be used for title bar
-            $page->vars['page-caption'] = stripslashes($m[ count($m) - 1 ]);
-
-            // disable the tempalte's H1 code
-            $page->vars['page-title'] = '';
-            $page->_reject_title = true;
-        }
     }
 
     /**
@@ -332,7 +315,7 @@ class CCPage extends CCTemplate
     */
     function PrintPage( & $body )
     {
-        CCPage::AddPrompt('body_text',$body);
+        CCPage::AddContent($body);
         CCPage::Show();
     }
 
@@ -462,17 +445,6 @@ class CCPage extends CCTemplate
             $page->AddMacro($page->_body_template);
         }
 
-        // wow...
-        if( !empty($page->vars['prompts']) )
-        {
-            $prompts = $page->vars['prompts'];
-            foreach( $prompts as $P )
-                if( $P['name'] = 'body_text' )
-                    $page->_check_for_title($page,$P['value']);
-        }
-        if( !empty($page->vars['body_html']) )
-            $page->_check_for_title($page,$page->vars['body_html']);
-
         /////////////////
         // Step 6
         //
@@ -519,9 +491,7 @@ class CCPage extends CCTemplate
     function GetViewFile($filename,$real_path=true)
     {
         global $CC_GLOBALS;
-        $files = array( $filename . '.php',
-                        $filename . '.tpl',
-                        $filename );
+        $files = CCTemplate::GetFilenameGuesses($filename);
         return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccskins/shared', $real_path );
     }
 
@@ -582,10 +552,34 @@ class CCPage extends CCTemplate
          else
            $page =& $this;
 
-        $page->vars = array_merge($page->vars, $form->GetTemplateVars());
-        $page->vars['macro_names'][] = $form->GetTemplateMacro();
+        $page->vars['forms'][] = array(
+                                    $form->GetTemplateMacro(),
+                                    $form->GetTemplateVars() );
+        if( !$page->_have_forms )
+        {
+            $page->vars['macro_names'][] = 'print_forms';
+            $page->_have_forms = true;
+        }
     }
- 
+
+     /**
+    * Add a html content into the body of the page
+    *
+    * @param string $html_text The text to add
+    */
+    function AddContent($html_text)
+    {
+        if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
+           $page =& CCPage::GetPage();
+         else
+           $page =& $this;
+
+        $page->vars['html_content'][] = $html_text;
+
+        if( empty($page->vars['macro_names']) || !in_array( 'print_html_content', $page->vars['macro_names'] ) )
+            $page->vars['macro_names'][] = 'print_html_content';
+    }
+
     /**
     * Generates a call out to a client script in the template
     * 
@@ -622,6 +616,9 @@ class CCPage extends CCTemplate
             $page =& CCPage::GetPage();
         else
             $page =& $this;
+
+        //if( substr($script_url,0,7) != 'http://' )
+        //    $script_url = ccd( CCTemplate::Search($script_url) );
 
         $arr = array();
         $arr_name = $top ? 'script_links' : 'end_script_links';
@@ -712,7 +709,7 @@ class CCPage extends CCTemplate
            $page =& $this;
 
         $page->vars['prompts'][] = array(  'name' => $name,
-                                                 'value' => $value );
+                                           'value' => $value );
 
         if( empty($page->vars['macro_names']) )
             $page->vars['macro_names'][] = 'show_prompts';

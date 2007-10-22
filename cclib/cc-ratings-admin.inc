@@ -188,7 +188,7 @@ class CCRatingsAdmin
             _('This action has no undo.') . "</span></h3>\n" . 
             '<p style="width: 250px"><a class="cc_gen_button" href="' . $deluser_url . '"><span style="color:red">' . sprintf(_('DELETE ALL RATINGS for %s.'), $username) . '</span></a></p>';
 
-            CCPage::AddPrompt('body_text',$html);
+            CCPage::AddContent($html);
             return true;
         }
 

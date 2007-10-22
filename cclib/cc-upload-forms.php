@@ -95,9 +95,6 @@ class CCUploadMediaForm extends CCUploadForm
         $this->AddFormFields( $fields );
 
         $this->_extra = array();
-
-        // no need to call special, now in default scripts
-        // CCPage::AddScriptBlock('popular_tags_script'); 
     }
 
     function AddSuggestedTags($suggested_tags)

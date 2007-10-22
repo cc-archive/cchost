@@ -106,6 +106,13 @@ class CCForm
         CCEvents::Invoke( CC_EVENT_FORM_INIT, array( &$this ) );
     }
 
+    function _add_links()
+    {
+        require_once('cclib/cc-page.php');
+        CCPage::AddScriptLink( 'js/form.js', true );
+        CCPage::SetStyleSheet( 'css/form.css' );
+    }
+
     /**
      * Set the value of an html form field. 
      *
@@ -571,6 +578,8 @@ class CCForm
     */
     function GenerateForm($hiddenonly = false)
     {
+        $this->_add_links();
+
         $this->_template_vars['html_form_fields']   = array();
         $this->_template_vars['html_hidden_fields'] = array();
 
@@ -934,8 +943,6 @@ class CCForm
      */
     function generator_textarea($varname,$value='',$class='')
     {
-        CCPage::AddScriptLink( 'js/grow_textarea.js', false );
-
         $html =<<<END
             <textarea style="width:300px;height:100px;" id="$varname" name="$varname" class="$class">$value</textarea><br />
             <a id="grow_$varname" name="grow_$varname" style="font-size:10px;" href="javascript: void(0);" onclick="cc_grow_textarea('$varname');">[ + ]</a>
@@ -1769,6 +1776,8 @@ class CCGridForm extends CCForm
      */
     function GenerateForm()
     {
+        $this->_add_links();
+
         $this->_normalize_fields();
 
         $headers = array();
@@ -2204,16 +2213,8 @@ class CCUploadForm extends CCForm
     */
     function DoSubmitMessage()
     {
-        CCPage::PageArg('show_form_submit_message',true);
-        $hidemsg = array(
-                'title' => _('Upload in progress'),
-                'paras' => array( 
-                   _('This might take a while...'),
-                   _('Do not close your browser or click on any links. Doing this might cancel your upload.')
-                   )
-             );
-        CCPage::PageArg('form_hide_msg',$hidemsg);
-        CCPage::AddScriptLink( 'js/upload_form_hide.js', false ); // false means bottom of page
+        $this->AddTemplateVars(array('hide_on_submit' => true));
+        CCPage::AddScriptBlock( 'hide_upload_form', true ); 
     }
 }
 

@@ -290,7 +290,7 @@ class CCNavigatorAdmin
                          "]</a></p>";
 
                 CCPage::SetTitle(_("Manage Navigator Tab Sets"));
-                CCPage::AddPrompt('body_text',$html);
+                CCPage::AddContent($html);
 
                 break;
             }

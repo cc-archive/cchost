@@ -49,6 +49,7 @@ class CCTemplate
         $this->template_stack = array();
         $this->map_stack = array();
         $this->files = array();
+        $this->search_cache = array();
     }
 
     function SetArg($name,$value='',$macroname='')
@@ -77,6 +78,8 @@ class CCTemplate
     {
         global $CC_GLOBALS;
 
+        $snapshot = $this->vars; // make this instance reusable
+
         $this->vars = array_merge($CC_GLOBALS,$this->vars,$args);
 
         if( empty($this->vars['skin']) && !empty($CC_GLOBALS['skin']) )
@@ -100,6 +103,7 @@ class CCTemplate
         }
 
         $this->Call($this->filename);
+
         if( !empty($this->vars['auto_execute']) )
         {
             $this->_push_path($this->filename);
@@ -107,6 +111,8 @@ class CCTemplate
                 $this->Call($exec);
             $this->_pop_path();
         }
+
+        $this->vars = $snapshot;
     }
 
     function Call($file)
@@ -121,6 +127,8 @@ class CCTemplate
         // 'file.ext/macroname'  - load file, call macro
         // 'file.ext'            - load file
         //
+
+        //CCDebug::Log("TCalling: $file");
 
         $funcname = '';
 
@@ -145,7 +153,7 @@ class CCTemplate
             $macro  = basename($file);
             // call dirname to strip off the macro this is the filepart 
             $file_path = dirname($file);
-            if( !empty($file_path) && ($file_path != '.') )
+            if( !empty($file_path) && ($file_path{0} != '.') )
             {
                 $file_name = basename($file_path); // this is the actual file
                 $ext = array_pop( explode('.', $file_name ) );
@@ -179,22 +187,31 @@ class CCTemplate
 
     function GetTemplate($filename,$real_path=true)
     {
-        $files = array( $filename . '.tpl',
-                        $filename . '.php',
-                        $filename,
-                        $filename . '.xml.tpl',
-                        $filename . '.xml.php',
-                        $filename . '.htm',
-                        $filename . '.html' );
+        $files = CCTemplate::GetFilenameGuesses($filename);
+        return CCTemplate::Search($files,$real_path);
+    }
 
-        if( empty($this) || ((strtolower(get_class($this)) != 'cctemplate') && 
-                                  !is_subclass_of($this,'CCTemplate') ) )
-        {
-            global $CC_GLOBALS;
-            return CCUtil::SearchPath( $files, $CC_GLOBALS['template-root'], 'ccskins', $real_path);
-        }
+    function GetFilenameGuesses($filename)
+    {
+        if( preg_match('/\.xml$/',$filename) )
+            return array(   $filename . '.php', 
+                            str_replace('.xml','.php',$filename), 
+                            $filename . '.tpl',
+                            str_replace('.xml','.tpl',$filename), 
+                            $filename 
+                         );
 
-        return $this->Search($files,$real_path);
+        if( !preg_match( '/\.[a-zA-Z]{1,4}$/', $filename ) )
+            return array(   $filename . '.tpl',
+                            $filename . '.php',
+                            $filename . '.xml.tpl',
+                            $filename . '.xml.php',
+                            $filename . '.htm',
+                            $filename . '.html',
+                            );
+
+         return array( $filename );
+
     }
 
     function GetTemplatePath()
@@ -202,7 +219,7 @@ class CCTemplate
         global $CC_GLOBALS;
         return array_unique(array_merge( $this->template_stack,
                                          $this->map_stack, 
-                                         CCUtil::SplitPaths( $CC_GLOBALS['template-root'], 'ccskins' ) ));
+                                         CCUtil::SplitPaths( $CC_GLOBALS['template-root'], 'ccskins/shared' ) ));
     }
 
     function URL($partial)
@@ -212,14 +229,30 @@ class CCTemplate
 
     function Search($file, $real_path = false )
     {
-        $dirs = $this->GetTemplatePath();
-        return CCUtil::SearchPath( $file, $dirs, '', $real_path);
+        if( empty($this) || ((strtolower(get_class($this)) != 'cctemplate') && 
+                                  !is_subclass_of($this,'CCTemplate') ) )
+        {
+            global $CC_GLOBALS;
+            return CCUtil::SearchPath( $file, $CC_GLOBALS['template-root'], 'ccskins/shared', $real_path);
+        }
+        
+        $sfile = is_array($file) ? md5($file[0]) : md5($file);
+        if( empty($this->search_cache[$sfile]) )
+        {
+            $dirs = $this->GetTemplatePath();
+            $found = CCUtil::SearchPath( $file, $dirs, '', $real_path);
+            $this->search_cache[$sfile] = $found;
+            //CCDebug::Log("TFound: $found");
+            return $found;
+        }
+
+        return $this->search_cache[$sfile];
     }
 
 
     function ImportMap($map)
     {
-        $map = $this->Search($map);
+        $map = $this->Search($map . '/map.php');
         $this->_push_path($map,'map_stack');
         $this->_parse($map);
     }
