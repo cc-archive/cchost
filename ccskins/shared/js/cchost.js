@@ -37,7 +37,6 @@ downloadHook.prototype = {
     }
 
     onClick: function( e, upload_id ) {
-        var url = home_url + 'download/' + upload_id + q + 'ajax=1';
         Modalbox.show( url, {title: 'Download', width: 500} );
     }
 }
