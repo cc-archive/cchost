@@ -1,27 +1,23 @@
+<div  id="cc_list">
 <?
-global $_TV;
 
-?><div  id="cc_list">
-<?
-$_TV['by'] = _('by');
-
-$carr101 = $_TV['records'];
+$carr101 = $A['records'];
 $cc101= count( $carr101);
 $ck101= array_keys( $carr101);
 for( $ci101= 0; $ci101< $cc101; ++$ci101)
 { 
-   $_TV['R'] = $carr101[ $ck101[ $ci101 ] ];
+   $A['R'] = $carr101[ $ck101[ $ci101 ] ];
    
 ?><div >
 <?
-$_TV['upname'] = CC_strchop($_TV['R']['upload_name'],$_TV['chop'],$_TV['dochop']);
-$_TV['user'] = CC_strchop($_TV['R']['user_real_name'],$_TV['chop'],$_TV['dochop']);
+$A['upname'] = CC_strchop($A['R']['upload_name'],$A['chop'],$A['dochop']);
+$A['user'] = CC_strchop($A['R']['user_real_name'],$A['chop'],$A['dochop']);
 
-?><a  href="<?= $_TV['R']['file_page_url']?>" class="cc_file_link">
-    <?= $_TV['upname']?>
-  </a> <?= $_TV['by']?>
-  <a  class="cc_user_link" href="<?= $_TV['R']['artist_page_url']?>">
-    <?= $_TV['user']?>
+?><a  href="<?= $A['R']['file_page_url']?>" class="cc_file_link">
+    <?= $A['upname']?>
+  </a> <?= $GLOBALS['str_by']?>
+  <a  class="cc_user_link" href="<?= $A['R']['artist_page_url']?>">
+    <?= $A['user']?>
   </a>
 </div><?
 } // END: for loop
@@ -29,7 +25,7 @@ $_TV['user'] = CC_strchop($_TV['R']['user_real_name'],$_TV['chop'],$_TV['dochop'
 ?><i  class="cc_tagline"><span >
 <?
 
-if( !empty($_TV['format_sig']) ) { $_TV['format_signature'] = $_TV['format_sig']; } else {  $_TV['format_signature'] = 'format_signature.xml/signature'; } _template_call_template($_TV['format_signature']);
+if( !empty($A['format_sig']) ) { $A['format_signature'] = $A['format_sig']; } else {  $A['format_signature'] = 'format_signature.xml/signature'; } _template_call_template($A['format_signature']);
 
 ?></span></i>
 </div>

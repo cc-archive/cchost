@@ -55,15 +55,7 @@ function _t_page_print_head_links($T,&$_TV)
     }
 
     if( !empty($_TV['script_links']) )
-    {
-        foreach( $_TV['script_links'] as $script_link )
-        {
-            $path = $T->Search($script_link);
-            if( empty($path) ) die( "Can't find script '$script_link'" );
-            $path = ccd($path);
-            print "<script type=\"text/javascript\" src=\"${path}\" ></script>\n";
-        }
-    }
+        _t_page_script_link_helper($_TV['script_links'],$T);
 
     if( !empty($_TV['script_blocks']) )
     {
@@ -75,6 +67,17 @@ function _t_page_print_head_links($T,&$_TV)
         foreach( $_TV['head_links'] as $head )
             print "<link rel=\"{$head['rel']}\" type=\"{$head['type']}\" href=\"{$head['href']}\" title=\"{$head['title']}\"/>\n";
 
+}
+
+function _t_page_script_link_helper($links,$T)
+{
+    foreach( $links as $script_link )
+    {
+        $path = $T->Search($script_link);
+        if( empty($path) ) die( "Can't find script '$script_link'" );
+        $path = ccd($path);
+        print "<script type=\"text/javascript\" src=\"${path}\" ></script>\n";
+    }
 }
 
 function _t_page_print_banner($T,&$_TV)
@@ -142,7 +145,11 @@ function page_inner_print_tabs($tabs,$id)
 
 function _t_page_main_body($T,&$_TV)
 {
-    if( !empty($_TV['show_body_header'])  )
+    if( empty($_TV['show_body_header'])  )
+    {
+        print("<body>\n");
+    }
+    else
     {
         if( empty($_TV['ajax']) )
         {
@@ -160,11 +167,6 @@ EOF;
 
             print("<div id=\"main_content\">\n");
 
-            print "<a name=\"content\"></a>\n";
-        }
-        else
-        {
-            print("<body>\n");
         }
     }
 
@@ -174,15 +176,14 @@ EOF;
     if( !empty($_TV['sub_nav_tabs'] ) )
         $T->Call('print_sub_nav_tabs');
 
-    $T->Call('print_page_title');
+    if( !empty($_TV['page-title'] ) )
+        $T->Call('print_page_title');
 
-    print '<a name="content" />' . "\n";
+    print '<a name="content" ></a>' . "\n";
 
     if( !empty($_TV['macro_names'] ) ) 
         foreach( $_TV['macro_names'] as $macro )
-    {
-        $T->Call($macro);
-    }
+            $T->Call($macro);
 
     if( !empty($_TV['inc_names'] ) ) 
         foreach( $_TV['inc_names'] as $inc_name )
@@ -222,25 +223,11 @@ EOF;
 function _t_page_print_end_script_blocks($T,&$_TV) 
 {
     if ( !empty($_TV['end_script_blocks'])) 
-    {
-        $carr111 = $_TV['end_script_blocks'];
-        $cc111= count( $carr111);
-        $ck111= array_keys( $carr111);
-        for( $ci111= 0; $ci111< $cc111; ++$ci111)
-            $T->Call($carr111[ $ck111[ $ci111 ] ]);
-    } 
+        foreach( $_TV['end_script_blocks'] as $block )
+            $T->Call($block);
 
     if ( !empty($_TV['end_script_links'])) 
-    {
-        $carr112 = $_TV['end_script_links'];
-        $cc112= count( $carr112);
-        $ck112= array_keys( $carr112);
-        for( $ci112= 0; $ci112< $cc112; ++$ci112)
-        { 
-            $_TV['eslink'] = $carr112[ $ck112[ $ci112 ] ];
-            ?><script  type="text/javascript" src="<?= $_TV['eslink']?>"></script><?
-        }
-    }
+        _t_page_script_link_helper($_TV['end_script_links'],$T);
 
     print "<script>cc_round_boxes();</script>\n";
 

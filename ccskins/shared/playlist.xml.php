@@ -40,7 +40,7 @@ function _t_playlist_playlist_popup($T,&$A) {
 function _t_playlist_playlist_browse($T,&$A) {
   $carr103 = $A['records'];$cc103= count( $carr103);$ck103= array_keys( $carr103);for( $ci103= 0; $ci103< $cc103; ++$ci103){    $A['PL'] = $carr103[ $ck103[ $ci103 ] ];   ?><div  class="cc_playlist_line" id="_pl_<?= $A['PL']['cart_id']?>"><?= $A['PL']['cart_name']?> <span  class="cc_playlist_dyn_user">created by
       <?= $A['PL']['user_real_name']?></span>
-<?if ( !empty($A['PL']['cart_dynamic'])) {?><span  class="cc_playlist_dyn_label"><?= _('(dynamic)')?></span><?}?><span ><?= CC_strchop(str_replace(',',' ',$A['PL']['cart_tags']),110)?></span>
+<?if ( !empty($A['PL']['cart_dynamic'])) {?><span  class="cc_playlist_dyn_label">(<?= $GLOBALS['str_dynamic'] ?>)</span><?}?><span ><?= CC_strchop(str_replace(',',' ',$A['PL']['cart_tags']),110)?></span>
 <?if ( !($A['PL']['cart_dynamic']) ) {?><span > items: <?= $A['PL']['cart_num_items']?></span><?}?></div>
 <?}$T->Call($A['prev_next_links']);
 }

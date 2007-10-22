@@ -85,13 +85,13 @@ function _t_recommends_init($T,&$targs) {
     Display: <select  id="limit_picker"></select>
 </div>
 <div  class="cc_stream_page_link" id="stream_link_container" style="display:none;">
-<a  href="javascript://stream" id="stream_link"><span ><?= _('Stream')?></span></a></div>
+<a  href="javascript://stream" id="stream_link"><span ><?= $GLOBALS['str_stream'] ?></span></a></div>
 <div  class="cc_stream_page_link" id="play_link_container" style="display:none;">
-<a  href="javascript://play win" id="play_link"><span ><?= _('Play');?></span></a></div>
+<a  href="javascript://play win" id="play_link"><span ><?= $GLOBALS['str_play'] ;?></span></a></div>
 </div>
 <div  id="featured">
-<h3 ><?= sprintf(_('Recommended by %s'),$A['get']['fullname']);?></h3>
-<div  class="featured_info"><?= sprintf(_('%s recommends these uploads.'),$A['get']['fullname']);?></div>
+<h3 ><?= sprintf($GLOBALS['str_recommended_by_s'],$A['get']['fullname']);?></h3>
+<div  class="featured_info"><?= sprintf($GLOBALS['str_s_recommends_these_uploads'] ,$A['get']['fullname']);?></div>
 </div>
 <div  id="browser">
   getting data...

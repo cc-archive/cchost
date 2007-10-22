@@ -321,16 +321,27 @@ a.upload_link {
 	padding-bottom: 0.5em;
 }
 
-.cc_form_input_short {
-	width: 100px;
+.cc_form_label {
+	width: 30%;
+	text-align: right;
+}
+.cc_form_label div {
+	white-space: nowrap;
+	font-weight: bold;
 }
 
-.cc_form_label {
-	text-align: right;
-	white-space: nowrap;
+.cc_form_label span {
 }
 
 .cc_form_element {
+}
+
+.cc_form_input {
+	width: 200px;
+}
+
+.cc_form_input_short {
+	width: 30px;
 }
 
 .cc_form_tip {
@@ -342,4 +353,7 @@ a.upload_link {
 
 .cc_form_submit {
 	margin-left: 40%;
+}
+#cc_form_help_container {
+	width: 600px;
 }

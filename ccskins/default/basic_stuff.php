@@ -2,8 +2,6 @@
 
 function _t_basic_stuff_print_prompts($T,&$_TV)
 {
-    
-
     foreach( $_TV['prompts'] as $prompt )
         ?><div class="cc_<?= $prompt['name'] ?>"><?= $prompt['value'] ?></div><?
 }

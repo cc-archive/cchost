@@ -22,11 +22,11 @@ function play_all()
 <ul  class="cc_playlist_owner_menu">
 <li >
 <a  href="javascript://open in window" id="playall" class="cc_playlist_playwindow" onclick="play_all()">
-<b ><span ><?= _('Play All in Window')?></span></b></a>
+<b ><span ><?= ?></span></b></a>
 </li>
 </ul>
 </div>
-<h1  style="width:50%;"><?= _('Popular Playlist Adds');?></h1>
+<h1  style="width:50%;"><?= ;?></h1>
 <br  sytle="clear:right" />
 <div  class="cc_pl_div" id="_cart_1" style="margin-top: 12px;">
 <?$carr101 = $A['info']['recs'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $A['item'] = $carr101[ $ck101[ $ci101 ] ];   ?><div  class="trr">

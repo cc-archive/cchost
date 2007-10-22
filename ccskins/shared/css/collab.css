@@ -213,3 +213,24 @@ a.collab_upload {
 	color: brown;
 	font-weight: bold;
 }
+
+/* show_collabs */
+  .collab_entry {
+    margin: 4px;
+    padding: 6px;
+  }
+  .collab_name {
+    font-weight: bold;
+    font-size: 13px;
+    color: brown;
+    margin: 0px 0px 4px 0px;
+  }
+  .collab_date {
+    color: #888;
+    font-style: italic;
+    margin: 4px;
+    display: block;
+    float: right;
+    width: 90px;
+    text-align: right;
+  }

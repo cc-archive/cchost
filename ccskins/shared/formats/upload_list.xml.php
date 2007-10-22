@@ -103,6 +103,7 @@ function helper_list_menu(&$R)
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
     $mi['menu_text'] = $GLOBALS['str_down'];
+    $mi['class'] = 'download_hook';
     helper_list_menu_item($mi);
 
     if( !empty($menu['comment']['comments']) )
@@ -207,8 +208,14 @@ EOF;
     
     if( !empty($A['enable_playlists']) && !empty($R['fplay_url']) )
     {
+        preg_match('%(http://[^/]+/)(.*)%',$R['fplay_url'],$m); // do this so no mp3 urls show up in the page
+        if( $m[1] == $A['root-url'] )
+            $root = 'root_url';
+        else
+            $root = "'${m[1]}'";
+
         print "        <div class=\"playerdiv\"><span class=\"playerlabel\">{$GLOBALS['str_play']}: </span><a class=\"cc_player_button cc_player_hear\" id=\"_ep_{$R['upload_id']}\"> </a></div>\n" .
-              "<script> \$('_ep_${R['upload_id']}').href = \"{$R['fplay_url']}\"; </script>\n";
+              "<script> \$('_ep_${R['upload_id']}').href = {$root} + '{$m[2]}'; </script>\n";
     }
 
     print "    </div><!-- upload info -->\n";

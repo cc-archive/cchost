@@ -43,14 +43,14 @@ function cc_get_sel(obj)
 
 function cc_apply_url(fname)
 {
-	var obj = new cc_obj(fname);
-	var url = cc_get_sel(obj.obj);
+	var obj = $(fname);
+	var url = cc_get_sel(obj);
 	_cc_apply_format(obj, '"' + url + '":', url );
 }
 
 function cc_apply_format(fname,tag)
 {
-	var obj = new cc_obj(fname);
+	var obj = $(fname);
 	var open;
 	if( tag == 'url' )
 	{
@@ -129,7 +129,7 @@ function cc_format_preview(fname)
 	obj.focus();
     var url = home_url + 'format/preview?ptext=' + txt;
     var e = $('format_inner_preview_' + fname);
-    $e.innerHTML = '...';
+    e.innerHTML = '...';
     new Ajax.Updater( e, url, {method: 'get'});
 }
 
@@ -137,4 +137,40 @@ function cc_hide_preview(fname)
 {
 	var pbox = $('format_preview_' + fname);
 	pbox.style.display = 'none';
+}
+
+function cc_grow_textarea(elemname)
+{
+  var elemobj;
+  var elemlink;
+  elemobj = $(elemname);
+  if( elemobj )
+  {
+      elemlink = $('grow_' + elemname);
+      if( elemobj.style.height == '100px' )
+      {
+          elemlink.innerHTML = '[ - ]';
+          elemobj.style.height = '300px';
+          elemobj.style.width = '450px';
+      }
+      else
+      {
+          elemlink.innerHTML = '[ + ]';
+          elemobj.style.height = '100px';
+          elemobj.style.width = '300px';
+      }
+      elemobj.focus();
+  }
+}
+
+function cc_add_tag(tag,fieldname)
+{
+  f = $(fieldname);  
+  tagstr = f.value;
+  tags = tagstr.split(',');
+  tags.push(tag);
+  tagstr = tags.join(',');
+  if( tagstr.charAt(0) == ',' )
+    tagstr = tagstr.substr(1);
+  f.value = tagstr;
 }

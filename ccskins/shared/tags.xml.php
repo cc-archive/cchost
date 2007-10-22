@@ -3,10 +3,21 @@
 
 function _t_tags_taglinks($T,&$A) {
   $carr101 = $A['tag_array'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $A['tag'] = $carr101[ $ck101[ $ci101 ] ];   ?><a  href="<?= $A['tag']['tagurl']?>" rel="tag" class="cc_tag_link"><?= $A['tag']['tag']?></a><?if ( !($ci101 == ($cc101-1)) ) {?>, <?}}}
-function _t_tags_popular_tags_script($T,&$A) {
-  }
-function _t_tags_popular_tags($T,&$A) {
-  $carr102 = $A['field']['tags'];$cc102= count( $carr102);$ck102= array_keys( $carr102);for( $ci102= 0; $ci102< $cc102; ++$ci102){    $A['tag'] = $carr102[ $ck102[ $ci102 ] ];   ?><a  href="javascript: cc_add_tag(<?= $A['tag']?>,<?= $A['field']['target']?>);" class="cc_tag_link"><?= $A['tag']?></a><?if ( !($ci102 == ($cc102-1)) ) {?>, <?}}}
+
+function _t_tags_popular_tags($T,&$A) 
+{
+    $carr102 = $A['field']['tags'];
+    $cc102= count( $carr102);
+    $ck102= array_keys( $carr102);
+    for( $ci102= 0; $ci102< $cc102; ++$ci102)
+    {    
+        $A['tag'] = $carr102[ $ck102[ $ci102 ] ];
+        ?><a  href="javascript://add tag" onclick="cc_add_tag('<?= $A['tag']?>','<?= $A['field']['target']?>');" class="cc_tag_link"><?= $A['tag']?></a><?  
+        if ( !($ci102 == ($cc102-1)) ) 
+          print ', ';
+    }
+}
+
 function _t_tags_tag_picker($T,&$A) {
   ?><div  class="cc_tags_list">
 <?$carr103 = $A['minus_tags'];$cc103= count( $carr103);$ck103= array_keys( $carr103);for( $ci103= 0; $ci103< $cc103; ++$ci103){    $A['m'] = $carr103[ $ck103[ $ci103 ] ];   ?><div  style="text-align:right">

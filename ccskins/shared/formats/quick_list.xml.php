@@ -1,9 +1,9 @@
 <?
 global $_TV;
 
-$upload_flag_str     = _('Flag this upload for possible violation of terms');
-$play_str            = _('Play');
-$by_str              = _('by');
+$upload_flag_str     = $GLOBALS['str_flag_this_upload'] ;
+$play_str            = $GLOBALS['str_play'] ;
+$by_str              = $GLOBALS['str_by'] ;
 
 $carr103 = empty($_TV['records']) ? $_TV['file_records'] : $_TV['records'];
 $cc103   = count( $carr103);

@@ -8,8 +8,8 @@
 <table  cellpadding="0" cellspacing="0">
 <tr ><td  id="cell1">
 <div  id="channel_intro">
-<h3 ><?= $GLOBALS['str_create_your_own'] ;?></h3>
-<p ><?= sprintf($GLOBALS['atr_create_your_own_stream'],$A['site-title']) ;?></p>
+<h3 ><?= $GLOBALS['str_create_your_own_remix_radio_station'] ;?></h3>
+<p ><?= sprintf($GLOBALS['str_create_your_own'],$A['site-title']) ;?></p>
 </div>
 </td></tr>
 <tr ><td  id="cell2">
@@ -62,19 +62,19 @@ if( !empty($chart['ratings']) )
         <span  class="opt_label"><?= $GLOBALS['str_ratings']?>:</span>
         <select  id="score" name="score">
         <option  value="500">5</option>
-        <option  value="450"><?= sprintf( $GLOBALS['str_or_above'], '4.5' ) ?></option>
-        <option  value="400" selected="selected"><?= sprintf( $GLOBALS['str_or_above'], '4' ) ;?></option>
-        <option  value="350"><?= sprintf( $GLOBALS['str_or_above'], '3.5' ) ?></option>
-        <option  value="300"><?= sprintf( $GLOBALS['str_or_above'], '3' ) ;?></option>
+        <option  value="450"><?= sprintf( $GLOBALS['str_d_or_above'], '4.5' ) ?></option>
+        <option  value="400" selected="selected"><?= sprintf( $GLOBALS['str_d_or_above'], '4' ) ;?></option>
+        <option  value="350"><?= sprintf( $GLOBALS['str_d_or_above'], '3.5' ) ?></option>
+        <option  value="300"><?= sprintf( $GLOBALS['str_d_or_above'], '3' ) ;?></option>
         <option  value="0"><?= $GLOBALS['all'] ;?></option>
         </select>
     <? } else { ?>
         <span  class="opt_label"><?= $GLOBALS['str_recommends']?>:</span>
         <select  id="num_scorea" name="num_scores">
-        <option  value="20"><?= sprintf( $GLOBALS['str_or_above'], '20' ) ?></option>
-        <option  value="10"><?= sprintf( $GLOBALS['str_or_above'], '10' ) ?></option>
-        <option  value="5" selected="selected"><?= sprintf( $GLOBALS['str_or_above'], '5' ) ;?></option>
-        <option  value="0"><?= $GLOBALS['all'] ;?></option>
+        <option  value="20"><?= sprintf( $GLOBALS['str_d_or_above'], '20' ) ?></option>
+        <option  value="10"><?= sprintf( $GLOBALS['str_d_or_above'], '10' ) ?></option>
+        <option  value="5" selected="selected"><?= sprintf( $GLOBALS['str_d_or_above'], '5' ) ;?></option>
+        <option  value="0"><?= $GLOBALS['str_all'] ;?></option>
         </select>
     <? } ?>
     </td>

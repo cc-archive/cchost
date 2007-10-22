@@ -4,32 +4,14 @@
 //------------------------------------- 
 function _t_collab_show_collabs($T,&$_TV) {
    
-    $css = ccd($T->Search( 'css/playlist.css' ));
+    $collabcss = ccd($T->Search( 'css/collab.css' ));
+    $playlistcss = ccd($T->Search( 'css/playlist.css' ));
     $bg  = ccd($T->Search( 'images/bg_fade.gif' )); 
-
-?><link  rel="stylesheet" type="text/css" href="<?= $css ?>" title="Default Style"></link>
-<style >
-  .collab_entry {
-    background: url('<?= $bg ?>') top repeat-x;
-    margin: 4px;
-    padding: 6px;
-  }
-  .collab_name {
-    font-weight: bold;
-    font-size: 13px;
-    color: brown;
-    margin: 0px 0px 4px 0px;
-  }
-  .collab_date {
-    color: #888;
-    font-style: italic;
-    margin: 4px;
-    display: block;
-    float: right;
-    width: 90px;
-    text-align: right;
-  }
-   </style>
+    if( !empty($bg) )
+        print "<style>.collab_entry {background: url('{$bg}') top repeat-x;}</style>";
+?>
+<link  rel="stylesheet" type="text/css" href="<?= $collabcss ?>" title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $playlistcss ?>" title="Default Style"></link>
 <table  style="width:95%">
 <?
 $_TV['rows'] = array_chunk($_TV['collabs']['collab_rows'], 2);
@@ -114,10 +96,10 @@ function _t_collab_show_collab($T,&$_TV) {
 <?
 $_TV['collab_id'] = $_TV['collab']['collab']['collab_id'];
 
-?><link  rel="stylesheet" type="text/css" href="<?= $_TV['root-url']?>cctemplates/collab.css" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $_TV['root-url']?>cctemplates/skin-simple-topics.css" title="Default Style"></link>
+?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/collab.css') ?>" title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/topics.css') ?>" title="Default Style"></link>
 <fieldset >
-<legend ><?= _('Info')?></legend>
+<legend ><?= $GLOBALS['str_info']?></legend>
 <?
 
 if ( !empty($_TV['collab']['is_owner'])) {
@@ -133,7 +115,7 @@ if ( !empty($_TV['collab']['is_owner'])) {
 </fieldset>
 <div  class="cc_collab_fields">
 <fieldset >
-<legend ><?= _('Artists')?></legend>
+<legend ><?= $GLOBALS['str_artists'] ?></legend>
 <div  class="user_lines">
 <div  id="user_inserter"></div>
 </div>
@@ -141,7 +123,7 @@ if ( !empty($_TV['collab']['is_owner'])) {
 </div>
 </fieldset>
 <fieldset >
-<legend ><?= _('Files')?></legend>
+<legend ><?= $GLOBALS['str_files'] ?> </legend>
 <div  class="file_list" id="file_list">
 </div>
 <?
@@ -178,7 +160,7 @@ for( $ci105= 0; $ci105< $cc105; ++$ci105)
 if ( !empty($_TV['collab']['is_member'])) {
 
 ?><fieldset >
-<legend ><?= _('Conversation')?></legend>
+<legend ><?= $GLOBALS['str_conversation'] ?></legend>
 <p >This conversation thread is private and only visible to members of the project:</p>
 <?
 $_TV['topics'] = $_TV['collab']['topics'];

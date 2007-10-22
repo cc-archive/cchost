@@ -16,8 +16,6 @@ $A['print_footer']            = 'page.php/print_footer';
 
 $A['print_menu']         = 'menu.tpl';
 
-$A['grow_textarea_script']       = 'form.php/grow_textarea_script';
-$A['hide_form_on_submit_script'] = 'form.php/hide_form_on_submit_script';
 $A['html_form']                  = 'form.php/html_form';
 $A['form_fields']                = 'form.php/form_fields';
 $A['grid_form_fields']           = 'form.php/grid_form_fields';
