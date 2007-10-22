@@ -25,7 +25,7 @@ function main()
 
     recur_mkdir( 'ccskins/pages' );
 
-    do_file( 'cctemplates/custom.xml', 'ccskins/pages/custom.xml.php' );
+    do_file( 'cctemplates/custom.xml', 'ccskins/shared/custom.xml.php' );
 
     recur_mkdir( 'ccskins/simple' );
     $files = glob('cctemplates/*.xml');
@@ -61,11 +61,11 @@ function main()
             }
         }
     }
-    recur_mkdir( 'ccskins/pages' );
+    recur_mkdir( 'ccskins/shared' );
     $files = glob('ccfiles/*.xml');
     foreach( $files as $F )
     {
-        do_file( $F, 'ccskins/pages/' . basename($F) . '.php' );
+        do_file( $F, 'ccskins/shared/' . basename($F) . '.php' );
     }
 
 }
