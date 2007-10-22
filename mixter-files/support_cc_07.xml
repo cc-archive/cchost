@@ -1,0 +1,68 @@
+<tal:block>
+
+<tal:block replace="">
+<!--
+
+Creative Commons has made the contents of this file
+available under a CC-GNU-GPL license:
+
+ http://creativecommons.org/licenses/GPL/2.0/
+
+ A copy of the full license can be found as part of this
+ distribution in the file LICENSE.TXT
+
+You may use the ccHost software in accordance with the
+terms of that license. You agree that you are solely 
+responsible for your use of the ccHost software and you
+represent and warrant to Creative Commons that your use
+of the ccHost software will comply with the CC-GNU-GPL.
+
+$Id$
+
+-->
+</tal:block>
+<h1 class="cc_hide">Support ccMixter</h1>
+<h1><img src="http://creativecommons.org/images/support/2006/support-title.png" /></h1>
+
+<div style="font-size: 17px;font-family:arial;">
+<p>A friendly notice from the folks that bring you ccMixter.org...</p>
+
+<p>ccMixter is free. You can create an account, download samples, host your a cappellas and remixes here
+with no fees, no advertising, no junk in your inbox, no nothing... just music.</p>
+
+<p>But ccMixter is not free to Creative Commons who depend on you to support it and provide for projects 
+like ccMixter and a whole host of others.</p>
+
+<p>We appreciate
+<i>any</i> support you can show by using the "Support CC" button on the left.</p>
+
+<h3 style="text-align:center">
+<a style="color:green" href="http://creativecommons.org/support/">
+<img src="http://creativecommons.org/images/support/2007/support-btn-150.png" /><br />
+http://creativecommons.org/support/</a></h3>
+
+<p>ccMixter is sponsored 100% by Creative Commons, which is sponsored by you. Thanks!</p>
+
+</div>
+
+<script>
+  //<!--
+  var tab_top = -41;
+
+  function timed_tab_grow()
+  {
+     ++tab_top;
+     var obj = new cc_obj('cc_tab');
+     obj.style.backgroundPosition    = "0px " + tab_top + "px";
+     if( tab_top < 0 )
+     {
+        setTimeout("timed_tab_grow()", 50);
+     }
+  }
+
+  tabobj = new cc_obj('cc_tab');
+  tabobj.obj.innerHTML = '<a href="http://creativecommons.org/">&nbsp;</a>';
+  timed_tab_grow();
+  //-->
+</script>
+</tal:block>

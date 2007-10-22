@@ -170,6 +170,25 @@ class CCPseudoVerifyAdminForm extends CCGridForm
 
 class CCPseudoVerifyAPI
 {
+    function CCPseudoVerifyAPI()
+    {
+        $this->_not_empty = true;
+    }
+
+    function Install()
+    {  
+        global $old_validator, $CC_UPLOAD_VALIDATOR;
+
+        if( !empty($CC_UPLOAD_VALIDATOR) && 
+                (strtolower(get_class($CC_UPLOAD_VALIDATOR)) == (strtolower(get_class($this))) ))
+        {
+            return;
+        }
+        $old_validator = $CC_UPLOAD_VALIDATOR;
+        $CC_UPLOAD_VALIDATOR = $this;
+
+    }
+
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('admin','pverify'), array( 'CCPseudoVerifyAPI', 'Admin' ),
@@ -177,13 +196,6 @@ class CCPseudoVerifyAPI
                           _('Display verification options form.'), CC_AG_UPLOADS );
     }
 
-    function Install()
-    {  
-       global $old_validator, $CC_UPLOAD_VALIDATOR;
-
-       $old_validator = $CC_UPLOAD_VALIDATOR;
-       $CC_UPLOAD_VALIDATOR = $this;
-    }
 
     /**
     * Event handler for {@link CC_EVENT_GET_SYSTAGS}
@@ -227,6 +239,15 @@ class CCPseudoVerifyAPI
     function _import_getid3_formats()
     {
         global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY]) )
+        {
+            // admin might have shut off getid3 option but this psuedo-verify
+            // editor requires it
+            $CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY] = true;
+            _verify_getid3_install();
+        }
+
 
         $basepath = CCUtil::CheckTrailingSlash($CC_GLOBALS[CCGETID3_PATH_KEY],true);
         $getid3_obj = CCGetID3::InitID3Obj();
@@ -423,10 +444,18 @@ class CCPseudoVerifyAPI
             return false;
         }
 
+        global $CC_GLOBALS;
+
         if( $FF['action'] == CC_PV_VERIFY )
         {
+            if( empty($CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY]) )
+            {
+                $CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY] = true;
+                _verify_getid3_install();
+            }
+
             CCDebug::QuietErrors();
-            $debug = CCDebug::Enable(false);
+            $debug = CCDebug::Enable(true);
 
             $id3 =& CCGetID3::InitID3Obj();
             $tags = $id3->analyze($path);

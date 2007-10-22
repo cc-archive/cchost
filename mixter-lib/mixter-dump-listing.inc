@@ -206,7 +206,7 @@ EOF;
             $culinks = array();
             foreach( $record['collab']['users'] as $U )
             {
-                $xurl = $url . '/' . $U['user_name'];
+                $xurl = ccl('people', $U['user_name'] );
                 $culinks[] = "<a href=\"$xurl\">{$U['user_real_name']}</a>";
             }
             $collab_links = join( ', ', $culinks );
