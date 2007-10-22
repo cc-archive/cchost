@@ -94,7 +94,7 @@ END;
         //
         // Setup the page and initialize useful things
         //
-        $this->_add_links();
+
         $users =& CCUsers::GetTable();
         require_once('cclib/cc-upload-table.php');
         $uploads = new CCUploads(); // get a new one because we step on it
@@ -446,12 +446,6 @@ END;
         $users->Update($arg2);
     }
 
-    function _add_links()
-    {
-        CCTopic::AddLinks();
-    }
-
-
     /**
     * Event hander for {@link CC_EVENT_DELETE_UPLOAD}
     * 
@@ -669,23 +663,6 @@ END;
                     $extra .= $up_results[$i][$field] . ' ';
                 $up_results[$i]['topic_search_result_info'] = CCSearch::_highlight_results($extra,$terms);
             }
-
-            /*
-                WRONG WAY
-
-            global $CC_GLOBALS;
-
-            $args = $CC_GLOBALS;
-            $args['root-url'] = cc_get_root_url() . '/';
-            $args['macro'] = 'recent_reviews';
-            $args['topics'] = $up_results;
-            $args['hot_topics'] = false;
-
-            //$tfile = CCTemplate::GetTemplate();
-            $template = new CCTemplate('topics .xml');
-            $html = $template->SetAllAndParse($args);
-            CCPage::AddPrompt('body_text',$html);
-            */
 
             CCPage::PageArg( 'hot_topics', false );
             CCPage::PageArg( 'topic_results_macro', 'topics.xml/recent_reviews');

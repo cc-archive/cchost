@@ -205,7 +205,6 @@ class CCForumAPI
             }
         }
 
-        CCTopic::AddLinks();
         CCPage::SetTitle(('Forums'));
         CCPage::PageArg('forums',$visible_groups,'forum_index');
     }
@@ -290,7 +289,6 @@ EOF;
         CCPage::SetTitle($forum_row['forum_name']);
         CCPage::PageArg( 'forum_cmds', $commands );
         CCPage::PageArg( 'threads', $forum_threads , 'forum_listing' );
-        CCTopic::AddLinks();
     }
 
     function _add_feed_links( $thread = '', $user = '' )
@@ -587,7 +585,6 @@ EOF;
         CCPage::SetTitle($title);
 
         $this->_add_feed_links( $thread_id );
-        CCTopic::AddLinks();
         $this->_build_bread_crumb_trail($row['topic_forum'],$row['topic_name']);
     }
 
@@ -624,7 +621,6 @@ EOF;
 
         CCPage::PageArg('topics',$rows,'forum_user');
         CCPage::SetTitle( sprintf( _("Forum Posts by %s"), $user_real_name ) );
-        CCTopic::AddLinks();
 
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');

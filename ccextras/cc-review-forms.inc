@@ -91,13 +91,11 @@ class CCReviewFormAPI
             // ug sorry about this
             if( function_exists('cc_playlist_enabled') && cc_playlist_enabled() )
             {
-                CCPage::PageMacro('playerembed.xml/eplayer');
-                CCPage::PageMacro('playlist.xml/playlist_menu');
+                CCPage::AddMacro('playerembed.xml/eplayer');
+                CCPage::AddMacro('playlist.xml/playlist_menu');
             }
             
             CCPage::AddForm( $form->GenerateForm() );
-
-            CCReview::_add_links();
         }
         else
         {

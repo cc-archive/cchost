@@ -572,7 +572,7 @@ filechanged($("dirlistselect"));
 
 </script>';
 
-        CCPage::PageArg('body_html',$html,'show_body_html');
+        CCPage::AddContent($html);
 
     }
 

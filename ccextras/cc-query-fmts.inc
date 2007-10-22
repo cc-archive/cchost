@@ -124,13 +124,12 @@ class CCQueryFormats
                                       $template));
                         exit;
                     }
-                        
-                    $templateObj = new CCTemplateMacro($tname,'');
+                    
+                    $template = $tname;
+                    $macro = '';
                 }
-                else
-                {
-                    $templateObj = new CCTemplateMacro($template,$macro);
-                }
+
+                $templateObj = new CCTemplateMacro($template,$macro);
 
                 $k = array_keys($records);
                 $count = count($k);

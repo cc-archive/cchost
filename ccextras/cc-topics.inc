@@ -522,10 +522,7 @@ class CCTopic
 
         CCPage::PageArg('str_none',_('(There are no translations for this topic)'));
         CCPage::PageArg('str_current_translations',_('Current translations') . ': ');
-        CCPage::PageArg('topic_short_macro','topics.xml/xlat_list');
-        CCPage::PageArg('topics',$results,'topic_short_macro');
-        $this->AddLinks();
-
+        CCPage::PageArg('topics',$results,'topics.xml/xlat_list');
     }
 
     function Translate($topic_id='')
@@ -552,7 +549,6 @@ class CCTopic
             CCPage::PageArg('post_translation_macro','topics.xml/post_reply');
             CCPage::PageArg('topic',$record,'post_translation_macro');
             CCPage::AddForm( $form->GenerateForm() );
-            $this->AddLinks();
         }
         else
         {
@@ -622,25 +618,9 @@ class CCTopic
                 $form->SetFormValue( 'topic_text', $quote_text);
             }
 
-            /*
-                WRONG WAY:
-            $form->GenerateForm();
-            $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
-            $args['root-url'] = cc_get_root_url();
-            $args['topic'] = $record;
-
-            $args['macro'] = 'post_reply';
-            $tfile = CCTemplate::GetTemplate('topics .xml');
-            $template = new CCTemplate($tfile);
-            $html = $template->SetAllAndParse($args);
-            CCPage::AddPrompt('body_text',$html);
-            */
-
             CCPage::PageArg('post_reply_macro','topics.xml/post_reply');
             CCPage::PageArg('topic',$record,'post_reply_macro');
             CCPage::AddForm( $form->GenerateForm() );
-
-            $this->AddLinks();
         }
         else
         {
@@ -789,35 +769,6 @@ class CCTopic
         $topics->DeleteKey($parent_id);
     }
 
-    function AddLinks()
-    {
-        global $CC_GLOBALS;
-
-        static $done;
-        if( !isset($done) )
-        {
-            if( function_exists('_cc_format_links') )
-            {
-                _cc_format_links();
-            }
-            else
-            {
-                //CCPage::AddScriptLink( ccd('cc_templates', 'dl_popup.js'), false );
-            }
-                
-            CCPage::AddScriptLink( 'js/cc-topics.js', false );
-            $cname = 'skin-' . $CC_GLOBALS['skin'] . '-topics.css';
-            $css_file = CCTemplate::GetTemplate($cname,false);
-            CCPage::AddLink('head_links', 'stylesheet', 'text/css', 
-                                ccd($css_file) , 'Default Style');
-
-            CCPage::PageArg('topic_flag_tip',_('Flag this topic for possible violation of terms'));
-            CCPage::PageArg('upload_flag_tip', _('Flag this upload for possible violation of terms'));
-
-            $done = true;
-        }
-    }
-
     function GetText($topic_id='')
     {
         $topics =& CCTopics::GetTable();
@@ -850,23 +801,8 @@ class CCTopic
         if( !$inpost || !$form->ValidateFields() )
         {
             CCPage::SetTitle(sprintf(_("Edit topic: '%s'"),$record['topic_name']));
-            /*
-                WRONG WAY 
-            $form->GenerateForm();
-            $args = array_merge($CC_GLOBALS,$form->GetTemplateVars());
-            $args['root-url'] = cc_get_root_url();
-            $args['macro'] = 'post_edit';
-            $tfile = CCTemplate::GetTemplate('topics .xml');
-            $template = new CCTemplate($tfile);
-            $html = $template->SetAllAndParse($args);
-            CCPage::AddPrompt('body_text',$html);
-            */
-    
-            CCPage::PageArg( 'post_edit_macro', 'topics.xml/post_edit' );
-            CCPage::PageArg( '_bogus', true, 'post_edit_macro'); 
+            CCPage::AddMacro( 'topics.xml/post_edit' ); 
             CCPage::AddForm( $form->GenerateForm() );
-
-            $this->AddLinks();
         }
         else
         {
@@ -902,25 +838,8 @@ class CCTopic
             return;
         }
 
-        /*
-            WRONG WAY 
-        $args = $CC_GLOBALS;
-        $args['root-url']  = cc_get_root_url();
-        $args['show_cmds'] = true;
-        $args['macro']     = 'one_topic';
-        $args['topic']     = $topics->GetRecordFromID($topic_id);
-        $tfile = CCTemplate::GetTemplate('topics .xml');
-        $template = new CCTemplate($tfile);
-        $html = $template->SetAllAndParse($args);
-        CCPage::AddPrompt('body_text',$html);
-        */
-
-
-        CCPage::PageArg( 'one_topic_macro','topics.xml/one_topic');
         CCPage::PageArg( 'show_cmds', true );
-        CCPage::PageArg( 'topic', $topic, 'one_topic_macro' );
-
-        $this->AddLinks();
+        CCPage::PageArg( 'topic', $topic, 'topics.xml/one_topic');
 
         $name = $topic['topic_name'];
         $title = $name{0} == '"' ? $name : "$name";

@@ -80,7 +80,7 @@ END;
         }
         $html .= '</ul>';
 
-        CCPage::AddPrompt('body_text',$html);
+        CCPage::AddContent($html);
     }
 
 

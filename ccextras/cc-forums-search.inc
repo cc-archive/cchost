@@ -127,7 +127,6 @@ class CCForumsSearchAPI
 
 
             CCPage::PageArg('topics',$results,'forum_search_results');
-            CCTopic::AddLinks();
         }
 
         $done_search = true;

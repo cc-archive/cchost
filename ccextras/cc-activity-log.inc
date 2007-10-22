@@ -299,7 +299,7 @@ class CCActivityLogAPI
                     $html .= "<tr><td><a href=\"$url\">$name</a></td></tr>";
                 }
                 $html .= '</table>';
-                CCPage::AddPrompt('body_text',$html);
+                CCPage::AddContent($html);
                 return;
             }
             else

@@ -30,22 +30,8 @@ if( !defined('IN_CC_HOST') )
 */
 require_once('ccextras/cc-topics.php');
 
-function _cc_format_links()
-{
-    static $done;
-    if( !isset($done) )
-    {
-        require_once('cclib/cc-page.php');
-        CCPage::AddScriptLink( 'js/cc-format.js' );
-        CCPage::SetStyleSheet( 'css/cc-format.css');
-        $done = true;
-    }
-}
-
 function _generator_cc_format($form, $fieldname, $value, $class )
 {
-    _cc_format_links();
-
     $textarea = $form->generator_textarea($fieldname,$value,$class);
 
     $url = ccl('format','preview') . '/';
@@ -56,7 +42,8 @@ function _generator_cc_format($form, $fieldname, $value, $class )
         <div class="cc_format_preview" id="format_inner_preview_' . $fieldname . '"></div>
             </div>';
 
-    $thumbs_up_tiny = CCTemplate::Search( 'images/thumbs_up_tiny.png' );
+    require_once('cclib/cc-template.php');
+    $thumbs_up_tiny = ccd( CCTemplate::Search( 'images/thumbs_up_tiny.png' ) );
 
     $html .=<<<END
         <div class="cc_ed_buttons">
@@ -69,7 +56,7 @@ function _generator_cc_format($form, $fieldname, $value, $class )
     <input type="button" onclick="cc_apply_format('$fieldname','blue');" value="B" style="color:blue" />
     <input type="button" onclick="cc_apply_format('$fieldname','big');" value="+" style="" />
     <input type="button" onclick="cc_apply_format('$fieldname','small');" value="-" style="" />
-    <button onclick="cc_apply_format('$fieldname','up'); return false;" style="" ><img src="$thumbs_up_tiny" /></button>
+    <a href="javascript://heya!" onclick="cc_apply_format('$fieldname','up'); return false;" style="" ><img src="$thumbs_up_tiny" /></a>
     <input type="button" onclick="cc_format_preview('$fieldname')" id="preview_$fieldname" value="preview" style="font-size:smaller;" />
     </div>
         $textarea
@@ -86,6 +73,7 @@ function _cc_format_unformat($text)
 
 function _cc_format_format($text)
 {
+    require_once('cclib/cc-template.php');
     $thumbs_up = CCTemplate::Search('images/thumbs_up.png');
 
     $quote = _('Quote:');
@@ -148,8 +136,6 @@ class CCFormat
         if( !_cc_is_formatting_on() )
             return;
 
-        _cc_format_links();
-
         $row['topic_text_html'] = _cc_format_format($row['topic_text']);
         $row['topic_text_plain'] = _cc_format_unformat($row['topic_text']);
     }
@@ -169,8 +155,6 @@ class CCFormat
         {
             return;
         }
-
-        _cc_format_links();
 
         if( !empty($row['upload_description']) )
         {
@@ -206,7 +190,6 @@ class CCFormat
         if( !_cc_is_formatting_on() )
             return;
 
-        $need_script = false;
         if( !empty($row['user_fields']) )
         {
             $count = count($row['user_fields']);
@@ -217,14 +200,10 @@ class CCFormat
                 if( !empty($F['id']) && $F['id'] == 'user_description' )
                 {
                     $F['value'] = _cc_format_format($row['user_description']);
-                    $need_script = true;
                     break;
                 }
             }
         }
-
-        if( $need_script )
-            _cc_format_links();
     }
 
     /**

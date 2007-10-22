@@ -71,7 +71,6 @@ class CCRunOnce
                array(  'label'      => _('Run Once'),
                        'form_tip'   => _('Comma separated list of xml files in viewfiles directory that registered users will see once.'),
                        'value'      => '',
-                       'class'      => 'cc_form_input_short',
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE );
         }

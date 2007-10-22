@@ -46,6 +46,7 @@ class CCPublicizeHV
     */
     function OnBuildUploadMenu(&$menu)
     {
+        require_once('cclib/cc-template.php');
         $rurl = CCTemplate::Search('images/shareicons') . '/';
         $menu['share_link'] = 
                      array(  'menu_text'  => '+', // _('Share'),

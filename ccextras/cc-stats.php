@@ -224,7 +224,7 @@ function cc_stats_show()
     }
 
     CCPage::SetTitle(_("Charts"));
-    CCPage::AddPrompt('body_text',$text);
+    CCPage::AddContent($text);
 }
 
 function cc_stats_uploads_by_month()
