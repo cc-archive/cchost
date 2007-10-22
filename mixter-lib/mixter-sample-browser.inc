@@ -251,15 +251,6 @@ class CCSampleBrowser
         $args['default_msg']    = $this->_default_msg();
         $args['licenses']       = $this->_get_lic_filters('sample');
 
-        /*
-        $tfile = CCPage::GetViewFile('sample_browser.xml');
-        if( $tfile === false ) // errrr
-            $tfile = CCTemplate::GetTemplate('sample_browser.xml');
-        $template = new CCTemplate( $tfile );
-        $html = $template->SetAllAndParse($args);
-        CCPage::AddPrompt('body_text',$html);
-        */
-
         foreach( $args as $K => $V )
             CCPage::PageArg( $K, $V );
         CCPage::PageArg( 'sample_browser', 'sample_browser.xml', 'sample_browser' );
