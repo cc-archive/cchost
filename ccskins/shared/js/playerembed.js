@@ -65,7 +65,7 @@ ccEmbeddedPlayer.prototype = {
             cPosBk:  'cc_player_pos_bk',          // position slider background
             cSlider: 'cc_player_slider',          // current position slider 
             cVolumeHover: 'cc_player_knob_hover', // class added to volume knob hovering
-            pos_msg:   'loading...',
+            pos_msg:   str_loading,
 
             // hehavoir mod
                                                   // there are two different set of controls:

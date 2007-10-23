@@ -1,91 +1,40 @@
-<style>
-/* big div sections */
-
-.upload {
-    margin: 15px; /* 0px 4px 0px; */
-    padding: 4px;
-    border-bottom: 1px dashed #8E8;
-}
-.upload_avatar {
-    width: 95px;
-    height: 95px;
-    float: left;
-    margin-right: 8px;
-}
-.upload_info {
-    width: 340px;
-    float: left;
-}
-#remix_info {
-    width: 335px;
-    float: left;
-}
-.list_menu {
-    float: left;
-    width: 150px;
-}
-
-/* other stuff */
-
-.lic_link {
-    float: right;
-    margin-right: 12px;
-}
-.upload_date {
-    color: #888;
-}
-.list_menu a {
-    display: block;
-}
-.remix_link {
-    font-weight: bold;
-}
-.remix_more_link {
-    font-style: italic;
-}
-#remix_info h2 {
-    font-size:12px;
-    font-weight:normal;
-    margin: 0px;
-}
-.playerdiv {
-    white-space: nowrap;
-}
-.playerlabel {
-    display: block;
-    float: left;
-}
-</style>
+<link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list.css') ?>" />
 <?
-$carr103 = empty( $A['records'] ) ? $A['file_records'] : $A['records'];
-$cc103   = count( $carr103);
-$ck103   = array_keys( $carr103);
 
-cc_get_remix_history($carr103,3);
-
-print "<div id=\"upload_listing\">\n";
-
-for( $ci103= 0; $ci103< $cc103; ++$ci103)
-{ 
-    $R =& $carr103[ $ck103[ $ci103 ] ];
-    $R['local_menu'] = cc_get_upload_menu($R);
-
-    print "  <div class=\"upload\" ><!--  %%% {$R['upload_name']}  %%% -->\n";
-
-    helper_list_info($R,$A,$T);
-    helper_list_menu($R);
-    helper_list_remixex($R);
-
-    print "    <br style=\"clear:both\" />\n  </div><!--  end upload  -->\n";
-}
-print "</div><!-- end listing -->\n";
-
-$T->Call('prev_next_links');
-
-if( !empty($A['enable_playlists']) )
+function _t_upload_list_init($T,&$A)
 {
-    $T->Call('playerembed.xml/eplayer');
-    $T->Call('playlist.xml/playlist_menu');
+    $carr103 = empty( $A['records'] ) ? $A['file_records'] : $A['records'];
+    $cc103   = count( $carr103);
+    $ck103   = array_keys( $carr103);
+
+    cc_get_remix_history($carr103,3);
+
+    print "<div id=\"upload_listing\">\n";
+
+    for( $ci103= 0; $ci103< $cc103; ++$ci103)
+    { 
+        $R =& $carr103[ $ck103[ $ci103 ] ];
+        $R['local_menu'] = cc_get_upload_menu($R);
+
+        print "  <div class=\"upload\" ><!--  %%% {$R['upload_name']}  %%% -->\n";
+
+        helper_list_info($R,$A,$T);
+        helper_list_menu($R);
+        helper_list_remixex($R);
+
+        print "    <br style=\"clear:both\" />\n  </div><!--  end upload  -->\n";
+    }
+    print "</div><!-- end listing -->\n";
+
+    $T->Call('prev_next_links');
+
+    if( !empty($A['enable_playlists']) )
+    {
+        $T->Call('playerembed.xml/eplayer');
+        $T->Call('playlist.xml/playlist_menu');
+    }
+
+    print '<script> var dl_hook = new downloadHook(); dl_hook.hookLinks(); </script>';
 }
 
 function helper_list_menu(&$R)
@@ -115,12 +64,12 @@ function helper_list_menu(&$R)
         $mi['action'] = 'javascript://rate';
         if( !empty($R['thumbs_up']) )
         {
-            $mi['menu_text'] = _('Recommend');
+            $mi['menu_text'] = $GLOBALS['str_recommend'] ;
             $tu = 'true';
         }
         else
         {
-            $mi['menu_text'] = _('Rate Now');
+            $mi['menu_text'] = $GLOBALS['str_rate_now'] ;
             $tu = 'false';
         }
         $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";

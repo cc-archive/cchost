@@ -160,48 +160,30 @@ for( $ci108= 0; $ci108< $cc108; ++$ci108)
 
 
 //------------------------------------- 
-function _t_form_submit_forms($T,&$A) {
-   
+function _t_form_submit_forms($T,&$A) 
+{
+   ?><div  class="cc_submit_forms_outer"><?
 
-?><div  class="cc_submit_forms_outer">
-<?
+    foreach($A['submit_form_infos'] as $SI )
+    {
+        ?><div  class="cc_submit_forms cc_round_box_bw"><?
 
-$carr109 = $A['submit_form_infos'];
-$cc109= count( $carr109);
-$ck109= array_keys( $carr109);
-for( $ci109= 0; $ci109< $cc109; ++$ci109)
-{ 
-   $A['submit_info'] = $carr109[ $ck109[ $ci109 ] ];
-   
-?><div  class="cc_submit_forms">
-<?
+        if ( !empty($SI['logo'])) 
+            ?><img  src="<?= $SI['logo']?>" /><?
 
-if ( !empty($A['submit_info']['logo'])) {
+        ?><h2 ><?= $SI['text']?></h2>
+        <div  class="cc_submit_form_help"><?= $SI['help']?></div>
+        <div  class="cc_submit_form_url"><?
+            if ( !($SI['quota_reached']) )
+                { ?><a  href="<?= $SI['action']?>"><?= $SI['text']?></a><? }
+            else
+                { ?><span  class="cc_quota_message"><?= $SI['quota_message']?></span><? }
 
-?><img  src="<?= $A['submit_info']['logo']?>" /><?
-} // END: if
+        ?></div>
+        </div><?
+    } 
 
-?><h2 ><?= $A['submit_info']['text']?></h2>
-<div  class="cc_submit_form_help"><?= $A['submit_info']['help']?></div>
-<div  class="cc_submit_form_url">
-<?
-
-if ( !($A['submit_info']['quota_reached']) ) {
-
-?><a  href="<?= $A['submit_info']['action']?>"><?= $A['submit_info']['text']?></a><?
-} // END: if
-
-if ( !empty($A['submit_info']['quota_reached'])) {
-
-?><span  class="cc_quota_message"><?= $A['submit_info']['quota_message']?></span><?
-} // END: if
-
-?></div>
-</div><?
-} // END: for loop
-
-?></div>
-<?
+    ?></div><?
 } // END: function submit_forms
 
 

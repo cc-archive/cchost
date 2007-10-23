@@ -1,5 +1,5 @@
 <? 
-$A['page-title'] = $GLOBALS['str_editors_picks_and_hot_tracks'];
+$A['page-title'] = $GLOBALS['str_edpicks_hot_tracks'];
 $T->Call('print_page_title');
 ?>
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/picks.css') ?>" />

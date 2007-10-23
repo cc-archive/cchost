@@ -18,6 +18,10 @@ $Id$
 
 */
 
+#radio_container{
+   margin: 0px auto;
+   width: 450px;
+}
 
 #channel_form td {
   vertical-align: top;
@@ -99,8 +103,11 @@ $Id$
     padding-right: 8px;
 }
 
+#options .opt_label {
+	white-space: nowrap;
+}
 
-#score, #sinceu, #limit {
+#score, #sinceu, #limit, #num_scores {
   font-size: 10px;
 }
 

@@ -39,7 +39,7 @@ var ccThinking = {
             this.div = document.createElement('div');
             this.div.style.display = 'none';
             this.div.className = 'cc_playlist_thinking';
-            this.div.innerHTML = 'thinking...';
+            this.div.innerHTML = str_thinking;
             document.body.appendChild(this.div);
         }
         this.div.style.top  = this.currY + 'px';
@@ -144,7 +144,7 @@ ccPlaylistMenu.prototype = {
     },
 
     _create_controls: function( link, pid, id ) {
-        var html = '<div id="' + pid + '" style="display:block;opacity:0.7;" class="cc_playlist_popup">getting information... </div>';
+        var html = '<div id="' + pid + '" style="display:block;opacity:0.7;" class="cc_playlist_popup">'+str_thinking+'</div>';
         new Insertion.After( link, html );
         var pp = $(pid);
         Position.clone( link, pid, {  setWidth:   false,
@@ -208,7 +208,8 @@ ccPlaylistMenu.prototype = {
             {
                 p.innerHTML = resp.responseText;
             }
-            new ccDelayAndFade( 1000, p, 0, 1500, 20, { complete: this._close_menu.bind(this) } );
+            //new ccDelayAndFade( 1000, p, 0, 1500, 20, { complete: this._close_menu.bind(this) } );
+            Effect.Fade( p, { duration: 2.0, delay: 0.2, afterFinish: this._close_menu.bind(this) } );
         }
         catch (err)
         {
@@ -220,8 +221,10 @@ ccPlaylistMenu.prototype = {
     _open_menu: function(pid) {
         var pp = $(pid);
         this.openMenu = pp;
+        pp.style.opacity = '0.0';
         pp.style.display = 'block';
-        new ccDelayAndFade( 0, pp, 1, 250, 4 );
+        //new ccDelayAndFade( 0, pp, 1, 250, 4 );
+        Effect.Appear( pp, { duration: 1.5, from: 0.0, to: 1.0, delay: 0.2 } );
     },
 
     _close_menu: function() {
@@ -276,7 +279,6 @@ ccPlaylistMenu.prototype = {
 
     _resp_info: function( info_id, resp ) {
         var info = $(info_id);
-        //info.style.opacity = 0;
         info.innerHTML = resp.responseText;
         info.style.display = 'block';
         this.openInfo = info;
@@ -284,7 +286,7 @@ ccPlaylistMenu.prototype = {
         if( x < 0 )
             x = 100;
         info.style.left = x + 'px';
-        //new ccDelayAndFade( 0, info, 1.0, 40, 10); 
+        Effect.Appear( info, { duration: 2.0, delay: 0.2 } );
         this.transport = null;
     },
 
@@ -534,7 +536,7 @@ var ccPlaylistBrowserObject = {
                     ccThinking.Enable(event);
                 this.openRec = detailId;            
                 var html = '\n<div id="'+detailId
-                               + '" class="cc_playlist_detail" style="display: none;">getting playlist...</div>\n';
+                               + '" class="cc_playlist_detail" style="display: none;">'+str_thinking+'</div>\n';
                 new Insertion.After(this.selected, html);
                 Event.observe( detailId, 'click', this.onStopDetailClick.bindAsEventListener(this, detailId) );
                 this.delayDisplay(detailId,'block');

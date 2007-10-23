@@ -91,7 +91,7 @@ function _t_recommends_init($T,&$targs) {
 </div>
 <div  id="featured">
 <h3 ><?= sprintf($GLOBALS['str_recommended_by_s'],$A['get']['fullname']);?></h3>
-<div  class="featured_info"><?= sprintf($GLOBALS['str_s_recommends_these_uploads'] ,$A['get']['fullname']);?></div>
+<div  class="featured_info"><?= sprintf($GLOBALS['str_s_recommends'] ,$A['get']['fullname']);?></div>
 </div>
 <div  id="browser">
   getting data...

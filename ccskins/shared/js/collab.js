@@ -33,7 +33,7 @@ ccCollab.prototype = {
             var pickFunk = this.onUserPick.bind(this);
             this.autoComp =  new ccAutoComplete( {  url: home_url + 'browse' + q + 'user_lookup=', onPick: pickFunk } );
             var container = $('invite_container');
-            container.innerHTML = this.autoComp.genControls( 'collab_user', '', 'invite other artists' );
+            container.innerHTML = this.autoComp.genControls( 'collab_user', '', str_invite_other_artists );
             this.autoComp.hookUpEvents();
             if( $('fileok') )
                 Event.observe( 'fileok', 'click', this.onFileSubmitOK.bindAsEventListener(this) );
@@ -69,7 +69,7 @@ ccCollab.prototype = {
     },
 
     onUploadPublish: function( e, id ) {
-        this.msg( 'thinking...', 'working' );
+        this.msg( str_thinking, str_working ); 
         var url = home_url + 'collab/upload/' + this.collab_id + '/' + id + '/publish';
         new Ajax.Request( url, { method: 'get', onComplete: this._req_publishupload.bind(this) } );
     },
@@ -81,7 +81,7 @@ ccCollab.prototype = {
         }
         else
         {
-            $('_pubtext_' + json.upload_id).innerHTML = json.published ? 'hide' : 'publish';
+            $('_pubtext_' + json.upload_id).innerHTML = json.published ? str_hide : str_publish;
             if( json.msg )
                 this.msg( json.msg, 'msg' );
         }
@@ -89,7 +89,7 @@ ccCollab.prototype = {
 
 
     onUploadRemove: function( e, id ) {
-        this.msg( 'thinking...', 'working' );
+        this.msg( str_thinking, str_working ); 
         var url = home_url + 'collab/upload/' + this.collab_id + '/' + id + '/remove';
         new Ajax.Request( url, { method: 'get', onComplete: this._req_removeupload.bind(this) } );
     },
@@ -115,9 +115,10 @@ ccCollab.prototype = {
         var file_line = $("_file_line_" + id);
         this.uploadTags = id;
         var tags = $('_user_tags_' + id ).innerHTML;
-        var html = '<div id="tags_editor" style="position:absolute;background:white;padding: 10px;">tags (e.g. bass, beat, keys): <input type="text" id="tags_edit" value="' + tags +
-                     '" /> <a href="javascript://ok tags" id="ok_tags">ok</a> ' +
-                     '<a href="javascript://ok edit" id="cancel_tags">cancel</a></div>';
+        var html = '<div id="tags_editor" style="position:absolute;background:white;padding: 10px;">'+str_tags_label+
+                      ': <input type="text" id="tags_edit" value="' + tags +
+                     '" /> <a href="javascript://ok tags" id="ok_tags">'+str_ok+'</a> ' +
+                     '<a href="javascript://ok edit" id="cancel_tags">'+str_cancel+'</a></div>';
         new Insertion.Before(file_line,html);
         Position.clone( file_line, $('tags_editor'), { setHeight: false } );
         //file_line.style.display = 'none';
@@ -136,9 +137,10 @@ ccCollab.prototype = {
         var credit = $("_credit_" + user_name);
         this.userCredit = user_name;
         this.userCreditValue = credit.innerHTML;
-        var html = '<div id="credit_editor">Enter '+user_name+'\'s role (e.g. bass, producer, vocals): <input type="text" id="credit_edit" value="' + this.userCreditValue +
-                     '" /> <a href="javascript://ok edit" id="ok_edit">ok</a> ' +
-                     '<a href="javascript://ok edit" id="cancel_edit">cancel</a></div>';
+        var text = str_enter_role.replace('/%s/',user_name);
+        var html = '<div id="credit_editor">'+text+': <input type="text" id="credit_edit" value="' + this.userCreditValue +
+                     '" /> <a href="javascript://ok edit" id="ok_edit">'+str_ok+'</a> ' +
+                     '<a href="javascript://ok edit" id="cancel_edit">'+str_cancel+'</a></div>';
         new Insertion.Before(user_line,html);
         user_line.style.display = 'none';
         this.okWatcher = this.onCreditOk.bindAsEventListener(this,user_name);
@@ -155,9 +157,10 @@ ccCollab.prototype = {
         var user_line = $("_user_line_" + user_name);
         var credit = $("_credit_" + user_name);
         this.userContact = user_name;
-        var html = '<div id="contact_editor">Send mail to '+user_name+':<br /><textarea style="width:60%;height:35px;" id="contact_edit"></textarea>' +
-                     '<a href="javascript://contact ok" id="ok_contact">ok</a> ' +
-                     '<a href="javascript://contact cancel" id="cancel_contact">cancel</a></div>';
+        text = str_send_mail_to.replace('/%s/',user_name);
+        var html = '<div id="contact_editor">'+text+':<br /><textarea style="width:60%;height:35px;" id="contact_edit"></textarea>' +
+                     '<a href="javascript://contact ok" id="ok_contact">'+str_ok+'</a> ' +
+                     '<a href="javascript://contact cancel" id="cancel_contact">'+str_cancel+'</a></div>';
         new Insertion.Before(user_line,html);
         user_line.style.display = 'none';
         this.okContactWatcher     = this.onContactOk.bindAsEventListener(this,user_name);
@@ -273,7 +276,7 @@ ccCollab.prototype = {
     },
 
     onUserRemove: function( e, user_name ) {
-        this.msg( 'thinking...', 'working' );
+        this.msg( str_thinking, str_working );
         var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/remove';
         new Ajax.Request( url, { method: 'get', onComplete: this._req_removeuser.bind(this) } );
     },
@@ -301,7 +304,9 @@ ccCollab.prototype = {
 
     msg: function( text, type ) {
         $('collab_ajax_msg').innerHTML = '<div id="amsg" class="ajaxmsg_' + type + '">' + text + '</div>';
-        new ccDelayAndFade( 0, $('amsg'), 1.0, 250, 5 );
+        //new ccDelayAndFade( 0, $('amsg'), 1.0, 250, 5 );
+        Effect.Appear( 'amsg', { duration: 2.0, delay: 0.5 } );
+
     },
  
     _req_adduser: function( resp, json ) {

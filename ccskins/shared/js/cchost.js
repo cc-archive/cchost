@@ -32,11 +32,13 @@ downloadHook.prototype = {
     hookLinks: function() {
         var me = this;
         $$('.download_hook').each( function(link) {
-            var upload_id = link.id.match(/_ep_(.*)/)[1];
+            var upload_id = link.id.match(/_ed_(.*)/)[1];
             Event.observe( link, 'click', me.onClick.bindAsEventListener( me, upload_id ) );
-    }
+        });
+    },
 
     onClick: function( e, upload_id ) {
-        Modalbox.show( url, {title: 'Download', width: 500} );
+        var url = home_url + 'api/query' + q + 'f=html&t=download&ids=' + upload_id;
+        Modalbox.show( url, {title: str_download, width: 500} );
     }
 }

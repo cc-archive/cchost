@@ -89,8 +89,9 @@ ccAutoPick.prototype = {
                     '<span class="cc_autocomp_stat" id="' + stat_id + '"><i>' + pre_text + '</i></span> ' +
                '</td></tr>' +
                '<tr><td>' +
-                   '<a class="cc_autocomp_clear" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + '">clear</a>  '  + 
-                   '<a class="cc_autocomp_show" href="javascript://show list" id="' + show_id + '">show list</a>'  + 
+                   '<a class="cc_autocomp_clear" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + '">'
+                    + str_clear + '</a>  '  + 
+                   '<a class="cc_autocomp_show" href="javascript://show list" id="' + show_id + '">' + str_show_list + '</a>'  + 
                '</td></tr>' +
                '<tr><td><input type="hidden" name="' + id + '" id="' + id + '" value="' + value + '" />' +
                       '<div class="cc_autocomp_list" id="' + list_id + '"><!-- --></div>' +
@@ -104,13 +105,13 @@ ccAutoPick.prototype = {
         {
             list.style.display = 'none';
             this.is_showing = false;
-            link.innerHTML = 'show list';
+            link.innerHTML = str_show_list;
         }
         else
         {
             list.style.display = 'block';
             this.is_showing = true;
-            link.innerHTML = 'hide list';
+            link.innerHTML = str_hide_list;
         }
     },
 

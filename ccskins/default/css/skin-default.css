@@ -105,9 +105,11 @@ h2 {
 	font-size: 175%;
 }
 
-#title h2, .title h1 {
+#title h2, .title h1, #main_content h1 {
 	padding: 0px 15px 10px 0px;
-	margin-top: 0px;
+	margin: 0px;
+	text-align: center;
+	font-family: Verdana;
 }
 
 /*
@@ -356,4 +358,36 @@ a.upload_link {
 }
 #cc_form_help_container {
 	width: 600px;
+}
+
+/* submit forms page */
+
+.cc_submit_forms_outer {
+	margin: 0px auto;
+	width: 520px;
+}
+
+.cc_submit_forms {
+	margin-bottom: 10px;
+}
+
+.cc_submit_forms img {
+	float: left;
+	margin: 7px;
+}
+
+.cc_submit_form_help {
+	text-align: justify;
+}
+.cc_submit_form_url {
+	font-size: 1.4em;
+	clear: left;
+	margin: 9px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.cc_quota_message {
+	font-style: italic;
+	font-weight: normal;
 }

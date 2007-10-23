@@ -43,6 +43,10 @@ EOF;
 
 function _t_page_print_head_links($T,&$_TV)
 {
+    if( !empty($_TV['head_links']) )
+        foreach( $_TV['head_links'] as $head )
+            print "<link rel=\"{$head['rel']}\" type=\"{$head['type']}\" href=\"{$head['href']}\" title=\"{$head['title']}\"/>\n";
+
     if( !empty($_TV['style_sheets']) )
     {
         foreach( $_TV['style_sheets'] as $css )
@@ -63,19 +67,22 @@ function _t_page_print_head_links($T,&$_TV)
             $T->Call($script_block);
     }
 
-    if( !empty($_TV['head_links']) )
-        foreach( $_TV['head_links'] as $head )
-            print "<link rel=\"{$head['rel']}\" type=\"{$head['type']}\" href=\"{$head['href']}\" title=\"{$head['title']}\"/>\n";
-
 }
 
 function _t_page_script_link_helper($links,$T)
 {
     foreach( $links as $script_link )
     {
-        $path = $T->Search($script_link);
-        if( empty($path) ) die( "Can't find script '$script_link'" );
-        $path = ccd($path);
+        if( substr($script_link,0,7) == 'http://' )
+        {
+            $path = $script_link;
+        }
+        else
+        {
+            $path = $T->Search($script_link);
+            if( empty($path) ) die( "Can't find script '$script_link'" );
+            $path = ccd($path);
+        }
         print "<script type=\"text/javascript\" src=\"${path}\" ></script>\n";
     }
 }
@@ -179,7 +186,8 @@ EOF;
     if( !empty($_TV['page-title'] ) )
         $T->Call('print_page_title');
 
-    print '<a name="content" ></a>' . "\n";
+    if( empty($_TV['ajax']) )
+        print '<a name="content" ></a>' . "\n";
 
     if( !empty($_TV['macro_names'] ) ) 
         foreach( $_TV['macro_names'] as $macro )

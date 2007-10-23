@@ -177,9 +177,12 @@ a.cc_playlist_i:hover {
 
 
 /* filter form */
+#dyn_filter_editor_parent {
+	width: 400px;
+	margin: 0px auto;
+}
 #dyn_filter_editor {
 	margin: 14px 0px 0px 25px;
-	width: 400px;
 	padding: 9px;
 }
 

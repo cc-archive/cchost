@@ -28,7 +28,7 @@ ccQueryBrowserFilters.prototype = {
 
         this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', 
                                          vals: [  
-                                                    ['remix,44k', 'default (remix)' ],
+                                                    ['remix,44k', str_default + ' (remix)' ],
                                                     ['editorial_pick',      'ed picks' ],
                                                     ['remix,hip_hop',       'hip hop'], 
                                                     ['remix,downtempo',     'downtempo'], 
@@ -37,15 +37,15 @@ ccQueryBrowserFilters.prototype = {
                                                     ['remix,chill',         'chill'],
                                                     ['remix,experimental',  'experimental'],
                                                     ['remix,trip_hop',      'trip hop'],
-                                                    ['audio',               'all uploads']
+                                                    ['audio',               str_all ]
                                                 ] 
                            };
-        this.user       = { name: 'Artist', fmt: 'user_lookup', param: 'user' };
-        this.remixesof  = { name: 'Remixes of', fmt: 'remix_user', param: 'remixesof' };
-        this.tags       = { name: 'Tags', fmt: 'tag_lookup', param: 'tags' };
-        this.type       = { name: 'Match', fmt: 'dropdown', param: 'type' ,
-                                         vals: [  [ 'all', 'Match all tags'],
-                                                  [ 'any', 'Match any tags' ]
+        this.user       = { name: str_artist, fmt: 'user_lookup', param: 'user' };
+        this.remixesof  = { name: str_remixes_of, fmt: 'remix_user', param: 'remixesof' };
+        this.tags       = { name: str_tags, fmt: 'tag_lookup', param: 'tags' };
+        this.type       = { name: str_match, fmt: 'dropdown', param: 'type' ,
+                                         vals: [  [ 'all', str_match_all_tags ],
+                                                  [ 'any', str_match_any_tags  ]
                                                ]
                                           };
         /*
@@ -59,31 +59,31 @@ ccQueryBrowserFilters.prototype = {
                                                ]
                           };
         */
-        this.lic  = { name: 'License', fmt: 'dropdown', param: 'lic',
-                                         vals: [  [ '*', 'all'],
-                                                  [ 'by', 'attribution'],
-                                                  [ 'nc', 'non-commercial'],
-                                                  [ 'sa', 'share-alike'],
-                                                  [ 'byncsa', 'nc-share-alike'],
-                                                  [ 's', 'sampling'],
-                                                  [ 'splus', 'sampling+'],
-                                                  [ 'ncsplut', 'nc-sampling+'],
-                                                  [ 'pd', 'public domain']
+        this.lic  = { name: str_license, fmt: 'dropdown', param: 'lic',
+                                         vals: [  [ '*', str_all],
+                                                  [ 'by', str_attribution],
+                                                  [ 'nc', str_non_commercial],
+                                                  [ 'sa', str_share_alike],
+                                                  [ 'byncsa', str_nc_share_alike],
+                                                  [ 's', str_sampling],
+                                                  [ 'splus', str_sampling_plus],
+                                                  [ 'ncsplut', str_nc_sampling_plus],
+                                                  [ 'pd', str_public]
                                                ]
                           };
-        this.sinced = { name: 'Since', fmt: 'dropdown', param: 'sinced',
+        this.sinced = { name: str_since, fmt: 'dropdown', param: 'sinced',
                                          vals: [  
-                                                  [ '*', 'all time'],
-                                                  [ '1 days ago', 'yesterday'],
-                                                  [ '1 weeks ago', 'a week ago'],
-                                                  [ '2 weeks ago', '2 weeks ago'],
-                                                  [ '1 months ago', 'last month'],
-                                                  [ '3 months ago', '3 months ago'],
-                                                  [ '1 years ago', 'a year ago']
+                                                  [ '*', str_all_time],
+                                                  [ '1 days ago', str_yesterday],
+                                                  [ '1 weeks ago', str_a_week_ago],
+                                                  [ '2 weeks ago', str_2_weeks_ago],
+                                                  [ '1 months ago', str_last_month],
+                                                  [ '3 months ago', str_3_months_ago],
+                                                  [ '1 years ago', str_a_year_ago]
                                                ]
                           };
 
-        this.limit = { name: 'Limit', fmt: 'dropdown', param: 'limit', value: 35,
+        this.limit = { name: str_limit, fmt: 'dropdown', param: 'limit', value: 35,
                                          vals: [  
                                                   [ 1 ], 
                                                   [ 5 ],
@@ -149,7 +149,7 @@ ccQueryBrowserFilters.prototype = {
         formInfo.html = ' <div class="filterform" id="' + formInfo.id + '" ><div id="' 
                        + formInfo.innerId + '" style="display:none"><a href="javascript://close filter" id="' 
                        + formInfo.closeId 
-                       + '" class="close_button">close</a>'
+                       + '" class="close_button">'+str_close+'</a>'
                    ;
 
         var formatter = formatter_arg || new ccFormatter();
@@ -162,7 +162,7 @@ ccQueryBrowserFilters.prototype = {
         });
 
         formInfo.html += '\n<div class="filterbuttontray"><a class="cc_gen_button" href="javascript://filter go" id="'
-                   + formInfo.submitId + '"><span>see results</span></a></div>\n</div></div>\n';
+                   + formInfo.submitId + '"><span>'+str_see_results+'</span></a></div>\n</div></div>\n';
 
         this.id = _id;
         return(formInfo);
@@ -232,7 +232,7 @@ ccFormatter.prototype = {
     user_lookup: function(f,col) {
         var autoComp = this.user_picker = new ccAutoComplete( {  url: home_url + 'browse' + q + 'user_lookup=' } );
         this._watches.push( { func: autoComp.hookUpEvents.bind(autoComp) } );
-        return autoComp.genControls( f.param, f.value, 'enter user below' );
+        return autoComp.genControls( f.param, f.value, str_enter_user_below );
     },
 
     remix_user: function( f, col ) {

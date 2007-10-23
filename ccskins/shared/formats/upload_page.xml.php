@@ -18,151 +18,37 @@
 *
 */
 
-?>
-<style>
-#upload_menu_box {
-    float: left;
-    width: 210px;
-    margin-top: 25px;
+function _t_upload_page_init($T,&$A)
+{
+    $css = $T->URL('css/upload_page.css');
+
+    ?><link rel="stylesheet" type="text/css" title="Default Style" href="<?= $css ?>" /><?
+
+    $R =& $A['record'];
+
+    $r_args = array( &$R );
+    cc_get_ratings_info($R);
+    cc_get_remix_history($r_args,0);
+    $R['local_menu'] = cc_get_upload_menu($R);
+
+    //CCDebug::PrintVar($R,false);
+
+    print "<div id=\"upload_sidebar_box\">\n";
+    helper_upload_do_sidebar($R,$A,$T);
+    print    "</div><!-- sidebar box -->\n";
+
+    helper_upload_date($R);
+
+    print "<div id=\"upload_menu_box\">\n";
+    helper_uploads_do_menus($R,$A,$T);
+    print "</div><!-- upload_menu_box -->\n";
+
+    print "<div id=\"upload_middle\">\n";
+    helper_upload_main_info($R,$A,$T);
+    print '</div><!-- upload_middle -->';
+
+    print '<script> var dl_hook = new downloadHook(); dl_hook.hookLinks(); </script>';
 }
-
-#upload_sidebar_box {
-    float: right;
-    width: 250px;
-}
-
-#upload_middle {
-    margin-left: 230px;
-    margin-right: 270px;
-}
-
-#download_box ul {
-    margin: 0px;
-    padding: 0px;
-    list-style: none;
-}
-#download_box ul li {
-    margin: 0px;
-    padding: 0px;
-}
-
-#date_box {
-    font-weight: bold;
-    color: #888888;
-}
-
-#modified_date {
-    margin-left: 50px;
-}
-
-#license_info p {
-    position: relative;
-    margin: 0px;
-}
-
-#license_info_t {
-    text-align: center;
-    margin: 0px;
-}
-
-#license_info p img {
-    position: absolute;
-    top: -30px;
-    left: -45px;
-}
-
-#remix_info {
-    margin-top: 22px;
-}
-
-#remix_info p {
-    position: relative;
-    margin: 0px;
-}
-
-#remix_info p img {
-    position: absolute;
-    top: -65px;
-    left: -45px;
-}
-
-#pick_box p {
-    position: relative;
-    margin: 0px;
-}
-
-#pick_box p img {
-    position: absolute;
-    top: -46px;
-    left: -38px;
-}
-
-.pick_reviewer {
-    margin-top: 12px;
-    text-align: right;
-    font-style: italic;
-}
-
-#remix_info div  {
-}
-
-#remix_info div span {
-    display: block;
-    margin-left: 12px;
-}
-
-.remix_link {
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-#credit_info {
-    font-size: 11px;
-    margin-bottom: 10px;
-}
-
-#credit_info th {
-    text-align: right;        
-}
-
-#credit_info td, #credit_info th {
-    vertical-align: top;
-    padding: 2px;
-}
-
-#taglinks {
-    margin-top: 14px;
-}
-
-</style>
-
-
-<?
-
-
-$R =& $A['record'];
-
-$r_args = array( &$R );
-cc_get_ratings_info($R);
-cc_get_remix_history($r_args,0);
-$R['local_menu'] = cc_get_upload_menu($R);
-
-//CCDebug::PrintVar($R,false);
-
-print "<div id=\"upload_sidebar_box\">\n";
-helper_upload_do_sidebar($R,$A,$T);
-print    "</div><!-- sidebar box -->\n";
-
-helper_upload_date($R);
-
-print "<div id=\"upload_menu_box\">\n";
-helper_uploads_do_menus($R,$A,$T);
-print "</div><!-- upload_menu_box -->\n";
-
-print "<div id=\"upload_middle\">\n";
-helper_upload_main_info($R,$A,$T);
-print '</div><!-- upload_middle -->';
-
 
 /*----------------------------------
     Menu stuff
@@ -249,6 +135,7 @@ function helper_uploads_do_menus(&$R,&$A)
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
     $mi['menu_text'] = $GLOBALS['str_down'];
+    $mi['class'] = 'download_hook';
     helper_upload_menu_item($mi);
 
     print "</ul></div>\n";
@@ -266,12 +153,12 @@ function helper_uploads_do_menus(&$R,&$A)
         $mi['action'] = 'javascript://rate';
         if( !empty($R['thumbs_up']) )
         {
-            $mi['menu_text'] = _('Recommend');
+            $mi['menu_text'] = $GLOBALS['str_recommend'] ;
             $tu = 'true';
         }
         else
         {
-            $mi['menu_text'] = _('Rate Now');
+            $mi['menu_text'] = $GLOBALS['str_rate_now'] ;
             $tu = 'false';
         }
         $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";
@@ -467,6 +354,8 @@ function helper_upload_remix_info($caption,$icon,$p,$T)
 function helper_upload_main_info(&$R,&$A,$T)
 {
     print "<div class=\"cc_round_box_bw\">\n";
+
+    print "<img src=\"{$R['user_avatar_url']}\" style=\"float:right\" />\n";
 
     print '<table cellspacing="0" cellpadding="0" id="credit_info">';
 
