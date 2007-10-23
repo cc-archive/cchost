@@ -259,14 +259,13 @@ class CCTemplate
 
     function _parse($file)
     {
-        if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') 
-            $file = str_replace( '\\', '/', $file );
+        $file = str_replace( '\\', '/', $file );
 
         if( !in_array( $file, $this->files ) )
         {
             preg_match( '#([^/]+)\.([a-z]+)$#i', $file, $m );
 
-            $bfunc = '_t_' . preg_replace('/[^a-z]+/i','_',$m[1]) . '_';
+            $bfunc = '_t_' . str_replace('_xml','',preg_replace('/[^a-z]+/i','_',$m[1])) . '_';
 
             // these will be visible to included/eval'd code
 
@@ -277,6 +276,7 @@ class CCTemplate
             {
                 require_once('cclib/cc-tpl-parser.php');
                 $parsed = cc_tpl_parse_file($file,$bfunc);
+                //if( strstr($file,'download') ) CCDebug::PrintVar($parsed);
                 eval( '?>' . $parsed);
             }
             else
@@ -291,7 +291,6 @@ class CCTemplate
 
             $this->files[] = $file;
         }
-
     }
 
 

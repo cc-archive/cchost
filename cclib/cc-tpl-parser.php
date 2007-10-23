@@ -42,7 +42,7 @@ function cc_tpl_parse_call_macro($prefix, $mac)
 function cc_tpl_parse_if_null( $is_null, $var )
 {
     $varname = cc_tpl_parse_var('',$var,'');
-    $bang = $is_null == 'not' ? '!' : '';
+    $bang = $is_null == 'not_' ? '!' : '';
     return "<? if( {$bang}empty($varname) ) { ?>";
 }
 
@@ -60,6 +60,12 @@ function cc_tpl_parse_file($filename,$bfunc)
     return cc_tpl_parse_text(file_get_contents($filename),$bfunc);
 }
 
+function cc_tpl_parse_chop($prefix,$varname,$amt)
+{
+    $var = cc_tpl_parse_var('',$varname,'');
+    return "$prefix CC_strchop($var,$amt,true); ?>";
+}
+
 function cc_tpl_parse_text($text,$bfunc)
 {
     static $ttable;
@@ -74,6 +80,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/(<\?=?) call(?:_macro)?\(([^\)]+)\)%/e"    =>   "cc_tpl_parse_call_macro('$1 ','$2');",
         "/<\? if_(not_)?(?:empty|null)\(([^\)]+)\)%/e"  => "cc_tpl_parse_if_null('$1','$2');"  ,
         "/<\? define\(([^,]+),([^\)]+)\)%/e"=>   "cc_tpl_parse_define('$1','$2');",
+        "/(<\?=?) chop\(([^,]+),([^\)]+)\)%/e"=>   "cc_tpl_parse_chop('$1', '$2','$3');",
 
                     "/<\? end_macro%/"                 =>   "<? } ?>",
                     "/<\? end_loop%/"                  =>   "<? } ?>",
