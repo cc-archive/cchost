@@ -17,7 +17,18 @@ function _t_util_print_forms($T,&$A)
 
     foreach( $A['forms'] as $form_info )
     {
-        $A['curr_form'] = $form_info[1];
+        $form = $form_info[1];
+        if( !empty($form['string_files']) )
+        {
+            foreach($form['string_files'] as $file )
+            {
+                $path = $T->Search($file);
+                if( empty($path) )
+                    die("Can't find string file: $file");
+                require_once($path);
+            }
+        }
+        $A['curr_form'] = $form;
         $T->Call($form_info[0]);
     }
 }

@@ -69,8 +69,9 @@ class CCNSFW
             */
             if( empty($fields['upload_nsfw']) )
                 $fields['upload_nsfw'] = 
-                            array( 'label'      => _('Not Safe For Work'),
-                                   'form_tip'   => sprintf(_('Mark this upload as %s if it contains questionable language.'), '<a href="http://en.wikipedia.org/wiki/NSFW">NSFW</a>'),
+                            array( 'label_str'      => 'str_not_safe_for_work',
+                                   'form_tip_str'   =>  'str_mark_this_upload',
+                                   'form_tip_args' => array ( '<a href="http://en.wikipedia.org/wiki/NSFW">NSFW</a>'),
                                    'formatter'  => 'checkbox',
                                    'flags'      => CCFF_NOUPDATE );
         }

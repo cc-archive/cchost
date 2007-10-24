@@ -338,12 +338,20 @@ a.upload_link {
 .cc_form_element {
 }
 
-.cc_form_input {
-	width: 200px;
+.cc_form_input, .cc_form_error_input  {
+	width: 250px;
 }
 
 .cc_form_input_short {
-	width: 30px;
+	width: 80px;
+}
+
+.cc_form_error {
+	color: red;
+}
+
+.cc_form_error_input {
+	background-color: pink;
 }
 
 .cc_form_tip {

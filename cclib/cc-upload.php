@@ -250,18 +250,20 @@ class CCUpload
 
         if( empty($types) )
         {
-            $form_tip = _('Specify the file to upload.');
+            $form_tip_str = 'str_specify_the_file';
+            $form_tip_args = '';
         }
         else
         {
-            $types = implode(', ',$types);
-            $form_tip = _("Valid file types") . ": " . $types;
+            $form_tip_str = 'str_valid_file_types';
+            $form_tip_args = array( implode(', ',$types) );
         }
 
         $fields[$field_name] = 
-                           array(  'label'      => _('File'),
+                           array(  'label_str'      => 'str_file',
                                    'formatter'  => 'upload',
-                                   'form_tip'   => $form_tip,
+                                   'form_tip_str'   => $form_tip_str,
+                                   'form_tip_args'   => $form_tip_args,
                                    'flags'      => CCFF_REQUIRED  );
     }
 

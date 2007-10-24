@@ -11,6 +11,8 @@ rbox_counter = 1;
 
 function _cc_round_box( e, color ) {
     e = $(e);
+    if( !e )
+        return;
     var id_o = 'rboxo_' + (rbox_counter++);
     var id = 'rbox_' + (rbox_counter++);
     var h2 = e.getElementsByTagName('H2');

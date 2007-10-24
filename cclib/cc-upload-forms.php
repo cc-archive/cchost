@@ -54,9 +54,9 @@ class CCUploadMediaForm extends CCUploadForm
         $this->SetHiddenField('upload_config', $CC_CFG_ROOT);
 
         $fields['upload_name'] =
-                        array( 'label'      => _('Name'),
+                        array( 'label_str'      => 'str_name',
                                'formatter'  => 'textedit',
-                               'form_tip'   => _('Display name for file'),
+                               'form_tip_str'   => 'str_display_name_for_file',
                                'flags'      => CCFF_POPULATE );
 
         if( $file_field )
@@ -73,22 +73,22 @@ class CCUploadMediaForm extends CCUploadForm
         $pop_tags = $tags->QueryKeys($where);
 
         $fields['upload_tags'] =
-                        array( 'label'      => _('Tags'),
+                        array( 'label_str'      => 'str_tags',
                                'formatter'  => 'tagsedit',
-                               'form_tip'   => _('Comma separated list of terms'),
+                               'form_tip_str'   => 'str_comma_separated',
                                'flags'      => CCFF_NONE );
 
         $fields['popular_tags'] =
-                        array( 'label'      => _('Popular Tags'),
+                        array( 'label_str'      => 'str_popular_tags',
                                'target'     => 'upload_tags',
                                'tags'       => $pop_tags,
                                'formatter'  => 'metalmacro',
                                'macro'      => 'popular_tags',
-                               'form_tip'   => _('Click on these to automatically add to your upload.'),
+                               'form_tip_str'   => 'str_click_on_these',
                                'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
 
         $fields['upload_description'] =
-                        array( 'label'      => _('Description'),
+                        array( 'label_str'      => 'str_description',
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE );
         
@@ -106,12 +106,12 @@ class CCUploadMediaForm extends CCUploadForm
             $suggested_tags = CCTag::TagSplit($suggested_tags);
 
         $fields['suggested_tags'] =
-                        array( 'label'      => _('Suggested Tags'),
+                        array( 'label_str'      => 'str_suggested_tags',
                                'target'     => 'upload_tags',
                                'tags'       => $suggested_tags,
                                'formatter'  => 'metalmacro',
                                'macro'      => 'popular_tags',
-                               'form_tip'   => _('Click on these to automatically add to your upload.'),
+                               'form_tip_str'   => 'str_click_on_these',
                                'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
 
         $this->InsertFormFields( $fields, 'before', 'popular_tags' );
@@ -155,7 +155,7 @@ class CCNewUploadForm extends CCUploadMediaForm
             {
                 $fields = array( 
                     'upload_license' =>
-                                array( 'label'      => _('License'),
+                                array( 'label_str'      => 'str_license',
                                        'formatter'  => 'metalmacro',
                                        'flags'      => CCFF_POPULATE,
                                        'macro'      => 'license_choice',

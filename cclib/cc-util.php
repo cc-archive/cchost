@@ -413,11 +413,12 @@ class CCUtil
         return $dirs;
     }
 
-    function SearchPath($target,$look_here_first,$then_here,$real_path=true)
+    function SearchPath($target,$look_here_first,$then_here,$real_path=true,$recurs=false)
     {
         if( !is_array($target) )
             $target = array( $target );
 
+        $files = array();
         foreach( $target as $T )
         {
             if( file_exists($T) )
@@ -426,6 +427,8 @@ class CCUtil
                     return realpath($T);
                 return $T;
             }
+
+            $files[] = ( $T{0} == '/' ) ? $T = substr($T,1) : $T;
         }
 
         if( !is_array($look_here_first) )
@@ -436,20 +439,12 @@ class CCUtil
 
         $paths = array_merge($look_here_first, $then_here);
 
-        $hit = CCUtil::_inner_search($target,$paths,$real_path);
+        $hit = CCUtil::_inner_search($files,$paths,$real_path,$recurs);
         return $hit;
     }
 
-    function _inner_search($target,$paths,$real_path)
+    function _inner_search($files,$paths,$real_path,$recurs)
     {
-        $files = array();
-        foreach( $target as $T )
-        {
-            if( $T{0} == '/' )
-                $T = substr($T,1);
-            $files[] = $T;
-        }
-
         foreach( $paths as $P )
         {
             $P = trim($P);
@@ -460,6 +455,17 @@ class CCUtil
                 //CCDebug::Log("Checking: $relpath");
                 if( file_exists($relpath) )
                     return $real_path ? realpath($relpath) : $relpath;
+            }
+
+            if( $recurs )
+            {
+                $dirs = glob( $P . '/*', GLOB_MARK | GLOB_NOSORT | GLOB_ONLYDIR );
+                foreach( $dirs as $dir )
+                {
+                    $hit = CCUtil::_inner_search($files,array($dir),$real_path,true);
+                    if( $hit )
+                        return $hit;
+                }
             }
         }
 

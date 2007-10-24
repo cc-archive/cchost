@@ -22,8 +22,11 @@ function _t_form_html_form($T,&$A)
         $T->Call('form.xml/form_fields');
 
     if ( !empty($F['submit_text'])) {
+        if( !empty($GLOBALS[$F['submit_text']]) )
+            $F['submit_text'] = $GLOBALS[$F['submit_text']];
         ?><input  type="submit" name="form_submit" id="form_submit" class="cc_form_submit" value="<?= $F['submit_text'] ?>"></input><?
     }
+
     if ( !empty($F['html_hidden_fields'])) 
     {
         foreach( $F['html_hidden_fields'] as $H )
@@ -69,12 +72,18 @@ function _t_form_form_fields($T,&$A) {
 
     foreach( $A['curr_form']['html_form_fields'] as $F )
     { 
+        _t_form_string_helper($F,'form_error');
+
         if ( !empty($F['form_error']))
             print "<tr  class=\"cc_form_error_row\"><td ></td><td  class=\"cc_form_error\">{$F['form_error']}</td></tr>\n";
 
         print '<tr class="cc_form_row">';
 
+        _t_form_string_helper($F,'form_tip');
+
         $tip = empty($F['form_tip']) ? '' : '<span>' . $F['form_tip'] . '</span>';
+
+        _t_form_string_helper($F,'label');
 
         if ( !empty($F['label'])) {
             print "<td  class=\"cc_form_label\"><div>{$F['label']}</div>$tip</td>";
@@ -100,6 +109,30 @@ function _t_form_form_fields($T,&$A) {
 
 } // END: function form_fields
 
+
+function _t_form_string_helper(&$F,$field)
+{
+    $strn = $field . '_str';
+
+    if( !empty($F[$strn]) )
+    {
+        if( !empty($F[$field . '_args']) )
+        {
+            $fmt = $GLOBALS[$F[$strn]];
+            $str = "\$s = sprintf('{$fmt}'";
+            foreach( $F['form_tip_args'] as $arg )
+                $str .= ",'" . str_replace("'", "\\'", $arg) . "'";
+            $str .= ");";
+            //CCDebug::PrintVar($str);
+            eval($str);
+            $F[$field] = $s;
+        }
+        else
+        {
+            $F[$field] = $GLOBALS[$F[$strn]];
+        }
+    }
+}
 
 //------------------------------------- 
 function _t_form_grid_form_fields($T,&$A) {

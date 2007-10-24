@@ -1,0 +1,113 @@
+#upload_menu_box {
+    float: left;
+    width: 210px;
+    margin-top: 25px;
+}
+
+#upload_sidebar_box {
+    float: right;
+    width: 250px;
+}
+
+#upload_middle {
+    margin-left: 230px;
+    margin-right: 270px;
+}
+
+#download_box ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+#download_box ul li {
+    margin: 0px;
+    padding: 0px;
+}
+
+#date_box {
+    font-weight: bold;
+    color: #888888;
+}
+
+#modified_date {
+    margin-left: 50px;
+}
+
+#license_info p {
+    position: relative;
+    margin: 0px;
+}
+
+#license_info_t {
+    text-align: center;
+    margin: 0px;
+}
+
+#license_info p img {
+    position: absolute;
+    top: -30px;
+    left: -45px;
+}
+
+#remix_info {
+    margin-top: 22px;
+}
+
+#remix_info p {
+    position: relative;
+    margin: 0px;
+}
+
+#remix_info p img {
+    position: absolute;
+    top: -65px;
+    left: -45px;
+}
+
+#pick_box p {
+    position: relative;
+    margin: 0px;
+}
+
+#pick_box p img {
+    position: absolute;
+    top: -46px;
+    left: -38px;
+}
+
+.pick_reviewer {
+    margin-top: 12px;
+    text-align: right;
+    font-style: italic;
+}
+
+#remix_info div  {
+}
+
+#remix_info div span {
+    display: block;
+    margin-left: 12px;
+}
+
+.remix_link {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+#credit_info {
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+
+#credit_info th {
+    text-align: right;        
+}
+
+#credit_info td, #credit_info th {
+    vertical-align: top;
+    padding: 2px;
+}
+
+#taglinks {
+    margin-top: 14px;
+}

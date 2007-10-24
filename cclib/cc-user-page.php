@@ -103,7 +103,7 @@ class CCUserPage
         else
         {
             CCPage::SetTitle($records[0]['user_real_name']);
-            CCPage::PageArg( 'user_record', $records, 'user_listing' );
+            CCPage::PageArg( 'user_record', $records[0], 'user_listing' );
         } 
     }
 

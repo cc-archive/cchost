@@ -1,0 +1,36 @@
+
+#user_profile {
+	width: 55%;
+	margin: 0px auto;
+	padding: 5px;
+}
+
+#user_fields div span {
+	font-weight: bold;
+}
+
+.avatar {
+	float: right;
+	margin: -35px 5px 5px 5px;
+}
+
+.user_link {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+#user_fields {
+	clear: right;
+}
+
+.ufc {
+	margin: 7px 3px;
+}
+
+
+.contact_link {
+	margin: 15px 10px;
+	display: block;
+	font-size: 13px;
+
+}

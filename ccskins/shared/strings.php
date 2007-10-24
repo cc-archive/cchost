@@ -43,7 +43,6 @@ $GLOBALS['str_flag_this_upload']      = _('Flag this upload for possible violati
 $GLOBALS['str_flagtip']               = $GLOBALS['str_flag_this_upload'];
 $GLOBALS['str_found_in']              = _('Found in'); 
 $GLOBALS['str_getting_playlists'] = _('getting playlists');
-
 $GLOBALS['str_hide']                  = _('hide');
 $GLOBALS['str_hide_list']             = _('hide list');
 $GLOBALS['str_highest_rated']         = _('Highest Rated');
@@ -139,5 +138,90 @@ $GLOBALS['str_whats_hot_right_now']   = _('What\'s Hot Right Now');
 $GLOBALS['str_working']               = _('working...');
 $GLOBALS['str_yesterday']             = _('Yesterday');
 $GLOBALS['str_zip_title']             = _('Contents of ZIP Archive');
+
+/* Upload forms */
+
+$GLOBALS['str_assign_this_file'] = _('Assign this file to a collaboration project');
+$GLOBALS['str_click_on_these'] = _('Click on these to automatically add to your upload.');
+$GLOBALS['str_collaboration'] = _('Collaboration');
+$GLOBALS['str_comma_separated'] = _('Comma separated list of terms');
+$GLOBALS['str_description'] = _('Description');
+$GLOBALS['str_display_name_for_file'] = _('Display name for file');
+$GLOBALS['str_featured_artists'] = _('Featured Artists');
+$GLOBALS['str_file'] = _('File');
+$GLOBALS['str_list_any_collob'] = _('List any colloborating artists (Hint: NOT YOU)');
+$GLOBALS['str_mark_this_upload'] = _('Mark this upload as %s if it contains questionable language.');
+$GLOBALS['str_name'] = _('Name');
+$GLOBALS['str_not_safe_for_work'] = _('Not Safe For Work');
+$GLOBALS['str_popular_tags'] = _('Popular Tags');
+$GLOBALS['str_specify_the_file'] = _('Specify the file to upload.');
+$GLOBALS['str_suggested_tags'] = _('Suggested Tags');
+$GLOBALS['str_tempo'] = _('Tempo');
+$GLOBALS['str_valid_file_types'] = _('Valid file types: %s');
+
+/* user profile, log in forms */
+
+$GLOBALS['str_about_you'] = _('About You');
+$GLOBALS['str_cannot_find_username'] = _('Cannot find that username');
+$GLOBALS['str_default_language'] = _('Default Language');
+$GLOBALS['str_django_old_skool'] = _('(e.g. Django, Old Skool, Miles Davis, Acid House)');
+$GLOBALS['str_e_mail'] = _('e-mail');
+$GLOBALS['str_full_name'] = _('Full Name');
+$GLOBALS['str_home_page_url'] = _('Home Page URL');
+$GLOBALS['str_image'] = _('Image');
+$GLOBALS['str_image_file'] = _('Image file (cannot be bigger than 93x93)');
+$GLOBALS['str_leave_this_blank'] = _('Leave this blank to keep your same password. If you change it you will need to log in again.');
+$GLOBALS['str_list_attributes'] = _('List attributes of artists you\'d like to hook up with (e.g. Producer, singer, drummer)');
+$GLOBALS['str_lofi_hires'] = _("(e.g. 'lofi', 'hires') Leave blank to use default");
+$GLOBALS['str_log_in'] = _('Log In');
+$GLOBALS['str_login_name'] = _('Login Name');
+$GLOBALS['str_lost_password'] = _('Lost Password?');
+$GLOBALS['str_make_sure_it'] = _('Make sure it starts with http://');
+$GLOBALS['str_manage_files'] = _('Manage Files');
+$GLOBALS['str_manage_the_i'] = _('Manage the \'I Sampled This\' List');
+$GLOBALS['str_new_user'] = _('New User?');
+$GLOBALS['str_nickname'] = _('Nickname');
+$GLOBALS['str_password'] = _('Password');
+$GLOBALS['str_pw_does_not_match'] = _('Password does not match login name.');
+$GLOBALS['str_register'] = _('Register');
+$GLOBALS['str_remember_me'] = _('Remember Me');
+$GLOBALS['str_retrieve_password'] = _('Retrieve Password');
+$GLOBALS['str_save_file_properties'] = _('Save File Properties');
+$GLOBALS['str_seckey_does_not_match'] = _('Security key does not match');
+$GLOBALS['str_security_key'] = _('Security Key');
+$GLOBALS['str_security_tip'] = _('Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) has a line through it, the D does not.');
+$GLOBALS['str_that_username_is'] = _('That username is already in use or is reserved by the system.');
+$GLOBALS['str_this_address_will'] = _('This address will never show on the site. It is required for creating a new account and for password recovery in case you forget your private password.');
+$GLOBALS['str_this_must_be'] = _('This must be at least 5 characters long.');
+$GLOBALS['str_this_must_be_less'] = _('This must be less than 25 characters.');
+$GLOBALS['str_this_must_consist'] = _('This must consist of letters, numbers or underscores (_) and be no longer than 25 characters.');
+$GLOBALS['str_this_must_letters'] = _('This must be letters, numbers or underscores (_)');
+$GLOBALS['str_update_the_list'] = _('Update the list of sources used by this upload');
+$GLOBALS['str_vinyl_guitar'] = _('(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)');
+$GLOBALS['str_what_i_like'] = _('What I Like');
+$GLOBALS['str_what_i_pound_on'] = _('What I Pound On');
+$GLOBALS['str_what_im_looking_for'] = _("What I'm Looking For");
+$GLOBALS['str_your_display_name'] = _('Your display name for the site (not to be confused with your login name).');
+
+$GLOBALS['str_tools_i_used'] = _('Tools I Used');
+$GLOBALS['str_what_software'] = _('What software, hardware, and plug-ins did you use?');
+$GLOBALS['str_samples_i_used'] = _('Samples I Used');
+$GLOBALS['str_where_did_you'] = _('Where did you find your samples? What kind of license are they under?');
+$GLOBALS['str_original_samples'] = _('Original Samples');
+$GLOBALS['str_what_material'] = _('What material did you create just for this work?');
+$GLOBALS['str_process'] = _('Process');
+$GLOBALS['str_how_did_you'] = _('How did you put all the pieces together?');
+$GLOBALS['str_other_notes'] = _('Other Notes');
+$GLOBALS['str_share_your_feelings'] = _('Share your feelings about the experience of creating this work.');
+
+$GLOBALS['str_user_listing'] = _('People');
+$GLOBALS['str_contact_artist'] = _('contact this artist');
+$GLOBALS['str_member_since'] = _('Member since');
+
+$GLOBALS['str_from'] = _('From');
+$GLOBALS['str_your_email'] = _('Your email address (optional)');
+$GLOBALS['str_subject'] = _('Subject');
+$GLOBALS['str_message'] = _('Message');
+$GLOBALS['str_security_key'] = _('Security Key');
 
 ?>

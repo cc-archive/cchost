@@ -66,36 +66,65 @@ function cc_tpl_parse_chop($prefix,$varname,$amt)
     return "$prefix CC_strchop($var,$amt,true); ?>";
 }
 
+function cc_tpl_parse_date($prefix,$varname,$fmt)
+{
+    $var = cc_tpl_parse_var('',$varname,'');
+    return "$prefix CC_datefmt($var,'$fmt'); ?>";
+}
+
+function cc_tpl_parse_inspect($varname)
+{
+    $var = cc_tpl_parse_var('',$varname,'');
+    return "<? CCDebug::Enable(true); CCDebug::PrintVar($var,false); ?>";
+}
+
 function cc_tpl_parse_text($text,$bfunc)
 {
     static $ttable;
 
+    $w = '(?:\s+)?';        // optional whitespace
+    $op = '\(' . $w;        // open paren
+    $cp = $w . '\)';        // close paren
+    $c = $w . ',' . $w;     // comma
+    $ac = '([^,]+)' . $c;   // arg followed by comma
+    $a = '([^\)]+)';        // final arg
+    $qa = "'([^']+)'";      // quoted arg
+    $aoq = "'?([^\)']+)'?"; // arg, optional quotes
+
     if( !isset($ttable) )
       $ttable = array(
-        '/%!/' => '<?= ',
-        '/%([a-z])/' => '<? $1',
-        "/(<\?=?) var\(([^\)]+)\)%/e"    =>   "cc_tpl_parse_var('$1 ','$2', ' ?>');",
-        "/(<\?=?) var_check\(([^\)]+)\)%/e"    =>   "cc_tpl_parse_var_check('$1 ','$2', ' ?>');",
-        "/<\? loop\(([^,]+),([^\)]+)\)%/e"  =>   "cc_tpl_parse_loop('$1','$2');",
-        "/(<\?=?) call(?:_macro)?\(([^\)]+)\)%/e"    =>   "cc_tpl_parse_call_macro('$1 ','$2');",
-        "/<\? if_(not_)?(?:empty|null)\(([^\)]+)\)%/e"  => "cc_tpl_parse_if_null('$1','$2');"  ,
-        "/<\? define\(([^,]+),([^\)]+)\)%/e"=>   "cc_tpl_parse_define('$1','$2');",
-        "/(<\?=?) chop\(([^,]+),([^\)]+)\)%/e"=>   "cc_tpl_parse_chop('$1', '$2','$3');",
+        
+        '/((?:\s)+%%[^%]+%%)/' => '',
 
-                    "/<\? end_macro%/"                 =>   "<? } ?>",
-                    "/<\? end_loop%/"                  =>   "<? } ?>",
-                    "/<\? end_if%/"                    =>   "<? } ?>",
+        '/%!/'                 => '<?= ',
+        '/%([a-z])/'           => '<? $1',
 
-        "/<\? if\((.+)\)%/U"               =>   "<? if( $1 ) { ?>",
-        "/<\? else%/"                      =>   "<? } else { ?>",
-        "/<\? include_map\(([^\)]+)\)%/"   =>   "<? \$T->ImportMap('$1'); ?>",
-        "/(<\?=?) url\(([^\)]+)\)%/"           =>   "$1 \$T->URL('$2') ?>",
-        "/<\? add_stylesheet\(([^\)]+)\)%/"=>   "<? \$A['style_sheets'][] = '$1'; ?>",
-        "/<\? import_map\(([^\)]+)\)%/"    =>   "<? \$T->ImportMap('$1'); ?>",
-        "/<\? string_def\(([^,]+),(_\('.+'\))\)%/U" =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
-        "/(<\?=?) string\(([^\)]+)\)%/"        =>   "$1 \$GLOBALS['str_$2'] ?>",
-        "/<\? return%/"                    =>   "<? return; ?>",
-        "/<\? php\((.+)\)%/U"           =>   "<? $1 ?>",
+        "/(<\?=?) var{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_var('$1 ','$2', ' ?>');",
+        "/(<\?=?) var_check{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_var_check('$1 ','$2', ' ?>');",
+        "/<\? loop{$op}{$ac}{$a}{$cp}%/e"                 =>   "cc_tpl_parse_loop('$1','$2');",
+        "/(<\?=?) call(?:_macro)?{$op}{$a}{$cp}%/e"       =>   "cc_tpl_parse_call_macro('$1 ','$2');",
+        "/<\? if_(not_)?(?:empty|null){$op}{$a}{$cp}%/e"  =>   "cc_tpl_parse_if_null('$1','$2');"  ,
+        "/<\? (?:define|map){$op}{$ac}{$a}{$cp}%/e"       =>   "cc_tpl_parse_define('$1','$2');",
+        "/(<\?=?) chop{$op}{$ac}{$a}{$cp}%/e"             =>   "cc_tpl_parse_chop('$1', '$2','$3');",
+        "/(<\?=?) date{$op}{$ac}{$qa}{$cp}%/e"            =>   "cc_tpl_parse_date('$1', '$2','$3');",
+        "/<\? inspect{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_inspect('$1');",
+
+        "/<\? end_(?:macro|loop|if)%/"   =>   "<? } ?>",
+
+        "/<\? if\((.+)\)%/U"                              =>   "<? if( $1 ) { ?>",
+        "/<\? else%/"                                     =>   "<? } else { ?>",
+        "/<\? include_map{$op}{$a}{$cp}%/"                =>   "<? \$T->ImportMap('$1'); ?>",
+        "/(<\?=?) url{$op}{$a}{$cp}%/"                    =>   "$1 \$T->URL('$2') ?>",
+        "/<\? add_stylesheet{$op}{$aoq}\)%/"              =>   "<? \$A['style_sheets'][] = '$1'; ?>",
+        "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
+        "/<\? import_map{$op}{$aoq}{$cp}%/"               =>   "<? \$T->ImportMap('$1'); ?>",
+        "/<\? title{$op}{$a}{$cp}%/"                      =>   "<? \$A['page-title'] = \$GLOBALS['str_$1']; \$T->Call('print_page_title'); ?>",
+        "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
+        "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   "$1 \$GLOBALS['str_$2'] ?>",
+        "/<\? return%/"                                   =>   "<? return; ?>",
+        "/<\? php{$op}(.+){$cp}%/U"                       =>   "<? $1 ?>",
+        "/<\? inherit{$op}{$ac}{$aoq}{$cp}%/"             =>   "<? \$T->Inherit('$1','$2'); ?>",
+        "/<\? call_parent%/"                              =>   "<? \$T->CallParent(); ?>",
         );
 
     $ttable["/<\? macro\(([^\)]+)\)%/"] = "<? function $bfunc$1(\$T,&\$A) { ?>";

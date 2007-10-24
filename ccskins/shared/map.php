@@ -21,10 +21,13 @@ $A['show_zip_dir'] = 'file_macros.php/show_zip_dir';
 $A['upload_banned'] = 'file_macros.php/upload_banned';
 $A['upload_not_published'] = 'file_macros.php/upload_not_published';
 
+$A['user_listings'] = 'user_list.tpl';
+$A['user_listing']  = 'user_profile.tpl';
+
 $A['script_links'][] = 'js/prototype.js';
 $A['script_links'][] = 'js/selector-addon-v1.js';
 $A['script_links'][] = 'js/scriptaculous/scriptaculous.js';
-$A['script_links'][] = url_args(ccl('docs/js_strings.php'),'ajax=1');
+$A['script_links'][] = url_args(ccl('docs/strings_js.php'),'ajax=1');
 $A['script_links'][] = 'js/modalbox/modalbox.js';
 $A['script_links'][] = 'js/cchost.js';
 $A['style_sheets'][] = 'js/modalbox/modalbox.css';

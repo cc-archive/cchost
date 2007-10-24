@@ -48,8 +48,10 @@ class CCTemplate
 
         $this->template_stack = array();
         $this->map_stack = array();
+        $this->call_stack = array();
         $this->files = array();
         $this->search_cache = array();
+        $this->inheritance = array();
     }
 
     function SetArg($name,$value='',$macroname='')
@@ -128,12 +130,12 @@ class CCTemplate
         // 'file.ext'            - load file
         //
 
-        //CCDebug::Log("TCalling: $file");
-
         $funcname = '';
 
         if( !preg_match('#[\./]#',$file) && !empty($this->vars[$file]) )
             $file = $this->vars[$file];
+
+        $this->_push_call($file);
 
         if( preg_match( '/\.(xml|htm|html|php|inc|tpl)$/', $file, $m ) )
         {
@@ -143,6 +145,7 @@ class CCTemplate
             {
                 // a full path was passed in, we're done
                 $this->_inner_include($file);
+                $this->_pop_call();
                 return;
             }
 
@@ -163,6 +166,7 @@ class CCTemplate
                 {
                     // the file is already in memory, just call the function
                     $funcname($this,$this->vars);
+                    $this->_pop_call();
                     return;
                 }
                 $filename = $file_path;
@@ -183,6 +187,7 @@ class CCTemplate
         }
 
         $this->_inner_include($path,$funcname);
+        $this->_pop_call();
     }
 
     function GetTemplate($filename,$real_path=true)
@@ -242,7 +247,6 @@ class CCTemplate
             $dirs = $this->GetTemplatePath();
             $found = CCUtil::SearchPath( $file, $dirs, '', $real_path);
             $this->search_cache[$sfile] = $found;
-            //CCDebug::Log("TFound: $found");
             return $found;
         }
 
@@ -276,7 +280,7 @@ class CCTemplate
             {
                 require_once('cclib/cc-tpl-parser.php');
                 $parsed = cc_tpl_parse_file($file,$bfunc);
-                //if( strstr($file,'download') ) CCDebug::PrintVar($parsed);
+                //if( strstr($file,'map') ) CCDebug::PrintVar($parsed);
                 eval( '?>' . $parsed);
             }
             else
@@ -294,7 +298,26 @@ class CCTemplate
     }
 
 
-    function ClearCache() { return true; }
+    function Inherit($macro, $new_impl)
+    {
+        $this->inheritance[$new_impl] = $this->vars[$macro];
+        $this->vars[$macro] = $new_impl;
+    }
+
+    function CallParent()
+    {
+        $this->Call( $this->inheritance[ $this->call_stack[0] ] );
+    }
+
+    function _pop_call()
+    {
+        array_shift( $this->call_stack );
+    }
+
+    function _push_call($funcname)
+    {
+        array_unshift( $this->call_stack, $funcname);
+    }
 
     function _inner_include($path,$funcname='')
     {
@@ -363,8 +386,17 @@ class CCTemplate
             }
         }
 
+        if( !empty($this->vars['user_record']) )
+            $this->vars['user_record'] = array( $this->vars['user_record'] );
+
         $this->vars['template_compat'] = true;
     }
+
+    /**
+    * @deprecated
+    */
+    function ClearCache() { return true; }
+
 }
 
 

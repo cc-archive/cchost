@@ -492,7 +492,7 @@ class CCPage extends CCTemplate
     {
         global $CC_GLOBALS;
         $files = CCTemplate::GetFilenameGuesses($filename);
-        return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccskins/shared', $real_path );
+        return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccskins/shared', $real_path, true );
     }
 
     function GetViewFilePath()

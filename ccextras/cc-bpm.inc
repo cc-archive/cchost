@@ -127,8 +127,8 @@ class CCBPM
             */
             if( empty($fields['upload_bpm']) )
                 $fields['upload_bpm'] = 
-                            array( 'label'      => _('BPM'),
-                                   'form_tip'   => _('Tempo'),
+                            array( 'label_str'  => 'str_bpm',
+                                   'form_tip_str'   => 'str_tempo',
                                     'class'     => 'form_input_short',
                                    'formatter'  => 'textedit',
                                    'flags'      => CCFF_NOUPDATE);

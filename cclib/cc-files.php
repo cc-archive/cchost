@@ -49,7 +49,7 @@ class CCEditFileForm extends CCUploadMediaForm
         $this->CCUploadMediaForm($userid,false);
         $this->SetHiddenField('upload_id' , $record['upload_id']);
         $this->SetFormValue('upload_tags', $record['upload_extra']['usertags']);
-        $this->SetSubmitText(_('Save File Properties'));
+        $this->SetSubmitText('str_save_file_properties');
 
         /*
             This code is just broken (conceptually that is) need to revisit with lawyers
@@ -84,8 +84,8 @@ class CCEditFileForm extends CCUploadMediaForm
 
 
         $fields['upload_man_files'] =
-                array( 'label'              => _("Manage Files"),
-                       'form_tip'           => _('Update the list of files used by this upload'),
+                array( 'label_str'              => 'str_manage_files',
+                       'form_tip_str'           => 'str_update_the_list',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                     _('Manage Files') . "</a>",
                        'formatter'          => 'statictext',
@@ -95,8 +95,8 @@ class CCEditFileForm extends CCUploadMediaForm
         $url = ccl('file','remixes',$record['upload_id'] );
 
         $fields['upload_remixes'] =
-                array( 'label'              => _("Manage the 'I Sampled This' List"),
-                       'form_tip'           => _('Update the list of sources used by this upload'),
+                array( 'label_str'              => 'str_manage_the_i',
+                       'form_tip_str'           => 'str_update_the_list',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                    _('Manage Remixes') . "</a>",
                        'formatter'          => 'statictext',
@@ -170,8 +170,8 @@ class CCFileAddForm extends CCUploadForm
         $fields = array();
         CCUpload::GetUploadField($fields);
         $fields['file_nicname'] = 
-                array( 'label'              => _('Nickname'),
-                       'form_tip'           => _("(e.g. 'lofi', 'hires') Leave blank to use default"),
+                array( 'label_str'              => 'str_nickname',
+                       'form_tip_str'           => 'str_lofi_hires',
                        'formatter'          => 'textedit',
                        'flags'              => CCFF_POPULATE );
         $this->AddFormFields($fields);
@@ -208,8 +208,8 @@ class CCFileNicknameForm extends CCForm
     {
         $this->CCForm();
         $fields['file_nicname'] = 
-                array( 'label'              => _('Nickname'),
-                       'form_tip'           => _("(e.g. 'lofi', 'hires') Leave blank to use default"),
+                array( 'label_str'              => 'str_nickname',
+                       'form_tip_str'           => 'str_lofi_hires',
                        'formatter'          => 'textedit',
                        'value'              => $oldnic,
                        'flags'              => CCFF_POPULATE );

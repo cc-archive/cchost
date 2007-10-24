@@ -267,7 +267,7 @@ class CCContactMailerForm extends CCSecurityVerifierForm
         $to = $user_to['user_real_name'] . ' (' . $user_to['user_name'] . ')';
 
         $fields['mail_to'] = array(
-                'label'       => _('To'),
+                'label_str'       => 'str_to',
                  'value'      => $to,
                  'flags'      => CCFF_STATIC | CCFF_NOUPDATE,
                  'formatter'  => 'statictext' );
@@ -275,9 +275,9 @@ class CCContactMailerForm extends CCSecurityVerifierForm
         if( empty($user_from) )
         {
             $fields['mail_from'] = array(
-                        'label'       => _('From'),
+                        'label_str'       => 'str_from',
                         'formatter'   => 'email',
-                        'form_tip'    => _('Your email address'),
+                        'form_tip_str'    => 'str_your_email_address',
                         'flags'      => CCFF_REQUIRED );
         }
         else
@@ -285,7 +285,7 @@ class CCContactMailerForm extends CCSecurityVerifierForm
             $from = $user_from['user_real_name'] . ' (' . $user_from['user_name'] . ')';
 
             $fields['mail_from_STATIC'] = array(
-                            'label'       => _('From'),
+                            'label_str'       => 'str_from',
                             'value'      => $from,
                             'flags'      => CCFF_STATIC | CCFF_NOUPDATE,
                             'formatter'  => 'statictext' );
@@ -296,11 +296,11 @@ class CCContactMailerForm extends CCSecurityVerifierForm
 
         $fields += array( 
                     'mail_subject' => array(
-                            'label'       => _('Subject'),
+                            'label_str'       => 'str_subject',
                             'formatter'   => 'textedit',
                             'flags'      => CCFF_NONE ),
                     'mail_body' => array(
-                            'label'       => _('Message'),
+                            'label_str'       => 'str_message',
                             'formatter'   => 'textarea',
                             'maxlength'   => 1000,
                             'form_tip'    => _('Message is limited to 1,000 characters'),
@@ -311,10 +311,10 @@ class CCContactMailerForm extends CCSecurityVerifierForm
                                'form_tip'   => '',
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
-                       array( 'label'       => _('Security Key'),
+                       array( 'label_str'       => 'str_security_key',
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip'   => CCSecurityVerifierForm::GetSecurityTip(),
+                               'form_tip_str'   => CCSecurityVerifierForm::GetSecurityTipStr(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
             );
 

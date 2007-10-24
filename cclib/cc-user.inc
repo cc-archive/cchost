@@ -87,7 +87,7 @@ class CCSecurityVerifierForm extends CCForm
         $retval = $keys->IsMatch( $hash, $id );
         if( !$retval )
         {
-            $this->SetFieldError($fieldname,_('Security key does not match'));
+            $this->SetFieldError($fieldname,array('str_seckey_does_not_match'));
         }
         return( $retval );
     }
@@ -95,9 +95,9 @@ class CCSecurityVerifierForm extends CCForm
     /**
     * Static function to return standard form tip for security field.
     */
-    function GetSecurityTip()
+    function GetSecurityTipStr()
     {
-        return _('Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) has a line through it, the D does not.');
+        return 'str_security_tip';
     }
 }
 
@@ -134,7 +134,7 @@ class CCUserForm extends CCSecurityVerifierForm
 
             if( $this->record['user_password'] != $password )
             {
-                $this->SetFieldError($fieldname,_("Password does not match login name."));
+                $this->SetFieldError($fieldname,array('str_pw_does_not_match'));
                 return(false);
             }
 
@@ -173,7 +173,7 @@ class CCUserForm extends CCSecurityVerifierForm
 
             if( empty($this->record) )
             {
-                $this->SetFieldError($fieldname,_("Cannot find that username"));
+                $this->SetFieldError($fieldname,array('str_cannot_find_username'));
                 return(false);
             }
 
@@ -202,40 +202,40 @@ class CCUserProfileForm extends CCUploadForm
 
         $fields = array( 
                     'user_real_name' =>
-                        array( 'label'      => _('Full Name'),
-                               'form_tip'   => _('Your display name for the site (not to be confused with your login name).'),
+                        array( 'label_str'      => 'str_full_name',
+                               'form_tip_str'   => 'str_your_display_name',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_password' =>
-                       array(  'label'      => _('Password'),
+                       array(  'label_str'  => 'str_password',
                                'formatter'  => 'password',
-                               'form_tip'   => _('Leave this blank to keep your same password. If you change it you will need to log in again.'),
+                               'form_tip_str'   => 'str_leave_this_blank',
                                'flags'      => CCFF_SKIPIFNULL ),
 
                     'user_email' =>
-                       array(  'label'      => _('e-mail'),
-                               'form_tip'   => _('This address will never show on the site but is required for creating a new account and password recovery in case you forget it.'),
+                       array(  'label_str'      => 'str_e_mail',
+                               'form_tip_str'   => 'str_this_address_will',
                                'formatter'  => 'email',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
                     'user_image' =>
-                       array(  'label'      => _('Image'),
+                       array(  'label_str'      => 'str_image',
                                'formatter'  => 'avatar',
-                               'form_tip'   => _('Image file (cannot be bigger than 93x93)'),
+                               'form_tip_str'   => 'str_image_file',
                                'upload_dir' => $avatar_dir,
                                'maxwidth'   => 93,
                                'maxheight'  => 94,
                                'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL  ),
 
                     'user_description' =>
-                        array( 'label'      => _('About You'),
+                        array( 'label_str'      => 'str_about_you',
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_homepage' =>
-                       array(  'label'      => _('Home Page URL'),
-                               'form_tip'   => _('Make sure it starts with http://'),
+                       array(  'label_str'      => 'str_home_page_url',
+                               'form_tip_str'   => 'str_make_sure_it',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
             );
@@ -244,7 +244,7 @@ class CCUserProfileForm extends CCUploadForm
         {
             $fields += array( 
                     'user_language' => 
-                        array(  'label'      => _("Default Language:"),
+                        array(  'label_str'      => 'str_default_language',
                             'formatter'  => 'select',
                             'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(), 
                             'flags'      => CCFF_POPULATE ),
@@ -253,21 +253,20 @@ class CCUserProfileForm extends CCUploadForm
 
         $fields += array( 
                     'user_whatido' =>
-                        array( 'label'      => _('What I Pound On'),
-                               'form_tip'   => _('(e.g. vinyl, guitar, ACID Pro, vocals, beat slicer)'),
+                        array( 'label_str'      => 'str_what_i_pound_on',
+                               'form_tip_str'   => 'str_vinyl_guitar',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_whatilike' =>
-                        array( 'label'      => _('What I Like:'),
-                               'form_tip'   => _('(e.g. Django, Old Skool, Miles Davis, Acid House)'),
+                        array( 'label_str'      => 'str_what_i_like',
+                               'form_tip_str'   => 'str_django_old_skool',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_lookinfor' =>
-                        array( 'label'      => _("What I'm Looking For:"),
-                               'form_tip'   => _("List attributes of musicians you'd like to hook up with ".
-                                               '(e.g. Producer, singer, drummer)'),
+                        array( 'label_str'      => 'str_what_im_looking_for',
+                               'form_tip_str'   => 'str_list_attributes',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
