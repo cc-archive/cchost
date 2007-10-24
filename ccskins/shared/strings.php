@@ -223,5 +223,6 @@ $GLOBALS['str_your_email'] = _('Your email address (optional)');
 $GLOBALS['str_subject'] = _('Subject');
 $GLOBALS['str_message'] = _('Message');
 $GLOBALS['str_security_key'] = _('Security Key');
-
+$GLOBALS['str_to'] = _('To');
+$GLOBALS['str_your_email_address'] = _('Your email address');
 ?>
