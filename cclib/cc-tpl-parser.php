@@ -113,11 +113,10 @@ function cc_tpl_parse_text($text,$bfunc)
 
         "/<\? if\((.+)\)%/U"                              =>   "<? if( $1 ) { ?>",
         "/<\? else%/"                                     =>   "<? } else { ?>",
-        "/<\? include_map{$op}{$a}{$cp}%/"                =>   "<? \$T->ImportMap('$1'); ?>",
         "/(<\?=?) url{$op}{$a}{$cp}%/"                    =>   "$1 \$T->URL('$2') ?>",
         "/<\? add_stylesheet{$op}{$aoq}\)%/"              =>   "<? \$A['style_sheets'][] = '$1'; ?>",
         "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
-        "/<\? import_map{$op}{$aoq}{$cp}%/"               =>   "<? \$T->ImportMap('$1'); ?>",
+        "/<\? import_skin{$op}{$aoq}{$cp}%/"               =>   "<? \$T->ImportSkin('$1'); ?>",
         "/<\? title{$op}{$a}{$cp}%/"                      =>   "<? \$A['page-title'] = \$GLOBALS['str_$1']; \$T->Call('print_page_title'); ?>",
         "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
         "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   "$1 \$GLOBALS['str_$2'] ?>",
@@ -134,7 +133,7 @@ function cc_tpl_parse_text($text,$bfunc)
 
 class cc_tpl_parser_test_cls
 {
-    function ImportMap() { }
+    function ImportSkin() { }
 }
 
 if( !function_exists('_') ) { function _() { } }
@@ -168,7 +167,7 @@ function cc_tpl_parser_test()
 
 </div> <!-- end of menu -->
 
-%import_map(ccskins/default/skin-default-map.php)%
+%import_skin(ccskins/foo)%
 
 %define(html_head,page.php/html_head)%
 %define(html_head,'page.php/html_head')%

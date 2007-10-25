@@ -26,11 +26,19 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+define('CC_DEFAULT_SKIN_SEARCH_PATHS', 'ccskins;ccskins/shared' );
+
 /**
 */
-class CCTemplate
+class CCSkin
 {
-    function CCTemplate($template, $html_mode = true)
+    /**
+    * Initialize a skin with either the main skin page or the macro map file
+    *
+    * @param string $template Name of either the main skin page or the macro map file
+    * @param bool $html_mode Set to false when the output is non-html (like json or xml feed)
+    */
+    function CCSkin($template, $html_mode = true)
     {
         global $CC_GLOBALS;
 
@@ -54,6 +62,13 @@ class CCTemplate
         $this->inheritance = array();
     }
 
+    /**
+    * Make a variable available to the page when rendering
+    *
+    * @param string $name The name of the variable as will be seen in the template
+    * @param mixed  $value The value that will be substituted for the 'name'
+    * @param string $macroname The name of a specific macro to invoke during template generation
+    */
     function SetArg($name,$value='',$macroname='')
     {
         $this->vars[$name] = $value;
@@ -62,21 +77,37 @@ class CCTemplate
             $this->vars['macro_names'][] = $macroname;
     }
 
+    /**
+    * Trigger a macro during page execution, typically in the middle of the client area
+    *
+    * @param string $macro The name of a specific macro to invoke during template generation
+    */
     function AddMacro($macro)
     {
         $this->vars['macro_names'][] = $macro;
     }
 
-    function & SetAllAndParse($args, $doprint = false, $admin_dump = false)
+    /**
+    * Parse and return the results of the this session
+    *
+    * @param mixed $args Last minute arguments to pump into the rendering
+    * @return string $text Results of parsing
+    */
+    function & SetAllAndParse($args)
     {
         ob_start();
-        $this->SetAllAndPrint($args,$doprint,$admin_dump);
+        $this->SetAllAndPrint($args);
         $t = ob_get_contents();
         ob_end_clean();
         return($t);
     }
 
-    function SetAllAndPrint($args, $admin_dump = false)
+    /**
+    * Print the current page/macro
+    *
+    * @param mixed $args Last minute arguments to pump into the rendering
+    */
+    function SetAllAndPrint($args)
     {
         global $CC_GLOBALS;
 
@@ -104,6 +135,12 @@ class CCTemplate
             header('Content-type: text/html; charset=' . CC_ENCODING) ;
         }
 
+        if( preg_match('#(?:$|/)skin\.(php|tpl)$#', $this->filename, $m ) )
+        {
+            $map_file = str_replace( 'skin.' . $m[1], 'map.' . $m[1], $this->filename );
+            $this->Call($map_file);
+        }
+
         $this->Call($this->filename);
 
         if( !empty($this->vars['auto_execute']) )
@@ -117,18 +154,31 @@ class CCTemplate
         $this->vars = $snapshot;
     }
 
+    /**
+    * Execute a template macro or file
+    *
+    * This is called from within templates
+    *
+    * forms of calling:
+    * 
+    * [path_to][file][macroname]
+    * 
+    * 'macroname' (alone)   - look this up in map
+    * 'file.ext/macroname'  - load file, execute macro
+    * 'file.ext'            - load file
+    * 
+    * Uses GetTemplate to search for files
+    *
+    * @see CCSkin::GetTemplate
+    * @param string $name The name of the variable as will be seen in the template
+    * @param mixed  $value The value that will be substituted for the 'name'
+    * @param string $macroname The name of a specific macro to invoke during template generation
+    */
     function Call($file)
     {
         global $CC_GLOBALS;
 
-        // forms of calling:
-        //
-        // [path_to][file][macroname]
-        //
-        // 'macroname' (alone)   - look this up in _TV
-        // 'file.ext/macroname'  - load file, call macro
-        // 'file.ext'            - load file
-        //
+        //CCDebug::Log("TCall: $file");
 
         $funcname = '';
 
@@ -190,12 +240,37 @@ class CCTemplate
         $this->_pop_call();
     }
 
+
+    /**
+    * Search along skin search path for a file
+    *
+    * Use this when you don't know the exact path or even the extension of
+    * the file you are looking for
+    *
+    * If you leave off the extension, this method add .tpl, .php, .htm/l while looking
+    *
+    * This method can be called 
+    *
+    * @param string $filename Partial filename to search for
+    * @param bool   $real_path True means returns the full local (server) path
+    * @return mixed $path_to_template string if found or bool(false) if not found
+    */
     function GetTemplate($filename,$real_path=true)
     {
-        $files = CCTemplate::GetFilenameGuesses($filename);
-        return CCTemplate::Search($files,$real_path);
+        $files = CCSkin::GetFilenameGuesses($filename);
+        return CCSkin::Search($files,$real_path);
     }
 
+    /**
+    * Return standard variations of a file
+    *
+    * If you leave off the extension, this method add .tpl, .php, .htm/l while looking
+    *
+    * @param string $filename Partial filename to search for
+    * @param mixed  $value The value that will be substituted for the 'name'
+    * @param string $macroname The name of a specific macro to invoke during template generation
+    * @return array $guesses Array of guesses, pass this to Search
+    */
     function GetFilenameGuesses($filename)
     {
         if( preg_match('/\.xml$/',$filename) )
@@ -219,26 +294,64 @@ class CCTemplate
 
     }
 
+    /**
+    * Return all directories in the current scope, perfect for searching 
+    *
+    * This is a non-static function that takes the current executing page
+    * or macro into account. The returned array are the directories in the
+    * following order:
+    *
+    *    Directory of currently executing templates
+    *            For example: If a template foo/template.php is currently executing then
+    *                         'foo' is the first directory. If that template calls another
+    *                         macro in the file bar/template2.php then 'bar' becomes the
+    *                         first directory, followed by 'foo'
+    *
+    *    Directory of current map file
+    *    Directories entered by admin in 'Skins Path' admin screens.
+    *    The directory defined by CC_DEFAULT_SKIN_SEARCH_PATHS
+    *
+    * @param string $filename Partial filename to search for
+    * @param mixed  $value The value that will be substituted for the 'name'
+    * @param string $macroname The name of a specific macro to invoke during template generation
+    * @return array $guesses Array of guesses, pass this to Search
+    */
     function GetTemplatePath()
     {
         global $CC_GLOBALS;
         return array_unique(array_merge( $this->template_stack,
                                          $this->map_stack, 
-                                         CCUtil::SplitPaths( $CC_GLOBALS['template-root'], 'ccskins/shared' ) ));
+                                         CCUtil::SplitPaths( $CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS ) ));
     }
 
+    /**
+    * Search the current template scope and return a full URL
+    *
+    * @param string $partial relative path to file (e.g. 'css/foo.css')
+    * @return string $url Full URL 
+    */
     function URL($partial)
     {
         return ccd( $this->Search($partial,false) );
     }
 
+    /**
+    * Search 
+    *
+    * 
+    *
+    * @param string $filename Partial filename to search for
+    * @param mixed  $value The value that will be substituted for the 'name'
+    * @param string $macroname The name of a specific macro to invoke during template generation
+    * @return array $guesses Array of guesses, pass this to Search
+    */
     function Search($file, $real_path = false )
     {
-        if( empty($this) || ((strtolower(get_class($this)) != 'cctemplate') && 
-                                  !is_subclass_of($this,'CCTemplate') ) )
+        if( empty($this) || ((strtolower(get_class($this)) != 'ccskin') && 
+                                  !is_subclass_of($this,'CCSkin') ) )
         {
             global $CC_GLOBALS;
-            return CCUtil::SearchPath( $file, $CC_GLOBALS['template-root'], 'ccskins/shared', $real_path);
+            return CCUtil::SearchPath( $file, $CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS, $real_path);
         }
         
         $sfile = is_array($file) ? md5($file[0]) : md5($file);
@@ -254,9 +367,14 @@ class CCTemplate
     }
 
 
-    function ImportMap($map)
+    function ImportSkin($dir)
     {
-        $map = $this->Search($map . '/map.php');
+        if( strstr($dir,'map') === false )
+            $dir .= '/map';
+        $map = $this->GetFilenameGuesses($dir);
+        $map = $this->Search($map );
+        if( !is_file($map) )
+            die("Can't find skin map file: $dir");
         $this->_push_path($map,'map_stack');
         $this->_parse($map);
     }
@@ -280,7 +398,7 @@ class CCTemplate
             {
                 require_once('cclib/cc-tpl-parser.php');
                 $parsed = cc_tpl_parse_file($file,$bfunc);
-                //if( strstr($file,'map') ) CCDebug::PrintVar($parsed);
+                //if( strstr($file,'round_box.tpl') ) CCDebug::PrintVar($parsed);
                 eval( '?>' . $parsed);
             }
             else
@@ -324,7 +442,10 @@ class CCTemplate
         $this->_push_path($path);
         $this->_parse($path);
         if( !empty($funcname) )
+        {
+            $funcname = trim($funcname); // fix this elsewhere!
             $funcname($this,$this->vars);
+        }
         $this->_pop_path();
     }
 
@@ -399,27 +520,48 @@ class CCTemplate
 
 }
 
-
-class CCTemplateMacro extends CCTemplate
+class CCSkinMacro extends CCSkin
 {
-    var $_mtemplate;
-    var $_mmacro;
+    var $_skin_macro;
 
-    function CCTemplateMacro($template,$macro)
+    function CCSkinMacro($macro,$mapfile='')
     {
         global $CC_GLOBALS;
-        $this->CCTemplate($CC_GLOBALS['skin-map'], true );
-        $this->_mtemplate = $template;
-        $this->_mmacro = $macro;
+        $this->CCSkin(empty($mapfile) ? $CC_GLOBALS['skin-map'] : $mapfile, true );
+        $this->_skin_macro = $macro;
     }
 
-    function SetAllAndPrint( $args, $doprint = false, $admin_dump = false )
+    function SetAllAndPrint( $args )
     {
-        $fname = empty($this->_mtemplate) ? '' : $this->_mtemplate . '/';
-        $args['auto_execute'] = empty($this->_mmacro) ? array($this->_mtemplate) : array( $fname . $this->_mmacro );
-        $ret = parent::SetAllAndPrint($args,$doprint,$admin_dump);
+        $args['auto_execute'] = $this->_skin_macro;
+        $ret = parent::SetAllAndPrint($args);
         return $ret;
     }
+}
+
+/**
+* @deprecated
+*/
+class CCTemplate extends CCSkin
+{
+    function CCTemplate($template, $html_mode = true)
+    {
+        $this->CCSkin($template,$html_mode);
+    }
+}
+
+/**
+* @deprecated
+*/
+class CCTemplateMacro extends CCSkinMacro
+{
+    function CCTemplateMacro($filename,$macro)
+    {
+        $fname = empty($filename) ? '' : $filename. '/';
+        $macro = empty($macro) ? array($filename) : array( $fname . $macro );
+        $this->CCSkinMacro($macro);
+    }
+
 }
 
 ?>

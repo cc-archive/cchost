@@ -161,9 +161,9 @@ function validator_skin_grabber($form,$fieldname)
 * For less specialized use, you should use the base class instead.
 *
 * @see GetPage
-* @see CCTemplate::CCTemplate()
+* @see CCSkin::CCSkin()
 */
-class CCPage extends CCTemplate
+class CCPage extends CCSkin
 {
     var $_body_template;
     var $_have_forms;
@@ -180,7 +180,7 @@ class CCPage extends CCTemplate
     {
         global $CC_GLOBALS;
 
-        $this->CCTemplate( $CC_GLOBALS['skin-file'] );
+        $this->CCSkin( $CC_GLOBALS['skin-file'] );
 
         $this->vars['show_body_header'] = true;
         $this->vars['show_body_footer'] = true;
@@ -240,7 +240,7 @@ class CCPage extends CCTemplate
     }
 
     /**
-    * Make a variable available to the template parser
+    * Make a variable available to the page when rendering
     *
     * @param string $name The name of the variable as will be seen in the template
     * @param mixed  $value The value that will be substituted for the 'name'
@@ -474,24 +474,22 @@ class CCPage extends CCTemplate
         if( !empty($_REQUEST['dump_page']) ) // && $isadmin )
              CCDebug::PrintVar($page->vars,false);
 
-        // CCDebug::LogVar('page environment',$page->vars);
-    
         if( !empty($CC_GLOBALS['no-cache']) )
             CCEvents::_send_no_cache_headers();
 
         //CCDebug::Chronometer($page_print);
 
         if( $print )
-            $page->SetAllAndPrint(array(), CCUser::IsAdmin() );
+            $page->SetAllAndPrint(array());
         else
-            return( $page->SetAllAndParse(array(), false, CCUser::IsAdmin()) );
+            return $page->SetAllAndParse(array());
         //CCDebug::Log( "Page print: " . CCDebug::Chronometer($page_print) );
     }
 
     function GetViewFile($filename,$real_path=true)
     {
         global $CC_GLOBALS;
-        $files = CCTemplate::GetFilenameGuesses($filename);
+        $files = CCSkin::GetFilenameGuesses($filename);
         return CCUtil::SearchPath( $files, $CC_GLOBALS['files-root'], 'ccskins/shared', $real_path, true );
     }
 
@@ -618,7 +616,7 @@ class CCPage extends CCTemplate
             $page =& $this;
 
         //if( substr($script_url,0,7) != 'http://' )
-        //    $script_url = ccd( CCTemplate::Search($script_url) );
+        //    $script_url = ccd( CCSkin::Search($script_url) );
 
         $arr = array();
         $arr_name = $top ? 'script_links' : 'end_script_links';

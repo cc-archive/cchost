@@ -1,18 +1,22 @@
 
+
 %%
     suck in shared template stuff
     -----------------------------
 %%
-%import_map(ccskins/shared)%
-%import_map(ccskins/shared/formats)%
+%import_skin(ccskins/shared)%
+%import_skin(ccskins/shared/formats)%
+
 
 %%
-    Add our round boxing to shared stuff
+    suck in shared template stuff
+    -----------------------------
 %%
-%append(script_links,'js/round-box.js' )%
-%append(style_sheets,'css/round-box.css' )%
+%append( style_sheets, css/plain.css)%
+%append( end_script_blocks, basic_stuff.php/post_script)%
 
-%php(require_once('ccskins/default/strings.php'))%  %% hmmm, probably need to formalize this a little better %%
+
+%php(require_once('ccskins/plain/strings.php'))%  %% hmmm, probably need to formalize this a little better %%
 
 %%
     define our page and form stuff
@@ -40,4 +44,5 @@
 %map( print_bread_crumbs, 'basic_stuff.php/print_bread_crumbs' )%
 %map( print_client_menu,  'basic_stuff.php/print_client_menu' )%
 %map( prev_next_links,    'basic_stuff.php/prev_next_links' )%
+
 

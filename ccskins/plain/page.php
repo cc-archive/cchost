@@ -237,8 +237,6 @@ function _t_page_print_end_script_blocks($T,&$_TV)
     if ( !empty($_TV['end_script_links'])) 
         _t_page_script_link_helper($_TV['end_script_links'],$T);
 
-    print "<script>cc_round_boxes();</script>\n";
-
 } // END: function show_end_script_blocks
 
 

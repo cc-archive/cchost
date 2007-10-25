@@ -1,5 +1,14 @@
 <?
 
+function _t_basic_stuff_post_script($T,&$_TV)
+{
+?>  <script>
+    new modalHook( [ 'mi_login', 'mi_register', 'search_site_link' ]); 
+    </script>
+<?
+}
+
+
 function _t_basic_stuff_print_prompts($T,&$_TV)
 {
     foreach( $_TV['prompts'] as $prompt )
@@ -8,10 +17,7 @@ function _t_basic_stuff_print_prompts($T,&$_TV)
 
 function _t_basic_stuff_print_bread_crumbs($T,&$_TV)
 {
-   
-
-    ?><div  class="cc_breadcrumbs">
-    <?
+    ?><div  class="cc_breadcrumbs"><?
 
     $carr103 = $_TV['bread_crumbs'];
     $cc103= count( $carr103);
@@ -65,8 +71,6 @@ function _t_basic_stuff_print_bread_crumbs($T,&$_TV)
 
 function _t_basic_stuff_print_client_menu($T,&$_TV)
 {
-    
-
     $items = $_TV['client_menu'];
     $count = count($items);
     $K = array_keys($items);
@@ -89,13 +93,15 @@ function _t_basic_stuff_print_client_menu($T,&$_TV)
 
 function _t_basic_stuff_prev_next_links($T,&$_TV) 
 {
-    
-
     print '<table  id="cc_prev_next_links"><tr >';
 
-    if ( !empty($_TV['prev_link'])) print "<td ><a href=\"{$_TV['prev_link']}\"><span >{$_TV['back_text']}</span></a></td>\n";
+    if ( !empty($_TV['prev_link'])) 
+        print "<td ><a href=\"{$_TV['prev_link']}\"><span >{$_TV['back_text']}</span></a></td>\n";
+
     print '<td  class="cc_list_list_space">&nbsp</td>';
-    if ( !empty($_TV['next_link'])) print "<td ><a href=\"{$_TV['next_link']}\"><span >{$_TV['more_text']}</span></a></td>\n";
+
+    if ( !empty($_TV['next_link'])) 
+        print "<td ><a href=\"{$_TV['next_link']}\"><span >{$_TV['more_text']}</span></a></td>\n";
 
     print '</tr></table>';
 
