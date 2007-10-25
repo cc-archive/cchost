@@ -787,8 +787,11 @@ class CCTopic
         }
     }
 
-    function _delete_tree($parent_id,$translations)
+    function _delete_tree($parent_id,$translations='')
     {
+        if( empty($translations) )
+            $translations =& CCTopicsi18n::GetTable();
+
         $tree =& CCTopicTree::GetTable();
         $where['topic_tree_parent'] = $parent_id;
         $rows = $tree->QueryRows($where);
