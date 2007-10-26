@@ -37,6 +37,12 @@ $Id$
  <a id="_ccm_mail_link_${rid_id}" class="cc_hide" href="/emails/indexe.php?contact=${rid_id}" rel="nofollow"><img
   src="/AUTHORS" />&nbsp;email comment</a>
  <metal:block use-macro="${old_show_footer_block}" />
+ <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+<script type="text/javascript">
+_uacct = "UA-2878955-1";
+urchinTracker();
+</script>
+
 </metal:block>
 
 <metal:block define-macro="ratings_stars" >
