@@ -27,6 +27,17 @@ $Id$
 p.peep {
   margin-left: 12px;
 }
+.rightlinks {
+ float: right;border-top:1px solid black;border-left:1px solid black;border-bottom:1px white solid;background-color:#DDD;padding:2px;
+ }
+a#playgood {
+  display: block;
+  padding: 3px;
+}
+a#playgood:hover {
+  text-decoration: none;
+  background-color: white;
+}
 </style>
 <h1 class="user">Welcome to ccMixter</h1>
 
@@ -74,8 +85,8 @@ p.peep {
 
         <a href="${root-url}buckyjonson" style="margin:2px;"><img 
            src="${root-url}mixter-files/djvadim/bucky_logo.png" border="0" style="float:right;margin-left:10px;" /></a>
-        <p>Bucky Jonson has the
-          band behind the Black Eyed Peas for over 8 years and are now stepping out. 
+        <p>Bucky Jonson is the
+          band behind the <b>Black Eyed Peas</b> for over 8 years now and are ready to step out. 
           <a href="http://www.creativecommons.org">Creative Commons</a> and <a href="http://bbemusic.com">BBE</a> announce that the original solo, individual instrumental studio tracks for Bucky Jonson's "The Band Behind the Front" album are now online under 
           a <a href="http://creativecommons.org/licenses/by-nc/3.0">Creative Commons </a> license. </p>
             <p><a href="${root-url}buckyjonson">More information and where to download</a>...</p>
@@ -97,7 +108,7 @@ p.peep {
        <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
        <tr><td id="fs_side" />
            <td id="fs_content">
-<div style="float: right;border-top:1px solid black;border-left:1px solid black;border-bottom:1px white solid;background-color:#DDD;padding:4px;">
+<div class="rightlinks">
   <h3 style="margin:2px">Sample Pools</h3>
   <div style="padding-left: 10px">
     <a href="/freesound">freesound</a><br />
@@ -127,49 +138,32 @@ p.peep {
 
   </td>
   <td id="newsfeeds">
-<style>
-.reader-publisher-module { /* outter div */
-}
-
-#readerpublishermodule0 { /* outter div ID */
-}
-
-#readerpublishermodule0 h3 { /* headline */
-    font-size: 12px;
-}
-
-#readerpublishermodule0 ul { /* links list */
-}
-
-#readerpublishermodule0 ul li { /* links list container */
-   margin-bottom: 5px;
-}
-
-a.i { /* topic link */
-}
-
-div.s { /* "from " container */
-}
-
-div.s a { /* "from" link */
-  font-weight: normal;
-}
-
-div.f { /* 'read more' link container */
-    display: none;
-}
-</style>
-
     <div id="fs_container">
      <table id="fs_table" cellspacing="0" cellpadding="0" >
        <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
        <tr><td id="fs_side" />
            <td id="fs_content">
-
-<script type="text/javascript" src="http://www.google.com/reader/ui/publisher.js"></script>
-<script type="text/javascript" src="http://www.google.com/reader/public/javascript/user/12748645413098479754/label/friend-of-ccmixter?n=8&callback=GRC_p(%7Bc%3A'-'%2Ct%3A'Friends%20of%20ccMixter'%2Cs%3A'true'%7D)%3Bnew%20GRC"></script>
-
-<div><a href="${root-url}media/view/media/extras/news">More news...</a></div>
+<div class="rightlinks" style="width:95px;text-align:center;"><a id="playgood" href="javascript://listen" onclick="ppage()">Listen while <br />you browse</a></div>
+<h3>The Good Stuff</h3>
+<div id="playtarget">
+</div>
+  <tal:block define="player_options string:autoHook: false,showVolume: false,showProgress: false,plcc_id: 'plc_id'" />
+  <metal:block use-macro="playerembed.xml/eplayer" />
+<script>
+function hookem()
+{
+    ccEPlayer.hookElements($$('playtarget'));
+}
+var url = home_url + 'api/query' + q + 'tags=editorial_pick&rand=1&limit=8&f=html&t=playlist.xml&m=playlist_links';
+//$$('playtarget').innerHTML = '<a href="' + url + '">link</a>';
+new Ajax.Updater('playtarget',url,{method:'get', onComplete: hookem});
+function ppage() { 
+    var url = home_url + 'playlist/popup' + q + 'tags=editorial_pick&rand=1&limit=30&promo_gap=7&promo_tag=site_promo';
+    var dim = "height=300,width=550";
+    var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
+                  "resizable=1,scrollbars=1," + dim );
+}
+</script>
 
             </td>
           <td id="fs_side" />
