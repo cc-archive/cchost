@@ -9,10 +9,7 @@
 <link rel="stylesheet" type="text/css" href="${root-url}mixter-files/home.css" title="Default Style"/>   
 
 <h1>BBE Music and ccMixter presents: Bucky Jonson</h1>
-<div style="width:524px; margin:0px auto;">
-<img src="/mixter-files/djvadim/bucky_portraits.png" />
-</div>
-<div style="width:524px; margin:0px auto;">
+<div style="width:60%;float:left;">
     <div id="fs_container">
      <table id="fs_table" cellspacing="0" cellpadding="0" >
        <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
@@ -84,5 +81,8 @@ getSources();
 
 </script>
 
+</div>
+<div style="float:left;margin-top:13px;margin-left:20px;">
+<img src="/mixter-files/djvadim/bucky_portraits.png" />
 </div>
 </div>

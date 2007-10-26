@@ -70,15 +70,15 @@ p.peep {
            <td id="fs_content">
 
 
-        <h2>DJ Vadim Album Tracks Released under CC</h2>
+        <h2>Bucky Jonson Tracks Released under CC</h2>
 
-        <a href="${root-url}bbe" class="logolink" style="margin:2px;float:left;width:175px;"><img 
-           src="${root-url}mixter-files/djvadim/bbe-logo.jpg" border="0" style="border: 1px solid black;" /></a>
+        <a href="${root-url}buckyjonson" style="margin:2px;"><img 
+           src="${root-url}mixter-files/djvadim/bucky_logo.png" border="0" style="" /></a>
         <p>
           <a href="http://www.creativecommons.org">Creative Commons</a>, International superstar DJ Vadim and <a href="http://bbemusic.com">BBE</a> are pleased, (<i>very</i> pleased) to announce that all original solo, individual instrumental and a cappella studio tracks 
           for DJ Vadim's "Soundcatcher" album are now online under 
           a Creative Commons <a href="http://creativecommons.org/licenses/by-nc/3.0">Attribution-NonCommercial</a> license, so that producers worldwide can use the sounds in remixes and new compositions.</p>
-            <p><a href="${root-url}bbe">More information and where to download</a>...</p>
+            <p><a href="${root-url}buckyjonson">More information and where to download</a>...</p>
 
             </td>
           <td id="fs_side" />
@@ -97,7 +97,14 @@ p.peep {
        <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
        <tr><td id="fs_side" />
            <td id="fs_content">
-
+<div style="float: right;">
+  <h3 style="margin:2px">Sample Pools</h3>
+  <div style="padding-left: 10px">
+    <a href="/freesound">freesound</a><br />
+    <a href="/bbe">BBE Music</a><br />
+    <a href="/magnatune/view/contest/sources">Mangatune</a>
+  </div>
+</div>
         <h2>Previous contests...</h2>
 
         <a href="/djvadim">DJ Vadim</a><br />
