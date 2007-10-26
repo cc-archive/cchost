@@ -81,27 +81,26 @@ function cc_stats_on_user_row(&$row)
                 if( $num_remixed == 1 )
                 {
                     $fmt = _('%s has one remix and has been %sremixed once%s.');
+                    $text = sprintf( $fmt, $username, $linka, $linkb );
                 }
                 else
                 {
-                    $fmt = _('%s has 1 remixes and has been remixed %s%d times%s.');
+                    $fmt = _('%s has 1 remix and has been remixed %s%d times%s.');
+                    $text = sprintf( $fmt, $username, $linka, $num_remixed, $linkb );
                 }
 
-                $text = sprintf( $fmt, $username, $linka, $num_remixed, $linkb );
             }
             else
             {
                 if( $num_remixed == 1 )
                 {
-                    $fmt = ngettext( '%s has %d remix and has been %sremixed 1 time%s.',
-                                     '%s has %d remixes and has been %sremixed 1 time%s.', $num_remixes );
-
-                    $text = sprintf( $fmt, $username, $linka, $num_remixes, $linkb );
+                    $fmt = _( '%s has %d remixes and has been %sremixed once%s.' );
+                    $text = sprintf( $fmt, $username, $num_remixes, $linka, $linkb );
                 }
                 else
                 {
-                    $text = sprintf( _('%s has %d remixes and has been remixed %s%d times%s.'),
-                                        $username, $num_remixes, $linka, $num_remixed, $linkb );
+                    $fmt = _('%s has %d remixes and has been remixed %s%d times%s.');
+                    $text = sprintf( $fmt, $username, $num_remixes, $linka, $num_remixed, $linkb );
                 }
             }
         }
