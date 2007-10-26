@@ -30,18 +30,28 @@ p.peep {
 .rightlinks {
  float: right;border-top:1px solid black;border-left:1px solid black;border-bottom:1px white solid;background-color:#DDD;padding:2px;
  }
-a#playgood {
+div#playgood {
   display: block;
   padding: 3px;
+  float: right;
+  width: 110px;
 }
-a#playgood:hover {
-  text-decoration: none;
-  background-color: white;
+#playtable {
+  margin-bottom: 14px;
 }
-#plc_id {
+#playlist_controls {
   height: 22px;
-  padding: 2px 20px;
+  padding: 5px 20px 2px 20px;
   background-color: #EEE;
+  width: 230px;
+  margin: 0px auto;
+}
+
+#play_all {
+  /* text-align: center; */
+  margin: 0px auto;
+  width: 120px;
+  padding-top: 14px;
 }
 </style>
 <h1 class="user">Welcome to ccMixter</h1>
@@ -148,7 +158,7 @@ a#playgood:hover {
        <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
        <tr><td id="fs_side" />
            <td id="fs_content">
-<div class="rightlinks" style="width:95px;text-align:center;"><a id="playgood" href="javascript://listen" onclick="ppage()">Listen while <br />you browse</a></div>
+<div id="playgood"><a class="cc_gen_button" href="javascript://listen" onclick="ppage()"><span>Play in popup</span></a></div>
 <h3>The Good Stuff</h3>
 <div id="playtarget">
 </div>
@@ -161,10 +171,9 @@ a#playgood:hover {
 <script>
 function hookem()
 {
-    ccEPlayer.hookElements($$('playtarget'));
+  new ccPagePlayer('1');
 }
 var url = home_url + 'api/query' + q + 'tags=editorial_pick&rand=1&limit=8&f=html&t=playlist.xml&m=playlist_links';
-//$$('playtarget').innerHTML = '<a href="' + url + '">link</a>';
 new Ajax.Updater('playtarget',url,{method:'get', onComplete: hookem});
 function ppage() { 
     var url = home_url + 'playlist/popup' + q + 'tags=editorial_pick&rand=1&limit=30&promo_gap=7&promo_tag=site_promo';
