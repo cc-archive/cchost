@@ -38,6 +38,11 @@ a#playgood:hover {
   text-decoration: none;
   background-color: white;
 }
+#plc_id {
+  height: 22px;
+  padding: 2px 20px;
+  background-color: #EEE;
+}
 </style>
 <h1 class="user">Welcome to ccMixter</h1>
 
@@ -147,8 +152,12 @@ a#playgood:hover {
 <h3>The Good Stuff</h3>
 <div id="playtarget">
 </div>
-  <tal:block define="player_options string:autoHook: false,showVolume: false,showProgress: false,plcc_id: 'plc_id'" />
-  <metal:block use-macro="playerembed.xml/eplayer" />
+
+<tal:block define="player_options string:autoHook: false,showVolume: false,showProgress: false,plcc_id: 'plc_id'" />
+<link rel="stylesheet" type="text/css" href="${root-url}cctemplates/playlist.css" title="Default Style" />
+<script src="${root-url}cctemplates/js/playlist.js" ></script>
+<metal:block use-macro="playerembed.xml/eplayer" />
+
 <script>
 function hookem()
 {
@@ -176,9 +185,6 @@ function ppage() {
 </tr>
 </table>
 
-<link rel="stylesheet" type="text/css" href="${root-url}cctemplates/playlist.css" title="Default Style" />
-<script src="${root-url}cctemplates/js/playlist.js" ></script>
-<metal:block use-macro="playerembed.xml/eplayer" />
 <script>
   //<!--
   var tab_top = -41;
