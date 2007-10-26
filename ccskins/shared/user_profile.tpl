@@ -18,7 +18,7 @@
     <div class="user_tag_group">
         <h3>%!var(#groups/label)%</h3>
             %loop(#groups/value,link)%
-                <a href="%!var(#link/tagurl)%">%!var(#link/tag)%</a>
+                <a href="%!var(#link/tagurl)%">%!var(#link/tag)%</a>%if_not_last(#link)%, %end_if%
             %end_loop%
     </div>
     %end_loop%

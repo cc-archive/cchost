@@ -28,13 +28,21 @@ function cc_tpl_parse_var_check($prefix,$var,$postfix)
 function cc_tpl_parse_loop($arr, $item)
 {
     $arr_name = cc_tpl_parse_var('',$arr,'');
-    return "<? if( !empty($arr_name) ) foreach( $arr_name as \$$item ) { ?>";
+    return "<? if( !empty($arr_name) ) { \$count_$item = count($arr_name); \$i_$item = 0; ".
+           "foreach( $arr_name as \$key_$item => \$$item) { \$i_$item++; ?>";
+}
+
+function cc_tpl_parse_last($bang, $item)
+{
+    $item = preg_replace('/(#|\$)/','',$item);
+    $bang = empty($bang) ? '' : '!';
+
+    return "<? if( {$bang}(\$i_{$item} == \$count_{$item}) ) { ?>";
 }
 
 function cc_tpl_parse_call_macro($prefix, $mac)
 {
-    if( ($mac{0} != "'") && ($mac{0} != '$') )
-        $mac = '$A[\'' . $mac . '\']';
+    $mac = cc_tpl_parse_var('',$mac,'');
 
     return "$prefix \$T->Call($mac); ?>";
 }
@@ -94,7 +102,11 @@ function cc_tpl_parse_text($text,$bfunc)
     if( !isset($ttable) )
       $ttable = array(
         
-        '/((?:\s)+%%[^%]+%%)/' => '',
+        '/((?:\s|^)+%%[^%]+%%)/' => '',
+
+        '/^\s+/' => '',
+        '/\s+$/' => '',
+        '/%\s+%/' => '%%',
 
         '/%!/'                 => '<?= ',
         '/%([a-z])/'           => '<? $1',
@@ -108,8 +120,10 @@ function cc_tpl_parse_text($text,$bfunc)
         "/(<\?=?) chop{$op}{$ac}{$a}{$cp}%/e"             =>   "cc_tpl_parse_chop('$1', '$2','$3');",
         "/(<\?=?) date{$op}{$ac}{$qa}{$cp}%/e"            =>   "cc_tpl_parse_date('$1', '$2','$3');",
         "/<\? inspect{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_inspect('$1');",
+        "/<\? if_(not_)last{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_last('$1','$2');", 
 
-        "/<\? end_(?:macro|loop|if)%/"   =>   "<? } ?>",
+        "/<\? end_(?:macro|if)%/"   =>   "<? } ?>",
+        "/<\? end_loop%/"           =>   "<? } } ?>",
 
         "/<\? if\((.+)\)%/U"                              =>   "<? if( $1 ) { ?>",
         "/<\? else%/"                                     =>   "<? } else { ?>",
@@ -124,11 +138,13 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? php{$op}(.+){$cp}%/U"                       =>   "<? $1 ?>",
         "/<\? inherit{$op}{$ac}{$aoq}{$cp}%/"             =>   "<? \$T->Inherit('$1','$2'); ?>",
         "/<\? call_parent%/"                              =>   "<? \$T->CallParent(); ?>",
+        "/<\? settings{$op}{$ac}{$a}{$cp}%/"              =>   "<? \$A['$2'] = CC_get_config('$1'); ?>",
+        "/<\? un(?:define|map){$op}{$a}{$cp}%/"           =>   "<? unset(\$A['$1']); ?>",
         );
 
     $ttable["/<\? macro\(([^\)]+)\)%/"] = "<? function $bfunc$1(\$T,&\$A) { ?>";
 
-    return preg_replace( array_keys($ttable), array_values($ttable), $text );
+    return '<!-- ' . $bfunc . '-->' . "\n" . preg_replace( array_keys($ttable), array_values($ttable), $text );
 }
 
 class cc_tpl_parser_test_cls

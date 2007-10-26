@@ -43,7 +43,7 @@ class CCAdminTemplateMacrosForm extends CCEditConfigForm
         $this->_get_macros_from_file('sidebar', $fields);
         $this->_get_macros_from_file('custom',$fields);
         $this->AddFormFields($fields);
-        $fname = '<b>' . CCTemplate::GetTemplate('sidebar.xml') .  '</b>';
+        $fname = '<b>' . CCTemplate::GetTemplate('sidebar') .  '</b>';
         $this->SetHelpText( sprintf(_('Pick which UI elements should appear on every page. Edit the file %s to add modules here.'),$fname) );
         $this->SetModule( ccs(__FILE__) );
     }
@@ -53,7 +53,7 @@ class CCAdminTemplateMacrosForm extends CCEditConfigForm
         if( !$filebase )
             return;
 
-        $fname = CCTemplate::GetTemplate( $filebase . '.xml' );
+        $fname = CCTemplate::GetTemplate( $filebase );
 
         if( !file_exists($fname) || !is_file($fname) )
             return;
@@ -62,14 +62,18 @@ class CCAdminTemplateMacrosForm extends CCEditConfigForm
         if( empty($text) )
             return;
 
-        $regex = '/define-macro="([^_][^"]*)"/s';
+        if( strstr($fname,'.php') )
+            $regex = "/function\s+_t_{$filebase}_([^_][a-z_]+)\(/i";
+        else // tpl
+            $regex = '/%macro\((?:\s+)?([^_][^)\s]+)\)/i';
+
         preg_match_all( $regex, $text, $m );
 
         foreach($m[1] as $T)
         {
             $N = $filebase . '/' . $T;
             $fields[$N] = array( 'label'     => str_replace('_',' ',$T),
-                                 'form_tip'  => $filebase != 'custom' ? "(in {$filebase}.xml)" : '',
+                                 'form_tip'  => $filebase != 'custom' ? "(in {$filebase})" : '',
                                  'formatter' => 'checkbox',
                                  'flags'     => CCFF_POPULATE );
         }
@@ -188,7 +192,7 @@ class CCTemplateAdmin
         }
     }
 
-    function GetTemplates($prefix,$ext)
+    function GetSkins()
     {
         global $CC_GLOBALS;
         
@@ -197,29 +201,22 @@ class CCTemplateAdmin
         foreach( $tdirs as $tdir )
         {
             $tdir = CCUtil::CheckTrailingSlash($tdir,false);
-            CCTemplateAdmin::_scour_dir($files, $tdir, $prefix, $ext );
+            CCTemplateAdmin::_scour_dir($files, $tdir);
         }
 
         return $files;
     }
 
-    function _scour_dir(&$files, $dir, $prefix, $ext)
+    function _scour_dir(&$files, $dir)
     {
-        if ($dh = opendir($dir)) 
+        $hits = glob( $dir . '/skin.*' );
+        if( !empty($hits) )
+            $files[ $hits[0] ] = $dir;
+        $dirs = glob( $dir . '/*', GLOB_ONLYDIR );
+        foreach( $dirs as $subdir )
         {
-            while (($file = readdir($dh)) !== false) 
-            {
-                if( is_dir("$dir/$file") )
-                {
-                    if( $file{0} != '.' )
-                        CCTemplateAdmin::_scour_dir($files,"$dir/$file",$prefix,$ext);
-                }
-                else if( preg_match( "/^$prefix-([^-]+)\.$ext/", $file, $m ) )
-                {
-                    $files[ $dir . '/' . $file ] = $m[1];
-                }
-            }
-            closedir($dh);
+            if( $subdir{0} != '.' )
+                CCTemplateAdmin::_scour_dir($files,$subdir);
         }
     }
 

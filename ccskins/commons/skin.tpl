@@ -8,10 +8,9 @@
     otherwise it's a pretty boring file
 %%
 
-%append( style_sheets, css/plain.css)%
-%append( end_script_blocks, plain.tpl/disable_tabs )%     %% add our script block to bottom of every page %%
-
 %macro(init)%
+  %inherit( user_listing, round_box.tpl/user_profile )%        %% user profile page needs special handling for description field %%
   %call(html_head)%
   %call(main_body)%
 %end_macro%
+

@@ -212,7 +212,6 @@ class CCConfigs extends CCTable
         $CC_GLOBALS['home-url'] = ccl();
 
         $settings = $configs->GetConfig('settings');
-        $CC_GLOBALS['skin']      = $settings['skin'];
         $CC_GLOBALS['skin-file'] = $settings['skin-file'];
         $CC_GLOBALS['skin-map']  = str_replace('skin.', 'map.', $settings['skin-file'] );
 
@@ -851,19 +850,7 @@ function cc_check_site_enabled()
         $msgtext = 'Site is under construction.';
     }
 
-    if( !empty($CC_GLOBALS['skin']) )
-    {
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        $css = ccd($settings['style-sheet']);
-        $css_link =<<<END
-            <link rel="stylesheet" type="text/css" href="$css" title="Default Style"/>
-END;
-    }
-    else
-    {
-        $css_link = '';
-    }
+    $css_link = '';
 
     $name = CC_ENABLE_KEY;
     $self = $_SERVER['PHP_SELF'];
@@ -872,7 +859,7 @@ END;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-    <title>ccHost</title>
+    <title>{$CC_GLOBALS['site-title']}</title>
     $css_link
 </head>
 <body>

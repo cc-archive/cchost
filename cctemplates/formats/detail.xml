@@ -1,4 +1,0 @@
-<tal:block>
-  <tal:block define="detail 1"  />
-  <phptal:block include="string:info.xml" />
-</tal:block>

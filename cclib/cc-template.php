@@ -115,9 +115,6 @@ class CCSkin
 
         $this->vars = array_merge($CC_GLOBALS,$this->vars,$args);
 
-        if( empty($this->vars['skin']) && !empty($CC_GLOBALS['skin']) )
-            $this->vars['skin'] = $CC_GLOBALS['skin'];
-
         if( CCUser::IsLoggedIn() )
         {
             $this->vars['logged_in_as'] = CCUser::CurrentUserName();
@@ -178,7 +175,7 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        //CCDebug::Log("TCall: $file");
+        CCDebug::Log("TCall: $file");
 
         $funcname = '';
 
@@ -398,7 +395,7 @@ class CCSkin
             {
                 require_once('cclib/cc-tpl-parser.php');
                 $parsed = cc_tpl_parse_file($file,$bfunc);
-                //if( strstr($file,'round_box.tpl') ) CCDebug::PrintVar($parsed);
+                //if( strstr($file,'user') ) CCDebug::PrintVar($parsed);
                 eval( '?>' . $parsed);
             }
             else
@@ -510,6 +507,33 @@ class CCSkin
         if( !empty($this->vars['user_record']) )
             $this->vars['user_record'] = array( $this->vars['user_record'] );
 
+        $configs =& CCConfigs::GetTable();
+        $tmacs = $configs->GetConfig('tmacs');
+
+        $first_key = key($tmacs);
+
+        // older installs don't have file/ prefix,
+        // fix that right here...
+        if( !preg_match( '#[./]#', $first_key ) )
+        {
+            $newmacs = array();
+            foreach( $tmacs as $K => $V )
+            {
+                $parts = split('/',$K);
+                if( count($parts) == 1 )
+                    $K = 'custom.xml/' . $parts[0];
+                else
+                    $K = $parts[0] . '.xml/' . $parts[1];
+                $newmacs[$K] = $V;
+            }
+            $configs->SaveConfig('tmacs',$newmacs,'',false);
+            $tmacs = $newmacs;
+        }
+
+        reset($tmacs);
+
+        $this->vars['custom_macros'][] = $tmacs;
+
         $this->vars['template_compat'] = true;
     }
 
@@ -533,7 +557,7 @@ class CCSkinMacro extends CCSkin
 
     function SetAllAndPrint( $args )
     {
-        $args['auto_execute'] = $this->_skin_macro;
+        $args['auto_execute'][] = $this->_skin_macro;
         $ret = parent::SetAllAndPrint($args);
         return $ret;
     }
@@ -558,7 +582,7 @@ class CCTemplateMacro extends CCSkinMacro
     function CCTemplateMacro($filename,$macro)
     {
         $fname = empty($filename) ? '' : $filename. '/';
-        $macro = empty($macro) ? array($filename) : array( $fname . $macro );
+        $macro = empty($macro) ? $filename : $fname . $macro ;
         $this->CCSkinMacro($macro);
     }
 

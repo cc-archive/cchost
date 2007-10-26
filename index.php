@@ -134,6 +134,7 @@ CCEvents::PerformAction();
 /*
 *  Show the resulting page
 */
+CCDebug::Chronometer($_p);
 CCPage::Show();           
 
 /*
@@ -142,6 +143,6 @@ CCPage::Show();
 CCDebug::InstallErrorHandler(false); 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
 
-print "<pre>Page time: " . CCDebug::Chronometer($_t) . " / skin: {$CC_GLOBALS['skin']}</pre>";
+print "<!-- Page time: " . CCDebug::Chronometer($_t) . '/' . CCDebug::Chronometer($_p) . "  skin: {$CC_GLOBALS['skin-file']} -->";
 
 ?>

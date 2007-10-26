@@ -341,7 +341,7 @@ END;
             $row['username'] = $row['user_real_name'];
         }
 
-        $template = new CCTemplateMacro( '', 'comment_thread_list' );
+        $template = new CCSkinMacro( 'comment_thread_list' );
         $args['posts'] = $revs;
         if( $this->_can_review($upload_id) )
         {

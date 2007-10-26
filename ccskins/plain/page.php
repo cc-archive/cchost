@@ -93,16 +93,14 @@ function _t_page_print_banner($T,&$_TV)
 
     if( !empty($_TV['sticky_search']) )
     {
-        $path = ccd($T->Search('images/find.png'));
-        print "<div id=\"banner_search\"><a id=\"search_site_link\" href=\"{$_TV['advanced_search_url']}\">" .
-              "<img src=\"{$path}\" />" .
-              "<h3>{$GLOBALS['str_find']}</h3>{$GLOBALS['str_findcontent']}</a></div>";
+        print "<div id=\"banner_search\"><a id=\"search_site_link\" href=\"{$_TV['advanced_search_url']}\">\n" .
+              "<h3>{$GLOBALS['str_find']}</h3><span>{$GLOBALS['str_findcontent']}</a></span></div>\n";
     }
 
     if( !empty($_TV['logged_in_as']) )
     {
-        print "<div id=\"login_info\">{$GLOBALS['str_loggedin']}: <span>${_TV['logged_in_as']}</span>".
-              "<a href=\"{$_TV['logout_url']}\">{$GLOBALS['str_logout']}</a></div>";
+        print "<div id=\"login_info\">{$GLOBALS['str_loggedin']}: <span>${_TV['logged_in_as']}</span>\n".
+              "<a href=\"{$_TV['logout_url']}\">{$GLOBALS['str_logout']}</a></div>\n";
     }
 
     if( !empty($_TV['beta_message']) )
@@ -120,23 +118,30 @@ EOF;
     if( !empty($_TV['site-description']) )
         print "<div id=\"site_description\">{$_TV['site-description']}</div>";
 
-    if( !empty($_TV['tab_info']) )
-        $T->Call('print_tabs');
-
     print("</div><!-- banner -->\n");
 }
 
 function _t_page_print_tabs($T,&$_TV)
 {
-    $tabs = $_TV['tab_info']['tabs'];
-    page_inner_print_tabs($tabs,'tabs');
+    if( !empty($_TV['tab_info']) )
+    {
+        $tabs = $_TV['tab_info']['tabs'];
+        page_inner_print_tabs($tabs,'tabs');
+        print '<div class="post_tab_breaker"></div>' . "\n";
+        unset($_TV['tab_info']); // this will prevent duplication from multiple skins
+    }
 }
 
 
 function _t_page_print_sub_nav_tabs($T,&$_TV)
 {
-    $tabs = $_TV['sub_nav_tabs']['tabs'];
-    page_inner_print_tabs($tabs,'sub_tabs');
+    if( !empty($_TV['sub_nav_tabs']) )
+    {
+        $tabs = $_TV['sub_nav_tabs']['tabs'];
+        page_inner_print_tabs($tabs,'sub_tabs');
+        print '<div class="post_sub_tab_breaker"></div>' . "\n";
+        unset($_TV['sub_nav_tabs']); // this will prevent duplication from multiple skins
+    }
 }
 
 function page_inner_print_tabs($tabs,$id)
@@ -170,6 +175,7 @@ EOF;
             print $HTML;
 
             $T->Call('print_banner');
+            $T->Call('print_tabs');
             $T->Call('print_menu');
 
             print("<div id=\"main_content\">\n");
@@ -199,7 +205,7 @@ EOF;
 
     if( empty($_TV['ajax']) )
     {
-        print "</div> <!-- main_content -->\n";
+        print "</div> <!-- main_content -->\n<div class=\"post_content_breaker\"></div>";
 
         if( !empty($_TV['show_body_footer']) )
         {

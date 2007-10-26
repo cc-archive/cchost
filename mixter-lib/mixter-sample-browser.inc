@@ -211,7 +211,6 @@ class CCSampleBrowser
         $args['records']         =& $recs;
         $args['results_caption'] = sprintf( 'returns %d results', count($args['records']) );
         $args['term']            = $term;
-        $args['browser_macro']   = 'sample_browser.xml/browser_list';
         $args['term_caption']    = $term_caption;
 
         if( empty($args['records']) )
@@ -224,10 +223,8 @@ class CCSampleBrowser
 
         //CCDebug::PrintVar($args['records'][0],false);
 
-        $vfile = CCPage::GetViewFile('sample_browser.xml');
-        $template = new CCTemplate( $vfile  );
-        $html = $template->SetAllAndParse($args);
-        print($html);
+        $template = new CCSkinMacro('sample_browser.php/browser_list');
+        $template->SetAllAndPrint($args);
         exit;
     }
 
@@ -243,17 +240,21 @@ class CCSampleBrowser
         $args['tag_sorts']      =& $this->_get_tag_sorts();
         $args['tag_filters']    =& $this->_get_tag_filters();
         $args['tag_limiters']   =& $this->_get_tag_limiters();
-        $args['browser_macro']  = 'sample_browser.xml/browser_page';
         $args['picker_caption'] = _('Search using tags:');
         $args['search_caption'] = _('Search for phrase:');
         $args['bpm_caption']    = _('Limit to BPM:');
         $args['search_text']    = _('Go');
         $args['default_msg']    = $this->_default_msg();
         $args['licenses']       = $this->_get_lic_filters('sample');
+        $args['sample_browser'] = 'sample_browser.php/browser_page';
+
+        //$args['browser_macro']  = 'sample_browser.xml/browser_page';
 
         foreach( $args as $K => $V )
             CCPage::PageArg( $K, $V );
-        CCPage::PageArg( 'sample_browser', 'sample_browser.xml', 'sample_browser' );
+
+        CCPage::AddMacro( 'sample_browser' );
+
     }
 
 

@@ -117,12 +117,8 @@ class CCPageAdmin
                 array( 'label'       => _('Skin'),
                        'form_tip'    => _('Default skin for this view'),
                        'formatter'   => 'select',
-                       'options'     => CCTemplateAdmin::GetTemplates('skin','(tpl|php)'),
+                       'options'     => CCTemplateAdmin::GetSkins(),
                        'flags'       => CCFF_POPULATE );
-            $fields['skin'] =
-                array( 'label'       => '',
-                       'formatter'   => 'skin_grabber',
-                       'flags'       => CCFF_POPULATE);
             $fields['max-listing'] =
                 array( 'label'       => _('Max Items Per Page'),
                        'form_tip'    => _('Maximum number of uploads, users in a listing'),
@@ -137,18 +133,6 @@ class CCPageAdmin
         }
 
     }
-}
-
-function generator_skin_grabber($form,$varname,$value='',$class='')
-{
-    return( "<input type='hidden' id=\"$varname\" name=\"$varname\" value=\"$value\" />" );
-}
-
-function validator_skin_grabber($form,$fieldname)
-{
-    preg_match( '/skin-(.+)\.[^\.]{3,4}$/', $_POST['skin-file'], $m );
-    $form->SetFormValue( $fieldname, $m[1] );
-    return true;
 }
 
 /**
@@ -256,16 +240,20 @@ class CCPage extends CCSkin
         $page->SetArg($name,$value,$macroname);
     }
 
-    function PageMacro($macroname)
+    function AddMacro($macroname)
     {
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
            $page =& CCPage::GetPage();
          else
            $page =& $this;
 
-        $page->AddMacro($macroname);
+        $page->_add_macro($macroname);
     }
 
+    function _add_macro($macroname)
+    {
+        parent::AddMacro($macroname);
+    }
 
     /**
     * Get a variable available to the template parser
@@ -361,85 +349,16 @@ class CCPage extends CCSkin
     {
         global $CC_GLOBALS;
 
-        /////////////////
-        // Step -2
-        //
-        // Don't do this method from command line
-        //
         if( !CCUtil::IsHTTP() )
             return;
 
-        /////////////////
-        // Step -1
-        //
-        // Allow static call
-        //
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
             $page =& CCPage::GetPage();
         else
             $page =& $this;
 
-        /////////////////
-        // Step 1
-        //
-        // Merge config into already existing page args
-        //
-        $page->vars = array_merge($page->vars,$CC_GLOBALS); // is this right?
-
-        /////////////////
-        // Step 1a
-        //
-        // Trigger custom macros
-        //
-        // 
-        $configs =& CCConfigs::GetTable();
-        $tmacs = $configs->GetConfig('tmacs');
-        foreach( $tmacs as $K => $V )
-        {
-            if( $V )
-            {
-                $page->vars['custom_macros'][] = str_replace( '/', '.xml/', $K );
-            }
-        }
-
-        /////////////////
-        // Step 2
-        //
-        // Pick style....
-        //
-        $style_set = false;
-        if( CCUser::IsLoggedIn() )
-        {
-            $cookiename = 'style-sheet-' . CCUser::CurrentUserName();
-            if( !empty($_COOKIE[$cookiename]) )
-            {
-                $page->SetStyleSheet($_COOKIE[$cookiename],_("User Styles"));
-                $style_set = true;
-            }
-        }
-
-        $isadmin = CCUser::IsAdmin();
-
-        /////////////////
-        // Step 3
-        //
-        // Populate current user's name
-        //
-        // (do this at ctor now)
-
-        /////////////////
-        // Step 4
-        //
-        // Populate menu
-        //
         $page->vars['menu_groups'] = CCMenu::GetMenu();
 
-        /////////////////
-        // Step 5
-        //
-        // Populate a custom body template
-        // This code assumes GetViewFile has already been called on _body_template
-        // 
         if( !empty($page->_body_template) )
         {
             $page->AddMacro($page->_body_template);
