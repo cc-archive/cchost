@@ -75,9 +75,8 @@ p.peep {
         <a href="${root-url}buckyjonson" style="margin:2px;"><img 
            src="${root-url}mixter-files/djvadim/bucky_logo.png" border="0" style="float:right;margin-left:10px;" /></a>
         <p>Bucky Jonson has the
-          band behind the Black Eyed Peas for over 8 years and now stepping out. 
-          <a href="http://www.creativecommons.org">Creative Commons</a> and <a href="http://bbemusic.com">BBE</a> announce that the original solo, individual instrumental and a cappella studio tracks 
-          for Bucky Jonson's "The Band Behind the Front" album are now online under 
+          band behind the Black Eyed Peas for over 8 years and are now stepping out. 
+          <a href="http://www.creativecommons.org">Creative Commons</a> and <a href="http://bbemusic.com">BBE</a> announce that the original solo, individual instrumental studio tracks for Bucky Jonson's "The Band Behind the Front" album are now online under 
           a <a href="http://creativecommons.org/licenses/by-nc/3.0">Creative Commons </a> license. </p>
             <p><a href="${root-url}buckyjonson">More information and where to download</a>...</p>
 
@@ -98,7 +97,7 @@ p.peep {
        <tr><td id="fs_top_left" /><td id="fs_top">&nbsp;</td><td id="fs_top_right" /></tr>
        <tr><td id="fs_side" />
            <td id="fs_content">
-<div style="float: right;">
+<div style="float: right;border-top:1px solid black;border-left:1px solid black;border-bottom:1px white solid;background-color:#DDD;padding:4px;">
   <h3 style="margin:2px">Sample Pools</h3>
   <div style="padding-left: 10px">
     <a href="/freesound">freesound</a><br />
