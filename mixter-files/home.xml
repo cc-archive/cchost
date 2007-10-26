@@ -73,7 +73,7 @@ p.peep {
         <h2>Bucky Jonson Tracks Released under CC</h2>
 
         <a href="${root-url}buckyjonson" style="margin:2px;"><img 
-           src="${root-url}mixter-files/djvadim/bucky_logo.png" border="0" style="" /></a>
+           src="${root-url}mixter-files/djvadim/bucky_logo.png" border="0" style="float:right;margin-left:10px;" /></a>
         <p>Bucky Jonson has the
           band behind the Black Eyed Peas for over 8 years and now stepping out. 
           <a href="http://www.creativecommons.org">Creative Commons</a> and <a href="http://bbemusic.com">BBE</a> announce that the original solo, individual instrumental and a cappella studio tracks 
