@@ -124,8 +124,9 @@
           <a href="${R/artist_page_url}"><span tal:content="php:CC_strchop(${R/user_real_name},16)" /></a></td>
     </tr>
   </tal:block>
-    <tr><td colspan="2" style="height:22px;"><div class="cc_playlist_pcontainer" id="plc_id" ></div></td></tr>
     </table>
+    <div id="playlist_controls" ><div class="cc_playlist_pcontainer" id="plc_id" ></div></div>
+    <div id="play_all"><a class="cc_gen_button" href="javascript://play all (unhooked)" id="_pla_1"><span tal:content="php: _('Play All');" /></a></div>
 </metal:block>
 
 <metal:block define-macro="playlist_list_window_cart">
