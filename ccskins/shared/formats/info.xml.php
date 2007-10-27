@@ -105,7 +105,7 @@ if ( isset($A['R']['remix_parents']) ) {
 <table >
 <tr >
 <td >
-<img  src="<?= $A['root-url']?>cctemplates/ccmixter/downloadicon.gif" />
+<img  src="<?= $T->URL('images/downloadicon.gif'); ?>" />
 </td>
 <td >
 <span  class="title parents_title"><?= $GLOBALS['str_uses_samples_from'] ;?></span>:<br  />
@@ -147,7 +147,7 @@ if ( isset($A['R']['remix_children']) ) {
 <table >
 <tr >
 <td >
-<img  src="<?= $A['root-url']?>cctemplates/ccmixter/uploadicon.gif" />
+<img  src="<?= $T->URL('images/uploadicon.gif') ?>" />
 </td>
 <td >
 <span  class="title children_title"><?= $GLOBALS['str_samples_from_here'] ;?></span>:<br  />

@@ -26,7 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define('CC_DEFAULT_SKIN_SEARCH_PATHS', 'ccskins;ccskins/shared' );
+define('CC_DEFAULT_SKIN_SEARCH_PATHS', 'ccskins/shared' );
 
 /**
 */
@@ -355,6 +355,7 @@ class CCSkin
         if( empty($this->search_cache[$sfile]) )
         {
             $dirs = $this->GetTemplatePath();
+            //if( is_string($file) && strstr($file,'button') ) { $x[] = $file; $x[] = $dirs; CCDebug::PrintVar($x); }
             $found = CCUtil::SearchPath( $file, $dirs, '', $real_path);
             $this->search_cache[$sfile] = $found;
             return $found;
@@ -372,6 +373,7 @@ class CCSkin
         $map = $this->Search($map );
         if( !is_file($map) )
             die("Can't find skin map file: $dir");
+        CCDebug::Log("Importing: $map");
         $this->_push_path($map,'map_stack');
         $this->_parse($map);
     }
@@ -394,6 +396,7 @@ class CCSkin
             if( $m[2] == 'tpl' )
             {
                 require_once('cclib/cc-tpl-parser.php');
+                CCDebug::Log("parsing: $file");
                 $parsed = cc_tpl_parse_file($file,$bfunc);
                 //if( strstr($file,'user') ) CCDebug::PrintVar($parsed);
                 eval( '?>' . $parsed);

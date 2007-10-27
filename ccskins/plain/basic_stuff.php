@@ -17,6 +17,9 @@ function _t_basic_stuff_print_prompts($T,&$_TV)
 
 function _t_basic_stuff_print_bread_crumbs($T,&$_TV)
 {
+    if( empty($_TV['bread_crumbs']) )
+        return;
+
     ?><div  class="cc_breadcrumbs"><?
 
     $carr103 = $_TV['bread_crumbs'];

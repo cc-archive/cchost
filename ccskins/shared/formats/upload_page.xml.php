@@ -311,10 +311,10 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
     ------------------------------------*/
 
     if( !empty($R['remix_parents']) )
-        helper_upload_remix_info( $GLOBALS['str_uses'], 'downloadicon-big.gif', $R['remix_parents'], $T );
+        helper_upload_remix_info( $GLOBALS['str_uses'], 'downloadicon.gif', $R['remix_parents'], $T );
 
     if( !empty($R['remix_children']) )
-        helper_upload_remix_info( $GLOBALS['str_usedby'], 'uploadicon-big.gif', $R['remix_children'], $T );
+        helper_upload_remix_info( $GLOBALS['str_usedby'], 'uploadicon.gif', $R['remix_children'], $T );
 }
 
 

@@ -15,12 +15,12 @@
 </style>
 <div  id="cc_download">
 <div id="download_help">
-    <div>%!string(IEtip)%</div>
-    <div>%!string(Mactip)%</div>
+    <div>%string(IEtip)%</div>
+    <div>%string(Mactip)%</div>
 </div>
 <ol>
 %loop(records/0/files,F)%
-     <li><a href="%!var(#F/download_url)%">%!var(#F/file_nicname)%</a></li>
+     <li><a href="%(#F/download_url)%">%(#F/file_nicname)%</a></li>
 %end_loop%
 </ol>
 </div>

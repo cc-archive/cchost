@@ -175,13 +175,13 @@ function helper_list_remixex(&$R)
    if( !empty($R['remix_parents']) )
     {
         $murl = empty($R['more_parents_link']) ? '' : $R['more_parents_link'];
-        helper_list_remix_info( $GLOBALS['str_uses'], 'downloadicon-big.gif', $R['remix_parents'], $murl );
+        helper_list_remix_info( $GLOBALS['str_uses'], 'downloadicon.gif', $R['remix_parents'], $murl );
     }
 
     if( !empty($R['remix_children']) )
     {
         $murl = empty($R['more_children_link']) ? '' : $R['more_children_link'];
-        helper_list_remix_info( $GLOBALS['str_usedby'], 'uploadicon-big.gif', $R['remix_children'], $murl );
+        helper_list_remix_info( $GLOBALS['str_usedby'], 'uploadicon.gif', $R['remix_children'], $murl );
     }
 }
 

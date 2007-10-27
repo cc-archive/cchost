@@ -1,8 +1,18 @@
 <?
 
+function _cc_tpl_flip_prefix($prefix)
+{
+    // typing an extra char '!' for the majority case was
+    // stupid. Now '!' supress output (not sure what that's for lol)
+    //
+    return $prefix == '<?=' ? '<?' : '<?=';
+}
+
 
 function cc_tpl_parse_var($prefix,$var,$postfix)
 {
+    if( $prefix )
+        $prefix = _cc_tpl_flip_prefix($prefix);
     $parts = explode('/',$var);
     if( $parts[0]{0} == '#' )
     {
@@ -20,6 +30,7 @@ function cc_tpl_parse_var($prefix,$var,$postfix)
 
 function cc_tpl_parse_var_check($prefix,$var,$postfix)
 {
+    $prefix = _cc_tpl_flip_prefix($prefix);
     $varname = cc_tpl_parse_var('',$var,'');
 
     return "$prefix empty($varname) ? '' : $varname $postfix";
@@ -28,8 +39,8 @@ function cc_tpl_parse_var_check($prefix,$var,$postfix)
 function cc_tpl_parse_loop($arr, $item)
 {
     $arr_name = cc_tpl_parse_var('',$arr,'');
-    return "<? if( !empty($arr_name) ) { \$count_$item = count($arr_name); \$i_$item = 0; ".
-           "foreach( $arr_name as \$key_$item => \$$item) { \$i_$item++; ?>";
+    return "<? if( !empty($arr_name) ) { \$c_$item = count($arr_name); \$i_$item = 0; ".
+           "foreach( $arr_name as \$k_$item => \$$item) { \$i_$item++; ?>";
 }
 
 function cc_tpl_parse_last($bang, $item)
@@ -37,11 +48,12 @@ function cc_tpl_parse_last($bang, $item)
     $item = preg_replace('/(#|\$)/','',$item);
     $bang = empty($bang) ? '' : '!';
 
-    return "<? if( {$bang}(\$i_{$item} == \$count_{$item}) ) { ?>";
+    return "<? if( {$bang}(\$i_{$item} == \$c_{$item}) ) { ?>";
 }
 
 function cc_tpl_parse_call_macro($prefix, $mac)
 {
+    $prefix = _cc_tpl_flip_prefix($prefix);
     $mac = cc_tpl_parse_var('',$mac,'');
 
     return "$prefix \$T->Call($mac); ?>";
@@ -60,22 +72,25 @@ function cc_tpl_parse_define($left,$right)
     if( $right{0} != "'" )
         $right = cc_tpl_parse_var('',$right,'');
 
-    return "<? $left = $right; ?>";
+    return "<? $left = $right; \n?>";
 }
 
 function cc_tpl_parse_file($filename,$bfunc)
 {
+    //print "parsing: $filename\n<br />";
     return cc_tpl_parse_text(file_get_contents($filename),$bfunc);
 }
 
 function cc_tpl_parse_chop($prefix,$varname,$amt)
 {
+    $prefix = _cc_tpl_flip_prefix($prefix);
     $var = cc_tpl_parse_var('',$varname,'');
     return "$prefix CC_strchop($var,$amt,true); ?>";
 }
 
 function cc_tpl_parse_date($prefix,$varname,$fmt)
 {
+    $prefix = _cc_tpl_flip_prefix($prefix);
     $var = cc_tpl_parse_var('',$varname,'');
     return "$prefix CC_datefmt($var,'$fmt'); ?>";
 }
@@ -84,6 +99,19 @@ function cc_tpl_parse_inspect($varname)
 {
     $var = cc_tpl_parse_var('',$varname,'');
     return "<? CCDebug::Enable(true); CCDebug::PrintVar($var,false); ?>";
+}
+
+function cc_tpl_parse_url($prefix,$varname)
+{
+    $prefix = _cc_tpl_flip_prefix($prefix);
+    if( $varname{0} == '#' )
+        $v = '$' . substr($varname,1);
+    elseif( $varname{0} == "'" )
+        $v = $varname;
+    else
+        $v = "'$varname'";
+
+    return "$prefix \$T->URL($v); ?>";
 }
 
 function cc_tpl_parse_text($text,$bfunc)
@@ -109,9 +137,9 @@ function cc_tpl_parse_text($text,$bfunc)
         '/%\s+%/' => '%%',
 
         '/%!/'                 => '<?= ',
-        '/%([a-z])/'           => '<? $1',
+        '/%([a-z\(])/'           => '<? $1',
 
-        "/(<\?=?) var{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_var('$1 ','$2', ' ?>');",
+        "/(<\?=?) (?:var)?{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_var('$1 ','$2', ' ?>');",
         "/(<\?=?) var_check{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_var_check('$1 ','$2', ' ?>');",
         "/<\? loop{$op}{$ac}{$a}{$cp}%/e"                 =>   "cc_tpl_parse_loop('$1','$2');",
         "/(<\?=?) call(?:_macro)?{$op}{$a}{$cp}%/e"       =>   "cc_tpl_parse_call_macro('$1 ','$2');",
@@ -120,22 +148,23 @@ function cc_tpl_parse_text($text,$bfunc)
         "/(<\?=?) chop{$op}{$ac}{$a}{$cp}%/e"             =>   "cc_tpl_parse_chop('$1', '$2','$3');",
         "/(<\?=?) date{$op}{$ac}{$qa}{$cp}%/e"            =>   "cc_tpl_parse_date('$1', '$2','$3');",
         "/<\? inspect{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_inspect('$1');",
-        "/<\? if_(not_)last{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_last('$1','$2');", 
+        "/<\? if_(not_)last{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_last('$1','$2');",  
+        "/(<\?=?) url{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_url('$1','$2');",
 
+        "/<\? else %/"              =>   "<? } else { ?>",
         "/<\? end_(?:macro|if)%/"   =>   "<? } ?>",
         "/<\? end_loop%/"           =>   "<? } } ?>",
 
         "/<\? if\((.+)\)%/U"                              =>   "<? if( $1 ) { ?>",
         "/<\? else%/"                                     =>   "<? } else { ?>",
-        "/(<\?=?) url{$op}{$a}{$cp}%/"                    =>   "$1 \$T->URL('$2') ?>",
         "/<\? add_stylesheet{$op}{$aoq}\)%/"              =>   "<? \$A['style_sheets'][] = '$1'; ?>",
         "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
-        "/<\? import_skin{$op}{$aoq}{$cp}%/"               =>   "<? \$T->ImportSkin('$1'); ?>",
+        "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
         "/<\? title{$op}{$a}{$cp}%/"                      =>   "<? \$A['page-title'] = \$GLOBALS['str_$1']; \$T->Call('print_page_title'); ?>",
+        "/(<\?=?) key{$op}{$a}{$cp}%/"                    =>   "$1 \$k_$1 ?>",
         "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
         "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   "$1 \$GLOBALS['str_$2'] ?>",
         "/<\? return%/"                                   =>   "<? return; ?>",
-        "/<\? php{$op}(.+){$cp}%/U"                       =>   "<? $1 ?>",
         "/<\? inherit{$op}{$ac}{$aoq}{$cp}%/"             =>   "<? \$T->Inherit('$1','$2'); ?>",
         "/<\? call_parent%/"                              =>   "<? \$T->CallParent(); ?>",
         "/<\? settings{$op}{$ac}{$a}{$cp}%/"              =>   "<? \$A['$2'] = CC_get_config('$1'); ?>",
@@ -144,61 +173,10 @@ function cc_tpl_parse_text($text,$bfunc)
 
     $ttable["/<\? macro\(([^\)]+)\)%/"] = "<? function $bfunc$1(\$T,&\$A) { ?>";
 
-    return '<!-- ' . $bfunc . '-->' . "\n" . preg_replace( array_keys($ttable), array_values($ttable), $text );
+    $text = preg_replace( array_keys($ttable), array_values($ttable), $text );
+
+    return preg_replace( '/\?><\?=?/', '', $text );  
 }
 
-class cc_tpl_parser_test_cls
-{
-    function ImportSkin() { }
-}
-
-if( !function_exists('_') ) { function _() { } }
-
-function cc_tpl_parser_test()
-{
-    $T = new cc_tpl_parser_test_cls();
-    $A = array();
-    $A['page.php']['html_head'] = false;
-    $hello = 'a';
-    $world = 'b';
-    $m = '';
-    $text =<<<EOF
-
-<div id="menu">
-
-%loop(menu_groups,group)%
-  <div class="menu_group">
-    <p>%!var(#group/group_name)%</p>
-    <ul>%loop(#group/menu_items,mi)%
-      <li><a href="%!var(#mi/action)%" id="%!var_check(#mi/id)%">%var(#mi/menu_text)%</a></li>
-    %end_loop% </ul>
-  </div>
-%end_loop%
-
-%loop(custom_macros,macro)%
-<div class="menu_group">
-  %call_macro(\$macro)%
-</div>
-%end_loop%
-
-</div> <!-- end of menu -->
-
-%import_skin(ccskins/foo)%
-
-%define(html_head,page.php/html_head)%
-%define(html_head,'page.php/html_head')%
-
-%string_def(zip_title,_('Contents of ZIP Archive'))%
-
-%php( if( strcmp(\$hello,\$world) && \$m % 5 ) { print('goofy'); } )%
-%string_def(create_your_own,_('Create Your Own Remix Radio Station'))%;
-EOF;
-    
-    $t = cc_tpl_parse_text($text,'');
-    print $t;
-    eval( '?>' . $t);
-}
-
-//cc_tpl_parser_test();
 
 ?>

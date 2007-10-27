@@ -452,7 +452,6 @@ class CCUtil
             foreach( $files as $T )
             {
                 $relpath = $dir . $T;
-                //CCDebug::Log("Checking: $relpath");
                 if( file_exists($relpath) )
                     return $real_path ? realpath($relpath) : $relpath;
             }
