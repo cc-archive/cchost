@@ -6,31 +6,6 @@ $Id$
 */
 error_reporting(E_ALL);
 
-/*
-template language, to hide php
-
-%macro(name)%
-%end_macro%
-
-%loop(array,item)%
-%end_loop%
-
-%if(condition)%
-%if_empty(name)%
-%if_not_empty(name)%
-%end_if%
-
-%var(name)%
-
-%call_macro(name)%
-
-%include_map(path_to_map)%
-
-%url(file)%
-
-%define(name,value)%
-
-*/
 require_once('cclib/htmlparser/htmlparser.inc');
 
 if( !defined( 'TC_PRETTY' ) )
@@ -43,6 +18,7 @@ else
 
 class CCTALCompiler
 {
+    
     function CCTALCompiler($use_compat=true)
     {
         $this->inPHP = false;
@@ -363,20 +339,10 @@ class CCTALCompiler
         $this->inPHP = false;
         $this->php_bracket(true,$OUT);
         $tname = '_t_' . $basename . '_init';
-        $OUT .=<<<EOF
-if( !defined('IN_CC_HOST') )
-    die('Welcome to ccHost');
+        $OUT .= "if( !defined('IN_CC_HOST') )\ndie('Welcome to ccHost');\n\n";
 
-EOF;
         if( $this->use_compat )
-        {
-            $OUT .=<<<EOF
-
-function _t_{$basename}_init(\$T,&\$targs) {
-    \$T->CompatRequired();
-}
-EOF;
-        }
+            $OUT .= "\n\nfunction _t_{$basename}_init(\$T,&\$targs) { \$T->CompatRequired(); } \n\n";
 
         // catch
         // <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -689,5 +655,475 @@ EOF;
 
 }
 
+
+class CCTalToTplCompiler extends CCTALCompiler
+{
+    function CCTalToTplCompiler($use_compat=true)
+    {
+        $this->CCTALCompiler($use_compat);
+    }
+
+    function php_bracket() // tpl
+    {
+    }
+
+    function do_OR() // tpl
+    {
+        die('OR is not supposed in TPL output');
+    }
+
+    function setup_loop($value,&$OUT) // tpl
+    {
+        $i = ++$this->var_count;
+        array_unshift($this->loop_stack, array( $i ));
+
+        $args = split( 'php:', $value );
+        if( count($args) == 1 )
+        {
+            $args = split( ' ',  $value);
+            if( empty($args[1]) ) { print("Lousy value: $value"); exit; }
+            $arr_expr = $this->get_arr_name($args[1]);
+        }
+        else
+        {
+            die("php not supported in loops for TPL");
+        }
+        $var_name = trim($args[0]);
+        $this->php_bracket(true, $OUT);
+        $OUT .= TCR_LF . "%loop($arr_expr,$var_name)%" . TCR_LF;
+    }
+
+
+    function setup_condition($value,&$OUT)  // tpl
+    {
+        if( preg_match( '/^php:(.*)$/', $value, $m ) )
+        {
+            $OUT .= TCR_LF . "%if(" . $this->parse_tal_expr($m[1]) . ")%" . TCR_LF ;
+        }
+        else if( preg_match( '/^not: exists:(.*)$/', $value, $m ) )
+        {
+            $OUT .= TCR_LF . "%if_null(" . $this->parse_tal_expr($m[1],false) . ")%" . TCR_LF ;
+        }
+        else if( preg_match( '/^exists:(.*)$/', $value, $m ) )
+        {
+            $OUT .= TCR_LF . "%if_not_null(" . $this->parse_tal_expr($m[1],false) . ")%" . TCR_LF ;
+        }
+        else
+        {
+            $OUT .= TCR_LF . "%if($value)%" /*. $this->parse_tal_expr($value,false,true) . ") {" */ . TCR_LF ;
+        }
+    }
+
+    function parse_define($value,&$OUT) // tpl
+    {
+        $defines = split(';',$value);
+        $this->php_bracket(true, $OUT);
+        foreach( $defines as $define )
+        {
+            $define = trim($define);
+            if( empty($define) )
+                continue;
+
+            preg_match('/^([^\s+]+)\s+(.*)$/',$define,$m);
+            $name = $m[1];
+            $args = split(' \| ',$m[2]);
+            if( count($args) == 1 )
+            {
+                $OUT .= "%define($name,";
+                if( $args[0] == "null" )
+                    $OUT .= "'')%" . TCR_LF;
+                else if( intval($args[0]) || $args[0] === '0')
+                    $OUT .= "'" . $args[0] . "')%" . TCR_LF;
+                else
+                    $OUT .= $this->parse_tal_expr($args[0],false) . ";" . TCR_LF;
+            }
+            else
+            {
+                $this->do_OR(); // ("\$A['$name'] =",$OUT,$args);
+            }
+        }
+    }
+
+    function parse_tal_attr($value,&$OUT)
+    {
+        $args = preg_split('/\s+/',$value);
+        $name = $args[0];
+        $val1 = $args[1]; // $this->parse_tal_expr($args[1],false);
+        if( empty($args[2]) )
+        {
+            $str = "$name=\"%($val1)%\"";
+        }
+        else
+        {
+            if( $args[1] == 'php:' )
+            {
+                $value = preg_replace( '/^(.*php:)/','',$value);
+                $str = "$name=\"<" . "?= $value ?" . ">\"";
+            }
+            else
+            {
+                if( $args[2] != '|' || empty($args[3]) )
+                {
+                    print_r($args);
+                    die("don't know tal::attribute expression: '$value'");
+                }
+
+                die( " OR operator in attribute not supported in tpl mode");
+            }
+        }
+        $OUT .= $str;
+        //print("Attr: $str\n");
+    }
+
+    function parse_tal_expr($v, $bracket=true, $condition=false) // tpl
+    {
+        $parts = split(' \| ',$v);
+        if( count($parts) > 1 )
+        {
+            $text = '';
+            $this->php_bracket(true,$text);
+            $this->do_OR("echo ",$text,$parts);
+            return $text;
+        }
+
+        list( $pre, $post ) = $this->echo_brackets($bracket);
+        if( $v == 'nothing' )
+            return $pre . "null" . $post;
+
+        if( preg_match( '/^(\'\'|string|php|not):(.*)$/', $v, $m ) )
+        {
+            switch( $m[1] )
+            {
+                case 'nothing':
+                    return "''";
+                case 'string':
+                    $str = addslashes($m[2]);
+                    return "'$str'";
+                case 'not': 
+                    return $pre . '!(' . $this->parse_value('${' . trim($m[2]). '}',false ) . ') ' . $post;
+                case 'php':
+                    return $pre . $this->parse_value(trim($m[2])) . $post;
+            }
+            
+            return null;
+        }
+
+        $v = trim($v);
+        if( $v{0} != '$' )
+            $v = '${' . $v . '}';
+        if( preg_match( '/^\$\{[^}]+\}$/U', $v ) )
+        {
+            if( $condition )
+            {
+                $pre .= '!empty(';
+                $post = ')' . $post;
+            }
+        }
+        return $pre . $this->parse_value( $v, false) . $post;
+    }
+
+    function close_brace(&$OUT, $type)
+    {
+        $this->php_bracket(true, $OUT);
+        //$OUT .= "\n%end_$type%\n";
+    }
+
+    
+    function compile_phptal_text($text,$basename) // tpl
+    {
+        $OUT = '';
+        $this->inPHP = false;
+        $this->php_bracket(true,$OUT);
+        $tname = '';
+
+        if( $this->use_compat )
+        {
+            $OUT .= "%compat_required%\n";
+        }
+
+        $parser = new HtmlParser($text);
+        $node_stack = array();
+        $this->loop_stack = array();
+        while ($parser->parse()) {
+
+            switch( $parser->iNodeType )
+            {
+                case NODE_TYPE_ELEMENT:
+                    $attrs =& $parser->iNodeAttributes;
+                    array_unshift( $node_stack, array( $parser->iNodeName, empty($attrs) ? null : $attrs ) );
+                    //print( "Push: {$parser->iNodeName}\n" );
+                    break;
+                case NODE_TYPE_ENDELEMENT:
+                    $stack_top = array_shift( $node_stack );
+                    //print("Pop: {$parser->iNodeName} == {$stack_top[0]}\n");
+                    break;
+            }
+
+            if( $this->outputSuspended )
+            {
+                switch( $parser->iNodeType )
+                {
+                    case NODE_TYPE_ELEMENT:
+                        $this->outputSuspended++;
+                        break;
+                    case NODE_TYPE_ENDELEMENT:
+                        $this->outputSuspended--;
+                        break;
+                }
+                continue;
+            }
+
+
+            switch( $parser->iNodeType )
+            {
+                case NODE_TYPE_ELEMENT:
+                    {
+                        $this->check_space($OUT);
+                        $parts = split(':',$parser->iNodeName);
+                        if( empty($parts[1]) || in_array($parts[0],array('rdf','dc') ) )
+                         {
+                            switch( $parts[0] )
+                            {
+                                case 'script':
+                                case 'style':
+                                    $this->inScript = true;
+                            }
+
+                            $tag = '<' . $parser->iNodeName . ' ';
+                            $content = '';
+
+                            if( !empty($attrs) )
+                            {
+                                // condition must come first
+                                if( array_key_exists('tal:condition',$attrs) )
+                                {
+                                    $value = $attrs['tal:condition'];
+                                    $this->setup_condition($value,$OUT);
+                                    $node_stack[0]['condition'] = true;
+                                }
+
+                                if( array_key_exists('tal:define',$attrs) )
+                                {
+                                    $value = $attrs['tal:define'];
+                                    $this->parse_define($value,$OUT);
+                                }
+
+                                foreach( $attrs as $attr => $value )
+                                {
+                                    switch( $attr )
+                                    {
+                                        case 'tal:define':
+                                        case 'tal:on-error':
+                                        case 'tal:condition':
+                                            break;
+                                        case 'tal:repeat':
+                                            $this->setup_loop($value,$OUT);
+                                            $node_stack[0]['looping'] = true;
+                                            break;
+                                        case 'tal:content':
+                                            $value = preg_replace('/^structure:?\s+/','',$value);
+                                            $content = $value; 
+                                            break;
+                                        case 'tal:attributes':
+                                            $oldPhp = $this->inPHP;
+                                            $this->inPHP = false;
+                                            $tag .= ' ';
+                                            $this->parse_tal_attr($value,$tag);
+                                            $this->inPHP = $oldPhp;
+                                            break;
+                                        default:
+                                            if( strstr($attr,'tal:') !== false )
+                                                die("unhandled tal attribute: $attr");
+                                            $oldPhp = $this->inPHP;
+                                            $this->inPHP = false;
+                                            $value = $this->parse_value($value,true,true);
+                                            $this->inPHP = $oldPhp;
+                                            $tag .= ' ' . $attr . '="' . $value . '"';
+                                            break;
+                                    }
+                                }
+                                $parser->iNodeAttributes = array();
+                            }
+
+                            if( !$this->is_singleton($parts[0]) )
+                                $tag .= '>';
+
+                            $this->php_bracket(false, $OUT);
+                            $OUT .= $tag;
+                            if( !empty($content) )
+                            {
+                                $parsed_content = $this->parse_tal_expr($content);
+                                $OUT .= $parsed_content;
+                            }
+                        }
+                        else
+                        {
+                            switch( $parts[0] )
+                            {
+                                case 'phptal':
+                                {
+                                    if( isset($attrs['include']) )
+                                    {
+                                        $value = substr($attrs['include'],strlen('string:'));
+                                        $this->php_bracket(true, $OUT);
+                                        $OUT .= "\$T->Call('$value');" . TCR_LF;
+                                        unset($attrs['include']);
+                                    }
+                                    if( count($attrs) )
+                                    {
+                                        print_r($attrs);
+                                        die('unhandled phptal:block attributes');
+                                    }
+                                    break;
+                                }
+
+                                case 'tal':
+                                {
+                                    if( isset($attrs['replace']) )
+                                    {
+                                        // currently we only support replace=''
+                                        $this->outputSuspended++;
+                                        unset($attrs['replace']);
+                                    }
+                                    if( isset($attrs['condition']) )
+                                    {
+                                        $this->setup_condition($attrs['condition'],$OUT);
+                                        $node_stack[0]['condition'] = true;
+                                        unset($attrs['condition']);
+                                    }
+
+                                    if( isset($attrs['define']) )
+                                    {
+                                        $this->parse_define($attrs['define'],$OUT);
+                                        unset($attrs['define']);
+                                    }
+                                    if( isset($attrs['repeat']) )
+                                    {
+                                        $this->setup_loop($attrs['repeat'],$OUT);
+                                        $node_stack[0]['looping'] = true;
+                                        unset($attrs['repeat']);
+                                    }
+
+                                    if( isset($attrs['content']) )
+                                    {
+                                        $value = preg_replace('/^structure:?\s+/','',$attrs['content']);
+                                        $OUT .= $this->parse_tal_expr($value,true);
+                                        unset($attrs['content']);
+                                    }
+                                    if( isset($attrs['on-error']) )
+                                    {
+                                        unset($attrs['on-error']);
+                                    }
+                                    if( count($attrs) )
+                                    {
+                                        print_r($attrs);
+                                        die('unhandled tal:block attributes');
+                                    }
+                                    break;
+                                }
+
+                                case 'metal':
+                                {
+                                    if( isset($attrs['define-macro']) )
+                                    {
+                                        $this->php_bracket(true, $OUT);
+                                        if( TC_PRETTY )
+                                            $OUT .= "\n\n";
+                                        else
+                                            $OUT .= "\n";
+                                        $tname = $attrs['define-macro'];
+                                        $OUT .= "%macro($tname) \n  ";
+                                        $node_stack[0]['funcblock'] = true;
+                                    }
+                                    elseif( isset($attrs['use-macro']) )
+                                    {
+                                        $value = $attrs['use-macro'];
+                                        if( $value{0} == '$' )
+                                            $value = $this->parse_tal_expr($value,false);
+                                        else
+                                            $value = "'$value'";
+                                        $this->php_bracket(true, $OUT);
+                                        $OUT .= "%call($value)\n";
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    break;
+
+                case NODE_TYPE_COMMENT:
+                    if( empty($this->inScript) )
+                        break;
+                    // fall thru
+
+                case NODE_TYPE_TEXT:
+                    {
+                        $ttext = trim($parser->iNodeValue);
+                        if( empty($ttext) )
+                        {
+                            $this->hasSpace = true;
+                        }
+                        else
+                        {
+                            $this->check_space($OUT);
+                            $this->php_bracket(false, $OUT);
+                            $OUT .= $this->parse_value($parser->iNodeValue,true); 
+                        }
+                    }
+                    break;
+
+                case NODE_TYPE_ENDELEMENT:
+                    {
+                        $this->check_space($OUT);
+                        $name = $stack_top[0];
+                        if( ( $name != $parser->iNodeName) && $parser->iNodeName != '{singleton}' )
+                            die("Misatch tags expecting {$name} got {$parser->iNodeName}  (Stack level:" . count($node_stack) . ")\n");
+                        $parts = split(':',$name);
+                        if( empty($parts[1]) )
+                        {
+                            if( $this->is_singleton($name)  )
+                            {
+                                $OUT .= ' />';
+                            }
+                            else
+                            {
+                                $this->php_bracket(false, $OUT);
+                                $OUT .= '</' . $name. '>';
+                            }
+                        }
+
+                        if( ($name == 'script') || ($name == 'style') )
+                            $this->inScript = false;
+
+                        if( !empty($stack_top['looping']) )
+                        {
+                            $this->close_brace($OUT, 'for loop');
+                            array_shift($this->loop_stack);
+                            $OUT .= "\n%end_loop%\n";
+                        }
+
+                        if( !empty($stack_top['condition']) )
+                        {
+                            $this->close_brace($OUT, 'if');
+                            $OUT .= "\n%end_if%\n";
+                        }
+
+                        if( !empty($stack_top['funcblock']) )
+                        {
+                            $this->close_brace($OUT, 'function ' . $stack_top[1]['define-macro']);
+                            $OUT .= "\n%end_macro%\n";
+                        }
+
+                    }
+                    break;
+            }
+        }
+        
+        $this->php_bracket(false,$OUT);
+        return trim($OUT);
+    }
+
+}
 
 ?>
