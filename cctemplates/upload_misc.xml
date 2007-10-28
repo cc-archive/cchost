@@ -66,7 +66,7 @@ $Id$
         <a tal:condition="record/reviews_link" href="${record/reviews_link/url}" class="rvlink" tal:content="record/reviews_link/text" />
 
         <span id="cc_rate_block_${record/upload_id}" class="rate_block">
-          <tal:block condition="record/ratings_score">${record/ratings_score} <span tal:content="php: _('Recommend!')" /></tal:block>
+          <tal:block condition="record/ratings_score"><span class="num_recommends">${record/ratings_score} <span tal:content="php: _('Recommend!')" /></span></tal:block>
         </span>
       </div>
     </td>

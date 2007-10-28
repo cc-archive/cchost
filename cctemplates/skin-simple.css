@@ -1888,3 +1888,18 @@ a.cc_flag_link {
 	font-style: italic;
 	float: left;
 }
+
+.rcmd { /* recommends button */
+	float:right; 
+	padding-left:5px;
+	padding-right:11px;
+}
+
+.num_recommends {
+	padding-left:15px;
+	color: green;
+}
+
+.cc_ratings_thumb{
+	padding-top: 18px;
+}
