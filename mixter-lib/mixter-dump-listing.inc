@@ -178,7 +178,8 @@ EOF;
                 <td><a class="cc_player_button cc_player_hear" id="_ep_{$upload_id}" href="javascript://url"> </a><script>//<!--
                    var _ep_{$upload_id}_1 = '$part1';
                    var _ep_{$upload_id}_2 = '$part2';
-                   $('_ep_{$upload_id}').href = _ep_{$upload_id}_1 + _ep_{$upload_id}_2;</script></td>
+                   $('_ep_{$upload_id}').href = _ep_{$upload_id}_1 + _ep_{$upload_id}_2;
+                   //--></script></td>
             </tr>
 EOF;
         }
