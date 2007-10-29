@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: cc-mail.inc 5180 2007-02-06 01:16:33Z fourstones $
+* $Id$
 *
 */
 
@@ -96,20 +96,6 @@ class CCLicensefiles
 
         return $rdf;
     }
-
-    function OnGetConfigFields($scope,&$fields)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $fields['license'] =
-               array(  'label'      => _('License'),
-                       'form_tip'   => _('Download files with license.'),
-                       'value'      => 0,
-                       'formatter'  => 'checkbox',
-                       'flags'      => CCFF_POPULATE );
-        }
-    }
-
 }
 
 ?>

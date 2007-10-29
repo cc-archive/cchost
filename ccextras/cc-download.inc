@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: cc-mail.inc 5180 2007-02-06 01:16:33Z fourstones $
+* $Id$
 *
 */
 
@@ -28,7 +28,6 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cclib/zip/zip.lib.php');
 require_once('ccextras/cc-licensefiles.inc');
-require_once('ccextras/cc-checksum.inc');
 
 class CCDownload
 {
@@ -37,6 +36,9 @@ class CCDownload
     {
         CCEvents::MapUrl( ccp('download'), array('CCDownload','Download'), CC_DONT_CARE_LOGGED_IN,
                 ccs(__FILE__), '{user_name}/{upload_id}', _('Download files with other files.'),
+                CC_AG_UPLOADS );
+        CCEvents::MapUrl( ccp('admin','download'), array('CCDownload','Admin'), CC_ADMIN_ONLY,
+                ccs(__FILE__), '', _('Admin Download manager.'),
                 CC_AG_UPLOADS );
     }
 
@@ -85,18 +87,35 @@ class CCDownload
 
     }
 
-    function OnGetConfigFields($scope,&$fields)
+    /**
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
+    function OnAdminMenu(&$items,$scope)
     {
         if( $scope == CC_GLOBAL_SCOPE )
         {
-            $fields['counter'] =
-               array(  'label'      => _('Download counter'),
-                       'form_tip'   => _('File download counter.'),
-                       'value'      => 0,
-                       'formatter'  => 'checkbox',
-                       'flags'      => CCFF_POPULATE );
+            $items += array(
+                'download' => array( 
+                                 'menu_text'  => _('Download Manager'),
+                                 'menu_group' => 'configure',
+                                 'help' => 'Count, checksum and license options for downloading',
+                                 'access' => CC_ADMIN_ONLY,
+                                 'weight' => 300,
+                                 'action' =>  ccl('admin','download')
+                                 ),
+                );
         }
     }
-
+    
+    function Admin()
+    {
+        require_once('ccextras/cc-download-form.inc');
+        CCPage::SetTitle(_('Configure Download Manager'));
+        $form = new CCDownloadAdminForm();
+        CCPage::AddForm( $form->GenerateForm() );
+    }
 }
 ?>

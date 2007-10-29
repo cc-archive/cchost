@@ -28,11 +28,11 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCAdmin' , 'OnGetConfi
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array('CCRestAPI', 'OnMapUrls'), 'cclib/cc-api.php' );
 
-CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCBan',  'OnBuildUploadMenu'), 'cclib/cc-ban.php' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCBan',  'OnUploadMenu'), 'cclib/cc-ban.php' );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCBan',  'OnMapUrls'), 'cclib/cc-ban.php' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCBan',  'OnUploadRow'), 'cclib/cc-ban.php' );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCBan',  'OnGetConfigFields'), 'cclib/cc-ban.php'  );
+CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCBanHV',  'OnBuildUploadMenu'), 'cclib/cc-ban.php' );
+CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCBanHV',  'OnUploadMenu'), 'cclib/cc-ban.php' );
+CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCBanHV',  'OnUploadRow'), 'cclib/cc-ban.php' );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCBan',  'OnMapUrls'), 'cclib/cc-ban.inc' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCBan',  'OnAdminMenu'), 'cclib/cc-ban.inc'  );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCContest' , 'OnMapUrls'), 'cclib/cc-contest.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,    array( 'CCContestHV',  'OnUploadRow'), 'cclib/cc-contest.php' );

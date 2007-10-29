@@ -178,16 +178,14 @@ END;
     }
 
     /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
+    * Event handler for {@link CC_EVENT_FORM_FIELDS}
     *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
+    * @param object &$form CCForm object
+    * @param object &$fields Current array of form fields
     */
-    function OnGetConfigFields($scope,&$fields)
+    function OnFormFields(&$form,&$fields)
     {
-        if( $scope == CC_GLOBAL_SCOPE )
+        if( (strtolower(get_class($form)) == 'ccbanadminform') && empty($fields['flagging']) )
         {
             $fields['flagging'] =
                array(  'label'      => _('Flagging'),
@@ -203,31 +201,6 @@ END;
                        'flags'      => CCFF_POPULATE );
         }
     }
-
-    /**
-    * Event handler for {@link CC_EVENT_ADMIN_MENU}
-    *
-    * @param array &$items Menu items go here
-    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    */
-    function OnAdminMenu(&$items,$scope)
-    {
-        /*
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $items += array( 
-                'flagadmin'   => array( 'menu_text'  => 'Flagging',
-                                 'menu_group' => 'configure',
-                                 'help'      => 'See newly flagged uploads and topics',
-                                 'access' => CC_ADMIN_ONLY,
-                                 'weight' => 90,
-                                 'action' =>  ccl('admin','flag') ),
-                );
-        }
-        */
-    }
 }
-
-
 
 ?>
