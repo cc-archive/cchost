@@ -1,6 +1,7 @@
 <?
 header('Content-type: text/javascript');
 ?>
+
 var str_2_weeks_ago = '<?= addslashes($GLOBALS['str_2_weeks_ago']) ?>';
 var str_3_months_ago = '<?= addslashes($GLOBALS['str_3_months_ago']) ?>';
 var str_a_week_ago = '<?= addslashes($GLOBALS['str_a_week_ago']) ?>';
@@ -28,6 +29,7 @@ var str_match_all_tags = '<?= addslashes($GLOBALS['str_match_all_tags']) ?>';
 var str_match_any_tags = '<?= addslashes($GLOBALS['str_match_any_tags']) ?>';
 var str_nc_sampling_plus = '<?= addslashes($GLOBALS['str_nc_sampling_plus']) ?>';
 var str_nc_share_alike = '<?= addslashes($GLOBALS['str_nc_share_alike']) ?>';
+var str_no_records_match =  '<?= addslashes($GLOBALS['str_no_records_match']) ?>';
 var str_non_commercial = '<?= addslashes($GLOBALS['str_non_commercial']) ?>';
 var str_ok = '<?= addslashes($GLOBALS['str_ok']) ?>';
 var str_public = '<?= addslashes($GLOBALS['str_public']) ?>';

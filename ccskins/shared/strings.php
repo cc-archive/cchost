@@ -225,4 +225,12 @@ $GLOBALS['str_message'] = _('Message');
 $GLOBALS['str_security_key'] = _('Security Key');
 $GLOBALS['str_to'] = _('To');
 $GLOBALS['str_your_email_address'] = _('Your email address');
+
+$GLOBALS['str_getting_data'] = _('Getting data...');
+$GLOBALS['str_prev'] = _('prev');
+$GLOBALS['str_no_records_match'] = _('no records match');
+$GLOBALS['str_recommends_browser'] = _('Recommends Browser');
+
+$GLOBALS["str_banning_upload"] = _("Banning Upload");
+
 ?>
