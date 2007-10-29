@@ -552,7 +552,7 @@ END;
 
        'php-tal-dir'         => 'cclib/phptal/libs' , 
        'php-tal-cache-dir'   => $local_base_dir . '/temp',
-       'user-upload-root'    => 'people' , 
+       'user-upload-root'    => 'files' , 
        'contest-upload-root' => 'contests' , 
        'template-root'       => $local_base_dir . '/skins/;cctemplates/' , 
        'files-root'          => $local_base_dir . '/viewfile/;ccfiles/',
@@ -633,6 +633,7 @@ END;
            'upload-auto-pub'   => '1' , 
            'max-listing'       => 10,
            'ratings'           => true,
+           'newuserpage'       => 1,
         );
 
     
