@@ -30,6 +30,10 @@ class CCRemoteHV
                 continue;
 
             $F['file_extra']['remote_url'] = $settings['ftp_baseurl'] . '/' . $F['file_extra']['remote_file_name'];
+
+            if( $i == 0 && !empty($row['fplay_url']) )
+                $row['fplay_url'] = $F['file_extra']['remote_url'];
+
         }
     }
 }
