@@ -2,6 +2,11 @@
  <refnamediv>
     <refname>Tutorial: Create a New Skin</refname>
  </refnamediv>
+<para>
+  <warning>This documenation refers to ccHost 4.5. There are serious changes coming in 5.0
+  Make sure to keep tabs at the <ulink href="http://wiki.creativecommons.org/CcHost">ccHost Wiki</ulink>
+  </warning>
+</para>
 
 {@toc}
 
@@ -64,8 +69,8 @@
 <title>3. Picking a Color Schemes</title>
 <para>
     When picking the individual colors in a scheme you might want to consult
-    with a tool such as 
-    <ulink url="http://www.siteprocentral.com/cgi-bin/feed/feed.cgi#">SiteProCentral's Color Scheme Chooser</ulink>.
+    with a tool such as a
+    <ulink url="http://www.google.com/search?q=color+scheme+chooser">color scheme chooser</ulink>.
 </para>
 </refsect1>
 

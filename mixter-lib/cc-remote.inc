@@ -1,15 +1,9 @@
 <?
-
+ 
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-/*
-CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,   array( 'CCRemote', 'OnUploadDone') );
-CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD, array( 'CCRemote', 'OnDeleteUpload') );
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,    array( 'CCRemote', 'OnAdminMenu'));
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCRemote', 'OnMapUrls'));
-*/
 
 /**
    How remoting works in chronological order:

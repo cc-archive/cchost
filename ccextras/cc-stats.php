@@ -46,6 +46,11 @@ function cc_stats_on_user_row(&$row)
     $num_remixes = $row['user_num_remixes'];
     $num_remixed = $row['user_num_remixed'];
 
+    $title = urlencode(sprintf(_('Remixes of %s'),$row['user_real_name']));
+    $rurl = url_args( ccl('api','query'), 'remixesof=' . $row['user_name'] . '&title=' . $title );
+    $linka = "<a href=\"$rurl\">";
+    $linkb = '</a>';
+
     if( empty( $num_remixes ) )
     {
         if( empty( $num_remixed ) )
@@ -54,10 +59,10 @@ function cc_stats_on_user_row(&$row)
         }
         else
         {
-            $fmt = ngettext( '%s has no remixes and has been remixed %d time.',
-                             '%s has no remixes and has been remixed %d times.', $num_remixed );
+            $fmt = ngettext( '%s has no remixes and has been remixed %s%d time%s.',
+                             '%s has no remixes and has been remixed %s%d times%s.', $num_remixed );
 
-            $text= sprintf( $fmt, $username, $num_remixed );
+            $text= sprintf( $fmt, $username, $linka, $num_remixed, $linkb );
         }
     }
     else
@@ -75,29 +80,27 @@ function cc_stats_on_user_row(&$row)
             {
                 if( $num_remixed == 1 )
                 {
-                    $text = sprintf( _('%s has one remix and has been remixed once'), $username );
+                    $fmt = _('%s has one remix and has been %sremixed once%s.');
+                    $text = sprintf( $fmt, $username, $linka, $linkb );
                 }
                 else
                 {
-                    $fmt = ngettext( '%s has 1 remix and has been remixed %d time.',
-                                     '%s has 1 remixes and has been remixed %d times.', $num_remixed );
-
-                    $text = sprintf( $fmt, $username, $num_remixed );
+                    $fmt = _('%s has 1 remix and has been remixed %s%d times%s.');
+                    $text = sprintf( $fmt, $username, $linka, $num_remixed, $linkb );
                 }
+
             }
             else
             {
                 if( $num_remixed == 1 )
                 {
-                    $fmt = ngettext( '%s has %d remix and has been remixed 1 time.',
-                                     '%s has %d remixes and has been remixed 1 time.', $num_remixes );
-
-                    $text = sprintf( $fmt, $username, $num_remixes );
+                    $fmt = _( '%s has %d remixes and has been %sremixed once%s.' );
+                    $text = sprintf( $fmt, $username, $num_remixes, $linka, $linkb );
                 }
                 else
                 {
-                    $text = sprintf( _('%s has %d remixes and has been remixed %d times.'),
-                                        $username, $num_remixes, $num_remixed );
+                    $fmt = _('%s has %d remixes and has been remixed %s%d times%s.');
+                    $text = sprintf( $fmt, $username, $num_remixes, $linka, $num_remixed, $linkb );
                 }
             }
         }

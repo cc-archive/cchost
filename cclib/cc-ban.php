@@ -29,86 +29,13 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+
 /**
 * Ban API used by admins to moderate uploads
 *
 */
-class CCBan
+class CCBanHV
 {
-    /**
-    * Handles amdin/ban URLs
-    * 
-    * Toggles the ban/unban flag on an upload record.
-    *
-    * @param integer $upload_id File id to ban
-    */
-    function Ban($upload_id)
-    {
-        global $CC_GLOBALS;
-
-        if( !CCUser::IsAdmin() )
-            return;
-
-        $uploads =& CCUploads::GetTable();
-        $row = $uploads->GetRecordFromID($upload_id);
-        $new_ban_flag = $row['upload_banned'] ^= 1;
-        $args['upload_id'] = $upload_id;
-        $args['upload_banned'] = $new_ban_flag;
-        $uploads->Update($args);
-        CCPage::SetTitle("Banning upload: '" . $row['upload_name'] . "'");
-        $yn = array( "no longer banned",
-                     "banned" );
-        CCEvents::Invoke( CC_EVENT_UPLOAD_MODERATED, array( &$row, $yn[ $new_ban_flag ]  ) );
-        CCPage::Prompt("The upload has been marked as " . $yn[ $new_ban_flag ] );
-
-        if( $new_ban_flag && !empty($CC_GLOBALS['ban-email-enable']) )
-        {
-            $text = str_replace('%title%',$row['upload_name'],$CC_GLOBALS['ban-email']);
-            if( file_exists('ccextras/cc-mail.inc') )
-            {
-                require_once('ccextras/cc-mail.inc');
-                $mailer = new CCMailer();
-                $mailer->To($row['user_email']);
-                $mailer->Subject( 'Your upload has been moderated' );
-                $mailer->Body($text);
-                $ok = $mailer->Send();
-                CCPage::Prompt(_('Moderation email notificaiton sent'));
-            }
-        }
-    }
-    
-    /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
-    *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
-    */
-    function OnGetConfigFields($scope,&$fields)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $fields['ban-message'] =
-               array(  'label'      => 'Ban Message',
-                       'form_tip'   => 'Message displayed to owner of a banned upload',
-                       'value'      => '',
-                       'formatter'  => 'textarea',
-                       'flags'      => CCFF_POPULATE | CCFF_NOSTRIP | CCFF_HTML);
-            $fields['ban-email-enable'] =
-               array(  'label'      => 'Email owner when banned',
-                       'form_tip'   => 'Send an email message to owner when an upload is banned.',
-                       'value'      => '',
-                       'formatter'  => 'checkbox',
-                       'flags'      => CCFF_POPULATE);
-            $fields['ban-email'] =
-               array(  'label'      => 'Ban Email Message',
-                       'form_tip'   => 'Email Message sent to owner when banned',
-                       'value'      => '',
-                       'formatter'  => 'textarea',
-                       'flags'      => CCFF_POPULATE);
-        }
-    }
 
     /**
     * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
@@ -168,21 +95,6 @@ class CCBan
         }
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_MAP_URLS}
-    *
-    * @see CCEvents::MapUrl()
-    */
-    function OnMapUrls()
-    {
-        CCEvents::MapUrl( 'admin/ban',   array('CCBan','Ban'),  
-            CC_ADMIN_ONLY, ccs(__FILE__), '{upload_id}', 
-            _('Ban/unban an upload') , CC_AG_USER );
-    }
 }
-
-
-
-
 
 ?>

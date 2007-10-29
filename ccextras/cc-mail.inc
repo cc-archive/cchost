@@ -121,6 +121,14 @@ class CCMailAdminForm extends CCEditConfigForm
                                              ),
                         'formatter'  => 'select',
                     ),
+
+            'mail_add_params' =>
+                array(
+                        'label'       => _('SendMail Parameters '),
+                        'form_tip'   => _('Additional params, like -f (Advanced)'),
+                        'flags'      => CCFF_POPULATE,
+                        'formatter'  => 'textedit',
+                    ),
             );
 
         $this->AddFormFields($fields);
@@ -253,8 +261,10 @@ class CCMailer
 
         if (!empty($bcc)) 
             $headers .= "Bcc: $bcc\r\n";
+        
+        $add_params = empty($GLOBALS['mail_add_params']) ? '' : $GLOBALS['mail_add_params'];
 
-        return @mail( $to, $subject, $message, $headers);
+        return @mail( $to, $subject, $message, $headers, $add_params );
     }
 } 
 

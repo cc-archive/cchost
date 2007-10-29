@@ -74,27 +74,23 @@ at a Unix/Linux command line you can use these steps to install:
    6. Follow the instructions from there on...
 
 
-Upgrading from 3.1
-------------------------------
+Upgrading from 3.1, 4.0 or newer to 4.5
+-----------------------------------------
 
   -1. Make a backup of your database.
 
    1. Login as admin to your existing site
 
-   2. Copy the 4.0 files (everything EXCEPT the ccadmin directory)
+   2. Copy the 4.5 files (everything EXCEPT the ccadmin directory)
       over your existing site
 
    3. Browse to you home page with:
         ?update=1 (for pretty url sites) or 
 	&update=1 (for non-pretty url)
   
-This upgrade includes the new CC 3.0 Licenses. In order to enabled
-them go to 'Site Settings' and then 'Licenses.' The new licenses
-are at the bottom. The 3.0 licenses will only apply to new uploads.
-
 
 Upgrading from 3.0
-------------------------------
+------------------
 
 ccHost 3.1 represented a significant change in how we handle
 your customized files and paths. The main purpose of this
@@ -167,7 +163,7 @@ Here are the steps for this update:
    ccfiles to local_files/viewfile. Make sure to update any references
    (e.g. <IMG src="" ) to reflect the move.
 
-8. Unzip the ccHost 3.1 package on your local machine
+8. Unzip the ccHost 4.5 package on your local machine
 
 9. Copy everything EXCEPT the ccadmin directory over your server's 
    ccHost directory. 

@@ -28,7 +28,8 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,       array( 'CCDownloadHV', 'OnUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCDownload' , 'OnMapUrls') , 'ccextras/cc-download.inc' );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS, array( 'CCDownload' , 'OnGetConfigFields') , 'ccextras/cc-download.inc' );
+//CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS, array( 'CCDownload' , 'OnGetConfigFields') , 'ccextras/cc-download.inc' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCDownload', 'OnAdminMenu'), 'ccextras/cc-download.inc');
 
 class CCDownloadHV
 {

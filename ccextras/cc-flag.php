@@ -31,11 +31,10 @@ require_once('ccextras/cc-topics.php'); // for EVENT_TOPIC stuff
 /**
 */
 
-CCEvents::AddHandler(CC_EVENT_TOPIC_ROW,         array( 'CCFlagHV', 'OnTopicRow')         );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCFlagHV', 'OnUploadRow')      );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS, array( 'CCFlag' , 'OnGetConfigFields') , 'ccextras/cc-flag.inc' );
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCFlag' , 'OnAdminMenu')       , 'ccextras/cc-flag.inc' );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCFlag' , 'OnMapUrls')         , 'ccextras/cc-flag.inc' );
+CCEvents::AddHandler(CC_EVENT_TOPIC_ROW,      array( 'CCFlagHV', 'OnTopicRow'));
+CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,     array( 'CCFlagHV', 'OnUploadRow'));
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCFlag' ,   'OnMapUrls'),    'ccextras/cc-flag.inc' );
+CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,    array( 'CCFlag',    'OnFormFields'), 'ccextras/cc-flag.inc' );
 
 class CCFlagHV
 {

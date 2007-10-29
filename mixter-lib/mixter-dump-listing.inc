@@ -170,11 +170,16 @@ EOF;
         if( !empty($record['fplay_url']) )
         {
             $url = $record['fplay_url'];
-
+            $part1 = substr($url,0,13);
+            $part2 = substr($url,13);
             $html .=<<<EOF
             <tr>
                 <th><span class="cc_player_label">{$str_play}</span> </th>
-                <td><a class="cc_player_button cc_player_hear" id="_ep_{$upload_id}" href="{$url}"> </a></td>
+                <td><a class="cc_player_button cc_player_hear" id="_ep_{$upload_id}" href="javascript://url"> </a><script>//<!--
+                   var _ep_{$upload_id}_1 = '$part1';
+                   var _ep_{$upload_id}_2 = '$part2';
+                   $('_ep_{$upload_id}').href = _ep_{$upload_id}_1 + _ep_{$upload_id}_2;
+                   //--></script></td>
             </tr>
 EOF;
         }

@@ -114,6 +114,12 @@ class CCTopicsi18n extends CCTable
         return $rows;
     }
 
+    function DeleteTranslationsOf($topic_id)
+    {
+        $w['topic_i18n_xlat_topic'] = $topic_id;
+        $this->DeleteWhere($w);
+    }
+
     function GetTranslationOf($topic_id,$topics)
     {
         $w['topic_i18n_xlat_topic'] = $topic_id;
@@ -179,6 +185,8 @@ class CCTopics extends CCTable
     function _attach_user(&$row)
     {
         $users =& CCUsers::GetTable();
+        if( empty($row['topic_user']) )
+            CCDebug::StackTrace();
         $user = $users->GetRecordFromID($row['topic_user']);
         $row += $user;
     }
@@ -714,6 +722,7 @@ class CCTopic
     function DeleteTopic($topic_id,$branch=false)
     {
         $topics =& CCTopics::GetTable();
+        $translations =& CCTopicsi18n::GetTable();
         $tree =& CCTopicTree::GetTable();
         $arg1['topic_tree_child'] = $topic_id;
         $parent_id = $tree->QueryItem('topic_tree_parent',$arg1);
@@ -730,6 +739,7 @@ class CCTopic
                                                                 $topic_id ));
                 // delete from topics
                 $topics->DeleteKey($topic_id);
+                $translations->DeleteTranslationsOf($topic_id);
                 // If the parent is marked as deleted, nuke it
                 $old_show_val = $topics->ShowDeleted(true);
                 $mark = $topics->QueryItemFromKey('topic_deleted',$parent_id);
@@ -753,12 +763,15 @@ class CCTopic
             // top level topic or branch flag is set, wipe it's tree...
             CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_DEEP, 
                                                             $topic_id ));
-            $this->_delete_tree($topic_id);
+            $this->_delete_tree($topic_id,$translations);
         }
     }
 
-    function _delete_tree($parent_id)
+    function _delete_tree($parent_id,$translations='')
     {
+        if( empty($translations) )
+            $translations =& CCTopicsi18n::GetTable();
+
         $tree =& CCTopicTree::GetTable();
         $where['topic_tree_parent'] = $parent_id;
         $rows = $tree->QueryRows($where);
@@ -767,6 +780,7 @@ class CCTopic
         $tree->DeleteWhere($where);
         $topics =& CCTopics::GetTable();
         $topics->DeleteKey($parent_id);
+        $translations->DeleteTranslationsOf($parent_id);
     }
 
     function GetText($topic_id='')
