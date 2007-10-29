@@ -275,6 +275,21 @@ class CCPage extends CCSkin
     }
 
     /**
+    * Sets the the title for the page using a string_id from the current skin
+    *
+    * @param string $title The title.
+    */
+    function SetTitleStr( $title_strid )
+    {
+        if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
+           $page =& CCPage::GetPage();
+         else
+           $page =& $this;
+
+        $page->SetArg('page-title-str',$title_strid);
+    }
+
+    /**
     * Sets the the title for the page
     *
     * @param string $title The title.
@@ -286,14 +301,7 @@ class CCPage extends CCSkin
          else
            $page =& $this;
 
-        if( empty($page->_reject_title) )
-        {
-            CCPage::PageArg('page-title',$title);
-        }
-        else
-        {
-            CCPage::PageArg('page-title',false);
-        }
+        $page->SetArg('page-title',$title);
     }
 
     /**

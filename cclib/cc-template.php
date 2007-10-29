@@ -151,6 +151,7 @@ class CCSkin
         $this->vars = $snapshot;
     }
 
+
     /**
     * Execute a template macro or file
     *
@@ -175,7 +176,7 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        CCDebug::Log("TCall: $file");
+        //CCDebug::Log("TCall: $file");
 
         $funcname = '';
 
@@ -184,7 +185,7 @@ class CCSkin
 
         $this->_push_call($file);
 
-        if( preg_match( '/\.(xml|htm|html|php|inc|tpl)$/', $file, $m ) )
+        if( preg_match( '/\.(xml|html?|php|inc|tpl)$/', $file, $m ) )
         {
             // this is no macro on the end
 
@@ -201,14 +202,10 @@ class CCSkin
         else
         {
             $macro  = basename($file);
-            // call dirname to strip off the macro this is the filepart 
-            $file_path = dirname($file);
-            if( !empty($file_path) && ($file_path{0} != '.') )
+            $filename = dirname($file); // call dirname to strip off the macro this is the filepart 
+            if( !empty($filename) && ($filename{0} != '.') )
             {
-                $file_name = basename($file_path); // this is the actual file
-                $ext = array_pop( explode('.', $file_name ) );
-                $basename = preg_replace( '/[^a-zA-Z0-9]+/', '_', basename($file_name, '.' . $ext) );
-                $funcname = '_t_' . $basename . '_' . $macro;
+                $funcname = '_t_' . preg_replace( '/((?:\.)[^\.]+$|[^a-zA-Z0-9\.]+)/', '_', basename($filename)) . $macro;
                 if( function_exists($funcname) )
                 {
                     // the file is already in memory, just call the function
@@ -216,7 +213,6 @@ class CCSkin
                     $this->_pop_call();
                     return;
                 }
-                $filename = $file_path;
             }
             else
             {
@@ -355,7 +351,7 @@ class CCSkin
         if( empty($this->search_cache[$sfile]) )
         {
             $dirs = $this->GetTemplatePath();
-            //if( is_string($file) && strstr($file,'button') ) { $x[] = $file; $x[] = $dirs; CCDebug::PrintVar($x); }
+            //if( is_string($file) && strstr($file,'playlist.js') ) { $x[] = $file; $x[] = $dirs; CCDebug::PrintVar($x); }
             $found = CCUtil::SearchPath( $file, $dirs, '', $real_path);
             $this->search_cache[$sfile] = $found;
             return $found;
@@ -373,7 +369,7 @@ class CCSkin
         $map = $this->Search($map );
         if( !is_file($map) )
             die("Can't find skin map file: $dir");
-        CCDebug::Log("Importing: $map");
+        //CCDebug::Log("Importing: $map");
         $this->_push_path($map,'map_stack');
         $this->_parse($map);
     }
@@ -396,10 +392,16 @@ class CCSkin
             if( $m[2] == 'tpl' )
             {
                 require_once('cclib/cc-tpl-parser.php');
-                CCDebug::Log("parsing: $file");
+                //CCDebug::Log("parsing: $file");
                 $parsed = cc_tpl_parse_file($file,$bfunc);
-                //if( strstr($file,'user') ) CCDebug::PrintVar($parsed);
-                eval( '?>' . $parsed);
+                $ret = eval( '?>' . $parsed);
+                if( $ret != 'ok' )
+                {
+                    $lines = split("\n",$parsed);
+                    array_unshift($lines,"-------- parsed template for $file --------");
+                    CCDebug::Enable(true);
+                    CCDebug::PrintVar($lines);
+                }
             }
             else
             {
@@ -474,15 +476,19 @@ class CCSkin
         if( !empty($this->vars['template_compat']) )
             return;
 
+        $this->ImportSkin('ccskins/plain');
+
         global $CC_GLOBALS;
 
         $pi = pathinfo( $CC_GLOBALS['skin-file'] );
+        $this->vars['skin'] = preg_replace('/\.[^\.]+$/', '', $pi['filename']);
         $sp = split( '\.', $pi['basename'] );
         $pi['filename'] = $sp[0];
 
+
         $this->vars['style_sheets'][] = $pi['filename'] . '.css';
 
-        if( empty($this->vars['head_links']) )
+        //if( empty($this->vars['head_links']) )
         {
             foreach( $this->vars['style_sheets'] as $css )
             {
@@ -534,10 +540,16 @@ class CCSkin
         }
 
         reset($tmacs);
+        $TM = array();
+        foreach( $tmacs as $TMF => $on )
+            if( $on )
+                $TM[] = $TMF;
 
-        $this->vars['custom_macros'][] = $tmacs;
+        $this->vars['custom_macros'] = $TM;
 
         $this->vars['template_compat'] = true;
+
+        //$this->vars['print_page_title'] = 'ccskins/plain/page.tpl/print_page_title';
     }
 
     /**
