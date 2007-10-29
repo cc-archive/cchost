@@ -1,6 +1,6 @@
 <?
 
-function _t_form_html_form($T,&$A) 
+function _t_html_form_html_form($T,&$A) 
 {
     $F = $A['curr_form'];
 
@@ -16,10 +16,10 @@ function _t_form_html_form($T,&$A)
            $T->Call($macro);
 
     if ( !empty($F['html_form_grid_columns'])) 
-        $T->Call('form.xml/grid_form_fields');
+        $T->Call('grid_form_fields');
 
     if ( !empty($F['html_form_fields']))
-        $T->Call('form.xml/form_fields');
+        $T->Call('form_fields');
 
     if ( !empty($F['submit_text'])) {
         if( !empty($GLOBALS[$F['submit_text']]) )
@@ -66,24 +66,24 @@ function _t_form_html_form($T,&$A)
 
 
 //------------------------------------- 
-function _t_form_form_fields($T,&$A) {
+function _t_html_form_form_fields($T,&$A) {
    
     print "<table  class=\"cc_form_table\">\n";
 
     foreach( $A['curr_form']['html_form_fields'] as $F )
     { 
-        _t_form_string_helper($F,'form_error');
+        _t_html_form_string_helper($F,'form_error');
 
         if ( !empty($F['form_error']))
             print "<tr  class=\"cc_form_error_row\"><td ></td><td  class=\"cc_form_error\">{$F['form_error']}</td></tr>\n";
 
         print '<tr class="cc_form_row">';
 
-        _t_form_string_helper($F,'form_tip');
+        _t_html_form_string_helper($F,'form_tip');
 
         $tip = empty($F['form_tip']) ? '' : '<span>' . $F['form_tip'] . '</span>';
 
-        _t_form_string_helper($F,'label');
+        _t_html_form_string_helper($F,'label');
 
         if ( !empty($F['label'])) {
             print "<td  class=\"cc_form_label\"><div>{$F['label']}</div>$tip</td>";
@@ -110,7 +110,7 @@ function _t_form_form_fields($T,&$A) {
 } // END: function form_fields
 
 
-function _t_form_string_helper(&$F,$field)
+function _t_html_form_string_helper(&$F,$field)
 {
     $strn = $field . '_str';
 
@@ -135,7 +135,7 @@ function _t_form_string_helper(&$F,$field)
 }
 
 //------------------------------------- 
-function _t_form_grid_form_fields($T,&$A) {
+function _t_html_form_grid_form_fields($T,&$A) {
    
 
 ?><table  class="cc_grid_form_table" id="table_<?= $A['curr_form']['form_id']?>">
@@ -193,7 +193,7 @@ for( $ci108= 0; $ci108< $cc108; ++$ci108)
 
 
 //------------------------------------- 
-function _t_form_submit_forms($T,&$A) 
+function _t_html_form_submit_forms($T,&$A) 
 {
    ?><div  class="cc_submit_forms_outer"><?
 
@@ -221,7 +221,7 @@ function _t_form_submit_forms($T,&$A)
 
 
 //------------------------------------- 
-function _t_form_show_form_about($T,&$A) 
+function _t_html_form_show_form_about($T,&$A) 
 {
     print '<div id="cc_form_help_container"><div class="cc_round_box">';
     foreach( $A['curr_form']['form_about'] as $FA )   
