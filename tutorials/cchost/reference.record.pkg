@@ -1,4 +1,9 @@
 <refentry id="{@id}">
+<para>
+  <warning>This documenation refers to ccHost 4.5. There are serious changes coming in 5.0
+  Make sure to keep tabs at the <ulink href="http://wiki.creativecommons.org/CcHost">ccHost Wiki</ulink>
+  </warning>
+</para>
  <refnamediv>
   <refname>Reference: Upload Record</refname>
  </refnamediv>

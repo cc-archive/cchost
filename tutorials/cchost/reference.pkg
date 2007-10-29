@@ -10,10 +10,9 @@
 </para>
 
 <para>
-  <note>
-    This document applies to ccHost 3.0. Most of the document also applies to 
-    2.1 but just how much has not been verified.
-  </note>
+  <warning>This documenation refers to ccHost 4.5. There are serious changes coming in 5.0
+  Make sure to keep tabs at the <ulink href="http://wiki.creativecommons.org/CcHost">ccHost Wiki</ulink>
+  </warning>
 </para>
 
 

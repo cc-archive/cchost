@@ -3,6 +3,11 @@
     <refname>Tutorial: Gallery View</refname>
     <refpurpose></refpurpose>
  </refnamediv>
+<para>
+  <warning>This documenation refers to ccHost 4.5. There are serious changes coming in 5.0
+  Make sure to keep tabs at the <ulink href="http://wiki.creativecommons.org/CcHost">ccHost Wiki</ulink>
+  </warning>
+</para>
 
 {@toc}
 
@@ -31,7 +36,7 @@
 
   <para>
       Place the XML below into a file called <filename>gallery.xml</filename> into 
-      your {@tutorial admin.basic.pkg.#paths Skins Path}.
+      your {@tutorial admin.basic.pkg#paths Skins Path}.
   </para>
 
 <example><literal>
