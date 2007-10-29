@@ -1,14 +1,56 @@
 ccHost Release Notes
 ====================
 
-Version 4.0
+Version 4.4
 
 This version marks a major feature release with something for 
-end users, admins and devleopers.
+end users, admins and devleopers (and many, many bugfixes)
 
 
-New Features
-=============
+New Features in 4.5
+======================
+
+- Collabaration
+
+Users invite each other, discuss collaborations in private, share private files, 
+then publish as a group
+
+- Social bookmarks
+
+Now every upload is one click away from bookmarked in the most popular sites (Digg,
+Yahoo, etc.)
+
+- Recommends method of rating
+
+Count recommendations in stead of star rating system. Browse a users 
+recommendations in a new browser 
+
+- Download packager
+
+Count download, download file with license file (RDF) and checksum
+
+- Various user interface features
+
+Browse users by what tools they use, big Thumbs Up in reviews/comments, 
+see who's remixed who with one click
+
+New Admin Features in 4.5
+==========================
+admin: allow admin to change user email, hooks to activity log
+admin: allow play for admins & hidden files
+admin: allow spaces in paths
+admin: consolidated admin configuration for moderation/flagging 
+admin: delete virtual root
+admin: enhanced activity log
+admin: show 'publish' link for admins on contest sources
+admin: add sendmail additional params to mail()
+admin: added 'reasons' to banning
+admin: activity log browser, archiving
+admin: User quota
+
+
+New Features in 4.0
+======================
 
 - Playlists/Favorites 
   
@@ -62,8 +104,8 @@ New Features
   time being.
 
 
-Improvements
-=============
+Improvements in 4.0
+====================
 
 - Performance Boost
 
@@ -124,149 +166,83 @@ Improvements
   will return all remixes that do NOT have the 'downtempo' tag
 
 
-An edited SVN LOG:
-------------------
--Fixed the headers in feeds and for data dumps, tested atom, rss and datadumps
--Updated to 4.0, testing out strings, made sure local installation updates ok,
--pool item display broken
--bugfix: UBeenRemixed had php4 error_exit
--calculating StrictestLicense is now more accurate
--playlist: only allow 44k mp3s (per flash)
--add 'install done' global config so new installs do ?update=1
--bugfix: urls with query strings broke feeds
--bugfix: invoking 'recent reviews' multiple times was broken
--embedded mp3 player
--auto-approve pools
--admin can now tie ratings to reviews if they want
--Added forcing of new define, CC_ENCODING which is set to UTF-8 so that all
--Added UTF-8 safe function for htmlentitites
--new policy: bad vroot (including wrong case) now returns 404
--new feature: run a page once per user
--bugfix: rank decimal could overrun db field (rare)
--hack for unchecking distorted tracks
--show lic in pool item
--dev: module load events
--'more remix' link broken from vroots
--bugfix: contest entries (e.g. fortminor) was not listing where contest name and username was the same
--admin feat: contest now have separate src avail date from entry accept date
--don't output 'about' for banned uploads
--extra meta data on license url
--Added yahoo media RSS namespace and support for avatar thumbnail for lisa...
--feature: translate forum message
--bugfix: folks who updated from 1.2 were broken
--more language editor
--nested xml output now works
--user tags are no longer there
--missing %s in upload message
--bugfix: missing part 5
--bugfix: advance on last item threw exception
--feature: search for strings
--create a i18n string map if none exists
--dump all strings from cctemplates into gettext style
--bugfix: download button was not being initialized properly
--bugfix: rare cases where vroot settings were wrong so admins were unknown
--cli config export/import
--set Id keyword expansion
--import needs to save  hash map first
--fixed id macro
--cleaned up strings - got rid of html tags, consolidated 16 strs (hopefully it will make sense)
--now create a submit form type on new contest
--file was not gettext'ized
--added SaveFormType api
--bugfix: contest was marked over before it began
--zend's json-encoder.php
--Added dummy wrappers for ngettext and gettext to protect our asses if gettext is not installed....
--bugfix: missing quotes on strings
--lang editor part 2 (done?)
--bugfix: paging records broken from tabs
--made Publicize admin extensible
--Fabricio's flash music player
--admin feature: Nav tabs now query enabled
--honor query strings on page's feed links
--no allow feeds to get tags from either query string or url
--new query params for 'page' format:
-- 'title' will seen in browser caption and <h1>
--'feed' triggers appearance of 'XML' buttons
--added ProcessAdminArgs to cover for admins/skin writers
--viewfile doesn't require .xml anymore
--docs is alias for viewfile
--<h1> tags in viewfiles and templates are honored over code
--navtabs will populate browser title bar if no one else will
--Converted to i18n...
--bugfix: misleading confirm msg on new registrations
--php5: pass by ref
--bugfix: 'Mini Site's sidebar was broken for non-pretty urls
--admin: hooked up super user features to admin menu
--php5: removed call-time ref
--i8nt string, removed cruft
--admin feat: delete a topic branch in one step
--topic lock field
--feature: lock an individual thread
--bugfix: remix throttle leaked on 'i sampled this'
--bugfix: kept reconnecting event
--bugfix: don't try to put a stream link there isn't one
--delay load URL mapped functions
--bugfix: straight xml formatter was broken
--bugfix: remixedby were broken
--hiked admin box further up for IE's sake
--ui: reset subtab margin, hiked admin box up for same effect
--typo and font tweak
--dev: created js dir and started moving javascripts there
--dev: made home/root_url and 'q' available to all pages
--feature: most active reviews
--got rid of cruft
--new form "smarts" misaligned security key
--bugfix: some ids= queries were breaking
--bugfix: no admin limit would set limit to 0 in all cases
--sidebar tweaks
--bugfix: bad nav paths called undefined func
--bugfix: radio was broke
--bugfix: edit settings was broken
--make int fields non-null
--non null db fields
--Fixed so always get a person or the generic icon if person has no icon...that'll get ppl. to change their image quick...
--super UserPage DefaultAvatar uploading
--left buttons
--admin feature: let admin edit access to every url
--dev: skip form label td if nothing there
--sync to new page format
--bugfix: raw edit broken by arrays in global config
--query page solidified
--dev: save off last where condition (enables page query)
--Added logo of artist to each feed
--events are here now
--new MapUrl params to save off module and doc info
--added query limit default
--updated so that it works on non-root installs like http://openclipart.org/cchost/media...
--Added default user icon for people who don't have their image installed...
--Added generic person icon
--Fixed a funky space at the beginning of by: AUTHOR NAME in basic cchost installs
--Added quick fix for getimagesize error
--Added new tag for thumbnail constrain...without this will break usage of thumbnails...
--query doc
--bugfix: Strip returned null breaking podcast artist
--bugfix: blank limit were squeaking through limit check
--ui: no more empty browser titles
--admin: consolidated ratings settings into one screen
--geek feature: minus ('-') tag will exclude uploads
--admin: 'inherited tags' forces remixes to inherit certain tags
--bugfix: checknumbers broke query/format of IDs
--new events: remix sources changed,
--ui: channels (radio)
--dev: new query/format generator engine
--bugfix: some templates broke without a mime-type
--dev: prototype 1.5rc
--ui: no more empty captions
--dev: prototype 1.5rc
--mixter: new remix home page
--dev: just a comment about using query engine
--admin ui: cleaned up caption
--dev: new param for QueryKeys to clean ids from _GET
--bugfix: clearing menu cache was merging, not delting
--dev: new apis for cleaning get/post args
--dev: new template api to get raw config info
--dev:Abstracted cc-render class
--bugfix: parse error and rename to conform with rest of bin
--Update zh_TW locale to 3.1.0 (Only 1 string modified since last submit.)
--Updated version number to 3.2SVN for development to continue! Have fun!
+An edited SVN LOG (4.5):
+-------------------------
 
+
+api: remix min/max param (for sample digging)
+bugfix: 2 players are not good
+bugfix: Fixed big db overlaod with openclipart.org 
+bugfix: add template tag was broken
+bugfix: bad people url broke collab page
+bugfix: calculate the amount of user's upload file
+bugfix: contest edit was broken
+bugfix: csv didn't output separate lines.
+bugfix: digging checkbox was not being read on refresh
+bugfix: dyn playlists don't display in profile
+bugfix: email form name
+bugfix: errors in skin-simple template
+bugfix: extra quote in mail
+bugfix: fix for mixed version lic remix
+bugfix: formats in publicize
+bugfix: got rid of extra click on pl open
+bugfix: ie margin bug
+bugfix: missed by sa for 3.0 lic
+bugfix: missing form_id caused js error
+bugfix: missing include
+bugfix: missing include
+bugfix: missing yet another include
+bugfix: new rec'd were not showing up
+bugfix: new uploads displayed wrong recc'd number
+bugfix: open list playlist broke when going 'next'
+bugfix: overrides on auto-macros in skins never worked
+bugfix: paging next in playlists confused onclick handlers
+bugfix: playlist counts could get out of date
+bugfix: popup info would not go away under IE on click away
+bugfix: post remix was broken
+bugfix: prevent wrapping of player button
+bugfix: publicize yourself was broken
+bugfix: recent playlists blew up
+bugfix: removing item from playlist would throw off counters
+bugfix: review feeds were broken
+bugfix: some format templates were broken,
+bugfix: some versions of php croaked on null contest return
+bugfix: spelling
+bugfix: stats broken for non-logged in users
+bugfix: translated topics were not being deleted
+bugfix: turning off getid3 confused psuedo verifier
+bugfix: unknown user crashed page
+bugfix: unreg users got missing func error
+bugfix: userid that starts with number couldn't publish/manage files
+bugfix: xspf feeds were broken for some reason
+
+code: Added reply-to field as an option...
+code: Jose Solorzano's html parser
+code: add 'realpath' choice
+code: array_combine doen'st exists in php4
+code: change rdf format
+code: enable type-type deleteWhere (this is a scary checkin)
+code: format.php was a dupe of .inc version
+code: kill invalid query choice with err msg
+code: more equitable and memory efficient ratings
+code: need to include events to ensure event defs are loaded
+code: new events (LostPassword, ip banned, etc.)
+code: optimized sql lookup
+code: shorten header link
+code: turn on new profile page tabs by default
+code: used to be 'people' dir, now it's 'files'
+code: Added check to see if the cc-config-db.php exists from ccadmin and if
+
+format: button player and upgrade
+format: embed playlist ui
+
+typo: clean avatar names
+typo: fixed count name
+
+ui: Lets give some error when this isn't getting anything...
+ui: clean up on play links
+ui: collab and recommends UI clean up
+ui: added 'display' ui, cleaned up buttons
+ui: it can show a listing of files contained in the zip file.
+ui: force a login after password change
+ui: dynamic user tabs
