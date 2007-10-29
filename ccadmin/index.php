@@ -26,7 +26,7 @@ if( empty($_SERVER['REQUEST_URI']) )
     $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
 }
 
-if( file_exists('../cc-config-db.php') )
+if( empty($_GET) && file_exists('../cc-config-db.php') )
 {
     /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
     die('<html><body>ccHost has detected \'../cc-config.db.php\' exists. 
@@ -399,14 +399,14 @@ END;
 function install_local_files($local_dir)
 {
     // is it right to disable warning here?
-    @mkdir( 'people');
+    @mkdir( 'files');
     @mkdir( 'contests');
     @mkdir( $local_dir . '/viewfile' );
     @mkdir( $local_dir . '/skins' );
     @mkdir( $local_dir . '/lib' );
     @mkdir( $local_dir . '/temp' );
 
-    chmod( 'people',   0777 );
+    chmod( 'files',   0777 );
     chmod( 'contests', 0777 );
     chmod( $local_dir . '/viewfile', 0777 );
     chmod( $local_dir . '/skins', 0777 );
