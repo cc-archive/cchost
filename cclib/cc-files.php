@@ -401,7 +401,7 @@ class CCPhysicalFile
         $this->CheckFileAccess($file_id);
         $files =& CCFiles::GetTable();
         $row = $files->QueryKeyRow($file_id);
-        CCPage::SetTitle(,$row['file_name']);
+        CCPage::SetTitle('str_file_replace_s',$row['file_name']);
         $form = new CCFilePropsForm($row['file_nicname']);
         $show = true;
         if( !empty($_POST['fileprops']) && $form->ValidateFields() )

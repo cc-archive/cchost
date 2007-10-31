@@ -51,7 +51,7 @@ function helper_list_menu(&$R)
     $mi = array();
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
-    $mi['menu_text'] = $GLOBALS['str_down'];
+    $mi['menu_text'] = $GLOBALS['str_list_download'];
     $mi['class'] = 'download_hook';
     helper_list_menu_item($mi);
 
@@ -69,7 +69,7 @@ function helper_list_menu(&$R)
         }
         else
         {
-            $mi['menu_text'] = $GLOBALS['str_rate_now'] ;
+            $mi['menu_text'] = $GLOBALS['str_list_rate_now'] ;
             $tu = 'false';
         }
         $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";
@@ -81,7 +81,7 @@ function helper_list_menu(&$R)
 
     $mi = array();
     $mi['action'] = $R['file_page_url'] . '#trackback';
-    $mi['menu_text'] = $GLOBALS['str_trackback'];
+    $mi['menu_text'] = $GLOBALS['str_list_trackback'];
     helper_list_menu_item($mi);
 
     if( !empty($menu['share']['share_link']) )
@@ -175,13 +175,13 @@ function helper_list_remixex(&$R)
    if( !empty($R['remix_parents']) )
     {
         $murl = empty($R['more_parents_link']) ? '' : $R['more_parents_link'];
-        helper_list_remix_info( $GLOBALS['str_uses'], 'downloadicon.gif', $R['remix_parents'], $murl );
+        helper_list_remix_info( $GLOBALS['str_list_uses'], 'downloadicon.gif', $R['remix_parents'], $murl );
     }
 
     if( !empty($R['remix_children']) )
     {
         $murl = empty($R['more_children_link']) ? '' : $R['more_children_link'];
-        helper_list_remix_info( $GLOBALS['str_usedby'], 'uploadicon.gif', $R['remix_children'], $murl );
+        helper_list_remix_info( $GLOBALS['str_list_usedby'], 'uploadicon.gif', $R['remix_children'], $murl );
     }
 }
 

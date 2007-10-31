@@ -87,7 +87,7 @@ $A['K'] = 'tags' . $ck102[$ci102] . $ck102[$ci102];
             <option  value="<?= strtotime('1 week ago')?>"><?= $GLOBALS['str_filter_last_week']?></option>
             <option  value="<?= strtotime('2 weeks ago')?>"><?= $GLOBALS['str_filter_2_weeks_ago']?></option>
             <option  value="<?= strtotime('1 month ago')?>"><?= $GLOBALS['str_filter_last_month']?></option>
-            <option  value="<?= strtotime('3 months ago')?>" selected="selected"><?= $GLOBALS['str_3_months_ago']?></option>
+            <option  value="<?= strtotime('3 months ago')?>" selected="selected"><?= $GLOBALS['str_filter_3_months_ago']?></option>
             <option  value="<?= strtotime('1 year ago')?>"><?= $GLOBALS['str_filter_last_year']?></option>
             <option  value="0"><?= $GLOBALS['str_filter_all_time']?></option>
             </select>

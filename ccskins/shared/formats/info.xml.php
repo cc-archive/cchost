@@ -108,7 +108,7 @@ if ( isset($A['R']['remix_parents']) ) {
 <img  src="<?= $T->URL('images/downloadicon.gif'); ?>" />
 </td>
 <td >
-<span  class="title parents_title"><?= $GLOBALS['str_uses_samples_from'] ;?></span>:<br  />
+<span  class="title parents_title"><?= $GLOBALS['str_list_uses'] ;?></span>:<br  />
 <?
 
 $carr104 = $A['R']['remix_parents'];

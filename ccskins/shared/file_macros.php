@@ -9,7 +9,7 @@ function _t_file_macros_show_zip_dir($T,&$_TV)
     $R =& $_TV['record'];
     foreach( $R['zipdirs'] as $zip )
     {
-        print "<p class=\"zipdir_title\">{$GLOBALS['str_zip_title']}</p>\n" .
+        print "<p class=\"zipdir_title\">{$GLOBALS['str_zip_title']}: <span>{$zip['name']}</span></p>\n" .
               "<ul class=\"cc_zipdir\">\n";
         foreach( $zip['dir']['files'] as $F )
             print "<li>{$F}</li>\n";

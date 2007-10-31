@@ -467,10 +467,8 @@ class CCUploadAPI
             $db_args['file_nicname']     = $file_args['file_nicname'];
             $db_args['file_format_info'] = serialize($file_args['file_format_info']);
             $db_args['file_extra']       = serialize($file_args['file_extra']);
-            if( !defined('IN_MIXTER_PORT') )
-            {
-                $db_args['file_filesize']    = filesize($file_args['local_path']);
-            }
+            if( file_exists($file_args['local_path']) )
+                $db_args['file_filesize'] = filesize($file_args['local_path']);
 
             $files->Update($db_args);
         }

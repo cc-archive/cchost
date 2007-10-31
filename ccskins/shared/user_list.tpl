@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="%url(css/user_list.css)%" title="Default Style" />
 
-%title(user_listing)%
+<h1>%string(people)%</h1>
 
 <div id="user_index">
     %loop(user_index,ui)%

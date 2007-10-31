@@ -8,6 +8,9 @@ $A['print_forms']        = 'util.php/print_forms';
 $A['print_html_content'] = 'util.php/print_html_content';
 $A['hide_upload_form']   = 'util.php/hide_upload_form';
 $A['print_prompts']      = 'util.php/print_prompts';
+$A['prev_next_links']      = 'util.php/prev_next_links';
+$A['print_bread_crumbs'] = 'util.php/print_bread_crumbs';
+$A['print_client_menu'] = 'util.php/print_client_menu';
 
 $A['admin_menu_page']    = 'admin.php/print_admin_menu';
 
@@ -24,6 +27,8 @@ $A['upload_not_published'] = 'file_macros.php/upload_not_published';
 
 $A['user_listings'] = 'user_list.tpl';
 $A['user_listing']  = 'user_profile.tpl';
+
+$A['tags'] = 'tags.php/tags';
 
 $A['script_links'][] = 'js/prototype.js';
 $A['script_links'][] = 'js/selector-addon-v1.js';

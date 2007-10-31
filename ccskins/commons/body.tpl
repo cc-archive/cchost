@@ -22,13 +22,12 @@
         <div id="site_description">%(site-description)%</div>
     %end_if%
 
+    %if_not_empty(tab_info)%
+        <? page_tab_helper($A['tab_info']['tabs'],'tabs'); ?>
+        <div class="post_tab_breaker"></div>
+    %end_if%
+
 </div><!-- banner -->
-
-%if_not_empty(tab_info)%
-    <? page_tab_helper($A['tab_info']['tabs'],'tabs'); ?>
-    <div class="post_tab_breaker"></div>
-%end_if%
-
 
 %if_not_empty(menu_groups)%
 

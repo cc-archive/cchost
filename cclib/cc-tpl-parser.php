@@ -16,7 +16,7 @@ function cc_tpl_parse_echo($prefix,$var,$postfix)
             $prefix = '<?=';
     }
 
-        $postfix = ';' . $postfix;
+    $postfix = ';' . $postfix;
 
     return cc_tpl_parse_var( $prefix, $var, $postfix );
 }
@@ -66,7 +66,8 @@ function cc_tpl_parse_last($bang, $item)
 function cc_tpl_parse_call_macro($prefix, $mac)
 {
     $prefix = _cc_tpl_flip_prefix($prefix);
-    $mac = cc_tpl_parse_var('',$mac,'');
+    if( $mac{0} != "'" )
+        $mac = cc_tpl_parse_var('',$mac,'');
 
     return "$prefix \$T->Call($mac); ?>";
 }
@@ -169,11 +170,11 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? end_(?:macro|if)%/"   =>   "<?\n } ?>",
         "/<\? end_loop%/"           =>   "<?\n } } ?>",
 
-        "/<\? if\(([^\)]+)\)%/"                           =>   "<? if( $1 ) { ?>",
+        "/<\? if\(([^\)]+)\)%/"                           =>   "<? if( !empty(\$A['$1']) ) { ?>",
+        "/<\? if_not\(([^\)]+)\)%/"                       =>   "<? if( empty(\$A['$1']) ) { ?>",
         "/<\? add_stylesheet{$op}{$aoq}\)%/"              =>   "<? \$A['style_sheets'][] = '$1'; ?>",
         "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
         "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
-        "/<\? title{$op}{$a}{$cp}%/"                      =>   "<? \$A['page-title'] = \$GLOBALS['str_$1']; \$T->Call('print_page_title'); ?>",
         "/(<\?=?) key{$op}{$a}{$cp}%/"                    =>   "$1 \$k_$1 ?>",
         "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
         "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   "<?= \$GLOBALS['str_$2'] ?>",

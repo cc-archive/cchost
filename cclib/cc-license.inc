@@ -127,7 +127,7 @@ class CCLicense
     {
         if( !defined('IN_MIXTER_PORT') )
         {
-            $sha1 = sha1_file( $file['local_path'] ) ;
+            $sha1 = @sha1_file( $file['local_path'] ) ;
             $file['file_extra']['sha1'] = $this->_hex_to_base32($sha1);
         }
     }

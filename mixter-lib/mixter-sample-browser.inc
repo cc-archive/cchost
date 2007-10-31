@@ -222,8 +222,8 @@ class CCSampleBrowser
         }
 
         //CCDebug::PrintVar($args['records'][0],false);
-
-        $template = new CCSkinMacro('sample_browser.php/browser_list');
+        $file = CCPage::GetViewFile('sample_browser.php');
+        $template = new CCSkinMacro( $file  . '/browser_list');
         $template->SetAllAndPrint($args);
         exit;
     }
@@ -235,7 +235,7 @@ class CCSampleBrowser
         $args = array(); // $CC_GLOBALS;
         list( $tags, $bpms ) = $this->_get_tags();
 
-        $args['tags']           =& $tags;
+        $args['tags_tags']      =& $tags;
         $args['bpms']           =& $bpms;
         $args['tag_sorts']      =& $this->_get_tag_sorts();
         $args['tag_filters']    =& $this->_get_tag_filters();
@@ -246,7 +246,8 @@ class CCSampleBrowser
         $args['search_text']    = _('Go');
         $args['default_msg']    = $this->_default_msg();
         $args['licenses']       = $this->_get_lic_filters('sample');
-        $args['sample_browser'] = 'sample_browser.php/browser_page';
+        $file = CCPage::GetViewFile('sample_browser.php');
+        $args['sample_browser'] = $file . '/browser_page';
 
         //$args['browser_macro']  = 'sample_browser.xml/browser_page';
 
@@ -344,6 +345,7 @@ class CCSampleBrowser
             $ts = CC_TS_DEFAULT;
 
         $tag_counts = array_count_values($all_tags);
+
         $tag_rows = array();
         switch( $ts )
         {

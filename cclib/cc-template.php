@@ -207,7 +207,7 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        //CCDebug::Log("TCall: $file");
+        CCDebug::Log("TCall: $file");
 
         $funcname = '';
 
@@ -425,6 +425,7 @@ class CCSkin
                 require_once('cclib/cc-tpl-parser.php');
                 //CCDebug::Log("parsing: $file");
                 $parsed = cc_tpl_parse_file($file,$bfunc);
+                //if( preg_match('/skin.tpl/',$file) ) CCDebug::PrintVar($parsed);
                 $ret = eval( '?>' . $parsed);
                 if( $ret != 'ok' )
                 {

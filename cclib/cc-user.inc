@@ -134,7 +134,7 @@ class CCUserForm extends CCSecurityVerifierForm
 
             if( $this->record['user_password'] != $password )
             {
-                $this->SetFieldError($fieldname,array('str_pw_does_not_match'));
+                $this->SetFieldError($fieldname,array('str_login_does_not_match'));
                 return(false);
             }
 

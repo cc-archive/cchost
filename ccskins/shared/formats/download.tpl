@@ -15,8 +15,8 @@
 </style>
 <div  id="cc_download">
 <div id="download_help">
-    <div>%string(IEtip)%</div>
-    <div>%string(Mactip)%</div>
+    <div>%string(list_IEtip)%</div>
+    <div>%string(list_Mactip)%</div>
 </div>
 <ol>
 %loop(records/0/files,F)%

@@ -111,3 +111,12 @@
 #taglinks {
     margin-top: 14px;
 }
+
+.zipdir_title {
+	font-style: italic;
+}
+
+.zipdir_title span {
+	font-style: normal;
+	font-weight: bold;
+}

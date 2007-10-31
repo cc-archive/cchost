@@ -155,7 +155,7 @@ class CCNewUserForm extends CCUserForm
 
             if( $user )
             {
-                $this->SetFieldError($fieldname,array('str_that_username_is'));
+                $this->SetFieldError($fieldname,array('str_login_that_username_is'));
                 return(false);
             }
 

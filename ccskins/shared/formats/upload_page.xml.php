@@ -134,7 +134,7 @@ function helper_uploads_do_menus(&$R,&$A)
     $mi = array();
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
-    $mi['menu_text'] = $GLOBALS['str_down'];
+    $mi['menu_text'] = $GLOBALS['str_list_download'];
     $mi['class'] = 'download_hook';
     helper_upload_menu_item($mi);
 
@@ -158,7 +158,7 @@ function helper_uploads_do_menus(&$R,&$A)
         }
         else
         {
-            $mi['menu_text'] = $GLOBALS['str_rate_now'] ;
+            $mi['menu_text'] = $GLOBALS['str_list_rate_now'] ;
             $tu = 'false';
         }
         $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";
@@ -175,9 +175,9 @@ function helper_uploads_do_menus(&$R,&$A)
 
     /** TRACKBACK menu *****/
 
-    $str = sprintf($GLOBALS['str_i_saw_this'], '"' . $R['upload_name'] . '"');
+    $str = sprintf($GLOBALS['str_list_i_saw_this'], '"' . $R['upload_name'] . '"');
     print "<div class=\"cc_round_box\" id=\"download_box\">\n" .
-          "<h2>{$GLOBALS['str_trackback']}</h2>\n<a name=\"trackback\"></a>" .
+          "<h2>{$GLOBALS['str_list_trackback']}</h2>\n<a name=\"trackback\"></a>" .
           "<p>{$str}</p><ul>\n";
 
     $mi = array();
@@ -185,8 +185,8 @@ function helper_uploads_do_menus(&$R,&$A)
     $saws = array( array( 'remix',    $GLOBALS['str_remix']),
                    array( 'podcast',  $GLOBALS['str_podcast']),
                    array( 'video',    $GLOBALS['str_video']),
-                   array( 'web',      $GLOBALS['str_web_blog']),
-                   array( 'album',    $GLOBALS['str_album'], ) );
+                   array( 'web',      $GLOBALS['str_list_web_blog']),
+                   array( 'album',    $GLOBALS['str_list_album'], ) );
     $url = "upload_trackback('{$R['upload_id']}', '";
     foreach( $saws as $saw )
     {
@@ -255,12 +255,12 @@ function helper_upload_date(&$R)
     }
     else
     {
-        $mod_date = '<span id="modified_date">' . $GLOBALS['str_lastmod'] . ': ' .  CC_datefmt($R['upload_last_edit'],'M d, Y h:i a');
+        $mod_date = '<span id="modified_date">' . $GLOBALS['str_list_lastmod'] . ': ' .  CC_datefmt($R['upload_last_edit'],'M d, Y h:i a');
         if( !empty($R['last_op_str']) )
             $mod_date .= ' (' . $R['last_op_str'] . ')';
         $mod_date .= '</span>';
     }
-    print "<div id=\"date_box\">{$GLOBALS['str_date']}: $date $mod_date</div>\n";
+    print "<div id=\"date_box\">{$GLOBALS['str_list_date']}: $date $mod_date</div>\n";
 }
 
 function helper_upload_do_sidebar(&$R,&$A,$T)
@@ -311,10 +311,10 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
     ------------------------------------*/
 
     if( !empty($R['remix_parents']) )
-        helper_upload_remix_info( $GLOBALS['str_uses'], 'downloadicon.gif', $R['remix_parents'], $T );
+        helper_upload_remix_info( $GLOBALS['str_list_uses'], 'downloadicon.gif', $R['remix_parents'], $T );
 
     if( !empty($R['remix_children']) )
-        helper_upload_remix_info( $GLOBALS['str_usedby'], 'uploadicon.gif', $R['remix_children'], $T );
+        helper_upload_remix_info( $GLOBALS['str_list_usedby'], 'uploadicon.gif', $R['remix_children'], $T );
 }
 
 
@@ -361,14 +361,14 @@ function helper_upload_main_info(&$R,&$A,$T)
 
     if( empty($R['collab']) )
     {
-        print "<tr><th>{$GLOBALS['str_by']}:</th><td><a href=\"{$R['artist_page_url']}\">{$R['user_real_name']}</a></td></tr>\n";
+        print "<tr><th>{$GLOBALS['str_by']}</th><td><a href=\"{$R['artist_page_url']}\">{$R['user_real_name']}</a></td></tr>\n";
     }
     else
     {
         $C =& $R['collab'];
         $url = $A['home-url'] . 'collab/' . $C['collab_id'];
-        print "<tr><th>{$GLOBALS['str_project']}:</th><td><a href=\"$url\">{$C['collab_name']}</a></td></tr>\n" . 
-              "<tr><th>{$GLOBALS['str_credit']}:</th><td>";
+        print "<tr><th>{$GLOBALS['str_collab_project']}:</th><td><a href=\"$url\">{$C['collab_name']}</a></td></tr>\n" . 
+              "<tr><th>{$GLOBALS['str_collab_credit']}:</th><td>";
         $comma = '';
         foreach( $C['users'] as $U )
         {
@@ -384,17 +384,13 @@ function helper_upload_main_info(&$R,&$A,$T)
         print "</td></tr>\n";
     }
 
-    if( !empty($R['upload_extra/featuring']) )
-    {
-        $test1 = strtolower(trim($R['upload_extra/featuring']));
-        $test2 = strtolower(trim($R['user_name']));
-        $test3 = strtolower(trim($R['user_real_name']));
-        if( ($test1 != $test2) && ($test1 != $test3) )
-            print "<tr><th>{$GLOBALS['str_featuring']}</th><td>{$R['upload_extra/featuring']}</td></tr>\n";
-    }
+    if( !empty($R['upload_extra']['featuring']) )
+        print "<tr><th>{$GLOBALS['str_featuring']}</th><td>{$R['upload_extra']['featuring']}</td></tr>\n";
 
+    if( !empty($R['files']['0']['file_format_info']['ps']) )
+        print "<tr><th>{$GLOBALS['str_list_length']}</th><td>{$R['files']['0']['file_format_info']['ps']}</td></tr>\n";
+    
     print "</table>\n";
-
 
     if( !empty( $R['upload_description_html'] ) )
     {
