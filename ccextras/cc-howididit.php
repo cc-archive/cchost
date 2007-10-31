@@ -46,9 +46,9 @@ class CCHowIDidItHV
             $record['howididit_link'] = array( 'action' => ccl('howididit',$record['upload_id']),
                                                'text'  => _('How I Did It'));
             if( empty($record['file_macros']) )
-                $record['file_macros'][] = 'howididit_link';
+                $record['file_macros'][] = 'print_howididit_link';
             else
-                array_unshift($record['file_macros'],'howididit_link');
+                array_unshift($record['file_macros'],'print_howididit_link');
         }
 
     }
