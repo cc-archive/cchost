@@ -90,11 +90,11 @@ class CCSearch
         $CC_GLOBALS['hide_sticky_search'] = true;
 
 
-        CCPage::SetTitle(_("Search"));
+        CCPage::SetTitle('str_search');
         $form = new CCSearchForm();
         CCPage::AddForm( $form->GenerateForm() );
 
-        $google = '<h1>' . _('Search using Google (tm)') . '</h1>';
+        $google = '<h2><?= $T->String(\'str_search_google\') ?></h2>';
         $site = preg_replace('#http://(.*)#','\1', cc_get_root_url() );
         $google  .=<<<END
 <form method="GET" action="http://www.google.com/search">
@@ -124,7 +124,7 @@ END;
             //$url = "http://google.com?site:
         }
 
-        CCPage::SetTitle(_('Search Results'));
+        CCPage::SetTitle('str_search_results');
 
         $done_search = false;
         CCEvents::Invoke( CC_EVENT_DO_SEARCH, array(&$done_search) );
@@ -263,7 +263,7 @@ END;
     {
         if( $field == 'lookinfor' )
         {
-            CCPage::SetTitle(_('Browse "What I Pound On"'));
+            CCPage::SetTitle('str_search_wipo');
 
             $org_tag = $tag;
             $tag = strtolower($tag);
@@ -329,7 +329,7 @@ EOF;
         else
         {
             $field = 'user_' . $field;
-            CCPage::SetTitle(_("Users that Mentioned the Following:") . " $tag");
+            CCPage::SetTitle('str_search_users_that', $tag);
             require_once('cclib/cc-user.inc');
             CCUserAPI::ListRecords( "$field LIKE '%$tag%'" );
         }

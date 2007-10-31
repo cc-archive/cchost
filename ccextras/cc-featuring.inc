@@ -99,8 +99,8 @@ class CCFeaturing
             {
                 $F = array();
                 $F['upload_featuring'] = 
-                            array( 'label_str'      => 'str_featured_artists',
-                                   'form_tip_str'   => 'str_list_any_collob',
+                            array( 'label_str'      => 'str_feat_artists',
+                                   'form_tip_str'   => 'str_feat_list_any_collob',
                                    'formatter'  => 'textedit',
                                    'flags'      => CCFF_NOUPDATE);
                 $form->InnerInsertFormFields($fields,$F,'after','upload_name');

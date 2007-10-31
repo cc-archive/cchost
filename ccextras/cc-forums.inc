@@ -205,7 +205,7 @@ class CCForumAPI
             }
         }
 
-        CCPage::SetTitle(('Forums'));
+        CCPage::SetTitle('str_forums');
         CCPage::PageArg('forums',$visible_groups,'forum_index');
     }
 
@@ -442,7 +442,7 @@ EOF;
             CCUtil::SendBrowserTo($url);
         }
 
-        CCPage::SetTitle( _('Post New Topic') );
+        CCPage::SetTitle( 'str_forum_post_new_topic' );
 
         require_once('ccextras/cc-topics-forms.inc');
         $form = new CCTopicForm( _('New Topic Text'), _('Submit Topic'), true );
@@ -506,7 +506,7 @@ EOF;
         if( empty($row) )
         {
             $this->_build_bread_crumb_trail(1);
-            CCPage::SetTitle( _('Thread Missing') );
+            CCPage::SetTitle( 'str_forum_thread_missing' );
             CCPage::Prompt(_('That topic thread does not exist.'));
             return;
         }
@@ -524,7 +524,7 @@ EOF;
             else
                 $msg = _('You do have proper permissions to see this forum.');
 
-            CCPage::SetTitle(_('Restricted Access'));
+            CCPage::SetTitle('str_forum_restricted_access');
             CCPage::Prompt($msg);
             return;
         }
@@ -620,7 +620,7 @@ EOF;
         $this->_add_feed_links( '', $username);
 
         CCPage::PageArg('topics',$rows,'forum_user');
-        CCPage::SetTitle( sprintf( _("Forum Posts by %s"), $user_real_name ) );
+        CCPage::SetTitle( 'str_forum_posts_by_s', $user_real_name  );
 
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');

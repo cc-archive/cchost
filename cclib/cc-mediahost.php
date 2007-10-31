@@ -94,7 +94,7 @@ class CCMediaHost
 
         if( empty($username) )
         {
-            CCPage::SetTitle(_("Browse Uploads"));
+            CCPage::SetTitle('str_file_browse_uploads');
             require_once('cclib/cc-upload.php');
             CCUpload::ListMultipleFiles();
         }
@@ -112,16 +112,16 @@ class CCMediaHost
 
                 if( empty($row) )
                 {
-                    CCPage::SetTitle(_('Unknown File'));
-                    CCPage::Prompt(_('The file cannot be found.') . ' ' . 
-                                   _('It may have been removed by the owner.'));
+                    CCPage::SetTitle('str_file_unknown');
+                    CCPage::Prompt('str_file_cannot_be_found');
+                    CCPage::Prompt('str_file_it_may_have');
                     CCUtil::Send404(false);
                 }
                 else
                 {
                     // aha
                     CCPage::SetTitle($row['upload_name']);
-                    CCPage::Prompt(_('This upload is not currently available for viewing.'));
+                    CCPage::Prompt('str_file_this_upload_is');
                 }
                 return;
             }

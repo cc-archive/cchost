@@ -132,7 +132,7 @@ if( class_exists('CCPage') || class_exists('ccpage') )
 </div>
 END;
 
-        CCPage::AddPrompt('body_html',$buttons);
+        CCPage::AddContent($buttons);
 
         return count($queue);
     }
@@ -290,8 +290,8 @@ END;
             }
         }
         $html .= '</table>';
-        CCPage::AddPrompt('body_html', $html);
-        CCPage::PageArg('dummy1', '0', 'prev_next_links');
+        CCPage::AddContent($html);
+        CCPage::AddMacro('prev_next_links');
     }
 
     function cc_remote_dump_queue()
@@ -323,7 +323,7 @@ END;
 
         $html .= '</table>';
 
-        CCPage::AddPrompt('body_html',$html);
+        CCPage::AddContent($html);
     }
 }
 

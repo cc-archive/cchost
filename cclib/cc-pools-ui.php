@@ -93,7 +93,7 @@ END;
                                 'text' => $c );
             }
         }
-        CCPage::SetTitle( _('Sample Pool:') . " " . $pool['pool_name'] );
+        CCPage::SetTitle( 'str_sample_pool_s', $pool['pool_name'] );
         CCPage::PageArg( 'pool_info', $pool, 'pool_info_head' );
         CCPage::PageArg( 'pool_items', $items, 'pool_item_listing' );
         CCPage::PageArg( 'pool_links', $alinks );

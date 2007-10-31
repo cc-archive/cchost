@@ -48,12 +48,12 @@ class CCNewUserForm extends CCUserForm
                     'user_name' =>
                         array( 'label_str'  => 'str_login_name',
                                'formatter'  => 'newusername',
-                               'form_tip_str' => 'str_this_must_consist',
+                               'form_tip_str' => 'str_login_this_must_consist',
                                'flags'      => CCFF_REQUIRED  ),
                     'user_email' =>
                        array( 'label_str'       => 'str_e_mail',
                                'formatter'  => 'email',
-                               'form_tip_str' => 'str_this_address_will',
+                               'form_tip_str' => 'str_login_this_address_will',
                                'flags'      => CCFF_REQUIRED ),
                 );
 
@@ -63,9 +63,9 @@ class CCNewUserForm extends CCUserForm
         {
             $fields += array(
                     'user_password' =>
-                       array(  'label_str'     => 'str_password',
+                       array(  'label_str'     => 'str_login_password',
                                'formatter'     => 'password',
-                               'form_tip_str'  => 'str_this_must_be',
+                               'form_tip_str'  => 'str_login_this_must_be',
                                'flags'         => CCFF_REQUIRED )
                 );
         }
@@ -88,7 +88,7 @@ class CCNewUserForm extends CCUserForm
         {
             $fields += array(
                     '_lost_password' =>
-                       array(  'label_str'      => 'str_lost_password',
+                       array(  'label_str'      => 'str_login_lost_password',
                                'formatter'  => 'statictext',
                                'value'      => '<a href="' . 
                                                ccl('lostpassword') . '">' 
@@ -98,7 +98,7 @@ class CCNewUserForm extends CCUserForm
         }
 
         $this->AddFormFields( $fields );
-        $this->SetSubmitText('str_register');
+        $this->SetSubmitText('str_login_register');
     }
 
     /**
@@ -133,13 +133,13 @@ class CCNewUserForm extends CCUserForm
 
             if( preg_match('/[^A-Za-z0-9_]/', $value) )
             {
-                $this->SetFieldError($fieldname, array('str_this_must_letters') );
+                $this->SetFieldError($fieldname, array('str_login_this_must_letters') );
                 return(false);
             }
 
             if( strlen($value) > 25 )
             {
-                $this->SetFieldError($fieldname, array('str_this_must_be_less') );
+                $this->SetFieldError($fieldname, array('str_login_this_must_be_less') );
                 return(false);
             }
 
@@ -186,17 +186,17 @@ class CCUserLoginForm extends CCUserForm
                                'flags'      => CCFF_REQUIRED ),
 
                     'user_password' =>
-                       array(  'label_str'       => 'str_password',
+                       array(  'label_str'       => 'str_login_password',
                                'formatter'  => 'matchpassword',
                                'flags'      => CCFF_REQUIRED ),
 
                     'user_remember' =>
-                       array(  'label_str'      => 'str_remember_me',
+                       array(  'label_str'      => 'str_login_remember_me',
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_NONE ),
 
                     '_new_user' =>
-                       array(  'label_str'       => 'str_new_user',
+                       array(  'label_str'       => 'str_login_new_user',
                                'formatter'  => 'statictext',
                                'value'      => '<a href="' . ccl('register') . '">' .
                                              _('Click Here') . '</a>',
@@ -209,7 +209,7 @@ class CCUserLoginForm extends CCUserForm
         {
             $fields += array( 
                     '_lost_password' =>
-                       array( 'label_str'       => 'str_lost_password',
+                       array( 'label_str'       => 'str_login_lost_password',
                                'formatter'  => 'statictext',
                                'value'      => '<a href="' . 
                                                ccl('lostpassword') . '">' .
@@ -249,7 +249,7 @@ class CCLostPasswordForm extends CCUserForm
                         );
 
         $this->AddFormFields( $fields );
-        $this->SetSubmitText('str_retrieve_password');
+        $this->SetSubmitText('str_login_retrieve_password');
     }
 }
 
@@ -433,7 +433,7 @@ class CCLogin
         cc_setcookie(CC_USER_COOKIE,'',time());
         unset($_COOKIE[CC_USER_COOKIE]);
         CCPage::Prompt(_('You are now logged out'));
-        CCPage::SetTitle(_("Log Out"));
+        CCPage::SetTitle('str_log_out');
         CCEvents::Invoke( CC_EVENT_LOGOUT, array( $CC_GLOBALS['user_name'] ) );
         unset($CC_GLOBALS['user_name']);
         unset($CC_GLOBALS['user_id']);
@@ -465,7 +465,7 @@ class CCLogin
             }
 
             CCEvents::Invoke(CC_EVENT_LOGIN_FORM,array(&$form));
-            CCPage::SetTitle(_("Log In"));
+            CCPage::SetTitle('str_log_in');
             CCPage::AddForm( $form->GenerateForm() );
             $ok = false;
         }
@@ -496,7 +496,7 @@ class CCLogin
     */
     function LostPassword()
     {
-        CCPage::SetTitle(_("Recover Lost Password"));
+        CCPage::SetTitle('str_login_recover_lost_password');
         $form = new CCLostPasswordForm();
         if( empty($_POST['lostpassword']) || !$form->ValidateFields() )
         {

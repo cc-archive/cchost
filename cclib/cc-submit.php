@@ -214,7 +214,7 @@ class CCSubmit
 
     function ShowSubmitTypes($types)
     {
-        CCPage::SetTitle(_('Pick Submission Type'));
+        CCPage::SetTitle('str_pick_submission_type');
         $keys = array_keys($types);
         foreach( $keys as $key )
         {

@@ -198,7 +198,7 @@ class CCUpload
     {
         $this->CheckFileAccess(CCUser::CurrentUser(),$upload_id);
         $uploads =& CCUploads::GetTable();
-        CCPage::SetTitle(_("Deleting File"));
+        CCPage::SetTitle('str_file_deleting');
         if( empty($_POST['confirmdelete']) )
         {
             $pretty_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
@@ -250,12 +250,12 @@ class CCUpload
 
         if( empty($types) )
         {
-            $form_tip_str = 'str_specify_the_file';
+            $form_tip_str = 'str_file_specify';
             $form_tip_args = '';
         }
         else
         {
-            $form_tip_str = 'str_valid_file_types';
+            $form_tip_str = 'str_file_valid_types';
             $form_tip_args = array( implode(', ',$types) );
         }
 

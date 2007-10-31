@@ -2,10 +2,7 @@
     die('Welcome to ccHost');
 
 ?><div >
-<?
-    $A['page-title-str'] = 'recommends_browser';
-    $T->Call('print_page_title');
-?>
+<h1><?= $GLOBALS['str_recommends_browser'] ?></h1>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css'); ?>" title="Default Style"></link>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/detail.css'); ?>" title="Default Style"></link>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/recommends.css'); ?>" title="Default Style"></link>
@@ -21,7 +18,7 @@
 </div>
 <div  id="featured">
 <h3 ><?= sprintf($GLOBALS['str_recommended_by_s'],$A['get']['fullname']);?></h3>
-<div  class="featured_info"><?= sprintf($GLOBALS['str_s_recommends'] ,$A['get']['fullname']);?></div>
+<div  class="featured_info"><?= sprintf($GLOBALS['str_recommends_s_2'] ,$A['get']['fullname']);?></div>
 </div>
 <div  id="browser"><?= $GLOBALS['str_getting_data'] ;?></div>
 <div  id="q"></div>

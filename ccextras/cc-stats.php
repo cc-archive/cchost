@@ -147,7 +147,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
         $user_recs =& cc_stats_chart_user_data($sort_on,$dir);
         CCPage::PageArg('user_recs',$user_recs, 'charts.xml' );
     }
-    CCPage::SetTitle(_("Charts"));
+    CCPage::SetTitle('str_charts');
 }
 
 function _cc_stats_filter($since)
@@ -226,7 +226,7 @@ function cc_stats_show()
         chmod($file,cc_default_file_perms());
     }
 
-    CCPage::SetTitle(_("Charts"));
+    CCPage::SetTitle('str_charts');
     CCPage::AddContent($text);
 }
 

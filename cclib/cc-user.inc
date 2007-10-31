@@ -202,40 +202,40 @@ class CCUserProfileForm extends CCUploadForm
 
         $fields = array( 
                     'user_real_name' =>
-                        array( 'label_str'      => 'str_full_name',
-                               'form_tip_str'   => 'str_your_display_name',
+                        array( 'label_str'      => 'str_prof_full_name',
+                               'form_tip_str'   => 'str_prof_your_display',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_password' =>
-                       array(  'label_str'  => 'str_password',
+                       array(  'label_str'  => 'str_login_password',
                                'formatter'  => 'password',
-                               'form_tip_str'   => 'str_leave_this_blank',
+                               'form_tip_str'   => 'str_prof_leave_this_blank',
                                'flags'      => CCFF_SKIPIFNULL ),
 
                     'user_email' =>
                        array(  'label_str'      => 'str_e_mail',
-                               'form_tip_str'   => 'str_this_address_will',
+                               'form_tip_str'   => 'str_login_this_address_will',
                                'formatter'  => 'email',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
                     'user_image' =>
-                       array(  'label_str'      => 'str_image',
+                       array(  'label_str'      => 'str_prof_image',
                                'formatter'  => 'avatar',
-                               'form_tip_str'   => 'str_image_file',
+                               'form_tip_str'   => 'str_prof_image_file',
                                'upload_dir' => $avatar_dir,
                                'maxwidth'   => 93,
                                'maxheight'  => 94,
                                'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL  ),
 
                     'user_description' =>
-                        array( 'label_str'      => 'str_about_you',
+                        array( 'label_str'      => 'str_prof_about_you',
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_homepage' =>
-                       array(  'label_str'      => 'str_home_page_url',
-                               'form_tip_str'   => 'str_make_sure_it',
+                       array(  'label_str'      => 'str_prof_home_page_url',
+                               'form_tip_str'   => 'str_prof_make_sure_it',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
             );
@@ -244,7 +244,7 @@ class CCUserProfileForm extends CCUploadForm
         {
             $fields += array( 
                     'user_language' => 
-                        array(  'label_str'      => 'str_default_language',
+                        array(  'label_str'      => 'str_lang_default',
                             'formatter'  => 'select',
                             'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(), 
                             'flags'      => CCFF_POPULATE ),
@@ -253,20 +253,20 @@ class CCUserProfileForm extends CCUploadForm
 
         $fields += array( 
                     'user_whatido' =>
-                        array( 'label_str'      => 'str_what_i_pound_on',
-                               'form_tip_str'   => 'str_vinyl_guitar',
+                        array( 'label_str'      => 'str_prof_what_i_pound_on',
+                               'form_tip_str'   => 'str_prof_vinyl_guitar',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_whatilike' =>
-                        array( 'label_str'      => 'str_what_i_like',
-                               'form_tip_str'   => 'str_django_old_skool',
+                        array( 'label_str'      => 'str_prof_what_i_like',
+                               'form_tip_str'   => 'str_prof_django_old_skool',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_lookinfor' =>
-                        array( 'label_str'      => 'str_what_im_looking_for',
-                               'form_tip_str'   => 'str_list_attributes',
+                        array( 'label_str'      => 'str_prof_what_im_looking_for',
+                               'form_tip_str'   => 'str_prof_list_attributes',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
@@ -299,7 +299,7 @@ class CCUserAPI
         else
             $upload_dir = $CC_GLOBALS['avatar-dir'];
 
-        CCPage::SetTitle(_("Edit Your Settings"));
+        CCPage::SetTitle("str_prof_edit_your_settings");
         $id    = CCUser::IDFromName($username);
         $form  = new CCUserProfileForm($id, $upload_dir );
         $ok    = false;
@@ -363,8 +363,8 @@ class CCUserAPI
     */
     function SaveProfile()
     {
-        CCPage::SetTitle(_("Edit Your Settings"));
-        CCPage::Prompt(_("Changes were saved"));
+        CCPage::SetTitle("str_edit_your_settings");
+        CCPage::Prompt("str_changes_were_saved");
     }
 
     function ListRecords($sql_where = '')
@@ -372,7 +372,7 @@ class CCUserAPI
         $users = new CCUsers(); // getting a new one so we can safely do the join
         if( empty($sql_where) )
         {
-            CCPage::SetTitle(_("People"));
+            CCPage::SetTitle('str_people');
             // only show those with uploads
             $users->SetOrder('user_registered','DESC');
             $users->AddJoin( new CCTable('cc_tbl_uploads','upload_user'), 'user_id' );
@@ -582,13 +582,13 @@ END;
         $msg = '';
         if( in_array( $user_to_add_or_remove, $favs ) )
         {
-            CCPage::SetTitle(_('Removed from favorites'));
+            CCPage::SetTitle('str_favorites_removed_from');
             $favs = array_diff($favs,array($user_to_add_or_remove));
             $msg = sprintf(_("%s has been removed from your list of favorites."), $user_to_add_or_remove);
         }
         else
         {
-            CCPage::SetTitle(_('Added to favorites'));
+            CCPage::SetTitle('str_favorites_added_to');
             $favs[] = $user_to_add_or_remove;
             $msg = sprintf(_("%s has been added to your list of favorites."), $user_to_add_or_remove);
         }

@@ -49,7 +49,7 @@ class CCEditFileForm extends CCUploadMediaForm
         $this->CCUploadMediaForm($userid,false);
         $this->SetHiddenField('upload_id' , $record['upload_id']);
         $this->SetFormValue('upload_tags', $record['upload_extra']['usertags']);
-        $this->SetSubmitText('str_save_file_properties');
+        $this->SetSubmitText('str_file_save_properties');
 
         /*
             This code is just broken (conceptually that is) need to revisit with lawyers
@@ -84,8 +84,8 @@ class CCEditFileForm extends CCUploadMediaForm
 
 
         $fields['upload_man_files'] =
-                array( 'label_str'              => 'str_manage_files',
-                       'form_tip_str'           => 'str_update_the_list',
+                array( 'label_str'              => 'str_files_manage',
+                       'form_tip_str'           => 'str_files_update_the_list',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                     _('Manage Files') . "</a>",
                        'formatter'          => 'statictext',
@@ -95,8 +95,8 @@ class CCEditFileForm extends CCUploadMediaForm
         $url = ccl('file','remixes',$record['upload_id'] );
 
         $fields['upload_remixes'] =
-                array( 'label_str'              => 'str_manage_the_i',
-                       'form_tip_str'           => 'str_update_the_list',
+                array( 'label_str'              => 'str_files_manage_the_i',
+                       'form_tip_str'           => 'str_files_update_the_list',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                    _('Manage Remixes') . "</a>",
                        'formatter'          => 'statictext',
@@ -170,8 +170,8 @@ class CCFileAddForm extends CCUploadForm
         $fields = array();
         CCUpload::GetUploadField($fields);
         $fields['file_nicname'] = 
-                array( 'label_str'              => 'str_nickname',
-                       'form_tip_str'           => 'str_lofi_hires',
+                array( 'label_str'              => 'str_files_nickname',
+                       'form_tip_str'           => 'str_files_lofi_hires',
                        'formatter'          => 'textedit',
                        'flags'              => CCFF_POPULATE );
         $this->AddFormFields($fields);
@@ -208,8 +208,8 @@ class CCFileNicknameForm extends CCForm
     {
         $this->CCForm();
         $fields['file_nicname'] = 
-                array( 'label_str'              => 'str_nickname',
-                       'form_tip_str'           => 'str_lofi_hires',
+                array( 'label_str'              => 'str_files_nickname',
+                       'form_tip_str'           => 'str_files_lofi_hires',
                        'formatter'          => 'textedit',
                        'value'              => $oldnic,
                        'flags'              => CCFF_POPULATE );
@@ -234,7 +234,7 @@ class CCPhysicalFile
         $record = $uploads->GetRecordFromKey($upload_id);
         if( empty($record) )
             return;
-        CCPage::SetTitle( _("Manage files for: ") . $record['upload_name'] );
+        CCPage::SetTitle( 'str_files_manage' );
 
         $args['files'] = &$record['files'];
         $args['urls'] = array( 
@@ -281,7 +281,7 @@ class CCPhysicalFile
         $uploads =& CCUploads::GetTable();
         $record = $uploads->GetRecordFromID($upload_id);
         $pretty_name = $record['upload_name'];
-        CCPage::SetTitle(_("Edit Properties: ") . $pretty_name);
+        CCPage::SetTitle('str_edit_properties');
         $form = new CCEditFileForm($userid,$record);
         $show = true;
         if( empty($_POST['editfile']) )
@@ -293,8 +293,8 @@ class CCPhysicalFile
             if( $form->ValidateFields() )
             {
                 CCUpload::PostProcessEditUploadForm($form, $record, $record['upload_extra']['relative_dir'] );
-                $msg = sprintf(_("Changes saved (see %s)"), '<a href="' . $record['file_page_url'] . '">' . _('results') . '</a>');
-                CCPage::Prompt($msg);
+                $url = url_args( $record['file_page_url'], 'prompt=str_file_changed' );
+                CCUtil::SendBrowserTo($url);
                 $show = false;
             }
         }
@@ -354,7 +354,7 @@ class CCPhysicalFile
         $uploads =& CCUploads::GetTable();
         $record = $uploads->GetRecordFromID($upload_id);
         $pretty_name = $record['upload_name'];
-        CCPage::SetTitle(_("Edit Properties: ") . $pretty_name);
+        CCPage::SetTitle('str_edit_properties');
         $path = $record['file_page_url'];
         $msg= sprintf(_("Changes saved, see %s."), '<a href="' . $path . '">' . $pretty_name . ' ' . _('page') . '</a>');
         if( $is_manage )
@@ -379,7 +379,7 @@ class CCPhysicalFile
         if( empty($_POST['confirmdelete']) )
         {
             $pretty_name = $files->QueryItemFromKey('file_name',$file_id);
-            CCPage::SetTitle(sprintf(_("Delete File '%s'"),$pretty_name));
+            CCPage::SetTitle('str_files_delete_s',$pretty_name);
             $form = new CCConfirmDeleteForm($pretty_name);
             CCPage::AddForm( $form->GenerateForm() );
         }
@@ -401,7 +401,7 @@ class CCPhysicalFile
         $this->CheckFileAccess($file_id);
         $files =& CCFiles::GetTable();
         $row = $files->QueryKeyRow($file_id);
-        CCPage::SetTitle(sprintf(_("Replace '%s'"),$row['file_name']));
+        CCPage::SetTitle(,$row['file_name']);
         $form = new CCFilePropsForm($row['file_nicname']);
         $show = true;
         if( !empty($_POST['fileprops']) && $form->ValidateFields() )
@@ -445,7 +445,7 @@ class CCPhysicalFile
         $this->CheckFileAccess($file_id);
         $files =& CCFiles::GetTable();
         $row = $files->QueryKeyRow($file_id);
-        CCPage::SetTitle(sprintf(_("Nickname for '%s'"),$row['file_name']));
+        CCPage::SetTitle('str_files_nickname_for_s',$row['file_name']);
         $form = new CCFileNicknameForm($row['file_nicname']);
         $show = true;
         if( !empty($_POST['filenickname']) && $form->ValidateFields() )
@@ -477,7 +477,7 @@ class CCPhysicalFile
         $this->CheckFileAccess(0,$upload_id);
         $uploads =& CCUploads::GetTable();
         $record = $uploads->GetRecordFromID($upload_id);
-        CCPage::SetTitle(sprintf(_("Add File to '%s'"),$record['upload_name']));
+        CCPage::SetTitle('str_files_add_to_s',$record['upload_name']);
         $form = new CCFileAddForm();
         $show = true;
         if( !empty($_POST['fileadd']) && $form->ValidateFields() )

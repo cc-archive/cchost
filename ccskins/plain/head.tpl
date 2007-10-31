@@ -5,7 +5,13 @@
     %end_if%
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 //EN">
 <head> 
-<title>%(site-title)% - %var_check(page-title)%</title>
+
+%if_not_empty(page-caption)%
+  <title>%(site-title)% - %text(page-caption)%</title>
+%else%
+  <title>%(site-title)% - %(site-description)%</title>
+%end_if%
+ 
 
 %if_not_empty(site-meta-keywords)%
     <meta name="keywords" content="%(site-meta-keywords)%" />

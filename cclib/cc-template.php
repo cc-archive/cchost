@@ -151,6 +151,37 @@ class CCSkin
         $this->vars = $snapshot;
     }
 
+    function String($args)
+    {
+        global $CC_GLOBALS;
+
+        if( empty($args) )
+        {
+            $text = '';
+        }
+        else
+        {
+            if( is_string($args) && !empty($this->vars[$args]) )
+                $args = $this->vars[$args];
+
+            if( is_array($args) )
+            {
+                $fmt = array_shift($args);
+                if( !empty($this->vars[$fmt]) )
+                    $fmt = $this->vars[$fmt];
+                $fmt = empty($GLOBALS[$fmt]) ? $fmt : $GLOBALS[$fmt];
+                if( is_array($args[0]) )
+                    $args = $args[0];
+                $text = vsprintf($fmt,$args);
+            }
+            else
+            {
+                $text = empty($GLOBALS[$args]) ? $args : $GLOBALS[$args];
+            }
+        }
+
+        return $text;
+    }
 
     /**
     * Execute a template macro or file

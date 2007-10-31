@@ -105,7 +105,7 @@ class CCCollab
                 $F['collab'] = 
                     array( 'label_str' => 'str_collaboration',
                            'formatter' => 'select',
-                           'form_tip_str'  => 'str_assign_this_file',
+                           'form_tip_str'  => 'str_collab_assign_this_file',
                            'options'   => $options,
                            'value'     => 0, // todo: 
                            'flags'     => CCFF_NOUPDATE,
@@ -170,7 +170,7 @@ class CCCollab
         $form =  new CCCollabForm();
         if( empty($_POST['collab']) || !$form->ValidateFields() )
         {
-            CCPage::SetTitle(_('Create New Collaboration Project'));
+            CCPage::SetTitle('str_collab_create');
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
@@ -209,8 +209,8 @@ class CCCollab
         $users->DeleteKey($collab_id);
         $collabs =& CCCollabs::GetTable();
         $collabs->DeleteKey($collab_id);
-        CCPage::SetTitle(_('Remove Collaboration'));
-        CCPage::Prompt(_('Collaboration has been removed.'));
+        CCPage::SetTitle('str_collab_remove');
+        CCPage::Prompt('str_collab_removed');
     }
 
     function Edit($collab_id='')
@@ -240,7 +240,7 @@ class CCCollab
         if( !$is_post || !$form->ValidateFields() )
         {
             $collab_row = $collabs->QueryKeyRow($collab_id);
-            CCPage::SetTitle(sprintf( _('Collaboration Project: "%s"'), $collab_row['collab_name'] ));
+            CCPage::SetTitle( 'str_collab_project_s', $collab_row['collab_name'] );
             if( !$is_post )
                 $form->PopulateValues($collab_row);
             CCPage::AddForm( $form->GenerateForm() );
@@ -250,7 +250,7 @@ class CCCollab
             $form->GetFormValues($values);
             if( !empty($values['collab_delete']) )
             {
-                CCPage::SetTitle(_('Remove Collaboration'));
+                CCPage::SetTitle('str_collab_remove');
                 $row = $this->_collab_row($collab_id);
                 require_once('cclib/cc-upload-forms.php');
                 $name = $row['collab_name'];
@@ -323,7 +323,7 @@ class CCCollab
 
         CCPage::PageArg( 'show_collabs', 'collab.xml/show_collabs' );
         CCPage::PageArg( 'collabs', $args, 'show_collabs' );
-        CCPage::SetTitle( _('Collaborations') );
+        CCPage::SetTitle( 'str_collab' );
     }
 
     function View($collab_id='')
@@ -337,7 +337,7 @@ class CCCollab
 
         $collab_row = $this->_collab_row($collab_id);
 
-        CCPage::SetTitle(sprintf( _('Collaboration Project: "%s"'), $collab_row['collab_name'] ));
+        CCPage::SetTitle( 'str_collab_project_s', $collab_row['collab_name'] );
 
         require_once('ccextras/cc-format.inc');
         $collab_row['collab_desc'] = _cc_format_format($collab_row['collab_desc']);
@@ -750,7 +750,7 @@ EOF;
 
         if( empty($_POST['collabtopic']) || !$form->ValidateFields() )
         {
-            CCPage::SetTitle(_('Collaboration message'));
+            CCPage::SetTitle('str_collab_message');
             CCPage::AddForm( $form->GenerateForm() );
         }
         else

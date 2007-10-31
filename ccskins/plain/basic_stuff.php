@@ -9,12 +9,6 @@ function _t_basic_stuff_post_script($T,&$_TV)
 }
 
 
-function _t_basic_stuff_print_prompts($T,&$_TV)
-{
-    foreach( $_TV['prompts'] as $prompt )
-        ?><div class="cc_<?= $prompt['name'] ?>"><?= $prompt['value'] ?></div><?
-}
-
 function _t_basic_stuff_print_bread_crumbs($T,&$_TV)
 {
     if( empty($_TV['bread_crumbs']) )

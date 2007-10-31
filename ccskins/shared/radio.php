@@ -1,7 +1,5 @@
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/radio.css'); ?>" />
-<? $A['page-title'] = $GLOBALS['str_remix_radio'];
-$T->Call('print_page_title');
-?>
+<h1><?= $GLOBALS['str_radio_remix'] ?></h1>
 <div id="radio_container">
 <form  id="channel_form">
 <table  cellpadding="0" cellspacing="0" id="outerframe">
@@ -11,7 +9,7 @@ $T->Call('print_page_title');
 <tr ><td  id="cell1">
 <div  id="channel_intro">
 <h3 ><?= $GLOBALS['str_radio_station'] ;?></h3>
-<p ><?= sprintf($GLOBALS['str_create_your_own'],$A['site-title']) ;?></p>
+<p ><?= sprintf($GLOBALS['str_radio_create'],$A['site-title']) ;?></p>
 </div>
 </td></tr>
 <tr ><td  id="cell2">
@@ -65,37 +63,37 @@ $A['K'] = 'tags' . $ck102[$ci102] . $ck102[$ci102];
                 <span  class="opt_label"><?= $GLOBALS['str_ratings']?>:</span>
                 <select  id="score" name="score">
                 <option  value="500">5</option>
-                <option  value="450"><?= sprintf( $GLOBALS['str_d_or_above'], '4.5' ) ?></option>
+                <option  value="450"><?= sprintf( $GLOBALS['str_filter_d_or_above'], '4.5' ) ?></option>
                 <option  value="400" selected="selected"><?= sprintf( $GLOBALS['str_d_or_above'], '4' ) ;?></option>
-                <option  value="350"><?= sprintf( $GLOBALS['str_d_or_above'], '3.5' ) ?></option>
-                <option  value="300"><?= sprintf( $GLOBALS['str_d_or_above'], '3' ) ;?></option>
-                <option  value="0"><?= $GLOBALS['str_all'] ;?></option>
+                <option  value="350"><?= sprintf( $GLOBALS['str_filter_d_or_above'], '3.5' ) ?></option>
+                <option  value="300"><?= sprintf( $GLOBALS['str_filter_d_or_above'], '3' ) ;?></option>
+                <option  value="0"><?= $GLOBALS['str_filter_all'] ;?></option>
                 </select>
             <? } else { ?>
                 <span  class="opt_label"><?= $GLOBALS['str_recommends']?>:</span>
                 <select  id="num_scores" name="num_scores">
-                <option  value="20"><?= sprintf( $GLOBALS['str_d_or_above'], '20' ) ?></option>
-                <option  value="10"><?= sprintf( $GLOBALS['str_d_or_above'], '10' ) ?></option>
-                <option  value="5" selected="selected"><?= sprintf( $GLOBALS['str_d_or_above'], '5' ) ;?></option>
-                <option  value="0"><?= $GLOBALS['str_all'] ;?></option>
+                <option  value="20"><?= sprintf( $GLOBALS['str_filter_d_or_above'], '20' ) ?></option>
+                <option  value="10"><?= sprintf( $GLOBALS['str_filter_d_or_above'], '10' ) ?></option>
+                <option  value="5" selected="selected"><?= sprintf( $GLOBALS['str_filter_d_or_above'], '5' ) ;?></option>
+                <option  value="0"><?= $GLOBALS['str_filter_all'] ;?></option>
                 </select>
             <? } ?>
             </td>
         <? } // ratings enabled ?>
         <td >
-            <span  class="opt_label"><?= $GLOBALS['str_since'] ?>:</span>
+            <span  class="opt_label"><?= $GLOBALS['str_filter_since'] ?>:</span>
             <select  id="sinceu" name="sinceu">
-            <option  value="<?= strtotime('1 day ago')?>"><?= $GLOBALS['str_yesterday']?></option>
-            <option  value="<?= strtotime('1 week ago')?>"><?= $GLOBALS['str_last_week']?></option>
-            <option  value="<?= strtotime('2 weeks ago')?>"><?= $GLOBALS['str_2_weeks_ago']?></option>
-            <option  value="<?= strtotime('1 month ago')?>"><?= $GLOBALS['str_last_month']?></option>
+            <option  value="<?= strtotime('1 day ago')?>"><?= $GLOBALS['str_filter_yesterday']?></option>
+            <option  value="<?= strtotime('1 week ago')?>"><?= $GLOBALS['str_filter_last_week']?></option>
+            <option  value="<?= strtotime('2 weeks ago')?>"><?= $GLOBALS['str_filter_2_weeks_ago']?></option>
+            <option  value="<?= strtotime('1 month ago')?>"><?= $GLOBALS['str_filter_last_month']?></option>
             <option  value="<?= strtotime('3 months ago')?>" selected="selected"><?= $GLOBALS['str_3_months_ago']?></option>
-            <option  value="<?= strtotime('1 year ago')?>"><?= $GLOBALS['str_last_year']?></option>
-            <option  value="0"><?= $GLOBALS['str_all_time']?></option>
+            <option  value="<?= strtotime('1 year ago')?>"><?= $GLOBALS['str_filter_last_year']?></option>
+            <option  value="0"><?= $GLOBALS['str_filter_all_time']?></option>
             </select>
         </td>
         <td >
-            <span  class="opt_label"><?= $GLOBALS['str_this_many']?>:</span>
+            <span  class="opt_label"><?= $GLOBALS['str_filter_this_many']?>:</span>
             <select  id="limit" name="limit">
             <option  value="10">10</option>
             <option  value="25" selected="selected">25</option>

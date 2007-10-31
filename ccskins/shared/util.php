@@ -1,5 +1,11 @@
 <?
 
+function _t_util_print_prompts($T,&$_TV)
+{
+    foreach( $_TV['prompts'] as $prompt )
+        ?><div class="cc_<?= $prompt['name'] ?>"><?= $T->String($prompt['value']) ?></div><?
+}
+
 
 function _t_util_print_html_content($T,&$A)
 {
@@ -7,7 +13,7 @@ function _t_util_print_html_content($T,&$A)
         return;
 
     foreach( $A['html_content'] as $html )
-        print $html;
+        eval( '?>' . $html); //print $html;
 }
 
 function _t_util_print_forms($T,&$A)

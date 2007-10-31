@@ -441,7 +441,7 @@ class CCTagEvents
 
     function OnBrowseTags($tagstr='')
     {
-        CCPage::SetTitle(_("Tags") . " $tagstr");
+        CCPage::SetTitle('str_tags_s',$tagstr);
 
         if( empty($tagstr) )
         {
@@ -557,7 +557,7 @@ class CCTagEvents
             $records[$i]['tagurl'] = ccl('tags',  $records[$i]['tags_tag']);
         }
 
-        CCPage::SetTitle(_("Tags"));
+        CCPage::SetTitle('str_tags');
         CCPage::PageArg('tag_switch_link',$switch_link);
         CCPage::PageArg('tag_array',$records,'tags');
     }

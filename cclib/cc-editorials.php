@@ -51,7 +51,7 @@ class CCEditorials
     {
         require_once('cclib/cc-upload-table.php');
 
-        CCPage::SetTitle( _("Editors' Picks") );
+        CCPage::SetTitle( 'str_editors_picks');
         $tag   = empty($upload_id) ? 'editorial_pick' : '';
         $where = empty($upload_id) ? '' : array( 'upload_id' => $upload_id );
         $uploads =& CCUploads::GetTable();
@@ -77,11 +77,11 @@ class CCEditorials
     {
         if( !$this->_is_editor() )
         {
-            CCPage::Prompt(_("Invalid path"));
+            CCUtil::Send404();
             return;
         }
 
-        CCPage::SetTitle(_("Edit Editorial"));
+        CCPage::SetTitle('str_editorial_edit');
         $reviewer_user_name = CCUser::CurrentUsername();
         $reviewer_name      = CCUser::CurrentUserField('user_real_name');
 
@@ -144,7 +144,7 @@ class CCEditorials
                 $showform = false;
 
                 $url = ccl('editorial','picks');
-                CCPage::Prompt(sprintf(_("Editorial saved. See <a href=\"%s\">here</a> for results."),$url));
+                CCUtil::SendBrowserTo($url);
             }
         }
 

@@ -8,15 +8,23 @@ function _cc_tpl_flip_prefix($prefix)
     return $prefix == '<?=' ? '<?' : '<?=';
 }
 
-
-function cc_tpl_parse_var($prefix,$var,$postfix)
+function cc_tpl_parse_echo($prefix,$var,$postfix)
 {
     if( $prefix )
     {
         if( $prefix == '!' )
             $prefix = '<?=';
-        $prefix = _cc_tpl_flip_prefix($prefix);
     }
+
+        $postfix = ';' . $postfix;
+
+    return cc_tpl_parse_var( $prefix, $var, $postfix );
+}
+
+function cc_tpl_parse_var($prefix,$var,$postfix)
+{
+    if( $prefix )
+        $prefix = _cc_tpl_flip_prefix($prefix);
     $parts = explode('/',$var);
     if( $parts[0]{0} == '#' )
     {
@@ -140,7 +148,7 @@ function cc_tpl_parse_text($text,$bfunc)
         '/\s+$/'  => '',
         '/%\s+%/' => '%%',
 
-        "/%(!?)(?:var)?{$op}{$a}{$cp}%/e"  =>   "cc_tpl_parse_var('$1 ','$2', ' ?>');",
+        "/%(!?)(?:var)?{$op}{$a}{$cp}%/e"  =>   "cc_tpl_parse_echo('$1 ','$2', ' ?>');",
 
         '/%!/'           => '<?= ',
         '/%([a-z\(])/'   => '<? $1',
@@ -169,7 +177,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/(<\?=?) key{$op}{$a}{$cp}%/"                    =>   "$1 \$k_$1 ?>",
         "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
         "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   "<?= \$GLOBALS['str_$2'] ?>",
-        "/<\? string_get{$op}{$ac}{$a}{$cp}%/"            =>   "<?  \$A['$2'] = \$GLOBALS[ 'str_' . \$A['$1'] ]; ?>", 
+        "/<\? text{$op}{$a}{$cp}%/"                       =>   "<?= \$T->String('$1'); ?>", 
         "/<\? return%/"                                   =>   "<? return; ?>",
         "/<\? inherit{$op}{$ac}{$aoq}{$cp}%/"             =>   "<? \$T->Inherit('$1','$2'); ?>",
         "/<\? call_parent%/"                              =>   "<? \$T->CallParent(); ?>",

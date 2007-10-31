@@ -37,7 +37,6 @@
 %map( submit_forms,    'html_form.php/submit_forms' )%
 %map( show_form_about, 'html_form.php/show_form_about' )%
 
-%map( show_prompts,       'basic_stuff.php/print_prompts' )%
 %map( print_bread_crumbs, 'basic_stuff.php/print_bread_crumbs' )%
 %map( print_client_menu,  'basic_stuff.php/print_client_menu' )%
 %map( prev_next_links,    'basic_stuff.php/prev_next_links' )%

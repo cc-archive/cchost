@@ -50,7 +50,7 @@ class CCArchive
                 if( !empty($tags) )
                     $trail[] = array( 'url' => ccl('archive','month',$arg1,$tags), 'text' => $tags);
 
-                CCPage::SetTitle( sprintf(_('Archive for %s'),$tstr) );
+                CCPage::SetTitle( 'str_archive_for_s', $tstr );
                 $month = $m[1];
                 $where = "SUBSTRING(upload_date,1,7) = '${m[1]}'";
                 CCUpload::ListMultipleFiles($where,$tags,'all');
@@ -71,7 +71,7 @@ class CCArchive
 END;
         $dates = CCDatabase::QueryRows($sql);
 
-        CCPage::SetTitle( _('Monthly Archive') );
+        CCPage::SetTitle( 'str_archive_monthly' );
         $html = '<ul>';
         foreach( $dates as $date )
         {

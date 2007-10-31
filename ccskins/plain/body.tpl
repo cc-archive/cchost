@@ -98,19 +98,9 @@ function page_inner_print_tabs($tabs,$id)
 ?>
 
 %macro(print_page_title)% 
-
-    %if_not_empty(page-title-str)%
-        %string_get(page-title-str,page-title)%
-    %end_if%
-
     %if_not_empty(page-title)%
-        <h1 class="title">%(page-title)%</h1>
-        %if_empty(ajax)%
-            <? $title = addslashes($A['page-title']); ?>
-            <script>document.title = '%(site-title)% - %(#title)%'</script>
-        %end_if%
+        <h1 class="title">%text(page-title)%</h1>
     %end_if%
-
 %end_macro%
 
 

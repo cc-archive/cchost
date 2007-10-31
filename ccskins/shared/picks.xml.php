@@ -1,7 +1,5 @@
-<? 
-$A['page-title'] = $GLOBALS['str_edpicks_hot_tracks'];
-$T->Call('print_page_title');
-?>
+<h1><?= $GLOBALS['str_edpicks_hot_tracks']; ?></h1>
+
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/picks.css') ?>" />
 <table  class="pickspage">
 <tr >
@@ -16,7 +14,7 @@ $T->Call('print_page_title');
 <td >
 <?
     $A['settings'] = CC_get_config('chart');
-    $A['pick_title'] = $GLOBALS['str_whats_hot_right_now'];
+    $A['pick_title'] = $GLOBALS['str_editorial_whats_hot'];
     $A['ed_pick'] = 0;
     $A['qstring'] = 'tags=remix,-digital_distortion&sort=num_scores&dir=DESC&sinced=' . $A['settings']['cut-off'] . '&limit=12';
     $T->Call('picks.xml/picks');
@@ -26,7 +24,7 @@ $T->Call('print_page_title');
 <tr >
 <td >
 <?
-    $A['pick_title'] = $GLOBALS['str_all_time_hot_list'];
+    $A['pick_title'] = $GLOBALS['str_editorial_all_time'];
     $A['ed_pick'] = 0;
     $A['qstring'] = 'tags=remix&sort=num_scores&dir=DESC&limit=10';
     $T->Call('picks.xml/picks');
@@ -90,6 +88,6 @@ function _t_picks_picks($T,&$A) {
     }
     else
     {
-        print "<div >{$GLOBALS['str_sorry_no_chart']}</div>"; 
+        print "<div >{$GLOBALS['str_editorial_no_chart']}</div>"; 
     }
 }

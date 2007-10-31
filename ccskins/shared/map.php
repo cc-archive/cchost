@@ -7,6 +7,7 @@ $A['picks_links']        = 'picks.xml/picks_links';
 $A['print_forms']        = 'util.php/print_forms';
 $A['print_html_content'] = 'util.php/print_html_content';
 $A['hide_upload_form']   = 'util.php/hide_upload_form';
+$A['print_prompts']      = 'util.php/print_prompts';
 
 $A['admin_menu_page']    = 'admin.php/print_admin_menu';
 

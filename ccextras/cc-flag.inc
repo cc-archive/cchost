@@ -46,18 +46,18 @@ class CCFlagContentForm extends CCSecurityVerifierForm
 
         $fields = array( 
                     'mail_from' => array(
-                            'label_str'       => 'str_from',
+                            'label_str'       => 'str_email_from',
                             'formatter'   => 'textedit',
                             'value'       => $user_from,
-                            'form_tip_str'    => 'str_your_email',
+                            'form_tip_str'    => 'str_email_your_address_opt',
                             'flags'      => CCFF_NONE ),
                     'mail_subject' => array(
-                            'label_str'       => 'str_subject',
+                            'label_str'       => 'str_email_subject',
                             'formatter'   => 'statictext',
                             'value'      => sprintf( _('Flag %s "%s"'), $type, $name ),
                             'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
                     'mail_body' => array(
-                            'label_str'       => 'str_message',
+                            'label_str'       => 'str_email_message',
                             'formatter'   => 'textarea',
                              'value'      => $text,
                             'flags'      => CCFF_REQUIRED ),

@@ -277,7 +277,7 @@ class CCContactMailerForm extends CCSecurityVerifierForm
         $to = $user_to['user_real_name'] . ' (' . $user_to['user_name'] . ')';
 
         $fields['mail_to'] = array(
-                'label_str'       => 'str_to',
+                'label_str'       => 'str_email_to',
                  'value'      => $to,
                  'flags'      => CCFF_STATIC | CCFF_NOUPDATE,
                  'formatter'  => 'statictext' );
@@ -285,9 +285,9 @@ class CCContactMailerForm extends CCSecurityVerifierForm
         if( empty($user_from) )
         {
             $fields['mail_from'] = array(
-                        'label_str'       => 'str_from',
+                        'label_str'       => 'str_email_from',
                         'formatter'   => 'email',
-                        'form_tip_str'    => 'str_your_email_address',
+                        'form_tip_str'    => 'str_email_your_address',
                         'flags'      => CCFF_REQUIRED );
         }
         else
@@ -295,7 +295,7 @@ class CCContactMailerForm extends CCSecurityVerifierForm
             $from = $user_from['user_real_name'] . ' (' . $user_from['user_name'] . ')';
 
             $fields['mail_from_STATIC'] = array(
-                            'label_str'       => 'str_from',
+                            'label_str'       => 'str_email_from',
                             'value'      => $from,
                             'flags'      => CCFF_STATIC | CCFF_NOUPDATE,
                             'formatter'  => 'statictext' );
@@ -306,14 +306,14 @@ class CCContactMailerForm extends CCSecurityVerifierForm
 
         $fields += array( 
                     'mail_subject' => array(
-                            'label_str'       => 'str_subject',
+                            'label_str'       => 'str_email_subject',
                             'formatter'   => 'textedit',
                             'flags'      => CCFF_NONE ),
                     'mail_body' => array(
-                            'label_str'       => 'str_message',
+                            'label_str'       => 'str_email_message',
                             'formatter'   => 'textarea',
                             'maxlength'   => 1000,
-                            'form_tip'    => _('Message is limited to 1,000 characters'),
+                            'form_tip'    => 'str_email_msg_limited', 
                             'flags'      => CCFF_REQUIRED ),
                     'user_mask' =>
                        array( 'label'       => '',

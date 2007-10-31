@@ -79,7 +79,7 @@ class CCPageAdmin
     */
     function Homepage()
     {
-        CCPage::ViewFile('home.xml');
+        CCPage::ViewFile('home');
     }
 
     /**
@@ -218,9 +218,15 @@ class CCPage extends CCSkin
         }
         else
         {
+            // see notes in CCPage::Show for why this is important
+            if( empty($page->vars['page-title']) )
+            {
+                $contents = file_get_contents($file);
+                $page->_check_for_title($contents);
+            }
+
             $page->_body_template = $file;
         }
-
     }
 
     /**
@@ -275,21 +281,6 @@ class CCPage extends CCSkin
     }
 
     /**
-    * Sets the the title for the page using a string_id from the current skin
-    *
-    * @param string $title The title.
-    */
-    function SetTitleStr( $title_strid )
-    {
-        if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
-           $page =& CCPage::GetPage();
-         else
-           $page =& $this;
-
-        $page->SetArg('page-title-str',$title_strid);
-    }
-
-    /**
     * Sets the the title for the page
     *
     * @param string $title The title.
@@ -301,7 +292,9 @@ class CCPage extends CCSkin
          else
            $page =& $this;
 
-        $page->SetArg('page-title',$title);
+        $arg = func_num_args() == 1 ? $title : func_get_args();
+        $page->SetArg('page-title', $arg );
+        $page->SetArg('page-caption', $arg );
     }
 
     /**
@@ -351,7 +344,6 @@ class CCPage extends CCSkin
     /**
     * Output the page to the client
     *
-    
     */
     function Show($print=true)
     {
@@ -372,28 +364,42 @@ class CCPage extends CCSkin
             $page->AddMacro($page->_body_template);
         }
 
-        /////////////////
-        // Step 6
-        //
-        // Show the current set of tabs at the top of the screen
-        //
-        // 
-        if( empty($CC_GLOBALS['hide_sticky_tabs']) && empty($page->vars['tab_info']) )
+        if( empty($CC_GLOBALS['hide_sticky_tabs']) && 
+            empty($page->vars['tab_info']) )
         {
             $naviator_api = new CCNavigator();
             $naviator_api->ShowTabs($page);
         }
 
-        /////////////////
-        // Step 7
-        //
-        // Show a search box in the banner
-        //
-        // 
         if( empty($CC_GLOBALS['hide_sticky_search']) )
         {
             $page->vars['sticky_search'] = true;
             $page->vars['advanced_search_url'] = ccl('search');
+        }
+
+        /*
+            Google puts a lot of emphasis on <title> tag so yes, we
+            go to great lengths to make sure there is something 
+            relevant there.
+        */
+        if( empty($page->vars['page-caption']) )
+        {
+            if( empty($page->vars['page-title']) )
+            {
+                if( !empty($page->vars['html_content']) )
+                {
+                    foreach( $page->vars['html_content'] as $contents )
+                    {
+                        $page->_check_for_title($contents);
+                        if( !empty($page->vars['page-caption']) )
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                $page->vars['page-caption'] = $page->vars['page-title'];
+            }
         }
 
         CCEvents::Invoke(CC_EVENT_RENDER_PAGE, array( &$page ) );
@@ -456,12 +462,14 @@ class CCPage extends CCSkin
     /**
     * Output a div with the class 'system_prompt'
     *
-    * @param string $prompt_text Contents of message
+    * @param string $prompt Contents of message 
     */
-    function Prompt($prompt_text)
+    function Prompt($prompt)
     {
-        CCPage::AddPrompt('system_prompt',$prompt_text);
+        $prompt = func_num_args() == 1 ? $prompt : func_get_args();
+        CCPage::AddPrompt('system_prompt', $prompt );
     }
+
 
     /**
     * Add a form to the page's template variables
@@ -637,11 +645,22 @@ class CCPage extends CCSkin
                                            'value' => $value );
 
         if( empty($page->vars['macro_names']) )
-            $page->vars['macro_names'][] = 'show_prompts';
-        elseif( !in_array( 'show_prompts', $page->vars['macro_names'] ) )
-            array_unshift($page->vars['macro_names'],'show_prompts');
+            $page->vars['macro_names'][] = 'print_prompts';
+        elseif( !in_array( 'print_prompts', $page->vars['macro_names'] ) )
+            array_unshift($page->vars['macro_names'],'print_prompts');
     }
 
+    function _check_for_title($contents)
+    {
+        // um, bit of a hack but I can't figure out another
+        // to have the <h1> tag in the file end up in the title 
+        // of the browser (?),
+        $r1 = '<h1[^>]+>%\(([^)]+)\)%'; // macro
+        $r2 = "<h1[^>]*><\?=[^']+'([^']+)'"; // global string
+        $r3 = '<h1[^>]*>(.*)</h1'; // normal h1
+        if( preg_match("#(($r1)|($r2)|($r3))#Uis",$contents,$m) )
+            $this->vars['page-caption'] = stripslashes($m[ count($m) - 1 ]);
+    }
     /**
     * Calculate and add paging links ( next/prev ) for listings
     *
