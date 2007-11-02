@@ -2,10 +2,10 @@
 <div class="hide">
   <a href="#content">%string(skip)%</a>
 </div>
-<div id="banner">
+<div id="banner" class="banner_bg banner_color">
 
     %if_not_empty(sticky_search)%
-        <div id="banner_search"><a id="search_site_link" href="%(advanced_search_url)%"><h3>%string(find)%</h3><span>%string(findcontent)%</span></a></div>
+        <div id="banner_search"><img src="%url(images/find.png)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%string(find)%</h3><span>%string(findcontent)%</span></a></div>
     %end_if%
 
     %if_not_empty(logged_in_as)%
@@ -23,7 +23,11 @@
     %end_if%
 
     %if_not_empty(tab_info)%
-        <? page_tab_helper($A['tab_info']['tabs'],'tabs'); ?>
+        <ul id="tabs">
+        %loop(tab_info/tabs,tab)%
+            <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%(#tab/text)%</span></a></li>
+        %end_loop%
+        </ul>
         <div class="post_tab_breaker"></div>
     %end_if%
 
@@ -31,13 +35,13 @@
 
 %if_not_empty(menu_groups)%
 
-<div id="menu">
+<div id="menu" color="menu_color">
 
     %loop(menu_groups,group)%
       <div class="menu_group">
-        <p>%(#group/group_name)%</p>
+        <p class="dark_color"><!-- edit: group -->%(#group/group_name)%</p>
         <ul>%loop(#group/menu_items,mi)%
-          <li><a href="%(#mi/action)%" id="%var_check(#mi/id)%">%(#mi/menu_text)%</a></li>
+          <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%><span><!-- edit: menu -->%(#mi/menu_text)%</span></a></li>
         %end_loop% </ul>
       </div>
     %end_loop%
@@ -52,7 +56,7 @@
 
     %loop(custom_macros,flag)%
       %if_not_null(#flag)%
-        <div class="menu_group">        
+        <div class="menu_group dark_color">        
           %call_macro(#k_flag)%
         </div>
       %end_if%
@@ -67,7 +71,11 @@
 %call(print_bread_crumbs)%
 
 %if_not_empty(sub_nav_tabs)%
-    <? page_tab_helper($A['sub_nav_tabs']['tabs'],'sub_tabs'); ?>
+    <ul id="sub_tabs">
+    %loop(sub_nav_tabs/tabs,tab)%
+        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%(#tab/text)%</span></a></li>
+    %end_loop%
+    </ul>
     <div class="post_sub_tab_breaker"></div>
 %end_if%
 
@@ -83,7 +91,7 @@
 
 <div class="post_content_breaker"></div>
 
-<div id="footer">
+<div id="footer" class="footer_bg footer_color">
   <div id="license">%(site-license)%</div>
   %(footer)%
 </div><!-- footer -->
@@ -95,10 +103,28 @@
 <script> 
     new modalHook( [ 'search_site_link', 'mi_login', 'mi_register']);  
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
+%if(is_admin)%
+    function str_chaser(e)
+    {
+        if( ['SPAN', 'H1', 'H2', 'H3', 'DIV', 'P', 'TD'].include(e.target.tagName) )
+        {
+            var child = e.target.firstChild;
+            if( child && (child.nodeType == 8) )
+            {
+                alert(child.nodeValue);
+            }
+            Event(e).stop();
+            return false;
+        }
+        return true;
+    }
+    Event.observe(window,'dblclick',str_chaser);
+%end_if%
+
 </script>
 
-%if_not_empty(end_script_links)%
-    <? page_script_link_helper($A['end_script_links'],$T); ?>
-%end_if%
+%loop(end_script_links,script_link)%
+    <script type="text/javascript" src="%url(#script_link)%" ></script>
+%end_loop%
 
 </body>

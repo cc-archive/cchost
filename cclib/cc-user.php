@@ -54,21 +54,31 @@ class CCUser
 
     function IsAdmin($name='')
     {
-        if( !CCUtil::IsHTTP() )
-            return true;
+        static $checked;
 
-        if( CCUser::IsSuper($name) )
-            return true;
+        if( isset($checked) )
+        {
+            return $checked;
+        }
+        else
+        {
+            if( !CCUtil::IsHTTP() || CCUser::IsSuper($name) )
+            {
+                $checked = true;
+                return true;
+            }
 
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        $_admins = $settings['admins'];
+            $configs =& CCConfigs::GetTable();
+            $settings = $configs->GetConfig('settings');
+            $_admins = $settings['admins'];
 
-        if( empty($name) )
-            $name = CCUser::CurrentUserName();
-        $ok = !empty($name) && (preg_match( "/(^|\W|,)$name(\W|,|$)/i",$_admins) > 0);
+            if( empty($name) )
+                $name = CCUser::CurrentUserName();
 
-        return $ok;
+            $checked = !empty($name) && (preg_match( "/(^|\W|,)$name(\W|,|$)/i",$_admins) > 0);
+
+            return $checked;
+        }
     }
 
     function CurrentUser()
@@ -318,8 +328,8 @@ class CCUsers extends CCTable
         }
 
         // todo: collapse these into the db
-        $user_fields = array( _('Home Page') => 'user_homepage_html',
-                              _('About Me')  => 'user_description' );
+        $user_fields = array( 'str_user_home_page' => 'user_homepage_html',
+                              'str_user_about_me'  => 'user_description' );
 
         $row['user_fields'] = array();
         foreach( $user_fields as $name => $uf  )
@@ -384,11 +394,11 @@ END;
             }
 
             CCTag::ExpandOnRow($row,'user_whatilike',ccl('search/people', 'whatilike'), 'user_tag_links',
-                                    _('What I Like'));
+                                    'str_prof_what_i_like');
             CCTag::ExpandOnRow($row,'user_whatido',  ccl('search/people', 'whatido'),'user_tag_links', 
-                                    _('What I Pound On'));
+                                    'str_prof_what_i_pound_on');
             CCTag::ExpandOnRow($row,'user_lookinfor',ccl('search/people', 'lookinfor'),'user_tag_links',
-                                    _('What I Look For'), true);
+                                    'str_prof_what_im_looking_for', true);
 
             CCEvents::Invoke( CC_EVENT_USER_ROW, array( &$row ) );
         }

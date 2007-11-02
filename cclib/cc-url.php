@@ -35,9 +35,11 @@ function ccl()
     global $CC_GLOBALS;
     global $CC_CFG_ROOT;
 
+    $vroot = $CC_CFG_ROOT == CC_GLOBAL_SCOPE ? '' : $CC_CFG_ROOT . '/';
+
     $arg = $CC_GLOBALS['pretty-urls'] ? '' : '/?ccm=';
     $args = func_get_args();
-    $cmdurl = "/$CC_CFG_ROOT/" . implode('/',$args);
+    $cmdurl = "/$vroot" . implode('/',$args);
     return( cc_get_root_url() . $arg . $cmdurl );
 }
 

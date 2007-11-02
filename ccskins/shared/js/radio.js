@@ -55,15 +55,15 @@ function showCount(obj)
 }
 
 var prevChannel = $('tags00');
-Element.classNames(prevChannel).add('cbutton_selected');
+Element.classNames(prevChannel).add('med_bg');
 
 $$('.cbutton').each( function(e) {
       Event.observe(e,'click', function (e)
             {
                 if( prevChannel )
-                    Element.classNames(prevChannel).remove('cbutton_selected');
+                    Element.classNames(prevChannel).remove('med_bg');
                 prevChannel = Event.element(e);
-                Element.classNames(prevChannel).add('cbutton_selected');
+                Element.classNames(prevChannel).add('med_bg');
                 updateLink();
             }, false )
 });

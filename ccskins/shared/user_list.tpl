@@ -2,7 +2,7 @@
 
 <h1>%string(people)%</h1>
 
-<div id="user_index">
+<div id="user_index" class="light_bg dark_border">
     %loop(user_index,ui)%
     <a href="%(#ui/url)%" title="%(#ui/text)%">%(#ui/text)%</a> 
     %end_loop%

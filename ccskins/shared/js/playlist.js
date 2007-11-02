@@ -38,7 +38,7 @@ var ccThinking = {
         {
             this.div = document.createElement('div');
             this.div.style.display = 'none';
-            this.div.className = 'cc_playlist_thinking';
+            this.div.className = 'cc_playlist_thinking light_bg dark_border';
             this.div.innerHTML = str_thinking;
             document.body.appendChild(this.div);
         }
@@ -144,7 +144,7 @@ ccPlaylistMenu.prototype = {
     },
 
     _create_controls: function( link, pid, id ) {
-        var html = '<div id="' + pid + '" style="display:block;opacity:0.7;" class="cc_playlist_popup">'+str_thinking+'</div>';
+        var html = '<div id="' + pid + '" style="display:block;opacity:0.7;" class="cc_playlist_popup light_bg dark_border">'+str_thinking+'</div>';
         new Insertion.After( link, html );
         var pp = $(pid);
         Position.clone( link, pid, {  setWidth:   false,
@@ -521,7 +521,8 @@ var ccPlaylistBrowserObject = {
                     element.style.display = 'block';
                     this.openRec = detailId;
                     // reset sel line because of painting probs
-                    Element.removeClassName( this.openRec, 'cc_playlist_sel' );
+                    Element.removeClassName( this.openRec, 'selected' ); // 'cc_playlist_sel' );
+                    //Element.addClassName( this.openRec, 'dark_bg' ); // 'cc_playlist_sel' );
                 }
             
                 this.openingRec = false;
@@ -617,8 +618,10 @@ var ccPlaylistBrowserObject = {
         if( Element.hasClassName( e, 'cc_playlist_line' ) )
         {
             if( this.selected )
-                Element.removeClassName(this.selected, 'cc_playlist_sel' );
-            Element.addClassName( e, 'cc_playlist_sel' );
+            {
+                Element.removeClassName(this.selected, 'sel_line'); // 'cc_playlist_sel' );
+            }
+            Element.addClassName( e, 'sel_line'); // 'cc_playlist_sel' );
             this.selected = e;
         }
     },

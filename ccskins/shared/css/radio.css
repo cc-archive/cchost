@@ -80,9 +80,9 @@ $Id$
    cursor: pointer;
 }
 
-.cbutton_selected {
-  background-color: #EEF;
-  color: #006;
+.cbutton_selected { /* colorize */
+ /* background-color: #EEF;
+  color: #006; */
 }
 
 .cvalue {

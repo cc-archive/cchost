@@ -37,5 +37,6 @@ $A['script_links'][] = url_args(ccl('docs/strings_js.php'),'ajax=1');
 $A['script_links'][] = 'js/modalbox/modalbox.js';
 $A['script_links'][] = 'js/cchost.js';
 $A['style_sheets'][] = 'js/modalbox/modalbox.css';
+$A['style_sheets'][] = url_args(ccl('docs/colors.php'),'ajax=1');
 
 ?>

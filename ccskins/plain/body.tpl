@@ -25,7 +25,11 @@
 </div><!-- banner -->
 
 %if_not_empty(tab_info)%
-    <? page_tab_helper($A['tab_info']['tabs'],'tabs'); ?>
+    <ul id="tabs">
+    %loop(tab_info/tabs,tab)%
+        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%(#tab/text)%</span></a></li>
+    %end_loop%
+    </ul>
     <div class="post_tab_breaker"></div>
 %end_if%
 
@@ -38,7 +42,7 @@
       <div class="menu_group">
         <p>%(#group/group_name)%</p>
         <ul>%loop(#group/menu_items,mi)%
-          <li><a href="%(#mi/action)%" id="%var_check(#mi/id)%">%(#mi/menu_text)%</a></li>
+          <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%>%(#mi/menu_text)%</a></li>
         %end_loop% </ul>
       </div>
     %end_loop%
@@ -68,7 +72,11 @@
 %call(print_bread_crumbs)%
 
 %if_not_empty(sub_nav_tabs)%
-    <? page_tab_helper($A['sub_nav_tabs']['tabs'],'sub_tabs'); ?>
+    <ul id="sub_tabs">
+    %loop(sub_nav_tabs/tabs,tab)%
+        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%(#tab/text)%</span></a></li>
+    %end_loop%
+    </ul>
     <div class="post_sub_tab_breaker"></div>
 %end_if%
 
@@ -98,8 +106,10 @@
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
 </script>
 
-%if_not_empty(end_script_links)%
-    <? page_script_link_helper($A['end_script_links'],$T); ?>
-%end_if%
+        print "\n";
+
+%loop(end_script_links,script_link)%
+    <script type="text/javascript" src="%url(#script_link)%" ></script>
+%end_loop%
 
 </body>

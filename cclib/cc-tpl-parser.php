@@ -40,12 +40,22 @@ function cc_tpl_parse_var($prefix,$var,$postfix)
     return $prefix . $v . '[\'' . join( "']['", $parts ) . '\']' . $postfix;
 }
 
-function cc_tpl_parse_var_check($prefix,$var,$postfix)
+function cc_tpl_parse_t($var)
 {
-    $prefix = _cc_tpl_flip_prefix($prefix);
-    $varname = cc_tpl_parse_var('',$var,'');
-
-    return "$prefix empty($varname) ? '' : $varname $postfix";
+    $parts = explode('/',$var);
+    if( $parts[0]{0} == '#' )
+    {
+        $var = '$' . substr($parts[0],1);
+        array_shift($parts);
+        if( !empty($parts) )
+            $var_name = $var . '[\'' . join( "']['", $parts ) . '\']';
+    }
+    else
+    {
+        $var_name = "'$var'";
+    }
+    
+    return "<?= \$T->String($var_name); ?>";
 }
 
 function cc_tpl_parse_loop($arr, $item)
@@ -101,6 +111,18 @@ function cc_tpl_parse_chop($prefix,$varname,$amt)
     return "$prefix CC_strchop($var,$amt,true); ?>";
 }
 
+function cc_tpl_parse_if_attr($varname,$attr)
+{
+    $var = cc_tpl_parse_var('',$varname,'');
+    return "<?= empty($var) ? '' : \"$attr=\\\"\" . $var . '\"'; ?>";
+}
+
+function cc_tpl_parse_if_class($varname,$class)
+{
+    $var = cc_tpl_parse_var('',$varname,'');
+    return "<?= empty($var) ? '' : \"class=\\\"$class\\\"\"; ?>";
+}
+
 function cc_tpl_parse_date($prefix,$varname,$fmt)
 {
     $prefix = _cc_tpl_flip_prefix($prefix);
@@ -117,6 +139,7 @@ function cc_tpl_parse_inspect($varname)
 function cc_tpl_parse_url($prefix,$varname)
 {
     $prefix = _cc_tpl_flip_prefix($prefix);
+
     if( $varname{0} == '#' )
         $v = '$' . substr($varname,1);
     elseif( $varname{0} == "'" )
@@ -141,7 +164,10 @@ function cc_tpl_parse_text($text,$bfunc)
     $aoq = "'?([^\)']+)'?"; // arg, optional quotes
 
     if( !isset($ttable) )
-      $ttable = array(
+    {
+        $str_format = (!class_exists( 'CCUser' ) || CCUser::IsAdmin()) ? "<?= \$T->String('str_$2') ?>" : "<?= \$GLOBALS['str_$2'] ?>";
+
+       $ttable = array(
         
         '/((?:\s|^)+%%[^%]+%%)/' => '',         // trim out comments
 
@@ -154,7 +180,6 @@ function cc_tpl_parse_text($text,$bfunc)
         '/%!/'           => '<?= ',
         '/%([a-z\(])/'   => '<? $1',
 
-        "/(<\?=?) var_check{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_var_check('$1 ','$2', ' ?>');",
         "/<\? loop{$op}{$ac}{$a}{$cp}%/e"                 =>   "cc_tpl_parse_loop('$1','$2');",
 
         "/(<\?=?) call(?:_macro)?{$op}{$a}{$cp}%/e"       =>   "cc_tpl_parse_call_macro('$1 ','$2');",
@@ -165,6 +190,9 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? inspect{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_inspect('$1');",
         "/<\? if_(not_)last{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_last('$1','$2');",  
         "/(<\?=?) url{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_url('$1','$2');",
+        "/<\?=? if_attr{$op}{$ac}{$a}{$cp}%/e"            =>   "cc_tpl_parse_if_attr('$1','$2');",
+        "/<\?=? if_class{$op}{$ac}{$a}{$cp}%/e"            =>  "cc_tpl_parse_if_class('$1','$2');",
+        "/<\? text{$op}{$a}{$cp}%/e"                      =>   "cc_tpl_parse_t('$1');", 
 
         "/<\? else%/"               =>   "<? } else { ?>",
         "/<\? end_(?:macro|if)%/"   =>   "<?\n } ?>",
@@ -177,16 +205,14 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
         "/(<\?=?) key{$op}{$a}{$cp}%/"                    =>   "$1 \$k_$1 ?>",
         "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
-        "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   "<?= \$GLOBALS['str_$2'] ?>",
-        "/<\? text{$op}{$a}{$cp}%/"                       =>   "<?= \$T->String('$1'); ?>", 
+        "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   $str_format,
         "/<\? return%/"                                   =>   "<? return; ?>",
         "/<\? inherit{$op}{$ac}{$aoq}{$cp}%/"             =>   "<? \$T->Inherit('$1','$2'); ?>",
         "/<\? call_parent%/"                              =>   "<? \$T->CallParent(); ?>",
         "/<\? settings{$op}{$ac}{$a}{$cp}%/"              =>   "<? \$A['$2'] = CC_get_config('$1'); ?>",
         "/<\? un(?:define|map){$op}{$a}{$cp}%/"           =>   "<? unset(\$A['$1']); ?>",
-/*
-*/
         );
+    }
 
     $ttable["/<\? macro\(([^\)]+)\)%/"] = "<? \nfunction $bfunc$1(\$T,&\$A) { ?>"; 
 

@@ -31,9 +31,9 @@ var q        = '%(q)%';
     <link rel="stylesheet" type="text/css" href="%url(#css)%" title="Default Style" />
 %end_loop%
 
-%if_not_empty(script_links)%
-    <? page_script_link_helper($A['script_links'],$T); ?>
-%end_if%
+%loop(script_links,script_link)%
+    <script type="text/javascript" src="%url(#script_link)%" ></script>
+%end_loop%
 
 %loop(script_blocks,script_block)%
     %call(#script_block)%

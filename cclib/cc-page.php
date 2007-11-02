@@ -104,11 +104,13 @@ class CCPageAdmin
     {
         require_once('cclib/cc-template.inc');
 
+        $skins = CCTemplateAdmin::GetSkins();
+
         if( $scope != CC_GLOBAL_SCOPE )
         {
             $fields['homepage'] =
                 array(  'label'      => _('Homepage'),
-                        'form_tip'   => sprintf(_('example: contest/mycontest %s or files: viewfile/home.xml'), '<br />'),
+                        'form_tip'   => sprintf(_('example: viewfile/home'), '<br />'),
                        'value'       => '',
                        'formatter'   => 'textedit',
                        'flags'       => CCFF_POPULATE);
@@ -117,7 +119,13 @@ class CCPageAdmin
                 array( 'label'       => _('Skin'),
                        'form_tip'    => _('Default skin for this view'),
                        'formatter'   => 'select',
-                       'options'     => CCTemplateAdmin::GetSkins(),
+                       'options'     => $skins,
+                       'flags'       => CCFF_POPULATE );
+            $fields['skin_properties'] =
+                array( 'label'       => ' ',
+                       'formatter'   => 'metalmacro',
+                       'skins'       => $skins,
+                       'macro'       => 'skin_form_field.php',
                        'flags'       => CCFF_POPULATE );
             $fields['max-listing'] =
                 array( 'label'       => _('Max Items Per Page'),
@@ -127,13 +135,15 @@ class CCPageAdmin
                        'flags'       => CCFF_POPULATE | CCFF_REQUIRED);
             $fields['default-feed-tags'] =
                 array( 'label'       => _('Default Feed Tags'),
-                       'form_tip'    => _('Comma separated list of tags to use when no other feed is specificed (e.g. audio,remix).') . ' ' . _('Leave blank for no default feed.'),
+                       'form_tip'    => _('Comma separated list of tags to use when no other feed is specificed (e.g. audio,remix).') . ' ' 
+                                        . _('Leave blank for no default feed.'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE);
         }
 
     }
 }
+
 
 /**
 * Page template for the entire site

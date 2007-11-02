@@ -108,7 +108,7 @@ function cc_stats_on_user_row(&$row)
     }
 
 
-    $row['user_fields'][] = array( 'label' => _('Stats'),
+    $row['user_fields'][] = array( 'label' => 'str_stats',
                                    'value' => $text,
                                    'id'    => 'user_num_remixes' );
 }

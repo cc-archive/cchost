@@ -122,7 +122,7 @@ class CCReviewsHV
             $text  .= sprintf($fmt, $link, $count, $link_close);
         }
 
-        $record['user_fields'][] = array( 'label'   => _('Reviews'), 
+        $record['user_fields'][] = array( 'label'   => 'str_stats', 
                                           'value'   => $text,
                                           'id'      => 'user_review_stats' );
 

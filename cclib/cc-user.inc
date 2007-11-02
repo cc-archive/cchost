@@ -202,40 +202,40 @@ class CCUserProfileForm extends CCUploadForm
 
         $fields = array( 
                     'user_real_name' =>
-                        array( 'label_str'      => 'str_prof_full_name',
-                               'form_tip_str'   => 'str_prof_your_display',
+                        array( 'label'      => 'str_prof_full_name',
+                               'form_tip'   => 'str_prof_your_display',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_password' =>
-                       array(  'label_str'  => 'str_login_password',
+                       array(  'label'  => 'str_login_password',
                                'formatter'  => 'password',
-                               'form_tip_str'   => 'str_prof_leave_this_blank',
+                               'form_tip'   => 'str_prof_leave_this_blank',
                                'flags'      => CCFF_SKIPIFNULL ),
 
                     'user_email' =>
-                       array(  'label_str'      => 'str_e_mail',
-                               'form_tip_str'   => 'str_login_this_address_will',
+                       array(  'label'      => 'str_e_mail',
+                               'form_tip'   => 'str_login_this_address_will',
                                'formatter'  => 'email',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
 
                     'user_image' =>
-                       array(  'label_str'      => 'str_prof_image',
+                       array(  'label'      => 'str_prof_image',
                                'formatter'  => 'avatar',
-                               'form_tip_str'   => 'str_prof_image_file',
+                               'form_tip'   => 'str_prof_image_file',
                                'upload_dir' => $avatar_dir,
                                'maxwidth'   => 93,
                                'maxheight'  => 94,
                                'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL  ),
 
                     'user_description' =>
-                        array( 'label_str'      => 'str_prof_about_you',
+                        array( 'label'      => 'str_prof_about_you',
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_homepage' =>
-                       array(  'label_str'      => 'str_prof_home_page_url',
-                               'form_tip_str'   => 'str_prof_make_sure_it',
+                       array(  'label'      => 'str_prof_home_page_url',
+                               'form_tip'   => 'str_prof_make_sure_it',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
             );
@@ -244,7 +244,7 @@ class CCUserProfileForm extends CCUploadForm
         {
             $fields += array( 
                     'user_language' => 
-                        array(  'label_str'      => 'str_lang_default',
+                        array(  'label'      => 'str_lang_default',
                             'formatter'  => 'select',
                             'options'    => $CC_GLOBALS['language']->GetPossibleLanguages(), 
                             'flags'      => CCFF_POPULATE ),
@@ -253,20 +253,20 @@ class CCUserProfileForm extends CCUploadForm
 
         $fields += array( 
                     'user_whatido' =>
-                        array( 'label_str'      => 'str_prof_what_i_pound_on',
-                               'form_tip_str'   => 'str_prof_vinyl_guitar',
+                        array( 'label'      => 'str_prof_what_i_pound_on',
+                               'form_tip'   => 'str_prof_vinyl_guitar',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_whatilike' =>
-                        array( 'label_str'      => 'str_prof_what_i_like',
-                               'form_tip_str'   => 'str_prof_django_old_skool',
+                        array( 'label'      => 'str_prof_what_i_like',
+                               'form_tip'   => 'str_prof_django_old_skool',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 
                     'user_lookinfor' =>
-                        array( 'label_str'      => 'str_prof_what_im_looking_for',
-                               'form_tip_str'   => 'str_prof_list_attributes',
+                        array( 'label'      => 'str_prof_what_im_looking_for',
+                               'form_tip'   => 'str_prof_list_attributes',
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
 

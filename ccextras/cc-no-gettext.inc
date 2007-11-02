@@ -28,7 +28,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCDebug::Log("Function gettext doesn't exist, using '" . basename(__FILE__) . '"');
+//CCDebug::Log("Function gettext doesn't exist, using '" . basename(__FILE__) . '"');
 
 /*
 * Someday this should work

@@ -103,9 +103,9 @@ class CCCollab
                     $options[ $collab['collab_id'] ] = $collab['collab_name'];
 
                 $F['collab'] = 
-                    array( 'label_str' => 'str_collaboration',
+                    array( 'label' => 'str_collaboration',
                            'formatter' => 'select',
-                           'form_tip_str'  => 'str_collab_assign_this_file',
+                           'form_tip'  => 'str_collab_assign_this_file',
                            'options'   => $options,
                            'value'     => 0, // todo: 
                            'flags'     => CCFF_NOUPDATE,

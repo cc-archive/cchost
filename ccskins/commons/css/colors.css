@@ -1,0 +1,33 @@
+<? 
+if( !defined('IN_CC_HOST') )
+	die('Welcome to ccHost');
+
+if( empty($scheme) || !in_array($scheme,array_map('basename',glob('ccskins/commons/images/*',GLOB_ONLYDIR))))
+	return;
+
+$url = $A['root-url'] . 'ccskins/commons/images/';
+
+?>
+
+.banner_bg {
+	background: url('<?= $url ?><?= $scheme ?>/header-main-b.png') bottom left repeat-x;
+}
+
+#tabs {
+	background: url('<?= $url ?>tabbar-bg.png') top left repeat-x;
+}
+
+#banner a { color: white; }
+
+ul#tabs li, ul#sub_tabs li { background: url("<?= $url ?>tab-bg.png") repeat-x bottom left #f0f4f1; }
+ul#tabs li.selected_tab, ul#sub_tabs li.selected_tab  { }
+
+ul#tabs a, ul#sub_tabs a  { color: #333; background: url("<?= $url ?><?= $scheme ?>/tab-body-dark.png") no-repeat top right ; }
+ul#tabs a span, ul#sub_tabs a span { background: url("<?= $url ?><?= $scheme ?>/tab-left-dark.png") no-repeat top left; }
+
+ul#tabs a:hover, ul#sub_tabs a:hover  { color: #333;  background: url("<?= $url ?><?= $scheme ?>/tab-body-lit.png") no-repeat top right #fff; }
+ul#tabs a:hover span, ul#sub_tabs a:hover span  { background: url("<?= $url ?><?= $scheme ?>/tab-left-lit.png") no-repeat top left; }
+
+ul#tabs li.selected_tab a, ul#sub_tabs li.selected_tab a  { background: url("<?= $url ?><?= $scheme ?>/tab-body-lit.png") no-repeat top right #fff; }
+ul#tabs li.selected_tab a span, ul#sub_tabs li.selected_tab a span  { background: url("<?= $url ?><?= $scheme ?>/tab-left-lit.png") no-repeat top left; }
+

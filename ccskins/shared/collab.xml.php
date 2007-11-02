@@ -1,308 +1,291 @@
 <?
 
-
 //------------------------------------- 
-function _t_collab_show_collabs($T,&$A) {
-   
-    $collabcss = ccd($T->Search( 'css/collab.css' ));
-    $playlistcss = ccd($T->Search( 'css/playlist.css' ));
-    $bg  = ccd($T->Search( 'images/bg_fade.gif' )); 
-    if( !empty($bg) )
-        print "<style>.collab_entry {background: url('{$bg}') top repeat-x;}</style>";
+function _t_collab_show_collabs($T,&$A) 
+{
 ?>
-<link  rel="stylesheet" type="text/css" href="<?= $collabcss ?>" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $playlistcss ?>" title="Default Style"></link>
-<table  style="width:95%">
+    <link  rel="stylesheet" type="text/css" href="<?= $T->URL( 'css/playlist.css' ) ?>" title="Default Style"></link>
+    <link  rel="stylesheet" type="text/css" href="<?= $T->URL( 'css/collab.css' ) ?>" title="Default Style"></link>
+    <table  style="width:95%">
 <?
-$A['rows'] = array_chunk($A['collabs']['collab_rows'], 2);
+    $A['rows'] = array_chunk($A['collabs']['collab_rows'], 2);
 
-$carr101 = $A['rows'];
-$cc101= count( $carr101);
-$ck101= array_keys( $carr101);
-for( $ci101= 0; $ci101< $cc101; ++$ci101)
-{ 
-   $A['col'] = $carr101[ $ck101[ $ci101 ] ];
-   
-?><tr >
+    $carr101 =& $A['rows'];
+    $cc101= count( $carr101);
+    $ck101= array_keys( $carr101);
+    for( $ci101= 0; $ci101< $cc101; ++$ci101)
+    { 
+       $A['col'] = $carr101[ $ck101[ $ci101 ] ];
+       
+        ?><tr ><?
+
+        $carr102 = $A['col'];
+        $cc102= count( $carr102);
+        $ck102= array_keys( $carr102);
+        for( $ci102= 0; $ci102< $cc102; ++$ci102)
+        { 
+           $R = $carr102[ $ck102[ $ci102 ] ];
+           
+?>
+    <td  style="vertical-align: top;width:50%;">
+    <div  class="collab_entry">
+    <span  class="collab_date"><?= CC_datefmt($R['collab_date'],'M d, Y');?></span>
+    <a  class="collab_name" href="<?= $A['home-url']?>collab/<?= $R['collab_id']?>"><?= CC_strchop($R['collab_name'],35);?></a>
+    <br  />
 <?
+        $carr103 = $R['users'];
+        $cc103= count( $carr103);
+        $ck103= array_keys( $carr103);
+        for( $ci103= 0; $ci103< $cc103; ++$ci103)
+        { 
+           $u = $carr103[ $ck103[ $ci103 ] ];
+           ?><a  href="<?= $A['home-url']?>people/<?= $u['user_name']?>"><?= $u['user_real_name']?></a><?
+            if ( !($ci103 == ($cc103-1)) ) { ?>, <? }
+        }
 
-$carr102 = $A['col'];
-$cc102= count( $carr102);
-$ck102= array_keys( $carr102);
-for( $ci102= 0; $ci102< $cc102; ++$ci102)
-{ 
-   $A['row'] = $carr102[ $ck102[ $ci102 ] ];
-   
-?><td  style="vertical-align: top;width:50%;">
-<div  class="collab_entry">
-<span  class="collab_date"><?= CC_datefmt($A['row']['collab_date'],'M d, Y');?></span>
-<a  class="collab_name" href="<?= $A['home-url']?>collab/<?= $A['row']['collab_id']?>"><?= CC_strchop($A['row']['collab_name'],35);?></a>
-<br  />
-<?
+        if( !empty($R['uploads']) ) 
+        {
+            $carr104 = $R['uploads'];
+            $cc104= count( $carr104);
+            $ck104= array_keys( $carr104);
+            for( $ci104= 0; $ci104< $cc104; ++$ci104)
+            { 
+                $ai = $carr104[ $ck104[ $ci104 ] ];
+                if( !empty($ai['fplay_url']) )
+                {
+                    ?><div class="tdc cc_playlist_pcontainer"><a class="cc_player_button cc_player_hear" id="_ep_1_<?= $ai['upload_id']?>" 
+                            href="<?= $ai['fplay_url']?>"> </a></div><?
+                }
+            }
+        }
 
-$carr103 = $A['row']['users'];
-$cc103= count( $carr103);
-$ck103= array_keys( $carr103);
-for( $ci103= 0; $ci103< $cc103; ++$ci103)
-{ 
-   $A['u'] = $carr103[ $ck103[ $ci103 ] ];
-   
-?><a  href="<?= $A['home-url']?>people/<?= $A['u']['user_name']?>"><?= $A['u']['user_real_name']?></a><?
+        ?><br  style="clear:both" /></div></td><?
+        } // END: for loop
 
-if ( !($ci103 == ($cc103-1)) ) {
+        ?></tr><?
+    } // END: for loop
 
-?>, <?
-} // END: if
-} // END: for loop
+    ?></table><?
 
-if ( !empty($A['row']['uploads'])) {
+    $T->Call('prev_next_links');
+    $T->Call('playerembed.xml/eplayer');
 
-$carr104 = $A['row']['uploads'];
-$cc104= count( $carr104);
-$ck104= array_keys( $carr104);
-for( $ci104= 0; $ci104< $cc104; ++$ci104)
-{ 
-   $A['item'] = $carr104[ $ck104[ $ci104 ] ];
-   
-if ( !empty($A['item']['fplay_url'])) {
-
-?><div  class="tdc cc_playlist_pcontainer"><a  class="cc_player_button cc_player_hear" id="_ep_1_<?= $A['item']['upload_id']?>" href="<?= $A['item']['fplay_url']?>">
-</a>
-</div><?
-} // END: if
-} // END: for loop
-} // END: if
-
-?><br  style="clear:both" />
-</div>
-</td><?
-} // END: for loop
-
-?></tr><?
-} // END: for loop
-
-?></table>
-<?
-//_template_call_template($A['prev_next_links']);
-//_template_call_template('playerembed.xml/eplayer');
 } // END: function show_collabs
 
 
 //------------------------------------- 
-function _t_collab_show_collab($T,&$A) {
-   
+function _t_collab_show_collab($T,&$A) 
+{
+    ?><div id="collab_ajax_msg"></div><?
 
-?><div  id="collab_ajax_msg"></div>
+    $collab = $A['collab'];
+    $C = $collab['collab'];
+
+    $collab_id = $C['collab_id'];
+
+    ?>
+    <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/collab.css') ?>" title="Default Style"></link>
+    <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/topics.css') ?>" title="Default Style"></link>
+    <fieldset >
+    <legend class="dark_bg light_color"><?= $GLOBALS['str_info']?></legend>
+    <?
+
+    if ( !empty($collab['is_owner'])) {
+
+    ?><div  style="float:right">
+    <a  id="commentcommand" href="<?= $A['home-url']?>collab/edit/<?= $collab_id?>"><span ><?=$GLOBALS['str_collab_edit']?></span></a>
+    </div><?
+    } // END: if
+
+    ?><div  class="cc_collab_by"><?=$GLOBALS['str_collab_created_by']?>: <a  href="<?= $A['home-url']?>people/<?= $C['user_name']?>"><?= $C['user_real_name']?></a> 
+              <?= $C['collab_date']?></div>
+    <div  class="cc_collab_desc light_bg dark_border"><?= $C['collab_desc']?></div>
+    </fieldset>
+    <div  class="cc_collab_fields">
+    <fieldset >
+    <legend class="dark_bg light_color" ><?= $GLOBALS['str_artists'] ?></legend>
+    <div  class="user_lines">
+    <div  id="user_inserter"></div>
+    </div>
+    <div  id="invite_container">
+    </div>
+    </fieldset>
+    <fieldset >
+    <legend class="dark_bg light_color" ><?= $GLOBALS['str_files'] ?> </legend>
+    <div  class="file_list" id="file_list">
+    </div>
+    <?
+
+    if ( !empty($collab['is_member']))
+    {
+        ?><iframe  style="display:none;" name="upload_frame"></iframe>
+        <form  target="upload_frame" 
+                enctype="multipart/form-data" 
+                action="<?= $A['home-url']?>collab/upload/file/<?= $collab_id?>" 
+                method="post" id="upform" name="upform"><?=$GLOBALS['str_collab_upload_file']?>: <select  name="uptype" id="uptype">
 <?
-$A['collab_id'] = $A['collab']['collab']['collab_id'];
+                $forms = cc_get_config('submit_forms');
+                foreach($forms as $form)
+                {
+                    if( !$form['enabled'] ) 
+                        continue;
+                    $tags = join(',',$form['tags']);
+                    $name = substr($form['submit_type'],0,10);
+                    print "<option value=\"{$tags}\">{$name}</option>\n";
+                }
+?>
+                </select>
+        <input type="file" id="upfile" name="upfile"></input> <?=$GLOBALS['str_collab_name']?>: <input  name="upname" id="upname" type="text"></input><select  name="lic" id="lic">
+        <?
+            foreach( $collab['lics'] as $lic )
+            { ?><option  value="<?= $lic['license_id']?>"><?= $lic['license_name']?></option><? }
 
-?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/collab.css') ?>" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/topics.css') ?>" title="Default Style"></link>
-<fieldset >
-<legend ><?= $GLOBALS['str_info']?></legend>
+        ?></select>
+        <button  id="fileok"><?=$GLOBALS['str_collab_ok']?></button>
+        </form>
+        <div  id="upcover" style="position:absolute;display:none;" class="light_bg"> 
+        <img  style="margin-left:45%" src="<?= $T->URL('images/spinner.gif') ?>" /></div>
+        <?
+    } // END: if member
+
+    ?></fieldset><?
+
+    if ( !empty($collab['is_member'])) 
+    {
+        ?><fieldset>
+        <legend class="dark_bg light_color" ><?= $GLOBALS['str_conversation'] ?></legend>
+        <p ><?=$GLOBALS['str_collab_this_conv']?>:</p>
+        <?
+        $A['topics'] = $collab['topics'];
+        //$T->Call('topics.xml/list_topics');
+
+        ?>
+        <div class="c_commands">
+            <a href="<?= $A['home-url']?>collab/topic/add/<?= $collab_id?>" id="commentcommand"><span ><?=$GLOBALS['str_collab_add_topic']?></span></a>
+        </div>
+        </fieldset><?
+    } // END: if member
+
+    ?></div>
+    <script  src="<?= $T->URL('js/autocomp.js'); ?>"></script>
+    <script  src="<?= $T->URL('js/collab.js'); ?>"></script>
+    <script >
+        var str_credit = '<?=$GLOBALS['str_collab_credit2']?>';
+        var str_remove = '<?=$GLOBALS['str_collab_remove2']?>';
+        var str_send_email = '<?=$GLOBALS['str_collab_send_email']?>';
+        var collab_template = '<' + 'div class="user_line light_bg med_color" id="_user_line_#{user_name}">' +
+                '<' + 'div class="user" ><' + 'a href="'+home_url+'people/#{user_name}">#{user_real_name}<' + '/a><' + '/div>' +
+                '<' + 'div class="role dark_color">#{role}<' + '/div>' +
+                '<' + 'div class="credit" id="_credit_#{user_name}">#{credit}<' + '/div>' +
 <?
-
-if ( !empty($A['collab']['is_owner'])) {
-
-?><div  style="float:right">
-<a  id="commentcommand" href="<?= $A['home-url']?>collab/edit/<?= $A['collab_id']?>"><span >edit</span></a>
-</div><?
-} // END: if
-
-?><div  class="cc_collab_by">Created by: <a  href="<?= $A['home-url']?>people/<?= $A['collab']['collab']['user_name']?>"><?= $A['collab']['collab']['user_real_name']?></a> 
-          <?= $A['collab']['collab']['collab_date']?></div>
-<div  class="cc_collab_desc"><?= $A['collab']['collab']['collab_desc']?></div>
-</fieldset>
-<div  class="cc_collab_fields">
-<fieldset >
-<legend ><?= $GLOBALS['str_artists'] ?></legend>
-<div  class="user_lines">
-<div  id="user_inserter"></div>
-</div>
-<div  id="invite_container">
-</div>
-</fieldset>
-<fieldset >
-<legend ><?= $GLOBALS['str_files'] ?> </legend>
-<div  class="file_list" id="file_list">
-</div>
+    if ( !empty($collab['is_owner'])) 
+    {
+?>
+         '<' + 'div><' + 'a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
+                  + 'span>' + str_credit +'<' + '/span><' + '/a><' + '/div>' +
+         '<' + 'div><' + 'a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
+                  + 'span>' + str_remove + '<' + '/span><' + '/a><' + '/div>' +
 <?
+    } // END: if
 
-if ( !empty($A['collab']['is_member'])) {
-
-?><iframe  style="display:none;" name="upload_frame"></iframe>
-<form  target="upload_frame" enctype="multipart/form-data" action="<?= $A['home-url']?>collab/upload/file/<?= $A['collab_id']?>" method="post" id="upform" name="upform">Upload file: <select  name="uptype" id="uptype">
-<option  value="remix">remix</option><option  value="sample">sample</option><option  value="acappella">a cappella</option></select>
-<input  type="file" id="upfile" name="upfile"></input> name: <input  name="upname" id="upname" type="text"></input><select  name="lic" id="lic">
-<?
-
-$carr105 = $A['collab']['lics'];
-$cc105= count( $carr105);
-$ck105= array_keys( $carr105);
-for( $ci105= 0; $ci105< $cc105; ++$ci105)
-{ 
-   $A['lic'] = $carr105[ $ck105[ $ci105 ] ];
-   
-?><option  value="<?= $A['lic']['license_id']?>"><?= $A['lic']['license_name']?></option><?
-} // END: for loop
-
-?></select>
-<button  id="fileok">ok</button>
-</form>
-<div  id="upcover" style="position:absolute;display:none;background-color:white;">
-<img  style="margin-left:45%" src="<?= $T->URL('images/spinner.gif') ?>" /></div>
-<?
-} // END: if
-
-?></fieldset>
-<?
-
-if ( !empty($A['collab']['is_member'])) {
-
-?><fieldset >
-<legend ><?= $GLOBALS['str_conversation'] ?></legend>
-<p >This conversation thread is private and only visible to members of the project:</p>
-<?
-$A['topics'] = $A['collab']['topics'];
-_template_call_template('topics.xml/list_topics');
-
-?><div  class="c_commands">
-<a  href="<?= $A['home-url']?>collab/topic/add/<?= $A['collab_id']?>" id="commentcommand"><span >Add Topic</span></a>
-</div>
-</fieldset><?
-} // END: if
-
-?></div>
-<script  src="<?= $T->URL('js/autocomp.js'); ?>"></script>
-<script  src="<?= $T->URL('js/collab.js'); ?>"></script>
-<script >
-    var collab_template = '<' + 'div class="user_line" id="_user_line_#{user_name}">' +
-            '<' + 'div class="user" ><' + 'a href="'+home_url+'people/#{user_name}">#{user_real_name}<' + '/a><' + '/div>' +
-            '<' + 'div class="role">#{role}<' + '/div>' +
-            '<' + 'div class="credit" id="_credit_#{user_name}">#{credit}<' + '/div>' +
-  <?
-
-if ( !empty($A['collab']['is_owner'])) {
+    if ( !empty($collab['is_member'])) 
+    {
+?>
+        '<' + 'div>' +
+        '    <' + 'a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><' + 'span>' + str_send_email
+             + '<' + '/span><' + '/a> ' +
+        '<' + '/div>' +
+<?  } // END: if
 
 ?>
-     '<' + 'div><' + 'a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
-              + 'span>credit<' + '/span><' + '/a><' + '/div>' +
-     '<' + 'div><' + 'a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
-              + 'span>remove<' + '/span><' + '/a><' + '/div>' +
-  <?
-} // END: if
+       '<' + '/div>';
+         var cu = new ccCollab('<?= $collab_id?>','<?= $collab['is_member']?>','<?= $collab['is_owner']?>');
+         cu.updateFiles('<?= $collab_id?>');
+<?
 
-if ( !empty($A['collab']['is_member'])) {
-
+    $carr106 = $collab['users'];
+    $cc106= count( $carr106);
+    $ck106= array_keys( $carr106);
+    for( $ci106= 0; $ci106< $cc106; ++$ci106)
+    { 
+       $_u = $carr106[ $ck106[ $ci106 ] ];
 ?>
-            '<' + 'div>' +
-            '    <' + 'a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><' + 'span>send email' 
-                 + '<' + '/span><' + '/a> ' +
-            '<' + '/div>' +
-  <?
-} // END: if
-
-?>
-           '<' + '/div>';
-     var cu = new ccCollab('<?= $A['collab_id']?>','<?= $A['collab']['is_member']?>','<?= $A['collab']['is_owner']?>');
-     cu.updateFiles('<?= $A['collab_id']?>');
-     <?
-
-$carr106 = $A['collab']['users'];
-$cc106= count( $carr106);
-$ck106= array_keys( $carr106);
-for( $ci106= 0; $ci106< $cc106; ++$ci106)
-{ 
-   $A['user'] = $carr106[ $ck106[ $ci106 ] ];
-   
-?>
-        cu.addUser( '<?= $A['user']['user_name']?>', '<?= $A['user']['user_real_name']?>', '<?= $A['user']['collab_user_role']?>', '<?= $A['user']['collab_user_credit']?>' );
-     <?
-} // END: for loop
-
+        cu.addUser( '<?= $_u['user_name']?>', '<?= $_u['user_real_name']?>', '<?= $_u['collab_user_role']?>', '<?= $_u['collab_user_credit']?>' );
+<?
+    } // END: for loop
 ?>
     function upload_done(upload_id,msg)
     {
       $('upcover').style.display = 'none';
       if( upload_id )
       {
-        cu.updateFiles('<?= $A['collab_id']?>');
-        cu.msg('Upload succeeded.','green');
+        cu.updateFiles('<?= $collab_id?>');
+        cu.msg('<?=$GLOBALS['str_collab_upload_succeeded']?>.','green');
       }
       else
       {
-        cu.msg('Upload failed: ' . msg,'red');
+        cu.msg('<?=$GLOBALS['str_collab_upload_failed']?>: ' . msg,'red');
       }
     }
-
-  </script>
-<?
+</script>
+    <?
 } // END: function show_collab
 
 
 //------------------------------------- 
-function _t_collab_show_collab_files($T,&$A) {
-   
+function _t_collab_show_collab_files($T,&$A)
+{
+    $carr107 =& $A['uploads'];
+    $cc107 = count($carr107);
+    $ck107 = array_keys($carr107);
+    for( $ci107= 0; $ci107< $cc107; ++$ci107)
+    { 
+        $up =& $carr107[ $ck107[ $ci107 ] ];
+       
+        $html =<<<EOF
+    <div class="file_line {$up['collab_type']}_line" id="_file_line_{$up['upload_id']}">
+    <div class="file_info"><a  class="fname" href="{$up['file_page_url']}">{$up['upload_name']}</a> {$GLOBALS['str_by']}
+                   <a  href="{$up['artist_page_url']}">{$up['user_real_name']}</a></div>
+EOF;
+        print $html;
 
-$carr107 = $A['uploads'];
-$cc107= count( $carr107);
-$ck107= array_keys( $carr107);
-for( $ci107= 0; $ci107< $cc107; ++$ci107)
-{ 
-   $A['upload'] = $carr107[ $ck107[ $ci107 ] ];
-   
-?><div  class="file_line <?= $A['upload']['collab_type']?>_line" id="_file_line_<?= $A['upload']['upload_id']?>">
-<div  class="file_info"><a  class="fname" href="<?= $A['upload']['file_page_url']?>"><?= $A['upload']['upload_name']?></a> by
-               <a  href="<?= $A['upload']['artist_page_url']?>"><?= $A['upload']['user_real_name']?></a></div>
-<?
+        if ( !empty($up['is_collab_owner'])) {
 
-if ( !empty($A['upload']['is_collab_owner'])) {
+    ?><div ><a  href="javascript://remove " id="_remove_<?= $up['upload_id']?>" class="file_cmd file_remove">
+    <span ><?=$GLOBALS['str_collab_remove2']?></span></a></div>
+    <div ><a  href="javascript://publish" id="_publish_<?= $up['upload_id']?>" class="file_cmd file_publish">
+    <span  id="_pubtext_<?= $up['upload_id']?>"><?=
 
-?><div ><a  href="javascript://remove " id="_remove_<?= $A['upload']['upload_id']?>" class="file_cmd file_remove"><span >remove</span></a></div>
-<div ><a  href="javascript://publish" id="_publish_<?= $A['upload']['upload_id']?>" class="file_cmd file_publish">
-<span  id="_pubtext_<?= $A['upload']['upload_id']?>"><?
+    empty($up['upload_published']) ? $GLOBALS['str_collab_publish'] : $GLOBALS['str_collab_hide'];
 
-if ( !empty($A['upload']['upload_published'])) {
+    ?></span></a>
+    </div>
+    <div ><a  href="javascript://tags" id="_tags_<?= $up['upload_id']?>" class="file_cmd file_tags"><?=$GLOBALS['str_collab_tags']?></a></div>
+    <?
+    } // END: if
 
-?>hide<?
-} // END: if
+    ?><div  class="ccud"><?= $up['collab_type']?></div>
+    <div  class="tags" id="_user_tags_<?= $up['upload_id']?>"><?= $up['upload_extra']['usertags']?></div>
+    <br  />
+    <table  class="file_dl_table">
+    <?
 
-if ( !($A['upload']['upload_published']) ) {
+    $carr108 =& $up['files'];
+    $cc108= count( $carr108);
+    $ck108= array_keys( $carr108);
+    for( $ci108= 0; $ci108< $cc108; ++$ci108)
+    { 
+       $f =& $carr108[ $ck108[ $ci108 ] ];
+       ?><tr ><td  class="nic"><?= $f['file_nicname']?></td>
+        <td ><a  href="<?= $f['download_url']?>" class="down_button"></a></td>
+        <td ><?= $f['file_name']?></td>
+        </tr><?
+    } // END: for loop
 
-?>publish<?
-} // END: if
-
-?></span></a>
-</div>
-<div ><a  href="javascript://tags" id="_tags_<?= $A['upload']['upload_id']?>" class="file_cmd file_tags">tags</a></div>
-<?
-} // END: if
-
-?><div  class="ccud"><?= $A['upload']['collab_type']?></div>
-<div  class="tags" id="_user_tags_<?= $A['upload']['upload_id']?>"><?= $A['upload']['upload_extra']['usertags']?></div>
-<br  />
-<table  class="file_dl_table">
-<?
-
-$carr108 = $A['upload']['files'];
-$cc108= count( $carr108);
-$ck108= array_keys( $carr108);
-for( $ci108= 0; $ci108< $cc108; ++$ci108)
-{ 
-   $A['file'] = $carr108[ $ck108[ $ci108 ] ];
-   
-?><tr ><td  class="nic"><?= $A['file']['file_nicname']?></td>
-<td ><a  href="<?= $A['file']['download_url']?>" class="down_button">
-</a></td>
-<td ><?= $A['file']['file_name']?></td>
-</tr>
-<?
-} // END: for loop
-
-?></table>
-</div>
-<?
-} // END: for loop
+    ?></table>
+    </div>
+    <?
+    } // END: for loop
 } // END: function show_collab_files
 
 ?>

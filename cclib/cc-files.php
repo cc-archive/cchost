@@ -84,8 +84,8 @@ class CCEditFileForm extends CCUploadMediaForm
 
 
         $fields['upload_man_files'] =
-                array( 'label_str'              => 'str_files_manage',
-                       'form_tip_str'           => 'str_files_update_the_list',
+                array( 'label'              => 'str_files_manage',
+                       'form_tip'           => 'str_files_update_the_list',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                     _('Manage Files') . "</a>",
                        'formatter'          => 'statictext',
@@ -95,8 +95,8 @@ class CCEditFileForm extends CCUploadMediaForm
         $url = ccl('file','remixes',$record['upload_id'] );
 
         $fields['upload_remixes'] =
-                array( 'label_str'              => 'str_files_manage_the_i',
-                       'form_tip_str'           => 'str_files_update_the_list',
+                array( 'label'              => 'str_files_manage_the_i',
+                       'form_tip'           => 'str_files_update_the_list',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                    _('Manage Remixes') . "</a>",
                        'formatter'          => 'statictext',
@@ -170,8 +170,8 @@ class CCFileAddForm extends CCUploadForm
         $fields = array();
         CCUpload::GetUploadField($fields);
         $fields['file_nicname'] = 
-                array( 'label_str'              => 'str_files_nickname',
-                       'form_tip_str'           => 'str_files_lofi_hires',
+                array( 'label'              => 'str_files_nickname',
+                       'form_tip'           => 'str_files_lofi_hires',
                        'formatter'          => 'textedit',
                        'flags'              => CCFF_POPULATE );
         $this->AddFormFields($fields);
@@ -208,8 +208,8 @@ class CCFileNicknameForm extends CCForm
     {
         $this->CCForm();
         $fields['file_nicname'] = 
-                array( 'label_str'              => 'str_files_nickname',
-                       'form_tip_str'           => 'str_files_lofi_hires',
+                array( 'label'              => 'str_files_nickname',
+                       'form_tip'           => 'str_files_lofi_hires',
                        'formatter'          => 'textedit',
                        'value'              => $oldnic,
                        'flags'              => CCFF_POPULATE );

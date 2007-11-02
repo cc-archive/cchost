@@ -47,7 +47,10 @@ function _t_upload_page_init($T,&$A)
     helper_upload_main_info($R,$A,$T);
     print '</div><!-- upload_middle -->';
 
-    print '<script> var dl_hook = new downloadHook(); dl_hook.hookLinks(); </script>';
+    print '<script> var dl_hook = new downloadHook(); dl_hook.hookLinks(); ';
+    if( !empty($R['upload_name_cls']) )
+        print "\n var h1e = \$\$('H1.title')[0]; h1e.innerHTML = '<span class=\"{$R['upload_name_cls']}\">' + h1e.innerHTML + '</span>';  ";
+    print '</script>';
 }
 
 /*----------------------------------

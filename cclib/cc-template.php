@@ -162,22 +162,47 @@ class CCSkin
         else
         {
             if( is_string($args) && !empty($this->vars[$args]) )
+            {
+                $var = $args;
                 $args = $this->vars[$args];
+            }
 
             if( is_array($args) )
             {
                 $fmt = array_shift($args);
                 if( !empty($this->vars[$fmt]) )
+                {
+                    $var = $fmt;
                     $fmt = $this->vars[$fmt];
-                $fmt = empty($GLOBALS[$fmt]) ? $fmt : $GLOBALS[$fmt];
+                }
+                if( !empty($GLOBALS[$fmt]) )
+                {
+                    $id = $fmt;
+                    $fmt =  $GLOBALS[$fmt];
+                }
                 if( is_array($args[0]) )
                     $args = $args[0];
                 $text = vsprintf($fmt,$args);
             }
             else
             {
-                $text = empty($GLOBALS[$args]) ? $args : $GLOBALS[$args];
+                if( empty($GLOBALS[$args]) )
+                {
+                    $text = $args;
+                }
+                else
+                {
+                    $id = $args;
+                    $text = $GLOBALS[$args];
+                }
             }
+        }
+
+        if( CCUser::IsAdmin() && (!empty($var) || !empty($id)) )
+        {
+            $var = empty($var) ? '' : "var: $var";
+            $id  = empty($id)  ? '' : "str: $id";
+            $text = "<!-- $id $var -->" . $text;
         }
 
         return $text;
@@ -207,7 +232,7 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        CCDebug::Log("TCall: $file");
+        //CCDebug::Log("TCall: $file");
 
         $funcname = '';
 
@@ -356,20 +381,22 @@ class CCSkin
     */
     function URL($partial)
     {
+        if( substr($partial,0,7) == 'http://' )
+            return $partial;
         return ccd( $this->Search($partial,false) );
     }
 
     /**
-    * Search 
+    * Search the template paths for a file
     *
+    * This method returns potentially different results depending on context.
     * 
     *
     * @param string $filename Partial filename to search for
-    * @param mixed  $value The value that will be substituted for the 'name'
-    * @param string $macroname The name of a specific macro to invoke during template generation
-    * @return array $guesses Array of guesses, pass this to Search
+    * @param bool $real_path Set to true to return full local path 
+    * @return string Path to requested file or bool(false)
     */
-    function Search($file, $real_path = false )
+    function Search($file, $real_path = false, $reject_if_match ='' )
     {
         if( empty($this) || ((strtolower(get_class($this)) != 'ccskin') && 
                                   !is_subclass_of($this,'CCSkin') ) )
@@ -383,7 +410,7 @@ class CCSkin
         {
             $dirs = $this->GetTemplatePath();
             //if( is_string($file) && strstr($file,'playlist.js') ) { $x[] = $file; $x[] = $dirs; CCDebug::PrintVar($x); }
-            $found = CCUtil::SearchPath( $file, $dirs, '', $real_path);
+            $found = CCUtil::SearchPath( $file, $dirs, '', $real_path, CC_SEARCH_RECURSE_DEFAULT, $reject_if_match);
             $this->search_cache[$sfile] = $found;
             return $found;
         }

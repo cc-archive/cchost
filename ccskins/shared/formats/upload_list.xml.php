@@ -129,6 +129,8 @@ function helper_list_info(&$R,&$A,$T)
     $about_url =  empty($R['local_menu']['download'][0]['action']) ? '' : "about=\"{$R['local_menu']['download'][0]['action']}\"";
     $date = CC_datefmt($R['upload_date'],'M d, Y h:i a');
     $licurl = $T->URL('images/lics/small-' . $R['license_logo']);
+    $extraclass = empty($R['upload_name_cls']) ? '' : ' ' . $R['upload_name_cls'];
+    $class = "class =\"upload_link{$extraclass}\"";
     $html =<<<EOF
     <div class="upload_avatar"><img src="{$R['user_avatar_url']}" /></div>
     <div class="upload_info">
@@ -137,7 +139,7 @@ function helper_list_info(&$R,&$A,$T)
                   rel="license"
                   title="{$R['license_name']}" >
                   <img src="{$licurl}" /></a> 
-        <a href="{$furl}" class="upload_link">{$name}</a><br /> {$GLOBALS['str_by']} <a href="{$aurl}">{$R['user_real_name']}</a>
+        <a href="{$furl}" {$class}>{$name}</a><br /> {$GLOBALS['str_by']} <a href="{$aurl}">{$R['user_real_name']}</a>
         <div class="upload_date">$date </div>
         <div class="taglinks">
             

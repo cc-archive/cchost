@@ -34,6 +34,9 @@ define('CC_RFC822_FORMAT', 'D, d M Y H:i:s '); // T');
 define('CC_RFC3339_FORMAT', 'Y-m-d\TH:i:s');
 /**#@-*/
 
+
+define('CC_SEARCH_RECURSE_DEFAULT', false);
+
 /**
 */
 function cc_default_file_perms()
@@ -214,7 +217,7 @@ class CCUtil
 
     function Send404($exit=true,$file='',$line='')
     {
-    //    header("HTTP/1.0 404 Not Found");
+        header("HTTP/1.0 404 Not Found");
         if( $exit )
         {
             if( $file )
@@ -413,15 +416,18 @@ class CCUtil
         return $dirs;
     }
 
-    function SearchPath($target,$look_here_first,$then_here,$real_path=true,$recurs=false)
+
+    function SearchPath($target,$look_here_first,$then_here,$real_path=true,$recurs=CC_SEARCH_RECURSE_DEFAULT,$reject='')
     {
         if( !is_array($target) )
             $target = array( $target );
 
+        $reject = empty($reject) ? false : str_replace('\\','/',realpath($reject));
+
         $files = array();
         foreach( $target as $T )
         {
-            if( file_exists($T) )
+            if( file_exists($T) && (!$reject || ($reject != str_replace('\\','/',realpath($T)))))
             {
                 if( $real_path )
                     return realpath($T);
@@ -439,11 +445,11 @@ class CCUtil
 
         $paths = array_merge($look_here_first, $then_here);
 
-        $hit = CCUtil::_inner_search($files,$paths,$real_path,$recurs);
+        $hit = CCUtil::_inner_search($files,$paths,$real_path,$recurs,$reject);
         return $hit;
     }
 
-    function _inner_search($files,$paths,$real_path,$recurs)
+    function _inner_search($files,$paths,$real_path,$recurs,$reject)
     {
         foreach( $paths as $P )
         {
@@ -452,7 +458,7 @@ class CCUtil
             foreach( $files as $T )
             {
                 $relpath = $dir . $T;
-                if( file_exists($relpath) )
+                if( file_exists($relpath) && (!$reject || ($reject != str_replace('\\','/',realpath($relpath)))))
                     return $real_path ? realpath($relpath) : $relpath;
             }
 
@@ -461,7 +467,7 @@ class CCUtil
                 $dirs = glob( $P . '/*', GLOB_MARK | GLOB_NOSORT | GLOB_ONLYDIR );
                 foreach( $dirs as $dir )
                 {
-                    $hit = CCUtil::_inner_search($files,array($dir),$real_path,true);
+                    $hit = CCUtil::_inner_search($files,array($dir),$real_path,true,$reject);
                     if( $hit )
                         return $hit;
                 }

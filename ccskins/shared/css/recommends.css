@@ -32,7 +32,7 @@
   width: 160px;
   border: 1px solid black;
   padding: 8px;
-  background-color: #DDD;
+  background-color: #DDD; /* colorize */
   overflow: hidden;
 }
 
@@ -51,7 +51,7 @@
 
 .featured_info {
   border: 1px solid black;
-  background-color: #DDF;
+  background-color: #DDF; /* colorize */
   padding: 7px;
   margin-bottom: 5px;
   overflow:hidden;

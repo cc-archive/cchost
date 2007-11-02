@@ -46,18 +46,18 @@ class CCFlagContentForm extends CCSecurityVerifierForm
 
         $fields = array( 
                     'mail_from' => array(
-                            'label_str'       => 'str_email_from',
+                            'label'       => 'str_email_from',
                             'formatter'   => 'textedit',
                             'value'       => $user_from,
-                            'form_tip_str'    => 'str_email_your_address_opt',
+                            'form_tip'    => 'str_email_your_address_opt',
                             'flags'      => CCFF_NONE ),
                     'mail_subject' => array(
-                            'label_str'       => 'str_email_subject',
+                            'label'       => 'str_email_subject',
                             'formatter'   => 'statictext',
                             'value'      => sprintf( _('Flag %s "%s"'), $type, $name ),
                             'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
                     'mail_body' => array(
-                            'label_str'       => 'str_email_message',
+                            'label'       => 'str_email_message',
                             'formatter'   => 'textarea',
                              'value'      => $text,
                             'flags'      => CCFF_REQUIRED ),
@@ -67,10 +67,10 @@ class CCFlagContentForm extends CCSecurityVerifierForm
                                'form_tip'   => '',
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
-                       array(  'label_str'       => 'str_security_key',
+                       array(  'label'       => 'str_security_key',
                                'formatter'  => 'textedit',
                                'class'      => 'cc_form_input_short',
-                               'form_tip_str'   => CCSecurityVerifierForm::GetSecurityTipStr(),
+                               'form_tip'   => CCSecurityVerifierForm::GetSecurityTipStr(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)
             );
 

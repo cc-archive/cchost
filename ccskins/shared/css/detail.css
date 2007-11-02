@@ -52,7 +52,7 @@
 
 .gd_description {
 	margin: 9px;
-	background-color: #EEC;
+	background-color: #EEC; /* colorize */
 	color: #333;
 	padding: 0px;
 	width: 500px;

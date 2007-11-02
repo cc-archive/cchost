@@ -102,7 +102,7 @@ class CCPublicizeHV
             $text = $itsme ? _('Publicize yourself')
                            : sprintf( _('Publicize %s'), $row['user_real_name'] );
                 
-            $row['user_fields'][] = array( 'label' => _('Publicize'), 
+            $row['user_fields'][] = array( 'label' => 'str_reviews', 
                                        'value' => "<a href=\"$url\">$text</a>" );
         }
     }

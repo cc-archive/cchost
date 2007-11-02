@@ -8,8 +8,16 @@ function _t_html_form_html_form($T,&$A)
         print "<script >form_id = '{$F['form_id']}';</script>\n";
 
     $onsubmit = empty($F['hide_on_submit']) ? '' : 'onsubmit="return the_formMask.dull_screen();" ';
-    ?><form  action="<?= $F['form_action']?>" method="<?= $F['form_method']?>" class="cc_form" name="<?= $F['form_id']?>" id="<?= $F['form_id']?>" enctype="<?= empty($F['form-data']) ? null : $F['form-data']; ?>" <?= $onsubmit ?> >
-    <?
+    $enctype  = empty($F['form-data'])      ? '' : 'enctype="' . $F['form-data'] . '"';
+    $html =<<<EOF
+    <form  action="{$F['form_action']}" 
+             method="{$F['form_method']}" 
+             class="cc_form" 
+             name="{$F['form_id']}" id="{$F['form_id']}" 
+              {$onsubmit} {$enctype} >
+EOF;
+    
+    print $html;
 
     if ( !empty($F['form_macros']))
         foreach( $F['form_macros'] as $macro )
@@ -21,10 +29,10 @@ function _t_html_form_html_form($T,&$A)
     if ( !empty($F['html_form_fields']))
         $T->Call('form_fields');
 
-    if ( !empty($F['submit_text'])) {
-        if( !empty($GLOBALS[$F['submit_text']]) )
-            $F['submit_text'] = $GLOBALS[$F['submit_text']];
-        ?><input  type="submit" name="form_submit" id="form_submit" class="cc_form_submit" value="<?= $F['submit_text'] ?>"></input><?
+    if ( !empty($F['submit_text'])) 
+    {
+        $submit_text = $T->String($F['submit_text']);
+        ?><input  type="submit" name="form_submit" id="form_submit" class="cc_form_submit" value="<?= $submit_text ?>"></input><?
     }
 
     if ( !empty($F['html_hidden_fields'])) 
@@ -72,24 +80,25 @@ function _t_html_form_form_fields($T,&$A) {
 
     foreach( $A['curr_form']['html_form_fields'] as $F )
     { 
-        _t_html_form_string_helper($F,'form_error');
-
         if ( !empty($F['form_error']))
-            print "<tr  class=\"cc_form_error_row\"><td ></td><td  class=\"cc_form_error\">{$F['form_error']}</td></tr>\n";
+            print "<tr  class=\"cc_form_error_row\"><td ></td><td  class=\"cc_form_error\">".
+                $T->String($F['form_error']) . "</td></tr>\n";
 
         print '<tr class="cc_form_row">';
 
-        _t_html_form_string_helper($F,'form_tip');
+        if( !empty($F['label']) )
+            $label = $T->String($F['label']);
 
-        $tip = empty($F['form_tip']) ? '' : '<span>' . $F['form_tip'] . '</span>';
-
-        _t_html_form_string_helper($F,'label');
-
-        if ( !empty($F['label'])) {
-            print "<td  class=\"cc_form_label\"><div>{$F['label']}</div>$tip</td>";
-            $span = '';
-        } else {
+        if ( empty($label) ) {
             $span = 'colspan="2"';
+        } else {
+            if( !empty($F['form_tip']) )
+                $tip = $T->String($F['form_tip']);
+
+            $tip = empty($tip) ? '' : '<span>' . $tip . '</span>';
+
+            print "<td  class=\"cc_form_label\"><div>{$label}</div>$tip</td>";
+            $span = '';
         }
 
         print "<td $span class=\"cc_form_element\">";
@@ -103,6 +112,9 @@ function _t_html_form_form_fields($T,&$A) {
         ?><?= $F['form_element']?></td><?
 
         print "</tr>\n";
+
+        $tip = $label = '';
+
     } // END: for loop
 
     print "</table>\n";
@@ -110,29 +122,6 @@ function _t_html_form_form_fields($T,&$A) {
 } // END: function form_fields
 
 
-function _t_html_form_string_helper(&$F,$field)
-{
-    $strn = $field . '_str';
-
-    if( !empty($F[$strn]) )
-    {
-        if( !empty($F[$field . '_args']) )
-        {
-            $fmt = $GLOBALS[$F[$strn]];
-            $str = "\$s = sprintf('{$fmt}'";
-            foreach( $F['form_tip_args'] as $arg )
-                $str .= ",'" . str_replace("'", "\\'", $arg) . "'";
-            $str .= ");";
-            //CCDebug::PrintVar($str);
-            eval($str);
-            $F[$field] = $s;
-        }
-        else
-        {
-            $F[$field] = $GLOBALS[$F[$strn]];
-        }
-    }
-}
 
 //------------------------------------- 
 function _t_html_form_grid_form_fields($T,&$A) {

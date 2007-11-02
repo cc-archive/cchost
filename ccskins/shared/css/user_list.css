@@ -1,4 +1,4 @@
-
+/* colorize */
 #user_listing_page {
 	height: 1520px;
 }
@@ -6,8 +6,8 @@
 #user_index {
 	margin: 9px;
 	padding: 4px;
-	border: 1px solid green;
-	background-color: #DFD;
+	border-width: 1px;
+	border-style: solid;
 	padding-left: 20px;
 }
 
@@ -18,7 +18,6 @@
 	font-size: 12px;
 	font-weight: bold;
 	background-color: transparent;
-	color: #797;
 	display: block;
 	float: left;
 	padding: 1px;
@@ -64,7 +63,6 @@
 
 .user_link span {
 	font-size: 11px;
-	color: #777;
 	font-weight: normal;
 }
 

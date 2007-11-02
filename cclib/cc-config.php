@@ -214,6 +214,7 @@ class CCConfigs extends CCTable
         $settings = $configs->GetConfig('settings');
         $CC_GLOBALS['skin-file'] = $settings['skin-file'];
         $CC_GLOBALS['skin-map']  = str_replace('skin.', 'map.', $settings['skin-file'] );
+        $CC_GLOBALS['skin_properties'] = empty($settings['skin_properties']) ? array() : $settings['skin_properties'];
 
         // allow admins to turn off user interface
         //
@@ -257,7 +258,8 @@ class CCConfigs extends CCTable
             $rows = $this->QueryRows($where, 'config_scope');
             if( empty($rows) || ($rows[0]['config_scope'] != $rootname) ) // check for case
             {
-                CCUtil::Send404(true);
+                $_REQUEST['ccm'] = '/' . CC_GLOBAL_SCOPE . $_REQUEST['ccm'];
+                $rootname = CC_GLOBAL_SCOPE;
             }
         }
         $CC_CFG_ROOT = $rootname;

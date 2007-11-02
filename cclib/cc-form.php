@@ -632,7 +632,7 @@ class CCForm
                     $form_fields['form_element'] = $this->$generator( $fieldname, $value, $class );
                 else
                     $form_fields['form_element'] = $generator( $this, $fieldname, $value, $class );
-                $this->_template_vars['html_form_fields'][] = $form_fields;
+                $this->_template_vars['html_form_fields'][$fieldname] = $form_fields;
             }
         }
 

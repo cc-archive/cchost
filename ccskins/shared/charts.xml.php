@@ -8,12 +8,12 @@ function _t_charts_init($T,&$targs) {
 <style >
 table.statstable {
   border: 3px solid #559;
-  background-color: #DDE;
+  background-color: #DDE;  /* colorize */
   margin: 5px;
 }
 
 .shead {
-  background-color: #559;
+  background-color: #559; /* colorize */
   color: white;
   padding: 2px 1px 2px 1px;
   }

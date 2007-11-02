@@ -1,4 +1,5 @@
-.cc_collab {
+
+.cc_collab { /* colorize */
 }
 
 legend {
@@ -6,9 +7,11 @@ legend {
 	padding: 3px 3px 3px 11px;
 	font-weight: bold;
 	font-variant: small-caps;
+	letter-spacing: 1em;
+/*
 	background: #88D;
 	color: white;
-	letter-spacing: 1em;
+*/
 }
 
 fieldset {
@@ -20,8 +23,8 @@ fieldset {
 }
 
 .cc_collab_desc {
-	background: #DDE;
-	border: 1px solid #ACA;
+	border-width: 1px;
+	border-style: solid;
 	padding: 4px;
 }
 
@@ -64,22 +67,22 @@ fieldset {
 
 a.fname {
 	font-weight: bold;
-	color: brown;
 }
 
 .user_line {
 	height: 14px;
-	background-color: #DDE;
 }
 
 .file_line {
-	background-color: #DDE;
-	border: 1px solid #ACA;
+	/* background-color: #DDE; */
+	border-width: 1px;
+	border-style: solid;
+	/* #ACA; */
 	margin-bottom: 11px;
 }
 
 .remix_line {
-	background-color: white;
+	/* background-color: white; */
 }
 
 
@@ -118,7 +121,6 @@ a.fname {
 
 .file_list .tags, .user_line .role {
 	font-size: 10px;
-	color: #777;
 }
 
 .file_list .file_info {
@@ -128,7 +130,6 @@ a.fname {
 .user_line div, .file_line div {
 	float: left;
 	padding: 1px 10px 1px 5px;
-	/* background-color: #DDE; */
 }
 
 .user_break {
@@ -210,7 +211,6 @@ a.fname {
 }
 
 a.collab_upload {
-	color: brown;
 	font-weight: bold;
 }
 
@@ -219,10 +219,10 @@ a.collab_upload {
     margin: 4px;
     padding: 6px;
   }
+
   .collab_name {
     font-weight: bold;
     font-size: 13px;
-    color: brown;
     margin: 0px 0px 4px 0px;
   }
   .collab_date {

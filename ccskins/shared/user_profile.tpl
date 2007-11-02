@@ -8,7 +8,7 @@
 
 <div id="user_fields">
     %loop(user_record/user_fields,uf)%
-        <div class="ufc" id="%var_check(#uf/id)%"><span>%(#uf/label)%</span> %(#uf/value)%</div>
+        <div class="ufc" %if_attr(#uf/id,id)%><span>%text(#uf/label)%</span> %(#uf/value)%</div>
     %end_loop%
 </div>
 
@@ -16,7 +16,7 @@
 
     %loop(user_record/user_tag_links,groups)%
     <div class="user_tag_group">
-        <h3>%(#groups/label)%</h3>
+        <h3>%text(#groups/label)%</h3>
             %loop(#groups/value,link)%
                 <a href="%(#link/tagurl)%">%(#link/tag)%</a>%if_not_last(#link)%, %end_if%
             %end_loop%

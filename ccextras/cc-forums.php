@@ -97,7 +97,7 @@ class CCForums
                            $name, $link1,  
                                       $record['user_num_posts'], $link2 );
 
-        $record['user_fields'][] = array( 'label' => _('Forum posts'), 
+        $record['user_fields'][] = array( 'label' => 'str_user_forum_posts', 
                                           'value' => $text,
                                           'id' => 'user_post_stats' );
     }

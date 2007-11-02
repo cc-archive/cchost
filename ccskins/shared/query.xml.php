@@ -1,9 +1,7 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-function _t_query_init($T,&$targs) {
-    $T->CompatRequired();
-}?><style >
+?><style >
 
 #ptable,
 #ftable { 
