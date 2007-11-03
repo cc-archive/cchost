@@ -128,7 +128,7 @@ function cc_format_preview(fname)
 	var pbox = new cc_obj('format_preview_' + fname);
 	pbox.style.display = 'block';
 	obj.obj.focus();
-	cc_get_data(home_url + 'format/preview?ptext=' + txt, 'format_inner_preview_' + fname,'getting preview...')
+	cc_get_data(home_url + 'format/preview' + q + 'ptext=' + txt, 'format_inner_preview_' + fname,'getting preview...')
 }
 
 function cc_hide_preview(fname)
