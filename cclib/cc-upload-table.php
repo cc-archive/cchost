@@ -254,6 +254,40 @@ class CCUploads extends CCTable
     }
 
     /**
+    * Remove data into the upload record
+    *
+    * See {@tutorial cchost.pkg#uploadextra a tutorial} 
+    * 
+    * @param mixter $id_or_row Interger upload id or upload record
+    * @param string $fieldname Name of extra field
+    * @param value $value Value to set into field
+    */
+    function UnsetExtraField( $id_or_row, $fieldname)
+    {
+        if( is_array($id_or_row) )
+        {
+            $extra = $id_or_row['upload_extra'];
+            $id = $id_or_row['upload_id'];
+            if( is_string($extra) )
+                $extra = unserialize($extra);
+        }
+        else
+        {
+            $id = $id_or_row;
+            $row = $this->QueryKeyRow($id_or_row);
+            $extra = unserialize($row['upload_extra']);
+        }
+
+        if( isset($extra[$fieldname]) )
+        {
+            unset($extra[$fieldname]);
+            $args['upload_extra'] = serialize($extra);
+            $args['upload_id'] = $id;
+            $this->Update($args);
+        }
+    }
+
+    /**
     * Set data into the upload record
     *
     * See {@tutorial cchost.pkg#uploadextra a tutorial} on how use this method.

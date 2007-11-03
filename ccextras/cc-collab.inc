@@ -128,6 +128,7 @@ class CCCollab
     */
     function OnUploadDone($upload_id, $op)
     {
+
         if( ($op == CC_UF_NEW_UPLOAD || $op == CC_UF_PROPERTIES_EDIT) &&
             array_key_exists('collab',$_POST)
           )
@@ -154,6 +155,8 @@ class CCCollab
             $text = _('A new file has been posted to your collaboration project') . "\n\n$url\n\n" . _('Thanks');
             $this->_mail_out( $collab_id, _('New Upload'), $text); 
         }
+        $uploads =& CCUploads::GetTable();
+        $uploads->SetExtraField( $upload_id, 'collab', $collab_id );
     }
 
     function Sync($collab_id)
@@ -203,7 +206,7 @@ class CCCollab
         $rows = $cuploads->QueryRows($w2);
         $uploads =& CCUploads::GetTable();
         foreach( $rows as $row )
-            $uploads->SetExtraField($row['collab_upload_upload'],'collab',0);
+            $uploads->UnsetExtraField($row['collab_upload_upload'],'collab');
         $cuploads->DeleteWhere($w2);
         $users =& CCCollabUsers::GetTable();
         $users->DeleteKey($collab_id);
@@ -529,6 +532,8 @@ EOF;
                     $w1['collab_upload_collab'] = $collab_id;
                     $collab_uploads->DeleteWhere($w1);
                     $args['msg'] = _('File removed from project');
+                    $uploads = new CCUploads();
+                    $uploads->UnsetExtraField($upload_id,'collab');
                     break;
 
                 case 'publish':
@@ -879,7 +884,6 @@ EOF;
 
             if( intval($ret) > 0 )
             {
-                $uploads->SetExtraField( $ret, 'collab', $collab_id );
                 $this->_add_upload($collab_id,$ret);
                 $collab_ids[] = $ret;
                 $this->_sync_collab_sources($collab_ids);
