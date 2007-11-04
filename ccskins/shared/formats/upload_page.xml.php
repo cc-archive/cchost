@@ -356,7 +356,7 @@ function helper_upload_remix_info($caption,$icon,$p,$T)
 
 function helper_upload_main_info(&$R,&$A,$T)
 {
-    print "<div class=\"cc_round_box_bw\">\n";
+    print "<div class=\"cc_round_box_mono\">\n";
 
     print "<img src=\"{$R['user_avatar_url']}\" style=\"float:right\" />\n";
 

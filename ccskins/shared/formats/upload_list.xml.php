@@ -3,7 +3,7 @@
 
 function _t_upload_list_init($T,&$A)
 {
-    $carr103 = empty( $A['records'] ) ? $A['file_records'] : $A['records'];
+    $carr103 =& $_TV['records'];
     $cc103   = count( $carr103);
     $ck103   = array_keys( $carr103);
 

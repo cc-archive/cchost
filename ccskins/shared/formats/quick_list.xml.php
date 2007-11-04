@@ -5,7 +5,7 @@ $upload_flag_str     = $GLOBALS['str_flag_this_upload'] ;
 $play_str            = $GLOBALS['str_play'] ;
 $by_str              = $GLOBALS['str_by'] ;
 
-$carr103 = empty($_TV['records']) ? $_TV['file_records'] : $_TV['records'];
+$carr103 =& $_TV['records'];
 $cc103   = count( $carr103);
 $ck103   = array_keys( $carr103);
 
