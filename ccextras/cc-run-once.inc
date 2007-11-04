@@ -37,6 +37,7 @@ class CCRunOnce
             return;
         }
 
+        require_once('cclib/cc-tags.php');
         $run_pages = CCTag::TagSplit($CC_GLOBALS['run_once']);
         $key = 'run7';
 

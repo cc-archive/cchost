@@ -14,9 +14,9 @@ if( !empty($_GET['bbe_format']) )
 
 if( !empty($_GET['bbe_edit']) )
 {
-    $f1 = @file_get_contents('mixter-files/bbe_1.txt');
-    $f2 = @file_get_contents('mixter-files/bbe_2.txt');
-    $f3 = @file_get_contents('mixter-files/bbe_3.txt');
+    $f1 = @file_get_contents('cchost_files/pages/djvadim/bbe_1.txt');
+    $f2 = @file_get_contents('cchost_files/pages/djvadim/bbe_2.txt');
+    $f3 = @file_get_contents('cchost_files/pages/djvadim/bbe_3.txt');
     $html =<<<EOF
     <style>
         textarea {
@@ -54,6 +54,6 @@ function bbe_write($num)
     $text = $_POST[$name];
     if( get_magic_quotes_gpc() == 1 )
         $text = trim(stripslashes( $text ));
-    $f = fopen("../mixter-files/$name.txt",'w'); fwrite($f,$text); fclose($f);
+    $f = fopen("cchost_files/pages/djvadim/$name.txt",'w'); fwrite($f,$text); fclose($f);
  }
 ?>

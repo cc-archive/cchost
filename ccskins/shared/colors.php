@@ -52,6 +52,17 @@ switch($scheme)
         $highlight = '#CCFFCC';
         break; 
     }
+
+    default:
+    {
+        $bg = '#FFEEEE';
+        $color = '#FF0000';
+        $dark = '#775555';
+        $med = '#FF8888';
+        $light = '#FFDDDD';
+        $highlight = '#FFCCCC';
+        break; 
+    }
 }
 
 ?>

@@ -122,7 +122,7 @@ EOF;
 
         //CCDebug::PrintVar($args['genres']);
         CCPage::PageArg('mt', $args);
-        CCPage::ViewFile('magnatune_loops.xml');
+        CCPage::ViewFile('magnatune_loops.php');
     }
 
     function LoopStream($loopid_wext)
@@ -186,12 +186,11 @@ EOF;
 
         $artist_name = CCDatabase::QueryItem("SELECT artist FROM magnatune_song_info WHERE page = '$loop_artist' LIMIT 1");
         $loops = CCDatabase::QueryRows("SELECT * FROM magnatune_loops WHERE loop_artist = '$loop_artist'");
-        $args['preview_macro'] = 'magnatune_preview.xml/loop_preview';
         $args['mt']['loop_stream_url']   = ccl('library','loopstream');
         $args['mt']['loop_preview'] = array( 'loop_artist' => $loop_artist,
                                        'loop_artist_name' => $artist_name,
                                        'loops' => $loops );
-        $this->_show_preview($args);
+        $this->_show_preview($args,'loop_preview');
     }
 
     function AlbumList($album_pick)
@@ -199,21 +198,19 @@ EOF;
         $sql = "SELECT download_mp3, trackname, songid, artist, albumname ".
                "FROM magnatune_song_info WHERE albumsku = '$album_pick'";
         $songs = CCDatabase::QueryRows($sql);
-        $args['preview_macro'] = 'magnatune_preview.xml/album_preview';
         $args['mt']['song_stream_url']   = ccl('library','songstream');
         $args['mt']['album_preview'] = array( 'album' => addslashes($songs[0]['albumname']),
                                         'artist' => addslashes($songs[0]['artist']),
                                         'songs' => $songs);
-        $this->_show_preview($args);
+        $this->_show_preview($args,'album_preview');
     }
 
-    function _show_preview(&$args)
+    function _show_preview(&$args,$macro)
     {
         global $CC_GLOBALS;
-
-        $template = new CCTemplate( 'magnatune_preview.xml' );
-        $html = $template->SetAllAndParse($args);
-        print($html);
+        $file = CCPage::GetViewFile('magnatune_preview.php');
+        $template = new CCSkinMacro( $file . '/' . $macro);
+        $template->SetAllAndPrint($args);
         exit;
     }
 

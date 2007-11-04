@@ -1,9 +1,6 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
-function _t_adminhelp_init($T,&$targs) {
-    $T->CompatRequired();
-}?><div >
+?><div >
 
 <div  id="adminhelp">
 <a  name="navhelp"></a>

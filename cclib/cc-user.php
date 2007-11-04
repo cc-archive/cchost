@@ -297,7 +297,6 @@ class CCUsers extends CCTable
         else
             $row['user_extra'] = array();
 
-
         if( $row['user_image'] )
         {
             if( empty($CC_GLOBALS['avatar-dir']) )
@@ -321,6 +320,18 @@ class CCUsers extends CCTable
             $row['user_avatar_url'] = false;
         }
 
+        // set the language to default (for visibility on the form only)
+        if (empty($row['user_language']))
+            $row['user_language'] = 'default';
+
+        //if( !empty($row['artist_page']) ) 
+         //   $this->GetFullRecord($row,$expand);
+
+        return $row;
+    }
+
+    function GetFullRecord(&$row,$expand=true)
+    {
         $row['user_homepage_html'] = '';
         if( !empty($row['user_homepage']) )
         {
@@ -338,11 +349,6 @@ class CCUsers extends CCTable
                 continue;
             $row['user_fields'][] = array( 'label' => $name, 'value' => $row[$uf], 'id' => $uf );
         }
-
-        // set the language to default (for visibility on the form only)
-        if (empty($row['user_language']))
-            $row['user_language'] = 'default';
-
 
         if( CCUser::IsAdmin() )
         {

@@ -205,6 +205,7 @@ class CCTags extends CCTable
         if( !is_array($tags) )
         {
             $tags = preg_replace('/\s+/','_',$tags);
+            require_once('cclib/cc-tags.php');
             $tags = CCTag::TagSplit($tags);
         }
         $tags = array_unique($tags);

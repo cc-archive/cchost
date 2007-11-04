@@ -87,14 +87,16 @@ function _t_custom_Latest_Remixes($T,&$A) {
 }
 function _t_custom__query_latest($T,&$A) {
   ?><p ><?= $A['latest_title']?></p>
-<?$A['qrecords'] = CC_cache_query($A['latest_tag'],'all','upload_date','DESC',5);if ( !empty($A['qrecords'])) {?><ul >
-<?$carr104 = $A['qrecords'];$cc104= count( $carr104);$ck104= array_keys( $carr104);for( $ci104= 0; $ci104< $cc104; ++$ci104){    $A['qrecord'] = $carr104[ $ck104[ $ci104 ] ];   ?><li ><a  href="<?= $A['qrecord']['file_page_url']?>"><?= $A['qrecord']['upload_short_name']?></a></li><?}?></ul><?}}
+<?$Rs =cc_quick_list($A['latest_tag'],true);if ( !empty($Rs)) {?><ul >
+<?$carr104 = $Rs;$cc104= count( $carr104);$ck104= array_keys( $carr104);for( $ci104= 0; $ci104< $cc104; ++$ci104){    $Q = $carr104[ $ck104[ $ci104 ] ];   ?><li ><a  href="<?= $Q['file_page_url']?>"><?= $Q['upload_short_name']?></a></li><?}?></ul><?}}
+
 function _t_custom_Recent_Reviews($T,&$A) {
-  $A['reviews'] = CC_recent_reviews();?><p ><?= $GLOBALS['str_recent_reviewers'] ;?></p>
+  $Rs = CC_recent_reviews();?><p ><?= $GLOBALS['str_recent_reviewers'] ;?></p>
 <ul  condition="reviews">
-<?$carr105 = $A['reviews'];$cc105= count( $carr105);$ck105= array_keys( $carr105);for( $ci105= 0; $ci105< $cc105; ++$ci105){    $A['rev'] = $carr105[ $ck105[ $ci105 ] ];   ?><li ><a  href="<?= $A['rev']['topic_permalink']?>"><?= CC_strchop($A['rev']['user_real_name'],12);?></a></li><?}?></ul>
+<?$carr105 = $Rs;$cc105= count( $carr105);$ck105= array_keys( $carr105);for( $ci105= 0; $ci105< $cc105; ++$ci105){    $_r = $carr105[ $ck105[ $ci105 ] ];   ?><li ><a  href="<?= $_r['topic_permalink']?>"><?= CC_strchop($_r['user_real_name'],12);?></a></li><?}?></ul>
 <a  href="<?= $A['home-url']?>reviews" class="cc_more_menu_link"><?= $GLOBALS['str_more_reviews'] ?>...</a>
-<?}
+<? }
+
 function _t_custom_Recent_Playlists($T,&$A) {
   $A['pl_lists'] = CC_recent_playlists();?><p ><?= $GLOBALS['str_recent_playlists'] ;?></p>
 <ul  condition="pl_lists">

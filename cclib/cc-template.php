@@ -232,7 +232,7 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        //CCDebug::Log("TCall: $file");
+        CCDebug::Log("TCall: $file");
 
         $funcname = '';
 
@@ -279,10 +279,12 @@ class CCSkin
         if( !empty($filename) )
             $path = $this->GetTemplate($filename,true);
 
+        CCDebug::LogVar('tpath',$path);
+
         if( empty($path) )
         {
             print( "<h3>Can't find template: <span style='color:red'>$file</span></h3>");
-            CCDebug::StackTrace();
+            CCDebug::PrintVar($this);
         }
 
         $this->_inner_include($path,$funcname);
@@ -383,7 +385,10 @@ class CCSkin
     {
         if( substr($partial,0,7) == 'http://' )
             return $partial;
-        return ccd( $this->Search($partial,false) );
+        $path = $this->Search($partial,false);
+        if( empty($path) )
+            die("Can't find: $partial");
+        return ccd($path);
     }
 
     /**
@@ -559,6 +564,9 @@ class CCSkin
                     );
             }
         }
+
+        if( !empty($this->vars['records']) && empty($this->vars['file_records']) )
+            $this->vars['file_records'] =& $this->vars['records'];
 
         if( !empty($this->vars['file_records']) )
         {

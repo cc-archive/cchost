@@ -89,26 +89,23 @@ function _t_html_form_form_fields($T,&$A) {
         if( !empty($F['label']) )
             $label = $T->String($F['label']);
 
-        if ( empty($label) ) {
-            $span = 'colspan="2"';
-        } else {
+        if ( !empty($label) ) {
             if( !empty($F['form_tip']) )
                 $tip = $T->String($F['form_tip']);
 
             $tip = empty($tip) ? '' : '<span>' . $tip . '</span>';
 
-            print "<td  class=\"cc_form_label\"><div>{$label}</div>$tip</td>";
-            $span = '';
+            print "<td  class=\"cc_form_label\"><div>{$label}</div>  $tip</td>";
         }
 
-        print "<td $span class=\"cc_form_element\">";
+        print "</tr><tr><td class=\"cc_form_element\">";
 
         if ( !empty($F['macro']))
         {
             $A['field'] = $F;
             $T->Call($F['macro']);
         }
-CCDebug::LogVar('fe',$F['form_element']);
+
         ?><?= $F['form_element']?></td><?
 
         print "</tr>\n";

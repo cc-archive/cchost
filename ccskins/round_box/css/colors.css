@@ -1,0 +1,20 @@
+<? 
+if( !defined('IN_CC_HOST') )
+	die('Welcome to ccHost');
+
+function suck_box_color($v) { return preg_replace('/.*backbox-([^\.]+)\.png/','$1',$v ); }
+if( empty($scheme) || !in_array($scheme,array_map('suck_box_color',glob('ccskins/round_box/images/*.png'))))
+	$scheme = 'mono';
+
+$url = $A['root-url'] . 'ccskins/round_box/images/backbox-' . $scheme . '.png';
+$mono_url = $A['root-url'] . 'ccskins/round_box/images/backbox-mono.png';
+
+?>
+
+/* rounded boxes */
+/* set the image to use and establish the lower-right position */ 
+.cssbox, .cssbox_body, .cssbox_head, .cssbox_head h2 
+{ background-image: url('<?= $url ?>'); } 
+
+.cssbox_mono, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 
+{ background-image: url('<?= $mono_url ?>'); } 

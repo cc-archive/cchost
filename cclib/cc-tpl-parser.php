@@ -108,7 +108,16 @@ function cc_tpl_parse_chop($prefix,$varname,$amt)
 {
     $prefix = _cc_tpl_flip_prefix($prefix);
     $var = cc_tpl_parse_var('',$varname,'');
-    return "$prefix CC_strchop($var,$amt,true); ?>";
+    if( $amt == 'chop' )
+    {
+        $amt = "\$A['chop']";
+        $flag = "\$A['dochop']";
+    }
+    else
+    {
+        $flag = 'true';
+    }
+    return "$prefix CC_strchop($var,$amt,$flag); ?>";
 }
 
 function cc_tpl_parse_if_attr($varname,$attr)
@@ -117,10 +126,11 @@ function cc_tpl_parse_if_attr($varname,$attr)
     return "<?= empty($var) ? '' : \"$attr=\\\"\" . $var . '\"'; ?>";
 }
 
-function cc_tpl_parse_if_class($varname,$class)
+function cc_tpl_parse_if_class($bang,$varname,$class)
 {
+    $bang = empty($bang) ? '' : '!';
     $var = cc_tpl_parse_var('',$varname,'');
-    return "<?= empty($var) ? '' : \"class=\\\"$class\\\"\"; ?>";
+    return "<?= {$bang}empty($var) ? '' : \"class=\\\"$class\\\"\"; ?>";
 }
 
 function cc_tpl_parse_date($prefix,$varname,$fmt)
@@ -191,7 +201,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? if_(not_)last{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_last('$1','$2');",  
         "/(<\?=?) url{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_url('$1','$2');",
         "/<\?=? if_attr{$op}{$ac}{$a}{$cp}%/e"            =>   "cc_tpl_parse_if_attr('$1','$2');",
-        "/<\?=? if_class{$op}{$ac}{$a}{$cp}%/e"            =>  "cc_tpl_parse_if_class('$1','$2');",
+        "/<\?=? if_(not_)?class{$op}{$ac}{$a}{$cp}%/e"           =>   "cc_tpl_parse_if_class('$1','$2','$3');",
         "/<\? text{$op}{$a}{$cp}%/e"                      =>   "cc_tpl_parse_t('$1');", 
 
         "/<\? else%/"               =>   "<? } else { ?>",
@@ -201,6 +211,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? if\(([^\)]+)\)%/"                           =>   "<? if( !empty(\$A['$1']) ) { ?>",
         "/<\? if_not\(([^\)]+)\)%/"                       =>   "<? if( empty(\$A['$1']) ) { ?>",
         "/<\? add_stylesheet{$op}{$aoq}\)%/"              =>   "<? \$A['style_sheets'][] = '$1'; ?>",
+        "/<\? prepend{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? array_unshift(\$A['$1'],'$2'); ?>",
         "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
         "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
         "/(<\?=?) key{$op}{$a}{$cp}%/"                    =>   "$1 \$k_$1 ?>",

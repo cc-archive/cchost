@@ -1,0 +1,163 @@
+
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: Verdana, arial, sans serif;
+	font-size: 0.8em;
+}
+
+img {
+	border: 0px;
+}
+
+a, a:link, a:visited {
+	text-decoration: none;
+}
+
+h1, h2, h3, ul {
+	font-family: arial;
+}
+
+.hide {
+	display: none;
+}
+
+#login_info {
+	float: right;
+	margin: 4px;
+}
+
+#sidebar ul {
+	list-style: none;
+	font-size: 0.9em;
+	padding: 0px;
+}
+
+#sidebar #tab_menu {
+	margin: 3px;
+	padding: 2px 6px;
+}
+
+#sidebar #tab_menu li {
+	margin-bottom: 3px;
+}
+
+#sidebar ul #sub_tabs {
+	padding-left: 14px;
+}
+.selected_tab {
+	background-color: white;
+}
+
+#page_footer {
+	margin-top: 15px;
+}
+
+#page_footer ul {		/* menu is in footer in popup */
+	list-style: none;
+	font-size: 0.9em;
+	padding: 5px;
+}
+
+#page_footer ul li {
+	padding-left: 14px;
+	float: left;
+}
+
+#page_footer p {
+	display: none;
+}
+
+#main_canvas {
+    width: 750px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+}
+
+#banner {
+}
+
+#sidebar {
+	float: right;
+	width: 150px;
+}
+
+#main_content {
+	float: left;
+	width: 500px;
+	padding-left: 20px;
+}
+
+
+/* form */
+
+div.cc_form_about {
+	width: 500px;
+}
+
+.cc_form_table {
+	width: 550px;
+}
+
+.cc_form_element {
+	padding-bottom: 0.85em;
+}
+
+.cc_form_table td {
+	vertical-align: top;
+}
+
+.cc_form_label {
+	text-align: left;
+	font-size: 0.65em;
+}
+
+.cc_form_label div {
+	font-weight: bold;
+	display: inline;
+}
+
+.cc_form_input {
+	width: 220px;
+}
+
+.cc_form_input short {
+	width: 100px;
+}
+
+.cc_form_submit {
+	margin-left: 40%;
+}
+
+#site_description {
+	margin-left: 20px;
+	font-size: 0.85em;
+}
+
+.post_content_breaker {
+	clear: both;
+}
+
+#vroot_selector {
+	font-size: 0.9em;
+	width: 200px;
+}
+
+/* upload list */
+.list_menu {
+  width: 67px;
+  border: 1px solid pink;
+}
+
+div.upload {
+	margin-right: 0px;
+	padding-right: 0px;
+}
+div.upload_info {
+	width: 290px;
+}
+
+.taglinks {
+	font-size: 0.7em;
+}

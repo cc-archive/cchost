@@ -13,7 +13,7 @@ foreach( $skins as $skin => $name )
     }
     else
     {
-        $skin_infos[$skin] = '<i>no skin properties available</i>';
+        $skin_infos[$skin] = '<i></i>'; // no skin properties available
     }
 }
 

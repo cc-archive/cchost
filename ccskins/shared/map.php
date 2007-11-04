@@ -1,5 +1,8 @@
 <?
 
+
+$A['style_sheets'][] = url_args(ccl('docs/colors.php'),'ajax=1');
+
 require_once('ccskins/shared/strings.php');
 
 $A['picks_links']        = 'picks.xml/picks_links';
@@ -11,6 +14,7 @@ $A['print_prompts']      = 'util.php/print_prompts';
 $A['prev_next_links']      = 'util.php/prev_next_links';
 $A['print_bread_crumbs'] = 'util.php/print_bread_crumbs';
 $A['print_client_menu'] = 'util.php/print_client_menu';
+$A['format_sig'] = 'util.php/format_signature';
 
 $A['admin_menu_page']    = 'admin.php/print_admin_menu';
 
@@ -28,15 +32,17 @@ $A['upload_not_published'] = 'file_macros.php/upload_not_published';
 $A['user_listings'] = 'user_list.tpl';
 $A['user_listing']  = 'user_profile.tpl';
 
+
 $A['tags'] = 'tags.php/tags';
 
-$A['script_links'][] = 'js/prototype.js';
 $A['script_links'][] = 'js/selector-addon-v1.js';
 $A['script_links'][] = 'js/scriptaculous/scriptaculous.js';
 $A['script_links'][] = url_args(ccl('docs/strings_js.php'),'ajax=1');
 $A['script_links'][] = 'js/modalbox/modalbox.js';
 $A['script_links'][] = 'js/cchost.js';
+
+array_unshift($A['script_links'],'js/prototype.js');
+
 $A['style_sheets'][] = 'js/modalbox/modalbox.css';
-$A['style_sheets'][] = url_args(ccl('docs/colors.php'),'ajax=1');
 
 ?>

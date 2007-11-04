@@ -17,8 +17,42 @@ modalHook.prototype = {
     },
 
     onClick: function( e, href, thetitle ) {
-        var url = href + q + 'ajax=1';
-        Modalbox.show( url, {title: thetitle, width: 500} );
+        if( href.indexOf('?') == -1 )
+            href += '?ajax=1';
+        else
+            href += '&ajax=1';
+        Modalbox.show( href, {title: thetitle, width: 500} );
+    }
+}
+
+var popupHook = Class.create();
+
+popupHook.prototype = {
+
+    initialize: function(ids) {
+        var me = this;
+        ids.each( function( id ) {
+            if( $(id) )
+            {
+                var e = $(id);
+                var href = e.href;
+                e.href = 'javascript://hooked for popup ' + id;
+                title = e.innerHTML.stripTags();
+                Event.observe( id, 'click', me.onClick.bindAsEventListener( me, href, title ) );
+            }
+        } );
+    },
+
+    onClick: function( e, href, thetitle ) {
+        if( href.indexOf('?') == -1 )
+            href += '?popup=1';
+        else
+            href += '&popup=1';
+        var dim = "height=600,width=900";
+        var win = window.open( href, 'cchostextrawin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
+                                      "resizable=1,scrollbars=1," + dim );
+        win.title = thetitle;
+
     }
 }
 

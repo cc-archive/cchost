@@ -97,11 +97,12 @@ class CCAdminTemplateTagsForm extends CCEditConfigForm
         foreach( $ttags as $K => $V )
         {
             $fields[$K] =
-                       array(  'label'       => $K,
+                       array(  'label'       => '%(' . $K . ')%',
                                'form_tip'    => '',
                                'formatter'   => strlen($V) > 80 ? 'textarea' : 'textedit',
                                'value'       => htmlspecialchars($V),
                                'flags'       => CCFF_NOSTRIP );
+
         }
         $this->AddFormFields($fields);
         $this->SetSubmitText("Submit Changes");

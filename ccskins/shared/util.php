@@ -1,8 +1,13 @@
 <?
 
-function _t_util_print_prompts($T,&$_TV)
+function _t_util_format_signature($T,$A)
 {
-    foreach( $_TV['prompts'] as $prompt )
+    print $GLOBALS['str_from']. " <a href=\"{$A['root-url']}\">{$A['site-title']}</a>";
+}
+
+function _t_util_print_prompts($T,&$A)
+{
+    foreach( $A['prompts'] as $prompt )
         ?><div class="cc_<?= $prompt['name'] ?>"><?= $T->String($prompt['value']) ?></div><?
 }
 
@@ -111,51 +116,51 @@ var the_formMask = new formMask();
 }
 
 
-function _t_util_print_bread_crumbs($T,&$_TV)
+function _t_util_print_bread_crumbs($T,&$A)
 {
-    if( empty($_TV['bread_crumbs']) )
+    if( empty($A['bread_crumbs']) )
         return;
 
     ?><div  class="cc_breadcrumbs"><?
 
-    $carr103 = $_TV['bread_crumbs'];
+    $carr103 = $A['bread_crumbs'];
     $cc103= count( $carr103);
     $ck103= array_keys( $carr103);
     for( $ci103= 0; $ci103< $cc103; ++$ci103)
     { 
-       $_TV['crumb'] = $carr103[ $ck103[ $ci103 ] ];
+       $A['crumb'] = $carr103[ $ck103[ $ci103 ] ];
        
     if ( !($ci103 == ($cc103-1)) ) {
 
-    ?><a  href="<?= $_TV['crumb']['url']?>"><span ><?= $_TV['crumb']['text']?></span></a>  &raquo; <?
+    ?><a  href="<?= $A['crumb']['url']?>"><span ><?= $A['crumb']['text']?></span></a>  &raquo; <?
     } // END: if
 
     if ( $ci103 == ($cc103-1) ){
 
-    ?><span ><?= $_TV['crumb']['text']?></span><?
+    ?><span ><?= $A['crumb']['text']?></span><?
     } // END: if
     } // END: for loop
 
-    if ( !empty($_TV['crumb_tags'])) {
+    if ( !empty($A['crumb_tags'])) {
 
     ?><select  onchange="document.location = this.options[this.selectedIndex].value;" style="font-size:smaller;">
     <?
 
-    $carr104 = $_TV['crumb_tags'];
+    $carr104 = $A['crumb_tags'];
     $cc104= count( $carr104);
     $ck104= array_keys( $carr104);
     for( $ci104= 0; $ci104< $cc104; ++$ci104)
     { 
-       $_TV['tagopt'] = $carr104[ $ck104[ $ci104 ] ];
+       $A['tagopt'] = $carr104[ $ck104[ $ci104 ] ];
        
-    if ( !empty($_TV['tagopt']['selected'])) {
+    if ( !empty($A['tagopt']['selected'])) {
 
-    ?><option  selected="selected" value="<?= $_TV['tagopt']['url']?>"><?= $_TV['tagopt']['text']?></option><?
+    ?><option  selected="selected" value="<?= $A['tagopt']['url']?>"><?= $A['tagopt']['text']?></option><?
     } // END: if
 
-    if ( !($_TV['tagopt']['selected']) ) {
+    if ( !($A['tagopt']['selected']) ) {
 
-    ?><option  value="<?= $_TV['tagopt']['url']?>"><?= $_TV['tagopt']['text']?></option><?
+    ?><option  value="<?= $A['tagopt']['url']?>"><?= $A['tagopt']['text']?></option><?
     } // END: if
     } // END: for loop
 
@@ -168,13 +173,13 @@ function _t_util_print_bread_crumbs($T,&$_TV)
 } // END: function show_bread_crumbs
 
 
-function _t_util_print_client_menu($T,&$_TV)
+function _t_util_print_client_menu($T,&$A)
 {
-    $items = $_TV['client_menu'];
+    $items = $A['client_menu'];
     $count = count($items);
     $K = array_keys($items);
-    if( !empty($_TV['client_menu_help']) )
-        print "<div class=\"client_menu_help\">{$_TV['client_menu_help']}</div>\n";
+    if( !empty($A['client_menu_help']) )
+        print "<div class=\"client_menu_help\">{$A['client_menu_help']}</div>\n";
 
     print "<ul class=\"client_menu\">\n";
     for( $i = 0; $i < $count; $i++ )
@@ -186,21 +191,21 @@ function _t_util_print_client_menu($T,&$_TV)
     }
     print "</ul>";
 
-    if( !empty($_TV['client_menu_hint']) )
-        print "<div class=\"client_menu_hint\">{$_TV['client_menu_hint']}</div>\n";
+    if( !empty($A['client_menu_hint']) )
+        print "<div class=\"client_menu_hint\">{$A['client_menu_hint']}</div>\n";
 }
 
-function _t_util_prev_next_links($T,&$_TV) 
+function _t_util_prev_next_links($T,&$A) 
 {
     print '<table  id="cc_prev_next_links"><tr >';
 
-    if ( !empty($_TV['prev_link'])) 
-        print "<td ><a href=\"{$_TV['prev_link']}\"><span >{$_TV['back_text']}</span></a></td>\n";
+    if ( !empty($A['prev_link'])) 
+        print "<td ><a href=\"{$A['prev_link']}\"><span >{$A['back_text']}</span></a></td>\n";
 
     print '<td  class="cc_list_list_space">&nbsp</td>';
 
-    if ( !empty($_TV['next_link'])) 
-        print "<td ><a href=\"{$_TV['next_link']}\"><span >{$_TV['more_text']}</span></a></td>\n";
+    if ( !empty($A['next_link'])) 
+        print "<td ><a href=\"{$A['next_link']}\"><span >{$A['more_text']}</span></a></td>\n";
 
     print '</tr></table>';
 

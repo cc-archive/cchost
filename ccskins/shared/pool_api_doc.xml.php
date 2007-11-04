@@ -1,9 +1,6 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
-function _t_pool_api_doc_init($T,&$targs) {
-    $T->CompatRequired();
-}?><style >
+?><style >
 #doctable td {
     vetical-align: top;
 }

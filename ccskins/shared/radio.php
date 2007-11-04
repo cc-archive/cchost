@@ -4,7 +4,7 @@
 <form  id="channel_form">
 <table  cellpadding="0" cellspacing="0" id="outerframe">
 <tr ><td  style="width:510px">
-<div  id="djback" class="cc_round_box_bw">
+<div  id="djback" class="cc_round_box_mono">
 <table  cellpadding="0" cellspacing="0">
 <tr ><td  id="cell1">
 <div  id="channel_intro">

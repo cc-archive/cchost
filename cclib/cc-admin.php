@@ -405,6 +405,7 @@ class CCAdmin
         $args['global_help']  = _('These settings affect the entire site');
         $args['global_items'] = $this->_check_access($global_items);
         $args['do_global'] = true;
+        CCPage::SetTitle(_('Global Settings'));
     }
 
     function _setup_local(&$args)
@@ -448,6 +449,7 @@ class CCAdmin
         $args['local_items'] = $this->_check_access($local_items);
         $args['delete_url'] = $CC_CFG_ROOT == CC_GLOBAL_SCOPE ? '' : url_args( ccl( 'admin/cfgroot' ), 'vroot=del' );
         $args['do_local'] = true;
+        CCPage::SetTitle(_('Virtual Root Settings'));
     }
 
     function _add_tabs($subtab)

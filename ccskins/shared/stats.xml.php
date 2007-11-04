@@ -1,9 +1,6 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
-function _t_stats_init($T,&$targs) {
-    $T->CompatRequired();
-}?><div >
+?><div >
 
 <style >
 table.statstable {

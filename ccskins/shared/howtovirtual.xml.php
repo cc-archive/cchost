@@ -1,9 +1,6 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
-function _t_howtovirtual_init($T,&$targs) {
-    $T->CompatRequired();
-}?><div >
+?><div >
 
 <style >
 li { margin-bottom: 7px; }

@@ -34,7 +34,6 @@ $Id$
   padding-top: 20px;
 }
 
-/* colorize */
 #target_text {
   width: 550px;
   height:75px;
@@ -69,12 +68,13 @@ $Id$
 #preview_container {
   /* width: 90%; */
   padding: 9px;
-  background-color: #DDF;
-  border: 1px solid #668;
+  border-wide: 1px;
+  border-style: solid;
 }
 
 #preview_block {
   background-color: white;
+  color: black;
   border: 1px solid black;
   padding: 4px;
   margin-top: 10px;
@@ -106,6 +106,38 @@ select {
 	width: 80%;
 	margin-left: 5%;
 }
+
+  .linkhead {
+    font-size: 13px;
+    color: green;
+    margin: 12px 0px 8px 0px;
+  }
+  
+  #linktype {
+    font-size: 11px;
+  }
+  
+  #linktext {
+    width: 420px;
+    height: 80px;
+    font-size: 11px;
+  }
+  
+  #share_email {
+    margin-left: 40%;
+    width: 200px;
+  }
+  
+  #share_email span {
+  }
+  
+  #inner_share {
+    background: url('../images/shareicons/email.gif') no-repeat top left;
+    padding-left: 55px;
+  }
+
+
+
 
 #share_div {
   margin: 4px;

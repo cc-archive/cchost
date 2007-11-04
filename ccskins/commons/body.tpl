@@ -91,7 +91,7 @@
 
 <div class="post_content_breaker"></div>
 
-<div id="footer" class="footer_bg footer_color">
+<div id="page_footer" class="light_bg">
   <div id="license">%(site-license)%</div>
   %(footer)%
 </div><!-- footer -->

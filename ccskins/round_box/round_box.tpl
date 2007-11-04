@@ -6,7 +6,7 @@
     if( desc )
     {
         Element.removeClassName(desc,'ufc');
-        cc_round_box_bw(desc);
+        cc_round_box_mono(desc);
     }
     </script>
 %end_macro%

@@ -1,7 +1,6 @@
 
 %import_skin(ccskins/plain)%  %% this skin is based on the 'plain' skin %%
 %append( style_sheets, 'css/plain.css' )%
-%append( end_script_blocks, plain.tpl/disable_tabs )%     %% plain requires this line %%
 
 %if(ajax)%
     %call('short_page.tpl')%

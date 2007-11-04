@@ -126,6 +126,7 @@ $GLOBALS['str_forum_posts_by_s'] = _("Forum Posts by %s");
 $GLOBALS['str_forum_restricted_access'] = _('Restricted Access');
 $GLOBALS['str_forum_thread_missing'] = _('Thread Missing') ;
 $GLOBALS['str_forums'] = _('Forums');
+$GLOBALS['str_from'] = _('from');
 $GLOBALS['str_getting_data'] = _('Getting data...');
 $GLOBALS['str_hidi_how_did_you'] = _('How did you put all the pieces together?');
 $GLOBALS['str_hidi_original_samples'] = _('Original Samples');

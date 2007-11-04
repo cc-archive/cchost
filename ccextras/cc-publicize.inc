@@ -276,12 +276,13 @@ class CCPublicize
         $args['htmlwarn'] = _('Make sure to copy from the box above, not what is showing below because the actual content of this HTML will change based on the upload activity. You can still get an idea of what of the formatting will look like here:');
 
         CCPage::SetTitle( $title );
-        CCPage::AddScriptLink( 'sharesites.js' );
-        CCPage::SetStyleSheet('publicize.css');
-        CCPage::PageArg('share', 'share.xml/share_popup' );
-        CCPage::PageArg('publicize', 'publicize.xml/publicize');
+        CCPage::AddScriptLink( 'js/sharesites.js', true );
+        CCPage::AddScriptLink( 'js/share.js', true );
+        CCPage::SetStyleSheet('css/publicize.css');
+        CCPage::PageArg('share', 'share.php/share_popup' );
+        CCPage::PageArg('publicize', 'publicize.php/publicize');
         CCPage::PageArg('PUB', $args, 'share');
-        CCPage::PageArg('dummy', array(), 'publicize');
+        CCPage::AddMacro('publicize');
 
         if( !empty($record) )
         {

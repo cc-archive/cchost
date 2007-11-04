@@ -99,7 +99,7 @@ class CCEditorials
         {
             $record['local_menu'] = CCUpload::GetRecordLocalMenu($record);
             $marg = array( $record );
-            $form->CallFormMacro( 'file_records', 'list_files', $marg);
+            $form->CallFormMacro( 'records', 'list_files', $marg);
             if( !empty($editorials[$reviewer_user_name]) )
             {
                 $form->SetFormValue('editorial_review', $editorials[$reviewer_user_name]['review'] );

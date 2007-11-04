@@ -116,18 +116,14 @@ class CCUpload
         }
 
         $macro = !empty($macro) ? $macro : (!empty($tmacro) ? $tmacro : (!empty($template) ? $template : ''));
-        if( !empty($macro) )
-        {
-            $dochop = isset($chop) && $chop > 0;
-            $chop   = isset($chop) ? $chop : 25;
-            CCPage::PageArg('chop',$chop);
-            CCPage::PageArg('dochop',$dochop);
-            CCPage::PageArg( 'records', $records, $macro );
-            $uploads =& CCUploads::GetTable();
-            CCPage::AddPagingLinks($uploads,$last_where); // ??
-            $result = true;
-            return;
-        }
+        
+        $dochop = isset($chop) && $chop > 0;
+        $chop   = isset($chop) ? $chop : 25;
+        CCPage::PageArg('chop',$chop);
+        CCPage::PageArg('dochop',$dochop);
+        CCPage::PageArg( 'records', $records, $macro );
+        $uploads =& CCUploads::GetTable();
+        CCPage::AddPagingLinks($uploads,$last_where); // ??
 
         // we don't know WHAT shape the global table is in but
         // we have the latest where used so we use that for
@@ -157,7 +153,7 @@ class CCUpload
         if( empty($macro) )
             $macro = 'list_files';
 
-        CCPage::PageArg( 'file_records', $records, $macro);
+        CCPage::PageArg( 'records', $records, $macro);
 
         if( !empty($feed) )
         {
@@ -178,7 +174,7 @@ class CCUpload
         if( empty($macro) )
             $macro = 'list_files';
 
-        CCPage::PageArg( 'file_records', $records, $macro);
+        CCPage::PageArg( 'records', $records, $macro);
     }
 
     function GetRecordLocalMenu(&$record)

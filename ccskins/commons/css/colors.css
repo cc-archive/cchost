@@ -31,3 +31,4 @@ ul#tabs a:hover span, ul#sub_tabs a:hover span  { background: url("<?= $url ?><?
 ul#tabs li.selected_tab a, ul#sub_tabs li.selected_tab a  { background: url("<?= $url ?><?= $scheme ?>/tab-body-lit.png") no-repeat top right #fff; }
 ul#tabs li.selected_tab a span, ul#sub_tabs li.selected_tab a span  { background: url("<?= $url ?><?= $scheme ?>/tab-left-lit.png") no-repeat top left; }
 
+<? require_once( dirname(__FILE__) . '/../../round_box/css/colors.css' ); ?>

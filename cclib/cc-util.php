@@ -206,6 +206,10 @@ class CCUtil
         {
             $newurl = cc_get_root_url();
         }
+
+        if( !empty($_GET['popup']) && (strpos($newurl,'popup=') === false) )
+            $newurl = url_args($newurl,'popup=1');
+
         header("Location: $newurl");
         exit;
     }
