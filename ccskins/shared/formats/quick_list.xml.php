@@ -1,11 +1,11 @@
 <?
-global $_TV;
+global $A;
 
 $upload_flag_str     = $GLOBALS['str_flag_this_upload'] ;
 $play_str            = $GLOBALS['str_play'] ;
 $by_str              = $GLOBALS['str_by'] ;
 
-$carr103 =& $_TV['records'];
+$carr103 =& $A['records'];
 $cc103   = count( $carr103);
 $ck103   = array_keys( $carr103);
 
@@ -26,8 +26,8 @@ for( $ci103= 0; $ci103< $cc103; ++$ci103)
 { 
     $R =& $carr103[ $ck103[ $ci103 ] ];
 
-    $furl = $_TV['home-url'] . 'files/' . $R['u'] . '/' . $R['i'];
-    $aurl = $_TV['home-url'] . 'people/' . $R['u'];
+    $furl = $A['home-url'] . 'files/' . $R['u'] . '/' . $R['i'];
+    $aurl = $A['home-url'] . 'people/' . $R['u'];
     $html =<<<EOF
         <tr><td><a href="{$furl}" class="upload_link">{$R['n']}</a> {$GLOBALS['str_by']} <a href="{$aurl}">{$R['r']}</a></td></tr>
         <tr><td class="taglinks">
@@ -35,7 +35,7 @@ EOF;
     print $html;
     $tags = explode(',',$R['t']);
     $comma = '';
-    $turl = $_TV['home-url'] . 'tags/';
+    $turl = $A['home-url'] . 'tags/';
     foreach( $tags as $T )
     {
         print "$comma<a href=\"{$turl}{$T}\">{$T}</a>";
