@@ -186,7 +186,7 @@ function cc_tcache_kill()
         foreach($tcache as $cname)
             if( file_exists($cname) )
                 @unlink($cname);
-        $tcache = array( '' );
+        $tcache = array();
         $configs->SaveConfig('tcache',$tcache,CC_GLOBAL_SCOPE);
     }
 }
@@ -248,6 +248,12 @@ function & CC_get_details($upload_id,$menu=true)
     $recs = array( &$rec );
     cc_get_remix_history( $recs, 0 );
     return $rec;
+}
+
+function & CC_get_user_details(&$row)
+{
+    $users =& CCUsers::GetTable();
+    return $users->GetFullRecord($row);
 }
 
 function cc_get_upload_menu(&$record)

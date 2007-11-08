@@ -330,7 +330,7 @@ class CCUsers extends CCTable
         return $row;
     }
 
-    function GetFullRecord(&$row,$expand=true)
+    function & GetFullRecord(&$row,$expand=true)
     {
         $row['user_homepage_html'] = '';
         if( !empty($row['user_homepage']) )

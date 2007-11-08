@@ -14,13 +14,27 @@ $GLOBALS['str_skin_theme'] = _('Theme');
 
 function _t_about_plain()
 {
+    $schemes = cc_get_config('color-schemes');
+    $opts= '';
+    if( !empty($schemes) )
+    {
+        foreach( $schemes as $scheme )
+            $opts .= "<option value=\"{$scheme['name']}\">{$scheme['display_name']}</option>\n";
+    }
+    else
+    {
+        $opts=<<<EOF
+        <option value="green">{$GLOBALS['str_skin_green']}</option>
+        <option value="blue">{$GLOBALS['str_skin_blue']}</option>
+        <option value="mono">{$GLOBALS['str_skin_mono']}</option>
+EOF;
+    }
+
     $html =<<<EOF
 <table  class="cc_form_table">
 <tr class="cc_form_row"><td  class="cc_form_label">${GLOBALS['str_skin_color_scheme']}:</td>
     <td><select name="skin_properties[color_scheme]" id="skin_properties[color_scheme]">
-        <option value="green">{$GLOBALS['str_skin_green']}</option>
-        <option value="blue">{$GLOBALS['str_skin_blue']}</option>
-        <option value="mono">{$GLOBALS['str_skin_mono']}</option>
+{$opts}
     </select></td></tr>
 <tr class="cc_form_row"><td  class="cc_form_label">${GLOBALS['str_skin_theme']}:</td>
     <td><select name="skin_properties[skin_theme]}" id="skin_properties[skin_theme]}">

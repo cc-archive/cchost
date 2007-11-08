@@ -333,7 +333,7 @@ class CCUserAdmin
                          'menu_text' => sprintf(_("Activity for %s"), $uq ),
                          'help'      => _('See Activity Log for this user.') );
 
-        CCPage::PageArg('link_table_items',$args,'link_table');
+        CCPage::PageArg('client_menu',$args,'print_client_menu');
 
     }
 

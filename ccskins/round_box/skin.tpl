@@ -5,7 +5,6 @@
 %if(ajax)%
     %call('short_page.tpl')%
 %else%
-%inherit( user_listing, round_box.tpl/user_profile )%        %% user profile page needs special handling for description field %%
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 //EN">
 <html>
     %call('head.tpl')%

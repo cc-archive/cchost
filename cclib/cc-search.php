@@ -299,7 +299,6 @@ END;
   font-weight: normal;
   font-style: italic;
   padding-right: 4px;
-  background-color: #CCF;
 }
 </style>
 <table id="wid_table">
@@ -311,7 +310,7 @@ EOF;
                 if( !$show_all && (count($alinks) < 2) )
                     continue;
 
-                $html .= '<tr><th>' . $wid;
+                $html .= '<tr><th class="light_bg">' . $wid;
                 if( ($got_tag && ($wid == $tag)) ||
                     (!$got_tag && ($first_letter == $wid{0}) )
                    )

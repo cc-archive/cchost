@@ -39,7 +39,7 @@
 </table>
 %if_not_empty(enable_playlists)%
     %call('playerembed.xml/eplayer')%
-    %call('playlist.xml/playlist_menu')%
+    %call('playlist.*/playlist_menu')%
 %end_if%
 %call(prev_next_links)%
 </div>

@@ -5,8 +5,10 @@
             <tr class="cc_form_error_row"><td></td><td class="cc_form_error">%string(#F/form_error)%</td></tr>
         %end_if%
         <tr class="cc_form_row">
-        <td  class="cc_form_label"><div>%text(#F/label)%</div><span>%text(#F/form_tip)%</span></td>
-        <td class="cc_form_element">%if_not_null(#F/macro)% %call(#F/macro)% %end_if%<!-- -->%(#F/form_element)%</td></tr>
+        <td  class="cc_form_label">
+            %if_not_null(#F/label)%<div>%text(#F/label)%</div>%end_if%
+            %if_not_null(#F/form_tip)%<span>%text(#F/form_tip)%</span>%end_if%</td>
+        <td class="cc_form_element">%if_not_null(#F/macro)% %map(field,#F)%<!-- -->%call(#F/macro)% %end_if%<!-- -->%(#F/form_element)%</td></tr>
     %end_loop%
 </table>
 %end_macro%
@@ -20,7 +22,7 @@
         <tr class="cc_form_row">
         <td  class="cc_form_label"><div>%text(#F/label)%</div><span>%text(#F/form_tip)%</span></td>
         </tr>
-        <tr><td class="cc_form_element">%if_not_null(#F/macro)% %call(#F/macro)% %end_if%<!-- -->%(#F/form_element)%</td></tr></tr>
+        <tr><td class="cc_form_element">%if_not_null(#F/macro)%  %map(field,#F)%<!-- -->%call(#F/macro)% %end_if%<!-- -->%(#F/form_element)%</td></tr></tr>
     %end_loop%
 </table>
 %end_macro%
@@ -43,47 +45,79 @@
    </tr>
 %end_loop%
 </table>
+%map(post_form_goo,'form_fields.tpl/post_flat_grid_form')%
 %end_macro%
 
 %macro(grid_form_fields)%
 <table class="cc_2by_grid_form_table" id="table_%(curr_form/form_id)%" cellspacing="0" cellpadding="0">
 <tr>
-<td class="cc_2by_grid_names med_bg"">
+<td class="cc_2by_grid_names med_bg" id="names_%(curr_form/form_id)%">
     %loop(curr_form/html_form_grid_rows,R)%
-       <? $name_guess = _suck_out_grid_row_name($R); ?>
-       <div id="dmit_%(#i_R)%" class="med_bg med_border"><a href="javascript://menu item" class="menu_item_title light_color" id="mit_%(#i_R)%" >%(#name_guess)%</a></div>
+       <div id="dmit_%(#i_R)%" class="med_bg dark_border"><a href="javascript://menu item" class="menu_item_title light_color" id="mit_%(#i_R)%" >%(#R/name)%</a></div>
     %end_loop%
 </td>
-<td class="cc_2by_grid_fields light_bg">
-<div id="fields_target_%(curr_form/form_id)%"></div>
-<td>
-</tr>
-</table>
-<script>
-
-var gcols_%(curr_form/form_id)% = [
-%loop(curr_form/html_form_grid_columns,C)%
-        <? $fge = str_replace("'","\\'",$T->String($C['column_name'])); ?>
-        '<span class="col">%(#fge)%</span>'%if_not_last(#C)%, %end_if%
-%end_loop%
-        ];
-
-var grows_%(curr_form/form_id)% = [
+<td class="cc_2by_grid_fields light_bg" id="fields_%(curr_form/form_id)%">
+%map(#C,curr_form/html_form_grid_columns)%
 %loop(curr_form/html_form_grid_rows,FR)%
-
-        '<div id="%(curr_form/form_id)%_' + %(#i_FR)% + '" style="display:none">' +
+    <div id="%(curr_form/form_id)%_%(#i_FR)%" style="display:none">
    %loop(#FR/html_form_grid_fields,F)%
         %if_not_null(#F/form_grid_element)%
-            <? $fge = str_replace("'","\\'",$F['form_grid_element']); ?>
-            '<div class="f">' + gcols_%(curr_form/form_id)%[%(#i_F)% - 1] + ' %(#fge)%</div>' +
+            <div class="f"><span class="col"><?= $C[$i_F-1]['column_name'] ?></span>%(#F/form_grid_element)%</div>
+            <div class="gform_breaker"></div>
         %end_if%
    %end_loop% 
-        '</div><div class="gform_breaker"></div>'%if_not_last(#FR)%, %end_if%
+</div>
 %end_loop%
-];
+</div>
+<td>
+</tr>
+%if_not_null(curr_form/html_add_row_caption)%
+<tr><td colspan="2">
+    <a href="javascript://add a row" id="%(curr_form/form_id)%_adder">%(curr_form/html_add_row_caption)%</a>
+    </td></tr>
+%end_if%
+</table>
+<script> var %(curr_form/form_id)%_editor = new ccGridEditor('%(curr_form/form_id)%'); </script>
+%map(post_form_goo,'form_fields.tpl/post_grid_form')%
+%end_macro%
 
-new ccGridEditor('%(curr_form/form_id)%',grows_%(curr_form/form_id)%);
+%macro(post_grid_form)%
+    %if_empty(curr_form/html_meta_row)%
+        %return%
+    %end_if%
+<div style="display:none">
+%loop(curr_form/html_meta_row,meta)%
+<div id="%(curr_form/form_id)%_meta_%(#i_meta)%">%(#meta)%</div>
+%end_loop%
+</div><!-- meta rows -->
+<script>
+%(curr_form/form_id)%_editor.cols = [
+    %loop(curr_form/html_form_grid_columns,C)% '%(#C/column_name)%'%if_not_last(#C)%, %end_if% %end_loop%
+    ];
 
+</script>
+%end_macro%
+
+%macro(post_flat_grid_form)%
+    %if_empty(curr_form/html_meta_row)%
+        %return%
+    %end_if%
+<div style="display:none">
+%loop(curr_form/html_meta_row,meta)%
+<div id="%(curr_form/form_id)%_meta_%(#i_meta)%">%(#meta)%</div>
+%end_loop%
+</div><!-- meta rows -->
+%if_not_null(curr_form/html_add_row_caption)%
+    <button  onclick="do_add_row(); return false;">%string(curr_form/html_add_row_caption)%</button>
+%end_if%
+<script>
+function do_add_row()
+{
+    add_flat_row( '%(curr_form/form_id)%', 
+                   %(curr_form/html_form_grid_num_rows)%,
+                   %(curr_form/html_form_grid_num_cols)%
+                );
+}
 </script>
 %end_macro%
 
@@ -94,7 +128,7 @@ function _suck_out_grid_row_name(&$row)
     foreach( $row['html_form_grid_fields'] as $field )
     {
         $html = $field['form_grid_element'];
-        if( strstr($html,'checkbox') || strstr($html,'select') )
+        if( strstr($html,'checkbox') || strstr($html,'select') || strstr($html,'radio'))
             continue;
         if( preg_match('/value="([^"]+)"/',$html,$m) )
             return $m[1];

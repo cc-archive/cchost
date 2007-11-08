@@ -174,3 +174,136 @@ function cc_add_tag(tag,fieldname)
     tagstr = tagstr.substr(1);
   f.value = tagstr;
 }
+
+
+ccGridEditor = Class.create();
+ccGridEditor.prototype = {
+
+    form_id: '',
+    curr_row: 1,
+    num_rows: 1,
+    cols: null,
+
+    initialize: function(form_id) {
+        this.form_id = form_id;
+        var me = this;
+        $$('.menu_item_title').each( function(e) {
+            ++me.num_rows;
+            var num = e.id.replace(/mit_/,'');
+            Event.observe( e, 'click', me.onMenuTitleClick.bindAsEventListener(me,num) );
+        });
+        this._select_row();
+        var adder = $(form_id + '_adder');
+        if( adder )
+        {
+            Event.observe( adder, 'click', me.onAdderClick.bindAsEventListener(me) );
+        }
+        $$('.gcol_name').each( function(e) {
+            var num = e.id.match(/^[^\[]+\[([0-9]+)/)[1];
+            var eid = 'mit_' + (parseInt(num)+1);
+            Event.observe( e, 'keyup', me.onNameChange.bindAsEventListener(me,e.id,eid) );
+        });
+    },
+
+    onNameChange: function(e,src,target) {
+        $(target).innerHTML = $(src).value;
+    },
+    onAdderClick: function() {
+        try
+        {
+            var html = '';
+            var ci;
+            ++this.num_rows;
+            for( ci = 0; ci < this.cols.length; ci++ )
+            {
+                var id = this.form_id + '_meta_' + (ci+1);
+                html += '<div class="f"><span class="col">' + this.cols[ci] + '</span>' +
+                         $(id).innerHTML.replace(/%i%/g,"" + this.num_rows).replace(/\\/g,'') +
+                        '</div><div class="gform_breaker"></div>';
+            }
+            var div = document.createElement('div');
+            var mitid = 'mit_' + this.num_rows;
+            var divid = this.form_id + '_' + this.num_rows;
+            div.id = divid;
+            div.innerHTML = html;
+            div.style.display = 'none';
+            $('fields_' + this.form_id).appendChild(div);
+            var me = this;
+            $(divid).getElementsByClassName('gcol_name').each( function(e) {
+                Event.observe( e, 'keyup', me.onNameChange.bindAsEventListener(me,e.id,mitid) );
+            });
+
+            div = document.createElement('div');
+            div.id = 'dmit_'+this.num_rows;
+            div.className = 'med_bg dark_border';
+            div.innerHTML = '<a href="javascript://menu item" ' +
+                   'class="menu_item_title light_color" id="'+mitid+'" >'+str_new_row+ ' (' + this.num_rows + ')</a>';
+            $('names_' + this.form_id).appendChild(div);
+            Event.observe( mitid, 'click', this.onMenuTitleClick.bindAsEventListener(this,this.num_rows) );
+            this._deselect_row();
+            this.curr_row = this.num_rows;
+            this._select_row();
+        }
+        catch (e)
+        {
+            alert(e);
+        }
+    },
+
+    _select_row: function() {
+        var _id = this.form_id + '_' + this.curr_row;
+        $(_id).style.display = 'block';
+        _id = 'mit_' + this.curr_row;
+        Element.removeClassName($(_id),'light_color');
+        Element.addClassName($(_id),'dark_color');
+        _id = 'dmit_' + this.curr_row;
+        Element.removeClassName($(_id),'med_bg');
+        Element.addClassName($(_id),'light_bg');
+        Element.addClassName($(_id),'selected');
+    },
+
+    _deselect_row: function() {
+        var _id = this.form_id + '_' + this.curr_row;
+        $(_id).style.display = 'none';
+        _id = 'mit_' + this.curr_row;
+        Element.addClassName($(_id),'light_color');
+        Element.removeClassName($(_id),'dark_color');
+        _id = 'dmit_' + this.curr_row;
+        Element.addClassName($(_id),'med_bg');
+        Element.removeClassName($(_id),'light_bg');
+        Element.removeClassName($(_id),'selected');
+    },
+
+    onMenuTitleClick: function(e,num) {
+        try
+        {
+            if( num == this.curr_row )
+                return;
+            this._deselect_row();
+            this.curr_row = num;
+            this._select_row();
+        }
+        catch (e)
+        {
+            alert(e);
+        }
+    }
+}
+
+
+var add_row_num = 1;
+function add_flat_row(form_id,num_grid_rows,num_grid_cols)
+{
+    var tableobj = $('table_' + form_id);
+    var row_num = num_grid_rows + add_row_num;
+    ++add_row_num;
+    var row = tableobj.insertRow(row_num);
+    var num_cols = num_grid_cols;
+    var td;
+    var ci;
+    for( ci = 0; ci < num_cols; ci++ )
+    {
+        td = row.insertCell(ci);
+        td.innerHTML = $(form_id + '_meta_' + ci).innerHTML.replace(/%i%/g,"" + row_num); 
+    }
+}

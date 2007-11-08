@@ -619,9 +619,9 @@ var ccPlaylistBrowserObject = {
         {
             if( this.selected )
             {
-                Element.removeClassName(this.selected, 'sel_line'); // 'cc_playlist_sel' );
+                Element.removeClassName(this.selected, 'selected_area'); // 'cc_playlist_sel' );
             }
-            Element.addClassName( e, 'sel_line'); // 'cc_playlist_sel' );
+            Element.addClassName( e, 'selected_area'); // 'cc_playlist_sel' );
             this.selected = e;
         }
     },

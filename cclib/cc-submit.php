@@ -308,7 +308,7 @@ class CCSubmit
                                  'menu_text' => _('Edit'),
                                  'help' => $data['submit_type'] );
             }
-            CCPage::PageArg('link_table_items',$args,'link_table');
+            CCPage::PageArg('client_menu',$args,'print_client_menu');
 
             $url = ccl('admin','submit','revert');
             $link1 = "<a href=\"$url\">";

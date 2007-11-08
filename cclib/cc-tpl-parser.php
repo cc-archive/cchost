@@ -218,8 +218,6 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
         "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   $str_format,
         "/<\? return%/"                                   =>   "<? return; ?>",
-        "/<\? inherit{$op}{$ac}{$aoq}{$cp}%/"             =>   "<? \$T->Inherit('$1','$2'); ?>",
-        "/<\? call_parent%/"                              =>   "<? \$T->CallParent(); ?>",
         "/<\? settings{$op}{$ac}{$a}{$cp}%/"              =>   "<? \$A['$2'] = CC_get_config('$1'); ?>",
         "/<\? un(?:define|map){$op}{$a}{$cp}%/"           =>   "<? unset(\$A['$1']); ?>",
         );

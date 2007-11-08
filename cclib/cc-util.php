@@ -420,66 +420,61 @@ class CCUtil
         return $dirs;
     }
 
-
-    function SearchPath($target,$look_here_first,$then_here,$real_path=true,$recurs=CC_SEARCH_RECURSE_DEFAULT,$reject='')
+    function SearchPath($target,$look_here_first,$then_here,$real_path=true,$recurs=CC_SEARCH_RECURSE_DEFAULT)
     {
+        $dirs = $look_here_first;
+        if( !is_array($dirs) )
+            $dirs = split(';',$dirs);
+        if( !empty($then_here) )
+        {
+            if( !is_array($then_here) )
+                $then_here = split(';',$then_here);
+            $dirs = array_merge($dirs,$then_here);
+        }
+        $clean_dirs = array();
+        foreach( $dirs as $dir )
+        {
+            $dir = trim($dir);
+            if( empty($dir) )
+                continue;
+            $clean_dirs[] = CCUtil::CheckTrailingSlash($dir,true);
+        }
+
         if( !is_array($target) )
-            $target = array( $target );
+            $target = array($target);
+            
+        // I would love to use '{' braces for this but there seems to
+        // be a limit (120?) on the size of the string so fk-it.
 
-        $reject = empty($reject) ? false : str_replace('\\','/',realpath($reject));
-
-        $files = array();
-        foreach( $target as $T )
+        foreach( $clean_dirs as $dir )
         {
-            if( file_exists($T) && (!$reject || ($reject != str_replace('\\','/',realpath($T)))))
+            foreach( $target as $T )
             {
-                if( $real_path )
-                    return realpath($T);
-                return $T;
+                $hit = CCUtil::_inner_search($T,$dir,$recurs);
+                if( !empty($hit) )
+                    return $real_path ? realpath($hit[0]) : $hit[0];
             }
-
-            $files[] = ( $T{0} == '/' ) ? $T = substr($T,1) : $T;
         }
-
-        if( !is_array($look_here_first) )
-            $look_here_first = split(';',$look_here_first);
-
-        if( !is_array($then_here) )
-            $then_here = split(';',$then_here);
-
-        $paths = array_merge($look_here_first, $then_here);
-
-        $hit = CCUtil::_inner_search($files,$paths,$real_path,$recurs,$reject);
-        return $hit;
+        return null;
     }
 
-    function _inner_search($files,$paths,$real_path,$recurs,$reject)
+    function _inner_search($target,$dir,$recurs)
     {
-        foreach( $paths as $P )
+        $hit = glob($dir . $target);
+        if( !empty($hit) || !$recurs )
+            return $hit;
+        $subdirs = glob( $dir . '*',GLOB_ONLYDIR|GLOB_NOSORT|GLOB_MARK);
+        if( empty($subdirs) )
+            return null;
+        foreach( $subdirs as $dir )
         {
-            $P = trim($P);
-            $dir = CCUtil::CheckTrailingSlash($P,true);
-            foreach( $files as $T )
-            {
-                $relpath = $dir . $T;
-                if( file_exists($relpath) && (!$reject || ($reject != str_replace('\\','/',realpath($relpath)))))
-                    return $real_path ? realpath($relpath) : $relpath;
-            }
-
-            if( $recurs )
-            {
-                $dirs = glob( $P . '/*', GLOB_MARK | GLOB_NOSORT | GLOB_ONLYDIR );
-                foreach( $dirs as $dir )
-                {
-                    $hit = CCUtil::_inner_search($files,array($dir),$real_path,true,$reject);
-                    if( $hit )
-                        return $hit;
-                }
-            }
+            $hit = CCUtil::_inner_search($target,$dir,$recurs);
+            if( !empty($hit) )
+                return $hit;
         }
-
-        return false;
+        return null;
     }
+
 }
 
 ?>

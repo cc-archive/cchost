@@ -1,6 +1,7 @@
 
 %append( style_sheets, css/blog.css)%
-%map(list_files,'formats/list_files_blog.tpl')%
+
+%map(form_fields, 'form_fields.tpl/stacked_form_fields')%
 
 %if(ajax)%
     %call('short_page.tpl')%

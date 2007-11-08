@@ -31,7 +31,7 @@ function _t_upload_list_init($T,&$A)
     if( !empty($A['enable_playlists']) )
     {
         $T->Call('playerembed.xml/eplayer');
-        $T->Call('playlist.xml/playlist_menu');
+        $T->Call('playlist.*/playlist_menu');
     }
 
     print '<script> var dl_hook = new downloadHook(); dl_hook.hookLinks(); </script>';

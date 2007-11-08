@@ -47,4 +47,5 @@ var str_see_results               ='<?=addslashes($GLOBALS['str_see_results'])?>
 var str_tags                      ='<?=addslashes($GLOBALS['str_tags'])?>';
 var str_thinking                  ='<?=addslashes($GLOBALS['str_thinking'])?>';
 var str_working                   ='<?=addslashes($GLOBALS['str_working'])?>';
+var str_new_row                   ='<?=addslashes($GLOBALS['str_new_row'])?>';
 <? exit; ?>

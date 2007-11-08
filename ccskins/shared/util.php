@@ -175,6 +175,7 @@ function _t_util_print_bread_crumbs($T,&$A)
 
 function _t_util_print_client_menu($T,&$A)
 {
+    ?><link rel="stylesheet" type="text/css" href="<?= $T->URL('css/client_menu.css'); ?>" title="Default Style" /><?
     $items = $A['client_menu'];
     $count = count($items);
     $K = array_keys($items);

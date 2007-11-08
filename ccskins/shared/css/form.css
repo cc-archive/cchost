@@ -17,6 +17,12 @@
 *
 */
 
+/* Generic form stuff */
+
+.cc_form_help_container {
+	margin-left: auto;
+	margin-right: auto;
+}
 
 /*--------------------------------------------------------
 	Styles for the formatted textedit editing in forms
@@ -63,4 +69,71 @@ span.quote span {
     display: block;
 	margin-bottom: 2px;
 	font-weight: bold;
+}
+
+/************************** 
+	grid form stuff 
+***************************/
+
+.cc_2by_grid_form_table {
+	width: 550px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+}
+
+.cc_2by_grid_form_table td {
+	vertical-align: top;
+}
+
+
+.cc_2by_grid_names {
+	text-align: right;
+	padding-bottom: 25px;
+}
+
+.cc_2by_grid_names div {
+	padding: 3px;
+	border-width: 2px;
+	border-style: solid;
+}
+
+.cc_2by_grid_names div.selected {
+	border-right-style: none;
+}
+
+.cc_2by_grid_names div a {
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.cc_2by_grid_form_table cc_form_input {
+	width: 250px;
+}
+
+.cc_2by_grid_form_table cc_form_input {
+	width: 250px;
+}
+
+.cc_2by_grid_fields {
+	width: 400px;
+	padding: 13px;
+}
+
+.cc_2by_grid_fields .f {
+	margin-bottom: 4px;
+}
+
+.cc_2by_grid_fields .col {
+	display: block;
+	float: left;
+	text-align: right;
+	width: 60px;
+	padding-right: 12px;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.gform_breaker {
+	clear: left;
 }

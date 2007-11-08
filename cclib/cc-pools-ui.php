@@ -156,7 +156,7 @@ END;
                        'menu_text' => _('Approve Remote Remixes'),
                        'help' => _('Validate pending remote remixes.') ),
                );
-        CCPage::PageArg( 'link_table_items', $args, 'link_table' );
+        CCPage::PageArg('client_menu',$args,'print_client_menu');
     }
 
     function Approve($submit='')
@@ -215,7 +215,7 @@ END;
                        'help' => $pool_row['pool_name'] 
                      );
         }
-        CCPage::PageArg( 'link_table_items', $args, 'link_table' );
+        CCPage::PageArg('client_menu',$args,'print_client_menu');
 
     }
 

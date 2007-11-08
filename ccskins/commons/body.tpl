@@ -5,7 +5,7 @@
 <div id="banner" class="banner_bg banner_color">
 
     %if_not_empty(sticky_search)%
-        <div id="banner_search"><img src="%url(images/find.png)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%string(find)%</h3><span>%string(findcontent)%</span></a></div>
+        <div id="banner_search"><img id="banner_search_img" height="50" width="70" src="%url(images/find.PNG)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%string(find)%</h3><span>%string(findcontent)%</span></a></div>
     %end_if%
 
     %if_not_empty(logged_in_as)%
@@ -126,5 +126,9 @@
 %loop(end_script_links,script_link)%
     <script type="text/javascript" src="%url(#script_link)%" ></script>
 %end_loop%
+<!--[if lt IE 7]>
+<script defer type="text/javascript" src="%url('js/pngfix.js')%"></script>
+<![endif]-->
+
 
 </body>

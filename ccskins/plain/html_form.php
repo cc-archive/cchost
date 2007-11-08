@@ -43,142 +43,14 @@ EOF;
 
     print "</form>\n";
 
-    if ( !empty($F['html_meta_row'])) {
-
-    ?>   <script >
-            var add_row_num = 1;
-            function add_the_row()
-            {
-                var tableobj = $('table_<?= $F['form_id']?>');
-                var row_num = <?= $F['html_form_grid_num_rows']?> + add_row_num;
-                ++add_row_num;
-                var row = tableobj.insertRow(row_num);
-                var num_cols = <?= $F['html_form_grid_num_cols']?>;
-                var td;
-                <?  $ci = 0;
-                    foreach( $F['html_meta_row'] as $HMR ) 
-                    { ?>
-                td = row.insertCell(<?= $ci?>);
-                td.innerHTML = '<?= $HMR?>'.replace(/%i%/g,"" + row_num); 
-                <?  $ci++; } ?>
-            }
-          </script>
-    <?
-    } // END: if
-
-    if ( isset($F['html_add_row_caption']) ) {
-        ?><button  onclick="add_the_row(); return false;"><?= $F['html_add_row_caption']?></button><?
+    if( !empty($A['post_form_goo']) )
+    {
+        $T->Call('post_form_goo');
+        unset($A['post_form_goo']);
     }
 
 } // END: function html_form
 
-
-//------------------------------------- 
-function _t_html_form_form_fields($T,&$A) {
-   
-    print "<table  class=\"cc_form_table\">\n";
-
-    foreach( $A['curr_form']['html_form_fields'] as $F )
-    { 
-        if ( !empty($F['form_error']))
-            print "<tr  class=\"cc_form_error_row\"><td ></td><td  class=\"cc_form_error\">".
-                $T->String($F['form_error']) . "</td></tr>\n";
-
-        print '<tr class="cc_form_row">';
-
-        if( !empty($F['label']) )
-            $label = $T->String($F['label']);
-
-        if ( empty($label) ) {
-            $span = 'colspan="2"';
-        } else {
-            if( !empty($F['form_tip']) )
-                $tip = $T->String($F['form_tip']);
-
-            $tip = empty($tip) ? '' : '<span>' . $tip . '</span>';
-
-            print "<td  class=\"cc_form_label\"><div>{$label}</div>$tip</td>";
-            $span = '';
-        }
-
-        print "<td $span class=\"cc_form_element\">";
-
-        if ( !empty($F['macro']))
-        {
-            $A['field'] = $F;
-            $T->Call($F['macro']);
-        }
-CCDebug::LogVar('fe',$F['form_element']);
-        ?><?= $F['form_element']?></td><?
-
-        print "</tr>\n";
-
-        $tip = $label = '';
-
-    } // END: for loop
-
-    print "</table>\n";
-
-} // END: function form_fields
-
-
-
-//------------------------------------- 
-function _t_html_form_grid_form_fields($T,&$A) {
-   
-
-?><table  class="cc_grid_form_table" id="table_<?= $A['curr_form']['form_id']?>">
-<tr  class="cc_grid_form_header_row">
-<?
-
-$carr106 = $A['curr_form']['html_form_grid_columns'];
-$cc106= count( $carr106);
-$ck106= array_keys( $carr106);
-for( $ci106= 0; $ci106< $cc106; ++$ci106)
-{ 
-   $A['curr_form']['head'] = $carr106[ $ck106[ $ci106 ] ];
-   
-?><th  class="cc_grid_form_header"><?= $A['curr_form']['head']['column_name']?></th><?
-} // END: for loop
-
-?></tr>
-<?
-
-$carr107 = $A['curr_form']['html_form_grid_rows'];
-$cc107= count( $carr107);
-$ck107= array_keys( $carr107);
-for( $ci107= 0; $ci107< $cc107; ++$ci107)
-{ 
-   $A['curr_form']['row'] = $carr107[ $ck107[ $ci107 ] ];
-   
-if ( !empty($A['curr_form']['row']['form_error'])) {
-
-?><tr  class="cc_form_error_row"><td ></td>
-<td  colspan="<?= $A['curr_form']['repeat']['row']['length']?>" class="cc_form_error"><?= $A['curr_form']['row']['form_error']?></td>
-</tr><?
-} // END: if
-
-?><tr  class="cc_form_row">
-<?
-
-$carr108 = $A['curr_form']['row']['html_form_grid_fields'];
-$cc108= count( $carr108);
-$ck108= array_keys( $carr108);
-for( $ci108= 0; $ci108< $cc108; ++$ci108)
-{ 
-   $F = $carr108[ $ck108[ $ci108 ] ];
-   
-?><td ><?= $F['form_grid_element']?>
-           </td><?
-} // END: for loop
-
-?></tr>
-<?
-} // END: for loop
-
-?></table>
-<?
-} // END: function grid_form_fields
 
 
 //------------------------------------- 

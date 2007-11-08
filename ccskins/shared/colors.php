@@ -18,51 +18,27 @@ $scheme = $CC_GLOBALS['skin_properties']['color_scheme'];
 
 print "/* Color scheme: {$scheme} */\n";
 
-switch($scheme)
+
+$schemes = cc_get_config('color-schemes');
+if( !empty($schemes) )
 {
-    case 'mono':
+    foreach( $schemes as $S )
     {
-        $bg = '#FFFFFF';
-        $color = '#000000';
-        $dark = '#555555';
-        $med = '#888888';
-        $light = '#DDDDDD';
-        $highlight = '#CCCCCC';
-        break;
+        if( $S['name'] == $scheme )
+        {
+            eval($S['scheme']);
+            break;
+        }
     }
-
-    case 'blue':
-    {
-        $bg = '#EEEEFF';
-        $color = '#0000FF';
-        $dark = '#555577';
-        $med = '#8888FF';
-        $light = '#DDDDFF';
-        $highlight = '#CCCCFF';
-        break;
-    }
-
-    case 'green':
-    {
-        $bg = '#EEFFEE';
-        $color = '#00FF00';
-        $dark = '#557755';
-        $med = '#88FF88';
-        $light = '#DDFFDD';
-        $highlight = '#CCFFCC';
-        break; 
-    }
-
-    default:
-    {
-        $bg = '#FFEEEE';
-        $color = '#FF0000';
-        $dark = '#775555';
-        $med = '#FF8888';
-        $light = '#FFDDDD';
-        $highlight = '#FFCCCC';
-        break; 
-    }
+}
+else
+{
+    $bg = '#FFEEEE';
+    $color = '#FF0000';
+    $dark = '#775555';
+    $med = '#FF8888';
+    $light = '#FFDDDD';
+    $highlight = '#FFCCCC';
 }
 
 ?>
@@ -81,15 +57,13 @@ switch($scheme)
 .highlight_bg { background-color: <?= $highlight ?>; }
 .highlight_border { border-color: <?= $highlight ?>; }
 .highlight_color { color: <?= $highlight ?>; }
-.sel_line { background-color: <?= $dark; ?>; color: <?= $light; ?>; }
-.unsel_line { background-color: <?= $light; ?>; color: <?= $dark; ?>; }
-
+.selected_area { background-color: <?= $dark; ?>; color: <?= $light; ?>; }
 a, a:visited { color: <?= $dark ?>; }
 
 <?
 
 
-$skin_colors = $T->Search('css/colors.css',true,__FILE__);
+$skin_colors = $T->Search('css/colors.css');
 if( $skin_colors )
     require_once($skin_colors);
 

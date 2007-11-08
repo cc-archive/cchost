@@ -98,7 +98,7 @@ _('Clicking on these links will not save your form.') . '</i></p>';
 
         for( $i = 0; $i < $count; $i++ )
         {
-            $delcheck = $i == 0 ? 'statictext' : 'checkbox';
+            $delcheck = $i == 0 ? 'metalmacro' : 'checkbox';
 
             $name = $tab_names[$i];
             if( $name == 'handler' )
@@ -127,7 +127,7 @@ _('Clicking on these links will not save your form.') . '</i></p>';
                 array(
                     'element_name'  => "mi[$name][text]",
                     'value'      => htmlentities($page[$name]['text']),
-                    'class'      => 'cc_form_input_short',
+                    'class'      => 'cc_form_input',
                     'formatter'  => 'textedit',
                     'flags'      => CCFF_REQUIRED ),
                 array(
@@ -287,7 +287,7 @@ class CCNavigatorAdmin
                 $html .= "</table>";
                 $url = url_args( ccl('admin','tabs'), 'cmd=addpage' );
                 $html .= "<p><b><a href=\"$url\">[" . _('Add new tab set') . 
-                         "]</a></p>";
+                         "]</a></b></p>";
 
                 CCPage::SetTitle(_("Manage Navigator Tab Sets"));
                 CCPage::AddContent($html);

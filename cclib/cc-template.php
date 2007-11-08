@@ -56,10 +56,8 @@ class CCSkin
 
         $this->template_stack = array();
         $this->map_stack = array();
-        $this->call_stack = array();
         $this->files = array();
         $this->search_cache = array();
-        $this->inheritance = array();
     }
 
     /**
@@ -232,14 +230,12 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        CCDebug::Log("TCall: $file");
+        //CCDebug::Log("TCall: $file");
 
         $funcname = '';
 
         if( !preg_match('#[\./]#',$file) && !empty($this->vars[$file]) )
             $file = $this->vars[$file];
-
-        $this->_push_call($file);
 
         if( preg_match( '/\.(xml|html?|php|inc|tpl)$/', $file, $m ) )
         {
@@ -249,7 +245,6 @@ class CCSkin
             {
                 // a full path was passed in, we're done
                 $this->_inner_include($file);
-                $this->_pop_call();
                 return;
             }
 
@@ -259,6 +254,7 @@ class CCSkin
         {
             $macro  = basename($file);
             $filename = dirname($file); // call dirname to strip off the macro this is the filepart 
+
             if( !empty($filename) && ($filename{0} != '.') )
             {
                 $funcname = '_t_' . preg_replace( '/((?:\.)[^\.]+$|[^a-zA-Z0-9\.]+)/', '_', basename($filename)) . $macro;
@@ -266,7 +262,6 @@ class CCSkin
                 {
                     // the file is already in memory, just call the function
                     $funcname($this,$this->vars);
-                    $this->_pop_call();
                     return;
                 }
             }
@@ -279,7 +274,7 @@ class CCSkin
         if( !empty($filename) )
             $path = $this->GetTemplate($filename,true);
 
-        CCDebug::LogVar('tpath',$path);
+        //CCDebug::LogVar('tpath',$path);
 
         if( empty($path) )
         {
@@ -288,7 +283,6 @@ class CCSkin
         }
 
         $this->_inner_include($path,$funcname);
-        $this->_pop_call();
     }
 
 
@@ -300,7 +294,8 @@ class CCSkin
     *
     * If you leave off the extension, this method add .tpl, .php, .htm/l while looking
     *
-    * This method can be called 
+    * This method can be called statically but will return different results depending
+    * on whether you 
     *
     * @param string $filename Partial filename to search for
     * @param bool   $real_path True means returns the full local (server) path
@@ -324,21 +319,28 @@ class CCSkin
     */
     function GetFilenameGuesses($filename)
     {
-        if( preg_match('/\.xml$/',$filename) )
-            return array(   $filename . '.php', 
+        if( preg_match('/\.(xml|tpl)$/',$filename,$m) )
+        {
+            // it's a legacy template
+
+            if( $m[1] == 'xml' )
+                return array(   
                             str_replace('.xml','.php',$filename), 
-                            $filename . '.tpl',
                             str_replace('.xml','.tpl',$filename), 
-                            $filename 
+                            $filename . '.php'
                          );
 
+            // if there is a compiled php version, then we
+            // want to favor that
+
+            return array( str_replace('.tpl', '.php', $filename ), 
+                          $filename );
+        }
+
         if( !preg_match( '/\.[a-zA-Z]{1,4}$/', $filename ) )
-            return array(   $filename . '.tpl',
-                            $filename . '.php',
-                            $filename . '.xml.tpl',
-                            $filename . '.xml.php',
-                            $filename . '.htm',
-                            $filename . '.html',
+            return array(   $filename . '.php',
+                            $filename . '.tpl',
+                            $filename . '.xml.php'
                             );
 
          return array( $filename );
@@ -352,13 +354,22 @@ class CCSkin
     * or macro into account. The returned array are the directories in the
     * following order:
     *
-    *    Directory of currently executing templates
+    *    Current cchost dir ('./') This allows for relative dirs from the root
+    *    priority (e.g. 'ccskins/plain/html_forms.tpl')
+    *
+    *    Directory of currently executing template and it's callers in reverse order.
+    *
     *            For example: If a template foo/template.php is currently executing then
     *                         'foo' is the first directory. If that template calls another
     *                         macro in the file bar/template2.php then 'bar' becomes the
     *                         first directory, followed by 'foo'
     *
-    *    Directory of current map file
+    *    Directory of current map file and all the maps it imported in the order they
+    *    were imported.
+    *
+    *            For example: If the current skin's map file is fee/map.tpl and it imports
+    *                         baz/map.tpl then fee will come first, followed by baz
+    *
     *    Directories entered by admin in 'Skins Path' admin screens.
     *    The directory defined by CC_DEFAULT_SKIN_SEARCH_PATHS
     *
@@ -370,9 +381,12 @@ class CCSkin
     function GetTemplatePath()
     {
         global $CC_GLOBALS;
-        return array_unique(array_merge( $this->template_stack,
+        $arr = array_unique(array_merge( array('./'),
+                                         $this->template_stack,
                                          $this->map_stack, 
                                          CCUtil::SplitPaths( $CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS ) ));
+
+        return $arr;
     }
 
     /**
@@ -394,7 +408,9 @@ class CCSkin
     /**
     * Search the template paths for a file
     *
-    * This method returns potentially different results depending on context.
+    * This method returns potentially different results depending on context. If not currently
+    * executing (printing to client) or called statically the method will search in the 
+    * admin 
     * 
     *
     * @param string $filename Partial filename to search for
@@ -403,6 +419,8 @@ class CCSkin
     */
     function Search($file, $real_path = false, $reject_if_match ='' )
     {
+        // CCDebug::LogVar('search',$file);
+
         if( empty($this) || ((strtolower(get_class($this)) != 'ccskin') && 
                                   !is_subclass_of($this,'CCSkin') ) )
         {
@@ -415,6 +433,8 @@ class CCSkin
         {
             $dirs = $this->GetTemplatePath();
             //if( is_string($file) && strstr($file,'playlist.js') ) { $x[] = $file; $x[] = $dirs; CCDebug::PrintVar($x); }
+            if( !empty($reject_if_match) )
+                die( 'wups, reject search doesn\'t work' );
             $found = CCUtil::SearchPath( $file, $dirs, '', $real_path, CC_SEARCH_RECURSE_DEFAULT, $reject_if_match);
             $this->search_cache[$sfile] = $found;
             return $found;
@@ -428,8 +448,8 @@ class CCSkin
     {
         if( strstr($dir,'map') === false )
             $dir .= '/map';
-        $map = $this->GetFilenameGuesses($dir);
-        $map = $this->Search($map );
+        $gss = $this->GetFilenameGuesses($dir);
+        $map = $this->Search($gss);
         if( !is_file($map) )
             die("Can't find skin map file: $dir");
         //CCDebug::Log("Importing: $map");
@@ -481,27 +501,6 @@ class CCSkin
         }
     }
 
-
-    function Inherit($macro, $new_impl)
-    {
-        $this->inheritance[$new_impl] = $this->vars[$macro];
-        $this->vars[$macro] = $new_impl;
-    }
-
-    function CallParent()
-    {
-        $this->Call( $this->inheritance[ $this->call_stack[0] ] );
-    }
-
-    function _pop_call()
-    {
-        array_shift( $this->call_stack );
-    }
-
-    function _push_call($funcname)
-    {
-        array_unshift( $this->call_stack, $funcname);
-    }
 
     function _inner_include($path,$funcname='')
     {

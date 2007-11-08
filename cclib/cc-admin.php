@@ -58,6 +58,7 @@ require_once('cclib/cc-form.php');
  *       'flags'     => CCFF_POPULATE | CCFF_REQUIRED ),
  *      );
  *
+ *    $this->SetModule(__FILE__);
  *    $this->AddFormFields($fields);
  *   }
  *}
@@ -132,6 +133,7 @@ class CCEditConfigForm extends CCForm
     {
         $configs =& CCConfigs::GetTable();
         $values = $configs->GetConfig($this->_typename,$this->_scope);
+        CCDebug::PrintVar($values);
         if( $values )
             $this->PopulateValues($values);
         return( parent::GenerateForm($hiddenonly) );

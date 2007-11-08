@@ -847,6 +847,7 @@ class CCForm
 
     function generator_metalmacro($varname,$value,$class='')
     {
+        $this->_form_fields[$varname]['name'] = $varname;
         return; // ($value);
     }
 
@@ -955,9 +956,21 @@ class CCForm
      */
     function generator_textarea($varname,$value='',$class='')
     {
+        if( $this->GetFormFieldItem($varname,'expanded') )
+        {
+            $h = '300';
+            $w = '450';
+            $p = '-';
+        }
+        else
+        {
+            $h = '100';
+            $w = '300';
+            $p = '+';
+        }
         $html =<<<END
-            <textarea style="width:300px;height:100px;" id="$varname" name="$varname" class="$class">$value</textarea><br />
-            <a id="grow_$varname" name="grow_$varname" style="font-size:10px;" href="javascript: void(0);" onclick="cc_grow_textarea('$varname');">[ + ]</a>
+            <textarea style="width:{$w}px;height:{$h}px;" id="$varname" name="$varname" class="$class">$value</textarea><br />
+            <a id="grow_$varname" name="grow_$varname" style="font-size:10px;" href="javascript: void(0);" onclick="cc_grow_textarea('$varname');">[ {$p} ]</a>
 END;
         return($html);
     }
@@ -1707,6 +1720,9 @@ class CCGridForm extends CCForm
     function SetColumnHeader(&$heads)
     {
         $this->_column_heads = $heads;
+        $args = func_get_args();
+        if( count($args) > 1 )
+            $this->_use_for_name = $args[1];
     }
 
     function & _get_form_field( $name )
@@ -1815,20 +1831,44 @@ class CCGridForm extends CCForm
         }
 
         $keys  = array_keys($this->_grid_rows);
+
+        if( isset($this->_use_for_name) )
+        {
+            $name_i = $this->_template_vars['html_form_grid_name_col'] =  $this->_use_for_name;
+        }
+        else
+        {
+            // legacy hacking, should remove this before 5.0 ships
+            $first_row = $this->_grid_rows[$keys[0]];
+            $i = 0;
+            foreach( $first_row as $tcol )
+            {
+                if( $tcol['formatter'] == 'textedit' )
+                {
+                    $name_i = $this->_template_vars['html_form_grid_name_col'] = $i;
+                    break;
+                }
+                ++$i;
+            }
+        }
+
         $i = 0;
         $rows = array();
         foreach( $keys as $key )
         {
             $grid_row =& $this->_grid_rows[$key];
             $form_error = '';
-            $template_row = $this->_build_row($grid_row,$form_error);
+            $template_row = $this->_build_row($grid_row,$form_error,$name_i);
 
             $rows[] = array(  'html_form_grid_fields' => $template_row, 
+                               'name' => $grid_row[$name_i]['value'],
+                               'has_error' => !empty($grid_row['has_error']),
                                      'grid_row' => ++$i,
                                      'form_error' => $form_error,
                                      'num_columns' => count($grid_row)
                                   );
         }
+
 
 
         $this->_template_vars['html_form_grid_rows'] =& $rows;
@@ -1839,7 +1879,8 @@ class CCGridForm extends CCForm
         if( !empty($this->_meta_row) )
         {
             $d = '';
-            $mrow = $this->_build_row($this->_meta_row,$d);
+            $mrow = $this->_build_row($this->_meta_row,$d,$name_i);
+
             /*
                 $mrow_text = '';
                 foreach( $mrow as $MR )
@@ -1858,7 +1899,7 @@ class CCGridForm extends CCForm
         return( $this );
     }
 
-    function _build_row(&$grid_row,&$form_error)
+    function _build_row(&$grid_row,&$form_error,$name_i)
     {
         $count2 = count($grid_row);
         $template_row = array();
@@ -1870,10 +1911,14 @@ class CCGridForm extends CCForm
             
             $class = empty($grid_cell['class']) ? '' : $grid_cell['class'];
 
+            if( $n == $name_i )
+                $class .= (empty($class) ? '' : ' ' ) . 'gcol_name';
+
             if( !empty($grid_cell['form_error']) )
             {
                 $form_error .= '   ' . $grid_cell['form_error'];
                 $class .= "\" style='background:pink' ";
+                $grid_row['has_error'] = true;
             }
 
             $template_row[] = array( 'form_grid_element' => 
@@ -1926,6 +1971,8 @@ class CCGridForm extends CCForm
         $m = preg_replace('/\[([^\]]+)\]/',"['$1']",$m);
 
         $value = null;
+        if( strstr($m,'word') )
+            CCDebug::PrintVar($this);
         eval($m);
         return($value);
     }

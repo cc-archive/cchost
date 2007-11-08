@@ -132,14 +132,14 @@ class CCPseudoVerifyAdminForm extends CCGridForm
                                         CC_PV_VERIFY => ''),
                 'flags'      => CCFF_POPULATE ),
               array(
-                'element_name'  => "{$pre}[$K][media-type]",    // group
-                'value'      => $F['media-type'],
+                'element_name'  => "{$pre}[$K][default-ext]",  // key
+                'value'      => $F['default-ext'],
                 'class'      => 'cc_form_input_short',
                 'formatter'  => 'textedit',
                 'flags'      => CCFF_REQUIRED ),
               array(
-                'element_name'  => "{$pre}[$K][default-ext]",  // key
-                'value'      => $F['default-ext'],
+                'element_name'  => "{$pre}[$K][media-type]",    // group
+                'value'      => $F['media-type'],
                 'class'      => 'cc_form_input_short',
                 'formatter'  => 'textedit',
                 'flags'      => CCFF_REQUIRED ),

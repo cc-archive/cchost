@@ -282,6 +282,9 @@ $GLOBALS['str_zip_title']             = _('Contents of ZIP Archive');
 
 $GLOBALS['str_reviews'] = _('Reviews');
 $GLOBALS['str_stats'] = _('Stats');
+$GLOBALS['str_new_row'] = _('new row');
 
+$GLOBALS['str_color_scheme'] = _('Color Schemes');
+$GLOBALS['str_skin_layout'] = _('Skin Layouts');
 
 ?>

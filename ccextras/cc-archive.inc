@@ -60,27 +60,19 @@ class CCArchive
         }
 
         CCPage::AddBreadCrumbs($trail);
-
+        $base_url = ccl('archive','month');
         $sql =<<<END
-            SELECT DATE_FORMAT( upload_date, '%M %Y' ) txt, 
-                   SUBSTRING( upload_date, 1, 7 ) mo,
-                   COUNT(*) cnt
+            SELECT DATE_FORMAT( upload_date, '%M %Y' ) as menu_text,
+                   CONCAT('{$base_url}/', SUBSTRING( upload_date, 1, 7 ) ) as action,
+                   CONCAT( '(', COUNT(*), ')' ) as `help`,
+                   SUBSTRING( upload_date, 1, 7 ) as mo
             FROM cc_tbl_uploads
             GROUP BY mo
             ORDER BY mo DESC 
 END;
-        $dates = CCDatabase::QueryRows($sql);
-
+        $args = CCDatabase::QueryRows($sql);
         CCPage::SetTitle( 'str_archive_monthly' );
-        $html = '<ul>';
-        foreach( $dates as $date )
-        {
-            $url = ccl('archive','month',$date['mo']);
-            $html .= "<li><a href=\"$url\">{$date['txt']}</a> ({$date['cnt']})</li>";
-        }
-        $html .= '</ul>';
-
-        CCPage::AddContent($html);
+        CCPage::PageArg('client_menu',$args,'print_client_menu');
     }
 
 

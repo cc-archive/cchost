@@ -5,14 +5,13 @@
 
 <style >
 table.statstable {
-  border: 3px solid #559;
-  background-color: #DDE;  /* colorize */
+  border-width: 3px;
+  border-style: solid;
   margin: 5px;
+  float:left;
 }
 
 .shead {
-  background-color: #559; /* colorize */
-  color: white;
   padding: 2px 1px 2px 1px;
   }
 </style>
@@ -28,7 +27,7 @@ table.statstable {
 </ul>
 </td>
 <td >
-<?if ( !empty($A['user_recs'])) {?><table  class="statstable">
+<?if ( !empty($A['user_recs'])) {?><table  class="statstable light_bg dark_border">
 <tr >
 <th >Artist</th>
 <th >Ratings</th>
@@ -43,7 +42,7 @@ table.statstable {
 <td ><?= $A['R']['user_num_remixes']?></td>
 <td ><?= $A['R']['user_num_remixed']?></td>
 <td ><?= $A['R']['user_num_uploads']?></td>
-</tr><?}?></table><?}if ( !empty($A['upload_recs'])) {?><table  class="statstable">
+</tr><?}?></table><?}if ( !empty($A['upload_recs'])) {?><table  class="statstable light_bg dark_border">
 <tr >
 <th >name</th>
 <th >artist</th>
