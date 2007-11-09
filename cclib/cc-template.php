@@ -113,6 +113,26 @@ class CCSkin
 
         $this->vars = array_merge($CC_GLOBALS,$this->vars,$args);
 
+        $config =& CCConfigs::GetTable();
+        $props = $config->GetConfig('skin-properties');
+        if( !empty($props['properties']) )
+        {
+            $this->vars['skin-properties']['css'] = '';
+            foreach( $props['properties'] as $P )
+            {
+                if( !empty($P['css']) )
+                    $this->vars['skin-properties']['css'] .= $P['css'];
+
+                if( !empty($P['php']) )
+                {
+                    $php = '$this->vars[\'skin-properties\']' . $P['php'];
+                    eval($php);
+                }
+            }
+
+            //CCDebug::PrintVar($this->vars['skin-properties']);
+        }
+
         if( CCUser::IsLoggedIn() )
         {
             $this->vars['logged_in_as'] = CCUser::CurrentUserName();

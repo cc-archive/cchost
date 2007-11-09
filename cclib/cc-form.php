@@ -1101,6 +1101,7 @@ END;
      */
     function generator_select($varname,$value='',$class='')
     {
+        /*
         $options = $this->GetFormFieldItem($varname,'options');
         $fvalue   = $this->GetFormValue($varname);
         $html = "<select id=\"$varname\" name=\"$varname\" class=\"$class\">";
@@ -1115,6 +1116,16 @@ END;
         }
         $html .= "</select>";
         return( $html );
+
+        */
+        $fvalue   = $this->GetFormValue($varname);
+        $F =& $this->_form_fields[$varname];
+        //if( !empty($fvalue) )
+        //    $F['options'][$fvalue]['selected'] = 'selected';
+        $F['class'] = $class;
+        $F['name'] = $varname;
+        $F['macro'] = 'form_fields.tpl/select';
+        return '';
     }
 
     /**

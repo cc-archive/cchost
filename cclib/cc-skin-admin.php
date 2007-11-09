@@ -53,11 +53,10 @@ class CCSkinAdminForm extends CCEditConfigForm
                     'macro'   => $value['editor'],
                     'props'     => $value['properties'],
                     'flags'    => CCFF_POPULATE,
-                );
-
+                    );
         }
 
-        $this->SetHiddenField( 'properties', '' );
+        $this->SetHiddenField( 'properties', '', CCFF_HIDDEN );
         $this->AddFormFields($fields);
         $this->SetSubmitText(_('Submit Skin Changes'));
         $this->SetModule(ccs(__FILE__));
@@ -84,7 +83,7 @@ class CCSkinAdminForm extends CCEditConfigForm
             }
         }
         $config_props = $this->GetFormValue('properties');
-        $config_props[$propval['id']] = $propval;
+        $config_props[$fieldname] = $propval;
         $this->SetFormValue('properties',$config_props);
         return true;
     }
@@ -109,7 +108,10 @@ class CCSkinAdmin
                       '#<caption>(.*)</caption>#U' => "   'caption' => '$1',\n",
                       '#<image>(.*)</image>#U' => "   'img' => '$1',\n",
                       '#<id>(.*)</id>#U' => "   'id' => '$1',\n",
-                      '#<markup type="([^"]+)">(.*)</markup>#Ums'=> "   'markup_type' => '$1',\n      'markup' => '$2',\n",
+                      /* '#<markup type="([^"]+)">(.*)</markup>#Ums'=> "   'markup_type' => '$1',\n      'markup' => '$2',\n", */
+                      '#</?markup>#' => '',
+                      '#<css>(.*)</css>#Ums' => "'css' => '$1',\n",
+                      '#<php>(.*)</php>#Ums' => "'php' => '$1',\n",
                       '#</property>#' => ' ), ',
                       '#</section>#' => ' ), ), ',
                       '#</properties>#' => ' ); '
@@ -117,7 +119,8 @@ class CCSkinAdmin
 
         $php = preg_replace(array_keys($map),array_values($map),$text);
         eval($php);
-        //CCDebug::PrintVar($php);
+        //$x = split("\n",$php);
+        //CCDebug::PrintVar($x);
         return $sections;
     }
 

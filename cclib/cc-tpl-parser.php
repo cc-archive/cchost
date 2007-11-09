@@ -47,7 +47,9 @@ function cc_tpl_parse_t($var)
     {
         $var = '$' . substr($parts[0],1);
         array_shift($parts);
-        if( !empty($parts) )
+        if( empty($parts) )
+            $var_name = $var;
+        else
             $var_name = $var . '[\'' . join( "']['", $parts ) . '\']';
     }
     else
