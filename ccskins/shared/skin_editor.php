@@ -14,8 +14,8 @@ function _t_skin_editor_edit_color_schemes($T,&$A)
     foreach( $props as $P )
     {
         $id = $P['id'];
-        preg_match_all( '/\.([^\s{]+)[\s{]/U', $P['markup'], $m );
-        $markup = preg_replace( '/\./', "#ecs_{$id} .", $P['markup'] );
+        preg_match_all( '/\.([^\s{]+)[\s{]/U', $P['css'], $m );
+        $markup = preg_replace( '/\./', "#ecs_{$id} .", $P['css'] );
         print '<br /><br /><b>' . $T->String($P['caption']) . '</b><br />';
         print "<style>{$markup}</style><table class=\"skin_colors_pick ed\" id=\"ecs_{$id}\">";
         $rows = array_chunk($m[1],7);
@@ -49,6 +49,7 @@ function _t_skin_editor_edit_layouts($T,&$A)
     $props = $A['field']['props'];
     $fid = $A['field']['name'];
     $value = empty($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
+    static $inst = 1;
 
     ?>
     <input type="hidden" name="<?= $fid ?>" id="<?= $fid ?>" value="<?= $value ?>"/>
@@ -57,9 +58,13 @@ function _t_skin_editor_edit_layouts($T,&$A)
     <table>
     <?
 
+    $class = 'skin_layout_pick_' . $inst;
+
     foreach( $props as $P )
     {
-        ?><tr class="skin_layout_pick" id="esl_<?=$P['id']?>" ><td><img src="<?= $T->URL($P['img'])?>" /></td><td><?=$P['caption']?></td></tr><?
+        $id = 'esl_' . $P['id'];
+        ?><tr class="<?=$class?>" id="<?=$id?>" ><td><img src="<?= $T->URL($P['img'])?>" /></td>
+          <td><?= $T->String($P['caption'])?></td></tr><?
     }
 
     $val_id = 'esl_' . $value;
@@ -67,9 +72,11 @@ function _t_skin_editor_edit_layouts($T,&$A)
     ?>
     </table></div>
     <script type="text/javascript">
-        new ccSkinEditor('skin_layout_pick','<?= $fid ?>','<?= $val_id ?>');
+        new ccSkinEditor('<?=$class?>','<?= $fid ?>','<?= $val_id ?>');
     </script>
     <?
+
+    ++$inst;
 }
 
 ?>

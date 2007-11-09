@@ -3,7 +3,8 @@
 <property>
 <caption>Black and White</caption>
 <id>mono</id>
-<markup type="text/css">
+<markup>
+<css>
 .light_bg { background-color: #FFFFFF; }
 .light_border { border-color: #FFFFFF; }
 .light_color { color: #FFFFFF; }
@@ -18,12 +19,13 @@
 .med_light_color { color: #DDDDDD; }
 .selected_area { background-color: #000000; color: #FFFFFF; }
 a, a:visited { color: #000000; }
+</css>
 </markup>
 </property>
 <property>
 <caption>Blue</caption>
 <id>blue</id>
-<markup type="text/css">
+<markup><css>
 .light_bg { background-color: #EEEEFF; }
 .light_border { border-color: #EEEEFF; }
 .light_color { color: #EEEEFF; }
@@ -37,13 +39,13 @@ a, a:visited { color: #000000; }
 .med_light_bg { background-color: #DDDDFF; }
 .med_light_color { color: #DDDDFF; }
 .selected_area { background-color: #0000FF; color: #EEEEFF; }
-a, a:visited { color: #0000FF; }
+a, a:visited { color: #0000FF; }</css>
 </markup>
 </property>
 <property>
 <caption>Green</caption>
 <id>green</id>
-<markup type="text/css">
+<markup><css>
 .light_bg { background-color: #EEFFEE; }
 .light_border { border-color: #EEFFEE; }
 .light_color { color: #EEFFEE; }
@@ -57,13 +59,13 @@ a, a:visited { color: #0000FF; }
 .med_light_bg { background-color: #DDFFDD; }
 .med_light_color { color: #DDFFDD; }
 .selected_area { background-color: #00FF00; color: #EEFFEE; }
-a, a:visited { color: #00FF00; }
+a, a:visited { color: #00FF00; }</css>
 </markup>
 </property>
 <property>
 <caption>Sky</caption>
 <id>sky</id>
-<markup type="text/css">
+<markup><css>
 .light_bg { background-color: #FFFFFF; }
 .light_border { border-color: #FFFFFF; }
 .light_color { color: #FFFFFF; }
@@ -77,13 +79,13 @@ a, a:visited { color: #00FF00; }
 .med_light_bg { background-color: #DDDDDD; }
 .med_light_color { color: #DDDDDD; }
 .selected_area { background-color: #000000; color: #FFFFFF; }
-a, a:visited { color: #000000; }
+a, a:visited { color: #000000; }</css>
 </markup>
 
 </property><property>
 <caption>Bluish Ocean</caption>
 <id>ocean</id>
-<markup type="text/css">
+<markup><css>
 .light_bg { background-color: #EEEEFF; }
 .light_border { border-color: #EEEEFF; }
 .light_color { color: #EEEEFF; }
@@ -97,13 +99,13 @@ a, a:visited { color: #000000; }
 .med_light_bg { background-color: #DDDDFF; }
 .med_light_color { color: #DDDDFF; }
 .selected_area { background-color: #0000FF; color: #EEEEFF; }
-a, a:visited { color: #0000FF; }
+a, a:visited { color: #0000FF; }</css>
 </markup>
 
 </property><property>
 <caption>Punk</caption>
 <id>punk</id>
-<markup type="text/css">
+<markup><css>
 .light_bg { background-color: pink; }
 .light_border { border-color: pink; }
 .light_color { color: #EEFFEE; }
@@ -117,13 +119,13 @@ a, a:visited { color: #0000FF; }
 .med_light_bg { background-color: #DDFFDD; }
 .med_light_color { color: #DDFFDD; }
 .selected_area { background-color: #00FF00; color: #EEFFEE; }
-a, a:visited { color: #00FF00; }
+a, a:visited { color: #00FF00; }</css>
 </markup>
 
 </property><property>
 <caption>Kinda pinkish</caption>
 <id>pinkish</id>
-<markup type="text/css">
+<markup><css>
 .light_bg { background-color: #FFFFFF; }
 .light_border { border-color: #FFFFFF; }
 .light_color { color: #FFFFFF; }
@@ -137,443 +139,492 @@ a, a:visited { color: #00FF00; }
 .med_light_bg { background-color: #FFFFFF; }
 .med_light_color { color: #FFFFFF; }
 .selected_area { background-color: #000000; color: #FFFFFF; }
-a, a:visited { color: #000000; }
+a, a:visited { color: #000000; }</css>
 </markup>
-
 </property>
 </section>
+
+<section type="tab_pos" label="str_tab_options" editor="skin_editor.php/edit_layouts">
+<property>
+<caption>str_tab_in_header</caption>
+<id>in_header</id>
+<image>layouts/tab_layout001.gif</image> 
+<markup><php>
+["tab_pos"] = array(
+"in_header" => true,
+"subclient" => true );</php>
+<css>
+#tabs li {
+  float: left;
+  display: block;
+  padding-right: 13px;
+  }
+</css>
+</markup>
+</property>
+<property>
+<caption>str_tab_floating</caption>
+<id>in_sidebar</id>
+<image>layouts/tab_layout002.gif</image> 
+<markup><php>
+["tab_pos"] = array(
+"subclient" => true,
+"floating" => true);</php>
+</markup>
+</property>
+<property>
+<caption>str_tab_nested_floating</caption>
+<id>nested</id>
+<image>layouts/tab_layout003.gif</image> 
+<markup><php>
+["tab_pos"] = array(
+"nested" => true );</php>
+</markup>
+</property>
+<property>
+<caption>str_tab_none</caption>
+<id>nested</id>
+<image>layouts/tab_layout004.gif</image> 
+<markup><php>
+["tab_pos"] = array(
+"none" => true );</php>
+</markup>
+</property>
+</section>
+
 <section type="skin-layout" label="str_skin_layout" editor="skin_editor.php/edit_layouts">
 <property>
-<image>layouts/layout001.gif</image> <id>layout001</id>
+<image>layouts/layout001.gif</image> 
+<id>layout001</id>
 <caption>Three flexible columns (n.01)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin: 0 25%}
 div#navigation{float:left;width:25%;margin-left:-100%}
 div#extra{float:left;width:25%;margin-left:-25%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout002.gif</image> <id>layout002</id>
 <caption>Three flexible columns (n.02)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin: 0 25%}
 div#navigation{float:left;width:25%;margin-left:-25%}
 div#extra{float:left;width:25%;margin-left:-100%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout003.gif</image> <id>layout003</id>
 <caption>Three flexible columns (n.03)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin-right: 50%}
 div#navigation{float:left;width:25%;margin-left:-50%}
 div#extra{float:left;width:25%;margin-left:-25%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout004.gif</image> <id>layout004</id>
 <caption>Three flexible columns (n.04)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin-right: 50%}
 div#navigation{float:left;width:25%;margin-left:-25%}
 div#extra{float:left;width:25%;margin-left:-50%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout005.gif</image> <id>layout005</id>
 <caption>Three flexible columns (n.05)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin-left: 50%}
 div#navigation{float:left;width:25%;margin-left:-100%}
 div#extra{float:left;width:25%;margin-left:-75%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout006.gif</image> <id>layout006</id>
 <caption>Three flexible columns (n.06)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin-left: 50%}
 div#navigation{float:left;width:25%;margin-left:-75%}
 div#extra{float:left;width:25%;margin-left:-100%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout007.gif</image> <id>layout007</id>
 <caption>Three fixed columns (n.7)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#wrapper{float:left;width:100%}
 div#content{margin: 0 150px}
 div#navigation{float:left;width:150px;margin-left:-700px}
 div#extra{float:left;width:150px;margin-left:-150px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout008.gif</image> <id>layout008</id>
 <caption>Three fixed columns (n.8)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#wrapper{float:left;width:100%}
 div#content{margin: 0 150px}
 div#navigation{float:left;width:150px;margin-left:-150px}
 div#extra{float:left;width:150px;margin-left:-700px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout009.gif</image> <id>layout009</id>
 <caption>Three fixed columns (n.9)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#wrapper{float:left;width:100%}
 div#content{margin-right: 300px}
 div#navigation{float:left;width:150px;margin-left:-300px}
 div#extra{float:left;width:150px;margin-left:-150px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout010.gif</image> <id>layout010</id>
 <caption>Three fixed columns (n.10)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#wrapper{float:left;width:100%}
 div#content{margin-right: 300px}
 div#navigation{float:left;width:150px;margin-left:-150px}
 div#extra{float:left;width:150px;margin-left:-300px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout011.gif</image> <id>layout011</id>
 <caption>Three fixed columns (n.11)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#wrapper{float:left;width:100%}
 div#content{margin-left: 300px}
 div#navigation{float:left;width:150px;margin-left:-700px}
 div#extra{float:left;width:150px;margin-left:-550px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout012.gif</image> <id>layout012</id>
 <caption>Three fixed columns (n.12)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#wrapper{float:left;width:100%}
 div#content{margin-left: 300px}
 div#navigation{float:left;width:150px;margin-left:-550px}
 div#extra{float:left;width:150px;margin-left:-700px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout013.gif</image> <id>layout013</id>
 <caption>Liquid, secondary columns fixed-width (n.13)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin: 0 200px}
 div#navigation{float:left;width:200px;margin-left:-100%}
 div#extra{float:left;width:200px;margin-left:-200px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout014.gif</image> <id>layout014</id>
 <caption>Liquid, secondary columns fixed-width (n.14)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin: 0 200px}
 div#navigation{float:left;width:200px;margin-left:-200px}
 div#extra{float:left;width:200px;margin-left:-100%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout015.gif</image> <id>layout015</id>
 <caption>Liquid, secondary columns fixed-width (n.15)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin-right: 400px}
 div#navigation{float:left;width:200px;margin-left:-400px}
 div#extra{float:left;width:200px;margin-left:-200px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout016.gif</image> <id>layout016</id>
 <caption>Liquid, secondary columns fixed-width (n.16)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin-right: 400px}
 div#navigation{float:left;width:200px;margin-left:-200px}
 div#extra{float:left;width:200px;margin-left:-400px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout017.gif</image> <id>layout017</id>
 <caption>Liquid, secondary columns fixed-width (n.17)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:right;width: 100%;margin-left: -400px}
 div#content{margin-left: 400px}
 div#navigation{float:right;width:200px}
 div#extra{float:right;width:200px}
 div#footer{clear:right;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout018.gif</image> <id>layout018</id>
 <caption>Liquid, secondary columns fixed-width (n.18)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:right;width: 100%;margin-left: -400px}
 div#content{margin-left: 400px}
 div#navigation{float:left;width:200px}
 div#extra{float:right;width:200px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout019.gif</image> <id>layout019</id>
 <caption>Liquid, three columns, hybrid widths (n.19)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin: 0 33% 0 200px}
 div#navigation{float:left;width:200px;margin-left:-100%}
 div#extra{float:left;width:33%;margin-left:-33%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout020.gif</image> <id>layout020</id>
 <caption>Liquid, three columns, hybrid widths (n.20)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin: 0 200px 0 33%}
 div#navigation{float:left;width:33%;margin-left:-100%}
 div#extra{float:left;width:200px;margin-left:-200px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout021.gif</image> <id>layout021</id>
 <caption>Liquid, three columns, hybrid widths (n.21)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%;margin-left:-25%}
 div#content{margin: 0 200px 0 25%}
 div#navigation{float:left;width:200px;margin-left:-200px}
 div#extra{float:left;width:25%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout022.gif</image> <id>layout022</id>
 <caption>Liquid, three columns, hybrid widths (n.22)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%;margin-left:-200px}
 div#content{margin: 0 25% 0 200px}
 div#navigation{float:left;width:25%;margin-left:-25%}
 div#extra{float:left;width:200px}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout023.gif</image> <id>layout023</id>
 <caption>Two columns liquid, side fixed (n.23)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%;margin-left:-200px}
 div#content{margin-left:200px}
 div#navigation{float:right;width:200px}
 div#extra{float:right;clear:right;width:200px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout024.gif</image> <id>layout024</id>
 <caption>Two columns liquid, side fixed (n.24)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:right;width:100%;margin-left:-200px}
 div#content{margin-left:200px}
 div#navigation{float:left;width:200px}
 div#extra{float:left;clear:left;width:200px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout025.gif</image> <id>layout025</id>
 <caption>Two flexible columns (n.25)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%;margin-left:-33%}
 div#content{margin-left:33%}
 div#navigation{float:right;width:32.9%}
 div#extra{float:right;clear:right;width:32.9%}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout026.gif</image> <id>layout026</id>
 <caption>Two flexible columns (n.26)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:right;width:100%;margin-right:-33%}
 div#content{margin-right:33%}
 div#navigation{float:left;width:32.9%}
 div#extra{float:left;clear:left;width:32.9%}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout027.gif</image> <id>layout027</id>
 <caption>One column liquid and two halves (n.27)</caption>
-<markup type="text/css">
+<markup><css>
 div#navigation{float:left;width:50%}
 div#extra{float:left;width:49.9%}
 div#footer{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout028.gif</image> <id>layout028</id>
 <caption>One column liquid and two halves (n.28)</caption>
-<markup type="text/css">
+<markup><css>
 div#navigation{float:right;width:50%}
 div#extra{float:right;width:49.9%}
 div#footer{clear:right;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout029.gif</image> <id>layout029</id>
 <caption>Two flexible columns and one larger (n.29)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:right;width:70%}
 div#navigation{float:left;width:29.9%}
 div#extra{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout030.gif</image> <id>layout030</id>
 <caption>Two flexible columns and one larger (n.30)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:70%}
 div#navigation{float:right;width:29.9%}
 div#extra{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout031.gif</image> <id>layout031</id>
 <caption>Two columns liquid, fixed side and large one (n.31)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin-left:200px}
 div#navigation{float:left;width:200px;margin-left:-100%}
 div#extra{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout032.gif</image> <id>layout032</id>
 <caption>Two columns liquid, fixed side and large one (n.32)</caption>
-<markup type="text/css">
+<markup><css>
 div#wrapper{float:left;width:100%}
 div#content{margin-right:200px}
 div#navigation{float:left;width:200px;margin-left:-200px}
 div#extra{clear:left;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout033.gif</image> <id>layout033</id>
 <caption>Two colums fixed (n.33)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#content{float:left;width:500px}
 div#navigation{float:right;width:200px}
 div#extra{float:right;clear:right;width:200px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout034.gif</image> <id>layout034</id>
 <caption>Two colums fixed (n.34)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#content{float:right;width:500px}
 div#navigation{float:left;width:200px}
 div#extra{float:left;clear:left;width:200px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout035.gif</image> <id>layout035</id>
 <caption>Two colums fixed (n.35)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#content{float:left;width:500px}
 div#navigation{float:right;width:200px}
 div#extra{float:left;width:500px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout036.gif</image> <id>layout036</id>
 <caption>Two colums fixed (n.36)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#content{float:right;width:500px}
 div#navigation{float:left;width:200px}
 div#extra{float:right;width:500px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout037.gif</image> <id>layout037</id>
 <caption>Two colums fixed (n.37)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#content{float:left;width:500px}
 div#navigation{float:right;width:200px}
 div#extra{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout038.gif</image> <id>layout038</id>
 <caption>Two colums fixed (n.38)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#content{float:right;width:500px}
 div#navigation{float:left;width:200px}
 div#extra{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout039.gif</image> <id>layout039</id>
 <caption>One column fixed and two halves (n.39)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#navigation{float:left;width:350px}
 div#extra{float:right;width:350px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 <property>
 <image>layouts/layout040.gif</image> <id>layout040</id>
 <caption>One column fixed and two halves (n.40)</caption>
-<markup type="text/css">
+<markup><css>
 div#container{width:700px;margin:0 auto}
 div#navigation{float:right;width:350px}
 div#extra{float:left;width:350px}
 div#footer{clear:both;width:100%}
-</markup>
+</css></markup>
 </property>
 </section>
 </properties>

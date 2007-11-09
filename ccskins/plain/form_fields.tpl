@@ -121,6 +121,16 @@ function do_add_row()
 </script>
 %end_macro%
 
+%macro(select)%
+<select id="%(field/name)%" name="%(field/name)%" %if_attr(field/class,class)%>
+%loop(field/options,opt)%
+    <option value="%(#k_opt)%">
+        %text(#opt)%
+    </option>
+%end_loop%
+</select>
+%end_macro%
+
 <?
 
 function _suck_out_grid_row_name(&$row)

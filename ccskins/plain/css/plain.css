@@ -30,23 +30,22 @@ h1, h2, h3, ul {
 	text-decoration: none;
 }
 
-#banner {
-	margin: 0px;
+#header {
 	padding: 3px 4px 3px 0px;
 }
 
-#banner_search {
+#header_search {
 	float: right;
 	text-align: right;
 	margin: 0px 14px;
 }
 
-#banner_search h3 {
+#header_search h3 {
 	font-size: 0.8em;
-	margin: 0.3em 0em;
+	margin: 0.3em 0em; 
 }
 
-#banner_search span {
+#header_search span {
 	font-size: 0.5em;
 }
 
@@ -58,16 +57,15 @@ h1, h2, h3, ul {
 	margin: 1em 2em;
 	padding: 0px;
 	list-style: none;
-	width: 85%;
 }
 
 
+/*
 #tabs li {
 	margin: 0px 2em;
 	padding: 0px;
-	display: block;
-	float: left;
 }
+*/
 
 #tabs li a {
 	font-size: 0.9em;
@@ -76,18 +74,17 @@ h1, h2, h3, ul {
 }
 
 #tabs li a, 
-#tabs li a:visited,
-#sub_tabs li a, 
-#sub_tabs li a:visited 
+#tabs li a:visited
 {
 	color: black;
 }
 
-#tabs li.selected_tab a, 
-#sub_tabs li.selected_tab a
+#tabs li.selected_tab a
 {
 	color: #BBB;
 }
+
+/*
 
 .post_tab_breaker {
 	clear: both;
@@ -114,6 +111,18 @@ h1, h2, h3, ul {
 	font-weight: bold;
 }
 
+#sub_tabs li a, 
+#sub_tabs li a:visited 
+{
+	color: black;
+}
+
+#sub_tabs li.selected_tab a
+{
+	color: #BBB;
+}
+
+
 .post_sub_tab_breaker {
 	clear: left;
 }
@@ -122,6 +131,7 @@ h1, h2, h3, ul {
 	float: left;
 	margin: 1.0em 2.0em;
 }
+*/
 
 .menu_group p {
 	margin: 0.3em 0.1em 0.1em 0.1em;
@@ -130,7 +140,7 @@ h1, h2, h3, ul {
 }
 
 .menu_group ul {
-	margin: 0px;
+	margin: 6px;
 	padding: 0px;
 	list-style: none;
 }
@@ -149,6 +159,7 @@ a.cc_more_menu_link {
 	font-style: italic;
 }
 
+/*
 #main_content {
 	width: 80%;
 	overflow: hidden;
@@ -162,6 +173,7 @@ a.cc_more_menu_link {
 	font-size: 0.7em;
 	width: 85%;
 }
+*/
 
 #page_footer img {
 	float: left;
@@ -199,6 +211,6 @@ a.cc_more_menu_link {
 }
 
 #site_description {
-	margin-left: 100px;
+	/* margin-left: 100px; */
 	font-size: 0.55em;
 }

@@ -1,11 +1,14 @@
-<body>
+<body class="dark_bg">
 <div class="hide">
   <a href="#content">%string(skip)%</a>
 </div>
-<div id="banner" class="dark_bg light_color">
+
+<div id="container" style="background-color:white;">
+
+<div id="header" class="med_dark_bg light_color">
 
     %if_not_empty(sticky_search)%
-        <div id="banner_search"><a id="search_site_link"
+        <div id="header_search"><a id="search_site_link"
         href="%(advanced_search_url)%"><h3 class="light_color">%string(find)%</h3><span class="light_color">%string(findcontent)%</span></a></div>
     %end_if%
 
@@ -24,18 +27,41 @@
         <div id="site_description">%(site-description)%</div>
     %end_if%
 
-</div><!-- banner -->
+    %if_not_empty(skin-properties/tab_pos/in_header)%
+        %call('tabs.tpl/print_tabs')%
+    %end_if%
+</div><!-- header -->
 
-%if_not_empty(tab_info)%
-    <ul id="tabs">
-    %loop(tab_info/tabs,tab)%
-        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%(#tab/text)%</span></a></li>
-    %end_loop%
-    %unmap(tab_info)%
-    </ul>
-    <div class="post_tab_breaker"></div>
+
+    <div id="wrapper">
+<div id="content">
+
+%call(print_bread_crumbs)%
+
+%if_not_empty(skin-properties/tab_pos/subclient)%
+    %call('tabs.tpl/print_sub_tabs')%
 %end_if%
 
+%if_not_empty(page-title)%
+    <h1 class="title">%text(page-title)%</h1>
+%end_if%
+<a name="content" ></a>    
+
+%loop(macro_names,macro)%    %call(#macro)%             %end_loop%
+%loop(inc_names,inc_name)%   %call(#inc_name)%          %end_loop%
+
+</div> <!-- content -->
+    </div> <!-- wrapper -->
+
+<div id="navigation">
+
+    %if_not_empty(skin-properties/tab_pos/floating)%
+        %call('tabs.tpl/print_tabs')%
+    %end_if%
+
+    %if_not_empty(skin-properties/tab_pos/nested)%
+        %call('tabs.tpl/print_nested_tabs')%
+    %end_if%
 
 %if_not_empty(menu_groups)%
 
@@ -50,8 +76,14 @@
       </div>
     %end_loop%
 
-    %% Get the custom sidebar items from settings() %%
+</div> <!-- end of menu -->
 
+    %unmap(menu_groups)%
+
+%end_if%
+</div>
+
+<div id="extra" class="med_bg light_color">
     %settings(tmacs,custom_macros)%
 
     %% These are little strange, the value is the flag
@@ -65,40 +97,10 @@
         </div>
       %end_if%
     %end_loop%
+</div>
 
-</div> <!-- end of menu -->
 
-    %unmap(menu_groups)%
-
-%end_if%
-
-<div id="main_content">
-
-%call(print_bread_crumbs)%
-
-%if_not_empty(sub_nav_tabs)%
-    <ul id="sub_tabs">
-    %loop(sub_nav_tabs/tabs,tab)%
-        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%(#tab/text)%</span></a></li>
-    %end_loop%
-    %unmap(sub_nav_tabs)%
-    </ul>
-    <div class="post_sub_tab_breaker"></div>
-%end_if%
-
-%if_not_empty(page-title)%
-    <h1 class="title">%text(page-title)%</h1>
-%end_if%
-<a name="content" ></a>    
-
-%loop(macro_names,macro)%    %call(#macro)%             %end_loop%
-%loop(inc_names,inc_name)%   %call(#inc_name)%          %end_loop%
-
-</div> <!-- main_content -->
-
-<div class="post_content_breaker"></div>
-
-<div id="page_footer" class="light_bg">
+<div id="footer" class="med_light_bg">
   <div id="license">%(site-license)%</div>
   %(footer)%
 </div><!-- footer -->
@@ -115,5 +117,7 @@
 %loop(end_script_links,script_link)%
     <script type="text/javascript" src="%url(#script_link)%" ></script>
 %end_loop%
+
+</div> <!-- container -->
 
 </body>

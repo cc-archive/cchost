@@ -286,5 +286,10 @@ $GLOBALS['str_new_row'] = _('new row');
 
 $GLOBALS['str_color_scheme'] = _('Color Schemes');
 $GLOBALS['str_skin_layout'] = _('Skin Layouts');
+$GLOBALS['str_tab_options'] = _('Navigator Tab Placement');
+$GLOBALS['str_tab_in_header'] = _('Tabs in the banner');
+$GLOBALS['str_tab_floating'] = _('Floating tabs (sub tabs in page)');
+$GLOBALS['str_tab_nested_floating'] = _('Nested floating tabs');
+$GLOBALS['str_tab_none'] = _('No tabs');
 
 ?>

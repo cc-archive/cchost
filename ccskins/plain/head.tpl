@@ -39,4 +39,9 @@ var q        = '%(q)%';
     %call(#script_block)%
 %end_loop%
 
+    %if_not_null(skin-properties/css)%
+    <style>
+        %(skin-properties/css)%
+    </style>
+    %end_if%
 </head>
