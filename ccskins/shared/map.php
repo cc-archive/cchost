@@ -1,8 +1,5 @@
 <?
 
-
-require_once('ccskins/shared/strings.php');
-
 $A['picks_links']        = 'picks.xml/picks_links';
 
 $A['print_forms']        = 'util.php/print_forms';
