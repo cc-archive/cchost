@@ -291,5 +291,9 @@ $GLOBALS['str_tab_in_header'] = _('Tabs in the banner');
 $GLOBALS['str_tab_floating'] = _('Floating tabs (sub tabs in page)');
 $GLOBALS['str_tab_nested_floating'] = _('Nested floating tabs');
 $GLOBALS['str_tab_none'] = _('No tabs');
+$GLOBALS['str_skin_square'] = _('Square boxes');
+$GLOBALS['str_skin_round'] = _('Rounded boxes');
+$GLOBALS['str_skin_none'] = _('None');
+$GLOBALS['str_skin_box_shape'] = _('Box Shape');
 
 ?>

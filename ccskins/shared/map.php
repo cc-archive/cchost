@@ -1,8 +1,6 @@
 <?
 
 
-$A['style_sheets'][] = url_args(ccl('docs/colors.php'),'ajax=1');
-
 require_once('ccskins/shared/strings.php');
 
 $A['picks_links']        = 'picks.xml/picks_links';

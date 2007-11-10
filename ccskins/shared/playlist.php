@@ -66,7 +66,7 @@ function _t_playlist_playlist_list($T,&$A) {
 <div  style="padding: 10px;"><?= cc_format_text($A['R']['cart_desc']);?></div>
 </div><?}?></td></tr></table>
 <div  class="cc_pl_div" id="_cart_<?= $A['R']['cart_id']?>">
-<?$A['reguser'] = $A['is_logged_in'];$A['records'] = $A['args']['records'];$T->Call('playlist.*/playlist_list_lines');
+<?$A['reguser'] = $A['is_logged_in'];$A['records'] = $A['args']['records'];$T->Call('playlist.tpl/playlist_list_lines');
 ?></div>
 <?if ( !empty($A['is_logged_in'])) {?><span id="pl_user_<?= $A['R']['cart_id']?>"></span><?}if ( !empty($A['args']['is_owner'])) {?><span id="pl_owner_<?= $A['R']['cart_id']?>"></span><?}?><br  clear="right" />
 <?}
@@ -135,7 +135,7 @@ function _t_playlist_playlist_popup_window($T,&$A) {
   ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
 <?$A['player_options'] = 'autoHook: false,showVolume: false,showProgress: false,plcc_id: \'plc_id\'';?>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
-<?$T->Call('playlist.*/playlist_list_window_cart');
+<?$T->Call('playlist.tpl/playlist_list_window_cart');
 $T->Call('playerembed.xml/eplayer');
 ?><script >
     new ccPlaylistMenu();
@@ -163,7 +163,7 @@ function _t_playlist_playlist_show_one($T,&$A) {
   ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/detail.css') ?>"  title="Default Style"></link>
 <?$A['player_options'] = 'autoHook: false';?><script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
-<?$T->Call('playlist.*/playlist_list');
+<?$T->Call('playlist.tpl/playlist_list');
 $T->Call('playerembed.xml/eplayer');
 ?><script >
     new ccPlaylistMenu();

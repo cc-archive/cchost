@@ -1,5 +1,79 @@
 <properties>
-<section type="color-scheme" label="str_color_scheme" editor="skin_editor.php/edit_color_schemes">
+<section type="font-scheme" label="str_font_scheme" editor="skin_editor.php/edit_font_schemes" scroll="0">
+<property><caption>Arial - Helvetica</caption><id>arial</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</css></markup></property>
+<property><caption>Arial Black</caption><id>arialblack</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Arial Black, Gadget, sans-serif;
+}
+</css></markup></property>
+<property><caption>Comic Sans</caption><id>comic</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Comic Sans MS, cursive;
+}
+</css></markup></property>
+<property><caption>Courier</caption><id>courier</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Courier New, courier, monospace;
+}
+</css></markup></property>
+<property><caption>Georgia</caption><id>georgia</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Georgia, serif;
+}
+</css></markup></property>
+<property><caption>Impact - Charcoal</caption><id>impact</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Impact, Charcoal, sans-serif;
+}
+</css></markup></property>
+<property><caption>Lucida</caption><id>lucida</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Lucida Console, Monaco, monospace;
+}
+</css></markup></property>
+<property><caption>Palatino</caption><id>palatino</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Palatino Linotype, Book Antiqua, Palatino, serif;
+}
+</css></markup></property>
+<property><caption>Tahoma</caption><id>tahoma</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Tahoma, Geneva, sans-serif;
+}
+</css></markup></property>
+<property><caption>Times New Roman</caption><id>times</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Times New Roman, Times, serif;
+}
+</css></markup></property>
+<property><caption>Trebuchet</caption><id>trebuchet</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+</css></markup></property>
+<property><caption>Verdana</caption><id>verdana</id>
+<markup><css>
+body, td, input, select, ul, h1, h2, h3, h4, p {
+  font-family: Verdana, Geneva, sans-serif;
+}
+</css></markup></property>
+</section>
+<section type="color-scheme" label="str_color_scheme" editor="skin_editor.php/edit_color_schemes" scroll="1">
 <property>
 <caption>Black and White</caption>
 <id>mono</id>
@@ -144,7 +218,7 @@ a, a:visited { color: #000000; }</css>
 </property>
 </section>
 
-<section type="tab_pos" label="str_tab_options" editor="skin_editor.php/edit_layouts">
+<section type="tab_pos" label="str_tab_options" editor="skin_editor.php/edit_layouts" scroll="0">
 <property>
 <caption>str_tab_in_header</caption>
 <id>in_header</id>
@@ -159,6 +233,11 @@ a, a:visited { color: #000000; }</css>
   display: block;
   padding-right: 13px;
   }
+#sub_tabs li {
+	display: block;
+	float: left;
+	margin-right: 9px;
+}
 </css>
 </markup>
 </property>
@@ -170,6 +249,13 @@ a, a:visited { color: #000000; }</css>
 ["tab_pos"] = array(
 "subclient" => true,
 "floating" => true);</php>
+<css>
+#sub_tabs li {
+	display: block;
+	float: left;
+	margin-right: 9px;
+}
+</css>
 </markup>
 </property>
 <property>
@@ -184,7 +270,6 @@ a, a:visited { color: #000000; }</css>
 <property>
 <caption>str_tab_none</caption>
 <id>nested</id>
-<image>layouts/tab_layout004.gif</image> 
 <markup><php>
 ["tab_pos"] = array(
 "none" => true );</php>
@@ -192,7 +277,93 @@ a, a:visited { color: #000000; }</css>
 </property>
 </section>
 
-<section type="skin-layout" label="str_skin_layout" editor="skin_editor.php/edit_layouts">
+<section type="round-box" label="str_skin_box_shape" editor="skin_editor.php/edit_layouts" scroll="0">
+<property>
+<image>layouts/rbox_layout001.gif</image> 
+<id>square</id>
+<caption>str_skin_square</caption>
+<css>
+.cc_round_box, .cc_round_box_mono 
+{ 
+  border-top: 1px solid #999; 
+  border-left: 1px solid #999; 
+  border-right: 2px solid #444; 
+  border-bottom: 2px solid #444; 
+  margin: 10px; 
+  padding: 20px; 
+}
+</css>
+</property>
+<property>
+<image>layouts/rbox_layout002.gif</image> 
+<id>round</id>
+<caption>str_skin_round</caption>
+<scriptlink>js/round-box.js</scriptlink>
+<script>cc_round_boxes();</script>
+<css>
+/*--------------------------------------------------------
+	Rounded Boxes
+--------------------------------------------------------*/
+
+/* rounded boxes */
+/* width: 335px !important; /* intended total box width - padding-right(next) */ 
+          /* width: 320px; /* IE Win = width - padding */ 
+
+.cssbox, .cssbox_body, .cssbox_head, .cssbox_head h2,
+.cssbox_mono, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+	background-position: right bottom;
+}
+
+.cssbox, .cssbox_mono { 
+	padding-right: 15px; /* the gap on the right edge of the image (not content padding) */ 
+	margin: 0px auto; /* use to position the box */ 
+} 
+
+/* set the top-right image */ 
+.cssbox_head, .cssbox_head_mono { 
+	background-position: top right; 
+	margin-right: -15px; /* pull the right image over on top of border */ 
+	padding-right: 40px; /* right-image-gap + right-inside padding */ 
+} 
+
+/* set the top-left image */ 
+.cssbox_head h2, .cssbox_head_mono h2 
+{
+	background-position: top left; 
+	margin: 0; /* reset main site styles*/ 
+	border: 0; /* ditto */ 
+	padding: 20px 0 10px 40px; /* padding-left = image gap + interior padding ... no padding-right */ 
+	height: auto !important; height: 1%; /* IE Holly Hack */ 
+	font-size: 13px;
+	font-family: Verdana;
+} 
+
+/* set the lower-left corner image */ 
+.cssbox_body, .cssbox_body_mono
+{
+	background-position: bottom left; 
+	margin-right: 25px; /* interior-padding right */ 
+	padding: 2px 0 25px 40px; /* mirror .cssbox_head right/left */ 
+	font-size: 11px;
+	font-family: Verdana;
+} 
+/* rounded boxes */
+/* set the image to use and establish the lower-right position */ 
+.cssbox, .cssbox_body, .cssbox_head, .cssbox_head h2,
+.cssbox_mono, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 
+{ background-image: url(\'/ccskins/shared/images/backbox-mono.png\'); } 
+</css>
+</markup></property>
+<property>
+<caption>str_skin_none</caption>
+<id>none</id>
+</property>
+</section>
+
+<section type="skin-layout" label="str_skin_layout" editor="skin_editor.php/edit_layouts" scroll="1">
 <property>
 <image>layouts/layout001.gif</image> 
 <id>layout001</id>

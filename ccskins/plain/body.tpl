@@ -104,6 +104,12 @@
   <div id="license">%(site-license)%</div>
   %(footer)%
 </div><!-- footer -->
+</div> <!-- container -->
+
+
+%loop(end_script_links,script_link)%
+    <script type="text/javascript" src="%url(#script_link)%" ></script>
+%end_loop%
 
 %loop(end_script_blocks,block)%
     %call(#block)%
@@ -112,12 +118,9 @@
 <script> 
     new modalHook( [ 'search_site_link', 'mi_login', 'mi_register']);  
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
+%if_not_null(skin-properties/script)% // hello
+    %(skin-properties/script)%
+%end_if%
 </script>
-
-%loop(end_script_links,script_link)%
-    <script type="text/javascript" src="%url(#script_link)%" ></script>
-%end_loop%
-
-</div> <!-- container -->
 
 </body>

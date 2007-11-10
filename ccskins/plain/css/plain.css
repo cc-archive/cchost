@@ -2,8 +2,10 @@
 body {
 	margin: 0px;
 	padding: 0px;
-	font-family: Verdana, arial, sans serif;
-	font-size: 0.8em;
+}
+
+body, td, ul {
+	font-size: 0.9em;
 }
 
 img {
@@ -14,24 +16,25 @@ a, a:link, a:visited {
 	text-decoration: none;
 }
 
-h1, h2, h3, ul {
-	font-family: arial;
-}
-
 .hide {
 	display: none;
 }
 
+#header {
+	padding: 3px 4px 3px 0px;
+}
+
 #site_title {
-	margin-left: 4em;
+	margin: 0px 0px 0px 2em;
 }
 
 #site_title a {
 	text-decoration: none;
 }
 
-#header {
-	padding: 3px 4px 3px 0px;
+#site_description {
+	margin: 0px 0px 0px 2em;
+	font-size: 0.8em;
 }
 
 #header_search {
@@ -59,14 +62,6 @@ h1, h2, h3, ul {
 	list-style: none;
 }
 
-
-/*
-#tabs li {
-	margin: 0px 2em;
-	padding: 0px;
-}
-*/
-
 #tabs li a {
 	font-size: 0.9em;
 	text-decoration: none;
@@ -79,6 +74,7 @@ h1, h2, h3, ul {
 	color: black;
 }
 
+#sub_tabs li.selected_tab a,
 #tabs li.selected_tab a
 {
 	color: #BBB;
@@ -86,24 +82,13 @@ h1, h2, h3, ul {
 
 /*
 
-.post_tab_breaker {
-	clear: both;
-}
-
 #sub_tabs {
 	list-style: none;
-	font-size: 0.85em;
+	font-size: 0.9em;
 	padding: 0px;
 	margin: 0px;
 	height: 1.4em;
 	margin: 1.5em;
-}
-
-#sub_tabs li {
-	padding: 0px;
-	display: block;
-	float: left;
-	margin-right: 9px;
 }
 
 #sub_tabs li a {
@@ -117,25 +102,10 @@ h1, h2, h3, ul {
 	color: black;
 }
 
-#sub_tabs li.selected_tab a
-{
-	color: #BBB;
-}
-
-
-.post_sub_tab_breaker {
-	clear: left;
-}
-
-#menu {
-	float: left;
-	margin: 1.0em 2.0em;
-}
 */
 
 .menu_group p {
 	margin: 0.3em 0.1em 0.1em 0.1em;
-	font-size: 0.8em;
 	font-weight: bold;
 }
 
@@ -148,32 +118,17 @@ h1, h2, h3, ul {
 .menu_group li {
 	margin: 0px;
 	padding: 0px;
-	font-size: 0.7em;
 }
 
-.menu_group li a, .menu_group li a:visited, a.cc_more_menu_link {
+.menu_group li a, 
+.menu_group li a:visited, 
+a.cc_more_menu_link {
 	text-decoration: none;
 }
 
 a.cc_more_menu_link {
 	font-style: italic;
 }
-
-/*
-#main_content {
-	width: 80%;
-	overflow: hidden;
-}
-
-#page_footer {
-	float: left;
-	margin-top: 2em;
-	margin-left: 7%;
-	margin-bottom: 2em;
-	font-size: 0.7em;
-	width: 85%;
-}
-*/
 
 #page_footer img {
 	float: left;
@@ -210,7 +165,3 @@ a.cc_more_menu_link {
 	margin-left: 40%;
 }
 
-#site_description {
-	/* margin-left: 100px; */
-	font-size: 0.55em;
-}

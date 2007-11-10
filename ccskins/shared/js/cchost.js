@@ -25,6 +25,14 @@ modalHook.prototype = {
     }
 }
 
+/*
+    Hook menu items so they go to a popup
+
+    usage:
+
+    new popupHook( [ 'mi_managesite', 'mi_global_settings' ] );  
+
+*/
 var popupHook = Class.create();
 
 popupHook.prototype = {
