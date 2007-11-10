@@ -1849,30 +1849,19 @@ class CCGridForm extends CCForm
         }
         else
         {
-            // legacy hacking, should remove this before 5.0 ships
-            $first_row = $this->_grid_rows[$keys[0]];
-            $i = 0;
-            foreach( $first_row as $tcol )
-            {
-                if( $tcol['formatter'] == 'textedit' )
-                {
-                    $name_i = $this->_template_vars['html_form_grid_name_col'] = $i;
-                    break;
-                }
-                ++$i;
-            }
+            $name_i = -1;
         }
 
         $i = 0;
         $rows = array();
-        foreach( $keys as $key )
+        foreach( $keys as $i => $key )
         {
             $grid_row =& $this->_grid_rows[$key];
             $form_error = '';
             $template_row = $this->_build_row($grid_row,$form_error,$name_i);
 
             $rows[] = array(  'html_form_grid_fields' => $template_row, 
-                               'name' => $grid_row[$name_i]['value'],
+                               'name' => $name_i == -1 ? substr($key,1) : $grid_row[$name_i]['value'],
                                'has_error' => !empty($grid_row['has_error']),
                                      'grid_row' => ++$i,
                                      'form_error' => $form_error,
@@ -1921,9 +1910,6 @@ class CCGridForm extends CCForm
             $value = empty($grid_cell['value']) ? '' : $grid_cell['value'];
             
             $class = empty($grid_cell['class']) ? '' : $grid_cell['class'];
-
-            if( $n == $name_i )
-                $class .= (empty($class) ? '' : ' ' ) . 'gcol_name';
 
             if( !empty($grid_cell['form_error']) )
             {

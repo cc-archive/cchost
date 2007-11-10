@@ -2,14 +2,18 @@
 <div class="hide">
   <a href="#content">%string(skip)%</a>
 </div>
-<div id="banner" class="banner_bg banner_color">
 
-    %if_not_empty(sticky_search)%
-        <div id="banner_search"><img id="banner_search_img" height="50" width="70" src="%url(images/find.PNG)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%string(find)%</h3><span>%string(findcontent)%</span></a></div>
-    %end_if%
+<div id="container" style="background-color:white;">
+
+<div id="header" class="light_color">
 
     %if_not_empty(logged_in_as)%
-        <div id="login_info">%string(loggedin)%: <span>%(logged_in_as)%</span><a href="%(home-url)%logout">%string(logout)%</a></div>
+        <div id="login_info">%string(loggedin)%: <span>%(logged_in_as)%</span> 
+            <a class="light_color" href="%(home-url)%logout">%string(logout)%</a></div>
+    %end_if%
+
+    %if_not_empty(sticky_search)%
+        <div id="header_search"><img id="banner_search_img" height="50" width="70" src="%url(images/find.PNG)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%string(find)%</h3><span class="light_color">%string(findcontent)%</span></a></div>
     %end_if%
 
     %if_not_empty(beta_message)%
@@ -22,61 +26,19 @@
         <div id="site_description">%(site-description)%</div>
     %end_if%
 
-    %if_not_empty(tab_info)%
-        <ul id="tabs">
-        %loop(tab_info/tabs,tab)%
-            <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%(#tab/text)%</span></a></li>
-        %end_loop%
-        </ul>
-        <div class="post_tab_breaker"></div>
+    %if_not_empty(skin-properties/tab_pos/in_header)%
+        %call('tabs.tpl/print_tabs')%
     %end_if%
+</div><!-- header -->
 
-</div><!-- banner -->
 
-%if_not_empty(menu_groups)%
-
-<div id="menu" color="menu_color">
-
-    %loop(menu_groups,group)%
-      <div class="menu_group">
-        <p class="dark_color"><!-- edit: group -->%(#group/group_name)%</p>
-        <ul>%loop(#group/menu_items,mi)%
-          <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%><span><!-- edit: menu -->%(#mi/menu_text)%</span></a></li>
-        %end_loop% </ul>
-      </div>
-    %end_loop%
-
-    %% Get the custom sidebar items from settings() %%
-
-    %settings(tmacs,custom_macros)%
-
-    %% These are little strange, the value is the flag
-       that decides what to print, the key is the macro
-    %%
-
-    %loop(custom_macros,flag)%
-      %if_not_null(#flag)%
-        <div class="menu_group dark_color">        
-          %call_macro(#k_flag)%
-        </div>
-      %end_if%
-    %end_loop%
-
-</div> <!-- end of menu -->
-
-%end_if%
-
-<div id="main_content">
+    <div id="wrapper">
+<div id="content">
 
 %call(print_bread_crumbs)%
 
-%if_not_empty(sub_nav_tabs)%
-    <ul id="sub_tabs">
-    %loop(sub_nav_tabs/tabs,tab)%
-        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%(#tab/text)%</span></a></li>
-    %end_loop%
-    </ul>
-    <div class="post_sub_tab_breaker"></div>
+%if_not_empty(skin-properties/tab_pos/subclient)%
+    %call('tabs.tpl/print_sub_tabs')%
 %end_if%
 
 %if_not_empty(page-title)%
@@ -87,14 +49,66 @@
 %loop(macro_names,macro)%    %call(#macro)%             %end_loop%
 %loop(inc_names,inc_name)%   %call(#inc_name)%          %end_loop%
 
-</div> <!-- main_content -->
+</div> <!-- content -->
+    </div> <!-- wrapper -->
 
-<div class="post_content_breaker"></div>
+<div id="navigation">
 
-<div id="page_footer" class="light_bg">
+    %if_not_empty(skin-properties/tab_pos/floating)%
+        %call('tabs.tpl/print_tabs')%
+    %end_if%
+
+    %if_not_empty(skin-properties/tab_pos/nested)%
+        %call('tabs.tpl/print_nested_tabs')%
+    %end_if%
+
+    %if_not_empty(menu_groups)%
+
+        <div id="menu">
+
+            %loop(menu_groups,group)%
+              <div class="menu_group">
+                <p>%(#group/group_name)%</p>
+                <ul>%loop(#group/menu_items,mi)%
+                  <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%>%(#mi/menu_text)%</a></li>
+                %end_loop% </ul>
+              </div>
+            %end_loop%
+
+        </div> <!-- end of menu -->
+
+        %unmap(menu_groups)%
+
+    %end_if%
+</div>
+
+<div id="extra">
+    %settings(tmacs,custom_macros)%
+
+    %% These are little strange, the value is the flag
+       that decides what to print, the key is the macro
+    %%
+
+    %loop(custom_macros,flag)%
+      %if_not_null(#flag)%
+        <div class="menu_group">        
+          %call_macro(#k_flag)%
+        </div>
+      %end_if%
+    %end_loop%
+</div>
+
+
+<div id="footer" class="med_light_bg">
   <div id="license">%(site-license)%</div>
   %(footer)%
 </div><!-- footer -->
+</div> <!-- container -->
+
+
+%loop(end_script_links,script_link)%
+    <script type="text/javascript" src="%url(#script_link)%" ></script>
+%end_loop%
 
 %loop(end_script_blocks,block)%
     %call(#block)%
@@ -103,32 +117,9 @@
 <script> 
     new modalHook( [ 'search_site_link', 'mi_login', 'mi_register']);  
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
-%if(is_admin)%
-    function str_chaser(e)
-    {
-        if( ['SPAN', 'H1', 'H2', 'H3', 'DIV', 'P', 'TD'].include(e.target.tagName) )
-        {
-            var child = e.target.firstChild;
-            if( child && (child.nodeType == 8) )
-            {
-                alert(child.nodeValue);
-            }
-            Event(e).stop();
-            return false;
-        }
-        return true;
-    }
-    Event.observe(window,'dblclick',str_chaser);
+%if_not_null(skin-properties/script)% // hello
+    %(skin-properties/script)%
 %end_if%
-
 </script>
-
-%loop(end_script_links,script_link)%
-    <script type="text/javascript" src="%url(#script_link)%" ></script>
-%end_loop%
-<!--[if lt IE 7]>
-<script defer type="text/javascript" src="%url('js/pngfix.js')%"></script>
-<![endif]-->
-
 
 </body>

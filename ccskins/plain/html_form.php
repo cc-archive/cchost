@@ -60,7 +60,7 @@ function _t_html_form_submit_forms($T,&$A)
 
     foreach($A['submit_form_infos'] as $SI )
     {
-        ?><div  class="cc_submit_forms cc_round_box_mono"><?
+        ?><div  class="cc_submit_forms box"><?
 
         if ( !empty($SI['logo'])) 
             ?><img  src="<?= $SI['logo']?>" /><?
@@ -84,7 +84,7 @@ function _t_html_form_submit_forms($T,&$A)
 //------------------------------------- 
 function _t_html_form_show_form_about($T,&$A) 
 {
-    print '<div id="cc_form_help_container"><div class="cc_round_box">';
+    print '<div id="cc_form_help_container"><div class="box">';
     foreach( $A['curr_form']['form_about'] as $FA )   
         print "<div  class=\"cc_form_about\">{$FA}</div>\n";
     print '</div></div>';

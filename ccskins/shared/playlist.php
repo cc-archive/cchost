@@ -5,7 +5,7 @@
 function _t_playlist_playlist_create_dyn($T,&$A) {
   ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
   <div id="dyn_filter_editor_parent">
-<div  id="dyn_filter_editor" class="cc_round_box" >
+<div  id="dyn_filter_editor" class="box" >
 <div  id="filter_form" >
 </div>
 </div>

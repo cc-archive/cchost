@@ -228,6 +228,10 @@ a, a:visited { color: #000000; }</css>
 "in_header" => true,
 "subclient" => true );</php>
 <css>
+#tabs {
+  height: 1.1em;
+  width: 100%;
+}
 #tabs li {
   float: left;
   display: block;
@@ -283,7 +287,7 @@ a, a:visited { color: #000000; }</css>
 <id>square</id>
 <caption>str_skin_square</caption>
 <css>
-.cc_round_box, .cc_round_box_mono 
+.box
 { 
   border-top: 1px solid #999; 
   border-left: 1px solid #999; 
@@ -310,14 +314,14 @@ a, a:visited { color: #000000; }</css>
           /* width: 320px; /* IE Win = width - padding */ 
 
 .cssbox, .cssbox_body, .cssbox_head, .cssbox_head h2,
-.cssbox_mono, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 {
+.cssbox, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 {
 	background-color: transparent;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
 	background-position: right bottom;
 }
 
-.cssbox, .cssbox_mono { 
+.cssbox, .cssbox { 
 	padding-right: 15px; /* the gap on the right edge of the image (not content padding) */ 
 	margin: 0px auto; /* use to position the box */ 
 } 
@@ -353,7 +357,7 @@ a, a:visited { color: #000000; }</css>
 /* rounded boxes */
 /* set the image to use and establish the lower-right position */ 
 .cssbox, .cssbox_body, .cssbox_head, .cssbox_head h2,
-.cssbox_mono, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 
+.cssbox, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 
 { background-image: url(\'/ccskins/shared/images/backbox-mono.png\'); } 
 </css>
 </markup></property>

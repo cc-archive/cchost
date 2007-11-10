@@ -47,8 +47,8 @@
 %end_if%
 <a name="content" ></a>    
 
-%loop(macro_names,macro)%    %call(#macro)%             %end_loop%
-%loop(inc_names,inc_name)%   %call(#inc_name)%          %end_loop%
+%loop(macro_names,macro)%    %call(#macro)%      %end_loop%
+%loop(inc_names,inc_name)%   %call(#inc_name)%   %end_loop%
 
 </div> <!-- content -->
     </div> <!-- wrapper -->
@@ -101,8 +101,8 @@
 
 
 <div id="footer" class="med_light_bg">
-  <div id="license">%(site-license)%</div>
-  %(footer)%
+  <div id="license"><p>%(site-license)%</p></div>
+  <p>%(footer)%</p>
 </div><!-- footer -->
 </div> <!-- container -->
 

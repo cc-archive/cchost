@@ -118,6 +118,7 @@ class CCSkin
         if( !empty($props['properties']) )
         {
             $this->vars['skin-properties']['css'] = '';
+            $this->vars['skin-properties']['script'] = '';
             foreach( $props['properties'] as $P )
             {
                 if( !empty($P['css']) )
@@ -127,6 +128,14 @@ class CCSkin
                 {
                     $php = '$this->vars[\'skin-properties\']' . $P['php'];
                     eval($php);
+                }
+
+                if( !empty($P['scriptlink']) )
+                    $this->vars['end_script_links'][] = $P['scriptlink'];
+
+                if( !empty($P['script']) )
+                {
+                    $this->vars['skin-properties']['script'] .= $P['script'];
                 }
             }
 

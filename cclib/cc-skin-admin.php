@@ -42,17 +42,19 @@ class CCSkinAdminForm extends CCEditConfigForm
     {
         $this->CCEditConfigForm('skin-properties');
 
-        $props = CCSkinAdmin::_read_properties();
+        $config =& CCConfigs::GetTable();
+        $props = $config->GetConfig('skin-design');
 
         $fields = array();
         foreach( $props as $id => $value )
         {
             $fields[$id] = array(
-                    'label' => $value['label'],
+                    'label'     => $value['label'],
                     'formatter' => 'skin_prop',
-                    'macro'   => $value['editor'],
+                    'macro'     => $value['editor'],
+                    'scroll'    => !empty($value['scroll']),
                     'props'     => $value['properties'],
-                    'flags'    => CCFF_POPULATE,
+                    'flags'     => CCFF_POPULATE,
                     );
         }
 
@@ -97,21 +99,19 @@ class CCSkinAdminForm extends CCEditConfigForm
 class CCSkinAdmin
 {
 
-    function & _read_properties()
+    function & _read_properties($save=false)
     {
         $file = CCTemplate::Search('properties.xml',true) or die('Can\'t find properties.xml');
         $text = file_get_contents($file);
         $map = array( '/<properties>/' => '$sections = array(' . "\n",
-                      '/<section type="([^"]+)"\s+label="([^"]+)"\s+editor="([^"]+)">/U' => 
-                                "  '$1' => array(\n   'label' => '$2',\n   'editor' => '$3',\n'properties' => array( \n",
+                      '/<section type="([^"]+)"\s+label="([^"]+)"\s+editor="([^"]+)"\s+scroll="([^"]+)">/U' => 
+                                "  '$1' => array(\n   'label' => '$2',\n   'editor' => '$3',\n   'scroll' => '$4',\n'properties' => array( \n",
                       '/<property>/' => '    array(' . "\n",
                       '#<caption>(.*)</caption>#U' => "   'caption' => '$1',\n",
                       '#<image>(.*)</image>#U' => "   'img' => '$1',\n",
                       '#<id>(.*)</id>#U' => "   'id' => '$1',\n",
-                      /* '#<markup type="([^"]+)">(.*)</markup>#Ums'=> "   'markup_type' => '$1',\n      'markup' => '$2',\n", */
                       '#</?markup>#' => '',
-                      '#<css>(.*)</css>#Ums' => "'css' => '$1',\n",
-                      '#<php>(.*)</php>#Ums' => "'php' => '$1',\n",
+                      '#<(css|php|scriptlink|script)>(.*)</\1>#Ums' => "'$1' => '$2',\n",
                       '#</property>#' => ' ), ',
                       '#</section>#' => ' ), ), ',
                       '#</properties>#' => ' ); '
@@ -119,9 +119,21 @@ class CCSkinAdmin
 
         $php = preg_replace(array_keys($map),array_values($map),$text);
         eval($php);
+        if( $save )
+        {
+            $config =& CCConfigs::GetTable();
+            $config->SaveConfig('skin-design',$sections,CC_GLOBAL_SCOPE,false);
+        }
         //$x = split("\n",$php);
         //CCDebug::PrintVar($x);
         return $sections;
+    }
+
+    function Import()
+    {
+        $this->_read_properties(true);
+        CCPage::SetTitle(_('Import Skins Properties'));
+        CCPage::Prompt(_('Skin properties imported'));
     }
 
     function Admin()
@@ -155,6 +167,8 @@ class CCSkinAdmin
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'admin/skins',     array('CCSkinAdmin', 'Admin'),       
+            CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( 'admin/skins/import',     array('CCSkinAdmin', 'Import'),
             CC_ADMIN_ONLY, ccs(__FILE__) );
     }
 

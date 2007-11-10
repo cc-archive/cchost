@@ -3,10 +3,6 @@ function cc_round_box( e ) {
     _cc_round_box( e, '' );
 }
 
-function cc_round_box_mono( e ) {
-    _cc_round_box( e, '_mono' );
-}
-
 rbox_counter = 1;
 
 function _cc_round_box( e, color ) {
@@ -31,6 +27,5 @@ function _cc_round_box( e, color ) {
 }
 
 function cc_round_boxes( className ) {
-    $$('.cc_round_box').each( cc_round_box );
-    $$('.cc_round_box_mono').each( cc_round_box_mono );
+    $$('.box').each( cc_round_box );
 }

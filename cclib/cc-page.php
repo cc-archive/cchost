@@ -121,12 +121,6 @@ class CCPageAdmin
                        'formatter'   => 'select',
                        'options'     => $skins,
                        'flags'       => CCFF_POPULATE );
-            $fields['skin_properties'] =
-                array( 'label'       => ' ',
-                       'formatter'   => 'metalmacro',
-                       'skins'       => $skins,
-                       'macro'       => 'skin_form_field.php',
-                       'flags'       => CCFF_POPULATE );
             $fields['max-listing'] =
                 array( 'label'       => _('Max Items Per Page'),
                        'form_tip'    => _('Maximum number of uploads, users in a listing'),

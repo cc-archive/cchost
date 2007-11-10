@@ -29,6 +29,7 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 require_once('cclib/cc-form.php');
+require_once('cclib/cc-skin-admin.php');
 
 /**
  *
@@ -42,52 +43,51 @@ class CCAdminColorSchemesForm extends CCGridForm
     {
         $this->CCGridForm();
 
-CCDebug::PrintVar($schemes);
-
         $heads = array( _('Display'), _('Internal'), _('Scheme') );
-        $this->SetColumnHeader($heads, 1);
+        $this->SetColumnHeader($heads);
 
-        foreach( $schemes as $keyname => $scheme)
+
+        foreach( $schemes['properties'] as $scheme)
         {
+            $keyname = $scheme['id'];
             $a = array(
                   array(
-                    'element_name'  => "grp[$keyname][display_name]",
-                    'value'      => $scheme['display_name'],
-                    'formatter'  => 'textedit',
+                    'element_name'  => "grp[$keyname][caption]",
+                    'value'      => $scheme['caption'],
+                    'formatter'  => 'statictext',
                     'flags'      => CCFF_REQUIRED ),
                   array(
-                    'element_name'  => "grp[$keyname][name]",
-                    'value'      => $scheme['name'],
-                    'formatter'  => 'textedit',
+                    'element_name'  => "grp[$keyname][id]",
+                    'value'      => $scheme['id'],
+                    'formatter'  => 'statictext',
                     'flags'      => CCFF_REQUIRED ),
                   array(
-                    'element_name'  => "grp[$keyname][scheme]",
-                    'value'      => $scheme['scheme'],
+                    'element_name'  => "grp[$keyname][css]",
+                    'value'      => $scheme['css'],
                     'formatter'  => 'textarea',
-                    'expanded'   => false,
+                    'expanded'   => true,
                     'flags'      => CCFF_REQUIRED ),
                 );
 
             $this->AddGridRow( $keyname, $a );
         }
 
-        $empty_scheme = CCColorSchemes::GetEmptyScheme();
         $S = 'new[%i%]';
         $a = array(
               array(
-                'element_name'  => $S . '[display_name]',
+                'element_name'  => $S . '[caption]',
                 'value'      => 'Friendly name',
                 'formatter'  => 'textedit',
                 'flags'      => CCFF_REQUIRED ),
               array(
-                'element_name'  => $S . '[name]',
+                'element_name'  => $S . '[id]',
                 'value'      => 'system_name',
                 'formatter'  => 'textedit',
                 'flags'      => CCFF_POPULATE ),
               array(
-                'element_name'  => $S . '[scheme]',
-                'value'      => $empty_scheme,
-                'expanded'   => false,
+                'element_name'  => $S . '[css]',
+                'value'      => '',
+                'expanded'   => true,
                 'formatter'  => 'textarea',
                 'flags'      => CCFF_POPULATE ),
             );
@@ -104,95 +104,54 @@ CCDebug::PrintVar($schemes);
 */
 class CCColorSchemes
 {
-    function GetDefaultColorSchemes()
-    {
-        $mono =<<<EOF
-\$bg = '#FFFFFF';
-\$color = '#000000';
-\$dark = '#555555';
-\$med = '#888888';
-\$light = '#DDDDDD';
-\$highlight = '#CCCCCC';
-\$highlight_bg = '#BBBBBB';
-\$link = \$dark;
-\$link_visited = \$dark;
-EOF;
-        $blue =<<<EOF
-\$bg = '#EEEEFF';
-\$color = '#0000FF';
-\$dark = '#555577';
-\$med = '#8888FF';
-\$light = '#DDDDFF';
-\$highlight = '#CCCCFF';
-\$highlight_bg = '#BBBBBB';
-\$link = \$dark;
-\$link_visited = \$dark;
-EOF;
-        $green =<<<EOF
-\$bg = '#EEFFEE';
-\$color = '#00FF00';
-\$dark = '#557755';
-\$med = '#88FF88';
-\$light = '#DDFFDD';
-\$highlight = '#CCFFCC';
-\$highlight_bg = '#BBBBBB';
-\$link = \$dark;
-\$link_visited = \$dark;
-EOF;
-
-        return array(
-            array( 'name' => 'mono' , 'display_name' => 'Black and White', 'scheme' => $mono ), 
-            array( 'name' => 'blue' , 'display_name' => 'Blue', 'scheme' => $blue ), 
-            array( 'name' => 'green' , 'display_name' => 'Green', 'scheme' =>$green) 
-        );
-    }
-
-    function GetEmptyScheme()
-    {
-        $empty_scheme =<<<EOF
-\$bg = '#FFFFFF';
-\$color = '#000000';
-\$dark = '#000000';
-\$med = '#888888';
-\$light = '#FFFFFF';
-\$highlight = '#666666';
-\$highlight_bg = '#BBBBBB';
-\$link = \$dark;
-\$link_visited = \$dark;
-EOF;
-        return $empty_scheme;
-    }
-
     function Admin()
     {
         CCPage::SetTitle(_('Edit Color Schemes'));
-        if( empty($_POST['admincolorschemes']) )
+        $config =& CCConfigs::GetTable();
+        $schemes = $config->GetConfig('skin-design');
+        $form = new CCAdminColorSchemesForm($schemes['color-scheme']);
+        if( empty($_POST['admincolorschemes']) || !$form->ValidateFields())
         {
-            $config =& CCConfigs::GetTable();
-            $schemes = $config->GetConfig('color-schemes');
-            if( empty($schemes) )
-                $schemes = $this->GetDefaultColorSchemes();
-            $form = new CCAdminColorSchemesForm($schemes);
             CCPage::AddForm($form->GenerateForm());
         }
         else
         {
-            $form = new CCAdminColorSchemesForm(array());
-            if( !$form->ValidateFields() )
+            /* POST ---------------
+                [grp] => Array
+                        (
+                            [mono] => Array
+                                (
+                                    [css] => .light_bg { background-color: #FFFFFF; }
+                                             .light_border { border-colo
+
+                $schemes-----------
+                [color-scheme] => Array
+                    (
+                        [properties] => Array
+                            (
+                                [0] => Array
+                                    (
+                                        [caption] => Black and White
+                                        [id] => mono
+                                        [css] => .light_bg { background-color: #FFFFFF; }
+                                                 .light_border { border-color: #FFFFFF; }
+            */
+            CCUtil::Strip($_POST);
+
+            foreach( $schemes['color-scheme']['properties'] as $k => $v )
             {
-                CCPage::AddForm($form->GenerateForm());
+                if( !empty($_POST['grp'][$v['id']]) )
+                    $schemes['color-scheme']['properties'][$k]['css'] = $_POST['grp'][$v['id']]['css'];
             }
-            else
+
+            if( !empty($_POST['new']) )
             {
-                CCUtil::Strip($_POST);
-                if( empty($_POST['new']) )
-                    $grp = $_POST['grp'];
-                else
-                    $grp = array_merge($_POST['grp'],$_POST['new']);
-                $configs =& CCConfigs::GetTable();
-                $configs->SaveConfig( 'color-schemes', $grp, '', false);
-                CCPage::Prompt(_('Color scheme changes saved'));
+                $schemes['color-scheme']['properties'] += $_POST['new'];
             }
+            
+            $config->SaveConfig('color-design',$schemes,CC_GLOBAL_SCOPE,false);
+
+            CCPage::Prompt(_('Color scheme changes saved'));
         }
     }
 

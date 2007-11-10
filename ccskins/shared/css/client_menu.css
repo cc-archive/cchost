@@ -3,6 +3,18 @@
 	width: 50%;
 }
 
+.client_menu li {
+	margin-bottom: 0.2em;
+}
+
 .client_menu a {
 	margin-right: 0.6em;
+	font-weight: bold;
+}
+
+.client_menu_help,
+.client_menu_hint {
+	margin-right: auto;
+	margin-left: auto;
+	width: 80%;
 }

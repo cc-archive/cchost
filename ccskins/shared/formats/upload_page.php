@@ -109,7 +109,7 @@ function helper_uploads_do_menus(&$R,&$A)
 
     if( !empty($menu['owner']) )
     {
-        print "  <div class=\"cc_round_box\" id=\"download_box\"><ul>\n";
+        print "  <div class=\"box\" id=\"download_box\"><ul>\n";
 
         foreach( $menu['owner'] as $mi )
             helper_upload_menu_item($mi);
@@ -119,7 +119,7 @@ function helper_uploads_do_menus(&$R,&$A)
 
     /** PLAY/DOWNLOAD menu *****/
 
-    print "  <div class=\"cc_round_box\" id=\"download_box\"><ul>\n";
+    print "  <div class=\"box\" id=\"download_box\"><ul>\n";
 
     if( !empty($R['fplay_url']) ) {
         $mi = array();
@@ -145,7 +145,7 @@ function helper_uploads_do_menus(&$R,&$A)
 
     /** REVIEW/RATE/SHARE menu ******/
 
-    print "<div class=\"cc_round_box\" id=\"download_box\"><ul>\n";
+    print "<div class=\"box\" id=\"download_box\"><ul>\n";
 
     if( !empty($menu['comment']['comments']) )
         helper_upload_menu_item($menu['comment']['comments']);
@@ -179,7 +179,7 @@ function helper_uploads_do_menus(&$R,&$A)
     /** TRACKBACK menu *****/
 
     $str = sprintf($GLOBALS['str_list_i_saw_this'], '"' . $R['upload_name'] . '"');
-    print "<div class=\"cc_round_box\" id=\"download_box\">\n" .
+    print "<div class=\"box\" id=\"download_box\">\n" .
           "<h2>{$GLOBALS['str_list_trackback']}</h2>\n<a name=\"trackback\"></a>" .
           "<p>{$str}</p><ul>\n";
 
@@ -204,7 +204,7 @@ function helper_uploads_do_menus(&$R,&$A)
 
     if( !empty($menu['admin']) )
     {
-        print "  <div class=\"cc_round_box\" id=\"download_box\"><ul>\n";
+        print "  <div class=\"box\" id=\"download_box\"><ul>\n";
 
         foreach( $menu['admin'] as $mi )
             helper_upload_menu_item($mi);
@@ -286,7 +286,7 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
         [license_text] => <strong>Attribution Noncommercial</strong>
     */
 
-    print "<div class=\"cc_round_box\" id=\"license_info\"><p><img src=\"" . $T->URL('images/lics/' . $R['license_logo'] ) . "\" />".
+    print "<div class=\"box\" id=\"license_info\"><p><img src=\"" . $T->URL('images/lics/' . $R['license_logo'] ) . "\" />".
           "  <div id=\"license_info_t\" >\n" .
           "    {$GLOBALS['str_lic']}<br />Creative Commons<br />" .
           "<a href=\"{$R['license_url']}\">" .
@@ -303,7 +303,7 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
         $pick = $E[ $keys[0] ];
         $url = $A['home-url'] . 'people/' . $pick['reviewer'];
         $img = $T->URL('images/big-red-star.gif');
-        print "<div class=\"cc_round_box\" id=\"pick_box\">" .
+        print "<div class=\"box\" id=\"pick_box\">" .
               "<h2>{$GLOBALS['str_edpick']}</h2>" .
               "<p><img src=\"$img\" />" .
               $pick['review'] . "</p><div class=\"pick_reviewer\">{$pick['reviewer']}</div></div>\n";
@@ -324,7 +324,7 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
 function helper_upload_remix_info($caption,$icon,$p,$T)
 {
     $icon = $T->URL('images/' . $icon);
-    print "<div class=\"cc_round_box\" id=\"remix_info\">" .
+    print "<div class=\"box\" id=\"remix_info\">" .
           "<h2>{$caption}</h2>\n<p><img src=\"{$icon}\" />";
 
     $c = count($p);
@@ -356,7 +356,7 @@ function helper_upload_remix_info($caption,$icon,$p,$T)
 
 function helper_upload_main_info(&$R,&$A,$T)
 {
-    print "<div class=\"cc_round_box_mono\">\n";
+    print "<div class=\"box\">\n";
 
     print "<img src=\"{$R['user_avatar_url']}\" style=\"float:right\" />\n";
 
@@ -426,7 +426,7 @@ function helper_upload_main_info(&$R,&$A,$T)
         // see file_macros.php for what these
         // might be (review links, zip dirs, etc.)
 
-        print "<div class=\"cc_round_box\">\n";
+        print "<div class=\"box\">\n";
         $A['record'] =& $R;
         foreach( $R['file_macros'] as $M )
         {
