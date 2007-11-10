@@ -36,6 +36,10 @@ class v_5_collabtag extends CCUpdate
 
     function _update_collabtag()
     {
+        require_once('ccextras/update_v_5_collab.inc');
+        $collab_update = new v_5_collab();
+        $collab_update->Update();
+
         require_once('ccextras/cc-collab.inc');
         $uploads = new CCUploads();
         $uploads->AddJoin( new CCCollabUploads(), 'upload_id' );
