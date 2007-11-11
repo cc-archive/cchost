@@ -5,7 +5,7 @@
     <a href="%(#R/license_url)%" title="%(#R/license_name)%" class="cc_liclogo">
         <img  src="%(root-url)%ccskins/shared/images/lics/small-%(#R/license_logo)%" />
     </a>
-    <a href="%(#R/file_page_url)%" class="cc_file_link">%chop(#R/upload_name,chop)%</a> <?= $GLOBALS['str_by']?>
+    <a href="%(#R/file_page_url)%" class="cc_file_link">%chop(#R/upload_name,chop)%</a> <?= $T->String('str_by')?>
     <a href="%(#R/artist_page_url)%">%chop(#R/user_real_name,chop)%</a>
     <span class="cc_upload_date">%(#R/upload_date_format)%</span>
     %if_not_null(#R/files/0/download_url)%

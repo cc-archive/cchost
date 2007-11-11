@@ -27,10 +27,6 @@ var q        = '%(q)%';
     <link rel="%(#head/rel)%" type="%(#head/type)%" href="%(#head/href)%" title="%(#head/title)%"/>
 %end_loop%
 
-%loop(style_sheets,css)%
-    <link rel="stylesheet" type="text/css" href="%url(#css)%" title="Default Style" />
-%end_loop%
-
 %loop(script_links,script_link)%
     <script type="text/javascript" src="%url(#script_link)%" ></script>
 %end_loop%
@@ -44,4 +40,8 @@ var q        = '%(q)%';
         %(skin-properties/css)%
     </style>
     %end_if%
+
+%loop(style_sheets,css)%
+    <link rel="stylesheet" type="text/css" href="%url(#css)%" title="Default Style" />
+%end_loop%
 </head>

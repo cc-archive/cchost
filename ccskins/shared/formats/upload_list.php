@@ -1,43 +1,41 @@
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list.css') ?>" />
 <?
 
-function _t_upload_list_init($T,&$A)
+$carr103 =& $A['records'];
+$cc103   = count( $carr103);
+$ck103   = array_keys( $carr103);
+
+cc_get_remix_history($carr103,3);
+
+print "<div id=\"upload_listing\">\n";
+
+for( $ci103= 0; $ci103< $cc103; ++$ci103)
+{ 
+    $R =& $carr103[ $ck103[ $ci103 ] ];
+    $R['local_menu'] = cc_get_upload_menu($R);
+
+    print "  <div class=\"upload\" ><!--  %%% {$R['upload_name']}  %%% -->\n";
+
+    helper_list_info($R,$A,$T);
+    helper_list_menu($R,$T);
+    helper_list_remixex($R,$T);
+
+    print "    <br style=\"clear:both\" />\n  </div><!--  end upload  -->\n";
+}
+print "</div><!-- end listing -->\n";
+
+$T->Call('prev_next_links');
+
+if( !empty($A['enable_playlists']) )
 {
-    $carr103 =& $A['records'];
-    $cc103   = count( $carr103);
-    $ck103   = array_keys( $carr103);
-
-    cc_get_remix_history($carr103,3);
-
-    print "<div id=\"upload_listing\">\n";
-
-    for( $ci103= 0; $ci103< $cc103; ++$ci103)
-    { 
-        $R =& $carr103[ $ck103[ $ci103 ] ];
-        $R['local_menu'] = cc_get_upload_menu($R);
-
-        print "  <div class=\"upload\" ><!--  %%% {$R['upload_name']}  %%% -->\n";
-
-        helper_list_info($R,$A,$T);
-        helper_list_menu($R);
-        helper_list_remixex($R);
-
-        print "    <br style=\"clear:both\" />\n  </div><!--  end upload  -->\n";
-    }
-    print "</div><!-- end listing -->\n";
-
-    $T->Call('prev_next_links');
-
-    if( !empty($A['enable_playlists']) )
-    {
-        $T->Call('playerembed.xml/eplayer');
-        $T->Call('playlist.tpl/playlist_menu');
-    }
-
-    print '<script> var dl_hook = new downloadHook(); dl_hook.hookLinks(); </script>';
+    $T->Call('playerembed.xml/eplayer');
+    $T->Call('playlist.tpl/playlist_menu');
 }
 
-function helper_list_menu(&$R)
+print '<script> var dl_hook = new downloadHook(); dl_hook.hookLinks(); </script>';
+
+
+function helper_list_menu(&$R,$T)
 {
     // see upload_page.xml.php for menu structure
 
@@ -51,7 +49,7 @@ function helper_list_menu(&$R)
     $mi = array();
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
-    $mi['menu_text'] = $GLOBALS['str_list_download'];
+    $mi['menu_text'] = $T->String('str_list_download');
     $mi['class'] = 'download_hook';
     helper_list_menu_item($mi);
 
@@ -64,12 +62,12 @@ function helper_list_menu(&$R)
         $mi['action'] = 'javascript://rate';
         if( !empty($R['thumbs_up']) )
         {
-            $mi['menu_text'] = $GLOBALS['str_recommend'] ;
+            $mi['menu_text'] = $T->String('str_recommend') ;
             $tu = 'true';
         }
         else
         {
-            $mi['menu_text'] = $GLOBALS['str_list_rate_now'] ;
+            $mi['menu_text'] = $T->String('str_list_rate_now') ;
             $tu = 'false';
         }
         $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";
@@ -81,7 +79,7 @@ function helper_list_menu(&$R)
 
     $mi = array();
     $mi['action'] = $R['file_page_url'] . '#trackback';
-    $mi['menu_text'] = $GLOBALS['str_list_trackback'];
+    $mi['menu_text'] = $T->String('str_list_trackback');
     helper_list_menu_item($mi);
 
     if( !empty($menu['share']['share_link']) )
@@ -139,7 +137,7 @@ function helper_list_info(&$R,&$A,$T)
                   rel="license"
                   title="{$R['license_name']}" >
                   <img src="{$licurl}" /></a> 
-        <a href="{$furl}" {$class}>{$name}</a><br /> {$GLOBALS['str_by']} <a href="{$aurl}">{$R['user_real_name']}</a>
+        <a href="{$furl}" {$class}>{$name}</a><br /> {$T->String('str_by')} <a href="{$aurl}">{$R['user_real_name']}</a>
         <div class="upload_date">$date </div>
         <div class="taglinks">
             
@@ -148,9 +146,9 @@ EOF;
     if( !empty($R['usertag_links']) )
     {
         $comma = '';
-        foreach( $R['usertag_links'] as $T )
+        foreach( $R['usertag_links'] as $tgg )
         {
-            print "$comma<a href=\"{$T['tagurl']}\">{$T['tag']}</a>";
+            print "$comma<a href=\"{$tgg['tagurl']}\">{$tgg['tag']}</a>";
             $comma = ",\n         ";
         }
     }
@@ -164,30 +162,30 @@ EOF;
             $root = 'root_url';
         else
             $root = "'${m[1]}'";
-
-        print "        <div class=\"playerdiv\"><span class=\"playerlabel\">{$GLOBALS['str_play']}: </span><a class=\"cc_player_button cc_player_hear\" id=\"_ep_{$R['upload_id']}\"> </a></div>\n" .
+        
+        print "        <div class=\"playerdiv\"><span class=\"playerlabel\">{$T->String('str_play')}: </span><a class=\"cc_player_button cc_player_hear\" id=\"_ep_{$R['upload_id']}\"> </a></div>\n" .
               "<script> \$('_ep_${R['upload_id']}').href = {$root} + '{$m[2]}'; </script>\n";
     }
 
     print "    </div><!-- upload info -->\n";
 }
 
-function helper_list_remixex(&$R)
+function helper_list_remixex(&$R,$T)
 {
    if( !empty($R['remix_parents']) )
     {
         $murl = empty($R['more_parents_link']) ? '' : $R['more_parents_link'];
-        helper_list_remix_info( $GLOBALS['str_list_uses'], 'downloadicon.gif', $R['remix_parents'], $murl );
+        helper_list_remix_info( $T->String('str_list_uses'), 'downloadicon.gif', $R['remix_parents'], $murl, $T );
     }
 
     if( !empty($R['remix_children']) )
     {
         $murl = empty($R['more_children_link']) ? '' : $R['more_children_link'];
-        helper_list_remix_info( $GLOBALS['str_list_usedby'], 'uploadicon.gif', $R['remix_children'], $murl );
+        helper_list_remix_info( $T->String('str_list_usedby'), 'uploadicon.gif', $R['remix_children'], $murl, $T );
     }
 }
 
-function helper_list_remix_info($caption,$icon,$p,$murl)
+function helper_list_remix_info($caption,$icon,$p,$murl,$T)
 {
     // 
     print '<div id="remix_info" > '.
@@ -203,12 +201,12 @@ function helper_list_remix_info($caption,$icon,$p,$murl)
         $aname = !empty($P['user_real_name']) ? $P['user_real_name'] : $P['pool_item_artist'];
         $fnamex = CC_StrChop($fname,18);
         $anamex = CC_StrChop($aname,18);
-        print "<div><a class=\"remix_link\" href=\"{$P['file_page_url']}\" title=\"{$fname}\">{$fnamex}</a> <span>{$GLOBALS['str_by']} \n    " . 
+        print "<div><a class=\"remix_link\" href=\"{$P['file_page_url']}\" title=\"{$fname}\">{$fnamex}</a> <span>{$T->String('str_by')} \n    " . 
               "<a href=\"{$P['artist_page_url']}\" title=\"{$aname}\">{$anamex}</a></span></div>\n";
     }
 
     if( $murl)
-        print "<a class=\"remix_more_link\" href=\"{$murl}\">{$GLOBALS['str_more']}...</a>";
+        print "<a class=\"remix_more_link\" href=\"{$murl}\">{$T->String('str_more')}...</a>";
 
     print "</div>\n";
 }

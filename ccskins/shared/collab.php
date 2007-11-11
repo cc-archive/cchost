@@ -87,23 +87,23 @@ function _t_collab_show_collab($T,&$A)
     <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/collab.css') ?>" title="Default Style"></link>
     <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/topics.css') ?>" title="Default Style"></link>
     <fieldset >
-    <legend class="dark_bg light_color"><?= $GLOBALS['str_info']?></legend>
+    <legend class="dark_bg light_color"><?= $T->String('str_info')?></legend>
     <?
 
     if ( !empty($collab['is_owner'])) {
 
     ?><div  style="float:right">
-    <a  id="commentcommand" href="<?= $A['home-url']?>collab/edit/<?= $collab_id?>"><span ><?=$GLOBALS['str_collab_edit']?></span></a>
+    <a  id="commentcommand" href="<?= $A['home-url']?>collab/edit/<?= $collab_id?>"><span ><?=$T->String('str_collab_edit')?></span></a>
     </div><?
     } // END: if
 
-    ?><div  class="cc_collab_by"><?=$GLOBALS['str_collab_created_by']?>: <a  href="<?= $A['home-url']?>people/<?= $C['user_name']?>"><?= $C['user_real_name']?></a> 
+    ?><div  class="cc_collab_by"><?=$T->String('str_collab_created_by')?>: <a  href="<?= $A['home-url']?>people/<?= $C['user_name']?>"><?= $C['user_real_name']?></a> 
               <?= $C['collab_date']?></div>
     <div  class="cc_collab_desc light_bg dark_border"><?= $C['collab_desc']?></div>
     </fieldset>
     <div  class="cc_collab_fields">
     <fieldset >
-    <legend class="dark_bg light_color" ><?= $GLOBALS['str_artists'] ?></legend>
+    <legend class="dark_bg light_color" ><?= $T->String('str_artists') ?></legend>
     <div  class="user_lines">
     <div  id="user_inserter"></div>
     </div>
@@ -111,7 +111,7 @@ function _t_collab_show_collab($T,&$A)
     </div>
     </fieldset>
     <fieldset >
-    <legend class="dark_bg light_color" ><?= $GLOBALS['str_files'] ?> </legend>
+    <legend class="dark_bg light_color" ><?= $T->String('str_files') ?> </legend>
     <div  class="file_list" id="file_list">
     </div>
     <?
@@ -122,7 +122,7 @@ function _t_collab_show_collab($T,&$A)
         <form  target="upload_frame" 
                 enctype="multipart/form-data" 
                 action="<?= $A['home-url']?>collab/upload/file/<?= $collab_id?>" 
-                method="post" id="upform" name="upform"><?=$GLOBALS['str_collab_upload_file']?>: <select  name="uptype" id="uptype">
+                method="post" id="upform" name="upform"><?=$T->String('str_collab_upload_file')?>: <select  name="uptype" id="uptype">
 <?
                 $forms = cc_get_config('submit_forms');
                 foreach($forms as $form)
@@ -135,13 +135,13 @@ function _t_collab_show_collab($T,&$A)
                 }
 ?>
                 </select>
-        <input type="file" id="upfile" name="upfile"></input> <?=$GLOBALS['str_collab_name']?>: <input  name="upname" id="upname" type="text"></input><select  name="lic" id="lic">
+        <input type="file" id="upfile" name="upfile"></input> <?=$T->String('str_collab_name')?>: <input  name="upname" id="upname" type="text"></input><select  name="lic" id="lic">
         <?
             foreach( $collab['lics'] as $lic )
             { ?><option  value="<?= $lic['license_id']?>"><?= $lic['license_name']?></option><? }
 
         ?></select>
-        <button  id="fileok"><?=$GLOBALS['str_collab_ok']?></button>
+        <button  id="fileok"><?=$T->String('str_collab_ok')?></button>
         </form>
         <div  id="upcover" style="position:absolute;display:none;" class="light_bg"> 
         <img  style="margin-left:45%" src="<?= $T->URL('images/spinner.gif') ?>" /></div>
@@ -153,15 +153,15 @@ function _t_collab_show_collab($T,&$A)
     if ( !empty($collab['is_member'])) 
     {
         ?><fieldset>
-        <legend class="dark_bg light_color" ><?= $GLOBALS['str_conversation'] ?></legend>
-        <p ><?=$GLOBALS['str_collab_this_conv']?>:</p>
+        <legend class="dark_bg light_color" ><?= $T->String('str_conversation') ?></legend>
+        <p ><?=$T->String('str_collab_this_conv')?>:</p>
         <?
         $A['topics'] = $collab['topics'];
         //$T->Call('topics.xml/list_topics');
 
         ?>
         <div class="c_commands">
-            <a href="<?= $A['home-url']?>collab/topic/add/<?= $collab_id?>" id="commentcommand"><span ><?=$GLOBALS['str_collab_add_topic']?></span></a>
+            <a href="<?= $A['home-url']?>collab/topic/add/<?= $collab_id?>" id="commentcommand"><span ><?=$T->String('str_collab_add_topic')?></span></a>
         </div>
         </fieldset><?
     } // END: if member
@@ -170,9 +170,9 @@ function _t_collab_show_collab($T,&$A)
     <script  src="<?= $T->URL('js/autocomp.js'); ?>"></script>
     <script  src="<?= $T->URL('js/collab.js'); ?>"></script>
     <script >
-        var str_credit = '<?=$GLOBALS['str_collab_credit2']?>';
-        var str_remove = '<?=$GLOBALS['str_collab_remove2']?>';
-        var str_send_email = '<?=$GLOBALS['str_collab_send_email']?>';
+        var str_credit = '<?=$T->String('str_collab_credit2')?>';
+        var str_remove = '<?=$T->String('str_collab_remove2')?>';
+        var str_send_email = '<?=$T->String('str_collab_send_email')?>';
         var collab_template = '<' + 'div class="user_line light_bg med_color" id="_user_line_#{user_name}">' +
                 '<' + 'div class="user" ><' + 'a href="'+home_url+'people/#{user_name}">#{user_real_name}<' + '/a><' + '/div>' +
                 '<' + 'div class="role dark_color">#{role}<' + '/div>' +
@@ -220,11 +220,11 @@ function _t_collab_show_collab($T,&$A)
       if( upload_id )
       {
         cu.updateFiles('<?= $collab_id?>');
-        cu.msg('<?=$GLOBALS['str_collab_upload_succeeded']?>.','green');
+        cu.msg('<?=$T->String('str_collab_upload_succeeded')?>.','green');
       }
       else
       {
-        cu.msg('<?=$GLOBALS['str_collab_upload_failed']?>: ' . msg,'red');
+        cu.msg('<?=$T->String('str_collab_upload_failed')?>: ' . msg,'red');
       }
     }
 </script>
@@ -244,7 +244,7 @@ function _t_collab_show_collab_files($T,&$A)
        
         $html =<<<EOF
     <div class="file_line {$up['collab_type']}_line" id="_file_line_{$up['upload_id']}">
-    <div class="file_info"><a  class="fname" href="{$up['file_page_url']}">{$up['upload_name']}</a> {$GLOBALS['str_by']}
+    <div class="file_info"><a  class="fname" href="{$up['file_page_url']}">{$up['upload_name']}</a> {$T->String('str_by')}
                    <a  href="{$up['artist_page_url']}">{$up['user_real_name']}</a></div>
 EOF;
         print $html;
@@ -252,15 +252,15 @@ EOF;
         if ( !empty($up['is_collab_owner'])) {
 
     ?><div ><a  href="javascript://remove " id="_remove_<?= $up['upload_id']?>" class="file_cmd file_remove">
-    <span ><?=$GLOBALS['str_collab_remove2']?></span></a></div>
+    <span ><?=$T->String('str_collab_remove2')?></span></a></div>
     <div ><a  href="javascript://publish" id="_publish_<?= $up['upload_id']?>" class="file_cmd file_publish">
     <span  id="_pubtext_<?= $up['upload_id']?>"><?=
 
-    empty($up['upload_published']) ? $GLOBALS['str_collab_publish'] : $GLOBALS['str_collab_hide'];
+    empty($up['upload_published']) ? $T->String('str_collab_publish') : $T->String('str_collab_hide');
 
     ?></span></a>
     </div>
-    <div ><a  href="javascript://tags" id="_tags_<?= $up['upload_id']?>" class="file_cmd file_tags"><?=$GLOBALS['str_collab_tags']?></a></div>
+    <div ><a  href="javascript://tags" id="_tags_<?= $up['upload_id']?>" class="file_cmd file_tags"><?=$T->String('str_collab_tags')?></a></div>
     <?
     } // END: if
 

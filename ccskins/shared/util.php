@@ -2,7 +2,7 @@
 
 function _t_util_format_signature($T,$A)
 {
-    print $GLOBALS['str_from']. " <a href=\"{$A['root-url']}\">{$A['site-title']}</a>";
+    print $T->String('str_from'). " <a href=\"{$A['root-url']}\">{$A['site-title']}</a>";
 }
 
 function _t_util_print_prompts($T,&$A)
@@ -46,7 +46,7 @@ function _t_util_print_forms($T,&$A)
 
 function _t_util_hide_upload_form($T,&$A)
 {
-    $msg = str_replace("\n", ' ', addslashes($GLOBALS['str_uploading_msg']));
+    $msg = str_replace("\n", ' ', addslashes($T->String('str_uploading_msg')));
     
     ?>
 <style>

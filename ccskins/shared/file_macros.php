@@ -9,7 +9,7 @@ function _t_file_macros_show_zip_dir($T,&$_TV)
     $R =& $_TV['record'];
     foreach( $R['zipdirs'] as $zip )
     {
-        print "<p class=\"zipdir_title\">{$GLOBALS['str_zip_title']}: <span>{$zip['name']}</span></p>\n" .
+        print "<p class=\"zipdir_title\">{$T->String('str_zip_title')}: <span>{$zip['name']}</span></p>\n" .
               "<ul class=\"cc_zipdir\">\n";
         foreach( $zip['dir']['files'] as $F )
             print "<li>{$F}</li>\n";
@@ -32,7 +32,7 @@ new Ajax.Updater( 'requested_reviews', url, { method: 'get' } );
 
 function _t_file_macros_print_recent_reviews($T,&$_TV)
 {
-    print "<p class=\"recent_reviews\">{$GLOBALS['str_recent_reviews']}</p>\n" .
+    print "<p class=\"recent_reviews\">{$T->String('str_recent_reviews')}</p>\n" .
           "<ul id=\"recent_reviews\">\n";
     foreach( $_TV['posts'] as $post )
     {
@@ -40,7 +40,7 @@ function _t_file_macros_print_recent_reviews($T,&$_TV)
         print "<li><span class=\"poster_name\">{$post['username']}</span> <a href=\"{$post['post_url']}\">{$text}</a></li>\n";
     }
     print "</ul>\n";
-    print "<a href=\"{$_TV['view_topic_url']}\">{$GLOBALS['str_read_all']}</a>\n";
+    print "<a href=\"{$_TV['view_topic_url']}\">{$T->String('str_read_all')}</a>\n";
 }
 
 function _t_file_macros_print_howididit_link($T,&$_TV)

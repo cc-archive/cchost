@@ -123,7 +123,7 @@ function helper_uploads_do_menus(&$R,&$A)
 
     if( !empty($R['fplay_url']) ) {
         $mi = array();
-        $mi['pre'] = $GLOBALS['str_play'];
+        $mi['pre'] = $T->String('str_play');
         $mi['class'] = 'cc_player_button cc_player_hear';
         $mi['id'] = "_ep_{$R['upload_id']}";
         $mi['action'] = $R['fplay_url'];
@@ -137,7 +137,7 @@ function helper_uploads_do_menus(&$R,&$A)
     $mi = array();
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
-    $mi['menu_text'] = $GLOBALS['str_list_download'];
+    $mi['menu_text'] = $T->String('str_list_download');
     $mi['class'] = 'download_hook';
     helper_upload_menu_item($mi);
 
@@ -156,12 +156,12 @@ function helper_uploads_do_menus(&$R,&$A)
         $mi['action'] = 'javascript://rate';
         if( !empty($R['thumbs_up']) )
         {
-            $mi['menu_text'] = $GLOBALS['str_recommend'] ;
+            $mi['menu_text'] = $T->String('str_recommend') ;
             $tu = 'true';
         }
         else
         {
-            $mi['menu_text'] = $GLOBALS['str_list_rate_now'] ;
+            $mi['menu_text'] = $T->String('str_list_rate_now') ;
             $tu = 'false';
         }
         $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";
@@ -178,18 +178,18 @@ function helper_uploads_do_menus(&$R,&$A)
 
     /** TRACKBACK menu *****/
 
-    $str = sprintf($GLOBALS['str_list_i_saw_this'], '"' . $R['upload_name'] . '"');
+    $str = sprintf($T->String('str_list_i_saw_this'), '"' . $R['upload_name'] . '"');
     print "<div class=\"box\" id=\"download_box\">\n" .
-          "<h2>{$GLOBALS['str_list_trackback']}</h2>\n<a name=\"trackback\"></a>" .
+          "<h2>{$T->String('str_list_trackback')}</h2>\n<a name=\"trackback\"></a>" .
           "<p>{$str}</p><ul>\n";
 
     $mi = array();
     $mi['action'] = 'javascript:// noted';
-    $saws = array( array( 'remix',    $GLOBALS['str_remix']),
-                   array( 'podcast',  $GLOBALS['str_podcast']),
-                   array( 'video',    $GLOBALS['str_video']),
-                   array( 'web',      $GLOBALS['str_list_web_blog']),
-                   array( 'album',    $GLOBALS['str_list_album'], ) );
+    $saws = array( array( 'remix',    $T->String('str_remix')),
+                   array( 'podcast',  $T->String('str_podcast')),
+                   array( 'video',    $T->String('str_video')),
+                   array( 'web',      $T->String('str_list_web_blog')),
+                   array( 'album',    $T->String('str_list_album'), ) );
     $url = "upload_trackback('{$R['upload_id']}', '";
     foreach( $saws as $saw )
     {
@@ -258,12 +258,12 @@ function helper_upload_date(&$R)
     }
     else
     {
-        $mod_date = '<span id="modified_date">' . $GLOBALS['str_list_lastmod'] . ': ' .  CC_datefmt($R['upload_last_edit'],'M d, Y h:i a');
+        $mod_date = '<span id="modified_date">' . $T->String('str_list_lastmod') . ': ' .  CC_datefmt($R['upload_last_edit'],'M d, Y h:i a');
         if( !empty($R['last_op_str']) )
             $mod_date .= ' (' . $R['last_op_str'] . ')';
         $mod_date .= '</span>';
     }
-    print "<div id=\"date_box\">{$GLOBALS['str_list_date']}: $date $mod_date</div>\n";
+    print "<div id=\"date_box\">{$T->String('str_list_date')}: $date $mod_date</div>\n";
 }
 
 function helper_upload_do_sidebar(&$R,&$A,$T)
@@ -288,7 +288,7 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
 
     print "<div class=\"box\" id=\"license_info\"><p><img src=\"" . $T->URL('images/lics/' . $R['license_logo'] ) . "\" />".
           "  <div id=\"license_info_t\" >\n" .
-          "    {$GLOBALS['str_lic']}<br />Creative Commons<br />" .
+          "    {$T->String('str_lic')}<br />Creative Commons<br />" .
           "<a href=\"{$R['license_url']}\">" .
           $R['license_name'] . "\n   <br />" .
           "</a></div></p></div>\n";
@@ -304,7 +304,7 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
         $url = $A['home-url'] . 'people/' . $pick['reviewer'];
         $img = $T->URL('images/big-red-star.gif');
         print "<div class=\"box\" id=\"pick_box\">" .
-              "<h2>{$GLOBALS['str_edpick']}</h2>" .
+              "<h2>{$T->String('str_edpick')}</h2>" .
               "<p><img src=\"$img\" />" .
               $pick['review'] . "</p><div class=\"pick_reviewer\">{$pick['reviewer']}</div></div>\n";
     }
@@ -314,10 +314,10 @@ function helper_upload_do_sidebar(&$R,&$A,$T)
     ------------------------------------*/
 
     if( !empty($R['remix_parents']) )
-        helper_upload_remix_info( $GLOBALS['str_list_uses'], 'downloadicon.gif', $R['remix_parents'], $T );
+        helper_upload_remix_info( $T->String('str_list_uses'), 'downloadicon.gif', $R['remix_parents'], $T );
 
     if( !empty($R['remix_children']) )
-        helper_upload_remix_info( $GLOBALS['str_list_usedby'], 'uploadicon.gif', $R['remix_children'], $T );
+        helper_upload_remix_info( $T->String('str_list_usedby'), 'uploadicon.gif', $R['remix_children'], $T );
 }
 
 
@@ -364,14 +364,14 @@ function helper_upload_main_info(&$R,&$A,$T)
 
     if( empty($R['collab']) )
     {
-        print "<tr><th>{$GLOBALS['str_by']}</th><td><a href=\"{$R['artist_page_url']}\">{$R['user_real_name']}</a></td></tr>\n";
+        print "<tr><th>{$T->String('str_by')}</th><td><a href=\"{$R['artist_page_url']}\">{$R['user_real_name']}</a></td></tr>\n";
     }
     else
     {
         $C =& $R['collab'];
         $url = $A['home-url'] . 'collab/' . $C['collab_id'];
-        print "<tr><th>{$GLOBALS['str_collab_project']}:</th><td><a href=\"$url\">{$C['collab_name']}</a></td></tr>\n" . 
-              "<tr><th>{$GLOBALS['str_collab_credit']}:</th><td>";
+        print "<tr><th>{$T->String('str_collab_project')}:</th><td><a href=\"$url\">{$C['collab_name']}</a></td></tr>\n" . 
+              "<tr><th>{$T->String('str_collab_credit')}:</th><td>";
         $comma = '';
         foreach( $C['users'] as $U )
         {
@@ -388,10 +388,10 @@ function helper_upload_main_info(&$R,&$A,$T)
     }
 
     if( !empty($R['upload_extra']['featuring']) )
-        print "<tr><th>{$GLOBALS['str_featuring']}</th><td>{$R['upload_extra']['featuring']}</td></tr>\n";
+        print "<tr><th>{$T->String('str_featuring')}</th><td>{$R['upload_extra']['featuring']}</td></tr>\n";
 
     if( !empty($R['files']['0']['file_format_info']['ps']) )
-        print "<tr><th>{$GLOBALS['str_list_length']}</th><td>{$R['files']['0']['file_format_info']['ps']}</td></tr>\n";
+        print "<tr><th>{$T->String('str_list_length')}</th><td>{$R['files']['0']['file_format_info']['ps']}</td></tr>\n";
     
     print "</table>\n";
 

@@ -34,9 +34,6 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCBanHV',  'OnUploadRo
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCBan',  'OnMapUrls'), 'cclib/cc-ban.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCBan',  'OnAdminMenu'), 'cclib/cc-ban.inc'  );
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCColorSchemes' , 'OnMapUrls'),  'cclib/cc-color-schemes.php' );
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCColorSchemes' , 'OnAdminMenu'), 'cclib/cc-color-schemes.php' );
-
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCContest' , 'OnMapUrls'), 'cclib/cc-contest.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,    array( 'CCContestHV',  'OnUploadRow'), 'cclib/cc-contest.php' );
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,    array( 'CCContest' , 'OnGetMacros'), 'cclib/cc-contest.inc' );

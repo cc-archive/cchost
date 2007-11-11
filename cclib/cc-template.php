@@ -45,8 +45,14 @@ class CCSkin
         $this->filename  = $template;
         $this->html_mode = $html_mode;
 
+        $this->vars['html_form']        = 'html_form.php/html_form';
+        $this->vars['form_fields']      = 'form_fields.tpl/form_fields';
+        $this->vars['grid_form_fields'] = 'form_fields.tpl/grid_form_fields';
+
         $configs =& CCConfigs::GetTable();
-        $this->vars = $configs->GetConfig('ttag');
+
+        $this->vars += $configs->GetConfig('ttag');
+
         $this->vars['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
         $this->vars['get'] = $_GET;
         $this->vars['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
@@ -157,12 +163,6 @@ class CCSkin
         {
             // Force UTF-8 necessary for some languages (chinese,japanese,etc)
             header('Content-type: text/html; charset=' . CC_ENCODING) ;
-        }
-
-        if( preg_match('#(?:$|/)skin\.(php|tpl)$#', $this->filename, $m ) )
-        {
-            $map_file = str_replace( 'skin.' . $m[1], 'map.' . $m[1], $this->filename );
-            $this->Call($map_file);
         }
 
         $this->Call($this->filename);
@@ -446,7 +446,7 @@ class CCSkin
     * @param bool $real_path Set to true to return full local path 
     * @return string Path to requested file or bool(false)
     */
-    function Search($file, $real_path = false, $reject_if_match ='' )
+    function Search($file, $real_path = false)
     {
         // CCDebug::LogVar('search',$file);
 
@@ -464,7 +464,7 @@ class CCSkin
             //if( is_string($file) && strstr($file,'playlist.js') ) { $x[] = $file; $x[] = $dirs; CCDebug::PrintVar($x); }
             if( !empty($reject_if_match) )
                 die( 'wups, reject search doesn\'t work' );
-            $found = CCUtil::SearchPath( $file, $dirs, '', $real_path, CC_SEARCH_RECURSE_DEFAULT, $reject_if_match);
+            $found = CCUtil::SearchPath( $file, $dirs, '', $real_path, CC_SEARCH_RECURSE_DEFAULT);
             $this->search_cache[$sfile] = $found;
             return $found;
         }
@@ -475,15 +475,13 @@ class CCSkin
 
     function ImportSkin($dir)
     {
-        if( strstr($dir,'map') === false )
-            $dir .= '/map';
-        $gss = $this->GetFilenameGuesses($dir);
-        $map = $this->Search($gss);
-        if( !is_file($map) )
-            die("Can't find skin map file: $dir");
-        //CCDebug::Log("Importing: $map");
-        $this->_push_path($map,'map_stack');
-        $this->_parse($map);
+        CCDebug::Log("Importing: $dir");
+        $skintpl = $dir . '/skin.tpl';
+        $skinphp = $dir . '/skin.php';
+        $skin = file_exists($skintpl) ? $skintpl : (file_exists($skinphp) ? $skinphp : '');
+        if( $skin )
+            $this->_parse($skin);
+        $this->_push_path($skin,'map_stack'); // skin file will get taken off inside here
     }
 
     function _parse($file)
@@ -533,6 +531,8 @@ class CCSkin
 
     function _inner_include($path,$funcname='')
     {
+        //CCDebug::Log("_inner call: $path / $funcname");
+
         $this->_push_path($path);
         $this->_parse($path);
         if( !empty($funcname) )

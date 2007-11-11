@@ -284,7 +284,7 @@ $GLOBALS['str_reviews'] = _('Reviews');
 $GLOBALS['str_stats'] = _('Stats');
 $GLOBALS['str_new_row'] = _('new row');
 
-$GLOBALS['str_color_scheme'] = _('Color Schemes');
+$GLOBALS['str_skin_color_scheme'] = _('Color Schemes');
 $GLOBALS['str_skin_layout'] = _('Skin Layouts');
 $GLOBALS['str_tab_options'] = _('Navigator Tab Placement');
 $GLOBALS['str_tab_in_header'] = _('Tabs in the banner');
@@ -295,5 +295,14 @@ $GLOBALS['str_skin_square'] = _('Square boxes');
 $GLOBALS['str_skin_round'] = _('Rounded boxes');
 $GLOBALS['str_skin_none'] = _('None');
 $GLOBALS['str_skin_box_shape'] = _('Box Shape');
+$GLOBALS['str_skin_font_scheme'] = _('Fonts');
+$GLOBALS['str_skin_mono'] = _('Black and White');
+
+$GLOBALS['str_strings_audio'] = _('Audio String Profile');
+$GLOBALS['str_strings_image'] = _('Images String Profile');
+$GLOBALS['str_strings_video'] = _('Video String Profile');
+$GLOBALS['str_strings_flash'] = _('Flash String Profile');
+$GLOBALS['str_strings_all'] = _('All Media String Profile');
+
 
 ?>

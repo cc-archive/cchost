@@ -102,31 +102,15 @@ class CCPageAdmin
     */
     function OnGetConfigFields($scope,&$fields)
     {
-        require_once('cclib/cc-template.inc');
-
-        $skins = CCTemplateAdmin::GetSkins();
-
         if( $scope != CC_GLOBAL_SCOPE )
         {
             $fields['homepage'] =
                 array(  'label'      => _('Homepage'),
-                        'form_tip'   => sprintf(_('example: viewfile/home'), '<br />'),
+                        'form_tip'   => sprintf(_('example: docs/home'), '<br />'),
                        'value'       => '',
                        'formatter'   => 'textedit',
                        'flags'       => CCFF_POPULATE);
 
-            $fields['skin-file'] =
-                array( 'label'       => _('Skin'),
-                       'form_tip'    => _('Default skin for this view'),
-                       'formatter'   => 'select',
-                       'options'     => $skins,
-                       'flags'       => CCFF_POPULATE );
-            $fields['max-listing'] =
-                array( 'label'       => _('Max Items Per Page'),
-                       'form_tip'    => _('Maximum number of uploads, users in a listing'),
-                       'class'       => 'cc_form_input_short',
-                       'formatter'   => 'textedit',
-                       'flags'       => CCFF_POPULATE | CCFF_REQUIRED);
             $fields['default-feed-tags'] =
                 array( 'label'       => _('Default Feed Tags'),
                        'form_tip'    => _('Comma separated list of tags to use when no other feed is specificed (e.g. audio,remix).') . ' ' 
@@ -169,6 +153,8 @@ class CCPage extends CCSkin
         global $CC_GLOBALS;
 
         $this->CCSkin( $CC_GLOBALS['skin-file'] );
+
+        $this->vars['auto_execute'][] = 'page.tpl';
 
         $this->vars['show_body_header'] = true;
         $this->vars['show_body_footer'] = true;

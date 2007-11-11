@@ -365,7 +365,7 @@ class CCForm
     {
         $this->_form_help_messages[] = $text;
 
-        $this->CallFormMacro('form_about','show_form_about',$this->_form_help_messages);
+        $this->CallFormMacro('form_about','html_form.php/show_form_about',$this->_form_help_messages);
     }
 
     /**
@@ -1118,10 +1118,7 @@ END;
         return( $html );
 
         */
-        $fvalue   = $this->GetFormValue($varname);
         $F =& $this->_form_fields[$varname];
-        //if( !empty($fvalue) )
-        //    $F['options'][$fvalue]['selected'] = 'selected';
         $F['class'] = $class;
         $F['name'] = $varname;
         $F['macro'] = 'form_fields.tpl/select';

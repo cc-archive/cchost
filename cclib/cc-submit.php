@@ -223,7 +223,7 @@ class CCSubmit
             if( empty($types[$key]['action']) )
                 $types[$key]['action'] = ccl('submit',$key);
         }
-        CCPage::PageArg('submit_form_infos', $types, 'submit_forms');
+        CCPage::PageArg('submit_form_infos', $types, 'html_form.php/submit_forms');
     }
 
 

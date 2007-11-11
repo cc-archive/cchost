@@ -1,6 +1,6 @@
-<body class="dark_bg">
+<body> <!-- class="dark_bg" -->
 <div class="hide">
-  <a href="#content">%string(skip)%</a>
+  <a href="#content">%text(skip)%</a>
 </div>
 
 <div id="container" style="background-color:white;">
@@ -9,12 +9,12 @@
 
     %if_not_empty(sticky_search)%
         <div id="header_search"><a id="search_site_link"
-        href="%(advanced_search_url)%"><h3 class="light_color">%string(find)%</h3><span class="light_color">%string(findcontent)%</span></a></div>
+        href="%(advanced_search_url)%"><h3 class="light_color">%text(find)%</h3><span class="light_color">%text(findcontent)%</span></a></div>
     %end_if%
 
     %if_not_empty(logged_in_as)%
-        <div id="login_info">%string(loggedin)%: <span>%(logged_in_as)%</span> 
-            <a class="light_color" href="%(home-url)%logout">%string(logout)%</a></div>
+        <div id="login_info">%text(loggedin)%: <span>%(logged_in_as)%</span> 
+            <a class="light_color" href="%(home-url)%logout">%text(logout)%</a></div>
     %end_if%
 
     %if_not_empty(beta_message)%

@@ -28,7 +28,6 @@ a:hover {
     
 	padding: 1px 0px 0px 0;
 	height: 102px;
-	border-bottom: 1px solid #BBB;
 	background: url('../images/header-main-b.png') bottom left repeat-x;
 	margin-bottom: 12px;
 }
@@ -108,6 +107,7 @@ h2 {
 	list-style-type: none;
 	background: url('../images/tabbar-bg.png') top left repeat-x;
 	line-height: 145%;
+	height: 30px;
 }
 
 ul#tabs li { float: left; height: 2.4em;  margin: 0.2em 2px 0 2px; background: url("../images/tab-bg.png") repeat-x bottom left #f0f4f1; padding:0px;}

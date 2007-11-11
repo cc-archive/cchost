@@ -1,5 +1,5 @@
 <properties>
-<section type="font-scheme" label="str_font_scheme" editor="skin_editor.php/edit_font_schemes" scroll="0">
+<section type="font-scheme" label="str_skin_font_scheme" editor="skin_editor.php/edit_font_schemes" scroll="0">
 <property><caption>Arial - Helvetica</caption><id>arial</id>
 <markup><css>
 body, td, input, select, ul, h1, h2, h3, h4, p {
@@ -73,9 +73,9 @@ body, td, input, select, ul, h1, h2, h3, h4, p {
 }
 </css></markup></property>
 </section>
-<section type="color-scheme" label="str_color_scheme" editor="skin_editor.php/edit_color_schemes" scroll="1">
+<section type="color-scheme" label="str_skin_color_scheme" editor="skin_editor.php/edit_color_schemes" scroll="1">
 <property>
-<caption>Black and White</caption>
+<caption>str_skin_mono</caption>
 <id>mono</id>
 <markup>
 <css>
@@ -97,7 +97,7 @@ a, a:visited { color: #000000; }
 </markup>
 </property>
 <property>
-<caption>Blue</caption>
+<caption>str_skin_blue</caption>
 <id>blue</id>
 <markup><css>
 .light_bg { background-color: #EEEEFF; }

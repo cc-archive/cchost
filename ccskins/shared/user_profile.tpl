@@ -5,8 +5,8 @@
 
 <div id="user_profile">
         <div class="avatar"><img src="%(user_record/user_avatar_url)%" /></div>
-        <a href="%(user_record/user_emailurl)%" class="contact_link">%string(contact_artist)%</a>
-        <div class="member_since">%string(member_since)%: %(user_record/user_date_format)%</div>
+        <a href="%(user_record/user_emailurl)%" class="contact_link">%text(contact_artist)%</a>
+        <div class="member_since">%text(member_since)%: %(user_record/user_date_format)%</div>
 
 <div id="user_fields">
     %loop(user_record/user_fields,uf)%

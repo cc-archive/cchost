@@ -177,8 +177,6 @@ function cc_tpl_parse_text($text,$bfunc)
 
     if( !isset($ttable) )
     {
-        $str_format = (!class_exists( 'CCUser' ) || CCUser::IsAdmin()) ? "<?= \$T->String('str_$2') ?>" : "<?= \$GLOBALS['str_$2'] ?>";
-
        $ttable = array(
         
         '/((?:\s|^)+%%[^%]+%%)/' => '',         // trim out comments
@@ -218,7 +216,6 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
         "/(<\?=?) key{$op}{$a}{$cp}%/"                    =>   "$1 \$k_$1 ?>",
         "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
-        "/(<\?=?) string{$op}{$a}{$cp}%/"                 =>   $str_format,
         "/<\? return%/"                                   =>   "<? return; ?>",
         "/<\? settings{$op}{$ac}{$a}{$cp}%/"              =>   "<? \$A['$2'] = CC_get_config('$1'); ?>",
         "/<\? un(?:define|map){$op}{$a}{$cp}%/"           =>   "<? unset(\$A['$1']); ?>",

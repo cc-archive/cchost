@@ -718,7 +718,7 @@ END;
             $items += array(
                 'settings'   => array( 'menu_text'  => 'Settings',
                                  'menu_group' => 'configure',
-                                 'help' => _('Style sheets, admins, home page, etc.'),
+                                 'help' => _('Admins, home page, etc.'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 1,
                                  'action' =>  ccl('admin','settings')

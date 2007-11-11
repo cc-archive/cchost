@@ -1,4 +1,4 @@
-<div id="skin_div"><i><?= $GLOBALS['str_thinking'] ?>...</i></div>
+<div id="skin_div"><i><?= $T->String('str_thinking') ?>...</i></div>
 <?
 $skins = $A['field']['skins'];
 $skin_infos = array();

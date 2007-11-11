@@ -43,7 +43,7 @@ for( $ci102= 0; $ci102< $cc102; ++$ci102)
 
 if ( !empty($A['idetail'])) {
 
-?><h3  class="dtitle"><a  href="<?= $A['R']['file_page_url']?>"><?= $A['upname']?></a> <?= $GLOBALS['str_by']?> 
+?><h3  class="dtitle"><a  href="<?= $A['R']['file_page_url']?>"><?= $A['upname']?></a> <?= $T->String('str_by')?> 
               <a  href="<?= $A['R']['artist_page_url']?>"><?= $A['user']?></a>
 </h3>
 <?
@@ -79,7 +79,7 @@ if ( !empty($A['R']['upload_description_html'])) {
 ?><table  class="files_table">
 <tr >
 <td  class="column files_column">
-<span  class="title files_title"><?= $GLOBALS['str_files'] ;?></span>:<br  />
+<span  class="title files_title"><?= $T->String('str_files') ;?></span>:<br  />
 <?
 
 $carr103 = $A['R']['files'];
@@ -108,7 +108,7 @@ if ( isset($A['R']['remix_parents']) ) {
 <img  src="<?= $T->URL('images/downloadicon.gif'); ?>" />
 </td>
 <td >
-<span  class="title parents_title"><?= $GLOBALS['str_list_uses'] ;?></span>:<br  />
+<span  class="title parents_title"><?= $T->String('str_list_uses') ;?></span>:<br  />
 <?
 
 $carr104 = $A['R']['remix_parents'];
@@ -120,7 +120,7 @@ for( $ci104= 0; $ci104< $cc104; ++$ci104)
    $A['upname'] = CC_strchop($A['P']['upload_name'],$A['chop'],$A['dochop']);
 $A['user'] = CC_strchop($A['P']['user_real_name'],$A['chop'],$A['dochop']);
 
-?><a  href="<?= $A['P']['file_page_url']?>" class="cc_file_link"><?= $A['upname']?></a> <?= $GLOBALS['str_by']?>
+?><a  href="<?= $A['P']['file_page_url']?>" class="cc_file_link"><?= $A['upname']?></a> <?= $T->String('str_by')?>
                 <a  href="<?= $A['P']['artist_page_url']?>" class="cc_user_link"><?= $A['user']?></a><?
 
 if ( !($ci104 == ($cc104-1)) ) {
@@ -150,7 +150,7 @@ if ( isset($A['R']['remix_children']) ) {
 <img  src="<?= $T->URL('images/uploadicon.gif') ?>" />
 </td>
 <td >
-<span  class="title children_title"><?= $GLOBALS['str_samples_from_here'] ;?></span>:<br  />
+<span  class="title children_title"><?= $T->String('str_samples_from_here') ;?></span>:<br  />
 <?
 
 $carr105 = $A['R']['remix_children'];
@@ -162,7 +162,7 @@ for( $ci105= 0; $ci105< $cc105; ++$ci105)
    $A['upname'] = CC_strchop($A['P']['upload_name'],$A['chop'],$A['dochop']);
 $A['user'] = CC_strchop($A['P']['user_real_name'],$A['chop'],$A['dochop']);
 
-?><a  href="<?= $A['P']['file_page_url']?>" class="cc_file_link"><?= $A['upname']?></a> <?= $GLOBALS['str_by']?>
+?><a  href="<?= $A['P']['file_page_url']?>" class="cc_file_link"><?= $A['upname']?></a> <?= $T->String('str_by')?>
                 <a  href="<?= $A['P']['artist_page_url']?>" class="cc_user_link"><?= $A['user']?></a>
 <?
 

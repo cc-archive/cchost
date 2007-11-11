@@ -193,6 +193,35 @@ class CCTemplateAdmin
         }
     }
 
+    function GetFormats()
+    {
+        global $CC_GLOBALS;
+        
+        $files = array();
+        $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], 'ccskins/shared');
+        foreach( $tdirs as $tdir )
+        {
+            $tdir = CCUtil::CheckTrailingSlash($tdir,false);
+            CCTemplateAdmin::_scour_format_dir($files, $tdir, '/formats/*.*' );
+        }
+        return $files;
+    }
+
+    function _scour_format_dir(&$files, $dir, $mask)
+    {
+        $hits = glob( $dir . $mask );
+        if( !empty($hits) )
+        {
+            $files += $hits;
+         }
+        $dirs = glob( $dir . '/*', GLOB_ONLYDIR );
+        foreach( $dirs as $subdir )
+        {
+            if( $subdir{0} != '.' )
+                CCTemplateAdmin::_scour_dir($files,$subdir,$mask);
+        }
+    }
+
     function GetSkins()
     {
         global $CC_GLOBALS;
@@ -202,22 +231,22 @@ class CCTemplateAdmin
         foreach( $tdirs as $tdir )
         {
             $tdir = CCUtil::CheckTrailingSlash($tdir,false);
-            CCTemplateAdmin::_scour_dir($files, $tdir);
+            CCTemplateAdmin::_scour_dir($files, $tdir, '/skin.*' );
         }
 
         return $files;
     }
 
-    function _scour_dir(&$files, $dir)
+    function _scour_dir(&$files, $dir, $mask)
     {
-        $hits = glob( $dir . '/skin.*' );
+        $hits = glob( $dir . $mask );
         if( !empty($hits) )
             $files[ $hits[0] ] = $dir;
         $dirs = glob( $dir . '/*', GLOB_ONLYDIR );
         foreach( $dirs as $subdir )
         {
             if( $subdir{0} != '.' )
-                CCTemplateAdmin::_scour_dir($files,$subdir);
+                CCTemplateAdmin::_scour_dir($files,$subdir,$mask);
         }
     }
 

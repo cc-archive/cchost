@@ -18,11 +18,11 @@ function play_all()
     <ul  class="cc_playlist_owner_menu">
         <li >
             <a href="javascript://open in window" id="playall" class="cc_playlist_playwindow" onclick="play_all()">
-            <b><span><?= $GLOBALS['str_pl_all_in_window'] ?></span></b></a>
+            <b><span><?= $T->String('str_pl_all_in_window') ?></span></b></a>
         </li>
     </ul>
 </div>
-<h1  style="width:50%;"><?= $GLOBALS['str_pl_popular_adds'] ?></h1>
+<h1  style="width:50%;"><?= $T->String('str_pl_popular_adds') ?></h1>
 <br  style="clear:right" />
 <div  class="cc_pl_div" id="_cart_1" style="margin-top: 12px;">
 <?
@@ -35,10 +35,10 @@ foreach( $AInfo['recs'] as $AIR )
 <div class="trr">
     <div  class="tdc cc_playlist_item" id="_pli_{$AIR['upload_id']}">
         <span ><a class="cc_playlist_pagelink" id="_plk_{$AIR['upload_id']}" target="_parent" href="{$AIR['file_page_url']}">{$iun}</a></span>
-        {$GLOBALS['str_by']} <a  href="{$AIR['artist_page_url']}">{$iurn}</a>
+        {$T->String('str_by')} <a  href="{$AIR['artist_page_url']}">{$iurn}</a>
     </div>
-    <div class="tdc" style="padding-left:15px">{$GLOBALS['str_pl_found_in']} 
-        <a href="{$A['home-url']}playlist/browse{$A['q']}id={$AIR['upload_id']}">{$AIR['track_count']} {$GLOBALS['str_pl_playlists']}</a>
+    <div class="tdc" style="padding-left:15px">{$T->String('str_pl_found_in')} 
+        <a href="{$A['home-url']}playlist/browse{$A['q']}id={$AIR['upload_id']}">{$AIR['track_count']} {$T->String('str_pl_playlists')}</a>
     </div>
     <div class="tdc"><a class="cc_playlist_i" id="_plinfo_{$AIR['upload_id']}"></a></div>
 EOF;
@@ -47,7 +47,7 @@ EOF;
     if ( !empty($A['is_logged_in'])) 
     {
 ?><div  id="playlist_menu_<?= $AIR['upload_id']?>" class="cc_playlist_action tdc">
-<a  class="cc_playlist_button" href="javascript://playlist_menu_<?= $AIR['upload_id']?>"><span ><?= $GLOBALS['str_pl_add_to'] ?></span></a>
+<a  class="cc_playlist_button" href="javascript://playlist_menu_<?= $AIR['upload_id']?>"><span ><?= $T->String('str_pl_add_to') ?></span></a>
 </div><?
     }
     if ( !empty($AIR['fplay_url'])) 

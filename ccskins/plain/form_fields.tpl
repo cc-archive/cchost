@@ -2,7 +2,7 @@
 <table class="cc_form_table">
     %loop(curr_form/html_form_fields,F)%
         %if_not_empty(#F/form_error)%
-            <tr class="cc_form_error_row"><td></td><td class="cc_form_error">%string(#F/form_error)%</td></tr>
+            <tr class="cc_form_error_row"><td></td><td class="cc_form_error">%text(#F/form_error)%</td></tr>
         %end_if%
         <tr class="cc_form_row">
         <td  class="cc_form_label">
@@ -17,7 +17,7 @@
 <table class="cc_form_table">
     %loop(curr_form/html_form_fields,F)%
         %if_not_empty(#F/form_error)%
-            <tr class="cc_form_error_row"><td></td><td class="cc_form_error">%string(#F/form_error)%</td></tr>
+            <tr class="cc_form_error_row"><td></td><td class="cc_form_error">%text(#F/form_error)%</td></tr>
         %end_if%
         <tr class="cc_form_row">
         <td  class="cc_form_label"><div>%text(#F/label)%</div><span>%text(#F/form_tip)%</span></td>
@@ -108,7 +108,7 @@
 %end_loop%
 </div><!-- meta rows -->
 %if_not_null(curr_form/html_add_row_caption)%
-    <button  onclick="do_add_row(); return false;">%string(curr_form/html_add_row_caption)%</button>
+    <button  onclick="do_add_row(); return false;">%text(curr_form/html_add_row_caption)%</button>
 %end_if%
 <script>
 function do_add_row()
@@ -123,8 +123,10 @@ function do_add_row()
 
 %macro(select)%
 <select id="%(field/name)%" name="%(field/name)%" %if_attr(field/class,class)%>
+%map(#selval,field/value)%
 %loop(field/options,opt)%
-    <option value="%(#k_opt)%">
+    <? $selected = ($k_opt == $selval) ? 'selected="selected"' : ''; ?>
+    <option value="%(#k_opt)%" %(#selected)%>
         %text(#opt)%
     </option>
 %end_loop%
