@@ -1,3 +1,10 @@
+%%
+[meta]
+    type     = list
+    desc     = _('Links to upload page')
+    dataview = page_links
+[/meta]
+%%
 <div  id="cc_list">
 %loop(records,R)%
 <div><a href="%(#R/file_page_url)%" class="cc_file_link">%chop(#R/upload_name,chop)%</a></div>

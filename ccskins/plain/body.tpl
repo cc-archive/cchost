@@ -27,7 +27,7 @@
         <div id="site_description">%(site-description)%</div>
     %end_if%
 
-    %if_not_empty(skin-properties/tab_pos/in_header)%
+    %if_not_empty(tab_pos/in_header)%
         %call('tabs.tpl/print_tabs')%
     %end_if%
 </div><!-- header -->
@@ -55,11 +55,11 @@
 
 <div id="navigation">
 
-    %if_not_empty(skin-properties/tab_pos/floating)%
+    %if_not_empty(tab_pos/floating)%
         %call('tabs.tpl/print_tabs')%
     %end_if%
 
-    %if_not_empty(skin-properties/tab_pos/nested)%
+    %if_not_empty(tab_pos/nested)%
         %call('tabs.tpl/print_nested_tabs')%
     %end_if%
 

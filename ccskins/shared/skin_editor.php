@@ -4,34 +4,39 @@ function _t_skin_editor_edit_font_schemes($T,&$A)
 {
     $props = $A['field']['props'];
     $fid = $A['field']['name'];
-    $value = empty($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
+    $value = empty($A['field']['value']) || !file_exists($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
     $scroll = empty($A['field']['scroll']) ? '' : 'overflow: scroll; height: 240px;';
     static $inst = 1;
 
     $class = 'skin_font_pick' . $inst;
 
-
     ?>
     <input type="hidden" name="<?= $fid ?>" id="<?= $fid ?>" value="<?= $value ?>"/>
     <div style="padding-left: 20px;border: 2px solid #999; width: 250px; <?=$scroll?>">
-    <table><?
+    <table cellpadding="0" cellspacing="0"><?
+    
+    $int = 1;
 
     foreach( $props as $P )
     {
-        $id = $P['id'];
-        preg_match_all( '/{([^}]+)}/Ums', $P['css'], $m );
-        $caption = $T->String($P['caption']);
-        print "<tr class=\"{$class} ed\" id=\"efs_{$id}\">";
-        foreach( $m[1] as $style )
-        {
-            print "<td style=\"{$style}\">{$caption}</td>";
-        }
-        print "</tr>\n";
+        $file  = $P['id'];
+        $id = 'efs_' . $int++;
+        if( $value == $file )
+            $val_id = $id;
+        
+        $text = file_get_contents($file);
+        preg_match( '#{(.+)}#Ums', $text, $m);
+        $caption = $T->String($P['desc']);
+        ?>
+        <tr >
+            <td class="<?= $class?>" ref="<?= $file?>" id="<?= $id?>" style="padding:0px;margin:0px;">
+                <span style="padding:0px;margin:0px;font-style:normal;font-size: 14px;<?= $m[1]?>"><?= $caption?></span>
+            </td>
+        </tr>
+        <?
     }
 
     print '</table></div>';
-
-    $val_id = 'efs_' . $value;
 
     ?>
     </div>
@@ -46,7 +51,8 @@ function _t_skin_editor_edit_color_schemes($T,&$A)
 {
     $props = $A['field']['props'];
     $fid = $A['field']['name'];
-    $value = empty($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
+    $A['field']['value'] = '';
+    $value = empty($A['field']['value'])  || !file_exists($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
     $scroll = empty($A['field']['scroll']) ? '' : 'overflow: scroll; height: 240px;';
     static $inst = 1;
 
@@ -58,13 +64,19 @@ function _t_skin_editor_edit_color_schemes($T,&$A)
     <div style="padding-left: 20px;border: 2px solid #999; width: 250px; <?=$scroll?>">
     <style>table.ed td { height: 10px; width:20px; border-style:solid; border-width: 1px; }</style><?
 
+    $int = 1;
     foreach( $props as $P )
     {
-        $id = $P['id'];
-        preg_match_all( '/\.([^\s{]+)[\s{]/U', $P['css'], $m );
-        $markup = preg_replace( '/\./', "#ecs_{$id} .", $P['css'] );
-        print '<br /><b>' . $T->String($P['caption']) . '</b><br />';
-        print "<style>{$markup}</style><table class=\"{$class} ed\" id=\"ecs_{$id}\">";
+        $file = $P['id'];
+        $text = file_get_contents($file);
+        preg_match_all( '/\.([^\s{]+)[\s{]/U', $text, $m );
+        $id = 'id_' . $int++;
+        if( $value == $file )
+            $val_id = $id;
+        $markup = preg_replace( '#.*<style>(.+)</style>#Ums', '$1', $text );
+        $markup = preg_replace( '/\./', "#{$id} .", $markup);
+        print '<br /><b>' . $T->String($P['desc']) . '</b><br />';
+        print "<style>{$markup}</style><table class=\"{$class} ed\" id=\"{$id}\">";
         $rows = array_chunk($m[1],7);
         foreach( $rows as $row )
         {
@@ -76,9 +88,8 @@ function _t_skin_editor_edit_color_schemes($T,&$A)
             print "</tr>\n";
         }        
         print '</table>';
+        ?><script>$('<?=$id?>').ref = '<?=$file?>';</script><?
     }
-
-    $val_id = 'ecs_' . $value;
 
     ?>
     </div>
@@ -92,8 +103,9 @@ function _t_skin_editor_edit_color_schemes($T,&$A)
 function _t_skin_editor_edit_layouts($T,&$A) 
 {
     $props = $A['field']['props'];
+    $A['field']['value'] = '';
     $fid = $A['field']['name'];
-    $value = empty($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
+    $value = empty($A['field']['value'])  || !file_exists($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
     $scroll = empty($A['field']['scroll']) ? '' : 'overflow: scroll; height: 240px;';
     static $inst = 1;
 
@@ -105,23 +117,30 @@ function _t_skin_editor_edit_layouts($T,&$A)
     <?
 
     $class = 'skin_layout_pick_' . $inst;
+    $int = 1;
 
     foreach( $props as $P )
     {
-        $id = 'esl_' . $P['id'];
-        if( empty($P['img']) )
+        $file = $P['id'];
+        $id = 'esl' . $inst . '_' . $int++;
+        if( $value == $file )
+            $val_id = $id;
+        if( empty($P['image']) )
         {
-            ?><tr class="<?=$class?>" id="<?=$id?>" ><td></td><td><?= $T->String($P['caption'])?></td></tr><?
+            ?><tr class="<?=$class?>" id="<?=$id?>" ><td></td><td><?= $T->String($P['desc'])?></td></tr><?
         }
         else
         {
-            ?><tr class="<?=$class?>" id="<?=$id?>" ><td><img src="<?= $T->URL($P['img'])?>" /></td>
-              <td><?= $T->String($P['caption'])?></td></tr><?
+            ?><tr class="<?=$class?>" id="<?=$id?>" >
+                <td><img src="<?= $T->URL($P['image'])?>" /></td>
+                <td><?= $T->String($P['desc'])?></td>
+              </tr><?
         }
 
+        ?><script>$('<?=$id?>').ref = '<?=$file?>';</script>
+        
+        <?
     }
-
-    $val_id = 'esl_' . $value;
 
     ?>
     </table></div>

@@ -18,6 +18,14 @@
 *
 */
 
+/*
+[meta]
+    type     = page
+    desc     = _('Full whiz bang single upload listing')
+    dataview = page_links
+[/meta]
+*/
+
 function _t_upload_page_init($T,&$A)
 {
     $css = $T->URL('css/upload_page.css');

@@ -5,6 +5,31 @@ function _t_util_format_signature($T,$A)
     print $T->String('str_from'). " <a href=\"{$A['root-url']}\">{$A['site-title']}</a>";
 }
 
+function _t_util_patch_stream_links($T,&$A)
+{
+    $stream_fg = $T->URL('images/player/hear-button-fg.gif');
+    if( empty($stream_fg) )
+    {
+        $str = $T->String('str_stream');
+        ?>
+<script>
+$$('.cc_streamlink').each( function(e) { e.innerHTML = '<?=$str?>'; } );
+</script>
+        <?
+    }
+    else
+    {
+        $stream_bg = $T->URL('images/player/hear-button-bg.gif');
+        ?>
+<style> 
+div.cc_list span { display:block; float: left; }
+a.cc_streamlink { float: left; width: 23px; height: 23px; display:block; background: url('<?= $stream_bg ?>') top left no-repeat; }
+a.cc_streamlink:hover { background: url('<?= $stream_fg ?>') top left no-repeat; text-decoration:none;}
+</style>
+        <?
+    }
+}
+
 function _t_util_print_prompts($T,&$A)
 {
     foreach( $A['prompts'] as $prompt )

@@ -42,6 +42,10 @@ a:hover {
 	float: right;
 }
 
+#header_search_img {
+	float: left;
+}
+
 #header_search a {
 	display: block;
 }

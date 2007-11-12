@@ -1,3 +1,10 @@
+%%
+[meta]
+    type     = list
+    desc     = _('Medium verbose (license, attribution, download link, tags, description)')
+    dataview = page_links
+[/meta]
+%%
 <div  id="cc_list">
 <table >
 %loop(records,R)%   
@@ -19,5 +26,7 @@
 </tr>
 %end_loop%
 </table>
+%if_not_null(format_sig)%
 <i class="cc_tagline"><span>%call(format_sig)%</span></i>
+%end_if%
 </div>

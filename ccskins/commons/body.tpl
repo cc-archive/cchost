@@ -13,7 +13,7 @@
     %end_if%
 
     %if_not_empty(sticky_search)%
-        <div id="header_search"><img id="banner_search_img" height="50" width="70" src="%url(images/find.PNG)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%text(find)%</h3><span class="light_color">%text(findcontent)%</span></a></div>
+        <div id="header_search"><img id="header_search_img" height="50" width="70" src="%url(images/find.PNG)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%text(find)%</h3><span class="light_color">%text(findcontent)%</span></a></div>
     %end_if%
 
     %if_not_empty(beta_message)%
@@ -26,9 +26,10 @@
         <div id="site_description">%(site-description)%</div>
     %end_if%
 
-    %if_not_empty(skin-properties/tab_pos/in_header)%
+    %if_not_empty(tab_pos/in_header)%
         %call('tabs.tpl/print_tabs')%
     %end_if%
+
 </div><!-- header -->
 
 
@@ -37,7 +38,7 @@
 
 %call(print_bread_crumbs)%
 
-%if_not_empty(skin-properties/tab_pos/subclient)%
+%if_not_empty(tab_pos/subclient)%
     %call('tabs.tpl/print_sub_tabs')%
 %end_if%
 
@@ -54,11 +55,11 @@
 
 <div id="navigation">
 
-    %if_not_empty(skin-properties/tab_pos/floating)%
+    %if_not_empty(tab_pos/floating)%
         %call('tabs.tpl/print_tabs')%
     %end_if%
 
-    %if_not_empty(skin-properties/tab_pos/nested)%
+    %if_not_empty(tab_pos/nested)%
         %call('tabs.tpl/print_nested_tabs')%
     %end_if%
 

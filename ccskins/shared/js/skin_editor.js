@@ -23,6 +23,7 @@ ccSkinEditor.prototype = {
         }
         this.currentPick = e;
         Element.addClassName(e,'med_bg');
-        $(this.id).value = e.id.match(/_(.*)$/)[1];
+        $(this.id).value = e.ref;
     }
 }
+

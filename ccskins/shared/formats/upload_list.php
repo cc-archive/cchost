@@ -1,3 +1,10 @@
+<? /*
+[meta]
+    type     = list
+    desc     = _('Full whiz bang multiple upload listing')
+    dataview = page_links
+[/meta]
+*/ ?>
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list.css') ?>" />
 <?
 

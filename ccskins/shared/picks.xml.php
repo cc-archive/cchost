@@ -31,7 +31,6 @@
 ?></td>
 </tr>
 </table>
-</div>
 
 <script type="text/javascript">
 //<!--

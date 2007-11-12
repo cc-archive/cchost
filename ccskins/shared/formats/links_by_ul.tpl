@@ -1,3 +1,10 @@
+%%
+[meta]
+    type     = list
+    desc     = _('Links to uploads with attribution (unordered list)')
+    dataview = page_links
+[/meta]
+%%
 <div  id="cc_list">
 <ul>
 %loop(records,R)%
