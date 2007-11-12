@@ -116,7 +116,7 @@ END;
         }
 
         $item['works_page'] = true;
-        CCPage::PageArg( 'chop', false );
+        CCPage::PageArg( 'dochop', false );
         $remixpool  =& CCLocalPoolRemixes::GetTable();
         $sourcepool =& CCLocalPoolSources::GetTable();
         $this->_prep_for_display($item, $remixpool,$sourcepool);

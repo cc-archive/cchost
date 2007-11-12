@@ -130,7 +130,7 @@ class CCMediaHost
             global $CC_GLOBALS;
             $CC_GLOBALS['works_page'] = true;
             $row['works_page'] = true;
-            CCPage::PageArg( 'chop', false );
+            CCPage::PageArg( 'dochop', false );
             $record = $uploads->GetRecordFromRow($row);
             CCPage::PageArg( 'record', $record, 'list_file' );
         }

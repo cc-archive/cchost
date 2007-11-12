@@ -193,7 +193,32 @@ class CCTemplateAdmin
         }
     }
 
-    function GetFormats()
+    function GetFormats($type)
+    {
+        return CCTemplateAdmin::_get_meta_type('formats',$type);
+    }
+
+    function GetProfiles()
+    {
+        return CCTemplateAdmin::_get_meta_type('profiles','profile');
+    }
+
+    function GetLayouts($type)
+    {
+        return CCTemplateAdmin::_get_meta_type('layouts',$type,false);
+    }
+
+    function GetFonts()
+    {
+        return CCTemplateAdmin::_get_meta_type('colors','font',false);
+    }
+
+    function GetColors()
+    {
+        return CCTemplateAdmin::_get_meta_type('colors','color',false);
+    }
+
+    function _get_meta_type($sub_dir,$type,$ret_files=true)
     {
         global $CC_GLOBALS;
         
@@ -202,9 +227,59 @@ class CCTemplateAdmin
         foreach( $tdirs as $tdir )
         {
             $tdir = CCUtil::CheckTrailingSlash($tdir,false);
-            CCTemplateAdmin::_scour_format_dir($files, $tdir, '/formats/*.*' );
+            CCTemplateAdmin::_scour_format_dir($files, $tdir, '/' . $sub_dir . '/*.*' );
         }
-        return $files;
+        
+        $match_files = array();
+        foreach($files as $ffile)
+        {
+            $props = CCTemplateAdmin::_get_format_props($ffile);
+            if( !$props || ($props['type'] != $type) )
+                continue;
+
+            if( !empty($props['desc']) )
+            {
+                if( preg_match("/^_\(['\"](.+)['\"]\)$/",$props['desc'],$m) )
+                    $props['desc'] = _($m[1]);
+            }
+
+            if( $ret_files )
+            {
+                if( empty($props['desc']) )
+                {
+                    $match_files[$ffile] = 'formats/' . preg_replace( '/\..*$/', '', basename($ffile) );
+                }
+                else
+                {
+                    $match_files[$ffile] = $props['desc'];
+                }
+            }
+            else
+            {
+                $props['id'] = $ffile;
+                $match_files[] = $props;
+            }
+        }
+
+        return $match_files;
+    }
+
+    function _get_format_props($filename)
+    {
+        $text = file_get_contents($filename);
+        if( !preg_match('#.*\[meta\](.*)\[/meta\].*#ms',$text,$m) )
+            return null;
+        $lines = split("\n",$m[1]);
+        $props = array();
+        foreach( $lines as $line )
+        {
+            $line = trim($line);
+            if( empty($line) )
+                continue;
+            $parts = split('=',$line);
+            $props[ trim($parts[0]) ] = trim($parts[1]);
+        }
+        return $props;
     }
 
     function _scour_format_dir(&$files, $dir, $mask)

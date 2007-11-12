@@ -113,13 +113,9 @@ function cc_tpl_parse_chop($prefix,$varname,$amt)
     if( $amt == 'chop' )
     {
         $amt = "\$A['chop']";
-        $flag = "\$A['dochop']";
     }
-    else
-    {
-        $flag = 'true';
-    }
-    return "$prefix CC_strchop($var,$amt,$flag); ?>";
+
+    return "$prefix CC_strchop($var,$amt,isset(\$A['dochop']) ? \$A['dochop'] : true); ?>";
 }
 
 function cc_tpl_parse_if_attr($varname,$attr)
@@ -210,12 +206,10 @@ function cc_tpl_parse_text($text,$bfunc)
 
         "/<\? if\(([^\)]+)\)%/"                           =>   "<? if( !empty(\$A['$1']) ) { ?>",
         "/<\? if_not\(([^\)]+)\)%/"                       =>   "<? if( empty(\$A['$1']) ) { ?>",
-        "/<\? add_stylesheet{$op}{$aoq}\)%/"              =>   "<? \$A['style_sheets'][] = '$1'; ?>",
         "/<\? prepend{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? array_unshift(\$A['$1'],'$2'); ?>",
         "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
         "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
-        "/(<\?=?) key{$op}{$a}{$cp}%/"                    =>   "$1 \$k_$1 ?>",
-        "/<\? string_def{$op}{$a},(_\('.+'\)){$cp}%/U"    =>   "<? \$GLOBALS['str_$1'] = $2; ?>",
+        "/<\? customize%/"                                =>   "<? \$T->AddCustomizations(); ?>",
         "/<\? return%/"                                   =>   "<? return; ?>",
         "/<\? settings{$op}{$ac}{$a}{$cp}%/"              =>   "<? \$A['$2'] = CC_get_config('$1'); ?>",
         "/<\? un(?:define|map){$op}{$a}{$cp}%/"           =>   "<? unset(\$A['$1']); ?>",

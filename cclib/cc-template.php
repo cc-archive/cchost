@@ -45,21 +45,16 @@ class CCSkin
         $this->filename  = $template;
         $this->html_mode = $html_mode;
 
-    /*
-        $this->vars['html_form']        = 'html_form.php/html_form';
-        $this->vars['form_fields']      = 'form_fields.tpl/form_fields';
-        $this->vars['grid_form_fields'] = 'form_fields.tpl/grid_form_fields';
-    */
         $configs =& CCConfigs::GetTable();
 
         $this->vars = $configs->GetConfig('ttag');
 
-        $this->vars['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
-        $this->vars['get'] = $_GET;
-        $this->vars['site-root'] = preg_replace('#http://[^/]+/?#','/',ccd());
+        $this->vars['q']            = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+        $this->vars['get']          = $_GET;
+        $this->vars['site-root']    = preg_replace('#http://[^/]+/?#','/',ccd());
         $this->vars['install_done'] = false;
-        $this->vars['noproto'] = false;
-        $this->vars['ajax'] = !empty($_REQUEST['ajax']);
+        $this->vars['noproto']      = false;
+        $this->vars['ajax']         = !empty($_REQUEST['ajax']);
 
         $this->template_stack = array();
         $this->map_stack = array();
@@ -116,38 +111,9 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        $snapshot = $this->vars; // make this instance reusable
+        $snapshot = $this->vars; // make this instance reusable (this is not tested)
 
         $this->vars = array_merge($CC_GLOBALS,$this->vars,$args);
-
-        $config =& CCConfigs::GetTable();
-        $props = $config->GetConfig('skin-properties');
-        if( !empty($props['properties']) )
-        {
-            $this->vars['skin-properties']['css'] = '';
-            $this->vars['skin-properties']['script'] = '';
-            foreach( $props['properties'] as $P )
-            {
-                if( !empty($P['css']) )
-                    $this->vars['skin-properties']['css'] .= $P['css'];
-
-                if( !empty($P['php']) )
-                {
-                    $php = '$this->vars[\'skin-properties\']' . $P['php'];
-                    eval($php);
-                }
-
-                if( !empty($P['scriptlink']) )
-                    $this->vars['end_script_links'][] = $P['scriptlink'];
-
-                if( !empty($P['script']) )
-                {
-                    $this->vars['skin-properties']['script'] .= $P['script'];
-                }
-            }
-
-            //CCDebug::PrintVar($this->vars['skin-properties']);
-        }
 
         if( CCUser::IsLoggedIn() )
         {
@@ -177,6 +143,19 @@ class CCSkin
         }
 
         $this->vars = $snapshot;
+    }
+
+    function AddCustomizations()
+    {
+        $config =& CCConfigs::GetTable();
+        $skin_settings = $config->GetConfig('skin-settings');
+        foreach( array( 'string_profile', 'tab_pos', 'box_shape', 'page_layout', 'color_scheme', 'font_scheme' ) as $inc )
+        {
+            $T = $this;
+            $A =& $this->vars;
+            if( !empty($skin_settings[$inc]) && file_exists($skin_settings[$inc]))
+                require_once($skin_settings[$inc]);
+        }
     }
 
     function String($args)
@@ -476,13 +455,19 @@ class CCSkin
 
     function ImportSkin($dir)
     {
-        CCDebug::Log("Importing: $dir");
-        $skintpl = $dir . '/skin.tpl';
-        $skinphp = $dir . '/skin.php';
+        $this->_pick_up_skin_file($dir,'strings');
+        $skin = $this->_pick_up_skin_file($dir,'skin');
+        $this->_push_path($skin,'map_stack'); // skin file will get taken off inside here
+    }
+
+    function _pick_up_skin_file($dir,$base)
+    {
+        $skintpl = $dir . '/' . $base . '.tpl';
+        $skinphp = $dir . '/' . $base . '.php';
         $skin = file_exists($skintpl) ? $skintpl : (file_exists($skinphp) ? $skinphp : '');
         if( $skin )
             $this->_parse($skin);
-        $this->_push_path($skin,'map_stack'); // skin file will get taken off inside here
+        return $skin;
     }
 
     function _parse($file)

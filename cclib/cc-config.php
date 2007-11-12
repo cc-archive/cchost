@@ -211,7 +211,9 @@ class CCConfigs extends CCTable
 
         $CC_GLOBALS['home-url'] = ccl();
 
-        $CC_GLOBALS += $configs->GetConfig('settings');
+        $settings = $configs->GetConfig('settings');
+        $skin_settings = $configs->GetConfig('skin-settings');
+        $CC_GLOBALS = array_merge($CC_GLOBALS,$settings,$skin_settings);
 
         // allow admins to turn off user interface
         //

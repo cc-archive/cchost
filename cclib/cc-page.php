@@ -158,7 +158,8 @@ class CCPage extends CCSkin
 
         $this->vars['show_body_header'] = true;
         $this->vars['show_body_footer'] = true;
-        $this->vars['chop'] = true;
+        $this->vars['chop'] = 20;
+        $this->vars['dochop'] = true;
         $this->vars['bread_crumbs'] = array();
         $this->vars['crumb_seperator'] = ' &raquo; ';
         $this->_have_forms = false;

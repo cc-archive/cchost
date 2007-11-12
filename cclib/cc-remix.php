@@ -118,7 +118,7 @@ class CCRemix
         {
             $record =& $uploads->GetRecordFromID($upload_id);
             $record['works_page'] = true;
-            CCPage::PageArg( 'chop', false );
+            CCPage::PageArg( 'dochop', false );
             
             $remix_sources =& CCRemixSources::GetTable();
             $sources = $remix_sources->GetSources($record,false);
