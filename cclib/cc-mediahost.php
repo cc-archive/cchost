@@ -132,8 +132,7 @@ class CCMediaHost
             $row['works_page'] = true;
             CCPage::PageArg( 'chop', false );
             $record = $uploads->GetRecordFromRow($row);
-            $macro = empty($GLOBAL['file_page_template']) ? 'list_file' : 'file_page_template';
-            CCPage::PageArg( 'record', $record, $macro );
+            CCPage::PageArg( 'record', $record, 'list_file' );
         }
     }
 
@@ -642,7 +641,6 @@ class CCMediaHost
                             );
         }
 
-        // CCPage::AddScriptLink( ccd('cctemplates', 'dl_popup.js'), false );
     }
 
     /**

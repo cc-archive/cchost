@@ -148,6 +148,7 @@ define('CCFF_SKIPIFNULL',     0x01); // insert/update - GetFormValues
 define('CCFF_NOUPDATE',       0x02); // insert/update
 
 define('CCFF_POPULATE',       0x04); // populate - PopulateValues
+define('CCFF_POPULATE_WITH_DEFAULT', CCFF_POPULATE | 0x400); 
 
 define('CCFF_HIDDEN',         0x08); // html form - GenerateForm
 

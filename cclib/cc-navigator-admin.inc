@@ -71,19 +71,9 @@ class CCEditTabsForm extends CCGridForm
     {
         $this->CCGridForm();
 
-        $url = ccl('viewfile','adminhelp.xml') . '#navhelp';
-        $addtab = ccl('admin','tabs',$page_name,'addtab');
-
-        $help =
-'<p>' . _('%sClick here%s for help with editing navigator tab sets.') .
-"</p>\n<p>" . _('%sClick here%s to add another tab.') . "</p>\n<p><i>" . 
-_('Clicking on these links will not save your form.') . '</i></p>';
-
-        $help = sprintf($help, "<a href=\"$url\"><b>", "</b></a>", 
-                               "<a href=\"$addtab\"><b>", "</b></a>");
-
-        $this->SetHelpText($help);
-        $heads = array(_('Delete'), _('Order'), _('Name'), _('Text'), _('Help Hint'), _('Function'), /*'Limit', */_('Data'), _('Access') );
+        $url = ccl('docs','adminhelp');
+        $this->SetHelpText(sprintf(_('%sClick here%s for help with editing navigator tab sets.'),"<a href=\"$url\"><b>", "</b></a>"));
+        $heads = array(_('Order'), _('Name'), _('Text'), _('Help Hint'), _('Function'), _('Data'), _('Access'),_('Delete'), );
 
         $this->SetColumnHeader($heads);
 
@@ -104,13 +94,7 @@ _('Clicking on these links will not save your form.') . '</i></p>';
             if( $name == 'handler' )
                 continue;
 
-            
             $a = array(  
-                array(
-                    'element_name'  => "mi[$name][delete]",
-                    'value'      => '',
-                    'formatter'  => $delcheck,
-                    'flags'      => CCFF_NONE ),
                 array(
                     'element_name'  => "mi[$name][order]",
                     'value'      => $i + 1,
@@ -139,20 +123,15 @@ _('Clicking on these links will not save your form.') . '</i></p>';
                     'element_name'  => "mi[$name][function]",
                     'value'      => $page[$name]['function'],
                     'formatter'  => 'select',
-                    'options'    => array( 'any' => _('Match Any Tags'),
-                                           'all' => _('Match All Tags'),
+                    'options'    => array( /*
+                                           'any' => _('Match Any Tags'),
+                                           'all' => _('Match All Tags'), */
                                            'url' => _('Execute URL'),
                                            'sub' => _('SubTabs'),
-                                           'qry' => _('Query')
+                                           'qry' => _('Query'),
                                             ),
                     'flags'      => CCFF_NONE ),
-/*
-                array(
-                    'element_name'  => "mi[$name][limit]",
-                    'value'      => empty($page[$name]['limit']) ? '' : 1,
-                    'formatter'  => 'checkbox',
-                    'flags'      => CCFF_NONE ),
-*/
+
                 array(
                     'element_name'  => "mi[$name][tags]",
                     'value'      => $page[$name]['tags'],
@@ -169,9 +148,77 @@ _('Clicking on these links will not save your form.') . '</i></p>';
                                            CC_ONLY_NOT_LOGGED_IN  => _("Anonymous users only"),
                                         ),
                     'flags'      => CCFF_NONE ),
+                array(
+                    'element_name'  => "mi[$name][delete]",
+                    'value'      => '',
+                    'formatter'  => $delcheck,
+                    'flags'      => CCFF_NONE ),
                 );
 
             $this->AddGridRow($name,$a);
+
+            $seloptions[++$t] = "$t";
+
+            $S = 'new[%i%]';
+            $a = array(
+                array(
+                    'element_name'  => $S . '[order]',
+                    'class'      => 'cc_form_input_short',
+                    'options'    => $seloptions,
+                    'formatter'  => 'raw_select',
+                    'flags'      => CCFF_NONE),
+                array(
+                    'element_name'  => $S . '[name]',
+                    'class'      => 'cc_form_input_short',
+                    'value'      => _('tabname'),
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED ),
+                array(
+                    'element_name'  => $S . '[text]',
+                    'class'      => 'cc_form_input',
+                    'value'      => _('Display Text'),
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED ),
+                array(
+                    'element_name'  => $S . '[help]',
+                    'formatter'  => 'textedit',
+                    'value'      => _('Help hint for your tab'),
+                    'flags'      => CCFF_REQUIRED ),
+                array(
+                    'element_name'  => $S . '[function]',
+                    'value'      => 'qry',
+                    'formatter'  => 'raw_select',
+                    'options'    => array( /*
+                                           'any' => _('Match Any Tags'),
+                                           'all' => _('Match All Tags'), */
+                                           'url' => _('Execute URL'),
+                                           'sub' => _('SubTabs'),
+                                           'qry' => _('Query'),
+                                            ),
+                    'flags'      => CCFF_NONE ),
+
+                array(
+                    'element_name'  => $S . '[tags]',
+                    'value'      => 'tags=remix+attribution',
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED ),
+                  array(
+                    'element_name'  => $S . '[access]',
+                    'value'      => CC_DONT_CARE_LOGGED_IN,
+                    'formatter'  => 'raw_select',
+                    'options'    => array( CC_MUST_BE_LOGGED_IN   => _('Logged in users only'),
+                                           CC_DONT_CARE_LOGGED_IN => _("Everyone"),
+                                           CC_ADMIN_ONLY          => _("Administrators only"),
+                                           CC_ONLY_NOT_LOGGED_IN  => _("Anonymous users only"),
+                                        ),
+                    'flags'      => CCFF_NONE ),
+                array(
+                    'element_name'  => $S . '[delete]',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE ),
+                );
+
+            $this->AddMetaRow($a, _('Add Tab') );
         }
     }
 }
@@ -258,7 +305,7 @@ class CCNavigatorAdmin
             {
                 $keys = array_keys($pages);
                 $count = count($keys);
-                $html = '<table style="width: 60%;margin-top: 40px;">';
+                $html = '<style>#tabtable td{white-space:nowrap;padding-right:20px;}</style><table id="tabtable" style="width: 60%;margin-top: 40px;">';
                 for( $i = 0; $i < $count; $i++ )
                 {
                     $pname = $keys[$i];
@@ -329,6 +376,8 @@ class CCNavigatorAdmin
                 else
                 {
                     $mi = $_POST['mi'];
+                    if( !empty($_POST['new']) )
+                        $mi += $_POST['new'];
                     CCUtil::StripSlash($mi);
                     $keys = array_keys($mi);
                     $count = count($keys);
@@ -467,40 +516,40 @@ class CCNavigatorAdmin
         $a = array(
              'home' =>     array(  'text'   => _('Home'),
                                    'help'   => _('Home page'),
-                                   'tags'   => '/viewfile/home.xml',
+                                   'tags'   => '/docs/home',
                                    'limit'  => 0,
                                    'access' => CC_DONT_CARE_LOGGED_IN,
                                    'function' => 'url' ),
              'all'   =>    array(  'text'   => _('All'),
                                    'help'   => _('See all the latest uploads'),
-                                   'tags'   => 'media',
+                                   'tags'   => 'tags=media',
                                    'limit'  => 0,
                                    'access' => CC_DONT_CARE_LOGGED_IN,
-                                   'function' => 'any' ),
+                                   'function' => 'qry' ),
              'remix' =>    array(  'text'   => _('Remix'),
                                    'help'   => _('See the latest remixes'),
                                    'access' => CC_DONT_CARE_LOGGED_IN,
                                    'limit'  => 0,
-                                   'tags'   => 'remix',
-                                   'function' => 'any' ),
+                                   'tags'   => 'tags=remix',
+                                   'function' => 'qry' ),
              'song' =>     array(  'text'   => _('Original'),
                                    'help'   => _('See recently uploaded originals'),
                                    'limit'  => 0,
-                                   'tags'   => 'original',
+                                   'tags'   => 'tags=original',
                                    'access' => CC_DONT_CARE_LOGGED_IN,
-                                   'function'=> 'any' ),
+                                   'function'=> 'qry' ),
              'picks'   =>    array('text'   => _('Picks'),
                                    'help'   => _('See picks by the Editorial Staff'),
                                    'limit'  => 0,
-                                   'tags'   => 'editorial_pick',
+                                   'tags'   => 'tags=editorial_pick',
                                    'access' => CC_DONT_CARE_LOGGED_IN,
-                                   'function' => 'any' ),
+                                   'function' => 'qry' ),
              'funky'   =>  array(  'text'   => _('Funky'),
                                    'help'   => _('Only the funky stuff please!'),
                                    'limit'  => 0,
-                                   'tags'   => 'funky,audio',
+                                   'tags'   => 'tags=funky+audio',
                                    'access' => CC_DONT_CARE_LOGGED_IN,
-                                   'function' => 'all' ),
+                                   'function' => 'qry' ),
              );
 
         return( $a );

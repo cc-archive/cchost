@@ -30,6 +30,48 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cclib/cc-admin.php');
 
+class CCSkinCreateForm extends CCForm
+{
+    function CCSkinCreateForm()
+    {
+        $this->CCForm();
+        global $CC_GLOBALS;
+
+        require_once('cclib/cc-template.inc');
+        $skins   = CCTemplateAdmin::GetSkins(true);
+
+        $use_paths = CCUtil::SplitPaths( $CC_GLOBALS['template-root']);
+        $paths = array();
+        foreach( $use_paths as $P )
+        {
+            if( strstr($P,'ccskins') )
+                continue;
+            $paths[$P] = $P;
+        }
+
+        $fields['skin-file'] =
+            array( 'label'       => _('Clone this Skin'),
+                   'form_tip'    => _('Your new skin will be a clone of this.'),
+                   'formatter'   => 'select',
+                   'options'     => $skins,
+                   'flags'       => CCFF_POPULATE );
+        $fields['target-dir'] =
+            array( 'label'       => _('Target Directory'),
+                   'form_tip'    => _('Your new skin will be created here.'),
+                   'formatter'   => 'select',
+                   'options'     => $paths,
+                   'flags'       => CCFF_POPULATE );
+        $fields['skin-name'] =
+            array( 'label'       => _('Name'),
+                   'form_tip'    => _('The name of your new skin will be called.'),
+                   'formatter'   => 'textedit',
+                   'flags'       => CCFF_POPULATE | CCFF_REQUIRED);
+
+        $this->AddFormFields($fields);
+        $this->SetSubmitText(_('Create new skin'));
+    }
+}
+
 class CCSkinSettingsForm extends CCEditConfigForm
 {
     function CCSkinSettingsForm()
@@ -37,7 +79,7 @@ class CCSkinSettingsForm extends CCEditConfigForm
         $this->CCEditConfigForm('settings');
 
         require_once('cclib/cc-template.inc');
-        $skins   = CCTemplateAdmin::GetSkins();
+        $skins   = CCTemplateAdmin::GetSkins(true);
         $format_files = CCTemplateAdmin::GetFormats();
         foreach($format_files as $ffile)
             $formats[$ffile] = 'formats/' . preg_replace( '/\..*$/', '', basename($ffile) );
@@ -58,19 +100,47 @@ class CCSkinSettingsForm extends CCEditConfigForm
                    'options'     => $options,
                    'flags'       => CCFF_POPULATE );
         $fields['list_files'] =
-            array( 'label'       => _('Listing Format'),
-                   'form_tip'    => _('Default upload listing for this view'),
+            array( 'label'       => _('Upload Listing Format'),
+                   'form_tip'    => _('Use this template when listing multiple files'),
                    'formatter'   => 'select',
                    'value'       => 'ccskins/shared/formats/upload_list.php',
                    'options'     => $formats,
-                   'flags'       => CCFF_POPULATE );
-
-/*
-%map( html_form,       'html_form.php/html_form' )%
-%map( form_fields,     'form_fields.tpl/form_fields' )%
-%map( grid_form_fields,'form_fields.tpl/grid_form_fields' )%
-*/
-
+                   'flags'       => CCFF_POPULATE_WITH_DEFAULT );
+        $fields['list_file'] =
+            array( 'label'       => _('Upload Page Format'),
+                   'form_tip'    => _('Use this template when showing a single upload page'),
+                   'formatter'   => 'select',
+                   'value'       => 'ccskins/shared/formats/upload_page.php',
+                   'options'     => $formats,
+                   'flags'       => CCFF_POPULATE_WITH_DEFAULT );
+        $fields['html_form'] =
+            array( 'label'       => _('Default Form Template'),
+                   'form_tip'    => _('Default template for displaying forms'),
+                   'formatter'   => 'select',
+                   'value'       => 'html_form.php/html_form',
+                   'options'     => array( 'html_form.php/html_form' => 'html_form.php/html_form' ),
+                   'flags'       => CCFF_POPULATE_WITH_DEFAULT );
+        $fields['form_fields'] =
+            array( 'label'       => _('Form Fields Style'),
+                   'form_tip'    => _('Choice the formatting of regular forms'),
+                   'formatter'   => 'select',
+                   'value'       => 'form_fields.tpl/form_fields',
+                   'options'     => array(
+                                        'form_fields.tpl/form_fields' => _('Field labels next to fields'),
+                                        'form_fields.tpl/stacked_form_fields' => _('Field labels above fields'),
+                                        'form_fields.tpl/fieldset_form_fields' => _('Field sets'),
+                                        ),
+                   'flags'       => CCFF_POPULATE_WITH_DEFAULT );
+        $fields['grid_form_fields'] =
+            array( 'label'       => _('Grid Form Fields Style'),
+                   'form_tip'    => _('Choice the formatting of grid forms'),
+                   'formatter'   => 'select',
+                   'value'       => 'form_fields.tpl/grid_form_fields',
+                   'options'     => array(
+                                        'form_fields.tpl/flat_grid_form_fields' => _('Matrix grid (all fields on one screen)'),
+                                        'form_fields.tpl/grid_form_fields' => _('Tab style (recommended for narrow layouts)'),
+                                        ),
+                   'flags'       => CCFF_POPULATE_WITH_DEFAULT );
         $fields['max-listing'] =
             array( 'label'       => _('Max Items Per Page'),
                    'form_tip'    => _('Maximum number of uploads, users in a listing'),
@@ -83,6 +153,7 @@ class CCSkinSettingsForm extends CCEditConfigForm
         $this->SetModule(ccs(__FILE__));
     }
 }
+
 /**
  *
  */
@@ -258,6 +329,10 @@ class CCSkinAdmin
                          'menu_text' => $star . _('Manage Color Schemes'),
                          'help'      => _('Create and manage color schemes') );
 
+        $args[] = array( 'action'    => ccl('admin','skins','create' ),
+                         'menu_text' => $star . _('Create Skin'),
+                         'help'      => _('Create a new skin') );
+
         $args[] = array( 'action'    => ccl('admin','skins','import' ),
                          'menu_text' => $star . _('Import Layouts'),
                          'help'      => _('Import layouts from \'properties.xml\' in your skins path (destructive!)') );
@@ -293,6 +368,60 @@ class CCSkinAdmin
         CCPage::SetTitle(_('Configure Skins Settings'));
         $form = new CCSkinSettingsForm();
         CCPage::AddForm($form->GenerateForm());
+    }
+
+    function Create()
+    {
+        CCPage::SetTitle(_('Create a Skin'));
+        $form = new CCSkinCreateForm();
+        if( empty($_POST['skincreate']) || !$form->ValidateFields() )
+        {
+            CCPage::AddForm($form->GenerateForm());
+        }
+        else
+        {
+            $form->GetFormValues($values);
+            $src = dirname($values['skin-file']);
+            $safe_name = strtolower(preg_replace('/[^a-z0-9_-]/','',$values['skin-name']));
+            $target = $values['target-dir'] . '/' . $safe_name;
+            if( file_exists($target) )
+            {
+                $form->SetFieldError('skin-name',_('A directory with that name already exists'));
+                CCPage::AddForm($form->GenerateForm());
+            }
+            else
+            {
+                $this->_deep_copy($src,$target);
+                $msg = sprintf(_('The skin %s has been created sucessfully'),'<b>' . $target . '</b>');
+                $msg .= '<p>' . sprintf(_('Return to %sSkin Settings%.'),'<a href="' . ccl('admin','skins') .'">', '</a>') . '</p>';
+                CCPage::Prompt($msg);
+            }
+        }
+    }
+
+    function _deep_copy($src,$target)
+    {
+        if( !file_exists($target) )
+        {
+            //print("making dir: $target<br />");
+            CCUtil::MakeSubdirs($target,0777);
+        }
+
+        $dirs = glob($src . '/*', GLOB_ONLYDIR );
+        foreach( $dirs as $dir )
+        {
+            $sub_dir = basename($dir);
+            $this->_deep_copy($src . '/' . $sub_dir, $target . '/' . $sub_dir );
+        }
+
+        $files = glob($src . '/*.*');
+        foreach( $files as $file )
+        {
+            $base = basename($file);
+            $t = $target . '/' . $base;
+            copy( $file, $t );
+            chmod( $t, 0777 );
+        }
     }
 
     function ColorSchemes()
@@ -423,6 +552,8 @@ class CCSkinAdmin
         CCEvents::MapUrl( 'admin/skins/layout',     array('CCSkinAdmin', 'Layout'),
             CC_ADMIN_ONLY, ccs(__FILE__) );
         CCEvents::MapUrl( 'admin/colors',     array('CCSkinAdmin', 'ColorSchemes'),       
+            CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( 'admin/skins/create', array('CCSkinAdmin', 'Create'),
             CC_ADMIN_ONLY, ccs(__FILE__) );
         CCEvents::MapUrl( 'admin/skins/import',     array('CCSkinAdmin', 'Import'),
             CC_ADMIN_ONLY, ccs(__FILE__) );

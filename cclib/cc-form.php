@@ -106,13 +106,6 @@ class CCForm
         CCEvents::Invoke( CC_EVENT_FORM_INIT, array( &$this ) );
     }
 
-    function _add_links()
-    {
-        require_once('cclib/cc-page.php');
-        CCPage::AddScriptLink( 'js/form.js', true );
-        CCPage::SetStyleSheet( 'css/form.css' );
-    }
-
     function SetStrings($string_file)
     {
         if( empty($this->_strings) || !in_array($string_file,$this->_strings) )
@@ -247,7 +240,7 @@ class CCForm
     *   </ul>
     *             </li>
     *     <li><b>class</b> <i>string</i> Name of css class to use. This is rare since most skins will style the INPUT fields
-    *     using generic selectors in the style sheet, however 'cc_form_input_short' is used when a smaller text input field is desired.</li>
+    *     using generic selectors in the style sheet, however 'form_input_short' is used when a smaller text input field is desired.</li>
     *     <li><b>maxwidth</b> <i>integer</i> Used by the 'avatar' formatter for sizing the image.</li>
     *     <li><b>maxheight</b> <i>integer</i> Used by the 'avatar' formatter for sizing the image.</li>
     *     <li><b>macro</b> <i>string</i> Used by the 'metalmacro' formatter and refers to a template macro
@@ -390,10 +383,12 @@ class CCForm
     */
     function SetFieldError($fieldname,$errmsg)
     {
-        if( is_array($errmsg) )
-            $this->SetFormFieldItem($fieldname,'form_error_str',$errmsg[0]);
+        $field_info =& $this->_get_form_field($fieldname);
+        $field_info['form_error'] = $errmsg;
+        if( empty($field_info['class']) )
+            $field_info['class'] = 'form_error_input';
         else
-            $this->SetFormFieldItem($fieldname,'form_error',$errmsg);
+            $field_info['class'] .= ' form_error_input';
     }
 
     /**
@@ -587,8 +582,6 @@ class CCForm
     */
     function GenerateForm($hiddenonly = false)
     {
-        $this->_add_links();
-
         $this->_template_vars['html_form_fields']   = array();
         $this->_template_vars['html_hidden_fields'] = array();
 
@@ -626,7 +619,7 @@ class CCForm
                 }
                 $class = empty($form_fields['class']) ? '' : $form_fields['class'];
                 if( !empty($form_fields['form_error']) ) 
-                    $class = 'cc_form_error_input';
+                    $class .= ' form_error_input';
 
                 if( method_exists($this,$generator) )
                     $form_fields['form_element'] = $this->$generator( $fieldname, $value, $class );
@@ -725,7 +718,15 @@ class CCForm
             $F =& $this->_form_fields[$fieldname];
             if( $F['flags'] & CCFF_POPULATE )
             {
-                $F['value'] = empty($values[$fieldname]) ? '' : $values[$fieldname];
+                if( empty($values[$fieldname]) )
+                {
+                    if( !($F['flags'] & CCFF_POPULATE_WITH_DEFAULT) )
+                        $F['value'] = '';
+                }
+                else
+                {
+                    $F['value'] = $values[$fieldname];
+                }
             }
         }
     }
@@ -881,7 +882,7 @@ class CCForm
     function generator_textedit($varname,$value='',$class='')
     {
         if( empty($class) )
-            $class='cc_form_input';
+            $class='form_input';
 
         return( "<input type='text' id=\"$varname\" name=\"$varname\" value=\"$value\" class=\"$class\" />" );
     }
@@ -1085,6 +1086,50 @@ END;
     function validator_radio($fieldname)
     {
         return( true );
+    }
+
+    /**
+     * Handles generation &lt;select HTML field with no string xlate
+     * 
+     * The 'options' field for the field descriptor must be an array
+     * of options to be generated here
+     * 
+     * @param string $varname Name of the HTML field
+     * @param string $value   value to be published into the field
+     * @param string $class   CSS class (rarely used)
+     * @returns string $html HTML that represents the field
+     */
+    function generator_raw_select($varname,$value='',$class='')
+    {
+        $options = $this->GetFormFieldItem($varname,'options');
+        $fvalue   = $this->GetFormValue($varname);
+        $html = "<select id=\"$varname\" name=\"$varname\" class=\"$class\">";
+        foreach( $options as $value => $text )
+        {
+            if( $value == $fvalue )
+                $selected = ' selected="selected" ';
+            else
+                $selected = '';
+
+            $html .= "<option value=\"$value\" $selected >$text</option>";
+        }
+        $html .= "</select>";
+        return( $html );
+    }
+
+    /**
+    * Handles validator for HTML field, called during ValidateFields()
+    * 
+    * Use the 'maxlenghth' field to limit user's input
+    * 
+    * @see CCForm::ValidateFields()
+    * 
+    * @param string $fieldname Name of the field will be passed in.
+    * @returns bool $ok always true
+    */
+    function validator_raw_select($fieldname)
+    {
+        return(true);
     }
 
 
@@ -1812,8 +1857,6 @@ class CCGridForm extends CCForm
      */
     function GenerateForm()
     {
-        $this->_add_links();
-
         $this->_normalize_fields();
 
         $headers = array();
@@ -1915,8 +1958,21 @@ class CCGridForm extends CCForm
                 $grid_row['has_error'] = true;
             }
 
-            $template_row[] = array( 'form_grid_element' => 
-                           $this->$generator( $grid_cell['element_name'], $value, $class ));
+            $gen = array();
+
+            if( method_exists($this,$generator) )
+                $gen['form_grid_element'] = $this->$generator( $grid_cell['element_name'], $value, $class );
+            else
+                $gen['form_grid_element'] = $generator( $this, $grid_cell['element_name'], $value, $class );
+
+            if( !empty($grid_cell['macro']) )
+            {
+                $gen += $grid_cell;
+                if( empty($gen['form_grid_element']) )
+                    $gen['form_grid_element'] = '<!-- -->';
+            }
+
+            $template_row[] = $gen;
         }
 
         return $template_row;

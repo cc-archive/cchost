@@ -222,7 +222,7 @@ class CCTemplateAdmin
         }
     }
 
-    function GetSkins()
+    function GetSkins($skip_shared=false)
     {
         global $CC_GLOBALS;
         
@@ -233,6 +233,9 @@ class CCTemplateAdmin
             $tdir = CCUtil::CheckTrailingSlash($tdir,false);
             CCTemplateAdmin::_scour_dir($files, $tdir, '/skin.*' );
         }
+
+        if( $skip_shared )
+            $files = array_diff( $files, array( 'ccskins/shared' ) );
 
         return $files;
     }

@@ -1,5 +1,7 @@
-<?
+<link rel="stylesheet" type="text/css" href="<?= $T->URL('css/form.css') ?>" title="Default Style" />
+<script type="text/javascript" src="<?= $T->URL('js/form.js') ?>"></script>
 
+<?
 function _t_html_form_html_form($T,&$A) 
 {
     $F = $A['curr_form'];

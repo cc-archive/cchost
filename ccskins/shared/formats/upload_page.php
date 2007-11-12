@@ -37,7 +37,7 @@ function _t_upload_page_init($T,&$A)
     helper_upload_do_sidebar($R,$A,$T);
     print    "</div><!-- sidebar box -->\n";
 
-    helper_upload_date($R);
+    helper_upload_date($R,$T);
 
     print "<div id=\"upload_menu_box\">\n";
     helper_uploads_do_menus($R,$A,$T);
@@ -101,7 +101,7 @@ function _t_upload_page_init($T,&$A)
 
 */
 
-function helper_uploads_do_menus(&$R,&$A)
+function helper_uploads_do_menus(&$R,&$A,$T)
 {
     $menu = $R['local_menu'];
 
@@ -249,7 +249,7 @@ function helper_upload_menu_item(&$item)
     Date info 
 *------------------------------------*/
 
-function helper_upload_date(&$R)
+function helper_upload_date(&$R,$T)
 {
     $date = CC_datefmt($R['upload_date'],'M d, Y h:i a');
     if( empty($R['upload_last_edit']) )

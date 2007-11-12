@@ -143,29 +143,3 @@ a.cc_more_menu_link {
 	font-size: 0.65em;
 }
 
-.cc_form_table td {
-	vertical-align: top;
-}
-
-.cc_form_label {
-	width: 25%;
-	text-align: right;
-	font-size: 0.65em;
-}
-
-.cc_form_label div {
-	font-weight: bold;
-}
-
-.cc_form_input {
-	width: 320px;
-}
-
-.cc_form_input short {
-	width: 100px;
-}
-
-.cc_form_submit {
-	margin-left: 40%;
-}
-

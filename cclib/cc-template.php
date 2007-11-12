@@ -45,13 +45,14 @@ class CCSkin
         $this->filename  = $template;
         $this->html_mode = $html_mode;
 
+    /*
         $this->vars['html_form']        = 'html_form.php/html_form';
         $this->vars['form_fields']      = 'form_fields.tpl/form_fields';
         $this->vars['grid_form_fields'] = 'form_fields.tpl/grid_form_fields';
-
+    */
         $configs =& CCConfigs::GetTable();
 
-        $this->vars += $configs->GetConfig('ttag');
+        $this->vars = $configs->GetConfig('ttag');
 
         $this->vars['q'] = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
         $this->vars['get'] = $_GET;
@@ -661,7 +662,7 @@ class CCSkinMacro extends CCSkin
     function CCSkinMacro($macro,$mapfile='')
     {
         global $CC_GLOBALS;
-        $this->CCSkin(empty($mapfile) ? $CC_GLOBALS['skin-map'] : $mapfile, true );
+        $this->CCSkin(empty($mapfile) ? $CC_GLOBALS['skin-file'] : $mapfile, true );
         $this->_skin_macro = $macro;
     }
 

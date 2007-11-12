@@ -93,7 +93,6 @@ class CCSkinExport
     {
         $page = new CCPage();
         $page->ShowHeaderFooter( false, !$simple );
-        //$page->AddScriptLink( ccd('cctemplates','dl_popup.js'), false );
         $html = $page->Show(false);
         preg_match('%<!-- CONTENT ENDS -->(.*)</body>%si',$html,$m);
         $html = $m[1];
