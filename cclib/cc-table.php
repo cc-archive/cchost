@@ -47,9 +47,7 @@ class CCTable
     var $_order;
     var $_direction;
     var $_group_on;
-    /** 
-    * Hacks (?)
-    */
+    var $_dataview;
     var $_last_sql;
     var $_last_where;
     /**#@-*/
@@ -69,6 +67,7 @@ class CCTable
     var $_group_on_key;
     /**#@-*/
 
+
     /**
     * Constructor
     *
@@ -82,6 +81,16 @@ class CCTable
         $this->_joins = array();
         $this->_join_num = 1;
         $this->_group_on_key = false;
+    }
+
+    /**
+    * Set the dataview for the next Query
+    *
+    * @param string $dataview_id ID of dataview (columns, joins, etc.)
+    */
+    function SetDataview($dataview_id)
+    {
+        $this->_dataview = $dataview_id;
     }
 
     /**
@@ -434,27 +443,39 @@ class CCTable
     */
     function _get_select($where,$columns='*')
     {
-        $where = $this->_where_to_string($where);
-
-        if( $where )
+        if( empty($this->_dataview) )
         {
-            $this->_last_where = $where;
-            $where = "WHERE $where";
+            $where = $this->_where_to_string($where);
+
+            if( $where )
+            {
+                $this->_last_where = $where;
+                $where = "WHERE $where";
+            }
+
+            $extra = '';
+            if( $columns == '*' && $this->_extra_columns )
+                $extra = ',' . implode(',',$this->_extra_columns);
+            $join = implode(' ', $this->_joins);
+
+            $group = $this->_group_on_key ? "\nGROUP BY " . $this->_key_field : '';
+            if( empty($group) && $this->_group_on )
+                $group = "\nGROUP BY " . $this->_group_on;
+            $sql = "SELECT $columns $extra \nFROM $this->_table_name \n $join \n $where $group";
+        }
+        else
+        {
+            $dtable = new CCTable('cc_tbl_dataview','dataview_id');
+            $row = $dtable->QueryKeyRow($this->_dataview);
+            $sql = $row['dataview_query'];
+            $this->_dataview_flags = $row['dataview_flags'];
+            global $CC_GLOBALS;
+            $sql = str_replace('%home-url%', $CC_GLOBALS['home-url'], $sql );
         }
 
         $order = '';
         if( $this->_order )
-            $order = 'ORDER BY ' . $this->_order . ' ' . $this->_direction;
-
-        $extra = '';
-        if( $columns == '*' && $this->_extra_columns )
-            $extra = ',' . implode(',',$this->_extra_columns);
-        $join = implode(' ', $this->_joins);
-
-        $group = $this->_group_on_key ? "\nGROUP BY " . $this->_key_field : '';
-        if( empty($group) && $this->_group_on )
-            $group = "\nGROUP BY " . $this->_group_on;
-        $sql = "SELECT $columns $extra \nFROM $this->_table_name \n $join \n $where $group \n $order";
+            $sql .= "\n" . 'ORDER BY ' . $this->_order . ' ' . $this->_direction;
 
         $this->_add_offset_limit($sql);
 

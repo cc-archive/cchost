@@ -136,7 +136,7 @@ class CCEditConfigForm extends CCForm
         //CCDebug::PrintVar($values);
         if( $values )
             $this->PopulateValues($values);
-        return( parent::GenerateForm($hiddenonly) );
+        return parent::GenerateForm($hiddenonly);
     }
 
     /**
@@ -827,10 +827,10 @@ END;
     function SaveConfig($form = '')
     {
         if( empty($_POST) )
-	{	
+	    {	
             CCPage::Prompt(_("Error Saving"));
             return;
-	}
+	    }
 
         CCPage::SetTitle(_("Saving Configuration"));
         if( empty($form) )

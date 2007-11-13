@@ -140,6 +140,15 @@ class CCSkinLayoutForm extends CCEditConfigForm
 
         $fields = array();
 
+        $fields['page_layout'] = array(
+                'label'     => _('Page Layout'),
+                'formatter' => 'skin_prop',
+                'macro'     => 'skin_editor.php/edit_layouts',
+                'scroll'    => true,
+                'props'     => CCTemplateAdmin::GetLayouts('layout'),
+                'flags'     => CCFF_POPULATE,
+                );
+
 /*    
         $fields['html_form'] =
             array( 'label'       => _('Default Form Template'),
@@ -189,14 +198,6 @@ class CCSkinLayoutForm extends CCEditConfigForm
                 'flags'     => CCFF_POPULATE,
                 );
 
-        $fields['page_layout'] = array(
-                'label'     => _('Page Layout'),
-                'formatter' => 'skin_prop',
-                'macro'     => 'skin_editor.php/edit_layouts',
-                'scroll'    => true,
-                'props'     => CCTemplateAdmin::GetLayouts('layout'),
-                'flags'     => CCFF_POPULATE,
-                );
         $this->AddFormFields($fields);
         $this->SetSubmitText(_('Submit Skin Layout Changes'));
         $this->SetModule(ccs(__FILE__));
@@ -248,7 +249,6 @@ class CCAdminColorSchemesForm extends CCEditConfigForm
                 'flags'     => CCFF_POPULATE,
                 );
 
-        $this->SetHiddenField( 'properties', '', CCFF_HIDDEN );
         $this->AddFormFields($fields);
         $this->SetSubmitText(_('Submit Skin Appearance Changes'));
         $this->SetModule(ccs(__FILE__));
@@ -371,7 +371,7 @@ class CCSkinAdmin
             return;
 
         $items += array( 
-            'skin-properties'   => array( 'menu_text'  => _('Skin'),
+            'skin-settings'   => array( 'menu_text'  => _('Skin'),
                              'menu_group' => 'configure',
                              'help'      => _('Choose a skin, theme, layout, colors, fonts, etc.'),
                              'access' => CC_ADMIN_ONLY,

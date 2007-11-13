@@ -849,6 +849,8 @@ class CCForm
     function generator_metalmacro($varname,$value,$class='')
     {
         $this->_form_fields[$varname]['name'] = $varname;
+        if( !empty($value) )
+            $this->_form_fields[$varname]['value'] = $value;
         return; // ($value);
     }
 

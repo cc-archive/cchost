@@ -122,6 +122,7 @@ class CCUpload
         CCPage::PageArg('chop',$chop);
         CCPage::PageArg('dochop',$dochop);
         CCPage::PageArg( 'records', $records, $macro );
+        CCPage::PageArg( 'skip_format_sig', true );
         $uploads =& CCUploads::GetTable();
         CCPage::AddPagingLinks($uploads,$last_where); // ??
 

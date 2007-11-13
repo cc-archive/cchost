@@ -422,6 +422,15 @@ class CCUtil
 
     function SearchPath($target,$look_here_first,$then_here,$real_path=true,$recurs=CC_SEARCH_RECURSE_DEFAULT)
     {
+        if( !is_array($target) )
+            $target = array($target);
+
+        foreach( $target as $T )
+        {
+            if( file_exists($T) )
+                return $real_path ? realpath($T) : $T;
+        }
+            
         $dirs = $look_here_first;
         if( !is_array($dirs) )
             $dirs = split(';',$dirs);
@@ -440,9 +449,6 @@ class CCUtil
             $clean_dirs[] = CCUtil::CheckTrailingSlash($dir,true);
         }
 
-        if( !is_array($target) )
-            $target = array($target);
-            
         // I would love to use '{' braces for this but there seems to
         // be a limit (120?) on the size of the string so fk-it.
 

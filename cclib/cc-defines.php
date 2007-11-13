@@ -229,4 +229,14 @@ define('CC_REG_ADMIN_EMAIL', 2 );
 define('CC_REG_NO_CONFIRM', 0 );
 /**#@-*/
 
+
+/**
+* Dataview flags
+*/
+define('CC_DV_MENUS',  1 );
+define('CC_DV_REMIXES',  2 );
+define('CC_DV_REMIXES_3',  4 );
+define('CC_DV_FILES',  8 );
+define('CC_DV_TAGLINKS',  0x10 );
+
 ?>
