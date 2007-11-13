@@ -29,9 +29,10 @@ function _t_skin_editor_edit_font_schemes($T,&$A)
         $caption = $T->String($P['desc']);
         ?>
         <tr >
-            <td class="<?= $class?>" ref="<?= $file?>" id="<?= $id?>" style="padding:0px;margin:0px;">
+            <td class="<?= $class?>" id="<?= $id?>" style="padding:0px;margin:0px;">
                 <span style="padding:0px;margin:0px;font-style:normal;font-size: 14px;<?= $m[1]?>"><?= $caption?></span>
             </td>
+            <script>$('<?=$id?>').ref = '<?=$file?>';</script>
         </tr>
         <?
     }
@@ -51,7 +52,6 @@ function _t_skin_editor_edit_color_schemes($T,&$A)
 {
     $props = $A['field']['props'];
     $fid = $A['field']['name'];
-    $A['field']['value'] = '';
     $value = empty($A['field']['value'])  || !file_exists($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
     $scroll = empty($A['field']['scroll']) ? '' : 'overflow: scroll; height: 240px;';
     static $inst = 1;
@@ -103,7 +103,6 @@ function _t_skin_editor_edit_color_schemes($T,&$A)
 function _t_skin_editor_edit_layouts($T,&$A) 
 {
     $props = $A['field']['props'];
-    $A['field']['value'] = '';
     $fid = $A['field']['name'];
     $value = empty($A['field']['value'])  || !file_exists($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
     $scroll = empty($A['field']['scroll']) ? '' : 'overflow: scroll; height: 240px;';

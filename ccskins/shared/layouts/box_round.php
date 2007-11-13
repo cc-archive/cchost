@@ -17,7 +17,7 @@ $A['end_script_blocks'][] = 'ccskins/shared/layouts/box_round.php/invoke_script'
 ?>
 
 <script type="text/javascript" src="<?= $T->URL('js/round-box.js'); ?>"></script>
-<link rel="stylesheet" type="text/css" href="<? $T->URL('layouts/box_round.css'); ?>" title="Default Style" />
+<link rel="stylesheet" type="text/css" href="<?= $T->URL('layouts/box_round.css'); ?>" title="Default Style" />
 <style>
 .cssbox, .cssbox_body, .cssbox_head, .cssbox_head h2,
 .cssbox, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 

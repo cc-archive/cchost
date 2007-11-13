@@ -13,7 +13,7 @@ function _t_tags_taglinks($T,&$A)
     { 
        $A['tag'] = $carr101[ $ck101[ $ci101 ] ];
        
-        ?><a  href="<?= $A['tag']['tagurl']?>" rel="tag" class="cc_tag_link"><?= $A['tag']['tag']?></a><?
+        ?><a href="<?= $A['tag']['tagurl']?>" rel="tag" class="cc_tag_link"><?= $A['tag']['tag']?></a><?
         if ( !($ci101 == ($cc101-1)) ) { ?>, <? }
     } // END: for loop
 } // END: function taglinks
@@ -28,7 +28,7 @@ function _t_tags_popular_tags($T,&$A)
     for( $ci102= 0; $ci102< $cc102; ++$ci102)
     { 
        $A['tag'] = $carr102[ $ck102[ $ci102 ] ];
-       ?><a  href="javascript: cc_add_tag(<?= $A['tag']?>,<?= $A['field']['target']?>);" class="cc_tag_link"><?= $A['tag']?></a><?
+       ?><a href="javascript://popular" onclick="cc_add_tag('<?= $A['tag']?>','<?= $A['field']['target']?>');" class="cc_tag_link"><?= $A['tag']?></a><?
        if ( !($ci102 == ($cc102-1)) ) { ?>, <? }
      } // END: for loop
 } // END: function popular_tags
@@ -47,8 +47,8 @@ function _t_tags_tag_picker($T,&$A)
     { 
        $A['m'] = $carr103[ $ck103[ $ci103 ] ];
        ?><div  style="text-align:right">
-        <a  class="cc_tag_link" rel="nofollow" href="<?= $A['base_tag_url']?>/<?= $A['m']['tag']?>"><?= $A['m']['tag']?></a>
-        <b >[<a  href="<?= $A['m']['url']?>"> - </a>]</b>
+        <a class="cc_tag_link" rel="nofollow" href="<?= $A['base_tag_url']?>/<?= $A['m']['tag']?>"><?= $A['m']['tag']?></a>
+        <b>[<a href="<?= $A['m']['url']?>"> - </a>]</b>
         </div><?
     } // END: for loop
     
@@ -62,8 +62,8 @@ function _t_tags_tag_picker($T,&$A)
        $A['t'] = $carr104[ $ck104[ $ci104 ] ];
        
        ?><div  style="text-align:right">
-        <a  class="cc_tag_link" rel="nofollow" href="<?= $A['base_tag_url']?>/<?= $A['t']?>"><?= CC_strchop($A['t'],12)?></a>
-        <b >[<a  href="<?= $A['base_addtag_url']?><?= $A['t']?>"> + </a>]</b>
+        <a class="cc_tag_link" rel="nofollow" href="<?= $A['base_tag_url']?>/<?= $A['t']?>"><?= CC_strchop($A['t'],12)?></a>
+        <b>[<a href="<?= $A['base_addtag_url']?><?= $A['t']?>"> + </a>]</b>
         </div><?
     } // END: for loop
     
@@ -84,7 +84,7 @@ function _t_tags_tags($T,&$A)
        $A['tag'] = $carr105[ $ck105[ $ci105 ] ];
        
         ?><span  class="cc_tag_count">
-        <a  href="<?= $A['tag']['tagurl']?>" rel="nofollow tag" class="cc_tag_link" style="line-height:110%;font-size:<?= $A['tag']['fontsize']?>px"><?= $A['tag']['tags_tag']?></a> (<?= $A['tag']['tags_count']?>)</span><?
+        <a href="<?= $A['tag']['tagurl']?>" rel="nofollow tag" class="cc_tag_link" style="line-height:110%;font-size:<?= $A['tag']['fontsize']?>px"><?= $A['tag']['tags_tag']?></a> (<?= $A['tag']['tags_count']?>)</span><?
         if ( !($ci105 == ($cc105-1)) ) { ?>, <? }
     } // END: for loop
     
