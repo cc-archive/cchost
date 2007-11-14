@@ -140,15 +140,6 @@ class CCSkinLayoutForm extends CCEditConfigForm
 
         $fields = array();
 
-        $fields['page_layout'] = array(
-                'label'     => _('Page Layout'),
-                'formatter' => 'skin_prop',
-                'macro'     => 'skin_editor.php/edit_layouts',
-                'scroll'    => true,
-                'props'     => CCTemplateAdmin::GetLayouts('layout'),
-                'flags'     => CCFF_POPULATE,
-                );
-
 /*    
         $fields['html_form'] =
             array( 'label'       => _('Default Form Template'),
@@ -195,6 +186,15 @@ class CCSkinLayoutForm extends CCEditConfigForm
                 'macro'     => 'skin_editor.php/edit_layouts',
                 'scroll'    => false,
                 'props'     => CCTemplateAdmin::GetLayouts('box_shape'),
+                'flags'     => CCFF_POPULATE,
+                );
+
+        $fields['page_layout'] = array(
+                'label'     => _('Page Layout'),
+                'formatter' => 'skin_prop',
+                'macro'     => 'skin_editor.php/edit_layouts',
+                'scroll'    => true,
+                'props'     => CCTemplateAdmin::GetLayouts('layout'),
                 'flags'     => CCFF_POPULATE,
                 );
 

@@ -48,8 +48,6 @@ class CCPoolHV
 
     function GetPoolHistory( &$rows, $max )
     {
-        CCDebug::StackTrace();
-
         global $CC_GLOBALS;
 
         $fhome = ccl() . 'pools/item/';

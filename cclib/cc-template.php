@@ -151,6 +151,8 @@ class CCSkin
         $skin_settings = $config->GetConfig('skin-settings');
         foreach( array( 'string_profile', 'tab_pos', 'box_shape', 'page_layout', 'color_scheme', 'font_scheme' ) as $inc )
         {
+            if( !empty($_REQUEST[$inc]) )
+                $skin_settings[$inc] = $_GET[$inc];
             $T = $this;
             $A =& $this->vars;
             if( !empty($skin_settings[$inc]) && file_exists($skin_settings[$inc]))
