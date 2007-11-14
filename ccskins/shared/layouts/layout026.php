@@ -5,10 +5,11 @@
     desc = _('Two flexible columns (n.26)')
 [/meta]
 */?>
+<!-- layout 26 -->
 <style>
-div#wrapper{float:right;width:100%;margin-right:-33%}
-div#content{margin-right:33%}
-div#navigation{float:left;width:32.9%}
-div#extra{float:left;clear:left;width:32.9%}
+div#wrapper{float:right;width:100%;margin-right:-16%}
+div#content{margin-right:16%}
+div#navigation{float:left;width:15%}
+div#extra{float:left;clear:left;width:15%}
 div#footer{clear:both;width:100%}
 </style>

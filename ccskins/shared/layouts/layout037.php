@@ -7,7 +7,8 @@
 */?>
 <style>
 div#container{width:700px;margin:0 auto}
-div#content{float:left;width:500px}
-div#navigation{float:right;width:200px}
-div#extra{clear:both;width:100%}
+div#content{float:left;width:530px;padding-left:8px;}
+div#navigation{float:right;width:150px}
+div#extra{clear:both;width:100%;height:170px;}
+div#extra .menu_group { float: left; }
 </style>

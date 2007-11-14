@@ -118,9 +118,6 @@
 <script> 
     new modalHook( [ 'search_site_link', 'mi_login', 'mi_register']);  
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
-%if_not_null(skin-properties/script)% // hello
-    %(skin-properties/script)%
-%end_if%
 </script>
 
 </body>

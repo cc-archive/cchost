@@ -6,9 +6,9 @@
 [/meta]
 */?>
 <style>
-div#wrapper{float:right;width: 100%;margin-left: -400px}
+div#wrapper{float:right;width: 100%;margin-left: -350px}
 div#content{margin-left: 400px}
-div#navigation{float:left;width:200px}
+div#navigation{float:left;width:150px}
 div#extra{float:right;width:200px}
 div#footer{clear:both;width:100%}
 </style>

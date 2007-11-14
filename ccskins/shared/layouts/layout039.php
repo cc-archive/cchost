@@ -10,4 +10,5 @@ div#container{width:700px;margin:0 auto}
 div#navigation{float:left;width:350px}
 div#extra{float:right;width:350px}
 div#footer{clear:both;width:100%}
+.menu_group { float: left; }
 </style>

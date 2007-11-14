@@ -7,8 +7,8 @@
 */?>
 <style>
 div#container{width:700px;margin:0 auto}
-div#content{float:right;width:500px}
-div#navigation{float:left;width:200px}
-div#extra{float:left;clear:left;width:200px}
+div#content{float:right;width:510px;padding-left:1.2em;}
+div#navigation{float:left;width:170px;padding-left:2px;}
+div#extra{float:left;clear:left;width:170px}
 div#footer{clear:both;width:100%}
 </style>

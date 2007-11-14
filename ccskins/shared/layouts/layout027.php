@@ -5,8 +5,11 @@
     desc = _('One column liquid and two halves (n.27)')
 [/meta]
 */?>
+<!-- layout 27 -->
 <style>
-div#navigation{float:left;width:50%}
-div#extra{float:left;width:49.9%}
-div#footer{clear:left;width:100%}
+div#content{padding-left: 1.5em;}
+div#navigation{float:left;width:48%;margin-top:10px;padding-left: 1.5em; }
+div#extra{float:left;width:48%;margin-top:10px;padding-left: 1.5em; }
+div#footer{clear:left;width:100%;margin-top:10px;}
+div.menu_group { float: left; padding-right: 10px; }
 </style>

@@ -5,10 +5,11 @@
     desc = _('Liquid, three columns, hybrid widths (n.21)')
 [/meta]
 */?>
+<!-- layout 21 -->
 <style>
-div#wrapper{float:left;width:100%;margin-left:-25%}
-div#content{margin: 0 200px 0 25%}
-div#navigation{float:left;width:200px;margin-left:-200px}
-div#extra{float:left;width:25%}
+div#wrapper{float:left;width:100%;margin-left:-15%}
+div#content{margin: 0 100px 0 15%;padding-left: 1.3em;}
+div#navigation{float:left;width:150px;margin-left:-150px}
+div#extra{float:left;width:15%}
 div#footer{clear:left;width:100%}
 </style>
