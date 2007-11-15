@@ -45,7 +45,7 @@ class CCDownloadHV
             foreach( $record['files'] as $file )
             {
                 $weight++;
-                $menu[$weight]['action'] = ccl( 'download', $record['user_name'], $file['file_id'] );
+                $menu[$weight]['action'] = ccl( 'download', $record['user_name'], $file['file_id'], $file['file_name'] );
                 if(!empty($CC_GLOBALS['counter']))
                 {
                     $menu[$weight]['menu_text'] .= " " . _('downloads') . ": " . $file['file_num_download'];

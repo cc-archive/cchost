@@ -31,7 +31,6 @@ require_once('ccextras/cc-licensefiles.inc');
 
 class CCDownload
 {
-
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('download'), array('CCDownload','Download'), CC_DONT_CARE_LOGGED_IN,
@@ -44,7 +43,6 @@ class CCDownload
 
     function Download($name,$id)
     {
-
         global $CC_GLOBALS;
 
         $files =& CCFiles::GetTable();
@@ -112,8 +110,18 @@ class CCDownload
     
     function Admin()
     {
-        require_once('ccextras/cc-download-form.inc');
+        global $CC_GLOBALS;
+
         CCPage::SetTitle(_('Configure Download Manager'));
+
+        if( empty($CC_GLOBALS['pretty-urls']) )
+        {
+            $url = ccl('admin/setup');
+            $link1 = "<a href=\"{$url}\">";
+            CCPage::Prompt( sprintf(_('Sorry, but "pretty urls" must be enabled in order to use this feature. Read more %shere%s'),$link1,'</a>'));
+            return;
+        }
+        require_once('ccextras/cc-download-form.inc');
         $form = new CCDownloadAdminForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
