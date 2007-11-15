@@ -85,23 +85,8 @@ div.cc_playlist_action  {
 	text-decoration: underline;
 }
 
-a.cc_playlist_i {
-	background: url('../images/i-bg.png') no-repeat;
-	width: 18px;
-	height: 18px;
+.tdc a.info_button {
 	margin: 0px 4px 0px 4px;
-	display:block;
-	cursor: pointer;
-}
-
-.cc_playlist_info {
-	border: 1px solid black;
-	background: white url("../images/bg_fade.gif") repeat-x;
-	padding: 12px;
-}
-
-a.cc_playlist_i:hover {
-	background: url('../images/i-fg.png') no-repeat;
 }
 
 .cc_pl_table {

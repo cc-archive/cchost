@@ -5,6 +5,7 @@
     desc = _('One column fixed and two halves (n.40)')
 [/meta]
 */?>
+<!-- layout 40 -->
 <style>
 div#container{width:700px;margin:0 auto}
 div#navigation{float:right;width:350px}

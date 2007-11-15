@@ -5,6 +5,7 @@
     desc = _('Two colums fixed (n.35)')
 [/meta]
 */?>
+<!-- layout 35 -->
 <style>
 div#container{width:700px;margin:0 auto}
 div#content{float:left;width:550px}

@@ -40,7 +40,7 @@ foreach( $AInfo['recs'] as $AIR )
     <div class="tdc" style="padding-left:15px">{$T->String('str_pl_found_in')} 
         <a href="{$A['home-url']}playlist/browse{$A['q']}id={$AIR['upload_id']}">{$AIR['track_count']} {$T->String('str_pl_playlists')}</a>
     </div>
-    <div class="tdc"><a class="cc_playlist_i" id="_plinfo_{$AIR['upload_id']}"></a></div>
+    <div class="tdc"><a class="info_button" id="_plinfo_{$AIR['upload_id']}"></a></div>
 EOF;
     print $html;
 
@@ -68,7 +68,8 @@ EOF;
 
 <br  clear="right" />
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/detail.css') ?>" title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>" title="Default Style"></link>
+<script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js') ?>"></script>
 <?$T->Call('playerembed.xml/eplayer');?>
 <script>new ccPlaylistMenu();</script>

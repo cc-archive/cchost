@@ -1,6 +1,10 @@
-
+<? /*
+[meta]
+    type     = format
+    desc     = _('Fabricio Zuardi's Music Player - Requires Flash')
+[/meta]
+*/ ?>
 <div  id="cc_mplayer">
-<script >// FORMAT_NAME _("Fabricio Zuardi's Music Player (Requires Flash)"); </script>
 <?
 
 if( !empty($A['height']) ) { $A['h'] = $A['height']; } else {  $A['h'] = 15;} 

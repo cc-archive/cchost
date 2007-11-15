@@ -5,6 +5,7 @@
     desc = _('Two columns liquid, fixed side and large one (n.32)')
 [/meta]
 */?>
+<!-- layout 32 -->
 <style>
 div#wrapper{float:left;width:100%}
 div#content{margin-right:200px;margin-left:0.8em;}

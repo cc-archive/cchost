@@ -4,7 +4,7 @@
 ?><div >
 <h1><?= $T->String('str_recommends_browser') ?></h1>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css'); ?>" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/detail.css'); ?>" title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css'); ?>" title="Default Style"></link>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/recommends.css'); ?>" title="Default Style"></link>
 
 <div  id="browser_head">
@@ -35,6 +35,7 @@
 </span>
 </div>
 <div  id="bottom_breaker">&nbsp;</div>
+<script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js'); ?>"></script>
 <?$T->Call('playerembed.xml/eplayer'); ?>
 <script>

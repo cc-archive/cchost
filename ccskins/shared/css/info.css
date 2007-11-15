@@ -17,40 +17,59 @@
 *
 */
 /*************************************
-* see formats/detail.xml *
+* see formats/info.php               *
 **************************************/
 
-.cc_liclogo {
+a.info_button {
+	background: url('../images/i-bg.png') no-repeat;
+	width: 18px;
+	height: 18px;
+	display:block;
+	cursor: pointer;
+}
+
+a.info_button:hover {
+	background: url('../images/i-fg.png') no-repeat;
+}
+
+.info_popup {
+	border: 1px solid black;
+	background: white url("../images/bg_fade.gif") repeat-x;
+	padding: 12px;
+}
+
+
+.info_detail .cc_liclogo {
 	clear:both;
 	display:block;
 	float:left; 
 	margin: 7px;
 }
 
-.cc_list {
+.info_detail .cc_list {
 	background-color: transparent;
 	width: auto;
 }
 
-.cc_list .cc_tags {
+.info_detail .cc_list .cc_tags {
 	width: 550px; 
 	white-space: normal;
 }
 
-.cc_list .cc_tags a {
+.info_detail .cc_list .cc_tags a {
 	display: inline;
 	font-size: 10px;
 }
 
-.dtitle, .dtitle a {
+.info_detail .dtitle, .info_detail .dtitle a {
    font-size: 15px;
 }
 
-.dtitle {
+.info_detail .dtitle {
 	margin: 1px;
 }
 
-.gd_description {
+.info_detail .gd_description {
 	margin: 9px;
 	background-color: #EEC; /* colorize */
 	color: #333;
@@ -58,27 +77,25 @@
 	width: 500px;
 }
 
-.title{
+.info_detail .title{
 	font-weight: bold;
 	font-size: 12px;
 }
 
-.files_table {
+.info_detail .files_table {
   margin-left:22px;
 }
 
-.files_table .column { 
+.info_detail .files_table .column { 
 	width: 160px;
 }
 
 
-.files_table td, .column_tab td {
+.info_detail .files_table td, .column_tab td {
 	vertical-align: top;
 }
 
-
-
-.upload_menu_outer {
+.info_detail .upload_menu_outer {
 	margin: 0px 11px 0px 0px;
 	float: right;
 	padding: 0px;
@@ -87,7 +104,7 @@
     border: 1px solid #616B6A;
 }
 
-.upload_menu_title {
+.info_detail .upload_menu_title {
 	font-weight: bold;
 	color: white;
     background: #616B6A;
@@ -98,16 +115,16 @@
 	font-variant: small-caps;
 }
 
-.upload_menu_outer div {
+.info_detail .upload_menu_outer div {
 	padding: 2px;
 }
 
-.upload_menu_outer div:hover {
+.info_detail .upload_menu_outer div:hover {
 	/* margin: 0px; */
   background-color: #C4985C;
 }	
 
-.upload_menu_outer div a {
+.info_detail .upload_menu_outer div a {
     padding: 3px;
 	color: white;
 	font-variant: small-caps;

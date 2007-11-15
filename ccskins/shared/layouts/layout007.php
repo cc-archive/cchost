@@ -5,6 +5,7 @@
     desc = _('Three fixed columns (n.7)')
 [/meta]
 */?>
+<!-- layout 7 -->
 <style>
 div#container{width:700px;margin:0 auto}
 div#wrapper{float:left;width:100%}

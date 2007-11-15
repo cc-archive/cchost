@@ -1,7 +1,7 @@
 %%
 [meta]
-    type     = list
-    desc     = _('Links to upload page with attribution and download links (unordered list)')
+    type     = format
+    desc     = _('Links to upload page with attribution and download links (UL)')
     dataview = page_links
 [/meta]
 %%

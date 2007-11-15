@@ -5,6 +5,7 @@
     desc = _('Two flexible columns and one larger (n.30)')
 [/meta]
 */?>
+<!-- layout 30 -->
 <style>
 div#wrapper{float:left;width:85%;}
 div#content{padding-left:1.5em;}

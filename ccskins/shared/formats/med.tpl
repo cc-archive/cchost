@@ -1,6 +1,6 @@
 %%
 [meta]
-    type     = list
+    type     = format
     desc     = _('Medium verbose (license, attribution, download link, tags, description)')
     dataview = page_links
 [/meta]

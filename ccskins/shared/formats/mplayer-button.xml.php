@@ -1,6 +1,11 @@
+<? /*
+[meta]
+    type     = format
+    desc     = _('Fabricio Zuardi's Button Player - Requires Flash')
+[/meta]
+*/ ?>
 
 <div  id="cc_mplayer">
-<script >// FORMAT_NAME _("Fabricio Zuardi's Button Player (Requires Flash)"); </script>
 <?
 $A['url'] = urlencode($A['home-url'] . 'api/query' . $A['q'] . $A['qstring'] . '&format=xspf');
 

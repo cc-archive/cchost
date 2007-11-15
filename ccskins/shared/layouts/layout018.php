@@ -5,6 +5,7 @@
     desc = _('Liquid, secondary columns fixed-width (n.18)')
 [/meta]
 */?>
+<!-- layout 18 -->
 <style>
 div#wrapper{float:right;width: 100%;margin-left: -350px}
 div#content{margin-left: 400px}

@@ -78,7 +78,7 @@ function _t_playlist_playlist_list_lines($T,&$A) {
 </span><?= $T->String('str_by') ?>
       <?$A['iurn'] = CC_strchop($A['item']['user_real_name'],30,true);?><a target="_parent" href="<?= $A['item']['artist_page_url']?>"><?= $A['iurn']?></a>
 </div>
-<div  class="tdc"><a class="cc_playlist_i" id="_plinfo_<?= $A['item']['upload_id']?>">
+<div  class="tdc"><a class="info_button" id="_plinfo_<?= $A['item']['upload_id']?>">
 </a></div>
 <?if ( !empty($A['reguser'])) {?><div  id="playlist_menu_<?= $A['item']['upload_id']?>" class="cc_playlist_action tdc light_bg dark_border">
 <a class="cc_playlist_button" href="javascript://playlist_menu_<?= $A['item']['upload_id']?>"><span><?=$T->String('str_pl_add_to')?> ...</span></a>
@@ -134,6 +134,7 @@ foreach( $A['args']['records'] as $R )
 function _t_playlist_playlist_popup_window($T,&$A) {
   ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
 <?$A['player_options'] = 'autoHook: false,showVolume: false,showProgress: false,plcc_id: \'plc_id\'';?>
+<script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <?$T->Call('playlist.tpl/playlist_list_window_cart');
 $T->Call('playerembed.xml/eplayer');
@@ -160,9 +161,12 @@ $T->Call('playerembed.xml/eplayer');
 
 
 function _t_playlist_playlist_show_one($T,&$A) {
-  ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/detail.css') ?>"  title="Default Style"></link>
-<?$A['player_options'] = 'autoHook: false';?><script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
+?>
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>"  title="Default Style"></link>
+<script  src="<?= $T->URL('/js/info.js') ?>"></script>
+<?$A['player_options'] = 'autoHook: false';?>
+<script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <?$T->Call('playlist.tpl/playlist_list');
 $T->Call('playerembed.xml/eplayer');
 ?><script >
@@ -171,8 +175,10 @@ $T->Call('playerembed.xml/eplayer');
   </script>
 <?}
 function _t_playlist_playlist_show_browser($T,&$A) {
-  ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>"  title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/detail.css') ?>"  title="Default Style"></link>
+  ?>
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>"  title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>"  title="Default Style"></link>
+<script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <div  id="playlist_browser" class="grid"><span><?= $T->String('str_pl_getting') ?>...</span></div>
 <?$A['player_options'] = 'autoHook: false';$T->Call('playerembed.xml/eplayer');
@@ -182,6 +188,7 @@ function _t_playlist_playlist_show_browser($T,&$A) {
 <?}
 function _t_playlist_playlist_menu($T,&$A) {
   ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
+<script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <script >
     new ccPlaylistMenu();

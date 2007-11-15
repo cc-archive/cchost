@@ -1,6 +1,6 @@
 %%
 [meta]
-    type     = list
+    type     = format
     desc     = _('Links to upload page with attribution and stream links')
     dataview = page_links
 [/meta]
