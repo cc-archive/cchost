@@ -38,7 +38,7 @@ class CCLicensefiles
         $uploads =& CCUploads::GetTable();
         $row = $uploads->QueryKeyRow($files->QueryItemFromKey('file_upload',$id));
 
-        $people_dir = empty($CC_GLOBALS['user-upload-root']) ? 'people' :
+        $people_dir = empty($CC_GLOBALS['user-upload-root']) ? 'content' :
                            $CC_GLOBALS['user-upload-root'];
 
         $file_name = $files->QueryItemFromKey('file_name',$id);

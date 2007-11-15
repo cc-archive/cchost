@@ -58,7 +58,7 @@ class CCDownload
 
         if(!empty($CC_GLOBALS['license']) || !empty($CC_GLOBALS['checksum']))
         {
-            $people_dir = empty($CC_GLOBALS['user-upload-root']) ? 'people' :
+            $people_dir = empty($CC_GLOBALS['user-upload-root']) ? 'content' :
                                $CC_GLOBALS['user-upload-root'];
 
             $file_dir = $people_dir . '/' . $name . '/' . $file_name;

@@ -104,7 +104,7 @@ class CCPathAdminForm extends CCEditConfigForm
         $fields['user-upload-root'] =
                array( 'label'       => $wflag . _('Media Upload Directory'),
                        'form_tip'   => _('Files will be uploaded to and downloaded from here.'),
-                       'value'      => 'people',
+                       'value'      => 'content',
                        'writable'   => true,
                        'formatter'  => 'sysdir',
                        'slash'      => false,

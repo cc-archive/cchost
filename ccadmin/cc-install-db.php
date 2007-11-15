@@ -552,7 +552,7 @@ END;
 
        'php-tal-dir'         => 'cclib/phptal/libs' , 
        'php-tal-cache-dir'   => $local_base_dir . '/temp',
-       'user-upload-root'    => 'files' , 
+       'user-upload-root'    => 'content' , 
        'contest-upload-root' => 'contests' , 
        'template-root'       => $local_base_dir . '/skins/;cctemplates/' , 
        'files-root'          => $local_base_dir . '/viewfile/;ccfiles/',
