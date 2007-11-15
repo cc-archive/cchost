@@ -28,11 +28,12 @@ if( !defined('IN_CC_HOST') )
 
 /**
 */
-require_once('ccextras/cc-reviews.php');
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCNotify',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCNotify' , 'OnGetConfigFields') );
 CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCNotify' , 'OnUserRow') );
+
+require_once('ccextras/cc-extras-events.php'); // for EVENT_TOPIC stuff
 
 CCEvents::AddHandler(CC_EVENT_REVIEW,         array( 'CCNotify',  'OnReview'));
 CCEvents::AddHandler(CC_EVENT_TOPIC_REPLY,    array( 'CCNotify',  'OnReply'));

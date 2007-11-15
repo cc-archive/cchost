@@ -26,6 +26,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('ccextras/cc-extras-events.php'); // for EVENT_TOPIC stuff
+
 /**
 */
 // Topic Delete Flags
