@@ -1,0 +1,16 @@
+
+#cc_narrow_list td {
+	padding: 2px;
+}
+
+#cc_narrow_list th {
+	padding: 2px;
+	text-align: right;
+	font-variant: small-caps;
+}
+
+#cc_narrow_list td .upload_name {
+	margin-top: 18px;
+	display: block;
+	}
+
