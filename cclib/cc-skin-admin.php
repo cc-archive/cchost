@@ -30,28 +30,75 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cclib/cc-admin.php');
 
+class CCSkinProfilesForm extends CCEditConfigForm
+{
+    function CCSkinProfilesForm()
+    {
+        $this->CCEditConfigForm('skin-settings');
+
+        require_once('cclib/cc-template.inc');
+
+        $fields['skin_profile'] = array(
+                'label'     => _('Skin Profile'),
+                'formatter' => 'select',
+                'options'   => CCTemplateAdmin::GetProfiles(),
+                'flags'     => CCFF_POPULATE,
+                );
+
+        $this->SetHandler( ccl('admin','skins','profiles') ); // reset the handler back to us
+        $this->SetHelpText(_('Selecting a new profile here will destroy any skin settings you have not saved to the current profile'));
+        $this->AddFormFields($fields);
+        $this->SetSubmitText(_('Load this Skin Profile'));
+    }
+}
+
+class CCSkinProfileSaveForm extends CCForm
+{
+    function CCSkinProfileSaveForm()
+    {
+        $this->CCForm();
+
+        require_once('cclib/cc-template.inc');
+        $user_paths = CCTemplateAdmin::GetUserPaths('profiles');
+
+        $fields['profile-name'] = array(
+                'label'     => _('Name'),
+                'form_tip'  => _('Your current skin profile settings will be saved to this name (file safe characters only)'),
+                'formatter' => 'textedit',
+                'flags'     => CCFF_REQUIRED,
+                );
+        $fields['desc'] = array(
+                'label'     => _('Description'),
+                'form_tip'  => _('A one-line description of this skin profile'),
+                'formatter' => 'textedit',
+                'flags'     => CCFF_REQUIRED,
+                );
+        $fields['target_dir'] = array(
+                'label'     => _('Target Directory'),
+                'form_tip'  => _('This profile will be saved here'),
+                'formatter' => 'select',
+                'options'   => $user_paths,
+                'flags'     => CCFF_NONE,
+                );
+
+        $this->AddFormFields($fields);
+        $this->SetSubmitText(_('Save this Skin Profile'));
+    }
+}
+
 class CCSkinCreateForm extends CCForm
 {
     function CCSkinCreateForm()
     {
         $this->CCForm();
-        global $CC_GLOBALS;
 
         require_once('cclib/cc-template.inc');
-        $skins   = CCTemplateAdmin::GetSkins(true);
-
-        $use_paths = CCUtil::SplitPaths( $CC_GLOBALS['template-root']);
-        $paths = array();
-        foreach( $use_paths as $P )
-        {
-            if( strstr($P,'ccskins') )
-                continue;
-            $paths[$P] = $P;
-        }
+        $skins      = CCTemplateAdmin::GetSkins(true);
+        $user_paths = CCTemplateAdmin::GetUserPaths();
 
         $fields['skin-file'] =
-            array( 'label'       => _('Clone this Skin'),
-                   'form_tip'    => _('Your new skin will be a clone of this.'),
+            array( 'label'       => _('Clone this Skin Template'),
+                   'form_tip'    => _('Your new skin will start as a clone of this.'),
                    'formatter'   => 'select',
                    'options'     => $skins,
                    'flags'       => CCFF_POPULATE );
@@ -59,7 +106,7 @@ class CCSkinCreateForm extends CCForm
             array( 'label'       => _('Target Directory'),
                    'form_tip'    => _('Your new skin will be created here.'),
                    'formatter'   => 'select',
-                   'options'     => $paths,
+                   'options'     => $user_paths,
                    'flags'       => CCFF_POPULATE );
         $fields['skin-name'] =
             array( 'label'       => _('Name'),
@@ -82,14 +129,8 @@ class CCSkinSettingsForm extends CCEditConfigForm
         $skins             = CCTemplateAdmin::GetSkins(true);
         $list_format_files = CCTemplateAdmin::GetFormats('list');
         $page_format_files = CCTemplateAdmin::GetFormats('page');
-        $str_profiles      = CCTemplateAdmin::GetProfiles();
+        $str_profiles      = CCTemplateAdmin::GetStringProfiles();
 
-        $fields['skin-file'] =
-            array( 'label'       => _('Skin'),
-                   'form_tip'    => _('Default skin for this view'),
-                   'formatter'   => 'select',
-                   'options'     => $skins,
-                   'flags'       => CCFF_POPULATE );
         $fields['string_profile'] =
             array( 'label'       => _('String Profile'),
                    'form_tip'    => _('Default profile for display strings'),
@@ -116,9 +157,15 @@ class CCSkinSettingsForm extends CCEditConfigForm
                    'class'       => 'cc_form_input_short',
                    'formatter'   => 'textedit',
                    'flags'       => CCFF_POPULATE | CCFF_REQUIRED);
+        $fields['skin-file'] =
+            array( 'label'       => _('Base Skin Template'),
+                   'form_tip'    => _('Default skin template for this profile'),
+                   'formatter'   => 'select',
+                   'options'     => $skins,
+                   'flags'       => CCFF_POPULATE );
 
         $this->AddFormFields($fields);
-        $this->SetSubmitText(_('Submit Skin Options Changes'));
+        $this->SetSubmitText(_('Submit Basic Skin Settings'));
         $this->SetModule(ccs(__FILE__));
         CCPage::AddScriptLink('js/skin_editor.js');
     }
@@ -148,7 +195,7 @@ class CCSkinLayoutForm extends CCEditConfigForm
                    'value'       => 'html_form.php/html_form',
                    'options'     => array( 'html_form.php/html_form' => 'html_form.php/html_form' ),
                    'flags'       => CCFF_POPULATE_WITH_DEFAULT );
-*/
+*/ 
         $fields['form_fields'] =
             array( 'label'       => _('Form Fields Style'),
                    'form_tip'    => _('Choice the formatting of regular forms'),
@@ -180,6 +227,7 @@ class CCSkinLayoutForm extends CCEditConfigForm
                 'props'     => CCTemplateAdmin::GetLayouts('tab_pos'),
                 'flags'     => CCFF_POPULATE,
                 );
+
         $fields['box_shape'] = array(
                 'label'     => _('Box Shapes'),
                 'formatter' => 'skin_prop',
@@ -240,6 +288,15 @@ class CCAdminColorSchemesForm extends CCEditConfigForm
                 'flags'     => CCFF_POPULATE,
                 );
 
+        $fields['font_size'] = array(
+                'label'     => _('Font Size'),
+                'formatter' => 'skin_prop',
+                'macro'     => 'skin_editor.php/edit_font_schemes',
+                'scroll'    => false,
+                'props'     => CCTemplateAdmin::GetFontSizes(),
+                'flags'     => CCFF_POPULATE,
+                );
+
         $fields['color_scheme'] = array(
                 'label'     => _('Color Scheme'),
                 'formatter' => 'skin_prop',
@@ -265,28 +322,125 @@ class CCAdminColorSchemesForm extends CCEditConfigForm
 */
 class CCSkinAdmin
 {
-    function Admin()
+    function Admin($profile='',$save='')
     {
+        if( !empty($profile) && $profile == 'profiles')
+            return $this->Profiles();
+
+        if( !empty($save) && !empty($profile) && $profile == 'profile' && $save == 'save' )
+            return $this->ProfileSave();
+
+        require_once('cclib/cc-template.inc');
+        $config =& CCConfigs::GetTable();
+        $skin_settings = $config->GetConfig('skin-settings');
+        if( empty($skin_settings['skin_profile']) )
+        {
+            $msg = _('There is no profile skin set, this is probably a bad thing');
+        }
+        else
+        {
+            $props = CCTemplateAdmin::_get_format_props($skin_settings['skin_profile']);
+            $msg = sprintf(_('Current skin profile: %s'), '<b>' . $props['desc'] . '</b>' );
+        }
+
         CCPage::SetTitle(_('Configure Skins'));
 
+        $args[] = array( 'action'    => ccl('admin','skins','profiles'),
+                         'menu_text' => _('Load a Profile'),
+                         'help'      => _('Start here to pick from an existing profile') );
+
         $args[] = array( 'action'    => ccl('admin','skins','settings'),
-                         'menu_text' => _('Settings'),
-                         'help'      => _('Pick a skin, theme, listing choices, etc.') );
+                         'menu_text' => _('Basic Settings'),
+                         'help'      => _('Message types, listing choices, etc.') );
 
         $args[] = array( 'action'    => ccl('admin','skins','layout'),
                          'menu_text' => _('Layouts'),
-                         'help'      => _('Pick a page layouts, tab placement, etc.') );
+                         'help'      => _('Page layouts, tab placement, box shapes, etc.') );
 
         $args[] = array( 'action'    => ccl('admin','colors'),
-                         'menu_text' => _('Color Schemes'),
-                         'help'      => _('Picks fonts and colors') );
+                         'menu_text' => _('Color, Font, Text size'),
+                         'help'      => _('Fonts and colors') );
+
+        $args[] = array( 'action'    => ccl('admin','skins','profile', 'save'),
+                         'menu_text' => _('Save this Profile'),
+                         'help'      => _('Save the current settings to your own profile') );
 
         $args[] = array( 'action'    => ccl('admin','skins','create' ),
-                         'menu_text' => _('Create Skin'),
-                         'help'      => _('Create a new skin') );
+                         'menu_text' => _('Create Skin Template'),
+                         'help'      => _('For web developers: Sets up a new skin template') );
 
+        CCPage::PageArg('client_menu_help', $msg );
         CCPage::PageArg('client_menu',$args,'print_client_menu');
+    }
 
+    function Profiles()
+    {
+        $form = new CCSkinProfilesForm();
+        if( empty($_POST['skinprofiles']) || !$form->ValidateFields() )
+        {
+            CCPage::SetTitle(_('Select a New Skin Profile'));
+            CCPage::AddForm($form->GenerateForm());
+        }
+        else
+        {
+            $form->GetFormValues($values);
+            $this->_set_profile($values['skin_profile']);
+            CCUtil::SendBrowserTo(ccl('admin','skins'));
+        }
+    }
+
+    function _set_profile($skin_profile)
+    {
+        require_once('cclib/cc-template.inc');
+        $props = CCTemplateAdmin::_get_format_props($skin_profile);
+        unset($props['type']);
+        unset($props['desc']);
+        $props['skin_profile'] = $skin_profile;
+        $config =& CCConfigs::GetTable();
+        $config->SaveConfig('skin-settings',$props);
+    }
+
+    function ProfileSave()
+    {
+        CCPage::SetTitle(_('Save Skin Profile'));
+        $form = new CCSkinProfileSaveForm();
+        if( empty($_POST['skinprofilesave']) || !$form->ValidateFields() )
+        {
+            CCPage::AddForm($form->GenerateForm());
+        }
+        else
+        {
+            /*
+                just to be different:
+
+                profiles are saved to files, not config. we only save the name here.
+            */
+            $form->GetFormValues($values);
+            $config =& CCConfigs::GetTable();
+            $skin_settings = $config->GetConfig('skin-settings');
+            $text = '<?/*' . "\n[meta]\n    type = profile\n    desc = _('{$values['desc']}')";
+            foreach( array( 'max-listing', 'properties', 'skin_profile') as $outme )
+                if( isset($skin_settings[$outme]) )
+                    unset($skin_settings[$outme]);
+
+            foreach( $skin_settings as $K => $V )
+            {
+                $text .= "\n    $K  = $V";
+            }
+            $text .= "\n[/meta]\n*/?" . '>' . "\n";
+            CCUtil::MakeSubdirs($values['target_dir']);
+            $fname = preg_replace('/[^a-z]+/','',strtolower($values['profile-name']));
+            if( empty($fname) )
+                $fname = 'madeup_' . rand();
+            $fname = 'profile_' . $fname . '.php';
+            $target = $values['target_dir'] . '/' . $fname;
+            $f = fopen($target,'w');
+            fwrite($f,$text);
+            fclose($f);
+            $skin_settings['skin_profile'] = $target;
+            $config->SaveConfig('skin-settings',$skin_settings);
+            CCUtil::SendBrowserTo(ccl('admin','skins'));
+        }
     }
 
     function Layout()
@@ -305,7 +459,7 @@ class CCSkinAdmin
 
     function Create()
     {
-        CCPage::SetTitle(_('Create a Skin'));
+        CCPage::SetTitle(_('Create a Skin Template'));
         $form = new CCSkinCreateForm();
         if( empty($_POST['skincreate']) || !$form->ValidateFields() )
         {

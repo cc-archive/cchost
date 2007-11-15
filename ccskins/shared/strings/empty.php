@@ -1,7 +1,7 @@
 <?
 /*
 [meta]
-    type = profile
+    type = string_profile
     desc = _('Empty (for testing only)')
 [/meta]
 */

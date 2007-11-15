@@ -1,7 +1,7 @@
 <?
 /*
 [meta]
-    type = profile
+    type = string_profile
     desc = _('Text appropriate for image/art sites')
 [/meta]
 */

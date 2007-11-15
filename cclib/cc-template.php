@@ -132,6 +132,9 @@ class CCSkin
             header('Content-type: text/html; charset=' . CC_ENCODING) ;
         }
 
+        if( !empty($this->vars['string_profile']) && file_exists($this->vars['string_profile']) )
+            require_once($this->vars['string_profile']);
+
         $this->Call($this->filename);
 
         if( !empty($this->vars['auto_execute']) )
@@ -147,16 +150,14 @@ class CCSkin
 
     function AddCustomizations()
     {
-        $config =& CCConfigs::GetTable();
-        $skin_settings = $config->GetConfig('skin-settings');
-        foreach( array( 'string_profile', 'tab_pos', 'box_shape', 'page_layout', 'color_scheme', 'font_scheme' ) as $inc )
+        $T = $this;
+        $A =& $this->vars;
+        foreach( array( 'tab_pos', 'box_shape', 'page_layout', 'color_scheme', 'font_scheme', 'font_size' ) as $inc )
         {
             if( !empty($_REQUEST[$inc]) )
-                $skin_settings[$inc] = $_GET[$inc];
-            $T = $this;
-            $A =& $this->vars;
-            if( !empty($skin_settings[$inc]) && file_exists($skin_settings[$inc]))
-                require_once($skin_settings[$inc]);
+                $A[$inc] = $_REQUEST[$inc];
+            if( !empty($A[$inc]) && file_exists($A[$inc]))
+                require_once($A[$inc]);
         }
     }
 
@@ -444,8 +445,6 @@ class CCSkin
         {
             $dirs = $this->GetTemplatePath();
             //if( is_string($file) && strstr($file,'playlist.js') ) { $x[] = $file; $x[] = $dirs; CCDebug::PrintVar($x); }
-            if( !empty($reject_if_match) )
-                die( 'wups, reject search doesn\'t work' );
             $found = CCUtil::SearchPath( $file, $dirs, '', $real_path, CC_SEARCH_RECURSE_DEFAULT);
             $this->search_cache[$sfile] = $found;
             return $found;

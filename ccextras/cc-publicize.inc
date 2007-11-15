@@ -196,46 +196,12 @@ class CCPublicize
         $opts['class'] = 'queryparam';
         $opts['name']  =
         $opts['id']    = 'template';
-        $opts['opts']  = array(
-                array( 'value'  => 'links',
-                       'selected'  => true,
-                       'text'   => $s ? _("Plain links") : _("Plain link")),
-                array( 'value'  => 'links_by',
-                       'selected'  => false,
-                       'text'   => $s ? _("Links with attribution") : _("Link with attribution")),
-                array( 'value'  => 'links_stream',
-                       'selected'  => false,
-                       'text'   => $s ? _('Links with a stream link') : _('Link with a stream link')),
-                array( 'value'  => 'links_dl',
-                       'selected'  => false,
-                       'text'   => $s ? _('Links with a download link') : _('Link with a download link')),
-                array( 'value'  => 'med',
-                       'selected'  => false,
-                       'text'   => _('Verbose (!)')),
-            );
-
-        if( !empty($CC_GLOBALS['pubwizex']) )
+        require_once('cclib/cc-template.inc');
+        $fmts = CCTemplateAdmin::GetFormats('format');
+        foreach( $fmts as $K => $F )
         {
-            $exformats = preg_split('/\s*,\s*/',$CC_GLOBALS['pubwizex']);
-            foreach($exformats as $exformat )
-            {
-                $file = $this->_find_fmt_template($exformat);
-                if( $file )
-                {
-                    $text = file_get_contents($file);
-                    if( preg_match('/FORMAT_NAME\s+_\([\'"](.*)[\'"]\);/U',$text,$m) )
-                    {
-                        $name = $m[1];
-                    }
-                    else
-                    {
-                        $name = preg_replace( '/\..*$/', '', basename($file) );
-                    }
-                    $opts['opts'][] = array( 'value' => $exformat, 'selected' => false, 'text' => $name );
-                }
-            }
+            $opts['opts'][] = array( 'value' => $K, 'text' => $F, 'selected' => false );
         }
-
         $combos[] = $opts;
 
         /*
@@ -340,41 +306,6 @@ class CCPublicize
         return false;
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
-    *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
-    */
-    function OnGetConfigFields($scope,&$fields)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $options = array(
-                CC_DONT_CARE_LOGGED_IN => _('Everybody'),
-                CC_MUST_BE_LOGGED_IN   => _('Registered User Only'),
-                0                      => _('Nobody (Turn this feature off)'),
-                );
-
-            $fields['pubwiz'] =
-               array(  'label'      => _('Show "Publicize Wizard" to'),
-                       'form_tip'   => _('Allows visitors to create HTML snippets for their blogs'),
-                       'weight'      => 600,
-                       'options'    => $options,
-                       'formatter'  => 'select',
-                       'flags'      => CCFF_POPULATE );
-
-            $fields['pubwizex'] =
-               array(  'label'      => _('Extra publicize formats'),
-                       'form_tip'   => _('Comma separated format templates. These can be in a \'formats\' directory in your Skins path. (e.g. mplayer, my_links, my_big_links)'),
-                       'weight'      => 601,
-                       'formatter'  => 'textarea',
-                       'flags'      => CCFF_POPULATE );
-        }
-
-    }
 
     function Email($type='',$arg1='')
     {

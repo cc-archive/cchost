@@ -200,7 +200,12 @@ class CCTemplateAdmin
 
     function GetProfiles()
     {
-        return CCTemplateAdmin::_get_meta_type('profiles','profile');
+        return CCTemplateAdmin::_get_meta_type('profiles','profile',true);
+    }
+
+    function GetStringProfiles()
+    {
+        return CCTemplateAdmin::_get_meta_type('strings','string_profile');
     }
 
     function GetLayouts($type)
@@ -211,6 +216,11 @@ class CCTemplateAdmin
     function GetFonts()
     {
         return CCTemplateAdmin::_get_meta_type('colors','font',false);
+    }
+
+    function GetFontSizes()
+    {
+        return CCTemplateAdmin::_get_meta_type('colors','fontsize',false);
     }
 
     function GetColors()
@@ -224,6 +234,7 @@ class CCTemplateAdmin
         
         $files = array();
         $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], 'ccskins/shared');
+
         foreach( $tdirs as $tdir )
         {
             $tdir = CCUtil::CheckTrailingSlash($tdir,false);
@@ -237,17 +248,11 @@ class CCTemplateAdmin
             if( !$props || ($props['type'] != $type) )
                 continue;
 
-            if( !empty($props['desc']) )
-            {
-                if( preg_match("/^_\(['\"](.+)['\"]\)$/",$props['desc'],$m) )
-                    $props['desc'] = _($m[1]);
-            }
-
             if( $ret_files )
             {
                 if( empty($props['desc']) )
                 {
-                    $match_files[$ffile] = 'formats/' . preg_replace( '/\..*$/', '', basename($ffile) );
+                    $match_files[$ffile] = $ffile;
                 }
                 else
                 {
@@ -279,6 +284,11 @@ class CCTemplateAdmin
             $parts = split('=',$line);
             $props[ trim($parts[0]) ] = trim($parts[1]);
         }
+        if( !empty($props['desc']) )
+        {
+            if( preg_match("/^_\(['\"](.+)['\"]\)$/",$props['desc'],$m) )
+                $props['desc'] = _($m[1]);
+        }
         return $props;
     }
 
@@ -295,6 +305,24 @@ class CCTemplateAdmin
             if( $subdir{0} != '.' )
                 CCTemplateAdmin::_scour_dir($files,$subdir,$mask);
         }
+    }
+
+    function GetUserPaths($append='')
+    {
+        global $CC_GLOBALS;
+
+        if( $append )
+            $append  = '/' . $append;
+
+        $use_paths = CCUtil::SplitPaths( $CC_GLOBALS['template-root']);
+        $paths = array();
+        foreach( $use_paths as $P )
+        {
+            if( strstr($P,'ccskins') )
+                continue;
+            $paths[$P . $append] = $P . $append;
+        }
+        return $paths;
     }
 
     function GetSkins($skip_shared=false)

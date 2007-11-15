@@ -2,10 +2,7 @@
 body {
 	margin: 0px;
 	padding: 0px;
-}
-
-body, td, ul {
-	font-size: 0.9em;
+	background-color: #777;
 }
 
 img {

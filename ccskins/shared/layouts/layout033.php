@@ -2,7 +2,7 @@
 [meta]
     type = layout
     image = layouts/images/layout033.gif
-    desc = _('Two colums fixed (n.33)')
+    desc = _('Blog Style - narrow, 2 cols fixed (n.33)')
 [/meta]
 */?>
 <!-- layout 33 -->

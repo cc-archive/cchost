@@ -2,7 +2,7 @@
 [meta]
     type = layout
     image = layouts/images/layout024.gif
-    desc = _('Two columns liquid, side fixed (n.24)')
+    desc = _('Class ccHost - 2 cols, side fixed (n.24)')
 [/meta]
 */?>
 <!-- layout 24 -->

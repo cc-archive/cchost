@@ -30,7 +30,6 @@ CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCPublicizeHV',  'OnUs
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCPublicizeHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPublicizeHV',  'OnUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPublicize',  'OnMapUrls'),   'ccextras/cc-publicize.inc');
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPublicize' , 'OnGetConfigFields'),   'ccextras/cc-publicize.inc' );
 
 /**
 */

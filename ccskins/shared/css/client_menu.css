@@ -1,17 +1,19 @@
 
 .client_menu {
-	margin: 2.0em auto;
-	width: 70%;
+	margin: 5% auto;
+	width: 90%;
 	list-style: none;
 }
 
 .client_menu li {
-	margin-bottom: 0.2em;
+	margin-bottom: 1.0em;
 }
 
 .client_menu a {
-	margin-right: 0.6em;
 	font-weight: bold;
+}
+
+.client_menu span {
 }
 
 .client_menu_help,

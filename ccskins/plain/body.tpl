@@ -30,7 +30,7 @@
             $f = $V['id'];
             $selc = ( $f == $sel ) ? 'selected="selected"' : '';
 
-            print "<option {$selc} value=\"{$f}\">{$f}</option>\n";
+            print "<option {$selc} value=\"{$f}\">{$V['desc']}</option>\n";
         }
     ?>
     </select></div>
