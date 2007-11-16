@@ -33,52 +33,133 @@ require_once('cclib/cc-admin.php');
 * @package cchost
 * @subpackage admin
 */
-class CCAdminTemplateMacrosForm extends CCEditConfigForm
+class CCExtrasForm extends CCEditConfigForm
 {
-    function CCAdminTemplateMacrosForm()
+    function CCExtrasForm()
     {
-        $this->CCEditConfigForm('tmacs');
+        $this->CCEditConfigForm('extras','',false);
 
-        $fields = array();
-        $this->_get_macros_from_file('sidebar', $fields);
-        $this->_get_macros_from_file('custom',$fields);
+        require_once('cclib/cc-template.inc');
+
+        $fields['macros'] = array(
+                'label'     => _('Sidebar Extras'),
+                'formatter' => 'extras_editor',
+                'options'   => CCTemplateAdmin::GetExtras(),
+                'flags'     => CCFF_POPULATE,
+                );
+
+        $fields['macros_order'] = array(
+                'label'     => '',
+                'formatter' => 'extras_hidden',
+                'options'   => CCTemplateAdmin::GetExtras(),
+                'flags'     => CCFF_POPULATE_WITH_DEFAULT,
+                );
+
         $this->AddFormFields($fields);
-        $fname = '<b>' . CCTemplate::GetTemplate('sidebar') .  '</b>';
-        $this->SetHelpText( sprintf(_('Pick which UI elements should appear on every page. Edit the file %s to add modules here.'),$fname) );
+        $this->SetSubmitText(_('Save'));
         $this->SetModule( ccs(__FILE__) );
     }
-
-    function _get_macros_from_file($filebase,&$fields)
-    {
-        if( !$filebase )
-            return;
-
-        $fname = CCTemplate::GetTemplate( $filebase );
-
-        if( !file_exists($fname) || !is_file($fname) )
-            return;
-
-        $text = @file_get_contents( $fname );
-        if( empty($text) )
-            return;
-
-        if( strstr($fname,'.php') )
-            $regex = "/function\s+_t_{$filebase}_([^_][a-z_]+)\(/i";
-        else // tpl
-            $regex = '/%macro\((?:\s+)?([^_][^)\s]+)\)/i';
-
-        preg_match_all( $regex, $text, $m );
-
-        foreach($m[1] as $T)
-        {
-            $N = $filebase . '/' . $T;
-            $fields[$N] = array( 'label'     => str_replace('_',' ',$T),
-                                 'form_tip'  => $filebase != 'custom' ? "(in {$filebase})" : '',
-                                 'formatter' => 'checkbox',
-                                 'flags'     => CCFF_POPULATE );
-        }
-    }
 }
+
+function generator_extras_hidden($form,$id,$value='',$class='')
+{
+    return '<input type="hidden" value="*"  id="' . $id .'"  name="' . $id .'" />';
+}
+
+function validator_extras_hidden($form,$fieldname)
+{
+    return true;
+}
+
+function validator_extras_editor($form,$fieldname)
+{
+    $order = $_POST['macros_order'];
+    preg_match_all('/targetmacros\[\]=([0-9]+)&?/',$order,$m);
+    $macs = array();
+    foreach( $m[1] as $i )
+    {
+        $macs[] = $_POST['F'][$i];
+    }
+    $form->SetFormValue('macros',$macs);
+    return true;
+}
+
+function generator_extras_editor($form,$id,$value='',$class='')
+{
+    $opts = $form->GetFormFieldItem($id,'options');
+
+    $macs = '';
+
+    if( empty($value) )
+    {
+        $macs = '';
+        $hgt = 'height:14px;';
+    }
+    else
+    {
+        $nums = array_keys($opts);
+        foreach( $value as $mac )
+        {
+            $i = array_search($mac,$nums) + 1;
+            $text = $opts[$mac];
+            $macs .= "\n<li id=\"targetmacros_{$i}\">{$opts[$mac]}</li>";
+        }
+        $hgt = '';
+    }
+
+    $list = '';
+    $hides = '';
+    $i = 0;
+    foreach( $opts as $F => $opt )
+    {
+        ++$i;
+        $hides .= "\n<input type=\"hidden\" name=\"F[{$i}]\" value=\"{$F}\" />";
+        if( !empty($value) && in_array( $F, $value ) )
+            continue;
+        $list .= "\n<li id=\"draglistmacros_{$i}\">{$opt}</li>";
+    }
+
+    $html =<<<EOF
+<div style="width:50%;margin:0px auto;">
+    <ul id="draglistmacros" class="ddex">
+        {$list}
+    </ul>
+</div>
+{$hides}
+EOF;
+
+    $msg = _('Drag items to here');
+    $target =<<<EOF
+    
+    <div class="ddex"><p style="padding:3px;"><b>{$msg}</b></p><ul id="targetmacros" class="ddex" style="border:1px solid black;{$hgt}">{$macs}</ul></div>
+
+<script type="text/javascript">
+function on_macros_drop(a,b)
+{
+    if( \$('macros_order').value == '*' )
+        \$('targetmacros').style.height = "";
+
+    \$('macros_order').value = Sortable.serialize('targetmacros');
+}
+
+Sortable.create("draglistmacros",
+ {dropOnEmpty:true,containment:['draglistmacros',"targetmacros"],constraint:false});
+Sortable.create("targetmacros",
+ {dropOnEmpty:true,containment:['draglistmacros',"targetmacros"],constraint:false,onUpdate: on_macros_drop});
+
+</script>
+<style>
+.ddex { list-style: none; padding: 0px; }
+.ddex li { cursor: move; padding: 4px; margin: 5px; border: 1px solid #999}
+</style>
+EOF;
+
+    CCPage::PageArg('edit_extra',$target);
+
+
+    return $html;
+}
+
 
 /**
 * @package cchost
@@ -139,10 +220,10 @@ class CCNewTemplateTagForm extends CCForm
 */
 class CCTemplateAdmin
 {
-    function OnAdminContent()
+    function OnAdminExtras()
     {
         CCPage::SetTitle(_("Sidebar Content"));
-        $form = new CCAdminTemplateMacrosForm();
+        $form = new CCExtrasForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
 
@@ -226,6 +307,11 @@ class CCTemplateAdmin
     function GetColors()
     {
         return CCTemplateAdmin::_get_meta_type('colors','color',false);
+    }
+
+    function GetExtras()
+    {
+        return CCTemplateAdmin::_get_meta_type('extras','extras');
     }
 
     function _get_meta_type($sub_dir,$type,$ret_files=true)
@@ -383,11 +469,11 @@ class CCTemplateAdmin
                              'access' => CC_MUST_BE_LOGGED_IN
                              ),
             */
-            'tmacs'  => array( 'menu_text'  => _('Sidebar Content'),
+            'tmacs'  => array( 'menu_text'  => _('Sidebar Extras'),
                              'menu_group'   => 'configure',
                              'help'         => _('Pick what features are available on the side bar.'),
                              'weight'       => 53,
-                             'action'       =>  ccl('admin','content'),
+                             'action'       =>  ccl('admin','extras'),
                              'access'       => CC_ADMIN_ONLY
                              ),
                 );
@@ -405,7 +491,7 @@ class CCTemplateAdmin
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
             _("Displays 'Header/Footer' form"), CC_AG_CONFIG );
 
-        CCEvents::MapUrl( 'admin/content',          array('CCTemplateAdmin','OnAdminContent'),      
+        CCEvents::MapUrl( 'admin/extras',          array('CCTemplateAdmin','OnAdminExtras'),      
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
             _("Displays 'Sidebar' form, let's the admin select modules to display on every page."), 
             CC_AG_CONFIG );

@@ -74,13 +74,6 @@ class CCPageAdmin
         }
     }
 
-    /**
-    * Displays the the default home page
-    */
-    function Homepage()
-    {
-        CCPage::ViewFile('home');
-    }
 
     /**
     * Display a file in the client area of the page (wrapper)
@@ -104,13 +97,6 @@ class CCPageAdmin
     {
         if( $scope != CC_GLOBAL_SCOPE )
         {
-            $fields['homepage'] =
-                array(  'label'      => _('Homepage'),
-                        'form_tip'   => sprintf(_('example: docs/home'), '<br />'),
-                       'value'       => '',
-                       'formatter'   => 'textedit',
-                       'flags'       => CCFF_POPULATE);
-
             $fields['default-feed-tags'] =
                 array( 'label'       => _('Default Feed Tags'),
                        'form_tip'    => _('Comma separated list of tags to use when no other feed is specificed (e.g. audio,remix).') . ' ' 

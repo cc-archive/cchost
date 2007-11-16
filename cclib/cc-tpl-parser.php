@@ -115,7 +115,7 @@ function cc_tpl_parse_chop($prefix,$varname,$amt)
         $amt = "\$A['chop']";
     }
 
-    return "$prefix CC_strchop($var,$amt,isset(\$A['dochop']) ? \$A['dochop'] : true); ?>";
+    return "$prefix cc_strchop($var,$amt,isset(\$A['dochop']) ? \$A['dochop'] : true); ?>";
 }
 
 function cc_tpl_parse_if_attr($varname,$attr)
@@ -135,7 +135,7 @@ function cc_tpl_parse_date($prefix,$varname,$fmt)
 {
     $prefix = _cc_tpl_flip_prefix($prefix);
     $var = cc_tpl_parse_var('',$varname,'');
-    return "$prefix CC_datefmt($var,'$fmt'); ?>";
+    return "$prefix cc_datefmt($var,'$fmt'); ?>";
 }
 
 function cc_tpl_parse_inspect($varname)

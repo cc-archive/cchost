@@ -1,4 +1,4 @@
-<body> <!-- class="dark_bg" -->
+<body> <!-- class="light_bg" -->
 <div class="hide">
   <a href="#content">%text(skip)%</a>
 </div>
@@ -6,34 +6,7 @@
 <div id="container" style="background-color:white;">
 
 <div id="header" class="med_dark_bg light_color"> 
-    <?
-    require_once('cclib/cc-template.inc');
-    $layouts = CCTemplateAdmin::GetLayouts('layout');
-    ?>
-    <script>function onlayout() {
-        var box = $('layouts');
-        var file = box.options[ box.selectedIndex ].value;
-        var junk = document.location.href;
-        if( document.location.search )
-        {
-            junk = junk.replace( document.location.search, '' );
-        }
-        document.location.href = junk + '?page_layout=' + file;
 
-    }
-    </script>
-    <div style="position:absolute;top:2px;left:340px;"><select id="layouts" onchange="onlayout()" style="font-size:11px;font-family:verdana;">
-    <?
-        $sel = empty($_GET['page_layout']) ? '' : $_GET['page_layout'];
-        foreach( $layouts as $K => $V )
-        {
-            $f = $V['id'];
-            $selc = ( $f == $sel ) ? 'selected="selected"' : '';
-
-            print "<option {$selc} value=\"{$f}\">{$V['desc']}</option>\n";
-        }
-    ?>
-    </select></div>
     %if_not_empty(sticky_search)%
         <div id="header_search"><a id="search_site_link"
         href="%(advanced_search_url)%"><h3 class="light_color">%text(find)%</h3><span class="light_color">%text(findcontent)%</span></a></div>
@@ -111,21 +84,18 @@
 </div>
 
 <div id="extra" class="med_bg light_color">
-    %settings(tmacs,custom_macros)%
-
-    %% These are little strange, the value is the flag
-       that decides what to print, the key is the macro
-    %%
-
-    %loop(custom_macros,flag)%
-      %if_not_null(#flag)%
+  %if_null(edit_extra)%
+    %settings(extras,custom_macros)%
+    %loop(custom_macros/macros,mac)%
         <div class="menu_group">        
-          %call_macro(#k_flag)%
+          %call_macro(#mac)%
         </div>
-      %end_if%
     %end_loop%
+  %else%
+    <!-- editing extras -->
+    %(edit_extra)%
+  %end_if%
 </div>
-
 
 <div id="footer" class="med_light_bg">
   <div id="license"><p>%(site-license)%</p></div>
@@ -146,5 +116,9 @@
     new modalHook( [ 'search_site_link', 'mi_login', 'mi_register']);  
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
 </script>
+
+<!--[if lt IE 7.]>
+<script defer type="text/javascript" src="%url(js/pngfix.js)%"></script>
+<![endif]-->
 
 </body>

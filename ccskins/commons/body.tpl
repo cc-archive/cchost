@@ -29,7 +29,6 @@
     %if_not_empty(tab_pos/in_header)%
         %call('tabs.tpl/print_tabs')%
     %end_if%
-
 </div><!-- header -->
 
 
@@ -47,8 +46,8 @@
 %end_if%
 <a name="content" ></a>    
 
-%loop(macro_names,macro)%    %call(#macro)%             %end_loop%
-%loop(inc_names,inc_name)%   %call(#inc_name)%          %end_loop%
+%loop(macro_names,macro)%    %call(#macro)%    %end_loop%
+%loop(inc_names,inc_name)%   %call(#inc_name)% %end_loop%
 
 </div> <!-- content -->
     </div> <!-- wrapper -->
@@ -84,21 +83,18 @@
 </div>
 
 <div id="extra">
-    %settings(tmacs,custom_macros)%
-
-    %% These are little strange, the value is the flag
-       that decides what to print, the key is the macro
-    %%
-
-    %loop(custom_macros,flag)%
-      %if_not_null(#flag)%
+  %if_null(edit_extra)%
+    %settings(extras,custom_macros)%
+    %loop(custom_macros/macros,mac)%
         <div class="menu_group">        
-          %call_macro(#k_flag)%
+          %call_macro(#mac)%
         </div>
-      %end_if%
     %end_loop%
+  %else%
+    <!-- editing extras -->
+    %(edit_extra)%
+  %end_if%
 </div>
-
 
 <div id="footer" class="med_light_bg">
   <div id="license">%(site-license)%</div>
@@ -119,5 +115,9 @@
     new modalHook( [ 'search_site_link', 'mi_login', 'mi_register']);  
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
 </script>
+
+<!--[if lt IE 7.]>
+<script defer type="text/javascript" src="%url(js/pngfix.js)%"></script>
+<![endif]-->
 
 </body>

@@ -97,12 +97,18 @@ class CCEditConfigForm extends CCForm
     /**#@-*/
 
     /**
+    /* @access private
+    /* @var boolean
+    */
+    var $_merge;
+
+    /**
      * Constructor
      *
      * @param string $config_type The name of the settings group (i.e. 'menu')
      * @param string $scope CC_GLOBAL_SCOPE or a specific vroot (blank means current)
      */
-    function CCEditConfigForm($config_type,$scope='')
+    function CCEditConfigForm($config_type,$scope='',$merge=true)
     {
         $this->CCForm();
         $this->SetHandler( ccl('admin', 'save') );
@@ -110,6 +116,7 @@ class CCEditConfigForm extends CCForm
         $this->SetHiddenField( '_name', get_class($this), CCFF_HIDDEN | CCFF_NOUPDATE );
         $this->_typename = $config_type;
         $this->_scope = $scope;
+        $this->_merge = $merge;
 
     }
 
@@ -159,7 +166,7 @@ class CCEditConfigForm extends CCForm
     {
         $configs =& CCConfigs::GetTable();
         $this->GetFormValues($values);
-        $configs->SaveConfig($this->_typename, $values, $this->_scope);
+        $configs->SaveConfig($this->_typename, $values, $this->_scope, $this->_merge);
     }
 }
 

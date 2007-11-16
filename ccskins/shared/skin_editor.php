@@ -6,7 +6,9 @@ function _t_skin_editor_edit_font_schemes($T,&$A)
     $fid = $A['field']['name'];
     $value = empty($A['field']['value']) || !file_exists($A['field']['value']) ? $props[0]['id'] : $A['field']['value'];
     $scroll = empty($A['field']['scroll']) ? '' : 'overflow: scroll; height: 240px;';
-    static $inst = 1;
+    static $inst = 0;
+
+    ++$inst;
 
     $class = 'skin_font_pick' . $inst;
 
@@ -20,7 +22,7 @@ function _t_skin_editor_edit_font_schemes($T,&$A)
     foreach( $props as $P )
     {
         $file  = $P['id'];
-        $id = 'efs_' . $int++;
+        $id = 'efs_' . $inst . '_' . $int++;
         if( $value == $file )
             $val_id = $id;
         

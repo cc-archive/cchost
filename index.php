@@ -87,6 +87,7 @@ require_once('cc-includes.php');
 $cc_extras_dirs = 'ccextras';
 include('cc-inc-extras.php');
 require_once('cc-custom.php');
+require_once('cc-template-api.php');
 
 /*
 * Configuration initialized here
