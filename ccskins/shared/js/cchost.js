@@ -80,7 +80,7 @@ downloadHook.prototype = {
     },
 
     onClick: function( e, upload_id ) {
-        var url = home_url + 'api/query' + q + 'f=html&t=download&ids=' + upload_id;
+        var url = query_url + 'f=html&t=download&ids=' + upload_id;
         Modalbox.show( url, {title: str_download, width: 500} );
     }
 }

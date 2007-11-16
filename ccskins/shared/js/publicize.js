@@ -44,7 +44,7 @@ ccPublicize.prototype = {
 
     updateTarget: function(){
 
-       var url = home_url + 'api/query' + q + Form.serialize('puboptions_form');
+       var url = query_url + Form.serialize('puboptions_form');
        var text = '<' + 'script type="text/javascript" src="' + url + '&format=docwrite" ><' + '/script>';
        var tt = $('target_text');
        if( tt.value )

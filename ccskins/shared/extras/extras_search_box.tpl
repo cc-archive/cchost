@@ -4,7 +4,7 @@
     desc = _('Search Box')
 [/meta]
 */?>
-
+<p>%text(str_search)%</p>
 <form action="%(home-url)%search/results" method="get">
 <div>
 <input class="cc_search_edit" name="search_text" value="search text"></input>

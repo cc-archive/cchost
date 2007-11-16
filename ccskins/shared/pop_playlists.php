@@ -7,7 +7,7 @@ function play_all()
 {
     var url = home_url + 'playlist/popup/' + q + 'ids=' + '<?= $AInfo['ids']?>&nosort=1';
     var dim = "height=300,width=550";
-    // var url = home_url + 'api/query' + q + 't=mplayerbig&f=html&playlist=' + playlist_id + '&' + qs;
+    // var url = query_url + 't=mplayerbig&f=html&playlist=' + playlist_id + '&' + qs;
     // var dim = "height=170, width=420";
     var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                   "resizable=1,scrollbars=1," + dim );

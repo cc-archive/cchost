@@ -50,6 +50,7 @@ class CCSkin
         $this->vars = $configs->GetConfig('ttag');
 
         $this->vars['q']            = $CC_GLOBALS['pretty-urls'] ? '?' : '&';
+        $this->vars['query-url']    = ccl('api','query') + $CC_GLOBALS['pretty-urls'] ? '?' : '&';
         $this->vars['get']          = $_GET;
         $this->vars['site-root']    = preg_replace('#http://[^/]+/?#','/',ccd());
         $this->vars['install_done'] = false;

@@ -51,7 +51,7 @@ ccUploadInfo.prototype = {
             }
             else
             {
-                var url = home_url + 'api/query' + q + 'f=html&t=info&ids=' + upload_id;
+                var url = query_url + 'f=html&t=info&ids=' + upload_id;
                 var y = (Event.pointerY(event) + 12), x = (Event.pointerX(event) - 50);
                 var html = '<div class="cc_playlist_info" id="' + info_id + '" ' +
                            'style="display:none;position:absolute;height:auto;top:'+y+'px;left:'+x+'px"></div>';

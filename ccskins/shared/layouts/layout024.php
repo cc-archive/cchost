@@ -9,7 +9,8 @@
 <style>
 div#wrapper{float:right;width:100%;margin-left:-200px}
 div#content{margin-left:200px;padding-left: 1.5em;}
-div#navigation{float:left;width:190px;padding-left:10px;}
-div#extra{float:left;clear:left;width:200px}
+div#navigation{float:left;width:190px;}
+div#extra{float:left;clear:left;width:200px;}
 div#footer{clear:both;width:100%}
+.menu_group { margin-left: 16px; }
 </style>

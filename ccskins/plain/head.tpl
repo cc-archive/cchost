@@ -17,9 +17,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <script>
 //<!--
-var home_url = '%(home-url)%';
-var root_url = '%(root-url)%';
-var q        = '%(q)%';
+var home_url  = '%(home-url)%';
+var root_url  = '%(root-url)%';
+var query_url = '%(query-url)%';
+var q         = '%(q)%';
 //-->
 </script>
 

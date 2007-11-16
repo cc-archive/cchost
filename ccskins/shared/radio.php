@@ -121,7 +121,7 @@ $A['K'] = 'tags' . $ck102[$ci102] . $ck102[$ci102];
 </form>
 </div><!-- radio container -->
 <script >
-baseCmd = '<?= $A['home-url']?>api/query';
+baseCmd = '<?= $A['query-url']?>';
 sitePromoTag = '<?= empty($A['site_promo_tag']) ? '' : $A['site_promo_tag'] ?>';
 </script>
 <script  src="<?= $T->URL('js/radio.js'); ?>" ></script>

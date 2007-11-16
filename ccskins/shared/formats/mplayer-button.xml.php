@@ -7,7 +7,7 @@
 
 <div  id="cc_mplayer">
 <?
-$A['url'] = urlencode($A['home-url'] . 'api/query' . $A['q'] . $A['qstring'] . '&format=xspf');
+$A['url'] = urlencode($A['query-url'] . $A['qstring'] . '&format=xspf');
 
 ?><div >
 <div  style="float:left; margin-right:12px;">

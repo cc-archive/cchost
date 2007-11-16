@@ -118,7 +118,7 @@ ccEmbeddedPlayer.prototype = {
                     }
                     else
                     {
-                        href = e.href = home_url + 'api/query' + q + 'f=m3u&ids=' + e.id.match(/[0-9]+$/);
+                        href = e.href = query_url + 'f=m3u&ids=' + e.id.match(/[0-9]+$/);
                     }
 
                     arr[ arr.length ] = [ e.id, href ];

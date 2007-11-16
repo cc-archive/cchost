@@ -40,7 +40,7 @@ $q = $A['q'];
     }
 
     $url  = $A['home-url'] . 'api/query/stream.m3u' . $q .'f=m3u&' . $qstring;
-    $url2 = $A['home-url'] . 'api/query/' . $q . 'f=rss&' . $qstring;
+    $url2 = $A['query-url'] . 'f=rss&' . $qstring;
 
 ?>   
 <li><a id="mi_stream_page" href="<?=$url?>"><?= $T->String('str_stream_this_page') ?></a></li>

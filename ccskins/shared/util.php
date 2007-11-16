@@ -205,7 +205,7 @@ function _t_util_print_client_menu($T,&$A)
     $count = count($items);
     $K = array_keys($items);
     if( !empty($A['client_menu_help']) )
-        print "<div class=\"client_menu_help\">{$A['client_menu_help']}</div>\n";
+        print "<div class=\"client_menu_help box\">{$A['client_menu_help']}</div>\n";
 
     print "<ul class=\"client_menu\">\n";
     for( $i = 0; $i < $count; $i++ )

@@ -324,7 +324,7 @@ ccPlayerMethods = {
                         str += idarr[0].match(/[0-9]+$/) + ';';
                         return str;
                     });
-                    play_all.href = home_url + 'api/query' + q + 'f=m3u&nosort=1&ids=' + ids_str;
+                    play_all.href = query_url + 'f=m3u&nosort=1&ids=' + ids_str;
                 }
             }
             var play_win = $('_plw_' + playlist_id);
@@ -342,7 +342,7 @@ ccPlayerMethods = {
         var qs  = location.search.substring(1);
         var url = home_url + 'playlist/popup/' + playlist_id + q + qs;
         var dim = "height=300,width=550";
-        // var url = home_url + 'api/query' + q + 't=mplayerbig&f=html&playlist=' + playlist_id + '&' + qs;
+        // var url = query_url + 't=mplayerbig&f=html&playlist=' + playlist_id + '&' + qs;
         // var dim = "height=170, width=420";
         var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                       "resizable=1,scrollbars=1," + dim );

@@ -84,7 +84,7 @@ class CCPathAdminForm extends CCEditConfigForm
                array(  'label'      => $wflag . _('Avatar Directory'),
                        'form_tip'   => _("If blank, avatars are assumed to be in the user's upload directory."),
                        'writable'   => true,
-                       'value'      => 'localdir',
+                       'value'      => '',
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE );
 
