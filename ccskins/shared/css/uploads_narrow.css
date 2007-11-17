@@ -4,6 +4,9 @@
 	font-weight: bold;
 }
 
+#cc_narrow_list {
+	margin: 0px 2%;
+	}
 #cc_narrow_list td {
 	padding: 2px;
 	vertical-align: top;
@@ -23,3 +26,8 @@
 #cc_narrow_list td.rec_end {
 	height: 20px;
 }
+
+.small_ratings {
+	float: left;
+	margin-right: 15%;
+	}
