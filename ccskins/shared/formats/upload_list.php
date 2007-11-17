@@ -38,7 +38,12 @@ if( !empty($A['enable_playlists']) )
     $T->Call('playlist.tpl/playlist_menu');
 }
 
-print '<script> var dl_hook = new popupHookup("download_hook","download",str_download); dl_hook.hookLinks(); </script>';
+print '<script> var dl_hook = new popupHookup("download_hook","download",str_download); dl_hook.hookLinks(); ' . "\n";
+
+$src = $T->URL('images/stars/star-red-s.gif');
+print 'new ratingsHooks(null,"' . $src . '","ratings_stars_small"); ' . "\n";
+
+print '</script>';
 
 
 function helper_list_menu(&$R,$T)
@@ -60,24 +65,6 @@ function helper_list_menu(&$R,$T)
 
     if( !empty($menu['comment']['comments']) )
         helper_list_menu_item($menu['comment']['comments']);
-
-    if( !empty($R['ok_to_rate']) )
-    {
-        $mi = array();
-        $mi['action'] = 'javascript://rate';
-        if( !empty($R['thumbs_up']) )
-        {
-            $mi['menu_text'] = $T->String('str_recommend') ;
-            $tu = 'true';
-        }
-        else
-        {
-            $mi['menu_text'] = $T->String('str_list_rate_now') ;
-            $tu = 'false';
-        }
-        $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";
-        helper_list_menu_item($mi);
-    }
 
     if( !empty($menu['playlist']['playlist_menu']) )
         helper_list_menu_item($menu['playlist']['playlist_menu']);
@@ -142,11 +129,19 @@ function helper_list_info(&$R,&$A,$T)
                   <img src="{$licurl}" /></a> 
         <a href="{$furl}" class="upload_name"><span{$wrapper_class}>{$name}</span></a><br /> {$T->String('str_by')} 
                <a href="{$aurl}">{$R['user_real_name']}</a>
-        <div class="upload_date">$date </div>
-        <div class="taglinks">
-            
+        <div class="upload_date">
 EOF;
     print $html;
+
+    if( !empty($R['upload_num_scores']) || !empty($A['logged_in_as']) )
+    {
+        cc_get_ratings_info($R);
+        $A['record'] =& $R;
+        $T->Call('util.php/ratings_stars_small');
+    }
+        
+    print $date . '</div><div class="taglinks">';
+
     if( !empty($R['usertag_links']) )
     {
         $comma = '';
@@ -158,7 +153,7 @@ EOF;
     }
     
     print "\n     </div><!-- tags -->\n    ";
-    
+
     if( !empty($A['enable_playlists']) && !empty($R['fplay_url']) )
     {
         preg_match('%(http://[^/]+/)(.*)%',$R['fplay_url'],$m); // do this so no mp3 urls show up in the page
