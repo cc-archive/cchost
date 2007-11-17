@@ -1,8 +1,7 @@
 <? /*
 [meta]
     type     = list
-    desc     = _('Full whiz bang multiple upload listing')
-    dataview = page_links
+    desc     = _('Multiple upload listing')
 [/meta]
 */ ?>
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list.css') ?>" />
@@ -39,7 +38,7 @@ if( !empty($A['enable_playlists']) )
     $T->Call('playlist.tpl/playlist_menu');
 }
 
-print '<script> var dl_hook = new downloadHook(); dl_hook.hookLinks(); </script>';
+print '<script> var dl_hook = new popupHookup("download_hook","download",str_download); dl_hook.hookLinks(); </script>';
 
 
 function helper_list_menu(&$R,$T)
@@ -52,7 +51,6 @@ function helper_list_menu(&$R,$T)
     if( !empty($menu['play']['stream']) )
         helper_list_menu_item($menu['play']['stream']);
 
-    //if( !empty($menu['play']['download']) )
     $mi = array();
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
@@ -134,17 +132,16 @@ function helper_list_info(&$R,&$A,$T)
     $about_url =  empty($R['local_menu']['download'][0]['action']) ? '' : "about=\"{$R['local_menu']['download'][0]['action']}\"";
     $date = CC_datefmt($R['upload_date'],'M d, Y h:i a');
     $licurl = $T->URL('images/lics/small-' . $R['license_logo']);
-    $extraclass = empty($R['upload_name_cls']) ? '' : ' ' . $R['upload_name_cls'];
-    $class = "class =\"upload_link{$extraclass}\"";
+    $wrapper_class = empty($R['upload_name_cls']) ? '' : ' class="' . $R['upload_name_cls'] . '"';
     $html =<<<EOF
     <div class="upload_avatar"><img src="{$R['user_avatar_url']}" /></div>
     <div class="upload_info">
         <a class="lic_link" href="{$R['license_url']}" 
                   {$about_url}
-                  rel="license"
-                  title="{$R['license_name']}" >
+                  rel="license" title="{$R['license_name']}" >
                   <img src="{$licurl}" /></a> 
-        <a href="{$furl}" {$class}>{$name}</a><br /> {$T->String('str_by')} <a href="{$aurl}">{$R['user_real_name']}</a>
+        <a href="{$furl}" class="upload_name"><span{$wrapper_class}>{$name}</span></a><br /> {$T->String('str_by')} 
+               <a href="{$aurl}">{$R['user_real_name']}</a>
         <div class="upload_date">$date </div>
         <div class="taglinks">
             

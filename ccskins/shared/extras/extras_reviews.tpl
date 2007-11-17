@@ -2,7 +2,7 @@
 [meta]
     type = extras
     desc = _('Recent Reviews')
-
+[/meta]
 */
 
 $Rs = cc_recent_reviews();

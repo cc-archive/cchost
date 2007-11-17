@@ -14,7 +14,15 @@
   border-left: 1px solid #999; 
   border-right: 2px solid #444; 
   border-bottom: 2px solid #444; 
-  margin: 10px; 
-  padding: 20px; 
+  padding: 2px 6px 6px 6px; 
+  margin: 6px; 
+}
+.box h2 {
+    margin: -2px -6px 6px -6px;
+    padding: 3px;
+    text-align: center;
+    background-color: #AAA;
+    font-size: 95%;
 }
 </style>
+

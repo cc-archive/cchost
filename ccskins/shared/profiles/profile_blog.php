@@ -4,8 +4,8 @@
     skin-file         = ccskins/plain/skin.tpl
     desc              = _('Blog Style - narrow, 2 cols fixed')
     string_profile    = ccskins/shared/strings/all_media.php
-    list_file         = ccskins/shared/formats/page_narrow.php
-    list_files        = ccskins/shared/formats/uploads_narrow.php
+    list_file         = ccskins/shared/formats/upload_page_narrow.php
+    list_files        = ccskins/shared/formats/uploads_narrow.tpl
     form_fields       = form_fields.tpl/stacked_form_fields
     grid_form_fields  = form_fields.tpl/grid_form_fields
     tab_pos           = ccskins/shared/layouts/tab_pos_header.php

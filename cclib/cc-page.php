@@ -652,7 +652,7 @@ class CCPage extends CCSkin
         if( empty($limit) )
         {
             $configs  =& CCConfigs::GetTable();
-            $settings = $configs->GetConfig('settings');
+            $settings = $configs->GetConfig('skin-settings');
             $limit    = $settings['max-listing'];
             if( !$limit )
                 $limit = 10;

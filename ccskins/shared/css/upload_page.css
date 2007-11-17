@@ -2,22 +2,6 @@
 	margin-top: 1.1em;
 }
 
-#upload_menu_box {
-    float: left;
-    width: 210px;
-    margin-top: 25px;
-}
-
-#upload_sidebar_box {
-    float: right;
-    width: 250px;
-}
-
-#upload_middle {
-    margin-left: 230px;
-    margin-right: 270px;
-}
-
 #download_box ul {
     margin: 0px;
     padding: 0px;

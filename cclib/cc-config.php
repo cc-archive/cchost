@@ -211,8 +211,14 @@ class CCConfigs extends CCTable
 
         $CC_GLOBALS['home-url'] = ccl();
 
-        $settings = $configs->GetConfig('settings');
         $skin_settings = $configs->GetConfig('skin-settings');
+        if( empty($skin_settings) )
+        {
+            // old install? hack through this for now...
+            require_once('cclib/cc-skin-admin.php');
+            CCSkinAdmin::_load_profile('ccskins/shared/profiles/profile_cchost.php');
+        }
+        $settings = $configs->GetConfig('settings');
         $CC_GLOBALS = array_merge($CC_GLOBALS,$settings,$skin_settings);
 
         // allow admins to turn off user interface

@@ -330,6 +330,9 @@ class CCSkinAdmin
         if( !empty($save) && !empty($profile) && $profile == 'profile' && $save == 'save' )
             return $this->ProfileSave();
 
+        if( !empty($save) && !empty($profile) && $profile == 'profile' && $save == 'load' )
+            return $this->ProfileLoad();
+
         require_once('cclib/cc-template.inc');
         $config =& CCConfigs::GetTable();
         $skin_settings = $config->GetConfig('skin-settings');
@@ -384,12 +387,12 @@ class CCSkinAdmin
         else
         {
             $form->GetFormValues($values);
-            $this->_set_profile($values['skin_profile']);
+            $this->_load_profile($values['skin_profile']);
             CCUtil::SendBrowserTo(ccl('admin','skins'));
         }
     }
 
-    function _set_profile($skin_profile)
+    function _load_profile($skin_profile)
     {
         require_once('cclib/cc-template.inc');
         $props = CCTemplateAdmin::_get_format_props($skin_profile);
@@ -398,6 +401,25 @@ class CCSkinAdmin
         $props['skin_profile'] = $skin_profile;
         $config =& CCConfigs::GetTable();
         $config->SaveConfig('skin-settings',$props);
+        global $CC_GLOBALS;
+        $CC_GLOBALS = array_merge($CC_GLOBALS,$props);
+    }
+
+    function ProfileLoad()
+    {
+        if( empty($_GET['profile']) )
+            die('missing profile argument');
+        $file = CCUtil::Strip($_GET['profile']);
+        if( empty($file) )
+            die('invalid profile argument');
+        if( !file_exists($file) )
+        {
+            $file = 'ccskins/shared/profiles/' . $file;
+            if( !file_exists($file) )
+                die('can not find profile ' . $file );
+        }
+        $this->_load_profile($file);
+        CCUtil::SendBrowserTo(); // back to referrer
     }
 
     function ProfileSave()

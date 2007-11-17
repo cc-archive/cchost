@@ -167,7 +167,7 @@ var $$=function(a,b) {
     //Otherwise use our addon!
     if( a.search(/^\.[^ ]+$/) != -1 )
     { 
-        b = b || document;
+        b = (b && b.getElementsByClassName) ? b : document;
         return b.getElementsByClassName(a.substring(1));
     }
     return new SelectorLiteAddon(a.split(/\s+/)).get(b | document);

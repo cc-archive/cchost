@@ -360,7 +360,8 @@ ccPlayerMethods = {
     },
 
     initialize: function(playlist_id) {
-        this.hook_playlist(playlist_id);
+        if( playlist_id )
+            this.hook_playlist(playlist_id);
     }
 }
 

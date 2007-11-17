@@ -64,23 +64,30 @@ popupHook.prototype = {
     }
 }
 
-var downloadHook = Class.create();
+var popupHookup = Class.create();
 
-downloadHook.prototype = {
+popupHookup.prototype = {
 
-    initialize: function() {
+    className: '',
+    formatName: '',
+    title: '',
+
+    initialize: function(className,formatName,title) {
+        this.className = className;
+        this.formatName = formatName;
+        this.title = title;
     },
 
     hookLinks: function() {
         var me = this;
-        $$('.download_hook').each( function(link) {
-            var upload_id = link.id.match(/_ed_(.*)/)[1];
+        $$('.' + this.className).each( function(link) {
+            var upload_id = link.id.match(/[0-9]+$/);
             Event.observe( link, 'click', me.onClick.bindAsEventListener( me, upload_id ) );
         });
     },
 
     onClick: function( e, upload_id ) {
-        var url = query_url + 'f=html&t=download&ids=' + upload_id;
-        Modalbox.show( url, {title: str_download, width: 500} );
+        var url = query_url + 'f=html&t='+this.formatName+'&ids=' + upload_id;
+        Modalbox.show( url, {title: this.title, width: 500} );
     }
 }

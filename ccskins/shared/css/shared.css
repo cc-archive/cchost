@@ -1,0 +1,13 @@
+.cc_name_ban {
+   text-decoration: line-through;
+   color: red;
+   font-weight: normal;
+}
+
+.cc_name_hidden {
+   text-decoration: line-through;
+   color: #999;
+   font-weight: normal;
+   font-style: italic;
+}
+

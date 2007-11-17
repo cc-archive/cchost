@@ -669,6 +669,12 @@ class CCQuery
             CCDebug::PrintVar($x,false);
         }
 
+        if( !empty($_REQUEST['dump_rec']) && CCUser::IsAdmin() )
+        {
+            CCDebug::Enable(true);
+            CCDebug::PrintVar($records[0]);
+        }
+
         if( $format == 'count' )
         {
             return( array( "[$records]", 'text/plain' ) );
@@ -974,7 +980,7 @@ class CCQuery
         if( $args['format'] == 'page' )
         {
             $configs      =& CCConfigs::GetTable();
-            $settings     = $configs->GetConfig('settings');
+            $settings     = $configs->GetConfig('skin-settings');
             $admin_limit  = $settings['max-listing'];
         }
         else

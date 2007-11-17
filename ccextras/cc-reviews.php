@@ -169,7 +169,8 @@ class CCReviewsHV
         {
             $url = ccl('reviews', $record['user_name'], $record['upload_id']);
             $record['reviews_link'] = array( 'url' => $url,
-                                        'text' => sprintf(_("Reviews (%s)"),$count) );
+                                        'text' => sprintf(_("Reviews (%s)"),$count),
+                                        'count' => $count );
         }
     }
 

@@ -399,7 +399,12 @@ class CCPlaylists
     function With($upload_id='')
     {
         $this->_test_pl($upload_id,0,true,false,false);
+        $ret =& $this->_playlist_with($upload_id);
+        $this->_output($ret);
+    }
 
+    function & _playlist_with($upload_id)
+    {
         $cart = new CCPlaylist();
         $wuser['cart_user'] = $user = CCUser::CurrentUser();
         $wuser['cart_dynamic'] = '';
@@ -430,7 +435,7 @@ class CCPlaylists
             $ret['with']    = $cart->QueryKeyRows($carts_with);
         }
         $ret['upload_id'] = $upload_id;
-        $this->_output($ret);
+        return $ret;
     }
 
     function BrowsePL($playlist_id='')
@@ -482,7 +487,6 @@ class CCPlaylists
 
     function Popup($playlist_id='')
     {
-        //$this->_test_pl(0,$playlist_id,false,true,false);
         if( empty($playlist_id) )
         {
             $pl = $this->_get_default_playlist();

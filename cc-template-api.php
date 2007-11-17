@@ -256,5 +256,21 @@ function cc_get_value($arr,$key)
     return null;
 }
 
+/**
+* Returns arrays with the current users playlists:
+*  $ret['with'] are playlists that HAVE this upload
+*  $ret['without'] are playlists that do NOT have this upload
+* This structure can be passed to the playlist_popup menu
+* template macro as 'args':
+*
+*  $A['args'] =& cc_get_playlist_with(&$record);
+*  $T->Call('playlist.tpl/playlist_popup')
+*/
+function & cc_get_playlist_with(&$record)
+{
+    require_once('ccextras/cc-playlist.inc');
+    $ret =& CCPlaylists::_playlist_with($record['upload_id']);
+    return $ret;
+}
 
 ?>

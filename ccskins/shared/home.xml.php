@@ -1,6 +1,6 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
+?>
 <style >
 .hs
 {

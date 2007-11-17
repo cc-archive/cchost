@@ -14,6 +14,8 @@ ccUploadInfo.prototype = {
 
     hookInfos: function(class_i,parent) {
         
+        var found = false;
+
         try
         {
             var me = this;

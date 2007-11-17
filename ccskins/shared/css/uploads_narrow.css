@@ -1,6 +1,12 @@
 
+.upload_name {
+	font-size: 120%;
+	font-weight: bold;
+}
+
 #cc_narrow_list td {
 	padding: 2px;
+	vertical-align: top;
 }
 
 #cc_narrow_list th {
@@ -10,7 +16,10 @@
 }
 
 #cc_narrow_list td .upload_name {
-	margin-top: 18px;
 	display: block;
+	margin-bottom: 0.5em;
 	}
 
+#cc_narrow_list td.rec_end {
+	height: 20px;
+}

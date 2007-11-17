@@ -34,11 +34,22 @@ function _t_playlist_playlist_create_dyn($T,&$A) {
     }
   </script>
 <?}
+
 function _t_playlist_playlist_popup($T,&$A) {
-  $carr101 = $A['args']['with'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $A['R'] = $carr101[ $ck101[ $ci101 ] ];   ?><a href="<?= $A['home-url']?>api/playlist/remove/<?= $A['args']['upload_id']?>/<?= $A['R']['cart_id']?>" class="cc_playlist_menu_item"><span><?= $T->String('str_pl_remove_from')?> <span class="cc_playlist_name"><?= $A['R']['cart_name']?></span></span></a>
-<?}$carr102 = $A['args']['without'];$cc102= count( $carr102);$ck102= array_keys( $carr102);for( $ci102= 0; $ci102< $cc102; ++$ci102){    $A['R'] = $carr102[ $ck102[ $ci102 ] ]; ?><a href="<?= $A['home-url']?>api/playlist/add/<?= $A['args']['upload_id']?>/<?= $A['R']['cart_id']?>" class="cc_playlist_menu_item"><span><?= $T->String('str_pl_add_to')?> <span class="cc_playlist_name"><?= $A['R']['cart_name']?></span></span></a>
-<?}?><a href="<?= $A['home-url']?>api/playlist/new/<?= $A['args']['upload_id']?>" class="cc_playlist_menu_item cc_playlist_add_mi"><span><?=$T->String('str_pl_add_to_new')?></span></a>
-<?}
+
+foreach( $A['args']['with'] as $R )
+{  
+   ?><span><a href="<?= $A['home-url']?>api/playlist/remove/<?= $A['args']['upload_id']?>/<?= $R['cart_id']?>" class="cc_playlist_menu_item"><span><?= $T->String('str_pl_remove_from')?> <span class="cc_playlist_name"><?= $R['cart_name']?></span></span></a></span><?
+}
+
+foreach( $A['args']['without'] as $R )
+{ 
+ ?><span><a href="<?= $A['home-url']?>api/playlist/add/<?= $A['args']['upload_id']?>/<?= $R['cart_id']?>" class="cc_playlist_menu_item"><span><?= $T->String('str_pl_add_to')?> <span class="cc_playlist_name"><?= $R['cart_name']?></span></span></a></span><?
+}
+ 
+?><span><a href="<?= $A['home-url']?>api/playlist/new/<?= $A['args']['upload_id']?>" class="cc_playlist_menu_item cc_playlist_add_mi"><span><?=$T->String('str_pl_add_to_new')?></span></a></span>
+<?
+}
 
 
 function _t_playlist_playlist_browse($T,&$A) {
@@ -174,6 +185,7 @@ $T->Call('playerembed.xml/eplayer');
     new ccPagePlayer(<?= $A['args']['playlist']['cart_id']?>);
   </script>
 <?}
+
 function _t_playlist_playlist_show_browser($T,&$A) {
   ?>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>"  title="Default Style"></link>
@@ -186,6 +198,7 @@ function _t_playlist_playlist_show_browser($T,&$A) {
     var plb = new ccPlaylistBrowser( 'playlist_browser', <?= $A['args']?> );
   </script>
 <?}
+
 function _t_playlist_playlist_menu($T,&$A) {
   ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
@@ -194,6 +207,8 @@ function _t_playlist_playlist_menu($T,&$A) {
     new ccPlaylistMenu();
   </script>
 <?}
+
+
 function _t_playlist_playlist_edit_order($T,&$A) {
   ?>(not implemented)
 <?}?>
