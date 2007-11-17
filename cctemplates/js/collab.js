@@ -199,7 +199,7 @@ ccCollab.prototype = {
     onTagsOk: function(e, id) {
         this.msg( 'thinking...', 'working' );
         var value = $('tags_edit').value;
-        var url = home_url + 'collab/upload/tags/' + this.collab_id + '/' + id + '?tags=' + value;
+        var url = home_url + 'collab/upload/tags/' + this.collab_id + '/' + id + q + 'tags=' + value;
         new Ajax.Request( url, { method: 'get', onComplete: this._req_tagsupload.bind(this) } );
         this.closeTags();
     },
@@ -208,7 +208,7 @@ ccCollab.prototype = {
     onCreditOk: function(e, user_name) {
         this.msg( 'thinking...', 'working' );
         var value = $('credit_edit').value;
-        var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/credit?credit=' + value;
+        var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/credit' + q + 'credit=' + value;
         new Ajax.Request( url, { method: 'get', onComplete: this._req_credituser.bind(this) } );
         this.closeCredit();
     },
