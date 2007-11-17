@@ -31,6 +31,10 @@
     float: right;
     margin-right: 12px;
 }
+.small_stars {
+	float: right;
+	margin-right: 20px;
+}
 .upload_date {
     color: #888;
 }
