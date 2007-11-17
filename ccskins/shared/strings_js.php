@@ -43,6 +43,7 @@ var str_sampling_plus             ='<?=addslashes($T->String('str_lic_sampling_p
 var str_share_alike               ='<?=addslashes($T->String('str_lic_share_alike'))?>';
 var str_loading                   ='<?=addslashes($T->String('str_loading'))?>';
 var str_ok                        ='<?=addslashes($T->String('str_ok'))?>';
+var str_ratings                   ='<?=addslashes($T->String('str_ratings')) ?>';
 var str_see_results               ='<?=addslashes($T->String('str_see_results'))?>';
 var str_tags                      ='<?=addslashes($T->String('str_tags'))?>';
 var str_thinking                  ='<?=addslashes($T->String('str_thinking'))?>';

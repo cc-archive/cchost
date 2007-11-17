@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = wide
+
     image = layouts/images/layout015.gif
     desc = _('Liquid, secondary columns fixed-width (n.15)')
 [/meta]

@@ -40,7 +40,6 @@ ccUploadInfo.prototype = {
         try
         {
             var old_id = this.CloseInfo();
-            alert(old_id);
             var info_id = '__plinfo__' + upload_id;
             if( old_id == info_id )
                 return;
@@ -55,7 +54,7 @@ ccUploadInfo.prototype = {
             {
                 var url = query_url + 'f=html&t=info&ids=' + upload_id;
                 var y = (Event.pointerY(event) + 12), x = (Event.pointerX(event) - 50);
-                var html = '<div class="cc_playlist_info" id="' + info_id + '" ' +
+                var html = '<div class="info_popup" id="' + info_id + '" ' +
                            'style="display:none;position:absolute;height:auto;top:'+y+'px;left:'+x+'px"></div>';
                 new Insertion.After(Event.element(event),html);
                 //var link = '<a href="' + url + '">' + url + '</a>';

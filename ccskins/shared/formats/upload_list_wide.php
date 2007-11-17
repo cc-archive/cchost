@@ -4,7 +4,7 @@
     desc     = _('Multiple upload listing')
 [/meta]
 */ ?>
-<link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list.css') ?>" />
+<link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list_wide.css') ?>" />
 <?
 
 $carr103 =& $A['records'];
@@ -48,7 +48,7 @@ print '</script>';
 
 function helper_list_menu(&$R,$T)
 {
-    // see upload_page.xml.php for menu structure
+    // see upload_page_wide.php for menu structure
 
     $menu =& $R['local_menu'];
 

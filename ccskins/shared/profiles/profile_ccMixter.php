@@ -4,8 +4,8 @@
     skin-file         = ccskins/commons/skin.tpl
     desc              = _('ccMixter style, wide, menus on left, fancy tabs')
     string_profile    = ccskins/shared/strings/audio.php
-    list_file         = ccskins/shared/formats/upload_page.php
-    list_files        = ccskins/shared/formats/upload_list.php
+    list_file         = ccskins/shared/formats/upload_page_wide.php
+    list_files        = ccskins/shared/formats/upload_list_wide.php
     form_fields       = form_fields.tpl/form_fields
     grid_form_fields  = form_fields.tpl/grid_form_fields
     tab_pos           = ccskins/shared/layouts/tab_pos_header.php

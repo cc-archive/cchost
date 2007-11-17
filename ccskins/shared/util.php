@@ -238,4 +238,59 @@ function _t_util_prev_next_links($T,&$A)
 } // END: function prev_next_links
 
 
+function _t_util_ratings_stars($T,&$A)
+{
+    $R =& $A['record'];
+    if( !empty($R['ratings']) )
+    {
+        foreach( $R['ratings'] as $rsize ) // 'half' 'full'
+        {
+            $src = 'images/stars/star-' . $rsize . '.gif';
+            print '<img style="width:17px;height:17px;margin:0px;" src="' . $T->URL($src) . '" />';
+        }
+        print ' ' . $R['ratings_score'];
+    }
+}
+
+function _t_util_ratings_stars_small($T,&$A)
+{
+    $R =& $A['record'];
+    if( !empty($R['ratings']) || $R['ok_to_rate'] )
+    {
+        $id = $R['upload_id'];
+        if( $A['ajax'] )
+            print '<div>'; 
+        else
+            print '<div class="small_stars" id="rate_block_' . $id . '">';
+        $i = 1; 
+        if( empty($R['ratings']) )
+        {
+            // there are no existing, put out editable blank stars...
+
+            print $T->String('str_rate') . ': ';
+            for( $i = 1; $i < 6; $i++ )
+            {
+                $url = $T->URL('images/stars/star-empty-s.gif');
+                $info = 'id="rate_star_' . $i . '_' . $id . '" class="rate_star"';
+                print '<img '.$info.' style="width:10px;height:10px;margin:0px;" src="' . $url . '" />';
+            }
+        }
+        else
+        {
+            // there's already a rating, put out stars, editable if legal to do so...
+
+            foreach( $R['ratings'] as $rsize ) // 'half' 'full'
+            {
+                $src = 'images/stars/star-' . $rsize . '-s.gif';
+                $url = $T->URL($src);
+                $info = empty($R['ok_to_rate']) ? '' : 'id="rate_star_' . $i . '_' . $id . '" class="rate_star"';
+                print '<img '.$info.' style="width:10px;height:10px;margin:0px;" src="' . $url . '" />';
+                ++$i;
+            }
+            print ' ' . $R['ratings_score'];
+        }
+        print '</div>';
+    }
+}
+
 ?>

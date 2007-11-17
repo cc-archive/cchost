@@ -231,6 +231,7 @@ class CCRating
         
         require_once('cclib/cc-upload-table.php');
         require_once('cclib/cc-sync.php');
+        require_once('cclib/cc-ratings.inc');
 
         $uploads =& CCUploads::GetTable();
         $record =& $uploads->GetRecordFromID($upload_id);
@@ -259,7 +260,9 @@ class CCRating
         $record =& $uploads->GetRecordFromID($upload_id);
         CCRatingsHV::_fill_scores($record,'upload');
         $args['record'] = $record;
-        $template = new CCTemplateMacro( '', 'ratings_stars' );
+        $args['ajax'] = true;
+        $macro = empty($_REQUEST['rmacro']) ? 'ratings_stars' : CCUtil::Strip($_REQUEST['rmacro']);
+        $template = new CCSkinMacro($macro);
         $template->SetAllAndPrint($args);
         exit;
     }

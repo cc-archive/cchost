@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = narrow
+
     image = layouts/images/layout010.gif
     desc = _('Three fixed columns (n.10)')
 [/meta]

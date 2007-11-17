@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = wide
+
     image = layouts/images/layout030.gif
     desc = _('Two flexible columns and one larger (n.30)')
 [/meta]

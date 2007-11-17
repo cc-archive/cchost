@@ -646,10 +646,10 @@ class CCSkinMacro extends CCSkin
 {
     var $_skin_macro;
 
-    function CCSkinMacro($macro,$mapfile='')
+    function CCSkinMacro($macro)
     {
         global $CC_GLOBALS;
-        $this->CCSkin(empty($mapfile) ? $CC_GLOBALS['skin-file'] : $mapfile, true );
+        $this->CCSkin($CC_GLOBALS['skin-file']);
         $this->_skin_macro = $macro;
     }
 

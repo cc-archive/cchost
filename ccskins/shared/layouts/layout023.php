@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = wide
+
     image = layouts/images/layout023.gif
     desc = _('Two columns liquid, side fixed (n.23)')
 [/meta]

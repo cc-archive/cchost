@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = narrow
+
     image = layouts/images/layout039.gif
     desc = _('One column fixed and two halves (n.39)')
 [/meta]

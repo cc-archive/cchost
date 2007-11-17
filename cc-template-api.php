@@ -238,8 +238,13 @@ function cc_get_upload_menu(&$record)
 
 function cc_get_ratings_info(&$record)
 {
-    require_once('cclib/cc-ratings.php');
-    CCRating::GetRatingsInfo($record);
+    $configs =& CCConfigs::GetTable();
+    $chart = $configs->GetConfig('chart');
+    if( !empty($chart['ratings']) )
+    {
+        require_once('cclib/cc-ratings.php');
+        CCRating::GetRatingsInfo($record);
+    }
 }
 function cc_get_remix_history(&$records,$max)
 {

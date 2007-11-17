@@ -5,7 +5,7 @@
     dataview = narrow_list
 [/meta]
 %%
-<link rel="stylesheet" href="<?= $T->URL('css/uploads_narrow.css'); ?>"  title="Default Style" type="text/css" />
+<link rel="stylesheet" href="<?= $T->URL('css/upload_list_narrow.css'); ?>"  title="Default Style" type="text/css" />
 <div  id="cc_narrow_list">
 <ul>
 <table cellspacing="0" cellpadding="0"  >

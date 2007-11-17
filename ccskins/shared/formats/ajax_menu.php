@@ -48,25 +48,6 @@ if( !empty($menu['owner']) )
 if( !empty($menu['comment']['comments']) )
     helper_ajax_menu_item($menu['comment']['comments']);
 
-if( !empty($R['ok_to_rate']) )
-{
-    $mi = array();
-    $mi['action'] = 'javascript://rate';
-    if( !empty($R['thumbs_up']) )
-    {
-        $mi['menu_text'] = $T->String('str_recommend') ;
-        $tu = 'true';
-    }
-    else
-    {
-        $mi['menu_text'] = $T->String('str_list_rate_now') ;
-        $tu = 'false';
-    }
-    $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";
-    helper_ajax_menu_item($mi);
-}
-
-
 if( !empty($menu['share']['share_link']) )
     helper_ajax_menu_item($menu['share']['share_link']);
 

@@ -37,4 +37,5 @@ div#upload_sidebar_box
 
 </style>
 
-<? $T->Call('formats/upload_page_shared.php')?>
+<? $T->Call('formats/upload_page_shared.php') ?>
+

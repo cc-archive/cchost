@@ -133,7 +133,7 @@ class CCSkinSettingsForm extends CCEditConfigForm
 
         $fields['string_profile'] =
             array( 'label'       => _('String Profile'),
-                   'form_tip'    => _('Default profile for display strings'),
+                   'form_tip'    => _('Default profile for display text in tabs, prompts, menus, etc.'),
                    'formatter'   => 'select',
                    'options'     => $str_profiles,
                    'flags'       => CCFF_POPULATE );
@@ -142,14 +142,14 @@ class CCSkinSettingsForm extends CCEditConfigForm
                    'form_tip'    => _('Use this template when showing a single upload page'),
                    'formatter'   => 'raw_select',
                    'options'     => $page_format_files,
-                   'value'       => 'ccskins/shared/formats/upload_page.php',
+                   'value'       => 'ccskins/shared/formats/upload_page_wide.php',
                    'flags'       => CCFF_POPULATE_WITH_DEFAULT );
         $fields['list_files'] =
             array( 'label'       => _('Upload Listing Format'),
                    'form_tip'    => _('Use this template when listing multiple files'),
                    'formatter'   => 'raw_select',
                    'options'     => $list_format_files,
-                   'value'       => 'ccskins/shared/formats/upload_list.php',
+                   'value'       => 'ccskins/shared/formats/upload_list_wide.php',
                    'flags'       => CCFF_POPULATE_WITH_DEFAULT );
         $fields['max-listing'] =
             array( 'label'       => _('Max Items Per Page'),
@@ -159,7 +159,7 @@ class CCSkinSettingsForm extends CCEditConfigForm
                    'flags'       => CCFF_POPULATE | CCFF_REQUIRED);
         $fields['skin-file'] =
             array( 'label'       => _('Base Skin Template'),
-                   'form_tip'    => _('Default skin template for this profile'),
+                   'form_tip'    => _('Default skin template for this profile (Advanced)'),
                    'formatter'   => 'select',
                    'options'     => $skins,
                    'flags'       => CCFF_POPULATE );
@@ -198,7 +198,7 @@ class CCSkinLayoutForm extends CCEditConfigForm
 */ 
         $fields['form_fields'] =
             array( 'label'       => _('Form Fields Style'),
-                   'form_tip'    => _('Choice the formatting of regular forms'),
+                   'form_tip'    => _('Choice the formatting of regular submit and user profile forms'),
                    'formatter'   => 'select',
                    'value'       => 'form_fields.tpl/form_fields',
                    'options'     => array(
@@ -221,7 +221,7 @@ class CCSkinLayoutForm extends CCEditConfigForm
 
         $fields['tab_pos'] = array(
                 'label'     => _('Tab Positions'),
-                'formatter' => 'skin_prop',
+                'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_layouts',
                 'scroll'    => false,
                 'props'     => CCTemplateAdmin::GetLayouts('tab_pos'),
@@ -230,7 +230,7 @@ class CCSkinLayoutForm extends CCEditConfigForm
 
         $fields['box_shape'] = array(
                 'label'     => _('Box Shapes'),
-                'formatter' => 'skin_prop',
+                'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_layouts',
                 'scroll'    => false,
                 'props'     => CCTemplateAdmin::GetLayouts('box_shape'),
@@ -239,7 +239,7 @@ class CCSkinLayoutForm extends CCEditConfigForm
 
         $fields['page_layout'] = array(
                 'label'     => _('Page Layout'),
-                'formatter' => 'skin_prop',
+                'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_layouts',
                 'scroll'    => true,
                 'props'     => CCTemplateAdmin::GetLayouts('layout'),
@@ -254,15 +254,6 @@ class CCSkinLayoutForm extends CCEditConfigForm
     }
 }
 
-function generator_skin_prop($form,$varname,$value,$class='')
-{
-    return $form->generator_metalmacro($varname,$value,$class);
-}
-
-function validator_skin_prop($form,$fieldname)
-{
-    return true;
-}
 
 
 /**
@@ -281,7 +272,7 @@ class CCAdminColorSchemesForm extends CCEditConfigForm
 
         $fields['font_scheme'] = array(
                 'label'     => _('Fonts'),
-                'formatter' => 'skin_prop',
+                'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_font_schemes',
                 'scroll'    => false,
                 'props'     => CCTemplateAdmin::GetFonts(),
@@ -290,7 +281,7 @@ class CCAdminColorSchemesForm extends CCEditConfigForm
 
         $fields['font_size'] = array(
                 'label'     => _('Font Size'),
-                'formatter' => 'skin_prop',
+                'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_font_schemes',
                 'scroll'    => false,
                 'props'     => CCTemplateAdmin::GetFontSizes(),
@@ -299,7 +290,7 @@ class CCAdminColorSchemesForm extends CCEditConfigForm
 
         $fields['color_scheme'] = array(
                 'label'     => _('Color Scheme'),
-                'formatter' => 'skin_prop',
+                'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_color_schemes',
                 'scroll'    => true,
                 'props'     => CCTemplateAdmin::GetColors(),
@@ -338,7 +329,7 @@ class CCSkinAdmin
         $skin_settings = $config->GetConfig('skin-settings');
         if( empty($skin_settings['skin_profile']) )
         {
-            $msg = _('There is no profile skin set, this is probably a bad thing');
+            $msg = _('There is no skin profile set, this is probably a bad thing');
         }
         else
         {
@@ -350,11 +341,11 @@ class CCSkinAdmin
 
         $args[] = array( 'action'    => ccl('admin','skins','profiles'),
                          'menu_text' => _('Load a Profile'),
-                         'help'      => _('Start here to pick from an existing profile') );
+                         'help'      => _('Start here to pick from an existing skin profile') );
 
         $args[] = array( 'action'    => ccl('admin','skins','settings'),
                          'menu_text' => _('Basic Settings'),
-                         'help'      => _('Message types, listing choices, etc.') );
+                         'help'      => _('String profile, listing choices, etc.') );
 
         $args[] = array( 'action'    => ccl('admin','skins','layout'),
                          'menu_text' => _('Layouts'),
@@ -365,7 +356,7 @@ class CCSkinAdmin
                          'help'      => _('Fonts and colors') );
 
         $args[] = array( 'action'    => ccl('admin','skins','profile', 'save'),
-                         'menu_text' => _('Save this Profile'),
+                         'menu_text' => _('Save this Skin Profile'),
                          'help'      => _('Save the current settings to your own profile') );
 
         $args[] = array( 'action'    => ccl('admin','skins','create' ),

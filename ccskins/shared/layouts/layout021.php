@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = wide
+
     image = layouts/images/layout021.gif
     desc = _('Liquid, three columns, hybrid widths (n.21)')
 [/meta]

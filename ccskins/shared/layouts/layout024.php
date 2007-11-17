@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = wide
+
     image = layouts/images/layout024.gif
     desc = _('Class ccHost - 2 cols, side fixed (n.24)')
 [/meta]

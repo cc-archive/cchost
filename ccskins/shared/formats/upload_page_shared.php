@@ -45,11 +45,20 @@ print '<div id="upload_menu_box">' . "\n";
 helper_uploads_do_menus($R,$A,$T);
 print '</div><!-- upload_menu_box -->' . "\n";
 
+print '<script>';
 
-print '<script> var dl_hook = new popupHookup(); dl_hook.hookLinks(); ';
-print '<script> var dl_hook = new popupHookup("download_hook","download",str_download); dl_hook.hookLinks(); ';
+if( $R['ok_to_rate'] )
+{
+    $empty_star = $T->URL('images/stars/star-empty.gif');
+    $edit_star  = $T->URL('images/stars/star-red.gif');
+    print "new ratingsHooks('{$empty_star}','{$edit_star}');\n";
+}
+
+print 'var dl_hook = new popupHookup("download_hook","download",str_download); dl_hook.hookLinks(); ' . "\n";
+
 if( !empty($R['upload_name_cls']) )
-    print "\n var h1e = \$\$('H1.title')[0]; h1e.innerHTML = '<span class=\"{$R['upload_name_cls']}\">' + h1e.innerHTML + '</span>';  ";
+    print "var h1e = \$\$('H1.title')[0]; h1e.innerHTML = '<span class=\"{$R['upload_name_cls']}\">' + h1e.innerHTML + '</span>';\n";
+
 print '</script>';
 
 
@@ -149,24 +158,6 @@ function helper_uploads_do_menus(&$R,&$A,$T)
 
     if( !empty($menu['comment']['comments']) )
         helper_upload_menu_item($menu['comment']['comments']);
-
-    if( !empty($R['ok_to_rate']) )
-    {
-        $mi = array();
-        $mi['action'] = 'javascript://rate';
-        if( !empty($R['thumbs_up']) )
-        {
-            $mi['menu_text'] = $T->String('str_recommend') ;
-            $tu = 'true';
-        }
-        else
-        {
-            $mi['menu_text'] = $T->String('str_list_rate_now') ;
-            $tu = 'false';
-        }
-        $mi['onclick'] = "upload_rate('{$R['upload_id']}', $tu );";
-        helper_upload_menu_item($mi);
-    }
 
     if( !empty($menu['playlist']['playlist_menu']) )
         helper_upload_menu_item($menu['playlist']['playlist_menu']);
@@ -393,6 +384,31 @@ function helper_upload_main_info(&$R,&$A,$T)
     if( !empty($R['files']['0']['file_format_info']['ps']) )
         print "<tr><th>{$T->String('str_list_length')}</th><td>{$R['files']['0']['file_format_info']['ps']}</td></tr>\n";
     
+    if( empty($R['thumbs_up']) )
+    {
+    
+        /* We output the structure, even if it's empty because if this user 
+           can rate it will be filled by an ajax call back
+        */
+        $str_ratings = empty($R['ratings']) ? '' : $T->String('str_ratings');
+        print '<tr><th id="rate_label_' . $R['upload_id'] . '">'.$str_ratings.'</th><td> <span id="rate_block_' . $R['upload_id'] . '">';
+        helper_print_stars($T,$A);
+        print '</span></td></tr>';
+        
+        if( $R['ok_to_rate'] )
+        {
+            $src = $T->URL('images/stars/star-empty.gif');
+            print '<tr><th id="rate_head_'.$R['upload_id'].'">' . $T->String('str_rate') . 
+                     '</th><td style="padding:0px" id="rate_edit_'.$R['upload_id'].'">';
+            for( $i = 1; $i < 6; $i++ )
+            {
+                print "\n" . '<img id="rate_star_' . $i . '_' . $R['upload_id'] . '" style="margin:0px;" class="rate_star" src="' . $src . '" />';
+            }
+            print '</td></tr>';
+        }
+    }
+
+
     print "</table>\n";
 
     if( !empty( $R['upload_description_html'] ) )
@@ -435,6 +451,12 @@ function helper_upload_main_info(&$R,&$A,$T)
         print "</div>\n";
     }
 
+}
+
+function helper_print_stars($T,&$A)
+{
+    require_once('ccskins/shared/util.php');
+    _t_util_ratings_stars($T,$A);
 }
 
 ?>

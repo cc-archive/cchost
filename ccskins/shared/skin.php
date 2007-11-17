@@ -10,6 +10,8 @@ $A['prev_next_links']      = 'util.php/prev_next_links';
 $A['print_bread_crumbs'] = 'util.php/print_bread_crumbs';
 $A['print_client_menu'] = 'util.php/print_client_menu';
 $A['format_sig'] = 'util.php/format_signature';
+$A['ratings_stars'] = 'util.php/ratings_stars';
+$A['ratings_stars_small'] = 'util.php/ratings_stars_small';
 
 $A['admin_menu_page']    = 'admin.php/print_admin_menu';
 
@@ -23,6 +25,7 @@ $A['comment_thread'] = 'file_macros.php/request_reviews';
 $A['show_zip_dir'] = 'file_macros.php/show_zip_dir';
 $A['upload_banned'] = 'file_macros.php/upload_banned';
 $A['upload_not_published'] = 'file_macros.php/upload_not_published';
+
 
 $A['user_listings'] = 'user_list.tpl';
 $A['user_listing']  = 'user_profile.tpl';

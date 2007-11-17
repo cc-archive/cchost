@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = narrow
+
     image = layouts/images/layout040.gif
     desc = _('One column fixed and two halves (n.40)')
 [/meta]

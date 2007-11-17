@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = narrow
+
     image = layouts/images/layout033.gif
     desc = _('Blog Style - narrow, 2 cols fixed (n.33)')
 [/meta]

@@ -1,6 +1,8 @@
 <?/*
 [meta]
-    type = layout
+    type  = layout
+    style = narrow
+
     image = layouts/images/layout038.gif
     desc = _('Two colums fixed (n.38)')
 [/meta]
