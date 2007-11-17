@@ -32,9 +32,18 @@
    <tr><th>%text(str_license)%</th>
      <td><a href="%(#R/license_url)%"><img src="%(root-url)%ccskins/shared/images/lics/small-%(#R/license_logo)%" /></a></td>
    </tr>
-   %if_not_null(#R/reviews_link)%
-    <tr><td /><td><a href="%(#R/reviews_link/url)%">%text(str_reviews)% (%(#R/reviews_link/count)%)</a></td></tr>
+    <tr><td /><td>
+   %if_null(thumbs_up)%
+        %if_not_null(#R/upload_num_scores)%
+            <? cc_get_ratings_info($R); ?>
+            %map(record,#R)%
+            %call('util.php/ratings_stars_small')%
+        %end_if%
    %end_if%
+   %if_not_null(#R/reviews_link)%
+        <a href="%(#R/reviews_link/url)%">%text(str_reviews)% (%(#R/reviews_link/count)%)</a>
+   %end_if%
+   </td></tr>
     <tr><td class="rec_end" colspan="2"></td></tr>
    
 %end_loop%
