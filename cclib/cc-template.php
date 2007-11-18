@@ -57,6 +57,20 @@ class CCSkin
         $this->vars['noproto']      = false;
         $this->vars['ajax']         = !empty($_REQUEST['ajax']);
 
+        // this seems like (memory) overkill, need to optimize
+        $this->vars = array_merge($CC_GLOBALS,$this->vars);
+
+        if( CCUser::IsLoggedIn() )
+        {
+            $this->vars['logged_in_as'] = CCUser::CurrentUserName();
+            $this->vars['logout_url'] = ccl('logout');
+            $this->vars['is_logged_in'] = 1;
+        } else {
+            $this->vars['is_logged_in'] = 0;
+        }
+        $this->vars['is_admin']  = CCUser::IsAdmin();
+        $this->vars['not_admin'] = !$this->vars['is_admin'];
+
         $this->template_stack = array();
         $this->map_stack = array();
         $this->files = array();
@@ -110,22 +124,10 @@ class CCSkin
     */
     function SetAllAndPrint($args)
     {
-        global $CC_GLOBALS;
-
         $snapshot = $this->vars; // make this instance reusable (this is not tested)
-
-        $this->vars = array_merge($CC_GLOBALS,$this->vars,$args);
-
-        if( CCUser::IsLoggedIn() )
-        {
-            $this->vars['logged_in_as'] = CCUser::CurrentUserName();
-            $this->vars['logout_url'] = ccl('logout');
-            $this->vars['is_logged_in'] = 1;
-        } else {
-            $this->vars['is_logged_in'] = 0;
-        }
-        $this->vars['is_admin']  = CCUser::IsAdmin();
-        $this->vars['not_admin'] = !$this->vars['is_admin'];
+    
+        if( !empty($args) )
+            $this->vars = array_merge($this->vars,$args);
 
         if( $this->html_mode )
         {
@@ -239,7 +241,20 @@ class CCSkin
     * @param mixed  $value The value that will be substituted for the 'name'
     * @param string $macroname The name of a specific macro to invoke during template generation
     */
-    function Call($file)
+    function Call($macropath)
+    {
+        list( $filename, $funcname ) = $this->LookupMacro($macropath);
+        if( function_exists($funcname) )
+        {
+            // the file is already in memory, just call the function
+            $funcname($this,$this->vars);
+            return;
+        }
+        $this->_inner_include($filename,$funcname);
+    }
+
+
+    function LookupMacro($macropath)
     {
         global $CC_GLOBALS;
 
@@ -247,40 +262,35 @@ class CCSkin
 
         $funcname = '';
 
-        if( !preg_match('#[\./]#',$file) && !empty($this->vars[$file]) )
-            $file = $this->vars[$file];
+        if( !preg_match('#[\./]#',$macropath) && !empty($this->vars[$macropath]) )
+            $macropath = $this->vars[$macropath];
 
-        if( preg_match( '/\.(xml|html?|php|inc|tpl)$/', $file, $m ) )
+        if( preg_match( '/\.(xml|html?|php|inc|tpl)$/', $macropath, $m ) )
         {
             // this is no macro on the end
 
-            if( is_file($file) )
+            if( is_file($macropath) )
             {
                 // a full path was passed in, we're done
-                $this->_inner_include($file);
-                return;
+                return array( $macropath, '' );
             }
 
-            $filename = $file;
+            $filename = $macropath;
         }
         else
         {
-            $macro  = basename($file);
-            $filename = dirname($file); // call dirname to strip off the macro this is the filepart 
+            $macro  = basename($macropath);
+            $filename = dirname($macropath); // call dirname to strip off the macro this is the filepart 
 
             if( !empty($filename) && ($filename{0} != '.') )
             {
                 $funcname = '_t_' . preg_replace( '/((?:\.)[^\.]+$|[^a-zA-Z0-9\.]+)/', '_', basename($filename)) . $macro;
                 if( function_exists($funcname) )
-                {
-                    // the file is already in memory, just call the function
-                    $funcname($this,$this->vars);
-                    return;
-                }
+                    return array( $filename, $funcname );
             }
             else
             {
-                $filename = $file;
+                $filename = $macropath;
             }
         }
 
@@ -291,12 +301,13 @@ class CCSkin
 
         if( empty($path) )
         {
-            print( "<h3>Can't find template: <span style='color:red'>$file</span></h3>");
+            print( "<h3>Can't find template: <span style='color:red'>$macropath</span></h3>");
             CCDebug::PrintVar($this);
         }
 
-        $this->_inner_include($path,$funcname);
+        return array( $path, $funcname );
     }
+
 
 
     /**
@@ -445,7 +456,6 @@ class CCSkin
         if( empty($this->search_cache[$sfile]) )
         {
             $dirs = $this->GetTemplatePath();
-            //if( is_string($file) && strstr($file,'playlist.js') ) { $x[] = $file; $x[] = $dirs; CCDebug::PrintVar($x); }
             $found = CCUtil::SearchPath( $file, $dirs, '', $real_path, CC_SEARCH_RECURSE_DEFAULT);
             $this->search_cache[$sfile] = $found;
             return $found;
@@ -653,6 +663,13 @@ class CCSkinMacro extends CCSkin
         $this->_skin_macro = $macro;
     }
 
+    function LookupMacro($macropath='')
+    {
+        if( empty($macropath) )
+            $macropath = $this->_skin_macro;
+        return parent::LookupMacro($macropath);
+    }
+    
     function SetAllAndPrint( $args )
     {
         $args['auto_execute'][] = $this->_skin_macro;

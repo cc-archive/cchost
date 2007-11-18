@@ -178,11 +178,11 @@ class CCAdminTemplateTagsForm extends CCEditConfigForm
         foreach( $ttags as $K => $V )
         {
             $fields[$K] =
-                       array(  'label'       => '%(' . $K . ')%',
-                               'form_tip'    => '',
-                               'formatter'   => strlen($V) > 80 ? 'textarea' : 'textedit',
-                               'value'       => htmlspecialchars($V),
-                               'flags'       => CCFF_NOSTRIP );
+               array(  'label'       => '%(' . $K . ')%',
+                       'form_tip'    => '',
+                       'formatter'   => strlen($V) > 80 ? 'textarea' : 'textedit',
+                       'value'       => htmlspecialchars($V),
+                       'flags'       => CCFF_NOSTRIP );
 
         }
         $this->AddFormFields($fields);
@@ -222,7 +222,7 @@ class CCTemplateAdmin
 {
     function OnAdminExtras()
     {
-        CCPage::SetTitle(_("Sidebar Content"));
+        CCPage::SetTitle(_("Sidebar Extras Content"));
         $form = new CCExtrasForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -312,6 +312,20 @@ class CCTemplateAdmin
     function GetExtras()
     {
         return CCTemplateAdmin::_get_meta_type('extras','extras');
+    }
+
+    function GetDataView($template)
+    {
+        $skinmac = new CCSkinMacro($template);
+        list( $file, $macro ) = $skinmac->LookupMacro();
+        if( empty($file) )
+            return null;
+        $props = CCTemplateAdmin::_get_format_props($file);
+        if( empty($props['dataview']) )
+            return null;
+        global $CC_GLOBALS;
+        $props['file'] = CCUtil::SearchPath( $props['dataview'] . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
+        return $props;
     }
 
     function _get_meta_type($sub_dir,$type,$ret_files=true)

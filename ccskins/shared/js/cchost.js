@@ -119,19 +119,20 @@ ratingsHooks.prototype = {
         if( rlabel )
             rlabel.innerHTML = str_ratings;
 
-        var hname = $("rate_head_" + id);
-        if( hname )
-            hname.style.display = 'none';
+        var h_elem = $("rate_head_" + id);
+        if( h_elem )
+            h_elem.style.display = 'none';
 
-        var bname = $("rate_edit_" + id);
-        if( bname )
-            bname.style.display = 'none';
+        var b_elem = $("rate_edit_" + id);
+        if( b_elem )
+            b_elem.style.display = 'none';
 
-        var dname = "rate_block_" + id;
+        var d_elem = $("rate_block_" + id);
+        d_elem.innerHTML = '...';
         var url = home_url + "rate/" + id + "/" + num;
         if( this.return_macro )
             url += q + 'rmacro=' + this.return_macro;
-        new Ajax.Updater($(dname),url);
+        new Ajax.Updater(d_elem,url);
 
     },
     onRateOff: function(event,id,num) {
@@ -149,5 +150,27 @@ ratingsHooks.prototype = {
             var img = $('rate_star_' + num + '_' + id);
             img.src = this.full_star_url;
         }
+    }
+}
+
+var recommendsHooks = Class.create();
+
+recommendsHooks.prototype = {
+
+    return_macro: null,
+    initialize: function(return_macro) {
+        $$('.recommend_link').each( function(e) {
+            var id = e.id.match(/[0-9]+$/);
+            Event.observe(img,'click',me.onRecommendClick.bindAsEventListener(me,id));
+        });
+    },
+
+    onRecommendClick: function(event,id) {
+        var d_elem = $("recommend_block_" + id);
+        d_elem.innerHTML = '...';
+        var url = home_url + "rate/" + id + "/5";
+        if( this.return_macro )
+            url += q + 'rmacro=' + this.return_macro;
+        new Ajax.Updater(d_elem,url);
     }
 }

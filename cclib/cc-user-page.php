@@ -109,18 +109,17 @@ class CCUserPage
 
     function Uploads($username,$tagfilter='')
     {
-        //CCPage::PageArg('browse_user','query_browser.xml/browse_user');
-        //CCPage::PageArg('user_to_browse', $username, 'browse_user');
-
         $where['user_name'] = $username;
         $users =& CCUsers::GetTable();
-        $title = $users->QueryItem('user_real_name',$where);
+        $q = 'title=' . $users->QueryItem('user_real_name',$where);
         if( !empty($tagfilter) )
-            $title .= ' (' . $tagfilter .')';
-        CCPage::SetTitle($title);
-        require_once('cclib/cc-upload.php');
-        CCUpload::ListMultipleFiles($where,$tagfilter);
-        $this->_show_feed_links($username);
+            $q .= ' (' . $tagfilter .')&tags=' . $tagfilter;
+        $q .= '&user=' . $username . '&t=list_files&f=page';
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $query->ProcessAdminArgs($q);
+        $query->Query();
+        //$this->_show_feed_links($username);
     }
 
     // er, copied from user.inc

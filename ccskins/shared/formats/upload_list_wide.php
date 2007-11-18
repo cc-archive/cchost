@@ -1,7 +1,7 @@
 <? /*
 [meta]
     type     = list
-    desc     = _('Multiple upload listing')
+    desc     = _('Multiple upload listing (wide)')
 [/meta]
 */ ?>
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list_wide.css') ?>" />
@@ -40,8 +40,11 @@ if( !empty($A['enable_playlists']) )
 
 print '<script> var dl_hook = new popupHookup("download_hook","download",str_download); dl_hook.hookLinks(); ' . "\n";
 
-$src = $T->URL('images/stars/star-red-s.gif');
-print 'new ratingsHooks(null,"' . $src . '","ratings_stars_small"); ' . "\n";
+if( !empty($A['need_ratings_hooks']) )
+{
+    $src = $T->URL('images/stars/star-red-s.gif');
+    print 'new ratingsHooks(null,"' . $src . '","ratings_stars_small"); ' . "\n";
+}
 
 print '</script>';
 
@@ -133,11 +136,27 @@ function helper_list_info(&$R,&$A,$T)
 EOF;
     print $html;
 
-    if( !empty($R['upload_num_scores']) || !empty($A['logged_in_as']) )
+    if( empty($R['thumbs_up']) )
     {
-        cc_get_ratings_info($R);
-        $A['record'] =& $R;
-        $T->Call('util.php/ratings_stars_small');
+        if( !empty($R['upload_num_scores']) || !empty($A['logged_in_as']) )
+        {
+            cc_get_ratings_info($R);
+            if( !empty($A['logged_in_as']) )
+                $A['need_ratings_hooks'] = 1;
+            $A['record'] =& $R;
+            $T->Call('util.php/ratings_stars_small');
+        }
+    }
+    else
+    {
+        if( !empty($R['upload_num_ratings']) || !empty($A['logged_in_as']) ) 
+        {
+            cc_get_ratings_info($R);
+            if( !empty($A['logged_in_as']) )
+                $A['need_recommend_hooks'] = true;
+            print '<div class="recommend_block" id="recommend_block_' . $R['upload_id'] . '">' . $T->String('str_recommends') .
+                      ' ' . $R['ratings_score'] . '</div>';
+        } 
     }
         
     print $date . '</div><div class="taglinks">';

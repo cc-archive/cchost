@@ -30,6 +30,7 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cclib/cc-defines-events.php');
 require_once('cclib/cc-defines-access.php');
+require_once('cclib/cc-defines-filters.php');
 
 /**
  * The name of this software. This is to not be changed.

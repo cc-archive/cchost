@@ -47,11 +47,15 @@ print '</div><!-- upload_menu_box -->' . "\n";
 
 print '<script>';
 
-if( $R['ok_to_rate'] )
+if( !empty($A['need_ratings_hooks'] ) )
 {
     $empty_star = $T->URL('images/stars/star-empty.gif');
     $edit_star  = $T->URL('images/stars/star-red.gif');
     print "new ratingsHooks('{$empty_star}','{$edit_star}');\n";
+}
+
+if( !empty($A['need_recommends_hooks'] ) )
+{
 }
 
 print 'var dl_hook = new popupHookup("download_hook","download",str_download); dl_hook.hookLinks(); ' . "\n";
@@ -392,22 +396,34 @@ function helper_upload_main_info(&$R,&$A,$T)
         */
         $str_ratings = empty($R['ratings']) ? '' : $T->String('str_ratings');
         print '<tr><th id="rate_label_' . $R['upload_id'] . '">'.$str_ratings.'</th><td> <span id="rate_block_' . $R['upload_id'] . '">';
+        $A['record'] =& $R;
         helper_print_stars($T,$A);
         print '</span></td></tr>';
         
         if( $R['ok_to_rate'] )
         {
+            $A['need_ratings_hooks'] = true;
             $src = $T->URL('images/stars/star-empty.gif');
             print '<tr><th id="rate_head_'.$R['upload_id'].'">' . $T->String('str_rate') . 
                      '</th><td style="padding:0px" id="rate_edit_'.$R['upload_id'].'">';
             for( $i = 1; $i < 6; $i++ )
             {
-                print "\n" . '<img id="rate_star_' . $i . '_' . $R['upload_id'] . '" style="margin:0px;" class="rate_star" src="' . $src . '" />';
+                print '<img id="rate_star_' . $i . '_' . $R['upload_id'] . '" style="height:17px;width:17px;margin:0px;" class="rate_star" src="' . $src . '" />';
             }
             print '</td></tr>';
         }
     }
-
+    else
+    {
+        if( !empty($R['upload_num_ratings']) || !empty($R['ok_to_rate']) ) 
+        {
+            cc_get_ratings_info($R);
+            if( !empty($A['ok_to_rate']) )
+                $A['need_recommend_hooks'] = true;
+            print '<tr><th>' . $T->String('str_recommends') . '</th><td class="recommend_block" id="recommend_block_' . $R['upload_id'] . '>'
+                    . $R['ratings_score'] . '</td></tr>';
+        } 
+    }
 
     print "</table>\n";
 

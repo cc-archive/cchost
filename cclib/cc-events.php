@@ -111,12 +111,7 @@ class CCEvents
     function AddHandler($eventname, $callback, $includefile='')
     {
         $events =& CCEvents::_events();
-        if( array_key_exists($eventname,$events) )
-            $handlers = $events[$eventname];
-        else
-            $handlers = array();
-        $handlers[] = array( $callback, $includefile );
-        $events[$eventname] = $handlers;
+        $events[$eventname][] = array( $callback, $includefile );
     }
 
     /**

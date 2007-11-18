@@ -80,6 +80,13 @@ class CCPathAdminForm extends CCEditConfigForm
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE );
 
+        $fields['dataview-dir'] =
+               array( 'label'       => _('Dataviews'),
+                       'form_tip'   => _('ccHost will look here for dataview definitions.'),
+                       'value'      => '',
+                       'formatter'  => 'sysdir',
+                       'flags'      => CCFF_POPULATE );
+
         $fields['avatar-dir'] =
                array(  'label'      => $wflag . _('Avatar Directory'),
                        'form_tip'   => _("If blank, avatars are assumed to be in the user's upload directory."),
@@ -105,7 +112,7 @@ class CCPathAdminForm extends CCEditConfigForm
         $fields['user-upload-root'] =
                array( 'label'       => $wflag . _('Media Upload Directory'),
                        'form_tip'   => _('Files will be uploaded to and downloaded from here.'),
-                       'value'      => 'people',
+                       'value'      => 'content',
                        'writable'   => true,
                        'formatter'  => 'sysdir',
                        'slash'      => false,

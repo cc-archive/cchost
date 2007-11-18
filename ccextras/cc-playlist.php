@@ -39,11 +39,43 @@ CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCPlaylistHV', 'OnBuil
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCPlaylistHV', 'OnUserProfileTabs'));
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCPlaylistHV', 'OnUploadRow'));
 
+CCEvents::AddHandler(CC_EVENT_FILTER_PLAY_URL,        array( 'CCPlaylistHV', 'OnFilterPlayURL'));
+
 //CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPlaylists' , 'OnGetConfigFields') , 'ccextras/cc-playlist.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCPlaylistManage',  'OnAdminMenu'),     'ccextras/cc-playlist-forms.inc' );
 
+
 class CCPlaylistHV 
 {
+
+    function OnFilterPlayURL( &$records ) 
+    {
+        if( !cc_playlist_enabled() )
+            return;
+
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('remote_files');
+        $remoting = !empty($settings['enable_streaming']);
+        $c = count($records);
+        $k = array_keys($records);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[$k[$i]];
+            foreach( array('file_extra','file_format_info') as $f )
+                if( is_string($R[$f]) )
+                    $R[$f] = unserialize($R[$f]);
+            if( !empty($R['file_format_info']['sr']) && 
+                ($R['file_format_info']['format-name'] == 'audio-mp3-mp3') && 
+                ($R['file_format_info']['sr'] == '44k') )
+            {
+                if( !$remoting || empty($R['file_extra']['remote_url'] ) )
+                    $url = $R['download_url'];
+                else
+                    $url = $R['file_extra']['remote_url'];
+                $R['fplay_url'] = $url;
+            }
+        }
+    }
 
     function OnUploadRow( &$record ) 
     {

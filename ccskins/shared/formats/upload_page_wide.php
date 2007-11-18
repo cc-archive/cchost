@@ -21,8 +21,7 @@
 /*
 [meta]
     type     = page
-    desc     = _('Single upload page')
-    dataview = page_links
+    desc     = _('Single upload page (wide)')
 [/meta]
 */
 ?>
