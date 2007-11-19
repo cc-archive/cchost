@@ -314,7 +314,7 @@ class CCTemplateAdmin
         return CCTemplateAdmin::_get_meta_type('extras','extras');
     }
 
-    function GetDataView($template)
+    function GetDataViewFromTemplate($template)
     {
         $skinmac = new CCSkinMacro($template);
         list( $file, $macro ) = $skinmac->LookupMacro();
@@ -325,6 +325,14 @@ class CCTemplateAdmin
             return null;
         global $CC_GLOBALS;
         $props['file'] = CCUtil::SearchPath( $props['dataview'] . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
+        return $props;
+    }
+
+    function GetDataView($dataview)
+    {
+        global $CC_GLOBALS;
+        $props['dataview'] = $dataview;
+        $props['file'] = CCUtil::SearchPath( $dataview . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
         return $props;
     }
 

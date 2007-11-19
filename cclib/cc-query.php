@@ -301,6 +301,33 @@ class CCQuery
 
     }
 
+    function _gen_user()
+    {
+        if( !empty($this->args['user']) )
+        {
+            $w['user_name'] = $this->args['user'];
+            $users =& CCUsers::GetTable();
+            $user_id = $users->QueryKey($w);
+            $this->where[] = "(upload_user = '{$user_id}')";
+        }
+    }
+
+    function _gen_remixes()
+    {
+        $id = $this->args['remixes'];
+        // sigh, I can't get subqueries to work.
+        $rows = CCDatabase::QueryItems('SELECT tree_child as upload_id FROM cc_tbl_tree WHERE tree_parent = ' . $id);
+        if( empty($rows) )
+        {
+            $where[] = '0';
+            $this->dead = true;
+        }
+        else
+        {
+            $where[] = 'upload_id IN (' . join(',',$rows) . ')';
+        }
+    }
+
     function Query($args=array())
     {
         if( !empty($args) )
@@ -319,6 +346,7 @@ class CCQuery
         $this->_gen_tags();
         $this->_gen_limit();
         $this->_gen_date();
+        $this->_gen_user();
 
         foreach( array( 'template', 'playlist', 'reccby', 'remixesof', 'ids' ) as $arg )
         {
@@ -334,18 +362,19 @@ class CCQuery
 
         if( !empty($this->args['score']) )
             $this->where[] = "($scoref >= {$this->args['score']})";
-        if( !empty($this->args['user']) )
-            $this->where[] = "(user_name = '{$this->args['user']}')";
         if( !empty($this->args['lic']) )
         {
             $license = $this->_lic_query_to_key($this->args['lic']);
             $this->where[] = "(license_id = '$license')";
         }
 
-        if( isset($remixmax) )
-            $this->where[] = "(upload_num_remixes <= '$remixmax')";
-        if( isset($remixmin) )
-            $this->where[] = "(upload_num_remixes >= '$remixmin')";
+        if( isset($this->args['remixmax']) )
+            $this->where[] = "(upload_num_remixes <= '{$this->args['remixmax']}')";
+        if( isset($this->args['remixmin']) )
+            $this->where[] = "(upload_num_remixes >= '{$this->args['remixmin']}')";
+        if( !empty($this->args['remixes']) )
+            $this->_gen_remixes();
+
         
         $this->sql_where = 'WHERE ' . join( ' AND ', $this->where );
 
@@ -370,10 +399,17 @@ class CCQuery
             else
             {
                 require_once('cclib/cc-template.inc');
-                $props = CCTemplateAdmin::GetDataView($this->args['template']);
+                $props = CCTemplateAdmin::GetDataViewFromTemplate($this->args['template']);
                 $this->args['dataview'] = $props['dataview'];
                 $this->dataview_file = $props['file'];
             }
+        }
+        else
+        {
+            require_once('cclib/cc-template.inc');
+            $props = CCTemplateAdmin::GetDataView($this->args['dataview']);
+            $this->args['dataview'] = $props['dataview'];
+            $this->dataview_file = $props['file'];
         }
 
         $records =& $this->_perform_sql();
@@ -476,11 +512,14 @@ class CCQuery
 
         $records = CCDatabase::QueryRows($sql);
 
-        if( count($records) > 0 && !empty($info['e']) )
+        if( count($records) > 0 )
         {
-            foreach( $info['e'] as $event )
+            while( count($info['e']) )
             {
-                CCEvents::Invoke( $event, array( &$records, &$this->args, &$info ) );
+                $e = $info['e'][0];
+                CCEvents::Invoke( $e, array( &$records, &$this->args, &$info ) );
+                if( count($info['e']) && $info['e'][0] == $e )
+                    array_shift($info['e']);
             }
         }
 

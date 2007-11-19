@@ -21,6 +21,7 @@ SELECT
     user_name,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     CONCAT( '$urll', license_logo ) as license_logo_url,
+    license_url,
     DATE_FORMAT( upload_date, '%W, %M %e, %Y @ %l:%i %p' ) as upload_date_format,
     file_name, file_format_info, file_extra, upload_contest
     %columns%

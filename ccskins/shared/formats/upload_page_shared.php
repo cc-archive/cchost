@@ -415,7 +415,7 @@ function helper_upload_main_info(&$R,&$A,$T)
     }
     else
     {
-        if( !empty($R['upload_num_ratings']) || !empty($R['ok_to_rate']) ) 
+        if( !empty($R['upload_num_scores']) || !empty($R['ok_to_rate']) ) 
         {
             cc_get_ratings_info($R);
             if( !empty($A['ok_to_rate']) )

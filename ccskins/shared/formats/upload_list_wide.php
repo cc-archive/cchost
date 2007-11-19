@@ -2,6 +2,7 @@
 [meta]
     type     = list
     desc     = _('Multiple upload listing (wide)')
+    dataview = list_wide
 [/meta]
 */ ?>
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list_wide.css') ?>" />
@@ -120,9 +121,8 @@ function helper_list_info(&$R,&$A,$T)
     $aurl = $R['artist_page_url'];
     $name = CC_StrChop($R['upload_name'],27);
     $about_url =  empty($R['local_menu']['download'][0]['action']) ? '' : "about=\"{$R['local_menu']['download'][0]['action']}\"";
-    $date = CC_datefmt($R['upload_date'],'M d, Y h:i a');
-    $licurl = $T->URL('images/lics/small-' . $R['license_logo']);
-    $wrapper_class = empty($R['upload_name_cls']) ? '' : ' class="' . $R['upload_name_cls'] . '"';
+    $date = $R['upload_date_format'];
+    $licurl = $R['license_logo_url']);
     $html =<<<EOF
     <div class="upload_avatar"><img src="{$R['user_avatar_url']}" /></div>
     <div class="upload_info">
@@ -130,7 +130,7 @@ function helper_list_info(&$R,&$A,$T)
                   {$about_url}
                   rel="license" title="{$R['license_name']}" >
                   <img src="{$licurl}" /></a> 
-        <a href="{$furl}" class="upload_name"><span{$wrapper_class}>{$name}</span></a><br /> {$T->String('str_by')} 
+        <a href="{$furl}" class="upload_name">{$name}</a><br /> {$T->String('str_by')} 
                <a href="{$aurl}">{$R['user_real_name']}</a>
         <div class="upload_date">
 EOF;
@@ -138,22 +138,16 @@ EOF;
 
     if( empty($R['thumbs_up']) )
     {
-        if( !empty($R['upload_num_scores']) || !empty($A['logged_in_as']) )
+        if( !empty($R['upload_num_scores']) )
         {
-            cc_get_ratings_info($R);
-            if( !empty($A['logged_in_as']) )
-                $A['need_ratings_hooks'] = 1;
             $A['record'] =& $R;
             $T->Call('util.php/ratings_stars_small');
         }
     }
     else
     {
-        if( !empty($R['upload_num_ratings']) || !empty($A['logged_in_as']) ) 
+        if( !empty($R['upload_num_scores']) ) 
         {
-            cc_get_ratings_info($R);
-            if( !empty($A['logged_in_as']) )
-                $A['need_recommend_hooks'] = true;
             print '<div class="recommend_block" id="recommend_block_' . $R['upload_id'] . '">' . $T->String('str_recommends') .
                       ' ' . $R['ratings_score'] . '</div>';
         } 

@@ -11,6 +11,7 @@
 <table cellspacing="0" cellpadding="0"  >
 %map(dochop,'1')%
 %loop(records,R)%
+
    <tr><td>
           <div class="box">
             <div><a href="javascript://download" class="download_hook" id="_ed__%(#R/upload_id)%">%text(str_list_download)%</a></div>
@@ -30,7 +31,7 @@
    <tr><th>%text(str_license)%</th>
      <td><a href="%(#R/license_url)%"><img src="%(#R/license_logo_url)%" /></a></td>
    </tr>
-    <tr><td /><td id="_%(#R/upload_id)" class="rate_head"></td></tr>
+    <tr><td /><td id="_%(#R/upload_id)%" class="rate_head"></td></tr>
     <tr><td class="rec_end" colspan="2"></td></tr>
    
 %end_loop%

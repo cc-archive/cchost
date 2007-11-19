@@ -645,7 +645,7 @@ class CCPage extends CCSkin
     * @param string $sql_where The SQL WHERE clause to limit queries
     * @param integer $limit Override system defaults for how many records in a page
     */
-    function AddPagingLinks(&$table,$sql_where,$limit ='')
+    function AddPagingLinks($table,$sql_where,$limit ='')
     {
         $args = array();
 
@@ -669,8 +669,17 @@ class CCPage extends CCSkin
             $offset = 0;
         }
 
-        $table->SetOffsetAndLimit(0,0);
-        $all_row_count = $table->CountRows($sql_where);
+        if( is_string($table) )
+        {
+            $sql = 'SELECT COUNT(*) from ' . $table . ' ' . $sql_where;
+            $all_row_count = CCDatabase::QueryItem($sql);
+        }
+        else
+        {
+            $table->SetOffsetAndLimit(0,0);
+            $all_row_count = $table->CountRows($sql_where);
+            $table->SetOffsetAndLimit($offset,$limit);
+        }
         if( $limit < $all_row_count )
         {
             $current_url = ccl(CCEvents::_current_action());
@@ -708,7 +717,6 @@ class CCPage extends CCSkin
                $args['next_offs'] = $next_offs;
             }
 
-            $table->SetOffsetAndLimit($offset,$limit);
         }
 
         return $args;
