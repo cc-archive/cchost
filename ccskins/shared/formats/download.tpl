@@ -1,3 +1,8 @@
+<?/*
+[meta]
+    dataview = files
+[/meta]
+*/?>
 <style>
 #cc_download {
 	margin: 10px;

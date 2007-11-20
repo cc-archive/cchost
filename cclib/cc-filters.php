@@ -11,7 +11,7 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
     $c = count($records);
     $k = array_keys($records);
 
-    foreach( array( CC_EVENT_FILTER_UPLOAD_USER_TAGS, CC_EVENT_FILTER_REMIXES_SHORT, 
+    foreach( array( CC_EVENT_FILTER_UPLOAD_USER_TAGS, CC_EVENT_FILTER_REMIXES_SHORT, CC_EVENT_FILTER_FILES,
                       CC_EVENT_FILTER_RATINGS_STARS, CC_EVENT_FILTER_DOWNLOAD_URL ) as $e )
     {
         if( !in_array( $e, $dataview_info['e'] ) )
@@ -23,10 +23,29 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
 
             switch( $e )
             {
+                case CC_EVENT_FILTER_FILES:
+                {
+                    $sql = 'SELECT * FROM cc_tbl_files where file_upload = ' . $R['upload_id'];
+                    $R['files'] = CCDatabase::QueryRows($sql);
+                    $fk = array_keys($R['files']);
+                    for( $fi = 0; $fi < count($fk); $fi++ )
+                    {
+                        $F =& $R['files'][$fk[$fi]];
+                        $F['file_extra'] = unserialize($F['file_extra']);
+                        $F['file_format_info'] = unserialize($F['file_format_info']);
+                        if( $R['upload_contest'] )
+                            $F['download_url'] = ccd($CC_GLOBALS['contests'][($R['upload_contest']-1)],$R['user_name'],$F['file_name']);
+                        else
+                            $F['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$F['file_name']);
+                    }
+                    break;
+                }
+
                 case CC_EVENT_FILTER_DOWNLOAD_URL:
                 {
+                    //CCDebug::PrintVar($R);
                     if( $R['upload_contest'] )
-                        $R['download_url'] = ccd($CC_GLOBALS['contests'][($R['upload_contest']+1)],$R['user_name'],$R['file_name']);
+                        $R['download_url'] = ccd($CC_GLOBALS['contests'][($R['upload_contest']-1)],$R['user_name'],$R['file_name']);
                     else
                         $R['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$R['file_name']);
                     break;
@@ -37,14 +56,14 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                     if( is_string($R['upload_extra']) )
                         $R['upload_extra'] = unserialize($R['upload_extra']);
 
-                    if( empty($R['upload_extra']['user_tags']) )
+                    if( empty($R['upload_extra']['usertags']) )
                     {
                         $R['user_tags'] = array();
                     }
                     else
                     {
                         require_once('cclib/cc-tags.inc');
-                        $tags = CCTag::TagSplit($R['upload_extra']['user_tags']);
+                        $tags = CCTag::TagSplit($R['upload_extra']['usertags']);
                         $baseurl = ccl('tags') . '/';
                         foreach( $tags as $tag )
                             $R['user_tags'][] = array( 'tagurl' => $baseurl . $tag, 'tag' => $tag );
@@ -60,8 +79,7 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                         $count = $R['upload_num_scores'];
                         $stars = floor($average);
                         $half = ($R['upload_score'] % 100) > 25;
-
-                        for( $i = 0; $i < $stars; $i++ )
+                        for( $ri = 0; $ri < $stars; $ri++ )
                             $R['ratings'][] = 'full';
 
                         if( $half )
@@ -70,10 +88,10 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                             $i++;
                         }
                         
-                        for( ; $i < 5; $i++ )
-                            $record['ratings'][] = 'empty';
+                        for( ; $ri < 5; $ri++ )
+                            $R['ratings'][] = 'empty';
                         
-                        $record['ratings_score'] = number_format($average,2) . '/' . $count;
+                        $R['ratings_score'] = number_format($average,2) . '/' . $count;
                     }
                     break;
                 }
@@ -81,25 +99,49 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                 case CC_EVENT_FILTER_REMIXES_SHORT:
                 {
                     $query = new CCQuery();
-                    $q = 'dataview=links_by&f=php&limit=3&remixes=' . $R['upload_id'];
+                    $q = 'dataview=links_by_chop&f=php&limit=4&sources=' . $R['upload_id'];
                     $args = $query->ProcessAdminArgs($q);
-                    list( $R['remix_children'] ) = $query->Query($args);
-                    CCDebug::PrintVar($R);
+                    list( $parents ) = $query->Query($args);
 
-                    // do parents later
+                    if( count($parents) < 3 )
+                    {
+                        $count = 4 - count($parents);
+                        $q = 'dataview=links_by_pool&f=php&limit=' . $count . '&sort=&datasource=pools&sources=' . $R['upload_id'];
+                        $query = new CCQuery();
+                        $args = $query->ProcessAdminArgs($q);
+                        list( $pool_parents ) = $query->Query($args);
+                        $parents = array_merge($parents,$pool_parents);
+                    }
+                    if( count($parents) > 3 )
+                    {
+                        $R['more_parents_link'] = $R['file_page_url'];
+                        unset($parents[3]);
+                    }
+                    $R['remix_parents'] = $parents;
+
+                    $query = new CCQuery();
+                    $q = 'dataview=links_by_chop&f=php&limit=4&remixes=' . $R['upload_id'];
+                    $args = $query->ProcessAdminArgs($q);
+                    list( $children ) = $query->Query($args);
+                    if( count($children) > 3 )
+                    {
+                        $R['more_children_link'] = $R['file_page_url'];
+                        unset($children[3]);
+                    }
+                    $R['remix_children'] = $children;
+
 
                     break;
                 }
 
             } // end switch on event
 
+
         } // for each record
-        
+
         $dataview_info['e'] = array_diff( $dataview_info['e'], array( $e ) );
 
-
     } // foreach event sent in
-
 
 }
 

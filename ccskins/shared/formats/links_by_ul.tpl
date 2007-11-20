@@ -2,14 +2,14 @@
 [meta]
     type     = format
     desc     = _('Links to uploads with attribution (UL)')
-    dataview = page_links
+    dataview = links_by
 [/meta]
 %%
 <div  id="cc_list">
 <ul>
 %loop(records,R)%
    <li>
-     <a href="%(#R/file_page_url)%" class="cc_file_link">%chop(#R/upload_name,chop)%</a> <?= $T->String('str_by')?>
+     <a href="%(#R/file_page_url)%" class="cc_file_link">%chop(#R/upload_name,chop)%</a>%text(str_by)%
      <a href="%(#R/artist_page_url)%">%chop(#R/user_real_name,chop)%</a>
    </li>
 %end_loop%

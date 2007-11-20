@@ -149,7 +149,7 @@ class CCSkinSettingsForm extends CCEditConfigForm
                    'form_tip'    => _('Use this template when listing multiple files'),
                    'formatter'   => 'raw_select',
                    'options'     => $list_format_files,
-                   'value'       => 'ccskins/shared/formats/upload_list_wide.php',
+                   'value'       => 'ccskins/shared/formats/upload_list_wide.tpl',
                    'flags'       => CCFF_POPULATE_WITH_DEFAULT );
         $fields['max-listing'] =
             array( 'label'       => _('Max Items Per Page'),

@@ -323,8 +323,18 @@ class CCTemplateAdmin
         $props = CCTemplateAdmin::_get_format_props($file);
         if( empty($props['dataview']) )
             return null;
-        global $CC_GLOBALS;
-        $props['file'] = CCUtil::SearchPath( $props['dataview'] . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
+        if( empty($props['embedded']) )
+        {
+            global $CC_GLOBALS;
+            $props['file'] = CCUtil::SearchPath( $props['dataview'] . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
+        }
+        else
+        {
+            $text = file_get_contents($file);
+            if( !preg_match('#\[dataview\](.*)\[/dataview\]#s',$text,$m) )
+                return null;
+            $props['code'] = $m[1];
+        }
         return $props;
     }
 

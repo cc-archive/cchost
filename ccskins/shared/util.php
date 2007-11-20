@@ -255,6 +255,26 @@ function _t_util_ratings_stars($T,&$A)
 function _t_util_ratings_stars_small($T,&$A)
 {
     $R =& $A['record'];
+    if( !empty($R['ratings']) )
+    {
+        if( $A['ajax'] )
+            print '<div>'; 
+        else
+            print '<div class="small_stars" id="rate_block_' . $R['upload_id'] . '">';
+        foreach( $R['ratings'] as $rsize ) // 'half' 'full'
+        {
+            $src = 'images/stars/star-' . $rsize . '-s.gif';
+            $url = $T->URL($src);
+            print '<img style="width:10px;height:10px;margin:0px;" src="' . $url . '" />';
+        }
+        print ' ' . $R['ratings_score'];
+        print '</div>';
+    }
+}
+
+function _t_util_ratings_stars_small_user($T,&$A)
+{
+    $R =& $A['record'];
     if( !empty($R['ratings']) || $R['ok_to_rate'] )
     {
         $id = $R['upload_id'];

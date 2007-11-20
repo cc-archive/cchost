@@ -197,7 +197,7 @@ CCEvents::AddHandler(CC_EVENT_FILTER_DOWNLOAD_URL, 'cc_filter_std', 'cclib/cc-fi
 CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_USER_TAGS, 'cc_filter_std', 'cclib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_REMIXES_SHORT, 'cc_filter_std', 'cclib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_RATINGS_STARS, 'cc_filter_std', 'cclib/cc-filters.php' );
-
+CCEvents::AddHandler(CC_EVENT_FILTER_FILES, 'cc_filter_std', 'cclib/cc-filters.php' );
 
 
 

@@ -22,7 +22,7 @@
 [meta]
     type     = page
     desc     = _('Single upload page (narrow)')
-    dataview = page_links
+    dataview = upload_page
 [/meta]
 */
 ?>

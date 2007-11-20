@@ -5,7 +5,7 @@
     desc              = _('Classic ccHost, wide, menus on left')
     string_profile    = ccskins/shared/strings/all_media.php
     list_file         = ccskins/shared/formats/upload_page_wide.php
-    list_files        = ccskins/shared/formats/upload_list_wide.php
+    list_files        = ccskins/shared/formats/upload_list_wide.tpl
     form_fields       = form_fields.tpl/form_fields
     grid_form_fields  = form_fields.tpl/grid_form_fields
     tab_pos           = ccskins/shared/layouts/tab_pos_header.php
