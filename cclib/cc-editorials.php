@@ -289,6 +289,21 @@ class CCEditorials
         }
     }
 
+    function OnFilterEdPick(&$records)
+    {
+        $k = array_keys($records);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[$k[$i]];
+            if( is_string($R['upload_extra']) )
+                $R['upload_extra'] = unserialize($R['upload_extra']);
+            if( empty($R['upload_extra']['edpicks']) )
+                continue;
+            $ek = array_keys($R['upload_extra']['edpicks']);
+            $R['edpick'] =& $R['upload_extra']['edpicks'][$ek[0]];
+        }
+    }
 }
 
 

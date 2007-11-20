@@ -24,6 +24,7 @@ function _cc_round_box( e, color ) {
     var e = Element.remove(e);
     $(id).appendChild(e);
     $(id_o).style.display = 'block';
+    Element.removeClassName(e,'box'); // this allows multiple calls to cc_round_box as elements arrive
 }
 
 function cc_round_boxes( className ) {

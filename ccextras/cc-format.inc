@@ -140,6 +140,32 @@ class CCFormat
         $row['topic_text_plain'] = _cc_format_unformat($row['topic_text']);
     }
 
+    function OnFilterHTML(&$rows)
+    {
+        if( !_cc_is_formatting_on() )
+            return;
+
+        $c = count($rows);
+        $k = array_keys($rows);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $rows[$k[$i]];
+            if( isset($R['_need_description_html']) )
+            {
+                if( empty($R['_need_description_html']) )
+                {
+                    $R['upload_description_html'] = '';
+                }
+                else
+                {
+                    $R['upload_description_html'] = _cc_format_format($R['_need_description_html']);
+                }
+                unset($R['_need_description_html']);
+            }
+        }
+    }
+
+
     function OnFilterText(&$rows)
     {
         if( !_cc_is_formatting_on() )

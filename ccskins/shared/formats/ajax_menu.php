@@ -20,41 +20,67 @@
 /*
 
 [meta]
-    dataview = ajax_menu
-    embedded = 1
+    dataview = upload_menu
 [/meta]
-[dataview]
-function ajax_menu_dataview() 
-{
-    $sql =<<<EOF
-SELECT upload_id, upload_banned, upload_tags, upload_published, upload_contest,
-       user_id, user_name, file_name, upload_user, upload_name
-    FROM cc_tbl_uploads
-    JOIN cc_tbl_user ON upload_user = user_id
-    JOIN cc_tbl_files ON upload_id = file_upload
-%joins%
-WHERE %where% (file_order = 0)
-%order%
-%limit%
-EOF;
-    return array( 'sql' => $sql,
-                  'name' => 'ajax_menu',
-                   'e'  => array(CC_EVENT_FILTER_FILES,
-                                 CC_EVENT_FILTER_DOWNLOAD_URL)
-                );
-}
-[/dataview]
+
 This is used for an ajax callback for just a menu on a record
 
 no download/play/show stuff, just actions (review, edit, share, etc.)
 
+----------------------------------
+    Menu layout ?
+------------------------------------
+
+    [play] => Array
+            [stream] => Array
+                    [menu_text] => Stream
+                    [weight] => -1
+                    [group_name] => play
+                    [id] => cc_streamfile
+                    [access] => 4
+                    [action] => http://cch5.org/media/files/stream/Transistor_Karma/11706.m3u
+                    [type] => 
+
+    [download] => Array
+            [1] => Array
+                    [action] => http://cch5.org/people/
+                    [menu_text] => mp3  (3.44MB)
+                    [group_name] => download
+                    [type] => audio/mpeg
+                    [weight] => 1
+                    [tip] => Transistor_Karma_-_The_Waterpipe_Aria_from_Ariane_and_Barbecue_a_remix_opera.mp3
+                    [access] => 4
+                    [id] => cc_downloadbutton
+
+    [remix] => Array
+            [replyremix] => Array
+    [share] => Array
+            [share_link] => Array
+    [comment] => Array
+            [comments] (Write Review)
+    [owner] => Array
+            [editupload] => Array
+            [managefiles] => Array
+            [manageremixes] => Array
+    [admin] => Array
+            [publish] => Array  (could be under owner)
+            [deleteupload] => Array
+            [howididit] => Array
+            [editorial] => Array
+            [ban] => Array
+            [uploadadmin] => Array
+    [playlist] => Array
+            [playlist_menu] => Array
 
 */
 
-if( empty($A['records']) )
-    return;
-
-$R = $A['records'][0];
+if( !empty($A['records']) )
+    $R =& $A['records'][0];
+else
+    if( !empty($A['record']) )
+        $R =& $A['record'];
+    else
+        return;
 
 $menu = empty($R['local_menu']) ? cc_get_upload_menu($R) : $R['local_menu'];
 

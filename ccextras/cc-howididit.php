@@ -29,10 +29,31 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCHowIDidItHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCHowIDidItHV',  'OnUploadMenu')      );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCHowIDidItHV',  'OnUploadRow')      );
+CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCHowIDidItHV',  'OnFilterMacros')      );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCHowIDidIt',  'OnMapUrls')        , 'ccextras/cc-howididit.inc' );
 
 class CCHowIDidItHV
 {
+    function OnFilterMacros(&$records)
+    {
+        $k = array_keys($records);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[$k[$i]];
+
+            if( empty($R['upload_extra']['howididit']) )
+                continue;
+
+            $R['howididit_link'] = array( 'action' => ccl('howididit',$R['upload_id']),
+                                               'text'  => 'str_how_i_did_it' );
+            if( empty($R['file_macros']) )
+                $R['file_macros'][] = 'print_howididit_link';
+            else
+                array_unshift($R['file_macros'],'print_howididit_link');
+        }
+    }
+
     /**
     * Event handler for {@link CC_EVENT_UPLOAD_ROW}
     *

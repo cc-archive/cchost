@@ -45,6 +45,8 @@ CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCReview' , 'OnTopicDe
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCReviewFormAPI',  'OnFormFields')      , 'ccextras/cc-review-forms.inc' );
 CCEvents::AddHandler(CC_EVENT_DO_SEARCH,          array( 'CCReviewFormAPI',  'OnDoSearch')        , 'ccextras/cc-review-forms.inc' );
 
+CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCReviewsHV',  'OnFilterMacros') );
+
 class CCReviewsHV
 {
     /**
@@ -171,6 +173,18 @@ class CCReviewsHV
             $record['reviews_link'] = array( 'url' => $url,
                                         'text' => sprintf(_("Reviews (%s)"),$count),
                                         'count' => $count );
+        }
+    }
+
+    function OnFilterMacros( &$records )
+    {
+        $k = array_keys($records);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[$k[$i]];
+            $R['file_macros'][] = 'comment_thread';
+            $R['comment_thread_url'] = ccl( 'reviews', 'thread', $R['upload_id'] );
         }
     }
 

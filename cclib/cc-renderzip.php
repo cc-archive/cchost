@@ -65,6 +65,32 @@ class CCRenderZip extends CCRender
             $record['file_macros'][] = 'show_zip_dir';
     }
 
+    function OnFilterMacros(&$records)
+    {
+        $k = array_keys($records);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[$k[$i]];
+            if( !CCUploads::InTags('zip',$R) )
+                continue;
+            $need_macro = false;
+            $kf = array_keys($R['files']);
+            $kc = count($kf);
+            for( $ki = 0; $ki < $kc; $ki++ )
+            {
+                $F =& $R['files'][$kc[$ki]];
+                if( empty($F['file_format_info']['zipdir'] ) )
+                    continue;
+                $record['zipdirs'][] = array( 'dir' => $F['file_format_info']['zipdir'],
+                                              'name' => $F['file_nicname']
+                                            );
+                $need_macro = true;
+            }
+            if( $need_macro )
+                $R['file_macros'][] = 'show_zip_dir';
+        }
+    }
 }
 
 

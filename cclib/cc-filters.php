@@ -12,6 +12,7 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
     $k = array_keys($records);
 
     foreach( array( CC_EVENT_FILTER_UPLOAD_USER_TAGS, CC_EVENT_FILTER_REMIXES_SHORT, CC_EVENT_FILTER_FILES,
+                      CC_EVENT_FILTER_UPLOAD_TAGS, CC_EVENT_FILTER_REMIXES_FULL,
                       CC_EVENT_FILTER_RATINGS_STARS, CC_EVENT_FILTER_DOWNLOAD_URL ) as $e )
     {
         if( !in_array( $e, $dataview_info['e'] ) )
@@ -48,6 +49,16 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                         $R['download_url'] = ccd($CC_GLOBALS['contests'][($R['upload_contest']-1)],$R['user_name'],$R['file_name']);
                     else
                         $R['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$R['file_name']);
+                    break;
+                }
+
+                case CC_EVENT_FILTER_UPLOAD_TAGS:
+                {
+                    require_once('cclib/cc-tags.inc');
+                    $tags = CCTag::TagSplit($R['upload_tags']);
+                    $baseurl = ccl('tags') . '/';
+                    foreach( $tags as $tag )
+                        $R['upload_taglinks'][] = array( 'tagurl' => $baseurl . $tag, 'tag' => $tag );
                     break;
                 }
 
@@ -96,6 +107,28 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                     break;
                 }
 
+                case CC_EVENT_FILTER_REMIXES_FULL:
+                {
+                    $query = new CCQuery();
+                    $q = 'dataview=links_by_chop&f=php&&sources=' . $R['upload_id'];
+                    $args = $query->ProcessAdminArgs($q);
+                    list( $parents ) = $query->Query($args);
+                    $q = 'dataview=links_by_pool&f=php&sort=&datasource=pools&sources=' . $R['upload_id'];
+                    $query = new CCQuery();
+                    $args = $query->ProcessAdminArgs($q);
+                    list( $pool_parents ) = $query->Query($args);
+                    $R['remix_parents'] = array_merge($parents,$pool_parents);
+                    if( count($R['remix_parents']) > 14 )
+                        $R['parents_overflow'] = true;
+                    $query = new CCQuery();
+                    $q = 'dataview=links_by_chop&f=php&&remixes=' . $R['upload_id'];
+                    $args = $query->ProcessAdminArgs($q);
+                    list( $R['remix_children'] ) = $query->Query($args);
+                    if( $R['remix_children'] > 14 )
+                        $R['children_overflow'] = true;
+                    break;
+                }
+
                 case CC_EVENT_FILTER_REMIXES_SHORT:
                 {
                     $query = new CCQuery();
@@ -129,8 +162,6 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                         unset($children[3]);
                     }
                     $R['remix_children'] = $children;
-
-
                     break;
                 }
 

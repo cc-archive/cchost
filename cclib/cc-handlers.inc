@@ -49,6 +49,7 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCEditorials',  'OnUpl
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCEditorials',  'OnMapUrls'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCEditorials' , 'OnGetConfigFields'), 'cclib/cc-editorials.php' );
 CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,        array( 'CCEditorials',  'OnGetSysTags'), 'cclib/cc-editorials.php');
+CCEvents::AddHandler(CC_EVENT_FILTER_ED_PICK,     array( 'CCEditorials',  'OnFilterEdPick'), 'cclib/cc-editorials.php');
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigFields'), 'cclib/cc-feed.php' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCFeed',  'OnUploadDelete'), 'cclib/cc-feed.php');
@@ -159,6 +160,7 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderImage', 'OnUplo
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS, array( 'CCRenderImage' , 'OnGetConfigFields' ), 'cclib/cc-renderimage.php' );
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderZip', 'OnUploadRow'), 'cclib/cc-renderzip.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCRenderZip',  'OnFilterMacros'), 'cclib/cc-renderzip.php'  );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCSearch', 'OnMapUrls'), 'cclib/cc-search.php'  );
 
@@ -196,9 +198,10 @@ CCEvents::AddHandler(CC_EVENT_CONTEST_ROW,  array( 'CCUser', 'OnUploadRow'), 'cc
 CCEvents::AddHandler(CC_EVENT_FILTER_DOWNLOAD_URL, 'cc_filter_std', 'cclib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_USER_TAGS, 'cc_filter_std', 'cclib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_REMIXES_SHORT, 'cc_filter_std', 'cclib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_REMIXES_FULL, 'cc_filter_std', 'cclib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_RATINGS_STARS, 'cc_filter_std', 'cclib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_FILES, 'cc_filter_std', 'cclib/cc-filters.php' );
-
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_TAGS, 'cc_filter_std', 'cclib/cc-filters.php' );
 
 
 

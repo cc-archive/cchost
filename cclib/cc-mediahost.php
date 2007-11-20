@@ -92,25 +92,27 @@ class CCMediaHost
     {
         $this->_build_bread_crumb_trail($username,$upload_id);
 
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+
         if( empty($username) )
         {
             CCPage::SetTitle('str_file_browse_uploads');
-            require_once('cclib/cc-upload.php');
-            CCUpload::ListMultipleFiles();
+            $query->Query(); // all defaults baby
         }
         else
         {
             $uploads =& CCUploads::GetTable();
-            $row = $uploads->QueryKeyRow($upload_id);
-            if( empty($row) )
+            $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
+            if( empty($name) )
             {
                 // wait, the file might just unpublished...
                 $uploads->SetDefaultFilter(false);
-                $row = $uploads->QueryKeyRow($upload_id);
+                $name = $uploads->QueryItemFromKey($upload_id);
                 if( !CCUser::IsAdmin() )
                     $uploads->SetDefaultFilter(true);
 
-                if( empty($row) )
+                if( empty($name) )
                 {
                     CCPage::SetTitle('str_file_unknown');
                     CCPage::Prompt('str_file_cannot_be_found');
@@ -120,19 +122,15 @@ class CCMediaHost
                 else
                 {
                     // aha
-                    CCPage::SetTitle($row['upload_name']);
+                    CCPage::SetTitle($name);
                     CCPage::Prompt('str_file_this_upload_is');
                 }
                 return;
             }
 
-            CCPage::SetTitle( empty($title) ? $row['upload_name'] : $title);
-            global $CC_GLOBALS;
-            $CC_GLOBALS['works_page'] = true;
-            $row['works_page'] = true;
-            CCPage::PageArg( 'dochop', false );
-            $record = $uploads->GetRecordFromRow($row);
-            CCPage::PageArg( 'record', $record, 'list_file' );
+            $title = empty($title) ? $name : $title;
+            $args = $query->ProcessAdminArgs( 't=list_file&ids=' . $upload_id . '&title=' . $title );
+            $query->Query($args);
         }
     }
 

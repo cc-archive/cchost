@@ -264,7 +264,6 @@ class CCQuery
     function _gen_ids()
     {
         // A specific set of IDs
-
         if( !empty($this->args['ids']) )
         {
             // this will do a security check in case someone tries
@@ -368,12 +367,10 @@ class CCQuery
         $this->_gen_tags();
         $this->_gen_limit();
         $this->_gen_date();
-        $this->_gen_user();
-        $this->_gen_ids();
 
-        foreach( array( 'template', 'playlist', 'reccby', 'remixesof', 'ids' ) as $arg )
+        foreach( array( 'user', 'template', 'playlist', 'reccby', 'remixesof', 'ids' ) as $arg )
         {
-            if( isset($args[$arg]) )
+            if( isset($this->args[$arg]) )
             {
                 $method = '_gen_' . $arg;
                 $this->$method();
@@ -561,8 +558,8 @@ class CCQuery
                                     '' ),
                              $info['sql'] );
 
-        $records = CCDatabase::QueryRows($this->sql);
-
+        $records =& CCDatabase::QueryRows($this->sql);
+//CCDebug::PrintVar($this);
         if( count($records) > 0 )
         {
             $info['query'] = $this;

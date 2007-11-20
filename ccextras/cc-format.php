@@ -37,6 +37,7 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFormat' , 'OnGetConf
 CCEvents::AddHandler(CC_EVENT_TOPIC_ROW,     array( 'CCFormat' , 'OnTopicRow'), 'ccextras/cc-format.inc'  );
 
 CCEvents::AddHandler(CC_EVENT_FILTER_DESCRIPTION_TEXT,       array( 'CCFormat', 'OnFilterText'), 'ccextras/cc-format.inc' );
+CCEvents::AddHandler(CC_EVENT_FILTER_DESCRIPTION_HTML,       array( 'CCFormat', 'OnFilterHTML'), 'ccextras/cc-format.inc' );
 
 function generator_cc_format($form, $fieldname, $value, $class )
 {
