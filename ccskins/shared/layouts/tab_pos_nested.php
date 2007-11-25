@@ -7,7 +7,7 @@
 [/meta]
 */
 
-["tab_pos"] = array(
+$A["tab_pos"] = array(
 "nested" => true );
 
 ?>

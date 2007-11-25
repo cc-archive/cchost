@@ -1,5 +1,6 @@
 <?/*
 [meta]
+    type = template_component
     dataview = files
 [/meta]
 */?>

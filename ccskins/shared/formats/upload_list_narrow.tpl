@@ -32,8 +32,32 @@
      <td><a href="%(#R/license_url)%"><img src="%(#R/license_logo_url)%" /></a></td>
    </tr>
     <tr><td /><td id="_%(#R/upload_id)%" class="rate_head"></td></tr>
-    <tr><td class="rec_end" colspan="2"></td></tr>
-   
+   <tr><td colspan="2">
+       %if_not_null(#R/remix_parents)%
+        <div id="remix_info"><h2>%text(str_list_uses)%</h2>
+        %loop(#R/remix_parents,P)%
+            <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> <span>%text(str_by)%</span>
+                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+        %end_loop%
+        %if_not_null(#R/more_parents_link)%
+            <a class="remix_more_link" href="%(#R/more_parents_link)%">%text(str_more)%...</a>
+        %end_if%
+        </div>
+    %end_if%
+    %if_not_null(#R/remix_children)%
+        <div id="remix_info"><h2>%text(str_list_usedby)%</h2>
+        %loop(#R/remix_children,P)%
+            <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> <span>%text(str_by)%</span>
+                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+        %end_loop%
+        %if_not_null(#R/more_children_link)%
+            <a class="remix_more_link" href="%(#R/more_children_link)%">%text(str_more)%...</a>
+        %end_if%
+        </div>
+    %end_if%
+  <td></tr>
+  <tr><td class="rec_end" colspan="2" class="dark_border"></td></tr>
+
 %end_loop%
 </table>
 %call(prev_next_links)%

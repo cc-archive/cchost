@@ -79,10 +79,10 @@ class CCRenderZip extends CCRender
             $kc = count($kf);
             for( $ki = 0; $ki < $kc; $ki++ )
             {
-                $F =& $R['files'][$kc[$ki]];
+                $F =& $R['files'][$kf[$ki]];
                 if( empty($F['file_format_info']['zipdir'] ) )
                     continue;
-                $record['zipdirs'][] = array( 'dir' => $F['file_format_info']['zipdir'],
+                $R['zipdirs'][] = array( 'dir' => &$F['file_format_info']['zipdir'],
                                               'name' => $F['file_nicname']
                                             );
                 $need_macro = true;

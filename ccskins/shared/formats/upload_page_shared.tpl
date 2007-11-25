@@ -94,8 +94,6 @@
         </div><!-- info box -->
 
         %if_not_null(#R/file_macros)%
-            %% see file_macros.php for what these
-               might be (review links, zip dirs, etc.) %%
             <div class="box">
             %loop(#R/file_macros,M)%
                 %call(#M)%
@@ -148,7 +146,7 @@
     %end_if%
 
     %if_not_null(#R/remix_children)%
-        <div id="remix_info"><h2>%text(str_list_usedby)%</h2><img src="%url('images/uploadicon.gif')%" />
+        <div class="box" id="remix_info"><h2>%text(str_list_usedby)%</h2><img src="%url('images/uploadicon.gif')%" />
         %if_not_null(#R/children_overflow)%
             <div style="overflow: scroll;height:300px;">
         %end_if%

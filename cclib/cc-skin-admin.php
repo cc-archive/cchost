@@ -313,17 +313,8 @@ class CCAdminColorSchemesForm extends CCEditConfigForm
 */
 class CCSkinAdmin
 {
-    function Admin($profile='',$save='')
+    function Admin()
     {
-        if( !empty($profile) && $profile == 'profiles')
-            return $this->Profiles();
-
-        if( !empty($save) && !empty($profile) && $profile == 'profile' && $save == 'save' )
-            return $this->ProfileSave();
-
-        if( !empty($save) && !empty($profile) && $profile == 'profile' && $save == 'load' )
-            return $this->ProfileLoad();
-
         require_once('cclib/cc-template.inc');
         $config =& CCConfigs::GetTable();
         $skin_settings = $config->GetConfig('skin-settings');
@@ -492,7 +483,33 @@ class CCSkinAdmin
             else
             {
                 $this->_deep_copy($src,$target);
-                $msg = sprintf(_('The skin %s has been created sucessfully'),'<b>' . $target . '</b>');
+                $profile = '<?/*';
+                $profile .=<<<EOF
+[meta]
+    type              = profile
+    skin-file         = {$target}/skin.tpl
+    desc              = _('{$safe_name}')
+    string_profile    = ccskins/shared/strings/all_media.php
+    list_file         = ccskins/shared/formats/upload_page_wide.php
+    list_files        = ccskins/shared/formats/upload_list_wide.tpl
+    form_fields       = form_fields.tpl/form_fields
+    grid_form_fields  = form_fields.tpl/grid_form_fields
+    tab_pos           = ccskins/shared/layouts/tab_pos_nested.php
+    box_shape         = ccskins/shared/layouts/box_none.php
+    page_layout       = ccskins/shared/layouts/layout024.php
+    font_scheme       = ccskins/shared/colors/font_arial.php
+    font_size         = ccskins/shared/colors/fontsize_sz_small.php
+    color_scheme      = ccskins/shared/colors/color_mono.php
+[/meta]
+*/?>
+EOF;
+                CCUtil::MakeSubdirs($target . '/profiles', 0777);
+                $prof_file = $target . '/profiles/' . $safe_name . '.php';
+                $f = fopen( $prof_file , 'w');
+                fwrite($f,$profile);
+                fclose($f);
+                $this->_load_profile($prof_file);
+                $msg = sprintf(_('The skin and profile %s has been created sucessfully'),"<b>'" . $target . "'</b>");
                 $msg .= '<p>' . sprintf(_('Return to %sSkin Settings%.'),'<a href="' . ccl('admin','skins') .'">', '</a>') . '</p>';
                 CCPage::Prompt($msg);
             }
@@ -531,7 +548,6 @@ class CCSkinAdmin
         CCPage::AddForm($form->GenerateForm());
     }
 
-
     function OnAdminMenu( &$items, $scope )
     {
         if( $scope == CC_GLOBAL_SCOPE )
@@ -555,15 +571,21 @@ class CCSkinAdmin
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/skins',     array('CCSkinAdmin', 'Admin'),
+        CCEvents::MapUrl( 'admin/skins',                array('CCSkinAdmin', 'Admin'),
             CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( 'admin/skins/settings',     array('CCSkinAdmin', 'Settings'),
+        CCEvents::MapUrl( 'admin/skins/profiles',       array('CCSkinAdmin', 'Profiles'),
             CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( 'admin/skins/layout',     array('CCSkinAdmin', 'Layout'),
+        CCEvents::MapUrl( 'admin/skins/profile/save',   array('CCSkinAdmin', 'ProfileSave'),
             CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( 'admin/colors',     array('CCSkinAdmin', 'ColorSchemes'),       
+        CCEvents::MapUrl( 'admin/skins/profile/load',   array('CCSkinAdmin', 'ProfileLoad'),
             CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( 'admin/skins/create', array('CCSkinAdmin', 'Create'),
+        CCEvents::MapUrl( 'admin/skins/settings',       array('CCSkinAdmin', 'Settings'),
+            CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( 'admin/skins/layout',         array('CCSkinAdmin', 'Layout'),
+            CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( 'admin/colors',               array('CCSkinAdmin', 'ColorSchemes'),       
+            CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( 'admin/skins/create',         array('CCSkinAdmin', 'Create'),
             CC_ADMIN_ONLY, ccs(__FILE__) );
     }
 

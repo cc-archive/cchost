@@ -41,6 +41,13 @@ var str_public                    ='<?=addslashes($T->String('str_lic_public'))?
 var str_sampling                  ='<?=addslashes($T->String('str_lic_sampling'))?>';
 var str_sampling_plus             ='<?=addslashes($T->String('str_lic_sampling_plus'))?>';
 var str_share_alike               ='<?=addslashes($T->String('str_lic_share_alike'))?>';
+
+var str_this_site                 ='<?=addslashes($T->String('str_remix_this_site'))?>';
+var str_no_search_term            ='<?=addslashes($T->String('str_remix_no_search_term'))?>';
+var str_no_matches                ='<?=addslashes($T->String('str_remix_no_matches'))?>';
+var str_remix_close               ='<?=addslashes($T->String('str_remix_close'))?>';
+var str_remix_open                ='<?=addslashes($T->String('str_remix_open'))?>';
+
 var str_loading                   ='<?=addslashes($T->String('str_loading'))?>';
 var str_ok                        ='<?=addslashes($T->String('str_ok'))?>';
 var str_ratings                   ='<?=addslashes($T->String('str_ratings')) ?>';

@@ -2096,7 +2096,7 @@ class CCUploadForm extends CCForm
             if( file_exists($real) )
             {
                 $path     = ccd($imagedir,$value);
-                $html .= '<br /><img src="' . $path . '" /><br /> '.
+                $html .= '<br /><img style="background-color:#999" src="' . $path . '" /><br /> '.
                   '<input type="checkbox" id="' . $varname . '_delete" name="' . $varname . '_delete" />'.
                   '<input type="hidden"   id="' . $varname . '_file"   name="' . $varname . '_file" ' .
                       'value="' . $value . '" />'.
@@ -2271,7 +2271,6 @@ class CCUploadForm extends CCForm
                 }
 
                 $realpath = realpath( $imagedir) . '/' . $clean_name ;
-
                 
                 if( file_exists($realpath) )
                     unlink($realpath);

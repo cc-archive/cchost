@@ -25,9 +25,20 @@
 
 #cc_narrow_list td.rec_end {
 	height: 20px;
+	border-top: 1px solid;
 }
 
 .small_stars {
 	float: left;
 	margin-right: 15%;
+}
+
+#remix_info {
+	float: left;
+	margin-left: 2em;
+}
+
+#remix_info h2 {
+	font-size: .8em;
+	margin: 1px;
 }

@@ -124,10 +124,10 @@ EOF;
         <div id="remix_info"><h2>%text(str_list_uses)%</h2>
         %loop(#R/remix_parents,P)%
             <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> <span>%text(str_by)%</span>
-                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div
+                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
         %end_loop%
-        %if_not_null(#R/parents_more_link)%
-            <a class="remix_more_link" href="%(#R/parents_more_link)%">%(str_more)%...</a>
+        %if_not_null(#R/more_parents_link)%
+            <a class="remix_more_link" href="%(#R/more_parents_link)%">%text(str_more)%...</a>
         %end_if%
         </div>
     %end_if%
@@ -138,8 +138,8 @@ EOF;
             <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> <span>%text(str_by)%</span>
                  <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
         %end_loop%
-        %if_not_null(#R/children_more_link)%
-            <a class="remix_more_link" href="%(#R/children_more_link)%">%(str_more)%...</a>
+        %if_not_null(#R/more_children_link)%
+            <a class="remix_more_link" href="%(#R/more_children_link)%">%text(str_more)%...</a>
         %end_if%
         </div>
     %end_if%

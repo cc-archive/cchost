@@ -455,21 +455,18 @@ class CCTagEvents
 
     function BrowseTags($tagstr,$search_type='all')
     {
-        require_once('cclib/cc-upload.php');
-        require_once('cclib/cc-upload-table.php');
+
         require_once('cclib/cc-tags.php');
+        require_once('cclib/cc-query.php');
 
         $currtags = CCTag::TagSplit($tagstr);
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetTagFilter($currtags,$search_type);
-        $uploads->SetOrder('upload_date','DESC');
-        CCPage::AddPagingLinks($uploads,'');
-        $records = $uploads->GetRecords('');
+        $q = '$tags=' . $currtags;
+        $query = new CCQuery();
+        $args= $query->ProcessAdminArgs($q);
+        $query->Query($args);
+        return;
         
         global $CC_GLOBALS;
-        $CC_GLOBALS['fplay_args'][] = "tags=$tagstr";
-
-        CCUpload::ListRecords($records);
 
         // All tags ('+')
         //
@@ -513,9 +510,11 @@ class CCTagEvents
         CCPage::PageArg("base_tag_url", ccl('tags'));
         $taghelp = strlen($tagstr) > 10 ? substr($tagstr,0,8) . '...' : $tagstr;
 
+        /*
         require_once('cclib/cc-feeds.php');
 
         CCFeeds::AddFeedLinks($tagstr,'',_('Tags') . ': ' . $taghelp );
+        */
 
     }
 

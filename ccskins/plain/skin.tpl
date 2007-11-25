@@ -1,7 +1,7 @@
 <?/*
 [meta]
-    type          = skin
-    desc          = _('Basic starter skin (defaults to mono)')
+    type  = skin
+    desc  = _('Basic starter skin templates')
 [/meta]
 */?>
 

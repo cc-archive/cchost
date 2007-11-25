@@ -1,6 +1,7 @@
 <?
 /*
 [meta]
+    type = template_component
     dataview = upload_menu
 [/meta]
 

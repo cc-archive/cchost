@@ -199,6 +199,30 @@ class CCAdminTemplateTagsForm extends CCEditConfigForm
 * @package cchost
 * @subpackage admin
 */
+class CCBannerLogoForm extends CCUploadForm
+{
+    function CCBannerLogoForm($avatar_dir,$file)
+    {
+        $this->CCUploadForm();
+
+
+        $fields['src'] =
+           array(  'label'       => _('Banner Logo File'),
+                   'form_tip'    => '',
+                   'upload_dir'  => $avatar_dir,
+                   'formatter'   => 'avatar',
+                   'value'       => $file,
+                   'flags'       => CCFF_POPULATE );
+
+        $this->AddFormFields($fields);
+        $this->SetSubmitText("Submit Banner Logo");
+    }
+}
+
+/**
+* @package cchost
+* @subpackage admin
+*/
 class CCNewTemplateTagForm extends CCForm
 {
     function CCNewTemplateTagForm()
@@ -249,11 +273,69 @@ class CCTemplateAdmin
         }
     }
 
-    function OnAdminTags()
+    function OnAdminTags($menu='')
     {
+        if( !empty($menu) )
+        {
+            if($menu == 'menu')
+                return $this->OnAdminTemplateMenu();
+            if($menu == 'bannerlogo')
+                return $this->OnBannerLogo();
+        }
+
         CCPage::SetTitle(_("Edit Template Tags"));
         $form = new CCAdminTemplateTagsForm();
         CCPage::AddForm( $form->GenerateForm() );
+    }
+
+    function OnBannerLogo()
+    {
+        $configs =& CCConfigs::GetTable();
+        $upload_dir = CCTemplateAdmin::GetFirstUserPath();
+        $ttags = $configs->GetConfig('site-logo');
+        $filename = empty($ttags['src']) ? '' : basename($ttags['src']);
+        $form = new CCBannerLogoForm($upload_dir,$filename);
+
+        if( !empty($_POST['bannerlogo']) && $form->ValidateFields() )
+        {
+            $form->FinalizeAvatarUpload('src', $upload_dir);
+            $form->GetFormValues($fields);
+            if( $fields['src'] )
+            {
+                $args['src'] = ccp($upload_dir,$fields['src']);
+                list( $args['w'], $args['h'] ) = @getimagesize($args['src']);
+            }
+            else
+            {
+                $args['src'] = 0;
+            }
+            $configs->SaveConfig('site-logo',$args);
+            CCUtil::SendBrowserTo(ccl('admin','templatetags','menu'));
+        }
+        else
+        {
+            CCPage::SetTitle(_('Set Banner Image'));
+            CCPage::AddForm( $form->GenerateForm() );
+        }
+    }
+
+    function OnAdminTemplateMenu()
+    {
+        CCPage::SetTitle(_('Configure Skins'));
+
+        $args[] = array( 'action'    => ccl('admin','templatetags','profiles'),
+                         'menu_text' => _('Banner Text, Footers, etc.'),
+                         'help'      => _('Edit the text of the banner, footer and other elements on every page') );
+
+        $args[] = array( 'action'    => ccl('admin','templatetags','bannerlogo'),
+                         'menu_text' => _('Banner Logo'),
+                         'help'      => _('Upload a logo graphic for the banner') );
+
+        $args[] = array( 'action'    => ccl('admin','templatetags','new'),
+                         'menu_text' => _('New Page Element'),
+                         'help'      => _('Web developers: Create a new element for page template skin') );
+
+        CCPage::PageArg('client_menu',$args,'print_client_menu');
     }
 
     function OnNewTags()
@@ -314,6 +396,11 @@ class CCTemplateAdmin
         return CCTemplateAdmin::_get_meta_type('extras','extras');
     }
 
+    function GetSkins($skip_shared=false)
+    {
+        return CCTemplateAdmin::_get_meta_type('','skin');
+    }
+
     function GetDataViewFromTemplate($template)
     {
         $skinmac = new CCSkinMacro($template);
@@ -346,42 +433,69 @@ class CCTemplateAdmin
         return $props;
     }
 
-    function _get_meta_type($sub_dir,$type,$ret_files=true)
+    function _get_meta_type($format_dir,$type,$ret_files=true)
     {
         global $CC_GLOBALS;
         
-        $files = array();
         $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], 'ccskins/shared');
-
-        foreach( $tdirs as $tdir )
+        $k = array_keys($tdirs);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
         {
-            $tdir = CCUtil::CheckTrailingSlash($tdir,false);
-            CCTemplateAdmin::_scour_format_dir($files, $tdir, '/' . $sub_dir . '/*.*' );
+            $tdirs[$k[$i]] = CCUtil::CheckTrailingSlash($tdirs[$k[$i]],false);
         }
-        
-        $match_files = array();
-        foreach($files as $ffile)
-        {
-            $props = CCTemplateAdmin::_get_format_props($ffile);
-            if( !$props || ($props['type'] != $type) )
-                continue;
 
-            if( $ret_files )
+        $results = array();
+        CCTemplateAdmin::_scour_format_dirs($results, $tdirs, $format_dir, $type, $ret_files);
+        return $results;
+    }
+
+    function _scour_format_dirs(&$match_files, $source, $format_dir, $type, $ret_files )
+    {
+        foreach( $source as $dir )
+        {
+            if( $format_dir )
             {
-                if( empty($props['desc']) )
-                {
-                    $match_files[$ffile] = $ffile;
-                }
-                else
-                {
-                    $match_files[$ffile] = $props['desc'];
-                }
+                $format_path = $dir . '/' . $format_dir;
+                if( !file_exists( $format_path ) )
+                    continue;
             }
             else
             {
-                $props['id'] = $ffile;
-                $match_files[] = $props;
+                $format_path = $dir;
             }
+
+            $subdirs = array();
+            foreach( glob( $format_path . '/*.*' ) as $ffile)
+            {
+                if( is_dir($ffile) )
+                    continue;
+
+                $props = CCTemplateAdmin::_get_format_props($ffile);
+                if( !$props || ($props['type'] != $type) )
+                    continue;
+
+                if( $ret_files )
+                {
+                    if( empty($props['desc']) )
+                    {
+                        $match_files[$ffile] = $ffile;
+                    }
+                    else
+                    {
+                        $match_files[$ffile] = $props['desc'];
+                    }
+                }
+                else
+                {
+                    $props['id'] = $ffile;
+                    $match_files[] = $props;
+                }
+            }
+
+            $subdirs = glob( $dir . '/*', GLOB_ONLYDIR );
+            if( !empty($subdirs) )
+                CCTemplateAdmin::_scour_format_dirs($match_files, $subdirs, $format_dir, $type, $ret_files );
         }
 
         return $match_files;
@@ -410,21 +524,6 @@ class CCTemplateAdmin
         return $props;
     }
 
-    function _scour_format_dir(&$files, $dir, $mask)
-    {
-        $hits = glob( $dir . $mask );
-        if( !empty($hits) )
-        {
-            $files += $hits;
-         }
-        $dirs = glob( $dir . '/*', GLOB_ONLYDIR );
-        foreach( $dirs as $subdir )
-        {
-            if( $subdir{0} != '.' )
-                CCTemplateAdmin::_scour_dir($files,$subdir,$mask);
-        }
-    }
-
     function GetUserPaths($append='')
     {
         global $CC_GLOBALS;
@@ -443,35 +542,18 @@ class CCTemplateAdmin
         return $paths;
     }
 
-    function GetSkins($skip_shared=false)
+    function GetFirstUserPath()
     {
         global $CC_GLOBALS;
-        
-        $files = array();
-        $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], 'ccskins');
-        foreach( $tdirs as $tdir )
+
+        $use_paths = CCUtil::SplitPaths( $CC_GLOBALS['template-root']);
+        foreach( $use_paths as $P )
         {
-            $tdir = CCUtil::CheckTrailingSlash($tdir,false);
-            CCTemplateAdmin::_scour_dir($files, $tdir, '/skin.*' );
+            if( strstr($P,'ccskins') )
+                continue;
+            return $P;
         }
-
-        if( $skip_shared )
-            $files = array_diff( $files, array( 'ccskins/shared' ) );
-
-        return $files;
-    }
-
-    function _scour_dir(&$files, $dir, $mask)
-    {
-        $hits = glob( $dir . $mask );
-        if( !empty($hits) )
-            $files[ $hits[0] ] = $dir;
-        $dirs = glob( $dir . '/*', GLOB_ONLYDIR );
-        foreach( $dirs as $subdir )
-        {
-            if( $subdir{0} != '.' )
-                CCTemplateAdmin::_scour_dir($files,$subdir,$mask);
-        }
+        return '';
     }
 
     /**
@@ -486,11 +568,11 @@ class CCTemplateAdmin
             return;
 
         $items += array( 
-            'ttag'   => array('menu_text'   => _('Titles and Footers'),
+            'ttag'   => array('menu_text'   => _('Banner and Footers'),
                               'menu_group'  => 'configure',
                               'help'        => _('Edit what the banner and footer says on each page.'),
                               'weight'      => 50,
-                              'action'      =>  ccl('admin','templatetags'),
+                              'action'      =>  ccl('admin','templatetags','menu'),
                               'access'      => CC_ADMIN_ONLY
                              ),
             /*
@@ -521,7 +603,7 @@ class CCTemplateAdmin
     {
         CCEvents::MapUrl( 'admin/templatetags',     array('CCTemplateAdmin','OnAdminTags'),         
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
-            _("Displays 'Header/Footer' form"), CC_AG_CONFIG );
+            _("Displays 'Header/Footer' menus and option forms"), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/extras',          array('CCTemplateAdmin','OnAdminExtras'),      
             CC_ADMIN_ONLY, ccs(__FILE__), '', 

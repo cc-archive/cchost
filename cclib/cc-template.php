@@ -57,8 +57,10 @@ class CCSkin
         $this->vars['noproto']      = false;
         $this->vars['ajax']         = !empty($_REQUEST['ajax']);
 
+        $site_logo['logo'] = $configs->GetConfig('site-logo');
+
         // this seems like (memory) overkill, need to optimize
-        $this->vars = array_merge($CC_GLOBALS,$this->vars);
+        $this->vars = array_merge($CC_GLOBALS,$this->vars,$site_logo);
 
         if( CCUser::IsLoggedIn() )
         {

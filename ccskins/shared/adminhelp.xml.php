@@ -1,7 +1,3 @@
-<?if( !defined('IN_CC_HOST') )
-    die('Welcome to ccHost');
-?><div >
-
 <div  id="adminhelp">
 <a  name="navhelp"></a>
 <h1 >Newest Information</h1>

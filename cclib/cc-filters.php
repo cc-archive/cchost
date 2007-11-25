@@ -67,18 +67,12 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                     if( is_string($R['upload_extra']) )
                         $R['upload_extra'] = unserialize($R['upload_extra']);
 
-                    if( empty($R['upload_extra']['usertags']) )
-                    {
-                        $R['user_tags'] = array();
-                    }
-                    else
-                    {
-                        require_once('cclib/cc-tags.inc');
-                        $tags = CCTag::TagSplit($R['upload_extra']['usertags']);
-                        $baseurl = ccl('tags') . '/';
-                        foreach( $tags as $tag )
-                            $R['user_tags'][] = array( 'tagurl' => $baseurl . $tag, 'tag' => $tag );
-                    }
+                    require_once('cclib/cc-tags.inc');
+                    $tags = CCTag::TagSplit($R['upload_extra']['ccud']);
+                    $tags = array_merge($tags,CCTag::TagSplit($R['upload_extra']['usertags']));
+                    $baseurl = ccl('tags') . '/';
+                    foreach( $tags as $tag )
+                        $R['usertag_links'][] = array( 'tagurl' => $baseurl . $tag, 'tag' => $tag );
                     break;
                 }
 
@@ -124,7 +118,7 @@ function cc_filter_std(&$records,&$query_args,&$dataview_info)
                     $q = 'dataview=links_by_chop&f=php&&remixes=' . $R['upload_id'];
                     $args = $query->ProcessAdminArgs($q);
                     list( $R['remix_children'] ) = $query->Query($args);
-                    if( $R['remix_children'] > 14 )
+                    if( count($R['remix_children']) > 14 )
                         $R['children_overflow'] = true;
                     break;
                 }

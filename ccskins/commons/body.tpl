@@ -20,7 +20,10 @@
         <div id="beta_message">%(show_beta_message)%</div>
     %end_if%
 
-    <h1 id="site_title"><a href="%(root-url)%" title="%(site-title)%">%(banner-html)%</a></h1>
+    <h1 id="site_title"><a href="%(root-url)%" title="%(site-title)%">
+        %if_not_null(logo/src)% <? $bimg = ccd($A['logo']['src']); ?><img src="%(#bimg)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> %end_if% 
+        %if_not_null(banner-html)% <!-- -->%(banner-html)%   %end_if% 
+    </a></h1>
 
     %if_not_empty(site-description)%
         <div id="site_description">%(site-description)%</div>

@@ -65,7 +65,6 @@ class CCQueryFormats
                 {
                     $R =& $records[$k[$i]];
                     $text .= $comm;
-                    $query->CleanRec($R);
                     $filtered = array_filter($R);
                     $text .= CCZend_Json_Encoder::encode($filtered);
                     $comm = ',';
@@ -90,7 +89,6 @@ class CCQueryFormats
                     for( $i = 0; $i < $count; $i++ )
                     {
                         $R =& $records[$k[$i]];
-                        $query->CleanRec($R);
                         $xml .= "   <tr>\n"; // <record type=\"object\" id=\"{$R[$idname]}\">\n";
                         $this->_dump_xml_obj($R,$xml);
                         $xml .= "   </tr>\n";
@@ -130,11 +128,6 @@ class CCQueryFormats
                 }
 
                 $templateObj = new CCTemplateMacro($template,$macro);
-
-                $k = array_keys($records);
-                $count = count($k);
-                for( $i = 0; $i < $count; $i++ )
-                    $query->CleanRec($records[$k[$i]]);
 
                 require_once('cclib/cc-page.php');
 
@@ -189,7 +182,6 @@ class CCQueryFormats
                 for( $i = 0; $i < $count; $i++ )
                 {
                     $R =& $records[$k[$i]];
-                    $query->CleanRec($R);
                     $fields = array();
                     foreach( $keys as $key )
                     {
@@ -220,16 +212,20 @@ class CCQueryFormats
 
         list( $value, $mime ) = $results;
 
-        // json returns value in header
-        //
-        if( $format == 'json' )
-            header( "X-JSON: $value");
+        if( empty($nomime) )
+        {
+            // json returns value in header
+            //
+            if( $format == 'json' )
+                header( "X-JSON: $value");
 
-        if( !empty($mime) )
-            header( "Content-type: $mime" );
+            if( !empty($mime) )
+                header( "Content-type: $mime" );
+        }
 
         print($value);
-        exit;
+        if( empty($noexit) )
+            exit;
     }
 
     function _old_dump_xml_obj($obj,&$xml)

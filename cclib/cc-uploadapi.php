@@ -738,6 +738,7 @@ class CCUploadAPI
         $file_args['local_path']   = cca($relative_dir,$file_args['file_name']);
         $file_args['download_url'] = ccd($relative_dir,$file_args['file_name']);
 
+
         // Run the file through the ID3 tagger
         //
         $tagger = null;

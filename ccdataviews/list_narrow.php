@@ -35,7 +35,8 @@ WHERE %where% file_order = 0
 %limit%
 EOF;
     return array( 'sql' => $sql,
-                   'e'  => array( CC_EVENT_FILTER_DESCRIPTION_TEXT,
+                   'e'  => array( CC_EVENT_FILTER_REMIXES_SHORT,
+                                  CC_EVENT_FILTER_DESCRIPTION_TEXT,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
                                   CC_EVENT_FILTER_PLAY_URL )
                 );

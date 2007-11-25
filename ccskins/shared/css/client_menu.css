@@ -6,11 +6,12 @@
 }
 
 .client_menu li {
-	margin-bottom: 1.0em;
+	margin-bottom: 0.8em;
 }
 
 .client_menu a {
 	font-weight: bold;
+	font-size: 1.1em;
 }
 
 .client_menu span {
