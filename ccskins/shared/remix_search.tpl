@@ -25,8 +25,7 @@ div#remix_search_controls {
 #debug { display: none; }
 </style>
 <div style="width:40em;">
-    <div id="remix_search_toggle" style="display:none"><a href="javascript://toggle" id="remix_toggle_link">%text(str_remix_close)%</a></div>
-    <div>%text(str_remix_i_used_samples)%: </div>
+    <div id="remix_search_toggle" style="display:none">%if_not_null(field/close_box)%<a href="javascript://toggle" id="remix_toggle_link">%text(str_remix_close)%</a>%end_if%</div>
     <div id="remix_search_controls" style="display:block">
         <select id="remix_search_type">
             <option value="search_remix_artist" selected="selected">%text(str_remix_artist)%</option>
@@ -40,6 +39,12 @@ div#remix_search_controls {
     </div>
     <div id="debug"></div>
     <div id="remix_search_results">
+    %if_not_null(field/sourcesof)%
+        <? 
+            cc_query_fmt("dataview=search_remix&t=remix_checks&f=html&noexit=1&nomime=1&sources=" . $A['field']['sourcesof']); 
+            cc_query_fmt("dataview=pool_item&f=html&t=remix_pool_checks&sort=&datasource=pools&noexit=1&nomime=1&sources=" . $A['field']['sourcesof']); 
+        ?>
+    %end_if%
     </div>
     <div id="remix_search_picks">
     </div>

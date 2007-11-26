@@ -24,5 +24,7 @@ require_once( 'cclib/cc-events.php');
 require_once( 'cclib/cc-handlers.inc');
 require_once( 'cclib/cc-user.php' );
 require_once( 'cclib/cc-upload-table.php' );
+require_once( 'cclib/cc-file-props.php' );
+require_once( 'cclib/cc-dataview.php' );
 
 ?>

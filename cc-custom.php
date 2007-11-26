@@ -204,23 +204,7 @@ function & CC_tag_query(
     $uploads->SetOffsetAndLimit(0,0);
     if( $with_menus || $with_remixes )
     {
-        $count = count($records);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            if( $with_menus )
-            {
-                $menu = 
-                   CCMenu::GetLocalMenu(CC_EVENT_UPLOAD_MENU,
-                                        array(&$records[$i]),
-                                        CC_EVENT_BUILD_UPLOAD_MENU);
-
-                $records[$i]['local_menu'] = $menu;
-            }
-            if( $with_remixes )
-            {
-                CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING, array(&$records[$i]));
-            }
-        }
+        die( 'with_menu and with_remixes are no longer supported, sorry' );
     }
     $uploads->SetDefaultFilter(true,false); 
     return $records;

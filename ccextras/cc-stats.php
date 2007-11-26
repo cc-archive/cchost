@@ -136,7 +136,7 @@ function cc_stats_charts($type='upload',$sort_on='rank',$dir='DESC')
         $count = count($upload_recs);
         for( $i = 0; $i < $count; $i++ )
         {
-            CCEvents::Invoke( CC_EVENT_UPLOAD_LISTING, array( &$upload_recs[$i] ) );
+            // todo -- use dataviews here...
             //CCDebug::PrintVar($args['upload_recs'][0],false);
         }
         CCPage::PageArg('upload_recs',$upload_recs,'charts.xml' );

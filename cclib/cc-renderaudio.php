@@ -40,25 +40,6 @@ require_once('cclib/cc-render.php');
 */
 class CCRenderAudio extends CCRender
 {
-    /**
-    * Handler for {@link CC_EVENT_LISTING_RECORDS}
-    *
-    * @param array $records Array of records being displayed
-    */
-    function OnListingRecords(&$records)
-    {
-        $count = count($records);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            //if( CCUploads::IsMediaType($records[$i],'audio') )
-            if( CCUploads::InTags('audio',$records[$i]) )
-            {
-                CCPage::PageArg('can_stream_page',true);
-                return;
-            }
-        }
-    }
-
     function StreamPage()
     {
         $this->_stream_files();

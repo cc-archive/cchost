@@ -324,7 +324,8 @@ class CCSkinAdmin
         }
         else
         {
-            $props = CCTemplateAdmin::_get_format_props($skin_settings['skin_profile']);
+            $fp = new CCFileProps();
+            $props = $fp->GetFileProps($skin_settings['skin_profile']);
             $msg = sprintf(_('Current skin profile: %s'), '<b>' . $props['desc'] . '</b>' );
         }
 
@@ -376,8 +377,8 @@ class CCSkinAdmin
 
     function _load_profile($skin_profile)
     {
-        require_once('cclib/cc-template.inc');
-        $props = CCTemplateAdmin::_get_format_props($skin_profile);
+        $fp = new CCFileProps();
+        $props = $fp->GetFileProps($skin_profile);
         unset($props['type']);
         unset($props['desc']);
         $props['skin_profile'] = $skin_profile;

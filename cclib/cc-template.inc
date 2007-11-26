@@ -156,7 +156,6 @@ EOF;
 
     CCPage::PageArg('edit_extra',$target);
 
-
     return $html;
 }
 
@@ -244,6 +243,51 @@ class CCNewTemplateTagForm extends CCForm
 */
 class CCTemplateAdmin
 {
+    function GetFormats($type)
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('formats',$type);
+    }
+
+    function GetProfiles()
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('profiles','profile',true);
+    }
+
+    function GetStringProfiles()
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('strings','string_profile');
+    }
+
+    function GetLayouts($type)
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('layouts',$type,false);
+    }
+
+    function GetFonts()
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('colors','font',false);
+    }
+
+    function GetFontSizes()
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('colors','fontsize',false);
+    }
+
+    function GetColors()
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('colors','color',false);
+    }
+
+    function GetExtras()
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('extras','extras');
+    }
+
+    function GetSkins($skip_shared=false)
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('','skin');
+    }
+
     function OnAdminExtras()
     {
         CCPage::SetTitle(_("Sidebar Extras Content"));
@@ -354,174 +398,6 @@ class CCTemplateAdmin
             $configs->SaveConfig('ttag',$newtag);
             CCUtil::SendBrowserTo(ccl('admin','templatetags'));
         }
-    }
-
-    function GetFormats($type)
-    {
-        return CCTemplateAdmin::_get_meta_type('formats',$type);
-    }
-
-    function GetProfiles()
-    {
-        return CCTemplateAdmin::_get_meta_type('profiles','profile',true);
-    }
-
-    function GetStringProfiles()
-    {
-        return CCTemplateAdmin::_get_meta_type('strings','string_profile');
-    }
-
-    function GetLayouts($type)
-    {
-        return CCTemplateAdmin::_get_meta_type('layouts',$type,false);
-    }
-
-    function GetFonts()
-    {
-        return CCTemplateAdmin::_get_meta_type('colors','font',false);
-    }
-
-    function GetFontSizes()
-    {
-        return CCTemplateAdmin::_get_meta_type('colors','fontsize',false);
-    }
-
-    function GetColors()
-    {
-        return CCTemplateAdmin::_get_meta_type('colors','color',false);
-    }
-
-    function GetExtras()
-    {
-        return CCTemplateAdmin::_get_meta_type('extras','extras');
-    }
-
-    function GetSkins($skip_shared=false)
-    {
-        return CCTemplateAdmin::_get_meta_type('','skin');
-    }
-
-    function GetDataViewFromTemplate($template)
-    {
-        $skinmac = new CCSkinMacro($template);
-        list( $file, $macro ) = $skinmac->LookupMacro();
-        if( empty($file) )
-            return null;
-        $props = CCTemplateAdmin::_get_format_props($file);
-        if( empty($props['dataview']) )
-            return null;
-        if( empty($props['embedded']) )
-        {
-            global $CC_GLOBALS;
-            $props['file'] = CCUtil::SearchPath( $props['dataview'] . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
-        }
-        else
-        {
-            $text = file_get_contents($file);
-            if( !preg_match('#\[dataview\](.*)\[/dataview\]#s',$text,$m) )
-                return null;
-            $props['code'] = $m[1];
-        }
-        return $props;
-    }
-
-    function GetDataView($dataview)
-    {
-        global $CC_GLOBALS;
-        $props['dataview'] = $dataview;
-        $props['file'] = CCUtil::SearchPath( $dataview . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
-        return $props;
-    }
-
-    function _get_meta_type($format_dir,$type,$ret_files=true)
-    {
-        global $CC_GLOBALS;
-        
-        $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], 'ccskins/shared');
-        $k = array_keys($tdirs);
-        $c = count($k);
-        for( $i = 0; $i < $c; $i++ )
-        {
-            $tdirs[$k[$i]] = CCUtil::CheckTrailingSlash($tdirs[$k[$i]],false);
-        }
-
-        $results = array();
-        CCTemplateAdmin::_scour_format_dirs($results, $tdirs, $format_dir, $type, $ret_files);
-        return $results;
-    }
-
-    function _scour_format_dirs(&$match_files, $source, $format_dir, $type, $ret_files )
-    {
-        foreach( $source as $dir )
-        {
-            if( $format_dir )
-            {
-                $format_path = $dir . '/' . $format_dir;
-                if( !file_exists( $format_path ) )
-                    continue;
-            }
-            else
-            {
-                $format_path = $dir;
-            }
-
-            $subdirs = array();
-            foreach( glob( $format_path . '/*.*' ) as $ffile)
-            {
-                if( is_dir($ffile) )
-                    continue;
-
-                $props = CCTemplateAdmin::_get_format_props($ffile);
-                if( !$props || ($props['type'] != $type) )
-                    continue;
-
-                if( $ret_files )
-                {
-                    if( empty($props['desc']) )
-                    {
-                        $match_files[$ffile] = $ffile;
-                    }
-                    else
-                    {
-                        $match_files[$ffile] = $props['desc'];
-                    }
-                }
-                else
-                {
-                    $props['id'] = $ffile;
-                    $match_files[] = $props;
-                }
-            }
-
-            $subdirs = glob( $dir . '/*', GLOB_ONLYDIR );
-            if( !empty($subdirs) )
-                CCTemplateAdmin::_scour_format_dirs($match_files, $subdirs, $format_dir, $type, $ret_files );
-        }
-
-        return $match_files;
-    }
-
-    function _get_format_props($filename)
-    {
-        $text = file_get_contents($filename);
-        if( !preg_match('#.*\[meta\](.*)\[/meta\].*#ms',$text,$m) )
-            return null;
-        $lines = split("\n",$m[1]);
-        $props = array();
-        foreach( $lines as $line )
-        {
-            $line = trim($line);
-            if( empty($line) )
-                continue;
-            $parts = split('=',$line);
-            $props[ trim($parts[0]) ] = trim($parts[1]);
-        }
-        if( !empty($props['desc']) )
-        {
-            if( preg_match("/^_\(['\"](.+)['\"]\)$/",$props['desc'],$m) )
-                $props['desc'] = _($m[1]);
-        }
-        return $props;
     }
 
     function GetUserPaths($append='')

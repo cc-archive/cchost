@@ -181,18 +181,7 @@ class CCPoolSources extends CCPoolTree
     /**
     * Return the pool remix sources for a given record
     *
-    * NOTE: This method is, er, performance intensive. See {@link CCPoolUI::OnUploadListing()} for
-    * an example of an optimized version.
-    * 
-    * The $limit_by_works_page parameter is (unfortunately) a flip-negative flag
-    * that will limit the number of records returned based on the following 
-    * conditions:
-    *
-    *   If $limit_by_works_page is <i>true</i> AND $record['works_page'] is <i>false</i>
-    *   then the number of records returned will be max out at {@link CC_MAX_SHORT_REMIX_DISPLAY}
-    *
-    * This flag is used when we are doing an upload listing and only have room for a few
-    * remix relatives.
+    * I think this method is dead
     *
     * @param array $record Record to get remixes of
     * @param boolean $limit_by_works_page (See method comments)
@@ -408,6 +397,46 @@ class CCLocalPoolRemixes extends CCRemixTree
 */
 class CCPool
 {
+    function Search($pool_id)
+    {
+        $query = CCUtil::Strip($_GET['search']);
+
+        list( $type, $pool_results ) = CCPool::PoolQuery($pool_id, $query);
+
+        if( !empty($pool_results) )
+        {
+            if( $type == 'rss' )
+            {
+                // we got a remote rss feed, we add the items right into the
+                // table even if the use doesn't pick them just to have them
+                // around.
+
+                $pools =& CCPools::GetTable();
+                $pool = $pools->QueryKeyRow($pool_id);
+    
+                $items = array();
+                foreach( $pool_results as $pool_result )
+                {
+                    $item = CCPool::AddItemToPool( $pool, $pool_result );
+                    if( is_array($item) )
+                    {
+                        $items[] = array_merge( $item, $pool );
+                    }
+                }
+            }
+            else
+            {
+                // the items were fetched locally
+                $items = $pool_results;
+            }
+        }
+
+        $template = new CCSkinMacro( CCUtil::Strip($_GET['t']) );
+        $args['records'] =& $items;
+        $template->SetAllAndPrint($args);
+        exit; // this is an ajax call
+    }
+
     function PoolQuery($pool_id, $query, $type='full')
     {
         $pools =& CCPools::GetTable();

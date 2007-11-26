@@ -5,7 +5,7 @@ if( !defined('IN_CC_HOST') )
     die( 'Welcome to ccHost' );
 
 
-function cc_filter_std(&$records,&$query_args,&$dataview_info)
+function cc_filter_std(&$records,&$dataview_info)
 {
     global $CC_GLOBALS;
     $c = count($records);

@@ -267,18 +267,6 @@ class CCRating
         exit;
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_LISTING}
-    *
-    * Final chance to massage a record before being displayed in a list
-    * 
-    * @param array &$row Record to massage with extra display information
-    */
-    function OnUploadListing(&$record)
-    {
-        CCRating::GetRatingsInfo($record);
-    }
-
     function GetRatingsInfo(&$record)
     {
         $configs    =& CCConfigs::GetTable();

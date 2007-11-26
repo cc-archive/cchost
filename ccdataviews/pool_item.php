@@ -1,19 +1,18 @@
 <?/*
 [meta]
     type = dataview
-    name = search_remix_title
+    name = pool_item
 [meta]
 */
 
-function search_remix_title_dataview() 
+function pool_item_dataview() 
 {
     $sql =<<<EOF
 SELECT 
-    upload_id, user_name, upload_name, user_real_name,
-    LOWER(upload_name) as qsearch
+    pool_item_id, pool_item_name, pool_item_artist, pool_name
      %columns% 
-FROM cc_tbl_uploads
-JOIN cc_tbl_user ON upload_user = user_id
+FROM cc_tbl_pool_item
+JOIN cc_tbl_pools ON pool_item_pool = pool_id
 %joins%
 %where%
 %group%

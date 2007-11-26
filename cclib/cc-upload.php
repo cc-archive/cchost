@@ -124,7 +124,7 @@ class CCUpload
         CCPage::PageArg( 'records', $records, $macro );
         CCPage::PageArg( 'skip_format_sig', true );
         $uploads =& CCUploads::GetTable();
-        CCPage::AddPagingLinks('cc_tbl_uploads' /*$uploads*/,$last_where); // ??
+        //CCPage::AddPagingLinks('cc_tbl_uploads' /*$uploads*/,$last_where); // ??
 
         // we don't know WHAT shape the global table is in but
         // we have the latest where used so we use that for
@@ -151,6 +151,8 @@ class CCUpload
         $CC_GLOBALS['fplay_args'][] = $qstring;
 
         CCPage::AddPagingLinks($temp_up,$last_where);
+                if( !isset( $this->args['qstring']) )
+            $this->args['qstring'] = $this->SerializeArgs($this->args);
         */
 
         if( empty($macro) )

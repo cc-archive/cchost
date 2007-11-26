@@ -45,38 +45,23 @@ class CCPostRemixForm extends CCNewUploadForm
      * @access public
      * @param integer $userid The remix will be 'owned' by owned by this user
      */
-    function CCPostRemixForm($userid,$show_pools=false)
+    function CCPostRemixForm($userid)
     {
         $this->CCNewUploadForm($userid,false);
 
-        require_once('cclib/cc-remix.php');
+        $fields['sources'] = array(    'label'      => 'str_sources',
+                           'form_tip'   => 'str_sources_tip',
+                           'formatter'  => 'metalmacro',
+                           'macro'      => 'remix_search',
+                           'close_box'  => 1,
+                           'flags'      => CCFF_POPULATE,
+                        );
 
-        if( $show_pools )
-            CCRemix::_add_pool_to_form($this);
+        $this->SetHiddenField( 'upload_license', '', CCFF_HIDDEN | CCFF_STATIC );
+        $this->InsertFormFields( $fields, 'before', 'upload_name');
+        $this->DisableSubmitOnInit();
 
-        CCRemix::_setup_search_fields($this);
     }
-
-    /**
-     * Overrides the base class and only displays fields if search results is not empty.
-     *
-     */
-    function GenerateForm()
-    {
-        if( $this->TemplateVarExists('remix_sources') || $this->TemplateVarExists('pool_sources')  )
-        {
-            parent::GenerateForm(false);
-        }
-        else
-        {
-            $this->EnableSubmitMessage(false);
-            $this->SetSubmitText(null);
-            parent::GenerateForm(true); // hiddenonly = true
-        }
-
-        return( $this );
-    }
-
 }
 
 
@@ -87,17 +72,22 @@ class CCEditRemixesForm extends CCForm
      *
      * Sets up form as a remix editing form. Initializes 'remix search' box.
      *
-     * @param bool $show_pools (reserved)
      */
-    function CCEditRemixesForm($show_pools=false)
+    function CCEditRemixesForm($sources_for_this)
     {
         $this->CCForm();
 
-        if( $show_pools )
-            CCRemix::_add_pool_to_form($this);
+        $fields['sources'] = array(    
+                           'label'      => 'str_sources',
+                           'form_tip'   => 'str_sources_tip',
+                           'formatter'  => 'metalmacro',
+                           'macro'      => 'remix_search',
+                           'sourcesof'  => $sources_for_this,
+                           'flags'      => CCFF_POPULATE,
+                        );
 
-        CCRemix::_setup_search_fields($this);
-
+        $this->AddFormFields($fields);
+        $this->DisableSubmitOnInit();
         $this->SetSubmitText(_('Done Editing'));
     }
 }

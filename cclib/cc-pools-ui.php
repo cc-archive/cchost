@@ -362,6 +362,9 @@ END;
         CCEvents::MapUrl( ccp( 'pools', 'item' ),    array( 'CCPoolUI', 'Item'),    
             CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolitemid}', 
             _('Show a sample pool item'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'pools', 'search' ),    array( 'CCPool', 'Search'),
+            CC_DONT_CARE_LOGGED_IN , 'cclib/cc-pools.php' , '{poolid}', 
+            _('Search a given pool (perhaps remotely) with a string'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp( 'admin', 'pools'),                array( 'CCPoolUI', 'Admin'),    
             CC_ADMIN_ONLY , ccs(__FILE__) , '', _('Display admin pools menu'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp( 'admin', 'pools', 'settings' ),   array( 'CCPoolUI', 'Settings'), 

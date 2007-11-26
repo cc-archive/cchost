@@ -2326,6 +2326,14 @@ class CCUploadForm extends CCForm
         $this->AddTemplateVars(array('hide_on_submit' => true));
         CCPage::AddScriptBlock( 'hide_upload_form', true ); 
     }
+
+    /**
+    * Adds the necessary javascript macros to disable the submit button
+    */
+    function DisableSubmitOnInit()
+    {
+        CCPage::AddScriptBlock( 'util.php/disable_submit_button', true ); 
+    }
 }
 
 ?>

@@ -69,6 +69,13 @@ function _t_util_print_forms($T,&$A)
     }
 }
 
+function _t_util_disable_submit_button($T,&$A)
+{
+    ?>
+<script> $('form_submit').disabled = true; </script>
+    <?
+}
+
 function _t_util_hide_upload_form($T,&$A)
 {
     $msg = str_replace("\n", ' ', addslashes($T->String('str_uploading_msg')));
@@ -113,12 +120,12 @@ formMask.prototype = {
 
     initialize: function()
     {
-        //Event.observe(form_id,'submit', this.dull_screen.bindAsEventListener(this) );
+        Event.observe(form_id,'submit', this.dull_screen.bindAsEventListener(this) );
     },
 
     dull_screen: function()
     { 
-         new Insertion.Before( $('banner'), '<div id="bodymask"><span>uploading...</span><div id="maskmsg"><?= $msg ?><?= $spinner ?></div>' );
+         new Insertion.Before( $('header'), '<div id="bodymask"><span>uploading...</span><div id="maskmsg"><?= $msg ?><?= $spinner ?></div>' );
          Event.observe('bodymask','click',this.killClick.bindAsEventListener(this),true);
          Event.observe('bodymask','keypress',this.killClick.bindAsEventListener(this),true);
          Element.scrollTo('bodymask');
@@ -131,8 +138,6 @@ formMask.prototype = {
         Event.stop(e);
         return false;
     }
-
-
 }
 
 var the_formMask = new formMask();
@@ -201,11 +206,13 @@ function _t_util_print_bread_crumbs($T,&$A)
 function _t_util_print_client_menu($T,&$A)
 {
     ?><link rel="stylesheet" type="text/css" href="<?= $T->URL('css/client_menu.css'); ?>" title="Default Style" /><?
+
+    if( !empty($A['client_menu_help']) )
+        print "<div class=\"client_menu_help box\">{$A['client_menu_help']}</div>\n";
+
     $items = $A['client_menu'];
     $count = count($items);
     $K = array_keys($items);
-    if( !empty($A['client_menu_help']) )
-        print "<div class=\"client_menu_help box\">{$A['client_menu_help']}</div>\n";
 
     print "<ul class=\"client_menu\">\n";
     for( $i = 0; $i < $count; $i++ )

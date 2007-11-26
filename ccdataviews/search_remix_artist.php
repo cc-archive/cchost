@@ -7,16 +7,9 @@
 
 function search_remix_artist_dataview() 
 {
-    $urlf = ccl('files') . '/';
-    $urlp = ccl('people') . '/';
-
     $sql =<<<EOF
 SELECT 
-    upload_id,  user_name,
-    CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
-    upload_name,
-    CONCAT( '$urlp', user_name ) as artist_page_url,
-    user_real_name,
+    upload_id, user_name, upload_name, user_real_name,
     LOWER(CONCAT_WS(' ', user_name, user_real_name)) as qsearch
      %columns% 
 FROM cc_tbl_uploads

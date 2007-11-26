@@ -246,13 +246,6 @@ function cc_get_ratings_info(&$record)
         CCRating::GetRatingsInfo($record);
     }
 }
-function cc_get_remix_history(&$records,$max)
-{
-    require_once('cclib/cc-remix-hv.php');
-    CCRemixHV::GetRemixHistory($records,$max);
-    require_once('cclib/cc-pools-hv.php');
-    CCPoolHV::GetPoolHistory( $records, $max );
-}
 
 function cc_get_value($arr,$key)
 {

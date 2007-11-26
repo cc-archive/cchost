@@ -203,7 +203,8 @@ END;
 
             $uploads =& CCUploads::GetTable();
             CCPage::SetTitle(sprintf(_('Reviews for "%s"'),$R['upload_name']) );
-            CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING,array(&$R));
+            // todo: convert al this to dataview
+            //CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING,array(&$R));
             $R['local_menu'] = CCUpload::GetRecordLocalMenu($R);
 
             // todo: this should have paging (!)

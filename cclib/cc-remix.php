@@ -40,58 +40,6 @@ define('CC_REMIX_SEARCH_LIMIT', 30 );
 class CCRemix
 {
     /**
-    * @access private
-    */
-    function _setup_search_fields(&$form)
-    {
-        if( !empty($_POST['remix_search_type']) )
-            $type = CCUtil::StripText($_POST['remix_search_type']);
-        else
-            $type = 'artist';
-
-        $searchtypes[] = array( 'value' => 'artist',
-                                'label' => _('Artist'),
-                                'selected' => $type == 'artist');
-        $searchtypes[] = array( 'value' => 'title',
-                                'label' => _('Title'),
-                                'selected' => $type == 'title' );
-        $searchtypes[] = array( 'value' => 'full',
-                                'label' => _('Full search'),
-                                'selected' => $type == 'full'  );
-
-        $form->SetTemplateVar('remix_search_types', $searchtypes );
-        $form->SetTemplateVar( 'remix_search_query', '' );
-
-        $form->CallFormMacro('remix_search', 'show_remix_search');
-
-        $this->SetTemplateVar('inputcheck', 'checked="checked"' );
-    }
-
-    /**
-    * @access private
-    */
-    function _add_pool_to_form(&$form)
-    {
-        require_once('cclib/cc-pools.php');
-        $pool_table =& CCPools::GetTable(); // tada!!!
-        $where = "pool_api_url > '' AND pool_search > 0 AND pool_banned < 1";
-        $pools = $pool_table->QueryRows($where);
-        if( !empty($pools) )
-        {
-            array_unshift( $pools, array( 'pool_id' => -1,
-                                          'pool_name' => _('This site') ));
-            $sel_pool = empty($_POST['pool']) ? -1 : $_POST['pool'];
-            $count = count($pools);
-            for( $i = 0; $i < $count; $i++ )
-            {
-                $pools[$i]['selected'] = $pools[$i]['pool_id'] == $sel_pool;
-            }
-
-            $form->SetTemplateVar('pools', $pools );
-        }
-    }
-
-    /**
     * Display UI for managing remix ('I Sampled This') list
     *
     * @param integer $upload_id Uplaod ID to edit remixes for
@@ -102,7 +50,6 @@ class CCRemix
 
         require_once('cclib/cc-pools.php');
         require_once('cclib/cc-upload.php');
-        require_once('cclib/cc-remix-tree.php');
         require_once('cclib/cc-remix-forms.php');
 
         CCUpload::CheckFileAccess(CCUser::CurrentUserName(),$upload_id);
@@ -111,24 +58,11 @@ class CCRemix
         $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
         $msg = sprintf(_("Editing Remixes for '%s'"),$name);
         CCPage::SetTitle($msg);
-        $pools    = empty($CC_GLOBALS['allow-pool-search']) ? false : $CC_GLOBALS['allow-pool-search'];
-        $form = new CCEditRemixesForm($pools);
+
+        $form = new CCEditRemixesForm($upload_id);
         $show = false;
         if( empty($_REQUEST['editremixes']) )
         {
-            $record =& $uploads->GetRecordFromID($upload_id);
-            $record['works_page'] = true;
-            CCPage::PageArg( 'dochop', false );
-            
-            $remix_sources =& CCRemixSources::GetTable();
-            $sources = $remix_sources->GetSources($record,false);
-            $form->SetTemplateVar( 'remix_sources', $sources );
-
-            $pool_sources =& CCPoolSources::GetTable();
-            $psources = $pool_sources->GetSources($record,false);
-            $form->SetTemplateVar( 'pool_sources', $psources );
-
-            $show = true;
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
@@ -162,103 +96,83 @@ class CCRemix
         $have_sources =  CCRemix::_check_for_sources( 'remix_sources', $uploads,    $form, $remix_sources );
         $have_sources |= CCRemix::_check_for_sources( 'pool_sources',  $pool_items, $form, $pool_sources );
 
-        if( $have_sources )
+        if( ($is_update || $have_sources) && $form->ValidateFields() )
         {
-            $tmerged = array_merge($remix_sources,$pool_sources);
-            CCRemix::StrictestLicense($form, $tmerged);
-            unset($tmerged);
-        }
+            $remixes =& CCRemixes::GetTable();
+            $pool_tree =& CCPoolRemixes::GetTable();
 
-        if( !empty($_POST['search']) || !empty($_POST['accept_remixes']) )
-        {
-            CCRemix::_perform_search($form);
-        }
-        elseif( !empty($_POST['form_submit']) )
-        {
-
-            //
-            // this means the user hit submit:
-            //
-            // they have selected sources along the way
-            //
-            if( ($is_update || $have_sources) && $form->ValidateFields() )
+            if( $is_update )
             {
-                $remixes =& CCRemixes::GetTable();
-                $pool_tree =& CCPoolRemixes::GetTable();
+                CCSync::RemixDetach($remixid);
+                $where1['tree_child'] = $remixid;
+                $remixes->DeleteWhere($where1);
+                $where2['pool_tree_child'] = $remixid;
+                $pool_tree->DeleteWhere($where2);
+            }
+            else
+            {
+                $remixid = CCUpload::PostProcessNewUploadForm($form,
+                                                               $ccud,
+                                                               $relative_dir,
+                                                               $remix_sources);
+            }
+
+
+            if( $remixid )
+            {
+                CCRemix::_update_remix_tree('remix_sources', $remixid, 'tree_parent', 
+                                        'tree_child', $remixes);
+
+                CCRemix::_update_remix_tree('pool_sources', $remixid, 
+                                        'pool_tree_pool_parent', 'pool_tree_child', $pool_tree);
 
                 if( $is_update )
                 {
-                    CCSync::RemixDetach($remixid);
-                    $where1['tree_child'] = $remixid;
-                    $remixes->DeleteWhere($where1);
-                    $where2['pool_tree_child'] = $remixid;
-                    $pool_tree->DeleteWhere($where2);
-                }
-                else
-                {
-                    $remixid = CCUpload::PostProcessNewUploadForm($form,
-                                                                   $ccud,
-                                                                   $relative_dir,
-                                                                   $remix_sources);
-                }
-
-
-                if( $remixid )
-                {
-                    CCRemix::_update_remix_tree('remix_sources', $remixid, 'tree_parent', 
-                                            'tree_child', $remixes);
-
-                    CCRemix::_update_remix_tree('pool_sources', $remixid, 
-                                            'pool_tree_pool_parent', 'pool_tree_child', $pool_tree);
-
-                    if( $is_update )
+                    // license might have changed
+                    if( $have_sources )
                     {
-                        // license might have changed
-                        if( $have_sources )
-                        {
-                            $upargs['upload_license'] = $form->GetFormValue('upload_license');
-                            $upargs['upload_id'] = $remixid;
-                            $uploads->Update($upargs);
-                        }
-
-                        // ccud might have changed...
-                        // for both license and ccud let's just recalc all the tags...
-
-                        $current_tags = $uploads->QueryItemFromKey('upload_tags',$remixid);
-
-                        if( CCTag::InTag( CCUD_ORIGINAL . ',' . CCUD_REMIX, $current_tags ) )
-                        {
-                            require_once('cclib/cc-uploadapi.php');
-
-                            $ccuda = array( CCUD_ORIGINAL, CCUD_REMIX  );
-
-                            CCUploadAPI::UpdateCCUD( $remixid, $ccuda[$have_sources], $ccuda[!$have_sources] );
-                        }
+                        $upargs['upload_license'] = $form->GetFormValue('upload_license');
+                        $upargs['upload_id'] = $remixid;
+                        $uploads->Update($upargs);
                     }
 
-                    // dig out the page url
-                    $uploads->SetTagFilter(''); // this shouldn't be needed -- but it is
-                    $record = $uploads->GetRecordFromID($remixid);
-                    $url = $record['file_page_url'];
+                    // ccud might have changed...
+                    // for both license and ccud let's just recalc all the tags...
 
-                    if( !empty($pool_sources) )
+                    $current_tags = $uploads->QueryItemFromKey('upload_tags',$remixid);
+
+                    if( CCTag::InTag( CCUD_ORIGINAL . ',' . CCUD_REMIX, $current_tags ) )
                     {
-                        CCSync::PoolSourceRemix($pool_sources);
-                        CCPool::NotifyPoolsOfRemix($pool_sources,$url);
+                        require_once('cclib/cc-uploadapi.php');
+
+                        $ccuda = array( CCUD_ORIGINAL, CCUD_REMIX  );
+
+                        CCUploadAPI::UpdateCCUD( $remixid, $ccuda[$have_sources], $ccuda[!$have_sources] );
                     }
-
-                    CCSync::Remix($remixid,$remix_sources);
-
-                    CCEvents::Invoke(CC_EVENT_SOURCES_CHANGED, array( $remixid, &$remix_sources) );
-
-                    $msg = $is_update ? _('update') : _('upload');
-                    $link1 = "<a href=\"$url\">";
-                    $link2 = '</a>';
-                    $prompt = sprintf(_("Remix %s succeeded (click %shere%s to see the results)."),
-                        $msg, $link1, $link2);
-                    CCPage::Prompt($prompt);
-                    return(true);
                 }
+
+                // dig out the page url
+                $uploads->SetTagFilter(''); // this shouldn't be needed -- but it is
+                $record = $uploads->GetRecordFromID($remixid);
+                $url = $record['file_page_url'];
+
+                if( !empty($pool_sources) )
+                {
+                    CCSync::PoolSourceRemix($pool_sources);
+                    CCPool::NotifyPoolsOfRemix($pool_sources,$url);
+                }
+
+                CCSync::Remix($remixid,$remix_sources);
+
+                CCEvents::Invoke(CC_EVENT_SOURCES_CHANGED, array( $remixid, &$remix_sources) );
+
+                $msg = $is_update ? _('update') : _('upload');
+                $link1 = "<a href=\"$url\">";
+                $link2 = '</a>';
+                $prompt = sprintf(_("Remix %s succeeded (click %shere%s to see the results)."),
+                    $msg, $link1, $link2);
+                CCPage::Prompt($prompt);
+                return(true);
             }
         }
 
@@ -267,104 +181,6 @@ class CCRemix
         return( false );
     }
 
-    /**
-    * @access private
-    */
-    function _perform_search(&$form)
-    {
-        $query = CCUtil::StripText($_POST['remix_search_query']);
-        $form->SetTemplateVar( 'remix_search_query', $query );
-
-        if( !empty($query) && empty($_POST['accept_remixes']) )
-        {
-            $type = CCUtil::StripText($_POST['remix_search_type']);
-
-            //
-            // User hit the 'search' key
-            //
-            $pool_id = empty($_POST['pool']) ? 0 : intval(CCUtil::StripText($_POST['pool']));
-
-            if( $pool_id > 0 )
-            {
-                list( $type, $pool_results ) = CCPool::PoolQuery($pool_id, $query, $type);
-
-                if( !empty($pool_results) )
-                {
-                    if( $type == 'rss' )
-                    {
-                        $pools =& CCPools::GetTable();
-                        $pool = $pools->QueryKeyRow($pool_id);
-            
-                        $items = array();
-                        foreach( $pool_results as $pool_result )
-                        {
-                            $item = CCPool::AddItemToPool( $pool, $pool_result );
-                            if( is_array($item) )
-                            {
-                                $items[] = array_merge( $item, $pool );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        $items = $pool_results;
-                    }
-
-                    if( !empty($items) )
-                    {
-                        $form->SetTemplateVar( 'pool_search_result', $items);
-                        $form->SetTemplateVar( 'got_search_result', true);
-                    }
-                }
-            }
-            else
-            {
-                switch( $type )
-                {
-                    case 'artist':
-                        $fields = array( 'user_name', 'user_real_name' );
-                        $limit = 1000; // let's see teru hit this number
-                        break;
-
-                    case 'title':
-                        $fields = array( 'upload_name');
-                        $limit = CC_REMIX_SEARCH_LIMIT;
-                        break;
-
-                    default:
-                        $limit = CC_REMIX_SEARCH_LIMIT;
-                        $fields = array();
-                }
-
-                require_once('cclib/cc-search.php');
-
-                CCSearch::DoSearch( $query, 'all', CC_SEARCH_UPLOADS, $results, $limit, $fields );
-                $count = 0;
-                if( !empty($results[CC_SEARCH_UPLOADS]) )
-                {
-                    $sremixes = array();
-                    $count = count($results[CC_SEARCH_UPLOADS]);
-                    $keys = array_keys($results[CC_SEARCH_UPLOADS]);
-                    $me = CCUser::CurrentUser();
-                    for( $i = 0; $i < $count; $i++ )
-                    {
-                        $rm =& $results[CC_SEARCH_UPLOADS][ $keys[$i] ];
-                        if( $rm['upload_user'] != $me )
-                            $sremixes[] = $rm;
-                    }
-
-                    if( !empty($sremixes) )
-                    {
-                        $form->SetTemplateVar( 'remix_search_result', $sremixes );
-                        $form->SetTemplateVar( 'got_search_result', true);
-                    }
-                }
-
-                $form->SetTemplateVar( 'remix_search_limit_hit', $count >= $limit );
-            }
-        }
-
-    }
 
     /**
     * @access private
@@ -419,22 +235,17 @@ class CCRemix
     * @param object &$form CCForm object
     * @param array &$rows Array of upload rows
     */
-    function StrictestLicense( &$form, &$rows )
+    function StrictestLicense()
     {
+
         require_once('cclib/cc-lics-chart.inc');
         $license = '';
         foreach( $rows as $row )
         {
             $license = $license ? cc_stricter_license( $row['license_id'], $license ) : $row['license_id'];
         }
-
-        $form->CallFormMacro( 'remix_license', 'show_remix_license' );
-        $form->SetHiddenField( 'upload_license', $license, CCFF_HIDDEN | CCFF_STATIC );
-        $lics =& CCLicenses::GetTable();
-        $licenserow = $lics->QueryKeyRow($license);
-        $form->AddTemplateVars( $licenserow  );
-        //CCDebug::PrintVar($licenserow);
     }
+
 
     /**
     * Event hander for {@link CC_EVENT_DELETE_UPLOAD}

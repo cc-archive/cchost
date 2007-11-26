@@ -20,7 +20,15 @@ ccRemixSearch.prototype = {
         }
 
         Event.observe('do_remix_search','click',me.onDoRemixSearch.bindAsEventListener(me));
-        Event.observe('remix_toggle_link', 'click', me.onToggleBox.bindAsEventListener(me));
+        
+        if( $('remix_toggle_link') )
+            Event.observe('remix_toggle_link', 'click', me.onToggleBox.bindAsEventListener(me));
+
+        this._hook_checks(true);
+
+        if( this.numChecked == 0 && $('form_submit') )
+            $('form_submit').disabled = true;
+
     },
 
     onToggleBox: function(ev){ 
@@ -42,29 +50,25 @@ ccRemixSearch.prototype = {
     },
 
     onDoRemixSearch: function(ev) {
-        $('remix_no_match').innerHTML = '&nbsp;';
         var value = $('remix_search').value.strip();
-        var sel_pool = -1;
         if( value.length < 4 )
         {
             alert(str_no_search_term);
             return;
         }
-        var query = query_url + 't=remix_checks&f=html';
-        var pools = $('pools');
-        if( pools )
-        {
-            sel_pool = pools.options[ pools.selectedIndex ].value;
-            if( sel_pool != -1 )
-                query += '&pool=' + sel_pool;
-        }
-        if( sel_pool == -1 );
+        $('remix_no_match').innerHTML = '&nbsp;';
+
+        var sel_pool = pools ?  $('pools').options[ $('pools').selectedIndex ].value : -1;
+        if( sel_pool == -1 )
         {
             var search_type = $('remix_search_type');
-            query += '&dataview=' + search_type.options[ search_type.selectedIndex ].value;
+            var query = query_url + 't=remix_checks&f=html&dataview=' + search_type.options[ search_type.selectedIndex ].value;
+        }
+        else
+        {
+            var query = home_url + 'pools/search/' + sel_pool + q + 't=remix_pool_checks';
         }
         query += '&search=' + value;
-        $('debug').innerHTML = '<a href="' + query + '">' + query + '</a>';
         new Ajax.Request(query, { method: 'get', onComplete: this.onSearchResults.bind(this,value) } );
     },
 
@@ -87,11 +91,7 @@ ccRemixSearch.prototype = {
             {
                 $('remix_no_match').innerHTML = str_no_matches.gsub('%s',value);
             }
-            var me = this;
-            $$('.remix_checks').each( function(e) { 
-                var id = e.id.match(/[0-9]+$/);
-                Event.observe(e,'click',me.onRemixCheck.bindAsEventListener(me, id ));
-            });
+            this._hook_checks(false);
         }
         catch (e)
         {
@@ -99,11 +99,25 @@ ccRemixSearch.prototype = {
         }
     },
 
+    _hook_checks: function(check_now) {
+        var me = this;
+        $$('.remix_checks').each( function(e) { 
+            if( check_now )
+            {
+                e.checked = true;
+                me.numChecked++;
+            }
+            var id = e.id.match(/[0-9]+$/);
+            Event.observe(e,'click',me.onRemixCheck.bindAsEventListener(me, id ));
+        });
+    },
+
     onRemixCheck: function( ev, id ) {
         try
         {
             var check = $('src_' + id);
             var label = $('rc_' + id );
+
             if( check.checked )
             {
                 this.numChecked++;
@@ -115,7 +129,10 @@ ccRemixSearch.prototype = {
                 Element.removeClassName(label,'remix_source_selected');
             }
 
-            $('remix_search_toggle').style.display = this.numChecked ? 'block' : 'none';
+            if( $('remix_search_toggle') )
+                $('remix_search_toggle').style.display = this.numChecked ? 'block' : 'none';
+            if( $('form_submit') )
+                $('form_submit').disabled = this.numChecked ? false : true;
 
             var controls = $('remix_search_controls');
             if( controls.style.display == 'none' )

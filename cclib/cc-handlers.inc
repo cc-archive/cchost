@@ -113,7 +113,6 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCMediaHost',  'OnUplo
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCMediaHost',  'OnMapUrls'), 'cclib/cc-mediahost.php' );
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,         array( 'CCMediaHost',  'OnGetMacros'), 'cclib/cc-mediahost.php' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCMediaHost' , 'OnGetConfigFields'), 'cclib/cc-mediahost.php'  );
-CCEvents::AddHandler(CC_EVENT_LISTING_RECORDS,    array( 'CCMediaHost' , 'OnListingRecords'), 'cclib/cc-mediahost.php'  );
 
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCMenu', 'OnAdminMenu'), 'cclib/cc-menu.php' );
 CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCMenu', 'OnBuildMenu'), 'cclib/cc-menu.php' );
@@ -128,27 +127,23 @@ CCEvents::AddHandler(CC_EVENT_APP_INIT,           array( 'CCPageAdmin', 'OnAppIn
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCPoolUI',  'OnMapUrls'), 'cclib/cc-pools-ui.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,     array( 'CCPoolUI',  'OnAdminMenu'), 'cclib/cc-pools-ui.php'  );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING, array( 'CCPoolHV',  'OnUploadListing'), 'cclib/cc-pools-hv.php' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  array( 'CCPoolUI',  'OnUploadDelete'), 'cclib/cc-pools-ui.php' );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCQuery',  'OnMapUrls'), 'cclib/cc-query.php' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCQuery' , 'OnGetConfigFields'), 'cclib/cc-query.php'  );
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCRating' , 'OnGetConfigFields' ), 'cclib/cc-ratings.php' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING,     array( 'CCRating',  'OnUploadListing'), 'cclib/cc-ratings.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCRating',  'OnMapUrls'), 'cclib/cc-ratings.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCRating' , 'OnAdminMenu'), 'cclib/cc-ratings.php'  );
 CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCRatingsHV' , 'OnUserRow'), 'cclib/cc-ratings.inc'  );
 CCEvents::AddHandler(CC_EVENT_USER_DELETED,       array( 'CCRating' , 'OnUserDelete'), 'cclib/cc-ratings.php'  );
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_LISTING, array( 'CCRemixHV', 'OnUploadListing'), 'cclib/cc-remix-hv.php' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  array( 'CCRemix', 'OnUploadDelete'), 'cclib/cc-remix.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCRemix' ,'OnMapUrls'), 'cclib/cc-remix.php'  );
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,     array( 'CCRenderAudio', 'OnUploadMenu'), 'cclib/cc-renderaudio.php' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,      array( 'CCRenderAudio', 'OnUploadRow'), 'cclib/cc-renderaudio.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,        array( 'CCRenderAudio', 'OnMapUrls'), 'cclib/cc-renderaudio.php' );
-CCEvents::AddHandler(CC_EVENT_LISTING_RECORDS, array( 'CCRenderAudio', 'OnListingRecords'), 'cclib/cc-renderaudio.php' ); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT, array( 'CCRenderAudio', 'OnApiQueryFormat'), 'cclib/cc-renderaudio.php' ); 
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,    array( 'CCRenderFlash', 'OnUploadRow'), 'cclib/cc-renderflash.php' );

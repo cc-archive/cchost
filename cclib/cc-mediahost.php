@@ -214,9 +214,8 @@ class CCMediaHost
 
         $username = CCUser::CurrentUserName();
         $userid   = CCUser::CurrentUser();
-        $pools    = empty($CC_GLOBALS['allow-pool-search']) ? false : $CC_GLOBALS['allow-pool-search'];
         require_once('cclib/cc-remix-forms.php');
-        $form     = new CCPostRemixForm($userid,$pools);
+        $form     = new CCPostRemixForm($userid);
 
         $this->_add_publish_field($form);
 
@@ -232,11 +231,6 @@ class CCMediaHost
         {
             if( !empty( $remix_this_id ) )
             {
-                $uploads =& CCUploads::GetTable();
-                $record =& $uploads->GetRecordFromID($remix_this_id);
-                $records = array($record);
-                $form->SetTemplateVar( 'remix_sources', $records );
-                CCRemix::StrictestLicense($form, $records);
             }
 
             CCPage::AddForm( $form->GenerateForm() );
@@ -244,7 +238,8 @@ class CCMediaHost
         else
         {
             $upload_dir = $this->_get_upload_dir($username);
-
+            
+            require_once('cclib/cc-remix.php');
             $do_prompt = CCRemix::OnPostRemixForm($form, $upload_dir, $tags );
 
             if( $do_prompt )
@@ -669,49 +664,6 @@ class CCMediaHost
             CC_ADMIN_ONLY, 'cclib/cc-upload.php', 
             '{upload_id}', _('Show admin upload form'), CC_AG_UPLOAD  );
 
-    }
-
-    /**
-    * Handler for {@link CC_EVENT_LISTING_RECORDS}
-    *
-    * Adds a listing of current ids and stuffs them into page template for use with
-    * features like 'Stream this page'
-    *
-    * @param array $records Array of records being displayed
-    */
-    function OnListingRecords(&$records)
-    {
-        $ids = array();
-        $this->_grab_ids($records,$ids);
-        $ids = array_unique($ids);
-        if( !empty($ids) )
-        {
-            $ids = implode(';',$ids);
-            CCPage::PageArg('upload_ids',$ids);
-        }
-    }
-
-    /**
-    * @access private
-    */
-    function _grab_ids(&$records,&$ids)
-    {
-        $count = count($records);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            if( empty($records[$i]['upload_id']) )
-                continue;
-
-            $ids[] = $records[$i]['upload_id'];
-            if( !empty($records[$i]['remix_parents']) )
-            {
-                $this->_grab_ids($records[$i]['remix_parents'],$ids);
-            }
-            if( !empty($records[$i]['remix_children']) )
-            {
-                $this->_grab_ids($records[$i]['remix_remix_children'],$ids);
-            }
-        }
     }
 
     /**

@@ -163,31 +163,12 @@ define('CC_EVENT_ADMIN_MENU',          'buildadminmenu');
 *</code>
 * @see CCEvents::AddHandler()
 * @see CCTable::GetRecordFromRow()
-* @see CC_EVENT_UPLOAD_LISTING
 * @see CC_EVENT_LISTING_RECORDS
 */
 define('CC_EVENT_UPLOAD_ROW',          'uploadrow' );
 
-/*
-* Request for Data Event: Preparing an upload record for display
-*
-* Triggered when a <i>single upload row</i> is about
-* to be displayed. This is the last event for individual
-* records before display. The ccHost system uses this event 
-* to populate the row with information about remixes and remix 
-* sources.
-*
-* Call back (handler) prototype:
-*<code>
-* // &$record is the upload data being massaged
-* function OnUploadListing( &$record )
-*</code>
-* @see CCEvents::AddHandler()
-* @see CCTable::GetRecordFromRow()
-* @see CC_EVENT_UPLOAD_ROW
-* @see CC_EVENT_LISTING_RECORDS
-*/
-define('CC_EVENT_UPLOAD_LISTING',      'uploadlisting' );
+// no longer supported:
+//define('CC_EVENT_UPLOAD_LISTING',      'uploadlisting' );
 
 /*
 * Request for Data Event: A list of records is being displayed
@@ -223,7 +204,6 @@ define('CC_EVENT_LISTING_RECORDS',     'listingrecs' );
 *</code>
 * @see CCEvents::AddHandler()
 * @see CC_EVENT_UPLOAD_ROW
-* @see CC_EVENT_UPLOAD_LISTING
 */
 define('CC_EVENT_UPLOAD_FILES',        'uploadfiles' );
 

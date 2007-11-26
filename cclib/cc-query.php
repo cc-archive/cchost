@@ -37,9 +37,10 @@ class CCQuery
     function CCQuery()
     {
         $this->sql ='';
+        $this->sql_columns = ''; 
         $this->sql_joins = '';
         $this->sql_where = '';
-        $this->sql_sort  = '';
+        $this->sql_order  = '';
         $this->sql_limit = '';
         $this->sql_group_by = '';
         $this->where = array();
@@ -193,13 +194,13 @@ class CCQuery
         $limit = empty($CC_GLOBALS['querylimit']) ? 10 : $CC_GLOBALS['querylimit'];
 
         return array(
-                    'tags' => '', 'reqtags' => '', 'type' => '', 
-                    'promo_tag' => '',  'promo_gap' => 4,
+                    'tags' => null, 'reqtags' => null, 'type' => null, 
+                    'promo_tag' => null,  'promo_gap' => 4,
                     'sort' => 'date', 'ord'  => 'DESC', 'nosort' => false, 'rand' => false,
                     'limit' => $limit, 'offset' => 0,
                     'sinceu' => 0, 'sinced' => 0,
-                    'lic'    => 0, 'score' => 0, 'ids' => '',  'user'  => '', 'remixesof' => '', 'remixedby' => '',
-                    'where' => '', 'mod'   => 0, 'unsub' => 0, 'format' => 'page',  'title'  => '',
+                    'lic'    => null, 'score' => null, 'ids' => null,  'user'  => null, 'remixesof' => null, 'remixedby' => null,
+                    'where' => null, 'mod'   => 0, 'unsub' => 0, 'format' => 'page',  'title'  => null,
                     'datasource' => 'uploads',
                     );
     }
@@ -208,9 +209,6 @@ class CCQuery
     {
         if( !empty($args) )
             $this->args = $args;
-
-        if( !isset( $this->args['qstring']) )
-            $this->args['qstring'] = $this->SerializeArgs($this->args);
 
         if( empty($this->args['format']) )
             $this->args['format'] = 'page';
@@ -221,88 +219,36 @@ class CCQuery
         if( $this->args['datasource'] == 'uploads' )
             $this->where[] = '(upload_published>0 and upload_banned<1)' ;
 
-        foreach( array( 'sort', 'tags', 'limit', 'date', 'user', 'playlist', 'search',
-                        'remixes', 'sources', 'reccby', 'remixesof', 'ids' ) as $arg )
+        foreach( array( 'sort', 'date', ) as $arg )
         {
-            //if( isset($this->args[$arg]) )
+            $method = '_gen_' . $arg;
+            $this->$method();
+        }
+
+        foreach( array( 'search', 'tags', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
+                         'reccby', 'remixesof', 'score', 'lic', 'remixmax', 'remixmin' ) as $arg )
+        {
+            if( isset($this->args[$arg]) )
             {
                 $method = '_gen_' . $arg;
                 $this->$method();
             }
         }
 
-
-        // Ratings...
-
-        if( !empty($this->args['score']) )
-            $this->where[] = "($scoref >= {$this->args['score']})";
-        if( !empty($this->args['lic']) )
-        {
-            $license = $this->_lic_query_to_key($this->args['lic']);
-            $this->where[] = "(license_id = '$license')";
-        }
-
-        if( isset($this->args['remixmax']) )
-            $this->where[] = "(upload_num_remixes <= '{$this->args['remixmax']}')";
-        if( isset($this->args['remixmin']) )
-            $this->where[] = "(upload_num_remixes >= '{$this->args['remixmin']}')";
-        
         $this->sql_where = 'WHERE ' . join( ' AND ', $this->where );
 
-        if( $this->args['format'] == 'count' )
-        {
-            $this->args['dataview'] = 'count';
-            $this->dataview_file = 'ccdataviews/count.php';
-            $this->sql_limit = '';
-        }
-        elseif( $this->args['format'] == 'ids' )
-        {
-            $this->args['dataview'] = 'ids';
-            $this->dataview = array( 'dataview' => 'default', 'file' => 'ccdataviews/ids.php');
-        }
-        elseif( empty($this->args['dataview']) )
-        {
-            if( empty($this->args['template']) )
-            {
-                if( $this->args['format'] == 'm3u' )
-                {
-                    // yea,this kind of special knowledge should probably be 
-                    // somewhere else - if we were pretending that we're not ccHost
-                    $this->args['dataview'] = 'files';
-                    $this->dataview = array( 'dataview' => 'files', 'file' => 'ccdataviews/files.php');
-                }
-                else
-                {
-                    $this->args['dataview'] = 'default';
-                    $this->dataview = array( 'dataview' => 'default', 'file' => 'ccdataviews/default.php');
-                }
-            }
-            else
-            {
-                require_once('cclib/cc-template.inc');
-                $props = CCTemplateAdmin::GetDataViewFromTemplate($this->args['template']);
-                $this->args['dataview'] = $props['dataview'];
-                $this->dataview = $props;
-            }
-        }
-        else
-        {
-            require_once('cclib/cc-template.inc');
-            $props = CCTemplateAdmin::GetDataView($this->args['dataview']);
-            $this->args['dataview'] = $props['dataview'];
-            $this->dataview = $props;
-        }
+        $this->_setup_dataview();
 
         if( empty($this->dead) )
             $records =& $this->_perform_sql();
         else
             $records = array();
 
-        // ------------- END QUERY ---------------------
+        // ------------- DUMP RESULTS ---------------------
 
-        if( !empty($dump_query) && CCUser::IsAdmin() )
+        if( !empty($this->args['dump_query']) && CCUser::IsAdmin() )
         {
-            $x[] = compact( array_keys($this->args) );
+            $x[] = $this;
             $x[] =& $records;
             CCDebug::Enable(true);
             CCDebug::PrintVar($x,false);
@@ -311,7 +257,7 @@ class CCQuery
         if( !empty($_REQUEST['dump_rec']) && CCUser::IsAdmin() )
         {
             CCDebug::Enable(true);
-            CCDebug::PrintVar($records[0]);
+            CCDebug::PrintVar($records[0],false);
         }
 
         if( $this->args['format'] == 'count' )
@@ -354,18 +300,8 @@ class CCQuery
                 $results = '';
                 $results_mime = '';
 
-                // callers (like feeds) can pass through
-                // arguments that will return in the event, but 
-                // we should repack the args in case they changed
-                // in this method...
-
-                $args = $this->args;
-
-                // used for paging and godknows what else
-                $args['last_where'] = $this->sql_where;
-
                 CCEvents::Invoke( CC_EVENT_API_QUERY_FORMAT, 
-                                    array( &$records, $args, &$results, &$results_mime ) );
+                                    array( &$records, &$this->args, &$results, &$results_mime ) );
 
                 return array( $results, $results_mime );
             }
@@ -374,54 +310,66 @@ class CCQuery
         return array( &$records, '' );
     }
 
+    function _setup_dataview()
+    {
+        if( $this->args['format'] == 'count' )
+        {
+            $this->args['dataview'] = 'count';
+            $this->dataview = array( 'dataview' => 'count', 'file' => 'ccdataviews/count.php');
+            $this->sql_limit = '';
+        }
+        elseif( $this->args['format'] == 'ids' )
+        {
+            $this->args['dataview'] = 'ids';
+            $this->dataview = array( 'dataview' => 'default', 'file' => 'ccdataviews/ids.php');
+        }
+        elseif( empty($this->args['dataview']) )
+        {
+            if( empty($this->args['template']) )
+            {
+                if( $this->args['format'] == 'm3u' )
+                {
+                    // yea,this kind of special knowledge should probably be 
+                    // somewhere else - if we were pretending that we're not ccHost
+                    $this->args['dataview'] = 'files';
+                    $this->dataview = array( 'dataview' => 'files', 'file' => 'ccdataviews/files.php');
+                }
+                else
+                {
+                    $this->args['dataview'] = 'default';
+                    $this->dataview = array( 'dataview' => 'default', 'file' => 'ccdataviews/default.php');
+                }
+            }
+            else
+            {
+                $dv = new CCDataview();
+                $props = $dv->GetDataViewFromTemplate($this->args['template']);
+                $this->args['dataview'] = $props['dataview'];
+                $this->dataview = $props;
+            }
+        }
+    }
+
     function & _perform_sql()
     {
         if( empty($this->args['dataview']) )
             die('No dataview');
-        if( empty($this->dataview['file']) )
+        $dv = new CCDataView();
+        $args = array();
+        foreach( array( 'where', 'order', 'joins', 'limit', 'columns', 'group_by' ) as $f )
         {
-            if( empty($this->dataview['code']) )
-            {
-                die('Dataview name ' . $this->dataview['dataview'] . ' but no code found');
-            }
-            else
-            {
-                eval($this->dataview['code']);
-            }
+            $member = 'sql_' . $f;
+            $args[$f] = $this->$member;
         }
-        else
+        if( empty($this->dataview) )
         {
-            if( !file_exists($this->dataview['file']) )
-                die("Can't find dataview file: " . $this->dataview['file']);
-            require_once($this->dataview['file']);
+            $dv = new CCDataview();
+            $props = $dv->GetDataView($this->args['dataview']);
+            $this->dataview = $props;
         }
-        $func = $this->args['dataview'] . '_dataview';
-        if( !function_exists($func) )
-            die("Can't find dataview function in " . $this->args['dataview']);
-        $info = $func();
-        $this->sql = preg_replace( array( '/%joins%/', '/(WHERE )?%where%/e', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/'  ),
-                             array( $this->sql_joins, 
-                                    empty($this->sql_where) ? '"$1"' : '"' . $this->sql_where . '" . ("$1" ? "AND" : "")', 
-                                    $this->sql_sort, 
-                                    $this->sql_limit, 
-                                    '',
-                                    $this->sql_group_by),
-                             $info['sql'] );
-        $records =& CCDatabase::QueryRows($this->sql);
-        if( count($records) > 0 )
-        {
-            $info['query'] = $this;
-            while( count($info['e']) )
-            {
-                $k = array_keys($info['e']);
-                $e = $info['e'][$k[0]];
-                CCEvents::Invoke( $e, array( &$records, &$this->args, &$info ) );
-                if( in_array( $e, $info['e'] ) )
-                    $info['e'] = array_diff( $info['e'], array( $e ) );
-            }
-        }
-
-        return $records;        
+        $records =& $dv->Perform($this->dataview,$args,$this);
+        $this->sql = $dv->sql;
+        return $records;
     }
 
     /********************************
@@ -429,9 +377,6 @@ class CCQuery
     *********************************/
     function _gen_search()
     {
-        if( empty($this->args['search']) )
-            return;
-
         if( empty($this->args['dataview']) )
             $this->args['dataview'] = 'search';
 
@@ -469,25 +414,23 @@ class CCQuery
 
         if( !empty($args['rand']) )
         {
-            $this->sql_sort = 'ORDER BY RAND()';
+            $this->sql_order = 'ORDER BY RAND()';
         }
         elseif( !empty($this->validated_sort) && (empty($args['ids']) || empty($args['nosort']))  )
         {
             if( empty($args['ord']) )
                 $args['ord'] = 'ASC';
-            $this->sql_sort = 'ORDER BY ' . $this->validated_sort . ' ' . $args['ord'];
+            $this->sql_order = 'ORDER BY ' . $this->validated_sort . ' ' . $args['ord'];
         }
         else
         {
-            $this->sql_sort = '';
+            $this->sql_order = '';
         }
 
     }
     
     function _gen_tags()
     {
-        if( empty($this->args['tags']) )
-            return;
         $tags = preg_split('/[\s,+]+/',$this->args['tags'],-1,PREG_SPLIT_NO_EMPTY);
         $this->where[] = '(upload_tags REGEXP \'(^|,)(' . join('|',$tags) . ')(,|$)\')';
     }
@@ -506,30 +449,20 @@ class CCQuery
 
     function _gen_limit()
     {
-        if( empty($this->args['limit']) )
-        {
-            $this->sql_limit = '';
-        }
-        else
-        {
-            if( empty($this->args['offset']) )
-                $this->args['offset'] = '0';
-            $this->sql_limit = 'LIMIT ' . $this->args['limit'] . ' OFFSET ' . $this->args['offset'];
-        }
+        if( empty($this->args['offset']) )
+            $this->args['offset'] = '0';
+        $this->sql_limit = 'LIMIT ' . $this->args['limit'] . ' OFFSET ' . $this->args['offset'];
     }
 
     function _gen_ids()
     {
         // A specific set of IDs
-        if( !empty($this->args['ids']) )
-        {
-            // this will do a security check in case someone tries
-            // to escape out of sql
-            $ids = array_unique(preg_split('/([^0-9]+)/',$this->args['ids'],0,PREG_SPLIT_NO_EMPTY));
-            if( $ids )
-                $this->where[] = '(upload_id IN (' . join(',',$ids) . '))';
-        }
 
+        // this will do a security check in case someone tries
+        // to escape out of sql
+        $ids = array_unique(preg_split('/([^0-9]+)/',$this->args['ids'],0,PREG_SPLIT_NO_EMPTY));
+        if( $ids )
+            $this->where[] = '(upload_id IN (' . join(',',$ids) . '))';
     }
 
     function _gen_date()
@@ -561,13 +494,10 @@ class CCQuery
 
     function _gen_user()
     {
-        if( !empty($this->args['user']) )
-        {
-            $w['user_name'] = $this->args['user'];
-            $users =& CCUsers::GetTable();
-            $user_id = $users->QueryKey($w);
-            $this->where[] = "(upload_user = '{$user_id}')";
-        }
+        $w['user_name'] = $this->args['user'];
+        $users =& CCUsers::GetTable();
+        $user_id = $users->QueryKey($w);
+        $this->where[] = "(upload_user = '{$user_id}')";
     }
 
     function _heritage_helper($key,$f1,$t,$f2,$kf)
@@ -589,21 +519,55 @@ class CCQuery
 
     function _gen_remixes()
     {
-        if( !empty($this->args['remixes']) )
-            $this->_heritage_helper('remixes','tree_child','cc_tbl_tree','tree_parent','upload_id');
+        $this->_heritage_helper('remixes','tree_child','cc_tbl_tree','tree_parent','upload_id');
     }
 
     function _gen_sources()
     {
-        if( !empty($this->args['sources']) )
-        {
-            if( $this->args['datasource'] == 'pools' )
-                $this->_heritage_helper('sources','pool_tree_pool_parent','cc_tbl_pool_tree','pool_tree_child','pool_item_id');
-            else
-                $this->_heritage_helper('sources','tree_parent','cc_tbl_tree','tree_child','upload_id');
-        }
+        if( $this->args['datasource'] == 'pools' )
+            $this->_heritage_helper('sources','pool_tree_pool_parent','cc_tbl_pool_tree','pool_tree_child','pool_item_id');
+        else
+            $this->_heritage_helper('sources','tree_parent','cc_tbl_tree','tree_child','upload_id');
     }
 
+    function _gen_score()
+    {
+        $this->where[] = "(upload_num_scores >= {$this->args['score']})";
+    }
+
+    function _gen_lic()
+    {
+        $translator = array( 
+            'by' => 'attribution',
+            'nc' => 'noncommercial', 
+            'sa' => 'share-alike'   , 
+            'nod' => 'noderives'   , 
+            'byncsa' => 'by-nc-sa'   , 
+            'byncnd' => 'by-nc-nd'   , 
+            'by-nc-sa' => 'by-nc-sa'   , 
+            'by-nc-nd' => 'by-nc-nd'   , 
+            's' => 'sampling'   , 
+            'splus' => 'sampling+',
+            'ncsplus' =>   'nc-sampling+',
+            'pd' =>  'publicdomain' ,
+            );
+
+        if( !array_key_exists( $this->args['lic'], $translator ) )
+            die('invalid license argument');
+
+        $license = $translator[$this->args['lic']];
+        $this->where[] = "(license_id = '$license')";
+    }
+
+    function _gen_remixmax()
+    {
+        $this->where[] = "(upload_num_remixes <= '{$this->args['remixmax']}')";
+    }
+
+    function _gen_remixmin()
+    {
+        $this->where[] = "(upload_num_remixes >= '{$this->args['remixmin']}')";
+    }        
 
     function _arg_alias()
     {
@@ -680,29 +644,6 @@ class CCQuery
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE );
         }
-    }
-
-    function _lic_query_to_key($query_lic)
-    {
-        $translator = array( 
-            'by' => 'attribution',
-            'nc' => 'noncommercial', 
-            'sa' => 'share-alike'   , 
-            'nod' => 'noderives'   , 
-            'byncsa' => 'by-nc-sa'   , 
-            'byncnd' => 'by-nc-nd'   , 
-            'by-nc-sa' => 'by-nc-sa'   , 
-            'by-nc-nd' => 'by-nc-nd'   , 
-            's' => 'sampling'   , 
-            'splus' => 'sampling+',
-            'ncsplus' =>   'nc-sampling+',
-            'pd' =>  'publicdomain' ,
-            );
-
-        if( !array_key_exists( $query_lic, $translator ) )
-            return '??';
-
-        return $translator[$query_lic];
     }
 
     function GetValidSortFields()

@@ -76,7 +76,8 @@ class CCReviewFormAPI
         {
             CCReview::_build_bread_crumb_trail($R['user_name'],$upload_id,'',_('create new'));
 
-            CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING,array(&$R));
+            // todo: convert all this to dataview
+            //CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING,array(&$R));
             $R['local_menu'] = CCUpload::GetRecordLocalMenu($R);
             unset($R['local_menu']['comment']);
 
