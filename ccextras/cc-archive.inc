@@ -53,7 +53,8 @@ class CCArchive
                 CCPage::SetTitle( 'str_archive_for_s', $tstr );
                 $month = $m[1];
                 $where = "SUBSTRING(upload_date,1,7) = '${m[1]}'";
-                CCUpload::ListMultipleFiles($where,$tags,'all');
+                die('todo: convert to query api');
+                //CCUpload::ListMultipleFiles($where,$tags,'all');
                 CCPage::AddBreadCrumbs($trail);
                 return;
             }

@@ -74,26 +74,6 @@ class CCUpload
     }
 
 
-    function ListMultipleFiles( $sql_where = '', 
-                                $ccud = '', // CCUD_MEDIA_BLOG_UPLOAD, 
-                                $search_type = '', 
-                                $macro = '' )
-    {
-        if( empty($search_type) )
-            $search_type = 'all';
-
-        $uploads =& CCUploads::GetTable();
-
-        $uploads->SetTagFilter($ccud,$search_type);
-        CCPage::AddPagingLinks($uploads,$sql_where);
-       
-        $uploads->SetSort( 'upload_date', 'DESC' );
-
-        $records =& $uploads->GetRecords($sql_where);
-
-        CCUpload::ListRecords($records,$macro);
-    }
-
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
         extract($args);
@@ -124,36 +104,12 @@ class CCUpload
         CCPage::PageArg( 'records', $records, $macro );
         CCPage::PageArg( 'skip_format_sig', true );
         $uploads =& CCUploads::GetTable();
-        //CCPage::AddPagingLinks('cc_tbl_uploads' /*$uploads*/,$last_where); // ??
+        CCPage::AddPagingLinks('cc_tbl_uploads', $queryObj->sql_where );
 
-        // we don't know WHAT shape the global table is in but
-        // we have the latest where used so we use that for
-        // paging (as it happens the query url will recognize offset
-        // in it)
+        if( !isset( $qstring ) )
+            $qstring = $queryObj->SerializeArgs($args);
 
-        $temp_up = new CCUploads();
-        
-        if( !empty($playlist) )  /// HHHHHHAAAAACK
-        {
-            // aaaaah!!!
-            require_once('ccextras/cc-cart-table.inc');
-            $temp_up->AddJoin( new CCPlaylistItems(), 'upload_id', 'LEFT OUTER', 'cart_item_upload' );
-        }
-
-        if( !empty($reccby) ) // hehe and another
-        {
-            require_once('cclib/cc-ratings.php');
-            $temp_up->AddJoin( new CCRatings(), 'upload_id', '', 'ratings_upload' );
-        }
-
-        /*
-        global $CC_GLOBALS;
-        $CC_GLOBALS['fplay_args'][] = $qstring;
-
-        CCPage::AddPagingLinks($temp_up,$last_where);
-                if( !isset( $this->args['qstring']) )
-            $this->args['qstring'] = $this->SerializeArgs($this->args);
-        */
+        CCPage::PageArg('qstring',$qstring );        
 
         if( empty($macro) )
             $macro = 'list_files';

@@ -41,8 +41,6 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCContest', 'OnAdminMenu'), 
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,            array( 'CCDatabaseAdmin', 'OnMapUrls'), 'cclib/cc-db-admin.php' );
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCDataView',  'OnMapUrls'), 'cclib/cc-dataview-admin.php' );
-
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCEditorials',  'OnBuildUploadMenu'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCEditorials',  'OnUploadMenu'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCEditorials',  'OnUploadRow'), 'cclib/cc-editorials.php');

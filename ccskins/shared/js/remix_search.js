@@ -4,7 +4,6 @@ ccRemixSearch = Class.create();
 ccRemixSearch.prototype = {
 
     oldTypeVal: -1,
-    numChecked: 0,
 
     initialize: function() {
 
@@ -19,16 +18,81 @@ ccRemixSearch.prototype = {
             Event.observe($('pools'),'change',me.onPoolChange.bindAsEventListener(me));
         }
 
-        Event.observe('do_remix_search','click',me.onDoRemixSearch.bindAsEventListener(me));
+        Event.observe( 'do_remix_search', 'click', me.onDoRemixSearch.bindAsEventListener(me) );
         
         if( $('remix_toggle_link') )
-            Event.observe('remix_toggle_link', 'click', me.onToggleBox.bindAsEventListener(me));
+            Event.observe( 'remix_toggle_link', 'click', me.onToggleBox.bindAsEventListener(me) );
 
-        this._hook_checks(true);
+        this._scan_checks(true);
+    },
 
-        if( this.numChecked == 0 && $('form_submit') )
-            $('form_submit').disabled = true;
+    _scan_checks: function(check_all) {
+        try
+        {
+            var me = this;
+            $('license_info').style.display = 'none';
+            var remix_sources = [];
+            var pool_sources = [];
+            var numChecked = 0;
+            $$('.remix_checks').each( function(e) { 
+                if( check_all )
+                    e.checked = true;
 
+                var m = e.name.match(/(remix|pool)_sources\[([0-9]+)\]/);
+                var id = m[2];
+                var label = $('rc_' + id );
+
+                if( check_all || e.checked )
+                {
+                    numChecked++;
+                    if( m[1] == 'remix' )
+                        remix_sources.push(id);
+                    else
+                        pool_sources.push(id);
+                    Element.addClassName(label,'remix_source_selected');
+                }
+                else
+                {
+                    Element.removeClassName(label,'remix_source_selected');
+                }
+
+                if( !e.hooked )
+                {
+                    Event.observe(e,'click',me.onRemixCheck.bindAsEventListener(me, id ));
+                    e.hooked = true;
+                }
+
+            });
+
+            if( numChecked )
+            {
+                var url = home_url + '/remixlicenses' + q + 'remix_sources=' + remix_sources + '&pool_sources=' + pool_sources;
+                new Ajax.Request(url, { method: 'get', onComplete: this.onLicenseResults.bind(this) } );
+            }
+
+            $('remix_search_toggle').style.display = numChecked ? 'block' : 'none';
+
+            if( $('form_submit') )
+                $('form_submit').disabled = numChecked ? false : true;
+        }
+        catch (e)
+        {
+            alert(e);
+        }
+    },
+
+    onRemixCheck: function( ev, id ) {
+        this._scan_checks(false);
+        var controls = $('remix_search_controls');
+        if( controls.style.display == 'none' )
+            this._toggle_open();
+    },
+
+    onLicenseResults: function(resp,json) {
+        $('license_info').innerHTML = str_remix_lic.replace('%s','<a href="' + json.license_url 
+                                                                 + '">' + json.license_name + '</a>' );
+        $('license_info').style.display = 'block';
+        $('upload_license').value = json.license_id;
     },
 
     onToggleBox: function(ev){ 
@@ -91,52 +155,7 @@ ccRemixSearch.prototype = {
             {
                 $('remix_no_match').innerHTML = str_no_matches.gsub('%s',value);
             }
-            this._hook_checks(false);
-        }
-        catch (e)
-        {
-            alert(e);
-        }
-    },
-
-    _hook_checks: function(check_now) {
-        var me = this;
-        $$('.remix_checks').each( function(e) { 
-            if( check_now )
-            {
-                e.checked = true;
-                me.numChecked++;
-            }
-            var id = e.id.match(/[0-9]+$/);
-            Event.observe(e,'click',me.onRemixCheck.bindAsEventListener(me, id ));
-        });
-    },
-
-    onRemixCheck: function( ev, id ) {
-        try
-        {
-            var check = $('src_' + id);
-            var label = $('rc_' + id );
-
-            if( check.checked )
-            {
-                this.numChecked++;
-                Element.addClassName(label,'remix_source_selected');
-            }
-            else
-            {
-                this.numChecked--;
-                Element.removeClassName(label,'remix_source_selected');
-            }
-
-            if( $('remix_search_toggle') )
-                $('remix_search_toggle').style.display = this.numChecked ? 'block' : 'none';
-            if( $('form_submit') )
-                $('form_submit').disabled = this.numChecked ? false : true;
-
-            var controls = $('remix_search_controls');
-            if( controls.style.display == 'none' )
-                this._toggle_open();
+            this._scan_checks(false);
         }
         catch (e)
         {

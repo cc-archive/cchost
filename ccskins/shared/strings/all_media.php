@@ -266,6 +266,7 @@ $GLOBALS['str_remix_no_search_term'] = _('Please enter a search phrase longer th
 $GLOBALS['str_remix_no_matches'] = _('Sorry, no sources match "%s"');
 $GLOBALS['str_remix_close'] = _('Close search box');
 $GLOBALS['str_remix_open'] = _('Open search box');
+$GLOBALS['str_remix_lic'] = _('This remix will be licensed under a %s license');
 
 $GLOBALS['str_sample_pool_s'] = _('Sample Pool: %s');
 $GLOBALS['str_samples_from']          = _('Samples from');

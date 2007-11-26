@@ -26,6 +26,9 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+define('CCDV_RET_RECORDS',  1);
+define('CCDV_RET_ITEMS',  2);
+define('CCDV_RET_RESOURCE',  3);
 
 class CCDataView
 {
@@ -52,7 +55,6 @@ class CCDataView
             return null;
         $fp = new CCFileProps();
         $props = $fp->GetFileProps($file);
-        $props['file'] = $file;
         if( empty($props['dataview']) )
             return null;
         if( empty($props['embedded']) )
@@ -60,7 +62,7 @@ class CCDataView
             if( empty($props['file']) )
             {
                 global $CC_GLOBALS;
-                $props['file'] = CCUtil::SearchPath( $props['dataview'] . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
+                $props = $this->GetDataView($props['dataview']);
             }
         }
         else
@@ -76,13 +78,13 @@ class CCDataView
         return $props;
     }
 
-    function & PerformFile($dataview_name,$args) 
+    function & PerformFile($dataview_name,$args,$ret_type = CCDV_RET_RECORDS) 
     {
         $props = $this->GetDataView($dataview_name);
-        return $this->Perform($props,$args);
+        return $this->Perform($props,$args,$ret_type);
     }
 
-    function & Perform($dataview,$args,$queryObj=null)
+    function & Perform($dataview,$args,$ret_type = CCDV_RET_RECORDS,$queryObj=null)
     {
         if( empty($dataview['code']) )
         {
@@ -117,22 +119,42 @@ class CCDataView
         $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/(WHERE )?%where%/e'  ),
                                     $sqlargs, $info['sql'] );
 
-        $records =& CCDatabase::QueryRows($this->sql);
-        if( count($records) > 0 )
+        switch( $ret_type )
         {
-            //$info['query'] = $queryObj;
-            //$info['dvobj'] = $this;
-            while( count($info['e']) )
+            case CCDV_RET_RECORDS:
             {
-                $k = array_keys($info['e']);
-                $e = $info['e'][$k[0]];
-                CCEvents::Invoke( $e, array( &$records, &$info ) );
-                if( in_array( $e, $info['e'] ) )
-                    $info['e'] = array_diff( $info['e'], array( $e ) );
+                $records =& CCDatabase::QueryRows($this->sql);
+                if( count($records) > 0 )
+                {
+                    //$info['query'] = $queryObj;
+                    //$info['dvobj'] = $this;
+                    while( count($info['e']) )
+                    {
+                        $k = array_keys($info['e']);
+                        $e = $info['e'][$k[0]];
+                        CCEvents::Invoke( $e, array( &$records, &$info ) );
+                        if( in_array( $e, $info['e'] ) )
+                            $info['e'] = array_diff( $info['e'], array( $e ) );
+                    }
+                }
+
+                return $records;        
+            }
+
+            case CCDV_RET_ITEMS:
+            {
+                $records =& CCDatabase::QueryItems($this->sql);
+                return $records;
+            }
+
+            case CCDV_RET_RESOURCE:
+            {
+                $qr = CCDatabase::Query($this->sql);
+                return $qr;
             }
         }
 
-        return $records;        
+        die('Invalid return type for dataview: ' . $ret_type );
     }
 
 }

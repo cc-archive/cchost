@@ -1703,6 +1703,15 @@ END;
         }
         return(true);
     }
+
+    /**
+    * Adds the necessary javascript macros to disable the submit button
+    */
+    function DisableSubmitOnInit()
+    {
+        CCPage::AddScriptBlock( 'util.php/disable_submit_button', true ); 
+    }
+
 }
 
 /**
@@ -2327,13 +2336,6 @@ class CCUploadForm extends CCForm
         CCPage::AddScriptBlock( 'hide_upload_form', true ); 
     }
 
-    /**
-    * Adds the necessary javascript macros to disable the submit button
-    */
-    function DisableSubmitOnInit()
-    {
-        CCPage::AddScriptBlock( 'util.php/disable_submit_button', true ); 
-    }
 }
 
 ?>

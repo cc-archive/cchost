@@ -22,7 +22,11 @@ div#remix_search_controls {
 #remix_search_toggle {
     float: right;
 }
-#debug { display: none; }
+#license_info a {
+    font-weight: bold;
+}
+
+#debug { display: block; }
 </style>
 <div style="width:40em;">
     <div id="remix_search_toggle" style="display:none">%if_not_null(field/close_box)%<a href="javascript://toggle" id="remix_toggle_link">%text(str_remix_close)%</a>%end_if%</div>
@@ -47,6 +51,8 @@ div#remix_search_controls {
     %end_if%
     </div>
     <div id="remix_search_picks">
+    </div>
+    <div id="license_info" class="box">
     </div>
 </div>
 

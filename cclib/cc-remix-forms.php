@@ -86,6 +86,7 @@ class CCEditRemixesForm extends CCForm
                            'flags'      => CCFF_POPULATE,
                         );
 
+        $this->SetHiddenField( 'upload_license', '', CCFF_HIDDEN | CCFF_STATIC );
         $this->AddFormFields($fields);
         $this->DisableSubmitOnInit();
         $this->SetSubmitText(_('Done Editing'));

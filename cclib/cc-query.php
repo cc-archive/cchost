@@ -299,6 +299,7 @@ class CCQuery
             {
                 $results = '';
                 $results_mime = '';
+                $this->args['queryObj'] = $this;
 
                 CCEvents::Invoke( CC_EVENT_API_QUERY_FORMAT, 
                                     array( &$records, &$this->args, &$results, &$results_mime ) );
@@ -367,7 +368,7 @@ class CCQuery
             $props = $dv->GetDataView($this->args['dataview']);
             $this->dataview = $props;
         }
-        $records =& $dv->Perform($this->dataview,$args,$this);
+        $records =& $dv->Perform($this->dataview,$args);
         $this->sql = $dv->sql;
         return $records;
     }
@@ -440,10 +441,6 @@ class CCQuery
     }
 
     function _gen_reccby()
-    {
-    }
-
-    function _gen_remixesof()
     {
     }
 
@@ -529,6 +526,27 @@ class CCQuery
         else
             $this->_heritage_helper('sources','tree_parent','cc_tbl_tree','tree_child','upload_id');
     }
+
+    function _gen_remixesof()
+    {
+        $users =& CCUsers::GetTable();
+        $where['user_name'] = $this->args['remixesof'];
+        $user_id = $users->QueryKey($where);
+        if( empty($user_id) )
+        {
+            $this->dead = true;
+            return;
+        }
+        $sql = "SELECT tree_child FROM cc_tbl_tree JOIN cc_tbl_uploads ON tree_parent = upload_id WHERE upload_id = " . $user_id;
+        $ids = CCDatabase::QueryItems($sql);
+        if( empty($ids) )
+        {
+            $this->dead = true;
+            return;
+        }
+        $this->where[] = 'upload_id IN (' . join(',',$ids) . ')';
+    }
+
 
     function _gen_score()
     {

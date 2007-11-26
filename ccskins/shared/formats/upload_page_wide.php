@@ -34,4 +34,4 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
 div#upload_menu_box{float:left;width:20%;margin-left:-100%;padding-left:1.5em;}
 </style>
 
-<? $T->Call('formats/upload_page_shared.tpl')?>
+<? $T->Call('formats/upload_page_shared.tpl'); ?>

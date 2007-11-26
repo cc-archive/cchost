@@ -47,6 +47,7 @@ var str_no_search_term            ='<?=addslashes($T->String('str_remix_no_searc
 var str_no_matches                ='<?=addslashes($T->String('str_remix_no_matches'))?>';
 var str_remix_close               ='<?=addslashes($T->String('str_remix_close'))?>';
 var str_remix_open                ='<?=addslashes($T->String('str_remix_open'))?>';
+var str_remix_lic                 ='<?=addslashes($T->String('str_remix_lic'))?>';
 
 var str_loading                   ='<?=addslashes($T->String('str_loading'))?>';
 var str_ok                        ='<?=addslashes($T->String('str_ok'))?>';

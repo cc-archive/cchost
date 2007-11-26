@@ -516,8 +516,8 @@ END;
 
             if( !empty($tagfilter ) )
             {
-                require_once('cclib/cc-upload.php');
-                CCUpload::ListMultipleFiles($where,$tagfilter);
+                //require_once('cclib/cc-upload.php');
+                //CCUpload::ListMultipleFiles($where,$tagfilter);
                 $this->_show_feed_links($username);
             
                 CCPage::SetTitle($name . ' :: ' . $tagfilter );
@@ -557,8 +557,9 @@ END;
 
             if( $show_records )
             {
-                require_once('cclib/cc-upload.php');
-                CCUpload::ListMultipleFiles($where,$tagfilter);
+                // todo: convert to query api
+                //require_once('cclib/cc-upload.php');
+                //CCUpload::ListMultipleFiles($where,$tagfilter);
             }
 
             $this->_show_feed_links($username);

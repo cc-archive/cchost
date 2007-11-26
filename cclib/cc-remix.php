@@ -28,12 +28,6 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 /**
-*
-*/
-define('CC_REMIX_SEARCH_LIMIT', 30 );
-
-
-/**
  * Remix API
  *
  */
@@ -82,7 +76,6 @@ class CCRemix
     */
     function OnPostRemixForm(&$form, $relative_dir, $ccud = CCUD_REMIX, $remixid = '')
     {
-        require_once('cclib/cc-upload-table.php');
         require_once('cclib/cc-pools.php');
         require_once('cclib/cc-sync.php');
 
@@ -235,15 +228,35 @@ class CCRemix
     * @param object &$form CCForm object
     * @param array &$rows Array of upload rows
     */
-    function StrictestLicense()
+    function RemixLicenses()
     {
-
+        $pool_sources = $_GET['pool_sources'];
+        $rows_r = $rows_p = array();
+        if( !empty($_GET['remix_sources']) )
+        {
+            $sql = 'SELECT DISTINCT upload_license FROM cc_tbl_uploads WHERE upload_id IN (' . $_GET['remix_sources'] . ')';
+            $rows_r = CCDatabase::QueryItems($sql);
+        }
+        if( !empty($_GET['pool_sources']) )
+        {
+            $sql = 'SELECT DISTINCT pool_item_license FROM cc_tbl_pool_item WHERE pool_item_id IN (' . $_GET['pool_sources'] . ')';
+            $rows_p = CCDatabase::QueryItems($sql);
+        }
+        $rows = array_unique(array_merge($rows_r,$rows_p));
         require_once('cclib/cc-lics-chart.inc');
         $license = '';
-        foreach( $rows as $row )
+        foreach( $rows as $L )
         {
-            $license = $license ? cc_stricter_license( $row['license_id'], $license ) : $row['license_id'];
+            $license = $license ? cc_stricter_license( $L, $license ) : $L;
         }
+        $lics = new CCTable('cc_tbl_licenses','license_id');
+        $row = $lics->QueryKeyRow($license);
+        require_once('cclib/zend/json-encoder.php');
+        $text = CCZend_Json_Encoder::encode($row);
+        header( "X-JSON: $text");
+        header( 'Content-type: text/plain');
+        print($text);
+        exit;
     }
 
 
@@ -270,6 +283,8 @@ class CCRemix
     {
         CCEvents::MapUrl( ccp('file','remixes'), array( 'CCRemix', 'EditRemixes'), 
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{upload_id}', _("Displays 'Manage Remixes' for upload"), CC_AG_UPLOAD );
+        CCEvents::MapUrl( ccp('remixlicenses'), array( 'CCRemix', 'RemixLicenses'), 
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{upload_id}', _("Ajax callback to calculate licenses"), CC_AG_UPLOAD );
     }
 
 
