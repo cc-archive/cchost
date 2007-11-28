@@ -44,7 +44,7 @@ $q = $A['q'];
 
 ?>   
 <li><a id="mi_stream_page" href="<?=$url?>"><?= $T->String('str_stream_this_page') ?></a></li>
-<li><a id="mi_podcast_page" title="{$T->String('str_drag_this_link')}" href="<?=$url2?>"><?= $T->String('str_podcast_this_page')?></a></li>
+<li><a id="mi_podcast_page" title="<?= $T->String('str_drag_this_link') ?>" href="<?=$url2?>"><?= $T->String('str_podcast_this_page')?></a></li>
 </ul>
 <?
 if( $script )

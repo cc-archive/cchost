@@ -116,9 +116,11 @@ print '</ul>';
 /** TRACKBACK menu *****/
 
 $str = sprintf($T->String('str_list_i_saw_this'), '"' . $R['upload_name'] . '"');
-print "<div class=\"box\" style=\"float:left\">\n" .
-      "<h2>{$T->String('str_list_trackback')}</h2>\n<a name=\"trackback\"></a>" .
-      "<p>{$str}</p><ul>\n";
+
+?><div class="box" style="float:left">
+  <h2><?= $T->String('str_list_trackback') ?></h2>
+  <a name="trackback"></a>
+  <p><?= $str ?></p><ul><?
 
 $mi = array();
 $mi['action'] = 'javascript:// noted';

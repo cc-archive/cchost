@@ -242,12 +242,11 @@ function _t_collab_show_collab_files($T,&$A)
     { 
         $up =& $carr107[ $ck107[ $ci107 ] ];
        
-        $html =<<<EOF
-    <div class="file_line {$up['collab_type']}_line" id="_file_line_{$up['upload_id']}">
-    <div class="file_info"><a  class="fname" href="{$up['file_page_url']}">{$up['upload_name']}</a> {$T->String('str_by')}
-                   <a  href="{$up['artist_page_url']}">{$up['user_real_name']}</a></div>
-EOF;
-        print $html;
+        ?>
+    <div class="file_line <?= $up['collab_type']?>_line" id="_file_line_<?= $up['upload_id'] ?>">
+    <div class="file_info"><a  class="fname" href="<?= $up['file_page_url'] ?>"><?= $up['upload_name'] ?></a> 
+        <?= $T->String('str_by') ?>
+        <a href="<?= $up['artist_page_url'] ?>"><?= $up['user_real_name'] ?></a></div><?
 
         if ( !empty($up['is_collab_owner'])) {
 

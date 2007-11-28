@@ -31,18 +31,18 @@ foreach( $AInfo['recs'] as $AIR )
 { 
     $iun  = CC_strchop($AIR['upload_name'],30,true);
     $iurn = CC_strchop($AIR['user_real_name'],30,true);
-    $html =<<<EOF
+?>
 <div class="trr">
-    <div  class="tdc cc_playlist_item" id="_pli_{$AIR['upload_id']}">
-        <span ><a class="cc_playlist_pagelink" id="_plk_{$AIR['upload_id']}" target="_parent" href="{$AIR['file_page_url']}">{$iun}</a></span>
-        {$T->String('str_by')} <a  href="{$AIR['artist_page_url']}">{$iurn}</a>
+    <div  class="tdc cc_playlist_item" id="_pli_<?= $AIR['upload_id'] ?>">
+        <span ><a class="cc_playlist_pagelink" id="_plk_<?= $AIR['upload_id'] ?>" target="_parent" href="{$AIR['file_page_url']}"><?=$iun?></a></span>
+        <?= $T->String('str_by') ?> <a  href="<?= $AIR['artist_page_url'] ?>"><?= $iurn ?></a>
     </div>
-    <div class="tdc" style="padding-left:15px">{$T->String('str_pl_found_in')} 
-        <a href="{$A['home-url']}playlist/browse{$A['q']}id={$AIR['upload_id']}">{$AIR['track_count']} {$T->String('str_pl_playlists')}</a>
+    <div class="tdc" style="padding-left:15px"><?= $T->String('str_pl_found_in') ?> 
+        <a href="<?= $A['home-url'] ?>playlist/browse<?= $A['q'] ?>id=<?= $AIR['upload_id'] ?>"><?= $AIR['track_count'] ?> 
+        <?= $T->String('str_pl_playlists') ?></a>
     </div>
-    <div class="tdc"><a class="info_button" id="_plinfo_{$AIR['upload_id']}"></a></div>
-EOF;
-    print $html;
+    <div class="tdc"><a class="info_button" id="_plinfo_<?= $AIR['upload_id'] ?>"></a></div>
+<?
 
     if ( !empty($A['is_logged_in'])) 
     {
