@@ -87,8 +87,16 @@ class CCPathAdminForm extends CCEditConfigForm
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE );
 
+        $fields['image-upload-dir'] =
+               array(  'label'      => $wflag . _('Admin Graphics Directory'),
+                       'form_tip'   => _("Graphics that you upload will be put here."),
+                       'writable'   => true,
+                       'value'      => '',
+                       'formatter'  => 'textedit',
+                       'flags'      => CCFF_POPULATE );
+
         $fields['avatar-dir'] =
-               array(  'label'      => $wflag . _('Avatar Directory'),
+               array(  'label'      => $wflag . _('User Avatar Directory'),
                        'form_tip'   => _("If blank, avatars are assumed to be in the user's upload directory."),
                        'writable'   => true,
                        'value'      => '',

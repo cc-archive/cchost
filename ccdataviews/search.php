@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = search
-[meta]
+[/meta]
 */
 
 function search_dataview() 

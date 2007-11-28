@@ -49,7 +49,10 @@ function _t_util_print_html_content($T,&$A)
 function _t_util_print_forms($T,&$A)
 {
     if( empty($A['forms']) )
+    {
+        print 'NO FORMS';
         return;
+    }
 
     foreach( $A['forms'] as $form_info )
     {
@@ -208,24 +211,32 @@ function _t_util_print_client_menu($T,&$A)
     ?><link rel="stylesheet" type="text/css" href="<?= $T->URL('css/client_menu.css'); ?>" title="Default Style" /><?
 
     if( !empty($A['client_menu_help']) )
-        print "<div class=\"client_menu_help box\">{$A['client_menu_help']}</div>\n";
+    {
+        ?><div class="client_menu_help box"><?= $A['client_menu_help'] ?></div><?
+    }
 
     $items = $A['client_menu'];
     $count = count($items);
     $K = array_keys($items);
 
-    print "<ul class=\"client_menu\">\n";
+    ?><ul class="client_menu"><?
+
     for( $i = 0; $i < $count; $i++ )
     {
         $I =& $items[ $K[$i] ];
-        print "<li><a href=\"{$I['action']}\"><span>${I['menu_text']}</span></a>\n";
+        ?><li><a href="<?= $I['action'] ?>"><span><?= $I['menu_text'] ?></span></a> <?
         if( !empty($I['help']) )
-            print "<span class=\"hint\">{$I['help']}</span>\n";
+        {
+            ?> <span class="hint"><?= $T->String($I['help']) ?></span> <?
+        }
     }
-    print "</ul>";
+    
+    ?></ul><?
 
     if( !empty($A['client_menu_hint']) )
-        print "<div class=\"client_menu_hint\">{$A['client_menu_hint']}</div>\n";
+    {
+        ?><div class="client_menu_hint"><?= $A['client_menu_hint'] ?></div><?
+    }
 }
 
 function _t_util_prev_next_links($T,&$A) 

@@ -128,7 +128,7 @@ class CCUser
     function IDFromName($username)
     {
         $users =& CCUsers::GetTable();
-        $where = "LOWER(user_name) = '" . strtolower($username) . "'";
+        $where = "user_name = '" . strtolower($username) . "'";
         return( $users->QueryKey($where) );
     }
 
@@ -257,7 +257,7 @@ class CCUsers extends CCTable
 
     function & GetRecordFromName($username)
     {
-        $where = "LOWER(user_name) = '" . strtolower($username) . "'";
+        $where = "user_name = '" . strtolower($username) . "'";
         $row = $this->QueryRow($where);
         if( empty($row) )
         {

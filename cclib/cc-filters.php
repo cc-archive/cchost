@@ -12,7 +12,7 @@ function cc_filter_std(&$records,&$dataview_info)
     $k = array_keys($records);
 
     foreach( array( CC_EVENT_FILTER_UPLOAD_USER_TAGS, CC_EVENT_FILTER_REMIXES_SHORT, CC_EVENT_FILTER_FILES,
-                      CC_EVENT_FILTER_UPLOAD_TAGS, CC_EVENT_FILTER_REMIXES_FULL,
+                      CC_EVENT_FILTER_UPLOAD_TAGS, CC_EVENT_FILTER_REMIXES_FULL, CC_EVENT_FILTER_EXTRA,
                       CC_EVENT_FILTER_RATINGS_STARS, CC_EVENT_FILTER_DOWNLOAD_URL ) as $e )
     {
         if( !in_array( $e, $dataview_info['e'] ) )
@@ -38,7 +38,24 @@ function cc_filter_std(&$records,&$dataview_info)
                             $F['download_url'] = ccd($CC_GLOBALS['contests'][($R['upload_contest']-1)],$R['user_name'],$F['file_name']);
                         else
                             $F['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$F['file_name']);
+                        $fs = $F['file_filesize'];
+                        if( $fs )
+                        {
+                            $F['file_rawsize'] = $fs;
+                            if( $fs > CC_1MG )
+                                $fs = number_format($fs/CC_1MG,2) . 'MB';
+                            else
+                                $fs = number_format($fs/1024) . 'KB';
+                            $F['file_filesize'] = " ($fs)";
+                        }
                     }
+                    break;
+                }
+
+                case CC_EVENT_FILTER_EXTRA:
+                {
+                    if( is_string($R['upload_extra']) )
+                        $R['upload_extra'] = unserialize($R['upload_extra']);
                     break;
                 }
 
@@ -125,12 +142,19 @@ function cc_filter_std(&$records,&$dataview_info)
 
                 case CC_EVENT_FILTER_REMIXES_SHORT:
                 {
-                    $query = new CCQuery();
-                    $q = 'dataview=links_by_chop&f=php&limit=4&sources=' . $R['upload_id'];
-                    $args = $query->ProcessAdminArgs($q);
-                    list( $parents ) = $query->Query($args);
+                    if( empty($R['upload_num_sources']) )
+                    {
+                        $parents = array();
+                    }
+                    else
+                    {
+                        $query = new CCQuery();
+                        $q = 'dataview=links_by_chop&f=php&limit=4&sources=' . $R['upload_id'];
+                        $args = $query->ProcessAdminArgs($q);
+                        list( $parents ) = $query->Query($args);
+                    }
 
-                    if( count($parents) < 3 )
+                    if( count($parents) < 3 && !empty($R['upload_num_pool_sources']) )
                     {
                         $count = 4 - count($parents);
                         $q = 'dataview=links_by_pool&f=php&limit=' . $count . '&sort=&datasource=pools&sources=' . $R['upload_id'];
@@ -146,14 +170,21 @@ function cc_filter_std(&$records,&$dataview_info)
                     }
                     $R['remix_parents'] = $parents;
 
-                    $query = new CCQuery();
-                    $q = 'dataview=links_by_chop&f=php&limit=4&remixes=' . $R['upload_id'];
-                    $args = $query->ProcessAdminArgs($q);
-                    list( $children ) = $query->Query($args);
-                    if( count($children) > 3 )
+                    if( empty($R['upload_num_remixes']) )
                     {
-                        $R['more_children_link'] = $R['file_page_url'];
-                        unset($children[3]);
+                        $children = array();
+                    }
+                    else
+                    {
+                        $query = new CCQuery();
+                        $q = 'dataview=links_by_chop&f=php&limit=4&remixes=' . $R['upload_id'];
+                        $args = $query->ProcessAdminArgs($q);
+                        list( $children ) = $query->Query($args);
+                        if( count($children) > 3 )
+                        {
+                            $R['more_children_link'] = $R['file_page_url'];
+                            unset($children[3]);
+                        }
                     }
                     $R['remix_children'] = $children;
                     break;

@@ -92,15 +92,6 @@ class CCImportFiles
                                  'action' =>  ccl('admin','import')
                                  ),
                 );
-
-            global $CC_GLOBALS;
-            if( empty($CC_GLOBALS['importer-installed']) )
-            {
-                CCEvents::GetUrlMap(true);
-                $flag['importer-installed'] = true;
-                $configs =& CCConfigs::GetTable();
-                $configs->SaveConfig('config',$flag);
-            }
         }
     }
 

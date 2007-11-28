@@ -65,15 +65,15 @@ function _t_html_form_submit_forms($T,&$A)
         ?><div  class="cc_submit_forms box"><?
 
         if ( !empty($SI['logo'])) 
-            ?><img  src="<?= $SI['logo']?>" /><?
+            ?><img  src="<?= $T->URL($SI['logo']) ?>" /><?
 
-        ?><h2 ><?= $SI['text']?></h2>
-        <div  class="cc_submit_form_help"><?= $SI['help']?></div>
+        ?><h2 ><?= $T->String($SI['text']) ?></h2>
+        <div  class="cc_submit_form_help"><?= $T->String($SI['help']) ?></div>
         <div  class="cc_submit_form_url"><?
             if ( !($SI['quota_reached']) )
-                { ?><a  href="<?= $SI['action']?>"><?= $SI['text']?></a><? }
+                { ?><a  href="<?= $SI['action']?>"><?= $T->String($SI['text']) ?></a><? }
             else
-                { ?><span  class="cc_quota_message"><?= $SI['quota_message']?></span><? }
+                { ?><span  class="cc_quota_message"><?= $T->String($SI['quota_message']) ?></span><? }
 
         ?></div>
         </div><?
@@ -86,10 +86,13 @@ function _t_html_form_submit_forms($T,&$A)
 //------------------------------------- 
 function _t_html_form_show_form_about($T,&$A) 
 {
-    print '<div id="cc_form_help_container"><div class="box">';
+    ?><div id="cc_form_help_container"><div class="box"><?
     foreach( $A['curr_form']['form_about'] as $FA )   
-        print "<div  class=\"cc_form_about\">{$FA}</div>\n";
-    print '</div></div>';
+    {
+        ?><div  class="cc_form_about"><?= $T->String($FA) ?></div><?
+    }
+    
+    ?></div></div><?
 
 } // END: function show_form_about
 

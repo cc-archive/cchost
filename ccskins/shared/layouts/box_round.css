@@ -34,8 +34,10 @@
 	border: 0; /* ditto */ 
 	padding: 20px 0 10px 40px; /* padding-left = image gap + interior padding ... no padding-right */ 
 	height: auto !important; height: 1%; /* IE Holly Hack */ 
+	/*
 	font-size: 13px;
 	font-family: Verdana;
+	*/
 } 
 
 /* set the lower-left corner image */ 
@@ -44,6 +46,8 @@
 	background-position: bottom left; 
 	margin-right: 25px; /* interior-padding right */ 
 	padding: 2px 0 25px 40px; /* mirror .cssbox_head right/left */ 
+	/*
 	font-size: 11px;
 	font-family: Verdana;
+	*/
 } 

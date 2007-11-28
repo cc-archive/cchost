@@ -100,7 +100,7 @@ class CCPlaylists
         $args['playlist'] = $this->_get_default_playlist();
 
         // strictly so add_menu() will work...
-        $args['playlist']['cart_dynamic'] = $qstring;
+        $args['playlist']['cart_dynamic'] = $qstring = $queryObj->SerializeArgs($query_args);
 
         if( empty($records) )
         {
@@ -130,7 +130,6 @@ class CCPlaylists
         $args['records'] = $records;
         $args['playlist']['cart_desc'] = $msg1;
         CCPage::SetTitle(_('Dynamic Playlist'));
-        CCPage::PageArg('playlist_show_one', 'playlist.xml/playlist_show_one' );
         CCPage::PageArg('args',$args,'playlist_show_one');
 
         $result = true;
@@ -480,7 +479,6 @@ class CCPlaylists
             if( empty($args) )
                 CCUtil::Send404();
             CCPage::SetTitle(sprintf(_('Playlist: %s'),$args['playlist']['cart_name']) );
-            CCPage::PageArg('playlist_show_one', 'playlist.xml/playlist_show_one' );
             CCPage::PageArg('args',$args,'playlist_show_one');
         }
     }

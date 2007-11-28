@@ -27,10 +27,6 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 /**
-*/
-define('CC_FORM_TYPE_LOGO_DIR', 'ccskins/shared/images/form_types' ); // this should be a call to CCTemplate::Search
-
-/**
 * @package cchost
 * @subpackage admin
 */
@@ -41,6 +37,8 @@ class CCAdminSubmitFormForm extends CCUploadForm
 {
     function CCAdminSubmitFormForm()
     {
+        global $CC_GLOBALS;
+
         $this->CCUploadForm();
         $fields = array( 
                     'enabled' =>
@@ -65,7 +63,7 @@ class CCAdminSubmitFormForm extends CCUploadForm
                        array(  'label'      => _('Logo'),
                                'formatter'  => 'avatar',
                                'form_tip'   => _('Image file'),
-                               'upload_dir' => CC_FORM_TYPE_LOGO_DIR,
+                               'upload_dir' => './',
                                'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL  ),
 
                     'help' =>
@@ -218,8 +216,6 @@ class CCSubmit
         $keys = array_keys($types);
         foreach( $keys as $key )
         {
-            if( !empty($types[$key]['logo']) )
-                $types[$key]['logo'] = ccd( CC_FORM_TYPE_LOGO_DIR, $types[$key]['logo'] );
             if( empty($types[$key]['action']) )
                 $types[$key]['action'] = ccl('submit',$key);
         }
@@ -285,47 +281,42 @@ class CCSubmit
         global $CC_CFG_ROOT;
 
         CCPage::SetTitle(_('Manage Submit Forms'));
-        $form_types = $this->_get_form_types(false);
-
         if( $cmd == 'revert' )
         {
             $configs =& CCConfigs::GetTable();
             $where['config_scope'] = $CC_CFG_ROOT;
             $where['config_type'] = 'submit_forms';
             $configs->DeleteWhere($where);
-            if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
-                CCPage::Prompt(_('Submit forms have been reverted to factory defaults'));
-            else
-                CCPage::Prompt(_('Submit forms have been reverted to global settings'));
-
+            CCPage::Prompt(_('Submit forms have been reverted to global settings'));
         }
-        else
-        {
-            $args = array();
-            foreach( $form_types as $key => $data)
-            {
-                $args[] = array( 'action' => ccl('admin','editsubmitform',$key ),
-                                 'menu_text' => _('Edit'),
-                                 'help' => $data['submit_type'] );
-            }
-            CCPage::PageArg('client_menu',$args,'print_client_menu');
 
+        $form_types = $this->_get_form_types(false);
+
+        $args = array();
+        foreach( $form_types as $key => $data)
+        {
+            $args[] = array( 'action' => ccl('admin','editsubmitform',$key ),
+                             'menu_text' => _('Edit'),
+                             'help' => $data['submit_type'] );
+        }
+
+        $prompt = '';
+
+        if( ($cmd != 'revert') && ($CC_CFG_ROOT != CC_GLOBAL_SCOPE) )
+        {
             $url = ccl('admin','submit','revert');
             $link1 = "<a href=\"$url\">";
             $link2 = '</a>';
-            if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
-            {
-                $prompt = sprintf( _('If you wish to revert all changes to factory defaults %sclick here%s. WARNING: there is no undo.'), $link1, $link2 );
-            }
-            else
-            {
-                $prompt = sprintf( _('If you wish to remove all submit form changes for %s and revert to the global settings %sclick here%s. WARNING: there is no undo.'), 
-                    '<b>'.$CC_CFG_ROOT.'</b>', $link1, $link2 );
-            }
-            CCPage::Prompt($prompt);
-            $url = ccl('admin','newsubmitform');
-            CCPage::Prompt("<a href=\"$url\">" . _('Add a new form type...') . '</a>');
+
+            $prompt .= '<p>' . sprintf( _('If you wish to remove all submit form changes for %s and revert to the global settings %sclick here%s. WARNING: there is no undo.'), 
+                '<b>'.$CC_CFG_ROOT.'</b>', $link1, $link2 ) . '</p>';
         }
+
+        $url = ccl('admin','newsubmitform');
+        $prompt .= "<p><a class=\"cc_gen_button\" href=\"$url\"><span>" . _('Add a new form type...') . '</span></a></p>';
+
+        CCPage::PageArg('client_menu',$args,'print_client_menu');
+        CCPage::PageArg('client_menu_help',$prompt);
     }
 
     function EditForm($form_type_key)
@@ -341,6 +332,48 @@ class CCSubmit
         $form = new CCAdminSubmitFormForm();
         if( empty($_POST['adminsubmitform']) )
         {
+            // 
+            // We copy the image to the user's upload dir so they
+            // don't edit the 'system' copy
+            //
+            // This is all a little heavy handed but it's solid
+            // and we take no chances of screwing things up
+            // down the line
+            //
+            if( strstr($form_types[$form_type_key]['logo'],'ccskins') )
+            {
+                global $CC_GLOBALS;
+                $fullpath = realpath($form_types[$form_type_key]['logo']);
+                $filename = basename($fullpath);
+                $dest_path = $CC_GLOBALS['image-upload-dir'] . $filename;
+                if( file_exists($dest_path) )
+                {
+                    $ret = true;
+                }
+                else
+                {
+                    $ret = copy($fullpath,$dest_path);
+                }
+                if( $ret )
+                {
+                    // we'll write this back to the form type (might as well)
+                    //
+                    // we get a fresh copy 
+                    $configs =& CCConfigs::GetTable();
+                    $forms_temp = $configs->GetConfig('submit_forms');
+                    $forms_temp[$form_type_key]['logo'] = $dest_path;
+                    $configs->SaveConfig('submit_forms',$forms_temp,'',false);
+
+
+                }
+                else
+                {
+                    $msg = _(sprintf('Your Graphics Upload Path (%s) must be writable to work on Submit Forms.',$CC_GLOBALS['image-upload-dir']));
+                    CCPage::Prompt($msg);
+                    return;
+                }
+                $form_types[$form_type_key]['logo'] = $dest_path;
+            }
             $form->PopulateValues($form_types[$form_type_key]);
         }
         elseif ( $form->ValidateFields() )
@@ -398,7 +431,9 @@ class CCSubmit
 
     function _save_form(&$form,$form_type_key,&$form_types)
     {
-        $form->FinalizeAvatarUpload('logo', CC_FORM_TYPE_LOGO_DIR );
+        global $CC_GLOBALS;
+
+        $form->FinalizeAvatarUpload('logo', $CC_GLOBALS['image-upload-dir'] );
         $form->GetFormValues($values);
         $form_types = $this->SaveFormType($values,$form_type_key,$form_types);
     }

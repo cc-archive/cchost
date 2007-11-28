@@ -26,7 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define('CC_DEFAULT_SKIN_SEARCH_PATHS', 'ccskins/shared' );
+define('CC_DEFAULT_SKIN_SEARCH_PATHS', 'ccskins/;ccskins/shared/;ccskins/shared/formats/' );
 
 /**
 */
@@ -53,7 +53,6 @@ class CCSkin
         $this->vars['query-url']    = ccl('api','query') . $q;
         $this->vars['get']          = $_GET;
         $this->vars['site-root']    = preg_replace('#http://[^/]+/?#','/',ccd());
-        $this->vars['install_done'] = false;
         $this->vars['noproto']      = false;
         $this->vars['ajax']         = !empty($_REQUEST['ajax']);
 
@@ -190,12 +189,12 @@ class CCSkin
                     $var = $fmt;
                     $fmt = $this->vars[$fmt];
                 }
-                if( !empty($GLOBALS[$fmt]) )
+                if( (substr($fmt,0,4) == 'str_') && !empty($GLOBALS[$fmt]) )
                 {
                     $id = $fmt;
                     $fmt =  $GLOBALS[$fmt];
                 }
-                if( is_array($args[0]) )
+                if( isset($args[0]) && is_array($args[0]) )
                     $args = $args[0];
                 $text = vsprintf($fmt,$args);
             }
@@ -213,12 +212,16 @@ class CCSkin
             }
         }
 
+        /*
+            turn on the code below for 'onscreen' editing of strings 
+
         if( CCUser::IsAdmin() && (!empty($var) || !empty($id)) )
         {
             $var = empty($var) ? '' : "var: $var";
             $id  = empty($id)  ? '' : "str: $id";
             $text = "<!-- $id $var -->" . $text;
         }
+        */
 
         return $text;
     }
@@ -565,86 +568,6 @@ class CCSkin
 
     function CompatRequired()
     {
-        if( !empty($this->vars['template_compat']) )
-            return;
-
-        $this->ImportSkin('ccskins/plain');
-
-        global $CC_GLOBALS;
-
-        $pi = pathinfo( $CC_GLOBALS['skin-file'] );
-        $this->vars['skin'] = preg_replace('/\.[^\.]+$/', '', $pi['filename']);
-        $sp = split( '\.', $pi['basename'] );
-        $pi['filename'] = $sp[0];
-
-
-        $this->vars['style_sheets'][] = $pi['filename'] . '.css';
-
-        //if( empty($this->vars['head_links']) )
-        {
-            foreach( $this->vars['style_sheets'] as $css )
-            {
-                $this->vars['head_links'][] = array(
-                        'rel' => 'stylesheet',
-                        'type' => 'text/css',
-                        'href' => ccd($pi['dirname'] . '/' . $css),
-                        'title' => 'Default Style'
-                    );
-            }
-        }
-
-        if( !empty($this->vars['records']) && empty($this->vars['file_records']) )
-            $this->vars['file_records'] =& $this->vars['records'];
-
-        if( !empty($this->vars['file_records']) )
-        {
-            $k = array_keys($this->vars['file_records']);
-            $c = count($k);
-            for( $i = 0; $i < $c; $i++ )
-            {
-                $R =& $this->vars['file_records'][$k[$i]];
-                $R['local_menu'] = cc_get_upload_menu($R);
-                cc_get_ratings_info($R);
-            }
-        }
-
-        if( !empty($this->vars['user_record']) )
-            $this->vars['user_record'] = array( $this->vars['user_record'] );
-
-        $configs =& CCConfigs::GetTable();
-        $tmacs = $configs->GetConfig('tmacs');
-
-        $first_key = key($tmacs);
-
-        // older installs don't have file/ prefix,
-        // fix that right here...
-        if( !preg_match( '#[./]#', $first_key ) )
-        {
-            $newmacs = array();
-            foreach( $tmacs as $K => $V )
-            {
-                $parts = split('/',$K);
-                if( count($parts) == 1 )
-                    $K = 'custom.xml/' . $parts[0];
-                else
-                    $K = $parts[0] . '.xml/' . $parts[1];
-                $newmacs[$K] = $V;
-            }
-            $configs->SaveConfig('tmacs',$newmacs,'',false);
-            $tmacs = $newmacs;
-        }
-
-        reset($tmacs);
-        $TM = array();
-        foreach( $tmacs as $TMF => $on )
-            if( $on )
-                $TM[] = $TMF;
-
-        $this->vars['custom_macros'] = $TM;
-
-        $this->vars['template_compat'] = true;
-
-        //$this->vars['print_page_title'] = 'ccskins/plain/page.tpl/print_page_title';
     }
 
     /**

@@ -1,3 +1,0 @@
-Files with the extension .php
-found in this directory will
-be included by ccHost

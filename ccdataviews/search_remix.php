@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = search_remix
-[meta]
+[/meta]
 */
 
 function search_remix_dataview() 

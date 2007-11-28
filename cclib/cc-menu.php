@@ -387,9 +387,6 @@ class CCMenu
 
             CCEvents::Invoke(CC_EVENT_PATCH_MENU, array( &$_menu_data['items'] ));
 
-            $links_menu = $configs->GetConfig('links_menu'); 
-            if( !empty($links_menu) )
-                $_menu_data['items'] += $links_menu;
         }
 
         return( $_menu_data );

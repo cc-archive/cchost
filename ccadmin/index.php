@@ -134,6 +134,8 @@ function step_4()
 
     $rnum = rand();
 
+    $login_url = $root_url; // home page will redirect to login 
+
     $html =<<<EOF
 
     <h2>Securing the Site</h2>
@@ -159,7 +161,7 @@ function step_4()
     <p>For Unix/Linux installations you should further read <a href="http://wiki.creativecommons.org/CcHost_File_Access">ccHost File Access Policy and Troubleshooting</a>
     <h2>Go forth...</h2>
 
-    <p>If you've done those steps you can browse to <a href="$root_url">$root_url</a> and log in as "<b>$admin</b>"
+    <p>If you've done those steps you can browse to <a href="$login_url">$login_url</a> and log in as "<b>$admin</b>"
     and continue setting up and configuring the site.</p>
 
 EOF;
@@ -399,24 +401,28 @@ END;
 function install_local_files($local_dir)
 {
     // is it right to disable warning here?
-    @mkdir( 'files');
+    @mkdir( 'content');
     @mkdir( 'contests');
-    @mkdir( $local_dir . '/viewfile' );
+    @mkdir( $local_dir . '/pages' );
     @mkdir( $local_dir . '/skins' );
+    @mkdir( $local_dir . '/skins/images' );
+    @mkdir( $local_dir . '/dataviews' );
     @mkdir( $local_dir . '/lib' );
     @mkdir( $local_dir . '/temp' );
 
-    chmod( 'files',   0777 );
+    chmod( 'content',   0777 );
     chmod( 'contests', 0777 );
-    chmod( $local_dir . '/viewfile', 0777 );
+    chmod( $local_dir . '/pages', 0777 );
     chmod( $local_dir . '/skins', 0777 );
     chmod( $local_dir . '/lib', 0777 );
     chmod( $local_dir . '/temp', 0777 );
+    chmod( $local_dir . '/skins/images', 0777 );
+    chmod( $local_dir . '/dataviews', 0777 );
 
-    docopy( 'sidebar.xml', $local_dir, 'skins');
-    docopy( 'home.xml', $local_dir, 'viewfile');
-    docopy( 'welcome.xml', $local_dir, 'viewfile');
+    docopy( 'home.php', $local_dir, 'pages');
+    docopy( 'welcome.php', $local_dir, 'pages');
     docopy( 'DEBUG.php', $local_dir, 'lib');
+    docopy( 'person.png', $local_dir, 'skins/images');
     docopy( 'error-msg.txt', $local_dir, '');
     docopy( 'disabled-msg.txt', $local_dir, '');
 }

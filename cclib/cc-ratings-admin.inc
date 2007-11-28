@@ -95,8 +95,8 @@ class CCAdminRatingsForm extends CCEditConfigForm
                        array(  'label'      => _('Recalculate now'),
                                'form_tip'   => _('Recalculate rating during submit. NOTE: This can take a very, very (very) long time if you have a lot of uploads.'),
                                'value'      => '<a href="$url" class="cc_gen_button"><span>Recalc</span></a>',
-                               'formatter'  => 'checkbox',
-                               'flags'      => CCFF_POPULATE),
+                               'formatter'  => 'statictext',
+                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
 
                     'ratings_ban' =>
                        array(  'label'      => _('Ratings Ban List'),

@@ -49,9 +49,10 @@ SELECT
     $is_thumbs_up as thumbs_up, $ratings_on as ratings_enabled,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     CONCAT( '$urll', license_logo ) as license_logo_url, license_url, license_name,
-    IF( upload_tags REGEXP '(^|,)(audio)(,|$)', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
+    IF( upload_tags LIKE '%,audio,%', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
     DATE_FORMAT( upload_date, '%W, %M %e, %Y @ %l:%i %p' ) as upload_date_format,
-    file_name, file_format_info, file_extra, upload_contest, upload_name
+    file_name, file_format_info, file_extra, upload_contest, upload_name,
+    upload_num_remixes, upload_num_sources, upload_num_pool_sources
     %columns%
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id

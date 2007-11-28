@@ -285,6 +285,20 @@ $GLOBALS['str_skip']                  = _('Skip to content');
 $GLOBALS['str_stream']                = _('Show');
 $GLOBALS['str_stream_now']            = _('Show Now');
 $GLOBALS['str_stream_this_page']      = _('Show this page');
+
+$GLOBALS['str_submit_remix']      = _('Derived Work');
+$GLOBALS['str_submit_a_remix']      = _('Submit a Derived Work');
+$GLOBALS['str_submit_remix_line']      = _( 'Use this form to submit a derived work.');
+$GLOBALS['str_submit_remix_help']     = _('A derived works project uses material downloaded from this site. When submitting a this type of project make sure to properly attribute the author you borrowed from (sampled) to comply with the Attribution part the Creative Commons license. The next screen will have a search function that allows you do just that.');
+$GLOBALS['str_submit_sample']  = _('Sample');
+$GLOBALS['str_submit_samples']  = _('Submit Samples');
+$GLOBALS['str_submit_samples_help']  = _('Samples are components specifically designed to be aggregated into larger works.');
+$GLOBALS['str_submit_samples_help_line']  = _('Use this form to submit samples.');
+$GLOBALS['str_submit_original'] = _('Self-Contained');
+$GLOBALS['str_submit_an_original'] = _('Submit a Self-Contained Project');
+$GLOBALS['str_submit_original_help'] = _('A self-contained project does not derive any material from outside sources. It is a totally original work.');
+$GLOBALS['str_submit_original_help'] = _('Use this form to upload a self-contained project.');
+
 $GLOBALS['str_suggested_tags'] = _('Suggested Tags');
 $GLOBALS['str_tags']                  = _('Tags');
 $GLOBALS['str_tags_s']                = _('Tags %s');

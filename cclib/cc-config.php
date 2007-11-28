@@ -70,6 +70,25 @@ class CCConfigs extends CCTable
         return $_cache;
     }
 
+    function Preload()
+    {
+        global $CC_CFG_ROOT;
+        if( empty($scope) )
+            $scope = $CC_CFG_ROOT;
+        $cache =& $this->_cache();
+        $all_configs = $this->QueryRows( "config_scope = '{$scope}' AND config_type <> 'config'" );
+
+        $c = count($all_configs);
+        $k = array_keys($all_configs);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $r =& $all_configs[$k[$i]];
+            $type = $r['config_type'];
+            $data = $this->_hash_to_string($type,unserialize($r['config_data']));
+            $cache[$scope][$type] = $data;
+        }
+    }
+        
     /**
     * Get the configuration settings of a type for a given scope
     *
@@ -209,6 +228,8 @@ class CCConfigs extends CCTable
 
         $configs->SetCfgRoot( empty($A[0]) ? CC_GLOBAL_SCOPE : $A[0] );
 
+        $configs->Preload();
+
         $CC_GLOBALS['home-url'] = ccl();
 
         $skin_settings = $configs->GetConfig('skin-settings');
@@ -268,7 +289,6 @@ class CCConfigs extends CCTable
             }
         }
         $CC_CFG_ROOT = $rootname;
-        cc_setcookie('cc_cfg_root',$rootname,null);
     }
 
     /**
@@ -458,17 +478,18 @@ class CCConfigs extends CCTable
     */
     function _get_clang_map()
     {
-        $where['config_type'] = 'clangmap';
-        $where['config_scope'] = CC_GLOBAL_SCOPE;
-        $row = $this->QueryRow($where);
-        if( empty($row) )
+        // can we store this like this???
+        static $map;
+        if( !isset($map) )
         {
-            return array();
+            $where['config_type'] = 'clangmap';
+            $where['config_scope'] = CC_GLOBAL_SCOPE;
+            $map = $this->QueryRow($where);
+            if( !empty($map) )
+                $map = unserialize($map['config_data']);
         }
-        else
-        {
-            return unserialize($row['config_data']);
-        }
+
+        return $map;
     }
 
     /*

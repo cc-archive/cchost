@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = links_by
-[meta]
+[/meta]
 */
 
 function links_by_pool_dataview() 

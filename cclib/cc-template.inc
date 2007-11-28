@@ -55,6 +55,8 @@ class CCExtrasForm extends CCEditConfigForm
                 'flags'     => CCFF_POPULATE_WITH_DEFAULT,
                 );
 
+        $help = _('Drag items from here to sidebar (and back) to add (and remove) items. Drag items within sidebar to reorder.');
+        $this->SetFormHelp($help);
         $this->AddFormFields($fields);
         $this->SetSubmitText(_('Save'));
         $this->SetModule( ccs(__FILE__) );
@@ -334,8 +336,10 @@ class CCTemplateAdmin
 
     function OnBannerLogo()
     {
+        global $CC_GLOBALS;
+
         $configs =& CCConfigs::GetTable();
-        $upload_dir = CCTemplateAdmin::GetFirstUserPath();
+        $upload_dir = $CC_GLOBALS['image-upload-dir'];
         $ttags = $configs->GetConfig('site-logo');
         $filename = empty($ttags['src']) ? '' : basename($ttags['src']);
         $form = new CCBannerLogoForm($upload_dir,$filename);
@@ -459,7 +463,7 @@ class CCTemplateAdmin
                              'access' => CC_MUST_BE_LOGGED_IN
                              ),
             */
-            'tmacs'  => array( 'menu_text'  => _('Sidebar Extras'),
+            'extras'  => array( 'menu_text'  => _('Sidebar Extras'),
                              'menu_group'   => 'configure',
                              'help'         => _('Pick what features are available on the side bar.'),
                              'weight'       => 53,

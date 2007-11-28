@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = links_by_dl
-[meta]
+[/meta]
 */
 
 function links_dl_dataview() 

@@ -178,21 +178,16 @@ class CCUserAdmin
     {
         global $CC_GLOBALS;
 
-        if( empty($CC_GLOBALS['avatar-dir']) )
-            $upload_dir = CCUser::GetUploadDir(CCUser::CurrentUserName());
-        else
-            $upload_dir = $CC_GLOBALS['avatar-dir'];
-
+        $upload_dir = $CC_GLOBALS['image-upload-dir'];
         CCPage::SetTitle(_("Set Default User Avatar"));
-        $form  = new CCDefaultAvatarForm($upload_dir );
+        $form  = new CCDefaultAvatarForm( );
 
         if( !empty($_POST['defaultavatar']) && $form->ValidateFields() )
         {
             $form->FinalizeAvatarUpload('default_user_image', $upload_dir);
             $form->GetFormValues($fields);
             if( $fields['default_user_image'] )
-                $args['default_user_image'] = 
-                    ccp($upload_dir,$fields['default_user_image']);
+                $args['default_user_image'] = ccp($upload_dir,$fields['default_user_image']);
             else
                 $args['default_user_image'] = 0;
             $configs =& CCConfigs::GetTable();

@@ -5,6 +5,8 @@
 
 <div id="container" style="background-color:white;">
 
+<? //CCDebug::PrintVar($T); ?>
+
 <div id="header" class="med_dark_bg light_color"> 
 
     %if_not_empty(sticky_search)%
@@ -17,13 +19,16 @@
             <a class="light_color" href="%(home-url)%logout">%text(logout)%</a></div>
     %end_if%
 
-    %if_not_empty(beta_message)%
-        <div id="beta_message">%(show_beta_message)%</div>
+    %if_not_empty(banner_message)%
+        <div id="beta_message">%(banner_message)%</div>
     %end_if%
 
-    <h1 id="site_title"><a href="%(root-url)%" title="%(site-title)%">
-        %if_not_null(logo/src)% <? $bimg = ccd($A['logo']['src']); ?><img src="%(#bimg)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> %end_if% 
-        %if_not_null(banner-html)% <!-- -->%(banner-html)%   %end_if% 
+    <h1 id="site_title"><a href="%(root-url)%" title="%(site-title)%" >
+        %if_not_null(logo/src)% 
+            <? $bimg = ccd($A['logo']['src']); ?><img src="%(#bimg)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> 
+        %else% 
+            <span class="light_color">%(site-title)%</span>
+        %end_if%
         </a></h1>
 
     %if_not_empty(site-description)%
@@ -37,7 +42,8 @@
 
 
     <div id="wrapper">
-<div id="content">
+<div id="content" style="background-color: white;">
+
 
 %call(print_bread_crumbs)%
 

@@ -36,15 +36,13 @@ class CCFileProps
     function GetProps($format_dir,$type,$ret_files=true)
     {
         global $CC_GLOBALS;
-        
-        $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], 'ccskins/shared');
+        $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS );
         $k = array_keys($tdirs);
         $c = count($k);
         for( $i = 0; $i < $c; $i++ )
         {
             $tdirs[$k[$i]] = CCUtil::CheckTrailingSlash($tdirs[$k[$i]],false);
         }
-
         $results = array();
         $this->_scan_dir($results, $tdirs, $format_dir, $type, $ret_files);
         return $results;

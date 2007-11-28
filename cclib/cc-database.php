@@ -97,7 +97,6 @@ class CCDatabase
 
         $_CC_DEBUG_SQL = $sql;
         $qr = mysql_query($sql,$link);
-
         if( !$qr )
         {
             if( CCDebug::IsEnabled() )

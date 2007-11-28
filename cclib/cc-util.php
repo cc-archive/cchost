@@ -398,22 +398,28 @@ class CCUtil
         return hexdec($hexipbang[0]). '.' . hexdec($hexipbang[1]) . '.' . hexdec($hexipbang[2]) . '.' . hexdec($hexipbang[3]);
     }
 
-    function SplitPaths($paths, $must_have='')
+    function SplitPaths($paths, $must_haves='')
     {
         $str = preg_replace('/(.*);?$/U', '\1', $paths);
         $dirs = split(';',$str);
-        if( $must_have )
+        if( $must_haves )
         {
-            $must_have = CCUtil::CheckTrailingSlash($must_have,false);
+            if( !is_array($must_haves) )
+                $must_haves = split(';',$must_haves);
 
-            if( empty($dirs) || 
-                (
-                    !in_array( $must_have . '/', $dirs  ) && 
-                    !in_array( $must_have, $dirs )
-                ) 
-            )
+            foreach( $must_haves as $must_have )
             {
-                $dirs[] = $must_have;
+                $must_have = CCUtil::CheckTrailingSlash($must_have,false);
+
+                if( empty($dirs) || 
+                    (
+                        !in_array( $must_have . '/', $dirs  ) && 
+                        !in_array( $must_have, $dirs )
+                    ) 
+                )
+                {
+                    $dirs[] = $must_have;
+                }
             }
         }
 

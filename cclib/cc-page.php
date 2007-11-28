@@ -406,7 +406,7 @@ class CCPage extends CCSkin
     function GetViewFilePath()
     {
         global $CC_GLOBALS;
-        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccskins/shared' );
+        return CCUtil::SplitPaths( $CC_GLOBALS['files-root'], 'ccskins/shared/' );
     }
     
     /**

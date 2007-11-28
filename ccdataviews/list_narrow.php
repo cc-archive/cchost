@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = list_narrow
-[meta]
+[/meta]
 */
 
 function list_narrow_dataview() 

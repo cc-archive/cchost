@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = count
-[meta]
+[/meta]
 */
 
 function count_dataview() 

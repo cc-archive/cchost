@@ -87,7 +87,7 @@ class CCSecurityVerifierForm extends CCForm
         $retval = $keys->IsMatch( $hash, $id );
         if( !$retval )
         {
-            $this->SetFieldError($fieldname,array('str_seckey_does_not_match'));
+            $this->SetFieldError($fieldname,'str_seckey_does_not_match');
         }
         return( $retval );
     }
@@ -134,7 +134,7 @@ class CCUserForm extends CCSecurityVerifierForm
 
             if( $this->record['user_password'] != $password )
             {
-                $this->SetFieldError($fieldname,array('str_login_does_not_match'));
+                $this->SetFieldError($fieldname,'str_login_does_not_match');
                 return(false);
             }
 
@@ -173,7 +173,7 @@ class CCUserForm extends CCSecurityVerifierForm
 
             if( empty($this->record) )
             {
-                $this->SetFieldError($fieldname,array('str_cannot_find_username'));
+                $this->SetFieldError($fieldname,'str_cannot_find_username');
                 return(false);
             }
 

@@ -216,6 +216,9 @@ class CCQuery
         if( $this->args['format'] == 'page' && empty($this->args['template'])  )
             $this->args['template'] = 'list_files';
 
+        if( $this->args['format'] == 'playlist' && empty($this->args['template'])  )
+            $this->args['template'] = 'playlist_show_one';
+
         if( $this->args['datasource'] == 'uploads' )
             $this->where[] = '(upload_published>0 and upload_banned<1)' ;
 
@@ -226,7 +229,7 @@ class CCQuery
         }
 
         foreach( array( 'search', 'tags', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
-                         'reccby', 'remixesof', 'score', 'lic', 'remixmax', 'remixmin' ) as $arg )
+                         'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  ) as $arg )
         {
             if( isset($this->args[$arg]) )
             {
@@ -315,8 +318,11 @@ class CCQuery
     {
         if( $this->args['format'] == 'count' )
         {
-            $this->args['dataview'] = 'count';
-            $this->dataview = array( 'dataview' => 'count', 'file' => 'ccdataviews/count.php');
+            if( $this->args['datasource'] == 'uploads' )
+            {
+                $this->args['dataview'] = 'count';
+                $this->dataview = array( 'dataview' => 'count', 'file' => 'ccdataviews/count.php');
+            }
             $this->sql_limit = '';
         }
         elseif( $this->args['format'] == 'ids' )
@@ -368,7 +374,7 @@ class CCQuery
             $props = $dv->GetDataView($this->args['dataview']);
             $this->dataview = $props;
         }
-        $records =& $dv->Perform($this->dataview,$args);
+        $records =& $dv->Perform($this->dataview,$args,$this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS );
         $this->sql = $dv->sql;
         return $records;
     }
@@ -408,6 +414,12 @@ class CCQuery
 
     function _gen_sort()
     {
+        if( $this->args['datasource'] != 'uploads' )
+        {
+            $this->sql_order = '';
+            return;
+        }
+
         $args =& $this->args;
 
         if( empty($this->validated_sort) && !empty($args['sort']) )
@@ -433,7 +445,12 @@ class CCQuery
     function _gen_tags()
     {
         $tags = preg_split('/[\s,+]+/',$this->args['tags'],-1,PREG_SPLIT_NO_EMPTY);
-        $this->where[] = '(upload_tags REGEXP \'(^|,)(' . join('|',$tags) . ')(,|$)\')';
+        $twhere = array();
+        foreach( $tags as $tag )
+            $twhere[] = "(upload_tags LIKE '%,{$tag},%')";
+        $j = $this->args['type'] == 'any' ? 'OR' : 'AND';
+
+        $this->where[] = '(' . join($j,$twhere) . ')';
     }
 
     function _gen_playlist()
@@ -442,6 +459,22 @@ class CCQuery
 
     function _gen_reccby()
     {
+        $users =& CCUsers::GetTable();
+        $w['user_name'] = $this->args['reccby'];
+        $user_id = $users->QueryKey($w);
+        if( $this->args['format'] == 'count' )
+        {
+            $this->where[] = 'ratings_user = ' . $user_id;
+        }
+        else
+        {
+            $sql = 'SELECT ratings_upload FROM cc_tbl_ratings WHERE ratings_user = ' . $user_id . ' ORDER BY ratings_id DESC ';
+            $ids = CCDatabase::QueryItems($sql);
+            if( $ids )
+                $this->where[] = '(upload_id IN (' . join(',',$ids) . '))';
+            else
+                $this->dead = true;
+        }
     }
 
     function _gen_limit()
@@ -574,7 +607,7 @@ class CCQuery
             die('invalid license argument');
 
         $license = $translator[$this->args['lic']];
-        $this->where[] = "(license_id = '$license')";
+        $this->where[] = "(upload_license = '$license')";
     }
 
     function _gen_remixmax()

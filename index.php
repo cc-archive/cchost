@@ -17,10 +17,14 @@
 * $Id$
 *
 */
+if( !empty($_GET['ccm']) && preg_match('/\.(gif|png|ico|jpg|mp3)$/',$_GET['ccm']) )
+{
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
 
 $CC_GLOBALS   = array();
 $CC_CFG_ROOT  = '';
-$_TV = array();
 $cc_error_level = E_ALL;
 
 error_reporting($cc_error_level); 
@@ -103,9 +107,11 @@ CCConfigs::Init();
 *  update)
 */
 if( file_exists('ccadmin') )
+{
     die('<html><body>' . _('ccHost installation is not complete.') . ' ' . 
         _('For security reasons, you should rename "ccadmin".') .  
         '</body></html>');
+}
 
 /*
 *  Pick up 3rd party PHP modules

@@ -64,7 +64,7 @@ function _t_picks_picks($T,&$A) {
 
   print "<h3>{$A['pick_title']}</h3>\n";
       
-  $A['chart'] = cc_query_fmt($A['qstring']);
+  $A['chart'] = cc_query_fmt($A['qstring'] . '&dataview=links_extra' );
   if ( !empty($A['chart'])) 
   {
         $T->Call('picks_links');

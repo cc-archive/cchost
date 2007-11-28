@@ -52,14 +52,14 @@ define('CC_PROJECT_NAME', 'CC_APP_NAME');
 /**
 * Current Version
 */
-define('CC_HOST_VERSION', '4.1SVN');
+define('CC_HOST_VERSION', '5.00alpha01');
 
 define( 'CC_GLOBAL_SCOPE', 'media' );
 define( 'CC_LOCAL_SCOPE',  'local' );
 
 define('CC_1MG', 1024 * 1024);
 
-define('CC_USER_COOKIE', 'lepsog2');
+define('CC_USER_COOKIE', 'lepsog3');
 
 /**
  * Need this for defining default encoding across the board

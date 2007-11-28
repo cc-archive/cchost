@@ -65,7 +65,7 @@ ccReccommendBrowser.prototype = {
         this.limit = limit_picker.options[limit_picker.selectedIndex].value;
         this.currOffset = 0;
         this.getQuery();
-        var url = query_url + this.query + '&f=count';
+        var url = query_url + this.query + '&f=count&datasource=ratings&dataview=count_ratings';
         this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.fillCount.bind(this) } );
     },
 
@@ -92,7 +92,7 @@ ccReccommendBrowser.prototype = {
 
     refreshContent: function() {
         this.clearUI();
-        var url = query_url + this.query + '&f=html&t=embedded_playlist&limit='+this.limit+'&offset='+this.currOffset;
+        var url = query_url + this.query + '&f=html&t=reccby&limit='+this.limit+'&offset='+this.currOffset;
         // $('q').innerHTML = '<a href="' + url + '">' + url + '</a>';
         this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.fillContent.bind(this) } );
     },

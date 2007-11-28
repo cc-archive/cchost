@@ -56,4 +56,18 @@ $GLOBALS['str_recent_reviews']        = _('Recent Reviews');
 $GLOBALS['str_reviews'] = _('Reviews');
 
 
+$GLOBALS['str_submit_remix']      = _('Remix');
+$GLOBALS['str_submit_a_remix']      = _('Submit a Remix');
+$GLOBALS['str_submit_remix_line']      = _( 'Use this form to submit a Remix.');
+$GLOBALS['str_submit_remix_help']     = _('A remix uses samples downloaded from this site. When submitting a this type of project make sure to properly attribute the author you borrowed from (sampled) to comply with the Attribution part the Creative Commons license. The next screen will have a search function that allows you do just that.');
+$GLOBALS['str_submit_sample']  = _('Sample');
+$GLOBALS['str_submit_samples']  = _('Submit Samples');
+$GLOBALS['str_submit_samples_help']  = _('Samples are audio components specifically designed to be aggregated into larger works.');
+$GLOBALS['str_submit_samples_help_line']  = _('Use this form to submit samples.');
+$GLOBALS['str_submit_original'] = _('Original Track');
+$GLOBALS['str_submit_an_original'] = _('Submit an Original Track');
+$GLOBALS['str_submit_original_help'] = _('An original project does not use any samples from outside sources. It is a totally original work.');
+$GLOBALS['str_submit_original_help'] = _('Use this form to upload an original track.');
+
+
 ?>

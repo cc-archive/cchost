@@ -59,46 +59,81 @@ function _t_playlist_playlist_browse($T,&$A) {
 <?if ( !($A['PL']['cart_dynamic']) ) {?><span> <?= $T->String('str_pl_items') ?>: <?= $A['PL']['cart_num_items']?></span><?}?></div>
 <?}$T->Call($A['prev_next_links']);
 }
+
 function _t_playlist_playlist_list($T,&$A) {
-  ?><table  class="cc_pl_table"><tr ><td >
-<?if ( !empty($A['args']['menu'])) {?><ul  class="cc_playlist_owner_menu light_bg dark_border">
-<?$carr104 = $A['args']['menu'];$cc104= count( $carr104);$ck104= array_keys( $carr104);for( $ci104= 0; $ci104< $cc104; ++$ci104){    $A['MI'] = $carr104[ $ck104[ $ci104 ] ];   ?><li >
+  ?>
+  <table  class="cc_pl_table"><tr><td>
+<?
+      if ( !empty($A['args']['menu'])) {?><ul  class="cc_playlist_owner_menu light_bg dark_border">
+<?$carr104 = $A['args']['menu'];$cc104= count( $carr104);$ck104= array_keys( $carr104);for( $ci104= 0; $ci104< $cc104; ++$ci104){    $A['MI'] = $carr104[ $ck104[ $ci104 ] ];   ?><li>
 <a target="_parent" href="<?= $A['MI']['url']?>" id="<?= $A['MI']['id']?>" class="<?= $A['MI']['class']?>"><span><?= $A['MI']['text']?></span></a>
 </li><?}?></ul>
-<?}?></td><td >
-<?if ( !empty($A['args']['feed_q'])) {?><div  class="cc_playlist_feed"><a target="_parent" href="<?= $A['args']['feed_q']?>">
+<?
+      }
+?></td><td>
+<?
+    if ( !empty($A['args']['feed_q'])) {?><div  class="cc_playlist_feed"><a target="_parent" href="<?= $A['args']['feed_q']?>">
 <img  src="<?= $T->URL('images/feed-icon16x16.png') ?>" /></a></div>
-<?}$A['R'] = $A['args']['playlist'];?><a target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $A['R']['cart_id']?>"><div  class="cc_playlist_title"><?= $A['R']['cart_name']?></div>
-</a>
-<span class="cc_playlist_date">
+<?
+    }
+
+    $A['R'] = $A['args']['playlist'];?><a target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $A['R']['cart_id']?>">
+    <div  class="cc_playlist_title"><?= $A['R']['cart_name']?></div></a>
+    <span class="cc_playlist_date">
 <?= $T->String('str_pl_created_by')?> <a target="_parent" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a> on <?= $A['R']['cart_date_format']?>
       </span>
-<?if ( !empty($A['R']['cart_desc'])) {?><div  class="gd_description" id="pldesc_<?= $A['R']['cart_id']?>">
+<?
+        if ( !empty($A['R']['cart_desc'])) {?><div  class="gd_description" id="pldesc_<?= $A['R']['cart_id']?>">
 <div  style="padding: 10px;"><?= cc_format_text($A['R']['cart_desc']);?></div>
-</div><?}?></td></tr></table>
+</div><?
+        }
+    
+    ?></td></tr></table>
 <div  class="cc_pl_div" id="_cart_<?= $A['R']['cart_id']?>">
 <?$A['reguser'] = $A['is_logged_in'];$A['records'] = $A['args']['records'];$T->Call('playlist.tpl/playlist_list_lines');
 ?></div>
-<?if ( !empty($A['is_logged_in'])) {?><span id="pl_user_<?= $A['R']['cart_id']?>"></span><?}if ( !empty($A['args']['is_owner'])) {?><span id="pl_owner_<?= $A['R']['cart_id']?>"></span><?}?><br  clear="right" />
-<?}
+<?
+    if ( !empty($A['is_logged_in'])) {
+        ?><span id="pl_user_<?= $A['R']['cart_id']?>"></span><?
+    }
+
+    if ( !empty($A['args']['is_owner'])) {
+        ?><span id="pl_owner_<?= $A['R']['cart_id']?>"></span><?
+    } 
+
+    ?><br  clear="right" /><?
+}
+
 function _t_playlist_playlist_list_lines($T,&$A) {
-  $carr105 = $A['records'];$cc105= count( $carr105);$ck105= array_keys( $carr105);for( $ci105= 0; $ci105< $cc105; ++$ci105){    $A['item'] = $carr105[ $ck105[ $ci105 ] ];   ?><div  class="trr">
-<div  class="tdc cc_playlist_item" id="_pli_<?= $A['item']['upload_id']?>">
-<?$A['iun'] = CC_strchop($A['item']['upload_name'],30,true);?><span>
-<a class="cc_playlist_pagelink" id="_plk_<?= $A['item']['upload_id']?>" target="_parent" href="<?= $A['item']['file_page_url']?>"><?= $A['iun']?></a>
-</span><?= $T->String('str_by') ?>
-      <?$A['iurn'] = CC_strchop($A['item']['user_real_name'],30,true);?><a target="_parent" href="<?= $A['item']['artist_page_url']?>"><?= $A['iurn']?></a>
-</div>
-<div  class="tdc"><a class="info_button" id="_plinfo_<?= $A['item']['upload_id']?>">
-</a></div>
-<?if ( !empty($A['reguser'])) {?><div  id="playlist_menu_<?= $A['item']['upload_id']?>" class="cc_playlist_action tdc light_bg dark_border">
-<a class="cc_playlist_button" href="javascript://playlist_menu_<?= $A['item']['upload_id']?>"><span><?=$T->String('str_pl_add_to')?> ...</span></a>
-</div><?}if ( !empty($A['item']['fplay_url'])) {?><div  class="tdc cc_playlist_pcontainer">
-<a class="cc_player_button cc_player_hear" id="_ep_<?= $A['R']['cart_id']?>_<?= $A['item']['upload_id']?>" href="<?= $A['item']['fplay_url']?>">
-</a>
-</div><?}?><div  class="hrc">
-</div>
-</div><?}}
+
+  foreach( $A['records'] as $R ) {
+    ?><div  class="trr">
+      <div  class="tdc cc_playlist_item" id="_pli_<?= $R['upload_id']?>">
+        <? $A['iun'] = CC_strchop($R['upload_name'],30,true);?>
+        <span>
+          <a class="cc_playlist_pagelink" id="_plk_<?= $R['upload_id']?>" target="_parent" href="<?= $R['file_page_url']?>"><?= $A['iun']?></a>
+        </span><?= $T->String('str_by') ?>
+        <?$A['iurn'] = CC_strchop($R['user_real_name'],30,true);?>
+        <a target="_parent" href="<?= $R['artist_page_url']?>"><?= $A['iurn']?></a>
+      </div>
+      <div class="tdc"><a class="info_button" id="_plinfo_<?= $R['upload_id']?>"></a></div>
+        <?if ( !empty($A['reguser'])) 
+        {
+            ?><div  id="playlist_menu_<?= $R['upload_id']?>" class="cc_playlist_action tdc light_bg dark_border">
+            <a class="cc_playlist_button" href="javascript://playlist_menu_<?= $R['upload_id']?>">
+            <span><?=$T->String('str_pl_add_to')?> ...</span></a>
+            </div><?
+        }
+        if ( !empty($R['fplay_url'])) 
+        {
+            ?><div  class="tdc cc_playlist_pcontainer">
+            <a class="cc_player_button cc_player_hear" id="_ep_<?= $A['R']['cart_id']?>_<?= $R['upload_id']?>" href="<?= $R['fplay_url']?>">
+            </a></div><?
+        }?><div  class="hrc">
+        </div>
+        </div><?
+        }
+}
 
 function _t_playlist_playlist_list_window_cart($T,&$A) {
   ?><div  class="cc_playlist_popup_window">
@@ -168,22 +203,6 @@ $T->Call('playerembed.xml/eplayer');
   }
   h1 { display: none; } /* don't ask */
   </style>
-<?}
-
-
-function _t_playlist_playlist_show_one($T,&$A) {
-?>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>"  title="Default Style"></link>
-<script  src="<?= $T->URL('/js/info.js') ?>"></script>
-<?$A['player_options'] = 'autoHook: false';?>
-<script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
-<?$T->Call('playlist.tpl/playlist_list');
-$T->Call('playerembed.xml/eplayer');
-?><script >
-    new ccPlaylistMenu();
-    new ccPagePlayer(<?= $A['args']['playlist']['cart_id']?>);
-  </script>
 <?}
 
 function _t_playlist_playlist_show_browser($T,&$A) {

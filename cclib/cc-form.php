@@ -1106,6 +1106,7 @@ END;
         $options = $this->GetFormFieldItem($varname,'options');
         $fvalue   = $this->GetFormValue($varname);
         $html = "<select id=\"$varname\" name=\"$varname\" class=\"$class\">";
+
         foreach( $options as $value => $text )
         {
             if( $value == $fvalue )

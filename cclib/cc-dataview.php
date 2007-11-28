@@ -29,6 +29,7 @@ if( !defined('IN_CC_HOST') )
 define('CCDV_RET_RECORDS',  1);
 define('CCDV_RET_ITEMS',  2);
 define('CCDV_RET_RESOURCE',  3);
+define('CCDV_RET_ITEM',  4);
 
 class CCDataView
 {
@@ -124,6 +125,7 @@ class CCDataView
             case CCDV_RET_RECORDS:
             {
                 $records =& CCDatabase::QueryRows($this->sql);
+//CCDebug::PrintVar($this->sql);
                 if( count($records) > 0 )
                 {
                     //$info['query'] = $queryObj;
@@ -144,6 +146,12 @@ class CCDataView
             case CCDV_RET_ITEMS:
             {
                 $records =& CCDatabase::QueryItems($this->sql);
+                return $records;
+            }
+
+            case CCDV_RET_ITEM:
+            {
+                $records = CCDatabase::QueryItem($this->sql);
                 return $records;
             }
 

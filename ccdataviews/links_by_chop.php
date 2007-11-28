@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = links_by_chop
-[meta]
+[/meta]
 */
 
 function links_by_chop_dataview() 

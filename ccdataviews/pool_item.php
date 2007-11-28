@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = pool_item
-[meta]
+[/meta]
 */
 
 function pool_item_dataview() 

@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = files
-[meta]
+[/meta]
 */
 
 function files_dataview() 

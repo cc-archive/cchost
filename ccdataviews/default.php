@@ -2,7 +2,7 @@
 [meta]
     type = dataview
     name = default
-[meta]
+[/meta]
 */
 
 function default_dataview() 
@@ -13,8 +13,7 @@ function default_dataview()
 
     $sql =<<<EOF
 SELECT 
-    upload_id, 
-    upload_name, 
+    upload_id, upload_name, upload_extra,
     upload_description as _need_description_text,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name,
@@ -31,7 +30,8 @@ JOIN cc_tbl_licenses ON upload_license = license_id
 %limit%
 EOF;
     return array( 'sql' => $sql,
-                   'e'  => array( CC_EVENT_FILTER_DESCRIPTION_TEXT  )
+                   'e'  => array(   CC_EVENT_FILTER_EXTRA,
+                                    CC_EVENT_FILTER_DESCRIPTION_TEXT  )
                 );
 }
 

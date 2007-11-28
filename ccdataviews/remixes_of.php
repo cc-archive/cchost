@@ -1,14 +1,19 @@
 <?/*
 [meta]
     type = dataview
-    name = count
+    name = remixes_of
 [/meta]
 */
 
-function count_dataview() 
+function remixes_of_dataview() 
 {
-    $sql = 'SELECT COUNT(*) from cc_tbl_uploads %columns% %joins% %where% %order% %limit%';
-
+    $sql =<<<EOF
+%joins%
+%where%
+%group%
+%order%
+%limit%
+EOF;
     return array( 'sql' => $sql,
                    'e'  => array( )
                 );
