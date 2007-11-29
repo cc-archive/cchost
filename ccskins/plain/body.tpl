@@ -5,8 +5,6 @@
 
 <div id="container" style="background-color:white;">
 
-<? //CCDebug::PrintVar($T); ?>
-
 <div id="header" class="med_dark_bg light_color"> 
 
     %if_not_empty(sticky_search)%
@@ -29,7 +27,7 @@
         %else% 
             <span class="light_color">%(site-title)%</span>
         %end_if%
-        </a></h1>
+    </a></h1>
 
     %if_not_empty(site-description)%
         <div id="site_description">%(site-description)%</div>
@@ -44,7 +42,6 @@
     <div id="wrapper">
 <div id="content" style="background-color: white;">
 
-
 %call(print_bread_crumbs)%
 
 %if_not_empty(tab_pos/subclient)%
@@ -56,8 +53,8 @@
 %end_if%
 <a name="content" ></a>    
 
-%loop(macro_names,macro)%    %call(#macro)%      %end_loop%
-%loop(inc_names,inc_name)%   %call(#inc_name)%   %end_loop%
+%loop(macro_names,macro)%    %call(#macro)%    %end_loop%
+%loop(inc_names,inc_name)%   %call(#inc_name)% %end_loop%
 
 </div> <!-- content -->
     </div> <!-- wrapper -->
@@ -72,24 +69,24 @@
         %call('tabs.tpl/print_nested_tabs')%
     %end_if%
 
-%if_not_empty(menu_groups)%
+    %if_not_empty(menu_groups)%
 
-<div id="menu">
+        <div id="menu">
 
-    %loop(menu_groups,group)%
-      <div class="menu_group">
-        <p>%(#group/group_name)%</p>
-        <ul>%loop(#group/menu_items,mi)%
-          <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%>%(#mi/menu_text)%</a></li>
-        %end_loop% </ul>
-      </div>
-    %end_loop%
+            %loop(menu_groups,group)%
+              <div class="menu_group">
+                <p>%(#group/group_name)%</p>
+                <ul>%loop(#group/menu_items,mi)%
+                  <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%>%(#mi/menu_text)%</a></li>
+                %end_loop% </ul>
+              </div>
+            %end_loop%
 
-</div> <!-- end of menu -->
+        </div> <!-- end of menu -->
 
-    %unmap(menu_groups)%
+        %unmap(menu_groups)%
 
-%end_if%
+    %end_if%
 </div>
 
 <div id="extra" class="med_bg light_color">

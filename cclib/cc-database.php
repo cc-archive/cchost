@@ -96,7 +96,12 @@ class CCDatabase
         global $_CC_DEBUG_SQL;
 
         $_CC_DEBUG_SQL = $sql;
+CCDebug::Chronometer($_sql);
         $qr = mysql_query($sql,$link);
+$t = CCDebug::Chronometer($_sql);
+if ($t > 0.01)
+    CCDebug::Log( "($t) " . $sql);
+
         if( !$qr )
         {
             if( CCDebug::IsEnabled() )

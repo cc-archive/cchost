@@ -16,13 +16,16 @@
         <div id="header_search"><img id="header_search_img" height="50" width="70" src="%url(images/find.PNG)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%text(find)%</h3><span class="light_color">%text(findcontent)%</span></a></div>
     %end_if%
 
-    %if_not_empty(beta_message)%
+    %if_not_empty(banner_message)%
         <div id="beta_message">%(show_beta_message)%</div>
     %end_if%
 
     <h1 id="site_title"><a href="%(root-url)%" title="%(site-title)%">
-        %if_not_null(logo/src)% <? $bimg = ccd($A['logo']['src']); ?><img src="%(#bimg)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> %end_if% 
-        %if_not_null(banner-html)% <!-- -->%(banner-html)%   %end_if% 
+        %if_not_null(logo/src)% 
+            <? $bimg = ccd($A['logo']['src']); ?><img src="%(#bimg)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> 
+        %else% 
+            <span class="light_color">%(site-title)%</span>
+        %end_if%
     </a></h1>
 
     %if_not_empty(site-description)%
@@ -100,8 +103,8 @@
 </div>
 
 <div id="footer" class="med_light_bg">
-  <div id="license">%(site-license)%</div>
-  %(footer)%
+  <div id="license"><p>%(site-license)%</p></div>
+  <p>%(footer)%</p>
 </div><!-- footer -->
 </div> <!-- container -->
 

@@ -406,6 +406,7 @@ function install_local_files($local_dir)
     @mkdir( $local_dir . '/pages' );
     @mkdir( $local_dir . '/skins' );
     @mkdir( $local_dir . '/skins/images' );
+    @mkdir( $local_dir . '/skins/extras' );
     @mkdir( $local_dir . '/dataviews' );
     @mkdir( $local_dir . '/lib' );
     @mkdir( $local_dir . '/temp' );
@@ -417,11 +418,13 @@ function install_local_files($local_dir)
     chmod( $local_dir . '/lib', 0777 );
     chmod( $local_dir . '/temp', 0777 );
     chmod( $local_dir . '/skins/images', 0777 );
+    chmod( $local_dir . '/skins/extras', 0777 );
     chmod( $local_dir . '/dataviews', 0777 );
 
     docopy( 'home.php', $local_dir, 'pages');
     docopy( 'welcome.php', $local_dir, 'pages');
     docopy( 'DEBUG.php', $local_dir, 'lib');
+    docopy( 'extras_links.php', $local_dir, 'skins/extras');
     docopy( 'person.png', $local_dir, 'skins/images');
     docopy( 'error-msg.txt', $local_dir, '');
     docopy( 'disabled-msg.txt', $local_dir, '');

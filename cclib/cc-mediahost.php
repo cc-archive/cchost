@@ -98,7 +98,8 @@ class CCMediaHost
         if( empty($username) )
         {
             CCPage::SetTitle('str_file_browse_uploads');
-            $query->Query(); // all defaults baby
+            $args = $query->ProcessAdminArgs(array('title' => _('Latest Files')));
+            $query->Query($args); 
         }
         else
         {
@@ -108,7 +109,7 @@ class CCMediaHost
             {
                 // wait, the file might just unpublished...
                 $uploads->SetDefaultFilter(false);
-                $name = $uploads->QueryItemFromKey($upload_id);
+                $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
                 if( !CCUser::IsAdmin() )
                     $uploads->SetDefaultFilter(true);
 

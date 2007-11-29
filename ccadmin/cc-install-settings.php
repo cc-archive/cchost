@@ -501,12 +501,7 @@ $install_settings = array(
                 ),
             ),
      ),
-    array( 
-        'config_type'  => 'tcache',
-        'config_scope' => 'media',
-        'config_data'  => array (
-            ),
-     ),
+
     array( 
         'config_type'  => 'remote_files',
         'config_scope' => 'media',
@@ -604,12 +599,15 @@ $install_settings = array(
         'config_scope' => 'media',
         'config_data'  => array (
             'macros' => array (
-                0 => 'ccskins/shared/extras/extras_edpicks.tpl',
-                1 => 'ccskins/shared/extras/extras_podcast_stream.php',
-                2 => 'ccskins/shared/extras/extras_search_box.tpl',
-                3 => 'ccskins/shared/extras/extras_support_cc.php',
+            'macros' => array (
+                0 => $local_base_dir . '/skins/extras/extras_links.tpl',
+                1 => 'ccskins/shared/extras/extras_edpicks.tpl',
+                2 => 'ccskins/shared/extras/extras_latest.tpl',
+                3 => 'ccskins/shared/extras/extras_podcast_stream.php',
+                4 => 'ccskins/shared/extras/extras_search_box.tpl',
+                5 => 'ccskins/shared/extras/extras_support_cc.php',
                 ),
-            'macros_order' => 'targetmacros[]=2&targetmacros[]=5&targetmacros[]=9&targetmacros[]=10',
+            'macros_order' => 'targetmacros[]=1&targetmacros[]=2&targetmacros[]=3&targetmacros[]=5&targetmacros[]=9&targetmacros[]=10',
             ),
      ),
 

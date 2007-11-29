@@ -49,6 +49,19 @@ class CCQuery
 
     function QueryURL()
     {
+        if( !empty($_GET['fix']) )
+        {
+            $sql[] = "ALTER TABLE `cc_tbl_user` ADD INDEX ( `user_name` ) ";
+            $sql[] = "UPDATE cc_tbl_uploads SET upload_tags = CONCAT(',',upload_tags,',')";
+            $sql[] = "ALTER TABLE `cc_tbl_uploads` ADD INDEX ( `upload_date` , `upload_tags` ( 200 ), `upload_published` , `upload_banned` ) ";
+            $sql[] = "ALTER TABLE `cc_tbl_pool_tree` ADD INDEX ( `pool_tree_child` , `pool_tree_parent` ) ";
+            $sql[] = "ALTER TABLE `cc_tbl_files` ADD INDEX ( `file_order` ) ";
+            CCDatabase::Query($sql);
+            print('fixed');
+            exit;
+        }
+
+
         $this->ProcessUriArgs();
 
         // ------------------------------------------------------
@@ -220,7 +233,7 @@ class CCQuery
             $this->args['template'] = 'playlist_show_one';
 
         if( $this->args['datasource'] == 'uploads' )
-            $this->where[] = '(upload_published>0 and upload_banned<1)' ;
+            $this->where[] = '(upload_published=1 and upload_banned=0)' ;
 
         foreach( array( 'sort', 'date', ) as $arg )
         {

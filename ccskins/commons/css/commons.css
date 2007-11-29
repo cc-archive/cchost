@@ -36,7 +36,9 @@ a:hover {
 	margin: 14px 0px 3px 120px;
 }
 
-#site_description { display: none; } /* for now */
+#site_description { 
+	margin-left: 30px;
+}
 
 #header_search {
 	float: right;
@@ -197,7 +199,7 @@ a.more_menu_link {
 
 .menu_group #mi_stream_page, .menu_group #mi_play_page, .menu_group #mi_podcast_page {
 	height: 20px;
-	padding-left: 22px;
+	padding-left: 22px; 
 	display: block;
 }
 

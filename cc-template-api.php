@@ -87,7 +87,7 @@ function cc_get_config($configName)
 /**
 * Return a list of 5 truncated records (the latest uploads) that match a given tag
 *
-* This method return ONLY two colums: file_page_url and upload_short_name
+* This method return ONLY two colums: file_page_url and upload_name
 *
 * @param string $tag a specific tag to search for
 * @param boolean $cache cache the results
@@ -99,7 +99,7 @@ function & cc_quick_list($tags,$cache=1)
 
     if( $cache )
     {
-        $cname = $CC_GLOBALS['php-tal-cache-dir'] . '/_ccc_' . $tags . '.txt';
+        $cname = $CC_GLOBALS['php-tal-cache-dir'] . '/quick_list_' . $tags . '.txt';
         if( file_exists($cname) )
         {
             include($cname);
@@ -107,22 +107,11 @@ function & cc_quick_list($tags,$cache=1)
         }
     }
 
-    $furl = ccl('files') . '/';
-
-    $tag = str_replace(',','|',$tags);
-
-    $sql =<<<END
-        SELECT CONCAT('$furl',user_name,'/',upload_id) as file_page_url,
-               SUBSTRING(upload_name,1,15) as upload_short_name
-        FROM cc_tbl_uploads
-        JOIN cc_tbl_user on upload_user = user_id
-        WHERE upload_tags REGEXP '(^| |,)($tag)(,|$)'
-        ORDER BY upload_date DESC
-        LIMIT 5
-END;
-
-    $rows =& CCDatabase::QueryRows($sql);
-
+    require_once('cclib/cc-query.php');
+    $query = new CCQuery();
+    $q = 'tags=' . $tags . '&dataview=links_short&limit=5&f=php';
+    $args = $query->ProcessAdminArgs($q);
+    list( $rows ) = $query->Query($args);
     if( $cache && ($CC_CFG_ROOT == CC_GLOBAL_SCOPE) )
     {
         $data = serialize($rows);
@@ -133,13 +122,6 @@ END;
         fwrite($f,$text);
         fclose($f);
         chmod($cname,cc_default_file_perms());
-        $configs =& CCConfigs::GetTable();
-        $tcache = $configs->GetConfig('tcache',CC_GLOBAL_SCOPE);
-        if( !in_array($cname,$tcache) )
-        {
-            $tcache[] = $cname;
-            $configs->SaveConfig('tcache',$tcache,CC_GLOBAL_SCOPE);
-        }
     }
     return $rows;
 }
@@ -153,16 +135,9 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_tcache_kill' );
 */
 function cc_tcache_kill()
 {
-    $configs =& CCConfigs::GetTable();
-    $tcache = $configs->GetConfig('tcache',CC_GLOBAL_SCOPE);
-    if( !empty($tcache) )
-    {
-        foreach($tcache as $cname)
-            if( file_exists($cname) )
-                @unlink($cname);
-        $tcache = array();
-        $configs->SaveConfig('tcache',$tcache,CC_GLOBAL_SCOPE);
-    }
+    $files = glob($CC_GLOBALS['php-tal-cache-dir'] . '/quick_list_*.txt');
+    foreach( $files as $file )
+        unlink($file);
 }
 
 function cc_get_config_roots()
