@@ -33,7 +33,9 @@ a.cc_streamlink:hover { background: url('<?= $stream_fg ?>') top left no-repeat;
 function _t_util_print_prompts($T,&$A)
 {
     foreach( $A['prompts'] as $prompt )
+    {
         ?><div class="cc_<?= $prompt['name'] ?>"><?= $T->String($prompt['value']) ?></div><?
+    }
 }
 
 
@@ -48,25 +50,9 @@ function _t_util_print_html_content($T,&$A)
 
 function _t_util_print_forms($T,&$A)
 {
-    if( empty($A['forms']) )
-    {
-        print 'NO FORMS';
-        return;
-    }
-
     foreach( $A['forms'] as $form_info )
     {
         $form = $form_info[1];
-        if( !empty($form['string_files']) )
-        {
-            foreach($form['string_files'] as $file )
-            {
-                $path = $T->Search($file);
-                if( empty($path) )
-                    die("Can't find string file: $file");
-                require_once($path);
-            }
-        }
         $A['curr_form'] = $form;
         $T->Call($form_info[0]);
     }

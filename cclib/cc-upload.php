@@ -245,7 +245,6 @@ class CCUpload
                                                     $user_tags,
                                                     $relative_dir,
                                                     $parents );
-
         if( is_string($ret) )
         {
             $form->SetFieldError('upload_file_name',$ret);

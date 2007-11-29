@@ -1,7 +1,7 @@
 
 <link rel="stylesheet" title="Default Style" href="%url(css/user_profile.css)%" />
 
-<? CC_get_user_details($A['user_record']); ?>
+<? cc_get_user_details($A['user_record']); ?>
 
 <div id="user_profile">
         <div class="avatar"><img src="%(user_record/user_avatar_url)%" /></div>

@@ -144,10 +144,8 @@ class CCRemix
                     }
                 }
 
-                // dig out the page url
-                $uploads->SetTagFilter(''); // this shouldn't be needed -- but it is
-                $record = $uploads->GetRecordFromID($remixid);
-                $url = $record['file_page_url'];
+                
+                $url = ccl('files', CCUser::CurrentUserName(), $remixid );
 
                 if( !empty($pool_sources) )
                 {

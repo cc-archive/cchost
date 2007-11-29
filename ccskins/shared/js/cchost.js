@@ -21,7 +21,7 @@ modalHook.prototype = {
             href += '?ajax=1';
         else
             href += '&ajax=1';
-        Modalbox.show( href, {title: thetitle, width: 500} );
+        Modalbox.show( href, {title: thetitle, width: 700, height: 550} );
     }
 }
 

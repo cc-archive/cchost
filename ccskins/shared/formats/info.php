@@ -21,7 +21,7 @@ SELECT
     CONCAT( '$urlp', user_name ) as artist_page_url,
     CONCAT( '$urll', license_logo ) as license_logo_url,
     license_url, license_name,
-    DATE_FORMAT( upload_date, '%W, %M %e, %Y @ %l:%i %p' ) as upload_date,
+    DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date,
     collab_upload_collab as collab_id, upload_contest, user_name
     %columns%
 FROM cc_tbl_uploads

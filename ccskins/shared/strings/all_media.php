@@ -282,9 +282,9 @@ $GLOBALS['str_security_tip'] = _('Type in the characters above. Valid characters
 $GLOBALS['str_see_all_picks']         = _('See all picks');
 $GLOBALS['str_see_results']           = _('See Results');
 $GLOBALS['str_skip']                  = _('Skip to content');
-$GLOBALS['str_stream']                = _('Show');
-$GLOBALS['str_stream_now']            = _('Show Now');
-$GLOBALS['str_stream_this_page']      = _('Show this page');
+$GLOBALS['str_stream']                = _('Stream');
+$GLOBALS['str_stream_now']            = _('Stream Now');
+$GLOBALS['str_stream_this_page']      = _('Stream this page');
 
 $GLOBALS['str_submit_remix']      = _('Derived Work');
 $GLOBALS['str_submit_a_remix']      = _('Submit a Derived Work');

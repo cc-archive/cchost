@@ -267,8 +267,53 @@ function cc_get_value($arr,$key)
 function & cc_get_playlist_with(&$record)
 {
     require_once('ccextras/cc-playlist.inc');
-    $ret =& CCPlaylists::_playlist_with($record['upload_id']);
+    $pls = new CCPlaylists();
+    $ret =& $pls->_playlist_with($record['upload_id']);
     return $ret;
+}
+
+
+function cc_get_user_avatar_sql()
+{
+    global $CC_GLOBALS;
+
+    if( empty($CC_GLOBALS['avatar-dir']) )
+    {
+        $aurl = ccd($CC_GLOBALS['user-upload-root']) . '/';
+        $aavtr = "user_name,  '/', " ;
+    }
+    else
+    {
+        $aurl = ccd($CC_GLOBALS['avatar-dir']) . '/';
+        $aavtr = '';
+    }
+    if( !empty($CC_GLOBALS['default_user_image']) )
+    {
+        $davurl = ccd($CC_GLOBALS['image-upload-dir'],$CC_GLOBALS['default_user_image']);
+    }
+    else
+    {
+        $davurl = '';
+    }
+ 
+    return "IF( LENGTH(user_image) > 0, CONCAT( '$aurl', {$aavtr} user_image ), '$davurl' ) as user_avatar_url";
+}
+
+function cc_get_user_avatar(&$R)
+{
+    global $CC_GLOBALS;
+
+    if( empty($R['user_image']) )
+    {
+        return ccd($CC_GLOBALS['image-upload-dir'],$CC_GLOBALS['default_user_image']);
+    }
+
+    if( empty($CC_GLOBALS['avatar-dir']) )
+    {
+        return ccd($CC_GLOBALS['user-upload-root'], $R['user_name'], $R['user_image'] );
+    }
+
+    return ccd($CC_GLOBALS['avatar-dir'], $R['user_image'] );
 }
 
 ?>

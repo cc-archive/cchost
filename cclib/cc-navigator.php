@@ -190,6 +190,7 @@ class CCNavigator
 
                 $args['feed'] = $qname;
                 $args['qstring'] = $qstring;
+                $args['title'] = $caption;
 
                 require_once('cclib/cc-query.php');
 

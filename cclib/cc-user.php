@@ -297,28 +297,7 @@ class CCUsers extends CCTable
         else
             $row['user_extra'] = array();
 
-        if( $row['user_image'] )
-        {
-            if( empty($CC_GLOBALS['avatar-dir']) )
-            {
-                $avatar_dir = CCUser::GetUploadDir( $row );
-            }
-            else
-            {
-                $avatar_dir = $CC_GLOBALS['avatar-dir'];
-            }
-
-            $row['user_avatar_url'] = ccd( $avatar_dir , $row['user_image'] );
-        }
-        elseif( !empty($CC_GLOBALS['default_user_image']) )
-        {
-            $row['user_avatar_url'] = ccd($CC_GLOBALS['default_user_image']);
-            //CCDebug::PrintVar($row['user_avatar_url']);
-        }
-        else
-        {
-            $row['user_avatar_url'] = false;
-        }
+        $row['user_avatar_url'] = cc_get_user_avatar($row);
 
         // set the language to default (for visibility on the form only)
         if (empty($row['user_language']))

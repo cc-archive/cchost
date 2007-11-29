@@ -52,7 +52,9 @@ div#remix_search_controls {
     </div>
     <div id="remix_search_picks">
     </div>
-    <div id="license_info" class="box">
+    <div id="license_info_container">
+        <div id="license_info" class="box">
+        </div>
     </div>
 </div>
 

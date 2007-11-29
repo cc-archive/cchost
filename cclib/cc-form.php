@@ -106,12 +106,6 @@ class CCForm
         CCEvents::Invoke( CC_EVENT_FORM_INIT, array( &$this ) );
     }
 
-    function SetStrings($string_file)
-    {
-        if( empty($this->_strings) || !in_array($string_file,$this->_strings) )
-            $this->_strings[] = $string_file;
-    }
-
     /**
      * Set the value of an html form field. 
      *
@@ -584,9 +578,6 @@ class CCForm
     {
         $this->_template_vars['html_form_fields']   = array();
         $this->_template_vars['html_hidden_fields'] = array();
-
-        if( !empty($this->_strings) )
-            $this->_template_vars['string_files'] = $this->_strings;
 
         $fieldnames = array_keys($this->_form_fields);
         foreach(  $fieldnames as $fieldname )

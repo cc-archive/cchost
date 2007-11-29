@@ -14,4 +14,7 @@ h1, h2  {
 h3, h4 {
   font-size: 1.05em;
 }
+div#MB_content {
+    font-size: 11px;
+}
 </style>

@@ -374,7 +374,7 @@ class CCQuery
             $props = $dv->GetDataView($this->args['dataview']);
             $this->dataview = $props;
         }
-        $records =& $dv->Perform($this->dataview,$args,$this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS );
+        $records =& $dv->Perform($this->dataview,$args,$this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS,$this );
         $this->sql = $dv->sql;
         return $records;
     }

@@ -150,7 +150,7 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCRenderFlash', 'OnMapUrls'
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,       array( 'CCRenderImage', 'OnUploadMenu'), 'cclib/cc-renderimage.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCRenderImage', 'OnMapUrls'), 'cclib/cc-renderimage.php' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderImage', 'OnUploadRow'), 'cclib/cc-renderimage.php' );
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS, array( 'CCRenderImage' , 'OnGetConfigFields' ), 'cclib/cc-renderimage.php' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCRenderImage' , 'OnAdminMenu' ), 'cclib/cc-renderimage.php' );
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderZip', 'OnUploadRow'), 'cclib/cc-renderzip.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCRenderZip',  'OnFilterMacros'), 'cclib/cc-renderzip.php'  );

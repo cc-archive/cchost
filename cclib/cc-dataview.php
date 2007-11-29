@@ -125,7 +125,7 @@ class CCDataView
             case CCDV_RET_RECORDS:
             {
                 $records =& CCDatabase::QueryRows($this->sql);
-//CCDebug::PrintVar($this->sql);
+
                 if( count($records) > 0 )
                 {
                     //$info['query'] = $queryObj;

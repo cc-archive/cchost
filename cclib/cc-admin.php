@@ -725,7 +725,7 @@ END;
             $items += array(
                 'settings'   => array( 'menu_text'  => 'Settings',
                                  'menu_group' => 'configure',
-                                 'help' => _('Admins, home page, etc.'),
+                                 'help' => _('Admins, editors, etc.'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 1,
                                  'action' =>  ccl('admin','settings')

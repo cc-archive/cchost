@@ -18,24 +18,7 @@ function upload_list_wide_dataview()
     $is_thumbs_up = empty($chart['thumbs_up']) ? '0' : '1';
     $ratings_on = empty( $chart['ratings'] ) ? '0' : '1';
 
-    if( empty($CC_GLOBALS['avatar-dir']) )
-    {
-        $aurl = ccd($CC_GLOBALS['user-upload-root']) . '/';
-        $aavtr = "user_name,  '/', " ;
-    }
-    else
-    {
-        $aurl = ccd($CC_GLOBALS['avatar-dir']) . '/';
-        $aavtr = '';
-    }
-    if( !empty($CC_GLOBALS['default_user_image']) )
-    {
-        $davurl = ccd($CC_GLOBALS['default_user_image']);
-    }
-    else
-    {
-        $davurl = '';
-    }
+    $user_avatar_col = cc_get_user_avatar_sql();
 
     $stream_url = url_args( ccl('api','query','stream.m3u'), 'f=m3u&ids=' );
 
@@ -44,13 +27,13 @@ SELECT
     upload_id, 
     IF( LENGTH(upload_name) > 35, CONCAT( SUBSTRING(upload_name,1,33), '...'), upload_name ) as upload_name_chop,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
-    IF( LENGTH(user_image) > 0, CONCAT( '$aurl', {$aavtr} user_image ), '$davurl' ) as user_avatar_url,
+    {$user_avatar_col},
     user_real_name, user_name, upload_score, upload_num_scores, upload_extra,
     $is_thumbs_up as thumbs_up, $ratings_on as ratings_enabled,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     CONCAT( '$urll', license_logo ) as license_logo_url, license_url, license_name,
     IF( upload_tags LIKE '%,audio,%', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
-    DATE_FORMAT( upload_date, '%W, %M %e, %Y @ %l:%i %p' ) as upload_date_format,
+    DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date_format,
     file_name, file_format_info, file_extra, upload_contest, upload_name,
     upload_num_remixes, upload_num_sources, upload_num_pool_sources
     %columns%
@@ -63,6 +46,7 @@ WHERE %where% file_order = 0
 %order%
 %limit%
 EOF;
+
     return array( 'sql' => $sql,
                    'name' => 'list_wide',
                    'e'  => array( 

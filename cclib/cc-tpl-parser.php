@@ -18,7 +18,7 @@ function cc_tpl_parse_echo($prefix,$var,$postfix)
 
     $postfix = ';' . $postfix;
 
-    return cc_tpl_parse_var( $prefix, $var, $postfix );
+    return '<!-- -->' . cc_tpl_parse_var( $prefix, $var, $postfix );
 }
 
 function cc_tpl_parse_var($prefix,$var,$postfix)
@@ -210,7 +210,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
         "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
         "/<\? customize%/"                                =>   "<? \$T->AddCustomizations(); ?>",
-        "/<\? return%/"                                   =>   "<? return; ?>",
+        "/<\? return%/"                                   =>   "<? return 'ok'; ?>",
         "/<\? settings{$op}{$ac}{$a}{$cp}%/"              =>   "<? \$A['$2'] = CC_get_config('$1'); ?>",
         "/<\? un(?:define|map){$op}{$a}{$cp}%/"           =>   "<? unset(\$A['$1']); ?>",
         );
@@ -220,7 +220,7 @@ function cc_tpl_parse_text($text,$bfunc)
 
     $text = preg_replace( array_keys($ttable), array_values($ttable), $text );
 
-    return preg_replace( '/\?>(\s+)?<\?=?/', '', $text ) . '<? return "ok"; ?>';  
+    return preg_replace( array( '/\?>(\s+)?<\?=?/', '/<!-- -->/'), array( '', ''),  $text ) . '<? return "ok"; ?>';  
 }
 
 /*

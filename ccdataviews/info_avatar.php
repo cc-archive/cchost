@@ -14,24 +14,7 @@ function info_avatar_dataview()
     $urlf = ccl('files') . '/';
     $urlp = ccl('people') . '/';
     $urll = ccd('ccskins/shared/images/lics/'); 
-    if( empty($CC_GLOBALS['avatar-dir']) )
-    {
-        $aurl = ccd($CC_GLOBALS['user-upload-root']) . '/';
-        $aavtr = "user_name,  '/', " ;
-    }
-    else
-    {
-        $aurl = ccd($CC_GLOBALS['avatar-dir']) . '/';
-        $aavtr = '';
-    }
-    if( !empty($CC_GLOBALS['default_user_image']) )
-    {
-        $davurl = ccd($CC_GLOBALS['default_user_image']);
-    }
-    else
-    {
-        $davurl = '';
-    }
+    $avatar_sql = cc_get_user_avatar_sql();
 
     $sql =<<<EOF
 SELECT 
@@ -40,7 +23,7 @@ SELECT
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name,
     user_name,
-    IF( LENGTH(user_image) > 0, CONCAT( '$aurl', {$aavtr} user_image ), '$davurl' ) as user_avatar_url,
+    $avatar_sql,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     CONCAT( '$urll', license_logo ) as license_logo_url,
     license_url, license_name,

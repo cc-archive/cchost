@@ -30,7 +30,7 @@ ccRemixSearch.prototype = {
         try
         {
             var me = this;
-            $('license_info').style.display = 'none';
+            $('license_info_container').style.display = 'none';
             var remix_sources = [];
             var pool_sources = [];
             var numChecked = 0;
@@ -91,7 +91,7 @@ ccRemixSearch.prototype = {
     onLicenseResults: function(resp,json) {
         $('license_info').innerHTML = str_remix_lic.replace('%s','<a href="' + json.license_url 
                                                                  + '">' + json.license_name + '</a>' );
-        $('license_info').style.display = 'block';
+        $('license_info_container').style.display = 'block';
         $('upload_license').value = json.license_id;
     },
 
@@ -122,7 +122,7 @@ ccRemixSearch.prototype = {
         }
         $('remix_no_match').innerHTML = '&nbsp;';
 
-        var sel_pool = pools ?  $('pools').options[ $('pools').selectedIndex ].value : -1;
+        var sel_pool = pools.length ?  $('pools').options[ $('pools').selectedIndex ].value : -1;
         if( sel_pool == -1 )
         {
             var search_type = $('remix_search_type');

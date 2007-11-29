@@ -57,7 +57,7 @@ class CCPostRemixForm extends CCNewUploadForm
                            'flags'      => CCFF_POPULATE,
                         );
 
-        $this->SetHiddenField( 'upload_license', '', CCFF_HIDDEN | CCFF_STATIC );
+        $this->SetHiddenField( 'upload_license', '', CCFF_HIDDEN | CCFF_POPULATE );
         $this->InsertFormFields( $fields, 'before', 'upload_name');
         $this->DisableSubmitOnInit();
 
@@ -86,7 +86,7 @@ class CCEditRemixesForm extends CCForm
                            'flags'      => CCFF_POPULATE,
                         );
 
-        $this->SetHiddenField( 'upload_license', '', CCFF_HIDDEN | CCFF_STATIC );
+        $this->SetHiddenField( 'upload_license', '', CCFF_HIDDEN | CCFF_POPULATE );
         $this->AddFormFields($fields);
         $this->DisableSubmitOnInit();
         $this->SetSubmitText(_('Done Editing'));

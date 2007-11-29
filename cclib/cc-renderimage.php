@@ -44,8 +44,17 @@ class CCRenderImage extends CCRender
     {
         CCEvents::MapUrl( ccp('media','showimage'), array('CCRenderImage','Show'), 
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}/{upload_id}', _('Display bitmap'), CC_AG_RENDER );
+        CCEvents::MapUrl( ccp('admin','thumbnail'), array('CCRenderImage','Admin'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Display thumbnail admin form'), CC_AG_RENDER );
     }
 
+    function Admin()
+    {
+        require_once('cclib/cc-renderimage-form.php');
+        CCPage::SetTitle(_('Admin Thumbnail'));
+        $form = new CCAdminThumbnailForm();
+        CCPage::AddForm( $form->GenerateForm() );
+    }
     function Show($username,$upload_id)
     {
         /* 
@@ -67,15 +76,6 @@ END;
     }
 
     /**
-    * Event handler for building local menus for contest rows
-    *
-    * @see CCMenu::AddItems()
-    */
-    function OnContestMenu(&$menu,&$record)
-    {
-    }
-
-    /**
     * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
@@ -87,7 +87,6 @@ END;
     */
     function OnUploadMenu(&$menu,&$record) 
     { 
-//      if( empty($record['upload_banned']) && CCUploads::IsMediaType($record,'image') )
         if( empty($record['upload_banned']) && CCUploads::InTags('image',$record) )
         {
             $link = ccl('media','showimage', $record['user_name'],
@@ -190,44 +189,26 @@ END;
     }
 
     /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
     */
-    function OnGetConfigFields($scope,&$fields)
+    function OnAdminMenu(&$items, $scope)
     {
-        if( $scope != CC_GLOBAL_SCOPE )
-        {
-            $fields['thumbnail-on'] = 
-               array( 'label'       => _('Display Thumbnails'),
-                       'formatter'  => 'checkbox',
-                       'form_tip'   => _('Display thumbnails for image uploads'),
-                       'flags'      => CCFF_POPULATE);
+        if( $scope == CC_GLOBAL_SCOPE )
+            return;
 
-            $fields['thumbnail-constrain-y'] = 
-               array( 'label'       => _('Constrain Thumbnail Proportion'),
-                       'formatter'  => 'checkbox',
-                       'form_tip'   => _('Constrain proportion of image to the original image\'s height (y value)'),
-                       'flags'      => CCFF_POPULATE);
-
-            $fields['thumbnail-x'] = 
-               array( 'label'       => _('Max Thumb X'),
-                       'formatter'  => 'textedit',
-                       'form_tip'   => _('Leave this blank or 0 (zero) to use the image\'s natural size'),
-                       'class'      => 'cc_form_input_short',
-                       'flags'      => CCFF_POPULATE);
-
-            $fields['thumbnail-y'] =
-               array( 'label'       => _('Max Thumb Y'),
-                       'formatter'  => 'textedit',
-                       'class'      => 'cc_form_input_short',
-                       'flags'      => CCFF_POPULATE );
-
-        }
+        $items += array( 
+            'thumbnails'=> array( 'menu_text'  => _('Thumbnails'),
+                                'menu_group' => 'configure',
+                                'access'     => CC_ADMIN_ONLY,
+                                'help'       => _('Configure thumbnails handling (for image uploads)'),
+                                'weight'     => 160,
+                                'action'     => ccl('admin','thumbnail') )
+                        );
     }
+
 }
 
 

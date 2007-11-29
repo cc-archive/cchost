@@ -179,11 +179,12 @@ class CCUploadAPI
         $db_args['upload_extra']['relative_dir'] = $relative_dir;
         $db_args['upload_extra'] = serialize($db_args['upload_extra']);
         $db_args['upload_date'] = date( 'Y-m-d H:i:s' );
+        $db_args['upload_tags'] = ',' . $upload_args['upload_tags'] . ',';
         $uploads->Insert($db_args);
 
 
         $tags =& CCTags::GetTable();
-        $tags->Update($db_args['upload_tags']);
+        $tags->Update($upload_args['upload_tags']);
 
         // Do sh1, magnet link and other post upload stuff
         //
@@ -439,11 +440,13 @@ class CCUploadAPI
         $upload_args['upload_extra'] = serialize($new_args['upload_extra']);
         $db_args = $upload_args;
         
+        $db_args['upload_tags'] = ',' . $upload_args['upload_tags'] . ',';
+
         $uploads =& CCUploads::GetTable();
         $uploads->Update($db_args);
 
         $tags =& CCTags::GetTable();
-        $tags->Replace($old_tags,$db_args['upload_tags']);
+        $tags->Replace($old_tags,$upload_args['upload_tags']);
 
         // It's quite possible that all the formats of this
         // upload were renamed or their format_info changed
@@ -711,7 +714,7 @@ class CCUploadAPI
         //
         $db_args = array();
         $db_args['upload_id']    = $record['upload_id'];
-        $db_args['upload_tags']  = $record['upload_tags'];
+        $db_args['upload_tags']  = ',' . $record['upload_tags'] . ','; // hmmm
         $db_args['upload_extra'] = serialize($record['upload_extra']);
         $uploads->Update($db_args);
 

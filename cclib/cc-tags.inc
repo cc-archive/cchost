@@ -455,18 +455,18 @@ class CCTagEvents
 
     function BrowseTags($tagstr,$search_type='all')
     {
-
-        require_once('cclib/cc-tags.php');
         require_once('cclib/cc-query.php');
 
-        $currtags = CCTag::TagSplit($tagstr);
-        $q = '$tags=' . $currtags;
+        $q = 'tags=' . $tagstr;
         $query = new CCQuery();
         $args= $query->ProcessAdminArgs($q);
         $query->Query($args);
         return;
         
         global $CC_GLOBALS;
+
+        require_once('cclib/cc-tags.php');
+        $currtags = CCTag::TagSplit($tagstr);
 
         // All tags ('+')
         //

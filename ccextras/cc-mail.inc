@@ -219,6 +219,7 @@ class CCMailer
     {
         global $CC_GLOBALS;
 
+CCDebug::PrintVar($CC_GLOBALS);
         if( empty($this->_from) && empty($CC_GLOBALS['mail_sender']) )
         {
             $this->_confim_install();
