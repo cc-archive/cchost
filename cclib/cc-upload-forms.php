@@ -217,6 +217,13 @@ class CCAdminUploadForm extends CCForm
                                'form_tip'   => _('Click on these to automatically add them.'),
                                'flags'      => CCFF_STATIC | CCFF_NOUPDATE 
                 ),
+            'upload_date'  =>
+                        array( 'label'      => _('Upload Date'),
+                               'formatter'  => 'textedit',
+                               'form_tip'   => _('For anti-bumping format: YYYY-MM-DD HH:MM:SS (24hr clock)'),
+                               'value'      => $record['upload_date'],
+                               'flags'      => CCFF_POPULATE,
+                ),
             );
 
         $this->AddFormFields($fields);

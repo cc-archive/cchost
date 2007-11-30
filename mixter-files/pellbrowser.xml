@@ -110,6 +110,7 @@
     <select id="lic_picker"></select>
   </div>
   <div id="hide_container"><input type="checkbox" id="hide_remixed" /> Hide remixed pells</div>
+  <div id="in_popup_container"><input type="checkbox" id="in_popup" /> Show in popup</div>
 </div>
 
 <div id="featured">
@@ -203,6 +204,7 @@ ccPellBrowser.prototype = {
       Event.observe( $('browser_prev'), 'click', this.onPrevClick.bindAsEventListener( this ) );
       Event.observe( $('browser_next'), 'click', this.onNextClick.bindAsEventListener( this ) );
       Event.observe( $('hide_remixed'), 'click', this.onHideRemixedClick.bindAsEventListener( this ) );
+      Event.observe( $('hide_remixed'), 'click', this.onShowInPopupClick.bindAsEventListener( this ) );
 
       var type_picker = $('type_picker');
       i = 0;
@@ -252,6 +254,10 @@ ccPellBrowser.prototype = {
     },
 
     onHideRemixedClick: function() {
+      this.refreshCount();
+    },
+
+    onShowInPopupClick: function() {
       this.refreshCount();
     },
 
@@ -308,7 +314,16 @@ ccPellBrowser.prototype = {
         this.clearUI();
         var url = home_url + 'api/query' + q + this.query + '&f=html&t=embedded_playlist&limit='+this.limit+'&offset='+this.currOffset;
         // $('q').innerHTML = '<a href="' + url + '">' + url + '</a>';
-        this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.fillContent.bind(this) } );
+        var checkbox = $('in_popup');
+        if( checkbox.checked )
+        {
+          var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
+                  "resizable=1,scrollbars=1");
+        }
+        else
+        {
+          this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.fillContent.bind(this) } );
+        }
     },
 
     fillContent: function( resp ) {
