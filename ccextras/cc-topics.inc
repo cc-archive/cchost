@@ -350,44 +350,6 @@ class CCTopics extends CCTable
 
     function GetTree(&$record,$sort='')
     {
-        // this will return recs marked as deleted
-
-        if( !empty($sort) )
-            $order = "ORDER BY children.topic_date $sort";
-        else
-            $order = '';
-
-        $parent_id = $record['topic_id'];
-
-        // upon second look: this CAN'T be even close to the most 
-        // efficient way to do this... why isn't this
-        //
-        //  select * from cc_tbl_topics_tree
-        //        join cc_tbl_topics on topic_id = topic_tree_child
-        //        where topic_tree_parent = $parent_id
-        //
-        // ????
-        $sql =<<<END
-            SELECT children.*, children.topic_text as topic_text_html, 
-                               children.topic_text as topic_text_plain
-            FROM cc_tbl_topics parent
-            JOIN cc_tbl_topic_tree tree ON parent.topic_id = tree.topic_tree_parent
-            JOIN cc_tbl_topics children ON children.topic_id = tree.topic_tree_child
-            WHERE parent.topic_id = '$parent_id'
-            $order
-END;
-        
-        $rows = CCDatabase::QueryRows($sql);
-        $count = count($rows);
-        $users = CCUsers::GetTable();
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $R =& $rows[$i];
-            $this->GetRecordFromRow($R);
-            $this->GetTree($R);
-        }
-
-        $record['topic_children'] = $rows;
     }
 
     // overwrite parent's version: some installations
@@ -447,38 +409,41 @@ END;
 }
 
 
-/**
-* Wrapper for topics tree table
-*
-*/
-class CCTopicTree extends CCTable
-{
-    function CCTopicTree()
-    {
-        $this->CCTable('cc_tbl_topic_tree', 'topic_tree_id');
-    }
-
-    /**
-    * Returns static singleton of table wrapper.
-    * 
-    * Use this method instead of the constructor to get
-    * an instance of this class.
-    * 
-    * @returns object $table An instance of this table
-    */
-    function & GetTable()
-    {
-        static $table;
-        if( !isset($table) )
-            $table = new CCTopicTree();
-        return $table;
-    }
-
-}
-
 
 class CCTopic
 {
+    function OnFilterTopicText(&$records)
+    {
+        $c = count($records);
+        $k = array_keys($records);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[ $k[$i] ];
+            if( !empty($R['_need_topic_text']) )
+            {
+                $R['topic_text_plain'] = cc_strchop(cc_format_unformat($R['_need_topic_text']),40);
+                unset($R['_need_topic_text']);
+            }
+        }
+    }
+
+    function OnFilterTopicHTML(&$records)
+    {
+        $c = count($records);
+        $k = array_keys($records);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[ $k[$i] ];
+            if( !empty($R['_need_topic_html']) )
+            {
+                $R['topic_text_html'] = cc_format_text($R['_need_topic_html']);
+                unset($R['_need_topic_html']);
+            }
+        }
+    }
+
+
+
     function _verify_topic($topic_id,&$topics,&$record,$is_translate=false)
     {
         $topic_id = intval(CCUtil::Strip($topic_id));

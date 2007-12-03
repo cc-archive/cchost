@@ -442,6 +442,7 @@ class CCTagEvents
 
     function OnBrowseTags($tagstr='')
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle('str_tags_s',$tagstr);
 
         if( empty($tagstr) )

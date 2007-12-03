@@ -2,7 +2,7 @@
 [meta]
     type              = profile
     skin-file         = ccskins/commons/skin.tpl
-    desc              = _('CC Style, wide, menus on left, fancy tabs')
+    desc              = _('CC Style, wide, menus on right, fancy tabs')
     string_profile    = ccskins/shared/strings/all_media.php
     list_file         = ccskins/shared/formats/upload_page_wide.php
     list_files        = ccskins/shared/formats/upload_list_wide.tpl

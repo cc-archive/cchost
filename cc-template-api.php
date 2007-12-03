@@ -99,7 +99,7 @@ function & cc_quick_list($tags,$cache=1)
 
     if( $cache )
     {
-        $cname = $CC_GLOBALS['php-tal-cache-dir'] . '/quick_list_' . $tags . '.txt';
+        $cname = cc_temp_dir() . '/quick_list_' . $tags . '.txt';
         if( file_exists($cname) )
         {
             include($cname);
@@ -135,7 +135,7 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_tcache_kill' );
 */
 function cc_tcache_kill()
 {
-    $files = glob($CC_GLOBALS['php-tal-cache-dir'] . '/quick_list_*.txt');
+    $files = glob(cc_temp_dir() . '/quick_list_*.txt');
     foreach( $files as $file )
         unlink($file);
 }
@@ -271,7 +271,8 @@ function cc_get_user_avatar_sql()
         $davurl = '';
     }
  
-    return "IF( LENGTH(user_image) > 0, CONCAT( '$aurl', {$aavtr} user_image ), '$davurl' ) as user_avatar_url";
+    //return "IF( LENGTH(user_image) > 0, CONCAT( '$aurl', {$aavtr} user_image ), '$davurl' ) as user_avatar_url";
+    return "'$davurl' as user_avatar_url";
 }
 
 function cc_get_user_avatar(&$R)

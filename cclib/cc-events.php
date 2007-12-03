@@ -393,6 +393,8 @@ class CCEvents
 
         if( isset($action) )
         {
+            require_once('cclib/cc-menu.php');
+
             $pm = CCEvents::_get_action_perms($action);
 
             if( ($pm & CCMenu::GetAccessMask() ) == 0 )
@@ -421,8 +423,6 @@ class CCEvents
                         CCEvents::load_action($action);
                 }
             }
-            
-
         }
 
         if( $method )
@@ -462,7 +462,10 @@ class CCEvents
         if( empty($action->md) )
         {
             CCUtil::Send404(false);
-            CCPage::SystemError("Can't find module");
+            CCDebug::Enable(true);
+            $x['error'] = "Can't find module";
+            $x['action'] = $action;
+            CCDebug::PrintVar($x);
         }
         else
         {
@@ -559,7 +562,7 @@ class CCEvents
         }
 
         if( empty($A) )
-            $P = 'homepage';
+            $P = CCEvents::_get_home_page();
         else
             $P = implode('/',$A);
 
@@ -593,6 +596,13 @@ class CCEvents
             if( $P )
                $argcount++;
         }
+    }
+
+    function _get_home_page()
+    {
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('settings');
+        return $settings['homepage'];
     }
 
     /**

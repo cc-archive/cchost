@@ -481,10 +481,21 @@ class CCSkin
     {
         $skintpl = $dir . '/' . $base . '.tpl';
         $skinphp = $dir . '/' . $base . '.php';
-        $skin = file_exists($skintpl) ? $skintpl : (file_exists($skinphp) ? $skinphp : '');
-        if( $skin )
-            $this->_parse($skin);
-        return $skin;
+        if( file_exists($skintpl) )
+        {
+            $this->_parse($skintpl);
+            return $skintpl;
+        }
+
+        if( file_exists($skinphp) )
+        {
+            $php = file_get_contents($skinphp);
+            $A =& $this->vars;
+            $T = $this;
+            eval( '?>' . $php);
+        }
+
+        return $skinphp;
     }
 
     function _parse($file)

@@ -60,19 +60,27 @@ class CCPlaylistHV
         $k = array_keys($records);
         for( $i = 0; $i < $c; $i++ )
         {
-            $R =& $records[$k[$i]];
-            foreach( array('file_extra','file_format_info') as $f )
-                if( is_string($R[$f]) )
-                    $R[$f] = unserialize($R[$f]);
-            if( !empty($R['file_format_info']['sr']) && 
-                ($R['file_format_info']['format-name'] == 'audio-mp3-mp3') && 
-                ($R['file_format_info']['sr'] == '44k') )
+            $rec =& $records[$k[$i]];
+            $cf = count($rec['files']);
+            $ck = array_keys($rec['files']);
+            for( $n = 0; $n < $cf; $n++ )
             {
-                if( !$remoting || empty($R['file_extra']['remote_url'] ) )
-                    $url = $R['download_url'];
-                else
-                    $url = $R['file_extra']['remote_url'];
-                $R['fplay_url'] = $url;
+                $R =& $rec['files'][$ck[$n]];
+
+                foreach( array('file_extra','file_format_info') as $f )
+                    if( is_string($R[$f]) )
+                        $R[$f] = unserialize($R[$f]);
+                if( !empty($R['file_format_info']['sr']) && 
+                    ($R['file_format_info']['format-name'] == 'audio-mp3-mp3') && 
+                    ($R['file_format_info']['sr'] == '44k') )
+                {
+                    if( !$remoting || empty($R['file_extra']['remote_url'] ) )
+                        $url = $R['download_url'];
+                    else
+                        $url = $R['file_extra']['remote_url'];
+                    $rec['fplay_url'] = $url;
+                    break;
+                }
             }
         }
     }

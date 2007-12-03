@@ -329,6 +329,8 @@ class CCSkinAdmin
             $msg = sprintf(_('Current skin profile: %s'), '<b>' . $props['desc'] . '</b>' );
         }
 
+        require_once('cclib/cc-page.php');
+
         CCPage::SetTitle(_('Configure Skins'));
 
         $args[] = array( 'action'    => ccl('admin','skins','profiles'),
@@ -355,6 +357,7 @@ class CCSkinAdmin
                          'menu_text' => _('Create Skin Template'),
                          'help'      => _('For web developers: Sets up a new skin template') );
 
+        require_once('cclib/cc-page.php');
         CCPage::PageArg('client_menu_help', $msg );
         CCPage::PageArg('client_menu',$args,'print_client_menu');
     }
@@ -364,6 +367,7 @@ class CCSkinAdmin
         $form = new CCSkinProfilesForm();
         if( empty($_POST['skinprofiles']) || !$form->ValidateFields() )
         {
+            require_once('cclib/cc-page.php');
             CCPage::SetTitle(_('Select a New Skin Profile'));
             CCPage::AddForm($form->GenerateForm());
         }
@@ -407,6 +411,7 @@ class CCSkinAdmin
 
     function ProfileSave()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Save Skin Profile'));
         $form = new CCSkinProfileSaveForm();
         if( empty($_POST['skinprofilesave']) || !$form->ValidateFields() )
@@ -450,6 +455,7 @@ class CCSkinAdmin
 
     function Layout()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Configure Skins Layouts'));
         $form = new CCSkinLayoutForm();
         CCPage::AddForm($form->GenerateForm());
@@ -457,6 +463,7 @@ class CCSkinAdmin
 
     function Settings()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Configure Skins Settings'));
         $form = new CCSkinSettingsForm();
         CCPage::AddForm($form->GenerateForm());
@@ -464,6 +471,7 @@ class CCSkinAdmin
 
     function Create()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Create a Skin Template'));
         $form = new CCSkinCreateForm();
         if( empty($_POST['skincreate']) || !$form->ValidateFields() )
@@ -544,6 +552,7 @@ EOF;
 
     function ColorSchemes()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Manage Color Schemes'));
         $form = new CCAdminColorSchemesForm();
         CCPage::AddForm($form->GenerateForm());

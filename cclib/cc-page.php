@@ -50,28 +50,72 @@ class CCPageAdmin
     function OnMapUrl()
     {
         CCEvents::MapUrl( 'viewfile', array( 'CCPageAdmin', 'ViewFile' ),  
-                          CC_DONT_CARE_LOGGED_IN, '', '{docfilename}', _('Displays XHTML template'), CC_AG_VIEWFILE  );
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays XHTML template'), CC_AG_VIEWFILE  );
         CCEvents::MapUrl( 'docs',     array( 'CCPageAdmin', 'ViewFile' ),  
-                          CC_DONT_CARE_LOGGED_IN, '', '{docfilename}', _('Displays XHTML template (alias for viewfile)'), CC_AG_VIEWFILE );
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays XHTML template (alias for viewfile)'), CC_AG_VIEWFILE );
         CCEvents::MapUrl( 'homepage', array( 'CCPageAdmin', 'Homepage' ),  
-                          CC_DONT_CARE_LOGGED_IN, '', '', _('Displays home page assigned in config'), CC_AG_VIEWFILE );
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Displays home page assigned in config'), CC_AG_VIEWFILE );
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_APP_INIT}
-    * 
-    * Maps an alias based on user preferences for 'homepage'
-    */
-    function OnAppInit()
+    function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        $homepage = $settings['homepage'];
+        if( strtolower($args['format']) != 'page' )
+            return;
 
-        if( !empty($homepage) )
+        extract($args);
+
+        if( !empty($title) )
+            CCPage::SetTitle($title);
+
+        if( !empty($template_args) )
         {
-            CCEvents::AddAlias('homepage',$homepage);
+            foreach( $template_argas as $K => $V )
+                CCPage::PageArg($K,$V);
         }
+
+        $dochop = isset($chop) && $chop > 0;
+        $chop   = isset($chop) ? $chop : 25;
+        CCPage::PageArg('chop',$chop);
+        CCPage::PageArg('dochop',$dochop);
+        CCPage::PageArg( 'records', $records, $template );
+
+        // this needs to be done through CCDataview:
+
+        if( empty($nopaging) )
+        {
+            $key = preg_replace('/s?$/','',$datasource);
+            $table = new CCTable('cc_tbl_' . $datasource, $key );        
+            CCPage::AddPagingLinks($table, $queryObj->sql_p['where'] );
+        }
+
+        if( !isset( $qstring ) )
+            $qstring = $queryObj->SerializeArgs($args);
+
+        CCPage::PageArg('qstring',$qstring );        
+
+        if( empty($template) )
+            $template = 'list_files';
+
+        CCPage::PageArg( 'records', $records, $template);
+
+        /* 
+
+            I think this is supposed to happen through the templates 
+            using 'qstring'???
+        */
+        /*
+        if( !empty($feed) )
+        {
+            // Let folks know they can subscribe to this query
+
+            $feed = strlen($feed) > 10 ? substr($feed,0,8) . '...' : $feed;
+            $tags = empty($tags) ? '' : $tags;
+            $qstring = empty($qstring) ? '' : $qstring;
+            CCFeed::AddFeedLinks( $tags, $qstring, $feed);
+        }
+
+        */
+        $result = true;
     }
 
 
@@ -97,6 +141,12 @@ class CCPageAdmin
     {
         if( $scope != CC_GLOBAL_SCOPE )
         {
+            $fields['homepage'] =
+                array(  'label'      => _('Homepage'),
+                        'form_tip'   => sprintf(_('For example a file: docs/home %sor a navigation tab: view/media/home'), '<br />'),
+                       'value'       => '',
+                       'formatter'   => 'textedit',
+                       'flags'       => CCFF_POPULATE);
             $fields['default-feed-tags'] =
                 array( 'label'       => _('Default Feed Tags'),
                        'form_tip'    => _('Comma separated list of tags to use when no other feed is specificed (e.g. audio,remix).') . ' ' 

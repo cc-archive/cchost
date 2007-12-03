@@ -34,10 +34,19 @@ function cc_filter_std(&$records,&$dataview_info)
                         $F =& $R['files'][$fk[$fi]];
                         $F['file_extra'] = unserialize($F['file_extra']);
                         $F['file_format_info'] = unserialize($F['file_format_info']);
+
                         if( $R['upload_contest'] )
-                            $F['download_url'] = ccd($CC_GLOBALS['contests'][($R['upload_contest']-1)],$R['user_name'],$F['file_name']);
+                        {
+                            // todo: this shouldn't be here
+                            if( empty($CC_GLOBALS['contests']) )
+                                cc_fill_contests();
+
+                            $F['download_url'] = ccd($CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name'],$F['file_name']);
+                        }
                         else
+                        {
                             $F['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$F['file_name']);
+                        }
                         $fs = $F['file_filesize'];
                         if( $fs )
                         {
@@ -63,9 +72,16 @@ function cc_filter_std(&$records,&$dataview_info)
                 {
                     //CCDebug::PrintVar($R);
                     if( $R['upload_contest'] )
-                        $R['download_url'] = ccd($CC_GLOBALS['contests'][($R['upload_contest']-1)],$R['user_name'],$R['file_name']);
+                    {
+                        // todo: this shouldn't be here
+                        if( empty($CC_GLOBALS['contests']) )
+                            cc_fill_contests();
+                        $R['download_url'] = ccd($CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name'],$R['files'][0]['file_name']);
+                    }
                     else
-                        $R['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$R['file_name']);
+                    {
+                        $R['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$R['files'][0]['file_name']);
+                    }
                     break;
                 }
 
@@ -123,70 +139,73 @@ function cc_filter_std(&$records,&$dataview_info)
                     $query = new CCQuery();
                     $q = 'dataview=links_by_chop&f=php&&sources=' . $R['upload_id'];
                     $args = $query->ProcessAdminArgs($q);
-                    list( $parents ) = $query->Query($args);
+                    list( $R['remix_parents'] ) = $query->Query($args);
                     $q = 'dataview=links_by_pool&f=php&sort=&datasource=pools&sources=' . $R['upload_id'];
                     $query = new CCQuery();
                     $args = $query->ProcessAdminArgs($q);
                     list( $pool_parents ) = $query->Query($args);
-                    $R['remix_parents'] = array_merge($parents,$pool_parents);
-                    if( count($R['remix_parents']) > 14 )
+                    if( $pool_parents )
+                        if( empty($R['remix_parents']) )
+                            $R['remix_parents'] = $pool_parents;
+                        else
+                            $R['remix_parents'] += $pool_parents;
+                    if( !empty($R['remix_parents']) && (count($R['remix_parents']) > 14) )
                         $R['parents_overflow'] = true;
                     $query = new CCQuery();
                     $q = 'dataview=links_by_chop&f=php&&remixes=' . $R['upload_id'];
                     $args = $query->ProcessAdminArgs($q);
                     list( $R['remix_children'] ) = $query->Query($args);
-                    if( count($R['remix_children']) > 14 )
+                    if( !empty($R['remix_children']) && (count($R['remix_children']) > 14) )
                         $R['children_overflow'] = true;
                     break;
                 }
 
                 case CC_EVENT_FILTER_REMIXES_SHORT:
                 {
-                    if( empty($R['upload_num_sources']) )
-                    {
-                        $parents = array();
-                    }
-                    else
+                    if( !empty($R['upload_num_sources']) )
                     {
                         $query = new CCQuery();
                         $q = 'dataview=links_by_chop&f=php&limit=4&sources=' . $R['upload_id'];
                         $args = $query->ProcessAdminArgs($q);
-                        list( $parents ) = $query->Query($args);
+                        list( $R['remix_parents'] ) = $query->Query($args);
                     }
 
-                    if( count($parents) < 3 && !empty($R['upload_num_pool_sources']) )
+                    if( !empty($R['upload_num_pool_sources']) )
                     {
-                        $count = 4 - count($parents);
-                        $q = 'dataview=links_by_pool&f=php&limit=' . $count . '&sort=&datasource=pools&sources=' . $R['upload_id'];
-                        $query = new CCQuery();
-                        $args = $query->ProcessAdminArgs($q);
-                        list( $pool_parents ) = $query->Query($args);
-                        $parents = array_merge($parents,$pool_parents);
-                    }
-                    if( count($parents) > 3 )
-                    {
-                        $R['more_parents_link'] = $R['file_page_url'];
-                        unset($parents[3]);
-                    }
-                    $R['remix_parents'] = $parents;
-
-                    if( empty($R['upload_num_remixes']) )
-                    {
-                        $children = array();
-                    }
-                    else
-                    {
-                        $query = new CCQuery();
-                        $q = 'dataview=links_by_chop&f=php&limit=4&remixes=' . $R['upload_id'];
-                        $args = $query->ProcessAdminArgs($q);
-                        list( $children ) = $query->Query($args);
-                        if( count($children) > 3 )
+                        if( !empty($R['remix_parents']) && (count($R['remix_parents']) < 3) )
                         {
-                            $R['more_children_link'] = $R['file_page_url'];
-                            unset($children[3]);
+                            $count = 4 - count($R['remix_parents']);
+                            $q = 'dataview=links_by_pool&f=php&limit=' . $count . '&sort=&datasource=pools&sources=' . $R['upload_id'];
+                            $query = new CCQuery();
+                            $args = $query->ProcessAdminArgs($q);
+                            list( $pool_parents ) = $query->Query($args);
+                            if( $pool_parents )
+                                if( empty($R['remix_parents']) )
+                                    $R['remix_parents'] = $pool_parents;
+                                else
+                                    $R['remix_parents'] += $pool_parents;
                         }
                     }
-                    $R['remix_children'] = $children;
+
+                    if( !empty($R['remix_parents']) && (count($R['remix_parents']) > 3) )
+                    {
+                        $R['more_parents_link'] = $R['file_page_url'];
+                        unset($R['remix_parents'][3]);
+                    }
+
+                    if( !empty($R['upload_num_remixes']) )
+                    {
+                        $query = new CCQuery();
+                        $q = 'dataview=links_by_chop&f=php&&remixes=' . $R['upload_id'];
+                        $q = 'dataview=links_by_chop&f=php&limit=4&remixes=' . $R['upload_id'];
+                        $args = $query->ProcessAdminArgs($q);
+                        list( $R['remix_children'] ) = $query->Query($args);
+                        if( !empty($R['remix_children']) && (count($R['remix_children']) > 3) )
+                        {
+                            $R['more_children_link'] = $R['file_page_url'];
+                            unset($R['remix_children'][3]);
+                        }
+                    }
                     break;
                 }
 
@@ -201,5 +220,14 @@ function cc_filter_std(&$records,&$dataview_info)
 
 }
 
+function cc_fill_contests()
+{
+    global $CC_GLOBALS;
+
+    $sql = 'SELECT contest_id, contest_short_name FROM cc_tbl_contests'; 
+    $crows = CCDatabase::QueryRows($sql);
+    foreach( $crows as $crow )
+        $CC_GLOBALS['contests'][ $crow['contest_id'] ] = $crow['contest_short_name'];
+}
 
 ?>

@@ -27,9 +27,10 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 define('CCDV_RET_RECORDS',  1);
-define('CCDV_RET_ITEMS',  2);
-define('CCDV_RET_RESOURCE',  3);
-define('CCDV_RET_ITEM',  4);
+define('CCDV_RET_ITEMS',    2);
+define('CCDV_RET_RESOURCE', 3);
+define('CCDV_RET_ITEM',     4);
+define('CCDV_RET_RECORD',   5);
 
 class CCDataView
 {
@@ -50,6 +51,8 @@ class CCDataView
 
     function GetDataViewFromTemplate($template)
     {
+        require_once('cclib/cc-template.php');
+
         $skinmac = new CCSkinMacro($template);
         list( $file, $macro ) = $skinmac->LookupMacro();
         if( empty($file) )
@@ -85,7 +88,7 @@ class CCDataView
         return $this->Perform($props,$args,$ret_type);
     }
 
-    function & Perform($dataview,$args,$ret_type = CCDV_RET_RECORDS,$queryObj=null)
+    function & Perform( $dataview, $args, $ret_type = CCDV_RET_RECORDS, $queryObj=null)
     {
         if( empty($dataview['code']) )
         {
@@ -110,49 +113,67 @@ class CCDataView
         if( !function_exists($func) )
             die("Can't find dataview function in " . $dataview['dataview']);
 
+        if( empty($args['where']) )
+            $args['where'] = '1';
+
         $sqlargs = array();
-        foreach( array( 'joins', 'order', 'limit', 'columns', 'group_by' ) as $f )
-            $sqlargs[$f] = isset($args[$f]) ? $args[$f] : '';
-        $sqlargs['where'] = !isset($args['where']) ? '"$1"' : '"' . $args['where'] . '" . ("$1" ? "AND" : "")';
+        foreach( array( array( 'JOIN', 'joins' ),
+                        array( 'ORDER BY', 'order' ),
+                        array( 'LIMIT' , 'limit' ),
+                        array( '' , 'columns' ),
+                        array( 'GROUP BY', 'group_by' ),
+                        array( 'WHERE', 'where') ,
+                        ) as $f )
+        {
+            $sqlargs[$f[1]] = !empty($args[$f[1]]) ? ($f[0] . ' ' . $args[$f[1]]) : '';
+        }
 
         $info = $func();
 
-        $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/(WHERE )?%where%/e'  ),
+        $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%where%/'  ),
                                     $sqlargs, $info['sql'] );
+
+// ------- DEBUG PREVIEW ------------
+if( $dataview['dataview'] == 'xx' )
+{
+    $x['sqlargs'] = $sqlargs;
+    $x[] = $this->sql;
+    $x[] = $dataview;
+    $x[] = $queryObj;
+    CCDebug::PrintVar($x);
+} // ---------------------------------
 
         switch( $ret_type )
         {
+            case CCDV_RET_RECORD:
+            {
+                $record =& CCDatabase::QueryRow($this->sql);
+                if( !empty($record) )
+                {
+                    $arr = array( &$record );
+                    $this->_record_events($arr,$info);
+                }
+                return $record;
+            }
+
             case CCDV_RET_RECORDS:
             {
                 $records =& CCDatabase::QueryRows($this->sql);
-
                 if( count($records) > 0 )
-                {
-                    //$info['query'] = $queryObj;
-                    //$info['dvobj'] = $this;
-                    while( count($info['e']) )
-                    {
-                        $k = array_keys($info['e']);
-                        $e = $info['e'][$k[0]];
-                        CCEvents::Invoke( $e, array( &$records, &$info ) );
-                        if( in_array( $e, $info['e'] ) )
-                            $info['e'] = array_diff( $info['e'], array( $e ) );
-                    }
-                }
-
+                    $this->_record_events($records,$info);
                 return $records;        
             }
 
             case CCDV_RET_ITEMS:
             {
-                $records =& CCDatabase::QueryItems($this->sql);
-                return $records;
+                $items =& CCDatabase::QueryItems($this->sql);
+                return $items;
             }
 
             case CCDV_RET_ITEM:
             {
-                $records = CCDatabase::QueryItem($this->sql);
-                return $records;
+                $item = CCDatabase::QueryItem($this->sql);
+                return $item;
             }
 
             case CCDV_RET_RESOURCE:
@@ -165,6 +186,45 @@ class CCDataView
         die('Invalid return type for dataview: ' . $ret_type );
     }
 
+    function _record_events(&$records,&$info)
+    {
+        //$info['query'] = $queryObj;
+        //$info['dvobj'] = $this;
+        while( count($info['e']) )
+        {
+            $k = array_keys($info['e']);
+            $e = $info['e'][$k[0]];
+            CCEvents::Invoke( $e, array( &$records, &$info ) );
+            if( in_array( $e, $info['e'] ) )
+                $info['e'] = array_diff( $info['e'], array( $e ) );
+        }
+    }
+
+    function MakeTagFilter( $tags, $type='all', $tagfield='upload_tags' )
+    {
+        if( is_array($tags) )
+            $tags = join(',',$tags);
+
+        $tagands = array();
+        require_once('cclib/cc-tags.php');
+        $tagsarr = CCTag::TagSplit($tags);
+        foreach( $tagsarr as $tag )
+        {
+            if( $tag{0} == '-' )
+            {
+                $tag = substr($tag,1);
+                $not = ' NOT ';
+            }
+            else
+            {
+                $not = '';
+            }
+            $tagands[] = "($tagfield $not LIKE '%,$tag,%' )";
+        }
+        $op = $type == 'all' ? 'AND' : 'OR';
+        
+        return implode( ' ' . $op . '  ', $tagands );
+    }
 }
 
 ?>

@@ -38,53 +38,11 @@ require_once('ccextras/cc-reviews-table.inc');
 */
 class CCReview
 {
-    function HotTopics($since)
-    {
-        $baseurl = ccl('reviews') . '/';
-        $baseup  = ccl('files') . '/';
-        $baseus  = ccl('people') . '/';
-
-        $sql =<<<END
-            SELECT count(*) as cnt, 
-                   ups.upload_name, 
-                   user_real_name,
-                   CONCAT( '$baseurl', user_name, '/', upload_id ) as revurl,
-                   CONCAT( '$baseup', user_name, '/', upload_id ) as file_page_url,
-                   CONCAT( '$baseus', user_name ) as artist_page_url
-            FROM (
-                SELECT * FROM `cc_tbl_topics`
-                WHERE (topic_upload >1)
-                    AND ((topic_type = 'review')OR (topic_type = 'reply'))
-                    AND (topic_date > '$since')
-                ORDER BY topic_date DESC
-                ) AS tbl
-            JOIN cc_tbl_uploads ups ON tbl.topic_upload = ups.upload_id
-            JOIN cc_tbl_user    user ON ups.upload_user = user.user_id
-            GROUP BY tbl.topic_upload
-            ORDER BY  cnt DESC 
-            LIMIT 7
-END;
-
-        $hot_topics = CCDatabase::QueryRows($sql);
-        if( empty($hot_topics) )
-        {
-            print('<span>' . _('Sorry, no hot topics yet') . '</span>');
-            exit;
-        }
-        
-        $args['hot_topics'] = $hot_topics;
-        $args['noskin'] = true;
-        $args['hottopics'] = '';
-        $args['macro'] = 'topics.xml/hot_topics';
-        $template = new CCTemplate('topics.xml');
-        $html = $template->SetAllAndParse($args);
-        print $html;
-        exit;
-    }
-
     function Reviews( $user_name='', $upload_id='' )
     {
         global $CC_GLOBALS;
+
+        require_once('cclib/cc-page.php');
 
         // 
         // These args will be passed to the template
@@ -96,14 +54,12 @@ END;
         //
 
         $users =& CCUsers::GetTable();
-        require_once('cclib/cc-upload-table.php');
-        $uploads = new CCUploads(); // get a new one because we step on it
-        $uploads->SetDefaultFilter(true,true);
 
         if( !empty($user_name) )
         {
-            $user_row  = $users->QueryRow("user_name = '$user_name'");
-            if( empty($user_row) )
+            $qkarg['user_name'] = $user_name;
+            $user_id = $users->QueryKey($qkarg);
+            if( empty($user_id) )
             {
                 CCPage::Prompt(_('Cannot find that user'));
                 CCUtil::Send404(false);
@@ -112,8 +68,10 @@ END;
 
             if( !empty($upload_id) )
             {
-                $R = $uploads->GetRecordFromID($upload_id);
-                if( empty($R) )
+                $cntwhere['upload_id'] = $upload_id;
+                $uploads =& CCUploads::GetTable();
+                $cnt = $uploads->CountRows($cntwhere);
+                if( !$cnt )
                 {
                     CCPage::Prompt(_('Cannot find that upload. It may have been removed by the owner.'));
                     CCUtil::Send404(false);
@@ -123,37 +81,17 @@ END;
         }
 
         //
-        // Set up bread crumb trail
-        //
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        if( !empty($upload_id) || empty($settings['newuserpage']) )
-        {
-            $this->_build_bread_crumb_trail($user_name,$upload_id);
-        }
-
-        //
-        // OK, figure out what the query and template should be
+        // OK, figure out what the template should be
         //
         if( empty($upload_id) )
         {
-
-            $uploads->AddJoin( new CCReviews(true), 'upload_id');
-            $uploads->SetSort('topic_date','DESC');
-            $uploads->AddExtraColumn('0 as topic_search_result_info');
-            $where = 'topic_id > 0 AND topic_type = \'review\'';
-
             if( empty($user_name) )
             {
                 //
                 // This is just a 'recent review' listing for the whole site
                 //
-                CCPage::AddPagingLinks($uploads,$where, NUM_REVIEWS_PER_PAGE);
-
-                CCPage::SetTitle(_('Recent Reviews'));
-                $topics             =& $uploads->GetRecords($where);
-                $macro              = 'recent_reviews';
-                $args['hot_topics'] = true;
+                CCPage::SetTitle('str_recent_reviews');
+                $template = 'reviews_recent';
             }
             else
             {
@@ -161,57 +99,33 @@ END;
                 // This is request for listing a users' reviews
                 //
 
+                $template = 'reviews_user';
                 $user_id   = $user_row['user_id'];
-                $user_real = $user_row['user_real_name'];
 
-                $query = CCUtil::StripText($_REQUEST['qtype']);
-                if( !empty($query) && $query == 'leftby' )
+                $qtype = CCUtil::StripText($_REQUEST['qtype']);
+                if( !empty($qtype) && $qtype == 'leftby' )
                 {
-                    $where .= " AND topic_user = '$user_id'";
-                    $title_for_by = 'by';
-                    $link_for_by = 'for';
-                    $link_query = '';
+                    $dataview = 'reviews_leftby';
                 }
                 else
                 {
-                    $where .= " AND upload_user = '$user_id'";
-                    $title_for_by = 'for';
-                    $link_for_by = 'by';
-                    $link_query = 'qtype=leftby';
+                    $dataview = 'reviews_leftfor';
                 }
                    
-                $title = sprintf(_("Reviews left %s"), "$title_for_by $user_real");
-                CCPage::SetTitle($title);
-                
-                CCPage::AddPagingLinks($uploads,$where,NUM_REVIEWS_PER_PAGE);
-                $topics =& $uploads->GetRecords($where);
-
-                $left_text = sprintf(_("See reviews left %s"), "$link_for_by $user_real");
-                $left_url = cc_current_url(); // ccl('reviews',$user_name);
-                if( $link_query )
-                    $left_url = url_args($left_url,$link_query);
-                $args['left_link'] = array( 'url' => $left_url, 
-                                            'text' => $left_text );
-                $macro = 'left_reviews';
             }
         }
         else
         {
-            //
-            // This is a request for listing a specific upload's review
-            //
-
+            $this->_build_bread_crumb_trail($user_name,$upload_id);
             $uploads =& CCUploads::GetTable();
-            CCPage::SetTitle(sprintf(_('Reviews for "%s"'),$R['upload_name']) );
-            // todo: convert al this to dataview
-            //CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING,array(&$R));
-            $R['local_menu'] = CCUpload::GetRecordLocalMenu($R);
-
-            // todo: this should have paging (!)
-            $reviews =& CCReviews::GetTable();
-            $args['record'] = $R;
-            $topics = $reviews->GetReviewsForUpload($upload_id,true,'ASC');
-            $macro = 'list_reviews';
+            $upload_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
+            $query = new CCQuery();
+            $args = $query->ProcessAdminArgs('nopaging=1&f=page&t=reviews_upload&datasource=topics');
+            $args['title'] = array( 'str_reviews_for_s', $upload_name);
+            $sqlargs['where'] = 'topic.topic_upload=' . $upload_id;
+            CCPage::PageArg('topic_upload',$upload_id);
+            $query->QuerySQL($args,$sqlargs);
+            return;
         }
 
         //
@@ -296,70 +210,8 @@ END;
             }
         }
 
+        require_once('cclib/cc-page.php');
         CCPage::AddBreadCrumbs($trail);
-    }
-
-    /**
-    * Handles forum/thread URL and generates short form of comments left for a file
-    *
-    * This method outputs Javascript document.write statements that generate 
-    * comments threads for a given file. 
-    * 
-    * @param integer $upload_id Upload ID to generate comment thread for
-    */ 
-    function SeeThread($upload_id)
-    {
-        global $CC_GLOBALS;
-
-        if( empty($CC_GLOBALS['reviews_enabled']) )
-        {
-            CCPage::Prompt(_("Review integration is not enabled."));
-            exit;
-        }
-
-        $reviews =& CCReviews::GetTable();
-        $reviews->SetOffsetAndLimit(0,10);
-        $revs = $reviews->GetReviewsForUpload($upload_id,false,'DESC');
-
-        require_once('cclib/cc-upload-table.php');
-        $uploads =& CCUploads::GetTable();
-        $reviewee = $uploads->QueryItemFromKey('user_name',$upload_id);
-
-        $count = count($revs);
-
-        if( $count == 0 )
-            exit;
-        
-        // Thu Mar 02, 2006 9:58 pm
-        $fmt = 'D M d, Y g:i a';
-        
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $row =& $revs[$i];
-            $row['post_text' ] = CC_strchop($row['topic_text_plain'],40);
-            $row['post_date_format'] = date( $fmt, strtotime($row['topic_date']) );
-            $row['post_url'] = ccl( 'reviews', $reviewee, $upload_id . '#' . $row['topic_id'] );
-            $row['username'] = $row['user_real_name'];
-        }
-
-        $template = new CCSkinMacro( 'comment_thread_list' );
-        $args['posts'] = $revs;
-        if( $this->_can_review($upload_id) )
-        {
-            $args['reply_topic_url'] = ccl('reviews','post',$upload_id ) . '#edit';
-        }
-        else
-        {
-            $args['reply_topic_url'] = false;
-        }
-
-        $uploads =& CCUploads::GetTable();
-        $user_name = $uploads->QueryItemFromKey('user_name',$upload_id);
-        $args['view_topic_url'] = ccl( 'reviews',$user_name, $upload_id  );
-
-        $template->SetAllAndPrint($args,false,true);
-        exit;
-
     }
 
     function OnTopicRow(&$row)
@@ -369,8 +221,9 @@ END;
 
         $upload_id = $row['topic_upload'];
 
-        $uploads =& CCUploads::GetTable();
-        $remixer = $uploads->QueryItemFromKey('user_name',$upload_id);
+        $dv = new CCDataview();
+        $arg['where'] = 'upload_id = ' . $upload_id;
+        $remixer = $dv->PerformFile('upload_owner',$arg,CCDV_RET_ITEM);
 
         $row['topic_permalink'] = ccl('reviews', $remixer, $upload_id. '#' . 
                                          $row['topic_id'] );

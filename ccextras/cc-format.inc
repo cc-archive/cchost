@@ -65,53 +65,6 @@ END;
     return $html;
 }
 
-function _cc_format_unformat($text)
-{
-    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up)';
-    return preg_replace("#\[/?$attrs(=[^\]]+)?\]#U",'',$text);
-}
-
-function _cc_format_format($text)
-{
-    require_once('cclib/cc-template.php');
-    $thumbs_up = CCTemplate::Search('images/thumbs_up.png');
-
-    $quote = _('Quote:');
-    require_once('cclib/smartypants/smartypants.php');
-    $attrs = '(b|i|u|red|green|blue|big|small)';
-    $text = strip_tags($text);
-    $text = preg_replace( "/\[$attrs\]/", '<span class="\1">', $text );
-    $text = preg_replace( "#\[/$attrs\]#", '</span>', $text );
-    $text = preg_replace( "/\[quote=?([^\]]+)?\]/", '<span class="quote"><span>'. $quote . ' $1</span>', $text );
-    $text = preg_replace( "#\[/quote\]#", '</span>', $text );
-    $text = preg_replace( "/\[up]/", "<img class=\"cc_thumbs_up\" src=\"$thumbs_up\" />", $text );
-    $text = preg_replace( "#\[/up\]#", '', $text );
-    $text = SmartyPants($text);
-    $urls = array( '@(?:^|[^">=\]])(http://[^\s$]+)@m',
-                   '@\[url\]([^\[]+)\[/url\]@' ,
-                   '@\[url=([^\]]+)\]([^\[]+)\[/url\]@' 
-                    );
-    $text = preg_replace_callback($urls,'_cc_format_url', $text);
-    $text = nl2br($text);
-    return $text;
-}
-
-function _cc_format_url(&$m)
-{
-    $url = $m[1];
-    if( empty($m[2]) )
-        $text = strlen($url) > 30 ? substr($url,0,27) . '...' : $url;
-    else
-        $text = $m[2];
-    /*
-    if( strpos($url,'?') !== false )
-    {
-        $parts = explode('?',$url);
-        $url = $parts[0] . '?' . urlencode($parts[1]);
-    }
-    */
-    return( " <a title=\"$url\" class=\"cc_format_link\" href=\"$url\">$text</a>" );
-}
 
 
 

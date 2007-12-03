@@ -60,6 +60,7 @@ class CCUpdate
                 $prompts[] = $update;
         }
 
+        require_once('cclib/cc-page.php');
         $prompts = join(', ',$prompts);
         CCPage::Prompt(_('Updates already installed:') . ' ' . $prompts);
 

@@ -37,72 +37,13 @@ if( !defined('IN_CC_HOST') )
 */
 class CCUploads extends CCTable
 {
-    var $_tags;
-    var $_tag_filter_type; // 'any' or 'all'
-    var $_filter;
-
     /**
     * Constructor
     */
     function CCUploads($anon_user=false)
     {
-        global $CC_SQL_DATE, $CC_CFG_ROOT;
-
-        require_once('cclib/cc-license.php');
-
         $this->CCTable('cc_tbl_uploads','upload_id');
-
-        $juser = $this->AddJoin( new CCUsers(),    'upload_user');
-        $this->AddJoin( new CCLicenses(), 'upload_license');
-
-        $this->AddExtraColumn("DATE_FORMAT(upload_date, '$CC_SQL_DATE') as upload_date_format");
-        $this->AddExtraColumn("DATE_FORMAT($juser.user_registered, '$CC_SQL_DATE') as user_date_format");
-        $this->AddExtraColumn("0 as works_page, upload_banned as skip_remixes, 0 as ratings_score, 0 as reviews_link");
-
-        $this->SetDefaultFilter(true,$anon_user);
     }
-
-    /**
-     * Override default sensitity to logged in user
-     *
-     * Typically this class is sensitive to the current user, showing files
-     * they own even if it's banned or unpublished, etc. (Admins can see 
-     * everything) Use the 'anon_user' flag on the constructor to create
-     * an instance assumes anonymous user which is safe to use when 
-     * creating lists that might be seen by someone other than the owner
-     * or admin.
-    */
-    function SetDefaultFilter($set,$anon_user=false)
-    {
-        $this->_filter = '';
-
-        if( !$set )
-            return '';
-
-        // if the current user is admin, don't put 
-        // any filters on the listings
-
-        if( $anon_user || !CCUtil::IsHTTP() || !CCUser::IsAdmin() )
-        {
-            $this->_filter .= " ( ";
-
-            if( !$anon_user && CCUser::IsLoggedIn() )
-            {
-                $userid = CCUser::CurrentUser();
-
-                // let the current user see all their
-                // files no matter what
-
-                $this->_filter .= "( upload_user = $userid ) OR ";
-            }
-
-            $this->_filter .= "( upload_published > 0 AND upload_banned < 1 ) )";
-
-        } // endif for non-admin users filters
-
-        return $this->_filter;
-    }
-
 
     /**
     * Returns static singleton of table wrapper.
@@ -120,26 +61,6 @@ class CCUploads extends CCTable
         return $_table;
     }
 
-    /**
-    * Limit query results to certain tags
-    *
-    * The 'tags' parameter can either be a comma separeated list of tags
-    * or an array of array.
-    *
-    * The 'type' parameter determines how the tags are combined, either 
-    * 'any' or 'all'
-    *
-    * @param mixed $tags What tags to limit the search by
-    * @param string $type One of 'any' or 'all'
-    */
-    function SetTagFilter($tags, $type='any')
-    {
-        if( is_array($tags) )
-            $tags = implode(', ',$tags);
-
-        $this->_tags = $tags;
-        $this->_tag_filter_type = $type;
-    }
 
     /**
     * Convert a database 'row' to a more semantically rich 'record'
@@ -155,6 +76,9 @@ class CCUploads extends CCTable
     */
     function & GetRecordFromRow( &$row )
     {
+        print("<pre>Getrecord called\n</pre>");
+        CCDebug::StackTrace();
+
         if( is_string( $row['upload_extra'] ) )
             $row['upload_extra'] = unserialize($row['upload_extra']);
 
@@ -209,25 +133,6 @@ class CCUploads extends CCTable
 
         return $row;
     }
-
-/*
-//    function IsMediaType(&$record,$looking_for_media,$looking_for_ext='')
-    {
-        if( empty($record['files']) )
-        {
-            CCDebug::StackTrace();
-            trigger_error('Invalid call to IsMediaType');
-        }
-        $file = $record['files'][0];
-        if( empty($file['file_format_info']['media-type']) )
-            return(false);
-        $mt = $file['file_format_info']['media-type'];
-        $ok = ($mt == $looking_for_media);
-        if( $ok && $looking_for_ext )
-            $ok =  $file['file_format_info']['default-ext'] == $looking_for_ext;
-        return($ok);
-    }
-*/
 
     /**
     * Shortcut for getting the basic file format
@@ -334,65 +239,6 @@ class CCUploads extends CCTable
         return( CCTag::TagSplit($record['upload_tags']) );
     }
 
-    /**
-    * Overwrite parent's version to add descriptor
-    * 
-    * @param mixed $where Where filter for next query
-    * @param string $columns Return these columns
-    */
-    function _get_select($where,$columns='*')
-    {
-        $where = $this->_where_to_string($where);
-        $where = $this->_tags_to_where($where);
-
-        if( !empty($this->_filter) )
-        {
-            if( empty($where) )
-                $where = $this->_filter;
-            else
-                $where = "$where AND \n ({$this->_filter})";
-        }
-
-        return( parent::_get_select($where,$columns) );
-    }
-
-    function _tags_to_where($where)
-    {
-        if( !empty($this->_tags) )
-        {
-            if( $this->_tag_filter_type == 'any' )
-            {
-                $tagors = preg_replace('/[ ]?,[ ]?/','|',$this->_tags);
-                $filter = " upload_tags REGEXP '(^| |,)($tagors)(,|\$)' ";
-            }
-            else
-            {
-                $tagands = array();
-                require_once('cclib/cc-tags.php');
-                $tagsarr = CCTag::TagSplit($this->_tags);
-                foreach( $tagsarr as $tag )
-                {
-                    if( $tag{0} == '-' )
-                    {
-                        $tag = substr($tag,1);
-                        $not = ' NOT ';
-                    }
-                    else
-                    {
-                        $not = '';
-                    }
-                    $tagands[] = "(upload_tags $not REGEXP '(^| |,)($tag)(,|\$)' )";
-                }
-                $filter = implode( ' AND ', $tagands );
-            }
-            if( empty($where) )
-                $where = $filter;
-            else
-                $where = "$where AND ($filter)";
-        }
-
-        return $where;
-    }
 }
 
 

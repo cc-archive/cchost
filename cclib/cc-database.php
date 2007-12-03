@@ -29,7 +29,6 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 $CC_SQL_DATE = '%W, %M %e, %Y @ %l:%i %p';
-$_CC_DEBUG_SQL = '';
 
 
 /**
@@ -93,14 +92,14 @@ class CCDatabase
         if( empty($link) )
             $link = CCDatabase::DBConnect();
 
-        global $_CC_DEBUG_SQL;
+        global $_sql_time;
+        static $_sql_t;
 
-        $_CC_DEBUG_SQL = $sql;
-CCDebug::Chronometer($_sql);
+CCDebug::Chronometer($_sql_t);
         $qr = mysql_query($sql,$link);
-$t = CCDebug::Chronometer($_sql);
-if ($t > 0.01)
-    CCDebug::Log( "($t) " . $sql);
+$_sql_time = CCDebug::Chronometer($_sql_t);
+//if ($t > 0.01)
+//    CCDebug::Log( "($t) " . $sql);
 
         if( !$qr )
         {

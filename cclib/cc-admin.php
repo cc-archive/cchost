@@ -804,6 +804,7 @@ END;
     */
     function Setup()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Global Site Setup'));
         $form = new CCAdminConfigForm();
         CCPage::AddForm( $form->GenerateForm() );
@@ -818,6 +819,7 @@ END;
     {
         global $CC_CFG_ROOT;
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle( _("Edit Settings:") . " '$CC_CFG_ROOT'");
         $form = new CCAdminSettingsForm();
         CCPage::AddForm( $form->GenerateForm() );
@@ -833,6 +835,7 @@ END;
     */
     function SaveConfig($form = '')
     {
+        require_once('cclib/cc-page.php');
         if( empty($_POST) )
 	    {	
             CCPage::Prompt(_("Error Saving"));

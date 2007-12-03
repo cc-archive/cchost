@@ -278,10 +278,12 @@ class CCPhysicalFile
         CCUpload::CheckFileAccess($username,$upload_id);
 
         $userid = CCUser::IDFromName($username);
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);
-        $pretty_name = $record['upload_name'];
+
         CCPage::SetTitle('str_edit_properties');
+
+        $dv = new CCDataview();
+        $args['where'] = 'WHERE upload_id = ' . $upload_id;
+        $record = $dv->PerformFile('upload_row',$args,CCDV_RET_RECORD);
         $form = new CCEditFileForm($userid,$record);
         $show = true;
         if( empty($_POST['editfile']) )
@@ -293,7 +295,7 @@ class CCPhysicalFile
             if( $form->ValidateFields() )
             {
                 CCUpload::PostProcessEditUploadForm($form, $record, $record['upload_extra']['relative_dir'] );
-                $url = url_args( $record['file_page_url'], 'prompt=str_file_changed' );
+                $url = url_args( ccd('files',CCUser::CurrentUserName(),$upload_id), 'prompt=str_file_changed' );
                 CCUtil::SendBrowserTo($url);
                 $show = false;
             }

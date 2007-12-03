@@ -27,9 +27,7 @@ ccUploadInfo.prototype = {
         }
         catch (e)
         {
-            var str = $H(e).inspect();
-            document.write( '<pre>' + str + '</pre>' );
-            alert( 'hookInfos:' + str  );
+            alert( e.message );
         }
 
         return found;

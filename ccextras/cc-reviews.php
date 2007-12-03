@@ -45,10 +45,11 @@ CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCReview' , 'OnTopicDe
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCReviewFormAPI',  'OnFormFields')      , 'ccextras/cc-review-forms.inc' );
 CCEvents::AddHandler(CC_EVENT_DO_SEARCH,          array( 'CCReviewFormAPI',  'OnDoSearch')        , 'ccextras/cc-review-forms.inc' );
 
-CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCReviewsHV',  'OnFilterMacros') );
+CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,       array( 'CCReviewsHV',  'OnFilterMacros') );
 
 class CCReviewsHV
 {
+
     /**
     * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
     * 

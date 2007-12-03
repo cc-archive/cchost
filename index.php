@@ -26,6 +26,7 @@ if( !empty($_GET['ccm']) && preg_match('/\.(gif|png|ico|jpg|mp3)$/',$_GET['ccm']
 $CC_GLOBALS   = array();
 $CC_CFG_ROOT  = '';
 $cc_error_level = E_ALL;
+$_sql_time = 0;
 
 error_reporting($cc_error_level); 
 
@@ -96,7 +97,9 @@ require_once('cc-template-api.php');
 /*
 * Configuration initialized here
 */
+CCDebug::Chronometer($_INIT);
 CCConfigs::Init();
+$_INIT = CCDebug::Chronometer($_INIT);
 
 
 /*
@@ -150,6 +153,7 @@ CCPage::Show();
 CCDebug::InstallErrorHandler(false); 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
 
-print "<!-- Page time: " . CCDebug::Chronometer($_t) . '/' . CCDebug::Chronometer($_p) . "  skin: {$CC_GLOBALS['skin-file']} -->";
+print "<!-- Page time: " . CCDebug::Chronometer($_t) . '/ page:' . CCDebug::Chronometer($_p) . ' /init: '
+   . $_INIT . '/sql: ' . $_sql_time . "  skin: {$CC_GLOBALS['skin-file']} -->";
 
 ?>

@@ -27,16 +27,15 @@ SELECT
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
 JOIN cc_tbl_licenses ON upload_license = license_id
-JOIN cc_tbl_files as file ON upload_id = file_upload
 LEFT OUTER JOIN cc_tbl_collab_uploads ON upload_id = collab_upload_upload
 %joins%
 %where% 
 LIMIT 1
 EOF;
     return array( 'sql' => $sql,
-                   'e'  => array( CC_EVENT_FILTER_UPLOAD_TAGS,
+                   'e'  => array( CC_EVENT_FILTER_FILES,
+                                  CC_EVENT_FILTER_UPLOAD_TAGS,
                                   CC_EVENT_FILTER_COLLAB_CREDIT,
-                                  CC_EVENT_FILTER_FILES,
                                   CC_EVENT_FILTER_EXTRA,
                                   CC_EVENT_FILTER_DESCRIPTION_TEXT,
                                   CC_EVENT_FILTER_REMIXES_FULL)

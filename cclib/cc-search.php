@@ -152,9 +152,7 @@ END;
         }
         if( !empty($results[CC_SEARCH_UPLOADS]) )
         {
-            require_once('cclib/cc-upload.php');
-
-            CCUpload::ListRecords($results[CC_SEARCH_UPLOADS]);
+            CCPage::PageArg( 'records', $results[CC_SEARCH_UPLOADS], 'upload_list' );
         }
 
         $url = ccl('search');

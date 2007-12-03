@@ -19,17 +19,11 @@ function _t_file_macros_show_zip_dir($T,&$_TV)
     }
 }
 
-function _t_file_macros_request_reviews($T,&$_TV)
+function _t_file_macros_request_reviews($T,&$A)
 {
-?>
-<div id="requested_reviews"></div>
-<script>
-//<!--
-url = '<?= $_TV['record']['comment_thread_url'] ?>' + q + 'ajax=1';
-new Ajax.Updater( 'requested_reviews', url, { method: 'get' } );
-//-->
-</script>
-<?
+    ?><div id="requested_reviews"><?
+        cc_query_fmt('noexit=1&nomime=1&f=html&t=reviews_preview&sort=topic_date&ids=' . $A['record']['upload_id'] );
+    ?></div><?
 }
 
 function _t_file_macros_print_recent_reviews($T,&$_TV)

@@ -15,6 +15,7 @@ define('CC_EVENT_FILTER_RATINGS_STARS',      'fstars' );
 define('CC_EVENT_FILTER_FILES',              'filtfile' );
 define('CC_EVENT_FILTER_UPLOAD_TAGS',        'filuptags' );
 define('CC_EVENT_FILTER_ED_PICK',            'filtedpick' );
+define('CC_EVENT_FILTER_ED_PICK_DETAIL',     'filtedpickdet' );
 define('CC_EVENT_FILTER_COLLAB_CREDIT',      'filtcolcrd' );
 define('CC_EVENT_FILTER_MACROS',             'fltmac' );
 define('CC_EVENT_FILTER_EXTRA',              'fltex' );

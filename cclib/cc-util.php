@@ -54,6 +54,14 @@ function cc_default_dir_perm()
     return cc_default_file_perms();
 }
 
+function cc_temp_dir()
+{
+    global $CC_GLOBALS;
+
+    if( !empty($CC_GLOBALS['temp-dir']) )
+        return $CC_GLOBALS['temp-dir'];
+    return $CC_GLOBALS['php-tal-cache-dir'];
+}
 
 /**
 */

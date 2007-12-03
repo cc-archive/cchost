@@ -127,8 +127,8 @@ class CCHowIDidIt
         if( empty($record['upload_extra']['howididit']) )
             return;
         $record['local_menu'] = CCUpload::GetRecordLocalMenu($record);
-        $arg = array( $record );
-        CCUpload::ListRecords( $arg );
+        $arg = array( &$record );
+        CCPage::PageArg( 'records', $arg, 'upload_list' );
         $fields = $this->_get_fields();
         $data = $this->_get_data($record);
         CCPage::SetTitle(_("How I Did It"));

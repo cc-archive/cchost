@@ -4,7 +4,7 @@
     style = wide
 
     image = layouts/images/layout023.gif
-    desc = _('Two columns liquid, side fixed (n.23)')
+    desc = _('CC Style, 2 columns, side fixed (n.23)')
 [/meta]
 */?>
 <!-- layout 23 -->

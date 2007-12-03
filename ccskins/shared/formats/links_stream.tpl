@@ -20,20 +20,19 @@ SELECT
     user_real_name, user_name, 
     CONCAT( '$urlp', user_name ) as artist_page_url,
     IF( upload_tags REGEXP '(^|,)(audio)(,|$)', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
-    file_name, file_format_info, file_extra, upload_contest, upload_name
+    upload_contest, upload_name
     %columns%
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
 JOIN cc_tbl_licenses ON upload_license = license_id
-JOIN cc_tbl_files as file ON upload_id = file_upload
 %joins%
-WHERE %where% file_order = 0
+%where%
 %order%
 %limit%
 EOF;
     return array( 'sql' => $sql,
                    'name' => 'list_wide',
-                   'e'  => array( ), 
+                   'e'  => array( CC_EVENT_FILTER_FILES, ), 
                 );
 }
 [/dataview]

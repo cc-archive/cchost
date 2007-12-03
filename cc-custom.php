@@ -152,7 +152,7 @@ function & CC_cache_query(
         $limit='', $with_menus=false, $with_remixes=false)
 {
     global $CC_GLOBALS, $CC_CFG_ROOT;
-    $cname = $CC_GLOBALS['php-tal-cache-dir'] . '/_ccc_' . $tags . '.txt';
+    $cname = cc_temp_dir() . '/_ccc_' . $tags . '.txt';
     if( file_exists($cname) )
     {
         include($cname);

@@ -45,6 +45,7 @@ class CCNavigator
     */
     function View($page_name='',$default_tab_name='',$sub_tab_name='')
     {
+        require_once('cclib/cc-page.php');
         $page =& CCPage::GetPage();
         $this->ShowTabs($page,true,$page_name,$default_tab_name,$sub_tab_name);
     }
@@ -191,6 +192,8 @@ class CCNavigator
                 $args['feed'] = $qname;
                 $args['qstring'] = $qstring;
                 $args['title'] = $caption;
+                if( !empty($_GET['limit']) )
+                    $args['limit'] = $_GET['limit'];
 
                 require_once('cclib/cc-query.php');
 

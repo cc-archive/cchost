@@ -74,6 +74,7 @@ class CCMediaHost
             }
         }
 
+        require_once('cclib/cc-page.php');
         CCPage::AddBreadCrumbs($trail);
     }
 

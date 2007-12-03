@@ -48,6 +48,7 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCEditorials',  'OnMap
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCEditorials' , 'OnGetConfigFields'), 'cclib/cc-editorials.php' );
 CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,        array( 'CCEditorials',  'OnGetSysTags'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_FILTER_ED_PICK,     array( 'CCEditorials',  'OnFilterEdPick'), 'cclib/cc-editorials.php');
+CCEvents::AddHandler(CC_EVENT_FILTER_ED_PICK_DETAIL, array( 'CCEditorials',  'OnFilterEdPickDetail'), 'cclib/cc-editorials.php');
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigFields'), 'cclib/cc-feed.php' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCFeed',  'OnUploadDelete'), 'cclib/cc-feed.php');
@@ -121,7 +122,7 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCNavigatorAdmin',  'OnMapUrl
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPageAdmin', 'OnMapUrl'), 'cclib/cc-page.php' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPageAdmin', 'OnGetConfigFields'), 'cclib/cc-page.php'  );
-CCEvents::AddHandler(CC_EVENT_APP_INIT,           array( 'CCPageAdmin', 'OnAppInit'), 'cclib/cc-page.php'  );
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCPageAdmin',  'OnApiQueryFormat'), 'cclib/cc-page.php' ); 
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCPoolUI',  'OnMapUrls'), 'cclib/cc-pools-ui.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,     array( 'CCPoolUI',  'OnAdminMenu'), 'cclib/cc-pools-ui.php'  );
@@ -172,8 +173,6 @@ CCEvents::AddHandler(CC_EVENT_SOURCES_CHANGED,  array( 'CCTag', 'OnSourcesChange
 
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCTemplateAdmin', 'OnAdminMenu'), 'cclib/cc-template.inc' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCTemplateAdmin', 'OnMapUrls'), 'cclib/cc-template.inc' );
-
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCUpload',  'OnApiQueryFormat'), 'cclib/cc-upload.php' ); 
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCUserAdmin', 'OnMapUrls'), 'cclib/cc-user-admin.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCUserAdmin', 'OnAdminMenu'), 'cclib/cc-user-admin.php' );

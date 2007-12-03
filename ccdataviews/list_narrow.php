@@ -23,19 +23,19 @@ SELECT
     CONCAT( '$urll', license_logo ) as license_logo_url,
     license_url,
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date_format,
-    file_name, file_format_info, file_extra, upload_contest
+    upload_contest
     %columns%
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
 JOIN cc_tbl_licenses ON upload_license = license_id
-JOIN cc_tbl_files as file ON upload_id = file_upload
 %joins%
-WHERE %where% file_order = 0
+%where%
 %order%
 %limit%
 EOF;
     return array( 'sql' => $sql,
-                   'e'  => array( CC_EVENT_FILTER_REMIXES_SHORT,
+                   'e'  => array( CC_EVENT_FILTER_FILES,
+                                  CC_EVENT_FILTER_REMIXES_SHORT,
                                   CC_EVENT_FILTER_DESCRIPTION_TEXT,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
                                   CC_EVENT_FILTER_PLAY_URL )

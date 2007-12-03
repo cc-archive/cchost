@@ -33,8 +33,7 @@ function cc_update_hot_topics()
         );
 
     }
-    var date = box.options[ box.selectedIndex ].value;
-    var url = home_url + 'reviews/hottopics/' + date;
+    var url = query_url + 't=reviews_recent&datasource=topics&f=html&sinced=' + box.options[ box.selectedIndex ].value;
     var myAjax = new Ajax.Updater( 
                     'cc_hot_topics_div',
                      url, 

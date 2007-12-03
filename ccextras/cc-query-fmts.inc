@@ -104,31 +104,24 @@ class CCQueryFormats
             case 'html':
             case 'docwrite':
             {
-                if( empty($macro) )
+                if( empty($template) )
+                    $template = 'med';
+
+                $skinmac = new CCSkinMacro($template);
+                list( $file, $macro ) = $skinmac->LookupMacro();
+
+                // normally we wouldn't go through extra step of
+                // actually looking up the template, but since
+                // this is a public api we want to be friendly
+                // about it...
+
+                if( !$file )
                 {
-                    if( empty($template) )
-                        $template = 'med';
-
-                    $tname = CCTemplate::GetTemplate('formats/' . $template);
-
-                    // normally we wouldn't go through extra step of
-                    // actually looking up the template, but since
-                    // this is a public api we want to be friendly
-                    // about it...
-
-                    if( !$tname )
-                    {
-                        print(sprintf(_('"%s" is not a valid template'), 
-                                      $template));
-                        exit;
-                    }
-                    
-                    $template = $tname;
-                    $macro = '';
+                    print(sprintf(_('"%s" is not a valid template'), 
+                                  $template));
+                    exit;
                 }
-
-                $templateObj = new CCTemplateMacro($template,$macro);
-
+                
                 require_once('cclib/cc-page.php');
 
                 $targs = $CC_GLOBALS;
@@ -139,10 +132,7 @@ class CCQueryFormats
                 if( !empty($template_args) )
                     $targs = array_merge($targs,$template_args);
 
-                if( !empty($qstring) )
-                    $targs['qstring'] = $qstring;
-
-                $text = $templateObj->SetAllAndParse($targs);
+                $text = $skinmac->SetAllAndParse($targs);
                 
                 if( $format == 'docwrite' )
                 {

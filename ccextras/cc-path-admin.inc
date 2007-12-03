@@ -57,7 +57,7 @@ class CCPathAdminForm extends CCEditConfigForm
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE );
 
-        $fields['php-tal-cache-dir'] =
+        $fields['temp-dir'] =
                array( 'label'       => $wflag . _('Temp Directory'),
                        'form_tip'   => _('Used by the system to write temporary files.'),
                        'value'      => '',

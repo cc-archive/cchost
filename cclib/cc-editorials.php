@@ -49,21 +49,19 @@ class CCEditorials
     */
     function ViewPicks($upload_id = '')
     {
-        require_once('cclib/cc-upload-table.php');
-
-        CCPage::SetTitle( 'str_editors_picks');
-        $tag   = empty($upload_id) ? 'editorial_pick' : '';
-        $where = empty($upload_id) ? '' : array( 'upload_id' => $upload_id );
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetTagFilter($tag);
-        CCPage::AddPagingLinks($uploads,$where);
-        $uploads->SetOrder('upload_date','DESC');
-        $records =& $uploads->GetRecords($where);
-        if( !empty($_REQUEST['dump_rec']) && CCUser::IsAdmin() )
-            CCDebug::PrintVar($records[0],false);
-        CCPage::PageArg('editorial_picks',$records,'show_editor_picks');
-        if( count($records) == 1 )
-            CCPage::PageArg( 'all_picks_link', ccl('editorial','picks') );
+        if( !empty($upload_id) )
+        {
+            $dv = new CCDataview();
+            $args['where'] = 'upload_id = ' . $upload_id;
+            $user_name = $dv->PerformFile('upload_owner',$args,CCDV_RET_ITEM);
+            CCUtil::SendBrowserTo( ccl('files',$user_name,$upload_id) );
+        }
+    
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $q = 't=ed_picks&tags=editorial_pick&title=str_editors_picks';
+        $args = $query->ProcessAdminArgs($q);
+        $query->Query($args);
     }
 
     /**
@@ -289,8 +287,10 @@ class CCEditorials
         }
     }
 
-    function OnFilterEdPick(&$records)
+    function _do_filter(&$records,$doformat)
     {
+        $doformat = $doformat && function_exists('cc_format_text');
+
         $k = array_keys($records);
         $c = count($k);
         for( $i = 0; $i < $c; $i++ )
@@ -302,7 +302,21 @@ class CCEditorials
                 continue;
             $ek = array_keys($R['upload_extra']['edpicks']);
             $R['edpick'] =& $R['upload_extra']['edpicks'][$ek[0]];
+            if( $doformat )
+            {
+                $R['edpick']['review'] = cc_format_text($R['edpick']['review']);
+            }
         }
+    }
+
+    function OnFilterEdPickDetail(&$records)
+    {
+        $this->_do_filter($records,true);
+    }
+
+    function OnFilterEdPick(&$records)
+    {
+        $this->_do_filter($records,false);
     }
 }
 
