@@ -400,31 +400,26 @@ END;
 
 function install_local_files($local_dir)
 {
-    // is it right to disable warning here?
-    @mkdir( 'content');
-    @mkdir( 'contests');
-    @mkdir( $local_dir . '/pages' );
-    @mkdir( $local_dir . '/skins' );
-    @mkdir( $local_dir . '/skins/images' );
-    @mkdir( $local_dir . '/skins/extras' );
-    @mkdir( $local_dir . '/dataviews' );
-    @mkdir( $local_dir . '/lib' );
-    @mkdir( $local_dir . '/temp' );
-
-    chmod( 'content',   0777 );
-    chmod( 'contests', 0777 );
-    chmod( $local_dir . '/pages', 0777 );
-    chmod( $local_dir . '/skins', 0777 );
-    chmod( $local_dir . '/lib', 0777 );
-    chmod( $local_dir . '/temp', 0777 );
-    chmod( $local_dir . '/skins/images', 0777 );
-    chmod( $local_dir . '/skins/extras', 0777 );
-    chmod( $local_dir . '/dataviews', 0777 );
+    foreach( array( 'content', 
+                    'contests', 
+                    $local_dir . '/pages',
+                    $local_dir . '/skins', 
+                    $local_dir . '/skins/images',
+                    $local_dir . '/skins/extras',
+                    $local_dir . '/dataviews',
+                    $local_dir . '/lib',
+                    $local_dir . '/temp',
+                    ) as $locdir )
+    {
+        // is it right to disable warning here?
+        @mkdir( $locdir );
+        chmod( $locdir,   0777 );
+    }
 
     docopy( 'home.php', $local_dir, 'pages');
     docopy( 'welcome.php', $local_dir, 'pages');
     docopy( 'DEBUG.php', $local_dir, 'lib');
-    docopy( 'extras_links.php', $local_dir, 'skins/extras');
+    docopy( 'extras_links.tpl', $local_dir, 'skins/extras');
     docopy( 'person.png', $local_dir, 'skins/images');
     docopy( 'error-msg.txt', $local_dir, '');
     docopy( 'disabled-msg.txt', $local_dir, '');
@@ -829,8 +824,8 @@ function get_install_fields($values)
     'pw'          => array( 'n' => 'Admin password',         'e' => '', 't' => 'password', 'v' => '' , 'q' => 1,
         'h' => '(Remember this, you\'ll need it. Must be at least 5 characters long, letters and numbers only.)' ),
 
-    'admin-email'       => array( 'n' => 'Site email',       'e' => '', 't' => 'text', 'v' => '' , 'q' => 0,
-        'h' => 'Default return address when ccHost sends email' ),
+    'admin-email'       => array( 'n' => 'Site email',       'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
+        'h' => 'Default return address when ccHost sends email ' ),
 
     'database'    => array( 'n' => 'Database name',          'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
         'h' => 'Name of the mySQL database to use (this must exist already)' ),
