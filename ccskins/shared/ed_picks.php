@@ -37,7 +37,19 @@ LEFT OUTER JOIN cc_tbl_collab_uploads ON upload_id = collab_upload_upload
 %order%
 %limit%
 EOF;
+
+    $sql_count =<<<EOF
+SELECT COUNT(*)
+FROM cc_tbl_uploads
+JOIN cc_tbl_user ON upload_user = user_id
+JOIN cc_tbl_licenses ON upload_license = license_id
+LEFT OUTER JOIN cc_tbl_collab_uploads ON upload_id = collab_upload_upload
+%joins%
+%where%
+EOF;
+
     return array( 'sql' => $sql,
+                  'sql_count' => $sql_count,
                    'e'  => array( CC_EVENT_FILTER_FILES,
                                   CC_EVENT_FILTER_ED_PICK_DETAIL,
                                   CC_EVENT_FILTER_COLLAB_CREDIT,

@@ -148,7 +148,7 @@ class CCQueryFormats
                 }
                 $results = array( $text, $mime );
 
-                if( !empty($paging) )
+                if( !empty($paging) && ($paging = 'on') )
                 {
                     $key = preg_replace('/s?$/','',$datasource);
                     $table = new CCTable('cc_tbl_' . $datasource, $key );        

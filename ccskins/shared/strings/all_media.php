@@ -127,11 +127,26 @@ $GLOBALS['str_filter_yesterday']             = _('Yesterday');
 $GLOBALS['str_flag_this_upload']      = _('Flag this upload for possible violation of terms');
 $GLOBALS['str_flagtip']               = $GLOBALS['str_flag_this_upload'];
 $GLOBALS['str_for'] = _('for'); // as in: 9 Reviews for Trifonic's Beatorama
+
 $GLOBALS['str_forum_post_new_topic'] = _('Post New Topic');
 $GLOBALS['str_forum_posts_by_s'] = _("Forum Posts by %s");
 $GLOBALS['str_forum_restricted_access'] = _('Restricted Access');
 $GLOBALS['str_forum_thread_missing'] = _('Thread Missing') ;
+$GLOBALS['str_forum_thread_not_there'] = _('That topic thread does not exist.');
 $GLOBALS['str_forums'] = _('Forums');
+$GLOBALS['str_forum_num_posts'] = _('replies');
+$GLOBALS['str_forum_num_threads'] = _('threads');
+$GLOBALS['str_forum_latest_post'] = _('latest post');
+$GLOBALS['str_forum_topic'] = _('Topic');
+$GLOBALS['str_forum_author'] = _('Author');
+$GLOBALS['str_forum_replies'] = _('Replies');
+$GLOBALS['str_forum_latest'] = _('Latest');
+$GLOBALS['str_forum_post'] = _('Post');
+$GLOBALS['str_forum_admin_required'] = _('You must have admin rights to see this forum.');
+$GLOBALS['str_forum_login_required'] = _('You must be logged in to see this forum.');
+$GLOBALS['str_forum_perm_denied'] = _('You do not have proper permissions to see this forum.');
+
+
 $GLOBALS['str_from'] = _('from');
 $GLOBALS['str_full_search'] = _('Full search');
 $GLOBALS['str_getting_data'] = _('Getting data...');
@@ -275,15 +290,19 @@ $GLOBALS['str_remix_close']           = _('Close search box');
 $GLOBALS['str_remix_open']            = _('Open search box');
 $GLOBALS['str_remix_lic']             = _('This remix will be licensed under a %s license');
 
-$GLOBALS['str_reviews_n']             = _('%d Reviews');
-$GLOBALS['str_reviews_most_active']   = _('Most Actively Reviewed Uploads');
-$GLOBALS['str_reviews_most_recent']   = _('Most Recently Reviewed Uploads');
+$GLOBALS['str_reviews_n']             = _('%d Comments');
+$GLOBALS['str_reviews_most_active']   = _('Most Active Contributions');
+$GLOBALS['str_reviews_most_recent']   = _('Most Recent Comments');
 $GLOBALS['str_reviews_past_week']     = _('Past week');
 $GLOBALS['str_reviews_past_month']    = _('Past month');
 $GLOBALS['str_reviews_all_time']      = _('All-time');
-$GLOBALS['str_reviews_for_s']         = _('Reviews for "%s"');
-$GLOBALS['str_review_of']             = _('review of');
-$GLOBALS['str_reviews_see']           = _('see review...');
+$GLOBALS['str_reviews_for_s']         = _('Comments for "%s"');
+$GLOBALS['str_review_of']             = _('comments on ');
+$GLOBALS['str_reviews_see']           = _('see comments...');
+$GLOBALS['str_reviews_left_by']           = _('Comments left by %s');
+$GLOBALS['str_reviews_left_for']           = _('Comments left for %s');
+$GLOBALS['str_reviews_left_for_button']           = _('%sSee comments left for %s%s');
+$GLOBALS['str_reviews_left_by_button']           = _('%sSee comments left by %s%s');
 
 $GLOBALS['str_sample_pool_s']         = _('Sample Pool: %s');
 

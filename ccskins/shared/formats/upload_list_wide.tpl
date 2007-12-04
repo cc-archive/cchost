@@ -46,7 +46,17 @@ JOIN cc_tbl_licenses ON upload_license = license_id
 %limit%
 EOF;
 
+    $sql_count =<<<EOF
+SELECT COUNT(*)
+FROM cc_tbl_uploads
+JOIN cc_tbl_user ON upload_user = user_id
+JOIN cc_tbl_licenses ON upload_license = license_id
+%joins%
+%where%
+EOF;
+
     return array( 'sql' => $sql,
+                  'sql_count' => $sql_count,
                    'name' => 'list_wide',
                    'e'  => array( CC_EVENT_FILTER_FILES,
                                   CC_EVENT_FILTER_UPLOAD_USER_TAGS, 

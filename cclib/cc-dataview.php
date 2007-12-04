@@ -133,6 +133,10 @@ class CCDataView
         $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%where%/'  ),
                                     $sqlargs, $info['sql'] );
 
+        $this->sql_count = empty($info['sql_count']) ? '' :
+                    preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%where%/'  ),
+                                    $sqlargs, $info['sql_count'] );
+
 // ------- DEBUG PREVIEW ------------
 if( $dataview['dataview'] == 'xx' )
 {

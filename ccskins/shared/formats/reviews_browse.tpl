@@ -31,7 +31,17 @@ function reviews_browse_dataview()
         %limit%
 END;
 
+    $sql_count =<<<END
+        SELECT COUNT(*)
+        FROM cc_tbl_topics
+        JOIN cc_tbl_uploads ups      ON topic_upload = ups.upload_id
+        JOIN cc_tbl_user    reviewee ON ups.upload_user = reviewee.user_id
+        JOIN cc_tbl_user    reviewer ON topic_user = reviewer.user_id
+        %where% AND (topic_type = 'review')
+END;
+
     return array( 'sql' => $sql,
+                  'sql_count' => $sql_count,
                    'e'  => array( CC_EVENT_FILTER_TOPIC_TEXT )
                 );
 }

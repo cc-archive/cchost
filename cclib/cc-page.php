@@ -81,11 +81,9 @@ class CCPageAdmin
 
         // this needs to be done through CCDataview:
 
-        if( empty($nopaging) )
+        if( empty($paging) || ($paging == 'on') || ($paging='default') )
         {
-            $key = preg_replace('/s?$/','',$datasource);
-            $table = new CCTable('cc_tbl_' . $datasource, $key );        
-            CCPage::AddPagingLinks($table, $queryObj->sql_p['where'] );
+            CCPage::AddPagingLinks($dataviewObj);
         }
 
         if( !isset( $qstring ) )
@@ -695,7 +693,7 @@ class CCPage extends CCSkin
     * @param string $sql_where The SQL WHERE clause to limit queries
     * @param integer $limit Override system defaults for how many records in a page
     */
-    function AddPagingLinks($table,$sql_where,$limit ='')
+    function AddPagingLinks($table_or_dataview,$sql_where='',$limit ='')
     {
         $args = array();
 
@@ -719,16 +717,16 @@ class CCPage extends CCSkin
             $offset = 0;
         }
 
-        if( is_string($table) )
+        if( empty($table_or_dataview->_key_field) )
         {
-            $sql = 'SELECT COUNT(*) from ' . $table . ' ' . $sql_where;
+            $sql = $table_or_dataview->sql_count;
             $all_row_count = CCDatabase::QueryItem($sql);
         }
         else
         {
-            $table->SetOffsetAndLimit(0,0);
-            $all_row_count = $table->CountRows($sql_where);
-            $table->SetOffsetAndLimit($offset,$limit);
+            $table_or_dataview->SetOffsetAndLimit(0,0);
+            $all_row_count = $table_or_dataview->CountRows($sql_where);
+            $table_or_dataview->SetOffsetAndLimit($offset,$limit);
         }
         if( $limit < $all_row_count )
         {

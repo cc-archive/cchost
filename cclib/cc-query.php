@@ -152,7 +152,9 @@ class CCQuery
     function QuerySQL($qargs,$sqlargs)
     {
         $this->args = $qargs;
+
         $this->sql_p = array_merge($this->sql_p,$sqlargs);
+        $this->_gen_limit();
         $this->_common_query();
         return $this->_process_records();
     }
@@ -450,6 +452,7 @@ class CCQuery
         $rettype = empty($this->args['rettype']) ? ($this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS) : $this->args['rettype'];
         $records =& $dv->Perform( $this->dataview, $this->sql_p, $rettype, $this );
         $this->sql = $dv->sql;
+        $this->args['dataviewObj'] =& $dv;
         //CCDebug::PrintVar($this->sql);
         return $records;
     }

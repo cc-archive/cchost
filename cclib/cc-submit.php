@@ -212,6 +212,7 @@ class CCSubmit
 
     function ShowSubmitTypes($types)
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle('str_pick_submission_type');
         $keys = array_keys($types);
         foreach( $keys as $key )
@@ -280,6 +281,7 @@ class CCSubmit
     {
         global $CC_CFG_ROOT;
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Manage Submit Forms'));
         if( $cmd == 'revert' )
         {
@@ -325,6 +327,7 @@ class CCSubmit
         if( empty($form_types[$form_type_key]) )
             return;
 
+        require_once('cclib/cc-page.php');
         $msg = sprintf(_('Editing Submit Form for: %s'), $form_types[$form_type_key]['submit_type'] );
         CCPage::SetTitle($msg);
         $ok = false;
@@ -398,6 +401,7 @@ class CCSubmit
 
     function NewForm()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle( _('Create a New Submit Form') );
 
         $form = new CCAdminSubmitFormForm();

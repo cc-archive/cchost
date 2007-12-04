@@ -270,7 +270,8 @@ class CCTopics extends CCTable
                 $row['commands']['lock'] = array( 'url' => ccl('topics','lock',$row['topic_id']),
                                                   'script' => '',
                                                   'text' => $text );
-                
+
+                CCDebug::StackTrace();
                 $tree =& CCTopicTree::GetTable();
                 $awhere['topic_tree_parent'] = $row['topic_id'];
                 $has_children = $tree->CountRows($awhere);

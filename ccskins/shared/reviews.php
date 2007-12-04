@@ -13,7 +13,7 @@ else
 
 ?><h3><?= $T->String('str_reviews_most_recent'); ?></h3><?
 
-cc_query_fmt('f=html&noexit=1&nomime=1&sort=date&ord=desc&t=reviews_browse&datasource=topics&paging=1&limit=30&offset=' . $offset);
+cc_query_fmt('f=html&noexit=1&nomime=1&sort=date&ord=desc&t=reviews_browse&datasource=topics&paging=on&limit=30&offset=' . $offset);
 
 $T->Call('prev_next_links');
 ?>

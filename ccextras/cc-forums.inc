@@ -205,6 +205,7 @@ class CCForumAPI
             }
         }
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle('str_forums');
         CCPage::PageArg('forums',$visible_groups,'forum_index');
     }
@@ -218,6 +219,8 @@ class CCForumAPI
 
     function _show_forum($forum_id)
     {
+        require_once('cclib/cc-page.php');
+
         //
         // Get the forums row and check this
         // user's access rights
@@ -478,7 +481,6 @@ EOF;
 
             CCEvents::Invoke( CC_EVENT_FORUM_POST, array( &$values ) );
 
-
             $url = ccl('thread',$thread_id);
             CCUtil::SendBrowserTo($url);
         }
@@ -491,44 +493,50 @@ EOF;
         $api = new CCForums();
 
         $threads =& CCForumThreads::GetTable();
-        if( empty($thread_id) )
-        {
-            $row = array();
-        }
-        else
-        {
-            $thread_row = $threads->QueryKeyRow($thread_id);
-            $topic_id = $thread_row['forum_thread_oldest'];
-
-            $topics =& CCTopics::GetTable();
-            $row = $topics->GetRecordFromID($topic_id);
-        }
-        if( empty($row) )
+        if( empty($thread_id) || !$threads->KeyExists($thread_id) )
         {
             $this->_build_bread_crumb_trail(1);
             CCPage::SetTitle( 'str_forum_thread_missing' );
-            CCPage::Prompt(_('That topic thread does not exist.'));
+            CCPage::Prompt('str_forum_thread_not_there');
             return;
         }
 
-        $forum_id = $row['topic_forum'];
-        $forums =& CCForum::GetTable();
-        $forum_row = $forums->QueryKeyRow($forum_id);
-        $mask = CCMenu::GetAccessMask();
-        if( ($mask & $forum_row['forum_read_access']) == 0 )
-        {
-            if( ($forum_row['forum_read_access'] & CC_ADMIN_ONLY) != 0 )
-                $msg = _('You must have admin rights to see this forum.');
-            elseif( ($forum_row['forum_read_access'] & CC_MUST_BE_LOGGED_IN) != 0 )
-                $msg = _('You must be logged in to see this forum.');
-            else
-                $msg = _('You do have proper permissions to see this forum.');
+        $sql = <<<EOF
+        SELECT topic_name, forum_thread_forum, forum_read_access
+            FROM cc_tbl_topics 
+            JOIN cc_tbl_forum_threads ON forum_thread_oldest = topic_id 
+            JOIN cc_tbl_forums        ON forum_thread_forum = forum_id
+            WHERE forum_thread_id = $thread_id
+EOF;
+        $row = CCDatabase::QueryRow($sql);
+        list( $topic_name, $forum_id, $read_access ) = CCDatabase::QueryRow($sql,false);
 
+        $mask = CCMenu::GetAccessMask();
+        if( ($mask & $read_access) == 0 )
+        {
+            if( ($read_access & CC_ADMIN_ONLY) != 0 )
+                $msg = 'str_forum_admin_required';
+            elseif( ($read_access & CC_MUST_BE_LOGGED_IN) != 0 )
+                $msg = 'str_forum_login_required';
+            else
+                $msg = 'str_forum_perm_denied';
             CCPage::SetTitle('str_forum_restricted_access');
             CCPage::Prompt($msg);
             return;
         }
 
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('paging=off&f=page&t=topic_thread&datasource=topics&title=' . $topic_name);
+        $sqlargs['where'] = 'topic.topic_thread=' . $thread_id;
+        $query->QuerySQL($args,$sqlargs);
+
+        $this->_add_feed_links( $thread_id );
+        $this->_build_bread_crumb_trail($forum_id,$topic_name);
+    }
+
+    // place holder....
+    function _t_commands()
+    {
         $commands = array();
         if( ($mask & $forum_row['forum_post_access']) != 0 )
         {
@@ -560,32 +568,6 @@ EOF;
                                      'text' => $ctext, 'msg' => 0  );
             }
         }
-
-        $records = array( &$row );
-        $topics->GetTreeFromRecords($records,'ASC');
-
-        // this is a hack, but seems workable:
-        // we flatten the topic's first line of children to 
-        // make it look more forum-y
-        $doflatten = true;
-
-        if( $doflatten && $row['topic_children'] )
-        {
-            $children = $row['topic_children'];
-            $row['topic_children'] = array();
-            $records = array_merge($records,$children);
-        }
-
-        CCPage::PageArg('show_cmds', true);
-        CCPage::PageArg('forum_cmds', $commands );
-        CCPage::PageArg('topics', $records,'forum_topic');
-
-        $name = $row['topic_name'];
-        $title = sprintf('"%s"',$name);
-        CCPage::SetTitle($title);
-
-        $this->_add_feed_links( $thread_id );
-        $this->_build_bread_crumb_trail($row['topic_forum'],$row['topic_name']);
     }
 
     function User($username)

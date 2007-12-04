@@ -1,24 +1,24 @@
 <?/*
 [meta]
     type = format
-    desc = _('Preview of upload reviews')
-    dataview = review_previews
+    desc = _('Forum topic thread')
+    dataview = topic_thread
     embedded = 1
 [/meta]
 [dataview]
-function review_previews_dataview() 
+function topic_thread_dataview() 
 {
     $urlp = ccl('people') . '/';
-    $turl = ccl('reviews') . '/';
+    $turl = ccl('thread') . '/';
     $user_avatar_col = cc_get_user_avatar_sql();
 
     $sql =<<<EOF
 
-SELECT  topic.topic_id, ((COUNT(parent.topic_id)-1) * 30) AS margin,
-        IF( COUNT(parent.topic_id) > 1, 1, 0 ) as is_reply, 
+SELECT  topic.topic_id, IF( COUNT(parent.topic_id) > 2, (COUNT(parent.topic_id) - 1) * 30, 0 ) AS margin,
+        IF( COUNT(parent.topic_id) > 2, 1, 0 ) as is_reply, 
         topic.topic_text as _need_topic_html, 
         user_real_name, user_name, user_num_reviews,
-        CONCAT( '$turl', user_name, '/',  topic.topic_upload, '#', topic.topic_id ) as topic_url,
+        CONCAT( '$turl', topic.topic_thread, '#', topic.topic_id ) as topic_url,
         CONCAT( '$urlp', user_name ) as artist_page_url,
         DATE_FORMAT( topic.topic_date, '%a, %b %e, %Y @ %l:%i %p' ) as topic_date_format,
         {$user_avatar_col}
@@ -39,7 +39,6 @@ EOF;
 [/dataview]
 */?>
 
-<? cc_query_fmt('noexit=1&nomime=1&f=html&t=list_files&ids=' . $A['topic_upload']); ?>
 <table>
 %loop(records,R)%
 <tr>

@@ -616,10 +616,15 @@ class CCEvents
         $configs =& CCConfigs::GetTable();
         if( !$force && empty($paths) )
         {
-            $paths = $configs->GetConfig('urlmap');
+            CCDebug::Log('getting paths');
+           $w['config_type'] = 'urlmap';
+            $rows = $configs->QueryRows($w);
+            $paths = unserialize($rows[0]['config_data']);
+            // $paths = $configs->GetConfig('urlmap');
         }
         if( $force || empty($paths) )
         {
+            CCDebug::Log('MAKING paths');
             CCEvents::Invoke(CC_EVENT_MAP_URLS);
             $configs->SaveConfig('urlmap',$paths,CC_GLOBAL_SCOPE);
         }

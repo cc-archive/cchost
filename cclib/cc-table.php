@@ -702,6 +702,17 @@ class CCTable
     }
 
     /**
+    * Return a boolean if the key exists or not
+    *
+    * @param int $key 
+    * @return boolean $key_exists
+    */
+    function KeyExists($key)
+    {
+        return( $this->CountRows( $this->_key_field . " = '$key'" ) == 1 );
+    }
+
+    /**
     * Returns max value for a column
     *
     * @see Query

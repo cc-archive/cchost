@@ -91,7 +91,7 @@ class CCReview
                 // This is just a 'recent review' listing for the whole site
                 //
                 CCPage::SetTitle('str_recent_reviews');
-                $template = 'reviews_recent';
+                CCPage::ViewFile('reviews');
             }
             else
             {
@@ -100,38 +100,48 @@ class CCReview
                 //
 
                 $template = 'reviews_user';
-                $user_id   = $user_row['user_id'];
-
                 $qtype = CCUtil::StripText($_REQUEST['qtype']);
-                if( !empty($qtype) && $qtype == 'leftby' )
+                if( empty($qtype) || ($qtype == 'leftby') )
                 {
-                    $dataview = 'reviews_leftby';
+                    $where = 'reviewer.user_name=';
+                    $tstr = 'str_reviews_left_by';
+                    $otstr = 'str_reviews_left_for_button';
+                    $qtype = 'leftfor';
                 }
                 else
                 {
-                    $dataview = 'reviews_leftfor';
+                    $where = 'reviewee.user_name=';
+                    $tstr = 'str_reviews_left_for';
+                    $otstr = 'str_reviews_left_by_button';
+                    $qtype = 'leftby';
                 }
-                   
+
+                $query = new CCQuery();
+                $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=reviews_browse&datasource=topics&limit=30',array(),false);
+                $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'');
+                $args['title'] = array( $tstr, $user_real_name );
+                $sqlargs['where'] = $where . "'$user_name'";
+                $query->QuerySQL($args,$sqlargs);
+
+                $a = array( $otstr, '<a href="' . cc_current_url() . '?qtype=' . $qtype . '">', $user_real_name, '</a>' );
+                CCPage::Prompt($a);
             }
         }
         else
         {
             $this->_build_bread_crumb_trail($user_name,$upload_id);
-            $uploads =& CCUploads::GetTable();
-            $upload_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
+            $upload_name = CCDatabase::QueryItem('SELECT upload_name FROM cc_tbl_uploads WHERE upload_id = '.$upload_id);
             $query = new CCQuery();
-            $args = $query->ProcessAdminArgs('nopaging=1&f=page&t=reviews_upload&datasource=topics');
+            $args = $query->ProcessAdminArgs('paging=off&f=page&t=reviews_upload&datasource=topics');
             $args['title'] = array( 'str_reviews_for_s', $upload_name);
             $sqlargs['where'] = 'topic.topic_upload=' . $upload_id;
-            CCPage::PageArg('topic_upload',$upload_id);
             $query->QuerySQL($args,$sqlargs);
+
+            // this is so we can display the upload record on the page:
+            CCPage::PageArg('topic_upload',$upload_id);
+
             return;
         }
-
-        //
-        // Output the listing...
-        //
-        CCPage::ViewFile('reviews');
 
         //
         // Attach feed buttons
@@ -146,13 +156,13 @@ class CCReview
             else
             {
                 $url = ccl('feed','rss','reviews',$user_name);
-                $help = '<br />' . sprintf( _('Reviews left for "%s"'), '<br /> ' . CC_strchop($user_row['user_real_name'],16) );
+                $help = '<br />' . sprintf( _('Reviews left for "%s"'), '<br /> ' . CC_strchop($user_real_name,16) );
             }
         }
         else
         {
             $url = ccl('feed','rss','reviews');
-            $help = _('Reviews');
+            $help = 'str_reviews';
         }
 
         $CC_GLOBALS['page-has-feed-links'] = 1;
