@@ -1,10 +1,10 @@
-%%
+<? %%
 [meta]
     type     = format
     desc     = _('Medium verbose (license, attribution, download link, tags, description)')
-    dataview = page_links
+    dataview = default
 [/meta]
-%%
+%%?>
 <div  id="cc_list">
 <table >
 %loop(records,R)%   

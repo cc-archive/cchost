@@ -131,10 +131,7 @@ class CCReview
         //
         // Output the listing...
         //
-        CCPage::PageArg('review_list_macro', 'topics.xml/' . $macro );
-        foreach( $args as $argname => $arg )
-            CCPage::PageArg($argname,$arg);
-        CCPage::PageArg('topics',$topics,'review_list_macro');
+        CCPage::ViewFile('reviews');
 
         //
         // Attach feed buttons

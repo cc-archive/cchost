@@ -292,6 +292,7 @@ class CCTemplateAdmin
 
     function OnAdminExtras()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_("Sidebar Extras Content"));
         $form = new CCExtrasForm();
         CCPage::AddForm( $form->GenerateForm() );
@@ -299,6 +300,7 @@ class CCTemplateAdmin
 
     function OnPeopleCustomize($username)
     {
+        require_once('cclib/cc-page.php');
         if( empty($_POST) )
         {
             CCPage::SetTitle(_("Custom Skin"));
@@ -321,6 +323,7 @@ class CCTemplateAdmin
 
     function OnAdminTags($menu='')
     {
+        require_once('cclib/cc-page.php');
         if( !empty($menu) )
         {
             if($menu == 'menu')
@@ -362,6 +365,7 @@ class CCTemplateAdmin
         }
         else
         {
+            require_once('cclib/cc-page.php');
             CCPage::SetTitle(_('Set Banner Image'));
             CCPage::AddForm( $form->GenerateForm() );
         }
@@ -369,6 +373,7 @@ class CCTemplateAdmin
 
     function OnAdminTemplateMenu()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Configure Skins'));
 
         $args[] = array( 'action'    => ccl('admin','templatetags','profiles'),
@@ -388,6 +393,7 @@ class CCTemplateAdmin
 
     function OnNewTags()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_("Add a New Template Tag"));
         $form = new CCNewTemplateTagForm();
         if( empty($_POST['newtemplatetag']) )

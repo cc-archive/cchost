@@ -60,6 +60,6 @@ div#remix_search_controls {
 
 <script src="%url('js/remix_search.js')%" type="text/javascript"></script>
 <script> 
-var pools = <?= cc_query_fmt("t=pools&f=js&nomime=1&noexit=1"); ?>; 
+var pools = %query('t=pools&f=js&nomime=1&noexit=1')%;
 new ccRemixSearch();
 </script>

@@ -78,5 +78,5 @@ define('CC_EVENT_TOPIC_ROW',    'topicrow');
 define('CC_EVENT_FILTER_TOPIC_TEXT',   'filttopict');
 define('CC_EVENT_FILTER_TOPIC_HTML',   'filttopich');
 define('CC_EVENT_FILTER_TOPIC_THREAD', 'filtthread');
-
+define('CC_EVENT_FITLER_REVIEWERS_UNIQUE', 'filterunq' );
 ?>

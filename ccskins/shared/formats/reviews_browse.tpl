@@ -20,7 +20,7 @@ function reviews_browse_dataview()
                CONCAT( '$baseup',  reviewee.user_name, '/', upload_id ) as file_page_url,
                CONCAT( '$baseus',  reviewee.user_name ) as artist_page_url,
                CONCAT( '$baseus',  reviewer.user_name ) as reviewer_page_url,
-               topic_text as _need_topic_text,
+               topic_text as _need_topic_text, topic_left,
                DATE_FORMAT( topic_date, '%a, %b %e, %Y @ %l:%i %p' ) as topic_date_format
         FROM cc_tbl_topics
         JOIN cc_tbl_uploads ups      ON topic_upload = ups.upload_id

@@ -30,23 +30,30 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCCollab',  'OnMapUrls
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCCollab', 'OnFormFields')      , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCCollab', 'OnUploadDone')      , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCCollab',  'OnUploadDelete')    , 'ccextras/cc-collab.inc' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCCollabHV',  'OnUploadRow') );
+CCEvents::AddHandler(CC_EVENT_FILTER_COLLAB_CREDIT, array( 'CCCollabHV',  'OnFilterCollabCredit') );
 
 class CCCollabHV 
 {
-    function OnUploadRow(&$record)
+    function OnFilterCollabCredit(&$records)
     {
-        if( empty($record['upload_extra']['collab']) )
-            return;
+        $c = count($records);
+        $k = array_keys($records);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[ $k[$i] ];
+            if( empty($R['collab_id']) )
+                continue;
 
-        $collab_id = $record['upload_extra']['collab'];
-        require_once('ccextras/cc-collab.inc');
-        $collabs = new CCCollabs();
-        $record['collab'] = $collabs->QueryKeyRow($collab_id);
-        $api = new CCCollab();
-        $record['collab']['users'] = $api->_get_collab_users($collab_id);
-        $record['collab']['base_purl'] = ccl('people');
+            $collab_id = $R['collab_id'];
+            require_once('ccextras/cc-collab.inc');
+            $collabs = new CCCollabs();
+            $R['collab'] = $collabs->QueryKeyRow($collab_id);
+            $api = new CCCollab();
+            $R['collab']['users'] = $api->_get_collab_users($collab_id);
+            $R['collab']['base_purl'] = ccl('people');
+        }
     }
+
 }
 
 ?>

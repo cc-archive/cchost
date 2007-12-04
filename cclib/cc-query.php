@@ -69,6 +69,7 @@ class CCQuery
                         'group_by' => '' );
         $this->where = array();
         $this->args = array();
+        $this->records = array();
     }
 
     function QueryURL()
@@ -93,7 +94,7 @@ class CCQuery
         // ------------------------------------------------------
         // Do the query
         //
-        // This method MAY exit the session... (like with feeds)
+        // This method MAY exit the session... 
         //
         list( $value, $mime ) = $this->Query();
 
@@ -114,6 +115,46 @@ class CCQuery
 
         print($value);
         exit;
+    }
+
+    function Query($args=array())
+    {
+        if( empty($args['cache']) )
+        {
+            $this->_generate_records($args);
+        }
+        else
+        {
+            $cname = cc_temp_dir() . '/query_cache_' . $args['cache'] . '.txt';
+            if( file_exists($cname) )
+            {
+                include($cname);
+                $this->records =& $_cache_rows;
+            }
+            else
+            {
+                $this->_generate_records($args);
+
+                $data = serialize($this->records);
+                $data = str_replace("'","\\'",$data);
+                $text = '<? /* This is a temporary file created by ccHost. It is safe to delete. */ ' .
+                         "\n" . '$_cache_rows = unserialize(\'' . $data . '\'); ?>';
+                $f = fopen($cname,'w+');
+                fwrite($f,$text);
+                fclose($f);
+                chmod($cname,cc_default_file_perms());
+            }
+        }
+
+        return $this->_process_records();
+    }
+
+    function QuerySQL($qargs,$sqlargs)
+    {
+        $this->args = $qargs;
+        $this->sql_p = array_merge($this->sql_p,$sqlargs);
+        $this->_common_query();
+        return $this->_process_records();
     }
 
     function ProcessUriArgs($extra_args = array())
@@ -215,14 +256,11 @@ class CCQuery
         foreach( $keys as $K )
         {
             // I have to believe skipping qstring is the right thing here...
-            if(  in_array( $K, $badargs ) || empty($args[$K]) || is_object($args[$K]) ||
+            if(  in_array( $K, $badargs ) || empty($args[$K]) || !is_string($args[$K]) ||
                 ( array_key_exists($K,$default_args) && ($args[$K] == $default_args[$K]) ) )
             {
                 continue;
             }
-
-            if( !is_string($args[$K]) )
-                continue;
 
             if( !empty($str) )
                 $str .= '&';
@@ -248,7 +286,7 @@ class CCQuery
                     );
     }
 
-    function Query($args=array())
+    function _generate_records($args)
     {
         if( !empty($args) )
             $this->args = $args;
@@ -280,14 +318,7 @@ class CCQuery
 
         $this->sql_p['where'] = join( ' AND ', $this->where );
 
-        return $this->_common_query();
-    }
-
-    function QuerySQL($qargs,$sqlargs)
-    {
-        $this->args = $qargs;
-        $this->sql_p = array_merge($this->sql_p,$sqlargs);
-        return $this->_common_query();
+        $this->_common_query();
     }
 
     function _common_query()
@@ -295,16 +326,15 @@ class CCQuery
         $this->_setup_dataview();
 
         if( empty($this->dead) )
-            $records =& $this->_perform_sql();
-        else
-            $records = array();
+            $this->records =& $this->_perform_sql();
+
 
         // ------------- DUMP RESULTS ---------------------
 
         if( !empty($this->args['dump_query']) && CCUser::IsAdmin() )
         {
             $x[] = $this;
-            $x[] =& $records;
+            $x[] =& $this->records;
             CCDebug::Enable(true);
             CCDebug::PrintVar($x,false);
         }
@@ -312,16 +342,20 @@ class CCQuery
         if( !empty($_REQUEST['dump_rec']) && CCUser::IsAdmin() )
         {
             CCDebug::Enable(true);
-            CCDebug::PrintVar($records[0],false);
+            CCDebug::PrintVar($this->records[0],false);
         }
 
+    }
+
+    function _process_records()
+    {
         if( $this->args['format'] == 'count' )
         {
-            return( array( "[$records]", 'text/plain' ) );
+            return( array( '[' . $this->records . ']', 'text/plain' ) );
         }
         elseif( $this->args['format'] == 'ids' )
         {
-            $text = empty($records) ? '-' : join(';',$records );
+            $text = empty($this->records) ? '-' : join(';',$this->records );
 
             return( array( $text, 'text/plain' ) );
         }
@@ -329,16 +363,13 @@ class CCQuery
         // Do NOT return at this point if records are empty, 
         // an empty feed is still valid
 
-        if( empty($records) )
-            $records = array();
-
-        if( !empty($records) && !empty($this->args['nosort']) && !empty($this->args['ids']) )
+        if( !empty($this->records) && !empty($this->args['nosort']) && !empty($this->args['ids']) )
         {
             $ids = $this->args['ids'];
             $i = 0;
             foreach($ids as $id)
                 $sort_order[$id] = $i++;
-            $this->_resort_records($records,$sort_order,'upload_id');
+            $this->_resort_records($this->records,$sort_order,'upload_id');
         }
 
         switch( $this->args['format'] )
@@ -348,7 +379,7 @@ class CCQuery
                 break;
 
             case 'phps':
-                return array( serialize($records), 'text/plain' );
+                return array( serialize($this->records), 'text/plain' );
 
             default:
             {
@@ -357,13 +388,13 @@ class CCQuery
                 $this->args['queryObj'] = $this;
 
                 CCEvents::Invoke( CC_EVENT_API_QUERY_FORMAT, 
-                                    array( &$records, &$this->args, &$results, &$results_mime ) );
+                                    array( &$this->records, &$this->args, &$results, &$results_mime ) );
 
                 return array( $results, $results_mime );
             }
         } // end switch
 
-        return array( &$records, '' );
+        return array( &$this->records, '' );
     }
 
     function _setup_dataview()
@@ -799,11 +830,10 @@ class CCQuery
         if( empty($fields) )
             return;
 
-        $valid = $this->GetValidSortFields();
+        $valid = $this->args['datasource'] == 'uploads' ? $this->GetValidSortFields() : '';
         $out = array();
 
         $fields = preg_split('/[\s\+,]+/',$fields);
-        $ds = $this->args['datasource'];
         foreach( $fields as $F )
         {
             if( empty($valid[$F][1]) )
@@ -811,7 +841,7 @@ class CCQuery
                 if( preg_match('/^[a-z\.]+((_)[a-z]+)?$/',$F,$m) )
                 {
                     if( empty($m[2]) )
-                        $out[] = $ds . '_' . $F;
+                        $out[] = $this->_make_field($F);
                     else
                         $out[] = $F;
                 }
@@ -858,6 +888,21 @@ class CCQuery
     }
 
 } // end of class CCQuery
+
+
+CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  'cc_tcache_kill' );
+CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    'cc_tcache_kill' );
+CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_tcache_kill' );
+
+/**
+* @private
+*/
+function cc_tcache_kill()
+{
+    $files = glob(cc_temp_dir() . '/query_cache_*.txt');
+    foreach( $files as $file )
+        unlink($file);
+}
 
 
 ?>

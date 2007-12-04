@@ -45,10 +45,29 @@ CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCReview' , 'OnTopicDe
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCReviewFormAPI',  'OnFormFields')      , 'ccextras/cc-review-forms.inc' );
 CCEvents::AddHandler(CC_EVENT_DO_SEARCH,          array( 'CCReviewFormAPI',  'OnDoSearch')        , 'ccextras/cc-review-forms.inc' );
 
-CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,       array( 'CCReviewsHV',  'OnFilterMacros') );
+CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,            array( 'CCReviewsHV',  'OnFilterMacros') );
+CCEvents::AddHandler(CC_EVENT_FITLER_REVIEWERS_UNIQUE,  array( 'CCReviewsHV',  'OnFilterReviewersUnique') );
 
 class CCReviewsHV
 {
+
+    function OnFilterReviewersUnique(&$records)
+    {
+        $c = count($records);
+        $k = array_keys($records);
+        $reviewers = array();
+        $found = 0;
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[ $k[$i] ];
+            if(  count($reviewers) > 6 || in_array($R['topic_user'],$reviewers) )
+            {
+                unset($records[ $k[$i] ]);
+                continue;
+            }
+            $reviewers[] = $R['topic_user'];
+        }
+    }
 
     /**
     * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}

@@ -84,61 +84,6 @@ function cc_get_config($configName)
     return $configs->GetConfig($configName);
 }
 
-/**
-* Return a list of 5 truncated records (the latest uploads) that match a given tag
-*
-* This method return ONLY two colums: file_page_url and upload_name
-*
-* @param string $tag a specific tag to search for
-* @param boolean $cache cache the results
-* @return array $trunrecs An array of 5 truncated records
-*/
-function & cc_quick_list($tags,$cache=1)
-{
-    global $CC_GLOBALS, $CC_CFG_ROOT;
-
-    if( $cache )
-    {
-        $cname = cc_temp_dir() . '/quick_list_' . $tags . '.txt';
-        if( file_exists($cname) )
-        {
-            include($cname);
-            return $rows;
-        }
-    }
-
-    require_once('cclib/cc-query.php');
-    $query = new CCQuery();
-    $q = 'tags=' . $tags . '&dataview=links_short&limit=5&f=php';
-    $args = $query->ProcessAdminArgs($q);
-    list( $rows ) = $query->Query($args);
-    if( $cache && ($CC_CFG_ROOT == CC_GLOBAL_SCOPE) )
-    {
-        $data = serialize($rows);
-        $data = str_replace("'","\\'",$data);
-        $text = '<? /* This is a temporary file created by ccHost. It is safe to delete. */ ' .
-                 "\n" . '$rows = unserialize(\'' . $data . '\'); ?>';
-        $f = fopen($cname,'w+');
-        fwrite($f,$text);
-        fclose($f);
-        chmod($cname,cc_default_file_perms());
-    }
-    return $rows;
-}
-
-CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  'cc_tcache_kill' );
-CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    'cc_tcache_kill' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_tcache_kill' );
-
-/**
-* @private
-*/
-function cc_tcache_kill()
-{
-    $files = glob(cc_temp_dir() . '/quick_list_*.txt');
-    foreach( $files as $file )
-        unlink($file);
-}
 
 function cc_get_config_roots()
 {
@@ -165,12 +110,6 @@ function cc_query_fmt($qstring)
     return $results;
 }
 
-function cc_recent_reviews($limit=5)
-{
-    require_once('ccextras/cc-reviews-table.inc');
-    return CC_recent_reviews_impl($limit);
-}
-
 function cc_recent_playlists()
 {
     require_once('ccextras/cc-playlist.php');
@@ -181,22 +120,6 @@ function cc_hot_playlists()
 {
     require_once('ccextras/cc-playlist.php');
     return CC_hot_playlists_impl();
-}
-
-function & cc_get_details($upload_id,$menu=true)
-{
-    global $CC_GLOBALS;
-    require_once('cclib/cc-upload.php');
-    require_once('cclib/cc-upload-table.php');
-    $uploads =& CCUploads::GetTable();
-    $rec = $uploads->GetRecordFromID($upload_id);
-    $CC_GLOBALS['works_page'] = 1;  // this assumes we're calling 
-    $rec['works_page'] = true;      // in an ajax context (!)
-    if( $menu )
-        $rec['local_menu'] = CCUpload::GetRecordLocalMenu($rec);
-    $recs = array( &$rec );
-    cc_get_remix_history( $recs, 0 );
-    return $rec;
 }
 
 function & cc_get_user_details(&$row)

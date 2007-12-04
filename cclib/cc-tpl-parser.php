@@ -209,6 +209,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? prepend{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? array_unshift(\$A['$1'],'$2'); ?>",
         "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
         "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
+        "/<\? query{$op}{$aoq}{$cp}%/"                    =>   "<?= cc_query_fmt('$1'); ?>",
         "/<\? customize%/"                                =>   "<? \$T->AddCustomizations(); ?>",
         "/<\? return%/"                                   =>   "<? return 'ok'; ?>",
         "/<\? settings{$op}{$ac}{$a}{$cp}%/"              =>   "<? \$A['$2'] = CC_get_config('$1'); ?>",

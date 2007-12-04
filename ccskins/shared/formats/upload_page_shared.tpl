@@ -46,7 +46,7 @@
                  <tr><th>%text(str_collab_project)%:</th><td><a href="%(home-url)%collab/%(#C/collab_id)%">%(#C/collab_name)%</a></td></tr> 
                       <tr><th>%text(str_collab_credit)%:</th><td>
                 %loop(#C/users,U)%
-                    <a href="%(home-url)%people/%(#U/user_name)%">%(#U/user_real_name)%</a> %(#C/credit)% %if_not_last(#U)% <br /> %end_if%
+                    <a href="%(home-url)%people/%(#U/user_name)%">%(#U/user_real_name)%</a> %(#U/collab_user_credit)% %if_not_last(#U)% <br /> %end_if%
                 %end_loop%
                 </td></tr>
             %end_if%
