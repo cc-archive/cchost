@@ -155,7 +155,7 @@ if( $dataview['dataview'] == 'xx' )
                 if( !empty($record) )
                 {
                     $arr = array( &$record );
-                    $this->_record_events($arr,$info);
+                    $this->FilterRecords($arr,$info);
                 }
                 return $record;
             }
@@ -164,7 +164,7 @@ if( $dataview['dataview'] == 'xx' )
             {
                 $records =& CCDatabase::QueryRows($this->sql);
                 if( count($records) > 0 )
-                    $this->_record_events($records,$info);
+                    $this->FilterRecords($records,$info);
                 return $records;        
             }
 
@@ -190,7 +190,7 @@ if( $dataview['dataview'] == 'xx' )
         die('Invalid return type for dataview: ' . $ret_type );
     }
 
-    function _record_events(&$records,&$info)
+    function FilterRecords(&$records,&$info)
     {
         //$info['query'] = $queryObj;
         //$info['dvobj'] = $this;

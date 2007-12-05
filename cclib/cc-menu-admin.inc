@@ -253,7 +253,8 @@ class CCMenuAdmin
             CCMenu::RevertToParent();
             return;
         }
-
+        
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Edit Menus'));
 
         $configs =& CCConfigs::GetTable();
@@ -294,6 +295,7 @@ class CCMenuAdmin
     */
     function AdminGroup()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Edit Menu Groups'));
 
         $configs =& CCConfigs::GetTable();

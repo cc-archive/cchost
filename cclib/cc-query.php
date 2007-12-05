@@ -242,9 +242,10 @@ class CCQuery
         return $this->args;
     }
 
-    function SerializeArgs()
+    function SerializeArgs($args=array())
     {
-        $args =& $this->args;
+        if( empty($args) )
+            $args =& $this->args;
         $keys = array_keys($args);
         $default_args = $this->GetDefaultArgs();
         $str = '';
@@ -401,6 +402,8 @@ class CCQuery
 
     function _setup_dataview()
     {
+        $this->args['dataviewObj'] = new CCDataView();
+
         if( empty($this->args['dataview']) )
         {
             if( $this->args['format'] == 'count' )
@@ -431,8 +434,7 @@ class CCQuery
             }
             else
             {
-                $dv = new CCDataview();
-                $props = $dv->GetDataViewFromTemplate($this->args['template']);
+                $props = $this->args['dataviewObj']->GetDataViewFromTemplate($this->args['template']);
                 $this->args['dataview'] = $props['dataview'];
                 $this->dataview = $props;
             }
@@ -443,17 +445,15 @@ class CCQuery
     {
         if( empty($this->args['dataview']) )
             die('No dataview');
-        $dv = new CCDataView();
+
         if( empty($this->dataview) )
         {
-            $props = $dv->GetDataView($this->args['dataview']);
+            $props = $this->args['dataviewObj']->GetDataView($this->args['dataview']);
             $this->dataview = $props;
         }
         $rettype = empty($this->args['rettype']) ? ($this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS) : $this->args['rettype'];
-        $records =& $dv->Perform( $this->dataview, $this->sql_p, $rettype, $this );
-        $this->sql = $dv->sql;
-        $this->args['dataviewObj'] =& $dv;
-        //CCDebug::PrintVar($this->sql);
+        $records =&  $this->args['dataviewObj']->Perform( $this->dataview, $this->sql_p, $rettype, $this );
+        $this->sql =  $this->args['dataviewObj']->sql;
         return $records;
     }
 

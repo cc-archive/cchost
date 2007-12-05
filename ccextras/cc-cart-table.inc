@@ -46,7 +46,8 @@ class CCCart extends CCTable
         if( $do_joins )
         {
             $juser = $this->AddJoin( new CCUsers(),    'cart_user');
-            $this->AddExtraColumn("DATE_FORMAT($juser.user_registered, '$CC_SQL_DATE') as user_date_format");
+            // magyar pulleeeeze
+            //$this->AddExtraColumn("DATE_FORMAT($juser.user_registered, '$CC_SQL_DATE') as user_date_format");
         }
     }
 
@@ -170,8 +171,6 @@ class CCPlaylistItems extends CCCartItems
         if(  $other_class == 'cccart' || is_subclass_of($other_cctable, 'CCCart') )
             $this->_cart_join = $join;
 
-        if( $other_class  == 'ccuploads' || is_subclass_of($other_cctable, 'CCUploads') )
-            $this->_upload_filter = $other_cctable->SetDefaultFilter(true,true);
         return $join;
     }
 

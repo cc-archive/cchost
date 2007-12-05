@@ -66,6 +66,7 @@ ccReccommendBrowser.prototype = {
         this.currOffset = 0;
         this.getQuery();
         var url = query_url + this.query + '&f=count&datasource=ratings&dataview=count_ratings';
+         $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.fillCount.bind(this) } );
     },
 
@@ -93,7 +94,7 @@ ccReccommendBrowser.prototype = {
     refreshContent: function() {
         this.clearUI();
         var url = query_url + this.query + '&f=html&t=reccby&limit='+this.limit+'&offset='+this.currOffset;
-        // $('q').innerHTML = '<a href="' + url + '">' + url + '</a>';
+         $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.fillContent.bind(this) } );
     },
 

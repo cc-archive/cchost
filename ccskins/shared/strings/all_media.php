@@ -145,6 +145,7 @@ $GLOBALS['str_forum_post'] = _('Post');
 $GLOBALS['str_forum_admin_required'] = _('You must have admin rights to see this forum.');
 $GLOBALS['str_forum_login_required'] = _('You must be logged in to see this forum.');
 $GLOBALS['str_forum_perm_denied'] = _('You do not have proper permissions to see this forum.');
+$GLOBALS['str_forum_topics_by'] = _('Forum posts by %s');
 
 
 $GLOBALS['str_from'] = _('from');

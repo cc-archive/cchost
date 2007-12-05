@@ -106,7 +106,7 @@ $_sql_time = CCDebug::Chronometer($_sql_t);
             if( CCDebug::IsEnabled() )
             {
                 print( "<pre>$sql<br />" . mysql_error() . "</pre>");
-                CCDebug::StackTrace(false);
+                CCDebug::StackTrace(false,true);
             }
             else
             {

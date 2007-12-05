@@ -81,7 +81,7 @@ class CCPageAdmin
 
         // this needs to be done through CCDataview:
 
-        if( empty($paging) || ($paging == 'on') || ($paging='default') )
+        if( !empty($records) && (count($records) > 1) && (empty($paging) || ($paging == 'on') || ($paging='default')) )
         {
             CCPage::AddPagingLinks($dataviewObj);
         }

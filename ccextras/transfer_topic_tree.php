@@ -8,6 +8,15 @@ function fix_topics()
 {
     if( empty($_GET['fix']) )
         return;
+
+    $sql =<<<EOF
+UPDATE `cc_tbl_forum_threads`  SET forum_thread_name = (
+SELECT topic_name
+FROM cc_tbl_topics
+WHERE topic_id = forum_thread_oldest
+)
+EOF;
+
     $rcount = 0;
     $rbcount = 0;
     CCDatabase::Query('UPDATE cc_tbl_topics SET topic_left = 0, topic_right = 0');

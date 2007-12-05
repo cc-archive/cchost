@@ -2,18 +2,17 @@
 [meta]
     type = format
     desc = _('Preview of upload reviews')
-    dataview = review_previews
+    dataview = reviews_upload
     embedded = 1
 [/meta]
 [dataview]
-function review_previews_dataview() 
+function reviews_upload_dataview() 
 {
     $urlp = ccl('people') . '/';
     $turl = ccl('reviews') . '/';
     $user_avatar_col = cc_get_user_avatar_sql();
 
     $sql =<<<EOF
-
 SELECT  topic.topic_id, ((COUNT(parent.topic_id)-1) * 30) AS margin,
         IF( COUNT(parent.topic_id) > 1, 1, 0 ) as is_reply, 
         topic.topic_text as _need_topic_html, 
@@ -31,7 +30,18 @@ ORDER BY (topic.topic_left)  asc
 %limit%
 EOF;
 
+    $sql_count =<<<EOF
+SELECT  COUNT(*)
+FROM cc_tbl_topics AS topic, 
+     cc_tbl_topics AS parent,
+     cc_tbl_user AS user
+%where% AND (topic.topic_user = user_id) AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
+GROUP BY topic.topic_id
+EOF;
+
+
     return array( 'sql' => $sql,
+                  'sql_count' => $sql_count,
                    'e'  => array(
                                   CC_EVENT_FILTER_TOPIC_HTML)
                 );

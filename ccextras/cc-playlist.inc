@@ -323,8 +323,18 @@ class CCPlaylists
             $limit  = empty($_REQUEST['limit']) ? 0 : intval($_REQUEST['limit']);
             $cart_items->SetOffsetAndLimit($offset,$limit);
             $cart_items->SetOrder('cart_item_order','ASC');
+
+            // this is transitional code, not a good idea to cut/paste from here:
+            $purl = ccl('files') . '/';
+            $cart_items->AddExtraColumn( "CONCAT('{$purl}', user_name, '/', upload_id) as file_page_url" );
+            $aurl = ccl('people') . '/';
+            $cart_items->AddExtraColumn( "CONCAT('{$aurl}', user_name) as artist_page_url" );
             $rows = $cart_items->QueryRows($w);
-            $args['records'] =& $uploads->GetRecordsFromRows($rows);
+            $dv = new CCDataView();
+            $info['e'] = array( CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_DOWNLOAD_URL );
+            $args['records'] =& $rows; 
+            $dv->FilterRecords($args['records'],$info);
+
             $args['feed_q'] = url_args( ccl('api','query'), 'f=rss&playlist=' . $playlist_id );
         }
         return $this->_add_menu($args,$playlist_id,$is_popup);
@@ -437,11 +447,16 @@ class CCPlaylists
         return $ret;
     }
 
+    /**
+    * Top level browse playlist(s) - mapped to playlist/browse/{playlist_id}
+    *
+    */
     function BrowsePL($playlist_id='')
     {
+        require_once('cclib/cc-page.php');
+
         $playlist_id = intval(CCUtil::Strip($playlist_id));
         $fulllist = empty($playlist_id) || ($playlist_id < 1);
-        require_once('cclib/cc-page.php');
         if( $fulllist )
         {
             if( !empty($_GET['id']) )
@@ -500,13 +515,16 @@ class CCPlaylists
         CCPage::ShowHeaderFooter( false, false  );
     }
 
+    /**
+    *  Calling from ajax to browse playlists
+    *
+    */
     function Browse($user='')
     {
-        require_once('cclib/cc-page.php');
-
         $where = '1 '; 
 
         $carts = new CCPlaylist(true);
+        $carts->AddExtraColumn("REPLACE(SUBSTR(cart_tags,1,110), ',', ' ') as cart_tags_munged");
 
         if( empty($user) )
         {
@@ -527,6 +545,7 @@ class CCPlaylists
 
         if( empty($_GET['upload_id']) )
         {
+            require_once('cclib/cc-page.php');
             $args = CCPage::AddPagingLinks($carts,$where,20);
         }
         else
@@ -690,20 +709,18 @@ class CCPlaylists
                 break;
 
             case 'html':
+                require_once('cclib/cc-template.php');
                 $template = CCUtil::Strip($_GET['t']);
                 if( empty($template) )
                     $template = 'playlist.xml';
                 else if( strpos( $template, '.xml' ) === false )
                     $template .= '.xml';
                 $macro = CCUtil::Strip($_GET['m']);
-                if( empty($macro) )
+                if( !empty($macro) )
                 {
-                    if( empty($pmacro) )
-                        CCUtil::Send404();
-                    else
-                        $macro = $pmacro;
+                    $macro = '/' . $macro;
                 }
-                $tobj = new CCTemplateMacro($template,$macro);
+                $tobj = new CCSkinMacro($template . $macro);
                 if( empty($tobj) )
                 {
                     print(" $template / $macro not found <br />\n" );

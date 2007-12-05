@@ -494,7 +494,7 @@ EOF;
                 $R['collab_type'] = preg_match( '/(^|,| )remix(,| $)/',$R['upload_extra']['ccud']) ? 'remix' : 'sample';
                 $R['collab_tags'] = $R['collab_type'] . ' ' . preg_replace( '/[, ]+/', ' ', $R['upload_extra']['usertags']);
             }
-            $template = new CCTemplateMacro( 'collab.xml', 'show_collab_files' );
+            $template = new CCSkinMacro( 'collab.xml/show_collab_files' );
             $args['uploads'] = $collab_uploads;
             $args['is_owner'] = $is_owner;
             $args['is_member'] = $is_member;

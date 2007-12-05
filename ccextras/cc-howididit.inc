@@ -115,7 +115,7 @@ class CCHowIDidIt
         $args['record'] = $record;
         $args['howididit_fields'] = $this->_get_fields();
         $args['howididit_info'] = $this->_get_data($record);
-        $template = new CCTemplateMacro( '', 'howididit_detail' );
+        $template = new CCSkinMacro( 'howididit_detail' );
         print( $template->SetAllAndParse($args) );
         exit;
     }

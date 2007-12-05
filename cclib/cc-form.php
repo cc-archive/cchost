@@ -636,7 +636,7 @@ class CCForm
     function GenerateHTML()
     {
         global $CC_GLOBALS;
-        $template = new CCTemplateMacro( '', $this->_template_macro );
+        $template = new CCSkinMacro( $this->_template_macro );
         $this->GenerateForm();
         return( $template->SetAllAndParse($this->_template_vars) );
     }

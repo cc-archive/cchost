@@ -22,6 +22,7 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 require_once('cclib/cc-form.php');
+require_once('cclib/cc-navigator.php');
 
 /**
 * Module for handling admin UI for navigation tabs
@@ -278,6 +279,7 @@ class CCNavigatorAdmin
                 $form = new CCRenameNavTabForm($page_name);
                 if( empty($_POST['renamenavtab']) || !$form->ValidateFields() )
                 {
+                    require_once('cclib/cc-page.php');
                     CCPage::SetTitle(_('Rename Navigator Tabs Set'));
                     CCPage::AddForm( $form->GenerateForm() );
                 }
@@ -336,6 +338,7 @@ class CCNavigatorAdmin
                 $html .= "<p><b><a href=\"$url\">[" . _('Add new tab set') . 
                          "]</a></b></p>";
 
+                require_once('cclib/cc-page.php');
                 CCPage::SetTitle(_("Manage Navigator Tab Sets"));
                 CCPage::AddContent($html);
 
@@ -365,6 +368,7 @@ class CCNavigatorAdmin
 
             case 'edit':
             {
+                require_once('cclib/cc-page.php');
                 CCPage::SetTitle(_("Edit Navigator Tabs:") . " '$page_name'");
                 if( empty($page) )
                     $page = $pages[$page_name];

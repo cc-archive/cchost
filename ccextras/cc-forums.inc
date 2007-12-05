@@ -570,8 +570,19 @@ EOF;
         }
     }
 
-    function User($username)
+    function User($user_name)
     {
+
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=topics_user&datasource=topics&limit=20',array(),false);
+        $r = CCDatabase::QueryRow('SELECT user_real_name, user_id FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'', false);
+        //CCDebug::PrintVar($r);
+        list( $user_real_name, $user_id ) = $r;
+        $args['title'] = array( 'str_forum_topics_by', $user_real_name );
+        $sqlargs['where'] = "topic_user ='$user_id'";
+        $query->QuerySQL($args,$sqlargs);
+        return;
+
         $users =& CCUsers::GetTable();
         $w['user_name'] = $username;
         $user_id = $users->QueryKey($w);

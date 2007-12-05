@@ -68,10 +68,8 @@ class CCReview
 
             if( !empty($upload_id) )
             {
-                $cntwhere['upload_id'] = $upload_id;
                 $uploads =& CCUploads::GetTable();
-                $cnt = $uploads->CountRows($cntwhere);
-                if( !$cnt )
+                if( !$uploads->KeyExists($upload_id) )
                 {
                     CCPage::Prompt(_('Cannot find that upload. It may have been removed by the owner.'));
                     CCUtil::Send404(false);
@@ -139,8 +137,6 @@ class CCReview
 
             // this is so we can display the upload record on the page:
             CCPage::PageArg('topic_upload',$upload_id);
-
-            return;
         }
 
         //
@@ -151,7 +147,7 @@ class CCReview
             if( $upload_id )
             {
                 $url = ccl('feed','rss','reviews',$user_name,$upload_id);
-                $help = '<br />' . sprintf( _('Reviews left for "%s"'), '<br /> ' . CC_strchop($R['upload_name'],16) );
+                $help = '<br />' . sprintf( _('Reviews left for "%s"'), '<br /> ' . CC_strchop($upload_name,16) );
             }
             else
             {

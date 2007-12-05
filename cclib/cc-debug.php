@@ -157,7 +157,7 @@ class CCDebug
     * @see Enable
     * @param bool $template_safe true means you are NOT debugging code that displays HTML
     */
-    function StackTrace($template_safe=false)
+    function StackTrace($template_safe=false,$full=false)
     {
         if( !CCDebug::IsEnabled() )
             return;
@@ -171,6 +171,17 @@ class CCDebug
             $st = _("No stack trace in this vesion of php");
         }
 
+        if( !$full )
+        {
+            $c = count($st);
+            for( $i = 0; $i < $c; $i++ )
+            {
+                if( !empty($st[$i]['args']) )
+                    unset($st[$i]['args']);
+                if( !empty($st[$i]['object']) )
+                    unset($st[$i]['object']);
+            }
+        }
         CCDebug::PrintVar($st,$template_safe);
     }
 
