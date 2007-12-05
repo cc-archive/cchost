@@ -572,61 +572,19 @@ EOF;
 
     function User($user_name)
     {
-
+        list( $user_real_name, $user_id ) = 
+            CCDatabase::QueryRow('SELECT user_real_name, user_id FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'', false);
+        if( empty($user_id) )
+        {
+            CCUtil::Send404();
+            return;
+        }
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=topics_user&datasource=topics&limit=20',array(),false);
-        $r = CCDatabase::QueryRow('SELECT user_real_name, user_id FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'', false);
-        //CCDebug::PrintVar($r);
-        list( $user_real_name, $user_id ) = $r;
         $args['title'] = array( 'str_forum_topics_by', $user_real_name );
         $sqlargs['where'] = "topic_user ='$user_id'";
         $query->QuerySQL($args,$sqlargs);
-        return;
-
-        $users =& CCUsers::GetTable();
-        $w['user_name'] = $username;
-        $user_id = $users->QueryKey($w);
-        if( empty($user_id) )
-            exit; // hack attempt
-        $user_real_name = $users->QueryItemFromKey('user_real_name',$user_id);
-        $topics = new CCTopics();
-        $topics->AddJoin( new CCForum(), 'topic_forum' );
-        $topics->AddJoin( new CCForumThreads(), 'topic_thread' );
-        $mask = CCMenu::GetAccessMask();
-        $where = "topic_thread > 0 && topic_user = $user_id AND forum_read_access & $mask";
-        CCPage::AddPagingLinks( $topics, $where, CC_MAX_USER_TOPICS );
-        $rows = $topics->GetRecords($where);
-
-
-        $topics =& CCTopics::GetTable(); // get a clean table w/o joins
-        $count = count($rows);
-        for( $i = 0; $i< $count; $i++ )
-        {
-            if( empty($rows[$i]['topic_name']) )
-            {
-                $title = $topics->QueryItemFromKey('topic_name', 
-                                                    $rows[$i]['forum_thread_oldest'] );
-                $rows[$i]['topic_name'] = sprintf( _('Reply to: "%s"') , $title ); 
-            }
-        }
-
-        $this->_add_feed_links( '', $username);
-
-        CCPage::PageArg('topics',$rows,'forum_user');
-        CCPage::SetTitle( 'str_forum_posts_by_s', $user_real_name  );
-
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        if( empty($settings['newuserpage']) )
-        {
-            $trail = array();
-            $trail[] = array( 'url' => ccl(),                    'text' => _('Home') );
-            $trail[] = array( 'url' => ccl('people'),            'text' => _('People') );
-            $trail[] = array( 'url' => ccl('people', $username), 'text' => $user_real_name );
-            $trail[] = array( 'url' => '',                       'text' => _('Forum posts') );
-            CCPage::AddBreadCrumbs($trail);
-        }
-
+        $this->_add_feed_links( '', $user_name);
     }
 
 

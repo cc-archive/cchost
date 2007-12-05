@@ -83,7 +83,7 @@ function _t_picks_picks($T,&$A) {
                 $edkeys = array_keys($item['upload_extra']['edpicks']);
                 $editorial = $item['upload_extra']['edpicks'][$edkeys[0]];
                 $_t_ = CC_strchop($editorial['review_text'],40);
-                ?><p><i><?= $_t_ ?><a href="<?= $editorial['review_url'] ?>">(<?= $T->String('str_more') ?>) </a></i></p><?
+                ?><p><i><?= $_t_ ?><a href="<?= $item['file_page_url'] ?>">(<?= $T->String('str_more') ?>) </a></i></p><?
             }
             print '</div>';
         }

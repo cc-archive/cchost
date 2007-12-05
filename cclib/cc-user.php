@@ -159,7 +159,7 @@ class CCUser
     function GetPeopleDir()
     {
         global $CC_GLOBALS;
-        return( empty($CC_GLOBALS['user-upload-root']) ? 'people' : 
+        return( empty($CC_GLOBALS['user-upload-root']) ? 'content' : 
                             $CC_GLOBALS['user-upload-root'] );
     }
 

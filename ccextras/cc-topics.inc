@@ -738,6 +738,7 @@ class CCTopic
         if( empty($translations) )
             $translations =& CCTopicsi18n::GetTable();
 
+        /*
         $tree =& CCTopicTree::GetTable();
         $where['topic_tree_parent'] = $parent_id;
         $rows = $tree->QueryRows($where);
@@ -746,6 +747,7 @@ class CCTopic
         $tree->DeleteWhere($where);
         $topics =& CCTopics::GetTable();
         $topics->DeleteKey($parent_id);
+        */
         $translations->DeleteTranslationsOf($parent_id);
     }
 

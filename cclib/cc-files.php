@@ -229,11 +229,17 @@ class CCPhysicalFile
         $upload_id = CCUtil::StripText($upload_id);
         if( empty($upload_id) || !intval($upload_id) )
             return;
-        require_once('cclib/cc-upload-table.php');
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromKey($upload_id);
-        if( empty($record) )
-            return;
+
+        $record = CCDatabase::QueryRow('SELECT upload_id, upload_name, user_name, upload_contest FROM cc_tbl_uploads JOIN cc_tbl_user ' .
+                                                      'ON upload_user = user_id WHERE upload_id = ' . $upload_id);
+        $record['file_page_url'] = ccl('files',$record['user_name'],$upload_id);
+
+        $dv = new CCDataView();
+        $e = array( CC_EVENT_FILTER_FILES );
+        $recs = array( &$record );
+        $dv->FilterRecords( $recs, $e );
+
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle( 'str_files_manage' );
 
         $args['files'] = &$record['files'];

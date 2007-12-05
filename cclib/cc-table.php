@@ -356,6 +356,30 @@ class CCTable
     }
 
     /**
+    * Returns an array of rows given keys (aka 'id')
+    *
+    * @param array $key array of keys to look up
+    * @param boolean $clean Set to true if keys came from URL and need 'cleaning'
+    * @return array $rows Array of raw database rows
+    */
+    function & QueryRowsFromKeys($keys,$clean=true)
+    {
+        if( empty($keys) )
+        {
+            $a = array();
+            return $a;
+        }
+
+        if( $clean )
+            $keys = CCUtil::CleanNumbers($keys);
+
+        $where = '(' . $this->_key_field . ' IN (' . join(',',$keys) . '))';
+        $rows =& $this->QueryRows($where);
+
+        return $rows;
+    }
+
+    /**
     * Return full records for a given where statement
     *
     * Param $where can be either a SQL WHERE clause or an array of

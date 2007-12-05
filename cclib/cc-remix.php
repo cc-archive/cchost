@@ -51,6 +51,7 @@ class CCRemix
         $uploads =& CCUploads::GetTable();
         $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
         $msg = sprintf(_("Editing Remixes for '%s'"),$name);
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle($msg);
 
         $form = new CCEditRemixesForm($upload_id);
@@ -162,11 +163,13 @@ class CCRemix
                 $link2 = '</a>';
                 $prompt = sprintf(_("Remix %s succeeded (click %shere%s to see the results)."),
                     $msg, $link1, $link2);
+                require_once('cclib/cc-page.php');
                 CCPage::Prompt($prompt);
                 return(true);
             }
         }
 
+        require_once('cclib/cc-page.php');
         CCPage::AddForm( $form->GenerateForm() );
 
         return( false );
@@ -210,7 +213,21 @@ class CCRemix
             // checked off some remix sources
             //
             $remix_check_boxes = array_keys($_POST[$field]);
-            $remix_sources = $table->GetRecordsFromKeys($remix_check_boxes,true);
+            if( $field == 'pool_sources' )
+            {
+                $remix_sources = $table->QueryRowsFromKeys($remix_check_boxes,true);
+            }
+            else
+            {
+                $sources_set = join(',',$remix_check_boxes);
+                $sql =<<<EOF
+                SELECT upload_id, user_real_name, user_name, upload_name, upload_user, upload_contest, upload_tags
+                FROM cc_tbl_uploads
+                JOIN cc_tbl_user ON upload_user = user_id
+                WHERE upload_id IN ({$sources_set})
+EOF;
+                $remix_sources = CCDatabase::QueryRows($sql);
+            }
             if( !empty($remix_sources) )
             {
                 $form->SetTemplateVar( $field, $remix_sources );

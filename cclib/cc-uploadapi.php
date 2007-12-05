@@ -45,24 +45,34 @@ class CCUploadAPI
     function DeleteUpload($upload_id)
     {
         require_once('cclib/cc-sync.php');
-        require_once('cclib/cc-remix-tree.php');
         require_once('cclib/cc-tags.inc');
 
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);    
+        $sql =<<<EOF
+            SELECT upload_id, upload_extra, upload_contest, user_name, upload_name, upload_tags, upload_user
+            FROM cc_tbl_uploads 
+            JOIN cc_tbl_user ON upload_user = user_id
+            WHERE upload_id = {$upload_id}
+EOF;
+        $record = CCDatabase::QueryRow($sql);
+        $dv = new CCDataView();
+        $filters = array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES, );
+        $recs = array( &$record );
+        $dv->FilterRecords($recs,$filters);
 
-        // we get the tree so for sync'ing later
+        // we have to get these now, after the ::Inovke, they'll be gone
 
-        $remix_sources =& CCRemixSources::GetTable();
-        $parents = $remix_sources->GetSources($record,false);
-        if( !empty($parents) )
-            $record['remix_parents'] = $parents;
-        $remixes =& CCRemixes::GetTable();
-        $children = $remixes->GetRemixes($record,false);
-        if( !empty($children) )
-            $record['remix_children'] = $children;
-        
-        CCEvents::Invoke(CC_EVENT_DELETE_UPLOAD, array( &$record ));
+        $sql =<<<EOF
+    SELECT 
+        IF( tree_child = {$upload_id}, tree_parent,        IF( tree_parent = {$upload_id}, tree_child, 0 ) )        as upload_id,
+        IF( tree_child = {$upload_id}, parent.upload_user, IF( tree_parent = {$upload_id}, child.upload_user, 0 ) ) as upload_user
+    FROM cc_tbl_tree 
+    JOIN cc_tbl_uploads as child  ON tree_child  = child.upload_id
+    JOIN cc_tbl_uploads as parent ON tree_parent = parent.upload_id
+    WHERE tree_parent = {$upload_id} OR tree_child = {$upload_id}
+EOF;
+        $record['tree_ids'] = CCDatabase::QueryRows($sql);
+
+        CCEvents::Invoke(CC_EVENT_DELETE_UPLOAD, $recs );
 
         $relative_dir = $record['upload_extra']['relative_dir'];
         $files =& CCFiles::GetTable();
@@ -76,6 +86,7 @@ class CCUploadAPI
         }
         $where = array();
         $where['upload_id'] = $upload_id;
+        $uploads =& CCUploads::GetTable();
         $uploads->DeleteWhere($where);
 
         $tags =& CCTags::GetTable();
@@ -102,8 +113,7 @@ class CCUploadAPI
         // info, user and contst fields, etc.) will work properly.
         //
         $uploads =& CCUploads::GetTable();
-        $uploads->FakeJoin($upload_args); 
-
+        //$uploads->FakeJoin($upload_args); 
         // We need to get an upload_id so that paths works
         // (like the song page for the CC License ID3 tag)
         //
@@ -681,9 +691,17 @@ class CCUploadAPI
         // Just get the record again with the new 'files' 
         // array filled out (yes, heavy weight but safe)
         //
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);
-
+        $sql =<<<EOF
+            SELECT upload_id, upload_tags, upload_extra, user_name, user_id, upload_contest
+                FROM cc_tbl_uploads
+                JOIN cc_tbl_user ON upload_user = user_id
+                WHERE upload_id = {$upload_id}
+EOF;
+        $record = CCDatabase::QueryRow($sql);
+        $dv = new CCDataView();
+        $filters = array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES );
+        $records = array( &$record );
+        $dv->FilterRecords($records,$filters);
 
         $old_tags = $record['upload_tags'];
 
@@ -712,6 +730,7 @@ class CCUploadAPI
 
         // All we need to update is the one field
         //
+        $uploads =& CCUploads::GetTable();
         $db_args = array();
         $db_args['upload_id']    = $record['upload_id'];
         $db_args['upload_tags']  = ',' . $record['upload_tags'] . ','; // hmmm
@@ -760,7 +779,7 @@ class CCUploadAPI
         // relates to the format. (hey, don't be so quick to judge)
         // since shared hosting environments are unlikely to allow
         // direct manipulation of files in /tmp we move the file
-        // to a temp location (root of /people) with a unique name
+        // to a temp location with a unique name
         // 
         // if the upload worked then a rename() above will move
         // the temp file out of people. if the upload fails, 
@@ -773,7 +792,7 @@ class CCUploadAPI
             return;
         
         global $CC_GLOBALS;
-        $upload_root = CCUser::GetPeopleDir();
+        $upload_root = cc_temp_dir();
         CCUtil::MakeSubdirs($upload_root);
         $upload_root = realpath($upload_root);
         if( preg_match('/\.([^\.]+)$/',$new_name,$m) )

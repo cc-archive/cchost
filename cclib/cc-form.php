@@ -1701,6 +1701,7 @@ END;
     */
     function DisableSubmitOnInit()
     {
+        require_once('cclib/cc-page.php');
         CCPage::AddScriptBlock( 'util.php/disable_submit_button', true ); 
     }
 
@@ -2324,6 +2325,7 @@ class CCUploadForm extends CCForm
     */
     function DoSubmitMessage()
     {
+        require_once('cclib/cc-page.php');
         $this->AddTemplateVars(array('hide_on_submit' => true));
         CCPage::AddScriptBlock( 'hide_upload_form', true ); 
     }

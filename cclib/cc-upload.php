@@ -52,6 +52,7 @@ class CCUpload
         if( empty($record) )
             return;
         $name = $record['upload_name'];
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(sprintf(_("Administrator Functions for '%s'"), $name));
         require_once('cclib/cc-upload-forms.php');
         $form = new CCAdminUploadForm($record);
@@ -91,6 +92,7 @@ class CCUpload
     {
         $this->CheckFileAccess(CCUser::CurrentUser(),$upload_id);
         $uploads =& CCUploads::GetTable();
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle('str_file_deleting');
         if( empty($_POST['confirmdelete']) )
         {

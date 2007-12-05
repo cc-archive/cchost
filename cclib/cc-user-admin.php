@@ -246,6 +246,7 @@ class CCUserAdmin
             $activity_ip = url_args( ccl('activity'), 'ip=' . $ip );
 
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(sprintf(_("Manage User Account for %s"), $username ));
 
         switch( $cmd )

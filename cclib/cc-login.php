@@ -344,6 +344,7 @@ class CCLogin
     {
         global $CC_GLOBALS;
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_("Create A New Account"));
         $form = new CCNewUserForm();
         $form->SetHelpText(_('This site requires cookies to be enabled in your browser'));
@@ -430,6 +431,7 @@ class CCLogin
     {
         global $CC_GLOBALS;
 
+        require_once('cclib/cc-page.php');
         cc_setcookie(CC_USER_COOKIE,'',time());
         unset($_COOKIE[CC_USER_COOKIE]);
         CCPage::Prompt(_('You are now logged out'));
@@ -465,6 +467,7 @@ class CCLogin
             }
 
             CCEvents::Invoke(CC_EVENT_LOGIN_FORM,array(&$form));
+            require_once('cclib/cc-page.php');
             CCPage::SetTitle('str_log_in');
             CCPage::AddForm( $form->GenerateForm() );
             $ok = false;
@@ -496,6 +499,7 @@ class CCLogin
     */
     function LostPassword()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle('str_login_recover_lost_password');
         $form = new CCLostPasswordForm();
         if( empty($_POST['lostpassword']) || !$form->ValidateFields() )

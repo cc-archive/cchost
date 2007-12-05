@@ -155,6 +155,7 @@ class CCQuery
 
         $this->sql_p = array_merge($this->sql_p,$sqlargs);
         $this->_gen_limit();
+        $this->_gen_sort();
         $this->_common_query();
         return $this->_process_records();
     }
@@ -330,7 +331,6 @@ class CCQuery
 
         if( empty($this->dead) )
             $this->records =& $this->_perform_sql();
-
 
         // ------------- DUMP RESULTS ---------------------
 
@@ -576,15 +576,13 @@ class CCQuery
 
     function _gen_remixesof()
     {
-        $users =& CCUsers::GetTable();
-        $where['user_name'] = $this->args['remixesof'];
-        $user_id = $users->QueryKey($where);
+        $user_id = CCUser::IDFromName($this->args['remixesof']);
         if( empty($user_id) )
         {
             $this->dead = true;
             return;
         }
-        $sql = "SELECT tree_child FROM cc_tbl_tree JOIN cc_tbl_uploads ON tree_parent = upload_id WHERE upload_id = " . $user_id;
+        $sql = "SELECT tree_child FROM cc_tbl_tree JOIN cc_tbl_uploads ON tree_parent = upload_id WHERE upload_user = " . $user_id;
         $ids = CCDatabase::QueryItems($sql);
         if( empty($ids) )
         {

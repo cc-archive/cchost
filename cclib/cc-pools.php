@@ -430,7 +430,8 @@ class CCPool
                 $items = $pool_results;
             }
         }
-
+    
+        require_once('cclib/cc-template.php');
         $template = new CCSkinMacro( CCUtil::Strip($_GET['t']) );
         $args['records'] =& $items;
         $template->SetAllAndPrint($args);

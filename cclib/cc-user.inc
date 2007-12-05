@@ -299,6 +299,7 @@ class CCUserAPI
         else
             $upload_dir = $CC_GLOBALS['avatar-dir'];
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle("str_prof_edit_your_settings");
         $id    = CCUser::IDFromName($username);
         $form  = new CCUserProfileForm($id, $upload_dir );
@@ -363,12 +364,14 @@ class CCUserAPI
     */
     function SaveProfile()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle("str_edit_your_settings");
         CCPage::Prompt("str_changes_were_saved");
     }
 
     function ListRecords($sql_where = '')
     {
+        require_once('cclib/cc-page.php');
         $users = new CCUsers(); // getting a new one so we can safely do the join
         if( empty($sql_where) )
         {
@@ -388,6 +391,7 @@ class CCUserAPI
     function _build_bread_crumb_trail($username,$tagfilter)
     {
         require_once('cclib/cc-tags.php');
+        require_once('cclib/cc-page.php');
 
         $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
         $trail[] = array( 'url' => ccl('people'), 'text' => _('People') );
@@ -401,7 +405,6 @@ class CCUserAPI
 
                 if( !empty($tagfilter) )
                 {
-  //                $trail[] = array( 'url' => ccl('people',$username,$tagfilter), 'text' => $tagfilter );
                     $trail[] = array( 'url' => '', 'text' => '');
                 }
             }
@@ -436,6 +439,7 @@ class CCUserAPI
 
     function BrowseUsers()
     {
+        require_once('cclib/cc-page.php');
         $users = new CCUsers();
 
         $alpha = '';
@@ -626,13 +630,15 @@ END;
         }
         else
         {
+            if( empty($record['user_real_name']) )
+            {
+                list( $record['user_name'], $record['user_real_name'] ) =
+                    CCDatabase::QueryRow('SELECT user_name, user_real_name FROM cc_tbl_user WHERE user_id = ' . $record['upload_user'], false);
+            }
             $patterns['%artist%']       = $record['user_real_name'];
             $patterns['%login%']        = $record['user_name'];
 
-            if( !empty($record['artist_page_url']) )
-                $patterns['%artist_page%']   = $record['artist_page_url'];
-            else
-                $patterns['%artist_page%'] = '';
+            $patterns['%artist_page%'] = ccl( 'people', $record['user_name'] );
         }
     }
 

@@ -341,10 +341,15 @@ class CCNotifyAPI
     */
     function OnUploadDone($upload_id,$op,&$parents)
     {
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);
+        $urlf = ccl('files') . '/';
 
-        $uploader = $record['upload_user'];
+        $sql =<<<EOF
+        SELECT upload_user, user_real_name, CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url, upload_name
+            FROM cc_tbl_uploads 
+            JOIN cc_tbl_user ON upload_user = user_id
+            WHERE upload_id = {$upload_id}
+EOF;
+        list( $uploader, $user_real_name, $file_page_url, $upload_name ) = CCDatabase::QueryRow($sql,false);
 
         // people who want get notified when this user
         // has uploaded anything:
@@ -360,7 +365,7 @@ class CCNotifyAPI
             $sampled_users = array();
             for( $i = 0; $i < $count; $i++ )
             {
-                $sampled_users[] = $parents[$i]['user_id'];
+                $sampled_users[] = $parents[$i]['upload_user'];
             }
 
             if( $sampled_users )
@@ -397,14 +402,14 @@ class CCNotifyAPI
         $ttags = $configs->GetConfig('ttag');
         $site_name = $ttags['site-title'];
         
-        $subject = sprintf(_('Upload by %s'),$record['user_real_name']);
+        $subject = sprintf(_('Upload by %s'),$user_real_name);
         $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 
         _('This is a notification that %s has just uploaded new material to %s')
         . "\n\n\"%s\"\n\n%s\n";
-        $body = sprintf($body, $record['user_real_name'],
+        $body = sprintf($body, $user_real_name,
                                $ttags['site-title'],
-                               $record['upload_name'],
-                               $record['file_page_url'] );
+                               $upload_name,
+                               $file_page_url);
 
         if( $parents )
         {

@@ -56,17 +56,9 @@ class CCSync
     {
         $upload_ids = array();
         $user_ids[] = $record['upload_user'];
-        if( !empty($record['remix_children']) )
+        if( !empty($record['tree_ids']) )
         {
-            foreach( $record['remix_children'] as $R )
-            {
-                $upload_ids[] = $R['upload_id'];
-                $user_ids[] = $R['upload_user'];
-            }
-        }
-        if( !empty($record['remix_parents']) )
-        {
-            foreach( $record['remix_parents'] as $R ) 
+            foreach( $record['tree_ids'] as $R )
             {
                 $upload_ids[] = $R['upload_id'];
                 $user_ids[] = $R['upload_user'];
@@ -74,17 +66,19 @@ class CCSync
         }
         $upload_ids = array_unique($upload_ids);
         $user_ids   = array_unique($user_ids);
+        $upload_id = $record['upload_id'];
 
         // Update the internal counters for any former parent,
         // child of the former upload...
 
-        $queries = array();
-        foreach( $upload_ids as $upload_id )
+        if( !empty($upload_ids) )
         {
+            $queries = array();
+            $str_ids = join(',',$upload_ids);
             $sql =<<<END
                 SELECT COUNT(*) as upload_num_remixes, tree_parent as upload_id
                    FROM cc_tbl_tree
-                   WHERE tree_parent = '$upload_id'
+                   WHERE tree_parent IN ({$str_ids})
                    GROUP BY tree_parent
 END;
 
@@ -94,7 +88,7 @@ END;
             $sql =<<<END
                 SELECT COUNT(*) as upload_num_sources, tree_child as upload_id
                    FROM cc_tbl_tree
-                   WHERE tree_child = '$upload_id'
+                   WHERE tree_child IN ({$str_ids})
                    GROUP BY tree_child
 END;
 
@@ -105,15 +99,15 @@ END;
             $sql =<<<END
                 SELECT COUNT(*) as upload_num_pool_sources, pool_tree_child as upload_id
                    FROM cc_tbl_pool_tree
-                   WHERE pool_tree_child = '$upload_id'
+                   WHERE pool_tree_child IN ({$str_ids})
                    GROUP BY pool_tree_child
 END;
             $queries[] = array( $upload_id,
                                 'upload_num_pool_sources',
                                 $sql );
+        
+            CCSync::_update_sqls($queries);
         }
-
-        CCSync::_update_sqls($queries);
 
         // Update the internal artists' counters for the
         // owner of the former upload as well as the owners
@@ -122,6 +116,8 @@ END;
 
         foreach( $user_ids as $user_id )
             CCSync::User(0,$user_id);
+
+
     }
 
     /**

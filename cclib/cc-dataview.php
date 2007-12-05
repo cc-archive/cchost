@@ -120,7 +120,7 @@ class CCDataView
         foreach( array( array( 'JOIN', 'joins' ),
                         array( 'ORDER BY', 'order' ),
                         array( 'LIMIT' , 'limit' ),
-                        array( '' , 'columns' ),
+                        array( ',' , 'columns' ),
                         array( 'GROUP BY', 'group_by' ),
                         array( 'WHERE', 'where') ,
                         ) as $f )
@@ -155,7 +155,7 @@ if( $dataview['dataview'] == 'xx' )
                 if( !empty($record) )
                 {
                     $arr = array( &$record );
-                    $this->FilterRecords($arr,$info);
+                    $this->FilterRecords($arr,$info['e']);
                 }
                 return $record;
             }
@@ -164,7 +164,7 @@ if( $dataview['dataview'] == 'xx' )
             {
                 $records =& CCDatabase::QueryRows($this->sql);
                 if( count($records) > 0 )
-                    $this->FilterRecords($records,$info);
+                    $this->FilterRecords($records,$info['e']);
                 return $records;        
             }
 
@@ -190,8 +190,9 @@ if( $dataview['dataview'] == 'xx' )
         die('Invalid return type for dataview: ' . $ret_type );
     }
 
-    function FilterRecords(&$records,&$info)
+    function FilterRecords(&$records,$filters)
     {
+        $info['e'] = $filters;
         //$info['query'] = $queryObj;
         //$info['dvobj'] = $this;
         while( count($info['e']) )
@@ -202,6 +203,7 @@ if( $dataview['dataview'] == 'xx' )
             if( in_array( $e, $info['e'] ) )
                 $info['e'] = array_diff( $info['e'], array( $e ) );
         }
+        return $info['e'];
     }
 
     function MakeTagFilter( $tags, $type='all', $tagfield='upload_tags' )

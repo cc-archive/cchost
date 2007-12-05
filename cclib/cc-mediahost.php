@@ -98,6 +98,7 @@ class CCMediaHost
 
         if( empty($username) )
         {
+            require_once('cclib/cc-page.php');
             CCPage::SetTitle('str_file_browse_uploads');
             $args = $query->ProcessAdminArgs(array('title' => _('Latest Files')));
             $query->Query($args); 
@@ -114,6 +115,7 @@ class CCMediaHost
                 if( !CCUser::IsAdmin() )
                     $uploads->SetDefaultFilter(true);
 
+                require_once('cclib/cc-page.php');
                 if( empty($name) )
                 {
                     CCPage::SetTitle('str_file_unknown');
@@ -149,6 +151,7 @@ class CCMediaHost
     */
     function SubmitOriginal($page_title, $tags, $form_help, $username='', $etc='')
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle($page_title);
         if( empty($username) )
         {
@@ -180,9 +183,7 @@ class CCMediaHost
 
                 if( $upload_id )
                 {
-                    $uploads =& CCUploads::GetTable();
-                    $record = $uploads->GetRecordFromID($upload_id);
-                    $url = $this->_get_file_page_url($record);
+                    $url = ccl('files',$username,$upload_id);
                     CCPage::Prompt(sprintf(_("Upload succeeded. Click %s to see results."),  "<a href=\"$url\">" . _('here') . "</a>"));
                     CCPage::Prompt(_("This upload is <b>NOT</b> entered in any contest."));
                     return;
@@ -339,6 +340,7 @@ class CCMediaHost
     */
     function _get_file_page_url(&$record)
     {
+        CCDebug::StackTrace();
         //return( ccc($record['upload_config'],'files',$record['user_name'],$record['upload_id'])  );
         return( ccl('files',$record['user_name'],$record['upload_id'])  );
     }
@@ -417,6 +419,8 @@ class CCMediaHost
         else
         {
             $parent = $record['remix_sources'][0];
+            if( empty($parent['user_real_name']) )
+                $parent['user_real_name'] =CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_id = ' . $parent['upload_user']);
             $patterns['%source_title%'] = $parent['upload_name'];
             $patterns['%source_artist%'] = $parent['user_real_name'];
             if( empty($mask) )
@@ -430,7 +434,11 @@ class CCMediaHost
             $patterns['%url%'] = $record['download_url'];
 
         if( !empty($record['upload_id']) )
-            $patterns['%song_page%'] = $this->_get_file_page_url($record);
+        {
+            if( empty($record['user_name']) )
+                $record['user_name'] = CCUser::GetUserName($record['upload_user']);
+            $patterns['%song_page%'] = ccl('files',$record['user_name'],$record['upload_id']);
+        }
 
         if( !empty($file['file_id']) )
             $patterns['%unique_id%'] = $file['file_id'];
