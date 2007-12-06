@@ -2218,4 +2218,8 @@ class CCUploadForm extends CCForm
     }
 }
 
+class CCGenericForm extends CCForm
+{
+}
+
 ?>

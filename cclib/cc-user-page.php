@@ -56,35 +56,23 @@ class CCUserPage
             return;
         }
 
-        require_once('cclib/cc-page.php');
-        $pages = $configs->GetConfig('tab_pages');
-        // let admin's override the coded behavoir 
-        // if they created a 'person' subtab use that...
-        if( empty($pages['person']) )
+        $originalTab = $tab;
+        $tabs = $this->_get_tabs($username,$tab);
+        $tagfilter = '';
+        CCPage::PageArg('sub_nav_tabs',$tabs);
+        if( empty($tabs['tabs'][$originalTab]) )
         {
-            // no admin tab 
-            $originalTab = $tab;
-            $tabs = $this->_get_tabs($username,$tab);
-            $tagfilter = '';
-            CCPage::PageArg('sub_nav_tabs',$tabs);
-            if( empty($tabs['tabs'][$originalTab]) )
-            {
-                // HACK
-                // for legacy reasons, we treat this like an upload tag query
-                $tagfilter = $originalTab; 
-            }
-            $cb_tabs = $tabs['tabs'][$tab];
-            if( !empty($cb_tabs['user_cb_mod']) )
-                require_once($cb_tabs['user_cb_mod']);
-            if( is_array($cb_tabs['user_cb']) && is_string($cb_tabs['user_cb'][0]) )
-                $cb_tabs['user_cb'][0] = new $cb_tabs['user_cb'][0]();
+            // HACK
+            // for legacy reasons, we treat this like an upload tag query
+            $tagfilter = $originalTab; 
+        }
+        $cb_tabs = $tabs['tabs'][$tab];
+        if( !empty($cb_tabs['user_cb_mod']) )
+            require_once($cb_tabs['user_cb_mod']);
+        if( is_array($cb_tabs['user_cb']) && is_string($cb_tabs['user_cb'][0]) )
+            $cb_tabs['user_cb'][0] = new $cb_tabs['user_cb'][0]();
 
-            call_user_func_array( $cb_tabs['user_cb'], array( $username, $tagfilter ) );
-        }
-        else
-        {
-            CCPage::PageArg('sub_nav_tabs',$pages['person'] );
-        }
+        call_user_func_array( $cb_tabs['user_cb'], array( $username, $tagfilter ) );
 
         $this->_setup_fplay(null,$username);
     }
@@ -171,6 +159,9 @@ class CCUserPage
             $K = $keys[$i];
             $tabs[$K]['tags'] = str_replace('%user_name%',$user,$tabs[$K]['tags']);
         }
+
+        if( empty($default_tab_name) && !empty($_COOKIE['default_user_tab']) )
+            $default_tab_name = $_COOKIE['default_user_tab'];
 
         require_once('cclib/cc-navigator.php');
         $navapi = new CCNavigator();

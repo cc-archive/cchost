@@ -31,6 +31,11 @@ class CCRecommends
 {
     function OnUserProfileTabs( &$tabs, &$record )
     {
+        if( empty($record['user_id']) )
+        {
+            $tabs['recommends'] = 'Recommends';
+            return;
+        }
         require_once('cclib/cc-ratings.php');
         $ratings =& CCRatings::GetTable();
         $w = "(ratings_user = {$record['user_id']}) AND (ratings_score > 400)";

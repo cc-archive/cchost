@@ -55,6 +55,12 @@ class CCForums
 {
     function OnUserProfileTabs( &$tabs, &$record )
     {
+        if( empty($record['user_id']) )
+        {
+            $tabs['topics'] = 'Topics';
+            return;
+        }
+
         if( empty($record['user_num_posts']) )
             return;
 
