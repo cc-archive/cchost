@@ -51,7 +51,7 @@ function _generator_cc_format($form, $fieldname, $value, $class )
 
     $url = ccl('format','preview') . '/';
     $html = 
-        '<div class="cc_box" style="display:none" id="format_preview_' . $fieldname . '">
+        '<div class="cc_box" style="display:none;width:100%;" id="format_preview_' . $fieldname . '">
             <h3>    <input type="button" onclick="cc_hide_preview(\'' . $fieldname . '\')" value="x" class="cc_close_preview" />
 ' . _('Preview') . ':</h3>
         <div class="cc_format_preview" id="format_inner_preview_' . $fieldname . '"></div>
