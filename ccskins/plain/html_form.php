@@ -65,7 +65,9 @@ function _t_html_form_submit_forms($T,&$A)
         ?><div  class="cc_submit_forms box"><?
 
         if ( !empty($SI['logo'])) 
+        {
             ?><img  src="<?= $T->URL($SI['logo']) ?>" /><?
+        }
 
         ?><h2 ><?= $T->String($SI['text']) ?></h2>
         <div  class="cc_submit_form_help"><?= $T->String($SI['help']) ?></div>

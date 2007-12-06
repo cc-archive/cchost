@@ -145,6 +145,7 @@ CCEvents::PerformAction();
 *  Show the resulting page
 */
 CCDebug::Chronometer($_p);
+require_once('cclib/cc-page.php');
 CCPage::Show();           
 
 /*

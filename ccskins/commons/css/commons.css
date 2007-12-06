@@ -117,6 +117,8 @@ h2 {
 	height: 30px;
 }
 
+ul#tabs a { font-weight: normal; }
+
 ul#tabs li { float: left; height: 2.4em;  margin: 0.2em 2px 0 2px; background: url("../images/tab-bg.png") repeat-x bottom left #f0f4f1; padding:0px;}
 ul#tabs li.selected_tab { margin-top: 0; font-weight: bold; height: 2.7em; }
 
@@ -138,6 +140,8 @@ ul#tabs li.selected_tab a span { background: url("../images/tab-left-lit.png") n
 	list-style-type: none;
 	line-height: 145%;
 }
+
+ul#sub_tabs a { font-weight: normal; }
 
 ul#sub_tabs li { float: left; height: 2.4em;  margin: 0.2em 2px 0 2px; background: url("../images/tab-bg.png") repeat-x bottom left #f0f4f1; }
 ul#sub_tabs li.selected_tab { margin-top: 0; font-weight: bold; height: 2.7em; }
@@ -188,6 +192,7 @@ ul#sub_tabs li.selected_tab a span { border-bottom: 0px; background: url("../ima
 
 .menu_group ul li a, a.more_menu_link {
 	text-decoration: none;
+	font-weight: normal;
 }
 
 a.more_menu_link {
@@ -229,3 +234,14 @@ a.more_menu_link {
 	margin: 12px;
 }
 
+a.cc_tag_link, #taglinks a {
+	font-weight: normal;
+	font-variant: small-caps;
+}
+
+#remix_info a.user_name {
+	font-weight: normal;
+}
+.info_box_clear {
+	clear: both;
+}

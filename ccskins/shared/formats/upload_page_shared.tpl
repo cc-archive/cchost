@@ -90,7 +90,7 @@
                 <a href="%(#tag/tagurl)%">%(#tag/tag)%</a>%if_not_last(#tag)%, %end_if%
             %end_loop%
             </div>
-
+            <br class="info_box_clear" />
         </div><!-- info box -->
 
         %if_not_null(#R/file_macros)%
@@ -136,8 +136,8 @@
             <div style="overflow: scroll;height:300px;">
         %end_if%
         %loop(#R/remix_parents,P)%
-            <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> <span>%text(str_by)%</span>
-                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+            <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
+                 <a href="%(#P/artist_page_url)%" class="user_name">%(#P/user_real_name)%</a></div>
         %end_loop%
         %if_not_null(#R/parents_overflow)%
             </div>

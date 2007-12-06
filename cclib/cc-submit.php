@@ -245,8 +245,75 @@ class CCSubmit
         $form_types = array();
         CCEvents::Invoke( CC_EVENT_SUBMIT_FORM_TYPES, array( &$form_types ) );
 
-        $form_types = $this->_sort_form_types($form_types,$honor_enabled);
+        if( $form_types )
+            $form_types = $this->_sort_form_types($form_types,$honor_enabled);
+        else
+            $form_types = $this->_default_form_types();
 
+        return $form_types;
+    }
+
+    function _default_form_types()
+    {
+        $form_types = 
+            array (
+                'remix' => array (
+                    'enabled' => 1,
+                    'submit_type' => 'str_submit_remix',
+                    'text' => 'str_submit_a_remix',
+                    'help' => 'str_submit_remix_help',
+                    'tags' => array (
+                        0 => 'media',
+                        1 => 'remix',
+                        ),
+                    'suggested_tags' => '',
+                    'weight' => 1,
+                    'form_help' => 'str_submit_remix_line',
+                    'isremix' => 1,
+                    'media_types' => 'audio',
+                    'action' => '',
+                    'logo' => 'ccskins/shared/images/submit-remix.gif',
+                    'type_key' => 'remix',
+                    ),
+                'samples' => array (
+                    'enabled' => 1,
+                    'submit_type' => 'str_submit_sample',
+                    'text' => 'str_submit_samples',
+                    'help' => 'str_submit_samples_help',
+                    'tags' => array (
+                        0 => 'sample',
+                        1 => 'media',
+                        ),
+                    'suggested_tags' => '',
+                    'weight' => 15,
+                    'form_help' => 'str_submit_samples_help_line',
+                    'isremix' => '',
+                    'media_types' => 'audio,archive',
+                    'action' => '',
+                    'logo' => 'ccskins/shared/images/submit-sample.gif',
+                    'type_key' => 'samples',
+                    ),
+                'fullmix' => array (
+                    'enabled' => '1',
+                    'submit_type' => 'str_submit_original',
+                    'text' => 'str_submit_an_original',
+                    'help' => 'str_submit_original_help',
+                    'tags' => array (
+                        0 => 'media',
+                        1 => 'original',
+                        ),
+                    'suggested_tags' => '',
+                    'weight' => 50,
+                    'form_help' => 'str_submit_original_help_line',
+                    'isremix' => '',
+                    'media_types' => 'audio',
+                    'action' => '',
+                    'logo' => 'ccskins/shared/images/submit-original.gif',
+                    'type_key' => 'fullmix',
+                    ),
+            );
+        $configs =& CCConfigs::GetTable();
+        $configs->SaveConfig('submit_forms',$form_types,'',false);
         return $form_types;
     }
 
@@ -304,7 +371,7 @@ class CCSubmit
 
         $prompt = '';
 
-        if( ($cmd != 'revert') && ($CC_CFG_ROOT != CC_GLOBAL_SCOPE) )
+        //if( ($cmd != 'revert') && ($CC_CFG_ROOT != CC_GLOBAL_SCOPE) )
         {
             $url = ccl('admin','submit','revert');
             $link1 = "<a href=\"$url\">";
@@ -381,7 +448,6 @@ class CCSubmit
         }
         elseif ( $form->ValidateFields() )
         {
-            // CCDebug::PrintVar($form_types);
             $this->_save_form($form,$form_type_key,$form_types);
             $urlx = ccl('admin','submit');
             $urly = ccl('submit');
@@ -444,11 +510,20 @@ class CCSubmit
 
     function SaveFormType($values,$form_type_key,$form_types='')
     {
+        global $CC_GLOBALS;
+
         if( empty($form_types) )
             $form_types = $this->_get_form_types(false);
 
-        if( empty($values['logo']) && !empty($form_types[$form_type_key]['logo']) )
-             $values['logo'] = $form_types[$form_type_key]['logo']; // wtf
+
+        if( empty($values['logo']) )
+        {
+             $values['logo'] = '';
+        }
+        else
+        {
+            $values['logo'] = $CC_GLOBALS['image-upload-dir'] . $values['logo'];
+        }
 
         if( empty($values['tags']) )
         {

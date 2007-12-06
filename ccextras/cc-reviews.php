@@ -210,6 +210,12 @@ class CCReviewsHV
 
     function OnUserProfileTabs( &$tabs, &$record )
     {
+        if( empty($record['user_id']) )
+        {
+            $tabs['reviews'] = 'Reviews';
+            return;
+        }
+
         if( empty($record['user_num_reviews']) )
             return;
 

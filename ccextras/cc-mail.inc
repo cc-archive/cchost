@@ -514,6 +514,7 @@ class CCMailerAPI
             return;
 
         $title = sprintf(_('Send Mail to %s'), $userto);
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle($title);
 
         $verify = $this->_ok_to_contact($userto);

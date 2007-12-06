@@ -122,6 +122,13 @@ class CCPlaylistHV
         if( !cc_playlist_enabled() )
             return;
 
+        if( empty($record['user_id']) )
+        {
+            $tabs['playlists'] = 'Playlists';
+            return;
+        }
+
+
         require_once('ccextras/cc-cart-table.inc');
         $carts = new CCPlaylist(false);
         $w['cart_user'] = $record['user_id'];
