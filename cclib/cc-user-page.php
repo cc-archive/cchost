@@ -59,6 +59,7 @@ class CCUserPage
         $originalTab = $tab;
         $tabs = $this->_get_tabs($username,$tab);
         $tagfilter = '';
+        require_once('cclib/cc-page.php');
         CCPage::PageArg('sub_nav_tabs',$tabs);
         if( empty($tabs['tabs'][$originalTab]) )
         {

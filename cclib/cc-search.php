@@ -107,7 +107,7 @@ class CCSearch
 
         $CC_GLOBALS['hide_sticky_search'] = true;
 
-
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle('str_search');
         $form = new CCSearchForm();
         CCPage::AddForm( $form->GenerateForm() );
@@ -142,6 +142,7 @@ END;
             //$url = "http://google.com?site:
         }
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle('str_search_results');
 
         $done_search = false;

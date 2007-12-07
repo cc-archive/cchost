@@ -234,7 +234,10 @@ a.more_menu_link {
 	margin: 12px;
 }
 
-a.cc_tag_link, #taglinks a, .taglinks a  {
+a.cc_tag_link, 
+#content #taglinks a, 
+#content div.taglinks a  
+{
 	font-weight: normal;
 	font-variant: small-caps;
 }

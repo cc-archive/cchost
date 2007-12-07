@@ -17,6 +17,16 @@ a, a:link, a:visited {
 	display: none;
 }
 
+#content a {
+	font-weight: bold;
+}
+
+a.cc_tag_link, 
+#content #taglinks a, 
+#content div.taglinks a  {
+	font-weight: normal;
+}
+
 #header {
 	padding: 3px 4px 3px 0px;
 }

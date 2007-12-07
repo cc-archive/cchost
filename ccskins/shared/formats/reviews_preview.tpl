@@ -41,7 +41,7 @@ EOF;
 %text(str_recent_reviews)%
 <ul>
 %loop(records,R)%
-<li><b>%(#R/reviewer_user_real_name)%</b> <a href="%(#R/topic_url)%">%(#R/topic_text_plain)%</a></li>
+<li>%(#R/reviewer_user_real_name)% <a href="%(#R/topic_url)%">%(#R/topic_text_plain)%</a></li>
 %end_loop%
 </ul>
 %map(#upload_id,records/0/topic_upload)%
