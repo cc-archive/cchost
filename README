@@ -47,7 +47,12 @@ To install follow the instructions in ccadmin/INSTALL.txt.
 4. Known Issues
 ------------------------
 
-* There are no known issues at this time
+- The 'Download Manager' is not supported in non-pretty urls mode 
+
+- getID3 1.7.7 has a problem tagging RIFF files (WAV, AVI, etc.)
+  The work around is to remove line 105 in getid3/write.php that
+  looks like:
+     case 'riff': // maybe not officially, but people do it anyway
 
 
 5. Contacts (Reporting Bugs)

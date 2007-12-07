@@ -133,7 +133,7 @@ class CCAdminPlaylistsForm extends CCEditConfigForm
                        'form_tip'   => _('Users who have abused playlists'),
                        'formatter'  => 'textarea',
                        'flags'      => CCFF_POPULATE ),
-
+/*
             'playlist_rank' =>
                array(  'label'      => _('Use Playlist For Rankings'),
                        'form_tip'   => _('Use playlists stats to rank uploads'),
@@ -171,7 +171,7 @@ class CCAdminPlaylistsForm extends CCEditConfigForm
                        'form_tip'   => _('How much do user ratings influence rankings (set this to zero to ignore ratings)'),
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE ),
-
+*/
                 );
 
 

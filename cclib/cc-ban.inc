@@ -135,8 +135,8 @@ class CCBan
         if( empty($_POST) )
         {
             $uploads =& CCUploads::GetTable();
-            $row = $uploads->GetRecordFromID($upload_id);
-            if( !empty($row['upload_banned']) ) // we're unbanning
+            $banned = CCDatabase::QueryItem('SELECT upload_banned FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+            if( $banned ) // we're unbanning
             {
                 $this->_do_ban($upload_id);
                 return;

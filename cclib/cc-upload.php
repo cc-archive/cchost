@@ -63,7 +63,13 @@ class CCUpload
         else
         {
             $form->GetFormValues($values);
-            
+
+            if( !empty($values['upload_date']) )
+            {
+                $uarg['upload_date'] = $values['upload_date'];
+                $uarg['upload_id'] = $upload_id;
+                $uploads->Update($uarg);
+            }
             require_once('cclib/cc-uploadapi.php');
 
             CCUploadAPI::UpdateCCUD($upload_id,$values['ccud'],$record['upload_extra']['ccud']);

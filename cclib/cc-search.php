@@ -35,6 +35,18 @@ class CCSearchForm extends CCForm
     function CCSearchForm()
     {
         $this->CCForm();
+        $sql = 'SELECT DISTINCT upload_license,license_tag, license_name FROM cc_tbl_uploads
+join cc_tbl_licenses on upload_license = license_id
+order by license_id';
+        $rows = CCDatabase::QueryRows($sql);
+        $licenses = array( '-1' => _('All Licenses') );
+        foreach( $rows as $row )
+        {
+            if( empty($licenses[$row['license_tag']]) )
+            {
+                $licenses[$row['license_tag']] = $row['license_name'];
+            }
+        }
         $fields = array( 
                 'search_text' =>
                         array( 'label'      => _('Search Text'),
@@ -58,6 +70,12 @@ class CCSearchForm extends CCForm
                                                 CC_SEARCH_UPLOADS | CC_SEARCH_USERS => _("Uploads and Users")
                                                     ),
                                'flags'      => CCFF_POPULATE),
+                'search_lic' =>
+                       array( 'label'      => _('License'),
+                              'form_tip'    => '',
+                              'formatter'   => 'select',
+                              'options'     => $licenses,
+                              'flags'       => CCFF_POPULATE ),
                 );
 
         $this->AddFormFields( $fields );
@@ -216,6 +234,12 @@ END;
             $filter = CCSearch::BuildFilter($fields, $qlower, $type);
             $uploads =& CCUploads::GetTable();
             $uploads->SetOffsetAndLimit(0,$limit);
+            if( !empty($_REQUEST['search_lic']) )
+            {
+                $lictag = CCUtil::Strip($_REQUEST['search_lic']);
+                if( !empty($lictag) && ($lictag != -1) )
+                    $uploads->SetTagFilter($lictag);
+            }
             $uploads->SetOrder('upload_date','DESC');
             $up_results = $uploads->GetRecords($filter);
             $count = count($up_results);
