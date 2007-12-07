@@ -59,6 +59,7 @@ class CCPageAdmin
 
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
+        //CCDebug::PrintVar($args);
         if( strtolower($args['format']) != 'page' )
             return;
 

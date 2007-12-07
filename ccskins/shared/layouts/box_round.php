@@ -23,3 +23,6 @@ $A['end_script_blocks'][] = 'ccskins/shared/layouts/box_round.php/invoke_script'
 .cssbox, .cssbox_body_mono, .cssbox_head_mono, .cssbox_head_mono h2 
 { background-image: url('<?= $T->URL('images/backbox-mono.png') ?>') } 
 </style>
+<script>
+var round_box_enabled = 1;
+</script>

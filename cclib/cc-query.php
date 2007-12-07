@@ -83,6 +83,7 @@ class CCQuery
             $sql[] = "ALTER TABLE `cc_tbl_files` ADD INDEX ( `file_order` ) ";
             $sql[] = "ALTER TABLE `cc_tbl_topics` ADD `topic_left` INT( 11 ) NOT NULL";
             $sql[] = "ALTER TABLE `cc_tbl_topics` ADD `topic_right` INT( 11 ) NOT NULL";
+            $sql[] = "update `cc_tbl_topics` set topic_type = 'forum' where topic_type = '' ";
             CCDatabase::Query($sql);
             print('fixed');
             exit;
@@ -119,9 +120,21 @@ class CCQuery
 
     function Query($args=array())
     {
-        if( empty($args['cache']) )
+        if( !empty($args) )
+            $this->args = $args;
+
+        if( $this->args['format'] == 'page' && empty($this->args['template'])  )
+            $this->args['template'] = 'list_files';
+
+        if( $this->args['format'] == 'playlist' && empty($this->args['template'])  )
+            $this->args['template'] = 'playlist_show_one';
+
+        if( $this->args['datasource'] == 'uploads' )
+            $this->where[] = '(upload_published=1 and upload_banned=0)' ;
+
+        if( empty($this->args['cache']) )
         {
-            $this->_generate_records($args);
+            $this->_generate_records();
         }
         else
         {
@@ -130,10 +143,11 @@ class CCQuery
             {
                 include($cname);
                 $this->records =& $_cache_rows;
+                $this->_generate_records();
             }
             else
             {
-                $this->_generate_records($args);
+                $this->_generate_records();
 
                 $data = serialize($this->records);
                 $data = str_replace("'","\\'",$data);
@@ -145,7 +159,6 @@ class CCQuery
                 chmod($cname,cc_default_file_perms());
             }
         }
-
         return $this->_process_records();
     }
 
@@ -290,20 +303,8 @@ class CCQuery
                     );
     }
 
-    function _generate_records($args)
+    function _generate_records()
     {
-        if( !empty($args) )
-            $this->args = $args;
-
-        if( $this->args['format'] == 'page' && empty($this->args['template'])  )
-            $this->args['template'] = 'list_files';
-
-        if( $this->args['format'] == 'playlist' && empty($this->args['template'])  )
-            $this->args['template'] = 'playlist_show_one';
-
-        if( $this->args['datasource'] == 'uploads' )
-            $this->where[] = '(upload_published=1 and upload_banned=0)' ;
-
         foreach( array( 'sort', 'date', ) as $arg )
         {
             $method = '_gen_' . $arg;
@@ -468,7 +469,6 @@ class CCQuery
 
         if( !empty($this->args['sinced']) )     // text date
         {
-            //CCDebug::PrintVar($this->args['sinced']);
             $since = strtotime($this->args['sinced']);
             if( $since < 1 )
                 die('invalid date string');

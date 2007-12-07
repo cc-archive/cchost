@@ -234,7 +234,7 @@ a.more_menu_link {
 	margin: 12px;
 }
 
-a.cc_tag_link, #taglinks a {
+a.cc_tag_link, #taglinks a, .taglinks a  {
 	font-weight: normal;
 	font-variant: small-caps;
 }
@@ -244,4 +244,9 @@ a.cc_tag_link, #taglinks a {
 }
 .info_box_clear {
 	clear: both;
+}
+
+.cc_howididit {
+	width: 500px;
+	margin: 0px auto;
 }

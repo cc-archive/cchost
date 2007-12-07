@@ -1,12 +1,18 @@
 <?
 
-function _t_file_macros_license_rdf($T,&$_TV)
+function _t_file_macros_print_howididit_link($T,&$A)
+{
+    ?><a href="<?= ccl('howididit',$A['record']['upload_id']) ?>"><?= $T->String('str_how_i_did_it') ?></a><br /><?
+}
+
+
+function _t_file_macros_license_rdf($T,&$A)
 {
 }
 
-function _t_file_macros_show_zip_dir($T,&$_TV)
+function _t_file_macros_show_zip_dir($T,&$A)
 {
-    $R =& $_TV['record'];
+    $R =& $A['record'];
     foreach( $R['zipdirs'] as $zip )
     {
         ?><p class="zipdir_title"><?= $T->String('str_zip_title') ?>: <span><?= $zip['name'] ?></span></p>
@@ -26,32 +32,29 @@ function _t_file_macros_request_reviews($T,&$A)
     ?></div><?
 }
 
-function _t_file_macros_print_recent_reviews($T,&$_TV)
+function _t_file_macros_print_recent_reviews($T,&$A)
 {
-    ?><p class="recent_reviews"><?= $T->String('str_recent_reviews') ?></p>
-          <ul id="recent_reviews"><?
-    foreach( $_TV['posts'] as $post )
+    ?>
+        <p class="recent_reviews"><?= $T->String('str_recent_reviews') ?></p>
+          <ul id="recent_reviews">
+    <?
+    foreach( $A['posts'] as $post )
     {
         $text = CC_strchop($post['post_text'],50);
         print "<li><span class=\"poster_name\">{$post['username']}</span> <a href=\"{$post['post_url']}\">{$text}</a></li>\n";
     }
     ?></ul>
-    <a href="<?= $_TV['view_topic_url'] ?>"><?= $T->String('str_read_all') ?></a><?
+    <a href="<?= $A['view_topic_url'] ?>"><?= $T->String('str_read_all') ?></a><?
 }
 
-function _t_file_macros_print_howididit_link($T,&$_TV)
+function _t_file_macros_upload_not_published($T,&$A)
 {
-    print "<a href\"{$_TV['record']['howididit_link']['action']}\">{$_TV['record']['howididit_link']['text']}</a><br \>\n";
+    print "<div class=\"unpublished\">{$A['record']['publish_message']}</div>";
 }
 
-function _t_file_macros_upload_not_published($T,&$_TV)
+function _t_file_macros_upload_banned($T,&$A) 
 {
-    print "<div class=\"unpublished\">{$_TV['record']['publish_message']}</div>";
-}
-
-function _t_file_macros_upload_banned($T,&$_TV) 
-{
-    print "<div class=\"upload_banned\">{$_TV['record']['banned_message']}</div>";
+    print "<div class=\"upload_banned\">{$A['record']['banned_message']}</div>";
 }
 
 ?>

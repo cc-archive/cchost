@@ -281,6 +281,7 @@ class CCPhysicalFile
     function Edit($username,$upload_id)
     {
         require_once('cclib/cc-upload.php');
+        require_once('cclib/cc-page.php');
         CCUpload::CheckFileAccess($username,$upload_id);
 
         $userid = CCUser::IDFromName($username);
@@ -288,7 +289,7 @@ class CCPhysicalFile
         CCPage::SetTitle('str_edit_properties');
 
         $dv = new CCDataview();
-        $args['where'] = 'WHERE upload_id = ' . $upload_id;
+        $args['where'] = 'upload_id = ' . $upload_id;
         $record = $dv->PerformFile('upload_row',$args,CCDV_RET_RECORD);
         $form = new CCEditFileForm($userid,$record);
         $show = true;

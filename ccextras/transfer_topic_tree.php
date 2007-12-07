@@ -6,7 +6,7 @@ CCEvents::AddHandler(CC_EVENT_APP_INIT,'fix_topics');
 
 function fix_topics()
 {
-    if( empty($_GET['fix']) )
+    if( empty($_GET['fix_topics']) )
         return;
 
     $sql =<<<EOF

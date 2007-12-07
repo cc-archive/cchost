@@ -144,13 +144,6 @@ class CCTopics extends CCTable
         require_once('cclib/cc-user.php');
 
         $this->CCTable('cc_tbl_topics', 'topic_id');
-        $this->SetOrder('topic_date','desc');
-        $this->AddJoin( new CCUsers(), 'topic_user' );
-        $this->AddExtraColumn('topic_text as topic_text_html, ' .
-                              'topic_text as topic_text_plain, ' .
-                              '0 as topic_permalink, ' .
-                              '0 as topic_search_result_info'
-                    );
         $this->_show_deleted = $show_deleted;
     }
 
@@ -353,16 +346,27 @@ class CCTopics extends CCTable
     {
     }
 
-    // overwrite parent's version: some installations
-    // don't have the default for _tags field setup
-    // properly
-    function Insert(&$values)
+    function Insert(&$values,$parent_id)
     {
-        if( !isset($values['topic_tags']) )
+        if( $parent_id === 0 )
         {
-            $values['topic_tags'] = '';
+            $right_sql = 'SELECT MAX(topic_right) FROM cc_tbl_topics WHERE topic_type = \'' . $this->_type_limit . '\'' ;
         }
-        return parent::Insert($values);
+        else
+        {
+            $right_sql = "SELECT topic_right FROM cc_tbl_topics WHERE topic_id = {$parent_id}";
+        }
+            
+        CCDatabase::Query('LOCK TABLE cc_tbl_topics WRITE');
+        $right = CCDatabase::QueryItem($right_sql);
+        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right + 2 WHERE topic_right > {$right}";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left + 2  WHERE topic_right > {$right}";
+        CCDatabase::Query($sql);
+        $values['topic_left'] = $right + 1;
+        $values['topic_right'] = $right + 2;
+        $ret = parent::Insert($values);
+        CCDatabase::Query('UNLOCK TABLES');
+        return $ret;
     }
 
     // overwrite parent's version to add type limit

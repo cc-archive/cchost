@@ -41,7 +41,8 @@ function cc_filter_std(&$records,&$dataview_info)
                             if( empty($CC_GLOBALS['contests']) )
                                 cc_fill_contests();
 
-                            $F['download_url'] = ccd($CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name'],$F['file_name']);
+                            $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],
+                                    $CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name'],$F['file_name']);
                         }
                         else
                         {

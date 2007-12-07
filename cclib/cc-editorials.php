@@ -51,9 +51,8 @@ class CCEditorials
     {
         if( !empty($upload_id) )
         {
-            $dv = new CCDataview();
-            $args['where'] = 'upload_id = ' . $upload_id;
-            $user_name = $dv->PerformFile('upload_owner',$args,CCDV_RET_ITEM);
+            $user_name = CCDatabase::QueryItem(
+                    'SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id);
             CCUtil::SendBrowserTo( ccl('files',$user_name,$upload_id) );
         }
     
@@ -79,14 +78,12 @@ class CCEditorials
             return;
         }
 
-        CCPage::SetTitle('str_editorial_edit');
+        list( $extra, $upload_name ) = CCDatabase::QueryRow('SELECT upload_extra, upload_name FROM cc_tbl_uploads WHERE upload_id='.$upload_id,false);
         $reviewer_user_name = CCUser::CurrentUsername();
         $reviewer_name      = CCUser::CurrentUserField('user_real_name');
 
-        $uploads =& CCUploads::GetTable();
-        $record  = $uploads->GetRecordFromID($upload_id);
-
-        $editorials = $uploads->GetExtraField($record, 'edpicks');
+        $extra = unserialize($extra);
+        $editorials = empty($extra['edpicks']) ? array() : $extra['edpicks'];
 
         require_once('cclib/cc-editorials.inc');
 
@@ -95,9 +92,7 @@ class CCEditorials
 
         if( empty( $_POST['editorial']) )
         {
-            $record['local_menu'] = CCUpload::GetRecordLocalMenu($record);
-            $marg = array( $record );
-            $form->CallFormMacro( 'records', 'list_files', $marg);
+            //$form->CallFormMacro( 'records', 'list_files', $marg);
             if( !empty($editorials[$reviewer_user_name]) )
             {
                 $form->SetFormValue('editorial_review', $editorials[$reviewer_user_name]['review'] );
@@ -122,6 +117,7 @@ class CCEditorials
 
                 // use upload id to force commits at each stage
 
+                $uploads =& CCUploads::GetTable();
                 $uploads->SetExtraField($upload_id,'edpicks',$editorials);
 
                 require_once('cclib/cc-uploadapi.php');
@@ -147,7 +143,11 @@ class CCEditorials
         }
 
         if( $showform )
+        {
+            require_once('cclib/cc-page.php');
+            CCPage::SetTitle(array('str_editorial_edit',$upload_name));
             CCPage::AddForm( $form->GenerateForm() );
+        }
     }
 
 

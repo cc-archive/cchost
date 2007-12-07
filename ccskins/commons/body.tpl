@@ -1,5 +1,4 @@
 <body>
-<div id="debug" style="background-color:white; padding: 2px; color:black; float:right;position:absolute;right:0px;top:110px;z-index:200;font-size:10px;"></div>
 <div class="hide">
   <a href="#content">%text(skip)%</a>
 </div>

@@ -36,6 +36,7 @@ class CCFileProps
     function GetProps($format_dir,$type,$ret_files=true)
     {
         global $CC_GLOBALS;
+        require_once('cclib/cc-template.php');
         $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS );
         $k = array_keys($tdirs);
         $c = count($k);

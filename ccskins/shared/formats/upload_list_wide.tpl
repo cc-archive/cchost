@@ -68,11 +68,11 @@ EOF;
 }
 [/dataview]
 */ ?>
+
 <link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/upload_list_wide.css')%" />
 
 <div id="upload_listing">
 %loop(records,R)%
-
     <div class="upload" ><!--   %(#R/upload_name)%   -->
     <div class="upload_avatar"><img src="%(#R/user_avatar_url)%" /></div>
     <div class="upload_info">
@@ -140,23 +140,23 @@ EOF;
 
     <br style="clear:both" />
     </div><!--  end upload  -->
-
 %end_loop%
-
 </div><!-- end listing -->
 
 %call(prev_next_links)%
+<!-- -->
+%if_null(#_GET/noscripts)%
+    %if_not_null(enable_playlists)%
+        %call('playerembed.xml/eplayer')%
+        <script>
+            ccEPlayer.hookElements($('upload_listing'));
+        </script>
+    %end_if%
 
-%if_not_null(enable_playlists)%
-    %call('playerembed.xml/eplayer')%
     <script>
-        ccEPlayer.hookElements($('cc_narrow_list'));
+        var dl_hook = new popupHookup("download_hook","download",str_download); 
+        dl_hook.hookLinks(); 
+        var menu_hook = new popupHookup("menuup_hook","ajax_menu",'');
+        menu_hook.hookLinks();
     </script>
 %end_if%
-
-<script>
-    var dl_hook = new popupHookup("download_hook","download",str_download); 
-    dl_hook.hookLinks(); 
-    var menu_hook = new popupHookup("menuup_hook","ajax_menu",'');
-    menu_hook.hookLinks();
-</script>

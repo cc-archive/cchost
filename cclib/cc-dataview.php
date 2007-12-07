@@ -147,6 +147,9 @@ if( $dataview['dataview'] == 'xx' )
     CCDebug::PrintVar($x);
 } // ---------------------------------
 
+        if( !empty($queryObj->records) )
+            return $queryObj->records;
+
         switch( $ret_type )
         {
             case CCDV_RET_RECORD:

@@ -50,96 +50,42 @@ class CCHowIDidIt
 
     function Browse()
     {
-        require_once('cclib/cc-upload-table.php');
-        CCPage::SetTitle(_("Browse 'How I Did It'"));
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetTagFilter('how_i_did_it');
-        $ord = 'ASC';
-        if( empty($_GET['sort']) )
-        {
-            $sort = 'upload_name';
-        }
-        else
-        {
-            switch( $_GET['sort'])
-            {
-                case 'name';
-                    $sort = 'upload_name';
-                    break;
-                case 'date';
-                    $sort = 'upload_date';
-                    $ord = 'DESC';
-                    break;
-                case 'user';
-                    $sort = 'user_real_name';
-                    break;
-            }
-        }
-        $uploads->SetOrder($sort,$ord);
-        $rows = $uploads->QueryRows('');
-        $uploads->SetTagFilter('');
-        $uploads->SetOrder('');
-        $url = ccl('howididit','detail');
-        $current_url = cc_calling_url();
-        $sorts = array(
-                    array( 'url' => url_args($current_url,'sort=user'),
-                           'text' => _('Artist'),
-                           'selected' => $sort == 'user_real_name' ),
-                    array( 'url' => url_args($current_url,'sort=date'),
-                           'text' => _('Date'),
-                           'selected' => $sort == 'upload_date' ),
-                    array( 'url' => url_args($current_url,'sort=name'),
-                           'text' => _('Upload Name'),
-                           'selected' => $sort == 'upload_name' ),
-            );
-
-        $help = _("Remixers are encouraged to specify the tools and process they used to create submissions to this site. Below is a list of submissions that the author has annotated with these special notes. Click on any submission to see the 'author's notes.");
-
-        CCPage::PageArg('howididit_sort_cap', _('Sort by:'));
-        CCPage::PageArg('howididit_sorts', $sorts );
-        CCPage::PageArg('howididit_help', _($help) );
-        CCPage::PageArg('howididit_url',$url);
-        CCPage::PageArg('howididit_records',$rows,'howididit_browse');
+        require_once('cclib/cc-page.php');
+        CCPage::SetTitle('str_hidi_browse');
+        CCPage::AddMacro('howididit_browse');
     }
 
     function Detail($upload_id)
     {
-        require_once('cclib/cc-upload-table.php');
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);
-        if( empty($record['upload_extra']['howididit']) )
-            return;
-        global $CC_GLOBALS;
-        $args = $CC_GLOBALS;
         $args['root-url'] = ccd();
-        $args['record'] = $record;
+        $args['howididit_upload'] = $upload_id;
         $args['howididit_fields'] = $this->_get_fields();
-        $args['howididit_info'] = $this->_get_data($record);
-        $template = new CCSkinMacro( 'howididit_detail' );
+        $args['howididit_info'] = $this->_get_data($upload_id);
+        require_once('cclib/cc-template.php');
+        $template = new CCSkinMacro( 'howididit' );
         print( $template->SetAllAndParse($args) );
         exit;
     }
 
     function HowIDidIt($upload_id)
     {
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);
-        if( empty($record['upload_extra']['howididit']) )
-            return;
-        $record['local_menu'] = CCUpload::GetRecordLocalMenu($record);
-        $arg = array( &$record );
-        CCPage::PageArg( 'records', $arg, 'upload_list' );
         $fields = $this->_get_fields();
-        $data = $this->_get_data($record);
+        $data = $this->_get_data($upload_id);
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_("How I Did It"));
+        CCPage::PageArg('howididit_upload',$upload_id);
         CCPage::PageArg('howididit_fields',$fields);
         CCPage::PageArg('howididit_info',$data,'howididit');
-
     }
 
-    function _get_data(&$record)
+    function _get_data($upload_id)
     {
-        $data = $record['upload_extra']['howididit'];
+        $uploads =& CCUploads::GetTable();
+        $upload_extra = CCDatabase::QueryItem('SELECT upload_extra FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+        $upload_extra = unserialize($upload_extra);
+        if( empty($upload_extra['howididit']) )
+            return;
+        $data =& $upload_extra['howididit'];
         $keys = array_keys($data);
         foreach( $keys as $key )
         {
@@ -161,14 +107,18 @@ class CCHowIDidIt
 
         CCUpload::CheckFileAccess(CCUser::CurrentUser(),$upload_id);
         $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromKey($upload_id);
-        if( empty($record) )
-            return;
-        CCPage::SetTitle( _("Edit 'How I Did It' for ") . $record['upload_name']);
+        if( !$uploads->KeyExists($upload_id) )
+            die('Invalid upload id for how i did it');
+
+        require_once('cclib/cc-page.php');
+        list( $upload_name, $upload_extra ) = CCDatabase::QueryRow(
+                'SELECT upload_name, upload_extra FROM cc_tbl_uploads WHERE upload_id=' . $upload_id, false );
+        CCPage::SetTitle( sprintf(_("Edit 'How I Did It' for %s"), $upload_name) );
         $form = new CCHowIDidItForm();
         $is_post = !empty($_POST['howididit']);
-        if(  !$is_post && !empty($record['upload_extra']['howididit']) )
-            $form->PopulateValues($record['upload_extra']['howididit']);
+        $upload_extra = unserialize($upload_extra);
+        if(  !$is_post && !empty($upload_extra['howididit']) )
+            $form->PopulateValues($upload_extra['howididit']);
         if( !$is_post || !$form->ValidateFields() )
         {
             CCPage::AddForm($form->GenerateForm());
@@ -188,27 +138,29 @@ class CCHowIDidIt
             }
             if( $has_values )
             {
-                $record['upload_extra']['howididit'] = $values;
-                $args['upload_extra'] = serialize($record['upload_extra']);
+                $upload_extra['howididit'] = $values;
+                $args['upload_extra'] = serialize($upload_extra);
                 $args['upload_id'] = $upload_id;
                 $uploads->Update($args);
                 CCUploadAPI::UpdateCCUD($upload_id,'how_i_did_it','');
                 $url = ccl('howididit',$upload_id);
-                CCPage::Prompt(sprintf(_("Changes saved. Click %s to see results"), "<a href=\"$url\">here</a>"));
+                CCPage::Prompt(sprintf(_("Changes saved. Click %shere%s to see results"), "<a href=\"$url\">","</a>"));
             }
             else
             {
-                if( !empty($record['upload_extra']['howididit']) )
+                if( !empty($upload_extra['howididit']) )
                 {
-                    unset($record['upload_extra']['howididit']);
-                    $args['upload_extra'] = serialize($record['upload_extra']);
+                    unset($upload_extra['howididit']);
+                    $args['upload_extra'] = serialize($upload_extra);
                     $args['upload_id'] = $upload_id;
                     $uploads->Update($args);
                 }
 
                 CCUploadAPI::UpdateCCUD($upload_id,'','how_i_did_it');
 
-                $url = $record['file_page_url'];
+                $user_name = CCDatabase::QueryItem(
+                                'SELECT user_name FROM cc_tlb_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id);
+                $url = ccl('files',$user_name,$upload_id);
                 $msg = _("No 'How I Did It' for this record. Click %s to go back to the upload's page");
                 CCPage::Prompt(sprintf($msg,"<a href=\"$url\">here</a>"));
             }

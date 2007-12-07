@@ -215,16 +215,14 @@ class CCNotifyAPI
             $notify_row = $notifications->QueryRow($where);
             if( $notify_row )
             {
-                $reviews =& CCReviews::GetTable();
-                $review_rec = $reviews->GetRecordFromRow($review);
                 $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . 
                 "\n\n" . 
                 _('This is a notification that "%s" has been reviewed by %s') .
                 "\n\n%s\n";
                 $upload_name = $uploads->QueryItemFromKey('upload_name',$review['topic_upload']);
                 $body = sprintf($body,$upload_name,
-                                      $review_rec['user_real_name'],
-                                      $review_rec['topic_permalink']);
+                                      $review['user_real_name'],
+                                      $review['topic_permalink']);
 
                 $subject = _('Review notification');
                 $nrarray = array( $notify_row );

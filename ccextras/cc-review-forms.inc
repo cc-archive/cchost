@@ -36,6 +36,7 @@ class CCReviewForm extends CCTopicForm
     function CCReviewForm()
     {
         $this->CCTopicForm(_('Review'),'Submit Review');
+//       $this->SetTemplateMacro('review_post')
     }
 }
 
@@ -58,8 +59,7 @@ class CCReviewFormAPI
         }
 
         $uploads =& CCUploads::GetTable();
-        $R = $uploads->GetRecordFromID($upload_id);
-        if( empty($R) )
+        if( !$uploads->KeyExists($upload_id) )
         {
             CCPage::Prompt(_('Cannot find that upload.'));
             CCUtil::Send404(false);
@@ -72,37 +72,27 @@ class CCReviewFormAPI
 
         require_once('ccextras/cc-reviews.inc');
 
+        list( $user_real_name, $upload_name, $user_name ) = CCDatabase::QueryRow(
+            'SELECT user_real_name, upload_name, user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='
+            . $upload_id, false);
+
         if( empty($_POST['review']) || !$form->ValidateFields() )
         {
-            CCReview::_build_bread_crumb_trail($R['user_name'],$upload_id,'',_('create new'));
 
-            // todo: convert all this to dataview
-            //CCEvents::Invoke(CC_EVENT_UPLOAD_LISTING,array(&$R));
-            $R['local_menu'] = CCUpload::GetRecordLocalMenu($R);
-            unset($R['local_menu']['comment']);
+            CCReview::_build_bread_crumb_trail($user_real_name,$upload_id,'',_('create new'));
 
-            CCPage::SetTitle(sprintf(_('Write a Review for "%s"'),$R['upload_name']));
+            CCPage::SetTitle(sprintf(_('Write a Review for "%s"'),$upload_name));
 
-            $reviews =& CCReviews::GetTable();
-            $topics = $reviews->GetReviewsForUpload($upload_id,false,'DESC');
-
-            CCPage::PageArg('record',$R);
-            CCPage::PageArg('review_post_macro','topics.xml/post_review');
-            CCPage::PageArg('topics',$topics,'review_post_macro');
-            // ug sorry about this
-            if( function_exists('cc_playlist_enabled') && cc_playlist_enabled() )
-            {
-                CCPage::AddMacro('playerembed.xml/eplayer');
-                CCPage::AddMacro('playlist.xml/playlist_menu');
-            }
+            CCPage::PageArg('review_upload',$upload_id);
             
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
         {
-            if( !CCReviewsHV::_can_review($R) )
+            if( !CCReviewsHV::_can_review($upload_id) )
             {
                 // submit was hit twice
+                require_once('cclib/cc-page.php');
                 CCPage::Prompt(_("You have already reviewed this upload."));
             }
             else
@@ -116,8 +106,8 @@ class CCReviewFormAPI
                 $values['topic_type'] = 'review';
                 $user_real = CCUser::CurrentUserField('user_real_name');
                 $values['topic_name'] = sprintf(_("Review of '%s' by '%s'"), 
-                                                $R['upload_name'], $user_real);
-                $reviews->Insert($values);
+                                                $upload_name, $user_real);
+                $reviews->Insert($values,0);
                 CCReview::Sync($upload_id,$values['topic_user']);
 
                 // EVENT_REVIEW expects a *real* row
@@ -125,10 +115,12 @@ class CCReviewFormAPI
                 // give them one
 
                 $row = $reviews->QueryKeyRow($values['topic_id']);
+                $row['user_real_name'] = $user_real_name;
+                $row['topic_permalink'] = ccl('reviews',$user_name, $upload_id ) . '#' . $values['topic_id'];
 
                 CCEvents::Invoke( CC_EVENT_REVIEW, array( &$row ) );
 
-                $url = ccl('reviews',$R['user_name'],$upload_id);
+                $url = ccl( 'reviews', $user_name, $upload_id );
                 CCUtil::SendBrowserTo($url);
             }
 

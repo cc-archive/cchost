@@ -167,12 +167,14 @@ class CCBan
         // Specifically: All these strings will be translated to the *moderators* choice
         // of language, not the users
 
+        $row = CCDatabase::QueryRow(
+            'SELECT upload_banned, upload_name, user_name, user_email FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id);
         $uploads =& CCUploads::GetTable();
-        $row = $uploads->GetRecordFromID($upload_id);
         $new_ban_flag = $row['upload_banned'] ^= 1;
         $args['upload_id'] = $upload_id;
         $args['upload_banned'] = $new_ban_flag;
         $uploads->Update($args);
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(sprintf(_("Banning upload: '%s'"),$row['upload_name']));
         $yn = array( _("no longer banned"), _("banned") );
         CCEvents::Invoke( CC_EVENT_UPLOAD_MODERATED, array( &$row, $yn[ $new_ban_flag ]  ) );
@@ -208,6 +210,7 @@ class CCBan
     
     function Admin()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Configure Moderation'));
         $form = new CCBanAdminForm();
         CCPage::AddForm( $form->GenerateForm() );

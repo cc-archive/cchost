@@ -241,6 +241,7 @@ class CCPublicize
         $args['previewwarn'] = _('This preview is pre-formatted. How this will actually look on your web page will change depending on your stylesheet settings.');
         $args['htmlwarn'] = _('Make sure to copy from the box above, not what is showing below because the actual content of this HTML will change based on the upload activity. You can still get an idea of what of the formatting will look like here:');
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle( $title );
         CCPage::AddScriptLink( 'js/sharesites.js', true );
         CCPage::AddScriptLink( 'js/share.js', true );

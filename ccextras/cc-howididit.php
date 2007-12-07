@@ -45,8 +45,6 @@ class CCHowIDidItHV
             if( empty($R['upload_extra']['howididit']) )
                 continue;
 
-            $R['howididit_link'] = array( 'action' => ccl('howididit',$R['upload_id']),
-                                               'text'  => 'str_how_i_did_it' );
             if( empty($R['file_macros']) )
                 $R['file_macros'][] = 'print_howididit_link';
             else

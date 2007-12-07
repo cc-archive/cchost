@@ -1,4 +1,4 @@
-<?
+`<?
 /*
 * Creative Commons has made the contents of this file
 * available under a CC-GNU-GPL license:
@@ -90,17 +90,9 @@ class CCRenderAudio extends CCRender
         if( !CCUploads::InTags('audio',$record) )
             return(null);
 
-        //if( !CCUploads::IsMediaType($record,'audio') )
-        //    return(null);
+        global $CC_GLOBALS;
 
-        if( empty($record['upload_contest']) )
-            $fakename = $record['user_name'];
-        else
-            $fakename = CCContestHV::GetContestNameFromRecord($record);
-
-        $link['url'] = ccl( 'files', 'stream', 
-                                    $fakename, 
-                                    $record['upload_id']. '.m3u' );
+        $link['url'] = url_args( ccl('api','query','stream.m3u'), 'f=m3u&ids=' . $record['upload_id'] );
         $link['text'] = _('Stream');
 
         return($link);
