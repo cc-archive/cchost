@@ -112,7 +112,7 @@ class CCSkin
     function & SetAllAndParse($args)
     {
         ob_start();
-        $this->SetAllAndPrint($args);
+        $this->SetAllAndPrint($args,false);
         $t = ob_get_contents();
         ob_end_clean();
         return($t);
@@ -123,16 +123,21 @@ class CCSkin
     *
     * @param mixed $args Last minute arguments to pump into the rendering
     */
-    function SetAllAndPrint($args)
+    function SetAllAndPrint($args,$headers=true)
     {
         $snapshot = $this->vars; // make this instance reusable (this is not tested)
     
         if( !empty($args) )
             $this->vars = array_merge($this->vars,$args);
 
-        if( $this->html_mode )
+        if( $this->html_mode && $headers )
         {
             // Force UTF-8 necessary for some languages (chinese,japanese,etc)
+            if( headers_sent($file,$line) )
+            {
+                print("Headers send $file $line<br />");
+                CCDebug::StackTrace();
+            }
             header('Content-type: text/html; charset=' . CC_ENCODING) ;
         }
 
@@ -606,10 +611,10 @@ class CCSkinMacro extends CCSkin
         return parent::LookupMacro($macropath);
     }
     
-    function SetAllAndPrint( $args )
+    function SetAllAndPrint( $args, $headers=false )
     {
         $args['auto_execute'][] = $this->_skin_macro;
-        $ret = parent::SetAllAndPrint($args);
+        $ret = parent::SetAllAndPrint($args,$headers);
         return $ret;
     }
 }

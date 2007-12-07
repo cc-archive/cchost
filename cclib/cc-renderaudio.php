@@ -1,4 +1,4 @@
-`<?
+<?
 /*
 * Creative Commons has made the contents of this file
 * available under a CC-GNU-GPL license:

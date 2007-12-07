@@ -40,6 +40,7 @@ class CCUpdate
         if( !CCUser::IsAdmin() || empty($_REQUEST['update']) )
             return;
 
+        require_once('cclib/cc-page.php');
         $updates = array();
         if ($cc_dh = opendir('ccextras')) 
         {
@@ -60,7 +61,6 @@ class CCUpdate
                 $prompts[] = $update;
         }
 
-        require_once('cclib/cc-page.php');
         $prompts = join(', ',$prompts);
         CCPage::Prompt(_('Updates already installed:') . ' ' . $prompts);
 
