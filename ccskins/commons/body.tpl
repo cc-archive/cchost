@@ -13,7 +13,7 @@
     %end_if%
 
     %if_not_empty(sticky_search)%
-        <div id="header_search"><img id="header_search_img" height="50" width="70" src="%url(images/find.PNG)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%text(find)%</h3><span class="light_color">%text(findcontent)%</span></a></div>
+        <div id="header_search"><img id="header_search_img" height="50" width="70" src="%url(images/find.png)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%text(find)%</h3><span class="light_color">%text(findcontent)%</span></a></div>
     %end_if%
 
     %if_not_empty(banner_message)%

@@ -159,7 +159,7 @@ class CCSkin
 
     function AddCustomizations()
     {
-        $T = $this;
+        $T =& $this;
         $A =& $this->vars;
         foreach( array( 'tab_pos', 'box_shape', 'page_layout', 'color_scheme', 'font_scheme', 'font_size' ) as $inc )
         {
@@ -496,7 +496,7 @@ class CCSkin
         {
             $php = file_get_contents($skinphp);
             $A =& $this->vars;
-            $T = $this;
+            $T =& $this;
             eval( '?>' . $php);
         }
 
@@ -516,7 +516,7 @@ class CCSkin
             // these will be visible to included/eval'd code
 
             $A =& $this->vars;
-            $T = $this;
+            $T =& $this;
 
             if( $m[2] == 'tpl' )
             {
