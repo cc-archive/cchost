@@ -268,7 +268,7 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        //CCDebug::Log("TCall: $file");
+        //CCDebug::Log("TCall: $macropath");
 
         $funcname = '';
 

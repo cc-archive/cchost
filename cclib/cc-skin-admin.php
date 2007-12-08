@@ -387,6 +387,8 @@ class CCSkinAdmin
         unset($props['desc']);
         $props['skin_profile'] = $skin_profile;
         $config =& CCConfigs::GetTable();
+        $curr_settings = $config->GetConfig('skin-settings'); // for vroots we need a copy of the root values
+        $props = array_merge($curr_settings,$props);
         $config->SaveConfig('skin-settings',$props);
         global $CC_GLOBALS;
         $CC_GLOBALS = array_merge($CC_GLOBALS,$props);

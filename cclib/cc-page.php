@@ -188,7 +188,6 @@ class CCPage extends CCSkin
         global $CC_GLOBALS;
 
         $this->CCSkin( $CC_GLOBALS['skin-file'] );
-
         $this->vars['auto_execute'][] = 'page.tpl';
 
         $this->vars['show_body_header'] = true;
@@ -436,13 +435,11 @@ class CCPage extends CCSkin
         if( !empty($CC_GLOBALS['no-cache']) )
             CCEvents::_send_no_cache_headers();
 
-        //CCDebug::Chronometer($page_print);
-
         if( $print )
             $page->SetAllAndPrint(array());
         else
             return $page->SetAllAndParse(array());
-        //CCDebug::Log( "Page print: " . CCDebug::Chronometer($page_print) );
+
     }
 
     function GetViewFile($filename,$real_path=true)

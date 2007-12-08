@@ -561,6 +561,8 @@ class CCAdmin
         if( !CCUser::IsAdmin() )
             return;
 
+        require_once('cclib/cc-page.php');
+
         if( empty($_GET['vroot']) )
         {
             CCPage::SetTitle(_("Create New Virtual Root"));
