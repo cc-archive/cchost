@@ -250,6 +250,7 @@ class CCRatingsAdmin
     */
     function _admin_ratings_chart()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_("Configure Ratings Chart Engine"));
         $form = new CCAdminRatingsForm();
         CCPage::AddForm( $form->GenerateForm() );

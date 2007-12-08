@@ -38,7 +38,6 @@
     %end_if%
 </div><!-- header -->
 
-
     <div id="wrapper">
 <div id="content" style="background-color: white;">
 

@@ -233,8 +233,14 @@ class CCRating
         require_once('cclib/cc-sync.php');
         require_once('cclib/cc-ratings.inc');
 
-        $uploads =& CCUploads::GetTable();
-        $record =& $uploads->GetRecordFromID($upload_id);
+        $sql =<<<EOF
+            SELECT upload_id, upload_user, upload_name, user_name, user_real_name, user_email, user_last_known_ip
+            FROM cc_tbl_uploads 
+            JOIN cc_tbl_user ON upload_user=user_id
+            WHERE upload_id = {$upload_id}
+EOF;
+        $record = CCDatabase::QueryRow($sql);
+        $record['file_page_url'] = ccl('files',$record['user_name'],$upload_id);
         $ratings =& CCRatings::GetTable();
         $has_rated = $ratings->IsRateBlocked($record);
 
@@ -256,12 +262,19 @@ class CCRating
             CCEvents::Invoke( CC_EVENT_RATED, array( $R, $score/100, &$record ) );
         }
 
+        $sql =<<<EOF
+            SELECT upload_score, upload_num_scores
+            FROM cc_tbl_uploads 
+            WHERE upload_id = {$upload_id}
+EOF;
+        $record2 = CCDatabase::QueryRow($sql);
+        $record = array_merge($record,$record2);
         $args = array();
-        $record =& $uploads->GetRecordFromID($upload_id);
         CCRatingsHV::_fill_scores($record,'upload');
         $args['record'] = $record;
         $args['ajax'] = true;
         $macro = empty($_REQUEST['rmacro']) ? 'ratings_stars' : CCUtil::Strip($_REQUEST['rmacro']);
+        require_once('cclib/cc-template.php');
         $template = new CCSkinMacro($macro);
         $template->SetAllAndPrint($args);
         exit;

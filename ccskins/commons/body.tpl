@@ -37,6 +37,7 @@
     %end_if%
 </div><!-- header -->
 
+<div id="debug"></div>
 
     <div id="wrapper">
 <div id="content">

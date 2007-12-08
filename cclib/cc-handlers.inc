@@ -183,6 +183,8 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserAPI', 'OnMapUrls
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,         array( 'CCUserAPI', 'OnGetMacros'), 'cclib/cc-user.inc' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCUserAPI' , 'OnGetConfigFields'), 'cclib/cc-user.inc'  );
 
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserHook', 'OnMapUrls'), 'cclib/cc-user-hook.php' );
+
 // yes, the next two were meant to map to the same method...
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,   array( 'CCUser', 'OnUploadRow'), 'cclib/cc-user.php' );
 CCEvents::AddHandler(CC_EVENT_CONTEST_ROW,  array( 'CCUser', 'OnUploadRow'), 'cclib/cc-user.inc' );

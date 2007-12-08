@@ -72,7 +72,9 @@ EOF;
 <link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/upload_list_wide.css')%" />
 
 <div id="upload_listing">
+<? $rec_ids = array(); ?>
 %loop(records,R)%
+    <? $rec_ids[] = $R['upload_id']; ?>
     <div class="upload" ><!--   %(#R/upload_name)%   -->
     <div class="upload_avatar"><img src="%(#R/user_avatar_url)%" /></div>
     <div class="upload_info">
@@ -83,10 +85,11 @@ EOF;
         <div class="upload_date">
             %if_empty(#R/thumbs_up)%
                 %map(record,#R)%
-                %call('util.php/ratings_stars_small')%
+                %call('util.php/ratings_stars_small_user')%
             %else%
                 %if_not_null(#R/upload_num_scores)%
-                    <div class="recommend_block" id="recommend_block_%(#R/upload_id)%">%text(str_recommends)% %(#R/upload_num_scores)% </div>
+                    <div class="recommend_block" id="recommend_block_%(#R/upload_id)%">%text(str_recommends)% 
+                            <!- -->%(#R/upload_num_scores)% </div>
                 %end_if%
             %end_if%
             %(#R/upload_date_format)%
@@ -158,5 +161,12 @@ EOF;
         dl_hook.hookLinks(); 
         var menu_hook = new popupHookup("menuup_hook","ajax_menu",'');
         menu_hook.hookLinks();
+        if( user_name )
+        {
+            null_star = '%url('images/stars/star-empty-s.gif')%';
+            full_star = '%url('images/stars/star-red-s.gif')%';
+            rate_return_t = 'ratings_stars_small_user';
+            new userHookup('upload_list', 'ids=<?= join(',',$rec_ids) ?>');
+        }
     </script>
 %end_if%

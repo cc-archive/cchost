@@ -78,6 +78,7 @@ class CCQuery
         {
             $sql[] = "ALTER TABLE `cc_tbl_user` ADD INDEX ( `user_name` ) ";
             $sql[] = "UPDATE cc_tbl_uploads SET upload_tags = CONCAT(',',upload_tags,',')";
+            $sql[] = "UPDATE cc_tbl_uploads SET upload_name = REPLACE(upload_name,'--','')";
             $sql[] = "ALTER TABLE `cc_tbl_uploads` ADD INDEX ( `upload_date` , `upload_tags` ( 200 ), `upload_published` , `upload_banned` ) ";
             $sql[] = "ALTER TABLE `cc_tbl_pool_tree` ADD INDEX ( `pool_tree_child` , `pool_tree_parent` ) ";
             $sql[] = "ALTER TABLE `cc_tbl_files` ADD INDEX ( `file_order` ) ";

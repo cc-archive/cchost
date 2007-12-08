@@ -279,7 +279,7 @@ function _t_util_ratings_stars_small($T,&$A)
 function _t_util_ratings_stars_small_user($T,&$A)
 {
     $R =& $A['record'];
-    if( !empty($R['ratings']) || $R['ok_to_rate'] )
+    if( !empty($R['ratings']) )
     {
         $id = $R['upload_id'];
         if( $A['ajax'] )
@@ -307,7 +307,7 @@ function _t_util_ratings_stars_small_user($T,&$A)
             {
                 $src = 'images/stars/star-' . $rsize . '-s.gif';
                 $url = $T->URL($src);
-                $info = empty($R['ok_to_rate']) ? '' : 'id="rate_star_' . $i . '_' . $id . '" class="rate_star"';
+                $info = 'id="rate_star_' . $i . '_' . $id . '" class="rate_star"';
                 print '<img '.$info.' style="width:10px;height:10px;margin:0px;" src="' . $url . '" />';
                 ++$i;
             }

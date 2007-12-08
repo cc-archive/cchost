@@ -92,6 +92,29 @@ popupHookup.prototype = {
     }
 }
 
+var userHookup = Class.create();
+
+userHookup.prototype = {
+
+    initialize: function(req,params) {
+        var url = home_url + '/user_hook/' + req + q + params;
+        if( $('debug') )
+            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
+        new Ajax.Request( url, { method: 'get', onComplete: this.onUserHooks.bind(this) } );
+    },
+
+    onUserHooks: function(resp,json) {
+        if( json && json.ok_to_rate.length )
+        {
+            if( json.rate_mode = 'rate' )
+            {
+                new ratingsHooks(json.ok_to_rate);
+            }
+        }
+    }
+
+}
+
 var ratingsHooks = Class.create();
 
 ratingsHooks.prototype = {
@@ -99,20 +122,30 @@ ratingsHooks.prototype = {
     full_star_url: null,
     null_star_url: null,
     return_macro: null,
-    initialize: function(null_star,full_star,return_macro) {
-        this.full_star_url = full_star;
-        this.null_star_url = null_star;
-        this.return_macro = return_macro;
-        var me = this;
-        $$('.rate_star').each( function(img) {
-            var m = img.id.match(/([0-9]+)_([0-9]+)$/);
-            var id = m[2];
-            var num = m[1];
-            img.altsrc = null_star || img.src;
-            Event.observe(img,'click',me.onRateClick.bindAsEventListener(me,id,num));
-            Event.observe(img,'mouseover',me.onRateHover.bindAsEventListener(me,id,num));
-            Event.observe(img,'mouseout',me.onRateOff.bindAsEventListener(me,id,num));
-        });
+    initialize: function(ok_to_rate) {
+        try
+        {
+            this.full_star_url = full_star;
+            this.null_star_url = null_star;
+            this.return_macro = rate_return_t || null;
+            var me = this;
+            $$('.rate_star').each( function(img) {
+                var m = img.id.match(/([0-9]+)_([0-9]+)$/);
+                var id = m[2];
+                var num = m[1];
+                if( ok_to_rate.include(id) )
+                {
+                    img.altsrc = null_star || img.src;
+                    Event.observe(img,'click',me.onRateClick.bindAsEventListener(me,id,num));
+                    Event.observe(img,'mouseover',me.onRateHover.bindAsEventListener(me,id,num));
+                    Event.observe(img,'mouseout',me.onRateOff.bindAsEventListener(me,id,num));
+                }
+            });
+        }
+        catch (e)
+        {
+            alert(e);
+        }
     },
     onRateClick: function(event,id,num) {
         var rlabel = $("rate_label_" + id);
@@ -132,6 +165,8 @@ ratingsHooks.prototype = {
         var url = home_url + "rate/" + id + "/" + num;
         if( this.return_macro )
             url += q + 'rmacro=' + this.return_macro;
+        if( $('debug') )
+            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         new Ajax.Updater(d_elem,url);
 
     },
@@ -139,7 +174,7 @@ ratingsHooks.prototype = {
         var i;
         for( i=1; i<6; i++)
         {
-            var img = $('rate_star_' + num + '_' + id);
+            var img = $('rate_star_' + i + '_' + id);
             img.src = img.altsrc;
         }
     },
@@ -147,8 +182,8 @@ ratingsHooks.prototype = {
         var i;
         for( i=1; i<=num; i++)
         {
-            var img = $('rate_star_' + num + '_' + id);
-            img.src = this.full_star_url;
+            var img = 'rate_star_' + i + '_' + id;
+            $(img).src = this.full_star_url;
         }
     }
 }
@@ -158,10 +193,13 @@ var recommendsHooks = Class.create();
 recommendsHooks.prototype = {
 
     return_macro: null,
-    initialize: function(return_macro) {
+    initialize: function(ok_to_rate,return_macro) {
+        this.return_macro = return_macro;
         $$('.recommend_link').each( function(e) {
             var id = e.id.match(/[0-9]+$/);
-            Event.observe(img,'click',me.onRecommendClick.bindAsEventListener(me,id));
+            if( ok_to_rate.include(id) ) {
+                Event.observe(img,'click',me.onRecommendClick.bindAsEventListener(me,id));
+            }
         });
     },
 

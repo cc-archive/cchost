@@ -21,6 +21,8 @@ var home_url  = '%(home-url)%';
 var root_url  = '%(root-url)%';
 var query_url = '%(query-url)%';
 var q         = '%(q)%';
+var user_name = %if_not_null(logged_in_as)% '%(logged_in_as)%'; %else% null; %end_if%
+
 //-->
 </script>
 
