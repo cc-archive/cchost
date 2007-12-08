@@ -58,12 +58,14 @@ class CCPublicize
     {
         require_once('cclib/cc-page.php');
         $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($id);
-        if( empty($record) )
+        if( !$uploads->KeyExists($id) )
         {
             CCPage::Prompt(_("Don't know what upload to share!"));
             return;
         }
+        $record = CCDatabase::QueryRow('SELECT upload_id, user_name, upload_name, user_real_name FROM cc_tbl_uploads JOIN ' .
+                                       'cc_tbl_user ON upload_user=user_id WHERE upload_id=' . $id );
+        $record['file_page_url'] = ccl('files',$record['user_name'],$id);
         $this->_share('upload',$record);
     }
 

@@ -408,7 +408,8 @@ var ccPlaylistBrowserObject = {
                 url += '&since=' + this.options.since;
         }
         var me = this;
-        $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
+        if( $('debug') )
+            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         new Ajax.Request( url, { method: 'get', onComplete: me._resp_browse.bind(me) } );
     },
 
@@ -548,7 +549,8 @@ var ccPlaylistBrowserObject = {
     */
     refreshDetails: function( cart_id ) {
         var url = home_url + 'api/playlist/view/' + cart_id + q + 'f=html&m=playlist_list&fcac=' + (new Date()).getTime();
-        $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
+        if( $('debug') )
+            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         new Ajax.Request( url, { method: 'get', onComplete: this._resp_playlist.bind(this, cart_id) } );
     },
 
