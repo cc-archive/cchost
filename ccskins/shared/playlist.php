@@ -10,7 +10,6 @@ function _t_playlist_playlist_create_dyn($T,&$A) {
 </div>
 </div>
 </div>
-<div  id="debug"></div>
 <script  src="<?= $T->URL('js/query_filter.js')?>" ></script>
 <script  src="<?= $T->URL('js/autocomp.js')?>" ></script>
 <script  src="<?= $T->URL('js/autopick.js')?>" ></script>

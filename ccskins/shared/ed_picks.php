@@ -54,7 +54,9 @@ EOF;
                                   CC_EVENT_FILTER_ED_PICK_DETAIL,
                                   CC_EVENT_FILTER_COLLAB_CREDIT,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
-                                  CC_EVENT_FILTER_PLAY_URL )
+                                  CC_EVENT_FILTER_PLAY_URL,
+                                  CC_EVENT_FILTER_UPLOAD_LIST,
+                                  )
                 );
 }
 [/dataview]

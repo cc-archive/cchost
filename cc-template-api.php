@@ -194,8 +194,8 @@ function cc_get_user_avatar_sql()
         $davurl = '';
     }
  
-    //return "IF( LENGTH(user_image) > 0, CONCAT( '$aurl', {$aavtr} user_image ), '$davurl' ) as user_avatar_url";
-    return "'$davurl' as user_avatar_url";
+    return "IF( LENGTH(user_image) > 0, CONCAT( '$aurl', {$aavtr} user_image ), '$davurl' ) as user_avatar_url";
+    //return "'$davurl' as user_avatar_url";
 }
 
 function cc_get_user_avatar(&$R)

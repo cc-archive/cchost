@@ -41,7 +41,6 @@ div#remix_search_controls {
         <a href="javascript://do search" id="do_remix_search">%text(str_remix_do_search)%</a>
         <div class="remix_no_match" id="remix_no_match"></div>
     </div>
-    <div id="debug"></div>
     <div id="remix_search_results">
     %if_not_null(field/sourcesof)%
         <? 
