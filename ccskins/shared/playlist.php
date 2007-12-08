@@ -98,7 +98,8 @@ function _t_playlist_playlist_list($T,&$A) {
 
 function _t_playlist_playlist_list_lines($T,&$A) {
 
-phpinfo();
+  if( empty($A['records']) )
+      return;
 
   foreach( $A['records'] as $R ) {
     ?><div  class="trr">

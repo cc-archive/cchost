@@ -27,6 +27,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-page.php'); // figure might as well
 
 /**
  * Base class for all HTML forms in the system.
