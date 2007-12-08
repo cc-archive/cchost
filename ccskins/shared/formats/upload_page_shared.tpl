@@ -26,7 +26,9 @@
 %end_if% 
 %map(#R,records/0)% 
 %map(record,#R)% 
-
+<script>
+var ratings_enabled = '%(#R/ratings_enabled)%';
+</script>
 
 <div id="date_box">%text(str_list_date)%: %(#R/upload_date)%
 %if_not_empty(upload_last_edit)%
@@ -59,15 +61,16 @@
                 <tr><th>%text(str_list_length)%</th><td>%(#R/file_format_info/ps)%</td></tr>
             %end_if%
 
-            %if_null(#R/thumbs_up)%
+            %if_not_null(#R/ratings_enabled)%
+                %if_empty(#R/thumbs_up)%
                 <tr><th id="rate_label_%(#R/upload_id)%">%if_not_null(#R/ratings)%<!-- -->%text(str_ratings)% %end_if%</th>
-                    <td><span id="rate_block_%(#R/upload_id)%">%call('util.tpl/ratings_stars')% </span></td></tr>
-            %else%
-                %if_not_null(#R/upload_num_scores)%
+                    <td><span id="rate_block_%(#R/upload_id)%">%call('util.tpl/ratings_stars_user')% </span></td></tr>
+                %else%
                     <tr><th>%text(str_recommends)%</th>
-                    <td class="recommend_block" id="recommend_block_%(#R/upload_id)%">%(#R/upload_num_scores)%</td></tr>
-                %end_if% 
+                    <td>%call('util.php/recommends')%</td>
+                %end_if%
             %end_if%
+
             </table>
 
             %if_not_null(#R/upload_description_html)%
@@ -90,6 +93,12 @@
                 <a href="%(#tag/tagurl)%">%(#tag/tag)%</a>%if_not_last(#tag)%, %end_if%
             %end_loop%
             </div>
+
+            %if_not_empty(#R/fplay_url)%
+                <div class="playerdiv"><span class="playerlabel">%text(str_play)%</span><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a></div>
+                <script> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
+            %end_if%
+
             <br class="info_box_clear" />
         </div><!-- info box -->
 
@@ -165,13 +174,28 @@
 <div id="upload_menu_box">
 </div><!-- upload_menu_box -->
 
+%if_not_null(enable_playlists)%
+    %call('playerembed.xml/eplayer')%
+    <script>
+        ccEPlayer.hookElements($('upload_middle'));
+    </script>
+%end_if%
+
 <script>
 function menu_cb(resp) {
     $('upload_menu_box').innerHTML = resp.responseText;
     var dl_hook = new popupHookup("download_hook","download",str_download); 
     dl_hook.hookLinks();
-    if( cc_round_boxes )
+    if( window.round_box_enabled )
         cc_round_boxes();
+    if( user_name && ratings_enabled )
+    {
+        null_star = '%url('images/stars/star-empty.gif')%';
+        full_star = '%url('images/stars/star-red.gif')%';
+        rate_return_t = 'ratings_stars_user';
+        recommend_return_t = 'recommends';
+        new userHookup('upload_list', 'ids=%(#R/upload_id)%');
+    }
 }
 var menu_url = query_url + 't=upload_menu&f=html&ids=%(#R/upload_id)%';
 new Ajax.Request( menu_url, { method: 'get', onComplete: menu_cb } );

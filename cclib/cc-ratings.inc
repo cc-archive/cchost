@@ -59,7 +59,7 @@ class CCRatingsHV
             
             for( ; $i < 5; $i++ )
                 $record['ratings'][] = 'empty';
-            
+
             $record['ratings_score'] = number_format($average,2) . '/' . $count;
         }
         else

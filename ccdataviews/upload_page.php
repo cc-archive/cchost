@@ -13,6 +13,10 @@ function upload_page_dataview()
     $urlp = ccl('people') . '/';
     $urll = ccd('ccskins/shared/images/lics/'); 
     $avatar_sql = cc_get_user_avatar_sql();
+    $configs =& CCConfigs::GetTable();
+    $chart = $configs->GetConfig('chart');
+    $is_thumbs_up = empty($chart['thumbs_up']) ? '0' : '1';
+    $ratings_on = empty( $chart['ratings'] ) ? '0' : '1';
 
     $sql =<<<EOF
 SELECT 
@@ -20,9 +24,8 @@ SELECT
     user_id, upload_user, upload_id, upload_name, upload_extra, 
     upload_description as _need_description_html,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
-    user_real_name,
-    user_name,
-    $avatar_sql,
+    $is_thumbs_up as thumbs_up, $ratings_on as ratings_enabled,
+    user_real_name,user_name, $avatar_sql, upload_num_scores, upload_score,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     CONCAT( '$urll', license_logo ) as license_logo_url,
     license_url, license_name,
@@ -43,11 +46,14 @@ EOF;
                                   CC_EVENT_FILTER_UPLOAD_TAGS,
                                   CC_EVENT_FILTER_ED_PICK_DETAIL,
                                   CC_EVENT_FILTER_COLLAB_CREDIT,
+                                  CC_EVENT_FILTER_RATINGS_STARS,
                                   CC_EVENT_FILTER_DESCRIPTION_HTML,
                                   CC_EVENT_FILTER_REMIXES_FULL,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
                                   CC_EVENT_FILTER_MACROS, 
-                                  CC_EVENT_FILTER_PLAY_URL )
+                                  CC_EVENT_FILTER_PLAY_URL,
+                                  CC_EVENT_FILTER_UPLOAD_PAGE,
+                            )
                 );
 }
 

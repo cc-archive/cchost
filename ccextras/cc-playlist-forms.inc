@@ -35,6 +35,7 @@ require_once('ccextras/cc-cart-table.inc');
 require_once('ccextras/cc-playlist.inc');
 require_once('cclib/cc-form.php');
 require_once('cclib/cc-admin.php');
+require_once('cclib/cc-page.php');
 
 class CCPlaylistForm extends CCForm
 {

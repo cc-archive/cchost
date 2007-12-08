@@ -97,7 +97,7 @@ var userHookup = Class.create();
 userHookup.prototype = {
 
     initialize: function(req,params) {
-        var url = home_url + '/user_hook/' + req + q + params;
+        var url = home_url + 'user_hook/' + req + q + params;
         if( $('debug') )
             $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         new Ajax.Request( url, { method: 'get', onComplete: this.onUserHooks.bind(this) } );
@@ -106,9 +106,17 @@ userHookup.prototype = {
     onUserHooks: function(resp,json) {
         if( json && json.ok_to_rate.length )
         {
-            if( json.rate_mode = 'rate' )
+            if( json.rate_mode == 'rate' )
             {
                 new ratingsHooks(json.ok_to_rate);
+            }
+            else if( json.rate_mode == 'recommend' )
+            {
+                new recommendsHooks(json.ok_to_rate);
+            }
+            else
+            {
+                alert('error: unknown rate mode: ' + json.rate_mode );
             }
         }
     }
@@ -135,7 +143,7 @@ ratingsHooks.prototype = {
                 var num = m[1];
                 if( ok_to_rate.include(id) )
                 {
-                    img.altsrc = null_star || img.src;
+                    img.altsrc = img.src;
                     Event.observe(img,'click',me.onRateClick.bindAsEventListener(me,id,num));
                     Event.observe(img,'mouseover',me.onRateHover.bindAsEventListener(me,id,num));
                     Event.observe(img,'mouseout',me.onRateOff.bindAsEventListener(me,id,num));
@@ -193,14 +201,26 @@ var recommendsHooks = Class.create();
 recommendsHooks.prototype = {
 
     return_macro: null,
-    initialize: function(ok_to_rate,return_macro) {
-        this.return_macro = return_macro;
-        $$('.recommend_link').each( function(e) {
-            var id = e.id.match(/[0-9]+$/);
-            if( ok_to_rate.include(id) ) {
-                Event.observe(img,'click',me.onRecommendClick.bindAsEventListener(me,id));
-            }
-        });
+
+    initialize: function(ok_to_rate) {
+        try
+        {
+            var me = this;
+            this.return_macro = recommend_return_t || null ;
+            $$('.recommend_block').each( function(e) {
+                var id = e.id.match(/[0-9]+$/);
+                if( ok_to_rate.include(id) ) {
+                    var html = e.innerHTML;
+                    var newHtml = '<span class="recommend_link">' + html + '</span>';
+                    e.innerHTML = newHtml;
+                    Event.observe(e,'click',me.onRecommendClick.bindAsEventListener(me,id));
+                }
+            });
+        }
+        catch (e)
+        {
+            alert(e);
+        }
     },
 
     onRecommendClick: function(event,id) {

@@ -124,12 +124,12 @@ function cc_filter_std(&$records,&$dataview_info)
                         if( $half )
                         {
                             $R['ratings'][] = 'half';
-                            $i++;
+                            $ri++;
                         }
                         
                         for( ; $ri < 5; $ri++ )
                             $R['ratings'][] = 'empty';
-                        
+
                         $R['ratings_score'] = number_format($average,2) . '/' . $count;
                     }
                     break;

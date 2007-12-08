@@ -256,6 +256,47 @@ function _t_util_ratings_stars($T,&$A)
     }
 }
 
+function _t_util_ratings_stars_user($T,&$A)
+{
+    $R =& $A['record'];
+    if( !empty($R['ratings']) )
+    {
+        $id = $R['upload_id'];
+        if( $A['ajax'] )
+            print '<div>'; 
+        else
+            print '<div id="rate_block_' . $id . '">';
+        $i = 1; 
+        if( empty($R['ratings']) )
+        {
+            // there are no existing, put out editable blank stars...
+
+            print $T->String('str_rate') . ': ';
+            for( $i = 1; $i < 6; $i++ )
+            {
+                $url = $T->URL('images/stars/star-empty.gif');
+                $info = 'id="rate_star_' . $i . '_' . $id . '" class="rate_star"';
+                print '<img '.$info.' style="width:17px;height:17px;margin:0px;" src="' . $url . '" />';
+            }
+        }
+        else
+        {
+            // there's already a rating, put out stars, editable if legal to do so...
+
+            foreach( $R['ratings'] as $rsize ) // 'half' 'full'
+            {
+                $src = 'images/stars/star-' . $rsize . '.gif';
+                $url = $T->URL($src);
+                $info = 'id="rate_star_' . $i . '_' . $id . '" class="rate_star"';
+                print '<img '.$info.' style="width:17px;height:17px;margin:0px;" src="' . $url . '" />';
+                ++$i;
+            }
+            print ' ' . $R['ratings_score'];
+        }
+        print '</div>';
+    }
+}
+
 function _t_util_ratings_stars_small($T,&$A)
 {
     $R =& $A['record'];
@@ -314,6 +355,23 @@ function _t_util_ratings_stars_small_user($T,&$A)
             print ' ' . $R['ratings_score'];
         }
         print '</div>';
+    }
+}
+
+function _t_util_recommends($T,&$A)
+{
+    $R =& $A['record'];
+
+    if( empty($A['ajax']) )
+    {
+        ?><div class="recommend_block" id="recommend_block_<?= $R['upload_id'] ?>"><?
+    }
+    
+    print $T->String('str_recommends') . ' <span>(' . sprintf('%d',$R['upload_num_scores']) . ')</span>';
+
+    if( empty($A['ajax']) )
+    {
+      ?></div><?
     }
 }
 

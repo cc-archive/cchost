@@ -36,6 +36,17 @@
 	margin-right: 20px;
 }
 
+.recommend_block {
+	background: url('../images/rate_it.png') top right no-repeat;
+	padding-right: 12px;
+}
+
+.recommend_link {
+	color: #FA044F; /* well.... */
+	font-weight: bold;
+	cursor: pointer;
+}
+
 .upload_date {
     color: #888;
 }

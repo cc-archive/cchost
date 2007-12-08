@@ -99,6 +99,8 @@ function _t_playlist_playlist_list($T,&$A) {
 
 function _t_playlist_playlist_list_lines($T,&$A) {
 
+phpinfo();
+
   foreach( $A['records'] as $R ) {
     ?><div  class="trr">
       <div  class="tdc cc_playlist_item" id="_pli_<?= $R['upload_id']?>">

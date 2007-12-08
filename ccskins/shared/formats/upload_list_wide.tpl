@@ -63,14 +63,17 @@ EOF;
                                   CC_EVENT_FILTER_REMIXES_SHORT,
                                   CC_EVENT_FILTER_RATINGS_STARS,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
-                                  CC_EVENT_FILTER_PLAY_URL )
+                                  CC_EVENT_FILTER_PLAY_URL,
+                                  CC_EVENT_FILTER_UPLOAD_LIST, )
                 );
 }
 [/dataview]
 */ ?>
 
 <link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/upload_list_wide.css')%" />
-
+<script>
+  var ratings_enabled = %if_not_null(records/0/ratings_enabled)% true %else% false %end_if%;
+</script>
 <div id="upload_listing">
 <? $rec_ids = array(); ?>
 %loop(records,R)%
@@ -83,13 +86,12 @@ EOF;
         <a href="%(#R/file_page_url)%" class="upload_name">%(#R/upload_name_chop)%</a><br />%text(str_by)% 
                <a href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
         <div class="upload_date">
-            %if_empty(#R/thumbs_up)%
+            %if_not_null(#R/ratings_enabled)%
                 %map(record,#R)%
-                %call('util.php/ratings_stars_small_user')%
-            %else%
-                %if_not_null(#R/upload_num_scores)%
-                    <div class="recommend_block" id="recommend_block_%(#R/upload_id)%">%text(str_recommends)% 
-                            <!- -->%(#R/upload_num_scores)% </div>
+                %if_empty(#R/thumbs_up)%
+                    %call('util.php/ratings_stars_small_user')%
+                %else%
+                    %call('util.php/recommends')%
                 %end_if%
             %end_if%
             %(#R/upload_date_format)%
@@ -161,11 +163,12 @@ EOF;
         dl_hook.hookLinks(); 
         var menu_hook = new popupHookup("menuup_hook","ajax_menu",'');
         menu_hook.hookLinks();
-        if( user_name )
+        if( user_name && ratings_enabled )
         {
             null_star = '%url('images/stars/star-empty-s.gif')%';
             full_star = '%url('images/stars/star-red-s.gif')%';
             rate_return_t = 'ratings_stars_small_user';
+            recommend_return_t = 'recommends';
             new userHookup('upload_list', 'ids=<?= join(',',$rec_ids) ?>');
         }
     </script>

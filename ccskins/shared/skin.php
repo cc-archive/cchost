@@ -14,6 +14,7 @@ $A['ratings_stars'] = 'util.php/ratings_stars';
 $A['ratings_stars_small'] = 'util.php/ratings_stars_small';
 $A['ratings_stars_user'] = 'util.php/ratings_stars_user';
 $A['ratings_stars_small_user'] = 'util.php/ratings_stars_small_user';
+$A['recommends'] = 'util.php/recommends';
 
 $A['admin_menu_page']    = 'admin.php/print_admin_menu';
 
