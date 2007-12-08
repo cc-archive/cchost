@@ -134,6 +134,11 @@ END;
 */
 class CCRating
 {
+    function OnFilterUserProfile(&$records)
+    {
+
+    }
+
     /**
     * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *

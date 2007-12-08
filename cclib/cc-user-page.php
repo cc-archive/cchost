@@ -44,15 +44,9 @@ class CCUserPage
             return;
         }
 
-        if( empty($settings['newuserpage']) || empty($username) )
+        if( empty($username) )
         {
-            // legacy handling...
-            require_once('cclib/cc-user.inc');
-            $uapi = new CCUserAPI();
-            if( empty($username) )
-                $uapi->BrowseUsers();
-            else
-                $uapi->UserPage($username,$tab);
+            $this->BrowseUsers();
             return;
         }
 
@@ -74,25 +68,25 @@ class CCUserPage
             $cb_tabs['user_cb'][0] = new $cb_tabs['user_cb'][0]();
 
         call_user_func_array( $cb_tabs['user_cb'], array( $username, $tagfilter ) );
-
-        $this->_setup_fplay(null,$username);
     }
 
     function Profile($username)
     {
-        $users = new CCUsers();
-        $where['user_name'] = $username;
-        $users->AddExtraColumn('1 as artist_page');
-        $records  = $users->GetRecords($where);
-        if( empty($records) )
+        require_once('cclib/cc-page.php');
+        $user_real_name = CCDatabase::QueryItem("SELECT user_real_name FROM cc_tbl_user WHERE user_name ='{$username}'");
+        if( !$user_real_name )
         {
             CCPage::Prompt(_("The system does not know that user."));
             CCUtil::Send404(false);
         }
         else
         {
-            CCPage::SetTitle($records[0]['user_real_name']);
-            CCPage::PageArg( 'user_record', $records[0], 'user_listing' );
+            CCPage::SetTitle($user_real_name);
+            require_once('cclib/cc-query.php');
+            $query = new CCQuery();
+            $args = $query->ProcessAdminArgs('t=user_profile&datasource=user');
+            $sqlargs['where'] = "user_name='{$username}'";
+            $query->QuerySQL($args,$sqlargs);
         } 
     }
 
@@ -111,7 +105,6 @@ class CCUserPage
         //$this->_show_feed_links($username);
     }
 
-    // er, copied from user.inc
     function _show_feed_links($username)
     {
         require_once('cclib/cc-feeds.php');
@@ -123,8 +116,8 @@ class CCUserPage
 
     function _get_tabs($user,&$default_tab_name)
     {
-        $users =& CCUsers::GetTable();
-        $record = $users->GetRecordFromName($user);
+        $record = CCDatabase::QueryRow(
+             "SELECT user_id, user_name, user_real_name, user_num_uploads FROM cc_tbl_user WHERE user_name = '{$user}'");
 
         $tabs = array();
 
@@ -153,6 +146,20 @@ class CCUserPage
     
         CCEvents::Invoke( CC_EVENT_USER_PROFILE_TABS, array( &$tabs, &$record ) );
 
+        if( CCUser::IsAdmin() )
+        {
+            $tabs['admin'] = array (
+                        'text' => 'Admin',
+                        'help' => 'Admin',
+                        'tags' => "admin",
+                        'limit' => '',
+                        'access' => 4,
+                        'function' => 'url',
+                        'user_cb' => array( 'CCUserAdmin', 'Admin' ),
+                        'user_cb_mod' => 'cclib/cc-user-admin.php',
+                     );
+        }
+
         $keys = array_keys($tabs);
         for( $i = 0; $i < count($keys); $i++ )
         {
@@ -170,18 +177,130 @@ class CCUserPage
         return $tab_info;
     }
 
-    function _setup_fplay($user_real_name,$username)
+    function BrowseUsers()
     {
-        global $CC_GLOBALS;
-        if( empty($user_real_name) )
+        $alpha           = '';
+        $where           = 'user_num_uploads > 0';
+        $qargs           = 't=user_list&datasource=user';
+        $sqlargs['where'] = 'user_num_uploads > 0';
+
+        if( !isset($_GET['p']) )
         {
-            $users =& CCUsers::GetTable();
-            $w['user_name'] = $username;
-            $user_real_name = $users->QueryItem('user_real_name',$w);
+            $qargs .= '&sort=user_registered&ord=DESC';
         }
-        $CC_GLOBALS['fplay_args'][] = "user=$username&reqtags=audio&limit=100";
-        $CC_GLOBALS['fplay_title']  = sprintf(_("PLAY %s"),CC_strchop($user_real_name,20));
+        else
+        {
+            $alpha = CCUtil::StripText($_GET['p']);
+            $sqlargs['where'] .= " AND (user_name LIKE '{$alpha}%')";
+            $qargs .= '&sort=user_name&ord=ASC';
+        }
+
+        $sql =<<<END
+                SELECT DISTINCT LOWER(SUBSTRING(user_name,1,1)) c
+                   FROM `cc_tbl_user` 
+                   WHERE user_num_uploads > 0
+                ORDER BY c
+END;
+
+        $burl = ccl('people');
+        $chars = CCDatabase::QueryItems($sql);
+        $len = count($chars);
+        $alinks = array();
+        for( $i = 0; $i < $len; $i++ )
+        {
+            $c = $chars[$i];
+            if( $c == $alpha )
+            {
+                $alinks[] = array( 
+                                'url' => '', 
+                                'text' => "<b>$c</b>" );
+            }
+            else
+            {
+                $alinks[] = array( 
+                                'url' => $burl . '?p=' . $c, 
+                                'text' => $c );
+            }
+        }
+
+        require_once('cclib/cc-page.php');
+        require_once('cclib/cc-query.php');
+
+        CCPage::PageArg('user_index',$alinks);
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs($qargs);
+        $query->QuerySQL($args,$sqlargs);
     }
+
+    function OnFilterUserProfile(&$records)
+    {
+        $row =& $records[0];
+
+        $row['user_homepage_html'] = '';
+        if( !empty($row['user_homepage']) )
+        {
+            $row['user_homepage_html'] = "<a href=\"{$row['user_homepage']}\">{$row['user_homepage']}</a>";
+        }
+
+        $user_fields = array( 'str_user_home_page' => 'user_homepage_html',
+                              'str_user_about_me'  => 'user_description' );
+
+        $row['user_fields'] = array();
+        foreach( $user_fields as $name => $uf  )
+        {
+            if( empty($row[$uf]) )
+                continue;
+            $row['user_fields'][] = array( 'label' => $name, 'value' => $row[$uf], 'id' => $uf );
+        }
+
+        if( CCUser::IsLoggedIn() && ($row['user_id'] != CCUser::CurrentUser()) )
+        {
+            $current_favs = strtolower(CCUser::CurrentUserField('user_favorites'));
+            $favs = CCTag::TagSplit($current_favs);
+            if( in_array( strtolower($row['user_name']), $favs ) )
+                $msg = sprintf(_("Remove %s from my favorites"),$row['user_real_name'] );
+            else
+                $msg = sprintf(_("Add %s to my favorites"),$row['user_real_name']);
+            $favurl = ccl('people','addtofavs',$row['user_name']);
+            $link = '<a href="' . $favurl . '">' . $msg . '</a>';
+            $row['user_fields'][] = array( 'label' => '',
+                                         'value' => $link,
+                                           'id' => 'fav' );
+        }
+
+        require_once('cclib/cc-tags.php');
+
+        $row['user_tag_links'] = array();
+
+        $favs = CCTag::TagSplit($row['user_favorites']);
+        if( !empty($favs) )
+        {
+            $links = array();
+            foreach( $favs as $fav )
+                $links[] = "(user_name = '$fav')";
+            $where = join(' OR ' ,$links);
+            $baseurl = ccl('people') . '/';
+            $sql =<<<END
+                SELECT user_real_name as tag, 
+                       CONCAT('$baseurl',user_name) as tagurl
+                FROM cc_tbl_user
+                WHERE $where
+END;
+            $links = CCDatabase::QueryRows($sql);
+            $row['user_tag_links']['links0'] = array( 'label' => _('Favorite people'),
+                                              'value' => $links );
+        //CCDebug::PrintVar($row);
+        }
+
+        CCTag::ExpandOnRow($row,'user_whatilike',ccl('search/people', 'whatilike'), 'user_tag_links',
+                                'str_prof_what_i_like');
+        CCTag::ExpandOnRow($row,'user_whatido',  ccl('search/people', 'whatido'),'user_tag_links', 
+                                'str_prof_what_i_pound_on');
+        CCTag::ExpandOnRow($row,'user_lookinfor',ccl('search/people', 'lookinfor'),'user_tag_links',
+                                'str_prof_what_im_looking_for', true);
+//CCDebug::PrintVar($row);
+    }
+
 
 }
 

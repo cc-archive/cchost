@@ -26,7 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCPublicizeHV',  'OnUserRow') );
+CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCPublicizeHV',  'OnFilterUserProfile') );
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCPublicizeHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPublicizeHV',  'OnUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPublicize',  'OnMapUrls'),   'ccextras/cc-publicize.inc');
@@ -81,27 +81,19 @@ class CCPublicizeHV
         $menu['share_link']['onclick'] = '';
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_USER_ROW}
-    *
-    * Add extra data to a user row before display
-    *
-    * @param array &$record User record to massage
-    */
-    function OnUserRow(&$row)
-    {
-        if( empty($row['artist_page']) )
-            return;
 
+    function OnFilterUserProfile(&$rows)
+    {
+        $row =& $rows[0];
         $itsme = CCUser::CurrentUser() == $row['user_id'];
 
         if( $this->_pub_wizard_allowd($itsme) )
         {
             $url = ccl('publicize',$row['user_name'] );
-            $text = $itsme ? _('Publicize yourself')
-                           : sprintf( _('Publicize %s'), $row['user_real_name'] );
+            $text = $itsme ? _('str_publicize_yourself')
+                           : array( _('str_publicize_s'), $row['user_real_name'] );
                 
-            $row['user_fields'][] = array( 'label' => 'str_reviews', 
+            $row['user_fields'][] = array( 'label' => 'str_publicize', 
                                        'value' => "<a href=\"$url\">$text</a>" );
         }
     }

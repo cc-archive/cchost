@@ -369,25 +369,6 @@ class CCUserAPI
         CCPage::Prompt("str_changes_were_saved");
     }
 
-    function ListRecords($sql_where = '')
-    {
-        require_once('cclib/cc-page.php');
-        $users = new CCUsers(); // getting a new one so we can safely do the join
-        if( empty($sql_where) )
-        {
-            CCPage::SetTitle('str_people');
-            // only show those with uploads
-            $users->SetOrder('user_registered','DESC');
-            $users->AddJoin( new CCTable('cc_tbl_uploads','upload_user'), 'user_id' );
-            $users->GroupOnKey();
-            $sql_where = 'upload_id > 0';
-        }
-        CCPage::AddPagingLinks($users,$sql_where);
-        $records =& $users->GetRecords($sql_where);
-        CCPage::PageArg( 'user_record', $records, 'user_listings' );
-        //CCDebug::PrintVar($sql_where);
-    }
-
     function _build_bread_crumb_trail($username,$tagfilter)
     {
         require_once('cclib/cc-tags.php');
@@ -437,150 +418,9 @@ class CCUserAPI
         CCPage::AddBreadCrumbs($trail);
     }
 
-    function BrowseUsers()
-    {
-        require_once('cclib/cc-page.php');
-        $users = new CCUsers();
-
-        $alpha = '';
-        $where = 'user_num_uploads > 0';
-        if( !isset($_GET['p']) )
-        {
-            $users->SetOrder('user_registered','DESC');
-        }
-        else
-        {
-            $alpha = CCUtil::StripText($_GET['p']);
-            $where = "($where) AND (user_name LIKE '{$alpha}%')";
-            $users->SetOrder('user_name','ASC');
-        }
-
-        CCPage::AddPagingLinks($users,$where);
-        $records =& $users->GetRecords($where);
-        CCPage::PageArg('user_record',$records,'user_listings');
-
-        $sql =<<<END
-                SELECT DISTINCT LOWER(SUBSTRING(user_name,1,1)) c
-                   FROM `cc_tbl_user` 
-                   WHERE user_num_uploads > 0
-                ORDER BY c
-END;
-
-        $burl = ccl('people');
-        $chars = CCDatabase::QueryItems($sql);
-        $len = count($chars);
-        $alinks = array();
-        for( $i = 0; $i < $len; $i++ )
-        {
-            $c = $chars[$i];
-            if( $c == $alpha )
-            {
-                $alinks[] = array( 
-                                'url' => '', 
-                                'text' => "<b>$c</b>" );
-            }
-            else
-            {
-                $alinks[] = array( 
-                                'url' => $burl . '?p=' . $c, 
-                                'text' => $c );
-            }
-        }
-
-        CCPage::PageArg('user_index',$alinks);
-    }
-
-    function UserPage($username = '',$tagfilter='')
-    {
-        $this->_build_bread_crumb_trail($username,$tagfilter);
-
-        if( empty($username) )
-        {
-            $this->BrowseUsers();
-        }
-        else
-        {
-            $users = new CCUsers();
-
-            $where['user_name'] = $username;
-            $users->AddExtraColumn('1 as artist_page');
-            $records  = $users->GetRecords($where);
-            if( empty($records) )
-            {
-                CCPage::Prompt(_("The system does not know that user."));
-                CCUtil::Send404(false);
-                return;
-            }
-            $itsme = $username == CCUser::CurrentUserName();
-            $R =& $records[0];
-            $name = $R['user_real_name'];
-
-            if( !empty($tagfilter ) )
-                $tagfilter = CCUtil::StripText($tagfilter);
-
-            if( !empty($tagfilter ) )
-            {
-                //require_once('cclib/cc-upload.php');
-                //CCUpload::ListMultipleFiles($where,$tagfilter);
-                $this->_show_feed_links($username);
-            
-                CCPage::SetTitle($name . ' :: ' . $tagfilter );
-
-                /// EARLY EXIT 
-                return;
-            }
-
-            CCPage::SetTitle($name);
-
-            $uploads =& CCUploads::GetTable();
-            $show_user = true;
-            $show_records = false;
-            if( $uploads->CountRows($where) > 0 )
-            {
-                $show_records = true;
-            }
-            else
-            {
-                if( $itsme )
-                {
-                    $msg = _("You've registered an account and logged in, but you haven't uploaded any remixes.") . '<br /><br />' . 
-                           _("Use the 'Submit Files' menu items on the left to start uploading.");
-
-                     $R['user_fields'][] = array( 'label' => '', 
-                                                  'value' => _($msg) );
-                }
-                else
-                {
-                        $msg = sprintf(_('%s has not uploaded any remixes.'), $name);                         
-                        $R['user_fields'][] = array( 'label' => '', 
-                                                      'value' => $msg );
-                }
-            }
-            if( $show_user )
-                CCPage::PageArg( 'user_record', $records, 'user_listing' );
-
-            if( $show_records )
-            {
-                // todo: convert to query api
-                //require_once('cclib/cc-upload.php');
-                //CCUpload::ListMultipleFiles($where,$tagfilter);
-            }
-
-            $this->_show_feed_links($username);
-        }
-    }
-
-    function _show_feed_links($username)
-    {
-        require_once('cclib/cc-feeds.php');
-        CCPage::PageArg('artist_page',$username);
-        CCFeeds::AddFeedLinks($username,'',sprintf(_('Uploads by %s'), $username) );
-        CCFeeds::AddFeedLinks('','remixesof=' .$username, sprintf(_('Remixes of %s'), $username) );
-        CCFeeds::AddFeedLinks('','remixedby=' .$username, sprintf(_('Remixed by %s'), $username) );
-    }
-
     function AddToFavs($user_to_add_or_remove)
     {
+        require_once('cclib/cc-tags.php');
         $current_favs = CCUser::CurrentUserField('user_favorites');
         $favs = CCTag::TagSplit($current_favs);
 
@@ -720,11 +560,6 @@ END;
                        'formatter'  => 'tagsedit',
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
 
-            $fields['newuserpage'] =
-               array(  'label'      => _('Use Subtabs on User Page'),
-                       'form_tip'   => _('Uncheck this for skins that use legacy user profile page'),
-                       'formatter'  => 'checkbox',
-                       'flags'      => CCFF_POPULATE );
         }
 
     }

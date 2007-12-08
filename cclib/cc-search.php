@@ -353,7 +353,6 @@ EOF;
             $field = 'user_' . $field;
             CCPage::SetTitle('str_search_users_that', $tag);
             require_once('cclib/cc-user.inc');
-            CCUserAPI::ListRecords( "$field LIKE '%$tag%'" );
         }
     }
 

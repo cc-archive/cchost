@@ -146,7 +146,8 @@ class CCUser
             if( is_string($val) )
             {
                 $val = unserialize(stripslashes($val));
-                $record = $users->GetRecordFromName( $val[0] );
+                $record = CCDatabase::QueryRow( 'SELECT * FROM cc_tbl_user WHERE user_name = \'' . $val[0]  . '\'' );
+                $record['user_extra'] = unserialize($record['user_extra']);
                 if( !empty( $record ) && ($record['user_password'] == $val[1]) )
                 {
                     $CC_GLOBALS = array_merge($CC_GLOBALS,$record);
@@ -241,20 +242,6 @@ class CCUsers extends CCTable
         return $_table;
     }
 
-    // -----------------------------------
-    //  For turning vanilla db 'rows' into
-    //        app-usable 'records'
-    // ------------------------------------
-    function & GetRecords($where)
-    {
-        $qr = $this->Query($where);
-        $records = array();
-        while( $row = mysql_fetch_assoc($qr) )
-            $records[] = $this->GetRecordFromRow($row);
-
-        return $records;
-    }
-
     function & GetRecordFromName($username)
     {
         $where = "user_name = '" . strtolower($username) . "'";
@@ -285,108 +272,27 @@ class CCUsers extends CCTable
 
     function & GetRecordFromRow(&$row,$expand = true)
     {
+        print('User get record called');
+        CCDebug::StackTrace();
+
         global $CC_GLOBALS;
-
-        $row['artist_page_url']  = ccl('people' ,$row['user_name']);
-        $row['user_emailurl']    = ccl('people', 'contact', $row['user_name'] );
-
-        $row['user_is_admin'] = CCUser::IsAdmin($row['user_name']);
         
         if( !empty($row['user_extra']) )
             $row['user_extra'] = unserialize($row['user_extra']);
         else
             $row['user_extra'] = array();
 
-        $row['user_avatar_url'] = cc_get_user_avatar($row);
-
         // set the language to default (for visibility on the form only)
         if (empty($row['user_language']))
             $row['user_language'] = 'default';
+    /*
 
-        //if( !empty($row['artist_page']) ) 
-         //   $this->GetFullRecord($row,$expand);
+        $row['artist_page_url']  = ccl('people' ,$row['user_name']);
+        $row['user_emailurl']    = ccl('people', 'contact', $row['user_name'] );
 
-        return $row;
-    }
-
-    function & GetFullRecord(&$row,$expand=true)
-    {
-        $row['user_homepage_html'] = '';
-        if( !empty($row['user_homepage']) )
-        {
-            $row['user_homepage_html'] = "<a href=\"{$row['user_homepage']}\">{$row['user_homepage']}</a>";
-        }
-
-        // todo: collapse these into the db
-        $user_fields = array( 'str_user_home_page' => 'user_homepage_html',
-                              'str_user_about_me'  => 'user_description' );
-
-        $row['user_fields'] = array();
-        foreach( $user_fields as $name => $uf  )
-        {
-            if( empty($row[$uf]) )
-                continue;
-            $row['user_fields'][] = array( 'label' => $name, 'value' => $row[$uf], 'id' => $uf );
-        }
-
-        if( CCUser::IsAdmin() )
-        {
-            $url = ccl('admin','user',$row['user_id']);
-            $ac_label = _('Account Management');
-            $row['user_fields'][] = array( 'label' => '', 'value' => "<a href=\"$url\" class=\"cc_user_admin_link\">$ac_label</a>" );
-        }
-
-        if( !empty($row['artist_page']) ) 
-        {
-            if( CCUser::IsLoggedIn() && ($row['user_id'] != CCUser::CurrentUser()) )
-            {
-                $current_favs = strtolower(CCUser::CurrentUserField('user_favorites'));
-                $favs = CCTag::TagSplit($current_favs);
-                if( in_array( strtolower($row['user_name']), $favs ) )
-                    $msg = sprintf(_("Remove %s from my favorites"),$row['user_real_name'] );
-                else
-                    $msg = sprintf(_("Add %s to my favorites"),$row['user_real_name']);
-                $row['user_favs_link'] = array( 'text' => $msg,
-                                             'link' => ccl('people','addtofavs',$row['user_name']) );
-            }
-
-        }
-
-        if( $expand )
-        {
-            require_once('cclib/cc-tags.php');
-
-            $row['user_tag_links'] = array();
-
-            $favs = CCTag::TagSplit($row['user_favorites']);
-            if( !empty($favs) )
-            {
-                $links = array();
-                foreach( $favs as $fav )
-                    $links[] = "(user_name = '$fav')";
-                $where = join(' OR ' ,$links);
-                $baseurl = ccl('people') . '/';
-                $sql =<<<END
-                    SELECT user_real_name as tag, 
-                           CONCAT('$baseurl',user_name) as tagurl
-                    FROM cc_tbl_user
-                    WHERE $where
-END;
-                $links = CCDatabase::QueryRows($sql);
-                $row['user_tag_links']['links0'] = array( 'label' => _('Favorite people'),
-                                                  'value' => $links );
-            //CCDebug::PrintVar($row);
-            }
-
-            CCTag::ExpandOnRow($row,'user_whatilike',ccl('search/people', 'whatilike'), 'user_tag_links',
-                                    'str_prof_what_i_like');
-            CCTag::ExpandOnRow($row,'user_whatido',  ccl('search/people', 'whatido'),'user_tag_links', 
-                                    'str_prof_what_i_pound_on');
-            CCTag::ExpandOnRow($row,'user_lookinfor',ccl('search/people', 'lookinfor'),'user_tag_links',
-                                    'str_prof_what_im_looking_for', true);
-
-            CCEvents::Invoke( CC_EVENT_USER_ROW, array( &$row ) );
-        }
+        $row['user_is_admin'] = CCUser::IsAdmin($row['user_name']);
+        $row['user_avatar_url'] = cc_get_user_avatar($row);
+    */
 
         return $row;
     }

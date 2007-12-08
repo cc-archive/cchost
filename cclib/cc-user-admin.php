@@ -226,14 +226,21 @@ class CCUserAdmin
         }
     }
 
-    function Admin($user_id,$cmd='')
+    function Admin($username,$cmd='')
     {
-        $users =& CCUsers::GetTable();
-        $record = $users->GetRecordFromKey($user_id);
-        if( empty($record) )
-            return;
+        $record = CCDatabase::QueryRow(
+                    'SELECT user_name, user_last_known_ip, user_name, user_id FROM cc_tbl_user WHERE user_name=\''.$username.'\'');
 
-        $username = $record['user_name'];
+        if( empty($record) )
+        {
+            $record = CCDatabase::QueryRow(
+                        'SELECT user_name, user_last_known_ip, user_name, user_id FROM cc_tbl_user WHERE user_id='.$username);
+            if( empty($record) )
+                return;
+            $username = $record['user_name'];
+        }
+
+        $user_id = $record['user_id'];
 
         $delfileslink = ccl('admin','user',$user_id,'delfiles');
         $deluserlink = ccl('admin','user',$user_id,'deluser');

@@ -31,7 +31,7 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCNotify',  'OnMapUrls'));
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCNotify' , 'OnGetConfigFields') );
-CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCNotify' , 'OnUserRow') );
+CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCNotify' , 'OnFilterUserProfile') );
 
 require_once('ccextras/cc-extras-events.php'); // for EVENT_TOPIC stuff
 
@@ -120,8 +120,9 @@ class CCNotify
     *
     * @param array &$record User record to massage
     */
-    function OnUserRow(&$row)
+    function OnFilterUserProfile(&$rows)
     {
+        $row =& $rows[0];
         if( $this->_is_notify_on() && CCUser::IsLoggedIn())
         {
             if( CCUser::CurrentUser() == $row['user_id'] )

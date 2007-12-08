@@ -122,11 +122,6 @@ function cc_hot_playlists()
     return CC_hot_playlists_impl();
 }
 
-function & cc_get_user_details(&$row)
-{
-    $users =& CCUsers::GetTable();
-    return $users->GetFullRecord($row);
-}
 
 function cc_get_upload_menu(&$record)
 {
@@ -134,16 +129,6 @@ function cc_get_upload_menu(&$record)
     return CCUpload::GetRecordLocalMenu($record);
 }
 
-function cc_get_ratings_info(&$record)
-{
-    $configs =& CCConfigs::GetTable();
-    $chart = $configs->GetConfig('chart');
-    if( !empty($chart['ratings']) )
-    {
-        require_once('cclib/cc-ratings.php');
-        CCRating::GetRatingsInfo($record);
-    }
-}
 
 function cc_get_value($arr,$key)
 {

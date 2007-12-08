@@ -35,7 +35,7 @@ define('NUM_REVIEWS_PER_PAGE', 20);
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCReviewsHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCReviewsHV',  'OnUploadMenu')       );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCReviewsHV',  'OnUploadRow')     );
-CCEvents::AddHandler(CC_EVENT_USER_ROW,           array( 'CCReviewsHV',  'OnUserRow')      );
+CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCReviewsHV',  'OnFilterUserProfile')      );
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCReviewsHV',  'OnUserProfileTabs')      );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCReview',  'OnMapUrls')         , 'ccextras/cc-reviews.inc' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCReview' , 'OnGetConfigFields') , 'ccextras/cc-reviews.inc' );
@@ -87,28 +87,15 @@ class CCReviewsHV
                          'access'     => CC_MUST_BE_LOGGED_IN );
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_USER_ROW}
-    *
-    * Add extra data to a user row before display
-    *
-    * @param array &$record User record to massage
-    */
-    function OnUserRow(&$record)
+    function OnFilterUserProfile(&$records)
     {
-        if( empty($record['artist_page']) )
-            return;
+        $record =& $records[0];
 
         $name = $record['user_real_name'];
 
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        if( empty($settings['newuserpage']) )
-            $url = ccl('reviews',$record['user_name']);
-        else
-            $url = ccl('people',$record['user_name'],'reviews');
+        $url = ccl('people',$record['user_name'],'reviews');
 
-        if( empty($record['user_num_reviews']) )
+        if( $record['user_num_reviews'] == 0 )
         {
             if( empty($record['user_num_reviewed']) )
                 return;

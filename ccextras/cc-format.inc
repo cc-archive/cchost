@@ -189,21 +189,19 @@ class CCFormat
     *
     * @param array &$record User record to massage
     */
-    function OnUserRow(&$row)
+    function OnFilterUserProfile(&$rows)
     {
         if( !_cc_is_formatting_on() )
             return;
 
+        $row =& $rows[0];
         if( !empty($row['user_fields']) )
         {
-            $count = count($row['user_fields']);
-            $keys = array_keys($row['user_fields']);
-            for( $i = 0; $i < $count; $i++ )
+            foreach( $row['user_fields'] as $K => $F )
             {
-                $F =& $row['user_fields'][ $keys[$i] ];
                 if( !empty($F['id']) && $F['id'] == 'user_description' )
                 {
-                    $F['value'] = _cc_format_format($row['user_description']);
+                    $row['user_fields'][$K]['value'] = _cc_format_format($row['user_description']);
                     break;
                 }
             }

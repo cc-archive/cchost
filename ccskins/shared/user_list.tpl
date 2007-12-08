@@ -1,3 +1,45 @@
+<?/*
+[meta]
+    type = template_component
+    desc = _('People page')
+    dataview = user_list
+    embedded = 1
+[/meta]
+[dataview]
+function user_list_dataview()
+{
+    $avatar_sql = cc_get_user_avatar_sql();
+    $ccp = ccl('people') . '/';
+    $cce = ccl('people','contact') . '/';
+
+    $sql =<<<EOF
+        SELECT $avatar_sql,  user_real_name, user_name, 
+            CONCAT( '$ccp', user_name ) as artist_page_url,
+            CONCAT( '$cce', user_name ) as user_emailurl,
+            DATE_FORMAT( user_registered, '%a, %b %e, %Y' ) as user_date_format
+            %columns%
+        FROM cc_tbl_user
+        %joins%
+        %where%
+        %order%
+        %limit%
+EOF;
+
+    $sql_count =<<<EOF
+        SELECT COUNT(*)
+        FROM cc_tbl_user
+        %where%
+EOF;
+    
+    return array( 'sql' => $sql,
+                  'sql_count' => $sql_count,
+                  'e' => array(
+                             CC_EVENT_FILTER_USER_LIST
+                             )
+                 );
+}
+[/dataview]
+*/?>
 <link rel="stylesheet" href="%url(css/user_list.css)%" title="Default Style" />
 
 <h1>%text(people)%</h1>
@@ -10,7 +52,7 @@
 </div>
 
 <div id="user_listing">
-%loop(user_record,u)%
+%loop(records,u)%
     <div class="user_record">
         <div class="avatar"><img src="%(#u/user_avatar_url)%" /></div>
         <a href="%(#u/artist_page_url)%" class="user_link">%(#u/user_real_name)% <span>(%(#u/user_name)%)</span></a>
