@@ -169,14 +169,14 @@ class CCUserForm extends CCSecurityVerifierForm
                 return(true);
 
             $users =& CCUsers::GetTable();
-            $this->record = $users->GetRecordFromName( $value );
+            $this->record = CCDatabase::QueryRow('SELECT * FROM cc_tbl_user WHERE user_name=\''.$value.'\'' );
 
             if( empty($this->record) )
             {
                 $this->SetFieldError($fieldname,'str_cannot_find_username');
                 return(false);
             }
-
+            
             return( true );
         }
 
