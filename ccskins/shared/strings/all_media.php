@@ -52,6 +52,7 @@ $GLOBALS['str_collab_upload_succeeded'] = _('Upload succeeded');
 $GLOBALS['str_collaboration'] = _('Collaboration');
 $GLOBALS['str_comma_separated'] = _('Comma separated list of terms');
 $GLOBALS['str_contact_artist'] = _('contact this artist');
+$GLOBALS['str_contact'] = _('contact');
 $GLOBALS['str_conversation']          = _('Conversation');
 $GLOBALS['str_default']               = _('default');
 $GLOBALS['str_description'] = _('Description');
@@ -67,6 +68,8 @@ $GLOBALS['str_editorial_whats_hot']   = _("What's Hot Right Now");
 $GLOBALS['str_editors_picks']         = _("Editors' Picks");
 $GLOBALS['str_edpick']                = _('Editorial pick');
 $GLOBALS['str_edpicks_hot_tracks']    = _("Editors' Picks and Popular Uploads");
+
+$GLOBALS['str_email'] = _('e-mail');
 $GLOBALS['str_email_from'] = _('From');
 $GLOBALS['str_email_message'] = _('Message');
 $GLOBALS['str_email_msg_limited'] = _('Message is limited to 1,000 characters');
@@ -74,12 +77,18 @@ $GLOBALS['str_email_subject'] = _('Subject');
 $GLOBALS['str_email_to'] = _('To');
 $GLOBALS['str_email_your_address'] = _('Your email address');
 $GLOBALS['str_email_your_address_opt'] = _('Your email address (optional)');
-$GLOBALS['str_favorites_added_to'] = _('Added to favorites');
+
+$GLOBALS['str_favorites']              = _('Favorite people');
+$GLOBALS['str_favorites_added_to']     = _('Added to favorites');
 $GLOBALS['str_favorites_removed_from'] = _('Removed from favorites');
+$GLOBALS['str_favorites_remove_s']     = _("Remove %s from my favorites");
+$GLOBALS['str_favorites_add_s']        = _("Add %s to my favorites");
+
 $GLOBALS['str_feat_artists'] = _('Featured Collaborators');
 $GLOBALS['str_feat_list_any_collob'] = _('List any colloborating artists (Hint: NOT YOU)');
 $GLOBALS['str_feature']               = _('featuring');
 $GLOBALS['str_featuring']             = _('Featuring');
+
 $GLOBALS['str_file'] = _('File');
 $GLOBALS['str_file_browse_uploads'] = _('Browse Uploads');
 $GLOBALS['str_file_cannot_be_found'] = _('The file cannot be found.');
@@ -100,6 +109,7 @@ $GLOBALS['str_files_manage_the_i'] = _("Manage the 'I Borrowed From This' List")
 $GLOBALS['str_files_nickname'] = _('Nickname');
 $GLOBALS['str_files_nickname_for_s'] = _("Nickname for '%s'");
 $GLOBALS['str_files_update_the_list'] = _('Update the list of sources used by this upload');
+
 $GLOBALS['str_filter_2_weeks_ago']           = _('2 weeks ago');
 $GLOBALS['str_filter_3_months_ago']          = _('3 months ago');
 $GLOBALS['str_filter_a_week_ago']            = _('a week ago');
@@ -108,7 +118,7 @@ $GLOBALS['str_filter_all']                   = _('all');
 $GLOBALS['str_filter_all_time']              = _('forever');
 $GLOBALS['str_filter_clear']                 = _('clear');
 $GLOBALS['str_filter_d_or_above']            = _('%d or above');
-$GLOBALS['str_filter_enter_user']      = _('Enter user below');
+$GLOBALS['str_filter_enter_user']            = _('Enter user below');
 $GLOBALS['str_filter_hide_list']             = _('hide list');
 $GLOBALS['str_filter_last_month']            = _('Last month');
 $GLOBALS['str_filter_last_week']             = _('Last week');
@@ -118,14 +128,16 @@ $GLOBALS['str_filter_limit']                 = _('Limit');
 $GLOBALS['str_filter_match']                 = _('Match');
 $GLOBALS['str_filter_match_all_tags']        = _('Match all tags');
 $GLOBALS['str_filter_match_any_tags']        = _('Match any tags');
-$GLOBALS['str_filter_no_records_match'] = _('no records match');
+$GLOBALS['str_filter_no_records_match']      = _('no records match');
 $GLOBALS['str_filter_remixes_of']            = _('Remixes of');
 $GLOBALS['str_filter_show_list']             = _('show list');
 $GLOBALS['str_filter_since']                 = _('Since');
 $GLOBALS['str_filter_this_many']             = _('This many');
 $GLOBALS['str_filter_yesterday']             = _('Yesterday');
+
 $GLOBALS['str_flag_this_upload']      = _('Flag this upload for possible violation of terms');
 $GLOBALS['str_flagtip']               = $GLOBALS['str_flag_this_upload'];
+
 $GLOBALS['str_for'] = _('for'); // as in: 9 Reviews for Trifonic's Beatorama
 
 $GLOBALS['str_forum_post_new_topic'] = _('Post New Topic');
@@ -272,6 +284,10 @@ $GLOBALS['str_prof_what_i_pound_on']      = _('Tools I Use');
 $GLOBALS['str_prof_what_im_looking_for']  = _("What I'm Looking For");
 $GLOBALS['str_prof_your_display']         = _('Your display name for the site (not to be confused with your login name).');
 
+$GLOBALS['str_publicize']                 = _('Publicize');
+$GLOBALS['str_publicize_yourself_s']      = _('%sPublicize yourself%s');
+$GLOBALS['str_publicize_s']               = _('Publicize %s');
+
 $GLOBALS['str_radio_create'] = _('Create your own stream or podcast from a random pool of remixes in %s by selecting a style and other choices.');
 $GLOBALS['str_radio_remix']           = _('Remix Radio');
 $GLOBALS['str_radio_station']         = _('Create Your Own Remix Radio Station');
@@ -330,6 +346,30 @@ $GLOBALS['str_security_tip'] = _('Type in the characters above. Valid characters
 $GLOBALS['str_see_all_picks']         = _('See all picks');
 $GLOBALS['str_see_results']           = _('See Results');
 $GLOBALS['str_skip']                  = _('Skip to content');
+
+$GLOBALS['str_remixes_of'] = _('Remixes of...');
+$GLOBALS['str_remix_stats_1'] = _('%s has no remixes and has not been remixed');
+$GLOBALS['str_remix_stats_2'] = _('%s has no remixes and has been remixed %s%d time%s.');
+$GLOBALS['str_remix_stats_3'] = _('%s has no remixes and has been remixed %s%d times%s.');
+$GLOBALS['str_remix_stats_4'] = _('%s has %d remix and has not been remixed');
+$GLOBALS['str_remix_stats_5'] = _('%s has %d remixes and has not been remixed');
+$GLOBALS['str_remix_stats_6'] = _('%s has one remix and has been %sremixed once%s.');
+$GLOBALS['str_remix_stats_7'] = _('%s has 1 remix and has been remixed %s%d times%s.');
+$GLOBALS['str_remix_stats_8'] = _('%s has %d remixes and has been %sremixed once%s.' );
+$GLOBALS['str_remix_stats_9'] = _('%s has %d remixes and has been remixed %s%d times%s.');
+
+$GLOBALS['str_reviews']         = _('Comments');
+$GLOBALS['str_review_write']    = _('Write Review');
+$GLOBALS['str_review_stats']    = _('Review Stats');
+$GLOBALS['str_reviews_stats_1']    = _('%s has not left any reviews and has been reviewed %sonce%s');
+$GLOBALS['str_reviews_stats_2']    =  _('%s has not left any reviews and has been reviewed %s%d times%s');
+$GLOBALS['str_reviews_stats_3']    =  _('%s has left %s1 review%s and has not been reviewed');
+$GLOBALS['str_reviews_stats_4']    = _('%s has left %s1 review%s and has been %sreviewed once%s');
+$GLOBALS['str_reviews_stats_5']    = _('%s has left %s1 review%s and has been reviewed %s%d times%s');
+$GLOBALS['str_reviews_stats_6']    = _('%s has left %s%d reviews%s and has not been reviewed');
+$GLOBALS['str_reviews_stats_7']    = _('%s has left %s%d reviews%s and has been %sreviewed once%s');
+$GLOBALS['str_reviews_stats_8']    = _('%s has left %s%d reviews%s and has been reviewed %s%d times%s');
+
 $GLOBALS['str_stream']                = _('Stream');
 $GLOBALS['str_stream_now']            = _('Stream Now');
 $GLOBALS['str_stream_this_page']      = _('Stream this page');
@@ -348,32 +388,35 @@ $GLOBALS['str_submit_original_help'] = _('A self-contained project does not deri
 $GLOBALS['str_submit_original_help'] = _('Use this form to upload a self-contained project.');
 
 $GLOBALS['str_suggested_tags'] = _('Suggested Tags');
-$GLOBALS['str_tags']                  = _('Tags');
-$GLOBALS['str_tags_s']                = _('Tags %s');
-$GLOBALS['str_thinking']              = _('thinking...');
-$GLOBALS['str_title']              = _('Title');
-$GLOBALS['str_uploading_msg']         = _('This could take a while... please be patient while the file is uploading');
-$GLOBALS['str_user_home_page'] = _('Home Page') ;
-$GLOBALS['str_user_about_me'] = _('About Me');
-$GLOBALS['str_user_forum_posts'] = _('Forum posts');
-$GLOBALS['str_user_listing'] = _('People');
+$GLOBALS['str_tags']           = _('Tags');
+$GLOBALS['str_tags_s']         = _('Tags %s');
+$GLOBALS['str_thinking']       = _('thinking...');
+$GLOBALS['str_title']          = _('Title');
+$GLOBALS['str_uploading_msg']  = _('This could take a while... please be patient while the file is uploading');
+
+$GLOBALS['str_user_home_page']     = _('Home Page') ;
+$GLOBALS['str_user_about_me']      = _('About Me');
+$GLOBALS['str_user_forum_posts']   = _('Forum posts');
+$GLOBALS['str_user_listing']       = _('People');
 $GLOBALS['str_user_notifications'] = _('Notifications');
-$GLOBALS['str_user_publicize'] = _('Publicize');
+$GLOBALS['str_user_publicize']     = _('Publicize');
+
 $GLOBALS['str_video']                 = _('Video');
 $GLOBALS['str_working']               = _('working...');
 $GLOBALS['str_zip_title']             = _('Contents of ZIP Archive');
 
-$GLOBALS['str_reviews'] = _('Comments');
 $GLOBALS['str_stats'] = _('Stats');
 $GLOBALS['str_new_row'] = _('new row');
 
 $GLOBALS['str_skin_color_scheme'] = _('Color Schemes');
 $GLOBALS['str_skin_layout'] = _('Skin Layouts');
-$GLOBALS['str_tab_options'] = _('Navigator Tab Placement');
-$GLOBALS['str_tab_in_header'] = _('Tabs in the banner');
-$GLOBALS['str_tab_floating'] = _('Floating tabs (sub tabs in page)');
+
+$GLOBALS['str_tab_options']         = _('Navigator Tab Placement');
+$GLOBALS['str_tab_in_header']       = _('Tabs in the banner');
+$GLOBALS['str_tab_floating']        = _('Floating tabs (sub tabs in page)');
 $GLOBALS['str_tab_nested_floating'] = _('Nested floating tabs');
-$GLOBALS['str_tab_none'] = _('No tabs');
+$GLOBALS['str_tab_none']            = _('No tabs');
+
 $GLOBALS['str_skin_square'] = _('Square boxes');
 $GLOBALS['str_skin_round'] = _('Rounded boxes');
 $GLOBALS['str_skin_none'] = _('None');

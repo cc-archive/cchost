@@ -80,7 +80,7 @@ class CCReviewsHV
     function OnBuildUploadMenu(&$menu)
     {
         $menu['comments'] = 
-                 array(  'menu_text'  => _('Write Review'),
+                 array(  'menu_text'  => 'str_review',
                          'weight'     => 95,
                          'group_name' => 'comment',
                          'id'         => 'commentcommand',
@@ -91,96 +91,91 @@ class CCReviewsHV
     {
         $record =& $records[0];
 
-        $name = $record['user_real_name'];
+        $name        = $record['user_real_name'];
+        $num_reviews = $record['user_num_reviews'];
+        $num_reved   = $record['user_num_reviewed'];
+        $url         = ccl('people',$record['user_name'],'reviews');
+        $byurl       = url_args($url,'qtype=leftby');
+        $forurl      = url_args($url,'qtype=leftfor');
+        $linkby      = "<a href=\"$byurl\">";
+        $linkfor     = "<a href=\"$forurl\">";
+        $link_close  = "</a>";
 
-        $url = ccl('people',$record['user_name'],'reviews');
-
-        if( $record['user_num_reviews'] == 0 )
+        if( $num_reviews == 0 )
         {
-            if( empty($record['user_num_reviewed']) )
-                return;
+            switch( $num_reved )
+            {
+                case 0:
+                {
+                    return;
+                }
 
-            $text = sprintf( _('%s has not left any reviews'), $name) . ' ';
+                case 1:
+                {
+                    // _('%s has not left any reviews and has been reviewed %sonce%s')
+                    $text = array( 'str_reviews_stats_1', $name, $linkfor, $link_close );
+                    break;
+                }
+                default:
+                {   
+                    // _('%s has not left any reviews and has been reviewed %s%d times%s')
+                    $text = array( 'str_reviews_stats_2', $name, $linkfor, $num_reved, $link_close );
+                    break;
+                }
+            }
         }
         else
         {
-            $count = $record['user_num_reviews'];
-            $byurl = url_args($url,'qtype=leftby');
-            $link  = "<a href=\"$byurl\">";
-	        $link_close = "</a>";
-            
-            $fmt = ngettext('%s has left %s%d review.%s',
-                            '%s has left %s%d reviews.%s', $count ) . ' ';
-            
-            $text  = sprintf($fmt, $name, $link, $count, $link_close );
+            if( $num_reviews == 1 )
+            {
+                switch( $num_reved )
+                {
+                    case 0:
+                    {
+                        // _('%s has left %s1 review% and has not been reviewed')
+                        $text = array('str_reviews_stats_3',$name,$linkby,$link_close);
+                        break;
+                    }
+                    case 1:
+                        // _('%s has left %s1 review% and has been %sreviewed once%')
+                        $text = array('str_reviews_stats_4', $name,$linkby,$link_close,$linkfor,$link_close);
+                        break;
+                    default:
+                        // _('%s has left %s1 review% and has been reviewed %s%d times%')
+                        $text = array('str_reviews_stats_5', $name,$linkby,$link_close,$linkfor,$num_reved,$link_close);
+                        break;
+                }
+            }
+            else
+            {
+                switch( $num_reved )
+                {
+                    case 0:
+                    {
+                        // _('%s has left %s%d reviews% and has not been reviewed')
+                        $text = array('str_reviews_stats_6',$name,$linkby,$num_reviews,$link_close);
+                        break;
+                    }
+                    case 1:
+                    {
+                        // _('%s has left %s%d reviews% and has been %sreviewed once%')
+                        $text = array('str_reviews_stats_7', $name,$linkby,$num_reviews,$link_close,$linkfor,$link_close);
+                        break;
+                    }
+                    default:
+                    {
+                        // _('%s has left %s%d reviews%s and has been reviewed %s%d times%')
+                        $text = array('str_reviews_stats_8', $name,$linkby,$num_reviews,$link_close,$linkfor,$num_reved,$link_close);
+                        break;
+                    }
+                }
+            }
         }
 
-        if( empty($record['user_num_reviewed']) )
-        {
-            $text .= _('and has not been reviewed');
-        }
-        else
-        {
-            $count = $record['user_num_reviewed'];
-            $link  = "<a href=\"$url\">";
-	        $link_close = "</a>";
-
-            $fmt = ngettext('and has been reviewed %s%d time%s.',
-                            'and has been reviewed %s%d times%s.', $count);
-
-            $text  .= sprintf($fmt, $link, $count, $link_close);
-        }
-
-        $record['user_fields'][] = array( 'label'   => 'str_stats', 
+        $record['user_fields'][] = array( 'label'   => 'str_review_stats', 
                                           'value'   => $text,
                                           'id'      => 'user_review_stats' );
 
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow( &$record )
-    {
-        global $CC_GLOBALS;
-
-        if( empty($CC_GLOBALS['reviews_enabled']) || 
-            !empty($record['upload_banned']) ||
-            empty($record['upload_extra']['num_reviews']))
-        {
-            $record['reviews_link'] = false;
-            return;
-        }
-
-        if( !empty($record['topic_id']) )
-        {
-            // reviewes were joined in which means
-            // the table definition is already in memory (right?)
-
-            $reviews =& CCReviews::GetTable();
-            $reviews->GetRecordFromRow($record); // this will invoke CC_EVENT_TOPIC_ROW (right?)
-            //CCEvents::Invoke(CC_EVENT_TOPIC_ROW,array(&$record));
-        }
-
-        if( !empty($record['works_page']) )
-        {
-            $record['file_macros'][] = 'comment_thread';
-            $url = ccl( 'reviews', 'thread', $record['upload_id'] );
-            $record['comment_thread_url'] = $url;
-        }
-
-        $count = $record['upload_extra']['num_reviews'];
-
-        if( $count )
-        {
-            $url = ccl('reviews', $record['user_name'], $record['upload_id']);
-            $record['reviews_link'] = array( 'url' => $url,
-                                        'text' => sprintf(_("Reviews (%s)"),$count),
-                                        'count' => $count );
-        }
     }
 
     function OnFilterMacros( &$records )

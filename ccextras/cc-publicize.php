@@ -90,11 +90,11 @@ class CCPublicizeHV
         if( $this->_pub_wizard_allowd($itsme) )
         {
             $url = ccl('publicize',$row['user_name'] );
-            $text = $itsme ? _('str_publicize_yourself')
-                           : array( _('str_publicize_s'), $row['user_real_name'] );
+            $text = $itsme ? array( _('str_publicize_yourself_s'), "<a href=\"$url\">", '</a>' )
+                           : array( _('str_publicize_s'), "<a href=\"$url\">{$row['user_real_name']}</a>" );
                 
             $row['user_fields'][] = array( 'label' => 'str_publicize', 
-                                       'value' => "<a href=\"$url\">$text</a>" );
+                                       'value' =>  $text );
         }
     }
 

@@ -42,7 +42,8 @@ END;
 
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
-                   'e'  => array( CC_EVENT_FILTER_TOPIC_TEXT )
+                   'e'  => array( CC_EVENT_FILTER_TOPIC_TEXT,
+                                  CC_EVENT_FILTER_REVIEWS )
                 );
 }
 [/dataview]

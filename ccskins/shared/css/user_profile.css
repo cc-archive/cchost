@@ -5,22 +5,33 @@
 	padding: 5px;
 }
 
-#user_fields div span {
-	font-weight: bold;
+.ufc_label {
+	text-transform: lowercase;
+	letter-spacing: 0.3em;
+	display: block;
+	text-align: left;
+	border-bottom: 1px solid #AAA;
+	width: 55%;
+	margin-bottom: 0.5em;
 }
 
-.avatar {
-	float: right;
-	margin: -35px 5px 5px 5px;
+.ufc_value {
+	margin-bottom: 1.6em;
 }
+
+.ufc_value,
+.ufc_label {
+	padding-left: 1.0em;
+}
+
+.user_tag_links .taglinks {
+	/* padding: 0.2em 3em; */
+}
+
 
 .user_link {
 	font-size: 20px;
 	font-weight: bold;
-}
-
-#user_fields {
-	clear: right;
 }
 
 .ufc {
@@ -34,3 +45,4 @@
 	font-size: 13px;
 
 }
+

@@ -66,6 +66,8 @@ class CCNotifyAPI
 
     function EditMyNotifications($other_user_name='')
     {
+        require_once('cclib/cc-page.php');
+
         CCPage::SetTitle(_('My Notifications'));
 
         // figure out what fields we are editing

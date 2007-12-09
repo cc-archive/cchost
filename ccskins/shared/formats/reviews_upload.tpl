@@ -43,7 +43,7 @@ EOF;
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
                    'e'  => array(
-                                  CC_EVENT_FILTER_TOPIC_HTML)
+                                  CC_EVENT_FILTER_TOPIC_HTML, CC_EVENT_FILTER_REVIEWS )
                 );
 }
 [/dataview]

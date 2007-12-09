@@ -117,7 +117,8 @@ class CCUserPage
     function _get_tabs($user,&$default_tab_name)
     {
         $record = CCDatabase::QueryRow(
-             "SELECT user_id, user_name, user_real_name, user_num_uploads FROM cc_tbl_user WHERE user_name = '{$user}'");
+             "SELECT user_id, user_name, user_real_name, user_num_uploads, user_num_reviews, user_num_scores,user_num_posts "
+             . "FROM cc_tbl_user WHERE user_name = '{$user}'");
 
         $tabs = array();
 
@@ -242,8 +243,9 @@ END;
             $row['user_homepage_html'] = "<a href=\"{$row['user_homepage']}\">{$row['user_homepage']}</a>";
         }
 
-        $user_fields = array( 'str_user_home_page' => 'user_homepage_html',
-                              'str_user_about_me'  => 'user_description' );
+        $user_fields = array( 'str_user_about_me'  => 'user_description',
+                              'str_user_home_page' => 'user_homepage_html',
+                              );
 
         $row['user_fields'] = array();
         foreach( $user_fields as $name => $uf  )
@@ -257,15 +259,18 @@ END;
         {
             $current_favs = strtolower(CCUser::CurrentUserField('user_favorites'));
             $favs = CCTag::TagSplit($current_favs);
-            if( in_array( strtolower($row['user_name']), $favs ) )
-                $msg = sprintf(_("Remove %s from my favorites"),$row['user_real_name'] );
-            else
-                $msg = sprintf(_("Add %s to my favorites"),$row['user_real_name']);
+            
             $favurl = ccl('people','addtofavs',$row['user_name']);
-            $link = '<a href="' . $favurl . '">' . $msg . '</a>';
-            $row['user_fields'][] = array( 'label' => '',
-                                         'value' => $link,
-                                           'id' => 'fav' );
+            $link = "<a href=\"{$favurl}\">{$row['user_real_name']}</a>";
+
+            if( in_array( strtolower($row['user_name']), $favs ) )
+                $msg = array('str_favorites_remove_s',$link);
+            else
+                $msg = array('str_favorites_add_s',$link);
+
+            $row['user_fields'][] = array( 'label' => 'str_favorites',
+                                           'value' => $msg,
+                                           'id'    => 'fav' );
         }
 
         require_once('cclib/cc-tags.php');

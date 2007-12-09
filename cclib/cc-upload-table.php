@@ -76,62 +76,9 @@ class CCUploads extends CCTable
     */
     function & GetRecordFromRow( &$row )
     {
-        print("<pre>Getrecord called\n</pre>");
+        print("<pre>Deprecated CCUpload::GetRecord called\n</pre>");
+        CCDebug::Enable(true);
         CCDebug::StackTrace();
-
-        if( is_string( $row['upload_extra'] ) )
-            $row['upload_extra'] = unserialize($row['upload_extra']);
-
-        $row['upload_description_html'] = CCUtil::TextToHTML($row['upload_description']);
-
-        $row['upload_short_name'] = strlen($row['upload_name']) > 18 ? 
-                                        substr($row['upload_name'],0,17) . '...' : 
-                                        $row['upload_name'];
-
-        $files =& CCFiles::GetTable();
-        $row['files'] = $files->FilesForUpload($row);
-        
-        $baseurl = ccl('tags');
-        require_once('cclib/cc-tags.php');
-        $utags = CCTag::TagSplit($row['upload_tags']);
-        foreach($utags as $tag)
-        {
-            $row['upload_taglinks'][] = array( 'tagurl' => $baseurl . '/' . $tag,
-                                               'tag' => $tag );
-        }  
-
-        $utags = $row['upload_extra']['ccud'];
-        if( !empty($row['upload_extra']['usertags']) )
-        {
-            $ut = trim( $row['upload_extra']['usertags'] );
-            if( !empty($ut) )
-                $utags .= ',' . $ut;
-        }
-
-        $utags = CCTag::TagSplit($utags);
-        foreach($utags as $tag)
-        {
-            $row['usertag_links'][] = array( 'tagurl' => $baseurl . '/' . $tag,
-                                             'tag' => $tag );
-        }  
-
-        CCEvents::Invoke(CC_EVENT_UPLOAD_ROW, array( &$row ));
-
-        
-        if( $row['upload_banned'] )
-        {
-            $row['upload_name_cls'] = 'cc_name_ban';
-        }
-        elseif( empty($row['upload_contest']) && !$row['upload_published'] )
-        {
-            $row['upload_name_cls'] = 'cc_name_hidden';
-        }
-        else
-        {
-            $row['upload_name_cls'] = '';
-        }
-
-        return $row;
     }
 
     /**

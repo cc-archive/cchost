@@ -34,20 +34,20 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,       'cc_stats_on_map_urls');
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  'cc_stats_kill_cache' );
 CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    'cc_stats_kill_cache' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_stats_kill_cache' );
-CCEvents::AddHandler(CC_EVENT_USER_ROW,       'cc_stats_on_user_row' );
+CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,       'cc_stats_on_user_row' );
  
-function cc_stats_on_user_row(&$row)
+function cc_stats_on_user_row(&$rows)
 {
-    if( empty($row['artist_page']) )
-        return;
+    $row =& $rows[0];
 
     $username = $row['user_real_name'];
 
     $num_remixes = $row['user_num_remixes'];
     $num_remixed = $row['user_num_remixed'];
 
-    $title = urlencode(sprintf(_('Remixes of %s'),$row['user_real_name']));
-    $rurl = url_args( ccl('api','query'), 'remixesof=' . $row['user_name'] . '&title=' . $title );
+    // todo: not sure how to mangle the string system to work the artist name into the query title
+    //$title = urlencode(sprintf(_('Remixes of %s'),$row['user_real_name']));
+    $rurl = url_args( ccl('api','query'), 'remixesof=' . $row['user_name'] . '&title=str_remixes_of'); // . $title );
     $linka = "<a href=\"$rurl\">";
     $linkb = '</a>';
 
@@ -55,24 +55,25 @@ function cc_stats_on_user_row(&$row)
     {
         if( empty( $num_remixed ) )
         {
-            $text = sprintf( _('%s has no remixes and has not been remixed'), $username );
+            // _('%s has no remixes and has not been remixed')
+            $text = array( 'str_remix_stats_1', $username );
         }
         else
         {
-            $fmt = ngettext( '%s has no remixes and has been remixed %s%d time%s.',
-                             '%s has no remixes and has been remixed %s%d times%s.', $num_remixed );
-
-            $text= sprintf( $fmt, $username, $linka, $num_remixed, $linkb );
+            //'%s has no remixes and has been remixed %s%d time%s.'
+            // '%s has no remixes and has been remixed %s%d times%s.'
+            $fmt = $num_remixed == 1 ? 'str_remix_stats_2' : 'str_remix_stats_3';
+            $text = array( $fmt, $username, $linka, $num_remixed, $linkb );
         }
     }
     else
     {
         if( empty($num_remixed) )
         {
-            $fmt = ngettext( '%s has %d remix and has not been remixed',
-                             '%s has %d remixes and has not been remixed', $num_remixes );
-
-            $text = sprintf( $fmt, $username, $num_remixes );
+            // '%s has %d remix and has not been remixed'
+            // '%s has %d remixes and has not been remixed'
+            $fmt = $num_remixes == 1 ? 'str_remix_stats_4' : 'str_remix_stats_5';
+            $text = array( $fmt, $username, $num_remixes );
         }
         else
         {
@@ -80,27 +81,27 @@ function cc_stats_on_user_row(&$row)
             {
                 if( $num_remixed == 1 )
                 {
-                    $fmt = _('%s has one remix and has been %sremixed once%s.');
-                    $text = sprintf( $fmt, $username, $linka, $linkb );
+                    //$fmt = _('%s has one remix and has been %sremixed once%s.');
+                    $text = array( 'str_remix_stats_6', $username, $linka, $linkb );
                 }
                 else
                 {
-                    $fmt = _('%s has 1 remix and has been remixed %s%d times%s.');
-                    $text = sprintf( $fmt, $username, $linka, $num_remixed, $linkb );
+                    //$fmt = _('%s has 1 remix and has been remixed %s%d times%s.');
+                    $text = array(  'str_remix_stats_7', $username, $linka, $num_remixed, $linkb );
                 }
-
+ 
             }
             else
             {
                 if( $num_remixed == 1 )
                 {
-                    $fmt = _( '%s has %d remixes and has been %sremixed once%s.' );
-                    $text = sprintf( $fmt, $username, $num_remixes, $linka, $linkb );
+                    //$fmt = _( '%s has %d remixes and has been %sremixed once%s.' );
+                    $text = array(  'str_remix_stats_8', $username, $num_remixes, $linka, $linkb );
                 }
                 else
                 {
-                    $fmt = _('%s has %d remixes and has been remixed %s%d times%s.');
-                    $text = sprintf( $fmt, $username, $num_remixes, $linka, $num_remixed, $linkb );
+                    //$fmt = _('%s has %d remixes and has been remixed %s%d times%s.');
+                    $text = array( 'str_remix_stats_9', $username, $num_remixes, $linka, $num_remixed, $linkb );
                 }
             }
         }

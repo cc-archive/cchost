@@ -37,11 +37,7 @@ class CCRecommends
             return;
         }
 
-        require_once('cclib/cc-ratings.php');
-        $ratings =& CCRatings::GetTable();
-        $w = "(ratings_user = {$record['user_id']}) AND (ratings_score > 400)";
-        $count = $ratings->CountRows($w);
-        if( empty($count) )
+        if( empty($record['user_num_scores']) )
             return;
 
         $tabs['recommends'] = array(

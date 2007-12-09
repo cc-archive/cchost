@@ -195,8 +195,8 @@ class CCUserProfileForm extends CCUploadForm
         global $CC_GLOBALS;
 
         $this->CCUploadForm();
-        $users =& CCUsers::GetTable();
-        $this->record = $users->GetRecordFromID($userid);
+        $this->record = CCDatabase::QueryRow('SELECT * FROM cc_tbl_user WHERE user_id='.$userid);
+        $this->record['user_extra'] = unserialize($this->record['user_extra']);
 
         // print_r( $CC_GLOBALS['language']->GetPossibleLanguages() );
 
@@ -319,15 +319,15 @@ class CCUserAPI
                 $form->FinalizeAvatarUpload('user_image', $upload_dir);
                 $form->GetFormValues($fields);
 
-                $users =& CCUsers::GetTable();
-                $old_info = $users->GetRecordFromID($id);
                 $fields['user_id'] = $id;
                 if( empty($fields['user_real_name']) )
                     $fields['user_real_name'] = $username;
+                $users =& CCUsers::GetTable();
                 $users->Update($fields);
                 
-                CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, 
-                                 array( $id, &$old_info));
+                $old_info = CCDatabase::QueryRow('SELECT * FROM cc_tbl_user WHERE user_id='.$id);
+                $old_info['user_extra'] = unserialize($old_info['user_extra']);
+                CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $id, &$old_info));
 
                 if( !empty($CC_GLOBALS['lang_per_user']) )
                     CCEvents::Invoke(CC_EVENT_TRANSLATE);
@@ -340,7 +340,7 @@ class CCUserAPI
                 {
                     // this sends us to the save page
                     // I added because problem with getting the new language
-                    // visible as soon as changed upon save
+                    // visible as soon as changed upon save (Jon)
                     $url = ccl('people','profile','save');
                 }
 
