@@ -87,6 +87,7 @@
 
 #credit_info th {
     text-align: right;        
+	text-transform: lowercase;
 }
 
 #credit_info td, #credit_info th {
@@ -94,8 +95,8 @@
     padding: 2px;
 }
 
-#taglinks {
-    margin-top: 14px;
+div.taglinks {
+    padding: 9px;
 }
 
 .zipdir_title {

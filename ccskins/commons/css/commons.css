@@ -234,17 +234,10 @@ a.more_menu_link {
 	margin: 12px;
 }
 
-a.cc_tag_link, 
-#content #taglinks a, 
-#content div.taglinks a  
-{
-	font-weight: normal;
-	font-variant: small-caps;
-}
-
 #remix_info a.user_name {
 	font-weight: normal;
 }
+
 .info_box_clear {
 	clear: both;
 }
@@ -252,4 +245,13 @@ a.cc_tag_link,
 .cc_howididit {
 	width: 500px;
 	margin: 0px auto;
+}
+
+div.taglinks {
+	word-spacing: 0.5em;
+}
+
+div.taglinks a,
+a.taglink {
+	font-weight: normal;
 }

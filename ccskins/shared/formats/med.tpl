@@ -18,7 +18,7 @@
     %if_not_null(#R/files/0/download_url)%
         <a class="cc_download_url" href="%(#R/files/0/download_url)%">%(#R/files/0/file_nicname)%</a>
     %end_if%
-    <div  class="cc_tags">%(#R/upload_tags)%</div>
+    <div  class="taglinks">%(#R/upload_tags)%</div>
     %if_not_null(#R/upload_description_html)%
         <div  class="cc_description">%(#R/upload_description_html)%</div>
     %end_if%

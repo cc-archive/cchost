@@ -88,7 +88,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
              <? } ?>
             %end_if%
 
-            <div id="taglinks">
+            <div class="taglinks">
             %loop(#R/upload_taglinks,tag)%
                 <a href="%(#tag/tagurl)%">%(#tag/tag)%</a>%if_not_last(#tag)%, %end_if%
             %end_loop%

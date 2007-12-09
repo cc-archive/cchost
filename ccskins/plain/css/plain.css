@@ -21,12 +21,6 @@ a, a:link, a:visited {
 	font-weight: bold;
 }
 
-a.cc_tag_link, 
-#content #taglinks a, 
-#content div.taglinks a  {
-	font-weight: normal;
-}
-
 #header {
 	padding: 3px 4px 3px 0px;
 }
@@ -146,7 +140,11 @@ a.cc_more_menu_link {
   font-size: 0.7em;
 }
 
-.taglinks {
-	font-size: 0.65em;
+div.taglinks {
+	word-spacing: 1.0em;
+}
+
+div.taglinks a  {
+	font-weight: normal;
 }
 

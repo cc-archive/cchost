@@ -73,7 +73,7 @@ if ( !empty($R['upload_extra']['featuring']))
 
 $A['tag_array'] = $R['upload_taglinks'];
 
-?><div  class="cc_tags">Tags: <? $T->Call('tags.xml/taglinks');?></div><?
+?><div  class="taglinks">Tags: <? $T->Call('tags.xml/taglinks');?></div><?
 
 if ( !empty($R['upload_description_text'])) 
 {

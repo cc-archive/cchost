@@ -51,12 +51,12 @@ a.info_button:hover {
 	width: auto;
 }
 
-.info_detail .cc_list .cc_tags {
+.info_detail .cc_list .taglinks {
 	width: 550px; 
 	white-space: normal;
 }
 
-.info_detail .cc_list .cc_tags a {
+.info_detail .cc_list .taglinks a {
 	display: inline;
 	font-size: 10px;
 }
