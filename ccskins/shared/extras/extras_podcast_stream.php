@@ -7,17 +7,12 @@
 
 */
 
-if( empty($A['artist_page']) ) 
-{ 
-    if( empty($A['qstring']) ) 
-        return;
+if( empty($A['qstring']) ) 
+    return;
 
-    $qstring = $A['qstring']; 
-}
-else 
-{
-    $qstring = 'user=' . $A['artist_page'];
-}
+$media_args = parse_str($A['qstring']);
+if( !$media_args['datasource'] && ($media_args['datasource'] != 'uploads') )
+    return;
 
 $qstring .= '&limit=15';
 $q = $A['q'];

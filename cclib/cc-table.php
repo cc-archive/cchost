@@ -972,6 +972,16 @@ class CCTable
         return( $row['Auto_increment'] );
     }
 
+    function Lock($type='WRITE')
+    {
+        CCDatabase::Query('LOCK TABLES ' . $this->_table_name . ' WRITE');
+    }
+
+    function Unlock()
+    {
+        CCDatabase::Query('UNLOCK TABLES');
+    }
+
     /**
     * Returns strings usable for searching serialized PHP strings
     * 
@@ -1023,7 +1033,6 @@ class CCTable
 
         return ( array( $field, $where )  );
     }
-
 }
  
 ?>

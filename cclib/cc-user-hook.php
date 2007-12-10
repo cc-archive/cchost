@@ -85,7 +85,7 @@ EOF;
                 }
 
 
-                $sql = "SELECT COUNT(*) FROM cc_tbl_ratings WHERE ratings_ip = '{$remote_ip}' AND ratings_user = {$user_id} AND " .
+                $sql = "SELECT COUNT(*) FROM cc_tbl_ratings WHERE (ratings_ip = '{$remote_ip}' OR ratings_user = {$user_id}) AND " .
                            " ratings_upload = {$R['upload_id']}";
                 $blocked = CCDatabase::QueryItem($sql);
                 if( $blocked )
@@ -113,7 +113,7 @@ EOF;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('user_hook','upload_list'),      array('CCUserHook','UploadList'), CC_MUST_BE_LOGGED_IN, ccs(__FILE__));
+        CCEvents::MapUrl( ccp('user_hook','upload_list'), array('CCUserHook','UploadList'), CC_MUST_BE_LOGGED_IN, ccs(__FILE__));
     }
 
 }

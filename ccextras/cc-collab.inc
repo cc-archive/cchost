@@ -198,6 +198,7 @@ class CCCollab
 
     function _delete_confirmed($collab_id)
     {
+        require_once('cclib/cc-page.php');
         $topics =& CCCollabTopics::GetTable();
         $w['topic_upload'] = $collab_id;
         $topics->DeleteWhere($w);
@@ -293,6 +294,7 @@ class CCCollab
 
     function ViewAll()
     {
+        require_once('cclib/cc-page.php');
         $collabs = new CCCollabs();
         $collabs->SetOrder( 'collab_date','DESC');
         CCPage::AddPagingLinks($collabs,'',10);
@@ -302,30 +304,22 @@ class CCCollab
         $users = new CCCollabUsers();
         $users->AddJoin( new CCUsers(), 'collab_user_user' );
 
-        // uploads (remixes)
-        $uploads = new CCUploads();
-        $uploads->AddJoin( new CCCollabUploads(), 'upload_id' );
-        $uploads->SetTagFilter('remix');
-        $uploads->SetOffsetandLimit(0,1);
-
+        $ccp = ccl('people') . '/';
         $c = count($rows);
         $keys = array_keys($rows);
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $rows[$keys[$i]];
-            $w1['collab_user_collab'] = $R['collab_id'];
-            $R['users'] = $users->QueryRows($w1);
-
-            $w2['collab_upload_collab'] = $R['collab_id'];
-            $R['uploads'] = $uploads->GetRecords($w2);
+            $sql =<<<EOF
+                SELECT CONCAT('$ccp',user_name) as artist_page_url, user_real_name
+                FROM cc_tbl_user
+                JOIN cc_tbl_collab_users on collab_user_user=user_id
+                WHERE collab_user_collab = {$R['collab_id']}
+EOF;
+            $R['users'] = CCDatabase::QueryRows($sql);
         }
 
-        $args = array(
-                'collab_rows'  => $rows,
-                );
-
-        CCPage::PageArg( 'show_collabs', 'collab.xml/show_collabs' );
-        CCPage::PageArg( 'collabs', $args, 'show_collabs' );
+        CCPage::PageArg( 'collab_rows', $rows, 'collab_main');
         CCPage::SetTitle( 'str_collab' );
     }
 
@@ -339,7 +333,7 @@ class CCCollab
         }
 
         $collab_row = $this->_collab_row($collab_id);
-
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle( 'str_collab_project_s', $collab_row['collab_name'] );
 
         require_once('ccextras/cc-format.inc');
@@ -352,10 +346,6 @@ class CCCollab
         $topics = new CCCollabTopics();
         $w3['topic_upload'] = $collab_id;
         $collab_topics = $topics->QueryRows($w3);
-        for( $i = 0; $i < count($collab_topics); $i++ )
-            $collab_topics[$i]['commands'] = array(); // for now...
-        $users =& CCUsers::GetTable();
-        $collab_topics =& $users->GetRecordsFromRows($collab_topics);
 
         require_once('cclib/cc-license.php');
         $licenses =& CCLicenses::GetTable();
@@ -369,37 +359,7 @@ class CCCollab
                 'lics'      => $lics,
                 'topics'    => $collab_topics );
 
-        $script =<<<EOF
-    var collab_template = '<div class="user_line" id="_user_line_#{user_name}">' +
-            '<div class="user" ><a href="'+home_url+'people/#{user_name}">#{user_real_name}</a></div>' +
-            '<div class="role">#{role}</div>' +
-            '<div class="credit" id="_credit_#{user_name}">#{credit}</div>' +
-EOF;
-        if( $is_owner )
-        {
-            $script .=<<<EOF
-     '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
-              + 'span>credit</span></a></div>' +
-     '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
-              + 'span>remove</span></a></div>' +
-EOF;
-        }
-
-        if( $is_member )
-        {
-            $script .=<<<EOF
-            '<div>' +
-            '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>send email' 
-                 + '</span></a> ' +
-            '</div>' +
-EOF;
-        }
-
-        $script .= "'</div>'";
-
-        CCPage::PageArg( 'collab_script', $script );
-        CCPage::PageArg( 'show_collab', 'collab.xml/show_collab' );
-        CCPage::PageArg( 'collab', $args, 'show_collab' );
+        CCPage::PageArg( 'collab', $args, 'collab_view' );
         $this->_build_bread_crumb_trail($collab_row['collab_name'] );
     }
 
@@ -427,6 +387,7 @@ EOF;
 
         $trail[] = array( 'url' => '', 'text' => $collab_name );
 
+        require_once('cclib/cc-page.php');
         CCPage::AddBreadCrumbs($trail);
     }
 
@@ -472,38 +433,11 @@ EOF;
 
     function GetUploads( $collab_id='' )
     {
-        $collab_row = $this->_collab_row($collab_id);
-        list( $is_owner, $is_member ) = $this->_get_user_acccess($collab_row);
-        $uploads = new CCUploads();
-        $uploads->SetOrder('upload_date','DESC');
-        $uploads->AddJoin( new CCCollabUploads(), 'upload_id' );
-        if( $is_member )
-            $uploads->SetDefaultFilter(false); // allow unpublished collab files through
-        $w2['collab_upload_collab'] = $collab_id;
-        $collab_uploads = $uploads->GetRecords($w2);
-        if( empty($collab_uploads) )
-        {
-            print(_('There are no visible uploads right now'));
-        }
-        else
-        {
-            $me = CCUser::CurrentUser();
-            $n = count($collab_uploads);
-            $upkeys = array_keys($collab_uploads);
-            for( $i = 0; $i < $n; $i++ )
-            {
-                $R =& $collab_uploads[$upkeys[$i]];
-                $R['is_collab_owner'] = $is_owner || ($R['upload_user'] == $me);
-                $R['collab_type'] = preg_match( '/(^|,| )remix(,| $)/',$R['upload_extra']['ccud']) ? 'remix' : 'sample';
-                $R['collab_tags'] = $R['collab_type'] . ' ' . preg_replace( '/[, ]+/', ' ', $R['upload_extra']['usertags']);
-            }
-            $template = new CCSkinMacro( 'collab.xml/show_collab_files' );
-            $args['uploads'] = $collab_uploads;
-            $args['is_owner'] = $is_owner;
-            $args['is_member'] = $is_member;
-            $template->SetAllAndPrint($args,'uploads');
-        }
-        exit;
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=collab_files&unpub=1&f=html');
+        $sqlargs['where'] = 'collab_id = ' . $collab_id;
+        $query->QuerySQL($args,$sqlargs);
     }
 
     function Upload( $collab_id='', $upload_id='', $cmd='' )

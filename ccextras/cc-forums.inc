@@ -336,11 +336,9 @@ EOF;
                 $trail[] = array( 'url' => 'dummy', 'text' => $topic_name );
             }
         }
-
+        require_once('cclib/cc-page.php');
         CCPage::AddBreadCrumbs($trail);
     }
-
-
 
     function OnTopicDelete($deltype,$topic_id)
     {
@@ -360,8 +358,6 @@ EOF;
         $topic = $topics->QueryKeyRow($topic_id);
         $thread_id = $topic['forum_thread_id'];
 
-        // if this topic has children, then those are newer
-
         if( $topic['forum_thread_oldest'] == $topic_id )
         {
             // no more topics left in this thread
@@ -369,17 +365,23 @@ EOF;
         }
         else
         {
+            // if this topic or one of its children is the 'newest' in the thread
+            // then we have to reset the thread's 'newest' pointer to some other topic
+            // that isn't being deleted
+
             if( !($is_newest = ($topic['forum_thread_newest'] == $topic_id)) )
             {
-                $children = $topics->GetDescendantsIDs($topic_id);
-                foreach( $children as $child_id )
-                    if( ($is_newest = ($topic['forum_thread_newest'] == $child_id)) )
-                        break;
+                // first let's see if one the newest topic in the thread
+                // is one of our children
+
+                $sql = 'SELECT topic_left, topic_right FROM cc_tbl_topics WHERE topic_id='.$topic['forum_thread_newest'];
+                list( $newleft, $newright ) = CCDatabase::QueryRow($sql,false);
+                $is_newest = ($newleft < $topic['topic_left']) || ($newright > $topic['topic_right']);
             }
 
             if( $is_newest )
             {
-                // the thread is not as new as it used to be
+                // The thread's newest pointer needs to be reset (its not as new as it used to be)
 
                 // get the next newest valid topic
                 $w = "(topic_thread = $thread_id) AND (topic_date < '{$topic['topic_date']}')";
@@ -401,19 +403,25 @@ EOF;
     {
         if( $deep )
         {
-            $tree =& CCTopicTree::GetTable();
-            $where['topic_tree_parent'] = $topic_id;
-            $rows = $tree->QueryRows($where);
-            foreach( $rows as $row )
-                $this->_del_sync($row['topic_tree_child'],true);
+            list( $left, $right ) = CCDatabase::QueryRow('SELECT topic_left, topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
+            $where = "topic_left >= $left AND topic_right <= $right";
         }
-        $topics =& CCTopics::GetTable();
-        $user_id = $topics->QueryItemFromKey('topic_user',$topic_id);
+        else
+        {
+            $where = "topic_id = $topic_id";
+        }
+
+        $sql =<<<EOF
+            SELECT user_num_posts - COUNT(user_num_posts) as user_num_posts, user_id 
+            FROM cc_tbl_user
+            JOIN cc_tbl_topics ON user_id=topic_user
+            WHERE $where
+            GROUP BY user_id
+EOF;
+        $rows = CCDatabase::QueryRows($sql);
         $users =& CCUsers::GetTable();
-        $num_posts = $users->QueryItemFromKey('user_num_posts',$user_id);
-        $args['user_num_posts'] = $num_posts - 1 ;
-        $args['user_id'] = $user_id;
-        $users->Update($args);
+        foreach( $rows as $row )
+            $users->Update($row);
     }
 
     function OnTopicReply(&$reply, &$original)

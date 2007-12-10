@@ -143,8 +143,6 @@ class CCTopics extends CCTable
 
     function CCTopics($show_deleted=false)
     {
-        require_once('cclib/cc-user.php');
-
         $this->CCTable('cc_tbl_topics', 'topic_id');
         $this->_show_deleted = $show_deleted;
     }
@@ -177,197 +175,58 @@ class CCTopics extends CCTable
         $this->_type_limit = $type;
     }
 
-    function _attach_user(&$row)
+    /**
+    * In this orverride we actually delete an entire branch under the topic
+    */
+    function DeleteKeyRow($topic_id)
     {
-        $users =& CCUsers::GetTable();
-        if( empty($row['topic_user']) )
-            CCDebug::StackTrace();
-        $user = $users->GetRecordFromID($row['topic_user']);
-        $row += $user;
-    }
-
-    function & GetRecordFromRow(&$row)
-    {
-        $this->_attach_user($row);
-
-        if( $row['topic_can_xlat'] )
-        {
-            $translations =& CCTopicsi18n::GetTable();
-            $row['translations'] = $translations->GetTranslations($row['topic_id']);
-        }
-        else
-        {
-            $row['translations'] = false;
-        }
-
-        if( $row['topic_thread'] )
-        {
-            // these are overrwritten by reviews
-            $row['topic_permalink'] = ccl('thread', $row['topic_thread'] ) . 
-                                        '#' . $row['topic_id'];
-        }
-
-        if( !empty($row['user_id']) )
-        {
-            // these are overrwritten by reviews
-            $row['user_post_count'] = $row['user_num_posts'];
-            $row['user_post_text']  = _('Posts');
-            $row['user_post_url']   = ccl( 'forums', 'people', $row['user_name'] );
-        }
-
-        if( $row['topic_type'] == 'xlat' )
-        {
-            $translations =& CCTopicsi18n::GetTable();
-            $row['translation_of'] = $translations->GetTranslationOf($row['topic_id'],$this);
-            $row['str_translation_of'] = _('Translation of...');
-        }
-
-        CCEvents::Invoke(CC_EVENT_TOPIC_ROW,array(&$row) );
-
-        if( isset($row['topic_is_feed']) )
-        {
-            $time = strtotime($row['topic_date']);
-            $row['atom_pubdate'] = CCUtil::FormatDate( CC_RFC3339_FORMAT, $time );
-            $row['rss_pubdate']  = CCUtil::FormatDate( CC_RFC822_FORMAT,  $time );
-        }
-        else
-        {
-            if( !isset($row['commands']) )
-                $row['commands'] = array();
-
-            if( $row['topic_can_xlat'] && CCUser::IsLoggedIn() )
-            {
-                $row['commands']['xlat'] = array( 
-                                            'url' => ccl('topics','translate',$row['topic_id'])
-                                                             . '#edit',
-                                            'script' => '',
-                                            'text' => _('Translate') );
-            }
-
-            if( CCUser::IsAdmin() || (CCUser::CurrentUser() == $row['topic_user']) )
-            {
-                $row['commands']['delete'] = array( 'url' => ccl('topics','delete',$row['topic_id']),
-                                            'script' => '',
-                                            'text' => _('Delete') );
-                $row['commands']['edit'] = array( 'url' => ccl('topics','edit',$row['topic_id']),
-                                            'script' => '',
-                                            'text' => _('Edit') );
-
-            }
-
-            if( CCUser::IsAdmin() )
-            {
-                if( empty($row['topic_locked']) )
-                    $text = _('Lock');
-                else
-                    $text = _('Unlock');
-
-                $row['commands']['lock'] = array( 'url' => ccl('topics','lock',$row['topic_id']),
-                                                  'script' => '',
-                                                  'text' => $text );
-
-                CCDebug::StackTrace();
-                $tree =& CCTopicTree::GetTable();
-                $awhere['topic_tree_parent'] = $row['topic_id'];
-                $has_children = $tree->CountRows($awhere);
-                if( $has_children )
-                {
-                    $row['commands']['killbranch'] 
-                        = array( 'url' => ccl('topics','delete',$row['topic_id'],'branch'),
-                                                      'script' => '',
-                                                      'text' => _('Delete branch') );
-                }
-            }
-
-            if( $this->_can_reply($row) )
-            {
-                $text = $this->GetReplyText($row);
-                
-                $row['commands']['quote'] = array( 'url' => ccl('topics','quote',$row['topic_id']),
-                                            'script' => '',
-                                            'text' => _('Reply with quote') );
-                
-                $row['commands']['reply'] = array( 'url' => ccl('topics','reply',$row['topic_id']),
-                                            'script' => '',
-                                            'text' => $text );
-
-            }
-
-        }
-
-        return $row;
-    }
-
-    function GetReplyText(&$row)
-    {
-        if( CCUser::CurrentUser() == $row['topic_user'] )
-        {
-            $text = _('Reply to yourself');
-        }
-        elseif( !empty($row['user_real_name']) )
-        {
-            $text = sprintf(_('Reply to %s'),$row['user_real_name']);
-        }
-        else
-        {
-            $text = _('Reply');
-        }
-
-        return $text;
-    }
-
-    function GetTreeFromRecords(&$records,$sort='')
-    {
-        $count = count($records);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $this->GetTree($records[$i],$sort);
-        }
-    }
-
-    function GetDescendantsIDs($topic_id)
-    {
-        $results = array();
-        $topic_tree = CCTopicTree::GetTable();
-        $this->_inner_get_descendants_ids($topic_id,$results,$topic_tree);
-        return $results;
-    }
-
-    function _inner_get_descendants_ids($parent_id,&$results,&$tree)
-    {
-        $w['topic_tree_parent'] = $parent_id;
-        $children = $tree->QueryRows($w);
-        foreach( $children as $child )
-        {
-            $results[] = $child['topic_tree_child'];
-            $this->_inner_get_descendants_ids($child['topic_tree_child'],$results,$tree);
-        }
-    }
-
-    function GetTree(&$record,$sort='')
-    {
+        $this->Lock();
+        list( $left, $right ) = CCDatabase::Query('SELECT topic_left,topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
+        $wid = ($right - $left) + 1;
+        $sql[] = "DELETE FROM cc_tbl_topics WHERE topic_left BETWEEN $left AND $right";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right - $wid WHERE topic_right > $right";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left - $wid  WHERE topic_left  > $right";
+        CCDatabase::Query($sql);
+        $this->Unlock();
     }
 
     function Insert(&$values,$parent_id)
     {
+        // we do a variation of the nested set model discussed here
+        // see: http://dev.mysql.com/tech-resources/articles/hierarchical-data.html
+        //
         if( $parent_id === 0 )
         {
-            $right_sql = 'SELECT MAX(topic_right) FROM cc_tbl_topics WHERE topic_type = \'' . $this->_type_limit . '\'' ;
+            //
+            // We're appending a top level topic (e.g. a review or new forum post)
+            //
+            $right_sql = 'SELECT MAX(topic_right) FROM cc_tbl_topics';
+            $right = CCDatabase::QueryItem($right_sql);
+            $values['topic_left'] = $right + 1;
+            $values['topic_right'] = $right + 2;
+            $ret = parent::Insert($values);
+            return $ret;
         }
-        else
-        {
-            $right_sql = "SELECT topic_right FROM cc_tbl_topics WHERE topic_id = {$parent_id}";
-        }
-            
-        CCDatabase::Query('LOCK TABLE cc_tbl_topics WRITE');
+
+        //
+        // We're appending (inserting) a topic the end of a parent's top level list (e.g. a reply)
+        //
+        // The parent's 'right' becomes the new topic's left
+        //
+        // The parent's new 'right' and everything to the right of it is shifted by
+        // by 2
+        //
+        $right_sql = "SELECT topic_right FROM cc_tbl_topics WHERE topic_id = {$parent_id}";
+        $this->Lock();
         $right = CCDatabase::QueryItem($right_sql);
-        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right + 2 WHERE topic_right > {$right}";
-        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left + 2  WHERE topic_right > {$right}";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right + 2 WHERE topic_right >= {$right}";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left + 2  WHERE topic_left >   {$right}";
         CCDatabase::Query($sql);
-        $values['topic_left'] = $right + 1;
-        $values['topic_right'] = $right + 2;
+        $values['topic_left'] = $right;
+        $values['topic_right'] = $right + 1;
         $ret = parent::Insert($values);
-        CCDatabase::Query('UNLOCK TABLES');
+        $this->Unlock();
+
         return $ret;
     }
 
@@ -407,11 +266,15 @@ class CCTopics extends CCTable
         return $where;
     }
 
-    function _can_reply(&$row)
+    // helper
+    function GetParentTopic($topic_id)
     {
-        return (CCUser::IsLoggedIn() && empty($row['topic_locked'])) ||
-                CCUser::IsAdmin();
+        // I think this is how to get the immediate parent
+        list( $left, $right ) = CCDatabase::QueryRow('SELECT topic_left,topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
+        $sql = "SELECT topic_id FROM cc_tbl_topics WHERE topic_left < $left AND topic_right > $right ORDER BY topic_left DESC LIMIT 1";
+        return array( CCDatabase::QueryItem($sql), $left, $right );
     }
+
 
 }
 
@@ -462,11 +325,13 @@ class CCTopic
         }
 
         $topics = CCTopics::GetTable();
-        $record = $topics->GetRecordFromID($topic_id);
-
-        if( !CCTopics::_can_reply($record) )
+        $record = $topics->QueryKeyRow($topic_id);
+        $is_logged_in = CCUser::IsLoggedIn();
+        $can_reply = ($is_logged_in && empty($record['topic_locked'])) || CCUser::IsAdmin();
+            
+        if( !$can_reply )
         {
-            if( !$is_translate || empty($record['topic_can_xlat']) || !CCUser::IsLoggedIn() )
+            if( !$is_translate || empty($record['topic_can_xlat']) || !$is_logged_in )
             {
                 CCPage::Prompt(_('You are not authorized to post here.'));
                 return false;
@@ -486,6 +351,7 @@ class CCTopic
 
     function _list_translatable_topics()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Topics for Translation'));
 
         $topics =& CCTopics::GetTable();
@@ -507,6 +373,8 @@ class CCTopic
 
     function Translate($topic_id='')
     {
+        require_once('cclib/cc-page.php');
+
         if( empty($topic_id) )
         {
             $this->_list_translatable_topics();
@@ -581,14 +449,26 @@ class CCTopic
 
         if( empty($_POST['topicreply']) || ($did_validation && !$validated) )
         {
-            $title = CCTopics::GetReplyText($record);
+            if( CCUser::CurrentUser() == $record['topic_user'] )
+            {
+                $title = 'str_topic_reply_to_yourself';
+            }
+            else
+            {
+                $sql = 'SELECT user_real_name FROM cc_tbl_user WHERE user_id='.$record['topic_user'];
+                $user_real_name = CCDatabase::QueryItem($sql);
+                $title = array('str_topic_reply_to_s',$user_real_name);
+            }
             CCPage::SetTitle($title);
 
             if( $is_quote === true && !$did_validation)
             {
-                // er, what if formatting is OFF ??
-
                 $users =& CCUsers::GetTable();
+                // hmmmm
+                $record['_need_topic_text'] = $record['topic_text'];
+                unset($record['topic_text']);
+                $arr = array(&$record);
+                $this->OnFilterTopicText($arr);
                 $user_real_name = $users->QueryItemFromKey('user_real_name',$record['topic_user']);
                 $quote_text = '[quote=' . 
                               $user_real_name . 
@@ -598,8 +478,10 @@ class CCTopic
                 $form->SetFormValue( 'topic_text', $quote_text);
             }
 
-            CCPage::PageArg('post_reply_macro','topics.xml/post_reply');
-            CCPage::PageArg('topic',$record,'post_reply_macro');
+            /*
+            CCPage::PageArg('topic_id',$topic_id);
+            CCPage::PageArg('topic',$record,'topic_reply' );
+            */
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
@@ -619,8 +501,7 @@ class CCTopic
             $values['topic_thread'] = $record['topic_thread'];
             $values['topic_name']   = $name;
             // $values['topic_top']   = $record['topic_top'];
-            $topics->Insert($values);
-            $this->Sync($topic_id,$next_id);
+            $topics->Insert($values,$topic_id);
 
             if( !empty($values['topic_thread']) )
             {
@@ -637,14 +518,6 @@ class CCTopic
 
             CCUtil::SendBrowserTo();
         }
-    }
-
-    function Sync($parent_id,$child_id)
-    {
-        $topic_tree =& CCTopicTree::GetTable();
-        $args['topic_tree_parent'] = $parent_id;
-        $args['topic_tree_child'] = $child_id;
-        $topic_tree->Insert($args);
     }
 
     function Quote($topic_id)
@@ -670,6 +543,7 @@ class CCTopic
     {
         if( $branch && !CCUser::IsAdmin() )
             cc_exit();
+        require_once('cclib/cc-page.php');
         $this->CheckTopicAccess($topic_id);
         $topics =& CCTopics::GetTable();
         CCPage::SetTitle(_("Deleting Topic"));
@@ -693,22 +567,19 @@ class CCTopic
 
     function DeleteTopic($topic_id,$branch=false)
     {
-        $topics =& CCTopics::GetTable();
         $translations =& CCTopicsi18n::GetTable();
-        $tree =& CCTopicTree::GetTable();
-        $arg1['topic_tree_child'] = $topic_id;
-        $parent_id = $tree->QueryItem('topic_tree_parent',$arg1);
+        $topics       =& CCTopics::GetTable();
+
+        list( $parent_id, $left, $right ) = $topics->GetParentTopic($topic_id);
+
         if( $parent_id && !$branch )
         {
-            $arg2['topic_tree_parent'] = $topic_id;
-            $child_count = $tree->CountRows($arg2);
-            if( $child_count < 1 )
+            if( $right - $left > 1 )
             {
                 // one parent, no children:
                 // delete from tree
-                $tree->DeleteWhere($arg1);
-                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_SHALLOW, 
-                                                                $topic_id ));
+
+                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_SHALLOW, $topic_id ));
                 // delete from topics
                 $topics->DeleteKey($topic_id);
                 $translations->DeleteTranslationsOf($topic_id);
@@ -726,46 +597,34 @@ class CCTopic
                 $args4['topic_id'] = $topic_id;
                 $args4['topic_deleted'] = 1;
                 $topics->Update($args4);
-                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, 
-                                                                $topic_id ));
+                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, $topic_id ));
             }
         }
         else
         {
             // top level topic or branch flag is set, wipe it's tree...
-            CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_DEEP, 
-                                                            $topic_id ));
-            $this->_delete_tree($topic_id,$translations);
+            CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_DEEP, $topic_id ));
+            $topics->DeleteKeyRow($topic_id);
+            $translations->DeleteTranslationsOf($parent_id);
         }
     }
 
-    function _delete_tree($parent_id,$translations='')
-    {
-        if( empty($translations) )
-            $translations =& CCTopicsi18n::GetTable();
-
-        /*
-        $tree =& CCTopicTree::GetTable();
-        $where['topic_tree_parent'] = $parent_id;
-        $rows = $tree->QueryRows($where);
-        foreach( $rows as $row )
-            $this->_delete_tree($row['topic_tree_child']);
-        $tree->DeleteWhere($where);
-        $topics =& CCTopics::GetTable();
-        $topics->DeleteKey($parent_id);
-        */
-        $translations->DeleteTranslationsOf($parent_id);
-    }
-
+    /**
+    * See topics.js for usage, this is used to retrieve xlat text on user request
+    *
+    */
     function GetText($topic_id='')
     {
         $topics =& CCTopics::GetTable();
         $topic_id = intval(CCUtil::Strip($topic_id));
-        if( empty($topic_id) || (!($record = $topics->GetRecordFromId($topic_id))) )
+        if( !$topics->KeyExists($topic_id) )
         {
             print('no such topic');
             exit;
         }
+        $rec = CCDatabase::QueryRow('SELECT topic_text as _need_topic_html FROM cc_topics WHERE topic_id='.$topic_id);
+        $arr = array( &$rec );
+        $this->OnFilterTopicHTML($arr);
         print( $record['topic_text_html'] );
         exit;
     }
@@ -773,13 +632,14 @@ class CCTopic
     function Edit($topic_id)
     {
         $this->CheckTopicAccess($topic_id);
+        
         global $CC_GLOBALS;
 
         require_once('ccextras/cc-topics-forms.inc');
 
         $form =  new CCTopicEditForm();
         $topics =& CCTopics::GetTable();
-        $record = $topics->GetRecordFromID($topic_id);
+        $record = $topics->QueryKeyRow($topic_id);
         
         $inpost = !empty($_POST['topicedit']);
 
@@ -788,8 +648,7 @@ class CCTopic
 
         if( !$inpost || !$form->ValidateFields() )
         {
-            CCPage::SetTitle(sprintf(_("Edit topic: '%s'"),$record['topic_name']));
-            CCPage::AddMacro( 'topics.xml/post_edit' ); 
+            CCPage::SetTitle(array('str_topic_edit_s',$record['topic_name']));
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
@@ -806,7 +665,7 @@ class CCTopic
     {
         global $CC_GLOBALS;
 
-        CCPage::SetTitle(_('View Topic'));
+        CCPage::SetTitle('str_topic_view');
 
         $topic_id = intval(CCUtil::Strip($topic_id));
         if( empty($topic_id) )
@@ -817,14 +676,15 @@ class CCTopic
         }
 
         $topics =& CCTopics::GetTable();
-        $topic = $topics->GetRecordFromID($topic_id);;
-
-        if( empty($topic) )
+        if( $topics->KeyExists($topic_id) )
         {
             CCPage::Prompt(_('Topic does not exist. (May have been deleted by author.)'));
             CCUtil::Send404(false,__FILE__,__LINE__);
             return;
         }
+
+        $topic = $topics->GetRecordFromID($topic_id);;
+
 
         CCPage::PageArg( 'show_cmds', true );
         CCPage::PageArg( 'topic', $topic, 'topics.xml/one_topic');
@@ -836,19 +696,21 @@ class CCTopic
 
     function Lock($topic_id)
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_('Locking and Unlocking Topic Replies'));
 
-        $topics =& CCTopics::GetTable();
-        $topic = $topics->QueryKeyRow($topic_id);
-        if( empty($topic) )
+        $row =
+            CCDatabase::QueryRow('SELECT topic_left, topic_right, topic_locked FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
+
+        if( empty($row) )
         {
             CCPage::Prompt(_('Topic does not exist'));
             return;
         }
-
-        $topics->GetTree($topic);
-        $lock = !$topic['topic_locked'];
-        $this->_lock_tree($topic,$topics,$lock);
+        list( $left, $right, $topic_lock  ) = $row;
+        $lock = !$topic_locked;
+        $sql = "UPDATE cc_tbl_topics SET topic_locked = {$lock} WHERE topic_left >= {$left} AND topic_right <= {$right}";
+        CCDatabase::Query($sql);
 
         $prompt = $lock ? _('Topic is now locked') 
                         : _('Topic is now unlocked');
@@ -860,21 +722,6 @@ class CCTopic
         }
 
         CCPage::Prompt($prompt);
-    }
-
-    function _lock_tree(&$topic,$topics,$lock)
-    {
-        $args['topic_id']     = $topic['topic_id'];
-        $args['topic_locked'] = $lock;
-        $topics->Update($args);
-        if( !empty($topic['topic_children']) )
-        {
-            $c = count($topic['topic_children']);
-            for( $i = 0; $i < $c; $i++ )
-            {
-                $this->_lock_tree($topic['topic_children'][$i],$topics,$lock);
-            }
-        }
     }
 
     /**
@@ -915,6 +762,9 @@ class CCTopic
         CCEvents::MapUrl( ccp('topics','lock'),   array( 'CCTopic', 'Lock'),    
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{topicid}', 
             _('Lock a topic thread from replies') , CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('user_hook','topic_cmds'),   array( 'CCTopicHook', 'DoHook'),    
+            CC_MUST_BE_LOGGED_IN, 'ccextras/cc-topics-hook.inc' );
     }
 
 }

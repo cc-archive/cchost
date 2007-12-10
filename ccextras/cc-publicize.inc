@@ -83,9 +83,9 @@ class CCPublicize
 
         if( $type == 'user' )
         {
-            $users  =& CCUsers::GetTable();
-            $record =& $users->GetRecordFromName($arg1);
-            
+            $sql = 'SELECT user_name, user_real_name FROM cc_tbl_user WHERE user_name=\'' . $arg1 . '\'';
+            $record = CCDatabase::QueryRow($sql);
+            $record['artist_page_url'] = ccl('people',$record['user_name']);
             $args['bookmark_url'] = $record['artist_page_url'];
             $configs =& CCConfigs::GetTable();
             $template_tags = $configs->GetConfig('ttag');

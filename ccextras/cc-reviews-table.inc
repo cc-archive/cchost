@@ -58,23 +58,6 @@ class CCReviews extends CCTopics
         return $table;
     }
 
-    function & GetReviewsForUpload($record_or_id,$deep,$sort)
-    {
-        $upload_id =  is_array($record_or_id) ? 
-                        $record_or_id['upload_id'] : 
-                        $record_or_id;
-
-        $where['topic_upload'] = $upload_id;
-
-        $this->SetSort('topic_date',$sort);
-
-        $records =& $this->GetRecords($where);
-        if( $deep )
-            $this->GetTreeFromRecords($records);
- 
-        return $records;
-    }
-
 }
 
 ?>

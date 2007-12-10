@@ -325,7 +325,7 @@ class CCReview
             $topic_id = $row['topic_id'];
             $reviewer = $row['topic_user'];
             $this->Sync($upload_id,$reviewer,-1);
-            $topic_api->_delete_tree($topic_id);
+            $reviews->DeleteKeyRow($topic_id);
         }
     }
 

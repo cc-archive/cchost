@@ -92,37 +92,6 @@ popupHookup.prototype = {
     }
 }
 
-var userHookup = Class.create();
-
-userHookup.prototype = {
-
-    initialize: function(req,params) {
-        var url = home_url + 'user_hook/' + req + q + params;
-        if( $('debug') )
-            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
-        new Ajax.Request( url, { method: 'get', onComplete: this.onUserHooks.bind(this) } );
-    },
-
-    onUserHooks: function(resp,json) {
-        if( json && json.ok_to_rate.length )
-        {
-            if( json.rate_mode == 'rate' )
-            {
-                new ratingsHooks(json.ok_to_rate);
-            }
-            else if( json.rate_mode == 'recommend' )
-            {
-                new recommendsHooks(json.ok_to_rate);
-            }
-            else
-            {
-                alert('error: unknown rate mode: ' + json.rate_mode );
-            }
-        }
-    }
-
-}
-
 var ratingsHooks = Class.create();
 
 ratingsHooks.prototype = {
@@ -229,6 +198,83 @@ recommendsHooks.prototype = {
         var url = home_url + "rate/" + id + "/5";
         if( this.return_macro )
             url += q + 'rmacro=' + this.return_macro;
+        if( $('debug') )
+            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         new Ajax.Updater(d_elem,url);
+    }
+}
+
+var userHookup = Class.create();
+
+userHookup.prototype = {
+
+    initialize: function(req,params) {
+        var url = home_url + 'user_hook/' + req + q + params;
+        if( $('debug') )
+            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
+        new Ajax.Request( url, { method: 'get', onComplete: this.onUserHooks.bind(this) } );
+    },
+
+    onUserHooks: function(resp,json) {
+        try
+        {
+            if( !json )
+                json = eval(resp.responseText);
+            
+            if( json  )
+            {
+                if( json.ok_to_rate && json.ok_to_rate.length )
+                {
+                    if( json.rate_mode == 'rate' )
+                    {
+                        new ratingsHooks(json.ok_to_rate);
+                    }
+                    else if( json.rate_mode == 'recommend' )
+                    {
+                        new recommendsHooks(json.ok_to_rate);
+                    }
+                    else
+                    {
+                        alert('error: unknown rate mode: ' + json.rate_mode );
+                    }
+                }
+                else
+                {
+                    if( json.topic_cmds )
+                    {
+                        new topicHooks(json.topic_cmds);
+                    }
+                }
+            }
+        }
+        catch (e)
+        {
+            alert(e);
+        }
+    }
+
+}
+
+
+var topicHooks = Class.create();
+
+topicHooks.prototype = {
+
+    initialize: function(topics_cmds) {
+        try
+        {
+            topics_cmds.each( function(cmd_meta) {
+                var id = cmd_meta.id;
+                var html = '';
+                cmd_meta.cmds.each( function(cmd) {
+                    html += '<a class="topic_cmd" href="' + cmd.href + '">' + cmd.text + '</a> ';
+                });
+                $('commands_' + id).innerHTML = html;
+            });
+        }
+        catch (e)
+        {
+            alert(e);
+        }
     }
 }

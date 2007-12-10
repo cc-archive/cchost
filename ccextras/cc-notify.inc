@@ -241,7 +241,6 @@ class CCNotifyAPI
         $this_poster = $reply['topic_user'];
         $posters = array();
         $C =& $original;
-        $topic_tree =& CCTopicTree::GetTable();
         $topics =& CCTopics::GetTable();
         while( $C )
         {
@@ -251,8 +250,7 @@ class CCNotifyAPI
             if( $C['topic_type'] != 'reply' )
                 break;
 
-            $ttarg['topic_tree_child'] = $C['topic_id'];
-            $parent_id = $topic_tree->QueryItem('topic_tree_parent',$ttarg);
+            list( $parent_id ) = $topics->GetParentTopic($C['topic_id']);
             if( empty($parent_id) )
                 break;
 
@@ -304,16 +302,20 @@ class CCNotifyAPI
         //
         if( $C['topic_type'] == 'review' )
         {
-            $reviews =& CCReviews::GetTable();
-            $topic_rec = $reviews->GetRecordFromRow($C);
+            $sql =<<<EOF
+                SELECT user_name 
+                FROM cc_tbl_user 
+                JOIN cc_tbl_uploads on user_id=upload_user
+                JOIN cc_tbl_topics on upload_id=topic_upload
+                WHERE topic_upload = {$C['topic_upload']}
+EOF;
+            $user_name = CCDatabase::QueryItem($sql);
+            $url = ccl('reviews',$user_name,$C['topic_upload']) . '#' . $C['topic_id'];
         }
         else
         {
-            $topic_rec = $topics->GetRecordFromRow($C);
-            $topic_rec['topic_permalink'] = ccl('thread',$C['topic_thread']) . '#' . $C['topic_id'];
+            $url = ccl('thread',$C['topic_thread']) . '#' . $C['topic_id'];
         }
-
-        $url = $topic_rec['topic_permalink'];
 
         $subject = _('Topic Reply Notification');
         $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 

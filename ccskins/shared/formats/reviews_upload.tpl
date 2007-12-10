@@ -52,12 +52,14 @@ EOF;
 <? cc_query_fmt('noexit=1&nomime=1&f=html&t=list_files&ids=' . $A['topic_upload']); ?>
 <table>
 %loop(records,R)%
+<? $thread_ids[] = $R['topic_id']; ?>
 <tr>
     %if_not_null(#R/is_reply)%
     <td colspan="2" style="border-left: solid white %(#R/margin)%px;" >
         <a name="%(#R/topic_id)%"></a>
         <div><a href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
         <div style="background-color:#DDD;float:left;">%(#R/topic_text_html)%</div>
+        <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
     </td>
     %else%
     <td >
@@ -69,8 +71,15 @@ EOF;
     <td>
         <div>%(#R/topic_date_format)% </div>
         %(#R/topic_text_html)%
+        <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
     </td>
     %end_if%
 </tr>
 %end_loop%
 </table>
+<script>
+if( user_name )
+{
+    new userHookup('topic_cmds','ids=<?= join(',',$thread_ids) ?>');
+}
+</script>

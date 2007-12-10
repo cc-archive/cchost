@@ -144,6 +144,18 @@ function cc_tpl_parse_inspect($varname)
     return "<? CCDebug::Enable(true); CCDebug::PrintVar($var,false); ?>";
 }
 
+function cc_tpl_parse_query_sql($args,$sql_where)
+{
+    $code =<<<EOF
+    require_once('cclib/cc-query.php');
+    \$query = new CCQuery();
+    \$args = \$query->ProcessAdminArgs("$args");
+    \$sqlargs['where'] = "$sql_where";
+    \$query->QuerySQL(\$args,\$sqlargs);
+EOF;
+    return "<? $code ?>";
+}
+
 function cc_tpl_parse_url($prefix,$varname)
 {
     $prefix = _cc_tpl_flip_prefix($prefix);
@@ -199,6 +211,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\?=? if_attr{$op}{$ac}{$a}{$cp}%/e"            =>   "cc_tpl_parse_if_attr('$1','$2');",
         "/<\?=? if_(not_)?class{$op}{$ac}{$a}{$cp}%/e"           =>   "cc_tpl_parse_if_class('$1','$2','$3');",
         "/<\? text{$op}{$a}{$cp}%/e"                      =>   "cc_tpl_parse_t('$1');", 
+        "/<\? query_sql{$op}{$ac}{$a}{$cp}%/e"            =>   "cc_tpl_parse_query_sql('$1','$2');", 
 
         "/<\? else%/"               =>   "<? } else { ?>",
         "/<\? end_(?:macro|if)%/"   =>   "<?\n } ?>",

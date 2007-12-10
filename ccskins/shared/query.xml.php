@@ -24,7 +24,7 @@
   font-family: Verdana;
 }
 
-.code {
+.cc_code {
   margin:20px 0px 20px 20px;
   font-family:Courier New;
 }
@@ -63,12 +63,12 @@ Sample Browser, and dozens of other places.
 <h2 > Input Parameters </h2>
 <p >For all ways of engagine the engine (url, programmatic, template, etc.) the input is formatted as 
 a browser query string (or form post variables)</p>
-<div  class="code">
+<div  class="cc_code">
   limit=5&tags=remix+chill&amp;sort=name&amp;f=html&amp;t=links
 </div>
 <h3 >Reference</h3>
 <p >Some parameters have two versions: long and short. For example the following will yeild the same results:</p>
-<div  class="code">
+<div  class="cc_code">
 /media/api/query?<b >f</b>=html&<b >t</b>=links&tags=chill<br  /><br  />
 /media/api/query?<b >format</b>=html&<b >template</b>=links&tags=chill
 </div>
@@ -97,7 +97,7 @@ format <b >long_form</b>,<b >short_form</b>:</p>
 <td > reqtags
 </td>
 <td > Return only records with these tags. These are added to whatever tags are specified in 'tags' and 'type'. Typical usage:
-<div  class="code">reqtags=audio
+<div  class="cc_code">reqtags=audio
 <br  />
  tags=chill+female_vocals
 <br  />
@@ -488,7 +488,7 @@ be taken because records can be get large, it's easy to get eat up a browser's
 memory with more than a few records. 
 Below is the layout (there might be 
 arrays nested in fields):
-<span  class="code">
+<span  class="cc_code">
  [{field:value,field:value...},{field:value,...}]
 </span>
 </td>

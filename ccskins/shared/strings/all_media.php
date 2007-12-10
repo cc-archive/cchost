@@ -392,6 +392,12 @@ $GLOBALS['str_tags']           = _('Tags');
 $GLOBALS['str_tags_s']         = _('Tags %s');
 $GLOBALS['str_thinking']       = _('thinking...');
 $GLOBALS['str_title']          = _('Title');
+
+$GLOBALS['str_topic_reply_to_yourself'] = _('Reply to yourself');
+$GLOBALS['str_topic_reply_to_s']        = _('Reply to %s');
+$GLOBALS['str_topic_edit_s']            = _("Edit topic '%s'");
+$GLOBALS['str_topic_view']              = _('View Topic');
+
 $GLOBALS['str_uploading_msg']  = _('This could take a while... please be patient while the file is uploading');
 
 $GLOBALS['str_user_home_page']     = _('Home Page') ;

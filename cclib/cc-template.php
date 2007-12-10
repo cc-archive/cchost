@@ -389,7 +389,7 @@ class CCSkin
     * following order:
     *
     *    Current cchost dir ('./') This allows for relative dirs from the root
-    *    priority (e.g. 'ccskins/plain/html_forms.tpl')
+    *    priority (e.g. 'ccskins/plain/page.tpl')
     *
     *    Directory of currently executing template and it's callers in reverse order.
     *

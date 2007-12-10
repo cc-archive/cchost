@@ -234,3 +234,11 @@ a.collab_upload {
     width: 90px;
     text-align: right;
   }
+
+div.ccud {
+	float: right;
+	border-top: 1px solid;
+	border-left: 1px solid;
+	border-right: 2px solid;
+	border-bottom: 2px solid;
+}

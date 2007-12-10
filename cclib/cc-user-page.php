@@ -286,7 +286,7 @@ END;
             $where = join(' OR ' ,$links);
             $baseurl = ccl('people') . '/';
             $sql =<<<END
-                SELECT user_real_name as tag, 
+                SELECT REPLACE(user_real_name,' ','&middot;') as tag, 
                        CONCAT('$baseurl',user_name) as tagurl
                 FROM cc_tbl_user
                 WHERE $where
