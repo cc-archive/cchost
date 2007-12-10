@@ -296,7 +296,8 @@ class CCPlaylists
     function _get_playlist_info($playlist_id,$is_popup=false)
     {
         $carts = new CCPlaylist(true);
-        $args['playlist'] = $carts->GetRecordFromID($playlist_id);
+        $args['playlist'] = $carts->QueryKeyRow($playlist_id);
+        $args['playlist']['artist_page_url'] = ccl('people',$args['playlist']['user_name']);
         if( empty($args['playlist']) )
             return null;
         if( $args['playlist']['cart_dynamic'] || ($args['playlist']['cart_subtype'] == 'default') )
