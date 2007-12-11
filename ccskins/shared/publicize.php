@@ -5,7 +5,7 @@ if( !defined('IN_CC_HOST') )
 
 
 //------------------------------------- 
-function _t_publicize_publicize($T,&$A) {
+function _t_publicize_publicize(&$T,&$A) {
   
   if ( !empty($A['PUB']['intro'])) {
   

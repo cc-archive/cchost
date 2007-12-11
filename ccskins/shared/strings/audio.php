@@ -25,14 +25,54 @@ $GLOBALS['str_list_length']                = _('length');
 $GLOBALS['str_list_album']                 = _('Album/CD');
 $GLOBALS['str_list_usedby']                = _('Samples are used in:');
 $GLOBALS['str_list_uses']                  = _('Uses samples from:');
+
 $GLOBALS['str_more_playlists']        = _('More playlists');
 $GLOBALS['str_new_playlist']          = _('new playlist');
+
 $GLOBALS['str_playlists']  = _('Playlists');
-$GLOBALS['str_pl_add_to_new']   = _('Add to new playlist');
-$GLOBALS['str_pl_all_in_window']    = _('Play All in Window');
-$GLOBALS['str_pl_getting'] = _('getting playlists');
-$GLOBALS['str_pl_playlists']             = _('playlists');
-$GLOBALS['str_pl_popular_adds'] = _('Popular Playlist Adds');
+
+
+$GLOBALS['str_pl_add_to']             = _('Add to');
+$GLOBALS['str_pl_add_to_new']         = _('Add to new playlist');
+$GLOBALS['str_pl_all_in_window']      = _('Show All in Window');
+$GLOBALS['str_pl_and_track_added.'] = _('New playlist created and track added.'); // js
+$GLOBALS['str_pl_browse_playlists_s'] = _('Browse Playlists Featuring "%s"');
+$GLOBALS['str_pl_create_dynamic_playlist'] = _('Create Dynamic Playlist');
+$GLOBALS['str_pl_created_by']         = _('created by');
+$GLOBALS['str_pl_create_playlist'] = _('Create Playlist');
+$GLOBALS['str_pl_delete_playist'] = _('Delete Playist') ;
+$GLOBALS['str_pl_dyn_msg1'] = _('This is a \'dynamic\' playlist which means it will change depending on the latest uploads to this site. You can bookmark this playlist, or you can drag %sthis link%s to your browser toolbar. ');
+$GLOBALS['str_pl_dyn_msg2'] = _('You can also save this playlist %s to customize it by clicking %shere%s');
+$GLOBALS['str_pl_dynamic_playlist'] = _('Dynamic Playlist');
+$GLOBALS['str_pl_dynamic']            = _('dynamic');
+$GLOBALS['str_pl_dynamic_changed'] = _('Dynamic playlist changed.'); //js
+$GLOBALS['str_pl_dynamic_playlist'] = _('Dynamic Playlist');
+$GLOBALS['str_pl_edit_dynamic_playlist_s'] = _('Edit Dynamic Playlist: "%s"');
+$GLOBALS['str_pl_edit_playlist_order'] = _('Edit Playlist Order');
+$GLOBALS['str_pl_edit_properties'] = _('Edit Properties');
+$GLOBALS['str_pl_empty_playlist'] = _('Empty Playlist');
+$GLOBALS['str_pl_found_in']           = _('Found in'); 
+$GLOBALS['str_pl_getting']            = _('getting playlists');
+$GLOBALS['str_pl_hot_playlists'] = _('Hot Playlists');
+$GLOBALS['str_pl_items']              = _('items');  // as in: number of items
+$GLOBALS['str_pl_new_playlist_created'] = _('New playlist created'); // js
+$GLOBALS['str_pl_new_playlists'] = _('New Playlists');
+$GLOBALS['str_pl_no_recs_match'] = _('No records match your dynamic playlist query. You can try again by modifiying your query %shere%s');
+$GLOBALS['str_pl_play_all_tracks'] = _('Play All Tracks');
+$GLOBALS['str_pl_play_in_window'] = _('Play in Window');
+$GLOBALS['str_pl_playlist_s'] = _('Playlist: %s');
+$GLOBALS['str_pl_playlists']          = _('playlists');
+$GLOBALS['str_pl_popular_adds']       = _('Popular Collection Adds');
+$GLOBALS['str_pl_remove_from']        = _('Remove from');
+$GLOBALS['str_pl_reorder playlist'] = _('Reorder Playlist');
+$GLOBALS['str_pl_return_to'] = _('%s Return to %syour playlists%s');
+$GLOBALS['str_pl_save_playlist_query'] = _('Save Playlist Query');
+$GLOBALS['str_pl_track_added'] = _('Track added to playlist'); // js
+$GLOBALS['str_pl_track_has_been_removed'] = _('Track has been removed from playlist'); // js
+$GLOBALS['str_pl_upload_is_already'] = _('Upload is already in list');
+
+
+
 $GLOBALS['str_play']                  = _('Play');
 $GLOBALS['str_play_now']              = _('Play Now');
 $GLOBALS['str_play_this_page']        = _('Play this page');

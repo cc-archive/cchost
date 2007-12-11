@@ -1,13 +1,13 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-function _t_license_license_enable($T,&$A) {
+function _t_license_license_enable(&$T,&$A) {
   ?><input  type="checkbox" name="<?= $A['field']['license']['license_id']?>" id="<?= $A['field']['license']['license_id']?>" checked="<?= empty($A['field']['value']) ? null : $A['field']['value']; ?>"></input>
 <label  for="<?= $A['field']['license']['license_id']?>"><?= $A['field']['license']['license_text']?></label>
 <?if ( !empty($A['field']['license']['license_url'])) {?><div  class="cc_file_license"><a  href="<?= $A['field']['license']['license_url']?>" target="_new">more info...</a></div><?}?><img  class="cc_license_image" src="<?= $T->URL('images/lics/' . $A['field']['license']['license_logo']) ?>" />
 <br  />
 <?}
-function _t_license_license_choice($T,&$A) {
+function _t_license_license_choice(&$T,&$A) {
   ?><table >
 <?$carr101 = $A['field']['license_choice'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $A['license'] = $carr101[ $ck101[ $ci101 ] ];   ?><tr ><td ><img  class="cc_license_image" src="<?= $T->URL('images/lics/' .$A['license']['license_logo']) ?>" /></td>
 <td ><input  type="radio" checked="<?= $A['license']['license_checked'] ?>" name="upload_license" value="<?= $A['license']['license_id']?>" id="<?= $A['license']['license_id']?>"></input>
@@ -15,14 +15,14 @@ function _t_license_license_choice($T,&$A) {
 </td></tr>
 <?}?></table>
 <?}
-function _t_license_license_rdf($T,&$A) {
+function _t_license_license_rdf(&$T,&$A) {
   ?>
  <?= $A['record']['start_comm']?>
     <?$T->Call('license.xml/raw_license_rdf');
 ?>
  <?= $A['record']['end_comm']?>
 <?}
-function _t_license_raw_license_rdf($T,&$A) {
+function _t_license_raw_license_rdf(&$T,&$A) {
   ?><rdf:RDF  xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <Work  rdf:about="">
 <dc:title ><?= $A['record']['upload_name']?>

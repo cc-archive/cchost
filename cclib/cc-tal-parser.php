@@ -562,7 +562,7 @@ class CCTALCompiler
                                         else
                                             $OUT .= "\n";
                                         $tname = '_t_' . $basename . '_' . $attrs['define-macro'];
-                                        $OUT .= "function $tname(\$T,&\$A) {\n  ";
+                                        $OUT .= "function $tname(&\$T,&\$A) {\n  ";
                                         $node_stack[0]['funcblock'] = true;
                                         ++$this->func_block;
                                     }

@@ -1,6 +1,6 @@
 <?
 
-function _t_skin_editor_edit_font_schemes($T,&$A) 
+function _t_skin_editor_edit_font_schemes(&$T,&$A) 
 {
     $props = $A['field']['props'];
     $fid = $A['field']['name'];
@@ -50,7 +50,7 @@ function _t_skin_editor_edit_font_schemes($T,&$A)
     
 }
 
-function _t_skin_editor_edit_color_schemes($T,&$A) 
+function _t_skin_editor_edit_color_schemes(&$T,&$A) 
 {
     $props = $A['field']['props'];
     $fid = $A['field']['name'];
@@ -102,7 +102,7 @@ function _t_skin_editor_edit_color_schemes($T,&$A)
     
 }
 
-function _t_skin_editor_edit_layouts($T,&$A) 
+function _t_skin_editor_edit_layouts(&$T,&$A) 
 {
     $props = $A['field']['props'];
     $fid = $A['field']['name'];

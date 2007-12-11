@@ -5,7 +5,7 @@ function _t_util_format_signature($T,$A)
     print $T->String('str_from'). " <a href=\"{$A['root-url']}\">{$A['site-title']}</a>";
 }
 
-function _t_util_patch_stream_links($T,&$A)
+function _t_util_patch_stream_links(&$T,&$A)
 {
     $stream_fg = $T->URL('images/player/hear-button-fg.gif');
     if( empty($stream_fg) )
@@ -30,7 +30,7 @@ a.cc_streamlink:hover { background: url('<?= $stream_fg ?>') top left no-repeat;
     }
 }
 
-function _t_util_print_prompts($T,&$A)
+function _t_util_print_prompts(&$T,&$A)
 {
     foreach( $A['prompts'] as $prompt )
     {
@@ -39,7 +39,7 @@ function _t_util_print_prompts($T,&$A)
 }
 
 
-function _t_util_print_html_content($T,&$A)
+function _t_util_print_html_content(&$T,&$A)
 {
     if( empty($A['html_content']) )
         return;
@@ -48,7 +48,7 @@ function _t_util_print_html_content($T,&$A)
         eval( '?>' . $html); //print $html;
 }
 
-function _t_util_print_forms($T,&$A)
+function _t_util_print_forms(&$T,&$A)
 {
     foreach( $A['forms'] as $form_info )
     {
@@ -58,14 +58,14 @@ function _t_util_print_forms($T,&$A)
     }
 }
 
-function _t_util_disable_submit_button($T,&$A)
+function _t_util_disable_submit_button(&$T,&$A)
 {
     ?>
 <script> $('form_submit').disabled = true; </script>
     <?
 }
 
-function _t_util_hide_upload_form($T,&$A)
+function _t_util_hide_upload_form(&$T,&$A)
 {
     $msg = str_replace("\n", ' ', addslashes($T->String('str_uploading_msg')));
     
@@ -135,7 +135,7 @@ var the_formMask = new formMask();
 }
 
 
-function _t_util_print_bread_crumbs($T,&$A)
+function _t_util_print_bread_crumbs(&$T,&$A)
 {
     if( empty($A['bread_crumbs']) )
         return;
@@ -192,7 +192,7 @@ function _t_util_print_bread_crumbs($T,&$A)
 } // END: function show_bread_crumbs
 
 
-function _t_util_print_client_menu($T,&$A)
+function _t_util_print_client_menu(&$T,&$A)
 {
     ?><link rel="stylesheet" type="text/css" href="<?= $T->URL('css/client_menu.css'); ?>" title="Default Style" /><?
 
@@ -225,7 +225,7 @@ function _t_util_print_client_menu($T,&$A)
     }
 }
 
-function _t_util_prev_next_links($T,&$A) 
+function _t_util_prev_next_links(&$T,&$A) 
 {
     print '<table  id="cc_prev_next_links"><tr >';
 
@@ -242,7 +242,7 @@ function _t_util_prev_next_links($T,&$A)
 } // END: function prev_next_links
 
 
-function _t_util_ratings_stars($T,&$A)
+function _t_util_ratings_stars(&$T,&$A)
 {
     $R =& $A['record'];
     if( !empty($R['ratings']) )
@@ -256,7 +256,7 @@ function _t_util_ratings_stars($T,&$A)
     }
 }
 
-function _t_util_ratings_stars_user($T,&$A)
+function _t_util_ratings_stars_user(&$T,&$A)
 {
     $R =& $A['record'];
     if( !empty($R['ratings']) )
@@ -297,7 +297,7 @@ function _t_util_ratings_stars_user($T,&$A)
     }
 }
 
-function _t_util_ratings_stars_small($T,&$A)
+function _t_util_ratings_stars_small(&$T,&$A)
 {
     $R =& $A['record'];
     if( !empty($R['ratings']) )
@@ -317,7 +317,7 @@ function _t_util_ratings_stars_small($T,&$A)
     }
 }
 
-function _t_util_ratings_stars_small_user($T,&$A)
+function _t_util_ratings_stars_small_user(&$T,&$A)
 {
     $R =& $A['record'];
     if( !empty($R['ratings']) )
@@ -358,7 +358,7 @@ function _t_util_ratings_stars_small_user($T,&$A)
     }
 }
 
-function _t_util_recommends($T,&$A)
+function _t_util_recommends(&$T,&$A)
 {
     $R =& $A['record'];
 

@@ -3,6 +3,7 @@
 $A['picks_links']        = 'picks.xml/picks_links';
 
 $A['print_forms']        = 'util.php/print_forms';
+$A['html_form']          = 'html_form.php/html_form';
 $A['print_html_content'] = 'util.php/print_html_content';
 $A['hide_upload_form']   = 'util.php/hide_upload_form';
 $A['print_prompts']      = 'util.php/print_prompts';
@@ -29,6 +30,7 @@ $A['show_zip_dir'] = 'file_macros.php/show_zip_dir';
 $A['upload_banned'] = 'file_macros.php/upload_banned';
 $A['upload_not_published'] = 'file_macros.php/upload_not_published';
 
+$A['playlist_list_lines'] = 'playlist_audio.tpl';
 
 $A['user_listings'] = 'user_list.tpl';
 $A['user_listing']  = 'user_profile.tpl';

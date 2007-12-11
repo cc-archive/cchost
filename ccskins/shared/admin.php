@@ -1,6 +1,6 @@
 <?
 
-function _t_admin_print_admin_menu($T,&$_TV)
+function _t_admin_print_admin_menu(&$T,&$_TV)
 {
     $menu = $_TV['admin_menu'];
 

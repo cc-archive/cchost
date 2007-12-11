@@ -54,7 +54,7 @@
 
 */
 
-function _t_upload_menu_init($T,&$A)
+function _t_upload_menu_init(&$T,&$A)
 {
     if( !empty($A['record']) )
         $R =& $A['record'];

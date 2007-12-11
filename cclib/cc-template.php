@@ -144,10 +144,25 @@ class CCSkin
         if( !empty($this->vars['string_profile']) && file_exists($this->vars['string_profile']) )
             require_once($this->vars['string_profile']);
 
+        // Load the main skin file here...
+        
         $this->Call($this->filename);
+
+        // execute specific macros...
 
         if( !empty($this->vars['auto_execute']) )
         {
+            // if the skin profile has any overrides we have to load them here in
+            // the event of ajax callbacks (otherwise we would load them in 
+            // AddCustomizations but only full page displays gets those)
+
+            if( !empty($this->vars['profile_extras']) && file_exists($this->vars['profile_extras']) ) // last minute overrides
+            {
+                $A =& $this->vars;
+                $T =& $this;
+                include($this->vars['profile_extras']);
+            }
+
             $this->_push_path($this->filename);
             foreach( $this->vars['auto_execute'] as $exec )
                 $this->Call($exec);
@@ -161,12 +176,15 @@ class CCSkin
     {
         $T =& $this;
         $A =& $this->vars;
-        foreach( array( 'tab_pos', 'box_shape', 'page_layout', 'color_scheme', 'font_scheme', 'font_size' ) as $inc )
+        foreach( array( 'tab_pos', 'box_shape', 'page_layout', 'color_scheme', 'font_scheme', 'font_size') as $inc )
         {
             if( !empty($_REQUEST[$inc]) )
                 $A[$inc] = $_REQUEST[$inc];
             if( !empty($A[$inc]) && file_exists($A[$inc]))
+            {
+                CCDebug::Log('Loading custom: ' . $A[$inc]);
                 require_once($A[$inc]);
+            }
         }
     }
 
@@ -268,7 +286,7 @@ class CCSkin
     {
         global $CC_GLOBALS;
 
-        //CCDebug::Log("TCall: $macropath");
+        //CCDebug::Log("Lookup: $macropath");
 
         $funcname = '';
 
@@ -517,6 +535,8 @@ class CCSkin
 
             $A =& $this->vars;
             $T =& $this;
+
+            CCDebug::Log("Loading/parsing: $file");
 
             if( $m[2] == 'tpl' )
             {

@@ -1,6 +1,6 @@
 <?
 
-function _t_playerembed_eplayer($T,&$_TV) 
+function _t_playerembed_eplayer(&$T,&$_TV) 
 {
     if( empty($_TV['poptions']) ) $_TV['poptions'] = '';
 ?>

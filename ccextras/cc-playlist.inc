@@ -43,16 +43,15 @@ class CCPlaylists
         require_once('cclib/cc-query.php');
         require_once('cclib/zend/json-encoder.php');
 
-        CCPage::SetTitle(_('Create Dynamic Playlist'));
+        CCPage::SetTitle('str_pl_create_dynamic_playlist');
         $args = array();
         $args['promo_tag'] = empty($CC_GLOBALS['playlist_promo_tag']) ? '' : $CC_GLOBALS['playlist_promo_tag'];
         $query = new CCQuery();
         $qargs = array_filter($query->ProcessUriArgs());
         $args['edit_query'] = CCZend_Json_Encoder::encode($qargs);
         $args['submit_url'] = ccl('api','query');
-        $args['submit_text'] = _('Create Playlist');
-        CCPage::PageArg( 'playlist_create_dyn', 'playlist.xml/playlist_create_dyn' );
-        CCPage::PageArg( 'plargs', $args, 'playlist_create_dyn' );
+        $args['submit_text'] = 'str_pl_create_playlist';
+        CCPage::PageArg( 'plargs', $args, 'playlist.xml/playlist_create_dyn');
     }
 
     function EditQuery($playlist_id='',$commit='')
@@ -61,7 +60,7 @@ class CCPlaylists
         $cart =& CCPlaylist::GetTable();
         $row = $cart->QueryKeyRow($playlist_id);
         require_once('cclib/cc-page.php');
-        CCPage::SetTitle(sprintf(_('Edit Dynamic Playlist: "%s"'),$row['cart_name']));
+        CCPage::SetTitle(array('str_pl_edit_dynamic_playlist_s',$row['cart_name']));
         if( empty($commit) )
         {
             parse_str($row['cart_dynamic'],$qargs);
@@ -69,7 +68,7 @@ class CCPlaylists
             $args['edit_query'] = CCZend_Json_Encoder::encode($qargs);
             $args['promo_tag'] = '';
             $args['submit_url'] = ccl('playlist','editquery',$playlist_id,'commit');
-            $args['submit_text'] = _('Save Playlist Query');
+            $args['submit_text'] = 'str_pl_save_playlist_query';
             CCPage::PageArg( 'playlist_create_dyn', 'playlist.xml/playlist_create_dyn' );
             CCPage::PageArg( 'plargs', $args, 'playlist_create_dyn' );
         }
@@ -82,7 +81,7 @@ class CCPlaylists
             $up['cart_id'] = $playlist_id;
             $up['cart_dynamic'] = $qargs;
             $cart->Update($up);
-            $this->_send_prompt(_('Dynamic playlist changed.'));
+            $this->_send_prompt('str_pl_dynamic_changed');
         }
     }
 
@@ -107,29 +106,26 @@ class CCPlaylists
             $url = url_args( ccl('playlist','create'), $qstring );
             $link1 = "[url=$url]";
             $link2 = '[/url]';
-            $msg1 = sprintf(_('No records match your dynamic playlist query. You can try again by modifiying your query %shere%s'),
-                                  $link1, $link2);
+            $args['playlist']['cart_msgs'][]= array('str_pl_no_recs_match',$link1, $link2);
         }
         else
         {
             $url = url_args( ccl('api','query'), $qstring . '&f=playlist');
             $link1 = "[url=$url]";
             $link2 = '[/url]';
-            $msg1 = sprintf(_('This is a \'dynamic\' playlist which means it will change depending on the latest uploads to this site. You can bookmark this playlist, or you can drag %sthis link%s to your browser toolbar. '),$link1,$link2);
+            $args['playlist']['cart_msgs'][] = array('str_pl_dyn_msg1',$link1,$link2);
             if( CCUser::IsLoggedIn() )
             {
                 $wpromo = empty($CC_GLOBALS['playlist_promo_tag']) ? '' : _('(without the promo tracks)');
                 $qstr = preg_replace('/promo_tag=[^&]+/','',$qstring);
                 $url = url_args( ccl('playlist','save'), $qstr );
                 $link1 = "[url=$url]";
-                $msg1 .= "\n\n" . sprintf(_('You can also save this playlist %s to customize it by clicking %shere%s'),
-                                        $wpromo, $link1,$link2);
+                $args['playlist']['cart_msgs'][] = array('str_pl_dyn_msg2',$wpromo, $link1,$link2);
             }
             $args = $this->_add_menu($args,$args['playlist']['cart_id']);
         }
         $args['records'] = $records;
-        $args['playlist']['cart_desc'] = $msg1;
-        CCPage::SetTitle(_('Dynamic Playlist'));
+        CCPage::SetTitle('str_pl_dynamic_playlist');
         CCPage::PageArg('args',$args,'playlist_show_one');
 
         $result = true;
@@ -234,7 +230,7 @@ class CCPlaylists
     function EditOrder($playlist_id='')
     {
         $this->_test_pl(0,$playlist_id,false,true,true);
-        CCPage::SetTitle(_('Edit Playlist Order'));
+        CCPage::SetTitle('str_pl_edit_playlist_order');
         if( empty($_POST) )
         {
             CCPage::PageArg('noproto',true);
@@ -280,7 +276,7 @@ class CCPlaylists
         $args['command'] = 'delete';
         $args['upload_id'] = $upload_id;
         $args['cart_id'] = $playlist_id;
-        $args['message'] = _('Track has been removed from playlist');
+        $args['message'] = 'str_pl_track_has_been_removed';
         $this->_output($args); // for now...
     }
 
@@ -351,13 +347,13 @@ class CCPlaylists
             $args['menu'][] = array( 'url'   => ccl( 'playlist', 'play', $playlist_id ),
                                      'class' => 'cc_playlist_playlink',
                                      'id'    => '_pla_' . $playlist_id,
-                                     'text'  => _('Play All Tracks') );
+                                     'text'  => 'str_pl_play_all_tracks' );
             if( !$is_popup )
             {
                 $args['menu'][] = array( 'url'   => 'javascript://play in window',
                                          'class' => 'cc_playlist_playwindow',
                                          'id'    => '_plw_' . $playlist_id,
-                                         'text'  => _('Play in window') );
+                                         'text'  => 'str_pl_play_in_window' );
             }
         }
 
@@ -377,19 +373,19 @@ class CCPlaylists
                     $args['menu'][] = array( 'url' => ccl( 'playlist', 'edit', $playlist_id ),
                                                 'class' => '',
                                                 'id'    => '',
-                                                'text' => _('Edit Properties') );
+                                                'text' => 'str_pl_edit_properties' );
 
                     if( !$is_dynamic && !empty($args['records']) )
                     {
                         $args['menu'][] = array( 'url' => ccl( 'playlist', 'editorder', $playlist_id ),
                                                                 'class' => '',
                                                                 'id'    => '',
-                                                                'text' => _('Reorder Playlist') );
+                                                                'text' => 'str_pl_reorder playlist' );
 
                         $args['menu'][] = array( 'url' => ccl( 'playlist', 'empty', $playlist_id ),
                                                                 'class' => '',
                                                                 'id'    => '',
-                                                                'text' => _('Empty Playlist') );
+                                                                'text' => 'str_pl_empty_playlist');
                     }
 
                     if( $args['playlist']['cart_subtype'] != 'favorites' )
@@ -397,7 +393,7 @@ class CCPlaylists
                         $args['menu'][] = array( 'url' => ccl( 'playlist', 'delete', $playlist_id ),
                                                 'class' => '',
                                                 'id'    => '',
-                                                'text' => _('Delete Playist') );
+                                                'text' => 'str_pl_delete_playist');
                     }
                 }
             }
@@ -470,7 +466,7 @@ class CCPlaylists
                 if( empty($name) )
                     CCUtil::Send404();
                 $args['upload'] = $upload_id;
-                CCPage::SetTitle(sprintf(_('Browse Playlists Featuring "%s"'),$name) );
+                CCPage::SetTitle(array('str_pl_browse_playlists_s',$name) );
             }
             else
             {
@@ -478,9 +474,9 @@ class CCPlaylists
                     $args['since'] = date('Y-m-d', strtotime($_GET['since']));
                 $args['hot'] = !empty($_GET['hot']);
                 if( $args['hot'] )
-                    $title = _('Hot Playlists');
+                    $title = 'str_pl_hot_playlists';
                 else
-                    $title = _('New Playlists');
+                    $title = 'str_pl_new_playlists';
                 CCPage::SetTitle($title);
             }
 
@@ -494,7 +490,7 @@ class CCPlaylists
             $args = $this->_get_playlist_info($playlist_id);
             if( empty($args) )
                 CCUtil::Send404();
-            CCPage::SetTitle(sprintf(_('Playlist: %s'),$args['playlist']['cart_name']) );
+            CCPage::SetTitle(sprintf(_('str_pl_playlist_s'),$args['playlist']['cart_name']) );
             CCPage::PageArg('args',$args,'playlist_show_one');
         }
     }
@@ -510,7 +506,7 @@ class CCPlaylists
         if( empty($args) )
             CCUtil::Send404();
         require_once('cclib/cc-page.php');
-        CCPage::SetTitle(sprintf(_('Playlist: %s'),$args['playlist']['cart_name']));
+        CCPage::SetTitle(sprintf('str_pl_playlist_s',$args['playlist']['cart_name']));
         CCPage::PageArg('playlist_popup_window', 'playlist.xml/playlist_popup_window' );
         CCPage::PageArg('args',$args,'playlist_popup_window');
         CCPage::ShowHeaderFooter( false, false  );
@@ -579,7 +575,7 @@ class CCPlaylists
         $check_row = $cart_items->CountRows($check);
         if( $check_row )
         {
-            $a = _('Upload is already in list');
+            $a = 'str_pl_upload_is_already';
             $this->_output($a);
         }
 
@@ -603,7 +599,7 @@ class CCPlaylists
     {
         $this->_test_pl($upload_id,$playlist_id,true,true,true);
         $this->_add($upload_id,$playlist_id);
-        $this->_output(_('Track added to playlist'));
+        $this->_output('str_pl_track_added');
     }
 
     function _get_default_playlist()
@@ -630,7 +626,7 @@ class CCPlaylists
                     CCUtil::Send404();
             }
     
-            $newrow = $this->_create_playlist('default',_('Dynamic Playlist'),'',$admin_id);
+            $newrow = $this->_create_playlist('default','str_pl_dynamic_playlist','',$admin_id);
             // we re-query to get the user record joined in
             $row = $carts->GetRecordFromID($newrow['cart_id']);
         }
@@ -658,7 +654,7 @@ class CCPlaylists
 
     function NewPL($upload_id='')
     {
-        $msg = _('New playlist created');
+        $msg = 'str_pl_new_playlist_created';
 
         if( !empty($_REQUEST['cart_name']) )
             $new_name = CCUtil::Strip($_REQUEST['cart_name']);
@@ -675,7 +671,7 @@ class CCPlaylists
         {
             $this->_test_pl($upload_id,$playlist_id,true,true,true);
             $this->_add($upload_id,$playlist_id);
-            $msg .= _(' and track added.');
+            $msg = 'str_pl_and_track_added';
         }
 
         $this->_output($msg);
@@ -688,7 +684,7 @@ class CCPlaylists
         $carts =& CCPlaylist::GetTable();
         $wuser['cart_user'] = CCUser::CurrentUser();
         $num = $carts->CountRows($wuser);
-        return sprintf( _("%s's Playlist (%d) "),$CC_GLOBALS['user_real_name'], $num + 1);
+        return sprintf( _("%s's Collection (%d) "),$CC_GLOBALS['user_real_name'], $num + 1);
     }
 
     function _output($obj,$pmacro='',$merge=false)
@@ -746,7 +742,7 @@ class CCPlaylists
         $url = ccl('people', CCUser::CurrentUserName(), 'playlists' );
         $link = "<a href=\"$url\">";
         $link2 = '</a>';
-        CCPage::Prompt($msg . ' ' . sprintf(_('Return to %syour playlists%s'),$link,$link2));
+        CCPage::Prompt(array('str_pl_return_to',$msg,$link,$link2));
     }
 
     function _test_pl($upload_id,$playlist_id,$test_upload,$test_playlist,$test_owner)

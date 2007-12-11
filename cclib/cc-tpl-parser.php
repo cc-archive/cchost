@@ -230,7 +230,7 @@ function cc_tpl_parse_text($text,$bfunc)
         );
     }
 
-    $ttable["/<\? macro\(([^\)]+)\)%/"] = "<? \nfunction $bfunc$1(\$T,&\$A) { ?>"; 
+    $ttable["/<\? macro\(([^\)]+)\)%/"] = "<? \nfunction $bfunc$1(&\$T,&\$A) { ?>"; 
 
     $text = preg_replace( array_keys($ttable), array_values($ttable), $text );
 

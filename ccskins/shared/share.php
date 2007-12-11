@@ -3,7 +3,7 @@ if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
 //------------------------------------- 
-function _t_share_share_popup($T,&$A) 
+function _t_share_share_popup(&$T,&$A) 
 {
   
 ?>

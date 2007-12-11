@@ -1,16 +1,16 @@
 <?
 
-function _t_file_macros_print_howididit_link($T,&$A)
+function _t_file_macros_print_howididit_link(&$T,&$A)
 {
     ?><a href="<?= ccl('howididit',$A['record']['upload_id']) ?>"><?= $T->String('str_how_i_did_it') ?></a><br /><?
 }
 
 
-function _t_file_macros_license_rdf($T,&$A)
+function _t_file_macros_license_rdf(&$T,&$A)
 {
 }
 
-function _t_file_macros_show_zip_dir($T,&$A)
+function _t_file_macros_show_zip_dir(&$T,&$A)
 {
     $R =& $A['record'];
     foreach( $R['zipdirs'] as $zip )
@@ -25,14 +25,14 @@ function _t_file_macros_show_zip_dir($T,&$A)
     }
 }
 
-function _t_file_macros_request_reviews($T,&$A)
+function _t_file_macros_request_reviews(&$T,&$A)
 {
     ?><div id="requested_reviews"><?
         cc_query_fmt('noexit=1&nomime=1&f=html&t=reviews_preview&sort=topic_date&ids=' . $A['record']['upload_id'] );
     ?></div><?
 }
 
-function _t_file_macros_print_recent_reviews($T,&$A)
+function _t_file_macros_print_recent_reviews(&$T,&$A)
 {
     ?>
         <p class="recent_reviews"><?= $T->String('str_recent_reviews') ?></p>
@@ -47,12 +47,12 @@ function _t_file_macros_print_recent_reviews($T,&$A)
     <a href="<?= $A['view_topic_url'] ?>"><?= $T->String('str_read_all') ?></a><?
 }
 
-function _t_file_macros_upload_not_published($T,&$A)
+function _t_file_macros_upload_not_published(&$T,&$A)
 {
     print "<div class=\"unpublished\">{$A['record']['publish_message']}</div>";
 }
 
-function _t_file_macros_upload_banned($T,&$A) 
+function _t_file_macros_upload_banned(&$T,&$A) 
 {
     print "<div class=\"upload_banned\">{$A['record']['banned_message']}</div>";
 }

@@ -61,7 +61,7 @@ table.statstable {
 </tr>
 </table>
 <?
-function _t_charts_ratings_dots($T,&$A) {
+function _t_charts_ratings_dots(&$T,&$A) {
   if ( !empty($A['R']['ratings_score'])) {$carr103 = $A['R']['ratings'];$cc103= count( $carr103);$ck103= array_keys( $carr103);for( $ci103= 0; $ci103< $cc103; ++$ci103){    $A['i'] = $carr103[ $ck103[ $ci103 ] ];   ?>
   <img  src="<?= $T->URL('/images/stars/dot-' . $A['i'] . '.gif') ?>" height="10" width="10" />
   <?}}if ( !empty($A['R']['ratings_score'])) {?><span >(<?= $A['R']['ratings_score']?>)</span><?}}?></div>

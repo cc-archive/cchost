@@ -201,7 +201,7 @@ ccPlaylistMenu.prototype = {
                 }
                 else
                 {
-                    p.innerHTML = json;
+                    p.innerHTML = eval(json);
                 }
             }
             else

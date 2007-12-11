@@ -4,7 +4,7 @@ if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
 //------------------------------------- 
-function _t_tags_taglinks($T,&$A) 
+function _t_tags_taglinks(&$T,&$A) 
 {
     $carr101 = $A['tag_array'];
     $cc101= count( $carr101);
@@ -20,7 +20,7 @@ function _t_tags_taglinks($T,&$A)
   
 
 //------------------------------------- 
-function _t_tags_popular_tags($T,&$A) 
+function _t_tags_popular_tags(&$T,&$A) 
 {
     $carr102 = $A['field']['tags'];
     $cc102= count( $carr102);
@@ -35,7 +35,7 @@ function _t_tags_popular_tags($T,&$A)
   
 
 //------------------------------------- 
-function _t_tags_tag_picker($T,&$A) 
+function _t_tags_tag_picker(&$T,&$A) 
 {
   
     ?><div  class="cc_tags_list"><?
@@ -71,7 +71,7 @@ function _t_tags_tag_picker($T,&$A)
 } // END: function tag_picker
   
 
-function _t_tags_tags($T,&$A) 
+function _t_tags_tags(&$T,&$A) 
 {
   
     ?><div  class="cc_tag_switch_link"><?= $A['tag_switch_link']?></div><?

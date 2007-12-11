@@ -697,11 +697,7 @@ class CCPage extends CCSkin
 
         if( empty($limit) )
         {
-            $configs  =& CCConfigs::GetTable();
-            $settings = $configs->GetConfig('skin-settings');
-            $limit    = $settings['max-listing'];
-            if( !$limit )
-                $limit = 10;
+            $limit    = empty($CC_GLOBALS['max-listing']) ? 12 : $CC_GLOBALS['max-listing'];
         }
 
         if( isset($_REQUEST['offset']) && (intval($_REQUEST['offset']) > 0) )

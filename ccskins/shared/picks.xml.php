@@ -47,7 +47,7 @@ function pickwinplay(qstring)
 
 
 <?
-function _t_picks_picks_links($T,&$A) {
+function _t_picks_picks_links(&$T,&$A) {
 ?>
 <div class="pickslinks">
     <a id="mi_podcast_page" href="<?= $A['home-url']?>podcast/page?<?= $A['qstring']?>"><span ><?= $T->String('str_podcast')?></span></a>
@@ -60,7 +60,7 @@ function _t_picks_picks_links($T,&$A) {
 <?
 }
 
-function _t_picks_picks($T,&$A) {
+function _t_picks_picks(&$T,&$A) {
 
   print "<h3>{$A['pick_title']}</h3>\n";
       

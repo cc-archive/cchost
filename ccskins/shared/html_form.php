@@ -2,7 +2,7 @@
 <script type="text/javascript" src="<?= $T->URL('js/form.js') ?>"></script>
 
 <?
-function _t_html_form_html_form($T,&$A) 
+function _t_html_form_html_form(&$T,&$A) 
 {
     $F = $A['curr_form'];
 
@@ -56,7 +56,7 @@ EOF;
 
 
 //------------------------------------- 
-function _t_html_form_submit_forms($T,&$A) 
+function _t_html_form_submit_forms(&$T,&$A) 
 {
    ?><div  class="cc_submit_forms_outer"><?
 
@@ -86,7 +86,7 @@ function _t_html_form_submit_forms($T,&$A)
 
 
 //------------------------------------- 
-function _t_html_form_show_form_about($T,&$A) 
+function _t_html_form_show_form_about(&$T,&$A) 
 {
     ?><div id="cc_form_help_container"><div class="box"><?
     foreach( $A['curr_form']['form_about'] as $FA )   

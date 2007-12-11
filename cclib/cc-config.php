@@ -233,6 +233,7 @@ class CCConfigs extends CCTable
         $CC_GLOBALS['home-url'] = ccl();
 
         $skin_settings = $configs->GetConfig('skin-settings');
+
         if( empty($skin_settings) )
         {
             // old install? hack through this for now...

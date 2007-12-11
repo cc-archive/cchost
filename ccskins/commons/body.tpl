@@ -77,7 +77,7 @@
               <div class="menu_group">
                 <p>%(#group/group_name)%</p>
                 <ul>%loop(#group/menu_items,mi)%
-                  <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%>%(#mi/menu_text)%</a></li>
+                  <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%>%text(#mi/menu_text)%</a></li>
                 %end_loop% </ul>
               </div>
             %end_loop%

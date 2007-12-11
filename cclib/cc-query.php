@@ -873,14 +873,11 @@ class CCQuery
 
         if( $args['format'] == 'page' )
         {
-            $configs      =& CCConfigs::GetTable();
-            $settings     = $configs->GetConfig('skin-settings');
-            $admin_limit  = $settings['max-listing'];
+            $admin_limit  = empty($CC_GLOBALS['max-listing']) ? 12 : $CC_GLOBALS['max-listing'];
         }
         else
         {
-            $admin_limit = empty($CC_GLOBALS['querylimit']) ? 0
-                            : $CC_GLOBALS['querylimit'];
+            $admin_limit = empty($CC_GLOBALS['querylimit']) ? 0 : $CC_GLOBALS['querylimit'];
         }
 
         if( !empty($admin_limit) && (empty($args['limit']) || ($admin_limit < $args['limit'])) )

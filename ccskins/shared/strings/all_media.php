@@ -5,6 +5,9 @@
     desc = _('Text appropriate for generic media')
 [/meta]
 */
+$GLOBALS['str_action']              = _('Actions');
+$GLOBALS['str_detail']              = _('Details');
+
 $GLOBALS['str_advanced']              = _('Advanced');
 $GLOBALS['str_archive_for_s'] = _('Archive for %s');
 $GLOBALS['str_archive_monthly'] = _('Monthly Archive');
@@ -248,18 +251,48 @@ $GLOBALS['str_nsfw_t']                = _('This upload might be ');
 $GLOBALS['str_ok']                    = _('ok');
 $GLOBALS['str_people']                = _('People');
 $GLOBALS['str_pick_submission_type']  = _('Pick Submission Type');
-$GLOBALS['str_playlists']             = _('Collections');
+
+$GLOBALS['str_playlists']             = _('Favorites');
+
 $GLOBALS['str_pl_add_to']             = _('Add to');
-$GLOBALS['str_pl_add_to_new']         = _('Add to new collection');
+$GLOBALS['str_pl_add_to_new']         = _('Add to new favorites list');
 $GLOBALS['str_pl_all_in_window']      = _('Show All in Window');
+$GLOBALS['str_pl_and_track_added.'] = _('New favorite list created and upload added.'); // js
+$GLOBALS['str_pl_browse_playlists_s'] = _('Browse Favorites Featuring "%s"');
+$GLOBALS['str_pl_create_dynamic_playlist'] = _('Create Dynamic Favorite List');
 $GLOBALS['str_pl_created_by']         = _('created by');
+$GLOBALS['str_pl_create_playlist'] = _('Create Favorites List');
+$GLOBALS['str_pl_delete_playist'] = _('Delete Favorites List') ;
+$GLOBALS['str_pl_dyn_msg1'] = _('This is a \'dynamic\' favorites list which means it will change depending on the latest uploads to this site. You can bookmark this playlist, or you can drag %sthis link%s to your browser toolbar. ');
+$GLOBALS['str_pl_dyn_msg2'] = _('You can also save this list %s to customize it by clicking %shere%s');
+$GLOBALS['str_pl_dynamic_playlist'] = _('Dynamic Favorites List');
 $GLOBALS['str_pl_dynamic']            = _('dynamic');
+$GLOBALS['str_pl_dynamic_changed'] = _('Dynamic favorites list changed.'); //js
+$GLOBALS['str_pl_dynamic_playlist'] = _('Dynamic Favorites List');
+$GLOBALS['str_pl_edit_dynamic_playlist_s'] = _('Edit Dynamic Favorites List: "%s"');
+$GLOBALS['str_pl_edit_playlist_order'] = _('Edit Favorites List Order');
+$GLOBALS['str_pl_edit_properties'] = _('Edit Properties');
+$GLOBALS['str_pl_empty_playlist'] = _('Empty Favorites List');
 $GLOBALS['str_pl_found_in']           = _('Found in'); 
-$GLOBALS['str_pl_getting']            = _('getting collections');
+$GLOBALS['str_pl_getting']            = _('getting favorites');
+$GLOBALS['str_pl_hot_playlists'] = _('Hot Favorites List');
 $GLOBALS['str_pl_items']              = _('items');  // as in: number of items
-$GLOBALS['str_pl_playlists']          = _('collections');
-$GLOBALS['str_pl_popular_adds']       = _('Popular Collection Adds');
+$GLOBALS['str_pl_new_playlist_created'] = _('New favorites list created'); // js
+$GLOBALS['str_pl_new_playlists'] = _('New Favorites');
+$GLOBALS['str_pl_no_recs_match'] = _('No records match your dynamic query. You can try again by modifiying your query %shere%s');
+$GLOBALS['str_pl_play_all_tracks'] = _('Show All');
+$GLOBALS['str_pl_play_in_window'] = _('Show in Window');
+$GLOBALS['str_pl_playlist_s'] = _('List: %s');
+$GLOBALS['str_pl_playlists']          = _('favorites');
+$GLOBALS['str_pl_popular_adds']       = _('Popular Favorites Adds');
 $GLOBALS['str_pl_remove_from']        = _('Remove from');
+$GLOBALS['str_pl_reorder playlist'] = _('Reorder List');
+$GLOBALS['str_pl_return_to'] = _('%s Return to %syour favorites%s');
+$GLOBALS['str_pl_save_playlist_query'] = _('Save Favorites List Query');
+$GLOBALS['str_pl_track_added'] = _('New favorite added to list'); // js
+$GLOBALS['str_pl_track_has_been_removed'] = _('Favorite has been removed from list'); // js
+$GLOBALS['str_pl_upload_is_already'] = _('Favorite is already in list');
+
 $GLOBALS['str_play']                  = _('Show ');
 $GLOBALS['str_play_now']              = _('Show Now');
 $GLOBALS['str_play_this_page']        = _('Show this page');
@@ -293,7 +326,7 @@ $GLOBALS['str_radio_remix']           = _('Remix Radio');
 $GLOBALS['str_radio_station']         = _('Create Your Own Remix Radio Station');
 $GLOBALS['str_ratings']               = _('Ratings');
 $GLOBALS['str_read_all']              = _('Read all...');
-$GLOBALS['str_recent_playlists']      = _('Recent Collections');
+$GLOBALS['str_recent_playlists']      = _('Recent Favorites');
 $GLOBALS['str_recent_reviewers']      = _('Recent Commentors') ;
 $GLOBALS['str_recent_reviews']        = _('Recent Comments');
 
