@@ -34,22 +34,29 @@ define('NUM_REVIEWS_PER_PAGE', 20);
 */
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCReviewsHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCReviewsHV',  'OnUploadMenu')       );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCReviewsHV',  'OnUploadRow')     );
 CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCReviewsHV',  'OnFilterUserProfile')      );
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCReviewsHV',  'OnUserProfileTabs')      );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCReview',  'OnMapUrls')         , 'ccextras/cc-reviews.inc' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCReview' , 'OnGetConfigFields') , 'ccextras/cc-reviews.inc' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCReview',  'OnUploadDelete')    , 'ccextras/cc-reviews.inc' );
-CCEvents::AddHandler(CC_EVENT_TOPIC_ROW,          array( 'CCReview' , 'OnTopicRow')        , 'ccextras/cc-reviews.inc' );
 CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCReview' , 'OnTopicDelete')     , 'ccextras/cc-reviews.inc' );
-CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCReviewFormAPI',  'OnFormFields')      , 'ccextras/cc-review-forms.inc' );
-CCEvents::AddHandler(CC_EVENT_DO_SEARCH,          array( 'CCReviewFormAPI',  'OnDoSearch')        , 'ccextras/cc-review-forms.inc' );
+CCEvents::AddHandler(CC_EVENT_SEARCH_META,          array( 'CCReviewsHV',  'OnSearchMeta'));
 
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,            array( 'CCReviewsHV',  'OnFilterMacros') );
 CCEvents::AddHandler(CC_EVENT_FITLER_REVIEWERS_UNIQUE,  array( 'CCReviewsHV',  'OnFilterReviewersUnique') );
 
 class CCReviewsHV
 {
+    function OnSearchMeta(&$search_meta)
+    {
+        $search_meta[] = 
+            array(
+                'template'   => 'search_reviews',
+                'title'      => 'str_search_reviews',
+                'datasource' => 'topics',
+                'group'      => 'reviews',
+            );
+    }
 
     function OnFilterReviewersUnique(&$records)
     {

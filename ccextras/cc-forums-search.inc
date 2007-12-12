@@ -36,36 +36,6 @@ class CCForumsSearchAPI
 {
 
     /**
-    * Event handler for {@link CC_EVENT_FORM_FIELDS}
-    *
-    * @param object &$form CCForm object
-    * @param object &$fields Current array of form fields
-    */
-    function OnFormFields(&$form,&$fields)
-    {
-        if( strtolower( get_class($form) ) == 'ccsearchform' )
-        {
-            /*
-            *  Add Reviews to search
-            */
-            $options = $fields['search_in']['options'];
-            $sorted = $options;
-            ksort($sorted);
-            $nextbit = 1;
-            foreach( $sorted as $key => $value )
-            {
-                if( $key & $nextbit )
-                {
-                    $nextbit <<= 1;
-                }
-            }
-            $options[$nextbit] = _('Forum Topics');
-            $fields['search_in']['options'] = $options;
-            $form->SetHiddenField('forums_search',$nextbit);
-        }
-    }
-
-    /**
     * Event handler for {@link CC_EVENT_DO_SEARCH}
     * 
     * @param boolean &$done_search Set this to true if you handle the search

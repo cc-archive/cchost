@@ -35,6 +35,8 @@ $A['playlist_list_lines'] = 'playlist_audio.tpl';
 $A['user_listings'] = 'user_list.tpl';
 $A['user_listing']  = 'user_profile.tpl';
 
+$A['search_results_all'] = 'search_results.tpl/search_results_all';
+$A['search_results_form'] = 'search_results.tpl/search_results_form';
 
 $A['tags'] = 'tags.php/tags';
 

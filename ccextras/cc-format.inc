@@ -84,15 +84,6 @@ class CCFormat
         exit;
     }
 
-    function OnTopicRow(&$row)
-    {
-        if( !_cc_is_formatting_on() )
-            return;
-
-        $row['topic_text_html'] = _cc_format_format($row['topic_text']);
-        $row['topic_text_plain'] = _cc_format_unformat($row['topic_text']);
-    }
-
     function OnFilterHTML(&$rows)
     {
         if( !_cc_is_formatting_on() )

@@ -115,7 +115,7 @@ function cc_tpl_parse_chop($prefix,$varname,$amt)
         $amt = "\$A['chop']";
     }
 
-    return "$prefix cc_strchop($var,$amt,isset(\$A['dochop']) ? \$A['dochop'] : true); ?>";
+    return "$prefix cc_strchop($var,$amt,true); ?>"; /* isset(\$A['dochop']) ? \$A['dochop'] : true); ? >*/
 }
 
 function cc_tpl_parse_if_attr($varname,$attr)

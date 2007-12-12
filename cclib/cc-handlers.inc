@@ -159,7 +159,8 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCRenderImage' , 'OnAdm
 CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderZip', 'OnUploadRow'), 'cclib/cc-renderzip.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCRenderZip',  'OnFilterMacros'), 'cclib/cc-renderzip.php'  );
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCSearch', 'OnMapUrls'), 'cclib/cc-search.php'  );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,              array( 'CCSearch', 'OnMapUrls'), 'cclib/cc-search.php'  );
+CCEvents::AddHandler(CC_EVENT_FILTER_SEARCH_RESULTS, array( 'CCSearch', 'OnFilterSearch'), 'cclib/cc-search.php'  );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCSkinAdmin' , 'OnMapUrls'),  'cclib/cc-skin-admin.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCSkinAdmin' , 'OnAdminMenu'), 'cclib/cc-skin-admin.php' );
@@ -185,6 +186,7 @@ CCEvents::AddHandler(CC_EVENT_PATCH_MENU,         array( 'CCUser', 'OnPatchMenu'
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserAPI', 'OnMapUrls'), 'cclib/cc-user.inc' );
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,         array( 'CCUserAPI', 'OnGetMacros'), 'cclib/cc-user.inc' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCUserAPI' , 'OnGetConfigFields'), 'cclib/cc-user.inc'  );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserSearch', 'OnMapUrls'), 'cclib/cc-user-search.php' );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserHook', 'OnMapUrls'), 'cclib/cc-user-hook.php' );
 

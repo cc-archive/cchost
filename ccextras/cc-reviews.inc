@@ -217,51 +217,6 @@ class CCReview
         CCPage::AddBreadCrumbs($trail);
     }
 
-    function OnTopicRow(&$row)
-    {
-        if( $row['topic_type'] != 'review' )
-            return;
-
-        $upload_id = $row['topic_upload'];
-
-        $dv = new CCDataview();
-        $arg['where'] = 'upload_id = ' . $upload_id;
-        $remixer = $dv->PerformFile('upload_owner',$arg,CCDV_RET_ITEM);
-
-        $row['topic_permalink'] = ccl('reviews', $remixer, $upload_id. '#' . 
-                                         $row['topic_id'] );
-
-        $row['user_post_count'] = $row['user_num_reviews'];
-        $row['user_post_text']  = _('Reviews');
-
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-        if( empty($settings['newuserpage']) )
-            $row['user_post_url']   = ccl( 'reviews', $row['user_name'] ) . '?qtype=leftby';
-        else
-            $row['user_post_url']   = ccl( 'people', $row['user_name'], 'reviews' ) . '?qtype=leftby';
-
-        if( $this->_can_review($upload_id) )
-        {
-            $row['commands']['new_review'] = 
-                                     array( 
-                                        'url' => ccl('reviews','post',
-                                                     $upload_id ),
-                                        'script' => '',
-                                        'text' => _('Write Review') );
-        }
-
-        if( !empty($row['upload_user']) )
-        {
-            // this will happen when viewing reviews for 
-            // more than one upload
-
-            $users =& CCUsers::GetTable();
-            $where['user_id'] = $row['topic_user'];
-            $row['reviewer'] = $users->QueryRow($where);
-        }
-    }
-
     function OnTopicDelete($deltype,$topic_id)
     {
         $reviews =& CCReviews::GetTable();
@@ -431,36 +386,6 @@ class CCReview
                     'flags'      => CCFF_NONE );
             */
 
-        }
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_FORM_FIELDS}
-    *
-    * @param object &$form CCForm object
-    * @param object &$fields Current array of form fields
-    */
-    function OnFormFields(&$form,&$fields)
-    {
-        if( strtolower( get_class($form) ) == 'ccsearchform' )
-        {
-            /*
-            *  Add Reviews to search
-            */
-            $options = $fields['search_in']['options'];
-            $sorted = $options;
-            ksort($sorted);
-            $nextbit = 1;
-            foreach( $sorted as $key => $value )
-            {
-                if( $key & $nextbit )
-                {
-                    $nextbit <<= 1;
-                }
-            }
-            $options[$nextbit] = _('Reviews');
-            $fields['search_in']['options'] = $options;
-            $form->SetHiddenField('reviews_search',$nextbit);
         }
     }
 

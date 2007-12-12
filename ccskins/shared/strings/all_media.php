@@ -373,6 +373,16 @@ $GLOBALS['str_search_google'] = _('Search using Google (tm)');
 $GLOBALS['str_search_results'] = _('Search Results');
 $GLOBALS['str_search_users_that'] = _("People that Mentioned '%s'");
 $GLOBALS['str_search_wipo'] = _("Browse 'What Tools I Use'");
+$GLOBALS['str_search_more'] = _('See more results from');
+$GLOBALS['str_results_from'] = _('Search Results From');
+$GLOBALS['str_search_no_matches'] = _('Sorry we couldn\'t find any matches from ');
+$GLOBALS['str_search_site'] = _('Search Entire Site');
+$GLOBALS['str_search_uploads'] = _('Uploads');
+$GLOBALS['str_search_users'] = _('User Pages');
+$GLOBALS['str_search_help'] = _("Use double quotes '\"' for an exact match, use under score '_' if searching tags. Click %shere%s for full geek explanation of what's possible");
+$GLOBALS['str_search_found_d'] = _('Found %d total matches');
+$GLOBALS['str_search_results_from'] = _('Search Results');
+
 $GLOBALS['str_seckey_does_not_match'] = _('Security key does not match');
 $GLOBALS['str_security_key'] = _('Security Key');
 $GLOBALS['str_security_tip'] = _('Type in the characters above. Valid characters are 0-9 and A-F. The zero (0) has a line through it, the D does not.');

@@ -31,8 +31,10 @@ require_once('ccextras/cc-extras-events.php'); // for EVENT_TOPIC stuff
 /**
 */
 
-CCEvents::AddHandler(CC_EVENT_TOPIC_ROW,      array( 'CCFlagHV', 'OnTopicRow'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,     array( 'CCFlagHV', 'OnUploadRow'));
+CCEvents::AddHandler(CC_EVENT_FILTER_TOPICS,      array( 'CCFlagHV', 'OnFilterTopics'));
+CCEvents::AddHandler(CC_EVENT_FILTER_REVIEWS,     array( 'CCFlagHV', 'OnFilterTopics'));
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_PAGE,         array( 'CCFlagHV', 'OnFilterUploads'));
+
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCFlag' ,   'OnMapUrls'),    'ccextras/cc-flag.inc' );
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,    array( 'CCFlag',    'OnFormFields'), 'ccextras/cc-flag.inc' );
 
@@ -50,16 +52,22 @@ class CCFlagHV
     * @param array &$record Upload row to massage with display data 
     * @see CCTable::GetRecordFromRow()
     */
-    function OnUploadRow( &$record )
+    function OnFilterUploads(&$rows)
     {
         if( $this->_is_flagging_on() )
-            $record['flag_url'] = ccl( 'flag', 'upload', $record['upload_id'] );
+        {
+            foreach($rows as $K => $row)
+                $rows[$K]['flag_url'] = ccl('flag','upload',$row['upload_id']);
+        }
     }
 
-    function OnTopicRow(&$row)
+    function OnFilterTopics(&$rows)
     {
         if( $this->_is_flagging_on() )
-            $row['flag_url'] = ccl('flag','topic',$row['topic_id']);
+        {
+            foreach($rows as $K => $row)
+                $rows[$K]['flag_url'] = ccl('flag','topic',$row['topic_id']);
+        }
     }
 
 }

@@ -105,6 +105,7 @@ END;
         if( empty($id) )
             return;
 
+        require_once('cclib/cc-page.php');
         require_once('cclib/cc-pools.php');
         $pool_items =& CCPoolItems::GetTable();
         $where['pool_item_id'] = $id;

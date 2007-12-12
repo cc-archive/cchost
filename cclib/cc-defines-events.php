@@ -507,7 +507,7 @@ define('CC_EVENT_FORM_VERIFY',         'formverify' );
 * example of a search hook and replace.
 * @see CCEvents::AddHandler()
 */
-define('CC_EVENT_DO_SEARCH',            'dosearch' );
+define('CC_EVENT_SEARCH_META',            'srchmeta' );
 
 /**
 * Request for Data Event: Fields for Admin Settings Forms

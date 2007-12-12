@@ -122,6 +122,7 @@ class CCDataView
                         array( 'LIMIT' , 'limit' ),
                         array( ',' , 'columns' ),
                         array( 'GROUP BY', 'group_by' ),
+                        array( '', 'search' ),
                         array( 'WHERE', 'where') ,
                         ) as $f )
         {
@@ -130,11 +131,11 @@ class CCDataView
 
         $info = $func();
 
-        $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%where%/'  ),
+        $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%search%/', '/%where%/'  ),
                                     $sqlargs, $info['sql'] );
 
         $this->sql_count = empty($info['sql_count']) ? '' :
-                    preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%where%/'  ),
+                    preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%search%/','/%where%/'  ),
                                     $sqlargs, $info['sql_count'] );
 
 // ------- DEBUG PREVIEW ------------
@@ -158,16 +159,18 @@ if( $dataview['dataview'] == 'xx' )
                 if( !empty($record) )
                 {
                     $arr = array( &$record );
-                    $this->FilterRecords($arr,$info['e']);
+                    $info['queryObj'] =& $queryObj;
+                    $this->FilterRecords($arr,$info);
                 }
                 return $record;
             }
 
             case CCDV_RET_RECORDS:
             {
+                $info['queryObj'] =& $queryObj;
                 $records =& CCDatabase::QueryRows($this->sql);
                 if( count($records) > 0 )
-                    $this->FilterRecords($records,$info['e']);
+                    $this->FilterRecords($records,$info);
                 return $records;        
             }
 
@@ -193,11 +196,8 @@ if( $dataview['dataview'] == 'xx' )
         die('Invalid return type for dataview: ' . $ret_type );
     }
 
-    function FilterRecords(&$records,$filters)
+    function FilterRecords(&$records,$info)
     {
-        $info['e'] = $filters;
-        //$info['query'] = $queryObj;
-        //$info['dvobj'] = $this;
         while( count($info['e']) )
         {
             $k = array_keys($info['e']);

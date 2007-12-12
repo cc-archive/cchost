@@ -601,32 +601,7 @@ class CCQuery
 
     function _gen_search()
     {
-        if( empty($this->args['dataview']) )
-            $this->args['dataview'] = 'search';
-
-        $query = strtolower($this->args['search']);
-        $type = empty($this->args['type']) ? 'all' : $this->args['type'];
-
-        switch( $type )
-        {
-            case 'phrase':
-                $having = "(qsearch LIKE '%$query%')";
-                break;
-
-            case 'any':
-            case 'all':
-                preg_match_all('/("(.*)"|(.*)(?:$|\s))/U',$query,$qterms );
-                $qterms = array_filter( array_merge( $qterms[2], $qterms[3] ), 
-                                           create_function('$t','return !empty($t);') );
-                $qsearch = array();
-                foreach( $qterms as $qt )
-                    $qsearch[] = "(qsearch LIKE '%$qt%')";
-                $having = '(' . join( $type == 'all' ? 'AND' : 'OR', $qsearch ) . ')';
-                break;
-        }
-
-        $field = $this->_make_field('id');
-        $this->sql_p['group_by'] = "$field HAVING $having";
+        $this->sql_p['search'] = addslashes(trim($this->args['search']));
     }
 
 
