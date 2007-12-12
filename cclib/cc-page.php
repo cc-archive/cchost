@@ -84,7 +84,7 @@ class CCPageAdmin
 
         if( !empty($records) && (count($records) > 1) && (empty($paging) || ($paging == 'on') || ($paging='default')) )
         {
-            CCPage::AddPagingLinks($dataviewObj);
+            CCPage::AddPagingLinks($queryObj->dataview);
         }
 
         if( !isset( $qstring ) )
@@ -693,6 +693,8 @@ class CCPage extends CCSkin
     */
     function AddPagingLinks($table_or_dataview,$sql_where='',$limit ='')
     {
+        global $CC_GLOBALS;
+
         $args = array();
 
         if( empty($limit) )

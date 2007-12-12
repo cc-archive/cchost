@@ -95,6 +95,7 @@ $GLOBALS['str_recent_reviewers']      = _('Recent Reviewers') ;
 $GLOBALS['str_recent_reviews']        = _('Recent Reviews');
 $GLOBALS['str_reviews'] = _('Reviews');
 
+$GLOBALS['str_search_reviews'] = _('Reviews');
 
 $GLOBALS['str_submit_remix']      = _('Remix');
 $GLOBALS['str_submit_a_remix']      = _('Submit a Remix');

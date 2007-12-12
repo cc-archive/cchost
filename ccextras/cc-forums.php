@@ -32,7 +32,7 @@ define('CC_MAX_USER_TOPICS', 30 );
 define('CC_MAX_FEED_TOPICS', 25 );
 
 
-CCEvents::AddHandler(CC_EVENT_SEARCH_META,          array( 'CCForumsSearchAPI',  'OnDoSearch'),   'ccextras/cc-forums-search.inc' );
+CCEvents::AddHandler(CC_EVENT_SEARCH_META,          array( 'CCForums',  'OnSearchMeta') );
 
 CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCForums',  'OnFilterUserProfile') );
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCForums',  'OnUserProfileTabs') );

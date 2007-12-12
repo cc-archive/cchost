@@ -4,6 +4,7 @@ $A['picks_links']        = 'picks.xml/picks_links';
 
 $A['print_forms']        = 'util.php/print_forms';
 $A['html_form']          = 'html_form.php/html_form';
+$A['horizontal_form_fields'] = 'form_fields.tpl/horizontal_form_fields';
 $A['print_html_content'] = 'util.php/print_html_content';
 $A['hide_upload_form']   = 'util.php/hide_upload_form';
 $A['print_prompts']      = 'util.php/print_prompts';
@@ -36,7 +37,7 @@ $A['user_listings'] = 'user_list.tpl';
 $A['user_listing']  = 'user_profile.tpl';
 
 $A['search_results_all'] = 'search_results.tpl/search_results_all';
-$A['search_results_form'] = 'search_results.tpl/search_results_form';
+$A['search_results_head'] = 'search_results.tpl/search_results_head';
 
 $A['tags'] = 'tags.php/tags';
 

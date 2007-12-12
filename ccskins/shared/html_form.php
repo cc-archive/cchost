@@ -4,7 +4,7 @@
 <?
 function _t_html_form_html_form(&$T,&$A) 
 {
-    $F = $A['curr_form'];
+    $F =& $A['curr_form'];
 
     if ( !empty($F['form_id']))
         print "<script >form_id = '{$F['form_id']}';</script>\n";
@@ -29,7 +29,12 @@ EOF;
         $T->Call('grid_form_fields');
 
     if ( !empty($F['html_form_fields']))
-        $T->Call('form_fields');
+    {
+        if( empty($F['form_fields_macro']) )
+            $T->Call('form_fields');
+        else
+            $T->Call($F['form_fields_macro']);
+    }
 
     if ( !empty($F['submit_text'])) 
     {

@@ -150,6 +150,9 @@ input.cc_form_submit {
 	margin-bottom: 2.0em;
 }
 
+.horizontal_form input.cc_form_submit {
+	margin: 0px;
+}
 
 /* ----------------- */
 

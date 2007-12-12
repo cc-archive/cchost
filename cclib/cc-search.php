@@ -38,8 +38,7 @@ class CCSearch
 
         require_once('cclib/cc-page.php');
         CCPage::SetTitle('str_search');
-        $meta_options = $this->_get_meta_select($search_meta);
-        $form = new CCSearchForm($meta_options);
+        $form = new CCSearchForm($search_meta,'normal');
         CCPage::AddForm( $form->GenerateForm() );
     }
 
@@ -89,32 +88,26 @@ class CCSearch
         require_once('cclib/cc-page.php');
         require_once('cclib/cc-query.php');
 
-        $form_args['options'] = $this->_get_meta_select($search_meta);
-        $form_args['search_in'] = $what;
-        $form_args['search_text'] = $search_text;
-        $opkeys = array_keys($form_args['options']);
-        $i = 0;
-        foreach($opkeys as $K )
-        {
-            if( $K == $what )
-            {
-                $form_args['selected'] = $i;
-                break;
-            }
-            ++$i;
-        }
-
-        CCPage::PageArg('search_form',$form_args,'search_results_form');
+        $form = new CCSearchForm( $search_meta, 'horizontal' );
+        $values['search_in'] = $what;
+        $values['search_text'] = $search_text;
+        $form->PopulateValues($values);
+        $gen = $form->GenerateForm();
+        // ack
+        $gen->_template_vars['html_hidden_fields'] = array();
+        //CCDebug::PrintVar($gen);
+        CCPage::AddForm($gen);
 
         if( $what == 'all')
         {
+            $grand_total = 0;
             $results = array();
             foreach( $search_meta as $meta )
             {
                 if( $meta['group'] == 'all' )
                     continue;
                 $query = new CCQuery();
-                $qs = "search=$search_text&datasource={$meta['datasource']}&t={$meta['template']}&sort="; 
+                $qs = "search=$search_text&datasource={$meta['datasource']}&t={$meta['template']}"; 
                 $q = $qs . "&limit=5&f=html&noexit=1&nomime=1";
                 $args = $query->ProcessAdminArgs($q);
                 ob_start();
@@ -123,7 +116,8 @@ class CCSearch
                 ob_end_clean();
                 $link = (count($query->records) == 5) 
                     ? url_args(ccl('search','results'),"search_text=$search_text&search_in={$meta['group']}") : '';
-                $total = CCDatabase::Query($query->args['dataviewObj']->sql_count);
+                $total = $query->dataview->GetCount();
+                $grand_total += $total;
                 $results[] = array( 
                     'meta' => $meta, 
                     'results' => $html, 
@@ -134,6 +128,9 @@ class CCSearch
 
             CCPage::SetTitle('str_search_results');
             CCPage::PageArg('search_results_meta',$results,'search_results_all');
+
+            if( !$grand_total )
+                $this->_eval_miss($search_text);
         }
         else
         {
@@ -141,14 +138,26 @@ class CCSearch
             {
                 if( $meta['group'] != $what )
                     continue;
+                CCPage::AddMacro('search_results_head');
+                // heaven bless global variables
+                global $CC_GLOBALS;
+                $result_limit = 30; // todo: option later
+                $CC_GLOBALS['max-listing'] = $result_limit; 
                 CCPage::SetTitle( array( 'str_search_results_from', $meta['title']) );
-                $q = "search=$search_text&datasource={$meta['datasource']}&t={$meta['template']}&sort=";
+                $q = "search=$search_text&datasource={$meta['datasource']}&t={$meta['template']}&limit=30";
                 $query = new CCQuery();
                 $args = $query->ProcessAdminArgs($q);
                 $query->Query($args);
-                if( empty($query->records) )
+                $total = $query->dataview->GetCount();
+                if( empty($total) )
                 {
-
+                    $this->_eval_miss($search_text);
+                }
+                else
+                {
+                    $msg = array( 'str_search_viewing', 
+                        $query->args['offset'], $query->args['offset'] + count($query->records), '<span>' . $total . '</span>' );
+                    CCPage::PageArg('search_result_viewing',$msg);
                 }
                 break;
             }
@@ -167,7 +176,7 @@ class CCSearch
         }
     }
 
-    function _highlight_results($input,&$terms,$maxoutlen = 100)
+    function _highlight_results($input,&$terms,$maxoutlen = 150)
     {
         $max = $maxoutlen;
 
@@ -233,8 +242,43 @@ END;
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _("Use this for 'action' in forms"), CC_AG_SEARCH );
     }
 
-    function _get_meta_select($search_meta)
+    function _eval_miss($search_text)
     {
+        // gather some stats about the search term:
+        $words = str_word_count($search_text,1);
+        $num_words = count($words);
+        $biggest_word = 0;
+        for( $i = 0; $i < $num_words; $i++ )
+            $biggest_word = max(strlen($words[$i]),$biggest_word);
+        $sophis = preg_match('/[+<>~(-]/',$search_text);
+        $quoted = strpos($search_text,'"');
+
+        if( ($biggest_word < 4) && $num_words == 1 )
+        {
+            $msg = array( 'str_search_miss_tiny', ' <span>"' . $search_text . ' joebob"</span> ', ' <span>"' . $search_text . '_joebob"</span> ' );
+        }
+        elseif( ($biggest_word < 4) && ($num_words > 1) && !$quoted)
+        {
+            $msg = array( 'str_search_miss_quote', ' <span>"' . $search_text . '"<span> ', 
+                         ' <span>' . substr(str_replace(' ','_',$search_text),0,25) . '</span> ' );
+        }
+        else
+        {
+            $msg = 'str_search_miss';
+        }
+
+        CCPage::PageArg('search_miss_msg',$msg);
+    }
+}
+
+/**
+*/
+class CCSearchForm extends CCForm
+{
+    function CCSearchForm($search_meta,$mode )
+    {
+        $this->CCForm();
+
         foreach( $search_meta as $meta )
         {
             $field_groups = array();
@@ -253,32 +297,28 @@ END;
            }
         }
 
-        return $options;
-    }
-}
-
-/**
-*/
-class CCSearchForm extends CCForm
-{
-    function CCSearchForm($search_meta_options)
-    {
-        $this->CCForm();
-
         $fields['search_text'] =
-                        array( 'label'      => _('Search Text'),
-                               'form_tip'   => array( 'str_search_help',
-                                                     '<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">','</a>'),
+                        array( 'label'      =>  $mode == 'horizontal' ? '' : _('Search Text'),
+                               'form_tip'   => '',
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED);
 
         $fields['search_in'] =
-                        array( 'label'      => _('What'),
+                        array( 'label'      => $mode == 'horizontal' ? '' : _('What'),
                                'form_tip'   => '',
                                'formatter'  => 'select',
-                               'options'    => $search_meta_options,
+                               'options'    => $options,
                                'flags'      => CCFF_POPULATE);
 
+        if( $mode == 'horizontal' )
+        {
+            $this->SetTemplateVar('form_fields_macro','horizontal_form_fields');
+        }
+        else
+        {
+            $this->SetFormHelp( array( 'str_search_help',
+                             '<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">','</a>') );
+        }
         $this->AddFormFields( $fields );
         $this->SetSubmitText(_('Search'));
         $this->SetHandler( ccl('search', 'results') );

@@ -126,7 +126,7 @@ class CCDataView
                         array( 'WHERE', 'where') ,
                         ) as $f )
         {
-            $sqlargs[$f[1]] = !empty($args[$f[1]]) ? ($f[0] . ' ' . $args[$f[1]]) : '';
+            $sqlargs[$f[1]] = !empty($args[$f[1]]) ? trim($f[0] . ' ' . $args[$f[1]]) : '';
         }
 
         $info = $func();
@@ -194,6 +194,11 @@ if( $dataview['dataview'] == 'xx' )
         }
 
         die('Invalid return type for dataview: ' . $ret_type );
+    }
+
+    function GetCount()
+    {
+        return intval( CCDatabase::QueryItem($this->sql_count) );
     }
 
     function FilterRecords(&$records,$info)

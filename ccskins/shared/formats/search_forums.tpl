@@ -6,21 +6,22 @@
     embedded = 1
 [/meta]
 [dataview]
-function search_forum_dataview() 
+function search_forums_dataview() 
 {
     $cct = ccl('thread') . '/';
 
     $sql =<<<EOF
 SELECT 
-    topic_name,
+    CONCAT( forum_name, ' :: ', topic_name ) as thread_name,
     CONCAT( '$cct', topic_thread, topic_id) as topic_url,
     LOWER(CONCAT_WS(' ', topic_name, topic_text)) as qsearch
      %columns% 
 FROM cc_tbl_topics
-JOIN cc_tbl_uploads ON topic_upload=upload_id
-JOIN cc_tbl_user reviewee ON upload_user=user_id
+JOIN cc_tbl_forum_threads ON topic_thread=forum_thread_id
+JOIN cc_tbl_forums ON forum_thread_forum=forum_id
+JOIN cc_tbl_user ON topic_user=user_id
 %joins%
-%where% AND (topic_upload > 0) AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
+%where% AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
 %group%
 %order%
 %limit%
@@ -29,7 +30,7 @@ EOF;
     $sql_count =<<<EOF
 SELECT COUNT(*)
 FROM cc_tbl_topics
-%where% AND (topic_upload > 0) AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
+%where% AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
 EOF;
 
     return array( 'sql' => $sql,
@@ -42,7 +43,7 @@ EOF;
 <div  id="search_result_list">
 %loop(records,R)%
    <div>
-     <a href="%(#R/topic_url)%">%(#R/topic_name)%</a>
+     <a href="%(#R/topic_url)%">%(#R/thread_name)%</a>
    </div>
    <div class="search_results" >
     %(#R/qsearch)%

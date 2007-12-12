@@ -404,20 +404,20 @@ class CCQuery
 
     function _setup_dataview()
     {
-        $this->args['dataviewObj'] = new CCDataView();
+        $this->dataview = new CCDataView();
 
         if( empty($this->args['dataview']) )
         {
             if( $this->args['format'] == 'count' )
             {
                 $this->args['dataview'] = 'count';
-                $this->dataview = array( 'dataview' => 'count', 'file' => 'ccdataviews/count.php');
+                $this->dataviewProps = array( 'dataview' => 'count', 'file' => 'ccdataviews/count.php');
                 $this->sql_p['limit'] = '';
             }
             elseif( $this->args['format'] == 'ids' )
             {
                 $this->args['dataview'] = 'ids';
-                $this->dataview = array( 'dataview' => 'default', 'file' => 'ccdataviews/ids.php');
+                $this->dataviewProps = array( 'dataview' => 'default', 'file' => 'ccdataviews/ids.php');
             }
             elseif( empty($this->args['template']) )
             {
@@ -426,19 +426,19 @@ class CCQuery
                     // yea,this kind of special knowledge should probably be 
                     // somewhere else - if we were pretending that we're not ccHost
                     $this->args['dataview'] = 'files';
-                    $this->dataview = array( 'dataview' => 'files', 'file' => 'ccdataviews/files.php');
+                    $this->dataviewProps = array( 'dataview' => 'files', 'file' => 'ccdataviews/files.php');
                 }
                 else
                 {
                     $this->args['dataview'] = 'default';
-                    $this->dataview = array( 'dataview' => 'default', 'file' => 'ccdataviews/default.php');
+                    $this->dataviewProps = array( 'dataview' => 'default', 'file' => 'ccdataviews/default.php');
                 }
             }
             else
             {
-                $props = $this->args['dataviewObj']->GetDataViewFromTemplate($this->args['template']);
+                $props = $this->dataview->GetDataViewFromTemplate($this->args['template']);
                 $this->args['dataview'] = $props['dataview'];
-                $this->dataview = $props;
+                $this->dataviewProps = $props;
             }
         }
     }
@@ -448,14 +448,14 @@ class CCQuery
         if( empty($this->args['dataview']) )
             die('No dataview');
 
-        if( empty($this->dataview) )
+        if( empty($this->dataviewProps) )
         {
-            $props = $this->args['dataviewObj']->GetDataView($this->args['dataview']);
-            $this->dataview = $props;
+            $props = $this->dataview->GetDataView($this->args['dataview']);
+            $this->dataviewProps = $props;
         }
         $rettype = empty($this->args['rettype']) ? ($this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS) : $this->args['rettype'];
-        $records =&  $this->args['dataviewObj']->Perform( $this->dataview, $this->sql_p, $rettype, $this );
-        $this->sql =  $this->args['dataviewObj']->sql;
+        $records =&  $this->dataview->Perform( $this->dataviewProps, $this->sql_p, $rettype, $this );
+        $this->sql =  $this->dataview->sql;
         return $records;
     }
 
@@ -706,6 +706,10 @@ class CCQuery
      */
     function _make_field($field)
     {
+        // yes, special case hacks go here
+        if( ($field =='date') && ($this->args['datasource'] == 'user') )
+            return 'user_registered';
+
         return preg_replace('/s?$/', '', $this->args['datasource']) . '_' . $field;
     }
 
@@ -842,6 +846,9 @@ class CCQuery
 
     function _check_limit()
     {
+        if( !empty($this->limit_override) )
+            return;
+
         global $CC_GLOBALS;
 
         $args =& $this->args;
