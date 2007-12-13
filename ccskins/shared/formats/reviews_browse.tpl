@@ -13,7 +13,7 @@ function reviews_browse_dataview()
     $baseus  = ccl('people') . '/';
 
     $sql =<<<END
-        SELECT ups.upload_name, 
+        SELECT ups.upload_name, topic_id,
                reviewee.user_real_name as reviewee_user_real_name, 
                reviewer.user_real_name as reviewer_user_real_name,
                CONCAT( '$baseurl', reviewee.user_name, '/', upload_id, '#', topic_id ) as topic_url,

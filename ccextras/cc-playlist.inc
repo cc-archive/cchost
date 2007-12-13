@@ -328,7 +328,7 @@ class CCPlaylists
             $cart_items->AddExtraColumn( "CONCAT('{$aurl}', user_name) as artist_page_url" );
             $rows = $cart_items->QueryRows($w);
             $dv = new CCDataView();
-            $filters = array( array( CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_DOWNLOAD_URL ) ); // sic
+            $filters = array( 'e' => array( CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_DOWNLOAD_URL ) ); // sic
             $args['records'] =& $rows; 
             $dv->FilterRecords($args['records'],$filters);
 

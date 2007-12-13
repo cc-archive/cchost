@@ -55,7 +55,7 @@ class CCUploadAPI
 EOF;
         $record = CCDatabase::QueryRow($sql);
         $dv = new CCDataView();
-        $filters = array( array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES, ) );
+        $filters = array( 'e' => array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES, ) );
         $recs = array( &$record );
         $dv->FilterRecords($recs,$filters);
 
@@ -699,7 +699,7 @@ EOF;
 EOF;
         $record = CCDatabase::QueryRow($sql);
         $dv = new CCDataView();
-        $filters = array( array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES ) ); // requires nested arrays
+        $filters = array( 'e' => array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES ) ); // requires nested arrays
         $records = array( &$record );
         $dv->FilterRecords($records,$filters);
 

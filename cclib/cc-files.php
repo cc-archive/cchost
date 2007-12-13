@@ -235,7 +235,7 @@ class CCPhysicalFile
         $record['file_page_url'] = ccl('files',$record['user_name'],$upload_id);
 
         $dv = new CCDataView();
-        $e = array( array( CC_EVENT_FILTER_FILES ) ); // requires nested arrays
+        $e = array( 'e' => array( CC_EVENT_FILTER_FILES ) ); // requires nested arrays
         $recs = array( &$record );
         $dv->FilterRecords( $recs, $e );
 

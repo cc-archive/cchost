@@ -12,8 +12,9 @@ function search_forums_dataview()
 
     $sql =<<<EOF
 SELECT 
-    CONCAT( forum_name, ' :: ', topic_name ) as thread_name,
-    CONCAT( '$cct', topic_thread, topic_id) as topic_url,
+    user_real_name,
+    CONCAT( forum_name, ' :: ', IF( LENGTH(topic_name) > 0, topic_name, forum_thread_name) ) as thread_name,
+    CONCAT( '$cct', topic_thread, '#', topic_id) as topic_url,
     LOWER(CONCAT_WS(' ', topic_name, topic_text)) as qsearch
      %columns% 
 FROM cc_tbl_topics
@@ -30,6 +31,7 @@ EOF;
     $sql_count =<<<EOF
 SELECT COUNT(*)
 FROM cc_tbl_topics
+JOIN cc_tbl_forum_threads ON topic_thread=forum_thread_id
 %where% AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
 EOF;
 
@@ -42,8 +44,8 @@ EOF;
 */?>
 <div  id="search_result_list">
 %loop(records,R)%
-   <div>
-     <a href="%(#R/topic_url)%">%(#R/thread_name)%</a>
+   <div class="search_results_link" >
+     <a href="%(#R/topic_url)%">%(#R/thread_name)% <!-- -->%text(str_by)%: %(#R/user_real_name)%</a>
    </div>
    <div class="search_results" >
     %(#R/qsearch)%

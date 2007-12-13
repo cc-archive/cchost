@@ -373,10 +373,21 @@ $GLOBALS['str_search']             = _('Search');
 $GLOBALS['str_search_forums'] = _('Forums');
 $GLOBALS['str_search_found_d'] = _('Found %s total matches');
 $GLOBALS['str_search_google'] = _('Search using Google (tm)');
-$GLOBALS['str_search_help'] = _("Use double quotes '\"' for an exact match, use under score '_' if searching tags. Click %shere%s for full geek explanation of what's possible");
-$GLOBALS['str_search_miss'] = _('Suggestions: <ul><li>Make sure all words are spelled correctly.</li><li>Try different keywords.</li><li>Try more general keywords.</li><li>Try fewer keywords.</li></ul>');
-$GLOBALS['str_search_miss_quote'] = _('Suggestions: <ul><li>Using double quotes may help your search results %s</li><li>If you are looking for tags try adding an underscore \'_\' to the terms %s</li><li>Make sure all words are spelled correctly.</li><li>Try different keywords.</li><li>Try more general keywords.</li><li>Try fewer keywords.</li></ul>');
-$GLOBALS['str_search_miss_tiny'] = _('Your search text is too small. Suggestions: <ul><li>Adding words and using double quotes may help your search results %s</li><li>If you are looking for tags try adding an underscore \'_\' to the terms %s</li><li>Make sure all words are spelled correctly.</li><li>Try different keywords.</li><li>Try more general keywords.</li><li>Try fewer keywords.</li></ul>');
+$GLOBALS['str_search_miss'] = _('
+Suggestions: 
+<ul>
+<li>Try using double quotes around phrases: "hip hop"</li>
+<li>If searching for tags try using an underscore: hip_hop</li>
+<li>If you get too many results use the minus sign: hip -hop</li>
+<li>Try adding a wildcard to the end of a word: fireproof*</li>
+<li>Make sure all words are spelled correctly.</li>
+<li>Try different keywords.</li>
+<li>Try more general keywords.</li>
+<li>Try fewer keywords.</li>
+<li>Click %shere%s for full geek explanation of what is possible</li>
+</ul>
+');
+$GLOBALS['str_search_help'] = $GLOBALS['str_search_miss'];
 $GLOBALS['str_search_more'] = _('See more results from');
 $GLOBALS['str_search_no_matches'] = _('Sorry we couldn\'t find any matches from ');
 $GLOBALS['str_search_results'] = _('Search Results');

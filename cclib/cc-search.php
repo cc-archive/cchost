@@ -252,7 +252,7 @@ END;
             $biggest_word = max(strlen($words[$i]),$biggest_word);
         $sophis = preg_match('/[+<>~(-]/',$search_text);
         $quoted = strpos($search_text,'"');
-
+        /*
         if( ($biggest_word < 4) && $num_words == 1 )
         {
             $msg = array( 'str_search_miss_tiny', ' <span>"' . $search_text . ' joebob"</span> ', ' <span>"' . $search_text . '_joebob"</span> ' );
@@ -263,8 +263,10 @@ END;
                          ' <span>' . substr(str_replace(' ','_',$search_text),0,25) . '</span> ' );
         }
         else
+        */
         {
-            $msg = 'str_search_miss';
+            $msg = array( 'str_search_miss', 
+                             '<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">','</a>' );
         }
 
         CCPage::PageArg('search_miss_msg',$msg);
@@ -313,6 +315,7 @@ class CCSearchForm extends CCForm
         if( $mode == 'horizontal' )
         {
             $this->SetTemplateVar('form_fields_macro','horizontal_form_fields');
+            $this->SetTemplateVar('form_method','GET');
         }
         else
         {
@@ -322,7 +325,6 @@ class CCSearchForm extends CCForm
         $this->AddFormFields( $fields );
         $this->SetSubmitText(_('Search'));
         $this->SetHandler( ccl('search', 'results') );
-        $this->SetTemplateVar('form_method','GET');
     }
 }
 
