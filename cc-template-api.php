@@ -172,7 +172,7 @@ function cc_get_user_avatar_sql()
     }
     if( !empty($CC_GLOBALS['default_user_image']) )
     {
-        $davurl = ccd($CC_GLOBALS['image-upload-dir'],$CC_GLOBALS['default_user_image']);
+        $davurl = ccd($CC_GLOBALS['default_user_image']);
     }
     else
     {

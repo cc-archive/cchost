@@ -12,7 +12,7 @@
     <a  class="collab_name" href="%(home-url)%collab/%(#R/collab_id)%">%chop(#R/collab_name,35)%</a>
     <br  />
     %loop(#R/users,u)%
-        <a  href="%(#u/artist_page_url)%">%(#u/user_real_name)%</a>%if_not_last(#u)%, %end_if%
+        <a  class="cc_user_link" href="%(#u/artist_page_url)%">%(#u/user_real_name)%</a>%if_not_last(#u)%, %end_if%
     %end_loop%
     <br  style="clear:both" />
     </div>

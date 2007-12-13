@@ -1,4 +1,4 @@
-<div id="collab_ajax_msg"></div>
+<div id="ajax_msg"></div>
 <?
 $collab = $A['collab'];
 $C = $collab['collab'];

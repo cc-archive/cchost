@@ -46,7 +46,7 @@ EOF;
 <tr>
     <td >
         <a name="%(#R/topic_id)%"></a>
-        <a href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
+        <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
     <td>

@@ -45,7 +45,7 @@ EOF;
 %loop(records,R)%
    <div class="search_results_link">
      <a href="%(#R/file_page_url)%" class="cc_file_link">%(#R/upload_name)%</a> %text(str_by)%
-     <a href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
+     <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
    </div>
    <div class="search_results" >
     %(#R/qsearch)%

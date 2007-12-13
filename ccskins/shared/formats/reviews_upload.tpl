@@ -57,14 +57,14 @@ EOF;
     %if_not_null(#R/is_reply)%
     <td colspan="2" style="border-left: solid white %(#R/margin)%px;" >
         <a name="%(#R/topic_id)%"></a>
-        <div><a href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
+        <div><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
         <div style="background-color:#DDD;float:left;">%(#R/topic_text_html)%</div>
         <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
     </td>
     %else%
     <td >
         <a name="%(#R/topic_id)%"></a>
-        <a href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
+        <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
         <div><a href="%(#R/artist_page_url)%/reviews"><?= $T->String(array('str_reviews_n',$R['user_num_reviews'])); ?></a></div>
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>

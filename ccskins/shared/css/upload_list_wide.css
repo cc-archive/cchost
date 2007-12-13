@@ -6,6 +6,9 @@
     padding: 4px;
     border-bottom: 1px dashed #8E8;
 }
+.upload_name {
+	font-size: 130%;
+}
 .upload_avatar {
     width: 95px;
     height: 95px;

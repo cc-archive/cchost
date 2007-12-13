@@ -58,8 +58,8 @@ $R =& $A['records'][0];
 if ( !empty($idetail)) 
 {
     ?>
-    <h3  class="dtitle"><a  href="<?= $R['file_page_url']?>"><?= $R['upload_name']?></a> <?= $T->String('str_by')?> 
-        <a  href="<?= $R['artist_page_url']?>"><?= $R['artist_full_namel']?></a>
+    <h3  class="dtitle"><a class="cc_file_link" href="<?= $R['file_page_url']?>"><?= $R['upload_name']?></a> <?= $T->String('str_by')?> 
+        <a  class="cc_user_link" href="<?= $R['artist_page_url']?>"><?= $R['artist_full_namel']?></a>
     </h3>
     <?
 } 

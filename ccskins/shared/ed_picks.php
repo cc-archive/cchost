@@ -106,10 +106,10 @@ for( $i = 0; $i < $row_count; $i++ )
         $R =& $row[ $col_keys[$n] ];
         ?><td>
         <div class="box">
-            <h2><a href="<?= $R['file_page_url'] ?>"><?= $R['upload_name'] ?></a></h2>
+            <h2><a class="cc_file_link" href="<?= $R['file_page_url'] ?>"><?= $R['upload_name'] ?></a></h2>
             <div class="info_div"><a class="info_button" id="_plinfo_<?= $R['upload_id'] ?>"></a></div>
-            <div><?= $T->String('str_by')?>: <a href="<?= $R['artist_page_url'] ?>"><?= $R['user_real_name'] ?></a></div>
-            <a href="<?= $R['artist_page_url'] ?>"><img src="<?= $R['user_avatar_url'] ?>" /></a>
+            <div><?= $T->String('str_by')?>: <a class="cc_user_link" href="<?= $R['artist_page_url'] ?>"><?= $R['user_real_name'] ?></a></div>
+            <a class="cc_user_link" href="<?= $R['artist_page_url'] ?>"><img src="<?= $R['user_avatar_url'] ?>" /></a>
             <div class="pick_text">
                 <?= $R['edpick']['review'] ?>
             </div>

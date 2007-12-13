@@ -76,14 +76,14 @@ function _t_picks_picks(&$T,&$A) {
         {    
             $item = $carr101[ $ck101[ $ci101 ] ];
             ?><div ><a href="<?= $item['file_page_url'] ?>" class="cc_file_link"><?= $item['upload_name'] ?></a>
-                  <br  /><span ><?= $T->String('str_by') ?> <a href="<?= $item['artist_page_url'] ?>"><?= $item['user_real_name'] ?></a></span>
+                  <br  /><span ><?= $T->String('str_by') ?> <a class="cc_user_link" href="<?= $item['artist_page_url'] ?>"><?= $item['user_real_name'] ?></a></span>
             <?
             if ( !empty($A['ed_pick'])) 
             {
                 $edkeys = array_keys($item['upload_extra']['edpicks']);
                 $editorial = $item['upload_extra']['edpicks'][$edkeys[0]];
                 $_t_ = CC_strchop($editorial['review_text'],40);
-                ?><p><i><?= $_t_ ?><a href="<?= $item['file_page_url'] ?>">(<?= $T->String('str_more') ?>) </a></i></p><?
+                ?><p><i><?= $_t_ ?><a class="cc_file_link" href="<?= $item['file_page_url'] ?>">(<?= $T->String('str_more') ?>) </a></i></p><?
             }
             print '</div>';
         }

@@ -303,10 +303,7 @@ ccCollab.prototype = {
     },
 
     msg: function( text, type ) {
-        $('collab_ajax_msg').innerHTML = '<div id="amsg" class="ajaxmsg_' + type + '">' + text + '</div>';
-        //new ccDelayAndFade( 0, $('amsg'), 1.0, 250, 5 );
-        Effect.Appear( 'amsg', { duration: 2.0, delay: 0.5 } );
-
+        ajax_msg(type,text);
     },
  
     _req_adduser: function( resp, json ) {

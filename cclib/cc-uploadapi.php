@@ -318,8 +318,9 @@ EOF;
         $existing_row = $files->QueryKeyRow($overwrite_this);
 
         $upload_id = $existing_row['file_upload'];
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);
+        $dv = new CCDataview();
+        $args['where'] = 'upload_id = ' . $upload_id;
+        $record = $dv->PerformFile('upload_row',$args,CCDV_RET_RECORD);
         $relative_dir = $record['upload_extra']['relative_dir'];
 
         // Run the file through the verifier (is it allowed? it is valid?)

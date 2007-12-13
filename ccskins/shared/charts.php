@@ -36,7 +36,7 @@ table.statstable {
 <th >uploads</th>
 </tr>
 <?$carr101 = $A['user_recs'];$cc101= count( $carr101);$ck101= array_keys( $carr101);for( $ci101= 0; $ci101< $cc101; ++$ci101){    $A['R'] = $carr101[ $ck101[ $ci101 ] ];   ?><tr >
-<td ><a  href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a></td>
+<td ><a  class="cc_user_link" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a></td>
 <td ><?$T->Call('charts.xml/ratings_dots');
 ?></td>
 <td ><?= $A['R']['user_num_remixes']?></td>
@@ -51,8 +51,8 @@ table.statstable {
 <th >sources</th>
 </tr>
 <?$carr102 = $A['upload_recs'];$cc102= count( $carr102);$ck102= array_keys( $carr102);for( $ci102= 0; $ci102< $cc102; ++$ci102){    $A['R'] = $carr102[ $ck102[ $ci102 ] ];   ?><tr >
-<td ><a  href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a></td>
-<td ><a  href="<?= $A['R']['file_page_url']?>"><?= $A['R']['upload_name']?></a></td>
+<td ><a  class="cc_user_link" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a></td>
+<td ><a  class="cc_file_link" href="<?= $A['R']['file_page_url']?>"><?= $A['R']['upload_name']?></a></td>
 <td  style="white-space: nowrap"><?$T->Call('charts.xml/ratings_dots');
 ?></td>
 <td ><?= $A['R']['upload_num_remixes']?></td>

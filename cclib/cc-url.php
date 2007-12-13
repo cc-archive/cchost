@@ -69,7 +69,11 @@ function cc_current_url()
 function ccp()
 {
     $args = func_get_args();
-    return( implode('/',$args) );
+    $dirs = array();
+    foreach( $args as $arg )
+        $dirs = array_merge($dirs,preg_split('#(/|\\\\)#',$arg));
+    $dirs = array_filter($dirs);
+    return( implode('/',$dirs) );
 }
 
 /**

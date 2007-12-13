@@ -1,3 +1,20 @@
+
+function ajax_msg(type,text)
+{
+    if( !$('ajax_msg') )
+        Insertion.Top('content','<div id="ajax_msg"></div>');
+    $('ajax_msg').innerHTML = '<div id="amsg" class="ajaxmsg_' + type + '">' + text + '</div>';
+    Effect.Appear( 'amsg', { duration: 2.0, delay: 0.5 } );
+}
+
+function ajax_debug(url)
+{
+    if( !$('debug') )
+        Insertion.Top('content','<div id="debug"></div>');
+    $('debug').style.display = 'block';
+    $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
+}
+
 var modalHook = Class.create();
 
 modalHook.prototype = {

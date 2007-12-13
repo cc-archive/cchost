@@ -49,8 +49,8 @@ EOF;
 %loop(records,R)%
 <div class="file_line" id="_file_line_%(#R/upload_id)%">
 <div class="ccud light_border"><?= preg_replace('/,?media/','',$R['upload_extra']['ccud']) ?></div>
-   <div class="file_info"><a class="fname" href="%(#R/file_page_url)%">%(#R/upload_name)%</a> 
-      %text(str_by)% <a href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a></div>
+   <div class="file_info"><a class="fname cc_file_link" href="%(#R/file_page_url)%">%(#R/upload_name)%</a> 
+      %text(str_by)% <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a></div>
 
 %if_not_empty(#R/is_collab_owner)%
     <div ><a href="javascript://remove " id="_remove_%(#R/upload_id)%" class="file_cmd file_remove">

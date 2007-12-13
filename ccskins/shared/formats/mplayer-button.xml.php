@@ -15,6 +15,6 @@ $A['url'] = urlencode($A['query-url'] . $A['qstring'] . '&format=xspf');
 <param  name="movie" value="<?= $A['root-url']?>cclib/xspf_player/musicplayer.swf?&playlist_url=<?= $A['url']?>&"></param>
 </object>
 </div>
-<span  class="cc_songinfo"><a  href="<?= $A['records']['0']['file_page_url']?>" class="cc_songtitle"><?= $A['records']['0']['upload_name']?></a> by <a  href="<?= $A['records']['0']['artist_page_url']?>" class="cc_artistname"><?= $A['records']['0']['user_real_name']?></a></span>&nbsp;
+<span  class="cc_songinfo"><a  class="cc_file_link" href="<?= $A['records']['0']['file_page_url']?>" class="cc_songtitle"><?= $A['records']['0']['upload_name']?></a> by <a  href="<?= $A['records']['0']['artist_page_url']?>" class="cc_artistname cc_user_link"><?= $A['records']['0']['user_real_name']?></a></span>&nbsp;
 
 </div>

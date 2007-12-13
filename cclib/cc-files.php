@@ -84,7 +84,7 @@ class CCEditFileForm extends CCUploadMediaForm
 
 
         $fields['upload_man_files'] =
-                array( 'label'              => 'str_files_manage',
+                array( 'label'              => '',
                        'form_tip'           => 'str_files_update_the_list',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                     _('Manage Files') . "</a>",
@@ -95,15 +95,14 @@ class CCEditFileForm extends CCUploadMediaForm
         $url = ccl('file','remixes',$record['upload_id'] );
 
         $fields['upload_remixes'] =
-                array( 'label'              => 'str_files_manage_the_i',
+                array( 'label'              => '',
                        'form_tip'           => 'str_files_update_the_list',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                    _('Manage Remixes') . "</a>",
                        'formatter'          => 'statictext',
                        'flags'              => CCFF_STATIC | CCFF_NOUPDATE );
 
-        $this->AddFormFields( $fields );
-
+        $this->InsertFormFields( $fields, 'top' );
         $this->EnableSubmitMessage(false);
     }
 
@@ -240,31 +239,19 @@ class CCPhysicalFile
         $dv->FilterRecords( $recs, $e );
 
         require_once('cclib/cc-page.php');
+
+        $this->_build_bread_crumb_trail($upload_id,true,false,'str_file_manage');
         CCPage::SetTitle( 'str_files_manage' );
 
+        $args['upload_id'] = $upload_id;
         $args['files'] = &$record['files'];
         $args['urls'] = array( 
-                        'upload_new_url'          => ccl('file','add',$record['upload_id']),
-                       'upload_replace_url'      => ccl('file','replace'),
-                       'upload_delete_url'       => ccl('file','delete'),
-                       'upload_jockey_up_url'    => ccl('file','jockey','up'),
-                       'upload_jockey_down_url'  => ccl('file','jockey','down'),
-                       'upload_nicname_url'      => ccl('file','nickname'),
+                        'upload_new_url'    => ccl('file','add',$upload_id),
+                       'upload_replace_url' => ccl('file','replace'),
+                       'upload_delete_url'  => ccl('file','delete'),
+                       'upload_jockey_url'  => ccl('file','jockey',$upload_id),
+                       'upload_nicname_url' => ccl('file','nickname'),
                     );
-        
-        $help = '<p>' . sprintf(_('This is where you add or replace files associated with \'%s\''), '<a href="%s">%s</a>.') . "</p>\n" . 
-        '<p>' . _('Use this screen to upload associated files. Common reasons to upload multiple files:') . "</p>" . 
-
-            '<ol><li>' . _('There are multiple resolutions of the main file (different bit rates, aspect ratios, etc.).') . '</li>' . 
-            '<li>' . _('There are multiple formats of the same file (e.g. mp3, ogg, wma, etc. for audio).') . '</li>' .
-            '<li>' . _('There are samples associated with the upload such as solo tracks or layers.') . '</li>' . 
-            '<li>' . _('There are streamable audio or image previews for an archive (e.g. ZIP) upload.') . '</li>' . 
-            '</ol>' . 
-        
-        '<p>' . _('HINT: Use the \'Nickname\' to distinguish between different uploads (e.g. \'LoRes\', \'Hires\', etc.) The default value is based on the file format (extension).') . '</p>' .
-'<p>' . _('HINT: The file at the top of the list is used for all default streaming and podcasting commands.') . '</p>';
-            
-        $args['form_about'] = sprintf(_($help),$record['file_page_url'],$record['upload_name']);
         
         CCPage::PageArg('field', $args, 'edit_files_links' );
 
@@ -283,6 +270,8 @@ class CCPhysicalFile
         require_once('cclib/cc-upload.php');
         require_once('cclib/cc-page.php');
         CCUpload::CheckFileAccess($username,$upload_id);
+
+        $this->_build_bread_crumb_trail($upload_id,false,false,'str_file_edit');
 
         $userid = CCUser::IDFromName($username);
 
@@ -313,46 +302,71 @@ class CCPhysicalFile
     }
 
     /**
-    * Handler for file/jockey/up and file/jockey/down URLs
+    * Handler for reordering files within an upload record
     *
-    * This method will shift the position of a file record, moving
-    * record up or down. If it makes it into the first slot then
-    * it will be treated as the 'default' upload used by render code
-    *
-    * @param string $dir 'up' or 'down'
+
     * @param integer $file_id The file_id field in the CCFiles database record
-    * @param bool    $with_ui true means show titles and prompt, false means do 'silently'
     */
-    function Jockey($dir,$file_id,$with_ui=true)
+    function Jockey($upload_id)
     {
-        $this->CheckFileAccess($file_id);
-        $files =& CCFiles::GetTable();
-        $row = $files->QueryKeyRow($file_id);
-        $where['file_upload'] = $row['file_upload'];
-        $rows = $files->QueryRows($where);
-        $count = count($rows);
-        for( $i = 0; $i < $count; $i++ )
+        $this->CheckFileAccess(0,$upload_id);
+        $new_order = CCUtil::Strip($_GET['file_order']);
+        if( empty($new_order) )
+            die('no file order?');
+        $i = 0;
+        for( $i = 0; $i < count($new_order); $i++ )
         {
-            if( $rows[$i]['file_id'] == $file_id )
+            $n = $new_order[$i] - 1;
+            $sql = "UPDATE cc_tbl_files SET file_order = $i WHERE file_upload = $upload_id AND file_order = $n";
+            CCDatabase::Query($sql);
+        }
+
+        require_once('cclib/zend/json-encoder.php');
+        $text = 'str_files_have_been_reordered'; // ('Files have been reordered');
+        $text = CCZend_Json_Encoder::encode($text);
+        header( "X-JSON: $text");
+        header( 'Content-type: text/plain');
+        print $text;
+        exit;
+    }
+
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail($upload_id,$edit,$manage,$cmd)
+    {
+        $trail[] = array( 'url' => ccl(), 
+                          'text' => 'str_home');
+        
+        $trail[] = array( 'url' => ccl('people'), 
+                          'text' => 'str_people' );
+
+        $sql = 'SELECT user_real_name, upload_name, user_name FROM cc_tbl_uploads ' .
+                'JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id;
+
+        list( $user_real_name, $upload_name, $user_name ) = CCDatabase::QueryRow($sql, false);
+
+        $trail[] = array( 'url' => ccl('people',$user_name), 
+                          'text' => $user_real_name );
+
+        $trail[] = array( 'url' => ccl('files',$user_name, $upload_id), 
+                          'text' => '"' . $upload_name . '"' );
+
+        if( $edit )
+        {
+            $trail[] = array( 'url' => ccl('files','edit', $user_name, $upload_id), 
+                               'text' => 'str_file_edit');
+
+            if( $manage )
             {
-                $swap_src = $i;
-                if($dir == 'down')
-                    $swap_dest = $i + 1;
-                else
-                    $swap_dest = $i - 1;
-                break;
+                $trail[] = array( 'url' => ccl('file','manage', $upload_id), 
+                                   'text' => 'str_file_manage');
             }
         }
-        $db_args = array();
-        $db_args['file_id']    = $rows[$swap_src]['file_id'];
-        $db_args['file_order'] = $rows[$swap_dest]['file_order'];
-        $files->Update($db_args);
-        $db_args['file_id']    = $rows[$swap_dest]['file_id'];
-        $db_args['file_order'] = $rows[$swap_src]['file_order'];
-        $files->Update($db_args);
 
-        if( $with_ui )
-            $this->_title_and_prompt($row['file_upload'],true);
+        $trail[] = array( 'url' => '', 'text' => $cmd );
+
+        CCPage::AddBreadCrumbs($trail);
     }
 
     /**
@@ -360,11 +374,11 @@ class CCPhysicalFile
     */
     function _title_and_prompt($upload_id,$is_manage=false)
     {
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);
-        $pretty_name = $record['upload_name'];
+        list( $pretty_name, $user_name ) = CCDatabase::QueryRow(
+            'SELECT upload_name,user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id, false );
+
         CCPage::SetTitle('str_edit_properties');
-        $path = $record['file_page_url'];
+        $path = ccl('files',$user_name,$upload_id);
         $msg= sprintf(_("Changes saved, see %s."), '<a href="' . $path . '">' . $pretty_name . ' ' . _('page') . '</a>');
         if( $is_manage )
         {
@@ -384,10 +398,13 @@ class CCPhysicalFile
     function Delete($file_id)
     {
         $this->CheckFileAccess($file_id);
+        list( $upload_id, $pretty_name ) = CCDatabase::QueryRow(
+                'SELECT file_upload, file_name FROM cc_tbl_files WHERE file_id ='.$file_id, false );
+        require_once('cclib/cc-page.php');
+        $this->_build_bread_crumb_trail($upload_id,true,true,'str_file_delete_one');
         $files =& CCFiles::GetTable();
         if( empty($_POST['confirmdelete']) )
         {
-            $pretty_name = $files->QueryItemFromKey('file_name',$file_id);
             CCPage::SetTitle('str_files_delete_s',$pretty_name);
             $form = new CCConfirmDeleteForm($pretty_name);
             CCPage::AddForm( $form->GenerateForm() );
@@ -396,7 +413,7 @@ class CCPhysicalFile
         {
             require_once('cclib/cc-uploadapi.php');
             CCUploadAPI::PostProcessFileDelete( $file_id, $upload_id );
-            $this->_title_and_prompt($upload_id,true);
+            CCUtil::SendBrowserTo( ccl('file','manage',$upload_id) );
         }
     }
 
@@ -408,8 +425,10 @@ class CCPhysicalFile
     function Replace($file_id)
     {
         $this->CheckFileAccess($file_id);
+        require_once('cclib/cc-page.php');
         $files =& CCFiles::GetTable();
         $row = $files->QueryKeyRow($file_id);
+        $this->_build_bread_crumb_trail($row['file_upload'],true,true,'str_file_replace');
         CCPage::SetTitle('str_file_replace_s',$row['file_name']);
         $form = new CCFilePropsForm($row['file_nicname']);
         $show = true;
@@ -431,8 +450,7 @@ class CCPhysicalFile
             }
             else
             {
-                $show = false;
-                $this->_title_and_prompt($row['file_upload'],true);
+                CCUtil::SendBrowserTo( ccl('file','manage',$row['file_upload']) );
             }
 
         }
@@ -454,6 +472,7 @@ class CCPhysicalFile
         $this->CheckFileAccess($file_id);
         $files =& CCFiles::GetTable();
         $row = $files->QueryKeyRow($file_id);
+        $this->_build_bread_crumb_trail($row['file_upload'],true,true,'str_file_nicname');
         CCPage::SetTitle('str_files_nickname_for_s',$row['file_name']);
         $form = new CCFileNicknameForm($row['file_nicname']);
         $show = true;
@@ -467,13 +486,11 @@ class CCPhysicalFile
             }
             $values['file_id'] = $file_id;
             $files->Update($values);
-            $show = false;
-            $this->_title_and_prompt($row['file_upload'],true);
+            CCUtil::SendBrowserTo( ccl('file','manage',$row['file_upload']) );
         }
 
         if( $show )
             CCPage::AddForm( $form->GenerateForm() );
-
     }
 
     /**
@@ -484,13 +501,17 @@ class CCPhysicalFile
     function Add($upload_id)
     {
         $this->CheckFileAccess(0,$upload_id);
-        $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromID($upload_id);
-        CCPage::SetTitle('str_files_add_to_s',$record['upload_name']);
+        require_once('cclib/cc-page.php');
+        $upload_name = CCDatabase::QueryItem('SELECT upload_name FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+        $this->_build_bread_crumb_trail($upload_id,true,true,'str_file_add_one');
+        CCPage::SetTitle('str_files_add_to_s',$upload_name);
         $form = new CCFileAddForm();
         $show = true;
         if( !empty($_POST['fileadd']) && $form->ValidateFields() )
         {
+            $dv = new CCDataView();
+            $record = $dv->PerformFile('default',array( 'where'=> 'upload_id='.$upload_id),CCDV_RET_RECORD);
+
             $form->GetFormValues($values);
             $current_path = $values['upload_file_name']['tmp_name'];
             $new_name     = $values['upload_file_name']['name'];
@@ -510,8 +531,7 @@ class CCPhysicalFile
             }
             else
             {
-                $show = false;
-                $this->_title_and_prompt($upload_id,true);
+                CCUtil::SendBrowserTo( ccl('file','manage',$upload_id) );
             }
 
         }

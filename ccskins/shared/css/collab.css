@@ -33,32 +33,6 @@ fieldset {
 	margin-right: 20px;
 }
 
-#collab_ajax_msg {
-	height: 25px;
-	text-align: center;
-	font-weight: bold;
-	width: 80%;
-	margin-left: 10%;
-}
-
-.ajaxmsg_msg {
-	background-color: green;
-	color: white;
-	padding: 2px;
-}
-
-.ajaxmsg_error {
-	background-color: red;
-	color: white;
-	padding: 2px;
-}
-
-.ajaxmsg_working {
-	background-color: yellow;
-	color: black;
-	padding: 2px;
-}
-
 .user_line, .file_line {
 	margin: 4px;
 	padding: 3px;

@@ -76,7 +76,7 @@ function _t_playlist_playlist_list(&$T,&$A) {
     $A['R'] = $A['args']['playlist'];?><a target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $A['R']['cart_id']?>">
     <div  class="cc_playlist_title"><?= $A['R']['cart_name']?></div></a>
     <span class="cc_playlist_date">
-<?= $T->String('str_pl_created_by')?> <a target="_parent" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a> on <?= $A['R']['cart_date_format']?>
+<?= $T->String('str_pl_created_by')?> <a target="_parent" class="cc_user_link" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a> on <?= $A['R']['cart_date_format']?>
       </span>
 <?
         if ( !empty($A['R']['cart_desc']) )
@@ -132,7 +132,7 @@ function _t_playlist_playlist_list_window_cart(&$T,&$A) {
 <div  class="cc_playlist_title"><?= $A['R']['cart_name']?></div>
 </a>
 <span class="cc_playlist_date">
-      <?= $T->String('str_pl_created_by')?> <a target="_parent" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a>
+      <?= $T->String('str_pl_created_by')?> <a target="_parent" class="cc_user_link" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a>
 <br  /><?= $A['R']['cart_date_format']?>
     </span>
 </td></tr>
@@ -148,9 +148,9 @@ foreach( $A['args']['records'] as $R )
      ?><tr ><td class="cc_playlist_item" id="_pli_<?= $R['upload_id']?>"><?
     $iname = CC_strchop($R['upload_name'],30);
     $uname = CC_strchop($R['user_real_name'],22);?><span>
-<a target="_parent" href="<?= $R['file_page_url']?>"><?= $iname?></a>
+<a target="_parent" class="cc_file_link" href="<?= $R['file_page_url']?>"><?= $iname?></a>
 </span> <?= $T->String('str_by')?>
-      <a target="_parent" href="<?= $R['artist_page_url']?>"><?= $uname ?></a>
+      <a target="_parent" class="cc_user_link" href="<?= $R['artist_page_url']?>"><?= $uname ?></a>
 </td>
 <?if ( !empty($R['fplay_url'])) {?><td  class="cc_playlist_pcontainer">
 <a class="cc_player_button cc_player_hear" id="_ep_<?= $A['R']['cart_id']?>_<?= $R['upload_id']?>" href="<?= $R['fplay_url']?>">

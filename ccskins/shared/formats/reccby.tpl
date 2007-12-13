@@ -12,7 +12,7 @@
         <span>
             <a class="cc_playlist_pagelink" id="_plk_%(#R/upload_id)%" target="_parent" href="%(#R/file_page_url)%">%(#R/upload_name)%</a>
         </span>%text(str_by)%
-        <a target="_parent" href="%(#R/artist_page_url)%">%(#R/user_real_name)%
+        <a target="_parent" class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%
     </div>
     <div class="tdc"><a class="info_button" id="_plinfo_%(#R/upload_id)%"></a></div>
     %if_not_null(logged_in_as)%

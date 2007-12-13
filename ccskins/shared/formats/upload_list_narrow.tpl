@@ -15,18 +15,18 @@
    <tr><td>
           <div class="box">
             <div><a href="javascript://download" class="download_hook" id="_ed__%(#R/upload_id)%">%text(str_list_download)%</a></div>
-            <div><a href="%(#R/file_page_url)%" >%text(str_detail)%</a></div>
+            <div><a class="cc_file_link" href="%(#R/file_page_url)%" >%text(str_detail)%</a></div>
             <div><a href="javascript://action" class="menuup_hook" id="_emup_%(#R/upload_id)%" >%text(str_action)%</a></div>
           </div>
        </td>
-       <td><a href="%(#R/file_page_url)%" class="upload_name"><span %if_attr(#R/upload_name_cls,class)%>%chop(#R/upload_name,60)%</span></a>
+       <td><a href="%(#R/file_page_url)%" class="cc_file_link upload_name"><span %if_attr(#R/upload_name_cls,class)%>%chop(#R/upload_name,60)%</span></a>
         <div>%chop(#R/upload_description_text,75)% <a href="%(#R/file_page_url)%">(%text(str_more)%)</a></div>
      </td></tr>
    %if_not_null(#R/fplay_url)%
    <tr><th>%text(str_play)%</th><td><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a><script>
     $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%'</script></tr>
    %end_if%
-   <tr><th>%text(str_by)%</th><td><a href="%(#R/artist_page_url)%" class="artist_name">%chop(#R/user_real_name,chop)%</a> 
+   <tr><th>%text(str_by)%</th><td><a href="%(#R/artist_page_url)%" class="cc_user_link artist_name">%chop(#R/user_real_name,chop)%</a> 
                               <span class="upload_date">%(#R/upload_date_format)%</span></td></tr>
    <tr><th>%text(str_license)%</th>
      <td><a href="%(#R/license_url)%"><img src="%(#R/license_logo_url)%" /></a></td>
@@ -36,8 +36,8 @@
        %if_not_null(#R/remix_parents)%
         <div id="remix_info"><h2>%text(str_list_uses)%</h2>
         %loop(#R/remix_parents,P)%
-            <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
-                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+            <div><a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
+                 <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
         %end_loop%
         %if_not_null(#R/more_parents_link)%
             <a class="remix_more_link" href="%(#R/more_parents_link)%">%text(str_more)%...</a>
@@ -47,8 +47,8 @@
     %if_not_null(#R/remix_children)%
         <div id="remix_info"><h2>%text(str_list_usedby)%</h2>
         %loop(#R/remix_children,P)%
-            <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
-                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+            <div><a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
+                 <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
         %end_loop%
         %if_not_null(#R/more_children_link)%
             <a class="remix_more_link" href="%(#R/more_children_link)%">%text(str_more)%...</a>

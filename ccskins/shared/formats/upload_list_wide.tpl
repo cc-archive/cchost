@@ -83,8 +83,8 @@ EOF;
     <div class="upload_info">
         <a class="lic_link" href="%(#R/license_url)%" about="%(#R/download_url)%"
                   rel="license" title="%(#R/license_name)%" ><img src="%(#R/license_logo_url)%" /></a> 
-        <a href="%(#R/file_page_url)%" class="upload_name">%(#R/upload_name_chop)%</a><br />%text(str_by)% 
-               <a href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
+        <a href="%(#R/file_page_url)%" class="cc_file_link upload_name">%(#R/upload_name_chop)%</a><br />%text(str_by)% 
+               <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
         <div class="upload_date">
             %if_not_null(#R/ratings_enabled)%
                 %map(record,#R)%
@@ -115,15 +115,15 @@ EOF;
         <div><a href="%(#R/stream_url)%" type="audio/x-mpegurl">%text(str_stream)%</a></div>
         %end_if%
         <div><a href="javascript://download" class="download_hook" id="_ed__%(#R/upload_id)%">%text(str_list_download)%</a></div>
-        <div><a href="%(#R/file_page_url)%">%text(str_detail)%</a></div>
+        <div><a class="cc_file_link" href="%(#R/file_page_url)%">%text(str_detail)%</a></div>
         <div><a href="javascript://action" class="menuup_hook" id="_emup_%(#R/upload_id)%" >%text(str_action)%</a></div>
     </div>
 
     %if_not_null(#R/remix_parents)%
         <div id="remix_info"><h2>%text(str_list_uses)%</h2>
         %loop(#R/remix_parents,P)%
-            <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
-                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+            <div><a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
+                 <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
         %end_loop%
         %if_not_null(#R/more_parents_link)%
             <a class="remix_more_link" href="%(#R/more_parents_link)%">%text(str_more)%...</a>
@@ -134,8 +134,8 @@ EOF;
     %if_not_null(#R/remix_children)%
         <div id="remix_info"><h2>%text(str_list_usedby)%</h2>
         %loop(#R/remix_children,P)%
-            <div><a class="remix_links" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
-                 <a href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+            <div><a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
+                 <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
         %end_loop%
         %if_not_null(#R/more_children_link)%
             <a class="remix_more_link" href="%(#R/more_children_link)%">%text(str_more)%...</a>

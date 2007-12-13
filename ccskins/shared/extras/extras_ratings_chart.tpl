@@ -9,7 +9,7 @@
 <? $chart = cc_ratings_chart(7); ?>
 <ul>
 %loop(#charts,CI)%
-  <li><a href="%(#CI/file_page_url)%">%(#CI/upload_short_name)%</a></li>
+  <li><a class="cc_file_link" href="%(#CI/file_page_url)%">%(#CI/upload_short_name)%</a></li>
 %end_loop%
 %if_null(#charts)%
   <li>%text(str_no_chart)%</li>

@@ -277,11 +277,11 @@ class CCForm
     * Put fields into a specific place in the form
     *
     * @param array &$fields Array of new fields to insert
-    * @param string $before_or_after One of: 'before' or 'after'
+    * @param string $before_or_after One of: 'before', 'after', 'top', 'bottom'
     * @param string $target_field Name of field to place new feilds before or after
     * @see AddFields
     */
-    function InsertFormFields( &$fields, $before_or_after, $target_field )
+    function InsertFormFields( &$fields, $before_or_after, $target_field = '')
     {
         $this->InnerInsertFormFields($this->_form_fields, $fields, $before_or_after, $target_field );
         CCEvents::Invoke( CC_EVENT_EXTRA_FORM_FIELDS, array( &$this, &$fields ) );
@@ -298,9 +298,20 @@ class CCForm
     */
     function InnerInsertFormFields( &$target_fields, &$fields, $before_or_after, $target_field )
     {
-        $pos = array_search($target_field, array_keys($target_fields));
-        if( $before_or_after == 'after' )
-            $pos++;
+        if( $before_or_after == 'top' )
+        {
+            $pos = 0;
+        }
+        elseif( $before_or_after == 'bottom' )
+        {
+            $pos = count($target_fields);
+        }
+        else
+        {
+            $pos = array_search($target_field, array_keys($target_fields));
+            if( $before_or_after == 'after' )
+                $pos++;
+        }
         if( $pos == count($target_fields) )
         {
             $this->AddFormFields($fields,false);
@@ -2265,7 +2276,7 @@ class CCUploadForm extends CCForm
             {
                 CCUtil::MakeSubdirs($imagedir);
 
-                $clean_name = preg_replace('/[^a-z0-9\._-]/','_',$filesobj['name']);
+                $clean_name = preg_replace('/[^a-z0-9\._-]/i','_',$filesobj['name']);
 
                 if( $clean_name != $filesobj['name'] )
                 {

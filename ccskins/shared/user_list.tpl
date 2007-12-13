@@ -55,7 +55,7 @@ EOF;
 %loop(records,u)%
     <div class="user_record">
         <div class="avatar"><img src="%(#u/user_avatar_url)%" /></div>
-        <a href="%(#u/artist_page_url)%" class="user_link">%(#u/user_real_name)% <span>(%(#u/user_name)%)</span></a>
+        <a href="%(#u/artist_page_url)%" class="cc_user_link user_link">%(#u/user_real_name)% <span>(%(#u/user_name)%)</span></a>
         <a href="%(#u/user_emailurl)%" class="contact_link">%text(contact_artist)%</a>
         <div class="member_since">%text(member_since)%: %(#u/user_date_format)%</div>
         <div class="user_breaker"></div>
