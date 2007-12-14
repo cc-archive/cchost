@@ -110,7 +110,7 @@ class CCUserPage
         $q = 'title=' . _('Non-public Files');
         require_once('cclib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('t=unpub&f=page&unpub=1&user='.$username);
+        $args = $query->ProcessAdminArgs('title=str_hidden_list&t=unpub&f=page&unpub=1&mod=1&user='.$username);
         $query->Query($args);
     }
 

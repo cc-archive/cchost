@@ -33,7 +33,7 @@ SELECT
     CONCAT('<a href="$urld',upload_id,'">$del</a>')  as delete_link,
     user_real_name, 
     CONCAT( '$urlp', user_name ) as artist_page_url,
-    DATE_FORMAT( upload_date, '%c-%d-%Y %l:%i %p' ) as upload_date_format
+    DATE_FORMAT( upload_date, '%m-%d-%Y %h:%i %p' ) as upload_date_format
     %columns%
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
@@ -58,12 +58,7 @@ EOF;
 }
 [/dataview]
 */ ?>
-
-<style>
-.upload_banned {
-    color:red;
-}
-</style>
+<link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/unpub.css')%" />
 <div id="unpub_listing">
 <table>
 %loop(records,R)%
