@@ -85,7 +85,8 @@ class CCDataView
     function & PerformFile($dataview_name,$args,$ret_type = CCDV_RET_RECORDS) 
     {
         $props = $this->GetDataView($dataview_name);
-        return $this->Perform($props,$args,$ret_type);
+        $f =& $this->Perform($props,$args,$ret_type);
+        return $f;
     }
 
     function & Perform( $dataview, $args, $ret_type = CCDV_RET_RECORDS, $queryObj=null)
