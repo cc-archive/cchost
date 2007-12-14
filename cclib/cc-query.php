@@ -671,7 +671,7 @@ class CCQuery
         $this->where[] = '(upload_banned = ' . intval($banok) . $op . 'upload_published = ' . intval(!$unpubok) . ')';
         //d($this->where);
         if( ($banok || $unpubok) && !CCUser::IsAdmin() )
-            $this->where[] = '(upload_user='.CCUser::CurrentUser.')';
+            $this->where[] = '(upload_user='.CCUser::CurrentUser().')';
     }
 
     function _heritage_helper($key,$f1,$t,$f2,$kf)
