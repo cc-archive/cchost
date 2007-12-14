@@ -76,6 +76,9 @@ class CCQuery
     {
         if( !empty($_GET['fix']) )
         {
+            // ALTER TABLE `cc_tbl_activity_log`  ENGINE = MYISAM 
+            // ALTER TABLE `cc_tbl_config` ADD INDEX ( `config_type` ) 
+            // ALTER TABLE `cc_tbl_config` ADD FULLTEXT `text_search` (`config_data`)
             $sql[] = "ALTER TABLE `cc_tbl_user` ADD INDEX ( `user_name` ) ";
             $sql[] = "UPDATE cc_tbl_uploads SET upload_tags = CONCAT(',',upload_tags,',')";
             $sql[] = "UPDATE cc_tbl_uploads SET upload_name = REPLACE(upload_name,'--','')";
@@ -131,7 +134,9 @@ class CCQuery
             $this->args['template'] = 'playlist_show_one';
 
         if( $this->args['datasource'] == 'uploads' )
-            $this->where[] = '(upload_published=1 and upload_banned=0)' ;
+        {
+            $this->_gen_visible();
+        }
 
         if( empty($this->args['cache']) )
         {
@@ -656,6 +661,17 @@ class CCQuery
         $user_id = $users->QueryKey($w);
         $field = $this->_make_field('user');
         $this->where[] = "($field = '{$user_id}')";
+    }
+
+    function _gen_visible()
+    {
+        $banok   = !empty($this->args['mod']) && (CCUser::IsAdmin() || CCUser::IsLoggedIn());
+        $unpubok = !empty($this->args['unpub']) && (CCUser::IsAdmin() || CCUser::IsLoggedIn());
+        $op = ($banok && $unpubok) ? ' OR ' : ' AND ';
+        $this->where[] = '(upload_banned = ' . intval($banok) . $op . 'upload_published = ' . intval(!$unpubok) . ')';
+        //d($this->where);
+        if( ($banok || $unpubok) && !CCUser::IsAdmin() )
+            $this->where[] = '(upload_user='.CCUser::CurrentUser.')';
     }
 
     function _heritage_helper($key,$f1,$t,$f2,$kf)

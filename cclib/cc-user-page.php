@@ -105,6 +105,15 @@ class CCUserPage
         //$this->_show_feed_links($username);
     }
 
+    function Hidden($username)
+    {
+        $q = 'title=' . _('Non-public Files');
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=unpub&f=page&unpub=1&user='.$username);
+        $query->Query($args);
+    }
+
     function _show_feed_links($username)
     {
         require_once('cclib/cc-feeds.php');
@@ -147,7 +156,9 @@ class CCUserPage
     
         CCEvents::Invoke( CC_EVENT_USER_PROFILE_TABS, array( &$tabs, &$record ) );
 
-        if( CCUser::IsAdmin() )
+        $isadmin = CCUser::IsAdmin();
+
+        if( $isadmin )
         {
             $tabs['admin'] = array (
                         'text' => 'Admin',
@@ -159,6 +170,29 @@ class CCUserPage
                         'user_cb' => array( 'CCUserAdmin', 'Admin' ),
                         'user_cb_mod' => 'cclib/cc-user-admin.php',
                      );
+        }
+
+        if( $record['user_num_uploads'] )
+        {
+            $itsme = CCUser::CurrentUserName() == $user;
+            if( $itsme || $isadmin )
+            {
+                $userid = CCUser::IDFromName($user);
+                $sql = 'SELECT COUNT(*) FROM cc_tbl_uploads WHERE (upload_published=0 OR upload_banned=1) AND upload_user='.$userid;
+                $hidden = CCDatabase::QueryItem($sql);
+                if( $hidden )
+                {
+                    $tabs['hidden'] = array (
+                                'text' => 'Hidden',
+                                'help' => 'non-public files',
+                                'tags' => "hidden",
+                                'limit' => '',
+                                'access' => 4,
+                                'function' => 'url',
+                                'user_cb' => array( $this, 'Hidden' ),
+                        );
+                }
+            }
         }
 
         $keys = array_keys($tabs);
