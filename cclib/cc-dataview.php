@@ -155,7 +155,7 @@ if( $dataview['dataview'] == 'xx' )
         {
             case CCDV_RET_RECORD:
             {
-                $record =& CCDatabase::QueryRow($this->sql);
+                $record = CCDatabase::QueryRow($this->sql);
                 if( !empty($record) )
                 {
                     $arr = array( &$record );
