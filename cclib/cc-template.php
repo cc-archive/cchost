@@ -182,7 +182,7 @@ class CCSkin
                 $A[$inc] = $_REQUEST[$inc];
             if( !empty($A[$inc]) && file_exists($A[$inc]))
             {
-                CCDebug::Log('Loading custom: ' . $A[$inc]);
+                //CCDebug::Log('Loading custom: ' . $A[$inc]);
                 require_once($A[$inc]);
             }
         }
