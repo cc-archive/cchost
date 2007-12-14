@@ -133,6 +133,10 @@ CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  array( 'CCPoolUI',  'OnUploadDelet
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCQuery',  'OnMapUrls'), 'cclib/cc-query.php' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCQuery' , 'OnGetConfigFields'), 'cclib/cc-query.php'  );
+CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  'cc_tcache_kill', 'cclib/cc-query.php'   );
+CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    'cc_tcache_kill', 'cclib/cc-query.php'   );
+CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_tcache_kill', 'cclib/cc-query.php'   );
+
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCRating' , 'OnGetConfigFields' ), 'cclib/cc-ratings.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCRating',  'OnMapUrls'), 'cclib/cc-ratings.php' );

@@ -181,7 +181,7 @@ class CCTopics extends CCTable
     function DeleteKeyRow($topic_id)
     {
         $this->Lock();
-        list( $left, $right ) = CCDatabase::Query('SELECT topic_left,topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
+        list( $left, $right ) = CCDatabase::QueryRow('SELECT topic_left,topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
         $wid = ($right - $left) + 1;
         $sql[] = "DELETE FROM cc_tbl_topics WHERE topic_left BETWEEN $left AND $right";
         $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right - $wid WHERE topic_right > $right";

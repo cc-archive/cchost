@@ -738,6 +738,8 @@ class CCQuery
     {
         CCEvents::MapUrl( ccp('api','query'),   array( 'CCQuery', 'QueryURL'), 
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Browser query interface'), CC_AG_QUERY );
+
+        cc_tcache_kill(); // this is probably and ?update=1 so kill the cache...
     }
 
     /**
@@ -871,14 +873,10 @@ class CCQuery
 } // end of class CCQuery
 
 
-CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  'cc_tcache_kill' );
-CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    'cc_tcache_kill' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_tcache_kill' );
-
 /**
 * @private
 */
-function cc_tcache_kill()
+function cc_tcache_kill(&$r)
 {
     $files = glob(cc_temp_dir() . '/query_cache_*.txt');
     foreach( $files as $file )
