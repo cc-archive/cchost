@@ -536,7 +536,7 @@ class CCSkin
             $A =& $this->vars;
             $T =& $this;
 
-            CCDebug::Log("Loading/parsing: $file");
+            //CCDebug::Log("Loading/parsing: $file");
 
             if( $m[2] == 'tpl' )
             {
