@@ -818,7 +818,7 @@ class CCTopic
             }
             else
             {
-                CCPage::AddScriptLink( ccd('cc_templates', 'dl_popup.js'), false );
+                CCPage::AddScriptLink( ccd('cctemplates', 'dl_popup.js'), false );
             }
                 
             CCPage::AddScriptLink( ccd('cctemplates', 'js', 'cc-topics.js'), false );
