@@ -389,6 +389,7 @@ class CCEvents
         if( !isset($action) )
             $action = CCEvents::ResolveUrl();
 
+
         $method = false;
 
         if( isset($action) )
@@ -398,7 +399,7 @@ class CCEvents
             $pm = CCEvents::_get_action_perms($action);
 
             if( ($pm & CCMenu::GetAccessMask() ) == 0 )
-                $action = CCEvents::ResolveUrl('/homepage');
+                $action = CCEvents::ResolveUrl('homepage'); // gets the home page
 
             if( is_string($action->cb) )
             {
@@ -549,7 +550,11 @@ class CCEvents
 
         $regex = '%/([^/\?]+)%';
 
-        if( empty($url) )
+        if( $url == 'homepage' )
+        {
+            $A = array();
+        }
+        elseif( empty($url) )
         {
             preg_match_all($regex,CCUtil::StripText($_REQUEST['ccm']),$a);
             array_shift($a[1]);

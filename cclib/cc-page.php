@@ -53,8 +53,6 @@ class CCPageAdmin
                           CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays XHTML template'), CC_AG_VIEWFILE  );
         CCEvents::MapUrl( 'docs',     array( 'CCPageAdmin', 'ViewFile' ),  
                           CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays XHTML template (alias for viewfile)'), CC_AG_VIEWFILE );
-        CCEvents::MapUrl( 'homepage', array( 'CCPageAdmin', 'Homepage' ),  
-                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Displays home page assigned in config'), CC_AG_VIEWFILE );
     }
 
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )

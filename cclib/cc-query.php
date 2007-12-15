@@ -665,13 +665,59 @@ class CCQuery
 
     function _gen_visible()
     {
-        $banok   = !empty($this->args['mod']) && (CCUser::IsAdmin() || CCUser::IsLoggedIn());
-        $unpubok = !empty($this->args['unpub']) && (CCUser::IsAdmin() || CCUser::IsLoggedIn());
-        $op = ($banok && $unpubok) ? ' OR ' : ' AND ';
-        $this->where[] = '(upload_banned = ' . intval($banok) . $op . 'upload_published = ' . intval(!$unpubok) . ')';
-        //d($this->where);
-        if( ($banok || $unpubok) && !CCUser::IsAdmin() )
+        $need_user = false; // if the user is not an admin they
+                            // should only see their uploads.
+                            // this flag controls that filter
+
+        $banned = 0; // default for banned upload = off
+
+        if( !empty($this->args['mod']) )
+        {
+            // user requested banned uploads 
+            if( CCUser::IsAdmin() )
+            {
+                $banned = 1;
+            }
+            else
+            {
+                if( CCUser::IsLoggedIn() )
+                {
+                    $banned = 1;
+                    $need_user = true;
+                }
+            }
+        }
+
+        $published = 1; // default for published upload = on
+        
+        if( !empty($this->args['unpub']) )
+        {
+            // user requested unpublished uploads
+
+            if( CCUser::IsAdmin() )
+            {
+                $published = 0;
+            }
+            else
+            {
+                if( CCUser::IsLoggedIn() )
+                {
+                    $published = 0;
+                    $need_user = true;
+                }
+            }
+        }
+
+        // we special case for when both mod=1 and unpub=1
+        // to make sure we return both 
+
+        $op = ( $banned && !$published ) ? ' OR ' : ' AND ';
+
+        $this->where[] = "(upload_banned = $banned $op upload_published = $published)";
+
+        if( $need_user )
             $this->where[] = '(upload_user='.CCUser::CurrentUser().')';
+
     }
 
     function _heritage_helper($key,$f1,$t,$f2,$kf)
@@ -892,7 +938,7 @@ class CCQuery
 /**
 * @private
 */
-function cc_tcache_kill(&$r)
+function cc_tcache_kill()
 {
     $files = glob(cc_temp_dir() . '/query_cache_*.txt');
     foreach( $files as $file )
