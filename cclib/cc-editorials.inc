@@ -53,6 +53,7 @@ class CCEditorialForm extends CCForm
                         ),
             'editorial_review' =>
                         array( 'label'      => _('Review'),
+                               'want_formatting' => true,
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_NONE,
                         ),

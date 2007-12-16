@@ -37,7 +37,6 @@ CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCPlaylists',  'OnUplo
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPlaylistHV', 'OnUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCPlaylistHV', 'OnBuildUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCPlaylistHV', 'OnUserProfileTabs'));
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCPlaylistHV', 'OnUploadRow'));
 
 CCEvents::AddHandler(CC_EVENT_FILTER_PLAY_URL,        array( 'CCPlaylistHV', 'OnFilterPlayURL'));
 
@@ -85,37 +84,6 @@ class CCPlaylistHV
         }
     }
 
-    function OnUploadRow( &$record ) 
-    {
-        if( !cc_playlist_enabled() || (!CCUser::IsAdmin() && (empty($record['upload_published']) || !empty($record['upload_banned'])) ) )
-        {
-            $record['fplay_url'] = '';
-        }
-        else
-        {
-            $configs =& CCConfigs::GetTable();
-            $settings = $configs->GetConfig('remote_files');
-            $remoting = !empty($settings['enable_streaming']);
-            $fkeys = array_keys($record['files']);
-            foreach( $fkeys as $fkey )
-            {
-                $F =& $record['files'][$fkey];
-
-                // Flash only understands MP3s with a 44k sample rate
-                if( !empty($F['file_format_info']['sr']) && 
-                    ($F['file_format_info']['format-name'] == 'audio-mp3-mp3') && 
-                    ($F['file_format_info']['sr'] == '44k') )
-                {
-                    if( !$remoting || empty($F['file_extra']['remote_url'] ) )
-                        $url = $F['download_url'];
-                    else
-                        $url = $F['file_extra']['remote_url'];
-                    $record['fplay_url'] = $url;
-                    break;
-                }
-            }
-        }
-    }
 
     function OnUserProfileTabs( &$tabs, &$record )
     {

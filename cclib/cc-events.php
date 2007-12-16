@@ -96,7 +96,7 @@ class CCEvents
     * handler. The recommended usage is:
     *
     * 1. Put the CCEvent::AddHandler call in a .php file in the Plugins Path
-    * 2. For "high volume" events (e.g. {@link CC_EVENT_UPLOAD_ROW}) put the handler 
+    * 2. For "high volume" events (e.g. {@link CC_EVENT_FILTER_UPLOAD_LIST}) put the handler 
     *    into the same file, in which case <b>$includefile</b> does not need to be 
     *    specified since all .php modules are already in memory
     * 3. For "lo volume" events (e.g. {@link CC_EVENT_MAP_URLS}) put the handler in

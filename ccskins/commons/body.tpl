@@ -8,13 +8,13 @@
 <div id="header" class="light_color">
 
     %if_not_empty(logged_in_as)%
-        <div id="login_info">%text(loggedin)%: <span>%(logged_in_as)%</span> 
-            <a class="light_color" href="%(home-url)%logout">%text(logout)%</a></div>
+        <div id="login_info">%text(str_loggedin)%: <span>%(logged_in_as)%</span> 
+            <a class="light_color" href="%(home-url)%logout">%text(str_logout)%</a></div>
     %end_if%
 
-    %if_not_empty(sticky_search)%
-        <div id="header_search"><img id="header_search_img" height="50" width="70" src="%url(images/find.png)%" /><a id="search_site_link" href="%(advanced_search_url)%"><h3>%text(find)%</h3><span class="light_color">%text(findcontent)%</span></a></div>
-    %end_if%
+    <div id="header_search"><img id="header_search_img" height="50" width="70" src="%url(images/find.png)%" />
+    <a class="light_color" id="search_site_link" href="%(home-url)%search"><h3>%text(str_find)%</h3>
+    <span class="light_color">%text(str_findcontent)%</span></a></div>
 
     %if_not_empty(banner_message)%
         <div id="beta_message">%(show_beta_message)%</div>

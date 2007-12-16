@@ -364,7 +364,7 @@ function _t_util_recommends(&$T,&$A)
 
     if( empty($A['ajax']) )
     {
-        ?><div class="recommend_block" id="recommend_block_<?= $R['upload_id'] ?>"><?
+        ?><div class="rated recommend_block" id="recommend_block_<?= $R['upload_id'] ?>"><?
     }
     
     print $T->String('str_recommends') . ' <span>(' . sprintf('%d',$R['upload_num_scores']) . ')</span>';

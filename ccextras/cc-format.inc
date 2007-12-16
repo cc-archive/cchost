@@ -43,7 +43,8 @@ function _generator_cc_format($form, $fieldname, $value, $class )
             </div>';
 
     require_once('cclib/cc-template.php');
-    $thumbs_up_tiny = ccd( CCTemplate::Search( 'images/thumbs_up_tiny.png' ) );
+    $thumbs_up_tiny = ccd( CCTemplate::Search( 'images/thumbs_up_tiny.gif' ) );
+    $mona = ccd( CCTemplate::Search( 'images/mona.gif' ) );
 
     $html .=<<<END
         <div class="cc_ed_buttons">
@@ -56,6 +57,7 @@ function _generator_cc_format($form, $fieldname, $value, $class )
     <input type="button" onclick="cc_apply_format('$fieldname','blue');" value="B" style="color:blue" />
     <input type="button" onclick="cc_apply_format('$fieldname','big');" value="+" style="" />
     <input type="button" onclick="cc_apply_format('$fieldname','small');" value="-" style="" />
+    <a href="javascript://heya!" onclick="cc_apply_format('$fieldname','img'); return false;" style="" ><img src="$mona" /></a>
     <a href="javascript://heya!" onclick="cc_apply_format('$fieldname','up'); return false;" style="" ><img src="$thumbs_up_tiny" /></a>
     <input type="button" onclick="cc_format_preview('$fieldname')" id="preview_$fieldname" value="preview" style="font-size:smaller;" />
     </div>
@@ -84,117 +86,42 @@ class CCFormat
         exit;
     }
 
-    function OnFilterHTML(&$rows)
+    function OnFilterFormat(&$rows)
     {
         if( !_cc_is_formatting_on() )
             return;
 
         $c = count($rows);
+        if( !$c )
+            return;
         $k = array_keys($rows);
+
+                // dig out fields
+        $first_row =& $rows[ $k[0] ];
+        $col_keys = array_keys($first_row);
+        $col_cnt = count($col_keys);
+        $format_needed = array();
+        for( $i = 0; $i < $col_cnt; $i++ )
+        {
+            $pieces = explode('_',$col_keys[$i]);
+            if( $pieces[0] != 'format' )
+                continue;
+            $db_col = join('_',array_splice($pieces,2));
+            $format_needed[$col_keys[$i]] = array(
+                'name' => $db_col . '_' . (($pieces[1] == 'text') ? 'plain' : 'html'),
+                'format' => $pieces[1] );
+        }
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $rows[$k[$i]];
-            if( isset($R['_need_description_html']) )
+            foreach( $format_needed as $F => $meta )
             {
-                if( empty($R['_need_description_html']) )
-                {
-                    $R['upload_description_html'] = '';
-                }
+                if( $meta['format'] == 'text' )
+                    $R[$meta['name']] = _cc_format_unformat($R[$F]);
                 else
-                {
-                    $R['upload_description_html'] = _cc_format_format($R['_need_description_html']);
-                }
-                unset($R['_need_description_html']);
-            }
-        }
-    }
+                    $R[$meta['name']] = _cc_format_format($R[$F]);
 
-
-    function OnFilterText(&$rows)
-    {
-        if( !_cc_is_formatting_on() )
-            return;
-
-        $c = count($rows);
-        $k = array_keys($rows);
-        for( $i = 0; $i < $c; $i++ )
-        {
-            $R =& $rows[$k[$i]];
-            if( isset($R['_need_description_text']) )
-            {
-                if( empty($R['_need_description_text']) )
-                {
-                    $R['upload_description_text'] = '';
-                }
-                else
-                {
-                    $R['upload_description_text'] = _cc_format_unformat($R['_need_description_text']);
-                }
-                unset($R['_need_description_text']);
-            }
-        }
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    */
-    function OnUploadRow(&$row)
-    {
-        if( !_cc_is_formatting_on() )
-            return;
-
-        if( empty($row['upload_description']) && 
-            empty($row['upload_extra']['edpicks']) )
-        {
-            return;
-        }
-
-        if( !empty($row['upload_description']) )
-        {
-            $row['upload_description_html'] = _cc_format_format($row['upload_description']);
-            $row['upload_description_text'] = _cc_format_unformat($row['upload_description']);
-        }
-
-        if( !empty($row['upload_extra']['edpicks']) )
-        {
-            $picks =& $row['upload_extra']['edpicks'];
-            $count = count($picks);
-            $keys = array_keys($picks);
-            for( $i = 0; $i < $count; $i++ )
-            {
-                $pick =& $row['upload_extra']['edpicks'][ $keys[$i] ];
-                $pick['review_html'] = _cc_format_format($pick['review']);
-                $pick['review_text'] = _cc_format_unformat($pick['review']);
-            }
-        }
-
-
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_USER_ROW}
-    *
-    * Add extra data to a user row before display
-    *
-    * @param array &$record User record to massage
-    */
-    function OnFilterUserProfile(&$rows)
-    {
-        if( !_cc_is_formatting_on() )
-            return;
-
-        $row =& $rows[0];
-        if( !empty($row['user_fields']) )
-        {
-            foreach( $row['user_fields'] as $K => $F )
-            {
-                if( !empty($F['id']) && $F['id'] == 'user_description' )
-                {
-                    $row['user_fields'][$K]['value'] = _cc_format_format($row['user_description']);
-                    break;
-                }
+                unset($R[$F]);
             }
         }
     }
@@ -231,13 +158,7 @@ class CCFormat
         if( !_cc_can_format_edit() )
             return;
 
-        // deprecated way of doing this, use 'want_formatting' form field instead
-        //
-        $fields_we_like = array( 'user_description', 'upload_description', 
-                                  'editorial_review', 'topic_text' );
-
         $help = _('Select text and use the buttons to apply format');
-
 
         $count = count($fields);
         $keys = array_keys($fields);
@@ -245,7 +166,7 @@ class CCFormat
         {
             $K =& $keys[$i];
 
-            if( in_array( $K, $fields_we_like ) || !empty($fields[$K]['want_formatting'] ) )
+            if( !empty($fields[$K]['want_formatting'] ) )
             {
                 $F =& $fields[ $K ];
                 if( $F['formatter'] == 'textarea' )

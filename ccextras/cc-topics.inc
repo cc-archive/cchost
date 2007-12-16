@@ -278,42 +278,8 @@ class CCTopics extends CCTable
 
 }
 
-
-
 class CCTopic
 {
-    function OnFilterTopicText(&$records)
-    {
-        $c = count($records);
-        $k = array_keys($records);
-        for( $i = 0; $i < $c; $i++ )
-        {
-            $R =& $records[ $k[$i] ];
-            if( !empty($R['_need_topic_text']) )
-            {
-                $R['topic_text_plain'] = cc_strchop(cc_format_unformat($R['_need_topic_text']),40);
-                unset($R['_need_topic_text']);
-            }
-        }
-    }
-
-    function OnFilterTopicHTML(&$records)
-    {
-        $c = count($records);
-        $k = array_keys($records);
-        for( $i = 0; $i < $c; $i++ )
-        {
-            $R =& $records[ $k[$i] ];
-            if( !empty($R['_need_topic_html']) )
-            {
-                $R['topic_text_html'] = cc_format_text($R['_need_topic_html']);
-                unset($R['_need_topic_html']);
-            }
-        }
-    }
-
-
-
     function _verify_topic($topic_id,&$topics,&$record,$is_translate=false)
     {
         $topic_id = intval(CCUtil::Strip($topic_id));
@@ -465,10 +431,9 @@ class CCTopic
             {
                 $users =& CCUsers::GetTable();
                 // hmmmm
+                die('fix this');
                 $record['_need_topic_text'] = $record['topic_text'];
-                unset($record['topic_text']);
-                $arr = array(&$record);
-                $this->OnFilterTopicText($arr);
+
                 $user_real_name = $users->QueryItemFromKey('user_real_name',$record['topic_user']);
                 $quote_text = '[quote=' . 
                               $user_real_name . 
@@ -622,9 +587,9 @@ class CCTopic
             print('no such topic');
             exit;
         }
+        die('fix this too');
         $rec = CCDatabase::QueryRow('SELECT topic_text as _need_topic_html FROM cc_topics WHERE topic_id='.$topic_id);
-        $arr = array( &$rec );
-        $this->OnFilterTopicHTML($arr);
+
         print( $record['topic_text_html'] );
         exit;
     }

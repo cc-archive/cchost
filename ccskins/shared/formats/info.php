@@ -15,7 +15,7 @@ function info_dataview()
     $sql =<<<EOF
 SELECT 
     user_id, upload_user, upload_id, upload_name, upload_extra, 
-    upload_description as _need_description_text, upload_tags,
+    upload_description as format_text_upload_description, upload_tags,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name,
     CONCAT( '$urlp', user_name ) as artist_page_url,
@@ -37,7 +37,7 @@ EOF;
                                   CC_EVENT_FILTER_UPLOAD_TAGS,
                                   CC_EVENT_FILTER_COLLAB_CREDIT,
                                   CC_EVENT_FILTER_EXTRA,
-                                  CC_EVENT_FILTER_DESCRIPTION_TEXT,
+                                  CC_EVENT_FILTER_FORMAT,
                                   CC_EVENT_FILTER_REMIXES_FULL)
                 );
 }

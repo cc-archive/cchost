@@ -28,7 +28,6 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCHowIDidItHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCHowIDidItHV',  'OnUploadMenu')      );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCHowIDidItHV',  'OnUploadRow')      );
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCHowIDidItHV',  'OnFilterMacros')      );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCHowIDidIt',  'OnMapUrls')        , 'ccextras/cc-howididit.inc' );
 
@@ -50,26 +49,6 @@ class CCHowIDidItHV
             else
                 array_unshift($R['file_macros'],'print_howididit_link');
         }
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow( &$record )
-    {
-        if( !empty($record['upload_extra']['howididit']) )
-        {
-            $record['howididit_link'] = array( 'action' => ccl('howididit',$record['upload_id']),
-                                               'text'  => _('How I Did It'));
-            if( empty($record['file_macros']) )
-                $record['file_macros'][] = 'print_howididit_link';
-            else
-                array_unshift($record['file_macros'],'print_howididit_link');
-        }
-
     }
 
     /**

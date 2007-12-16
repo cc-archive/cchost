@@ -20,7 +20,7 @@ function reviews_browse_dataview()
                CONCAT( '$baseup',  reviewee.user_name, '/', upload_id ) as file_page_url,
                CONCAT( '$baseus',  reviewee.user_name ) as artist_page_url,
                CONCAT( '$baseus',  reviewer.user_name ) as reviewer_page_url,
-               topic_text as _need_topic_text, topic_left,
+               topic_text as format_html_topic_text, topic_left,
                DATE_FORMAT( topic_date, '%a, %b %e, %Y @ %l:%i %p' ) as topic_date_format
         FROM cc_tbl_topics
         JOIN cc_tbl_uploads ups      ON topic_upload = ups.upload_id
@@ -42,7 +42,7 @@ END;
 
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
-                   'e'  => array( CC_EVENT_FILTER_TOPIC_TEXT,
+                   'e'  => array( CC_EVENT_FILTER_FORMAT,
                                   CC_EVENT_FILTER_REVIEWS )
                 );
 }

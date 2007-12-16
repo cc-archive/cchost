@@ -33,12 +33,9 @@ require_once('ccextras/cc-extras-events.php'); // for EVENT_TOPIC stuff
 
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCFormat', 'OnFormFields'), 'ccextras/cc-format.inc' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCFormat', 'OnMapUrls'), 'ccextras/cc-format.inc' );
-CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCFormat', 'OnFilterUserProfile'), 'ccextras/cc-format.inc' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCFormat', 'OnUploadRow'), 'ccextras/cc-format.inc' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFormat' , 'OnGetConfigFields'), 'ccextras/cc-format.inc'  );
 
-CCEvents::AddHandler(CC_EVENT_FILTER_DESCRIPTION_TEXT,       array( 'CCFormat', 'OnFilterText'), 'ccextras/cc-format.inc' );
-CCEvents::AddHandler(CC_EVENT_FILTER_DESCRIPTION_HTML,       array( 'CCFormat', 'OnFilterHTML'), 'ccextras/cc-format.inc' );
+CCEvents::AddHandler(CC_EVENT_FILTER_FORMAT,       array( 'CCFormat', 'OnFilterFormat'), 'ccextras/cc-format.inc' );
 
 function generator_cc_format($form, $fieldname, $value, $class )
 {
@@ -97,18 +94,20 @@ function _cc_is_formatting_on()
 function _cc_format_format($text)
 {
     require_once('cclib/cc-template.php');
-    $thumbs_up = CCTemplate::Search('images/thumbs_up.png');
+    $thumbs_up = ccd( CCTemplate::Search('images/thumbs_up.gif') );
 
     $quote = _('Quote:');
     require_once('cclib/smartypants/smartypants.php');
-    $attrs = '(b|i|u|red|green|blue|big|small)';
+    $attrs = '(b|i|u|red|green|blue|big|small|right|left)';
     $text = strip_tags($text);
     $map = array( "/\[$attrs\]/" => '<span class="\1">', 
                   "#\[/$attrs\]#" => '</span>', 
                   "/\[quote=?([^\]]+)?\]/" => '<span class="quote"><span>'. $quote . ' $1</span>', 
                   "#\[/quote\]#" =>  '</span>', 
                   "/\[up]/" => "<img class=\"cc_thumbs_up\" src=\"$thumbs_up\" />", 
-                  "#\[/up\]#" => '', );
+                  "#\[/up\]#" => '', 
+                  "#\[img=([^\]]+)\]\[/img\]#" => '<img class="format_image" src="$1" />', 
+                );
     $text = preg_replace( array_keys($map), 
                           array_values($map), 
                           $text );

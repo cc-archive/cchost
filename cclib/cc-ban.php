@@ -78,23 +78,6 @@ class CCBanHV
         }
     }
     
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow( &$record )
-    {
-        if( !empty($record['upload_banned']) )
-        {
-            global $CC_GLOBALS;
-
-            $record['banned_message'] =  $CC_GLOBALS['ban-message'];
-            $record['file_macros'][] = 'upload_banned';
-        }
-    }
-
 }
 
 ?>

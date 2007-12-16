@@ -280,8 +280,6 @@ class CCFiles extends CCTable
             $this->_format_file_size($rows[$i]);
         }
 
-        CCEvents::Invoke(CC_EVENT_UPLOAD_FILES, array(&$row,&$rows) );
-
         return($rows);
     }
 

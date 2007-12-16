@@ -68,20 +68,5 @@ class CCRatingsHV
             $record['ratings_score'] = $count;
         }
     }
-
-    /**
-    * Event handler for {@link CC_EVENT_USER_ROW}
-    *
-    * Add extra data to a user row before display
-    *
-    * @param array &$record User record to massage
-    */
-    function OnUserRow(&$record)
-    {
-        if( !empty($record['user_num_scores']) ) // && $row['user_num_scores'] > 10 )
-        {
-            $this->_fill_scores($record,'user');
-        }
-    }
 }
 ?>

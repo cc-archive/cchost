@@ -61,6 +61,7 @@ class CCTopicForm extends CCSecurityVerifierForm
                     'topic_text' => array(
                             'label'         => $label_text,
                             'formatter'     => 'textarea',
+                               'want_formatting' => true,
                             'flags'         => CCFF_REQUIRED | CCFF_POPULATE),
                     );
 

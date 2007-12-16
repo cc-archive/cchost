@@ -170,32 +170,6 @@ class CCEditorials
 
 
     /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow( &$record )
-    {
-        $uploads =& CCUploads::GetTable();
-        $editorials = $uploads->GetExtraField($record,'edpicks');
-        if( empty($editorials) )
-            return;
-
-        $count = count($editorials);
-        $keys = array_keys($editorials);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            // hmmm
-            $pick =& $record['upload_extra']['edpicks'][ $keys[$i] ];
-            $pick['review_html'] = CCUtil::TextToHTML( $pick['review'] );
-            $pick['review_short'] = substr($pick['review'],0,25) . '...';
-            $pick['review_url'] = ccl( 'editorial','picks',$record['upload_id'] );
-        }
-    }
-
-
-    /**
     * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
     * 
     * The menu items gathered here are for the 'local' menu at each upload display

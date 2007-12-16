@@ -277,7 +277,7 @@ END;
             $row['user_homepage_html'] = "<a href=\"{$row['user_homepage']}\">{$row['user_homepage']}</a>";
         }
 
-        $user_fields = array( 'str_user_about_me'  => 'user_description',
+        $user_fields = array( 'str_user_about_me'  => 'user_description_html',
                               'str_user_home_page' => 'user_homepage_html',
                               );
 

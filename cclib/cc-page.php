@@ -394,12 +394,6 @@ class CCPage extends CCSkin
             $naviator_api->ShowTabs($page);
         }
 
-        if( empty($CC_GLOBALS['hide_sticky_search']) )
-        {
-            $page->vars['sticky_search'] = true;
-            $page->vars['advanced_search_url'] = ccl('search');
-        }
-
         /*
             Google puts a lot of emphasis on <title> tag so yes, we
             go to great lengths to make sure there is something 

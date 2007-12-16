@@ -89,6 +89,7 @@ class CCUploadMediaForm extends CCUploadForm
 
         $fields['upload_description'] =
                         array( 'label'      => 'str_description',
+                               'want_formatting' => true,
                                'formatter'  => 'textarea',
                                'flags'      => CCFF_POPULATE );
         

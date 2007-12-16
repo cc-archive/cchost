@@ -14,7 +14,7 @@ function collab_thread_dataview()
 
     $sql =<<<EOF
 SELECT  topic.topic_id, 
-        topic.topic_text as _need_topic_html, 
+        topic.topic_text as format_html_topic_text, 
         user_real_name, user_name, user_num_posts,
         CONCAT( '$turl', topic.topic_thread, '#', topic.topic_id ) as topic_url,
         CONCAT( '$urlp', user_name ) as artist_page_url,
@@ -35,7 +35,7 @@ EOF;
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
                    'e'  => array(
-                                  CC_EVENT_FILTER_TOPIC_HTML, CC_EVENT_FILTER_TOPICS)
+                                  CC_EVENT_FILTER_FORMAT, CC_EVENT_FILTER_TOPICS)
                 );
 }
 [/dataview]

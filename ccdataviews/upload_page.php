@@ -22,7 +22,7 @@ function upload_page_dataview()
 SELECT 
     upload_banned, upload_tags, upload_published, 
     user_id, upload_user, upload_id, upload_name, upload_extra, 
-    upload_description as _need_description_html,
+    upload_description as format_html_upload_description,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     $is_thumbs_up as thumbs_up, $ratings_on as ratings_enabled,
     user_real_name,user_name, $avatar_sql, upload_num_scores, upload_score,
@@ -47,7 +47,7 @@ EOF;
                                   CC_EVENT_FILTER_ED_PICK_DETAIL,
                                   CC_EVENT_FILTER_COLLAB_CREDIT,
                                   CC_EVENT_FILTER_RATINGS_STARS,
-                                  CC_EVENT_FILTER_DESCRIPTION_HTML,
+                                  CC_EVENT_FILTER_FORMAT,
                                   CC_EVENT_FILTER_REMIXES_FULL,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
                                   CC_EVENT_FILTER_MACROS, 

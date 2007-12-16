@@ -34,27 +34,29 @@ a:hover {
 }
 
 #site_title {  /* in the header */
-	margin: 14px 0px 3px 120px;
+	margin: 8px 0px 2px 30px;
+	padding: 0px;
 }
 
 #site_description { 
 	margin-left: 30px;
+	font-size: 10px;
+	font-variant: small-caps;
+	padding: 0px;
 }
 
 #header_search {
 	float: right;
+	margin-top: 10px;
 }
 
 #header_search_img {
 	float: left;
+    display: block;
 }
 
 #header_search a {
 	display: block;
-}
-
-#header_search_img {
-    display: block;
 }
 
 #header_search h3 {

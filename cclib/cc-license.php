@@ -90,30 +90,4 @@ class CCLicenses extends CCTable
     }
 }
 
-/**
-* High volume event handlers
-*/
-class CCLicenseHV
-{
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow( &$record )
-    {
-        if( empty($record['upload_license']) || empty($record['works_page']) )
-            return;
-
-        $record['year'] = substr($record['upload_date'],0,4);
-        $record['start_comm'] = "<!--";
-        $record['end_comm'] = "-->";
-
-        $record['file_macros'][] = 'license_rdf';
-
-    }
-
-}
-
 ?>

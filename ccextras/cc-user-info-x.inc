@@ -195,18 +195,12 @@ class CCUserInfoX
         if( !empty($CC_GLOBALS['user_extra']['user_info']) &&  
             strtolower( get_class($form) ) == 'ccuserprofileform' )
         {
-            require_once('cclib/cc-contest-table.inc');
-            $contests =& CCContests::GetTable();
-            $open_contests =& $contests->GetOpenContests();
-            if( empty($open_contests) )
-                return;
 
-            $cc = count($open_contests);
-            $open_contest_names = array();
-            for( $i = 0; $i < $cc; $i++ )
-            {
-                $open_contest_names[] = $open_contests[$i]['contest_short_name'];
-            }
+            $sql =<<<EOF
+            SELECT contest_short_name FROM cc_tbl_contests WHERE
+                 contest_publish  AND (NOW() > contest_open) AND (NOW() < contest_deadline) 
+EOF;
+            $open_contest_names = CCDatabase::QueryItems($sql);
 
             $infos =& $CC_GLOBALS['user_extra']['user_info']; 
             $keys = array_keys($infos);
@@ -214,7 +208,8 @@ class CCUserInfoX
             {
                 if( empty($infos[$contest]) || !in_array( $contest, $open_contest_names ) )
                     continue;
-                $nice_name = $contests->GetFriendlyNameFromShortName($contest);
+
+                $nice_name = CCDatabase::QueryItem("SELECT contest_friendly_name FROM cc_tbl_contests WHERE contest_short_name = '{$contest}'");
                 $url = ccl('contest','userinfo',$contest,'edit');
                 $value = "<a style=\"width:180px\" href=\"$url\" class=\"cc_gen_button\"><span>\"$nice_name\"</span></a>";
                 $fields[ $contest . '_uinfo_link'] = 

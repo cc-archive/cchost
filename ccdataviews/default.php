@@ -14,7 +14,7 @@ function default_dataview()
     $sql =<<<EOF
 SELECT 
     upload_id, upload_name, upload_extra, upload_contest, user_name, upload_tags,
-    upload_description as _need_description_text,
+    upload_description as format_text_upload_description,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name,
     CONCAT( '$urlp', user_name ) as artist_page_url,
@@ -31,7 +31,7 @@ JOIN cc_tbl_licenses ON upload_license = license_id
 EOF;
     return array( 'sql' => $sql,
                    'e'  => array(   CC_EVENT_FILTER_EXTRA,
-                                    CC_EVENT_FILTER_DESCRIPTION_TEXT,
+                                    CC_EVENT_FILTER_FORMAT,
                                     CC_EVENT_FILTER_FILES )
                 );
 }

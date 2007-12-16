@@ -58,6 +58,12 @@ function cc_apply_format(fname,tag)
 		if( url )
 			open = '[url=' + url + ']';
 	}
+    if( tag == 'img' )
+    {
+        var url = prompt('Image URL:','http://');
+        if( url )
+            open = '[img=' + url + ']';
+    }
 
 	if( !open )
 		open = '[' + tag + ']';

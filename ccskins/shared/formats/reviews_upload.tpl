@@ -15,7 +15,7 @@ function reviews_upload_dataview()
     $sql =<<<EOF
 SELECT  topic.topic_id, ((COUNT(parent.topic_id)-1) * 30) AS margin,
         IF( COUNT(parent.topic_id) > 1, 1, 0 ) as is_reply, 
-        topic.topic_text as _need_topic_html, 
+        topic.topic_text as format_html_topic_text, 
         user_real_name, user_name, user_num_reviews,
         CONCAT( '$turl', user_name, '/',  topic.topic_upload, '#', topic.topic_id ) as topic_url,
         CONCAT( '$urlp', user_name ) as artist_page_url,
@@ -43,7 +43,7 @@ EOF;
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
                    'e'  => array(
-                                  CC_EVENT_FILTER_TOPIC_HTML, CC_EVENT_FILTER_REVIEWS )
+                                  CC_EVENT_FILTER_FORMAT, CC_EVENT_FILTER_REVIEWS )
                 );
 }
 [/dataview]

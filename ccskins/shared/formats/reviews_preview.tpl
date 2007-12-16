@@ -11,7 +11,7 @@ function review_previews_dataview()
     $turl = ccl('reviews') . '/';
 
     $sql =<<<EOF
-SELECT topic_text              as _need_topic_text, topic_upload,
+SELECT topic_text              as format_text_topic_text, topic_upload,
        reviewee.user_real_name as reviewee_user_real_name,
        reviewee.user_name as reviewee_user_name,
        IF( LENGTH(reviewer.user_real_name) > 15, 
@@ -29,7 +29,7 @@ LIMIT 5
 EOF;
 
     return array( 'sql' => $sql,
-                   'e'  => array(CC_EVENT_FILTER_TOPIC_TEXT)
+                   'e'  => array(CC_EVENT_FILTER_FORMAT)
                 );
 }
 [/dataview]
@@ -41,7 +41,7 @@ EOF;
 %text(str_recent_reviews)%
 <ul>
 %loop(records,R)%
-<li>%(#R/reviewer_user_real_name)% <a href="%(#R/topic_url)%">%(#R/topic_text_plain)%</a></li>
+<li>%(#R/reviewer_user_real_name)% <a href="%(#R/topic_url)%">%chop(#R/topic_text_plain,40)%</a></li>
 %end_loop%
 </ul>
 %map(#upload_id,records/0/topic_upload)%

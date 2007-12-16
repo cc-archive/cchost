@@ -3,8 +3,7 @@
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-define('CC_EVENT_FILTER_DESCRIPTION_TEXT',   'fdesctext' );
-define('CC_EVENT_FILTER_DESCRIPTION_HTML',   'fdeschtml' );
+define('CC_EVENT_FILTER_FORMAT',             'filtformat' );
 define('CC_EVENT_FILTER_UPLOAD_NAME_CLASS',  'fupcls' );
 define('CC_EVENT_FILTER_PLAY_URL',           'fplayurl' );
 define('CC_EVENT_FILTER_DOWNLOAD_URL',       'fdwnurl' );

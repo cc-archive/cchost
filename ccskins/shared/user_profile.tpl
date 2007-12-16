@@ -13,7 +13,7 @@ function user_profile_dataview()
 
     $sql =<<<EOF
         SELECT $avatar_sql, user_id, user_name, user_real_name, user_favorites, user_num_uploads,
-            user_homepage, user_description, user_whatilike, user_whatido, user_lookinfor,
+            user_homepage, user_description as format_html_user_description, user_whatilike, user_whatido, user_lookinfor,
             user_num_reviewed, user_num_reviews, user_num_remixes, user_num_remixed,
             CONCAT( '$cce', user_name ) as user_emailurl, user_num_posts,
             DATE_FORMAT( user_registered, '%a, %b %e, %Y' ) as user_date_format
@@ -22,7 +22,7 @@ function user_profile_dataview()
 EOF;
 
     return array( 'sql' => $sql,
-                  'e' => array( CC_EVENT_FILTER_USER_PROFILE ) );
+                  'e' => array( CC_EVENT_FILTER_FORMAT, CC_EVENT_FILTER_USER_PROFILE ) );
 
 }
 [/dataview] %%
@@ -64,15 +64,15 @@ EOF;
 </div>
 
 <script>
-var user_desc = $('user_description');
+var user_desc = $('user_description_html');
 var avatar_html = '<div id="avatar" style="float:right;width:94px;"><img src="%(#U/user_avatar_url)%" /></div>';
 var breaker = '<br style="clear:right" />';
 if( user_desc )
 {
     if( window.round_box_enabled )
     {
-        cc_round_box('user_description');
-        $$('#user_description .ufc_label').each( function( e ) { e.style.display = 'none'; } );
+        cc_round_box('user_description_html');
+        $$('#user_description_html .ufc_label').each( function( e ) { e.style.display = 'none'; } );
     }
     else
     {

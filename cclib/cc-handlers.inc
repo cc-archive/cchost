@@ -33,12 +33,10 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS, array('CCRestAPI', 'OnMapUrls'), 'cclib/
 
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCBanHV',  'OnBuildUploadMenu'), 'cclib/cc-ban.php' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCBanHV',  'OnUploadMenu'), 'cclib/cc-ban.php' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCBanHV',  'OnUploadRow'), 'cclib/cc-ban.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCBan',  'OnMapUrls'), 'cclib/cc-ban.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCBan',  'OnAdminMenu'), 'cclib/cc-ban.inc'  );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCContest' , 'OnMapUrls'), 'cclib/cc-contest.inc' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,    array( 'CCContestHV',  'OnUploadRow'), 'cclib/cc-contest.php' );
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,    array( 'CCContest' , 'OnGetMacros'), 'cclib/cc-contest.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCContest', 'OnAdminMenu'), 'cclib/cc-contest.inc' );
 
@@ -46,7 +44,6 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,            array( 'CCDatabaseAdmin', 'On
 
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCEditorials',  'OnBuildUploadMenu'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCEditorials',  'OnUploadMenu'), 'cclib/cc-editorials.php');
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCEditorials',  'OnUploadRow'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCEditorials',  'OnMapUrls'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCEditorials' , 'OnGetConfigFields'), 'cclib/cc-editorials.php' );
 CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,        array( 'CCEditorials',  'OnGetSysTags'), 'cclib/cc-editorials.php');
@@ -101,7 +98,6 @@ CCEvents::AddHandler(CC_EVENT_GET_MACROS,   array( 'CCLicense' , 'OnGetMacros'),
 CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,  array( 'CCLicense',  'OnGetSysTags'), 'cclib/cc-license.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCLicense',  'OnAdminMenu'), 'cclib/cc-license.inc' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCLicense',  'OnMapUrls'), 'cclib/cc-license.inc' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,   array( 'CCLicenseHV',  'OnUploadRow'), 'cclib/cc-license.php' );
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCLogin' , 'OnGetConfigFields'), 'cclib/cc-login.php' );
 CCEvents::AddHandler(CC_EVENT_MAIN_MENU,  array( 'CCLogin',  'OnBuildMenu'), 'cclib/cc-login.php' );
@@ -111,7 +107,6 @@ CCEvents::AddHandler(CC_EVENT_GET_MACROS,   array( 'CCMacro' , 'OnGetMacros'), '
 
 CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCMediaHost',  'OnBuildUploadMenu'), 'cclib/cc-mediahost.php' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCMediaHost',  'OnUploadMenu'), 'cclib/cc-mediahost.php' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,         array( 'CCMediaHost',  'OnUploadRow'), 'cclib/cc-mediahost.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCMediaHost',  'OnMapUrls'), 'cclib/cc-mediahost.php' );
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,         array( 'CCMediaHost',  'OnGetMacros'), 'cclib/cc-mediahost.php' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCMediaHost' , 'OnGetConfigFields'), 'cclib/cc-mediahost.php'  );
@@ -148,19 +143,15 @@ CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,  array( 'CCRemix', 'OnUploadDelete'
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCRemix' ,'OnMapUrls'), 'cclib/cc-remix.php'  );
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,     array( 'CCRenderAudio', 'OnUploadMenu'), 'cclib/cc-renderaudio.php' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,      array( 'CCRenderAudio', 'OnUploadRow'), 'cclib/cc-renderaudio.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,        array( 'CCRenderAudio', 'OnMapUrls'), 'cclib/cc-renderaudio.php' );
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT, array( 'CCRenderAudio', 'OnApiQueryFormat'), 'cclib/cc-renderaudio.php' ); 
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,    array( 'CCRenderFlash', 'OnUploadRow'), 'cclib/cc-renderflash.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCRenderFlash', 'OnMapUrls'), 'cclib/cc-renderflash.php' );
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,       array( 'CCRenderImage', 'OnUploadMenu'), 'cclib/cc-renderimage.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCRenderImage', 'OnMapUrls'), 'cclib/cc-renderimage.php' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderImage', 'OnUploadRow'), 'cclib/cc-renderimage.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCRenderImage' , 'OnAdminMenu' ), 'cclib/cc-renderimage.php' );
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,        array( 'CCRenderZip', 'OnUploadRow'), 'cclib/cc-renderzip.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCRenderZip',  'OnFilterMacros'), 'cclib/cc-renderzip.php'  );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,              array( 'CCSearch', 'OnMapUrls'), 'cclib/cc-search.php'  );
@@ -193,10 +184,6 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCUserAPI' , 'OnGetCon
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserSearch', 'OnMapUrls'), 'cclib/cc-user-search.php' );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserHook', 'OnMapUrls'), 'cclib/cc-user-hook.php' );
-
-// yes, the next two were meant to map to the same method...
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,   array( 'CCUser', 'OnUploadRow'), 'cclib/cc-user.php' );
-CCEvents::AddHandler(CC_EVENT_CONTEST_ROW,  array( 'CCUser', 'OnUploadRow'), 'cclib/cc-user.inc' );
 
 CCEvents::AddHandler(CC_EVENT_FILTER_DOWNLOAD_URL, 'cc_filter_std', 'cclib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_USER_TAGS, 'cc_filter_std', 'cclib/cc-filters.php' );

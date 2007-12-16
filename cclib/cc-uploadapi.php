@@ -751,13 +751,6 @@ EOF;
         if( !empty($msg) )
             return $msg;
     
-        // What follows is a little bit of cheat because instead
-        // of calling GetRecordFromRow (which we deam too dangerous
-        // because we don't have an actual record) we stuff these
-        // values into the record ourselves. If in the future
-        // some OnRecordRow event handler needs this step to ID3 tagging
-        // work better this step will have to be rethought)
-        //
         $file_args['local_path']   = cca($relative_dir,$file_args['file_name']);
         $file_args['download_url'] = ccd($relative_dir,$file_args['file_name']);
 

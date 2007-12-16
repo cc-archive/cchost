@@ -37,120 +37,6 @@ if( !defined('IN_CC_HOST') )
 class CCContestHV
 {
     /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow( &$record )
-    {
-        if( empty($record['upload_contest']) )
-            return;
-
-        $systags = CCUploads::SplitTags($record);
-
-        $isentry  = in_array( CCUD_CONTEST_ENTRY, $systags);
-        $issource = !$isentry && (in_array( CCUD_CONTEST_MAIN_SOURCE, $systags ) ||
-                                 in_array( CCUD_CONTEST_SAMPLE_SOURCE, $systags) );
-
-        if( $issource  )
-            $relative = $this->_get_upload_dir($record);
-        elseif( $isentry )
-            $relative = $this->_get_user_upload_dir($record);
-        else
-            return;
-        
-        $record['relative_dir']  = $relative;
-        for( $i = 0; $i < count($record['files']); $i++ )
-        {
-            $record['files'][$i]['download_url']  = ccd( $relative, $record['files'][$i]['file_name'] );
-            $record['files'][$i]['local_path']    = cca( $relative, $record['files'][$i]['file_name']);
-        }
-
-        $record['file_page_url'] = $this->_get_file_page_url($record);
-    }
-
-
-    /**
-    * Internal helper for getting the upload page's URL
-    *
-    * @param array $record Upload database record (may be incomplete)
-    */
-    function _get_file_page_url(&$record)
-    {
-        return( ccl('files',$record['user_name'],$record['upload_id']) );
-    }
-
-    /**
-    * Internal helper method
-    *
-    * Returns the upload directory associated with the username (or one
-    * found in the record
-    *
-    * @param array $record Database record with contest name in it
-    * @param string $username For this user (if blank, $record is assumed to have a username in it)
-    * @returns string $dir User's upload directory for this contest
-    */
-    function _get_user_upload_dir( $record, $username='' )
-    {
-        $basedir = CCContestHV::_get_upload_dir($record);
-        if( empty($username) )
-            $username = $record['user_name'];
-
-        return( $basedir . '/' . $username );
-    }
-
-    /**
-    * Internal helper method
-    *
-    * Returns the base upload directory associated with a contest
-    *
-    * @param mixter $name_or_row Either short contest name or database record with contest name in it
-    */
-    function _get_upload_dir($name_or_row)
-    {
-        global $CC_GLOBALS;
-
-        $name = is_string($name_or_row) ? $name_or_row : CCContestHV::GetContestNameFromRecord($name_or_row);
-        $base_dir = empty($CC_GLOBALS['contest-upload-root']) ? 'contests' : 
-                            $CC_GLOBALS['contest-upload-root'];
-
-        return( $base_dir . '/' . $name );
-    }
-
-    function GetContestNameFromRecord($row) 
-    {
-        global $CC_GLOBALS;
-
-        if( !empty($row['contest_short_name']) )
-            return $row['contest_short_name'];
-
-        if( empty($CC_GLOBALS['contests']) )
-        {
-            // this will happen one time when upgrading to 4
-
-            require_once('cclib/cc-contest-admin.inc');
-            $CC_GLOBALS['contests'] = CCContestAdmin::UpgradeGlobals();
-        }
-
-        $name = '';
-
-        if( empty($row['contest_short_name']) )
-        {
-            if( !empty($row['upload_contest']) )
-            {
-                $name = $CC_GLOBALS['contests'][ $row['upload_contest'] ];
-            }
-        }
-        else
-        {
-            $name = $name['contest_short_name'];
-        }
-
-        return $name;
-    }
-
-    /**
     * Callback for Navigation tab display
     *
     * @see CCNavigator::View()
@@ -161,17 +47,20 @@ class CCContestHV
         require_once('cclib/cc-contest-table.inc');
         $contests =& CCContests::GetTable();
         $short_name = $page['handler']['args']['contest'];
-        $contest = $contests->GetRecordFromShortName($short_name);
+        $contest = CCDatabase::QueryRow(
+            'SELECT contest_id, contest_publish, contest_open, contest_entries_accept, contest_deadline FROM cc_tbl_contests ' .
+            "WHERE contest_short_name = '{$short_name}'");
+        $contests->GetOpenStatus($contest);
+
 
         if( !empty($page['winners']) )
         {
             if( $page['winners']['function'] != 'url' )
             {
-                $uploads =& CCUploads::GetTable();
-                $uploads->SetTagFilter('winner,' . $short_name,'all');
-                $num_winners = $uploads->CountRows();
-                $uploads->SetTagFilter('');
-
+                require_once('cclib/cc-dataview.php');
+                $dv = new CCDataView();
+                $filter = $dv->MakeTagFilter('winner,' . $short_name,'all');
+                $num_winners = CCDatabase::QueryItem("SELECT COUNT(*) from cc_tbl_uploads WHERE $filter");
                 if( !$num_winners )
                 {
                     unset($page['winners']);

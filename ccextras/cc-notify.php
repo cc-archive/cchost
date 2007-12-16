@@ -114,7 +114,7 @@ class CCNotify
 
 
     /**
-    * Event handler for {@link CC_EVENT_USER_ROW}
+    * Event handler for {@link CC_EVENT_FILTER_USER_PROFILE}
     *
     * Add extra data to a user row before display
     *

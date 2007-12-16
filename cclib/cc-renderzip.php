@@ -32,38 +32,8 @@ require_once('cclib/cc-render.php');
 * @package cchost
 * @subpackage archive
 */
-class CCRenderZip extends CCRender
+class CCRenderZip 
 {
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow(&$record)
-    {
-        if( empty($record['works_page']) || !CCUploads::InTags('zip',$record) )
-            return;
-
-        CCUpload::EnsureFiles($record,true);
-
-        $need_macro = false;
-        foreach( $record['files'] as $file )
-        {
-            if( !empty($file['file_format_info']['zipdir']) )
-            {
-                $dir = array( 'dir' => $file['file_format_info']['zipdir'],
-                              'name' => $file['file_nicname']
-                             );
-                /* break; **/
-                $record['zipdirs'][] = $dir;
-                $need_macro = true;
-            }
-        }
-
-        if( $need_macro )
-            $record['file_macros'][] = 'show_zip_dir';
-    }
 
     function OnFilterMacros(&$records)
     {

@@ -98,35 +98,6 @@ class CCContestForm extends CCUploadForm
                         'value'      => 'now +2 weeks',
                         'flags'      => CCFF_POPULATE),
 
-            /*
-            'contest_auto_publish' => array (
-                        'label'      => _('Auto-Publish Entries'),
-                        'form_tip'   => '',
-                        'formatter'  => 'radio',
-                        'options'      => array( 
-                                            '0' => _('Only admins can see entries until after the deadline'),
-                                            '1' => _('Entries are made public upon upload') ),
-                        'value'      => '0',
-                        'flags'      => CCFF_POPULATE),
-
-            'contest_vote_online' => array (
-                        'label'      => _('Vote Online'),
-                        'form_tip'   => '',
-                        'formatter'  => 'radio',
-                        'options'      => array( 
-                                            '0' => _('Winner is determined offline'),
-                                            '1' => _('Display a poll after deadline for entries has passed') ),
-                        'value'      => '1',
-                        'flags'      => CCFF_POPULATE),
-
-            'contest_vote_deadline' => array (
-                        'label'      => _('Voting Deadline'),
-                        'form_tip'   => _('When do polls close? (Only applies if you chose online voting above)'),
-                        'formatter'  => 'date',
-                        'value'      => 'now +4 weeks',
-                        'flags'      => CCFF_POPULATE),
-            */
-
             '_server_time' => array (
                         'label'      => _('Current Server Time'),
                         'formatter'  => 'statictext',
@@ -140,8 +111,6 @@ class CCContestForm extends CCUploadForm
 
         // back compat 
         $this->SetHiddenField( 'contest_auto_publish', 1 );
-        $this->SetHiddenField('contest_vote_online', 0 );
-        $this->SetHiddenField( 'contest_vote_deadline', '1 years from now' );
 
         $this->EnableSubmitMessage(false);
     }
@@ -219,8 +188,8 @@ class CCCreateContestForm extends CCContestForm
                 $this->SetFieldError($fieldname, _('Must be characters and numbers, no more than 25'));
                 return(false);
             }
-            $contests =& CCContests::GetTable();
-            if( $contests->GetIDFromShortName($value) )
+            $count = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_contests WHERE contest_short_name = '{$value}'");
+            if( $count )
             {
                 $this->SetFieldError($fieldname, _('Name already exists'));
                 return(false);
@@ -654,8 +623,6 @@ EOF;
             $upload_dir = CCContestHV::_get_upload_dir($contest_short_name);
             $form->FinalizeAvatarUpload('contest_bitmap', $upload_dir);
             $form->GetFormValues($fields);
-            if( empty($fields['contest_vote_online']) ) // make sure this is a numeric value
-                $fields['contest_vote_online'] = 0;
             $contests =& CCContests::GetTable();
             $contests->Update($fields);
             CCPage::Prompt(_('Changes Saved'));

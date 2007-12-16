@@ -200,6 +200,7 @@ recommendsHooks.prototype = {
                     var newHtml = '<span class="recommend_link">' + html + '</span>';
                     e.innerHTML = newHtml;
                     Event.observe(e,'click',me.onRecommendClick.bindAsEventListener(me,id));
+                    Element.removeClassName(e,'rated');
                 }
             });
         }
@@ -215,9 +216,11 @@ recommendsHooks.prototype = {
         var url = home_url + "rate/" + id + "/5";
         if( this.return_macro )
             url += q + 'rmacro=' + this.return_macro;
-        if( $('debug') )
-            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
-        new Ajax.Updater(d_elem,url);
+        new Ajax.Updater(d_elem,url,{onComplete:this.onRecommendFilled.bind(this,id)});
+    },
+
+    onRecommendFilled: function(id) {
+        Element.addClassName($("recommend_block_" + id),'rated');
     }
 }
 

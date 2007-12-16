@@ -68,21 +68,6 @@ class CCMixter
         CCPage::ViewFile('samples.xml');
     }
 
-    function OnBuildMenu()
-    {
-        $items = array(
-            'mixterfaq' => array (
-                'menu_text' => 'Is It Legal? (FAQ)',
-                'access'    => CC_DONT_CARE_LOGGED_IN,
-                'menu_group'=> 'visitor',
-                'weight'    => 100,
-                'action'    => ccl('viewfile','isitlegal.xml')
-                )
-            );
-
-        CCMenu::AddItems($items);
-    }
-
 }
 
 

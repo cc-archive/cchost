@@ -231,6 +231,7 @@ class CCUserProfileForm extends CCUploadForm
                     'user_description' =>
                         array( 'label'      => 'str_prof_about_you',
                                'formatter'  => 'textarea',
+                               'want_formatting' => true,
                                'flags'      => CCFF_POPULATE ),
 
                     'user_homepage' =>

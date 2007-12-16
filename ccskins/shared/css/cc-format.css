@@ -64,3 +64,13 @@ span.quote span {
 	margin-bottom: 2px;
 	font-weight: bold;
 }
+span.right {
+	display: block;
+	float: right;
+	margin: 4px;
+}
+span.left {
+	display: block;
+	float: left;
+	margin: 4px;
+}

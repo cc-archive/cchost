@@ -46,21 +46,6 @@ class CCFlagHV
         return( !empty($CC_GLOBALS['flagging']) );
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnFilterUploads(&$rows)
-    {
-        if( $this->_is_flagging_on() )
-        {
-            foreach($rows as $K => $row)
-                $rows[$K]['flag_url'] = ccl('flag','upload',$row['upload_id']);
-        }
-    }
-
     function OnFilterTopics(&$rows)
     {
         if( $this->_is_flagging_on() )
@@ -70,6 +55,14 @@ class CCFlagHV
         }
     }
 
+    function OnFilterUploads(&$rows)
+    {
+        if( $this->_is_flagging_on() )
+        {
+            foreach($rows as $K => $row)
+                $rows[$K]['flag_url'] = ccl('flag','upload',$row['upload_id']);
+        }
+    }
 }
 
 ?>

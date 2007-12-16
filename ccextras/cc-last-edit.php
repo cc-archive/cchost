@@ -28,7 +28,6 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCLastEdit', 'OnUploadDone') );
 CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    array( 'CCLastEdit', 'OnDeleteFile') );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ROW,     array( 'CCLastEdit', 'OnUploadRow'));
 
 /**
 *
@@ -69,42 +68,6 @@ class CCLastEdit
         $uploads->SetExtraField($upload_id,'last_op',$op);
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow(&$R)
-    {
-        if( isset($R['upload_last_edit']) )
-        {
-
-            if
-            (
-                empty($R['upload_last_edit']) ||
-                $R['upload_last_edit'] == '0000-00-00 00:00:00' 
-             ) 
-            {
-                unset($R['upload_last_edit']);
-            }
-            elseif( !empty($R['upload_extra']['last_op']) )
-            {
-                switch( $R['upload_extra']['last_op'] )
-                {
-                    case 'del':
-                        $R['last_op_str'] = _('File deleted');
-                        break;
-                    case 'replace':
-                        $R['last_op_str'] = _('File replaced');
-                        break;
-                    case 'add':
-                        $R['last_op_str'] = _('File added');
-                        break;
-                }
-            }
-        }
-    }
 }
 
 

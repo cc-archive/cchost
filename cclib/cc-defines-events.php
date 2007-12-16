@@ -146,24 +146,7 @@ define('CC_EVENT_BUILD_UPLOAD_MENU',   'builduploadmenu');
 define('CC_EVENT_ADMIN_MENU',          'buildadminmenu');
 
 /**
-* Request for Data Event: Massage a raw upload row into a record
-*
-* Event trigged when <i>a single upload row</i> is pulled out of
-* the database and is about to be displayed. Gives
-* modules an opportunity to massage the row and
-* populate it with data required by templates for display.
-* The ccHost system uses this event to populate the 
-* row with information about physical files, menus 
-* commands, etc.
-*
-* Call back (handler) prototype:
-*<code>
-* // &$record is the upload data being massaged
-* function OnUploadRow( &$record )
-*</code>
-* @see CCEvents::AddHandler()
-* @see CCTable::GetRecordFromRow()
-* @see CC_EVENT_LISTING_RECORDS
+* @deprecated
 */
 define('CC_EVENT_UPLOAD_ROW',          'uploadrow' );
 
@@ -171,39 +154,12 @@ define('CC_EVENT_UPLOAD_ROW',          'uploadrow' );
 //define('CC_EVENT_UPLOAD_LISTING',      'uploadlisting' );
 
 /*
-* Request for Data Event: A list of records is being displayed
-*
-* Triggered when a <i>multiple upload records</i> are about
-* to be displayed. The ccHost rendering system uses this event 
-* to populate the template with 'Podcast this page' and
-* 'Stream this page' user interface elements.
-*
-* Call back (handler) prototype:
-*<code>
-* // &$records is an array of upload records about to be displayed
-* function OnListingRecords( &$records )
-*</code>
-* @see CCEvents::AddHandler()
-* @see CC_EVENT_UPLOAD_ROW
-* @see CC_EVENT_UPLOAD_LISTING
+* @deprecated
 */
 define('CC_EVENT_LISTING_RECORDS',     'listingrecs' );
 
 /**
-* Request for Data Event: File info has been attached to record
-*
-* Triggered by {@link CCFiles::FilesForUpload} after the during
-* {@link CC_EVENT_UPLOAD_ROW} event processing after the information
-* for physical files has been put into the record preparing for
-* display.
-*
-* Call back (handler) prototype:
-*<code>
-* // &$row is the upload row being displayed
-* function OnUploadFile( &$row)
-*</code>
-* @see CCEvents::AddHandler()
-* @see CC_EVENT_UPLOAD_ROW
+* @deprecated
 */
 define('CC_EVENT_UPLOAD_FILES',        'uploadfiles' );
 
@@ -319,23 +275,7 @@ define('CC_EVENT_RATED',               'rated' );
 define('CC_EVENT_GET_SYSTAGS',         'getsystags' );
 
 /**
-* Request for Data Event: Massage a raw user row into a record
-*
-* Event trigged when a user row is pulled out of
-* the database and is about to be displayed. Gives
-* modules an opportunity to massage the row and
-* populate it with data required by templates for display.
-* The ccHost system uses this event to populate the 
-* row with information like the user's ratings status,
-* number of reviews, etc.
-*
-* Call back (handler) prototype:
-*<code>
-* // &$record is the user data being massaged
-* function OnUploadUser( &$record )
-*</code>
-* @see CCEvents::AddHandler()
-* @see CCUser::GetRecordFromRow()
+* @deprecated
 */
 define('CC_EVENT_USER_ROW',            'userrow' );
 
@@ -371,23 +311,7 @@ define('CC_EVENT_MAP_URLS',            'mapurls');
 define('CC_EVENT_UPLOAD_ALLOWED',      'throttle');
 
 /**
-* Request for Data Event: Massage a raw contest row into a record
-*
-* Event trigged when a contest row is pulled out of
-* the database and is about to be displayed. Gives
-* modules an opportunity to massage the row and
-* populate it with data required by templates for display.
-* The ccHost system uses this event to populate the 
-* row with detailed information about the creator of 
-* the contest.
-*
-* Call back (handler) prototype:
-*<code>
-* // &$record is the contest data being massaged
-* function OnUploadContest( &$record )
-*</code>
-* @see CCEvents::AddHandler()
-* @see CCContest::GetRecordFromRow()
+* @deprecated
 */
 define('CC_EVENT_CONTEST_ROW',         'contestrow' );
 

@@ -18,7 +18,7 @@ function edpick_detail_dataview()
     $sql =<<<EOF
 SELECT 
     user_id, upload_user, upload_id, upload_name, upload_extra, 
-    upload_description as _need_description_html,
+    upload_description as format_html_upload_description,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name,
     user_name,
@@ -53,6 +53,7 @@ EOF;
                    'e'  => array( CC_EVENT_FILTER_FILES,
                                   CC_EVENT_FILTER_ED_PICK_DETAIL,
                                   CC_EVENT_FILTER_COLLAB_CREDIT,
+                                  CC_EVENT_FILTER_FORMAT,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
                                   CC_EVENT_FILTER_PLAY_URL,
                                   CC_EVENT_FILTER_UPLOAD_LIST,

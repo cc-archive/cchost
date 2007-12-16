@@ -201,19 +201,6 @@ class CCUser
             $M['action'] = str_replace('%login_name%',$current_user_name,$M['action']);
         }
     }
-
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow(&$row)
-    {
-        $users =& CCUsers::GetTable();
-        $users->GetRecordFromRow($row,false);
-    }
-
 }
 
 class CCUsers extends CCTable

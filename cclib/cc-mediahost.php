@@ -345,43 +345,6 @@ class CCMediaHost
         return( ccl('files',$record['user_name'],$record['upload_id'])  );
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow( &$record )
-    {
-        if( CCUploads::InTags(CCUD_MEDIA_BLOG_UPLOAD,$record) )
-        {
-            $relative = $this->_get_upload_dir($record['user_name']);
-
-            $record['relative_dir']  = $relative;
-            for( $i = 0; $i < count($record['files']); $i++ )
-            {
-                $F =& $record['files'][$i];
-                $name = $F['file_name'];
-                $F['download_url']  = ccd( $relative, $name );
-                $F['local_path']    = cca( $relative, $name );
-            }
-
-            if( empty($record['upload_published']) )
-            {
-                $puburl = ccl( 'files', 
-                               'publish', 
-                                $record['user_name'] ,
-                                $record['upload_id'] );
-                $pubtext = _('Publish now');
-                $publink = "<a href=\"$puburl\">$pubtext</a>";
-                $record['publish_message'] = _('This file is only visible to the owner and admins.') . '[ ' . $publink . ' ]';
-                $record['file_macros'][] = 'upload_not_published';
-            }
-
-            $record['file_page_url'] = $this->_get_file_page_url($record);
-        }
-
-    }
 
     /**
     * Event handler for {@link CC_EVENT_GET_MACROS}

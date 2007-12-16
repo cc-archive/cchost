@@ -27,7 +27,5 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCTopic',  'OnMapUrls'), 'ccextras/cc-topics.inc');
-CCEvents::AddHandler(CC_EVENT_FILTER_TOPIC_TEXT,   array( 'CCTopic', 'OnFilterTopicText'), 'ccextras/cc-topics.inc' );
-CCEvents::AddHandler(CC_EVENT_FILTER_TOPIC_HTML,   array( 'CCTopic', 'OnFilterTopicHTML'), 'ccextras/cc-topics.inc');
 
 ?>
