@@ -53,10 +53,11 @@ EOF;
 <? $thread_ids[] = $R['topic_id']; ?>
 <tr>
     %if_not_null(#R/is_reply)%
-    <td colspan="2" class="cc_topic_reply" style="margin-left: %(#R/margin)%px;" >
-        <a name="%(#R/topic_id)%"></a>
-        <div><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
-        <div class="cc_topic_reply_text med_light_bg">%(#R/topic_text_html)%
+    <td>&nbsp;<a name="%(#R/topic_id)%"></a></td>
+    <td class="cc_topic_reply" style="padding-left:%(#R/margin)%px">
+        <div class="cc_topic_reply_body  light_bg">
+            <div class="cc_topic_reply_head med_light_bg"><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
+            <div class="cc_topic_reply_text">%(#R/topic_text_html)%</div>
             <div class="cc_topic_commands" id="commands_%(#R/topic_id)%"></div>
         </div>
     </td>
@@ -64,15 +65,13 @@ EOF;
     <td class="cc_topic_head">
         <a name="%(#R/topic_id)%"></a>
         <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
-        <div><a href="%(#R/artist_page_url)%/topics"><?= $T->String(array('str_forum_posts_n',$R['user_num_posts'])); ?></a></div>
+        <div><a href="%(#R/artist_page_url)%/reviews"><?= $T->String(array('str_forum_posts_n',$R['user_num_posts'])); ?></a></div>
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
     <td class="cc_topic_body">
-        <div class="cc_topic_date">%(#R/topic_date_format)% </div>
-        <p>
-            %(#R/topic_text_html)%
-        </p>
-        <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
+        <div class="cc_topic_date dark_bg light_color" >%(#R/topic_date_format)% </div>
+        <div class="cc_topic_text med_light_bg">%(#R/topic_text_html)%</div>
+        <div class="cc_topic_commands med_light_bg" id="commands_%(#R/topic_id)%"></div>
     </td>
     %end_if%
 </tr>
