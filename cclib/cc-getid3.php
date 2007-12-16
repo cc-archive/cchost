@@ -52,6 +52,8 @@ class CCGetID3
     */
     function BadPath()
     {
+        require_once('cclib/cc-page.php');
+
         global $CC_GLOBALS;
         $getid3path = $CC_GLOBALS[CCGETID3_PATH_KEY] . '/getid3.php';
         $msg = _('GetID3 library integration is not properly installed:') . '<br />' . _("The path does not exist") . '<br />';
