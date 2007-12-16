@@ -360,8 +360,8 @@ $GLOBALS['str_review_of']             = _('comments on ');
 $GLOBALS['str_reviews_see']           = _('see comments...');
 $GLOBALS['str_reviews_left_by']           = _('Comments left by %s');
 $GLOBALS['str_reviews_left_for']           = _('Comments left for %s');
-$GLOBALS['str_reviews_left_for_button']           = _('%sSee comments left for %s%s');
-$GLOBALS['str_reviews_left_by_button']           = _('%sSee comments left by %s%s');
+$GLOBALS['str_reviews_left_for_button']           = _('See comments left for %s');
+$GLOBALS['str_reviews_left_by_button']           = _('See comments left by %s');
 
 $GLOBALS['str_sample_pool_s']         = _('Sample Pool: %s');
 

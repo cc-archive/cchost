@@ -16,7 +16,7 @@ function topics_user_dataview()
                CONCAT( '$baseurl', topic_thread, '#', topic_id ) as topic_url,
                CONCAT( '$baseus',  user_name ) as artist_page_url,
                topic_text as format_text_topic_text, topic_left,
-               DATE_FORMAT( topic_date, '%a, %b %e, %Y @ %l:%i %p' ) as topic_date_format,
+               DATE_FORMAT( topic_date, '%a, %b %e %l:%i %p' ) as topic_date_format,
                forum_thread_name, forum_name
         FROM cc_tbl_topics
         JOIN cc_tbl_forum_threads  ON topic_thread = forum_thread_id

@@ -121,8 +121,10 @@ class CCReview
                 $sqlargs['where'] = $where . "'$user_name'";
                 $query->QuerySQL($args,$sqlargs);
 
-                $a = array( $otstr, '<a href="' . cc_current_url() . '?qtype=' . $qtype . '">', $user_real_name, '</a>' );
-                CCPage::Prompt($a);
+                $leftby_link = array( 'text' => array( $otstr, $user_real_name ),
+                                      'url' =>  cc_current_url() . '?qtype=' . $qtype );
+
+                CCPage::PageArg('leftby_link',$leftby_link);
             }
         }
         else

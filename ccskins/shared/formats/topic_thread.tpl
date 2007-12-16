@@ -46,28 +46,32 @@ EOF;
 }
 [/dataview]
 */?>
+<link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
 
-<table>
+<table class="cc_topic_thread">
 %loop(records,R)%
 <? $thread_ids[] = $R['topic_id']; ?>
 <tr>
     %if_not_null(#R/is_reply)%
-    <td colspan="2" style="border-left: solid white %(#R/margin)%px;" >
+    <td colspan="2" class="cc_topic_reply" style="margin-left: %(#R/margin)%px;" >
         <a name="%(#R/topic_id)%"></a>
         <div><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
-        <div style="background-color:#DDD;float:left;">%(#R/topic_text_html)%</div>
-        <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
+        <div class="cc_topic_reply_text med_light_bg">%(#R/topic_text_html)%
+            <div class="cc_topic_commands" id="commands_%(#R/topic_id)%"></div>
+        </div>
     </td>
     %else%
-    <td >
+    <td class="cc_topic_head">
         <a name="%(#R/topic_id)%"></a>
         <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
         <div><a href="%(#R/artist_page_url)%/topics"><?= $T->String(array('str_forum_posts_n',$R['user_num_posts'])); ?></a></div>
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
-    <td>
-        <div>%(#R/topic_date_format)% </div>
-        %(#R/topic_text_html)%
+    <td class="cc_topic_body">
+        <div class="cc_topic_date">%(#R/topic_date_format)% </div>
+        <p>
+            %(#R/topic_text_html)%
+        </p>
         <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
     </td>
     %end_if%

@@ -96,7 +96,7 @@ class CCFormat
             return;
         $k = array_keys($rows);
 
-                // dig out fields
+        // dig out fields
         $first_row =& $rows[ $k[0] ];
         $col_keys = array_keys($first_row);
         $col_cnt = count($col_keys);
@@ -111,6 +111,7 @@ class CCFormat
                 'name' => $db_col . '_' . (($pieces[1] == 'text') ? 'plain' : 'html'),
                 'format' => $pieces[1] );
         }
+
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $rows[$k[$i]];
@@ -118,9 +119,8 @@ class CCFormat
             {
                 if( $meta['format'] == 'text' )
                     $R[$meta['name']] = _cc_format_unformat($R[$F]);
-                else
+                elseif( $meta['format'] == 'html' )
                     $R[$meta['name']] = _cc_format_format($R[$F]);
-
                 unset($R[$F]);
             }
         }

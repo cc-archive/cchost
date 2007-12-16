@@ -50,28 +50,31 @@ EOF;
 */?>
 
 <? cc_query_fmt('noexit=1&nomime=1&f=html&t=list_files&ids=' . $A['topic_upload']); ?>
-<table>
+<link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
+<table class="cc_topic_thread" cellspacing="0" cellpadding="0">
 %loop(records,R)%
 <? $thread_ids[] = $R['topic_id']; ?>
 <tr>
     %if_not_null(#R/is_reply)%
-    <td colspan="2" style="border-left: solid white %(#R/margin)%px;" >
-        <a name="%(#R/topic_id)%"></a>
-        <div><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
-        <div style="background-color:#DDD;float:left;">%(#R/topic_text_html)%</div>
-        <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
+    <td>&nbsp;<a name="%(#R/topic_id)%"></a></td>
+    <td class="cc_topic_reply" style="padding-left:%(#R/margin)%px">
+        <div class="cc_topic_reply_body  light_bg">
+            <div class="cc_topic_reply_head med_light_bg"><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
+            <div class="cc_topic_reply_text">%(#R/topic_text_html)%</div>
+            <div class="cc_topic_commands" id="commands_%(#R/topic_id)%"></div>
+        </div>
     </td>
     %else%
-    <td >
+    <td class="cc_topic_head">
         <a name="%(#R/topic_id)%"></a>
         <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
         <div><a href="%(#R/artist_page_url)%/reviews"><?= $T->String(array('str_reviews_n',$R['user_num_reviews'])); ?></a></div>
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
-    <td>
-        <div>%(#R/topic_date_format)% </div>
-        %(#R/topic_text_html)%
-        <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
+    <td class="cc_topic_body">
+        <div class="cc_topic_date dark_bg light_color" >%(#R/topic_date_format)% </div>
+        <div class="cc_topic_text med_light_bg">%(#R/topic_text_html)%</div>
+        <div class="cc_topic_commands med_light_bg" id="commands_%(#R/topic_id)%"></div>
     </td>
     %end_if%
 </tr>
