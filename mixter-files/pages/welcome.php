@@ -1,0 +1,34 @@
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+
+function _t_welcome_init($T,&$targs) {
+    
+}
+?><div >
+
+<style >
+.hs
+{
+    font-style:Courier New, courier, serif;
+    font-size: 12px;
+    vertical-align: top;
+}
+</style>
+<img  src="/cctemplates/ccmixter/downloadicon-big.gif" style="float:left;margin:12px;" />
+<img  src="/cctemplates/ccmixter/uploadicon-big.gif" style="float:right;margin:12px;" />
+<h2  style="text-align:center;font-size:14pt;">Thank you for creating an account with ccMixter</h2>
+<br  clear="all" />
+<h2 >Your Artist's Page</h2>
+<p >You can keep track of your submissions and reviews by other Mixters by 
+visiting your Artist Page:</p>
+<h2  style="font-weight:normal;font-family:arial;text-align:center;font-size:large;">
+<a  href="http://ccmixter.org/media/people/<?= $A['user_name']?>">http://ccmixter.org/media/people/<?= $A['user_name']?></a></h2>
+<p >You can also share this permanant, public address with friends.</p>
+<br  /><h2 >Changing Your Password and Other Preferences</h2>
+<p >It's <i >highly recommended</i> that you start things off by creating a new password and setting
+up other preferences on your own private <a  href="/media/people/profile">Edit Your Profile</a> page.</p>
+<br  />
+<h2 >Uploading Sampled Tracks, New Songs and Sample Libraries</h2>
+<p >Of course if you want to get straight to uploading you can jump right in by selecting the "Submit Files" options from the menu on the left.</p>
+</div>
