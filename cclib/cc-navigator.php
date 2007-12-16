@@ -165,8 +165,9 @@ class CCNavigator
                 }
 
                 $action = CCEvents::ResolveUrl( $pieces[0], true );
+                
                 if( empty($action) )
-                    $this->_signal_error( __LINE__ );
+                    CCPage::Prompt("The naviation tab could not resolve the url: $url");
                 else
                    CCEvents::PerformAction($action);
                 

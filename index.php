@@ -31,17 +31,28 @@ $_sql_time = 0;
 error_reporting($cc_error_level); 
 
 /*
-*  ccHost can't connect to the database without this file. 
-*  If not present, it probably means we haven't installed yet.
+*  ccHost can't connect to the database without this 
+*  the right version of this file. 
+*  If not present, it probably means we haven't installed
+*  or upgraded properly yet.
 */
-if( !file_exists('cc-config-db.php') )
+if( file_exists('cc-config-db.php') )
 {
     /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
+    die('<html><body>ccHost has not been properly upgraded. 
+        Please <a href="ccadmin/">
+        follow these steps</a> for a successful
+        upgrade.</body></html>');
+}
+
+if( !file_exists('cc-host-db.php') )
+{
     die('<html><body>ccHost has not been properly installed. 
         Please <a href="ccadmin/">
         follow these steps</a> for a successful
         setup.</body></html>');
 }
+
 
 /*
 *  All ccHost includes require this define to prevent direct 

@@ -343,19 +343,6 @@ EOF;
     }
 
     /**
-    * Verifies that the current user is allowed to vote in the current contest
-    *
-    * @param array $record Contest record to check
-    */ 
-    function OKToVote(&$R)
-    {
-        return( empty($_REQUEST['polls']) && CCUser::IsLoggedIn() && 
-                   $R['contest_voting_open'] && 
-                  !CCPoll::AlreadyVoted($R['contest_short_name']) );
-
-    }
-
-    /**
     * Overwrites base class to add specific publishing and other filters
     * 
     * @param mixed $where string or array representing WHERE clause

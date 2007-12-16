@@ -552,24 +552,31 @@ class CCEvents
 
         if( $url == 'homepage' )
         {
-            $A = array();
+            $url_pieces = array();
         }
         elseif( empty($url) )
         {
             preg_match_all($regex,CCUtil::StripText($_REQUEST['ccm']),$a);
+            // peel off the cfgroot
             array_shift($a[1]);
-            $A =& $a[1];
+            $url_pieces =& $a[1];
         }
         else
         {
              preg_match_all($regex,$url,$a);
-             $A =& $a[1];
+             $url_pieces =& $a[1];
         }
 
-        if( empty($A) )
+        if( empty($url_pieces) )
+        {
             $P = CCEvents::_get_home_page();
+            preg_match_all($regex,'/'.$P,$a);
+            $url_pieces =& $a[1];
+        }
         else
-            $P = implode('/',$A);
+        {
+            $P = implode('/',$url_pieces);
+        }
 
         $paths          =& CCEvents::GetUrlMap();
         $current_action =& CCEvents::_current_action();
@@ -579,11 +586,10 @@ class CCEvents
         {
              $P = $aliases[$P];
              preg_match_all($regex,$P,$a);
-             $A =& $a[1];
+             $url_pieces =& $a[1];
         }
 
         $current_action = $P;
-
         $argcount  = 0;
 
         while( $P )
@@ -591,10 +597,10 @@ class CCEvents
             if( array_key_exists($P,$paths) )
             {
                 $action = $paths[$P];
-                $shiftby = count($A) - $argcount;
+                $shiftby = count($url_pieces) - $argcount;
                 for( $i = 0; $i < $shiftby; $i++ )
-                    array_shift($A);
-                $action->args = $A;
+                    array_shift($url_pieces);
+                $action->args = $url_pieces;
                 return( $action );
             }
             $P = substr( $P, 0, strrpos($P,'/') );
@@ -605,6 +611,8 @@ class CCEvents
 
     function _get_home_page()
     {
+        global $CC_CFG_ROOT;
+
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
         return $settings['homepage'];

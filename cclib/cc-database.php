@@ -236,7 +236,7 @@ $_sql_time = CCDebug::Chronometer($_sql_t);
         if( !empty($file) )
             $CC_DB_INFO_FILE = $file;
         if( empty($CC_DB_INFO_FILE) )
-            return( 'cc-config-db.php' );
+            return( 'cc-host-db.php' );
         return( $CC_DB_INFO_FILE );
     }
 

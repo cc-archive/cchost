@@ -21,24 +21,29 @@
 
 error_reporting(E_ALL);
 
+define('IN_CC_HOST', true);
+define('IN_CC_INSTALL', true);
+
 if( empty($_SERVER['REQUEST_URI']) )
 {
     $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
 }
 
-if( empty($_GET) && file_exists('../cc-config-db.php') )
+if( file_exists('../cc-config-db.php') || !empty($_REQUEST['up_step']) )
+{
+    require_once('cc-upgrade.php');
+}
+
+if( empty($_GET) && file_exists('../cc-host-db.php') )
 {
     /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
-    die('<html><body>ccHost has detected \'../cc-config.db.php\' exists. 
+    die('<html><body>ccHost has detected \'../cc-host-db.php\' exists. 
          Please move this file out of the way before proceeding with 
          visiting your current URL/path for successful installation.
          </body></html>');
 }
 
 
-
-define('IN_CC_HOST', true);
-define('IN_CC_INSTALL', true);
 
 chdir('..');
 
@@ -47,6 +52,7 @@ if( !empty($_REQUEST['rewritehelp']) )
 
 $step = empty($_REQUEST['step']) ? '1' : $_REQUEST['step'];
 
+$install_title = 'ccHost Installation';
 include( dirname(__FILE__) . '/cc-install-head.php');
 $stepfunc = 'step_' . $step;
 $stepfunc();
@@ -402,6 +408,7 @@ function install_local_files($local_dir)
 {
     foreach( array( 'content', 
                     'contests', 
+                    $local_dir, 
                     $local_dir . '/pages',
                     $local_dir . '/skins', 
                     $local_dir . '/skins/images',
@@ -412,8 +419,15 @@ function install_local_files($local_dir)
                     ) as $locdir )
     {
         // is it right to disable warning here?
-        @mkdir( $locdir );
-        chmod( $locdir,   0777 );
+        if( !@mkdir( $locdir ) )
+        {
+            if( !file_exists($locdir) ) 
+            {
+                print("error with making: $locdir<br />");
+                exit;
+            }
+            chmod( $locdir,   0777 );
+        }
     }
 
     docopy( 'home.php', $local_dir, 'pages');
@@ -909,7 +923,7 @@ END;
     print($html);
 }
 
-function install_db_config($f,&$err)
+function install_db_config($f,&$err) 
 {
     $varname = "\$CC_DB_CONFIG";
     $text = "<?PHP";
@@ -933,7 +947,7 @@ END;
     $text .= "?>";
 
     $err = '';
-    $fname = 'cc-config-db.php';
+    $fname = 'cc-host-db.php';
     $fh = @fopen($fname,'w+');
     if( !$fh )
     {

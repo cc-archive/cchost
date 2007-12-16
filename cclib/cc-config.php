@@ -217,6 +217,8 @@ class CCConfigs extends CCTable
 
         $CC_GLOBALS = $configs->GetConfig('config', CC_GLOBAL_SCOPE);
 
+        CCConfigs::_check_version($CC_GLOBALS['cc-host-version']);
+
         // First argument in ccm is the current virtual root (aka config root)
         //
         // note: ?ccm= will be in _REQUEST even if pretty urls are turned on,
@@ -384,8 +386,17 @@ class CCConfigs extends CCTable
     {
         global $CC_GLOBALS;
 
-        if( version_compare($config_in_db, CC_HOST_VERSION) == 0 )
+        $cmp = version_compare($config_in_db, CC_HOST_VERSION);
+
+        if( $cmp == 0 )
             return;
+
+        $cmp = version_compare($config_in_db, '5.0.0');
+
+        if( $cmp < 0 )
+        {
+            die('This installation of ccHost must be upgraded to version 5.0');
+        }
 
         $this->SetValue('config', 'cc-host-version', CC_HOST_VERSION, CC_GLOBAL_SCOPE);
         $CC_GLOBALS['cc-host-version']  = CC_HOST_VERSION;

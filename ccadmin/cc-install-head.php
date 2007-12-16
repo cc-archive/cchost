@@ -21,7 +21,7 @@
 */
 ?>
 <head>
-    <title>ccHost Installation</title>
+    <title><?=$install_title?></title>
     <style>
     body, td
     {
@@ -112,4 +112,4 @@
     </style>
 </head>
 <body style="margin:3% 11% 3% 4%">
-<h1>ccHost Install</h1>
+<h1><?=$install_title?></h1>

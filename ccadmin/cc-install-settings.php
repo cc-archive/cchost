@@ -500,20 +500,6 @@ $install_settings = array(
             ),
      ),
     array( 
-        'config_type'  => 'remote_files',
-        'config_scope' => 'media',
-        'config_data'  => array (
-            'enable_streaming' => 1,
-            'ftp_server' => '',
-            'ftp_username' => '',
-            'ftp_password' => '',
-            'ftp_dir' => '',
-            'ftp_cmdurl' => '',
-            'ftp_baseurl' => '',
-            '_file' => '',
-            ),
-     ),
-    array( 
         'config_type'  => 'channels',
         'config_scope' => 'media',
         'config_data'  => array (
@@ -578,7 +564,6 @@ $install_settings = array(
             'list_file' => 'ccskins/shared/formats/upload_page_wide.php',
             'list_files' => 'ccskins/shared/formats/upload_list_wide.tpl',
             'max-listing' => 12,
-            'html_form' => 'html_form.tpl/html_form',
             'form_fields' => 'form_fields.tpl/form_fields',
             'grid_form_fields' => 'form_fields.tpl/grid_form_fields',
             'tab_pos' => 'ccskins/shared/layouts/tab_pos_header.php',

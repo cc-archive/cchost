@@ -392,16 +392,6 @@ END;
             CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display contest properties form'), CC_AG_CONTESTS );
         CCEvents::MapUrl( 'admin/contest',          array( 'CCContest', 'Admin'),        
             CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display admin contest forms'), CC_AG_CONTESTS );
-
-
-        CCEvents::MapUrl( 'contest',               array( 'CCContestDeprecated', 'Contests'),      
-            CC_DONT_CARE_LOGGED_IN, 'cclib/cc-contest-dep.inc'); // , '[contestname]', _('Display Contests home page'), CC_AG_CONTESTS );
-        CCEvents::MapUrl( 'contests',              array( 'CCContestDeprecated', 'Contests'),      
-            CC_DONT_CARE_LOGGED_IN, 'cclib/cc-contest-dep.inc'); // , '[contestname]', _('Alias for /contest'), CC_AG_CONTESTS );
-
-        //CCEvents::MapUrl( 'contest/vote',          array( 'CCContest', 'Vote'),          
-        //    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
-        //CCEvents::MapUrl( 'contest/poll/results', array( 'CCContest', 'PollResults'),     CC_DONT_CARE_LOGGED_IN );
     }
 
 }

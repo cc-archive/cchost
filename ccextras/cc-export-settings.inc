@@ -53,6 +53,17 @@ class CCSettingsExporter
             die($msg);
         }
 
+        $this->ImportRead($fname);
+
+        if( empty($no_ui) )
+        {
+            CCPage::SetTitle(_('Import Settings'));
+            CCPage::Prompt(_('Settings have been imported'));
+        }
+    }
+
+    function ImportRead($fname)
+    {
         include($fname);
 
         if( empty($cc_host_config_export) )
@@ -84,7 +95,7 @@ class CCSettingsExporter
         {
             // this should only happen in cases of 
             // transitioning between 3.2 and earlier
-            // versions.
+            // versions or upgrading to 5
 
             $configs->SaveDefaultCfgStringMap();
         }
@@ -99,12 +110,8 @@ class CCSettingsExporter
             $d[$k]['config_data'] = $configs->CfgSerialize($d[$k]['config_type'],$d[$k]['config_data']);
         }
         $configs->InsertBatch( $columns, $d );
-        if( empty($no_ui) )
-        {
-            CCPage::SetTitle(_('Import Settings'));
-            CCPage::Prompt(_('Settings have been imported'));
-        }
     }
+
 
     /**
     *
@@ -113,23 +120,32 @@ class CCSettingsExporter
     {
         global $no_ui;
 
-        $configs =& CCConfigs::GetTable();
-        $allrows = $configs->QueryRows('');
-
         if( empty($no_ui) )
             header("Content-type: application/text-editor");
+
+        $dohash    =  !empty($_REQUEST['h']);
+        $dourlmap  =  !empty($_REQUEST['u']);
+        $this->ExportPrint($dohash,$dourlmap,$dostrhash);
+        exit;
+    }
+
+    function ExportPrint($dohash,$dourlmap)
+    {
+        // dohash := UnHash the strings. If this is false then we leave the strings as they are (hashed)
+        //           and we output the hashtable.
+
+        $configs =& CCConfigs::GetTable();
+        $allrows = $configs->QueryRows('');
 
         $level = 0;
         
         print("<?\n\nif( !defined('IN_CC_HOST') ) exit; \n\n\$cc_host_config_export = array ( \n\n ");
         
-        $dohash =  empty($_REQUEST['h']);
-
         foreach( $allrows as $row )
         {
-            if( $row['config_type'] == 'strhash' && $dohash )
+            if( ($row['config_type'] == 'strhash') && $dohash ) // we need the hash 
                 continue;
-            if( $row['config_type'] == 'urlmap' && empty($_REQUEST['u']) )
+            if( ($row['config_type'] == 'urlmap') && !$dourlmap )
                 continue;
 
             print( "    array( \n" .
@@ -148,8 +164,8 @@ class CCSettingsExporter
         }
 
         print("   ); \n\n ?>" );
-        exit;
     }
+
 
     function _dump_data(&$data,$level)
     {
