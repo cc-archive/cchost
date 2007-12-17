@@ -46,9 +46,10 @@ EOF;
 }
 [/dataview]
 */?>
+
 <link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
 
-<table class="cc_topic_thread">
+<table class="cc_topic_thread" cellspacing="0" cellspacing="0" >
 %loop(records,R)%
 <? $thread_ids[] = $R['topic_id']; ?>
 <tr>

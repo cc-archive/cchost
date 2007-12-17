@@ -74,26 +74,6 @@ class CCQuery
 
     function QueryURL()
     {
-        if( !empty($_GET['fix']) )
-        {
-            // ALTER TABLE `cc_tbl_activity_log`  ENGINE = MYISAM 
-            // ALTER TABLE `cc_tbl_config` ADD INDEX ( `config_type` ) 
-            // ALTER TABLE `cc_tbl_config` ADD FULLTEXT `text_search` (`config_data`)
-            $sql[] = "ALTER TABLE `cc_tbl_user` ADD INDEX ( `user_name` ) ";
-            $sql[] = "UPDATE cc_tbl_uploads SET upload_tags = CONCAT(',',upload_tags,',')";
-            $sql[] = "UPDATE cc_tbl_uploads SET upload_name = REPLACE(upload_name,'--','')";
-            $sql[] = "ALTER TABLE `cc_tbl_uploads` ADD INDEX ( `upload_date` , `upload_tags` ( 200 ), `upload_published` , `upload_banned` ) ";
-            $sql[] = "ALTER TABLE `cc_tbl_pool_tree` ADD INDEX ( `pool_tree_child` , `pool_tree_parent` ) ";
-            $sql[] = "ALTER TABLE `cc_tbl_files` ADD INDEX ( `file_order` ) ";
-            $sql[] = "ALTER TABLE `cc_tbl_topics` ADD `topic_left` INT( 11 ) NOT NULL";
-            $sql[] = "ALTER TABLE `cc_tbl_topics` ADD `topic_right` INT( 11 ) NOT NULL";
-            $sql[] = "update `cc_tbl_topics` set topic_type = 'forum' where topic_type = '' ";
-            CCDatabase::Query($sql);
-            print('fixed');
-            exit;
-        }
-
-
         $this->ProcessUriArgs();
 
         // ------------------------------------------------------
@@ -171,7 +151,7 @@ class CCQuery
     function QuerySQL($qargs,$sqlargs)
     {
         $this->args = $qargs;
-
+        
         $this->sql_p = array_merge($this->sql_p,$sqlargs);
         $this->_gen_limit();
         $this->_gen_sort();
@@ -317,8 +297,9 @@ class CCQuery
             $this->$method();
         }
 
-        foreach( array( 'search', 'tags', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
-                         'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  ) as $arg )
+        foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
+                         'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
+                        ) as $arg )
         {
             if( isset($this->args[$arg]) )
             {
@@ -340,10 +321,14 @@ class CCQuery
             $this->where[] = $this->dataview->MakeTagFilter($this->tags,$this->args['type'],$tagfield);
         }
 
+        if( !empty($this->sql_p['where']) )
+            $this->where[] = $this->sql_p['where'];
+
         $this->sql_p['where'] = join( ' AND ', $this->where );
 
         if( empty($this->dead) )
             $this->records =& $this->_perform_sql();
+
 
         // ------------- DUMP RESULTS ---------------------
 
@@ -465,6 +450,7 @@ class CCQuery
             $this->dataviewProps = $props;
         }
         $rettype = empty($this->args['rettype']) ? ($this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS) : $this->args['rettype'];
+
         $records =&  $this->dataview->Perform( $this->dataviewProps, $this->sql_p, $rettype, $this );
         $this->sql =  $this->dataview->sql;
         return $records;
@@ -651,6 +637,30 @@ class CCQuery
     function _gen_tags()
     {
         $this->tags = preg_split('/[\s,+]+/',$this->args['tags'],-1,PREG_SPLIT_NO_EMPTY);
+    }
+
+    function _gen_thread()
+    {
+        if( $this->args['datasource'] == 'topics' )
+        {
+            $this->where[] = "topic_thread = '{$this->args['thread']}'";
+        }
+    }
+
+    function _gen_type()
+    {
+        if( $this->args['datasource'] == 'topics' )
+        {
+            $this->where[] = "topic_type = '{$this->args['type']}'";
+        }
+    }
+
+    function _gen_upload()
+    {
+        if( $this->args['datasource'] == 'topics' )
+        {
+            $this->where[] = "topic_upload = '{$this->args['upload']}'";
+        }
     }
 
     function _gen_user()

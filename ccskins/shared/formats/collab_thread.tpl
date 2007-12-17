@@ -41,18 +41,19 @@ EOF;
 [/dataview]
 */?>
 
-<table>
+<link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
+
+<table class="cc_topic_thread" cellspacing="0" cellspacing="0" >
 %loop(records,R)%
 <tr>
-    <td >
+    <td  class="cc_topic_head">
         <a name="%(#R/topic_id)%"></a>
-        <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
+        <div><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a></div>
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
-    <td>
-        <div>%(#R/topic_date_format)% </div>
-        %(#R/topic_text_html)%
-        <div class="topic_commands" id="commands_%(#R/topic_id)%"></div>
+    <td class="cc_topic_body">
+        <div class="cc_topic_date dark_bg light_color" >%(#R/topic_date_format)% </div>
+        <div class="cc_topic_text med_light_bg">%(#R/topic_text_html)%</div>
     </td>
 </tr>
 %end_loop%

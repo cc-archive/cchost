@@ -72,7 +72,7 @@ $collab_id = $C['collab_id'];
 <fieldset>
 <legend class="dark_bg light_color" >%text(str_conversation)%</legend>
     <p >%text(str_collab_this_conv)%:</p>
-    %query_sql(noexit=1&nomime=1&f=html&t=collab_thread&datasource=topics&ord=ASC,topic.topic_upload=$collab_id)%
+    <?= cc_query_fmt('noexit=1&nomime=1&f=html&t=collab_thread&datasource=topics&ord=ASC&type=collab&upload='.$collab_id); ?>
     <div class="c_commands">
         <a href="%(home-url)%collab/topic/add/%(#collab_id)%" id="commentcommand"><span >%text(str_collab_add_topic)%</span></a>
     </div>

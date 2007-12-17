@@ -342,11 +342,6 @@ EOF;
         $collab_users = $this->_get_collab_users($collab_id);
 
         list( $is_owner, $is_member ) = $this->_get_user_acccess($collab_row,$collab_users);
-
-        $topics = new CCCollabTopics();
-        $w3['topic_upload'] = $collab_id;
-        $collab_topics = $topics->QueryRows($w3);
-
         require_once('cclib/cc-license.php');
         $licenses =& CCLicenses::GetTable();
         $lics     = $licenses->GetEnabled();
@@ -357,7 +352,7 @@ EOF;
                 'collab'    => $collab_row,
                 'users'     => $collab_users,
                 'lics'      => $lics,
-                'topics'    => $collab_topics );
+                );
 
         CCPage::PageArg( 'collab', $args, 'collab_view' );
         $this->_build_bread_crumb_trail($collab_row['collab_name'] );
