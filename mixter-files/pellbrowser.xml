@@ -176,7 +176,7 @@ ccPellBrowser.prototype = {
                 [ 'acappella+spoken_word', 'Spoken Word' ],
                 [ 'acappella', 'All ' ] ],
     currOffset: 0,
-    currType: 'acappella+melody',
+    currType: 'acappella+featured',
     totalCount: 0,
     limit: 0,
     hideRemixed: 0,
