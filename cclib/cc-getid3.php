@@ -60,7 +60,7 @@ class CCGetID3
 
 
         if( CCUser::IsAdmin() )
-            $msg .= '<a href="' . ccl('admin','setup') . '">' . _('Click here to edit configuration') . '</a>'));
+            $msg .= '<a href="' . ccl('admin','setup') . '">' . _('Click here to edit configuration') . '</a>';
         else
             $msg .= _('Please ask the site administrator to correct this.');
 
