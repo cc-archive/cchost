@@ -60,7 +60,7 @@ class CCGetID3
 
 
         if( CCUser::IsAdmin() )
-            $msg .= '<a href="' . ccl('admin','setup') . '">' . sprintf(_('Click here%s to edit configuration', '</a>'));
+            $msg .= '<a href="' . ccl('admin','setup') . '">' . _('Click here to edit configuration') . '</a>'));
         else
             $msg .= _('Please ask the site administrator to correct this.');
 
@@ -73,7 +73,8 @@ class CCGetID3
     */
     function NotConfigured()
     {
-        CCPage::SystemError(_("GetID3 library integration is not properly installed:") . "<br />". _("Please ask the site administrator to configure properly."));
+        CCPage::SystemError(_("GetID3 library integration is not properly installed:") . 
+            "<br />". _("Please ask the site administrator to configure properly."));
     }
 
     /**

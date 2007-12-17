@@ -85,7 +85,7 @@ CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,         array( 'CCFileVerify', 'OnGet
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,          array( 'CCFileVerify', 'OnGetMacros'),  'cclib/cc-fileverify.php' );
 CCEvents::AddHandler(CC_EVENT_INIT_VALIDATOR,      array( 'CCFileVerify', 'Install' ),     'cclib/cc-fileverify.php' );
 
-CCEvents::AddHandler(CC_EVENT_APP_INIT,   '_verify_getid3_install', 'cclib/cc-getid3.php' );
+//CCEvents::AddHandler(CC_EVENT_APP_INIT,   '_verify_getid3_install', 'cclib/cc-getid3.php' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCGetID3' , 'OnGetConfigFields' ), 'cclib/cc-getid3.php' );
 CCEvents::AddHandler(CC_EVENT_SYSPATHS, array( 'CCGetID3' , 'OnSysPaths' ), 'cclib/cc-getid3.php' );
 
