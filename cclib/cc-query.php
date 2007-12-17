@@ -327,14 +327,20 @@ class CCQuery
             }
         }
 
-        $this->sql_p['where'] = join( ' AND ', $this->where );
-
         $this->_common_query();
     }
 
     function _common_query()
     {
         $this->_setup_dataview();
+
+        if( !empty($this->tags) )
+        {
+            $tagfield = $this->_make_field('tags');
+            $this->where[] = $this->dataview->MakeTagFilter($this->tags,$this->args['type'],$tagfield);
+        }
+
+        $this->sql_p['where'] = join( ' AND ', $this->where );
 
         if( empty($this->dead) )
             $this->records =& $this->_perform_sql();
@@ -644,14 +650,7 @@ class CCQuery
 
     function _gen_tags()
     {
-        $tags = preg_split('/[\s,+]+/',$this->args['tags'],-1,PREG_SPLIT_NO_EMPTY);
-        $twhere = array();
-        $field = $this->_make_field('tags');
-        foreach( $tags as $tag )
-            $twhere[] = "($field LIKE '%,{$tag},%')";
-        $j = $this->args['type'] == 'any' ? 'OR' : 'AND';
-
-        $this->where[] = '(' . join($j,$twhere) . ')';
+        $this->tags = preg_split('/[\s,+]+/',$this->args['tags'],-1,PREG_SPLIT_NO_EMPTY);
     }
 
     function _gen_user()

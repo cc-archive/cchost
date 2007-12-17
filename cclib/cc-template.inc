@@ -103,8 +103,11 @@ function generator_extras_editor($form,$id,$value='',$class='')
         foreach( $value as $mac )
         {
             $i = array_search($mac,$nums) + 1;
-            $text = $opts[$mac];
-            $macs .= "\n<li id=\"targetmacros_{$i}\">{$opts[$mac]}</li>";
+            if( array_key_exists($mac,$opts) )
+            {
+                $text = $opts[$mac];
+                $macs .= "\n<li id=\"targetmacros_{$i}\">{$opts[$mac]}</li>";
+            }
         }
         $hgt = '';
     }
