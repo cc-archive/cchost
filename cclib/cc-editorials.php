@@ -227,7 +227,18 @@ class CCEditorials
     */
     function OnUploadMenu(&$menu,&$record)
     {
+        $ok = false;
+
         if( $this->_is_editor() && empty($record['upload_banned']) )
+        {
+            $uploads = new CCUploads();
+            $uploads->SetTagFilter('editorial_pick');
+            $w['upload_user'] = $record['upload_user'];
+            $count = $uploads->CountRows($w);
+            $ok = !$count;
+        }
+
+        if( $ok )
         {
             $menu['editorial']['action'] = ccl( 'editorial', 'submit', $record['upload_id'] );
             $menu['editorial']['access']  |= CC_MUST_BE_LOGGED_IN;
@@ -238,7 +249,6 @@ class CCEditorials
         {
             $menu['editorial']['access'] = CC_DISABLED_MENU_ITEM;
         }
-
     }
 
     /**
