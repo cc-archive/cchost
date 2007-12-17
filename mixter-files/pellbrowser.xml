@@ -170,10 +170,10 @@ ccPellBrowser = Class.create();
 
 ccPellBrowser.prototype = {
 
-    allTypes: [ [ 'acappella+melody', 'Melody' ], 
+    allTypes: [ [ 'acappella+featured', 'Featured' ],
+                [ 'acappella+melody', 'Melody' ], 
                 [ 'acappella+rap', 'Rap' ],
                 [ 'acappella+spoken_word', 'Spoken Word' ],
-                [ 'acappella+featured', 'Featured' ],
                 [ 'acappella', 'All ' ] ],
     currOffset: 0,
     currType: 'acappella+melody',
