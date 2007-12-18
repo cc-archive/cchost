@@ -148,11 +148,9 @@ class CCQueryFormats
                 }
                 $results = array( $text, $mime );
 
-                if( !empty($paging) && ($paging = 'on') )
+                if( !empty($paging) && ($paging == 'on') )
                 {
-                    $key = preg_replace('/s?$/','',$datasource);
-                    $table = new CCTable('cc_tbl_' . $datasource, $key );        
-                    CCPage::AddPagingLinks($table, $queryObj->sql_p['where'], $limit );
+                    CCPage::AddPagingLinks($queryObj->dataview,'',$limit);
                 }
 
                 break;

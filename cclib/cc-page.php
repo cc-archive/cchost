@@ -691,7 +691,7 @@ class CCPage extends CCSkin
 
         if( empty($limit) )
         {
-            $limit    = empty($CC_GLOBALS['max-listing']) ? 12 : $CC_GLOBALS['max-listing'];
+            $limit = empty($CC_GLOBALS['max-listing']) ? 12 : $CC_GLOBALS['max-listing'];
         }
 
         if( isset($_REQUEST['offset']) && (intval($_REQUEST['offset']) > 0) )
@@ -707,8 +707,7 @@ class CCPage extends CCSkin
 
         if( empty($table_or_dataview->_key_field) )
         {
-            $sql = $table_or_dataview->sql_count;
-            $all_row_count = CCDatabase::QueryItem($sql);
+            $all_row_count = CCDatabase::QueryItem($table_or_dataview->sql_count);
         }
         else
         {

@@ -48,6 +48,7 @@ class CCForm
     var $_form_fields;
     var $_template_macro;
     var $_form_help_messages;
+    var $_enable_submit_message;
     /**#@-*/
 
     /**
@@ -105,6 +106,12 @@ class CCForm
             $this->SetHiddenField( strtolower(substr($p1,0,strlen($p1)-4)), 'classname', CCFF_HIDDEN | CCFF_NOUPDATE );
 
         CCEvents::Invoke( CC_EVENT_FORM_INIT, array( &$this ) );
+    }
+
+    function EnableUploads()
+    {
+       $this->_template_vars['form-data'] = 'multipart/form-data';
+        $this->EnableSubmitMessage(true);
     }
 
     /**
@@ -459,6 +466,11 @@ class CCForm
         $this->_form_fields[$name] = $value;
     }
 
+    function RemoveFormField( $name )
+    {
+        unset($this->_form_fields[$name]);
+    }
+
     /**
     * Set (or replace) a template field to be passed to the template generator
     *
@@ -588,6 +600,9 @@ class CCForm
     */
     function GenerateForm($hiddenonly = false)
     {
+        if( $this->_enable_submit_message )
+            $this->DoSubmitMessage();
+
         $this->_template_vars['html_form_fields']   = array();
         $this->_template_vars['html_hidden_fields'] = array();
 
@@ -1717,6 +1732,267 @@ END;
         CCPage::AddScriptBlock( 'util.php/disable_submit_button', true ); 
     }
 
+    /**
+     * Handles generation of HTML field for avatars.
+     *
+     * Generates HTML for displaying browse field and (if the image exists)
+     * a thumbnail of the image and a 'delete this' check box. It requires
+     * that the field information array contains an entry called 'upload_dir'
+     * is the local directory (relative, <b>not</b> full path) that is to
+     * receive the image upload. This method is called automatically from CCForm::GenerateForm()
+     *
+     * @param string $varname Name of the HTML field
+     * @param string $value   Image file name (optional)
+     * @param string $class   CSS class (ignored)
+     * @returns string of HTML that represents the field
+     */
+    function generator_avatar($varname,$value='',$class='')
+    {
+        $html = $this->generator_upload($varname,$value,$class);
+
+        // if we came back here on error, display the original file
+        // (if there is one)
+
+        if( $this->GetFieldError($varname) )
+        {
+            $value = empty( $_POST[$varname . '_file'] ) ? null : $_POST[$varname . '_file'];
+        }
+
+        if( !empty($value) )
+        {
+            $imagedir = $this->GetFormFieldItem($varname,'upload_dir');
+            if( is_array($value) ) // err, sorry about this
+                $value = $value['name']; 
+            $real = cca($imagedir,$value);
+            if( file_exists($real) )
+            {
+                $path     = ccd($imagedir,$value);
+                $html .= '<br /><img style="background-color:#999" src="' . $path . '" /><br /> '.
+                  '<input type="checkbox" id="' . $varname . '_delete" name="' . $varname . '_delete" />'.
+                  '<input type="hidden"   id="' . $varname . '_file"   name="' . $varname . '_file" ' .
+                      'value="' . $value . '" />'.
+                         ' ' . _('Delete this image');
+            }
+        }
+
+        return($html);
+    }
+
+    /**
+     * Validates HTML field for avatars at POST time.
+     * 
+     * Checks for such things as 'required' flags. Also checks against 
+     * an ield information array about maximum height/width requirements. Generates 
+     * HTML for displaying browse field and delete checkbox (if the image exists).
+     * This method is called automatically from CCForm::ValidateFields()
+     * 
+     * @param string $fieldname Name of the HTML field
+     * @returns boolean $bool true if field data passes validation, false on errors
+     */
+    function validator_avatar($fieldname)
+    {
+        $retval = CCUploadForm::validator_upload($fieldname);
+
+        if( $retval )
+        {
+            $filesobj = $this->GetFormValue($fieldname);
+            if( !$filesobj || ($filesobj['error'] == UPLOAD_ERR_NO_FILE) )
+                return(true);
+
+            $tmp_name   = $filesobj['tmp_name'];
+            $image_size = @getimagesize($tmp_name);
+
+            if( $image_size === false )
+            {
+                $this->SetFieldError($fieldname,_("This file does not appear to be an image."));
+                $retval = false;
+            }
+            else
+            {
+                $maxheight = intval($this->GetFormFieldItem($fieldname,'maxheight'));
+                $maxwidth  = intval($this->GetFormFieldItem($fieldname,'maxwidth'));
+                if( $maxheight && $maxwidth )
+                {
+                    // getimagesize will try to read this even if the
+                    // user typed in garbage into the file input field
+                    // is_file() returns true so we have to squash the error
+
+                    list( $width, $height ) = $image_size;
+                    if( !$width || !$height )
+                    {
+                        $this->SetFieldError($fieldname,_("The image size could not be determined."));
+                        $retval = false;
+                    }
+                    else if( ($width > $maxwidth) || ($height > $maxheight ) )
+                    {
+                        $this->SetFieldError($fieldname,_("The image must be no larger than 93px x 93px."));
+                        $retval = false;
+                    }
+                }
+            }
+        }
+
+        return( $retval );
+    }
+
+    /**
+     * Handles generation of HTML field for simple file uploads.
+     *
+     * Generates HTML for displaying browse field. This method is called automatically from CCForm::GenerateForm()
+     *
+     * @param string $varname Name of the HTML field
+     * @param string $value   (ignored)
+     * @param string $class   CSS class (optional)
+     * @returns string of HTML that represents the field
+     */
+    function generator_upload($varname,$value='',$class='')
+    {
+        return( "<input type=\"file\" id=\"$varname\" name=\"$varname\" class=\"$class\" />" );
+    }
+
+    /**
+     * Validates HTML field for file uploads at POST time.
+     *
+     * Checks for such things as 'required' flags. Also checks against 
+     * PHP system errors on upload. If successful will populate the 
+     * the 'value' field of the fields info array with the name of the
+     * target file and creates an entry called 'fileobj' that contains 
+     * a copy of the PHP $_FILES object for this field.
+     * This method is called automatically from CCForm::ValidateFields()
+     *
+     * @param string $fieldname Name of the HTML field
+     * @returns boolean $bool true if field data passes validation, false on errors
+     */
+    function validator_upload($fieldname)
+    {
+        $flags = $this->GetFormFieldItem($fieldname,'flags');
+        if( !isset($_FILES[$fieldname]) )
+        {
+            if( ($flags & CCFF_REQUIRED)!=0 )
+            {
+                $this->SetFieldError( $fieldname, _("You must specify a file.") );
+                return false;
+            }
+            return true;
+        }
+        $filesobj = $_FILES[$fieldname];
+
+        if( !($flags & CCFF_REQUIRED) && ($filesobj['error'] == UPLOAD_ERR_NO_FILE) )
+            return(true);
+
+        if( $filesobj['error'] != 0 )
+        {
+            $problems = array( UPLOAD_ERR_INI_SIZE  => 
+                                    _('The file is too big.'),
+                               UPLOAD_ERR_FORM_SIZE => 
+                                    _('The file is too big.'),
+                               UPLOAD_ERR_PARTIAL   => 
+                                    _('The file was not fully uploaded.'),
+                               UPLOAD_ERR_NO_FILE   => 
+                                    _('Missing file name'));
+
+            $this->SetFieldError($fieldname, $problems[$filesobj['error']]);
+            return(false);
+        }
+
+        $filesobj['name'] = CCUtil::StripSlash($filesobj['name']);
+        $this->SetFormValue($fieldname,$filesobj);
+        return(true);
+    }
+
+
+    /**
+     * Avatar upload is not completed until this helper is called.
+     *
+     * This method should be called (after field verification) to
+     * move the uploaded to the right location. It requires
+     * that the field information array contains an entry called 'upload_dir'
+     * is the local directory (relative, <b>not</b> full path) that is to
+     * receive the image upload. 
+     *
+     * @param string $fieldname Name of the HTML field
+     * @param string $imagedir Directory to put the uploaded image into
+     */
+    function FinalizeAvatarUpload($fieldname,$imagedir)
+    {
+        $ok = true;
+        $delfield = $fieldname . '_delete';
+        if( array_key_exists($delfield,$_POST) ) // && ($_POST[$delfield] == 'on') )
+        {
+            $oldname  = CCUtil::StripText($_POST[$fieldname . '_file']);
+            if( $oldname )
+            {
+                CCUtil::MakeSubdirs( $imagedir ); 
+                $path = realpath($imagedir) . '/' . $oldname; 
+                unlink( $path );
+
+                // we have to strip the SKIP flag to maek sure the blank
+                // record gets written to the db
+                $flags = $this->GetFormFieldItem($fieldname,'flags');
+                $this->SetFormFieldItem($fieldname,'flags', $flags &= ~CCFF_SKIPIFNULL);
+            }
+            $this->SetFormValue($fieldname,'');
+        }
+        else
+        {
+            $filesobj = $this->GetFormValue($fieldname);
+
+            if( $filesobj )
+            {
+                CCUtil::MakeSubdirs($imagedir);
+
+                $clean_name = preg_replace('/[^a-z0-9\._-]/i','_',$filesobj['name']);
+
+                if( $clean_name != $filesobj['name'] )
+                {
+                    $filesobj['name'] = $clean_name;
+                    $this->SetFormValue($fieldname,$filesobj);
+                }
+
+                $realpath = realpath( $imagedir) . '/' . $clean_name ;
+                
+                if( file_exists($realpath) )
+                    unlink($realpath);
+
+                $ok = move_uploaded_file($filesobj['tmp_name'],$realpath );
+
+                if( $ok )
+                {
+                    chmod($realpath,cc_default_file_perms());
+                }
+                else
+                {
+                    $filesobj['name'] = null;
+                }
+
+                $this->SetFormValue($fieldname,$filesobj['name']);
+            }
+        }
+        
+        return( $ok );
+    }
+
+    /**
+    * Shows or hides the message during file submits
+    *
+    * @param boolean $bool
+    */
+    function EnableSubmitMessage($bool)
+    {
+        $this->_enable_submit_message = $bool;
+    }
+
+    /**
+    * Adds the necessary javascript macros to show submit message
+    */
+    function DoSubmitMessage()
+    {
+        require_once('cclib/cc-page.php');
+        $this->AddTemplateVars(array('hide_on_submit' => true));
+        CCPage::AddScriptBlock( 'hide_upload_form', true ); 
+    }
+
+
 }
 
 /**
@@ -2055,11 +2331,6 @@ class CCGridForm extends CCForm
  */
 class CCUploadForm extends CCForm
 {
-    /**
-    * @access private
-    * @var string 
-    */
-    var $_enabled_submit_message;
 
     /**
      * Constructor
@@ -2070,276 +2341,7 @@ class CCUploadForm extends CCForm
     function CCUploadForm()
     {
         $this->CCForm();
-
-       $this->_template_vars['form-data'] = 'multipart/form-data';
-       $this->EnableSubmitMessage(true);
-    }
-
-    /**
-     * Handles generation of HTML field for avatars.
-     *
-     * Generates HTML for displaying browse field and (if the image exists)
-     * a thumbnail of the image and a 'delete this' check box. It requires
-     * that the field information array contains an entry called 'upload_dir'
-     * is the local directory (relative, <b>not</b> full path) that is to
-     * receive the image upload. This method is called automatically from CCForm::GenerateForm()
-     *
-     * @param string $varname Name of the HTML field
-     * @param string $value   Image file name (optional)
-     * @param string $class   CSS class (ignored)
-     * @returns string of HTML that represents the field
-     */
-    function generator_avatar($varname,$value='',$class='')
-    {
-        $html = $this->generator_upload($varname,$value,$class);
-
-        // if we came back here on error, display the original file
-        // (if there is one)
-
-        if( $this->GetFieldError($varname) )
-        {
-            $value = empty( $_POST[$varname . '_file'] ) ? null : $_POST[$varname . '_file'];
-        }
-
-        if( !empty($value) )
-        {
-            $imagedir = $this->GetFormFieldItem($varname,'upload_dir');
-            if( is_array($value) ) // err, sorry about this
-                $value = $value['name']; 
-            $real = cca($imagedir,$value);
-            if( file_exists($real) )
-            {
-                $path     = ccd($imagedir,$value);
-                $html .= '<br /><img style="background-color:#999" src="' . $path . '" /><br /> '.
-                  '<input type="checkbox" id="' . $varname . '_delete" name="' . $varname . '_delete" />'.
-                  '<input type="hidden"   id="' . $varname . '_file"   name="' . $varname . '_file" ' .
-                      'value="' . $value . '" />'.
-                         ' ' . _('Delete this image');
-            }
-        }
-
-        return($html);
-    }
-
-    /**
-     * Validates HTML field for avatars at POST time.
-     * 
-     * Checks for such things as 'required' flags. Also checks against 
-     * an ield information array about maximum height/width requirements. Generates 
-     * HTML for displaying browse field and delete checkbox (if the image exists).
-     * This method is called automatically from CCForm::ValidateFields()
-     * 
-     * @param string $fieldname Name of the HTML field
-     * @returns boolean $bool true if field data passes validation, false on errors
-     */
-    function validator_avatar($fieldname)
-    {
-        $retval = CCUploadForm::validator_upload($fieldname);
-
-        if( $retval )
-        {
-            $filesobj = $this->GetFormValue($fieldname);
-            if( !$filesobj || ($filesobj['error'] == UPLOAD_ERR_NO_FILE) )
-                return(true);
-
-            $tmp_name   = $filesobj['tmp_name'];
-
-            $image_size = @getimagesize($tmp_name);
-
-            if( $image_size === false )
-            {
-                $this->SetFieldError($fieldname,_("This file does not appear to be an image."));
-                $retval = false;
-            }
-            else
-            {
-                $maxheight = intval($this->GetFormFieldItem($fieldname,'maxheight'));
-                $maxwidth  = intval($this->GetFormFieldItem($fieldname,'maxwidth'));
-                if( $maxheight && $maxwidth )
-                {
-                    // getimagesize will try to read this even if the
-                    // user typed in garbage into the file input field
-                    // is_file() returns true so we have to squash the error
-
-                    list( $width, $height ) = $image_size;
-                    if( !$width || !$height )
-                    {
-                        $this->SetFieldError($fieldname,_("The image size could not be determined."));
-                        $retval = false;
-                    }
-                    else if( ($width > $maxwidth) || ($height > $maxheight ) )
-                    {
-                        $this->SetFieldError($fieldname,_("The image must be no larger than 93px x 93px."));
-                        $retval = false;
-                    }
-                }
-            }
-        }
-
-        return( $retval );
-    }
-
-    /**
-     * Handles generation of HTML field for simple file uploads.
-     *
-     * Generates HTML for displaying browse field. This method is called automatically from CCForm::GenerateForm()
-     *
-     * @param string $varname Name of the HTML field
-     * @param string $value   (ignored)
-     * @param string $class   CSS class (optional)
-     * @returns string of HTML that represents the field
-     */
-    function generator_upload($varname,$value='',$class='')
-    {
-        return( "<input type=\"file\" id=\"$varname\" name=\"$varname\" class=\"$class\" />" );
-    }
-
-    /**
-     * Validates HTML field for file uploads at POST time.
-     *
-     * Checks for such things as 'required' flags. Also checks against 
-     * PHP system errors on upload. If successful will populate the 
-     * the 'value' field of the fields info array with the name of the
-     * target file and creates an entry called 'fileobj' that contains 
-     * a copy of the PHP $_FILES object for this field.
-     * This method is called automatically from CCForm::ValidateFields()
-     *
-     * @param string $fieldname Name of the HTML field
-     * @returns boolean $bool true if field data passes validation, false on errors
-     */
-    function validator_upload($fieldname)
-    {
-        $filesobj = $_FILES[$fieldname];
-        $flags = $this->GetFormFieldItem($fieldname,'flags');
-
-        if( !($flags & CCFF_REQUIRED) && ($filesobj['error'] == UPLOAD_ERR_NO_FILE) )
-            return(true);
-
-        if( $filesobj['error'] != 0 )
-        {
-            $problems = array( UPLOAD_ERR_INI_SIZE  => 
-                                    _('The file is too big.'),
-                               UPLOAD_ERR_FORM_SIZE => 
-                                    _('The file is too big.'),
-                               UPLOAD_ERR_PARTIAL   => 
-                                    _('The file was not fully uploaded.'),
-                               UPLOAD_ERR_NO_FILE   => 
-                                    _('Missing file name'));
-
-            $this->SetFieldError($fieldname, $problems[$filesobj['error']]);
-            return(false);
-        }
-
-        $filesobj['name'] = CCUtil::StripSlash($filesobj['name']);
-        $this->SetFormValue($fieldname,$filesobj);
-        return(true);
-    }
-
-
-    /**
-     * Avatar upload is not completed until this helper is called.
-     *
-     * This method should be called (after field verification) to
-     * move the uploaded to the right location. It requires
-     * that the field information array contains an entry called 'upload_dir'
-     * is the local directory (relative, <b>not</b> full path) that is to
-     * receive the image upload. 
-     *
-     * @param string $fieldname Name of the HTML field
-     * @param string $imagedir Directory to put the uploaded image into
-     */
-    function FinalizeAvatarUpload($fieldname,$imagedir)
-    {
-        $ok = true;
-        $delfield = $fieldname . '_delete';
-        if( array_key_exists($delfield,$_POST) ) // && ($_POST[$delfield] == 'on') )
-        {
-            $oldname  = CCUtil::StripText($_POST[$fieldname . '_file']);
-            if( $oldname )
-            {
-                CCUtil::MakeSubdirs( $imagedir ); 
-                $path = realpath($imagedir) . '/' . $oldname; 
-                unlink( $path );
-
-                // we have to strip the SKIP flag to maek sure the blank
-                // record gets written to the db
-                $flags = $this->GetFormFieldItem($fieldname,'flags');
-                $this->SetFormFieldItem($fieldname,'flags', $flags &= ~CCFF_SKIPIFNULL);
-            }
-            $this->SetFormValue($fieldname,'');
-        }
-        else
-        {
-            $filesobj = $this->GetFormValue($fieldname);
-
-            if( $filesobj )
-            {
-                CCUtil::MakeSubdirs($imagedir);
-
-                $clean_name = preg_replace('/[^a-z0-9\._-]/i','_',$filesobj['name']);
-
-                if( $clean_name != $filesobj['name'] )
-                {
-                    $filesobj['name'] = $clean_name;
-                    $this->SetFormValue($fieldname,$filesobj);
-                }
-
-                $realpath = realpath( $imagedir) . '/' . $clean_name ;
-                
-                if( file_exists($realpath) )
-                    unlink($realpath);
-
-                $ok = move_uploaded_file($filesobj['tmp_name'],$realpath );
-
-                if( $ok )
-                {
-                    chmod($realpath,cc_default_file_perms());
-                }
-                else
-                {
-                    $filesobj['name'] = null;
-                }
-
-                $this->SetFormValue($fieldname,$filesobj['name']);
-            }
-        }
-        
-        return( $ok );
-    }
-
-    /**
-    *  Generate the form
-    *
-    *  Overrides base class to handle case where submit message might be disabled
-    *
-    * @param boolean $hiddenonly Only generate hidden fields
-    * @see EnableSubmitMessage
-    */
-    function GenerateForm($hiddenonly = false)
-    {
-        if( $this->_enable_submit_message )
-            $this->DoSubmitMessage();
-        return( parent::GenerateForm($hiddenonly) );
-    }
-
-    /**
-    * Shows or hides the message during file submits
-    *
-    * @param boolean $bool
-    */
-    function EnableSubmitMessage($bool)
-    {
-        $this->_enable_submit_message = $bool;
-    }
-
-    /**
-    * Adds the necessary javascript macros to show submit message
-    */
-    function DoSubmitMessage()
-    {
-        require_once('cclib/cc-page.php');
-        $this->AddTemplateVars(array('hide_on_submit' => true));
-        CCPage::AddScriptBlock( 'hide_upload_form', true ); 
+        $this->EnableUploads();
     }
 
 }

@@ -33,11 +33,19 @@ if( !defined('IN_CC_HOST') )
 */
 class CCFileProps
 {
-    function GetProps($format_dir,$type,$ret_files=true)
+    function GetProps($format_dir,$type,$ret_files=true,$tdirs='')
     {
         global $CC_GLOBALS;
         require_once('cclib/cc-template.php');
-        $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS );
+        if( empty($tdirs) )
+        {
+            $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS );
+        }
+        else
+        {
+            if( is_string($tdirs) )
+                $tdirs = array($tdirs);
+        }
         $k = array_keys($tdirs);
         $c = count($k);
         for( $i = 0; $i < $c; $i++ )
@@ -86,14 +94,15 @@ class CCFileProps
             {
                 $format_path = $dir;
             }
-
             $subdirs = array();
-            foreach( glob( $format_path . '/*.*' ) as $ffile)
+            $_files = glob( $format_path . '/*.*' ) ;
+            foreach( $_files as $ffile)
             {
                 if( is_dir($ffile) )
                     continue;
 
                 $props = $this->GetFileProps($ffile);
+
                 if( !$props || ($props['type'] != $type) )
                     continue;
 

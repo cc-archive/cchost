@@ -26,7 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define('CC_DEFAULT_SKIN_SEARCH_PATHS', 'ccskins/;ccskins/shared/;ccskins/shared/formats/' );
+define('CC_DEFAULT_SKIN_SEARCH_PATHS', 'ccskins/shared/pages/;ccskins/;ccskins/shared/;ccskins/shared/formats/;' );
 
 /**
 */
@@ -484,6 +484,7 @@ class CCSkin
         if( empty($this->search_cache[$sfile]) )
         {
             $dirs = $this->GetTemplatePath();
+            $this->_latest_search_path = $dirs; // for debugging
             $found = CCUtil::SearchPath( $file, $dirs, '', $real_path, CC_SEARCH_RECURSE_DEFAULT);
             $this->search_cache[$sfile] = $found;
             return $found;

@@ -29,7 +29,8 @@ EOF;
 
     $sql_count =<<<EOF
 SELECT COUNT(*)
-FROM cc_tbl_topics AS topic, 
+FROM cc_tbl_topics AS topic
+JOIN cc_tbl_user AS user ON (topic.topic_user = user_id) 
 %where%
 EOF;
     return array( 'sql' => $sql,

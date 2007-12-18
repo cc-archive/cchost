@@ -283,7 +283,6 @@ class CCQuery
         return array(
                     'sort' => 'date', 'ord'  => 'DESC', 
                     'limit' => $limit, 'offset' => 0,
-                    'type' => 'all',
                     'datasource' => 'uploads', 'format' => 'page',
                     'promo_tag' => 'site_promo',  'promo_gap' => 4,
                     );
@@ -318,6 +317,8 @@ class CCQuery
         if( !empty($this->tags) )
         {
             $tagfield = $this->_make_field('tags');
+            if( empty($this->args['type']) )
+                $this->args['type'] = 'all';
             $this->where[] = $this->dataview->MakeTagFilter($this->tags,$this->args['type'],$tagfield);
         }
 

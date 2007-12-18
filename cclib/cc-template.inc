@@ -293,6 +293,17 @@ class CCTemplateAdmin
         $fp = new CCFileProps(); return $fp->GetProps('','skin');
     }
 
+    function GetContentTemplates()
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('pages','content_page');
+    }
+
+    function GetContentPages()
+    {
+        global $CC_GLOBALS;
+        $fp = new CCFileProps(); return $fp->GetProps('pages','dynamic_content_page',true,$CC_GLOBALS['install-user-root']);
+    }
+
     function OnAdminExtras()
     {
         require_once('cclib/cc-page.php');
