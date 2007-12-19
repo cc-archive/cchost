@@ -42,6 +42,7 @@ END;
 [/dataview]
 */?>
 
+<link rel="stylesheet" title="Default Style" type="text/css" href="%url(css/topics.css)%" />
 <table class="cc_topic_user_table"  cellpadding="0" cellspacing="0">
   %loop(records,R)%
 <tr>

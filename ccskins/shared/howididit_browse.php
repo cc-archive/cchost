@@ -33,10 +33,6 @@ ccHowIDidIt.prototype = {
         var sort = picker.options[ picker.selectedIndex ].value;
         var ord = sort == 'date' ? 'DESC' : 'ASC';
         var url = query_url + 'size=10&f=html&t=uploads_options&tags=how_i_did_it&sort=' + sort + '&ord=' + ord;
-        /*
-        if( $('debug') )
-            $('debug').innerHTML = '<a style="color:red;font-weight:normal;" href="' + url + '">' + url + '</url>';
-        */
         new Ajax.Request( url, { method: 'get', onComplete: this._resp_uploads.bind(this) } );
     },
 

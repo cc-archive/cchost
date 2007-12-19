@@ -79,17 +79,22 @@ table.cc_topic_table {
 	margin: 0.2em;
 }
 
+table.cc_topic_user_table td.cc_topic_thumb,
 table.cc_topic_table td.cc_topic_see, 
 table.cc_topic_table td.cc_topic_thumb {
 	vertical-align: top;
 }
 
+table.cc_topic_user_table td.cc_topic_thumb {
+	padding-bottom: 12px;
+}
 
 table.cc_topic_table td.cc_topic_see {
 	text-align: right;
 	padding: 0px 1.0em 1.0em 0em;
 }
 
+table.cc_topic_user_table td.cc_topic_date,
 table.cc_topic_table td.cc_topic_date {
 	vertical-align: top;
 	text-align: right;
@@ -102,6 +107,7 @@ table.cc_topic_table td.cc_topic_thumb_head {
 	vertical-align: top;
 }
 
+table.cc_topic_user_table td.cc_topic_thumb a,
 table.cc_topic_table td.cc_topic_thumb a {
 	font-style: italic;
 	font-weight: normal;

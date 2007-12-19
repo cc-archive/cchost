@@ -185,6 +185,7 @@ $GLOBALS['str_hidi_name'] = _('Upload name');
 $GLOBALS['str_hidi_date'] = _('Upload date');
 $GLOBALS['str_hidi_author'] = _('Artist');
 
+$GLOBALS['str_hidden_list'] = _('Unpublished and Moderated Uploads');
 $GLOBALS['str_highest_rated']         = _('Highest Rated');
 $GLOBALS['str_info']                  = _('Info');
 $GLOBALS['str_lang_default'] = _('Default Language');
@@ -469,6 +470,7 @@ $GLOBALS['str_user_forum_posts']   = _('Forum posts');
 $GLOBALS['str_user_listing']       = _('People');
 $GLOBALS['str_user_notifications'] = _('Notifications');
 $GLOBALS['str_user_publicize']     = _('Publicize');
+$GLOBALS['str_user_filter_tags']     = _('Filter by tag: ');
 
 $GLOBALS['str_video']                 = _('Video');
 $GLOBALS['str_working']               = _('working...');

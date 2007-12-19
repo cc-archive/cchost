@@ -159,8 +159,6 @@ ratingsHooks.prototype = {
         var url = home_url + "rate/" + id + "/" + num;
         if( this.return_macro )
             url += q + 'rmacro=' + this.return_macro;
-        if( $('debug') )
-            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         new Ajax.Updater(d_elem,url);
 
     },
@@ -230,8 +228,6 @@ userHookup.prototype = {
 
     initialize: function(req,params) {
         var url = home_url + 'user_hook/' + req + q + params;
-        if( $('debug') )
-            $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
         new Ajax.Request( url, { method: 'get', onComplete: this.onUserHooks.bind(this) } );
     },
 

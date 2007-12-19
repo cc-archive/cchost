@@ -70,3 +70,11 @@
 .taglinks {
    padding: 5px;
 }
+
+div#user_tags_filter {
+	text-align: right;
+	margin-right: 15%;
+}
+div#user_tag_target {
+	display: inline;
+}

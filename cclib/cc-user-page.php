@@ -92,6 +92,8 @@ class CCUserPage
 
     function Uploads($username,$tagfilter='')
     {
+        CCPage::PageArg('user_tags_user',$username,'user_tags');
+        CCPage::PageArg('user_tags_tag',$tagfilter);
         $where['user_name'] = $username;
         $users =& CCUsers::GetTable();
         $q = 'title=' . $users->QueryItem('user_real_name',$where);

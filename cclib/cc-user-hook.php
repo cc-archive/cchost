@@ -106,6 +106,25 @@ EOF;
         exit;
     }
 
+    function Tags($user_name)
+    {
+        $rawtags = CCDatabase::QueryItems('SELECT DISTINCT upload_tags FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id ' .
+                                          "WHERE user_name='$user_name'");
+        $c = count($rawtags);
+        $k = array_keys($rawtags);
+        $tagarr = array();
+        for($i = 0; $i < $c; $i++ )
+        {
+            $tagarr = array_merge($tagarr,array_filter(preg_split('/[\s,]/',$rawtags[$k[$i]])));
+        }
+        $tagarr = array_unique($tagarr);
+        sort($tagarr);
+        require_once('cclib/zend/json-encoder.php');
+        $args = CCZend_Json_Encoder::encode($tagarr);
+        header('Content-type: text/javascript');
+        print($args);
+        exit;
+    }
     /**
     * Event handler for mapping urls to methods
     *
@@ -114,6 +133,7 @@ EOF;
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('user_hook','upload_list'), array('CCUserHook','UploadList'), CC_MUST_BE_LOGGED_IN, ccs(__FILE__));
+        CCEvents::MapUrl( ccp('user_hook','tags'),        array('CCUserHook','Tags'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
     }
 
 }

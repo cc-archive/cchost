@@ -75,7 +75,7 @@ function on_reorder_click()
 {
     var _file_order = Sortable.serialize('file_order');
     var url = '%(field/urls/upload_jockey_url)%' + q + _file_order;
-    ajax_debug(url);
+    //ajax_debug(url);
     new Ajax.Request( url, { method:'get', onComplete: _resp_reorder } );
 }
 
