@@ -13,7 +13,6 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCRemote', 'OnMapUrls'),  '
 
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCMagnatune',  'OnMapUrls'), 'mixter-lib/mixter-magnatune.inc' );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCMixterRedir', 'OnMapUrls'), 'mixter-lib/mixter-redir.inc' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCSampleBrowser' , 'OnMapUrls'), 'mixter-lib/mixter-sample-browser.inc' );
 CCevents::AddHandler(CC_EVENT_MAP_URLS,     array( 'MixterContest', 'OnMapUrls' ), 'mixter-lib/mixter-contest.inc' );
 
