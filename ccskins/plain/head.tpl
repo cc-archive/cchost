@@ -1,9 +1,9 @@
 <head> 
 
 %if_empty(page-caption)%
-  <title>%(site-title)% - %(site-description)%</title>
+  <title>%text(site-title)% - %text(site-description)%</title>
 %else%
-  <title>%(site-title)% - <?= $A['page-caption'] ?></title>
+  <title>%text(site-title)% - <?= $A['page-caption'] ?></title>
 %end_if%
  
 %if_not_empty(site-meta-keywords)%

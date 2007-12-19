@@ -210,7 +210,7 @@ $GLOBALS['str_list_rate_now']              = _('Rate Now');
 $GLOBALS['str_list_trackback']             = _('Trackback');
 $GLOBALS['str_list_usedby']                = _('Pieces are borrowed in:');
 $GLOBALS['str_list_uses']                  = _('Borrows pieces from:');
-$GLOBALS['str_list_web_blog']              = _('Web / Blog / MySpace');
+$GLOBALS['str_list_web_blog']              = _('Blog / MySpace');
 $GLOBALS['str_loading']               = _('loading...');
 
 $GLOBALS['str_log_in'] = _('Log In');
@@ -349,6 +349,7 @@ $GLOBALS['str_remix_close']           = _('Close search box');
 $GLOBALS['str_remix_open']            = _('Open search box');
 $GLOBALS['str_remix_lic']             = _('This remix will be licensed under a %s license');
 
+$GLOBALS['str_review']                = _('Add Comment');
 $GLOBALS['str_reviews_n']             = _('%d Comments');
 $GLOBALS['str_reviews_most_active']   = _('Most Active Contributions');
 $GLOBALS['str_reviews_most_recent']   = _('Most Recent Comments');
@@ -362,6 +363,8 @@ $GLOBALS['str_reviews_left_by']           = _('Comments left by %s');
 $GLOBALS['str_reviews_left_for']           = _('Comments left for %s');
 $GLOBALS['str_reviews_left_for_button']           = _('See comments left for %s');
 $GLOBALS['str_reviews_left_by_button']           = _('See comments left by %s');
+
+$GLOBALS['str_share']         = _('&nbsp;'); // "share" icons
 
 $GLOBALS['str_sample_pool_s']         = _('Sample Pool: %s');
 

@@ -140,7 +140,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
     %if_not_null(#R/remix_parents)%
         <div class="box" id="remix_info">
             <h2>%text(str_list_uses)%</h2>
-            <img src="%url('images/downloadicon.gif')%" />
+            <p style="position:relative;top:0px;left:0px;"><img src="%url('images/downloadicon.gif')%" /></p>
         %if_not_null(#R/parents_overflow)%
             <div style="overflow: scroll;height:300px;">
         %end_if%
@@ -155,7 +155,9 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
     %end_if%
 
     %if_not_null(#R/remix_children)%
-        <div class="box" id="remix_info"><h2>%text(str_list_usedby)%</h2><img src="%url('images/uploadicon.gif')%" />
+        <div class="box" id="remix_info">
+            <h2>%text(str_list_usedby)%</h2>
+            <p style="position:relative;top:0px;left:0px;"><img src="%url('images/uploadicon.gif')%" /></p>
         %if_not_null(#R/children_overflow)%
             <div style="overflow: scroll;height:300px;">
         %end_if%

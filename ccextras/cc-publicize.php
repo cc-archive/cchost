@@ -48,7 +48,7 @@ class CCPublicizeHV
         require_once('cclib/cc-template.php');
         $rurl = CCTemplate::Search('images/shareicons') . '/';
         $menu['share_link'] = 
-                     array(  'menu_text'  => '+', // _('Share'),
+                     array(  'menu_text'  => 'str_share',
                              'weight'     => 10,
                              'group_name' => 'share',
                              'tip'        => _('Bookmark, share, embed...'),

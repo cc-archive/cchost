@@ -1,3 +1,5 @@
+@import url('rate.css');
+
 #main_content h1 {
 	margin-top: 1.1em;
 }
@@ -32,6 +34,12 @@
 }
 
 #license_info p img {
+    position: absolute;
+    top: -30px;
+    left: -45px;
+}
+
+#remix_info p img {
     position: absolute;
     top: -30px;
     left: -45px;
@@ -131,13 +139,7 @@ div.taglinks {
    font-weight: normal;
 }
 
-.recommend_block {
-	background: url('../images/rate_it.gif') top right no-repeat;
-	padding-right: 12px;
-}
-
-.recommend_link {
-	color: #FA044F; /* well.... */
-	font-weight: bold;
-	cursor: pointer;
+span.playerlabel {
+	display: block;
+	float: left;
 }

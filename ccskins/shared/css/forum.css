@@ -1,0 +1,35 @@
+div.forum_group {
+	width: 80%;
+	margin: 0px auto;
+}
+div.forum_group_name {
+	text-transform: lowercase;
+	letter-spacing: 0.3em;
+	display: block;
+	text-align: left;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #aaaaaa;
+	width: 55%;
+}
+div.forum_group_name, div.forum {
+	padding-left: 1em;
+}
+
+div.forum {
+	margin: 0.5em;
+	height: 5.5em;
+}
+div.forum_name {
+	font-size: 1.2em;
+}
+div.forum_description {
+	font-size: 0.8em;
+}
+
+div.forum_stats {
+	position: absolute;
+	top: 3px;
+	left: 46%;
+	width: 320px;
+}

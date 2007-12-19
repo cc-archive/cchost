@@ -56,6 +56,7 @@
 
 function _t_upload_menu_init(&$T,&$A)
 {
+    print '<link href="' . $T->URL('css/upload_menu.css') . '" text="text/css" title="Default Style" rel="stylesheet" />';
     if( !empty($A['record']) )
         $R =& $A['record'];
     else
@@ -73,7 +74,7 @@ function _t_upload_menu_init(&$T,&$A)
         print "  <div class=\"box\" id=\"download_box\"><ul>\n";
 
         foreach( $menu['owner'] as $mi )
-            helper_upload_menu_item($mi);
+            helper_upload_menu_item($mi,$T);
 
         print "     </ul></div>\n";
     }
@@ -88,19 +89,19 @@ function _t_upload_menu_init(&$T,&$A)
         $mi['class'] = 'cc_player_button cc_player_hear';
         $mi['id'] = "_ep_{$R['upload_id']}";
         $mi['action'] = $R['fplay_url'];
-        helper_upload_menu_item($mi);
+        helper_upload_menu_item($mi,$T);
     }
 
     if( !empty($menu['play']) )
         foreach( $menu['play'] as $mi )
-            helper_upload_menu_item($mi);
+            helper_upload_menu_item($mi,$T);
 
     $mi = array();
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
     $mi['menu_text'] = $T->String('str_list_download');
     $mi['class'] = 'download_hook';
-    helper_upload_menu_item($mi);
+    helper_upload_menu_item($mi,$T);
 
     print "</ul></div>\n";
 
@@ -109,13 +110,13 @@ function _t_upload_menu_init(&$T,&$A)
     print "<div class=\"box\" id=\"download_box\"><ul>\n";
 
     if( !empty($menu['comment']['comments']) )
-        helper_upload_menu_item($menu['comment']['comments']);
+        helper_upload_menu_item($menu['comment']['comments'],$T);
 
     if( !empty($menu['playlist']['playlist_menu']) )
-        helper_upload_menu_item($menu['playlist']['playlist_menu']);
+        helper_upload_menu_item($menu['playlist']['playlist_menu'],$T);
 
     if( !empty($menu['share']['share_link']) )
-        helper_upload_menu_item($menu['share']['share_link']);
+        helper_upload_menu_item($menu['share']['share_link'],$T);
 
     print "</ul></div>\n";
 
@@ -124,7 +125,6 @@ function _t_upload_menu_init(&$T,&$A)
     $str = sprintf($T->String('str_list_i_saw_this'), '"' . $R['upload_name'] . '"');
 
     ?><div class="box" id="download_box">
-        <h2><?= $T->String('str_list_trackback') ?></h2>
         <a name=\"trackback\"></a> 
         <p><?= $str ?></p><ul><?
 
@@ -140,7 +140,7 @@ function _t_upload_menu_init(&$T,&$A)
     {
         $mi['menu_text'] = $saw[1];
         $mi['onclick'] = $url . $saw[0] . "');";
-        helper_upload_menu_item($mi);
+        helper_upload_menu_item($mi,$T);
     }
 
     print "</ul></div>";
@@ -152,14 +152,14 @@ function _t_upload_menu_init(&$T,&$A)
         print "  <div class=\"box\" id=\"download_box\"><ul>\n";
 
         foreach( $menu['admin'] as $mi )
-            helper_upload_menu_item($mi);
+            helper_upload_menu_item($mi,$T);
 
         print "     </ul></div>\n";
     }
 }
 
 
-function helper_upload_menu_item(&$item) 
+function helper_upload_menu_item(&$item,&$T) 
 {
     if( empty($item['parent_id']) )
         print '<li>';
@@ -185,7 +185,7 @@ function helper_upload_menu_item(&$item)
     print '>';
     
     if( !empty($item['menu_text']) )
-        print $item['menu_text'];
+        print $T->String($item['menu_text']);
     
     print "</a></li>\n";
 }

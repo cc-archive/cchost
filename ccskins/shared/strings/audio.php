@@ -90,6 +90,7 @@ $GLOBALS['str_stream']                = _('Stream');
 $GLOBALS['str_stream_now']            = _('Stream Now');
 $GLOBALS['str_stream_this_page']      = _('Stream this page');
 
+$GLOBALS['str_review']                = _('Write Review');
 $GLOBALS['str_more_reviews']          = _('More reviews');
 $GLOBALS['str_recent_reviewers']      = _('Recent Reviewers') ;
 $GLOBALS['str_recent_reviews']        = _('Recent Reviews');

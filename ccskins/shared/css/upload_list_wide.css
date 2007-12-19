@@ -1,5 +1,6 @@
 /* colorize */
 /* big div sections */
+@import url('rate.css');
 
 .upload {
     margin: 15px; /* 0px 4px 0px; */
@@ -25,7 +26,7 @@
 }
 .list_menu {
     float: left;
-    width: 150px;
+    width: 100px;
 }
 
 /* other stuff */
@@ -34,40 +35,12 @@
     float: right;
     margin-right: 12px;
 }
-.small_stars, .recommend_block {
-	float: right;
-	margin-right: 20px;
-}
-
-.rated {
-	background-image: url('../images/thumbs_up_tiny.gif');
-}
-
-.recommend_link, .rated {
-	padding-right: 20px;
-	height: 18px;
-	background-position: right top;
-	background-repeat: no-repeat;
-}
-.recommend_link, .recommend_block {
-	height: 18px;
-	margin-top: -4px;
-	padding-top: 4px;
-}
-
-.recommend_link {
-	color: #FA044F; /* well.... */
-	font-weight: bold;
-	cursor: pointer;
-	background-image: url('../images/rate_it.gif');
-	display: block;
-}
-
 .upload_date {
     color: #888;
 }
 .list_menu a {
     display: block;
+	margin-bottom: 4px;
 }
 .remix_link {
     font-weight: bold;
@@ -76,9 +49,15 @@
     font-style: italic;
 }
 #remix_info h2 {
-    font-size:12px;
-    font-weight:normal;
-    margin: 0px;
+ 	text-transform: lowercase;
+	letter-spacing: 0.3em;
+	display: block;
+	text-align: left;
+	border-bottom: 1px solid #AAA;
+	margin-top: 0px;
+	margin-bottom: 0.5em;
+	font-size: 11px;
+	font-weight: normal;
 }
 .playerdiv {
     white-space: nowrap;

@@ -82,7 +82,13 @@ a:hover {
 
 h1, h2, h3 {
 	line-height: 120%;
-	font-family: Georgia,serif;
+	font-family: arial,sans serif;
+}
+
+
+.cssbox_head h2 {
+	line-height: 100%;
+	margin: 0px;
 }
 
 h2 {
@@ -256,4 +262,10 @@ div.taglinks {
 div.taglinks a,
 a.taglink {
 	font-weight: normal;
+}
+
+div#footer {
+	position: relative;
+	top: 13px;
+	padding-top: 0.3em;
 }
