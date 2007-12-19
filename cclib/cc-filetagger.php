@@ -36,15 +36,6 @@ if( !defined('IN_CC_HOST') )
 class CCID3Tagger 
 {
 
-    function OnUploadID3Tagger( &$tagger )
-    {
-        // test the global for backward compat
-        if( isset($CC_ID3_TAGGER) )
-            $tagger = $CC_ID3_TAGGER;
-        else
-            $tagger = $this;
-    }
-
     /**
     * Method that does the ID3 tagging according to rules set by user
     *
@@ -91,13 +82,14 @@ class CCID3Tagger
 
         foreach( $tagmasks as $name => $mask )
         {
-            $value     = CCMacro::TranslateMask($patterns,$mask);
+            $value = CCMacro::TranslateMask($patterns,$mask);
             if( !empty($value) )
                 $tags[$name] = array( $value );
         }
 
         if( count($tags) > 0 )
         {
+            require_once('cclib/cc-getid3.php');
             CCDebug::QuietErrors();
             $debug = CCDebug::Enable(false);
 
@@ -238,9 +230,5 @@ class CCID3Tagger
     }
 
 }
-
-// this global is deprecated, use CC_EVENT_UPLOAD_ID3TAGGER event instead
-$CC_ID3_TAGGER = null; // new CCID3Tagger();
-
 
 ?>

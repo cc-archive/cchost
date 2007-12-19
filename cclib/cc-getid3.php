@@ -37,8 +37,10 @@ define('CCGETID3_ENABLED_ID3V1',          'getid3-v1');
 
 // todo: contact getID3() folks to aks why this function is missing
 // from their libs...
-function IsValidDottedIP($str) { return(true); }
+if( !function_exists('IsValidDottedIP') ) { function IsValidDottedIP($str) { return(true); } }
 
+
+_verify_getid3_install();
 
 /**
 * Wrapper for the GetID3 Library
@@ -129,11 +131,13 @@ class CCGetID3
     {
         static $file_formats;
 
-        // TODO: Add full support to cchost for the all getid3 formats
-        // which are identified in the getid3.php file in the method
-        // GetFileFormatArray() which I get below
-        // Also, probably need to push upstream to get the description
-        // field into the description of the filetypes
+        // DEVELOPERS
+        //
+        // Before adding anything here check out the PsuedoVerifier
+        //
+        // There's ~100% chance you can handle your file format there
+        //
+
         $getid3_obj = CCGetID3::InitID3Obj();
         $getid3_file_formats = $getid3_obj->GetFileFormatArray();
 
@@ -250,22 +254,21 @@ class CCGetID3
            'enabled' => true,
            'mediatype' => 'image',
            );
-	 // JON: I adding the following two as examples of checking getid3.php
-	 // to see if these types are even allowed...
-	 if ( isset($getid3_file_formats['svg']) )
-             $file_formats['image-xml-svg'] = array(
-                 'name'       => 'svg',
-                 'description' => 'Scalable Vector Graphic ' . _('Image'),
-                 'enabled' => true,
-                 'mediatype' => 'image',
-             );  
-	 if ( isset($getid3_file_formats['swf']) )
-             $file_formats['video-swf-swf'] =  array(
-                 'name'       => 'swf',
-                 'description' => 'Flash ' . _('Video'),
-                 'enabled' => true,
-                 'mediatype' => 'video',
-             );
+
+        if ( isset($getid3_file_formats['svg']) )
+            $file_formats['image-xml-svg'] = array(
+                'name'       => 'svg',
+                'description' => 'Scalable Vector Graphic ' . _('Image'),
+                'enabled' => true,
+                'mediatype' => 'image',
+                );  
+        if ( isset($getid3_file_formats['swf']) )
+            $file_formats['video-swf-swf'] =  array(
+                'name'       => 'swf',
+                'description' => 'Flash ' . _('Video'),
+                'enabled' => true,
+                'mediatype' => 'video',
+                );
 
          return( $file_formats );
 
@@ -311,7 +314,6 @@ class CCGetID3
         }
     }
 }
-
 
 function _verify_getid3_install()
 {

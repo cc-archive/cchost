@@ -30,8 +30,6 @@ require_once('cclib/cc-admin.php');
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-$CC_UPLOAD_VALIDATOR = null; // new CCFileVerify();
-
 /**
 * Form for configuration the file format verification module
 *
@@ -48,6 +46,7 @@ class CCAdminFileVerifyForm extends CCEditConfigForm
 
         $fields = array();
         
+        require_once('cclib/cc-getid3.php');
         $formats =& CCGetID3::GetFormats();
 
         foreach( $formats as $name => $format )
@@ -89,6 +88,7 @@ class CCFileVerify
     */
     function GetValidFileTypes(&$types)
     {
+        require_once('cclib/cc-getid3.php');
         $configs =& CCConfigs::GetTable();
         $allowed = $configs->GetConfig('format-allow');
         $formats =& CCGetID3::GetFormats();
@@ -100,14 +100,6 @@ class CCFileVerify
         }
 
         return( count($types) > 0 );
-    }
-
-    function Install()
-    {
-        global $CC_UPLOAD_VALIDATOR, $CC_GLOBALS;
-        
-        if( !empty($CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY]) )
-            $CC_UPLOAD_VALIDATOR = $this;
     }
 
     /**
@@ -140,6 +132,7 @@ class CCFileVerify
     */
     function FileValidate(&$formatinfo)
     {
+        require_once('cclib/cc-getid3.php');
         $retval = false;
         $path = $formatinfo->GetFilePath();
 
@@ -310,6 +303,7 @@ class CCFileVerify
     */
     function _ID3_to_format_info(&$id3obj,&$F, $name)
     {
+        require_once('cclib/cc-getid3.php');
         $formats =& CCGetID3::GetFormats();
         list( $mediatype ) = split('-',$name);
         $F['media-type']  = $mediatype;

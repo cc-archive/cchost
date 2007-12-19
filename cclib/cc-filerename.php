@@ -35,11 +35,6 @@ if( !defined('IN_CC_HOST') )
 */
 class CCFileRename
 {
-    function OnUploadRenamer( &$renamer )
-    {
-        $renamer = $this;
-    }
-
     /**
     * Event handler for {@link CC_EVENT_ADMIN_MENU}
     *
@@ -100,29 +95,9 @@ class CCFileRename
     * well as the value associated with the upload record.
     *
     * This method is called by checking for a global renamer module (through
-    * the UPLOAD_RENAMER event and then calling $renamer->Rename($record,$newname).
+    * the $CC_UPLOAD_RENAMER global.)
     *
     * If everything works out OK, this method will populate the $newname arg
-    *
-    * <code>
-    *        
-    * // get $file record from CCFiles table 
-    * // $relative_dir is determined by owner module (media blog, contest, etc.)
-    *
-    * $renamer = null;
-    * CCEvents::Invoke( CC_EVENT_UPLOAD_RENAMER, array(&$renamer) );
-    * if( isset($renamer) )
-    * {
-    *    if( $renamer->Rename($record,$newname )
-    *    {
-    *        $oldname = $file['file_name'];
-    *        rename( cca($relative_dir,$oldname), cca($relative_dir,$newname) );
-    *        $file['file_name'] = $newname;
-    *        $files->Update($file);
-    *    }
-    * }
-    *
-    * </code>
     *
     * @see CCUploadAPI::PostProcessNewUpload()
     * @param array $record Database record of upload

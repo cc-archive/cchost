@@ -147,49 +147,46 @@ function _t_util_print_bread_crumbs(&$T,&$A)
     $ck103= array_keys( $carr103);
     for( $ci103= 0; $ci103< $cc103; ++$ci103)
     { 
-       $A['crumb'] = $carr103[ $ck103[ $ci103 ] ];
-       
-    if ( !($ci103 == ($cc103-1)) ) {
+        $A['crumb'] = $carr103[ $ck103[ $ci103 ] ];
 
-    ?><a  href="<?= $A['crumb']['url']?>"><span ><?= $A['crumb']['text']?></span></a>  &raquo; <?
-    } // END: if
+        if ( !($ci103 == ($cc103-1)) ) 
+        {
+            ?><a  href="<?= $A['crumb']['url']?>"><span ><?= $T->String($A['crumb']['text'])?></span></a>  &raquo; <?
+        }
 
-    if ( $ci103 == ($cc103-1) ){
+        if ( $ci103 == ($cc103-1) )
+        {
+            ?><span ><?= $T->String($A['crumb']['text'])?></span><?
+        }
+    } 
 
-    ?><span ><?= $A['crumb']['text']?></span><?
-    } // END: if
-    } // END: for loop
+    if ( !empty($A['crumb_tags'])) 
+    {
+        ?><select  onchange="document.location = this.options[this.selectedIndex].value;" style="font-size:smaller;"><?
 
-    if ( !empty($A['crumb_tags'])) {
+        $carr104 = $A['crumb_tags'];
+        $cc104= count( $carr104);
+        $ck104= array_keys( $carr104);
+        for( $ci104= 0; $ci104< $cc104; ++$ci104)
+        { 
+            $A['tagopt'] = $carr104[ $ck104[ $ci104 ] ];
+            if ( !empty($A['tagopt']['selected'])) 
+            {
+                ?><option  selected="selected" value="<?= $A['tagopt']['url']?>"><?= $A['tagopt']['text']?></option><?
+            }
 
-    ?><select  onchange="document.location = this.options[this.selectedIndex].value;" style="font-size:smaller;">
-    <?
+            if ( !($A['tagopt']['selected']) ) 
+            {
+                ?><option  value="<?= $A['tagopt']['url']?>"><?= $A['tagopt']['text']?></option><?
+            }
+        } 
 
-    $carr104 = $A['crumb_tags'];
-    $cc104= count( $carr104);
-    $ck104= array_keys( $carr104);
-    for( $ci104= 0; $ci104< $cc104; ++$ci104)
-    { 
-       $A['tagopt'] = $carr104[ $ck104[ $ci104 ] ];
-       
-    if ( !empty($A['tagopt']['selected'])) {
+        ?></select><?
+    }
 
-    ?><option  selected="selected" value="<?= $A['tagopt']['url']?>"><?= $A['tagopt']['text']?></option><?
-    } // END: if
+    ?></div><?
 
-    if ( !($A['tagopt']['selected']) ) {
-
-    ?><option  value="<?= $A['tagopt']['url']?>"><?= $A['tagopt']['text']?></option><?
-    } // END: if
-    } // END: for loop
-
-    ?></select>
-    <?
-    } // END: if
-
-    ?></div>
-<?
-} // END: function show_bread_crumbs
+}
 
 
 function _t_util_print_client_menu(&$T,&$A)

@@ -27,8 +27,7 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 require_once('cclib/cc-form.php');
-
-$old_validator = null;
+require_once('cclib/cc-getid3.php');
 
 define('CC_PV_DISABLE', 'da' );
 define('CC_PV_SIG', 'sig' );
@@ -173,20 +172,6 @@ class CCPseudoVerifyAPI
     function CCPseudoVerifyAPI()
     {
         $this->_not_empty = true;
-    }
-
-    function Install()
-    {  
-        global $old_validator, $CC_UPLOAD_VALIDATOR;
-
-        if( !empty($CC_UPLOAD_VALIDATOR) && 
-                (strtolower(get_class($CC_UPLOAD_VALIDATOR)) == (strtolower(get_class($this))) ))
-        {
-            return;
-        }
-        $old_validator = $CC_UPLOAD_VALIDATOR;
-        $CC_UPLOAD_VALIDATOR = $this;
-
     }
 
     function OnMapUrls()
@@ -390,10 +375,9 @@ class CCPseudoVerifyAPI
 
    function GetValidFileTypes(&$types)
    {
-        global $old_validator;
-
-        if( isset($old_validator) )
-           $old_validator->GetValidFileTypes($types);
+        require_once('cclib/cc-fileverify.php');
+        $old_validator = new CCFileVerify();
+        $old_validator->GetValidFileTypes($types);
 
         $configs =& CCConfigs::GetTable();
         $pv = $configs->GetConfig('pseudo-verify');
@@ -402,21 +386,15 @@ class CCPseudoVerifyAPI
             if( $T['action'] != CC_PV_DISABLE )
                 $types[] = $K;
 
-       return $types;
+        return $types;
    }
 
     function FileValidate(&$formatinfo)
     {
-        global $old_validator;
-
-        $retval = false;
-
-        if( isset($old_validator) )
-        {
-            $retval = $old_validator->FileValidate($formatinfo);
-            if( $retval )
-                return true;
-        }
+        $old_validator = new CCFileVerify();
+        $retval = $old_validator->FileValidate($formatinfo);
+        if( $retval )
+            return true;
 
         $path = $formatinfo->GetFilePath();
 
@@ -451,7 +429,6 @@ class CCPseudoVerifyAPI
             if( empty($CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY]) )
             {
                 $CC_GLOBALS[CCGETID3_FILEVERIFY_ENABLED_KEY] = true;
-                _verify_getid3_install();
             }
 
             CCDebug::QuietErrors();

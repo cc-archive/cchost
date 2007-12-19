@@ -93,13 +93,20 @@ $GLOBALS['str_feature']               = _('featuring');
 $GLOBALS['str_featuring']             = _('Featuring');
 
 $GLOBALS['str_file'] = _('File');
+$GLOBALS['str_file_add_new'] = _('Add a new file');
 $GLOBALS['str_file_browse_uploads'] = _('Browse Uploads');
 $GLOBALS['str_file_cannot_be_found'] = _('The file cannot be found.');
+$GLOBALS['str_file_delete_this'] = _('Delete this file');
 $GLOBALS['str_file_deleting'] = _('Deleting File');
+$GLOBALS['str_file_drag_this'] = _('Drag here to reorder');
+$GLOBALS['str_file_edit'] = _('Properties');
 $GLOBALS['str_file_it_may_have'] = _('It may have been removed by the owner.');
+$GLOBALS['str_file_nicname_this'] = _('Change the nickname');
 $GLOBALS['str_file_replace_s'] = _("Replace '%s'");
+$GLOBALS['str_file_replace_this'] = _('Replace this file');
 $GLOBALS['str_file_save_properties'] = _('Save File Properties');
 $GLOBALS['str_file_specify'] = _('Specify the file to upload.');
+$GLOBALS['str_file_submit_order'] = _('Save this file order');
 $GLOBALS['str_file_this_upload_is'] = _('This upload is not currently available for viewing.');
 $GLOBALS['str_file_unknown'] = _('Unknown File');
 $GLOBALS['str_file_valid_types'] = _('Valid file types: %s');
@@ -107,6 +114,7 @@ $GLOBALS['str_files']                 = _('Files');
 $GLOBALS['str_files_add_to_s'] = _("Add File to '%s'");
 $GLOBALS['str_files_delete_s'] = _("Delete File '%s'");
 $GLOBALS['str_files_lofi_hires'] = _("(e.g. 'draft', 'final') Leave blank to use default");
+$GLOBALS['str_file_manage'] = _('Manage Files');
 $GLOBALS['str_files_manage'] = _('Manage Files');
 $GLOBALS['str_files_manage_the_i'] = _("Manage the 'I Borrowed From This' List");
 $GLOBALS['str_files_nickname'] = _('Nickname');
@@ -166,6 +174,8 @@ $GLOBALS['str_forum_posts_n'] = _('%d forum posts');
 $GLOBALS['str_from'] = _('from');
 $GLOBALS['str_full_search'] = _('Full search');
 $GLOBALS['str_getting_data'] = _('Getting data...');
+
+$GLOBALS['str_home'] = _('Home');
 
 $GLOBALS['str_how_i_did_it'] = _('See "How I Did It"');
 $GLOBALS['str_hidi_how_did_you'] = _('How did you put all the pieces together?');
@@ -349,6 +359,16 @@ $GLOBALS['str_remix_no_matches']      = _('Sorry, no sources match "%s"');
 $GLOBALS['str_remix_close']           = _('Close search box');
 $GLOBALS['str_remix_open']            = _('Open search box');
 $GLOBALS['str_remix_lic']             = _('This remix will be licensed under a %s license');
+$GLOBALS['str_remixes_of'] = _('Remixes of...');
+$GLOBALS['str_remix_stats_1'] = _('%s has no remixes and has not been remixed');
+$GLOBALS['str_remix_stats_2'] = _('%s has no remixes and has been remixed %s%d time%s.');
+$GLOBALS['str_remix_stats_3'] = _('%s has no remixes and has been remixed %s%d times%s.');
+$GLOBALS['str_remix_stats_4'] = _('%s has %d remix and has not been remixed');
+$GLOBALS['str_remix_stats_5'] = _('%s has %d remixes and has not been remixed');
+$GLOBALS['str_remix_stats_6'] = _('%s has one remix and has been %sremixed once%s.');
+$GLOBALS['str_remix_stats_7'] = _('%s has 1 remix and has been remixed %s%d times%s.');
+$GLOBALS['str_remix_stats_8'] = _('%s has %d remixes and has been %sremixed once%s.' );
+$GLOBALS['str_remix_stats_9'] = _('%s has %d remixes and has been remixed %s%d times%s.');
 
 $GLOBALS['str_review']                = _('Add Comment');
 $GLOBALS['str_reviews_n']             = _('%d Comments');
@@ -364,6 +384,18 @@ $GLOBALS['str_reviews_left_by']           = _('Comments left by %s');
 $GLOBALS['str_reviews_left_for']           = _('Comments left for %s');
 $GLOBALS['str_reviews_left_for_button']           = _('See comments left for %s');
 $GLOBALS['str_reviews_left_by_button']           = _('See comments left by %s');
+$GLOBALS['str_reviews']         = _('Comments');
+$GLOBALS['str_review_write']    = _('Write Review');
+$GLOBALS['str_review_stats']    = _('Review Stats');
+$GLOBALS['str_reviews_stats_1']    = _('%s has not left any reviews and has been reviewed %sonce%s');
+$GLOBALS['str_reviews_stats_2']    =  _('%s has not left any reviews and has been reviewed %s%d times%s');
+$GLOBALS['str_reviews_stats_3']    =  _('%s has left %s1 review%s and has not been reviewed');
+$GLOBALS['str_reviews_stats_4']    = _('%s has left %s1 review%s and has been %sreviewed once%s');
+$GLOBALS['str_reviews_stats_5']    = _('%s has left %s1 review%s and has been reviewed %s%d times%s');
+$GLOBALS['str_reviews_stats_6']    = _('%s has left %s%d reviews%s and has not been reviewed');
+$GLOBALS['str_reviews_stats_7']    = _('%s has left %s%d reviews%s and has been %sreviewed once%s');
+$GLOBALS['str_reviews_stats_8']    = _('%s has left %s%d reviews%s and has been reviewed %s%d times%s');
+
 
 $GLOBALS['str_share']         = _('&nbsp;'); // "share" icons
 
@@ -411,32 +443,11 @@ $GLOBALS['str_see_all_picks']         = _('See all picks');
 $GLOBALS['str_see_results']           = _('See Results');
 $GLOBALS['str_skip']                  = _('Skip to content');
 
-$GLOBALS['str_remixes_of'] = _('Remixes of...');
-$GLOBALS['str_remix_stats_1'] = _('%s has no remixes and has not been remixed');
-$GLOBALS['str_remix_stats_2'] = _('%s has no remixes and has been remixed %s%d time%s.');
-$GLOBALS['str_remix_stats_3'] = _('%s has no remixes and has been remixed %s%d times%s.');
-$GLOBALS['str_remix_stats_4'] = _('%s has %d remix and has not been remixed');
-$GLOBALS['str_remix_stats_5'] = _('%s has %d remixes and has not been remixed');
-$GLOBALS['str_remix_stats_6'] = _('%s has one remix and has been %sremixed once%s.');
-$GLOBALS['str_remix_stats_7'] = _('%s has 1 remix and has been remixed %s%d times%s.');
-$GLOBALS['str_remix_stats_8'] = _('%s has %d remixes and has been %sremixed once%s.' );
-$GLOBALS['str_remix_stats_9'] = _('%s has %d remixes and has been remixed %s%d times%s.');
-
-$GLOBALS['str_reviews']         = _('Comments');
-$GLOBALS['str_review_write']    = _('Write Review');
-$GLOBALS['str_review_stats']    = _('Review Stats');
-$GLOBALS['str_reviews_stats_1']    = _('%s has not left any reviews and has been reviewed %sonce%s');
-$GLOBALS['str_reviews_stats_2']    =  _('%s has not left any reviews and has been reviewed %s%d times%s');
-$GLOBALS['str_reviews_stats_3']    =  _('%s has left %s1 review%s and has not been reviewed');
-$GLOBALS['str_reviews_stats_4']    = _('%s has left %s1 review%s and has been %sreviewed once%s');
-$GLOBALS['str_reviews_stats_5']    = _('%s has left %s1 review%s and has been reviewed %s%d times%s');
-$GLOBALS['str_reviews_stats_6']    = _('%s has left %s%d reviews%s and has not been reviewed');
-$GLOBALS['str_reviews_stats_7']    = _('%s has left %s%d reviews%s and has been %sreviewed once%s');
-$GLOBALS['str_reviews_stats_8']    = _('%s has left %s%d reviews%s and has been reviewed %s%d times%s');
-
 $GLOBALS['str_stream']                = _('Stream');
 $GLOBALS['str_stream_now']            = _('Stream Now');
 $GLOBALS['str_stream_this_page']      = _('Stream this page');
+$GLOBALS['str_sources'] = _('Sources');
+$GLOBALS['str_sources_tip'] = _('Pick the source material for you upload');
 
 $GLOBALS['str_submit_remix']      = _('Derived Work');
 $GLOBALS['str_submit_a_remix']      = _('Submit a Derived Work');

@@ -21,7 +21,7 @@
     [file_order] => 0
 */?>
 <style>
-ul.ddex    { list-style: none; padding: 0px; }
+ul.ddex    { list-style: none; padding: 0px; width: 70%; margin:0px auto;}
 ul.ddex li { padding: 4px; margin: 5px; border: 1px solid #999}
 div.drag_handle { cursor: move;  }
 div.fn {

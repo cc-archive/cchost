@@ -523,16 +523,13 @@ EOF;
     {
         require_once('cclib/cc-formatinfo.php');
 
-        CCEvents::Invoke( CC_EVENT_INIT_VALIDATOR );
-
-        global $CC_UPLOAD_VALIDATOR;
+        $verfier = CCUploadAPI::GetVerifier();
 
         $format_info =  new CCFileFormatInfo($current_path);
         
-        if( isset($CC_UPLOAD_VALIDATOR) )
+        if( isset($verifier) )
         {
-
-            $CC_UPLOAD_VALIDATOR->FileValidate( $format_info );
+            $verifier->FileValidate( $format_info );
             $errors = $format_info->GetErrors();
             if( !empty($errors) )
             {
@@ -597,8 +594,7 @@ EOF;
 
     function _do_rename( &$upload_args, &$file_args, $current_path, $relative_dir )
     {
-        $renamer = null;
-        CCEvents::Invoke( CC_EVENT_UPLOAD_RENAMER, array( &$renamer ) );
+        $renamer = CCUploadAPI::GetRenamer();
         $newname = '';
         if( isset($renamer) )
         {
@@ -755,10 +751,7 @@ EOF;
         $file_args['download_url'] = ccd($relative_dir,$file_args['file_name']);
 
 
-        // Run the file through the ID3 tagger
-        //
-        $tagger = null;
-        CCEvents::Invoke( CC_EVENT_UPLOAD_ID3TAGGER, array( &$tagger ) );
+        $tagger = CCUploadAPI::GetTagger();
         if( isset($tagger) )
             $tagger->TagFile( $record, $file_args['local_path'] );
 
@@ -807,6 +800,78 @@ EOF;
             @unlink($current_path);
     }
 
+    function & GetRenamer()
+    {
+        global $CC_UPLOAD_RENAMER;
+
+        static $renamer;
+
+        if( !isset($renamer) )
+        {
+            if( isset($CC_UPLOAD_RENAMER) )
+            {
+                $renamer = $CC_UPLOAD_RENAMER();
+            }
+            else
+            {
+                require_once('cclib/cc-filerename.php');
+                $renamer = new CCFileRename();
+            }
+        }
+
+        return $renamer;
+    }
+
+    function & GetTagger()
+    {
+        global $CC_ID3_TAGGER;
+
+        static $tagger;
+
+        if( !isset($tagger) )
+        {
+            if( isset($CC_ID3_TAGGER) )
+            {
+                $tagger = $CC_ID3_TAGGER();
+            }
+            else
+            {
+                require_once('cclib/cc-filetagger.php');
+                $tagger = new CCID3Tagger();
+            }
+        }
+
+        return $tagger;
+    }
+
+    function & GetVerifier()
+    {
+        global $CC_UPLOAD_VALIDATOR;
+
+        static $verifier;
+
+        if( !isset($verifier) )
+        {
+            if( isset($CC_UPLOAD_VALIDATOR) )
+            {
+                $verifier = $CC_UPLOAD_VALIDATOR();
+            }
+            else
+            {
+                if( file_exists('ccextras/cc-pseudo-verify.inc') )
+                {
+                    require_once('ccextras/cc-pseudo-verify.inc');
+                    $verifier = new CCPseudoVerifyAPI();
+                }
+                else
+                {
+                    require_once('cclib/cc-fileverify.php');
+                    $verifier = new CCFileVerify();
+                }
+            }
+        }
+        return $verifier;
+    }
 }
 
 ?>

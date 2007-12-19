@@ -141,13 +141,11 @@ class CCUpload
 
     function GetUploadField(&$fields,$field_name = 'upload_file_name')
     {
-        CCEvents::Invoke(CC_EVENT_INIT_VALIDATOR);
-
-        global $CC_UPLOAD_VALIDATOR;
-
-        $types = array();
-        if( isset($CC_UPLOAD_VALIDATOR) )
-            $CC_UPLOAD_VALIDATOR->GetValidFileTypes($types);
+        require_once('cclib/cc-uploadapi.php');
+        $verifier =& CCUploadAPI::GetVerifier();
+        $types = '';
+        if( isset($verifier) )
+            $verifier->GetValidFileTypes($types);
 
         if( empty($types) )
         {

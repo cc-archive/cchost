@@ -45,13 +45,14 @@ class CCRemix
         require_once('cclib/cc-pools.php');
         require_once('cclib/cc-upload.php');
         require_once('cclib/cc-remix-forms.php');
+        require_once('cclib/cc-page.php');
 
         CCUpload::CheckFileAccess(CCUser::CurrentUserName(),$upload_id);
 
         $uploads =& CCUploads::GetTable();
         $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
         $msg = sprintf(_("Editing Remixes for '%s'"),$name);
-        require_once('cclib/cc-page.php');
+        $this->_build_bread_crumb_trail($upload_id,$msg);
         CCPage::SetTitle($msg);
 
         $form = new CCEditRemixesForm($upload_id);
@@ -66,6 +67,37 @@ class CCRemix
             $this->OnPostRemixForm($form, '', '', $upload_id);
         }
     }
+
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail($upload_id,$text)
+    {
+        $trail[] = array( 'url' => ccl(), 
+                          'text' => 'str_home');
+        
+        $trail[] = array( 'url' => ccl('people'), 
+                          'text' => 'str_people' );
+
+        $sql = 'SELECT user_real_name, upload_name, user_name FROM cc_tbl_uploads ' .
+                'JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id;
+
+        list( $user_real_name, $upload_name, $user_name ) = CCDatabase::QueryRow($sql, false);
+
+        $trail[] = array( 'url' => ccl('people',$user_name), 
+                          'text' => $user_real_name );
+
+        $trail[] = array( 'url' => ccl('files',$user_name, $upload_id), 
+                          'text' => '"' . $upload_name . '"' );
+
+        $trail[] = array( 'url' => ccl('files','edit', $user_name, $upload_id), 
+                           'text' => 'str_file_edit');
+
+        $trail[] = array( 'url' => '', 'text' => $text );
+
+        CCPage::AddBreadCrumbs($trail);
+    }
+
 
     /**
     * Function called in repsonse to submit on a remix form

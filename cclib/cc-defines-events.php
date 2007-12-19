@@ -192,24 +192,6 @@ define('CC_EVENT_UPLOAD_FILES',        'uploadfiles' );
 */
 define('CC_EVENT_UPLOAD_DONE',         'uploaddone' );
 
-/**
-* Request for data Event: Request for validators
-*
-* A somewhat hacky way to initialize the CC_UPLOAD_VALIDATOR global
-* variable. (This is not the prescribed way to handle a situation
-* like this but is this way for historical reasons.)
-*
-* After this event is triggered it is a assumed that the global
-* will have an object (if installed) that implements a CCFileVerify
-* interface.
-*
-* Call back (handler) prototype:
-*<code>
-* function OnInitValidator(  )
-*</code>
-* @see CCEvents::AddHandler()
-*/
-define('CC_EVENT_INIT_VALIDATOR',  'initvalidator' );
 
 /**
 * Notification Event: 'I Sampled This' list changed (or created) 
@@ -537,38 +519,6 @@ define('CC_EVENT_SYSPATHS',               'syspaths' );
 * @see CCEvents::AddHandler()
 */
 define('CC_EVENT_API_QUERY_FORMAT',         'apiqueryformat');
-
-
-/**
-* Request for Data Event: api/query request for file renamer
-*
-* Triggered when caller has requested the module responsible
-* for renaming uploads
-*
-*
-* Event handler prototype:
-*<code>
-*function OnUploadRenamer( &$renamer );
-*</code>
-* @see CCEvents::AddHandler()
-*/
-define('CC_EVENT_UPLOAD_RENAMER',         'getrenamer');
-
-/**
-* Request for Data Event: api/query request for ID3 file tagger
-*
-* Triggered when caller has requested the module responsible
-* for tagging files 
-*
-*
-* Event handler prototype:
-*<code>
-*function OnUploadID3Tagger( &$tagger );
-*</code>
-* @see CCEvents::AddHandler()
-*/
-define('CC_EVENT_UPLOAD_ID3TAGGER',         'getid3tagger');
-
 
 /**
 * Request for Data Event: Add feed links to header/footer

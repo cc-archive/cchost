@@ -70,9 +70,6 @@ CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsRSS',  'OnApiQu
 
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,       array( 'CCFileRename', 'OnAdminMenu'),     'cclib/cc-filerename.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,         array( 'CCFileRename', 'OnMapUrls'),       'cclib/cc-filerename.php' );
-CCEvents::AddHandler(CC_EVENT_UPLOAD_RENAMER,   array( 'CCFileRename', 'OnUploadRenamer'), 'cclib/cc-filerename.php' );
-
-CCEvents::AddHandler(CC_EVENT_UPLOAD_ID3TAGGER,   array( 'CCID3Tagger', 'OnUploadID3Tagger'), 'cclib/cc-filetagger.php' );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCPhysicalFile', 'OnMapUrls'), 'cclib/cc-files.php');
 
@@ -83,9 +80,7 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,          array( 'CCFileVerify', 'OnAdm
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,            array( 'CCFileVerify', 'OnMapUrls'),    'cclib/cc-fileverify.php'  );
 CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,         array( 'CCFileVerify', 'OnGetSysTags'), 'cclib/cc-fileverify.php' );
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,          array( 'CCFileVerify', 'OnGetMacros'),  'cclib/cc-fileverify.php' );
-CCEvents::AddHandler(CC_EVENT_INIT_VALIDATOR,      array( 'CCFileVerify', 'Install' ),     'cclib/cc-fileverify.php' );
 
-//CCEvents::AddHandler(CC_EVENT_APP_INIT,   '_verify_getid3_install', 'cclib/cc-getid3.php' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCGetID3' , 'OnGetConfigFields' ), 'cclib/cc-getid3.php' );
 CCEvents::AddHandler(CC_EVENT_SYSPATHS, array( 'CCGetID3' , 'OnSysPaths' ), 'cclib/cc-getid3.php' );
 
