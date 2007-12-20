@@ -379,7 +379,7 @@ class CCContentPage
         }
         else
         {
-            $this->_save_page($form,true);
+            $fname = $this->_save_page($form,true);
             CCUtil::SendBrowserTo( ccl('docs',$fname) );
         }
     }
@@ -450,6 +450,7 @@ EOF;
         fwrite($f,$text);
         fclose($f);
         chmod($path,cc_default_file_perms());
+        return $fname;
     }
 
     function Manage()
