@@ -117,6 +117,13 @@ class CCDataView
         if( empty($args['where']) )
             $args['where'] = '1';
 
+        $info = $func();
+
+        return $this->PerformInfo( $info, $args, $ret_type, $queryObj );
+    }
+
+    function & PerformInfo( $info, $args, $ret_type = CCDV_RET_RECORDS, $queryObj=null)
+    {
         $sqlargs = array();
         foreach( array( array( 'JOIN', 'joins' ),
                         array( 'ORDER BY', 'order' ),
@@ -130,7 +137,6 @@ class CCDataView
             $sqlargs[$f[1]] = !empty($args[$f[1]]) ? trim($f[0] . ' ' . $args[$f[1]]) : '';
         }
 
-        $info = $func();
 
         $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%search%/', '/%where%/'  ),
                                     $sqlargs, $info['sql'] );
@@ -140,11 +146,11 @@ class CCDataView
                                     $sqlargs, $info['sql_count'] );
 
 // ------- DEBUG PREVIEW ------------
-if( $dataview['dataview'] == 'xx' )
+if( 0 )
 {
     $x['sqlargs'] = $sqlargs;
     $x[] = $this->sql;
-    $x[] = $dataview;
+    $x[] = empty($dataview) ? '*no dv*' : $dataview;
     $x[] = $queryObj;
     CCDebug::PrintVar($x);
 } // ---------------------------------

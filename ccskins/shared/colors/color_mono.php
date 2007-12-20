@@ -15,12 +15,15 @@
 
 .med_dark_bg { background-color: #555555; }
 .med_dark_color { color: #555555; }
+.med_dark_border { color: #555555; }
 
 .med_bg { background-color: #888888; }
 .med_color { color: #888888; }
+.med_border { color: #888888; }
 
 .med_light_bg { background-color: #DDDDDD; }
 .med_light_color { color: #DDDDDD; }
+.med_light_border { color: #DDDDDD; }
 
 .selected_area { background-color: #000000; color: #FFFFFF; }
 

@@ -77,6 +77,7 @@ EOF;
 
     function Loops()
     {
+        require_once('cclib/cc-page.php');
         $this->check_for_loop_artists();
 
         $args['loop_preview_url']  = ccc('magnatune','view','contest','sources') . '#loops';
@@ -207,6 +208,8 @@ EOF;
 
     function _show_preview(&$args,$macro)
     {
+        require_once('cclib/cc-page.php');
+        require_once('cclib/cc-template.php');
         global $CC_GLOBALS;
         $file = CCPage::GetViewFile('magnatune_preview.php');
         $template = new CCSkinMacro( $file . '/' . $macro);

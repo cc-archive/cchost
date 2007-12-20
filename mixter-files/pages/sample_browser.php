@@ -145,7 +145,7 @@ function _t_sample_browser_browser_page($T,&$A) {
 
   #sample_browser {
     float: left;
-    width: 450px;
+    width: 550px;
     border: 2px solid #999;
     height: 480px;
     background-color: #EEE;
@@ -326,7 +326,8 @@ function _t_sample_browser_browser_page($T,&$A) {
   }
 
   td.nicname {
-    width: 40px;
+    /* width: 40px; */
+    white-space: nowrap;
     font-size: 10px;
   }
 
@@ -503,7 +504,7 @@ for( $ci105= 0; $ci105< $cc105; ++$ci105)
 { 
    $A['R'] = $carr105[ $ck105[ $ci105 ] ];
    
-?><tr  class="row_<?= $A['R']['odd']?>">
+?><tr  class="row_<?= $ci105 & 1 ? 'odd' : 'even' ?>">
 <td  class="filelink"><a  href="<?= $A['R']['file_page_url']?>" class="cc_file_link"><span ><?= CC_strchop($A['R']['upload_name'],26);?></span></a></td>
 <td  class="bpm">
 <?
@@ -524,19 +525,21 @@ $cc106= count( $carr106);
 $ck106= array_keys( $carr106);
 for( $ci106= 0; $ci106< $cc106; ++$ci106)
 { 
-   $A['F'] = $carr106[ $ck106[ $ci106 ] ];
+   $F =& $carr106[ $ck106[ $ci106 ] ];
    
 ?><tr >
-<td  class="dbutton"><a  class="down_button" href="<?= $A['F']['download_url']?>">&nbsp;</a></td>
+<td  class="dbutton"><a  class="down_button" href="<?= $F['download_url']?>">&nbsp;</a></td>
 <td  class="sbutton"><?
 
-if ( !empty($A['F']['is_audio'])) {
+if ( !empty($F['file_format_info']['media-type']) && 
+                                   ( $F['file_format_info']['media-type'] == 'audio' ) )
+{
 
-?><a  href="/media/samples/stream/<?= $A['F']['file_id']?>.m3u" class="hear_button">&nbsp; </a><?
+?><a  href="/samples/stream/<?= $F['file_id']?>.m3u" class="hear_button">&nbsp; </a><?
 } // END: if
 
 ?></td>
-<td  class="nicname"><?= $A['F']['file_nicname']?> <span ><?= $A['F']['file_filesize']?></span></td>
+<td  class="nicname"><?= $F['file_nicname']?> <span ><?= $F['file_filesize']?></span></td>
 </tr><?
 } // END: for loop
 

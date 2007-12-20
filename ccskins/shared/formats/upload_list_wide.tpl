@@ -110,7 +110,7 @@ EOF;
 
     </div><!-- upload info -->
 
-    <div class="list_menu">
+    <div class="list_menu light_bg med_border">
         %if_not_null(#R/stream_url)%
         <div><a href="%(#R/stream_url)%" type="audio/x-mpegurl">%text(str_stream)%</a></div>
         %end_if%
