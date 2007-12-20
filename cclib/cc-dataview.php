@@ -119,7 +119,9 @@ class CCDataView
 
         $info = $func();
 
-        return $this->PerformInfo( $info, $args, $ret_type, $queryObj );
+        $ret =& $this->PerformInfo( $info, $args, $ret_type, $queryObj );
+
+        return $ret;
     }
 
     function & PerformInfo( $info, $args, $ret_type = CCDV_RET_RECORDS, $queryObj=null)
