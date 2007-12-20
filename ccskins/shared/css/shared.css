@@ -41,3 +41,10 @@
 	margin: 0.3em 0px 1.4em 0px;
 }
 
+a.cc_external_link, a.cc_external_link:link, a.cc_external_link:visited {
+	font-weight: normal;
+}
+
+a.cc_external_link span {
+	text-decoration: underline;
+}

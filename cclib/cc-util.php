@@ -172,7 +172,7 @@ class CCUtil
 
         $regex = '#http://(.*)(\s|$|<)#Ue';
         $repl  = "'<a class=\"cc_external_link\" target=\"_blank\" " .
-                 "href=\"http://$1\">' . (strlen('$1') > 25 ? substr('$1',0,25) . '...' : '$1') . '</a> $2'";
+                 "href=\"http://$1\"><span>' . (strlen('$1') > 25 ? substr('$1',0,25) . '...' : '$1') . '</span></a> $2'";
         $text = preg_replace($regex,$repl,$text);
 
         return($text);

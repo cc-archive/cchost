@@ -76,24 +76,22 @@ class CCPageAdmin
         $chop   = isset($chop) ? $chop : 25;
         CCPage::PageArg('chop',$chop);
         CCPage::PageArg('dochop',$dochop);
-        CCPage::PageArg( 'records', $records, $template );
 
         // this needs to be done through CCDataview:
 
-        if( !empty($records) && (count($records) > 1) && (empty($paging) || ($paging == 'on') || ($paging='default')) )
+        if( !empty($records) && (count($records) > 1) && (empty($paging) || ($paging == 'on') || ($paging=='default')) )
         {
-            CCPage::AddPagingLinks($queryObj->dataview);
+            CCPage::AddPagingLinks($queryObj->dataview,empty($limit)?'':$limit);
         }
+
+        if( empty($template) )
+            $template = 'list_files';
+        CCPage::PageArg( 'records', $records, $template );
 
         if( !isset( $qstring ) )
             $qstring = $queryObj->SerializeArgs($args);
 
         CCPage::PageArg('qstring',$qstring );        
-
-        if( empty($template) )
-            $template = 'list_files';
-
-        CCPage::PageArg( 'records', $records, $template);
 
         /* 
 
@@ -184,7 +182,9 @@ class CCPage extends CCSkin
     function CCPage()
     {
         global $CC_GLOBALS;
+        static $c = 0;
 
+        $this->instance = ++$c;
         $this->CCSkin( $CC_GLOBALS['skin-file'] );
         $this->vars['auto_execute'][] = 'page.tpl';
 

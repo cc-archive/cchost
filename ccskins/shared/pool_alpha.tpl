@@ -1,0 +1,48 @@
+
+<div id="pool_filter">%text(str_pool_filter)%: <div id="pool_target"></div></div>
+
+<script>
+ccPoolAlpha = Class.create();
+
+ccPoolAlpha.prototype = {
+
+    thisPool: null,
+    selTag: null,
+    baseUrl: null,
+
+    initialize: function(pool_id,sel_tag) {
+        this.thisPool = pool_id;
+        this.selTag = sel_tag;
+        var url = home_url + 'pools/pool_hook/alpha/' + pool_id;
+        var me = this;
+        new Ajax.Request( url, { method: 'get', onComplete: me.onPoolAlpha.bind(me) } );
+    },
+
+    onPoolAlpha: function(resp) {
+        try {
+            var vals = eval(resp.responseText);
+            var html = '<select id="pool_alphas"><option value="">' + str_all + '</option>';
+            var me = this;
+            vals.each( function(c) {
+                html += '<option value="' + c + '"';
+                if( me.selTag == c )
+                    html += ' selected="selected" ';
+                html += '>' + c + '</option>';
+            });
+            html += '</select>';
+            $('pool_target').innerHTML = html;
+            Event.observe('pool_alphas','change',me.onPoolAlphaChange.bindAsEventListener(me));
+            this.baseUrl = vals.base_url;
+        } catch( e ) {
+            alert(e);
+        }
+    },
+
+    onPoolAlphaChange: function() {
+        var sel = $('pool_alphas');
+        document.location = home_url + 'pools/pool/' + this.thisPool + '/' + sel.options[sel.selectedIndex].value;
+    }
+}
+
+new ccPoolAlpha('%(pool_id)%','%(pool_alpha_char)%');
+</script>

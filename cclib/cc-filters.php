@@ -137,28 +137,36 @@ function cc_filter_std(&$records,&$dataview_info)
 
                 case CC_EVENT_FILTER_REMIXES_FULL:
                 {
-                    require_once('cclib/cc-query.php');
-                    $query = new CCQuery();
-                    $q = 'dataview=links_by_chop&f=php&&sources=' . $R['upload_id'];
-                    $args = $query->ProcessAdminArgs($q);
-                    list( $R['remix_parents'] ) = $query->Query($args);
-                    $q = 'dataview=links_by_pool&f=php&sort=&datasource=pools&sources=' . $R['upload_id'];
-                    $query = new CCQuery();
-                    $args = $query->ProcessAdminArgs($q);
-                    list( $pool_parents ) = $query->Query($args);
-                    if( $pool_parents )
-                        if( empty($R['remix_parents']) )
-                            $R['remix_parents'] = $pool_parents;
-                        else
-                            $R['remix_parents'] = array_merge( $R['remix_parents'],  $pool_parents );
-                    if( !empty($R['remix_parents']) && (count($R['remix_parents']) > 14) )
-                        $R['parents_overflow'] = true;
-                    $query = new CCQuery();
-                    $q = 'dataview=links_by_chop&f=php&&remixes=' . $R['upload_id'];
-                    $args = $query->ProcessAdminArgs($q);
-                    list( $R['remix_children'] ) = $query->Query($args);
-                    if( !empty($R['remix_children']) && (count($R['remix_children']) > 14) )
-                        $R['children_overflow'] = true;
+                    if( $dataview_info['queryObj']->args['datasource'] == 'pool_items' )
+                    {
+                        $query = new CCQuery();
+                        $args = $query->ProcessAdminArgs('datasource=pool_items&dataview=links_by&f=php&remixes=' . $R['pool_item_id']);
+                        list( $R['remix_children'] ) = $query->Query($args);
+                        if( !empty($R['remix_children']) && (count($R['remix_children']) > 14) )
+                            $R['children_overflow'] = true;
+                    }
+                    else
+                    {
+                        require_once('cclib/cc-query.php');
+                        $query = new CCQuery();
+                        $args = $query->ProcessAdminArgs('dataview=links_by_chop&f=php&sources=' . $R['upload_id']);
+                        list( $R['remix_parents'] ) = $query->Query($args);
+                        $query = new CCQuery();
+                        $args = $query->ProcessAdminArgs('dataview=links_by_pool&f=php&sort=&datasource=pools&sources=' . $R['upload_id']);
+                        list( $pool_parents ) = $query->Query($args);
+                        if( $pool_parents )
+                            if( empty($R['remix_parents']) )
+                                $R['remix_parents'] = $pool_parents;
+                            else
+                                $R['remix_parents'] = array_merge( $R['remix_parents'],  $pool_parents );
+                        if( !empty($R['remix_parents']) && (count($R['remix_parents']) > 14) )
+                            $R['parents_overflow'] = true;
+                        $query = new CCQuery();
+                        $args = $query->ProcessAdminArgs('dataview=links_by_chop&f=php&remixes=' . $R['upload_id']);
+                        list( $R['remix_children'] ) = $query->Query($args);
+                        if( !empty($R['remix_children']) && (count($R['remix_children']) > 14) )
+                            $R['children_overflow'] = true;
+                    }
                     break;
                 }
 
@@ -198,7 +206,7 @@ function cc_filter_std(&$records,&$dataview_info)
                     if( !empty($R['upload_num_remixes']) )
                     {
                         $query = new CCQuery();
-                        $q = 'dataview=links_by_chop&f=php&&remixes=' . $R['upload_id'];
+                        $q = 'dataview=links_by_chop&f=php&remixes=' . $R['upload_id'];
                         $q = 'dataview=links_by_chop&f=php&limit=4&remixes=' . $R['upload_id'];
                         $args = $query->ProcessAdminArgs($q);
                         list( $R['remix_children'] ) = $query->Query($args);

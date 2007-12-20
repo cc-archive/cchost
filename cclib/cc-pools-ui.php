@@ -39,64 +39,74 @@ class CCPoolUI
     {
         $pool_id = CCUtil::StripText($pool_id);
         if( empty($pool_id) )
-            return;
+            return $this->ShowPools();
 
         $pools =& CCPools::GetTable();
-        $pool = $pools->QueryKeyRow($pool_id);
-        if( empty( $pool ) )
+        if( !$pools->KeyExists($pool_id) )
             return;
 
-        $pool_items = new CCPoolItems();
+        require_once('cclib/cc-page.php');
+        $pool = CCDatabase::QueryRow('SELECT pool_description,pool_name,pool_id,pool_site_url FROM cc_tbl_pools WHERE pool_id='.$pool_id);
+        CCPage::SetTitle( 'str_pool_name_s', $pool['pool_name'] );
+        CCPage::PageArg( 'pool_info', $pool );
+        $this->_build_bread_crumb_trail($pool['pool_id'],$pool['pool_name']);
+
+        CCPage::PageArg('pool_id',$pool_id,'pool_alpha');
+        CCPage::PageArg('pool_alpha_char',$alpha);
+
         $where =<<<END
             (pool_item_pool = $pool_id) AND 
             ((pool_item_num_remixes > 0) OR (pool_item_num_sources > 0))
 END;
         if( !empty($alpha) )
             $where .= " AND (pool_item_artist LIKE '{$alpha}%')";
-        $pool_items->SetSort('pool_item_artist','ASC');
-        CCPage::AddPagingLinks($pool_items,$where);
-        $items = $pool_items->QueryRows($where);
-        $count = count($items);
-        $remixpool =&  CCLocalPoolRemixes::GetTable();
-        $sourcepool =& CCLocalPoolSources::GetTable();
-        for( $i = 0; $i < $count; $i++ )
+
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=pool_listing&datasource=pool_items&sort=user&ord=ASC');
+        $sqlArgs['where'] = $where;
+        $query->QuerySQL($args,$sqlArgs);
+
+    }
+    
+    function ShowPools()
+    {
+        require_once('cclib/cc-page.php');
+        $this->_build_bread_crumb_trail();
+        CCPage::SetTitle('str_pools_link');
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=pools_list&datasource=pools&sort=');
+        $query->Query($args);
+    }
+
+    function PoolHook($cmd,$pool_id)
+    {
+        switch($cmd)
         {
-            $this->_prep_for_display($items[$i], $remixpool,$sourcepool,true);
-        }
-
-        $sql =<<<END
-            SELECT DISTINCT LOWER(SUBSTRING(`pool_item_artist`,1,1)) c
-               FROM `cc_tbl_pool_item` WHERE                  
-            (pool_item_pool = $pool_id) AND 
-            ((pool_item_num_remixes > 0) OR (pool_item_num_sources > 0))
-            ORDER BY c
-
+            case 'alpha':
+            {
+                $sql =<<<END
+                    SELECT DISTINCT LOWER(SUBSTRING(`pool_item_artist`,1,1)) c
+                       FROM `cc_tbl_pool_item` WHERE                  
+                    (pool_item_pool = $pool_id) AND 
+                    ((pool_item_num_remixes > 0) OR (pool_item_num_sources > 0))
+                    ORDER BY c
 END;
-
-        $burl = ccl('pools','pool',$pool_id) . '/';
-        $chars = CCDatabase::QueryItems($sql);
-        $len = count($chars);
-        $alinks = array();
-        for( $i = 0; $i < $len; $i++ )
-        {
-            $c = $chars[$i];
-            if( $c == $alpha )
-            {
-                $alinks[] = array( 
-                                'url' => '', 
-                                'text' => "<b>$c</b>" );
-            }
-            else
-            {
-                $alinks[] = array( 
-                                'url' => $burl . $c, 
-                                'text' => $c );
+                $args= CCDatabase::QueryItems($sql);
+                break;
             }
         }
-        CCPage::SetTitle( 'str_sample_pool_s', $pool['pool_name'] );
-        CCPage::PageArg( 'pool_info', $pool, 'pool_info_head' );
-        CCPage::PageArg( 'pool_items', $items, 'pool_item_listing' );
-        CCPage::PageArg( 'pool_links', $alinks );
+
+        if( !empty($args) )
+        {
+            require_once('cclib/zend/json-encoder.php');
+            $text = CCZend_Json_Encoder::encode($args);
+            header( "X-JSON: $text");
+            header( 'Content-type: text/plain');
+            print $text;
+        }
+        exit;
     }
 
     function Item($pool_item_id='')
@@ -105,27 +115,16 @@ END;
         if( empty($id) )
             return;
 
-        require_once('cclib/cc-page.php');
-        require_once('cclib/cc-pools.php');
-        $pool_items =& CCPoolItems::GetTable();
-        $where['pool_item_id'] = $id;
-        $item       = $pool_items->QueryRow($where);
-        if( empty($item) )
-        {
-            CCUtil::Send404(true);
-            return;
-        }
+        list( $pool_id, $pool_name, $pool_item_name ) = 
+            CCDatabase::QueryRow('SELECT pool_id, pool_name, pool_item_name FROM cc_tbl_pool_item JOIN cc_tbl_pools '.
+                                   'ON pool_item_pool=pool_id WHERE pool_item_id='.$pool_item_id,false);
+        $this->_build_bread_crumb_trail($pool_id,$pool_name,$pool_item_id,$pool_item_name);
 
-        $item['works_page'] = true;
-        CCPage::PageArg( 'dochop', false );
-        $remixpool  =& CCLocalPoolRemixes::GetTable();
-        $sourcepool =& CCLocalPoolSources::GetTable();
-        $this->_prep_for_display($item, $remixpool,$sourcepool);
-        $pools =& CCPools::GetTable();
-        $pool = $pools->QueryKeyRow($item['pool_item_pool']);
-        CCPage::PageArg( 'pool_info', $pool, 'pool_info_head' );
-        CCPage::PageArg( 'pool_items', array( $item ), 'pool_item_listing' );
-        CCPage::SetTitle( _('Sample Pool Item: ') . $item['pool_item_name'] );
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=pool_item&datasource=pool_items&ids='.$pool_item_id);
+        $query->Query($args);
+        CCPage::SetTitle( 'str_pool_item_page' );
     }
 
     function _prep_for_display(&$item, &$remixpool,&$sourcepool)
@@ -349,6 +348,34 @@ END;
         $tree->DeleteWhere($where);
     }
 
+    function _build_bread_crumb_trail($pool_id='',$pool_name='',$pool_item='',$pool_item_name='')
+    {
+        $trail = array();
+        $trail[] = array( 'url' => ccl(), 'text' => 'str_home' );
+        if( $pool_id )
+        {
+            $trail[] = array( 'url' => ccl('pools'), 'text' => 'str_pools_link' );
+            if( $pool_item )
+            {
+                $trail[] = array( 'url' => ccl('pools','pool',$pool_id), 'text' => $pool_name );
+                $trail[] = array( 'url' => '', 'text' => $pool_item_name );
+            }
+            else
+            {
+                $trail[] = array( 'url' => '', 'text' => $pool_name );
+            }
+
+        }
+        else
+        {
+            $trail[] = array( 'url' => '', 'text' => 'str_pools_link' );
+        }
+
+        require_once('cclib/cc-page.php');
+        CCPage::AddBreadCrumbs($trail);
+    }
+
+
 
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
@@ -357,6 +384,11 @@ END;
     */
     function OnMapUrls()
     {
+        CCEvents::MapUrl( ccp( 'pools', 'pool_hook'),     array( 'CCPoolUI', 'PoolHook'),
+            CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid},{cmd}'); // ajax callbck
+        CCEvents::MapUrl( ccp( 'pools'),     array( 'CCPoolUI', 'Pool'),
+            CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid}', 
+            _('List sample pools'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp( 'pools', 'pool'),     array( 'CCPoolUI', 'Pool'),    
             CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid}', 
             _('Show sample pool'), CC_AG_SAMPLE_POOL );

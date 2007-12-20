@@ -570,7 +570,15 @@ class CCQuery
 
     function _gen_remixes()
     {
-        $this->_heritage_helper('remixes','tree_child','cc_tbl_tree','tree_parent','upload_id');
+        if( $this->args['datasource'] == 'pool_items' )
+        {
+            //$this->sql_p['joins'] = 'cc_tbl_pool_tree ON pool_tree_child = upload_id';
+            $this->_heritage_helper('remixes','pool_tree_child','cc_tbl_pool_tree','pool_tree_pool_parent','upload_id');
+        }
+        else
+        {
+            $this->_heritage_helper('remixes','tree_child','cc_tbl_tree','tree_parent','upload_id');
+        }
     }
 
     function _gen_remixesof()
@@ -838,6 +846,19 @@ class CCQuery
 
     function GetValidSortFields()
     {
+        // this method is a little shaky...
+
+        if( $this->args['datasource'] == 'pool_items' )
+        {
+            return array( 'name' => array( _('Pool item name'), 'pool_item_name' ),
+                          'user' => array( _('Pool item artist'), 'pool_item_artist' ),
+                          'date' => array( '', -1 )
+                        );
+        }
+
+        if( $this->args['datasource'] != 'uploads' )
+            return '';
+
         return array(
             'name'               => array( _('Upload name'), 'upload_name'),
             'lic'                => array( _('Upload license'), 'upload_license'),
@@ -885,7 +906,7 @@ class CCQuery
         if( empty($fields) )
             return;
 
-        $valid = $this->args['datasource'] == 'uploads' ? $this->GetValidSortFields() : '';
+        $valid = $this->GetValidSortFields();
         $out = array();
 
         $fields = preg_split('/[\s\+,]+/',$fields);
@@ -904,11 +925,13 @@ class CCQuery
             }
             else
             {
-                $out[] = $valid[$F][1];
+                if( $valid[$F][1] !== -1 )
+                    $out[] = $valid[$F][1];
             }
         }
 
-        $this->validated_sort = '( ' . join(',',$out) . ') ';
+        if( !empty($out) )
+            $this->validated_sort = '( ' . join(',',$out) . ') ';
     }
 
     function _get_get_offset()

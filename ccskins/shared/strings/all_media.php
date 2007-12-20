@@ -399,7 +399,16 @@ $GLOBALS['str_reviews_stats_8']    = _('%s has left %s%d reviews%s and has been 
 
 $GLOBALS['str_share']         = _('&nbsp;'); // "share" icons
 
-$GLOBALS['str_sample_pool_s']         = _('Sample Pool: %s');
+$GLOBALS['str_pool_name_s']         = _('Sample Pool: %s');
+$GLOBALS['str_pool_item_page'] = _('Sample Pool Item');
+$GLOBALS['str_pools_link']         = _('Sample Pools');
+$GLOBALS['str_pool_info_head'] = _('Sample Pool Info');
+$GLOBALS['str_pool_from'] = _('From sample pool');
+$GLOBALS['str_pool_filter'] = _('Sample pool artists');
+$GLOBALS['str_pool_details_link'] = _('See remixes...');
+
+$GLOBALS['str_ex_link'] = _('Link');
+$GLOBALS['str_external_link'] = _('External link');
 
 $GLOBALS['str_samples_from']          = _('Samples from');
 $GLOBALS['str_samples_from_here']     = _('Samples from here are used in');

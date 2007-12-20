@@ -224,7 +224,7 @@ function _t_util_print_client_menu(&$T,&$A)
 
 function _t_util_prev_next_links(&$T,&$A) 
 {
-    print '<table  id="cc_prev_next_links"><tr >';
+    print '<table id="cc_prev_next_links"><tr >';
 
     if ( !empty($A['prev_link'])) 
         print "<td ><a href=\"{$A['prev_link']}\"><span >{$A['back_text']}</span></a></td>\n";
