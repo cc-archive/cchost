@@ -124,8 +124,8 @@ class CCRemix
 
         if( ($is_update || $have_sources) && $form->ValidateFields() )
         {
-            $remixes =& CCRemixes::GetTable();
-            $pool_tree =& CCPoolRemixes::GetTable();
+            $remixes = new CCTable('cc_tbl_tree','nonesense');
+            $pool_tree = new CCTable('cc_tbl_pool_tree','nonesene');
 
             if( $is_update )
             {
@@ -316,7 +316,7 @@ EOF;
     {
         $id = $row['upload_id'];
         $where = "(tree_parent = $id) OR (tree_child = $id)";
-        $tree = new CCRemixTree('tree_parent','tree_child');
+        $tree = new CCTable('cc_tbl_tree','nonesense');
         $tree->DeleteWhere($where);
     }
 

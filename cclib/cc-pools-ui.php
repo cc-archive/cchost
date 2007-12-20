@@ -185,7 +185,9 @@ END;
                 }
             }
         }
-        $remixes =& CCPoolRemixes::GetTable();
+
+        // todo: make this sql....
+        $remixes = new CCTable('cc_tbl_pool_tree','pool_tree_id');
         $args['records'] = $remixes->GetUnapproved();
         if( empty($args['records']) )
         {

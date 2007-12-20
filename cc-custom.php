@@ -35,18 +35,6 @@ if( !defined('IN_CC_HOST') )
 
 function CC_pending_pool_remix()
 {
-    if( CCUser::IsAdmin() )
-    {
-        $pool_remixes =& CCPoolRemixes::GetTable();
-        if( $pool_remixes->HasUnapproved() )
-        {
-            $args['url'] = ccl( 'admin', 'pools', 'approve' ) ;
-            $args['message'] = _("You've been remixed!") . '<br />' . 
-                               _('Click here to make them visible!');
-            return( $args );
-        }
-    }
-
     return( null );
 }
 

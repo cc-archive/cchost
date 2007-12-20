@@ -242,7 +242,7 @@ class CCRestAPI
                 $this->error_exit($pool_item);
         }
 
-        $pool_tree =&  CCPoolRemixes::GetTable();
+        $pool_tree = new CCTable('cc_tbl_pool_tree','pool_tree_parent');
         $remtreeargs['pool_tree_parent'] = $upload_id;
         $remtreeargs['pool_tree_pool_child'] = $pool_item['pool_item_id'];
         $pool_tree->Insert($remtreeargs);

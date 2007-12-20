@@ -20,12 +20,14 @@ div#remix_search_controls {
     font-style: italic;
 }
 #remix_search_toggle {
-    float: right;
+    margin: 5px;
 }
 #license_info a {
     font-weight: bold;
 }
 
+#remix_search_results {
+}
 #debug { display: block; }
 </style>
 <div style="width:40em;">
