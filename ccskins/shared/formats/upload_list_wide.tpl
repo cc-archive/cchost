@@ -159,9 +159,9 @@ EOF;
     %end_if%
 
     <script>
-        var dl_hook = new popupHookup("download_hook","download",str_download); 
+        var dl_hook = new queryPopup("download_hook","download",str_download); 
         dl_hook.hookLinks(); 
-        var menu_hook = new popupHookup("menuup_hook","ajax_menu",'');
+        var menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);
         menu_hook.hookLinks();
         if( user_name && ratings_enabled )
         {

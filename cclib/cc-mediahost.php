@@ -408,14 +408,16 @@ class CCMediaHost
     }
 
     /**
-    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
+    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
-    * The menu items gathered here are for the 'local' menu at each upload display
+    * The handler is called when a menu is being displayed with
+    * a specific record. All dynamic changes are made here
     * 
-    * @param array $menu The menu being built, put menu items here.
+    * @param array $menu The menu being displayed
+    * @param array $record The database record the menu is for
     * @see CCMenu::GetLocalMenu()
     */
-    function OnBuildUploadMenu(&$menu)
+    function OnUploadMenu(&$menu,&$record)
     {
         $menu['editupload'] = 
                      array(  'menu_text'  => _('Edit'),
@@ -465,20 +467,7 @@ class CCMediaHost
                              'group_name' => 'admin',
                              'id'         => 'admincommand',
                              'access'     => CC_ADMIN_ONLY );
-    }
 
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
-    * 
-    * The handler is called when a menu is being displayed with
-    * a specific record. All dynamic changes are made here
-    * 
-    * @param array $menu The menu being displayed
-    * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu()
-    */
-    function OnUploadMenu(&$menu,&$record)
-    {
         $isowner = CCUser::CurrentUser() == $record['user_id'];
         $isadmin = CCUser::IsAdmin();
 
@@ -532,8 +521,6 @@ class CCMediaHost
             return; // BAIL
         }
 
-
-
         if( $isowner || $isadmin )
         {
             $menu['editupload']['access']  = CC_MUST_BE_LOGGED_IN;
@@ -559,7 +546,6 @@ class CCMediaHost
         }
 
         $ismediablog = CCUploads::InTags(CCUD_MEDIA_BLOG_UPLOAD,$record) || $isadmin;
-
 
         if( $ismediablog && (($isowner && $this->_is_auto_pub()) || $isadmin) )
         {

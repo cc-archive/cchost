@@ -3,8 +3,17 @@
 	width: 130px;
 	height: 16px;
 	display: block;
+}
+
+#ajax_menu #trackbackbox {
+	width: 40%;
+	float: left;
+	margin-right: 2%;
+}
+#download_box .cc_share_button {
 	margin-top: 11px;
 }
+
 #download_box li {
 	line-height: 130%;
 }

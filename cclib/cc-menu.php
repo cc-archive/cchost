@@ -84,115 +84,6 @@ class CCMenu
         return( $_menu );
     }
 
-    /**
-    * Build a 'local' menu of command links
-    * 
-    * This method invokes an event passing around a structure for the
-    * respondants to fill in. The resulting menu is then returned to
-    * the caller. As of this writing this only used for the menu
-    * that is displayed with an upload.
-    *
-    * The menu is built in two phases:
-    *
-    * <ol><li>Event: {@link CC_EVENT_BUILD_UPLOAD_MENU} Use this event
-    * to build up the menu filling everything possible that is context-free
-    * (that is: you don't know the record the menu is for). Example:
-    *<code>
-    *function OnBuildUploadMenu(&$menu)
-    *{
-    *    $menu['editupload'] = 
-    *                 array(  'menu_text'  => _('Edit'),
-    *                         'weight'     => 100,
-    *                         'group_name' => 'owner',
-    *                         'id'         => 'editcommand',
-    *                         'access'     => CC_DYNAMIC_MENU_ITEM );
-    *
-    *    $menu['managefiles'] = 
-    *                 array(  'menu_text'  => _('Manage Files'),
-    *                         'weight'     => 101,
-    *                         'group_name' => 'owner',
-    *                         'id'         => 'managecommand',
-    *                         'access'     => CC_DYNAMIC_MENU_ITEM );
-    *}
-    *</code>
-    *</li>
-    *<li>Event: {@link CC_EVENT_UPLOAD_MENU} Use this event to add or
-    * modify the menu items given a specific context. Example:
-    *<code>
-    *function OnUploadMenu(&$menu,&$record)
-    *{
-    *    $isowner = CCUser::CurrentUser() == $record['user_id'];
-    *    $isadmin = CCUser::IsAdmin();
-    *
-    *    if( $isowner || $isadmin )
-    *    {
-    *        $menu['editupload']['access']  = CC_MUST_BE_LOGGED_IN;
-    *        $menu['editupload']['action']  = ccl('files','edit',
-    *                                                $record['user_name'],
-    *                                                $record['upload_id']);
-    *
-    *        $menu['managefiles']['access']  = CC_MUST_BE_LOGGED_IN;
-    *        $menu['managefiles']['action']  = ccl('file',
-    *                                              'manage', 
-    *                                              $record['upload_id']);
-    *    }
-    *}
-    *</code>
-    *</li></ol>
-    *
-    * The two steps are done for future features (caching and 
-    * editing local menus)
-    *
-    * Example of calling this method:
-    * <code>
-    *$menu = CCMenu::GetLocalMenu( CC_EVENT_UPLOAD_MENU,
-    *                              array(&$record),
-    *                              CC_EVENT_BUILD_UPLOAD_MENU);
-    *
-    *$record['local_menu'] = $menu;
-    * </code>
-    * 
-    * @param string $menuname The name of the menu (this is be invoked as an event for display)
-    * @param array $args      References to all these will be passed to all event handlers
-    * @param string $builder_event The name of the 'builder' event to be invoked before anything else
-    */
-    function GetLocalMenu($menuname,$args=array(),$builder_event='')
-    {
-        // Invoke the event....
-        
-        $allmenuitems = array();
-        $r = array( &$allmenuitems );
-        if( $builder_event )
-        {
-            CCEvents::Invoke($builder_event, $r );
-        }
-        $c = count($args);
-        for( $i = 0; $i < $c; $i++ )
-            $r[] =& $args[$i];
-
-        CCEvents::Invoke($menuname, $r );
-
-        // sort the results
-        
-        uasort($allmenuitems ,'cc_weight_sorter');
-
-        // filter the results based on access permissions
-
-        $mask = CCMenu::GetAccessMask();
-
-        $menu = array();
-        $count = count($allmenuitems);
-        $keys = array_keys($allmenuitems);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $key = $keys[$i];
-            $access = $allmenuitems[$key]['access'];
-            if( !($access & CC_DISABLED_MENU_ITEM) && (($access & $mask) != 0) )
-                $menu[$key] = $allmenuitems[$key];
-        }
-
-        return( $menu );
-    }
 
     /**
     * Occasionally the menu needs to be reset (e.g. a user logs out)
@@ -533,10 +424,6 @@ class CCMenu
 
 }
 
-function cc_weight_sorter($a, $b)
-{
-   return( $a['weight'] > $b['weight'] ? 1 : -1 );
-}
 
 function cc_sort_user_menu($a, $b)
 {

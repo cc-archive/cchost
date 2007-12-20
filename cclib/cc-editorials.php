@@ -168,25 +168,6 @@ class CCEditorials
         return( !empty($settings['editors']) && in_array( CCUser::CurrentUserName(), CCTag::TagSplit($settings['editors']) ) );
     }
 
-
-    /**
-    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
-    * 
-    * The menu items gathered here are for the 'local' menu at each upload display
-    * 
-    * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu()
-    */
-    function OnBuildUploadMenu(&$menu)
-    {
-        $menu['editorial'] = 
-                     array(  'menu_text'  => _('Editorial'),
-                             'weight'     => 300,
-                             'group_name' => 'editorial',
-                             'id'         => 'editorialcommand',
-                             'access'     => CC_DYNAMIC_MENU_ITEM );
-    }
-
     /**
     * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
@@ -195,22 +176,23 @@ class CCEditorials
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
         if( $this->_is_editor() && empty($record['upload_banned']) )
         {
+            $menu['editorial'] = 
+                         array(  'menu_text'  => _('Editorial'),
+                                 'weight'     => 300,
+                                 'group_name' => 'editorial',
+                                 'id'         => 'editorialcommand',
+                                 'access'     => CC_DYNAMIC_MENU_ITEM );
+
             $menu['editorial']['action'] = ccl( 'editorial', 'submit', $record['upload_id'] );
             $menu['editorial']['access']  |= CC_MUST_BE_LOGGED_IN;
             if( CCUser::IsAdmin() )
                 $menu['editorial']['group_name'] = 'admin';
         }
-        else
-        {
-            $menu['editorial']['access'] = CC_DISABLED_MENU_ITEM;
-        }
-
     }
 
     /**

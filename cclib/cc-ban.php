@@ -38,24 +38,6 @@ class CCBanHV
 {
 
     /**
-    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
-    * 
-    * The menu items gathered here are for the 'local' menu at each upload display
-    * 
-    * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu()
-    */
-    function OnBuildUploadMenu(&$menu)
-    {
-        $menu['ban'] = 
-                     array(  'menu_text'  => 'Ban',
-                             'weight'     => 1001,
-                             'group_name' => 'admin',
-                             'id'         => 'bancommand',
-                             'access'     => CC_ADMIN_ONLY );
-    }
-
-    /**
     * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
@@ -63,7 +45,6 @@ class CCBanHV
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
@@ -71,6 +52,13 @@ class CCBanHV
 
         if( CCUser::IsAdmin() )
         {
+            $menu['ban'] = 
+                         array(  'menu_text'  => 'Ban',
+                                 'weight'     => 1001,
+                                 'group_name' => 'admin',
+                                 'id'         => 'bancommand',
+                                 'access'     => CC_ADMIN_ONLY );
+
             if( $record['upload_banned'] > 0 )
                 $menu['ban']['menu_text'] = 'UnBan';
 

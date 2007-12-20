@@ -123,13 +123,6 @@ function cc_hot_playlists()
 }
 
 
-function cc_get_upload_menu(&$record)
-{
-    require_once('cclib/cc-upload.php');
-    return CCUpload::GetRecordLocalMenu($record);
-}
-
-
 function cc_get_value($arr,$key)
 {
     if( is_array($arr) && array_key_exists($key,$arr) )

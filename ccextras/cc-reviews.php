@@ -32,7 +32,6 @@ define('NUM_REVIEWS_PER_PAGE', 20);
 
 /**
 */
-CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCReviewsHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCReviewsHV',  'OnUploadMenu')       );
 CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCReviewsHV',  'OnFilterUserProfile')      );
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCReviewsHV',  'OnUserProfileTabs')      );
@@ -76,23 +75,6 @@ class CCReviewsHV
         }
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
-    * 
-    * The menu items gathered here are for the 'local' menu at each upload display
-    * 
-    * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu()
-    */
-    function OnBuildUploadMenu(&$menu)
-    {
-        $menu['comments'] = 
-                 array(  'menu_text'  => 'str_review',
-                         'weight'     => 95,
-                         'group_name' => 'comment',
-                         'id'         => 'commentcommand',
-                         'access'     => CC_MUST_BE_LOGGED_IN );
-    }
 
     function OnFilterUserProfile(&$records)
     {
@@ -227,15 +209,19 @@ class CCReviewsHV
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
         global $CC_GLOBALS;
 
-        if( !empty($record['upload_banned']) || 
-            empty($CC_GLOBALS['reviews_enabled']) || 
-            !$this->_can_review($record) )
+        $menu['comments'] = 
+                 array(  'menu_text'  => 'str_review',
+                         'weight'     => 95,
+                         'group_name' => 'comment',
+                         'id'         => 'commentcommand',
+                         'access'     => CC_MUST_BE_LOGGED_IN );
+
+        if( empty($CC_GLOBALS['reviews_enabled']) || !$this->_can_review($record) )
         {
             $menu['comments']['access'] = CC_DISABLED_MENU_ITEM;
         }

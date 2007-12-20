@@ -19,7 +19,8 @@ EOF;
     return array( 'sql' => $sql,
                   'name' => 'ajax_menu',
                    'e'  => array(CC_EVENT_FILTER_FILES,
-                                 CC_EVENT_FILTER_DOWNLOAD_URL)
+                                 CC_EVENT_FILTER_DOWNLOAD_URL,
+                                 CC_EVENT_FILTER_UPLOAD_MENU)
                 );
 }
 

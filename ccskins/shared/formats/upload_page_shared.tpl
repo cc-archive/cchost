@@ -186,7 +186,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 <script>
 function menu_cb(resp) {
     $('upload_menu_box').innerHTML = resp.responseText;
-    var dl_hook = new popupHookup("download_hook","download",str_download); 
+    var dl_hook = new queryPopup("download_hook","download",str_download); 
     dl_hook.hookLinks();
     if( window.round_box_enabled )
         cc_round_boxes();

@@ -93,6 +93,11 @@ function cc_exit()
     exit();
 }
 
+function cc_weight_sorter($a, $b)
+{
+   return( $a['weight'] > $b['weight'] ? 1 : -1 );
+}
+
 /**
 */
 class CCUtil

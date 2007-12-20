@@ -15,33 +15,6 @@ function ajax_debug(url)
     $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
 }
 
-var modalHook = Class.create();
-
-modalHook.prototype = {
-
-    initialize: function(ids) {
-        var me = this;
-        ids.each( function( id ) {
-            if( $(id) )
-            {
-                var e = $(id);
-                var href = e.href;
-                e.href = 'javascript://hooked ' + id;
-                title = e.innerHTML.stripTags();
-                Event.observe( id, 'click', me.onClick.bindAsEventListener( me, href, title ) );
-            }
-        } );
-    },
-
-    onClick: function( e, href, thetitle ) {
-        if( href.indexOf('?') == -1 )
-            href += '?ajax=1';
-        else
-            href += '&ajax=1';
-        Modalbox.show( href, {title: thetitle, width: 700, height: 550} );
-    }
-}
-
 /*
     Hook menu items so they go to a popup
 
@@ -81,9 +54,37 @@ popupHook.prototype = {
     }
 }
 
-var popupHookup = Class.create();
+var modalHook = Class.create();
 
-popupHookup.prototype = {
+modalHook.prototype = {
+
+    initialize: function(ids) {
+        var me = this;
+        ids.each( function( id ) {
+            if( $(id) )
+            {
+                var e = $(id);
+                var href = e.href;
+                e.href = 'javascript://hooked ' + id;
+                title = e.innerHTML.stripTags();
+                Event.observe( id, 'click', me.onClick.bindAsEventListener( me, href, title ) );
+            }
+        } );
+    },
+
+    onClick: function( e, href, thetitle ) {
+        if( href.indexOf('?') == -1 )
+            href += '?ajax=1';
+        else
+            href += '&ajax=1';
+        Modalbox.show( href, {title: thetitle, width: 700, height: 550} );
+    }
+}
+
+
+var queryPopup = Class.create();
+
+queryPopup.prototype = {
 
     className: '',
     formatName: '',

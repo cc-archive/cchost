@@ -26,7 +26,6 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCHowIDidItHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCHowIDidItHV',  'OnUploadMenu')      );
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCHowIDidItHV',  'OnFilterMacros')      );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCHowIDidIt',  'OnMapUrls')        , 'ccextras/cc-howididit.inc' );
@@ -52,24 +51,6 @@ class CCHowIDidItHV
     }
 
     /**
-    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
-    * 
-    * The menu items gathered here are for the 'local' menu at each upload display
-    * 
-    * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu()
-    */
-    function OnBuildUploadMenu(&$menu)
-    {
-        $menu['howididit'] = 
-                     array(  'menu_text'  => _('Edit "How I Did It"'),
-                             'weight'     => 110,
-                             'group_name' => 'owner',
-                             'id'         => 'editcommand',
-                             'access'     => CC_MUST_BE_LOGGED_IN );
-    }
-
-    /**
     * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
@@ -77,7 +58,6 @@ class CCHowIDidItHV
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
@@ -86,14 +66,17 @@ class CCHowIDidItHV
 
         if( ($isadmin || $isowner) && !$record['upload_banned']) 
         {
+            $menu['howididit'] = 
+                         array(  'menu_text'  => _('Edit "How I Did It"'),
+                                 'weight'     => 110,
+                                 'group_name' => 'owner',
+                                 'id'         => 'editcommand',
+                                 'access'     => CC_MUST_BE_LOGGED_IN );
+
             $menu['howididit']['action'] = ccl( 'edithowididit', $record['upload_id'] );
             
             if( $isadmin && !$isowner ) // geez, it's me!
                 $menu['howididit']['group_name']  = 'admin';
-        }
-        else
-        {
-            $menu['howididit']['access'] = CC_DISABLED_MENU_ITEM;
         }
     }
 

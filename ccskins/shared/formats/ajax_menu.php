@@ -83,8 +83,9 @@ else
     else
         return;
 
-$menu = empty($R['local_menu']) ? cc_get_upload_menu($R) : $R['local_menu'];
+$menu =& $R['local_menu'];
 
+print '<link rel="stylesheet" type="text/css" title="Default Style" href="' . $T->URL('css/upload_menu.css') . '" />';
 print '<div id="ajax_menu"><ul>';
 
 /** OWNER stuff *****/
@@ -92,23 +93,23 @@ print '<div id="ajax_menu"><ul>';
 if( !empty($menu['owner']) )
 {
     foreach( $menu['owner'] as $mi )
-        helper_ajax_menu_item($mi);
+        helper_ajax_menu_item($mi,$T);
 }
 
 /** REVIEW/RATE/SHARE menu ******/
 
 if( !empty($menu['comment']['comments']) )
-    helper_ajax_menu_item($menu['comment']['comments']);
+    helper_ajax_menu_item($menu['comment']['comments'],$T);
 
 if( !empty($menu['share']['share_link']) )
-    helper_ajax_menu_item($menu['share']['share_link']);
+    helper_ajax_menu_item($menu['share']['share_link'],$T);
 
 /** ADMIN menu *****/
 
 if( !empty($menu['admin']) )
 {
     foreach( $menu['admin'] as $mi )
-        helper_ajax_menu_item($mi);
+        helper_ajax_menu_item($mi,$T);
 }
 
 print '</ul>';
@@ -117,7 +118,7 @@ print '</ul>';
 
 $str = sprintf($T->String('str_list_i_saw_this'), '"' . $R['upload_name'] . '"');
 
-?><div class="box" style="float:left">
+?><div id="trackbackbox"><div class="box">
   <h2><?= $T->String('str_list_trackback') ?></h2>
   <a name="trackback"></a>
   <p><?= $str ?></p><ul><?
@@ -134,17 +135,17 @@ foreach( $saws as $saw )
 {
     $mi['menu_text'] = $saw[1];
     $mi['onclick'] = $url . $saw[0] . "');";
-    helper_ajax_menu_item($mi);
+    helper_ajax_menu_item($mi,$T);
 }
 
-print "</ul></div>";
+print "</ul></div></div>";
 
 /** PLAYLIST menu *****/
 
 if( !empty($menu['playlist']['playlist_menu']) )
 {
     // actually we're going to embed the thing right here...
-    // helper_ajax_menu_item($menu['playlist']['playlist_menu']);
+    // helper_ajax_menu_item($menu['playlist']['playlist_menu'],$T);
     print '<style>.plblock a { display: block; }</style>';
 print '<div class="box plblock" style="float:left"><h2>' . $T->String('str_playlists') . '</h2>';
     $A['args'] =& cc_get_playlist_with($R);
@@ -174,7 +175,7 @@ EOF;
 
 
 
-function helper_ajax_menu_item(&$item) 
+function helper_ajax_menu_item(&$item,&$T) 
 {
     if( empty($item['parent_id']) )
         print '<li>';
@@ -200,7 +201,7 @@ function helper_ajax_menu_item(&$item)
     print '>';
     
     if( !empty($item['menu_text']) )
-        print $item['menu_text'];
+        print $T->String($item['menu_text']);
     
     print "</a></li>\n";
 }

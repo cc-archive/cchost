@@ -12,8 +12,9 @@ function cc_filter_std(&$records,&$dataview_info)
     $k = array_keys($records);
 
     foreach( array( CC_EVENT_FILTER_UPLOAD_USER_TAGS, CC_EVENT_FILTER_REMIXES_SHORT, CC_EVENT_FILTER_FILES,
-                      CC_EVENT_FILTER_UPLOAD_TAGS, CC_EVENT_FILTER_REMIXES_FULL, CC_EVENT_FILTER_EXTRA,
-                      CC_EVENT_FILTER_RATINGS_STARS, CC_EVENT_FILTER_DOWNLOAD_URL, ) as $e )
+                    CC_EVENT_FILTER_UPLOAD_TAGS, CC_EVENT_FILTER_REMIXES_FULL, CC_EVENT_FILTER_EXTRA,
+                    CC_EVENT_FILTER_RATINGS_STARS, CC_EVENT_FILTER_DOWNLOAD_URL,
+                    CC_EVENT_FILTER_UPLOAD_MENU, ) as $e )
     {
         if( !in_array( $e, $dataview_info['e'] ) )
             continue;
@@ -219,6 +220,37 @@ function cc_filter_std(&$records,&$dataview_info)
                     break;
                 }
 
+                case CC_EVENT_FILTER_UPLOAD_MENU:
+                {
+                    // note: this is 
+                    $allmenuitems = array();
+                    $r = array( &$allmenuitems, &$R );
+                    CCEvents::Invoke(CC_EVENT_UPLOAD_MENU, $r );
+
+                    // sort the results
+                    
+                    uasort($allmenuitems ,'cc_weight_sorter');
+
+                    // filter the results based on access permissions
+                    require_once('cclib/cc-menu.php');
+                    $mask = CCMenu::GetAccessMask();
+
+                    $menu = array();
+                    $count = count($allmenuitems);
+                    $keys = array_keys($allmenuitems);
+                    $grouped_menu = array();
+                    for( $i = 0; $i < $count; $i++ )
+                    {
+                        $key    = $keys[$i];
+                        $item   =& $allmenuitems[$key];
+                        $access = $item['access'];
+                        if( !($access & CC_DISABLED_MENU_ITEM) && (($access & $mask) != 0) )
+                        {
+                            $grouped_menu[$item['group_name']][$key] = $item;
+                        }
+                    }
+                    $R['local_menu'] =& $grouped_menu;
+                }
             } // end switch on event
 
 

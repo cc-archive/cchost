@@ -27,7 +27,6 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCPublicizeHV',  'OnFilterUserProfile') );
-CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCPublicizeHV',  'OnBuildUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPublicizeHV',  'OnUploadMenu') );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPublicize',  'OnMapUrls'),   'ccextras/cc-publicize.inc');
 
@@ -36,27 +35,6 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPublicize',  'OnMapU
 class CCPublicizeHV
 {
     /**
-    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
-    * 
-    * The menu items gathered here are for the 'local' menu at each upload display
-    * 
-    * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu()
-    */
-    function OnBuildUploadMenu(&$menu)
-    {
-        require_once('cclib/cc-template.php');
-        $rurl = CCTemplate::Search('images/shareicons') . '/';
-        $menu['share_link'] = 
-                     array(  'menu_text'  => 'str_share',
-                             'weight'     => 10,
-                             'group_name' => 'share',
-                             'tip'        => _('Bookmark, share, embed...'),
-                             'access'     => CC_DONT_CARE_LOGGED_IN,
-                        );
-    }
-
-    /**
     * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
@@ -64,19 +42,24 @@ class CCPublicizeHV
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
+        require_once('cclib/cc-template.php');
+        $rurl = CCTemplate::Search('images/shareicons') . '/';
+        $menu['share_link'] = 
+                     array(  'menu_text'  => 'str_share',
+                             'weight'     => 10,
+                             'id'         => 'sharecommand',
+                             'group_name' => 'share',
+                             'tip'        => _('Bookmark, share, embed...'),
+                             'access'     => CC_DONT_CARE_LOGGED_IN,
+                        );
+
         $url = ccl('share', $record['upload_id'] );
         $jscript = "window.open( '$url', 'cchostsharewin', 'status=1,toolbar=0,location=0,menubar=0,directories=0,resizable=1,scrollbars=1,height=480,width=550');";
 
-        $menu['share_link']['id']      = 'sharecommand';
         $menu['share_link']['class']   = "cc_share_button";
-        /*
-        $menu['share_link']['action']  = "javascript://Share!";
-        $menu['share_link']['onclick'] = $jscript;
-        */
         $menu['share_link']['action']  = $url;
         $menu['share_link']['onclick'] = '';
     }

@@ -65,7 +65,7 @@ function _t_upload_menu_init(&$T,&$A)
         else
             return;
 
-    $menu = empty($R['local_menu']) ? cc_get_upload_menu($R) : $R['local_menu'];
+    $menu =& $R['local_menu'];
 
     /** OWNER menu *****/
 

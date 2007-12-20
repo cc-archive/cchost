@@ -81,19 +81,6 @@ class CCUpload
     }
 
 
-    function GetRecordLocalMenu(&$record)
-    {
-        $menu = CCMenu::GetLocalMenu(CC_EVENT_UPLOAD_MENU,array(&$record),CC_EVENT_BUILD_UPLOAD_MENU);
-        $grouped_menu = array();
-        foreach( $menu as $key => $item )
-        {
-            if( !isset($item['type']) )
-                $item['type'] = '';
-            $grouped_menu[$item['group_name']][$key] = $item;
-        }
-        return( $grouped_menu );
-    }
-
     function Delete($upload_id)
     {
         $this->CheckFileAccess(CCUser::CurrentUser(),$upload_id);

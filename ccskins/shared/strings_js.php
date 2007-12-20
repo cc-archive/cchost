@@ -2,6 +2,7 @@
 header('Content-type: text/javascript');
 ?>
 
+var str_action_menu               ='<?=addslashes($T->String('str_action_menu'))?>';
 var str_artist                    ='<?=addslashes($T->String('str_artist'))?>';
 var str_cancel                    ='<?=addslashes($T->String('str_cancel'))?>';
 var str_close                     ='<?=addslashes($T->String('str_close'))?>';

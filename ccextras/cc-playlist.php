@@ -35,7 +35,6 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPlaylists',  'OnMapU
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCPlaylists',  'OnApiQueryFormat'),   'ccextras/cc-playlist.inc' ); 
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCPlaylists',  'OnUploadDelete'),     'ccextras/cc-playlist.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPlaylistHV', 'OnUploadMenu'));
-CCEvents::AddHandler(CC_EVENT_BUILD_UPLOAD_MENU,  array( 'CCPlaylistHV', 'OnBuildUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCPlaylistHV', 'OnUserProfileTabs'));
 
 CCEvents::AddHandler(CC_EVENT_FILTER_PLAY_URL,        array( 'CCPlaylistHV', 'OnFilterPlayURL'));
@@ -116,26 +115,6 @@ class CCPlaylistHV
     }
 
     /**
-    * Event handler for {@link CC_EVENT_BUILD_UPLOAD_MENU}
-    * 
-    * The menu items gathered here are for the 'local' menu at each upload display
-    * 
-    * @param array $menu The menu being built, put menu items here.
-    * @see CCMenu::GetLocalMenu()
-    */
-    function OnBuildUploadMenu(&$menu)
-    {
-        if( !cc_playlist_enabled() )
-            return;
-        $menu['playlist_menu'] = 
-                     array(  'menu_text'  => _('Add to Playlist'),
-                             'weight'     => 130,
-                             'group_name' => 'playlist',
-                             'access'     => CC_MUST_BE_LOGGED_IN,
-                        );
-    }
-
-    /**
     * Event handler for {@link CC_EVENT_UPLOAD_MENU}
     * 
     * The handler is called when a menu is being displayed with
@@ -143,26 +122,23 @@ class CCPlaylistHV
     * 
     * @param array $menu The menu being displayed
     * @param array $record The database record the menu is for
-    * @see CCMenu::GetLocalMenu()
     */
     function OnUploadMenu(&$menu,&$record)
     {
-        if( !cc_playlist_enabled() || empty($record['upload_published']) || !empty($record['upload_banned']) )
+        if( !cc_playlist_enabled() || !CCUser::IsLoggedIn() || empty($record['upload_published']) || !empty($record['upload_banned']) )
             return;
 
-        if( CCUser::IsLoggedIn() )
-        {
-            $parent_id = 'playlist_menu_' . $record['upload_id'];
-            $menu['playlist_menu']['parent_id'] = $parent_id;
-            $menu['playlist_menu']['action'] = "javascript://{$parent_id}";
-            $menu['playlist_menu']['id']     = 'commentcommand';
-            $menu['playlist_menu']['class']  = "cc_playlist_button";
-            $menu['playlist_menu']['access'] = CC_MUST_BE_LOGGED_IN;
-        }
-        else
-        {
-            $menu['playlist_menu']['access'] = CC_DISABLED_MENU_ITEM;
-        }
+        $menu['playlist_menu'] = 
+                     array(  'menu_text'  => _('Add to Playlist'),
+                             'weight'     => 130,
+                             'group_name' => 'playlist',
+                             'access'     => CC_MUST_BE_LOGGED_IN,
+                        );
+        $parent_id = 'playlist_menu_' . $record['upload_id'];
+        $menu['playlist_menu']['parent_id'] = $parent_id;
+        $menu['playlist_menu']['action'] = "javascript://{$parent_id}";
+        $menu['playlist_menu']['id']     = 'commentcommand';
+        $menu['playlist_menu']['class']  = "cc_playlist_button";
     }
 }
 

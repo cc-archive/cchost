@@ -23,8 +23,8 @@ ccHowIDidIt.prototype = {
 
     initialize: function() {
         Event.observe( 'hidi_sort', 'change', this.fillUploads.bindAsEventListener(this) );
-        this.dl_hook = new popupHookup("download_hook","download",str_download); 
-        this.menu_hook = new popupHookup("menuup_hook","ajax_menu",'');
+        this.dl_hook = new queryPopup("download_hook","download",str_download); 
+        this.menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);
         this.fillUploads();
     },
 

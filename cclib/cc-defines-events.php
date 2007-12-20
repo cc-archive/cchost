@@ -107,26 +107,8 @@ define('CC_EVENT_PATCH_MENU',          'patchmenu');
 * function OnUploadMenu(&$menu, &$record )
 *</code>
 * @see CCEvents::AddHandler()
-* @see CCMenu::GetLocalMenu()
 */
 define('CC_EVENT_UPLOAD_MENU',         'uploadmenu');
-
-/**
-* Request for Data Event: Build upload local menu
-*
-* Event triggered when the system is requesting to build the
-* local menu for a given upload.
-* 
-* Call back (handler) prototype:
-*<code>
-* // The callback edits the $menu structure directly
-* function OnBuildUploadMenu(&$menu )
-*</code>
-* @see CCEvents::AddHandler()
-* @see CCMenu::GetLocalMenu()
-*/
-define('CC_EVENT_BUILD_UPLOAD_MENU',   'builduploadmenu');
-
 
 /**
 * Request for Data Event: Build and display the admin's menu

@@ -6,6 +6,7 @@
 [/meta]
 */
 $GLOBALS['str_action']              = _('Actions');
+$GLOBALS['str_action_menu']         = _('Actions Menu');
 $GLOBALS['str_detail']              = _('Details');
 
 $GLOBALS['str_advanced']              = _('Advanced');
