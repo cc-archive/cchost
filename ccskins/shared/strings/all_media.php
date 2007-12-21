@@ -72,6 +72,7 @@ $GLOBALS['str_editorial_whats_hot']   = _("What's Hot Right Now");
 $GLOBALS['str_editors_picks']         = _("Editors' Picks");
 $GLOBALS['str_edpick']                = _('Editorial pick');
 $GLOBALS['str_edpicks_hot_tracks']    = _("Editors' Picks and Popular Uploads");
+$GLOBALS['str_edpicks_more']           = _('More picks');
 
 $GLOBALS['str_email'] = _('e-mail');
 $GLOBALS['str_email_from'] = _('From');
@@ -521,6 +522,34 @@ $GLOBALS['str_strings_image'] = _('Images String Profile');
 $GLOBALS['str_strings_video'] = _('Video String Profile');
 $GLOBALS['str_strings_flash'] = _('Flash String Profile');
 $GLOBALS['str_strings_all'] = _('All Media String Profile');
+
+/* config strings */
+
+$GLOBALS['str_ban_message'] = _( "This upload is under review and is only visible to the owner and admins. Please contact the site administrator.");
+$GLOBALS['str_ban_email'] = _( "Hi,\n\nJust wanted to let you know that your upload called \"%title%\" has been moderated. That means the upload has been removed from public view (including download and streaming).");
+$GLOBALS['str_flag_msg'] = _( "Use this form to contact the administrators of the site about possible violations of the terms of use of the site (including copyright infractions.)<br /><br />Anonymous notifications are accepted, just leave the email address field blank.");
+$GLOBALS['str_footer'] = _('This site uses <a href="http://wiki.creativecommons.org/wiki/CcHost">ccHost</a>, licensed under <a href="http://creativecommons.org/licenses/GPL/2.0/">CC-GNU-GPL</a>, which is a product of the <a href="http://sourceforge.net/projects/cctools/">ccTools</a> project and uses <a href="http://getid3.sourceforge.net/">GetID3</a>.');
+$GLOBALS['str_site_license'] = _('<a rel="license" href="http://creativecommons.org/licenses/by-nc/2.5/"><img alt="Creative Commons License" src="http://creativecommons.org/images/public/somerights20.gif" id="cc_license_image"></a> The text of this site is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attribution-NonCommercial 3.0 License</a>.');
+$GLOBALS['str_home_page'] = _('Home page');
+$GLOBALS['str_see_picks'] = _('See picks by the Editorial Staff');
+$GLOBALS['str_see_remixes'] = _('See the latest remixes');
+$GLOBALS['str_see_samples'] = _('See recently uploaded samples');
+$GLOBALS['str_see_people'] = _('See the newest users who uploaded here');
+$GLOBALS['str_quota_msg'] = _('You are not authorized to submit this type of file at this time, most likely because you have met the quota for this type of submission.');
+$GLOBALS['str_visitors'] = _('Visitors');
+$GLOBALS['str_artists'] = _('Artists');
+$GLOBALS['str_admin'] = _('Admin');
+$GLOBALS['str_log_in'] = _('Log In');
+$GLOBALS['str_register'] = _('Register');
+$GLOBALS['str_submit_files'] = _('Submit Files');
+$GLOBALS['str_your_page'] = _('Your Page');
+$GLOBALS['str_edit_profile'] = _('Edit Your Profile');
+$GLOBALS['str_browse_tags'] = _('Browse Tags');
+
+
+
+
+
 
 
 ?>

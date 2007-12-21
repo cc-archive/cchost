@@ -101,8 +101,6 @@ CREATE TABLE `cc_tbl_contests` (
   `contest_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `contest_auto_publish` int(1) NOT NULL default '0',
   `contest_publish` int(1) NOT NULL default '0',
-  `contest_vote_online` int(1) NOT NULL default '0',
-  `contest_vote_deadline` datetime NOT NULL default '0000-00-00 00:00:00',
   `contest_entries_accept` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`contest_id`)
 );

@@ -48,3 +48,14 @@ a.cc_external_link, a.cc_external_link:link, a.cc_external_link:visited {
 a.cc_external_link span {
 	text-decoration: underline;
 }
+
+div#beta_message {
+	position: absolute;
+	top: 15px;
+	left: 30%;
+	background-color: white;
+	border: 1px solid red;
+	color: orange;
+	padding: 5px;
+	z-index: 100;
+}

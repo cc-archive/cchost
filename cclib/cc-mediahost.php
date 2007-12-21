@@ -32,52 +32,6 @@ if( !defined('IN_CC_HOST') )
 */
 class CCMediaHost
 {
-
-    /**
-    * @access private
-    */
-    function _build_bread_crumb_trail($username,$upload_id)
-    {
-        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
-        
-        if( empty($username) )
-        {
-            $trail[] = array( 'url' => ccl('media','files'), 
-                              'text' => _('Uploads') );
-        }
-        else
-        {
-            $trail[] = array( 'url' => ccl('people'), 
-                              'text' => _('People') );
-            $users =& CCUsers::GetTable();
-            $user_real_name = $users->QueryItem('user_real_name',
-                                                "user_name = '$username'");
-            if( !empty($user_real_name) )
-            {
-                $trail[] = array( 'url' => ccl('people',$username), 
-                                           'text' => $user_real_name );
-                if( !empty($upload_id) )
-                {
-                    require_once('cclib/cc-upload-table.php');
-
-                    $uploads =& CCUploads::GetTable();
-                    $upload_name = $uploads->QueryItemFromKey('upload_name',
-                                                              $upload_id);
-                    if( !empty($upload_name) )
-                    {
-                        $upload_name = '"' . $upload_name . '"';
-                        $trail[] = array( 'url' => ccl('files',$username,
-                                                       $upload_id), 
-                                           'text' => $upload_name );
-                    }
-                }
-            }
-        }
-
-        require_once('cclib/cc-page.php');
-        CCPage::AddBreadCrumbs($trail);
-    }
-
     /*-----------------------------
         MAPPED TO URLS
     -------------------------------*/
@@ -524,8 +478,7 @@ class CCMediaHost
         if( $isowner || $isadmin )
         {
             $menu['editupload']['access']  = CC_MUST_BE_LOGGED_IN;
-            $menu['editupload']['action']  = ccl('files','edit',
-                                                    $record['user_name'],
+            $menu['editupload']['action']  = ccl('files','edit', $record['user_name'],
                                                     $record['upload_id']);
 
             $menu['managefiles']['access']  = CC_MUST_BE_LOGGED_IN;
@@ -645,6 +598,52 @@ class CCMediaHost
                                'flags'      => CCFF_POPULATE );
         }
 
+    }
+
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail($username,$upload_id)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => 'str_home' );
+        
+        if( empty($username) )
+        {
+            $trail[] = array( 'url' => ccl('media','files'), 
+                              'text' => 'str_uploads' );
+        }
+        else
+        {
+            $trail[] = array( 'url' => ccl('people'), 
+                              'text' => 'str_people');
+
+            $users =& CCUsers::GetTable();
+            $user_real_name = $users->QueryItem('user_real_name',
+                                                "user_name = '$username'");
+            if( !empty($user_real_name) )
+            {
+                $trail[] = array( 'url' => ccl('people',$username), 
+                                           'text' => $user_real_name );
+                if( !empty($upload_id) )
+                {
+                    require_once('cclib/cc-upload-table.php');
+
+                    $uploads =& CCUploads::GetTable();
+                    $upload_name = $uploads->QueryItemFromKey('upload_name',
+                                                              $upload_id);
+                    if( !empty($upload_name) )
+                    {
+                        $upload_name = '"' . $upload_name . '"';
+                        $trail[] = array( 'url' => ccl('files',$username,
+                                                       $upload_id), 
+                                           'text' => $upload_name );
+                    }
+                }
+            }
+        }
+
+        require_once('cclib/cc-page.php');
+        CCPage::AddBreadCrumbs($trail);
     }
 
 }

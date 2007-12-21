@@ -45,9 +45,11 @@ if( !function_exists('array_combine') )
     {
         $c = count($keys);
         $dest = array();
+        $vkeys = array_keys($values);
         for( $i = 0; $i < $c; $i++ )
-            $dest[$keys[$i]] = $values[$i];
-
+        {
+            $dest[$keys[$i]] = $values[$vkeys[$i]];
+        }
         return $dest;
     }
 }

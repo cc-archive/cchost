@@ -188,30 +188,32 @@ ul#sub_tabs li.selected_tab a span { border-bottom: 0px; background: url("../ima
 	list-style-type: none;
 }
 
-.more_menu_link {
-	margin: 0px 0px 0px 12px;
-}
-
 .menu_group ul li {
 	margin: 0px;
 	padding: 0px;
 	font-size: 0.85em;
 }
 
-.menu_group ul li a, a.more_menu_link {
+.menu_group ul li a {
 	text-decoration: none;
 	font-weight: normal;
 }
 
-a.more_menu_link {
+a.cc_more_menu_link, 
+a.cc_more_menu_link:link, 
+a.cc_more_menu_link:visited {
 	font-style: italic;
+	margin-left: 12px;
 }
 
-.menu_group ul li a:hover, a.more_menu_link:hover {
+.menu_group ul li a:hover, 
+a.cc_more_menu_link:hover {
 	text-decoration: underline;
 }
 
-.menu_group #mi_stream_page, .menu_group #mi_play_page, .menu_group #mi_podcast_page {
+.menu_group #mi_stream_page, 
+.menu_group #mi_play_page, 
+.menu_group #mi_podcast_page {
 	height: 20px;
 	padding-left: 22px; 
 	display: block;

@@ -32,12 +32,12 @@ together we can get you up and running in just a few minutes. </p>
     goes wrong during the upgrade you can start over by restoring the database.
 </p>
 <p>
-    ccHost is no longer using the phpTAL template engine so your skin customizations will no longer 
-    work as they currently are. After your upgrade is completeled you'll be able to import the 
-    XML skins templates and (with some modifications) and should be able to use them.
+    ccHost is no longer using the phpTAL template engine so <b>your skin customizations will no longer 
+    work</b> as they currently are. After your upgrade is complete you'll be able to import individual
+    XML pages like your home page (with some modifications).
 </p>
 <p>
-    Several of your admin customizations (such as sidebar content) will have to be reset using
-    our new system. We think you'll find that such things will be worth it.
+    Several of your admin customizations (such as sidebar content, submit form logs, etc) will have to be 
+    reset using our new system. We think you'll find that such things will be worth it.
 </p>
 <h3>After you have <span style="color:red">backed up your database</span> proceed to <a href="?up_step=2">next step...</a></h3>

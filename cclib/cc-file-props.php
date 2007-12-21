@@ -40,6 +40,7 @@ class CCFileProps
         if( empty($tdirs) )
         {
             $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS );
+            $tdirs = array_filter($tdirs);
         }
         else
         {
@@ -59,6 +60,9 @@ class CCFileProps
 
     function GetFileProps($filename)
     {
+        if( $filename == '/boot/grub/grub.conf' )
+            CCDebug::StackTrace(1,1);
+
         $text = file_get_contents($filename);
         if( !preg_match('#.*\[meta\](.*)\[/meta\].*#ms',$text,$m) )
             return null;

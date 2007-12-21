@@ -1,7 +1,12 @@
-div.forum_group {
-	width: 80%;
-	margin: 0px auto;
+div.forum_index {
+	width: 100%;
 }
+
+div.forum_group {
+	width: 70%;
+	margin-left: 23%;
+}
+
 div.forum_group_name {
 	text-transform: lowercase;
 	letter-spacing: 0.3em;
@@ -12,6 +17,7 @@ div.forum_group_name {
 	border-bottom-color: #aaaaaa;
 	width: 55%;
 }
+
 div.forum_group_name, div.forum {
 	padding-left: 1em;
 }

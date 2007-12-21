@@ -1,4 +1,8 @@
 <body>
+%if_not_empty(beta_message)%
+    <div id="beta_message" style="position:absolute;">%(beta_message)%</div>
+%end_if%
+
 <div class="hide">
   <a href="#content">%text(skip)%</a>
 </div>

@@ -246,7 +246,7 @@ class CCSkin
         }
         */
 
-        return $text;
+        return CCUtil::Strip($text);
     }
 
     /**

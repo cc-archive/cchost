@@ -139,6 +139,7 @@ class CCQuery
                 $data = str_replace("'","\\'",$data);
                 $text = '<? /* This is a temporary file created by ccHost. It is safe to delete. */ ' .
                          "\n" . '$_cache_rows = unserialize(\'' . $data . '\'); ?>';
+                CCUtil::MakeSubDirs(dirname($cname));
                 $f = fopen($cname,'w+');
                 fwrite($f,$text);
                 fclose($f);

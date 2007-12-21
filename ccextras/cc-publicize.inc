@@ -326,9 +326,13 @@ class CCPublicize
                     $regarding = $record['user_name'];
                 break;
             case 'upload':
-                $uploads =& CCUploads::GetTable();
                 if( !empty($arg1) )
-                    $record = $uploads->GetRecordFromID($arg1);
+                {
+                    $ccf = ccl('files') . '/';
+                    $record = CCDatabase::QueryRow("SELECT CONCAT('$ccf',user_name,upload_id) as file_page_url,' . 
+                                 'upload_id,upload_name,user_name,user_real_name from cc_tbl_uploads JOIN " .
+                                 'cc_tbl_user ON upload_user=user_id WHERE upload_id='.$arg1);
+                }
                 $ok = !empty($record);
                 if( $ok )
                     $regarding = $record['upload_id'] . '/' . $record['upload_name'];

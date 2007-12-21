@@ -1,29 +1,23 @@
+-- phpMyAdmin SQL Dump
+-- version 2.9.1.1
+-- http://www.phpmyadmin.net
+-- 
+-- Host: localhost
+-- Generation Time: Dec 20, 2007 at 11:20 PM
+-- Server version: 5.0.27
+-- PHP Version: 5.2.1
+-- 
+-- Database: 'cchost'
+-- 
 
-CREATE TABLE cc_tbl_topics (
-  topic_id int(11) unsigned NOT NULL auto_increment,
-  topic_upload int(11) unsigned NOT NULL default '0',
-  topic_user int(11) unsigned NOT NULL default '0',
-  topic_views int(11) unsigned NOT NULL default '0',
-  topic_type varchar(100) NOT NULL default '',
-  topic_date datetime NOT NULL default '0000-00-00 00:00:00',
-  topic_edited datetime NOT NULL default '0000-00-00 00:00:00',
-  topic_deleted int(2) unsigned NOT NULL default '0',
-  topic_name mediumtext NOT NULL,
-  topic_text mediumtext NOT NULL,
-  topic_tags mediumtext NOT NULL,
-  topic_forum int(6) unsigned default NULL,
-  topic_thread int(11) unsigned default NULL,
-  topic_locked int(2) unsigned NOT NULL default '0',
-  topic_can_xlat int(1) unsigned NOT NULL default '0',
-  topic_left int(11) NOT NULL,
-  topic_right int(11) NOT NULL,
-  PRIMARY KEY  (topic_id),
-  KEY topic_upload (topic_upload),
-  KEY topic_thread (topic_thread),
-  KEY topic_user (topic_user),
-  FULLTEXT KEY topic_search (topic_name,topic_text)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
 
+-- 
+-- Table structure for table 'cc_tbl_activity_log'
+-- 
+-- Creation: Dec 14, 2007 at 12:24 AM
+-- Last update: Dec 19, 2007 at 11:32 PM
+-- 
 
 CREATE TABLE cc_tbl_activity_log (
   activity_log_id int(11) unsigned NOT NULL auto_increment,
@@ -35,15 +29,15 @@ CREATE TABLE cc_tbl_activity_log (
   activity_log_param_2 varchar(255) NOT NULL default '',
   activity_log_param_3 varchar(255) NOT NULL default '',
   PRIMARY KEY  (activity_log_id)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 -- 
 -- Table structure for table 'cc_tbl_cart'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Dec 12, 2007 at 06:51 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_cart (
@@ -67,8 +61,8 @@ CREATE TABLE cc_tbl_cart (
 -- 
 -- Table structure for table 'cc_tbl_cart_items'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Dec 10, 2007 at 01:54 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 19, 2007 at 09:38 PM
 -- 
 
 CREATE TABLE cc_tbl_cart_items (
@@ -84,9 +78,9 @@ CREATE TABLE cc_tbl_cart_items (
 -- 
 -- Table structure for table 'cc_tbl_collab_uploads'
 -- 
--- Creation: Dec 10, 2007 at 12:59 AM
--- Last update: Dec 10, 2007 at 01:54 AM
--- Last check: Dec 10, 2007 at 12:59 AM
+-- Creation: Dec 15, 2007 at 08:33 PM
+-- Last update: Dec 15, 2007 at 08:51 PM
+-- Last check: Dec 15, 2007 at 08:33 PM
 -- 
 
 CREATE TABLE cc_tbl_collab_uploads (
@@ -94,7 +88,6 @@ CREATE TABLE cc_tbl_collab_uploads (
   collab_upload_upload int(11) NOT NULL default '0',
   collab_upload_role varchar(20) NOT NULL default '',
   collab_upload_type varchar(100) NOT NULL,
-  PRIMARY KEY  (collab_upload_upload),
   KEY collab_upload_collab (collab_upload_collab)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -103,8 +96,8 @@ CREATE TABLE cc_tbl_collab_uploads (
 -- 
 -- Table structure for table 'cc_tbl_collab_users'
 -- 
--- Creation: Dec 09, 2007 at 10:59 PM
--- Last update: Dec 09, 2007 at 10:59 PM
+-- Creation: Dec 15, 2007 at 08:33 PM
+-- Last update: Dec 15, 2007 at 08:33 PM
 -- 
 
 CREATE TABLE cc_tbl_collab_users (
@@ -120,8 +113,8 @@ CREATE TABLE cc_tbl_collab_users (
 -- 
 -- Table structure for table 'cc_tbl_collabs'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_collabs (
@@ -138,7 +131,8 @@ CREATE TABLE cc_tbl_collabs (
 -- 
 -- Table structure for table 'cc_tbl_config'
 -- 
--- Creation: Nov 27, 2007 at 05:55 PM
+-- Creation: Dec 14, 2007 at 03:27 AM
+-- Last update: Dec 20, 2007 at 04:54 AM
 -- 
 
 CREATE TABLE cc_tbl_config (
@@ -146,16 +140,17 @@ CREATE TABLE cc_tbl_config (
   config_type varchar(255) default NULL,
   config_scope varchar(40) default NULL,
   config_data mediumtext,
-  PRIMARY KEY  (config_id)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY  (config_id),
+  KEY config_type (config_type)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 -- 
 -- Table structure for table 'cc_tbl_contests'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_contests (
@@ -183,8 +178,8 @@ CREATE TABLE cc_tbl_contests (
 -- 
 -- Table structure for table 'cc_tbl_feedcache'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_feedcache (
@@ -201,9 +196,9 @@ CREATE TABLE cc_tbl_feedcache (
 -- 
 -- Table structure for table 'cc_tbl_files'
 -- 
--- Creation: Nov 30, 2007 at 11:56 AM
--- Last update: Dec 14, 2007 at 12:06 AM
--- Last check: Nov 30, 2007 at 11:56 AM
+-- Creation: Dec 15, 2007 at 08:33 PM
+-- Last update: Dec 19, 2007 at 11:32 PM
+-- Last check: Dec 15, 2007 at 08:33 PM
 -- 
 
 CREATE TABLE cc_tbl_files (
@@ -226,8 +221,8 @@ CREATE TABLE cc_tbl_files (
 -- 
 -- Table structure for table 'cc_tbl_forum_groups'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_forum_groups (
@@ -242,8 +237,8 @@ CREATE TABLE cc_tbl_forum_groups (
 -- 
 -- Table structure for table 'cc_tbl_forum_threads'
 -- 
--- Creation: Dec 04, 2007 at 03:53 PM
--- Last update: Dec 09, 2007 at 07:45 PM
+-- Creation: Dec 15, 2007 at 08:33 PM
+-- Last update: Dec 18, 2007 at 10:42 PM
 -- 
 
 CREATE TABLE cc_tbl_forum_threads (
@@ -265,8 +260,8 @@ CREATE TABLE cc_tbl_forum_threads (
 -- 
 -- Table structure for table 'cc_tbl_forums'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_forums (
@@ -285,8 +280,8 @@ CREATE TABLE cc_tbl_forums (
 -- 
 -- Table structure for table 'cc_tbl_keys'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Dec 12, 2007 at 06:51 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 20, 2007 at 12:24 PM
 -- 
 
 CREATE TABLE cc_tbl_keys (
@@ -302,8 +297,8 @@ CREATE TABLE cc_tbl_keys (
 -- 
 -- Table structure for table 'cc_tbl_licenses'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_licenses (
@@ -326,8 +321,8 @@ CREATE TABLE cc_tbl_licenses (
 -- 
 -- Table structure for table 'cc_tbl_notifications'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_notifications (
@@ -343,8 +338,8 @@ CREATE TABLE cc_tbl_notifications (
 -- 
 -- Table structure for table 'cc_tbl_pool_item'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Dec 04, 2007 at 11:20 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 19, 2007 at 03:38 PM
 -- 
 
 CREATE TABLE cc_tbl_pool_item (
@@ -370,9 +365,9 @@ CREATE TABLE cc_tbl_pool_item (
 -- 
 -- Table structure for table 'cc_tbl_pool_tree'
 -- 
--- Creation: Nov 29, 2007 at 10:40 PM
--- Last update: Dec 05, 2007 at 03:21 AM
--- Last check: Nov 29, 2007 at 10:40 PM
+-- Creation: Dec 19, 2007 at 03:08 PM
+-- Last update: Dec 19, 2007 at 09:38 PM
+-- Last check: Dec 19, 2007 at 03:08 PM
 -- 
 
 CREATE TABLE cc_tbl_pool_tree (
@@ -382,7 +377,8 @@ CREATE TABLE cc_tbl_pool_tree (
   pool_tree_pool_parent int(5) unsigned default NULL,
   pool_tree_pool_child int(5) unsigned default NULL,
   PRIMARY KEY  (pool_tree_id),
-  KEY pool_tree_child (pool_tree_child,pool_tree_parent)
+  KEY pool_tree_child (pool_tree_child,pool_tree_parent),
+  KEY pool_tree_pool_parent (pool_tree_pool_parent)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -390,8 +386,8 @@ CREATE TABLE cc_tbl_pool_tree (
 -- 
 -- Table structure for table 'cc_tbl_pools'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_pools (
@@ -414,8 +410,8 @@ CREATE TABLE cc_tbl_pools (
 -- 
 -- Table structure for table 'cc_tbl_ratings'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Dec 11, 2007 at 08:33 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 19, 2007 at 01:45 AM
 -- 
 
 CREATE TABLE cc_tbl_ratings (
@@ -432,8 +428,8 @@ CREATE TABLE cc_tbl_ratings (
 -- 
 -- Table structure for table 'cc_tbl_ratings_chart'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_ratings_chart (
@@ -455,8 +451,8 @@ CREATE TABLE cc_tbl_ratings_chart (
 -- 
 -- Table structure for table 'cc_tbl_tag_alias'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_tag_alias (
@@ -470,8 +466,8 @@ CREATE TABLE cc_tbl_tag_alias (
 -- 
 -- Table structure for table 'cc_tbl_tags'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Dec 14, 2007 at 12:06 AM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 19, 2007 at 11:38 PM
 -- 
 
 CREATE TABLE cc_tbl_tags (
@@ -486,9 +482,9 @@ CREATE TABLE cc_tbl_tags (
 -- 
 -- Table structure for table 'cc_tbl_topic_i18n'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Nov 29, 2007 at 10:39 PM
--- Last check: Nov 29, 2007 at 10:39 PM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
+-- Last check: Dec 15, 2007 at 08:32 PM
 -- 
 
 CREATE TABLE cc_tbl_topic_i18n (
@@ -501,10 +497,61 @@ CREATE TABLE cc_tbl_topic_i18n (
 -- --------------------------------------------------------
 
 -- 
+-- Table structure for table 'cc_tbl_topic_tree'
+-- 
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 15, 2007 at 08:32 PM
+-- 
+
+CREATE TABLE cc_tbl_topic_tree (
+  topic_tree_id int(11) unsigned NOT NULL auto_increment,
+  topic_tree_parent int(11) unsigned NOT NULL default '0',
+  topic_tree_child int(11) unsigned NOT NULL default '0',
+  PRIMARY KEY  (topic_tree_id)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'cc_tbl_topics'
+-- 
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 19, 2007 at 09:38 PM
+-- Last check: Dec 15, 2007 at 08:33 PM
+-- 
+
+CREATE TABLE cc_tbl_topics (
+  topic_id int(11) unsigned NOT NULL auto_increment,
+  topic_upload int(11) unsigned NOT NULL default '0',
+  topic_user int(11) unsigned NOT NULL default '0',
+  topic_views int(11) unsigned NOT NULL default '0',
+  topic_type varchar(100) NOT NULL default '',
+  topic_date datetime NOT NULL default '0000-00-00 00:00:00',
+  topic_edited datetime NOT NULL default '0000-00-00 00:00:00',
+  topic_deleted int(2) unsigned NOT NULL default '0',
+  topic_name mediumtext NOT NULL,
+  topic_text mediumtext NOT NULL,
+  topic_tags mediumtext NOT NULL,
+  topic_forum int(6) unsigned default NULL,
+  topic_thread int(11) unsigned default NULL,
+  topic_locked int(2) unsigned NOT NULL default '0',
+  topic_can_xlat int(1) unsigned NOT NULL default '0',
+  topic_left int(11) NOT NULL,
+  topic_right int(11) NOT NULL,
+  PRIMARY KEY  (topic_id),
+  KEY topic_upload (topic_upload),
+  KEY topic_thread (topic_thread),
+  KEY topic_user (topic_user),
+  FULLTEXT KEY topic_search (topic_name,topic_text)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
 -- Table structure for table 'cc_tbl_tree'
 -- 
--- Creation: Nov 29, 2007 at 10:39 PM
--- Last update: Dec 14, 2007 at 12:06 AM
+-- Creation: Dec 15, 2007 at 08:32 PM
+-- Last update: Dec 19, 2007 at 11:30 PM
 -- 
 
 CREATE TABLE cc_tbl_tree (
@@ -519,9 +566,9 @@ CREATE TABLE cc_tbl_tree (
 -- 
 -- Table structure for table 'cc_tbl_uploads'
 -- 
--- Creation: Dec 12, 2007 at 01:26 PM
--- Last update: Dec 14, 2007 at 12:06 AM
--- Last check: Dec 12, 2007 at 01:26 PM
+-- Creation: Dec 19, 2007 at 10:56 PM
+-- Last update: Dec 19, 2007 at 11:38 PM
+-- Last check: Dec 19, 2007 at 10:56 PM
 -- 
 
 CREATE TABLE cc_tbl_uploads (
@@ -538,6 +585,9 @@ CREATE TABLE cc_tbl_uploads (
   upload_published int(1) unsigned NOT NULL default '0',
   upload_banned int(1) unsigned NOT NULL default '0',
   upload_topic_id int(11) unsigned NOT NULL default '0',
+  old_topic int(11) NOT NULL default '0',
+  old_dtitle int(11) NOT NULL default '0',
+  old_fname mediumtext,
   upload_num_remixes int(7) unsigned NOT NULL default '0',
   upload_num_pool_remixes int(7) unsigned NOT NULL default '0',
   upload_num_sources int(7) unsigned NOT NULL default '0',
@@ -550,7 +600,8 @@ CREATE TABLE cc_tbl_uploads (
   upload_num_plays int(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (upload_id),
   KEY upload_tags (upload_tags(300)),
-  FULLTEXT KEY text_search (upload_name,upload_tags,upload_description)
+  FULLTEXT KEY text_search (upload_name,upload_tags,upload_description),
+  FULLTEXT KEY upload_name (upload_name)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -558,9 +609,9 @@ CREATE TABLE cc_tbl_uploads (
 -- 
 -- Table structure for table 'cc_tbl_user'
 -- 
--- Creation: Dec 02, 2007 at 10:35 PM
--- Last update: Dec 14, 2007 at 12:06 AM
--- Last check: Dec 02, 2007 at 10:35 PM
+-- Creation: Dec 19, 2007 at 11:00 PM
+-- Last update: Dec 19, 2007 at 11:38 PM
+-- Last check: Dec 19, 2007 at 11:00 PM
 -- 
 
 CREATE TABLE cc_tbl_user (
@@ -592,6 +643,6 @@ CREATE TABLE cc_tbl_user (
   user_quota int(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (user_id),
   KEY user_name (user_name),
-  KEY user_id (user_id),
-  FULLTEXT KEY text_search (user_name,user_real_name,user_description,user_favorites,user_whatido)
+  FULLTEXT KEY text_search (user_name,user_real_name,user_description,user_favorites,user_whatido),
+  FULLTEXT KEY remix_search (user_name,user_real_name)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;

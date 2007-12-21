@@ -75,39 +75,14 @@ class CCSettingsExporter
 
         $c = count($d);
 
-        $got_string_map = false;
-
-        for( $i = 0; $i < $c; $i++ )
-        {
-            if( $d[$i]['config_type'] == 'clangmap' )
-            {
-                // gotta add the language map before serializing 
-                // string will work
-                $d[$i]['config_data'] = serialize($d[$i]['config_data']);
-                $configs->Insert($d[$i]);
-                unset($d[$i]);
-                $got_string_map = true;
-                break;
-            }
-        }
-
-        if( !$got_string_map )
-        {
-            // this should only happen in cases of 
-            // transitioning between 3.2 and earlier
-            // versions or upgrading to 5
-
-            $configs->SaveDefaultCfgStringMap();
-        }
-
         $keys = array_keys($d);
         $c = count($keys);
         $columns = array( 'config_type', 'config_scope', 'config_data' );
         for( $i = 0; $i < $c; $i++ )
         {
             $k = $keys[$i];
-            //print('doing:' .$d[$k]['config_type'] . "\n");
-            $d[$k]['config_data'] = $configs->CfgSerialize($d[$k]['config_type'],$d[$k]['config_data']);
+            $type = $d[$k]['config_type'];
+            $d[$k]['config_data'] = $serialize($d[$k]['config_data']);
         }
         $configs->InsertBatch( $columns, $d );
     }
@@ -123,16 +98,15 @@ class CCSettingsExporter
         if( empty($no_ui) )
             header("Content-type: application/text-editor");
 
-        $dohash    =  !empty($_REQUEST['h']);
-        $dourlmap  =  !empty($_REQUEST['u']);
-        $this->ExportPrint($dohash,$dourlmap,$dostrhash);
+        $this->ExportPrint();
         exit;
     }
 
-    function ExportPrint($dohash,$dourlmap)
+    function ExportPrint()
     {
-        // dohash := UnHash the strings. If this is false then we leave the strings as they are (hashed)
-        //           and we output the hashtable.
+        // dohash := UnHash pre cchost5 strings. If this is false then we leave the 
+        //           strings as they are (hashed) and we output the hashtable.
+        //           For >=cch5 we just output the string as is
 
         $configs =& CCConfigs::GetTable();
         $allrows = $configs->QueryRows('');
@@ -143,9 +117,7 @@ class CCSettingsExporter
         
         foreach( $allrows as $row )
         {
-            if( ($row['config_type'] == 'strhash') && $dohash ) // we need the hash 
-                continue;
-            if( ($row['config_type'] == 'urlmap') && !$dourlmap )
+            if( $row['config_type'] == 'urlmap' )
                 continue;
 
             print( "    array( \n" .
@@ -153,11 +125,7 @@ class CCSettingsExporter
                    "        'config_scope' => '{$row['config_scope']}',\n" .
                    "        'config_data'  => " );
 
-            if( $dohash )
-                $data = $configs->CfgUnserialize($row['config_type'],$row['config_data']);
-            else
-                $data = unserialize($row['config_data']);
-
+            $data = unserialize($row['config_data']);
             $this->_dump_data($data,0);
 
             print( "     ),\n" );

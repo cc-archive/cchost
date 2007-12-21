@@ -354,7 +354,6 @@ function install_tables(&$f,&$errs)
     require_once( 'cclib/cc-database.php' );
     require_once( 'cclib/cc-table.php' );
     require_once( 'cclib/cc-config.php');
-    require_once( 'cclib/cc-remix-tree.php' );
     require_once( 'cclib/cc-pools.php' );
     require_once( dirname(__FILE__) . '/cc-install-db.php');
     require_once( 'cclib/cc-lics-install.php');

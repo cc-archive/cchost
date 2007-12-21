@@ -1,7 +1,9 @@
 
 <link href="%url(css/forum.css)%" rel="stylesheet" title="Default Style" type="text/css" />
 
+<div class="forum_index">
 %loop(forums,group)%
+
     <div class="forum_group">
         <div class="forum_group_name">%(#group/forum_group_name)%</div>
         %loop(#group/forums,forum)%
@@ -22,4 +24,6 @@
             </div>
         %end_loop%
     </div>
+
 %end_loop%
+</div>

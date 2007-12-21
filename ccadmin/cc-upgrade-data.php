@@ -1,7 +1,34 @@
 <?
 
-fix_collabs();
-fix_topics();
+function fix_all()
+{
+    fix_collabs();
+    fix_tags();
+    fix_pool_resync();
+    flush();
+    fix_topics();
+}
+
+function fix_pool_resync()
+{
+    print("Updating pool resync...");
+    $sql[] = 'UPDATE cc_tbl_pool_item SET pool_item_num_remixes = 0';
+    $sql[] =<<<EOF
+UPDATE `cc_tbl_pool_item` AS pi SET pool_item_num_remixes = (
+SELECT count( * )
+FROM cc_tbl_pool_tree
+WHERE pool_tree_pool_parent = pi.pool_item_id)
+EOF;
+    CCDatabase::Query($sql);
+    print("done<br />\n");
+}
+
+function fix_tags()
+{
+    $sql = "UPDATE cc_tbl_uploads SET upload_tags = CONCAT(',',upload_tags,',') WHERE SUBSTRING(upload_tags,1,1) <> ','";
+    CCDatabase::Query($sql);
+    print("Updload tags updated<br />\n");
+}
 
 function fix_topics()
 {
@@ -16,14 +43,50 @@ WHERE topic_id = forum_thread_oldest
 EOF;
     CCDatabase::Query($sql);
 
+    $sql =<<<EOF
+UPDATE cc_tbl_topics  SET topic_type = 'forum' WHERE topic_type = ''
+EOF;
+    CCDatabase::Query($sql);
+
+    CCDatabase::Query('LOCK TABLES cc_tbl_topics WRITE, cc_tbl_topic_tree READ');
     CCDatabase::Query('UPDATE cc_tbl_topics SET topic_left = 0, topic_right = 0');
-    $qr = CCDatabase::Query('SELECT topic_id, topic_upload, topic_thread FROM cc_tbl_topics WHERE topic_type <> \'reply\' ORDER BY topic_date ASC');
+
+    // after some muddling through this was the fastest way to do this. In 
+    // the case of ccMixter we had 20,000 non-reply topics, however, 2/3rds
+    // of those did have replies (mainly because they were reviews)
+
+    // these are topics that actually have children 
+    // we group because has several children and would show up multiple
+    // times 
+    $sql =<<<EOF
+SELECT topic_id, topic_upload, topic_thread FROM cc_tbl_topics 
+join cc_tbl_topic_tree on topic_tree_parent = topic_id 
+where topic_type <> 'reply'
+group by topic_id
+ORDER BY topic_date ASC
+EOF;
+
+    $qr = CCDatabase::Query($sql);
     $right = 0;
     while( $_tid = mysql_fetch_row($qr) )
     {
         $right = rebuild_tree($_tid[0],$_tid[1],$right);
     }
 
+    // these are ones without parents
+    $sql =<<<EOF
+SELECT topic_id FROM cc_tbl_topics WHERE topic_left = 0 ORDER BY topic_date ASC
+EOF;
+
+    $qr = CCDatabase::Query($sql);
+    while( $row = mysql_fetch_row($qr) )
+    {
+        $left = $right + 1;
+        $right = $left + 1;
+       mysql_query("UPDATE cc_tbl_topics SET topic_left=$left, topic_right=$right WHERE topic_id={$row[0]}" )
+           or die(mysql_error());
+    }
+    CCDatabase::Query('UNLOCK TABLES');
     print("done<br />");
 }
 
@@ -53,6 +116,7 @@ function fix_collabs()
     SELECT upload_id,upload_tags
         FROM cc_tbl_collab_uploads
         JOIN cc_tbl_uploads ON upload_id=collab_upload_upload
+        WHERE collab_upload_type = ''
 EOF;
     $qr = CCDatabase::Query($sql);
     while( list($id,$tags)= mysql_fetch_row($qr) )

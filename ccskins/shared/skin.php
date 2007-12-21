@@ -19,6 +19,7 @@ $A['ratings_stars_small_user'] = 'util.php/ratings_stars_small_user';
 $A['recommends'] = 'util.php/recommends';
 
 $A['admin_menu_page']    = 'admin.php/print_admin_menu';
+$A['forum_admin'] = 'forum_misc.php/forum_admin';
 
 $A['popular_tags'] = 'tags.xml/popular_tags';
 $A['license_choice'] = 'license.xml/license_choice';

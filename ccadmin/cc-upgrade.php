@@ -131,11 +131,28 @@ function print_dir_form($msg='')
     <tr><th colspan="2" style="padding-top:1em;">Domain Change</th></tr>
     <tr><td colspan="2" style="padding-top:1em;">If you moved your data from another domain please let us know the change:</td><tr>
     <? $ttag = get_old_config('ttag');
-       $old_domain = preg_replace('%http://([^/]+)/%','$1',$ttag['root-url']); ?>
+       $old_domain = preg_replace('%http://([^/]+)/%','$1',$ttag['root-url']); 
+       $new_domain = !empty($_SERVER['HTTP_HOST']) ? 'http://' . $_SERVER['HTTP_HOST'] : $old_domain;
+       ?>
 
     <tr><td style="text-align:right">Old domain:</td><td><input name="old_domain" value="<?= $old_domain ?>" /></td></tr>
     <tr><td style="text-align:right">New domain:</td><td><input name="new_domain" value="<?= $old_domain ?>" /></td></tr>
 
+    <?
+
+        if( ($config['user-upload-root'] == 'people') && !empty($config['pretty-urls']) ) 
+        {
+    ?>
+    <tr><th colspan="2" style="padding-top:1em;">'People' Change</th></tr>
+    <tr><td colspan="2" style="padding-top:1em;">The upload directory 'people' conflicts with changes made to pretty-url setups.</td><tr>
+    <tr><td style="text-align:right">Change 'people' to:</td><td><input name="new_people" value="content" /></td></tr>
+    <?
+        } else {
+    ?>
+    <tr><td /><td><input name="new_people" type="hidden" value="<?= $config['user-upload-root'] ?>" /></td></tr>
+    <?
+        }
+    ?>
 <tr><td></td><td style="padding-top:2em;"><input type="submit" value="Let's go..." /></td></tr>
 </table>
 </form>
@@ -170,10 +187,8 @@ function impf_2()
     $new_config = array(
             'dataview-dir'        => $local_base_dir . '/dataviews/',
             'template-root'       => $local_base_dir . '/skins/' , 
-            'image-upload-dir'    => $local_base_dir . '/skins/images/',
+            'image-upload-dir'    => $local_base_dir . '/images/',
             'files-root'          => $local_base_dir . '/pages/',
-            'extra-lib'           => $local_base_dir . '/lib/',
-            'temp-dir'            => $local_base_dir . '/temp',
         );
 
     foreach( $new_config as $newdir )
@@ -196,75 +211,14 @@ function impf_2()
 
     print("Created new directories<br />\n");
 
-    $new_config['install-user-root']   = $local_base_dir . '/';
-    $new_config['cc-host-version']   = CC_HOST_VERSION;
-    $config = addslashes(serialize(array_merge( get_old_config(), $new_config )));
-    CCDatabase::Query("UPDATE cc_tbl_config SET config_data = '$config' WHERE config_scope = 'media' AND config_type = 'config'");
-
-    $skin_settings = addslashes( serialize( array (
-            'skin-file' => 'ccskins/plain/skin.tpl',
-            'string_profile' => 'ccskins/shared/strings/all_media.php',
-            'list_file' => 'ccskins/shared/formats/upload_page_wide.php',
-            'list_files' => 'ccskins/shared/formats/upload_list_wide.tpl',
-            'max-listing' => 12,
-            'html_form' => 'html_form.tpl/html_form',
-            'form_fields' => 'form_fields.tpl/form_fields',
-            'grid_form_fields' => 'form_fields.tpl/grid_form_fields',
-            'tab_pos' => 'ccskins/shared/layouts/tab_pos_header.php',
-            'box_shape' => 'ccskins/shared/layouts/box_round.php',
-            'page_layout' => 'ccskins/shared/layouts/layout024.php',
-            'color_scheme' => 'ccskins/shared/colors/color_mono.php',
-            'font_scheme' => 'ccskins/shared/colors/font_verdana.php',
-            'font_size' => 'ccskins/shared/colors/fontsize_sz_small.php',
-            'skin_profile' => 'ccskins/shared/profiles/profile_cchost.php',
-        ) ) );
-
-    CCDatabase::Query("INSERT INTO cc_tbl_config ( config_data, config_scope, config_type ) VALUES( '$skin_settings', 'media', 'skin-settings')");
-    
-    $extras = addslashes( serialize( array (
-            'macros' => array (
-                0 => $local_base_dir . '/skins/extras/extras_links.tpl',
-                1 => 'ccskins/shared/extras/extras_edpicks.tpl',
-                2 => 'ccskins/shared/extras/extras_latest.tpl',
-                3 => 'ccskins/shared/extras/extras_podcast_stream.php',
-                4 => 'ccskins/shared/extras/extras_search_box.tpl',
-                5 => 'ccskins/shared/extras/extras_support_cc.php',
-                ),
-            'macros_order' => 'targetmacros[]=1&targetmacros[]=2&targetmacros[]=3&targetmacros[]=5&targetmacros[]=9&targetmacros[]=10',
-            ) ) );
-
-    CCDatabase::Query("INSERT INTO cc_tbl_config ( config_data, config_scope, config_type ) VALUES( '$extras', 'media', 'extras')");
-
-    print("Installed New Skin Settings<br />\n");
-
-    if( $_POST['old_domain'] != $_POST['new_domain'] )
-    {
-        require_once('ccextras/cc-export-settings.inc');
-        require_once('cclib/cc-table.php');
-        require_once('cclib/cc-config.php');
-        require_once('cclib/cc-util.php');
-        $ex = new CCSettingsExporter();
-        ob_start();
-        $ex->ExportPrint(true,false);
-        $config_text = ob_get_contents();
-        ob_end_clean();
-        $config_text = str_replace($_POST['old_domain'],$_POST['new_domain'],$config_text);
-        $fname = 'temp_config_dump.txt';
-        $f = fopen($fname,'w');
-        fwrite($f, $config_text);
-        fclose($f);
-        $ex->ImportRead($fname);
-        //unlink($fname);
-
-        print("Domain switched from {$_POST['old_domain']} to {$_POST['new_domain']}<br />\n");
-    }
+    untangle_the_freakin_config_mess($local_base_dir,$new_config);
 
 
 ?>
 <p>
 The next step involves updating the structure of your database. Depending on the amount
 of data and the speed of your server this could take a few minutes. (WARNING: Your
-ccHost installation is in an imcomplete, unusable state until you finish this upgrade.)
+ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
 </p>
 <p>
 <h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=3">Do it...</a></h3>
@@ -283,7 +237,7 @@ function impf_3()
 <p>
 The next step involves updating the some internal pointers in the database. If you have a lot of reviews
 or forum messages this could take a few minutes. (WARNING: Your
-ccHost installation is in an imcomplete, unusable state until you finish this upgrade.)
+ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
 </p>
 <p>
 <h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=4">Do it...</a></h3>
@@ -294,11 +248,25 @@ function impf_4()
     setup_old_db();
 
     require_once( dirname(__FILE__) . '/cc-upgrade-data.php');
+    fix_all();
 
-    update_config_db($err);
+?>
+<p>
+The next step will update your configuration (WARNING: Your
+ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
+</p>
+<p>
+<h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=5">Do it...</a></h3>
+<?
+}
+
+function impf_5()
+{
+
+update_config_db($err);
     if( $err )
     {
-        print "$err\n<br />";
+        print "$e\n<br />";
         return;
     }
    ?>
@@ -331,6 +299,121 @@ function get_old_config($config='config')
     setup_old_db();
     $row = CCDatabase::QueryItem("SELECT config_data FROM cc_tbl_config WHERE config_scope = 'media' AND config_type = '$config'");
     return unserialize($row);
+}
+
+function _do_unhash(&$v,$strhash,$domswitch)
+{
+    if( is_array($v) )
+    {
+        $k = array_keys($v);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $ph =& $v[$k[$i]];
+            _do_unhash($ph,$strhash,$domswitch);
+        }
+    }
+    else
+    {
+        if( isset($strhash[$v]) )
+            $v = $strhash[$v];
+        if( !empty($domswitch) )
+            $v = str_replace($domswitch[0],$domswitch[1],$v);
+    }
+}
+
+function untangle_the_freakin_config_mess($local_base_dir,$new_config)
+{
+    setup_old_db();
+    // we've got to unhash the strings
+    $strhash = CCDatabase::QueryItem("SELECT config_data FROM cc_tbl_config WHERE config_type = 'strhash'");
+    if( $strhash )
+    {
+        // hack for ccMixter
+        $strhash = str_replace('Ã',  'e',$strhash);
+        $strhash = str_replace('ƒÂ©',' ',$strhash);
+        $strhash = unserialize($strhash);
+    }
+    if( $_POST['old_domain'] != $_POST['new_domain'] )
+    {
+        $dom_switch = array($_POST['old_domain'],$_POST['new_domain'] );
+    }
+    else
+    {
+        $dom_switch = array();
+    }
+
+    $old_config = get_old_config();
+    $new_people = $_POST['new_people'];
+    if( $old_config['user-upload-root'] != $new_people )
+    {
+        rename($old_config['user-upload-root'],$new_people);
+        print("Renamed '{$old_config['user-upload-root']}' to '{$new_people}'<br />\n");
+        $new_config['user-upload-root'] = $new_people;
+    }
+
+    $new_config['install-user-root']   = $local_base_dir . '/';
+    $new_config['cc-host-version']   = CC_HOST_VERSION;
+    $config = array_merge( $old_config, $new_config );
+    _do_unhash($config,$strhash,$dom_switch);
+    $config = addslashes(serialize($config));
+    mysql_query('LOCK TABLES cfg READ, cc_tbl_config WRITE');
+    mysql_query("UPDATE cc_tbl_config SET config_data = '$config' WHERE config_scope = 'media' AND config_type = 'config'");
+
+    $skin_settings = addslashes( serialize( array (
+            'skin-file' => 'ccskins/plain/skin.tpl',
+            'string_profile' => 'ccskins/shared/strings/all_media.php',
+            'list_file' => 'ccskins/shared/formats/upload_page_wide.php',
+            'list_files' => 'ccskins/shared/formats/upload_list_wide.tpl',
+            'max-listing' => 12,
+            'html_form' => 'html_form.tpl/html_form',
+            'form_fields' => 'form_fields.tpl/form_fields',
+            'grid_form_fields' => 'form_fields.tpl/grid_form_fields',
+            'tab_pos' => 'ccskins/shared/layouts/tab_pos_header.php',
+            'box_shape' => 'ccskins/shared/layouts/box_round.php',
+            'page_layout' => 'ccskins/shared/layouts/layout024.php',
+            'color_scheme' => 'ccskins/shared/colors/color_mono.php',
+            'font_scheme' => 'ccskins/shared/colors/font_verdana.php',
+            'font_size' => 'ccskins/shared/colors/fontsize_sz_small.php',
+            'skin_profile' => 'ccskins/shared/profiles/profile_cchost.php',
+        ) ) );
+
+    mysql_query("INSERT INTO cc_tbl_config ( config_data, config_scope, config_type ) VALUES( '$skin_settings', 'media', 'skin-settings')");
+    
+    $extras = addslashes( serialize( array (
+            'macros' => array (
+                1 => 'ccskins/shared/extras/extras_edpicks.tpl',
+                2 => 'ccskins/shared/extras/extras_latest.tpl',
+                3 => 'ccskins/shared/extras/extras_podcast_stream.php',
+                4 => 'ccskins/shared/extras/extras_search_box.tpl',
+                5 => 'ccskins/shared/extras/extras_support_cc.php',
+                ),
+            'macros_order' => 'targetmacros[]=1&targetmacros[]=2&targetmacros[]=3&targetmacros[]=5',
+            ) ) );
+
+    mysql_query("INSERT INTO cc_tbl_config ( config_data, config_scope, config_type ) VALUES( '$extras', 'media', 'extras')");
+
+    print("Installed New Skin Settings<br />\n");
+
+    $sql = "SELECT config_id,config_data FROM cc_tbl_config as cfg WHERE config_type NOT " .
+            "IN('strhash','clangmap','urlmap','extras','skin-settings','config')";
+    $qr = mysql_query($sql);
+    while( $row = mysql_fetch_assoc($qr) )
+    {
+        $data = unserialize($row['config_data']);
+        _do_unhash($data,$strhash,$dom_switch);
+        $data = addslashes(serialize($data));
+        mysql_query("UPDATE cc_tbl_config SET config_data = '$data' WHERE config_id = {$row['config_id']}");
+    }
+
+    $sql = "DELETE FROM cc_tbl_config WHERE config_type IN('strhash','clangmap','urlmap')";
+    mysql_query($sql);
+    mysql_query('UNLOCK TABLES');
+
+    print("Config strings updated<br />\n");
+    if( !empty($dom_switch) )
+        print("Domain switched from {$_POST['old_domain']} to {$_POST['new_domain']}<br />\n");
+
 }
 
 print '</body></html>';
