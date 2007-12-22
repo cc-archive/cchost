@@ -20,17 +20,22 @@ p { font-size: 12px; }
   width:100%;
 }
 </style>
-<h1 >Creative Commons Magnatune Lisa DeBenedictis Remix Contest</h1>
-<h2  style="color: brown;font-size:18px;margin:0px;font-weight:normal;padding:5px;
-           text-align:center; border: 1px solid brown;margin:7px;">Hear the <a  href="<?= $A['root-url']?>magnatune/view/contest/winners">winners</a>!</h2>
-<img  src="/mixter-files/ccdj2.gif" height="150" style="float:right;margin-left:10px;margin-bottom:5px;" />
+<div style="width:70%; margin: 8px auto;">
+<div class="box">
+<h2 >Creative Commons Magnatune Lisa DeBenedictis Remix Contest</h2>
+<p  style="color: brown;font-size:18px;margin:0px;font-weight:normal;padding:5px;
+           text-align:center; border: 1px solid brown;margin:7px;">Hear the <a  href="<?= $A['root-url']?>magnatune/view/contest/winners">winners</a>!</p>
+</div>
+<div height="150" style="float:right;margin-left:10px;margin-bottom:5px;" >
+<img  src="/mixter-files/images/cc-mixter-sq-logo.png" />
+</div>
 <h2  style="font-size:18px;margin:0px;font-weight:normal;">What it was:</h2>
 <p >A contest to remix two vocal tracks ("Cuckoo" and/or "Below") from Lisa DeBenedictis's <a  href="http://magnatune.com">Magnatune</a> release "<a  href="http://magnatune.com/artists/debenedictis">Tigers</a>" and using samples from the entire catalog of <a  href="http://creativecommons.org/">Creative Commons</a> licensed tracks on <a  href="http://magnatune.com/">Magnatune</a> (over 1,700 tracks to sample from!)</p>
 <p >The CC Magnatune/Lisa DeBenedictis Remix Contest built upon the label's catalog featuring tracks licensed under the <a  href="http://creativecommons.org/licenses/by-nc-sa/2.0">Attribution-NonCommerical-ShareAlike licenses</a>, giving you the right to rip, sample, mash, and share, without legal hassle. </p>
 <div  class="contestbox">
 <div  class="contestback" style="width:370px;float:right;margin:8px;">
 <div  style="padding:10px 20px 10px 10px;">
-<a  href="/contests/magnatune"><img  src="/mixter-files/magnatune_logo.gif" alt="Magnatune" style="float:right;margin-left:10px;margin-bottom:6px;border:1px solid #ccc;" /></a>
+<a  href="/contests/magnatune"><img  src="/mixter-files/pages/magnatune/magnatune_logo.gif" alt="Magnatune" style="float:right;margin-left:10px;margin-bottom:6px;border:1px solid #ccc;" /></a>
 <a  href="http://magnatune.com/info"><h2  style="font-size:18px;margin:0px;font-weight:normal;">What's Magnatune?</h2></a>
 <br  clear="right" />
 <p >"Musicians need to be in control and enjoy the process of having their music released. The systematic destruction of musician's lives is unacceptable: musicians are very close to staging a revolution (and some already have)."</p>
@@ -56,3 +61,4 @@ Creative Re-use and Transformation of Samples from the Magnatune catalog- 30% of
 Production Quality -30% of overall grade</p>
 <h2  style="font-size:18px;margin:0px;font-weight:normal;">Winners:</h2>
 <p ><a  href="<?= $A['root-url']?>magnatune/view/contest/winners">View the winners</a>!</p>
+</div>
