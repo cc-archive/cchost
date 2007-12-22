@@ -181,22 +181,20 @@ function & CC_cache_query(
 function & CC_tag_query( 
    $tags,$search_type='all',$sort_on='',$order='',$limit='',$with_menus=false,$with_remixes=false)
 {
-    require_once('cclib/cc-upload-table.php');
-    $uploads =& CCUploads::GetTable();
-    $uploads->SetDefaultFilter(true,true); // second true means treat like anonymous
-    $uploads->SetTagFilter(CCUtil::StripText($tags),$search_type);
-    if( $sort_on )
-        $uploads->SetOrder($sort_on,$order);
-    if( $limit )
-        $uploads->SetOffsetAndLimit(0,$limit);
-    $records =& $uploads->GetRecords('');
-    $uploads->SetTagFilter('');
-    $uploads->SetOffsetAndLimit(0,0);
-    if( $with_menus || $with_remixes )
-    {
-        die( 'with_menu and with_remixes are no longer supported, sorry' );
-    }
-    $uploads->SetDefaultFilter(true,false); 
+    $q = "f=php&dataview=info_avatar&tags=$tags&type=$search_type&sort=$sort_on&order=$order&limit=$limit";
+    require_once('cclib/cc-query.php');
+    $query = new CCQuery();
+    $args = $query->ProcessAdminArgs($q);
+    list( $records ) = $query->Query($args);
+    require_once('cclib/cc-dataview.php');
+    $dv = new CCDataView();
+    $info = array();
+    if( $with_menus )
+        $info['e'][] = CC_EVENT_FILTER_UPLOAD_MENU;
+    if( $with_remixes )
+        $info['e'][] = CC_EVENT_FILTER_REMIXES_SHORT;
+    if( !empty($info) )
+        $dv->FilterRecords($records,$info);
     return $records;
 }
 
