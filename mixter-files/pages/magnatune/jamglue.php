@@ -6,7 +6,7 @@ function _t_jamglue_init($T,&$targs) {
     
 }
 ?><div  style="font-family: Verdana; font-size:11px">
-<link  rel="stylesheet" type="text/css" href="<?= $A['root-url']?>mixter-files/home.css" title="Default Style"></link>
+
 <h1 >Jamglue and ccMixter</h1>
 <div  style="width: 70%; margin-left: 10%;">
 <div  id="fs_container">

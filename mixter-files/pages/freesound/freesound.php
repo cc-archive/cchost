@@ -1,41 +1,34 @@
-<?
-if( !defined('IN_CC_HOST') )
-    die('Welcome to ccHost');
 
-function _t_freesound_init($T,&$targs) {
-    
-}
-?><div  style="font-family: Verdana; font-size:11px">
-<link  rel="stylesheet" type="text/css" href="<?= $A['root-url']?>mixter-files/home.css" title="Default Style"></link>
-<h1 >the freesound project &amp; ccMixter</h1>
-<div  id="fs_container">
-<table  id="fs_table" cellspacing="0" cellpadding="0">
-<tr ><td  id="fs_top_left"></td><td  id="fs_top">&nbsp;</td><td  id="fs_top_right"></td></tr>
-<tr ><td  id="fs_side"></td>
-<td  id="fs_content">
-<div  style="float: right; margin: 8px;"><a  href="http://freesound.iua.upf.edu/"><img  src="<?= $T->URL('freesound-logo.gif'); ?>" /></a></div>
-<p >The <a  href="http://freesound.iua.upf.edu/">freesound project</a> is an independent
-audio sample collection website that uses Creative Commons licensing to share 10,000s
-of sample for use in audio works. Think of this way: freesound is to samples as ccMixter
-is to remixes. (The freesound project and its website are not associated with Creative
-Commons or ccMixter. We just like 'em a whole lot.)</p>
-</td>
-<td  id="fs_side"></td>
-</tr>
-<tr ><td  id="fs_bot_left"></td><td  id="fs_bot">&nbsp;</td><td  id="fs_bot_right"></td></tr>
-</table>
+<h1>the freesound project &amp; ccMixter</h1>
+<div  style="font-family: Verdana; font-size:11px;width:450px;margin:0px auto;">
+    <div  class="box">
+        <div  style="float: right; margin: 8px;"><a  href="http://freesound.iua.upf.edu/">
+            <img  src="<?= $T->URL('freesound-logo.gif'); ?>" /></a>
+        </div>
+    <p >The <a  href="http://freesound.iua.upf.edu/">freesound project</a> is an independent
+    audio sample collection website that uses Creative Commons licensing to share 10,000s
+    of sample for use in audio works. Think of this way: freesound is to samples as ccMixter
+    is to remixes. (The freesound project and its website are not associated with Creative
+    Commons or ccMixter. We just like 'em a whole lot.)</p>
+    </div>
 </div>
-<h3  style="text-align: left">Sound Designers</h3>
-<p >While ccMixter accepts sample uploads, it's not our specialty so we strongly 
-encourage sound designers to consider uploading to 
-<a  href="http://freesound.iua.upf.edu/">freesound</a>. Your samples will still be 
-available for remixing here and you'll get 100% of the same attribution for every
-remix that is uploaded here. We even keep track of 
-<a  href="<?= $A['home-url']?>pools/pool/4">who's remixed you...</a></p>
-<h3  style="text-align: left">Remixers</h3>
+<div style="width:500px; margin: 7px auto;">
+<h3 style="text-align: left">Sound Designers</h3>
+<p>
+    While ccMixter accepts sample uploads, it's not our specialty so we strongly 
+    encourage sound designers to consider uploading to 
+    <a  href="http://freesound.iua.upf.edu/">freesound</a>. Your samples will still be 
+    available for remixing here and you'll get 100% of the same attribution for every
+    remix that is uploaded here. We even keep track of 
+    <a  href="<?= $A['home-url']?>pools/pool/4">who's remixed you...</a>
+</p>
+
+<h3 style="text-align: left">Remixers</h3>
 <p >The Creative Commons Sample Pool just grew by over 20,000 samples thanks to the 
-freesound project and ccMixter working together to act as one big sample and remix consortium.</p>
-<p >Here are the steps to use the two sites together:</p>
+freesound project and ccMixter working together to act as one big sample and remix consortium.
+</p>
+
+<p>Here are the steps to use the two sites together:</p>
 <style >
 .fslist li {
   margin-bottom: 13px;
@@ -64,10 +57,7 @@ freesound project and ccMixter working together to act as one big sample and rem
     form</a> and follow these steps:
   </li>
 </ul>
-<table  id="fs_table" cellspacing="0" cellpadding="0">
-<tr ><td  id="fs_top_left"></td><td  id="fs_top">&nbsp;</td><td  id="fs_top_right"></td></tr>
-<tr ><td  id="fs_side"></td>
-<td  id="fs_content">
+
 <ol  class="fslist"><li >Select the 'Freesound' sample pool and search for the artists that
     you samples.
     <div  class="fsimg"><img  src="<?= $T->URL('freesound-pool-1.gif'); ?>" /></div></li>
@@ -79,9 +69,4 @@ freesound project and ccMixter working together to act as one big sample and rem
     <div  class="fsimg"><img  src="<?= $T->URL('freesound-pool-3.gif'); ?>" /></div></li>
 <li >Continue with uploading your remix using the remix form.</li>
 </ol>
-</td>
-<td  id="fs_side"></td>
-</tr>
-<tr ><td  id="fs_bot_left"></td><td  id="fs_bot">&nbsp;</td><td  id="fs_bot_right"></td></tr>
-</table>
 </div>

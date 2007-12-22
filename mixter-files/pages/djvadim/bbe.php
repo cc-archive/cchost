@@ -16,7 +16,7 @@ if( !defined('IN_CC_HOST') )
     <div style="float: right; margin: 8px;">
         <a href="http://bbemusic.com/"><img  src="<?= $T->URL('bbe-logo.jpg'); ?>" /></a>
         <br/>
-        <a  href="http://creativecommons.org"><img  src="<?= $T->URL('cc-logo.png'); ?>" /></a>
+        <a  href="http://creativecommons.org"><img  src="<?= $T->UserGraphic('cc-logo.png'); ?>" /></a>
     </div>
     <p><?= $bbet ?></p>
 </div>

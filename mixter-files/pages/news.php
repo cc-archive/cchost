@@ -5,7 +5,7 @@ if( !defined('IN_CC_HOST') )
 function _t_news_init($T,&$targs) {
     
 }
-?><link  rel="stylesheet" type="text/css" href="<?= $A['root-url']?>mixter-files/home.css" title="Default Style"></link>
+?>
 <h1  class="cc_hide">News from Friends of ccMixter</h1>
 <style >
 .reader-publisher-module { /* outter div */

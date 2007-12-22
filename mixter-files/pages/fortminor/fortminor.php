@@ -27,12 +27,19 @@ p {
   width:100%;
 }
 </style>
-<img  src="<?= $T->URL('fmlogo.jpg'); ?>" style="float: left; margin-right: 10px; margin-bottom: 5px;" height="100" alt="Fort Minor logo &copy; Fort Minor. Used with permission." title="Fort Minor logo &copy; Fort Minor. Used with permission." />
 <h1  id="pagehead" style="color:#000; font-size: 28px;">Fort Minor Remix Contest</h1>
 <table  style=""><tr ><td >
-<div  style="border: 1px solid brown; font-size: 16px; ;padding: 15px; color:brown;font-weight:bold;text-align:center;"><img  src="/mixter-files/marckaschke.jpg" style="float:right;margin:12px;" /><br  />Congratulations to our grand prize winner <a  href="<?= $A['home-url']?>people/marc" style="white-space:nowrap;">marc kaschke</a> for his entry:<br  /><br  />
-<a  href="<?= $A['home-url']?>files/marc/4492" style="white-space:nowrap;font-weight:bold;font-size:17px">Remember the Name (Kaschke & Mauer Remix)</a><br  /><br  />
-Congratulations marc!!</div></td></tr></table>
+<div  class="box" >
+<img  src="<?= $T->URL('fmlogo.jpg'); ?>" style="float: left; margin-right: 10px; margin-bottom: 5px;" height="100" alt="Fort Minor logo &copy; Fort Minor. Used with permission." title="Fort Minor logo &copy; Fort Minor. Used with permission." />
+<img  src="/mixter-files/marckaschke.jpg" style="float:right;margin:12px;" />
+
+<p>Congratulations to our grand prize winner <a  href="<?= $A['home-url']?>people/marc" style="white-space:nowrap;">
+marc kaschke</a> for his entry:</p>
+<p><a  href="<?= $A['home-url']?>files/marc/4492" style="white-space:nowrap;font-weight:bold;font-size:17px">Remember the Name (Kaschke & Mauer Remix)</a></p>
+<p>Congratulations marc!!</p>
+<br style="clear:both" />
+</div>
+</td></tr></table>
 <p >
 <a  href="http://creativecommons.org/">Creative Commons</a>, <a  href="http://www.warnerbrosrecords.com/">Warner Bros. Records</a>, and <a  href="http://www.machineshoprecordings.com">Machine Shop Recordings</a> are proud to present the Fort Minor Remix Contest. <a  href="http://fortminor.com/">Fort Minor</a> is offering the separated audio elements of "Remember the Name" online under a <a  href="http://creativecommons.org/licenses/by-nc/2.5/">Creative Commons BY-NC license</a>, so that producers all over the world can easily create remixes of the hit song.
 </p>
