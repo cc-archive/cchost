@@ -35,13 +35,14 @@ table.cc_topic_thread td.cc_topic_body div.cc_topic_commands,
 table.cc_topic_thread td.cc_topic_body div.cc_topic_date,
 table.cc_topic_thread td.cc_topic_body div.cc_topic_text {
 	padding: 4px 0px 4px 15px;
-	width: 85%;
 	margin: 0px;
+	width: 85%;
 }
 
 table.cc_topic_thread td.cc_topic_body div.cc_topic_commands,
 table.cc_topic_thread td.cc_topic_reply div.cc_topic_commands { 
 	height: 2.1em;
+	white-space: nowrap;
 }
 
 

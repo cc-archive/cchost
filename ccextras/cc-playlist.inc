@@ -310,30 +310,26 @@ class CCPlaylists
         }
         else
         {
-            $cart_items =& CCPlaylistItems::GetTable();
-            $uploads = new CCUploads();
-            $j1 = $cart_items->AddJoin( $uploads, 'cart_item_upload' );
-            $j2 = $cart_items->AddJoin( new CCUsers(), $j1 . '.upload_user' );
 
-            $w['cart_item_cart'] = $playlist_id;
-            $offset = empty($_REQUEST['offset']) ? 0 : intval($_REQUEST['offset']);
-            $limit  = empty($_REQUEST['limit']) ? 0 : intval($_REQUEST['limit']);
-            $cart_items->SetOffsetAndLimit($offset,$limit);
-            $cart_items->SetOrder('cart_item_order','ASC');
-
-            // this is transitional code, not a good idea to cut/paste from here:
             $purl = ccl('files') . '/';
-            $cart_items->AddExtraColumn( "CONCAT('{$purl}', user_name, '/', upload_id) as file_page_url" );
-            $aurl = ccl('people') . '/';
-            $cart_items->AddExtraColumn( "CONCAT('{$aurl}', user_name) as artist_page_url" );
-            $rows = $cart_items->QueryRows($w);
-            $dv = new CCDataView();
-            $filters = array( 'e' => array( CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_DOWNLOAD_URL ) ); // sic
-            $args['records'] =& $rows; 
-            $dv->FilterRecords($args['records'],$filters);
+            $ccp = ccl('people') . '/';
+            $sql =<<<EOF
+                SELECT upload_name, user_name, user_real_name, upload_id, upload_contest,
+                  CONCAT('$ccp',user_name) as artist_page_url ,
+                  CONCAT('$purl',user_name,'/',upload_id) as file_page_url
+                  FROM cc_tbl_cart_items
+                  JOIN cc_tbl_uploads on cart_item_upload = upload_id
+                  JOIN cc_tbl_user ON upload_user = user_id 
+                  WHERE cart_item_cart = $playlist_id
+                  ORDER BY cart_item_order ASC
+EOF;
 
+            $args['records'] =& CCDatabase::QueryRows($sql);
             $args['feed_q'] = url_args( ccl('api','query'), 'f=rss&playlist=' . $playlist_id );
         }
+        $dv = new CCDataView();
+        $filters = array( 'e' => array( CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_DOWNLOAD_URL ) ); // sic
+        $dv->FilterRecords($args['records'],$filters);
         return $this->_add_menu($args,$playlist_id,$is_popup);
     }
 
@@ -498,11 +494,10 @@ class CCPlaylists
     function Popup($playlist_id='')
     {
         if( empty($playlist_id) )
-        {
-            $pl = $this->_get_default_playlist();
-            $playlist_id = $pl['cart_id'];
-        }
+            $playlist_id = $this->_get_default_playlist(true);
+
         $args = $this->_get_playlist_info($playlist_id,true);
+
         if( empty($args) )
             CCUtil::Send404();
         require_once('cclib/cc-page.php');
@@ -601,36 +596,67 @@ class CCPlaylists
         $this->_add($upload_id,$playlist_id);
         $this->_output('str_pl_track_added');
     }
-
-    function _get_default_playlist()
+ 
+    function _get_default_playlist($id_only=false)
     {
-        $carts = new CCPlaylist(true);
-        $w['cart_subtype'] = 'default';
-        $rows = $carts->GetRecords($w);
-        if( !empty($rows) )
-            $row = $rows[0];
-        if( empty($row) )
+        $ccp = ccl('people');
+        if( $id_only )
         {
-            // find an admin
-            $users =& CCUsers::GetTable();
-            $w2['user_name'] = 'admin';
-            $admin_id = $users->QueryKey($w2);
-            if( empty($admin_id) )
-            {
-                $config =& CCConfigs::GetTable();
-                $settings = $config->GetConfig('settings');
-                $admins = preg_split('/(\W|,)/', $settings['admins'] );
-                $w2['user_name'] = $admins[0];
-                $admin_id = $users->QueryKey($w2);
-                if( empty($admin_id) )
-                    CCUtil::Send404();
-            }
-    
-            $newrow = $this->_create_playlist('default','str_pl_dynamic_playlist','',$admin_id);
-            // we re-query to get the user record joined in
-            $row = $carts->GetRecordFromID($newrow['cart_id']);
+            $sql =<<<EOF
+                SELECT cart_id
+                  FROM cc_tbl_cart
+                  JOIN cc_tbl_user ON cart_user = user_id 
+                  WHERE cart_type = 'playlist' AND cart_subtype = 'default'
+                  LIMIT 1
+EOF;
+            $id = CCDatabase::QueryItem($sql);
+            return $id;
+        }
+        else
+        {
+            $sql =<<<EOF
+                SELECT cart_name, cart_desc, cart_id, cart_tags, cart_date,
+                  CONCAT('$ccp','/',user_name) as artist_page_url 
+                  FROM cc_tbl_cart
+                  JOIN cc_tbl_user ON cart_user = user_id 
+                  WHERE cart_type = 'playlist' AND cart_subtype = 'default'
+                  LIMIT 1
+EOF;
+            $row = CCDatabase::QueryRow($sql);
+            if( $row )
+                return $row;
+
         }
 
+        // find an admin
+        $users =& CCUsers::GetTable();
+        $w2['user_name'] = 'admin';
+        $admin_id = $users->QueryKey($w2);
+        if( empty($admin_id) )
+        {
+            $config =& CCConfigs::GetTable();
+            $settings = $config->GetConfig('settings');
+            $admins = preg_split('/(\W|,)/', $settings['admins'] );
+            $w2['user_name'] = $admins[0];
+            $admin_id = $users->QueryKey($w2);
+            if( empty($admin_id) )
+                CCUtil::Send404();
+        }
+    
+        $newrow = $this->_create_playlist('default','str_pl_dynamic_playlist','',$admin_id);
+
+        if( $id_only )
+            return $new_row['cart_id'];
+
+        $sql =<<<EOF
+            SELECT cart_name, cart_desc, cart_id, cart_tags, cart_date,
+              CONCAT('$ccp','/',user_name) as artist_page_url 
+              FROM cc_tbl_cart
+              JOIN cc_tbl_user ON cart_user = user_id 
+              WHERE cart_id = {$newrow['cart_id']}
+              LIMIT 1
+EOF;
+        $row = CCDatabase::QueryRow($sql);
         return $row;
     }
 

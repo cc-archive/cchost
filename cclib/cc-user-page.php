@@ -92,6 +92,7 @@ class CCUserPage
 
     function Uploads($username,$tagfilter='')
     {
+        //CCDebug::StackTrace();
         CCPage::PageArg('user_tags_user',$username,'user_tags');
         CCPage::PageArg('user_tags_tag',$tagfilter);
         $where['user_name'] = $username;
@@ -128,7 +129,7 @@ class CCUserPage
     function _get_tabs($user,&$default_tab_name)
     {
         $record = CCDatabase::QueryRow(
-             "SELECT user_id, user_name, user_real_name, user_num_uploads, user_num_reviews, user_num_scores,user_num_posts "
+             "SELECT user_id, user_name, user_real_name, user_num_uploads, user_num_reviews, user_num_reviewed,user_num_scores,user_num_posts "
              . "FROM cc_tbl_user WHERE user_name = '{$user}'");
 
         $tabs = array();

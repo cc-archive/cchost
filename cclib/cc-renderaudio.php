@@ -183,6 +183,14 @@ class CCRenderAudio extends CCRender
 
         $streamfile = '';
         $n = count($records);
+
+        if( $n && empty($records[0]['files']) )
+        {
+            $dv = new CCDataView();
+            $info = array( 'e' => array(CC_EVENT_FILTER_FILES) );
+            $dv->FilterRecords($records,$info);
+        }
+
         for( $i = 0; $i < $n; $i++ )
         {
             $R =& $records[$i];

@@ -119,12 +119,12 @@ class CCDataView
 
         $info = $func();
 
-        $ret =& $this->PerformInfo( $info, $args, $ret_type, $queryObj );
+        $ret =& $this->PerformInfo( $info, $args, $ret_type, $queryObj, $dataview );
 
         return $ret;
     }
 
-    function & PerformInfo( $info, $args, $ret_type = CCDV_RET_RECORDS, $queryObj=null)
+    function & PerformInfo( $info, $args, $ret_type = CCDV_RET_RECORDS, $queryObj=null, $dataview=null)
     {
         $sqlargs = array();
         foreach( array( array( 'JOIN', 'joins' ),
@@ -152,7 +152,7 @@ if( 0 )
 {
     $x['sqlargs'] = $sqlargs;
     $x[] = $this->sql;
-    $x[] = empty($dataview) ? '*no dv*' : $dataview;
+    $x[] = !isset($dataview) ? '*no dv*' : $dataview;
     $x[] = $queryObj;
     CCDebug::PrintVar($x);
 } // ---------------------------------

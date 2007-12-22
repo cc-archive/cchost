@@ -246,7 +246,7 @@ class CCSkin
         }
         */
 
-        return CCUtil::Strip($text);
+        return CCUtil::StripSlash($text);
     }
 
     /**
@@ -453,7 +453,7 @@ class CCSkin
             return $partial;
         $path = $this->Search($partial,false);
         if( empty($path) )
-            die("Can't find: $partial");
+            die("\"/>Can't find: $partial");
         return ccd($path);
     }
 
@@ -493,7 +493,14 @@ class CCSkin
         return $this->search_cache[$sfile];
     }
 
-
+    function UserGraphic($partial)
+    {
+        global $CC_GLOBALS;
+        $path = $CC_GLOBALS['image-upload-dir'] . $partial;
+        if( file_exists($path) )
+            return ccd($path);
+        die("\"/>Can't find graphic $partial");
+    }
     function ImportSkin($dir)
     {
         $this->_pick_up_skin_file($dir,'strings');

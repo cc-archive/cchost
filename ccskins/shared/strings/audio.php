@@ -90,12 +90,34 @@ $GLOBALS['str_stream']                = _('Stream');
 $GLOBALS['str_stream_now']            = _('Stream Now');
 $GLOBALS['str_stream_this_page']      = _('Stream this page');
 
-$GLOBALS['str_review']                = _('Write Review');
+$GLOBALS['str_review']                = _('Add Review');
+$GLOBALS['str_reviews_n']             = _('%d Reviews');
+$GLOBALS['str_reviews_most_active']   = _('Most Active Reviewers');
+$GLOBALS['str_reviews_most_recent']   = _('Most Recent Reviews');
+$GLOBALS['str_reviews_for_s']         = _('Reviews for "%s"');
+$GLOBALS['str_review_of']             = _('reviews on ');
+$GLOBALS['str_reviews_see']           = _('see reviews...');
+$GLOBALS['str_reviews_left_by']           = _('Reviews left by %s');
+$GLOBALS['str_reviews_left_for']           = _('Reviews left for %s');
+$GLOBALS['str_reviews_left_for_button']           = _('See reviews left for %s');
+$GLOBALS['str_reviews_left_by_button']           = _('See reviews left by %s');
+$GLOBALS['str_reviews']         = _('Reviews');
+$GLOBALS['str_review_write']    = _('Write Review');
+$GLOBALS['str_review_stats']    = _('Review Stats');
+$GLOBALS['str_reviews_stats_1']    = _('%s has not left any reviews and has been %sreviewed once%s');
+$GLOBALS['str_reviews_stats_2']    =  _('%s has not left any reviews and has been reviewed %s%d times%s');
+$GLOBALS['str_reviews_stats_3']    =  _('%s has left %s1 review%s and has not been reviewed');
+$GLOBALS['str_reviews_stats_4']    = _('%s has left %s1 review%s and has been %sreviewed once%s');
+$GLOBALS['str_reviews_stats_5']    = _('%s has left %s1 review%s and has been reviewed %s%d times%s');
+$GLOBALS['str_reviews_stats_6']    = _('%s has left %s%d reviews%s and has not been reviewed');
+$GLOBALS['str_reviews_stats_7']    = _('%s has left %s%d reviews%s and has been %sreviewed once%s');
+$GLOBALS['str_reviews_stats_8']    = _('%s has left %s%d reviews%s and has been reviewed %s%d times%s');
+
+
 $GLOBALS['str_more_reviews']          = _('More reviews');
 $GLOBALS['str_more_reviewers']        = _('More reviews');
 $GLOBALS['str_recent_reviewers']      = _('Recent Reviewers') ;
 $GLOBALS['str_recent_reviews']        = _('Recent Reviews');
-$GLOBALS['str_reviews'] = _('Reviews');
 
 $GLOBALS['str_search_reviews'] = _('Reviews');
 

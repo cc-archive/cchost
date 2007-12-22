@@ -387,16 +387,16 @@ $GLOBALS['str_reviews_left_for']           = _('Comments left for %s');
 $GLOBALS['str_reviews_left_for_button']           = _('See comments left for %s');
 $GLOBALS['str_reviews_left_by_button']           = _('See comments left by %s');
 $GLOBALS['str_reviews']         = _('Comments');
-$GLOBALS['str_review_write']    = _('Write Review');
-$GLOBALS['str_review_stats']    = _('Review Stats');
-$GLOBALS['str_reviews_stats_1']    = _('%s has not left any reviews and has been reviewed %sonce%s');
-$GLOBALS['str_reviews_stats_2']    =  _('%s has not left any reviews and has been reviewed %s%d times%s');
-$GLOBALS['str_reviews_stats_3']    =  _('%s has left %s1 review%s and has not been reviewed');
-$GLOBALS['str_reviews_stats_4']    = _('%s has left %s1 review%s and has been %sreviewed once%s');
-$GLOBALS['str_reviews_stats_5']    = _('%s has left %s1 review%s and has been reviewed %s%d times%s');
-$GLOBALS['str_reviews_stats_6']    = _('%s has left %s%d reviews%s and has not been reviewed');
-$GLOBALS['str_reviews_stats_7']    = _('%s has left %s%d reviews%s and has been %sreviewed once%s');
-$GLOBALS['str_reviews_stats_8']    = _('%s has left %s%d reviews%s and has been reviewed %s%d times%s');
+$GLOBALS['str_review_write']    = _('Add Comment');
+$GLOBALS['str_review_stats']    = _('Comment Stats');
+$GLOBALS['str_reviews_stats_1']    = _('%s has not left any comments and has been %sanswered once%s');
+$GLOBALS['str_reviews_stats_2']    =  _('%s has not left any comments and has been answered %s%d times%s');
+$GLOBALS['str_reviews_stats_3']    =  _('%s has left %s1 comment%s and has not been commented on');
+$GLOBALS['str_reviews_stats_4']    = _('%s has left %s1 comment%s and has been %answered once%s');
+$GLOBALS['str_reviews_stats_5']    = _('%s has left %s1 comment%s and has been answered %s%d times%s');
+$GLOBALS['str_reviews_stats_6']    = _('%s has left %s%d comment%s and has not been answered');
+$GLOBALS['str_reviews_stats_7']    = _('%s has left %s%d comment%s and has been %answered once%s');
+$GLOBALS['str_reviews_stats_8']    = _('%s has left %s%d comment%s and has been answered %s%d times%s');
 
 
 $GLOBALS['str_share']         = _('&nbsp;'); // "share" icons

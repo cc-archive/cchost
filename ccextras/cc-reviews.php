@@ -160,7 +160,6 @@ class CCReviewsHV
                 }
             }
         }
-
         $record['user_fields'][] = array( 'label'   => 'str_review_stats', 
                                           'value'   => $text,
                                           'id'      => 'user_review_stats' );
@@ -187,7 +186,7 @@ class CCReviewsHV
             return;
         }
 
-        if( empty($record['user_num_reviews']) )
+        if( empty($record['user_num_reviews']) && empty($record['user_num_reviewed']))
             return;
 
         $tabs['reviews'] = array(

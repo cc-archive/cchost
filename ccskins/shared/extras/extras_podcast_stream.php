@@ -10,11 +10,11 @@
 if( empty($A['qstring']) ) 
     return;
 
-$media_args = parse_str($A['qstring']);
-if( !$media_args['datasource'] && ($media_args['datasource'] != 'uploads') )
+$qstring = $A['qstring'];
+$media_args = parse_str($qstring);
+if( !empty($media_args['datasource']) && ($media_args['datasource'] != 'uploads') )
     return;
 
-$qstring .= '&limit=15';
 $q = $A['q'];
 
 ?>  
@@ -25,9 +25,15 @@ $q = $A['q'];
     if ( !empty($A['enable_playlists'])) 
     {
         $script = true;
-        if( !empty($A['get']['offset']) ) { $offs = $A['get']['offset']; } else {  $offs = 0;} 
-        if( !empty($A['fplay_title']) )   { $fplayt = $A['fplay_title']; } else {  $fplayt = $T->String('str_play_this_page'); } 
-        ?><li><a id="mi_play_page" href="javascript://play page" onclick="ppage()"><?=$fplayt?></a></li><?
+        if( !empty($A['get']['offset']) ) 
+        {
+            $offs = $A['get']['offset']; 
+        } 
+        else
+        {
+            $offs = 0;
+        } 
+        ?><li><a id="mi_play_page" href="javascript://play page" onclick="ppage()"><?=$T->String('str_play_this_page')?></a></li><?
     }
     else
     {

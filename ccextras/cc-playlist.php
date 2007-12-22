@@ -183,35 +183,6 @@ EOF;
 	return $playlists;
 }
 
-function CC_popular_playlist_tracks()
-{ 
-    require_once('ccextras/cc-cart-table.inc');
-    /*
-select count(*) as cnt , cart_item_upload , upload_name
-from cc_tbl_cart_items 
-join cc_tbl_uploads on upload_id = cart_item_upload
-group by cart_item_upload order by cnt desc    
-*/
-    $items =& CCPlaylistItems::GetTable();
-    $items->AddExtraColumn( 'count(*) as track_count' );
-    $j1 = $items->AddJoin( new CCPlaylist(), 'cart_item_cart' );
-    $uploads = new CCUploads();
-    $j2 = $items->AddJoin( $uploads, 'cart_item_upload' );
-    $j3 = $items->AddJoin( new CCUsers(), $j2 . '.upload_user' );
-    $items->GroupOn( 'cart_item_upload' );
-    $items->SetOrder( 'track_count', 'DESC' );
-    $items->SetOffsetAndLimit(0,25);
-    $where = 'cart_user != user_id';
-    $rows = $items->QueryRows($where);
-    $rows = $uploads->GetRecordsFromRows($rows);
-    $keys = array_keys($rows);
-    $ids = array();
-    foreach( $keys as $K )
-        $ids[] = $rows[$K]['upload_id'];
-    $ids = join(',',$ids);
-    return array( 'recs' => $rows, 'ids' => $ids );
-}
-
 function CC_hot_playlists_impl($since)
 {
     require_once('ccextras/cc-cart-table.inc');

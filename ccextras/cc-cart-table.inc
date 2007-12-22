@@ -61,6 +61,7 @@ class CCCart extends CCTable
 
     function & GetRecordFromRow(&$row) 
     {
+
         if( !empty($row['user_id']) )
         {
             $users =& CCUsers::GetTable();

@@ -368,7 +368,7 @@ class CCQuery
 
         if( !empty($this->records) && !empty($this->args['nosort']) && !empty($this->args['ids']) )
         {
-            $ids = $this->args['ids'];
+            $ids = is_string($this->args['ids']) ? split(',',$this->args['ids']) : $this->args['ids'];
             $i = 0;
             foreach($ids as $id)
                 $sort_order[$id] = $i++;

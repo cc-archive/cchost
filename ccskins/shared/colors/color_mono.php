@@ -27,7 +27,7 @@
 
 .selected_area { background-color: #000000; color: #FFFFFF; }
 
-a, a:visited { color: #000080; }
+a, a:visited { color: #223344; }
 
 a.cc_user_link, a.cc_user_link:visited, a.cc_user_link:link  { color: #686868; font-weight: normal;}
 a.cc_file_link, a.cc_file_link:visited, a.cc_file_link:link  { color: #669966; font-weight: bold; letter-spacing:0.05em;}
