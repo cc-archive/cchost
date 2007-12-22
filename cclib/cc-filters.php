@@ -172,9 +172,9 @@ function cc_filter_remixes_short(&$R)
 
     if( !empty($R['upload_num_pool_sources']) )
     {
-        if( !empty($R['remix_parents']) && (count($R['remix_parents']) < 3) )
+        if( empty($R['remix_parents']) || (count($R['remix_parents']) < 3) )
         {
-            $count = 4 - count($R['remix_parents']);
+            $count = empty($R['remix_parents']) ? 4 : 4 - count($R['remix_parents']);
             $q = 'dataview=links_by_pool&f=php&limit=' . $count . '&sort=&datasource=pools&sources=' . $R['upload_id'];
             $query = new CCQuery();
             $args = $query->ProcessAdminArgs($q);
@@ -206,6 +206,7 @@ function cc_filter_remixes_short(&$R)
             unset($R['remix_children'][3]);
         }
     }
+
 }
 
 function cc_filter_remixes_full(&$R,&$dataview_info)
