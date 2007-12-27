@@ -510,21 +510,22 @@ EOF;
         }
 
         $sql = <<<EOF
-        SELECT topic_name, forum_thread_forum, forum_read_access
+        SELECT topic_name, forum_thread_forum, forum_read_access, topic_id,
+               forum_post_access, forum_thread_closed, forum_thread_sticky, forum_id
             FROM cc_tbl_topics 
             JOIN cc_tbl_forum_threads ON forum_thread_oldest = topic_id 
             JOIN cc_tbl_forums        ON forum_thread_forum = forum_id
             WHERE forum_thread_id = $thread_id
 EOF;
+
         $row = CCDatabase::QueryRow($sql);
-        list( $topic_name, $forum_id, $read_access ) = CCDatabase::QueryRow($sql,false);
 
         $mask = CCMenu::GetAccessMask();
-        if( ($mask & $read_access) == 0 )
+        if( ($mask & $row['forum_read_access']) == 0 )
         {
-            if( ($read_access & CC_ADMIN_ONLY) != 0 )
+            if( ($row['forum_read_access'] & CC_ADMIN_ONLY) != 0 )
                 $msg = 'str_forum_admin_required';
-            elseif( ($read_access & CC_MUST_BE_LOGGED_IN) != 0 )
+            elseif( ($row['forum_read_access'] & CC_MUST_BE_LOGGED_IN) != 0 )
                 $msg = 'str_forum_login_required';
             else
                 $msg = 'str_forum_perm_denied';
@@ -533,49 +534,52 @@ EOF;
             return;
         }
 
+        require_once('cclib/cc-page.php');
+
+        if( ($mask & $row['forum_post_access']) != 0 )
+            $this->_thread_commands($row,$thread_id);
+
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('paging=off&f=page&t=topic_thread&datasource=topics&title=' . $topic_name);
+        $args = $query->ProcessAdminArgs('paging=off&f=page&t=topic_thread&datasource=topics&title=' . $row['topic_name']);
         $sqlargs['where'] = 'topic.topic_thread=' . $thread_id;
         $query->QuerySQL($args,$sqlargs);
 
         $this->_add_feed_links( $thread_id );
-        $this->_build_bread_crumb_trail($forum_id,$topic_name);
+        $this->_build_bread_crumb_trail($row['forum_id'],$row['topic_name']);
     }
 
-    // place holder....
-    function _t_commands()
+    function _thread_commands($row,$thread_id)
     {
         $commands = array();
-        if( ($mask & $forum_row['forum_post_access']) != 0 )
+        $closed = $row['forum_thread_closed'];
+
+        if( $closed )
         {
-            $closed = $thread_row['forum_thread_closed'];
-
-            if( $closed )
-            {
-                $commands[] = array( 'url' => 0, 'msg' => _('Thread is closed to new comments.') );
-            }
-            else
-            {
-                $commands[] = array( 'url' => ccl('topics','reply',$topic_id) . '#edit',
-                                 'text' => _('Post topic reply' ), 'msg' => 0 );
-            }
-
-            if( CCUser::IsAdmin() )
-            {
-                $commands[] = array( 'url' => ccl('admin','forums', 'move', $thread_id ),
-                                     'text' => _('Move thread' ), 'msg' => 0  );
-
-                $ctext = $closed ? _('Open') : _('Close');
-
-                $commands[] = array( 'url' => ccl('admin','forums', 'close', $thread_id ),
-                                     'text' => $ctext, 'msg' => 0  );
-
-                $ctext = $thread_row['forum_thread_sticky'] ? _('Unstick') : _('Stick');
-
-                $commands[] = array( 'url' => ccl('admin','forums', 'stick', $thread_id ),
-                                     'text' => $ctext, 'msg' => 0  );
-            }
+            $commands[] = array( 'url' => 0, 'msg' => _('Thread is closed to new comments.') );
         }
+        else
+        {
+            $commands[] = array( 'url' => ccl('topics','reply',$row['topic_id']) . '#edit',
+                             'text' => _('Post topic reply' ), 'msg' => 0 );
+        }
+
+        if( CCUser::IsAdmin() )
+        {
+            $commands[] = array( 'url' => ccl('admin','forums', 'move', $thread_id ),
+                                 'text' => _('Move thread' ), 'msg' => 0  );
+
+            $ctext = $closed ? _('Open') : _('Close');
+
+            $commands[] = array( 'url' => ccl('admin','forums', 'close', $thread_id ),
+                                 'text' => $ctext, 'msg' => 0  );
+
+            $ctext = $row['forum_thread_sticky'] ? _('Unstick') : _('Stick');
+
+            $commands[] = array( 'url' => ccl('admin','forums', 'stick', $thread_id ),
+                                 'text' => $ctext, 'msg' => 0  );
+        }
+
+        CCPage::PageArg('thread_commands',$commands);
     }
 
     function User($user_name)

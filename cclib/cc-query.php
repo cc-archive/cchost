@@ -254,8 +254,7 @@ class CCQuery
         // alias short to long
         $this->_arg_alias();
 
-        $badargs = array( 'qstring', 'ccm', 'view', 'format', 'template', 'template_args',
-                          'datasource', 'dataview' ); // not sure about these 2....
+        $badargs = array( 'qstring', 'ccm', 'view', 'format', 'template', 'template_args'); 
 
         foreach( $keys as $K )
         {
@@ -271,7 +270,6 @@ class CCQuery
 
             $str .= $K . '=' . urlencode($args[$K]);
         }
-
         return $str;
     }
 

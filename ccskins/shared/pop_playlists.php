@@ -8,12 +8,12 @@
 [dataview]
 function popular_tracks_dataview()
 {
-    $urlf = ccl('file') . '/';
+    $urlf = ccl('files') . '/';
     $urlp = ccl('people') . '/';
 
     $sql =<<<EOF
 SELECT COUNT(*) as track_count , cart_item_upload , upload_name, user_name, user_real_name, upload_contest,
-    CONCAT( '$urlf', user_name, upload_id ) as file_page_url, upload_id,
+    CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url, upload_id,
     CONCAT( '$urlp', user_name ) as artist_page_url
 FROM cc_tbl_cart_items 
 JOIN cc_tbl_uploads ON upload_id = cart_item_upload
@@ -45,7 +45,7 @@ foreach( $recs as $AIR )
 ?>
     <div class="trr">
         <div  class="tdc cc_playlist_item" id="_pli_<?= $AIR['upload_id'] ?>">
-            <span ><a class="cc_playlist_pagelink cc_file_link" id="_plk_<?= $AIR['upload_id'] ?>" target="_parent" href="{$AIR['file_page_url']}"><?=$iun?></a></span>
+            <span ><a class="cc_playlist_pagelink cc_file_link" id="_plk_<?= $AIR['upload_id'] ?>" target="_parent" href="<?= $AIR['file_page_url'] ?>"><?=$iun?></a></span>
             <?= $T->String('str_by') ?> <a  class="cc_user_link" href="<?= $AIR['artist_page_url'] ?>"><?= $iurn ?></a>
         </div>
         <div class="tdc" style="padding-left:15px"><?= $T->String('str_pl_found_in') ?> 
@@ -58,7 +58,7 @@ foreach( $recs as $AIR )
     if ( !empty($A['is_logged_in'])) 
     {
 ?>
-        <div  id="playlist_menu_<?= $AIR['upload_id']?>" class="cc_playlist_action tdc">
+        <div  id="playlist_menu_<?= $AIR['upload_id']?>" class="cc_playlist_action tdc light_bg dark_border">
             <a class="cc_playlist_button" href="javascript://playlist_menu_<?= $AIR['upload_id']?>"><span ><?= $T->String('str_pl_add_to') ?></span></a>
         </div>
 <?
@@ -88,5 +88,11 @@ foreach( $recs as $AIR )
 <script  src="<?= $T->URL('js/playlist.js') ?>"></script>
 <?
     $T->Call('playerembed.xml/eplayer');
+?>
+<script >
+    var playlistMenu = new ccPlaylistMenu();
+    playlistMenu.hookElements('cc_pl_div');
+</script>
+<?
     $T->Call('prev_next_links');
 ?>

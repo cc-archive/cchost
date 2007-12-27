@@ -470,8 +470,8 @@ class CCFeed
             // put a 'clean' version of the description in the '_text'
             // field...
 
-            if( !empty($row['upload_description_text']) )
-                $row['upload_description'] =  $row['upload_description_text'];
+            if( !empty($row['upload_description_plain']) )
+                $row['upload_description'] =  $row['upload_description_plain'];
 
             if( !empty($row['upload_description_html']) )
             {

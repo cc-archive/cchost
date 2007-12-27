@@ -1,3 +1,8 @@
+<div class="forum_cmds">
+%loop(forum_cmds,FC)%
+    <a href="%(#FC/url)%">%(#FC/text)%</a>
+%end_loop%
+</div>
 <table>
 <tr>
 <th>%text(str_forum_topic)%</th>

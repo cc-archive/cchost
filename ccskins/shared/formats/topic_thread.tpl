@@ -14,6 +14,7 @@ function topic_thread_dataview()
 
     $sql =<<<EOF
 SELECT  topic.topic_id, IF( COUNT(parent.topic_id) > 2, (COUNT(parent.topic_id) - 1) * 30, 0 ) AS margin,
+        topic.topic_left, topic.topic_right,
         IF( COUNT(parent.topic_id) > 2, 1, 0 ) as is_reply, 
         topic.topic_text as format_html_topic_text, 
         user_real_name, user_name, user_num_posts,
@@ -49,6 +50,12 @@ EOF;
 
 <link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
 
+<div class="forum_cmds">
+%loop(thread_commands,TC)%
+    <a href="%(#TC/url)%">%(#TC/text)%</a>
+%end_loop%
+</div>
+
 <table class="cc_topic_thread" cellspacing="0" cellspacing="0" >
 %loop(records,R)%
 <? $thread_ids[] = $R['topic_id']; ?>
@@ -57,7 +64,12 @@ EOF;
     <td>&nbsp;<a name="%(#R/topic_id)%"></a></td>
     <td class="cc_topic_reply" style="padding-left:%(#R/margin)%px">
         <div class="cc_topic_reply_body  light_bg">
-            <div class="cc_topic_reply_head med_light_bg"><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
+            <div class="cc_topic_reply_head med_light_bg">
+                <div style="float:right"><a href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+                    %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if%
+                </div>
+                <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% 
+            </div>
             <div class="cc_topic_reply_text">%(#R/topic_text_html)%</div>
             <div class="cc_topic_commands" id="commands_%(#R/topic_id)%"></div>
         </div>
@@ -70,7 +82,11 @@ EOF;
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
     <td class="cc_topic_body">
-        <div class="cc_topic_date dark_bg light_color" >%(#R/topic_date_format)% </div>
+        <div class="cc_topic_date dark_bg light_color" >
+            <div style="float:right"><a  class="light_color" href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+                %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if%
+            </div>
+            %(#R/topic_date_format)% </div>
         <div class="cc_topic_text med_light_bg">%(#R/topic_text_html)%</div>
         <div class="cc_topic_commands med_light_bg" id="commands_%(#R/topic_id)%"></div>
     </td>

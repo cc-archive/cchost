@@ -328,7 +328,7 @@ EOF;
             $args['feed_q'] = url_args( ccl('api','query'), 'f=rss&playlist=' . $playlist_id );
         }
         $dv = new CCDataView();
-        $filters = array( 'e' => array( CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_DOWNLOAD_URL ) ); // sic
+        $filters = array( 'e' => array( CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_DOWNLOAD_URL, CC_EVENT_FILTER_PLAY_URL ) ); // sic
         $dv->FilterRecords($args['records'],$filters);
         return $this->_add_menu($args,$playlist_id,$is_popup);
     }
@@ -458,9 +458,9 @@ EOF;
                 if( empty($upload_id) || ($upload_id < 1) )
                     CCUtil::Send404();
                 $uploads =& CCUploads::GetTable();
-                $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
-                if( empty($name) )
+                if( !$uploads->KeyExists($upload_id) )
                     CCUtil::Send404();
+                $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
                 $args['upload'] = $upload_id;
                 CCPage::SetTitle(array('str_pl_browse_playlists_s',$name) );
             }
@@ -486,7 +486,7 @@ EOF;
             $args = $this->_get_playlist_info($playlist_id);
             if( empty($args) )
                 CCUtil::Send404();
-            CCPage::SetTitle(sprintf(_('str_pl_playlist_s'),$args['playlist']['cart_name']) );
+            CCPage::SetTitle(array(_('str_pl_playlist_s'),$args['playlist']['cart_name']) );
             CCPage::PageArg('args',$args,'playlist_show_one');
         }
     }
@@ -501,7 +501,7 @@ EOF;
         if( empty($args) )
             CCUtil::Send404();
         require_once('cclib/cc-page.php');
-        CCPage::SetTitle(sprintf('str_pl_playlist_s',$args['playlist']['cart_name']));
+        CCPage::SetTitle(array('str_pl_playlist_s',$args['playlist']['cart_name']));
         CCPage::PageArg('playlist_popup_window', 'playlist.xml/playlist_popup_window' );
         CCPage::PageArg('args',$args,'playlist_popup_window');
         CCPage::ShowHeaderFooter( false, false  );
@@ -805,9 +805,27 @@ EOF;
     */
     function OnUploadDelete(&$record)
     {
-        $cart_items =& CCCartItems::GetTable();
-        $w['cart_item_upload'] = $record['upload_id'];
-        $cart_items->DeleteWhere($w);
+        $sql =<<<EOF
+            SELECT cart_item_cart
+            FROM cc_tbl_cart_items
+            WHERE cart_item_upload = {$record['upload_id']}
+EOF;
+        $carts = CCDatabase::QueryItems($sql);
+        if( !empty($carts) )
+        {
+            $cart_set = join(',',$carts);
+            $sql =<<<EOF
+                UPDATE cc_tbl_cart 
+                SET cart_num_items = cart_num_items-1
+                WHERE cart_id IN ({$cart_set})
+EOF;
+            CCDatabase::Query($sql);
+            $sql =<<<EOF
+                DELETE FROM cc_tbl_cart_items
+                WHERE cart_item_upload = {$record['upload_id']}
+EOF;
+            CCDatabase::Query($sql);
+        }
     }
 }
 

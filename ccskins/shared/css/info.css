@@ -36,6 +36,8 @@ a.info_button:hover {
 	border: 1px solid black;
 	background: white url("../images/bg_fade.gif") repeat-x;
 	padding: 12px;
+	width: 560px;
+	z-index: 100;
 }
 
 
@@ -46,17 +48,17 @@ a.info_button:hover {
 	margin: 7px;
 }
 
-.info_detail .cc_list {
+.info_detail .info_list {
 	background-color: transparent;
 	width: auto;
 }
 
-.info_detail .cc_list .taglinks {
+.info_detail .info_list .taglinks {
 	width: 550px; 
 	white-space: normal;
 }
 
-.info_detail .cc_list .taglinks a {
+.info_detail .info_list .taglinks a {
 	display: inline;
 	font-size: 10px;
 }
@@ -91,8 +93,10 @@ a.info_button:hover {
 }
 
 
-.info_detail .files_table td, .column_tab td {
-	vertical-align: top;
+.info_detail .info_column {
+	float: left;
+	width: 30%;
+	margin-right: 2%;
 }
 
 .info_detail .upload_menu_outer {

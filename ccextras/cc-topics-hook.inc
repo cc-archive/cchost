@@ -94,7 +94,18 @@ EOF;
                 }
                 else
                 {
-                    $text = sprintf(_('Reply to %s'),$R['user_real_name']);
+                    /************
+                    * temp hack for preventing garbage on the screen
+                    * what is the alternative to sprintf for int'l chars?
+                    */
+                    $asc2uni = array();
+                    for($i=128;$i<256;$i++){
+                      $asc2uni[chr($i)] = '?';
+                    }
+                    if( strtr($R['user_real_name'],$asc2uni) != $R['user_real_name'] )
+                        $text = _('Reply');
+                    else
+                        $text = sprintf(_('Reply to %s'),$R['user_real_name']);
                 }
                 
                 $rec['cmds'][] = array( 'href' => ccl('topics','quote',$R['topic_id']),

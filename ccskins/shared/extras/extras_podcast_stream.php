@@ -11,7 +11,7 @@ if( empty($A['qstring']) )
     return;
 
 $qstring = $A['qstring'];
-$media_args = parse_str($qstring);
+parse_str($qstring,$media_args);
 if( !empty($media_args['datasource']) && ($media_args['datasource'] != 'uploads') )
     return;
 

@@ -9,6 +9,22 @@ function fix_all()
     fix_topics();
 }
 
+function fix_cart_sync()
+{
+    $sql[] = "LOCK TABLES cc_tbl_cart WRITE , cc_tbl_cart_items READ";
+    $sql[] = <<<EOF
+UPDATE cc_tbl_cart SET cart_num_items = (
+SELECT count( * )
+FROM `cc_tbl_cart_items`
+WHERE cart_item_cart = cart_id
+)
+EOF;
+    $sql[] = "UNLOCK TABLES";
+
+    print("Updating playlist cart counts<br />\n");
+    CCDatabase::Query($sql);
+}
+
 function fix_pool_resync()
 {
     print("Updating pool resync...");

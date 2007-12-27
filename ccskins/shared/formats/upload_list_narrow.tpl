@@ -20,7 +20,7 @@
           </div>
        </td>
        <td><a href="%(#R/file_page_url)%" class="cc_file_link upload_name"><span %if_attr(#R/upload_name_cls,class)%>%chop(#R/upload_name,60)%</span></a>
-        <div>%chop(#R/upload_description_text,75)% <a href="%(#R/file_page_url)%">(%text(str_more)%)</a></div>
+        <div>%chop(#R/upload_description_plain,75)% <a href="%(#R/file_page_url)%">(%text(str_more)%)</a></div>
      </td></tr>
    %if_not_null(#R/fplay_url)%
    <tr><th>%text(str_play)%</th><td><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a><script>

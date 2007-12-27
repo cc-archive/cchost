@@ -171,7 +171,7 @@ $GLOBALS['str_forum_admin_required'] = _('You must have admin rights to see this
 $GLOBALS['str_forum_login_required'] = _('You must be logged in to see this forum.');
 $GLOBALS['str_forum_perm_denied'] = _('You do not have proper permissions to see this forum.');
 $GLOBALS['str_forum_topics_by'] = _('Forum posts by %s');
-$GLOBALS['str_forum_posts_n'] = _('%d forum posts');
+$GLOBALS['str_forum_posts_n'] = _('%d posts');
 
 $GLOBALS['str_from'] = _('from');
 $GLOBALS['str_full_search'] = _('Full search');
@@ -483,6 +483,7 @@ $GLOBALS['str_topic_reply_to_yourself'] = _('Reply to yourself');
 $GLOBALS['str_topic_reply_to_s']        = _('Reply to %s');
 $GLOBALS['str_topic_edit_s']            = _("Edit topic '%s'");
 $GLOBALS['str_topic_view']              = _('View Topic');
+$GLOBALS['str_permalink']              = _('permalink');
 
 $GLOBALS['str_uploading_msg']  = _('This could take a while... please be patient while the file is uploading');
 
