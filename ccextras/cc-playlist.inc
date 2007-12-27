@@ -501,7 +501,7 @@ EOF;
         if( empty($args) )
             CCUtil::Send404();
         require_once('cclib/cc-page.php');
-        CCPage::SetTitle(array('str_pl_playlist_s',$args['playlist']['cart_name']));
+        CCPage::SetTitle( array('str_pl_playlist_s',$args['playlist']['cart_name']) );
         CCPage::PageArg('playlist_popup_window', 'playlist.xml/playlist_popup_window' );
         CCPage::PageArg('args',$args,'playlist_popup_window');
         CCPage::ShowHeaderFooter( false, false  );

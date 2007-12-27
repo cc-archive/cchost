@@ -277,9 +277,8 @@ class CCPhysicalFile
 
         CCPage::SetTitle('str_edit_properties');
 
-        $dv = new CCDataview();
-        $args['where'] = 'upload_id = ' . $upload_id;
-        $record = $dv->PerformFile('upload_row',$args,CCDV_RET_RECORD);
+        $record = CCDatabase::QueryRow('SELECT * FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+        $record['upload_extra'] = unserialize($record['upload_extra']);
         $form = new CCEditFileForm($userid,$record);
         $show = true;
         if( empty($_POST['editfile']) )

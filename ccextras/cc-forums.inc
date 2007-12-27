@@ -259,7 +259,7 @@ class CCForumAPI
         {$oldest}.topic_name         AS oldest_topic_name, 
         {$newestuser}.user_real_name AS newest_real_name, 
         {$newestuser}.user_name      AS newest_user_name, 
-        {$newest}.topic_date         AS newest_topic_date, 
+        DATE_FORMAT({$newest}.topic_date,'%a %b %e, %Y')         AS newest_topic_date, 
         {$newest}.topic_id           AS newest_topic_id
 EOF;
 

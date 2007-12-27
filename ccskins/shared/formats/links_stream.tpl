@@ -19,7 +19,7 @@ SELECT
     upload_id, upload_name, CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name, user_name, 
     CONCAT( '$urlp', user_name ) as artist_page_url,
-    IF( upload_tags REGEXP '(^|,)(audio)(,|$)', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
+    IF( upload_tags LIKE '%,audio,%', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
     upload_contest, upload_name
     %columns%
 FROM cc_tbl_uploads

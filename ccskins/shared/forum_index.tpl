@@ -19,7 +19,8 @@
                 <div class="forum_last_post">
                      %text(str_forum_latest_post)%: 
                       <a href="%(home-url)%thread/%(#forum/latest_post/forum_thread_id)%#%(#forum/latest_post/forum_thread_newest)%">
-                      %date(#forum/latest_post/forum_thread_date,'j M')%<!-- --> %text(str_by)%: %(#forum/latest_post/user_real_name)%</a>
+                      %date(#forum/latest_post/forum_thread_date,'j M')%<!-- --> %text(str_by)%: - 
+                      %(#forum/latest_post/user_real_name)%</a>
                 </div>
             </div>
         %end_loop%

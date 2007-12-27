@@ -3,6 +3,8 @@ function ajax_msg(type,text)
 {
     if( !$('ajax_msg') )
         Insertion.Top('content','<div id="ajax_msg"></div>');
+    if( text.substr(0,4) == 'str_' )
+        text = eval(text);
     $('ajax_msg').innerHTML = '<div id="amsg" class="ajaxmsg_' + type + '">' + text + '</div>';
     Effect.Appear( 'amsg', { duration: 2.0, delay: 0.5 } );
 }

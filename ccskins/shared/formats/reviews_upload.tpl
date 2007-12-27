@@ -1,6 +1,6 @@
 <?/*
 [meta]
-    type = format
+    type = template_component
     desc = _('Preview of upload reviews')
     dataview = reviews_upload
     embedded = 1
@@ -13,7 +13,7 @@ function reviews_upload_dataview()
     $user_avatar_col = cc_get_user_avatar_sql();
 
     $sql =<<<EOF
-SELECT  topic.topic_id, ((COUNT(parent.topic_id)-1) * 30) AS margin,
+SELECT  topic.topic_id, ((COUNT(parent.topic_id)-1) * 30) AS margin, topic.topic_left, topic.topic_right,
         IF( COUNT(parent.topic_id) > 1, 1, 0 ) as is_reply, 
         topic.topic_text as format_html_topic_text, 
         user_real_name, user_name, user_num_reviews,
@@ -59,7 +59,12 @@ EOF;
     <td>&nbsp;<a name="%(#R/topic_id)%"></a></td>
     <td class="cc_topic_reply" style="padding-left:%(#R/margin)%px">
         <div class="cc_topic_reply_body  light_bg">
-            <div class="cc_topic_reply_head med_light_bg"><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% </div>
+            <div class="cc_topic_reply_head med_light_bg">
+                <div style="float:right"><a href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+                    %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if%
+                </div>
+                <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% 
+            </div>
             <div class="cc_topic_reply_text">%(#R/topic_text_html)%</div>
             <div class="cc_topic_commands" id="commands_%(#R/topic_id)%"></div>
         </div>
@@ -72,7 +77,12 @@ EOF;
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
     <td class="cc_topic_body">
-        <div class="cc_topic_date dark_bg light_color" >%(#R/topic_date_format)% </div>
+        <div class="cc_topic_date dark_bg light_color" >
+            <div style="float:right"><a class="light_color" href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+                %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if%
+            </div>
+            %(#R/topic_date_format)%
+        </div>
         <div class="cc_topic_text med_light_bg">%(#R/topic_text_html)%</div>
         <div class="cc_topic_commands med_light_bg" id="commands_%(#R/topic_id)%"></div>
     </td>

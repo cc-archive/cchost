@@ -1,31 +1,31 @@
+<link href="%url(css/forum.css)%" rel="stylesheet" title="Default Style" type="text/css" />
 <div class="forum_cmds">
 %loop(forum_cmds,FC)%
     <a href="%(#FC/url)%">%(#FC/text)%</a>
 %end_loop%
 </div>
-<table>
+<table class="forum_listing">
 <tr>
-<th>%text(str_forum_topic)%</th>
-<th>%text(str_forum_author)%</th>
-<th>%text(str_forum_replies)%</th>
-<th>%text(str_forum_latest)%</th>
-<th>%text(str_forum_post)%</th>
+<th class="med_border">%text(str_forum_topic)%</th>
+<th class="med_border">%text(str_forum_author)%</th>
+<th class="med_border">%text(str_forum_replies)%</th>
+<th class="med_border">%text(str_forum_latest)%</th>
 </tr>
 %loop(threads,thread)%
  <tr>
    <td>
-        <div class="thread_sticky_%(#thread/forum_thread_sticky)%"> </div>
+        %if_not_null(#thread/forum_thread_sticky)% <div class="forum_sticky_thread"> </div> %end_if%
         <a href="%(#thread/thread_url)%">%(#thread/oldest_topic_name)%</a>
    </td>
    <td>
-        <a href="%(#thread/author_url)%">%(#thread/author_real_name)%</a>
+        <a class="cc_user_link" href="%(#thread/author_url)%">%(#thread/author_real_name)%</a>
    </td>
-   <td>
+   <td class="forum_replies">
         %(#thread/num_topics)%
    </td>
    <td>
       <a href="%(#thread/newest_topic_url)%">%(#thread/newest_topic_date)%</a>
-    <div>%text(str_by)% %(#thread/newest_real_name)%
+    <div>%text(str_by)%: %(#thread/newest_real_name)%
    </td>
 </tr>
 %end_loop%

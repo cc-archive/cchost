@@ -1,6 +1,6 @@
 <?/*
 [meta]
-    type = format
+    type = template_component
     desc = _('Browse reviews')
     dataview = reviews_browse
     embedded = 1

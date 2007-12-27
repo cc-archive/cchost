@@ -290,8 +290,15 @@ class CCTopic
             return false;
         }
 
-        $topics = CCTopics::GetTable();
-        $record = $topics->QueryKeyRow($topic_id);
+        $record = CCDatabase::QueryRow('SELECT topic_locked, topic_can_xlat FROM cc_tbl_topics WHERE topic_id='.$topic_id);
+        if( empty($record) )
+        {
+            CCPage::Prompt(_('Cannot find that topic.') . ' ' . 
+                           _('It might have been deleted by the author.'));
+            CCUtil::Send404(false,__FILE__,__LINE__);
+            return false;
+        }
+
         $is_logged_in = CCUser::IsLoggedIn();
         $can_reply = ($is_logged_in && empty($record['topic_locked'])) || CCUser::IsAdmin();
             
@@ -302,14 +309,6 @@ class CCTopic
                 CCPage::Prompt(_('You are not authorized to post here.'));
                 return false;
             }
-        }
-
-        if( empty($record) )
-        {
-            CCPage::Prompt(_('Cannot find that topic.') . ' ' . 
-                           _('It might have been deleted by the author.'));
-            CCUtil::Send404(false,__FILE__,__LINE__);
-            return false;
         }
 
         return true;
@@ -413,34 +412,29 @@ class CCTopic
             $did_validation = true;
         }
 
+        $row = CCDatabase::QueryRow('SELECT topic_user,topic_text as format_text_topic_text FROM cc_tbl_topics WHERE topic_id='.$topic_id);
+        $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_id='.$row['topic_user']);
+
         if( empty($_POST['topicreply']) || ($did_validation && !$validated) )
         {
-            if( CCUser::CurrentUser() == $record['topic_user'] )
+            if( CCUser::CurrentUser() == $row['topic_user'] )
             {
                 $title = 'str_topic_reply_to_yourself';
             }
             else
             {
-                $sql = 'SELECT user_real_name FROM cc_tbl_user WHERE user_id='.$record['topic_user'];
-                $user_real_name = CCDatabase::QueryItem($sql);
                 $title = array('str_topic_reply_to_s',$user_real_name);
             }
             CCPage::SetTitle($title);
 
             if( $is_quote === true && !$did_validation)
             {
-                $users =& CCUsers::GetTable();
-                // hmmmm
-                die('fix this');
-                $record['_need_topic_text'] = $record['topic_text'];
-
-                $user_real_name = $users->QueryItemFromKey('user_real_name',$record['topic_user']);
-                $quote_text = '[quote=' . 
-                              $user_real_name . 
-                              ']' . 
-                              $record['topic_text_plain'] .
-                              '[/quote]';
-                $form->SetFormValue( 'topic_text', $quote_text);
+                require_once('cclib/cc-dataview.php');
+                $dv = new CCDataView();
+                $info = array( 'e' => array( CC_EVENT_FILTER_FORMAT ) );
+                $r = array(&$row);
+                $dv->FilterRecords( $r, $info );
+                $form->SetFormValue( 'topic_text', "[quote={$user_real_name}]{$row['topic_text_plain']}[/quote]");
             }
 
             /*
@@ -451,12 +445,15 @@ class CCTopic
         }
         else
         {
+            $record = CCDatabase::QueryRow('SELECT topic_name,topic_forum,topic_thread,topic_user,topic_type,topic_upload,topic_id FROM cc_tbl_topics WHERE topic_id='.$topic_id);
+
             $replang = _('Reply');
             if( strstr($record['topic_name'],$replang) === false )
                 $name = sprintf( '%s (%s)', $record['topic_name'], $replang );
             else
                 $name = $record['topic_name'];
             $form->GetFormValues($values);
+            $topics = new CCTopics();
             $next_id = $topics->NextID();
             $values['topic_id']    = $next_id;
             $values['topic_date']  = date('Y-m-d H:i:s',time());
@@ -464,8 +461,8 @@ class CCTopic
             $values['topic_type']  = 'reply';
             $values['topic_forum'] = $record['topic_forum'];
             $values['topic_thread'] = $record['topic_thread'];
+            $values['topic_upload'] = $record['topic_upload'];
             $values['topic_name']   = $name;
-            // $values['topic_top']   = $record['topic_top'];
             $topics->Insert($values,$topic_id);
 
             if( !empty($values['topic_thread']) )

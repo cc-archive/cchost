@@ -216,54 +216,6 @@ table.form_table tr.form_row span {
 	font-weight: normal;
 }
 
-
-/*--------------------------------------------------------
-	Styles for the formatted textedit editing in forms
---------------------------------------------------------*/
-.cc_close_preview {
- float:right;
- margin-right:2px;
- font-size:7px;
-}
-
-.cc_format_preview {
-	padding: 5px;
-}
-
-a.cc_format_link {
-	color: rgb(0, 80, 128);
-	font-weight: bold;
-	text-decoration: underline;
-}
-
-.cc_close_preview,
-div.cc_ed_buttons input {
-     background-color: #FFD;
-     border: 1px solid #666;
-     cursor: pointer;
-     padding: 1px;
-
-  }
-span.big { font-size: 20px }
-span.small { font-size: 9px }
-span.red { color: red; }
-span.green { color: green; }
-span.blue { color: blue; }
-span.u { text-decoration: underline; }
-span.b { font-weight: bold; }
-span.i { font-style: italic; }
-span.quote { 
-	display: block;
-	margin-left: 24px;
-	font-style: italic;
-	padding: 3px;
-}
-span.quote span {
-    display: block;
-	margin-bottom: 2px;
-	font-weight: bold;
-}
-
 /************************** 
 	grid form stuff 
 ***************************/

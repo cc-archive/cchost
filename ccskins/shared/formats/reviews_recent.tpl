@@ -1,6 +1,6 @@
 <?/*
 [meta]
-    type = format
+    type = template_component
     desc = _('7 most recent reviews')
     dataview = review_recent
     embedded = 1

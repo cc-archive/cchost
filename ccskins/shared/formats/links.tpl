@@ -6,14 +6,14 @@
     embedded = 1
 [/meta]
 [dataview]
-function links_by_dataview() 
+function links_dataview() 
 {
     $urlf = ccl('files') . '/';
 
     $sql =<<<EOF
 SELECT 
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
-    upload_name,
+    upload_name
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
 %joins%

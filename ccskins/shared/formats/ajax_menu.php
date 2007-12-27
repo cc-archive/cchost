@@ -155,7 +155,7 @@ $script =<<<EOF
 <script>
 function pl_item_cb(resp,json)
 {
-    this.parentNode.innerHTML = json.message ? json.message : json;
+    this.parentNode.innerHTML = json.message ? eval(json.message) : eval(json);
 }
 function pl_item_action(event,url)
 {

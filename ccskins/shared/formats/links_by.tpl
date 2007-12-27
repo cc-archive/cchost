@@ -12,7 +12,5 @@
      <a href="%(#R/artist_page_url)%">%chop(#R/user_real_name,chop)%</a>
    </div>
 %end_loop%
-%if_not_empty(format_sig)%
-   <i class="cc_tagline"><span>%call(format_sig)%</span></i>
-%end_if%
+<i class="cc_tagline"><span>%call(format_sig)%</span></i>
 </div>

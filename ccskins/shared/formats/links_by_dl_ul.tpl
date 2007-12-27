@@ -11,7 +11,7 @@
    <li>
      <a href="%(#R/file_page_url)%" class="cc_file_link">%chop(#R/upload_name,chop)%</a>%text(str_by)%
      <a href="%(#R/artist_page_url)%">%chop(#R/user_real_name,chop)%</a>
-     <a href="%(#R/download_url)%">%(#R/file_nicname)%</a>
+     <a href="%(#R/download_url)%">%(#R/files/0/file_nicname)%</a>
    </li>
 %end_loop%
 </ul>

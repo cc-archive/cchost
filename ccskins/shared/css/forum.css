@@ -1,3 +1,21 @@
+table.forum_listing {
+	width: 80%;
+	margin: 0px auto;
+}
+
+table.forum_listing td {
+	vertical-align: top;
+	padding-left: 1.3em;
+}
+
+
+div.forum_sticky_thread {
+	float: left;
+	width: 16px;
+	height: 16px;
+	background: url('../images/sticky.gif') top left no-repeat;
+}
+
 div.forum_index {
 	width: 100%;
 }
@@ -7,14 +25,23 @@ div.forum_group {
 	margin-left: 23%;
 }
 
-div.forum_group_name {
+table.forum_listing th  {
+	font-weight: normal;
+	text-align: left;
+	padding-left: 1.3em;
+}
+
+div.forum_group_name, table.forum_listing th  {
 	text-transform: lowercase;
 	letter-spacing: 0.3em;
-	display: block;
-	text-align: left;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-color: #aaaaaa;
+}
+
+div.forum_group_name {
+	display: block;
+	text-align: left;
 	width: 55%;
 }
 

@@ -23,12 +23,24 @@
 --------------------------------------------------------*/
 .cc_close_preview {
  float:right;
- margin-right:2px;
  font-size:7px;
 }
 
 .cc_format_preview {
 	padding: 5px;
+}
+
+.format_preview_outer {
+	border: 1px solid #999;
+}
+
+.format_preview_outer h3 {
+	margin: 0px;
+	padding-left: 3px;
+	border-bottom: 1px solid #999;
+	background-color: #DDD;
+	height: 18px;
+
 }
 
 a.cc_format_link {

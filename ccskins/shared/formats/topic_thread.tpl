@@ -1,6 +1,6 @@
 <?/*
 [meta]
-    type = format
+    type = template_component
     desc = _('Forum topic thread')
     dataview = topic_thread
     embedded = 1

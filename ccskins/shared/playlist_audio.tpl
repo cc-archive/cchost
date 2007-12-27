@@ -17,7 +17,7 @@
   %end_if%
   %if_not_null(#R/fplay_url)%
       <div class="tdc cc_playlist_pcontainer">
-        <a class="cc_player_button cc_player_hear" id="_ep_%(#R/cart_id)%_%(#R/upload_id)%" href="%(#R/fplay_url)%">
+        <a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%" href="%(#R/fplay_url)%">
         </a></div>
   %end_if%<div class="hrc"> </div>
     </div>

@@ -366,7 +366,7 @@ class CCUserAPI
     function SaveProfile()
     {
         require_once('cclib/cc-page.php');
-        CCPage::SetTitle("str_edit_your_settings");
+        CCPage::SetTitle("str_edit_profile");
         CCPage::Prompt("str_changes_were_saved");
     }
 

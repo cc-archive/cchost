@@ -128,6 +128,7 @@ class CCQueryFormats
                 $targs['records']  =& $records;
                 $targs['dochop']   = isset($chop) && $chop > 0;
                 $targs['chop']     = isset($chop) ? $chop : 25;
+                $targs['qstring']  = $queryObj->SerializeArgs($args);
 
                 if( !empty($template_args) )
                     $targs = array_merge($targs,$template_args);

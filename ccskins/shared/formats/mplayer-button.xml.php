@@ -1,6 +1,7 @@
 <? /*
 [meta]
     type     = format
+    dataview = links_by_dl
     desc     = _('Fabricio Zuardi's Button Player - Requires Flash')
 [/meta]
 */ ?>

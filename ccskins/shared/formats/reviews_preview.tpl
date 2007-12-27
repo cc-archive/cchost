@@ -1,6 +1,6 @@
 <?/*
 [meta]
-    type = format
+    type = template_component
     desc = _('Preview of upload reviews')
     dataview = review_previews
     embedded = 1
