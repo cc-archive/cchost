@@ -473,7 +473,7 @@ class CCQuery
         }
         elseif( !empty($this->args['sinceu']) ) // unix time
         {
-            if( $sinceu{0} === '_' )
+            if( $this->args['sinceu']{0} === '_' )
                 $this->args['sinceu'] = substr($this->args['sinceu'],1);
             $since = $this->args['sinceu'];
         }

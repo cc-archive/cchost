@@ -18,23 +18,29 @@ $Id$
 
 */
 
-function getURL()
-{
-    return (baseCmd + '?' + Form.serialize('channel_form') + '&tags=' + 
-                $( 'cvalue_' + prevChannel.id ).innerHTML);
-}
-
 function updateLink()
 {
-    var url = getURL() + '&rand=1';
-    $('streamlink').href = url + '&format=m3u';
-    $('podlink').href = url + '&format=rss';
+    var args = Form.serialize('channel_form') + '&tags=' + $( 'cvalue_' + currChannel.id ).innerHTML;
+    $('streamlink').href = stream_url + args + '&rand=1&format=m3u';
+    $('podlink').href    = query_url  + args + '&rand=1&format=rss';
 
     if( sitePromoTag && (sitePromoTag.length > 0) )
         $('streamlink').href += '&promo_tag=' + sitePromoTag;
 
-    var myAjax = new Ajax.Request( url + '&format=count', {
-				method: 'get', onComplete: showCount });    
+    var curl = query_url + args + '&format=count';
+    var myAjax = new Ajax.Request( curl, {method: 'get', onComplete: showCount });    
+}
+
+function radio_play() 
+{ 
+    var args = Form.serialize('channel_form') + '&tags=' + $( 'cvalue_' + currChannel.id ).innerHTML;
+    if( sitePromoTag && (sitePromoTag.length > 0) )
+        args  += '&promo_tag=' + sitePromoTag;
+    var url = home_url + 'playlist/popup' + q + args;
+    var dim = "height=300,width=550";
+    ajax_debug(url);
+    var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
+                  "resizable=1,scrollbars=1," + dim );
 }
 
 
@@ -54,16 +60,18 @@ function showCount(obj)
     }
 }
 
-var prevChannel = $('tags00');
-Element.classNames(prevChannel).add('med_bg');
+var currChannel = $('tags00');
+Element.classNames(currChannel).add('med_bg');
+
+Event.observe('playlink','click', radio_play, false );
 
 $$('.cbutton').each( function(e) {
       Event.observe(e,'click', function (e)
             {
-                if( prevChannel )
-                    Element.classNames(prevChannel).remove('med_bg');
-                prevChannel = Event.element(e);
-                Element.classNames(prevChannel).add('med_bg');
+                if( currChannel )
+                    Element.classNames(currChannel).remove('med_bg');
+                currChannel = Event.element(e);
+                Element.classNames(currChannel).add('med_bg');
                 updateLink();
             }, false )
 });
