@@ -61,7 +61,7 @@ function _t_util_print_forms(&$T,&$A)
 function _t_util_disable_submit_button(&$T,&$A)
 {
     ?>
-<script type="text/javascript"> $('form_submit').disabled = true; </script>
+<script type="text/javascript"> if( $('form_submit') ) { $('form_submit').disabled = true; } </script>
     <?
 }
 
@@ -100,7 +100,7 @@ function _t_util_hide_upload_form(&$T,&$A)
 <? 
 $spinner = $T->URL('images/spinner.gif');
 if( !empty($spinner) )
-    $spinner = "<br /><br /><img src=\"{$spinner}\" />";
+    $spinner = "<br /><img src=\"{$spinner}\" />";
 ?>
 <script type="text/javascript">
 var formMask = Class.create();
@@ -114,7 +114,7 @@ formMask.prototype = {
 
     dull_screen: function()
     { 
-         new Insertion.Before( $('header'), '<div id="bodymask"><span>uploading...</span><div id="maskmsg"><?= $msg ?><?= $spinner ?></div>' );
+         new Insertion.Before( $('header'), '<div id="bodymask"><div id="maskmsg"><?= $msg ?><br /><?= $spinner ?></div>' );
          Event.observe('bodymask','click',this.killClick.bindAsEventListener(this),true);
          Event.observe('bodymask','keypress',this.killClick.bindAsEventListener(this),true);
          Element.scrollTo('bodymask');

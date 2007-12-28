@@ -131,6 +131,7 @@ class CCReview
         {
             $this->_build_bread_crumb_trail($user_name,$upload_id);
             $upload_name = CCDatabase::QueryItem('SELECT upload_name FROM cc_tbl_uploads WHERE upload_id = '.$upload_id);
+            require_once('cclib/cc-query.php');
             $query = new CCQuery();
             $args = $query->ProcessAdminArgs('paging=off&f=page&t=reviews_upload&datasource=topics');
             $args['title'] = array( 'str_reviews_for_s', $upload_name);

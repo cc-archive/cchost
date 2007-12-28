@@ -136,17 +136,6 @@ class CCContest
         $username  = CCUser::CurrentUserName();
         $uid       = CCUser::CurrentUser();
 
-        //TODO: This is a test that we changed to !empty so that any
-        //      current installations can work. Otherwise, re-enable for
-        //      testing.
-        if( !empty($CC_GLOBALS['cc_mixter_installed']) )
-        {
-            $formhelp =<<<END
-   Having upload problems? Click <a 
-            href="http://ccmixter.org/media/viewfile/isitlegal.xml#upload_problems"><b>HERE</b></a>.
-END;
-        }
-
         if( empty($records) )
         {
             // this contest doesn't have 'sources' (like a sample upload contest)
@@ -167,8 +156,8 @@ END;
                 if( $form->ValidateFields() )
                 {
                     $upload_id = CCUpload::PostProcessNewUploadForm( $form, $ccud, $upload_dir );
-                    
-                    $do_prompt = !empty($upload_id);
+                    if( $upload_id )
+                        CCUpload::ShowAfterSubmit($upload_id);
                 }
             }
         }
@@ -192,6 +181,7 @@ END;
                     foreach( $keys as $key )
                     {
                         $R =& $records[$key];
+
                         $R['no_check'] = CCTag::InTag($inherit,$R['upload_tags']);
                     }
                 }
@@ -201,14 +191,8 @@ END;
             else
             {
                 $upload_dir = CCContestHV::_get_user_upload_dir( $C, $username);
-                
-                $do_prompt = CCRemix::OnPostRemixForm( $form, $upload_dir, $ccud);
+                CCRemix::OnPostRemixForm( $form, $upload_dir, $ccud);
             }
-        }
-
-        if( $do_prompt )
-        {
-            CCPage::Prompt(sprintf(_("Your upload has been entered in '%s'"),$C['contest_friendly_name']));
         }
     }
 

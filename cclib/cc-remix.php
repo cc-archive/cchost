@@ -190,21 +190,25 @@ class CCRemix
 
                 CCEvents::Invoke(CC_EVENT_SOURCES_CHANGED, array( $remixid, &$remix_sources) );
 
-                $msg = $is_update ? _('update') : _('upload');
-                $link1 = "<a href=\"$url\">";
-                $link2 = '</a>';
-                $prompt = sprintf(_("Remix %s succeeded (click %shere%s to see the results)."),
-                    $msg, $link1, $link2);
-                require_once('cclib/cc-page.php');
-                CCPage::Prompt($prompt);
-                return(true);
+                if( $is_update )
+                {
+                    $link1 = "<a href=\"$url\">";
+                    $link2 = '</a>';
+                    $prompt = sprintf(_("Remix update succeeded (click %shere%s to see the results)."),$msg, $link1, $link2);
+                    require_once('cclib/cc-page.php');
+                    CCPage::Prompt($prompt);
+                }
+                else
+                {
+                    CCUpload::ShowAfterSubmit($remixid);
+                }
+                return false;
             }
         }
 
         require_once('cclib/cc-page.php');
         CCPage::AddForm( $form->GenerateForm() );
-
-        return( false );
+        return false;
     }
 
 

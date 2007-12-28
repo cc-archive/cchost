@@ -33,6 +33,46 @@ if( !defined('IN_CC_HOST') )
 class CCUpload
 {
 
+    function ShowAfterSubmit($upload_id)
+    {
+        CCUpload::_build_bread_crumb_trail($upload_id,true,'str_submit_after');
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=after_submit&ids='.$upload_id);
+        $query->Query($args);
+    }
+
+    function _build_bread_crumb_trail($upload_id,$do_edit,$cmd)
+    {
+        $trail[] = array( 'url' => ccl(), 
+                          'text' => 'str_home');
+        
+        $trail[] = array( 'url' => ccl('people'), 
+                          'text' => 'str_people' );
+
+        $sql = 'SELECT user_real_name, upload_name, user_name FROM cc_tbl_uploads ' .
+                'JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id;
+
+        list( $user_real_name, $upload_name, $user_name ) = CCDatabase::QueryRow($sql, false);
+
+        $trail[] = array( 'url' => ccl('people',$user_name), 
+                          'text' => $user_real_name );
+
+        $trail[] = array( 'url' => ccl('files',$user_name, $upload_id), 
+                          'text' => '"' . $upload_name . '"' );
+
+        if( $do_edit )
+        {
+            $trail[] = array( 'url' => ccl('files','edit', $upload_id), 
+                              'text' => 'str_file_edit' );
+        }
+
+        $trail[] = array( 'url' => '', 'text' => $cmd );
+
+        require_once('cclib/cc-page.php');
+        CCPage::AddBreadCrumbs($trail,true);
+    }
+
     function EnsureFiles(&$record,$fetch_if_missing)
     {
         if( empty($record['files']) )

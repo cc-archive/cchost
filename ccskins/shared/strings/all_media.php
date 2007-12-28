@@ -98,6 +98,7 @@ $GLOBALS['str_feeds']             = _('Syndication');
 
 $GLOBALS['str_file'] = _('File');
 $GLOBALS['str_file_add_new'] = _('Add a new file');
+$GLOBALS['str_file_add_one'] = _('Add a file');
 $GLOBALS['str_file_browse_uploads'] = _('Browse Uploads');
 $GLOBALS['str_file_cannot_be_found'] = _('The file cannot be found.');
 $GLOBALS['str_file_delete_this'] = _('Delete this file');
@@ -123,7 +124,8 @@ $GLOBALS['str_files_manage'] = _('Manage Files');
 $GLOBALS['str_files_manage_the_i'] = _("Manage the 'I Borrowed From This' List");
 $GLOBALS['str_files_nickname'] = _('Nickname');
 $GLOBALS['str_files_nickname_for_s'] = _("Nickname for '%s'");
-$GLOBALS['str_files_update_the_list'] = _('Update the list of sources used by this upload');
+$GLOBALS['str_files_update_the_list'] = _('Add or replace files');
+$GLOBALS['str_files_update_sources'] = _('Edit the sources');
 
 $GLOBALS['str_filter_2_weeks_ago']           = _('2 weeks ago');
 $GLOBALS['str_filter_3_months_ago']          = _('3 months ago');
@@ -474,6 +476,13 @@ $GLOBALS['str_submit_original'] = _('Self-Contained');
 $GLOBALS['str_submit_an_original'] = _('Submit a Self-Contained Project');
 $GLOBALS['str_submit_original_help'] = _('A self-contained project does not derive any material from outside sources. It is a totally original work.');
 $GLOBALS['str_submit_original_help'] = _('Use this form to upload a self-contained project.');
+$GLOBALS['str_submit_after'] = _('Submission Succeeded');
+$GLOBALS['str_submit_succeeded'] = _('Your file "%s" uploaded successfully.');
+$GLOBALS['str_submit_no_contest'] = _('"%s" is not entered in a contest'); 
+$GLOBALS['str_submit_contest'] = _('"%s" has been entered in the "%s" contest');
+$GLOBALS['str_submit_add_files'] = _('Click here to add files to "%s"');
+$GLOBALS['str_submit_link'] = _('Link: %s');
+
 
 $GLOBALS['str_suggested_tags'] = _('Suggested Tags');
 $GLOBALS['str_tags']           = _('Tags');

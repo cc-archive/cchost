@@ -137,9 +137,7 @@ class CCMediaHost
 
                 if( $upload_id )
                 {
-                    $url = ccl('files',$username,$upload_id);
-                    CCPage::Prompt(sprintf(_("Upload succeeded. Click %s to see results."),  "<a href=\"$url\">" . _('here') . "</a>"));
-                    CCPage::Prompt(_("This upload is <b>NOT</b> entered in any contest."));
+                    CCUpload::ShowAfterSubmit($upload_id);
                     return;
                 }
             }

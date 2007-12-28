@@ -589,14 +589,15 @@ class CCPage extends CCSkin
     * </code>         
     * @param array $trail Links to display at top of page
     */
-    function AddBreadCrumbs($trail)
+    function AddBreadCrumbs($trail,$overwrite=false)
     {
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
             $page =& CCPage::GetPage();
         else
             $page =& $this;
 
-        $page->vars['bread_crumbs'] = $trail;
+        if( empty($page->vars['bread_crumbs']) || $overwrite )
+            $page->vars['bread_crumbs'] = $trail;
     }
 
     /**

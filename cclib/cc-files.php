@@ -96,7 +96,7 @@ class CCEditFileForm extends CCUploadMediaForm
 
         $fields['upload_remixes'] =
                 array( 'label'              => '',
-                       'form_tip'           => 'str_files_update_the_list',
+                       'form_tip'           => 'str_files_update_sources',
                        'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
                                                    _('Manage Remixes') . "</a>",
                        'formatter'          => 'statictext',

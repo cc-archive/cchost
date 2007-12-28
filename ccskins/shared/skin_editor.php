@@ -78,7 +78,7 @@ function _t_skin_editor_edit_color_schemes(&$T,&$A)
         $markup = preg_replace( '#.*<style type="text/css">(.+)</style>#Ums', '$1', $text );
         $markup = preg_replace( '/\./', "#{$id} .", $markup);
         print '<br /><b>' . $T->String($P['desc']) . '</b><br />';
-        print "<style type="text/css">{$markup}</style><table class=\"{$class} ed\" id=\"{$id}\">";
+        print "<style type=\"text/css\">{$markup}</style><table class=\"{$class} ed\" id=\"{$id}\">";
         $rows = array_chunk($m[1],7);
         foreach( $rows as $row )
         {
