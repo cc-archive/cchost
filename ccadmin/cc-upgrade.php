@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
 function grey_me(obj,msgid)
 {
     var msg =     document.getElementById(msgid);
@@ -414,6 +414,34 @@ function untangle_the_freakin_config_mess($local_base_dir,$new_config)
     if( !empty($dom_switch) )
         print("Domain switched from {$_POST['old_domain']} to {$_POST['new_domain']}<br />\n");
 
+    $sql = "SELECT * FROM cc_tbl_config WHERE config_type = 'tab_pages'";
+    $qr = mysql_query($sql);
+    while( $R = mysql_fetch_assoc($qr) )
+    {
+        $pages = unserialize($R['config_data']);
+        $c = count($pages);
+        $k = array_keys($pages);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $set =& $pages[$k[$i]];
+            $k2 = array_keys($set);
+            $c2 = count($k2);
+            for( $n = 0; $n < $c2; $n++ )
+            {
+                $P =& $set[$k2[$n]];
+                if( !empty($P['function']) && ($P['function'] == 'all' || $P['function'] == 'any') )
+                {
+                    $qstring = 'tags=' . $P['tags'] . '&type=' . $P['function'];
+                    $P['function'] = 'qry';
+                    $P['tags'] = $qstring;
+                }
+            }
+        }
+        $data = addslashes(serialize($pages));
+        $sql = "UPDATE cc_tbl_config SET config_data = '{$data}' WHERE config_id = {$R['config_id']}";
+        mysql_query($sql);
+    }
+    print "Tab pages updated<br />\n";
 }
 
 print '</body></html>';
