@@ -751,7 +751,7 @@ function get_rewrite_help()
         $pretty_help =<<<EOF
 <html>
 <head>
-<style>
+<style type="text/css">
 body { font-size: 13px; font-family: verdana; }
 </style>
 </head>

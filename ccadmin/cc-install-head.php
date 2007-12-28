@@ -22,7 +22,7 @@
 ?>
 <head>
     <title><?=$install_title?></title>
-    <style>
+    <style type="text/css">
     body, td
     {
         font-family: arial;
