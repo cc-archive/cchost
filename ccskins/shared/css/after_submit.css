@@ -1,0 +1,21 @@
+div#after_submit {
+	margin: 20px auto;
+	width: 70%;
+	padding: 10px;
+	text-align: center;
+	border: 1px solid;
+}
+div#after_submit h2 {
+	margin: 2px;
+}
+div#after_submit p {
+	font-size: 1.1em;
+}
+div#after_submit a#add_block {
+	display: block;
+	margin: 0.5em;
+	font-size: 1.3em;
+	padding: 6px;
+	border: 1px solid;
+}
+

@@ -23,6 +23,7 @@
 #remix_info {
     width: 335px;
     float: left;
+	margin-left: 12px;
 }
 .list_menu {
     float: left;
