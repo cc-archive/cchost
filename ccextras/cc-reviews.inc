@@ -113,7 +113,7 @@ class CCReview
                     $otstr = 'str_reviews_left_by_button';
                     $qtype = 'leftby';
                 }
-
+                require_once('cclib/cc-query.php');
                 $query = new CCQuery();
                 $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=reviews_browse&datasource=topics&limit=30',array(),false);
                 $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'');
