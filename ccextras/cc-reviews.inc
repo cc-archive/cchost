@@ -165,10 +165,7 @@ class CCReview
 
         $CC_GLOBALS['page-has-feed-links'] = 1;
 
-        CCPage::AddLink( 'head_links', 'alternate', 'application/rss+xml', $url, "RSS 2.0");
         CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $url, "RSS 2.0", "xml",$help );
-
-
     }
 
     function _build_bread_crumb_trail($user_name,$upload_id='',$cmd_url='',$cmd_text='')

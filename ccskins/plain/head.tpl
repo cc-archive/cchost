@@ -26,6 +26,10 @@ var user_name = %if_not_null(logged_in_as)% '%(logged_in_as)%'; %else% null; %en
 //-->
 </script>
 
+%loop(feed_links,feed)%
+    <link rel="%(#feed/rel)%" type="%(#feed/type)%" href="%(#feed/href)%" title="%(#feed/title)%"/>
+%end_loop%
+
 %loop(head_links,head)%
     <link rel="%(#head/rel)%" type="%(#head/type)%" href="%(#head/href)%" title="%(#head/title)%"/>
 %end_loop%

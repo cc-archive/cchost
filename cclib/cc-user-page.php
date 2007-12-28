@@ -68,6 +68,9 @@ class CCUserPage
             $cb_tabs['user_cb'][0] = new $cb_tabs['user_cb'][0]();
 
         call_user_func_array( $cb_tabs['user_cb'], array( $username, $tagfilter ) );
+
+        $this->_show_feed_links($username, $cb_tabs['tags'] != 'uploads');
+
     }
 
     function Profile($username)
@@ -105,7 +108,6 @@ class CCUserPage
         $query = new CCQuery();
         $query->ProcessAdminArgs($q);
         $query->Query();
-        //$this->_show_feed_links($username);
     }
 
     function Hidden($username)
@@ -117,13 +119,19 @@ class CCUserPage
         $query->Query($args);
     }
 
-    function _show_feed_links($username)
+    function _show_feed_links($username,$uploads=true)
     {
-        require_once('cclib/cc-feeds.php');
-        CCPage::PageArg('artist_page',$username);
-        CCFeeds::AddFeedLinks($username,'',sprintf(_('Uploads by %s'), $username) );
-        CCFeeds::AddFeedLinks('','remixesof=' .$username, sprintf(_('Remixes of %s'), $username) );
-        CCFeeds::AddFeedLinks('','remixedby=' .$username, sprintf(_('Remixed by %s'), $username) );
+        $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
+        $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name=\''.$username .'\'');
+        $title = sprintf(_('Remixes of %s'), $user_real_name);
+        $url = url_args( ccl('api','query'), 'f=rss&t=rss_20&remixesof=' .$username .'&title=' . urlencode($title));
+        CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $title, $img . $title, 'feed_remixes_of' );
+
+        if( $uploads )
+        {
+            $url = url_args( ccl('api','query'), 'f=rss&t=rss_20&user=' . $username . '&title=' . urlencode($user_real_name) );
+            CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $user_real_name, $img . $username, 'feed_rss' );
+        }
     }
 
     function _get_tabs($user,&$default_tab_name)

@@ -177,19 +177,8 @@ class CCNavigator
                 // 4b. Everything else is a type of query
                 //
 
-                if( $default_tab['function'] == 'qry' )
-                {
-                    $qstring = $default_tab['tags'];
-                    parse_str($default_tab['tags'],$args);
-                }
-                else 
-                {
-                    $qstring = 'tags=' . $default_tab['tags'] .
-                               '&type=' . $default_tab['function'];
-                    $args['tags'] = $default_tab['tags'];
-                    $args['type'] = $default_tab['function'];
-                }
-
+                $qstring = $default_tab['tags'];
+                parse_str($default_tab['tags'],$args);
                 $args['feed'] = $qname;
                 $args['qstring'] = $qstring;
                 $args['title'] = $caption;

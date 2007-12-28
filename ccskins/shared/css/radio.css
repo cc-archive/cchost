@@ -20,24 +20,12 @@ $Id$
 
 #radio_container{
    margin: 0px auto;
-   width: 450px;
+   width: 600px;
 }
 
 #channel_form td {
   vertical-align: top;
   padding-right: 7px;
-}
-
-#channel_title {
-	display: none;
-}
-
-#outerframe {
-   width: 100%;
-}
-
-#outerframe td {
-  vertical-align: top;
 }
 
 
@@ -47,15 +35,13 @@ $Id$
 }
 
 #channel_intro {
-   margin: 21px 0px 0px 50px;
+   margin: 6px 0px 0px 50px;
    width: 400px;
 }
 
-#channel_intro h3 {
+h2 {
   text-align: center;
-  font-size: 13px;
   font-family: Verdana;
-  margin-bottom: 8px;
 }
 
 #channels {
@@ -71,13 +57,14 @@ $Id$
 .cbutton {
    vertical-align: middle;
    margin: 1px;
-   padding: 2px;
+   padding: 2px 0px 2px 4px;
    border-top: 2px solid #CCE;
    border-left: 2px solid #CCE;
    border-bottom: 1px solid black;
    border-right: 1px solid black;
    height: 16px;
    cursor: pointer;
+   font-family: Helvetica;
 }
 
 .cbutton_selected { /* colorize */
@@ -85,26 +72,13 @@ $Id$
   color: #006; */
 }
 
-.cvalue {
-  display:none;
-}
-
 #channel_form {
   padding: 0px;
   margin: 0px;
 }
 
-#options {
-  margin: 6px 0px 0px 28px;
-}
-
-#options td {
-    vertical-align: top;
-    padding-right: 8px;
-}
-
-#options .opt_label {
-	white-space: nowrap;
+#channels {
+	margin-bottom: 8px;
 }
 
 #score, #sinceu, #limit, #num_scores {
@@ -114,9 +88,23 @@ $Id$
 #countresults {
   font-style: italic;
   margin: 0px;
+  text-align: right;
+  float: right;
 }
 
-#gobuttons cc_stream_page_link,
-#gobuttons cc_pod_page_link {
-  margin-bottom: 6px;
+div.radio_opt {
+	margin: 3px 0px 10px 10%;
+}
+
+#gobuttons {
+	padding: 2px;
+	width: 80%;
+	margin: 1px auto;
+}
+
+#gobuttons a {
+	height: 25px;
+	float: left;
+	padding-left: 23px;
+	margin-right: 40px;
 }

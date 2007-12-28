@@ -83,6 +83,10 @@ fieldset.form_fieldset legend.form_label {
 	padding: 0.3em;
 }
 
+fieldset.form_fieldset .form_input {
+	width: 90%;
+}
+
 fieldset.form_fieldset div.form_element {
 	margin-top: 0.2em;
 }

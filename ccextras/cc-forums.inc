@@ -315,7 +315,6 @@ EOF;
         global $CC_GLOBALS;
         $CC_GLOBALS['page-has-feed-links'] = 1;
 
-        CCPage::AddLink( 'head_links', 'alternate', 'application/rss+xml', $url, "RSS 2.0");
         CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $url, "RSS 2.0", "xml",$help );
     }
 
@@ -538,7 +537,8 @@ EOF;
 
         if( ($mask & $row['forum_post_access']) != 0 )
             $this->_thread_commands($row,$thread_id);
-
+        
+        require_once('cclib/cc-query.php');
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('paging=off&f=page&t=topic_thread&datasource=topics&title=' . $row['topic_name']);
         $sqlargs['where'] = 'topic.topic_thread=' . $thread_id;

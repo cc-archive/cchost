@@ -26,4 +26,5 @@ define('CC_EVENT_FILTER_USER_LIST',           'filtuser' );
 define('CC_EVENT_FILTER_SEARCH_RESULTS',      'filtsrch' );
 define('CC_EVENT_FILTER_UPLOAD_MENU',         'filtupmenu' );
 
+
 ?>

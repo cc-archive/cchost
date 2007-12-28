@@ -363,26 +363,35 @@ class CCUtil
         return false;
     }
 
-
-    function FormatDate($fmt,$date)
+    function GetTimeZone()
     {
         static $TZ;
-        static $GM;
         if( !isset($TZ) )
         {
             $TZ = date('T');
             if ( strlen($TZ) > 3 )
                 $TZ = preg_replace('/[^A-Z]/','',$TZ);
         }
+        return $TZ;
+    }
 
+    function GetGMZone()
+    {
+        static $GM;
         if( !isset($GM) )
         {
             $GM = date('O');
             if( strpos(':',$GM) === false )
                 $GM = preg_replace('/00$/',':00',$GM);
         }
+        return $GM;
+    }
 
-            //CCDebug::StackTrace();
+    function FormatDate($fmt,$date)
+    {
+        
+        $TZ = CCUtil::GetTimeZone();
+        $GM = CCUtil::GetGMZone();
 
         $d = date($fmt,$date);
 

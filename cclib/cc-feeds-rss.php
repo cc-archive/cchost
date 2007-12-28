@@ -30,133 +30,65 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cclib/cc-feed.php');
 
-define('CC_FEED_RSS', 'rss');
-
 /**
-* RSS Feed generator and reader for site
-*
-* NOTE: Kill the cache for the menu if you are adding new menu items:
-* http://cchost.localhost/?ccm=/media/admin/menu/killcache
-* @package cchost
-* @subpackage api
-*
-* TODO: Rename this to CCFeedsRSS20
-* TODO: Rename the file cc-feeds-rss20.php
-* TODO: extract the atom stuff that is tainting this to another class
-* TODO: probably should abstract the interface parts of this as well.
+* RSS Feed generator 
 */
-class CCFeedsRSS extends CCFeed
+class CCFeedsRSS 
 {
-    var $_feed_type = CC_FEED_RSS;
-
-    function PodcastPage()
+    function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
-        $query = new CCQuery();
-
-        $args['format']       = CC_FEED_RSS;
-        $args['sub_title']   = _("Podcast this page");
-        $args['feed_url']     = ccl('podcast','page');
-        
-        $args = $query->ProcessUriArgs($args);
-
-        if( !empty($args['ids']) )
-        {
-            $args['limit']  = 200; // @todo yea, yea, for now... 
-        }
-        elseif( !empty($args['tags']) )
-        {
-            $args['limit']  = CC_FEED_NUM_ITEMS;
-        }
-        else
-        {
-            CCUtil::Send404();
-        }
-
-        $query->Query($args);
-    }
-
-    function PodcastUser($username='')
-    {
-        if( empty($username) )
+        if( $args['format'] != 'rss' )
             return;
 
-        $query = new CCQuery();
-        
-        $args['user']   = CCUtil::Strip($username);
-        $args['format'] = 'rss';
-        $args['limit']  = 0;
-        $args['sub_title'] = sprintf(_("Podcast for %s"), $username);
-        $args['feed_url'] = ccl('podcast','page',$username);
+        global $CC_GLOBALS;
 
-        $args = $query->ProcessUriArgs($args);
-        $query->Query($args);
-    }
+        $targs['channel_title'] = cc_feed_title($args);
+        $targs['home-url'] = htmlentities(ccl());
+        $targs['channel_description'] = cc_feed_description();
+        $targs['lang_xml'] = $CC_GLOBALS['lang_xml'];
+        $targs['rss-pub-date'] = 
+        $targs['rss-build-date'] = CCUtil::FormatDate(CC_RFC822_FORMAT,time());
 
-    /**
-    * Handler for feed/rss - returns rss xml feed for given records
-    *
-    * @param array $records Results of some kind of uploads query
-    * @param string $tagstr  Search string to display as part of description
-    * @param string $feed_url The URL that represents this result set 
-    */
-    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
-                                     $cache_type= CC_FEED_RSS, $sub_title='')
-    {
-        $this->_gen_feed_from_records('rss_20.xml',$records,$tagstr,$feed_url,
-                                      $cache_type, $sub_title);
-    }
-
-    function OnAddFeedLinks($tagstr,$qstring='',$help_text='')
-    {
-        if( !empty($tagstr) )
+        $k = array_keys($records);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
         {
-            $tags = CCTag::TagSplit($tagstr);
-            $utags = urlencode(implode(' ',$tags));
-            $rss_feed_url  = ccl('feed','rss', $utags);
-            if( !empty($qstring) )
-                $rss_feed_url = url_args( $rss_feed_url, $qstring );
+            $R =& $records[$k[$i]];
+            $R['upload_description_html']  = cc_feed_safe_html($R['upload_description_html']) ;
+            $R['upload_description_plain'] = cc_feed_encode($R['upload_description_plain']);
+            $R['upload_name']              = cc_feed_encode($R['upload_name']);
+            $R['user_real_name']           = cc_feed_encode($R['user_real_name']);
         }
+
+        $targs['records'] =& $records;
+
+        require_once('cclib/cc-template.php');
+
+        $skin = new CCSkin('rss_20.php',false);
+        header("Content-type: text/xml; charset=" . CC_ENCODING); 
+        $skin->SetAllAndPrint($targs,false);
+        exit;
+    }
+
+
+    function OnRenderPage(&$page)
+    {
+        $qstring = $page->GetPageArg('qstring');
+        if( empty($qstring) )
+            return;
+        parse_str($qstring,$args);
+        if( !empty($args['datasource']) && ($args['datasource'] != 'uploads') )
+            return;
+        $feed_url = url_args( ccl('api','query'), $qstring . '&f=rss&t=rss_20');
+        if( empty($args['title']) )
+            $help = 'RSS feed';
         else
-        {
-            $rss_feed_url = url_args( ccl('feed','rss'), $qstring );
-        }
-
-        CCPage::AddLink( 'head_links', 'alternate', 'application/rss+xml',
-                         $rss_feed_url, "RSS 2.0");
-
-        CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', 
-                         $rss_feed_url, "RSS 2.0", "xml",$help_text );
+            $help = $args['title'];
+        $link_text = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ' . $help;
+        CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $feed_url, $help, $link_text, 'feed_rss' );
     }
 
-    /**
-    * @deprecated Use CCFeed::AddFeedLinks instead
-    */
-    function AddFeedLinks($tagstr,$qstring='',$help_text='')
-    {
-        return parent::AddFeedLinks($tagstr,$qstring,$help_text);
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_MAP_URLS}
-    *
-    * @see CCEvents::MapUrl()
-    */
-    function OnMapUrls()
-    {
-        CCEvents::MapUrl( ccp('feed',CC_FEED_RSS),  array( 'CCFeedsRSS', 'GenerateFeed'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[tags]', 
-            _('Feed generator RSS'), CC_AG_FEEDS );
-
-        CCEvents::MapUrl( ccp('podcast','page'),  array( 'CCFeedsRSS', 'PodcastPage'),
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', 
-            _('Feed generator RSS Podcast'), CC_AG_FEEDS );
-
-        CCEvents::MapUrl( ccp('podcast','artist'),  array( 'CCFeedsRSS', 'PodcastUser'),
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{username}', 
-            _('Feed generator RSS Podcast'), CC_AG_FEEDS );
-    }
-
-} // end of class CCFeedsRSS
+}
 
 
 ?>

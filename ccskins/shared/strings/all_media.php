@@ -62,6 +62,7 @@ $GLOBALS['str_default']               = _('default');
 $GLOBALS['str_description'] = _('Description');
 $GLOBALS['str_display_name_for_file'] = _('Display name for file');
 $GLOBALS['str_download']              = _('Download');
+$GLOBALS['str_download_from']              = _('Download from');
 $GLOBALS['str_drag_this_link']        = _('');
 $GLOBALS['str_e_mail'] = _('e-mail');
 $GLOBALS['str_edit_properties'] = _('Edit Properties');

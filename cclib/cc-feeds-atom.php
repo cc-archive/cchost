@@ -19,7 +19,7 @@
 */
 
 /**
-* Atom Module feed generator
+* RSS Module feed generator
 *
 * @package cchost
 * @subpackage api
@@ -28,61 +28,61 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-
-define('CC_FEED_ATOM', 'atom');
-
 require_once('cclib/cc-feed.php');
 
 /**
-* Atom Feed generator and reader for site
-*
-* @package cchost
-* @subpackage api
+* RSS Feed generator 
 */
-class CCFeedsAtom extends CCFeed
+class CCFeedsAtom
 {
-    var $_feed_type = CC_FEED_ATOM;
-
-
-    function GenerateFeedFromRecords(&$records,$tagstr,$feed_url,
-                                     $cache_type= CC_FEED_ATOM, $sub_title='')
+    function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
-        $this->_gen_feed_from_records('atom_10.xml',$records,$tagstr,
-                                      $feed_url,$cache_type,$sub_title);
+        if( $args['format'] != 'atom' )
+            return;
+
+        $targs['channel_title'] = cc_feed_title($args);
+        $targs['feed_url'] = /* what's the difference again?? */
+        $targs['raw_feed_url'] = htmlentities(cc_current_url());
+        $targs['atom-pub-date'] = CCUtil::FormatDate(CC_RFC3339_FORMAT,time());
+
+        $k = array_keys($records);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[$k[$i]];
+            $R['upload_description_plain'] = cc_feed_encode($R['upload_description_plain']);
+            $R['upload_name']              = cc_feed_encode($R['upload_name']);
+            $R['user_real_name']           = cc_feed_encode($R['user_real_name']);
+        }
+
+        $targs['records'] =& $records;
+
+        require_once('cclib/cc-template.php');
+
+        $skin = new CCSkin('atom_10.php',false);
+        header("Content-type: text/xml; charset=" . CC_ENCODING); 
+        $skin->SetAllAndPrint($targs,false);
+        exit;
     }
 
-    function OnAddFeedLinks($tagstr,$qstring='',$help_text='')
+    function OnRenderPage(&$page)
     {
-        if( !empty($tagstr) )
-        {
-            $tags = CCTag::TagSplit($tagstr);
-            $utags = urlencode(implode(' ',$tags));
-            $atom_feed_url = ccl('feed',CC_FEED_ATOM,$utags);
-            if( !empty($qstring) )
-                $atom_feed_url = url_args( $atom_feed_url, $qstring );
-        }
+        $qstring = $page->GetPageArg('qstring');
+        if( empty($qstring) )
+            return;
+        parse_str($qstring,$args);
+        if( !empty($args['datasource']) && ($args['datasource'] != 'uploads') )
+            return;
+        $feed_url = url_args( ccl('api','query'), $qstring . '&f=atom&t=atom_10');
+        if( empty($args['title']) )
+            $help = 'ATOM feed';
         else
-        {
-            $atom_feed_url = url_args( ccl('feed',CC_FEED_ATOM), $qstring );
-        }
-
-        CCPage::AddLink( 'head_links', 'alternate', 'application/atom+xml', 
-                         $atom_feed_url, "ATOM 1.0");
+            $help = $args['title'];
+        $link_text = '<img src="' . ccd('ccskins','shared','images','feed-atom16x16.png') . '" title="[ Atom 1.0 ]" /> ' . $help;
+        CCPage::AddLink( 'feed_links', 'alternate', 'application/atom+xml', $feed_url, $help . ' [Atom]', $link_text, 'feed_atom' );
     }
 
-    /**
-    * Event handler for {@link CC_EVENT_MAP_URLS}
-    *
-    * @see CCEvents::MapUrl()
-    */
-    function OnMapUrls()
-    {
-        CCEvents::MapUrl( ccp('feed',CC_FEED_ATOM),  array( 'CCFeedsAtom', 'GenerateFeed'), 
-			         CC_DONT_CARE_LOGGED_IN,ccs(__FILE__), '', 
-            _('Feed generator RSS Podcast'), CC_AG_FEEDS );
-    }
-
-} // end of class CCFeeds
+}
 
 
 ?>

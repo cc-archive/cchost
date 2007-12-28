@@ -107,16 +107,31 @@ class CCQuery
         if( !empty($args) )
             $this->args = $args;
 
-        if( $this->args['format'] == 'page' && empty($this->args['template'])  )
-            $this->args['template'] = 'list_files';
-
-        if( $this->args['format'] == 'playlist' && empty($this->args['template'])  )
-            $this->args['template'] = 'playlist_show_one';
+        // todo: move this out
+        if( empty($this->args['template']) )
+        {
+            switch( $this->args['format'] )
+            {
+                case 'page':
+                    $this->args['template'] = 'list_files';
+                    break;
+                case 'playlist':
+                    $this->args['template'] = 'playlist_show_one';
+                    break;
+                case 'rss':
+                    $this->args['template'] = 'rss_20';
+                    break;
+                case 'atom':
+                    $this->args['template'] = 'atom_10';
+                    break;
+                case 'xspf':
+                    $this->args['template'] = 'xspf_10';
+                    break;
+            }
+        }
 
         if( $this->args['datasource'] == 'uploads' )
-        {
             $this->_gen_visible();
-        }
 
         if( empty($this->args['cache']) )
         {
@@ -254,7 +269,7 @@ class CCQuery
         // alias short to long
         $this->_arg_alias();
 
-        $badargs = array( 'qstring', 'ccm', 'view', 'format', 'template', 'template_args'); 
+        $badargs = array( 'qstring', 'ccm', 'view', 'format', 'template', 'template_args', 'dataview' ); 
 
         foreach( $keys as $K )
         {
@@ -952,6 +967,10 @@ class CCQuery
         if( $args['format'] == 'page' )
         {
             $admin_limit  = empty($CC_GLOBALS['max-listing']) ? 12 : $CC_GLOBALS['max-listing'];
+        }
+        elseif( in_array($args['format'], array('rss','atom','xspf') ) )
+        {
+            $admin_limit  = empty($CC_GLOBALS['max-feed']) ? 15 : $CC_GLOBALS['max-feed'];
         }
         else
         {

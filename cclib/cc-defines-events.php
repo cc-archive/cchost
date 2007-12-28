@@ -503,29 +503,9 @@ define('CC_EVENT_SYSPATHS',               'syspaths' );
 define('CC_EVENT_API_QUERY_FORMAT',         'apiqueryformat');
 
 /**
-* Request for Data Event: Add feed links to header/footer
-*
-* Called when page is requesting feeds for header and the
-* little orange feed links
-*
-* Respondant is responsible for adding the proper links using
-* {@link CCPage::AddLink()}
-*
-* Event handler prototype:
-*<code>
-*function OnAddFeedLinks($tagstr, $qstring,$help_text)
-*</code>
-* @see CCEvents::AddHandler()
-*/
-define('CC_EVENT_ADD_FEED_LINKS', 'addfeedlinks');
-
-
-/**
 * Request for Data Event: Add tabs to user profile page
 *
 * Called when user profile page is being rendered
-*
-* {@link CCPage::AddLink()}
 *
 * Event handler prototype/example:
 *<code>

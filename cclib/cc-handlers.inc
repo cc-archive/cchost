@@ -44,27 +44,22 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,            array( 'CCDatabaseAdmin', 'On
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCEditorials',  'OnUploadMenu'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCEditorials',  'OnMapUrls'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCEditorials' , 'OnGetConfigFields'), 'cclib/cc-editorials.php' );
-CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,        array( 'CCEditorials',  'OnGetSysTags'), 'cclib/cc-editorials.php');
-CCEvents::AddHandler(CC_EVENT_FILTER_ED_PICK,     array( 'CCEditorials',  'OnFilterEdPick'), 'cclib/cc-editorials.php');
+CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,           array( 'CCEditorials',  'OnGetSysTags'), 'cclib/cc-editorials.php');
+CCEvents::AddHandler(CC_EVENT_FILTER_ED_PICK,        array( 'CCEditorials',  'OnFilterEdPick'), 'cclib/cc-editorials.php');
 CCEvents::AddHandler(CC_EVENT_FILTER_ED_PICK_DETAIL, array( 'CCEditorials',  'OnFilterEdPickDetail'), 'cclib/cc-editorials.php');
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCFeed', 'OnGetConfigFields'), 'cclib/cc-feed.php' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCFeed',  'OnUploadDelete'), 'cclib/cc-feed.php');
 CCEvents::AddHandler(CC_EVENT_DELETE_FILE,        array( 'CCFeed',  'OnFileDelete'), 'cclib/cc-feed.php');
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCFeed',  'OnUploadDone'), 'cclib/cc-feed.php');
-//CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,        array( 'CCFeed',  'OnRenderPage'), 'cclib/cc-feed.php');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCFeedsAtom', 'OnMapUrls'), 'cclib/cc-feeds-atom.php');
-CCEvents::AddHandler(CC_EVENT_ADD_FEED_LINKS,     array( 'CCFeedsAtom',  'OnAddFeedLinks'), 'cclib/cc-feeds-atom.php'); 
-
-// this is in the base class
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsAtom', 'OnApiQueryFormat'),'cclib/cc-feeds-atom.php'); 
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCFeedsRSS',  'OnMapUrls'),'cclib/cc-feeds-rss.php');
-CCEvents::AddHandler(CC_EVENT_ADD_FEED_LINKS,     array( 'CCFeedsRSS',  'OnAddFeedLinks'),'cclib/cc-feeds-rss.php'); 
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsRSS',  'OnApiQueryFormat'), 'cclib/cc-feeds-rss.php'); 
 
-// this is in the base class
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsRSS',  'OnApiQueryFormat'),'cclib/cc-feeds-rss.php'); 
+// this turns out to be order dependent and we want rss as the default
+CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,        array( 'CCFeedsRSS',  'OnRenderPage'),     'cclib/cc-feeds-rss.php'); 
+CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,        array( 'CCFeedsAtom', 'OnRenderPage'),    'cclib/cc-feeds-atom.php'); 
 
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,       array( 'CCFileRename', 'OnAdminMenu'),     'cclib/cc-filerename.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,         array( 'CCFileRename', 'OnMapUrls'),       'cclib/cc-filerename.php' );

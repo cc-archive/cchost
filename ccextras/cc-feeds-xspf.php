@@ -29,9 +29,18 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,  array( 'CCFeedsXSPF', 'OnMapUrls'), 'ccextras/cc-feeds-xspf.inc' );
+CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsXSPFHV', 'OnApiQueryFormat') ); 
 
-// implemented in the base class
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsXSPF', 'OnApiQueryFormat'), 'ccextras/cc-feeds-xspf.inc' ); 
+class CCFeedsXSPFHV
+{
+    function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
+    {
+        if( $args['format'] != 'xspf' )
+            return;
+
+        require_once('ccextras/cc-feeds-xspf.inc');
+        cc_xspf_query_format($records,$args,$result,$result_mime);
+    }
+} 
 
 ?>

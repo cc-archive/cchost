@@ -92,24 +92,6 @@ class CCPageAdmin
             $qstring = $queryObj->SerializeArgs($args);
 
         CCPage::PageArg('qstring',$qstring );        
-
-        /* 
-
-            I think this is supposed to happen through the templates 
-            using 'qstring'???
-        */
-        /*
-        if( !empty($feed) )
-        {
-            // Let folks know they can subscribe to this query
-
-            $feed = strlen($feed) > 10 ? substr($feed,0,8) . '...' : $feed;
-            $tags = empty($tags) ? '' : $tags;
-            $qstring = empty($qstring) ? '' : $qstring;
-            CCFeed::AddFeedLinks( $tags, $qstring, $feed);
-        }
-
-        */
         $result = true;
     }
 
@@ -628,7 +610,7 @@ class CCPage extends CCSkin
     * @param string $link_text Text for footer links (e.g. 'RSS 1.0')
     * @param string $link_help Text beside footer links (e.g. 'Remixes of pathchilla')
     */
-    function AddLink($placement, $rel, $type, $href, $title, $link_text = '', $link_help = '')
+    function AddLink($placement, $rel, $type, $href, $title, $link_text = '', $id = '')
     {
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
            $page =& CCPage::GetPage();
@@ -640,7 +622,7 @@ class CCPage extends CCSkin
                                                    'href'      => $href,
                                                    'title'     => $title,
                                                    'link_text' => $link_text,
-                                                   'link_help' => $link_help);
+                                                   'id'        => $id );
     }
 
     /**

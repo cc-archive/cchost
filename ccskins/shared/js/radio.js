@@ -20,25 +20,24 @@ $Id$
 
 function updateLink()
 {
-    var args = Form.serialize('channel_form') + '&tags=' + $( 'cvalue_' + currChannel.id ).innerHTML;
-    $('streamlink').href = stream_url + args + '&rand=1&format=m3u';
-    $('podlink').href    = query_url  + args + '&rand=1&format=rss';
+    var args = Form.serialize('channel_form') + '&tags=' + currChannel.getAttribute('rel');
+    $('mi_stream_page').href = stream_url + args + '&rand=1&f=m3u';
+    $('mi_podcast_page').href    = query_url  + args + '&rand=1&f=rss';
 
     if( sitePromoTag && (sitePromoTag.length > 0) )
-        $('streamlink').href += '&promo_tag=' + sitePromoTag;
+        $('mi_stream_page').href += '&promo_tag=' + sitePromoTag;
 
-    var curl = query_url + args + '&format=count';
-    var myAjax = new Ajax.Request( curl, {method: 'get', onComplete: showCount });    
+    var curl = query_url + args + '&f=count';
+    new Ajax.Request( curl, {method: 'get', onComplete: showCount });    
 }
 
 function radio_play() 
 { 
-    var args = Form.serialize('channel_form') + '&tags=' + $( 'cvalue_' + currChannel.id ).innerHTML;
+    var args = Form.serialize('channel_form') + '&tags=' + currChannel.getAttribute('rel');
     if( sitePromoTag && (sitePromoTag.length > 0) )
         args  += '&promo_tag=' + sitePromoTag;
     var url = home_url + 'playlist/popup' + q + args;
     var dim = "height=300,width=550";
-    ajax_debug(url);
     var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                   "resizable=1,scrollbars=1," + dim );
 }
@@ -60,10 +59,9 @@ function showCount(obj)
     }
 }
 
-var currChannel = $('tags00');
-Element.classNames(currChannel).add('med_bg');
 
-Event.observe('playlink','click', radio_play, false );
+var currChannel = $$('.starter')[0];
+Event.observe('mi_play_page','click', radio_play, false );
 
 $$('.cbutton').each( function(e) {
       Event.observe(e,'click', function (e)
