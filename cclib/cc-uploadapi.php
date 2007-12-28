@@ -133,7 +133,7 @@ EOF;
         $file_args = array();
         $file_args['file_extra'] = array();
         $errs = CCUploadAPI::_do_verify_file_size($current_path);
-	$errs .= CCUploadAPI::_do_verify_file_format($current_path,$file_args);
+        $errs .= CCUploadAPI::_do_verify_file_format($current_path,$file_args);
         if( $errs )
         {
             CCUploadAPI::_cleanup_upload_file($current_path,$is_temp);
@@ -522,10 +522,8 @@ EOF;
     {
         require_once('cclib/cc-formatinfo.php');
 
-        $verfier = CCUploadAPI::GetVerifier();
-
+        $verifier = CCUploadAPI::GetVerifier();
         $format_info =  new CCFileFormatInfo($current_path);
-        
         if( isset($verifier) )
         {
             $verifier->FileValidate( $format_info );

@@ -4,7 +4,7 @@
     desc = _('9px')
 [/meta]
 */?>
-<style>
+<style type="text/css">
 body, td, input, select, ul, p {
   font-size: 9px;
 }

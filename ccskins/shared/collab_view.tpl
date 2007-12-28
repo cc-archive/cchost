@@ -82,7 +82,7 @@ $collab_id = $C['collab_id'];
 
 <script  src="%url('js/autocomp.js')%" type="text/javascript" ></script>
 <script  src="%url('js/collab.js')%"   type="text/javascript" ></script>
-<script >
+<script type="text/javascript">
 var str_credit = '%text(str_collab_credit2)%';
 var str_remove = '%text(str_collab_remove2)%';
 var str_send_email = '%text(str_collab_send_email)%';

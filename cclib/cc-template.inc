@@ -153,7 +153,7 @@ Sortable.create("targetmacros",
  {dropOnEmpty:true,containment:['draglistmacros',"targetmacros"],constraint:false,onUpdate: on_macros_drop});
 
 </script>
-<style>
+<style type="text/css">
 .ddex { list-style: none; padding: 0px; }
 .ddex li { cursor: move; padding: 4px; margin: 5px; border: 1px solid #999}
 </style>

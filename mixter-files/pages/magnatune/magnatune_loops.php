@@ -45,7 +45,7 @@ td.sbutton {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 function on_get_albumlist(listbox)
 {
    var opt    = listbox.options[listbox.selectedIndex];
@@ -81,7 +81,7 @@ function get_mbase_url()
 }
 
 </script>
-<style>
+<style type="text/css">
 .genre_head {
   margin: 5px;
 }
@@ -162,7 +162,7 @@ download individual tracks in high quality MP3:</p>
 <table  border="0" cellpadding="3" cellspacing="0">
 <tr>
 <td  valign="top">
-<style> optgroup { font-weight: bold; font-family: verdana; font-style: normal;} </style>
+<style type="text/css"> optgroup { font-weight: bold; font-family: verdana; font-style: normal;} </style>
 <div>
 <table><tr><td>
 <select  name="magnatunegenres" id="magnatunegenres" style="font-size: 11px;font-family: Verdana">
@@ -223,7 +223,7 @@ for( $ci103= 0; $ci103< $cc103; ++$ci103)
 
 if ( !empty($A['mt']['genre_filter_on'])) {
 
-?><script>
+?><script type="text/javascript">
 //<!--
 function sel_genre()
 {

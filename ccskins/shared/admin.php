@@ -30,7 +30,7 @@ function _t_admin_print_admin_menu(&$T,&$_TV)
 function _t_admin_print_admin_menu_hook()
 {
     ?>
-<script>
+<script type="text/javascript">
 function vroot_hook()
 {
     var e = $('vroot_selector');

@@ -20,7 +20,7 @@
     [file_filesize] =>  (6KB)
     [file_order] => 0
 */?>
-<style>
+<style type="text/css">
 ul.ddex    { list-style: none; padding: 0px; width: 70%; margin:0px auto;}
 ul.ddex li { padding: 4px; margin: 5px; border: 1px solid #999}
 div.drag_handle { cursor: move;  }
@@ -62,7 +62,7 @@ div.cmd_link{
 <div class="cmd_link" id="submit_order_link" style="display:none">
 <a id="submit_file_order" href="javascript://submit order">%text(str_file_submit_order)%</a>
 </div>
-<script>
+<script type="text/javascript">
 var _first_file = 1;
 var upload_id = %(field/upload_id)%;
 

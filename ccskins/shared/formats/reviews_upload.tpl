@@ -90,7 +90,7 @@ EOF;
 </tr>
 %end_loop%
 </table>
-<script>
+<script type="text/javascript">
 if( user_name )
 {
     new userHookup('topic_cmds','ids=<?= join(',',$thread_ids) ?>');

@@ -58,7 +58,7 @@ class CCUserSearch
             $wid_links = array();
             // TODO: This should really go into a stylesheet proper.
             $html =<<<EOF
-<style>
+<style type="text/css">
 #wid_table td, #wid_table th {
   vertical-align: top;
 }

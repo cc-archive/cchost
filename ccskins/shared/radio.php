@@ -95,7 +95,7 @@ if( !empty($chart['ratings']) )
 </div> <!-- box -->
 </form>
 </div><!-- radio container -->
-<script>
+<script type="text/javascript">
 stream_url = '<?= ccl('api','query','stream.m3u') . $A['q'] ?>';
 sitePromoTag = '<?= empty($A['site_promo_tag']) ? 'site_promo' : $A['site_promo_tag'] ?>';
 </script>

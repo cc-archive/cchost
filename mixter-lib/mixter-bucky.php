@@ -18,7 +18,7 @@ if( !empty($_GET['bucky_edit']) )
     $f2 = @file_get_contents('mixter-files/bucky_2.txt');
     $f3 = @file_get_contents('mixter-files/bucky_3.txt');
     $html =<<<EOF
-    <style>
+    <style type="text/css">
         textarea {
             width: 80%;
             height: 200px;

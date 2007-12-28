@@ -26,7 +26,7 @@
 %end_if% 
 %map(#R,records/0)% 
 %map(record,#R)% 
-<script>
+<script type="text/javascript">
 var ratings_enabled = '%(#R/ratings_enabled)%';
 </script>
 
@@ -96,7 +96,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 
             %if_not_empty(#R/fplay_url)%
                 <div class="playerdiv"><span class="playerlabel">%text(str_play)%</span><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a></div>
-                <script> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
+                <script type="text/javascript"> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
             %end_if%
 
             <br class="info_box_clear" />
@@ -178,12 +178,12 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 
 %if_not_null(enable_playlists)%
     %call('playerembed.xml/eplayer')%
-    <script>
+    <script type="text/javascript">
         ccEPlayer.hookElements($('upload_middle'));
     </script>
 %end_if%
 
-<script>
+<script type="text/javascript">
 function menu_cb(resp) {
     $('upload_menu_box').innerHTML = resp.responseText;
     var dl_hook = new queryPopup("download_hook","download",str_download); 

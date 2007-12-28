@@ -12,7 +12,7 @@ function _t_util_patch_stream_links(&$T,&$A)
     {
         $str = $T->String('str_stream');
         ?>
-<script>
+<script type="text/javascript">
 $$('.cc_streamlink').each( function(e) { e.innerHTML = '<?=$str?>'; } );
 </script>
         <?
@@ -21,7 +21,7 @@ $$('.cc_streamlink').each( function(e) { e.innerHTML = '<?=$str?>'; } );
     {
         $stream_bg = $T->URL('images/player/hear-button-bg.gif');
         ?>
-<style> 
+<style type="text/css"> 
 div.cc_list span { display:block; float: left; }
 a.cc_streamlink { float: left; width: 23px; height: 23px; display:block; background: url('<?= $stream_bg ?>') top left no-repeat; }
 a.cc_streamlink:hover { background: url('<?= $stream_fg ?>') top left no-repeat; text-decoration:none;}
@@ -61,7 +61,7 @@ function _t_util_print_forms(&$T,&$A)
 function _t_util_disable_submit_button(&$T,&$A)
 {
     ?>
-<script> $('form_submit').disabled = true; </script>
+<script type="text/javascript"> $('form_submit').disabled = true; </script>
     <?
 }
 
@@ -70,7 +70,7 @@ function _t_util_hide_upload_form(&$T,&$A)
     $msg = str_replace("\n", ' ', addslashes($T->String('str_uploading_msg')));
     
     ?>
-<style>
+<style type="text/css">
 #bodymask {
         position: absolute;
         top: 0px;
@@ -102,7 +102,7 @@ $spinner = $T->URL('images/spinner.gif');
 if( !empty($spinner) )
     $spinner = "<br /><br /><img src=\"{$spinner}\" />";
 ?>
-<script>
+<script type="text/javascript">
 var formMask = Class.create();
 
 formMask.prototype = {

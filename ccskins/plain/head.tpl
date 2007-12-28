@@ -15,7 +15,7 @@
 
 <meta name="robots" content="index, follow" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<script>
+<script type="text/javascript">
 //<!--
 var home_url  = '%(home-url)%';
 var root_url  = '%(root-url)%';

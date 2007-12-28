@@ -71,7 +71,7 @@ EOF;
 */ ?>
 
 <link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/upload_list_wide.css')%" />
-<script>
+<script type="text/javascript">
   var ratings_enabled = %if_not_null(records/0/ratings_enabled)% true %else% false %end_if%;
 </script>
 <div id="upload_listing">
@@ -105,7 +105,7 @@ EOF;
 
         %if_not_empty(#R/fplay_url)%
             <div class="playerdiv"><span class="playerlabel">%text(str_play)%</span><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a></div>
-            <script> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
+            <script type="text/javascript"> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
         %end_if%
 
     </div><!-- upload info -->
@@ -153,12 +153,12 @@ EOF;
 %if_null(#_GET/noscripts)%
     %if_not_null(enable_playlists)%
         %call('playerembed.xml/eplayer')%
-        <script>
+        <script type="text/javascript">
             ccEPlayer.hookElements($('upload_listing'));
         </script>
     %end_if%
 
-    <script>
+    <script type="text/javascript">
         var dl_hook = new queryPopup("download_hook","download",str_download); 
         dl_hook.hookLinks(); 
         var menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);

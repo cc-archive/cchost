@@ -18,7 +18,7 @@ if( !empty($_GET['bbe_edit']) )
     $f2 = @file_get_contents('cchost_files/pages/djvadim/bbe_2.txt');
     $f3 = @file_get_contents('cchost_files/pages/djvadim/bbe_3.txt');
     $html =<<<EOF
-    <style>
+    <style type="text/css">
         textarea {
             width: 80%;
             height: 200px;

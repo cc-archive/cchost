@@ -23,7 +23,7 @@
         <div>%chop(#R/upload_description_plain,75)% <a href="%(#R/file_page_url)%">(%text(str_more)%)</a></div>
      </td></tr>
    %if_not_null(#R/fplay_url)%
-   <tr><th>%text(str_play)%</th><td><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a><script>
+   <tr><th>%text(str_play)%</th><td><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a><script type="text/javascript">
     $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%'</script></tr>
    %end_if%
    <tr><th>%text(str_by)%</th><td><a href="%(#R/artist_page_url)%" class="cc_user_link artist_name">%chop(#R/user_real_name,chop)%</a> 
@@ -65,11 +65,11 @@
 
 %if_not_null(enable_playlists)%
  %call('playerembed.xml/eplayer')%
- <script>
+ <script type="text/javascript">
    ccEPlayer.hookElements($('cc_narrow_list'));
  </script>
 %end_if%
-<script>
+<script type="text/javascript">
 var dl_hook = new queryPopup("download_hook","download",str_download); 
 dl_hook.hookLinks(); 
 var menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);

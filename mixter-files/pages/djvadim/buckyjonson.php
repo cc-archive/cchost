@@ -1,6 +1,6 @@
 
 <div style="font-family: Verdana; font-size:11px">
-<style>
+<style type="text/css">
 .bbemsg {
   color: #944;
 }
@@ -45,7 +45,7 @@
 
 </div>
 
-<script>
+<script type="text/javascript">
 
 function showBBESources( resp )
 {

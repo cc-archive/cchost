@@ -6,7 +6,7 @@ if( !defined('IN_CC_HOST') )
 function _t_sample_browser_browser_page($T,&$A) {
   
 ?><h1>Samples Browser</h1>
-<script >
+<script type="text/javascript">
   //<!--
   var tags = new Array();
   var tag_filter = 'any';

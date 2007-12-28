@@ -21,7 +21,7 @@ demonstrate the artistic power and possibilities of open licensing.</p>
 http://creativecommons.org/support/</a></h3>
 <p >ccMixter is sponsored 100% by Creative Commons, which is sponsored by you. Thanks!</p>
 </div>
-<script >
+<script type="text/javascript">
   //<!--
   var tab_top = -41;
 

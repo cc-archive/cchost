@@ -1,5 +1,5 @@
 
-<style>
+<style type="text/css">
 
 #left_box {
      float: left;

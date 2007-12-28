@@ -700,7 +700,7 @@ entities. SmartyPants can perform the following transformations:
 *	Three consecutive dots (`...`) into an ellipsis entity
 
 SmartyPants does not modify characters within `<pre>`, `<code>`, `<kbd>`, 
-`<script>`, or `<math>` tag blocks. Typically, these tags are used to 
+`<script type="text/javascript">`, or `<math>` tag blocks. Typically, these tags are used to 
 display text where smart quotes and other "smart punctuation" would not 
 be appropriate, such as source code or example markup.
 

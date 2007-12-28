@@ -7,7 +7,7 @@
 [/meta]
 */
 ?>
-<style>
+<style type="text/css">
 .box
 { 
   border-top: 1px solid #999; 

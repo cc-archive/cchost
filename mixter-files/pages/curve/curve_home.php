@@ -71,7 +71,7 @@ On MADRUGADA, ZONE explores his newly found identity on technology mixing it wit
 <h2 >Official Rules</h2>
 <p >Read the <a  href="<?= $A['root-url']?>curve/view/contest/rules">Official Rules</a>.</p>
 </div>
-<script >
+<script type="text/javascript">
 
 function settitle()
 {

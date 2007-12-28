@@ -4,7 +4,7 @@
         desc = _('Monochrome')
 [/meta]
 */?>
-<style>
+<style type="text/css">
 .light_bg { background-color: #F0F0F0; }
 .light_border { border-color: #FFFFFF; }
 .light_color, a.light_color, a.light_color:visited, a.light_color:link  { color: #FFFFFF; }

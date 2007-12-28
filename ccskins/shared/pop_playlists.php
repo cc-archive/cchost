@@ -89,7 +89,7 @@ foreach( $recs as $AIR )
 <?
     $T->Call('playerembed.xml/eplayer');
 ?>
-<script >
+<script type="text/javascript">
     var playlistMenu = new ccPlaylistMenu();
     playlistMenu.hookElements('cc_pl_div');
 </script>

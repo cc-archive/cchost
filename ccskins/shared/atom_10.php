@@ -9,15 +9,16 @@
 function atom_dataview()
 {
     $ccf = ccl('files') . '/';
+    $ccp = ccl('people') . '/';
     $GM = CCUtil::GetGMZone();
-    $avatar_sql = cc_get_user_avatar_sql();
 
     // 2007-12-18T16:36:37-08:00
     // %Y-%c-%dT%T
 
     $sql =<<<EOF
-        SELECT $avatar_sql, upload_id, upload_name, upload_name, upload_contest, user_name, user_real_name,
+        SELECT upload_id, upload_name, upload_name, upload_contest, user_name, user_real_name,
         CONCAT( '$ccf', user_name, '/', upload_id ) as file_page_url, 
+        CONCAT( '$ccp', user_name ) as artist_page_url, 
         upload_tags, license_url,
         upload_description as format_text_upload_description,
         CONCAT( DATE_FORMAT(upload_date,'%Y-%c-%dT%T'), '$GM' ) as atom_pubdate
@@ -46,7 +47,7 @@ print '<?xml version="1.0" encoding="utf-8" ?>'
 
 <title><?= $A['channel_title'] ?></title>
 <link rel="self" href="<?= $A['raw_feed_url'] ?>"/>
-<link rel="alternate" href="<?= $A['feed_url'] ?>"/>
+<link rel="alternate" href="<?= ccl() ?>"/>
 <updated><?= $A['atom-pub-date'] ?></updated>
 <id><?= $A['feed_url'] ?></id>
 <?
@@ -58,10 +59,17 @@ if( !empty($A['records']) )
     <entry>
       <id><?= $item['file_page_url'] ?></id>
       <title><?= $item['upload_name'] ?></title>
-      <author><name><?= $item['user_real_name'] ?></name></author>
-      <logo><?= $item['user_avatar_url'] ?></logo>
+      <author>
+        <name><?= $item['user_real_name'] ?></name>
+        <uri><?= $item['artist_page_url'] ?></uri>
+      </author>
       <link rel="alternate" href="<?= $item['file_page_url'] ?>" type="text/html" />
-      <link rel="enclosure" href="<?= $item['files'][0]['download_url'] ?>" length="<?= $item['files'][0]['file_rawsize'] ?>" type="<?= $item['files'][0]['file_format_info']['mime_type'] ?>"/>
+      <? 
+            if( empty($item['files'][0]['file_format_info']['mime_type']) )
+                d($item);
+    ?>
+      <link rel="enclosure" href="<?= $item['files'][0]['download_url'] ?>" length="<?= $item['files'][0]['file_rawsize'] ?>" 
+        type="<?= $item['files'][0]['file_format_info']['mime_type'] ?>"/>
 
         <?
         $tags = split(',',$item['upload_tags']);

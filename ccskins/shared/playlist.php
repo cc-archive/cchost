@@ -13,7 +13,7 @@ function _t_playlist_playlist_create_dyn(&$T,&$A) {
 <script  src="<?= $T->URL('js/query_filter.js')?>" ></script>
 <script  src="<?= $T->URL('js/autocomp.js')?>" ></script>
 <script  src="<?= $T->URL('js/autopick.js')?>" ></script>
-<script >
+<script type="text/javascript">
     var params = <?= $A['plargs']['edit_query']?>;
     var filters = new ccQueryBrowserFilters( params );
     var formatter = new ccFormatter();
@@ -225,12 +225,12 @@ function _t_playlist_playlist_popup_window(&$T,&$A)
     $T->Call('playlist.tpl/playlist_list_window_cart');
     $T->Call('playerembed.xml/eplayer');
 ?>
-<script>
+<script type="text/javascript">
     new ccPlaylistMenu();
     new ccPagePlayer(<?= $A['args']['playlist']['cart_id']?>);
     new ccParentRedirector(); 
 </script>
-<style>
+<style type="text/css">
   div.cc_playlist_popup_window,
   #cc_wrapper1, #cc_wrapper2
   #cc_content, #cc_centercontent {
@@ -255,7 +255,7 @@ function _t_playlist_playlist_show_browser(&$T,&$A) {
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <div  id="playlist_browser" class="grid"><span><?= $T->String('str_pl_getting') ?>...</span></div>
 <?$A['player_options'] = 'autoHook: false';$T->Call('playerembed.xml/eplayer');
-?><script >
+?><script type="text/javascript">
     var plb = new ccPlaylistBrowser( 'playlist_browser', <?= $A['args']?> );
 </script>
 <?}
@@ -266,7 +266,7 @@ function _t_playlist_playlist_menu(&$T,&$A)
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
-<script >
+<script type="text/javascript">
     new ccPlaylistMenu();
 </script>
 <?

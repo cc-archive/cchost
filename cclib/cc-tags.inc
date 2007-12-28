@@ -113,7 +113,10 @@ class CCTags extends CCTable
     function Insert($tags,$type,$update_type = true)
     {
         if( !is_array($tags) )
+        {
+            require_once('cclib/cc-tags.php');
             $tags = CCTag::TagSplit($tags);
+        }
         if( empty($tags) )
             return;
         $tags = array_map('strtolower',$tags);

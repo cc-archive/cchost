@@ -51,7 +51,7 @@ $q = $A['q'];
 if( $script )
 {
 ?>
-<script>
+<script type="text/javascript">
 function ppage() { 
     var url = home_url + 'playlist/popup' + q + 'offset=<?= $offs ?>&<?= $qstring ?>';
     var dim = "height=300,width=550";

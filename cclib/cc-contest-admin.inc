@@ -312,7 +312,7 @@ class CCContestAdmin
         $publish_url    = ccc($contest_short_name, 'contest', 'publish_sources',$contest_short_name );
 
         $html =<<<EOF
-<style>
+<style type="text/css">
 .contest_help {
     width: 80%;
     }

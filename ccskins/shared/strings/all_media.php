@@ -94,6 +94,7 @@ $GLOBALS['str_feat_artists'] = _('Featured Collaborators');
 $GLOBALS['str_feat_list_any_collob'] = _('List any colloborating artists (Hint: NOT YOU)');
 $GLOBALS['str_feature']               = _('featuring');
 $GLOBALS['str_featuring']             = _('Featuring');
+$GLOBALS['str_feeds']             = _('Syndication');
 
 $GLOBALS['str_file'] = _('File');
 $GLOBALS['str_file_add_new'] = _('Add a new file');

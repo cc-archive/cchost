@@ -4,7 +4,7 @@
         desc = _('Green')
 [/meta]
 */?>
-<style>
+<style type="text/css">
 .light_bg { background-color: #EEFFEE; }
 .light_border { border-color: #EEFFEE; }
 .light_color { color: #EEFFEE; }

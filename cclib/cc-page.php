@@ -612,6 +612,7 @@ class CCPage extends CCSkin
     */
     function AddLink($placement, $rel, $type, $href, $title, $link_text = '', $id = '')
     {
+
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
            $page =& CCPage::GetPage();
          else
@@ -619,7 +620,7 @@ class CCPage extends CCSkin
 
         $page->vars[$placement][] = array(   'rel'       => $rel,
                                                    'type'      => $type,
-                                                   'href'      => $href,
+                                                   'href'      => str_replace('&','&amp;',$href),
                                                    'title'     => $title,
                                                    'link_text' => $link_text,
                                                    'id'        => $id );

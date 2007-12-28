@@ -41,8 +41,9 @@ class CCFeedsAtom
             return;
 
         $targs['channel_title'] = cc_feed_title($args);
+        $qstring = $args['queryObj']->SerializeArgs($args);
         $targs['feed_url'] = /* what's the difference again?? */
-        $targs['raw_feed_url'] = htmlentities(cc_current_url());
+        $targs['raw_feed_url'] = htmlentities(url_args(ccl('api','query'),$qstring));
         $targs['atom-pub-date'] = CCUtil::FormatDate(CC_RFC3339_FORMAT,time());
 
         $k = array_keys($records);

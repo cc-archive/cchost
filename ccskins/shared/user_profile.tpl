@@ -63,7 +63,7 @@ EOF;
     </div>
 </div>
 
-<script>
+<script type="text/javascript">
 var user_desc = $('user_description_html');
 var avatar_html = '<div id="avatar" style="float:right;width:94px;"><img src="%(#U/user_avatar_url)%" /></div>';
 var breaker = '<br style="clear:right" />';

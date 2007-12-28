@@ -490,7 +490,7 @@ class CCPseudoVerifyAPI
             $FI['tags'] = $FF['tags'];
             $FI['default-ext'] = $FF['default-ext'];
             $FI['media-type'] = $FF['media-type'];
-            $FI['mime_type'] = '';
+            $FI['mime_type'] = empty($FF['mime_type']) ? 'octect/stream' : $FF['mime_type'];
             if( !empty($FF['zipdir']) )
                 $FI['zipdir'] = $FF['zipdir'];
             $formatinfo->SetData( $FI );

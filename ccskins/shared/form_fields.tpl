@@ -116,7 +116,7 @@
 </td></tr>
 %end_if%
 </table>
-<script> var %(curr_form/form_id)%_editor = new ccGridEditor('%(curr_form/form_id)%'); </script>
+<script type="text/javascript"> var %(curr_form/form_id)%_editor = new ccGridEditor('%(curr_form/form_id)%'); </script>
 %map(post_form_goo,'form_fields.tpl/post_grid_form')%
 %end_macro%
 
@@ -129,7 +129,7 @@
 <div id="%(curr_form/form_id)%_meta_%(#i_meta)%">%(#meta)%</div>
 %end_loop%
 </div><!-- meta rows -->
-<script>
+<script type="text/javascript">
 %(curr_form/form_id)%_editor.cols = [
     %loop(curr_form/html_form_grid_columns,C)% '%(#C/column_name)%'%if_not_last(#C)%, %end_if% %end_loop%
     ];
@@ -149,7 +149,7 @@
 %if_not_null(curr_form/html_add_row_caption)%
     <button  onclick="do_add_row(); return false;">%(curr_form/html_add_row_caption)%</button>
 %end_if%
-<script>
+<script type="text/javascript">
 function do_add_row()
 {
     add_flat_row( '%(curr_form/form_id)%', 

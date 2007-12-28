@@ -160,7 +160,7 @@ for( $ci104= 0; $ci104< $cc104; ++$ci104)
 <div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/curve/ccmixter.org_curvemusic_vocals.zip"><span >vocals (41 MB) </span>
 </a>
 <p >(FLAC compressed WAV files in ZIP archive)</p></div>
-<script >
+<script type="text/javascript">
 function settitle()
 {
    var sbuck = $('ccttite');

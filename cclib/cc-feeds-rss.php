@@ -48,6 +48,7 @@ class CCFeedsRSS
         $targs['lang_xml'] = $CC_GLOBALS['lang_xml'];
         $targs['rss-pub-date'] = 
         $targs['rss-build-date'] = CCUtil::FormatDate(CC_RFC822_FORMAT,time());
+        $targs['feed_url'] = htmlentities(cc_current_url());
 
         $k = array_keys($records);
         $c = count($k);
@@ -58,6 +59,7 @@ class CCFeedsRSS
             $R['upload_description_plain'] = cc_feed_encode($R['upload_description_plain']);
             $R['upload_name']              = cc_feed_encode($R['upload_name']);
             $R['user_real_name']           = cc_feed_encode($R['user_real_name']);
+            $R['user_avatar_url']          = str_replace(' ','%20',$R['user_avatar_url']); // required by validation
         }
 
         $targs['records'] =& $records;

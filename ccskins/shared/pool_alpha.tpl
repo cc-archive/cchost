@@ -1,7 +1,7 @@
 
 <div id="pool_filter">%text(str_pool_filter)%: <div id="pool_target"></div></div>
 
-<script>
+<script type="text/javascript">
 ccPoolAlpha = Class.create();
 
 ccPoolAlpha.prototype = {

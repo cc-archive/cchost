@@ -8,7 +8,7 @@
 [/meta]
 */?>
 <!-- layout 29 -->
-<style>
+<style type="text/css">
 div#wrapper{float:right;width:85%}
 div#navigation{float:left;width:15%}
 div#extra{clear:both;width:100%;height:170px;}

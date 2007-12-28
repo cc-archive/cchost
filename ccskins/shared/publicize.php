@@ -110,7 +110,7 @@ function _t_publicize_publicize(&$T,&$A) {
 </div>
 </div>
 <script  type="text/javascript" src="<?= $T->URL('js/publicize.js') ?>"></script>
-<script >
+<script type="text/javascript">
   //<!--
   seeHTML = '<?= $A['PUB']['seehtml']?>';
   showFormatted = '<?= $A['PUB']['showformatted']?>';

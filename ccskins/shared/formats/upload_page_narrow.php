@@ -26,7 +26,7 @@
 [/meta]
 */
 ?>
-<style>
+<style type="text/css">
 div#upload_wrapper
 {width:95%}
 div#upload_sidebar_box,

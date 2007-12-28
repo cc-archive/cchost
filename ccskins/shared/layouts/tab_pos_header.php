@@ -11,7 +11,7 @@ $A["tab_pos"] = array(
     "in_header" => true,
     "subclient" => true );
 ?>
-<style>
+<style type="text/css">
 #tabs {
   height: 1.1em;
 }

@@ -63,7 +63,7 @@ EOF;
 [/dataview]
 */
 ?>
-<style>
+<style type="text/css">
 #edpicks td {
     vertical-align: top;
     width: 32.5%;
@@ -124,7 +124,7 @@ for( $i = 0; $i < $row_count; $i++ )
                 ?>
             <div class="playlabel"><?= $T->String('str_play') ?></div><a class="cc_player_button cc_player_hear" id="_ep_<?= $R['upload_id'] ?>"> </a>
             <div style="clear:both" />
-            <script> $('_ep_<?= $R['upload_id']?>').href = '<?= $R['fplay_url'] ?>' </script>
+            <script type="text/javascript"> $('_ep_<?= $R['upload_id']?>').href = '<?= $R['fplay_url'] ?>' </script>
                 <?
             }
             ?>
@@ -135,7 +135,7 @@ for( $i = 0; $i < $row_count; $i++ )
 }
 ?></table>
 <script  src="<?= $T->URL('js/info.js') ?>"></script>
-<script>
+<script type="text/javascript">
 var uinfo = new ccUploadInfo();
 uinfo.hookInfos('.info_button',$('edpicks'));
 </script>
@@ -147,7 +147,7 @@ if( !empty($A['enable_playlists']) )
 {
     $T->Call('playerembed.xml/eplayer');
     ?>
-<script>
+<script type="text/javascript">
     ccEPlayer.hookElements($('edpicks'));
 </script>
     <?

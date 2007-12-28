@@ -206,6 +206,7 @@ class CCUploads extends CCTable
     */
     function InTags($tags,&$record)
     {
+        require_once('cclib/cc-tags.php');
         return( CCTag::InTag($tags,$record['upload_tags']));
     }
 
@@ -217,6 +218,7 @@ class CCUploads extends CCTable
     */
     function SplitTags(&$record)
     {
+        require_once('cclib/cc-tags.php');
         return( CCTag::TagSplit($record['upload_tags']) );
     }
 

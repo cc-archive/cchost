@@ -11,7 +11,7 @@ $A["tab_pos"] = array(
     "subclient" => true,
     "floating" => true);
 ?>
-<style>
+<style type="text/css">
 #sub_tabs li {
 	display: block;
 	float: left;

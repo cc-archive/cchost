@@ -15,7 +15,7 @@
     $T->Call('playlist.tpl/playlist_list');
     $T->Call('playerembed.xml/eplayer');
 ?>
-<script >
+<script type="text/javascript">
     new ccPlaylistMenu();
     new ccPagePlayer(<?= $A['args']['playlist']['cart_id']?>);
 </script>

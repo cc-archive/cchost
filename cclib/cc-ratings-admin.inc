@@ -429,7 +429,7 @@ EOF;
 
         // TODO: This needs to be moved to a real stylesheet outside this code.
         $html =<<<END
-            <style>
+            <style type="text/css">
                 .rt th { 
                     background: black;
                     padding: 2px;

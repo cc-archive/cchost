@@ -1,5 +1,5 @@
 
-<style>
+<style type="text/css">
 div#remix_search_controls {
 }
 
@@ -60,7 +60,7 @@ div#remix_search_controls {
 </div>
 
 <script src="%url('js/remix_search.js')%" type="text/javascript"></script>
-<script> 
+<script type="text/javascript"> 
 var pools = %query('t=pools&f=js&nomime=1&noexit=1')%;
 new ccRemixSearch();
 </script>

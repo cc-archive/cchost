@@ -21,7 +21,7 @@ $Id$
 ?>
 <h1>ccHost Home page</h1>
 
-<style>
+<style type="text/css">
 .hs
 {
     font-style:Courier New, courier, serif;
@@ -64,7 +64,7 @@ $Id$
                       <p>Please <a href="<?= $A['root-url'] ?>?update=1">CLICK HERE</a> to finish your ccHost installation.</p>
                 </div>
                 <? if( !empty($_GET['update']) ) { ?>
-                   <script>
+                   <script type="text/javascript">
                       var msg = 'OK! You are done! <a href="<?= $A['root-url'] ?>">CLICK HERE</a> to start using ccHost';
                       $('almost_done').innerHTML = msg;
                    </script>

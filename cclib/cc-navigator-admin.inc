@@ -307,7 +307,7 @@ class CCNavigatorAdmin
             {
                 $keys = array_keys($pages);
                 $count = count($keys);
-                $html = '<style>#tabtable td{white-space:nowrap;padding-right:20px;}</style><table id="tabtable" style="width: 60%;margin-top: 40px;">';
+                $html = '<style type="text/css">#tabtable td{white-space:nowrap;padding-right:20px;}</style><table id="tabtable" style="width: 60%;margin-top: 40px;">';
                 for( $i = 0; $i < $count; $i++ )
                 {
                     $pname = $keys[$i];

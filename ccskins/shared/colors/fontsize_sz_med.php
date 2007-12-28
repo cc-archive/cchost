@@ -4,7 +4,7 @@
     desc = _('Medium')
 [/meta]
 */?>
-<style>
+<style type="text/css">
 body, td, input, select, ul, p {
   font-size: 1.0em;
 }

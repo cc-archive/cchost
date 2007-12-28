@@ -287,7 +287,7 @@ END;
         $page =<<<END
 <html>
 <head>
-<style>
+<style type="text/css">
    body,table,a {
      font-family: Verdana;
      font-size: 11px;

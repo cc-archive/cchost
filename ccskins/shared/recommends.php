@@ -43,11 +43,11 @@
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js'); ?>"></script>
 <?$T->Call('playerembed.xml/eplayer'); ?>
-<script>
+<script type="text/javascript">
 var ruser = '<?= $A['get']['ruser']?>';
 var fullname = '<?= $A['get']['fullname']?>';
 </script>
 <script  src="<?= $T->URL('js/recommends.js'); ?>" /></script>
-<script>
+<script type="text/javascript">
 new ccReccommendBrowser();
 </script>

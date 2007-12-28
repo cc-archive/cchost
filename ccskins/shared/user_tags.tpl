@@ -1,7 +1,7 @@
 
 <div id="user_tags_filter">%text(str_user_filter_tags)% <div id="user_tag_target"></div></div>
 
-<script>
+<script type="text/javascript">
 ccUserTags = Class.create();
 
 ccUserTags.prototype = {

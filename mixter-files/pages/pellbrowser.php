@@ -68,7 +68,7 @@
 .feat_title {
   font-weight: bold;
   font-size: 14px;
-  color: orange;
+  color: #FF4444;
 }
 
 .feat_user {
@@ -168,7 +168,7 @@ foreach( $A['feats'] as $R )
 <?
 $T->Call('playerembed.xml/eplayer');
 
-?><script >
+?><script type="text/javascript">
 //<!--
 var feat_playlistMenu = new ccPlaylistMenu( { autoHook: false } );
 feat_playlistMenu.hookElements($('featured_pell'));

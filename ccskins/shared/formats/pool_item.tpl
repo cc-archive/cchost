@@ -6,7 +6,7 @@
 [/meta]
 %%*/?>
 <link rel="stylesheet" title="Default Style" type="text/css" href="%url(css/upload_page.css)%" />
-<style>
+<style type="text/css">
 div#upload_wrapper{float:left;width:100%}
 div#upload_middle{margin: 0 30% 0 5%;padding-left:2.0em;}
 div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}

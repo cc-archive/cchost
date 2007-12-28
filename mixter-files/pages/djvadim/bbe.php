@@ -39,7 +39,7 @@ if( !defined('IN_CC_HOST') )
 
 </div>
 
-<script>
+<script type="text/javascript">
 
 function showBBESources( resp )
 {

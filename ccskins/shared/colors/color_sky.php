@@ -4,7 +4,7 @@
         desc = _('Sky')
 [/meta]
 */?>
-<style>
+<style type="text/css">
 .light_bg { background-color: #FFFFFF; }
 .light_border { border-color: #FFFFFF; }
 .light_color { color: #FFFFFF; }

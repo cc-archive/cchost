@@ -4,7 +4,7 @@
         desc = _('Bluish Ocean')
 [/meta]
 */?>
-<style>
+<style type="text/css">
 .light_bg { background-color: #EEEEFF; }
 .light_border { border-color: #EEEEFF; }
 .light_color { color: #EEEEFF; }

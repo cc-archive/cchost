@@ -12,7 +12,7 @@
 <div id="cc_howididit_uploads"></div>
 <div id="cc_howididit_detail"></div>
 
-<script>
+<script type="text/javascript">
 ccHowIDidIt = Class.create();
 
 ccHowIDidIt.prototype = {

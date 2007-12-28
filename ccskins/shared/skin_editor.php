@@ -34,7 +34,7 @@ function _t_skin_editor_edit_font_schemes(&$T,&$A)
             <td class="<?= $class?>" id="<?= $id?>" style="padding:0px;margin:0px;">
                 <span style="padding:0px;margin:0px;font-style:normal;font-size: 14px;<?= $m[1]?>"><?= $caption?></span>
             </td>
-            <script>$('<?=$id?>').ref = '<?=$file?>';</script>
+            <script type="text/javascript">$('<?=$id?>').ref = '<?=$file?>';</script>
         </tr>
         <?
     }
@@ -64,7 +64,7 @@ function _t_skin_editor_edit_color_schemes(&$T,&$A)
     ?>
     <input type="hidden" name="<?= $fid ?>" id="<?= $fid ?>" value="<?= $value ?>"/>
     <div style="padding-left: 20px;border: 2px solid #999; width: 250px; <?=$scroll?>">
-    <style>table.ed td { height: 10px; width:20px; border-style:solid; border-width: 1px; }</style><?
+    <style type="text/css">table.ed td { height: 10px; width:20px; border-style:solid; border-width: 1px; }</style><?
 
     $int = 1;
     foreach( $props as $P )
@@ -75,10 +75,10 @@ function _t_skin_editor_edit_color_schemes(&$T,&$A)
         $id = 'id_' . $int++;
         if( $value == $file )
             $val_id = $id;
-        $markup = preg_replace( '#.*<style>(.+)</style>#Ums', '$1', $text );
+        $markup = preg_replace( '#.*<style type="text/css">(.+)</style>#Ums', '$1', $text );
         $markup = preg_replace( '/\./', "#{$id} .", $markup);
         print '<br /><b>' . $T->String($P['desc']) . '</b><br />';
-        print "<style>{$markup}</style><table class=\"{$class} ed\" id=\"{$id}\">";
+        print "<style type="text/css">{$markup}</style><table class=\"{$class} ed\" id=\"{$id}\">";
         $rows = array_chunk($m[1],7);
         foreach( $rows as $row )
         {
@@ -90,7 +90,7 @@ function _t_skin_editor_edit_color_schemes(&$T,&$A)
             print "</tr>\n";
         }        
         print '</table>';
-        ?><script>$('<?=$id?>').ref = '<?=$file?>';</script><?
+        ?><script type="text/javascript">$('<?=$id?>').ref = '<?=$file?>';</script><?
     }
 
     ?>
@@ -113,7 +113,7 @@ function _t_skin_editor_edit_layouts(&$T,&$A)
     ?>
     <input type="hidden" name="<?= $fid ?>" id="<?= $fid ?>" value="<?= $value ?>"/>
     <div style="padding-left: 20px;border: 2px solid #999; width: 250px; <?=$scroll?>">
-    <style>#el td { vertical-align: top; padding:2px;} </style>
+    <style type="text/css">#el td { vertical-align: top; padding:2px;} </style>
     <table>
     <?
 
@@ -138,7 +138,7 @@ function _t_skin_editor_edit_layouts(&$T,&$A)
               </tr><?
         }
 
-        ?><script>$('<?=$id?>').ref = '<?=$file?>';</script>
+        ?><script type="text/javascript">$('<?=$id?>').ref = '<?=$file?>';</script>
         
         <?
     }

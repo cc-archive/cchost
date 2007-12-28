@@ -826,7 +826,7 @@ EOF;
         $html =<<<EOF
         <html>
         <body>
-        <script>
+        <script type="text/javascript">
             if( window.parent.upload_done )
                 window.parent.upload_done('$ret','$msg');
             else
