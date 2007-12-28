@@ -10,6 +10,7 @@ function cc_filter_std(&$records,&$dataview_info)
     global $CC_GLOBALS;
     $c = count($records);
     $k = array_keys($records);
+    require_once('cclib/cc-tags.php');
 
     foreach( array( CC_EVENT_FILTER_UPLOAD_USER_TAGS, CC_EVENT_FILTER_REMIXES_SHORT, CC_EVENT_FILTER_FILES,
                     CC_EVENT_FILTER_UPLOAD_TAGS, CC_EVENT_FILTER_REMIXES_FULL, CC_EVENT_FILTER_EXTRA,

@@ -80,6 +80,7 @@ class CCRatings extends CCTable
         $chart = $configs->GetConfig('chart');
         if( !empty($chart['ratings_ban']) )
         {
+            require_once('cclib/cc-tags.php');
             $banlist = CCTag::TagSplit($chart['ratings_ban']);
             $username = CCUser::CurrentUserName();
             if( in_array($username,$banlist) )

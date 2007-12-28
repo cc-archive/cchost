@@ -111,6 +111,7 @@ class CCRemix
     {
         require_once('cclib/cc-pools.php');
         require_once('cclib/cc-sync.php');
+        require_once('cclib/cc-tags.php');
 
         $is_update  = !empty($remixid);
         $uploads    =& CCUploads::GetTable();

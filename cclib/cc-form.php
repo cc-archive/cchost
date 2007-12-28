@@ -1345,6 +1345,7 @@ END;
     function validator_tagsedit($fieldname)
     {
         require_once('cclib/cc-tags.inc');
+        require_once('cclib/cc-tags.php');
         $value = $this->GetFormValue($fieldname);
         $tags =& CCTags::GetTable();
         $value = $tags->Normalize($value);

@@ -532,7 +532,10 @@ class CCSubmit
         else
         {
             if( is_string($values['tags']) )
+            {
+                require_once('cclib/cc-tags.php');
                 $values['tags'] = CCTag::TagSplit($values['tags']);
+            }
             if( !in_array( 'media', $values['tags'] ) )
                 $values['tags'][] = 'media';
         }

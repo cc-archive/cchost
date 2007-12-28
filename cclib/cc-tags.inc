@@ -26,6 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cclib/cc-tags.php');
 /**
 */
 define('CC_MAX_TAG_LEN',  25);

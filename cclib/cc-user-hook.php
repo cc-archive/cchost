@@ -54,6 +54,7 @@ EOF;
 
         if( !empty($C['ratings_ban']) )
         {
+            require_once('cclib/cc-tags.php');
             $banlist = CCTag::TagSplit($C['ratings_ban']);
             $user_blocked = in_array($user_name,$banlist);
         }

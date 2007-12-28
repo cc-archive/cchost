@@ -104,7 +104,10 @@ class CCUploadMediaForm extends CCUploadForm
             return;
 
         if( !is_array($suggested_tags) )
+        {
+            require_once('cclib/cc-tags.php');
             $suggested_tags = CCTag::TagSplit($suggested_tags);
+        }
 
         $fields['suggested_tags'] =
                         array( 'label'      => 'str_suggested_tags',

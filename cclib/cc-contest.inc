@@ -181,7 +181,7 @@ class CCContest
                     foreach( $keys as $key )
                     {
                         $R =& $records[$key];
-
+                        require_once('cclib/cc-tags.php');
                         $R['no_check'] = CCTag::InTag($inherit,$R['upload_tags']);
                     }
                 }

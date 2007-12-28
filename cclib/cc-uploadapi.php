@@ -566,6 +566,7 @@ EOF;
         }
 
         require_once('cclib/cc-tags.inc');
+        require_once('cclib/cc-tags.php');
         $tags  =& CCTags::GetTable();
         $user_tags = $tags->CheckAliases($user_tags);
         $user_tags = $tags->CleanSystemTags($user_tags);
@@ -682,6 +683,8 @@ EOF;
 
     function _recalc_upload_tags($upload_id,$new_ccud = '',$replaces_ccud='')
     {
+        require_once('cclib/cc-tags.php');
+
         // Just get the record again with the new 'files' 
         // array filled out (yes, heavy weight but safe)
         //

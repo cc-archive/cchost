@@ -140,6 +140,8 @@ class CCRatingsAdmin
     {
         global $CC_GLOBALS;
 
+        require_once('cclib/cc-tags.php');
+
         if( $confirmed != 'confirmed' )
         {
             $users =& CCUsers::GetTable();

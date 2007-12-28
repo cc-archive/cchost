@@ -194,6 +194,8 @@ class CCPseudoVerifyAPI
         if( empty($file['file_format_info']['tags']) )
             return;
 
+        require_once('cclib/cc-tags.php');
+
         $newtags = CCTag::TagSplit($file['file_format_info']['tags']);
     
         $tags = array_merge($tags,$newtags);

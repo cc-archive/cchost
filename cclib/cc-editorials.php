@@ -165,6 +165,7 @@ class CCEditorials
             return(true);
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
+        require_once('cclib/cc-tags.php');
         return( !empty($settings['editors']) && in_array( CCUser::CurrentUserName(), CCTag::TagSplit($settings['editors']) ) );
     }
 

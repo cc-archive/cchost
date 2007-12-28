@@ -280,6 +280,8 @@ END;
 
     function OnFilterUserProfile(&$records)
     {
+        require_once('cclib/cc-tags.php');
+
         $row =& $records[0];
 
         $row['user_homepage_html'] = '';
@@ -318,8 +320,6 @@ END;
                                            'id'    => 'fav' );
         }
 
-        require_once('cclib/cc-tags.php');
-
         $row['user_tag_links'] = array();
 
         $favs = CCTag::TagSplit($row['user_favorites']);
@@ -339,7 +339,6 @@ END;
             $links = CCDatabase::QueryRows($sql);
             $row['user_tag_links']['links0'] = array( 'label' => _('Favorite people'),
                                               'value' => $links );
-        //CCDebug::PrintVar($row);
         }
 
         CCTag::ExpandOnRow($row,'user_whatilike',ccl('search/people', 'whatilike'), 'user_tag_links',

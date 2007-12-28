@@ -244,6 +244,7 @@ class CCQuery
         if( !empty($this->args['tags']) )
         {
             // clean up tags 
+            require_once('cclib/cc-tags.php');
             $this->args['tags'] = join(',',CCTag::TagSplit($this->args['tags']));
         }
 

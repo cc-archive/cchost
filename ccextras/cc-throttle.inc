@@ -344,6 +344,8 @@ class CCThrottle
 
         if( !empty($throttle['user-exceptions']) )
         {
+            require_once('cclib/cc-tags.php');
+
             $exceptions = CCTag::TagSplit($throttle['user-exceptions']);
             
             if( in_array( $username, $exceptions ) )
