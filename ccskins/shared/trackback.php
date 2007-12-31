@@ -20,6 +20,7 @@ EOF;
 }
 [/dataview]
 */
+
 $ttype = $_GET['ttype'];
 $R     =& $A['records'][0];
 $text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name'].'</span>', 
@@ -54,7 +55,8 @@ $title = $T->String('str_trackback_title_' .$ttype);
 </style>
 
 <div id="trackback_response">
-<form id="trackback_form" name="trackback_form">
+</div>
+<form id="trackback_form" name="trackback_form" action="/track/podcast/<?= $R['upload_id'] ?>" method="post" >
     <div id="trackback_help" name="trackback_help"><h2><?= $title ?></h2><?= $text ?></div>
 
 <!--
@@ -82,31 +84,35 @@ $title = $T->String('str_trackback_title_' .$ttype);
 <? } ?>
 
     <div class="f"><?= $T->String('str_trackback_your_name'); ?>
-    <input id="trackback_your_name" name="trackback_your_name" /></div>
-
-    <div class="f"><?= $T->String('str_trackback_comment'); ?>
-    <textarea id="trackback_comments" name="trackback_comments"></textarea></div>
+    <input id="trackback_your_name" name="trackback_your_name" <?= empty($A['user_real_name']) ? '' : "value=\"" . $A['user_real_name'] . '"'; ?> /></div>
 
     <div class="f"><?= $T->String('str_trackback_email'); ?>
-    <input id="trackback_email" name="trackback_email" /></div>
+    <input id="trackback_email" name="trackback_email" <?= empty($A['user_email']) ? '' : "value=\"" . $A['user_email'] . '"'; ?> /></div>
 
     <div class="f">
         <a id="trackback_submit" href="javascript://submit track"><?= $T->String('str_trackback_submit'); ?></a>
     </div>
 </form>
-</div>
 
 <script type="text/javascript">
 
 function on_track(resp)
 {
-    var vars = [ '', eval('str_trackback_type_<?= $ttype ?>'), 
-                 '<?= $R['upload_name'] ?>', 
-                 '<?= $R['user_real_name'] ?>' ];
+    if( resp.responseText != 'ok' )
+    {
+        $('trackback_response').innerHTML = str_trackback_error + '<br />' + resp.responseText;        
+    }
+    else
+    {
+        var vars = [ '', eval('str_trackback_type_<?= $ttype ?>'), 
+                     '<?= $R['upload_name'] ?>', 
+                     '<?= $R['user_real_name'] ?>' ];
 
-    var text = new Template( str_trackback_response ).evaluate( vars ) + '<br />' + resp.responseText;
-    Modalbox.alert(text);
+        var text = new Template( str_trackback_response ).evaluate( vars );
+        Modalbox.alert(text);
+    }   
 }
+ 
 
 function submit_tb()
 {

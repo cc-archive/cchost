@@ -26,7 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCTrackback', 'OnMapUrls') );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCTrackback', 'OnMapUrls') );
 
 class CCTrackBack
 {
@@ -49,16 +49,16 @@ class CCTrackBack
             $a['pool_item_pool']           = $pool_id;
             $a['pool_item_url']            = $link;
             $a['pool_item_download_url']   = '';
-            $a['pool_item_description']    = CCUtil::Strip($_POST['trackback_comments']);
+            $a['pool_item_description']    = '';
             $a['pool_item_extra']          = serialize( array( 'ttype'     => $type, 
-                                                               'embed'     => $_POST['trackback_media'],
+                                                               'embed'     => CCUtil::StripSlash($_POST['trackback_media']),
                                                                'poster'    => $name,
                                                                'email'     => $email,
                                                                'upload_id' => $upload_id,
                                                         ) );
             $a['pool_item_license']        = $upload_license;
-            $a['pool_item_name']           = $this->_get_item_name($_POST['trackback_name'],$link);
-            $a['pool_item_artist']         = $this->_clean_text($_POST['trackback_artist']);
+            $a['pool_item_name']           = $this->_get_item_name(CCUtil::Strip($_POST['trackback_name']),$link);
+            $a['pool_item_artist']         = $this->_get_item_user(CCUtil::Strip($_POST['trackback_artist']),$link);
             $a['pool_item_approved']       = 0;
             $a['pool_item_timestamp']      = time();
             $a['pool_item_num_remixes']    = 0;
@@ -78,18 +78,33 @@ class CCTrackBack
     {
         if( !empty($name) )
             return $name;
+        require_once('cclib/snoopy/Snoopy.class.php');
+        $snoopy = new Snoopy();
+        $snoopy->fetch($link);
+        if( !empty($snoopy->error) )
+            $this->_error_out($snoopy->error);
+        if( preg_match( '/<meta name="title" content="([^"]+)">/U',$snoopy->results,$m ) )
+            return $m[1];
+        if( preg_match( '#<title>([^<]+)</title>#',$snoopy->results,$m) )
+            return $m[1];
         if( preg_match( '#/([^/]+)$#',$link,$m) )
             return $m[1];
         return substr( str_replace('http://','',$link), 0, 20 );
     }
 
-    function _clean_text($text)
+    function _get_item_user($user,$link)
     {
-        return CCUtil::StripText($text);
+        if( !empty($user) )
+            return $user;
+        $purl = parse_url($link);
+        return str_replace('www.','',$purl['host']);
     }
+
 
     function _clean_url($text)
     {
+        if( substr($text,0,7) != 'http://' )
+            $text = 'http://' . $text;
         return trim($text);
     }
 
@@ -112,7 +127,7 @@ class CCTrackBack
             require_once('cclib/cc-pools.php');
             $pools = new CCPools();
             $a['pool_id'] = $pools->NextID();
-            $a['pool_name'] = _('Trackback Sitings Pools');
+            $a['pool_name'] = _('Trackback Sitings');
             $a['pool_short_name'] = '_web';
             $a['pool_description'] = _('People link to us!');
             // pool_api_url can ba a local module for searching the pool

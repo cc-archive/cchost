@@ -140,8 +140,8 @@ END;
                        'menu_text' => _('Manage Sample Pools'),
                        'help' => _('Manage pools known to this site.') ),
                 array( 'action' => ccl( 'admin', 'pools', 'approve' ),
-                       'menu_text' => _('Approve Remote Remixes'),
-                       'help' => _('Validate pending remote remixes.') ),
+                       'menu_text' => _('Approve Trackbacks'),
+                       'help' => _('Approve trackbacks and remote remixes') ),
                );
         CCPage::PageArg('client_menu',$args,'print_client_menu');
     }
@@ -178,26 +178,31 @@ EOF;
                 }
             }
 
-            $approved = join(',',$approved);
-            $sql = "UPDATE cc_tbl_pool_item SET pool_item_approved = 1 WHERE pool_item_id IN ({$approved})";
-            CCDatabase::Query($sql);
+            if( !empty($approved) )
+            {
+                $approved = join(',',$approved);
+                $sql = "UPDATE cc_tbl_pool_item SET pool_item_approved = 1 WHERE pool_item_id IN ({$approved})";
+                CCDatabase::Query($sql);
+            }
             $upload_ids = array_filter(array_unique($upload_ids));
             require_once('cclib/cc-sync.php');
             foreach( $upload_ids as $upload_id )
                 CCSync::Upload($upload_id);
-            $rows = CCDatabase::QueryRows("SELECT pool_item_extra FROM cc_tbl_pool_item WHERE pool_item_id IN ({$approved})");
-            require_once('cclib/cc-uploadapi.php');
-            foreach( $rows as $row )
+            if( !empty($approved) )
             {
-                if( empty($row['pool_item_extra']) )
-                    continue;
-                $ex = unserialize($row['pool_item_extra']);
-                if( empty($ex['ttype']) )
-                    continue;
-                $upload_id = $ex['upload_id'];
-                CCUploadAPI::UpdateCCUD($upload_id,'in_' . $ex['ttype'] . ',trackback','');
+                $rows = CCDatabase::QueryRows("SELECT pool_item_extra FROM cc_tbl_pool_item WHERE pool_item_id IN ({$approved})");
+                require_once('cclib/cc-uploadapi.php');
+                foreach( $rows as $row )
+                {
+                    if( empty($row['pool_item_extra']) )
+                        continue;
+                    $ex = unserialize($row['pool_item_extra']);
+                    if( empty($ex['ttype']) )
+                        continue;
+                    $upload_id = $ex['upload_id'];
+                    CCUploadAPI::UpdateCCUD($upload_id,'in_' . $ex['ttype'] . ',trackback','');
+                }
             }
-
         }
 
         require_once('cclib/cc-query.php');
@@ -443,7 +448,7 @@ EOF;
             $items += array( 
                 'pool' => array( 'menu_text'  => _('Sample Pools'),
                                  'menu_group' => 'configure',
-                                 'help' => _('Sub menu for managing sample pools'),
+                                 'help' => _('Managing sample pools and trackbacks'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 10000,
                                  'action' =>  ccl('admin','pools')

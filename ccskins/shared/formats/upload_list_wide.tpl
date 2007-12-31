@@ -35,7 +35,7 @@ SELECT
     IF( upload_tags LIKE '%,audio,%', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date_format,
     upload_contest, upload_name,
-    upload_num_remixes, upload_num_sources, upload_num_pool_sources
+    upload_num_remixes, upload_num_sources, upload_num_pool_sources, upload_num_pool_remixes
     %columns%
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
@@ -136,7 +136,8 @@ EOF;
         %loop(#R/remix_children,P)%
             <div>
             %if_not_null(#P/pool_item_extra/ttype)%
-                <span class="pool_item_type">%(#P/pool_item_extra/ttype)%</span>: 
+                <? $tstr = $T->String('str_trackback_type_' . $P['pool_item_extra']['ttype']) ?>
+                <span class="pool_item_type">%(#tstr)%</span>: 
             %end_if%
             <a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
                  <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>

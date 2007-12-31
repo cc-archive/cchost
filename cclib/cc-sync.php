@@ -135,7 +135,11 @@ END;
 
         $sql[] =<<<END
                 UPDATE cc_tbl_uploads SET upload_num_pool_remixes = 
-                    (SELECT COUNT(*) FROM cc_tbl_pool_tree WHERE pool_tree_parent = $upload_id)
+                    (
+                        SELECT COUNT(*) FROM cc_tbl_pool_tree 
+                        JOIN cc_tbl_pool_item ON pool_tree_pool_child
+                        WHERE (pool_tree_parent = $upload_id) AND (pool_item_approved = 1)
+                    )
                     WHERE upload_id = $upload_id
 END;
 

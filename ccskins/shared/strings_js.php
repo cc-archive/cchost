@@ -64,13 +64,13 @@ var str_pl_new_playlist_created   ='<?=addslashes($T->String('str_pl_new_playlis
 var str_pl_track_added            ='<?=addslashes($T->String('str_pl_track_added'))?>';
 var str_pl_track_has_been_removed ='<?=addslashes($T->String('str_pl_track_has_been_removed'))?>';
 var str_trackback_title           ='<?=addslashes($T->String('str_trackback_title'))?>';
-str_trackback_no_email            ='<?=addslashes($T->String('str_trackback_no_email'))?>';
-str_trackback_no_link             ='<?=addslashes($T->String('str_trackback_no_link'))?>';
-str_trackback_type_album          ='<?=addslashes($T->String('str_trackback_type_album'))?>';      
-str_trackback_type_web            ='<?=addslashes($T->String('str_trackback_type_web'))?>';
-str_trackback_type_video          ='<?=addslashes($T->String('str_trackback_type_video'))?>';
-str_trackback_type_remix          ='<?=addslashes($T->String('str_trackback_type_remix'))?>';
-str_trackback_type_podcast        ='<?=addslashes($T->String('str_trackback_type_podcast'))?>';
-str_trackback_response            ='<?=addslashes($T->String('str_trackback_response'))?>';
-
+var str_trackback_no_email            ='<?=addslashes($T->String('str_trackback_no_email'))?>';
+var str_trackback_no_link             ='<?=addslashes($T->String('str_trackback_no_link'))?>';
+var str_trackback_type_album          ='<?=addslashes($T->String('str_trackback_type_album'))?>';      
+var str_trackback_type_web            ='<?=addslashes($T->String('str_trackback_type_web'))?>';
+var str_trackback_type_video          ='<?=addslashes($T->String('str_trackback_type_video'))?>';
+var str_trackback_type_remix          ='<?=addslashes($T->String('str_trackback_type_remix'))?>';
+var str_trackback_type_podcast        ='<?=addslashes($T->String('str_trackback_type_podcast'))?>';
+var str_trackback_response            ='<?=addslashes($T->String('str_trackback_response'))?>';
+var str_trackback_error               ='<?=addslashes($T->String('str_trackback_error'))?>';
 <? exit; ?>

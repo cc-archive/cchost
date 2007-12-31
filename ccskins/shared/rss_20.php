@@ -59,7 +59,16 @@ print '<?xml version="1.0" encoding="utf-8" ?>'
 <pubDate><?= $A['rss-pub-date']?></pubDate>
 <lastBuildDate><?= $A['rss-build-date']?></lastBuildDate>
 <atom:link href="<?= $A['feed_url']?>" rel="self" type="application/rss+xml" />
+<? if( !empty($A['logo']) ) { ?>
+<image> 
+			<url><?= ccd($A['logo']['src']) ?></url>
+			<link><?= $A['home-url']?></link> 
+			<title><?= $A['channel_title']?></title> 
+			<height><?= $A['logo']['h'] ?></height>
+			<width><?= $A['logo']['w'] ?></width>
+</image>
 <?
+}
 
 if ( !empty($A['records'])) {
 

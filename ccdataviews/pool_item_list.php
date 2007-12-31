@@ -21,7 +21,7 @@ function pool_item_list_dataview()
         CONCAT( '$urlp', pool_id ) as pool_url,
         CONCAT( '$urll', license_logo ) as license_logo_url, license_url,
         CONCAT( '$urlls', license_logo ) as license_logo_url_small,
-        license_name
+        license_name, pool_item_extra
     FROM cc_tbl_pool_item
     JOIN cc_tbl_pools ON pool_item_pool = pool_id
     JOIN cc_tbl_licenses ON pool_item_license = license_id

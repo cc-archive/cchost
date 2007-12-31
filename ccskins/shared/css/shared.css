@@ -68,3 +68,9 @@ div#beta_message {
 #MB_close {
 	border: 1px solid #555;
 }
+
+/* todo: move this, colorize */
+.pool_item_type {
+	font-weight: bold;
+	color: green;
+}

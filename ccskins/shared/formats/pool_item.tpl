@@ -24,8 +24,22 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
                     <td><span class="cc_file_link upload_name" style="font-size:2em;">%(#R/pool_item_name)%</span></td></tr>
                 <tr><th>%text(str_by)% </th>
                     <td><i>%(#R/pool_item_artist)%</i></td></tr>
-                <tr><th>%text(str_pool_from)% </th>
-                    <td><a href="%(#R/pool_url)%">%(#R/pool_name)%</a></td></tr>
+                %if_not_null(#R/pool_item_extra/ttype)%
+                    <? $tstr = $T->String('str_trackback_type_' . $R['pool_item_extra']['ttype']) ?>
+                    <tr><th></th><td><?= $tstr ?><td></tr>
+                %else%
+                    <tr><th>%text(str_pool_from)% </th>
+                        <td><a href="%(#R/pool_url)%">%(#R/pool_name)%</a></td></tr>
+                %end_if%
+                %if_not_null(#R/pool_item_description)%
+                    <tr><th></th><td>%(#R/pool_item_description)%</td></tr>
+                %end_if%
+                %if_not_null(#R/pool_item_extra/embed)%
+                    <tr><th></th><td>%(#R/pool_item_extra/embed)%</td></tr>
+                %end_if%
+                %if_not_null(#R/pool_item_extra/posted)%
+                    <tr><th>%text(str_pool_posted_by)%</th><td>%(#R/pool_item_extra/posted)%</td></tr>
+                %end_if%
                 <tr><th>%text(str_external_link)% </th>
                     <td><a class="cc_external_link" href="%(#R/pool_item_url)%"><span>%(#R/pool_item_url)%</span> 
                          <img src="%url(images/remote.gif)%" /></a></td></tr>
