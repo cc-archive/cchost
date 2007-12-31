@@ -20,12 +20,6 @@ EOF;
 }
 [/dataview]
 */
-
-$ttype = $_GET['ttype'];
-$R     =& $A['records'][0];
-$text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name'].'</span>', 
-                    '<span>'.$R['user_real_name'].'</span>' ) );
-$title = $T->String('str_trackback_title_' .$ttype);
 ?>
 <style type="text/css">
 #trackback_form {
@@ -53,17 +47,22 @@ $title = $T->String('str_trackback_title_' .$ttype);
     font-weight: bold;
 }
 </style>
+<?
+$ttype = $_GET['ttype'];
+$R     =& $A['records'][0];
+$text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name'].'</span>', 
+                    '<span>'.$R['user_real_name'].'</span>' ) );
+$title = $T->String('str_trackback_title_' .$ttype);
+?>
+<p />
 
 <div id="trackback_response">
 </div>
-<form id="trackback_form" name="trackback_form" action="/track/podcast/<?= $R['upload_id'] ?>" method="post" >
-    <div id="trackback_help" name="trackback_help"><h2><?= $title ?></h2><?= $text ?></div>
-
-<!--
-    <div class="f"><?= $T->String('str_trackback_name_' . $ttype); ?>
-    <input id="trackback_name" name="trackback_name" /></div>
--->
-
+<form id="trackback_form" name="trackback_form" style="z-index:200;display:block;">
+    <div id="trackback_help" name="trackback_help">
+        <h2><?= $title ?></h2>
+        <?= $text ?>
+    </div>
     <input type="hidden" name="trackback_name" />
 
     <div class="f"><?= $T->String('str_trackback_artist_' . $ttype); ?>
@@ -84,10 +83,12 @@ $title = $T->String('str_trackback_title_' .$ttype);
 <? } ?>
 
     <div class="f"><?= $T->String('str_trackback_your_name'); ?>
-    <input id="trackback_your_name" name="trackback_your_name" <?= empty($A['user_real_name']) ? '' : "value=\"" . $A['user_real_name'] . '"'; ?> /></div>
+    <input id="trackback_your_name" name="trackback_your_name" 
+        <?= empty($A['user_real_name']) ? '' : "value=\"" . $A['user_real_name'] . '"'; ?> /></div>
 
     <div class="f"><?= $T->String('str_trackback_email'); ?>
-    <input id="trackback_email" name="trackback_email" <?= empty($A['user_email']) ? '' : "value=\"" . $A['user_email'] . '"'; ?> /></div>
+    <input id="trackback_email" name="trackback_email" 
+        <?= empty($A['user_email']) ? '' : "value=\"" . $A['user_email'] . '"'; ?> /></div>
 
     <div class="f">
         <a id="trackback_submit" href="javascript://submit track"><?= $T->String('str_trackback_submit'); ?></a>

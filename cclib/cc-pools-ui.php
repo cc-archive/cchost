@@ -160,12 +160,8 @@ END;
                 if( $action == 'nothing' )
                     continue;
                 $id = CCUtil::StripText($id);
-                $sql =<<<EOF
-                    SELECT pool_tree_child + pool_tree_parent 
-                    FROM cc_tbl_pool_tree
-                    WHERE (pool_tree_pool_parent = $id) OR (pool_tree_pool_child = $id)
-EOF;
-                $upload_ids = array_merge( $upload_ids, CCDatabase::QueryItems($sql) );
+                $uids = CCDatabase::QueryItems("SELECT pool_tree_parent FROM cc_tbl_pool_tree WHERE pool_tree_pool_child = $id");
+                $upload_ids = array_merge( $upload_ids, $uids );
 
                 if( $action == 'delete' )
                 {
