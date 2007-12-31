@@ -378,10 +378,6 @@ function install_tables(&$f,&$errs)
 
     print "Licenses installed<br />";
 
-    CCPool::InstallPools();
-
-//    print "Sample pools installed<br />";
-
     $pw = md5( $f['pw']['v'] );
     $user = $f['admin']['v'];
     $date = date('Y-m-d H:i:00');

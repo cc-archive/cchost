@@ -47,7 +47,11 @@
     %if_not_null(#R/remix_children)%
         <div id="remix_info"><h2>%text(str_list_usedby)%</h2>
         %loop(#R/remix_children,P)%
-            <div><a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
+            <div>
+            %if_not_null(#P/pool_item_extra/ttype)%
+                <span class="pool_item_type">%(#P/pool_item_extra/ttype)%</span>: 
+            %end_if%
+            <a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
                  <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
         %end_loop%
         %if_not_null(#R/more_children_link)%

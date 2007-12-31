@@ -59,3 +59,12 @@ div#beta_message {
 	padding: 5px;
 	z-index: 100;
 }
+
+.MB_alert p {
+	border: 1px solid #AAA;
+	padding: 5px;
+}
+
+#MB_close {
+	border: 1px solid #555;
+}

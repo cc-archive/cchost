@@ -120,6 +120,37 @@ END;
 
     }
 
+    function Upload($upload_id)
+    {
+        $sql[] =<<<END
+                UPDATE cc_tbl_uploads SET upload_num_remixes = 
+                    (SELECT COUNT(*) FROM cc_tbl_tree WHERE tree_parent = $upload_id)
+                    WHERE upload_id = $upload_id
+END;
+        $sql[] =<<<END
+                UPDATE cc_tbl_uploads SET upload_num_sources = 
+                    (SELECT COUNT(*) FROM cc_tbl_tree WHERE tree_child = $upload_id)
+                    WHERE upload_id = $upload_id
+END;
+
+        $sql[] =<<<END
+                UPDATE cc_tbl_uploads SET upload_num_pool_remixes = 
+                    (SELECT COUNT(*) FROM cc_tbl_pool_tree WHERE pool_tree_parent = $upload_id)
+                    WHERE upload_id = $upload_id
+END;
+
+        $sql[] =<<<END
+                UPDATE cc_tbl_uploads SET upload_num_pool_sources = 
+                    (SELECT COUNT(*) FROM cc_tbl_pool_tree WHERE pool_tree_child = $upload_id)
+                    WHERE upload_id = $upload_id
+END;
+
+        CCDatabase::Query($sql);
+
+        CCSync::User($upload_id,0);
+    }
+
+
     /**
     * Method to keep an artist's internal upload counters up to date.
     *
@@ -285,7 +316,7 @@ END;
 
     function PoolSourceRemix($pool_sources)
     {
-        $tree =& new CCPoolSources();
+        $tree = new CCPoolTree();
         $pool_items =& CCPoolItems::GetTable();
         foreach( $pool_sources as $PS )
         {
@@ -397,23 +428,6 @@ END;
                 $row[$query[1]] = 0;
             }
             $quploads->Update($row);
-        }
-
-        global $CC_GLOBALS;
-
-        if( !empty($CC_GLOBALS['ratings_rank']) ) 
-        {
-            $configs =& CCConfigs::GetTable();
-            $chart = $configs->GetConfig('chart');
-
-            foreach( $queries as $query )
-            {
-                $row = $quploads->QueryKeyrow($query[0]);
-                CCSync::_calc_rank($chart,$row,'upload');
-                $args['upload_id'] = $row['upload_id'];
-                $args['upload_rank'] = $row['upload_rank'];
-                $quploads->Update($args);
-            }
         }
     }
 

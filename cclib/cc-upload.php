@@ -63,7 +63,7 @@ class CCUpload
 
         if( $do_edit )
         {
-            $trail[] = array( 'url' => ccl('files','edit', $upload_id), 
+            $trail[] = array( 'url' => ccl('files','edit', $user_name, $upload_id), 
                               'text' => 'str_file_edit' );
         }
 

@@ -161,14 +161,28 @@ function cc_filter_std(&$records,&$dataview_info)
 
 }
 
+function _filter_history_helper($sql,$col)
+{
+    /*
+        note: I couldn't get inner selects to work
+    */
+    $values = CCDatabase::QueryItems($sql);
+    if( empty($values) )
+        return null;
+    return array( 'where' => $col . ' IN (' . join(',',$values) . ')' );
+}
+
 function cc_filter_remixes_short(&$R)
 {
     if( !empty($R['upload_num_sources']) )
     {
-        $query = new CCQuery();
-        $q = 'dataview=links_by_chop&f=php&limit=4&sources=' . $R['upload_id'];
-        $args = $query->ProcessAdminArgs($q);
-        list( $R['remix_parents'] ) = $query->Query($args);
+        $args = _filter_history_helper(
+                    "SELECT tree_parent FROM cc_tbl_tree WHERE tree_child={$R['upload_id']} LIMIT 4",'upload_id');
+        if( $args )
+        {
+            $dv = new CCDataView();
+            $R['remix_parents'] = $dv->PerformFile('links_by_chop',$args);
+        }
     }
 
     if( !empty($R['upload_num_pool_sources']) )
@@ -176,15 +190,18 @@ function cc_filter_remixes_short(&$R)
         if( empty($R['remix_parents']) || (count($R['remix_parents']) < 3) )
         {
             $count = empty($R['remix_parents']) ? 4 : 4 - count($R['remix_parents']);
-            $q = 'dataview=links_by_pool&f=php&limit=' . $count . '&sort=&datasource=pools&sources=' . $R['upload_id'];
-            $query = new CCQuery();
-            $args = $query->ProcessAdminArgs($q);
-            list( $pool_parents ) = $query->Query($args);
-            if( $pool_parents )
+            $args = _filter_history_helper(
+                "SELECT pool_tree_pool_parent FROM cc_tbl_pool_tree WHERE pool_tree_child={$R['upload_id']} LIMIT {$count}",
+                'pool_item_id');
+            if( $args )
+            {
+                $dv = new CCDataView();
+                $pool_parents = $dv->PerformFile('links_by_pool',$args);
                 if( empty($R['remix_parents']) )
                     $R['remix_parents'] = $pool_parents;
                 else
                     $R['remix_parents'] = array_merge( $R['remix_parents'],  $pool_parents );
+            }
         }
     }
 
@@ -196,16 +213,39 @@ function cc_filter_remixes_short(&$R)
 
     if( !empty($R['upload_num_remixes']) )
     {
-        $query = new CCQuery();
-        $q = 'dataview=links_by_chop&f=php&remixes=' . $R['upload_id'];
-        $q = 'dataview=links_by_chop&f=php&limit=4&remixes=' . $R['upload_id'];
-        $args = $query->ProcessAdminArgs($q);
-        list( $R['remix_children'] ) = $query->Query($args);
-        if( !empty($R['remix_children']) && (count($R['remix_children']) > 3) )
+        $args = _filter_history_helper(
+                    "SELECT tree_child FROM cc_tbl_tree WHERE tree_parent={$R['upload_id']} LIMIT 4",'upload_id');
+        if( $args )
         {
-            $R['more_children_link'] = $R['file_page_url'];
-            unset($R['remix_children'][3]);
+            $dv = new CCDataView();
+            $R['remix_children'] = $dv->PerformFile('links_by_chop',$args);
         }
+    }
+
+    if( !empty($R['upload_num_pool_remixes']) )
+    {
+        if( empty($R['remix_children']) || (count($R['remix_children']) < 3) )
+        {
+            $count = empty($R['remix_children']) ? 4 : 4 - count($R['remix_children']);
+            $args = _filter_history_helper(
+                "SELECT pool_tree_pool_child FROM cc_tbl_pool_tree WHERE pool_tree_parent={$R['upload_id']} LIMIT {$count}",
+                'pool_item_id');
+            if( $args )
+            {
+                $dv = new CCDataView();
+                $pool_children = $dv->PerformFile('links_by_pool',$args);
+                if( empty($R['remix_children']) )
+                    $R['remix_children'] = $pool_children;
+                else
+                    $R['remix_children'] = array_merge( $R['remix_children'],  $pool_children );
+            }
+        }
+    }
+
+    if( !empty($R['remix_children']) && (count($R['remix_children']) > 3) )
+    {
+        $R['more_children_link'] = $R['file_page_url'];
+        unset($R['remix_children'][3]);
     }
 
 }
@@ -214,31 +254,82 @@ function cc_filter_remixes_full(&$R,&$dataview_info)
 {
     if( $dataview_info['queryObj']->args['datasource'] == 'pool_items' )
     {
-        $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('datasource=pool_items&dataview=links_by&f=php&remixes=' . $R['pool_item_id']);
-        list( $R['remix_children'] ) = $query->Query($args);
+        // We are listing a sample pool item(s)
+        $args = _filter_history_helper(
+                   "SELECT pool_tree_child FROM cc_tbl_pool_tree WHERE pool_tree_pool_parent={$R['pool_item_id']}", 'upload_id');
+        if( $args )
+        {
+            $dv = new CCDataView();
+            $R['remix_children'] = $dv->PerformFile('links_by',$args);
+        }
         if( !empty($R['remix_children']) && (count($R['remix_children']) > 14) )
             $R['children_overflow'] = true;
+
+        $args = _filter_history_helper(
+                   "SELECT pool_tree_parent FROM cc_tbl_pool_tree WHERE pool_tree_pool_child={$R['pool_item_id']}", 'upload_id');
+        if( $args )
+        {
+            $dv = new CCDataView();
+            $R['remix_parents'] = $dv->PerformFile('links_by',$args);
+        }
+        if( !empty($R['remix_parents']) && (count($R['remix_parents']) > 14) )
+            $R['parents_overflow'] = true;
+
     }
     else
     {
-        require_once('cclib/cc-query.php');
-        $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('dataview=links_by_chop&f=php&sources=' . $R['upload_id']);
-        list( $R['remix_parents'] ) = $query->Query($args);
-        $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('dataview=links_by_pool&f=php&sort=&datasource=pools&sources=' . $R['upload_id']);
-        list( $pool_parents ) = $query->Query($args);
-        if( $pool_parents )
+        // We are listing local upload
+
+        /* local remix sources */
+
+        $args = _filter_history_helper("SELECT tree_parent FROM cc_tbl_tree WHERE tree_child={$R['upload_id']}",'upload_id');
+        if( $args )
+        {
+            $dv = new CCDataView();
+            $R['remix_parents'] = $dv->PerformFile('links_by_chop',$args);
+        }
+        
+        /* pool remix sources */
+
+        $args = _filter_history_helper(
+                    "SELECT pool_tree_pool_parent FROM cc_tbl_pool_tree WHERE pool_tree_child={$R['upload_id']}",
+                    'pool_item_id');
+        if( $args )
+        {
+            $dv = new CCDataView();
+            $pool_parents = $dv->PerformFile('links_by_pool',$args);
             if( empty($R['remix_parents']) )
                 $R['remix_parents'] = $pool_parents;
             else
                 $R['remix_parents'] = array_merge( $R['remix_parents'],  $pool_parents );
+        }
         if( !empty($R['remix_parents']) && (count($R['remix_parents']) > 14) )
             $R['parents_overflow'] = true;
-        $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('dataview=links_by_chop&f=php&remixes=' . $R['upload_id']);
-        list( $R['remix_children'] ) = $query->Query($args);
+
+        /* local remixes of this upload */
+
+        $args = _filter_history_helper(
+                    "SELECT tree_child FROM cc_tbl_tree WHERE tree_parent={$R['upload_id']}",'upload_id');
+        if( $args )
+        {
+            $dv = new CCDataView();
+            $R['remix_children'] = $dv->PerformFile('links_by_chop',$args);
+        }
+
+        /* remote remixes and trackbacks of this upload */
+
+        $args = _filter_history_helper(
+                        "SELECT pool_tree_pool_child FROM cc_tbl_pool_tree WHERE pool_tree_parent={$R['upload_id']}",
+                        'pool_item_id');
+        if( $args )
+        {
+            $dv = new CCDataView();
+            $pool_children = $dv->PerformFile('links_by_pool',$args);
+            if( empty($R['remix_children']) )
+                $R['remix_children'] = $pool_children;
+            else
+                $R['remix_children'] = array_merge( $R['remix_children'],  $pool_children );
+        }
         if( !empty($R['remix_children']) && (count($R['remix_children']) > 14) )
             $R['children_overflow'] = true;
     }
@@ -265,10 +356,13 @@ function cc_filter_files(&$R)
 
             $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],
                     $CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name'],$F['file_name']);
+            $F['local_path']   = cca($CC_GLOBALS['contest-upload-root'],
+                    $CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name'],$F['file_name']);
         }
         else
         {
             $F['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$F['file_name']);
+            $F['local_path']   = cca($CC_GLOBALS['user-upload-root'],$R['user_name'],$F['file_name']);
         }
         $fs = $F['file_filesize'];
         if( $fs )

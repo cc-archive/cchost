@@ -127,22 +127,9 @@ END;
         CCPage::SetTitle( 'str_pool_item_page' );
     }
 
-    function _prep_for_display(&$item, &$remixpool,&$sourcepool)
-    {
-        require_once('cclib/cc-remix.php');
-
-        $children = $remixpool->GetRemixes($item);
-        CCRemix::_mark_row($item,'has_children','remix_children',$children,'more_children_link',false);
-        $parents = $sourcepool->GetSources($item);
-        CCRemix::_mark_row($item,'has_parents','remix_parents',$parents,'more_parents_link',false);
-
-        // hmmm... I'm sure this is here for a great reason...
-        $item['upload_name'] = $item['pool_item_name'];
-
-    }
-
     function Admin()
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_("Sample Pools Administration"));
         $args =
             array(
@@ -161,45 +148,62 @@ END;
 
     function Approve($submit='')
     {
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle(_("Approve Pending Remixes"));
         if( $submit )
         {
-            $ids = $_POST['approve'];
-            if( !empty($ids) )
+            $pool_items = CCPoolItems::GetTable();
+            $approved = array();
+            $upload_ids = array();
+            foreach( $_POST['action'] as $id => $action )
             {
-                $pool_items = CCPoolItems::GetTable();
-                foreach( $ids as $id )
-                {
-                    $id = CCUtil::StripText($id);
-                    if( !empty($id) && intval($id) )
-                    {
-                        $where[] = "(pool_item_id = $id)";
-                    }
-                }
+                if( $action == 'nothing' )
+                    continue;
+                $id = CCUtil::StripText($id);
+                $sql =<<<EOF
+                    SELECT pool_tree_child + pool_tree_parent 
+                    FROM cc_tbl_pool_tree
+                    WHERE (pool_tree_pool_parent = $id) OR (pool_tree_pool_child = $id)
+EOF;
+                $upload_ids = array_merge( $upload_ids, CCDatabase::QueryItems($sql) );
 
-                if( !empty($where) )
+                if( $action == 'delete' )
                 {
-                    $sql = implode( ' OR ', $where );
-                    $f['pool_item_approved'] = 1;
-                    $pool_items->UpdateWhere($f, $sql, false);
+                    CCDatabase::Query('DELETE FROM cc_tbl_pool_item WHERE pool_item_id = '.$id);
+                    CCDatabase::Query("DELETE FROM cc_tbl_pool_tree WHERE (pool_tree_pool_parent = $id) && (pool_tree_pool_child = $id)");
+                }
+                else
+                {
+                    $approved[] = $id;
                 }
             }
+
+            $approved = join(',',$approved);
+            $sql = "UPDATE cc_tbl_pool_item SET pool_item_approved = 1 WHERE pool_item_id IN ({$approved})";
+            CCDatabase::Query($sql);
+            $upload_ids = array_filter(array_unique($upload_ids));
+            require_once('cclib/cc-sync.php');
+            foreach( $upload_ids as $upload_id )
+                CCSync::Upload($upload_id);
+            $rows = CCDatabase::QueryRows("SELECT pool_item_extra FROM cc_tbl_pool_item WHERE pool_item_id IN ({$approved})");
+            require_once('cclib/cc-uploadapi.php');
+            foreach( $rows as $row )
+            {
+                if( empty($row['pool_item_extra']) )
+                    continue;
+                $ex = unserialize($row['pool_item_extra']);
+                if( empty($ex['ttype']) )
+                    continue;
+                $upload_id = $ex['upload_id'];
+                CCUploadAPI::UpdateCCUD($upload_id,'in_' . $ex['ttype'] . ',trackback','');
+            }
+
         }
 
-        // todo: make this sql....
-        $remixes = new CCTable('cc_tbl_pool_tree','pool_tree_id');
-        $args['records'] = $remixes->GetUnapproved();
-        if( empty($args['records']) )
-        {
-            CCPage::Prompt(_("There are no pending remote remixes"));
-        }
-        else
-        {
-            $args['heads'] = array( _('Show'), _('Remix'), _('Download from Site'), _('by Remixer'), _('Original') );
-            $args['approve_url'] = ccl( 'admin', 'pools', 'approve', 'submit' );
-            //CCDebug::PrintVar($args);
-            CCPage::PageArg( 'pool_info', $args, 'pool_approvals' );
-        }
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=pool_approvals&datasource=pool_items');
+        $query->Query($args);
     }
 
     function Manage()
@@ -346,7 +350,7 @@ END;
     {
         $id = $row['upload_id'];
         $where = "(pool_tree_parent = $id) OR (pool_tree_child = $id)";
-        $tree = new CCPoolTree('pool_tree_parent','pool_tree_child');
+        $tree = new CCPoolTree();
         $tree->DeleteWhere($where);
     }
 
@@ -386,7 +390,7 @@ END;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp( 'pools', 'pool_hook'),     array( 'CCPoolUI', 'PoolHook'),
+        CCEvents::MapUrl( ccp( 'pools', 'pool_hook'),     array( 'CCPoolUI', 'PoolHook'), 
             CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid},{cmd}'); // ajax callbck
         CCEvents::MapUrl( ccp( 'pools'),     array( 'CCPoolUI', 'Pool'),
             CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid}', 

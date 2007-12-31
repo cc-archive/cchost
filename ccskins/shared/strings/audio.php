@@ -22,7 +22,7 @@ $GLOBALS['str_hidi_samples_i_used'] = _('Samples I Used');
 $GLOBALS['str_hidi_what_software'] = _('What software, hardware, and plug-ins did you use?');
 $GLOBALS['str_hidi_where_did_you'] = _('Where did you find your samples? What kind of license are they under?');
 $GLOBALS['str_list_length']                = _('length');
-$GLOBALS['str_list_album']                 = _('Album/CD');
+$GLOBALS['str_trackback_type_album']                 = _('Album/CD');
 $GLOBALS['str_list_usedby']                = _('Samples are used in:');
 $GLOBALS['str_list_uses']                  = _('Uses samples from:');
 

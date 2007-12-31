@@ -112,7 +112,7 @@ Modalbox.Methods = {
 	
 	alert: function(message){
 		var html = '<div class="MB_alert"><p>' + message + '</p><input type="button" onclick="Modalbox.hide()" value="OK" /></div>';
-		Modalbox.show(html, {title: 'Alert: ' + document.title, width: 300});
+		Modalbox.show(html, {title: 'Alert: ' + document.title.substring(0,46) + '...', width: 300, height: 200});
 	},
 		
 	_hide: function(event) { // Internal hide method to use inside MB class

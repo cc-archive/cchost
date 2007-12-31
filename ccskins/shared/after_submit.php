@@ -46,7 +46,7 @@ else
     print '<p>' . $T->String( array( 'str_submit_contest', $R['upload_name'], $R['contest_friendly_name'] ) ) . '</p>';
 }
 
-print '<a id="add_block" class="dark_border light_bg" href="' . ccl('file','add',$R['upload_id']) . '">'
+print '<a id="add_block" href="' . ccl('file','add',$R['upload_id']) . '">'
     . $T->String( array( 'str_submit_add_files',$R['upload_name'] ) ) 
     . '</p>';
 

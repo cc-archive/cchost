@@ -43,12 +43,6 @@ class CCPools extends CCTable
     function CCPools()
     {
         $this->CCTable('cc_tbl_pools', 'pool_id');
-
-        if( !defined('IN_CC_INSTALL') )
-        {
-            $baseurl = ccl('pools','pool') . '/';
-            $this->AddExtraColumn("CONCAT('$baseurl', pool_id) as pool_page_url");
-        }
     }
 
     /**
@@ -132,80 +126,9 @@ class CCPoolItems extends CCTable
 */
 class CCPoolTree extends CCTable
 {
-    var $_bind_to_query;
-    var $_pool_items;
-
-    function CCPoolTree($bind_to_pool,$bind_to_query)
+    function CCPoolTree()
     {
-        $this->CCTable('cc_tbl_pool_tree',$bind_to_pool);
-        $this->_bind_to_query = $bind_to_query;
-    }
-
-    function & _get_relatives($id,$need_approval,$limit)
-    {
-        if( !isset($this->_pool_items) )
-        {
-            $this->_pool_items = new CCPoolItems();
-        }
-
-        $joinid = $this->_pool_items->AddJoin($this,'pool_item_id');
-        $approval = $need_approval ? ' AND (pool_item_approved > 0)' : '';
-        if( $limit )
-            $this->_pool_items->SetOffsetAndLimit(0,CC_MAX_SHORT_REMIX_DISPLAY);
-        
-        $where = $joinid . '.' . $this->_bind_to_query . " = '$id' $approval";
-        //$sql = $this->_pool_items->_get_select($where);
-        //CCDebug::PrintVar($sql);
-        $rows = $this->_pool_items->QueryRows( $where );
-        $this->_pool_items->RemoveJoin($joinid);
-        $records =& $this->_pool_items->GetRecordsFromRows($rows);
-        return $records;
-    }
-}
-
-
-/**
-* Table wrapper used for returning remote sources given local remixes
-*
-* @package cchost
-* @subpackage api
-*/
-class CCPoolSources extends CCPoolTree
-{
-    function CCPoolSources()
-    {
-        $this->CCPoolTree('pool_tree_pool_parent', 'pool_tree_child');
-    }
-
-    /**
-    * Return the pool remix sources for a given record
-    *
-    * I think this method is dead
-    *
-    * @param array $record Record to get remixes of
-    * @param boolean $limit_by_works_page (See method comments)
-    */
-    function & GetSources($record,$limit_by_works_page=false)
-    {
-        $do_limit = $limit_by_works_page ? empty($record['works_page']) : false;
-        $r =& $this->_get_relatives($record['upload_id'],false,$do_limit);
-        return $r;
-    }
-
-    /**
-    * Returns static singleton of table wrapper.
-    * 
-    * Use this method instead of the constructor to get
-    * an instance of this class.
-    * 
-    * @returns object $table An instance of this table
-    */
-    function & GetTable()
-    {
-        static $_table;
-        if( !isset($_table) )
-            $_table = new CCPoolSources();
-        return $_table;
+        $this->CCTable('cc_tbl_pool_tree','pool_tree_id');
     }
 }
 
@@ -512,109 +435,6 @@ class CCPool
         return($error_msg);
     }
 
-    function InstallPools()
-    {
-        // 
-        // Remote pools of CC licensed material
-        //
-        $drops [] = 'cc_tbl_pools';
-
-        $sql[] = <<<END
-
-    CREATE TABLE cc_tbl_pools
-        (
-          pool_id          int(5) unsigned  NOT NULL auto_increment,
-          pool_name        varchar(255),
-          pool_short_name  varchar(50),
-          pool_description mediumtext NOT NULL default '',
-          pool_api_url     mediumtext NOT NULL default '',
-          pool_site_url    mediumtext NOT NULL default '',
-          pool_ip          varchar(10) NOT NULL default '',
-          pool_banned      tinyint(1) NOT NULL default 0,
-          pool_search      tinyint(1) NOT NULL default 0,
-          pool_auto_approve tinyint(1) NOT NULL default 0,
-          pool_default_license  varchar(50) NOT NULL default '',
-
-          PRIMARY KEY pool_id (pool_id)
-        )
-END;
-
-        // 
-        // Pool CC licensed material works
-        //
-        // These items share samples with this site
-        //
-        $drops [] = 'cc_tbl_pool_item';
-
-        $sql[] = <<<END
-
-    CREATE TABLE cc_tbl_pool_item
-        (
-          pool_item_id           int(5) unsigned  NOT NULL auto_increment,
-          pool_item_pool         int(5),
-          pool_item_url          mediumtext   NOT NULL default '',
-          pool_item_download_url mediumtext   NOT NULL default '',
-          pool_item_description  mediumtext   NOT NULL default '',
-          pool_item_extra        mediumtext   NOT NULL default '',
-          pool_item_license      varchar(255) NOT NULL default '',
-          pool_item_name         varchar(255) NOT NULL default '',
-          pool_item_artist       varchar(255) NOT NULL default '',
-          pool_item_approved     tinyint(0)   NOT NULL default 0,
-          pool_item_num_remixes  int(6)       NOT NULL default 0,
-          pool_item_num_sources  int(6)       NOT NULL default 0,
-          pool_item_timestamp    int(30),
-
-          PRIMARY KEY pool_item_id (pool_item_id)
-        )
-END;
-
-        // 
-        // Pool remix tree
-        //
-        $drops [] = 'cc_tbl_pool_tree';
-
-        $sql[] = <<<END
-
-    CREATE TABLE cc_tbl_pool_tree 
-        (
-          pool_tree_id              int(5) unsigned NOT NULL auto_increment,
-          pool_tree_parent          int(5) unsigned,
-          pool_tree_child           int(5) unsigned,
-          pool_tree_pool_parent   int(5) unsigned,
-          pool_tree_pool_child    int(5) unsigned,
-
-          PRIMARY KEY pool_tree_id (pool_tree_id)
-        )
-
-END;
-
-        $tables = CCDatabase::ShowTables();
-        $drop_sql = array();
-        $drops = array_intersect( $drops, $tables );
-        if( !empty($drops) )
-        {
-            foreach( $drops as $drop )
-            {
-                $drop_sql[] = "DROP TABLE $drop";
-            }
-
-            CCDatabase::Query($drop_sql);
-        }
-        CCDatabase::Query($sql);
-
-        // don't overwrite intallers settings
-
-        // $vals['allow-pool-ui']       = false;
-        // $vals['allow-pool-search']   = false;
-        // $vals['allow-pool-register'] = false;
-        
-        $vals['pool-push-hub']       = '';
-        $vals['pool-pull-hub']       = '';
-        $vals['pool-remix-throttle'] = 10;
-
-        $configs =& CCConfigs::GetTable();
-        $configs->SaveConfig( 'config', $vals, CC_GLOBAL_SCOPE, true );
-    }
     
 }
 

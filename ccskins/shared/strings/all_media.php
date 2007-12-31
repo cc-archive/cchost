@@ -218,7 +218,6 @@ $GLOBALS['str_lic_sampling_plus']         = _('sampling+');
 $GLOBALS['str_lic_share_alike']           = _('share alike');
 $GLOBALS['str_list_IEtip']                 = _('IE: Right-click select \'Save Target As\'');
 $GLOBALS['str_list_Mactip']                = _('Mac: Control-click select \'Save Link As\'');
-$GLOBALS['str_list_album']                 = _('Collection');
 $GLOBALS['str_list_date']                  = _('uploaded');
 $GLOBALS['str_list_download']                  = _('Download');
 $GLOBALS['str_list_i_saw_this']            = _('I Used or Saw %s In A...');
@@ -227,7 +226,6 @@ $GLOBALS['str_list_rate_now']              = _('Rate Now');
 $GLOBALS['str_list_trackback']             = _('Trackback');
 $GLOBALS['str_list_usedby']                = _('Pieces are borrowed in:');
 $GLOBALS['str_list_uses']                  = _('Borrows pieces from:');
-$GLOBALS['str_list_web_blog']              = _('Blog / MySpace');
 $GLOBALS['str_loading']               = _('loading...');
 
 $GLOBALS['str_log_in'] = _('Log In');
@@ -558,10 +556,47 @@ $GLOBALS['str_your_page'] = _('Your Page');
 $GLOBALS['str_edit_profile'] = _('Edit Your Profile');
 $GLOBALS['str_browse_tags'] = _('Browse Tags');
 
+$GLOBALS['str_trackback_title'] = _('Submit a Trackback');
+$GLOBALS['str_trackback_response'] = _('The administrators have been notified and your #{1} link to "#{2}" by #{3} will appear here soon.');
+$GLOBALS['str_trackback_comment']   = _('Your comments');
+$GLOBALS['str_trackback_email']   = _('Your email (required)');
+$GLOBALS['str_trackback_your_name']   = _('Your name');
+$GLOBALS['str_trackback_no_email']   = _('You must supply a valid email address');
+$GLOBALS['str_trackback_no_link']   = _('You must supply a link');
+$GLOBALS['str_trackback_submit']        = _('Submit');
 
+$GLOBALS['str_trackback_remix']   = _('If you know of remix of "%s" by %s please enter the link below');
+$GLOBALS['str_trackback_podcast'] = _('If you heard "%s" by %s in a podcast please enter a link to the podcast\'s home page below');
+$GLOBALS['str_trackback_video']   = _('If you know of a video that uses "%s" by %s paste the embedding tag below');
+$GLOBALS['str_trackback_web']     = _('If you know of a web page or blog the refers to "%s" by %s please enter the link below');
+$GLOBALS['str_trackback_album']   = _('For an album or collection that includes "%s" by %s please enter the a link to its page below');
+$GLOBALS['str_trackback_title_remix']   = _('Submit a Remix Trackback');
+$GLOBALS['str_trackback_title_podcast'] = _('Submit a Podcast Trackback');
+$GLOBALS['str_trackback_title_video']   = _('Submit a Video Trackback');
+$GLOBALS['str_trackback_title_web']     = _('Submit a Web Trackback');
+$GLOBALS['str_trackback_title_album']   = _('Submit an Album Trackback');
+$GLOBALS['str_trackback_type_album']   = _('Collection');
+$GLOBALS['str_trackback_type_web']     = _('Blog / MySpace');
+$GLOBALS['str_trackback_type_video']   = _('Video');
+$GLOBALS['str_trackback_type_remix']   = _('Remix');
+$GLOBALS['str_trackback_type_podcast'] = _('Podcast');
+$GLOBALS['str_trackback_name_remix']   = _('Name of remix');
+$GLOBALS['str_trackback_name_podcast'] = _('Name of the podcast');
+$GLOBALS['str_trackback_name_video']   = _('Name of video');
+$GLOBALS['str_trackback_name_web']     = _('Name of the blog or web page');
+$GLOBALS['str_trackback_name_album']   = _('Name of the album or collection');
+$GLOBALS['str_trackback_artist_remix']   = _('Remixer or producer');
+$GLOBALS['str_trackback_artist_podcast'] = _('Person or organization responsible for the podcast');
+$GLOBALS['str_trackback_artist_video']   = _('Person who made the video');
+$GLOBALS['str_trackback_artist_web']     = _('Person or organization that authored the web page');
+$GLOBALS['str_trackback_artist_album']   = _('Person or group that made the album');
 
+$GLOBALS['str_trackback_media_video']   = _('Embed video code here');
 
-
-
+$GLOBALS['str_trackback_link_remix']   = _('URL to web page');
+$GLOBALS['str_trackback_link_podcast'] = _('URL to podcast home page');
+$GLOBALS['str_trackback_link_video']   = _('URL to video page');
+$GLOBALS['str_trackback_link_web']     = _('URL to blog, webpage, etc.');
+$GLOBALS['str_trackback_link_album']   = _('URL to album page');
 
 ?>

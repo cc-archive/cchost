@@ -297,3 +297,11 @@ topicHooks.prototype = {
         }
     }
 }
+
+
+function upload_trackback( upload_id, type )
+{
+    var url = query_url + 'ajax=1&t=trackback&ttype=' + type + '&ids=' + upload_id;
+    var h = type == 'video' ? 560 : 500;
+    Modalbox.show( url, {title: str_trackback_title, width: 480, height: h} );
+}

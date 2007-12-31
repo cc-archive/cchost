@@ -125,11 +125,11 @@ $str = sprintf($T->String('str_list_i_saw_this'), '"' . $R['upload_name'] . '"')
 
 $mi = array();
 $mi['action'] = 'javascript:// noted';
-$saws = array( array( 'remix',    $T->String('str_remix')),
+$saws = array( array( 'remix',    $T->String('str_trackback_type_remix')),
                array( 'podcast',  $T->String('str_podcast')),
-               array( 'video',    $T->String('str_video')),
-               array( 'web',      $T->String('str_list_web_blog')),
-               array( 'album',    $T->String('str_list_album'), ) );
+               array( 'video',    $T->String('str_trackback_type_video')),
+               array( 'web',      $T->String('str_trackback_type_web')),
+               array( 'album',    $T->String('str_trackback_type_album'), ) );
 $url = "upload_trackback('{$R['upload_id']}', '";
 foreach( $saws as $saw )
 {

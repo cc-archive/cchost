@@ -41,6 +41,6 @@ EOF;
 
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
-                  'e' => array(CC_EVENT_FILTER_REMIXES_FULL) );
+                  'e' => array(CC_EVENT_FILTER_REMIXES_FULL,CC_EVENT_FILTER_POOL_ITEMS) );
 }
 ?>

@@ -49,6 +49,23 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
             </div>
         %end_if%
 
+        %if_not_null(#R/remix_parents)%
+            <div class="box" id="remix_info">
+                <h2>%text(str_list_uses)%</h2>
+                <p style="position:relative;top:0px;left:0px;"><img src="%url('images/downloadicon.gif')%" /></p>
+            %if_not_null(#R/parents_overflow)%
+                <div style="overflow: scroll;height:300px;">
+            %end_if%
+            %loop(#R/remix_parents,P)%
+                <div><a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> <span>%text(str_by)%</span>
+                     <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+            %end_loop%
+            %if_not_null(#R/parents_overflow)%
+                </div>
+            %end_if%
+            </div>
+        %end_if%
+
     </div>
 </div>
 <div id="upload_sidebar_box">

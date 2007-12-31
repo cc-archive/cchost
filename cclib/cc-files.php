@@ -269,6 +269,7 @@ class CCPhysicalFile
     {
         require_once('cclib/cc-upload.php');
         require_once('cclib/cc-page.php');
+        require_once('cclib/cc-dataview.php');
         CCUpload::CheckFileAccess($username,$upload_id);
 
         $this->_build_bread_crumb_trail($upload_id,false,false,'str_file_edit');
@@ -277,8 +278,12 @@ class CCPhysicalFile
 
         CCPage::SetTitle('str_edit_properties');
 
-        $record = CCDatabase::QueryRow('SELECT * FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
-        $record['upload_extra'] = unserialize($record['upload_extra']);
+        $info = array(
+            'sql' => 'SELECT *, user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id,
+            'e'   => array( CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_EXTRA )
+            );
+        $dv = new CCDataView();
+        $record = $dv->PerformInfo( $info, array(), CCDV_RET_RECORD);
         $form = new CCEditFileForm($userid,$record);
         $show = true;
         if( empty($_POST['editfile']) )

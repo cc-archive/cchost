@@ -181,7 +181,7 @@ CCEvents::AddHandler(CC_EVENT_FILTER_FILES, 'cc_filter_std', 'cclib/cc-filters.p
 CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_TAGS, 'cc_filter_std', 'cclib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_EXTRA, 'cc_filter_std', 'cclib/cc-filters.php' );
 
-
+CCEvents::AddHandler(CC_EVENT_FILTER_POOL_ITEMS, 'cc_filter_pool_items', 'cclib/cc-pool-filters.php' );
 
 
 

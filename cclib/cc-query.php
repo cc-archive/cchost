@@ -585,15 +585,7 @@ class CCQuery
 
     function _gen_remixes()
     {
-        if( $this->args['datasource'] == 'pool_items' )
-        {
-            //$this->sql_p['joins'] = 'cc_tbl_pool_tree ON pool_tree_child = upload_id';
-            $this->_heritage_helper('remixes','pool_tree_child','cc_tbl_pool_tree','pool_tree_pool_parent','upload_id');
-        }
-        else
-        {
-            $this->_heritage_helper('remixes','tree_child','cc_tbl_tree','tree_parent','upload_id');
-        }
+        $this->_heritage_helper('remixes','tree_child','cc_tbl_tree','tree_parent','upload_id');
     }
 
     function _gen_remixesof()
@@ -652,10 +644,7 @@ class CCQuery
     
     function _gen_sources()
     {
-        if( $this->args['datasource'] == 'pools' )
-            $this->_heritage_helper('sources','pool_tree_pool_parent','cc_tbl_pool_tree','pool_tree_child','pool_item_id');
-        else
-            $this->_heritage_helper('sources','tree_parent','cc_tbl_tree','tree_child','upload_id');
+        $this->_heritage_helper('sources','tree_parent','cc_tbl_tree','tree_child','upload_id');
     }
 
     function _gen_tags()
@@ -757,12 +746,12 @@ class CCQuery
     {
         $id = $this->args[$key];
         // sigh, I can't get subqueries to work.
-        $sql = "SELECT $f1 FROM $t WHERE $f2 = $id";
+        $sql = "SELECT $f1 as $kf FROM $t WHERE $f2 = $id";
         $rows = CCDatabase::QueryItems($sql);
         if( empty($rows) )
         {
-            $this->where[] = '0';
-            $this->dead = true;
+            $this->where[] = $kf . ' IN (' . $sql . ')';
+            //$this->dead = true;
         }
         else
         {

@@ -162,8 +162,13 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
             <div style="overflow: scroll;height:300px;">
         %end_if%
         %loop(#R/remix_children,P)%
-            <div><a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> <span>%text(str_by)%</span>
-                 <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a></div>
+            <div>
+            %if_not_null(#P/pool_item_extra/ttype)%
+                <span class="pool_item_type">%(#P/pool_item_extra/ttype)%</span>: 
+            %end_if%
+                <a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> <span>%text(str_by)%</span>
+                 <a class="cc_user_link" href="%(#P/artist_page_url)%">%(#P/user_real_name)%</a>
+            </div>
         %end_loop%
         %if_not_null(#R/children_overflow)%
             </div>

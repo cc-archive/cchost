@@ -746,11 +746,8 @@ EOF;
         $msg = CCUploadAPI::_do_rename( $record, $file_args, $current_path, $relative_dir );
         if( !empty($msg) )
             return $msg;
-    
         $file_args['local_path']   = cca($relative_dir,$file_args['file_name']);
         $file_args['download_url'] = ccd($relative_dir,$file_args['file_name']);
-
-
         $tagger = CCUploadAPI::GetTagger();
         if( isset($tagger) )
             $tagger->TagFile( $record, $file_args['local_path'] );

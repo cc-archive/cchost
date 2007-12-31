@@ -126,6 +126,11 @@ if ( !empty($R['remix_children']) )
     $i = 0;
     foreach( $R['remix_children'] as $P )
     {
+        if( !empty($P['pool_item_extra']['ttype']) )
+        {
+            ?><span class="pool_item_type"><?= $P['pool_item_extra']['ttype']?></span>: <?
+        }
+
         ?><a href="<?= $P['file_page_url']?>" class="cc_file_link"><?= $P['upload_name']?></a> <?= $T->String('str_by')?>
           <a href="<?= $P['artist_page_url']?>" class="cc_user_link"><?= $P['user_real_name']?></a>
         <?
