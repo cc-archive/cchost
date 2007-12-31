@@ -598,5 +598,5 @@ $GLOBALS['str_trackback_link_video']   = _('URL to video page');
 $GLOBALS['str_trackback_link_web']     = _('URL to blog, webpage, etc.');
 $GLOBALS['str_trackback_link_album']   = _('URL to album page');
 $GLOBALS['str_trackback_error']   = _('There was an error reaching the page:');
-
+$GLOBALS['str_trackback_remix_upload'] = _('%sClick here if you want to upload a remix of "%s"%s');
 ?>

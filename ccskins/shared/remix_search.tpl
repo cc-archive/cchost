@@ -44,6 +44,11 @@ div#remix_search_controls {
         <div class="remix_no_match" id="remix_no_match"></div>
     </div>
     <div id="remix_search_results">
+    %if_not_null(field/remix_id)%
+        <?  
+            cc_query_fmt("dataview=links_by&t=remix_checks&f=html&noexit=1&nomime=1&ids=" . $A['field']['remix_id']); 
+        ?>
+    %end_if%
     %if_not_null(field/sourcesof)%
         <? 
             cc_query_fmt("dataview=search_remix&t=remix_checks&f=html&noexit=1&nomime=1&sources=" . $A['field']['sourcesof']); 

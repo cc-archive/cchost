@@ -46,6 +46,12 @@ EOF;
 #trackback_help span {
     font-weight: bold;
 }
+#trackback_form .m {
+    margin: 3px;
+    border: 1px dashed #BBB;
+    padding: 2px;
+    text-align: center;
+}
 </style>
 <?
 $ttype = $_GET['ttype'];
@@ -64,6 +70,14 @@ $title = $T->String('str_trackback_title_' .$ttype);
         <?= $text ?>
     </div>
     <input type="hidden" name="trackback_name" />
+
+<? if( ($ttype == 'remix') && !empty($A['logged_in_as']) ) { ?>
+    <div class="m">
+        <?= $T->String(array('str_trackback_remix_upload','<a href="' . 
+                ccl('submit','remix',$R['logged_in_as'], $R['upload_id']) . 
+            '">',$R['upload_name'],'</a>')) ?>
+    </div>
+<? } ?>
 
     <div class="f"><?= $T->String('str_trackback_artist_' . $ttype); ?>
     <input id="trackback_artist" name="trackback_artist" /></div>
@@ -133,7 +147,8 @@ function submit_tb()
     }
 
     $('trackback_response').innerHTML = str_thinking;
-    var url = home_url + 'track/<?= $ttype ?>/' + <?= $R['upload_id'] ?>;
+    var cd = new Date();
+    var url = home_url + 'track/<?= $ttype ?>/' + <?= $R['upload_id'] ?> + q + 'cd=' + cd.getTime();;
     new Ajax.Request( url, { onComplete: on_track, parameters: p } );
     return false;
 }

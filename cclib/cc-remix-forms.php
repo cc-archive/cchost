@@ -45,7 +45,7 @@ class CCPostRemixForm extends CCNewUploadForm
      * @access public
      * @param integer $userid The remix will be 'owned' by owned by this user
      */
-    function CCPostRemixForm($userid)
+    function CCPostRemixForm($userid,$remix_id='')
     {
         $this->CCNewUploadForm($userid,false);
 
@@ -53,6 +53,7 @@ class CCPostRemixForm extends CCNewUploadForm
                            'form_tip'   => 'str_sources_tip',
                            'formatter'  => 'metalmacro',
                            'macro'      => 'remix_search',
+                           'remix_id'   => $remix_id,
                            'close_box'  => 1,
                            'flags'      => CCFF_POPULATE,
                         );

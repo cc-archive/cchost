@@ -35,10 +35,11 @@ class CCTrackBack
         require_once('cclib/cc-pools.php');
         $link = $this->_clean_url($_POST['trackback_link']);
         $pool_id = $this->_get_web_sample_pool();
-        $pool_item_id = 0; // CCDatabase::QueryItem("SELECT pool_item_id FROM cc_tbl_pool_item WHERE pool_item_url = '$link'");
+        $pool_item_id = CCDatabase::QueryItem("SELECT pool_item_id FROM cc_tbl_pool_item WHERE pool_item_url = '$link'");
         $pool_items = new CCPoolItems();
         if( empty($pool_item_id) )
         {
+            $new = true;
             $upload_license = CCDatabase::QueryItem('SELECT upload_license FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
             $email = CCUTil::Strip($_POST['trackback_email']);
             $name = CCUTil::Strip($_POST['trackback_your_name']);
@@ -70,6 +71,12 @@ class CCTrackBack
         $x['pool_tree_parent'] = $upload_id;
         $x['pool_tree_pool_child'] = $pool_item_id;
         $pool_tree->Insert($x);
+        if( empty($new) )
+        {
+            require_once('cclib/cc-sync.php');
+            CCSync::Upload($upload_id);
+        }
+
         print 'ok';
         exit;
     }

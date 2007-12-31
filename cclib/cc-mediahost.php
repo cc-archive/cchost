@@ -164,9 +164,6 @@ class CCMediaHost
     {
         global $CC_GLOBALS;
 
-        if( !empty($etc['url_extra']) )
-            $remix_this_id = $etc['url_extra'];
-
         $username = CCUser::CurrentUserName();
         $userid   = CCUser::CurrentUser();
         require_once('cclib/cc-remix-forms.php');
@@ -184,10 +181,7 @@ class CCMediaHost
 
         if( empty($_POST['postremix']) )
         {
-            if( !empty( $remix_this_id ) )
-            {
-            }
-
+            $form->SetFormFieldItem('sources','remix_id',empty($etc['url_extra']) ? '' : $etc['url_extra']);
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
