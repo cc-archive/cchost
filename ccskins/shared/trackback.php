@@ -74,7 +74,7 @@ $title = $T->String('str_trackback_title_' .$ttype);
 <? if( ($ttype == 'remix') && !empty($A['logged_in_as']) ) { ?>
     <div class="m">
         <?= $T->String(array('str_trackback_remix_upload','<a href="' . 
-                ccl('submit','remix',$R['logged_in_as'], $R['upload_id']) . 
+                ccl('submit','remix',$A['logged_in_as'], $R['upload_id']) . 
             '">',$R['upload_name'],'</a>')) ?>
     </div>
 <? } ?>
