@@ -154,6 +154,6 @@ function submit_tb()
     new Ajax.Request( url, { onComplete: on_track, parameters: p } );
     return false;
 }
-//Event.observe('trackback_submit','click',submit_tb);
+Event.observe('trackback_submit','click',submit_tb);
 </script>
 

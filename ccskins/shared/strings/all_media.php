@@ -564,7 +564,7 @@ $GLOBALS['str_trackback_no_email']  = _('You must supply a valid email address')
 $GLOBALS['str_trackback_no_link']   = _('You must supply a link');
 $GLOBALS['str_trackback_submit']    = _('Submit');
 
-$GLOBALS['str_trackback_remix']         = _('If you know of remix of "%s" by %s please enter the link below');
+$GLOBALS['str_trackback_remix']         = _('If you know of a remix of "%s" by %s please enter the link below');
 $GLOBALS['str_trackback_podcast']       = _('If you heard "%s" by %s in a podcast please enter a link to the podcast\'s home page below');
 $GLOBALS['str_trackback_video']         = _('If you know of a video that uses "%s" by %s paste the embedding tag below');
 $GLOBALS['str_trackback_web']           = _('If you know of a web page or blog the refers to "%s" by %s please enter the link below');
