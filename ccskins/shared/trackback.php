@@ -46,11 +46,18 @@ EOF;
 #trackback_help span {
     font-weight: bold;
 }
-#trackback_form .m {
-    margin: 3px;
+
+a.remix_up_link {
+    margin: 5px;
     border: 1px dashed #BBB;
-    padding: 2px;
+    padding: 5px;
     text-align: center;
+    display: block;
+    font-weight: normal;
+}
+a.remix_up_link:hover {
+    background-color: white;
+    text-decoration: none;
 }
 </style>
 <?
@@ -60,8 +67,6 @@ $text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name']
                     '<span>'.$R['user_real_name'].'</span>' ) );
 $title = $T->String('str_trackback_title_' .$ttype);
 ?>
-<p />
-
 <div id="trackback_response">
 </div>
 <form id="trackback_form" name="trackback_form" style="z-index:200;display:block;">
@@ -70,14 +75,6 @@ $title = $T->String('str_trackback_title_' .$ttype);
         <?= $text ?>
     </div>
     <input type="hidden" name="trackback_name" />
-
-<? if( ($ttype == 'remix') && !empty($A['logged_in_as']) ) { ?>
-    <div class="m">
-        <?= $T->String(array('str_trackback_remix_upload','<a href="' . 
-                ccl('submit','remix',$A['logged_in_as'], $R['upload_id']) . 
-            '">',$R['upload_name'],'</a>')) ?>
-    </div>
-<? } ?>
 
     <div class="f"><?= $T->String('str_trackback_artist_' . $ttype); ?>
     <input id="trackback_artist" name="trackback_artist" /></div>
@@ -108,6 +105,11 @@ $title = $T->String('str_trackback_title_' .$ttype);
         <a id="trackback_submit" href="javascript://submit track"><?= $T->String('str_trackback_submit'); ?></a>
     </div>
 </form>
+<? if( ($ttype == 'remix') && !empty($A['logged_in_as']) ) { ?>
+   <a class="remix_up_link" href="<?= ccl('submit','remix',$A['logged_in_as'], $R['upload_id']) ?>">
+        <?= $T->String(array('str_trackback_remix_upload','',$R['upload_name'],'')) ?>
+    </a>
+<? } ?>
 
 <script type="text/javascript">
 
@@ -120,7 +122,7 @@ function on_track(resp)
     else
     {
         var vars = [ '', eval('str_trackback_type_<?= $ttype ?>'), 
-                     '<?= $R['upload_name'] ?>', 
+                     '<?= addslashes($R['upload_name']) ?>', 
                      '<?= $R['user_real_name'] ?>' ];
 
         var text = new Template( str_trackback_response ).evaluate( vars );
@@ -152,6 +154,6 @@ function submit_tb()
     new Ajax.Request( url, { onComplete: on_track, parameters: p } );
     return false;
 }
-Event.observe('trackback_submit','click',submit_tb);
+//Event.observe('trackback_submit','click',submit_tb);
 </script>
 
