@@ -591,6 +591,7 @@ EOF;
             CCUtil::Send404();
             return;
         }
+        require_once('cclib/cc-query.php');
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=topics_user&datasource=topics&limit=20',array(),false);
         $args['title'] = array( 'str_forum_topics_by', $user_real_name );

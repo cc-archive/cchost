@@ -67,7 +67,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
                     <td><span id="rate_block_%(#R/upload_id)%">%call('util.tpl/ratings_stars_user')% </span></td></tr>
                 %else%
                     <tr><th>%text(str_recommends)%</th>
-                    <td>%call('util.php/recommends')%</td>
+                    <td>%call('util.php/recommends')%</td></tr>
                 %end_if%
             %end_if%
 
@@ -99,7 +99,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
                 <script type="text/javascript"> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
             %end_if%
 
-            <br class="info_box_clear" />
+            <div class="info_box_clear">&nbsp;</div>
         </div><!-- info box -->
 
         %if_not_null(#R/file_macros)%

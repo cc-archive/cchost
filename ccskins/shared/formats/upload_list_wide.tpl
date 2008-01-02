@@ -148,7 +148,7 @@ EOF;
         </div>
     %end_if%
 
-    <br style="clear:both" />
+    <div style="clear:both">&nbsp;</div>
     </div><!--  end upload  -->
 %end_loop%
 </div><!-- end listing -->

@@ -222,8 +222,11 @@ class CCQuery
         $k = array_keys($this->args);
         $n = count($k);
         for( $i = 0; $i < $n; $i++)
-            if( is_string($this->args[$k[$i]]) && (strpos($this->args[$k[$i]],'\'') !== false) )
+        {
+            $tt = $this->args[$k[$i]];
+            if( is_string($tt) && (strpos($tt,'\'') === (strlen($tt)-1) ) )
                 die('Illegal value in query');
+        }
     
         if( !empty($this->args['sort']) )
             $this->_validate_sort_fields();

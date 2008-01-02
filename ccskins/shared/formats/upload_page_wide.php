@@ -34,4 +34,14 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
 div#upload_menu_box{float:left;width:20%;margin-left:-100%;padding-left:1.5em;}
 </style>
 
+<!--[if IE]> 
+<link href="<?= $T->URL('css/upload_menu.css') ?>" text="text/css" title="Default Style" rel="stylesheet" />
+<style type="text/css">
+div#upload_wrapper{float:left;width:100%;}
+div#upload_middle{margin: 0 35% 0 23%;}
+div#upload_sidebar_box{float:left;width:30%;margin-left:-30%;}
+div#upload_menu_box{float:left;width:20%;margin-left:-85%;}
+</style>
+<![endif]-->
+
 <? $T->Call('formats/upload_page_shared.tpl'); ?>
