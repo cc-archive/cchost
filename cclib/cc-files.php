@@ -51,34 +51,6 @@ class CCEditFileForm extends CCUploadMediaForm
         $this->SetFormValue('upload_tags', $record['upload_extra']['usertags']);
         $this->SetSubmitText('str_file_save_properties');
 
-        /*
-            This code is just broken (conceptually that is) need to revisit with lawyers
-
-        $licenses =& CCLicenses::GetTable();
-
-        // Get the licenses that are looser than this one
-        $lics = $this->_looser_child_lics($record);
-        
-        if( empty($lics) )
-            $lics = $licenses->GetEnabled($record['license_strict']);
-
-        $lics[ $record['upload_license'] ] = $record;
-
-        if( count($lics) > 1 )
-        {
-            $select_fields = array();
-            foreach( $lics as $lic )
-                $select_fields[ $lic['license_id'] ] = $lic['license_name'];
-            $fields['upload_license'] = 
-                array( 'label' => _('License'),
-                   'form_tip' => _('NOTE: You can only pick less restrictive license. Once you have done that you can not re-license under a stricter license (on this site). '),
-                   'formatter' => 'select',
-                   'value'     => $record['license_id'],
-                   'options'   => $select_fields,
-                   'flags'     => CCFF_NONE );
-        }
-
-        */
 
         $url = ccl('file','manage',$record['upload_id'] );
 

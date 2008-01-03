@@ -586,11 +586,17 @@ class CCQuery
         $this->where[] = "(upload_num_remixes >= '{$this->args['remixmin']}')";
     }        
 
+    /*
+    * List the remixes of an upload (see also remix filter in cc-filter.php)
+    */
     function _gen_remixes()
     {
         $this->_heritage_helper('remixes','tree_child','cc_tbl_tree','tree_parent','upload_id');
     }
 
+    /*
+    * List the remixes of a PERSON
+    */
     function _gen_remixesof()
     {
         $user_id = CCUser::IDFromName($this->args['remixesof']);
@@ -645,9 +651,23 @@ class CCQuery
 
     }
     
+    /*
+    * List the sources of an upload (see also remix filter in cc-filter.php)
+    */
     function _gen_sources()
     {
-        $this->_heritage_helper('sources','tree_parent','cc_tbl_tree','tree_child','upload_id');
+        switch( $this->args['datasource'] )
+        {
+            case 'uploads':
+                $this->_heritage_helper('sources','tree_parent','cc_tbl_tree','tree_child','upload_id');
+                break;
+            case 'pool_items':
+                $this->_heritage_helper('sources','pool_tree_pool_parent','cc_tbl_pool_tree','pool_tree_child','pool_item_id');
+                break;
+            default:
+                die('invalid datasource for "sources"');
+                break;
+        }
     }
 
     function _gen_tags()
@@ -753,8 +773,8 @@ class CCQuery
         $rows = CCDatabase::QueryItems($sql);
         if( empty($rows) )
         {
-            $this->where[] = $kf . ' IN (' . $sql . ')';
-            //$this->dead = true;
+            //$this->where[] = $kf . ' IN (' . $sql . ')';
+            $this->dead = true;
         }
         else
         {
