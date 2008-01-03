@@ -193,11 +193,8 @@ class CCRemix
 
                 if( $is_update )
                 {
-                    $link1 = "<a href=\"$url\">";
-                    $link2 = '</a>';
-                    $prompt = sprintf(_("Remix update succeeded (click %shere%s to see the results)."),$msg, $link1, $link2);
-                    require_once('cclib/cc-page.php');
-                    CCPage::Prompt($prompt);
+                    $user_name = CCDatabase::QueryItem('SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$remixid);
+                    CCUtil::SendBrowserTo(ccl('files',$user_name,$remixid));
                 }
                 else
                 {
