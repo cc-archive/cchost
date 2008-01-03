@@ -281,17 +281,12 @@ class CCContestAdmin
 
     function PublishSources($contest_short_name)
     {
-        $uploads = new CCUploads();
-        $uploads->SetDefaultFilter(false,false);
+        require_once('cclib/cc-dataview.php');
+        $dv = new CCDataView();
         $tags = $contest_short_name . ',-contest_entry';
-        $uploads->SetTagFilter( $tags, 'all' );
-        $keys = $uploads->QueryKeys();
-        foreach( $keys as $key )
-        {
-            $w['upload_id'] = $key;
-            $w['upload_published'] = 1;
-            $uploads->Update($w);
-        }
+        $filter = $dv->MakeTagFilter($tags,'all');
+        $sql = 'UPDATE cc_tbl_uploads SET upload_published = 1 WHERE '. $filter;
+        CCDatabase::Query($sql);
         $url = ccl('tags', $tags );
         CCUtil::SendBrowserTo($url);
     }
