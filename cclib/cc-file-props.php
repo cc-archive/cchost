@@ -45,7 +45,7 @@ class CCFileProps
         else
         {
             if( is_string($tdirs) )
-                $tdirs = array($tdirs);
+                $tdirs = CCUtil::SplitPaths($tdirs);
         }
         $k = array_keys($tdirs);
         $c = count($k);

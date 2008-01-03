@@ -301,7 +301,7 @@ class CCTemplateAdmin
     function GetContentPages()
     {
         global $CC_GLOBALS;
-        $fp = new CCFileProps(); return $fp->GetProps('pages','dynamic_content_page',true,$CC_GLOBALS['install-user-root']);
+        $fp = new CCFileProps(); return $fp->GetProps('','dynamic_content_page',true,$CC_GLOBALS['files-root']);
     }
 
     function OnAdminExtras()
