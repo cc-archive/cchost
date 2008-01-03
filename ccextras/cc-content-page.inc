@@ -352,9 +352,9 @@ class CCContentPage
         {
             $form->PopulateValues($props);                
         }
-        elseif( $form->ValidateFields() )
+        elseif( $form->ValidateFields() && $this->_valid_target_dir($form,$target) )
         {
-            $this->_save_page($form,false);
+            $this->_save_page($form,false,$target);
             CCUtil::SendBrowserTo( ccl('admin','content','manage') );
         }
 
@@ -373,22 +373,35 @@ class CCContentPage
         $this->_build_bread_crumb_trail(_('Create a Content Page'));
         CCPage::SetTitle(_('Create a Content Page'));
         $form = new CCContentPageForm();
-        if( empty($_POST['contentpage']) || !$form->ValidateFields() )
+        if( empty($_POST['contentpage']) || !$form->ValidateFields() || !$this->_valid_target_dir($form,$target) )
         {
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
         {
-            $fname = $this->_save_page($form,true);
+            $fname = $this->_save_page($form,true,$target);
             CCUtil::SendBrowserTo( ccl('docs',$fname) );
         }
     }
 
-    function _save_page(&$form,$new)
+    function _valid_target_dir(&$form,&$target_dir) 
+    {
+        global $CC_GLOBALS;
+        list( $target_dir ) = array_filter(split( ';', $CC_GLOBALS['files-root'] ));
+        if( !empty($target_dir) )
+            $target_dir = trim($target_dir);
+        if( empty($target_dir) || !file_exists($target_dir) )
+        {
+            $form->SetHelpText(sprintf(_("Can't find a suitable place to write the new 'docs' content. Fix this in %sPath Configure%"),
+                            '<a href="' . ccl('admin','paths') . '">', '</a>' ) );
+            return false;
+        }
+        return true;
+    }
+
+    function _save_page(&$form,$new,$target_dir)
     {
         $form->GetFormValues($values);
-        global $CC_GLOBALS;
-        $target_dir = $CC_GLOBALS['install-user-root'] . 'pages';
         $fname = trim(preg_replace('/[^0-9a-z_-]+/', '-', strtolower($values['title'])),'-');
         if( empty($fname) )
             $fname = 'topicpage';
