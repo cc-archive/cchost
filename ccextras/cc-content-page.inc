@@ -206,23 +206,24 @@ class CCContentPageForm extends CCForm
 */
 class CCContentPage
 {
-    function TDelete($topic_id)
+    function TDelete($topic_id='')
     {
         $this->_build_bread_crumb_trail(_('Delete a Content Entry'));
         CCPage::SetTitle(_('Delete a Content Entry'));
-        if( empty($page) )
+        if( empty($topic_id) )
             CCUtil::Send404();
         $form = new CCGenericForm();
         if( empty($_POST['generic']) )
         {
             $name = CCDatabase::QueryItem('SELECT topic_name FROM cc_tbl_topics WHERE topic_id='.$topic_id);
             $form->SetFormHelp(_('This is permanantly erase this content. There is <b>NO UNDO</b>'));
-            $fname = basename($page);
+            $fname = basename($name);
             $form->SetSubmitText(sprintf("Delete '%s' Now",$name));
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
         {
+            require_once('ccextras/cc-topics.inc');
             $topics = new CCTopics();
             $topics->DeleteKeyRow($topic_id);
             CCUtil::SendBrowserTo( ccl('admin','content','manage') );

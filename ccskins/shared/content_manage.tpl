@@ -31,7 +31,7 @@ if( empty($_GET['topic_type']) )
     $_GET['topic_type'] = '';
 ?>
 <h2><?= _('Conent Pages') ?></h2>
-<a href="%(home-url)%admin/content/page%"><?= _('Create a new page')?></a>
+<a href="%(home-url)%admin/content/page"><?= _('Create a new page')?></a>
 <table class="cc_content_pages">
 %loop(content_pages,cp)%
 <tr>
@@ -43,7 +43,7 @@ if( empty($_GET['topic_type']) )
 %end_loop%
 </table>
 <h2><?= _('Content Topics') ?></h2>
-<a href="%(home-url)%admin/content/post%"><?= _('Create new content')?></a>
+<a href="%(home-url)%admin/content/post"><?= _('Create new content')?></a>
 <div><?= _('Select topic type')?>: <select id="topic_types" onchange="document.location = '<?= cc_current_url() ?>' + q + 'topic_type=' + this.options[this.selectedIndex].value;">
 %loop(topic_types,tt)%
 <option value="%(#tt)%" <?= ($tt == $_GET['topic_type']) ? 'selected="selected"' : '' ?>>%(#tt)%</option>
