@@ -1,4 +1,10 @@
 <body> <!-- class="light_bg" -->
+%if_not_empty(site-disabled)%
+    <div id="site_disabled_message" style="position:absolute">%text(str_site_disabled)%</div>
+%end_if%
+%if_not_empty(beta_message)%
+    <div id="beta_message" style="position:absolute;">%(beta_message)%</div>
+%end_if%
 <div class="hide">
   <a href="#content">%text(skip)%</a>
 </div>
@@ -15,10 +21,6 @@
     %if_not_empty(logged_in_as)%
         <div id="login_info">%text(loggedin)%: <span>%(logged_in_as)%</span> 
             <a class="light_color" href="%(home-url)%logout">%text(logout)%</a></div>
-    %end_if%
-
-    %if_not_empty(banner_message)%
-        <div id="beta_message">%(banner_message)%</div>
     %end_if%
 
     <h1 id="site_title"><a href="%(root-url)%" title="%(site-title)%" >

@@ -1,4 +1,7 @@
 <body>
+%if_not_empty(site-disabled)%
+    <div id="site_disabled_message" style="position:absolute">%text(str_site_disabled)%</div>
+%end_if%
 %if_not_empty(beta_message)%
     <div id="beta_message" style="position:absolute;">%(beta_message)%</div>
 %end_if%

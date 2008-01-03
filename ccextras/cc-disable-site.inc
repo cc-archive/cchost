@@ -43,20 +43,45 @@ class CCDisableSiteForm extends CCEditConfigForm
         $fields['enable-password'] =
                array( 'label'       => _('Admin Password'),
                        'form_tip'   => _('This password will allow admins to continue passed disabling.'),
-                       'formatter'  => 'password',
+                       'formatter'  => 'disable_site_password',
                        'nomd5'      => true,
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
         $fields['disabled-msg'] =
                array( 'label'       => _('Site Disabled Message'),
                        'form_tip'   => _('This file is displayed when the admins have temporarily disabled the site.'),
-                       'value'      => 'disabled-msg.txt',
-                       'formatter'  => 'localdir',
+                       'formatter'  => 'disable_site_localdir',
                        'flags'      => CCFF_POPULATE  );
 
         $this->AddFormFields($fields);
         $this->SetModule( ccs(__FILE__) );
     }
+
+    function generator_disable_site_password($varname,$value='',$class='')
+    {
+        return $this->generator_password($varname,$value,$class);
+    }
+
+    function validator_disable_site_password($fieldname)
+    {
+        if( empty($_POST['site-disabled']) )
+            return true;
+        return $this->validator_password($fieldname);
+    }
+
+    function generator_disable_site_localdir($varname,$value='',$class='')
+    {
+        return $this->generator_localdir($varname,$value,$class);
+    }
+
+    function validator_disable_site_localdir($fieldname)
+    {
+        if( empty($_POST['site-disabled']) )
+            return true;
+        return $this->validator_localdir($fieldname);
+    }
 }
+
+
 
 /**
 *

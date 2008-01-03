@@ -555,6 +555,7 @@ $GLOBALS['str_submit_files'] = _('Submit Files');
 $GLOBALS['str_your_page'] = _('Your Page');
 $GLOBALS['str_edit_profile'] = _('Edit Your Profile');
 $GLOBALS['str_browse_tags'] = _('Browse Tags');
+$GLOBALS['str_site_disabled'] = _('Private Mode');
 
 $GLOBALS['str_trackback_title']     = _('Submit a Trackback');
 $GLOBALS['str_trackback_response']  = _('The administrators have been notified and your #{1} link to "#{2}" by #{3} will appear here soon.');

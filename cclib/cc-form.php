@@ -400,7 +400,7 @@ class CCForm
         $field_info['form_error'] = $errmsg;
         if( empty($field_info['class']) )
             $field_info['class'] = 'form_error_input';
-        else
+        elseif( strstr($field_info['class'],'form_error_input') === false )
             $field_info['class'] .= ' form_error_input';
     }
 
@@ -903,6 +903,8 @@ class CCForm
     {
         if( empty($class) )
             $class='form_input';
+        elseif( strstr($class,'form_input') === false )
+            $class .= ' form_input';
 
         return( "<input type='text' id=\"$varname\" name=\"$varname\" value=\"$value\" class=\"$class\" />" );
     }
@@ -1622,11 +1624,11 @@ END;
             if( !file_exists($dir) )
             {
                 $this->SetFieldError($fieldname, _('This file or directory does not exist.'));
-                return(false);
+                return false ;
             }
         }
 
-        return(true);
+        return true;
     }
 
 

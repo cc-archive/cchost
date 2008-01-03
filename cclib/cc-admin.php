@@ -138,11 +138,14 @@ class CCEditConfigForm extends CCForm
      */
     function GenerateForm($hiddenonly = false)
     {
-        $configs =& CCConfigs::GetTable();
-        $values = $configs->GetConfig($this->_typename,$this->_scope);
-        //CCDebug::PrintVar($values);
-        if( $values )
-            $this->PopulateValues($values);
+        if( empty($_POST) )
+        {
+            $configs =& CCConfigs::GetTable();
+            $values = $configs->GetConfig($this->_typename,$this->_scope);
+            //CCDebug::PrintVar($values);
+            if( $values )
+                $this->PopulateValues($values);
+        }
         return parent::GenerateForm($hiddenonly);
     }
 
