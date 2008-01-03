@@ -50,7 +50,7 @@ class CCTag
             return $tagstr;
         $ok = preg_match_all( "/(?:(^|\W))(-?\w+)/", $tagstr, $m); 
         if( $ok )
-            return $m[2];
+            return array_filter($m[2]);
         return array();
     }
 

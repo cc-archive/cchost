@@ -467,16 +467,15 @@ EOF;
 
                 case 'publish':
                     $uploads = new CCUploads();
-                    $uploads->SetDefaultFilter(false); // allow unpublished collab files through
-                    $row = $uploads->QueryKeyRow($upload_id);
-                    if( empty($row) )
+                    if( !$uploads->KeyExists($upload_id) )
                     {
                         $args['error'] = _('Can not find that file');
                     }
                     else
                     {
+                        $published = CCDatabase::QueryItem('SELECT upload_published FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
                         $w2['upload_id'] = $upload_id;
-                        $w2['upload_published'] = !$row['upload_published'];
+                        $w2['upload_published'] = !$published;
                         $uploads->Update($w2);
                         if( $w2['upload_published'] )
                         {
@@ -725,9 +724,7 @@ EOF;
         if( !$bad )
         {
             $uploads = new CCUploads();
-            $uploads->SetDefaultFilter(false); // allow unpublished collab files through
-            $record = $uploads->GetRecordFromID($upload_id);
-            $bad != empty($record);
+            $bad = !$uploads->KeyExists($upload_id);
             if( $bad )
                 $args['error'] = _('Upload record not found');
         }
@@ -736,19 +733,27 @@ EOF;
         {
             require_once('cclib/cc-tags.php');
             require_once('cclib/cc-tags.inc');
-            $old_user_tags = CCTag::TagSplit($record['upload_extra']['usertags']);
-            $old_tags = CCTag::TagSplit($record['upload_tags']);
-            $new_user_tags = CCTag::TagSplit($_GET['tags']);
-            $tags = new CCTags();
-            $new_user_tags = $tags->CheckAliases($tags->CleanSystemTags($new_user_tags));
-            $record['upload_extra']['usertags'] = $new_user_tags;
-            $up['upload_extra'] = serialize($record['upload_extra']);
-            $up['upload_tags'] = join( ', ', array_merge( array_diff( $old_tags, $old_user_tags ), CCTag::TagSplit($new_user_tags) ));
+            $sql = 'SELECT upload_extra,upload_tags FROM cc_tbl_uploads WHERE upload_id='.$upload_id;
+            list( $extra, $upload_tags ) = CCDatabase::QueryRow($sql,false);
+            $extra             = unserialize($extra);
+            $old_user_tags     = CCTag::TagSplit($extra['usertags']);
+            $old_tags          = CCTag::TagSplit($upload_tags);
+            $new_user_tags     = CCTag::TagSplit($_GET['tags']);
+            $tags_db           = new CCTags();
+            $new_user_tags     = $tags_db->CheckAliases($tags_db->CleanSystemTags($new_user_tags));
+            $extra['usertags'] = $new_user_tags;
+
+            $up['upload_extra'] = serialize($extra);
+            $up['upload_tags']  = ',' 
+                                  . join( ',', array_merge( array_diff( $old_tags, $old_user_tags ), CCTag::TagSplit($new_user_tags) )) 
+                                  . ',';
             $up['upload_id'] = $upload_id;
             $uploads->Update($up);
             $args['msg'] = _('Tags updated');
             $args['user_tags'] = $new_user_tags;
             $args['upload_id'] = $upload_id;
+
+            $tags_db->Replace($old_user_tags,$new_user_tags);
         }
 
         $this->_output($args);
@@ -846,18 +851,19 @@ EOF;
         if( count($collab_ids) < 2 )
             return; // there's only one (or none) uploads, nothing to attach
 
-        $uploads = new CCuploads();
-        $uploads->SetDefaultFilter(false); // allow hidden files;
+        require_once('cclib/cc-dataview.php');
+
+        $dv = new CCDataView();
         $keys = join(',',$collab_ids);
-        $where = "upload_id IN ({$keys})";
 
-        $uploads->SetTagFilter('-remix','all');
-        $source_ids = $uploads->QueryKeys($where);
+        // Do NOT filter out hidden uploads
+        $filter = $dv->MakeTagFilter('-remix','all');
+        $sql = "SELECT upload_id FROM cc_tbl_uploads WHERE (upload_id IN ({$keys})) AND {$filter} AND (upload_banned = 0)";
+        $source_ids = CCDatabase::QueryItems($sql);
 
-        $uploads->SetTagFilter('remix','any');
-        $remix_ids = $uploads->QueryKeys($where);
-
-        $uploads->SetTagFilter('');
+        $filter = $dv->MakeTagFilter('remix','any');
+        $sql = "SELECT upload_id FROM cc_tbl_uploads WHERE (upload_id IN ({$keys})) AND {$filter} AND (upload_banned = 0)";
+        $remix_ids = CCDatabase::QueryItems($sql);
         
         if( count($source_ids) == 0 || count($remix_ids) == 0 )
             return; // there are only sources (or remixes), nothing to attach
@@ -869,14 +875,14 @@ EOF;
         $remix_tree = new CCTable('cc_tbl_tree','tree_parent');
         foreach( $remix_ids as $remix_id )
         {
-            $w['tree_child'] = $remix_id;
-            $tree_source_ids = $remix_tree->QueryItems('tree_parent',$w);
+            $tree_source_ids = CCDatabase::QueryItems('SELECT tree_parent FROM cc_tbl_tree WHERE tree_child='.$remix_id);
             $new_sources = array_diff( $source_ids, $tree_source_ids);
 
             if( $new_sources )
             {
-                $source_rows = $uploads->QueryKeyRows($new_sources);
-                $remixer = $uploads->QueryItemFromKey('upload_user',$remix_id);
+                $source_rows = CCDatabase::QueryRows(
+                    'SELECT upload_user, upload_id FROM cc_tbl_uploads WHERE upload_id IN (' . join(',',$new_sources) . ')' );
+                $remixer = CCDatabase::QueryItem('SELECT upload_user FROM cc_tbl_uploads WHERE upload_id = ' . $remix_id);
                 $parents = array();
                 foreach( $source_rows as $source )
                 {

@@ -66,9 +66,12 @@ EOF;
 <script type="text/javascript">
 var user_desc = $('user_description_html');
 var avatar_html = '<div id="avatar" style="float:right;width:94px;"><img src="%(#U/user_avatar_url)%" /></div>';
-var breaker = '<br style="clear:right" />';
+var breaker = '<div style="clear:both">&nbsp;</div>';
 if( user_desc )
 {
+    new Insertion.Top(user_desc,avatar_html);
+    new Insertion.Bottom(user_desc,breaker);
+
     if( window.round_box_enabled )
     {
         cc_round_box('user_description_html');
@@ -78,8 +81,6 @@ if( user_desc )
     {
         Element.addClassName(user_desc,'box');
     }
-    new Insertion.Top(user_desc,avatar_html);
-    new Insertion.Bottom(user_desc,breaker);
 }
 else
 {

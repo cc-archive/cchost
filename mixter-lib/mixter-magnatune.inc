@@ -217,38 +217,6 @@ EOF;
         exit;
     }
 
-    // this was a one time function for digging out the 
-    // magnatune contest entrants info
-    function csv()
-    {
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetTagFilter('magnatune');
-        $uploads->SetOrder('user_name');
-        $records = $uploads->GetRecords('');
-        header('Content-type: text/plain');
-        print( "USERNAME, UPLOAD_NAME, FILE_NAME, USER_REAL_NAME, DAYTIME_PHONE, COUNTRY, BIRTHDATE\n");
-        $count = count($records);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $record =& $records[$i];
-            if( is_string($record['user_extra']) )
-                $uextra = unserialize($record['user_extra']);
-            else
-                $uextra = $record['user_extra'];
-            
-            $minfo =& $uextra['magnatune_contest_info'];
-
-            print( $record['user_name'] . ', ' .
-                   $record['upload_name'] . ', ' .
-                   $record['files'][0]['file_name'] . ', ' .
-                   $minfo['realname'] . ', ' .
-                   $minfo['daytimephone'] . ', ' .
-                   $minfo['country'] . ', ' .
-                   $minfo['birthdate'] . "\n" );
-        }
-
-        exit;
-    }
 
     /**
     * Event handler for mapping urls to methods

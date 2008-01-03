@@ -203,6 +203,7 @@ ccCollab.prototype = {
         this.msg( 'thinking...', 'working' );
         var value = $('tags_edit').value;
         var url = home_url + 'collab/upload/tags/' + this.collab_id + '/' + id + '?tags=' + value;
+        ajax_debug(url);
         new Ajax.Request( url, { method: 'get', onComplete: this._req_tagsupload.bind(this) } );
         this.closeTags();
     },

@@ -35,7 +35,7 @@ $collab_id = $C['collab_id'];
     <div  class="file_list" id="file_list">
     </div>
     %if_not_null(#collab/is_member)%
-       <iframe  style="display:none;" name="upload_frame"></iframe>
+       <iframe  style="display:block;width:100%;height:4em;" name="upload_frame"></iframe>
         <form  target="upload_frame" 
                 enctype="multipart/form-data" 
                 action="<?= $A['home-url']?>collab/upload/file/%(#collab_id)%" 

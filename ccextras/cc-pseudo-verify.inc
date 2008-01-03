@@ -393,6 +393,7 @@ class CCPseudoVerifyAPI
 
     function FileValidate(&$formatinfo)
     {
+        require_once('cclib/cc-fileverify.php');
         $old_validator = new CCFileVerify();
         $retval = $old_validator->FileValidate($formatinfo);
         if( $retval )

@@ -60,29 +60,23 @@ class CCMediaHost
         else
         {
             $uploads =& CCUploads::GetTable();
-            $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
+            list( $name, $published, $banned ) = CCDatabase::QueryRow(
+                        'SELECT upload_name,upload_published,upload_banned FROM cc_tbl_uploads WHERE upload_id='.$upload_id,false);
+
+            require_once('cclib/cc-page.php');
             if( empty($name) )
             {
-                // wait, the file might just unpublished...
-                $uploads->SetDefaultFilter(false);
-                $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
-                if( !CCUser::IsAdmin() )
-                    $uploads->SetDefaultFilter(true);
+                CCPage::SetTitle('str_file_unknown');
+                CCPage::Prompt('str_file_cannot_be_found');
+                CCPage::Prompt('str_file_it_may_have');
+                CCUtil::Send404(false);
+                return;
+            }
 
-                require_once('cclib/cc-page.php');
-                if( empty($name) )
-                {
-                    CCPage::SetTitle('str_file_unknown');
-                    CCPage::Prompt('str_file_cannot_be_found');
-                    CCPage::Prompt('str_file_it_may_have');
-                    CCUtil::Send404(false);
-                }
-                else
-                {
-                    // aha
-                    CCPage::SetTitle($name);
-                    CCPage::Prompt('str_file_this_upload_is');
-                }
+            if( !$published || $banned )
+            {
+                CCPage::SetTitle($name);
+                CCPage::Prompt('str_file_this_upload_is');
                 return;
             }
 
