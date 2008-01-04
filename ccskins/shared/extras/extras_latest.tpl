@@ -2,6 +2,7 @@
 [meta]
     type = extras
     desc = _('Latest Uploads')
+    allow_user = 1
 [/meta]
 */?>
 <p>%text(str_new_uploads)%</p>

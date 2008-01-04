@@ -283,9 +283,9 @@ class CCTemplateAdmin
         $fp = new CCFileProps(); return $fp->GetProps('colors','color',false);
     }
 
-    function GetExtras()
+    function GetExtras($user_only=false)
     {
-        $fp = new CCFileProps(); return $fp->GetProps('extras','extras');
+        $fp = new CCFileProps(); return $fp->GetProps('extras','extras',true,'',$user_only?'allow_user':'');
     }
 
     function GetSkins($skip_shared=false)

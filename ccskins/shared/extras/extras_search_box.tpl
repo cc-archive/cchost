@@ -2,6 +2,7 @@
 [meta]
     type = extras
     desc = _('Search Box')
+    allow_user = 1
 [/meta]
 */?>
 <p>%text(str_search)%</p>

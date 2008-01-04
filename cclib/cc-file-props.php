@@ -33,7 +33,7 @@ if( !defined('IN_CC_HOST') )
 */
 class CCFileProps
 {
-    function GetProps($format_dir,$type,$ret_files=true,$tdirs='')
+    function GetProps($format_dir,$type,$ret_files=true,$tdirs='',$must_have=null)
     {
         global $CC_GLOBALS;
         require_once('cclib/cc-template.php');
@@ -54,7 +54,7 @@ class CCFileProps
             $tdirs[$k[$i]] = CCUtil::CheckTrailingSlash($tdirs[$k[$i]],false);
         }
         $results = array();
-        $this->_scan_dir($results, $tdirs, $format_dir, $type, $ret_files);
+        $this->_scan_dir($results, $tdirs, $format_dir, $type, $ret_files,$must_have);
         return $results;
     }
 
@@ -84,7 +84,7 @@ class CCFileProps
         return $props;
     }
 
-    function _scan_dir(&$match_files, $source, $format_dir, $type, $ret_files )
+    function _scan_dir(&$match_files, $source, $format_dir, $type, $ret_files, $must_have=null )
     {
         foreach( $source as $dir )
         {
@@ -108,6 +108,9 @@ class CCFileProps
                 $props = $this->GetFileProps($ffile);
 
                 if( !$props || ($props['type'] != $type) )
+                    continue;
+
+                if( $must_have && empty($props[$must_have]) )
                     continue;
 
                 if( $ret_files )

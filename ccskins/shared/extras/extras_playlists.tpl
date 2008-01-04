@@ -2,6 +2,7 @@
 [meta]
     type = extras
     desc = _('Recent Playlists')
+    allow_user = 1
 [/meta]
 */
 

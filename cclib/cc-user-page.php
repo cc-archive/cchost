@@ -136,6 +136,8 @@ class CCUserPage
 
     function _get_tabs($user,&$default_tab_name)
     {
+        global $CC_GLOBALS;
+
         $record = CCDatabase::QueryRow(
              "SELECT user_id, user_name, user_real_name, user_num_uploads, user_num_reviews, user_num_reviewed,user_num_scores,user_num_posts "
              . "FROM cc_tbl_user WHERE user_name = '{$user}'");
@@ -213,8 +215,8 @@ class CCUserPage
             $tabs[$K]['tags'] = str_replace('%user_name%',$user,$tabs[$K]['tags']);
         }
 
-        if( empty($default_tab_name) && !empty($_COOKIE['default_user_tab']) )
-            $default_tab_name = $_COOKIE['default_user_tab'];
+        if( empty($default_tab_name) && !empty($CC_GLOBALS['user_extra']['pref']['default_user_tab']) )
+            $default_tab_name = $CC_GLOBALS['user_extra']['pref']['default_user_tab'];
 
         require_once('cclib/cc-navigator.php');
         $navapi = new CCNavigator();

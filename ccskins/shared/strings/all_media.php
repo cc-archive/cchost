@@ -600,4 +600,12 @@ $GLOBALS['str_trackback_link_web']     = _('URL to blog, webpage, etc.');
 $GLOBALS['str_trackback_link_album']   = _('URL to album page');
 $GLOBALS['str_trackback_error']   = _('There was an error reaching the page:');
 $GLOBALS['str_trackback_remix_upload'] = _('%sClick here if you want to upload a remix of "%s"%s');
+
+$GLOBALS['str_pref_title'] = _('Your Preferences');
+$GLOBALS['str_pref_default_tab'] = _('Default Profile Tab');
+$GLOBALS['str_pref_setting_this'] =_('Setting this will determine which tab is the default when visiting an artist\'s page');
+$GLOBALS['str_pref_sidebar'] = _('See these links in the sidebar');
+$GLOBALS['str_uploads'] = _('Uploads');
+$GLOBALS['str_profile'] = _('User Profile');
+
 ?>
