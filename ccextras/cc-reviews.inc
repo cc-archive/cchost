@@ -76,6 +76,12 @@ class CCReview
                     return;
                 }
             }
+
+            $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'');
+        }
+        else
+        {
+            $user_real_name = '';
         }
 
         //
@@ -116,7 +122,6 @@ class CCReview
                 require_once('cclib/cc-query.php');
                 $query = new CCQuery();
                 $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=reviews_browse&datasource=topics&limit=30',array(),false);
-                $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'');
                 $args['title'] = array( $tstr, $user_real_name );
                 $sqlargs['where'] = $where . "'$user_name'";
                 $query->QuerySQL($args,$sqlargs);
@@ -129,8 +134,8 @@ class CCReview
         }
         else
         {
-            $this->_build_bread_crumb_trail($user_name,$upload_id);
             $upload_name = CCDatabase::QueryItem('SELECT upload_name FROM cc_tbl_uploads WHERE upload_id = '.$upload_id);
+            $this->_build_bread_crumb_trail(array($user_name,$user_real_name),array($upload_id,$upload_name));
             require_once('cclib/cc-query.php');
             $query = new CCQuery();
             $args = $query->ProcessAdminArgs('paging=off&f=page&t=reviews_upload&datasource=topics');
@@ -149,67 +154,60 @@ class CCReview
         {
             if( $upload_id )
             {
-                $url = ccl('feed','rss','reviews',$user_name,$upload_id);
-                $help = '<br />' . sprintf( _('Reviews left for "%s"'), '<br /> ' . CC_strchop($upload_name,16) );
+                $q = '&upload=' . $upload_id;
+                $title= sprintf( _('Reviews left for "%s"'), CC_strchop($upload_name,16) );
             }
             else
             {
-                $url = ccl('feed','rss','reviews',$user_name);
-                $help = '<br />' . sprintf( _('Reviews left for "%s"'), '<br /> ' . CC_strchop($user_real_name,16) );
-            }
-        }
-        else
-        {
-            $url = ccl('feed','rss','reviews');
-            $help = 'str_reviews';
-        }
-
-        $CC_GLOBALS['page-has-feed-links'] = 1;
-
-        CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $url, "RSS 2.0", "xml",$help );
-    }
-
-    function _build_bread_crumb_trail($user_name,$upload_id='',$cmd_url='',$cmd_text='')
-    {
-        $trail = array();
-        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
-
-        if( empty($user_name) )
-        {
-            $trail[] = array( 'url' => ccl('reviews'), 'text' => _('Reviews') );
-        }
-        else
-        {
-            $trail[] = array( 'url' => ccl('people'), 'text' => _('People') );
-
-            $users   =& CCUsers::GetTable();
-            $user_real_name = $users->QueryItem('user_real_name',"user_name = '$user_name'");
-
-            if( empty($user_real_name) )
-            {
-                $user_name = '';
-                $upload_id = '';
-            }
-            else
-            {
-                $trail[] = array( 'url' => ccl('people',$user_name), 'text' => $user_real_name );
-
-                if( empty($upload_id) )
+                if( $qtype == 'leftfor' ) // note: this was flipped above
                 {
-                    $trail[] = array( 'url' => ccl('reviews',$user_name), 'text' => _('Reviews') );
+                    $q = '&user=' . $user_name;
+                    $title = sprintf( _('Reviews left by %s'), CC_strchop($user_real_name,16) );
                 }
                 else
                 {
-                    $uploads =& CCUploads::GetTable(); 
-
-                    $upload_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
-                    $upload_name = '"' . $upload_name . '"';
-                    $trail[] = array( 'url' => ccl('files',$user_name,$upload_id), 'text' => $upload_name );
-                    $trail[] = array( 'url' => ccl('reviews',$user_name,$upload_id), 'text' => _('Reviews') );
-
-                    if( !empty($cmd_text) )
-                        $trail[] = array( 'url' => $cmd_url, 'text' => $cmd_text );
+                    $q = '&reviewee='.$user_name;
+                    $title = sprintf( _('Reviews left for "%s"'), CC_strchop($user_real_name,16) );
                 }
+            }
+        }
+        else
+        {
+            $q = '';
+            $title = _('Reviews'); // 'str_reviews';
+        }
+        $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
+        $url = url_args( ccl('api','query'), 'f=rss&datasource=topics&type=review' . $q .'&title=' . urlencode($title));
+        CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $title, $img . $title, 'feed_reviews' );
+    }
+
+    function _build_bread_crumb_trail($user=array(),$upload=array(),$cmd_url='',$cmd_text='')
+    {
+        $trail = array();
+        $trail[] = array( 'url' => ccl(), 'text' => 'str_home');
+
+        if( empty($user) )
+        {
+            $trail[] = array( 'url' => ccl('reviews'), 'text' => 'str_reviews' );
+        }
+        else
+        {
+            $trail[] = array( 'url' => ccl('people'), 'text' => 'str_people' );
+
+            $trail[] = array( 'url' => ccl('people',$user[0]), 'text' => $user[1] );
+
+            if( empty($upload) )
+            {
+                $trail[] = array( 'url' => ccl('reviews',$user[0]), 'text' => 'str_reviews' );
+            }
+            else
+            {
+                $upload_name = '"' . $upload[1] . '"';
+                $trail[] = array( 'url' => ccl('files',$user[0],$upload[0]),    'text' => $upload[1]   );
+                $trail[] = array( 'url' => ccl('reviews',$user[0],$upload[0]), 'text' => 'str_reviews' );
+
+                if( !empty($cmd_text) )
+                    $trail[] = array( 'url' => $cmd_url, 'text' => $cmd_text );
             }
         }
 
@@ -284,75 +282,6 @@ class CCReview
         }
     }
 
-    function RssFeed($username='',$upload_id='')
-    {
-        global $CC_GLOBALS;
-
-        // yes, yes, this should be an admin option
-
-        $CC_GLOBALS['topics_license_url'] = 'http://creativecommons.org/licenses/by/2.5';
-
-        $items =& $this->_get_feed_items($username,$upload_id,$title);
-        $feed = new CCTopicsFeed();
-        $feed->Feed($items,$title,'rss',ccl('reviews'));
-    }
-
-    function & _get_feed_items($username,$upload_id,&$title)
-    {
-        $reviews = new CCReviews(); // don't get global because we're recking it
-        $reviews->AddExtraColumn('1 as topic_is_feed');
-        $reviews->SetOrder('topic_date','DESC');
-        $items = array();
-        $w = array();
-        if( !empty($username) )
-        {
-            $users =& CCUsers::GetTable();
-            $uw['user_name'] = $username;
-            $urow = $users->QueryRow($uw,'user_id,user_real_name');
-            if( empty($urow) )
-                exit;
-            $user_id = $urow['user_id'];
-            $user_real_name = $urow['user_real_name'];
-            if( !empty($upload_id) )
-            {
-                $uploads =& CCUploads::GetTable();
-                $upload_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
-                if( !empty($upload_name) )
-                {
-                    $w['topic_upload'] = $upload_id;
-                    $title = sprintf( _('Reviews left for %s by %s'), $upload_name, $user_real_name );
-                }
-            }
-            else
-            {
-                $uploads = new CCUploads();
-                $uploads->AddJoin( new CCReviews(true), 'upload_id');
-                $uploads->SetSort('topic_date','DESC');
-                $uploads->SetOffsetAndLimit(0,CC_MAX_TOPIC_FEED_ITEMS);
-                $uploads->SetDefaultFilter(true,true);
-                $where['topic_type'] = 'review';
-                $where['upload_user'] = $user_id;
-                $krows = $uploads->QueryRows($where,'topic_id');
-                $keys = array();
-                foreach($krows as $krow)
-                    $keys[] = $krow['topic_id'];
-                $items =& $reviews->GetRecordsFromKeys($keys);
-                $title = sprintf( _('Reviews left for %s'), $user_real_name );
-            }
-        }
-        else
-        {
-            $title = _('Reviews');
-        }
-
-        if( empty($items) )
-        {
-            $reviews->SetOffsetAndLimit(0,CC_MAX_TOPIC_FEED_ITEMS);
-            $items =& $reviews->GetRecords($w);
-        }
-
-        return $items;
-    }
 
     /**
     * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
@@ -404,10 +333,6 @@ class CCReview
         CCEvents::MapUrl( ccp('reviews','post'), array( 'CCReviewFormAPI', 'PostReview'),  
             CC_MUST_BE_LOGGED_IN, 'ccextras/cc-review-forms.inc', '[upload_id]', 
             _('Display a review form'), CC_AG_REVIEWS );
-
-        CCEvents::MapUrl( ccp('feed','rss','reviews'), array( 'CCReview', 'RssFeed'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '[user_name]/[upload_id]', 
-            _('Reviews by a person or for a specific upload'), CC_AG_FEEDS );
 
         // ajax callbacks...
 

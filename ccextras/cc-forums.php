@@ -29,7 +29,6 @@ if( !defined('IN_CC_HOST') )
 require_once('ccextras/cc-extras-events.php');
 
 define('CC_MAX_USER_TOPICS', 30 );
-define('CC_MAX_FEED_TOPICS', 25 );
 
 
 CCEvents::AddHandler(CC_EVENT_SEARCH_META,          array( 'CCForums',  'OnSearchMeta') );

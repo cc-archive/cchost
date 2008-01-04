@@ -294,41 +294,39 @@ EOF;
         CCPage::PageArg( 'threads', $forum_threads , 'forum_listing' );
     }
 
-    function _add_feed_links( $thread = '', $user = '' )
+    function _add_feed_links( $thread = '', $user = '', $user_real_name='' )
     {
         if( !empty($thread) )
         {
-            $url = ccl('feed','rss','forums','thread',$thread);
-            $help = _('Topic');
+            $q = '&thread='.$thread;
+            $title = 'str_topic';
         }
         elseif( !empty($user) )
         {
-            $url = ccl('feed','rss','forums','user',$user);
-            $help = $user;
+            $q = '&thread=-1&user='.$user;
+            $title = $user_real_name;
         }
         else
         {
-            $url = ccl('feed','rss','forums');
-            $help = _('Forum');
+            $q = '&thread=-1'; // yea, magic hack
+            $title = _('Forums'); // 'str_forum';
         }
 
-        global $CC_GLOBALS;
-        $CC_GLOBALS['page-has-feed-links'] = 1;
-
-        CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $url, "RSS 2.0", "xml",$help );
+        $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
+        $url = url_args( ccl('api','query'), 'f=rss&datasource=topics' . $q .'&title=' . urlencode($title));
+        CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $title, $img . $title, 'feed_topics' );
     }
 
     function _build_bread_crumb_trail($forum_id='',$topic_name='')
     {
         $trail = array();
-        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
-        $trail[] = array( 'url' => ccl('forums'), 'text' => _('Forums') );
+        $trail[] = array( 'url' => ccl(), 'text' => 'str_home' );
+        $trail[] = array( 'url' => ccl('forums'), 'text' => 'str_forums' );
 
         if( $forum_id )
         {
-            $forums =& CCForum::GetTable();
-            $row = $forums->QueryKeyRow($forum_id);
-            $trail[] = array( 'url' => ccl('forums',$forum_id), 'text' => $row['forum_name'] );
+            $forum_name = CCDatabase::QueryItem('SELECT forum_name FROM cc_tbl_forums WHERE forum_id='.$forum_id);
+            $trail[] = array( 'url' => ccl('forums',$forum_id), 'text' => $forum_name );
 
             if( $topic_name )
             {
@@ -597,81 +595,8 @@ EOF;
         $args['title'] = array( 'str_forum_topics_by', $user_real_name );
         $sqlargs['where'] = "topic_user ='$user_id'";
         $query->QuerySQL($args,$sqlargs);
-        $this->_add_feed_links( '', $user_name);
+        $this->_add_feed_links( '', $user_name,$user_real_name);
     }
-
-
-    function RssFeed( $type='',$param='')
-    {
-        global $CC_GLOBALS;
-
-        $api = new CCForums();
-
-        // yes, yes, this should be an admin option
-
-        $CC_GLOBALS['topics_license_url'] = 'http://creativecommons.org/licenses/by/2.5';
-
-        $topics = new CCTopics();
-        $topics->AddJoin( new CCForum(), 'topic_forum' );
-        $topics->SetOffsetAndLimit( 0, CC_MAX_FEED_TOPICS );
-        $topics->AddExtraColumn('1 as topic_is_feed');
-
-        if( $type == 'user' )
-        {
-            $users =& CCUsers::GetTable();
-            $wu['user_name'] = $param;
-            $user_id = $users->QueryKey($wu);
-            if( empty($user_id) )
-                exit; // hack 
-            $where = "(topic_user = $user_id) AND (topic_forum > 0)";
-            $title = sprintf( _('Feed for topics by %s'), $param );
-        }
-        elseif( $type == 'thread' )
-        {
-            if( intval($param) == 0 )
-                exit; // hack 
-            $where = "(topic_thread  = $param) ";
-            $threads = new CCForumThreads();
-            $threads->AddJoin( new CCTopics(), 'forum_thread_oldest' );
-            $topic_name = $threads->QueryItemFromKey('topic_name',$param);
-            if( empty($topic_name) )
-                exit; // hack 
-            $title = sprintf( _('Feed for topic: %s'), $topic_name );
-        }
-        else
-        {
-            $title = _('Forums Feed');
-            $where = 'topic_forum > 0';
-        }
-
-        $access = CC_DONT_CARE_LOGGED_IN;
-        //$where = "($where) AND (forum_read_access & $access)";
-        $records = $topics->GetRecords($where);
-        $count = count( $records );
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $R =& $records[$i];
-
-            if( ($R['forum_read_access'] & CC_DONT_CARE_LOGGED_IN) == 0 )
-            {
-                $R['topic_text'] = 
-                $R['topic_text_plain'] = 
-                $R['topic_text_html'] = _('Contents requires login');
-            }
-
-            $R['topic_name'] = $R['forum_name'] . '::' . $R['topic_name'];
-        }
-
-        if( $type )
-            $url = ccl('feed','rss','forums',$type,$param);
-        else
-            $url = ccl('feed','rss','forums');
-
-        $feed = new CCTopicsFeed();
-        $feed->Feed($records,$title,'rss',$url);
-
-    }
-
 }
 
 ?>

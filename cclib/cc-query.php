@@ -119,7 +119,10 @@ class CCQuery
                     $this->args['template'] = 'playlist_show_one';
                     break;
                 case 'rss':
-                    $this->args['template'] = 'rss_20';
+                    if( $this->args['datasource'] == 'uploads' )
+                        $this->args['template'] = 'rss_20';
+                    elseif( $this->args['datasource'] == 'topics' )
+                        $this->args['template'] = 'rss_20_topics';
                     break;
                 case 'atom':
                     $this->args['template'] = 'atom_10';
@@ -316,6 +319,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
+                         'reviewee',
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -615,6 +619,21 @@ class CCQuery
         $this->where[] = 'upload_id IN (' . join(',',$ids) . ')';
     }
 
+    /*
+    * Reviews left FOR a person
+    */
+    function _gen_reviewee()
+    {
+        if( $this->args['datasource'] == 'topics' )
+        {
+            /*
+                Assumes this is dataview !!!:
+            $this->sql_p['joins'] = ' cc_tbl_uploads ups      ON topic_upload = ups.upload_id ' .
+                                    'JOIN cc_tbl_user    reviewee ON ups.upload_user = reviewee.user_id';
+            */
+            $this->where[] = "(reviewee.user_name = '{$this->args['reviewee']}')";
+        }
+    }
 
     function _gen_score()
     {
@@ -679,12 +698,18 @@ class CCQuery
     {
         if( $this->args['datasource'] == 'topics' )
         {
-            $this->where[] = "topic_thread = '{$this->args['thread']}'";
+            $thread = $this->args['thread'];
+            if( $thread = -1 )
+                $this->where[] = "topic_thread > 0";
+            else
+                $this->where[] = "topic_thread = $thread";
         }
     }
 
     function _gen_type()
     {
+        // 'type' for uploads (as applied to tags) are handled elsewhere (see call to MakeTagFilter in this file)
+
         if( $this->args['datasource'] == 'topics' )
         {
             $this->where[] = "topic_type = '{$this->args['type']}'";

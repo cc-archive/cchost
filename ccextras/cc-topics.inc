@@ -35,36 +35,6 @@ define('CCTDF_MARK',            'mark');
 define('CCTDF_SHALLOW',         'shallow');
 define('CCTDF_DEEP',            'deep');
 
-define('CC_MAX_TOPIC_FEED_ITEMS', 30 );
-
-
-require_once('cclib/cc-feed.php');
-
-class CCTopicsFeed extends CCFeed
-{
-    function Feed(&$topics,$title,$feed_type,$feed_url)
-    {
-        // TODO: Fix this to be generic for feed types...
-        if( $feed_type == 'rss' )
-            $template = 'rss_20_topics.xml';
-        else
-            die(_('You have requested an unknown feed type.')); // blaaa!
-
-        $title = $this->_cct($title);
-        $count = count($topics);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $T =& $topics[$i];
-            $T['topic_name']       = utf8_encode($this->_cct($T['topic_name']));
-            $T['topic_text_plain'] = utf8_encode($this->_cct($T['topic_text_plain']));
-            $T['user_real_name']   = utf8_encode($this->_cct($T['user_real_name']));
-            $T['topic_text_html']  = $this->_clean_urls($T['topic_text_html']);
-        }
-
-        $this->_gen_feed_from_records($template,$topics,$title,$feed_url,$feed_type);
-    }
-}
-
 class CCTopicsi18n extends CCTable
 {
     function CCTopicsi18n()
@@ -625,35 +595,10 @@ class CCTopic
 
     function View($topic_id='')
     {
-        global $CC_GLOBALS;
-
-        CCPage::SetTitle('str_topic_view');
-
-        $topic_id = intval(CCUtil::Strip($topic_id));
-        if( empty($topic_id) )
-        {
-            CCPage::Prompt(_('No topic specified'));
-            CCUtil::Send404(false,__FILE__,__LINE__);
-            return;
-        }
-
-        $topics =& CCTopics::GetTable();
-        if( $topics->KeyExists($topic_id) )
-        {
-            CCPage::Prompt(_('Topic does not exist. (May have been deleted by author.)'));
-            CCUtil::Send404(false,__FILE__,__LINE__);
-            return;
-        }
-
-        $topic = $topics->GetRecordFromID($topic_id);;
-
-
-        CCPage::PageArg( 'show_cmds', true );
-        CCPage::PageArg( 'topic', $topic, 'topics.xml/one_topic');
-
-        $name = $topic['topic_name'];
-        $title = $name{0} == '"' ? $name : "$name";
-        CCPage::SetTitle($title);
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('datasource=topics&t=ccskins/shared/pages/content_page.tpl&ids='.$topic_id);
+        $query->Query($args);
     }
 
     function Lock($topic_id)

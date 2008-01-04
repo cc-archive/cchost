@@ -52,21 +52,38 @@ class CCFeedsRSS
 
         $k = array_keys($records);
         $c = count($k);
+        $is_topics = $args['datasource'] == 'topics';
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $records[$k[$i]];
-            $R['upload_description_html']  = cc_feed_safe_html($R['upload_description_html']) ;
-            $R['upload_description_plain'] = cc_feed_encode($R['upload_description_plain']);
-            $R['upload_name']              = cc_feed_encode($R['upload_name']);
-            $R['user_real_name']           = cc_feed_encode($R['user_real_name']);
-            $R['user_avatar_url']          = str_replace(' ','%20',$R['user_avatar_url']); // required by validation
+            $R['user_real_name'] = cc_feed_encode($R['user_real_name']);
+            if( $is_topics )
+            {
+                $R['topic_text_html']   = cc_feed_safe_html($R['topic_text_html']) ;
+                $R['topic_text_plain'] = cc_feed_encode($R['topic_text_plain']);
+                $R['topic_name']        = cc_feed_encode($R['topic_name']);
+            }
+            else
+            {
+                $R['upload_description_html']  = cc_feed_safe_html($R['upload_description_html']) ;
+                $R['upload_description_plain'] = cc_feed_encode($R['upload_description_plain']);
+                $R['upload_name']              = cc_feed_encode($R['upload_name']);
+                $R['user_avatar_url']          = str_replace(' ','%20',$R['user_avatar_url']); // required by validation
+            }
+        }
+
+        if( $is_topics )
+        {
+            // yes, yes, this should be an admin option
+
+            $CC_GLOBALS['topics_license_url'] = 'http://creativecommons.org/licenses/by/2.5';
         }
 
         $targs['records'] =& $records;
 
         require_once('cclib/cc-template.php');
 
-        $skin = new CCSkin('rss_20.php',false);
+        $skin = new CCSkin($args['template'],false);
         header("Content-type: text/xml; charset=" . CC_ENCODING); 
         $skin->SetAllAndPrint($targs,false);
         exit;
