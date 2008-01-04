@@ -6,4 +6,6 @@
 [/meta]
 */
 
+$GLOBALS['strings-profile'] = 'empty';
+
 ?>

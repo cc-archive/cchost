@@ -8,6 +8,8 @@
 
 require_once( dirname(__FILE__) . '/all_media.php' );
 
+$GLOBALS['strings-profile'] = 'image';
+
 $GLOBALS['str_collab_upload_file'] = _('Upload art');
 $GLOBALS['str_collab_credit']                = _('Credit');
 $GLOBALS['str_collab_credit2']                = _('credit');

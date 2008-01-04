@@ -129,7 +129,7 @@
 %end_loop%
 
 <script type="text/javascript"> 
-    new modalHook( [ 'search_site_link', 'mi_login', 'mi_register']);  
+    new modalHook( [ 'search_site_link' ]);  
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
 </script>
 

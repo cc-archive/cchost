@@ -30,7 +30,7 @@ function rss_topic_dataview()
             CONCAT('{$ccr}',reviewee.user_name,'/',topic_upload,'#',topic_id),
             CONCAT('{$cct}',topic_thread, '#', topic_id) ) as topic_permalink
         FROM cc_tbl_topics
-        JOIN cc_tbl_user author ON topic_user=user_id
+        JOIN cc_tbl_user author ON topic_user=author.user_id
         LEFT OUTER JOIN cc_tbl_forum_threads ON topic_thread=forum_thread_id
         LEFT OUTER JOIN cc_tbl_forums ON forum_thread_forum=forum_id
         LEFT OUTER JOIN cc_tbl_uploads ups ON topic_upload=upload_id

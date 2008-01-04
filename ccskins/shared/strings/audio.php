@@ -8,6 +8,8 @@
 
 require_once( dirname(__FILE__) . '/all_media.php' );
 
+$GLOBALS['strings-profile'] = 'audio';
+
 $GLOBALS['str_bpm']                   = _('BPM');
 $GLOBALS['str_bpm_tempo'] = _('Tempo');
 $GLOBALS['str_collab_enter_role']            = _("Enter %s's role (e.g. bass, producer, vocals)");

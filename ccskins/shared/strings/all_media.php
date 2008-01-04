@@ -5,6 +5,8 @@
     desc = _('Text appropriate for generic media')
 [/meta]
 */
+$GLOBALS['strings-profile'] = 'generic';
+
 $GLOBALS['str_action']              = _('Actions');
 $GLOBALS['str_action_menu']         = _('Actions Menu');
 $GLOBALS['str_detail']              = _('Details');
@@ -564,7 +566,6 @@ $GLOBALS['str_trackback_your_name'] = _('Your name');
 $GLOBALS['str_trackback_no_email']  = _('You must supply a valid email address');
 $GLOBALS['str_trackback_no_link']   = _('You must supply a link');
 $GLOBALS['str_trackback_submit']    = _('Submit');
-
 $GLOBALS['str_trackback_remix']         = _('If you know of a remix of "%s" by %s please enter the link below');
 $GLOBALS['str_trackback_podcast']       = _('If you heard "%s" by %s in a podcast please enter a link to the podcast\'s home page below');
 $GLOBALS['str_trackback_video']         = _('If you know of a video that uses "%s" by %s paste the embedding tag below');
@@ -590,9 +591,7 @@ $GLOBALS['str_trackback_artist_podcast'] = _('Person or organization responsible
 $GLOBALS['str_trackback_artist_video']   = _('Person who made the video');
 $GLOBALS['str_trackback_artist_web']     = _('Person or organization that authored the web page');
 $GLOBALS['str_trackback_artist_album']   = _('Person or group that made the album');
-
 $GLOBALS['str_trackback_media_video']   = _('Embed video code here');
-
 $GLOBALS['str_trackback_link_remix']   = _('URL to web page');
 $GLOBALS['str_trackback_link_podcast'] = _('URL to podcast home page or podcast feed');
 $GLOBALS['str_trackback_link_video']   = _('URL to video page');
@@ -607,5 +606,31 @@ $GLOBALS['str_pref_setting_this'] =_('Setting this will determine which tab is t
 $GLOBALS['str_pref_sidebar'] = _('See these links in the sidebar');
 $GLOBALS['str_uploads'] = _('Uploads');
 $GLOBALS['str_profile'] = _('User Profile');
+
+$GLOBALS['str_stats_overall_stats'] = _('Overall Stats');
+$GLOBALS['str_stats_total_uploads'] = _('Total uploads:');
+$GLOBALS['str_stats_title'] = _('Site Statistics');
+$GLOBALS['str_stats_remixed'] = _('Remixed');
+$GLOBALS['str_stats_remixes'] = _('Remixes');
+$GLOBALS['str_stats_samples'] = _('Samples');
+$GLOBALS['str_stats_fully_mixed'] = _('Fully Mixed');
+$GLOBALS['str_stats_most_sampled_artists'] = _('Most Sampled Artists');
+$GLOBALS['str_stats_artist'] = _('Aritst');
+$GLOBALS['str_stats_sampled'] = _('Sampled');
+$GLOBALS['str_stats_uploads_by_month'] = _('Uploads by Month');
+$GLOBALS['str_stats_month'] = _('Month');
+$GLOBALS['str_stats_uploads'] = _('Uploads');
+$GLOBALS['str_stats_signups_by_month'] = _('Signups by Month');
+$GLOBALS['str_stats_signups'] = _('Signups');
+$GLOBALS['str_stats_most_remixes'] = _('Most Remixes');
+$GLOBALS['str_stats_most_picks'] = _('Most Editor\'s Picks');
+$GLOBALS['str_stats_picks'] = _('Picks');
+$GLOBALS['str_stats_most_remixed_pell'] = _('Most Remixed A Cappellas');
+$GLOBALS['str_stats_name'] = _('Name');
+$GLOBALS['str_stats_licenses_samples'] = _('Licenses for Samples');
+
+$GLOBALS['str_stats_acappellas'] = _('A Cappellas');
+$GLOBALS['str_stats_licenses_pells'] = _('Licenses for A Cappellas');
+
 
 ?>
