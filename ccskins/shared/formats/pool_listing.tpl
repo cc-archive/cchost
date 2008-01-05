@@ -5,10 +5,17 @@
     dataview = pool_item_list
 [/meta]
 %%*/?>
+
 <link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/pool_listing.css')%" />
+<style type="text/css">
+div#upload_wrapper{float:left;width:100%}
+div#upload_middle{margin: 0px 30% 0px 0px;padding-left:2.0em;}
+div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
+</style>
+
 <div id="upload_wrapper">
   <div id="upload_middle">
-    <div id="upload_listing">
+    <div id="upload_listing">&nbsp;
 %loop(records,R)%
   <div class="upload" >
         <div class="pool_item_info"
@@ -47,7 +54,7 @@
         </div>
     %end_if%
 
-    <br style="clear:both" />
+    <div style="clear:both">&nbsp;</div>
   </div><!--  end upload  -->
 %end_loop%
     </div> <!-- upload listing -->

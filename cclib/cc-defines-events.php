@@ -306,20 +306,6 @@ define('CC_EVENT_CONTEST_ROW',         'contestrow' );
 define('CC_EVENT_GET_MACROS',          'getmacros' );
 
 /**
-* Request for Data Event: Submit form types 
-*
-* Triggered when the system needs to initialize the
-* submit form types. This event is triggered approximately
-* once in the lifetime of ccHost installation and then
-* roughly never again.
-*
-* For example of an event handler see the implementation
-* of {@link CCMusicForms::OnSubmitFormTypes()}
-* @see CCEvents::AddHandler()
-*/
-define('CC_EVENT_SUBMIT_FORM_TYPES',   'submitformtypes' );
-
-/**
 * Request for Data Event: Page is about to be rendered
 *
 * Triggered just before the page object does a merge

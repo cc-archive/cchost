@@ -1,5 +1,5 @@
 
-<div id="pool_filter">%text(str_pool_filter)%: <div id="pool_target"></div></div>
+<div id="pool_filter"><span id="pool_filter_label">&nbsp;</span> <div id="pool_target"></div></div>
 
 <script type="text/javascript">
 ccPoolAlpha = Class.create();
@@ -20,7 +20,10 @@ ccPoolAlpha.prototype = {
 
     onPoolAlpha: function(resp) {
         try {
+            if( !resp.responseText ) 
+                return;
             var vals = eval(resp.responseText);
+            $('pool_filter_label').innerHTML = '%text(str_pool_filter)%' + ': ';
             var html = '<select id="pool_alphas"><option value="">' + str_all + '</option>';
             var me = this;
             vals.each( function(c) {

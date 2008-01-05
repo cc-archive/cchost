@@ -177,7 +177,7 @@ END;
             if( !empty($approved) )
             {
                 $approved = join(',',$approved);
-                $sql = "UPDATE cc_tbl_pool_item SET pool_item_approved = 1 WHERE pool_item_id IN ({$approved})";
+                $sql = "UPDATE cc_tbl_pool_item SET pool_item_approved = 1, pool_item_num_sources =  (pool_item_num_sources+1) WHERE pool_item_id IN ({$approved})";
                 CCDatabase::Query($sql);
             }
             $upload_ids = array_filter(array_unique($upload_ids));

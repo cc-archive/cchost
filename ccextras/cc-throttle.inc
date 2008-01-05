@@ -116,8 +116,9 @@ class CCAdminThrottleRulesForm extends CCGridForm
         $form_submit_types = $configs->GetConfig('submit_forms');
         if( empty($form_submit_types) )
         {
-            $form_types = array();
-            CCEvents::Invoke( CC_EVENT_SUBMIT_FORM_TYPES, array( &$form_submit_types ) );
+            // errr
+            require_once('cclib/cc-sumbit.php');
+            $form_types = CCSubmit::_get_form_types();
         }
 
         $submit_types['all'] = _('All types');
@@ -240,6 +241,8 @@ class CCThrottle
     */
     function OnUploadAllowed(&$submit_types)
     {
+        require_once('cclib/cc-dataview.php');
+
         $type_keys  = array_keys($submit_types);
         foreach( $type_keys as $type_key )
         {
@@ -256,12 +259,8 @@ class CCThrottle
         $configs    =& CCConfigs::GetTable();
         $rules      = $configs->GetConfig('throttle_rules');
         $throttle   = $configs->GetConfig('throttle');
-        $uploads    =& CCUploads::GetTable();
         $user_id    = CCUser::CurrentUser();
-
-
-        $all_submit_types = array();
-        CCEvents::Invoke( CC_EVENT_SUBMIT_FORM_TYPES, array( &$all_submit_types ) );
+        $dv         = new CCDataView();
 
         foreach( $rules as $rule )
         {
@@ -281,10 +280,14 @@ class CCThrottle
 
             $limit_by_type = $rule['limit_by_type'];
 
-            if( $limit_by_type != 'all' )
+            if( !array_key_exists($limit_by_type,$submit_types) )
             {
-                $uploads->SetTagFilter( $all_submit_types[$limit_by_type]['tags'], 'all' );
+                // this is a crufty upgrade, a rule exsists for a submit type that doesn't exist anymore
+                // todo: ???
+                continue;
             }
+
+            $tag_filter =  ($limit_by_type != 'all') ? 'AND ' . $dv->MakeTagFilter($submit_types[$limit_by_type]['tags'], 'all' ) : '';
 
             if( $rule['time_period'] != 'forever' )
             {
@@ -292,7 +295,7 @@ class CCThrottle
                 $where = "($where AND upload_date > '$time_period')";
             }
 
-            $C = $uploads->CountRows($where);
+            $C = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_uploads WHERE $where $tag_filter");
             $N = $rule['num_uploads'];
 
             $done = false;
@@ -318,8 +321,6 @@ class CCThrottle
 
                 $done = $rule['stop'] == 'stop';
             }
-
-            $uploads->SetTagFilter('');
 
             if( $done )
                 break;

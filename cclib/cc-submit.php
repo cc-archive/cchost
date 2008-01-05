@@ -228,7 +228,12 @@ class CCSubmit
     {
         $configs =& CCConfigs::GetTable();
         $form_types = $configs->GetConfig('submit_forms');
-        if( !empty($form_types) )
+        if( empty($form_types) )
+        {
+            $form_types = $this->_default_form_types();
+            $configs->SaveConfig('submit_forms',$form_types);
+        }
+        else
         {
             if( $honor_enabled )
             {
@@ -242,13 +247,6 @@ class CCSubmit
             return $form_types;
         }
 
-        $form_types = array();
-        CCEvents::Invoke( CC_EVENT_SUBMIT_FORM_TYPES, array( &$form_types ) );
-
-        if( $form_types )
-            $form_types = $this->_sort_form_types($form_types,$honor_enabled);
-        else
-            $form_types = $this->_default_form_types();
 
         return $form_types;
     }

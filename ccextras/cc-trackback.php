@@ -35,7 +35,7 @@ class CCTrackBack
         require_once('cclib/cc-pools.php');
         $link = $this->_clean_url($_POST['trackback_link']);
         $pool_id = $this->_get_web_sample_pool();
-        $pool_item_id = CCDatabase::QueryItem("SELECT pool_item_id FROM cc_tbl_pool_item WHERE pool_item_url = '$link'");
+        $pool_item_id = 0; // CCDatabase::QueryItem("SELECT pool_item_id FROM cc_tbl_pool_item WHERE pool_item_url = '$link'");
         $pool_items = new CCPoolItems();
         if( empty($pool_item_id) )
         {

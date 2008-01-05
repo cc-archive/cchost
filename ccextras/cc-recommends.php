@@ -37,8 +37,9 @@ class CCRecommends
             return;
         }
 
-        if( empty($record['user_num_scores']) )
-            return;
+		$count = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_ratings WHERE ratings_user = '.$record['user_id']);
+		if( !$count )
+			return;
 
         $tabs['recommends'] = array(
                     'text' => 'Recommends',
