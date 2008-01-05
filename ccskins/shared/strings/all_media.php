@@ -41,6 +41,7 @@ $GLOBALS['str_collab_hide']           = _('hide');
 $GLOBALS['str_collab_invite']         = _('invite other people');
 $GLOBALS['str_collab_message']        = _('Collaboration message');
 $GLOBALS['str_collab_name'] = _('name');
+$GLOBALS['str_collab_no_files'] = _('There are no public in this project yet.');
 $GLOBALS['str_collab_ok'] = _('ok');
 $GLOBALS['str_collab_project']               = _('Project');
 $GLOBALS['str_collab_project_s'] = _('Collaboration Project: "%s"');

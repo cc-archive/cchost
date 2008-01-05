@@ -14,7 +14,7 @@ function collab_files_dataview()
     $urlp = ccl('people') . '/';
     $stream_url = url_args( ccl('api','query','stream.m3u'), 'f=m3u&ids=' );
     $me = CCUser::CurrentUser();
-    $admin = CCUser::IsAdmin();
+    $admin = CCUser::IsAdmin() ? 1 : 0;
 
     $sql =<<<EOF
 SELECT 
@@ -40,10 +40,13 @@ EOF;
                 );
 }
 [/dataview]
-*/?>
+
+*/
+
+?>
 
 %if_null(records)%
-    %text(str_collab_no_files)%
+    <!-- -- >%text(str_collab_no_files)%<!-- -- >
     %return%
 %end_if%
 %loop(records,R)%
