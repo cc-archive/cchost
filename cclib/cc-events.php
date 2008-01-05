@@ -258,7 +258,7 @@ class CCEvents
     }
 
     /**
-    * Maps incoming urls to functions/methods
+    * Maps access to commands and incoming urls to functions/methods
     *
     * For a tutorial on using this method see {@tutorial cchost.pkg#url Create an URL and Bind it to a Method}
     *
@@ -351,10 +351,18 @@ class CCEvents
     * @param string $doc_summary Brief descriptions of the functionality of the handler
     * @param string $doc_group Documenation category to use for this handler
     */
-    function MapUrl( $url, $callback, $permissions, $module='', $doc_param='',
-                                                                $doc_summary='',
-                                                                $doc_group = '' )
+    function MapCommand( $params=array( 'url'         => '',
+                                        'callback'    => '',
+                                        'module'      => '',
+                                        'permissions' => '',
+                                        'roles'       => '',
+                                        'menu_text'   => '',
+                                        'doc_param'   => '',
+                                        'doc_summary' => '',
+                                        'doc_group'   => '' ) )
     {
+        extract($params);
+
         $action     = new CCAction();
         $action->cb = $callback;
         $action->pm = $permissions;
@@ -365,6 +373,19 @@ class CCEvents
         $action->url = $url;
         $paths =& CCEvents::_paths();
         $paths[$url] = $action;
+    }
+
+    function MapUrl( $url, $callback, $permissions, $module='', $doc_param='',
+                                                                $doc_summary='',
+                                                                $doc_group = '' )
+    {
+        CCEvents::MapCommand( array( 'url'         => $url,
+                                    'callback'    => $callback,
+                                    'module'      => $module,
+                                    'permissions' => $permissions,
+                                    'doc_param'   => $doc_param,
+                                    'doc_summary' => $doc_summary,
+                                    'doc_group'   => $doc_group ) );
     }
 
     /**

@@ -108,8 +108,8 @@ function cc_get_access_groups()
 function cc_get_roles()
 {
     return array(
-            CC_MUST_BE_LOGGED_IN => _('Registered users'),
-            CC_ONLY_NOT_LOGGED_IN => _('Anonymous users only'),
+            CC_MUST_BE_LOGGED_IN   => _('Registered users'),
+            CC_ONLY_NOT_LOGGED_IN  => _('Anonymous users only'),
             CC_DONT_CARE_LOGGED_IN => _('Everybody'),
             CC_ADMIN_ONLY          => _('Admin/Moderators'),
             CC_SUPER_ONLY          => _('Super admins')

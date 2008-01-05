@@ -107,31 +107,7 @@ class CCQuery
         if( !empty($args) )
             $this->args = $args;
 
-        // todo: move this out
-        if( empty($this->args['template']) )
-        {
-            switch( $this->args['format'] )
-            {
-                case 'page':
-                    $this->args['template'] = 'list_files';
-                    break;
-                case 'playlist':
-                    $this->args['template'] = 'playlist_show_one';
-                    break;
-                case 'rss':
-                    if( $this->args['datasource'] == 'uploads' )
-                        $this->args['template'] = 'rss_20';
-                    elseif( $this->args['datasource'] == 'topics' )
-                        $this->args['template'] = 'rss_20_topics';
-                    break;
-                case 'atom':
-                    $this->args['template'] = 'atom_10';
-                    break;
-                case 'xspf':
-                    $this->args['template'] = 'xspf_10';
-                    break;
-            }
-        }
+        $this->_ensure_template();
 
         if( $this->args['datasource'] == 'uploads' )
             $this->_gen_visible();
@@ -170,7 +146,7 @@ class CCQuery
     function QuerySQL($qargs,$sqlargs)
     {
         $this->args = $qargs;
-        
+        $this->_ensure_template();        
         $this->sql_p = array_merge($this->sql_p,$sqlargs);
         $this->_gen_limit();
         $this->_gen_sort();
@@ -307,6 +283,35 @@ class CCQuery
                     'datasource' => 'uploads', 'format' => 'page',
                     'promo_tag' => 'site_promo',  'promo_gap' => 4,
                     );
+    }
+
+    function _ensure_template()
+    {
+        // todo: move this out
+        if( empty($this->args['template']) )
+        {
+            switch( $this->args['format'] )
+            {
+                case 'page':
+                    $this->args['template'] = 'list_files';
+                    break;
+                case 'playlist':
+                    $this->args['template'] = 'playlist_show_one';
+                    break;
+                case 'rss':
+                    if( $this->args['datasource'] == 'uploads' )
+                        $this->args['template'] = 'rss_20';
+                    elseif( $this->args['datasource'] == 'topics' )
+                        $this->args['template'] = 'rss_20_topics';
+                    break;
+                case 'atom':
+                    $this->args['template'] = 'atom_10';
+                    break;
+                case 'xspf':
+                    $this->args['template'] = 'xspf_10';
+                    break;
+            }
+        }
     }
 
     function _generate_records()
@@ -473,7 +478,6 @@ class CCQuery
             $this->dataviewProps = $props;
         }
         $rettype = empty($this->args['rettype']) ? ($this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS) : $this->args['rettype'];
-
         $records =&  $this->dataview->Perform( $this->dataviewProps, $this->sql_p, $rettype, $this );
         $this->sql =  $this->dataview->sql;
         return $records;

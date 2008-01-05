@@ -36,6 +36,7 @@ class CCArchive
 {
     function Archive($type='',$arg1='',$tags='')
     {
+        require_once('cclib/cc-page.php');
         $trail = array();
         $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
         $trail[] = array( 'url' => ccl('archive'), 'text' => _('Archive') );
@@ -49,13 +50,15 @@ class CCArchive
                 $trail[] = array( 'url' => ccl('archive','month',$arg1), 'text' => $arg1 );
                 if( !empty($tags) )
                     $trail[] = array( 'url' => ccl('archive','month',$arg1,$tags), 'text' => $tags);
+                CCPage::AddBreadCrumbs($trail);
 
                 CCPage::SetTitle( 'str_archive_for_s', $tstr );
                 $month = $m[1];
-                $where = "SUBSTRING(upload_date,1,7) = '${m[1]}'";
-                die('todo: convert to query api');
-                //CCUpload::ListMultipleFiles($where,$tags,'all');
-                CCPage::AddBreadCrumbs($trail);
+                require_once('cclib/cc-query.php');
+                $query = new CCQuery();
+                $args = $query->ProcessAdminArgs(array());
+                $sqlargs['where'] = "SUBSTRING(upload_date,1,7) = '${m[1]}'";
+                $query->QuerySQL($args,$sqlargs);
                 return;
             }
         }
