@@ -46,11 +46,11 @@ ccPublicize.prototype = {
 
        var url = query_url + Form.serialize('puboptions_form');
        var text = '<' + 'script type="text/javascript" src="' + url + '&format=docwrite" ><' + '/script>';
-       var tt = $('target_text');
-       if( tt.value )
-           tt.value = text;
-       else
-           tt.innerHTML = text;
+       $('target_text').value = text;
+       //if( tt.value )
+           //tt.value = text;
+       //else
+       //    tt.innerHTML = text;
 
        new Ajax.Request( url + '&format=html', { method: 'get', onComplete: this.resp_updateTarget } );    
     },

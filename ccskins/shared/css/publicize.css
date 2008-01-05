@@ -68,7 +68,7 @@ $Id$
 #preview_container {
   /* width: 90%; */
   padding: 9px;
-  border-wide: 1px;
+  border-width: 1px;
   border-style: solid;
 }
 
