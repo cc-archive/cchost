@@ -1,6 +1,6 @@
 <?/*
 [meta]
-    name = template_component
+    type = template_component
     desc = _('Trackback feature');
     dataview = trackback
     embedded = 1

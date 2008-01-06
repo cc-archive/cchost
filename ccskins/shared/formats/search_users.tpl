@@ -18,7 +18,7 @@ SELECT
      %columns% 
 FROM cc_tbl_user
 %joins%
-%where% AND MATCH(user_name, user_real_name, user_description) AGAINST( '%search%' IN BOOLEAN MODE )
+%where%
 %group%
 %order%
 %limit%
@@ -28,7 +28,7 @@ EOF;
 SELECT COUNT(*)
 FROM cc_tbl_user
 %joins%
-%where% AND MATCH(user_name, user_real_name, user_description) AGAINST( '%search%' IN BOOLEAN MODE )
+%where%
 EOF;
 
     return array( 'sql' => $sql,

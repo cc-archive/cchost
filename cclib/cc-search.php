@@ -33,7 +33,6 @@ class CCSearch
 {
     function Search()
     {
-        $search_meta = $this->_get_search_meta();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
 
         require_once('cclib/cc-page.php');
@@ -42,31 +41,33 @@ class CCSearch
         CCPage::AddForm( $form->GenerateForm() );
     }
 
-    function _get_search_meta()
+    function OnSearchMeta(&$search_meta)
     {
-        return array(
+        $search_meta[] = 
             array(
                 'template' => '*',
                 'title'    => 'str_search_site',
                 'datasource' => '*',
                 'group'    => 'all'
-            ),
+            );
+        $search_meta[] = 
             array(
                 'template'   => 'search_uploads',
                 'datasource' => 'uploads',
                 'title'      => 'str_search_uploads',
                 'fields'     => array(),
                 'group'      => 'uploads',
-            ),
+                'match'      => 'upload_name,upload_description,upload_tags',
+            );
+        $search_meta[] = 
             array(
                 'template'   => 'search_users',
                 'title'      => 'str_search_users',
                 'datasource' => 'user',
                 'fields'     => array(),
                 'group'      => 'users',
-            )
-        );
-
+                'match'      => 'user_name,user_real_name,user_description',
+            );
     }
 
     function Results()
@@ -83,7 +84,6 @@ class CCSearch
 
         $what = CCUtil::StripText($_REQUEST['search_in']);
 
-        $search_meta = $this->_get_search_meta();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
         require_once('cclib/cc-page.php');
         require_once('cclib/cc-query.php');

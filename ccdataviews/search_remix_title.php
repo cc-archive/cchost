@@ -14,7 +14,7 @@ SELECT
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
 %joins%
-%where% AND MATCH(upload_name) AGAINST( '%search%' IN BOOLEAN MODE )
+%where% AND MATCH(upload_name) AGAINST( '%match%' IN BOOLEAN MODE )
 %group%
 %order%
 %limit%

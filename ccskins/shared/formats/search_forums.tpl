@@ -22,7 +22,7 @@ JOIN cc_tbl_forum_threads ON topic_thread=forum_thread_id
 JOIN cc_tbl_forums ON forum_thread_forum=forum_id
 JOIN cc_tbl_user ON topic_user=user_id
 %joins%
-%where% AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
+%where%
 %group%
 %order%
 %limit%
@@ -32,7 +32,7 @@ EOF;
 SELECT COUNT(*)
 FROM cc_tbl_topics
 JOIN cc_tbl_forum_threads ON topic_thread=forum_thread_id
-%where% AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
+%where%
 EOF;
 
     return array( 'sql' => $sql,

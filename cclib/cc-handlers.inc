@@ -143,6 +143,7 @@ CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCRenderZip',  'OnFilt
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,              array( 'CCSearch', 'OnMapUrls'), 'cclib/cc-search.php'  );
 CCEvents::AddHandler(CC_EVENT_FILTER_SEARCH_RESULTS, array( 'CCSearch', 'OnFilterSearch'), 'cclib/cc-search.php'  );
+CCEvents::AddHandler(CC_EVENT_SEARCH_META,          array( 'CCSearch',  'OnSearchMeta'), 'cclib/cc-search.php'  ) ;
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCSkinAdmin' , 'OnMapUrls'),  'cclib/cc-skin-admin.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCSkinAdmin' , 'OnAdminMenu'), 'cclib/cc-skin-admin.php' );

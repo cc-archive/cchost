@@ -324,7 +324,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee',
+                         'reviewee', 'match'
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -560,6 +560,12 @@ class CCQuery
         $this->sql_p['limit'] = $this->args['limit'] . ' OFFSET ' . $this->args['offset'];
     }
 
+    function _gen_match()
+    {
+        // this only works for specific dataviews (see search_remix_artist.php)
+        $this->sql_p['match'] = addslashes(trim($this->args['match']));
+    }
+
     function _gen_playlist()
     {
     }
@@ -646,9 +652,17 @@ class CCQuery
 
     function _gen_search()
     {
-        $this->sql_p['search'] = addslashes(trim($this->args['search']));
+        CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
+        foreach( $search_meta as $meta )
+        {
+            if( $this->args['datasource'] == $meta['datasource'] )
+            {
+                $search = addslashes(trim($this->args['search']));
+                $this->where[] = "MATCH({$meta['match']}) AGAINST( '$search' IN BOOLEAN MODE )";
+                break;
+            }
+        }
     }
-
 
     function _gen_sort()
     {

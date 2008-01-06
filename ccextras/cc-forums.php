@@ -59,6 +59,7 @@ class CCForums
                 'title'      => 'str_search_forums',
                 'datasource' => 'topics',
                 'group'      => 'forums',
+                'match'      => 'topic_name,topic_text',
             );
     }
 

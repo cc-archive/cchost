@@ -132,7 +132,7 @@ class CCDataView
                         array( 'LIMIT' , 'limit' ),
                         array( ',' , 'columns' ),
                         array( 'GROUP BY', 'group_by' ),
-                        array( '', 'search' ),
+                        array( '', 'match' ),
                         array( 'WHERE', 'where') ,
                         ) as $f )
         {
@@ -140,11 +140,11 @@ class CCDataView
         }
 
 
-        $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%search%/', '/%where%/'  ),
+        $this->sql = preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%match%/', '/%where%/'  ),
                                     $sqlargs, $info['sql'] );
 
         $this->sql_count = empty($info['sql_count']) ? '' :
-                    preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%search%/','/%where%/'  ),
+                    preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%match%/','/%where%/'  ),
                                     $sqlargs, $info['sql_count'] );
 
 // ------- DEBUG PREVIEW ------------

@@ -21,7 +21,7 @@ JOIN cc_tbl_user reviewers ON topic_user=reviewers.user_id
 JOIN cc_tbl_uploads ON topic_upload=upload_id
 JOIN cc_tbl_user reviewee ON upload_user=reviewee.user_id
 %joins%
-%where% AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
+%where%
 %group%
 %order%
 %limit%
@@ -31,7 +31,7 @@ EOF;
 SELECT COUNT(*)
 FROM cc_tbl_topics
 JOIN cc_tbl_uploads ON topic_upload=upload_id
-%where% AND MATCH(topic_name, topic_text) AGAINST( '%search%' IN BOOLEAN MODE )
+%where%
 EOF;
 
     return array( 'sql' => $sql,

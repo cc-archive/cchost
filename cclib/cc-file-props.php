@@ -107,6 +107,9 @@ class CCFileProps
 
                 $props = $this->GetFileProps($ffile);
 
+                if( $props && empty($props['type']) )
+                    die("Missing meta 'type' in $ffile");
+
                 if( !$props || ($props['type'] != $type) )
                     continue;
 
