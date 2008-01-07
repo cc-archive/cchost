@@ -187,6 +187,9 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
     <script type="text/javascript">
         ccEPlayer.hookElements($('upload_middle'));
     </script>
+    %if_not_null(logged_in_as)%
+        %call('playlist.xml/playlist_menu')%
+    %end_if%
 %end_if%
 
 <script type="text/javascript">
@@ -203,6 +206,9 @@ function menu_cb(resp) {
         rate_return_t = 'ratings_stars_user';
         recommend_return_t = 'recommends';
         new userHookup('upload_list', 'ids=%(#R/upload_id)%');
+        %if_not_null(enable_playlists)%
+            playlist_hook_menu();
+        %end_if%
     }
 }
 var menu_url = query_url + 't=upload_menu&f=html&ids=%(#R/upload_id)%';

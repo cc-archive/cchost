@@ -138,5 +138,8 @@ $GLOBALS['str_submit_an_original'] = _('Submit an Original Track');
 $GLOBALS['str_submit_original_help'] = _('An original project does not use any samples from outside sources. It is a totally original work.');
 $GLOBALS['str_submit_original_help'] = _('Use this form to upload an original track.');
 
+$GLOBALS['str_stats_acappellas'] = _('A Cappellas');
+$GLOBALS['str_stats_licenses_pells'] = _('Licenses for A Cappellas');
+$GLOBALS['str_stats_most_remixed_pell'] = _('Most Remixed A Cappellas');
 
 ?>

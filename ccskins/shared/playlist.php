@@ -267,12 +267,10 @@ function _t_playlist_playlist_menu(&$T,&$A)
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <script type="text/javascript">
+function playlist_hook_menu() {
     new ccPlaylistMenu();
+}
 </script>
 <?
 }
-
-
-function _t_playlist_playlist_edit_order(&$T,&$A) {
-  ?>(not implemented)
-<?}?>
+?>

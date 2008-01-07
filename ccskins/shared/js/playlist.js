@@ -128,7 +128,9 @@ ccPlaylistMenu.prototype = {
                 this._refresh_menu( id, pid );
             }
             else
+            {
                 this._open_menu(pid);
+            }
         }
         else
         {
@@ -144,7 +146,7 @@ ccPlaylistMenu.prototype = {
     },
 
     _create_controls: function( link, pid, id ) {
-        var html = '<div id="' + pid + '" style="display:block;opacity:0.7;" class="cc_playlist_popup light_bg dark_border">'+str_thinking+'</div>';
+        var html = '<div id="' + pid + '" style="display:none;opacity:0.0;" class="cc_playlist_popup light_bg dark_border">'+str_thinking+'</div>';
         new Insertion.After( link, html );
         var pp = $(pid);
         Position.clone( link, pid, {  setWidth:   false,
@@ -208,7 +210,6 @@ ccPlaylistMenu.prototype = {
             {
                 p.innerHTML = resp.responseText;
             }
-            //new ccDelayAndFade( 1000, p, 0, 1500, 20, { complete: this._close_menu.bind(this) } );
             Effect.Fade( p, { duration: 2.0, delay: 0.2, afterFinish: this._close_menu.bind(this) } );
         }
         catch (err)
@@ -223,7 +224,6 @@ ccPlaylistMenu.prototype = {
         this.openMenu = pp;
         pp.style.opacity = '0.0';
         pp.style.display = 'block';
-        //new ccDelayAndFade( 0, pp, 1, 250, 4 );
         Effect.Appear( pp, { duration: 1.5, from: 0.0, to: 1.0, delay: 0.2 } );
     },
 

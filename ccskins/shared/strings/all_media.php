@@ -629,12 +629,9 @@ $GLOBALS['str_stats_signups'] = _('Signups');
 $GLOBALS['str_stats_most_remixes'] = _('Most Remixes');
 $GLOBALS['str_stats_most_picks'] = _('Most Editor\'s Picks');
 $GLOBALS['str_stats_picks'] = _('Picks');
-$GLOBALS['str_stats_most_remixed_pell'] = _('Most Remixed A Cappellas');
 $GLOBALS['str_stats_name'] = _('Name');
 $GLOBALS['str_stats_licenses_samples'] = _('Licenses for Samples');
 
-$GLOBALS['str_stats_acappellas'] = _('A Cappellas');
-$GLOBALS['str_stats_licenses_pells'] = _('Licenses for A Cappellas');
 
 
 ?>
