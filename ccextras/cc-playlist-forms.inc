@@ -213,13 +213,15 @@ class CCPlaylistManage
 
     function Edit($playlist_id='')
     {
-        $playlist_id = intval(CCUtil::Strip($playlist_id));
-        if( empty($playlist_id) || $playlist_id < 1 )
-            CCUtil::Send404();
+        $api = new CCPlaylists();
+        $api->_test_pl('',$playlist_id, /* test upload: */ false, 
+                                        /* test_playlist */ true,
+                                        /* test_owner */ true);
+        
 
         require_once('cclib/cc-page.php');
-
-        CCPage::SetTitle(_('Edit Playlist Properties'));
+        $api->_build_bread_crumb_trail($playlist_id,'str_pl_edit_properties');
+        CCPage::SetTitle('str_pl_edit_properties');
         $carts =& CCPlaylist::GetTable();
         $row = $carts->QueryKeyRow($playlist_id);
         $form = new CCPlaylistForm($row['cart_dynamic'],$playlist_id);
@@ -257,9 +259,15 @@ class CCPlaylistManage
 
     function EmptyPL($playlist_id='')
     {
-        CCPlaylists::_test_pl(0,$playlist_id,false,true,true);
+        $api = new CCPlaylists();
+        $api->_test_pl('',$playlist_id, /* test upload: */ false, 
+                                        /* test_playlist */ true,
+                                        /* test_owner */ true);
+        
+
         require_once('cclib/cc-page.php');
-        CCPage::SetTitle(_('Empty Playlist'));
+        $api->_build_bread_crumb_trail($playlist_id,'str_pl_empty_playlist');
+        CCPage::SetTitle('str_pl_empty_playlist');
         if( empty($_POST['confirmplaylistempty']) )
         {
             require_once('ccextras/cc-playlist-forms.inc');
@@ -282,9 +290,15 @@ class CCPlaylistManage
 
     function DeletePL($playlist_id='')
     {
-        CCPlaylists::_test_pl(0,$playlist_id,false,true,true);
+        $api = new CCPlaylists();
+        $api->_test_pl('',$playlist_id, /* test upload: */ false, 
+                                        /* test_playlist */ true,
+                                        /* test_owner */ true);
+        
+
         require_once('cclib/cc-page.php');
-        CCPage::SetTitle(_('Delete Playlist'));
+        $api->_build_bread_crumb_trail($playlist_id,'str_pl_delete_playist');
+        CCPage::SetTitle('str_pl_delete_playist');
         if( empty($_POST['confirmplaylistdelete']) )
         {
             require_once('ccextras/cc-playlist-forms.inc');

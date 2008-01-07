@@ -48,6 +48,7 @@ $GLOBALS['str_pl_dynamic_playlist'] = _('Dynamic Gallery');
 $GLOBALS['str_pl_dynamic']            = _('dynamic');
 $GLOBALS['str_pl_dynamic_changed'] = _('Dynamic gallery changed.'); //js
 $GLOBALS['str_pl_dynamic_playlist'] = _('Dynamic Gallery');
+$GLOBALS['str_pl_edit_dynamic_playlist'] = _('Edit Gallery List');
 $GLOBALS['str_pl_edit_dynamic_playlist_s'] = _('Edit Gallery List: "%s"');
 $GLOBALS['str_pl_edit_playlist_order'] = _('Edit Gallery Order');
 $GLOBALS['str_pl_edit_properties'] = _('Edit Properties');

@@ -324,7 +324,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match'
+                         'reviewee', 'match', 
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -568,6 +568,7 @@ class CCQuery
 
     function _gen_playlist()
     {
+        $this->where[] = 'cart_item_cart = '.$this->args['playlist']; // err, is this right?
     }
 
     function _gen_reccby()

@@ -57,6 +57,8 @@ class CCPlaylists
     function EditQuery($playlist_id='',$commit='')
     {
         $this->_test_pl(0,$playlist_id,false,true,true);
+        $this->_build_bread_crumb_trail($playlist_id,
+                        array(ccl('playlist','edit',$playlist_id),'str_pl_edit_properties'),'str_pl_edit_dynamic_playlist');
         $cart =& CCPlaylist::GetTable();
         $row = $cart->QueryKeyRow($playlist_id);
         require_once('cclib/cc-page.php');
@@ -227,38 +229,62 @@ class CCPlaylists
         exit;
     }
 
-    function EditOrder($playlist_id='')
+    function _build_bread_crumb_trail($playlist_id,$cmd='',$cmd2='')
     {
-        $this->_test_pl(0,$playlist_id,false,true,true);
-        CCPage::SetTitle('str_pl_edit_playlist_order');
-        if( empty($_POST) )
+        $trail = array();
+        $trail[] = array( 'url' => ccl(), 'text' => 'str_home' );
+        $trail[] = array( 'url' => ccl('people'), 'text' => 'str_people' );
+        list( $user_id, $playlist_name ) = CCDatabase::QueryRow(
+                'SELECT cart_user, cart_name FROM cc_tbl_cart WHERE cart_id='.$playlist_id,false);
+        list( $user_name, $user_real_name ) = CCDatabase::QueryRow(
+            'SELECT user_name, user_real_name FROM cc_tbl_user WHERE user_id='.$user_id,false);
+        $trail[] = array( 'url' => ccl('people',$user_name), 'text' => $user_real_name );
+        $trail[] = array( 'url' => ccl('people',$user_name,'playlists'), 'text' => 'str_playlists' );
+        if( empty($cmd) )
         {
-            CCPage::PageArg('noproto',true);
-            CCPage::PageArg('editor','playlist.xml/playlist_edit_order');
-            $args = $this->_get_playlist_info($playlist_id);
-            if( empty($args) )
-                CCUtil::Send404();
-            $args['postbackurl'] = ccl('playlist','editorder',$playlist_id);
-            CCPage::PageArg('args',$args,'editor');
+            $trail[] = array( 'url' => '', 'text' => $playlist_name );
         }
         else
         {
-            if( !empty($_POST['idorder']) )
+            $trail[] = array( 'url' => ccl('playlist','browse',$playlist_id), 'text' => $playlist_name );
+            if( is_array($cmd) )
             {
-                $ids = split(',',$_POST['idorder']);
-                if( !empty($ids) )
-                {
-                    $cart_items =& CCCartItems::GetTable();
-                    $i = 0;
-                    foreach( $ids as $id )
-                    {
-                        $up['cart_item_id'] = $id;
-                        $up['cart_item_order'] = $i++;
-                        $cart_items->Update($up);
-                    }
-                }
+                $trail[] = array( 'url' => $cmd[0], 'text' => $cmd[1]);
+                $trail[] = array( 'url' => '', 'text' => $cmd2 );
             }
+            else
+            {
+                $trail[] = array( 'url' => '', 'text' => $cmd );
+            }
+        }
 
+        require_once('cclib/cc-page.php');
+        CCPage::AddBreadCrumbs($trail);
+    }
+
+    function EditOrder($playlist_id='',$cmd='')
+    {
+        $this->_test_pl(0,$playlist_id,false,true,true);
+        if( empty($cmd) )
+        {
+            require_once('cclib/cc-page.php');
+            require_once('cclib/cc-query.php');
+            $this->_build_bread_crumb_trail($playlist_id,'str_pl_edit_playlist_order');
+            CCPage::SetTitle('str_pl_edit_playlist_order');
+            CCPage::PageArg('playlist_id',$playlist_id);
+            $query = new CCQuery();
+            $args = $query->ProcessAdminArgs('t=playlist_reorder&playlist='.$playlist_id);
+            $query->Query($args);
+        }
+        else
+        {
+            $ids = CCDatabase::QueryItems("SELECT cart_item_id FROM cc_tbl_cart_items WHERE cart_item_cart = $playlist_id ORDER by cart_item_order ASC");
+            foreach( $_GET['file_order'] as $new_pos => $old_pos )
+            {
+                $id = $ids[$old_pos-1];
+                $sql = "UPDATE cc_tbl_cart_items SET cart_item_order = $new_pos WHERE cart_item_id = $id";
+                CCDatabase::Query($sql);
+            }
             $url = ccl('playlist','browse',$playlist_id);
             CCUtil::SendBrowserTo($url);
         }
@@ -483,6 +509,7 @@ EOF;
         else
         {
             $this->_test_pl(0,$playlist_id,false,true,false);
+            $this->_build_bread_crumb_trail($playlist_id);
             $args = $this->_get_playlist_info($playlist_id);
             if( empty($args) )
                 CCUtil::Send404();
@@ -786,16 +813,14 @@ EOF;
         }
         if( $ok && $test_owner )
         {
-            $cart =& CCPlaylist::GetTable();
-            $owner = $cart->QueryItemFromKey('cart_user',$playlist_id);
-            $x = array( $owner, CCUser::CurrentUser() );
+            $owner = CCDatabase::QueryItem('SELECT cart_user FROM cc_tbl_cart WHERE cart_id='.$playlist_id);
             $ok = !empty($owner) && ($owner == CCUser::CurrentUser());
         }
-
         if( !$ok )
         {
             CCUtil::Send404();
         }
+        return $ok;
     }
 
     /**
