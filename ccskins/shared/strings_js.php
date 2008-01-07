@@ -62,6 +62,8 @@ var str_new_row                   ='<?=addslashes($T->String('str_new_row'))?>';
 var str_pl_dynamic_changed        ='<?=addslashes($T->String('str_pl_dynamic_changed'))?>';
 var str_pl_new_playlist_created   ='<?=addslashes($T->String('str_pl_new_playlist_created'))?>';
 var str_pl_track_added            ='<?=addslashes($T->String('str_pl_track_added'))?>';
+var str_pl_and_track_added        ='<?=addslashes($T->String('str_pl_and_track_added'))?>';
+
 var str_pl_track_has_been_removed ='<?=addslashes($T->String('str_pl_track_has_been_removed'))?>';
 var str_trackback_title           ='<?=addslashes($T->String('str_trackback_title'))?>';
 var str_trackback_no_email            ='<?=addslashes($T->String('str_trackback_no_email'))?>';

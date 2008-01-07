@@ -146,7 +146,7 @@ ccPlaylistMenu.prototype = {
     },
 
     _create_controls: function( link, pid, id ) {
-        var html = '<div id="' + pid + '" style="display:none;opacity:0.0;" class="cc_playlist_popup light_bg dark_border">'+str_thinking+'</div>';
+        var html = '<div id="' + pid + '" style="" class="cc_playlist_popup light_bg dark_border">'+str_thinking+'</div>';
         new Insertion.After( link, html );
         var pp = $(pid);
         Position.clone( link, pid, {  setWidth:   false,
@@ -198,7 +198,10 @@ ccPlaylistMenu.prototype = {
             {
                 if( json.message )
                 {
-                    p.innerHTML = json.message;
+                    if( json.message.match(/^str_/) )
+                        p.innerHTML = eval(json.message);
+                    else
+                        p.innerHTML = json.message;
                     this.onJSONCommand(json);
                 }
                 else
@@ -210,7 +213,7 @@ ccPlaylistMenu.prototype = {
             {
                 p.innerHTML = resp.responseText;
             }
-            Effect.Fade( p, { duration: 2.0, delay: 0.2, afterFinish: this._close_menu.bind(this) } );
+            Effect.Fade( p, { duration: 1.5, delay: 1.2, afterFinish: this._close_menu.bind(this) } );
         }
         catch (err)
         {
@@ -224,7 +227,7 @@ ccPlaylistMenu.prototype = {
         this.openMenu = pp;
         pp.style.opacity = '0.0';
         pp.style.display = 'block';
-        Effect.Appear( pp, { duration: 1.5, from: 0.0, to: 1.0, delay: 0.2 } );
+        Effect.Appear( pp, { duration: 0.7, from: 0.0, to: 1.0, delay: 0.2 } );
     },
 
     _close_menu: function() {
@@ -503,10 +506,11 @@ var ccPlaylistBrowserObject = {
                     ccThinking.Enable(event);
                 this.openRec = detailId;            
                 var html = '\n<div id="'+detailId
-                               + '" class="cc_playlist_detail" style="display: none;">'+str_thinking+'</div>\n';
+                               + '" class="cc_playlist_detail" style="opacity:0.0;">'+str_thinking+'</div>\n';
                 new Insertion.After(this.selected, html);
                 Event.observe( detailId, 'click', this.onStopDetailClick.bindAsEventListener(this, detailId) );
-                this.delayDisplay(detailId,'block');
+                Effect.Appear( detailId, { duration: 0.3, from: 0.0, to: 1.0, delay: 0.2 } );
+                //this.delayDisplay(detailId,'block');
                 this.refreshDetails(cart_id);
             }
         }
@@ -514,14 +518,6 @@ var ccPlaylistBrowserObject = {
         {
             this._report_error( 'open pl:', err);
         }
-    },
-
-    delayDisplay: function( id, how ) {
-        setTimeout( this.onDelayDisplay.bind(this,id,how), 300 );
-    },
-
-    onDelayDisplay: function(id,how) {
-        $(id).style.display = how;
     },
 
     onStopDetailClick: function(event, detailId) {

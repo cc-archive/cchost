@@ -302,91 +302,6 @@ class CCAdminMakeCfgRootForm extends CCForm
 }
 
 /**
-* This form edits the raw configation data
-*
-* This is not on any menu, admins can reach it via /main/admin/edit
-*
-*/
-class CCAdminRawForm extends CCGridForm
-{
-    /**
-    * Constructor
-    *
-    **/
-    function CCAdminRawForm()
-    {
-        $this->CCGridForm();
-
-        $heads = array( "Setting", "Value" );
-        $this->SetColumnHeader($heads);
-
-        $configs =& CCConfigs::GetTable();
-        $configs->SetSort('config_scope,config_type');
-        $rows = $configs->QueryRows('');
-
-        foreach( $rows as $row )
-        {
-            $id   = $row['config_id'];
-            $arr  = $configs->CfgUnserialize( $row['config_type'], $row['config_data'] );
-            $c    = count($arr);
-            $keys = array_keys($arr);
-
-            if( !$keys )
-                continue;
-
-            for( $i = 0; $i < $c; $i++ )
-            {
-                $name = $keys[$i];
-                $value = $arr[$name];
-                if( is_array( $value ) ||  is_object( $value) )
-                    continue;
-                $a = $this->_make_field($row,$id,$i,$name,$arr[$name]);
-                $uid = $name . '_' . $id . '_' . $i;
-                $this->AddGridRow( $uid, $a );
-            }
-        }
-
-        $this->SetSubmitText(_('Save Configuration'));
-        $this->SetHelpText(_("Just be careful what you do here, it's easy to 'break the site'"));
-    }
-
-    /**
-    * Local helper
-    *
-    * @access private
-    */
-    function _make_field($row,$id,$i,$name,$value)
-    {
-        if( strchr($value,"\n") )
-        {
-            $formatter = 'textarea';
-        }
-        else
-        {
-            $formatter = 'textedit';
-        }
-        $tname = $row['config_scope'] . '::' . $row['config_type'] . '[' . $name . ']';
-        $class = intval($value) ? 'cc_form_input_short' : '';
-        $a = array(
-                  array(
-                    'element_name'  => 'cfg_' . $id . '_' . $i,
-                    'value'      => $tname,
-                    'formatter'  => 'statictext',
-                    'flags'      => CCFF_STATIC ),
-                  array(
-                    'element_name'  => "cfg[$id][$name]",
-                    'value'      => htmlspecialchars($value),
-                    'formatter'  => $formatter,
-                    'class'      => $class,
-                    'flags'      => CCFF_NONE ),
-                );
-
-        return($a);
-    }
-}
-
-
-/**
 * Basic admin API and system event watcher.
 * 
 */
@@ -527,32 +442,10 @@ class CCAdmin
     * This form edits the raw configation data
     *
     * This is not on any menu, admins can reach it via /main/admin/edit
-    *
-    * @see CCAdminRawForm::CCAdminRawForm()
     */
     function Deep()
     {
-        CCPage::SetTitle(_("Edit Raw Configuation Data"));
-        if( empty($_POST['adminraw']) )
-        {
-            $form = new CCAdminRawForm();
-            CCPage::AddForm( $form->GenerateForm() );
-        }
-        else
-        {
-            $cfgs = $_POST['cfg'];
-            $configs =& CCConfigs::GetTable();
-            foreach( $cfgs as $id => $data )
-            {
-                CCUtil::StripSlash($data);
-                $where['config_id'] = $id;
-                $type = $configs->QueryItemFromKey('config_type',$id);
-                $where['config_data'] = $configs->CfgSerialize($type,$data);
-                $configs->Update($where);
-            }
-
-            CCPage::Prompt(_("Configuration Changes Saved"));
-        }
+        CCUtil::SendBrowserTo( ccd( 'cclib/cc-config-repair.php' ) );
     }
 
     /**
