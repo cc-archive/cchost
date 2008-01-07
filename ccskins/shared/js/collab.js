@@ -25,9 +25,14 @@ ccCollab.prototype = {
     autoComp: null,
     userCredit: null,
     userContact: null,
+    is_member: false,
+    is_owner: false,
+    user_template: null,
 
     initialize: function(collab,is_member,is_owner) {
         this.collab_id = collab;
+        this.is_member = is_member;
+        this.is_owner = is_owner;
         if( is_member )
         {
             var pickFunk = this.onUserPick.bind(this);
@@ -38,6 +43,7 @@ ccCollab.prototype = {
             if( $('fileok') )
                 Event.observe( 'fileok', 'click', this.onFileSubmitOK.bindAsEventListener(this) );
         }
+        this.user_template = this._make_user_template();
     },
 
     updateFiles: function(collab_id) {
@@ -276,6 +282,34 @@ ccCollab.prototype = {
         this.closeTags();
     },
 
+    onUserConfirm: function( e, user_name ) {
+        this.msg( str_thinking, str_working );
+        var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/confirm';
+        new Ajax.Request( url, { method: 'get', onComplete: this._req_confirmuser.bind(this) } );
+    },
+
+    _req_confirmuser: function( resp, json ) {
+        try
+        {
+            if( json.error )
+            {
+                this.msg( json.error, 'error' );
+            }
+            else
+            {
+                $('confirm_link').remove();
+                $('_confirm_label_' + json.user_name).innerHTML = str_collab_confirmed;
+                if( json.msg )
+                    this.msg( json.msg, 'msg' );
+            }
+        }
+        catch(e)
+        {
+            alert(e);
+        }
+    },
+
+
     onUserRemove: function( e, user_name ) {
         this.msg( str_thinking, str_working );
         var url = home_url + 'collab/user/' + this.collab_id + '/' + user_name + '/remove';
@@ -314,7 +348,7 @@ ccCollab.prototype = {
         }
         else
         {
-            this.addUser( json.user_name, json.user_real_name, 'member', '' );
+            this.addUser( json.user_name, json.user_real_name, 'member', '', 0 );
             $(this.autoComp.options.editID).value = '';
             this.autoComp._list_close(); 
             if( json.msg )
@@ -322,22 +356,71 @@ ccCollab.prototype = {
         }
     },
 
-    addUser: function( username, fullname, userrole, usercredit ) {
-        var vars = {
-                user_name: username,
-                user_real_name: fullname,
-                role: userrole,
-                credit: usercredit
-            };
+    _make_user_template: function()
+    {
+        var collab_template = 
+            '<div class="user_line" id="_user_line_#{user_name}">' +
+            '<div class="user" ><a href="'+home_url+'people/#{user_name}">#{user_real_name}</a></div>' +
+            '<div class="role">#{role} (<span id="_confirm_label_#{user_name}">#{confirmed}</span>)</div>' +
+            '<div class="credit" id="_credit_#{user_name}">#{credit}</div>';
+        if( this.is_owner )
+        {
+            collab_template +=
+                '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
+                      + 'span>'+str_credit+'</span></a></div>' +
+                '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
+                      + 'span>'+str_remove+'</span></a></div>';
+        }
+        if( this.is_member )
+        {
+            collab_template +=
+                '<div>' +
+                '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>' 
+                + str_send_email + '</span></a> ' +
+                '</div>';
+        }
         
-        var html = new Template( collab_template ).evaluate( vars );
-        new Insertion.Before( 'user_inserter', html );
+        return collab_template + '#{confirm_link}</div>';
+    },
 
-        if( $('_user_remove_' + username) )
-            Event.observe( '_user_remove_' + username, 'click', this.onUserRemove.bindAsEventListener(this,username) );
-        if( $('_user_credit_' + username) )
-            Event.observe( '_user_credit_' + username, 'click', this.onUserCredit.bindAsEventListener(this,username) );
-        if( $('_contact_' + username) )
-            Event.observe( '_contact_'     + username, 'click', this.onUserContact.bindAsEventListener(this,username) );
+    addUser: function( username, fullname, userrole, usercredit, userconfirmed, itsme ) {
+        try
+        {
+            
+            var confirmlink = '';
+            
+            if( itsme && !userconfirmed )
+            {
+                confirmlink = 
+                '<div id="confirm_link">' +
+                        '<a href="javascript://confirm" id="_confirm_'+user_name+'" class="user_cmd confirm_user"><span>' +
+                         str_confirm_membership + '</span></a> ' +
+                        '</div>';
+            }
+            var vars = {
+                    user_name: username,
+                    user_real_name: fullname,
+                    role: userrole,
+                    credit: usercredit,
+                    confirmed: userconfirmed ? str_collab_confirmed : str_collab_not_confirmed,
+                    confirm_link: confirmlink
+                };
+            
+            var html = new Template( this.user_template ).evaluate( vars );
+            new Insertion.Before( 'user_inserter', html );
+
+            if( $('_user_remove_' + username) )
+                Event.observe( '_user_remove_' + username, 'click', this.onUserRemove.bindAsEventListener(this,username) );
+            if( $('_user_credit_' + username) )
+                Event.observe( '_user_credit_' + username, 'click', this.onUserCredit.bindAsEventListener(this,username) );
+            if( $('_contact_' + username) )
+                Event.observe( '_contact_'     + username, 'click', this.onUserContact.bindAsEventListener(this,username) );
+            if( $('_confirm_' + username) )
+                Event.observe( '_confirm_'     + username, 'click', this.onUserConfirm.bindAsEventListener(this,username) );
+        }
+        catch (e)
+        {
+            alert(e);
+        }
     }
 }

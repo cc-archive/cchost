@@ -33,6 +33,7 @@ class CCSearch
 {
     function Search()
     {
+        $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
 
         require_once('cclib/cc-page.php');
@@ -83,7 +84,7 @@ class CCSearch
             die('missing "search in" field'); // I think this is a hack attempt
 
         $what = CCUtil::StripText($_REQUEST['search_in']);
-
+        $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
         require_once('cclib/cc-page.php');
         require_once('cclib/cc-query.php');

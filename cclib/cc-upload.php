@@ -58,8 +58,9 @@ class CCUpload
         $trail[] = array( 'url' => ccl('people',$user_name), 
                           'text' => $user_real_name );
 
-        $trail[] = array( 'url' => ccl('files',$user_name, $upload_id), 
-                          'text' => '"' . $upload_name . '"' );
+        if( $cmd != 'str_file_deleted' )
+            $trail[] = array( 'url' => ccl('files',$user_name, $upload_id), 
+                              'text' => '"' . $upload_name . '"' );
 
         if( $do_edit )
         {
@@ -129,6 +130,7 @@ class CCUpload
         CCPage::SetTitle('str_file_deleting');
         if( empty($_POST['confirmdelete']) )
         {
+            $this->_build_bread_crumb_trail($upload_id,false,'str_file_deleting');
             $pretty_name = $uploads->QueryItemFromKey('upload_name',$upload_id);
             require_once('cclib/cc-upload-forms.php');
             $form = new CCConfirmDeleteForm($pretty_name);
@@ -136,9 +138,10 @@ class CCUpload
         }
         else
         {
+            $this->_build_bread_crumb_trail($upload_id,false,'str_file_deleted');
             require_once('cclib/cc-uploadapi.php');
             CCUploadAPI::DeleteUpload($upload_id);
-            CCPage::Prompt(_("Upload has been deleted."));
+            CCPage::Prompt('str_file_deleted');
         }
     }
 

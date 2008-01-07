@@ -653,6 +653,7 @@ class CCQuery
 
     function _gen_search()
     {
+        $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
         foreach( $search_meta as $meta )
         {

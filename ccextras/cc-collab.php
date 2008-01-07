@@ -31,9 +31,34 @@ CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,        array( 'CCCollab', 'OnFormFiel
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCCollab', 'OnUploadDone')      , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCCollab',  'OnUploadDelete')    , 'ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_FILTER_COLLAB_CREDIT, array( 'CCCollabHV',  'OnFilterCollabCredit') );
+CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCCollabHV',  'OnUserProfileTabs') );
 
 class CCCollabHV 
 {
+    function OnUserProfileTabs( &$tabs, &$record )
+    {
+        if( empty($record['user_id']) )
+        {
+            $tabs['collabs'] = 'str_collaborations';
+            return;
+        }
+
+        $c = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_collab_users WHERE collab_user_user='.$record['user_id']);
+
+        if( !$c  )
+            return;
+
+        $tabs['collabs'] = array(
+                    'text' => 'str_collaborations',
+                    'help' => 'str_collaborations',
+                    'tags' => 'collabs',
+                    'access' => 4,
+                    'function' => 'url',
+                    'user_cb' => array( 'CCCollab', 'UserTab' ),
+                    'user_cb_mod' => 'ccextras/cc-collab.inc',
+            );
+    }
+
     function OnFilterCollabCredit(&$records)
     {
         $c = count($records);
@@ -46,11 +71,14 @@ class CCCollabHV
 
             $collab_id = $R['collab_id'];
             require_once('ccextras/cc-collab.inc');
-            $collabs = new CCCollabs();
-            $R['collab'] = $collabs->QueryKeyRow($collab_id);
+            if( empty($R['collab_name']) )
+            {
+                $collab_info = CCDatabase::QueryRow('SELECT * FROM cc_tbl_collabs WHERE collab_id='.$collab_id);
+                foreach( $collab_info as $K => $V )
+                    $R[$K] = $V;
+            }
             $api = new CCCollab();
-            $R['collab']['users'] = $api->_get_collab_users($collab_id);
-            $R['collab']['base_purl'] = ccl('people');
+            $R['collab_users'] = $api->_get_collab_users($collab_id);
         }
     }
 

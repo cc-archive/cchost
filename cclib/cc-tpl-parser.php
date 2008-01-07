@@ -187,6 +187,7 @@ function cc_tpl_parse_text($text,$bfunc)
     {
        $ttable = array(
         
+        '#\[(meta|dataview)\].*\[/\1\]#Us' => '',         // trim out metas
         '/((?:\s|^)+%%[^%]+%%)/' => '',         // trim out comments
 
         '/^\s+/'  => '',                         // trim out all spaces

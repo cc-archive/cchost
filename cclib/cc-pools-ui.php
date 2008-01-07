@@ -152,7 +152,6 @@ END;
         CCPage::SetTitle(_("Approve Pending Remixes"));
         if( $submit )
         {
-            $pool_items = CCPoolItems::GetTable();
             $approved = array();
             $upload_ids = array();
             foreach( $_POST['action'] as $id => $action )

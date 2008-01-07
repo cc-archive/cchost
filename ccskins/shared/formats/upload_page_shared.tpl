@@ -44,10 +44,9 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
             %if_null(#R/collab_id)%
                 <tr><th>%text(str_by)%</th><td><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a></td></tr>
             %else%
-                %map(#C,#R/collab)%
-                 <tr><th>%text(str_collab_project)%:</th><td><a href="%(home-url)%collab/%(#C/collab_id)%">%(#C/collab_name)%</a></td></tr> 
+                 <tr><th>%text(str_collab_project)%:</th><td><a href="%(home-url)%collab/%(#R/collab_id)%">%(#R/collab_name)%</a></td></tr> 
                       <tr><th>%text(str_collab_credit)%:</th><td>
-                %loop(#C/users,U)%
+                %loop(#R/collab_users,U)%
                     <a href="%(home-url)%people/%(#U/user_name)%">%(#U/user_real_name)%</a> %(#U/collab_user_credit)% %if_not_last(#U)% <br /> %end_if%
                 %end_loop%
                 </td></tr>

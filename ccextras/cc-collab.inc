@@ -63,6 +63,16 @@ class CCCollabTopics extends CCTopics
 */
 class CCCollab
 {
+    function UserTab($user_name)
+    {
+        $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name=\''.$user_name.'\'');
+        $title = sprintf("%s's Collaborations",$user_real_name);
+
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=collab_user&datasource=collab_user&user='.$user_name.'&title='.$title);
+        $query->Query($args);
+    }
 
     function OnUploadDelete($record)
     {
@@ -189,6 +199,7 @@ class CCCollab
             $uvalues['collab_user_collab'] = $values['collab_id'];
             $uvalues['collab_user_user'] = CCUser::CurrentUser();
             $uvalues['collab_user_role'] = 'owner';
+            $uvalues['collab_user_confirmed'] = 1;
             $collab_users->Insert($uvalues);
 
             $url = ccl('collab',$values['collab_id']);
@@ -294,33 +305,10 @@ class CCCollab
 
     function ViewAll()
     {
-        require_once('cclib/cc-page.php');
-        $collabs = new CCCollabs();
-        $collabs->SetOrder( 'collab_date','DESC');
-        CCPage::AddPagingLinks($collabs,'',10);
-        $rows = $collabs->QueryRows('');
-
-        // users
-        $users = new CCCollabUsers();
-        $users->AddJoin( new CCUsers(), 'collab_user_user' );
-
-        $ccp = ccl('people') . '/';
-        $c = count($rows);
-        $keys = array_keys($rows);
-        for( $i = 0; $i < $c; $i++ )
-        {
-            $R =& $rows[$keys[$i]];
-            $sql =<<<EOF
-                SELECT CONCAT('$ccp',user_name) as artist_page_url, user_real_name
-                FROM cc_tbl_user
-                JOIN cc_tbl_collab_users on collab_user_user=user_id
-                WHERE collab_user_collab = {$R['collab_id']}
-EOF;
-            $R['users'] = CCDatabase::QueryRows($sql);
-        }
-
-        CCPage::PageArg( 'collab_rows', $rows, 'collab_main');
-        CCPage::SetTitle( 'str_collab' );
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=collab_main&datasource=collab&title=str_collab&limit=10');
+        $query->Query($args);
     }
 
     function View($collab_id='')
@@ -341,7 +329,7 @@ EOF;
 
         $collab_users = $this->_get_collab_users($collab_id);
 
-        list( $is_owner, $is_member ) = $this->_get_user_acccess($collab_row,$collab_users);
+        list( $is_owner, $is_member, $is_confirmed ) = $this->_get_user_acccess($collab_row,$collab_users);
         require_once('cclib/cc-license.php');
         $licenses =& CCLicenses::GetTable();
         $lics     = $licenses->GetEnabled();
@@ -349,6 +337,7 @@ EOF;
         $args = array(
                 'is_owner'  => $is_owner,
                 'is_member' => $is_member,
+                'is_confirmed' => $is_confirmed,
                 'collab'    => $collab_row,
                 'users'     => $collab_users,
                 'lics'      => $lics,
@@ -366,7 +355,7 @@ EOF;
         $trail[] = array( 'url' => ccl(), 
                           'text' => _('Home') );
         
-        if( !empty($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'],'media/remix/collab') )
+        if( !empty($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'],'remix/collab') )
         {
             $trail[] = array( 'url' => ccl('view','media','remix'), 
                               'text' => _('Remixes') );
@@ -388,21 +377,29 @@ EOF;
 
     function _get_collab_users($collab_id)
     {
-        $users = new CCCollabUsers();
-        $users->AddJoin( new CCUsers(), 'collab_user_user' );
-        $w1['collab_user_collab'] = $collab_id;
-        return $users->QueryRows($w1);
+        $ccp = ccl('people') . '/';
+        $sql =<<<EOF
+            SELECT CONCAT('$ccp',user_name) as artist_page_url, user_real_name, user_name, user_email, user_id,
+                       cc_tbl_collab_users.*
+            FROM cc_tbl_user
+            JOIN cc_tbl_collab_users on collab_user_user=user_id
+            WHERE collab_user_collab = {$collab_id}
+EOF;
+
+        return CCDatabase::QueryRows($sql);
     }
 
     function _get_user_acccess($collab_row,$collab_users=array())
     {
         $curr_user = CCUser::CurrentUser();
         $is_member = false;
+        $is_confirmed = false;
 
         if( CCUser::IsAdmin() )
         {
             $is_owner = true;
             $is_member = true;
+            $is_confirmed = true;
         }
         else
         {
@@ -411,6 +408,7 @@ EOF;
             if( $is_owner )
             {
                 $is_member = true;
+                $is_confirmed = true;
             }
             else
             {
@@ -418,12 +416,17 @@ EOF;
                     $collab_users = $this->_get_collab_users($collab_row['collab_id']);
 
                 foreach( $collab_users as $CU )
+                {
                     if( $is_member = ($curr_user == $CU['user_id']) )
+                    {
+                        $is_confirmed = $CU['collab_user_confirmed'];
                         break;
+                    }
+                }
             }
         }
 
-        return array( $is_owner, $is_member );
+        return array( $is_owner, $is_member, $is_confirmed );
     }
 
     function GetUploads( $collab_id='' )
@@ -525,13 +528,12 @@ EOF;
             switch( $cmd )
             {
                 case 'add':
-                    $users =& CCUsers::GetTable();
-                    $user_real_name = $users->QueryItemFromKey('user_real_name',$user_id);
+                    $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_id='.$user_id);
                     $users = new CCCollabUsers();
                     $w1['collab_user_user'] = $user_id;
                     $w1['collab_user_collab'] = $collab_id;
                     $collab_user = $users->QueryRow($w1);
-                    if( !empty($collab_user) )
+                    if( !empty($c) )
                     {
                         $args['error'] = sprintf(_('%s is already a member'),$user_real_name);
                     }
@@ -546,8 +548,7 @@ EOF;
                     break;
 
                 case 'remove':
-                    $users =& CCUsers::GetTable();
-                    $user_real_name = $users->QueryItemFromKey('user_real_name',$user_id);
+                    $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_id='.$user_id);
                     $users = new CCCollabUsers();
                     $w1['collab_user_user'] = $user_id;
                     $w1['collab_user_collab'] = $collab_id;
@@ -562,6 +563,12 @@ EOF;
                         $users->DeleteWhere($w1);
                         $args['user_name'] = $username;
                         $args['msg'] = sprintf(_('%s removed from project'),$user_real_name);
+                        $c = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_collab_users WHERE collab_user_collab='.$collab_id);
+                        if( $c < 2 )
+                        {
+                            CCDatabase::Query('UPDATE cc_tbl_collabs SET collab_confirmed=0 WHERE collab_id='.$collab_id);
+                            $args['msg'] .= ' (NO MEMBERS: This project is no longer listed)';
+                        }
                     }
                     break;
 
@@ -601,14 +608,27 @@ EOF;
                     }
                     else
                     {
-                        $users =& CCUsers::GetTable();
-                        $user_email = $users->QueryItemFromKey('user_email',$user_id);
+                        $user_email = CCDatabase::QueryItem('SELECT user_email FROM cc_tbl_user WHERE user_id='.$user_id);
                         $url = ccl('collab',$collab_id);
-                        $collabs = new CCCollabs();
-                        $collab_name = $collabs->QueryItemFromKey('collab_name',$collab_id);
+                        $collab_name = CCDatabase::QueryItem('SELECT collab_name FROM cc_tbl_collabs WHERE collab_id='.$collab_id);
                         $text .= "\n\nProject: \"$collab_name\"\n$url\n";
                         $this->_mail_out( $collab_id, _('Private message'), $text, $user_email );
                         $args['msg'] = _('Message sent');
+                    }
+                    break;
+
+                case 'confirm':
+                    if( CCUser::CurrentUserName() == $username )
+                    {
+                        CCDatabase::Query("UPDATE cc_tbl_collab_users SET collab_user_confirmed = 1 WHERE " .
+                                          "collab_user_collab = $collab_id AND collab_user_user = $user_id");
+                        CCDatabase::Query("UPDATE cc_tbl_collabs SET collab_confirmed = 1 WHERE collab_id = $collab_id");
+                        $args['user_name'] = $username;
+                        $args['msg']= _('You have been confirmed for this project');
+                    }
+                    else
+                    {
+                        $args['error'] = _('You do not have permssion to confirm other users');
                     }
                     break;
 

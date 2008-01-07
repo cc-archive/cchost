@@ -81,12 +81,17 @@ a.fname {
 	background: url('ccmixter/down-button-bg.gif');
 }
 
+.user_line {
+	white-space: nowrap;
+}
+
 .user_line .user {
-	width: 22%;
+	width: 150px;
+	overflow: hidden;
 }
 
 .user_line .role {
-	width: 50px;
+	width: 150px;
 }
 
 .user_line .credit {

@@ -1,3 +1,9 @@
+<?/*%%
+[meta]
+    type = template_component
+    desc = _('View A Collaboration')
+[/meta]
+%%*/?>
 <div id="ajax_msg"></div>
 <?
 $collab = $A['collab'];
@@ -12,6 +18,10 @@ $collab_id = $C['collab_id'];
         <a  id="commentcommand" href="%(home-url)%collab/edit/%(#collab_id)%"><span >%text(str_collab_edit)%</span></a>
     </div>
     %end_if%
+
+   %if_null(#C/collab_confirmed)%
+    <div  class="cc_collab_desc light_bg dark_border" style="margin:0.5em auto;width:60%;text-align:center;">%text(str_collab_list_when_conf)%</div>
+   %end_if%
 
     <div  class="cc_collab_by">
         %text(str_collab_created_by)%: <a href="%(home-url)%people/%(#C/user_name)%">%(#C/user_real_name)%</a> 
@@ -83,45 +93,29 @@ $collab_id = $C['collab_id'];
 <script  src="%url('js/autocomp.js')%" type="text/javascript" ></script>
 <script  src="%url('js/collab.js')%"   type="text/javascript" ></script>
 <script type="text/javascript">
-var str_credit = '%text(str_collab_credit2)%';
-var str_remove = '%text(str_collab_remove2)%';
-var str_send_email = '%text(str_collab_send_email)%';
-var collab_template = 
-    '<div class="user_line" id="_user_line_#{user_name}">' +
-    '<div class="user" ><a href="'+home_url+'people/#{user_name}">#{user_real_name}</a></div>' +
-    '<div class="role">#{role}</div>' +
-    '<div class="credit" id="_credit_#{user_name}">#{credit}</div>' +
-%if_not_null(#collab/is_owner)%
-    '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
-          + 'span>credit</span></a></div>' +
-    '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
-          + 'span>remove</span></a></div>' +
-%end_if%
-%if_not_null(#collab/is_member)%
-    '<div>' +
-    '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>send email' 
-         + '</span></a> ' +
-    '</div>' +
-%end_if%
-    '</div>';
-
 var cu = new ccCollab('%(#collab_id)%','%(#collab/is_member)%','%(#collab/is_owner)%');
 cu.updateFiles('%(#collab_id)%');
 %loop(#collab/users,_u)%
-  cu.addUser( '%(#_u/user_name)%', '%(#_u/user_real_name)%', '%(#_u/collab_user_role)%', '%(#_u/collab_user_credit)%' );
+  <?
+    if( $collab['is_owner'] || $collab['is_member'] || $_u['collab_user_confirmed'] ) 
+    {
+        $itsme = ($_u['user_id'] == CCUser::CurrentUser()) ? 1 : 0;
+      ?> cu.addUser( '%(#_u/user_name)%', '%(#_u/user_real_name)%', 
+             '%(#_u/collab_user_role)%', '%(#_u/collab_user_credit)%',%(#_u/collab_user_confirmed)%, %(#itsme)% );
+  <? } ?>
 %end_loop%
 
-    function upload_done(upload_id,msg)
-    {
-      $('upcover').style.display = 'none';
-      if( upload_id )
-      {
-        cu.updateFiles('%(#collab_id)%');
-        cu.msg('%text(str_collab_upload_succeeded)%.','green');
-      }
-      else
-      {
-        cu.msg('%text(str_collab_upload_failed)%: ' . msg,'red');
-      }
-    }
+function upload_done(upload_id,msg)
+{
+  $('upcover').style.display = 'none';
+  if( upload_id )
+  {
+    cu.updateFiles('%(#collab_id)%');
+    cu.msg('%text(str_collab_upload_succeeded)%.','green');
+  }
+  else
+  {
+    cu.msg('%text(str_collab_upload_failed)%: ' . msg,'red');
+  }
+}
 </script>
