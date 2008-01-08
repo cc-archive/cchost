@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generation Time: Dec 20, 2007 at 11:20 PM
+-- Generation Time: Jan 07, 2008 at 03:34 PM
 -- Server version: 5.0.27
 -- PHP Version: 5.2.1
 -- 
@@ -15,8 +15,8 @@
 -- 
 -- Table structure for table 'cc_tbl_activity_log'
 -- 
--- Creation: Dec 14, 2007 at 12:24 AM
--- Last update: Dec 19, 2007 at 11:32 PM
+-- Creation: Dec 30, 2007 at 04:23 PM
+-- Last update: Jan 07, 2008 at 06:08 AM
 -- 
 
 CREATE TABLE cc_tbl_activity_log (
@@ -36,8 +36,8 @@ CREATE TABLE cc_tbl_activity_log (
 -- 
 -- Table structure for table 'cc_tbl_cart'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_cart (
@@ -61,8 +61,8 @@ CREATE TABLE cc_tbl_cart (
 -- 
 -- Table structure for table 'cc_tbl_cart_items'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 19, 2007 at 09:38 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_cart_items (
@@ -78,9 +78,9 @@ CREATE TABLE cc_tbl_cart_items (
 -- 
 -- Table structure for table 'cc_tbl_collab_uploads'
 -- 
--- Creation: Dec 15, 2007 at 08:33 PM
--- Last update: Dec 15, 2007 at 08:51 PM
--- Last check: Dec 15, 2007 at 08:33 PM
+-- Creation: Jan 07, 2008 at 03:15 PM
+-- Last update: Jan 07, 2008 at 03:26 PM
+-- Last check: Jan 07, 2008 at 03:15 PM
 -- 
 
 CREATE TABLE cc_tbl_collab_uploads (
@@ -96,8 +96,8 @@ CREATE TABLE cc_tbl_collab_uploads (
 -- 
 -- Table structure for table 'cc_tbl_collab_users'
 -- 
--- Creation: Dec 15, 2007 at 08:33 PM
--- Last update: Dec 15, 2007 at 08:33 PM
+-- Creation: Jan 07, 2008 at 03:32 PM
+-- Last update: Jan 07, 2008 at 03:32 PM
 -- 
 
 CREATE TABLE cc_tbl_collab_users (
@@ -105,6 +105,7 @@ CREATE TABLE cc_tbl_collab_users (
   collab_user_user int(11) NOT NULL default '0',
   collab_user_role varchar(100) NOT NULL default '',
   collab_user_credit varchar(100) NOT NULL default '',
+  collab_user_confirmed int(1) NOT NULL default '0',
   KEY collab_user_collab (collab_user_collab)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -113,8 +114,8 @@ CREATE TABLE cc_tbl_collab_users (
 -- 
 -- Table structure for table 'cc_tbl_collabs'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:33 PM
+-- Last update: Jan 07, 2008 at 03:33 PM
 -- 
 
 CREATE TABLE cc_tbl_collabs (
@@ -123,6 +124,7 @@ CREATE TABLE cc_tbl_collabs (
   collab_desc text NOT NULL,
   collab_user int(11) NOT NULL default '0',
   collab_date datetime NOT NULL default '0000-00-00 00:00:00',
+  collab_confirmed int(1) NOT NULL default '0',
   PRIMARY KEY  (collab_id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
@@ -131,8 +133,8 @@ CREATE TABLE cc_tbl_collabs (
 -- 
 -- Table structure for table 'cc_tbl_config'
 -- 
--- Creation: Dec 14, 2007 at 03:27 AM
--- Last update: Dec 20, 2007 at 04:54 AM
+-- Creation: Jan 07, 2008 at 03:13 PM
+-- Last update: Jan 07, 2008 at 03:26 PM
 -- 
 
 CREATE TABLE cc_tbl_config (
@@ -149,8 +151,8 @@ CREATE TABLE cc_tbl_config (
 -- 
 -- Table structure for table 'cc_tbl_contests'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_contests (
@@ -178,8 +180,8 @@ CREATE TABLE cc_tbl_contests (
 -- 
 -- Table structure for table 'cc_tbl_feedcache'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_feedcache (
@@ -196,9 +198,9 @@ CREATE TABLE cc_tbl_feedcache (
 -- 
 -- Table structure for table 'cc_tbl_files'
 -- 
--- Creation: Dec 15, 2007 at 08:33 PM
--- Last update: Dec 19, 2007 at 11:32 PM
--- Last check: Dec 15, 2007 at 08:33 PM
+-- Creation: Jan 07, 2008 at 03:15 PM
+-- Last update: Jan 07, 2008 at 03:15 PM
+-- Last check: Jan 07, 2008 at 03:15 PM
 -- 
 
 CREATE TABLE cc_tbl_files (
@@ -221,8 +223,8 @@ CREATE TABLE cc_tbl_files (
 -- 
 -- Table structure for table 'cc_tbl_forum_groups'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_forum_groups (
@@ -237,8 +239,8 @@ CREATE TABLE cc_tbl_forum_groups (
 -- 
 -- Table structure for table 'cc_tbl_forum_threads'
 -- 
--- Creation: Dec 15, 2007 at 08:33 PM
--- Last update: Dec 18, 2007 at 10:42 PM
+-- Creation: Jan 07, 2008 at 03:15 PM
+-- Last update: Jan 07, 2008 at 03:15 PM
 -- 
 
 CREATE TABLE cc_tbl_forum_threads (
@@ -260,8 +262,8 @@ CREATE TABLE cc_tbl_forum_threads (
 -- 
 -- Table structure for table 'cc_tbl_forums'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_forums (
@@ -280,8 +282,8 @@ CREATE TABLE cc_tbl_forums (
 -- 
 -- Table structure for table 'cc_tbl_keys'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 20, 2007 at 12:24 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_keys (
@@ -297,8 +299,8 @@ CREATE TABLE cc_tbl_keys (
 -- 
 -- Table structure for table 'cc_tbl_licenses'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_licenses (
@@ -321,8 +323,8 @@ CREATE TABLE cc_tbl_licenses (
 -- 
 -- Table structure for table 'cc_tbl_notifications'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_notifications (
@@ -338,8 +340,8 @@ CREATE TABLE cc_tbl_notifications (
 -- 
 -- Table structure for table 'cc_tbl_pool_item'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 19, 2007 at 03:38 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_pool_item (
@@ -365,9 +367,9 @@ CREATE TABLE cc_tbl_pool_item (
 -- 
 -- Table structure for table 'cc_tbl_pool_tree'
 -- 
--- Creation: Dec 19, 2007 at 03:08 PM
--- Last update: Dec 19, 2007 at 09:38 PM
--- Last check: Dec 19, 2007 at 03:08 PM
+-- Creation: Jan 07, 2008 at 03:15 PM
+-- Last update: Jan 07, 2008 at 03:15 PM
+-- Last check: Jan 07, 2008 at 03:15 PM
 -- 
 
 CREATE TABLE cc_tbl_pool_tree (
@@ -386,8 +388,8 @@ CREATE TABLE cc_tbl_pool_tree (
 -- 
 -- Table structure for table 'cc_tbl_pools'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_pools (
@@ -410,8 +412,8 @@ CREATE TABLE cc_tbl_pools (
 -- 
 -- Table structure for table 'cc_tbl_ratings'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 19, 2007 at 01:45 AM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_ratings (
@@ -426,33 +428,54 @@ CREATE TABLE cc_tbl_ratings (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table 'cc_tbl_ratings_chart'
+-- Table structure for table 'cc_tbl_role_permissions'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 04, 2008 at 10:06 PM
 -- 
 
-CREATE TABLE cc_tbl_ratings_chart (
-  chart_id int(11) unsigned NOT NULL auto_increment,
-  chart_upload int(11) NOT NULL default '0',
-  chart_rank int(11) NOT NULL default '0',
-  chart_user int(11) NOT NULL default '0',
-  chart_rating int(11) NOT NULL default '0',
-  chart_count int(11) NOT NULL default '0',
-  chart_weight int(11) NOT NULL default '0',
-  chart_num_children int(4) NOT NULL default '0',
-  chart_num_parents int(4) NOT NULL default '0',
-  chart_time int(20) NOT NULL default '0',
-  PRIMARY KEY  (chart_id)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+CREATE TABLE cc_tbl_role_permissions (
+  role_permssion_role int(5) NOT NULL,
+  role_permission_actions varchar(255) NOT NULL,
+  KEY role_permssion_role (role_permssion_role)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'cc_tbl_role_users'
+-- 
+-- Creation: Jan 04, 2008 at 10:14 PM
+-- 
+
+CREATE TABLE cc_tbl_role_users (
+  role_users_user int(11) NOT NULL,
+  role_users_role int(5) NOT NULL,
+  role_users_scope varchar(40) NOT NULL,
+  KEY role_users_user (role_users_user)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table 'cc_tbl_roles'
+-- 
+-- Creation: Jan 04, 2008 at 10:00 PM
+-- 
+
+CREATE TABLE cc_tbl_roles (
+  role_id int(5) NOT NULL,
+  role_role varchar(100) NOT NULL,
+  PRIMARY KEY  (role_id),
+  KEY role_role (role_role)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 -- 
 -- Table structure for table 'cc_tbl_tag_alias'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_tag_alias (
@@ -466,8 +489,8 @@ CREATE TABLE cc_tbl_tag_alias (
 -- 
 -- Table structure for table 'cc_tbl_tags'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 19, 2007 at 11:38 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_tags (
@@ -482,9 +505,9 @@ CREATE TABLE cc_tbl_tags (
 -- 
 -- Table structure for table 'cc_tbl_topic_i18n'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
--- Last check: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
+-- Last check: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_topic_i18n (
@@ -499,8 +522,8 @@ CREATE TABLE cc_tbl_topic_i18n (
 -- 
 -- Table structure for table 'cc_tbl_topic_tree'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 15, 2007 at 08:32 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_topic_tree (
@@ -515,9 +538,9 @@ CREATE TABLE cc_tbl_topic_tree (
 -- 
 -- Table structure for table 'cc_tbl_topics'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 19, 2007 at 09:38 PM
--- Last check: Dec 15, 2007 at 08:33 PM
+-- Creation: Jan 07, 2008 at 03:15 PM
+-- Last update: Jan 07, 2008 at 03:15 PM
+-- Last check: Jan 07, 2008 at 03:15 PM
 -- 
 
 CREATE TABLE cc_tbl_topics (
@@ -550,8 +573,8 @@ CREATE TABLE cc_tbl_topics (
 -- 
 -- Table structure for table 'cc_tbl_tree'
 -- 
--- Creation: Dec 15, 2007 at 08:32 PM
--- Last update: Dec 19, 2007 at 11:30 PM
+-- Creation: Jan 07, 2008 at 03:12 PM
+-- Last update: Jan 07, 2008 at 03:12 PM
 -- 
 
 CREATE TABLE cc_tbl_tree (
@@ -566,9 +589,9 @@ CREATE TABLE cc_tbl_tree (
 -- 
 -- Table structure for table 'cc_tbl_uploads'
 -- 
--- Creation: Dec 19, 2007 at 10:56 PM
--- Last update: Dec 19, 2007 at 11:38 PM
--- Last check: Dec 19, 2007 at 10:56 PM
+-- Creation: Jan 07, 2008 at 03:15 PM
+-- Last update: Jan 07, 2008 at 03:15 PM
+-- Last check: Jan 07, 2008 at 03:15 PM
 -- 
 
 CREATE TABLE cc_tbl_uploads (
@@ -609,9 +632,9 @@ CREATE TABLE cc_tbl_uploads (
 -- 
 -- Table structure for table 'cc_tbl_user'
 -- 
--- Creation: Dec 19, 2007 at 11:00 PM
--- Last update: Dec 19, 2007 at 11:38 PM
--- Last check: Dec 19, 2007 at 11:00 PM
+-- Creation: Jan 07, 2008 at 03:15 PM
+-- Last update: Jan 07, 2008 at 03:15 PM
+-- Last check: Jan 07, 2008 at 03:15 PM
 -- 
 
 CREATE TABLE cc_tbl_user (
