@@ -324,7 +324,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 
+                         'reviewee', 'match', 'reqtags',
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -340,6 +340,12 @@ class CCQuery
     function _common_query()
     {
         $this->_setup_dataview();
+
+        if( !empty($this->reqtags) )
+        {
+            $tagfield = $this->_make_field('tags');
+            $this->where[] = $this->dataview->MakeTagFilter($this->reqtags,'all',$tagfield);
+        }
 
         if( !empty($this->tags) )
         {
@@ -712,6 +718,11 @@ class CCQuery
     function _gen_tags()
     {
         $this->tags = preg_split('/[\s,+]+/',$this->args['tags'],-1,PREG_SPLIT_NO_EMPTY);
+    }
+
+    function _gen_reqtags()
+    {
+        $this->reqtags = preg_split('/[\s,+]+/',$this->args['reqtags'],-1,PREG_SPLIT_NO_EMPTY);
     }
 
     function _gen_thread()

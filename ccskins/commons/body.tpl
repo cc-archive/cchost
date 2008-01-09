@@ -14,10 +14,15 @@
 
 <div id="header" class="light_color">
 
-    %if_not_empty(logged_in_as)%
-        <div id="login_info">%text(str_loggedin)%: <span>%(logged_in_as)%</span> 
-            <a class="light_color" href="%(home-url)%logout">%text(str_logout)%</a></div>
+    <div id="login_info">
+    %if_not_empty(logged_in_as)%<!-- logged in -->
+        %text(str_loggedin)%: <span>%(logged_in_as)%</span> 
+            <a class="light_color" href="%(home-url)%logout">%text(str_logout)%</a>
+    %else%<!-- not logged in -->
+        <span class="med_color">%text(str_logged_in_not)%</span>
+        <a class="light_color" href="%(home-url)%login">%text(str_log_in)%</a>
     %end_if%
+    </div>
 
     <div id="header_search"><img id="header_search_img" height="50" width="70" src="%url(images/find.png)%" />
     <a class="light_color" id="search_site_link" href="%(home-url)%search"><h3>%text(str_find)%</h3>
@@ -29,7 +34,7 @@
 
     <h1 id="site_title"><a href="%(root-url)%" title="%(site-title)%">
         %if_not_null(logo/src)% 
-            <? $bimg = ccd($A['logo']['src']); ?><img src="%(#bimg)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> 
+            <img src="%(logo/src)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> 
         %else% 
             <span class="light_color">%(site-title)%</span>
         %end_if%

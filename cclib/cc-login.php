@@ -434,12 +434,13 @@ class CCLogin
         require_once('cclib/cc-page.php');
         cc_setcookie(CC_USER_COOKIE,'',time());
         unset($_COOKIE[CC_USER_COOKIE]);
-        CCPage::Prompt(_('You are now logged out'));
+        CCPage::Prompt('str_log_logged_out');
         CCPage::SetTitle('str_log_out');
         CCEvents::Invoke( CC_EVENT_LOGOUT, array( $CC_GLOBALS['user_name'] ) );
         unset($CC_GLOBALS['user_name']);
         unset($CC_GLOBALS['user_id']);
         CCMenu::Reset();
+        CCPage::AddMacro('util.php/fixup_logout');
     }
 
     /**

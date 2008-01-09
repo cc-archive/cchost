@@ -5,6 +5,19 @@ function _t_util_format_signature($T,$A)
     print $T->String('str_from'). " <a href=\"{$A['root-url']}\">{$A['site-title']}</a>";
 }
 
+function _t_util_fixup_logout($T,$A)
+{
+    $html = '<span class="med_color">' . $T->String('str_logged_in_not') . 
+        '</span><a class="light_color" href="' . ccl('login') . '">' . $T->String('str_log_in') . '</a>';
+
+?>
+<script>
+    $('login_info').innerHTML = '<?= $html ?>';
+</script>
+<?
+}
+
+
 function _t_util_patch_stream_links(&$T,&$A)
 {
     $stream_fg = $T->URL('images/player/hear-button-fg.gif');

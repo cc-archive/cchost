@@ -245,7 +245,8 @@ class CCPlaylistManage
             $values['cart_name'] = substr($values['cart_name'],0,60);
             $values['cart_id'] = $playlist_id;
             $carts->Update($values);
-            $this->_send_prompt(_('Playlist has been updated.'));
+            $url = ccl('playlist','browse',$playlist_id);
+            CCUtil::SendBrowserTo($url);
         }
     }
 

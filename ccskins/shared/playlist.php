@@ -34,20 +34,20 @@ function _t_playlist_playlist_create_dyn(&$T,&$A) {
   </script>
 <?}
 
-function _t_playlist_playlist_popup(&$T,&$A) {
+function _t_playlist_playlist_popup(&$T,&$A) 
+{
 
-foreach( $A['args']['with'] as $R )
-{  
-   ?><span><a href="<?= $A['home-url']?>api/playlist/remove/<?= $A['args']['upload_id']?>/<?= $R['cart_id']?>" class="cc_playlist_menu_item"><span><?= $T->String('str_pl_remove_from')?> <span class="cc_playlist_name"><?= $R['cart_name']?></span></span></a></span><?
-}
+    foreach( $A['args']['with'] as $R )
+    {  
+       ?><span><a href="<?= $A['home-url']?>api/playlist/remove/<?= $A['args']['upload_id']?>/<?= $R['cart_id']?>" class="cc_playlist_menu_item"><span><?= $T->String('str_pl_remove_from')?> <span class="cc_playlist_name"><?= $R['cart_name']?></span></span></a></span><?
+    }
 
-foreach( $A['args']['without'] as $R )
-{ 
- ?><span><a href="<?= $A['home-url']?>api/playlist/add/<?= $A['args']['upload_id']?>/<?= $R['cart_id']?>" class="cc_playlist_menu_item"><span><?= $T->String('str_pl_add_to')?> <span class="cc_playlist_name"><?= $R['cart_name']?></span></span></a></span><?
-}
+    foreach( $A['args']['without'] as $R )
+    { 
+     ?><span><a href="<?= $A['home-url']?>api/playlist/add/<?= $A['args']['upload_id']?>/<?= $R['cart_id']?>" class="cc_playlist_menu_item"><span><?= $T->String('str_pl_add_to')?> <span class="cc_playlist_name"><?= $R['cart_name']?></span></span></a></span><?
+    }
  
-?><span><a href="<?= $A['home-url']?>api/playlist/new/<?= $A['args']['upload_id']?>" class="cc_playlist_menu_item cc_playlist_add_mi"><span><?=$T->String('str_pl_add_to_new')?></span></a></span>
-<?
+    ?><span><a href="<?= $A['home-url']?>api/playlist/new/<?= $A['args']['upload_id']?>" class="cc_playlist_menu_item cc_playlist_add_mi"><span><?=$T->String('str_pl_add_to_new')?></span></a></span><?
 }
 
 
@@ -71,50 +71,59 @@ function _t_playlist_playlist_list(&$T,&$A)
 
     ?></ul><?
     }
-?></td><td>
-<?
-    if ( !empty($A['args']['feed_q'])) {?><div  class="cc_playlist_feed"><a target="_parent" href="<?= $A['args']['feed_q']?>">
-<img  src="<?= $T->URL('images/feed-icon16x16.png') ?>" /></a></div>
-<?
+
+    ?></td><td><?
+    
+    if ( !empty($A['args']['feed_q'])) 
+    {
+        ?><div class="cc_playlist_feed"><a target="_parent" href="<?= $A['args']['feed_q']?>">
+                <img src="<?= $T->URL('images/feed-icon16x16.png') ?>" /></a>
+          </div><?
     }
 
-    $A['R'] = $A['args']['playlist'];?><a target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $A['R']['cart_id']?>">
-    <div  class="cc_playlist_title"><?= $A['R']['cart_name']?></div></a>
-    <span class="cc_playlist_date">
-<?= $T->String('str_pl_created_by')?> <a target="_parent" class="cc_user_link" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a> on <?= $A['R']['cart_date_format']?>
-      </span>
-<?
-        if ( !empty($A['R']['cart_desc']) )
-        {
-?>
-<div  class="gd_description" id="pldesc_<?= $A['R']['cart_id']?>">
-    <div  style="padding: 10px;"><?= cc_format_text($A['R']['cart_desc']);?></div>
-</div>
-<?
-        }
-        if ( !empty($A['R']['cart_msgs']) )
-        {
-?>
-<div  class="gd_description" id="pldesc_<?= $A['R']['cart_id']?>">
-    <div  style="padding: 10px;">
-        <? foreach( $A['R']['cart_msgs'] as $cmsg )
-            {
-                $T->String($cmsg);
-                print '<br /><br />';
-            }
-        ?>
-    </div>
-</div>
-<?
-        }
+    $A['R'] = $A['args']['playlist'];
     
-    ?></td></tr></table>
-<div  class="cc_pl_div" id="_cart_<?= $A['R']['cart_id']?>">
+?>
+    <a target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $A['R']['cart_id']?>">
+        <div class="cc_playlist_title"><?= $A['R']['cart_name']?></div>
+    </a>
+    <span class="cc_playlist_date">
+        <?= $T->String('str_pl_created_by')?> <a target="_parent" class="cc_user_link" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a> on <?= $A['R']['cart_date_format']?>
+    </span>
+<?
+    if ( !empty($A['R']['cart_desc']) )
+    {
+?>
+        <div  class="gd_description" id="pldesc_<?= $A['R']['cart_id']?>">
+            <div style="padding: 10px;"><?= cc_format_text($A['R']['cart_desc']);?></div>
+        </div>
+<?
+    }
+    if ( !empty($A['R']['cart_msgs']) )
+    {
+?>
+        <div  class="gd_description" id="pldesc_<?= $A['R']['cart_id']?>">
+            <div  style="padding: 10px;">
+                <? foreach( $A['R']['cart_msgs'] as $cmsg )
+                   {
+                        print $T->String($cmsg);
+                        print '<br /><br />';
+                   }
+                ?>
+            </div>
+        </div>
+<?
+    }
+    
+?>  </td></tr>
+    </table>
+    <div  class="cc_pl_div" id="_cart_<?= $A['R']['cart_id']?>">
 <?
     $A['records'] = $A['args']['records'];
     $T->Call('playlist_list_lines');
-?></div>
-<?
+    
+    ?></div><?
+
     if ( !empty($A['is_logged_in'])) {
         ?><span id="pl_user_<?= $A['R']['cart_id']?>"></span><?
     }
@@ -123,7 +132,7 @@ function _t_playlist_playlist_list(&$T,&$A)
         ?><span id="pl_owner_<?= $A['R']['cart_id']?>"></span><?
     } 
 
-    ?><br  clear="right" /><?
+    ?><div style="clear:right">&nbsp;</div><?
 }
 
 

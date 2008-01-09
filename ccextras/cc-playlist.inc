@@ -83,7 +83,8 @@ class CCPlaylists
             $up['cart_id'] = $playlist_id;
             $up['cart_dynamic'] = $qargs;
             $cart->Update($up);
-            $this->_send_prompt('str_pl_dynamic_changed');
+            $url = ccl('playlist','browse',$playlist_id);
+            CCUtil::SendBrowserTo($url);
         }
     }
 
@@ -95,8 +96,6 @@ class CCPlaylists
             return;
 
         extract($query_args);
-        $results = array();
-        $query = new CCQuery();
 
         $args['playlist'] = $this->_get_default_playlist();
 
@@ -106,27 +105,27 @@ class CCPlaylists
         if( empty($records) )
         {
             $url = url_args( ccl('playlist','create'), $qstring );
-            $link1 = "[url=$url]";
-            $link2 = '[/url]';
+            $link1 = "<a href=\"$url\">";
+            $link2 = '</a>';
             $args['playlist']['cart_msgs'][]= array('str_pl_no_recs_match',$link1, $link2);
         }
         else
         {
             $url = url_args( ccl('api','query'), $qstring . '&f=playlist');
-            $link1 = "[url=$url]";
-            $link2 = '[/url]';
+            $link1 = "<a href=\"$url\">";
+            $link2 = '</a>';
             $args['playlist']['cart_msgs'][] = array('str_pl_dyn_msg1',$link1,$link2);
             if( CCUser::IsLoggedIn() )
             {
-                $wpromo = empty($CC_GLOBALS['playlist_promo_tag']) ? '' : _('(without the promo tracks)');
                 $qstr = preg_replace('/promo_tag=[^&]+/','',$qstring);
                 $url = url_args( ccl('playlist','save'), $qstr );
-                $link1 = "[url=$url]";
-                $args['playlist']['cart_msgs'][] = array('str_pl_dyn_msg2',$wpromo, $link1,$link2);
+                $link1 = "<a href=\"$url\">";
+                $args['playlist']['cart_msgs'][] = array('str_pl_dyn_msg2','', $link1,$link2);
             }
             $args = $this->_add_menu($args,$args['playlist']['cart_id']);
         }
         $args['records'] = $records;
+        $this->_build_bread_crumb_trail($args['playlist']['cart_id']);
         CCPage::SetTitle('str_pl_dynamic_playlist');
         CCPage::PageArg('args',$args,'playlist_show_one');
 
@@ -231,14 +230,15 @@ class CCPlaylists
 
     function _build_bread_crumb_trail($playlist_id,$cmd='',$cmd2='')
     {
-        $trail = array();
-        $trail[] = array( 'url' => ccl(), 'text' => 'str_home' );
-        $trail[] = array( 'url' => ccl('people'), 'text' => 'str_people' );
         list( $user_id, $playlist_name ) = CCDatabase::QueryRow(
                 'SELECT cart_user, cart_name FROM cc_tbl_cart WHERE cart_id='.$playlist_id,false);
         list( $user_name, $user_real_name ) = CCDatabase::QueryRow(
             'SELECT user_name, user_real_name FROM cc_tbl_user WHERE user_id='.$user_id,false);
-        $trail[] = array( 'url' => ccl('people',$user_name), 'text' => $user_real_name );
+
+        $trail = array();
+        $trail[] = array( 'url' => ccl(),                                'text' => 'str_home' );
+        $trail[] = array( 'url' => ccl('people'),                        'text' => 'str_people' );
+        $trail[] = array( 'url' => ccl('people',$user_name),             'text' => $user_real_name );
         $trail[] = array( 'url' => ccl('people',$user_name,'playlists'), 'text' => 'str_playlists' );
         if( empty($cmd) )
         {
@@ -319,9 +319,9 @@ class CCPlaylists
     {
         $carts = new CCPlaylist(true);
         $args['playlist'] = $carts->QueryKeyRow($playlist_id);
-        $args['playlist']['artist_page_url'] = ccl('people',$args['playlist']['user_name']);
         if( empty($args['playlist']) )
             return null;
+        $args['playlist']['artist_page_url'] = ccl('people',$args['playlist']['user_name']);
         if( $args['playlist']['cart_dynamic'] || ($args['playlist']['cart_subtype'] == 'default') )
         {
             require_once('cclib/cc-query.php');
@@ -642,8 +642,9 @@ EOF;
         else
         {
             $sql =<<<EOF
-                SELECT cart_name, cart_desc, cart_id, cart_tags, cart_date,
-                  CONCAT('$ccp','/',user_name) as artist_page_url 
+                SELECT cart_name, cart_desc, cart_id, cart_tags, cart_date, cart_user, user_real_name,
+                  CONCAT('$ccp','/',user_name) as artist_page_url,
+                  DATE_FORMAT(cart_date, '%W, %M %e, %Y @ %l:%i %p') as cart_date_format
                   FROM cc_tbl_cart
                   JOIN cc_tbl_user ON cart_user = user_id 
                   WHERE cart_type = 'playlist' AND cart_subtype = 'default'
