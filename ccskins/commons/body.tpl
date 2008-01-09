@@ -34,7 +34,7 @@
 
     <h1 id="site_title"><a href="%(root-url)%" title="%(site-title)%">
         %if_not_null(logo/src)% 
-            <img src="%(logo/src)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> 
+            <? $bimg = ccd($A['logo']['src']); ?><img src="%(#bimg)%" style="width:%(logo/w)%px;height:%(logo/h)%px"/> 
         %else% 
             <span class="light_color">%(site-title)%</span>
         %end_if%
