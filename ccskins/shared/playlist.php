@@ -14,23 +14,20 @@ function _t_playlist_playlist_create_dyn(&$T,&$A) {
 <script  src="<?= $T->URL('js/autocomp.js')?>" ></script>
 <script  src="<?= $T->URL('js/autopick.js')?>" ></script>
 <script type="text/javascript">
-    var params = <?= $A['plargs']['edit_query']?>;
-    var filters = new ccQueryBrowserFilters( params );
-    var formatter = new ccFormatter();
-    var formInfo = filters.makeForm( 'ff', formatter );
-    $('filter_form').innerHTML = formInfo.html;
-    formatter.setup_watches();
-    $(formInfo.innerId).style.display = 'block';
-    Event.observe(formInfo.submitId,'click',onFilterSubmit.bindAsEventListener());
-    $(formInfo.submitId).innerHTML = '<span><?= $T->String($A['plargs']['submit_text']) ?></span>';
-
-    function onFilterSubmit(event) {
-      var qstring = filters.queryString() + '&f=playlist';
+    function submit_callback(event) {
+      var qstring = window.filters.queryString() + '&f=playlist';
       var promo_tag = '<?= $A['plargs']['promo_tag']?>';
       if( promo_tag.length > 0 )
         qstring += '&promo_tag=' + promo_tag;
       document.location.href = '<?= $A['plargs']['submit_url']?>' + q + qstring;
     }
+
+    var filters = new ccQueryBrowserFilters( 
+        { submit_text: '<?= $T->String($A['plargs']['submit_text']) ?>',
+          init_values: <?= $A['plargs']['edit_query']?>,
+          reqtags: <?= cc_get_config( 'playlist_tags', 'json' ) ?>,
+          onFilterSubmit: submit_callback.bindAsEventListener() } );
+
   </script>
 <?}
 
@@ -69,7 +66,7 @@ function _t_playlist_playlist_list(&$T,&$A)
 <?
         }
 
-    ?></ul><?
+        ?></ul><?
     }
 
     ?></td><td><?
@@ -81,30 +78,31 @@ function _t_playlist_playlist_list(&$T,&$A)
           </div><?
     }
 
-    $A['R'] = $A['args']['playlist'];
+
+    $playlist = $A['args']['playlist'];
     
 ?>
-    <a target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $A['R']['cart_id']?>">
-        <div class="cc_playlist_title"><?= $A['R']['cart_name']?></div>
+    <a target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $playlist['cart_id']?>">
+        <div class="cc_playlist_title"><?= $playlist['cart_name']?></div>
     </a>
     <span class="cc_playlist_date">
-        <?= $T->String('str_pl_created_by')?> <a target="_parent" class="cc_user_link" href="<?= $A['R']['artist_page_url']?>"><?= $A['R']['user_real_name']?></a> on <?= $A['R']['cart_date_format']?>
+        <?= $T->String('str_pl_created_by')?> <a target="_parent" class="cc_user_link" href="<?= $playlist['artist_page_url']?>"><?= $playlist['user_real_name']?></a> on <?= $playlist['cart_date_format']?>
     </span>
 <?
-    if ( !empty($A['R']['cart_desc']) )
+    if ( !empty($playlist['cart_desc']) )
     {
 ?>
-        <div  class="gd_description" id="pldesc_<?= $A['R']['cart_id']?>">
-            <div style="padding: 10px;"><?= cc_format_text($A['R']['cart_desc']);?></div>
+        <div  class="gd_description" id="pldesc_<?= $playlist['cart_id']?>">
+            <div style="padding: 10px;"><?= cc_format_text($playlist['cart_desc']);?></div>
         </div>
 <?
     }
-    if ( !empty($A['R']['cart_msgs']) )
+    if ( !empty($playlist['cart_msgs']) )
     {
 ?>
-        <div  class="gd_description" id="pldesc_<?= $A['R']['cart_id']?>">
+        <div  class="gd_description" id="pldesc_<?= $playlist['cart_id']?>">
             <div  style="padding: 10px;">
-                <? foreach( $A['R']['cart_msgs'] as $cmsg )
+                <? foreach( $playlist['cart_msgs'] as $cmsg )
                    {
                         print $T->String($cmsg);
                         print '<br /><br />';
@@ -117,7 +115,7 @@ function _t_playlist_playlist_list(&$T,&$A)
     
 ?>  </td></tr>
     </table>
-    <div  class="cc_pl_div" id="_cart_<?= $A['R']['cart_id']?>">
+    <div  class="cc_pl_div" id="_cart_<?= $playlist['cart_id']?>">
 <?
     $A['records'] = $A['args']['records'];
     $T->Call('playlist_list_lines');
@@ -125,11 +123,11 @@ function _t_playlist_playlist_list(&$T,&$A)
     ?></div><?
 
     if ( !empty($A['is_logged_in'])) {
-        ?><span id="pl_user_<?= $A['R']['cart_id']?>"></span><?
+        ?><span id="pl_user_<?= $playlist['cart_id']?>"></span><?
     }
 
     if ( !empty($A['args']['is_owner'])) {
-        ?><span id="pl_owner_<?= $A['R']['cart_id']?>"></span><?
+        ?><span id="pl_owner_<?= $playlist['cart_id']?>"></span><?
     } 
 
     ?><div style="clear:right">&nbsp;</div><?
@@ -140,22 +138,21 @@ function _t_playlist_playlist_list_window_cart(&$T,&$A)
 {
 ?>
     <div  class="cc_playlist_popup_window">
-    <table  class="cc_pl_table" cellpadding="0" cellspacing="0"><tr ><td >
+    <table  class="cc_pl_table" cellpadding="0" cellspacing="0"><tr><td>
 <?
     if ( !empty($A['args']['menu'])) 
     {
-        ?><ul  class="cc_playlist_owner_menu light_bg dark_border"><?
+?>
+        <ul class="cc_playlist_owner_menu light_bg dark_border"><?
             
-        $carr106 = $A['args']['menu'];
-        $cc106= count( $carr106);
-        $ck106= array_keys( $carr106);
-        for( $ci106= 0; $ci106< $cc106; ++$ci106)
+        foreach( $A['args']['menu'] as $mi )
         {
-            $A['MI'] = $carr106[ $ck106[ $ci106 ] ];   
-            ?><li >
-            <a target="_parent" href="<?= $A['MI']['url']?>" id="<?= $A['MI']['id']?>" class="<?= $A['MI']['class']?>"><span><?= $T->String($A['MI']['text']) ?></span></a>
+?>
+            <li >
+                <a target="_parent" href="<?= $mi['url']?>" id="<?= $mi['id']?>" class="<?= $mi['class']?>">
+                    <span><?= $T->String($mi['text']) ?></span></a>
             </li>
-            <?
+<?
         }
 
         ?></ul><?
@@ -256,22 +253,23 @@ function _t_playlist_playlist_popup_window(&$T,&$A)
 <?
 }
 
-function _t_playlist_playlist_show_browser(&$T,&$A) {
-  ?>
+function _t_playlist_playlist_show_browser(&$T,&$A) 
+{
+?>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>"  title="Default Style"></link>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>"  title="Default Style"></link>
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <div  id="playlist_browser" class="grid"><span><?= $T->String('str_pl_getting') ?>...</span></div>
-<?$A['player_options'] = 'autoHook: false';$T->Call('playerembed.xml/eplayer');
-?><script type="text/javascript">
+<? $A['player_options'] = 'autoHook: false';$T->Call('playerembed.xml/eplayer'); ?>
+<script type="text/javascript">
     var plb = new ccPlaylistBrowser( 'playlist_browser', <?= $A['args']?> );
 </script>
 <?}
 
 function _t_playlist_playlist_menu(&$T,&$A) 
 {
-  ?>
+?>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>

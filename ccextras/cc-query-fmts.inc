@@ -101,6 +101,17 @@ class CCQueryFormats
                 break;
             }
             
+            case 'embed':
+            {
+                require_once('cclib/cc-page.php');
+                $page =& CCPage::GetPage();
+                $page->PageArg('records', $records);
+                $page->PageArg('dochop',  isset($chop) && $chop > 0 );
+                $page->PageArg('chop',    isset($chop) ? $chop : 25 );
+                $page->Call($template);
+            }
+            break;
+
             case 'html':
             case 'docwrite':
             {

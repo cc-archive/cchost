@@ -76,6 +76,9 @@ class CCSkin
         $this->map_stack = array();
         $this->files = array();
         $this->search_cache = array();
+
+        $template = $this->GetTemplate($this->filename);
+        $this->_pick_up_skin_file(dirname($template),'skin');
     }
 
     /**
@@ -141,12 +144,17 @@ class CCSkin
             header('Content-type: text/html; charset=' . CC_ENCODING) ;
         }
 
+        // we have to special case and pick up string files early 
+
+        // first the skin/template specific string file then the global string profile
+        $this->_pick_up_skin_file(dirname($this->filename),'strings');
+
         if( !empty($this->vars['string_profile']) && file_exists($this->vars['string_profile']) )
             require_once($this->vars['string_profile']);
 
         // Load the main skin file here...
-        
-        $this->Call($this->filename);
+        // hmmm
+        //$this->Call($this->filename);
 
         // execute specific macros...
 
@@ -624,12 +632,14 @@ class CCSkin
 class CCSkinMacro extends CCSkin
 {
     var $_skin_macro;
+    var $_skin_loaded;
 
     function CCSkinMacro($macro)
     {
         global $CC_GLOBALS;
         $this->CCSkin($CC_GLOBALS['skin-file']);
         $this->_skin_macro = $macro;
+        $this->_skin_loaded = false;
     }
 
     function LookupMacro($macropath='')
@@ -642,7 +652,7 @@ class CCSkinMacro extends CCSkin
     function SetAllAndPrint( $args, $headers=false )
     {
         $args['auto_execute'][] = $this->_skin_macro;
-        $ret = parent::SetAllAndPrint($args,$headers);
+        $ret = parent::SetAllAndPrint($args,$headers,!$this->_skin_loaded);
         return $ret;
     }
 }

@@ -28,5 +28,7 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCChannels', 'OnMapUrls')  , 'ccextras/cc-channels.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCChannels', 'OnAdminMenu'), 'ccextras/cc-channels.inc');
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCQueryAdmin', 'OnMapUrls')  , 'ccextras/cc-query-admin.inc' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCQueryAdmin', 'OnAdminMenu'), 'ccextras/cc-query-admin.inc');
 
 ?>

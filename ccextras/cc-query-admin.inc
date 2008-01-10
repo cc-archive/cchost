@@ -29,27 +29,28 @@ if( !defined('IN_CC_HOST') )
 require_once('ccextras/cc-tag-editor.inc');
 
 
-class CCChannelsAdminForm extends CCTagEditorForm
+class CCQueryAdminForm extends CCTagEditorForm
 {
-    function CCChannelsAdminForm()
+    function CCQueryAdminForm($default_tags)
     {
-        $this->CCTagEditorForm('channels',_('Add Channel'));
-
-        $promo_tag = empty($CC_GLOBALS['site_promo_tag']) ? 'site_promo' : $CC_GLOBALS['site_promo_tag'];
-        $input = $this->generator_textedit('site_promo_tag',$promo_tag,'cc_form_edit_short');
-        $html = sprintf(_('Uploads with these tags %s will be mixed in with streams.'),$input);
-
-        $this->SetHelpText($html);
+        $this->CCTagEditorForm('browse_query_tags',_('Add Tag'),$default_tags);
     }
 }
 
-class CCChannels
+class CCQueryAdmin
 {
     function Admin()
     {
-        CCPage::SetTitle(_('Configure Channels'));
-        $form = new CCChannelsAdminForm();
-        if( empty($_POST['channelsadmin']) || !$form->ValidateFields() )
+        CCPage::SetTitle(_('Query Admin'));
+
+        $default_tags = array(
+                    array( 'tags' => 'remix',
+                            'text' => 'remix' ),
+                    array( 'tags' => 'sample',
+                           'text'   => 'sample' )
+                );
+        $form = new CCQueryAdminForm($default_tags);
+        if( empty($_POST['queryadmin']) || !$form->ValidateFields() )
         {
             CCPage::AddForm( $form->GenerateForm() );
         }
@@ -61,12 +62,9 @@ class CCChannels
             if( !empty($_POST['new']) )
                 $this->_inject($channels,$_POST['new']);
             $configs =& CCConfigs::GetTable();
-            $configs->SaveConfig('channels',$channels,CC_GLOBAL_SCOPE,false);
+            $configs->SaveConfig('browse_query_tags',$channels,CC_GLOBAL_SCOPE,false);
 
-            $b['site_promo_tag'] = $_POST['site_promo_tag'];
-            $configs->SaveConfig('config',$b,CC_GLOBAL_SCOPE,true);
-
-            CCPage::Prompt(_('Channel information saved'));
+            CCPage::Prompt(_('Tags information saved'));
         }
 
     }
@@ -88,10 +86,10 @@ class CCChannels
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','channels'), 
-                          array( 'CCChannels', 'Admin'),  CC_ADMIN_ONLY,
+        CCEvents::MapUrl( ccp('admin','browse'), 
+                          array( 'CCQueryAdmin', 'Admin'),  CC_ADMIN_ONLY,
                           ccs(__FILE__), '', 
-                          _('Configure channels/radio interface'), 
+                          _('Configure browse interface'), 
                           CC_AG_RENDER );
     }
 
@@ -106,13 +104,13 @@ class CCChannels
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $items += array(
-                'channels' => array( 
-                                 'menu_text'  => _('Channels Page'),
+                'qbrowse' => array( 
+                                 'menu_text'  => _('Query Browser'),
                                  'menu_group' => 'configure',
-                                 'help' => 'Configure playlists for the channels page',
+                                 'help' => 'Configure query browser',
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 1340,
-                                 'action' =>  ccl('admin','channels')
+                                 'action' =>  ccl('admin','browse')
                                  ),
                 );
         }

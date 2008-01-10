@@ -24,22 +24,17 @@
 ccQueryBrowserFilters = Class.create();
 ccQueryBrowserFilters.prototype = {
 
-    initialize: function(init_values) {
+    options: {},
 
-        this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', 
-                                         vals: [  
-                                                    ['remix,44k', str_default + ' (remix)' ],
-                                                    ['editorial_pick',      'ed picks' ],
-                                                    ['remix,hip_hop',       'hip hop'], 
-                                                    ['remix,downtempo',     'downtempo'], 
-                                                    ['remix,funky',         'funky'], 
-                                                    ['remix,female_vocals', 'female vocals'],
-                                                    ['remix,chill',         'chill'],
-                                                    ['remix,experimental',  'experimental'],
-                                                    ['remix,trip_hop',      'trip hop'],
-                                                    ['audio',               str_all ]
-                                                ] 
-                           };
+    initialize: function(options) {
+
+        this.options = options;
+
+        var vtags = this.options.reqtags.inject( [], function(arr,tags) {
+            arr.push( [ tags.tags, tags.text ] );
+            return arr;
+        });
+        this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', vals: vtags };
         this.user       = { name: str_artist, fmt: 'user_lookup', param: 'user' };
         this.remixesof  = { name: str_remixes_of, fmt: 'remix_user', param: 'remixesof' };
         this.tags       = { name: str_tags, fmt: 'tag_lookup', param: 'tags' };
@@ -97,14 +92,26 @@ ccQueryBrowserFilters.prototype = {
         // this should be "playlist mode"
         // this.rand       = { name: 'Random Sort', fmt: 'checkbox', param: 'rand' };
 
-        if( init_values )
+        if( this.options.init_values )
         {
             var me = this;
-            $H(init_values).each( function(pair) {
+            $H(this.options.init_values).each( function(pair) {
                 if( me[pair[0]] )
                     me[pair[0]].value = pair[1];
             });
         }
+
+        if( !this.options.formatter )
+            this.options.formatter = new ccFormatter();
+        if( !this.options.formInfo )
+            this.options.formInfo = this.makeForm( 'ff', this.options.formatter );
+        if( !this.options.filter_form )
+            this.options.filter_form = 'filter_form';
+        $(this.options.filter_form).innerHTML = this.options.formInfo.html;
+        this.options.formatter.setup_watches();
+        $(this.options.formInfo.innerId).style.display = 'block';
+        Event.observe(this.options.formInfo.submitId,'click',this.options.onFilterSubmit);
+        $(this.options.formInfo.submitId).innerHTML = '<span>' + this.options.submit_text + '</span>';
     },
 
     filterOutUnknown: function(filters) {

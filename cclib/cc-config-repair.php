@@ -13,10 +13,40 @@ function validate_user()
     if( !in_array($user_name,$supers) )
         die('you are not in the media/config/supers list');
 }
-error_reporting(E_ALL); validate_user(); ?>
+error_reporting(E_ALL); validate_user(); 
+
+$path = empty($_GET['path']) ? array() : split('/',$_GET['path']);
+
+
+if( !empty($_POST['cmd']) )
+{
+    switch( $_POST['cmd'] )
+    {
+        case 'add':
+            do_add_path($path);
+            break;
+        case 'save':
+            do_save_path($path,strip($_POST['value']));
+            break;
+    }
+}
+?>
 <html>
 <head>
 <script type="text/javascript" src="../ccskins/shared/js/prototype.js" ></script>
+<script>
+function save_config(path)
+{
+    $('config_field').innerHTML = 'working...';
+    var value = $('config_value').value;
+    new Ajax.Updater('config_field','/cclib/cc-config-repair.php',{method:'post',params:'cmd=save&path='+path+'&value='+value});
+}
+function add_path(path,newnode)
+{
+    $('path_edit').innerHTML = 'working...';
+    new Ajax.Updater('config_field','/cclib/cc-config-repair.php',{method:'post',params:'cmd=add&path='+path});
+}
+</script>
 <style>
 #config_list {
     float: left;
@@ -55,13 +85,16 @@ a.config_path:hover, a.config_key:hover {
     float: right;
     margin-right: 30px;
 }
-
+#config_field{
+    margin: 2px;
+    border: 1px solid black;
+    padding: 2px;
+}
 </style>
 </head>
 <body>
 <h2>Edit Config</h2>
 <?
-$path = empty($_GET['path']) ? array() : split('/',$_GET['path']);
 
 if( !empty($_GET['cmd']) )
 {
@@ -70,7 +103,6 @@ if( !empty($_GET['cmd']) )
         del($path);
     }
 }
-
 
 $qr = q('SELECT DISTINCT config_scope FROM cc_tbl_config ORDER by config_scope');
 print '<div id="config_list">';
@@ -106,9 +138,6 @@ if( empty($_GET['cmd']) )
         print '</div>';
     }
 }
-else
-{
-}
 
 
 function recurse_path($data,$base,$path,$level)
@@ -121,28 +150,31 @@ function recurse_path($data,$base,$path,$level)
         if( isset($key) && ($K == $key) )
         {
             $type = empty($V) ? 'null' : gettype($V);
+            print "\n";
             switch($type)
             {
                 case 'array':
                     print '<a class="config_key" href="?path='.$dpath.'">'.$space . $K.'</a>';
                     if( count($path) == $level+1 )
                     {
-                        print '<a class="config_cmd" href="?cmd=add&path='.$dpath.'">'.$space .'[add key to \''.$K.'\']</a> ' .
-                              '<a class="config_cmd" href="?cmd=delete&path='.$dpath.'">'.$space . '[delete \''.$K.'\']</a> ';
+                        print '<div id="path_edit"><a class="config_cmd" href="javascript://" onclick="add_path(\''.$dpath.'\');">'.$space .'[add key to \''.$K.'\']</a> ' .
+                              '<a class="config_cmd" href="?cmd=delete&path='.$dpath.'">'.$space . '[delete \''.$K.'\']</a></div> ';
                     }
                     recurse_path($V,$dpath,$path,$level+1);
                     continue;
                 case 'object':
-                    print "$K is an object, sorry, can't edit";
+                    print "<div>$K is an object, sorry, can't edit";
                     break;
                 case 'integer':
                 case 'null':
-                    print $space . "$K: $space <input id='config_edit' value=\"" . htmlentities($V) . '" />';
+                    print '<div id="config_field">'.$space . "$K: $space <input id='config_value' value=\"" . htmlentities($V) . '" />';
                     break;
                 default:
-                    print $space . "$K:<br />$space <textarea id='config_value'>" . htmlentities($V) . '</textarea>';
+                    print '<div id="config_field">'.$space . "$K:<br />$space <textarea id='config_value'>" . htmlentities($V) . '</textarea>';
             }
+           print '<a class="config_cmd" href="javascript://" onclick="save_config(\''.$dpath.'\');">'.$space . '[save \''.$K.'\']</a> ';
            print '<a class="config_cmd" href="?cmd=delete&path='.$dpath.'">'.$space . '[delete \''.$K.'\']</a> ';
+           print '</div>';
         }
         else
         {   
@@ -245,6 +277,36 @@ function data($path)
     $qr = q($sql);
     $row = mysql_fetch_assoc($qr) or die( mysql_error() );
     return unserialize($row['config_data']);
+}
+
+function strip(&$mixed)
+{
+    if( get_magic_quotes_gpc() == 1 )
+    {
+        if( is_array($mixed) )
+        {
+            $keys = array_keys($mixed);
+            foreach( $keys as $key )
+                $mixed[$key] = strip($mixed[$key]);
+        }
+        else
+        {
+            $mixed = trim(stripslashes( $mixed ));
+        }
+    }
+    return($mixed);
+}
+
+function do_add_path($path)
+{
+    print 'ok';
+    exit;
+}
+
+function do_save_config($path,$value)
+{
+    print 'ok';
+    exit;
 }
 
 function d(&$obj)

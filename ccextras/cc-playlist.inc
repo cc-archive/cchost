@@ -198,6 +198,12 @@ class CCPlaylists
                                             'ccextras/cc-playlist-forms.inc' ,
                    '', _('Playlist api'), CC_AG_PLAYLIST ); 
 
+        CCEvents::MapUrl( ccp('admin','playlists','tags'), 
+                          array( 'CCPlaylistManage', 'AdminTags'),  CC_ADMIN_ONLY,
+                                            'ccextras/cc-playlist-forms.inc' , '',
+                          _('Configure playlist tags'), 
+                          CC_AG_PLAYLIST );
+
     }
 
     function Save()

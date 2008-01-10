@@ -5,4 +5,4 @@
 [/meta]
 */?>
 
-%import_skin(ccskins/plain)%
+%import_skin(ccskins/shared)%

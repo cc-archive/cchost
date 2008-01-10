@@ -310,6 +310,7 @@ function add_flat_row(form_id,num_grid_rows,num_grid_cols)
     for( ci = 0; ci < num_cols; ci++ )
     {
         td = row.insertCell(ci);
-        td.innerHTML = $(form_id + '_meta_' + ci).innerHTML.replace(/%i%/g,"" + row_num); 
+        var nid = ci + 1;
+        td.innerHTML = $(form_id + '_meta_' + nid).innerHTML.replace(/%i%/g,"" + row_num); 
     }
 }

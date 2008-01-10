@@ -38,6 +38,7 @@ class CCPseudoVerifyAdminForm extends CCGridForm
     function CCPseudoVerifyAdminForm()
     {
         $this->CCGridForm();
+        $this->SetTemplateVar('form_fields_macro','flat_grid_form_fields');
 
         $help = _('Use this screen to allow uploads of less common and hard to verify file types. Unlike other common media types the degree of support for verifying the efficacy of these file types range greatly.') . "\n" .
                 '<p>' . _('A guide to using this screen') . ":</p>\n" .

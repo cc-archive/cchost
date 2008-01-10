@@ -26,7 +26,12 @@ EOF;
            $T->Call($macro);
 
     if ( !empty($F['html_form_grid_columns'])) 
-        $T->Call('grid_form_fields');
+    {
+        if( empty($F['form_fields_macro']) )
+            $T->Call('grid_form_fields');
+        else
+            $T->Call($F['form_fields_macro']);
+    }
 
     if ( !empty($F['html_form_fields']))
     {

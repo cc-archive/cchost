@@ -33,9 +33,18 @@ if( !defined('IN_CC_HOST') )
 */
 require_once('ccextras/cc-cart-table.inc');
 require_once('ccextras/cc-playlist.inc');
+require_once('ccextras/cc-tag-editor.inc');
 require_once('cclib/cc-form.php');
 require_once('cclib/cc-admin.php');
 require_once('cclib/cc-page.php');
+
+class CCPlaylistTagsAdminForm extends CCTagEditorForm
+{
+    function CCPlaylistTagsAdminForm($default_tags)
+    {
+        $this->CCTagEditorForm('playlist_tags',_('Add Tag'),$default_tags);
+    }
+}
 
 class CCPlaylistForm extends CCForm
 {
@@ -134,45 +143,13 @@ class CCAdminPlaylistsForm extends CCEditConfigForm
                        'form_tip'   => _('Users who have abused playlists'),
                        'formatter'  => 'textarea',
                        'flags'      => CCFF_POPULATE ),
-/*
-            'playlist_rank' =>
-               array(  'label'      => _('Use Playlist For Rankings'),
-                       'form_tip'   => _('Use playlists stats to rank uploads'),
-                       'formatter'  => 'checkbox',
-                       'flags'      => CCFF_POPULATE ),
 
-            'playlist_feat' =>
-               array(  'label'      => _('Featured Song'),
-                       'form_tip'   => _('This will be excluded from rankings and play counts. (Use the numberic upload id)'),
-                       'class'      => 'cc_form_input_short',
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE ),
-
-            'playlist_minsec' =>
-               array(  'label'      => _('Minimum Play Time'),
-                       'form_tip'   => _('The minimum number of seconds before a song gets credit for a Play'),
-                       'class'      => 'cc_form_input_short',
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE ),
-
-            'playlist_weigh_play' =>
-               array(  'label'      => _('Weight: Play'),
-                       'form_tip'   => _('How much do plays influence rankings'),
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE ),
-
-            'playlist_weigh_add' =>
-               array(  'label'      => _('Weight: Add'),
-                       'form_tip'   => _('How much do adds to playlists influence rankings'),
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE ),
-
-            'playlist_weigh_rate' =>
-               array(  'label'      => _('Weight: Rate'),
-                       'form_tip'   => _('How much do user ratings influence rankings (set this to zero to ignore ratings)'),
-                       'formatter'  => 'textedit',
-                       'flags'      => CCFF_POPULATE ),
-*/
+            '_tags' => 
+                array( 'label'      => _('Create Tags'),
+                       'value'      => "<a href=\"".ccl('admin','playlists','tags')."\">" . _('Edit default tags for create form') . '</a>',
+                       'formatter'  => 'statictext',
+                       'form_tip'   => _('Edit which tags are shown in the Create Playlist form'),
+                       'flags'      => CCFF_NOUPDATE | CCFF_STATIC ),
                 );
 
 
@@ -188,6 +165,47 @@ class CCPlaylistManage
         $form = new CCAdminPlaylistsForm();
         CCPage::AddForm($form->GenerateForm());
     }
+
+    function AdminTags()
+    {
+        CCPage::SetTitle(_('Config Create Playlist Tags'));
+
+        $default_tags = array(
+                    array( 'tags' => 'remix',
+                            'text' => 'remix' ),
+                    array( 'tags' => 'sample',
+                           'text'   => 'sample' )
+                );
+        $form = new CCPlaylistTagsAdminForm($default_tags);
+        if( empty($_POST['playlisttagsadmin']) || !$form->ValidateFields() )
+        {
+            CCPage::AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            $channels = array();
+            if( !empty($_POST['S']) )
+                $this->_inject($channels,$_POST['S']);
+            if( !empty($_POST['new']) )
+                $this->_inject($channels,$_POST['new']);
+            $configs =& CCConfigs::GetTable();
+            $configs->SaveConfig('playlist_tags',$channels,CC_GLOBAL_SCOPE,false);
+
+            CCPage::Prompt(_('Tags information saved'));
+        }
+
+    }
+
+    function _inject(&$results,$arr)
+    {
+        CCUtil::StripSlash($arr);
+        foreach( $arr as $channel )
+        {
+            if( empty($channel['delete']) )
+                $results[] = $channel;
+        }
+    }
+
 
     /**
     * Event handler for {@link CC_EVENT_ADMIN_MENU}

@@ -66,11 +66,6 @@ function cc_datefmt($date,$fmt)
     return( date($fmt,strtotime($date)) );
 }
 
-function cc_not_empty(&$val)
-{
-    return isset($val) && !empty($val) ? $val : '';
-}
-
 
 /**
 * Return the values current stored in the configs tables
@@ -78,10 +73,14 @@ function cc_not_empty(&$val)
 * @param string $configName Name of settings (e.g. 'chart', 'licenses')
 * @return mixed Raw config value as stored in db
 */
-function cc_get_config($configName)
+function cc_get_config($configName,$format='php')
 {
     $configs =& CCConfigs::GetTable();
-    return $configs->GetConfig($configName);
+    $v = $configs->GetConfig($configName);
+    if( $format == 'php' )
+        return $v;
+    if( $format == 'json' )
+        return cc_php_to_json($v);
 }
 
 
@@ -191,6 +190,12 @@ function cc_get_user_avatar(&$R)
     }
 
     return ccd($CC_GLOBALS['avatar-dir'], $R['user_image'] );
+}
+
+function cc_php_to_json(&$obj)
+{
+    require_once('cclib/zend/json-encoder.php');
+    return CCZend_Json_Encoder::encode($obj);
 }
 
 ?>
