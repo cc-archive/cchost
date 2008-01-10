@@ -181,11 +181,12 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 <div id="upload_menu_box">
 </div><!-- upload_menu_box -->
 
+%call('playerembed.xml/eplayer')%
+<script type="text/javascript">
+if( window.ccEPlayer )
+    ccEPlayer.hookElements($('upload_middle'));
+</script>
 %if_not_null(enable_playlists)%
-    %call('playerembed.xml/eplayer')%
-    <script type="text/javascript">
-        ccEPlayer.hookElements($('upload_middle'));
-    </script>
     %if_not_null(logged_in_as)%
         %call('playlist.xml/playlist_menu')%
     %end_if%

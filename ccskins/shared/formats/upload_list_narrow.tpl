@@ -68,12 +68,11 @@
 %call(prev_next_links)%
 </div>
 
-%if_not_null(enable_playlists)%
- %call('playerembed.xml/eplayer')%
- <script type="text/javascript">
-   ccEPlayer.hookElements($('cc_narrow_list'));
- </script>
-%end_if%
+%call('playerembed.xml/eplayer')%
+<script type="text/javascript">
+if( window.ccEPlayer )
+    ccEPlayer.hookElements($('cc_narrow_list'));
+</script>
 <script type="text/javascript">
 var dl_hook = new queryPopup("download_hook","download",str_download); 
 dl_hook.hookLinks(); 

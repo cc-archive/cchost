@@ -47,17 +47,21 @@ function pickwinplay(qstring)
 
 
 <?
-function _t_picks_picks_links(&$T,&$A) {
+function _t_picks_picks_links(&$T,&$A) 
+{
+    if( $GLOBALS['strings-profile'] == 'audio' )
+    {
 ?>
-<div class="pickslinks">
-    <a id="mi_podcast_page" href="<?= $A['home-url']?>podcast/page?<?= $A['qstring']?>"><span ><?= $T->String('str_podcast')?></span></a>
-    <a id="mi_stream_page" href="<?= $A['home-url']?>stream/page/playlist.m3u?<?= $A['qstring']?>"><span ><?= $T->String('str_stream')?></span></a>
-<?if ( !empty($A['enable_playlists'])) {?>
-    <a  id="mi_play_page" href="javascript://play win" onclick="pickwinplay('<?= $A['qstring']?>');"><span ><?= $T->String('str_play')?></span></a>
-<?}?>
-    <br class="pickslinks_break" />
-</div>
+        <div class="pickslinks">
+        <a id="mi_podcast_page" href="<?= $A['home-url']?>podcast/page?<?= $A['qstring']?>"><span ><?= $T->String('str_podcast')?></span></a>
+        <a id="mi_stream_page" href="<?= $A['home-url']?>stream/page/playlist.m3u?<?= $A['qstring']?>">
+            <span><?= $T->String('str_stream')?></span></a>
+        <a id="mi_play_page" href="javascript://play win" onclick="pickwinplay('<?= $A['qstring']?>');">
+            <span><?= $T->String('str_play')?></span></a>
+            <br class="pickslinks_break" />
+        </div>
 <?
+    }
 }
 
 function _t_picks_picks(&$T,&$A) {

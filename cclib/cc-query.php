@@ -324,7 +324,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 'reqtags',
+                         'reviewee', 'match', 'reqtags','rand',
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -577,6 +577,11 @@ class CCQuery
         $this->where[] = 'cart_item_cart = '.$this->args['playlist']; // err, is this right?
     }
 
+    function _gen_rand()
+    {
+        $this->sql_p['order'] = 'RAND()';
+    }
+
     function _gen_reccby()
     {
         $users =& CCUsers::GetTable();
@@ -679,11 +684,7 @@ class CCQuery
         if( empty($this->validated_sort) && !empty($args['sort']) )
             $this->_validate_sort_fields();
 
-        if( !empty($args['rand']) )
-        {
-            $this->sql_p['order'] = 'RAND()';
-        }
-        elseif( !empty($this->validated_sort) && (empty($args['ids']) || empty($args['nosort']))  )
+        if( !empty($this->validated_sort) && (empty($args['ids']) || empty($args['nosort']))  )
         {
             if( empty($args['ord']) )
                 $args['ord'] = 'ASC';

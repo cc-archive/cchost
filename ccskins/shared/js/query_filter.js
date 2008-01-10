@@ -30,6 +30,11 @@ ccQueryBrowserFilters.prototype = {
 
         this.options = options;
 
+        if( !this.options.query_url )
+            this.options.query_url = query_url;
+        if( !this.options.format )
+            this.options.format = 'html';
+
         var vtags = this.options.reqtags.inject( [], function(arr,tags) {
             arr.push( [ tags.tags, tags.text ] );
             return arr;
@@ -78,22 +83,18 @@ ccQueryBrowserFilters.prototype = {
                                                ]
                           };
 
-        this.limit = { name: str_limit, fmt: 'dropdown', param: 'limit', value: 35,
-                                         vals: [  
-                                                  [ 1 ], 
-                                                  [ 5 ],
-                                                  [ 10 ],
-                                                  [ 15 ],
-                                                  [ 25 ],
-                                                  [ 50 ]
-                                               ]
-                          };
+        var limits = [  [ 1 ], [ 5 ], [ 10 ], [ 15 ], [ 25 ], [ 50 ] ];
 
-        // this should be "playlist mode"
+        this.limit = { name: str_limit, fmt: 'dropdown', param: 'limit', value: 25, vals: limits };
+
+        // this should be "shuffle mode"
         // this.rand       = { name: 'Random Sort', fmt: 'checkbox', param: 'rand' };
 
         if( this.options.init_values )
         {
+            if( this.options.init_values.limit && !limits.flatten().include(this.options.init_values.limit) )
+                this.options.init_values.limit = 25;
+
             var me = this;
             $H(this.options.init_values).each( function(pair) {
                 if( me[pair[0]] )
@@ -110,21 +111,31 @@ ccQueryBrowserFilters.prototype = {
         $(this.options.filter_form).innerHTML = this.options.formInfo.html;
         this.options.formatter.setup_watches();
         $(this.options.formInfo.innerId).style.display = 'block';
-        Event.observe(this.options.formInfo.submitId,'click',this.options.onFilterSubmit);
+        if( this.options.onFilterSubmit )
+            this.hookFilterSubmit(this.options.onFilterSubmit);
         $(this.options.formInfo.submitId).innerHTML = '<span>' + this.options.submit_text + '</span>';
     },
 
-    filterOutUnknown: function(filters) {
-        var me = this;
-        var results = [];
-        $H(filters).reject( function(pair)  {
-            if( !me[pair[0]] )
-                results[pair[0]] = pair[1];
-        });
-        return results;
+    hookFilterSubmit: function(func) {
+        Event.observe(this.options.formInfo.submitId,'click',func);
     },
 
-    queryString: function() {
+    queryURL: function(withTemplate) {
+        return this.options.query_url + this.queryString(withTemplate);
+    },
+
+    queryString: function(withTemplate) {
+        var str = this._queryString() + '&f=' + this.options.format;
+        if( withTemplate && this.options.template )
+            str += '&t=' + this.options.template;
+        return str;
+    },
+
+    queryCountURL: function() {
+        return this.options.query_url + this._queryString() + '&f=count';
+    },
+
+    _queryString: function() {
         var elements = Form.getElements($(this.id));
         var q = Array();
 
@@ -139,7 +150,6 @@ ccQueryBrowserFilters.prototype = {
         }
 
         return q.join('&');
-
     },
 
     makeForm: function( baseId, formatter_arg ) {
@@ -296,6 +306,8 @@ ccFormatter.prototype = {
         f.vals.each( function(opt) {
             var val = opt[0], text = opt.length > 1 ? opt[1] : val;
             var sel = val == f.value ? ' selected="selected" ' : '';
+            if( text.toString().match(/^str_/) )
+                text = eval(text.toString());
             html += '<option ' + sel + 'value="' + val + '" >' + text + '</option>';
         });
         return html + '</select>';

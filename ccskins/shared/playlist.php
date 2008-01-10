@@ -15,16 +15,18 @@ function _t_playlist_playlist_create_dyn(&$T,&$A) {
 <script  src="<?= $T->URL('js/autopick.js')?>" ></script>
 <script type="text/javascript">
     function submit_callback(event) {
-      var qstring = window.filters.queryString() + '&f=playlist';
+      var qstring = window.filters.queryURL(true);
       var promo_tag = '<?= $A['plargs']['promo_tag']?>';
       if( promo_tag.length > 0 )
         qstring += '&promo_tag=' + promo_tag;
-      document.location.href = '<?= $A['plargs']['submit_url']?>' + q + qstring;
+      document.location.href = qstring;
     }
 
     var filters = new ccQueryBrowserFilters( 
         { submit_text: '<?= $T->String($A['plargs']['submit_text']) ?>',
           init_values: <?= $A['plargs']['edit_query']?>,
+          query_url: '<?= $A['plargs']['submit_url']?>' + q,
+          format: 'playlist',
           reqtags: <?= cc_get_config( 'playlist_tags', 'json' ) ?>,
           onFilterSubmit: submit_callback.bindAsEventListener() } );
 

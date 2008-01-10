@@ -170,13 +170,7 @@ class CCPlaylistManage
     {
         CCPage::SetTitle(_('Config Create Playlist Tags'));
 
-        $default_tags = array(
-                    array( 'tags' => 'remix',
-                            'text' => 'remix' ),
-                    array( 'tags' => 'sample',
-                           'text'   => 'sample' )
-                );
-        $form = new CCPlaylistTagsAdminForm($default_tags);
+        $form = new CCPlaylistTagsAdminForm();
         if( empty($_POST['playlisttagsadmin']) || !$form->ValidateFields() )
         {
             CCPage::AddForm( $form->GenerateForm() );

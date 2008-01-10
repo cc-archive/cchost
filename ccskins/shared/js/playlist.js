@@ -307,7 +307,7 @@ ccPlaylistMenu.prototype = {
 ccPlayerMethods = {
     hook_playlist: function(playlist_id,parent) {
         var play_all = $('_pla_' + playlist_id);
-        if( ccEPlayer && ccEPlayer.hookElements )
+        if( window.ccEPlayer && ccEPlayer.hookElements )
         {
             var play_ids = ccEPlayer.hookElements(parent);
             if( play_all )
@@ -354,11 +354,14 @@ ccPlayerMethods = {
     },
 
     onPlayAll: function(event) {
-        var element = Event.element(event);
-        while( !element.href )
-            element = element.parentNode;
-        ccEPlayer.SetPlaylist(element._playlist,true);
-        ccEPlayer.StartPlaylist();
+        if( window.ccEPlayer )
+        {
+            var element = Event.element(event);
+            while( !element.href )
+                element = element.parentNode;
+            ccEPlayer.SetPlaylist(element._playlist,true);
+            ccEPlayer.StartPlaylist();
+        }
         Event.stop(event);
     },
 

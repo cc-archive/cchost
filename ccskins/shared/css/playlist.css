@@ -191,7 +191,8 @@ div.cc_playlist_action  {
 }
 
 #dyn_filter_editor .cc_autocomp_list {
-    /* background-color: #FFF; */
+    background-color: #FFF; 
+	z-index: 201;
 }
 
 #dyn_filter_editor #_ap_stat_tags {

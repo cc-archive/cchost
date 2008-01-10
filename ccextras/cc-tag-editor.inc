@@ -47,7 +47,20 @@ class CCTagEditorForm extends CCGridForm
         $configs =& CCConfigs::GetTable();
         $channels =  $configs->GetConfig($config,CC_GLOBAL_SCOPE);
         if( empty($channels) )
+        {
+            if( empty($default_tags) )
+            {
+                $default_tags = array(
+                            array( 'tags' => '*',
+                                   'text' => 'str_all'),
+                            array( 'tags' => 'remix',
+                                    'text' => 'remix' ),
+                            array( 'tags' => 'sample',
+                                   'text'   => 'sample' )
+                        );
+            }
             $channels = $default_tags;
+        }
         $count = 0;
         foreach( $channels as $channel  )
         {

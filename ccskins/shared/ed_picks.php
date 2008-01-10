@@ -121,10 +121,10 @@ for( $i = 0; $i < $row_count; $i++ )
             <?
             if( !empty($R['fplay_url']) )
             {
-                ?>
-            <div class="playlabel"><?= $T->String('str_play') ?></div><a class="cc_player_button cc_player_hear" id="_ep_<?= $R['upload_id'] ?>"> </a>
-            <div style="clear:both" />
-            <script type="text/javascript"> $('_ep_<?= $R['upload_id']?>').href = '<?= $R['fplay_url'] ?>' </script>
+                ?>  <div class="playlabel"><?= $T->String('str_play') ?></div>
+                    <a class="cc_player_button cc_player_hear" id="_ep_<?= $R['upload_id'] ?>"> </a>
+                    <div style="clear:both" />
+                    <script type="text/javascript"> $('_ep_<?= $R['upload_id']?>').href = '<?= $R['fplay_url'] ?>' </script>
                 <?
             }
             ?>
@@ -143,14 +143,9 @@ uinfo.hookInfos('.info_button',$('edpicks'));
 
 $T->Call('prev_next_links');
 
-if( !empty($A['enable_playlists']) )
-{
-    $T->Call('playerembed.xml/eplayer');
-    ?>
+$T->Call('playerembed.xml/eplayer');
+?>
 <script type="text/javascript">
+if( window.ccEPlayer )
     ccEPlayer.hookElements($('edpicks'));
 </script>
-    <?
-}
-
-?>

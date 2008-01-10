@@ -11,14 +11,16 @@
     </div>
     <div id="browser_head">
         <div id="limit_picker_container">
-            Display: <select  id="limit_picker"></select>
+            <?= $T->String('str_display') ;?><select  id="limit_picker"></select>
         </div>
-        <div class="cc_stream_page_link" id="stream_link_container" style="display:none;">
-            <a href="javascript://stream" id="mi_stream_page"><span ><?= $T->String('str_stream') ?></span></a>
+        <? if( $GLOBALS['strings-profile'] == 'audio' ) { ?>
+        <div class="cc_stream_page_link" id="stream_link_container">
+            <a href="javascript://stream" id="mi_stream_page"  style="display:none;"><span ><?= $T->String('str_stream') ?></span></a>
         </div>
-        <div class="cc_stream_page_link" id="play_link_container" style="display:none;">
-            <a href="javascript://play win" id="mi_play_page"><span ><?= $T->String('str_play') ;?></span></a>
+        <div class="cc_stream_page_link" id="play_link_container">
+            <a href="javascript://play win" id="mi_play_page"  style="display:none;"><span ><?= $T->String('str_play') ;?></span></a>
         </div>
+        <? } ?>
     </div>
     <div id="browser">
         <?= $T->String('str_getting_data') ;?>
@@ -32,22 +34,17 @@
         <td><a id="browser_next" class="cc_gen_button  browse_prevnext" style="display:none" href="javascript://browser_next">
             <span><?= $T->String('str_more') ?> &gt;&gt;&gt;</span></a></td>
     </tr></tbody></table>
-    <div id="feed_links" style="display:none">
-        <span class="cc_feed_link">
-        <a id="rss_feed" class="cc_feed_button" type="application/rss+xml" href="" title="RSS 2.0">RSS </a>
-        <span id="feed_name"></span>
-        </span>
-    </div>
-    <div id="bottom_breaker">&nbsp;</div>
+    <div style="clear:both">&nbsp;</div>
 </div><!-- browser client -->
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js'); ?>"></script>
-<?$T->Call('playerembed.xml/eplayer'); ?>
+<? $T->Call('playerembed.xml/eplayer'); ?>
 <script type="text/javascript">
 var ruser = '<?= $A['get']['ruser']?>';
 var fullname = '<?= $A['get']['fullname']?>';
 </script>
 <script  src="<?= $T->URL('js/recommends.js'); ?>" /></script>
+<script  src="<?= $T->URL('js/query_browser.js'); ?>" /></script>
 <script type="text/javascript">
-new ccReccommendBrowser();
+new ccQueryBrowser( { filters: new ccReccommendFilter() } );
 </script>

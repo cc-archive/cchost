@@ -67,7 +67,7 @@ ccHowIDidIt.prototype = {
             }
             this.dl_hook.hookLinks(); 
             this.menu_hook.hookLinks();
-            if( this.playlists_enalbed )
+            if( window.ccEPlayer )
             {
                 ccEPlayer.hookElements($('cc_howididit_detail'));
             }

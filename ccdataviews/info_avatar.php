@@ -34,12 +34,14 @@ JOIN cc_tbl_user ON upload_user = user_id
 JOIN cc_tbl_licenses ON upload_license = license_id
 %joins%
 %where%
+%order%
 %limit%
 EOF;
     return array( 'sql' => $sql,
                    'e'  => array( CC_EVENT_FILTER_FILES,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
-                                  CC_EVENT_FILTER_PLAY_URL )
+                                  CC_EVENT_FILTER_PLAY_URL,
+                                  'hackavurl' ) // todo: remove this after beta!!
                 );
 }
 

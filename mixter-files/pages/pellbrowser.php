@@ -149,10 +149,10 @@ foreach( $A['feats'] as $R )
 <div  id="browser">
   getting data...
 </div>
-<div  id="q"></div>
-<table  id="cc_prev_next_links"><tbody ><tr >
-<td  class="cc_list_list_space">&nbsp;</td>
-<td ><a  id="browser_prev" class="cc_gen_button  browse_prevnext" style="display:none" href="javascript://browser_prev"><span >&lt;&lt;&lt; Prev</span></a>
+<div id="q"></div>
+<table id="cc_prev_next_links"><tbody ><tr>
+<td class="cc_list_list_space">&nbsp;</td>
+<td><a id="browser_prev" class="cc_gen_button  browse_prevnext" style="display:none" href="javascript://browser_prev"><span >&lt;&lt;&lt; Prev</span></a>
 </td>
 <td ><a  id="browser_next" class="cc_gen_button  browse_prevnext" style="display:none" href="javascript://browser_next"><span >More &gt;&gt;&gt;</span></a></td>
 </tr></tbody></table>
@@ -165,27 +165,26 @@ foreach( $A['feats'] as $R )
 <div  id="bottom_breaker">&nbsp;</div>
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('/js/playlist.js') ?>"></script>
+<script  src="<?= $T->URL('/js/query_browser.js') ?>"></script>
 <?
 $T->Call('playerembed.xml/eplayer');
 
-?><script type="text/javascript">
+?>
+<script type="text/javascript">
 //<!--
 var feat_playlistMenu = new ccPlaylistMenu( { autoHook: false } );
 feat_playlistMenu.hookElements($('featured_pell'));
 
-ccPellBrowser = Class.create();
+ccPellFilters = Class.create();
 
-ccPellBrowser.prototype = {
+ccPellFilters.prototype = {
 
-    allTypes: [ [ 'acappella+melody', 'Melody' ], 
+    allTypes: [ [ 'acappella+featured', 'Featured' ],
+                [ 'acappella+melody', 'Melody' ], 
                 [ 'acappella+rap', 'Rap' ],
                 [ 'acappella+spoken_word', 'Spoken Word' ],
-                [ 'acappella+featured', 'Featured' ],
                 [ 'acappella', 'All ' ] ],
-    currOffset: 0,
-    currType: 'acappella+melody',
-    totalCount: 0,
-    limit: 0,
+    currType: 'acappella+featured',
     hideRemixed: 0,
     query: '',
     currBPM: '-',
@@ -195,21 +194,46 @@ ccPellBrowser.prototype = {
         this.hookElements();
     },
 
+    hookFilterSubmit: function(func) {
+        this.options.onFilterSubmit = func;
+    },
+
+    queryURL: function(withTemplate) {
+        return query_url + this.querystring(withTemplate);
+    },
+
+    queryString: function(withTemplate) {
+        this.getQuery();
+        var str = this.query + '&f=html';
+        if( withTemplate )
+            str += '&t=reccby';
+        return str;
+    },
+
+    queryCountURL: function() {
+        this.getQuery();
+        return query_url + this.query + '&f=count';
+    },
+
+    refresh: function() {
+        if( this.options.onFilterSubmit )
+            this.options.onFilterSubmit();
+    },
+
     hookElements: function() {
       var url = home_url + 'samples/lics/acappella';
       this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.hookElements2.bind(this) } );
     },
 
     hookElements2: function(resp,lics) {
+        try {
       var lic_picker = $('lic_picker');
       var i = 0;
       lics.each( function(t) {
         lic_picker.options[i++] = new Option( t['text'], t['value']);
       });
-      Event.observe( lic_picker, 'change', this.refreshCount.bindAsEventListener( this ) );
+      Event.observe( lic_picker, 'change', this.refresh.bindAsEventListener( this ) );
 
-      Event.observe( $('browser_prev'), 'click', this.onPrevClick.bindAsEventListener( this ) );
-      Event.observe( $('browser_next'), 'click', this.onNextClick.bindAsEventListener( this ) );
       Event.observe( $('hide_remixed'), 'click', this.onHideRemixedClick.bindAsEventListener( this ) );
 
       var type_picker = $('type_picker');
@@ -242,32 +266,36 @@ ccPellBrowser.prototype = {
       limit_picker.options[i++] = new Option( '25', '25' );
       limit_picker.options[i++] = new Option( '50', '50' );
       limit_picker.selectedIndex = 3;
+      this.limit = 25;
       Event.observe( limit_picker, 'change', this.onLimitClick.bindAsEventListener( this ) );
 
-      this.refreshCount();
+      this.refresh();
+        } catch(e) {
+            alert(e);
+        }
     },
 
     onLimitClick: function() {
         var limit_picker = $('limit_picker');
         this.limit = limit_picker.options[limit_picker.selectedIndex].value;
-        this.refreshCount();
+        this.refresh();
     },
 
     onBPMClick: function() {
         var bpm_picker = $('bpm_picker');
         this.currBPM = bpm_picker.options[bpm_picker.selectedIndex].value;
-        this.refreshCount();
+        this.refresh();
     },
 
     onHideRemixedClick: function() {
-      this.refreshCount();
+      this.refresh();
     },
 
     changeType: function() {
         var type_picker = $('type_picker');
         var type = type_picker.options[type_picker.selectedIndex].value;
         this.currType = type;
-        this.refreshCount();
+        this.refresh();
     },
 
     getQuery: function() {
@@ -281,80 +309,7 @@ ccPellBrowser.prototype = {
         this.hideRemixed = checkbox.checked ? 1 : 0;
           if( this.hideRemixed )
               this.query += '&remixmax=0';
-    },
-
-    refreshCount: function() {
-        this.clearUI();
-        var limit_picker = $('limit_picker');
-        this.limit = limit_picker.options[limit_picker.selectedIndex].value;
-        this.currOffset = 0;
-        this.getQuery();
-        var url = query_url + this.query + '&f=count';
-        this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.fillCount.bind(this) } );
-    },
-
-    fillCount: function( resp ) {
-        this.totalCount = eval(resp.responseText)[0];
-        if( this.totalCount > 0 )
-        {
-          this.refreshContent();
-        }
-        else
-        {
-          $('browser').innerHTML = 'no records match';
-        }
-    },
-
-    clearUI: function() {
-        $('browser_prev').style.display = 'none';
-        $('browser_next').style.display = 'none';        
-        $('browser').innerHTML = '...';
-        $('feed_links').style.display = 'none';
-    },
-
-    refreshContent: function() {
-        this.clearUI();
-        var url = query_url + this.query + '&f=html&t=reccby&limit='+this.limit+'&offset='+this.currOffset;
-        // $('q').innerHTML = '<a href="' + url + '">' + url + '</a>';
-        this.transport = new Ajax.Request( url, { method: 'get', onComplete: this.fillContent.bind(this) } );
-    },
-
-    fillContent: function( resp ) {
-      try
-      {
-        var browser = $('browser');
-        browser.innerHTML = resp.responseText;
-        ccEPlayer.hookElements(browser);
-        if( !this.playlistMenu )
-            this.playlistMenu = new ccPlaylistMenu( { autoHook: false, playlist: this } );
-
-        // hook the menus, info button, et. al.
-        this.playlistMenu.hookElements(browser);
-
-        var prev_mode = this.currOffset > 0 ? 'block' : 'none';
-        var next_mode = (this.totalCount - this.limit) > this.currOffset ? 'block' : 'none';
-        $('browser_prev').style.display = prev_mode;
-        $('browser_next').style.display = next_mode;
-        $('feed_links').style.display = 'block';
-        var feed_url = query_url + 'f=rss&limit=15&' + this.query; 
-        $('rss_feed').href = feed_url;
-
-        //var head = document.getElementsByTagName('HEAD')[0];
-      }
-      catch (err)
-      {
-        alert(err);
-      }
-    },
-
-    onPrevClick: function() {
-        this.currOffset -= parseInt(this.limit);
-        this.refreshContent();
-    },
-
-    onNextClick: function() {
-      this.currOffset += parseInt(this.limit);
-      this.refreshContent();
+        this.query += '&limit=' + this.limit;
     },
 
     onTypeClick: function( e ) {
@@ -362,7 +317,8 @@ ccPellBrowser.prototype = {
     }
 }
 
-new ccPellBrowser();
+new ccQueryBrowser( { filters: new ccPellFilters() } );
+
 //-->
 </script>
 </div>

@@ -2,6 +2,12 @@
 
 function _t_playerembed_eplayer(&$T,&$_TV) 
 {
+    if( $GLOBALS['strings-profile'] != 'audio' )
+    {
+        // wow, this is scary, no?
+        return;
+    }
+
     if( empty($_TV['poptions']) ) $_TV['poptions'] = '';
 ?>
 

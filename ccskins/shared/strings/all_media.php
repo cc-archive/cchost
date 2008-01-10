@@ -515,6 +515,7 @@ $GLOBALS['str_topic_view']              = _('View Topic');
 $GLOBALS['str_permalink']              = _('permalink');
 
 $GLOBALS['str_uploading_msg']  = _('This could take a while... please be patient while the file is uploading');
+$GLOBALS['str_upload_browser'] = _('Browse Uploads');
 
 $GLOBALS['str_user_home_page']     = _('Home Page') ;
 $GLOBALS['str_user_about_me']      = _('About Me');

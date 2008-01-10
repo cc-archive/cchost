@@ -156,12 +156,10 @@ EOF;
 %call(prev_next_links)%
 <!-- -->
 %if_null(#_GET/noscripts)%
-    %if_not_null(enable_playlists)%
-        %call('playerembed.xml/eplayer')%
-        <script type="text/javascript">
-            ccEPlayer.hookElements($('upload_listing'));
-        </script>
-    %end_if%
+    %call('playerembed.xml/eplayer')%
+    <script type="text/javascript">
+        ccEPlayer.hookElements($('upload_listing'));
+    </script>
 
     <script type="text/javascript">
         var dl_hook = new queryPopup("download_hook","download",str_download); 
