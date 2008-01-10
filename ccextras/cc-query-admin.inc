@@ -31,9 +31,9 @@ require_once('ccextras/cc-tag-editor.inc');
 
 class CCQueryAdminForm extends CCTagEditorForm
 {
-    function CCQueryAdminForm($default_tags)
+    function CCQueryAdminForm()
     {
-        $this->CCTagEditorForm('browse_query_tags',_('Add Tag'),$default_tags);
+        $this->CCTagEditorForm('browse_query_tags',_('Add Tag'));
     }
 }
 
@@ -43,13 +43,7 @@ class CCQueryAdmin
     {
         CCPage::SetTitle(_('Query Admin'));
 
-        $default_tags = array(
-                    array( 'tags' => 'remix',
-                            'text' => 'remix' ),
-                    array( 'tags' => 'sample',
-                           'text'   => 'sample' )
-                );
-        $form = new CCQueryAdminForm($default_tags);
+        $form = new CCQueryAdminForm();
         if( empty($_POST['queryadmin']) || !$form->ValidateFields() )
         {
             CCPage::AddForm( $form->GenerateForm() );

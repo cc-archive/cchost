@@ -199,7 +199,7 @@ ccPellFilters.prototype = {
     },
 
     queryURL: function(withTemplate) {
-        return query_url + this.querystring(withTemplate);
+        return query_url + this.queryString(withTemplate);
     },
 
     queryString: function(withTemplate) {

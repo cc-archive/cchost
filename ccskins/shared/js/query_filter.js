@@ -35,10 +35,19 @@ ccQueryBrowserFilters.prototype = {
         if( !this.options.format )
             this.options.format = 'html';
 
-        var vtags = this.options.reqtags.inject( [], function(arr,tags) {
-            arr.push( [ tags.tags, tags.text ] );
-            return arr;
-        });
+        var vtags;
+        
+        if( this.options.reqtags.inject )
+        {
+            vtags = this.options.reqtags.inject( [], function(arr,tags) {
+                        arr.push( [ tags.tags, tags.text ] );
+                        return arr;
+                    });
+        }
+        else
+        {
+            vtags = [];
+        }
         this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', vals: vtags };
         this.user       = { name: str_artist, fmt: 'user_lookup', param: 'user' };
         this.remixesof  = { name: str_remixes_of, fmt: 'remix_user', param: 'remixesof' };

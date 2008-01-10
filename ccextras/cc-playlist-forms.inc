@@ -40,9 +40,9 @@ require_once('cclib/cc-page.php');
 
 class CCPlaylistTagsAdminForm extends CCTagEditorForm
 {
-    function CCPlaylistTagsAdminForm($default_tags)
+    function CCPlaylistTagsAdminForm()
     {
-        $this->CCTagEditorForm('playlist_tags',_('Add Tag'),$default_tags);
+        $this->CCTagEditorForm('playlist_tags',_('Add Tag'));
     }
 }
 
