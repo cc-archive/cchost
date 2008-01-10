@@ -34,7 +34,7 @@
 </style>
 <div >
     <p id="intro">
-        <img  src="/cchost_files/skins/ccmixter/images/cc-mixter-sq-logo.png" style="margin: 5px 14px;float:left" />
+        <img  src="/mixter-files/images/cc-mixter-sq-logo.png" style="margin: 5px 14px;float:left" />
         <img  src="http://creativecommons.org/images/public/somerights20.gif" style="margin: 14px;float:right" />All of the 
         samples featured on this page are licensed under the <a  href="http://creativecommons.org">Creative Commons</a> 
         family of license agreements. That means you don't need an account with ccMixter to download, share and remix 

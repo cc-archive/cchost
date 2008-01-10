@@ -46,7 +46,9 @@ ccUploadInfo.prototype = {
             {
                 this.openInfo = $(info_id);
                 this.openInfo.style.display = 'block';
-                this.openInfo.style.width = "auto";
+                Effect.Appear( this.openInfo, { duration: 0.5, delay: 0.2 } );
+                //alert($A(this.openInfo.style).flatten().toString());
+                //this.openInfo.style.width = "auto";
             }
             else
             {
@@ -74,6 +76,7 @@ ccUploadInfo.prototype = {
         {
             var old_id = this.openInfo.id;
             this.openInfo.style.display = 'none';
+            Effect.Fade( this.openInfo, { duration: 0.5, delay: 0.2 } );
             this.openInfo = null;
             return old_id;
         }

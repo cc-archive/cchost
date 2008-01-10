@@ -11,7 +11,7 @@
     </div>
     <div id="browser_head">
         <div id="limit_picker_container">
-            <?= $T->String('str_display') ;?><select  id="limit_picker"></select>
+            <?= $T->String('str_filter_limit') ;?>: <select  id="limit_picker"></select>
         </div>
         <? if( $GLOBALS['strings-profile'] == 'audio' ) { ?>
         <div class="cc_stream_page_link" id="stream_link_container">

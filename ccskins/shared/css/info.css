@@ -97,6 +97,7 @@ a.info_button:hover {
 	float: left;
 	width: 30%;
 	margin-right: 2%;
+	overflow: hidden;
 }
 
 .info_detail .upload_menu_outer {

@@ -66,7 +66,7 @@ table.maintable td {
 </div>
 <div id="left_box">
     <div class="box">
-        <img  id="mixter_logo" src="/mixter-files/skins/images/cc-mixter-sq-logo.png" alt="" border="0" />
+        <img  id="mixter_logo" src="/mixter-files/images/cc-mixter-sq-logo.png" alt="" border="0" />
         <table >
             <tr >
                 <td  id="left_quote">&ldquo;</td>
