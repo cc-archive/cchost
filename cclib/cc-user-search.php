@@ -29,6 +29,8 @@ class CCUserSearch
 {
     function OnUserSearch($field,$tag='')
     {
+        require_once('cclib/cc-page.php');
+
         if( $field == 'lookinfor' )
         {
             CCPage::SetTitle('str_search_wipo');
@@ -97,7 +99,11 @@ EOF;
         {
             $field = 'user_' . $field;
             CCPage::SetTitle('str_search_users_that', $tag);
-            require_once('cclib/cc-user.inc');
+            require_once('cclib/cc-query.php');
+            $query = new CCQuery();
+            $sqlargs['where'] = "CONCAT($field,',') LIKE '%$tag,%'";
+            $args = $query->ProcessAdminArgs('datasource=user&t=user_match');
+            $query->QuerySQL($args,$sqlargs);
         }
     }
 
