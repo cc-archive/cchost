@@ -58,14 +58,14 @@ function cc_feed_description()
     return cc_feed_encode($template_tags['site-description']);
 }
 
-function cc_feed_title($args)
+function cc_feed_title($args,$skin)
 {
     $configs         =& CCConfigs::GetTable();
     $template_tags   = $configs->GetConfig('ttag');
-    return cc_feed_encode($template_tags['site-title']) . cc_feed_subtitle($args);
+    return cc_feed_encode($template_tags['site-title']) . cc_feed_subtitle($args,$skin);
 }
 
-function cc_feed_subtitle($args)
+function cc_feed_subtitle($args,$skin)
 {
     $subtitle = '';
 
@@ -79,11 +79,11 @@ function cc_feed_subtitle($args)
     }
     elseif( !empty($args['remixesof']) )
     {
-        $subtitle = sprintf( _('Remixes of %s'), $args['remixesof'] );
+        $subtitle = $skin->String(array('str_remixes_of_s',$args['remixesof']) );
     }
     elseif( !empty($args['remixedby']) )
     {
-        $subtitle = sprintf( _('Remixed by %s'), $args['remixedby'] );
+        $subtitle = $skin->String(array('str_remixed_by_s',$args['remixedby'] ));
     }
 
 

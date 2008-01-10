@@ -79,6 +79,8 @@ class CCSkin
 
         $template = $this->GetTemplate($this->filename);
         $this->_pick_up_skin_file(dirname($template),'skin');
+
+        $this->_strings_loaded = false; // rrrrg
     }
 
     /**
@@ -151,6 +153,7 @@ class CCSkin
 
         if( !empty($this->vars['string_profile']) && file_exists($this->vars['string_profile']) )
             require_once($this->vars['string_profile']);
+        $this->_strings_loaded = true;
 
         // Load the main skin file here...
         // hmmm
@@ -199,6 +202,13 @@ class CCSkin
     function String($args)
     {
         global $CC_GLOBALS;
+
+        if( !$this->_strings_loaded )
+        {
+            // rrrg, this is hacked for now... see CCConfig::Init for why this kinda works
+            if( !empty($CC_GLOBALS['string_profile']) && file_exists($CC_GLOBALS['string_profile']) )
+                require_once($CC_GLOBALS['string_profile']);
+        }
 
         if( empty($args) )
         {

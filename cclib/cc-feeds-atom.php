@@ -40,7 +40,9 @@ class CCFeedsAtom
         if( $args['format'] != 'atom' )
             return;
 
-        $targs['channel_title'] = cc_feed_title($args);
+        $skin = new CCSkinMacro('atom_10.php',false);
+
+        $targs['channel_title'] = cc_feed_title($args,$skin);
         $qstring = $args['queryObj']->SerializeArgs($args);
         $targs['feed_url'] = /* what's the difference again?? */
         $targs['raw_feed_url'] = htmlentities(url_args(ccl('api','query'),$qstring));
@@ -60,7 +62,6 @@ class CCFeedsAtom
 
         require_once('cclib/cc-template.php');
 
-        $skin = new CCSkin('atom_10.php',false);
         header("Content-type: text/xml; charset=" . CC_ENCODING); 
         $skin->SetAllAndPrint($targs,false);
         exit;

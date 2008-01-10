@@ -42,7 +42,9 @@ class CCFeedsRSS
 
         global $CC_GLOBALS;
 
-        $targs['channel_title'] = cc_feed_title($args);
+        $skin = new CCSkinMacro($args['template'],false);
+
+        $targs['channel_title'] = cc_feed_title($args,$skin);
         $targs['home-url'] = htmlentities(ccl());
         $targs['channel_description'] = cc_feed_description();
         $targs['lang_xml'] = $CC_GLOBALS['lang_xml'];
@@ -83,7 +85,6 @@ class CCFeedsRSS
 
         require_once('cclib/cc-template.php');
 
-        $skin = new CCSkin($args['template'],false);
         header("Content-type: text/xml; charset=" . CC_ENCODING); 
         $skin->SetAllAndPrint($targs,false);
         exit;

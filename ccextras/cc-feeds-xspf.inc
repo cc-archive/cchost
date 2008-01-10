@@ -38,7 +38,9 @@ require_once('cclib/cc-feed.php');
 */
 function cc_xspf_query_format(&$records,$args,&$result,&$result_mime)
 {
-    $targs['channel_title']       = cc_feed_title($args);
+    $skin = new CCSkinMacro('xspf_10.php',false);
+
+    $targs['channel_title']       = cc_feed_title($args,$skin);
     $targs['root-url']            = htmlentities(ccl());
     $targs['channel_description'] = cc_feed_description();
     $targs['xspf-pub-date']       = CCUtil::FormatDate(CC_RFC822_FORMAT,time());
@@ -57,7 +59,6 @@ function cc_xspf_query_format(&$records,$args,&$result,&$result_mime)
 
     require_once('cclib/cc-template.php');
 
-    $skin = new CCSkin('xspf_10.php',false);
     header("Content-type: text/xml; charset=" . CC_ENCODING); 
     $skin->SetAllAndPrint($targs,false);
     exit;

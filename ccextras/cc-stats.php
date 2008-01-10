@@ -41,7 +41,12 @@ function cc_stats_on_user_row(&$rows)
 
     // todo: not sure how to mangle the string system to work the artist name into the query title
     //$title = urlencode(sprintf(_('Remixes of %s'),$row['user_real_name']));
-    $rurl = url_args( ccl('api','query'), 'remixesof=' . $row['user_name'] . '&title=str_remixes_of'); // . $title );
+    // here's a hack
+    require_once('cclib/cc-page.php');
+    $page = CCPage::GetPage();
+    $title = urlencode($page->String(array('str_remixes_of_s',$row['user_real_name'])));
+
+    $rurl = url_args( ccl('api','query'), 'remixesof=' . $row['user_name'] . '&title=' . $title );
     $linka = "<a href=\"$rurl\">";
     $linkb = '</a>';
 

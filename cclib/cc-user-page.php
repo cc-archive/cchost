@@ -121,9 +121,13 @@ class CCUserPage
 
     function _show_feed_links($username,$uploads=true)
     {
+        // hack ?... use the page to get string defs
+        require_once('cclib/cc-page.php');
+        $page = CCPage::GetPage();
+
         $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
         $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name=\''.$username .'\'');
-        $title = sprintf(_('Remixes of %s'), $user_real_name);
+        $title = $page->String(array('str_remixes_of_s',$user_real_name));
         $url = url_args( ccl('api','query'), 'f=rss&t=rss_20&remixesof=' .$username .'&title=' . urlencode($title));
         CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $title, $img . $title, 'feed_remixes_of' );
 
