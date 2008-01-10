@@ -222,7 +222,10 @@ class CCMediaHost
         
         CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $fileid, CC_UF_PROPERTIES_EDIT, array(&$row) ) );
 
-        $this->Media( $username, $fileid, $value ? _("Published") : _("Unpublished")  );
+        if( $value )
+            $this->Media( $username, $fileid );
+        else
+            CCUtil::SendBrowserTo( ccl('people',$username,'hidden') );
     }
 
     /*-----------------------------
