@@ -215,8 +215,8 @@ class CCUserPage
             $tabs[$K]['tags'] = str_replace('%user_name%',$user,$tabs[$K]['tags']);
         }
 
-        if( empty($default_tab_name) && !empty($CC_GLOBALS['user_extra']['pref']['default_user_tab']) )
-            $default_tab_name = $CC_GLOBALS['user_extra']['pref']['default_user_tab'];
+        if( empty($default_tab_name) && !empty($CC_GLOBALS['user_extra']['prefs']['default_user_tab']) )
+            $default_tab_name = $CC_GLOBALS['user_extra']['prefs']['default_user_tab'];
 
         require_once('cclib/cc-navigator.php');
         $navapi = new CCNavigator();

@@ -49,6 +49,8 @@ class CCUserPreferences
                     'label' => 'str_pref_default_tab',
                     'form_tip' => 'str_pref_setting_this', 
                     'formatter' => 'select',
+                    'value' => empty($CC_GLOBALS['user_extra']['prefs']['default_user_tab']) ? 'uploads' :
+                                        $CC_GLOBALS['user_extra']['prefs']['default_user_tab'],
                     'options' => $tabs,
                     'flags' => CCFF_NONE
             );
