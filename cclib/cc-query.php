@@ -574,6 +574,9 @@ class CCQuery
 
     function _gen_playlist()
     {
+        if( $this->args['datasource'] == 'uploads' )
+            $this->sql_p['joins'] = 'cc_tbl_cart_items ON cart_item_upload=upload_id';
+
         $this->where[] = 'cart_item_cart = '.$this->args['playlist']; // err, is this right?
     }
 
