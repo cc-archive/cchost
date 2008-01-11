@@ -1,5 +1,3 @@
-<div id="ajax_msg"></div>
-
 <?/*
     [file_id] => 12744
     [file_upload] => 12735
@@ -66,17 +64,11 @@ div.cmd_link{
 var _first_file = 1;
 var upload_id = %(field/upload_id)%;
 
-function _resp_reorder(resp)
-{
-    ajax_msg('msg',resp.responseText);
-}
-
 function on_reorder_click()
 {
     var _file_order = Sortable.serialize('file_order');
     var url = '%(field/urls/upload_jockey_url)%' + q + _file_order;
-    //ajax_debug(url);
-    new Ajax.Request( url, { method:'get', onComplete: _resp_reorder } );
+    new Ajax.Request( url, { method:'get' } );
 }
 
 Event.observe('submit_file_order','click',on_reorder_click);

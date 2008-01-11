@@ -11,32 +11,6 @@
    font-style: italic;
 }
 
-#ajax_msg {
-	height: 25px;
-	text-align: center;
-	font-weight: bold;
-	width: 80%;
-	margin-left: 10%;
-}
-
-.ajaxmsg_msg {
-	background-color: green;
-	color: white;
-	padding: 2px;
-}
-
-.ajaxmsg_error {
-	background-color: red;
-	color: white;
-	padding: 2px;
-}
-
-.ajaxmsg_working {
-	background-color: yellow;
-	color: black;
-	padding: 2px;
-}
-
 .cc_breadcrumbs {
 	margin: 0.3em 0px 1.4em 0px;
 }
@@ -79,6 +53,34 @@ div#site_disabled_message {
 #MB_close {
 	border: 1px solid #555;
 }
+
+#cc_thinking {
+    border-width: 1px;
+	border-style: solid;
+    padding: 9px;
+	z-index: 4;
+	position: absolute;
+}
+
+.ajaxmsg_message {
+	background-color: green;
+	color: white;
+	font-weight: bold;
+}
+
+.ajaxmsg_error {
+	background-color: red;
+	color: white;
+	font-weight: bold;
+}
+
+.ajaxmsg_working, .ajaxmsg_warning {
+	background-color: yellow;
+	color: black;
+	font-weight: bold;
+}
+
+
 
 /* todo: move this, colorize */
 .pool_item_type {

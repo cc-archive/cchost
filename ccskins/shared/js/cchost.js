@@ -1,24 +1,6 @@
 
-function ajax_msg(type,text)
-{
-    if( !$('ajax_msg') )
-        Insertion.Top('content','<div id="ajax_msg"></div>');
-    if( text.substr(0,4) == 'str_' )
-        text = eval(text);
-    $('ajax_msg').innerHTML = '<div id="amsg" class="ajaxmsg_' + type + '">' + text + '</div>';
-    Effect.Appear( 'amsg', { duration: 2.0, delay: 0.5 } );
-}
-
-function ajax_debug(url)
-{
-    if( !$('debug') )
-        Insertion.Top('content','<div id="debug"></div>');
-    $('debug').style.display = 'block';
-    $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
-}
-
 /*
-    Hook menu items so they go to a popup
+    Hook menu items so they go to a browser popup
 
     usage:
 
@@ -56,6 +38,9 @@ popupHook.prototype = {
     }
 }
 
+/*
+    Hook a link so it goes to a DHTML model popup div
+*/
 var modalHook = Class.create();
 
 modalHook.prototype = {
@@ -84,17 +69,20 @@ modalHook.prototype = {
 }
 
 
+/*
+    hook a class of links so the id triggers a query in a DHTML modal popup
+*/
 var queryPopup = Class.create();
 
 queryPopup.prototype = {
 
     className: '',
-    formatName: '',
+    template: '',
     title: '',
 
-    initialize: function(className,formatName,title) {
+    initialize: function(className,template,title) {
         this.className = className;
-        this.formatName = formatName;
+        this.template = template;
         this.title = title;
     },
 
@@ -107,11 +95,16 @@ queryPopup.prototype = {
     },
 
     onClick: function( e, upload_id ) {
-        var url = query_url + 'f=html&t='+this.formatName+'&ids=' + upload_id;
+        var url = query_url + 'f=html&t='+this.template+'&ids=' + upload_id;
         Modalbox.show( url, {title: this.title, width: 500} );
     }
 }
 
+
+/*
+    If user is logged in, make ratings stars interactive
+    (called from userHooks below)
+*/
 var ratingsHooks = Class.create();
 
 ratingsHooks.prototype = {
@@ -183,6 +176,10 @@ ratingsHooks.prototype = {
     }
 }
 
+/*
+    If the user is logged in, make the 'recommends' thumbs up interactive
+    (called from userHooks below)
+*/
 var recommendsHooks = Class.create();
 
 recommendsHooks.prototype = {
@@ -225,6 +222,38 @@ recommendsHooks.prototype = {
     }
 }
 
+/*
+    If the user is logged in, make the topics/reviews interactive
+    (called from userHooks below)
+*/
+var topicHooks = Class.create();
+
+topicHooks.prototype = {
+
+    initialize: function(topics_cmds) {
+        try
+        {
+            topics_cmds.each( function(cmd_meta) {
+                var id = cmd_meta.id;
+                var html = '';
+                cmd_meta.cmds.each( function(cmd) {
+                    html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + cmd.text + '</span></a> ';
+                });
+                $('commands_' + id).innerHTML = html;
+            });
+        }
+        catch (e)
+        {
+            alert(e);
+        }
+    }
+}
+
+
+/*
+    If the user is logged in, make the appropriate HTML parts interactive
+    (ratings, topic commands, etc.)
+*/
 var userHookup = Class.create();
 
 userHookup.prototype = {
@@ -238,7 +267,7 @@ userHookup.prototype = {
         try
         {
             if( !json )
-                json = eval(resp.responseText);
+                json = eval( '(' + resp.responseText + ')' );
             
             if( json  )
             {
@@ -275,33 +304,234 @@ userHookup.prototype = {
 }
 
 
-var topicHooks = Class.create();
-
-topicHooks.prototype = {
-
-    initialize: function(topics_cmds) {
-        try
-        {
-            topics_cmds.each( function(cmd_meta) {
-                var id = cmd_meta.id;
-                var html = '';
-                cmd_meta.cmds.each( function(cmd) {
-                    html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + cmd.text + '</span></a> ';
-                });
-                $('commands_' + id).innerHTML = html;
-            });
-        }
-        catch (e)
-        {
-            alert(e);
-        }
-    }
-}
-
-
 function upload_trackback( upload_id, type )
 {
     var url = query_url + 'ajax=1&t=trackback&ttype=' + type + '&ids=' + upload_id;
     var h = type == 'video' ? 560 : 500;
     Modalbox.show( url, {title: str_trackback_title, width: 480, height: h} );
 }
+
+
+function ajax_debug(url)
+{
+    if( !$('debug') )
+        new Insertion.Top('content','<div id="debug"></div>');
+    $('debug').style.display = 'block';
+    if( url.match(/^http:/) )
+        $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
+    else
+        $('debug').innerHTML = url;
+}
+
+var ccPopupManagerMethods = {
+
+    openPopup: null,
+    currX: 0,
+    currY: 0,
+    thinkingDiv: null,
+    thinkingEnabled: false,
+    msgDiv: null,
+    prevMsgClass: null,
+    errCount: 0,
+    itme: 'hello me',
+
+    StartThinking: function(event) {
+        this.currY  = (parseInt(Event.pointerY(event)) - 5); 
+        this.currX  = (parseInt(Event.pointerX(event)) + 15); 
+        if( this.currX > (  document.body.offsetWidth - 50 ) )
+            this.currX /= 2;
+        this.thinkingEnabled = true;
+    },
+
+    StopThinking: function(dur) {
+        if( this.thinkingEnabled )
+        {
+            Effect.Fade(this.thinkingDiv, { delay: dur, duration: 0.3 } );
+            this.thinkingEnabled = false;
+        }
+        
+    },
+
+    ShowThinking: function(text){
+        if( !this.thinkingEnabled )
+        {
+            this.currY = 20;
+            this.currX = 300;
+            this.thinkingEnabled = true;
+            //return;
+        }
+
+        if( !$('cc_thinking') )
+        {
+            this.thinkingDiv = document.createElement('div');
+            this.thinkingDiv.id = 'cc_thinking';
+            this.thinkingDiv.className = 'light_bg dark_border';
+            document.body.appendChild(this.thinkingDiv);
+        }
+
+        if( this.prevMsgClass )
+        {
+            Element.removeClassName(this.thinkingDiv,this.prevMsgClass);
+            this.prevMsgClass = null;
+        }
+
+        this.thinkingDiv.innerHTML = text || str_thinking;
+        this.thinkingDiv.style.top  = this.currY + 'px';
+        this.thinkingDiv.style.left = this.currX + 'px';
+        Effect.Appear( this.thinkingDiv, { duration: 0.2 } );
+    },
+
+    onAjaxReturn: function(json) {
+
+        if( json )
+        {
+            var dur = 4.5;
+
+            if( json.message )
+            {
+                this.ShowMessage('message',json.message,dur);
+            }
+            else if( json.warning )
+            {
+                this.ShowMessage('warning',json.warning,dur);
+            }
+            else if( json.err )
+            {
+                this.ShowMessage('error',json.err,5.0);
+            }
+            else
+            {
+                if( Ajax.activeRequestCount == 0 )
+                    this.StopThinking(0.2);
+            }
+        }
+        else
+        {
+            if( Ajax.activeRequestCount == 0 )
+                this.StopThinking(0.2);
+        }
+    },
+
+    ShowMessage: function(type,text,dur)
+    {
+        try
+        {
+            if( text.match(/^str_/) )
+                text = eval( text );
+
+            this.ShowThinking(text);
+            var className = 'ajaxmsg_' + type;
+            this.prevMsgClass = className;
+            Element.addClassName(this.thinkingDiv,className);
+            this.StopThinking(dur);
+        }
+        catch(ex)
+        {
+            alert('show message: ' + ex.message);
+        }
+    },
+
+    ShowElement: function(id) {
+        Effect.Appear( id, { duration: 0.5 } );
+    },
+
+    HideElement: function(id) {
+        Effect.Fade( id, { duration: 0.5 } );
+    },
+
+    /**
+    *    User clicked something that trigged an ajax call for data
+    *
+    *  Put up the little 'thinking' div, wait for response
+    */
+    userClickDataFetch: function(event,id) {
+        this._close_any_popups();
+        this.StartThinking(event);
+        Event.stop(event);
+    },
+
+    /**
+    *  Data came back from ajax request, open the popup with 'id'
+    */
+    dataFetchedOpenPopup: function(id) {
+        if( id == this.openPopup )
+            return;
+        this._close_any_popups();
+        this.openPopup = id;
+        this.ShowElement(id);
+        this._hook_window();
+    },
+
+    /*
+    * Data is cached in hidden popup, reopen it now
+    */
+    reopenPopupOrCloseIfOpen: function(event,id) {
+        if( id == this.openPopup )
+        {
+            this._close_any_popups();
+        }
+        else
+        {
+            this.StartThinking(event);
+            this.dataFetchedOpenPopup(id);
+        }
+        Event.stop(event);
+    },
+
+    /**
+    * 
+    */
+    clearWindowClick: function(event) {
+        this._close_any_popups();
+    },
+
+    _close_any_popups: function() {
+        if( this.openPopup )
+        {
+            this.HideElement(this.openPopup);
+            this.openPopup = null;
+        }
+    }
+}
+
+
+var ccPopupManager = Object.extend(
+        {
+            bodyHooked: false,
+            _hook_window: function() {
+                if( !this.bodyHooked )
+                {
+                    Event.observe( document.body /* window */, 'click', this.clearWindowClick.bindAsEventListener(this));
+                    this.bodyHooked = true;
+                }
+            },
+
+            onCreate: function(req){
+                //ajax_debug(req.url);
+                if( !Prototype.Browser.IE )
+                {
+                    // this completely blows IE to smithereens
+                    this.ShowThinking();
+                }
+                else
+                {
+                    if( !this.thinkingEnabled )
+                    {
+                        this.currY = 20;
+                        this.currX = 300;
+                        this.thinkingEnabled = true;
+                    }
+                }
+            },
+
+            onException: function(req,ex) {
+                this.ShowMessage( 'error', ex.toString(), 6.0 );
+            },
+
+            onComplete: function(req,t,json) {
+                this.onAjaxReturn(json);
+            }
+        }, ccPopupManagerMethods );
+
+Ajax.Responders.register(ccPopupManager);
+

@@ -20,7 +20,7 @@
     border: 1px solid #C4985C;
 }
 
-.cc_playlist_popup, .cc_playlist_thinking {
+.cc_playlist_popup {
     border-width: 1px;
 	border-style: solid;
     padding: 9px;
@@ -28,10 +28,6 @@
 	position: absolute;
 	height: auto;
 	width: auto;
-}
-
-.cc_playlist_thinking {
-	font-size: 11px;
 }
 
 a.cc_playlist_menu_item {

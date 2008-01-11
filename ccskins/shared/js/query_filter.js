@@ -316,7 +316,7 @@ ccFormatter.prototype = {
             var val = opt[0], text = opt.length > 1 ? opt[1] : val;
             var sel = val == f.value ? ' selected="selected" ' : '';
             if( text.toString().match(/^str_/) )
-                text = eval(text.toString());
+                text = eval( "(" + text.toString() + ")" );
             html += '<option ' + sel + 'value="' + val + '" >' + text + '</option>';
         });
         return html + '</select>';

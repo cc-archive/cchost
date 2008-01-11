@@ -308,8 +308,8 @@ class CCPlaylists
         $args['command'] = 'delete';
         $args['upload_id'] = $upload_id;
         $args['cart_id'] = $playlist_id;
-        $args['message'] = 'str_pl_track_has_been_removed';
-        $this->_output($args); // for now...
+        $args[CC_AJAX_MESSAGE] = 'str_pl_track_has_been_removed';
+        CCUtil::ReturnAjaxData($args);
     }
 
     function View($playlist_id='')
@@ -603,8 +603,7 @@ EOF;
         $check_row = $cart_items->CountRows($check);
         if( $check_row )
         {
-            $a = 'str_pl_upload_is_already';
-            $this->_output($a);
+            CCUtil::ReturnAjaxMessage('str_pl_upload_is_already',CC_AJAX_WARNING);
         }
 
         $uploads  =& CCUploads::GetTable();
@@ -627,7 +626,7 @@ EOF;
     {
         $this->_test_pl($upload_id,$playlist_id,true,true,true);
         $this->_add($upload_id,$playlist_id);
-        $this->_output('str_pl_track_added');
+        CCUtil::ReturnAjaxMessage('str_pl_track_added');
     }
  
     function _get_default_playlist($id_only=false)
@@ -734,7 +733,7 @@ EOF;
             $msg = 'str_pl_and_track_added';
         }
 
-        $this->_output($msg);
+        CCUtil::ReturnAjaxMessage($msg);
     }
 
     function _gen_name()

@@ -99,12 +99,7 @@ EOF;
             }
         }
 
-        require_once('cclib/zend/json-encoder.php');
-        $text = CCZend_Json_Encoder::encode($ret);
-        header( "X-JSON: $text");
-        header( 'Content-type: text/plain');
-        print $text;
-        exit;
+        CCUtil::ReturnAjaxData($ret);
     }
 
     function Tags($user_name)
@@ -120,11 +115,7 @@ EOF;
         }
         $tagarr = array_unique($tagarr);
         sort($tagarr);
-        require_once('cclib/zend/json-encoder.php');
-        $args = CCZend_Json_Encoder::encode($tagarr);
-        header('Content-type: text/javascript');
-        print($args);
-        exit;
+        CCUtil::ReturnAjaxData($tagarr);
     }
     /**
     * Event handler for mapping urls to methods

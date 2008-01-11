@@ -20,56 +20,54 @@ class CCQueryBrowser
         if( isset($_GET['user_lookup']) )
         {
             $user_mask = trim(CCUtil::Strip($_GET['user_lookup']));
-            if( $user_mask )
-            {
-                // yes, yes, it's a hack
-                $sql = "SELECT user_name as un, " .
-                       "IF(user_name = user_real_name,user_name,CONCAT(user_real_name,' (',user_name,')')) as ut ".
-                       ' FROM cc_tbl_user WHERE ' .
-                       "((user_name LIKE '{$user_mask}%') OR (user_real_name LIKE '{$user_mask}%')) AND " .
-                       ' user_num_uploads > 0 ' .
-                       ' ORDER BY user_name ASC';
-                $this->_output_q($sql);
-            }
-            exit;
+            if( !$user_mask )
+                CCUtil::ReturnAjaxMessage('not a valid user lookup',CC_AJAX_WARNING);
+
+            $sql = "SELECT user_name as un, " .
+                   "IF(user_name = user_real_name,user_name,CONCAT(user_real_name,' (',user_name,')')) as ut ".
+                   ' FROM cc_tbl_user WHERE ' .
+                   "((user_name LIKE '{$user_mask}%') OR (user_real_name LIKE '{$user_mask}%')) AND " .
+                   ' user_num_uploads > 0 ' .
+                   ' ORDER BY user_name ASC';
+            $this->_output_q($sql);
+
         }
         else if( isset($_GET['tag_lookup']) )
         {
             $tag_mask = trim(CCUtil::Strip($_GET['tag_lookup']));
-            if( $tag_mask )
+            if( !$tag_mask )
+                CCUtil::ReturnAjaxMessage('not a valid tag lookup',CC_AJAX_WARNING);
+            
+            $limit = '';
+            if( !empty($_GET['limit']) )
             {
-                $limit = '';
-                if( !empty($_GET['limit']) )
-                {
-                    $limit = sprintf("%d",$_GET['limit']);
-                    if( !empty($limit) )
-                        $limit = "LIMIT 0, $limit";
-                }
-
-                $type = empty($_GET['type']) ? 4 : sprintf('%d',$_GET['type']);
-                if( empty($type) )
-                    $type = 4;
-                $where = "WHERE ( (tags_type & $type) <> 0 ) ";
-
-                if( $tag_mask != '*' )
-                    $where .= " AND (tags_tag LIKE '{$tag_mask}%')";
-
-                if( !empty($_GET['min']) )
-                {
-                    $min = sprintf("%d",$_GET['min']);
-                    if( !empty($min) )
-                        $where .= " AND (tags_count >= $min)";
-                }
-
-                // yes, yes, it's a hack
-                $sql = "SELECT tags_tag as un, CONCAT(tags_tag,' (',tags_count,')') as ut " .
-                       ' FROM cc_tbl_tags  ' .
-                       $where .
-                       ' ORDER BY tags_tag ASC ' . $limit;
-                
-                $this->_output_q($sql,false);
+                $limit = sprintf("%d",$_GET['limit']);
+                if( !empty($limit) )
+                    $limit = "LIMIT 0, $limit";
             }
-            exit;
+
+            $type = empty($_GET['type']) ? 4 : sprintf('%d',$_GET['type']);
+            if( empty($type) )
+                $type = 4;
+            $where = "WHERE ( (tags_type & $type) <> 0 ) ";
+
+            if( $tag_mask != '*' )
+                $where .= " AND (tags_tag LIKE '{$tag_mask}%')";
+
+            if( !empty($_GET['min']) )
+            {
+                $min = sprintf("%d",$_GET['min']);
+                if( !empty($min) )
+                    $where .= " AND (tags_count >= $min)";
+            }
+
+            // yes, yes, it's a hack
+            $sql = "SELECT tags_tag as un, CONCAT(tags_tag,' (',tags_count,')') as ut " .
+                   ' FROM cc_tbl_tags  ' .
+                   $where .
+                   ' ORDER BY tags_tag ASC ' . $limit;
+            
+            $this->_output_q($sql,false);
         }
         else
         {
@@ -102,12 +100,7 @@ class CCQueryBrowser
         $args['html'] = '';
         while( $row = mysql_fetch_assoc($qr) )
             $args['html'] .= '<p class="cc_autocomp_line" id="_ac_' . $row['un'] . '">' . $row['ut'] . '</p>';
-        require_once('cclib/zend/json-encoder.php');
-        $args = CCZend_Json_Encoder::encode($args);
-        if( $do_json )
-            header("X-JSON: $args");
-        header('Content-type: text/javascript');
-        print($args);
+        CCUtil::ReturnAjaxData($args,$do_json);
     }
 }
 

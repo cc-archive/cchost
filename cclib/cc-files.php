@@ -297,13 +297,7 @@ class CCPhysicalFile
             CCDatabase::Query($sql);
         }
 
-        require_once('cclib/zend/json-encoder.php');
-        $text = 'str_files_have_been_reordered'; // ('Files have been reordered');
-        $text = CCZend_Json_Encoder::encode($text);
-        header( "X-JSON: $text");
-        header( 'Content-type: text/plain');
-        print $text;
-        exit;
+        CCUtil::ReturnAjaxMessage('str_files_have_been_reordered');
     }
 
     /**

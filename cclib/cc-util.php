@@ -37,6 +37,10 @@ define('CC_RFC3339_FORMAT', 'Y-m-d\TH:i:s');
 
 define('CC_SEARCH_RECURSE_DEFAULT', false);
 
+define('CC_AJAX_MESSAGE', 'message');
+define('CC_AJAX_WARNING', 'warning');
+define('CC_AJAX_ERROR',   'err');
+
 /**
 */
 function cc_default_file_perms()
@@ -225,6 +229,23 @@ class CCUtil
 
         header("Location: $newurl");
         exit;
+    }
+
+    function ReturnAjaxData($obj,$inHeader=true)
+    {
+        require_once('cclib/zend/json-encoder.php');
+        $text = CCZend_Json_Encoder::encode($obj);
+        if( $inHeader )
+            header( "X-JSON: $text");
+        header( 'Content-type: text/plain');
+        print( '(' . $text . ')' );
+        exit;
+    }
+
+    function ReturnAjaxMessage($msg,$type = CC_AJAX_MESSAGE)
+    {
+        $obj[$type] = $msg;
+        CCUtil::ReturnAjaxData($obj);
     }
 
     function IsHTTP()

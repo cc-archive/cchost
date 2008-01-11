@@ -4,7 +4,6 @@
     desc = _('View A Collaboration')
 [/meta]
 %%*/?>
-<div id="ajax_msg"></div>
 <?
 $collab = $A['collab'];
 $C = $collab['collab'];
@@ -100,22 +99,25 @@ cu.updateFiles('%(#collab_id)%');
     if( $collab['is_owner'] || $collab['is_member'] || $_u['collab_user_confirmed'] ) 
     {
         $itsme = ($_u['user_id'] == CCUser::CurrentUser()) ? 1 : 0;
-      ?> cu.addUser( '%(#_u/user_name)%', '%(#_u/user_real_name)%', 
-             '%(#_u/collab_user_role)%', '%(#_u/collab_user_credit)%',%(#_u/collab_user_confirmed)%, %(#itsme)% );
+        $role = addslashes($_u['collab_user_role']);
+        $credit = addslashes($_u['collab_user_credit']);
+        $rname = addslashes($_u['user_real_name']);
+      ?> cu.addUser( '%(#_u/user_name)%', '%(#rname)%', '%(#role)%', '%(#credit)%',
+             %(#_u/collab_user_confirmed)%, %(#itsme)% );
   <? } ?>
 %end_loop%
 
 function upload_done(upload_id,msg)
 {
   $('upcover').style.display = 'none';
-  if( upload_id )
+  if( upload_id > 0)
   {
     cu.updateFiles('%(#collab_id)%');
-    cu.msg('%text(str_collab_upload_succeeded)%.','green');
+    ccPopupManager.ShowMessage('message','%text(str_collab_upload_succeeded)%',4.0);
   }
   else
   {
-    cu.msg('%text(str_collab_upload_failed)%: ' . msg,'red');
+    ccPopupManager.ShowMessage('error','%text(str_collab_upload_failed)%: ' + (msg || '???'),5.0);
   }
 }
 </script>

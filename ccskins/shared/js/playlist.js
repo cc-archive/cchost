@@ -17,53 +17,6 @@
 *
 */
 
-var ccThinking = {
-
-    currX: 0,
-    currY: 0,
-    div: null,
-    enabled: false,
-
-    Enable: function(event) {
-        this.currY  = (Event.pointerY(event) - 5); 
-        this.currX  = (Event.pointerX(event) + 15); 
-        this.enabled = true;
-    },
-
-    onCreate: function(){
-        if( !this.enabled )
-            return;
-
-        if( !this.div )
-        {
-            this.div = document.createElement('div');
-            this.div.style.display = 'none';
-            this.div.className = 'cc_playlist_thinking light_bg dark_border';
-            this.div.innerHTML = str_thinking;
-            document.body.appendChild(this.div);
-        }
-        this.div.style.top  = this.currY + 'px';
-        this.div.style.left = this.currX + 'px';
-        this.div.style.display = 'block';
-    },
-
-    _hide_popup: function() {
-        if( this.div )
-            this.div.style.display = 'none';
-    },
-
-    onComplete: function(req,t,json) {
-        if(Ajax.activeRequestCount == 0) {
-            this._hide_popup();
-            this.enabled = false;
-        }
-        else {
-            
-        }
-    }
-};
-
-Ajax.Responders.register(ccThinking);
 
 /************************************************
 *
@@ -74,209 +27,90 @@ ccPlaylistMenu = Class.create();
 
 ccPlaylistMenu.prototype = {
 
-    openMenu: null,
-    inOpen: false,
-    windowHooked: false,
-    openInfo: null,
-    transport: null,
-
     initialize: function(options) {
         this.options = Object.extend( { autoHook: true }, options || {} );
         this.infos = new ccUploadInfo();
-        this.infos.onClickWatch = this.onInfoClick.bind(this);
-        this.infos.bindWatch = this.InfoArrived.bind(this);
         if( this.options.autoHook )
             this.hookElements();
     },
 
     hookElements: function(parent) {
         var me = this;
-        var found = false;
         $$('.cc_playlist_button', parent).each( function(e) {
             var id = e.href.match( /([0-9]+$)/ )[1];
             Event.observe( e, 'click', me.onMenuButtonClick.bindAsEventListener( me, id ) );
-            found = true;
         });
 
-        found = this.infos.hookInfos('.info_button',parent) || found;
-
-        if( found && !this.windowHooked ) {
-            Event.observe( document.body /* window */, 'click', this.onWindowClick.bindAsEventListener(this));
-            this.windowHooked = true;
-        }
-
+        this.infos.hookInfos('.info_button',parent);
     },
 
-    onMenuButtonClick: function(e,id) {
-        if( this.transport )
-            return;
+    onMenuButtonClick: function(event,id) {
 
-        this._close_info();
         var pid = 'pl_menu_' + id;
-        if( this.openMenu )
-        {
-            var openId = this.openMenu.id;
-            this._close_menu();
-            if( openId == pid )
-                return;
-        }
         if( $(pid) )
         {
             if( $(pid).needRefresh ) 
             {
-                $(pid).style.display = 'block';
-                this._refresh_menu( id, pid );
+                this._refresh_menu( event, id, pid );
             }
             else
             {
-                this._open_menu(pid);
+                ccPopupManager.reopenPopupOrCloseIfOpen(event,pid);
             }
         }
         else
         {
-            var element = Event.element(e);
+            var element = Event.element(event);
             while( element.tagName != 'A' )
                 element = element.parentNode;
-            this._create_controls( element, pid, id );
+            this._create_controls( event, element, pid, id );
         }
-        this.inOpen = true;
-        //if( this.options.stopOnClick )
-            Event.stop(e);
-            return false;
+        return false;
     },
 
-    _create_controls: function( link, pid, id ) {
-        var html = '<div id="' + pid + '" style="" class="cc_playlist_popup light_bg dark_border">'+str_thinking+'</div>';
+    _create_controls: function( event, link, pid, id ) {
+        var html = '<div id="' + pid + '" style="opacity:0.0" class="cc_playlist_popup light_bg dark_border">&nbsp;</div>';
         new Insertion.After( link, html );
         var pp = $(pid);
         Position.clone( link, pid, {  setWidth:   false,
                                       setHeight:  false,
                                       offsetTop:  20,
                                       offsetLeft: 20 } );
-        this._refresh_menu( id, pid );
+        this._refresh_menu( event, id, pid );
     },
 
-    _refresh_menu: function( id, pid ) {
+    _refresh_menu: function( event, id, pid ) {
+        ccPopupManager.userClickDataFetch(event,pid);
         var url = home_url + 'api/playlist/with/' + id + q + 'f=html&m=playlist_popup'
         this.transport = new Ajax.Request( url, { method: 'get', onComplete: this._req_with.bind(this,pid) } );
     },
 
     _req_with: function( pid, resp ) {
-        try
-        {
-            var e = $(pid);
-            e.needRefresh = false;
-            e.innerHTML = resp.responseText;
-            var me = this;
-            $A(e.getElementsByTagName('A')).each( function( a ) {
-                var url = a.href;
-                a.href = 'javascript://playlist menu item';
-                Event.observe( a, 'click', me.onMenuItemClick.bindAsEventListener( me, url, pid ) );
-            });
-            this._open_menu(pid);
-        }
-        catch (err)
-        {
-            alert(err);
-        }
-        this.transport = null;
+        var e = $(pid);
+        e.needRefresh = false;
+        e.innerHTML = resp.responseText;
+        var me = this;
+        $A(e.getElementsByTagName('A')).each( function( a ) {
+            var url = a.href;
+            a.href = 'javascript://playlist menu item';
+            Event.observe( a, 'click', me.onMenuItemClick.bindAsEventListener( me, url, pid ) );
+        });
+        ccPopupManager.dataFetchedOpenPopup(pid);
     },
 
     onMenuItemClick: function( event, url, pid ) {
         var p = $(pid);
-        ccThinking.Enable(event);
-        this.transport = new Ajax.Request( url, { method: 'get', onComplete: this._req_status.bind(this,pid) } );
-        Event.stop( event );
+        ccPopupManager.userClickDataFetch(event,pid);
+        new Ajax.Request( url, { method: 'get', onComplete: this._req_status.bind(this,pid) } );
+        return false;
     },
 
     _req_status: function( pid, resp, json ) {
-        try
-        {
-            var p = $(pid);
-            p.needRefresh = true;
-            if( json )
-            {
-                if( json.message )
-                {
-                    if( json.message.match(/^str_/) )
-                        p.innerHTML = eval(json.message);
-                    else
-                        p.innerHTML = json.message;
-                    this.onJSONCommand(json);
-                }
-                else
-                {
-                    p.innerHTML = eval(json);
-                }
-            }
-            else
-            {
-                p.innerHTML = resp.responseText;
-            }
-            Effect.Fade( p, { duration: 1.5, delay: 1.2, afterFinish: this._close_menu.bind(this) } );
-        }
-        catch (err)
-        {
-            alert(err);
-        }
-        this.transport = null;
+        $(pid).needRefresh = true;
+        if( json.command )
+            this.onJSONCommand(json);
     },
     
-    _open_menu: function(pid) {
-        var pp = $(pid);
-        this.openMenu = pp;
-        pp.style.opacity = '0.0';
-        pp.style.display = 'block';
-        Effect.Appear( pp, { duration: 0.7, from: 0.0, to: 1.0, delay: 0.2 } );
-    },
-
-    _close_menu: function() {
-        if( this.openMenu )
-        {
-            this.openMenu.style.display = 'none';
-            this.openMenu = null;
-        }
-    },
-
-    onInfoClick: function(event, info_id, transport) {
-        if( this.transport )
-            return;
-
-        this.transport = transport;
-        this._close_menu();
-
-        if( !$(info_id) )
-        {
-            ccThinking.Enable(event);
-        }
-        this.inOpen = true;
-    },
-
-    _close_info: function() {
-        this.infos.CloseInfo();
-    },
-
-    InfoArrived: function() {
-        this.transport = null;
-    },
-
-    CloseMenus: function() {
-        if( this.inOpen )
-        {
-            this.inOpen = false;
-        }
-        else
-        {
-            this._close_menu();
-            this._close_info();
-        }
-    },
-
-    onWindowClick: function(e) {
-        this.CloseMenus();
-        return true;
-    },
-
     /* 
     *
     * playlist stuff ... doesn't really belong here yet here it is... 
@@ -386,35 +220,40 @@ var ccdbg = '';
 var ccPlaylistBrowserObject = {
 
     selected: null,
-    openRec: '',
-    openingRec: false,
-    browsingAway: false,
 
     /*
        get the list of playlists
     */
     initialize: function(container_id,options) {
-        this.options = Object.extend( { }, options || {} );
+        this.options = Object.extend( this.options || {}, options || {} );
         this.container_id = container_id;
         this._get_carts();
     },
 
     _get_carts: function(url) {
-        if( !url )
+        try
         {
-            url = home_url + 'api/playlist/browse';
-            if( this.options.user )
-                url += '/' + this.options.user;
-            url += q + 'f=html&t=playlist_browse';
-            if( this.options.upload )
-                url += '&upload_id=' + this.options.upload;
-            if( this.options.hot )
-                url += '&hot=1';
-            if( this.options.since )
-                url += '&since=' + this.options.since;
+            if( !url )
+            {
+                url = home_url + 'api/playlist/browse';
+                if( this.options.user )
+                    url += '/' + this.options.user;
+                url += q + 'f=html&t=playlist_browse';
+                if( this.options.upload )
+                    url += '&upload_id=' + this.options.upload;
+                if( this.options.hot )
+                    url += '&hot=1';
+                if( this.options.since )
+                    url += '&since=' + this.options.since;
+            }
+            var me = this;
+            new Ajax.Request( url, { method: 'get', onComplete: me._resp_browse.bind(me) } );
         }
-        var me = this;
-        new Ajax.Request( url, { method: 'get', onComplete: me._resp_browse.bind(me) } );
+        catch (e)
+        {
+            alert(e);
+        }
+
     },
 
     /*
@@ -445,20 +284,12 @@ var ccPlaylistBrowserObject = {
     },
 
     onPrevNext: function(e,href) {
-        //var offs = href.match(/\?(.*)$/)[1];
-        this.openRec = '';
-        this.openingRec = false;
-        this.selected = null;
-        this.browsingAway = false;
-
         this._get_carts(href);
         Event.stop(e);
     },
 
     onListClick: function(event) {
-        if( this.browsingAway )
-            this.browsingAway = false;  // have to set this in case user does 'back' 
-        else
+        if( this.selected )
             this.openPlaylist(this.selected,event);
     },
 
@@ -468,36 +299,9 @@ var ccPlaylistBrowserObject = {
             var cart_id = $(id).id.replace('_pl_','');
             var detailId = '_pld_' + cart_id;
 
-            this.openingRec = true;
-
-            if( this.openRec.length > 0 )
-            {
-                // close the 'current' playlist
-                $(this.openRec).style.display = 'none';
-            }
-
             if( $(detailId) )
             {
-                var element = $(detailId);
-
-                if( this.openRec == detailId )
-                {
-                    // all we did was close the currently open one
-                    this.openRec = '';
-                }
-                else
-                {
-                    // this is a request to open another playlist and
-                    // we already have it cached and it's not changed
-                    // so just open it...
-                    element.style.display = 'block';
-                    this.openRec = detailId;
-                    // reset sel line because of painting probs
-                    Element.removeClassName( this.openRec, 'selected' ); // 'cc_playlist_sel' );
-                    //Element.addClassName( this.openRec, 'dark_bg' ); // 'cc_playlist_sel' );
-                }
-            
-                this.openingRec = false;
+                this.reopenPopupOrCloseIfOpen(event,detailId);
             }
             else
             {
@@ -505,15 +309,10 @@ var ccPlaylistBrowserObject = {
                 // the contents, go to the server to get the playlist
                 // details...
 
-                if( event )
-                    ccThinking.Enable(event);
-                this.openRec = detailId;            
                 var html = '\n<div id="'+detailId
-                               + '" class="cc_playlist_detail" style="opacity:0.0;">'+str_thinking+'</div>\n';
+                               + '" class="cc_playlist_detail"></div>\n';
                 new Insertion.After(this.selected, html);
-                Event.observe( detailId, 'click', this.onStopDetailClick.bindAsEventListener(this, detailId) );
-                Effect.Appear( detailId, { duration: 0.3, from: 0.0, to: 1.0, delay: 0.2 } );
-                //this.delayDisplay(detailId,'block');
+                this.userClickDataFetch(event,detailId);
                 this.refreshDetails(cart_id);
             }
         }
@@ -523,20 +322,8 @@ var ccPlaylistBrowserObject = {
         }
     },
 
-    onStopDetailClick: function(event, detailId) {
-        var e = Event.element(event);
-        var detail = $(detailId);
-        while( e != detail )
-        {
-            if( e.href && e.href.match(/^http:/) )
-            {
-                this.browsingAway = true;
-                return;
-            }
-            e = e.parentNode;
-        }
-        if( this.playlistMenu )
-            this.playlistMenu.CloseMenus();
+    KillBubble: function(event) {
+        ccPopupManager.clearWindowClick();
         Event.stop(event);
         return false;
     },
@@ -556,7 +343,10 @@ var ccPlaylistBrowserObject = {
 
         try
         {
-            var e = $('_pld_' + cart_id);
+            var id = '_pld_' + cart_id;
+            var e = $(id);
+            e.style.display = 'none';
+            //Element.makeClipping(e);
             e.innerHTML = resp.responseText;
 
             // hook the .mp3 links
@@ -568,7 +358,7 @@ var ccPlaylistBrowserObject = {
             // hook the menus, info button, et. al.
             this.playlistMenu.hookElements(e);
 
-            e.style.display = 'block';
+            this.dataFetchedOpenPopup(id);
         }
         catch (err)
         {
@@ -580,14 +370,33 @@ var ccPlaylistBrowserObject = {
     onListHover: function(event) {
         var e = Event.element(event);
 
-        if( Element.hasClassName( e, 'cc_playlist_line' ) )
+        var hasClass = Element.hasClassName( e, 'cc_playlist_line' );
+        if( !hasClass )
+        {
+            while( e.tagName != 'DIV' )
+            {
+                e = e.parentNode;
+                if( Element.hasClassName( e, 'cc_playlist_line' ) )
+                {
+                    hasClass = true;
+                    break;
+                }
+            }
+        }
+
+        if( hasClass )
+        {
+            if( this.selected && (this.selected.id != e.id) )
+                Element.removeClassName(this.selected, 'selected_area'); 
+            if( !Element.hasClassName( e, 'selected_area') )
+                Element.addClassName( e, 'selected_area'); 
+            this.selected = e;
+        }
+        else
         {
             if( this.selected )
-            {
-                Element.removeClassName(this.selected, 'selected_area'); // 'cc_playlist_sel' );
-            }
-            Element.addClassName( e, 'selected_area'); // 'cc_playlist_sel' );
-            this.selected = e;
+                Element.removeClassName(this.selected, 'selected_area'); 
+            this.selected = null;
         }
     },
 
@@ -597,7 +406,18 @@ var ccPlaylistBrowserObject = {
 }
 
 ccPlaylistBrowser = Class.create();
-ccPlaylistBrowser.prototype =  Object.extend( ccPlayerMethods, ccPlaylistBrowserObject );
+ccPlaylistBrowser.prototype = Object.extend( { _hook_window: function() { } }, ccPlayerMethods);
+Object.extend(ccPlaylistBrowser.prototype, ccPlaylistBrowserObject);
+Object.extend(ccPlaylistBrowser.prototype, ccPopupManagerMethods );
+Object.extend(ccPlaylistBrowser.prototype, {
+    ShowElement: function(id) {
+        Effect.BlindDown( id, { duration: 0.5, restoreAfterFinish: false } ); // IE requires no restoreAfterFinish
+    },
+
+    HideElement: function(id) {
+        Effect.BlindUp( id, { duration: 0.5 } );
+    } } );
+
 
 /*
     parent redirector

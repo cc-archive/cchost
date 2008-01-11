@@ -29,7 +29,6 @@ EOF;
 }                  
 [/dataview]
 %%*/?>
-<div id="ajax_msg"></div>
 
 <style type="text/css">
 ul.ddex    { list-style: none; padding: 0px; width: 50%; margin:0px auto;}

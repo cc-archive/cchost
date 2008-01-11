@@ -119,12 +119,7 @@ EOF;
             $ret['topic_cmds'][] = $rec;
         }
 
-        require_once('cclib/zend/json-encoder.php');
-        $text = CCZend_Json_Encoder::encode($ret);
-        header( "X-JSON: $text");
-        header( 'Content-type: text/plain');
-        print $text;
-        exit;
+        CCUtil::ReturnAjaxData($ret);
    }
 
 }

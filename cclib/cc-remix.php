@@ -300,12 +300,7 @@ EOF;
         }
         $lics = new CCTable('cc_tbl_licenses','license_id');
         $row = $lics->QueryKeyRow($license);
-        require_once('cclib/zend/json-encoder.php');
-        $text = CCZend_Json_Encoder::encode($row);
-        header( "X-JSON: $text");
-        header( 'Content-type: text/plain');
-        print($text);
-        exit;
+        CCUtil::ReturnAjaxData($row);
     }
 
 

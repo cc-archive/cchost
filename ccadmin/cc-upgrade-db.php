@@ -68,7 +68,7 @@ function upgrade_db()
         {
             print("Creating table: $new_table_name<br />\n");
             // create table
-            $sql = $new_table_info['create'][$i];
+            $sql = $new_table_info['create'];
             CCDatabase::Query($sql);
         }
 

@@ -99,13 +99,7 @@ END;
         }
 
         if( !empty($args) )
-        {
-            require_once('cclib/zend/json-encoder.php');
-            $text = CCZend_Json_Encoder::encode($args);
-            header( "X-JSON: $text");
-            header( 'Content-type: text/plain');
-            print $text;
-        }
+            CCUtil::ReturnAjaxData($args);
         exit;
     }
 

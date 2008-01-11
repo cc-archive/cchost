@@ -241,12 +241,7 @@ EOF;
     function LicsForTags($tag_filter)
     {
         $lics = $this->_get_lic_filters($tag_filter,true);
-        require_once('cclib/zend/json-encoder.php');
-        $text = CCZend_Json_Encoder::encode($lics);
-        header( "X-JSON: $text");
-        header( 'Content-type: text/plain');
-        print($text);
-        exit;
+        CCUtil::ReturnAjaxData($lics);
     }
 
     function _get_lic_filters($tag_filter,$collapse=false)

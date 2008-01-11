@@ -54,7 +54,6 @@ if( $script )
 <script type="text/javascript">
 function ppage() { 
     var url = home_url + 'playlist/popup' + q + 'offset=<?= $offs ?>&<?= $qstring ?>';
-    ajax_debug(url);
     var dim = "height=300,width=550";
     var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                   "resizable=1,scrollbars=1," + dim );

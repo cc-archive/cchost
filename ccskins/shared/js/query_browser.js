@@ -117,7 +117,7 @@ ccQueryBrowser.prototype = {
     },
 
     fillCount: function( resp ) {
-        this.totalCount = eval(resp.responseText)[0];
+        this.totalCount = eval( "(" + resp.responseText + ")" )[0];
         if( this.totalCount > 0 )
         {
           this.refreshContent();

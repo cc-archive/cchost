@@ -450,7 +450,7 @@ EOF;
         }
         else
         {
-            $args['error'] = _('Invalid arguments');
+            $args[CC_AJAX_ERROR] = _('Invalid arguments');
         }
 
         if( $ok )
@@ -463,7 +463,7 @@ EOF;
                     $w1['collab_upload_upload'] = $upload_id;
                     $w1['collab_upload_collab'] = $collab_id;
                     $collab_uploads->DeleteWhere($w1);
-                    $args['msg'] = _('File removed from project');
+                    $args[CC_AJAX_WARNING] = _('File removed from project');
                     $uploads = new CCUploads();
                     $uploads->UnsetExtraField($upload_id,'collab');
                     break;
@@ -472,7 +472,7 @@ EOF;
                     $uploads = new CCUploads();
                     if( !$uploads->KeyExists($upload_id) )
                     {
-                        $args['error'] = _('Can not find that file');
+                        $args[CC_AJAX_ERROR] = _('Can not find that file');
                     }
                     else
                     {
@@ -483,18 +483,18 @@ EOF;
                         if( $w2['upload_published'] )
                         {
                             $args['published'] = 1;
-                            $args['msg'] = _('Upload is now visible to everybody');
+                            $args[CC_AJAX_MESSAGE] = _('Upload is now visible to everybody');
                         }
                         else
                         {
                             $args['published'] = 0;
-                            $args['msg'] = _('Upload is now only visible to members of the project');
+                            $args[CC_AJAX_WARNING] = _('Upload is now only visible to members of the project');
                         }
                     }
                     break;
 
                 default:
-                    $args['error'] = _('Unknown command: ' . $cmd);
+                    $args[CC_AJAX_ERROR] = _('Unknown command: ' . $cmd);
                     break;
             }
         }
@@ -516,7 +516,7 @@ EOF;
         }
         else
         {
-            $args['error'] = _('Invalid arguments');
+            $args[CC_AJAX_ERROR] = _('Invalid arguments');
         }
 
         $args = array();
@@ -535,7 +535,7 @@ EOF;
                     $collab_user = $users->QueryRow($w1);
                     if( !empty($c) )
                     {
-                        $args['error'] = sprintf(_('%s is already a member'),$user_real_name);
+                        $args[CC_AJAX_ERROR] = sprintf(_('%s is already a member'),$user_real_name);
                     }
                     else
                     {
@@ -543,7 +543,7 @@ EOF;
                         $users->Insert($w1);
                         $args['user_name'] = $username;
                         $args['user_real_name'] = $user_real_name;
-                        $args['msg'] = sprintf(_('%s added to project'),$user_real_name);
+                        $args[CC_AJAX_MESSAGE] = sprintf(_('%s added to project'),$user_real_name);
                     }
                     break;
 
@@ -555,19 +555,19 @@ EOF;
                     $collab_user = $users->QueryRow($w1);
                     if( empty($collab_user) )
                     {
-                        $args['error'] = sprintf(_('%s is not member of this project'),$user_real_name);
+                        $args[CC_AJAX_ERROR] = sprintf(_('%s is not member of this project'),$user_real_name);
                     }
                     else
                     {
                         $w1['collab_user_role'] = 'member';
                         $users->DeleteWhere($w1);
                         $args['user_name'] = $username;
-                        $args['msg'] = sprintf(_('%s removed from project'),$user_real_name);
+                        $args[CC_AJAX_MESSAGE] = sprintf(_('%s removed from project'),$user_real_name);
                         $c = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_collab_users WHERE collab_user_collab='.$collab_id);
                         if( $c < 2 )
                         {
                             CCDatabase::Query('UPDATE cc_tbl_collabs SET collab_confirmed=0 WHERE collab_id='.$collab_id);
-                            $args['msg'] .= ' (NO MEMBERS: This project is no longer listed)';
+                            $args[CC_AJAX_MESSAGE] .= ' (NO MEMBERS: This project is no longer listed)';
                         }
                     }
                     break;
@@ -581,7 +581,7 @@ EOF;
 
                     if( !$ok )
                     {
-                        $args['error'] = _('Missing argument');
+                        $args[CC_AJAX_ERROR] = _('Missing argument');
                     }
                     else
                     {
@@ -592,7 +592,7 @@ EOF;
                         $users->UpdateWhere($w2,$w1);
                         $args['user_name'] = $username;
                         $args['credit'] = $credit;
-                        $args['msg'] = _('User credit updated');
+                        $args[CC_AJAX_MESSAGE] = _('User credit updated');
                     }
                     break;
 
@@ -604,7 +604,7 @@ EOF;
                     }
                     if( !$ok )
                     {
-                        $args['error'] = _('Missing argument');
+                        $args[CC_AJAX_ERROR] = _('Missing argument');
                     }
                     else
                     {
@@ -613,7 +613,7 @@ EOF;
                         $collab_name = CCDatabase::QueryItem('SELECT collab_name FROM cc_tbl_collabs WHERE collab_id='.$collab_id);
                         $text .= "\n\nProject: \"$collab_name\"\n$url\n";
                         $this->_mail_out( $collab_id, _('Private message'), $text, $user_email );
-                        $args['msg'] = _('Message sent');
+                        $args[CC_AJAX_MESSAGE] = _('Message sent');
                     }
                     break;
 
@@ -624,23 +624,23 @@ EOF;
                                           "collab_user_collab = $collab_id AND collab_user_user = $user_id");
                         CCDatabase::Query("UPDATE cc_tbl_collabs SET collab_confirmed = 1 WHERE collab_id = $collab_id");
                         $args['user_name'] = $username;
-                        $args['msg']= _('You have been confirmed for this project');
+                        $args[CC_AJAX_MESSAGE]= _('You have been confirmed for this project');
                     }
                     else
                     {
-                        $args['error'] = _('You do not have permssion to confirm other users');
+                        $args[CC_AJAX_ERROR] = _('You do not have permssion to confirm other users');
                     }
                     break;
 
                 default:
-                    $args['error'] = _('Invalid command');
+                    $args[CC_AJAX_ERROR] = _('Invalid command');
                     $ok = false;
                     break;
             }
         }
         else
         {
-            $args['error'] = _('Invalid arguments');
+            $args[CC_AJAX_ERROR] = _('Invalid arguments');
         }
 
         $this->_output($args);
@@ -685,12 +685,7 @@ EOF;
 
     function _output($args) 
     {
-        require_once('cclib/zend/json-encoder.php');
-        $text = CCZend_Json_Encoder::encode($args);
-        header( "X-JSON: $text");
-        header( 'Content-type: text/plain');
-        print($text);
-        exit;
+        CCUtil::ReturnAjaxData($args);
     }
 
     function PostTopic($collab_id)
@@ -716,7 +711,7 @@ EOF;
             $values['topic_user'] = CCUser::CurrentUser();
             $values['topic_type'] = 'collab';
             $values['topic_name'] = '';
-            $topics->Insert($values);
+            $topics->Insert($values,0);
 
             $url = ccl( 'collab', $collab_id );
             $text = _('A new topic has been posted to your collaboration project') . "\n\n$url\n\n" . _('Thanks');
@@ -731,14 +726,17 @@ EOF;
 
     function UpdateTags($collab_id,$upload_id)
     {
-        $bad = empty($upload_id) || empty($_GET['tags']); 
+        $bad = empty($upload_id) && empty($_GET['tags']); 
+
+        if( $bad )
+            $args[CC_AJAX_ERROR] = _('Missing arguments');
 
         if( !$bad )
         {
             $tags = CCUtil::Strip($_GET['tags']);
             $bad = empty($tags);
             if( $bad )
-                $args['error'] = _('Missing arguments');
+                $args[CC_AJAX_ERROR] = _('Missing tags');
         }
 
         if( !$bad )
@@ -746,7 +744,7 @@ EOF;
             $uploads = new CCUploads();
             $bad = !$uploads->KeyExists($upload_id);
             if( $bad )
-                $args['error'] = _('Upload record not found');
+                $args[CC_AJAX_ERROR] = _('Upload record not found');
         }
 
         if( !$bad )
@@ -769,7 +767,7 @@ EOF;
                                   . ',';
             $up['upload_id'] = $upload_id;
             $uploads->Update($up);
-            $args['msg'] = _('Tags updated');
+            $args[CC_AJAX_MESSAGE] = _('Tags updated');
             $args['user_tags'] = $new_user_tags;
             $args['upload_id'] = $upload_id;
 
