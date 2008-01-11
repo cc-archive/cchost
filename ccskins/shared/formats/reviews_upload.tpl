@@ -16,10 +16,10 @@ function reviews_upload_dataview()
 SELECT  topic.topic_id, ((COUNT(parent.topic_id)-1) * 30) AS margin, topic.topic_left, topic.topic_right,
         IF( COUNT(parent.topic_id) > 1, 1, 0 ) as is_reply, 
         topic.topic_text as format_html_topic_text, 
-        user_real_name, user_name, user_num_reviews,
-        CONCAT( '$turl', user_name, '/',  topic.topic_upload, '#', topic.topic_id ) as topic_url,
-        CONCAT( '$urlp', user_name ) as artist_page_url,
+        user.user_real_name, user.user_name, user.user_num_reviews,
+        CONCAT( '$urlp', user.user_name ) as artist_page_url,
         DATE_FORMAT( topic.topic_date, '%a, %b %e, %Y @ %l:%i %p' ) as topic_date_format,
+        user.user_image as user_image,
         {$user_avatar_col}
 FROM cc_tbl_topics AS topic, 
      cc_tbl_topics AS parent,
@@ -35,7 +35,7 @@ SELECT  COUNT(*)
 FROM cc_tbl_topics AS topic, 
      cc_tbl_topics AS parent,
      cc_tbl_user AS user
-%where% AND (topic.topic_user = user_id) AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
+%where% AND (topic.topic_user = user.user_id) AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
 GROUP BY topic.topic_id
 EOF;
 
@@ -49,7 +49,12 @@ EOF;
 [/dataview]
 */?>
 
-<? cc_query_fmt('noexit=1&nomime=1&f=html&t=list_files&ids=' . $A['topic_upload']); ?>
+<? 
+    cc_query_fmt('noexit=1&nomime=1&f=html&t=list_files&ids=' . $A['topic_upload']); 
+    // sorry about this...
+    $user_name = CCDatabase::QueryItem('SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$A['topic_upload']);
+    $topic_url = ccl('reviews',$user_name,$A['topic_upload']);
+?>
 <link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
 <table class="cc_topic_thread" cellspacing="0" cellpadding="0">
 %loop(records,R)%
@@ -60,7 +65,7 @@ EOF;
     <td class="cc_topic_reply" style="padding-left:%(#R/margin)%px">
         <div class="cc_topic_reply_body  light_bg">
             <div class="cc_topic_reply_head med_light_bg">
-                <div style="float:right"><a href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+                <div style="float:right"><a href="%(#topic_url)%#%(#R/topic_id)%">%text(str_permalink)%</a> 
                     %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if%
                 </div>
                 <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% 
@@ -78,7 +83,7 @@ EOF;
     </td>
     <td class="cc_topic_body">
         <div class="cc_topic_date dark_bg light_color" >
-            <div style="float:right"><a class="light_color" href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+            <div style="float:right"><a class="light_color" href="%(#topic_url)%#%(#R/topic_id)%">%text(str_permalink)%</a> 
                 %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if%
             </div>
             %(#R/topic_date_format)%
@@ -93,6 +98,6 @@ EOF;
 <script type="text/javascript">
 if( user_name )
 {
-    new userHookup('topic_cmds','ids=<?= join(',',$thread_ids) ?>');
+    new userHookup('topic_cmds','upload=<?= $A['topic_upload'] ?>&type=review&ids=<?= join(',',$thread_ids) ?>');
 }
 </script>

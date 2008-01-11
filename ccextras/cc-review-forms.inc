@@ -79,9 +79,15 @@ class CCReviewFormAPI
         if( empty($_POST['review']) || !$form->ValidateFields() )
         {
 
-            CCReview::_build_bread_crumb_trail($user_real_name,$upload_id,'',_('create new'));
+            CCReview::_build_bread_crumb_trail(array($user_name,$user_real_name),
+                                      array( $upload_id, $upload_name), '',_('create new'));
 
-            CCPage::SetTitle(sprintf(_('Write a Review for "%s"'),$upload_name));
+            CCPage::SetTitle(array('str_review_write_s',$upload_name));
+
+            require_once('cclib/cc-query.php');
+            $query = new CCQuery();
+            $args = $query->ProcessAdminArgs('t=list_files&ids=' . $upload_id); 
+            $query->Query($args);
 
             CCPage::PageArg('review_upload',$upload_id);
             

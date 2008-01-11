@@ -107,6 +107,7 @@ $GLOBALS['str_reviews_left_for_button']           = _('See reviews left for %s')
 $GLOBALS['str_reviews_left_by_button']           = _('See reviews left by %s');
 $GLOBALS['str_reviews']         = _('Reviews');
 $GLOBALS['str_review_write']    = _('Write Review');
+$GLOBALS['str_review_write_s']    = _('Write a Review for "%s"');
 $GLOBALS['str_review_stats']    = _('Review Stats');
 $GLOBALS['str_reviews_stats_1']    = _('%s has not left any reviews and has been %sreviewed once%s');
 $GLOBALS['str_reviews_stats_2']    =  _('%s has not left any reviews and has been reviewed %s%d times%s');

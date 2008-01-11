@@ -412,6 +412,7 @@ $GLOBALS['str_reviews_left_for_button']           = _('See comments left for %s'
 $GLOBALS['str_reviews_left_by_button']           = _('See comments left by %s');
 $GLOBALS['str_reviews']         = _('Comments');
 $GLOBALS['str_review_write']    = _('Add Comment');
+$GLOBALS['str_review_write_s']    = _('Leave a Comment on "%s"');
 $GLOBALS['str_review_stats']    = _('Comment Stats');
 $GLOBALS['str_reviews_stats_1']    = _('%s has not left any comments and has been %sanswered once%s');
 $GLOBALS['str_reviews_stats_2']    =  _('%s has not left any comments and has been answered %s%d times%s');

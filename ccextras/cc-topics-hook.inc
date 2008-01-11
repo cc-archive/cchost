@@ -45,6 +45,17 @@ EOF;
         $user_id  = CCUser::CurrentUser();
         $is_admin = CCUser::IsAdmin();
 
+        if( !empty($_GET['type']) && $_GET['type'] == 'review' )
+        {
+            // yikes
+            require_once('ccextras/cc-reviews.php');
+            if( CCReviewsHV::_can_review($_GET['upload']) )
+            {
+                $review_cmd = array( 'href' => ccl('reviews','post',$_GET['upload']) . '#edit',
+                                     'text' => _('Add Review') );
+            }
+        }
+
         foreach( $recs as $R )
         {
             $rec = array();
@@ -113,6 +124,11 @@ EOF;
                 
                 $rec['cmds'][] = array( 'href' => ccl('topics','reply',$R['topic_id']),
                                             'text' => $text );
+            }
+
+            if( !empty($review_cmd) )
+            {
+                $rec['cmds'][] = $review_cmd;
             }
 
             $rec['id'] = $R['topic_id'];
