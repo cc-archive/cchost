@@ -81,70 +81,12 @@ function _t_util_disable_submit_button(&$T,&$A)
 function _t_util_hide_upload_form(&$T,&$A)
 {
     $msg = str_replace("\n", ' ', addslashes($T->String('str_uploading_msg')));
-    
-    ?>
-<style type="text/css">
-#bodymask {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 400%;
-        background-color: #999;
-        opacity: 0.8;
-        z-index: 100;
-}
-#maskmsg {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    margin: 10%;
-    opacity: 1.0; 
-    border: solid 2px black;
-    background-color: white;
-    padding: 5%;
-    text-align: center;
-    vertical-align: middle;
-    z-index: 103;
-    font-size: 23px;
-    font-weight: bold;
-}
-</style>
-<? 
-$spinner = $T->URL('images/spinner.gif');
-if( !empty($spinner) )
-    $spinner = "<br /><img src=\"{$spinner}\" />";
+    $text = '<div id="maskmsg">' .$msg. '</div>';
 ?>
 <script type="text/javascript">
-var formMask = Class.create();
-
-formMask.prototype = {
-
-    initialize: function()
-    {
-        Event.observe(form_id,'submit', this.dull_screen.bindAsEventListener(this) );
-    },
-
-    dull_screen: function()
-    { 
-         new Insertion.Before( $('header'), '<div id="bodymask"><div id="maskmsg"><?= $msg ?><br /><?= $spinner ?></div>' );
-         Event.observe('bodymask','click',this.killClick.bindAsEventListener(this),true);
-         Event.observe('bodymask','keypress',this.killClick.bindAsEventListener(this),true);
-         Element.scrollTo('bodymask');
-        //Modalbox.show( $('upload_msg'), {title: null, overlayClose: false, width: 400} );
-        return true;
-    },
-
-    killClick: function(e)
-    {
-        Event.stop(e);
-        return false;
-    }
-}
-
-var the_formMask = new formMask();
+var the_formMask = new ccFormMask(form_id,'<?= $text ?>',true);
 </script>
-    <?
+<?
 }
 
 

@@ -535,3 +535,41 @@ var ccPopupManager = Object.extend(
 
 Ajax.Responders.register(ccPopupManager);
 
+
+var ccFormMask = Class.create();
+
+ccFormMask.prototype = {
+
+    text: null,
+    clickKiller: null,
+
+    initialize: function(form_id,msg,hook_submit)
+    {
+        this.text = msg;
+        if( hook_submit )
+            Event.observe(form_id,'submit', this.dull_screen.bindAsEventListener(this) );
+    },
+
+    dull_screen: function()
+    { 
+        this.clickKiller = this.killClick.bindAsEventListener(this);
+        new Insertion.Before( $('header'), '<div id="bodymask">'+this.text+'</div>' );
+        Event.observe('bodymask','click',this.clickKiller,true);
+        Event.observe('bodymask','keypress',this.clickKiller,true);
+        Element.scrollTo('bodymask');
+        return true;
+    },
+
+    killClick: function(e)
+    {
+        Event.stop(e);
+        return false;
+    },
+
+    cancelMask: function()
+    {
+        Event.stopObserving('bodymask','click',this.clickKiller,true);
+        Event.stopObserving('bodymask','keypress',this.clickKiller,true);
+        $('bodymask').remove();
+    }
+}

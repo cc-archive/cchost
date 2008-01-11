@@ -273,7 +273,7 @@ ccAutoPick.prototype = {
         try
         {
             var target = $(this.options.listID);
-            json = []; // eval( "(" + resp.responseText + ")" );
+            json = eval( resp.responseText );
             this.line_count = json.count;
             if( json.count > 10 )
             {
