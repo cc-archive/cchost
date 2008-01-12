@@ -450,6 +450,7 @@ EOF;
             CCUtil::SendBrowserTo($url);
         }
 
+        require_once('cclib/cc-page.php');
         CCPage::SetTitle( 'str_forum_post_new_topic' );
 
         require_once('ccextras/cc-topics-forms.inc');
@@ -471,7 +472,7 @@ EOF;
             $values['topic_user'] = CCUser::CurrentUser();
             $values['topic_id'] = $topic_id;
             $values['topic_thread'] = $thread_id;
-            $topics->Insert($values);
+            $topics->Insert($values,0);
 
             $ftvalues = array();
             $ftvalues['forum_thread_id'] = $thread_id;

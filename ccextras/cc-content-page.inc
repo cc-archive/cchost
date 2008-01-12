@@ -254,12 +254,11 @@ class CCContentPage
                 }
                 unset($values[$name]);
             }
-            if( $values['topic_type']{0} == '-' )
+            if( !empty($values['new_topic_type']) )
                 $values['topic_type'] = $values['new_topic_type'];
             unset($values['new_topic_type']);
             $topics = new CCTopics();
             $values['topic_id'] = $topic_id;
-            $values['topic_type'] = $values['topic_type'];
             $topics->Update($values);
             $url = ccl('admin','content','manage');
             if( !empty($_GET['offset']) )
@@ -293,7 +292,7 @@ class CCContentPage
                 }
                 unset($values[$name]);
             }
-            if( $values['topic_type']{0} == '-' )
+            if( !empty($values['new_topic_type']) )
                 $values['topic_type'] = $values['new_topic_type'];
             unset($values['new_topic_type']);
             $topics = new CCTopics();
@@ -302,7 +301,7 @@ class CCContentPage
             $values['topic_thread'] = 0;
             $values['topic_date'] = date('Y-m-d H:i:s',time());
             $values['topic_user'] = CCUser::CurrentUser();
-            $values['topic_type'] = $values['topic_type'];
+            //$values['topic_type'] = $values['topic_type'];
             $topics->Insert($values,0);
             $title = _('New Content Preview');
             $q="title={$title}&datasource=topics&t=content_page&ids=".$values['topic_id'];

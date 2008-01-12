@@ -63,11 +63,13 @@ EOF;
     %if_not_null(#R/is_reply)%
     <td>&nbsp;<a name="%(#R/topic_id)%"></a></td>
     <td class="cc_topic_reply" style="padding-left:%(#R/margin)%px">
+        <div style="border-left:600px solid transparent;font-size:2px;height:3px;">.</div>
         <div class="cc_topic_reply_body  light_bg">
             <div class="cc_topic_reply_head med_light_bg">
-                <div style="float:right"><a href="%(#R/topic_url)%">%text(str_permalink)%</a> 
-                    %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if%
-                </div>
+                <a class="topic_permalink light_color" href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+                %if_not_null(flagging)%
+                    <a class="flag topic_flag" title="%text(str_flag_this_topic)%" href="%(home-url)%flag/topic/%(#R/topic_id)%">&nbsp;</a>
+                %end_if%
                 <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% 
             </div>
             <div class="cc_topic_reply_text">%(#R/topic_text_html)%</div>
@@ -82,10 +84,13 @@ EOF;
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
     <td class="cc_topic_body">
+        <div style="border-left:600px solid transparent;font-size:2px;height:3px;">.</div>
         <div class="cc_topic_date dark_bg light_color" >
-            <div style="float:right"><a  class="light_color" href="%(#R/topic_url)%">%text(str_permalink)%</a> 
-                %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if%
-            </div>
+            <a class="topic_permalink light_color" href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+            %if_not_null(flagging)%
+                <a class="flag topic_flag" title="%text(str_flag_this_topic)%" href="%(home-url)%flag/topic/%(#R/topic_id)%">&nbsp;</a>
+            %end_if%
+           <!-- %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if% -->
             %(#R/topic_date_format)% </div>
         <div class="cc_topic_text med_light_bg">%(#R/topic_text_html)%</div>
         <div class="cc_topic_commands med_light_bg" id="commands_%(#R/topic_id)%"></div>

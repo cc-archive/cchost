@@ -118,3 +118,13 @@ table.cc_topic_table td.cc_topic_thumb a {
 	text-align: right;
 	margin: 0px 2em 2em 0px;
 }
+a.topic_flag {
+	float: right;
+	margin-right: 12px;
+	padding: 1px;
+}
+a.topic_permalink {
+	float: right;
+	display: block;
+	margin-right: 1em;
+}

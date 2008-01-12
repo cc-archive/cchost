@@ -81,3 +81,7 @@ div#user_tags_filter {
 div#user_tag_target {
 	display: inline;
 }
+a.upload_flag {
+	float: right;
+	margin-right: 12px;
+}

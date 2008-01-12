@@ -167,7 +167,7 @@ $GLOBALS['str_filter_this_many']             = _('This many');
 $GLOBALS['str_filter_yesterday']             = _('Yesterday');
 
 $GLOBALS['str_flag_this_upload']      = _('Flag this upload for possible violation of terms');
-$GLOBALS['str_flagtip']               = $GLOBALS['str_flag_this_upload'];
+$GLOBALS['str_flag_this_topic']       = _('Flag this topic for possible violation of terms');
 
 $GLOBALS['str_for'] = _('for'); // as in: 9 Reviews for Trifonic's Beatorama
 

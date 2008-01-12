@@ -96,11 +96,13 @@ EOF;
             %end_if%
             %(#R/upload_date_format)%
         </div>
-    
         <div class="taglinks">
             %loop(#R/usertag_links,tgg)%
                 <a href="%(#tgg/tagurl)%">%(#tgg/tag)%</a>%if_not_last(tgg)%, %end_if%
             %end_loop%
+            %if_not_null(flagging)%
+                <a class="flag upload_flag" title="%text(str_flag_this_upload)%" href="%(home-url)%flag/upload/%(#R/upload_id)%">&nbsp;</a>
+            %end_if%
         </div><!-- tags -->
 
         %if_not_empty(#R/fplay_url)%
