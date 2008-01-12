@@ -54,7 +54,8 @@ class CCSampleBrowser
 
     function SamplesSearch()
     {
-        if( empty($_GET['term']) )
+        $term = empty($_GET['term']) ? '' : CCUtil::Strip($_GET['term']);
+        if( empty($term) )
         {
             print('<span class="sb_msg">' . 
                    _('Enter a search phrase first...') . 
@@ -62,39 +63,39 @@ class CCSampleBrowser
             exit;
         }
 
-        $term = $_GET['term'];
-        $where = "LOWER(CONCAT(upload_description,upload_tags,user_real_name,user_name,upload_name)) LIKE '%$term%'";
-
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetTagFilter('sample');
-        $recs = $uploads->GetRecords($where);
-        
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('f=php&dataview=default&tags=sample&search='.$term);
+        list( $recs ) = $query->Query($args);
         $this->_list_records($recs,"\"$term\"", _('Search phrase'));
     }
 
     function SamplesStream($file_id_with_m3u)
     {
         $file_id = str_replace('.m3u', '', $file_id_with_m3u);
-        $files =& CCFiles::GetTable();
-        $upload_id = $files->QueryItemFromKey('file_upload', $file_id);
-        if( !empty($upload_id) )
+        $sql =<<<EOF
+            SELECT upload_contest, user_name, contest_short_name, file_name
+            FROM cc_tbl_files
+            JOIN cc_tbl_uploads ON file_upload=upload_id
+            JOIN cc_tbl_user ON upload_user=user_id
+            LEFT OUTER JOIN cc_tbl_contests ON upload_contest=contest_id
+            WHERE file_id = {$file_id}
+EOF;
+        $F = CCDatabase::QueryRow($sql);
+        if( $F )
         {
-            $uploads =& CCUploads::GetTable();
-            $record = $uploads->GetRecordFromKey($upload_id);
-            if( !empty($record) )
+            global $CC_GLOBALS;
+            if( $F['contest_short_name'] )
             {
-                $F =& $record['files'];
-                $count = count($F);
-                for( $i = 0; $i < $count; $i++ )
-                {
-                    if( $F[$i]['file_id'] == $file_id )
-                    {
-                        header("Content-type: audio/x-mpegurl");
-                        print( $F[$i]['download_url'] . "\n" );
-                        break;
-                    }
-                }
+                $download_url = ccd($CC_GLOBALS['contest-upload-root'],$F['contest_short_name'],$F['user_name'],$F['file_name']);
             }
+            else
+            {
+                $download_url = ccd($CC_GLOBALS['user-upload-root'],$F['user_name'],$F['file_name']);
+            }
+
+            header("Content-type: audio/x-mpegurl");
+            print( $download_url . "\n" );
         }
         // there's no point in doing error messages since this is
         // fed to media player, I guess we could return 404...
