@@ -205,6 +205,7 @@ div.cc_playlist_action  {
 
 #dyn_filter_editor p.cc_autocomp_picked {
 	font-style: italic;
+	background-color: white;
 /*	color: blue; */
 }
 

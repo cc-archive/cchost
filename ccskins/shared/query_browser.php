@@ -1,19 +1,35 @@
-<h1><?= $T->String('str_upload_browser') ?></h1>
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css'); ?>" title="Default Style"></link>
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css'); ?>" title="Default Style"></link>
 <style type="text/css">
 #browser {
 }
 #qtable {
-    width: 95%;
+    width: 100%;
 
 }
 #qtable td {
     vertical-align: top;
+    text-align: left;
 }
+
+#dyn_filter_editor .filterform span.th  {
+    float: none;
+    text-align: left;
+    margin: 0px;
+    padding: 0px;
+}
+
+#dyn_filter_editor .filterform span.field  {
+    float: none;
+    display: block;
+    margin: 0px;
+    padding: 0px;
+}
+
 #dyn_filter_editor {
     margin: 0px;
     padding: 4px;
+    width:180px;
 }
 #stream_link_container, #play_link_container {
   float: left;
@@ -24,12 +40,16 @@
 
 #play_link_container #mi_play_page,
 #stream_link_container #mi_stream_page {
-	padding-left: 22px;
-  font-size: 16px;
+    padding-left: 22px;
+    font-size: 16px;
+}
+#filter_controls {
+   width: 190px;
+   padding-right:10px;
 }
 </style>
 <table id="qtable">
-<tr><td style="width:270px">
+<tr><td id="filter_controls" >
     <div  id="dyn_filter_editor" class="light_bg">
         <div  id="filter_form"  >
         </div>
@@ -65,10 +85,10 @@
 <script  src="<?= $T->URL('js/playlist.js'); ?>"></script>
 <?$T->Call('playerembed.xml/eplayer'); ?>
 <script type="text/javascript">
-
+<? $qargs = empty($A['browse_args']) ? "{ 'limit': 25, 'reqtags': '*' }" : $A['browse_args']; ?>
 var filters = new ccQueryBrowserFilters( 
                     { submit_text: '<?= $T->String('str_see_results') ?>',
-                      init_values: { 'limit': 25 },
+                      init_values: <?= $qargs ?>,
                       template: 'reccby',
                       reqtags: <?= cc_get_config( 'browse_query_tags', 'json' ) ?>} );
 

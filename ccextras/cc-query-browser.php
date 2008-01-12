@@ -118,23 +118,12 @@ EOF;
         else
         {
             require_once('cclib/cc-page.php');
-            $args = array_diff($_GET,array('ccm'=>'/media/browse'));
-            if( empty($args) )
-            {
-                CCPage::SetTitle(_('Browse Uploads'));
-                $args = '[]';
-            }
-            else
-            {
-                require_once('cclib/cc-query.php');
-                require_once('cclib/zend/json-encoder.php');
-
-                $query = new CCQuery();
-                $args = $query->ProcessUriArgs();
-                $args = array_filter($args);
-                $args = CCZend_Json_Encoder::encode($args);
-            }
-            CCPage::AddMacro('query_browser');
+            require_once('cclib/cc-query.php');
+            require_once('cclib/zend/json-encoder.php');
+            CCPage::SetTitle(_('Browse Uploads'));
+            $query = new CCQuery();
+            $args = array_merge( array( 'reqtags' => '*'), $query->ProcessUriArgs() );
+            $args = CCZend_Json_Encoder::encode($args);
             CCPage::PageArg('browse_args', $args, 'query_browser');
         }
     }

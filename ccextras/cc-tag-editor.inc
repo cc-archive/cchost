@@ -52,7 +52,7 @@ class CCTagEditorForm extends CCGridForm
             {
                 $default_tags = array(
                             array( 'tags' => '*',
-                                   'text' => 'str_all'),
+                                   'text' => 'str_filter_all'),
                             array( 'tags' => 'remix',
                                     'text' => 'remix' ),
                             array( 'tags' => 'sample',
