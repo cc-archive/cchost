@@ -124,7 +124,7 @@ ccQueryBrowser.prototype = {
         }
         else
         {
-          this.browser.innerHTML = str_no_records_match;
+          this.browser.innerHTML = str_filter_no_records_match;
         }
     },
 

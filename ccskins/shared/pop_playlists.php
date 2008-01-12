@@ -12,14 +12,14 @@ function popular_tracks_dataview()
     $urlp = ccl('people') . '/';
 
     $sql =<<<EOF
-SELECT COUNT(*) as track_count , cart_item_upload , upload_name, user_name, user_real_name, upload_contest,
-    CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url, upload_id,
-    CONCAT( '$urlp', user_name ) as artist_page_url
-FROM cc_tbl_cart_items 
-JOIN cc_tbl_uploads ON upload_id = cart_item_upload
-JOIN cc_tbl_user ON upload_user = user_id
-GROUP BY cart_item_upload ORDER BY track_count DESC    
-%limit%
+            SELECT COUNT(*) as track_count , cart_item_upload , upload_name, user_name, user_real_name, upload_contest,
+                CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url, upload_id,
+                CONCAT( '$urlp', user_name ) as artist_page_url
+            FROM cc_tbl_cart_items 
+            JOIN cc_tbl_uploads ON upload_id = cart_item_upload
+            JOIN cc_tbl_user ON upload_user = user_id
+            GROUP BY cart_item_upload ORDER BY track_count DESC    
+            %limit%
 EOF;
     $sql_count = 'SELECT 100';
 
@@ -36,12 +36,14 @@ EOF;
 <?
 
 $recs =& $A['records'];
-$ids = array();
-foreach( $recs as $AIR )
-{ 
-    $iun  = CC_strchop($AIR['upload_name'],30,true);
-    $iurn = CC_strchop($AIR['user_real_name'],30,true);
-    $ids[] = $AIR['upload_id'];
+if( !empty($recs) )
+{
+    $ids = array();
+    foreach( $recs as $AIR )
+    { 
+        $iun  = CC_strchop($AIR['upload_name'],30,true);
+        $iurn = CC_strchop($AIR['user_real_name'],30,true);
+        $ids[] = $AIR['upload_id'];
 ?>
     <div class="trr">
         <div  class="tdc cc_playlist_item" id="_pli_<?= $AIR['upload_id'] ?>">
@@ -76,6 +78,7 @@ foreach( $recs as $AIR )
     <div class="hrc"></div>
     </div> <!-- trr -->
 <?
+    }
 }
 ?>
 

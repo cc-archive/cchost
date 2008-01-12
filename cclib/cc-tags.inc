@@ -460,8 +460,17 @@ class CCTagEvents
 
     function BrowseTags($tagstr,$search_type='all')
     {
+        CCPage::PageArg('tagstr',$tagstr,'tags.php/tag_picker');
         require_once('cclib/cc-query.php');
+        $q = 'tags=' . $tagstr . '&type=' .$search_type;
+        $query = new CCQuery();
+        $args= $query->ProcessAdminArgs($q);
+        $query->Query($args);
+        return;
+    }
 
+    function _foowhiz()
+    {
         $q = 'tags=' . $tagstr;
         $query = new CCQuery();
         $args= $query->ProcessAdminArgs($q);

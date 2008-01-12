@@ -225,6 +225,8 @@ ccAutoComplete.prototype = {
     _reponse_lookup: function( target_id, resp, json ) {
         try
         {
+            if( !json )
+                json = eval(resp.responseText);
             var target = $(target_id);
             this.line_count = json.count;
             if( json.count > 10 )

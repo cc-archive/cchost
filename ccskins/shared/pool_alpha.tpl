@@ -24,7 +24,7 @@ ccPoolAlpha.prototype = {
                 return;
             var vals = eval(resp.responseText);
             $('pool_filter_label').innerHTML = '%text(str_pool_filter)%' + ': ';
-            var html = '<select id="pool_alphas"><option value="">' + str_all + '</option>';
+            var html = '<select id="pool_alphas"><option value="">' + str_filter_all + '</option>';
             var me = this;
             vals.each( function(c) {
                 html += '<option value="' + c + '"';

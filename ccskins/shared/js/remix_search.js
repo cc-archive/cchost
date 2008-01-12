@@ -10,7 +10,7 @@ ccRemixSearch.prototype = {
         var me = this;
         if( pools.length > 0 )
         {
-            var html = '<select id="pools"><option value="-1" selected="selected">' + str_this_site + '</option>';
+            var html = '<select id="pools"><option value="-1" selected="selected">' + str_remix_this_site + '</option>';
             pools.each( function(p) {
                 html += '<option value="' + p.pool_id + '">' + p.pool_name + '</option>';
             });
@@ -137,7 +137,7 @@ ccRemixSearch.prototype = {
         var value = $('remix_search').value.strip();
         if( value.length < 3 )
         {
-            alert(str_no_search_term);
+            alert(str_remix_no_search_term);
             return;
         }
         $('remix_no_match').innerHTML = '&nbsp;';
@@ -175,7 +175,7 @@ ccRemixSearch.prototype = {
             }
             else
             {
-                $('remix_no_match').innerHTML = str_no_matches.gsub('%s',value);
+                $('remix_no_match').innerHTML = str_remix_no_matches.gsub('%s',value);
             }
             this._scan_checks(false);
         }

@@ -198,4 +198,9 @@ function cc_php_to_json(&$obj)
     return CCZend_Json_Encoder::encode($obj);
 }
 
+function cc_wrap_user_tags(&$tag)
+{
+    $tag = '<p class="cc_autocomp_line" id="_ac_'.$tag.'">'.$tag.'</p>';
+}
+
 ?>

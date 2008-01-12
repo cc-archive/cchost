@@ -334,6 +334,7 @@ var ccPopupManagerMethods = {
     prevMsgClass: null,
     errCount: 0,
     itme: 'hello me',
+    mode: null,
 
     StartThinking: function(event) {
         this.currY  = (parseInt(Event.pointerY(event)) - 5); 
@@ -344,6 +345,8 @@ var ccPopupManagerMethods = {
     },
 
     StopThinking: function(dur) {
+        if( this.mode && this.mode == 'err' )
+            return;
         if( this.thinkingEnabled )
         {
             Effect.Fade(this.thinkingDiv, { delay: dur, duration: 0.3 } );
@@ -353,6 +356,8 @@ var ccPopupManagerMethods = {
     },
 
     ShowThinking: function(text){
+        if( this.mode && this.mode == 'err' )
+            return;
         if( !this.thinkingEnabled )
         {
             this.currY = 20;
@@ -414,15 +419,19 @@ var ccPopupManagerMethods = {
 
     ShowMessage: function(type,text,dur)
     {
+        if( this.mode && this.mode == 'err' )
+            return;
+
         try
         {
             if( text.match(/^str_/) )
                 text = eval( text );
 
             this.ShowThinking(text);
-            var className = 'ajaxmsg_' + type;
+            var className = 'ajaxmsg_' + (type == 'exception' ? 'error' : type);
             this.prevMsgClass = className;
             Element.addClassName(this.thinkingDiv,className);
+            this.mode = type == 'exception' ? 'err' : null;
             this.StopThinking(dur);
         }
         catch(ex)
@@ -525,7 +534,7 @@ var ccPopupManager = Object.extend(
             },
 
             onException: function(req,ex) {
-                this.ShowMessage( 'error', ex.toString(), 6.0 );
+                this.ShowMessage( 'exception', ex.toString(), 6.0 );
             },
 
             onComplete: function(req,t,json) {
@@ -572,4 +581,29 @@ ccFormMask.prototype = {
         Event.stopObserving('bodymask','keypress',this.clickKiller,true);
         $('bodymask').remove();
     }
+}
+
+function cc_window_dim() {
+    var w = window;
+    var T, L, W, H;
+    with (w.document) {
+      if (w.document.documentElement && documentElement.scrollTop) {
+        T = documentElement.scrollTop;
+        L = documentElement.scrollLeft;
+      } else if (w.document.body) {
+        T = body.scrollTop;
+        L = body.scrollLeft;
+      }
+      if (w.innerWidth) {
+        W = w.innerWidth;
+        H = w.innerHeight;
+      } else if (w.document.documentElement && documentElement.clientWidth) {
+        W = documentElement.clientWidth;
+        H = documentElement.clientHeight;
+      } else {
+        W = body.offsetWidth;
+        H = body.offsetHeight
+      }
+    }
+    return { top: T, left: L, width: W, height: H };
 }

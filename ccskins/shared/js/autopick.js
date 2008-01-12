@@ -41,6 +41,16 @@ ccAutoPick.prototype = {
                                       options );
     },
 
+    requestList: function() {
+        if( !this.list_filled )
+        {
+            var url = this.options.url;
+            this.list_filled = true;
+            new Ajax.Request( url, { onComplete: this._reponse_lookup.bind(this),
+                                     method: 'get' } );
+        }
+    },
+
     hookUpEvents: function() {
         try
         {            
@@ -52,10 +62,6 @@ ccAutoPick.prototype = {
 
             $(this.options.listID).style.display = 'none';
 
-            var url = this.options.url;
-
-            new Ajax.Request( url, { onComplete: this._reponse_lookup.bind(this),
-                                     method: 'get' } );
         }
         catch (e)
         {
@@ -90,8 +96,8 @@ ccAutoPick.prototype = {
                '</td></tr>' +
                '<tr><td>' +
                    '<a class="cc_autocomp_clear" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + '">'
-                    + str_clear + '</a>  '  + 
-                   '<a class="cc_autocomp_show" href="javascript://show list" id="' + show_id + '">' + str_show_list + '</a>'  + 
+                    + str_filter_clear + '</a>  '  + 
+                   '<a class="cc_autocomp_show" href="javascript://show list" id="' + show_id + '">' + str_filter_show_list + '</a>'  + 
                '</td></tr>' +
                '<tr><td><input type="hidden" name="' + id + '" id="' + id + '" value="' + value + '" />' +
                       '<div class="cc_autocomp_list" id="' + list_id + '"><!-- --></div>' +
@@ -99,19 +105,20 @@ ccAutoPick.prototype = {
     },
 
     onShowClick: function(e) {
+        this.requestList();
         var link = $(this.options.showID);
         var list = $(this.options.listID);
         if( this.is_showing ) 
         {
             list.style.display = 'none';
             this.is_showing = false;
-            link.innerHTML = str_show_list;
+            link.innerHTML = this.options.str_filter_show_list || str_filter_show_list;
         }
         else
         {
             list.style.display = 'block';
             this.is_showing = true;
-            link.innerHTML = str_hide_list;
+            link.innerHTML = this.options.str_filter_hide_list || str_filter_hide_list
         }
     },
 
@@ -147,6 +154,8 @@ ccAutoPick.prototype = {
             }.bind(this));
             this.selected.clear();
             this._update_elements();
+            if( this.options.submitID )
+                $(this.options.submitID).style.display = '';
         }
     },
 
@@ -170,11 +179,14 @@ ccAutoPick.prototype = {
             }
             
             this._update_elements();
+            if( this.options.submitID )
+                $(this.options.submitID).style.display = '';
         }
     },
 
     _update_elements: function() {
-        $(this.options.clearID).style.display = this.selected.length == 0 ? 'none' : '';
+        var disp = this.selected.length == 0 ? 'none' : '';
+        $(this.options.clearID).style.display = disp;
         $(this.options.targetID).value = this.selected.join( ' ' );
         if( $(this.options.targetID).value )
             $(this.options.statID).innerHTML = this.selected.join( ', ' );
@@ -272,6 +284,8 @@ ccAutoPick.prototype = {
     _reponse_lookup: function( resp, json ) {
         try
         {
+            if( !json )
+                json = eval(resp.responseText);
             var target = $(this.options.listID);
             json = eval( resp.responseText );
             this.line_count = json.count;
@@ -298,9 +312,12 @@ ccAutoPick.prototype = {
             }
 
             target.innerHTML = json.html;
+            if( this.onDataReceived )
+                this.onDataReceived();
             this.selected.each( function(tag)  {
                 Element.addClassName( '_ac_' + tag, this.options.pickClass );
             }.bind(this));
+
         }
         catch (err)
         {

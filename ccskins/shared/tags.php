@@ -37,6 +37,22 @@ function _t_tags_popular_tags(&$T,&$A)
 //------------------------------------- 
 function _t_tags_tag_picker(&$T,&$A) 
 {
+    $T->Call('tag_filter');
+    $target = ccl('tags') . '/';
+    $fetch = url_args( ccl('browse'), 'related='.$A['tagstr']);
+?>
+<script>
+new ccTagFilter( { url: '<?=$fetch?>', 
+                   target_url: '<?=$target?>',
+                   tags: '<?=$A['tagstr']?>' } );
+
+</script>
+<?
+}
+
+//------------------------------------- 
+function _t_tags_tag_picker_OLD(&$T,&$A) 
+{
   
     ?><div  class="cc_tags_list"><?
 

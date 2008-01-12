@@ -97,12 +97,15 @@ class CCUserPage
     {
         //CCDebug::StackTrace();
         CCPage::PageArg('user_tags_user',$username,'user_tags');
-        CCPage::PageArg('user_tags_tag',$tagfilter);
+        $tags = array_unique(preg_split('/[\s]?,[\s]?/',$tagfilter,-1,PREG_SPLIT_NO_EMPTY));
+        sort($tags);
+        $tagfilter_commas = join(',',$tags);
+        CCPage::PageArg('user_tags_tag',$tagfilter_commas);
         $where['user_name'] = $username;
         $users =& CCUsers::GetTable();
         $q = 'title=' . $users->QueryItem('user_real_name',$where);
         if( !empty($tagfilter) )
-            $q .= ' (' . $tagfilter .')&tags=' . $tagfilter;
+            $q .= ' (' . $tagfilter_commas .')&tags=' . $tagfilter;
         $q .= '&user=' . $username . '&t=list_files&f=page';
         require_once('cclib/cc-query.php');
         $query = new CCQuery();

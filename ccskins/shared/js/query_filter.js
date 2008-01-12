@@ -50,11 +50,11 @@ ccQueryBrowserFilters.prototype = {
         }
         this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', vals: vtags };
         this.user       = { name: str_artist, fmt: 'user_lookup', param: 'user' };
-        this.remixesof  = { name: str_remixes_of, fmt: 'remix_user', param: 'remixesof' };
+        this.remixesof  = { name: str_filter_remixes_of, fmt: 'remix_user', param: 'remixesof' };
         this.tags       = { name: str_tags, fmt: 'tag_lookup', param: 'tags' };
-        this.type       = { name: str_match, fmt: 'dropdown', param: 'type' ,
-                                         vals: [  [ 'all', str_match_all_tags ],
-                                                  [ 'any', str_match_any_tags  ]
+        this.type       = { name: str_filter_match, fmt: 'dropdown', param: 'type' ,
+                                         vals: [  [ 'all', str_filter_match_all_tags ],
+                                                  [ 'any', str_filter_match_any_tags  ]
                                                ]
                                           };
         /*
@@ -68,33 +68,33 @@ ccQueryBrowserFilters.prototype = {
                                                ]
                           };
         */
-        this.lic  = { name: str_license, fmt: 'dropdown', param: 'lic',
-                                         vals: [  [ '*', str_all],
-                                                  [ 'by', str_attribution],
-                                                  [ 'nc', str_non_commercial],
-                                                  [ 'sa', str_share_alike],
-                                                  [ 'byncsa', str_nc_share_alike],
-                                                  [ 's', str_sampling],
-                                                  [ 'splus', str_sampling_plus],
-                                                  [ 'ncsplut', str_nc_sampling_plus],
-                                                  [ 'pd', str_public]
+        this.lic  = { name: str_filter_license, fmt: 'dropdown', param: 'lic',
+                                         vals: [  [ '*', str_filter_all],
+                                                  [ 'by', str_lic_attribution],
+                                                  [ 'nc', str_lic_non_commercial],
+                                                  [ 'sa', str_lic_share_alike],
+                                                  [ 'byncsa', str_lic_nc_share_alike],
+                                                  [ 's', str_lic_sampling],
+                                                  [ 'splus', str_lic_sampling_plus],
+                                                  [ 'ncsplut', str_lic_nc_sampling_plus],
+                                                  [ 'pd', str_lic_public]
                                                ]
                           };
-        this.sinced = { name: str_since, fmt: 'dropdown', param: 'sinced',
+        this.sinced = { name: str_filter_since, fmt: 'dropdown', param: 'sinced',
                                          vals: [  
-                                                  [ '*', str_all_time],
-                                                  [ '1 days ago', str_yesterday],
-                                                  [ '1 weeks ago', str_a_week_ago],
-                                                  [ '2 weeks ago', str_2_weeks_ago],
-                                                  [ '1 months ago', str_last_month],
-                                                  [ '3 months ago', str_3_months_ago],
-                                                  [ '1 years ago', str_a_year_ago]
+                                                  [ '*', str_filter_all_time],
+                                                  [ '1 days ago', str_filter_yesterday],
+                                                  [ '1 weeks ago', str_filter_a_week_ago],
+                                                  [ '2 weeks ago', str_filter_2_weeks_ago],
+                                                  [ '1 months ago', str_filter_last_month],
+                                                  [ '3 months ago', str_filter_3_months_ago],
+                                                  [ '1 years ago', str_filter_a_year_ago]
                                                ]
                           };
 
         var limits = [  [ 1 ], [ 5 ], [ 10 ], [ 15 ], [ 25 ], [ 50 ] ];
 
-        this.limit = { name: str_limit, fmt: 'dropdown', param: 'limit', value: 25, vals: limits };
+        this.limit = { name: str_filter_limit, fmt: 'dropdown', param: 'limit', value: 25, vals: limits };
 
         // this should be "shuffle mode"
         // this.rand       = { name: 'Random Sort', fmt: 'checkbox', param: 'rand' };
@@ -258,7 +258,7 @@ ccFormatter.prototype = {
     user_lookup: function(f,col) {
         var autoComp = this.user_picker = new ccAutoComplete( {  url: home_url + 'browse' + q + 'user_lookup=' } );
         this._watches.push( { func: autoComp.hookUpEvents.bind(autoComp) } );
-        return autoComp.genControls( f.param, f.value, str_enter_user_below );
+        return autoComp.genControls( f.param, f.value, str_filter_enter_user );
     },
 
     remix_user: function( f, col ) {

@@ -102,21 +102,6 @@ EOF;
         CCUtil::ReturnAjaxData($ret);
     }
 
-    function Tags($user_name)
-    {
-        $rawtags = CCDatabase::QueryItems('SELECT DISTINCT upload_tags FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id ' .
-                                          "WHERE user_name='$user_name'");
-        $c = count($rawtags);
-        $k = array_keys($rawtags);
-        $tagarr = array();
-        for($i = 0; $i < $c; $i++ )
-        {
-            $tagarr = array_merge($tagarr,array_filter(preg_split('/[\s,]/',$rawtags[$k[$i]])));
-        }
-        $tagarr = array_unique($tagarr);
-        sort($tagarr);
-        CCUtil::ReturnAjaxData($tagarr);
-    }
     /**
     * Event handler for mapping urls to methods
     *

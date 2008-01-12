@@ -23,14 +23,21 @@ class CCQueryBrowser
             if( !$user_mask )
                 CCUtil::ReturnAjaxMessage('not a valid user lookup',CC_AJAX_WARNING);
 
-            $sql = "SELECT user_name as un, " .
-                   "IF(user_name = user_real_name,user_name,CONCAT(user_real_name,' (',user_name,')')) as ut ".
-                   ' FROM cc_tbl_user WHERE ' .
-                   "((user_name LIKE '{$user_mask}%') OR (user_real_name LIKE '{$user_mask}%')) AND " .
-                   ' user_num_uploads > 0 ' .
-                   ' ORDER BY user_name ASC';
-            $this->_output_q($sql);
+            $sql =<<<EOF
+                SELECT 
+                    CONCAT( '<p class="cc_autocomp_line" id="_ac_', user_name, '">', 
+                        IF(user_name = user_real_name,user_name,CONCAT(user_real_name,' (',user_name,')')),
+                        '</p>' 
+                        ) as t
+                    FROM cc_tbl_user 
+                    WHERE  ((user_name LIKE '{$user_mask}%') OR (user_real_name LIKE '{$user_mask}%')) AND 
+                           user_num_uploads > 0 ORDER BY user_name ASC
+EOF;
 
+            $users = CCDatabase::QueryItems($sql);
+            $args['count'] = count($users);
+            $args['html'] = join('',$users);
+            CCUtil::ReturnAjaxData($args,false);
         }
         else if( isset($_GET['tag_lookup']) )
         {
@@ -46,9 +53,9 @@ class CCQueryBrowser
                     $limit = "LIMIT 0, $limit";
             }
 
-            $type = empty($_GET['type']) ? 4 : sprintf('%d',$_GET['type']);
+            $type = empty($_GET['type']) ? CCTT_USER : sprintf('%d',$_GET['type']);
             if( empty($type) )
-                $type = 4;
+                $type = CCTT_USER;
             $where = "WHERE ( (tags_type & $type) <> 0 ) ";
 
             if( $tag_mask != '*' )
@@ -61,13 +68,52 @@ class CCQueryBrowser
                     $where .= " AND (tags_count >= $min)";
             }
 
-            // yes, yes, it's a hack
-            $sql = "SELECT tags_tag as un, CONCAT(tags_tag,' (',tags_count,')') as ut " .
-                   ' FROM cc_tbl_tags  ' .
-                   $where .
-                   ' ORDER BY tags_tag ASC ' . $limit;
-            
-            $this->_output_q($sql,false);
+            $sql =<<<EOF
+            SELECT CONCAT( '<p class="cc_autocomp_line" id="_ac_', tags_tag, '">', tags_tag, ' (', tags_count,')</p>' ) as t
+                   FROM cc_tbl_tags
+                   {$where}
+                   ORDER BY tags_tag ASC {$limit}
+EOF;
+
+            $tags = CCDatabase::QueryItems($sql);
+            $args['count'] = count($tags);
+            $args['html'] = join('',$tags);
+            CCUtil::ReturnAjaxData($args,false);
+        }
+        else if( isset($_GET['related']) )
+        {
+            $tag_mask = trim(CCUtil::Strip($_GET['related']));
+            if( !$tag_mask )
+                CCUtil::ReturnAjaxMessage('not a valid tag lookup',CC_AJAX_WARNING);
+            require_once('cclib/cc-dataview.php');
+            $dv = new CCDataView();
+            $filter = $dv->MakeTagFilter($tag_mask);
+            $tags = CCDatabase::QueryItems("SELECT DISTINCT upload_tags FROM cc_tbl_uploads WHERE $filter");
+
+            $tags = array_unique(preg_split('/[\s,]?,[\s]?/',join(',',$tags),-1,PREG_SPLIT_NO_EMPTY));
+            sort($tags);
+            $these = preg_split('/[\s,]+/',$tag_mask,-1,PREG_SPLIT_NO_EMPTY);
+            $tags = array_merge( $these, array_diff($tags,$these));
+            array_walk($tags,'cc_wrap_user_tags');
+            $args['count'] = count($tags);
+            $args['html'] = join('',$tags);
+            CCUtil::ReturnAjaxData($args,false);
+        }
+        else if( isset($_GET['user']) )
+        {
+            $user_name = trim(CCUtil::Strip($_GET['user']));
+            if( !$user_name )
+                CCUtil::ReturnAjaxMessage('not a valid user lookup',CC_AJAX_WARNING);
+
+            $tags = CCDatabase::QueryItems('SELECT DISTINCT upload_tags FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id ' .
+                                              "WHERE user_name='$user_name'");
+
+            $tags = array_unique(preg_split('/[\s]?,[\s]?/',join(',',$tags),-1,PREG_SPLIT_NO_EMPTY));
+            sort($tags);
+            array_walk($tags,'cc_wrap_user_tags');
+            $args['count'] = count($tags);
+            $args['html'] = join('',$tags);
+            CCUtil::ReturnAjaxData($args);
         }
         else
         {
@@ -88,19 +134,9 @@ class CCQueryBrowser
                 $args = array_filter($args);
                 $args = CCZend_Json_Encoder::encode($args);
             }
-            CCPage::PageArg('query_browser','query_browser.xml/query_browser');
+            CCPage::AddMacro('query_browser');
             CCPage::PageArg('browse_args', $args, 'query_browser');
         }
-    }
-
-    function _output_q($sql,$do_json=true) 
-    {
-        $qr = mysql_query($sql) or die( mysql_error() );
-        $args['count'] = mysql_num_rows($qr);
-        $args['html'] = '';
-        while( $row = mysql_fetch_assoc($qr) )
-            $args['html'] .= '<p class="cc_autocomp_line" id="_ac_' . $row['un'] . '">' . $row['ut'] . '</p>';
-        CCUtil::ReturnAjaxData($args,$do_json);
     }
 }
 

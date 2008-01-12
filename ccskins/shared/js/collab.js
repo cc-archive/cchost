@@ -38,7 +38,7 @@ ccCollab.prototype = {
             var pickFunk = this.onUserPick.bind(this);
             this.autoComp =  new ccAutoComplete( {  url: home_url + 'browse' + q + 'user_lookup=', onPick: pickFunk } );
             var container = $('invite_container');
-            container.innerHTML = this.autoComp.genControls( 'collab_user', '', str_invite_other_artists );
+            container.innerHTML = this.autoComp.genControls( 'collab_user', '', str_collab_invite );
             this.autoComp.hookUpEvents();
             if( $('fileok') )
                 Event.observe( 'fileok', 'click', this.onFileSubmitOK.bindAsEventListener(this) );
@@ -84,7 +84,7 @@ ccCollab.prototype = {
     _req_publishupload: function( resp, json ) {
         if( !json.err )
         {
-            $('_pubtext_' + json.upload_id).innerHTML = json.published ? str_hide : str_publish;
+            $('_pubtext_' + json.upload_id).innerHTML = json.published ? str_collab_hide : str_collab_publish;
         }
     },
 
@@ -110,7 +110,7 @@ ccCollab.prototype = {
         this.uploadTags = id;
         var tags = $('_user_tags_' + id ).innerHTML;
         // style="position:absolute;background:white;padding: 10px;"
-        var html = '<div id="tags_editor" >'+str_tags_label+
+        var html = '<div id="tags_editor" >'+str_collab_tags_label+
                       ': <input type="text" id="tags_edit" value="' + tags +
                      '" /> <a href="javascript://ok tags" id="ok_tags">'+str_ok+'</a> ' +
                      '<a href="javascript://ok edit" id="cancel_tags">'+str_cancel+'</a></div>';
@@ -132,7 +132,7 @@ ccCollab.prototype = {
         var credit = $("_credit_" + user_name);
         this.userCredit = user_name;
         this.userCreditValue = credit.innerHTML;
-        var text = str_enter_role.replace(/%s/,user_name);
+        var text = str_collab_enter_role.replace(/%s/,user_name);
         var html = '<div id="credit_editor">'+text+': <input type="text" id="credit_edit" value="' + this.userCreditValue +
                      '" /> <a href="javascript://ok edit" id="ok_edit">'+str_ok+'</a> ' +
                      '<a href="javascript://ok edit" id="cancel_edit">'+str_cancel+'</a></div>';
@@ -152,7 +152,7 @@ ccCollab.prototype = {
         var user_line = $("_user_line_" + user_name);
         var credit = $("_credit_" + user_name);
         this.userContact = user_name;
-        text = str_send_mail_to.replace(/%s/,user_name);
+        text = str_collab_send_mail_to.replace(/%s/,user_name);
         var html = '<div id="contact_editor">'+text+':<br /><textarea style="width:60%;height:35px;" id="contact_edit"></textarea>' +
                      '<a href="javascript://contact ok" id="ok_contact">'+str_ok+'</a> ' +
                      '<a href="javascript://contact cancel" id="cancel_contact">'+str_cancel+'</a></div>';
@@ -310,14 +310,14 @@ ccCollab.prototype = {
                 '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
                       + 'span>'+str_credit+'</span></a></div>' +
                 '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
-                      + 'span>'+str_remove+'</span></a></div>';
+                      + 'span>'+str_collab_remove2+'</span></a></div>';
         }
         if( this.is_member )
         {
             collab_template +=
                 '<div>' +
                 '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>' 
-                + str_send_email + '</span></a> ' +
+                + str_collab_send_email + '</span></a> ' +
                 '</div>';
         }
         
@@ -335,7 +335,7 @@ ccCollab.prototype = {
                 confirmlink = 
                 '<div id="confirm_link">' +
                         '<a href="javascript://confirm" id="_confirm_'+user_name+'" class="user_cmd confirm_user"><span>' +
-                         str_confirm_membership + '</span></a> ' +
+                         str_collab_confirm_membership + '</span></a> ' +
                         '</div>';
             }
             var vars = {

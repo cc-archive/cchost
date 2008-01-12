@@ -149,6 +149,7 @@ $GLOBALS['str_filter_all_time']              = _('forever');
 $GLOBALS['str_filter_clear']                 = _('clear');
 $GLOBALS['str_filter_d_or_above']            = _('%d or above');
 $GLOBALS['str_filter_enter_user']            = _('Enter user below');
+$GLOBALS['str_filter_go']                    = _('see results');
 $GLOBALS['str_filter_hide_list']             = _('hide list');
 $GLOBALS['str_filter_last_month']            = _('Last month');
 $GLOBALS['str_filter_last_week']             = _('Last week');
@@ -526,7 +527,7 @@ $GLOBALS['str_user_forum_posts']   = _('Forum posts');
 $GLOBALS['str_user_listing']       = _('People');
 $GLOBALS['str_user_notifications'] = _('Notifications');
 $GLOBALS['str_user_publicize']     = _('Publicize');
-$GLOBALS['str_user_filter_tags']     = _('Filter by tag: ');
+$GLOBALS['str_user_filter_tags']     = _('Click here edit tags');
 
 $GLOBALS['str_video']                 = _('Video');
 $GLOBALS['str_working']               = _('working...');
