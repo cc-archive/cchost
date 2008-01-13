@@ -734,7 +734,7 @@ class CCQuery
         if( $this->args['datasource'] == 'topics' )
         {
             $thread = $this->args['thread'];
-            if( $thread = -1 )
+            if( $thread == -1 )
                 $this->where[] = "topic_thread > 0";
             else
                 $this->where[] = "topic_thread = $thread";
