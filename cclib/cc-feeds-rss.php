@@ -78,7 +78,7 @@ class CCFeedsRSS
         {
             // yes, yes, this should be an admin option
 
-            $CC_GLOBALS['topics_license_url'] = 'http://creativecommons.org/licenses/by/2.5';
+            $targs['topics_license_url'] = 'http://creativecommons.org/licenses/by/2.5';
         }
 
         $targs['records'] =& $records;
