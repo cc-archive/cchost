@@ -1,7 +1,7 @@
- %%
+%%
 [meta]
     type = template_component
-    desc = _('Browse User Collaborations')
+    desc = _('Browse a users collab (profile tab)')
     dataview = browse_user_collabs
     embedded = 1
 [/meta]

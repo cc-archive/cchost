@@ -118,6 +118,8 @@ function _cc_format_format($text)
                     );
     $text = preg_replace_callback($urls,'_cc_format_url', $text);
     $text = nl2br($text);
+    if( preg_match('/class="(right|left)/',$text) ) 
+        $text .= '<div style="clear:both">&nbsp;</div>';
     return $text;
 }
 

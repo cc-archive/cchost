@@ -11,6 +11,7 @@ function collab_files_dataview()
     global $CC_GLOBALS;
 
     $urlf = ccl('files') . '/';
+    $urle = ccl('files','edit') . '/';
     $urlp = ccl('people') . '/';
     $stream_url = url_args( ccl('api','query','stream.m3u'), 'f=m3u&ids=' );
     $me = CCUser::CurrentUser();
@@ -18,7 +19,13 @@ function collab_files_dataview()
 
     $sql =<<<EOF
 SELECT 
-    upload_id, upload_name, CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
+    upload_id, upload_name, 
+    IF( upload_published = 0, 
+          IF( upload_user = $me OR $admin,
+              CONCAT( '$urle', upload_name, '/', upload_id ),
+              '' ),
+          CONCAT( '$urlf', user_name, '/', upload_id ) 
+      ) as file_page_url,
     user_real_name, user_name, 
     CONCAT( '$urlp', user_name ) as artist_page_url,
     upload_contest, upload_name, upload_published, upload_extra,
@@ -46,12 +53,12 @@ EOF;
 ?>
 
 %if_null(records)%
-    <!-- -- >%text(str_collab_no_files)%<!-- -- >
-    %return%
+    &nbsp;%text(str_collab_no_files)%&nbsp;
+%return%
 %end_if%
 %loop(records,R)%
 <div class="file_line" id="_file_line_%(#R/upload_id)%">
-<div class="ccud light_border"><?= preg_replace('/,?media/','',$R['upload_extra']['ccud']) ?></div>
+<div class="ccud light_border"><?=  join(', ',array_diff(split(',',$R['upload_extra']['ccud']),array('media'))) ?></div>
    <div class="file_info"><a class="fname cc_file_link" href="%(#R/file_page_url)%">%(#R/upload_name)%</a> 
       %text(str_by)% <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a></div>
 

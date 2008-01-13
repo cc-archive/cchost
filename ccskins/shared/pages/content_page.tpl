@@ -38,7 +38,7 @@ if( empty($A['content_page_textformat']) )
 ?>
 
 <table class="cc_content_page" cellspacing="0" cellspacing="0" >
-<?  $num_cols = empty($A['content_page_cols']) ? 2 : $A['content_page_cols'];
+<?  $num_cols = empty($A['content_page_columns']) ? 2 : $A['content_page_columns'];
     $wid = intval(100/$num_cols);
     $rows = array_chunk($A['records'],$num_cols); ?>
 %loop(#rows,row)%

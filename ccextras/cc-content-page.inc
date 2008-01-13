@@ -345,8 +345,6 @@ class CCContentPage
         $props['type'] = $props['topic_type'];
         $props['title'] = $props['desc'];
 
-        $this->_build_bread_crumb_trail(_('Create a Content Page'));
-        CCPage::SetTitle(_('Create a Content Page'));
         $form = new CCContentPageForm();
         if( empty($_POST['contentpage']) )
         {

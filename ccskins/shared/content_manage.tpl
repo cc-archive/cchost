@@ -38,7 +38,8 @@ if( empty($_GET['topic_type']) )
     <td>%(#cp)%</td>
     <td><a href="%(home-url)%admin/content/page/edit/%(q)%page=%(#k_cp)%">edit</a></td>
     <td><a href="%(home-url)%admin/content/page/delete/%(q)%page=%(#k_cp)%">delete</a></td>
-    <td><a target="_blank" href="%(home-url)%docs/%(#k_cp)%">view</a></td>
+    <? $page = preg_replace('/\.[^\.]+$/','',basename($k_cp)); ?>
+    <td><a target="_blank" href="%(home-url)%docs/%(#page)%">view</a></td>
 </tr>
 %end_loop%
 </table>

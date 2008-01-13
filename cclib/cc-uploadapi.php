@@ -189,7 +189,7 @@ EOF;
         $db_args['upload_extra']['relative_dir'] = $relative_dir;
         $db_args['upload_extra'] = serialize($db_args['upload_extra']);
         $db_args['upload_date'] = date( 'Y-m-d H:i:s' );
-        $db_args['upload_tags'] = ',' . $upload_args['upload_tags'] . ',';
+        $db_args['upload_tags'] = $upload_args['upload_tags'];
         $uploads->Insert($db_args);
 
 

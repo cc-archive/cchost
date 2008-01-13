@@ -146,13 +146,18 @@ class CCCollab
             if( !empty($_POST['collab']) )
             {
                 $collab_id = $_POST['collab'];
-                $this->_add_upload($collab_id,$upload_id);
+                $uploads = new CCUploads();
+                $extra = CCDatabase::QueryItem('SELECT upload_extra FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+                $extra = unserialize($extra);
+                // ugh, this should be compared to submit form types...
+                preg_match('/(remix|sample|original|acappella)/',$extra['ccud'],$m);
+                $this->_add_upload($collab_id,$upload_id,$m[1]);
                 $this->Sync($collab_id);
             }
         }
     }
 
-    function _add_upload($collab_id,$upload_id)
+    function _add_upload($collab_id,$upload_id,$ccud)
     {
         $collab_uploads = new CCCollabUploads();
         $w['collab_upload_upload'] = $upload_id;
@@ -160,12 +165,13 @@ class CCCollab
         $rows = $collab_uploads->QueryRows($w);
         if( empty($rows) )
         {
+            $w['collab_upload_type'] = $ccud;
             $collab_uploads->Insert($w);
             $url = ccl( 'collab', $collab_id );
             $text = _('A new file has been posted to your collaboration project') . "\n\n$url\n\n" . _('Thanks');
             $this->_mail_out( $collab_id, _('New Upload'), $text); 
         }
-        $uploads =& CCUploads::GetTable();
+        $uploads = new CCUploads();
         $uploads->SetExtraField( $upload_id, 'collab', $collab_id );
     }
 
@@ -328,7 +334,6 @@ class CCCollab
         $collab_row['collab_desc'] = _cc_format_format($collab_row['collab_desc']);
 
         $collab_users = $this->_get_collab_users($collab_id);
-
         list( $is_owner, $is_member, $is_confirmed ) = $this->_get_user_acccess($collab_row,$collab_users);
         require_once('cclib/cc-license.php');
         $licenses =& CCLicenses::GetTable();
@@ -339,7 +344,6 @@ class CCCollab
                 'is_member' => $is_member,
                 'is_confirmed' => $is_confirmed,
                 'collab'    => $collab_row,
-                'users'     => $collab_users,
                 'lics'      => $lics,
                 );
 
@@ -438,6 +442,15 @@ EOF;
         $query->QuerySQL($args,$sqlargs);
     }
 
+    function GetUsers( $collab_id='' )
+    {
+        require_once('cclib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('t=collab_users&f=html&datasource=collab_users');
+        $sqlargs['where'] = 'collab_user_collab = ' . $collab_id;
+        $query->QuerySQL($args,$sqlargs);
+    }
+
     function Upload( $collab_id='', $upload_id='', $cmd='' )
     {
         $ok = !empty($collab_id) && !empty($upload_id) && !empty($cmd);
@@ -533,7 +546,7 @@ EOF;
                     $w1['collab_user_user'] = $user_id;
                     $w1['collab_user_collab'] = $collab_id;
                     $collab_user = $users->QueryRow($w1);
-                    if( !empty($c) )
+                    if( !empty($collab_user) )
                     {
                         $args[CC_AJAX_ERROR] = sprintf(_('%s is already a member'),$user_real_name);
                     }
@@ -563,11 +576,11 @@ EOF;
                         $users->DeleteWhere($w1);
                         $args['user_name'] = $username;
                         $args[CC_AJAX_MESSAGE] = sprintf(_('%s removed from project'),$user_real_name);
-                        $c = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_collab_users WHERE collab_user_collab='.$collab_id);
+                        $c = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_collab_users WHERE collab_user_confirmed =1 AND collab_user_collab='.$collab_id);
                         if( $c < 2 )
                         {
                             CCDatabase::Query('UPDATE cc_tbl_collabs SET collab_confirmed=0 WHERE collab_id='.$collab_id);
-                            $args[CC_AJAX_MESSAGE] .= ' (NO MEMBERS: This project is no longer listed)';
+                            $args[CC_AJAX_MESSAGE] .= ' (NO CONFIRMED MEMBERS: This project is no longer listed)';
                         }
                     }
                     break;
@@ -801,30 +814,16 @@ EOF;
                                                  '[url=' . ccl('collab',$collab_id) . ']' 
                                                   . $collab_row['collab_name'] . '[/url]' );
 
-            require_once('cclib/cc-mediahost.php');
-            $media_host = new CCMediaHost();
-            $new_path = $media_host->_get_upload_dir($CC_GLOBALS['user_name']);
+            // MUST BE RELATIVE:
+            $new_path = $CC_GLOBALS['user-upload-root'] . '/' . $CC_GLOBALS['user_name'];
 
             $files = new CCCollabUploads();
             $w['collab_upload_collab'] = $collab_id;
             $collab_ids = $files->QueryItems('collab_upload_upload',$w);
 
-            $ccud = $_POST['uptype'];
-            $uploads = new CCuploads();
-            if( $ccud == 'remix' && !empty($collab_ids) )
-            {
-                $uploads->SetTagFilter('-remix','all');
-                $sources = $uploads->QueryKeyRows($collab_ids);
-                $uploads->SetTagFilter('');
-            }
-            else
-            {
-                $sources = array();
-            }
-
             $values['upload_license'] = $_POST['lic'];
             $values['upload_user'] = CCUser::CurrentUser();
-
+            $ccud = $_POST['uptype'];
             require_once('cclib/cc-uploadapi.php');
             $ret = CCUploadAPI::PostProcessNewUpload(   $values, 
                                                         $_FILES['upfile']['tmp_name'],
@@ -832,11 +831,11 @@ EOF;
                                                         array( $ccud, 'media'),
                                                         '', // $user_tags,
                                                         $new_path,
-                                                        $sources );
+                                                        array() );
 
             if( intval($ret) > 0 )
             {
-                $this->_add_upload($collab_id,$ret);
+                $this->_add_upload($collab_id,$ret,$ccud);
                 $collab_ids[] = $ret;
                 $this->_sync_collab_sources($collab_ids);
             }
@@ -950,10 +949,13 @@ EOF;
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id},{cmd}'  );
 
         CCEvents::MapUrl( ccp('collab','upload','update'), array( 'CCCollab', 'GetUploads'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}'  );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+
+        CCEvents::MapUrl( ccp('collab','users'), array( 'CCCollab', 'GetUsers'),  
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
 
         CCEvents::MapUrl( ccp('collab','upload','file'), array( 'CCCollab', 'UploadFile'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
 
         CCEvents::MapUrl( ccp('collab','upload','tags'), array( 'CCCollab', 'UpdateTags'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}'  );

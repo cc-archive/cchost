@@ -177,7 +177,7 @@ if( 0 )
             case CCDV_RET_RECORDS:
             {
                 $info['queryObj'] =& $queryObj;
-                $records =& CCDatabase::QueryRows($this->sql);
+                $records =& CCDatabase::QueryRows($this->sql); //d($records);
                 if( count($records) > 0 )
                     $this->FilterRecords($records,$info);
                 return $records;        
@@ -242,7 +242,7 @@ if( 0 )
             {
                 $not = '';
             }
-            $tagands[] = "($tagfield $not LIKE '%,$tag,%' )";
+            $tagands[] = "(CONCAT(',',$tagfield,',') $not LIKE '%,$tag,%' )";
         }
         $op = $type == 'all' ? 'AND' : 'OR';
         

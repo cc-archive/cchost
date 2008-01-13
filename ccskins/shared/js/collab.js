@@ -27,7 +27,6 @@ ccCollab.prototype = {
     userContact: null,
     is_member: false,
     is_owner: false,
-    user_template: null,
 
     initialize: function(collab,is_member,is_owner) {
         this.collab_id = collab;
@@ -43,10 +42,9 @@ ccCollab.prototype = {
             if( $('fileok') )
                 Event.observe( 'fileok', 'click', this.onFileSubmitOK.bindAsEventListener(this) );
         }
-        this.user_template = this._make_user_template();
     },
 
-    updateFiles: function(collab_id) {
+    updateFiles: function() {
         var url = home_url + 'collab/upload/update/' + this.collab_id ;
         new Ajax.Request( url, { method: 'get', onComplete: this._req_updatefiles.bind(this) } );
     },
@@ -65,6 +63,36 @@ ccCollab.prototype = {
         $$('.file_tags').each( function(a) {
             var id = a.id.match(/[0-9]+$/);
             Event.observe( a, 'click', me.onUploadTags.bindAsEventListener(me,id) );
+        });
+    },
+
+    updateUsers: function() {
+        var url = home_url + 'collab/users/' + this.collab_id ;
+        new Ajax.Request( url, { method: 'get', onComplete: this._req_updateusers.bind(this) } );
+    },
+
+    _req_updateusers: function( resp ) {
+        $('user_lines').innerHTML = resp.responseText;
+        var me = this;
+
+        $$('.remove_user').each( function(e) {
+            var username = e.id.match(/remove_(.+)$/)[1];
+            Event.observe( e, 'click', me.onUserRemove.bindAsEventListener(me,username) );
+        });
+
+        $$('.edit_credit').each( function(e_credit) {
+            var username = e_credit.id.match(/_credit_(.+)$/)[1];
+            Event.observe( e_credit, 'click', me.onUserCredit.bindAsEventListener(me,username) );
+        });
+
+        $$('.edit_contact').each( function(e_contact) {
+            var username = e_contact.id.match(/_contact_(.+)$/)[1];
+            Event.observe( e_contact, 'click', me.onUserContact.bindAsEventListener(me,username) );
+        });
+
+        $$('.confirm_user').each( function(e_confirm) {
+            var username = e_confirm.id.match(/_confirm_(.+)$/)[1];
+            Event.observe( e_confirm, 'click', me.onUserConfirm.bindAsEventListener(me,username) );
         });
     },
 
@@ -291,77 +319,9 @@ ccCollab.prototype = {
     _req_adduser: function( resp, json ) {
         if( !json.err )
         {
-            this.addUser( json.user_name, json.user_real_name, 'member', '', 0 );
+            this.updateUsers();
             $(this.autoComp.options.editID).value = '';
             this.autoComp._list_close(); 
-        }
-    },
-
-    _make_user_template: function()
-    {
-        var collab_template = 
-            '<div class="user_line" id="_user_line_#{user_name}">' +
-            '<div class="user" ><a href="'+home_url+'people/#{user_name}">#{user_real_name}</a></div>' +
-            '<div class="role">#{role} (<span id="_confirm_label_#{user_name}">#{confirmed}</span>)</div>' +
-            '<div class="credit" id="_credit_#{user_name}">#{credit}</div>';
-        if( this.is_owner )
-        {
-            collab_template +=
-                '<div><a href="javascript://edit credit" id="_user_credit_#{user_name}" class="user_cmd edit_credit"><' 
-                      + 'span>'+str_credit+'</span></a></div>' +
-                '<div><a href="javascript://remove user" id="_user_remove_#{user_name}" class="user_cmd"><' 
-                      + 'span>'+str_collab_remove2+'</span></a></div>';
-        }
-        if( this.is_member )
-        {
-            collab_template +=
-                '<div>' +
-                '    <a href="javascript://contact" id="_contact_#{user_name}" class="user_cmd edit_contact"><span>' 
-                + str_collab_send_email + '</span></a> ' +
-                '</div>';
-        }
-        
-        return collab_template + '#{confirm_link}</div>';
-    },
-
-    addUser: function( username, fullname, userrole, usercredit, userconfirmed, itsme ) {
-        try
-        {
-            
-            var confirmlink = '';
-            
-            if( itsme && !userconfirmed )
-            {
-                confirmlink = 
-                '<div id="confirm_link">' +
-                        '<a href="javascript://confirm" id="_confirm_'+user_name+'" class="user_cmd confirm_user"><span>' +
-                         str_collab_confirm_membership + '</span></a> ' +
-                        '</div>';
-            }
-            var vars = {
-                    user_name: username,
-                    user_real_name: fullname,
-                    role: userrole,
-                    credit: usercredit,
-                    confirmed: userconfirmed ? str_collab_confirmed : str_collab_not_confirmed,
-                    confirm_link: confirmlink
-                };
-            
-            var html = new Template( this.user_template ).evaluate( vars );
-            new Insertion.Before( 'user_inserter', html );
-
-            if( $('_user_remove_' + username) )
-                Event.observe( '_user_remove_' + username, 'click', this.onUserRemove.bindAsEventListener(this,username) );
-            if( $('_user_credit_' + username) )
-                Event.observe( '_user_credit_' + username, 'click', this.onUserCredit.bindAsEventListener(this,username) );
-            if( $('_contact_' + username) )
-                Event.observe( '_contact_'     + username, 'click', this.onUserContact.bindAsEventListener(this,username) );
-            if( $('_confirm_' + username) )
-                Event.observe( '_confirm_'     + username, 'click', this.onUserConfirm.bindAsEventListener(this,username) );
-        }
-        catch (e)
-        {
-            alert(e);
         }
     }
 }

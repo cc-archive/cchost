@@ -74,11 +74,11 @@ a.fname {
     display: block;
     width: 17px;
     height: 17px;
-	background: url('ccmixter/down-button-fg.gif');
+	background: url('../images/down-button-fg.gif');
 }
 
 .file_dl_table .down_button:hover {
-	background: url('ccmixter/down-button-bg.gif');
+	background: url('../images/down-button-bg.gif');
 }
 
 .user_line {
@@ -104,6 +104,7 @@ a.fname {
 
 .file_list .file_info {
 	width: 30%;
+	overflow: hidden;
 }
 
 .user_line div, .file_line div {

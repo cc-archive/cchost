@@ -32,8 +32,7 @@ $collab_id = $C['collab_id'];
  <div  class="cc_collab_fields">
  <fieldset >
  <legend class="dark_bg light_color" >%text(str_artists)%</legend>
-    <div  class="user_lines">
-        <div  id="user_inserter"></div>
+    <div  id="user_lines" class="user_lines">
     </div>
     <div  id="invite_container">
     </div>
@@ -93,19 +92,8 @@ $collab_id = $C['collab_id'];
 <script  src="%url('js/collab.js')%"   type="text/javascript" ></script>
 <script type="text/javascript">
 var cu = new ccCollab('%(#collab_id)%','%(#collab/is_member)%','%(#collab/is_owner)%');
-cu.updateFiles('%(#collab_id)%');
-%loop(#collab/users,_u)%
-  <?
-    if( $collab['is_owner'] || $collab['is_member'] || $_u['collab_user_confirmed'] ) 
-    {
-        $itsme = ($_u['user_id'] == CCUser::CurrentUser()) ? 1 : 0;
-        $role = addslashes($_u['collab_user_role']);
-        $credit = addslashes($_u['collab_user_credit']);
-        $rname = addslashes($_u['user_real_name']);
-      ?> cu.addUser( '%(#_u/user_name)%', '%(#rname)%', '%(#role)%', '%(#credit)%',
-             %(#_u/collab_user_confirmed)%, %(#itsme)% );
-  <? } ?>
-%end_loop%
+cu.updateFiles();
+cu.updateUsers();
 
 function upload_done(upload_id,msg)
 {
