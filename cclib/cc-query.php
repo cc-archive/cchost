@@ -207,9 +207,6 @@ class CCQuery
                 die('Illegal value in query');
         }
     
-        if( !empty($this->args['sort']) )
-            $this->_validate_sort_fields();
-
         return $this->args;
     }
 
@@ -234,9 +231,6 @@ class CCQuery
             $this->_check_limit();
 
         $this->_get_get_offset();
-
-        if( !empty($this->args['sort']) )
-            $this->_validate_sort_fields();
 
         return $this->args;
     }
@@ -684,18 +678,26 @@ class CCQuery
     {
         $args =& $this->args;
 
-        if( empty($this->validated_sort) && !empty($args['sort']) )
-            $this->_validate_sort_fields();
+        if( !empty($args['ids']) || !empty($args['nosort'])  )
+        {
+            $this->sql_p['order'] = '';
+            return;
+        }
 
-        if( !empty($this->validated_sort) && (empty($args['ids']) || empty($args['nosort']))  )
+        if( ($args['datasource'] == 'uploads') && ($args['sort'] == 'rank') )
+        {
+            $this->sql_p['columns'] = '((upload_num_scores*4) + (upload_num_playlists*2) + (upload_num_plays/2)) AS qrank';
+        }
+
+
+        $sorts = $this->GetValidSortFields();
+
+        if( !empty($sorts[$args['sort']]) )
         {
             if( empty($args['ord']) )
                 $args['ord'] = 'ASC';
-            $this->sql_p['order'] = $this->validated_sort . ' ' . $args['ord'];
-        }
-        else
-        {
-            $this->sql_p['order'] = '';
+
+            $this->sql_p['order'] = $sorts[$args['sort']][1] . ' ' . $args['ord'];
         }
 
     }
@@ -939,15 +941,52 @@ class CCQuery
         {
             return array( 'name' => array( _('Pool item name'), 'pool_item_name' ),
                           'user' => array( _('Pool item artist'), 'pool_item_artist' ),
-                          'date' => array( '', -1 )
                         );
         }
+
+        if( $this->args['datasource'] == 'topics' )
+        {
+            return array( 'name' => array( _('Topic name'), 'topic_name' ),
+                          'date' => array( _('Topic date'), 'topic_date' ),
+                          'type' => array( _('Topic type'), 'topic_type' )
+                        );
+        }
+
+        $user = array( 'fullname' => array( _('Aritst display name'),  'TRIM(LOWER(user_real_name))' ),
+                          'date'     => array( _('Registration date'),  'user_registered' ),
+                        'user'               => array( _('Artist login name'), 'user_name'),
+                        'registered'         => array( _('Artist registered'), 'user_registered'),
+                        'user_remixes'       => array( _('Number of remixes'), 'user_num_remixes'),
+                        'remixed'            => array( _('Number of times remixed'), 'user_num_remixed'),
+                        'uploads'            => array( _('Number of uploads'), 'user_num_uploads'),
+                        'userscore'          => array( _('Artists\'s average rating'), 'user_score'),
+                        'user_num_scores'    => array( _('Number of ratings'), 'user_num_scores'),
+                        'user_reviews'       => array( _('Reviews left by artist'), 'user_num_reviews'),
+                        'user_reviewed'      => array( _('Reviews left for artist'), 'user_num_reviewed'),
+                        'posts'              => array( _('Forum topics by artist'), 'user_num_posts'),
+                        );
+
+        if( $this->args['datasource'] == 'user' )
+        {
+            return $user;
+        }
+
+        if( $this->args['datasource'] == 'collab' )
+        {
+            return array_merge( $user, 
+                       array( 'name' => array( _('Collab name'), 'collab_name' ),
+                              'date' => array( _('Topic date'), 'collab_date' ),
+                            ));
+        }
+
+
 
         if( $this->args['datasource'] != 'uploads' )
             return '';
 
-        return array(
-            'name'               => array( _('Upload name'), 'upload_name'),
+        
+        return array_merge( $user, array(
+            'name'               => array( _('Upload name'), 'TRIM(TRIM(BOTH \'"\' FROM LOWER(upload_name)))'),
             'lic'                => array( _('Upload license'), 'upload_license'),
             'date'               => array( _('Upload date'), 'upload_date'),
             'last_edit'          => array( _('Upload last edited'), 'upload_last_edit'),
@@ -956,22 +995,8 @@ class CCQuery
             'sources'            => array( _('Upload\'s sources'),  
                                                    '(upload_num_sources+upload_num_pool_sources)'),
 
-            'score'              => array( _('Upload\'s ratings'), 'upload_score'),
             'num_scores'         => array( _('Number of ratings'), 'upload_num_scores'),
-            'rank'               => array( _('Upload ranking'), 'upload_rank'),
 
-            'user'               => array( _('Artist login name'), 'user_name'),
-            'fullname'           => array( _('Artist name'), 'user_real_name'),
-            'registered'         => array( _('Artist registered'), 'user_registered'),
-            'user_remixes'       => array( _('Number of remixes'), 'user_num_remixes'),
-            'remixed'            => array( _('Number of times remixed'), 'user_num_remixed'),
-            'uploads'            => array( _('Number of uploads'), 'user_num_uploads'),
-            'userscore'          => array( _('Artists\'s average rating'), 'user_score'),
-            'user_num_scores'    => array( _('Number of ratings'), 'user_num_scores'),
-            'userrank'           => array( _('Artist\'s ranking'), 'user_rank'),
-            'user_reviews'       => array( _('Reviews left by artist'), 'user_num_reviews'),
-            'user_reviewed'      => array( _('Reviews left for artist'), 'user_num_reviewed'),
-            'posts'              => array( _('Forum topics by artist'), 'user_num_posts'),
             'id'                 => array( _('Internal upload id'), 'upload_id'),
 
             'local_remixes'      => array( _('Upload\'s local remixes'), 'upload_num_remixes'),
@@ -981,45 +1006,11 @@ class CCQuery
             'pool_sources'       => array( _('Upload\'s sample pool sources'), 
                                                     'upload_num_pool_sources'),
 
-            );
+            'rank'               => array( _('Upload Rank'), 'qrank'),
+            'score'              => array( _('Upload\'s ratings'), 'upload_score'),
+            ));
     }
 
-    function _validate_sort_fields()
-    {
-        // this is at least partially done for security
-        // reasons to avoid sql injection
-
-        $fields = $this->args['sort'];
-        if( empty($fields) )
-            return;
-
-        $valid = $this->GetValidSortFields();
-        $out = array();
-
-        $fields = preg_split('/[\s\+,]+/',$fields);
-        foreach( $fields as $F )
-        {
-            if( empty($valid[$F][1]) )
-            {
-                if( preg_match('/^[a-z\.]+((_)[a-z]+)?$/',$F,$m) )
-                {
-                    if( empty($m[2]) )
-                        $out[] = $this->_make_field($F);
-                    else
-                        $out[] = $F;
-                }
-
-            }
-            else
-            {
-                if( $valid[$F][1] !== -1 )
-                    $out[] = $valid[$F][1];
-            }
-        }
-
-        if( !empty($out) )
-            $this->validated_sort = '( ' . join(',',$out) . ') ';
-    }
 
     function _get_get_offset()
     {

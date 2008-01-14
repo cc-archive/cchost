@@ -10,10 +10,29 @@
 	float: left;
 	margin-right: 2%;
 }
+
 #download_box .cc_share_button {
 	margin-top: 11px;
 }
 
+p#trackback_caption {
+	overflow: hidden;
+	margin: 0px;
+}
 #download_box li {
 	line-height: 130%;
+}
+
+#cc_download {
+	margin: 10px;
+}
+#cc_download a {
+	font-weight: bold;
+	font-size: 1.2em;
+	display: block;
+	padding: 3px;
+}
+#download_help {
+	margin: 5px;
+	padding: 3px;
 }

@@ -85,7 +85,6 @@ else
 
 $menu =& $R['local_menu'];
 
-print '<link rel="stylesheet" type="text/css" title="Default Style" href="' . $T->URL('css/upload_menu.css') . '" />';
 print '<div id="ajax_menu"><ul>';
 
 /** OWNER stuff *****/
@@ -121,7 +120,7 @@ $str = sprintf($T->String('str_list_i_saw_this'), '"' . $R['upload_name'] . '"')
 ?><div id="trackbackbox"><div class="box">
   <h2><?= $T->String('str_list_trackback') ?></h2>
   <a name="trackback"></a>
-  <p><?= $str ?></p><ul><?
+  <p id="trackback_caption"><?= $str ?></p><ul><?
 
 $mi = array();
 $mi['action'] = 'javascript:// noted';

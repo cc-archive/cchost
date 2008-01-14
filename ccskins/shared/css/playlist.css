@@ -149,12 +149,13 @@ div.cc_playlist_action  {
 
 /* filter form */
 #dyn_filter_editor_parent {
-	width: 400px;
+	width: 600px;
 	margin: 0px auto;
 }
 #dyn_filter_editor {
 	margin: 14px 0px 0px 25px;
 	padding: 9px;
+	width: 595px;
 }
 
 #dyn_filter_editor, 

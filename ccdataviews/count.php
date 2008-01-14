@@ -7,7 +7,7 @@
 
 function count_dataview() 
 {
-    $sql = 'SELECT COUNT(*) from cc_tbl_uploads %columns% %joins% %where% %order% %limit%';
+    $sql = 'SELECT COUNT(*) from cc_tbl_uploads %joins% %where%';
 
     return array( 'sql' => $sql,
                    'e'  => array( )

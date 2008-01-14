@@ -370,55 +370,6 @@ class CCUserAPI
         CCPage::Prompt("str_changes_were_saved");
     }
 
-    function _build_bread_crumb_trail($username,$tagfilter)
-    {
-        require_once('cclib/cc-tags.php');
-        require_once('cclib/cc-page.php');
-
-        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
-        $trail[] = array( 'url' => ccl('people'), 'text' => _('People') );
-        if( !empty($username) )
-        {
-            $users =& CCUsers::GetTable();
-            $user_real_name = $users->QueryItem('user_real_name',"user_name = '$username'");
-            if( !empty($user_real_name) )
-            {
-                $trail[] = array( 'url' => ccl('people',$username), 'text' => $user_real_name );
-
-                if( !empty($tagfilter) )
-                {
-                    $trail[] = array( 'url' => '', 'text' => '');
-                }
-            }
-            
-            require_once('cclib/cc-upload-table.php');
-            $uploads = new CCUploads();
-            $where['user_name'] = $username;
-            $tagrows = $uploads->QueryRows($where,'upload_tags');
-            if( !empty($tagrows) )
-            {
-                $all_tags = array();
-                foreach( $tagrows as $tagrow )
-                    $all_tags = array_merge($all_tags,CCTag::TagSplit($tagrow['upload_tags']));
-                $all_tags = array_unique($all_tags);
-                sort($all_tags);
-                $taglinks = array();
-                $taglinks[] = array( 'url' => ccl('people',$username),
-                                     'text' => empty($tagfilter) ? _('(select tag)') : _('(no tag)'),
-                                     'selected' => empty($tagfilter) );
-                foreach($all_tags as $tag)
-                    $taglinks[] = array( 'url' => ccl('people',$username,$tag),
-                                         'text' => $tag,
-                                         'selected' => $tag == $tagfilter );
-
-                CCPage::PageArg('crumb_tags',$taglinks);
-            }
-        }
-
-        
-        CCPage::AddBreadCrumbs($trail);
-    }
-
     function AddToFavs($user_to_add_or_remove)
     {
         require_once('cclib/cc-tags.php');

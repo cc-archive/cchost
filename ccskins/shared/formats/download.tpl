@@ -4,21 +4,6 @@
     dataview = files
 [/meta]
 */?>
-<style type="text/css">
-#cc_download {
-	margin: 10px;
-}
-#cc_download a {
-	font-weight: bold;
-	font-size: 1.2em;
-	display: block;
-	padding: 3px;
-}
-#download_help {
-	margin: 5px;
-	padding: 3px;
-}
-</style>
 <div  id="cc_download">
 <div id="download_help">
     <div>%text(str_list_IEtip)%</div>

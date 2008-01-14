@@ -1,3 +1,6 @@
+@import url('rate.css');
+@import url('trackback.css');
+@import url('upload_menu.css');
 
 .upload_name {
 	font-size: 120%;

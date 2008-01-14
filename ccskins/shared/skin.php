@@ -55,5 +55,6 @@ array_unshift($A['script_links'],'js/prototype.js');
 $A['style_sheets'][] = 'js/modalbox/modalbox.css';
 $A['style_sheets'][] = 'css/shared.css';
 $A['style_sheets'][] = 'css/cc-format.css';
+$A['style_sheets'][] = 'css/form.css';
 
 ?>

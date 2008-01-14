@@ -481,6 +481,7 @@ EOF;
             $ftvalues['forum_thread_oldest'] = 
             $ftvalues['forum_thread_newest'] = $topic_id;
             $ftvalues['forum_thread_date'] = $values['topic_date'];
+            $ftvalues['forum_thread_name'] = $values['topic_name'];
             $threads->Insert($ftvalues);
 
             $this->_on_new_topic($values);

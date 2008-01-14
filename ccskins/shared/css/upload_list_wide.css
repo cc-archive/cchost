@@ -1,6 +1,8 @@
 /* colorize */
 /* big div sections */
 @import url('rate.css');
+@import url('trackback.css');
+@import url('upload_menu.css');
 
 .upload {
     margin: 15px; /* 0px 4px 0px; */

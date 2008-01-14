@@ -120,7 +120,7 @@ EOF;
             require_once('cclib/cc-page.php');
             require_once('cclib/cc-query.php');
             require_once('cclib/zend/json-encoder.php');
-            CCPage::SetTitle(_('Browse Uploads'));
+            CCPage::SetTitle('str_browse_remixes');
             $query = new CCQuery();
             $args = array_merge( array( 'reqtags' => '*'), $query->ProcessUriArgs() );
             $args = CCZend_Json_Encoder::encode($args);

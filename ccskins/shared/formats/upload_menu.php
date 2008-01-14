@@ -56,7 +56,6 @@
 
 function _t_upload_menu_init(&$T,&$A)
 {
-    print '<link href="' . $T->URL('css/upload_menu.css') . '" text="text/css" title="Default Style" rel="stylesheet" />';
     if( !empty($A['record']) )
         $R =& $A['record'];
     else
@@ -126,7 +125,7 @@ function _t_upload_menu_init(&$T,&$A)
 
     ?><div class="box" id="download_box">
         <a name=\"trackback\"></a> 
-        <p><?= $str ?></p><ul><?
+        <p id="trackback_caption"><?= $str ?></p><ul><?
 
     $mi = array();
     $mi['action'] = 'javascript:// noted';

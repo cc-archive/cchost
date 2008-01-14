@@ -20,47 +20,7 @@ EOF;
 }
 [/dataview]
 */
-?>
-<style type="text/css">
-#trackback_form {
-   width: 95%;
-   margin: 0px auto;
-}
-#trackback_form .f {
-    margin: 16px;
-}
-#trackback_form h2 {
-    text-align: center;
-}
-#trackback_form #trackback_embed {
-    font-size: 0.9em;
-}
-#trackback_form textarea {
-    height: 3em;
-}
-#trackback_form textarea, #trackback_form input {
-    width: 340px;
-    display: block;
-}
 
-#trackback_help span {
-    font-weight: bold;
-}
-
-a.remix_up_link {
-    margin: 5px;
-    border: 1px dashed #BBB;
-    padding: 5px;
-    text-align: center;
-    display: block;
-    font-weight: normal;
-}
-a.remix_up_link:hover {
-    background-color: white;
-    text-decoration: none;
-}
-</style>
-<?
 $ttype = $_GET['ttype'];
 $R     =& $A['records'][0];
 $text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name'].'</span>', 

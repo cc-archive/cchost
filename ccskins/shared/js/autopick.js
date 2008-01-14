@@ -90,17 +90,18 @@ ccAutoPick.prototype = {
             value = '';
         }
         
-        return '<table cellspacing="0" cellpadding="0">' +
-               '<tr><td>' +
+        return '<table cellspacing="0" cellpadding="0" style="">' +
+               '<tr><td colspan="2">' +
                     '<span class="cc_autocomp_stat" id="' + stat_id + '"><i>' + pre_text + '</i></span> ' +
                '</td></tr>' +
-               '<tr><td>' +
-                   '<a class="cc_autocomp_clear" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + '">'
-                    + str_filter_clear + '</a>  '  + 
+               '<tr><td>'  + 
                    '<a class="cc_autocomp_show" href="javascript://show list" id="' + show_id + '">' + str_filter_show_list + '</a>'  + 
-               '</td></tr>' +
-               '<tr><td><input type="hidden" name="' + id + '" id="' + id + '" value="' + value + '" />' +
+               '</td><td>' +
+                   '<a class="cc_autocomp_clear" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + '">'
+                    + str_filter_clear + '</a></td></tr>' +
+               '<tr><td colspan="2"><input type="hidden" name="' + id + '" id="' + id + '" value="' + value + '" />' +
                       '<div class="cc_autocomp_list" id="' + list_id + '"><!-- --></div>' +
+                    '<div style="border-left: 180px transparent solid;font-size: 2px;height:2px;"></div>' + 
                '</td></tr></table>';
     },
 
@@ -110,13 +111,16 @@ ccAutoPick.prototype = {
         var list = $(this.options.listID);
         if( this.is_showing ) 
         {
-            list.style.display = 'none';
+            Effect.BlindUp(list);
+            //list.style.display = 'none';
             this.is_showing = false;
             link.innerHTML = this.options.str_filter_show_list || str_filter_show_list;
         }
         else
         {
+            list.style.opacity = '0.0';
             list.style.display = 'block';
+            Effect.Appear(list);
             this.is_showing = true;
             link.innerHTML = this.options.str_filter_hide_list || str_filter_hide_list
         }

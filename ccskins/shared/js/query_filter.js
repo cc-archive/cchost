@@ -57,6 +57,15 @@ ccQueryBrowserFilters.prototype = {
                                                   [ 'any', str_filter_match_any_tags  ]
                                                ]
                                           };
+        this.sort       = { name: str_filter_sort, fmt: 'dropdown', param: 'sort',
+                                         vals: [  [ 'date', str_filter_date ],
+                                                  [ 'name', str_filter_name ],
+                                                  [ 'fullname', str_filter_artist ],
+                                                  [ 'rank', str_filter_score ] ] };
+
+        this.ord        = { name: str_filter_order, fmt: 'dropdown', param: 'ord',
+                                         vals: [  [ 'desc', str_filter_most_to_least ],
+                                                  [ 'asc', str_filter_least_to_most ] ] };
         /*
         this.score      = { name: 'Ratings', fmt: 'dropdown', param: 'score',
                                          vals: [  [ '*', 'all'],

@@ -218,19 +218,45 @@ class CCPlaylists
         $this->BrowsePL($row['cart_id']);
     }
 
-    function Bump($upload_id='')
+    function Bump($upload_encoded='')
     {
-        if( empty($upload_id) )
+        if( empty($upload_encoded) )
             CCUtil::Send404();
+
         global $CC_GLOBALS;
-        $fname = $CC_GLOBALS['logfile-dir'] . 'bump_count.txt';
         $ip = $_SERVER['REMOTE_ADDR'];
-        $user = CCUser::CurrentUserName();
-        $file = fopen($fname,'a');
+        $user = CCUser::CurrentUser();
         $time = date('Y-m-d H:i:s');
-        fwrite( $file, "$time,$upload_id,$user,$ip\n");
-        fclose($file);
-        chmod($fname, 0777 );
+        $yesterday = date('Y-m-d H:i:s',strtotime('1 days ago'));
+        CCDatabase::Query("DELETE FROM cc_tbl_play_track WHERE play_track_date < '{$yesterday}'");
+
+        if( preg_match('/_ep_([0-9]+)_([0-9]+)$/',$upload_encoded,$playparts) )
+        {
+            $playlist_id = $playparts[1];
+            $upload_id = $playparts[2];
+        }
+        else
+        {
+            preg_match('/_ep_([0-9]+)$/',$upload_encoded,$playparts);
+            $playlist_id = 0;
+            $upload_id = $playparts[1];
+        }
+
+        $hit = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_play_track WHERE (play_track_ip='{$ip}' OR play_track_user={$user}) AND play_track_upload={$upload_id}");
+        if( $hit )
+            die('counted');
+        $table = new CCTable('cc_tbl_play_track','play_track_ip');
+        $args['play_track_ip'] = $ip;
+        $args['play_track_date'] = $time;
+        $args['play_track_upload'] = $upload_id;
+        $args['play_track_user'] = $user;
+        $table->Insert($args);
+        
+        CCDatabase::Query('UPDATE cc_tbl_uploads SET upload_num_plays = upload_num_plays+1 WHERE upload_id='.$upload_id);
+        if( $playlist_id > 1 )
+            CCDatabase::Query('UPDATE cc_tbl_cart   SET cart_num_plays   = cart_num_plays+1   WHERE cart_id='.$upload_id);
+
+        print 'ok';
         exit;
     }
 

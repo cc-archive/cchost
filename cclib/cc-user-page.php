@@ -235,13 +235,12 @@ class CCUserPage
     function BrowseUsers()
     {
         $alpha           = '';
-        $where           = 'user_num_uploads > 0';
         $qargs           = 't=user_list&datasource=user';
         $sqlargs['where'] = 'user_num_uploads > 0';
 
         if( !isset($_GET['p']) )
         {
-            $qargs .= '&sort=user_registered&ord=DESC';
+            $qargs .= '&sort=date&ord=DESC';
         }
         else
         {
@@ -284,6 +283,7 @@ END;
         CCPage::PageArg('user_index',$alinks);
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs($qargs);
+
         $query->QuerySQL($args,$sqlargs);
     }
 

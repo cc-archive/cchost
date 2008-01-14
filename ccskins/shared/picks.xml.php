@@ -16,7 +16,7 @@
     $A['settings'] = CC_get_config('chart');
     $A['pick_title'] = $T->String('str_editorial_whats_hot');
     $A['ed_pick'] = 0;
-    $A['qstring'] = 'tags=remix,-digital_distortion&sort=num_scores&dir=DESC&sinced=' . $A['settings']['cut-off'] . '&limit=12';
+    $A['qstring'] = 'tags=remix,-digital_distortion&sort=rank&sinced=' . $A['settings']['cut-off'] . '&limit=12';
     $T->Call('picks.xml/picks');
 ?>
 </td>
@@ -26,7 +26,7 @@
 <?
     $A['pick_title'] = $T->String('str_editorial_all_time');
     $A['ed_pick'] = 0;
-    $A['qstring'] = 'tags=remix&sort=num_scores&dir=DESC&limit=10';
+    $A['qstring'] = 'tags=remix&sort=rank&limit=10';
     $T->Call('picks.xml/picks');
 ?></td>
 </tr>

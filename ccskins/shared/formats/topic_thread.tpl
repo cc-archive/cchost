@@ -80,7 +80,7 @@ EOF;
     <td class="cc_topic_head">
         <a name="%(#R/topic_id)%"></a>
         <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
-        <div><a href="%(#R/artist_page_url)%/reviews"><?= $T->String(array('str_forum_posts_n',$R['user_num_posts'])); ?></a></div>
+        <div><a href="%(#R/artist_page_url)%/topics"><?= $T->String(array('str_forum_posts_n',$R['user_num_posts'])); ?></a></div>
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
     </td>
     <td class="cc_topic_body">
