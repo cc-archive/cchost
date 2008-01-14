@@ -71,17 +71,21 @@ p.cc_autocomp_line {
 
 .filterform span.th  {
     text-align: left;
-    margin: 12px 0px 2px 0px;
+    margin: 0px;
     padding: 0px;
-    display:block;
-    padding: 4px 4px 4px 6px;
+    padding: 2px 2px 2px 6px;
+    font-size: 0.8em;
+    display: block;
+    font-variant: small-caps;
+    letter-spacing: 0.2em;
+    text-transform: lowercase;
 }
 
 .filterform span.field  {
     float: none;
     display: block;
     margin: 0px;
-    padding: 0px;
+    padding: 5px 0px 10px 0px;
     width: 100%;
 }
 #ff_filter_inner {
