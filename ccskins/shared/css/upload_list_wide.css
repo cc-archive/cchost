@@ -87,3 +87,10 @@ a.upload_flag {
 	float: right;
 	margin-right: 12px;
 }
+
+a.upload_review_link {
+	padding-left: 14px;
+	height: 13px;
+	background: url('../images/comments.gif') top left no-repeat;
+	
+}

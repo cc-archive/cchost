@@ -13,6 +13,7 @@ function upload_list_wide_dataview()
     $urlf = ccl('files') . '/';
     $urlp = ccl('people') . '/';
     $urll = ccd('ccskins/shared/images/lics/small-'); 
+    $urlr = ccl('reviews') . '/';
     $configs =& CCConfigs::GetTable();
     $chart = $configs->GetConfig('chart');
     $is_thumbs_up = empty($chart['thumbs_up']) ? '0' : '1';
@@ -32,6 +33,7 @@ SELECT
     $is_thumbs_up as thumbs_up, $ratings_on as ratings_enabled,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     CONCAT( '$urll', license_logo ) as license_logo_url, license_url, license_name,
+    CONCAT( '$urlr', user_name, '/', upload_id ) as reviews_url,
     IF( upload_tags LIKE '%,audio,%', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date_format,
     upload_contest, upload_name,
@@ -119,6 +121,9 @@ EOF;
         <div><a href="javascript://download" class="download_hook" id="_ed__%(#R/upload_id)%">%text(str_list_download)%</a></div>
         <div><a class="cc_file_link" href="%(#R/file_page_url)%">%text(str_detail)%</a></div>
         <div><a href="javascript://action" class="menuup_hook" id="_emup_%(#R/upload_id)%" >%text(str_action)%</a></div>
+        %if_not_null(#R/upload_extra/num_reviews)%
+          <div><a class="upload_review_link" href="%(#R/reviews_url)%">(%(#R/upload_extra/num_reviews)%)</a></div>
+        %end_if%
     </div>
 
     %if_not_null(#R/remix_parents)%
