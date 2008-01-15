@@ -1,4 +1,21 @@
 <body>
+<!--[if lt IE 7]> 
+<style type="text/css">
+#tabs { top: 68px; background: transparent; height: 30px; }
+ul#tabs li { background: #f0f4f1; }
+ul#tabs a {background: transparent; }
+ul#tabs a span { background: transparent;  border-left: 1px solid #555; border-top: 1px solid #555;}
+ul#tabs li.selected_tab a { background: #FFF; }
+ul#tabs li.selected_tab a span { background: #fff; }
+ul#sub_tabs li { background: #f0f4f1; }
+ul#sub_tabs a {background: #DDD; }
+ul#sub_tabs a span { background: transparent; }
+ul#sub_tabs a:hover {background: #fff; }
+ul#sub_tabs a:hover span { background: transparent; }
+ul#sub_tabs li.selected_tab a { background: #fff; }
+ul#sub_tabs li.selected_tab a span { background: transparent; }
+</style>
+<![endif]-->
 %if_not_empty(site-disabled)%
     <div id="site_disabled_message" style="position:absolute">%text(str_site_disabled)%</div>
 %end_if%

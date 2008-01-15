@@ -187,7 +187,7 @@ class CCSkin
     {
         $T =& $this;
         $A =& $this->vars;
-        foreach( array( 'tab_pos', 'box_shape', 'page_layout', 'color_scheme', 'font_scheme', 'font_size') as $inc )
+        foreach( array( 'page_layout', 'color_scheme', 'font_scheme', 'font_size', 'tab_pos', 'box_shape', ) as $inc )
         {
             if( !empty($_REQUEST[$inc]) )
                 $A[$inc] = $_REQUEST[$inc];
