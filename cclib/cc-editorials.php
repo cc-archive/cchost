@@ -131,6 +131,7 @@ class CCEditorials
                     CCUploadAPI::UpdateCCUD($upload_id,'editorial_pick','');
                 }
 
+                $record = array();
                 CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, 
                                     array( $upload_id, CC_UF_PROPERTIES_EDIT, array(&$record) ) );
                 CCEvents::Invoke( CC_EVENT_ED_PICK, array( $upload_id ) );
