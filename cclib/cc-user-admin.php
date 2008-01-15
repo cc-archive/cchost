@@ -145,6 +145,7 @@ class CCIPManageForm extends CCGridForm
     function CCIPManageForm($ip_masks)
     {
         $this->CCGridForm();
+        $this->SetTemplateVar('form_fields_macro','flat_grid_form_fields');
 
         $heads = array( _("Delete"), _("Regular Expression Mask"));
         $this->SetColumnHeader($heads);

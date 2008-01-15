@@ -26,7 +26,7 @@ JOIN cc_tbl_licenses ON upload_license = license_id
 %limit%
 EOF;
     return array( 'sql' => $sql,
-                   'e'  => array(   CC_EVENT_FILTER_EXTRA )
+                   'e'  => array(   CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_ED_PICK )
                 );
 }
 

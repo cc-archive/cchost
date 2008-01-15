@@ -35,7 +35,6 @@ div#upload_menu_box{float:left;width:20%;margin-left:-100%;padding-left:1.5em;}
 </style>
 
 <!--[if IE]> 
-<link href="<?= $T->URL('css/upload_menu.css') ?>" text="text/css" title="Default Style" rel="stylesheet" />
 <style type="text/css">
 div#upload_wrapper{float:left;width:100%;}
 div#upload_middle{margin: 0 35% 0 23%;}

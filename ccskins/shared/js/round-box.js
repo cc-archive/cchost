@@ -1,11 +1,7 @@
 
-function cc_round_box( e ) {
-    _cc_round_box( e, '' );
-}
-
 rbox_counter = 1;
 
-function _cc_round_box( e, color ) {
+function cc_round_box( e ) {
     e = $(e);
     if( !e )
         return;
@@ -18,8 +14,8 @@ function _cc_round_box( e, color ) {
         caption = h2.innerHTML;
         e.removeChild(h2);
     }
-    var html = '<div id="' + id_o + '" style="display:none" class="cssbox' + color + '"><div class="cssbox_head' + color + '"><h2>' + caption + 
-                '</h2></div><div id="' + id + '" class="cssbox_body' + color + '">  </div></div>';
+    var html = '<div id="' + id_o + '" style="display:none" class="cssbox"><div class="cssbox_head"><h2>' + caption + 
+                '</h2></div><div id="' + id + '" class="cssbox_body">  </div></div>';
     new Insertion.Before(e,html);
     var e = Element.remove(e);
     $(id).appendChild(e);

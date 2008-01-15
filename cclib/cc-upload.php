@@ -89,7 +89,8 @@ class CCUpload
     function AdminUpload($upload_id)
     {
         $uploads =& CCUploads::GetTable();
-        $record = $uploads->GetRecordFromKey($upload_id);
+        $record = CCDatabase::QueryRow('SELECT upload_extra,upload_date,upload_name FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+        $record['upload_extra'] = unserialize($record['upload_extra']);
         if( empty($record) )
             return;
         $name = $record['upload_name'];
@@ -114,7 +115,8 @@ class CCUpload
             require_once('cclib/cc-uploadapi.php');
 
             CCUploadAPI::UpdateCCUD($upload_id,$values['ccud'],$record['upload_extra']['ccud']);
-            $url = $record['file_page_url'];
+            $user_name = CCDatabase::QueryItem('SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id);
+            $url = ccl('files',$user_name,$upload_id);
             $link1 = "<a href=\"$url\">";
             CCPage::Prompt(sprintf(_("Changes saved to '%s'. Click %shere%s to see results"), 
                         $name, $link1, '</a>'));

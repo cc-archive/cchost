@@ -245,9 +245,9 @@ class CCEditorials
         }
     }
 
-    function _do_filter(&$records,$doformat)
+    function _do_filter(&$records,$formatting)
     {
-        $doformat = $doformat && function_exists('cc_format_text');
+        $doformat = !empty($formatting) && function_exists($formatting);
 
         $k = array_keys($records);
         $c = count($k);
@@ -262,19 +262,19 @@ class CCEditorials
             $R['edpick'] =& $R['upload_extra']['edpicks'][$ek[0]];
             if( $doformat )
             {
-                $R['edpick']['review'] = cc_format_text($R['edpick']['review']);
+                $R['edpick']['review'] = $formatting($R['edpick']['review']);
             }
         }
     }
 
     function OnFilterEdPickDetail(&$records)
     {
-        $this->_do_filter($records,true);
+        $this->_do_filter($records,'cc_format_text');
     }
 
     function OnFilterEdPick(&$records)
     {
-        $this->_do_filter($records,false);
+        $this->_do_filter($records,'cc_format_unformat');
     }
 }
 

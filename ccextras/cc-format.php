@@ -60,7 +60,7 @@ function cc_format_text($text)
 
 function cc_format_unformat($text)
 {
-    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up)';
+    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up|left|right|img)';
     return preg_replace("#\[/?$attrs(=[^\]]+)?\]#U",'',$text);
 }
 

@@ -152,7 +152,6 @@ function cc_filter_std(&$records,&$dataview_info)
                 }
             } // end switch on event
 
-
         } // for each record
 
         $dataview_info['e'] = array_diff( $dataview_info['e'], array( $e ) );
