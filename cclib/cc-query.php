@@ -581,21 +581,12 @@ class CCQuery
 
     function _gen_reccby()
     {
-        $users =& CCUsers::GetTable();
-        $w['user_name'] = $this->args['reccby'];
-        $user_id = $users->QueryKey($w);
-        if( $this->args['format'] == 'count' )
+        $user_id = CCDatabase::QueryItem("SELECT user_id FROM cc_tbl_user WHERE user_name= '{$this->args['reccby']}'");
+        $this->sql_p['joins'] = 'cc_tbl_ratings ON ratings_upload=upload_id';
+        $this->where[] = 'ratings_user = ' . $user_id;
+        if( $this->args['format'] != 'count' )
         {
-            $this->where[] = 'ratings_user = ' . $user_id;
-        }
-        else
-        {
-            $sql = 'SELECT ratings_upload FROM cc_tbl_ratings WHERE ratings_user = ' . $user_id . ' ORDER BY ratings_id DESC ';
-            $ids = CCDatabase::QueryItems($sql);
-            if( $ids )
-                $this->where[] = '(upload_id IN (' . join(',',$ids) . '))';
-            else
-                $this->dead = true;
+            $this->sql_p['order'] = 'ratings_id DESC'; // er, ....
         }
     }
 

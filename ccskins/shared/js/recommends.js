@@ -26,7 +26,7 @@ ccReccommendFilter.prototype = {
     },
 
     queryCountURL: function() {
-        return query_url + 'f=html&reccby=' + ruser + '&f=count&datasource=ratings&dataview=count_ratings';
+        return query_url + 'f=count&reccby=' + ruser;
     },
 
     hookElements: function() {
