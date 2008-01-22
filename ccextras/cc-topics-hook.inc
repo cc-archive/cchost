@@ -52,7 +52,7 @@ EOF;
             if( CCReviewsHV::_can_review($_GET['upload']) )
             {
                 $review_cmd = array( 'href' => ccl('reviews','post',$_GET['upload']) . '#edit',
-                                     'text' => _('Add Review') );
+                                     'text' => 'str_review_write'  );
             }
         }
 
@@ -73,9 +73,9 @@ EOF;
             if( $is_topic_owner || $is_admin )
             {
                 $rec['cmds'][] = array( 'href' => ccl('topics','delete',$R['topic_id']),
-                                            'text' => _('Delete') );
+                                            'text' => 'str_topic_delete' );
                 $rec['cmds'][] = array( 'href' => ccl('topics','edit',$R['topic_id']),
-                                            'text' => _('Edit') );
+                                            'text' => 'str_topic_edit' );
 
             }
 
@@ -101,7 +101,7 @@ EOF;
             {
                 if( $is_topic_owner )
                 {
-                    $text = _('Reply to yourself');
+                    $text = 'str_topic_reply_to_yourself';
                 }
                 else
                 {
@@ -114,9 +114,9 @@ EOF;
                       $asc2uni[chr($i)] = '?';
                     }
                     if( strtr($R['user_real_name'],$asc2uni) != $R['user_real_name'] )
-                        $text = _('Reply');
+                        $text = 'str_topic_reply';
                     else
-                        $text = sprintf(_('Reply to %s'),$R['user_real_name']);
+                        $text = array('str_reply_to_sn',$R['user_real_name']);
                 }
                 
                 $rec['cmds'][] = array( 'href' => ccl('topics','quote',$R['topic_id']),

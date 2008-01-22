@@ -237,7 +237,8 @@ topicHooks.prototype = {
                 var id = cmd_meta.id;
                 var html = '';
                 cmd_meta.cmds.each( function(cmd) {
-                    html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + cmd.text + '</span></a> ';
+                    var text = cmd.text.match(/^str_/) ? eval( cmd.text ) : cmd.text;
+                    html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + text + '</span></a> ';
                 });
                 $('commands_' + id).innerHTML = html;
             });

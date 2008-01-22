@@ -41,8 +41,9 @@ class CCFlagContentForm extends CCSecurityVerifierForm
         global $CC_GLOBALS;
 
         $this->CCSecurityVerifierForm();
-
-        $text = sprintf(_("This %s contains material that may violate the terms of the site"), $type);
+        require_once('cclib/cc-page.php');
+        $page = CCPage::GetPage();
+        $type = $page->String('str_flag_' . $type);
 
         $fields = array( 
                     'mail_from' => array(
@@ -54,12 +55,12 @@ class CCFlagContentForm extends CCSecurityVerifierForm
                     'mail_subject' => array(
                             'label'       => 'str_email_subject',
                             'formatter'   => 'statictext',
-                            'value'      => sprintf( _('Flag %s "%s"'), $type, $name ),
+                            'value'      => $page->String(array('str_flag_s_s',$type,$name)),
                             'flags'      => CCFF_STATIC | CCFF_NOUPDATE ),
                     'mail_body' => array(
                             'label'       => 'str_email_message',
                             'formatter'   => 'textarea',
-                             'value'      => $text,
+                             'value'      => $page->String(array('str_flag_this_s_contains',$type)),
                             'flags'      => CCFF_REQUIRED ),
                     'user_mask' =>
                        array( 'label'       => '',
@@ -99,11 +100,73 @@ class CCFlag
                 CC_AG_UPLOADS );
     }
 
+    function _bbc_upload($upload_id,&$trail,$cmd='')
+    {
+        $trail[] = array( 'url' => ccl('people'), 
+                          'text' => 'str_people' );
+
+        $sql = 'SELECT user_real_name, upload_name, user_name FROM cc_tbl_uploads ' .
+                'JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id;
+
+        list( $user_real_name, $upload_name, $user_name ) = CCDatabase::QueryRow($sql, false);
+
+        $trail[] = array( 'url' => ccl('people',$user_name), 
+                          'text' => $user_real_name );
+
+        $trail[] = array( 'url' => ccl('files',$user_name, $upload_id), 
+                          'text' => '"' . $upload_name . '"' );
+
+        if( $cmd )
+        {
+            $trail[] = array( 'url' => ccl('reviews',$user_name, $upload_id), 
+                              'text' => 'str_reviews' );
+        }
+    }
+
+    function _build_bread_crumb_trail($type,$id)
+    {
+        $trail[] = array( 'url' => ccl(), 
+                          'text' => 'str_home');
+        
+        if( $type == 'upload' )
+        {
+            $this->_bbc_upload($id,$trail);
+
+        }
+        elseif( $type == 'topic' )
+        {
+            list( $type, $upload_id, $thread_id, $topic_name ) = 
+                    CCDatabase::QueryRow('SELECT topic_type, topic_upload, topic_thread, topic_name FROM cc_tbl_topics WHERE topic_id='.$id,false);
+
+            if( $upload_id ) // $type == 'review' )
+            {
+                $this->_bbc_upload($upload_id,$trail,'reviews');
+
+            }
+            elseif( $thread_id )
+            {
+                list( $forum_id, $forum_name, $thread_name ) = CCDatabase::QueryRow('SELECT forum_id, forum_name, forum_thread_name FROM cc_tbl_forums JOIN cc_tbl_forum_threads ON '.  
+                                              'forum_thread_forum=forum_id WHERE forum_thread_id='.$thread_id,false);
+                $trail[] = array( 'url' => ccl('forums'), 'text' => 'str_forums' );
+                $trail[] = array( 'url' => ccl('forums',$forum_id), 'text' => $forum_name );
+                $trail[] = array( 'url' => ccl('thread',$thread_id), 'text' => $thread_name );
+                $trail[] = array( 'url' => ccl('thread',$thread_id) . '#' . $id, 'text' => $topic_name );
+            }
+        }
+
+        $trail[] = array( 'url' => '', 'text' => 'str_flag' );
+
+        require_once('cclib/cc-page.php');
+        CCPage::AddBreadCrumbs($trail);
+    }
+
     function Flag($type,$id)
     {
         global $CC_GLOBALS;
 
         CCPage::SetTitle(_('Flag Content'));
+
+        $this->_build_bread_crumb_trail($type,$id);
 
         if( $type == 'upload' )
         {

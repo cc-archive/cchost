@@ -175,8 +175,13 @@ $GLOBALS['str_filter_since']                 = _('Since');
 $GLOBALS['str_filter_this_many']             = _('This many');
 $GLOBALS['str_filter_yesterday']             = _('Yesterday');
 
+$GLOBALS['str_flag']      = _('Flag');
 $GLOBALS['str_flag_this_upload']      = _('Flag this upload for possible violation of terms');
 $GLOBALS['str_flag_this_topic']       = _('Flag this topic for possible violation of terms');
+$GLOBALS['str_flag_this_s_contains']  = _("This %s contains material that may violate the terms of the site");
+$GLOBALS['str_flag_s_s']  = _('Flag %s "%s"'); // as in: Flag topic "foo bar"
+$GLOBALS['str_flag_topic'] = _('topic');
+$GLOBALS['str_flag_upload'] = _('upload');
 
 $GLOBALS['str_for'] = _('for'); // as in: 9 Reviews for Trifonic's Beatorama
 
@@ -199,6 +204,10 @@ $GLOBALS['str_forum_login_required'] = _('You must be logged in to see this foru
 $GLOBALS['str_forum_perm_denied'] = _('You do not have proper permissions to see this forum.');
 $GLOBALS['str_forum_topics_by'] = _('Forum posts by %s');
 $GLOBALS['str_forum_posts_n'] = _('%d posts');
+$GLOBALS['str_forum_new_topic_text'] = _('New Topic Text');
+$GLOBALS['str_forum_submit_topic'] = _('Submit Topic');
+$GLOBALS['str_forum_thread_closed'] = _('Thread is closed to new comments.') ;
+$GLOBALS['str_forum_post_topic_reply'] = _('Post topic reply');
 
 $GLOBALS['str_from'] = _('from');
 $GLOBALS['str_full_search'] = _('Full search');
@@ -525,6 +534,9 @@ $GLOBALS['str_topic_reply_to_yourself'] = _('Reply to yourself');
 $GLOBALS['str_topic_reply_to_s']        = _('Reply to %s');
 $GLOBALS['str_topic_edit_s']            = _("Edit topic '%s'");
 $GLOBALS['str_topic_view']              = _('View Topic');
+$GLOBALS['str_topic_delete']        = _('Delete');
+$GLOBALS['str_topic_edit']            = _("Edit");
+
 $GLOBALS['str_permalink']              = _('permalink');
 
 $GLOBALS['str_uploading_msg']  = _('This could take a while... please be patient while the file is uploading');

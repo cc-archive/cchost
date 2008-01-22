@@ -240,7 +240,7 @@ class CCForumAPI
         if( ($mask & $forum_row['forum_post_access']) != 0 )
         {
             $commands[] = array( 'url' => ccl('forums','post',$forum_id),
-                                 'text' => _('Post new topic' ) );
+                                 'text' => 'str_forum_post_new_topic' );
         }
 
         //
@@ -294,12 +294,17 @@ EOF;
         CCPage::PageArg( 'threads', $forum_threads , 'forum_listing' );
     }
 
-    function _add_feed_links( $thread = '', $user = '', $user_real_name='' )
+    function _add_feed_links( $thread = '', $user = '', $user_real_name='', $thread_name ='')
     {
+        require_once('cclib/cc-page.php');
+        $page = CCPage::GetPage();
+
         if( !empty($thread) )
         {
             $q = '&thread='.$thread;
-            $title = 'str_topic';
+            if( empty($thread_name) )
+                $thread_name = CCDatabase::QueryItem('SELECT forum_thread_name FROM cc_tbl_forum_threads WHERE forum_thread_id='.$thread);
+            $title = empty($thread_name) ? $page->String('str_topic') : $thread_name;
         }
         elseif( !empty($user) )
         {
@@ -309,7 +314,7 @@ EOF;
         else
         {
             $q = '&thread=-1'; // yea, magic hack
-            $title = _('Forums'); // 'str_forum';
+            $title = $page->String('str_forum');
         }
 
         $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
@@ -454,7 +459,7 @@ EOF;
         CCPage::SetTitle( 'str_forum_post_new_topic' );
 
         require_once('ccextras/cc-topics-forms.inc');
-        $form = new CCTopicForm( _('New Topic Text'), _('Submit Topic'), true );
+        $form = new CCTopicForm( 'str_forum_new_topic_text', 'str_forum_submit_topic', true );
         if( empty($_POST['topic']) || !$form->ValidateFields() )
         {
             CCPage::AddForm( $form->GenerateForm() );
@@ -510,7 +515,7 @@ EOF;
 
         $sql = <<<EOF
         SELECT topic_name, forum_thread_forum, forum_read_access, topic_id,
-               forum_post_access, forum_thread_closed, forum_thread_sticky, forum_id
+               forum_post_access, forum_thread_closed, forum_thread_sticky, forum_id, forum_name
             FROM cc_tbl_topics 
             JOIN cc_tbl_forum_threads ON forum_thread_oldest = topic_id 
             JOIN cc_tbl_forums        ON forum_thread_forum = forum_id
@@ -544,7 +549,8 @@ EOF;
         $sqlargs['where'] = 'topic.topic_thread=' . $thread_id;
         $query->QuerySQL($args,$sqlargs);
 
-        $this->_add_feed_links( $thread_id );
+        $name = $row['forum_name'] . '::' . $row['topic_name'];
+        $this->_add_feed_links( $thread_id, '', '', $name );
         $this->_build_bread_crumb_trail($row['forum_id'],$row['topic_name']);
     }
 
@@ -555,12 +561,12 @@ EOF;
 
         if( $closed )
         {
-            $commands[] = array( 'url' => 0, 'msg' => _('Thread is closed to new comments.') );
+            $commands[] = array( 'url' => 0, 'msg' => 'str_forum_thread_closed');
         }
         else
         {
             $commands[] = array( 'url' => ccl('topics','reply',$row['topic_id']) . '#edit',
-                             'text' => _('Post topic reply' ), 'msg' => 0 );
+                             'text' => 'str_forum_post_topic_reply', 'msg' => 0 );
         }
 
         if( CCUser::IsAdmin() )

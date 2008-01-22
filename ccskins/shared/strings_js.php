@@ -49,6 +49,8 @@ var str_filter_show_list          ='<?=addslashes($T->String('str_filter_show_li
 var str_filter_since              ='<?=addslashes($T->String('str_filter_since'))?>';
 var str_filter_sort               ='<?=addslashes($T->String('str_filter_sort'))?>';
 var str_filter_yesterday          ='<?=addslashes($T->String('str_filter_yesterday'))?>';
+var str_forum_post_topic_reply    ='<?=addslashes($T->String('str_forum_post_topic_reply'))?>';
+
 var str_lic_attribution           ='<?=addslashes($T->String('str_lic_attribution'))?>';
 var str_lic_nc_sampling_plus      ='<?=addslashes($T->String('str_lic_nc_sampling_plus'))?>';
 var str_lic_nc_share_alike        ='<?=addslashes($T->String('str_lic_nc_share_alike'))?>';
@@ -72,9 +74,14 @@ var str_remix_no_matches          ='<?=addslashes($T->String('str_remix_no_match
 var str_remix_no_search_term      ='<?=addslashes($T->String('str_remix_no_search_term'))?>';
 var str_remix_open                ='<?=addslashes($T->String('str_remix_open'))?>';
 var str_remix_this_site           ='<?=addslashes($T->String('str_remix_this_site'))?>';
+var str_review_write              ='<?=addslashes($T->String('str_review_write'))?>';
 var str_see_results               ='<?=addslashes($T->String('str_see_results'))?>';
 var str_tags                      ='<?=addslashes($T->String('str_tags'))?>';
 var str_thinking                  ='<?=addslashes($T->String('str_thinking'))?>';
+var str_topic_delete                  ='<?=addslashes($T->String('str_topic_delete'))?>';
+var str_topic_edit                  ='<?=addslashes($T->String('str_topic_edit'))?>';
+var str_topic_reply_to_yourself  ='<?=addslashes($T->String('str_topic_reply_to_yourself'))?>';
+
 var str_trackback_error           ='<?=addslashes($T->String('str_trackback_error'))?>';
 var str_trackback_no_email        ='<?=addslashes($T->String('str_trackback_no_email'))?>';
 var str_trackback_no_link         ='<?=addslashes($T->String('str_trackback_no_link'))?>';

@@ -52,7 +52,7 @@ EOF;
 
 <div class="forum_cmds">
 %loop(thread_commands,TC)%
-    <a href="%(#TC/url)%">%(#TC/text)%</a>
+    <a href="%(#TC/url)%">%text(#TC/text)%</a>
 %end_loop%
 </div>
 
