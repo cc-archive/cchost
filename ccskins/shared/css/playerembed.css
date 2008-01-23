@@ -1,3 +1,10 @@
+.cc_player_controls {
+	position: absolute;
+	padding: 4px;
+	border: 1px solid black;
+	background: url('../images/bg_fade_wide.gif') repeat-y top left;
+}
+
 .cc_player_button {
     display: block;
     width: 17px;

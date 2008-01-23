@@ -56,7 +56,7 @@ EOF;
 %end_loop%
 </div>
 
-<table class="cc_topic_thread" cellspacing="0" cellspacing="0" >
+<table class="cc_topic_thread" cellspacing="0" cellpadding="0">
 %loop(records,R)%
 <? $thread_ids[] = $R['topic_id']; ?>
 <tr>
@@ -66,10 +66,11 @@ EOF;
         <div style="border-left:600px solid transparent;font-size:2px;height:3px;">.</div>
         <div class="cc_topic_reply_body  light_bg">
             <div class="cc_topic_reply_head med_light_bg">
-                <a class="topic_permalink light_color" href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+                <a class="topic_permalink light_color" href="%(#R/topic_url)%#%(#R/topic_id)%">%text(str_permalink)%</a> 
                 %if_not_null(flagging)%
                     <a class="flag topic_flag" title="%text(str_flag_this_topic)%" href="%(home-url)%flag/topic/%(#R/topic_id)%">&nbsp;</a>
                 %end_if%
+                <!-- %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if% -->
                 <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> %(#R/topic_date_format)% 
             </div>
             <div class="cc_topic_reply_text">%(#R/topic_text_html)%</div>
@@ -86,12 +87,13 @@ EOF;
     <td class="cc_topic_body">
         <div style="border-left:600px solid transparent;font-size:2px;height:3px;">.</div>
         <div class="cc_topic_date dark_bg light_color" >
-            <a class="topic_permalink light_color" href="%(#R/topic_url)%">%text(str_permalink)%</a> 
+            <a class="topic_permalink light_color" href="%(#R/topic_url)%#%(#R/topic_id)%">%text(str_permalink)%</a> 
             %if_not_null(flagging)%
                 <a class="flag topic_flag" title="%text(str_flag_this_topic)%" href="%(home-url)%flag/topic/%(#R/topic_id)%">&nbsp;</a>
             %end_if%
-           <!-- %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if% -->
-            %(#R/topic_date_format)% </div>
+            <!-- %if(is_admin)% L: %(#R/topic_left)% / R: %(#R/topic_right)% - %end_if% -->
+            %(#R/topic_date_format)% 
+        </div>
         <div class="cc_topic_text med_light_bg">%(#R/topic_text_html)%</div>
         <div class="cc_topic_commands med_light_bg" id="commands_%(#R/topic_id)%"></div>
     </td>

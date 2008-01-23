@@ -8,7 +8,7 @@
 
 %loop(records,R)%
 <div  class="trr">
-    <div  class="tdc cc_playlist_item" style="width:340px" id="_pli_%(#R/upload_id)%">
+    <div  class="tdc cc_playlist_item" id="_pli_%(#R/upload_id)%">
         <span>
             <a class="cc_playlist_pagelink" id="_plk_%(#R/upload_id)%" target="_parent" href="%(#R/file_page_url)%">%(#R/upload_name)%</a>
         </span>%text(str_by)%

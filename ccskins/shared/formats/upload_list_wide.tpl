@@ -26,7 +26,7 @@ function upload_list_wide_dataview()
     $sql =<<<EOF
 SELECT 
     upload_id, 
-    IF( LENGTH(upload_name) > 35, CONCAT( SUBSTRING(upload_name,1,33), '...'), upload_name ) as upload_name_chop,
+    IF( LENGTH(upload_name) > 31, CONCAT( SUBSTRING(upload_name,1,29), '...'), upload_name ) as upload_name_chop,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     {$user_avatar_col},
     user_real_name, user_name, upload_score, upload_num_scores, upload_extra,

@@ -136,7 +136,7 @@ ccEmbeddedPlayer.prototype = {
             // used for a 'global' volume and slider controls...
 
             this.options.plc_controls =
-                  '<div id="#{player_id}" class="#{player_class}" >' +
+                  '<div id="#{player_id}" class="#{global_player_class}" >' +
                       '<a href="javascript://prev" class="#{prev_button_class} #{button_class}" id="#{prev_id}" > </a>' +
                       '<a href="javascript://next" class="#{next_button_class} #{button_class}" id="#{next_id}" > </a>' +
                       '<div class="#{vol_class}" id="#{vol_id}" >' +
@@ -214,13 +214,13 @@ ccEmbeddedPlayer.prototype = {
 
         var html = new Template( controls ).evaluate( vars );
         if( place_in )
-            $(id).innerHTML = html;
-        else
-            new Insertion.After(id, html );
-
-        if( $(vars.pos_bk_id) )
         {
-            Position.clone(vars.pos_id,vars.pos_bk_id,{setWidth: false,setHeight: false});
+            $(id).innerHTML = html;
+        }
+        else
+        {
+            new Insertion.After(id, html );
+            Position.clone(id,vars.player_id,{offsetLeft: 40, setWidth: false,setHeight: false});
         }
 
         Event.observe( vars.player_id, 'click', this.onPlayerClick.bindAsEventListener(this) );

@@ -125,7 +125,7 @@ div.cc_playlist_action  {
 }
 
 .cc_playlist_pcontainer {
-   width: 215px;
+   width: 21px;
    white-space: nowrap;
 }
 
@@ -134,8 +134,15 @@ div.cc_playlist_action  {
    white-space: nowrap;
 }
 
+.cc_playlist_popup_window .cc_player_controls {
+	position: static;
+	padding: 0px;
+	border: 0px;
+	background: transparent;
+}
+
 .cc_playlist_item {
-	width: 353px;
+	width: 380px;
 	overflow: hidden;
 	padding-top: 2px;
 	padding-bottom: 1px;
