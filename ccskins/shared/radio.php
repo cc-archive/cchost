@@ -73,7 +73,7 @@ if( !empty($chart['ratings']) )
     <? } else { ?>
         <div class="radio_opt">
             <span  class="opt_label"><?= $T->String('str_recommends') ?>:</span>
-            <select  id="num_scores" name="num_scores">
+            <select  id="score" name="score">
             <option  value="20"><?= $T->String( array('str_filter_d_or_above', '20') ) ?></option>
             <option  value="10"><?= $T->String( array('str_filter_d_or_above', '10') ) ?></option>
             <option  value="5" selected="selected"><?= $T->String( array('str_filter_d_or_above', '5') ) ;?></option>

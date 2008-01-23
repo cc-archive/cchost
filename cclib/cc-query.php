@@ -318,7 +318,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 'reqtags','rand',
+                         'reviewee', 'match', 'reqtags','rand'
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -647,7 +647,10 @@ class CCQuery
 
     function _gen_score()
     {
-        $this->where[] = "(upload_num_scores >= {$this->args['score']})";
+        if( $this->args['datasource'] == 'user' )
+            $this->where[] = 'user_num_scores >= ' . $this->args['score'];
+        else
+            $this->where[] = 'upload_num_scores >= ' . $this->args['score'];
     }
 
     function _gen_search()

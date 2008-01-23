@@ -67,7 +67,7 @@ EOF;
                 $rec['cmds'][] = array( 
                                             'href' => ccl('topics','translate',$R['topic_id'])
                                                              . '#edit',
-                                            'text' => _('Translate') );
+                                            'text' => 'str_topic_translate' );
             }
 
             if( $is_topic_owner || $is_admin )
@@ -116,11 +116,11 @@ EOF;
                     if( strtr($R['user_real_name'],$asc2uni) != $R['user_real_name'] )
                         $text = 'str_topic_reply';
                     else
-                        $text = array('str_reply_to_sn',$R['user_real_name']);
+                        $text = array('str_topic_reply_to_sn',$R['user_real_name']);
                 }
                 
                 $rec['cmds'][] = array( 'href' => ccl('topics','quote',$R['topic_id']),
-                                            'text' => _('Reply with quote') );
+                                            'text' => 'str_topic_reply_with_quote' );
                 
                 $rec['cmds'][] = array( 'href' => ccl('topics','reply',$R['topic_id']),
                                             'text' => $text );

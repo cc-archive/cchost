@@ -532,10 +532,13 @@ $GLOBALS['str_title']          = _('Title');
 
 $GLOBALS['str_topic_reply_to_yourself'] = _('Reply to yourself');
 $GLOBALS['str_topic_reply_to_s']        = _('Reply to %s');
+$GLOBALS['str_topic_reply_to_sn']        = _('Reply to #{1}');
 $GLOBALS['str_topic_edit_s']            = _("Edit topic '%s'");
 $GLOBALS['str_topic_view']              = _('View Topic');
 $GLOBALS['str_topic_delete']        = _('Delete');
 $GLOBALS['str_topic_edit']            = _("Edit");
+$GLOBALS['str_topic_reply_with_quote']            = _("Reply with quote");
+$GLOBALS['str_topic_translate']            = _('Translate');
 
 $GLOBALS['str_permalink']              = _('permalink');
 

@@ -237,8 +237,7 @@ topicHooks.prototype = {
                 var id = cmd_meta.id;
                 var html = '';
                 cmd_meta.cmds.each( function(cmd) {
-                    var text = cmd.text.match(/^str_/) ? eval( cmd.text ) : cmd.text;
-                    html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + text + '</span></a> ';
+                    html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + cc_str(cmd.text) + '</span></a> ';
                 });
                 $('commands_' + id).innerHTML = html;
             });
@@ -304,6 +303,20 @@ userHookup.prototype = {
 
 }
 
+function cc_str(s)
+{
+    if( !s.match )
+    {
+        var template = new Template(cc_str(s[0]));
+        var args = $A(s);
+        s = template.evaluate( args );
+    }
+
+    if( s.match(/^str_/) )
+        return eval( s );
+
+    return s;
+}
 
 function upload_trackback( upload_id, type )
 {
@@ -425,10 +438,7 @@ var ccPopupManagerMethods = {
 
         try
         {
-            if( text.match(/^str_/) )
-                text = eval( text );
-
-            this.ShowThinking(text);
+            this.ShowThinking(cc_str(text));
             var className = 'ajaxmsg_' + (type == 'exception' ? 'error' : type);
             this.prevMsgClass = className;
             Element.addClassName(this.thinkingDiv,className);

@@ -8,7 +8,8 @@ ccQueryBrowser.prototype = {
         browser_id:     'browser',
         rss_link_id:    'rss_link',
         play_link_id:   'mi_play_page', // 'play_link_container'
-        stream_link_id: 'mi_stream_page'
+        stream_link_id: 'mi_stream_page',
+        autoRefresh:     true
         },
     onQueryResultsBind: null,
     onQuerySubmitBind: null,
@@ -38,7 +39,7 @@ ccQueryBrowser.prototype = {
             this.play_link   = this.options.play_link_id   ? $(this.options.play_link_id) : null;
             this.stream_link = this.options.stream_link_id ? $(this.options.stream_link_id) : null;
 
-            this.paging = this.prev_link && this.next_link;
+            this.paging = (this.prev_link != null) && (this.next_link != null);
 
             if( this.prev_link )
                 Event.observe( this.prev_link, 'click', this.onPrevClick.bindAsEventListener( this ) );
@@ -52,7 +53,8 @@ ccQueryBrowser.prototype = {
             if( this.stream_link )
                 Event.observe( this.stream_link, 'click',  this.stream_list.bindAsEventListener( this ) );
 
-            this.refresh();
+            if( this.options.autoRefresh )
+                this.refresh();
         }
         catch (e)
         {
@@ -69,22 +71,22 @@ ccQueryBrowser.prototype = {
 
     play_in_popup: function()
     {
-      var query = this.options.filters.queryString(false);
-      var url = home_url + 'playlist/popup' + q + query;
-      if( this.currOffset > 0 )
-          url += '&offset='+this.currOffset;
-      var dim = "height=300,width=550";
-      var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
+        var query = this.options.filters.queryString(false);
+        var url = home_url + 'playlist/popup' + q + query;
+        if( this.currOffset > 0 )
+            url += '&offset='+this.currOffset;
+        var dim = "height=300,width=550";
+        var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                     "resizable=1,scrollbars=1," + dim );
     },
 
     stream_list: function()
     {
-      var query = this.options.filters.queryString(false);
-      var url = home_url + 'stream/page/playlist.m3u' + q + query + '&offset='+this.currOffset;
-      var link = $('mi_stream_page');
-      link.href = url;
-      link.click();
+        var query = this.options.filters.queryString(false);
+        var url = home_url + 'stream/page/playlist.m3u' + q + query + '&offset='+this.currOffset;
+        var link = $('mi_stream_page');
+        link.href = url;
+        link.click();
     },
 
     clearUI: function() {
@@ -92,7 +94,7 @@ ccQueryBrowser.prototype = {
             this.prev_link.style.display = 'none';
         if( this.next_link )
             this.next_link.style.display = 'none';        
-        this.browser.innerHTML = '...';
+        this.browser.innerHTML = str_getting_data + '...';
         if( this.rss_link )
             this.rss_link.style.display = 'none';
         if( this.play_link )
