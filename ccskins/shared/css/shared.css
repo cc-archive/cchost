@@ -126,3 +126,7 @@ div#site_disabled_message {
 	font-weight: bold;
 	color: green;
 }
+
+#nsfw {
+	color: red;
+}

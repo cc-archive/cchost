@@ -10,6 +10,12 @@ function _t_file_macros_license_rdf(&$T,&$A)
 {
 }
 
+function _t_file_macros_show_nsfw(&$T,&$A)
+{
+    print '<p id="nsfw">' . $T->String(array('str_nsfw_t','<a href="http://en.wikipedia.org/wiki/NSFW">','</a>')) . '</p>';
+}
+
+
 function _t_file_macros_show_zip_dir(&$T,&$A)
 {
     $R =& $A['record'];

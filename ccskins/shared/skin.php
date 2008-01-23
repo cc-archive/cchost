@@ -31,6 +31,7 @@ $A['print_howididit_link'] = 'file_macros.php/print_howididit_link';
 $A['comment_thread_list'] = 'file_macros.php/print_recent_reviews';
 $A['comment_thread'] = 'file_macros.php/request_reviews';
 $A['show_zip_dir'] = 'file_macros.php/show_zip_dir';
+$A['show_nsfw'] = 'file_macros.php/show_nsfw';
 $A['upload_banned'] = 'file_macros.php/upload_banned';
 $A['upload_not_published'] = 'file_macros.php/upload_not_published';
 
