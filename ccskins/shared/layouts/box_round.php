@@ -23,6 +23,22 @@ $A['end_script_text'][] = 'cc_round_boxes();';
 { background-image: url('<?= $T->URL('images/backbox-mono.gif') ?>') } 
 </style>
 
+<!--[if lt IE 7.]> 
+<style type="text/css">
+.cssbox, .cssbox_body, .cssbox_head, .cssbox_head h2
+{ background: transparent; padding: 0px;) } 
+.cssbox {
+    border: 1px solid #DDD;
+    background: #EEE;
+    margin: 6px;
+    padding: 4px;
+}
+h2.no_box_header {
+    display: none;
+}
+</style>
+<![endif]-->
+
 
 <script type="text/javascript">
 var round_box_enabled = 1;

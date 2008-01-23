@@ -21,6 +21,14 @@
 
 ?><link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/upload_page.css')%" />
 
+<!--[if lt IE 7]> 
+<style>
+#remix_info p img, #pick_box p img {
+    position:static;
+}
+</style>
+<![endif]-->
+
 %if_null(records)%
     %return%
 %end_if% 

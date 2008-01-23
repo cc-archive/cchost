@@ -1,4 +1,7 @@
 <body>
+<!--[if lt IE 7.]> 
+<style> #tabs { background: transparent; } </style>
+<![endif]-->
 
 %if_not_empty(site-disabled)%
     <div id="site_disabled_message" style="position:absolute">%text(str_site_disabled)%</div>
