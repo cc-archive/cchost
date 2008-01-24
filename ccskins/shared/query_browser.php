@@ -125,13 +125,14 @@ p.cc_autocomp_line {
     padding: 4px;
     width:180px;
 }
-#stream_link_container, #play_link_container {
+#podcast_link_container, #stream_link_container, #play_link_container {
   float: left;
   margin-left: 21px;
   margin-bottom: 1em;
   width: 140px;
 }
 
+#podcast_link_container #mi_podcast_page,
 #play_link_container #mi_play_page,
 #stream_link_container #mi_stream_page {
     padding-left: 22px;
@@ -150,11 +151,14 @@ p.cc_autocomp_line {
     </div>
     <div id="browser_area">
         <? if( $GLOBALS['strings-profile'] == 'audio' ) { ?>
-        <div class="cc_stream_page_link" id="stream_link_container">
+        <div id="stream_link_container">
             <a href="javascript://stream" id="mi_stream_page"  style="display:none;"><span ><?= $T->String('str_stream') ?></span></a>
         </div>
-        <div class="cc_stream_page_link" id="play_link_container">
+        <div id="play_link_container">
             <a href="javascript://play win" id="mi_play_page"  style="display:none;"><span ><?= $T->String('str_play') ;?></span></a>
+        </div>
+        <div id="podcast_link_container">
+            <a id="mi_podcast_page" href="javascript://podcast"><span ><?= $T->String('str_podcast')?></span></a>
         </div>
         <? } ?>
         <div id="browser">

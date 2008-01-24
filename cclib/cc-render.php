@@ -37,23 +37,6 @@ class CCRender
 {
     function Show($username,$upload_id)
     {
-        /*
-        $uploads =& CCUploads::GetTable();
-        $record =& $uploads->GetRecordFromID($upload_id);
-        CCUpload::EnsureFiles($record,true);
-        $url = $record['files'][0]['download_url'];
-        */
-
-        /*
-        $html =<<< END
-<html>
-<body>
-<img src="$url" />
-</body>
-</html>
-END;
-        print($html);
-        exit; */
     }
 
 } // end of CCRender class

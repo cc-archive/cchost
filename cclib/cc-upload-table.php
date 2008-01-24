@@ -263,50 +263,6 @@ class CCFiles extends CCTable
         return( $_table );
     }
 
-    /**
-    * Return array of files records given an upload record
-    *
-    * @param mixed $row a row from CCUploads table
-    * @returns array $rows Returns array of file records
-    */
-    function FilesForUpload($row)
-    {
-        $upload_id = is_array($row) ? $row['upload_id'] : $row;
-
-        $where['file_upload'] = $upload_id;
-        $rows = $this->QueryRows($where);
-        for( $i = 0; $i < count($rows); $i++ )
-        {
-            $rows[$i]['file_format_info'] = unserialize($rows[$i]['file_format_info']);
-            $rows[$i]['file_extra']       = unserialize($rows[$i]['file_extra']);
-            $this->_format_file_size($rows[$i]);
-        }
-
-        return($rows);
-    }
-
-    /**
-    * Internal goodie for formatting file sizes
-    */
-    function _format_file_size(&$row)
-    {
-        $fs = $row['file_filesize'];
-        if( $fs )
-        {
-            $row['file_rawsize'] = $fs;
-            if( $fs > CC_1MG )
-                $fs = number_format($fs/CC_1MG,2) . 'MB';
-            else
-                $fs = number_format($fs/1024) . 'KB';
-            $row['file_filesize'] = " ($fs)";
-        }
-        else
-        {
-            $row['file_filesize'] = '';
-        }
-    }
-
-
 }
 
 ?>

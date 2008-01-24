@@ -363,8 +363,9 @@ function cc_filter_files(&$R)
             $F['download_url'] = ccd($CC_GLOBALS['user-upload-root'],$R['user_name'],$F['file_name']);
             $F['local_path']   = cca($CC_GLOBALS['user-upload-root'],$R['user_name'],$F['file_name']);
         }
+
         $fs = $F['file_filesize'];
-        if( $fs )
+//        if( $fs )
         {
             $F['file_rawsize'] = $fs;
             if( $fs > CC_1MG )

@@ -27,14 +27,22 @@
 
 #featured {
   float: right;
-  width: 28%;
   border: 1px solid black;
   padding: 8px;
-  background-color: #DDD;
+  /* background-color: #DDD; */
+  width: 210px;
 }
 
 .cc_playlist_item {
-  width: 290px;
+  width: 400px;
+}
+
+.cc_playlist_pagelink {
+    display: block;
+    float: left;
+    width: 200px;
+    overflow: hidden;
+    margin-right: 5px;
 }
 
 #featured h3 {
@@ -48,14 +56,12 @@
 
 .featured_info {
   border: 1px solid black;
-  background-color: #DDF;
   padding: 7px;
   margin-bottom: 5px;
 }
 
 .featured_pell {
-  border: 1px solid black;
-  background-color: white;
+  border: 3px solid #DDF;
   padding: 4px;
   margin-bottom: 5px;
 }

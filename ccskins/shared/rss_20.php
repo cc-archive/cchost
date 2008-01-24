@@ -22,6 +22,7 @@ function rss_dataview()
         upload_description as format_text_upload_description,
         upload_description as format_html_upload_description,
         CONCAT( DATE_FORMAT(upload_date,'%a, %d %b %Y %T'), '$TZ' ) as rss_pubdate
+        %columns%
         FROM cc_tbl_uploads
         JOIN cc_tbl_user ON upload_user=user_id
         JOIN cc_tbl_licenses ON upload_license=license_id

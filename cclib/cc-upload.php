@@ -74,18 +74,6 @@ class CCUpload
         CCPage::AddBreadCrumbs($trail,true);
     }
 
-    function EnsureFiles(&$record,$fetch_if_missing)
-    {
-        if( empty($record['files']) )
-        {
-            if( !$fetch_if_missing )
-                return;
-
-            $files =& CCFiles::GetTable();
-            $record['files'] = $files->FilesForUpload($record);
-        }
-    }
-
     function AdminUpload($upload_id)
     {
         $uploads =& CCUploads::GetTable();

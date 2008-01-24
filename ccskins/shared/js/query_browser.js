@@ -9,6 +9,7 @@ ccQueryBrowser.prototype = {
         rss_link_id:    'rss_link',
         play_link_id:   'mi_play_page', // 'play_link_container'
         stream_link_id: 'mi_stream_page',
+        podcast_link_id: 'mi_podcast_page',
         autoRefresh:     true
         },
     onQueryResultsBind: null,
@@ -38,6 +39,7 @@ ccQueryBrowser.prototype = {
             this.rss_link    = this.options.rss_link_id    ? $(this.options.rss_link_id) : null;
             this.play_link   = this.options.play_link_id   ? $(this.options.play_link_id) : null;
             this.stream_link = this.options.stream_link_id ? $(this.options.stream_link_id) : null;
+            this.podcast_link = this.options.podcast_link_id ? $(this.options.podcast_link_id) : null;
 
             this.paging = (this.prev_link != null) && (this.next_link != null);
 
@@ -49,9 +51,6 @@ ccQueryBrowser.prototype = {
 
             if( this.play_link )
                 Event.observe( this.play_link, 'click',    this.play_in_popup.bindAsEventListener( this ) );
-
-            if( this.stream_link )
-                Event.observe( this.stream_link, 'click',  this.stream_list.bindAsEventListener( this ) );
 
             if( this.options.autoRefresh )
                 this.refresh();
@@ -78,15 +77,6 @@ ccQueryBrowser.prototype = {
         var dim = "height=300,width=550";
         var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                     "resizable=1,scrollbars=1," + dim );
-    },
-
-    stream_list: function()
-    {
-        var query = this.options.filters.queryString(false);
-        var url = home_url + 'stream/page/playlist.m3u' + q + query + '&offset='+this.currOffset;
-        var link = $('mi_stream_page');
-        link.href = url;
-        link.click();
     },
 
     clearUI: function() {
@@ -151,14 +141,29 @@ ccQueryBrowser.prototype = {
                 this.next_link.style.display = next_mode;
             }
 
-            if( this.rss_link )
+
+            var queryStr = '?' + this.options.filters.queryString(false);
+            var p = queryStr.parseQuery();
+
+            if( this.stream_link != null )
             {
-                this.rss_link.style.display = 'block';
-                var query = this.getQuery(false);
-                var params = ('?' + query).toQueryParams();
-                params.f = 'rss';
-                var feed_url = query_url + params.toQueryString();
-                this.rss_link.href = feed_url;
+                p.f = 'm3u';
+                p.offset = this.currOffset;
+                var url = home_url + 'api/query/stream.m3u' + q + $H(p).toQueryString();
+                this.stream_link.href = url;
+            }
+
+            if( (this.rss_link != null) || (this.podcast_link != null) )
+            {
+                p.f = 'rss';
+                var feed_url = query_url + $H(p).toQueryString();
+                if( this.rss_link != null )
+                {
+                    this.rss_link.style.display = 'block';
+                    this.rss_link.href = feed_url;
+                }
+                if( this.podcast_link != null )
+                    this.podcast_link.href = feed_url;
             }
 
             /* this is audio stuff.... */

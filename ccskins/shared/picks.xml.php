@@ -53,7 +53,7 @@ function _t_picks_picks_links(&$T,&$A)
     {
 ?>
         <div class="pickslinks">
-        <a id="mi_podcast_page" href="<?= $A['home-url']?>podcast/page?<?= $A['qstring']?>"><span ><?= $T->String('str_podcast')?></span></a>
+        <a id="mi_podcast_page" href="<?= $A['query-url']?>f=rss&<?= $A['qstring']?>"><span ><?= $T->String('str_podcast')?></span></a>
         <a id="mi_stream_page" href="<?= $A['home-url']?>stream/page/playlist.m3u?<?= $A['qstring']?>">
             <span><?= $T->String('str_stream')?></span></a>
         <a id="mi_play_page" href="javascript://play win" onclick="pickwinplay('<?= $A['qstring']?>');">

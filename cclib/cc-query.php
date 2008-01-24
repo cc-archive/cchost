@@ -683,7 +683,6 @@ class CCQuery
             $this->sql_p['columns'] = '((upload_num_scores*4) + (upload_num_playlists*2) + (upload_num_plays/2)) AS qrank';
         }
 
-
         $sorts = $this->GetValidSortFields();
 
         if( !empty($sorts[$args['sort']]) )
