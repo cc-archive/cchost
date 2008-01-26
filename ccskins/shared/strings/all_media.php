@@ -542,6 +542,7 @@ $GLOBALS['str_topic_translate']            = _('Translate');
 
 $GLOBALS['str_permalink']              = _('permalink');
 
+$GLOBALS['str_uploading']  = _('Uploading...');
 $GLOBALS['str_uploading_msg']  = _('This could take a while... please be patient while the file is uploading');
 $GLOBALS['str_upload_browser'] = _('Browse Uploads');
 

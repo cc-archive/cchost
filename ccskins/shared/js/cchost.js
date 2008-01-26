@@ -561,36 +561,24 @@ var ccFormMask = Class.create();
 ccFormMask.prototype = {
 
     text: null,
-    clickKiller: null,
+    title: null,
 
-    initialize: function(form_id,msg,hook_submit)
+    initialize: function(form_id,msg,hook_submit,title)
     {
         this.text = msg;
+        this.title = title;
         if( hook_submit )
             Event.observe(form_id,'submit', this.dull_screen.bindAsEventListener(this) );
     },
 
     dull_screen: function()
     { 
-        this.clickKiller = this.killClick.bindAsEventListener(this);
-        new Insertion.Before( $('header'), '<div id="bodymask">'+this.text+'</div>' );
-        Event.observe('bodymask','click',this.clickKiller,true);
-        Event.observe('bodymask','keypress',this.clickKiller,true);
-        Element.scrollTo('bodymask');
+        Modalbox.show( this.text, {title: this.title, 
+                                   width: 600, height: 400, 
+                                   overlayClose: false, 
+                                   transitions: false,
+                                   slideDownDuration: 0.0 } );
         return true;
-    },
-
-    killClick: function(e)
-    {
-        Event.stop(e);
-        return false;
-    },
-
-    cancelMask: function()
-    {
-        Event.stopObserving('bodymask','click',this.clickKiller,true);
-        Event.stopObserving('bodymask','keypress',this.clickKiller,true);
-        $('bodymask').remove();
     }
 }
 

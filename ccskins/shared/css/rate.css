@@ -25,7 +25,6 @@
 	font-weight: bold;
 	cursor: pointer;
 	background-image: url('../images/rate_it.gif');
-	display: block;
 	white-space: nowrap;
 }
 

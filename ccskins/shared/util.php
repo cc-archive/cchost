@@ -80,11 +80,11 @@ function _t_util_disable_submit_button(&$T,&$A)
 
 function _t_util_hide_upload_form(&$T,&$A)
 {
-    $msg = str_replace("\n", ' ', addslashes($T->String('str_uploading_msg')));
-    $text = '<div id="maskmsg">' .$msg. '</div>';
+    $msg = '<h2 id="form_mask_msg">' . str_replace("\n", ' ', addslashes($T->String('str_uploading_msg'))) . '</h2>';
+    $title = $T->String('str_uploading');
 ?>
 <script type="text/javascript">
-var the_formMask = new ccFormMask(form_id,'<?= $text ?>',true);
+    var the_formMask = new ccFormMask(form_id,'<?= $msg ?>',true,'<?= $title ?>');
 </script>
 <?
 }

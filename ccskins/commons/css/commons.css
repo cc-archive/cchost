@@ -194,7 +194,7 @@ ul#sub_tabs li.selected_tab a span { border-bottom: 0px; background: url("../ima
 	font-size: 0.85em;
 }
 
-.menu_group ul li a {
+.menu_group ul li a, .menu_group ul li a:visited {
 	text-decoration: none;
 	font-weight: normal;
 }
@@ -261,8 +261,8 @@ div.taglinks {
 	word-spacing: 0.5em;
 }
 
-div.taglinks a,
-a.taglink {
+div.taglinks a, div.taglinks a:visited,
+a.taglink, a.taglink:visited {
 	font-weight: normal;
 }
 

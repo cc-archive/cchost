@@ -9,7 +9,7 @@ function _t_html_form_html_form(&$T,&$A)
     if ( !empty($F['form_id']))
         print "<script type=\"text/javascript\">form_id = '{$F['form_id']}';</script>\n";
 
-    $onsubmit = empty($F['hide_on_submit']) ? '' : 'onsubmit="return the_formMask.dull_screen();" ';
+    $onsubmit = ''; // empty($F['hide_on_submit']) ? '' : 'onsubmit="return the_formMask.dull_screen();" ';
     $enctype  = empty($F['form-data'])      ? '' : 'enctype="' . $F['form-data'] . '"';
     $html =<<<EOF
     <form  action="{$F['form_action']}" 
