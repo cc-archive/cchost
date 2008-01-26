@@ -31,6 +31,9 @@ a, a:visited { color: #223344; }
 
 a.cc_user_link, a.cc_user_link:visited, a.cc_user_link:link  { color: #686868; font-weight: normal;}
 a.cc_file_link, a.cc_file_link:visited, a.cc_file_link:link  { color: #669966; font-weight: bold; letter-spacing:0.05em;}
+.menu_group a.cc_file_link:visited, 
+.menu_group a.cc_user_link:visited,
+.menu_group a.cc_file_link:link  { font-weight: normal; }
 .cc_breadcrumbs a { color: #777777; } 
 .cc_breadcrumbs a:hover { color: black; text-decoration: none; }
 </style>

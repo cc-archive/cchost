@@ -35,7 +35,7 @@ function vroot_hook()
 {
     var e = $('vroot_selector');
     var cfg = e.options[ e.selectedIndex ].value;
-    document.location = root_url + cfg + '/admin/site/local';
+    window.location.href = root_url + cfg + '/admin/site/local';
 }
 Event.observe( 'vroot_selector', 'change',  vroot_hook );
 

@@ -119,7 +119,9 @@ ccTagFilter.prototype = {
     },
 
     onSubmitClick: function(event) {
-        document.location.href =  this.options.target_url + $('utg').value.replace(' ','+');
+        var url = this.options.target_url + $('utg').value.replace(' ','+');
+        location.href =  url;
+        return false;
     }
 }
 </script>

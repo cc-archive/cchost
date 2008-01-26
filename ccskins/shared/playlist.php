@@ -26,7 +26,8 @@ var filters = new ccQueryBrowserFilters(
           var promo_tag = '<?= $A['plargs']['promo_tag']?>';
           if( promo_tag.length > 0 )
             qstring += '&promo_tag=' + promo_tag;
-          document.location.href = qstring;
+          window.location.href = qstring;
+          return false;
         }
      } );
 

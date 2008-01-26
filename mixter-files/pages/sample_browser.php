@@ -63,14 +63,14 @@ function _t_sample_browser_browser_page($T,&$A) {
   {
     var newval = selobj.options[ selobj.selectedIndex ].value;
     var loc = get_base_url();
-    document.location = loc + '?ts=' + newval;
+    window.location.href = loc + '?ts=' + newval;
   }
 
   function new_tag_limiter(selobj)
   {
     var newval = selobj.options[ selobj.selectedIndex ].value;
     var loc = get_base_url();
-    document.location = loc + '?sa=' + newval;
+    window.location.href = loc + '?sa=' + newval;
   }
 
   function new_tag_filter(selobj)
@@ -89,7 +89,7 @@ function _t_sample_browser_browser_page($T,&$A) {
 
   function get_base_url()
   {
-    var loc = '' + document.location;
+    var loc = '' + window.location.href;
     var regex = new RegExp(/\?..=[0-9a-z]+/);
     if( regex.exec( loc ) )
        loc = loc.replace( regex, '' );

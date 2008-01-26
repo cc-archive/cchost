@@ -115,30 +115,6 @@ function _t_util_print_bread_crumbs(&$T,&$A)
         }
     } 
 
-    if ( !empty($A['crumb_tags'])) 
-    {
-        ?><select  onchange="document.location = this.options[this.selectedIndex].value;" style="font-size:smaller;"><?
-
-        $carr104 = $A['crumb_tags'];
-        $cc104= count( $carr104);
-        $ck104= array_keys( $carr104);
-        for( $ci104= 0; $ci104< $cc104; ++$ci104)
-        { 
-            $A['tagopt'] = $carr104[ $ck104[ $ci104 ] ];
-            if ( !empty($A['tagopt']['selected'])) 
-            {
-                ?><option  selected="selected" value="<?= $A['tagopt']['url']?>"><?= $A['tagopt']['text']?></option><?
-            }
-
-            if ( !($A['tagopt']['selected']) ) 
-            {
-                ?><option  value="<?= $A['tagopt']['url']?>"><?= $A['tagopt']['text']?></option><?
-            }
-        } 
-
-        ?></select><?
-    }
-
     ?></div><?
 
 }

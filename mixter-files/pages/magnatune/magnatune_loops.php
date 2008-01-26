@@ -71,12 +71,12 @@ function on_pick_genre()
    var glistbox = $('magnatunegenres');
    var opt = glistbox.options[glistbox.selectedIndex];
    var loc = get_mbase_url();
-   document.location = loc + '?genre=' + opt.value + '#catalog';
+   window.location.href = loc + '?genre=' + opt.value + '#catalog';
 }
 
 function get_mbase_url()
 {
-  var loc = '' + document.location;
+  var loc = '' + window.location.href;
   return loc.split('?')[0];
 }
 

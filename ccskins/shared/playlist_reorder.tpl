@@ -58,7 +58,8 @@ function on_reorder_click()
 {
     var _file_order = Sortable.serialize('file_order');
     var url = home_url + 'playlist/editorder/%(playlist_id)%/cmd' + q + _file_order;
-    document.location = url;
+    window.location.href = url;
+    return false;
 }
 Event.observe('submit_file_order','click',on_reorder_click);
 Sortable.create("file_order",{constraint:false});

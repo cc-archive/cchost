@@ -43,7 +43,7 @@ ccPoolAlpha.prototype = {
 
     onPoolAlphaChange: function() {
         var sel = $('pool_alphas');
-        document.location = home_url + 'pools/pool/' + this.thisPool + '/' + sel.options[sel.selectedIndex].value;
+        window.location.href = home_url + 'pools/pool/' + this.thisPool + '/' + sel.options[sel.selectedIndex].value;
     }
 }
 
