@@ -121,8 +121,9 @@ Modalbox.Methods = {
 	},
 	
 	_appear: function() { // First appearing of MB
-		if(navigator.appVersion.match(/\bMSIE\b/))
+		if(window.IEversion && (window.IEversion < 7.0)) {
 			this._toggleSelects();
+        }
 		this._setOverlay();
 		this._setWidth();
 		this._setPosition();
@@ -391,7 +392,8 @@ Modalbox.Methods = {
 		/* Initialized will be set to false */
 		this.initialized = false;
 		
-		if(navigator.appVersion.match(/\bMSIE\b/))
+		//if(navigator.appVersion.match(/\bMSIE\b/))
+		if(window.IEversion && (window.IEversion < 7.0)) 
 			this._toggleSelects(); // Toggle back 'select' elements in IE
 		this.event("afterHide"); // Passing afterHide callback
 		this.setOptions(this._options); //Settings options object into intial state
@@ -435,13 +437,24 @@ Modalbox.Methods = {
 		html.style.height = height;
 		html.style.overflow = overflow; 
 	},
-	// For IE browsers -- hiding all SELECT elements
+	// For IE < 7 browsers -- hiding all SELECT elements
 	_toggleSelects: function() {
 		var selects = $$("select");
+
+        // ccHack: invoke with 'setStyle' doesn't seem to work, 
+        //     also 'visiblity' doesn't fix the select bleed problem this
+        //     intended to address:
+        //
+        // selects.invoke('setStyle', {'visibility': 'hidden'});  
+
 		if(this.initialized) {
-			selects.invoke('setStyle', {'visibility': 'hidden'});
+            selects.each( function(e) {
+                e.style.display = 'none';
+            });
 		} else {
-			selects.invoke('setStyle', {'visibility': ''});
+            selects.each( function(e) {
+                e.style.display = '';
+            });
 		}
 			
 	},

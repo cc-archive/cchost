@@ -20,7 +20,7 @@ function cc_round_box( e ) {
         e.removeChild(h2);
     }
 
-    var html = '<div id="' + id_o + '" style="display:none;width='+wid+';" class="cssbox"><div class="cssbox_head"><h2 id="' + 
+    var html = '<div id="' + id_o + '" style="display:none;width:'+wid+'px;" class="cssbox"><div class="cssbox_head"><h2 id="' + 
                 h2_id + '" >' + caption + '</h2></div><div id="' + id + '" class="cssbox_body">  </div></div>';
     new Insertion.Before(e,html);
     var e = Element.remove(e);

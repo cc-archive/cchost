@@ -11,9 +11,9 @@ Use in <HEAD> with DEFER keyword wrapped in conditional comments:
 */
 
 var arVersion = navigator.appVersion.split("MSIE")
-var version = parseFloat(arVersion[1])
+var IEversion = parseFloat(arVersion[1])
 
-if ((version >= 5.5) && (document.body.filters)) 
+if ((IEversion >= 5.5) && (document.body.filters)) 
 {
 
    for(var i=0; i<document.images.length; i++)
