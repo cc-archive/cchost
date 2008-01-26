@@ -78,11 +78,12 @@ var str_review_write              ='<?=addslashes($T->String('str_review_write')
 var str_see_results               ='<?=addslashes($T->String('str_see_results'))?>';
 var str_tags                      ='<?=addslashes($T->String('str_tags'))?>';
 var str_thinking                  ='<?=addslashes($T->String('str_thinking'))?>';
-var str_topic_delete                  ='<?=addslashes($T->String('str_topic_delete'))?>';
-var str_topic_edit                  ='<?=addslashes($T->String('str_topic_edit'))?>';
-var str_topic_reply_to_yourself  ='<?=addslashes($T->String('str_topic_reply_to_yourself'))?>';
-var str_topic_reply_with_quote  ='<?=addslashes($T->String('str_topic_reply_with_quote'))?>';
-var str_topic_reply_to_sn        ='<?=addslashes($T->String('str_topic_reply_to_sn'))?>';
+var str_topic_delete              ='<?=addslashes($T->String('str_topic_delete'))?>';
+var str_topic_edit                ='<?=addslashes($T->String('str_topic_edit'))?>';
+var str_topic_reply               ='<?=addslashes($T->String('str_topic_reply'))?>';
+var str_topic_reply_to_yourself   ='<?=addslashes($T->String('str_topic_reply_to_yourself'))?>';
+var str_topic_reply_with_quote    ='<?=addslashes($T->String('str_topic_reply_with_quote'))?>';
+var str_topic_reply_to_sn         ='<?=addslashes($T->String('str_topic_reply_to_sn'))?>';
 
 var str_trackback_error           ='<?=addslashes($T->String('str_trackback_error'))?>';
 var str_trackback_no_email        ='<?=addslashes($T->String('str_trackback_no_email'))?>';

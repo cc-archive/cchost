@@ -530,6 +530,7 @@ $GLOBALS['str_tags_s']         = _('Tags %s');
 $GLOBALS['str_thinking']       = _('thinking...');
 $GLOBALS['str_title']          = _('Title');
 
+$GLOBALS['str_topic_reply'] = _('Reply');
 $GLOBALS['str_topic_reply_to_yourself'] = _('Reply to yourself');
 $GLOBALS['str_topic_reply_to_s']        = _('Reply to %s');
 $GLOBALS['str_topic_reply_to_sn']        = _('Reply to #{1}');

@@ -56,9 +56,12 @@ class CCEditorials
             CCUtil::SendBrowserTo( ccl('files',$user_name,$upload_id) );
         }
     
+        require_once('cclib/cc-page.php');
         require_once('cclib/cc-query.php');
+        $page = CCPage::GetPage();
+        $title = $page->String('str_editors_picks');
         $query = new CCQuery();
-        $q = 't=ed_picks&tags=editorial_pick&title=str_editors_picks';
+        $q = 't=ed_picks&tags=editorial_pick&title='.$title;
         $args = $query->ProcessAdminArgs($q);
         $query->Query($args);
     }
