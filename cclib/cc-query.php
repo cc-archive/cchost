@@ -118,12 +118,12 @@ class CCQuery
         }
         else
         {
-            $cname = cc_temp_dir() . '/query_cache_' . $args['cache'] . '.txt';
+            $cname = cc_temp_dir() . '/query_cache_' . $this->args['cache'] . '.txt';
             if( file_exists($cname) )
             {
                 include($cname);
                 $this->records =& $_cache_rows;
-                $this->_generate_records();
+                //$this->_generate_records();
             }
             else
             {

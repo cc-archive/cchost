@@ -287,7 +287,7 @@ class CCSkin
     * @param mixed  $value The value that will be substituted for the 'name'
     * @param string $macroname The name of a specific macro to invoke during template generation
     */
-    function Call($macropath)
+    function Call($macropath,$forceParse=false)
     {
         list( $filename, $funcname ) = $this->LookupMacro($macropath);
         if( function_exists($funcname) )
@@ -296,7 +296,7 @@ class CCSkin
             $funcname($this,$this->vars);
             return;
         }
-        $this->_inner_include($filename,$funcname);
+        $this->_inner_include($filename,$funcname,$forceParse);
     }
 
 
@@ -547,11 +547,11 @@ class CCSkin
         return $skinphp;
     }
 
-    function _parse($file)
+    function _parse($file,$forceParse=false)
     {
         $file = str_replace( '\\', '/', $file );
 
-        if( !in_array( $file, $this->files ) )
+        if( $forceParse || !in_array( $file, $this->files ) )
         {
             preg_match( '#([^/]+)\.([a-z]+)$#i', $file, $m );
 
@@ -594,12 +594,12 @@ class CCSkin
     }
 
 
-    function _inner_include($path,$funcname='')
+    function _inner_include($path,$funcname='',$forceParse=false)
     {
         //CCDebug::Log("_inner call: $path / $funcname");
 
         $this->_push_path($path);
-        $this->_parse($path);
+        $this->_parse($path,$forceParse);
         if( !empty($funcname) )
         {
             $funcname = trim($funcname); // fix this elsewhere!

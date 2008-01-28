@@ -5,6 +5,7 @@
 
 <div  id="djback" class="box">
 <h2><?= $T->String('str_radio_station') ;?></h2>
+<div id="channel_content">
 <div  id="channel_intro"><?= $T->String( array('str_radio_create',$A['site-title']) ) ;?></div>
 
 <table  id="channels" cellspacing="0" cellpadding="0">
@@ -91,8 +92,8 @@ if( !empty($chart['ratings']) )
     <a  href="" id="mi_stream_page"><span><?= $T->String('str_stream')?></span></a>
     <a  href="" id="mi_podcast_page"><span><?= $T->String('str_podcast')?></span></a>
 </div>
-
-</div> <!-- box -->
+</div> <!-- channel_content aka when in doubt thrown a div around it -->
+</div> <!-- djback/box -->
 </form>
 </div><!-- radio container -->
 <script type="text/javascript">

@@ -28,9 +28,12 @@ $Id$
   padding-right: 7px;
 }
 
+#channel_content {
+  width: 500px;
+}
 
 #djback {
-  width: 500px;
+   width: 600px;
   height: 240px;
 }
 
