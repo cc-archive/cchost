@@ -36,17 +36,17 @@ error_reporting($cc_error_level);
 *  If not present, it probably means we haven't installed
 *  or upgraded properly yet.
 */
-if( file_exists('cc-config-db.php') )
-{
-    /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
-    die('<html><body>ccHost has not been properly upgraded. 
-        Please <a href="ccadmin/">
-        follow these steps</a> for a successful
-        upgrade.</body></html>');
-}
-
 if( !file_exists('cc-host-db.php') )
 {
+    if( file_exists('cc-config-db.php') )
+    {
+        /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
+        die('<html><body>ccHost has not been properly upgraded. 
+            Please <a href="ccadmin/">
+            follow these steps</a> for a successful
+            upgrade.</body></html>');
+    }
+
     die('<html><body>ccHost has not been properly installed. 
         Please <a href="ccadmin/">
         follow these steps</a> for a successful
@@ -73,7 +73,7 @@ if( file_exists('.cc-ban.txt') )
 * We make a special include for debug so that modules can turn 
 * it on as quickly as possible.
 */
-require_once('cclib/cc-debug.php');
+require_once('cchost_lib/cc-debug.php');
 CCDebug::Enable(true);
 CCDebug::Chronometer($_t);
 
@@ -93,17 +93,17 @@ CCDebug::InstallErrorHandler(true);
 *  compiled into PHP
 */
 if( !function_exists('gettext') )
-   require_once('ccextras/cc-no-gettext.inc');
+   require_once('cchost_lib/ccextras/cc-no-gettext.inc');
 
 /*
 *  Include core modules and extras that come with the 
 *  ccHost package
 */
-require_once('cc-includes.php');
-$cc_extras_dirs = 'ccextras';
-include('cc-inc-extras.php');
-require_once('cc-custom.php');
-require_once('cc-template-api.php');
+require_once('cchost_lib/cc-includes.php');
+$cc_extras_dirs = 'cchost_lib/ccextras';
+include('cchost_lib/cc-inc-extras.php');
+require_once('cchost_lib/cc-custom.php');
+require_once('cchost_lib/cc-template-api.php');
 
 /*
 * Configuration initialized here
@@ -133,7 +133,7 @@ if( file_exists('ccadmin') )
 if( !empty($CC_GLOBALS['extra-lib']) )
 {
     $cc_extras_dirs = $CC_GLOBALS['extra-lib'];
-    include('cc-inc-extras.php');
+    include('cchost_lib/cc-inc-extras.php');
 }
 
 /*
@@ -156,7 +156,7 @@ CCEvents::PerformAction();
 *  Show the resulting page
 */
 CCDebug::Chronometer($_p);
-require_once('cclib/cc-page.php');
+require_once('cchost_lib/cc-page.php');
 CCPage::Show();           
 
 /*

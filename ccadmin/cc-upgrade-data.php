@@ -3,7 +3,6 @@
 function fix_all()
 {
     fix_collabs();
-    fix_tags();
     fix_pool_resync();
     flush();
     fix_topics();
@@ -39,12 +38,6 @@ EOF;
     print("done<br />\n");
 }
 
-function fix_tags()
-{
-    $sql = "UPDATE cc_tbl_uploads SET upload_tags = CONCAT(',',upload_tags,',') WHERE SUBSTRING(upload_tags,1,1) <> ','";
-    CCDatabase::Query($sql);
-    print("Updload tags updated<br />\n");
-}
 
 function fix_topics()
 {

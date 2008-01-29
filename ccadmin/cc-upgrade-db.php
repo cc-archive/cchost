@@ -75,43 +75,5 @@ function upgrade_db()
     }
 }
 
-/*
-    These are changed 
-*/
-/*
-'config_type'  => 'config',
-'config_type'  => 'settings',
-'config_type'  => 'tab_pages',
-'config_type'  => 'logging',
-'config_type'  => 'menu',
-*/
-/* these are new 
-*/
-/*
-'config_type'  => 'skin-settings',
-'config_type'  => 'extras',
-'config_type'  => 'site-logo',
-*/
-/*
-I think these are unchanged (?)
-
-        'config_type'  => 'clangmap',
-'config_type'  => 'channels',
-'config_type'  => 'throttle',
-'config_type'  => 'throttle_rules',
-'config_type'  => 'submit_forms',
-'config_type'  => 'groups',
-'config_type'  => 'ttag',
-'config_type'  => 'format-allow',
-'config_type'  => 'name-masks',
-'config_type'  => 'id3-tag-masks',
-'config_type'  => 'chart',
-'config_type'  => 'licenses',
-'config_type'  => 'pseudo-verify',
-
-Mixter only:
-'config_type'  => 'remote_files',
-
-*/
 
 ?>
