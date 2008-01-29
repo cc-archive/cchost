@@ -16,7 +16,7 @@ function _t_playerembed_eplayer(&$T,&$_TV)
 <script  type="text/javascript" src="<?= $T->URL('/js/swfobject.js') ?>"></script>
 <div  id="flash_goes_here"></div>
 <script  type="text/javascript">
-    var swfObj = new SWFObject('<?= $_TV['root-url']?>cclib/fplayer/ccmixter2.swf', 'uploadMovie', '1', '1', '8', "#FFFFFF" );
+    var swfObj = new SWFObject('<?= $_TV['root-url']?>cchost_lib/fplayer/ccmixter2.swf', 'uploadMovie', '1', '1', '8', "#FFFFFF" );
     swfObj.addVariable('allowScriptAccess','always');
     swfObj.write('flash_goes_here');
     var flashVersion = deconcept.SWFObjectUtil.getPlayerVersion();

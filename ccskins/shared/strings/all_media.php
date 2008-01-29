@@ -295,6 +295,7 @@ $GLOBALS['str_name']                  = _('Name');
 $GLOBALS['str_new_playlist']          = _('new collection');
 $GLOBALS['str_new_remixes']           = _('New Remixes');
 $GLOBALS['str_new_uploads']           = _('New Uploads');
+$GLOBALS['str_news']                  = _('News');
 $GLOBALS['str_no_chart']              = _('No Chart');
 $GLOBALS['str_nsfw']                  = _('Not Safe For Work');
 $GLOBALS['str_nsfw_mark_this_upload'] = _('Mark this upload as %s if it contains questionable language.');

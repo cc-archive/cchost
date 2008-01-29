@@ -107,3 +107,24 @@ div#site_disabled_message {
 #nsfw {
 	color: red;
 }
+
+#blurbs {
+}
+
+.blurb_name {
+	font-variant: small-caps;
+	display: block;
+	margin: 1.0em 1.2em 0px 0px;
+	text-align: center;
+	background-color: #CCC;
+	padding: 2px;
+}
+
+.blurb_text {
+	display: block;
+	margin: 0px 1.2em 0px 0px;
+	padding: 0.3em 0px 0.3em 0.6em;
+	border-left: 3px solid #CCC;
+	border-right: 3px solid #CCC;
+	border-bottom: 3px solid #CCC;
+}
