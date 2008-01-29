@@ -42,7 +42,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-require_once('cclib/cc-form.php');
+require_once('cchost_lib/cc-form.php');
 
 class MxSnapContestForm extends CCForm
 {

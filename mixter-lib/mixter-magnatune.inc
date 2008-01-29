@@ -77,7 +77,7 @@ EOF;
 
     function Loops()
     {
-        require_once('cclib/cc-page.php');
+        require_once('cchost_lib/cc-page.php');
         $this->check_for_loop_artists();
 
         $args['loop_preview_url']  = ccc('magnatune','view','contest','sources') . '#loops';
@@ -172,7 +172,7 @@ EOF;
                 $fields = array( 'pool_item_description', 'pool_item_name', 'pool_item_artist' );
                 break;
         }
-        require_once('cclib/cc-search.php');
+        require_once('cchost_lib/cc-search.php');
         $filter = CCSearch::BuildFilter($fields,$query,'any');
         $filter = "($filter) AND pool_item_pool = '$pool_id'";
         $pool_items =& CCPoolItems::GetTable();
@@ -208,8 +208,8 @@ EOF;
 
     function _show_preview(&$args,$macro)
     {
-        require_once('cclib/cc-page.php');
-        require_once('cclib/cc-template.php');
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-template.php');
         global $CC_GLOBALS;
         $file = CCPage::GetViewFile('magnatune_preview.php');
         $template = new CCSkinMacro( $file . '/' . $macro);

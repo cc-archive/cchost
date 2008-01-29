@@ -63,7 +63,7 @@ class CCSampleBrowser
             exit;
         }
 
-        require_once('cclib/cc-query.php');
+        require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('f=php&dataview=default&tags=sample&search='.$term);
         list( $recs ) = $query->Query($args);
@@ -125,7 +125,7 @@ EOF;
             $match = 'any';
 
 
-        require_once('cclib/cc-dataview.php');
+        require_once('cchost_lib/cc-dataview.php');
         $dv = new CCDataView();
         $tag_filter = $dv->MakeTagFilter($tags,$match);
 
@@ -202,7 +202,7 @@ EOF;
             exit;
         }
 
-        require_once('cclib/cc-template.php');
+        require_once('cchost_lib/cc-template.php');
         $template = new CCSkinMacro( 'sample_browser.php/browser_list');
         $template->SetAllAndPrint($args);
         exit;
@@ -247,7 +247,7 @@ EOF;
 
     function _get_lic_filters($tag_filter,$collapse=false)
     {
-        require_once('cclib/cc-dataview.php');
+        require_once('cchost_lib/cc-dataview.php');
         $dv = new CCDataView();
         $filter = $dv->MakeTagFilter($tag_filter);
         $group_key = $collapse ? 'license_tag' : 'upload_license';
@@ -277,7 +277,7 @@ EOF;
 
     function _get_tags()
     {
-        require_once('cclib/cc-dataview.php');
+        require_once('cchost_lib/cc-dataview.php');
         $dv = new CCDataView();
         $where = $dv->MakeTagFilter('sample');
         $sql = "SELECT upload_extra FROM cc_tbl_uploads WHERE (upload_banned=0) AND (upload_published=1) AND $where";
@@ -309,7 +309,7 @@ EOF;
         //CCDebug::Enable(true);
 
         $all_tags = strtolower( join(',', $tagstrs ) );
-        require_once('cclib/cc-tags.php');
+        require_once('cchost_lib/cc-tags.php');
         $all_tags = CCTag::TagSplit($all_tags);
 
         if( !empty( $_GET['ts'] ) )
