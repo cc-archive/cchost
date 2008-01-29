@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 
 chdir('..');
 
-require_once('cclib/cc-tpl-parser.php');
+require_once('cchost_lib/cc-tpl-parser.php');
 
 if( empty($argv[1]) || (!empty($argv[2]) && ($argv[2] != '-#')) )
     die( syntax() );

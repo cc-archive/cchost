@@ -21,7 +21,7 @@ function main()
     chdir('..');
     define('IN_CC_HOST',1);
     define('TC_PRETTY', 1 );
-    require_once('cclib/cc-tal-parser.php');
+    require_once('cchost_lib/cc-tal-parser.php');
 
     recur_mkdir( 'cchost_files/pages' );
     $files = glob('mixter-files/*.xml');
