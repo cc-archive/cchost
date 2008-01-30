@@ -1,3 +1,8 @@
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template radio -->
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/radio.css'); ?>" />
 
 <div id="radio_container">

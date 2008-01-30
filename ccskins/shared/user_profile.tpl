@@ -1,4 +1,7 @@
-<?/* %%
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/* %%
 [meta]
     type = profile
     desc = _('User profile page')
@@ -27,7 +30,7 @@ EOF;
 }
 [/dataview] %%
 */?>
-
+<!-- template user_profile -->
 %if_null(records/0)%
     %return%
 %end_if%

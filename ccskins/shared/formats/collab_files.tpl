@@ -51,26 +51,26 @@ EOF;
 */
 
 ?>
-
+<!-- template collab_files -->
 %if_null(records)%
     &nbsp;%text(str_collab_no_files)%&nbsp;
 %return%
 %end_if%
 %loop(records,R)%
 <div class="file_line" id="_file_line_%(#R/upload_id)%">
-<div class="ccud light_border"><?=  join(', ',array_diff(split(',',$R['upload_extra']['ccud']),array('media'))) ?></div>
+   <div class="ccud light_border"><?=  join(', ',array_diff(split(',',$R['upload_extra']['ccud']),array('media'))) ?></div>
    <div class="file_info"><a class="fname cc_file_link" href="%(#R/file_page_url)%">%(#R/upload_name)%</a> 
       %text(str_by)% <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a></div>
 
 %if_not_empty(#R/is_collab_owner)%
-    <div ><a href="javascript://remove " id="_remove_%(#R/upload_id)%" class="file_cmd file_remove">
-    <span >%text(str_collab_remove2)%</span></a></div>
-    <div ><a href="javascript://publish" id="_publish_%(#R/upload_id)%" class="file_cmd file_publish">
+    <div><a href="javascript://remove " id="_remove_%(#R/upload_id)%" class="file_cmd file_remove small_button">
+        <span >%text(str_collab_remove2)%</span></a></div>
+    <div><a href="javascript://publish" id="_publish_%(#R/upload_id)%" class="file_cmd file_publish small_button">
         <span id="_pubtext_%(#R/upload_id)%">
             %if_null(#R/upload_published)%<!-- -->%text(str_collab_publish)% %else%<!-- -->%text(str_collab_hide)% %end_if%
         </span></a>
     </div>
-    <div><a href="javascript://tags" id="_tags_%(#R/upload_id)%" class="file_cmd file_tags">%text(str_collab_tags)%</a></div>
+    <div><a href="javascript://tags" id="_tags_%(#R/upload_id)%" class="file_cmd file_tags small_button">%text(str_collab_tags)%</a></div>
 %end_if%
 
     <div class="tags" id="_user_tags_%(#R/upload_id)%">%(#R/upload_extra/usertags)%</div>

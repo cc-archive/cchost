@@ -1,8 +1,12 @@
-
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template tag_filter -->
 <style text="type/css">
 
-.autocomp_label, .cc_autocomp_stat, 
-a.autocomp_links {
+.autocomp_label, .cc_autocomp_stat
+{
     display: block;
     float: right;
     margin-left: 9px;
@@ -10,7 +14,8 @@ a.autocomp_links {
 }
 
 a.autocomp_links {
-    border: 1px solid #777;
+   float: right;
+   margin-left: 9px;
 }
 
 #user_tags_filter p.cc_autocomp_line {
@@ -53,10 +58,13 @@ a.autocomp_links {
 </style>
 
 <div id="user_tags_filter" style="position:relative">
-<a class="cc_autocomp_clear autocomp_links" style="" href="javascript://clear list" id="_ap_clear_utg">%text(str_filter_clear)%</a>
-<a class="cc_autocomp_submit autocomp_links" href="javascript://show list" id="_ap_submit_utg">%text(str_filter_go)%</a>
+<a class="cc_autocomp_clear autocomp_links cc_gen_button" 
+    href="javascript://clear list" id="_ap_clear_utg"><span>%text(str_filter_clear)%</span></a>
+<a class="cc_autocomp_submit autocomp_links cc_gen_button" 
+    href="javascript://results" id="_ap_submit_utg"><span>%text(str_filter_go)%</span></a>
 <span class="cc_autocomp_stat" id="_ap_stat_utg"></span> 
-<a class="cc_autocomp_show autocomp_links" href="javascript://show list" id="_ap_show_utg">%text(str_user_filter_tags)%</a>
+<a class="cc_autocomp_show autocomp_links cc_gen_button" 
+    href="javascript://show list" id="_ap_show_utg"><span>%text(str_user_filter_tags)%</span></a>
 
 <div style="clear: both">&nbsp;</div>
     <div style="overflow: scroll; display: none; height: 170px;float:right;" 

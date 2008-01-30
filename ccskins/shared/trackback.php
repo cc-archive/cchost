@@ -1,4 +1,7 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/*
 [meta]
     type = template_component
     desc = _('Trackback feature');
@@ -27,6 +30,7 @@ $text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name']
                     '<span>'.$R['user_real_name'].'</span>' ) );
 $title = $T->String('str_trackback_title_' .$ttype);
 ?>
+<!-- tempalte trackback -->
 <div id="trackback_response">
 </div>
 <form id="trackback_form" name="trackback_form" style="z-index:200;display:block;">

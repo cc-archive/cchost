@@ -184,7 +184,7 @@ ccQueryBrowserFilters.prototype = {
         formInfo.html = ' <div class="filterform" id="' + formInfo.id + '" ><div id="' 
                        + formInfo.innerId + '" style="display:none"><a href="javascript://close filter" id="' 
                        + formInfo.closeId 
-                       + '" class="close_button">'+str_close+'</a>'
+                       + '" class="close_button small_button"><span>'+str_close+'</span></a>'
                    ;
 
         var formatter = formatter_arg || new ccFormatter();

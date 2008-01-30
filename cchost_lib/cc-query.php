@@ -941,7 +941,8 @@ class CCQuery
         {
             return array( 'name' => array( _('Topic name'), 'topic_name' ),
                           'date' => array( _('Topic date'), 'topic_date' ),
-                          'type' => array( _('Topic type'), 'topic_type' )
+                          'type' => array( _('Topic type'), 'topic_type' ),
+                          'left' => array( _('Topic tree'), 'topic_left' ),
                         );
         }
 

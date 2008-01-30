@@ -1,4 +1,8 @@
-
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template recommends -->
 <h1><?= $T->String('str_recommends_browser') ?></h1>
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css'); ?>" title="Default Style"></link>
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css'); ?>" title="Default Style"></link>

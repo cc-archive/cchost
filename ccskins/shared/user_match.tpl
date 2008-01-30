@@ -1,4 +1,7 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/*
 [meta]
     type = template_component
     desc = _('People like me page')
@@ -41,6 +44,7 @@ EOF;
 }
 [/dataview]
 */?>
+<!-- template user_match -->
 <link rel="stylesheet" href="%url(css/user_list.css)%" title="Default Style" />
 <style>
 .whatido, .whatilike {

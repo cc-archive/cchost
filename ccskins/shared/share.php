@@ -1,7 +1,9 @@
 <?
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
+?>
+<!-- template share -->
+<?
 //------------------------------------- 
 function _t_share_share_popup(&$T,&$A) 
 {

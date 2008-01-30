@@ -1,8 +1,12 @@
 <?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
 
 function _t_forum_misc_forum_admin($T,&$A) {
   
-?><table  class="forumadmin">
+?>
+<!-- tempalte forum_misc -->
+<table  class="forumadmin">
 <?
 
     $carr104 = $A['fadmin']['forum_groups'];

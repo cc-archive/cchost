@@ -1,4 +1,7 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/*
 [meta]
     type     = template_component
     desc     = _('for displaying edpicks')
@@ -63,6 +66,7 @@ EOF;
 [/dataview]
 */
 ?>
+<!-- tempalte ed_picks -->
 <style type="text/css">
 #edpicks td {
     vertical-align: top;

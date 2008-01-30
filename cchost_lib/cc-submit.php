@@ -219,6 +219,14 @@ class CCSubmit
         {
             if( empty($types[$key]['action']) )
                 $types[$key]['action'] = ccl('submit',$key);
+            // legacy handling
+            if( !empty($types[$key]['logo']) )
+            {
+                if( !file_exists($types[$key]['logo']) )
+                {
+                    unset($types[$key]['logo']);
+                }
+            }
         }
         CCPage::PageArg('submit_form_infos', $types, 'html_form.php/submit_forms');
     }
@@ -380,7 +388,8 @@ class CCSubmit
         }
 
         $url = ccl('admin','newsubmitform');
-        $prompt .= "<p><a class=\"cc_gen_button\" href=\"$url\"><span>" . _('Add a new form type...') . '</span></a></p>';
+        $prompt .= "<p><a class=\"cc_gen_button\" style=\"float:left;\" href=\"$url\"><span>" 
+                    . _('Add a new form type...') . '</span></a><div style=\"clear:both;\">&nbsp;</div></p>';
 
         CCPage::PageArg('client_menu',$args,'print_client_menu');
         CCPage::PageArg('client_menu_help',$prompt);

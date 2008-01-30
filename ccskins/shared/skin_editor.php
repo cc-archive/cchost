@@ -1,5 +1,9 @@
 <?
-
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template skin_editor -->
+<?
 function _t_skin_editor_edit_font_schemes(&$T,&$A) 
 {
     $props = $A['field']['props'];

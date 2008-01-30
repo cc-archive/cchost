@@ -1,4 +1,8 @@
-<?/*%%
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+
+/*%%
 [meta]
     type = template_component
     desc = _('Playlist Reorder')
@@ -29,7 +33,7 @@ EOF;
 }                  
 [/dataview]
 %%*/?>
-
+<!-- template playlist_reorder -->
 <style type="text/css">
 ul.ddex    { list-style: none; padding: 0px; width: 50%; margin:0px auto;}
 ul.ddex li { padding: 1px; margin: 2px; border: 1px solid #999}

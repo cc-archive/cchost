@@ -1,3 +1,6 @@
+<? if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
 %macro(form_fields)%
 <table class="form_table flat_form" cellspacing="0" cellpadding="0">
     %loop(curr_form/html_form_fields,F)%

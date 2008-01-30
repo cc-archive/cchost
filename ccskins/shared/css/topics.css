@@ -2,13 +2,16 @@
 	Topic thread
 */
 table.cc_topic_thread {
+	clear: left;
 }
 
-table.cc_topic_thread div.cc_topic_commands a {
-	display: block;
+div.forum_cmds a {
 	float: left;
 	margin-right: 1.0em;
-	padding: 2px;
+}
+table.cc_topic_thread div.cc_topic_commands a {
+	float: left;
+	margin-right: 1.0em;
 }
 
 table.cc_topic_thread td {
@@ -117,6 +120,7 @@ table.cc_topic_table td.cc_topic_thumb a {
 .leftby_link {
 	text-align: right;
 	margin: 0px 2em 2em 0px;
+	float: right;
 }
 a.topic_flag {
 	float: right;
@@ -128,3 +132,13 @@ a.topic_permalink {
 	display: block;
 	margin-right: 1em;
 }
+
+.topic_deleted {
+	width: 60%;
+	margin: 1em 0px 0px 0px;
+	padding: 2px 0px 2px 4em;
+}
+.topic_deleted a.user_link {
+	font-weight: normal;
+}
+	

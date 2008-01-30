@@ -1,6 +1,8 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
+?>
+<!-- template playlist -->
+<?
 
 function _t_playlist_playlist_create_dyn(&$T,&$A) {
   ?><link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>

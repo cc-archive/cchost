@@ -17,10 +17,10 @@ function enable_other()
 
 chdir('..');
 
-require_once('cclib/cc-defines.php');
+require_once('cchost_lib/cc-defines.php');
 
 if( !function_exists('gettext') )
-    require_once('ccextras/cc-no-gettext.inc');
+    require_once('cchost_lib/ccextras/cc-no-gettext.inc');
 
 $step = empty($_REQUEST['up_step']) ? '1' : $_REQUEST['up_step'];
 
@@ -283,13 +283,12 @@ function update_config_db(&$err)
     $dbconfig ['dbuser']['v']   = $CC_DB_CONFIG['db-user'];
     $dbconfig ['dbpw']['v']     = $CC_DB_CONFIG['db-password'];
     install_db_config($dbconfig,$err);
-    rename('cc-config-db.php','cc-config-db-OLD-.php');
 }
 
 function setup_old_db()
 {
-    require_once('cclib/cc-debug.php');
-    require_once('cclib/cc-database.php');
+    require_once('cchost_lib/cc-debug.php');
+    require_once('cchost_lib/cc-database.php');
     CCDebug::Enable(true);
     CCDatabase::_config_db('cc-config-db.php');
 }
@@ -347,6 +346,8 @@ function untangle_the_freakin_config_mess($local_base_dir,$new_config)
     $new_people = $_POST['new_people'];
     if( $old_config['user-upload-root'] != $new_people )
     {
+        if( file_exists($new_people) )
+            rename($new_people,$new_people . '_previous_' . time());
         rename($old_config['user-upload-root'],$new_people);
         print("Renamed '{$old_config['user-upload-root']}' to '{$new_people}'<br />\n");
         $new_config['user-upload-root'] = $new_people;
@@ -435,6 +436,10 @@ function untangle_the_freakin_config_mess($local_base_dir,$new_config)
                     $P['function'] = 'qry';
                     $P['tags'] = $qstring;
                 }
+                if( !empty($P['module']) )
+                {
+                    $P['module'] = str_replace('cclib','cclib_host',$P['module']);
+                }
             }
         }
         $data = addslashes(serialize($pages));
@@ -442,6 +447,7 @@ function untangle_the_freakin_config_mess($local_base_dir,$new_config)
         mysql_query($sql);
     }
     print "Tab pages updated<br />\n";
+
 }
 
 print '</body></html>';

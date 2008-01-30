@@ -37,7 +37,10 @@ ccAutoPick.prototype = {
         this.options = Object.extend( { selClass: 'cc_autocomp_selected',
                                         pickClass: 'cc_autocomp_picked',
                                         lineTag: 'p',
-                                        borderClass: 'cc_autocomp_border' },
+                                        borderClass: 'cc_autocomp_border',
+                                        showButtonClass: 'cc_autocomp_show',
+                                        clearButtonClass: 'cc_autocomp_clear'
+                                       },
                                       options );
     },
 
@@ -89,18 +92,19 @@ ccAutoPick.prototype = {
         {
             value = '';
         }
-        
+alert(this.options.showButtonClass);        
+
         return '<table cellspacing="0" cellpadding="0" style="">' +
                '<tr><td colspan="2">' +
                     '<span class="cc_autocomp_stat" id="' + stat_id + '"><i>' + pre_text + '</i></span> ' +
                '</td></tr>' +
                '<tr><td>'  + 
-                   '<a class="cc_autocomp_show" href="javascript://show list" id="' + show_id + '">' + str_filter_show_list + '</a>'  + 
-               '</td><td>' +
-                   '<a class="cc_autocomp_clear" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + '">'
-                    + str_filter_clear + '</a></td></tr>' +
+                   '<a class="'+this.options.showButtonClass+'" href="javascript://show list" id="' + show_id + '"><span>' + str_filter_show_list + 
+                   '</a></span></td><td>' +
+                   '<a class="'+this.options.clearButtonClass+'" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + 
+                    '"><span>' + str_filter_clear + '</span></a></td></tr>' +
                '<tr><td colspan="2"><input type="hidden" name="' + id + '" id="' + id + '" value="' + value + '" />' +
-                      '<div class="cc_autocomp_list" id="' + list_id + '"><!-- --></div>' +
+                    '<div class="cc_autocomp_list" id="' + list_id + '"><!-- --></div>' +
                     '<div style="border-left: 180px transparent solid;font-size: 2px;height:2px;"></div>' + 
                '</td></tr></table>';
     },
@@ -114,7 +118,8 @@ ccAutoPick.prototype = {
             Effect.BlindUp(list);
             //list.style.display = 'none';
             this.is_showing = false;
-            link.innerHTML = this.options.str_filter_show_list || str_filter_show_list;
+            var t = this.options.str_filter_show_list || str_filter_show_list;
+            link.innerHTML = '<span>' + t + '</span>';
         }
         else
         {
@@ -122,7 +127,8 @@ ccAutoPick.prototype = {
             list.style.display = 'block';
             Effect.Appear(list);
             this.is_showing = true;
-            link.innerHTML = this.options.str_filter_hide_list || str_filter_hide_list
+            var t = this.options.str_filter_hide_list || str_filter_hide_list;
+            link.innerHTML = '<span>' + t + '</span>';
         }
     },
 

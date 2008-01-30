@@ -1,7 +1,10 @@
+<? if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?><!-- template forum_listing -->
 <link href="%url(css/forum.css)%" rel="stylesheet" title="Default Style" type="text/css" />
 <div class="forum_cmds">
 %loop(forum_cmds,FC)%
-    <a href="%(#FC/url)%">%(#FC/text)%</a>
+    <a href="%(#FC/url)%" class="cc_gen_button"><span>%text(#FC/text)%</span></a>
 %end_loop%
 </div>
 <table class="forum_listing">

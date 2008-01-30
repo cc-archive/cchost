@@ -1,4 +1,6 @@
-
+<? if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?><!-- template forum_index -->
 <link href="%url(css/forum.css)%" rel="stylesheet" title="Default Style" type="text/css" />
 
 <div class="forum_index">

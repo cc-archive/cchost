@@ -135,7 +135,7 @@ EOF;
             $ret['topic_cmds'][] = $rec;
         }
 
-        CCUtil::ReturnAjaxData($ret);
+        CCUtil::ReturnAjaxData($ret,false);
    }
 
 }

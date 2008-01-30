@@ -1,3 +1,7 @@
+<? if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template query_browser -->
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css'); ?>" title="Default Style"></link>
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css'); ?>" title="Default Style"></link>
 <style type="text/css">

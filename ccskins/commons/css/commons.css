@@ -271,3 +271,49 @@ div#footer {
 	top: 13px;
 	padding-top: 0.3em;
 }
+
+a.cc_gen_button {
+    display: block;
+    background: url('../images/button_left.gif') no-repeat left top;
+    padding: 0 0 0 5px;
+    text-decoration: none;
+    color: #666;
+    white-space: nowrap;
+    font-family: Verdana;
+    font-size: 9px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+a.cc_gen_button span {
+    display: block;
+    text-align: center;
+    padding: 5px 7px 6px 2px;
+    background: url('../images/button_right.gif') no-repeat right top;
+}
+
+a.cc_gen_button:hover {
+    background-position: 0% -23px;
+    color:black;
+}
+
+a.cc_gen_button:hover span {
+    background-position: 100% -23px;
+}
+
+a.small_button {
+	padding: 2px;
+	border: 1px solid #888;
+	background-color: #DDD;
+	font-weight: normal;
+}
+
+a.small_button span { 
+	border-right: #666;
+	border-bottom: #666;
+}
+a.small_button:hover {
+	border: 1px solid #000;
+	background-color: #FFF;
+	text-decoration: none;
+}

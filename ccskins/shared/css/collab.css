@@ -39,6 +39,7 @@ fieldset {
 	clear: left;
 }
 
+
 a.fname {
 	font-weight: bold;
 }
@@ -175,12 +176,20 @@ a.fname {
 	font-size: 11px;
 }
 
-#credit_editor, #tags_editor {
+#credit_editor, #tags_editor, #contact_editor {
 	border: 1px solid #666;
 	background-color:white;
 	padding: 3px;
 	margin: 10px;
 	width: 60%;
+}
+
+#contact_editor {
+	width: 60%;
+}
+
+#contact_editor textarea {
+	margin-right: 1em;
 }
 
 #collabs_table td {
@@ -200,6 +209,11 @@ a.fname {
 
 a.collab_upload {
 	font-weight: bold;
+}
+
+#collab_topic_add {
+	margin-top: 1em;
+	float: left;
 }
 
 /* show_collabs */

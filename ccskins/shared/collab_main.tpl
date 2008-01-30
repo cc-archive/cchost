@@ -1,4 +1,7 @@
-<? /*
+<? 
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/*
 [meta]
     type = template_component
     desc = _('Browse Collaborations')
@@ -26,6 +29,7 @@ EOF;
 [/dataview]
 */ ?>
  
+<!-- template collab_main -->
 
 <? $rows = array_chunk($A['records'], 2); ?>
 

@@ -1,4 +1,8 @@
-<?/*%%
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+
+/*%%
 [meta]
     type     = template_component
     desc     = _('Display Pools')
@@ -33,6 +37,7 @@ EOF;
 }
 [/dataview]
 %%*/?>
+<!-- template pools_list -->
 <link rel="stylesheet" title="Default Style" type="text/css" href="%url(css/pool_listing.css)%" />
 %loop(records,R)%
 <div id="pools_list">

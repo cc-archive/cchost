@@ -1,4 +1,7 @@
+<!-- template playerembed -->
 <?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
 
 function _t_playerembed_eplayer(&$T,&$_TV) 
 {

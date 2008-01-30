@@ -1,4 +1,8 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+
+/*
 [meta]
     type = template_component
     desc = _('Most popular playlist uploads')
@@ -31,7 +35,7 @@ EOF;
 [/dataview]
 */?>
 
-
+<!-- template pop_playlists -->
 <div  class="cc_pl_div" id="_cart_1" style="margin-top: 12px;">
 <?
 

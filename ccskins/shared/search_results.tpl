@@ -1,4 +1,8 @@
-
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template search_results -->
 %macro(search_results_all)%
 <link rel="stylesheet" type="text/css" href="%url(css/search.css)%" title="Default Style" />
 %if_not_null(search_miss_msg)%

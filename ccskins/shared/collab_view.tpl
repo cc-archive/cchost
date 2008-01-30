@@ -9,12 +9,13 @@ $collab = $A['collab'];
 $C = $collab['collab'];
 $collab_id = $C['collab_id'];
 ?>
+<!-- template collab_view -->
 <link  rel="stylesheet" type="text/css" href="%url('css/collab.css')%" title="Default Style"></link>
 <fieldset>
 <legend class="dark_bg light_color">%text(str_info)%</legend>
     %if_not_null(#collab/is_owner)%
-    <div  style="float:right">
-        <a  id="commentcommand" href="%(home-url)%collab/edit/%(#collab_id)%"><span >%text(str_collab_edit)%</span></a>
+    <div style="float:right">
+        <a class="cc_gen_button" href="%(home-url)%collab/edit/%(#collab_id)%"><span>%text(str_collab_edit)%</span></a>
     </div>
     %end_if%
 
@@ -82,7 +83,7 @@ $collab_id = $C['collab_id'];
     <p >%text(str_collab_this_conv)%:</p>
     <?= cc_query_fmt('noexit=1&nomime=1&f=html&t=collab_thread&datasource=topics&ord=ASC&type=collab&upload='.$collab_id); ?>
     <div class="c_commands">
-        <a href="%(home-url)%collab/topic/add/%(#collab_id)%" id="commentcommand"><span >%text(str_collab_add_topic)%</span></a>
+        <a href="%(home-url)%collab/topic/add/%(#collab_id)%" class="cc_gen_button" id="collab_topic_add" ><span>%text(str_collab_add_topic)%</span></a>
     </div>
 </fieldset>
 %end_if%       

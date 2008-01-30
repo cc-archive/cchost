@@ -1,4 +1,7 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/*
     [file_id] => 12744
     [file_upload] => 12735
     [file_name] => admin_-_2fingersGlow.png
@@ -18,6 +21,7 @@
     [file_filesize] =>  (6KB)
     [file_order] => 0
 */?>
+<!-- template edit_files_links -->
 <style type="text/css">
 ul.ddex    { list-style: none; padding: 0px; width: 70%; margin:0px auto;}
 ul.ddex li { padding: 4px; margin: 5px; border: 1px solid #999}

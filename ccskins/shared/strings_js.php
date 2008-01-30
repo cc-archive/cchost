@@ -84,7 +84,7 @@ var str_topic_reply               ='<?=addslashes($T->String('str_topic_reply'))
 var str_topic_reply_to_yourself   ='<?=addslashes($T->String('str_topic_reply_to_yourself'))?>';
 var str_topic_reply_with_quote    ='<?=addslashes($T->String('str_topic_reply_with_quote'))?>';
 var str_topic_reply_to_sn         ='<?=addslashes($T->String('str_topic_reply_to_sn'))?>';
-
+var str_topic_translate           ='<?=addslashes($T->String('str_topic_translate'))?>';
 var str_trackback_error           ='<?=addslashes($T->String('str_trackback_error'))?>';
 var str_trackback_no_email        ='<?=addslashes($T->String('str_trackback_no_email'))?>';
 var str_trackback_no_link         ='<?=addslashes($T->String('str_trackback_no_link'))?>';

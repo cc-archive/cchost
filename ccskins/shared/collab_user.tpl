@@ -1,4 +1,7 @@
-%%
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/*
 [meta]
     type = template_component
     desc = _('Browse a users collab (profile tab)')
@@ -38,8 +41,8 @@ EOF;
                   'sql_count' => $sql_count );
 }
 [/dataview]
-%%
-
+*/?>
+<!-- template collab_user -->
 <style type="text/css">
 #collab_user_listing {
    width: 500px;

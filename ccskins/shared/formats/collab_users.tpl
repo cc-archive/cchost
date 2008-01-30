@@ -43,8 +43,8 @@ EOF;
 [/dataview]
 
 */
-
 ?>
+<!-- template collab_users -->
 
 %loop(records,R)%
 <div class="user_line" id="_user_line_%(#R/user_name)%">
@@ -62,15 +62,15 @@ EOF;
      </span></div>
   <div class="credit" id="_credit_%(#R/user_name)%">%(#R/collab_user_credit)%</div>
   %if_not_null(#R/is_collab_owner)%
-      <div><a href="javascript://edit credit" id="_user_credit_%(#R/user_name)%" class="user_cmd edit_credit">
+      <div><a href="javascript://edit credit" id="_user_credit_%(#R/user_name)%" class="user_cmd edit_credit small_button">
         <span>%text(str_collab_credit2)%</span></a></div>
       %if_null(#R/is_owner_record)%
-          <div><a href="javascript://remove user" id="_user_remove_%(#R/user_name)%" class="user_cmd remove_user">
+          <div><a href="javascript://remove user" id="_user_remove_%(#R/user_name)%" class="user_cmd remove_user small_button">
             <span>%text(str_collab_remove2)%</span></a></div>
       %end_if%
   %end_if%
   %if_not_null(#R/is_collab_member)%
-      <div><a href="javascript://contact" id="_contact_%(#R/user_name)%" class="user_cmd edit_contact">
+      <div><a href="javascript://contact" id="_contact_%(#R/user_name)%" class="user_cmd edit_contact  small_button">
         <span>%text(str_collab_send_email)%</span></a> </div>
   %end_if%
 </div>

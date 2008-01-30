@@ -1,4 +1,7 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/*
 [meta]
     type = template_component
     desc = _('People page')
@@ -40,6 +43,7 @@ EOF;
 }
 [/dataview]
 */?>
+<!-- template user_list -->
 <link rel="stylesheet" href="%url(css/user_list.css)%" title="Default Style" />
 
 <h1>%text(people)%</h1>

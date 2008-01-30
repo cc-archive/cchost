@@ -1,4 +1,8 @@
-
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template user_tags -->
 %call('tag_filter')%
 <script>
 new ccTagFilter( { url: home_url + 'browse' + q + 'user=%(user_tags_user)%', 

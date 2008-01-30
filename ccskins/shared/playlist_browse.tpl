@@ -1,4 +1,7 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+/*
 [meta]
     type = template_component
 [/meta]
@@ -26,7 +29,7 @@ EOF;
                    'e'  => array() );
 }
 */?>
-
+<!-- tempalte playlist_browse -->
 %loop(records,PL)%  
   <div  class="cc_playlist_line med_bg" id="_pl_%(#PL/cart_id)%">%(#PL/cart_name)% 
         <span class="cc_playlist_dyn_user">%text(str_pl_created_by)% <!-- -->%(#PL/user_real_name)%</span>

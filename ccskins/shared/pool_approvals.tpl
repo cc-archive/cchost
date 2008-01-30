@@ -1,4 +1,8 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+
+/*
 [meta]
     type = template_component
     desc = _('Pool approval (admin)')
@@ -44,6 +48,7 @@ $post_url = ccl( 'admin', 'pools', 'approve', 'submit' );
 $heads = array( _('Approve'), _('Delete'), _('None'), _('Upload'),_('Author'), _('Site/Links') );
 $tr = array( '<' => '&lt;', '>' => '&gt' );
 ?>
+<!-- tempalte pool_approvals -->
 <style>
 .cc_pool_approval_list table td {
     vertical-align: top;

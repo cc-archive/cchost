@@ -1,5 +1,5 @@
-<?if( !defined('IN_CC_HOST') )
-    die('Welcome to ccHost');
+<!-- template license -->
+<?
 
 function _t_license_license_enable(&$T,&$A) {
   ?><input  type="checkbox" name="<?= $A['field']['license']['license_id']?>" id="<?= $A['field']['license']['license_id']?>" checked="<?= empty($A['field']['value']) ? null : $A['field']['value']; ?>"></input>

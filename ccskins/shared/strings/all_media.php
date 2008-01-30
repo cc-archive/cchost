@@ -538,6 +538,7 @@ $GLOBALS['str_topic_reply_to_sn']        = _('Reply to #{1}');
 $GLOBALS['str_topic_edit_s']            = _("Edit topic '%s'");
 $GLOBALS['str_topic_view']              = _('View Topic');
 $GLOBALS['str_topic_delete']        = _('Delete');
+$GLOBALS['str_topic_deleted']        = _('*** Topic deleted by author ***');
 $GLOBALS['str_topic_edit']            = _("Edit");
 $GLOBALS['str_topic_reply_with_quote']            = _("Reply with quote");
 $GLOBALS['str_topic_translate']            = _('Translate');
@@ -554,7 +555,7 @@ $GLOBALS['str_user_forum_posts']   = _('Forum posts');
 $GLOBALS['str_user_listing']       = _('People');
 $GLOBALS['str_user_notifications'] = _('Notifications');
 $GLOBALS['str_user_publicize']     = _('Publicize');
-$GLOBALS['str_user_filter_tags']     = _('Click here edit tags');
+$GLOBALS['str_user_filter_tags']     = _('Edit tags');
 
 $GLOBALS['str_video']                 = _('Video');
 $GLOBALS['str_working']               = _('working...');

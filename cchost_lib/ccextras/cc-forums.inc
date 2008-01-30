@@ -314,7 +314,7 @@ EOF;
         else
         {
             $q = '&thread=-1'; // yea, magic hack
-            $title = $page->String('str_forum');
+            $title = $page->String('str_forums');
         }
 
         $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
@@ -545,10 +545,9 @@ EOF;
         
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('paging=off&f=page&t=topic_thread&datasource=topics&title=' . $row['topic_name']);
+        $args = $query->ProcessAdminArgs('sort=left&paging=off&f=page&t=topic_thread&datasource=topics&title=' . $row['topic_name'],array(),false);
         $sqlargs['where'] = 'topic.topic_thread=' . $thread_id;
         $query->QuerySQL($args,$sqlargs);
-
         $name = $row['forum_name'] . '::' . $row['topic_name'];
         $this->_add_feed_links( $thread_id, '', '', $name );
         $this->_build_bread_crumb_trail($row['forum_id'],$row['topic_name']);

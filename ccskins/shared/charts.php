@@ -1,7 +1,8 @@
-<?if( !defined('IN_CC_HOST') )
+<? if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
-}?><div >
+?>
+<!-- template charts -->
+<div >
 
 <style >
 table.statstable {

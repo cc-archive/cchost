@@ -1,4 +1,6 @@
 <?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
 
 /*
     This file is for last minute overriding of default

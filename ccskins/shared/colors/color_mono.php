@@ -22,7 +22,7 @@
 .med_border { color: #A0A0A0; }
 
 .med_light_bg { background-color: #DDDDDD; }
-.med_light_color { color: #DDDDDD; }
+.med_light_color { color: #CCC; }
 .med_light_border { color: #DDDDDD; }
 
 .selected_area { background-color: #000000; color: #FFFFFF; }

@@ -2,7 +2,9 @@
 
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
-
+?>
+<!-- template tags -->
+<?
 //------------------------------------- 
 function _t_tags_taglinks(&$T,&$A) 
 {

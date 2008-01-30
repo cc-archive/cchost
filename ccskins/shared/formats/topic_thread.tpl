@@ -14,7 +14,7 @@ function topic_thread_dataview()
 
     $sql =<<<EOF
 SELECT  topic.topic_id, IF( COUNT(parent.topic_id) > 2, (COUNT(parent.topic_id) - 1) * 30, 0 ) AS margin,
-        topic.topic_left, topic.topic_right,
+        topic.topic_left, topic.topic_right, topic.topic_deleted,
         IF( COUNT(parent.topic_id) > 2, 1, 0 ) as is_reply, 
         topic.topic_text as format_html_topic_text, 
         user_real_name, user_name, user_num_posts,
@@ -47,19 +47,22 @@ EOF;
 }
 [/dataview]
 */?>
-
+<!-- template topic_thread -->
 <link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
 
 <div class="forum_cmds">
 %loop(thread_commands,TC)%
-    <a href="%(#TC/url)%">%text(#TC/text)%</a>
+    <a class="cc_gen_button" href="%(#TC/url)%"><span>%text(#TC/text)%</span></a>
 %end_loop%
 </div>
 
 <table class="cc_topic_thread" cellspacing="0" cellpadding="0">
 %loop(records,R)%
-<? $thread_ids[] = $R['topic_id']; ?>
 <tr>
+%if_not_null(#R/topic_deleted)%
+    <td colspan="2"><div class="topic_deleted med_light_color">%text(str_topic_deleted)%</div></td>
+%else%
+    <? $thread_ids[] = $R['topic_id']; ?>
     %if_not_null(#R/is_reply)%
     <td>&nbsp;<a name="%(#R/topic_id)%"></a></td>
     <td class="cc_topic_reply" style="padding-left:%(#R/margin)%px">
@@ -98,9 +101,11 @@ EOF;
         <div class="cc_topic_commands med_light_bg" id="commands_%(#R/topic_id)%"></div>
     </td>
     %end_if%
+%end_if%
 </tr>
 %end_loop%
 </table>
+%call(prev_next_links)%
 <script type="text/javascript">
 if( user_name )
 {

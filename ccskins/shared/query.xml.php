@@ -1,7 +1,9 @@
 <?if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-?><style >
+?>
+<!-- template query -->
+<style >
 
 #ptable,
 #ftable { 

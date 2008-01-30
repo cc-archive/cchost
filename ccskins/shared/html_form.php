@@ -1,3 +1,7 @@
+<? if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- tempalte html_form -->
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/form.css') ?>" title="Default Style" />
 <script type="text/javascript" src="<?= $T->URL('js/form.js') ?>"></script>
 

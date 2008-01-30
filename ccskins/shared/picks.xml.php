@@ -1,3 +1,7 @@
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?><!-- template picks -->
 <h1><?= $T->String('str_edpicks_hot_tracks'); ?></h1>
 
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/picks.css') ?>" />

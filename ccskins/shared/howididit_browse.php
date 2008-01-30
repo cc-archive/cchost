@@ -1,4 +1,8 @@
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
 
+?><!-- tempalte howididit_browse -->
  <div class="box"><?= $T->String('str_hidi_help') ?></div>
  <div class="cc_howididit_links">
     <?= $T->String('str_hidi_sort_by') ?>

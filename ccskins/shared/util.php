@@ -158,12 +158,12 @@ function _t_util_prev_next_links(&$T,&$A)
     print '<table id="cc_prev_next_links"><tr >';
 
     if ( !empty($A['prev_link'])) 
-        print "<td ><a href=\"{$A['prev_link']}\"><span >{$A['back_text']}</span></a></td>\n";
+        print "<td ><a class=\"cc_gen_button\" href=\"{$A['prev_link']}\"><span >{$A['back_text']}</span></a></td>\n";
 
     print '<td  class="cc_list_list_space">&nbsp</td>';
 
     if ( !empty($A['next_link'])) 
-        print "<td ><a href=\"{$A['next_link']}\"><span >{$A['more_text']}</span></a></td>\n";
+        print "<td ><a class=\"cc_gen_button\" href=\"{$A['next_link']}\"><span >{$A['more_text']}</span></a></td>\n";
 
     print '</tr></table>';
 

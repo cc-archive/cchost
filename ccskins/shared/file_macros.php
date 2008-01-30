@@ -1,4 +1,6 @@
 <?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
 
 function _t_file_macros_print_howididit_link(&$T,&$A)
 {

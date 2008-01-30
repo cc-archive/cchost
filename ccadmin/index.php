@@ -126,7 +126,7 @@ function step_4()
     require_once('cclib/cc-config.php');
     require_once('cclib/cc-util.php');
     if( !function_exists('gettext') )
-       require_once('ccextras/cc-no-gettext.inc'); // ugh, ccextras
+       require_once('cchost_lib/ccextras/cc-no-gettext.inc'); // ugh, ccextras
 
     $configs =& CCConfigs::GetTable();
     $settings = $configs->GetConfig('settings');
@@ -359,7 +359,7 @@ function install_tables(&$f,&$errs)
     require_once( 'cclib/cc-lics-install.php');
     require_once( 'cclib/cc-util.php' );
     if( !function_exists('gettext') )
-       require_once('ccextras/cc-no-gettext.inc'); // ugh, ccextras
+       require_once('cchost_lib/ccextras/cc-no-gettext.inc'); // ugh, ccextras
     
     CCDebug::Enable(true) ;
 

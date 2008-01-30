@@ -1,6 +1,9 @@
 <?
-
-
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template reviews -->
+<?
 if( empty($_GET['offset']) )
 {
     $T->Call('reviews_recent_edit');

@@ -1,3 +1,8 @@
+<? 
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- template playlist_audio -->
 %if_null(records)%
     %return%
 %end_if%

@@ -1,4 +1,8 @@
-<?/*
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+
+/*
 [meta]
     type     = template_component
     desc     = _('Page shown after successful submission')
@@ -27,7 +31,9 @@ EOF;
 [/dataview]
 */
 
-?><link rel="stylesheet" type="text/css" href="<?= $T->URL('css/after_submit.css') ?>" /><?
+?>
+<!-- template after_submit -->
+<link rel="stylesheet" type="text/css" href="<?= $T->URL('css/after_submit.css') ?>" /><?
 
 $R =& $A['records'][0];
 

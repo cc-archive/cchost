@@ -1,4 +1,8 @@
-
+<?
+if( !defined('IN_CC_HOST') )
+    die('Welcome to ccHost');
+?>
+<!-- remix_search -->
 <style type="text/css">
 div#remix_search_controls {
 }

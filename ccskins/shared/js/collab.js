@@ -140,8 +140,8 @@ ccCollab.prototype = {
         // style="position:absolute;background:white;padding: 10px;"
         var html = '<div id="tags_editor" >'+str_collab_tags_label+
                       ': <input type="text" id="tags_edit" value="' + tags +
-                     '" /> <a href="javascript://ok tags" id="ok_tags">'+str_ok+'</a> ' +
-                     '<a href="javascript://ok edit" id="cancel_tags">'+str_cancel+'</a></div>';
+                     '" /> <a class="small_button" href="javascript://ok tags" id="ok_tags"><span>'+str_ok+'</span></a> ' +
+                     '<a class="small_button" href="javascript://ok edit" id="cancel_tags"><span>'+str_cancel+'</span></a></div>';
         new Insertion.Before(file_line,html);
         //Position.clone( file_line, $('tags_editor'), { setHeight: false, setWidth: false } ); // 
         file_line.style.display = 'none';
@@ -162,8 +162,8 @@ ccCollab.prototype = {
         this.userCreditValue = credit.innerHTML;
         var text = str_collab_enter_role.replace(/%s/,user_name);
         var html = '<div id="credit_editor">'+text+': <input type="text" id="credit_edit" value="' + this.userCreditValue +
-                     '" /> <a href="javascript://ok edit" id="ok_edit">'+str_ok+'</a> ' +
-                     '<a href="javascript://ok edit" id="cancel_edit">'+str_cancel+'</a></div>';
+                     '" /> <a class="small_button"href="javascript://ok edit" id="ok_edit"><span>'+str_ok+'</span></a> ' +
+                     '<a class="small_button"href="javascript://ok edit" id="cancel_edit"><span>'+str_cancel+'</span></a></div>';
         new Insertion.Before(user_line,html);
         user_line.style.display = 'none';
         this.okWatcher = this.onCreditOk.bindAsEventListener(this,user_name);
@@ -182,8 +182,8 @@ ccCollab.prototype = {
         this.userContact = user_name;
         text = str_collab_send_mail_to.replace(/%s/,user_name);
         var html = '<div id="contact_editor">'+text+':<br /><textarea style="width:60%;height:35px;" id="contact_edit"></textarea>' +
-                     '<a href="javascript://contact ok" id="ok_contact">'+str_ok+'</a> ' +
-                     '<a href="javascript://contact cancel" id="cancel_contact">'+str_cancel+'</a></div>';
+                     '<a class="small_button" href="javascript://contact ok" id="ok_contact"><span>'+str_ok+'</span></a> ' +
+                     '<a class="small_button" href="javascript://contact cancel" id="cancel_contact"><span>'+str_cancel+'</span></a></div>';
         new Insertion.Before(user_line,html);
         user_line.style.display = 'none';
         this.okContactWatcher     = this.onContactOk.bindAsEventListener(this,user_name);
