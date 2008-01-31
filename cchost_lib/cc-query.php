@@ -661,7 +661,7 @@ class CCQuery
         {
             if( $this->args['datasource'] == $meta['datasource'] )
             {
-                $search = addslashes(trim($this->args['search']));
+                $search = str_replace("'","\\'",(trim($this->args['search'])));
                 $this->where[] = "MATCH({$meta['match']}) AGAINST( '$search' IN BOOLEAN MODE )";
                 break;
             }

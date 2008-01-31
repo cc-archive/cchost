@@ -31,7 +31,23 @@ require_once('cchost_lib/cc-form.php');
 
 class CCSearch
 {
-    function Search()
+    function Search($ignore_request=false)
+    {
+        if( !empty($_REQUEST['search_text']) )
+        {
+            $search_text = CCUtil::StripText($_REQUEST['search_text']);
+
+            if( !empty($search_text) )
+            {
+                $this->do_results($search_text);
+                return;
+            }
+        }
+
+        $this->do_search();
+    }
+
+    function do_search()
     {
         $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
@@ -74,12 +90,18 @@ class CCSearch
     function Results()
     {
         $search_text = CCUtil::StripText($_REQUEST['search_text']);
+
         if( empty($search_text) )
         {
-            $this->Search();
+            $this->do_search();
             return;
         }
 
+        $this->do_results($search_text);
+    }
+
+    function do_results($search_text)
+    {
         if( empty($_REQUEST['search_in']) )
             die('missing "search in" field'); // I think this is a hack attempt
 
@@ -91,12 +113,12 @@ class CCSearch
 
         $form = new CCSearchForm( $search_meta, 'horizontal' );
         $values['search_in'] = $what;
-        $values['search_text'] = $search_text;
+        $values['search_text'] = htmlentities($search_text);
         $form->PopulateValues($values);
         $gen = $form->GenerateForm();
         // ack
         $gen->_template_vars['html_hidden_fields'] = array();
-        //CCDebug::PrintVar($gen);
+        //d($gen);
         CCPage::AddForm($gen);
 
         if( $what == 'all')
@@ -116,7 +138,7 @@ class CCSearch
                 $html = ob_get_contents();
                 ob_end_clean();
                 $link = (count($query->records) == 5) 
-                    ? url_args(ccl('search','results'),"search_text=$search_text&search_in={$meta['group']}") : '';
+                    ? url_args(ccl('search'),"search_text=$search_text&search_in={$meta['group']}") : '';
                 $total = $query->dataview->GetCount();
                 $grand_total += $total;
                 $results[] = array( 
@@ -316,7 +338,6 @@ class CCSearchForm extends CCForm
         if( $mode == 'horizontal' )
         {
             $this->SetTemplateVar('form_fields_macro','horizontal_form_fields');
-            $this->SetTemplateVar('form_method','GET');
         }
         else
         {
@@ -325,7 +346,8 @@ class CCSearchForm extends CCForm
         }
         $this->AddFormFields( $fields );
         $this->SetSubmitText(_('Search'));
-        $this->SetHandler( ccl('search', 'results') );
+        $this->SetTemplateVar('form_method','GET');
+        //$this->SetHandler( ccl('search', 'results') );
     }
 }
 
