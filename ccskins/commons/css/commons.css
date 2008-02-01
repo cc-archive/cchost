@@ -99,10 +99,12 @@ h2 {
 }
 
 #content h1 {
-	padding: 0px 15px 10px 0px;
+	padding: 0px 5px 10px 0px;
 	margin: 0px;
 	text-align: center;
 	font-family: Verdana;
+	font-size: 20px;
+	font-weight: normal;
 }
 
 .post_content_breaker {

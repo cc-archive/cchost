@@ -37,18 +37,22 @@ function cc_filter_std(&$records,&$dataview_info)
                 {
                     if( is_string($R['upload_extra']) )
                         $R['upload_extra'] = unserialize($R['upload_extra']);
-                    if( $R['upload_contest'] )
+                    
+                    if( isset($R['upload_contest']) )
                     {
-                        // todo: this shouldn't be here
-                        if( empty($CC_GLOBALS['contests']) )
-                            cc_fill_contests();
+                        if( $R['upload_contest'] )
+                        {
+                            // todo: this shouldn't be here
+                            if( empty($CC_GLOBALS['contests']) )
+                                cc_fill_contests();
 
-                        $R['upload_extra']['relative_dir'] = ccp($CC_GLOBALS['contest-upload-root'],
-                                $CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name']);
-                    }
-                    else
-                    {
-                        $R['upload_extra']['relative_dir'] = ccp($CC_GLOBALS['user-upload-root'],$R['user_name']);
+                            $R['upload_extra']['relative_dir'] = ccp($CC_GLOBALS['contest-upload-root'],
+                                    $CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name']);
+                        }
+                        else
+                        {
+                            $R['upload_extra']['relative_dir'] = ccp($CC_GLOBALS['user-upload-root'],$R['user_name']);
+                        }
                     }
                     break;
                 }

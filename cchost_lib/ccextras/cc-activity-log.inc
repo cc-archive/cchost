@@ -244,7 +244,7 @@ class CCActivityLogAPI
         
         $searchterm = '';
         $menuopts['full'] = true;
-        CCPage::PageArg('activity_menu',$menuopts,'show_activity_menu'); 
+        CCPage::PageArg('activity_menu',$menuopts,'admin.php/show_activity_menu'); 
 
         if( $arg == 'admin' )
         {
@@ -354,7 +354,7 @@ class CCActivityLogAPI
         $rows = $logs->QueryRows('');
         CCPage::PageArg( 'act-searchterm', $searchterm );
         CCPage::PageArg( 'activity-url', ccl( 'activity' ) );
-        CCPage::PageArg('activity_log',$rows,'show_activity_log');
+        CCPage::PageArg('activity_log',$rows,'admin.php/show_activity_log');
     }
 
     function _do_import($fname,$logs)
