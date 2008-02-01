@@ -37,6 +37,19 @@ function cc_filter_std(&$records,&$dataview_info)
                 {
                     if( is_string($R['upload_extra']) )
                         $R['upload_extra'] = unserialize($R['upload_extra']);
+                    if( $R['upload_contest'] )
+                    {
+                        // todo: this shouldn't be here
+                        if( empty($CC_GLOBALS['contests']) )
+                            cc_fill_contests();
+
+                        $R['upload_extra']['relative_dir'] = ccp($CC_GLOBALS['contest-upload-root'],
+                                $CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name']);
+                    }
+                    else
+                    {
+                        $R['upload_extra']['relative_dir'] = ccp($CC_GLOBALS['user-upload-root'],$R['user_name']);
+                    }
                     break;
                 }
 
@@ -338,6 +351,10 @@ function cc_filter_files(&$R)
 {
     global $CC_GLOBALS;
 
+    // todo: this shouldn't be here
+    if( empty($CC_GLOBALS['contests']) )
+        cc_fill_contests();
+
     $sql = 'SELECT * FROM cc_tbl_files where file_upload = ' . $R['upload_id'];
     $R['files'] = CCDatabase::QueryRows($sql);
     $fk = array_keys($R['files']);
@@ -349,10 +366,6 @@ function cc_filter_files(&$R)
 
         if( $R['upload_contest'] )
         {
-            // todo: this shouldn't be here
-            if( empty($CC_GLOBALS['contests']) )
-                cc_fill_contests();
-
             $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],
                     $CC_GLOBALS['contests'][$R['upload_contest']],$R['user_name'],$F['file_name']);
             $F['local_path']   = cca($CC_GLOBALS['contest-upload-root'],
@@ -380,11 +393,16 @@ function cc_filter_files(&$R)
 function cc_fill_contests()
 {
     global $CC_GLOBALS;
+    static $looked_up;
 
-    $sql = 'SELECT contest_id, contest_short_name FROM cc_tbl_contests'; 
-    $crows = CCDatabase::QueryRows($sql);
-    foreach( $crows as $crow )
-        $CC_GLOBALS['contests'][ $crow['contest_id'] ] = $crow['contest_short_name'];
+    if( !isset($looked_up) )
+    {
+        $sql = 'SELECT contest_id, contest_short_name FROM cc_tbl_contests'; 
+        $crows = CCDatabase::QueryRows($sql);
+        foreach( $crows as $crow )
+            $CC_GLOBALS['contests'][ $crow['contest_id'] ] = $crow['contest_short_name'];
+        $looked_up = true;
+    }
 }
 
 ?>

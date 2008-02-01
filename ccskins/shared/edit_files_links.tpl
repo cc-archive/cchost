@@ -34,11 +34,23 @@ li.file_desc div.c {
     float: left;
     padding: 2px;
     margin: 0px 0px 0px 20px;
+}
+
+.drag_handle {
     border: 1px solid;
 }
+
+li.file_desc div.c a {
+    padding: 2px;
+}
+
 div.cmd_link{
     clear: both;
     margin: 1.0em;
+}
+div.cmd_link a {
+    float: left;
+    margin: 1.3em;
 }
 </style>
 
@@ -51,21 +63,24 @@ div.cmd_link{
                 <div class="c light_border drag_handle">%text(str_file_drag_this)%</a></div>
             <? } ?>
             <div class="c light_border">
-                <a href="%(field/urls/upload_nicname_url)%/%(#F/file_id)%">%text(str_file_nicname_this)%</a> %(#F/file_nicname)%
+                <a class="small_button" 
+                    href="%(field/urls/upload_nicname_url)%/%(#F/file_id)%"><span>%text(str_file_nicname_this)%</span></a> %(#F/file_nicname)%
             </div>
-            <div class="c light_border"><a href="%(field/urls/upload_replace_url)%/%(#F/file_id)%">%text(str_file_replace_this)% </a></div>
-            <div class="c light_border" id="del_cmd_%(#i_F)%" <? if( $i_F == 1 ) { ?>style="display:none"<?}?>><a href="%(field/urls/upload_delete_url)%/%(#F/file_id)%">%text(str_file_delete_this)%</a></div>
+            <div class="c light_border"><a class="small_button" 
+                href="%(field/urls/upload_replace_url)%/%(#F/file_id)%"><span>%text(str_file_replace_this)% </span></a></div>
+            <div class="c light_border" id="del_cmd_%(#i_F)%" <? if( $i_F == 1 ) { ?>style="display:none"<?}?>>
+                <a class="small_button" href="%(field/urls/upload_delete_url)%/%(#F/file_id)%"><span>%text(str_file_delete_this)%</span></a></div>
             <div style="clear:both;">&nbsp;</div>
         </div>
     </li>
 %end_loop%
 </ul>
 <div class="cmd_link">
-    <a href="%(field/urls/upload_new_url)%">%text(str_file_add_new)%</a>
+    <a href="%(field/urls/upload_new_url)%" class="cc_gen_button"><span>%text(str_file_add_new)%</span></a>
 </div>
 <? if( count($A['field']['files']) > 1 ) { ?>
     <div class="cmd_link" id="submit_order_link" style="display:none">
-        <a id="submit_file_order" href="javascript://submit order">%text(str_file_submit_order)%</a>
+        <a class="cc_gen_button" id="submit_file_order" href="javascript://submit order"><span>%text(str_file_submit_order)%</span></a>
     </div>
     <script type="text/javascript">
     var _first_file = 1;

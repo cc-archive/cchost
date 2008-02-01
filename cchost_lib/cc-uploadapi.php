@@ -42,11 +42,8 @@ class CCUploadAPI
         CCUploadAPI::_recalc_upload_tags($upload_id,$new_ccud,$replaces_ccud);
     }
 
-    function DeleteUpload($upload_id)
+    function & _get_record($upload_id)
     {
-        require_once('cchost_lib/cc-sync.php');
-        require_once('cchost_lib/cc-tags.inc');
-
         $sql =<<<EOF
             SELECT upload_id, upload_extra, upload_contest, user_name, upload_name, upload_tags, upload_user
             FROM cc_tbl_uploads 
@@ -58,6 +55,15 @@ EOF;
         $filters = array( 'e' => array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES, ) );
         $recs = array( &$record );
         $dv->FilterRecords($recs,$filters);
+        return $record;
+    }
+
+    function DeleteUpload($upload_id)
+    {
+        require_once('cchost_lib/cc-sync.php');
+        require_once('cchost_lib/cc-tags.inc');
+
+        $record =& CCUploadAPI::_get_record($upload_id);
 
         // we have to get these now, after the ::Inovke, they'll be gone
 
@@ -186,7 +192,7 @@ EOF;
             $db_args['upload_config'] = $CC_CFG_ROOT;
         }
 
-        $db_args['upload_extra']['relative_dir'] = $relative_dir;
+        // $db_args['upload_extra']['relative_dir'] = $relative_dir;
         $db_args['upload_extra'] = serialize($db_args['upload_extra']);
         $db_args['upload_date'] = date( 'Y-m-d H:i:s' );
         $db_args['upload_tags'] = $upload_args['upload_tags'];
@@ -290,21 +296,19 @@ EOF;
     function PostProcessFileDelete( $file_id, &$upload_id )
     {
         CCEvents::Invoke( CC_EVENT_DELETE_FILE, array( $file_id ) );
-
-        $files =& CCFiles::GetTable();
-        $row = $files->QueryKeyRow($file_id);
+        $row = CCDatabase::QueryRow('SELECT file_upload, file_name FROM cc_tbl_files WHERE file_id='.$file_id);
         $upload_id = $row['file_upload'];
-
-        $uploads =& CCUploads::GetTable();
-        $relative_dir = $uploads->GetExtraField($upload_id,'relative_dir');
+        $record =& CCUploadAPI::_get_record($upload_id);
+        $relative_dir = $record['upload_extra']['relative_dir'];
         $path = realpath( $relative_dir . '/' . $row['file_name'] );
         if( file_exists($path) )
             @unlink($path);
 
         $where['file_id'] = $file_id;
+        $files = new CCFiles();
         $files->DeleteWhere($where);
 
-        CCUploadAPI::_recalc_upload_tags($upload_id);
+        CCUploadAPI::_recalc_upload_tags( $upload_id );
     }
 
     function PostProcessFileReplace( $overwrite_this,
@@ -318,8 +322,7 @@ EOF;
         $existing_row = $files->QueryKeyRow($overwrite_this);
 
         $upload_id = $existing_row['file_upload'];
-        $record = CCDatabase::QueryRow('SELECT * FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
-        $record['upload_extra'] = unserialize($record['upload_extra']);
+        $record = CCUploadAPI::_get_record($upload_id);
         $relative_dir = $record['upload_extra']['relative_dir'];
 
         // Run the file through the verifier (is it allowed? it is valid?)
@@ -685,21 +688,7 @@ EOF;
     {
         require_once('cchost_lib/cc-tags.php');
 
-        // Just get the record again with the new 'files' 
-        // array filled out (yes, heavy weight but safe)
-        //
-        $sql =<<<EOF
-            SELECT upload_id, upload_tags, upload_extra, user_name, user_id, upload_contest
-                FROM cc_tbl_uploads
-                JOIN cc_tbl_user ON upload_user = user_id
-                WHERE upload_id = {$upload_id}
-EOF;
-        $record = CCDatabase::QueryRow($sql);
-        $dv = new CCDataView();
-        $filters = array( 'e' => array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES ) ); // requires nested arrays
-        $records = array( &$record );
-        $dv->FilterRecords($records,$filters);
-
+        $record =& CCUploadAPI::_get_record($upload_id);
         $old_tags = $record['upload_tags'];
 
         $ccud_tags = CCTag::TagSplit($record['upload_extra']['ccud']);

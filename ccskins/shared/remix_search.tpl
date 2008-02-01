@@ -32,10 +32,11 @@ div#remix_search_controls {
 
 #remix_search_results {
 }
-#debug { display: block; }
+
 </style>
 <div style="width:40em;">
-    <div id="remix_search_toggle" style="display:none">%if_not_null(field/close_box)%<a href="javascript://toggle" id="remix_toggle_link">%text(str_remix_close)%</a>%end_if%</div>
+    <div id="remix_search_toggle" style="display:none">%if_not_null(field/close_box)%<a href="javascript: //toggle" 
+        id="remix_toggle_link" class="small_button"><span>%text(str_remix_close)%</span></a>%end_if%</div>
     <div id="remix_search_controls" style="display:block">
         <select id="remix_search_type">
             <option value="search_remix_artist" selected="selected">%text(str_remix_artist)%</option>
@@ -44,7 +45,7 @@ div#remix_search_controls {
         </select>
         <input type="edit" id="remix_search" />
         <div id="pool_select_contaner"></div>
-        <a href="javascript://do search" id="do_remix_search">%text(str_remix_do_search)%</a>
+        <a href="javascript://do search" class="small_buttton" id="do_remix_search"><span>%text(str_remix_do_search)%</span></a>
         <div class="remix_no_match" id="remix_no_match"></div>
     </div>
     <div id="remix_search_results">

@@ -140,6 +140,8 @@ $GLOBALS['str_files_nickname'] = _('Nickname');
 $GLOBALS['str_files_nickname_for_s'] = _("Nickname for '%s'");
 $GLOBALS['str_files_update_the_list'] = _('Add or replace files');
 $GLOBALS['str_files_update_sources'] = _('Edit the sources');
+$GLOBALS['str_files_have_been_reordered'] = _('Files have been reordered');
+
 
 $GLOBALS['str_filter_2_weeks_ago']           = _('2 weeks ago');
 $GLOBALS['str_filter_3_months_ago']          = _('3 months ago');

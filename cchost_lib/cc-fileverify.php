@@ -93,6 +93,10 @@ class CCFileVerify
         $allowed = $configs->GetConfig('format-allow');
         $formats =& CCGetID3::GetFormats();
 
+        if( empty($formats) ) { // installation error
+            return false;
+        }
+
         foreach($allowed as $allow => $value )
         {
             if( $value )

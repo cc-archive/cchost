@@ -14,6 +14,7 @@ ccRemixSearch.prototype = {
             pools.each( function(p) {
                 html += '<option value="' + p.pool_id + '">' + p.pool_name + '</option>';
             });
+            html += '</select>';
             $('pool_select_contaner').innerHTML = html;
             Event.observe($('pools'),'change',me.onPoolChange.bindAsEventListener(me));
         }
@@ -110,7 +111,8 @@ ccRemixSearch.prototype = {
             }
         });
         controls.style.display = show_now ? 'block' : 'none';
-        $('remix_toggle_link').innerHTML = show_now ? str_remix_close : str_remix_open;
+        var t = show_now ? str_remix_close : str_remix_open;
+        $('remix_toggle_link').innerHTML = '<span>' + t + '</span>';
         this._check_results_box_size(!show_now);
     },
 
@@ -134,6 +136,7 @@ ccRemixSearch.prototype = {
     },
 
     onDoRemixSearch: function(ev) {
+        ccPopupManager.StartThinking(ev);
         var value = $('remix_search').value.strip();
         if( value.length < 3 )
         {

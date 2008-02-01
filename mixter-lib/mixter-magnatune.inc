@@ -154,29 +154,18 @@ EOF;
         exit;
     }
 
-    function LocalSearch($pool_id,$query,$type)
+    function LocalSearch($pool_id,$text,$type)
     {
-        $query = CCUtil::StripText( urldecode($query) );
-        if( empty($query) )
+        $text = CCUtil::StripText( urldecode($text) );
+        if( empty($text) )
             return( array() );
 
-        switch( $type )
-        {
-            case 'artist':
-                $fields = array( 'pool_item_artist' );
-                break;
-            case 'title' :
-                $fields = array( 'pool_item_name' );
-                break;
-            default:
-                $fields = array( 'pool_item_description', 'pool_item_name', 'pool_item_artist' );
-                break;
-        }
-        require_once('cchost_lib/cc-search.php');
-        $filter = CCSearch::BuildFilter($fields,$query,'any');
-        $filter = "($filter) AND pool_item_pool = '$pool_id'";
-        $pool_items =& CCPoolItems::GetTable();
-        $items = $pool_items->QueryRows($filter);
+        require_once('cchost_lib/cc-query.php');
+        $query = new CCQuery();
+        parse_str('limit=1000&format=php&datasource=pool_item&sort=&dataview=pool_item_search',$q);
+        $sql['where'] = 'pool_item_pool =' . $pool_id;
+        $sql['match'] = $text;
+        list( $items ) = $query->QuerySQL($q,$sql);
         return($items);
     }
 

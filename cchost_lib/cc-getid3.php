@@ -60,9 +60,8 @@ class CCGetID3
         $getid3path = $CC_GLOBALS[CCGETID3_PATH_KEY] . '/getid3.php';
         $msg = _('GetID3 library integration is not properly installed:') . '<br />' . _("The path does not exist") . '<br />';
 
-
         if( CCUser::IsAdmin() )
-            $msg .= '<a href="' . ccl('admin','setup') . '">' . _('Click here to edit configuration') . '</a>';
+            $msg .= '<a href="' . ccl('admin','paths') . '">' . _('Click here to edit configuration') . '</a>';
         else
             $msg .= _('Please ask the site administrator to correct this.');
 
@@ -99,7 +98,7 @@ class CCGetID3
     {
         static $ID3Obj;
 
-        if( empty($ID3Obj) )
+        if( empty($ID3Obj) && class_exists('getID3') )
         {
             $ID3Obj = new getID3;
             $ID3Obj->option_tag_lyrics3       = false;
@@ -108,7 +107,7 @@ class CCGetID3
             $ID3Obj->option_tags_html         = false;
         }
 
-        return($ID3Obj);
+        return $ID3Obj ;
     }
 
     /**
@@ -139,6 +138,12 @@ class CCGetID3
         //
 
         $getid3_obj = CCGetID3::InitID3Obj();
+        if( !isset($getid3_obj) )
+        {
+            $arg = array(); // invalid installation
+            return $arg;
+        }
+
         $getid3_file_formats = $getid3_obj->GetFileFormatArray();
 
         if( !empty($file_formats) )

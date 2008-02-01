@@ -239,6 +239,7 @@ class CCPseudoVerifyAPI
 
         $basepath = CCUtil::CheckTrailingSlash($CC_GLOBALS[CCGETID3_PATH_KEY],true);
         $getid3_obj = CCGetID3::InitID3Obj();
+        d($getid3_obj);
         $ffa = $getid3_obj->GetFileFormatArray();
 
         $media_ffa = CCGetID3::GetFormats();

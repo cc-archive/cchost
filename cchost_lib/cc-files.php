@@ -197,20 +197,15 @@ class CCPhysicalFile
 {
     function Manage($upload_id)
     {
+        require_once('cchost_lib/cc-uploadapi.php');
+        require_once('cchost_lib/cc-page.php');
+
         $upload_id = CCUtil::StripText($upload_id);
         if( empty($upload_id) || !intval($upload_id) )
             return;
 
-        $record = CCDatabase::QueryRow('SELECT upload_id, upload_name, user_name, upload_contest FROM cc_tbl_uploads JOIN cc_tbl_user ' .
-                                                      'ON upload_user = user_id WHERE upload_id = ' . $upload_id);
+        $record =& CCUploadAPI::_get_record($upload_id);
         $record['file_page_url'] = ccl('files',$record['user_name'],$upload_id);
-
-        $dv = new CCDataView();
-        $e = array( 'e' => array( CC_EVENT_FILTER_FILES ) ); // requires nested arrays
-        $recs = array( &$record );
-        $dv->FilterRecords( $recs, $e );
-
-        require_once('cchost_lib/cc-page.php');
 
         $this->_build_bread_crumb_trail($upload_id,true,false,'str_file_manage');
         CCPage::SetTitle( 'str_files_manage' );
