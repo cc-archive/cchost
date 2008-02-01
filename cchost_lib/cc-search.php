@@ -191,7 +191,9 @@ class CCSearch
     {
         $k = array_keys($records);
         $c = count($k);
-        $terms = preg_split('/[^a-z_]+/',$info['queryObj']->args['search'],-1,PREG_SPLIT_NO_EMPTY);
+        $r = '("([^"]+)"|(\w+))';
+        preg_match_all( "/$r/", $info['queryObj']->args['search'], $m );
+        $terms = array_filter(array_merge($m[2],$m[3]));
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $records[ $k[$i] ];

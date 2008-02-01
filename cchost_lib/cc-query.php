@@ -362,10 +362,8 @@ class CCQuery
 
         if( !empty($this->args['dump_query']) && CCUser::IsAdmin() )
         {
-            $x[] = $this;
-            $x[] =& $this->records;
             CCDebug::Enable(true);
-            CCDebug::PrintVar($x,false);
+            CCDebug::PrintVar($this,false);
         }
 
         if( !empty($_REQUEST['dump_rec']) && CCUser::IsAdmin() )

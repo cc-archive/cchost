@@ -302,18 +302,19 @@ a.cc_gen_button:hover span {
 }
 
 a.small_button {
-	padding: 2px;
+	padding: 0px 0px 0px 2px;
 	border: 1px solid #888;
-	background-color: #DDD;
 	font-weight: normal;
+	background-color: #DDD;
+    background: url('../images/button_small.gif') no-repeat left top;
+	font-size: 9px;
 }
 
-a.small_button span { 
-	border-right: #666;
-	border-bottom: #666;
-}
 a.small_button:hover {
-	border: 1px solid #000;
-	background-color: #FFF;
 	text-decoration: none;
+    background: url('../images/button_small_hover.gif') no-repeat right top;
+}
+
+a.small_button span {
+	padding: 0px 2px 4px 0px;
 }

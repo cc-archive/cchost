@@ -92,7 +92,6 @@ ccAutoPick.prototype = {
         {
             value = '';
         }
-alert(this.options.showButtonClass);        
 
         return '<table cellspacing="0" cellpadding="0" style="">' +
                '<tr><td colspan="2">' +
