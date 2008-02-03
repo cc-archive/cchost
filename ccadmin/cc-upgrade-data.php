@@ -147,7 +147,9 @@ EOF;
     print('Collaboration type field updated<br />'."\n");
 
     CCDatabase::Query('UPDATE cc_tbl_collab_users SET collab_user_confirmed = 1');
-    CCDatabase::Query('UPDATE cc_tbl_collabs SET collab_confirmed = 1');
+    $sql = "UPDATE cc_tbl_collabs SET collab_confirmed = " .
+           "(SELECT COUNT(collab_user_confirmed) > 1 FROM `cc_tbl_collab_users` WHERE collab_user_collab = collab_id)";
+    CCDatabase::Query($sql);
 
     print('Collaboration user confirmed field updated<br />'."\n");
 }

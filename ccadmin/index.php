@@ -118,13 +118,13 @@ function step_3()
 
 function step_4()
 {
-    require_once('cc-config-db.php');
-    require_once('cclib/cc-defines.php');
-    require_once('cclib/cc-debug.php');
-    require_once('cclib/cc-database.php');
-    require_once('cclib/cc-table.php');
-    require_once('cclib/cc-config.php');
-    require_once('cclib/cc-util.php');
+    require_once('cc-host-db.php');
+    require_once('cchost_lib/cc-defines.php');
+    require_once('cchost_lib/cc-debug.php');
+    require_once('cchost_lib/cc-database.php');
+    require_once('cchost_lib/cc-table.php');
+    require_once('cchost_lib/cc-config.php');
+    require_once('cchost_lib/cc-util.php');
     if( !function_exists('gettext') )
        require_once('cchost_lib/ccextras/cc-no-gettext.inc'); // ugh, ccextras
 
@@ -348,16 +348,16 @@ EOF;
 function install_tables(&$f,&$errs)
 {
     //print("<pre>");print_r($f);print("</pre>");exit;
-    require_once( 'cc-config-db.php');
-    require_once( 'cclib/cc-defines.php');
-    require_once( 'cclib/cc-debug.php');
-    require_once( 'cclib/cc-database.php' );
-    require_once( 'cclib/cc-table.php' );
-    require_once( 'cclib/cc-config.php');
-    require_once( 'cclib/cc-pools.php' );
+    require_once( 'cc-host-db.php');
+    require_once( 'cchost_lib/cc-defines.php');
+    require_once( 'cchost_lib/cc-debug.php');
+    require_once( 'cchost_lib/cc-database.php' );
+    require_once( 'cchost_lib/cc-table.php' );
+    require_once( 'cchost_lib/cc-config.php');
+    require_once( 'cchost_lib/cc-pools.php' );
     require_once( dirname(__FILE__) . '/cc-install-db.php');
-    require_once( 'cclib/cc-lics-install.php');
-    require_once( 'cclib/cc-util.php' );
+    require_once( 'cchost_lib/cc-lics-install.php');
+    require_once( 'cchost_lib/cc-util.php' );
     if( !function_exists('gettext') )
        require_once('cchost_lib/ccextras/cc-no-gettext.inc'); // ugh, ccextras
     

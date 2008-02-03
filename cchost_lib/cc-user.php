@@ -147,11 +147,14 @@ class CCUser
             {
                 $val = unserialize(stripslashes($val));
                 $record = CCDatabase::QueryRow( 'SELECT * FROM cc_tbl_user WHERE user_name = \'' . $val[0]  . '\'' );
-                $record['user_extra'] = unserialize($record['user_extra']);
-                if( !empty( $record ) && ($record['user_password'] == $val[1]) )
+                if( !empty($record) )
                 {
-                    $CC_GLOBALS = array_merge($CC_GLOBALS,$record);
-                    $users->SaveKnownIP();
+                    $record['user_extra'] = unserialize($record['user_extra']);
+                    if( !empty( $record ) && ($record['user_password'] == $val[1]) )
+                    {
+                        $CC_GLOBALS = array_merge($CC_GLOBALS,$record);
+                        $users->SaveKnownIP();
+                    }
                 }
             }
         }

@@ -94,7 +94,7 @@
 
             %loop(menu_groups,group)%
               <div class="menu_group">
-                <p>%(#group/group_name)%</p>
+                <p>%text(#group/group_name)%</p>
                 <ul>%loop(#group/menu_items,mi)%
                   <li><a href="%(#mi/action)%" %if_attr(#mi/id,id)%>%text(#mi/menu_text)%</a></li>
                 %end_loop% </ul>

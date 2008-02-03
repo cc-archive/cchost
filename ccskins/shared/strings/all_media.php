@@ -87,6 +87,7 @@ $GLOBALS['str_editors_picks']         = _("Editors' Picks");
 $GLOBALS['str_edpick']                = _('Editorial pick');
 $GLOBALS['str_edpicks_hot_tracks']    = _("Editors' Picks and Popular Uploads");
 $GLOBALS['str_edpicks_more']           = _('More picks');
+$GLOBALS['str_picks'] = _('Picks');
 
 $GLOBALS['str_email'] = _('e-mail');
 $GLOBALS['str_email_from'] = _('From');
@@ -405,6 +406,7 @@ $GLOBALS['str_remix_no_matches']      = _('Sorry, no sources match "%s" Try addi
 $GLOBALS['str_remix_close']           = _('Close search box');
 $GLOBALS['str_remix_open']            = _('Open search box');
 $GLOBALS['str_remix_lic']             = _('This remix will be licensed under a %s license');
+$GLOBALS['str_remixes'] = _('Remixes');
 $GLOBALS['str_remixes_of'] = _('Remixes of...');
 $GLOBALS['str_remixes_of_s'] = _('Remixes of "%s"');
 $GLOBALS['str_remixed_by_s'] = _('Remixed by %s');
@@ -459,6 +461,7 @@ $GLOBALS['str_pool_details_link'] = _('See remixes...');
 $GLOBALS['str_ex_link'] = _('Link');
 $GLOBALS['str_external_link'] = _('External link');
 
+$GLOBALS['str_samples']          = _('Samples');
 $GLOBALS['str_samples_from']          = _('Samples from');
 $GLOBALS['str_samples_from_here']     = _('Samples from here are used in');
 

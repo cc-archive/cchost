@@ -25,24 +25,31 @@ if( !defined('IN_CC_HOST') )
 if( !defined('CC_MAIL_THROTTLED') )
     define('CC_MAIL_THROTTLED', 8); // see ccextras/cc-mail.php
 
+function d(&$obj)
+{
+    print '<pre>';
+    print_r($obj);
+    print '</pre>';
+    exit;
+}
+
 function cc_install_tables(&$vars,&$msg,$local_base_dir)
 {
-    
+    $new_tables_text = file_get_contents( dirname(__FILE__) . '/cchost_tables.sql');
+
+    preg_match_all( '/CREATE TABLE ([^\s]+) \((.*\))\s+\) ENGINE[^;]+;/msU', $new_tables_text, $m );
+
     /* DROP PREVIOUS TABLES */
 
     $tables = CCDatabase::ShowTables();
 
-    require_once('cc-install-tables.php');
-
     if( !empty($tables) )
     {
-        foreach( $table_creates as $tinfo )
+        foreach( $m[1] as $drop_table )
         {
-            preg_match('/CREATE TABLE `([^`]+)`/',$tinfo,$m);
-            $drop = $m[1];
-            if( in_array($drop,$tables) )
+            if( in_array($drop_table,$tables) )
             {
-                mysql_query( "DROP TABLE $drop" );
+                mysql_query( "DROP TABLE $drop_table" );
                 $msg = mysql_error();
                 if( $msg )
                    return(false);
@@ -50,9 +57,10 @@ function cc_install_tables(&$vars,&$msg,$local_base_dir)
         }
     }
 
-    /* INSTALL TABLES */
 
-    foreach( $table_creates as $s )
+    /* INSTALL TABLES */
+    
+    foreach( $m[0] as $s )
     {
        mysql_query($s);
        $msg = mysql_error();
@@ -62,11 +70,6 @@ function cc_install_tables(&$vars,&$msg,$local_base_dir)
 
 
     $configs =& CCConfigs::GetTable();
-
-    // First, create a string map so that incoming strings 
-    // will be i18n'ized properly
-
-    $configs->SaveDefaultCfgStringMap();
 
     require_once('cc-install-settings.php');
 
