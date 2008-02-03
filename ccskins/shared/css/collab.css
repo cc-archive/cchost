@@ -97,6 +97,7 @@ a.fname {
 
 .user_line .credit {
 	width: 150px;
+	overflow: hidden;
 }
 
 .file_list .tags, .user_line .role {

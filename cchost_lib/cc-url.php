@@ -54,13 +54,14 @@ function ccc()
 
     $arg = $CC_GLOBALS['pretty-urls'] ? '' : '/?ccm=';
     $args = func_get_args();
-    $cmdurl = '/' . implode('/',$args);
+    $cmdurl = implode('/',$args);
     return( cc_get_root_url() . $arg . $cmdurl );
 }
 
 function cc_current_url()
 {
-    return ccc($_REQUEST['ccm']);
+    $args = preg_replace('#^/?' . CC_GLOBAL_SCOPE . '#', '', $_REQUEST['ccm'] );
+    return ccc($args);
 }
 
 /**

@@ -701,7 +701,7 @@ class CCPage extends CCSkin
         }
         if( $limit < $all_row_count )
         {
-            $current_url = ccl(CCEvents::_current_action());
+            $current_url = cc_current_url(); // ccl(CCEvents::_current_action());
             if( count($_GET) > 1 )
             {
                 foreach( $_GET as $key => $val )

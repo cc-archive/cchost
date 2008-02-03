@@ -1,25 +1,33 @@
 
-.client_menu {
-	margin: 5% auto;
-	width: 90%;
+ul.client_menu {
+	margin: 0px auto;
+	width: 70%;
 	list-style: none;
 }
 
 .client_menu li {
-	margin-bottom: 0.8em;
+	margin-bottom: 0.4em;
 }
 
 .client_menu a {
 	font-weight: bold;
 	font-size: 1.1em;
+	display: block;
+	float: left;
+	width: 210px;
+	text-align: right;
+	margin-right: 10px;
 }
 
 .client_menu span {
 }
 
-.client_menu_help,
-.client_menu_hint {
-	margin-right: auto;
-	margin-left: auto;
+.client_menu_help {
 	width: 70%;
+	margin: 0px auto;
+}
+.client_menu_hint {
+	margin: 0.7em auto;
+	width: 70%;
+	font-style: italic;
 }

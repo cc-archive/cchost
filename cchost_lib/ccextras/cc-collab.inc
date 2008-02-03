@@ -313,7 +313,7 @@ class CCCollab
     {
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('t=collab_main&datasource=collab&title=str_collab&limit=10');
+        $args = $query->ProcessAdminArgs('t=collab_main&datasource=collab&title=str_collab&limit=14');
         $query->Query($args);
     }
 
@@ -579,9 +579,10 @@ EOF;
                         $c = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_collab_users WHERE collab_user_confirmed =1 AND collab_user_collab='.$collab_id);
                         if( $c < 2 )
                         {
-                            CCDatabase::Query('UPDATE cc_tbl_collabs SET collab_confirmed=0 WHERE collab_id='.$collab_id);
                             $args[CC_AJAX_MESSAGE] .= ' (NO CONFIRMED MEMBERS: This project is no longer listed)';
                         }
+                        $sql = "update cc_tbl_collabs set collab_confirmed = (SELECT count(collab_user_confirmed) > 1 FROM `cc_tbl_collab_users` WHERE collab_user_collab = $collab_id)";
+                        CCDatabase::Query($sql);
                     }
                     break;
 

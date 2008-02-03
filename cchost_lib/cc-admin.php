@@ -329,7 +329,7 @@ class CCAdmin
         uasort($global_items,'cc_weight_sorter');
         //CCDebug::PrintVar($global_items,false);
         $args['global_title'] = ''; // _('Global Site Settings');
-        $args['global_help']  = _('These settings affect the entire site');
+        $args['global_help']  = null; // _('These settings affect the entire site');
         $args['global_items'] = $this->_check_access($global_items);
         $args['do_global'] = true;
         CCPage::SetTitle(_('Global Settings'));

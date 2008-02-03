@@ -47,9 +47,13 @@ table.cc_content_topics td {
 #topic_picker {
     margin: 8px;
 }
+.butt {
+    float: left;
+}
 </style>
 <h2><?= _('Conent Pages') ?></h2>
-<a href="%(home-url)%admin/content/page" class="cc_gen_button"><span><?= _('Create a new page')?></span></a>
+<a href="%(home-url)%admin/content/page" class="butt cc_gen_button"><span><?= _('Create a new page')?></span></a>
+<div style="clear:both">&nbsp;</div>
 <table class="cc_content_pages">
 %loop(content_pages,cp)%
 <? $class = $i_cp & 1 ? 'odd_row' : 'even_row'; ?>
@@ -63,10 +67,14 @@ table.cc_content_topics td {
 %end_loop%
 </table>
 <h2><?= _('Content Topics') ?></h2>
-<a href="%(home-url)%admin/content/post" class="cc_gen_button"><span><?= _('Create new content')?></span></a>
-<div id="topic_picker"><?= _('Select topic type')?>: <select id="topic_types" onchange="window.location.href = '<?= cc_current_url() ?>' + q + 'topic_type=' + this.options[this.selectedIndex].value;">
+<a href="%(home-url)%admin/content/post" class="butt cc_gen_button"><span><?= _('Create new content')?></span></a>
+<div style="clear:both">&nbsp;</div>
+<div id="topic_picker"><?= _('Select topic type')?>: 
+<select id="topic_types" 
+  onchange="window.location.href = '<?= cc_current_url() ?>' + q + 'topic_type=' + this.options[this.selectedIndex].value;">
 %loop(topic_types,tt)%
-<option value="%(#tt)%" <?= ($tt == $_GET['topic_type']) ? 'selected="selected"' : '' ?>%(#tt)%</option>
+<? $sel = $_GET['topic_type'] == $tt ? 'selected="selected"' : ''; ?>
+<option value="%(#tt)%" <?= $sel ?>> %(#tt)%</option>
 %end_loop%
 </select></div>
 <table class="cc_content_topics" cellspacing="0" cellspacing="0" >

@@ -81,8 +81,9 @@ a:hover {
 }
 
 h1, h2, h3 {
-	line-height: 120%;
+	line-height: 105%;
 	font-family: arial,sans serif;
+	margin: 2px;
 }
 
 
