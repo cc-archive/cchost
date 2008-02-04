@@ -114,6 +114,8 @@ a.fname {
 
 .user_line .credit {
 	width: 150px;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .file_list .tags, .user_line .role {

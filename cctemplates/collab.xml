@@ -120,7 +120,7 @@
      var cu = new ccCollab('${collab_id}','${collab/is_member}','${collab/is_owner}');
      cu.updateFiles('${collab_id}');
      <tal:block repeat="user collab/users">
-        cu.addUser( '${user/user_name}', '${user/user_real_name}', '${user/collab_user_role}', '${user/collab_user_credit}' );
+        cu.addUser( '${user/user_name}', "${user/user_real_name}", '${user/collab_user_role}', "${user/collab_user_credit}" );
      </tal:block>
     function upload_done(upload_id,msg)
     {
