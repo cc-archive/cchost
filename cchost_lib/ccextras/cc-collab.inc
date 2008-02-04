@@ -581,7 +581,8 @@ EOF;
                         {
                             $args[CC_AJAX_MESSAGE] .= ' (NO CONFIRMED MEMBERS: This project is no longer listed)';
                         }
-                        $sql = "update cc_tbl_collabs set collab_confirmed = (SELECT count(collab_user_confirmed) > 1 FROM `cc_tbl_collab_users` WHERE collab_user_collab = $collab_id)";
+                        $confirmed = ($c < 2) ? 0 : 1;
+                        $sql = "update cc_tbl_collabs set collab_confirmed = $confirmed WHERE collab_id = $collab_id";
                         CCDatabase::Query($sql);
                     }
                     break;
