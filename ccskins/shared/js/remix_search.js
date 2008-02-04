@@ -150,12 +150,13 @@ ccRemixSearch.prototype = {
         {
             var search_type = $('remix_search_type');
             var query = query_url + 't=remix_checks&f=html&dataview=' + search_type.options[ search_type.selectedIndex ].value +
-                                     '&match=' + value;
+                                     '&match=' + value + '&user=-' + user_name;
         }
         else
         {
             var query = home_url + 'pools/search/' + sel_pool + q + 't=remix_pool_checks&search=' + value;
         }
+        ajax_debug(query);
         new Ajax.Request(query, { method: 'get', onComplete: this.onSearchResults.bind(this,value) } );
     },
 

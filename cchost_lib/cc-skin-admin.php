@@ -187,15 +187,6 @@ class CCSkinLayoutForm extends CCEditConfigForm
 
         $fields = array();
 
-/*    
-        $fields['html_form'] =
-            array( 'label'       => _('Default Form Template'),
-                   'form_tip'    => _('Default template for displaying forms'),
-                   'formatter'   => 'select',
-                   'value'       => 'html_form.php/html_form',
-                   'options'     => array( 'html_form.php/html_form' => 'html_form.php/html_form' ),
-                   'flags'       => CCFF_POPULATE_WITH_DEFAULT );
-*/ 
         $fields['form_fields'] =
             array( 'label'       => _('Form Fields Style'),
                    'form_tip'    => _('Choice the formatting of regular submit and user profile forms'),
@@ -313,6 +304,25 @@ class CCAdminColorSchemesForm extends CCEditConfigForm
 */
 class CCSkinAdmin
 {
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail($text,$cmd=false)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        
+        $trail[] = array( 'url' => ccl('admin','site'), 'text' => _('Settings') );
+    
+        if( $cmd )
+        {
+            $trail[] = array( 'url' => ccl('admin','skins'), 'text' => _('Configure Skins') );
+        }
+
+        $trail[] = array( 'url' => '', 'text' => _($text) );
+
+        CCPage::AddBreadCrumbs($trail);
+    }
+
     function Admin()
     {
         require_once('cchost_lib/cc-template.inc');
@@ -330,6 +340,8 @@ class CCSkinAdmin
         }
 
         require_once('cchost_lib/cc-page.php');
+
+        $this->_build_bread_crumb_trail(_('Configure Skins'));
 
         CCPage::SetTitle(_('Configure Skins'));
 
@@ -364,11 +376,15 @@ class CCSkinAdmin
 
     function Profiles()
     {
+        require_once('cchost_lib/cc-page.php');
+        $title = _('Select a New Skin Profile');
+        $this->_build_bread_crumb_trail($title,true);
+
         $form = new CCSkinProfilesForm();
         if( empty($_POST['skinprofiles']) || !$form->ValidateFields() )
         {
             require_once('cchost_lib/cc-page.php');
-            CCPage::SetTitle(_('Select a New Skin Profile'));
+            CCPage::SetTitle($title);
             CCPage::AddForm($form->GenerateForm());
         }
         else
@@ -417,7 +433,9 @@ class CCSkinAdmin
     function ProfileSave()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Save Skin Profile'));
+        $title = _('Save Skin Profile');
+        $this->_build_bread_crumb_trail($title,true);
+        CCPage::SetTitle($title);
         $form = new CCSkinProfileSaveForm();
         if( empty($_POST['skinprofilesave']) || !$form->ValidateFields() )
         {
@@ -461,7 +479,9 @@ class CCSkinAdmin
     function Layout()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Configure Skins Layouts'));
+        $title = _('Configure Skins Layouts');
+        $this->_build_bread_crumb_trail($title,true);
+        CCPage::SetTitle($title);
         $form = new CCSkinLayoutForm();
         CCPage::AddForm($form->GenerateForm());
     }
@@ -469,7 +489,9 @@ class CCSkinAdmin
     function Settings()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Configure Skins Settings'));
+        $title = _('Configure Skins Settings');
+        $this->_build_bread_crumb_trail($title,true);
+        CCPage::SetTitle($title);
         $form = new CCSkinSettingsForm();
         CCPage::AddForm($form->GenerateForm());
     }
@@ -477,7 +499,9 @@ class CCSkinAdmin
     function Create()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Create a Skin Template'));
+        $title = _('Create a Skin Template');
+        $this->_build_bread_crumb_trail($title,true);
+        CCPage::SetTitle($title);
         $form = new CCSkinCreateForm();
         if( empty($_POST['skincreate']) || !$form->ValidateFields() )
         {
@@ -558,7 +582,9 @@ EOF;
     function ColorSchemes()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Manage Color Schemes'));
+        $title = _('Manage Color Schemes');
+        $this->_build_bread_crumb_trail($title,true);
+        CCPage::SetTitle($title);
         $form = new CCAdminColorSchemesForm();
         CCPage::AddForm($form->GenerateForm());
     }

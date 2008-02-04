@@ -754,11 +754,21 @@ class CCQuery
 
     function _gen_user()
     {
-        $w['user_name'] = $this->args['user'];
+        $user = $this->args['user'];
+        if( $user{0} == '-' )
+        {
+            $user = substr($user,1);
+            $op = '<>';
+        }
+        else
+        {
+            $op = '=';
+        }
+        $w['user_name'] = $user;
         $users =& CCUsers::GetTable();
         $user_id = $users->QueryKey($w);
         $field = $this->_make_field('user');
-        $this->where[] = "($field = '{$user_id}')";
+        $this->where[] = "($field $op '{$user_id}')";
     }
 
     function _gen_visible()
