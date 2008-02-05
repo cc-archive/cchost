@@ -408,8 +408,14 @@ class CCEvents
     function PerformAction($action = null )
     {
         if( !isset($action) )
+        {
             $action = CCEvents::ResolveUrl();
-
+            if( !isset($action) )
+            {
+                $_REQUEST['ccm'] = preg_replace('#^/([^/]+)/#','/\1/docs/',$_REQUEST['ccm']);
+                $action = CCEvents::ResolveUrl();
+            }
+        }
 
         $method = false;
 

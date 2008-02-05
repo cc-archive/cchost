@@ -304,10 +304,9 @@ class CCContentPage
             $values['topic_user'] = CCUser::CurrentUser();
             //$values['topic_type'] = $values['topic_type'];
             $topics->Insert($values,0);
-            $title = _('New Content Preview');
-            $q="title={$title}&datasource=topics&t=content_page&ids=".$values['topic_id'];
-            $url = url_args( ccl('api','query'), $q );
-            CCUtil::SendBrowserTo($url);
+            //$q="title={$title}&datasource=topics&t=content_page&ids=".$values['topic_id'];
+
+            CCUtil::SendBrowserTo( ccl('admin','content','manage') );
         }
     }
 
@@ -354,7 +353,8 @@ class CCContentPage
         elseif( $form->ValidateFields() && $this->_valid_target_dir($form,$target) )
         {
             $this->_save_page($form,false,$target);
-            CCUtil::SendBrowserTo( ccl('admin','content','manage') );
+            $url = url_args( ccl('admin','content','manage'), 'topic_type=' . $props['type'] );
+            CCUtil::SendBrowserTo($url);
         }
 
         CCPage::AddForm( $form->GenerateForm() );
@@ -378,8 +378,8 @@ class CCContentPage
         }
         else
         {
-            $fname = $this->_save_page($form,true,$target);
-            CCUtil::SendBrowserTo( ccl('docs',$fname) );
+            $url = ccl('admin','content','manage');
+            CCUtil::SendBrowserTo($url);
         }
     }
 
@@ -485,26 +485,29 @@ EOF;
         $query->Query($args);
     }
 
-    function Admin()
+    /*
+    * Event handler for {@link CC_EVENT_ADMIN_MENU}
+    *
+    * @param array &$items Menu items go here
+    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    */
+    function OnAdminMenu(&$items,$scope)
     {
-        require_once('cchost_lib/cc-page.php');
-        $this->_build_bread_crumb_trail($cmd='');
-        CCPage::SetTitle(_('Content Admin'));
-
-        $args[] = array( 'action'    => ccl('admin','content','manage'),
-                         'menu_text' => _('Manage Content'),
-                         'help'      => _('Edit, delete and organize page content') );
-
-        $args[] = array( 'action'    => ccl('admin','content','post'),
-                         'menu_text' => _('Post Content'),
-                         'help'      => _('Create new content for pages at your site.') );
-
-        $args[] = array( 'action'    => ccl('admin','content','page'),
-                         'menu_text' => _('New Content Page'),
-                         'help'      => _('Create new content page layouts') );
-
-        CCPage::PageArg('client_menu',$args,'print_client_menu');
+        if( $scope == CC_GLOBAL_SCOPE )
+        {
+            $items += array(
+                'admin_content' => array( 
+                                 'menu_text'  => _('Manage Page Content'),
+                                 'menu_group' => 'configure',
+                                 'help' => 'Manage special pages and topics ',
+                                 'access' => CC_ADMIN_ONLY,
+                                 'weight' => 3,
+                                 'action' =>  ccl('admin','content')
+                                 ),
+                );
+        }
     }
+
 
     /**
     * @access private
@@ -513,7 +516,7 @@ EOF;
     {
         $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
         
-        $trail[] = array( 'url' => ccl('admin','site'), 
+        $trail[] = array( 'url' => ccl('admin','site','global'), 
                           'text' => _('Settings') );
 
         if( $cmd )
@@ -542,7 +545,7 @@ EOF;
         CCEvents::MapUrl( ccp('admin','content','delete'), array( 'CCContentPage', 'TDelete'),    CC_ADMIN_ONLY, ccs(__FILE__) );
         CCEvents::MapUrl( ccp('admin','content','manage'), array( 'CCContentPage', 'Manage'),     CC_ADMIN_ONLY, ccs(__FILE__) );
         CCEvents::MapUrl( ccp('admin','content','pages'),  array( 'CCContentPage', 'Pages'),      CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin','content'),          array( 'CCContentPage', 'Admin'),      CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('admin','content'),          array( 'CCContentPage', 'Manage'),     CC_ADMIN_ONLY, ccs(__FILE__) );
     }
 
 }

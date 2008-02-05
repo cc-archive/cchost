@@ -16,7 +16,8 @@
         You can keep track of your submissions and reviews by other Mixters by visiting your Artist Page:
     </p>
     <h2 style="font-weight:normal;font-family:arial;text-align:center;font-size:large;">
-        <a href="http://ccmixter.org/people/<?= $A['user_name']?>">http://ccmixter.org/people/<?= $A['user_name']?></a>
+        <? $url = ccl('people',$A['user_name'] ); ?>
+        <a href="<?= $url ?>"><?= $url ?></a>
     </h2>
     <p>You can also share this permanant, public address with friends.</p>
     <br />

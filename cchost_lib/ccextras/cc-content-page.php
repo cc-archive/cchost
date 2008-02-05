@@ -27,5 +27,6 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCContentPage',  'OnMapUrls'),   'cchost_lib/ccextras/cc-content-page.inc' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU, array( 'CCContentPage',  'OnAdminMenu'),   'cchost_lib/ccextras/cc-content-page.inc' );
 
 ?>
