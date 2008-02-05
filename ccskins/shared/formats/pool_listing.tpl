@@ -24,7 +24,7 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
 
             <a class="cc_file_link upload_name" href="%(#R/pool_item_page)%">%(#R/pool_item_name)%</a>
             <br />%text(str_by)% <a class="cc_user_link" href="%(#R/pool_item_url)%">%(#R/pool_item_artist)%</a>
-            <br />%text(str_ex_link)% <a class="cc_external_link" href="%(#R/pool_item_url)%"><span>%(#R/pool_item_url)%</span> 
+            <br /><a class="cc_external_link" href="%(#R/pool_item_url)%"><span>%text(str_external_link)%</span> 
                          <img src="%url(images/remote.gif)%" /></a>
 
          </div>
