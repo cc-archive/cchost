@@ -6,6 +6,11 @@ function _t_djvadim_home_init($T,&$targs) {
     
 }
 ?><style >
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
     h2 {
       margin-top: 25px;
     }

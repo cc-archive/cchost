@@ -6,6 +6,11 @@ function _t_copyrightcriminals_init($T,&$targs) {
     
 }
 ?><style >
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
 p { font-size: 12px; }
 .contestbox 
 {

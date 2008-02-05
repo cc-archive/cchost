@@ -1,4 +1,9 @@
 ﻿<style > 
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
   h2 { margin-top: 25px; }
 </style>
 <H2 >

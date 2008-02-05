@@ -4,6 +4,10 @@ if( !defined('IN_CC_HOST') )
 
 ?><div>
 <style type="text/css">
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
 
 .lp_results_head {
   font-style: italic;

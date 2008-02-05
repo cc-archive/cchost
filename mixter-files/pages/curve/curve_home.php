@@ -6,6 +6,11 @@ function _t_curve_home_init($T,&$targs) {
     
 }
 ?><style > 
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
   h2 { margin-top: 25px; }
 </style>
 <h1  id="ccttite">Creative Commons ((c)urve)music tm Remix Contest</h1>

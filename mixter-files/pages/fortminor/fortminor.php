@@ -6,6 +6,11 @@ function _t_fortminor_init($T,&$targs) {
     
 }
 ?><style >
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
 #pagehead h1 {
   color: #000;
   font-size: 20px;
@@ -28,8 +33,8 @@ p {
 }
 </style>
 <h1  id="pagehead" style="color:#000; font-size: 28px;">Fort Minor Remix Contest</h1>
-<table  style=""><tr ><td >
-<div  class="box" >
+<table  style="width:100%"><tr ><td >
+<div  class="box" style="width:90%" >
 <img  src="<?= $T->URL('fmlogo.jpg'); ?>" style="float: left; margin-right: 10px; margin-bottom: 5px;" height="100" alt="Fort Minor logo &copy; Fort Minor. Used with permission." title="Fort Minor logo &copy; Fort Minor. Used with permission." />
 <img  src="/mixter-files/marckaschke.jpg" style="float:right;margin:12px;" />
 

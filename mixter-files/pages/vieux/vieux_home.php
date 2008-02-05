@@ -6,6 +6,11 @@ function _t_vieux_home_init($T,&$targs) {
     
 }
 ?><style >
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
     h1 {
       color: #000 !important;
     }

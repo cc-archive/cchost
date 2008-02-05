@@ -3,6 +3,11 @@ if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
 ?><style >
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
 
 h1.pagehead {
   color: #000 !important;
@@ -80,8 +85,8 @@ p {
 <p >You can listen to the original versions of the songs by visiting <a  href="http://www.crammed.be/news/cc.htm">the Crammed Discs Web site</a> (RealPlayer required).</p>
 <p ><strong >Note:</strong> You are free to use other music licensed under <a  href=" http://creativecommons.org/licenses/by/2.5/">CC BY</a> or <a  href=" http://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC</a>, audio in the public domain, and your own original sounds in your remix. Submissions that include music that you don't have permission to use will become ineligible.</p>
 <h2  style="margin: 0px; font-size: 18px; font-weight: normal;">How to Participate</h2>
-<div  style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center;float:right;width:50%;">The contest is closed to new entries.</div>
-<br  />
+<div  style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center;width:50%;">The contest is closed to new entries.</div>
+<div >&nbsp</div>
 <h2  style="margin: 0px; font-size: 18px; font-weight: normal;">Source Materials</h2>
 <p >Download the separated audio elements of Cibelle's "Noite de Carnaval," DJ Dolores's "Sanidade," and Apollo Nove's "Yage Cameras" <a  href="<?= $A['root-url']?>crammed/view/contest/sources">here</a>.</p>
 <br  />

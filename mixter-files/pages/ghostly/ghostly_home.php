@@ -7,6 +7,11 @@ function _t_ghostly_home_init($T,&$targs) {
 }
 ?><div >
 <style >
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
     h1 {
       color: #000 !important;
     }

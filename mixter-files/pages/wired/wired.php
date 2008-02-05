@@ -1,4 +1,10 @@
 <style >
+
+#inner_content {
+    width: 80%;
+    margin: 0px auto;
+}
+
 p { font-size: 12px; }
 .contestbox {
 margin-top:10px;margin-bottom:30px;
