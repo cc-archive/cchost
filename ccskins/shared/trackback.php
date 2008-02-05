@@ -31,6 +31,11 @@ $text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name']
 $title = $T->String('str_trackback_title_' .$ttype);
 ?>
 <!-- tempalte trackback -->
+<style>
+#trackback_submit {
+    float: left;
+}
+</style>
 <div id="trackback_response">
 </div>
 <form id="trackback_form" name="trackback_form" style="z-index:200;display:block;">
@@ -66,7 +71,7 @@ $title = $T->String('str_trackback_title_' .$ttype);
         <?= empty($A['user_email']) ? '' : "value=\"" . $A['user_email'] . '"'; ?> /></div>
 
     <div class="f">
-        <a id="trackback_submit" href="javascript://submit track"><?= $T->String('str_trackback_submit'); ?></a>
+        <a id="trackback_submit" class="cc_gen_button" href="javascript://submit track"><span><?= $T->String('str_trackback_submit'); ?></span></a>
     </div>
 </form>
 <? if( ($ttype == 'remix') && !empty($A['logged_in_as']) ) { ?>

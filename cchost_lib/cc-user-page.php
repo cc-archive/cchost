@@ -69,7 +69,8 @@ class CCUserPage
 
         call_user_func_array( $cb_tabs['user_cb'], array( $username, $tagfilter ) );
 
-        $this->_show_feed_links($username, $cb_tabs['tags'] != 'uploads');
+        if( empty($this->_no_feeds) )
+            $this->_show_feed_links($username, $cb_tabs['tags'] != 'uploads');
 
     }
 
@@ -120,6 +121,9 @@ class CCUserPage
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('title=str_hidden_list&t=unpub&f=page&unpub=1&mod=1&user='.$username);
         $query->Query($args);
+        $this->_no_feeds = true;
+        $page =& CCPage::GetPage();
+        $page->SetArg('qstring','');
     }
 
     function _show_feed_links($username,$uploads=true)

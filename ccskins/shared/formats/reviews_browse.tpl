@@ -65,7 +65,7 @@ END;
     </td>
 </tr>
 <tr>
-    <td class="cc_topic_see"><div><a id="commentcommand" href="%(#R/topic_url)%"><span>%text(str_reviews_see)%</span></a></div></td>
+    <td class="cc_topic_see"><div><a class="cc_gen_button" href="%(#R/topic_url)%"><span>%text(str_reviews_see)%</span></a></div></td>
     <td class="cc_topic_thumb"><a href="%(#R/topic_url)%" class="med_dark_color"><span>%chop(#R/topic_text_plain,80)%</span></a></td>
 </tr>
 %end_loop%

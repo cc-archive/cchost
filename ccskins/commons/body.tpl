@@ -67,12 +67,14 @@
 %if_not_empty(page-title)%
     <h1 class="title">%text(page-title)%</h1>
 %end_if%
-<a name="content" ></a>    
+<a name="content" ></a>
+<div id="inner_content">
 <?
     if( !empty($A['macro_names'] ) )
         while( $macro = array_shift($A['macro_names']) )
             $T->Call($macro);
 ?>
+</div>
 %loop(inc_names,inc_name)%   %call(#inc_name)% %end_loop%
 
 </div> <!-- content -->

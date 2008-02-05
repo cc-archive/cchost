@@ -261,6 +261,12 @@ function _t_playlist_playlist_popup_window(&$T,&$A)
 function _t_playlist_playlist_show_browser(&$T,&$A) 
 {
 ?>
+<style>
+#inner_content {
+    width: 85%;
+    margin: 0px auto;
+}
+</style>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>"  title="Default Style"></link>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>"  title="Default Style"></link>
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>

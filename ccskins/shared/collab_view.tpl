@@ -10,6 +10,12 @@ $C = $collab['collab'];
 $collab_id = $C['collab_id'];
 ?>
 <!-- template collab_view -->
+<style>
+#inner_content {
+    width: 85%;
+    margin: 0px auto;
+}
+</style>
 <link  rel="stylesheet" type="text/css" href="%url('css/collab.css')%" title="Default Style"></link>
 <fieldset>
 <legend class="dark_bg light_color">%text(str_info)%</legend>

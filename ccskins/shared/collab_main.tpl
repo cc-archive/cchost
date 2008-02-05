@@ -30,6 +30,12 @@ EOF;
 */ ?>
  
 <!-- template collab_main -->
+<style>
+#inner_content {
+    width: 85%;
+    margin: 0px auto;
+}
+</style>
 
 <? $rows = array_chunk($A['records'], 2); ?>
 

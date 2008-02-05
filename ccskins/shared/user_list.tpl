@@ -45,6 +45,12 @@ EOF;
 */?>
 <!-- template user_list -->
 <link rel="stylesheet" href="%url(css/user_list.css)%" title="Default Style" />
+<style>
+#inner_content {
+    width: 85%;
+    margin: 0px auto;
+}
+</style>
 
 <h1>%text(people)%</h1>
 
