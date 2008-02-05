@@ -361,13 +361,13 @@ class CCAdmin
         else
         {
             $config_names = array_keys($local_items);
-            $star = ' <span style="color:red;font-size:larger;">*</span>';
+            $star = ' <span class="config_star">*</span>';
             foreach( $config_names as $config_name )
             {
                 $where['config_type'] = $config_name;
                 $where['config_scope'] = $CC_CFG_ROOT;
                 if( $configs->CountRows($where) )
-                    $local_items[$config_name]['menu_text'] .= $star;
+                    $local_items[$config_name]['menu_text'] = $star . $local_items[$config_name]['menu_text'];
             }
             $args['local_hint'] = "$star " . 
 	        _("This setting over writes the main site's values");

@@ -19,7 +19,10 @@ ul.client_menu {
 	margin-right: 10px;
 }
 
-.client_menu span {
+span.config_star {
+	display: inline;
+	font-weight: bold;
+	color: red;
 }
 
 .client_menu_help {

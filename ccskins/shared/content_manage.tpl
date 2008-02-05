@@ -61,8 +61,8 @@ table.cc_content_topics td {
     <td>%(#cp)%</td>
     <td><a href="%(home-url)%admin/content/page/edit/%(q)%page=%(#k_cp)%" class="small_button"><span>edit</span></a></td>
     <td><a href="%(home-url)%admin/content/page/delete/%(q)%page=%(#k_cp)%" class="small_button"><span>delete</span></a></td>
-    <? $page = preg_replace('/\.[^\.]+$/','',basename($k_cp)); ?>
-    <td><a target="_blank" href="%(home-url)%docs/%(#page)%" class="small_button"><span>view</span></a></td>
+    <? $page = ccl(preg_replace('/\.[^\.]+$/','',basename($k_cp))); ?>
+    <td><a target="_blank" href="%(#page)%" class="small_button"><span>view</span></a></td>
 </tr>
 %end_loop%
 </table>

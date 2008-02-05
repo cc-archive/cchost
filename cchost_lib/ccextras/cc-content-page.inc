@@ -378,7 +378,8 @@ class CCContentPage
         }
         else
         {
-            $url = ccl('admin','content','manage');
+            $this->_save_page($form,true,$target);
+            $url = ccl( 'admin','content' );
             CCUtil::SendBrowserTo($url);
         }
     }
@@ -416,6 +417,7 @@ class CCContentPage
                 $path = $target_dir . '/' . $fname . '.php';
             }
         }
+
         $values['title'] = addslashes($values['title']);
 
         $meta = '';
@@ -468,8 +470,8 @@ EOF;
     function Manage()
     {
         require_once('cchost_lib/cc-page.php');
-        $this->_build_bread_crumb_trail(_('Manage Content'));
-        CCPage::SetTitle(_('Manage Content'));
+        $this->_build_bread_crumb_trail(_('Manage Page Content'));
+        CCPage::SetTitle(_('Manage Page Content'));
 
         require_once('cchost_lib/cc-template.inc');
         $pages = CCTemplateAdmin::GetContentPages();
