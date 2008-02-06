@@ -58,8 +58,8 @@ class CCLicensefiles
       <dc:title>'.$row['upload_name'].'</dc:title>
       <dc:description>'.$row['upload_description'].'</dc:description>
       <dc:subject>'.$row['upload_tags'].'</dc:subject>
-      <dc:creator><Agent><dc:title>'.$row['user_real_name'].'</dc:title></Agent></dc:creator>
-      <dc:rights><Agent><dc:title>'.$row['user_real_name'].'</dc:title></Agent></dc:rights>
+      <dc:creator><Agent>'.$row['user_real_name'].'</Agent></dc:creator>
+      <dc:rights><Agent>'.$row['user_real_name'].'</Agent></dc:rights>
       <dc:date>'.substr($row['upload_date'],0,10).'</dc:date>
       <dc:format>'.$file_format_info['mime_type'].'</dc:format>
       <dc:type></dc:type>
@@ -71,7 +71,7 @@ class CCLicensefiles
 
     foreach( $permits as $pt )
     {
-        if( !$pt )
+        if( $pt )
             $rdf .= "\n" . '      <permits rdf:resource="http://web.resource.org/cc/'.$pt.'" />';
     }
 
@@ -79,15 +79,15 @@ class CCLicensefiles
 
     foreach( $required as $rd )
     {
-        if( !$rd )
-            $rdf .= "\n" . '      <permits rdf:resource="http://web.resource.org/cc/'.$rd.'" />';
+        if( $rd )
+            $rdf .= "\n" . '      <requires rdf:resource="http://web.resource.org/cc/'.$rd.'" />';
     }
 
     $prohibits = explode(',',$license['license_prohibits']);
 
     foreach( $prohibits as $ph )
     {
-        if( !$rdf )
+        if( $ph )
             $rdf .= "\n" . '      <prohibits rdf:resource="http://web.resource.org/cc/'.$ph.'" />';
     }
 
