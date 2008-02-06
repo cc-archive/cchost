@@ -12,7 +12,7 @@ if( !defined('IN_CC_HOST') )
 function trackback_dataview()
 {
     $sql =<<<EOF
-        SELECT upload_id, upload_name, user_real_name
+        SELECT upload_id, upload_name, user_real_name, user_name
             FROM cc_tbl_uploads
             JOIN cc_tbl_user ON upload_user=user_id
             %where%
@@ -74,7 +74,8 @@ $title = $T->String('str_trackback_title_' .$ttype);
         <a id="trackback_submit" class="cc_gen_button" href="javascript://submit track"><span><?= $T->String('str_trackback_submit'); ?></span></a>
     </div>
 </form>
-<? if( ($ttype == 'remix') && !empty($A['logged_in_as']) ) { ?>
+<? if( ($ttype == 'remix') && !empty($A['logged_in_as']) && ($R['user_name'] != $A['logged_in_as']) ) { ?>
+   <div style="clear:both">&nbsp;</div>
    <a class="remix_up_link" href="<?= ccl('submit','remix',$A['logged_in_as'], $R['upload_id']) ?>">
         <?= $T->String(array('str_trackback_remix_upload','',$R['upload_name'],'')) ?>
     </a>

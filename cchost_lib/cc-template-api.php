@@ -203,4 +203,11 @@ function cc_wrap_user_tags(&$tag)
     $tag = '<p class="cc_autocomp_line" id="_ac_'.$tag.'">'.$tag.'</p>';
 }
 
+function cc_content_feed($query,$title)
+{
+    $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
+    $url = url_args( ccl('api','query'), 'f=rss&datasource=topics&title=' . urlencode($title) . '&' . $query );
+    CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $title, $img . $title, 'feed_topics' );
+}
+
 ?>

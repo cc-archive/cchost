@@ -131,6 +131,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
             <a href="%(#R/license_url)%">%(#R/license_name)%</a><br />
         </div>
       </p>
+      %call('license_rdf')%
     </div>
 
     %if_not_null(#R/edpick)%

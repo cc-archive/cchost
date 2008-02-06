@@ -80,7 +80,7 @@ EOF;
 <? $rec_ids = array(); ?>
 %loop(records,R)%
     <? $rec_ids[] = $R['upload_id']; ?>
-    <div class="upload" ><!--   %(#R/upload_name)%   -->
+    <div class="upload" ><!--   <?= str_replace('--','', $R['upload_name']) ?>   -->
     <div class="upload_avatar"><img src="%(#R/user_avatar_url)%" /></div>
     <div class="upload_info">
         <a class="lic_link" href="%(#R/license_url)%" about="%(#R/download_url)%"

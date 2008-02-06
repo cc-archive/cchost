@@ -10,6 +10,67 @@ function _t_file_macros_print_howididit_link(&$T,&$A)
 
 function _t_file_macros_license_rdf(&$T,&$A)
 {
+  ?><!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+<dc:title><?= str_replace('--','',$A['record']['upload_name']) ?></dc:title>
+
+<dc:date><?= $A['record']['year'] ?></dc:date>
+<dc:description><?= htmlentities($A['record']['upload_description_html']) ?></dc:description>
+<dc:creator><Agent><dc:title><?= $A['record']['user_real_name']?></Agent></dc:creator>
+<dc:rights><Agent><dc:title><?= $A['record']['user_real_name']?></Agent></dc:rights>
+<?  if ( !empty($A['record']['dcmitype'])) 
+    {
+          ?><dc:type rdf:resource="http://purl.org/dc/dcmitype/<?= $A['record']['dcmitype']?>"></dc:type>
+<?  }
+    if ( !empty($A['record']['remix_parents'])) 
+    {
+        foreach( $A['record']['remix_parents'] as $parent )
+        {
+            ?><dc:source resource="<?= $parent['file_page_url']?>"></dc:source> <?
+        }
+    }
+    
+    ?><license rdf:resource="<?= $A['record']['license_url']?>"></license>
+</Work>
+<?
+        if ( !empty($A['record']['files']['0']['file_extra']['sha1'])) 
+        {
+            ?><Work rdf:about="urn:sha1:<?= $A['record']['files']['0']['file_extra']['sha1']?>">
+<license rdf:resource="<?= $A['record']['license_url']?>"></license>
+</Work>
+<?
+        }
+?><License rdf:about="<?= $A['record']['license_url']?>"><?
+
+    if ( !empty($A['record']['license_permits'])) 
+    {
+        $pts = CC_split_tags($A['record']['license_permits']);
+        foreach( $pts as $pt )
+        {
+            ?>
+            <permits rdf:resource="http://web.resource.org/cc/<?= $pt ?>"></permits><?
+        }
+    }
+    if ( !empty($A['record']['license_required'])) 
+    {
+        $pts = CC_split_tags($A['record']['license_required']);
+        foreach( $pts as $pt )
+        {
+            ?>
+            <permits rdf:resource="http://web.resource.org/cc/<?= $pt ?>"></permits><?
+        }
+    }
+    
+    if ( !empty($A['record']['license_prohibits'])) 
+    {
+        $pts = CC_split_tags($A['record']['license_prohibits']);
+        foreach( $pts as $pt )
+        {
+            ?>
+            <prohibits rdf:resource="http://web.resource.org/cc/<?= $pt ?>"></prohibits><?
+        }
+    }
+?></License> --><?
 }
 
 function _t_file_macros_show_nsfw(&$T,&$A)

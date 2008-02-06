@@ -62,7 +62,7 @@ class CCFeedsRSS
             if( $is_topics )
             {
                 $R['topic_text_html']   = cc_feed_safe_html($R['topic_text_html']) ;
-                $R['topic_text_plain'] = cc_feed_encode($R['topic_text_plain']);
+                $R['topic_text_plain']  = cc_feed_encode($R['topic_text_plain']);
                 $R['topic_name']        = cc_feed_encode($R['topic_name']);
             }
             else

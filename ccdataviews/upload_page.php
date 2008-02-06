@@ -28,7 +28,8 @@ SELECT
     user_real_name,user_name, $avatar_sql, upload_num_scores, upload_score,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     CONCAT( '$urll', license_logo ) as license_logo_url,
-    license_url, license_name,
+    license_url, license_name, license_permits, license_required, license_prohibits,
+    DATE_FORMAT( upload_date, '%Y' ) as year, 
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date,
     upload_contest,
     collab_upload_collab as collab_id
