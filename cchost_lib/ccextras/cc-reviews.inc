@@ -138,9 +138,9 @@ class CCReview
             $this->_build_bread_crumb_trail(array($user_name,$user_real_name),array($upload_id,$upload_name));
             require_once('cchost_lib/cc-query.php');
             $query = new CCQuery();
-            $args = $query->ProcessAdminArgs('paging=off&f=page&t=reviews_upload&datasource=topics');
+            $args = $query->ProcessAdminArgs('paging=off&f=page&t=reviews_upload&datasource=topics',array(),false);
             $args['title'] = array( 'str_reviews_for_s', $upload_name);
-            $sqlargs['where'] = 'topic.topic_upload=' . $upload_id;
+            $sqlargs['where'] = 'topic.topic_type = \'review\' AND topic.topic_upload=' . $upload_id;
             $query->QuerySQL($args,$sqlargs);
 
             // this is so we can display the upload record on the page:
@@ -233,9 +233,8 @@ class CCReview
 
     function Sync($upload_id,$reviewer,$add=0)
     {
-        $reviews =& CCReviews::GetTable();
-        $where['topic_upload'] = $upload_id;
-        $count = $reviews->CountRows($where) + $add;
+        $count = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_topics WHERE topic_type='review' AND topic_upload=$upload_id");
+        $count += $add;
         $uploads =& CCUploads::GetTable();
         $uploads->SetExtraField( $upload_id, 'num_reviews', $count );
 

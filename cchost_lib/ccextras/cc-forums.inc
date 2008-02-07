@@ -354,10 +354,15 @@ EOF;
 
         $api = new CCForums();
 
-        $topics = new CCTopics();
-        $topic_threads = new CCForumThreads();
-        $topics->AddJoin( $topic_threads, 'topic_thread' );
-        $topic = $topics->QueryKeyRow($topic_id);
+        $sql =<<<EOF
+            SELECT * FROM cc_tbl_topics
+            LEFT OUTER JOIN cc_tbl_forum_threads ON topic_thread=forum_thread_id
+            WHERE topic_id = $topic_id
+EOF;
+        $topic = CCDatabase::QueryRow($sql);
+        if( empty($topic['forum_thread_id']) )
+            return;
+
         $thread_id = $topic['forum_thread_id'];
 
         if( $topic['forum_thread_oldest'] == $topic_id )

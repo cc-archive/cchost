@@ -23,7 +23,7 @@ JOIN cc_tbl_uploads as uploads  ON topic_upload = upload_id
 JOIN cc_tbl_user    as reviewer ON topic_user   = reviewer.user_id
 JOIN cc_tbl_user    as reviewee ON upload_user  = reviewee.user_id
 %joins%
-%where% AND (topic_type <> 'reply')
+%where% AND (topic_type = 'review')
 %order%
 LIMIT 5
 EOF;

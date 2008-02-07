@@ -77,6 +77,7 @@ EOF;
     WHERE tree_parent = {$upload_id} OR tree_child = {$upload_id}
 EOF;
         $record['tree_ids'] = CCDatabase::QueryRows($sql);
+        $recs = array( &$record );
 
         CCEvents::Invoke(CC_EVENT_DELETE_UPLOAD, $recs );
 

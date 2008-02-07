@@ -54,6 +54,7 @@ EOF;
     // sorry about this...
     $user_name = CCDatabase::QueryItem('SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$A['topic_upload']);
     $topic_url = ccl('reviews',$user_name,$A['topic_upload']);
+    $thread_ids = array();
 ?>
 <link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
 <table class="cc_topic_thread" cellspacing="0" cellpadding="0">
@@ -101,9 +102,11 @@ EOF;
 </tr>
 %end_loop%
 </table>
+%if_not_null(#thread_ids)%
 <script type="text/javascript">
 if( user_name )
 {
     new userHookup('topic_cmds','upload=<?= $A['topic_upload'] ?>&type=review&ids=<?= join(',',$thread_ids) ?>');
 }
 </script>
+%end_if%
