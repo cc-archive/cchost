@@ -140,7 +140,8 @@ class CCReview
             $query = new CCQuery();
             $args = $query->ProcessAdminArgs('paging=off&f=page&t=reviews_upload&datasource=topics',array(),false);
             $args['title'] = array( 'str_reviews_for_s', $upload_name);
-            $sqlargs['where'] = 'topic.topic_type = \'review\' AND topic.topic_upload=' . $upload_id;
+            // sh*t this is a hack to hack, need to rethink/redo how topic_upload foreign keys work
+            $sqlargs['where'] = 'topic.topic_type <> \'collab\' AND topic.topic_upload=' . $upload_id;
             $query->QuerySQL($args,$sqlargs);
 
             // this is so we can display the upload record on the page:
