@@ -2,15 +2,6 @@
 .cc_collab { /* colorize */
 }
 
-.collab_table {
-	width:	78%; 
-	margin: 0px auto;
-}
-
-.collab_table td {
-	background: url('../images/bg_fade.gif') 100% 0% repeat-x;
-}
-
 legend {
 	/* border: 1px solid black; */
 	padding: 3px 3px 3px 11px;

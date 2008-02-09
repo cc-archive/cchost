@@ -31,11 +31,7 @@ $text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name']
 $title = $T->String('str_trackback_title_' .$ttype);
 ?>
 <!-- tempalte trackback -->
-<style>
-#trackback_submit {
-    float: left;
-}
-</style>
+
 <div id="trackback_response">
 </div>
 <form id="trackback_form" name="trackback_form" style="z-index:200;display:block;">

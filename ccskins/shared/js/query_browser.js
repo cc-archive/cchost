@@ -91,6 +91,8 @@ ccQueryBrowser.prototype = {
             this.play_link.style.display = 'none';
         if( this.stream_link )
             this.stream_link.style.display = 'none';
+        if( this.podcast_link )
+            this.podcast_link.style.display = 'none';
     },
 
     refresh: function()
@@ -174,6 +176,8 @@ ccQueryBrowser.prototype = {
                     this.play_link.style.display = 'block';
                 if( this.stream_link )
                     this.stream_link.style.display = 'block';
+                if( this.podcast_link )
+                    this.podcast_link.style.display = 'block';
                 //$('mi_stream_page').href = 'javascript://stream';
             }
 

@@ -41,7 +41,7 @@ EOF;
 
 <link  rel="stylesheet" type="text/css" href="%url( 'css/playlist.css' )%" title="Default Style"></link>
 <link  rel="stylesheet" type="text/css" href="%url( 'css/collab.css' )%" title="Default Style"></link>
-<table  class="collab_table">
+<table  style="width:78%; margin: 0px auto;">
 %loop(#rows,cols)%
 <tr>
   %loop(#cols,R)%

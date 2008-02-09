@@ -128,3 +128,7 @@ div#site_disabled_message {
 	border-right: 3px solid #CCC;
 	border-bottom: 3px solid #CCC;
 }
+
+#trackback_submit {
+    float: left;
+}

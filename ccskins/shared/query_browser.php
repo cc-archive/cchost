@@ -7,7 +7,7 @@
 <style type="text/css">
 
 #browser_client {
-    width: 835px;
+    width: 840px;
     margin: 0px auto;
 }
 
@@ -162,8 +162,9 @@ p.cc_autocomp_line {
             <a href="javascript://play win" id="mi_play_page"  style="display:none;"><span ><?= $T->String('str_play') ;?></span></a>
         </div>
         <div id="podcast_link_container">
-            <a id="mi_podcast_page" href="javascript://podcast"><span ><?= $T->String('str_podcast')?></span></a>
+            <a href="javascript://podcast" id="mi_podcast_page" style="display:none;"><span ><?= $T->String('str_podcast')?></span></a>
         </div>
+		<div style="clear:both">&nbsp;</div>
         <? } ?>
         <div id="browser">
             <?= $T->String('str_getting_data') ;?>

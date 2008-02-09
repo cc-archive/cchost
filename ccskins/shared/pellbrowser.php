@@ -44,7 +44,7 @@
 .cc_playlist_pagelink {
     display: block;
     float: left;
-    width: 200px;
+    width: 250px;
     overflow: hidden;
     margin-right: 5px;
 }
