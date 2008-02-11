@@ -66,7 +66,7 @@ $authorinfo['kidproto'] = 'Jon Phillips  <jon@creativecommons.org>';
 $args      = get_args();
 
 $verbose   = !empty($args['v']);
-$date_from = get_time_arg($args,'s','-7 days');
+$date_from = get_time_arg($args,'s','-21 days');
 $date_to   = get_time_arg($args,'e','tomorrow');
 
 $cmd = "svn -v log -r $date_from:$date_to";

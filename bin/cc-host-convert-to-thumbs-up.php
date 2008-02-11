@@ -37,14 +37,14 @@ if( preg_match( '#[\\\\/]bin$#', getcwd() ) )
 
 define('IN_CC_HOST',1);
 require_once('cc-config-db.php');
-require_once('cclib/cc-table.php');
-require_once('cclib/cc-database.php');
-require_once('cclib/cc-config.php');
-require_once('cclib/cc-defines.php');
-require_once('cclib/cc-debug.php');
-require_once('cclib/cc-util.php');
+require_once('cchost_lib/cc-table.php');
+require_once('cchost_lib/cc-database.php');
+require_once('cchost_lib/cc-config.php');
+require_once('cchost_lib/cc-defines.php');
+require_once('cchost_lib/cc-debug.php');
+require_once('cchost_lib/cc-util.php');
 if( !function_exists('gettext') )
-    require_once('ccextras/cc-no-gettext.inc');
+    require_once('cchost_lib/ccextras/cc-no-gettext.inc');
 CCDebug::Enable(true);
 do_main();
 

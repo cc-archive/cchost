@@ -49,15 +49,15 @@ ini_set('memory_limit', '80M');
 error_reporting(E_ALL & ~E_NOTICE);
 
 define('IN_CC_HOST', true);
-require_once('cclib/cc-debug.php');
+require_once('cchost_lib/cc-debug.php');
 CCDebug::Enable(false);                 // set this to 'true' if you are a
 if( !function_exists('gettext') )
-   require_once('ccextras/cc-no-gettext.inc');  
+   require_once('cchost_lib/ccextras/cc-no-gettext.inc');  
 require_once('cc-includes.php');
 CCConfigs::Init();                      // config settings established here
 $cc_extras_dirs = 'ccextras';
 include('cc-inc-extras.php');
-require_once('cclib/cc-feed.php');
+require_once('cchost_lib/cc-feed.php');
 CCEvents::Invoke(CC_EVENT_APP_INIT);
 
 
