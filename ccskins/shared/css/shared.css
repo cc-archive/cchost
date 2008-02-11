@@ -1,0 +1,134 @@
+.cc_name_ban {
+   text-decoration: line-through;
+   color: red;
+   font-weight: normal;
+}
+
+.cc_name_hidden {
+   text-decoration: line-through;
+   color: #999;
+   font-weight: normal;
+   font-style: italic;
+}
+
+.cc_breadcrumbs {
+	margin: 0.3em 0px 1.4em 0px;
+}
+
+a.cc_external_link, a.cc_external_link:link, a.cc_external_link:visited {
+	font-weight: normal;
+}
+
+a.cc_external_link span {
+	text-decoration: underline;
+}
+
+a.flag {
+	background: url('../images/flag-white.gif') top left no-repeat;
+	width: 12px;
+	height: 12px;
+	display:block;
+}
+
+a.flag:hover {
+	background: url('../images/flag-red.gif') top left no-repeat;
+}
+
+div#beta_message {
+	position: absolute;
+	top: 15px;
+	left: 30%;
+	background-color: white;
+	border: 1px solid red;
+	color: #FF4444;
+	padding: 5px;
+	z-index: 100;
+}
+
+div#site_disabled_message {
+	position: absolute;
+	top: 15px;
+	left: 15%;
+	background-color: #DDD;
+	border: 1px solid blue;
+	color: #FF4444;
+	padding: 5px;
+	z-index: 100;
+}
+
+.MB_alert p {
+	border: 1px solid #AAA;
+	padding: 5px;
+}
+
+#MB_close {
+	border: 1px solid #555;
+}
+
+#cc_thinking {
+    border-width: 1px;
+	border-style: solid;
+    padding: 9px;
+	z-index: 4;
+	position: absolute;
+}
+
+.ajaxmsg_message {
+	background-color: green;
+	color: white;
+	font-weight: bold;
+}
+
+.ajaxmsg_error {
+	background-color: red;
+	color: white;
+	font-weight: bold;
+}
+
+.ajaxmsg_working, .ajaxmsg_warning {
+	background-color: yellow;
+	color: black;
+	font-weight: bold;
+}
+
+
+#form_mask_msg {
+	width: 90%;
+	margin: 24% auto;
+	text-align: center;
+}
+
+/* todo: move this, colorize */
+.pool_item_type {
+	font-weight: bold;
+	color: green;
+}
+
+#nsfw {
+	color: red;
+}
+
+#blurbs {
+}
+
+.blurb_name {
+	font-variant: small-caps;
+	display: block;
+	margin: 1.0em 1.2em 0px 0px;
+	text-align: center;
+	background-color: #CCC;
+	padding: 2px;
+}
+
+.blurb_text {
+	display: block;
+	margin: 0px 1.2em 0px 0px;
+	padding: 0.3em 0px 0.3em 0.6em;
+	border-left: 3px solid #CCC;
+	border-right: 3px solid #CCC;
+	border-bottom: 3px solid #CCC;
+}
+
+#trackback_submit {
+    float: left;
+}
