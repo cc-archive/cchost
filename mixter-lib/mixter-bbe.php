@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 
 if( !empty($_GET['bbe_format']) )
 {
-    require_once('../cclib/snoopy/Snoopy.class.php');
+    require_once('../cchost_lib/snoopy/Snoopy.class.php');
     $snoopy = new Snoopy();
     $snoopy->fetch('http://ccmixtermedia.org/djvadim/tracks');
     print $snoopy->results;
@@ -14,11 +14,11 @@ if( !empty($_GET['bbe_format']) )
 
 if( !empty($_GET['bbe_edit']) )
 {
-    $f1 = @file_get_contents('mixter-files/bbe_1.txt');
-    $f2 = @file_get_contents('mixter-files/bbe_2.txt');
-    $f3 = @file_get_contents('mixter-files/bbe_3.txt');
+    $f1 = @file_get_contents('cchost_files/pages/djvadim/bbe_1.txt');
+    $f2 = @file_get_contents('cchost_files/pages/djvadim/bbe_2.txt');
+    $f3 = @file_get_contents('cchost_files/pages/djvadim/bbe_3.txt');
     $html =<<<EOF
-    <style>
+    <style type="text/css">
         textarea {
             width: 80%;
             height: 200px;
@@ -54,6 +54,6 @@ function bbe_write($num)
     $text = $_POST[$name];
     if( get_magic_quotes_gpc() == 1 )
         $text = trim(stripslashes( $text ));
-    $f = fopen("../mixter-files/$name.txt",'w'); fwrite($f,$text); fclose($f);
+    $f = fopen("cchost_files/pages/djvadim/$name.txt",'w'); fwrite($f,$text); fclose($f);
  }
 ?>

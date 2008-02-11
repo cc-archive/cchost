@@ -5,8 +5,8 @@ if( !defined('IN_CC_HOST') )
 
 if( class_exists('CCPage') || class_exists('ccpage') )
 {
-    require_once('cclib/cc-admin.php');
-    require_once('cclib/cc-upload-table.php');
+    require_once('cchost_lib/cc-admin.php');
+    require_once('cchost_lib/cc-upload-table.php');
 
     /**
     * Form for admin ui for ftp remoting
@@ -132,7 +132,7 @@ if( class_exists('CCPage') || class_exists('ccpage') )
 </div>
 END;
 
-        CCPage::AddPrompt('body_html',$buttons);
+        CCPage::AddContent($buttons);
 
         return count($queue);
     }
@@ -290,8 +290,8 @@ END;
             }
         }
         $html .= '</table>';
-        CCPage::AddPrompt('body_html', $html);
-        CCPage::PageArg('dummy1', '0', 'prev_next_links');
+        CCPage::AddContent($html);
+        CCPage::AddMacro('prev_next_links');
     }
 
     function cc_remote_dump_queue()
@@ -323,7 +323,7 @@ END;
 
         $html .= '</table>';
 
-        CCPage::AddPrompt('body_html',$html);
+        CCPage::AddContent($html);
     }
 }
 
@@ -393,7 +393,7 @@ function cc_remote_delete($fname,$mixter_ftp_settings)
 
 function cc_remote_exec($query,$mixter_ftp_settings)
 {
-    require_once('cclib/snoopy/Snoopy.class.php');
+    require_once('cchost_lib/snoopy/Snoopy.class.php');
 
     $snoopy = new Snoopy();
     $snoopy->read_timeout = 10;

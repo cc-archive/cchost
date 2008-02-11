@@ -77,6 +77,7 @@ EOF;
 
     function Loops()
     {
+        require_once('cchost_lib/cc-page.php');
         $this->check_for_loop_artists();
 
         $args['loop_preview_url']  = ccc('magnatune','view','contest','sources') . '#loops';
@@ -122,7 +123,7 @@ EOF;
 
         //CCDebug::PrintVar($args['genres']);
         CCPage::PageArg('mt', $args);
-        CCPage::ViewFile('magnatune_loops.xml');
+        CCPage::ViewFile('magnatune_loops.php');
     }
 
     function LoopStream($loopid_wext)
@@ -153,29 +154,18 @@ EOF;
         exit;
     }
 
-    function LocalSearch($pool_id,$query,$type)
+    function LocalSearch($pool_id,$text,$type)
     {
-        $query = CCUtil::StripText( urldecode($query) );
-        if( empty($query) )
+        $text = CCUtil::StripText( urldecode($text) );
+        if( empty($text) )
             return( array() );
 
-        switch( $type )
-        {
-            case 'artist':
-                $fields = array( 'pool_item_artist' );
-                break;
-            case 'title' :
-                $fields = array( 'pool_item_name' );
-                break;
-            default:
-                $fields = array( 'pool_item_description', 'pool_item_name', 'pool_item_artist' );
-                break;
-        }
-        require_once('cclib/cc-search.php');
-        $filter = CCSearch::BuildFilter($fields,$query,'any');
-        $filter = "($filter) AND pool_item_pool = '$pool_id'";
-        $pool_items =& CCPoolItems::GetTable();
-        $items = $pool_items->QueryRows($filter);
+        require_once('cchost_lib/cc-query.php');
+        $query = new CCQuery();
+        parse_str('limit=1000&format=php&datasource=pool_item&sort=&dataview=pool_item_search',$q);
+        $sql['where'] = 'pool_item_pool =' . $pool_id;
+        $sql['match'] = $text;
+        list( $items ) = $query->QuerySQL($q,$sql);
         return($items);
     }
 
@@ -186,12 +176,11 @@ EOF;
 
         $artist_name = CCDatabase::QueryItem("SELECT artist FROM magnatune_song_info WHERE page = '$loop_artist' LIMIT 1");
         $loops = CCDatabase::QueryRows("SELECT * FROM magnatune_loops WHERE loop_artist = '$loop_artist'");
-        $args['preview_macro'] = 'magnatune_preview.xml/loop_preview';
         $args['mt']['loop_stream_url']   = ccl('library','loopstream');
         $args['mt']['loop_preview'] = array( 'loop_artist' => $loop_artist,
                                        'loop_artist_name' => $artist_name,
                                        'loops' => $loops );
-        $this->_show_preview($args);
+        $this->_show_preview($args,'loop_preview');
     }
 
     function AlbumList($album_pick)
@@ -199,56 +188,24 @@ EOF;
         $sql = "SELECT download_mp3, trackname, songid, artist, albumname ".
                "FROM magnatune_song_info WHERE albumsku = '$album_pick'";
         $songs = CCDatabase::QueryRows($sql);
-        $args['preview_macro'] = 'magnatune_preview.xml/album_preview';
         $args['mt']['song_stream_url']   = ccl('library','songstream');
         $args['mt']['album_preview'] = array( 'album' => addslashes($songs[0]['albumname']),
                                         'artist' => addslashes($songs[0]['artist']),
                                         'songs' => $songs);
-        $this->_show_preview($args);
+        $this->_show_preview($args,'album_preview');
     }
 
-    function _show_preview(&$args)
+    function _show_preview(&$args,$macro)
     {
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-template.php');
         global $CC_GLOBALS;
-
-        $template = new CCTemplate( 'magnatune_preview.xml' );
-        $html = $template->SetAllAndParse($args);
-        print($html);
+        $file = CCPage::GetViewFile('magnatune_preview.php');
+        $template = new CCSkinMacro( $file . '/' . $macro);
+        $template->SetAllAndPrint($args);
         exit;
     }
 
-    // this was a one time function for digging out the 
-    // magnatune contest entrants info
-    function csv()
-    {
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetTagFilter('magnatune');
-        $uploads->SetOrder('user_name');
-        $records = $uploads->GetRecords('');
-        header('Content-type: text/plain');
-        print( "USERNAME, UPLOAD_NAME, FILE_NAME, USER_REAL_NAME, DAYTIME_PHONE, COUNTRY, BIRTHDATE\n");
-        $count = count($records);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $record =& $records[$i];
-            if( is_string($record['user_extra']) )
-                $uextra = unserialize($record['user_extra']);
-            else
-                $uextra = $record['user_extra'];
-            
-            $minfo =& $uextra['magnatune_contest_info'];
-
-            print( $record['user_name'] . ', ' .
-                   $record['upload_name'] . ', ' .
-                   $record['files'][0]['file_name'] . ', ' .
-                   $minfo['realname'] . ', ' .
-                   $minfo['daytimephone'] . ', ' .
-                   $minfo['country'] . ', ' .
-                   $minfo['birthdate'] . "\n" );
-        }
-
-        exit;
-    }
 
     /**
     * Event handler for mapping urls to methods

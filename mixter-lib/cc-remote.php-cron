@@ -6,9 +6,9 @@ if( !defined('IN_CC_HOST') )
 chdir('..');
 
 if( !function_exists('gettext') )
-    require_once('ccextras/cc-no-gettext.inc');
+    require_once('cchost_lib/ccextras/cc-no-gettext.inc');
 
-require_once('cclib/cc-debug.php');
+require_once('cchost_lib/cc-debug.php');
 require_once('cc-includes.php');
 require_once('mixter-lib/cc-remote-client.inc');
 

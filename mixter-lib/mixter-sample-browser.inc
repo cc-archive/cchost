@@ -18,20 +18,6 @@
 *
 */
 
-/**
-* A note about this module:
-*
-* This was written a few months before the 
-* CCQuery class and prototype.js were introduced into the codebase.
-* About 1/4 of this code would vanish if it was ever ported to
-* to use those technologies.
-*
-* The idea would be to load an args array with the tags and
-* other search terms, plus with a format of 
-* 'html' and $args['template'] = 'sample_browser.xml'
-*
-*/
-
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
@@ -68,7 +54,8 @@ class CCSampleBrowser
 
     function SamplesSearch()
     {
-        if( empty($_GET['term']) )
+        $term = empty($_GET['term']) ? '' : CCUtil::Strip($_GET['term']);
+        if( empty($term) )
         {
             print('<span class="sb_msg">' . 
                    _('Enter a search phrase first...') . 
@@ -76,39 +63,39 @@ class CCSampleBrowser
             exit;
         }
 
-        $term = $_GET['term'];
-        $where = "LOWER(CONCAT(upload_description,upload_tags,user_real_name,user_name,upload_name)) LIKE '%$term%'";
-
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetTagFilter('sample');
-        $recs = $uploads->GetRecords($where);
-        
+        require_once('cchost_lib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('f=php&dataview=default&tags=sample&search='.$term);
+        list( $recs ) = $query->Query($args);
         $this->_list_records($recs,"\"$term\"", _('Search phrase'));
     }
 
     function SamplesStream($file_id_with_m3u)
     {
         $file_id = str_replace('.m3u', '', $file_id_with_m3u);
-        $files =& CCFiles::GetTable();
-        $upload_id = $files->QueryItemFromKey('file_upload', $file_id);
-        if( !empty($upload_id) )
+        $sql =<<<EOF
+            SELECT upload_contest, user_name, contest_short_name, file_name
+            FROM cc_tbl_files
+            JOIN cc_tbl_uploads ON file_upload=upload_id
+            JOIN cc_tbl_user ON upload_user=user_id
+            LEFT OUTER JOIN cc_tbl_contests ON upload_contest=contest_id
+            WHERE file_id = {$file_id}
+EOF;
+        $F = CCDatabase::QueryRow($sql);
+        if( $F )
         {
-            $uploads =& CCUploads::GetTable();
-            $record = $uploads->GetRecordFromKey($upload_id);
-            if( !empty($record) )
+            global $CC_GLOBALS;
+            if( $F['contest_short_name'] )
             {
-                $F =& $record['files'];
-                $count = count($F);
-                for( $i = 0; $i < $count; $i++ )
-                {
-                    if( $F[$i]['file_id'] == $file_id )
-                    {
-                        header("Content-type: audio/x-mpegurl");
-                        print( $F[$i]['download_url'] . "\n" );
-                        break;
-                    }
-                }
+                $download_url = ccd($CC_GLOBALS['contest-upload-root'],$F['contest_short_name'],$F['user_name'],$F['file_name']);
             }
+            else
+            {
+                $download_url = ccd($CC_GLOBALS['user-upload-root'],$F['user_name'],$F['file_name']);
+            }
+
+            header("Content-type: audio/x-mpegurl");
+            print( $download_url . "\n" );
         }
         // there's no point in doing error messages since this is
         // fed to media player, I guess we could return 404...
@@ -138,19 +125,14 @@ class CCSampleBrowser
             $match = 'any';
 
 
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetDefaultFilter(true,true); // filter out banned and hidden packs
-        $uploads->SetSort( 'upload_date', 'DESC' );
-        $uploads->SetTagFilter($tags,$match);
-
-
-        // this is the only way to AND the 'sample' tag
-        // and OR the rest of the them...
+        require_once('cchost_lib/cc-dataview.php');
+        $dv = new CCDataView();
+        $tag_filter = $dv->MakeTagFilter($tags,$match);
 
         if( !empty($_GET['bpm']) && ($_GET['bpm'] != '-') )
         {
             $bpm = $_GET['bpm'];
-            $bpm_where = " AND (upload_tags REGEXP '(^| |,)(bpm_{$bpm})(,|\$)' )";
+            $bpm_where = 'AND ' . $dv->MakeTagFilter('bpm_'. $bpm);
         }
         else
         {
@@ -161,7 +143,7 @@ class CCSampleBrowser
         if( !empty($_GET['lic']) && ($_GET['lic'] != '-') )
         {
             $lic = $_GET['lic'];
-            $lic_where = " AND (upload_license = '$lic')";
+            $lic_where = " AND (license_tag = '$lic')";
         }
         else
         {
@@ -169,9 +151,24 @@ class CCSampleBrowser
             $lic_where = '';
         }
 
-        $where = "(upload_tags REGEXP '(^| |,)(sample)(,|\$)' )" . $bpm_where . $lic_where;
+        $sample_filter = $dv->MakeTagFilter('sample');
 
-        $recs =& $uploads->GetRecords($where);
+        $where = "($sample_filter) AND ( ($tag_filter) $bpm_where  $lic_where)";
+        $ccp = ccl('people') . '/';
+        $ccu = ccl('files') . '/';
+        $sql =<<<EOF
+            SELECT upload_id, upload_name, upload_extra, upload_contest, user_name, user_real_name,
+                CONCAT( '$ccp', user_name ) as artist_page_url,
+                CONCAT( '$ccu', user_name, '/', upload_id ) as file_page_url
+            FROM cc_tbl_uploads
+            JOIN cc_tbl_user ON upload_user=user_id
+            JOIN cc_tbl_licenses ON upload_license=license_id
+            WHERE (upload_banned=0) AND (upload_published=1) AND ($where)
+            ORDER BY upload_date DESC
+EOF;
+        $recs = CCDatabase::QueryRows($sql);
+        $e = array( 'e' => array( CC_EVENT_FILTER_EXTRA, CC_EVENT_FILTER_FILES, CC_EVENT_FILTER_DOWNLOAD_URL ) );
+        $dv->FilterRecords( $recs, $e );
 
         if( strpos( $tags, ',' ) !== false )
              $term = str_replace(',',', ',$tags) . ' (' . $match . ')';
@@ -191,27 +188,10 @@ class CCSampleBrowser
     {
         global $CC_GLOBALS;
 
-        // phpTal does NOT like the hyphen in "media-type" so we have to mark
-        // each file record as 'is_audio' manually
-
-        $count = count($recs);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            $F =& $recs[$i]['files'];
-            $fcount = count($F);
-            for( $n = 0; $n < $fcount; $n++ )
-            {
-                $F[$n]['is_audio'] = !empty($F[$n]['file_format_info']['media-type']) && 
-                                   ( $F[$n]['file_format_info']['media-type'] == 'audio' );
-            }
-            $recs[$i]['odd'] = $i & 1 ? 'odd' : 'even';
-        }
-
         $args = $CC_GLOBALS;
         $args['records']         =& $recs;
         $args['results_caption'] = sprintf( 'returns %d results', count($args['records']) );
         $args['term']            = $term;
-        $args['browser_macro']   = 'sample_browser.xml/browser_list';
         $args['term_caption']    = $term_caption;
 
         if( empty($args['records']) )
@@ -222,12 +202,9 @@ class CCSampleBrowser
             exit;
         }
 
-        //CCDebug::PrintVar($args['records'][0],false);
-
-        $vfile = CCPage::GetViewFile('sample_browser.xml');
-        $template = new CCTemplate( $vfile  );
-        $html = $template->SetAllAndParse($args);
-        print($html);
+        require_once('cchost_lib/cc-template.php');
+        $template = new CCSkinMacro( 'sample_browser.php/browser_list');
+        $template->SetAllAndPrint($args);
         exit;
     }
 
@@ -235,56 +212,50 @@ class CCSampleBrowser
     {
         global $CC_GLOBALS;
 
-        $args = $CC_GLOBALS;
+        $args = array(); // $CC_GLOBALS;
         list( $tags, $bpms ) = $this->_get_tags();
 
-        $args['tags']           =& $tags;
+        $args['tags_tags']      =& $tags;
         $args['bpms']           =& $bpms;
         $args['tag_sorts']      =& $this->_get_tag_sorts();
         $args['tag_filters']    =& $this->_get_tag_filters();
         $args['tag_limiters']   =& $this->_get_tag_limiters();
-        $args['browser_macro']  = 'sample_browser.xml/browser_page';
         $args['picker_caption'] = _('Search using tags:');
         $args['search_caption'] = _('Search for phrase:');
         $args['bpm_caption']    = _('Limit to BPM:');
         $args['search_text']    = _('Go');
         $args['default_msg']    = $this->_default_msg();
-        $args['licenses']       = $this->_get_lic_filters('sample');
+        $args['licenses']       = $this->_get_lic_filters('sample',true);
+        $file = CCPage::GetViewFile('sample_browser.php');
+        $args['sample_browser'] = $file . '/browser_page';
 
-        $tfile = CCPage::GetViewFile('sample_browser.xml');
-        if( $tfile === false ) // errrr
-            $tfile = CCTemplate::GetTemplate('sample_browser.xml');
-        $template = new CCTemplate( $tfile );
-        $html = $template->SetAllAndParse($args);
-        CCPage::AddPrompt('body_text',$html);
+        //$args['browser_macro']  = 'sample_browser.xml/browser_page';
+
+        foreach( $args as $K => $V )
+            CCPage::PageArg( $K, $V );
+
+        CCPage::AddMacro( 'sample_browser' );
+
     }
 
 
     function LicsForTags($tag_filter)
     {
         $lics = $this->_get_lic_filters($tag_filter,true);
-        require_once('cclib/zend/json-encoder.php');
-        $text = CCZend_Json_Encoder::encode($lics);
-        header( "X-JSON: $text");
-        header( 'Content-type: text/plain');
-        print($text);
-        exit;
+        CCUtil::ReturnAjaxData($lics);
     }
 
     function _get_lic_filters($tag_filter,$collapse=false)
     {
-        $uploads = new CCUploads();
-        $uploads->GroupOn($collapse ? 'license_tag' : 'upload_license');
-        $uploads->SetTagFilter($tag_filter);
-        $used_lics = $uploads->QueryItems('upload_license','');
-        $in = array();
-        foreach( $used_lics as $ul )
-            $in[] = "'$ul'";
-        $where = 'license_id IN (' . join(',',$in) . ')';
-
-        $licenses =& CCLicenses::GetTable();
-        $licenses->SetOrder('license_name');
-        $rows = $licenses->QueryRows($where);
+        require_once('cchost_lib/cc-dataview.php');
+        $dv = new CCDataView();
+        $filter = $dv->MakeTagFilter($tag_filter);
+        $group_key = $collapse ? 'license_tag' : 'upload_license';
+        $sql = "SELECT upload_license FROM cc_tbl_uploads JOIN cc_tbl_licenses ON upload_license=license_id WHERE $filter GROUP BY $group_key";
+        $used_lics = CCDatabase::QueryItems($sql);
+        $sql = "SELECT license_tag,license_id,license_name FROM cc_tbl_licenses WHERE license_id IN ('" 
+               . join("','",$used_lics) . "') ORDER BY license_name";
+        $rows = CCDatabase::QueryRows($sql);
         if( empty($_GET['lic']) )
             $sellic = '-';
         else
@@ -306,10 +277,11 @@ class CCSampleBrowser
 
     function _get_tags()
     {
-        $uploads =& CCUploads::GetTable();
-        $uploads->SetDefaultFilter(true,true); // filter out banned and hidden packs
-        $uploads->SetTagFilter( 'sample' );
-        $rows = $uploads->QueryRows('','upload_extra');
+        require_once('cchost_lib/cc-dataview.php');
+        $dv = new CCDataView();
+        $where = $dv->MakeTagFilter('sample');
+        $sql = "SELECT upload_extra FROM cc_tbl_uploads WHERE (upload_banned=0) AND (upload_published=1) AND $where";
+        $rows = CCDatabase::QueryRows($sql);
         $count = count($rows);
         $tagstrs = array();
         $bpms = array();
@@ -337,7 +309,7 @@ class CCSampleBrowser
         //CCDebug::Enable(true);
 
         $all_tags = strtolower( join(',', $tagstrs ) );
-        require_once('cclib/cc-tags.php');
+        require_once('cchost_lib/cc-tags.php');
         $all_tags = CCTag::TagSplit($all_tags);
 
         if( !empty( $_GET['ts'] ) )
@@ -346,6 +318,7 @@ class CCSampleBrowser
             $ts = CC_TS_DEFAULT;
 
         $tag_counts = array_count_values($all_tags);
+
         $tag_rows = array();
         switch( $ts )
         {

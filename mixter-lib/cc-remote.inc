@@ -95,7 +95,7 @@ class CCRemote
 
                 $html .= '<br />';
             }
-            CCPage::AddPrompt('body_text',$html);
+            CCPage::AddContent($html);
         }
     }
 
