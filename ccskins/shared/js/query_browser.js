@@ -36,11 +36,6 @@ ccQueryBrowser.prototype = {
             this.prev_link   = this.options.prev_link_id   ? $(this.options.prev_link_id) : null;
             this.next_link   = this.options.next_link_id   ? $(this.options.next_link_id) : null;
             this.browser     = this.options.browser_id     ? $(this.options.browser_id) : null; 
-            this.rss_link    = this.options.rss_link_id    ? $(this.options.rss_link_id) : null;
-            this.play_link   = this.options.play_link_id   ? $(this.options.play_link_id) : null;
-            this.stream_link = this.options.stream_link_id ? $(this.options.stream_link_id) : null;
-            this.podcast_link = this.options.podcast_link_id ? $(this.options.podcast_link_id) : null;
-
             this.paging = (this.prev_link != null) && (this.next_link != null);
 
             if( this.prev_link )
@@ -49,9 +44,6 @@ ccQueryBrowser.prototype = {
             if( this.next_link )
                 Event.observe( this.next_link, 'click', this.onNextClick.bindAsEventListener( this ) );
 
-            if( this.play_link )
-                Event.observe( this.play_link, 'click',    this.play_in_popup.bindAsEventListener( this ) );
-
             if( this.options.autoRefresh )
                 this.refresh();
         }
@@ -59,6 +51,21 @@ ccQueryBrowser.prototype = {
         {
             alert('init qbrowser failed: ' + e );
         }
+    },
+
+    _check_feed_links: function() {
+        if( this._feed_links_checked )
+            return;
+
+        this.rss_link    = this.options.rss_link_id    ? $(this.options.rss_link_id) : null;
+        this.play_link   = this.options.play_link_id   ? $(this.options.play_link_id) : null;
+        this.stream_link = this.options.stream_link_id ? $(this.options.stream_link_id) : null;
+        this.podcast_link = this.options.podcast_link_id ? $(this.options.podcast_link_id) : null;
+
+        if( this.play_link )
+            Event.observe( this.play_link, 'click',    this.play_in_popup.bindAsEventListener( this ) );
+
+        this._feed_links_checked = true;
     },
 
     getQuery: function(withTemplate) {
@@ -146,6 +153,8 @@ ccQueryBrowser.prototype = {
 
             var queryStr = '?' + this.options.filters.queryString(false);
             var p = queryStr.parseQuery();
+
+            this._check_feed_links();
 
             if( this.stream_link != null )
             {

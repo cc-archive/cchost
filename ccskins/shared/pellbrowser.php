@@ -1,10 +1,10 @@
-<div >
-<h1 >A Cappella Browser</h1>
+
+<h1>A Cappella Browser</h1>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
 <link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>" title="Default Style"></link>
 <style >
 #inner_content {
-    width: 80%;
+    width: 750px;
     margin: 0px auto;
 }
 
@@ -15,6 +15,10 @@
 
 #type_picker, #bpm_picker, #limit_picker, #lic_picker {
   font-size: 11px;
+}
+
+#lic_picker {
+    width: 180px;
 }
 
 #hide_container {
@@ -31,6 +35,7 @@
 
 #featured {
   float: right;
+  margin-right: -35px;
   border: 1px solid black;
   padding: 8px;
   /* background-color: #DDD; */
@@ -107,49 +112,51 @@
 
 </style>
 <div id="browser_head">
-<div id="type_picker_container">
-    Type: <select  id="type_picker"></select>
+    <div id="type_picker_container">
+        Type: <select  id="type_picker"></select>
+    </div>
+    <div id="bpm_picker_container">
+        BPM: <select  id="bpm_picker"></select>
+    </div>
+    <div id="limit_picker_container">
+        Display: <select  id="limit_picker"></select>
+    </div>
+    <div id="lic_picker_container">
+    <select  id="lic_picker"></select>
+    </div>
+    <div id="hide_container"><input  type="checkbox" id="hide_remixed"></input> Hide remixed pells</div>
 </div>
-<div id="bpm_picker_container">
-    BPM: <select  id="bpm_picker"></select>
-</div>
-<div id="limit_picker_container">
-    Display: <select  id="limit_picker"></select>
-</div>
-<div id="lic_picker_container">
-<select  id="lic_picker"></select>
-</div>
-<div id="hide_container"><input  type="checkbox" id="hide_remixed"></input> Hide remixed pells</div>
-</div>
+
 <div id="featured">
 <?
 $A['feats'] = cc_query_fmt('tags=acappella+featured&limit=3&rand=1&dataview=info_avatar&f=php');
-
-?><div class="featured_info">
-<span  style="display:none">wrong spellings: acappela, accapella, acapella</span>
-<img src="http://creativecommons.org/images/public/somerights20.gif" style="margin: 8px;float:right" />
-All a cappellas are under a <a href="http://creativecommons.org">Creative Commons</a> license. Please
-verify which license applies to each a cappella.
-        </div>
-<h3>Featured A Cappellas</h3>
+?>
+    <div class="featured_info">
+        <span  style="display:none">wrong spellings: acappela, accapella, acapella</span>
+        <img src="http://creativecommons.org/images/public/somerights20.gif" style="margin: 8px;float:right" />
+        All a cappellas are under a <a href="http://creativecommons.org">Creative Commons</a> license. Please
+        verify which license applies to each a cappella.
+    </div>
+    <h3>Featured A Cappellas</h3>
 <?
 
 foreach( $A['feats'] as $R )
 {
-?><div class="featured_pell">
-<div class="feat_avatar">
-    <a href="<?= $R['artist_page_url']?>"><img src="<?= $R['user_avatar_url']?>" /></a>
-</div>
-<a class="feat_title cc_file_link" href="<?= $R['file_page_url']?>"><?= $R['upload_name']?></a>
-<a class="feat_user cc_user_link" href="<?= $R['artist_page_url']?>"><?= $R['user_real_name']?></a>
-<div class="tdc" style="float:right;width:20px"><a class="info_button" id="_plinfo_<?= $R['upload_id']?>"></a></div>
-<a href="<?= $R['license_url']?>" about="" rel="license" title="<?= $R['license_name']?>"><img src="<?= $R['license_logo_url'] ?>" /></a>
-<div class="clear_me">&nbsp;</div>
+?>
+    <div class="featured_pell">
+        <div class="feat_avatar">
+            <a href="<?= $R['artist_page_url']?>"><img src="<?= $R['user_avatar_url']?>" /></a>
+        </div>
+        <a class="feat_title cc_file_link" href="<?= $R['file_page_url']?>"><?= $R['upload_name']?></a>
+        <a class="feat_user cc_user_link" href="<?= $R['artist_page_url']?>"><?= $R['user_real_name']?></a>
+        <div class="tdc" style="float:right;width:20px"><a class="info_button" id="_plinfo_<?= $R['upload_id']?>"></a></div>
+        <a href="<?= $R['license_url']?>" about="" rel="license" title="<?= $R['license_name']?>"><img src="<?= $R['license_logo_url'] ?>" /></a>
+        <div class="clear_me">&nbsp;</div>
 <? if( !empty($R['fplay_url']) ) { ?>
-<table  cellspacing="0" cellpadding="0" style="width:100%"><tr ><td  style="width:30px">Play:</td><td ><a class="cc_player_button cc_player_hear" id="_ep_<?= $R['upload_id']?>" href="<?= $R['fplay_url']?>">
-</a></td></tr></table>
+        <table  cellspacing="0" cellpadding="0" style="width:100%"><tr ><td  style="width:30px">Play:</td><td ><a class="cc_player_button cc_player_hear" id="_ep_<?= $R['upload_id']?>" href="<?= $R['fplay_url']?>">
+        </a></td></tr></table>
 <? } ?>
-</div>
+    </div>
 <?
 } // END: for loop
 
@@ -168,17 +175,14 @@ foreach( $A['feats'] as $R )
 </tr>
 </table>
 
-<div id="feed_links" style="display:none">
-    <span  class="cc_feed_link">
-    <a id="rss_feed" class="cc_feed_button" type="application/rss+xml" href="" title="RSS 2.0">RSS </a>
-    <span  id="feed_name"></span>
-    </span>
-</div>
 <div id="bottom_breaker">&nbsp;</div>
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('/js/playlist.js') ?>"></script>
 <script  src="<?= $T->URL('/js/query_browser.js') ?>"></script>
-<? $T->Call('playerembed.xml/eplayer'); ?>
+<? 
+    $T->Call('playerembed.xml/eplayer'); 
+    $A['qstring'] = 'tags=acappella+featured&limit=50';
+?>
 <script type="text/javascript">
 //<!--
 var feat_playlistMenu = new ccPlaylistMenu( { autoHook: false } );
@@ -331,4 +335,3 @@ new ccQueryBrowser( { filters: new ccPellFilters(), autoRefresh: false } );
 
 //-->
 </script>
-</div>

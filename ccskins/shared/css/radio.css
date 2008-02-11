@@ -101,8 +101,7 @@ div.radio_opt {
 
 #gobuttons {
 	padding: 2px;
-	width: 80%;
-	margin: 1px auto;
+	margin-bottom: 12px;
 }
 
 #gobuttons a {
