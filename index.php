@@ -17,23 +17,42 @@
 * $Id$
 *
 */
+if( !empty($_GET['ccm']) && preg_match('/\.(gif|png|ico|jpg|mp3)$/',$_GET['ccm']) )
+{
+    header("HTTP/1.0 404 Not Found");
+    exit;
+}
 
+$CC_GLOBALS   = array();
+$CC_CFG_ROOT  = '';
 $cc_error_level = E_ALL;
+$_sql_time = 0;
 
 error_reporting($cc_error_level); 
 
 /*
-*  ccHost can't connect to the database without this file. 
-*  If not present, it probably means we haven't installed yet.
+*  ccHost can't connect to the database without this 
+*  the right version of this file. 
+*  If not present, it probably means we haven't installed
+*  or upgraded properly yet.
 */
-if( !file_exists('cc-config-db.php') )
+if( !file_exists('cc-host-db.php') )
 {
-    /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
+    if( file_exists('cc-config-db.php') )
+    {
+        /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
+        die('<html><body>ccHost has not been properly upgraded. 
+            Please <a href="ccadmin/">
+            follow these steps</a> for a successful
+            upgrade.</body></html>');
+    }
+
     die('<html><body>ccHost has not been properly installed. 
         Please <a href="ccadmin/">
         follow these steps</a> for a successful
         setup.</body></html>');
 }
+
 
 /*
 *  All ccHost includes require this define to prevent direct 
@@ -54,7 +73,9 @@ if( file_exists('.cc-ban.txt') )
 * We make a special include for debug so that modules can turn 
 * it on as quickly as possible.
 */
-require_once('cclib/cc-debug.php');
+require_once('cchost_lib/cc-debug.php');
+CCDebug::Enable(true);
+CCDebug::Chronometer($_t);
 
 /*
 * Logging errors to a file this will help ccHost developers
@@ -72,21 +93,24 @@ CCDebug::InstallErrorHandler(true);
 *  compiled into PHP
 */
 if( !function_exists('gettext') )
-   require_once('ccextras/cc-no-gettext.inc');
+   require_once('cchost_lib/ccextras/cc-no-gettext.inc');
 
 /*
 *  Include core modules and extras that come with the 
 *  ccHost package
 */
-require_once('cc-includes.php');
-$cc_extras_dirs = 'ccextras';
-include('cc-inc-extras.php');
-require_once('cc-custom.php');
+require_once('cchost_lib/cc-includes.php');
+$cc_extras_dirs = 'cchost_lib/ccextras';
+include('cchost_lib/cc-inc-extras.php');
+require_once('cchost_lib/cc-custom.php');
+require_once('cchost_lib/cc-template-api.php');
 
 /*
 * Configuration initialized here
 */
+CCDebug::Chronometer($_INIT);
 CCConfigs::Init();
+$_INIT = CCDebug::Chronometer($_INIT);
 
 
 /*
@@ -97,9 +121,11 @@ CCConfigs::Init();
 *  update)
 */
 if( file_exists('ccadmin') )
+{
     die('<html><body>' . _('ccHost installation is not complete.') . ' ' . 
         _('For security reasons, you should rename "ccadmin".') .  
         '</body></html>');
+}
 
 /*
 *  Pick up 3rd party PHP modules
@@ -107,7 +133,7 @@ if( file_exists('ccadmin') )
 if( !empty($CC_GLOBALS['extra-lib']) )
 {
     $cc_extras_dirs = $CC_GLOBALS['extra-lib'];
-    include('cc-inc-extras.php');
+    include('cchost_lib/cc-inc-extras.php');
 }
 
 /*
@@ -129,6 +155,8 @@ CCEvents::PerformAction();
 /*
 *  Show the resulting page
 */
+CCDebug::Chronometer($_p);
+require_once('cchost_lib/cc-page.php');
 CCPage::Show();           
 
 /*
@@ -136,5 +164,8 @@ CCPage::Show();
 */
 CCDebug::InstallErrorHandler(false); 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
+
+print "<!-- Page time: " . CCDebug::Chronometer($_t) . '/ page:' . CCDebug::Chronometer($_p) . ' /init: '
+   . $_INIT . '/sql: ' . $_sql_time . "  skin: {$CC_GLOBALS['skin-file']} -->";
 
 ?>
