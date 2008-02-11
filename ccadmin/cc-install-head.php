@@ -21,8 +21,8 @@
 */
 ?>
 <head>
-    <title>ccHost Installation</title>
-    <style>
+    <title><?=$install_title?></title>
+    <style type="text/css">
     body, td
     {
         font-family: arial;
@@ -112,4 +112,4 @@
     </style>
 </head>
 <body style="margin:3% 11% 3% 4%">
-<h1>ccHost Install</h1>
+<h1><?=$install_title?></h1>

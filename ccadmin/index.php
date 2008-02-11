@@ -21,24 +21,29 @@
 
 error_reporting(E_ALL);
 
+define('IN_CC_HOST', true);
+define('IN_CC_INSTALL', true);
+
 if( empty($_SERVER['REQUEST_URI']) )
 {
     $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] .'?'. $_SERVER['QUERY_STRING'];
 }
 
-if( empty($_GET) && file_exists('../cc-config-db.php') )
+if( file_exists('../cc-config-db.php') || !empty($_REQUEST['up_step']) )
+{
+    require_once('cc-upgrade.php');
+}
+
+if( empty($_GET) && file_exists('../cc-host-db.php') )
 {
     /* NOT TRANSLATED BECAUSE LANG, NOT INITIALIZED YET */
-    die('<html><body>ccHost has detected \'../cc-config.db.php\' exists. 
+    die('<html><body>ccHost has detected \'../cc-host-db.php\' exists. 
          Please move this file out of the way before proceeding with 
          visiting your current URL/path for successful installation.
          </body></html>');
 }
 
 
-
-define('IN_CC_HOST', true);
-define('IN_CC_INSTALL', true);
 
 chdir('..');
 
@@ -47,6 +52,7 @@ if( !empty($_REQUEST['rewritehelp']) )
 
 $step = empty($_REQUEST['step']) ? '1' : $_REQUEST['step'];
 
+$install_title = 'ccHost Installation';
 include( dirname(__FILE__) . '/cc-install-head.php');
 $stepfunc = 'step_' . $step;
 $stepfunc();
@@ -112,15 +118,15 @@ function step_3()
 
 function step_4()
 {
-    require_once('cc-config-db.php');
-    require_once('cclib/cc-defines.php');
-    require_once('cclib/cc-debug.php');
-    require_once('cclib/cc-database.php');
-    require_once('cclib/cc-table.php');
-    require_once('cclib/cc-config.php');
-    require_once('cclib/cc-util.php');
+    require_once('cc-host-db.php');
+    require_once('cchost_lib/cc-defines.php');
+    require_once('cchost_lib/cc-debug.php');
+    require_once('cchost_lib/cc-database.php');
+    require_once('cchost_lib/cc-table.php');
+    require_once('cchost_lib/cc-config.php');
+    require_once('cchost_lib/cc-util.php');
     if( !function_exists('gettext') )
-       require_once('ccextras/cc-no-gettext.inc'); // ugh, ccextras
+       require_once('cchost_lib/ccextras/cc-no-gettext.inc'); // ugh, ccextras
 
     $configs =& CCConfigs::GetTable();
     $settings = $configs->GetConfig('settings');
@@ -133,6 +139,8 @@ function step_4()
     $perms = sprintf( '%04o', $config['file-perms'] );
 
     $rnum = rand();
+
+    $login_url = $root_url; // home page will redirect to login 
 
     $html =<<<EOF
 
@@ -159,7 +167,7 @@ function step_4()
     <p>For Unix/Linux installations you should further read <a href="http://wiki.creativecommons.org/CcHost_File_Access">ccHost File Access Policy and Troubleshooting</a>
     <h2>Go forth...</h2>
 
-    <p>If you've done those steps you can browse to <a href="$root_url">$root_url</a> and log in as "<b>$admin</b>"
+    <p>If you've done those steps you can browse to <a href="$login_url">$login_url</a> and log in as "<b>$admin</b>"
     and continue setting up and configuring the site.</p>
 
 EOF;
@@ -340,19 +348,18 @@ EOF;
 function install_tables(&$f,&$errs)
 {
     //print("<pre>");print_r($f);print("</pre>");exit;
-    require_once( 'cc-config-db.php');
-    require_once( 'cclib/cc-defines.php');
-    require_once( 'cclib/cc-debug.php');
-    require_once( 'cclib/cc-database.php' );
-    require_once( 'cclib/cc-table.php' );
-    require_once( 'cclib/cc-config.php');
-    require_once( 'cclib/cc-remix-tree.php' );
-    require_once( 'cclib/cc-pools.php' );
+    require_once( 'cc-host-db.php');
+    require_once( 'cchost_lib/cc-defines.php');
+    require_once( 'cchost_lib/cc-debug.php');
+    require_once( 'cchost_lib/cc-database.php' );
+    require_once( 'cchost_lib/cc-table.php' );
+    require_once( 'cchost_lib/cc-config.php');
+    require_once( 'cchost_lib/cc-pools.php' );
     require_once( dirname(__FILE__) . '/cc-install-db.php');
-    require_once( 'cclib/cc-lics-install.php');
-    require_once( 'cclib/cc-util.php' );
+    require_once( 'cchost_lib/cc-lics-install.php');
+    require_once( 'cchost_lib/cc-util.php' );
     if( !function_exists('gettext') )
-       require_once('ccextras/cc-no-gettext.inc'); // ugh, ccextras
+       require_once('cchost_lib/ccextras/cc-no-gettext.inc'); // ugh, ccextras
     
     CCDebug::Enable(true) ;
 
@@ -370,10 +377,6 @@ function install_tables(&$f,&$errs)
     cc_install_licenses();
 
     print "Licenses installed<br />";
-
-    CCPool::InstallPools();
-
-//    print "Sample pools installed<br />";
 
     $pw = md5( $f['pw']['v'] );
     $user = $f['admin']['v'];
@@ -398,25 +401,35 @@ END;
 
 function install_local_files($local_dir)
 {
-    // is it right to disable warning here?
-    @mkdir( 'content');
-    @mkdir( 'contests');
-    @mkdir( $local_dir . '/viewfile' );
-    @mkdir( $local_dir . '/skins' );
-    @mkdir( $local_dir . '/lib' );
-    @mkdir( $local_dir . '/temp' );
+    foreach( array( 'content', 
+                    'contests', 
+                    $local_dir, 
+                    $local_dir . '/pages',
+                    $local_dir . '/skins', 
+                    $local_dir . '/skins/images',
+                    $local_dir . '/skins/extras',
+                    $local_dir . '/dataviews',
+                    $local_dir . '/lib',
+                    $local_dir . '/temp',
+                    ) as $locdir )
+    {
+        // is it right to disable warning here?
+        if( !@mkdir( $locdir ) )
+        {
+            if( !file_exists($locdir) ) 
+            {
+                print("error with making: $locdir<br />");
+                exit;
+            }
+            chmod( $locdir,   0777 );
+        }
+    }
 
-    chmod( 'content',   0777 );
-    chmod( 'contests', 0777 );
-    chmod( $local_dir . '/viewfile', 0777 );
-    chmod( $local_dir . '/skins', 0777 );
-    chmod( $local_dir . '/lib', 0777 );
-    chmod( $local_dir . '/temp', 0777 );
-
-    docopy( 'sidebar.xml', $local_dir, 'skins');
-    docopy( 'home.xml', $local_dir, 'viewfile');
-    docopy( 'welcome.xml', $local_dir, 'viewfile');
+    docopy( 'home.php', $local_dir, 'pages');
+    docopy( 'welcome.php', $local_dir, 'pages');
     docopy( 'DEBUG.php', $local_dir, 'lib');
+    docopy( 'extras_links.tpl', $local_dir, 'skins/extras');
+    docopy( 'person.png', $local_dir, 'skins/images');
     docopy( 'error-msg.txt', $local_dir, '');
     docopy( 'disabled-msg.txt', $local_dir, '');
 }
@@ -734,7 +747,7 @@ function get_rewrite_help()
         $pretty_help =<<<EOF
 <html>
 <head>
-<style>
+<style type="text/css">
 body { font-size: 13px; font-family: verdana; }
 </style>
 </head>
@@ -820,8 +833,8 @@ function get_install_fields($values)
     'pw'          => array( 'n' => 'Admin password',         'e' => '', 't' => 'password', 'v' => '' , 'q' => 1,
         'h' => '(Remember this, you\'ll need it. Must be at least 5 characters long, letters and numbers only.)' ),
 
-    'admin-email'       => array( 'n' => 'Site email',       'e' => '', 't' => 'text', 'v' => '' , 'q' => 0,
-        'h' => 'Default return address when ccHost sends email' ),
+    'admin-email'       => array( 'n' => 'Site email',       'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
+        'h' => 'Default return address when ccHost sends email ' ),
 
     'database'    => array( 'n' => 'Database name',          'e' => '', 't' => 'text', 'v' => '' , 'q' => 1,
         'h' => 'Name of the mySQL database to use (this must exist already)' ),
@@ -905,7 +918,7 @@ END;
     print($html);
 }
 
-function install_db_config($f,&$err)
+function install_db_config($f,&$err) 
 {
     $varname = "\$CC_DB_CONFIG";
     $text = "<?PHP";
@@ -929,7 +942,7 @@ END;
     $text .= "?>";
 
     $err = '';
-    $fname = 'cc-config-db.php';
+    $fname = 'cc-host-db.php';
     $fh = @fopen($fname,'w+');
     if( !$fh )
     {
