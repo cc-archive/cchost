@@ -303,7 +303,7 @@ class CCNotifyAPI
         if( $C['topic_type'] == 'review' )
         {
             $sql =<<<EOF
-                SELECT user_name 
+                SELECT DISTINCT user_name 
                 FROM cc_tbl_user 
                 JOIN cc_tbl_uploads on user_id=upload_user
                 JOIN cc_tbl_topics on upload_id=topic_upload
