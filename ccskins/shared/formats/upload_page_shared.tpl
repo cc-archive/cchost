@@ -32,15 +32,17 @@
 %if_null(records)%
     %return%
 %end_if% 
+
 %map(#R,records/0)% 
 %map(record,#R)% 
+
 <script type="text/javascript">
 var ratings_enabled = '%(#R/ratings_enabled)%';
 </script>
 
 <div id="date_box">%text(str_list_date)%: %(#R/upload_date)%
-%if_not_empty(upload_last_edit)%
-<span id="modified_date">%text(str_list_lastmod)%: %(#R/upload_last_edit)% %if_not_null(#R/last_op_str)% (%text(#R/last_op_str)%) %end_if%</span>
+%if_not_empty(#R/upload_last_edit)%
+<span id="modified_date">%text(str_list_lastmod)%: %(#R/upload_last_edit)% %if_not_null(#R/upload_extra/last_op)% (%text(#R/upload_extra/last_op)%) %end_if%</span>
 %end_if%
 </div>
 
@@ -64,9 +66,14 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
                 <tr><th>%text(str_featuring)%</th><td>%(#R/upload_extra/featuring)%</td></tr>
             %end_if%
 
-            %if_not_null(#R/file_format_info/ps)%
-                <tr><th>%text(str_list_length)%</th><td>%(#R/file_format_info/ps)%</td></tr>
+            %if_not_null(#R/files/0/file_format_info/ps)%
+                <tr><th>%text(str_list_length)%</th><td>%(#R/files/0/file_format_info/ps)%</td></tr>
             %end_if%
+
+            %if_not_null(#R/upload_extra/bpm)%
+                <tr><th>%text(str_bpm)%</th><td>%(#R/upload_extra/bpm)%</td></tr>
+            %end_if%
+
 
             %if_not_null(#R/ratings_enabled)%
                 %if_empty(#R/thumbs_up)%
@@ -109,8 +116,8 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
             <div class="info_box_clear">&nbsp;</div>
         </div><!-- info box -->
 
+        <div class="box">
         %if_not_null(#R/file_macros)%
-            <div class="box">
             %loop(#R/file_macros,M)%
                 %call(#M)%
             %end_loop%

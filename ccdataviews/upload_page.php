@@ -31,6 +31,7 @@ SELECT
     license_url, license_name, license_permits, license_required, license_prohibits,
     DATE_FORMAT( upload_date, '%Y' ) as year, 
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date,
+    IF( upload_last_edit > '', DATE_FORMAT( upload_last_edit, '%a, %b %e, %Y @ %l:%i %p' ), 0 ) as upload_last_edit,
     upload_contest,
     collab_upload_collab as collab_id
     %columns%
