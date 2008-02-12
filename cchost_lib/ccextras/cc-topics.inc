@@ -252,6 +252,8 @@ class CCTopic
 {
     function _verify_topic($topic_id,&$topics,&$record,$is_translate=false)
     {
+        require_once('cchost_lib/cc-page.php');
+
         $topic_id = intval(CCUtil::Strip($topic_id));
         if( empty($topic_id) )
         {
