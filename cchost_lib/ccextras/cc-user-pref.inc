@@ -45,12 +45,13 @@ class CCUserPreferences
         $record = array();
         CCEvents::Invoke( CC_EVENT_USER_PROFILE_TABS, array( &$tabs, &$record ) );
 
+        $ex =& $CC_GLOBALS['user_extra'];
+
         $fields['settab'] = array(
                     'label' => 'str_pref_default_tab',
                     'form_tip' => 'str_pref_setting_this', 
                     'formatter' => 'select',
-                    'value' => empty($CC_GLOBALS['user_extra']['prefs']['default_user_tab']) ? 'uploads' :
-                                        $CC_GLOBALS['user_extra']['prefs']['default_user_tab'],
+                    'value' => empty($ex['prefs']['default_user_tab']) ? 'uploads' : $ex['prefs']['default_user_tab'],
                     'options' => $tabs,
                     'flags' => CCFF_NONE
             );
@@ -59,7 +60,7 @@ class CCUserPreferences
 
         require_once('cchost_lib/cc-template.inc');
         $extras = CCTemplateAdmin::GetExtras(true);
-        $prev = empty($CC_GLOBALS['user_extra']['prefs']['extras']) ? null : $CC_GLOBALS['user_extra']['prefs']['extras'];
+        $prev = empty($ex['prefs']['extras']) ? null : $ex['prefs']['extras'];
         foreach( $extras as $file => $text )
         {
             $fields['extras['.$file.']'] = array(
@@ -70,6 +71,26 @@ class CCUserPreferences
                         'flags' => CCFF_POPULATE
                 );
         }
+
+
+        $fields['anon_ok'] = array(
+                'label' => 'str_email_allow_anon',
+                'form_tip' => 'str_email_allow_anon_tip',
+                 'formatter' => 'checkbox',
+                 'flags' => CCFF_NONE,
+                 'value' => !empty($ex['anon_ok']),
+            );
+
+
+        $page =& CCPage::GetPage();
+        $url = ccl('people','notify','edit');
+        $fields['notify_link'] = array(
+                'label' => 'str_notify_edit',
+                'form_tip' => '',
+                 'formatter' => 'statictext',
+                 'flags' => CCFF_STATIC | CCFF_NOUPDATE,
+                 'value' => $page->String(array( 'str_notify_link', "<a href=\"$url\">",'</a>' ))
+            );
 
         $form->AddFormFields($fields);
         
@@ -86,6 +107,7 @@ class CCUserPreferences
             $user_extra = CCDatabase::QueryItem('SELECT user_extra FROM cc_tbl_user WHERE user_id='.$user_id);
             $user_extra = unserialize($user_extra);
             $user_extra['prefs'] = $prefs;
+            $user_extra['anon_ok'] = !empty($_POST['anon_ok']);
             $args['user_extra'] = serialize($user_extra);
             $args['user_id'] = $user_id;
             $user = new CCUsers();

@@ -422,7 +422,9 @@ class CCMailerAPI
             if( CCUser::IsLoggedIn() )
             {
                 $user_id = CCUser::CurrentUser();
-                $count = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_uploads WHERE upload_user='.$user_id);
+                $uploads =& CCUploads::GetTable();
+                $where['user_id'] = $user_id;
+                $count = $uploads->CountRows($where);
                 if( empty($count) )
                 {
                     $rule = $CC_GLOBALS['mail_registered'];
@@ -434,7 +436,9 @@ class CCMailerAPI
             }
             else // user not logged in:
             {
-                $rule = $CC_GLOBALS['mail_anon'];
+                $ex = CCDatabase::QueryItem("SELECT user_extra FROM cc_tbl_user WHERE user_name = '$userto'");
+                $ex = unserialize($ex);
+                $rule = empty($ex['anon_ok']) ? $CC_GLOBALS['mail_anon'] : CC_MAIL_ALLOWED;
             }
 
             /*-----------------------------------------

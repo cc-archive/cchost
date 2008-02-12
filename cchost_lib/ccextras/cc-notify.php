@@ -125,19 +125,14 @@ class CCNotify
         $row =& $rows[0];
         if( $this->_is_notify_on() && CCUser::IsLoggedIn())
         {
-            if( CCUser::CurrentUser() == $row['user_id'] )
-            {
-                $url = ccl('people','notify','edit');
-                $text = _('Edit My Notifications');
-            }
-            else
+            if( CCUser::CurrentUser() != $row['user_id'] )
             {
                 $url = ccl('people','notify','edit',$row['user_name']);
-                $text = sprintf(_('Get Notified About %s'),$row['user_real_name']);
+                $row['user_fields'][] = array( 'label' => 'str_user_notifications', 
+                                               'value' => array('str_notify_get_notified',"<a href=\"$url\">",$row['user_real_name'],'</a>')
+                                              );
             }
 
-            $row['user_fields'][] = array( 'label' => 'str_user_notifications', 
-                                           'value' => "<a href=\"$url\">$text</a>" );
         }
     }
 
