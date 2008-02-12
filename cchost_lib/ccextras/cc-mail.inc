@@ -422,9 +422,7 @@ class CCMailerAPI
             if( CCUser::IsLoggedIn() )
             {
                 $user_id = CCUser::CurrentUser();
-                $uploads =& CCUploads::GetTable();
-                $where['user_id'] = $user_id;
-                $count = $uploads->CountRows($where);
+                $count = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_uploads WHERE upload_user='.$user_id);
                 if( empty($count) )
                 {
                     $rule = $CC_GLOBALS['mail_registered'];
