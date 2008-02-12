@@ -56,13 +56,13 @@ class CCUser
     {
         static $checked;
 
-        if( isset($checked) )
+        if( empty($name) && isset($checked) )
         {
             return $checked;
         }
         else
         {
-            if( !CCUtil::IsHTTP() || CCUser::IsSuper($name) )
+            if( empty($name) && (!CCUtil::IsHTTP() || CCUser::IsSuper($name)) )
             {
                 $checked = true;
                 return true;
