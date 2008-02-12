@@ -136,3 +136,11 @@ a.info_button:hover {
 	white-space: nowrap;
 }
 
+#info_bpm {
+	float: right;
+	margin: 4px;
+}
+
+#info_bpm span {
+	font-weight: bold;
+}

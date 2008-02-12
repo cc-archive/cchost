@@ -50,9 +50,17 @@ $R =& $A['records'][0];
 <!--- INFO DETAIL -->
 <div class="info_detail" style="margin:0px;padding:0px;">
 <div  class="info_list" id="_info_<?= $R['upload_id']?>">
-<a  href="<?= $R['license_url']?>" title="<?= $R['license_name']?>" class="cc_liclogo">
-    <img  src="<?= $R['license_logo_url'] ?>" />
-</a>
+<?
+if( !empty($R['upload_extra']['bpm']) )
+{
+?>
+    <div id="info_bpm"><?= $T->String('str_bpm') ?> <span><?= $R['upload_extra']['bpm'] ?></span></div>
+<?
+}
+?>
+    <a  href="<?= $R['license_url']?>" title="<?= $R['license_name']?>" class="cc_liclogo">
+        <img  src="<?= $R['license_logo_url'] ?>" />
+    </a>
 <?
 
 if ( !empty($idetail)) 
