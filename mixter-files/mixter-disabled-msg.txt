@@ -11,7 +11,7 @@
 </style>
 </head>
 <body>
-<p>  <img src="/mixter-files/resting.gif" /></p>
+<p>  <img src="/mixter-files/images/resting.gif" /></p>
     <h3>ccMixter is taking a break...</h3>
     <p>We'll be right back... </p>
 </body>
