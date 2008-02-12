@@ -50,7 +50,7 @@ class CCReviewFormAPI
     */
     function PostReview($upload_id)
     {
-        global $CC_GLOBALS;
+        global $CC_GLOBALS, $CC_CFG_ROOT;
 
         if( empty($CC_GLOBALS['reviews_enabled']) )
         {
@@ -65,8 +65,6 @@ class CCReviewFormAPI
             CCUtil::Send404(false);
             return;
         }
-
-        global $CC_GLOBALS, $CC_CFG_ROOT;
 
         $form = new CCReviewForm();
 
@@ -116,12 +114,8 @@ class CCReviewFormAPI
                 $reviews->Insert($values,0);
                 CCReview::Sync($upload_id,$values['topic_user']);
 
-                // EVENT_REVIEW expects a *real* row
-                // code in the handler will break if you don't
-                // give them one
-
                 $row = $reviews->QueryKeyRow($values['topic_id']);
-                $row['user_real_name'] = $user_real_name;
+                $row['user_real_name'] = $user_real;
                 $row['topic_permalink'] = ccl('reviews',$user_name, $upload_id ) . '#' . $values['topic_id'];
 
                 CCEvents::Invoke( CC_EVENT_REVIEW, array( &$row ) );
