@@ -205,7 +205,8 @@ class CCNavigator
         {
             if( !empty($page['handler']['module']) )
             {
-                $handler = str_replace('cclib','cchost_lib',$page['handler']['module']); // compat hack
+                $handler = str_replace('cclib_host/','cchost_lib/',$page['handler']['module']); // compat hack
+                $handler = str_replace('cclib/','cchost_lib/',$handler); // compat hack hack
                 require_once($handler);
             }
             $handler = $page['handler']['method'];

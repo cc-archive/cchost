@@ -365,6 +365,8 @@ EOF;
 
         $thread_id = $topic['forum_thread_id'];
 
+        $topic_threads = new CCForumThreads();
+
         if( $topic['forum_thread_oldest'] == $topic_id )
         {
             // no more topics left in this thread

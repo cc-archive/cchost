@@ -3,7 +3,7 @@ function validate_user()
 {
     // If you can't even login then uncomment the next line TEMPORARILY to edit your config
     // return; 
-    list( $user_name, $pw ) = unserialize($_COOKIE['lepsog3']) or die('no login cookie. log in to cchost first, otherwise edit this script');
+    list( $user_name, $pw ) = unserialize(strip($_COOKIE['lepsog3'])) or die('no login cookie. log in to cchost first, otherwise edit this script');
     $qr = q('SELECT user_id FROM cc_tbl_user WHERE user_name=\''.$user_name.'\' AND user_password=\''.$pw.'\'');
     $ok = mysql_num_rows($qr) or die('can not find you in the user database');
     $data = data(array('media','config'));

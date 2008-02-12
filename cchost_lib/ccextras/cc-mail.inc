@@ -264,10 +264,9 @@ class CCMailer
         
         $add_params = empty($GLOBALS['mail_add_params']) ? '' : $GLOBALS['mail_add_params'];
 
-        // please god don't let me forget to turn this back on
-        // return @mail( $to, $subject, $message, $headers, $add_params );
+        return @mail( $to, $subject, $message, $headers, $add_params );
 
-        return 1;
+        //return 1;
     }
 } 
 
