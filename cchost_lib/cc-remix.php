@@ -279,16 +279,35 @@ EOF;
     */
     function RemixLicenses()
     {
-        $pool_sources = $_GET['pool_sources'];
-        $rows_r = $rows_p = array();
-        if( !empty($_GET['remix_sources']) )
+        $row = CCRemix::GetStrictestLicense($_GET['remix_sources'],$_GET['pool_sources']);
+        CCUtil::ReturnAjaxData($row);
+    }
+
+    function GetStrictestLicenseForUpload($upload_id)
+    {
+        $remix_sources = CCDatabase::QueryItems('SELECT tree_parent FROM cc_tbl_tree WHERE tree_child = '.$upload_id);
+        $remix_sources = empty($remix_sources) ? '' : join(',',$remix_sources);
+        $pool_sources  = CCDatabase::QueryItems('SELECT pool_tree_pool_parent FROM cc_tbl_pool_tree WHERE pool_tree_child = '.$upload_id);
+        $pool_sources  = empty($pool_sources) ? '' : join(',',$pool_sources);
+        if( empty($remix_sources) && empty($pool_sources) )
         {
-            $sql = 'SELECT DISTINCT upload_license FROM cc_tbl_uploads WHERE upload_id IN (' . $_GET['remix_sources'] . ')';
+            return array();
+        }
+        $row = CCRemix::GetStrictestLicense($remix_sources,$pool_sources);
+        return $row;
+    }
+
+    function GetStrictestLicense($remix_sources,$pool_sources)
+    {
+        $rows_r = $rows_p = array();
+        if( !empty($remix_sources) )
+        {
+            $sql = 'SELECT DISTINCT upload_license FROM cc_tbl_uploads WHERE upload_id IN (' . $remix_sources . ')';
             $rows_r = CCDatabase::QueryItems($sql);
         }
-        if( !empty($_GET['pool_sources']) )
+        if( !empty($pool_sources) )
         {
-            $sql = 'SELECT DISTINCT pool_item_license FROM cc_tbl_pool_item WHERE pool_item_id IN (' . $_GET['pool_sources'] . ')';
+            $sql = 'SELECT DISTINCT pool_item_license FROM cc_tbl_pool_item WHERE pool_item_id IN (' . $pool_sources . ')';
             $rows_p = CCDatabase::QueryItems($sql);
         }
         $rows = array_unique(array_merge($rows_r,$rows_p));
@@ -300,9 +319,8 @@ EOF;
         }
         $lics = new CCTable('cc_tbl_licenses','license_id');
         $row = $lics->QueryKeyRow($license);
-        CCUtil::ReturnAjaxData($row);
+        return $row;
     }
-
 
     /**
     * Event hander for {@link CC_EVENT_DELETE_UPLOAD}

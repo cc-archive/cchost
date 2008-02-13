@@ -46,8 +46,7 @@ class CCEditFileForm extends CCUploadMediaForm
      */
     function CCEditFileForm($userid,&$record)
     {
-        $this->CCUploadMediaForm($userid,false);
-        $this->SetHiddenField('upload_id' , $record['upload_id']);
+        $this->CCUploadMediaForm($userid,false,$record['upload_id']);
         $this->SetFormValue('upload_tags', $record['upload_extra']['usertags']);
         $this->SetSubmitText('str_file_save_properties');
 

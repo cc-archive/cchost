@@ -76,9 +76,10 @@ class CCCollab
 
     function OnUploadDelete($record)
     {
-        $collab_uploads = new CCCollabUploads();
-        $w['collab_upload_upload'] = $record['upload_id'];
-        $collab_uploads->DeleteWhere($w);
+        if( !empty($record['upload_extra']['collab']) )
+        {
+            $this->_remove_upload($record['upload_extra']['collab'],$record['upload_id']);
+        }
     }
 
     /**
@@ -104,6 +105,17 @@ class CCCollab
             $collab_users->AddJoin( new CCCollabs(), 'collab_user_collab' );
             $w['collab_user_user'] = CCUser::CurrentUser();
             $collabs = $collab_users->QueryRows($w);
+            $upload_id = $form->GetFormValue('upload_id');
+            if( $upload_id )
+            {
+                $uploads = new CCUploads();
+                $old_collab = $uploads->GetExtraField( $upload_id, 'collab' );
+            }
+            else
+            {
+                $old_collab = 0;
+            }
+            
             if( !empty($collabs) )
             {
                 $F = array();
@@ -117,7 +129,7 @@ class CCCollab
                            'formatter' => 'select',
                            'form_tip'  => 'str_collab_assign_this_file',
                            'options'   => $options,
-                           'value'     => 0, // todo: 
+                           'value'     => $old_collab,
                            'flags'     => CCFF_NOUPDATE,
                             );
 
@@ -143,16 +155,26 @@ class CCCollab
             array_key_exists('collab',$_POST)
           )
         {
-            if( !empty($_POST['collab']) )
+            $uploads = new CCUploads();
+            $old_collab = $uploads->GetExtraField( $upload_id, 'collab' );
+
+            if( empty($_POST['collab']) )
+            {
+                if( !empty($old_collab) )
+                {
+                    $this->_remove_upload($old_collab,$upload_id);
+                }
+            }
+            else
             {
                 $collab_id = $_POST['collab'];
-                $uploads = new CCUploads();
-                $extra = CCDatabase::QueryItem('SELECT upload_extra FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
-                $extra = unserialize($extra);
+                if( $old_collab != $collab_id )
+                    $this->_remove_upload($old_collab,$upload_id);
+
                 // ugh, this should be compared to submit form types...
-                preg_match('/(remix|sample|original|acappella)/',$extra['ccud'],$m);
+                $ccud = $uploads->GetExtraField( $upload_id, 'ccud' );
+                preg_match('/(remix|sample|original|acappella)/',$ccud,$m);
                 $this->_add_upload($collab_id,$upload_id,$m[1]);
-                $this->Sync($collab_id);
             }
         }
     }
@@ -173,14 +195,7 @@ class CCCollab
         }
         $uploads = new CCUploads();
         $uploads->SetExtraField( $upload_id, 'collab', $collab_id );
-    }
-
-    function Sync($collab_id)
-    {
-        $files = new CCCollabUploads();
-        $w['collab_upload_collab'] = $collab_id;
-        $collab_ids = $files->QueryItems('collab_upload_upload',$w);
-        $this->_sync_collab_sources($collab_ids);
+        $this->Sync($collab_id);
     }
 
     function Create()
@@ -472,13 +487,8 @@ EOF;
             switch($cmd)
             {
                 case 'remove':
-                    $collab_uploads = new CCCollabUploads();
-                    $w1['collab_upload_upload'] = $upload_id;
-                    $w1['collab_upload_collab'] = $collab_id;
-                    $collab_uploads->DeleteWhere($w1);
+                    $this->_remove_upload($collab_id,$upload_id);
                     $args[CC_AJAX_WARNING] = _('File removed from project');
-                    $uploads = new CCUploads();
-                    $uploads->UnsetExtraField($upload_id,'collab');
                     break;
 
                 case 'publish':
@@ -838,8 +848,6 @@ EOF;
             if( intval($ret) > 0 )
             {
                 $this->_add_upload($collab_id,$ret,$ccud);
-                $collab_ids[] = $ret;
-                $this->_sync_collab_sources($collab_ids);
             }
             else
             {
@@ -863,8 +871,12 @@ EOF;
         exit;
     }
 
-    function _sync_collab_sources($collab_ids)
+    function Sync($collab_id)
     {
+        $files = new CCCollabUploads();
+        $w['collab_upload_collab'] = $collab_id;
+        $collab_ids = $files->QueryItems('collab_upload_upload',$w);
+
         // attach all collab samples and pells to remixes...
 
         if( count($collab_ids) < 2 )
@@ -914,10 +926,38 @@ EOF;
                     $remix_tree->Insert($insert);
                 }
                 if( !empty($parents) )
+                {
                     CCSync::Remix($remix_id,$parents);
+                }
             }
         }
 
+        // have to wait until the tree is complete (I think)
+        foreach( $remix_ids as $remix_id )
+            $this->_update_license($remix_id);
+    }
+
+    function _remove_upload($collab_id,$upload_id)
+    {
+        $collab_uploads = new CCCollabUploads();
+        $w1['collab_upload_upload'] = $upload_id;
+        $w1['collab_upload_collab'] = $collab_id;
+        $collab_uploads->DeleteWhere($w1);
+        $uploads = new CCUploads();
+        $uploads->UnsetExtraField($upload_id,'collab');
+        $this->Sync($collab_id);
+    }
+
+    function _update_license($remix_id)
+    {
+        require_once('cchost_lib/cc-remix.php');
+        $lic_row = CCRemix::GetStrictestLicenseForUpload($remix_id);
+        if( empty($lic_row) )
+            return;
+        $ups = new CCUploads();
+        $upsargs['upload_id'] = $remix_id;
+        $upsargs['upload_license'] = $lic_row['license_id'];
+        $ups->Update($upsargs);
     }
 
     /**

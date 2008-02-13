@@ -60,8 +60,8 @@ class CCMediaHost
         else
         {
             $uploads =& CCUploads::GetTable();
-            list( $name, $published, $banned ) = CCDatabase::QueryRow(
-                        'SELECT upload_name,upload_published,upload_banned FROM cc_tbl_uploads WHERE upload_id='.$upload_id,false);
+            list( $name, $published, $banned, $owner_id ) = CCDatabase::QueryRow(
+                        'SELECT upload_name,upload_published,upload_banned,upload_user FROM cc_tbl_uploads WHERE upload_id='.$upload_id,false);
 
             require_once('cchost_lib/cc-page.php');
             if( empty($name) )
@@ -75,6 +75,11 @@ class CCMediaHost
 
             if( !$published || $banned )
             {
+                if( CCUser::IsAdmin() || (CCUser::CurrentUser() == $owner_id) )
+                {
+                    CCUtil::SendBrowserTo( ccl('people',$username,'hidden') );
+                    return;
+                }
                 CCPage::SetTitle($name);
                 CCPage::Prompt('str_file_this_upload_is');
                 return;

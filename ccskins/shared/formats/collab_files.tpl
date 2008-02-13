@@ -11,7 +11,6 @@ function collab_files_dataview()
     global $CC_GLOBALS;
 
     $urlf = ccl('files') . '/';
-    $urle = ccl('files','edit') . '/';
     $urlp = ccl('people') . '/';
     $stream_url = url_args( ccl('api','query','stream.m3u'), 'f=m3u&ids=' );
     $me = CCUser::CurrentUser();
@@ -20,12 +19,7 @@ function collab_files_dataview()
     $sql =<<<EOF
 SELECT 
     upload_id, upload_name, 
-    IF( upload_published = 0, 
-          IF( upload_user = $me OR $admin,
-              CONCAT( '$urle', upload_name, '/', upload_id ),
-              '' ),
-          CONCAT( '$urlf', user_name, '/', upload_id ) 
-      ) as file_page_url,
+    CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name, user_name, 
     CONCAT( '$urlp', user_name ) as artist_page_url,
     upload_contest, upload_name, upload_published, upload_extra,

@@ -44,7 +44,7 @@ class CCUploadMediaForm extends CCUploadForm
      * @access public
      * @param integer $user_id This id represents the 'owner' of the media
      */
-    function CCUploadMediaForm($user_id,$file_field = true)
+    function CCUploadMediaForm($user_id,$file_field = true,$upload_id=0)
     {
         global $CC_CFG_ROOT;
 
@@ -52,6 +52,8 @@ class CCUploadMediaForm extends CCUploadForm
         $this->SetSubmitText(_('Upload'));
         $this->SetHiddenField('upload_user', $user_id);
         $this->SetHiddenField('upload_config', $CC_CFG_ROOT);
+        if( $upload_id )
+            $this->SetHiddenField('upload_id', $upload_id );
 
         $fields['upload_name'] =
                         array( 'label'      => 'str_name',
