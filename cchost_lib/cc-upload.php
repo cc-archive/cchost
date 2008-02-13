@@ -77,7 +77,7 @@ class CCUpload
     function AdminUpload($upload_id)
     {
         $uploads =& CCUploads::GetTable();
-        $record = CCDatabase::QueryRow('SELECT upload_extra,upload_date,upload_name FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+        $record = CCDatabase::QueryRow('SELECT upload_extra,upload_date,upload_name,upload_license FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
         $record['upload_extra'] = unserialize($record['upload_extra']);
         if( empty($record) )
             return;
@@ -94,12 +94,12 @@ class CCUpload
         {
             $form->GetFormValues($values);
 
+            $uarg['upload_id'] = $upload_id;
             if( !empty($values['upload_date']) )
-            {
                 $uarg['upload_date'] = $values['upload_date'];
-                $uarg['upload_id'] = $upload_id;
-                $uploads->Update($uarg);
-            }
+            $uarg['upload_license'] = $values['upload_license'];
+            $uploads->Update($uarg);
+
             require_once('cchost_lib/cc-uploadapi.php');
 
             CCUploadAPI::UpdateCCUD($upload_id,$values['ccud'],$record['upload_extra']['ccud']);

@@ -203,6 +203,11 @@ class CCAdminUploadForm extends CCForm
         $tags->SetOrder('tags_tag','ASC');
         $sys_tags = $tags->QueryKeys($where);
 
+        $lics = CCDatabase::QueryRows('SELECT license_id,license_name FROM cc_tbl_licenses');
+        $options = array();
+        foreach( $lics as $lic )
+            $options[ $lic['license_id'] ] = $lic['license_name'];
+
         $fields = array(
             'ccud' => array(
                 'label'     => _('Internal Tags'),
@@ -225,6 +230,14 @@ class CCAdminUploadForm extends CCForm
                                'formatter'  => 'textedit',
                                'form_tip'   => _('For anti-bumping format: YYYY-MM-DD HH:MM:SS (24hr clock)'),
                                'value'      => $record['upload_date'],
+                               'flags'      => CCFF_POPULATE,
+                ),
+            'upload_license'  =>
+                        array( 'label'      => _('Upload License'),
+                               'formatter'  => 'select',
+                               'form_tip'   => '',
+                               'options'    => $options,
+                               'value'      => $record['upload_license'],
                                'flags'      => CCFF_POPULATE,
                 ),
             );
