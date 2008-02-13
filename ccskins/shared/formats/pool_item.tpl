@@ -84,6 +84,7 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
 </div>
 <div id="upload_sidebar_box">
 
+    <? if( $R['pool_short_name'] != '_web' ) { ?>
     <div class="box" id="license_info">
       <p><img src="%(#R/license_logo_url)%" />
         <div id="license_info_t" >
@@ -93,6 +94,7 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
         </div>
       </p>
     </div>
+    <? } ?>
 
     <div class="box" id="pool_info">
         <h2>%text(str_pool_info_head)%</h2>
