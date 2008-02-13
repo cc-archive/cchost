@@ -422,8 +422,8 @@ class CCMailerAPI
             if( CCUser::IsLoggedIn() )
             {
                 $user_id = CCUser::CurrentUser();
-                $uploads =& CCUploads::GetTable();
-                $where['user_id'] = $user_id;
+                $uploads = new CCUploads();
+                $where['upload_user'] = $user_id;
                 $count = $uploads->CountRows($where);
                 if( empty($count) )
                 {
