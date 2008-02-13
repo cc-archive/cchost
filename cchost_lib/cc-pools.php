@@ -221,6 +221,11 @@ class CCPool
 
     function NotifyPoolsOfRemix($pool_items, $remixguid)
     {
+        // todo: test and enable this code
+
+        return; 
+
+
         require_once('cchost_lib/snoopy/Snoopy.class.php');
         require_once('cchost_lib/cc-api.php');
 
