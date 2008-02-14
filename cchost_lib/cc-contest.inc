@@ -348,7 +348,17 @@ class CCContest
         $contest = $contests->QueryKeyRow($contest_id);
 
         if( !empty($record['upload_id']) )
-            $patterns['%song_page%'] = CCContestHV::_get_file_page_url($record,$contest['contest_short_name']);
+        {
+            if( empty($record['user_name']) )
+            {
+                $user_name = CCDatabase::QueryItem('SELECT user_name FROM cc_tbl_user WHERE user_id='.$record['upload_user']);
+            }
+            else
+            {
+                $user_name = $record['user_name'];
+            }
+            $patterns['%song_page%'] = ccl('files',$user_name,$record['upload_id']);
+        }
 
         $patterns['%contest%']          = $contest['contest_short_name'];
         $patterns['%contest_fullname%'] = $contest['contest_friendly_name'];
