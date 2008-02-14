@@ -45,7 +45,7 @@ if( !defined('IN_CC_HOST') )
 */
 function cc_strchop($str,$maxlen,$dochop = true)
 {
-    if( empty($dochop) || (strlen($str) <= $maxlen) )
+    if( empty($maxlen) || empty($dochop) || (strlen($str) <= $maxlen) )
         return($str);
     return( substr($str,0,$maxlen) . '...' );
 }
