@@ -136,9 +136,71 @@ END;
                 array( 'action' => ccl( 'admin', 'pools', 'approve' ),
                        'menu_text' => _('Approve Trackbacks'),
                        'help' => _('Approve trackbacks and remote remixes') ),
+                array( 'action' => url_args( ccl( 'api', 'query' ), 
+                                  'datasource=pool_items&t=pool_item_admin&match=_web&title=Pool Items Manage&sort=id&ord=desc'),
+                       'menu_text' => _('Manage Trackbacks'),
+                       'help' => _('Edit, delete and otherwise manage remote remixes') ),
                );
         CCPage::PageArg('client_menu',$args,'print_client_menu');
     }
+
+    function _process_pool_items($actions)
+    {
+        $approved = array();
+        $upload_ids = array();
+        foreach( $actions as $id => $action )
+        {
+            if( $action == 'nothing' )
+                continue;
+            $id = CCUtil::StripText($id);
+            $uids = CCDatabase::QueryItems("SELECT pool_tree_parent FROM cc_tbl_pool_tree WHERE pool_tree_pool_child = $id");
+            $upload_ids = array_merge( $upload_ids, $uids );
+
+            if( $action == 'delete' )
+            {
+                CCDatabase::Query('DELETE FROM cc_tbl_pool_item WHERE pool_item_id = '.$id);
+                CCDatabase::Query("DELETE FROM cc_tbl_pool_tree WHERE (pool_tree_pool_parent = $id) && (pool_tree_pool_child = $id)");
+            }
+            else
+            {
+                $approved[] = $id;
+            }
+        }
+
+        if( !empty($approved) )
+        {
+            $approved = join(',',$approved);
+            $sql = "UPDATE cc_tbl_pool_item SET pool_item_approved = 1, pool_item_num_sources =  (pool_item_num_sources+1) WHERE pool_item_id IN ({$approved})";
+            CCDatabase::Query($sql);
+        }
+        $upload_ids = array_filter(array_unique($upload_ids));
+        require_once('cchost_lib/cc-sync.php');
+        foreach( $upload_ids as $upload_id )
+            CCSync::Upload($upload_id);
+        if( !empty($approved) )
+        {
+            $rows = CCDatabase::QueryRows("SELECT pool_item_extra FROM cc_tbl_pool_item WHERE pool_item_id IN ({$approved})");
+            require_once('cchost_lib/cc-uploadapi.php');
+            foreach( $rows as $row )
+            {
+                if( empty($row['pool_item_extra']) )
+                    continue;
+                $ex = unserialize($row['pool_item_extra']);
+                if( empty($ex['ttype']) )
+                    continue;
+                $upload_id = $ex['upload_id'];
+                CCUploadAPI::UpdateCCUD($upload_id,'in_' . $ex['ttype'] . ',trackback','');
+            }
+        }
+    }
+
+    function ItemDelete($pool_item)
+    {
+        $actions['delete'] = $pool_item;
+        $this->_process_pool_items($actions);
+        CCUtil::ReturnAjaxMessage(_('Pool item deleted'));
+    }
+
 
     function Approve($submit='')
     {
@@ -146,52 +208,7 @@ END;
         CCPage::SetTitle(_("Approve Pending Remixes"));
         if( $submit )
         {
-            $approved = array();
-            $upload_ids = array();
-            foreach( $_POST['action'] as $id => $action )
-            {
-                if( $action == 'nothing' )
-                    continue;
-                $id = CCUtil::StripText($id);
-                $uids = CCDatabase::QueryItems("SELECT pool_tree_parent FROM cc_tbl_pool_tree WHERE pool_tree_pool_child = $id");
-                $upload_ids = array_merge( $upload_ids, $uids );
-
-                if( $action == 'delete' )
-                {
-                    CCDatabase::Query('DELETE FROM cc_tbl_pool_item WHERE pool_item_id = '.$id);
-                    CCDatabase::Query("DELETE FROM cc_tbl_pool_tree WHERE (pool_tree_pool_parent = $id) && (pool_tree_pool_child = $id)");
-                }
-                else
-                {
-                    $approved[] = $id;
-                }
-            }
-
-            if( !empty($approved) )
-            {
-                $approved = join(',',$approved);
-                $sql = "UPDATE cc_tbl_pool_item SET pool_item_approved = 1, pool_item_num_sources =  (pool_item_num_sources+1) WHERE pool_item_id IN ({$approved})";
-                CCDatabase::Query($sql);
-            }
-            $upload_ids = array_filter(array_unique($upload_ids));
-            require_once('cchost_lib/cc-sync.php');
-            foreach( $upload_ids as $upload_id )
-                CCSync::Upload($upload_id);
-            if( !empty($approved) )
-            {
-                $rows = CCDatabase::QueryRows("SELECT pool_item_extra FROM cc_tbl_pool_item WHERE pool_item_id IN ({$approved})");
-                require_once('cchost_lib/cc-uploadapi.php');
-                foreach( $rows as $row )
-                {
-                    if( empty($row['pool_item_extra']) )
-                        continue;
-                    $ex = unserialize($row['pool_item_extra']);
-                    if( empty($ex['ttype']) )
-                        continue;
-                    $upload_id = $ex['upload_id'];
-                    CCUploadAPI::UpdateCCUD($upload_id,'in_' . $ex['ttype'] . ',trackback','');
-                }
-            }
+            $this->_process_items($_POST['action']);
         }
 
         require_once('cchost_lib/cc-query.php');
@@ -325,6 +342,80 @@ END;
         }
     }
 
+    function ItemEdit($pool_item)
+    {
+        $row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_pool_item WHERE pool_item_id='.$pool_item);
+        if( empty($row) )
+            CCUtil::Send404();
+        $row['pool_item_extra'] = empty($row['pool_item_extra']) ? array() : unserialize($row['pool_item_extra']);
+        require_once('cchost_lib/cc-form.php');
+        require_once('cchost_lib/cc-page.php');
+        CCPage::SetTitle(_('Edit Pool Item'));
+        $form = new CCGenericForm();
+        $fields = array();
+        foreach( array( 'pool_item_url' => _('Page URL'), 'pool_item_download_url' => _('Download URL'), 
+            'pool_item_description' => _('Description'), 'pool_item_name' => _('Name'),
+            'pool_item_artist' => _('Artist'), 'pool_item_approved' => _('Approved') ) as $field => $name)
+        {
+            $fields[$field] = array(
+                    'label' => $name,
+                    'formatter' => 'textedit',
+                    'value' => $row[$field],
+                    'flags' => CCFF_NONE 
+                    );
+        }
+        foreach( array( 'ttype' => _('Link Type'), 'poster' => _('Poster'), 'email' => _('email') ) as $field => $name )
+        {
+            $fields[$field] = array(
+                    'label' => $name,
+                    'formatter' => 'textedit',
+                    'value' => $row['pool_item_extra'][$field],
+                    'flags' => CCFF_NONE 
+                    );
+        }
+
+        if( !empty($row['pool_item_extra']['embed']) )
+        {
+            $fields['embed'] = array(
+                    'label' => 'Embed code',
+                    'formatter' => 'textarea',
+                    'value' => htmlentities($row['pool_item_extra']['embed']),
+                    'flags' => CCFF_NONE 
+                    );
+        }
+
+        $form->AddFormFields($fields);
+        //[pool_item_license] => noncommercial
+
+        if(  empty($_POST['generic']) || !$form->ValidateFields() )
+        {
+            CCPage::AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            $form->GetFormValues($values);
+            $values['pool_item_extra'] = $row['pool_item_extra'];
+            foreach( array( 'ttype', 'poster', 'email', 'embed' ) as $field )
+            {
+                if( isset($values[$field]) )
+                {
+                    $values['pool_item_extra'][$field] = $values[$field];
+                    unset($values[$field]);
+                }
+            }
+            $values['pool_item_extra'] = serialize($values['pool_item_extra']);
+            $values['pool_item_id'] = $pool_item;
+            $url = $form->GetFormValue('http_referer');
+            $table = new CCPoolItems();
+            $table->Update($values);
+            if( !empty($url) )
+                $url = urldecode($url);
+            else
+                $url = ccl('pools','item',$pool_item);
+            CCUtil::SendBrowserTo($url);
+        }
+    }
+
     function Delete($pool_id)
     {
         /*
@@ -415,6 +506,10 @@ END;
         CCEvents::MapUrl( ccp( 'admin', 'pools', 'approve', 'item' ),    
             array( 'CCPoolUI', 'ApproveItem'),   CC_ADMIN_ONLY , ccs(__FILE__) , '{poolitem}', 
             _('Approve a remote remix'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'poolitem',  'edit' ),  array( 'CCPoolUI', 'ItemEdit'),     
+            CC_ADMIN_ONLY , ccs(__FILE__) , '{poolitemid}', _('Edit properties of pool item'), CC_AG_SAMPLE_POOL );
+        CCEvents::MapUrl( ccp( 'admin', 'poolitem',  'delete' ),  array( 'CCPoolUI', 'ItemDelete'),     
+            CC_ADMIN_ONLY , ccs(__FILE__) , '{poolitemid}', _('Delete pool item'), CC_AG_SAMPLE_POOL );
     }
 
     /**

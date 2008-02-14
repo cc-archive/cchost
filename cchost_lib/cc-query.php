@@ -942,6 +942,7 @@ class CCQuery
         {
             return array( 'name' => array( _('Pool item name'), 'pool_item_name' ),
                           'user' => array( _('Pool item artist'), 'pool_item_artist' ),
+                          'id'   => array( _('Internal id'), 'pool_item_id'),
                         );
         }
 
