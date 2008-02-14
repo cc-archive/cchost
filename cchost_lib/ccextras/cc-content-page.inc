@@ -56,6 +56,13 @@ class CCContentPostForm extends CCTopicForm
                                'formatter'   => 'textedit',
                                'flags'       => CCFF_POPULATE );
 
+        $fields['topic_date'] =
+                        array(  'label'      => _('Publish Date'),
+                               'form_tip'    => '',
+                               'formatter'   => 'date',
+                               'value'       => date('Y-m-d H:i:s'),
+                               'flags'       => CCFF_POPULATE );
+
         $this->SetFormFieldItem('topic_text', 'show_img', true);
         $this->InsertFormFields( $fields, 'top' );
         $this->RemoveFormField('user_confirm');
@@ -262,8 +269,11 @@ class CCContentPage
             $values['topic_id'] = $topic_id;
             $topics->Update($values);
             $url = ccl('admin','content','manage');
-            if( !empty($_GET['offset']) )
-                $url = url_args( $url, 'offset='.$_GET['offset']);
+            if( empty($_GET['offset']) )
+                $offset = '';
+            else
+                $offset = '&offset='.$_GET['offset'];
+            $url = url_args( $url, 'topic_type=' . $values['topic_type'] . $offset );
             CCUtil::SendBrowserTo($url);
         }
 
@@ -300,7 +310,8 @@ class CCContentPage
             $values['topic_id'] = $topics->NextID();
             $values['topic_upload'] = 0;
             $values['topic_thread'] = 0;
-            $values['topic_date'] = date('Y-m-d H:i:s',time());
+            if( empty($values['topic_date']) )
+                $values['topic_date'] = date('Y-m-d H:i:s',time());
             $values['topic_user'] = CCUser::CurrentUser();
             //$values['topic_type'] = $values['topic_type'];
             $topics->Insert($values,0);

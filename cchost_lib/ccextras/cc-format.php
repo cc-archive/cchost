@@ -60,7 +60,7 @@ function cc_format_text($text)
 
 function cc_format_unformat($text)
 {
-    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up|left|right|img)';
+    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up|left|right|img|query)';
     return preg_replace("#\[/?$attrs(=[^\]]+)?\]#U",'',$text);
 }
 
@@ -112,15 +112,30 @@ function _cc_format_format($text)
                           array_values($map), 
                           $text );
     $text = SmartyPants($text);
+
+    if( strpos($text,'[query') !== false )
+        $text = preg_replace_callback( "#\[query=([^\]]+)\]\[/query\]#",'_cc_format_query', $text );
+
     $urls = array( '@(?:^|[^">=\]])(http://[^\s$]+)@m',
                    '@\[url\]([^\[]+)\[/url\]@' ,
                    '@\[url=([^\]]+)\]([^\[]+)\[/url\]@' 
                     );
     $text = preg_replace_callback($urls,'_cc_format_url', $text);
+
     $text = nl2br($text);
+    
     if( preg_match('/class="(right|left)/',$text) ) 
         $text .= '<div style="clear:both">&nbsp;</div>';
+    
     return $text;
+}
+
+function _cc_format_query(&$m)
+{
+    $qurl = url_args( ccl('api','query'), 'f=docwrite&' . urldecode($m[1]) );
+    
+ 
+    return "<script src=\"$qurl\" type=\"text/javascript\"></script>";
 }
 
 function _cc_format_url(&$m)
