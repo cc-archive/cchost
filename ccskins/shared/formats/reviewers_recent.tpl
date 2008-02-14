@@ -17,7 +17,7 @@ function reviewers_recent_dataview()
         JOIN cc_tbl_uploads ups      ON topics.topic_upload = ups.upload_id
         JOIN cc_tbl_user    reviewer ON topics.topic_user   = reviewer.user_id
         JOIN cc_tbl_user    reviewee ON ups.upload_user     = reviewee.user_id
-        WHERE topic_type <> 'reply'
+        WHERE topic_type = 'review'
         ORDER BY topic_date DESC
         LIMIT 25
 END;
