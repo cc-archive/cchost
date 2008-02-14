@@ -35,13 +35,13 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
                     <tr><th></th><td>%(#R/pool_item_description)%</td></tr>
                 %end_if%
                 %if_not_null(#R/pool_item_extra/embed)%
-                    <tr><th></th><td>%(#R/pool_item_extra/embed)%</td></tr>
+                    <tr><td colspan="2">%(#R/pool_item_extra/embed)%</td></tr>
                 %end_if%
                 %if_not_null(#R/pool_item_extra/posted)%
                     <tr><th>%text(str_pool_posted_by)%</th><td>%(#R/pool_item_extra/posted)%</td></tr>
                 %end_if%
                 <tr><th>%text(str_external_link)% </th>
-                    <td><a class="cc_external_link" href="%(#R/pool_item_url)%"><span>%(#R/pool_item_url)%</span> 
+                    <td><a class="cc_external_link" href="%(#R/pool_item_url)%"><span>%chop(#R/pool_item_url,44)%</span> 
                          <img src="%url(images/remote.gif)%" /></a></td></tr>
             </table>
         </div>

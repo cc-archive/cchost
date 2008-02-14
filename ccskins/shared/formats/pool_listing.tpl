@@ -19,9 +19,14 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
 %loop(records,R)%
   <div class="upload" >
         <div class="pool_item_info"
-          <a class="lic_link" href="%(#R/license_url)%" about="%(#R/pool_item_url)%"
-                  rel="license" title="%(#R/license_name)%" ><img src="%(#R/license_logo_url_small)%" /></a> 
-
+          %if_not_null(#R/license_logo_url_small)%
+              <a class="lic_link" href="%(#R/license_url)%" about="%(#R/pool_item_url)%"
+                      rel="license" title="%(#R/license_name)%" ><img src="%(#R/license_logo_url_small)%" /></a> 
+          %end_if%
+          %if_not_null(#R/pool_item_extra/ttype)%
+                    <? $tstr = $T->String('str_trackback_type_' . $R['pool_item_extra']['ttype']) ?>
+                    <span class="pool_item_type"><?= $tstr ?></span>: 
+          %end_if%
             <a class="cc_file_link upload_name" href="%(#R/pool_item_page)%">%(#R/pool_item_name)%</a>
             <br />%text(str_by)% <a class="cc_user_link" href="%(#R/pool_item_url)%">%(#R/pool_item_artist)%</a>
             <br /><a class="cc_external_link" href="%(#R/pool_item_url)%"><span>%text(str_external_link)%</span> 
