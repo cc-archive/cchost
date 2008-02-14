@@ -196,7 +196,7 @@ END;
 
     function ItemDelete($pool_item)
     {
-        $actions['delete'] = $pool_item;
+        $actions[$pool_item] = 'delete';
         $this->_process_pool_items($actions);
         CCUtil::ReturnAjaxMessage(_('Pool item deleted'));
     }
