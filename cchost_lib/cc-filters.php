@@ -72,14 +72,7 @@ function cc_filter_std(&$records,&$dataview_info)
 
                         $contest_name = $CC_GLOBALS['contests'][$R['upload_contest']];
 
-                        if( $contest_name == $r_user ) // this is a hack, todo: we need to know if this is contest source
-                        {
-                            $R['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$f_name);
-                        }
-                        else
-                        {
-                            $R['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$f_name);
-                        }
+                        $R['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$f_name);
                     }
                     else
                     {
@@ -387,16 +380,8 @@ function cc_filter_files(&$R)
         {
             $contest_name = $CC_GLOBALS['contests'][$R['upload_contest']];
 
-            if( $contest_name == $r_user ) // this is a hack, todo: we need to know if this is contest source
-            {
-                $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$F['file_name']);
-                $F['local_path']   = cca($CC_GLOBALS['contest-upload-root'],$contest_name,$F['file_name']);
-            }
-            else
-            {
-                $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$F['file_name']);
-                $F['local_path']   = cca($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$F['file_name']);
-            }
+            $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$F['file_name']);
+            $F['local_path']   = cca($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$F['file_name']);
         }
         else
         {
