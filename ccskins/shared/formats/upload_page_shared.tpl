@@ -196,6 +196,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 
 <div id="upload_menu_box">
 </div><!-- upload_menu_box -->
+<div style="clear:both">&nbsp;</div>
 
 %call('playerembed.xml/eplayer')%
 <script type="text/javascript">
