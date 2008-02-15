@@ -576,7 +576,7 @@ class CCLogin
         $keys =& CCSecurityKeys::GetTable();
         $hash = $keys->QueryItemFromKey('keys_key',$key);
         $ip   = $keys->QueryItemFromKey('keys_ip',$key);
-        if( empty($hash) || ($ip != $_SERVER['REMOTE_ADDR']) )
+        if( empty($hash) ) // || ($ip != $_SERVER['REMOTE_ADDR']) )  note: the IP check broke on Buckman's dual DSL 
             exit;
         $ord  = ord($hash[$offset]);
         require_once('cchost_lib/cc-template.php');
