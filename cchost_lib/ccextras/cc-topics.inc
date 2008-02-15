@@ -504,11 +504,22 @@ class CCTopic
         $translations =& CCTopicsi18n::GetTable();
         $topics       =& CCTopics::GetTable();
 
-        list( $parent_id, $left, $right ) = $topics->GetParentTopic($topic_id);
+
+        $x = $topics->GetParentTopic($topic_id);
+        list( $parent_id, $left, $right ) = $x;
 
         if( $parent_id && !$branch )
         {
             if( $right - $left > 1 )
+            {
+                // has children and a parent
+                // mark as deleted
+                $args4['topic_id'] = $topic_id;
+                $args4['topic_deleted'] = 1;
+                $topics->Update($args4);
+                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, $topic_id ));
+            }
+            else
             {
                 // one parent, no children:
                 // delete from tree
@@ -523,15 +534,6 @@ class CCTopic
                 $topics->ShowDeleted($old_show_val);
                 if( $mark )
                     $this->DeleteTopic($parent_id); // recurse 'up'
-            }
-            else
-            {
-                // has children and a parent
-                // mark as deleted
-                $args4['topic_id'] = $topic_id;
-                $args4['topic_deleted'] = 1;
-                $topics->Update($args4);
-                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, $topic_id ));
             }
         }
         else
