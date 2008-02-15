@@ -48,6 +48,7 @@ a:hover {
 #header_search {
 	float: right;
 	margin-top: 10px;
+	width: 150px;
 }
 
 #header_search_img {
