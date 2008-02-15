@@ -208,7 +208,7 @@ END;
         CCPage::SetTitle(_("Approve Pending Remixes"));
         if( $submit )
         {
-            $this->_process_items($_POST['action']);
+            $this->_process_pool_items($_POST['action']);
         }
 
         require_once('cchost_lib/cc-query.php');
