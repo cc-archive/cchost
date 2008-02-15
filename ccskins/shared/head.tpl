@@ -13,6 +13,10 @@
     <meta name="description" content="%(site-meta-description)%" />
 %end_if%
 
+%if_not_empty(extra-meta)%
+    %(extra-meta)%
+%end_if%
+
 <meta name="robots" content="index, follow" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <script type="text/javascript">
