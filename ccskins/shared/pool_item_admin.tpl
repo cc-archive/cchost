@@ -45,7 +45,7 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
 <!-- tempalte pool_approvals -->
 <style>
 #inner_content {
-    width: 860px;
+    width: 750px;
     margin: 0px auto;
 }
 .cc_pool_approval_list table td {
@@ -72,12 +72,13 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
     margin-right: 10px;
 }
 .pool_item_rec {
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     padding-top: 4px;
     border-top: 1px solid #999;
 }
 .butts {
     margin: 3px;
+    float: left;
 }
 </style>
 
@@ -85,6 +86,10 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
   %loop(records,r)%
   <?= $extra = unserialize($r['pool_item_extra']); ?>
   <div class="pool_item_rec" id="rec_%(#r/pool_item_id)%">
+      <div class="butts">
+        <a href="%(#r/item_edit_url)%" id="edit_link_%(#r/pool_item_id)%" class="small_button"><span>edit</span></a>
+        <a href="javascript://del item" id="del_link_%(#r/pool_item_id)%" class="small_button del_link"><span>delete</span></a>
+     </div>
      <div class="fl">%(#r/pool_item_artist)%</div>
      <div class="fl"><a href="%(#r/pool_item_url)%" target="_blank" >%(#r/pool_item_name)%</a></div>
      %if_not_null(#extra/ttype)%
@@ -96,11 +101,6 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
          </div>
      %end_if%
       <div style="clear:both">&nbsp;</div>
-      <div class="butts">
-        <a href="%(#r/item_edit_url)%" id="edit_link_%(#r/pool_item_id)%" class="small_button"><span>edit</span></a>
-        <a href="javascript://del item" id="del_link_%(#r/pool_item_id)%" class="small_button del_link"><span>delete</span></a>
-     </div>
-     <div style="clear:both">&nbsp;</div>
   </div>
   %end_loop%
 </div>
