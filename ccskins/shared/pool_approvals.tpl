@@ -4,7 +4,7 @@ if( !defined('IN_CC_HOST') )
 
 
 $post_url = ccl( 'admin', 'pools', 'approve', 'submit' );
-$heads = array( _('Approve'), _('Delete'), _('None'), _('Uploads'),_('Author'), _('Site/Links') );
+$heads = array( '', _('Approve'), _('Delete'), _('None'), _('Uploads'),_('Author'), _('Site/Links') );
 $tr = array( '<' => '&lt;', '>' => '&gt' );
 ?>
 <!-- tempalte pool_approvals -->
@@ -35,6 +35,7 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
       <tr>%loop(#heads,head)%<th>%(#head)%</th>%end_loop%</tr>
       %loop(records,r)%
       <tr>
+         <td><a href="%(#r/item_edit_url)%" id="edit_link_%(#r/pool_item_id)%" class="small_button"><span>edit</span></a></td>
          <td><input type="radio" name="action[%(#r/pool_item_id)%]" value="approve" checked="checked" /></td>
          <td><input type="radio" name="action[%(#r/pool_item_id)%]" value="delete" /></td>
          <td><input type="radio" name="action[%(#r/pool_item_id)%]" value="nothing" /></td>
