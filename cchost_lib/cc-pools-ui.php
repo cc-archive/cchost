@@ -257,9 +257,11 @@ END;
         }
 
         $pool_id = $this->GetWebSamplePool();
+        $cce = ccl('admin','poolitem','edit') . '/';
         $sql =<<<EOF
         SELECT pool_item_id, pool_item_url, pool_item_name, pool_item_download_url,
-               pool_item_extra, pool_name, pool_item_artist
+               pool_item_extra, pool_name, pool_item_artist,
+               CONCAT( '{$cce}', pool_item_id ) as item_edit_url
         FROM cc_tbl_pool_item
         JOIN cc_tbl_pools     ON pool_item_pool       = pool_id
         WHERE (pool_item_approved = 0) and pool_item_pool = {$pool_id}
@@ -506,13 +508,10 @@ EOF;
             }
             $values['pool_item_extra'] = serialize($values['pool_item_extra']);
             $values['pool_item_id'] = $pool_item;
-            $url = $form->GetFormValue('http_referer');
             $table = new CCPoolItems();
             $table->Update($values);
-            if( !empty($url) )
-                $url = urldecode($url);
-            else
-                $url = ccl('pools','item',$pool_item);
+            $form->SendToReferer(); // this will exit if possible
+            $url = ccl('pools','item',$pool_item); // otherwise go here...
             CCUtil::SendBrowserTo($url);
         }
     }

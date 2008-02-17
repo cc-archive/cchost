@@ -108,6 +108,16 @@ class CCForm
         CCEvents::Invoke( CC_EVENT_FORM_INIT, array( &$this ) );
     }
 
+    function SendToReferer()
+    {
+        $refer = $this->GetFormValue('http_referer');
+        if( !empty($refer) )
+        {
+            $refer = str_replace('&amp;','&',urldecode($refer));
+            CCUtil::SendBrowserTo($refer); // this will exit the session
+        }
+        return false;
+    }
     function EnableUploads()
     {
        $this->_template_vars['form-data'] = 'multipart/form-data';
