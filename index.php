@@ -74,8 +74,6 @@ if( file_exists('.cc-ban.txt') )
 * it on as quickly as possible.
 */
 require_once('cchost_lib/cc-debug.php');
-CCDebug::Enable(true);
-CCDebug::Chronometer($_t);
 
 /*
 * Logging errors to a file this will help ccHost developers
@@ -108,10 +106,7 @@ require_once('cchost_lib/cc-template-api.php');
 /*
 * Configuration initialized here
 */
-CCDebug::Chronometer($_INIT);
 CCConfigs::Init();
-$_INIT = CCDebug::Chronometer($_INIT);
-
 
 /*
 *  We don't want to encourage ccHost installations to have 
@@ -155,7 +150,6 @@ CCEvents::PerformAction();
 /*
 *  Show the resulting page
 */
-CCDebug::Chronometer($_p);
 require_once('cchost_lib/cc-page.php');
 CCPage::Show();           
 
@@ -164,8 +158,5 @@ CCPage::Show();
 */
 CCDebug::InstallErrorHandler(false); 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
-
-print "<!-- Page time: " . CCDebug::Chronometer($_t) . '/ page:' . CCDebug::Chronometer($_p) . ' /init: '
-   . $_INIT . '/sql: ' . $_sql_time . "  skin: {$CC_GLOBALS['skin-file']} -->";
 
 ?>
