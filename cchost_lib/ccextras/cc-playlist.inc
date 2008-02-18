@@ -220,6 +220,8 @@ class CCPlaylists
 
     function Bump($upload_encoded='')
     {
+        return; // ugh, we need to implement this properly
+
         if( empty($upload_encoded) )
             CCUtil::Send404();
 
