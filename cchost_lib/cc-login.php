@@ -143,8 +143,7 @@ class CCNewUserForm extends CCUserForm
                 return(false);
             }
 
-            $users =& CCUsers::GetTable();
-            $user = $users->GetRecordFromName( $value );
+            $user = CCDatabase::QueryItem('SELECT user_id FROM cc_tbl_user WHERE user_name=\''.$value.'\'');
 
             if( empty($user) )
             {
