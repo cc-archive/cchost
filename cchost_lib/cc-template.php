@@ -138,10 +138,13 @@ class CCSkin
         if( $this->html_mode && $headers )
         {
             // Force UTF-8 necessary for some languages (chinese,japanese,etc)
-            if( headers_sent($file,$line) )
+            if( CCDebug::IsEnabled() )
             {
-                print("Headers send $file $line<br />");
-                CCDebug::StackTrace();
+                if( headers_sent($file,$line) )
+                {
+                    print("Headers send $file $line<br />");
+                    CCDebug::StackTrace();
+                }
             }
             header('Content-type: text/html; charset=' . CC_ENCODING) ;
         }
@@ -571,7 +574,7 @@ class CCSkin
                 $parsed = cc_tpl_parse_file($file,$bfunc);
                 //if( preg_match('/skin.tpl/',$file) ) CCDebug::PrintVar($parsed);
                 $ret = eval( '?>' . $parsed);
-                if( $ret != 'ok' )
+                if( $ret != 'ok' && CCUser::IsAdmin() )
                 {
                     $lines = split("\n",$parsed);
                     array_unshift($lines,"-------- parsed template for $file --------");

@@ -288,7 +288,7 @@ class CCMediaHost
     */
     function _get_file_page_url(&$record)
     {
-        CCDebug::StackTrace();
+        //CCDebug::StackTrace();
         //return( ccc($record['upload_config'],'files',$record['user_name'],$record['upload_id'])  );
         return( ccl('files',$record['user_name'],$record['upload_id'])  );
     }

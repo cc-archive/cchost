@@ -262,8 +262,8 @@ class CCUsers extends CCTable
 
     function & GetRecordFromRow(&$row,$expand = true)
     {
-        print('User get record called');
         CCDebug::StackTrace();
+        trigger_error('User get record called');
 
         global $CC_GLOBALS;
         

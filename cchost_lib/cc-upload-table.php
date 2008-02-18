@@ -76,9 +76,9 @@ class CCUploads extends CCTable
     */
     function & GetRecordFromRow( &$row )
     {
-        print("<pre>Deprecated CCUpload::GetRecord called\n</pre>");
-        CCDebug::Enable(true);
+        //CCDebug::Enable(true);
         CCDebug::StackTrace();
+        trigger_error("<pre>Deprecated CCUpload::GetRecord called\n</pre>");
     }
 
     /**

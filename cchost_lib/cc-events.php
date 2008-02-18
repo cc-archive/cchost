@@ -490,10 +490,12 @@ class CCEvents
         if( empty($action->md) )
         {
             CCUtil::Send404(false);
+            /*
             CCDebug::Enable(true);
             $x['error'] = "Can't find module";
             $x['action'] = $action;
             CCDebug::PrintVar($x);
+            */
         }
         else
         {

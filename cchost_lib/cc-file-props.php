@@ -60,9 +60,6 @@ class CCFileProps
 
     function GetFileProps($filename)
     {
-        if( $filename == '/boot/grub/grub.conf' )
-            CCDebug::StackTrace(1,1);
-
         $text = file_get_contents($filename);
         if( !preg_match('#.*\[meta\](.*)\[/meta\].*#ms',$text,$m) )
             return null;
