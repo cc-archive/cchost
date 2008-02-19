@@ -35,6 +35,17 @@ EOF;
 */
 if( empty($A['content_page_textformat']) )
     $A['content_page_textformat'] = 'format';
+
+if( !empty($A['content_page_width']) ) {
+?>
+<style type="text/css">
+#inner_content {
+    width: <?= $A['content_page_width'] ?>;
+    margin: 0px auto;
+}
+</style>
+<?
+}
 ?>
 
 <table class="cc_content_page" cellspacing="0" cellspacing="0" >

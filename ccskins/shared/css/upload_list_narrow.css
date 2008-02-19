@@ -45,3 +45,8 @@
 	font-size: .8em;
 	margin: 1px;
 }
+
+a.upload_flag {
+	float: right;
+	margin-right: 12px;
+}

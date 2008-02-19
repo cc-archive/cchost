@@ -3,8 +3,11 @@ if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
 ?><!-- tempalte howididit_browse -->
- <div class="box"><?= $T->String('str_hidi_help') ?></div>
- <div class="cc_howididit_links">
+
+<? /* er, IE won't accept stylesheets in ajax calbacks so we have to include it here, but what if we are in 'narrow' mode?? */ ?>
+<link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list_wide.css') ?>" />
+<div class="box"><?= $T->String('str_hidi_help') ?></div>
+<div class="cc_howididit_links">
     <?= $T->String('str_hidi_sort_by') ?>
     <select id="hidi_sort">
         <option value="date" selected="selected"><?= $T->String('str_hidi_date')?></option>

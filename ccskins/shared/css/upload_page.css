@@ -145,3 +145,7 @@ span.playerlabel {
 	display: block;
 	float: left;
 }
+a.upload_flag {
+	float: right;
+	margin-right: 20px;
+	}

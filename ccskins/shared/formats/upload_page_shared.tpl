@@ -40,10 +40,14 @@
 var ratings_enabled = '%(#R/ratings_enabled)%';
 </script>
 
-<div id="date_box">%text(str_list_date)%: %(#R/upload_date)%
-%if_not_empty(#R/upload_last_edit)%
-<span id="modified_date">%text(str_list_lastmod)%: %(#R/upload_last_edit)% %if_not_null(#R/upload_extra/last_op)% (%text(#R/upload_extra/last_op)%) %end_if%</span>
+%if_not_null(flagging)%
+    <a class="flag upload_flag" title="%text(str_flag_this_upload)%" href="%(home-url)%flag/upload/%(#R/upload_id)%">&nbsp;</a>
 %end_if%
+<div id="date_box">
+    %text(str_list_date)%: %(#R/upload_date)%<!-- -->
+    %if_not_empty(#R/upload_last_edit)%
+    <span id="modified_date">%text(str_list_lastmod)%: %(#R/upload_last_edit)%&nbsp;%if_not_null(#R/upload_extra/last_op)% (%text(#R/upload_extra/last_op)%) %end_if%</span>
+    %end_if%
 </div>
 
 <div id="upload_wrapper">

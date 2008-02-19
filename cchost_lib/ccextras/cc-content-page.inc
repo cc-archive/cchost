@@ -143,7 +143,7 @@ class CCContentPageForm extends CCForm
 
         $fields['content_page_columns'] =
                         array(  'label'      => _('Number of columns'),
-                               'form_tip'    => _('Some formats will ignore this.'),
+                               'form_tip'    => _('Some layouts will ignore this.'),
                                'formatter'   => 'select',
                                'options'     => $options,
                                'flags'       => CCFF_POPULATE );
@@ -153,19 +153,25 @@ class CCContentPageForm extends CCForm
 
         $fields['limit'] =
                         array(  'label'      => _('Limit number of topics'),
-                               'form_tip'    => _('Some formats will ignore this.'),
+                               'form_tip'    => _('Some layouts will ignore this.'),
                                'formatter'   => 'select',
                                'options'     => $options,
                                'flags'       => CCFF_POPULATE );
 
         $options =
-            array( 'format' => 'Use formatted text (e.g. [b] style)',
-                    'raw' => 'Do not format text (HTML)',
-                   'text'  => 'Unformatted (remove [b] style formatting)', );
+            array( 'format' => _('Use formatted text (e.g. [b] style)'),
+                    'raw' =>   _('Do not format text (HTML)'),
+                   'text'  =>  _('Unformatted (remove [b] style formatting)'), );
+
+        $fields['content_page_width'] =
+                        array(  'label'      => _('Page Width'),
+                               'form_tip'    => _('ex: 80% or 730px (Some layouts ignore this)'),
+                               'formatter'   => 'textedit',
+                               'flags'       => CCFF_POPULATE );
 
         $fields['content_page_textformat'] =
                         array(  'label'      => _('Text format'),
-                               'form_tip'    => _('Some formats will ignore this.'),
+                               'form_tip'    => _('Some layouts will ignore this.'),
                                'formatter'   => 'select',
                                'options'     => $options,
                                'flags'       => CCFF_POPULATE );
@@ -448,7 +454,7 @@ class CCContentPage
         }
 
         $vars = '';
-        foreach( array( 'content_page_box', 'content_page_paging', 
+        foreach( array( 'content_page_box', 'content_page_paging', 'content_page_width',
                         'content_page_textformat', 'content_page_columns' ) as $K  )
         {
             if( isset($values[$K]) )
