@@ -74,7 +74,10 @@ no download/play/show stuff, just actions (review, edit, share, etc.)
             [playlist_menu] => Array
 
 */
+?>
+<script src="/ccskins/shared/js/prototype.js" /></script>
 
+<?
 if( !empty($A['records']) )
     $R =& $A['records'][0];
 else
@@ -110,6 +113,15 @@ if( !empty($menu['admin']) )
     foreach( $menu['admin'] as $mi )
         helper_ajax_menu_item($mi,$T);
 }
+
+/** Editors menu *****/
+
+if( !empty($menu['editorial']) )
+{
+    foreach( $menu['editorial'] as $mi )
+        helper_ajax_menu_item($mi,$T);
+}
+
 
 print '</ul>';
 

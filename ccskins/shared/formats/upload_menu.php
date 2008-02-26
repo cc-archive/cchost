@@ -108,6 +108,15 @@ function _t_upload_menu_init(&$T,&$A)
 
     print "<div class=\"box\" id=\"download_box\"><ul>\n";
 
+    /** Editors *****/
+
+    if( !empty($menu['editorial']) )
+    {
+        foreach( $menu['editorial'] as $mi )
+            helper_upload_menu_item($mi,$T);
+    }
+
+
     if( !empty($menu['comment']['comments']) )
         helper_upload_menu_item($menu['comment']['comments'],$T);
 
