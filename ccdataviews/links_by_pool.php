@@ -1,7 +1,7 @@
 <?/*
 [meta]
     type = dataview
-    name = links_by
+    name = links_by_pool
     desc = _('Used by upload listing for Samples are From')
 [/meta]
 */
