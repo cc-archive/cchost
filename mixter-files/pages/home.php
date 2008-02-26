@@ -99,8 +99,26 @@ table.maintable td {
         </p>
     </div>
 
+</div> <!-- left_box -->
+<div id="right_box" >
     <div class="box">
-        <h2>Previous contests...</h2>
+        <h2>Welcome to the New ccMixter</h2>
+        <p>
+            Well, we've gone through a face lift as well as major internal overhaul and we're not done! We're
+            going to be turning on a lot of new features shortly. Make sure to keep track by subscribing our
+            <a href="http://ccmixter.org/api/query?f=rss&datasource=topics&thread=-1&title=Forums">Forums Feed <img src="http://ccmixter.org/ccskins/shared/images/feed-icon16x16.png" /></a>
+        </p>
+        <p>
+            For starters try out our new <a href="http://ccmixter.org/view/media/remix/browse">Remix Browser</a>.
+        </p>
+        <p>
+            We think we got all (most?) of the kinks out of the system. But just in case... please <a href="http://ccmixter.org/media/people/contact/admin">report bugs here</a>.
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>Sample Pools and previous contests...</h2>
+        <a  href="/buckyjonson">Bucky Jonson</a><br  />
         <a  href="/djvadim">DJ Vadim</a><br  />
         <a  href="/salman">Salman Ahmad</a><br  />
         <a  href="/vieux">Vieux Farka Toure</a><br  />
@@ -113,25 +131,5 @@ table.maintable td {
         <a  href="/freestylemix">WIRED CD</a> Beastie Boys, Chuck D....<br  />
     </div>
     
-</div> <!-- left_box -->
-<div id="right_box" >
-    <div class="box">
-        <h2>DJ Vadim Album Tracks Released under CC</h2>
-        <p>
-            <a  href="<?= $A['root-url']?>bbe" class="logolink" style="margin:2px;float:left;width:175px;">
-            <img src="<?= $T->URL('djvadim/bbe-logo.jpg'); ?>" border="0" style="border: 1px solid black;" /></a>
-        </p>
-        <p>
-            <a  href="http://www.creativecommons.org">Creative Commons</a>, International superstar DJ Vadim and 
-            <a  href="http://bbemusic.com">BBE</a> are pleased, (<i >very</i> pleased) to announce that all original solo, 
-            individual instrumental and a cappella studio tracks for DJ Vadim's "Soundcatcher" album are now online under 
-            a Creative Commons <a  href="http://creativecommons.org/licenses/by-nc/3.0">Attribution-NonCommercial</a> license, 
-            so that producers worldwide can use the sounds in remixes and new compositions.
-        </p>
-        <p ><a  href="<?= $A['root-url']?>bbe">More information and where to download</a>...</p>
-    </div>
-    <div class="box">
-        <h2>News from Friends</h2>
-    </div>
 </div> <!-- right box -->
 
