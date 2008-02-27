@@ -82,7 +82,7 @@ class CCSettingsExporter
         {
             $k = $keys[$i];
             $type = $d[$k]['config_type'];
-            $d[$k]['config_data'] = $serialize($d[$k]['config_data']);
+            $d[$k]['config_data'] = serialize($d[$k]['config_data']);
         }
         $configs->InsertBatch( $columns, $d );
     }
