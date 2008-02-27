@@ -1,4 +1,88 @@
-Release notes for ccHost
+This package is an early-adopters ALPHA of ccHost version 5
+
+As of this writing (Feb. 27, 2008) this is the code currently running
+on ccMixter.org so it is known to work under SOME conditions. However 
+it is NOT recommended to be used on a production/public site and 
+this release is for testing and purposes only.
+
+In this document:
+
+1. NEW INSTALL
+2. UPGRADE
+3. IMPORTING phpTAL Templates
+4. KNOWN ISSUES
+5. DEVELOPERS
+6. SECURITY ALERT
+
+
+
+1. NEW INSTALL
+----------------
+1. Unzip the package on a local machine
+2. Copy the directory structure to the root of your web server
+3. Browse to http://your_domain/ccadmin
+
+
+2. UPGRADE
+------------
+For upgrading from ccHost 4.x or before:
+
+1. Do not try the upgrade on your main/production/public site.
+2. Make a copy of your entire ccHost database onto your test site
+3. Copy your content (e.g. 'people' directory) to your test site
+4. Copy your cc-config-db.php to the root of your test site
+5. Unzip the ccHost 5 package on a local machine
+6. Copy the directory structure to your test site's server
+7. Browse to http://your_domain/ccadmin
+
+NOTE: It is recommended that you do NOT copy any plugins or
+custom code that have not been ported to ccHost 5. (See Developers
+section below)
+
+
+3. IMPORTING phpTAL Templates
+------------------------------
+
+None of your version 4 skins, pages, etc. work anymore as is. You can 
+try to import your old phpTAL XML templates using:
+
+     bin/cc-host-import-v4-template.php 
+
+Many imported templates (like your home page) might "just work" 
+but many will need tweaking, assuming you are familiar with PHP.
+
+4. KNOWN ISSUES
+-----------------
+
+The list of known issues is very dynamic and up to YOU to keep
+up to date by checking and submitting bugs to our Source Forge
+bug tracker:
+
+https://sourceforge.net/tracker/?atid=559966&group_id=80503&func=browse
+
+Category: ccHost
+
+5. DEVELOPERS
+--------------
+
+If you have written custom PHP code or plugins for ccHost v4 or before
+you should first get the ccHost 5 installation up and running before
+trying your custom code. Much has changed in the code and the chances
+of your custom 'just working' is very low. The new core APIs are still
+very fluid so expect more churn.
+
+6. SECURITY ALERT
+------------------
+
+The new template engine uses a .tpl extension file that is generally
+directly accessable from the web. If you don't map that extension to
+some program (like php) in your server configuration then users will
+see SQL syntax directly in their browsers.
+
+======================================================================================
+======================================================================================
+
+Release notes for ccHost v4 (mostly obsolete)
 
 1.   What's New (Stable)
 2.   System Requirements

@@ -5,6 +5,7 @@
 %if_not_empty(beta_message)%
     <div id="beta_message" style="position:absolute;">%(beta_message)%</div>
 %end_if%
+
 <div class="hide">
   <a href="#content">%text(skip)%</a>
 </div>
@@ -54,7 +55,11 @@
 %end_if%
 <a name="content" ></a>    
 
-%loop(macro_names,macro)%    %call(#macro)%    %end_loop%
+<?
+    if( !empty($A['macro_names'] ) )
+        while( $macro = array_shift($A['macro_names']) )
+            $T->Call($macro);
+?>
 %loop(inc_names,inc_name)%   %call(#inc_name)% %end_loop%
 
 </div> <!-- content -->

@@ -109,7 +109,7 @@ class CCContentPageForm extends CCForm
 
         $types = CCDatabase::QueryItems('SELECT DISTINCT topic_type FROM cc_tbl_topics');
         $types = array_filter($types);
-        $types = array_combine( array_values($types), $types );
+        $types = empty($types) ? array( 'home' => 'home' ) : array_combine( array_values($types), $types );
 
         if( !empty($types) )
         {
@@ -499,7 +499,7 @@ EOF;
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         if( empty($_GET['topic_type']) )
-            $_GET['topic_type'] = $types[0];
+            $_GET['topic_type'] = empty($types[0]) ? 'home' : $types[0];
         $args = $query->ProcessAdminArgs('t=content_manage&datasource=topics&type='.$_GET['topic_type']);
         $query->Query($args);
     }
