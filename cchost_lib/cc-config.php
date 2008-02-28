@@ -395,7 +395,8 @@ class CCConfigs extends CCTable
             die('This installation of ccHost must be upgraded to version 5.0');
         }
 
-        $this->SetValue('config', 'cc-host-version', CC_HOST_VERSION, CC_GLOBAL_SCOPE);
+        $cfg = new CCConfigs();
+        $cfg->SetValue('config', 'cc-host-version', CC_HOST_VERSION, CC_GLOBAL_SCOPE);
         $CC_GLOBALS['cc-host-version']  = CC_HOST_VERSION;
     }
 }

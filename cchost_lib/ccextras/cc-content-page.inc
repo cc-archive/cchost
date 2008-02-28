@@ -305,6 +305,7 @@ class CCContentPage
                 $name = 'images_' . $i;
                 if( !empty($values[$name]['name']) )
                 {
+                    CCUtil::MakeSubDirs($CC_GLOBALS['image-upload-dir']);
                     move_uploaded_file($values[$name]['tmp_name'],$CC_GLOBALS['image-upload-dir'] . $values[$name]['name']);
                 }
                 unset($values[$name]);

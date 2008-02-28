@@ -512,7 +512,7 @@ class CCSkinAdmin
             $form->GetFormValues($values);
             $src = dirname($values['skin-file']);
             $safe_name = strtolower(preg_replace('/[^a-z0-9_-]/','',$values['skin-name']));
-            $target = $values['target-dir'] . '/' . $safe_name;
+            $target = rtrim($values['target-dir'],'/') . '/' . $safe_name;
             if( file_exists($target) )
             {
                 $form->SetFieldError('skin-name',_('A directory with that name already exists'));
@@ -520,12 +520,13 @@ class CCSkinAdmin
             }
             else
             {
+                $tpl_file = rtrim($target,'/') . '/skin.tpl';
                 $this->_deep_copy($src,$target);
                 $profile = '<?/*';
                 $profile .=<<<EOF
 [meta]
     type              = profile
-    skin-file         = {$target}/skin.tpl
+    skin-file         = {$tpl_file}
     desc              = _('{$safe_name}')
     string_profile    = ccskins/shared/strings/all_media.php
     list_file         = ccskins/shared/formats/upload_page_wide.php
@@ -541,14 +542,20 @@ class CCSkinAdmin
 [/meta]
 */?>
 EOF;
-                CCUtil::MakeSubdirs($target . '/profiles', 0777);
-                $prof_file = $target . '/profiles/' . $safe_name . '.php';
+                $prof_dir = rtrim(dirname($target),'/') . '/profiles';
+                CCUtil::MakeSubdirs($prof_dir, 0777);
+                $prof_file = $prof_dir . '/' . $safe_name . '.php';
                 $f = fopen( $prof_file , 'w');
                 fwrite($f,$profile);
                 fclose($f);
                 $this->_load_profile($prof_file);
                 $msg = sprintf(_('The skin and profile %s has been created sucessfully'),"<b>'" . $target . "'</b>");
                 $msg .= '<p>' . sprintf(_('Return to %sSkin Settings%.'),'<a href="' . ccl('admin','skins') .'">', '</a>') . '</p>';
+                $text = file_get_contents($tpl_file);
+                $text = preg_replace('/(desc\s+=\s+_\(\')([^\']+)\'/','$1'.$tpl_file.'\'',$text);
+                $f = fopen($tpl_file,'w');
+                fwrite($f,$text);
+                fclose($f);
                 CCPage::Prompt($msg);
             }
         }
