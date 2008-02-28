@@ -38,23 +38,12 @@ $Id$
               <p>You are logged in as an administrator</p>
           <? } ?>
 
-            <?
-                if( $zipfiles = glob('5*.zip') )
-                {
-                    list( $zipfile )= $zipfiles;
-                    $filesize = filesize($zipfile);
-                }
-            ?>
           <div  style="width:550px;margin: 14px auto;">
           <div class="box">
-            This is a pre-early-adoptors-curious-developers build of ccHost 5. Only install this on a web you don't care
-            about because it will <b>DESTROY</b> any previous install of ccHost. 
+            <p>This is a pre-early-adoptors-curious-developers build of ccHost 5. Only install this on a web you don't care
+            about. </p>
             
-            <? if( !empty($zipfile) ) { ?>
-            You can pick up this build here:<h3><a style="display:block;font-size:16px;margin:9px;color:green;text-decoration:underline" href="<?= $zipfile ?>"><?= $zipfile ?></a> filesize: (<?= number_format($filesize/1000000,2) ?>MB) </h3>
-            <? } ?>
-
-            New features in cchost 5 (so far):
+            <p>New features in cchost 5 (so far):</p>
 
             <table style="float:right; margin: 5px;">
                 <tr><td><img src="ccskins/shared/layouts/images/layout005.gif" /></td></tr>
@@ -70,10 +59,23 @@ $Id$
                         image sites, configurable <b>tab layouts</b>, <b>form layouts</b>, etc.
                     </p>
                 </li>
+                <li><b>New Page Content Manager</b>
+                    <p>
+                        Admins can create pages in your system without any XML/HTML. 
+                    </p>
+                </li>
+                <li><b>Trackbacks</b>
+                    <p>
+                        ccHost installations can track where their media has been used across the web (e.g. YouTube)
+                    </p>
+                </li>
                 <li><b>Performance</b>
                     <p>
-                        The new skin engine renders pages at over 10 times faster than the previous template engine and uses
+                        The new skin engine renders pages at many times faster than the previous template engine and uses
                         less than 1/10th of the memory per page request.
+                    </p>
+                    <p>
+                        Search is not only ultra fast, but now allows for sophisticated term combinations.
                     </p>
                     <p>
                         A new database wrapper makes it easier to create custom templates and increases the speed of
@@ -86,12 +88,6 @@ $Id$
             </ul>
 
             <br style="clear:right" />
-
-            What's <span style="color:red;font-weight:bold">broken</span> in this build:
-
-            <ul>
-                <li>Most of the site. This is not a usable build for anything but getting a feel for what's coming</li>
-            </ul>
 
           </div></div>
 

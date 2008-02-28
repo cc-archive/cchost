@@ -1,26 +1,28 @@
-This package is an early-adopters ALPHA of ccHost version 5
+The ccHost v5 package is an early-adopters ALPHA 
 
 As of this writing (Feb. 27, 2008) this is the code currently running
 on ccMixter.org so it is known to work under SOME conditions. However 
 it is NOT recommended to be used on a production/public site and 
-this release is for testing and purposes only.
+this release is for testing and bug finding/fixing purposes only.
 
 In this document:
 
 1. NEW INSTALL
 2. UPGRADE
-3. IMPORTING phpTAL Templates
+3. IMPORTING phpTAL TEMPLATES
 4. KNOWN ISSUES
 5. DEVELOPERS
 6. SECURITY ALERT
-
+7. HOWTO: CONTENT MANAGER
+8. HOWTO: CREATE A SKIN
+9. HOWTO: REPAIR A CONFIG (A.K.A. HELP!!!!)
 
 
 1. NEW INSTALL
 ----------------
 1. Unzip the package on a local machine
 2. Copy the directory structure to the root of your web server
-3. Browse to http://your_domain/ccadmin
+3. Browse to http://your_domain
 
 
 2. UPGRADE
@@ -30,17 +32,18 @@ For upgrading from ccHost 4.x or before:
 1. Do not try the upgrade on your main/production/public site.
 2. Make a copy of your entire ccHost database onto your test site
 3. Copy your content (e.g. 'people' directory) to your test site
-4. Copy your cc-config-db.php to the root of your test site
+4. Copy your cc-config-db.php to the root of your test site 
+   (edit manually if you renamed the database or changed user information)
 5. Unzip the ccHost 5 package on a local machine
-6. Copy the directory structure to your test site's server
-7. Browse to http://your_domain/ccadmin
+6. Copy the directory structure to your test site's server (including ccadmin)
+7. Browse to http://your_domain
 
 NOTE: It is recommended that you do NOT copy any plugins or
 custom code that have not been ported to ccHost 5. (See Developers
 section below)
 
 
-3. IMPORTING phpTAL Templates
+3. IMPORTING phpTAL TEMPLATES
 ------------------------------
 
 None of your version 4 skins, pages, etc. work anymore as is. You can 
@@ -76,13 +79,108 @@ very fluid so expect more churn.
 
 The new template engine uses a .tpl extension file that is generally
 directly accessable from the web. If you don't map that extension to
-some program (like php) in your server configuration then users will
+some program (like php) in your server configuration then users can
 see SQL syntax directly in their browsers.
 
+7. HOWTO: CONTENT MANAGER
+--------------------------
+
+In ccHost 5 you can create pages in your system without any HTML/XML file editing 
+whatsoever. Examples of pages created this way are the ccMixter home page and
+"As Seen on the Web"
+
+http://ccmixter.org/
+http://ccmixter.org/view/media/remix/trackback
+
+The second example is mapped to a navigation tab. The creation of a page like this
+and mapping to a tab are explained here:
+
+First create new content topics:
+
+1. While logged in as admin account: Click on 'Global Settings' in the menu
+2. Click on 'Manage Page Content'
+3. Click on 'Create New Content'
+4. At 'New Content Type' type in "my_page_content" (without the quotes)
+5. Enter a title and topic contents
+6. Click on 'Submit Content'
+
+Repeat these steps for addition topics except replace step (4):
+
+4. At 'Content Type' select 'my_page_content' from the drop down, 
+   leave 'New Content Type' blank
+
+Images are uploaded to cchost_files/images (replace cchost_files with the name of the
+files directory you supplied during install). To refer to those images use the new 'img' 
+block in your topics. Example:
+
+[img=/cchost_files/images/my_image.gif][/img]
+
+You can also use the new 'left' or 'right' blocks to float images or blocks of text:
+
+[left][img=/cchost_files/images/my_image.gif][/img][/left]
+
+Next create a new content page:
+
+1. While logged in as admin account: Click on 'Global Settings' in the menu
+2. Click on 'Manage Page Content'
+3. Click on 'Create a New Page'
+4. At 'Content Type' select "my_page_content" 
+5. Enter a page title like "My Page" (without the quotes)
+6. Click on 'Submit' - this should take you back to the 'Manage Page Content' screen
+7. Click on 'view' next to your new page to preview the page (Note the URL in your browser)
+
+To map your new page to a tab:
+
+1. While logged in as admin account: Click on 'Manage Site' in the menu
+2. Click on 'Navigator Tab Sets'
+3. Click on '[edit tabs]'
+4. Click on 'Add tab'
+5. Under 'Function' select 'Execute URL'
+6. Under 'Data' enter the URL from Step (7) in the section above
+7. Click on 'Submit'
+
+HINT: entering a full URL in a tab causes a re-direct (extra round trip to your server). To 
+prevent this in Step (6) enter "/viewfile/my-page" without the quotes and 
+substituting my-page with the name of your page.
+
+
+8. HOWTO: CREATE A SKIN
+-----------------------
+
+During the install/upgrade you were prompted for the name of where to keep your
+local (non ccHost system) files. In the documenation below, substitute that
+directory name in place of cchost_files.
+
+1. While logged in as admin account: Click on 'Manage Site' in the menu
+2. Click on 'Skin'
+3. Click on 'Create Skin Template'
+4. Type in a name like "my_skin" (without the quotes)
+5. Click 'Create New Skin'
+
+Over riding 'shared' styles and layouts:
+
+Most of what you need should be in cchost_files/skins/my_skin directory. If you
+want to modify a specific screen layout, style or javascript behavior other than 
+the body or page template (like the upload listings) then COPY the file(s) from 
+ccskins/shared/* into cchost_files/skins/my_skin and edit there. Your changes will 
+be noted by ccHost and override the 'shared' version.
+
+
+9. HOWTO: REPAIR A CONFIG (A.K.A. HELP!!!!)
+--------------------------------------------
+
+If you get into 'trouble' with your system you might be able to salvage your site
+by browsing to either:
+
+http://your_server/admin/edit
+http://your_server?ccm=/media/admin/edit
+http://your_server/cchost_lib/cc-config-repair.php
+
+
 ======================================================================================
 ======================================================================================
 
-Release notes for ccHost v4 (mostly obsolete)
+Release notes for ccHost v4 
 
 1.   What's New (Stable)
 2.   System Requirements
