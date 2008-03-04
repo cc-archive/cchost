@@ -106,6 +106,12 @@ div#site_disabled_message {
 
 #nsfw {
 	color: red;
+	white-space: nowrap;
+}
+
+div#nsfw {
+	clear: both;
+	padding-top: 11px;
 }
 
 #blurbs {

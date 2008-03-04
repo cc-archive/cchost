@@ -13,5 +13,5 @@
     <option value="2004-01-01">%text(str_reviews_all_time)%</option>
   </select>
 </h3>
-<div id="cc_hot_topics_div"></div>
+<div id="cc_hot_topics_div" style="margin-bottom:1.5em;"></div>
 <script src="%url(js/cc-topics.js)%" type="text/javascript" ></script>

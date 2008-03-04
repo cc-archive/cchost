@@ -59,9 +59,12 @@ class CCMediaHost
         }
         else
         {
-            $uploads =& CCUploads::GetTable();
-            list( $name, $published, $banned, $owner_id ) = CCDatabase::QueryRow(
-                        'SELECT upload_name,upload_published,upload_banned,upload_user FROM cc_tbl_uploads WHERE upload_id='.$upload_id,false);
+            if( !empty($upload_id) )
+            {
+                $uploads =& CCUploads::GetTable();
+                list( $name, $published, $banned, $owner_id ) = CCDatabase::QueryRow(
+                            'SELECT upload_name,upload_published,upload_banned,upload_user FROM cc_tbl_uploads WHERE upload_id='.$upload_id,false);
+            }
 
             require_once('cchost_lib/cc-page.php');
             if( empty($name) )

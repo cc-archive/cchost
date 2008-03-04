@@ -103,7 +103,7 @@ class CCFeedsRSS
         if( empty($args['title']) )
             $help = 'RSS feed';
         else
-            $help = $args['title'];
+            $help = CCUtil::StripSlash($args['title']);
         $link_text = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ' . $help;
         CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $feed_url, $help, $link_text, 'feed_rss' );
     }

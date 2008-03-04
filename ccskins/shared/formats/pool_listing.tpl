@@ -7,11 +7,6 @@
 %%*/?>
 
 <link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/pool_listing.css')%" />
-<style type="text/css">
-div#upload_wrapper{float:left;width:100%}
-div#upload_middle{margin: 0px 30% 0px 0px;padding-left:2.0em;}
-div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
-</style>
 
 <div id="upload_wrapper">
   <div id="upload_middle">
@@ -65,12 +60,6 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
     </div> <!-- upload listing -->
   </div>
 </div> <!-- upload middle/wrapper -->
-<div id="upload_sidebar_box">
-    <div class="box" id="pool_info">
-        <h2>%text(str_pool_info_head)%</h2>
-        <a class="pool_name" href="%(pool_info/pool_site_url)%">%(pool_info/pool_name)%</a>
-        <p>"%(pool_info/pool_description)%"</p>
-    </div>
-</div>
+
 <br style="clear:both" />
 %call(prev_next_links)%

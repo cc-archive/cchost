@@ -79,7 +79,7 @@ class CCFeedsAtom
         if( empty($args['title']) )
             $help = 'ATOM feed';
         else
-            $help = $args['title'];
+            $help = CCUtil::StripSlash($args['title']);
         $link_text = '<img src="' . ccd('ccskins','shared','images','feed-atom16x16.png') . '" title="[ Atom 1.0 ]" /> ' . $help;
         CCPage::AddLink( 'feed_links', 'alternate', 'application/atom+xml', $feed_url, $help . ' [Atom]', $link_text, 'feed_atom' );
     }

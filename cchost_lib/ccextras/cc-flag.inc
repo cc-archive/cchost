@@ -194,7 +194,7 @@ class CCFlag
             if( $type == 'upload' )
             {
                 $ccl = ccl('files') . '/';
-                list( $url, $title  ) = CCDatabase::QueryRow("SELECT CONCAT('{$ccl}',user_name,{$id}) as url, upload_name " .
+                list( $url, $title  ) = CCDatabase::QueryRow("SELECT CONCAT('{$ccl}',user_name,'/',{$id}) as url, upload_name " .
                                            'FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id=' . $id, false );
                 $type = _('Upload');
 

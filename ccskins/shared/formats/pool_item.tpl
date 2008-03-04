@@ -7,14 +7,23 @@
 %%*/?>
 <link rel="stylesheet" title="Default Style" type="text/css" href="%url(css/upload_page.css)%" />
 <style type="text/css">
-div#upload_wrapper{float:left;width:100%}
+div#upload_wrapper{float:left;width:100%;}
 div#upload_middle{margin: 0 30% 0 5%;padding-left:2.0em;}
-div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
-/* div#upload_menu_box{float:left;width:20%;margin-left:-100%;padding-left:1.5em;} */
+div#upload_sidebar_box{float:left;width:30%;margin-left:-30%;}
+
 #pool_info {
     text-align: center;
 }
 </style>
+
+<!--[if IE]> 
+<style type="text/css">
+div#upload_wrapper{float:left;width:100%;}
+div#upload_middle{margin: 0 35% 0 2%;padding:0px;}
+div#upload_sidebar_box{float:left;width:30%;margin-left:-30%;}
+</style>
+<![endif]-->
+
 %map(#R,records/0)%
 <div id="upload_wrapper">
   <div id="upload_middle">

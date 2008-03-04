@@ -87,6 +87,7 @@ EOF;
                   rel="license" title="%(#R/license_name)%" ><img src="%(#R/license_logo_url)%" /></a> 
         <a href="%(#R/file_page_url)%" class="cc_file_link upload_name">%(#R/upload_name_chop)%</a><br />%text(str_by)% 
                <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
+
         <div class="upload_date">
             %if_not_null(#R/ratings_enabled)%
                 %map(record,#R)%
@@ -98,6 +99,7 @@ EOF;
             %end_if%
             %(#R/upload_date_format)%
         </div>
+
         <div class="taglinks">
             %loop(#R/usertag_links,tgg)%
                 <a href="%(#tgg/tagurl)%">%(#tgg/tag)%</a>%if_not_last(tgg)%, %end_if%
@@ -110,6 +112,10 @@ EOF;
         %if_not_empty(#R/fplay_url)%
             <div class="playerdiv"><span class="playerlabel">%text(str_play)%</span><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a></div>
             <script type="text/javascript"> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
+        %end_if%
+
+        %if_not_null(#R/upload_extra/nsfw)%
+            <div id="nsfw"><?= $T->String(array('str_nsfw_t','<a href="http://en.wikipedia.org/wiki/NSFW">','</a>')) ?></div>
         %end_if%
 
     </div><!-- upload info -->

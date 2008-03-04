@@ -213,7 +213,10 @@ class CCQuery
     function ProcessAdminArgs($args,$extra_args=array(),$check_limit=true)
     {
         if( is_string($args) )
+        {
             parse_str($args,$args);
+            CCUtil::StripSlash($args);
+        }
 
         $this->args = array_merge($this->GetDefaultArgs(),$args,$extra_args);
 

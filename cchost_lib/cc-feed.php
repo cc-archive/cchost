@@ -75,7 +75,7 @@ function cc_feed_subtitle($args,$skin)
     }
     elseif( !empty($args['user']) )
     {
-        $subtitle = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name = ' . $args['user']);
+        $subtitle = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name = \'' . $args['user'] . '\'' );
     }
     elseif( !empty($args['remixesof']) )
     {
