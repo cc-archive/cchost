@@ -393,10 +393,14 @@ EOF;
                 // The thread's newest pointer needs to be reset (its not as new as it used to be)
 
                 // get the next newest valid topic
-                $w = "(topic_thread = $thread_id) AND (topic_date < '{$topic['topic_date']}')";
-                $topics->SetOrder('topic_date','desc');
-                $topics->SetOffsetAndLimit( 0, 1 );
-                $newest_row = $topics->QueryRow($w);
+                $sql =<<<EOF
+                    SELECT topic_id, topic_date 
+                    FROM cc_tbl_topics 
+                    WHERE (topic_thread = $thread_id) AND (topic_date < '{$topic['topic_date']}')
+                    ORDER BY topic_date DESC
+                    LIMIT 1
+EOF;
+                $newest_row = CCDatabase::QueryRow($sql);
 
                 $tf['forum_thread_newest'] = $newest_row['topic_id'];
                 $tf['forum_thread_date']   = $newest_row['topic_date'];
