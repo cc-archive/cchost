@@ -569,11 +569,7 @@ EOF;
         $commands = array();
         $closed = $row['forum_thread_closed'];
 
-        if( $closed )
-        {
-            $commands[] = array( 'url' => 0, 'msg' => 'str_forum_thread_closed');
-        }
-        else
+        if( empty($closed) )
         {
             $commands[] = array( 'url' => ccl('topics','reply',$row['topic_id']) . '#edit',
                              'text' => 'str_forum_post_topic_reply', 'msg' => 0 );
