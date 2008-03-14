@@ -123,6 +123,7 @@ class CCTags extends CCTable
         $tags = array_map('strtolower',$tags);
 
         $where = $this->GetWhereFilter($tags);
+        $this->SetOffsetAndLimit( 0, count($tags) );
         $diff_tags = $this->QueryKeys($where);
         $new_tags = array_diff($tags,$diff_tags);
         if( $update_type && (($type & (CCTT_ADMIN | CCTT_SYSTEM)) != 0) )
