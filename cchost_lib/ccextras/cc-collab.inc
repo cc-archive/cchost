@@ -233,6 +233,7 @@ class CCCollab
         require_once('cchost_lib/cc-page.php');
         $topics =& CCCollabTopics::GetTable();
         $w['topic_upload'] = $collab_id;
+        $w['topic_type'] = 'collab';
         $topics->DeleteWhere($w);
         $cuploads =& CCCollabUploads::GetTable();
         $w2['collab_upload_collab'] = $collab_id;
