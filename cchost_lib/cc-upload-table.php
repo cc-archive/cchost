@@ -127,6 +127,8 @@ class CCUploads extends CCTable
         {
             $id = $id_or_row;
             $row = $this->QueryKeyRow($id_or_row);
+            if( empty($row) )
+	        return;
             $extra = unserialize($row['upload_extra']);
         }
 
