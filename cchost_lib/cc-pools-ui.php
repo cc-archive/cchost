@@ -189,25 +189,26 @@ END;
         // The upload needs to be synch'd on num_pool remixes
         // 
 
-        $row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_pool_item WHERE pool_item_id='.$pool_item_id);
         $sql = "UPDATE cc_tbl_pool_item SET pool_item_approved = 1, pool_item_num_sources =  (pool_item_num_sources+1) WHERE pool_item_id="
                      . $pool_item_id;
 
         CCDatabase::Query($sql);
 
+        $row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_pool_item WHERE pool_item_id='.$pool_item_id);
+        $ex = empty($row['pool_item_extra']) ? array() : unserialize($row['pool_item_extra']);
+
         if( empty($upload_id) )
         {
-            $ex = empty($row['pool_item_extra']) ? array() : unserialize($row['pool_item_extra']);
-            if( empty($ex['ttype']) )
-                return;
-            $need_tags = split(',',$ex['upload_id']);
-            if( empty($need_tags) )
-                return;
+            if( !empty($ex['upload_id']) )
+                $need_tags = split(',',$ex['upload_id']);
         }
         else
         {
             $need_tags = array($upload_id);
         }
+
+        if( empty($need_tags) )
+            return;
 
         require_once('cchost_lib/cc-sync.php');
         require_once('cchost_lib/cc-uploadapi.php');
@@ -221,7 +222,9 @@ END;
             if( empty($row) )
                 $pool_tree->Insert($x);
 
-            CCUploadAPI::UpdateCCUD($upload_id,'trackback,in_' . $ex['ttype'] ,'');
+            if( !empty($ex['ttype']) )
+                CCUploadAPI::UpdateCCUD($upload_id,'trackback,in_' . $ex['ttype'] ,'');
+
             CCSync::Upload($upload_id);
         }
     }

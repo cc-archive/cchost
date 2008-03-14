@@ -78,7 +78,7 @@ class CCTrackBack
         {
             if( $pre_approved )
             {
-                CCPoolsUI::ApproveTrackback($pool_item_id,$upload_id);
+                CCPoolUI::ApproveTrackback($pool_item_id,$upload_id);
             }
             else
             {
