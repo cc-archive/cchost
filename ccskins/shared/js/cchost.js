@@ -190,10 +190,13 @@ quickReviewHooks.prototype = {
             var me = this;
             reviewable_ids.each( function(id) {
                     var btn_holder = $('instareview_btn_' + id);
-                    var btn_id     = 'review_button_' + id;
-                    var html = '<a href="javascript://instarview" class="instareview_btn" id="' + btn_id + '">&nbsp;</a>';
-                    btn_holder.innerHTML = html;
-                    Event.observe(btn_id,'click',me.onQuickReviewClick.bindAsEventListener(me,id));
+                    if( btn_holder )
+                    {
+                        var btn_id     = 'review_button_' + id;
+                        var html = '<a href="javascript://instarview" class="instareview_btn" id="' + btn_id + '">&nbsp;</a>';
+                        btn_holder.innerHTML = html;
+                        Event.observe(btn_id,'click',me.onQuickReviewClick.bindAsEventListener(me,id));
+                    }
                 });
         }
         catch (e)
