@@ -65,6 +65,16 @@ EOF;
         unset($A['post_form_goo']);
     }
 
+    if( !empty($F['form_submit_trap']) )
+    {
+        ?>
+<script type="text/javascript">
+    // ajax trapper
+    new <?= $F['form_submit_trap']?>(form_id);
+</script>
+        <?
+    }
+
 } // END: function html_form
 
 

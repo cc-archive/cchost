@@ -177,6 +177,38 @@ ratingsHooks.prototype = {
 }
 
 /*
+    If the user is logged in while listing records, enable
+    in-situ reviewing (called from userHooks below)
+*/
+var quickReviewHooks = Class.create();
+
+quickReviewHooks.prototype = {
+
+    initialize: function(reviewable_ids) {
+        try
+        {
+            var me = this;
+            reviewable_ids.each( function(id) {
+                    var btn_holder = $('instareview_btn_' + id);
+                    var btn_id     = 'review_button_' + id;
+                    var html = '<a href="javascript://instarview" class="instareview_btn" id="' + btn_id + '">&nbsp;</a>';
+                    btn_holder.innerHTML = html;
+                    Event.observe(btn_id,'click',me.onQuickReviewClick.bindAsEventListener(me,id));
+                });
+        }
+        catch (e)
+        {
+            alert(e);
+        }
+    },
+
+    onQuickReviewClick: function(event,id) {
+        var url = home_url + 'reviews/post/' + id + q + 'ajax=1';
+        Modalbox.show( url, {title: str_review_write, width: 500, height: 500} );
+    }
+}
+
+/*
     If the user is logged in, make the 'recommends' thumbs up interactive
     (called from userHooks below)
 */
@@ -292,6 +324,10 @@ userHookup.prototype = {
                     {
                         new topicHooks(json.topic_cmds);
                     }
+                }
+                if( json.reviewable )
+                {
+                    new quickReviewHooks(json.reviewable);
                 }
             }
         }
@@ -580,6 +616,33 @@ ccFormMask.prototype = {
                                    slideDownDuration: 0.0 } );
         return true;
     }
+}
+
+var ccReviewFormHook = Class.create();
+
+ccReviewFormHook.prototype = {
+    initialize: function(form_id) {
+        Event.observe(form_id,'submit', this.quiet_submit.bindAsEventListener(this,form_id) );
+    },
+
+    quiet_submit: function(event,form_id) {
+        var url = $(form_id).action;
+        var params = Form.serialize(form_id);
+        new Ajax.Request( url, { method: 'post', parameters: params, onComplete: this.form_return.bind(this) } );
+        Event.stop(event);
+        return false;
+    },
+
+    form_return: function(resp,json) {
+        if( json && json.reviews_url )
+        {
+            var html = '<a class="upload_review_link" href="' + json.reviews_url + '">(' + json.num_reviews + ')</a>';
+            var target = $('review_' + json.upload_id);
+            target.innerHTML = html;
+            Modalbox.hide();
+        }
+    }
+
 }
 
 function cc_window_dim() {

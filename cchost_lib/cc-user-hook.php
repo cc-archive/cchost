@@ -32,6 +32,8 @@ class CCUserHook
 {
     function UploadList()
     {
+        global $CC_GLOBALS;
+
         $ids = CCUtil::Strip($_GET['ids']);
 
         $sql =<<<EOF
@@ -98,6 +100,20 @@ EOF;
                 $ret['ok_to_rate'][] = $R['upload_id'];
             }
         }
+
+        if( !empty($CC_GLOBALS['reviews_enabled']) )
+        {
+            $revapi = new CCReviewsHV();
+            $reviewable_ids = array();
+            foreach( $recs as $R )
+                if( $revapi->_can_review($R) )
+                    $reviewable_ids[] = $R['upload_id'];
+            if( !empty($reviewable_ids) )
+            {
+                $ret['reviewable'] = $reviewable_ids;
+            }
+        }
+        
 
         CCUtil::ReturnAjaxData($ret);
     }

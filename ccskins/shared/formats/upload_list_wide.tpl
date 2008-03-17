@@ -73,6 +73,7 @@ EOF;
 */ ?>
 
 <link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/upload_list_wide.css')%" />
+<script type="text/javascript" src="%url(js/form.js)%"></script>
 <script type="text/javascript">
   var ratings_enabled = %if_not_null(records/0/ratings_enabled)% true %else% false %end_if%;
 </script>
@@ -127,9 +128,13 @@ EOF;
         <div><a href="javascript://download" class="download_hook" id="_ed__%(#R/upload_id)%">%text(str_list_download)%</a></div>
         <div><a class="cc_file_link" href="%(#R/file_page_url)%">%text(str_detail)%</a></div>
         <div><a href="javascript://action" class="menuup_hook" id="_emup_%(#R/upload_id)%" >%text(str_action)%</a></div>
+        <div id="review_%(#R/upload_id)%">
+          <span id="instareview_btn_%(#R/upload_id)%"></span>
         %if_not_null(#R/upload_extra/num_reviews)%
-          <div><a class="upload_review_link" href="%(#R/reviews_url)%">(%(#R/upload_extra/num_reviews)%)</a></div>
+          <a class="upload_review_link" 
+                href="%(#R/reviews_url)%">(%(#R/upload_extra/num_reviews)%)</a> 
         %end_if%
+        </div>
     </div>
 
     %if_not_null(#R/remix_parents)%
@@ -161,7 +166,7 @@ EOF;
         </div>
     %end_if%
 
-    <div style="clear:both">&nbsp;</div>
+    <div style="clear:both" class="instareview">&nbsp;</div>
     </div><!--  end upload  -->
 %end_loop%
 </div><!-- end listing -->

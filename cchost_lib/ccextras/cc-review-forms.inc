@@ -68,6 +68,13 @@ class CCReviewFormAPI
 
         $form = new CCReviewForm();
 
+        if( !empty($_GET['ajax']) )
+        {
+            $form->RemoveFormField( 'user_confirm' );
+            $form->RemoveFormField( 'user_mask' );
+            $form->SetTemplateVar('form_submit_trap', 'ccReviewFormHook' ); 
+        }
+
         require_once('cchost_lib/ccextras/cc-reviews.inc');
 
         list( $user_real_name, $upload_name, $user_name ) = CCDatabase::QueryRow(
@@ -76,15 +83,23 @@ class CCReviewFormAPI
 
         if( empty($_POST['review']) || !$form->ValidateFields() )
         {
-
-            CCReview::_build_bread_crumb_trail(array($user_name,$user_real_name),
-                                      array( $upload_id, $upload_name), '',_('create new'));
-
-            CCPage::SetTitle(array('str_review_write_s',$upload_name));
-
             require_once('cchost_lib/cc-query.php');
             $query = new CCQuery();
-            $args = $query->ProcessAdminArgs('t=list_files&ids=' . $upload_id); 
+
+            if( empty($_GET['ajax']) )
+            {
+                CCReview::_build_bread_crumb_trail(array($user_name,$user_real_name),
+                                          array( $upload_id, $upload_name), '',_('create new'));
+
+                CCPage::SetTitle(array('str_review_write_s',$upload_name));
+
+                $args = $query->ProcessAdminArgs('t=list_files&ids=' . $upload_id); 
+            }
+            else
+            {
+                $args = $query->ProcessAdminArgs('t=reviews_summary&paging=off&ids=' . $upload_id); 
+            }
+
             $query->Query($args);
 
             CCPage::PageArg('review_upload',$upload_id);
@@ -120,8 +135,19 @@ class CCReviewFormAPI
 
                 CCEvents::Invoke( CC_EVENT_REVIEW, array( &$row ) );
 
-                $url = ccl( 'reviews', $user_name, $upload_id );
-                CCUtil::SendBrowserTo($url);
+                if( empty($_GET['ajax']) )
+                {
+                    $url = ccl( 'reviews', $user_name, $upload_id );
+                    CCUtil::SendBrowserTo($url);
+                }
+                else
+                {
+                    $ret['upload_id']   = $upload_id;
+                    $ret['reviews_url'] = ccl('reviews',$user_name, $upload_id );
+                    $ret['num_reviews'] = CCDatabase::QueryItem(
+                                            'SELECT COUNT(*) FROM cc_tbl_topics WHERE topic_type = \'review\' AND topic_upload = '.$upload_id);
+                    CCUtil::ReturnAjaxData($ret);
+                }
             }
 
         }
