@@ -110,8 +110,8 @@ $_sql_time = CCDebug::Chronometer($_sql_t);
             }
             else
             {
-                print mysql_error();
-                st();
+                //print mysql_error();
+                //st();
                 trigger_error(_("Internal error, contact the admin"));
             }
         }
