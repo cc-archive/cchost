@@ -480,15 +480,12 @@ EOF;
                     );
         }
 
-        if( !empty($row['pool_item_extra']['embed']) )
-        {
-            $fields['embed'] = array(
-                    'label' => 'Embed code',
-                    'formatter' => 'textarea',
-                    'value' => htmlentities($row['pool_item_extra']['embed']),
-                    'flags' => CCFF_NONE 
-                    );
-        }
+        $fields['embed'] = array(
+                'label' => 'Embed code',
+                'formatter' => 'textarea',
+                'value' => empty($row['pool_item_extra']['embed']) ? '' : htmlentities($row['pool_item_extra']['embed']),
+                'flags' => CCFF_NONE 
+                );
 
         $form->AddFormFields($fields);
         //[pool_item_license] => noncommercial
