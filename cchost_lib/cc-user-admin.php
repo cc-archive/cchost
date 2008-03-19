@@ -244,6 +244,7 @@ class CCUserAdmin
         $user_id = $record['user_id'];
 
         $delfileslink = ccl('admin','user',$user_id,'delfiles');
+        $hidefileslink = ccl('admin','user',$user_id,'hidefiles');
         $deluserlink = ccl('admin','user',$user_id,'deluser');
         $ban_ip_link = ccl('admin','user',$user_id,'banip');
         $change_pass = ccl('admin','password',$user_id);
@@ -263,6 +264,10 @@ class CCUserAdmin
                 $msg = $this->_del_user_files($record);
                 if( $msg === false )
                     return;
+                break;
+
+            case 'hidefiles':
+                $msg = $this->_hide_user_files($record);
                 break;
 
             case 'deluser':
@@ -298,6 +303,11 @@ class CCUserAdmin
                              'menu_text' => $spanR . 
                                 sprintf(_('Delete All Files For %s'), $uq . $spanC),
                              'help' => _('This action can not be un-done') . ' ' );
+
+            $args[] = array( 'action' => $hidefileslink,
+                             'menu_text' => sprintf(_('Hide All Files For %s'), $uq ),
+                             'help' => _('Set all files to unpublished') );
+
         }
         else
         {
@@ -339,6 +349,13 @@ class CCUserAdmin
 
         CCPage::PageArg('client_menu',$args,'print_client_menu');
 
+    }
+
+    function _hide_user_files($record)
+    {
+        $sql = 'UPDATE cc_tbl_uploads SET upload_published = 0 WHERE upload_user = ' . $record['user_id'];
+        CCDatabase::Query($sql);
+        return( sprintf(_("Files have been hidden for user, %s."), $record['user_name']) );
     }
 
     function _del_user_files(&$record)

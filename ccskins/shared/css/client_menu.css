@@ -6,7 +6,9 @@ ul.client_menu {
 }
 
 .client_menu li {
-	margin-bottom: 0.4em;
+	margin-bottom: 1.4em;
+	padding-top: 0.5em;
+	clear: left;
 }
 
 .client_menu a {
