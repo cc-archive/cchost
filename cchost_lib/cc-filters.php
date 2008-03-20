@@ -15,7 +15,7 @@ function cc_filter_std(&$records,&$dataview_info)
     foreach( array( CC_EVENT_FILTER_UPLOAD_USER_TAGS, CC_EVENT_FILTER_REMIXES_SHORT, CC_EVENT_FILTER_FILES,
                     CC_EVENT_FILTER_UPLOAD_TAGS, CC_EVENT_FILTER_REMIXES_FULL, CC_EVENT_FILTER_EXTRA,
                     CC_EVENT_FILTER_RATINGS_STARS, CC_EVENT_FILTER_DOWNLOAD_URL,
-                    CC_EVENT_FILTER_UPLOAD_MENU, ) as $e )
+                    CC_EVENT_FILTER_UPLOAD_MENU, CC_EVENT_FILTER_NUM_FILES, ) as $e )
     {
         if( !in_array( $e, $dataview_info['e'] ) )
             continue;
@@ -30,6 +30,12 @@ function cc_filter_std(&$records,&$dataview_info)
                 {
                     if( !isset($R['files']) ) 
                         cc_filter_files($R);
+                    break;
+                }
+
+                case CC_EVENT_FILTER_NUM_FILES:
+                {
+                    $R['num_files'] = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_files WHERE file_upload = ' .$R['upload_id'] );
                     break;
                 }
 

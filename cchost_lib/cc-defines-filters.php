@@ -7,6 +7,7 @@ define('CC_EVENT_FILTER_FORMAT',             'filtformat' );
 define('CC_EVENT_FILTER_UPLOAD_NAME_CLASS',  'fupcls' );
 define('CC_EVENT_FILTER_PLAY_URL',           'fplayurl' );
 define('CC_EVENT_FILTER_DOWNLOAD_URL',       'fdwnurl' );
+define('CC_EVENT_FILTER_NUM_FILES',           'numfiles' );
 define('CC_EVENT_FILTER_UPLOAD_USER_TAGS',   'futags'  );
 define('CC_EVENT_FILTER_REMIXES_SHORT',      'frmxsht'   );
 define('CC_EVENT_FILTER_REMIXES_FULL',       'frmxfull'   );
