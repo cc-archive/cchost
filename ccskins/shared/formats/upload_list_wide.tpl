@@ -126,7 +126,7 @@ EOF;
         %if_not_null(#R/stream_url)%
         <div><a href="%(#R/stream_url)%" type="audio/x-mpegurl">%text(str_stream)%</a></div>
         %end_if%
-        <div><a href="javascript://download" class="download_hookid="_ed__%(#R/upload_id)%"
+        <div><a href="javascript://download" class="download_hook" id="_ed__%(#R/upload_id)%"
             title="<?= $T->String(array('str_list_num_files',$R['num_files'])) ?>"
             ><?= $T->String( $R['num_files'] > 1 ? 'str_downloads' : 'str_download' ); ?></a> </div>
         <div><a class="cc_file_link" href="%(#R/file_page_url)%">%text(str_detail)%</a></div>
