@@ -20,6 +20,7 @@ var str_collab_send_mail_to       ='<?=addslashes($T->String('str_collab_send_ma
 var str_collab_tags_label         ='<?=addslashes($T->String('str_collab_tags_label'))?>';   //tags(e.g.bass, beat, keys)
 var str_default                   ='<?=addslashes($T->String('str_default'))?>';
 var str_download                  ='<?=addslashes($T->String('str_download'))?>';
+var str_download_this_page        ='<?=addslashes($T->String('str_download_this_page'))?>';
 var str_files_have_been_reordered ='<?=addslashes($T->String('str_files_have_been_reordered'))?>';
 
 var str_filter_2_weeks_ago        ='<?=addslashes($T->String('str_filter_2_weeks_ago'))?>';

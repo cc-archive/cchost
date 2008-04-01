@@ -46,4 +46,4 @@ EOF;
 </ul>
 %map(#upload_id,records/0/topic_upload)%
 %map(#reviewee,records/0/reviewee_user_name)%
-<div><a href="%(home-url)%reviews/%(#reviewee)%/%(#upload_id)%">%text(str_read_all)%</a></div>
+<div style="width:25%"><a class="cc_gen_button" href="%(home-url)%reviews/%(#reviewee)%/%(#upload_id)%"><span>%text(str_read_all)%</span></a></div>

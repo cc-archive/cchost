@@ -346,12 +346,16 @@ EOF;
         $urlf = ccl('files') . '/';
 
         $sql =<<<EOF
-        SELECT upload_user, user_real_name, CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url, upload_name
+        SELECT upload_user, user_real_name, CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url, upload_name,
+               upload_published
             FROM cc_tbl_uploads 
             JOIN cc_tbl_user ON upload_user = user_id
             WHERE upload_id = {$upload_id}
 EOF;
-        list( $uploader, $user_real_name, $file_page_url, $upload_name ) = CCDatabase::QueryRow($sql,false);
+        list( $uploader, $user_real_name, $file_page_url, $upload_name, $published ) = CCDatabase::QueryRow($sql,false);
+
+        if( empty($published) )
+            return;
 
         // people who want get notified when this user
         // has uploaded anything:

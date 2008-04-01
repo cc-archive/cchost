@@ -262,37 +262,52 @@ class CCPool
     function AddPool($pool_site_api_url)
     {
         require_once('cchost_lib/cc-api.php');
-
-        $info_url = CCRestAPI::MakeUrl( $pool_site_api_url, 'info' );
-        $fr = new CCFeedReader();
-        $rss = $fr->cc_parse_url( $info_url );
-
-        if( !empty($rss->ERROR) )
-        {
-            $err = "Feed read error on $pool_site_api_url: " . $rss->ERROR;
-            CCDebug::Log($err);
-            return(false);
-        }
-
-        if( empty($rss->channel) )
-        {
-            CCDebug::Log("Feed read error on $pool_site_api_url: Can't find channel info");
-            return(false);
-        }
-
-        $parts = parse_url($pool_site_api_url);
-        $host = str_replace('www.','',$parts['host']);
-
         $pools =& CCPools::GetTable();
 
-        $C =& $rss->channel;
+        $args['pool_id'] = $pools->NextID();
+
+        $parts = parse_url($pool_site_api_url);
+        if( strpos($parts['scheme'],'http') === false )
+        {
+            $args['pool_name']         = _('Generic pool');
+            $args['pool_description']  = '';
+            $args['pool_short_name']   = 'generic_' . $args['pool_id'];
+            $args['pool_api_url']      = $pool_site_api_url;
+            $args['pool_site_url']     = $pool_site_api_url;
+            $args['pool_ip']           = '';
+        }
+        else
+        {
+            $info_url = CCRestAPI::MakeUrl( $pool_site_api_url, 'info' );
+            $fr = new CCFeedReader();
+            $rss = $fr->cc_parse_url( $info_url );
+
+            if( !empty($rss->ERROR) )
+            {
+                $err = "Feed read error on $pool_site_api_url: " . $rss->ERROR;
+                CCDebug::Log($err);
+                return(false);
+            }
+
+            if( empty($rss->channel) )
+            {
+                CCDebug::Log("Feed read error on $pool_site_api_url: Can't find channel info");
+                return(false);
+            }
+
+            $parts = parse_url($pool_site_api_url);
+            $host = str_replace('www.','',$parts['host']);
+
+            $C =& $rss->channel;
+            $args['pool_name']         = empty($C['title']) ? $host : $C['title'];
+            $args['pool_description']  = empty($C['description']) ? "Pool of samples at $host" : $C['description'];
+            $args['pool_short_name']   = preg_replace('/[^a-zA-Z0-9_]/', '_', $host );
+            $args['pool_api_url']      = $pool_site_api_url;
+            $args['pool_site_url']     = empty($C['link']) ? $pool_site_api_url : $C['link'];
+            $args['pool_ip']           = CCUtil::EncodeIP($_SERVER['REMOTE_ADDR']);
+        }
+
         $args['pool_id']           = $pools->NextID();
-        $args['pool_name']         = empty($C['title']) ? $host : $C['title'];
-        $args['pool_description']  = empty($C['description']) ? "Pool of samples at $host" : $C['description'];
-        $args['pool_short_name']   = preg_replace('/[^a-zA-Z0-9_]/', '_', $host );
-        $args['pool_api_url']      = $pool_site_api_url;
-        $args['pool_site_url']     = empty($C['link']) ? $pool_site_api_url : $C['link'];
-        $args['pool_ip']           = CCUtil::EncodeIP($_SERVER['REMOTE_ADDR']);
         $args['pool_banned']       = false;
         $args['pool_auto_approve'] = false;
 

@@ -9,9 +9,14 @@
     <div>%text(str_list_IEtip)%</div>
     <div>%text(str_list_Mactip)%</div>
 </div>
+%loop(records,R)%
+<p class="upload_name">%(#R/upload_name)%</p>
 <ol>
-%loop(records/0/files,F)%
-     <li><a href="%(#F/download_url)%">%(#F/file_nicname)%</a></li>
-%end_loop%
+    %loop(#R/files,F)%
+         <li>
+            <a href="%(#F/download_url)%">%(#F/file_nicname)% %(#F/file_filesize)%</a> 
+         </li>
+    %end_loop%
 </ol>
+%end_loop%
 </div>

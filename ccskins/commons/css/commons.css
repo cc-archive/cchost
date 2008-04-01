@@ -217,6 +217,7 @@ a.cc_more_menu_link:hover {
 
 .menu_group #mi_stream_page, 
 .menu_group #mi_play_page, 
+.menu_group #mi_download_page, 
 .menu_group #mi_podcast_page {
 	height: 20px;
 	padding-left: 22px; 
@@ -237,7 +238,13 @@ a.cc_more_menu_link:hover {
 #mi_podcast_page {
 	background: url('../../shared/images/menu-podcast.png') top left no-repeat;
 }
+#mi_download_page {
+	background: url('../../shared/images/menu-download.png') top left no-repeat;
+}
 
+#cc_download {
+	font-size: 11px;
+}
 
 #license img {
 	float: left;
@@ -305,7 +312,7 @@ a.cc_gen_button:hover span {
     background-position: 100% -23px;
 }
 
-a.small_button {
+a.small_button, #do_remix_search {
 	padding: 0px 0px 0px 2px;
 	border: 1px solid #888;
 	font-weight: normal;
@@ -314,11 +321,11 @@ a.small_button {
 	font-size: 9px;
 }
 
-a.small_button:hover {
+a.small_button:hover, #do_remix_search:hover {
 	text-decoration: none;
     background: url('../images/button_small_hover.gif') no-repeat right top;
 }
 
-a.small_button span {
+a.small_button span, #do_remix_search span {
 	padding: 0px 2px 4px 0px;
 }

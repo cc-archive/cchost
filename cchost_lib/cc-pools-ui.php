@@ -386,10 +386,11 @@ EOF;
                 {
                     $api = new CCPool();
                     $pool = $api->AddPool($where['pool_api_url']);
-
+                    if( !$pool )
+                        $pool = _('Could not add pool');
                     if( is_string($pool) )
                     {
-                        $form->SeFieldError( 'pool-push-hub', $pool );
+                        $form->SetFieldError( 'pool-pull-hub', $pool );
                     }
                     else
                     {

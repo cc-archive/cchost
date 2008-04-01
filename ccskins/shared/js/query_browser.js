@@ -10,6 +10,7 @@ ccQueryBrowser.prototype = {
         play_link_id:   'mi_play_page', // 'play_link_container'
         stream_link_id: 'mi_stream_page',
         podcast_link_id: 'mi_podcast_page',
+        download_link_id: 'mi_download_page',
         autoRefresh:     true
         },
     onQueryResultsBind: null,
@@ -20,6 +21,7 @@ ccQueryBrowser.prototype = {
     rss_link: null,
     play_link: null,
     stream_link: null,
+    download_link: null,
     currOffset: 0,
     totalCount: 0,
     paging: false,
@@ -61,6 +63,7 @@ ccQueryBrowser.prototype = {
         this.play_link   = this.options.play_link_id   ? $(this.options.play_link_id) : null;
         this.stream_link = this.options.stream_link_id ? $(this.options.stream_link_id) : null;
         this.podcast_link = this.options.podcast_link_id ? $(this.options.podcast_link_id) : null;
+        this.download_link = this.options.download_link_id ? $(this.options.download_link_id) : null;
 
         if( this.play_link )
             Event.observe( this.play_link, 'click',    this.play_in_popup.bindAsEventListener( this ) );
@@ -100,6 +103,8 @@ ccQueryBrowser.prototype = {
             this.stream_link.style.display = 'none';
         if( this.podcast_link )
             this.podcast_link.style.display = 'none';
+        if( this.download_link )
+            this.download_link.style.display = 'none';
     },
 
     refresh: function()
@@ -175,6 +180,24 @@ ccQueryBrowser.prototype = {
                 }
                 if( this.podcast_link != null )
                     this.podcast_link.href = feed_url;
+            }
+
+            if( this.download_link )
+            {
+                p.f = 'html';
+                p.t = 'download';
+                var down_url = query_url + $H(p).toQueryString();
+                //ajax_debug(down_url);
+                // so much for clean, parameterized code, fix after alpha
+                var id = this.options.download_link_id;
+                var id_parent = 'mi_download_page_parent';
+                if( $(id_parent) )
+                {
+                    $(id_parent).innerHTML = '<a id="'+ id +'">' + str_download_this_page + '</a>';
+                    this.download_link = $(id);
+                }
+                this.download_link.href = down_url;
+                new modalHook( [ id ] );
             }
 
             /* this is audio stuff.... */

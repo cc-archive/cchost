@@ -32,6 +32,8 @@ class CCUserPage
 {
     function People( $username='', $tab='' )
     {
+        require_once('cchost_lib/cc-page.php');
+
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
 
@@ -53,7 +55,6 @@ class CCUserPage
         $originalTab = $tab;
         $tabs = $this->_get_tabs($username,$tab);
         $tagfilter = '';
-        require_once('cchost_lib/cc-page.php');
         CCPage::PageArg('sub_nav_tabs',$tabs);
         if( empty($tabs['tabs'][$originalTab]) )
         {

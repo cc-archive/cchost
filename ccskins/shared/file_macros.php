@@ -4,7 +4,7 @@ if( !defined('IN_CC_HOST') )
 
 function _t_file_macros_print_howididit_link(&$T,&$A)
 {
-    ?><a href="<?= ccl('howididit',$A['record']['upload_id']) ?>"><?= $T->String('str_how_i_did_it') ?></a><br /><?
+    ?><a class="cc_gen_button" style="width: 25%" href="<?= ccl('howididit',$A['record']['upload_id']) ?>"><span><?= $T->String('str_how_i_did_it') ?></span></a><br /><?
 }
 
 
@@ -118,7 +118,7 @@ function _t_file_macros_print_recent_reviews(&$T,&$A)
         print "<li><span class=\"poster_name\">{$post['username']}</span> <a href=\"{$post['post_url']}\">{$text}</a></li>\n";
     }
     ?></ul>
-    <a href="<?= $A['view_topic_url'] ?>"><?= $T->String('str_read_all') ?></a><?
+    <a class="cc_gen_button" style="width: 25%" href="<?= $A['view_topic_url'] ?>"><span><?= $T->String('str_read_all') ?></span></a><?
 }
 
 function _t_file_macros_upload_not_published(&$T,&$A)

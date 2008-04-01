@@ -8,7 +8,7 @@
 function files_dataview() 
 {
     $sql =<<<EOF
-        SELECT upload_id, upload_contest, user_name
+        SELECT upload_id, upload_contest, user_name, upload_name
         %columns% 
 FROM cc_tbl_uploads 
 JOIN cc_tbl_user ON upload_user = user_id

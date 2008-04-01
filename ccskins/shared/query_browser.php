@@ -138,9 +138,10 @@ p.cc_autocomp_line {
 
 #podcast_link_container #mi_podcast_page,
 #play_link_container #mi_play_page,
+#play_link_container #mi_download_page,
 #stream_link_container #mi_stream_page {
-    padding-left: 22px;
-    font-size: 16px;
+    padding-left: 18px;
+    font-size: 14px;
 }
 
 .filterbuttontray {
@@ -163,6 +164,9 @@ p.cc_autocomp_line {
         </div>
         <div id="podcast_link_container">
             <a href="javascript://podcast" id="mi_podcast_page" style="display:none;"><span ><?= $T->String('str_podcast')?></span></a>
+        </div>
+        <div id="podcast_link_container">
+            <a href="javascript://download" id="mi_download_page" style="display:none;"><span ><?= $T->String('str_download')?></span></a>
         </div>
 		<div style="clear:both">&nbsp;</div>
         <? } ?>
