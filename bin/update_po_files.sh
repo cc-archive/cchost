@@ -22,10 +22,12 @@ find . -noleaf -type f -name "*.po"|sort|\
 (
 while read FILENAME; do
   PO_FILE_COUNT=`expr $PO_FILE_COUNT + 1`
-  mv -f "$FILENAME" "$FILENAME".old     # do not ask questions, because the answers would come from the pipe
   if [ "$?" -eq "0" ]; then
     echo "$FILENAME"
-    msgmerge "$FILENAME".old "$POT_FILENAME" > "$FILENAME"
+    msgmerge "$FILENAME".old "$POT_FILENAME" > "$FILENAME.tmp" && \
+        mv -f "$FILENAME" "$FILENAME".old && \
+        mv -f "$FILENAME.tmp" "$FILENAME" && \
+        rm -f "$FILENAME.tmp"
     if [ "$?" -ne "0" ]; then
       echo "Could not merge \"$FILENAME.old\"."
     fi
