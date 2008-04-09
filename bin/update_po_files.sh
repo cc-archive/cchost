@@ -24,8 +24,8 @@ while read FILENAME; do
   PO_FILE_COUNT=`expr $PO_FILE_COUNT + 1`
   if [ "$?" -eq "0" ]; then
     echo "$FILENAME"
+    cp "$FILENAME" "$FILENAME".old && \
     msgmerge "$FILENAME".old "$POT_FILENAME" > "$FILENAME.tmp" && \
-        mv -f "$FILENAME" "$FILENAME".old && \
         mv -f "$FILENAME.tmp" "$FILENAME" && \
         rm -f "$FILENAME.tmp"
     if [ "$?" -ne "0" ]; then
