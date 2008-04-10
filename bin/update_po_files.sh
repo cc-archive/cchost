@@ -18,7 +18,7 @@ fi
 
 PO_FILE_COUNT=0
 
-find . -noleaf -type f -name "*.po"|sort|\
+find "./$1" -noleaf -type f -name "*.po"|sort|\
 (
 while read FILENAME; do
   PO_FILE_COUNT=`expr $PO_FILE_COUNT + 1`
