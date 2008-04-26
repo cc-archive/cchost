@@ -618,7 +618,7 @@ class CCTopic
             CCPage::Prompt(_('Topic does not exist'));
             return;
         }
-        list( $left, $right, $topic_lock  ) = $row;
+        list( $left, $right, $topic_locked  ) = $row;
         $lock = !$topic_locked;
         $sql = "UPDATE cc_tbl_topics SET topic_locked = {$lock} WHERE topic_left >= {$left} AND topic_right <= {$right}";
         CCDatabase::Query($sql);
