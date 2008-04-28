@@ -284,12 +284,20 @@ class CCPhysicalFile
         if( empty($new_order) )
             die('no file order?');
         $i = 0;
+
+            $sqlx = "SELECT file_upload, file_order, file_id FROM cc_tbl_files WHERE file_upload = $upload_id";
+            $rows['before'] = CCDatabase::QueryRows($sqlx);
+
         for( $i = 0; $i < count($new_order); $i++ )
         {
-            $n = $new_order[$i] - 1;
+            $n = $new_order[$i]; // - 1;
             $sql = "UPDATE cc_tbl_files SET file_order = $i WHERE file_upload = $upload_id AND file_order = $n";
             CCDatabase::Query($sql);
         }
+
+            $rows['after'] = CCDatabase::QueryRows($sqlx);
+
+        d($rows);
 
         CCUtil::ReturnAjaxMessage('str_files_have_been_reordered');
     }

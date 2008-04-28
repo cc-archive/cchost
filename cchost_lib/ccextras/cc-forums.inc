@@ -525,7 +525,7 @@ EOF;
         }
 
         $sql = <<<EOF
-        SELECT topic_name, forum_thread_forum, forum_read_access, topic_id,
+        SELECT topic_name, forum_thread_forum, forum_read_access, topic_id, topic_locked,
                forum_post_access, forum_thread_closed, forum_thread_sticky, forum_id, forum_name
             FROM cc_tbl_topics 
             JOIN cc_tbl_forum_threads ON forum_thread_oldest = topic_id 
@@ -569,7 +569,7 @@ EOF;
         $commands = array();
         $closed = $row['forum_thread_closed'];
 
-        if( empty($closed) )
+        if( empty($closed) && empty($row['topic_locked']) )
         {
             $commands[] = array( 'url' => ccl('topics','reply',$row['topic_id']) . '#edit',
                              'text' => 'str_forum_post_topic_reply', 'msg' => 0 );
