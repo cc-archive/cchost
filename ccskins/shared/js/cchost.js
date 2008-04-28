@@ -271,10 +271,13 @@ topicHooks.prototype = {
             topics_cmds.each( function(cmd_meta) {
                 var id = cmd_meta.id;
                 var html = '';
-                cmd_meta.cmds.each( function(cmd) {
-                    html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + cc_str(cmd.text) + '</span></a> ';
-                });
-                $('commands_' + id).innerHTML = html;
+                if( cmd_meta.cmds )
+                {
+                    cmd_meta.cmds.each( function(cmd) {
+                        html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + cc_str(cmd.text) + '</span></a> ';
+                    });
+                    $('commands_' + id).innerHTML = html;
+                }
             });
         }
         catch (e)
