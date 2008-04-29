@@ -43,13 +43,14 @@ $q = $A['q'];
 
     $url  = $A['home-url'] . 'api/query/stream.m3u' . $q .'f=m3u&' . $qstring;
     $url2 = $A['query-url'] . 'f=rss&' . $qstring . '&offset=' . $offs;
-    $url3 = $A['query-url'] . 'limit=15&f=html&t=download&' . $qstring . '&offset=' . $offs;
+    $url3 = 'limit=15&f=html&t=download&' . $qstring . '&offset=' . $offs;
 ?>   
 <li><a id="mi_stream_page" href="<?=$url?>"><?= $T->String('str_stream_this_page') ?></a></li>
 <li><a id="mi_podcast_page" title="<?= $T->String('str_drag_this_link') ?>" href="<?=$url2?>"><?= $T->String('str_podcast_this_page')?></a></li>
-<li id="mi_download_page_parent"><a id="mi_download_page" href="<?=$url3?>"><?= $T->String('str_download_this_page')?></a></li>
+<li id="mi_download_page_parent"><a id="mi_download_page" href=""><?= $T->String('str_download_this_page')?></a></li>
 </ul>
 <script type="text/javascript">
+$('mi_download_page').href = query_url + '<?= $url3 ?>';
 new modalHook( [ 'mi_download_page' ] );
 <?
 if( $script )
