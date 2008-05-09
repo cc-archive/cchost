@@ -118,13 +118,8 @@ EOF;
         else
         {
             require_once('cchost_lib/cc-page.php');
-            require_once('cchost_lib/cc-query.php');
-            require_once('cchost_lib/zend/json-encoder.php');
             CCPage::SetTitle('str_browse_remixes');
-            $query = new CCQuery();
-            $args = array_merge( array( 'reqtags' => '*'), $query->ProcessUriArgs() );
-            $args = CCZend_Json_Encoder::encode($args);
-            CCPage::PageArg('browse_args', $args, 'query_browser');
+            CCPage::AddMacro('query_browser');
         }
     }
 }

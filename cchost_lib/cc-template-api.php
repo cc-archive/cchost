@@ -94,6 +94,16 @@ function cc_get_config_roots()
     return $roots;
 }
 
+function cc_query_default_args($required_args=array())
+{
+    require_once('cchost_lib/cc-query.php');
+    require_once('cchost_lib/zend/json-encoder.php');
+    $query = new CCQuery();
+    $args = array_merge( $query->ProcessUriArgs(), $required_args );
+    $json_args = CCZend_Json_Encoder::encode($args);
+    return array( $args, $json_args );
+}
+
 function cc_query_fmt($qstring)
 {
     if( empty($qstring) )
@@ -107,6 +117,56 @@ function cc_query_fmt($qstring)
     $args = $query->ProcessAdminArgs($args);
     list( $results ) = $query->Query($args);
     return $results;
+}
+
+function cc_query_get_optset( $optset_name = 'default', $fmt = 'php' )
+{
+    $optsets = cc_get_config('query-browser-opts');
+    if( empty($optsets[$optset_name]) )
+    {
+        $optset = array( 'template' => 'reccby',
+                         'css'      => 'css/qbrowser_wide.css',
+                         'limit'    => 25,
+                         'reqtags'  => '*',
+                         'license'  => 1,
+                         'user'     => 1,
+                        );
+    }
+    else
+    {
+        $optset = $optsets[$optset_name];
+    }
+    $reqtags_all = cc_get_config('query-browser-reqtags');
+    if( empty($optset['types_key']) || empty($reqtags_all[$optset['types_key']]) )
+    {
+        $reqtags = array( 
+                        array( 'tags' => '*',
+                               'text' => 'str_filter_all' )
+                         );
+    }
+    else
+    {
+        $reqtags = $reqtags_all[$optset['types_key']];
+    }
+
+    $optset['types'] = $reqtags;
+
+    if( $fmt != 'json' )
+        return $optset;
+
+    require_once('cchost_lib/zend/json-encoder.php');
+    return CCZend_Json_Encoder::encode($optset);
+}
+
+if( !function_exists('http_build_query') )
+{
+    function http_build_query($args)
+    {
+        $qargs = array();
+        foreach( $args as $K => $V )
+            $qargs = $K . '=' . $V;
+        return join( '&', $qargs );
+    }
 }
 
 function cc_recent_playlists()

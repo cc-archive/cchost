@@ -45,7 +45,16 @@ class CCTagEditorForm extends CCGridForm
         $this->SetColumnHeader($heads);
 
         $configs =& CCConfigs::GetTable();
-        $channels =  $configs->GetConfig($config,CC_GLOBAL_SCOPE);
+        if( is_string($config) )
+        {
+            $channels =  $configs->GetConfig($config,CC_GLOBAL_SCOPE);
+        }
+        else
+        {
+            $chansgrop = $configs->GetConfig($config[0],CC_GLOBAL_SCOPE);
+            if( !empty($chansgrop[$config[1]]) )
+                $channels = $chansgrop[$config[1]];
+        }
         if( empty($channels) )
         {
             if( empty($default_tags) )

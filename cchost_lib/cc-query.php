@@ -355,7 +355,8 @@ class CCQuery
         if( !empty($this->sql_p['where']) )
             $this->where[] = $this->sql_p['where'];
 
-        $this->sql_p['where'] = join( ' AND ', $this->where );
+//        $this->sql_p['where'] = join( ' AND ', $this->where ) ;
+        $this->sql_p['where'] = empty($this->where) ? '' : '(' . join( ') AND (', $this->where ) . ')' ;
 
         if( empty($this->dead) )
             $this->records =& $this->_perform_sql();

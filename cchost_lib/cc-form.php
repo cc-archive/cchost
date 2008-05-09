@@ -1153,8 +1153,6 @@ END;
     /**
     * Handles validator for HTML field, called during ValidateFields()
     * 
-    * Use the 'maxlenghth' field to limit user's input
-    * 
     * @see CCForm::ValidateFields()
     * 
     * @param string $fieldname Name of the field will be passed in.
@@ -1164,7 +1162,6 @@ END;
     {
         return(true);
     }
-
 
     /**
      * Handles generation &lt;select and several &lt;option HTML field 
@@ -1179,23 +1176,6 @@ END;
      */
     function generator_select($varname,$value='',$class='')
     {
-        /*
-        $options = $this->GetFormFieldItem($varname,'options');
-        $fvalue   = $this->GetFormValue($varname);
-        $html = "<select id=\"$varname\" name=\"$varname\" class=\"$class\">";
-        foreach( $options as $value => $text )
-        {
-            if( $value == $fvalue )
-                $selected = ' selected="selected" ';
-            else
-                $selected = '';
-
-            $html .= "<option value=\"$value\" $selected >$text</option>";
-        }
-        $html .= "</select>";
-        return( $html );
-
-        */
         $F =& $this->_form_fields[$varname];
         $F['class'] = $class;
         $F['name'] = $varname;
@@ -2060,11 +2040,13 @@ class CCGridForm extends CCForm
      *
      * @param array  meta_row Meta information of insertable row
      * @param string caption Caption for 'add row' button
+     * @param string Javascript to execute after new meta row has been added by user
      */
-    function AddMetaRow($meta_row,$caption)
+    function AddMetaRow($meta_row,$caption,$post_stuff_script='')
     {
         $this->_meta_row = $meta_row;
         $this->_add_row_caption = $caption;
+        $this->SetTemplateVar('stuffer_script',$post_stuff_script);
     }
 
     /**
@@ -2251,6 +2233,7 @@ class CCGridForm extends CCForm
         for( $n = 0; $n < $count2; $n++ )
         {
             $grid_cell =& $grid_row[$n];
+
             $generator  = 'generator_' . $grid_cell['formatter'];
             $value = empty($grid_cell['value']) ? '' : $grid_cell['value'];
             
@@ -2266,7 +2249,9 @@ class CCGridForm extends CCForm
             $gen = array();
 
             if( method_exists($this,$generator) )
+            { 
                 $gen['form_grid_element'] = $this->$generator( $grid_cell['element_name'], $value, $class );
+            }
             else
                 $gen['form_grid_element'] = $generator( $this, $grid_cell['element_name'], $value, $class );
 

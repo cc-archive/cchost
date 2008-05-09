@@ -283,6 +283,11 @@ class CCTemplateAdmin
         $fp = new CCFileProps(); return $fp->GetProps('colors','color',false);
     }
 
+    function GetStyles($type)
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('css',$type);
+    }
+
     function GetExtras($user_only=false)
     {
         $fp = new CCFileProps(); return $fp->GetProps('extras','extras',true,'',$user_only?'allow_user':'');
