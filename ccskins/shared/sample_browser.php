@@ -128,6 +128,21 @@ function _t_sample_browser_browser_page($T,&$A) {
      new Ajax.Updater('sample_browser',url,{method:'get'});
   }
 
+  function toggle_zipper(link_id,id)
+  {
+     var div = $(id);
+     var link = $(link_id);
+     if( div.style.display == 'none' )
+     {
+        link.src = '<?=$A['root-url']?>ccskins/shared/images/close.gif';
+        div.style.display = 'block';
+     }
+     else
+     {
+        link.src = '<?=$A['root-url']?>ccskins/shared/images/open.gif';
+        div.style.display = 'none';
+     }
+  }
   // -->
 </script>
 <style >
@@ -145,7 +160,7 @@ function _t_sample_browser_browser_page($T,&$A) {
 
   #sample_browser {
     float: left;
-    width: 550px;
+    width: 600px;
     border: 2px solid #999;
     height: 480px;
     background-color: #EEE;
@@ -335,8 +350,10 @@ function _t_sample_browser_browser_page($T,&$A) {
     width: 20px;
     font-size: 10px;
     color: #677;
-
  }
+  .zip_files {
+      color: green;
+  }
   </style>
 <div  id="sample_browser">
   <?= $A['default_msg']?>
@@ -496,52 +513,63 @@ function _t_sample_browser_browser_list($T,&$A) {
 <div  id="results_container">
 <table  id="results_table" cellpadding="0" cellspacing="0">
 <?
-
-$carr105 = $A['records'];
-$cc105= count( $carr105);
-$ck105= array_keys( $carr105);
-for( $ci105= 0; $ci105< $cc105; ++$ci105)
-{ 
-   $A['R'] = $carr105[ $ck105[ $ci105 ] ];
+$ci105 = 0;
+foreach( $A['records'] as $_rec )
+{
+   $A['R'] =& $_rec;
    
-?><tr  class="row_<?= $ci105 & 1 ? 'odd' : 'even' ?>">
+?><tr  class="row_<?= $ci105++ & 1 ? 'odd' : 'even' ?>">
 <td  class="filelink"><a  href="<?= $A['R']['file_page_url']?>" class="cc_file_link"><span ><?= CC_strchop($A['R']['upload_name'],26);?></span></a></td>
 <td  class="bpm">
 <?
 
-if ( !empty($A['R']['upload_extra']['bpm'])) {
-
-?><span ><?= $A['R']['upload_extra']['bpm']?></span>bpm<?
-} // END: if
+    if ( !empty($A['R']['upload_extra']['bpm'])) 
+    {
+        ?><span ><?= $A['R']['upload_extra']['bpm']?></span>bpm<?
+    } // END: if
 
 ?></td>
 <td  class="userlink"><a  class="cc_user_link" href="<?= $A['R']['artist_page_url']?>"><span ><?= CC_strchop($A['R']['user_real_name'],12);?></span></a></td>
 <td >
 <table  cellpadding="0" cellspacing="0" class="files">
 <?
-
-$carr106 = $A['R']['files'];
-$cc106= count( $carr106);
-$ck106= array_keys( $carr106);
-for( $ci106= 0; $ci106< $cc106; ++$ci106)
-{ 
-   $F =& $carr106[ $ck106[ $ci106 ] ];
-   
+    $ci105_f = $ci105 * 100;
+    foreach( $_rec['files'] as $F ) 
+    { 
+        
 ?><tr >
 <td  class="dbutton"><a  class="down_button" href="<?= $F['download_url']?>">&nbsp;</a></td>
 <td  class="sbutton"><?
 
-if ( !empty($F['file_format_info']['media-type']) && 
-                                   ( $F['file_format_info']['media-type'] == 'audio' ) )
-{
+        $is_zip = !empty($F['file_format_info']['zipdir']['files'] );
 
-?><a  href="/samples/stream/<?= $F['file_id']?>.m3u" class="hear_button">&nbsp; </a><?
-} // END: if
-
+        $link_id = 'ziplink_' . $ci105_f++;
+        $id = 'zipdir_' . $ci105_f;
+        if ( !empty($F['file_format_info']['media-type']) )
+        {
+            if ( $F['file_format_info']['media-type'] == 'audio' ) 
+            {
+                ?><a  href="/samples/stream/<?= $F['file_id']?>.m3u" class="hear_button">&nbsp; </a><?
+            } 
+            // END: if
+            if( $is_zip )
+            {
+                ?><a href="javascript://see zip contents" onclick="toggle_zipper('<?=$link_id?>','<?=$id?>'); return false" ><img src="<?= $A['root-url']?>ccskins/shared/images/open.gif" id="<?=$link_id?>" /></a><?
+            }
+        }
+?></td><td  class="nicname"><?= $F['file_nicname']?> <span ><?= $F['file_filesize']?></span><?
+        if( $is_zip )
+        {   
+            print '<div id="'. $id . '" class="zip_files" style="display:none";>';
+            foreach( $F['file_format_info']['zipdir']['files'] as $zipfile )
+            {
+                print $zipfile . '<br />';
+            }
+        }
 ?></td>
-<td  class="nicname"><?= $F['file_nicname']?> <span ><?= $F['file_filesize']?></span></td>
 </tr><?
-} // END: for loop
+
+    } // END: for loop
 
 ?></table>
 </td>

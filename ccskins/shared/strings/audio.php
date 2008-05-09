@@ -143,4 +143,5 @@ $GLOBALS['str_stats_acappellas'] = _('A Cappellas');
 $GLOBALS['str_stats_licenses_pells'] = _('Licenses for A Cappellas');
 $GLOBALS['str_stats_most_remixed_pell'] = _('Most Remixed A Cappellas');
 
+$GLOBALS['str_save_to_playlist'] = _('Save as playlist');
 ?>

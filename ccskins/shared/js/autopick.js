@@ -38,8 +38,8 @@ ccAutoPick.prototype = {
                                         pickClass: 'cc_autocomp_picked',
                                         lineTag: 'p',
                                         borderClass: 'cc_autocomp_border',
-                                        showButtonClass: 'cc_autocomp_show',
-                                        clearButtonClass: 'cc_autocomp_clear'
+                                        showButtonClass: 'cc_autocomp_show small_button',
+                                        clearButtonClass: 'cc_autocomp_clear small_button'
                                        },
                                       options );
     },
@@ -94,15 +94,15 @@ ccAutoPick.prototype = {
         }
 
         return '<table cellspacing="0" cellpadding="0" style="">' +
-               '<tr><td colspan="2">' +
+               '<tr><td>' +
                     '<span class="cc_autocomp_stat" id="' + stat_id + '"><i>' + pre_text + '</i></span> ' +
                '</td></tr>' +
                '<tr><td>'  + 
                    '<a class="'+this.options.showButtonClass+'" href="javascript://show list" id="' + show_id + '"><span>' + str_filter_show_list + 
-                   '</a></span></td><td>' +
+                   '</a></span>&nbsp;' +
                    '<a class="'+this.options.clearButtonClass+'" style="display:'+clear_display+'" href="javascript://clear list" id="' + clear_id + 
                     '"><span>' + str_filter_clear + '</span></a></td></tr>' +
-               '<tr><td colspan="2"><input type="hidden" name="' + id + '" id="' + id + '" value="' + value + '" />' +
+               '<tr><td><input type="hidden" name="' + id + '" id="' + id + '" value="' + value + '" />' +
                     '<div class="cc_autocomp_list" id="' + list_id + '"><!-- --></div>' +
                     '<div style="border-left: 180px transparent solid;font-size: 2px;height:2px;"></div>' + 
                '</td></tr></table>';

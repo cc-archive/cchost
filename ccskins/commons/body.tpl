@@ -16,6 +16,7 @@
 
 <div id="container" style="background-color:white;">
 
+%if_null(#_GET/popup)%
 <div id="header" class="light_color">
 
     <div id="login_info">
@@ -52,16 +53,19 @@
         %call('tabs.tpl/print_tabs')%
     %end_if%
 </div><!-- header -->
+%end_if%
 
 <div style="display:none" id="debug"></div>
 
     <div id="wrapper">
 <div id="content">
 
+%if_null(#_GET/popup)%
 %call(print_bread_crumbs)%
 
 %if_not_empty(tab_pos/subclient)%
     %call('tabs.tpl/print_sub_tabs')%
+%end_if%
 %end_if%
 
 %if_not_empty(page-title)%
@@ -79,6 +83,8 @@
 
 </div> <!-- content -->
     </div> <!-- wrapper -->
+
+%if_null(#_GET/popup)%
 
 <div id="navigation">
 
@@ -128,6 +134,9 @@
   <div id="license"><p>%(site-license)%</p></div>
   <p>%(footer)%</p>
 </div><!-- footer -->
+
+%end_if% <!-- if_not_null_popup -->
+
 </div> <!-- container -->
 
 

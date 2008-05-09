@@ -28,6 +28,8 @@ ccQueryBrowserFilters.prototype = {
 
     initialize: function(options) {
 
+      try
+      {
         this.options = options;
 
         if( !this.options.query_url )
@@ -35,33 +37,52 @@ ccQueryBrowserFilters.prototype = {
         if( !this.options.format )
             this.options.format = 'html';
 
-        var vtags;
-        
-        if( this.options.reqtags.inject )
+        var types;
+
+        if( this.options.optset.types.inject )
         {
-            vtags = this.options.reqtags.inject( [], function(arr,tags) {
+            types = this.options.optset.types.inject( [], function(arr,tags) {
                         arr.push( [ tags.tags, tags.text ] );
                         return arr;
                     });
         }
         else
         {
-            vtags = [];
+            types = [];
         }
-        this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', vals: vtags };
-        this.user       = { name: str_artist, fmt: 'user_lookup', param: 'user' };
-        this.remixesof  = { name: str_filter_remixes_of, fmt: 'remix_user', param: 'remixesof' };
+        
+        // 'types' as the user sees it, is really 'reqtags' in query-api-speak
+
+        this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', vals: types };
+        if( this.options.optset.user )
+        {
+            this.user       = { name: str_artist, fmt: 'user_lookup', param: 'user' };
+            this.remixesof  = { name: str_filter_remixes_of, fmt: 'remix_user', param: 'remixesof' };
+        }
+
         this.tags       = { name: str_tags, fmt: 'tag_lookup', param: 'tags' };
         this.type       = { name: str_filter_match, fmt: 'dropdown', param: 'type' ,
                                          vals: [  [ 'all', str_filter_match_all_tags ],
                                                   [ 'any', str_filter_match_any_tags  ]
                                                ]
                                           };
+        var sort_vals = null;
+        if( this.options.optset.user )
+        {
+             sort_vals = [  [ 'date', str_filter_date ],
+                      [ 'name', str_filter_name ],
+                      [ 'fullname', str_filter_artist ],
+                      [ 'rank', str_filter_score ] ];
+        }
+        else
+        {
+             sort_vals = [  [ 'date', str_filter_date ],
+                      [ 'name', str_filter_name ] ];
+        }
+
         this.sort       = { name: str_filter_sort, fmt: 'dropdown', param: 'sort',
-                                         vals: [  [ 'date', str_filter_date ],
-                                                  [ 'name', str_filter_name ],
-                                                  [ 'fullname', str_filter_artist ],
-                                                  [ 'rank', str_filter_score ] ] };
+                                         vals: sort_vals
+                                                };
 
         this.ord        = { name: str_filter_order, fmt: 'dropdown', param: 'ord',
                                          vals: [  [ 'desc', str_filter_most_to_least ],
@@ -77,18 +98,21 @@ ccQueryBrowserFilters.prototype = {
                                                ]
                           };
         */
-        this.lic  = { name: str_filter_license, fmt: 'dropdown', param: 'lic',
-                                         vals: [  [ '*', str_filter_all],
-                                                  [ 'by', str_lic_attribution],
-                                                  [ 'nc', str_lic_non_commercial],
-                                                  [ 'sa', str_lic_share_alike],
-                                                  [ 'byncsa', str_lic_nc_share_alike],
-                                                  [ 's', str_lic_sampling],
-                                                  [ 'splus', str_lic_sampling_plus],
-                                                  [ 'ncsplut', str_lic_nc_sampling_plus],
-                                                  [ 'pd', str_lic_public]
-                                               ]
-                          };
+        if( this.options.optset.license )
+        {
+            this.lic  = { name: str_filter_license, fmt: 'dropdown', param: 'lic',
+                                             vals: [  [ '*', str_filter_all],
+                                                      [ 'by', str_lic_attribution],
+                                                      [ 'nc', str_lic_non_commercial],
+                                                      [ 'sa', str_lic_share_alike],
+                                                      [ 'byncsa', str_lic_nc_share_alike],
+                                                      [ 's', str_lic_sampling],
+                                                      [ 'splus', str_lic_sampling_plus],
+                                                      [ 'ncsplut', str_lic_nc_sampling_plus],
+                                                      [ 'pd', str_lic_public]
+                                                   ]
+                              };
+        }
         this.sinced = { name: str_filter_since, fmt: 'dropdown', param: 'sinced',
                                          vals: [  
                                                   [ '*', str_filter_all_time],
@@ -132,6 +156,10 @@ ccQueryBrowserFilters.prototype = {
         if( this.options.onFilterSubmit )
             this.hookFilterSubmit(this.options.onFilterSubmit);
         $(this.options.formInfo.submitId).innerHTML = '<span>' + this.options.submit_text + '</span>';
+      }
+      catch(e) {
+          alert(e);
+      }
     },
 
     hookFilterSubmit: function(func) {
@@ -144,8 +172,8 @@ ccQueryBrowserFilters.prototype = {
 
     queryString: function(withTemplate) {
         var str = this._queryString() + '&f=' + this.options.format;
-        if( withTemplate && this.options.template )
-            str += '&t=' + this.options.template;
+        if( withTemplate && this.options.optset.template )
+            str += '&t=' + this.options.optset.template;
         return str;
     },
 

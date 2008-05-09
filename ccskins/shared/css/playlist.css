@@ -224,10 +224,6 @@ div.cc_playlist_action  {
 }
 
 #dyn_filter_editor .cc_autocomp_clear {
-	display: block;
-	text-align: right;
-	width: 110px;
-	float: right;
 }
 
 .cc_autocomp_stat {

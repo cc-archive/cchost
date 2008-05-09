@@ -249,6 +249,8 @@ ccGridEditor.prototype = {
             this._deselect_row();
             this.curr_row = this.num_rows;
             this._select_row();
+            if( this.PostStufferScript )
+                this.PostStufferScript();
         }
         catch (e)
         {

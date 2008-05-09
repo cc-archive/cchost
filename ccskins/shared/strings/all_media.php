@@ -473,6 +473,8 @@ $GLOBALS['str_samples']          = _('Samples');
 $GLOBALS['str_samples_from']          = _('Samples from');
 $GLOBALS['str_samples_from_here']     = _('Samples from here are used in');
 
+$GLOBALS['str_save_to_playlist'] = _('Save to collection');
+
 $GLOBALS['str_results_from'] = _('Search Results From');
 $GLOBALS['str_search']             = _('Search');
 $GLOBALS['str_search_forums'] = _('Forums');
@@ -692,6 +694,7 @@ $GLOBALS['str_stats_picks'] = _('Picks');
 $GLOBALS['str_stats_name'] = _('Name');
 $GLOBALS['str_stats_licenses_samples'] = _('Licenses for Samples');
 
+$GLOBALS['str_save_playlist'] = _('Save as collection');
 
 
 ?>

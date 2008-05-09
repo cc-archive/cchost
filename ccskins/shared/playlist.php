@@ -17,12 +17,15 @@ function _t_playlist_playlist_create_dyn(&$T,&$A) {
 <script  src="<?= $T->URL('js/autopick.js')?>" ></script>
 <script type="text/javascript">
     
+<? 
+    $optset = cc_query_get_optset('create_playlist', 'json' );
+?>
 var filters = new ccQueryBrowserFilters( 
     { submit_text: '<?= $T->String($A['plargs']['submit_text']) ?>',
       init_values: <?= $A['plargs']['edit_query']?>,
       query_url: '<?= $A['plargs']['submit_url']?>' + q,
       format: 'playlist',
-      reqtags: <?= cc_get_config( 'playlist_tags', 'json' ) ?>,
+      optset: <?= $optset ?>,
       onFilterSubmit: function(event) {
           var qstring = window.filters.queryURL(true);
           var promo_tag = '<?= $A['plargs']['promo_tag']?>';

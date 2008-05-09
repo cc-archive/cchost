@@ -119,7 +119,11 @@
 </td></tr>
 %end_if%
 </table>
-<script type="text/javascript"> var %(curr_form/form_id)%_editor = new ccGridEditor('%(curr_form/form_id)%'); </script>
+<script type="text/javascript"> var %(curr_form/form_id)%_editor = new ccGridEditor('%(curr_form/form_id)%'); 
+%if_not_null(curr_form/stuffer_script)%
+%(curr_form/form_id)%_editor.PostStufferScript = %(curr_form/stuffer_script)%;
+%end_if%
+</script>
 %map(post_form_goo,'form_fields.tpl/post_grid_form')%
 %end_macro%
 

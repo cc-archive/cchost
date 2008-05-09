@@ -11,7 +11,9 @@ var popupHook = Class.create();
 
 popupHook.prototype = {
 
-    initialize: function(ids) {
+    options: { height:600, width:900 },
+    initialize: function(ids,options) {
+        Object.extend(this.options, options || {});
         var me = this;
         ids.each( function( id ) {
             if( $(id) )
@@ -30,7 +32,7 @@ popupHook.prototype = {
             href += '?popup=1';
         else
             href += '&popup=1';
-        var dim = "height=600,width=900";
+        var dim = "height=" + this.options.height + ",width=" + this.options.width ;
         var win = window.open( href, 'cchostextrawin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                                       "resizable=1,scrollbars=1," + dim );
         win.title = thetitle;

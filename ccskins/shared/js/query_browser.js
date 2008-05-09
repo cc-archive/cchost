@@ -11,6 +11,7 @@ ccQueryBrowser.prototype = {
         stream_link_id: 'mi_stream_page',
         podcast_link_id: 'mi_podcast_page',
         download_link_id: 'mi_download_page',
+        s2pl_link_id: 'mi_save_to_playlist', 
         autoRefresh:     true
         },
     onQueryResultsBind: null,
@@ -37,6 +38,7 @@ ccQueryBrowser.prototype = {
 
             this.prev_link   = this.options.prev_link_id   ? $(this.options.prev_link_id) : null;
             this.next_link   = this.options.next_link_id   ? $(this.options.next_link_id) : null;
+            this.s2pl_link   = this.options.s2pl_link_id   ? $(this.options.s2pl_link_id) : null; 
             this.browser     = this.options.browser_id     ? $(this.options.browser_id) : null; 
             this.paging = (this.prev_link != null) && (this.next_link != null);
 
@@ -105,6 +107,8 @@ ccQueryBrowser.prototype = {
             this.podcast_link.style.display = 'none';
         if( this.download_link )
             this.download_link.style.display = 'none';
+        if( this.s2pl_link )
+            this.s2pl_link.style.display = 'none';
     },
 
     refresh: function()
@@ -158,15 +162,23 @@ ccQueryBrowser.prototype = {
 
             var queryStr = '?' + this.options.filters.queryString(false);
             var p = queryStr.parseQuery();
+            p.offset = this.currOffset;
 
             this._check_feed_links();
 
             if( this.stream_link != null )
             {
                 p.f = 'm3u';
-                p.offset = this.currOffset;
                 var url = home_url + 'api/query/stream.m3u' + q + $H(p).toQueryString();
                 this.stream_link.href = url;
+            }
+
+            if( this.s2pl_link != null )
+            {
+                p.f = 'playlist';
+                var pl_url = query_url + $H(p).toQueryString();
+                this.s2pl_link.href = pl_url;
+                this.s2pl_link.style.display = '';
             }
 
             if( (this.rss_link != null) || (this.podcast_link != null) )

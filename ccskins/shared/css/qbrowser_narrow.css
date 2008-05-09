@@ -1,0 +1,165 @@
+/*
+[meta]
+	desc = _('Narrow browser')
+	type = query_browser_styles
+[/meta]
+*/
+@import('playlist.css'); 
+@import('info.css');
+
+
+#browser_client {
+    width: 640px;
+    margin: 0px auto;
+}
+
+.cc_playlist_item {
+	width: 220px;
+}
+
+.cc_playlist_pagelink {
+    display: block;
+    float: left;
+    width: 180px;
+    overflow: hidden;
+    margin-right: 8px;
+}
+
+#browser_filter {
+    margin: 4px;
+}
+#browser_area {
+    float: left;
+    margin-left: 40px;
+}
+
+#filter_controls {
+   width: 90px;
+   padding-right:5px;
+   float: left;
+}
+
+#filter_controls select {
+    width: 105px;
+}
+
+
+.filterform div {
+	margin-bottom: 4px;
+}
+
+
+.close_button {
+	display: none;
+}
+
+#dyn_filter_editor .cc_autocomp_edit {
+	margin: 4px 0px 5px 0px;
+}
+
+p.cc_autocomp_picked{
+    font-style: italic;
+    color: blue;
+}
+
+.cc_autocomp_stat {
+    /*width: 50px;*/
+}
+.cc_autocomp_list {
+    background-color: #FFF; 
+	z-index: 201;
+	cursor: pointer;
+    width: 110px;
+}
+
+#_ap_stat_tags {
+	font-weight: bold;
+}
+
+p.cc_autocomp_line {
+	margin: 1px;
+}
+
+#dyn_filter_editor p.cc_autocomp_selected {
+    /* background-color: #CCC; */
+}
+
+#dyn_filter_editor p.cc_autocomp_picked {
+	font-style: italic;
+	background-color: white;
+/*	color: blue; */
+}
+
+.cc_autocomp_clear {
+	text-align: left;
+}
+
+#_ap_show_tags {
+    width: 40px;
+}
+#_ap_clear_tags {
+}
+.cc_autocomp_show {
+	text-align: left;
+}
+
+.cc_autocomp_stat {
+}
+
+.cc_autocomp_border {
+    border-width: 1px;
+	border-style: solid;
+	/* #666; */
+}
+
+.filterform {
+    width: 112px;
+}
+.filterform span.th  {
+    text-align: left;
+    margin: 0px;
+    padding: 0px;
+    padding: 2px 2px 2px 6px;
+    font-size: 0.8em;
+    display: block;
+    font-variant: small-caps;
+    letter-spacing: 0.2em;
+    text-transform: lowercase;
+}
+
+.filterform span.field  {
+    float: none;
+    display: block;
+    margin: 0px;
+    padding: 5px 0px 10px 0px;
+    width: 100%;
+}
+#ff_filter_inner {
+    margin-bottom: 8px;
+    display: block;
+}
+
+#dyn_filter_editor {
+    margin: 0px;
+    padding: 4px;
+    width:180px;
+}
+#podcast_link_container, #stream_link_container, #play_link_container {
+  float: left;
+  margin-left: 21px;
+  margin-bottom: 1em;
+  width: 80px;
+}
+
+#podcast_link_container #mi_podcast_page,
+#play_link_container #mi_play_page,
+#play_link_container #mi_download_page,
+#stream_link_container #mi_stream_page {
+    padding-left: 18px;
+    font-size: 14px;
+}
+
+.filterbuttontray {
+    margin-top: 20px;
+    text-align: center;
+}
