@@ -16,7 +16,7 @@ $optset = cc_query_get_optset( empty($_GET['optset']) ? 'default' : $_GET['optse
             <?= $T->String('str_getting_data') ;?>
         </div>
 
-        <table id="cc_prev_next_links">
+        <table id="cc_prev_next_links" style="clear:left">
         <tr>
             <td class="cc_list_list_space">&nbsp;</td>
             <td><a id="browser_prev" class="cc_gen_button  browse_prevnext" style="display:none" href="javascript://browser_prev">
@@ -24,7 +24,7 @@ $optset = cc_query_get_optset( empty($_GET['optset']) ? 'default' : $_GET['optse
             </td>
             <td><a id="browser_next" class="cc_gen_button  browse_prevnext" style="display:none" href="javascript://browser_next">
                 <span><?= $T->String('str_more') ?> &gt;&gt;&gt;</span></a> </td>
-        <? if( !empty($A['enable_playlists']) ) { ?>
+        <? if( !empty($A['enable_playlists']) && !empty($optset['playlist_button']) ) { ?>
             <td> <a id="mi_save_to_playlist" class="cc_gen_button" style="display:none" href="javascript://save to playlist">
                 <span><?= $T->String('str_save_to_playlist') ?></span></a></td>
         <? } ?>
