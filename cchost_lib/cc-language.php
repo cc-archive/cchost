@@ -436,12 +436,16 @@ class CCLanguage
         // This one for some reason makes a difference FU@#$%^&*!CK
         // and when combined with bind_textdomain_codeset allows one
         // to set locale independent of server locale setup!!!
-        if ( false == putenv("LANGUAGE=" . $this->_language ) )
+
+        // NOTE: if php's safe is set then putenv will fail,
+        // hence the '@' prefix (which allows it it work)
+
+        if ( false == @putenv("LANGUAGE=" . $this->_language ) )
             CCDebug::Log(sprintf("Could not set the ENV variable LANGUAGE = %s",
                              $this->_language));
 
         // set the LANG environmental variable
-        if ( false == putenv("LANG=" . $this->_language ) )
+        if ( false == @putenv("LANG=" . $this->_language ) )
             CCDebug::Log(sprintf("Could not set the ENV variable LANG = %s", 
                              $this->_language));
 
