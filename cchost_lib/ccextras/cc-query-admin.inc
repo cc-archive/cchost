@@ -49,6 +49,7 @@ class CCQueryAdminForm extends CCGridForm
                         _('Template'), 
                         _('Style'),
                         _('Def. limit'),
+                        _('Playlist but.'),
                         _('Req. tags'),
                         '', // types_key
                         _('Types'),
@@ -126,6 +127,12 @@ class CCQueryAdminForm extends CCGridForm
                     'formatter'  => 'textedit',
                     'flags'      => CCFF_POPULATE),
 
+                 array(
+                    'element_name'  => "mi[$name][playlist_button]",
+                    'value'      => '',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE ),
+
                 array(
                     'element_name'  => "mi[$name][reqtags]",
                     'value'      => $opt['reqtags'],
@@ -202,6 +209,12 @@ class CCQueryAdminForm extends CCGridForm
                     'formatter'  => 'textedit',
                     'flags'      => CCFF_POPULATE),
 
+                 array(
+                    'element_name'  => $S . "[playlist_button]",
+                    'value'      => '',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE ),
+
                 array(
                     'element_name'  => $S . "[reqtags]",
                     'value'      => '',
@@ -262,7 +275,7 @@ class CCQueryAdmin
     {
         if( !empty($dotags) && $dotags == 'tags' )
         {
-            $this->AdminQueryTags($optsname);
+            $this->AdminQueryTypes($optsname);
             return;
         }
         $configs = CCConfigs::GetTable();
@@ -318,8 +331,9 @@ class CCQueryAdmin
                 'types_key'  => $new_opt['types_key'],
                 'reqtags'    => $new_opt['reqtags'],
                 'limit'      => $new_opt['limit'],
-                'license'    => empty($new_opt['license']) ? 0 : 1,
-                'user'       => empty($new_opt['user']) ? 0 : 1,
+                'playlist_button' => empty($new_opt['playlist_button']) ? 0 : 1,
+                'license'         => empty($new_opt['license']) ? 0 : 1,
+                'user'            => empty($new_opt['user']) ? 0 : 1,
                 );
         }
 
@@ -329,7 +343,7 @@ class CCQueryAdmin
         }
     }
 
-    function AdminQueryTags($typekeys_name)
+    function AdminQueryTypes($typekeys_name)
     {
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle(_('Admin Query Types'));

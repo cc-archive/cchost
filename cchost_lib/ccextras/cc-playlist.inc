@@ -660,6 +660,13 @@ EOF;
     function _get_default_playlist($id_only=false)
     {
         $ccp = ccl('people');
+
+        $cart_fields =<<<EOF
+cc_tbl_cart.*, user_real_name,
+                  CONCAT('$ccp','/',user_name) as artist_page_url,
+                  DATE_FORMAT(cart_date, '%W, %M %e, %Y @ %l:%i %p') as cart_date_format
+EOF;
+
         if( $id_only )
         {
             $sql =<<<EOF
@@ -675,9 +682,7 @@ EOF;
         else
         {
             $sql =<<<EOF
-                SELECT cart_name, cart_desc, cart_id, cart_tags, cart_date, cart_user, user_real_name,
-                  CONCAT('$ccp','/',user_name) as artist_page_url,
-                  DATE_FORMAT(cart_date, '%W, %M %e, %Y @ %l:%i %p') as cart_date_format
+                SELECT {$cart_fields}
                   FROM cc_tbl_cart
                   JOIN cc_tbl_user ON cart_user = user_id 
                   WHERE cart_type = 'playlist' AND cart_subtype = 'default'
@@ -710,8 +715,7 @@ EOF;
             return $new_row['cart_id'];
 
         $sql =<<<EOF
-            SELECT cart_name, cart_desc, cart_id, cart_tags, cart_date,
-              CONCAT('$ccp','/',user_name) as artist_page_url 
+            SELECT {$cart_fields}
               FROM cc_tbl_cart
               JOIN cc_tbl_user ON cart_user = user_id 
               WHERE cart_id = {$newrow['cart_id']}
