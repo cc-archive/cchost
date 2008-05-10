@@ -454,10 +454,11 @@ class CCSkin
     function GetTemplatePath()
     {
         global $CC_GLOBALS;
-        $arr = array_unique(array_merge( array('./'),
+        $arr = array_filter(
+                array_unique(array_merge( array('./'),
                                          $this->template_stack,
                                          $this->map_stack, 
-                                         CCUtil::SplitPaths( $CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS ) ));
+                                         CCUtil::SplitPaths( $CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS ) )));
 
         return $arr;
     }
@@ -501,8 +502,8 @@ class CCSkin
             return CCUtil::SearchPath( $file, $CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS, $real_path);
         }
         
-        $sfile = is_array($file) ? md5($file[0]) : md5($file);
-        if( empty($this->search_cache[$sfile]) )
+        $sfile = is_array($file) ? md5(join('',$file)) : md5($file);
+        if( !isset($this->search_cache[$sfile]) )
         {
             $dirs = $this->GetTemplatePath();
             $this->_latest_search_path = $dirs; // for debugging
