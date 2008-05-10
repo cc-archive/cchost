@@ -310,11 +310,11 @@ class CCNotifyAPI
                 WHERE topic_upload = {$C['topic_upload']}
 EOF;
             $user_name = CCDatabase::QueryItem($sql);
-            $url = ccl('reviews',$user_name,$C['topic_upload']) . '#' . $C['topic_id'];
+            $url = ccl('reviews',$user_name,$C['topic_upload']) . '#' . $reply['topic_id'];
         }
         else
         {
-            $url = ccl('thread',$C['topic_thread']) . '#' . $C['topic_id'];
+            $url = ccl('thread',$C['topic_thread']) . '#' . $reply['topic_id'];
         }
 
         $subject = _('Topic Reply Notification');
@@ -459,7 +459,8 @@ EOF;
             $ok = @$mailer->Send();
             if( !$ok )
             {
-                CCDebug::Log("Message '$subject' failed to send");
+                CCDebug::Enable(true);
+                CCDebug::Log("Message '$subject' failed to send: \n{$body}");
             }
         }
     }
