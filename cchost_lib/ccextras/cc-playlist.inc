@@ -530,6 +530,8 @@ EOF;
                     $args['min'] = intval($_GET['min']);
                 if( !empty($_GET['since']) )
                     $args['since'] = date('Y-m-d', strtotime($_GET['since']));
+                if( !empty($_GET['offset']) )
+                    $args['offset'] = intval($_GET['offset']);
                 $args['hot'] = !empty($_GET['hot']);
                 if( $args['hot'] )
                     $title = 'str_pl_hot_playlists';
@@ -603,7 +605,10 @@ EOF;
         if( empty($_GET['upload_id']) )
         {
             require_once('cchost_lib/cc-page.php');
-            $args = CCPage::AddPagingLinks($carts,$where,20);
+            $offset = empty($_GET['offset']) ? 0 : $_GET['offset'];
+            $limit  = empty($_GET['limit']) ? 20 : $_GET['limit'];
+            $carts->SetOffsetAndLimit($offset,$limit);
+            $args = CCPage::AddPagingLinks($carts,$where,$limit);
         }
         else
         {
