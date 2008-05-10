@@ -526,6 +526,8 @@ EOF;
             }
             else
             {
+                if( !empty($_GET['min']) )
+                    $args['min'] = intval($_GET['min']);
                 if( !empty($_GET['since']) )
                     $args['since'] = date('Y-m-d', strtotime($_GET['since']));
                 $args['hot'] = !empty($_GET['hot']);
@@ -581,7 +583,9 @@ EOF;
 
         if( empty($user) )
         {
-            $where .= 'AND (cart_subtype <> "default") AND (cart_num_items > 0)';
+            $where .= 'AND (cart_subtype <> "default")';
+            if( !empty($_GET['min']) )
+                $where .= " AND (cart_num_items >= '{$_GET['min']}')";
         }
         else
         {

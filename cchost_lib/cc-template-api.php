@@ -164,7 +164,7 @@ if( !function_exists('http_build_query') )
     {
         $qargs = array();
         foreach( $args as $K => $V )
-            $qargs = $K . '=' . $V;
+            $qargs[] = $K . '=' . $V;
         return join( '&', $qargs );
     }
 }
