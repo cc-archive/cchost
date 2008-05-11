@@ -1,5 +1,0 @@
-<div>
-  <tal:block define="reguser is_logged_in" />
-  <tal:block define="R php: array_combine( array('cart_id'), array( 1 ) );" />
-  <metal:block use-macro="playlist.xml/playlist_list_lines" />
-</div>

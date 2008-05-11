@@ -1,3 +1,0 @@
-<metal:block define-macro="signature">
- <span tal:content="php: _('From')" /> <a href="${root-url}">${site-title}</a>
-</metal:block>
