@@ -4,7 +4,8 @@ if( !defined('IN_CC_HOST') )
 
 function _t_file_macros_print_howididit_link(&$T,&$A)
 {
-    ?><a class="cc_gen_button" style="width: 25%" href="<?= ccl('howididit',$A['record']['upload_id']) ?>"><span><?= $T->String('str_how_i_did_it') ?></span></a><br /><?
+    ?>
+        <table><tr><td><a class="cc_gen_button" href="<?= ccl('howididit',$A['record']['upload_id']) ?>"><span><?= $T->String('str_how_i_did_it') ?></span></a></td></tr></table><?
 }
 
 
@@ -101,9 +102,19 @@ function _t_file_macros_show_zip_dir(&$T,&$A)
 
 function _t_file_macros_request_reviews(&$T,&$A)
 {
+
     ?><div id="requested_reviews"><?
         cc_query_fmt('noexit=1&nomime=1&f=html&t=reviews_preview&sort=topic_date&ids=' . $A['record']['upload_id'] );
     ?></div><?
+
+    $ratings_opts = cc_get_config('chart');
+    if( !empty($ratings_opts['thumbs_up']) )
+    {
+        ?><div id="recommended_by"><?
+            cc_query_fmt('noexit=1&nomime=1&f=html&t=recc&datasource=ratings&recc=' . $A['record']['upload_id'] );
+        ?></div><?
+    }
+
 }
 
 function _t_file_macros_print_recent_reviews(&$T,&$A)

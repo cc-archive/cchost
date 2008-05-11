@@ -392,6 +392,7 @@ $GLOBALS['str_radio_remix']           = _('Remix Radio');
 $GLOBALS['str_radio_station']         = _('Create Your Own Remix Radio Station');
 $GLOBALS['str_ratings']               = _('Ratings');
 $GLOBALS['str_read_all']              = _('Read all...');
+$GLOBALS['str_recommended_by']        = _('Recommended by');
 $GLOBALS['str_recent_playlists']      = _('Recent Favorites');
 $GLOBALS['str_recent_reviewers']      = _('Recent Commentors') ;
 $GLOBALS['str_recent_reviews']        = _('Recent Comments');

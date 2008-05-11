@@ -138,3 +138,7 @@ div#nsfw {
 #trackback_submit {
     float: left;
 }
+
+#requested_reviews, #recommended_by {
+	margin-bottom: 1em;
+}
