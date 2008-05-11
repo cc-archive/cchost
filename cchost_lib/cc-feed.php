@@ -31,7 +31,7 @@ if( !defined('IN_CC_HOST') )
 
 function cc_feed_encode($str)
 {
-    return utf8_encode( preg_replace('&[^a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]&','',$str ) );
+    return utf8_encode( preg_replace('`[^&a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]`','',$str ) );
 }
 
 function cc_feed_safe_urls($text)
