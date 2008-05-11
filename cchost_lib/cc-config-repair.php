@@ -151,6 +151,7 @@ if( empty($_REQUEST['cmd']) )
 function recurse_path($data,$base,$path,$level)
 {
     $key = count($path) > $level ? $path[$level] : null;
+    ksort($data);
     foreach( $data as $K => $V )
     {
         $dpath = $base . '/' . $K;

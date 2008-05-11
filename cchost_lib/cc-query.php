@@ -295,6 +295,9 @@ class CCQuery
                 case 'playlist':
                     $this->args['template'] = 'playlist_show_one';
                     break;
+                case 'recc':
+                    $this->args['template'] = 'recc';
+                    break;
                 case 'rss':
                     if( $this->args['datasource'] == 'uploads' )
                         $this->args['template'] = 'rss_20';
@@ -321,7 +324,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 'reqtags','rand'
+                         'reviewee', 'match', 'reqtags','rand', 'recc',
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -579,6 +582,13 @@ class CCQuery
     function _gen_rand()
     {
         $this->sql_p['order'] = 'RAND()';
+    }
+
+    function _gen_recc()
+    {
+        // assume the joins are in the dataview (??)
+        $this->args['datasource'] = 'ratings';
+        $this->where[] = 'ratings_upload = ' . $this->args['recc'];
     }
 
     function _gen_reccby()
