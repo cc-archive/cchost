@@ -31,6 +31,7 @@ if( !defined('IN_CC_HOST') )
 
 function cc_feed_encode($str)
 {
+    $str = preg_replace('/&(?!amp;|#)/','&amp;',$str);
     return utf8_encode( preg_replace('`[^&a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]`','',$str ) );
 }
 
@@ -46,8 +47,8 @@ function _cc_encode_feed_url($m)
 
 function cc_feed_safe_html($text)
 {
-    $tr = array( ']' => '#' . ord(']') . ';', 
-                 '[' => '#' . ord('[') . ';' );
+    $tr = array( ']' => '&#' . ord(']') . ';', 
+                 '[' => '&#' . ord('[') . ';' );
     return cc_feed_encode(strtr( cc_feed_safe_urls($text), $tr ));
 }
 
