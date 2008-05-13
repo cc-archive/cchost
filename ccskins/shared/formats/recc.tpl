@@ -1,6 +1,7 @@
 <?/*
 [meta]
     desc     = _('For seeing who recommends a given upload')
+    type     = template_component
     dataview = recc
     embedded = 1
 [/meta]

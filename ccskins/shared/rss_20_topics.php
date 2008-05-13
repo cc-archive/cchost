@@ -36,7 +36,7 @@ function rss_topic_dataview()
         LEFT OUTER JOIN cc_tbl_uploads ups ON topic_upload=upload_id
         LEFT OUTER JOIN cc_tbl_user reviewee ON ups.upload_user=reviewee.user_id
         %joins%
-        %where%
+        %where% and (topic_deleted = 0)
         %order%
         %limit%
 EOF;
