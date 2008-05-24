@@ -29,7 +29,7 @@ if( !defined('IN_CC_HOST') )
 require_once('cchost_lib/cc-form.php');
 
 /**
- * Base class for forms that uplaod media files.
+ * Base class for forms that upload media files.
  * 
  */
 class CCUploadMediaForm extends CCUploadForm 
@@ -67,28 +67,6 @@ class CCUploadMediaForm extends CCUploadForm
             CCUpload::GetUploadField($fields,'upload_file_name');
         }
 
-        require_once('cchost_lib/cc-tags.inc');
-        $tags =& CCTags::GetTable();
-        $where['tags_type'] = CCTT_USER;
-        $tags->SetOffsetAndLimit(0,'25');
-        $tags->SetOrder('tags_count','DESC');
-        $pop_tags = $tags->QueryKeys($where);
-
-        $fields['upload_tags'] =
-                        array( 'label'      => 'str_tags',
-                               'formatter'  => 'tagsedit',
-                               'form_tip'   => 'str_comma_separated',
-                               'flags'      => CCFF_NONE );
-
-        $fields['popular_tags'] =
-                        array( 'label'      => 'str_popular_tags',
-                               'target'     => 'upload_tags',
-                               'tags'       => $pop_tags,
-                               'formatter'  => 'metalmacro',
-                               'macro'      => 'popular_tags',
-                               'form_tip'   => 'str_click_on_these',
-                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
-
         $fields['upload_description'] =
                         array( 'label'      => 'str_description',
                                'want_formatting' => true,
@@ -97,30 +75,14 @@ class CCUploadMediaForm extends CCUploadForm
         
         $this->AddFormFields( $fields );
 
+        CCUpload::GetTagFields( $this, 'upload_tags', 'before', 'upload_description' );
+
         $this->_extra = array();
     }
 
     function AddSuggestedTags($suggested_tags)
     {
-        if( empty($suggested_tags) )
-            return;
-
-        if( !is_array($suggested_tags) )
-        {
-            require_once('cchost_lib/cc-tags.php');
-            $suggested_tags = CCTag::TagSplit($suggested_tags);
-        }
-
-        $fields['suggested_tags'] =
-                        array( 'label'      => 'str_suggested_tags',
-                               'target'     => 'upload_tags',
-                               'tags'       => $suggested_tags,
-                               'formatter'  => 'metalmacro',
-                               'macro'      => 'popular_tags',
-                               'form_tip'   => 'str_click_on_these',
-                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
-
-        $this->InsertFormFields( $fields, 'before', 'popular_tags' );
+        CCUpload::AddSuggestedTags($this,$suggested_tags);
     }
 
 }

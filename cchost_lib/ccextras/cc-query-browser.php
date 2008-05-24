@@ -99,9 +99,9 @@ EOF;
             $args['html'] = join('',$tags);
             CCUtil::ReturnAjaxData($args,false);
         }
-        else if( isset($_GET['user']) )
+        else if( isset($_GET['user_tags']) )
         {
-            $user_name = trim(CCUtil::Strip($_GET['user']));
+            $user_name = trim(CCUtil::Strip($_GET['user_tags']));
             if( !$user_name )
                 CCUtil::ReturnAjaxMessage('not a valid user lookup',CC_AJAX_WARNING);
 

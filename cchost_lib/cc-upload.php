@@ -183,6 +183,56 @@ class CCUpload
                                    'flags'      => CCFF_REQUIRED  );
     }
 
+    function GetTagFields(&$form,$tag_field_name='upload_tags',$insert_how = 'before',$insert_where = 'upload_description')
+    {
+        require_once('cchost_lib/cc-tags.inc');
+        $tags =& CCTags::GetTable();
+        $where['tags_type'] = CCTT_USER;
+        $tags->SetOffsetAndLimit(0,'25');
+        $tags->SetOrder('tags_count','DESC');
+        $pop_tags = $tags->QueryKeys($where);
+
+        $fields[$tag_field_name] =
+            array( 'label'      => 'str_tags',
+                   'formatter'  => 'tagsedit',
+                   'form_tip'   => 'str_comma_separated',
+                   'flags'      => CCFF_NONE );
+
+        $fields['popular_tags'] =
+                    array( 'label'      => 'str_popular_tags',
+                           'target'     => $tag_field_name,
+                           'tags'       => $pop_tags,
+                           'formatter'  => 'metalmacro',
+                           'macro'      => 'popular_tags',
+                           'form_tip'   => 'str_click_on_these',
+                           'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
+
+        $form->InsertFormFields( $fields, $insert_how, $insert_where );
+    }
+
+    function AddSuggestedTags(&$form,$suggested_tags, $how = 'before', $where = 'popular_tags' )
+    {
+        if( empty($suggested_tags) )
+            return;
+
+        if( !is_array($suggested_tags) )
+        {
+            require_once('cchost_lib/cc-tags.php');
+            $suggested_tags = CCTag::TagSplit($suggested_tags);
+        }
+
+        $fields['suggested_tags'] =
+                        array( 'label'      => 'str_suggested_tags',
+                               'target'     => 'upload_tags',
+                               'tags'       => $suggested_tags,
+                               'formatter'  => 'metalmacro',
+                               'macro'      => 'popular_tags',
+                               'form_tip'   => 'str_click_on_these',
+                               'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
+
+        $form->InsertFormFields( $fields, $how, $where );
+    }
+
     function PostProcessNewUploadForm( &$form, $ccud_tags, $relative_dir, $parents = null)
     {
         $form->GetFormValues($values);
@@ -234,6 +284,7 @@ class CCUpload
     }
 
 }
+
 
 
 ?>

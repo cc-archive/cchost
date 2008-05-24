@@ -147,6 +147,12 @@ class CCSubmit
         $this->Submit('remix', '', $remix_this_id);
     }
 
+    function GetSubmitTypes()
+    {
+        $types = $this->_get_form_types(true);
+        CCEvents::Invoke(CC_EVENT_UPLOAD_ALLOWED, array( &$types ) );
+        return $types;
+    }
 
     /**
     * Handles URL files/submit

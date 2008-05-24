@@ -775,29 +775,11 @@ EOF;
 
         if( !$bad )
         {
-            require_once('cchost_lib/cc-tags.php');
-            require_once('cchost_lib/cc-tags.inc');
-            $sql = 'SELECT upload_extra,upload_tags FROM cc_tbl_uploads WHERE upload_id='.$upload_id;
-            list( $extra, $upload_tags ) = CCDatabase::QueryRow($sql,false);
-            $extra             = unserialize($extra);
-            $old_user_tags     = CCTag::TagSplit($extra['usertags']);
-            $old_tags          = CCTag::TagSplit($upload_tags);
-            $new_user_tags     = CCTag::TagSplit($_GET['tags']);
-            $tags_db           = new CCTags();
-            $new_user_tags     = $tags_db->CheckAliases($tags_db->CleanSystemTags($new_user_tags));
-            $extra['usertags'] = $new_user_tags;
-
-            $up['upload_extra'] = serialize($extra);
-            $up['upload_tags']  = ',' 
-                                  . join( ',', array_merge( array_diff( $old_tags, $old_user_tags ), CCTag::TagSplit($new_user_tags) )) 
-                                  . ',';
-            $up['upload_id'] = $upload_id;
-            $uploads->Update($up);
+            require_once('cchost_lib/cc-uploadapi.php');
+            CCUploadAPI::UpdateUserTags($tags);
             $args[CC_AJAX_MESSAGE] = _('Tags updated');
             $args['user_tags'] = $new_user_tags;
             $args['upload_id'] = $upload_id;
-
-            $tags_db->Replace($old_user_tags,$new_user_tags);
         }
 
         $this->_output($args);

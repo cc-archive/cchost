@@ -115,12 +115,14 @@ class CCLicense
     */
     function OnGetSysTags(&$record,&$file,&$tags)
     {
-        if( !empty($record['upload_license']) )
-        {
-            $licenses =& CCLicenses::GetTable();
-            $where['license_id'] = $record['upload_license'];
-            $tags[] = $licenses->QueryItem('license_tag',$where);
-        }
+        if( !isset($record) )
+            return;
+
+        if( empty($record['upload_license']) )
+            $record['upload_license'] = CCDatabase::QueryItem('SELECT upload_license FROM cc_tbl_uploads WHERE upload_id='.$record['upload_id']);
+        $licenses =& CCLicenses::GetTable();
+        $where['license_id'] = $record['upload_license'];
+        $tags[] = $licenses->QueryItem('license_tag',$where);
     }
 
     function OnFileDone(&$file)

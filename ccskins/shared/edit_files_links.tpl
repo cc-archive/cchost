@@ -20,7 +20,16 @@ if( !defined('IN_CC_HOST') )
       )
     [file_filesize] =>  (6KB)
     [file_order] => 0
-*/?>
+    [file_extra] => Array
+        (
+            [ccud] => sample   // this is optional
+        }
+*/
+
+
+$submit_types = cc_get_submit_types();
+
+?>
 <!-- template edit_files_links -->
 <style type="text/css">
 ul.ddex    { list-style: none; padding: 0px; width: 70%; margin:0px auto;}
@@ -52,12 +61,32 @@ div.cmd_link a {
     float: left;
     margin: 1.3em;
 }
+div.addtype {
+    float: right;
+}
 </style>
 
 <ul id="file_order" class="ddex">
 %loop(field/files,F)%
-    <li class="file_desc dark_border light_bg dark_color" id="file_order_%(#i_F)%">
-        <div class="fn">%(#F/file_name)%</div>
+    <li class="file_desc dark_border light_bg dark_color" id="file_order_%(#F/file_id)%_%(#i_F)%">
+        <div class="fn">
+            <div class="addtype" id="type_cmd_%(#F/file_id)%">
+                %text(str_files_type)%: 
+                %if_not_null(#F/file_extra/ccud)%
+                    %map(ccud,#F/file_extra/ccud)%
+                %else%
+                    %map(ccud,'')%
+                %end_if%
+                <select id="type_pick_%(#F/file_id)%" class="type_picker">
+                %loop(#submit_types,st)%
+                    <? $selected = ($k_st == $A['ccud']) ? 'selected="selected"' : ''; ?>
+                    <option value="%(#k_st)%" %(#selected)%>
+                        %text(#st)%
+                    </option>
+                %end_loop%
+                </select>
+            </div>%(#F/file_name)%
+        </div>
         <div style="margin: 6px;">
             <? if( $c_F > 1 ) { ?>
                 <div class="c light_border drag_handle">%text(str_file_drag_this)%</a></div>
@@ -95,6 +124,18 @@ div.cmd_link a {
 
     Event.observe('submit_file_order','click',on_reorder_click);
 
+    function on_change_type(id)
+    {
+        var sel  = $('type_cmd_' + id);
+        var type = sel.options[ sel.selectedIndex ].value;
+        var url  = '%(field/urls/file_change_type_url)%' + '/' + id + '/' + type
+    }
+
+    $$('.addtype').each( function(e) {
+        var id = e.id.match(/[0-9]+$/);
+        Event.observe( e,'change', on_change_type.bind(this,id) );
+    });
+
     function on_file_drop(a)
     {
         $('submit_order_link').style.display = 'block';
@@ -103,7 +144,8 @@ div.cmd_link a {
             if( _first_file != a.childNodes[0].id )
             {
                 var id_old = _first_file;
-                var id_new = a.childNodes[0].id.match(/([0-9]+)$/)[1];
+                var id = a.childNodes[0].id;
+                var id_new = id.match(/([0-9]+)$/)[1];
                 $('del_cmd_' + id_old).style.display = 'block';
                 $('del_cmd_' + id_new).style.display = 'none';
                 _first_file = id_new;

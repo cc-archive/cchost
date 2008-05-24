@@ -94,6 +94,27 @@ function cc_get_config_roots()
     return $roots;
 }
 
+function cc_get_submit_types($allow_remix=false,$default_title='')
+{
+    if( empty($default_title) )
+        $default = _('Default');
+
+    include('cchost_lib/cc-submit.php');
+    $sapi = new CCSubmit();
+    $types = $sapi->GetSubmitTypes();
+    foreach( $types as $typekey => $typeinfo )
+    {
+        if( empty($types['quota_reached']) && ($allow_remix || !$typeinfo['isremix']) )
+            $submit_types[$typekey] = $typeinfo['submit_type'];
+    }
+
+    return array_merge(    array( '' => $default_title ),
+                        $submit_types, 
+                        array( 'alternate_mix' => _('Alternate mix'),
+                               'multiple_formats'  => _('Alternate format'),
+                               'preview' => _('Preview') ));
+}
+
 function cc_query_default_args($required_args=array())
 {
     require_once('cchost_lib/cc-query.php');

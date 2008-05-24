@@ -299,6 +299,10 @@ class CCPlaylistManage
         $cartitems =& CCPlaylistItems::GetTable();
         $w['cart_item_cart'] = $playlist_id;
         $cartitems->DeleteWhere($w);
+        $carts =& CCPlaylist::GetTable();
+        $wx['cart_num_items'] = 0;
+        $wx['cart_id'] = $playlist_id;
+        $carts->Update($wx);
     }
 
     function DeletePL($playlist_id='')

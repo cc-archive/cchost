@@ -50,38 +50,31 @@ $R =& $A['records'][0];
 <!--- INFO DETAIL -->
 <div class="info_detail" style="margin:0px;padding:0px;">
 <div  class="info_list" id="_info_<?= $R['upload_id']?>">
-<?
-if( !empty($R['upload_extra']['bpm']) )
-{
-?>
+
+<table>
+    <tr>
+        <td class="liclogo">
+            <a href="<?= $R['license_url']?>" title="<?= $R['license_name']?>">
+                <img src="<?= $R['license_logo_url'] ?>" />
+            </a>
+        </td>
+        <td>
+<? if( !empty($R['upload_extra']['bpm']) ) { ?>
     <div id="info_bpm"><?= $T->String('str_bpm') ?> <span><?= $R['upload_extra']['bpm'] ?></span></div>
+<? } ?>
+<? if ( !empty($R['upload_extra']['featuring'])) { ?>
+    <div><?= $T->String('str_featuring')?> : <b ><?= $R['upload_extra']['featuring']?></b></div>
+<? } ?>
+
+<div  class="cc_upload_date"><?= $R['upload_date']?></div>
+
+<? $A['tag_array'] = $R['upload_taglinks']; ?>
+
+<div  class="taglinks"><?= $T->String('str_tags')?>: <? $T->Call('tags.xml/taglinks');?></div>
+        </td>
+    </tr>
+</table>
 <?
-}
-?>
-    <a  href="<?= $R['license_url']?>" title="<?= $R['license_name']?>" class="cc_liclogo">
-        <img  src="<?= $R['license_logo_url'] ?>" />
-    </a>
-<?
-
-if ( !empty($idetail)) 
-{
-    ?>
-    <h3  class="dtitle"><a class="cc_file_link" href="<?= $R['file_page_url']?>"><?= $R['upload_name']?></a> <?= $T->String('str_by')?> 
-        <a  class="cc_user_link" href="<?= $R['artist_page_url']?>"><?= $R['artist_full_namel']?></a>
-    </h3>
-    <?
-} 
-
-if ( !empty($R['upload_extra']['featuring'])) 
-{
-    ?><div ><?= $T->String('str_featuring')?> : <b ><?= $R['upload_extra']['featuring']?></b></div><?
-}
-
-?><div  class="cc_upload_date"><?= $R['upload_date']?></div><?
-
-$A['tag_array'] = $R['upload_taglinks'];
-
-?><div  class="taglinks"><?= $T->String('str_tags')?>: <? $T->Call('tags.xml/taglinks');?></div><?
 
 if ( !empty($R['upload_description_plain'])) 
 {
@@ -93,22 +86,27 @@ if ( !empty($R['upload_description_plain']))
 }
 
 ?>
-<div class="info_column">
-<span  class="title files_title"><?= $T->String('str_files') ;?></span>:<br  />
+<table class="files_table">
+    <tr>
+        <td>
+            <span  class="title files_title"><?= $T->String('str_files') ;?></span>:<br  />
 <?
-
 foreach( $R['files'] as $F )
 {
   print $F['file_nicname'] . ': <a href="' . $F['download_url'] . '">' . $T->String('str_download') .
          '</a> ' . $F['file_filesize'] . '<br  />';
 }
 
-print '</div>';
+$info_col_width = !empty($R['remix_parents']) && !empty($R['remix_children']) ? '33%' : '66%';
+
+?>
+        </td>
+        <td style="width:<?= $info_col_width ?>;">
+            <div class="files_info">
+<?
 
 if ( !empty($R['remix_parents']) ) 
 {
-    print "<div class=\"info_column\">\n";
-
     print '<span class="title parents_title">' . $T->String('str_list_uses') . '</span>:<br  />' . "\n";
 
     $last = count( $R['remix_parents']) - 1;
@@ -120,14 +118,15 @@ if ( !empty($R['remix_parents']) )
         if( $i++ < $last )
             print '<br />';
     }
-
-    print '</div>';
-
 }
-
+?>
+            </div>
+        </td>
+        <td style="width:<?= $info_col_width ?>;">
+            <div class="files_info">
+<?
 if ( !empty($R['remix_children']) ) 
 {
-    print '<div class="info_column">' . "\n";
     print '<span class="title children_title">' . $T->String('str_samples_from_here') . '</span>:<br />' . "\n";
 
     $last = count($R['remix_children']) - 1;
@@ -146,9 +145,11 @@ if ( !empty($R['remix_children']) )
             print '<br />';
     }
 
-    print '</div>';
-
 }
 ?>
+            </div>
+        </td>
+    </tr>
+</table>
 </div><!-- info_list -->
 </div><!-- info_detail -->

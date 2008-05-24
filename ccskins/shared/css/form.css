@@ -183,7 +183,7 @@ table.stacked_form .form_input_short {
 	padding-bottom: 2em;
 }
 
-table.form_table tr.form_row span {
+.form_label span {
 	font-style: italic;
 }
 

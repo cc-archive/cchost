@@ -42,6 +42,29 @@ class CCUploadAPI
         CCUploadAPI::_recalc_upload_tags($upload_id,$new_ccud,$replaces_ccud);
     }
 
+    function UpdateUserTags($upload_id,$new_user_tags)
+    {
+        require_once('cchost_lib/cc-tags.php');
+        require_once('cchost_lib/cc-tags.inc');
+        $sql = 'SELECT upload_extra,upload_tags FROM cc_tbl_uploads WHERE upload_id='.$upload_id;
+        list( $extra, $upload_tags ) = CCDatabase::QueryRow($sql,false);
+        $extra             = unserialize($extra);
+        $old_user_tags     = CCTag::TagSplit($extra['usertags']);
+        $old_tags          = CCTag::TagSplit($upload_tags);
+        $new_user_tags     = CCTag::TagSplit($new_user_tags);
+        $tags_db           = new CCTags();
+        $new_user_tags     = $tags_db->CheckAliases($tags_db->CleanSystemTags($new_user_tags));
+        $extra['usertags'] = $new_user_tags;
+
+        $up['upload_extra'] = serialize($extra);
+        $up['upload_tags']  = ',' 
+                              . join( ',', array_merge( array_diff( $old_tags, $old_user_tags ), CCTag::TagSplit($new_user_tags) )) 
+                              . ',';
+        $up['upload_id'] = $upload_id;
+        $uploads->Update($up);
+        $tags_db->Replace($old_user_tags,$new_user_tags);
+    }
+
     function & _get_record($upload_id)
     {
         $sql =<<<EOF
@@ -234,7 +257,8 @@ EOF;
                                  $nicname,
                                  $current_path,
                                  $new_name,
-                                 $relative_dir)
+                                 $relative_dir,
+                                 $ccud = '')
     {
         CCUploadAPI::_move_upload_file($current_path,$new_name,$is_temp);
 
@@ -245,6 +269,12 @@ EOF;
         //
         $file_args = array();
         $file_args['file_extra'] = array();
+        if( !empty($ccud) )
+        {
+            if( is_array($ccud) )
+                $ccud = join(',',$ccud);
+            $file_args['file_extra']['ccud'] = $ccud;
+        }
         $errs = CCUploadAPI::_do_verify_file_size($current_path);
         $errs .= CCUploadAPI::_do_verify_file_format( $current_path, $file_args );
         if( $errs )
@@ -563,10 +593,13 @@ EOF;
         $systags = array();
         $eargs = array( &$record, null, &$systags );
         CCEvents::Invoke( CC_EVENT_GET_SYSTAGS, $eargs );
+        $file_ccud = array();
         for( $i = 0; $i < count($a_files); $i++ )
         {
             $eargs2 = array( null, &$a_files[$i], &$systags );
             CCEvents::Invoke( CC_EVENT_GET_SYSTAGS, $eargs2 );
+            if( !empty($a_files[$i]['file_extra']['ccud']) )
+                $file_ccud[] = $a_files[$i]['file_extra']['ccud'];
         }
 
         require_once('cchost_lib/cc-tags.inc');
@@ -581,7 +614,7 @@ EOF;
         $record['upload_extra']['usertags']    = CCUploadAPI::_concat_tags( $user_tags );
         $record['upload_extra']['ccud']        = CCUploadAPI::_concat_tags( $ccud_tags );
         $record['upload_extra']['systags']     = CCUploadAPI::_concat_tags( $systags );
-        $all_tags                              = CCUploadAPI::_concat_tags( $ccud_tags, $systags, $user_tags );
+        $all_tags                              = CCUploadAPI::_concat_tags( $ccud_tags, $file_ccud, $systags, $user_tags );
 
         $tags->Insert($record['upload_extra']['ccud'],     CCTT_SYSTEM );
         $tags->Insert($record['upload_extra']['systags'],  CCTT_SYSTEM );

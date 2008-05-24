@@ -371,46 +371,39 @@ class CCMediaHost
     function OnUploadMenu(&$menu,&$record)
     {
         $menu['editupload'] = 
-                     array(  'menu_text'  => _('Edit'),
+                     array(  'menu_text'  => 'str_file_edit',
                              'weight'     => 100,
                              'group_name' => 'owner',
                              'id'         => 'editcommand',
                              'access'     => CC_DYNAMIC_MENU_ITEM );
 
         $menu['managefiles'] = 
-                     array(  'menu_text'  => _('Manage Files'),
+                     array(  'menu_text'  => 'str_files_manage',
                              'weight'     => 101,
                              'group_name' => 'owner',
                              'id'         => 'managecommand',
                              'access'     => CC_DYNAMIC_MENU_ITEM );
 
         $menu['manageremixes'] = 
-                     array(  'menu_text'  => _('Manage Remixes'),
+                     array(  'menu_text'  => 'str_files_manage_remixes',
                              'weight'     => 102,
                              'group_name' => 'owner',
                              'id'         => 'manageremixcommand',
                              'access'     => CC_DYNAMIC_MENU_ITEM );
 
         $menu['publish'] =
-                    array( 'menu_text' => _('Publish'),
+                    array( 'menu_text' => 'str_file_publish',
                            'group_name' => 'owner',
                             'id'        => 'publishcommand',
                            'weight'    => 103,
                            'access'    => CC_DYNAMIC_MENU_ITEM );
 
         $menu['deleteupload'] = 
-                     array(  'menu_text'  => _('Delete'),
+                     array(  'menu_text'  => 'str_file_delete',
                              'weight'     => 104,
                              'group_name' => 'owner',
                              'id'         => 'deletecommand',
                              'access'     => CC_DYNAMIC_MENU_ITEM );
-
-        $menu['replyremix'] = 
-                     array(  'menu_text'  => _('I Sampled This'),
-                             'weight'     => 3,
-                             'group_name' => 'remix',
-                             'id'         => 'replyremix',
-                             'access'     => CC_MUST_BE_LOGGED_IN );
 
         $menu['uploadadmin'] = 
                      array(  'menu_text'  => _('Admin'),
@@ -438,16 +431,10 @@ class CCMediaHost
 
         if( empty($record['upload_banned']) )
         {
-            if( $isowner )
-                $menu['replyremix']['access']    = CC_DISABLED_MENU_ITEM;
-            else
-                $menu['replyremix']['action']  = ccl( 'files', 'remix', $record['upload_id']);
         }
         else
         {
             // This upload is banned!!
-
-            $menu['replyremix']['access'] = CC_DISABLED_MENU_ITEM;
 
             if( $isowner || $isadmin )
             {

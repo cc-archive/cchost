@@ -32,8 +32,6 @@
                     [access] => 4
                     [id] => cc_downloadbutton
 
-    [remix] => Array
-            [replyremix] => Array
     [share] => Array
             [share_link] => Array
     [comment] => Array

@@ -7,7 +7,7 @@
         %if_not_empty(#F/form_error)%
             <tr class="form_error_row"><td></td><td class="form_error">%text(#F/form_error)%</td></tr>
         %end_if%
-        <tr class="form_row">
+        <tr class="form_row" id="%(#k_F)%_field_row">
         <td  class="form_label">
             %if_not_null(#F/label)%<div>%text(#F/label)%</div>%end_if%
             %if_not_null(#F/form_tip)%<span>%text(#F/form_tip)%</span>%end_if%</td>
@@ -18,7 +18,7 @@
 
 %macro(horizontal_form_fields)%
 <table class="form_table horizontal_form" cellspacing="0" cellpadding="0">
-    <tr class="form_row">
+    <tr class="form_row" id="%(#k_F)%_field_row">
     %loop(curr_form/html_form_fields,F)%
         <td  class="form_element">
             %if_not_null(#F/label)%<div>%text(#F/label)%</div>%end_if%
@@ -43,7 +43,7 @@
         %if_not_empty(#F/form_error)%
             <tr class="form_error_row"><td class="form_error">%text(#F/form_error)%</td></tr>
         %end_if%
-        <tr class="form_row">
+        <tr class="form_row" id="%(#k_F)%_field_row">
         <td>
              <div class="form_label">%text(#F/label)%</div>
              %if_not_null(#F/form_tip)%<span>%text(#F/form_tip)%</span>%end_if%
@@ -55,7 +55,7 @@
 
 %macro(fieldset_form_fields)%
     %loop(curr_form/html_form_fields,F)%
-    <fieldset class="form_fieldset">
+    <fieldset class="form_fieldset" id="%(#k_F)%_field_row">
         <legend class="form_label med_bg light_color">%text(#F/label)%</legend>
         %if_not_empty(#F/form_error)%
             <div class="form_error_row"><div class="form_error">%text(#F/form_error)%</div></div>
@@ -77,7 +77,7 @@
    %if_not_null(#R/form_error)%
       <tr class="form_error_row"><td></td><td class="form_error">%text(#R/form_error)%</td></tr>
    %end_if%
-   <tr class="form_row">
+   <tr class="form_row" id="%(#k_F)%_field_row">
    %loop(#R/html_form_grid_fields,F)%
      <td class="form_element">
        %if_not_null(#F/macro)%  %map(field,#F)% <!-- -->%call(#F/macro)% %end_if%

@@ -53,12 +53,12 @@ class CCEditFileForm extends CCUploadMediaForm
 
         $url = ccl('file','manage',$record['upload_id'] );
 
+        $page =& CCPage::GetPage();
 
         $fields['upload_man_files'] =
                 array( 'label'              => '',
                        'form_tip'           => 'str_files_update_the_list',
-                       'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
-                                                    _('Manage Files') . "</a>",
+                       'value'              => $page->String(array( 'str_files_manage_files_link', "<a style='width:220px' class=\"cc_gen_button\" href=\"$url\"><span>", "</span></a>")),
                        'formatter'          => 'statictext',
                        'flags'              => CCFF_STATIC | CCFF_NOUPDATE );
 
@@ -68,8 +68,7 @@ class CCEditFileForm extends CCUploadMediaForm
         $fields['upload_remixes'] =
                 array( 'label'              => '',
                        'form_tip'           => 'str_files_update_sources',
-                       'value'              => "<a class=\"cc_file_command\" href=\"$url\">" .
-                                                   _('Manage Remixes') . "</a>",
+                       'value'              => $page->String(array( 'str_files_manage_remixes_link', "<a style='width:220px' class=\"cc_gen_button\" href=\"$url\"><span>", "</span></a>")),
                        'formatter'          => 'statictext',
                        'flags'              => CCFF_STATIC | CCFF_NOUPDATE );
 
@@ -134,17 +133,33 @@ class CCFileAddForm extends CCUploadForm
     * Constructor
     *
     */
-    function CCFileAddForm()
+    function CCFileAddForm($upload_id)
     {
         $this->CCUploadForm();
+
+        require_once('cchost_lib/cc-submit.php');
+
+        $submit_types = cc_get_submit_types();
+
         $fields = array();
         CCUpload::GetUploadField($fields);
+        $fields['file_type'] = 
+                array( 'label'              => 'str_files_type',
+                       'form_tip'           => 'str_files_type_tip',
+                       'formatter'          => 'select',
+                       'value'              => empty($_POST) && !empty($_GET['atype']) ? $_GET['atype'] : '',
+                       'options'            => $submit_types,
+                       'flags'              => CCFF_POPULATE );
+
         $fields['file_nicname'] = 
                 array( 'label'              => 'str_files_nickname',
                        'form_tip'           => 'str_files_lofi_hires',
+                       'class'              => 'cc_form_input_short',
                        'formatter'          => 'textedit',
                        'flags'              => CCFF_POPULATE );
+
         $this->AddFormFields($fields);
+
     }
 }
 
@@ -160,9 +175,9 @@ class CCFilePropsForm extends CCFileAddForm
     * @param string $oldnic Current nicname for upload
     * @param bool $do_upload true means show the upload file input field
     */
-    function CCFilePropsForm($oldnic)
+    function CCFilePropsForm($oldnic,$upload_id)
     {
-        $this->CCFileAddForm();
+        $this->CCFileAddForm($upload_id);
         $this->SetFormValue( 'file_nicname', $oldnic );
     }
 }
@@ -217,6 +232,7 @@ class CCPhysicalFile
                        'upload_delete_url'  => ccl('file','delete'),
                        'upload_jockey_url'  => ccl('file','jockey',$upload_id),
                        'upload_nicname_url' => ccl('file','nickname'),
+                       'file_change_type_url' => ccl('file','changetype'),
                     );
         
         CCPage::PageArg('field', $args, 'edit_files_links' );
@@ -477,12 +493,12 @@ class CCPhysicalFile
         $upload_name = CCDatabase::QueryItem('SELECT upload_name FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
         $this->_build_bread_crumb_trail($upload_id,true,true,'str_file_add_one');
         CCPage::SetTitle('str_files_add_to_s',$upload_name);
-        $form = new CCFileAddForm();
+        $form = new CCFileAddForm($upload_id);
         $show = true;
         if( !empty($_POST['fileadd']) && $form->ValidateFields() )
         {
             $dv = new CCDataView();
-            $record = $dv->PerformFile('default',array( 'where'=> 'upload_id='.$upload_id),CCDV_RET_RECORD);
+            $record = $dv->PerformFile( 'default', array( 'where'=> 'upload_id='.$upload_id), CCDV_RET_RECORD );
 
             $form->GetFormValues($values);
             $current_path = $values['upload_file_name']['tmp_name'];
@@ -490,12 +506,26 @@ class CCPhysicalFile
             $relative_dir = $record['upload_extra']['relative_dir'];
             $nicname      = $values['file_nicname'];
 
+            if( empty($values['file_type']) )
+            {
+                $ccud = '';
+            }
+            else
+            {
+                require_once('cchost_lib/cc-submit.php');
+                $submitapi = new CCSubmit();
+                $types = $submitapi->GetSubmitTypes();
+                $ccud = empty($types[ $values['file_type'] ]) ? $values['file_type'] : $types[ $values['file_type'] ]['tags'];
+            }
+
             require_once('cchost_lib/cc-uploadapi.php');
             $ret = CCUploadAPI::PostProcessFileAdd( $record,
                                                  $nicname,
                                                  $current_path,
                                                  $new_name,
-                                                 $relative_dir);
+                                                 $relative_dir,
+                                                 $ccud
+                                                 );
 
             if( is_string($ret) )
             {
@@ -503,7 +533,14 @@ class CCPhysicalFile
             }
             else
             {
-                CCUtil::SendBrowserTo( ccl('file','manage',$upload_id) );
+                if( !empty($values['upload_tags']) )
+                {
+                    $tags = $form->GetFormValue('up_tags_static') . ',' . $values['upload_tags'];
+                    CCUploadAPI::UpdateUserTags($upload_id,$tags);
+                }
+
+                if( empty($_GET['popup']) )
+                    CCUtil::SendBrowserTo( ccl('file','manage',$upload_id) );
             }
 
         }

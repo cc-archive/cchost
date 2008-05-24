@@ -41,11 +41,8 @@ a.info_button:hover {
 }
 
 
-.info_detail .cc_liclogo {
-	clear:both;
-	display:block;
-	float:left; 
-	margin: 7px;
+.info_detail .liclogo {
+	vertical-align: top;
 }
 
 .info_detail .info_list {
@@ -54,7 +51,8 @@ a.info_button:hover {
 }
 
 .info_detail .info_list .taglinks {
-	width: 550px; 
+    margin-top: 5px;
+	width: 450px; 
 	white-space: normal;
 }
 
@@ -85,19 +83,13 @@ a.info_button:hover {
 }
 
 .info_detail .files_table {
-  margin-left:22px;
-}
-
-.info_detail .files_table .column { 
-	width: 160px;
+	width: 550px;
 }
 
 
-.info_detail .info_column {
-	float: left;
-	width: 30%;
-	margin-right: 2%;
+.info_detail .files_table td .files_info {
 	overflow: hidden;
+	background-color: pink;
 }
 
 .info_detail .upload_menu_outer {
