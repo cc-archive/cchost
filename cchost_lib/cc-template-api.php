@@ -99,7 +99,7 @@ function cc_get_submit_types($allow_remix=false,$default_title='')
     if( empty($default_title) )
         $default = _('Default');
 
-    include('cchost_lib/cc-submit.php');
+    require_once('cchost_lib/cc-submit.php');
     $sapi = new CCSubmit();
     $types = $sapi->GetSubmitTypes();
     foreach( $types as $typekey => $typeinfo )
