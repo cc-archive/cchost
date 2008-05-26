@@ -72,14 +72,14 @@ div.addtype {
         <div class="fn">
             <div class="addtype" id="type_cmd_%(#F/file_id)%">
                 %text(str_files_type)%: 
-                %if_not_null(#F/file_extra/ccud)%
-                    %map(ccud,#F/file_extra/ccud)%
+                %if_not_null(#F/file_extra/type)%
+                    %map(ccudtype,#F/file_extra/type)%
                 %else%
-                    %map(ccud,'')%
+                    %map(ccudtype,'')%
                 %end_if%
                 <select id="type_pick_%(#F/file_id)%" class="type_picker">
                 %loop(#submit_types,st)%
-                    <? $selected = ($k_st == $A['ccud']) ? 'selected="selected"' : ''; ?>
+                    <? $selected = ($k_st == $A['ccudtype']) ? 'selected="selected"' : ''; ?>
                     <option value="%(#k_st)%" %(#selected)%>
                         %text(#st)%
                     </option>
@@ -126,12 +126,15 @@ div.addtype {
 
     function on_change_type(id)
     {
-        var sel  = $('type_cmd_' + id);
+        var sel  = $('type_pick_' + id);
         var type = sel.options[ sel.selectedIndex ].value;
-        var url  = '%(field/urls/file_change_type_url)%' + '/' + id + '/' + type
+        if( !type )
+            type = '-';
+        var url  = '%(field/urls/file_change_type_url)%' + '/' + id + '/' + type;
+        new Ajax.Request( url, { method: 'get' } );
     }
 
-    $$('.addtype').each( function(e) {
+    $$('.type_picker').each( function(e) {
         var id = e.id.match(/[0-9]+$/);
         Event.observe( e,'change', on_change_type.bind(this,id) );
     });

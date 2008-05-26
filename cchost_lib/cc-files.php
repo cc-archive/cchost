@@ -133,7 +133,7 @@ class CCFileAddForm extends CCUploadForm
     * Constructor
     *
     */
-    function CCFileAddForm($upload_id)
+    function CCFileAddForm($atype)
     {
         $this->CCUploadForm();
 
@@ -143,20 +143,30 @@ class CCFileAddForm extends CCUploadForm
 
         $fields = array();
         CCUpload::GetUploadField($fields);
+
         $fields['file_type'] = 
                 array( 'label'              => 'str_files_type',
                        'form_tip'           => 'str_files_type_tip',
                        'formatter'          => 'select',
-                       'value'              => empty($_POST) && !empty($_GET['atype']) ? $_GET['atype'] : '',
+                       'value'              => $atype,
                        'options'            => $submit_types,
                        'flags'              => CCFF_POPULATE );
 
+        $type_name = empty($atype) ? '' : (empty($submit_types[$atype]) ? '' : $submit_types[$atype]);
+
         $fields['file_nicname'] = 
                 array( 'label'              => 'str_files_nickname',
-                       'form_tip'           => 'str_files_lofi_hires',
+                       'form_tip'           => array( 'str_files_lofi_hires', '<span id="type_hint_target"><b>'.$type_name.'</b></span>' ),
                        'class'              => 'cc_form_input_short',
                        'formatter'          => 'textedit',
                        'flags'              => CCFF_POPULATE );
+
+        $fields['_type_stuffer'] = 
+                array( 'label'              => '',
+                       'form_tip'           => '',
+                       'formatter'          => 'metalmacro',
+                       'macro'              => 'html_form.php/add_type_stuffer',
+                       'flags'              => CCFF_NOUPDATE | CCFF_STATIC );
 
         $this->AddFormFields($fields);
 
@@ -175,9 +185,9 @@ class CCFilePropsForm extends CCFileAddForm
     * @param string $oldnic Current nicname for upload
     * @param bool $do_upload true means show the upload file input field
     */
-    function CCFilePropsForm($oldnic,$upload_id)
+    function CCFilePropsForm($oldnic,$atype)
     {
-        $this->CCFileAddForm($upload_id);
+        $this->CCFileAddForm($atype);
         $this->SetFormValue( 'file_nicname', $oldnic );
     }
 }
@@ -194,8 +204,9 @@ class CCFileNicknameForm extends CCForm
         $this->CCForm();
         $fields['file_nicname'] = 
                 array( 'label'              => 'str_files_nickname',
-                       'form_tip'           => 'str_files_lofi_hires',
+                       'form_tip'           => array('str_files_lofi_hires',''),
                        'formatter'          => 'textedit',
+                       'class'              => 'cc_form_input_short',
                        'value'              => $oldnic,
                        'flags'              => CCFF_POPULATE );
         $this->AddFormFields($fields);
@@ -299,21 +310,22 @@ class CCPhysicalFile
         $new_order = CCUtil::Strip($_GET['file_order']);
         if( empty($new_order) )
             die('no file order?');
-        $i = 0;
 
-            $sqlx = "SELECT file_upload, file_order, file_id FROM cc_tbl_files WHERE file_upload = $upload_id";
-            $rows['before'] = CCDatabase::QueryRows($sqlx);
-
+        $sqlx = "SELECT file_order, file_id FROM cc_tbl_files WHERE file_upload = $upload_id";
+        $file_rows = CCDatabase::QueryRows($sqlx);
+        $normalized = $new_order;
+        sort($normalized);
+        $file_rows_norm = array();
+        for( $i = 0; $i < count($normalized); $i++ )
+            $file_rows_norm[ $normalized[$i] ] = $file_rows[$i];
         for( $i = 0; $i < count($new_order); $i++ )
+            $file_rows[ $i ] = $file_rows_norm[ $new_order[$i] ];
+        $files =& CCFiles::GetTable();
+        for( $i = 0; $i < count($file_rows); $i++ )
         {
-            $n = $new_order[$i]; // - 1;
-            $sql = "UPDATE cc_tbl_files SET file_order = $i WHERE file_upload = $upload_id AND file_order = $n";
-            CCDatabase::Query($sql);
+            $file_rows[$i]['file_order'] = $i;
+            $files->Update($file_rows[$i]);
         }
-
-            $rows['after'] = CCDatabase::QueryRows($sqlx);
-
-        d($rows);
 
         CCUtil::ReturnAjaxMessage('str_files_have_been_reordered');
     }
@@ -418,7 +430,8 @@ class CCPhysicalFile
         $row = $files->QueryKeyRow($file_id);
         $this->_build_bread_crumb_trail($row['file_upload'],true,true,'str_file_replace');
         CCPage::SetTitle('str_file_replace_s',$row['file_name']);
-        $form = new CCFilePropsForm($row['file_nicname']);
+        $row['file_extra'] = unserialize($row['file_extra']);
+        $form = new CCFilePropsForm($row['file_nicname'],empty($row['file_extra']['type']) ? '' : $row['file_extra']['type']);
         $show = true;
         if( !empty($_POST['fileprops']) && $form->ValidateFields() )
         {
@@ -438,6 +451,7 @@ class CCPhysicalFile
             }
             else
             {
+                $this->_change_type($file_id,$values['file_type']);
                 CCUtil::SendBrowserTo( ccl('file','manage',$row['file_upload']) );
             }
 
@@ -481,6 +495,58 @@ class CCPhysicalFile
             CCPage::AddForm( $form->GenerateForm() );
     }
 
+    function _change_type($file_id,$new_type)
+    {
+        $tags = $this->_tags_for_type($new_type);
+        
+        // CCUD tags are buried in the serialized file_extra field
+        list( $extra, $upload_id ) = CCDatabase::QueryRow('SELECT file_extra, file_upload FROM cc_tbl_files WHERE file_id='.$file_id,false);
+        $extra = unserialize($extra);
+
+        // Update the file_extra field - unset fields for blanks to not waste db space
+        if( empty($tags) && isset($extra['ccud']) )
+        {
+            unset($extra['ccud']);
+        }
+        else
+        {
+            $extra['ccud'] = $tags;
+        }
+        if( empty($new_type) && isset($extra['type']) )
+        {
+            unset($extra['type']);
+        }
+        else
+        {
+            $extra['type'] = $new_type;
+        }
+        $w['file_id'] = $file_id;
+        $w['file_extra'] = serialize($extra);
+        $files =& CCFiles::GetTable();
+        $files->Update($w);
+
+        // Update the main upload tags, very heavy handed but safe
+        require_once('cchost_lib/cc-uploadapi.php');
+        CCUploadAPI::UpdateCCUD($upload_id,'','');
+
+    }
+
+    /**
+    * Handles file/changetype URL, ajax callback that changes a file sys tag
+    *
+    * @param integer $file_id The file_id to change
+    * @param string  $new_type New type, this is a submit form type or a specific tag
+    * @see cc_get_submit_types
+    */
+    function ChangeType($file_id,$new_type)
+    {
+        $this->CheckFileAccess($file_id,0);
+        if( $new_type == '-' )
+            $new_type = '';
+        $this->_change_type($file_id,$new_type);
+        CCUtil::ReturnAjaxMessage(_('File type has been updated'));
+    }
+
     /**
     * Handles file/add URL, shows and process form for adding a file to an upload record
     *
@@ -493,7 +559,7 @@ class CCPhysicalFile
         $upload_name = CCDatabase::QueryItem('SELECT upload_name FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
         $this->_build_bread_crumb_trail($upload_id,true,true,'str_file_add_one');
         CCPage::SetTitle('str_files_add_to_s',$upload_name);
-        $form = new CCFileAddForm($upload_id);
+        $form = new CCFileAddForm(empty($_POST) && !empty($_GET['atype']) ? $_GET['atype'] : '');
         $show = true;
         if( !empty($_POST['fileadd']) && $form->ValidateFields() )
         {
@@ -505,18 +571,8 @@ class CCPhysicalFile
             $new_name     = $values['upload_file_name']['name'];
             $relative_dir = $record['upload_extra']['relative_dir'];
             $nicname      = $values['file_nicname'];
-
-            if( empty($values['file_type']) )
-            {
-                $ccud = '';
-            }
-            else
-            {
-                require_once('cchost_lib/cc-submit.php');
-                $submitapi = new CCSubmit();
-                $types = $submitapi->GetSubmitTypes();
-                $ccud = empty($types[ $values['file_type'] ]) ? $values['file_type'] : $types[ $values['file_type'] ]['tags'];
-            }
+            $file_type    = $values['file_type'];
+            $ccud         = $this->_tags_for_type($file_type);
 
             require_once('cchost_lib/cc-uploadapi.php');
             $ret = CCUploadAPI::PostProcessFileAdd( $record,
@@ -524,7 +580,8 @@ class CCPhysicalFile
                                                  $current_path,
                                                  $new_name,
                                                  $relative_dir,
-                                                 $ccud
+                                                 $ccud,
+                                                 $file_type
                                                  );
 
             if( is_string($ret) )
@@ -551,6 +608,17 @@ class CCPhysicalFile
             CCPage::AddForm( $form->GenerateForm() );
         }
 
+    }
+
+    function _tags_for_type($type)
+    {
+        if( empty($type) )
+            return $type;
+
+        require_once('cchost_lib/cc-submit.php');
+        $submitapi = new CCSubmit();
+        $types = $submitapi->GetSubmitTypes();
+        return empty($types[ $type ]) ? $type : join(',',$types[ $type ]['tags']);
     }
 
     /**
@@ -588,6 +656,7 @@ class CCPhysicalFile
         CCEvents::MapUrl( 'file/jockey',  array('CCPhysicalFile','Jockey'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
         CCEvents::MapUrl( 'file/delete',  array('CCPhysicalFile','Delete'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
         CCEvents::MapUrl( 'file/nickname',array('CCPhysicalFile','Nicname'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/changetype',array('CCPhysicalFile','ChangeType'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
         CCEvents::MapUrl( 'file/manage',  array('CCPhysicalFile','Manage'), 
             CC_MUST_BE_LOGGED_IN , ccs(__FILE__), '', _('Show "Manage Files" form'), CC_AG_UPLOADS );
     }

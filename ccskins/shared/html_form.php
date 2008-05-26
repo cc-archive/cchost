@@ -191,6 +191,24 @@ new ccFileAdderPicker();
 
 
 //------------------------------------- 
+function _t_html_form_add_type_stuffer(&$T,&$A) 
+{
+?> 
+<script>
+Event.observe( 'file_type', 'change', function() 
+    { 
+        var ft = $('file_type');
+        var sel = ft.options[ ft.selectedIndex ];
+        var text = sel.value ? sel.text : '';
+        $('type_hint_target').innerHTML = '<b>' + text + '</b>';
+    }
+    );
+</script>
+<?
+
+}
+
+//------------------------------------- 
 function _t_html_form_show_form_about(&$T,&$A) 
 {
     ?><div id="cc_form_help_container"><div class="box"><?

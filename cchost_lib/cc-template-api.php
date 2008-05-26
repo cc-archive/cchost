@@ -97,7 +97,7 @@ function cc_get_config_roots()
 function cc_get_submit_types($allow_remix=false,$default_title='')
 {
     if( empty($default_title) )
-        $default = _('Default');
+        $default_title = _('(Default)');
 
     require_once('cchost_lib/cc-submit.php');
     $sapi = new CCSubmit();
@@ -111,6 +111,7 @@ function cc_get_submit_types($allow_remix=false,$default_title='')
     return array_merge(    array( '' => $default_title ),
                         $submit_types, 
                         array( 'alternate_mix' => _('Alternate mix'),
+                               'rough_mix'  => _('Rough mix'),
                                'multiple_formats'  => _('Alternate format'),
                                'preview' => _('Preview') ));
 }

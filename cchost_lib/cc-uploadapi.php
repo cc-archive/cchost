@@ -258,7 +258,8 @@ EOF;
                                  $current_path,
                                  $new_name,
                                  $relative_dir,
-                                 $ccud = '')
+                                 $ccud = '',
+                                 $type = '')
     {
         CCUploadAPI::_move_upload_file($current_path,$new_name,$is_temp);
 
@@ -270,11 +271,9 @@ EOF;
         $file_args = array();
         $file_args['file_extra'] = array();
         if( !empty($ccud) )
-        {
-            if( is_array($ccud) )
-                $ccud = join(',',$ccud);
             $file_args['file_extra']['ccud'] = $ccud;
-        }
+        if( !empty($type) )
+            $file_args['file_extra']['type'] = $type;
         $errs = CCUploadAPI::_do_verify_file_size($current_path);
         $errs .= CCUploadAPI::_do_verify_file_format( $current_path, $file_args );
         if( $errs )
@@ -301,13 +300,27 @@ EOF;
         //
         CCEvents::Invoke( CC_EVENT_FILE_DONE, array( &$file_args ) );
 
+        if( empty($nicname) )
+        {
+            if( !empty($type) )
+            {
+                $subtypes = cc_get_submit_types();
+                if( !empty($subtypes[$type]) )
+                    $nicname = $subtypes[$type];
+            }
+            
+            if( empty($nicname) )
+            {
+                $nicname = $file_args['file_format_info']['default-ext'];
+            }
+        }
         // Make a new record in the CCFiles table
         //
         $db_args = array();
         $db_args['file_id']          = $file_args['file_id'];
         $db_args['file_upload']      = $record['upload_id'];
         $db_args['file_name']        = $file_args['file_name'];
-        $db_args['file_nicname']     = empty($nicname) ? $file_args['file_format_info']['default-ext'] : $nicname;
+        $db_args['file_nicname']     = $nicname;
         $db_args['file_extra']       = serialize($file_args['file_extra']);
         $db_args['file_format_info'] = serialize($file_args['file_format_info']);
         $db_args['file_filesize']    = filesize($file_args['local_path']);
