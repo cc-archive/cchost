@@ -88,7 +88,7 @@ if ( !empty($R['upload_description_plain']))
 ?>
 <table class="files_table">
     <tr>
-        <td>
+        <td style="width:33%">
             <span  class="title files_title"><?= $T->String('str_files') ;?></span>:<br  />
 <?
 foreach( $R['files'] as $F )
@@ -101,34 +101,36 @@ $info_col_width = !empty($R['remix_parents']) && !empty($R['remix_children']) ? 
 
 ?>
         </td>
-        <td style="width:<?= $info_col_width ?>;">
-            <div class="files_info">
 <?
 
 if ( !empty($R['remix_parents']) ) 
 {
-    print '<span class="title parents_title">' . $T->String('str_list_uses') . '</span>:<br  />' . "\n";
+?>
 
+        <td style="width:<?= $info_col_width ?>;">
+            <div class="files_info">
+                <span class="title parents_title"><?= $T->String('str_list_uses')?></span>:
+<?
     $last = count( $R['remix_parents']) - 1;
-    $i = 0;
     foreach( $R['remix_parents'] as $P )
     {
-        ?><a href="<?= $P['file_page_url']?>" class="cc_file_link"><?= $P['upload_name']?></a> <?= $T->String('str_by')?>
-            <a  href="<?= $P['artist_page_url']?>" class="cc_user_link"><?= $P['user_real_name']?></a><?
-        if( $i++ < $last )
-            print '<br />';
+        ?><div class="cx"><a href="<?= $P['file_page_url']?>" class="cc_file_link"><?= $P['upload_name']?></a> <?= $T->String('str_by')?>
+            <a  href="<?= $P['artist_page_url']?>" class="cc_user_link"><?= $P['user_real_name']?></a></div><?
     }
-}
 ?>
             </div>
         </td>
-        <td style="width:<?= $info_col_width ?>;">
-            <div class="files_info">
 <?
+}
+
 if ( !empty($R['remix_children']) ) 
 {
-    print '<span class="title children_title">' . $T->String('str_samples_from_here') . '</span>:<br />' . "\n";
-
+?>
+    <td style="width:<?= $info_col_width ?>;">
+        <div class="files_info">
+            <span class="title children_title"><?= $T->String('str_samples_from_here')?></span>:
+    
+<?
     $last = count($R['remix_children']) - 1;
     $i = 0;
     foreach( $R['remix_children'] as $P )
@@ -138,17 +140,15 @@ if ( !empty($R['remix_children']) )
             ?><span class="pool_item_type"><?= $P['pool_item_extra']['ttype']?></span>: <?
         }
 
-        ?><a href="<?= $P['file_page_url']?>" class="cc_file_link"><?= $P['upload_name']?></a> <?= $T->String('str_by')?>
-          <a href="<?= $P['artist_page_url']?>" class="cc_user_link"><?= $P['user_real_name']?></a>
-        <?
-        if( $i++ < $last )
-            print '<br />';
+        ?><div class="cx"><a href="<?= $P['file_page_url']?>" class="cc_file_link"><?= $P['upload_name']?></a> <?= $T->String('str_by')?>
+          <a href="<?= $P['artist_page_url']?>" class="cc_user_link"><?= $P['user_real_name']?></a></div><?
     }
-
+?>
+        </div>
+    </td>
+<?
 }
 ?>
-            </div>
-        </td>
     </tr>
 </table>
 </div><!-- info_list -->

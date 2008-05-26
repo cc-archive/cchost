@@ -13,44 +13,6 @@ $submit_types = cc_get_submit_types(false,'(Select type)');
 %end_if%
 
 <!-- template manage_files -->
-<style>
-.edit_files_submit {
-    width: 100%;
-}
-
-.edit_upload_name {
-    padding: 3px 0px 3px 5px;
-    background-color: #DDD;
-    font-weight: bold;
-    font-size: 12px;
-}
-
-.edit_picker_container {
-    padding-left: 15px;
-}
-
-.edit_file_names {
-    margin-left: 15px;
-}
-
-.edit_file_names th {
-    font-weight: bold;
-    text-align: right;
-    padding-right: 4px;
-}
-
-.edit_file_commands table td {
-    padding-left: 5px;
-}
-
-.edit_picker_container, .edit_picker_container select {
-    font-size: 10px;
-}
-
-.edit_files_breaker {
-    height: 20px;
-}
-</style>
 <table class="edit_files_submit">
 %loop(records,R)%
 <tr>

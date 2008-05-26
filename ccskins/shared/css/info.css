@@ -86,10 +86,16 @@ a.info_button:hover {
 	width: 550px;
 }
 
+.info_detail .files_table td {
+	vertical-align: top;
+}
+
+.info_detail .files_table td .files_info .cx {
+	white-space: nowrap;
+}
 
 .info_detail .files_table td .files_info {
 	overflow: hidden;
-	background-color: pink;
 }
 
 .info_detail .upload_menu_outer {

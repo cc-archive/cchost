@@ -1,3 +1,40 @@
+/*
+* Creative Commons has made the contents of this file
+* available under a CC-GNU-GPL license:
+*
+* http://creativecommons.org/licenses/GPL/2.0/
+*
+* A copy of the full license can be found as part of this
+* distribution in the file LICENSE.TXT.
+* 
+* You may use the ccHost software in accordance with the
+* terms of that license. You agree that you are solely 
+* responsible for your use of the ccHost software and you
+* represent and warrant to Creative Commons that your use
+* of the ccHost software will comply with the CC-GNU-GPL.
+*
+* $Id$
+*
+*/
+
+/*
+    Some browsers (er, like IE) cache ajax requests, even if the
+    user empties their browser cache, the ajax fetcher still 
+    keeps things around. So we override the Ajax.Request ctor
+    and tack on a random url argument (the current time) which
+    fools IE into getting the live data.
+*/
+Ajax.Request.prototype._old_request_init = Ajax.Request.prototype.initialize;
+
+Ajax.Request.prototype.initialize = function(url, options) {
+    var _q_ = '?';
+    if( url.match(/\?/) )
+        _q_ = '&';
+    url += _q_ + '_cache_buster=' + new Date().getTime();
+    //ajax_debug(url);
+    this._old_request_init(url,options);
+  };
+
 
 /*
     Hook menu items so they go to a browser popup
@@ -441,6 +478,7 @@ var ccPopupManagerMethods = {
         this.thinkingDiv.innerHTML = text || str_thinking;
         this.thinkingDiv.style.top  = this.currY + 'px';
         this.thinkingDiv.style.left = this.currX + 'px';
+        this.thinkingDiv.style.zIndex = '200';
         Effect.Appear( this.thinkingDiv, { duration: 0.2 } );
     },
 

@@ -312,12 +312,15 @@ a.cc_gen_button:hover span {
     background-position: 100% -23px;
 }
 
+td a.small_button { 
+   margin-bottom: 8px;
+}
+
 a.small_button, #do_remix_search {
 	padding: 0px 0px 0px 2px;
 	border: 1px solid #888;
 	font-weight: normal;
-	background-color: #DDD;
-    background: url('../images/button_small.gif') no-repeat left top;
+    background: url('../images/button_small.gif') no-repeat left top; 
 	font-size: 9px;
 }
 

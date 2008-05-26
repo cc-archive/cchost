@@ -83,11 +83,12 @@ EOF;
 function _t_html_form_submit_forms(&$T,&$A) 
 {
    ?>
+    <link rel="stylesheet" title="Default Style" type="text/css" href="<?= $T->URL('css/manage_files.css'); ?>" />
     <div class="cc_submit_forms_outer">
        <div  id="manage_box" style="display:none;">
         <div class="cc_submit_forms box">
             <h2><?= $T->String('str_file_manage') ?></h2>
-            <table><tr>
+            <table class="edit_sort_buttons" ><tr>
             <td><a href="javascript://sort by date" class="small_button" style="display:none" id="files_by_date"><span><?= $T->String('str_file_sort_by_date') ?></span></a></td>
             <td><a href="javascript://sort by name" class="small_button" style="display:default" id="files_by_name"><span><?= $T->String('str_file_sort_by_name') ?></span></a></td>
             </tr></table>

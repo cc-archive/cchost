@@ -41,8 +41,8 @@ div.fn {
 }
 li.file_desc div.c {
     float: left;
-    padding: 2px;
     margin: 0px 0px 0px 20px;
+    padding: 3px 2px 7px 2px;
 }
 
 .drag_handle {
@@ -87,7 +87,8 @@ div.addtype {
                 </select>
             </div>%(#F/file_name)%
         </div>
-        <div style="margin: 6px;">
+        <div style="clear:both;font-size:3px;height:3px;">&nbsp;</div>
+        <div style="margin: 6px;clear:both;">
             <? if( $c_F > 1 ) { ?>
                 <div class="c light_border drag_handle">%text(str_file_drag_this)%</a></div>
             <? } ?>
@@ -99,7 +100,7 @@ div.addtype {
                 href="%(field/urls/upload_replace_url)%/%(#F/file_id)%"><span>%text(str_file_replace_this)% </span></a></div>
             <div class="c light_border" id="del_cmd_%(#i_F)%" <? if( $i_F == 1 ) { ?>style="display:none"<?}?>>
                 <a class="small_button" href="%(field/urls/upload_delete_url)%/%(#F/file_id)%"><span>%text(str_file_delete_this)%</span></a></div>
-            <div style="clear:both;">&nbsp;</div>
+            <div style="clear:both;font-size:3px;height:3px;">&nbsp;</div>
         </div>
     </li>
 %end_loop%
@@ -107,6 +108,23 @@ div.addtype {
 <div class="cmd_link">
     <a href="%(field/urls/upload_new_url)%" class="cc_gen_button"><span>%text(str_file_add_new)%</span></a>
 </div>
+<script type="text/javascript">
+    function on_change_type(id)
+    {
+        var sel  = $('type_pick_' + id);
+        var type = sel.options[ sel.selectedIndex ].value;
+        if( !type )
+            type = '-';
+        var url  = '%(field/urls/file_change_type_url)%' + '/' + id + '/' + type;
+        new Ajax.Request( url, { method: 'get' } );
+    }
+
+    $$('.type_picker').each( function(e) {
+        var id = e.id.match(/[0-9]+$/);
+        Event.observe( e,'change', on_change_type.bind(this,id) );
+    });
+
+</script>
 <? if( count($A['field']['files']) > 1 ) { ?>
     <div class="cmd_link" id="submit_order_link" style="display:none">
         <a class="cc_gen_button" id="submit_file_order" href="javascript://submit order"><span>%text(str_file_submit_order)%</span></a>
@@ -123,21 +141,6 @@ div.addtype {
     }
 
     Event.observe('submit_file_order','click',on_reorder_click);
-
-    function on_change_type(id)
-    {
-        var sel  = $('type_pick_' + id);
-        var type = sel.options[ sel.selectedIndex ].value;
-        if( !type )
-            type = '-';
-        var url  = '%(field/urls/file_change_type_url)%' + '/' + id + '/' + type;
-        new Ajax.Request( url, { method: 'get' } );
-    }
-
-    $$('.type_picker').each( function(e) {
-        var id = e.id.match(/[0-9]+$/);
-        Event.observe( e,'change', on_change_type.bind(this,id) );
-    });
 
     function on_file_drop(a)
     {
