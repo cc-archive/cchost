@@ -21,7 +21,7 @@ JOIN cc_tbl_user reviewers ON topic_user=reviewers.user_id
 JOIN cc_tbl_uploads ON topic_upload=upload_id
 JOIN cc_tbl_user reviewee ON upload_user=reviewee.user_id
 %joins%
-%where%
+%where% AND topic_type = 'review'
 %group%
 %order%
 %limit%
