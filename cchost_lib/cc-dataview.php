@@ -147,15 +147,14 @@ class CCDataView
                     preg_replace( array( '/%joins%/', '/%order%/', '/%limit%/', '/%columns%/', '/%group%/', '/%match%/','/%where%/'  ),
                                     $sqlargs, $info['sql_count'] );
 
-// ------- DEBUG PREVIEW ------------
-if( 0 )
-{
-    $x['sqlargs'] = $sqlargs;
-    $x[] = $this->sql;
-    $x[] = !isset($dataview) ? '*no dv*' : $dataview;
-    $x[] = $queryObj;
-    CCDebug::PrintVar($x);
-} // ---------------------------------
+        if( CCUser::IsAdmin() && !empty($_GET['dpreview']) )
+        {
+            $x['sqlargs'] = $sqlargs;
+            $x[] = $this->sql;
+            $x[] = !isset($dataview) ? '*no dv*' : $dataview;
+            $x[] = $queryObj;
+            CCDebug::PrintVar($x);
+        } 
 
         if( !empty($queryObj->records) )
             return $queryObj->records;

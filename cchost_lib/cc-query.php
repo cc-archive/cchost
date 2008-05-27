@@ -665,6 +665,41 @@ class CCQuery
             $this->where[] = 'upload_num_scores >= ' . $this->args['score'];
     }
 
+    function _search_helper($columns,$term)
+    {
+        if( $term{0} == '-' )
+        {
+            $neg = 'NOT';
+            $term = substr($term,1);
+        }
+        else
+        {
+            $neg = '';
+        }
+        return "LOWER(CONCAT({$columns})) {$neg} LIKE '%{$term}%'";
+    }
+
+    function _search_term_parser($term)
+    {
+        preg_match_all('/((-?"([^"]+)")|(?<=^|\s)([^"\s]+)(?=\s|$))/',$term,$m);
+        $res = array();
+        foreach($m[0] as $mx)
+        {
+            if( $mx{0} == '-' )
+            {
+                if( $mx{1} == '"' )
+                    $mx = str_replace('"','',$mx);
+            }
+            elseif( $mx{0} == '"' )
+            {
+                $mx = str_replace('"','',$mx);
+            }
+
+            $res[] = $mx;
+        }
+        return $res;
+    }
+
     function _gen_search()
     {
         $search_meta = array();
@@ -680,30 +715,35 @@ class CCQuery
                 global $CC_GLOBALS;
                 if( empty($CC_GLOBALS['use_text_index']) )
                 {
-                    $strlow = strtolower($search);
                     switch( $this->args['search_type'] )
                     {
                         case 'match':
                         {
-                            $this->where[] = "LOWER(CONCAT({$meta['match']})) LIKE '%{$strlow}%'";
+                            $this->where[] = $this->_search_helper($meta['match'],$strlow);
                             break;
                         }
 
                         case 'all':
                         {
-                            $terms = preg_split('/\s+/',$strlow);
+                            $terms = $this->_search_term_parser(strtolower($search));
                             foreach( $terms as $term )
-                                $this->where[] = "LOWER(CONCAT({$meta['match']})) LIKE '%{$term}%'";
+                                $this->where[] = $this->_search_helper($meta['match'],$term);
                             break;
                         }
 
                         case 'any':
                         {
-                            $terms = preg_split('/\s+/',$strlow);
+                            $terms = $this->_search_term_parser(strtolower($search));
                             $ors = array();
                             foreach( $terms as $term )
-                                $ors[] = "(LOWER(CONCAT({$meta['match']})) LIKE '%{$term}%')";
-                            $this->where[] = join( ' OR ', $ors );
+                            {
+                                if( $term{0} == '-' )
+                                    $this->where[] = $this->_search_helper($meta['match'],$term);
+                                else
+                                    $ors[] = $this->_search_helper($meta['match'],$term);
+                            }
+                            if( !empty($ors) )
+                                $this->where[] = join( ' OR ', $ors );
                             break;
                         }
                     }

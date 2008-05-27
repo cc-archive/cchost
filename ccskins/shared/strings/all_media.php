@@ -510,7 +510,15 @@ Suggestions:
 ');
 $GLOBALS['str_search_miss_generic'] = _('If searching for tags try using an underscore instead of a space: hip_hop...');
 $GLOBALS['str_search_help'] = $GLOBALS['str_search_miss'];
-$GLOBALS['str_search_help_generic'] = _('Use this form to search for text on the site...');
+$GLOBALS['str_search_help_generic'] = _('
+Use this form to search for text on the site...<br />
+Suggestions:
+<ul>
+<li><p>Use minus sign \'-\' to exclude terms: <b>hip -hop</b> will return results that have <b>hip</b> but not <b>hop</b></p></li>
+<li><p>Use double quotes to match exact phrases: <b>"hip hop"</b> will return results with that exact phrase, including the space</p></li>
+<li><p>Use underscore \'_\' instead of space when searching for tags: <b>hip_hop</b> (no quotes needed)</p></li>
+</ul>
+');
 $GLOBALS['str_search_more'] = _('See more results from');
 $GLOBALS['str_search_no_matches'] = _('Sorry we couldn\'t find any matches from ');
 $GLOBALS['str_search_results'] = _('Search Results');
