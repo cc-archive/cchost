@@ -292,4 +292,18 @@ function cc_content_feed($query,$title)
     CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $title, $img . $title, 'feed_topics' );
 }
 
+function cc_fancy_user_sql($colname='fancy_user_name',$table='')
+{
+    if( !empty($table) && substr($table,-1) != '.' )
+        $table .= '.';
+
+    $sql =<<<EOF
+        IF( {$table}user_name = REPLACE({$table}user_real_name,' ','_'), 
+            {$table}user_real_name, 
+            CONCAT( {$table}user_real_name, ' (', {$table}user_name, ')' ) ) as {$colname}
+EOF;
+    
+    return $sql;
+}
+
 ?>

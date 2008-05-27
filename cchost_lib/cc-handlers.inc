@@ -144,6 +144,7 @@ CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCRenderZip',  'OnFilt
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,              array( 'CCSearch', 'OnMapUrls'), 'cchost_lib/cc-search.php'  );
 CCEvents::AddHandler(CC_EVENT_FILTER_SEARCH_RESULTS, array( 'CCSearch', 'OnFilterSearch'), 'cchost_lib/cc-search.php'  );
 CCEvents::AddHandler(CC_EVENT_SEARCH_META,          array( 'CCSearch',  'OnSearchMeta'), 'cchost_lib/cc-search.php'  ) ;
+CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,   array( 'CCSearch', 'OnGetConfigFields'), 'cchost_lib/cc-search.php' );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCSkinAdmin' , 'OnMapUrls'),  'cchost_lib/cc-skin-admin.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCSkinAdmin' , 'OnAdminMenu'), 'cchost_lib/cc-skin-admin.php' );

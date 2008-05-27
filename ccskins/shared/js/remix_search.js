@@ -4,9 +4,11 @@ ccRemixSearch = Class.create();
 ccRemixSearch.prototype = {
 
     oldTypeVal: -1,
+    useTextIndex: false,
 
-    initialize: function() {
+    initialize: function( useTextIndex ) {
 
+        this.useTextIndex = useTextIndex;
         var me = this;
         if( pools.length > 0 )
         {
@@ -156,6 +158,7 @@ ccRemixSearch.prototype = {
         {
             var query = home_url + 'pools/search/' + sel_pool + q + 't=remix_pool_checks&search=' + value;
         }
+        //ajax_debug(query);
         new Ajax.Request(query, { method: 'get', onComplete: this.onSearchResults.bind(this,value) } );
     },
 
@@ -178,7 +181,8 @@ ccRemixSearch.prototype = {
             }
             else
             {
-                $('remix_no_match').innerHTML = str_remix_no_matches.gsub('%s',value);
+                var _wstr = this.useTextIndex ? str_remix_no_matches : str_remix_no_matches_gen;
+                $('remix_no_match').innerHTML = _wstr.gsub('%s',value);
             }
             this._scan_checks(false);
         }

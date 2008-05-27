@@ -49,6 +49,8 @@ class CCSearch
 
     function do_search()
     {
+        global $CC_GLOBALS;
+
         $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
 
@@ -56,6 +58,9 @@ class CCSearch
         CCPage::SetTitle('str_search');
         $form = new CCSearchForm($search_meta,'normal');
         CCPage::AddForm( $form->GenerateForm() );
+        if( !empty($CC_GLOBALS['show_google_form']) )
+            CCPage::AddMacro('google_search');
+
     }
 
     function OnSearchMeta(&$search_meta)
@@ -102,6 +107,8 @@ class CCSearch
 
     function do_results($search_text)
     {
+        global $CC_GLOBALS;
+
         if( empty($_REQUEST['search_in']) )
             die('missing "search in" field'); // I think this is a hack attempt
 
@@ -110,6 +117,11 @@ class CCSearch
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
         require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/cc-query.php');
+
+        if( empty($CC_GLOBALS['use_text_index']) )
+        {
+            $values['search_type'] = $search_type = CCUtil::StripText($_REQUEST['search_type']);
+        }
 
         $form = new CCSearchForm( $search_meta, 'horizontal' );
         $values['search_in'] = $what;
@@ -130,15 +142,24 @@ class CCSearch
                 if( $meta['group'] == 'all' )
                     continue;
                 $query = new CCQuery();
-                $qs = "search=$search_text&datasource={$meta['datasource']}&t={$meta['template']}"; 
+                $qs = "search=$search_text&datasource={$meta['datasource']}&group={$meta['group']}&t={$meta['template']}"; 
                 $q = $qs . "&limit=5&f=html&noexit=1&nomime=1";
+                if( empty($search_type) )
+                {
+                    $search_type_arg = '';
+                }
+                else
+                {
+                    $search_type_arg = '&search_type=' . $search_type;
+                    $q .= '&search_type=' . $search_type;
+                }
                 $args = $query->ProcessAdminArgs($q);
                 ob_start();
                 $query->Query($args);
                 $html = ob_get_contents();
                 ob_end_clean();
                 $link = (count($query->records) == 5) 
-                    ? url_args(ccl('search'),"search_text=$search_text&search_in={$meta['group']}") : '';
+                    ? url_args(ccl('search'),"search_text=$search_text&search_in={$meta['group']}{$search_type_arg}") : '';
                 $total = $query->dataview->GetCount();
                 $grand_total += $total;
                 $results[] = array( 
@@ -167,7 +188,9 @@ class CCSearch
                 $result_limit = 30; // todo: option later
                 $CC_GLOBALS['max-listing'] = $result_limit; 
                 CCPage::SetTitle( array( 'str_search_results_from', $meta['title']) );
-                $q = "search=$search_text&datasource={$meta['datasource']}&t={$meta['template']}&limit=30";
+                $q = "search=$search_text&datasource={$meta['datasource']}&group={$meta['group']}&t={$meta['template']}&limit=30";
+                if( !empty($search_type) )
+                    $q .= '&search_type=' . $search_type;
                 $query = new CCQuery();
                 $args = $query->ProcessAdminArgs($q);
                 $query->Query($args);
@@ -230,30 +253,6 @@ class CCSearch
         return($input);
     }
 
-    function _show_google_search()
-    {
-        $google = '<h2><?= $T->String(\'str_search_google\') ?></h2>';
-        $site = preg_replace('#http://(.*)#','\1', cc_get_root_url() );
-        $google  .=<<<END
-<form method="GET" action="http://www.google.com/search">
-<input type="hidden" name="ie" value="utf-8" />
-<input type="hidden" name="oe" value="utf-8" />
-<table><tr>
-<td>
-    <a href="http://www.google.com/"><img src="http://www.google.com/logos/Logo_40wht.gif" alt="google"></a>
-</td>
-<td>
-    <input type="text"   name="q" size="31" maxlength="255" value="" />
-    <input type="submit" name="btng"        value="Google search" />
-    <input type="hidden" name="domains"     value="$site" />
-    <input type="hidden" name="sitesearch"  value="$site" />
-</td></tr></table>
-</form>
-END;
-
-        CCPage::AddContent($google);
-    }
-
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
@@ -267,31 +266,70 @@ END;
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _("Use this for 'action' in forms"), CC_AG_SEARCH );
     }
 
+    /**
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
+    *
+    * Add global settings settings to config editing form
+    * 
+    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    * @param array  $fields Array of form fields to add fields to.
+    */
+    function OnGetConfigFields($scope,&$fields)
+    {
+        if( $scope == CC_GLOBAL_SCOPE )
+        {
+            $fields['use_text_index'] =
+               array(  'label'      => _('Search Method'),
+                       'form_tip'   => _('Check this to use mysql TEXTINDEX searching'),
+                       'value'      => '',
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE );
+
+            $fields['show_google_form'] =
+               array(  'label'      => _('Show Google(tm) Search Form'),
+                       'form_tip'   => _('Check this to show users a Google search form'),
+                       'value'      => '',
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE );
+        }
+
+    }
+
+
     function _eval_miss($search_text)
     {
-        // gather some stats about the search term:
-        $words = str_word_count($search_text,1);
-        $num_words = count($words);
-        $biggest_word = 0;
-        for( $i = 0; $i < $num_words; $i++ )
-            $biggest_word = max(strlen($words[$i]),$biggest_word);
-        $sophis = preg_match('/[+<>~(-]/',$search_text);
-        $quoted = strpos($search_text,'"');
-        /*
-        if( ($biggest_word < 4) && $num_words == 1 )
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['use_text_index']) )
         {
-            $msg = array( 'str_search_miss_tiny', ' <span>"' . $search_text . ' joebob"</span> ', ' <span>"' . $search_text . '_joebob"</span> ' );
-        }
-        elseif( ($biggest_word < 4) && ($num_words > 1) && !$quoted)
-        {
-            $msg = array( 'str_search_miss_quote', ' <span>"' . $search_text . '"<span> ', 
-                         ' <span>' . substr(str_replace(' ','_',$search_text),0,25) . '</span> ' );
+            $msg = 'str_search_miss_generic';
         }
         else
-        */
         {
-            $msg = array( 'str_search_miss', 
-                             '<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">','</a>' );
+            // gather some stats about the search term:
+            $words = str_word_count($search_text,1);
+            $num_words = count($words);
+            $biggest_word = 0;
+            for( $i = 0; $i < $num_words; $i++ )
+                $biggest_word = max(strlen($words[$i]),$biggest_word);
+            $sophis = preg_match('/[+<>~(-]/',$search_text);
+            $quoted = strpos($search_text,'"');
+            /*
+            if( ($biggest_word < 4) && $num_words == 1 )
+            {
+                $msg = array( 'str_search_miss_tiny', ' <span>"' . $search_text . ' joebob"</span> ', ' <span>"' . $search_text . '_joebob"</span> ' );
+            }
+            elseif( ($biggest_word < 4) && ($num_words > 1) && !$quoted)
+            {
+                $msg = array( 'str_search_miss_quote', ' <span>"' . $search_text . '"<span> ', 
+                             ' <span>' . substr(str_replace(' ','_',$search_text),0,25) . '</span> ' );
+            }
+            else
+            */
+            {
+                $msg = array( 'str_search_miss', 
+                                 '<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">','</a>' );
+            }
         }
 
         CCPage::PageArg('search_miss_msg',$msg);
@@ -304,6 +342,8 @@ class CCSearchForm extends CCForm
 {
     function CCSearchForm($search_meta,$mode )
     {
+        global $CC_GLOBALS;
+
         $this->CCForm();
 
         foreach( $search_meta as $meta )
@@ -330,6 +370,18 @@ class CCSearchForm extends CCForm
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE | CCFF_REQUIRED);
 
+        if( empty($CC_GLOBALS['use_text_index']) )
+        {
+            $typeops = array( 'any' => _('Match any word'), 'all' => _('Match all words'), 'match' => _('Match exact phrase') );
+            $fields['search_type'] =
+                    array( 'label'      => $mode == 'horizontal' ? '' : _('Match'),
+                           'form_tip'   => '',
+                           'formatter'  => 'select',
+                           'options'    => $typeops,
+                           'flags'      => CCFF_POPULATE);
+
+        }
+
         $fields['search_in'] =
                         array( 'label'      => $mode == 'horizontal' ? '' : _('What'),
                                'form_tip'   => '',
@@ -343,12 +395,20 @@ class CCSearchForm extends CCForm
         }
         else
         {
-            $this->SetFormHelp( array( 'str_search_help',
-                             '<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">','</a>') );
+            if( empty($CC_GLOBALS['use_text_index']) )
+            {
+                $this->SetFormHelp( 'str_search_help_generic' );
+            }
+            else
+            {
+                $this->SetFormHelp( array( 'str_search_help',
+                                 '<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">','</a>') );
+            }
         }
         $this->AddFormFields( $fields );
         $this->SetSubmitText(_('Search'));
         $this->SetTemplateVar('form_method','GET');
+
         //$this->SetHandler( ccl('search', 'results') );
     }
 }

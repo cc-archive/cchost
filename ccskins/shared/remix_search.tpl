@@ -39,9 +39,15 @@ div#remix_search_controls {
         id="remix_toggle_link" class="small_button"><span>%text(str_remix_close)%</span></a>%end_if%</div>
     <div id="remix_search_controls" style="display:block">
         <select id="remix_search_type">
-            <option value="search_remix_artist" selected="selected">%text(str_remix_artist)%</option>
-            <option value="search_remix_title" >%text(str_remix_title)%</option>
-            <option value="search_remix" >%text(str_remix_full_search)%</option>
+            %if_not_null(use_text_index)%
+                <option value="search_remix_artist" selected="selected">%text(str_remix_artist)%</option>
+                <option value="search_remix_title" >%text(str_remix_title)%</option>
+                <option value="search_remix" >%text(str_remix_full_search)%</option>
+            %else%
+                <option value="search_remix_gen_artist" selected="selected">%text(str_remix_artist)%</option>
+                <option value="search_remix_gen_title" >%text(str_remix_title)%</option>
+                <option value="search_remix_gen" >%text(str_remix_full_search)%</option>
+            %end_if%
         </select>
         <input type="edit" id="remix_search" />
         <div id="pool_select_contaner"></div>
@@ -72,5 +78,5 @@ div#remix_search_controls {
 <script src="%url('js/remix_search.js')%" type="text/javascript"></script>
 <script type="text/javascript"> 
 var pools = %query('t=pools&f=js&nomime=1&noexit=1')%;
-new ccRemixSearch();
+new ccRemixSearch(<?= empty($A['use_text_index']) ? 'false' : 'true' ?>);
 </script>

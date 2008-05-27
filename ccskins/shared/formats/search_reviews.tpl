@@ -30,7 +30,9 @@ EOF;
     $sql_count =<<<EOF
 SELECT COUNT(*)
 FROM cc_tbl_topics
+JOIN cc_tbl_user reviewers ON topic_user=reviewers.user_id
 JOIN cc_tbl_uploads ON topic_upload=upload_id
+JOIN cc_tbl_user reviewee ON upload_user=reviewee.user_id
 %where%
 EOF;
 

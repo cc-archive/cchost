@@ -48,13 +48,16 @@ class CCReviewsHV
 {
     function OnSearchMeta(&$search_meta)
     {
+        global $CC_GLOBALS;
+        $columns = empty($CC_GLOBALS['user_text_index']) ? 'topic_name,topic_text,reviewers.user_real_name,reviewers.user_name' 
+                                                        : 'topic_name,topic_text';
         $search_meta[] = 
             array(
                 'template'   => 'search_reviews',
                 'title'      => 'str_search_reviews',
                 'datasource' => 'topics',
                 'group'      => 'reviews',
-                'match'      => 'topic_name,topic_text',
+                'match'      => $columns,
             );
     }
 

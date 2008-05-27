@@ -424,6 +424,7 @@ $GLOBALS['str_remix_do_search']       = _('Search');
 $GLOBALS['str_remix_this_site']       = _('This site');
 $GLOBALS['str_remix_no_search_term']  = _('Please enter a search phrase longer than 3 characters');
 $GLOBALS['str_remix_no_matches']      = _('Sorry, no sources match "%s" Try adding a \'*\': "%s*" ');
+$GLOBALS['str_remix_no_matches_gen']  = _('Sorry, no sources match "%s"');
 $GLOBALS['str_remix_close']           = _('Close search box');
 $GLOBALS['str_remix_open']            = _('Open search box');
 $GLOBALS['str_remix_lic']             = _('This remix will be licensed under a %s license');
@@ -507,7 +508,9 @@ Suggestions:
 <li>Click %shere%s for full geek explanation of what is possible</li>
 </ul>
 ');
+$GLOBALS['str_search_miss_generic'] = _('If searching for tags try using an underscore instead of a space: hip_hop...');
 $GLOBALS['str_search_help'] = $GLOBALS['str_search_miss'];
+$GLOBALS['str_search_help_generic'] = _('Use this form to search for text on the site...');
 $GLOBALS['str_search_more'] = _('See more results from');
 $GLOBALS['str_search_no_matches'] = _('Sorry we couldn\'t find any matches from ');
 $GLOBALS['str_search_results'] = _('Search Results');

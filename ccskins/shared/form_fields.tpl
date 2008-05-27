@@ -18,9 +18,9 @@
 
 %macro(horizontal_form_fields)%
 <table class="form_table horizontal_form" cellspacing="0" cellpadding="0">
-    <tr class="form_row" id="%(#k_F)%_field_row">
+    <tr class="form_row" >
     %loop(curr_form/html_form_fields,F)%
-        <td  class="form_element">
+        <td  class="form_element" id="%(#k_F)%_field_row">
             %if_not_null(#F/label)%<div>%text(#F/label)%</div>%end_if%
             %if_not_null(#F/form_tip)%<span>%text(#F/form_tip)%</span>%end_if% 
             %if_not_null(#F/macro)% %map(field,#F)%<!-- -->%call(#F/macro)% %end_if%<!-- -->%(#F/form_element)%</td>
@@ -77,9 +77,9 @@
    %if_not_null(#R/form_error)%
       <tr class="form_error_row"><td></td><td class="form_error">%text(#R/form_error)%</td></tr>
    %end_if%
-   <tr class="form_row" id="%(#k_F)%_field_row">
+   <tr class="form_row">
    %loop(#R/html_form_grid_fields,F)%
-     <td class="form_element">
+     <td class="form_element" id="%(#k_F)%_field_row">
        %if_not_null(#F/macro)%  %map(field,#F)% <!-- -->%call(#F/macro)% %end_if%
        <!-- -->%(#F/form_grid_element)%
      </td>

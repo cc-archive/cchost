@@ -30,6 +30,7 @@ EOF;
     $sql_count =<<<EOF
 SELECT COUNT(*)
 FROM cc_tbl_uploads
+JOIN cc_tbl_user ON upload_user = user_id
 %joins%
 %where%
 EOF;

@@ -32,6 +32,7 @@ EOF;
 SELECT COUNT(*)
 FROM cc_tbl_topics
 JOIN cc_tbl_forum_threads ON topic_thread=forum_thread_id
+JOIN cc_tbl_user ON topic_user=user_id
 %where%
 EOF;
 

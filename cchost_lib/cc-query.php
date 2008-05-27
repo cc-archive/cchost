@@ -669,12 +669,49 @@ class CCQuery
     {
         $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
+        $grp = empty($this->args['group']) ? '' : $this->args['group'];
+
         foreach( $search_meta as $meta )
         {
-            if( $this->args['datasource'] == $meta['datasource'] )
+            if( ($grp && ($this->args['group'] == $meta['group'])) || 
+                (empty($grp) && ($this->args['datasource'] == $meta['datasource'])) )
             {
                 $search = str_replace("'","\\'",(trim($this->args['search'])));
-                $this->where[] = "MATCH({$meta['match']}) AGAINST( '$search' IN BOOLEAN MODE )";
+                global $CC_GLOBALS;
+                if( empty($CC_GLOBALS['use_text_index']) )
+                {
+                    $strlow = strtolower($search);
+                    switch( $this->args['search_type'] )
+                    {
+                        case 'match':
+                        {
+                            $this->where[] = "LOWER(CONCAT({$meta['match']})) LIKE '%{$strlow}%'";
+                            break;
+                        }
+
+                        case 'all':
+                        {
+                            $terms = preg_split('/\s+/',$strlow);
+                            foreach( $terms as $term )
+                                $this->where[] = "LOWER(CONCAT({$meta['match']})) LIKE '%{$term}%'";
+                            break;
+                        }
+
+                        case 'any':
+                        {
+                            $terms = preg_split('/\s+/',$strlow);
+                            $ors = array();
+                            foreach( $terms as $term )
+                                $ors[] = "(LOWER(CONCAT({$meta['match']})) LIKE '%{$term}%')";
+                            $this->where[] = join( ' OR ', $ors );
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    $this->where[] = "MATCH({$meta['match']}) AGAINST( '$search' IN BOOLEAN MODE )";
+                }
                 break;
             }
         }

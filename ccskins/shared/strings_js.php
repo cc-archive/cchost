@@ -74,6 +74,7 @@ var str_ratings                   ='<?=addslashes($T->String('str_ratings')) ?>'
 var str_remix_close               ='<?=addslashes($T->String('str_remix_close'))?>';
 var str_remix_lic                 ='<?=addslashes($T->String('str_remix_lic'))?>';
 var str_remix_no_matches          ='<?=addslashes($T->String('str_remix_no_matches'))?>';
+var str_remix_no_matches_gen      ='<?=addslashes($T->String('str_remix_no_matches_gen'))?>';
 var str_remix_no_search_term      ='<?=addslashes($T->String('str_remix_no_search_term'))?>';
 var str_remix_open                ='<?=addslashes($T->String('str_remix_open'))?>';
 var str_remix_this_site           ='<?=addslashes($T->String('str_remix_this_site'))?>';
