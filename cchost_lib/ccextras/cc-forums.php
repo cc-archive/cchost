@@ -53,16 +53,13 @@ class CCForums
 {
     function OnSearchMeta(&$search_meta)
     {
-        global $CC_GLOBALS;
-        $columns = empty($CC_GLOBALS['user_text_index']) ? 'topic_name,topic_text,user_real_name,user_name' 
-                                                        : 'topic_name,topic_text';
         $search_meta[] = 
             array(
                 'template'   => 'search_forums',
                 'title'      => 'str_search_forums',
                 'datasource' => 'topics',
                 'group'      => 'forums',
-                'match'      => $columns,
+                'match'      => 'topic_name,topic_text',
             );
     }
 
