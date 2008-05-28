@@ -82,90 +82,35 @@ EOF;
 //------------------------------------- 
 function _t_html_form_submit_forms(&$T,&$A) 
 {
-   ?>
-    <link rel="stylesheet" title="Default Style" type="text/css" href="<?= $T->URL('css/manage_files.css'); ?>" />
-    <div class="cc_submit_forms_outer">
-       <div  id="manage_box" style="display:none;">
-        <div class="cc_submit_forms box">
-            <h2><?= $T->String('str_file_manage') ?></h2>
-            <table class="edit_sort_buttons" ><tr>
-            <td><a href="javascript://sort by date" class="small_button" style="display:none" id="files_by_date"><span><?= $T->String('str_file_sort_by_date') ?></span></a></td>
-            <td><a href="javascript://sort by name" class="small_button" style="display:default" id="files_by_name"><span><?= $T->String('str_file_sort_by_name') ?></span></a></td>
-            </tr></table>
-            <br />
-            <div id="files_manage_target" style="height:200px;overflow:scroll;border:2px solid #555;">
-            </div>
-        </div>
-        </div>
-<script type="text/javascript">
+    $results = cc_query_fmt('f=php&dataview=links&limit=3&user=' . $A['user_name']);
 
-ccFileAdderPicker = Class.create();
-
-ccFileAdderPicker.prototype = {
-
-    initialize: function() {
-        var url = query_url + 'f=html&t=manage_files&limit=300&dataview=default&user=' + user_name;
-        new Ajax.Request( url,  { method: 'get', onComplete: this.gotFiles.bind(this) });
-        Event.observe( 'files_by_date', 'click', this.onFilesBy.bindAsEventListener(this,'date') );
-        Event.observe( 'files_by_name', 'click', this.onFilesBy.bindAsEventListener(this,'name') );
-    },
-
-    onFilesBy: function(event, type) {
-        var url = query_url + 'f=html&t=manage_files&limit=300&dataview=default&user=' + user_name;
-        var on, off;
-        if( type == 'name' )
-        {
-            url += '&sort=name&ord=asc';
-            on = 'date';
-            off = 'name';
-        }
-        else
-        {
-            on = 'name';
-            off = 'date';
-        }
-        $('files_by_' + on).style.display = '';
-        $('files_by_' + off).style.display = 'none';
-        new Ajax.Request( url,  { method: 'get', onComplete: this.gotFiles.bind(this) });
-    },
-
-    gotFiles: function(resp) {
-        try {
-            if( !resp.responseText ) 
-                return;
-            $('manage_box').style.display = 'block';
-            $('files_manage_target').innerHTML = resp.responseText;
-            this.updatePickers();
-        } 
-        catch(err)
-        {
-            alert(err);
-        }
-    },
-
-    updatePickers: function() {
-        var me = this;
-        $$('.add_file_picker').each( function(e) {
-            Event.observe( e, 'change', me.go_to_file_adder.bindAsEventListener(me,e) );
-        });
-    },
-
-    go_to_file_adder: function( event, select )
+    if( !empty($results) )
     {
-        var type = select.options[ select.selectedIndex ].value;
-        if( !type )
-            return;
-        var id = select.id.match(/[0-9]+$/);
-        var url = home_url + 'file/add/' + id + q + 'atype=' + type;
-        document.location = url;
+        $manage_url = url_args(ccl('api','query'),'t=manage_files&user=' . $A['user_name']);
+        $manage_link = '<a class="manage_link" href="' . $manage_url . '">';
+        foreach( $results as $k => $res )
+            $results[$k] = $res['upload_name'];
+        $names = '<i>' . join('</i>, <i>',$results) . '</i>';
+?>
+    <div class="cc_submit_forms_outer">
+       <div  id="manage_box" style="display:;">
+            <div class="cc_submit_forms box">
+                <img  src="<?= $T->URL('images/submit-manage.png') ?>" />
+                <h2><?= $T->String('str_file_manage') ?></h2>
+                <div  class="cc_submit_form_help" style="font-size:1.3em;line-height:1.7em;"><?= $T->String(array('str_files_manage_text',
+                                                                        $manage_link, '</a>',
+                                                                        $manage_link, '</a>',
+                                                                        $manage_link, '</a>',
+                                                                        $names )) ?>
+                </div>
+                <div  class="cc_submit_form_url">
+                    <a  href="<?= $manage_url ?>" > <?= $T->String('str_file_manage')  ?></a>
+                </div>
+            </div>
+      </div>
+<?
     }
-}
-
-new ccFileAdderPicker();
-
-</script>
-   <?
-
+   
     foreach($A['submit_form_infos'] as $SI )
     {
         ?><div  class="cc_submit_forms box"><?

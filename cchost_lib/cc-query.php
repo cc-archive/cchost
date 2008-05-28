@@ -712,6 +712,7 @@ class CCQuery
                 (empty($grp) && ($this->args['datasource'] == $meta['datasource'])) )
             {
                 $search = str_replace("'","\\'",(trim($this->args['search'])));
+                $strlow = strtolower($search);
                 global $CC_GLOBALS;
                 if( empty($CC_GLOBALS['use_text_index']) )
                 {
@@ -725,7 +726,7 @@ class CCQuery
 
                         case 'all':
                         {
-                            $terms = $this->_search_term_parser(strtolower($search));
+                            $terms = $this->_search_term_parser($strlow);
                             foreach( $terms as $term )
                                 $this->where[] = $this->_search_helper($meta['match'],$term);
                             break;
@@ -733,7 +734,7 @@ class CCQuery
 
                         case 'any':
                         {
-                            $terms = $this->_search_term_parser(strtolower($search));
+                            $terms = $this->_search_term_parser($strlow);
                             $ors = array();
                             foreach( $terms as $term )
                             {
