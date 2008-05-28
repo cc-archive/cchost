@@ -716,7 +716,8 @@ class CCQuery
                 global $CC_GLOBALS;
                 if( empty($CC_GLOBALS['use_text_index']) )
                 {
-                    switch( $this->args['search_type'] )
+                    $stype = empty($this->args['search_type']) ? 'any' : $this->args['search_type'];
+                    switch( $stype )
                     {
                         case 'match':
                         {
