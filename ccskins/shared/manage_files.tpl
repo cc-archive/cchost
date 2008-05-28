@@ -15,7 +15,7 @@ function manage_files_dataview()
     $sql =<<<EOF
     SELECT 
            CONCAT( '$manurl', upload_id ) as manage_url,
-           CONCAT( '$propurl', upload_id ) as prop_url,
+           CONCAT( '$propurl', user_name, '/', upload_id ) as prop_url,
            CONCAT( '$rmxurl', upload_id ) as rmx_url,
            upload_name, upload_id
            %columns%
