@@ -13,6 +13,7 @@ function xspf_dataview()
     $sql =<<<EOF
         SELECT $avatar_sql, upload_id, upload_name, upload_name, upload_contest, user_name, user_real_name,
         license_url
+        %columns%
         FROM cc_tbl_uploads
         JOIN cc_tbl_user ON upload_user=user_id
         JOIN cc_tbl_licenses ON upload_license=license_id
