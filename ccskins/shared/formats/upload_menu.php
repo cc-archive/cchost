@@ -97,6 +97,8 @@ function _t_upload_menu_init(&$T,&$A)
     $mi['action'] = "javascript://download";
     $mi['id'] = "_ed_{$R['upload_id']}";
     $mi['menu_text'] = $T->String('str_list_download');
+    if( count($R['files']) > 1 )
+        $mi['menu_text'] .= ' ' . $T->String( array('str_list_download_num_files', count($R['files'] ) ) );
     $mi['class'] = 'download_hook';
     helper_upload_menu_item($mi,$T);
 
