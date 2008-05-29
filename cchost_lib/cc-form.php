@@ -916,6 +916,7 @@ class CCForm
         elseif( strstr($class,'form_input') === false )
             $class .= ' form_input';
 
+        $value = str_replace('"', '&quot;',$value);
         return( "<input type='text' id=\"$varname\" name=\"$varname\" value=\"$value\" class=\"$class\" />" );
     }
 
