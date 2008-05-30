@@ -860,7 +860,10 @@ class CCQuery
         $w['user_name'] = $user;
         $users =& CCUsers::GetTable();
         $user_id = $users->QueryKey($w);
-        $field = $this->_make_field('user');
+        if( $this->args['datasource'] == 'user' )
+            $field = 'user_id';
+        else
+            $field = $this->_make_field('user');
         $this->where[] = "($field $op '{$user_id}')";
     }
 
