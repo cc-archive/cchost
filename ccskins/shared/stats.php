@@ -25,74 +25,81 @@ table.statstable td {
     $visible = "upload_published=1 AND upload_banned=0";
 ?>
 <table class="statstable light_bg dark_border" style="float:left">
-<tr><th class="shead dark_bg light_color" colspan="3"><?= $T->String('str_stats_overall_stats') ?></th></tr>
-<tr><th></th><th></th><th><?= $T->String('str_stats_remixed') ?></th></tr>
-<tr><td><?= $T->String('str_stats_total_uploads') ?></td>
-<td>
+    <tr><th class="shead dark_bg light_color" colspan="3"><?= $T->String('str_stats_overall_stats') ?></th></tr>
+    <tr><th></th><th></th><th><?= $T->String('str_stats_remixed') ?></th></tr>
+    <tr><td><?= $T->String('str_stats_total_uploads') ?></td>
+        <td>
 <?
     $n = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_uploads WHERE ' .$visible);
     print $n;
 ?>
-</td>
-<td></td></tr>
-<tr><td><?= $T->String('str_stats_remixes') ?>:</td><td>
+        </td>
+        <td></td>
+    </tr>
+    <tr><td><?= $T->String('str_stats_remixes') ?>:</td>
+        <td>
 <?
     $n = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_uploads WHERE upload_num_sources > 0 AND '.$visible);
     print $n;
-?></td><td></td></tr>
+?>      </td>
+        <td></td>
+    </tr>
 <? if( $GLOBALS['strings-profile'] == 'audio' ) { ?>
-<tr><td><?= $T->String('str_stats_acappellas') ?>:</td>
-<td>
+    <tr><td><?= $T->String('str_stats_acappellas') ?>:</td>
+        <td>
 <?
     $filter = $statsdv->MakeTagFilter('acappella');
     $sql = "SELECT COUNT(*) FROM cc_tbl_uploads WHERE $filter AND $visible";
     $n = CCDatabase::QueryItem($sql);
     print $n;
 ?>
-</td>
-<td>
+        </td>
+        <td>
 <?
     $r = CCDatabase::QueryItem($sql . " AND upload_num_remixes > 0");
     print floor( ($r*100) / $n ) . '%';
 ?>
-</td></tr>
+        </td>
+    </tr>
 <? } ?>
-<tr><td><?= $T->String('str_stats_samples') ?>:</td>
-<td>
+    <tr><td><?= $T->String('str_stats_samples') ?>:</td>
+        <td>
 <?
     $filter = $statsdv->MakeTagFilter('sample');
     $sql = "SELECT COUNT(*) FROM cc_tbl_uploads WHERE $filter AND $visible";
     $n = CCDatabase::QueryItem($sql);
     print $n;
 ?>
-</td>
-<td>
+        </td>
+        <td>
 <?
     $r = CCDatabase::QueryItem($sql . " AND upload_num_remixes > 0");
     print floor( ($r*100) / $n ) . '%';
 ?>
-</td></tr>
-
-<tr><td><?= $T->String('str_stats_fully_mixed') ?>:</td>
-<td>
+        </td>
+    </tr>
+    <tr><td><?= $T->String('str_stats_fully_mixed') ?>:</td>
+        <td>
 <?
     $filter = $statsdv->MakeTagFilter('original');
     $sql = "SELECT COUNT(*) FROM cc_tbl_uploads WHERE $filter AND $visible";
     $n = CCDatabase::QueryItem($sql);
     print $n;
 ?>
-</td>
-<td>
+        </td>
+        <td>
 <?
     $r = CCDatabase::QueryItem($sql . " AND upload_num_remixes > 0");
     print floor( ($r*100) / $n ) . '%';
 ?>
-</td></tr>
+        </td>
+    </tr>
 </table>
 
 <table class="statstable light_bg dark_border">
-<tr><th class="shead dark_bg light_color" colspan="3"><?= $T->String('str_stats_most_sampled_artists') ?></th></tr>
-<tr><th><?= $T->String('str_stats_artist') ?></th><th><?= $T->String('str_stats_sampled') ?></th></tr>
+    <tr><th class="shead dark_bg light_color" colspan="3"><?= $T->String('str_stats_most_sampled_artists') ?></th></tr>
+    <tr><th><?= $T->String('str_stats_artist') ?></th>
+        <th><?= $T->String('str_stats_sampled') ?></th></tr>
 <?
     $ccp = ccl('people') . '/';
     $sql =<<<EOF
@@ -107,14 +114,15 @@ EOF;
     $rows = CCDatabase::QueryRows($sql);
     foreach( $rows as $R )
     {
-        ?><tr><td><a class="cc_user_link" href="<?= $R['url'] ?>"><?= $R['user_real_name'] ?></a></td><td><?= $R['user_num_remixed'] ?></td></tr><?
+        ?><tr><td><a class="cc_user_link" href="<?= $R['url'] ?>"><?= $R['user_real_name'] ?></a></td>
+              <td><?= $R['user_num_remixed'] ?></td></tr><?
     }
 ?>
 </table>
 
 <table class="statstable light_bg dark_border">
-<tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_uploads_by_month') ?></th></tr>
-<tr><th><?= $T->String('str_stats_month') ?></th><th><?= $T->String('str_stats_uploads') ?></th></tr>
+    <tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_uploads_by_month') ?></th></tr>
+    <tr><th><?= $T->String('str_stats_month') ?></th><th><?= $T->String('str_stats_uploads') ?></th></tr>
 <?
     $sql =<<<EOF
         SELECT SUBSTRING(upload_date,1,7) as mo, COUNT(*) as cnt 
@@ -132,8 +140,8 @@ EOF;
 </table>
 
 <table class="statstable light_bg dark_border">
-<tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_signups_by_month') ?></th></tr>
-<tr><th><?= $T->String('str_stats_month') ?></th><th><?= $T->String('str_stats_signups') ?></th></tr>
+    <tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_signups_by_month') ?></th></tr>
+    <tr><th><?= $T->String('str_stats_month') ?></th><th><?= $T->String('str_stats_signups') ?></th></tr>
 <?
     $sql = "SELECT SUBSTRING(user_registered,1,7) as mo, COUNT(*) as cnt FROM cc_tbl_user GROUP BY mo ORDER BY SUBSTRING(user_registered,1,7) DESC";
     $rows = CCDatabase::QueryRows($sql);
@@ -146,8 +154,8 @@ EOF;
 </table>
 
 <table class="statstable light_bg dark_border">
-<tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_most_remixes') ?></th></tr>
-<tr><th><?= $T->String('str_stats_artist') ?></th><th><?= $T->String('str_stats_remixes') ?></th></tr>
+    <tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_most_remixes') ?></th></tr>
+    <tr><th><?= $T->String('str_stats_artist') ?></th><th><?= $T->String('str_stats_remixes') ?></th></tr>
 <?
     $sql =<<<EOF
         SELECT user_num_remixes, user_real_name, 
@@ -165,8 +173,8 @@ EOF;
 </table>
 
 <table class="statstable light_bg dark_border">
-<tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_most_picks') ?></th></tr>
-<tr><th><?= $T->String('str_stats_artist') ?></th><th><?= $T->String('str_stats_picks') ?></th></tr>
+    <tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_most_picks') ?></th></tr>
+    <tr><th><?= $T->String('str_stats_artist') ?></th><th><?= $T->String('str_stats_picks') ?></th></tr>
 <?
     $filter = $statsdv->MakeTagFilter('editorial_pick');
     $sql =<<<EOF
@@ -189,10 +197,10 @@ EOF;
 
 <? if( $GLOBALS['strings-profile'] == 'audio' ) { ?>
 <table class="statstable light_bg dark_border">
-<tr><th class="shead dark_bg light_color" colspan="3"><?= $T->String('str_stats_most_remixed_pell') ?></th></tr>
-<tr><th><?= $T->String('str_stats_name') ?></th><th><?= $T->String('str_stats_artist') ?></th><th><?= $T->String('str_stats_remixed') ?></th></tr>
+    <tr><th class="shead dark_bg light_color" colspan="3"><?= $T->String('str_stats_most_remixed_pell') ?></th></tr>
+    <tr><th><?= $T->String('str_stats_name') ?></th><th><?= $T->String('str_stats_artist') ?></th><th><?= $T->String('str_stats_remixed') ?></th></tr>
 <?
-    $ccf = ccl('files');
+    $ccf = ccl('files') . '/';
     $filter = $statsdv->MakeTagFilter('acappella');
     $sql =<<<EOF
         SELECT upload_num_remixes as cnt,
@@ -211,14 +219,15 @@ EOF;
     {
         ?>
         <tr><td><a class="cc_file_link" href="<?= $R['file_url']?>"><?= $R['upload_name'] ?></a></td>
-        <td><a href="<?= $R['artist_url']?>" class="cc_user_link"><?= $R['user_real_name']?></a></td><td><?= $R['cnt']?></td></tr><?
+            <td><a href="<?= $R['artist_url']?>" class="cc_user_link"><?= $R['user_real_name']?></a></td>
+            <td><?= $R['cnt']?></td></tr><?
     }
 ?>
 
 </table>
 <? } ?>
 <table class="statstable light_bg dark_border">
-<tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_licenses_samples') ?></th></tr>
+    <tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_licenses_samples') ?></th></tr>
 <?
     $filter = $statsdv->MakeTagFilter('sample');
     $sql =<<<EOF
@@ -238,7 +247,7 @@ EOF;
 </table>
 <? if( $GLOBALS['strings-profile'] == 'audio' ) { ?>
 <table class="statstable light_bg dark_border">
-<tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_licenses_pells') ?></th></tr>
+    <tr><th class="shead dark_bg light_color" colspan="2"><?= $T->String('str_stats_licenses_pells') ?></th></tr>
 <?
     $filter = $statsdv->MakeTagFilter('acappella');
     $sql =<<<EOF
@@ -257,6 +266,4 @@ EOF;
 ?>
 </table>
 <? } ?>
-</div>
-</div>
     
