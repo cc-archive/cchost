@@ -5,7 +5,7 @@
 [/meta]
 */
 
-function search_remix_title_gen_dataview() 
+function search_remix_gen_title_dataview() 
 {
     $fun = cc_fancy_user_sql('user_real_name');
 
