@@ -315,15 +315,21 @@ class CCPublicize
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle(_('Share This Link'));
 
+        $type = CCUtil::Strip($type);
+        $arg1 = CCUtil::Strip($arg1);
+
         switch( $type )
         {
             case 'user':
-                $users =& CCUsers::GetUsers();
                 if( !empty($arg1) )
-                    $record = $users->GetRecordFromName($arg1);
-                $ok = !empty($record);
-                if( $ok )
-                    $regarding = $record['user_name'];
+                {
+                    $ccp = ccl('people') . '/';
+                    $record = CCDatabase::QueryRow("SELECT CONCAT('$ccp',user_name, '/profile') as artist_page_url," . 
+                                 "user_name,user_real_name from cc_tbl_user WHERE user_name = '$arg1'" );
+                }
+                if( !empty($record) )
+                    $regarding = $arg1;
+                $ok = !empty($regarding);
                 break;
             case 'upload':
                 if( !empty($arg1) )
