@@ -91,7 +91,7 @@ EOF;
     <td class="cc_topic_body">
         <div style="border-left:600px solid transparent;font-size:2px;height:3px;">.</div>
         <div class="cc_topic_date dark_bg light_color" >
-            <a class="topic_permalink light_color" href="%(#topic_url)%#%(#R/topic_id)%">%text(str_permalink)%</a> 
+            <a class="topic_permalink med_color" href="%(#topic_url)%#%(#R/topic_id)%">%text(str_permalink)%</a> 
             %if_not_null(flagging)%
                 <a class="flag topic_flag" title="%text(str_flag_this_topic)%" href="%(home-url)%flag/topic/%(#R/topic_id)%">&nbsp;</a>
             %end_if%
