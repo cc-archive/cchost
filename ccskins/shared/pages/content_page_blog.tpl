@@ -28,7 +28,7 @@ if( empty($A['content_page_textformat']) )
         </div>
         <div class="cc_topic_credit"><a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a></div>
         %if_not_null(topic_url)%
-            <div class="cc_topic_permalink"><a href="%(topic_url)%%(#R/topic_id)%">premalink</a></div>
+            <div class="cc_topic_permalink"><a href="%(topic_url)%#%(#R/topic_id)%">premalink</a></div>
         %end_if%
     </td>
 </tr>

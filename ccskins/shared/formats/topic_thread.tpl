@@ -47,7 +47,7 @@ EOF;
 }
 [/dataview]
 */?>
-<!-- template topic_thread -->
+<!-- template topic_thread (tpl)-->
 <link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
 
 <div class="forum_cmds">
@@ -86,6 +86,11 @@ EOF;
         <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
         <div><a href="%(#R/artist_page_url)%/topics"><?= $T->String(array('str_forum_posts_n',$R['user_num_posts'])); ?></a></div>
         <a href="%(#R/artist_page_url)%"><img src="%(#R/user_avatar_url)%" /></a>
+        <? $role = cc_get_user_role($R['user_name']); ?>
+        %if_not_null(#role)%
+        <div class="user_role">%(#role)%</div>
+        %end_if%
+
     </td>
     <td class="cc_topic_body">
         <div style="border-left:600px solid transparent;font-size:2px;height:3px;">.</div>

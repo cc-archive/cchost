@@ -18,6 +18,11 @@ table.cc_topic_thread td {
 	vertical-align: top;
 }
 
+table.cc_topic_thread .user_role {
+	margin-top: 3px;
+	text-align: center;
+	text-transform: uppercase;
+	}
 
 table.cc_topic_thread td.cc_topic_head {
 	padding-top: 1.4em;

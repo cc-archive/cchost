@@ -230,6 +230,11 @@ function & cc_get_playlist_with(&$record)
 }
 
 
+function cc_get_user_role($user_name)
+{
+    return CCUser::IsAdmin($user_name) ? 'admin' : '';
+}
+
 function cc_get_user_avatar_sql()
 {
     global $CC_GLOBALS;
