@@ -131,8 +131,8 @@ class CCUserPage
     {
         // hack ?... use the page to get string defs
         require_once('cchost_lib/cc-page.php');
-        $page = CCPage::GetPage();
 
+        $page = CCPage::GetPage();
         $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
         $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name=\''.$username .'\'');
         $title = $page->String(array('str_remixes_of_s',$user_real_name));
@@ -295,6 +295,7 @@ END;
     function OnFilterUserProfile(&$records)
     {
         require_once('cchost_lib/cc-tags.php');
+        require_once('cchost_lib/cc-page.php');
 
         $row =& $records[0];
 
@@ -315,6 +316,12 @@ END;
                 continue;
             $row['user_fields'][] = array( 'label' => $name, 'value' => $row[$uf], 'id' => $uf );
         }
+
+        $feed_url = url_args( ccl('api','query'), 't=user_feeds&datasource=user&user='.$row['user_name'] );
+        $page =& CCPage::GetPage();
+        $feed_link = 
+            $page->String( array('str_user_feed_link','<a href="' . $feed_url . '">', '</a>', $row['user_real_name']));
+        $row['user_fields'][] = array( 'label' => 'str_user_feeds', 'value' => $feed_link , 'id' => 'user_feeds' );
 
         if( CCUser::IsLoggedIn() && ($row['user_id'] != CCUser::CurrentUser()) )
         {
