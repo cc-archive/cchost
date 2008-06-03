@@ -83,6 +83,13 @@ class CCShareLinkForm extends CCSecurityVerifierForm
             $about_url = $record['file_page_url'];
             $body = sprintf( _('Check out "%s" by %s at %s!'), $about, $user, $site_name ) . "\n\n" . $about_url;
         }
+        elseif( $type == 'playlist' )
+        {
+            $user  = $record['user_real_name'];
+            $about = $record['cart_name'];
+            $about_url = ccl('playlist','browse',$record['cart_id']);
+            $body = sprintf( _('Check out %s\'s Playlist "%s" at %s!'), $user, $about, $site_name ) . "\n\n" . $about_url;
+        }
 
         $subject = sprintf( _("Check out %s at %s"), $about, $site_name );
 

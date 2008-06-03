@@ -69,7 +69,11 @@ class CCPublicize
         $this->_share('upload',$record);
     }
 
-    
+    function SharePlaylist($id)
+    {
+        $this->_share('playlist',$id);
+    }
+
     function _share($type,$arg1,$arg2='')
     {
         global $CC_GLOBALS;
@@ -138,7 +142,6 @@ class CCPublicize
         {
             if( $type == 'upload' )
             {
-
                 $record =& $arg1;
                 
                 $args['intro'] = _('Use the links above to share this upload with your social network or follow the instructions below to embed a link in your web page, blog, MySpace page, etc.');
@@ -150,9 +153,21 @@ class CCPublicize
 
                 $args = array_merge( $args, $record );
                 $title = sprintf( _('Share \'%s\''), $record['upload_name'] );
+                $args['hiddens'][] = array( 'value' => $record['upload_id'], 'name' => 'ids' );
+            }
+            elseif ($type == 'playlist')
+            {
+                $args['intro'] = _('Use the links above to share this playlist with your social network or follow the instructions below to embed a link in your web page, blog, MySpace page, etc.');
+                list( $playlist_name ) = CCDatabase::QueryRow(
+                        'SELECT cart_name FROM cc_tbl_cart WHERE cart_id='.$arg1,false);
+
+                $args['bookmark_url'] = ccl('playlist','browse',$arg1);
+                $args['bookmark_title'] = $playlist_name;
+                $args['email_url'] = ccl( 'email', 'playlist', $arg1 );
+                $args['hiddens'][] = array( 'value' => $arg1, 'name' => 'playlist' );
+                $title = sprintf( _('Share \'%s\''), $playlist_name );
             }
 
-            $args['hiddens'][] = array( 'value' => $record['upload_id'], 'name' => 'ids' );
             $do_num_links = false;
             $do_chop = false;
             $args['user_name'] = '';
@@ -328,7 +343,10 @@ class CCPublicize
                                  "user_name,user_real_name from cc_tbl_user WHERE user_name = '$arg1'" );
                 }
                 if( !empty($record) )
+                {
                     $regarding = $arg1;
+                    $this->_build_bread_crumb_trail($record['user_name'], '');
+                }
                 $ok = !empty($regarding);
                 break;
             case 'upload':
@@ -341,18 +359,35 @@ class CCPublicize
                 }
                 $ok = !empty($record);
                 if( $ok )
+                {
                     $regarding = $record['upload_id'] . '/' . $record['upload_name'];
+                    $this->_build_bread_crumb_trail($record['user_name'], $record['upload_id']);
+                }
                 break;
+            case 'playlist':
+                if( !empty($arg1) )
+                {
+                    $ccp = ccl('playlist','browse',$arg1);
+                    require_once('cchost_lib/ccextras/cc-playlist.inc');
+                    $plobj = new CCPlaylists();
+                    $plobj->_build_bread_crumb_trail($arg1,'Share');
+
+                    $record = CCDatabase::QueryRow(
+                                'SELECT user_name, user_real_name, cart_name, cart_id FROM cc_tbl_cart ' .
+                                '   JOIN cc_tbl_user ON cart_user = user_id ' .
+                                ' WHERE cart_id='.$arg1);
+
+                }
+                if( !empty($record) )
+                    $regarding = $record['cart_name'];
+                $ok = !empty($regarding);
+                break;
+
             default:
                 $ok = false;
         }
         if( !$ok )
             CCUtil::Send404(true);
-
-        if( !empty($record) )
-        {
-            $this->_build_bread_crumb_trail($record['user_name'], empty($record['upload_id']) ? '' : $record['upload_id']);
-        }
 
         require_once('cchost_lib/ccextras/cc-publicize-forms.inc');
         $form = new CCShareLinkForm($type,$record);
@@ -418,6 +453,9 @@ class CCPublicize
 
         CCEvents::MapUrl( ccp('share'), array( 'CCPublicize', 'Share' ),  
                 CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{id}', _('Displays Share/Embed PopupWindow'), CC_AG_UPLOADS  );
+
+        CCEvents::MapUrl( ccp('share','playlist'), array( 'CCPublicize', 'SharePlaylist' ),  
+                CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{id}', _('Displays share playlist forms'), CC_AG_UPLOADS  );
 
         CCEvents::MapUrl( ccp('email'), array( 'CCPublicize', 'Email' ),  
                 CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{type},{id}', _('Email link to a friend'), CC_AG_UPLOADS  );
