@@ -59,6 +59,8 @@ function _t_playlist_playlist_popup(&$T,&$A)
 
 function _t_playlist_playlist_list(&$T,&$A) 
 {
+   $playlist = $A['args']['playlist']; ?>
+
   ?><table  class="cc_pl_table"><tr><td><?
 
     if ( !empty($A['args']['menu'])) 
@@ -77,19 +79,20 @@ function _t_playlist_playlist_list(&$T,&$A)
         ?></ul><?
     }
 
-    ?></td><td><?
+    ?></td><td><div class="cc_playlist_feed"><?
     
     if ( !empty($A['args']['feed_q'])) 
     {
-        ?><div class="cc_playlist_feed"><a target="_parent" href="<?= $A['args']['feed_q']?>">
+        ?>
+           <a target="_parent" href="<?= $A['args']['feed_q']?>">
                 <img src="<?= $T->URL('images/feed-icon16x16.png') ?>" /></a>
-          </div><?
+         <?
     }
 
+    ?><a target="_parent" href="<?= ccl('share','playlist',$playlist['cart_id']) ?>">
+            <img src="<?= $T->URL('images/share-link.gif') ?>" /></a>
+    </div>
 
-    $playlist = $A['args']['playlist'];
-    
-?>
     <a target="_parent" href="<?= $A['home-url']?>playlist/browse/<?= $playlist['cart_id']?>">
         <div class="cc_playlist_title"><?= $playlist['cart_name']?></div>
     </a>
