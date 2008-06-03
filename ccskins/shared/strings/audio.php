@@ -142,4 +142,15 @@ $GLOBALS['str_stats_licenses_pells'] = _('Licenses for A Cappellas');
 $GLOBALS['str_stats_most_remixed_pell'] = _('Most Remixed A Cappellas');
 
 $GLOBALS['str_save_to_playlist'] = _('Save as playlist');
+
+$GLOBALS['str_user_feed_title'] = _('Feeds and Podcasts for %s');
+$GLOBALS['str_user_feed_link'] = _('%sFeeds and Podcasts%s for %s');
+$GLOBALS['str_user_feed_remixes_by'] = _('Remixes by %s');
+$GLOBALS['str_user_feed_remixes_of'] = _('Remixes of %s');
+$GLOBALS['str_user_feed_trackbacks'] = _('Uploads by %s featured in videos, podcasts, albums, etc.');
+$GLOBALS['str_user_feed_remix_trackbacks'] = _('Remixes of %s featured in videos, podcasts, albums, etc.');
+$GLOBALS['str_user_feed_reviews_by'] = _('Reviews left by %s');
+$GLOBALS['str_user_feed_reviews_for'] = _('Reviews left for %s');
+
+
 ?>
