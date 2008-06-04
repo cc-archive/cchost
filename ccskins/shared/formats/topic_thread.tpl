@@ -46,8 +46,18 @@ EOF;
                 );
 }
 [/dataview]
-*/?>
+*/
+
+$thread_ids = array();
+
+?>
 <!-- template topic_thread (tpl)-->
+
+%if_null(records)%
+    <div>There's no topics here!</div>
+    %return%
+%end_if%
+
 <link rel="stylesheet" href="%url(css/topics.css)%" title="Default Style" type="text/css" />
 
 <div class="forum_cmds">
