@@ -59,7 +59,7 @@ function _t_playlist_playlist_popup(&$T,&$A)
 
 function _t_playlist_playlist_list(&$T,&$A) 
 {
-   $playlist = $A['args']['playlist']; ?>
+   $playlist = $A['args']['playlist']; 
 
   ?><table  class="cc_pl_table"><tr><td><?
 
@@ -89,7 +89,14 @@ function _t_playlist_playlist_list(&$T,&$A)
          <?
     }
 
-    ?><a target="_parent" href="<?= ccl('share','playlist',$playlist['cart_id']) ?>">
+    $share_url = ccl('share','playlist',$playlist['cart_id']);
+
+    if( $playlist['cart_subtype'] == 'default' )
+    {
+        $share_url = url_args( $share_url, $playlist['cart_dynamic'] );
+    }
+
+    ?><a target="_parent" href="<?= $share_url ?>">
             <img src="<?= $T->URL('images/share-link.gif') ?>" /></a>
     </div>
 
