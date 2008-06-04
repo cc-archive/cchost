@@ -55,6 +55,7 @@ $GLOBALS['str_pl_edit_dynamic_playlist_s'] = _('Edit Dynamic Playlist: "%s"');
 $GLOBALS['str_pl_edit_playlist_order'] = _('Edit Playlist Order');
 $GLOBALS['str_pl_edit_properties'] = _('Edit Properties');
 $GLOBALS['str_pl_empty_playlist'] = _('Empty Playlist');
+$GLOBALS['str_pl_found_in_d']           = _('Found in %s%d playlists%s'); 
 $GLOBALS['str_pl_found_in']           = _('Found in'); 
 $GLOBALS['str_pl_getting']            = _('getting playlists');
 $GLOBALS['str_pl_hot_playlists'] = _('Hot Playlists');
@@ -74,6 +75,9 @@ $GLOBALS['str_pl_save_playlist_query'] = _('Save Playlist Query');
 $GLOBALS['str_pl_track_added'] = _('Track added to playlist'); // js
 $GLOBALS['str_pl_track_has_been_removed'] = _('Track has been removed from playlist'); // js
 $GLOBALS['str_pl_upload_is_already'] = _('Upload is already in list');
+$GLOBALS['str_pl_user_title'] = _('Playlists featuring %s');
+$GLOBALS['str_pl_user_num'] = _('%s is found %sonce in playlists%s');
+$GLOBALS['str_pl_user_nums'] = _('%s is found %s%d times in playlists%s');
 
 
 

@@ -8,6 +8,19 @@ function _t_file_macros_print_howididit_link(&$T,&$A)
         <table><tr><td><a class="cc_gen_button" href="<?= ccl('howididit',$A['record']['upload_id']) ?>"><span><?= $T->String('str_how_i_did_it') ?></span></a></td></tr></table><?
 }
 
+function _t_file_macros_print_num_playlists(&$T,&$A)
+{
+    $ccb = url_args( ccl('playlist','browse'), 'id=' .$A['record']['upload_id'] );
+    $text = $T->String( array('str_pl_found_in_d',
+                              '<a href="' . $ccb . '">',
+                              $A['record']['upload_num_playlists'],
+                              '</a>' ) );
+
+    ?>
+    <div class="upload_num_playlists_link" style="text-align: right;"><?= $text ?></div>
+    <?
+}
+
 
 function _t_file_macros_license_rdf(&$T,&$A)
 {

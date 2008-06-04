@@ -54,6 +54,7 @@ $GLOBALS['str_pl_edit_playlist_order'] = _('Edit Gallery Order');
 $GLOBALS['str_pl_edit_properties'] = _('Edit Properties');
 $GLOBALS['str_pl_empty_playlist'] = _('Empty Gallery');
 $GLOBALS['str_pl_found_in']           = _('Found in'); 
+$GLOBALS['str_pl_found_in_d']           = _('Found in %s%d galleries%s'); 
 $GLOBALS['str_pl_getting']            = _('getting favorites');
 $GLOBALS['str_pl_hot_playlists'] = _('Hot Favorites List');
 $GLOBALS['str_pl_items']              = _('images');  // as in: number of items
@@ -72,5 +73,8 @@ $GLOBALS['str_pl_save_playlist_query'] = _('Save Gallery List Query');
 $GLOBALS['str_pl_track_added'] = _('Image added to list'); // js
 $GLOBALS['str_pl_track_has_been_removed'] = _('Image has been removed from list'); // js
 $GLOBALS['str_pl_upload_is_already'] = _('Image is already in list');
+$GLOBALS['str_pl_user_title'] = _('Galleries featuring %s');
+$GLOBALS['str_pl_user_num'] = _('%s is found %sonce in galleries%s');
+$GLOBALS['str_pl_user_nums'] = _('%s is found %s%d times in galleries%s');
 
 ?>

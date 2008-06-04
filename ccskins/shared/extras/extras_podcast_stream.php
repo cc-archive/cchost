@@ -42,8 +42,10 @@ $q = $A['q'];
     }
 
     $url  = $A['home-url'] . 'api/query/stream.m3u' . $q .'f=m3u&' . $qstring;
+    if( strstr( $url, 'offset=' ) === false )
+        $url .= '&offset=' . $offs;
     $url2 = $A['query-url'] . 'f=rss&' . $qstring . '&offset=' . $offs;
-    $url3 = 'limit=15&f=html&t=download&' . $qstring . '&offset=' . $offs;
+    $url3 = 'limit=15&f=html&' . $qstring . '&offset=' . $offs . '&t=download';
 ?>   
 <li><a id="mi_stream_page" href="<?=$url?>"><?= $T->String('str_stream_this_page') ?></a></li>
 <li><a id="mi_podcast_page" title="<?= $T->String('str_drag_this_link') ?>" href="<?=$url2?>"><?= $T->String('str_podcast_this_page')?></a></li>

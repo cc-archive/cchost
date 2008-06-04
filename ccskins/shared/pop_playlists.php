@@ -12,20 +12,25 @@ if( !defined('IN_CC_HOST') )
 [dataview]
 function popular_tracks_dataview()
 {
-    $urlf = ccl('files') . '/';
-    $urlp = ccl('people') . '/';
+    $ccf = ccl('files') . '/';
+    $ccp = ccl('people') . '/';
+    $ccb = url_args( ccl('playlist','browse'), 'id=' );
+    $user_sql = cc_fancy_user_sql('user_real_name');
 
     $sql =<<<EOF
-            SELECT COUNT(*) as track_count , cart_item_upload , upload_name, user_name, user_real_name, upload_contest,
-                CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url, upload_id,
-                CONCAT( '$urlp', user_name ) as artist_page_url
-            FROM cc_tbl_cart_items 
-            JOIN cc_tbl_uploads ON upload_id = cart_item_upload
-            JOIN cc_tbl_user ON upload_user = user_id
-            GROUP BY cart_item_upload ORDER BY track_count DESC    
-            %limit%
+        SELECT upload_num_playlists, upload_id, upload_name, $user_sql,
+        CONCAT( '$ccf', user_name, '/', upload_id ) as file_page_url, 
+        CONCAT( '$ccp', user_name ) as artist_page_url,
+        CONCAT( '$ccb', upload_id ) as playlist_browse_url
+        %columns%
+        FROM cc_tbl_uploads
+        JOIN cc_tbl_user ON upload_user=user_id
+        %joins%
+        %where%
+        %order%
+        %limit%
 EOF;
-    $sql_count = 'SELECT 100';
+    $sql_count = 'SELECT count(*) FROM cc_tbl_uploads';
 
     return array( 'e' => array(),
                   'sql' => $sql,
@@ -55,7 +60,7 @@ if( !empty($recs) )
             <?= $T->String('str_by') ?> <a  class="cc_user_link" href="<?= $AIR['artist_page_url'] ?>"><?= $iurn ?></a>
         </div>
         <div class="tdc" style="padding-left:15px"><?= $T->String('str_pl_found_in') ?> 
-            <a href="<?= $A['home-url'] ?>playlist/browse<?= $A['q'] ?>id=<?= $AIR['upload_id'] ?>"><?= $AIR['track_count'] ?> 
+            <a href="<?= $AIR['playlist_browse_url'] ?>"><?= $AIR['upload_num_playlists'] ?> 
             <?= $T->String('str_pl_playlists') ?></a>
         </div>
         <div class="tdc"><a class="info_button" id="_plinfo_<?= $AIR['upload_id'] ?>"></a></div>

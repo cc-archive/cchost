@@ -354,6 +354,7 @@ $GLOBALS['str_pl_edit_playlist_order'] = _('Edit Favorites List Order');
 $GLOBALS['str_pl_edit_properties'] = _('Edit Properties');
 $GLOBALS['str_pl_empty_playlist'] = _('Empty Favorites List');
 $GLOBALS['str_pl_found_in']           = _('Found in'); 
+$GLOBALS['str_pl_found_in_d']           = _('Found in %s%d favorites%s'); 
 $GLOBALS['str_pl_getting']            = _('getting favorites');
 $GLOBALS['str_pl_hot_playlists'] = _('Hot Favorites List');
 $GLOBALS['str_pl_items']              = _('items');  // as in: number of items
@@ -373,6 +374,9 @@ $GLOBALS['str_pl_save_order'] = _('Save This Order');
 $GLOBALS['str_pl_track_added'] = _('New favorite added to list'); // js
 $GLOBALS['str_pl_track_has_been_removed'] = _('Favorite has been removed from list'); // js
 $GLOBALS['str_pl_upload_is_already'] = _('Favorite is already in list');
+$GLOBALS['str_pl_user_title'] = _('Favorites featuring %s');
+$GLOBALS['str_pl_user_num'] = _('%s is found %sonce in favorites%s');
+$GLOBALS['str_pl_user_nums'] = _('%s is found %s%d times in favorites%s');
 
 $GLOBALS['str_play']                  = _('Show ');
 $GLOBALS['str_play_now']              = _('Show Now');
