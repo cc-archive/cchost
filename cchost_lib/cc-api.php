@@ -54,14 +54,15 @@ class CCRestAPI
         return( $url . $args );
     }
 
-    function Info($feeds = null)
+    function Info()
     {
-        if( !isset($feeds) )
-        {
-            require_once('cchost_lib/cc-feeds-rss.php');
-            $feeds = new CCFeedsRss();
-        }
-        $feeds->GenerateFeed('');
+        require_once('cchost_lib/cc-query.php');
+        $queryapi = new CCQuery();
+        $args['ids'] = 1; // well, actually any invalid upload_id
+        if( empty($_REQUEST['format']) )
+            $args['format'] = 'rss';
+        $args = $queryapi->ProcessUriArgs($args);
+        $queryapi->Query($args);
     }
 
     function Search()
@@ -71,6 +72,7 @@ class CCRestAPI
 
         require_once('cchost_lib/cc-query.php');
         $queryapi = new CCQuery();
+        $args = array();
         if( empty($_REQUEST['format']) )
             $args['format'] = 'rss';
         $args = $queryapi->ProcessUriArgs($args);
@@ -99,25 +101,14 @@ class CCRestAPI
         if( empty($guid) )
             $guid = urldecode($_REQUEST['guid']);
 
-        require_once('cchost_lib/cc-feeds-rss.php');
-        $feeds = new CCFeedsRSS();
-
         $upload_id = CCRestAPI::_get_upload_id_from_guid($guid);
-
-        if( empty($upload_id) )
-            $this->Info($feeds);
-
-        $uploads =& CCUploads::GetTable();
-        $record =& $uploads->GetRecordFromID($upload_id);
-
-        $records = array( $record );
-        $feeds->PrepRecords($records);
-        $feeds->GenerateFeedFromRecords(
-                        $records,
-                        '',
-                        ccl('api','file',$upload_id),
-                        ''
-                        );
+        require_once('cchost_lib/cc-query.php');
+        $queryapi = new CCQuery();
+        $args['ids'] = $upload_id;
+        if( empty($_REQUEST['format']) )
+            $args['format'] = 'rss';
+        $args = $queryapi->ProcessUriArgs($args);
+        $queryapi->Query($args);
     }
 
     //
