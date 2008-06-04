@@ -687,8 +687,15 @@ class CCQuery
         {
             if( $mx{0} == '-' )
             {
-                if( $mx{1} == '"' )
-                    $mx = str_replace('"','',$mx);
+                if( strlen($mx) > 1 )
+                {
+                    if( $mx{1} == '"' )
+                        $mx = str_replace('"','',$mx);
+                }
+                else
+                {
+                    continue;
+                }
             }
             elseif( $mx{0} == '"' )
             {
