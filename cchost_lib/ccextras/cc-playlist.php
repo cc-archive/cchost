@@ -36,6 +36,9 @@ CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCPlaylists',  'OnApiQ
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCPlaylists',  'OnUploadDelete'),     'cchost_lib/ccextras/cc-playlist.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPlaylistHV', 'OnUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCPlaylistHV', 'OnUserProfileTabs'));
+CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCPlaylistHV', 'OnFilterMacros')      );
+CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCPlaylistHV', 'OnFilterUserProfile') );
+
 
 CCEvents::AddHandler(CC_EVENT_FILTER_PLAY_URL,        array( 'CCPlaylistHV', 'OnFilterPlayURL'));
 
@@ -83,6 +86,44 @@ class CCPlaylistHV
         }
     }
 
+
+    /**
+    * Event handler for {@link CC_EVENT_FILTER_USER_PROFILE}
+    *
+    * Add extra data to a user row before display
+    *
+    * @param array &$record User record to massage
+    */
+    function OnFilterUserProfile(&$rows)
+    {
+        if( !cc_playlist_enabled() )
+            return;
+
+        $row =& $rows[0];
+        $sql =<<<EOF
+        SELECT sum( upload_num_playlists )
+            FROM cc_tbl_uploads
+            WHERE upload_user = {$row['user_id']}
+EOF;
+        $count = CCDatabase::QueryItem($sql);
+        if( !$count )
+            return;
+
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        $title = $page->String( array( 'str_pl_user_title', $row['user_real_name'] ) );
+        $url = url_args( ccl('api','query'), 'sort=num_playlists&t=pop_playlists&user=' . $row['user_name'] . '&title=' . $title);
+
+        if( $count == 1 )
+            $value = array('str_pl_user_num',$row['user_real_name'], "<a href=\"$url\">", '</a>');
+        else
+            $value = array('str_pl_user_nums',$row['user_real_name'], "<a href=\"$url\">",$count,'</a>');
+
+        $row['user_fields'][] = array( 'label' => 'str_playlists', 
+                                       'value' => $value
+                                      );
+
+    }
 
     function OnUserProfileTabs( &$tabs, &$record )
     {
@@ -140,6 +181,54 @@ class CCPlaylistHV
         $menu['playlist_menu']['id']     = 'commentcommand';
         $menu['playlist_menu']['class']  = "cc_playlist_button";
     }
+
+    function OnFilterMacros(&$records)
+    {
+        if( !cc_playlist_enabled() )
+            return;
+
+        $k = array_keys($records);
+        $c = count($k);
+
+        if( $c && !isset($records[$k[0]]['upload_num_playlists']) )
+        {
+            // NOTE: this code should probably in cc-filter somewhere ? maybe ?
+
+            // there's no playlist info in the record, we
+            // have to dig it out
+
+            if( !isset($records[$k[0]]['upload_id']) )
+            {
+                // there's nothing we can do...
+                return;
+            }
+            $ids = array();
+            for( $i = 0; $i < $c; $i++ )
+                $ids[] = $records[$k[$i]]['upload_id'];
+            $plcs = CCDatabase::QueryRows( 'SELECT upload_id,upload_num_playlists FROM cc_tbl_uploads WHERE upload_id IN (' .
+                                              join(',',$ids) . ')' );
+            $plcounts = array();
+            foreach( $plcs as $plc )
+                $plcounts[$plc['upload_id']] = $plc['upload_num_playlists'];
+            for( $i = 0; $i < $c; $i++ )
+            {
+                $R =& $records[$k[$i]];
+                $R['upload_num_playlists'] = $plcounts[ $R['upload_id'] ];
+            }
+        }
+
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[$k[$i]];
+
+            if( empty($R['upload_num_playlists']) )
+                continue;
+
+            $R['file_macros'][] = 'file_macros.php/print_num_playlists';
+        }
+    }
+
+
 }
 
 function cc_playlist_enabled()

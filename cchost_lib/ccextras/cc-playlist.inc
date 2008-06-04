@@ -333,6 +333,7 @@ class CCPlaylists
         $cart_items->DeleteWhere($w);
         $carts =& CCPlaylist::GetTable();
         $carts->Dec('cart_num_items',$playlist_id);
+        $this->_sync_upload($upload_id);
         $args['command'] = 'delete';
         $args['upload_id'] = $upload_id;
         $args['cart_id'] = $playlist_id;
@@ -643,11 +644,6 @@ EOF;
             CCUtil::ReturnAjaxMessage('str_pl_upload_is_already',CC_AJAX_WARNING);
         }
 
-        $uploads  =& CCUploads::GetTable();
-        $up_row   = $uploads->QueryKeyRow($upload_id);
-        $up_tags  = $up_row['upload_tags'];
-        $up_score = $up_row['upload_score'];
-
         $carts =& CCPlaylist::GetTable();
         $carts->Inc('cart_num_items',$playlist_id);
 
@@ -657,6 +653,21 @@ EOF;
         $new_row['cart_item_upload'] = $upload_id;
         $new_row['cart_item_order'] = $count;
         $cart_items->Insert($new_row);
+
+        $this->_sync_upload($upload_id);
+    }
+
+    function _sync_upload($upload_id)
+    {
+        $sql =<<<EOF
+        UPDATE cc_tbl_uploads SET upload_num_playlists = (
+            SELECT COUNT( * )
+            FROM cc_tbl_cart_items
+            WHERE cart_item_upload = upload_id
+            )
+        WHERE upload_id = {$upload_id}
+EOF;
+        CCDatabase::Query($sql);
     }
 
     function Add($upload_id='',$playlist_id='')

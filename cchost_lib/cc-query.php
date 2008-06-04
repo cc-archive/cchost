@@ -64,7 +64,7 @@ class CCQuery
                         'columns' => '',
                         'joins' => '',
                         'where' => '',
-                        'order ' => '',
+                        'order' => '',
                         'limit' => '', 
                         'group_by' => '' );
         $this->where = array();
@@ -72,6 +72,10 @@ class CCQuery
         $this->records = array();
     }
 
+    /**
+    * Entry point for api/query
+    *
+    */
     function QueryURL()
     {
         $this->ProcessUriArgs();
@@ -102,6 +106,10 @@ class CCQuery
         exit;
     }
 
+    /**
+    * Use this when calling from php (call ProcessAdminArgs first to clean the args)
+    *
+    */
     function Query($args=array())
     {
         if( !empty($args) )
@@ -143,6 +151,10 @@ class CCQuery
         return $this->_process_records();
     }
 
+    /**
+    * Call this from php when you need to hack in some SQL (call ProcessAdminArgs first on $qargs)
+    *
+    */
     function QuerySQL($qargs,$sqlargs)
     {
         $this->args = $qargs;
@@ -154,6 +166,9 @@ class CCQuery
         return $this->_process_records();
     }
 
+    /**
+    * Call this to fetch and clean args that were passed in through the browser
+    */
     function ProcessUriArgs($extra_args = array())
     {
         global $CC_GLOBALS;
@@ -206,10 +221,17 @@ class CCQuery
             if( is_string($tt) && (strpos($tt,'\'') === (strlen($tt)-1) ) )
                 die('Illegal value in query');
         }
-    
+
+            // this probably belongs somewhere else
+        if( !empty($req['playlist']) && empty($req['sort']) )
+            $this->args['nosort'] = 1;
+
         return $this->args;
     }
 
+    /**
+    * Call this before calling Query or QuerySQL
+    */
     function ProcessAdminArgs($args,$extra_args=array(),$check_limit=true)
     {
         if( is_string($args) )
@@ -234,6 +256,10 @@ class CCQuery
             $this->_check_limit();
 
         $this->_get_get_offset();
+
+        // this probably belongs somewhere else
+        if( !empty($this->args['playlist']) && empty($args['sort']) && empty($extra_args['sort']) )
+            $this->args['nosort'] = 1;
 
         return $this->args;
     }
@@ -303,12 +329,37 @@ class CCQuery
                         $this->args['template'] = 'rss_20';
                     elseif( $this->args['datasource'] == 'topics' )
                         $this->args['template'] = 'rss_20_topics';
+                    if( !empty($this->args['rss_dataview']) )
+                        $this->args['dataview'] = $this->args['rss_dataview'];
                     break;
                 case 'atom':
                     $this->args['template'] = 'atom_10';
                     break;
                 case 'xspf':
                     $this->args['template'] = 'xspf_10';
+                    break;
+            }
+        }
+        else
+        {
+            switch( $this->args['format'] )
+            {
+                case 'rss':
+                    /* so, this code can happen when a page is being viewed
+                       that requires a template and we are called from the
+                       'podcast this page' link which requires special
+                       handling in the case where the page template is 
+                       particularly hostile to the data needed for an
+                       rss feed
+                    */
+                    if( !empty($this->args['rss_dataview']) )
+                    {
+                        $this->args['dataview'] = $this->args['rss_dataview'];
+                        if( $this->args['datasource'] == 'uploads' )
+                            $this->args['template'] = 'rss_20';
+                        elseif( $this->args['datasource'] == 'topics' )
+                            $this->args['template'] = 'rss_20_topics';
+                    }
                     break;
             }
         }
@@ -772,7 +823,7 @@ class CCQuery
 
         if( !empty($args['ids']) || !empty($args['nosort'])  )
         {
-            $this->sql_p['order'] = '';
+            $this->sql_p['order'] = empty($args['playlist']) ? '' : 'cart_item_order';
             return;
         }
 
@@ -1012,7 +1063,7 @@ class CCQuery
         CCEvents::MapUrl( ccp('api','query'),   array( 'CCQuery', 'QueryURL'), 
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Browser query interface'), CC_AG_QUERY );
 
-        cc_tcache_kill(); // this is probably and ?update=1 so kill the cache...
+        cc_tcache_kill(); // this is probably an ?update=1 so kill the cache...
     }
 
     /**
@@ -1092,22 +1143,17 @@ class CCQuery
 
         
         return array_merge( $user, array(
-            'name'               => array( _('Upload name'), 'TRIM(TRIM(BOTH \'"\' FROM LOWER(upload_name)))'),
-            'lic'                => array( _('Upload license'), 'upload_license'),
-            'date'               => array( _('Upload date'), 'upload_date'),
-            'last_edit'          => array( _('Upload last edited'), 'upload_last_edit'),
-            'remixes'            => array( _('Upload\'s remixes'), 
-                                                  '(upload_num_remixes+upload_num_pool_remixes)'),
-            'sources'            => array( _('Upload\'s sources'),  
-                                                   '(upload_num_sources+upload_num_pool_sources)'),
-
-            'num_scores'         => array( _('Number of ratings'), 'upload_num_scores'),
-
-            'id'                 => array( _('Internal upload id'), 'upload_id'),
-
+            'name'               => array( _('Upload name'),             'TRIM(TRIM(BOTH \'"\' FROM LOWER(upload_name)))'),
+            'lic'                => array( _('Upload license'),          'upload_license'),
+            'date'               => array( _('Upload date'),             'upload_date'),
+            'last_edit'          => array( _('Upload last edited'),      'upload_last_edit'),
+            'remixes'            => array( _('Upload\'s remixes'),       '(upload_num_remixes+upload_num_pool_remixes)'),
+            'sources'            => array( _('Upload\'s sources'),       '(upload_num_sources+upload_num_pool_sources)'),
+            'num_scores'         => array( _('Number of ratings'),       'upload_num_scores'),
+            'num_playlists'      => array( _('Number of playlists'),     'upload_num_playlists desc,upload_date'),
+            'id'                 => array( _('Internal upload id'),      'upload_id'),
             'local_remixes'      => array( _('Upload\'s local remixes'), 'upload_num_remixes'),
-            'pool_remixes'       => array( _('Upload\'s remote remixes'), 
-                                                   'upload_num_pool_remixes'),
+            'pool_remixes'       => array( _('Upload\'s remote remixes'),'upload_num_pool_remixes'),
             'local_sources'      => array( _('Upload\'s local sources'), 'upload_num_sources'),
             'pool_sources'       => array( _('Upload\'s sample pool sources'), 
                                                     'upload_num_pool_sources'),
