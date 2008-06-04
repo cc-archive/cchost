@@ -39,7 +39,7 @@ class CCPublicize
         {
             if( !($user = CCUser::CurrentUserName()) )
             {
-                CCPage::Prompt(_("Don't know what user to publicize!"));
+                CCPage::Prompt('str_share_no_user');
                 return;
             }
         }
@@ -47,7 +47,7 @@ class CCPublicize
         $itsme  = $user == CCUser::CurrentUserName();
         if( !$this->_pub_wizard_allowd($itsme) )
         {
-            CCPage::Prompt(_('This feature is not enabled here'));
+            CCPage::Prompt('str_share_no_feature');
             return;
         }
 
@@ -60,7 +60,7 @@ class CCPublicize
         $uploads =& CCUploads::GetTable();
         if( !$uploads->KeyExists($id) )
         {
-            CCPage::Prompt(_("Don't know what upload to share!"));
+            CCPage::Prompt('str_share_no_upload');
             return;
         }
         $record = CCDatabase::QueryRow('SELECT upload_id, user_name, upload_name, user_real_name FROM cc_tbl_uploads JOIN ' .
@@ -78,10 +78,15 @@ class CCPublicize
     {
         global $CC_GLOBALS;
 
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+
         $args['intro'] = '';
-        $args['step1'] = _('1. Select from the following options:');
-        $args['step2'] = _('2. Then copy the text from this field and paste it into your page:');
+        $args['step1'] = 'str_share_step1';
+        $args['step2'] = 'str_share_step2';
         $args['hiddens'] = array();
+
+        $do_share_popup = true;
 
         $combos = array();
 
@@ -101,23 +106,24 @@ class CCPublicize
             
             if( $arg2 ) // $itsme 
             {
-                $args['intro'] = _('Do you have a blog or web page? You can display a list of up-to-the-minute links to your latest remixes directly on your page.');
-                $yourremixes = _('Your remixes');
-                $othersremixes = _("Other peoples's remixes of you.");
-                $allyourups = _('All of your uploads');
-                $title = _('Publicize Yourself');
+                $args['intro'] = 'str_share_intro1';
+                $yourremixes = 'str_share_your_remixes';
+                $othersremixes = 'str_share_other_remixes';
+                $allyourups = 'str_share_your_uploads';
+                $title = 'str_share_pub_yourself';
             }
             else
             {
-                $args['intro'] = sprintf( _("Do you have a blog or web page? You can display a list of up-to-the-minute links to latest remixes of %s directly on your page."), '<b>' . $record['user_real_name'] . '</b>' ) . ' ' .
-                    sprintf(_('Use the links above to share %s\'s with your social network or follow the instructions below to embed a link in your web page, blog, MySpace page, etc.'), '<b>' . $record['user_real_name'] . '</b>' );
-                $yourremixes = sprintf( _("%s's remixes"), $record['user_real_name'] );
-                $othersremixes = sprintf( _("Other peoples's remixes of %s"),
-                                             $record['user_real_name'] );
-                $allyourups = sprintf( _('All %s\'s uploads'), $record['user_real_name'] );
-                $title = sprintf( _('Publicize %s'), $record['user_real_name'] );
+                $args['intro'] = $page->String(array('str_share_intro2a', '<b>' . $record['user_real_name'] . '</b>' ))  . ' ' .
+
+                    $page->String(array('str_share_intro2b', '<b>' . $record['user_real_name'] . '</b>' ));
+                $yourremixes = $page->String(array( 'str_share_your_remixes_s', $record['user_real_name'] ));
+                $othersremixes = $page->String(array( 'str_share_other_remixes_s',
+                                             $record['user_real_name'] ));
+                $allyourups = $page->String(array( 'str_share_all_uploads_s', $record['user_real_name'] ));
+                $title = $page->String(array( 'str_share_publicize_s', $record['user_real_name'] ));
             }
-            $opts['title'] = _('Type of links:');
+            $opts['title'] = 'str_share_type_links';
             $opts['name']  = '';
             $opts['class']  =
             $opts['id']    = 'usertypechanger';
@@ -144,28 +150,54 @@ class CCPublicize
             {
                 $record =& $arg1;
                 
-                $args['intro'] = _('Use the links above to share this upload with your social network or follow the instructions below to embed a link in your web page, blog, MySpace page, etc.');
-
+                $args['intro'] = 'str_share_intro3';
                 $args['bookmark_url'] = $record['file_page_url'];
                 $args['bookmark_title'] = $record['upload_name'];
                 $args['email_url'] = ccl( 'email', 'upload', $record['upload_id'] );
 
 
                 $args = array_merge( $args, $record );
-                $title = sprintf( _('Share \'%s\''), $record['upload_name'] );
+                $title = $page->String(array( 'str_share_share_s', $record['upload_name'] ));
                 $args['hiddens'][] = array( 'value' => $record['upload_id'], 'name' => 'ids' );
             }
             elseif ($type == 'playlist')
             {
-                $args['intro'] = _('Use the links above to share this playlist with your social network or follow the instructions below to embed a link in your web page, blog, MySpace page, etc.');
-                list( $playlist_name ) = CCDatabase::QueryRow(
-                        'SELECT cart_name FROM cc_tbl_cart WHERE cart_id='.$arg1,false);
+                list( $playlist_name, $query, $subtype ) = CCDatabase::QueryRow(
+                        'SELECT cart_name, cart_dynamic, cart_subtype FROM cc_tbl_cart WHERE cart_id='.$arg1,false);
+                
+                if( !empty($subtype) && ($subtype == 'default') )
+                {
+                    require_once('cchost_lib/cc-query.php');
+                    $query = new CCQuery();
+                    $query= $query->ProcessUriArgs();
+                    $do_share_popup = false;
+                }
 
+                if( !empty($query) )
+                {
+                    if( is_string($query) )
+                        parse_str($query,$query);
+                    foreach( $query as $name => $value )
+                        $args['hiddens'][] = array( 'name' => $name, 'value' => $value );
+                }
+                else
+                {
+                    $args['hiddens'][] = array( 'value' => $arg1, 'name' => 'playlist' );
+                }
                 $args['bookmark_url'] = ccl('playlist','browse',$arg1);
                 $args['bookmark_title'] = $playlist_name;
                 $args['email_url'] = ccl( 'email', 'playlist', $arg1 );
-                $args['hiddens'][] = array( 'value' => $arg1, 'name' => 'playlist' );
-                $title = sprintf( _('Share \'%s\''), $playlist_name );
+                $title = $page->String(array( 'str_share_share_s', $playlist_name ));
+
+                if( $do_share_popup )
+                {
+                    $args['intro'] = 'str_share_intro4a';
+                }
+                else
+                {
+                    $args['intro'] = 'str_share_intro4b';
+                }
+
             }
 
             $do_num_links = false;
@@ -176,7 +208,7 @@ class CCPublicize
         if( $do_num_links )
         {
             $opts = array();
-            $opts['title'] = _('Number of links:');
+            $opts['title'] = 'str_share_num_links';
             $opts['name']  =
             $opts['id']    = 'limit';
             $opts['class'] = 'queryparam';
@@ -184,16 +216,16 @@ class CCPublicize
             $opts['opts']  = array(
                     array( 'value'     => '1',
                            'selected'  => false,
-                           'text'      => _('Just the very latest one') ),
+                           'text'      => 'str_share_num_links1' ),
                     array( 'value'     => '5',
                            'selected'  => true,
-                           'text'      => _('The 5 latest')),
+                           'text'      => 'str_share_num_links5' ),
                     array( 'value'     => '10',
                            'selected'  => false,
-                           'text'      => _('The 10 latest')),
+                           'text'      => 'str_share_num_links10'),
                     array( 'value'     => '50',
                            'selected'  => false,
-                           'text'      => _('A whole bunch (up to a 50)'))
+                           'text'      => 'str_share_num_links50')
                 );
             $combos[] = $opts;
 
@@ -208,7 +240,7 @@ class CCPublicize
             Formats
         */
         $opts = array();
-        $opts['title'] = _('Format:');
+        $opts['title'] = 'str_share_format';
         $opts['help']  = '';
         $opts['class'] = 'queryparam';
         $opts['name']  =
@@ -227,45 +259,49 @@ class CCPublicize
         if( $do_chop )
         {
             $opts = array();
-            $opts['title'] = _('Chop:');
+            $opts['title'] = 'str_share_chop';
             $opts['class'] = 'queryparam';
             $opts['name']  =
             $opts['id']    = 'chop';
-            $opts['help']  = _('Cut off links larger than:');
+            $opts['help']  = 'str_share_cut_off';
             $opts['opts']  = array(
                     array( 'value'  => '10',
                            'selected'  => true,
-                           'text'   => _("10 characters")),
+                           'text'   => 'str_share_cut_off_10'),
                     array( 'value'  => '20',
                            'selected'  => false,
-                           'text'   => _("20 characters")),
+                           'text'   => 'str_share_cut_off_20'),
                     array( 'value'  => '25',
                            'selected'  => false,
-                           'text'   => _("25 characters")),
+                           'text'   => 'str_share_cut_off_25'),
                     array( 'value'  => '0',
                            'selected'  => false,
-                           'text'   => _("Don't do any chopping")),
+                           'text'   => 'str_share_cut_off_off'),
                 );
             $combos[] = $opts;
         }
 
         $args['combos'] =& $combos;
 
-        $args['seehtml']       = _('Show raw HTML');
-        $args['showformatted'] = _('Show Formatted');
+        $args['seehtml']       = 'str_share_raw_html';
+        $args['showformatted'] = 'str_share_formatted';
         
-        $args['preview'] = _('Preview');
-        $args['previewwarn'] = _('This preview is pre-formatted. How this will actually look on your web page will change depending on your stylesheet settings.');
-        $args['htmlwarn'] = _('Make sure to copy from the box above, not what is showing below because the actual content of this HTML will change based on the upload activity. You can still get an idea of what of the formatting will look like here:');
+        $args['preview'] = 'str_share_preview';
+        $args['previewwarn'] = 'str_share_preview_warn';
+        $args['htmlwarn'] = 'str_share_html_warn';
 
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle( $title );
         CCPage::AddScriptLink( 'js/sharesites.js', true );
         CCPage::AddScriptLink( 'js/share.js', true );
         CCPage::SetStyleSheet('css/publicize.css');
-        CCPage::PageArg('share', 'share.php/share_popup' );
         CCPage::PageArg('publicize', 'publicize.php/publicize');
-        CCPage::PageArg('PUB', $args, 'share');
+        CCPage::PageArg('PUB', $args );
+        if( $do_share_popup )
+        {
+            CCPage::PageArg('share', 'share.php/share_popup' );
+            CCPage::AddMacro('share');
+        }
         CCPage::AddMacro('publicize');
 
         if( !empty($record) )
@@ -282,7 +318,7 @@ class CCPublicize
         $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
         
         $trail[] = array( 'url' => ccl('people'), 
-                          'text' => _('People') );
+                          'text' => 'str_people' );
         $users =& CCUsers::GetTable();
         $user_real_name = $users->QueryItem('user_real_name',
                                             "user_name = '$username'");
@@ -305,7 +341,7 @@ class CCPublicize
             }
         }
 
-        $trail[] = array( 'url' => '', 'text' => _('Share') );
+        $trail[] = array( 'url' => '', 'text' => 'str_share_text' );
 
         CCPage::AddBreadCrumbs($trail);
     }
