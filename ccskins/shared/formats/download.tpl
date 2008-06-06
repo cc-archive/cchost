@@ -14,7 +14,7 @@
 <ol>
     %loop(#R/files,F)%
          <li>
-            <a href="%(#F/download_url)%">%(#F/file_nicname)% %(#F/file_filesize)%</a> 
+            %(#F/file_nicname)% %(#F/file_filesize)%: <a href="%(#F/download_url)%">%(#F/file_name)%</a> 
          </li>
     %end_loop%
 </ol>
