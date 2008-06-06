@@ -58,7 +58,6 @@ class CCFeedsRSS
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $records[$k[$i]];
-            d($R);
             $R['user_real_name'] = cc_feed_encode($R['user_real_name']);
             if( $is_topics )
             {
