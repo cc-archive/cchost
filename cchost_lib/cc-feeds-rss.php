@@ -58,16 +58,26 @@ class CCFeedsRSS
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $records[$k[$i]];
+            d($R);
             $R['user_real_name'] = cc_feed_encode($R['user_real_name']);
             if( $is_topics )
             {
-                $R['topic_text_html']   = cc_feed_safe_html($R['topic_text_html']) ;
+                // we're going to experiment with turnin this off since all this text 
+                // will be displayed within CDATA blocks which freely allow angle
+                // brackets and ampersands. What other characters may blow up this
+                // section I'm not sure
+                //
+                //$R['topic_text_html']   = cc_feed_safe_html($R['topic_text_html']) ;
+
                 $R['topic_text_plain']  = cc_feed_encode($R['topic_text_plain']);
                 $R['topic_name']        = cc_feed_encode($R['topic_name']);
             }
             else
             {
-                $R['upload_description_html']  = cc_feed_safe_html($R['upload_description_html']) ;
+                // see note above
+                //
+                //$R['upload_description_html']  = cc_feed_safe_html($R['upload_description_html']) ;
+
                 $R['upload_description_plain'] = cc_feed_encode($R['upload_description_plain']);
                 $R['upload_name']              = cc_feed_encode($R['upload_name']);
                 $R['user_avatar_url']          = str_replace(' ','%20',$R['user_avatar_url']); // required by validation
