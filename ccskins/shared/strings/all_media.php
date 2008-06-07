@@ -782,4 +782,11 @@ $GLOBALS['str_user_feed_topics'] = _('Forum topics and replies by %s');
 $GLOBALS['str_syndication_feed'] = _('syndication feed');
 $GLOBALS['str_playlist'] = _('playlist');
 
+$GLOBALS['str_updated_file_added'] = _('File(s) added');
+$GLOBALS['str_updated_file_replaced'] = _('File(s) replaced');
+$GLOBALS['str_updated_file_deleted'] = _('File(s) deleted');
+$GLOBALS['str_updated_unknown'] = _('(? unknown operation ?)');
+$GLOBALS['str_updated_recent'] = _('Recent Updates');
+$GLOBALS['str_updated_more'] = _('More recent updates');
+
 ?>
