@@ -119,6 +119,7 @@ EOF;
 
 print '<table class="linkstable">';
 gen_ufl('user=', $T->String(array('str_user_feed_all_ups_by',$urec['fancy_user_name'])));
+gen_ufl('sort=last_edit&user=', $T->String(array('str_user_feed_last_edit',$urec['fancy_user_name'])));
 gen_ufl('tags=remix&user=', $T->String(array('str_user_feed_remixes_by',$urec['fancy_user_name'])));
 gen_ufl('remixesof=', $T->String(array('str_user_feed_remixes_of',$urec['fancy_user_name'])));
 gen_ufl('tags=trackback&user=', $T->String(array('str_user_feed_trackbacks',$urec['fancy_user_name'])));

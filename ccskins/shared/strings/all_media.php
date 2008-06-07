@@ -773,6 +773,7 @@ $GLOBALS['str_user_feed_all_ups_by'] = _('All uploads by %s');
 $GLOBALS['str_user_feed_remixes_by'] = _('Remixes by %s');
 $GLOBALS['str_user_feed_remixes_of'] = _('Remixes of %s');
 $GLOBALS['str_user_feed_trackbacks'] = _('Uploads by %s featured in trackbacks');
+$GLOBALS['str_user_feed_last_edit'] = _('Recent updates by %s');
 $GLOBALS['str_user_feed_remix_trackbacks'] = _('Remixes of %s featured in trackbacks');
 $GLOBALS['str_user_feed_reccby'] = _('Uploads recommended by %s');
 $GLOBALS['str_user_feed_reviews_by'] = _('Comments left by %s');
