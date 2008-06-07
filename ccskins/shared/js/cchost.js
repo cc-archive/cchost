@@ -118,6 +118,8 @@ queryPopup.prototype = {
     className: '',
     template: '',
     title: '',
+    width: 500,
+    height: '',
 
     initialize: function(className,template,title) {
         this.className = className;
@@ -135,7 +137,7 @@ queryPopup.prototype = {
 
     onClick: function( e, upload_id ) {
         var url = query_url + 'f=html&t='+this.template+'&ids=' + upload_id;
-        Modalbox.show( url, {title: this.title, width: 500} );
+        Modalbox.show( url, {title: this.title, width: this.width, height: this.height } );
     }
 }
 

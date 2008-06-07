@@ -217,6 +217,8 @@ if( window.ccEPlayer )
 function menu_cb(resp) {
     $('upload_menu_box').innerHTML = resp.responseText;
     var dl_hook = new queryPopup("download_hook","download",str_download); 
+    dl_hook.height = '550';
+    dl_hook.width = '700';
     dl_hook.hookLinks();
     if( window.round_box_enabled )
         cc_round_boxes();
