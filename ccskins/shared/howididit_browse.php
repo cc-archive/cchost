@@ -31,8 +31,8 @@ ccHowIDidIt.prototype = {
     initialize: function() {
         Event.observe( 'hidi_sort', 'change', this.fillUploads.bindAsEventListener(this) );
         this.dl_hook = new queryPopup("download_hook","download",str_download); 
-            dl_hook.height = '550';
-            dl_hook.width  = '700';
+        this.dl_hook.height = '550';
+        this.dl_hook.width  = '700';
         this.menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);
         this.fillUploads();
     },
