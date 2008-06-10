@@ -18,7 +18,15 @@ function _t_admin_print_admin_menu(&$T,&$_TV)
             $selected = $VR['selected'] ? 'selected="selected" ' : '';
             $help .= "<option value=\"{$VR['cfg']}\" $selected>{$VR['text']}</option>\n";
         }
-        $_TV['client_menu_help'] = $help . "</select>";
+        if( empty($menu['delete_url']) )
+        {
+            $del_button = '';
+        }
+        else
+        {
+            $del_button = '<br /><br /><a class="small_button" href="' . $menu['delete_url'] . '">' . _('Delete this virtual root') . '</a>';
+        }
+        $_TV['client_menu_help'] = $help . "</select>" . $del_button;
         $_TV['client_menu_hint'] = $menu['local_hint'];
         $_TV['client_menu']      = $menu['local_items'];
         $_TV['end_script_blocks'][] = 'admin.php/print_admin_menu_hook';
