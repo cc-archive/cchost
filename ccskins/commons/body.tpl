@@ -132,7 +132,10 @@
 
 <div id="footer" class="med_light_bg">
   <div id="license"><p>%(site-license)%</p></div>
-  <p>%(footer)%</p>
+  <p><?
+  $__plug = str_replace('#rand#',rand(),$A['footer']);
+  print $__plug;
+?></p>
 </div><!-- footer -->
 
 %end_if% <!-- if_not_null_popup -->
