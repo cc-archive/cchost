@@ -160,8 +160,6 @@ class CCQuery
         $this->args = $qargs;
         $this->_ensure_template();        
         $this->sql_p = array_merge($this->sql_p,$sqlargs);
-        $this->_gen_limit();
-        $this->_gen_sort();
         $this->_common_query();
         return $this->_process_records();
     }
