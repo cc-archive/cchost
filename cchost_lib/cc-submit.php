@@ -63,8 +63,9 @@ class CCAdminSubmitFormForm extends CCUploadForm
                        array(  'label'      => _('Logo'),
                                'formatter'  => 'avatar',
                                'form_tip'   => _('Image file'),
-                               'upload_dir' => $CC_GLOBALS['image-upload-dir'],
+                               'upload_dir' => $CC_GLOBALS['image-upload-dir'],     
                                'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL  ),
+
 
                     'help' =>
                         array( 'label' => _('Description'),
@@ -117,6 +118,11 @@ class CCAdminSubmitFormForm extends CCUploadForm
                                'form_tip'   => _('Redirect this submission from the default Submit Form handler (advanced usage)'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE ),
+                    'delete' =>
+                        array( 'label' => _('Delete'),
+                               'form_tip'   => _('Delete this submit form type (This is no UNDO!)'),
+                               'formatter'  => 'checkbox',
+                               'flags'      => CCFF_NONE ),
                   );
 
     
@@ -218,23 +224,33 @@ class CCSubmit
 
     function ShowSubmitTypes($types)
     {
+        global $CC_GLOBALS;
+
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle('str_pick_submission_type');
         $keys = array_keys($types);
+        $sorted = array();
         foreach( $keys as $key )
         {
             if( empty($types[$key]['action']) )
                 $types[$key]['action'] = ccl('submit',$key);
-            // legacy handling
+
             if( !empty($types[$key]['logo']) )
             {
-                if( !file_exists($types[$key]['logo']) )
+                $img = $CC_GLOBALS['image-upload-dir'] . basename($types[$key]['logo']);
+                if( file_exists($img ) )
+                {
+                    $types[$key]['logo'] = $img;
+                }
+                else
                 {
                     unset($types[$key]['logo']);
                 }
             }
+            $sorted[ $types[$key]['weight'] ] = $types[$key];
         }
-        CCPage::PageArg('submit_form_infos', $types, 'html_form.php/submit_forms');
+        ksort($sorted);
+        CCPage::PageArg('submit_form_infos', $sorted, 'html_form.php/submit_forms');
     }
 
 
@@ -258,6 +274,7 @@ class CCSubmit
                         unset($form_types[$key]);
                 }
             }
+            $sorted = array();
             return $form_types;
         }
 
@@ -361,6 +378,7 @@ class CCSubmit
         global $CC_CFG_ROOT;
 
         require_once('cchost_lib/cc-page.php');
+        $this->_build_bread_crumb_trail('');
         CCPage::SetTitle(_('Manage Submit Forms'));
         if( $cmd == 'revert' )
         {
@@ -394,7 +412,7 @@ class CCSubmit
         }
 
         $url = ccl('admin','newsubmitform');
-        $prompt .= "<p><a class=\"cc_gen_button\" style=\"float:left;\" href=\"$url\"><span>" 
+        $prompt .= "<p><a class=\"cc_gen_button\" style=\"float:left;margin-bottom:8px;\" href=\"$url\"><span>" 
                     . _('Add a new form type...') . '</span></a><div style=\"clear:both;\">&nbsp;</div></p>';
 
         CCPage::PageArg('client_menu',$args,'print_client_menu');
@@ -403,11 +421,14 @@ class CCSubmit
 
     function EditForm($form_type_key)
     {
+        global $CC_GLOBALS;
+
         $form_types = $this->_get_form_types(false);
         if( empty($form_types[$form_type_key]) )
             return;
 
         require_once('cchost_lib/cc-page.php');
+        $this->_build_bread_crumb_trail(_('Edit Submit Form'));
         $msg = sprintf(_('Editing Submit Form for: %s'), $form_types[$form_type_key]['submit_type'] );
         CCPage::SetTitle($msg);
         $ok = false;
@@ -415,60 +436,31 @@ class CCSubmit
         $form = new CCAdminSubmitFormForm();
         if( empty($_POST['adminsubmitform']) )
         {
-            // 
-            // We copy the image to the user's upload dir so they
-            // don't edit the 'system' copy
-            //
-            // This is all a little heavy handed but it's solid
-            // and we take no chances of screwing things up
-            // down the line
-            //
-            if( strstr($form_types[$form_type_key]['logo'],'ccskins') )
-            {
-                global $CC_GLOBALS;
-                $fullpath = realpath($form_types[$form_type_key]['logo']);
-                $filename = basename($fullpath);
-                $dest_path = $CC_GLOBALS['image-upload-dir'] . $filename;
-                if( file_exists($dest_path) )
-                {
-                    $ret = true;
-                }
-                else
-                {
-                    $ret = copy($fullpath,$dest_path);
-                }
-                if( $ret )
-                {
-                    // we'll write this back to the form type (might as well)
-                    //
-                    // we get a fresh copy 
-                    $configs =& CCConfigs::GetTable();
-                    $forms_temp = $configs->GetConfig('submit_forms');
-                    $forms_temp[$form_type_key]['logo'] = $dest_path;
-                    $configs->SaveConfig('submit_forms',$forms_temp,'',false);
-
-
-                }
-                else
-                {
-                    $msg = sprintf(_('Your Graphics Upload Path (%s) must be writable to work on Submit Forms.'),$CC_GLOBALS['image-upload-dir']);
-                    CCPage::Prompt($msg);
-                    return;
-                }
-                $form_types[$form_type_key]['logo'] = $dest_path;
-            }
+            $this->_ensure_private_logo($form_types,$form_type_key);
             $form->PopulateValues($form_types[$form_type_key]);
+        }
+        elseif( array_key_exists('delete',$_POST) )
+        {
+            $form_name = $form_types[$form_type_key]['submit_type'];
+            $configs =& CCConfigs::GetTable();
+            $forms_temp = $configs->GetConfig('submit_forms');
+            unset($forms_temp[$form_type_key]);
+            $configs->SaveConfig('submit_forms',$forms_temp,'',false);
+            $urlx = ccl('admin','submit');
+            $urly = ccl('submit');
+            $link1 = "<a href=\"$urlx\">";
+            CCPage::Prompt(sprintf( _('Submit form "%s" has been deleted.'), $form_name ));
+            $ok = true;
         }
         elseif ( $form->ValidateFields() )
         {
-            $this->_save_form($form,$form_type_key,$form_types);
-            $urlx = ccl('admin','submit');
-            $urly = ccl('submit');
-            $form_name = $form_types[$form_type_key]['submit_type'];
-            $link1 = "<a href=\"$urlx\">";
-            CCPage::Prompt(
-                sprintf( _('Submit form changes saved. Go back to %sManage Submit Forms%s or see the %s'), $link1, '</a>', "<a href=\"$urly\">$form_name</a>")
-                );
+            $form->FinalizeAvatarUpload('logo', $CC_GLOBALS['image-upload-dir'] );
+            $form->GetFormValues($values);
+            // this ensures that the logo isn't wiped. (sigh)
+            if( empty($values['logo']) )
+                $values['logo'] = $form_types[$form_type_key]['logo'];
+            $form_types = $this->SaveFormType($values,$form_type_key,$form_types);
+            CCPage::Prompt( _('Submit form changes saved') );
             $ok = true;
         }
 
@@ -478,14 +470,70 @@ class CCSubmit
         }
     }
 
+    function _ensure_private_logo(&$form_types,&$form_type_key)
+    {
+        global $CC_GLOBALS;
+
+        // 
+        // We copy the image to the user's upload dir so they
+        // don't edit the 'system' copy
+        //
+        // This is all a little heavy handed but it's solid
+        // and we take no chances of screwing things up
+        // down the line
+        //
+        if( !isset($form_types[$form_type_key]['logo']) )
+        {
+            $form_types[$form_type_key]['logo'] = '';
+            return;
+        }
+
+        if( strstr($form_types[$form_type_key]['logo'],'ccskins') === false )
+            return;
+
+        global $CC_GLOBALS;
+        $fullpath = realpath($form_types[$form_type_key]['logo']);
+        $filename = basename($fullpath);
+        $dest_path = $CC_GLOBALS['image-upload-dir'] . $filename;
+        if( file_exists($dest_path) )
+        {
+            $ret = true;
+        }
+        else
+        {
+            $ret = copy($fullpath,$dest_path);
+        }
+        if( $ret )
+        {
+            // we'll write this back to the form type (might as well)
+            //
+            // we get a fresh copy 
+            $configs =& CCConfigs::GetTable();
+            $forms_temp = $configs->GetConfig('submit_forms');
+            $forms_temp[$form_type_key]['logo'] = $filename;
+            $configs->SaveConfig('submit_forms',$forms_temp,'',false);
+        }
+        else
+        {
+            $msg = sprintf(_('Your Graphics Upload Path (%s) must be writable to work on Submit Forms.'),$CC_GLOBALS['image-upload-dir']);
+            CCPage::Prompt($msg);
+            return;
+        }
+        $form_types[$form_type_key]['logo'] = $filename;
+    }
+
     function NewForm()
     {
+        global $CC_GLOBALS;
+
         require_once('cchost_lib/cc-page.php');
+        $this->_build_bread_crumb_trail(_('New Submit Form'));
         CCPage::SetTitle( _('Create a New Submit Form') );
 
         $form = new CCAdminSubmitFormForm();
         if( !empty($_POST['adminsubmitform']) && $form->ValidateFields() )
         {
+            /* Get a 'safe' form label */
             $form_types = $this->_get_form_types(false);
             $form_label = strtolower($form->GetFormValue('submit_type'));
             $form_label = preg_replace('/[^a-z]+/', '', $form_label);
@@ -497,28 +545,16 @@ class CCSubmit
             while( in_array( $safe_form_label, $keys ) )
                 $safe_form_label = $form_label . $i++;
             $form_type_key = $safe_form_label;
-            $this->_save_form($form,$form_type_key,$form_types);
-            $form_name = $form_types[$form_type_key]['submit_type'];
-            $urlz = ccl('admin','submit');
-            $urlf = ccl('submit');
-            $link1 = "<a href=\"$urlz\">";
-            CCPage::Prompt(
-                sprintf( _('New Form type saved. Go back to %sManage Submit Forms%s or see the %s'), $link1, '</a>', "<a href=\"$urlf\">$form_name</a>")
-                );
+
+            $form->FinalizeAvatarUpload('logo', $CC_GLOBALS['image-upload-dir'] );
+            $form->GetFormValues($values);
+            $form_types = $this->SaveFormType($values,$form_type_key,$form_types);
+            CCPage::Prompt( _('New Form type saved.') );
         }
         else
         {
             CCPage::AddForm( $form->GenerateForm() );
         }
-    }
-
-    function _save_form(&$form,$form_type_key,&$form_types)
-    {
-        global $CC_GLOBALS;
-
-        $form->FinalizeAvatarUpload('logo', $CC_GLOBALS['image-upload-dir'] );
-        $form->GetFormValues($values);
-        $form_types = $this->SaveFormType($values,$form_type_key,$form_types);
     }
 
     function SaveFormType($values,$form_type_key,$form_types='')
@@ -527,16 +563,6 @@ class CCSubmit
 
         if( empty($form_types) )
             $form_types = $this->_get_form_types(false);
-
-
-        if( empty($values['logo']) )
-        {
-             $values['logo'] = '';
-        }
-        else
-        {
-            $values['logo'] = $CC_GLOBALS['image-upload-dir'] . $values['logo'];
-        }
 
         if( empty($values['tags']) )
         {
@@ -645,6 +671,26 @@ class CCSubmit
         }
     }
 
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail($text)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        
+        $trail[] = array( 'url' => ccl('admin','site'), 'text' => _('Settings') );
+        if( empty($text) )
+        {
+            $trail[] = array( 'url' => '', 'text' => _('Manage Submit Forms') );
+        }
+        else
+        {
+            $trail[] = array( 'url' => ccl('admin','submit'), 'text' => _('Manage Submit Forms') );
+            $trail[] = array( 'url' => '', 'text' => $text );
+        }
+
+        CCPage::AddBreadCrumbs($trail);
+    }
 }
 
 
