@@ -493,7 +493,7 @@ class CCAdmin
                 $configs =& CCConfigs::GetTable();
                 $w['config_scope'] = $CC_CFG_ROOT;
                 $configs->DeleteWhere($w);
-                $url = ccl( 'media/admin/site/local' );
+                $url = ccc( CC_GLOBAL_SCOPE, 'admin', 'site', 'local' );
                 CCUtil::SendBrowserTo($url);
             }
         }

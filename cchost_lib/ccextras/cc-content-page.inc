@@ -180,14 +180,12 @@ class CCContentPageForm extends CCForm
                         array(  'label'      => _('Next/Prev Links'),
                                'form_tip'    => _('Allowing paging with next/prev links'),
                                'formatter'   => 'checkbox',
-                               'value'       => 1,
                                'flags'       => CCFF_POPULATE );
 
         $fields['content_page_box'] =
                         array(  'label'      => _('Boxes'),
                                'form_tip'    => _('Use boxes around content'),
                                'formatter'   => 'checkbox',
-                               'value'       => 1,
                                'flags'       => CCFF_POPULATE );
 
         $options = 

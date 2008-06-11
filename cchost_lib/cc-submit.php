@@ -63,7 +63,7 @@ class CCAdminSubmitFormForm extends CCUploadForm
                        array(  'label'      => _('Logo'),
                                'formatter'  => 'avatar',
                                'form_tip'   => _('Image file'),
-                               'upload_dir' => './',
+                               'upload_dir' => $CC_GLOBALS['image-upload-dir'],
                                'flags'      => CCFF_POPULATE | CCFF_SKIPIFNULL  ),
 
                     'help' =>
@@ -451,7 +451,7 @@ class CCSubmit
                 }
                 else
                 {
-                    $msg = _(sprintf('Your Graphics Upload Path (%s) must be writable to work on Submit Forms.',$CC_GLOBALS['image-upload-dir']));
+                    $msg = sprintf(_('Your Graphics Upload Path (%s) must be writable to work on Submit Forms.'),$CC_GLOBALS['image-upload-dir']);
                     CCPage::Prompt($msg);
                     return;
                 }

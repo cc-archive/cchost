@@ -51,7 +51,7 @@ class CCAdminMenuForm extends CCGridForm
         {
             $revert_link = ccl('admin','menu','revert');
 
-            $rlink1 = "<a href=\"$revert_link\"><b><u>";
+            $rlink1 = "<a class=\"small_button\" href=\"$revert_link\"><b><u>";
             $rlink2 = "</b></u></a>";
 
             if( $CC_CFG_ROOT == CC_GLOBAL_SCOPE )
@@ -89,17 +89,10 @@ class CCAdminMenuForm extends CCGridForm
 
         $this->SetHelpText($help);
 
-        $addurl = ccl('admin', 'menu', 'additems', '3');
-        $addlink1 = "<a href=\"$addurl\"><b><u>";
-        $addlink2 = '</b></u></a>';
-        $help = _('To add items click %shere%s (This will not save any of the work you have done below.)');
-        $help =  sprintf( $help, $addlink1, $addlink2 );
-        $this->SetHelpText($help);
-
         uasort($menu,'cc_sort_user_menu');
         uasort($groups,'cc_weight_sorter');
 
-        $heads = array( _('Menu Text'), _('Group'), _('Weight'), _('Action'), _('Id'), _('Access'), );
+        $heads = array( _('Menu Text'), _('Group'), _('Weight'), _('Action'), _('Id'), _('Access'), _('Delete') );
         $this->SetColumnHeader($heads);
 
         $group_select = array();
@@ -148,6 +141,11 @@ class CCAdminMenuForm extends CCGridForm
                     'formatter'  => 'select',
                     'options'    => $access_ops,
                     'flags'      => CCFF_NONE ),
+                  array(
+                    'element_name'  => "mi[$keyname][delete]",
+                    'value'      => '',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE ),
                 );
 
             $this->AddGridRow( $keyname, $a );
@@ -157,6 +155,49 @@ class CCAdminMenuForm extends CCGridForm
             */
         }
 
+        $S = 'new[%i%]';
+        $a = array(
+              array(
+                'element_name'  => $S . "[menu_text]",
+                'value'      => '',
+                'formatter'  => 'textedit',
+                'flags'      => CCFF_REQUIRED ),
+              array(
+                'element_name'  => $S . "[menu_group]",
+                'value'      => '',
+                'formatter'  => 'raw_select',
+                'options'    => $group_select,
+                'flags'      => CCFF_NONE ),
+              array(
+                'element_name'  => $S . "[weight]",
+                'value'      => '',
+                'formatter'  => 'textedit',
+                'class'      => 'cc_form_input_short',
+                'flags'      => CCFF_REQUIRED ),
+              array(
+                'element_name'  => $S . "[action]",
+                'value'      => '',
+                'formatter'  => 'textedit',
+                'flags'      => CCFF_REQUIRED ),
+              array(
+                'element_name'  => $S . "[id]",
+                'value'      => 'mi_%i%',
+                'formatter'  => 'textedit',
+                'flags'      => CCFF_REQUIRED ),
+              array(
+                'element_name'  => $S . "[access]",
+                'value'      => '',
+                'formatter'  => 'raw_select',
+                'options'    => $access_ops,
+                'flags'      => CCFF_NONE ),
+              array(
+                'element_name'  => $S . "[delete]",
+                'value'      => '',
+                'formatter'  => 'checkbox',
+                'flags'      => CCFF_NONE ),
+            );
+
+        $this->AddMetaRow($a,_('Add Menu Item'));
         $this->SetSubmitText(_('Submit Menu Changes'));
     }
 
@@ -179,7 +220,7 @@ class CCAdminMenuGroupsForm extends CCGridForm
     {
         $this->CCGridForm();
 
-        $heads = array( _('Group Name'), _('Weight') );
+        $heads = array( _('Name'), _('Weight'), _('Delete') );
         $this->SetColumnHeader($heads);
 
         foreach( $groups as $keyname => $group )
@@ -196,11 +237,37 @@ class CCAdminMenuGroupsForm extends CCGridForm
                     'formatter'  => 'textedit',
                     'class'      => 'cc_form_input_short',
                     'flags'      => CCFF_REQUIRED ),
+                  array(
+                    'element_name'  => "grp[$keyname][delete]",
+                    'value'      => '',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE ),
                 );
 
             $this->AddGridRow( $keyname, $a );
         }
         
+        $S = 'new[%i%]';
+        $a = array(
+              array(
+                    'element_name'  => $S . "[group_name]",
+                    'value'      => '',
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED ),
+                  array(
+                    'element_name'  => $S . "[weight]",
+                    'value'      => '',
+                    'formatter'  => 'textedit',
+                    'class'      => 'cc_form_input_short',
+                    'flags'      => CCFF_REQUIRED ),
+              array(
+                'element_name'  => $S . "[delete]",
+                'value'      => '',
+                'formatter'  => 'checkbox',
+                'flags'      => CCFF_NONE ),
+            );
+
+        $this->AddMetaRow($a,_('Add New Group'));
         $this->SetSubmitText(_('Submit Group Changes'));
     }
 }
@@ -256,6 +323,7 @@ class CCMenuAdmin
         
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle(_('Edit Menus'));
+        $this->_build_bread_crumb_trail(_('Edit Menus'));
 
         $configs =& CCConfigs::GetTable();
 
@@ -269,15 +337,30 @@ class CCMenuAdmin
         else
         {
             $menu_items = $_POST['mi'];
+            if( !empty($_POST['new']) )
+                $menu_items += $_POST['new'];
             CCUtil::StripSlash($menu_items);
             $copy = array();
             foreach( $menu_items as $name => $edits )
             {
-                $copy[$name]['menu_text']  = CCUtil::StripText($edits['menu_text']);
+                if( array_key_exists('delete',$edits ) )
+                    continue;
+                $id   = CCUtil::StripText($edits['id']);
+                $text = CCUtil::StripText($edits['menu_text']);
+
+                // here's some legacy hacking...
+                if( preg_match( '/(additem|^[0-9]+$)/', $name) )
+                {
+                    $name = $basename = strtolower(preg_replace('/[^a-z0-9]+/i','_',$text));
+                    $ix = 1;
+                    while( array_key_exists($name,$menu_items) )
+                        $name = $basename . '_' . $ix++;
+                }
+                $copy[$name]['menu_text']  = $text;
                 $copy[$name]['menu_group'] = CCUtil::StripText($edits['menu_group']);
                 $copy[$name]['weight']     = CCUtil::StripText($edits['weight']);
                 $copy[$name]['access']     = CCUtil::StripText($edits['access']) ;
-                $copy[$name]['id']         = CCUtil::StripText($edits['id']) ;
+                $copy[$name]['id']         = $id;
                 $copy[$name]['action']     = htmlspecialchars(urldecode($edits['action'])) ;
             }
 
@@ -290,6 +373,18 @@ class CCMenuAdmin
 
     }
 
+    function _build_bread_crumb_trail($text,$cmd=false)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        
+        $trail[] = array( 'url' => ccl('admin','site'), 'text' => _('Settings') );
+    
+        $trail[] = array( 'url' => '', 'text' => _($text) );
+
+        CCPage::AddBreadCrumbs($trail);
+    }
+
+
     /**
     * Displays and processes a form that allows admins to edit the main menu's groups
     */
@@ -297,6 +392,7 @@ class CCMenuAdmin
     {
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle(_('Edit Menu Groups'));
+        $this->_build_bread_crumb_trail(_('Edit Groups'));
 
         $configs =& CCConfigs::GetTable();
 
@@ -309,8 +405,27 @@ class CCMenuAdmin
         else
         {
             $groups = $_POST['grp'];
-            array_walk($groups,'cc_strip_groups');
-            $configs->SaveConfig('groups',$groups,'',false);
+            if( !empty($_POST['new']) )
+                $groups += $_POST['new'];
+            CCUtil::Strip($groups);
+            $copy = array();
+            foreach( $groups as $name => $group )
+            {
+                if( array_key_exists('delete',$group) )
+                    continue;
+
+                // here's some legacy hacking...
+                if( preg_match( '/^(extra[1-3]|[0-9]+)$/', $name) )
+                {
+                    $name = $basename = strtolower(preg_replace('/[^a-z0-9]+/i','_',$group['group_name']));
+                    $ix = 1;
+                    while( array_key_exists($name,$groups) )
+                        $name = $basename . '_' . $ix++;
+                }
+                $copy[$name]['group_name']  = $group['group_name'];
+                $copy[$name]['weight'] = $group['weight'];
+            }
+            $configs->SaveConfig('groups',$copy,'',false);
             CCPage::Prompt(_('Menu group changes have been saved'));
         }            
 

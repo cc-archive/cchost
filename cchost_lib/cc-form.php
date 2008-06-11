@@ -1758,9 +1758,14 @@ END;
             if( is_array($value) ) // err, sorry about this
                 $value = $value['name']; 
             $real = cca($imagedir,$value);
+            $path = ccd($imagedir,$value);
+            if( !file_exists($real) )
+            {
+                $real = cca($value);
+                $path = ccd($value);
+            }
             if( file_exists($real) )
             {
-                $path     = ccd($imagedir,$value);
                 $html .= '<br /><img style="background-color:#999" src="' . $path . '" /><br /> '.
                   '<input type="checkbox" id="' . $varname . '_delete" name="' . $varname . '_delete" />'.
                   '<input type="hidden"   id="' . $varname . '_file"   name="' . $varname . '_file" ' .
@@ -1916,8 +1921,16 @@ END;
             $oldname  = CCUtil::StripText($_POST[$fieldname . '_file']);
             if( $oldname )
             {
-                CCUtil::MakeSubdirs( $imagedir ); 
-                $path = realpath($imagedir) . '/' . $oldname; 
+                if( file_exists($oldname) )
+                {
+                    $path = realpath($oldname);
+                }
+                else
+                {
+                    CCUtil::MakeSubdirs( $imagedir );  // er, why?
+                    $path = realpath($imagedir) . '/' . $oldname; 
+                }
+
                 unlink( $path );
 
                 // we have to strip the SKIP flag to maek sure the blank

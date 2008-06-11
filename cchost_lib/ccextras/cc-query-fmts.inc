@@ -114,6 +114,7 @@ class CCQueryFormats
 
             case 'html':
             case 'docwrite':
+            case 'textfile':
             {
                 if( empty($template) )
                     $template = 'med';
@@ -153,6 +154,16 @@ class CCQueryFormats
                     foreach( $lines as $L )
                        $text .= "document.write('" . addslashes($L) . "' + \"\\n\")\n";
                     $mime = 'application/javascript';
+                }
+                elseif( $format == 'textfile' )
+                {
+                    if( !empty($filename) )
+                    {
+                        header("Content-Length: " .(string)strlen($text) );
+                        header('Content-Disposition: attachment; filename="'.$filename.'"');
+                    }
+
+                    $mime = 'text/plain';
                 }
                 else
                 {

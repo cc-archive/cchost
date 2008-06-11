@@ -432,9 +432,4 @@ function cc_sort_user_menu($a, $b)
     return( cc_weight_sorter($a['menu_group'],$b['menu_group']) );
 }
 
-function cc_strip_groups(&$i,$k)
-{
-    $i['group_name']   = CCUtil::StripText($i['group_name']);
-    $i['weight'] = CCUtil::StripText($i['weight']);
-}
 ?>
