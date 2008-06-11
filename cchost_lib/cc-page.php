@@ -667,7 +667,7 @@ class CCPage extends CCSkin
     * @param string $sql_where The SQL WHERE clause to limit queries
     * @param integer $limit Override system defaults for how many records in a page
     */
-    function AddPagingLinks($table_or_dataview,$sql_where='',$limit ='')
+    function AddPagingLinks(&$table_or_dataview,$sql_where='',$limit ='')
     {
         global $CC_GLOBALS;
 

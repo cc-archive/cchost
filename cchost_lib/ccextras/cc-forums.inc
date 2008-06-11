@@ -264,7 +264,7 @@ class CCForumAPI
 EOF;
 
         $wf['forum_thread_forum'] = $forum_id;
-        CCPage::AddPagingLinks($threads,$wf);
+        CCPage::AddPagingLinks($threads,$wf,30);
         $forum_threads =& $threads->QueryRows($wf,$columns);
 
         $topic_counter = new CCTable('cc_tbl_topics','topic_id');
