@@ -186,9 +186,8 @@ class CCSearch
                 // heaven bless global variables
                 global $CC_GLOBALS;
                 $result_limit = 30; // todo: option later
-                $CC_GLOBALS['max-listing'] = $result_limit; 
                 CCPage::SetTitle( array( 'str_search_results_from', $meta['title']) );
-                $q = "search=$search_text&datasource={$meta['datasource']}&group={$meta['group']}&t={$meta['template']}&limit=30";
+                $q = "search=$search_text&datasource={$meta['datasource']}&group={$meta['group']}&t={$meta['template']}&limit=".$result_limit;
                 if( !empty($search_type) )
                     $q .= '&search_type=' . $search_type;
                 $query = new CCQuery();

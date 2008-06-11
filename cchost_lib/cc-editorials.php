@@ -61,7 +61,7 @@ class CCEditorials
         $page = CCPage::GetPage();
         $title = $page->String('str_editors_picks');
         $query = new CCQuery();
-        $q = 't=ed_picks&tags=editorial_pick&title='.$title;
+        $q = 'limit=15&t=ed_picks&tags=editorial_pick&title='.$title;
         $args = $query->ProcessAdminArgs($q);
         $query->Query($args);
     }

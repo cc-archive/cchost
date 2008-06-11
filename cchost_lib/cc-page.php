@@ -81,7 +81,7 @@ class CCPageAdmin
 
         if( !empty($records) && (count($records) > 1) && (empty($paging) || ($paging == 'on') || ($paging=='default')) )
         {
-            CCPage::AddPagingLinks($queryObj->dataview,empty($limit)?'':$limit);
+            CCPage::AddPagingLinks($queryObj->dataview,'',empty($limit)?'':$limit);
         }
 
         if( empty($template) )

@@ -210,7 +210,7 @@ class CCQuery
         if( !empty($this->args['query']) )
             $this->args['query'] = urldecode($this->args['query']);
 
-        $this->_check_limit();
+        $this->_hard_limit = true;
         $this->_get_get_offset();
 
         $k = array_keys($this->args);
@@ -232,7 +232,7 @@ class CCQuery
     /**
     * Call this before calling Query or QuerySQL
     */
-    function ProcessAdminArgs($args,$extra_args=array(),$check_limit=true)
+    function ProcessAdminArgs($args,$extra_args=array())
     {
         if( is_string($args) )
         {
@@ -251,9 +251,6 @@ class CCQuery
             require_once('cchost_lib/cc-tags.php');
             $this->args['tags'] = join(',',CCTag::TagSplit($this->args['tags']));
         }
-
-        if( $check_limit )
-            $this->_check_limit();
 
         $this->_get_get_offset();
 
@@ -298,7 +295,7 @@ class CCQuery
     {
         global $CC_GLOBALS;
 
-        $limit = empty($CC_GLOBALS['querylimit']) ? 10 : $CC_GLOBALS['querylimit'];
+        $limit = 0; // empty($CC_GLOBALS['querylimit']) ? 10 : $CC_GLOBALS['querylimit'];
 
         return array(
                     'sort' => 'date', 'ord'  => 'DESC', 
@@ -390,6 +387,9 @@ class CCQuery
 
     function _common_query()
     {
+        if( !empty($this->_hard_limit) )
+            $this->_check_limit();
+
         $this->_setup_dataview();
 
         if( !empty($this->reqtags) )
@@ -409,7 +409,6 @@ class CCQuery
         if( !empty($this->sql_p['where']) )
             $this->where[] = $this->sql_p['where'];
 
-//        $this->sql_p['where'] = join( ' AND ', $this->where ) ;
         $this->sql_p['where'] = empty($this->where) ? '' : '(' . join( ') AND (', $this->where ) . ')' ;
 
         if( empty($this->dead) )
@@ -611,9 +610,51 @@ class CCQuery
 
     function _gen_limit()
     {
-        if( empty($this->args['offset']) )
+        global $CC_GLOBALS;
+
+        if( empty($this->args['offset']) || (intval($this->args['offset']) <= 0) )
             $this->args['offset'] = '0';
-        $this->sql_p['limit'] = $this->args['limit'] . ' OFFSET ' . $this->args['offset'];
+
+        if( empty($this->args['limit']) )
+        {
+            switch( $this->args['format'] )
+            {
+                case 'page':
+                    $this->args['limit'] = 'page';
+                    break;
+                case 'xspf':
+                case 'rss':
+                case 'atom':
+                    $this->args['limit'] = 'feed';
+                    break;
+               default:
+                    $this->args['limit'] = 'query';
+                    break;
+            }
+        }
+
+        switch( $this->args['limit'] )
+        {
+            case 'page':
+                $limit  = empty($CC_GLOBALS['max-listing']) ? 12 : $CC_GLOBALS['max-listing'];
+                break;
+            
+            case 'feed':
+                $limit = empty($CC_GLOBALS['max-feed']) ? 15 : $CC_GLOBALS['max-feed'];
+                break;
+
+            case 'query':
+                $limit = empty($CC_GLOBALS['querylimit']) ? 0 : $CC_GLOBALS['querylimit'];
+                break;
+
+            default:
+                $limit = $this->args['limit'];
+                break;
+        }
+
+
+        $this->args['limit'] =  $limit; // put here for debugging too
+        $this->sql_p['limit'] = $limit . ' OFFSET ' . $this->args['offset'];
     }
 
     function _gen_match()
@@ -1173,9 +1214,6 @@ class CCQuery
 
     function _check_limit()
     {
-        if( !empty($this->limit_override) )
-            return;
-
         global $CC_GLOBALS;
 
         $args =& $this->args;
