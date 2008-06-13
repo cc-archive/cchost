@@ -13,9 +13,9 @@
 <? $rkey = array_keys($R['files']);
    $fname = $R['files'][$rkey[0]]['file_name'];
    $tname = preg_replace( '/(.*)(_[0-9]+)?\.[^.]+$/', '\1.txt', $fname );
-   //<a href="%(query-url)%t=files_info.tpl&f=text&returnas=%(#tname)%&ids=%(#R/upload_id)%">infomation (text)</a>)
+   //t=files_info.tpl&f=text&returnas=(#tname)&ids=(#R/upload_id)
 ?>
-<p class="upload_name">%(#R/upload_name)% <span style="font-style:italic">%if_not_null(#R/upload_extra/bpm)% (BPM: %(#R/upload_extra/bpm)%) 
+<p class="upload_name">%(#R/upload_name)% </p>
 <ol>
     %loop(#R/files,F)%
          <li>
