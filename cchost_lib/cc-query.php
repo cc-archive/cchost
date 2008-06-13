@@ -115,6 +115,9 @@ class CCQuery
         if( !empty($args) )
             $this->args = $args;
 
+        if( !empty($this->_sql_squeeze) )
+           $this->sql_p = array_merge($this->sql_p,$this->_sql_squeeze);
+
         $this->_ensure_template();
 
         if( $this->args['datasource'] == 'uploads' )
@@ -157,11 +160,8 @@ class CCQuery
     */
     function QuerySQL($qargs,$sqlargs)
     {
-        $this->args = $qargs;
-        $this->_ensure_template();        
-        $this->sql_p = array_merge($this->sql_p,$sqlargs);
-        $this->_common_query();
-        return $this->_process_records();
+        $this->_sql_squeeze =  $sqlargs;
+        return $this->Query($qargs);
     }
 
     /**
@@ -634,7 +634,7 @@ class CCQuery
         switch( $this->args['limit'] )
         {
             case 'page':
-                $limit  = empty($CC_GLOBALS['max-listing']) ? 12 : $CC_GLOBALS['max-listing'];
+                $limit  = $this->_get_max_listing();
                 break;
             
             case 'feed':
@@ -1218,7 +1218,7 @@ class CCQuery
 
         if( $args['format'] == 'page' )
         {
-            $admin_limit  = empty($CC_GLOBALS['max-listing']) ? 12 : $CC_GLOBALS['max-listing'];
+            $admin_limit  = $this->_get_max_listing();
         }
         elseif( in_array($args['format'], array('rss','atom','xspf') ) )
         {
@@ -1235,6 +1235,16 @@ class CCQuery
         }
     }
 
+    function _get_max_listing()
+    {
+        if( !isset($this->_max_listing) )
+        {
+            $configs =& CCConfigs::GetTable();
+            $settings = $configs->GetConfig('skin-settings');
+            $this->_max_listing = empty($settings['max-listing']) ? 12 : $settings['max-listing'];
+        }
+        return $this->_max_listing;
+    }
 } // end of class CCQuery
 
 

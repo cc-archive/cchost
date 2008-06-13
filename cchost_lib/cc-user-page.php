@@ -287,8 +287,8 @@ END;
 
         CCPage::PageArg('user_index',$alinks);
         $query = new CCQuery();
+        $qargs .= '&limit=20';
         $args = $query->ProcessAdminArgs($qargs);
-
         $query->QuerySQL($args,$sqlargs);
     }
 
