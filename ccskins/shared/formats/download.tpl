@@ -15,7 +15,7 @@
    $tname = preg_replace( '/(.*)(_[0-9]+)?\.[^.]+$/', '\1.txt', $fname );
    //t=files_info.tpl&f=text&returnas=(#tname)&ids=(#R/upload_id)
 ?>
-<p class="upload_name">%(#R/upload_name)% </p>
+<p class="upload_name">%(#R/upload_name)% <span style="font-style:italic">%if_not_null(#R/upload_extra/bpm)% (BPM: %(#R/upload_extra/bpm)%) %end_if%</span></p>
 <ol>
     %loop(#R/files,F)%
          <li>
