@@ -293,11 +293,9 @@ class CCQuery
     {
         global $CC_GLOBALS;
 
-        $limit = 0; // empty($CC_GLOBALS['querylimit']) ? 10 : $CC_GLOBALS['querylimit'];
-
         return array(
                     'sort' => 'date', 'ord'  => 'DESC', 
-                    'limit' => $limit, 'offset' => 0,
+                    'limit' => 'default', 'offset' => 0,
                     'datasource' => 'uploads', 'format' => 'page',
                     'promo_tag' => 'site_promo',  'promo_gap' => 4,
                     );
@@ -613,7 +611,7 @@ class CCQuery
         if( empty($this->args['offset']) || (intval($this->args['offset']) <= 0) )
             $this->args['offset'] = '0';
 
-        if( empty($this->args['limit']) )
+        if( !isset($this->args['limit']) || $this->args['limit'] == 'default' )
         {
             switch( $this->args['format'] )
             {
@@ -652,7 +650,9 @@ class CCQuery
 
 
         $this->args['limit'] =  $limit; // put here for debugging too
-        $this->sql_p['limit'] = $limit . ' OFFSET ' . $this->args['offset'];
+        if( $limit )
+            $this->sql_p['limit'] = $limit . ' OFFSET ' . $this->args['offset'];
+
     }
 
     function _gen_match()

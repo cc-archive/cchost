@@ -138,7 +138,7 @@ class CCReview
             $this->_build_bread_crumb_trail(array($user_name,$user_real_name),array($upload_id,$upload_name));
             require_once('cchost_lib/cc-query.php');
             $query = new CCQuery();
-            $args = $query->ProcessAdminArgs('paging=off&f=page&t=reviews_upload&datasource=topics',array(),false);
+            $args = $query->ProcessAdminArgs('limit=0&paging=off&f=page&t=reviews_upload&datasource=topics',array(),false);
             $args['title'] = array( 'str_reviews_for_s', $upload_name);
             // sh*t this is a hack to hack, need to rethink/redo how topic_upload foreign keys work
             $sqlargs['where'] = 'topic.topic_type <> \'collab\' AND topic.topic_upload=' . $upload_id;
