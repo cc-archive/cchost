@@ -171,6 +171,8 @@ class CCQuery
     {
         global $CC_GLOBALS;
 
+        $this->_from_url = true;
+
         $req = !empty($_POST) ? $_POST : $_GET;
 
         if( empty($req) )
@@ -208,7 +210,6 @@ class CCQuery
         if( !empty($this->args['query']) )
             $this->args['query'] = urldecode($this->args['query']);
 
-        $this->_hard_limit = true;
         $this->_get_get_offset();
 
         $k = array_keys($this->args);
@@ -383,7 +384,7 @@ class CCQuery
 
     function _common_query()
     {
-        if( !empty($this->_hard_limit) )
+        if( !empty($this->_from_url) )
             $this->_check_limit();
 
         $this->_setup_dataview();
@@ -611,7 +612,23 @@ class CCQuery
         if( empty($this->args['offset']) || (intval($this->args['offset']) <= 0) )
             $this->args['offset'] = '0';
 
-        if( !isset($this->args['limit']) || $this->args['limit'] == 'default' )
+        if( !empty($this->_from_url) )
+        {
+            // we need to verify limit keywords:
+            switch( $this->args['limit'] )
+            {
+                case 'page':
+                    if( $this->args['format'] != 'page' )
+                        $limit = 'default';
+                    break;
+                case 'feed':
+                    if( !in_array($this->args['format'], array('rss','atom','xspf') )) 
+                        $limit = 'default';
+                    break;
+            }
+        }
+
+        if( $this->args['limit'] == 'default' )
         {
             switch( $this->args['format'] )
             {
@@ -1229,7 +1246,8 @@ class CCQuery
             $admin_limit = empty($CC_GLOBALS['querylimit']) ? 0 : $CC_GLOBALS['querylimit'];
         }
 
-        if( !empty($admin_limit) && (empty($args['limit']) || ($admin_limit < $args['limit'])) )
+        $intv = intval($args['limit']);
+        if( !empty($admin_limit) && (empty($intv) || ($admin_limit < $intv)) )
         {
             $args['limit'] = $admin_limit;
         }
