@@ -21,7 +21,7 @@ function popular_tracks_dataview()
         SELECT upload_num_playlists, upload_id, upload_name, $user_sql,
         CONCAT( '$ccf', user_name, '/', upload_id ) as file_page_url, 
         CONCAT( '$ccp', user_name ) as artist_page_url,
-        CONCAT( '$ccb', upload_id ) as playlist_browse_url
+        CONCAT( '$ccb', upload_id ) as playlist_browse_url, user_name, upload_contest
         %columns%
         FROM cc_tbl_uploads
         JOIN cc_tbl_user ON upload_user=user_id
