@@ -22,6 +22,7 @@ function atom_dataview()
         upload_tags, license_url,
         upload_description as format_text_upload_description,
         CONCAT( DATE_FORMAT(upload_date,'%Y-%c-%dT%T'), '$GM' ) as atom_pubdate
+        %columns%
         FROM cc_tbl_uploads
         JOIN cc_tbl_user ON upload_user=user_id
         JOIN cc_tbl_licenses ON upload_license=license_id
