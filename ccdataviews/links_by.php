@@ -17,6 +17,7 @@ SELECT
     upload_name,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     user_real_name, upload_contest, user_name
+    %columns%
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
 %joins%
