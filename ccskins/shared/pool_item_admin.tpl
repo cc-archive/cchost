@@ -14,11 +14,13 @@ function pool_item_admin_dataview()
 {
     $ccl = ccl('files') . '/';
     $cce = ccl('admin','poolitem','edit') . '/';
+    $ccp = ccl('pools','item') . '/';
 
     $sql =<<<EOF
         SELECT pool_item_id, pool_item_url, pool_item_name, pool_item_download_url, pool_item_extra, 
                pool_item_artist, 
-               CONCAT( '$cce', pool_item_id ) as item_edit_url
+               CONCAT( '$cce', pool_item_id ) as item_edit_url,
+               CONCAT( '$ccp', pool_item_id ) as item_view_url
         FROM cc_tbl_pool_item
         JOIN cc_tbl_pools ON pool_item_pool=pool_id
         %where% AND pool_short_name = '%match%'
@@ -89,6 +91,7 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
       <div class="butts">
         <a href="%(#r/item_edit_url)%" id="edit_link_%(#r/pool_item_id)%" class="small_button"><span>edit</span></a>
         <a href="javascript://del item" id="del_link_%(#r/pool_item_id)%" class="small_button del_link"><span>delete</span></a>
+        <a class="small_button" href="%(#r/item_view_url)%"><span>view</span></a>
      </div>
      <div class="fl">%(#r/pool_item_artist)%</div>
      <div class="fl"><a href="%(#r/pool_item_url)%" target="_blank" >%(#r/pool_item_name)%</a></div>

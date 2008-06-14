@@ -52,6 +52,10 @@ div#upload_sidebar_box{float:left;width:30%;margin-left:-30%;}
                 <tr><th>%text(str_external_link)% </th>
                     <td><a class="cc_external_link" href="%(#R/pool_item_url)%"><span>%chop(#R/pool_item_url,44)%</span> 
                          <img src="%url(images/remote.gif)%" /></a></td></tr>
+                %if_not_null(is_admin)%
+                <tr><th><br />admin</th>
+                    <td><br /><a class="small_button" href="%(query-url)%match=_web&datasource=pool_items&t=pool_item_admin&ids=%(#R/pool_item_id)%"><span>edit</span> </a></td></tr>
+                %end_if%
             </table>
         </div>
 
