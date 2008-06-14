@@ -45,6 +45,7 @@ class CCMediaHost
     */
     function Media($username ='', $upload_id = '', $title='')
     {
+        $upload_id = sprintf("%0d",$upload_id);
         $this->_build_bread_crumb_trail($username,$upload_id);
 
         require_once('cchost_lib/cc-query.php');

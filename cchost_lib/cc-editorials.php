@@ -52,7 +52,7 @@ class CCEditorials
         if( !empty($upload_id) )
         {
             $user_name = CCDatabase::QueryItem(
-                    'SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id);
+                    'SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.sprintf("%0d",$upload_id));
             CCUtil::SendBrowserTo( ccl('files',$user_name,$upload_id) );
         }
     

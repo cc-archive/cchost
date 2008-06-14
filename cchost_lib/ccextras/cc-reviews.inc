@@ -141,7 +141,7 @@ class CCReview
             $args = $query->ProcessAdminArgs('limit=0&paging=off&f=page&t=reviews_upload&datasource=topics',array(),false);
             $args['title'] = array( 'str_reviews_for_s', $upload_name);
             // sh*t this is a hack to hack, need to rethink/redo how topic_upload foreign keys work
-            $sqlargs['where'] = 'topic.topic_type <> \'collab\' AND topic.topic_upload=' . $upload_id;
+            $sqlargs['where'] = 'topic.topic_type <> \'collab\' AND topic.topic_upload=' . sprintf("%0d",$upload_id);
             $query->QuerySQL($args,$sqlargs);
 
             // this is so we can display the upload record on the page:
@@ -155,7 +155,7 @@ class CCReview
         {
             if( $upload_id )
             {
-                $q = '&upload=' . $upload_id;
+                $q = '&upload=' . sprintf("%0d",$upload_id);
                 $title= sprintf( _('Reviews left for "%s"'), CC_strchop($upload_name,16) );
             }
             else

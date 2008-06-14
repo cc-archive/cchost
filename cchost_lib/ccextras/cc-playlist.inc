@@ -509,7 +509,7 @@ EOF;
     {
         require_once('cchost_lib/cc-page.php');
 
-        $playlist_id = intval(CCUtil::Strip($playlist_id));
+        $playlist_id = sprintf("%0d",CCUtil::Strip($playlist_id));
         $fulllist = empty($playlist_id) || ($playlist_id < 1);
         if( $fulllist )
         {
@@ -868,6 +868,8 @@ EOF;
         {
             $playlist_id = intval(CCUtil::Strip($playlist_id));
             $ok = !empty($playlist_id) && ($playlist_id > 0);
+            if( $ok )
+                $ok = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_cart WHERE cart_id='.$playlist_id);
         }
         if( $ok && $test_owner )
         {
