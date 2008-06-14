@@ -73,6 +73,8 @@ class CCHowIDidIt
         $data = $this->_get_data($upload_id);
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle(_("How I Did It"));
+        if( empty($data) )
+            CCUtil::Send404();
         CCPage::PageArg('howididit_upload',$upload_id);
         CCPage::PageArg('howididit_fields',$fields);
         CCPage::PageArg('howididit_info',$data,'howididit');
@@ -81,6 +83,8 @@ class CCHowIDidIt
     function _get_data($upload_id)
     {
         $uploads =& CCUploads::GetTable();
+        if( !$uploads->KeyExists($upload_id) )
+            return null;
         $upload_extra = CCDatabase::QueryItem('SELECT upload_extra FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
         $upload_extra = unserialize($upload_extra);
         if( empty($upload_extra['howididit']) )
