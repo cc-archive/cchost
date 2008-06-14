@@ -23,6 +23,10 @@ div#upload_middle{margin: 0 35% 0 2%;padding:0px;}
 div#upload_sidebar_box{float:left;width:30%;margin-left:-30%;}
 </style>
 <![endif]-->
+%if_null(records/0)%
+    <p>Can't find this pool item</p>
+    %return%
+%end_if%
 
 %map(#R,records/0)%
 <div id="upload_wrapper">
