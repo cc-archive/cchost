@@ -89,8 +89,10 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
   <?= $extra = unserialize($r['pool_item_extra']); ?>
   <div class="pool_item_rec" id="rec_%(#r/pool_item_id)%">
       <div class="butts">
+        %if(is_admin)%
         <a href="%(#r/item_edit_url)%" id="edit_link_%(#r/pool_item_id)%" class="small_button"><span>edit</span></a>
         <a href="javascript://del item" id="del_link_%(#r/pool_item_id)%" class="small_button del_link"><span>delete</span></a>
+        %end_if%
         <a class="small_button" href="%(#r/item_view_url)%"><span>view</span></a>
      </div>
      <div class="fl">%(#r/pool_item_artist)%</div>

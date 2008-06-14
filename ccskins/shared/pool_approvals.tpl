@@ -36,9 +36,9 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
       %loop(records,r)%
       <tr>
          <td><a href="%(#r/item_edit_url)%" id="edit_link_%(#r/pool_item_id)%" class="small_button"><span>edit</span></a></td>
-         <td><input type="radio" name="action[%(#r/pool_item_id)%]" value="approve" checked="checked" /></td>
+         <td><input type="radio" name="action[%(#r/pool_item_id)%]" value="approve"/></td>
          <td><input type="radio" name="action[%(#r/pool_item_id)%]" value="delete" /></td>
-         <td><input type="radio" name="action[%(#r/pool_item_id)%]" value="nothing" /></td>
+         <td><input type="radio" name="action[%(#r/pool_item_id)%]" value="nothing"  checked="checked"  /></td>
          <td>
             %loop(#r/uploads,u)%
                <a href="%(#u/file_page_url)%">%(#u/upload_name)%</a>
