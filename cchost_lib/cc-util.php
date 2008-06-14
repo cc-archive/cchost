@@ -255,7 +255,6 @@ class CCUtil
 
     function Send404($exit=true,$file='',$line='')
     {
-        CCDebug::StackTrace();
         header("HTTP/1.0 404 Not Found");
         if( $exit )
         {

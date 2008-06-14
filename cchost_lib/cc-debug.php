@@ -444,6 +444,13 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
 
     $states =& CCDebug::_states();
 
+    if( ($errno == 2) && preg_match('/Missing argument/',$errstr) ) // missing argument, bots end up here a lot (yes, English only, I know)
+    {
+        if( $states['enabled'] !== true )
+            CCUtil::Send404();
+    }
+
+
     //
     // Format error message
     //
