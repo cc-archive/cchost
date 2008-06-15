@@ -157,6 +157,8 @@ var $$old=$$;
 
 var $$=function(a,b) {
 
+    return $$old(a);
+
     // Hacked by VS for ccHost
     //expression is too complicated, forward the call to prototype's function!
     // original: if (b || a.indexOf("[")>=0) return $$old.apply(this,arguments);
