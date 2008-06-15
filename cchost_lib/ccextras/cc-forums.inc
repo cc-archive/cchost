@@ -118,6 +118,8 @@ class CCForumAPI
 {
     function Index($forum_id='')
     {
+        $forum_id = sprintf("%0d",$forum_id);
+
         if( !empty($forum_id) )
         {
             $this->_show_forum($forum_id);
