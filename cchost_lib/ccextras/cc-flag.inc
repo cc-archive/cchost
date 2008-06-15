@@ -166,18 +166,27 @@ class CCFlag
 
         CCPage::SetTitle(_('Flag Content'));
 
-        $this->_build_bread_crumb_trail($type,$id);
+        $id = sprintf("%0d",$id);
+
+        if( empty($id) )
+            CCUtil::Send404();
 
         if( $type == 'upload' )
         {
             $uploads =& CCUploads::GetTable();
+            if( !$uploads->KeyExists($id) )
+                CCUtil::Send404();
             $name = $uploads->QueryItemFromKey('upload_name',$id);
         }
         elseif( $type == 'topic' )
         {
             $topics =& CCTopics::GetTable();
+            if( !$topics->KeyExists($id) )
+                CCUtil::Send404();
             $name = $topics->QueryItemFromKey('topic_name',$id);
         }
+
+        $this->_build_bread_crumb_trail($type,$id);
 
         $user_from = empty($CC_GLOBALS['user_email']) ? '' : $CC_GLOBALS['user_email'];
         
