@@ -374,6 +374,7 @@ function cc_filter_files(&$R)
     $sql = 'SELECT * FROM cc_tbl_files where file_upload = ' . $R['upload_id'];
     $R['files'] = CCDatabase::QueryRows($sql);
     $fk = array_keys($R['files']);
+    $tags = '';
     for( $fi = 0; $fi < count($fk); $fi++ )
     {
         $F =& $R['files'][$fk[$fi]];
@@ -386,8 +387,26 @@ function cc_filter_files(&$R)
         {
             $contest_name = $CC_GLOBALS['contests'][$R['upload_contest']];
 
-            $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$F['file_name']);
-            $F['local_path']   = cca($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$F['file_name']);
+            if( empty($tags) )
+            {
+                if( empty($R['upload_tags']) )
+                    $tags = CCDatabase::QueryItem('SELECT upload_tags FROM cc_tbl_uploads WHERE upload_id='.$R['upload_id']);
+                else
+                    $tags = $R['upload_tags'];
+            }
+
+            $is_source = preg_match('/,contest_(source|sample),/', ',' . $tags . ',' );
+
+            if( $is_source )
+            {
+                $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$F['file_name']);
+                $F['local_path']   = cca($CC_GLOBALS['contest-upload-root'],$contest_name,$F['file_name']);
+            }
+            else
+            {
+                $F['download_url'] = ccd($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$F['file_name']);
+                $F['local_path']   = cca($CC_GLOBALS['contest-upload-root'],$contest_name,$r_user,$F['file_name']);
+            }
         }
         else
         {
