@@ -335,7 +335,7 @@ class CCCollab
 
     function View($collab_id='')
     {
-        $collab_id = CCUtil::Strip($collab_id);
+        $collab_id = sprintf("%0d",$collab_id);
         if( empty($collab_id) )
         {
             $this->ViewAll();
