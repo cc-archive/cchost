@@ -90,7 +90,7 @@ class CCMediaHost
             }
 
             $title = empty($title) ? $name : $title;
-            $args = $query->ProcessAdminArgs( 't=list_file&ids=' . $upload_id . '&title=' . $title );
+            $args = $query->ProcessAdminArgs( 't=list_file&ids=' . $upload_id . '&title=' . urlencode($title) );
             $query->Query($args);
         }
     }
