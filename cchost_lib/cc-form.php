@@ -1241,9 +1241,9 @@ END;
                 $this->SetFieldError($fieldname," " . _("This must be at least 5 characters."));
                 return(false);
             }
-            if( preg_match('/[^A-Za-z0-9]/', $value) )
+            if( preg_match('/[^A-Za-z0-9!@#$%^&_\.-]/', $value) )
             {
-                $this->SetFieldError($fieldname, " " . _('This must be letters or numbers.'));
+                $this->SetFieldError($fieldname, " " . _('Illegal character in password.'));
                 return(false);
             }
 
