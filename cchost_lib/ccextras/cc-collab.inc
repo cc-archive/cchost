@@ -451,15 +451,31 @@ EOF;
 
     function GetUploads( $collab_id='' )
     {
+        $collab_row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_collabs WHERE collab_id='.$collab_id);
+        list( $is_owner, $is_member, $is_confirmed ) = $this->_get_user_acccess($collab_row);
+
+        $sql =<<<EOF
+            SELECT collab_upload_upload FROM cc_tbl_collab_uploads 
+            JOIN cc_tbl_uploads ON collab_upload_upload = upload_id
+            WHERE collab_upload_collab = {$collab_id} AND upload_banned = 0
+EOF;
+        $ids = CCDatabase::QueryItems($sql);
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('t=collab_files&unpub=1&f=html');
+        $query->_ignore_visible = $is_confirmed;
+        $args = $query->ProcessAdminArgs('t=collab_files&f=html&ids=' . join(',',$ids));
         $sqlargs['where'] = 'collab_id = ' . $collab_id;
         $query->QuerySQL($args,$sqlargs);
     }
 
     function GetUsers( $collab_id='' )
     {
+        global $CC_GLOBALS;
+        $collab_row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_collabs WHERE collab_id='.$collab_id);
+        list( $CC_GLOBALS['is_collab_owner'], 
+              $CC_GLOBALS['is_collab_member'], 
+              $CC_GLOBALS['is_collab_confirmed'] ) = $this->_get_user_acccess($collab_row);
+
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('t=collab_users&f=html&datasource=collab_users');

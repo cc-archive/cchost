@@ -983,6 +983,9 @@ class CCQuery
 
     function _gen_visible()
     {
+        if( !empty($this->_ignore_visible) )
+            return;
+
         $need_user = false; // if the user is not an admin they
                             // should only see their uploads.
                             // this flag controls that filter
