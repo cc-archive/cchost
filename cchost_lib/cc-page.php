@@ -710,6 +710,7 @@ class CCPage extends CCSkin
                 {
                     if( $key == 'offset' || $key == 'ccm' )
                         continue;
+                    $val = urlencode(CCUtil::StripSlash($val));
                     $current_url = url_args( $current_url, "$key=$val" );
                 }
             }
