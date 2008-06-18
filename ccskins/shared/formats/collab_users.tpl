@@ -69,7 +69,7 @@ EOF;
             <span>%text(str_collab_remove2)%</span></a></div>
       %end_if%
   %end_if%
-  %if_not_null(#R/is_collab_member)%
+  %if_not_null(is_collab_member)%
       <div><a href="javascript://contact" id="_contact_%(#R/user_name)%" class="user_cmd edit_contact  small_button">
         <span>%text(str_collab_send_email)%</span></a> </div>
   %end_if%
