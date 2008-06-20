@@ -154,9 +154,11 @@ class CCAdminThrottleRulesForm extends CCGridForm
         for( $i = 1; $i <= $count; $i++ )
             $vals['numbers']["$i"] = '' . $i;
 
+        $keys = array_keys($rules);
         for( $i = 0; $i < $count; $i++ )
         {
-            $field = $this->_get_row('rule',$i,$rules[$i],$i,$vals);
+            $K = $keys[$i];
+            $field = $this->_get_row('rule',$i,$rules[$K],$i,$vals);
             $this->AddGridRow( $i, $field );
         }
 
@@ -184,12 +186,12 @@ class CCAdminThrottleRulesForm extends CCGridForm
                   array(
                     'element_name'  => "{$pre}[{$key}][order]",
                     'value'         => $i + 1,
-                    'options'       => $vals['numbers'],
-                    'formatter'     => 'raw_select',
+                    'class'         => 'cc_form_input_short',
+                    'formatter'     => 'textedit',
                     'flags'         => CCFF_NONE),
                   array(
                     'element_name'  => 'stat1' . $i,
-                    'value'         => _('If user has '),
+                    'value'         => '&nbsp;' . _('If user has '),
                     'formatter'     => 'statictext',
                     'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
                   array(
@@ -200,7 +202,7 @@ class CCAdminThrottleRulesForm extends CCGridForm
                     'flags'         => CCFF_REQUIRED | CCFF_POPULATE ),
                   array(
                     'element_name'  => 'stat2' . $i,
-                    'value'         => _('# of:') . ' ',
+                    'value'         => '&nbsp;' . _('# of:') . ' ',
                     'formatter'     => 'statictext',
                     'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
                   array(
@@ -211,7 +213,7 @@ class CCAdminThrottleRulesForm extends CCGridForm
                     'flags'         => CCFF_POPULATE  ),
                   array(
                     'element_name'  => 'stat3' . $i,
-                    'value'         => _('since:') . ' ',
+                    'value'         => '&nbsp;' . _('since:') . ' ',
                     'formatter'     => 'statictext',
                     'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
                   array(
@@ -222,7 +224,7 @@ class CCAdminThrottleRulesForm extends CCGridForm
                     'flags'         => CCFF_POPULATE ),
                   array(
                     'element_name'  => 'stat4' . $i,
-                    'value'         => _('then:') . ' ',
+                    'value'         => '&nbsp;' . _('then:') . ' ',
                     'formatter'     => 'statictext',
                     'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
                   array(
@@ -381,6 +383,7 @@ class CCThrottle
 
     function Admin()
     {
+        $this->_build_bread_crumb_trail(false);
         CCPage::SetTitle(_("Administer Upload Throttle"));
         $form = new CCAdminThrottleForm();
         CCPage::AddForm( $form->GenerateForm() );
@@ -388,6 +391,8 @@ class CCThrottle
 
     function Rules()
     {
+        $this->_build_bread_crumb_trail(true);
+
         $configs =& CCConfigs::GetTable();
         CCPage::SetTitle(_("Upload Throttle Rules"));
 
@@ -433,19 +438,17 @@ class CCThrottle
             usort($rules,'cc_order_sorter');
             $keys = array_keys($rules);
             $count = count($keys);
+            $the_rules = array();
             for( $i = 0; $i < $count; $i++ )
             {
                 $K = $keys[$i];
-                if( !empty($rules[$K]['delete']) )
+                if( empty($rules[$K]['delete']) )
                 {
-                    unset($rules[$K]);
-                }
-                else
-                {
-                    unset($rules['order']);
+                    unset($rules[$K]['order']);
+                    $the_rules[] = $rules[$K];
                 }
             }
-            $configs->SaveConfig('throttle_rules',$rules,CC_GLOBAL_SCOPE,false);
+            $configs->SaveConfig('throttle_rules',$the_rules,CC_GLOBAL_SCOPE,false);
             CCUtil::SendBrowserTo( ccl('admin','throttle') );
         }
 
@@ -487,6 +490,27 @@ class CCThrottle
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display throttle settings form'), CC_AG_MISC_ADMIN );
         CCEvents::MapUrl( ccp('admin','throttlerules'),  array( 'CCThrottle', 'Rules'), 
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display throttle rules form'), CC_AG_MISC_ADMIN );
+    }
+
+    function _build_bread_crumb_trail($show_rules)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        
+        $trail[] = array( 'url' => ccl('admin','site','global'), 
+                          'text' => _('Settings') );
+
+        if( $show_rules )
+        {
+            $trail[] = array( 'url' => ccl('admin','throttle'), 'text' => _('Throttle') );
+            $trail[] = array( 'url' => '', 'text' => _('Rules') );
+        }
+        else
+        {
+            $trail[] = array( 'url' => '', 'text' => _('Throttle') );
+        }
+
+        require_once('cchost_lib/cc-page.php');
+        CCPage::AddBreadCrumbs($trail);
     }
 
 }
