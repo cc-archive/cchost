@@ -35,6 +35,46 @@ Ajax.Request.prototype.initialize = function(url, options) {
     this._old_request_init(url,options);
   };
 
+/*
+    Double clicking on a link that is supposed to open a modal box
+    has several bad side effects, double pumping the Ajax request
+    on slow connections, closing the box before it opens on fast
+    ones. Here we inject a 2 sec time buffer between requests to
+    open, re-open and close, hopefully covering all those cases.
+*/
+
+if (!window.Modalbox)
+    throw( "no modalbox defined!" );
+
+Modalbox._lastopentime = 0;
+Modalbox._old_show = Modalbox.show;
+Modalbox._old_hide = Modalbox.hide;
+
+Modalbox.show = function( content, options ) {
+    var now = new Date().getTime();
+    if( this._lastopentime )
+    {
+        var tdiff = now - this._lastopentime;
+        if( tdiff < 2000 )
+            return;
+    }
+    this._lastopentime = now;
+    this._old_show( content, options );
+};
+
+Modalbox.hide = function(options) {
+    var now = new Date().getTime();
+    if( this._lastopentime )
+    {
+        var tdiff = now - this._lastopentime;
+        if( tdiff < 2000 )
+            return false;
+    }
+    var val = this._old_hide(options);
+    this._lastopentime = 0;
+    return val;
+};
+
 
 /*
     Hook menu items so they go to a browser popup
@@ -84,6 +124,8 @@ var modalHook = Class.create();
 
 modalHook.prototype = {
 
+    in_hook: false,
+
     initialize: function(ids) {
         var me = this;
         ids.each( function( id ) {
@@ -99,11 +141,23 @@ modalHook.prototype = {
     },
 
     onClick: function( e, href, thetitle ) {
+        if( this.in_hook ) // prevent double-click processing
+        {
+            Event.stop(e);
+            alert('wups');
+            return false;
+        }
+        this.in_hook = true;
         if( href.indexOf('?') == -1 )
             href += '?ajax=1';
         else
             href += '&ajax=1';
-        Modalbox.show( href, {title: thetitle, width: 700, height: 550} );
+        Modalbox.show( href, {title: thetitle, width: 700, height: 550, afterHide: this.afterHide.bind(this) } );
+    },
+
+    afterHide: function() {
+        this.in_hook = false;
+
     }
 }
 
@@ -120,6 +174,7 @@ queryPopup.prototype = {
     title: '',
     width: 500,
     height: '',
+    in_hook: false,
 
     initialize: function(className,template,title) {
         this.className = className;
@@ -136,8 +191,15 @@ queryPopup.prototype = {
     },
 
     onClick: function( e, upload_id ) {
+        if( this.in_hook )
+            return;
+        this.in_hook = true;
         var url = query_url + 'f=html&t='+this.template+'&ids=' + upload_id;
-        Modalbox.show( url, {title: this.title, width: this.width, height: this.height } );
+        Modalbox.show( url, {title: this.title, width: this.width, height: this.height, afterHide: this.afterHide.bind(this) } );
+    },
+
+    afterHide: function() {
+        this.in_hook = false;
     }
 }
 

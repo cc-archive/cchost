@@ -283,6 +283,15 @@ table.stacked_form .form_input_short {
 	white-space: nowrap;
 }
 
+table.grid_form_table .form_input_short,
+table.grid_form_table .cc_form_input_short{
+	width: 45px;
+}
+
+table.grid_form_table td{
+	padding-left: 2px;
+}
+
 .gform_breaker {
 	clear: left;
 }
