@@ -51,11 +51,13 @@ class CCAdminThrottleForm extends CCEditConfigForm
 
         $fields['user-exceptions'] = array (
            'label'      => _('User exceptions'),
-           'form_tip'   => _('Comma separted list of user login names that are exempt from throttling.') . ' ' . _('Administrators are automatically exempt from throttling.') . ' ',
+           'form_tip'   => _('Comma separted list of user login names that are exempt from throttling.') . ' ' . 
+                           _('Administrators are automatically exempt from throttling.') . ' ',
            'formatter'  => 'textedit',
            'flags'      => CCFF_POPULATE );
 
-        $msg = _("You are not authorized to submit this type of file.") . ' ' . _('Please contact the site administrator for details.');
+        $msg = _("You are not authorized to submit this type of file.") . ' ' . 
+               _('Please contact the site administrator for details.');
 
         $fields['quota-msg'] = array (
            'label'      => _('Quota Message'),
@@ -94,12 +96,12 @@ class CCAdminThrottleRulesForm extends CCGridForm
     function CCAdminThrottleRulesForm(&$rules)
     {
         $this->CCGridForm();
-
-        $html = "<input type=\"submit\" name=\"addrule\" id=\"addrule\" value=\"" . _('Add A Rule') . "\" />";
-        $this->SetFormHelp($html);
+        $this->SetTemplateVar('form_fields_macro','flat_grid_form_fields');
 
         if( empty($rules) )
         {
+            $html = "<input type=\"submit\" name=\"addrule\" id=\"addrule\" value=\"" . _('Add A Rule') . "\" />";
+            $this->SetFormHelp($html);
             $this->SetSubmitText('');
             return;
         }
@@ -127,7 +129,9 @@ class CCAdminThrottleRulesForm extends CCGridForm
             $submit_types[$type_name] = $type_data['submit_type'];
         }
 
-        $time_periods = array(
+        $vals['submit_types'] = $submit_types;
+
+        $vals['time_periods'] = array(
                 '1 days ago'    => _('24 hours'),
                 '1 weeks ago'   => _('7 days'),
                 '2 weeks ago'   => _('2 weeks'),
@@ -135,95 +139,112 @@ class CCAdminThrottleRulesForm extends CCGridForm
                 'forever'       => _('forever')
         );
 
-        $allow_pick = array(
+        $vals['allow_pick'] = array(
                 'forbid'        => _('Forbid'),
                 'allow'         => _('Allow')
                 );
 
-        $stop_pick = array(
+        $vals['stop_pick'] = array(
                 'stop'          => _('Stop here if rule is true'),
                 'continue'      => _('Continue to next rule')
                 );
 
         $count = count($rules);
-        $numbers = array();
+        $vals['numbers'] = array();
         for( $i = 1; $i <= $count; $i++ )
-            $numbers["$i"] = '' . $i;
+            $vals['numbers']["$i"] = '' . $i;
 
         for( $i = 0; $i < $count; $i++ )
         {
-            $field = array(
-                      array(
-                        'element_name'  => "rule[$i][delete]",
-                        'value'         => 0,
-                        'formatter'     => 'checkbox',
-                        'flags'         => CCFF_NONE),
-                      array(
-                        'element_name'  => "rule[$i][order]",
-                        'value'         => $i + 1,
-                        'options'       => $numbers,
-                        'formatter'     => 'select',
-                        'flags'         => CCFF_NONE),
-                      array(
-                        'element_name'  => 'stat1' . $i,
-                        'value'         => _('If user has '),
-                        'formatter'     => 'statictext',
-                        'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
-                      array(
-                        'element_name'  => "rule[$i][num_uploads]",
-                        'value'         => $rules[$i]['num_uploads'],
-                        'class'         => 'cc_form_input_short',
-                        'formatter'     => 'textedit',
-                        'flags'         => CCFF_REQUIRED | CCFF_POPULATE ),
-                      array(
-                        'element_name'  => 'stat2' . $i,
-                        'value'         => _('# of:') . ' ',
-                        'formatter'     => 'statictext',
-                        'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
-                      array(
-                        'element_name'  => "rule[$i][limit_by_type]",
-                        'value'         => $rules[$i]['limit_by_type'],
-                        'formatter'     => 'select',
-                        'options'       => $submit_types,
-                        'flags'         => CCFF_POPULATE  ),
-                      array(
-                        'element_name'  => 'stat3' . $i,
-                        'value'         => _('since:') . ' ',
-                        'formatter'     => 'statictext',
-                        'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
-                      array(
-                        'element_name'  => "rule[$i][time_period]",
-                        'value'         => $rules[$i]['time_period'],
-                        'formatter'     => 'select',
-                        'options'       => $time_periods,
-                        'flags'         => CCFF_POPULATE ),
-                      array(
-                        'element_name'  => 'stat4' . $i,
-                        'value'         => _('then:') . ' ',
-                        'formatter'     => 'statictext',
-                        'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
-                      array(
-                        'element_name'  => "rule[$i][allow]",
-                        'value'         => $rules[$i]['allow'],
-                        'formatter'     => 'select',
-                        'options'       => $allow_pick,
-                        'flags'         => CCFF_POPULATE ),
-                      array(
-                        'element_name'  => "rule[$i][allow_type]",
-                        'value'         => $rules[$i]['allow_type'],
-                        'formatter'     => 'select',
-                        'options'       => $submit_types,
-                        'flags'         => CCFF_POPULATE ),
-                      array(
-                        'element_name'  => "rule[$i][stop]",
-                        'value'         => $rules[$i]['stop'],
-                        'formatter'     => 'select',
-                        'options'       => $stop_pick,
-                        'flags'         => CCFF_POPULATE ),
-                );
+            $field = $this->_get_row('rule',$i,$rules[$i],$i,$vals);
+            $this->AddGridRow( $i, $field );
+        }
 
-                $this->AddGridRow( $i, $field );
-            }
+        $new_row = array(
+                    'num_uploads' => 3,
+                    'limit_by_type' => 'all' ,
+                    'time_period' => '1 day ago',
+                    'allow' => 'forbid',
+                    'allow_type' => 'all',
+                    'stop' => 'stop',
+            );
+        $field = $this->_get_row('new','%i%',$new_row,$count,$vals);
+        $this->AddMetaRow($field, _('Add Rule') );
+
+    }
+
+    function _get_row($pre,$key,&$rule,$i,&$vals)
+    {
+        return array(
+                  array(
+                    'element_name'  => "{$pre}[{$key}][delete]",
+                    'value'         => 0,
+                    'formatter'     => 'checkbox',
+                    'flags'         => CCFF_NONE),
+                  array(
+                    'element_name'  => "{$pre}[{$key}][order]",
+                    'value'         => $i + 1,
+                    'options'       => $vals['numbers'],
+                    'formatter'     => 'raw_select',
+                    'flags'         => CCFF_NONE),
+                  array(
+                    'element_name'  => 'stat1' . $i,
+                    'value'         => _('If user has '),
+                    'formatter'     => 'statictext',
+                    'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
+                  array(
+                    'element_name'  => "{$pre}[{$key}][num_uploads]",
+                    'value'         => $rule['num_uploads'],
+                    'class'         => 'cc_form_input_short',
+                    'formatter'     => 'textedit',
+                    'flags'         => CCFF_REQUIRED | CCFF_POPULATE ),
+                  array(
+                    'element_name'  => 'stat2' . $i,
+                    'value'         => _('# of:') . ' ',
+                    'formatter'     => 'statictext',
+                    'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
+                  array(
+                    'element_name'  => "{$pre}[{$key}][limit_by_type]",
+                    'value'         => $rule['limit_by_type'],
+                    'formatter'     => 'raw_select',
+                    'options'       => $vals['submit_types'],
+                    'flags'         => CCFF_POPULATE  ),
+                  array(
+                    'element_name'  => 'stat3' . $i,
+                    'value'         => _('since:') . ' ',
+                    'formatter'     => 'statictext',
+                    'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
+                  array(
+                    'element_name'  => "{$pre}[{$key}][time_period]",
+                    'value'         => $rule['time_period'],
+                    'formatter'     => 'raw_select',
+                    'options'       => $vals['time_periods'],
+                    'flags'         => CCFF_POPULATE ),
+                  array(
+                    'element_name'  => 'stat4' . $i,
+                    'value'         => _('then:') . ' ',
+                    'formatter'     => 'statictext',
+                    'flags'         => CCFF_STATIC | CCFF_NOUPDATE ),
+                  array(
+                    'element_name'  => "{$pre}[{$key}][allow]",
+                    'value'         => $rule['allow'],
+                    'formatter'     => 'raw_select',
+                    'options'       => $vals['allow_pick'],
+                    'flags'         => CCFF_POPULATE ),
+                  array(
+                    'element_name'  => "{$pre}[{$key}][allow_type]",
+                    'value'         => $rule['allow_type'],
+                    'formatter'     => 'raw_select',
+                    'options'       => $vals['submit_types'],
+                    'flags'         => CCFF_POPULATE ),
+                  array(
+                    'element_name'  => "{$pre}[{$key}][stop]",
+                    'value'         => $rule['stop'],
+                    'formatter'     => 'raw_select',
+                    'options'       => $vals['stop_pick'],
+                    'flags'         => CCFF_POPULATE ),
+            );
+
     }
 }
 
@@ -405,7 +426,10 @@ class CCThrottle
         }
         else
         {
-            $rules = $_POST['rule'];
+            if( empty($_POST['new']) )
+                $rules = $_POST['rule'];
+            else
+                $rules = array_merge($_POST['rule'],$_POST['new']);
             usort($rules,'cc_order_sorter');
             $keys = array_keys($rules);
             $count = count($keys);
