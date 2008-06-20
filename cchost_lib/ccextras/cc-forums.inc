@@ -558,7 +558,8 @@ EOF;
         
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('limit=0&sort=left&paging=off&f=page&t=topic_thread&datasource=topics&title=' . $row['topic_name'],array(),false);
+        $args = $query->ProcessAdminArgs('limit=0&sort=left&paging=off&f=page&t=topic_thread&datasource=topics&title=' . 
+            urlencode($row['topic_name']),array(),false);
         $sqlargs['where'] = 'topic.topic_thread=' . $thread_id;
         $query->QuerySQL($args,$sqlargs);
         $name = $row['forum_name'] . '::' . $row['topic_name'];
