@@ -123,6 +123,12 @@ if( file_exists('ccadmin') )
 }
 
 /*
+* Don't generate the page if the browser already has
+* the latest version
+*/
+cc_check_if_modified();
+
+/*
 *  Pick up 3rd party PHP modules
 */
 if( !empty($CC_GLOBALS['extra-lib']) )
