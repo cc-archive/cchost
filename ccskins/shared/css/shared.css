@@ -142,3 +142,15 @@ div#nsfw {
 #requested_reviews, #recommended_by {
 	margin-bottom: 1em;
 }
+
+.cc_playlist_menu_item { 
+	display: block; 
+}
+
+a.cc_playlist_edit {
+	font-weight: normal;
+}
+
+.cc_playlist_menu_item a.cc_playlist_edit {
+	font-weight: normal;
+}

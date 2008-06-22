@@ -155,7 +155,6 @@ if( !empty($menu['playlist']['playlist_menu']) )
 {
     // actually we're going to embed the thing right here...
     // helper_ajax_menu_item($menu['playlist']['playlist_menu'],$T);
-    print '<style type="text/css">.plblock a { display: block; }</style>';
 print '<div class="box plblock" style="float:left"><h2>' . $T->String('str_playlists') . '</h2>';
     $A['args'] =& cc_get_playlist_with($R);
     $T->Call('playlist.tpl/playlist_popup');
