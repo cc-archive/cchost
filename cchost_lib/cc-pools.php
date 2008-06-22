@@ -350,7 +350,7 @@ class CCPool
         $args['pool_item_id']            = $pool_items->NextID();
         $args['pool_item_pool']          = $pool['pool_id'];
         $args['pool_item_url']           = $link;
-        $args['pool_item_download_url']  = $item['enclosure']['url'];
+        $args['pool_item_download_url']  = empty($item['enclosure']) ? '' : $item['enclosure']['url'];
         $args['pool_item_license']       = $license;
         $args['pool_item_name']          = $item['title'];
         $args['pool_item_artist']        = $item['artist'];
@@ -359,9 +359,9 @@ class CCPool
         $args['pool_item_timestamp']     = $item['date_timestamp'];
 
         $extra = array( 'guid'   => $item['guid'],
-                        'length' => $item['enclosure']['length'],
-                        'type'   => $item['enclosure']['type'],
-                        'tags'   => $item['category'] );
+                        'length' => empty($item['enclosure']) ? '' : $item['enclosure']['length'],
+                        'type'   => empty($item['enclosure']) ? '' : $item['enclosure']['type'],
+                        'tags'   => empty($item['category']) ? '' : $item['category'] );
 
         $args['pool_item_extra']         = serialize($extra);
 
