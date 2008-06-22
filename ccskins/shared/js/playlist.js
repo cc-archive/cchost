@@ -90,7 +90,8 @@ ccPlaylistMenu.prototype = {
         e.needRefresh = false;
         e.innerHTML = resp.responseText;
         var me = this;
-        $A(e.getElementsByTagName('A')).each( function( a ) {
+        //$A(e.getElementsByTagName('A'))
+        $$('.pl_menu_item').each( function( a ) {
             var url = a.href;
             a.href = 'javascript://playlist menu item';
             Event.observe( a, 'click', me.onMenuItemClick.bindAsEventListener( me, url, pid ) );

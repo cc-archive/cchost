@@ -372,9 +372,11 @@ for( $ci101= 0; $ci101< $cc101; ++$ci101)
 { 
    $A['tagrec'] = $carr101[ $ck101[ $ci101 ] ];
    
-?><tr ><td  class="tagcheck"><input  onclick="tag_checked(this)" type="checkbox" id="<?= $A['tagrec']['tags_tag']?>" name="<?= $A['tagrec']['tags_tag']?>"></input>
-</td>
-<td  class="tb"><label  for="<?= $A['tagrec']['tags_tag']?>" id="name_<?= $A['tagrec']['tags_tag']?>"><?= $A['tagrec']['tags_tag']?></label>
+?><tr>
+    <td class="tagcheck">
+        <input  onclick="tag_checked(this)" type="checkbox" id="<?= $A['tagrec']['tags_tag']?>" name="<?= $A['tagrec']['tags_tag']?>"></input>
+    </td>
+<td class="tb"><label  for="<?= $A['tagrec']['tags_tag']?>" id="name_<?= $A['tagrec']['tags_tag']?>"><?= $A['tagrec']['tags_tag']?></label>
 <span  class="tbc">(<?= $A['tagrec']['tags_count']?>)</span></td>
 </tr>
 <?

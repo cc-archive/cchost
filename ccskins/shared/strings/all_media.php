@@ -348,6 +348,7 @@ $GLOBALS['str_pl_dynamic_playlist'] = _('Dynamic Favorites List');
 $GLOBALS['str_pl_dynamic']            = _('dynamic');
 $GLOBALS['str_pl_dynamic_changed'] = _('Dynamic favorites list changed.'); //js
 $GLOBALS['str_pl_dynamic_playlist'] = _('Dynamic Favorites List');
+$GLOBALS['str_pl_edit'] = _('edit');
 $GLOBALS['str_pl_edit_dynamic_playlist'] = _('Edit Dynamic Favorites List');
 $GLOBALS['str_pl_edit_dynamic_playlist_s'] = _('Edit Dynamic Favorites List: "%s"');
 $GLOBALS['str_pl_edit_playlist_order'] = _('Edit Favorites List Order');

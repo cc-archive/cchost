@@ -172,7 +172,7 @@ function pl_item_action(event,url)
     Event.stop(event);
     return false;
 }
-$$('.cc_playlist_menu_item').each( function(e) {
+$$('a.pl_menu_item').each( function(e) {
     var url = e.href;
     e.href = 'javascript:// playlist goo';
     Event.observe( e, 'click', pl_item_action.bindAsEventListener(e,url) );

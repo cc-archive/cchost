@@ -30,13 +30,18 @@
 	width: auto;
 }
 
-a.cc_playlist_menu_item {
+span.cc_playlist_menu_item {
 	display: block;
-	margin: 4px;
+	margin: 2px;
 }
 
 .cc_playlist_name {
 	font-weight: bold;
+}
+
+a.cc_playlist_edit {
+	font-weight: normal;
+	
 }
 
 .cc_playlist_add_mi {
