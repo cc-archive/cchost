@@ -2,8 +2,7 @@
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 ?>
-<!-- template stats -->
-<p>Mixter version!</p>
+<!-- template stats (Mixter version!) -->
 <style>
 table.statstable {
   border-width: 3px;
