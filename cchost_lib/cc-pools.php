@@ -189,8 +189,6 @@ class CCPool
         {
             require_once('cchost_lib/cc-api.php');
             $query_url = CCRestAPI::MakeUrl( $api_url, 'search', 'query=' . $query );
-            //CCDebug::PrintVar($query_url);
-            //CCDebug::LogVar('query_url',$query_url);
             $fr = new CCFeedReader();
             $rss = $fr->cc_parse_url( $query_url );
             if( !empty($rss->ERROR) )
