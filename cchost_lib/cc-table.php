@@ -750,34 +750,6 @@ class CCTable
     }
 
     /**
-    * Returns the date of the most recent record
-    *
-    * @see CCUtil::CheckModifiedDate
-    * @param string $where Condition to match
-    * @param string $date_field Name of date column to return
-    * @param integer $offset Starting from here (-1 means use current offset)
-    * @return mixed $date
-    */
-    function GetMostRecentDate($where,$date_field,$offset=-1)
-    {
-        $old_limit = $this->_limit;
-        $this->_limit = 1;
-        if( $offset != -1 )
-        {
-            $old_offset = $this->_offset;
-            $this->_offset = $offset;
-        }
-        $sql = $this->_get_select($where,$date_field);
-        $date = CCDatabase::QueryItem($sql);
-        $this->_limit = $old_limit;
-        if( $offset != -1 )
-        {
-            $this->_offset = $old_offset;
-        }
-        return $date;
-    }
-
-    /**
     * Inserts a new record into the database
     *
     * <code>

@@ -516,11 +516,12 @@ EOF;
                     }
                     else
                     {
-                        $published = CCDatabase::QueryItem('SELECT upload_published FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+                        $pubrow = $uploads->QueryKeyRow($upload_id);
+                        $value = $pubrow['upload_published'] ? 0 : 1;
+                        $w2['upload_published'] = $value;
                         $w2['upload_id'] = $upload_id;
-                        $w2['upload_published'] = !$published;
                         $uploads->Update($w2);
-                        if( $w2['upload_published'] )
+                        if( $value )
                         {
                             $args['published'] = 1;
                             $args[CC_AJAX_MESSAGE] = _('Upload is now visible to everybody');
@@ -530,6 +531,8 @@ EOF;
                             $args['published'] = 0;
                             $args[CC_AJAX_WARNING] = _('Upload is now only visible to members of the project');
                         }
+                        
+                        CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $upload_id, CC_UF_PROPERTIES_EDIT, array(&$pubrow) ) );
                     }
                     break;
 

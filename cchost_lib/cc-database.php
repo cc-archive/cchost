@@ -95,11 +95,15 @@ class CCDatabase
         global $_sql_time;
         static $_sql_t;
 
-CCDebug::Chronometer($_sql_t);
+        //CCDebug::Chronometer($_sql_t);
         $qr = mysql_query($sql,$link);
-$_sql_time = CCDebug::Chronometer($_sql_t);
-//if ($t > 0.01)
-//    CCDebug::Log( "($t) " . $sql);
+        //$_sql_time = CCDebug::Chronometer($_sql_t);
+
+
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['in_if_modified']) && preg_match( '/^(\s+)?(insert|delete|update)/i',$sql) )
+            cc_set_if_modified();
 
         if( !$qr )
         {
