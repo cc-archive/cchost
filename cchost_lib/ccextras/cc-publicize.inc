@@ -155,7 +155,6 @@ class CCPublicize
                 $args['bookmark_title'] = $record['upload_name'];
                 $args['email_url'] = ccl( 'email', 'upload', $record['upload_id'] );
 
-
                 $args = array_merge( $args, $record );
                 $title = $page->String(array( 'str_share_share_s', $record['upload_name'] ));
                 $args['hiddens'][] = array( 'value' => $record['upload_id'], 'name' => 'ids' );
@@ -197,6 +196,15 @@ class CCPublicize
                 {
                     $args['intro'] = 'str_share_intro4b';
                 }
+
+                $sql =<<<EOF
+                    SELECT user_name,user_real_name
+                    FROM cc_tbl_user 
+                    JOIN cc_tbl_cart ON cart_user = user_id
+                    WHERE cart_id = {$arg1}
+EOF;
+                list( $user_name, $user_real_name ) = CCDatabase::QueryRow($sql,false);
+                $this->_build_bread_crumb_trail_pl($user_name, $user_real_name, $arg1, $playlist_name );
 
             }
 
@@ -308,6 +316,30 @@ class CCPublicize
         {
             $this->_build_bread_crumb_trail($record['user_name'], empty($record['upload_id']) ? '' : $record['upload_id']);
         }
+    }
+
+    /**
+    * @access private
+    */
+    function _build_bread_crumb_trail_pl($username,$user_real_name,$playlist_id,$playlist_name)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+        
+        $trail[] = array( 'url' => ccl('people'), 
+                          'text' => 'str_people' );
+
+        $trail[] = array( 'url' => ccl('people',$username), 
+                                   'text' => $user_real_name );
+
+        $trail[] = array( 'url' => ccl('people',$username,'playlists'), 
+                          'text' => 'str_playlists' );
+
+        $trail[] = array( 'url' => ccl('playlist','browse',$playlist_id ),
+                          'text' => $playlist_name );
+
+        $trail[] = array( 'url' => '', 'text' => 'str_share_text' );
+
+        CCPage::AddBreadCrumbs($trail);
     }
 
     /**
