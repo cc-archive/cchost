@@ -45,44 +45,79 @@ function cc_set_if_modified()
 
 function cc_check_if_modified()
 {
+    // disable this until I'm sure it freakin works
+
+    return;
+
     global $CC_GLOBALS;
 
     if( empty($CC_GLOBALS[CC_IF_MOD_FLAG]) )
     {
+        //
+        // This will happen exactly once per installation
+        // (or whenever developer changes CC_IF_MOD_FLAG value)
+        //
         cc_set_if_modified();
     }
 
-    $contentDate = intval($CC_GLOBALS[CC_IF_MOD_FLAG]);
-    $lastmod     = gmdate('D, d M Y H:i:s', $contentDate ) . ' GMT'; 
-    $etag        = '"' . md5($lastmod) . '"'; // ETag is sent even with 304 header 
-    header("ETag: $etag"); 
+    //
+    // When the user transitions from logged in to not (or visa versa) 
+    // our pages change radically so you want to make sure that the page's cache
+    // is in sync with when the user transitioned.
+    //
+    // The browser has a copy of the page in it's cache at time http_time
+    // The user logged in/out at time user_time
+    // The database was last changed at last_db_write_time
+    //
 
-    $http_check  = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) : null;
-    $http_etag   = isset($_SERVER['HTTP_IF_NONE_MATCH'])     ? $_SERVER['HTTP_IF_NONE_MATCH']                : null;
+    $last_db_write_time  = intval($CC_GLOBALS[CC_IF_MOD_FLAG]);
+    $http_time           = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) : null;
+    $user_time           = 0;
 
-    $ifmod =  $http_check ? ($http_check >= $contentDate) : null; 
+    $ifmod =  $http_time ? ($http_time >= $last_db_write_time) : null; 
 
-    /*
-    $iftag =  $http_etag  ? ($http_etag == $etag)         : null; 
-    $iftag = true;
-
-    if (($ifmod || $iftag) && ($ifmod !== false && $iftag !== false)) 
-    */
-
+    //
+    // If the browser's copy is newer than the last db write then continue
+    //
     if( $ifmod && ($ifmod !== false) )
     {
-        header('HTTP/1.0 304 Not Modified'); 
-        _clog('Sending 304');
-        exit; 
+        if( CCUser::IsLoggedIn() )
+        {
+            $user_time = empty($_COOKIE[CC_TRANSITION_COOKIE]) ? 0 : intval($_COOKIE[CC_TRANSITION_COOKIE]);
+            if( !$user_time )
+            {
+                // this will happen when the user has nuked their 
+                // cookies or if this code has not been run between
+                // login/out transitions
+                $user_time = gmmktime();
+                cc_setcookie(CC_TRANSITION_COOKIE,$user_time,time()+60*60*24*30);
+            }
+        }
+
+        //
+        // If the browser's copy is newer than user's login/out transition then use it
+        //
+        if( !$user_time || ($http_time > $user_time) )
+        {
+            header('HTTP/1.0 304 Not Modified'); 
+            _clog('Sending 304');
+            exit; 
+        }
+        else
+        {
+            _clog("Failed user test");
+        }
     } 
     
-    // Last-Modified doesn't need to be sent with 304 response 
-    header("Last-Modified: $lastmod"); 
-    _clog("Sending page: $lastmod ($http_check/$contentDate) (ifmod:$ifmod)");
+    $last_db_write_time_fmt = gmdate('D, d M Y H:i:s', $last_db_write_time ) . ' GMT'; 
+    header("Last-Modified: $last_db_write_time_fmt"); 
+    _clog("Sending page: $last_db_write_time_fmt ($user_time/$http_time/$last_db_write_time) (ifmod:$ifmod)");
 }
 
 function cc_send_no_cache_headers()
 {
+    _clog('Clearing headers');
+
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
     // always modified
@@ -99,7 +134,7 @@ function cc_send_no_cache_headers()
 
 function _clog($msg)
 {
-    return; 
+    //return; 
     $debug = CCDebug::Enable(true);
     CCDebug::Log( str_replace(ccl(),'',cc_current_url()) . ' ' . $msg);
     CCDebug::Enable($debug);
