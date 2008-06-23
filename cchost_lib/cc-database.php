@@ -30,7 +30,6 @@ if( !defined('IN_CC_HOST') )
 
 $CC_SQL_DATE = '%W, %M %e, %Y @ %l:%i %p';
 
-
 /**
 * Wrapper class for mySQL, however only CCTable should be calling it directly.
 *
@@ -102,8 +101,22 @@ class CCDatabase
 
         global $CC_GLOBALS;
 
-        if( empty($CC_GLOBALS['in_if_modified']) && preg_match( '/^(\s+)?(insert|delete|update)/i',$sql) )
-            cc_set_if_modified();
+        if( function_exists('cc_set_if_modified') )
+        {
+            static $cc_in_table_lock = false;
+
+            if( preg_match( '/^(\s+)?lock/i',$sql) )
+            {
+                $cc_in_table_lock = true;
+            }
+            elseif( !$cc_in_table_lock 
+                && empty($CC_GLOBALS['in_if_modified']) 
+                && preg_match( '/^(\s+)?(insert|delete|update)/i',$sql) )
+            {
+                cc_set_if_modified();
+                $cc_in_table_lock = false;
+            }
+        }
 
         if( !$qr )
         {

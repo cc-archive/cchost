@@ -84,7 +84,10 @@ class CCSettingsExporter
             $type = $d[$k]['config_type'];
             $d[$k]['config_data'] = serialize($d[$k]['config_data']);
         }
+
+        $configs->Lock();
         $configs->InsertBatch( $columns, $d );
+        $configs->Unlock();
     }
 
 

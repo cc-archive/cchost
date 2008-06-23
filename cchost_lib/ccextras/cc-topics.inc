@@ -151,14 +151,14 @@ class CCTopics extends CCTable
     function DeleteKeyRow($topic_id)
     {
         // Locking broken when added if-modified-since
-        //$this->Lock();
+        $this->Lock();
         list( $left, $right ) = CCDatabase::QueryRow('SELECT topic_left,topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
         $wid = ($right - $left) + 1;
         $sql[] = "DELETE FROM cc_tbl_topics WHERE topic_left BETWEEN $left AND $right";
         $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right - $wid WHERE topic_right > $right";
         $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left - $wid  WHERE topic_left  > $right";
         CCDatabase::Query($sql);
-        //$this->Unlock();
+        $this->Unlock();
     }
 
     function Insert(&$values,$parent_id)
@@ -188,7 +188,7 @@ class CCTopics extends CCTable
         // by 2
         //
         $right_sql = "SELECT topic_right FROM cc_tbl_topics WHERE topic_id = {$parent_id}";
-        //$this->Lock();
+        $this->Lock();
         $right = CCDatabase::QueryItem($right_sql);
         $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right + 2 WHERE topic_right >= {$right}";
         $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left + 2  WHERE topic_left >   {$right}";
@@ -196,7 +196,7 @@ class CCTopics extends CCTable
         $values['topic_left'] = $right;
         $values['topic_right'] = $right + 1;
         $ret = parent::Insert($values);
-        //$this->Unlock();
+        $this->Unlock();
 
         return $ret;
     }
