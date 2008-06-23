@@ -551,24 +551,6 @@ class CCEvents
     }
 
     /**
-    * @access private
-    */
-    function _send_no_cache_headers()
-    {
-        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-
-        // always modified
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-         
-        // HTTP/1.1
-        header("Cache-Control: no-store, no-cache, must-revalidate");
-        header("Cache-Control: post-check=0, pre-check=0", false);
-
-        // HTTP/1.0
-        header("Pragma: no-cache");
-    }
-
-    /**
     * Convert an url into an internal action structure.
     * 
     * @param string $url Internal url to execute (empty means the currently calling URL)

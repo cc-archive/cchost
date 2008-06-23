@@ -407,7 +407,7 @@ class CCPage extends CCSkin
              CCDebug::PrintVar($page->vars,false);
 
         if( !empty($CC_GLOBALS['no-cache']) )
-            CCEvents::_send_no_cache_headers();
+            cc_send_no_cache_headers();
 
         if( $print )
             $page->SetAllAndPrint(array());

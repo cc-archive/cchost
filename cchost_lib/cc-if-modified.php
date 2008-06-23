@@ -81,11 +81,27 @@ function cc_check_if_modified()
     _clog("Sending page: $lastmod ($http_check/$contentDate) (ifmod:$ifmod)");
 }
 
+function cc_send_no_cache_headers()
+{
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+
+    // always modified
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+     
+    // HTTP/1.1
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+
+    // HTTP/1.0
+    header("Pragma: no-cache");
+}
+
+
 function _clog($msg)
 {
-    return;
+    return; 
     $debug = CCDebug::Enable(true);
-    CCDebug::Log( cc_current_url() . ' ' . $msg);
+    CCDebug::Log( str_replace(ccl(),'',cc_current_url()) . ' ' . $msg);
     CCDebug::Enable($debug);
 }
 

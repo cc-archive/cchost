@@ -227,6 +227,7 @@ class CCUtil
         if( !empty($_GET['popup']) && (strpos($newurl,'popup=') === false) )
             $newurl = url_args($newurl,'popup=1');
 
+        cc_send_no_cache_headers();
         header("Location: $newurl");
         exit;
     }

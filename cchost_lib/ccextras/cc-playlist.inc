@@ -804,8 +804,6 @@ EOF;
         if( empty($format) )
             $format = empty($pmacro) ? 'json' : 'html';
 
-        CCEvents::_send_no_cache_headers();
-
         switch( $format )
         {
             case 'json':
