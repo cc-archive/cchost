@@ -66,6 +66,8 @@ class CCReview
                 return;
             }
 
+            $upload_id = sprintf("0%d",$upload_id);
+
             if( !empty($upload_id) )
             {
                 $uploads =& CCUploads::GetTable();
