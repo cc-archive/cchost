@@ -66,7 +66,7 @@ class CCReview
                 return;
             }
 
-            $upload_id = sprintf("0%d",$upload_id);
+            $upload_id = sprintf("%0d",$upload_id);
 
             if( !empty($upload_id) )
             {
