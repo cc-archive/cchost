@@ -299,6 +299,11 @@ class CCSkin
             $funcname($this,$this->vars);
             return;
         }
+        if( empty($filename) )
+        {
+            CCUtil::Send404();
+            return;
+        }
         $this->_inner_include($filename,$funcname,$forceParse);
     }
 
