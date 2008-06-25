@@ -76,7 +76,12 @@ class CCViewLogs
             print sprintf( _('%s does not exist'), $srcfile );
             exit;
         }
-        $target_name = $logdir . $parts[0] . '_' . date('Y-m-d') . '.' . $parts[1];
+        $count = 0;
+        $base = $logdir . $parts[0] . '_' . date('Y-m-d') . '_';
+        $ext  = '.' . $parts[1];
+
+        do { $target_name = $base . $count++ . $ext; }
+        while( file_exists($target_name) );
 
         rename($srcfile,$target_name);
 
