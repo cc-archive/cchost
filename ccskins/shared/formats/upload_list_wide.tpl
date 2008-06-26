@@ -82,13 +82,15 @@ EOF;
 <? $rec_ids = array(); ?>
 %loop(records,R)%
     <? $rec_ids[] = $R['upload_id']; ?>
-    <div class="upload" ><!--   <?= str_replace('--','', $R['upload_name']) ?>   -->
+    <div class="upload" 
+        %if_not_null(#R/files/0/file_extra/sha1)% about="urn:sha1:%(#R/files/0/file_extra/sha1)%" %end_if% >
+        <!--   <?= str_replace('--','', $R['upload_name']) ?>   -->
     <div class="upload_avatar"><img src="%(#R/user_avatar_url)%" /></div>
-    <div class="upload_info">
-        <a class="lic_link" href="%(#R/license_url)%" about="%(#R/download_url)%"
+    <div class="upload_info"><!-- about="%(#R/download_url)%" -->
+        <a class="lic_link" href="%(#R/license_url)%" 
                   rel="license" title="%(#R/license_name)%" ><img src="%(#R/license_logo_url)%" /></a> 
-        <a href="%(#R/file_page_url)%" class="cc_file_link upload_name">%(#R/upload_name_chop)%</a><br />%text(str_by)% 
-               <a class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
+        <a property="dc:title" href="%(#R/file_page_url)%" class="cc_file_link upload_name">%(#R/upload_name_chop)%</a><br />%text(str_by)% 
+               <a property="dc:creator" class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a>
 
         <div class="upload_date">
             %if_not_null(#R/ratings_enabled)%
