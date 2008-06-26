@@ -48,7 +48,7 @@ function cc_set_if_modified()
 
 function cc_check_if_modified()
 {
-    $is_static = preg_match( '/(strings_js.php)/', cc_current_url() );
+    $is_static = false; // preg_match( '/(strings_js.php)/', cc_current_url() );
 
     if( (CCUser::IsLoggedIn() || ($_SERVER['REQUEST_METHOD'] !== 'GET')) && !$is_static )
     {
