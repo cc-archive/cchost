@@ -10,6 +10,7 @@
 <?
 if( empty($records) )
 {
+    print '<!-- no records match! --></div>';
     return;
 }
 $qstring = $A['qstring'];
