@@ -8,6 +8,10 @@
 
 <div  id="cc_mplayer">
 <?
+if( empty($records) )
+{
+    return;
+}
 $qstring = $A['qstring'];
 parse_str($qstring,$qargs);
 if( empty($qargs['rand']) )
