@@ -123,12 +123,6 @@ if( file_exists('ccadmin') )
 }
 
 /*
-* Don't generate the page if the browser already has
-* the latest version
-*/
-cc_check_if_modified();
-
-/*
 *  Pick up 3rd party PHP modules
 */
 if( !empty($CC_GLOBALS['extra-lib']) )
@@ -141,6 +135,13 @@ if( !empty($CC_GLOBALS['extra-lib']) )
 *  User is logged in after this call
 */
 CCUser::InitCurrentUser();             
+
+/*
+* Don't generate the page if the browser already has
+* the latest version
+*/
+cc_check_if_modified();
+
 
 /*
 *  Let all the modules know that config is set
