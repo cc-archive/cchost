@@ -28,26 +28,38 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define('CC_IF_MOD_FLAG','mod-if-304');
+define('CC_IF_MOD_FLAG','mod-stamp');
 
 function cc_set_if_modified()
 {
     global $CC_GLOBALS;
 
-    $cfg = new CCConfigs();
     $time = gmmktime(); 
-    $CC_GLOBALS['in_if_modified'] = true;
-    $cfg->SetValue('config', CC_IF_MOD_FLAG, $time, CC_GLOBAL_SCOPE);
-    unset($CC_GLOBALS['in_if_modified']);
-    $CC_GLOBALS[CC_IF_MOD_FLAG]  = $time;
-    _clog('setting if-mod: ' . $time);
+    if( !isset($CC_GLOBALS[CC_IF_MOD_FLAG]) || ($CC_GLOBALS[CC_IF_MOD_FLAG] != $time) )
+    {
+        $cfg = new CCConfigs();
+        $CC_GLOBALS['in_if_modified'] = true;
+        $cfg->SetValue('config', CC_IF_MOD_FLAG, $time, CC_GLOBAL_SCOPE);
+        unset($CC_GLOBALS['in_if_modified']);
+        $CC_GLOBALS[CC_IF_MOD_FLAG]  = $time;
+        _clog('setting if-mod: ' . $time);
+    }
 }
 
 function cc_check_if_modified()
 {
-    // disable this until I'm sure it freakin works
+    $is_static = preg_match( '/(strings_js.php)/', cc_current_url() );
 
-    return;
+    if( (CCUser::IsLoggedIn() || ($_SERVER['REQUEST_METHOD'] !== 'GET')) && !$is_static )
+    {
+        // We don't play around if the user is logged in because
+        // they would likely see a bunch of pages as if they
+        // were logged out. (drupal has the same rationale,
+        // not sure if that's a good thing but we're going with it)
+        //
+        cc_send_no_cache_headers();
+        return;
+    }
 
     global $CC_GLOBALS;
 
@@ -60,58 +72,27 @@ function cc_check_if_modified()
         cc_set_if_modified();
     }
 
-    //
-    // When the user transitions from logged in to not (or visa versa) 
-    // our pages change radically so you want to make sure that the page's cache
-    // is in sync with when the user transitioned.
-    //
-    // The browser has a copy of the page in it's cache at time http_time
-    // The user logged in/out at time user_time
-    // The database was last changed at last_db_write_time
-    //
+    $last_modified = gmdate('D, d M Y H:i:s', $CC_GLOBALS[CC_IF_MOD_FLAG]) .' GMT';
+    $etag = '"'.md5($last_modified).'"';
 
-    $last_db_write_time  = intval($CC_GLOBALS[CC_IF_MOD_FLAG]);
-    $http_time           = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) : null;
-    $user_time           = 0;
+    $if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE']) : false;
+    $if_none_match     = isset($_SERVER['HTTP_IF_NONE_MATCH'])     ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])     : false;
 
-    $ifmod =  $http_time ? ($http_time >= $last_db_write_time) : null; 
-
-    //
-    // If the browser's copy is newer than the last db write then continue
-    //
-    if( $ifmod && ($ifmod !== false) )
+    if( $is_static || ($if_modified_since && $if_none_match && ($if_none_match == $etag) && ($if_modified_since == $last_modified)) )
     {
-        if( CCUser::IsLoggedIn() )
-        {
-            $user_time = empty($_COOKIE[CC_TRANSITION_COOKIE]) ? 0 : intval($_COOKIE[CC_TRANSITION_COOKIE]);
-            if( !$user_time )
-            {
-                // this will happen when the user has nuked their 
-                // cookies or if this code has not been run between
-                // login/out transitions
-                $user_time = gmmktime();
-                cc_setcookie(CC_TRANSITION_COOKIE,$user_time,time()+60*60*24*30);
-            }
-        }
+        _clog('Sending 304');
+        header('HTTP/1.1 304 Not Modified');
+        // All 304 responses must send an etag if the 200 response for the same object contained an etag
+        header("Etag: $etag");
+        exit();
+    }
 
-        //
-        // If the browser's copy is newer than user's login/out transition then use it
-        //
-        if( !$user_time || ($http_time > $user_time) )
-        {
-            header('HTTP/1.0 304 Not Modified'); 
-            _clog('Sending 304');
-            exit; 
-        }
-        else
-        {
-            _clog("Failed user test");
-        }
-    } 
-    
-    $last_db_write_time_fmt = gmdate('D, d M Y H:i:s', $last_db_write_time ) . ' GMT'; 
-    header("Last-Modified: $last_db_write_time_fmt"); 
-    _clog("Sending page: $last_db_write_time_fmt ($user_time/$http_time/$last_db_write_time) (ifmod:$ifmod)");
+    _clog("Sending page: $last_modified ($if_modified_since/$if_none_match)");
+    header("Last-Modified: $last_modified"); 
+    header("ETag: $etag");
+    // force validation on this page
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Cache-Control: must-revalidate");
 }
 
 function cc_send_no_cache_headers()
@@ -134,9 +115,13 @@ function cc_send_no_cache_headers()
 
 function _clog($msg)
 {
-    //return; 
+    return; 
     $debug = CCDebug::Enable(true);
-    CCDebug::Log( str_replace(ccl(),'',cc_current_url()) . ' ' . $msg);
+    $uri = empty($_SERVER['REQUEST_URI']) 
+                ? str_replace(ccl(),'',cc_current_url()) . $_SERVER['QUERY_STRING'] 
+                : $_SERVER['REQUEST_URI'];
+    $url = preg_replace('#ccm=/[^&]+#','',$uri);
+    CCDebug::Log( $uri . ' ' . $msg);
     CCDebug::Enable($debug);
 }
 
