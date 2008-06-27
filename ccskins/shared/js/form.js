@@ -204,11 +204,13 @@ ccGridEditor.prototype = {
         {
             Event.observe( adder, 'click', me.onAdderClick.bindAsEventListener(me) );
         }
+        /*
         $$('.gcol_name').each( function(e) {
             var num = e.id.match(/^[^\[]+\[([0-9]+)/)[1];
             var eid = 'mit_' + (parseInt(num)+1);
             Event.observe( e, 'keyup', me.onNameChange.bindAsEventListener(me,e.id,eid) );
         });
+        */
     },
 
     onNameChange: function(e,src,target) {
@@ -235,10 +237,11 @@ ccGridEditor.prototype = {
             div.style.display = 'none';
             $('fields_' + this.form_id).appendChild(div);
             var me = this;
+            /*
             $(divid).getElementsByClassName('gcol_name').each( function(e) {
                 Event.observe( e, 'keyup', me.onNameChange.bindAsEventListener(me,e.id,mitid) );
             });
-
+            */
             div = document.createElement('div');
             div.id = 'dmit_'+this.num_rows;
             div.className = 'med_bg dark_border';
