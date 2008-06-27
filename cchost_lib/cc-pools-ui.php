@@ -37,13 +37,21 @@ class CCPoolUI
 {
     function Pool($pool_id='',$alpha='')
     {
-        $pool_id = CCUtil::StripText($pool_id);
+        if( !empty($pool_id) )
+        {
+            $pool_id = sprintf('%0d',$pool_id);
+            $pool_id = CCUtil::StripText($pool_id);
+        }
+
         if( empty($pool_id) )
             return $this->ShowPools();
 
         $pools =& CCPools::GetTable();
         if( !$pools->KeyExists($pool_id) )
             return;
+
+        if( !empty($alpha) )
+            $alpha = $alpha{0};
 
         require_once('cchost_lib/cc-page.php');
         $pool = CCDatabase::QueryRow('SELECT pool_description,pool_name,pool_id,pool_site_url FROM cc_tbl_pools WHERE pool_id='.$pool_id);
@@ -105,8 +113,9 @@ END;
 
     function Item($pool_item_id='')
     {
-        $id = CCUtil::StripText($pool_item_id);
-        if( empty($id) )
+        if( !empty($pool_item_id) )
+            $pool_item_id = sprintf('0%d',$pool_item_id);
+        if( empty($pool_item_id) )
             return;
 
         list( $pool_id, $pool_name, $pool_item_name ) = 
@@ -241,7 +250,7 @@ END;
     {
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle(_("Approve Pending Trackbacks"));
-        if( $submit )
+        if( !empty($_POST['action'])  )
         {
             // this is called when admin wants to 1) approve, 2) delete or 3) noop a trackback
 
