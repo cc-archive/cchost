@@ -446,7 +446,7 @@ class CCQuery
 
         if( !empty($this->records) && !empty($this->args['nosort']) && !empty($this->args['ids']) )
         {
-            $ids = is_string($this->args['ids']) ? split(',',$this->args['ids']) : $this->args['ids'];
+            $ids = is_string($this->args['ids']) ? $this->_split_ids($this->args['ids']) : $this->args['ids'];
             $i = 0;
             foreach($ids as $id)
                 $sort_order[$id] = $i++;
@@ -572,12 +572,17 @@ class CCQuery
 
         // this will do a security check in case someone tries
         // to escape out of sql
-        $ids = array_unique(preg_split('/([^0-9]+)/',$this->args['ids'],0,PREG_SPLIT_NO_EMPTY));
+        $ids = $this->_split_ids($this->args['ids']);
         if( $ids )
         {
             $field = $this->_make_field('id');
             $this->where[] = "($field IN (" . join(',',$ids) . '))';
         }
+    }
+
+    function _split_ids($ids)
+    {
+        return array_unique(preg_split('/([^0-9]+)/',$ids,0,PREG_SPLIT_NO_EMPTY));
     }
 
     function _gen_lic()
