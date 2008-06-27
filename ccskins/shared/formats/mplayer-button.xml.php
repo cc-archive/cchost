@@ -8,7 +8,7 @@
 
 <div  id="cc_mplayer">
 <?
-if( empty($records) )
+if( empty($A['records']) )
 {
     print '<!-- no records match! --></div>';
     return;
