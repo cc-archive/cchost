@@ -556,10 +556,18 @@ class CCMailerAPI
             $from_email = empty($user_from) ? $fields['mail_from'] : $user_from['user_email'];
             $from_name  = empty($user_from) ? $fields['mail_from'] : $user_from['user_name'];
 
+            $body = "\n\nMail sent to account: {$user_to['user_real_name']} ({$user_to['user_name']})\n";
+            if( !empty($user_from) )
+            {
+                $body .= "Mail sent from account: {$user_from['user_real_name']} ({$user_from['user_name']})\n";
+            }
+            $body .= "------------------------------------------------------------------------\n\n";
+            $body .= $fields['mail_body'];
+
             $mailer->From( $from_email );
             $mailer->To( $user_to['user_email'] );
             $mailer->Subject( $fields['mail_subject'] );
-            $mailer->Body( $fields['mail_body'] );
+            $mailer->Body( $body );
             $mailer->Send();
 
             CCPage::Prompt( _('Mail sent') );
