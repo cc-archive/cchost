@@ -450,17 +450,19 @@ EOF;
 
         $mailer = new CCMailer();
         $mailer->Subject( $subject );
-        $mailer->Body($body);
         $users =& CCUsers::GetTable();
         foreach( $user_ids as $user_id )
         {
-            $address = $users->QueryItemFromKey('user_email',$user_id);
-            $mailer->To($address);
+            $wx['user_id'] = $user_id;
+            $urow = $users->QueryRow($wx,'user_email,user_name,user_real_name');
+            $mailer->To($urow['user_email']);
+            $u_body = $body . "\n\nSent to account: {$urow['user_real_name']} ({$urow['user_name']})\n";
+            $mailer->Body($u_body);
             $ok = @$mailer->Send();
             if( !$ok )
             {
                 CCDebug::Enable(true);
-                CCDebug::Log("Message '$subject' failed to send: \n{$body}");
+                CCDebug::Log("Message '$subject' failed to send: \n{$u_body}");
             }
         }
     }
