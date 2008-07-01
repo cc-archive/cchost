@@ -4,6 +4,8 @@
     desc = _('Atom 1.0 Feed')
     dataview = atom
     embedded = 1
+    formats = atom
+    datasource = uploads
 [/meta]
 [dataview]
 function atom_dataview()

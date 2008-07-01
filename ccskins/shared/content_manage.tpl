@@ -1,6 +1,8 @@
 <?/*
 [meta]
     type = template_component
+    desc = _('Admin Content')
+    datasource = topics
     dataview = content_manage
     embedded = 1
 [/meta]
@@ -51,6 +53,11 @@ table.cc_content_topics td {
     float: left;
 }
 </style>
+<?
+require_once('cchost_lib/cc-template.inc');
+$A['content_pages'] = CCTemplateAdmin::GetContentPages();
+$A['topic_types'] = CCDatabase::QueryItems("SELECT DISTINCT topic_type FROM cc_tbl_topics WHERE topic_type > ''");
+?>
 <h2><?= _('Conent Pages') ?></h2>
 <a href="%(home-url)%admin/content/page" class="butt cc_gen_button"><span><?= _('Create a new page')?></span></a>
 <div style="clear:both">&nbsp;</div>
@@ -71,7 +78,7 @@ table.cc_content_topics td {
 <div style="clear:both">&nbsp;</div>
 <div id="topic_picker"><?= _('Select topic type')?>: 
 <select id="topic_types" 
-  onchange="window.location.href = '<?= cc_current_url() ?>' + q + 'topic_type=' + this.options[this.selectedIndex].value;">
+  onchange="window.location.href = '<?= cc_current_url() . $A['q'] ?>' + 'topic_type=' + this.options[this.selectedIndex].value;">
 %loop(topic_types,tt)%
 <? $sel = $_GET['topic_type'] == $tt ? 'selected="selected"' : ''; ?>
 <option value="%(#tt)%" <?= $sel ?>> %(#tt)%</option>

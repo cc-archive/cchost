@@ -2,6 +2,8 @@
 [meta]
     type = feed
     desc = _('RSS 2.0 Feed for Topics')
+    formats = rss
+    datasource = topics
     dataview = rss_topic
     embedded = 1
 [/meta]

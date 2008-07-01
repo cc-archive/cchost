@@ -1,7 +1,9 @@
 <?/*
 [meta]
-    desc     = _('For seeing who recommends a given upload')
+    desc     = _('For seeing who recommends a given upload (match=upload_id)')
     type     = template_component
+    required_args = match
+    datasource = ratings
     dataview = recc
     embedded = 1
 [/meta]
@@ -22,7 +24,7 @@ JOIN cc_tbl_user as rater ON ratings_user = rater.user_id
 JOIN cc_tbl_uploads ON ratings_upload = upload_id
 JOIN cc_tbl_user as uploader ON upload_user = uploader.user_id
 %joins%
-%where% AND (uploader.user_id <> rater.user_id)
+%where% AND (ratings_upload = %match%) AND (uploader.user_id <> rater.user_id)
 %order%
 %limit%
 EOF;

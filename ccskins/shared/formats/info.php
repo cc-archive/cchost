@@ -1,7 +1,7 @@
 <?/*
 [meta]
-    type = template_component
-    name = info
+    type = ajax_component
+    desc = _('Info popup for upload')
     dataview = info
     embedded = 1
 [/meta]

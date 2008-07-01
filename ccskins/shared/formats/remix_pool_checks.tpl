@@ -1,7 +1,8 @@
 %%
 [meta]
-    type     = template_component
+    type     = ajax_component
     desc     = _('used by pool remix search')
+    datasource = pool_items
 [/meta]
 %%
 %loop(records,R)%

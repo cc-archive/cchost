@@ -1,8 +1,9 @@
 <?
 /*
 [meta]
-    type = template_component
+    type = ajax_component
     dataview = upload_menu
+    required_args = ids
 [/meta]
 
 

@@ -3,6 +3,7 @@
     type     = template_component
     desc     = _('Display Pool Items')
     dataview = pool_item_list
+    datasource = pool_items
 [/meta]
 %%*/?>
 

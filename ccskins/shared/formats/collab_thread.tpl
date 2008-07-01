@@ -1,8 +1,12 @@
 <?/*
 [meta]
-    type = template_component
-    desc = _('Collab topic thread')
+    type = ajax_component
+    desc = _('Collab style topic thread (set match=collab_id)')
+    example = t=collab_thread&f=html&type=collab&upload=123
     dataview = collab_thread
+    datasource = topics
+    valid_args = type,match
+    required_args = match
     embedded = 1
 [/meta]
 [dataview]
@@ -22,7 +26,7 @@ SELECT  topic.topic_id,
         {$user_avatar_col}
 FROM cc_tbl_topics AS topic
 JOIN cc_tbl_user AS user ON (topic.topic_user = user_id) 
-%where% 
+%where% AND (topic.topic_upload = %match%) 
 %order%
 %limit%
 EOF;

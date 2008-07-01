@@ -1,9 +1,10 @@
 <?/*
 [meta]
-    type     = template_component
-    desc     = _('List files associated with collaboration')
+    type     = ajax_component
+    desc     = _('List files in collaboration')
     dataview = collab_files
     embedded = 1
+    valid_args = ids, collab
 [/meta]
 [dataview]
 function collab_files_dataview() 

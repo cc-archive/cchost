@@ -5,6 +5,7 @@ if( !defined('IN_CC_HOST') )
 [meta]
     type = template_component
     desc = _('Browse Collaborations')
+    datasource = collabs
     dataview = browse_collabs
     embedded = 1
 [/meta]
@@ -12,8 +13,9 @@ if( !defined('IN_CC_HOST') )
 function browse_collabs_dataview()
 {
     $sql =<<<EOF
-        SELECT * FROM cc_tbl_collabs 
-        WHERE collab_confirmed = 1
+        SELECT * 
+        FROM cc_tbl_collabs 
+        %where% AND collab_confirmed = 1
         %order%
         %limit%
 EOF;

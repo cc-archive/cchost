@@ -3,6 +3,8 @@
     type = feed
     desc = _('RSS 2.0 Feed')
     dataview = rss_20
+    datasource = uploads
+    formats = rss
 [/meta]
 */
 

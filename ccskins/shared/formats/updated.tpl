@@ -1,10 +1,9 @@
 <?/*
 
-Example query: api/query?t=updated&sort=last_edit&ord=desc&title=Recently%20Updated
-
 [meta]
     desc     = _('Listing for recently updated')
     type     = query_browser_template
+    example  = t=updated&sort=last_edit&ord=desc
     dataview = updated
     embedded = 1
 [/meta]

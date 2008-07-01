@@ -1,9 +1,12 @@
 <?/*
 [meta]
-    type = template_component
-    desc = _('Preview of upload reviews')
-    dataview = reviews_upload
-    embedded = 1
+    type          = template_component
+    desc          = _('List of upload reviews (use match=upload_id)')
+    datasource    = topics
+    dataview      = reviews_upload
+    embedded      = 1
+    valid_args    = match
+    required_args = match
 [/meta]
 [dataview]
 function reviews_upload_dataview() 
@@ -11,6 +14,8 @@ function reviews_upload_dataview()
     $urlp = ccl('people') . '/';
     $turl = ccl('reviews') . '/';
     $user_avatar_col = cc_get_user_avatar_sql();
+
+    // sh*t this is a hack to hack, need to rethink/redo how topic_upload foreign keys work
 
     $sql =<<<EOF
 SELECT  topic.topic_id, ((COUNT(parent.topic_id)-1) * 30) AS margin, topic.topic_left, topic.topic_right,
@@ -24,7 +29,10 @@ SELECT  topic.topic_id, ((COUNT(parent.topic_id)-1) * 30) AS margin, topic.topic
 FROM cc_tbl_topics AS topic, 
      cc_tbl_topics AS parent,
      cc_tbl_user AS user
-%where% AND (topic.topic_user = user_id) AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
+%where% AND (topic.topic_upload = %match%)
+        AND (topic.topic_type <> 'collab') 
+        AND (topic.topic_user = user_id) 
+        AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
 GROUP BY topic.topic_id
 ORDER BY (topic.topic_left)  asc
 %limit%
@@ -35,10 +43,12 @@ SELECT  COUNT(*)
 FROM cc_tbl_topics AS topic, 
      cc_tbl_topics AS parent,
      cc_tbl_user AS user
-%where% AND (topic.topic_user = user.user_id) AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
+%where% AND (topic.topic_upload = %match%)
+        AND (topic.topic_type <> 'collab') 
+        AND (topic.topic_user = user_id) 
+        AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
 GROUP BY topic.topic_id
 EOF;
-
 
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
@@ -50,9 +60,12 @@ EOF;
 */?>
 
 <? 
+    if( empty($A['topic_upload']) && !empty($_GET['match']) )
+        $A['topic_upload'] = sprintf('%0d',$_GET['match']);
     cc_query_fmt('noexit=1&nomime=1&f=html&t=list_files&ids=' . $A['topic_upload']); 
     // sorry about this...
-    $user_name = CCDatabase::QueryItem('SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$A['topic_upload']);
+    $user_name = 
+      CCDatabase::QueryItem('SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$A['topic_upload']);
     $topic_url = ccl('reviews',$user_name,$A['topic_upload']);
     $thread_ids = array();
 ?>
@@ -70,7 +83,7 @@ EOF;
         <div style="border-left:600px solid transparent;clear:both;font-size:2px;height:3px;">.</div>
         <div class="cc_topic_reply_body  light_bg">
             <div class="cc_topic_reply_head med_light_bg">
-                <a class="topic_permalink"             href="%(#topic_url)%#%(#R/topic_id)%">%text(str_permalink)%</a> 
+                <a class="topic_permalink" href="%(#topic_url)%#%(#R/topic_id)%">%text(str_permalink)%</a> 
                 %if_not_null(flagging)%
                     <a class="flag topic_flag" title="%text(str_flag_this_topic)%" href="%(home-url)%flag/topic/%(#R/topic_id)%">&nbsp;</a>
                 %end_if%

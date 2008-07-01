@@ -3,7 +3,9 @@
     type = template_component
     desc = _('Browse topics left by a user')
     dataview = topics_user
+    datasource = topics
     embedded = 1
+    required_args = user
 [/meta]
 [dataview]
 function topics_user_dataview() 

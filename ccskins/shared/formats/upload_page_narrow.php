@@ -23,6 +23,7 @@
     type     = page
     desc     = _('Single upload page (narrow)')
     dataview = upload_page
+    require_args = ids
 [/meta]
 */
 ?>

@@ -2,6 +2,7 @@
 [meta]
     type = template_component
     desc = _('Upload reviews for insta-review popup')
+    datasource = topics
     dataview = review_summary
     embedded = 1
 [/meta]
@@ -18,6 +19,7 @@ JOIN cc_tbl_uploads ON topic_upload=upload_id
 %joins%
 %where% AND (topic_type = 'review')
 %order%
+%limit%
 EOF;
 
     return array( 'sql' => $sql,

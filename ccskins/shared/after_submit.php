@@ -8,6 +8,7 @@ if( !defined('IN_CC_HOST') )
     desc     = _('Page shown after successful submission')
     dataview = after_submit
     embedded = 1
+    required_args = ids
 [/meta]
 [dataview]
 function after_submit_dataview()
@@ -30,6 +31,11 @@ EOF;
 }
 [/dataview]
 */
+
+if( empty($A['records'][0]) )
+{
+    return;
+}
 
 ?>
 <!-- template after_submit -->

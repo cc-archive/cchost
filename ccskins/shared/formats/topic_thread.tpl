@@ -1,9 +1,11 @@
 <?/*
 [meta]
     type = template_component
-    desc = _('Forum topic thread')
+    desc = _('Forum topic thread (set match=thread_id)')
+    datasource = topics
     dataview = topic_thread
     embedded = 1
+    required_args = match
 [/meta]
 [dataview]
 function topic_thread_dataview() 
@@ -25,7 +27,9 @@ SELECT  topic.topic_id, IF( COUNT(parent.topic_id) > 2, (COUNT(parent.topic_id) 
 FROM cc_tbl_topics AS topic, 
      cc_tbl_topics AS parent,
      cc_tbl_user AS user
-%where% AND (topic.topic_user = user_id) AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
+%where% AND (topic.topic_thread = %match%)
+        AND (topic.topic_user = user_id) 
+        AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
 GROUP BY topic.topic_id
 ORDER BY (topic.topic_left)  asc
 %limit%
@@ -36,7 +40,9 @@ SELECT COUNT(*)
 FROM cc_tbl_topics AS topic, 
      cc_tbl_topics AS parent,
      cc_tbl_user AS user
-%where% AND (topic.topic_user = user_id) AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
+%where% AND (topic.topic_thread = %match%)
+        AND (topic.topic_user = user_id) 
+        AND (topic.topic_left BETWEEN parent.topic_left AND parent.topic_right)
 GROUP BY topic.topic_id
 EOF;
     return array( 'sql' => $sql,
@@ -122,7 +128,7 @@ $thread_ids = array();
 </table>
 %call(prev_next_links)%
 <script type="text/javascript">
-if( user_name )
+if( window.user_name && userHookup )
 {
     new userHookup('topic_cmds','ids=<?= join(',',$thread_ids) ?>');
 }

@@ -3,6 +3,7 @@
     type     = list
     desc     = _('Multiple upload listing (wide)')
     dataview = upload_list_wide
+    datasource = uploads
     embedded = 1
 [/meta]
 [dataview]

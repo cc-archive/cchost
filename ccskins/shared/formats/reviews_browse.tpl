@@ -2,6 +2,7 @@
 [meta]
     type = template_component
     desc = _('Browse reviews')
+    datasource = topics
     dataview = reviews_browse
     embedded = 1
 [/meta]

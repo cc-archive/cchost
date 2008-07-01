@@ -4,7 +4,7 @@ if( !defined('IN_CC_HOST') )
 /*
 [meta]
     type = template_component
-    desc = _('Trackback feature');
+    desc = _('Trackback feature')
     dataview = trackback
     embedded = 1
 [/meta]

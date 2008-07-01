@@ -1,6 +1,5 @@
 <? /*
 [meta]
-    type     = template_component
     desc     = _('For listing unpublished and moderated uploads')
     dataview = unpub
     embedded = 1

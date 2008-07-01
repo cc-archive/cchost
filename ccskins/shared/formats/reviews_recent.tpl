@@ -2,6 +2,7 @@
 [meta]
     type = template_component
     desc = _('7 most recent reviews')
+    datasource = topics
     dataview = review_recent
     embedded = 1
 [/meta]

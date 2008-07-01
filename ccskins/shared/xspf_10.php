@@ -2,6 +2,8 @@
 [meta]
     type = feed
     desc = _('XSPF 1.0 Playlist')
+    formats = xspf
+    datasource = uploads
     dataview = xspf
     embedded = 1
 [/meta]

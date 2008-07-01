@@ -3,6 +3,7 @@
     type = content_page
     desc = _('Generic Page')
     dataview = content_page
+    datasource = topics
     embedded = 1
 [/meta]
 [dataview]

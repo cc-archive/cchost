@@ -1,9 +1,10 @@
 <?/*
 [meta]
-    type = template_component
-    desc = _('7 most recent reviewers (for menu)')
-    dataview = reviewers_recent
-    embedded = 1
+    type       = ajax_component
+    desc       = _('7 most recent reviewers (for menu)')
+    datasource = topics
+    dataview   = reviewers_recent
+    embedded   = 1
 [/meta]
 [dataview]
 function reviewers_recent_dataview() 

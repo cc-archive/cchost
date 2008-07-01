@@ -1,9 +1,11 @@
 <?/*
 [meta]
-    type     = template_component
-    desc     = _('List collab users (embedded in collab page)')
-    dataview = collab_users
-    embedded = 1
+    type       = ajax_component
+    desc       = _('List collab users (embedded in collab page)')
+    dataview   = collab_users
+    embedded   = 1
+    datasource = collab_users
+    valid_args = collab
 [/meta]
 [dataview]
 function collab_users_dataview() 

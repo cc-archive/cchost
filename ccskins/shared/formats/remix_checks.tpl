@@ -1,6 +1,6 @@
 %%
 [meta]
-    type     = template_component
+    type     = ajax_component
     desc     = _('used by remix search')
 [/meta]
 %%

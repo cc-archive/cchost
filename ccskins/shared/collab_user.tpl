@@ -5,6 +5,8 @@ if( !defined('IN_CC_HOST') )
 [meta]
     type = template_component
     desc = _('Browse a users collab (profile tab)')
+    datasource = collab_user
+    required_args = user
     dataview = browse_user_collabs
     embedded = 1
 [/meta]

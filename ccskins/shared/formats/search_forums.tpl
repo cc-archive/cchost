@@ -1,9 +1,12 @@
 <?/*
 [meta]
     type     = search_forums
-    desc     = _('For forums search results')
+    desc     = _('For forums search results (set type=forums)')
+    example    = type=forums&t=search_forums&limit=30&search_type=any&search=charlie rose
+    datasource = topics
     dataview = search_forums
     embedded = 1
+    required_args = type, search
 [/meta]
 [dataview]
 function search_forums_dataview() 

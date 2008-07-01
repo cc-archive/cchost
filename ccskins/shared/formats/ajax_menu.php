@@ -21,7 +21,9 @@
 
 [meta]
     type = template_component
+    desc  = _('Return a menu for an upload')
     dataview = upload_menu
+    valid_args = ids
 [/meta]
 
 This is used for an ajax callback for just a menu on a record

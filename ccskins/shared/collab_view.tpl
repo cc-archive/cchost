@@ -1,9 +1,3 @@
-<?/*%%
-[meta]
-    type = template_component
-    desc = _('View A Collaboration')
-[/meta]
-%%*/?>
 <?
 $collab = $A['collab'];
 $C = $collab['collab'];
@@ -87,7 +81,7 @@ $collab_id = $C['collab_id'];
 <fieldset>
 <legend class="dark_bg light_color" >%text(str_conversation)%</legend>
     <p >%text(str_collab_this_conv)%:</p>
-    <?= cc_query_fmt('noexit=1&nomime=1&f=html&t=collab_thread&datasource=topics&ord=ASC&type=collab&upload='.$collab_id); ?>
+    <?= cc_query_fmt('noexit=1&nomime=1&f=html&t=collab_thread&ord=ASC&type=collab&match='.$collab_id); ?>
     <div class="c_commands">
         <a href="%(home-url)%collab/topic/add/%(#collab_id)%" class="cc_gen_button" id="collab_topic_add" ><span>%text(str_collab_add_topic)%</span></a>
     </div>

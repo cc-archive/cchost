@@ -1,6 +1,7 @@
 <?/*
 [meta]
-    type = template_component
+    type = ajax_component
+    desc = _('Download files')
     dataview = files
 [/meta]
 */?>

@@ -117,14 +117,14 @@ function _t_file_macros_request_reviews(&$T,&$A)
 {
 
     ?><div id="requested_reviews"><?
-        cc_query_fmt('noexit=1&nomime=1&f=html&t=reviews_preview&sort=topic_date&ids=' . $A['record']['upload_id'] );
+        cc_query_fmt('noexit=1&nomime=1&f=html&t=reviews_preview&sort=topic_date&match=' . $A['record']['upload_id'] );
     ?></div><?
 
     $ratings_opts = cc_get_config('chart');
     if( !empty($ratings_opts['thumbs_up']) )
     {
         ?><div id="recommended_by"><?
-            cc_query_fmt('noexit=1&nomime=1&f=html&t=recc&datasource=ratings&recc=' . $A['record']['upload_id'] );
+            cc_query_fmt('noexit=1&nomime=1&f=html&t=recc&match=' . $A['record']['upload_id'] );
         ?></div><?
     }
 

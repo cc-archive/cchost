@@ -1,9 +1,12 @@
 <?/*
 [meta]
     type     = search_results
-    desc     = _('For reviews search results')
+    desc     = _('For reviews search results (set group=reviews)')
+    example    = group=reviews&t=search_reviews&limit=30&search_type=any&search=charlie+rose
     dataview = search_reviews
+    datasource = topics
     embedded = 1
+    required_args = type, search
 [/meta]
 [dataview]
 function search_reviews_dataview() 

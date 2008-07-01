@@ -1,9 +1,13 @@
 <?/*
 [meta]
     type     = search_results
-    desc     = _('For user search results')
+    desc     = _('For user search results (set group=user)')
+    example    = t=search_users&limit=30&search_type=any&search=charlie+rose
+    datasource = users
     dataview = search_users
     embedded = 1
+    valid_args = search, search_type
+    required_args = search, search_type
 [/meta]
 [dataview]
 function search_users_dataview() 

@@ -1,8 +1,9 @@
 <?/*%%
 [meta]
-    type     = template_component
-    desc     = _('Display Individual Pool Item')
-    dataview = pool_item_list
+    type       = template_component
+    desc       = _('Display Individual Pool Item')
+    dataview   = pool_item_list
+    datasource = pool_items
 [/meta]
 %%*/?>
 <link rel="stylesheet" title="Default Style" type="text/css" href="%url(css/upload_page.css)%" />
