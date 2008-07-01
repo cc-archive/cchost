@@ -21,6 +21,17 @@
 /**
 * Query API
 *
+* The request is handled in 3 main phases:
+*
+*   PHASE 1
+*     Interpret the parameters to determine the data source and data view (see _validate_sources)
+*   
+*   
+*   - Perform the SQL query
+*   - Format the output and return it to caller
+*
+* 
+*
 * @package cchost
 * @subpackage api
 */
@@ -32,27 +43,6 @@ require_once('cchost_lib/cc-tags.php');
 
 /**
 *
-*  these args should be generic stuff...
-*
-*  required for these to work is a genericized version of the following
-*  fields:
-*
-*  _tags, _date, _id, _user, concat(* search fields)
-*
-*  args:
-*
-*  tag filters: tags, reqtags, type,             
-* date filters: sinceu, sinced
-* gen. filters: ids, user, search (req. 'qsearch' field in dataview)
-*     ordering: sort, ord, nosort, rand
-*       paging: limit, offset
-*     data/fmt: format, datasource, template (for format=html/json/etc), title (for format=page)
-*  
-*
-* These are upload specific:
-*
-*  promot_tag, promo_gap, lic, score, remixesof, remixedby, 
-*  mod, unsub, playlist, remixmax, remixmin
 *
 */
 class CCQuery 
@@ -62,7 +52,7 @@ class CCQuery
         $this->sql = '';
         $this->sql_p = array(   
                         'columns' => '',
-                        'joins' => '',
+                        'joins' => array(),
                         'where' => '',
                         'order' => '',
                         'limit' => '', 
@@ -80,24 +70,13 @@ class CCQuery
     {
         $this->ProcessUriArgs();
 
-        // ------------------------------------------------------
-        // Do the query
-        //
-        // This method MAY exit the session... 
-        //
-        list( $value, $mime ) = $this->Query();
-
-        // ------------------------------------------------------
-        // Results
-        //
+        list( $value, $mime ) = $this->Query(); // This method MAY exit the session... 
 
         if( $value === true ) // handled elsewhere 
             return;           // return and show the page
 
-        // We didn't find anything, slap back a 404
-        //
         if( empty($value) ) 
-            CCUtil::Send404(true);
+            CCUtil::Send404(true);  // We didn't find anything, slap back a 404
 
         if( !empty($mime) )
             header( "Content-type: $mime" );
@@ -118,7 +97,7 @@ class CCQuery
         if( !empty($this->_sql_squeeze) )
            $this->sql_p = array_merge($this->sql_p,$this->_sql_squeeze);
 
-        $this->_ensure_template();
+        $this->_validate_sources();
 
         if( $this->args['datasource'] == 'uploads' )
             $this->_gen_visible();
@@ -129,307 +108,12 @@ class CCQuery
         }
         else
         {
-            $cname = cc_temp_dir() . '/query_cache_' . $this->args['cache'] . '.txt';
-            if( file_exists($cname) )
-            {
-                include($cname);
-                $this->records =& $_cache_rows;
-                //$this->_generate_records();
-            }
-            else
-            {
-                $this->_generate_records();
-
-                $data = serialize($this->records);
-                $data = str_replace("'","\\'",$data);
-                $text = '<? /* This is a temporary file created by ccHost. It is safe to delete. */ ' .
-                         "\n" . '$_cache_rows = unserialize(\'' . $data . '\'); ?>';
-                CCUtil::MakeSubDirs(dirname($cname));
-                $f = fopen($cname,'w+');
-                fwrite($f,$text);
-                fclose($f);
-                chmod($cname,cc_default_file_perms());
-            }
+            $this->_generate_records_from_cache();
         }
-        return $this->_process_records();
-    }
 
-    /**
-    * Call this from php when you need to hack in some SQL (call ProcessAdminArgs first on $qargs)
-    *
-    */
-    function QuerySQL($qargs,$sqlargs)
-    {
-        $this->_sql_squeeze =  $sqlargs;
-        return $this->Query($qargs);
-    }
-
-    /**
-    * Call this to fetch and clean args that were passed in through the browser
-    */
-    function ProcessUriArgs($extra_args = array())
-    {
-        global $CC_GLOBALS;
-
-        $this->_from_url = true;
-
-        $req = !empty($_POST) ? $_POST : $_GET;
-
-        if( empty($req) )
-            return $extra_args;
-
-        if( !empty($req['ccm']) )
-            unset($req['ccm']);
-
-        // ------------------------------------------------------
-        // Security
         //
-        if( !empty($req['where']) )
-            unset($req['where']);
-
-        CCUtil::Strip($req);
-
-        // ------------------------------------------------------
-        // Build up args..
+        // Process the resulting records here
         //
-        // 1. System defaults...
-        // 2. End-user...
-        // 3. Calling code can override (important to make sure 
-        //    things like 'limit' aren't abused)
-
-        $this->args = array_merge($this->GetDefaultArgs(),$req,$extra_args);
-
-        // alias short to long
-        $this->_arg_alias();
-
-        // get the '+' out of the tag str
-        if( !empty($this->args['tags']) )
-            $this->args['tags'] = str_replace( ' ', ',', urldecode($this->args['tags']));
-
-        // queries might need decoding
-        if( !empty($this->args['query']) )
-            $this->args['query'] = urldecode($this->args['query']);
-
-        $this->_get_get_offset();
-
-        $k = array_keys($this->args);
-        $n = count($k);
-        for( $i = 0; $i < $n; $i++)
-        {
-            $tt = $this->args[$k[$i]];
-            if( is_string($tt) && (strpos($tt,'\'') === (strlen($tt)-1) ) )
-                die('Illegal value in query');
-        }
-
-            // this probably belongs somewhere else
-        if( !empty($req['playlist']) && empty($req['sort']) )
-            $this->args['nosort'] = 1;
-
-        return $this->args;
-    }
-
-    /**
-    * Call this before calling Query or QuerySQL
-    */
-    function ProcessAdminArgs($args,$extra_args=array())
-    {
-        if( is_string($args) )
-        {
-            parse_str($args,$args);
-            CCUtil::StripSlash($args);
-        }
-
-        $this->args = array_merge($this->GetDefaultArgs(),$args,$extra_args);
-
-        // alias short to long
-        $this->_arg_alias();
-
-        if( !empty($this->args['tags']) )
-        {
-            // clean up tags 
-            require_once('cchost_lib/cc-tags.php');
-            $this->args['tags'] = join(',',CCTag::TagSplit($this->args['tags']));
-        }
-
-        $this->_get_get_offset();
-
-        // this probably belongs somewhere else
-        if( !empty($this->args['playlist']) && empty($args['sort']) && empty($extra_args['sort']) )
-            $this->args['nosort'] = 1;
-
-        return $this->args;
-    }
-
-    function SerializeArgs($args=array())
-    {
-        if( empty($args) )
-            $args =& $this->args;
-        $keys = array_keys($args);
-        $default_args = $this->GetDefaultArgs();
-        $str = '';
-
-        // alias short to long
-        $this->_arg_alias();
-
-        $badargs = array( 'qstring', 'ccm', 'view', 'format', 'template', 'template_args', 'dataview' ); 
-
-        foreach( $keys as $K )
-        {
-            // I have to believe skipping qstring is the right thing here...
-            if(  in_array( $K, $badargs ) || empty($args[$K]) || !is_string($args[$K]) ||
-                ( array_key_exists($K,$default_args) && ($args[$K] == $default_args[$K]) ) )
-            {
-                continue;
-            }
-
-            if( !empty($str) )
-                $str .= '&';
-
-            $str .= $K . '=' . urlencode($args[$K]);
-        }
-        return $str;
-    }
-
-    function GetDefaultArgs()
-    {
-        global $CC_GLOBALS;
-
-        return array(
-                    'sort' => 'date', 'ord'  => 'DESC', 
-                    'limit' => 'default', 'offset' => 0,
-                    'datasource' => 'uploads', 'format' => 'page',
-                    'promo_tag' => 'site_promo',  'promo_gap' => 4,
-                    );
-    }
-
-    function _ensure_template()
-    {
-        // todo: move this out
-        if( empty($this->args['template']) )
-        {
-            switch( $this->args['format'] )
-            {
-                case 'page':
-                    $this->args['template'] = 'list_files';
-                    break;
-                case 'playlist':
-                    $this->args['template'] = 'playlist_show_one';
-                    break;
-                case 'recc':
-                    $this->args['template'] = 'recc';
-                    break;
-                case 'rss':
-                    if( $this->args['datasource'] == 'uploads' )
-                        $this->args['template'] = 'rss_20';
-                    elseif( $this->args['datasource'] == 'topics' )
-                        $this->args['template'] = 'rss_20_topics';
-                    if( !empty($this->args['rss_dataview']) )
-                        $this->args['dataview'] = $this->args['rss_dataview'];
-                    break;
-                case 'atom':
-                    $this->args['template'] = 'atom_10';
-                    break;
-                case 'xspf':
-                    $this->args['template'] = 'xspf_10';
-                    break;
-            }
-        }
-        else
-        {
-            switch( $this->args['format'] )
-            {
-                case 'rss':
-                    /* so, this code can happen when a page is being viewed
-                       that requires a template and we are called from the
-                       'podcast this page' link which requires special
-                       handling in the case where the page template is 
-                       particularly hostile to the data needed for an
-                       rss feed
-                    */
-                    if( !empty($this->args['rss_dataview']) )
-                    {
-                        $this->args['dataview'] = $this->args['rss_dataview'];
-                        if( $this->args['datasource'] == 'uploads' )
-                            $this->args['template'] = 'rss_20';
-                        elseif( $this->args['datasource'] == 'topics' )
-                            $this->args['template'] = 'rss_20_topics';
-                    }
-                    break;
-            }
-        }
-    }
-
-    function _generate_records()
-    {
-        foreach( array( 'sort', 'date', ) as $arg )
-        {
-            $method = '_gen_' . $arg;
-            $this->$method();
-        }
-
-        foreach( array( 'search', 'tags', 'type', 'playlist', 'limit', 'ids', 'user', 'remixes', 'sources', 
-                         'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 'reqtags','rand', 'recc',
-                        ) as $arg )
-        {
-            if( isset($this->args[$arg]) )
-            {
-                $method = '_gen_' . $arg;
-                $this->$method();
-            }
-        }
-
-        $this->_common_query();
-    }
-
-    function _common_query()
-    {
-        if( !empty($this->_from_url) )
-            $this->_check_limit();
-
-        $this->_setup_dataview();
-
-        if( !empty($this->reqtags) )
-        {
-            $tagfield = $this->_make_field('tags');
-            $this->where[] = $this->dataview->MakeTagFilter($this->reqtags,'all',$tagfield);
-        }
-
-        if( !empty($this->tags) )
-        {
-            $tagfield = $this->_make_field('tags');
-            if( empty($this->args['type']) )
-                $this->args['type'] = 'all';
-            $this->where[] = $this->dataview->MakeTagFilter($this->tags,$this->args['type'],$tagfield);
-        }
-
-        if( !empty($this->sql_p['where']) )
-            $this->where[] = $this->sql_p['where'];
-
-        $this->sql_p['where'] = empty($this->where) ? '' : '(' . join( ') AND (', $this->where ) . ')' ;
-
-        if( empty($this->dead) )
-            $this->records =& $this->_perform_sql();
-
-
-        // ------------- DUMP RESULTS ---------------------
-
-        if( !empty($this->args['dump_query']) && CCUser::IsAdmin() )
-        {
-            CCDebug::Enable(true);
-            CCDebug::PrintVar($this,false);
-        }
-
-        if( !empty($_REQUEST['dump_rec']) && CCUser::IsAdmin() )
-        {
-            CCDebug::Enable(true);
-            CCDebug::PrintVar($this->records[0],false);
-        }
-
-    }
-
-    function _process_records()
-    {
         if( $this->args['format'] == 'count' )
         {
             return( array( '[' . $this->records . ']', 'text/plain' ) );
@@ -470,7 +154,6 @@ class CCQuery
 
                 CCEvents::Invoke( CC_EVENT_API_QUERY_FORMAT, 
                                     array( &$this->records, &$this->args, &$results, &$results_mime ) );
-
                 return array( $results, $results_mime );
             }
         } // end switch
@@ -478,66 +161,416 @@ class CCQuery
         return array( &$this->records, '' );
     }
 
-    function _setup_dataview()
+    /**
+    * Call this from php when you need to hack in some SQL (call ProcessAdminArgs first on $qargs)
+    *
+    */
+    function QuerySQL($qargs,$sqlargs)
     {
-        $this->dataview = new CCDataView();
+        $this->_sql_squeeze =  $sqlargs;
+        return $this->Query($qargs);
+    }
 
-        if( empty($this->args['dataview']) )
+    /**
+    * Call this to fetch and clean args that were passed in through the browser
+    */
+    function ProcessUriArgs($extra_args = array())
+    {
+        global $CC_GLOBALS;
+
+        $this->_from_url = true;
+
+        $req = !empty($_POST) ? $_POST : $_GET;
+
+        if( empty($req) )
+            return $extra_args;
+
+        if( !empty($req['ccm']) )
+            unset($req['ccm']);
+
+        CCUtil::Strip($req);
+
+        $this->_arg_alias_ref($req); // convert short to long
+        $this->_uri_args = $req;     // store for later
+
+        $this->args = array_merge($this->GetDefaultArgs(),$req,$extra_args);
+
+        // get the '+' out of the tag str
+        if( !empty($this->args['tags']) )
+            $this->args['tags'] = str_replace( ' ', ',', urldecode($this->args['tags']));
+
+        // queries might need decoding
+        if( !empty($this->args['search']) )
+            $this->args['search'] = urldecode($this->args['search']);
+
+        $k = array_keys($this->args);
+        $n = count($k);
+        for( $i = 0; $i < $n; $i++)
         {
-            if( $this->args['format'] == 'count' )
-            {
-                $this->args['dataview'] = 'count';
-                $this->dataviewProps = array( 'dataview' => 'count', 'file' => 'ccdataviews/count.php');
+            $tt = $this->args[$k[$i]];
+            if( is_string($tt) && (strpos($tt,'\'') === (strlen($tt)-1) ) )
+                die('Illegal value in query');
+        }
+
+        $this->_validate_sources();
+        $this->_validate_args();
+
+        return $this->args;
+    }
+
+    /** 
+    * Helper function for formats during CC_EVENT_QUERY_SETUP
+    *
+    */
+    function GetSourcesFromDataview($dataview_name)
+    {
+        if( empty($this->dataview) )
+        {
+            require_once('cchost_lib/cc-dataview.php');
+            $this->dataview = new CCDataView();
+        }
+        $this->dataviewProps = $this->dataview->GetDataview($dataview_name);
+        $this->args['dataview'] = $dataview_name;
+        $this->args['datasource'] = empty($this->dataviewProps['datasource']) ? 'uploads' : $this->dataviewProps['datasource'];
+    }
+
+    /** 
+    * Helper function for formats during CC_EVENT_QUERY_SETUP
+    *
+    */
+    function GetSourcesFromTemplate($template_name)
+    {
+        if( empty($this->dataview) )
+        {
+            require_once('cchost_lib/cc-dataview.php');
+            $this->dataview = new CCDataView();
+        }
+
+        require_once('cchost_lib/cc-template.php');
+        $template = $this->template = new CCSkinMacro($template_name);
+        $this->templateProps = $template->GetProps();
+        $this->dataviewProps = $this->dataview->GetDataviewFromTemplate($template);
+        if( empty($this->dataviewProps) )
+        {
+            $this->templateProps['dataview'] = 'default';
+            $this->dataviewProps = $this->dataview->GetDataview('default');
+        }
+
+        $this->args['dataview'] = $this->templateProps['dataview'];
+        if( empty($this->templateProps['datasource']) )
+        {
+            $this->args['datasource'] = empty($this->dataviewProps['datasource']) ? 'uploads' : $this->dataviewProps['datasource'];
+        }
+        else
+        {
+            //
+            // The datasource is right there in the template
+            //
+            $this->args['datasource'] = $this->templateProps['datasource'];
+        }
+    }
+
+    /** 
+    * Helper function for formats during CC_EVENT_QUERY_SETUP
+    *
+    */
+    function ValidateLimit($admin_limit_key,$max=12)
+    {
+        if( !empty($this->_limit_is_valid) )
+            return;
+
+        global $CC_GLOBALS;
+        if( empty($this->_from_url) )
+            $admin_limit_key = 'querylimit';
+        $admin_limit = empty($admin_limit_key) ? $max : $CC_GLOBALS[$admin_limit_key];
+        if( empty($this->args['limit']) || ( $this->args['limit'] == 'default' ) )
+            $caller_limit = 'default';
+        else 
+            $caller_limit = sprintf('%0d',$this->args['limit']);
+        if( empty($caller_limit) || ($caller_limit == 'default') || ($caller_limit > $admin_limit) )
+            $caller_limit = $admin_limit;
+        $this->args['limit'] = $caller_limit;
+        $this->_limit_is_valid = true;
+    }
+
+    /** 
+    * Query phase 1 processing
+    *
+    * At the end of this data source and data view MUST have been initialized
+    *
+    */
+    function _validate_sources()
+    {
+        if( !empty($this->_validated_sources) )
+            return;
+
+        $A =& $this->args;
+
+        //
+        // This is the default return type from dataview::perform
+        //
+        $A['rettype'] = CCDV_RET_RECORDS;
+
+        //
+        // every query must have a format
+        //
+        if( empty($A['format']) )
+            $A['format'] = 'page';
+
+        switch( $A['format'] )
+        {
+            case 'php':
+            case 'phps':
+                if( empty($A['dataview']) )
+                    $A['dataview'] = 'default';
+                $this->GetSourcesFromDataview($A['dataview']);
+                break;
+            case 'count':
+                $A['rettype'] = CCDV_RET_ITEM;
+                $this->GetSourcesFromDataview('count');
                 $this->sql_p['limit'] = '';
-            }
-            elseif( $this->args['format'] == 'ids' )
+                break;
+            case 'ids':
+                $A['rettype'] = CCDV_RET_ITEMS;
+                $this->GetSourcesFromDataview('ids');
+                break;
+            default:
+                CCEvents::Invoke( CC_EVENT_API_QUERY_SETUP, array( &$this->args, &$this, !empty($this->_from_url)) );
+                break;
+        }
+
+        $this->_validated_sources = true;
+    }
+
+    /** 
+    * Validate args from HTTP request
+    *
+    */
+    function _validate_args()
+    {
+        if( !empty($this->templateProps['valid_args']) )
+        {
+            $valid = array_unique(preg_split('/([^a-z_]+)/',$this->templateProps['valid_args'],0,PREG_SPLIT_NO_EMPTY));
+            if( !empty($valid) )
             {
-                $this->args['dataview'] = 'ids';
-                $this->dataviewProps = array( 'dataview' => 'default', 'file' => 'ccdataviews/ids.php');
-            }
-            elseif( empty($this->args['template']) )
-            {
-                if( $this->args['format'] == 'm3u' )
+                $skip = array('format','template','dataview','datasource','offset','limit','sort','ord','dpreview');
+                $diff = array_diff(array_diff(array_keys($this->_uri_args),$skip),$valid);
+                if( !empty($diff) )
                 {
-                    // yea,this kind of special knowledge should probably be 
-                    // somewhere else - if we were pretending that we're not ccHost
-                    $this->args['dataview'] = 'files';
-                    $this->dataviewProps = array( 'dataview' => 'files', 'file' => 'ccdataviews/files.php');
-                }
-                else
-                {
-                    $this->args['dataview'] = 'default';
-                    $this->dataviewProps = array( 'dataview' => 'default', 'file' => 'ccdataviews/default.php');
+                    $msg = sprintf(_('Invalid query args: "%s"  Valid args are: "%s" '),join( ', ',$diff),$this->templateProps['valid_args']);
+                    print $msg;
+                    exit;
                 }
             }
-            else
+        }
+        if( !empty($this->templateProps['required_args']) )
+        {
+            $req = array_unique(preg_split('/([^a-z]+)/',$this->templateProps['required_args'],0,PREG_SPLIT_NO_EMPTY));
+            if( !empty($req) )
             {
-                $props = $this->dataview->GetDataViewFromTemplate($this->args['template']);
-                $this->args['dataview'] = $props['dataview'];
-                $this->dataviewProps = $props;
+                $gotcha = array_intersect($req, array_keys($this->args)); // not _url_args!
+                if( empty($gotcha) )
+                {
+                    $msg = sprintf(_('Missing required query args: "%s" '),$this->templateProps['required_args']);
+                    print $msg;
+                    exit;
+                }
+            }
+        }
+        if( !empty($this->templateProps['formats']) )
+        {
+            $valid = array_unique(preg_split('/([^a-z]+)/',$this->templateProps['formats'],0,PREG_SPLIT_NO_EMPTY));
+            if( !empty($valid) && empty($this->args['format']) || !in_array( $this->args['format'], $valid ) )
+            {
+                $this->args['format'] = $valid[0];
             }
         }
     }
 
-    function & _perform_sql()
+    /**
+    * Call this before calling Query or QuerySQL
+    */
+    function ProcessAdminArgs($args,$extra_args=array())
     {
-        if( empty($this->args['dataview']) )
-            die('No dataview');
-
-        if( empty($this->dataviewProps) )
+        if( is_string($args) )
         {
-            $props = $this->dataview->GetDataView($this->args['dataview']);
-            $this->dataviewProps = $props;
+            parse_str($args,$args);
+            CCUtil::StripSlash($args);
         }
-        $rettype = empty($this->args['rettype']) ? ($this->args['format'] == 'count' ? CCDV_RET_ITEM : CCDV_RET_RECORDS) : $this->args['rettype'];
-        $records =&  $this->dataview->Perform( $this->dataviewProps, $this->sql_p, $rettype, $this );
-        $this->sql =  $this->dataview->sql;
-        return $records;
+
+        // alias short to long
+        $this->_arg_alias_ref($args);
+
+        $this->args = array_merge($this->GetDefaultArgs(),$args,$extra_args);
+
+        if( !empty($this->args['tags']) )
+        {
+            // clean up tags 
+            require_once('cchost_lib/cc-tags.php');
+            $this->args['tags'] = join(',',CCTag::TagSplit($this->args['tags']));
+        }
+
+        return $this->args;
+    }
+
+    function SerializeArgs($args=array())
+    {
+        if( empty($args) )
+            $args =& $this->args;
+        $keys = array_keys($args);
+        $default_args = $this->GetDefaultArgs();
+        $str = '';
+
+        // alias short to long
+        $this->_arg_alias();
+
+        $badargs = array( 'qstring', 'ccm', 'format', 'template', 'dataview', 'datasource' ); 
+
+        foreach( $keys as $K )
+        {
+            if(  in_array( $K, $badargs ) || empty($args[$K]) || !is_string($args[$K]) ||
+                ( array_key_exists($K,$default_args) && ($args[$K] == $default_args[$K]) ) )
+            {
+                continue;
+            }
+
+            if( !empty($str) )
+                $str .= '&';
+
+            $str .= $K . '=' . urlencode($args[$K]);
+        }
+        return $str;
+    }
+
+    function GetDefaultArgs()
+    {
+        global $CC_GLOBALS;
+
+        return array(
+                    'sort' => 'date', 'ord'  => 'DESC', 
+                    'limit' => 'default', 'offset' => 0,
+                    'format' => 'page',
+                    );
+    }
+
+    function _generate_records()
+    {
+        foreach( array( 'sort', 'date', ) as $arg )
+        {
+            $method = '_gen_' . $arg;
+            $this->$method();
+        }
+
+        foreach( array( 'search', 'tags', 'type', 'playlist', 'ids', 'user', 'remixes', 'sources', 
+                         'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
+                         'reviewee', 'match', 'reqtags','rand', 'recc', 'collab',
+                        ) as $arg )
+        {
+            if( isset($this->args[$arg]) )
+            {
+                $method = '_gen_' . $arg;
+                $this->$method();
+            }
+        }
+
+        $this->_gen_limit();
+
+        if( !empty($this->reqtags) )
+        {
+            $tagfield = $this->_make_field('tags');
+            $this->where[] = $this->dataview->MakeTagFilter($this->reqtags,'all',$tagfield);
+        }
+
+        if( !empty($this->tags) )
+        {
+            $tagfield = $this->_make_field('tags');
+            if( empty($this->args['type']) )
+                $this->args['type'] = 'all';
+            $this->where[] = $this->dataview->MakeTagFilter($this->tags,$this->args['type'],$tagfield);
+        }
+
+        if( !empty($this->sql_p['where']) )
+            $this->where[] = $this->sql_p['where'];
+
+        $this->sql_p['where'] = empty($this->where) ? '' : '(' . join( ') AND (', $this->where ) . ')' ;
+
+        if( empty($this->dead) )
+        {
+            $this->dataviewProps['dataview'] = $this->args['dataview'];
+            $this->records =&  $this->dataview->Perform( $this->dataviewProps, $this->sql_p, $this->args['rettype'], $this );
+            $this->sql =  $this->dataview->sql;
+        }
+
+
+        // ------------- DUMP RESULTS ---------------------
+
+        if( !empty($this->args['dump_query']) && CCUser::IsAdmin() )
+        {
+            CCDebug::Enable(true);
+            CCDebug::PrintVar($this,false);
+        }
+
+        if( !empty($_REQUEST['dump_rec']) && CCUser::IsAdmin() )
+        {
+            CCDebug::Enable(true);
+            CCDebug::PrintVar($this->records[0],false);
+        }
+
+    }
+
+    function _generate_records_from_cache()
+    {
+        $cname = cc_temp_dir() . '/query_cache_' . $this->args['cache'] . '.txt';
+        if( file_exists($cname) )
+        {
+            include($cname);
+            $this->records =& $_cache_rows;
+            //$this->_generate_records();
+        }
+        else
+        {
+            $this->_generate_records();
+
+            $data = serialize($this->records);
+            $data = str_replace("'","\\'",$data);
+            $text = '<? /* This is a temporary file created by ccHost. It is safe to delete. */ ' .
+                     "\n" . '$_cache_rows = unserialize(\'' . $data . '\'); ?>';
+            CCUtil::MakeSubDirs(dirname($cname));
+            $f = fopen($cname,'w+');
+            fwrite($f,$text);
+            fclose($f);
+            chmod($cname,cc_default_file_perms());
+        }
     }
 
     /********************************
     * Generators
     *********************************/
+    function _gen_collab()
+    {
+        if( ($this->args['datasource'] == 'collabs') || ($this->args['datasource'] == 'collab_users') )
+        {
+            $field = $this->_make_field('collab');
+            $this->where[] = sprintf( "($field = '%0d')", $this->args['collab'] );
+        }
+        elseif( $this->args['datasource'] == 'uploads' )
+        {
+            $collab_id = sprintf('%0d',$this->args['collab'] );
+            if( !empty($collab_id) )
+            {
+                $ids = CCDatabase::QueryItems('SELECT collab_upload_upload FROM cc_tbl_collab_uploads WHERE collab_upload_collab='.$collab_id);
+                if( empty($ids) )
+                {
+                    $this->dead = true;
+                }
+                else
+                {
+                    $this->where[] = '(upload_id IN (' . join(',',$ids) . '))';
+                }
+            }
+        }
+    }
+
     function _gen_date()
     {
         // Check for date limit
@@ -554,7 +587,7 @@ class CCQuery
         {
             if( $this->args['sinceu']{0} === '_' )
                 $this->args['sinceu'] = substr($this->args['sinceu'],1);
-            $since = $this->args['sinceu'];
+            $since = sprintf('%0d',$this->args['sinceu']);
         }
 
         if( !empty($since) )
@@ -568,10 +601,6 @@ class CCQuery
 
     function _gen_ids()
     {
-        // A specific set of IDs
-
-        // this will do a security check in case someone tries
-        // to escape out of sql
         $ids = $this->_split_ids($this->args['ids']);
         if( $ids )
         {
@@ -612,69 +641,17 @@ class CCQuery
 
     function _gen_limit()
     {
-        global $CC_GLOBALS;
+        $this->ValidateLimit('querylimit');
+        
+        $A =& $this->args;
 
-        if( empty($this->args['offset']) || (intval($this->args['offset']) <= 0) )
-            $this->args['offset'] = '0';
+        if( !empty($A['offset']) )
+            $A['offset'] = sprintf('%0d',$A['offset'] );
 
-        if( !empty($this->_from_url) )
-        {
-            // we need to verify limit keywords:
-            switch( $this->args['limit'] )
-            {
-                case 'page':
-                    if( $this->args['format'] != 'page' )
-                        $limit = 'default';
-                    break;
-                case 'feed':
-                    if( !in_array($this->args['format'], array('rss','atom','xspf') )) 
-                        $limit = 'default';
-                    break;
-            }
-        }
+        if( empty($A['offset']) || ($A['offset'] <= 0) )
+            $A['offset'] = '0';
 
-        if( $this->args['limit'] == 'default' )
-        {
-            switch( $this->args['format'] )
-            {
-                case 'page':
-                    $this->args['limit'] = 'page';
-                    break;
-                case 'xspf':
-                case 'rss':
-                case 'atom':
-                    $this->args['limit'] = 'feed';
-                    break;
-               default:
-                    $this->args['limit'] = 'query';
-                    break;
-            }
-        }
-
-        switch( $this->args['limit'] )
-        {
-            case 'page':
-                $limit  = $this->_get_max_listing();
-                break;
-            
-            case 'feed':
-                $limit = empty($CC_GLOBALS['max-feed']) ? 15 : $CC_GLOBALS['max-feed'];
-                break;
-
-            case 'query':
-                $limit = empty($CC_GLOBALS['querylimit']) ? 0 : $CC_GLOBALS['querylimit'];
-                break;
-
-            default:
-                $limit = $this->args['limit'];
-                break;
-        }
-
-
-        $this->args['limit'] =  $limit; // put here for debugging too
-        if( $limit )
-            $this->sql_p['limit'] = $limit . ' OFFSET ' . $this->args['offset'];
-
+        $this->sql_p['limit'] = $A['limit'] . ' OFFSET ' . $A['offset'];
     }
 
     function _gen_match()
@@ -686,9 +663,10 @@ class CCQuery
     function _gen_playlist()
     {
         if( $this->args['datasource'] == 'uploads' )
-            $this->sql_p['joins'] = 'cc_tbl_cart_items ON cart_item_upload=upload_id';
-
-        $this->where[] = 'cart_item_cart = '.$this->args['playlist']; // err, is this right?
+        {
+            $this->sql_p['joins'][] = 'cc_tbl_cart_items ON cart_item_upload=upload_id';
+            $this->where[] = 'cart_item_cart = '.$this->args['playlist']; // err, is this right?
+        }
     }
 
     function _gen_rand()
@@ -696,21 +674,17 @@ class CCQuery
         $this->sql_p['order'] = 'RAND()';
     }
 
-    function _gen_recc()
-    {
-        // assume the joins are in the dataview (??)
-        $this->args['datasource'] = 'ratings';
-        $this->where[] = 'ratings_upload = ' . $this->args['recc'];
-    }
-
     function _gen_reccby()
     {
         $user_id = CCDatabase::QueryItem("SELECT user_id FROM cc_tbl_user WHERE user_name= '{$this->args['reccby']}'");
-        $this->sql_p['joins'] = 'cc_tbl_ratings ON ratings_upload=upload_id';
-        $this->where[] = 'ratings_user = ' . $user_id;
-        if( $this->args['format'] != 'count' )
+        if( !empty($user_id) && $this->args['datasource'] == 'uploads')
         {
-            $this->sql_p['order'] = 'ratings_id DESC'; // er, ....
+            $this->sql_p['joins'][] = 'cc_tbl_ratings ON ratings_upload=upload_id';
+            $this->where[] = 'ratings_user = ' . $user_id;
+            if( $this->args['format'] != 'count' )
+            {
+                $this->sql_p['order'] = 'ratings_id DESC'; // er, ....
+            }
         }
     }
 
@@ -771,9 +745,10 @@ class CCQuery
 
     function _gen_score()
     {
+        $this->args['score'] = sprintf('%0d',$this->args['score']);
         if( $this->args['datasource'] == 'user' )
             $this->where[] = 'user_num_scores >= ' . $this->args['score'];
-        else
+        elseif( $this->args['datasource'] == 'uploads' )
             $this->where[] = 'upload_num_scores >= ' . $this->args['score'];
     }
 
@@ -823,12 +798,11 @@ class CCQuery
     {
         $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
-        $grp = empty($this->args['group']) ? '' : $this->args['group'];
+        $grp = empty($this->args['type']) ? 0 : $this->args['type'];
 
         foreach( $search_meta as $meta )
         {
-            if( ($grp && ($this->args['group'] == $meta['group'])) || 
-                (empty($grp) && ($this->args['datasource'] == $meta['datasource'])) )
+            if( (!$grp || ($grp == $meta['group'])) && ($this->args['datasource'] == $meta['datasource']) )
             {
                 $search = str_replace("'","\\'",(trim($this->args['search'])));
                 $strlow = strtolower($search);
@@ -897,8 +871,7 @@ class CCQuery
 
         if( !empty($sorts[$args['sort']]) )
         {
-            if( empty($args['ord']) )
-                $args['ord'] = 'ASC';
+            $args['ord'] = empty($args['ord']) || (strtoupper($args['ord']) == 'DESC') ? 'DESC' : 'ASC';
 
             $this->sql_p['order'] = $sorts[$args['sort']][1] . ' ' . $args['ord'];
         }
@@ -958,9 +931,10 @@ class CCQuery
 
     function _gen_upload()
     {
-        if( $this->args['datasource'] == 'topics' )
+        if( $this->args['datasource'] == 'topics' || ($this->args['datasource'] == 'ratings'))
         {
-            $this->where[] = "topic_upload = '{$this->args['upload']}'";
+            $field = $this->_make_field('upload');
+            $this->where[] = $field ." = '{$this->args['upload']}'";
         }
     }
 
@@ -976,13 +950,22 @@ class CCQuery
         {
             $op = '=';
         }
-        $w['user_name'] = $user;
-        $users =& CCUsers::GetTable();
-        $user_id = $users->QueryKey($w);
-        if( $this->args['datasource'] == 'user' )
-            $field = 'user_id';
+
+        if( $this->args['datasource'] == 'pool_items' )
+        {
+            $field = 'pool_item_artist';
+            $user_id = $user;
+        }
         else
-            $field = $this->_make_field('user');
+        {
+            $w['user_name'] = $user;
+            $users =& CCUsers::GetTable();
+            $user_id = $users->QueryKey($w);
+            if( $this->args['datasource'] == 'user' )
+                $field = 'user_id';
+            else
+                $field = $this->_make_field('user');
+        }
         $this->where[] = "($field $op '{$user_id}')";
     }
 
@@ -1048,7 +1031,7 @@ class CCQuery
 
     function _heritage_helper($key,$f1,$t,$f2,$kf)
     {
-        $id = $this->args[$key];
+        $id = sprintf('%0d',$this->args[$key]);
         // sigh, I can't get subqueries to work.
         $sql = "SELECT $f1 as $kf FROM $t WHERE $f2 = $id";
         $rows = CCDatabase::QueryItems($sql);
@@ -1066,8 +1049,11 @@ class CCQuery
 
     function _arg_alias()
     {
-        $args =& $this->args;
+        $this->_arg_alias_ref($this->args);
+    }
 
+    function _arg_alias_ref(&$args)
+    {
         $aliases = array( 'f'      => 'format',
                           't'      => 'template',
                           'm'      => 'template',
@@ -1192,15 +1178,15 @@ class CCQuery
             return $user;
         }
 
-        if( $this->args['datasource'] == 'collab' )
+        if( ($this->args['datasource'] == 'collabs') ||
+            ($this->args['datasource'] == 'collab_user') )
         {
             return array_merge( $user, 
-                       array( 'name' => array( _('Collab name'), 'collab_name' ),
-                              'date' => array( _('Topic date'), 'collab_date' ),
-                            ));
+                       array( 'name' => array( _('Collaboration name'), 'collab_name' ),
+                              'date' => array( _('Collaboration  date'), 'collab_date' ),
+                              'user' => array( _('Collaboration owner'), 'collab_user' ),
+                        ) );
         }
-
-
 
         if( $this->args['datasource'] != 'uploads' )
             return '';
@@ -1228,49 +1214,6 @@ class CCQuery
     }
 
 
-    function _get_get_offset()
-    {
-        if( $this->args['format'] == 'page' && !empty($_GET['offset']) )
-            $this->args['offset'] = sprintf('%0d',$_GET['offset']);
-    }
-
-
-    function _check_limit()
-    {
-        global $CC_GLOBALS;
-
-        $args =& $this->args;
-
-        if( $args['format'] == 'page' )
-        {
-            $admin_limit  = $this->_get_max_listing();
-        }
-        elseif( in_array($args['format'], array('rss','atom','xspf') ) )
-        {
-            $admin_limit  = empty($CC_GLOBALS['max-feed']) ? 15 : $CC_GLOBALS['max-feed'];
-        }
-        else
-        {
-            $admin_limit = empty($CC_GLOBALS['querylimit']) ? 0 : $CC_GLOBALS['querylimit'];
-        }
-
-        $intv = intval($args['limit']);
-        if( !empty($admin_limit) && (empty($intv) || ($admin_limit < $intv)) )
-        {
-            $args['limit'] = $admin_limit;
-        }
-    }
-
-    function _get_max_listing()
-    {
-        if( !isset($this->_max_listing) )
-        {
-            $configs =& CCConfigs::GetTable();
-            $settings = $configs->GetConfig('skin-settings');
-            $this->_max_listing = empty($settings['max-listing']) ? 12 : $settings['max-listing'];
-        }
-        return $this->_max_listing;
-    }
 } // end of class CCQuery
 
 

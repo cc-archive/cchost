@@ -88,6 +88,28 @@ class CCPlaylists
         }
     }
 
+    function OnApiQuerySetup( &$args, &$queryObj, $validate)
+    {
+        if( $args['format'] != 'playlist' )
+            return;
+        $args['template'] = 'playlist_show_one';
+        $queryObj->GetSourcesFromTemplate($args['template']);
+
+        if( !empty($args['playlist']) )
+        {
+            $args['playlist'] = sprintf('%0d',$args['playlist']);
+            if( empty($args['playlist']) )
+            {
+                unset($args['playlist']);
+            }
+            else
+            {
+                if( empty($args['sort'])  )
+                    $this->args['nosort'] = 1; // this is magic and will trigger a sort by cart_item_order, sry
+            }
+        }
+    }
+
     function OnApiQueryFormat( &$records, $query_args, &$result, &$result_mime )
     {
         global $CC_GLOBALS;

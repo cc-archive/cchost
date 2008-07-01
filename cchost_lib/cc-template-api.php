@@ -126,7 +126,7 @@ function cc_query_default_args($required_args=array())
     return array( $args, $json_args );
 }
 
-function cc_query_fmt($qstring)
+function cc_query_fmt($qstring,$debug=0)
 {
     if( empty($qstring) )
         return array();

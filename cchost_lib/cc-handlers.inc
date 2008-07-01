@@ -53,8 +53,10 @@ CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCFeed',  'OnUploadDel
 CCEvents::AddHandler(CC_EVENT_DELETE_FILE,        array( 'CCFeed',  'OnFileDelete'), 'cchost_lib/cc-feed.php');
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCFeed',  'OnUploadDone'), 'cchost_lib/cc-feed.php');
 
+CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,   array( 'CCFeedsAtom', 'OnApiQuerySetup'),'cchost_lib/cc-feeds-atom.php'); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsAtom', 'OnApiQueryFormat'),'cchost_lib/cc-feeds-atom.php'); 
 
+CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,   array( 'CCFeedsRSS',  'OnApiQuerySetup'), 'cchost_lib/cc-feeds-rss.php'); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsRSS',  'OnApiQueryFormat'), 'cchost_lib/cc-feeds-rss.php'); 
 
 // this turns out to be order dependent and we want rss as the default
@@ -107,6 +109,7 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCNavigatorAdmin',  'OnMapUrl
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPageAdmin', 'OnMapUrl'), 'cchost_lib/cc-page.php' );
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPageAdmin', 'OnGetConfigFields'), 'cchost_lib/cc-page.php'  );
+CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,   array( 'CCPageAdmin',  'OnApiQuerySetup'), 'cchost_lib/cc-page.php' ); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCPageAdmin',  'OnApiQueryFormat'), 'cchost_lib/cc-page.php' ); 
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCPoolUI',  'OnMapUrls'), 'cchost_lib/cc-pools-ui.php' );
@@ -131,6 +134,7 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCRemix' ,'OnMapUrls'), 'c
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,     array( 'CCRenderAudio', 'OnUploadMenu'), 'cchost_lib/cc-renderaudio.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,        array( 'CCRenderAudio', 'OnMapUrls'), 'cchost_lib/cc-renderaudio.php' );
+CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP, array( 'CCRenderAudio', 'OnApiQuerySetup'), 'cchost_lib/cc-renderaudio.php' ); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT, array( 'CCRenderAudio', 'OnApiQueryFormat'), 'cchost_lib/cc-renderaudio.php' ); 
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCRenderFlash', 'OnMapUrls'), 'cchost_lib/cc-renderflash.php' );

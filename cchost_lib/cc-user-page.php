@@ -32,6 +32,11 @@ class CCUserPage
 {
     function People( $username='', $tab='' )
     {
+        if( !empty($username) )
+            $username = CCUtil::Strip($username);
+        if( !empty($tab) )
+            $username = CCUtil::Strip($tab);
+
         require_once('cchost_lib/cc-page.php');
 
         $configs =& CCConfigs::GetTable();

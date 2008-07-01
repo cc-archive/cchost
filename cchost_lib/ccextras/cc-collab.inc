@@ -478,9 +478,8 @@ EOF;
 
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('t=collab_users&f=html&datasource=collab_users');
-        $sqlargs['where'] = 'collab_user_collab = ' . $collab_id;
-        $query->QuerySQL($args,$sqlargs);
+        $args = $query->ProcessAdminArgs('t=collab_users&f=html&collab='.$collab_id);
+        $query->Query($args);
     }
 
     function Upload( $collab_id='', $upload_id='', $cmd='' )

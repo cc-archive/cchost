@@ -35,6 +35,15 @@ require_once('cchost_lib/cc-feed.php');
 */
 class CCFeedsRSS 
 {
+    function OnApiQuerySetup( &$args, &$queryObj, $validate)
+    {
+        if( $args['format'] != 'rss' )
+            return;
+        $args['template'] = (!empty($args['datasource']) && $args['datasource'] == 'topics' ) ? 'rss_20_topics.php' : 'rss_20.php';
+        $queryObj->GetSourcesFromTemplate($args['template']);
+        $queryObj->ValidateLimit('max-feed');
+    }
+
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
         if( $args['format'] != 'rss' )

@@ -558,10 +558,9 @@ EOF;
         
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('limit=0&sort=left&paging=off&f=page&t=topic_thread&datasource=topics&title=' . 
-            urlencode($row['topic_name']),array(),false);
-        $sqlargs['where'] = 'topic.topic_thread=' . $thread_id;
-        $query->QuerySQL($args,$sqlargs);
+        $args = $query->ProcessAdminArgs('limit=0&sort=left&paging=off&f=page&t=topic_thread&&title=' . 
+            urlencode($row['topic_name']) . '&match='. $thread_id );
+        $query->Query($args);
         $name = $row['forum_name'] . '::' . $row['topic_name'];
         $this->_add_feed_links( $thread_id, '', '', $name );
         $this->_build_bread_crumb_trail($row['forum_id'],$row['topic_name']);
@@ -606,12 +605,13 @@ EOF;
             CCUtil::Send404();
             return;
         }
+        require_once('cchost_lib/page.php');
         require_once('cchost_lib/cc-query.php');
+        $page =& CCPage::GetPage();
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=topics_user&datasource=topics&limit=20',array(),false);
-        $args['title'] = array( 'str_forum_topics_by', $user_real_name );
-        $sqlargs['where'] = "topic_user ='$user_id'";
-        $query->QuerySQL($args,$sqlargs);
+        $title = $page->String(array( 'str_forum_topics_by', $user_real_name ));
+        $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=topics_user&limit=20&title'.$title.'user='.$user_name);
+        $query->Query($args);
         $this->_add_feed_links( '', $user_name,$user_real_name);
     }
 }

@@ -71,7 +71,8 @@ class CCFileProps
             if( empty($line) )
                 continue;
             $parts = split('=',$line);
-            $props[ trim($parts[0]) ] = trim($parts[1]);
+            $prop_name = array_shift($parts);
+            $props[ trim($prop_name) ] = trim( join( '=', $parts) );
         }
         if( !empty($props['desc']) )
         {

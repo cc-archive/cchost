@@ -26,6 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,   array( 'CCQueryFormats',  'OnApiQuerySetup'), 'cchost_lib/ccextras/cc-query-fmts.inc' ); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCQueryFormats',  'OnApiQueryFormat'), 'cchost_lib/ccextras/cc-query-fmts.inc' ); 
 
 ?>

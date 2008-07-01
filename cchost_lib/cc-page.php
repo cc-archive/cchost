@@ -55,6 +55,27 @@ class CCPageAdmin
                           CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays XHTML template (alias for viewfile)'), CC_AG_VIEWFILE );
     }
 
+    function OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
+    {
+        extract($args);
+
+        if( $format != 'page' )
+            return;
+
+        if( empty($template) )
+            $args['template'] = 'list_files';
+
+        $queryObj->GetSourcesFromTemplate($args['template']);
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('skin-settings');
+        $max_listing = empty($settings['max-listing']) ? 12 : $settings['max-listing'];
+        $queryObj->ValidateLimit(null,$max_listing);
+
+        // why is this needed again?
+        if( !empty($_GET['offset']) )
+            $args['offset'] = sprintf('%0d',$_GET['offset']);
+    }
+
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
         //CCDebug::PrintVar($args);
@@ -65,12 +86,6 @@ class CCPageAdmin
 
         if( !empty($title) )
             CCPage::SetTitle($title);
-
-        if( !empty($template_args) )
-        {
-            foreach( $template_argas as $K => $V )
-                CCPage::PageArg($K,$V);
-        }
 
         $dochop = isset($chop) && $chop > 0;
         $chop   = isset($chop) ? $chop : 25;
@@ -693,7 +708,7 @@ class CCPage extends CCSkin
 
         if( empty($table_or_dataview->_key_field) )
         {
-            $all_row_count = CCDatabase::QueryItem($table_or_dataview->sql_count);
+            $all_row_count = $table_or_dataview->GetCount();
         }
         else
         {

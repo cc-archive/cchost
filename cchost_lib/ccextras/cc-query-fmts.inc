@@ -30,6 +30,46 @@ if( !defined('IN_CC_HOST') )
 */
 class CCQueryFormats
 {
+
+    function OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
+    {
+        extract($args);
+
+        $format = strtolower($format); // just in case he screwed the case
+
+        switch( $format )
+        {
+            case 'html':
+            case 'docwrite':
+            case 'embed':
+            {
+                if( empty($template) )
+                    $args['template'] = 'links';
+                $queryObj->GetSourcesFromTemplate($args['template']);
+                break;
+            }
+            case 'json':
+            case 'js':
+            case 'xml':
+            case 'textfile':
+            case 'csv':
+            {
+                if( empty($template) )
+                {
+                    if( empty($dataview) )
+                        $dataview = 'default';
+                    $queryObj->GetSourcesFromDataView($dataview);
+                }
+                else
+                {
+                    $queryObj->GetSourcesFromTemplate($args['template']);
+                }
+                break;
+            }
+
+        } // end switch
+    }
+
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
         global $CC_GLOBALS;
@@ -39,8 +79,6 @@ class CCQueryFormats
         $results = array();
 
         $format = strtolower($format); // just in case he screwed the case
-
-        $query = new CCQuery();
 
         switch( $format )
         {
@@ -142,11 +180,8 @@ class CCQueryFormats
                 $targs['chop']     = isset($chop) ? $chop : 25;
                 $targs['qstring']  = $queryObj->SerializeArgs($args);
 
-                if( !empty($template_args) )
-                    $targs = array_merge($targs,$template_args);
-
                 $text = $skinmac->SetAllAndParse($targs);
-                
+
                 if( $format == 'docwrite' )
                 {
                     $lines = preg_split('/[\n\r]/',$text);
@@ -243,8 +278,11 @@ class CCQueryFormats
         }
 
         print($value);
+
         if( empty($noexit) )
             exit;
+
+        $result = true;
     }
 
     function _old_dump_xml_obj($obj,&$xml)

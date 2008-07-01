@@ -53,7 +53,7 @@ class CCReviewsHV
                 'template'   => 'search_reviews',
                 'title'      => 'str_search_reviews',
                 'datasource' => 'topics',
-                'group'      => 'reviews',
+                'group'      => 'review',
                 'match'      => 'topic_name,topic_text',
             );
     }

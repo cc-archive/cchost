@@ -489,17 +489,11 @@ EOF;
         $this->_build_bread_crumb_trail(_('Manage Page Content'));
         CCPage::SetTitle(_('Manage Page Content'));
 
-        require_once('cchost_lib/cc-template.inc');
-        $pages = CCTemplateAdmin::GetContentPages();
-        CCPage::PageArg('content_pages',$pages);
-        
-        $types = CCDatabase::QueryItems("SELECT DISTINCT topic_type FROM cc_tbl_topics WHERE topic_type > ''");
-        CCPage::PageArg('topic_types',$types);
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         if( empty($_GET['topic_type']) )
             $_GET['topic_type'] = empty($types[0]) ? 'home' : $types[0];
-        $args = $query->ProcessAdminArgs('t=content_manage&datasource=topics&type='.$_GET['topic_type']);
+        $args = $query->ProcessAdminArgs('t=content_manage&type='.$_GET['topic_type']);
         $query->Query($args);
     }
 

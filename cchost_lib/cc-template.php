@@ -128,7 +128,7 @@ class CCSkin
     *
     * @param mixed $args Last minute arguments to pump into the rendering
     */
-    function SetAllAndPrint($args,$headers=true)
+    function SetAllAndPrint( $args, $headers=true )
     {
         $snapshot = $this->vars; // make this instance reusable (this is not tested)
     
@@ -179,7 +179,9 @@ class CCSkin
 
             $this->_push_path($this->filename);
             foreach( $this->vars['auto_execute'] as $exec )
+            {
                 $this->Call($exec);
+            }
             $this->_pop_path();
         }
 
@@ -308,7 +310,30 @@ class CCSkin
     }
 
 
+    function GetProps($macropath)
+    {
+        if( file_exists($macropath) )
+        {
+            $file = $macropath;
+        }
+        else
+        {
+            list( $file, $macro ) = $this->_inner_lookup_macro($macropath);
+            if( empty($file) )
+                return null;
+        }
+        require_once('cchost_lib/cc-file-props.php');
+        $fp = new CCFileProps();
+        return $fp->GetFileProps($file);
+    }
+
+
     function LookupMacro($macropath)
+    {
+        return $this->_inner_lookup_macro($macropath);
+    }
+
+    function _inner_lookup_macro($macropath)
     {
         global $CC_GLOBALS;
 
@@ -356,6 +381,8 @@ class CCSkin
         if( empty($path) )
         {
             print( "<h3>Can't find template: <span style='color:red'>$macropath</span></h3>");
+            if( !CCDebug::IsEnabled() )
+                CCUtil::Send404();
             CCDebug::PrintVar($this);
         }
 
@@ -580,6 +607,7 @@ class CCSkin
                 $parsed = cc_tpl_parse_file($file,$bfunc);
                 //if( preg_match('/skin.tpl/',$file) ) CCDebug::PrintVar($parsed);
                 $ret = eval( '?>' . $parsed);
+
                 if( $ret != 'ok' && CCUser::IsAdmin() )
                 {
                     $lines = split("\n",$parsed);
@@ -650,28 +678,51 @@ class CCSkin
 
 class CCSkinMacro extends CCSkin
 {
-    var $_skin_macro;
-    var $_skin_loaded;
+    var $_macro;
+    var $_macro_file;
+    var $_macro_macro;
+    var $_macro_loaded;
+    var $_macro_props;
 
     function CCSkinMacro($macro)
     {
         global $CC_GLOBALS;
         $this->CCSkin($CC_GLOBALS['skin-file']);
-        $this->_skin_macro = $macro;
-        $this->_skin_loaded = false;
+        $this->_macro = $macro;
+        $this->_macro_loaded = false;
+        list( $this->_macro_file, $this->_macro_macro ) = $this->_inner_lookup_macro($macro);
+        $this->_macro_props = parent::GetProps($this->_macro_file);
+    }
+
+    function Call($with)
+    {
+        $this->_hello = true;
+        return parent::Call($with);
     }
 
     function LookupMacro($macropath='')
     {
         if( empty($macropath) )
-            $macropath = $this->_skin_macro;
+            return array( $this->_macro_file, $this->_macro_macro );
         return parent::LookupMacro($macropath);
     }
     
+    function GetSkinFile($macropath='')
+    {
+        return $this->_macro_file;
+    }
+
+    function GetProps($macropath='')
+    {
+        return $this->_macro_props;
+    }
+
     function SetAllAndPrint( $args, $headers=false )
     {
-        $args['auto_execute'][] = $this->_skin_macro;
-        $ret = parent::SetAllAndPrint($args,$headers,!$this->_skin_loaded);
+        // there's some magic here... because SetAll&Print will call this->Call
+        // which will call LookupMacro with a null macro
+        $args['auto_execute'][] = '';
+        $ret = parent::SetAllAndPrint($args,$headers,!$this->_macro_loaded);
         return $ret;
     }
 }

@@ -29,10 +29,20 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 
+CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,   array( 'CCFeedsXSPFHV', 'OnApiQuerySetup') ); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsXSPFHV', 'OnApiQueryFormat') ); 
 
 class CCFeedsXSPFHV
 {
+    function OnApiQuerySetup( &$args, &$queryObj, $validate)
+    {
+        if( $args['format'] != 'xspf' )
+            return;
+        $args['template'] = 'xspf_10.php';
+        $queryObj->GetSourcesFromTemplate($args['template']);
+        $queryObj->ValidateLimit('max-feed');
+    }
+
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
         if( $args['format'] != 'xspf' )

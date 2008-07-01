@@ -85,7 +85,7 @@ class CCSearch
             array(
                 'template'   => 'search_users',
                 'title'      => 'str_search_users',
-                'datasource' => 'user',
+                'datasource' => 'users',
                 'fields'     => array(),
                 'group'      => 'users',
                 'match'      => 'user_name,user_real_name,user_description',
@@ -142,7 +142,8 @@ class CCSearch
                 if( $meta['group'] == 'all' )
                     continue;
                 $query = new CCQuery();
-                $qs = "search=$search_text&datasource={$meta['datasource']}&group={$meta['group']}&t={$meta['template']}"; 
+                $grp_type = $meta['datasource'] == $meta['group'] ? '' : '&type=' . $meta['group'];
+                $qs = "search=$search_text&datasource={$meta['datasource']}{$grp_type}&t={$meta['template']}"; 
                 $q = $qs . "&limit=5&f=html&noexit=1&nomime=1";
                 if( empty($search_type) )
                 {
@@ -187,7 +188,8 @@ class CCSearch
                 global $CC_GLOBALS;
                 $result_limit = 30; // todo: option later
                 CCPage::SetTitle( array( 'str_search_results_from', $meta['title']) );
-                $q = "search=$search_text&datasource={$meta['datasource']}&group={$meta['group']}&t={$meta['template']}&limit=".$result_limit;
+                $grp_type = $meta['datasource'] == $meta['group'] ? '' : '&type=' . $meta['group'];
+                $q = "search={$search_text}&datasource={$meta['datasource']}{$grp_type}&t={$meta['template']}&limit={$result_limit}";
                 if( !empty($search_type) )
                     $q .= '&search_type=' . $search_type;
                 $query = new CCQuery();

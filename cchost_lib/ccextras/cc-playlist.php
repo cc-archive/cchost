@@ -32,6 +32,7 @@ if( !defined('IN_CC_HOST') )
 *
 */
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPlaylists',  'OnMapUrls'),          'cchost_lib/ccextras/cc-playlist.inc' );
+CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,    array( 'CCPlaylists',  'OnApiQuerySetup'),    'cchost_lib/ccextras/cc-playlist.inc' ); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCPlaylists',  'OnApiQueryFormat'),   'cchost_lib/ccextras/cc-playlist.inc' ); 
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCPlaylists',  'OnUploadDelete'),     'cchost_lib/ccextras/cc-playlist.inc' );
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPlaylistHV', 'OnUploadMenu'));

@@ -71,7 +71,7 @@ END;
 
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('t=pool_listing&datasource=pool_items&sort=user&ord=ASC');
+        $args = $query->ProcessAdminArgs('t=pool_listing&sort=user&ord=ASC');
         $sqlArgs['where'] = $where;
         $query->QuerySQL($args,$sqlArgs);
 
@@ -125,7 +125,7 @@ END;
 
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('t=pool_item&datasource=pool_items&ids='.$pool_item_id);
+        $args = $query->ProcessAdminArgs('t=pool_item&ids='.$pool_item_id);
         $query->Query($args);
         CCPage::SetTitle( 'str_pool_item_page' );
     }

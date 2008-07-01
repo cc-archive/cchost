@@ -42,8 +42,6 @@ class CCReview
     {
         global $CC_GLOBALS;
 
-        require_once('cchost_lib/cc-page.php');
-
         // 
         // These args will be passed to the template
         //
@@ -53,7 +51,11 @@ class CCReview
         // Setup the page and initialize useful things
         //
 
+        require_once('cchost_lib/cc-page.php');
+
+        $page =& CCPage::GetPage();
         $users =& CCUsers::GetTable();
+        $upload_id = sprintf("%0d",$upload_id);
 
         if( !empty($user_name) )
         {
@@ -65,8 +67,6 @@ class CCReview
                 CCUtil::Send404(false);
                 return;
             }
-
-            $upload_id = sprintf("%0d",$upload_id);
 
             if( !empty($upload_id) )
             {
@@ -140,11 +140,9 @@ class CCReview
             $this->_build_bread_crumb_trail(array($user_name,$user_real_name),array($upload_id,$upload_name));
             require_once('cchost_lib/cc-query.php');
             $query = new CCQuery();
-            $args = $query->ProcessAdminArgs('limit=0&paging=off&f=page&t=reviews_upload&datasource=topics',array(),false);
-            $args['title'] = array( 'str_reviews_for_s', $upload_name);
-            // sh*t this is a hack to hack, need to rethink/redo how topic_upload foreign keys work
-            $sqlargs['where'] = 'topic.topic_type <> \'collab\' AND topic.topic_upload=' . sprintf("%0d",$upload_id);
-            $query->QuerySQL($args,$sqlargs);
+            $title = $page->String(array( 'str_reviews_for_s', $upload_name));
+            $args = $query->ProcessAdminArgs('limit=0&paging=off&t=reviews_upload&match='.$upload_id.'&title='.$title);
+            $query->Query($args);
 
             // this is so we can display the upload record on the page:
             CCPage::PageArg('topic_upload',$upload_id);
@@ -335,6 +333,8 @@ class CCReview
         CCEvents::MapUrl( ccp('reviews','post'), array( 'CCReviewFormAPI', 'PostReview'),  
             CC_MUST_BE_LOGGED_IN, 'cchost_lib/ccextras/cc-review-forms.inc', '[upload_id]', 
             _('Display a review form'), CC_AG_REVIEWS );
+
+        // ajax callbacks...
 
         CCEvents::MapUrl( ccp('reviews','hottopics'), array( 'CCReview', 'HotTopics'),    
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );

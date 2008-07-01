@@ -471,10 +471,28 @@ $fields['my_sys_dir'] =
 define('CC_EVENT_SYSPATHS',               'syspaths' );
 
 /**
-* Request for Data Event: api/query request with unknown format
+* Request for Data Event: api/query setup
 *
 * Triggered when caller has requested a query in a 
-* format unknown to the default handler.
+* format unknown to the default handler (phase 1).
+*
+* The respondant is reponsible for filling out (at least)
+* the 'datasource' and 'dataview' properties and otherwise
+* validate the query params
+*
+* Event handler prototype:
+*<code>
+*function OnApiQuerySetup( &$query_args, &$queryObj, $requiresValidation );
+*</code>
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_API_QUERY_SETUP',         'apiquerysetup');
+
+/**
+* Request for Data Event: api/query render
+*
+* Triggered when caller has requested a query in a 
+* format unknown to the default handler (phase 2).
 *
 * The respondant can exit the session if the request is fullfilled
 * or put the results and the mime type to return (if not 'html')

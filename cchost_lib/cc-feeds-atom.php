@@ -35,6 +35,15 @@ require_once('cchost_lib/cc-feed.php');
 */
 class CCFeedsAtom
 {
+    function OnApiQuerySetup( &$args, &$queryObj, $validate)
+    {
+        if( $args['format'] != 'atom' )
+            return;
+        $args['template'] = 'atom_10.php';
+        $queryObj->GetSourcesFromTemplate($args['template']);
+        $queryObj->ValidateLimit('max-feed');
+    }
+
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
     {
         if( $args['format'] != 'atom' )

@@ -172,6 +172,14 @@ class CCRenderAudio extends CCRender
         exit;
     }
 
+    function OnApiQuerySetup( &$args, &$queryObj, $validate)
+    {
+        if( $args['format'] != 'm3u' )
+            return;
+        $args['dataview'] = 'files';
+        $queryObj->GetSourcesFromDataview($args['dataview']);
+    }
+
     function OnApiQueryFormat( &$records, $args, &$results, &$results_mime )
     {
         if( $args['format'] != 'm3u' )

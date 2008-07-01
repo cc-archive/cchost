@@ -39,47 +39,40 @@ class CCDataView
         global $CC_GLOBALS;
         $filename = CCUtil::SearchPath( $dataview_name . '.php', $CC_GLOBALS['dataview-dir'], 'ccdataviews', true );
 
-        // we don't do a dig_out here because we don't want the data, 
-        // we just want to find the file. to dig the meta info out
-        // we would have to load the file and that would be redundant
-        // (we'll do that at the sql query stage)
+        if( empty($filename) )
+            return null;
 
+        require_once('cchost_lib/cc-file-props.php');
+        $fp = new CCFileProps();
+        $props = $fp->GetFileProps($filename);
         $props['dataview'] = $dataview_name;
         $props['file'] = $filename;
         return $props;
     }
 
-    function GetDataViewFromTemplate($template)
+    function GetDataViewFromTemplate(&$skinmac)
     {
-        require_once('cchost_lib/cc-template.php');
+        $props = $skinmac->GetProps();
 
-        $skinmac = new CCSkinMacro($template);
-        list( $file, $macro ) = $skinmac->LookupMacro();
-        if( empty($file) )
-            return null;
-        $fp = new CCFileProps();
-        $props = $fp->GetFileProps($file);
         if( empty($props['dataview']) )
             return null;
+
         if( empty($props['embedded']) )
         {
-            if( empty($props['file']) )
-            {
-                global $CC_GLOBALS;
-                $props = $this->GetDataView($props['dataview']);
-            }
+            global $CC_GLOBALS;
+            $dvprops = $this->GetDataView($props['dataview']);
         }
         else
         {
             // we grab the template and suck out the 
             // embedded dataview
-
+            $file = $skinmac->GetSkinFile();
             $text = file_get_contents($file);
             if( !preg_match('#\[dataview\](.*)\[/dataview\]#s',$text,$m) )
                 return null;
-            $props['code'] = $m[1];
+            $dvprops['code'] = $m[1];
         }
-        return $props;
+        return $dvprops;
     }
 
     function & PerformFile($dataview_name,$args,$ret_type = CCDV_RET_RECORDS) 
@@ -126,6 +119,9 @@ class CCDataView
 
     function & PerformInfo( $info, $args, $ret_type = CCDV_RET_RECORDS, $queryObj=null, $dataview=null)
     {
+        if( !empty($args['joins']) && is_array($args['joins']) )
+            $args['joins'] = join( ' JOIN ', $args['joins'] );
+
         $sqlargs = array();
         foreach( array( array( 'JOIN', 'joins' ),
                         array( 'ORDER BY', 'order' ),
@@ -206,6 +202,11 @@ class CCDataView
 
     function GetCount()
     {
+        if( empty($this->sql_count) )
+        {
+            print _('This template does not support paging');
+            exit;
+        }
         return intval( CCDatabase::QueryItem($this->sql_count) );
     }
 
