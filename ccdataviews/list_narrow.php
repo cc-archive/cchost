@@ -2,6 +2,7 @@
 [meta]
     type = dataview
     name = list_narrow
+    datasource = uploads
 [/meta]
 */
 

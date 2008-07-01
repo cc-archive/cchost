@@ -3,7 +3,7 @@
 [meta]
     type     = dataview
     desc     = _('Pool Item Listing')
-    dataview = pool_item_list
+    datasource = pool_item
 [/meta]
 */
 function pool_item_list_dataview()

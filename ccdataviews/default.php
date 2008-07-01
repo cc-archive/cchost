@@ -2,6 +2,7 @@
 [meta]
     type = dataview
     name = default
+    datasource = uploads
 [/meta]
 */
 

@@ -2,6 +2,8 @@
 [meta]
     type = dataview
     name = pool_item_search_gen
+    datasource = pool_item
+    required_args = match
 [/meta]
 */
 

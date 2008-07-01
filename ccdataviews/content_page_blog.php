@@ -2,6 +2,7 @@
 [meta]
     type = dataview
     desc = _('Blog Content Page')
+    datasource = topics
 [/meta]
 */
 function content_page_blog_dataview() 

@@ -2,6 +2,7 @@
 [meta]
     type = dataview
     name = pool_item
+    datasource = pool_item
 [/meta]
 */
 

@@ -2,6 +2,7 @@
 [meta]
     type = dataview
     name = search_remix_artist
+    required_args = match
 [/meta]
 */
 

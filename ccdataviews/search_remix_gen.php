@@ -2,6 +2,7 @@
 [meta]
     type = dataview
     name = search_remix_gen
+    required_args = match
 [/meta]
 */
 

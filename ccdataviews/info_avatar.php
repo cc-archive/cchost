@@ -1,7 +1,7 @@
 <?/*
 [meta]
     type = dataview
-    desc = _('Deep info (no remixes, user avatar')
+    desc = _('Deep info (no remixes, user avatar)')
     name = info_avatar
 [/meta]
 

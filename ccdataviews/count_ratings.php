@@ -2,6 +2,7 @@
 [meta]
     type = dataview
     name = count_ratings
+    datasource = ratings
 [/meta]
 */
 
