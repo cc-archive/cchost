@@ -35,7 +35,7 @@ class CCUserPage
         if( !empty($username) )
             $username = CCUtil::Strip($username);
         if( !empty($tab) )
-            $username = CCUtil::Strip($tab);
+            $tab = CCUtil::Strip($tab);
 
         require_once('cchost_lib/cc-page.php');
 
@@ -94,9 +94,8 @@ class CCUserPage
             CCPage::SetTitle($user_real_name);
             require_once('cchost_lib/cc-query.php');
             $query = new CCQuery();
-            $args = $query->ProcessAdminArgs('t=user_profile&datasource=user');
-            $sqlargs['where'] = "user_name='{$username}'";
-            $query->QuerySQL($args,$sqlargs);
+            $args = $query->ProcessAdminArgs('t=user_profile&u='.$username);
+            $query->Query($args);
         } 
     }
 

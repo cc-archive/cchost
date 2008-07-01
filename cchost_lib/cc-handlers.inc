@@ -19,7 +19,7 @@
 */
 
 // this one needs to happen before the others
-CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE, array( 'CCUserPage' , 'OnFilterUserProfile'), 'cchost_lib/cc-user.inc'  );
+CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE, array( 'CCUserPage' , 'OnFilterUserProfile'), 'cchost_lib/cc-user-page.php'  );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCAccess' , 'OnMapUrls'),  'cchost_lib/cc-access.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCAccess' , 'OnAdminMenu'), 'cchost_lib/cc-access.php' );

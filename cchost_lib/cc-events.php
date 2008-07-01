@@ -200,7 +200,11 @@ class CCEvents
                                 return;
                         }
                         if( !class_exists($class) && !class_exists(strtolower($class)) )
-                            CCDebug::PrintVar($handler);
+                        {
+                            $x[] = 'Bad handler mapping';
+                            $x[] = $handler;
+                            CCDebug::PrintVar($x);
+                        }
                         $obj = new $class;
                     }
                     

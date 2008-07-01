@@ -4,9 +4,11 @@ if( !defined('IN_CC_HOST') )
 /* %%
 [meta]
     type = profile
-    desc = _('User profile page')
+    desc = _('User profile page (set match=user_name)')
     dataview = user_profile
+    datasource = user
     embedded = 1
+    require_args = user
 [/meta]
 [dataview]
 function user_profile_dataview()
@@ -21,7 +23,7 @@ function user_profile_dataview()
             CONCAT( '$cce', user_name ) as user_emailurl, user_num_posts,
             DATE_FORMAT( user_registered, '%a, %b %e, %Y' ) as user_date_format
         FROM cc_tbl_user
-        %where%
+        %where% 
 EOF;
 
     return array( 'sql' => $sql,
