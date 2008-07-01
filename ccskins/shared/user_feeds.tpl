@@ -9,6 +9,7 @@
     type = template_component
     embedded = 1
     dataview = user_feeds
+    datasource = user
 [/meta]
 [dataview]
 function user_feeds_dataview()
@@ -38,12 +39,12 @@ global $urec, $rssfeed, $rssimg, $atomfeed, $atomimg, $xspffeed, $xspfimg, $podi
 
 $urec = $A['records']['0'];
 $urec['fancy_user_name'] = '<b>' . $urec['fancy_user_name'] . '</b>';
-$rssfeed  = $A['query-url'] . 'f=rss&limit=15&';
+$rssfeed  = $A['query-url'] . 'f=rss&';
 $rssimg   = '<img src="' . $T->URL('images/feed-icon16x16.png') . '" />';
 $podimg   = '<img src="' . $T->URL('images/menu-podcast.png') . '" />';
-$atomfeed = $A['query-url'] . 'f=atom&limit=15&';
+$atomfeed = $A['query-url'] . 'f=atom&';
 $atomimg  = '<img src="' . $T->URL('images/feed-atom16x16.png') . '" />';
-$xspffeed = $A['query-url'] . 't=xspf_10&f=xspf&limit=15&';
+$xspffeed = $A['query-url'] . 'f=xspf&';
 $xspfimg  = '<b>XSPF</b>';
 
 
@@ -118,16 +119,16 @@ EOF;
 }
 
 print '<table class="linkstable">';
-gen_ufl('user=', $T->String(array('str_user_feed_all_ups_by',$urec['fancy_user_name'])));
-gen_ufl('sort=last_edit&user=', $T->String(array('str_user_feed_last_edit',$urec['fancy_user_name'])));
-gen_ufl('tags=remix&user=', $T->String(array('str_user_feed_remixes_by',$urec['fancy_user_name'])));
+gen_ufl('u=', $T->String(array('str_user_feed_all_ups_by',$urec['fancy_user_name'])));
+gen_ufl('sort=last_edit&u=', $T->String(array('str_user_feed_last_edit',$urec['fancy_user_name'])));
+gen_ufl('tags=remix&u=', $T->String(array('str_user_feed_remixes_by',$urec['fancy_user_name'])));
 gen_ufl('remixesof=', $T->String(array('str_user_feed_remixes_of',$urec['fancy_user_name'])));
-gen_ufl('tags=trackback&user=', $T->String(array('str_user_feed_trackbacks',$urec['fancy_user_name'])));
+gen_ufl('tags=trackback&u=', $T->String(array('str_user_feed_trackbacks',$urec['fancy_user_name'])));
 gen_ufl('tags=trackback&remixesof=', $T->String(array('str_user_feed_remix_trackbacks',$urec['fancy_user_name'])));
 gen_ufl('reccby=', $T->String(array('str_user_feed_reccby',$urec['fancy_user_name'])));
-gen_ufl('datasource=topics&type=review&user=', $T->String(array('str_user_feed_reviews_by',$urec['fancy_user_name'])),false);
+gen_ufl('datasource=topics&type=review&u=', $T->String(array('str_user_feed_reviews_by',$urec['fancy_user_name'])),false);
 gen_ufl('datasource=topics&type=review&reviewee=', $T->String(array('str_user_feed_reviews_for',$urec['fancy_user_name'])),false);
-gen_ufl('datasource=topics&thread=-1&user=',  $T->String(array('str_user_feed_topics',$urec['fancy_user_name'])), false);
+gen_ufl('datasource=topics&thread=-1&u=',  $T->String(array('str_user_feed_topics',$urec['fancy_user_name'])), false);
 print '</table>';
 
 ?>

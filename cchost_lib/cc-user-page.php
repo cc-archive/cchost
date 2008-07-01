@@ -321,7 +321,7 @@ END;
             $row['user_fields'][] = array( 'label' => $name, 'value' => $row[$uf], 'id' => $uf );
         }
 
-        $feed_url = url_args( ccl('api','query'), 't=user_feeds&datasource=user&user='.$row['user_name'] );
+        $feed_url = url_args( ccl('api','query'), 't=user_feeds&u='.$row['user_name'] );
         $page =& CCPage::GetPage();
         $feed_link = 
             $page->String( array('str_user_feed_link','<a href="' . $feed_url . '">', '</a>', $row['user_real_name']));
