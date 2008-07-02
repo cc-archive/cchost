@@ -157,19 +157,28 @@ class CCQueryFormats
                 if( empty($template) )
                     $template = 'med';
 
-                $skinmac = new CCSkinMacro($template);
-                list( $file, $macro ) = $skinmac->LookupMacro();
-
-                // normally we wouldn't go through extra step of
-                // actually looking up the template, but since
-                // this is a public api we want to be friendly
-                // about it...
-
-                if( !$file )
+                if( !empty($queryObj->template ) )
                 {
-                    print(sprintf(_('"%s" is not a valid template'), 
-                                  $template));
-                    exit;
+                    $skinmac = $queryObj->template;
+                }
+                else
+                {
+                    // vs: it's possible in Query API 2.0 this is never called...
+
+                    $skinmac = new CCSkinMacro($template);
+                    list( $file, $macro ) = $skinmac->LookupMacro();
+
+                    // normally we wouldn't go through extra step of
+                    // actually looking up the template, but since
+                    // this is a public api we want to be friendly
+                    // about it...
+
+                    if( !$file )
+                    {
+                        print(sprintf(_('"%s" is not a valid template'), 
+                                      $template));
+                        exit;
+                    }
                 }
                 
                 require_once('cchost_lib/cc-page.php');

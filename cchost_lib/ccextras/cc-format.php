@@ -113,17 +113,17 @@ function _cc_format_format($text)
                           $text );
     $text = SmartyPants($text);
 
-    if( strpos($text,'[query') !== false )
-        $text = preg_replace_callback( "#\[query=([^\]]+)\]\[/query\]#",'_cc_format_query', $text );
-
     $urls = array( '@(?:^|[^">=\]])(http://[^\s$]+)@m',
                    '@\[url\]([^\[]+)\[/url\]@' ,
                    '@\[url=([^\]]+)\]([^\[]+)\[/url\]@' 
                     );
     $text = preg_replace_callback($urls,'_cc_format_url', $text);
 
+    if( strpos($text,'[query') !== false )
+        $text = preg_replace_callback( "#\[query=([^\]]+)\]\[/query\]#",'_cc_format_query',$text);
+
     $text = nl2br($text);
-    
+
     if( preg_match('/class="(right|left)/',$text) ) 
         $text .= '<div style="clear:both">&nbsp;</div>';
     
@@ -132,10 +132,10 @@ function _cc_format_format($text)
 
 function _cc_format_query(&$m)
 {
-    $qurl = url_args( ccl('api','query'), 'f=docwrite&' . urldecode($m[1]) );
-    
- 
-    return "<script src=\"$qurl\" type=\"text/javascript\"></script>";
+    static $num = 0;
+    $qurl = url_args( ccl('api','query'), 'f=html&' . urldecode($m[1]));
+    ++$num;
+    return "<div><div id=\"cath_{$num}\" ></div><script> new Ajax.Updater('cath_{$num}', '{$qurl}', { method: 'get' } );</script></div>";
 }
 
 function _cc_format_url(&$m)
