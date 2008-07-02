@@ -93,11 +93,10 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 
             %if_not_null(#R/upload_description_html)%
             <?
-                $lines = preg_split('/<br/',$R['upload_description_html'] );
-                $scroll = false; // count($lines) > 16;
+                $scroll = (strlen($R['upload_description_html']) > 200) || (preg_match_all('/<br/',$R['upload_description_html'],$brs) > 17);
                 if( $scroll )
                 {
-                    ?><div style="overflow:scroll;height:11em;border:1px solid #BBB;padding:4px;"><?
+                    ?><div style="overflow:scroll;height:19em;border:1px solid #BBB;padding:4px;"><?
                 } 
                 ?>%(#R/upload_description_html)%<?
                 if( $scroll )
