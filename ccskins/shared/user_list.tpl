@@ -5,6 +5,7 @@ if( !defined('IN_CC_HOST') )
 [meta]
     type = template_component
     desc = _('People page')
+    datasource = users
     dataview = user_list
     embedded = 1
 [/meta]
