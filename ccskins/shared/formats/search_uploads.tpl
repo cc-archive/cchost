@@ -1,12 +1,12 @@
 <?/*
 [meta]
     type     = search_results
-    desc     = _('For upload search results (group=uploads)')
-    example    = t=search_uploads&limit=30&search_type=any&search=charlie+rose
+    desc     = _('For upload search results')
+    example    = t=search_uploads&limit=30&search_type=any&s=charlie+rose
     dataview = search_uploads
     embedded = 1
     valid_args = search, search_type
-    required_args = search, search_type
+    required_args = search
 [/meta]
 [dataview]
 function search_uploads_dataview() 
