@@ -6,9 +6,15 @@
 [/meta]
 %%
 
-<? $url = urlencode($A['query-url'] . $A['qstring'] . '&format=xspf'); ?>
+<? 
+    $autoplay = empty($_GET['autoplay']) ? '0' : '1';
+    $color = empty($_GET['bgcolor']) ? 'e6e6e6' : $_GET['bgcolor'];
+    $url = $A['query-url'] . $A['qstring'] . '&format=xspf'; 
+    $src = "http://webjay.org/flash/xspf_player?autoload=1&autoplay={$autoplay}&playlist_url={$url}";
+?>
 
- <embed src="http://webjay.org/flash/xspf_player?autoload=1&autoplay=1&playlist_url=%(#url)%"
+<!-- <?= $src ?>-->
+ <embed src="<?=$src?>"
     quality="high"
     bgcolor="e6e6e6"
     width="400"

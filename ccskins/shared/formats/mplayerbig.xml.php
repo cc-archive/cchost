@@ -1,7 +1,7 @@
 <? /*
 [meta]
     type     = embed
-    dataview = links_dl
+    dataview = passthru
     desc     = _('Fabricio Zuardi's Music Player BIG - Requires Flash')
 [/meta]
 */ 
