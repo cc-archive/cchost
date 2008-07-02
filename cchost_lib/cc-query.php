@@ -368,8 +368,8 @@ class CCQuery
             $req = array_unique(preg_split('/([^a-z]+)/',$this->templateProps['required_args'],0,PREG_SPLIT_NO_EMPTY));
             if( !empty($req) )
             {
-                $gotcha = array_intersect($req, array_keys($this->args)); // not _url_args!
-                if( empty($gotcha) )
+                $gotcha = array_intersect(array_keys($this->args),$req); // not _url_args!
+                if( array_diff($req,$gotcha) )
                 {
                     $msg = sprintf(_('Missing required query args: "%s" '),$this->templateProps['required_args']);
                     print $msg;
@@ -799,10 +799,11 @@ class CCQuery
         $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
         $grp = empty($this->args['type']) ? 0 : $this->args['type'];
+        $ds = $this->args['datasource'];
 
         foreach( $search_meta as $meta )
         {
-            if( (!$grp || ($grp == $meta['group'])) && ($this->args['datasource'] == $meta['datasource']) )
+            if( (($grp === 0) || ($grp == $meta['group'])) && ($ds == $meta['datasource']) )
             {
                 $search = str_replace("'","\\'",(trim($this->args['search'])));
                 $strlow = strtolower($search);
