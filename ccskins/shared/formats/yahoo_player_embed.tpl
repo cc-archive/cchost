@@ -1,7 +1,7 @@
 %%
 [meta]
     type     = embed
-    desc     = _('Yahoo! (tm) Player (Flash Version)')
+    desc     = _('Y!(tm) Easy Listerner Player')
     dataview = passthru
 [/meta]
 %%
