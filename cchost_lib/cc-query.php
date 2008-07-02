@@ -339,6 +339,9 @@ class CCQuery
                 break;
         }
 
+        if( $A['datasource'] == 'users' )
+            $A['datasource'] = 'user';
+
         $this->_validated_sources = true;
     }
 
@@ -856,7 +859,6 @@ class CCQuery
     function _gen_sort()
     {
         $args =& $this->args;
-
         if( !empty($args['ids']) || !empty($args['nosort'])  )
         {
             $this->sql_p['order'] = empty($args['playlist']) ? '' : 'cart_item_order';

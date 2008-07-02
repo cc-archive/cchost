@@ -244,7 +244,7 @@ class CCUserPage
     function BrowseUsers()
     {
         $alpha           = '';
-        $qargs           = 't=user_list&datasource=user';
+        $qargs           = 't=user_list';
         $sqlargs['where'] = 'user_num_uploads > 0';
 
         if( !isset($_GET['p']) )
