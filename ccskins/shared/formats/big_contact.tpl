@@ -8,7 +8,7 @@
 
 <? 
     $autoplay = empty($_GET['autoplay']) ? 'no' : 'yes';
-    $url = $A['query-url'] . $A['qstring'] . '&f=rss'; 
+    $url = urlencode($A['query-url'] . $A['qstring'] . '&f=rss'); 
     $src = "http://www.bigcontact.com/feedplayer-slim.swf?r=0&xmlurl={$url}";
 ?>
 
