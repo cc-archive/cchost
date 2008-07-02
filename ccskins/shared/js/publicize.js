@@ -29,7 +29,7 @@ ccPublicize.prototype = {
         var me = this;
 
         $$('.queryparam').each( function(e) {
-                Event.observe( e, 'click', me.updateTarget.bindAsEventListener(me) );
+                Event.observe( e, 'change', me.updateTarget.bindAsEventListener(me) );
         });
 
         if( $('usertypechanger') )
@@ -43,15 +43,26 @@ ccPublicize.prototype = {
     },
 
     updateTarget: function(){
-
-       var url = query_url + Form.serialize('puboptions_form');
-       var text = '<' + 'script type="text/javascript" src="' + url + '&format=docwrite" ><' + '/script>';
-       $('target_text').value = text;
-       new Ajax.Request( url + '&format=html', { method: 'get', onComplete: this.resp_updateTarget } );    
+        var url = query_url + Form.serialize('puboptions_form');
+        var curr_template = decodeURIComponent(url.match(/template=([^&]+)&/)[1]);
+        var is_embed = embed_templates.include(curr_template);
+        if( is_embed )
+        {
+           $('target_text').value = '';
+        }
+        else
+        {
+           var text = '<' + 'script type="text/javascript" src="' + url + '&format=docwrite" ><' + '/script>';
+           $('target_text').value = text;
+        }
+        var me = this;
+        new Ajax.Request( url + '&format=html', { method: 'get', onComplete: me.resp_updateTarget.bind(me,is_embed) } );    
     },
 
-    resp_updateTarget: function(req) {
+    resp_updateTarget: function(is_embed,req) {
 
+       if( is_embed )
+            $('target_text').value = req.responseText.replace(/cache_buster=[0-9]+/,'');
        var prev = $('preview');
        if( prev.innerHTML )
             prev.innerHTML = req.responseText;
@@ -60,6 +71,7 @@ ccPublicize.prototype = {
        else
            alert('wups');
         $('src_preview').innerHTML = req.responseText.escapeHTML();
+
     },
 
     updateUserType: function() {

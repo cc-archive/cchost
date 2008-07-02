@@ -93,6 +93,7 @@ function _t_publicize_publicize(&$T,&$A)
 <script  type="text/javascript" src="<?= $T->URL('js/publicize.js') ?>"></script>
 <script type="text/javascript">
   //<!--
+  embed_templates = [ '<?= join("', '",$A['PUB']['embedded_templates']) ?>' ];
   seeHTML = '<?= addslashes($T->String($A['PUB']['seehtml'])) ?>';
   showFormatted = '<?= addslashes($T->String($A['PUB']['showformatted'])) ?>';
   username = '<?= $A['PUB']['user_name']?>';

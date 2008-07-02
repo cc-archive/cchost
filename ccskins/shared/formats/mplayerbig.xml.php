@@ -1,6 +1,6 @@
 <? /*
 [meta]
-    type     = format
+    type     = embed
     dataview = links_dl
     desc     = _('Fabricio Zuardi's Music Player BIG - Requires Flash')
 [/meta]

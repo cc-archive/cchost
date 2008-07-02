@@ -254,6 +254,13 @@ EOF;
         $opts['name']  =
         $opts['id']    = 'template';
         require_once('cchost_lib/cc-template.inc');
+        $embeds = CCTemplateAdmin::GetFormats('embed');
+        $embedded_templates = array();
+        foreach( $embeds as $K => $F )
+        {
+            $embedded_templates[] = $K;
+            $opts['opts'][] = array( 'value' => $K, 'text' => $F, 'selected' => false );
+        }
         $fmts = CCTemplateAdmin::GetFormats('format');
         foreach( $fmts as $K => $F )
         {
@@ -290,6 +297,7 @@ EOF;
         }
 
         $args['combos'] =& $combos;
+        $args['embedded_templates'] = $embedded_templates;
 
         $args['seehtml']       = 'str_share_raw_html';
         $args['showformatted'] = 'str_share_formatted';
