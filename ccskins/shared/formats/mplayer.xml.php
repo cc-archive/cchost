@@ -10,7 +10,6 @@
 $s_h   = empty($A['height']) ? 15 : $A['height'];
 $h_ply = empty($A['player']) ? 'xspf_player_slim.swf' : $A['player']; 
 $s_w   = 400;
-$t_url = $A['query-url'] . $A['qstring'] . '&format=xspf';
 $s_url = urlencode($A['query-url'] . $A['qstring'] . '&format=xspf');
 
 ?>
