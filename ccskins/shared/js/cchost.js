@@ -18,6 +18,10 @@
 */
 
 /*
+
+*/
+
+/*
     Some browsers (er, like IE) cache ajax requests, even if the
     user empties their browser cache, the ajax fetcher still 
     keeps things around. So we override the Ajax.Request ctor
@@ -34,6 +38,7 @@ Ajax.Request.prototype.initialize = function(url, options) {
     //ajax_debug(url);
     this._old_request_init(url,options);
   };
+
 
 /*
     Double clicking on a link that is supposed to open a modal box
@@ -173,7 +178,7 @@ queryPopup.prototype = {
     template: '',
     title: '',
     width: 500,
-    height: '',
+    height: null,
     in_hook: false,
 
     initialize: function(className,template,title) {
@@ -195,7 +200,10 @@ queryPopup.prototype = {
             return;
         this.in_hook = true;
         var url = query_url + 'f=html&t='+this.template+'&ids=' + upload_id;
-        Modalbox.show( url, {title: this.title, width: this.width, height: this.height, afterHide: this.afterHide.bind(this) } );
+        var params = {title: this.title, width: this.width, afterHide: this.afterHide.bind(this) };
+        if( this.height )
+            params.height = this.height;
+        Modalbox.show( url,  params );
     },
 
     afterHide: function() {

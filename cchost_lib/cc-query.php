@@ -356,7 +356,7 @@ class CCQuery
             $valid = array_unique(preg_split('/([^a-z_]+)/',$this->templateProps['valid_args'],0,PREG_SPLIT_NO_EMPTY));
             if( !empty($valid) )
             {
-                $skip = array('format','template','dataview','datasource','offset','limit','sort','ord','dpreview');
+                $skip = array('format','template','dataview','datasource','offset','limit','sort','ord','dpreview','_cache_buster');
                 $diff = array_diff(array_diff(array_keys($this->_uri_args),$skip),$valid);
                 if( !empty($diff) )
                 {

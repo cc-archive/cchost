@@ -1595,20 +1595,10 @@ Element.Methods = {
       if (property == 'opacity') element.setOpacity(styles[property])
       else
       {
-        try
-        {
-            
         elementStyle[(property == 'float' || property == 'cssFloat') ?
           (elementStyle.styleFloat === undefined ? 'cssFloat' : 'styleFloat') :
           (camelized ? property : property.camelize())] = styles[property];
-        }
-        catch (er)
-        {
-            // on IE7 this is broken for 'height' maybe when it's missing?
-            //alert( 'broke on: ' + property );
-        }
       }
-
     return element;
   },
 
