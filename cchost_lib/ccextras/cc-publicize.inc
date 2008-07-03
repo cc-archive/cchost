@@ -94,6 +94,11 @@ class CCPublicize
         {
             $sql = 'SELECT user_name, user_real_name FROM cc_tbl_user WHERE user_name=\'' . $arg1 . '\'';
             $record = CCDatabase::QueryRow($sql);
+            if( empty($record) )
+            {
+                CCPage::Prompt('str_share_no_user');
+                return;
+            }
             $record['artist_page_url'] = ccl('people',$record['user_name']);
             $args['bookmark_url'] = $record['artist_page_url'];
             $configs =& CCConfigs::GetTable();
