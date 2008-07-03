@@ -311,4 +311,13 @@ EOF;
     return $sql;
 }
 
+function cc_get_content_page_type($page)
+{
+    require_once('cchost_lib/cc-template.php');
+    $skinmac = new CCSkinMacro($page);
+    $props = $skinmac->GetProps();
+    if( empty($props['topic_type']) )
+        die("Content Page '{$page}' does not have 'topic_type' property");
+    return $props['topic_type'];
+}
 ?>

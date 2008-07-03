@@ -466,7 +466,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'playlist', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 'reqtags','rand', 'recc', 'collab',
+                         'reviewee', 'match', 'reqtags','rand', 'recc', 'collab', 'topic',
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -709,6 +709,11 @@ class CCQuery
         $this->_heritage_helper('remixes','tree_child','cc_tbl_tree','tree_parent','upload_id');
     }
 
+    function _gen_reqtags()
+    {
+        $this->reqtags = preg_split('/[\s,+]+/',$this->args['reqtags'],-1,PREG_SPLIT_NO_EMPTY);
+    }
+
     /*
     * List the remixes of a PERSON
     */
@@ -905,11 +910,6 @@ class CCQuery
         $this->tags = preg_split('/[\s,+]+/',$this->args['tags'],-1,PREG_SPLIT_NO_EMPTY);
     }
 
-    function _gen_reqtags()
-    {
-        $this->reqtags = preg_split('/[\s,+]+/',$this->args['reqtags'],-1,PREG_SPLIT_NO_EMPTY);
-    }
-
     function _gen_thread()
     {
         if( $this->args['datasource'] == 'topics' )
@@ -919,6 +919,16 @@ class CCQuery
                 $this->where[] = "topic_thread > 0";
             else
                 $this->where[] = "topic_thread = $thread";
+        }
+    }
+
+    function _gen_topic()
+    {
+        if( $this->args['datasource'] == 'topics' )
+        {
+            $topic = trim($this->args['topic']);
+            if( strlen($topic) )
+                $this->where[] = "REPLACE(LOWER(topic_name),' ','-') = '{$this->args['topic']}'";
         }
     }
 

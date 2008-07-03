@@ -110,7 +110,7 @@ class CCDataView
         if( empty($args['where']) )
             $args['where'] = '1';
 
-        $info = $func();
+        $info = $func($queryObj);
 
         $ret =& $this->PerformInfo( $info, $args, $ret_type, $queryObj, $dataview );
 

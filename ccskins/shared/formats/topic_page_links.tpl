@@ -1,22 +1,22 @@
 <?/*
 [meta]
     type = topic_format
-    desc = _('Content topic links (set page=content_page_name')
-    dataview = page_topic_links
+    desc = _('Content topic links (set page=content_page_name)')
+    dataview = topic_page_links
     embedded = 1
     datasource = topics
     required_args = page
 [/meta]
 [dataview]
-function topic_page_links_dataview()
+function topic_page_links_dataview($queryObj)
 {
-    list( $page, $topic_type ) = cc_get_current_content_type();
-    $page_url = url_args(ccl($page),'');
-    global $CC_GLOBALS;
+    $page       = $queryObj->args['page'];
+    $topic_type = cc_get_content_page_type($page);
+    $page_url   = url_args(ccl($page),'topic=');
 
     $sql =<<<EOF
         SELECT topic_name, 
-        CONCAT('{$page_url}', 'topic=', LOWER(REPLACE(topic_name,' ','-')) ) as topic_url
+            CONCAT( '{$page_url}', LOWER(REPLACE(topic_name,' ','-')) ) as topic_url
         %columns%
         FROM cc_tbl_topics
         %joins%
@@ -28,8 +28,7 @@ EOF;
 }
 [/dataview]
 */?>
-<div class="topic_links">
 %loop(records,R)%
-<div><a href="%(#R/topic_url)%" class="topic_link">%(#R/topic_name)%</a></div>
+<li><a href="%(#R/topic_url)%" class="topic_link">%(#R/topic_name)%</a></li>
 %end_loop%
-</div>
+
