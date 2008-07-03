@@ -93,7 +93,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 
             %if_not_null(#R/upload_description_html)%
             <?
-                $scroll = (strlen($R['upload_description_html']) > 200) || (preg_match_all('/<br/',$R['upload_description_html'],$brs) > 17);
+                $scroll = (strlen($R['upload_description_html']) > 400) || (preg_match_all('/<br/',$R['upload_description_html'],$brs) > 17);
                 if( $scroll )
                 {
                     ?><div style="overflow:scroll;height:19em;border:1px solid #BBB;padding:4px;"><?
