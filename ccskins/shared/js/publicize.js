@@ -21,11 +21,17 @@ ccPublicize = Class.create();
 ccPublicize.prototype = {
 
     is_preview: true,
+    preview: null,
+    target_text: null,
+    src_preview: null,
     username: '',
 
     initialize: function(username) {
 
-        this.username = username;
+        this.preview     = $('preview');
+        this.target_text = $('target_text');
+        this.src_preview = $('src_preview');
+        this.username    = username;
         var me = this;
 
         $$('.queryparam').each( function(e) {
@@ -34,7 +40,7 @@ ccPublicize.prototype = {
 
         if( $('usertypechanger') )
         {
-            Event.observe( 'usertypechanger', 'click', me.updateUserType.bindAsEventListener(me) );
+            Event.observe( 'usertypechanger', 'change', me.updateUserType.bindAsEventListener(me) );
             this.updateUserType();
         }
 
@@ -43,35 +49,39 @@ ccPublicize.prototype = {
     },
 
     updateTarget: function(){
+        this.set_p(str_loading);
         var url = query_url + Form.serialize('puboptions_form');
         var curr_template = decodeURIComponent(url.match(/template=([^&]+)&/)[1]);
         var is_embed = embed_templates.include(curr_template);
         if( is_embed )
         {
-           $('target_text').value = '';
+           this.target_text.value = '';
         }
         else
         {
            var text = '<' + 'script type="text/javascript" src="' + url + '&format=docwrite" ><' + '/script>';
-           $('target_text').value = text;
+           this.target_text.value = text;
         }
         var me = this;
         new Ajax.Request( url + '&format=html', { method: 'get', onComplete: me.resp_updateTarget.bind(me,is_embed) } );    
     },
 
-    resp_updateTarget: function(is_embed,req) {
-
-       if( is_embed )
-            $('target_text').value = req.responseText.replace(/cache_buster=[0-9]+/,'');
-       var prev = $('preview');
-       if( prev.innerHTML )
-            prev.innerHTML = req.responseText;
-       else if( prev.innerText )
-            prev.innerText = req.responseText;
+    set_p: function(t) {
+       if( this.preview.innerHTML )
+            this.preview.innerHTML = t;
+       else if( this.preview.innerText )
+            this.preview.innerText = t;
        else
            alert('wups');
-        $('src_preview').innerHTML = req.responseText.escapeHTML();
+    },
 
+    resp_updateTarget: function(is_embed,req) {
+        var text = req.responseText;
+        this.set_p(text);
+        text = text.replace(/&_cache_buster=[0-9]+/,'');
+        this.src_preview.innerHTML = text.escapeHTML();
+        if( is_embed )
+            this.target_text.value = text.replace(/&_cache_buster=[0-9]+/,'');
     },
 
     updateUserType: function() {
