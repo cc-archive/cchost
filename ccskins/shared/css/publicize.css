@@ -144,7 +144,7 @@ select {
 }
 
 #share_table td {
-  vertical-align: center;
+  vertical-align: middle;
   padding: 2px;
   border: 1px solid #DDD;
 }

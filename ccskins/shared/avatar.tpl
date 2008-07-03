@@ -3,7 +3,7 @@ if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 /* %%
 [meta]
-    type = template_component
+    type = ajax_component
     desc = _('User avatar')
     dataview = avatar
     datasource = user
