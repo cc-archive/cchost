@@ -7,16 +7,10 @@
 
 */
 
-if( empty($A['qstring']) ) 
+if( empty($A['qstring']) || (!empty($A['page_datasource']) && ($A['page_datasource'] != 'uploads')) )
     return;
 
-$qstring = $A['qstring'];
-parse_str($qstring,$media_args);
-if( !empty($media_args['datasource']) && ($media_args['datasource'] != 'uploads') )
-    return;
-
-$qstring .= '&limit=page';
-
+$qstring = $A['qstring'] .'&limit=page';
 $q = $A['q'];
 
 ?>  

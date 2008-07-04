@@ -105,6 +105,7 @@ class CCUserPage
         CCPage::PageArg('user_tags_user',$username,'user_tags');
         $tags = array_unique(preg_split('/[\s]?,[\s]?/',$tagfilter,-1,PREG_SPLIT_NO_EMPTY));
         sort($tags);
+        $this->_tag_filter = join(' ',$tags);
         $tagfilter_commas = join(',',$tags);
         CCPage::PageArg('user_tags_tag',$tagfilter_commas);
         $where['user_name'] = $username;
@@ -143,7 +144,13 @@ class CCUserPage
         //if( $uploads )
         {
             $query = 'user=' . $username . '&title=' . urlencode($user_real_name);
-            $page->AddFeedLink($query, $user_real_name, $user_real_name, 'feed_rss' );
+            $title = $user_real_name;
+            if( !empty($this->_tag_filter) )
+            {
+                $query .= '&tags=' . $this->_tag_filter;
+                $title .= ' (' . $this->_tag_filter . ')';
+            }
+            $page->AddFeedLink($query, $title, $title);
         }
 
         $title = $page->String(array('str_remixes_of_s',$user_real_name));

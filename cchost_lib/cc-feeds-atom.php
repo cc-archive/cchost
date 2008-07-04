@@ -81,9 +81,9 @@ class CCFeedsAtom
         exit;
     }
 
-    function OnRenderPage(&$page)
+    function OnAddPageFeed(&$page,$feed_info)
     {
-        cc_feed_add_page_links($page,'feed-atom16x16.png','Atom 1.0','atom','feed_atom',true);
+        cc_feed_add_page_links($page,$feed_info,'feed-atom16x16.png','Atom 1.0','atom','feed_atom');
     }
 
 }

@@ -115,9 +115,9 @@ class CCFeedsRSS
     }
 
 
-    function OnRenderPage(&$page)
+    function OnAddPageFeed(&$page,$feed_info)
     {
-        cc_feed_add_page_links($page,'feed-icon16x16.png','RSS 2.0','rss','feed_rss',false);
+        cc_feed_add_page_links($page,$feed_info,'feed-icon16x16.png','RSS 2.0','rss','feed_rss',array('uploads','topics'));
     }
 
 }

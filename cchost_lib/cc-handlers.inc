@@ -60,8 +60,8 @@ CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,   array( 'CCFeedsRSS',  'OnApiQue
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCFeedsRSS',  'OnApiQueryFormat'), 'cchost_lib/cc-feeds-rss.php'); 
 
 // this turns out to be order dependent and we want rss as the default
-CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,        array( 'CCFeedsRSS',  'OnRenderPage'),     'cchost_lib/cc-feeds-rss.php'); 
-CCEvents::AddHandler(CC_EVENT_RENDER_PAGE,        array( 'CCFeedsAtom', 'OnRenderPage'),    'cchost_lib/cc-feeds-atom.php'); 
+CCEvents::AddHandler(CC_EVENT_ADD_PAGE_FEED,        array( 'CCFeedsRSS',  'OnAddPageFeed'),     'cchost_lib/cc-feeds-rss.php'); 
+CCEvents::AddHandler(CC_EVENT_ADD_PAGE_FEED,        array( 'CCFeedsAtom', 'OnAddPageFeed'),    'cchost_lib/cc-feeds-atom.php'); 
 
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,       array( 'CCFileRename', 'OnAdminMenu'),     'cchost_lib/cc-filerename.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,         array( 'CCFileRename', 'OnMapUrls'),       'cchost_lib/cc-filerename.php' );

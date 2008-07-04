@@ -335,3 +335,7 @@ new ccQueryBrowser( { filters: new ccPellFilters(), autoRefresh: false } );
 
 //-->
 </script>
+<?
+ //cc_content_feed('datasource=topics&type=feat_samples&page=featured-samples','Featured Samples','topics');
+cc_content_feed('tags=acappella','A Cappella');
+?>

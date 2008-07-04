@@ -311,7 +311,7 @@ EOF;
         elseif( !empty($user) )
         {
             $q = '&thread=-1&user='.$user;
-            $title = $user_real_name;
+            $title = $user_real_name . ' (' . _('Topics') . ')';
         }
         else
         {

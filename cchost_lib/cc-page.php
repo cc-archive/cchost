@@ -111,7 +111,8 @@ class CCPageAdmin
         if( !isset( $qstring ) )
             $qstring = $queryObj->SerializeArgs($args);
 
-        CCPage::PageArg('qstring',$qstring );        
+        CCPage::PageArg('qstring',$qstring );
+        CCPage::PageArg('page_datasource',$datasource);
         $result = true;
     }
 
@@ -144,9 +145,9 @@ class CCPageAdmin
                        'value'       => '',
                        'formatter'   => 'textedit',
                        'flags'       => CCFF_POPULATE);
-            $fields['default-feed-tags'] =
-                array( 'label'       => _('Default Feed Tags'),
-                       'form_tip'    => _('Comma separated list of tags to use when no other feed is specificed (e.g. audio,remix).') . ' ' 
+            $fields['default-feed-query'] =
+                array( 'label'       => _('Default Feed Query'),
+                       'form_tip'    => _('Query to use for pages that do not specify a feed') . ' ' 
                                         . _('Leave blank for no default feed.'),
                                'formatter'  => 'textedit',
                                'flags'      => CCFF_POPULATE);
@@ -423,6 +424,47 @@ class CCPage extends CCSkin
 
         CCEvents::Invoke(CC_EVENT_RENDER_PAGE, array( &$page ) );
 
+        // did anyone add a feed to page 'manually'?
+        if( empty($page->vars['feed_links']) )
+        {
+            // no, is there a defaul query that ran to fill the page?
+            if( empty($page->vars['qstring']) )
+            {
+                // no, is there an admin set 'default feed query'?
+                $config =& CCConfigs::GetTable();
+                $settings = $config->GetConfig('settings');
+                if( !empty($settings['default-feed-query']) )
+                    $defq = $settings['default-feed-query'];
+            }
+            else
+            {
+                $defq = $page->vars['qstring'];
+            }
+
+            if( !empty($defq) )
+            {
+                parse_str($defq,$defq_args);
+                if( empty($defq_args['title']) )
+                {
+                    if( empty($defq_args['tags']) )
+                    {
+                        $title = _('Feed');
+                    }
+                    else
+                    {
+                        $title = _('Tags: ') . preg_replace('/[,\+ ]+/',' ',$defq_args['tags']);
+                    }
+                }
+                else
+                {
+                    $title = $defq_args['title'];
+                }
+                $page->AddFeedLink($defq, $title, $title);
+                // Set this flag incase a template adds a feed link midway through render
+                $page->_using_default_feeds = true;
+            }
+        }
+
         if( !empty($_REQUEST['dump_page']) ) // && $isadmin )
              CCDebug::PrintVar($page->vars,false);
 
@@ -658,18 +700,28 @@ class CCPage extends CCSkin
     */
     function AddFeedLink($query, $title, $link_text = '', $id = '', $datasource='uploads')
     {
-
+        
         if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
            $page =& CCPage::GetPage();
          else
            $page =& $this;
 
-        $page->vars['page_feed_links'][] = array(       'query'      => $query, 
-                                                   'title'     => $title,
-                                                   'link_text' => $link_text,
-                                                   'id'        => $id,
-                                                   'datasource'=> $datasource,
-                                            );
+        if( !empty($page->_using_default_feeds) )
+        {
+            // it seems we are already in the middle of a render
+            // nuke the default feed links and let the caller
+            // override all
+            $page->var['feed_links'] = array();
+            $page->_using_default_feeds = false;
+        }
+
+        $feed_info = array(  'query'      => $query, 
+                           'title'     => $title,
+                           'link_text' => $link_text,
+                           'id'        => $id,
+                           'datasource'=> $datasource,
+                        );
+        CCEvents::Invoke( CC_EVENT_ADD_PAGE_FEED, array( &$page, $feed_info ) );
     }
 
     /**

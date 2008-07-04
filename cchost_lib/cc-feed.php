@@ -35,6 +35,16 @@ function cc_feed_encode($str)
     return utf8_encode( preg_replace('`[^&a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]`','',$str ) );
 }
 
+function cc_feed_transcode($str)
+{
+    return preg_replace_callback('`[^&a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]`','_cc_feed_transcode',$str );
+}
+
+function _cc_feed_transcode($arr)
+{
+    return preg_replace('/[^&a-zA-Z0-9;]/','-',htmlentities($arr[0])); //  '-'; //  . ord($arr[0]);
+}
+
 function cc_feed_safe_urls($text)
 {
     return preg_replace_callback("/(?:href|title|src)\s?=['\"][^'\"]+\?([^'\"]+)['\"]/U",'_cc_encode_feed_url', $text);
@@ -101,41 +111,19 @@ function cc_feed_subtitle($args,$skin)
     return '';
 }
 
-function cc_feed_add_page_links(&$page,$icon,$version,$fmt,$id,$only_uploads)
+function cc_feed_add_page_links(&$page,$feed_info,$icon,$version,$fmt,$id,$accepts=array('uploads'))
 {
     $img = '<img src="' . ccd('ccskins','shared','images',$icon) . '" title="[ '.$version.' ]" />';
-    $feed_links = $page->GetPageArg('page_feed_links');
-    if( empty($feed_links) )
-    {
-        $qstring = $page->GetPageArg('qstring');
-        if( empty($qstring) )
-            return;
-
-        parse_str($qstring,$args);
-        if( $only_uploads && !empty($args['datasource']) && ($args['datasource'] != 'uploads')) 
-            return;
-        $feed_url = url_args( ccl('api','query'), $qstring . '&f=' . $fmt);
-        if( empty($args['title']) )
-            $help = $version;
-        else
-            $help = CCUtil::StripSlash($args['title']);
-        $link_text = $img . ' ' . $help;
-        $page->AddLink( 'feed_links', 'alternate', 'application/atom+xml', $feed_url, $help . ' [ '.$version.' ]', $link_text, $id);
-    }
+    if( $accepts && !in_array($feed_info['datasource'],$accepts) )
+        return;
+    $feed_url = url_args( ccl('api','query'), $feed_info['query'] . '&f=' . $fmt);
+    $help = empty($feed_info['title']) ? '[ ' . $version . ' ]' : $feed_info['title'];
+    $link_text = $img . ' ' . $help;
+    if( empty($feed_info['id']) )
+        $_id = $id;
     else
-    {
-        foreach( $feed_links as $FL )
-        {
-            if( $only_uploads && ($FL['datasource'] != 'uploads')) 
-                continue;
-            if( empty($FL['query']) )
-                d($feed_links);
-            $feed_url = url_args( ccl('api','query'), $FL['query'] . '&f=' . $fmt);
-            $help = empty($FL['title']) ? '[ ' . $version . ' ]' : $FL['title'];
-            $link_text = $img . ' ' . $help;
-            $page->AddLink( 'feed_links', 'alternate', 'application/atom+xml', $feed_url, $help . ' [ '. $version .' ]', $link_text, '' );
-        }
-    }
+        $_id = $feed_info['id'];
+    $page->AddLink( 'feed_links', 'alternate', 'application/atom+xml', $feed_url, $help . ' [ '. $version .' ]', $link_text, $_id);
 }
 
 /**

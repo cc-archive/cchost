@@ -322,6 +322,8 @@ define('CC_EVENT_GET_MACROS',          'getmacros' );
 */
 define('CC_EVENT_RENDER_PAGE',         'renderpage');
 
+define('CC_EVENT_ADD_PAGE_FEED', 'addpagefeed');
+
 /**#@+
 * Request for Data Event: Phase of form processing.
 *
