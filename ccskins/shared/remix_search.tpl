@@ -62,8 +62,10 @@ div#remix_search_controls {
     %end_if%
     %if_not_null(field/sourcesof)%
         <? 
-            cc_query_fmt("dataview=links_by&t=remix_checks&f=html&noexit=1&nomime=1&sources=" . $A['field']['sourcesof']); 
-            cc_query_fmt("dataview=pool_item&f=html&t=remix_pool_checks&sort=&datasource=pool_items&noexit=1&nomime=1&sources=" . $A['field']['sourcesof']); 
+            $qurl = "dataview=links_by&t=remix_checks&f=html&noexit=1&nomime=1&sources=" . $A['field']['sourcesof'];
+            cc_query_fmt($qurl); 
+            $qurl = "dataview=pool_item&t=remix_pool_checks&f=html&sort=&noexit=1&nomime=1&sources=" .$A['field']['sourcesof'];
+            cc_query_fmt($qurl); 
         ?>
     %end_if%
     </div>

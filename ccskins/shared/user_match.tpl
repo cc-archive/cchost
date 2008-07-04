@@ -6,6 +6,7 @@ if( !defined('IN_CC_HOST') )
     type = template_component
     desc = _('People like me page')
     dataview = user_match
+    datasource = user
     embedded = 1
 [/meta]
 [dataview]

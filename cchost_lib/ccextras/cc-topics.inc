@@ -620,7 +620,7 @@ class CCTopic
             return;
         }
         list( $left, $right, $topic_locked  ) = $row;
-        $lock = !$topic_locked;
+        $lock = $topic_locked ? '0' : '1';
         $sql = "UPDATE cc_tbl_topics SET topic_locked = {$lock} WHERE topic_left >= {$left} AND topic_right <= {$right}";
         CCDatabase::Query($sql);
 

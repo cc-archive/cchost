@@ -97,7 +97,18 @@ class CCLicense
         }
         else
         {
-            if( !empty($record['license_url']) )
+            if( empty($record['license_url']) )
+            {
+                if( !empty($record['upload_license']) )
+                {
+                    $licrow = CCDatabase::QueryRow(
+                                'SELECT license_url, license_name FROM cc_tbl_licenses WHERE license_id="'.
+                                $record['upload_license'] . '"');
+                    $patterns['%license_url%'] = $licrow['license_url'];
+                    $patterns['%license%'] = $licrow['license_name'];
+                }
+            }
+            else
             {
                 $patterns['%license_url%'] = $record['license_url'];
                 $patterns['%license%'] = $record['license_name'];

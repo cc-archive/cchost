@@ -239,7 +239,7 @@ class CCPage extends CCSkin
         if( empty($file) )
         {
             $page->Prompt( sprintf(_("Can't find %s template"),$template) );
-            //CCUtil::Send404();
+            CCUtil::Send404(false);
         }
         else
         {

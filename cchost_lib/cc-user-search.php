@@ -102,7 +102,7 @@ EOF;
             require_once('cchost_lib/cc-query.php');
             $query = new CCQuery();
             $sqlargs['where'] = "CONCAT($field,',') LIKE '%$tag,%'";
-            $args = $query->ProcessAdminArgs('datasource=user&t=user_match');
+            $args = $query->ProcessAdminArgs('t=user_match');
             $query->QuerySQL($args,$sqlargs);
         }
     }

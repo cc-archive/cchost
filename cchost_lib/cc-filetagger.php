@@ -223,6 +223,7 @@ class CCID3Tagger
     */
     function AdminTagger()
     {
+        require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle("Configure ID3 Tagger");
         require_once('cchost_lib/cc-filetagger-admin.inc');
         $form = new CCAdminTaggerForm($this);

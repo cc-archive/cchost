@@ -605,12 +605,12 @@ EOF;
             CCUtil::Send404();
             return;
         }
-        require_once('cchost_lib/page.php');
+        require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/cc-query.php');
         $page =& CCPage::GetPage();
         $query = new CCQuery();
         $title = $page->String(array( 'str_forum_topics_by', $user_real_name ));
-        $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=topics_user&limit=20&title'.$title.'user='.$user_name);
+        $args = $query->ProcessAdminArgs('sort=date&ord=desc&t=topics_user&limit=20&title'.$title.'&user='.$user_name);
         $query->Query($args);
         $this->_add_feed_links( '', $user_name,$user_real_name);
     }

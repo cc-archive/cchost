@@ -3,6 +3,7 @@
     type     = ajax_component
     desc     = _('used by pool remix search')
     datasource = pool_items
+    dataview_param = ok
 [/meta]
 %%
 %loop(records,R)%
