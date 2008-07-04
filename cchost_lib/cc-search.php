@@ -85,9 +85,9 @@ class CCSearch
             array(
                 'template'   => 'search_users',
                 'title'      => 'str_search_users',
-                'datasource' => 'users',
+                'datasource' => 'user',
                 'fields'     => array(),
-                'group'      => 'users',
+                'group'      => 'user',
                 'match'      => 'user_name,user_real_name,user_description',
             );
     }
