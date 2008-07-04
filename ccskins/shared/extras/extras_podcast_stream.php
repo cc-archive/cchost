@@ -15,6 +15,8 @@ parse_str($qstring,$media_args);
 if( !empty($media_args['datasource']) && ($media_args['datasource'] != 'uploads') )
     return;
 
+$qstring .= '&limit=page';
+
 $q = $A['q'];
 
 ?>  
@@ -45,7 +47,7 @@ $q = $A['q'];
     if( strstr( $url, 'offset=' ) === false )
         $url .= '&offset=' . $offs;
     $url2 = $A['query-url'] . 'f=rss&' . $qstring . '&offset=' . $offs;
-    $url3 = 'limit=15&f=html&' . $qstring . '&offset=' . $offs . '&t=download';
+    $url3 = 'f=html&' . $qstring . '&offset=' . $offs . '&t=download';
 ?>   
 <li><a id="mi_stream_page" href="<?=$url?>"><?= $T->String('str_stream_this_page') ?></a></li>
 <li><a id="mi_podcast_page" title="<?= $T->String('str_drag_this_link') ?>" href="<?=$url2?>"><?= $T->String('str_podcast_this_page')?></a></li>
