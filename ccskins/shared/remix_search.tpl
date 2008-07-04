@@ -77,6 +77,6 @@ div#remix_search_controls {
 
 <script src="%url('js/remix_search.js')%" type="text/javascript"></script>
 <script type="text/javascript"> 
-var pools = %query('t=pools&f=js&nomime=1&noexit=1')%;
+var pools = %query('t=pools&f=js')%;
 new ccRemixSearch(<?= empty($A['use_text_index']) ? 'false' : 'true' ?>);
 </script>

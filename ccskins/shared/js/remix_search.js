@@ -80,7 +80,7 @@ ccRemixSearch.prototype = {
         }
         catch (e)
         {
-            alert('remix_search.js (1): 'e);
+            alert('remix_search.js (1): ' + e);
         }
     },
 
@@ -158,7 +158,6 @@ ccRemixSearch.prototype = {
         {
             var query = home_url + 'pools/search/' + sel_pool + q + 't=remix_pool_checks&search=' + value;
         }
-        //ajax_debug(query);
         new Ajax.Request(query, { method: 'get', onComplete: this.onSearchResults.bind(this,value) } );
     },
 
@@ -188,7 +187,7 @@ ccRemixSearch.prototype = {
         }
         catch (e)
         {
-            alert('remix_search.js (2): 'e);
+            alert('remix_search.js (2): ' + e);
         }
     },
 

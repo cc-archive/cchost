@@ -2,6 +2,7 @@
 [meta]
     type     = ajax_component
     desc     = _('used by remix search')
+    dataview_param = ok
 [/meta]
 %%
 %loop(records,R)%
