@@ -55,9 +55,18 @@ class CCPageAdmin
                           CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays XHTML template (alias for viewfile)'), CC_AG_VIEWFILE );
     }
 
+
     function OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
     {
         extract($args);
+
+        if( ($limit == 'page') || ($format == 'page')  )
+        {
+            $configs =& CCConfigs::GetTable();
+            $settings = $configs->GetConfig('skin-settings');
+            $max_listing = empty($settings['max-listing']) ? 12 : $settings['max-listing'];
+            $queryObj->ValidateLimit(null,$max_listing);
+        }
 
         if( $format != 'page' )
             return;
@@ -66,10 +75,6 @@ class CCPageAdmin
             $args['template'] = 'list_files';
 
         $queryObj->GetSourcesFromTemplate($args['template']);
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('skin-settings');
-        $max_listing = empty($settings['max-listing']) ? 12 : $settings['max-listing'];
-        $queryObj->ValidateLimit(null,$max_listing);
 
         // why is this needed again?
         if( !empty($_GET['offset']) )

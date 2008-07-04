@@ -37,8 +37,14 @@ class CCFeedsRSS
 {
     function OnApiQuerySetup( &$args, &$queryObj, $validate)
     {
-        if( $args['format'] != 'rss' )
+        $f = $args['format'];
+
+        if( ($f == 'rss') || ($args['limit'] == 'feed') )
+            $queryObj->ValidateLimit('max-feed');
+
+        if( $f != 'rss' )
             return;
+
         $args['template'] = (!empty($args['datasource']) && $args['datasource'] == 'topics' ) ? 'rss_20_topics.php' : 'rss_20.php';
         $queryObj->GetSourcesFromTemplate($args['template']);
         $queryObj->ValidateLimit('max-feed');

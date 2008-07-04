@@ -182,8 +182,8 @@ class CCNavigator
                 $args['feed'] = $qname;
                 $args['qstring'] = $qstring;
                 $args['title'] = $caption;
-                if( !empty($_GET['limit']) )
-                    $args['limit'] = $_GET['limit'];
+                if( empty($args['limit']) )
+                    $args['limit'] = empty($_GET['limit']) ? 'page' : $_GET['limit'];
 
                 require_once('cchost_lib/cc-query.php');
 

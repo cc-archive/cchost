@@ -112,7 +112,7 @@ class CCUserPage
         $q = 'title=' . $users->QueryItem('user_real_name',$where);
         if( !empty($tagfilter) )
             $q .= ' (' . $tagfilter_commas .')&tags=' . $tagfilter;
-        $q .= '&user=' . $username . '&t=list_files&f=page';
+        $q .= '&user=' . $username . '&t=list_files&f=page&limit=page';
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         $query->ProcessAdminArgs($q);
