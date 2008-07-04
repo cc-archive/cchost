@@ -287,11 +287,15 @@ class CCQueryFormats
         }
 
         print($value);
-
         if( empty($noexit) )
             exit;
 
-        $result = true;
+        // this next line of code was not here before
+        // and everything worked great. Then it appeared
+        // and I don't know why -- and things broke
+        // so I'm turning it back off...
+
+        // $result = true;
     }
 
     function _old_dump_xml_obj($obj,&$xml)

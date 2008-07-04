@@ -252,8 +252,20 @@ class CCQuery
         $this->dataviewProps = $this->dataview->GetDataviewFromTemplate($template);
         if( empty($this->dataviewProps) )
         {
-            $this->templateProps['dataview'] = 'default';
-            $this->dataviewProps = $this->dataview->GetDataview('default');
+            if( empty($this->templateProps['dataview_param']) || 
+                ($this->templateProps['dataview_param'] != 'ok') ||
+                (empty($this->args['dataview']))
+              )
+            {
+                $dvname = 'default';
+            }
+            else
+            {
+                $dvname = $this->args['dataview'];
+            }
+
+            $this->templateProps['dataview'] = $dvname;
+            $this->dataviewProps = $this->dataview->GetDataview($dvname);
         }
 
         $this->args['dataview'] = $this->templateProps['dataview'];
