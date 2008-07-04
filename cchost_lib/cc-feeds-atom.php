@@ -83,19 +83,7 @@ class CCFeedsAtom
 
     function OnRenderPage(&$page)
     {
-        $qstring = $page->GetPageArg('qstring');
-        if( empty($qstring) )
-            return;
-        parse_str($qstring,$args);
-        if( !empty($args['datasource']) && ($args['datasource'] != 'uploads') )
-            return;
-        $feed_url = url_args( ccl('api','query'), $qstring . '&f=atom&t=atom_10');
-        if( empty($args['title']) )
-            $help = 'ATOM feed';
-        else
-            $help = CCUtil::StripSlash($args['title']);
-        $link_text = '<img src="' . ccd('ccskins','shared','images','feed-atom16x16.png') . '" title="[ Atom 1.0 ]" /> ' . $help;
-        CCPage::AddLink( 'feed_links', 'alternate', 'application/atom+xml', $feed_url, $help . ' [Atom]', $link_text, 'feed_atom' );
+        cc_feed_add_page_links($page,'feed-atom16x16.png','Atom 1.0','atom','feed_atom',true);
     }
 
 }

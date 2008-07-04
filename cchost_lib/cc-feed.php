@@ -101,6 +101,43 @@ function cc_feed_subtitle($args,$skin)
     return '';
 }
 
+function cc_feed_add_page_links(&$page,$icon,$version,$fmt,$id,$only_uploads)
+{
+    $img = '<img src="' . ccd('ccskins','shared','images',$icon) . '" title="[ '.$version.' ]" />';
+    $feed_links = $page->GetPageArg('page_feed_links');
+    if( empty($feed_links) )
+    {
+        $qstring = $page->GetPageArg('qstring');
+        if( empty($qstring) )
+            return;
+
+        parse_str($qstring,$args);
+        if( $only_uploads && !empty($args['datasource']) && ($args['datasource'] != 'uploads')) 
+            return;
+        $feed_url = url_args( ccl('api','query'), $qstring . '&f=' . $fmt);
+        if( empty($args['title']) )
+            $help = $version;
+        else
+            $help = CCUtil::StripSlash($args['title']);
+        $link_text = $img . ' ' . $help;
+        $page->AddLink( 'feed_links', 'alternate', 'application/atom+xml', $feed_url, $help . ' [ '.$version.' ]', $link_text, $id);
+    }
+    else
+    {
+        foreach( $feed_links as $FL )
+        {
+            if( $only_uploads && ($FL['datasource'] != 'uploads')) 
+                continue;
+            if( empty($FL['query']) )
+                d($feed_links);
+            $feed_url = url_args( ccl('api','query'), $FL['query'] . '&f=' . $fmt);
+            $help = empty($FL['title']) ? '[ ' . $version . ' ]' : $FL['title'];
+            $link_text = $img . ' ' . $help;
+            $page->AddLink( 'feed_links', 'alternate', 'application/atom+xml', $feed_url, $help . ' [ '. $version .' ]', $link_text, '' );
+        }
+    }
+}
+
 /**
  * @package cchost
  * @subpackage api

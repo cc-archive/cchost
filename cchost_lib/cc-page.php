@@ -629,7 +629,7 @@ class CCPage extends CCSkin
     * @param string $href Value for the HREF attribute
     * @param string $title Value for TITLE attribute
     * @param string $link_text Text for footer links (e.g. 'RSS 1.0')
-    * @param string $link_help Text beside footer links (e.g. 'Remixes of pathchilla')
+    * @param string $id Set the link id so other elements on the page can access directly
     */
     function AddLink($placement, $rel, $type, $href, $title, $link_text = '', $id = '')
     {
@@ -645,6 +645,31 @@ class CCPage extends CCSkin
                                                    'title'     => $title,
                                                    'link_text' => $link_text,
                                                    'id'        => $id );
+    }
+
+    /**
+    * Add a Feed LINK tag into the output (will be used by feed formatters at RenderPage)
+    *
+    * @param string $query Streamlined query (no format, etc.)
+    * @param string $title Value for TITLE attribute
+    * @param string $link_text Text for footer links (e.g. 'RSS 1.0')
+    * @param string $link_help Text beside footer links (e.g. 'Remixes of pathchilla')
+    * @param string $datasource Datasource for query
+    */
+    function AddFeedLink($query, $title, $link_text = '', $id = '', $datasource='uploads')
+    {
+
+        if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
+           $page =& CCPage::GetPage();
+         else
+           $page =& $this;
+
+        $page->vars['page_feed_links'][] = array(       'query'      => $query, 
+                                                   'title'     => $title,
+                                                   'link_text' => $link_text,
+                                                   'id'        => $id,
+                                                   'datasource'=> $datasource,
+                                            );
     }
 
     /**

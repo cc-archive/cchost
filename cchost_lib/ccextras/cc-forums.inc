@@ -299,7 +299,7 @@ EOF;
     function _add_feed_links( $thread = '', $user = '', $user_real_name='', $thread_name ='')
     {
         require_once('cchost_lib/cc-page.php');
-        $page = CCPage::GetPage();
+        $page =& CCPage::GetPage();
 
         if( !empty($thread) )
         {
@@ -319,9 +319,8 @@ EOF;
             $title = $page->String('str_forums');
         }
 
-        $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
-        $url = url_args( ccl('api','query'), 'f=rss&datasource=topics' . $q .'&title=' . urlencode($title));
-        CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $title, $img . $title, 'feed_topics' );
+        $query = 'datasource=topics' . $q .'&title=' . urlencode($title);
+        $page->AddFeedLink($query, $title, $title, 'feed_topics', 'topics' );
     }
 
     function _build_bread_crumb_trail($forum_id='',$topic_name='')

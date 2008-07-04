@@ -117,19 +117,7 @@ class CCFeedsRSS
 
     function OnRenderPage(&$page)
     {
-        $qstring = $page->GetPageArg('qstring');
-        if( empty($qstring) )
-            return;
-        parse_str($qstring,$args);
-        if( !empty($args['datasource']) && ($args['datasource'] != 'uploads') )
-            return;
-        $feed_url = url_args( ccl('api','query'), $qstring . '&f=rss&t=rss_20');
-        if( empty($args['title']) )
-            $help = 'RSS feed';
-        else
-            $help = CCUtil::StripSlash($args['title']);
-        $link_text = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ' . $help;
-        CCPage::AddLink( 'feed_links', 'alternate', 'application/rss+xml', $feed_url, $help, $link_text, 'feed_rss' );
+        cc_feed_add_page_links($page,'feed-icon16x16.png','RSS 2.0','rss','feed_rss',false);
     }
 
 }

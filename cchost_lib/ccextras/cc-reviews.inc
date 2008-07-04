@@ -175,11 +175,10 @@ class CCReview
         else
         {
             $q = '';
-            $title = _('Reviews'); // 'str_reviews';
+            $title = $page->String('str_reviews');
         }
-        $img = '<img src="' . ccd('ccskins','shared','images','feed-icon16x16.png') . '" title="[ RSS 2.0 ]" /> ';
-        $url = url_args( ccl('api','query'), 'f=rss&datasource=topics&type=review' . $q .'&title=' . urlencode($title));
-        CCPage::AddLink('feed_links', 'alternate', 'application/rss+xml', $url, $title, $img . $title, 'feed_reviews' );
+        $query = 'datasource=topics&type=review' . $q .'&title=' . urlencode($title);
+        $page->AddFeedLink($query, $title, $title, 'feed_reviews', 'topics' );
     }
 
     function _build_bread_crumb_trail($user=array(),$upload=array(),$cmd_url='',$cmd_text='')
