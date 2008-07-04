@@ -257,7 +257,7 @@ ccGridEditor.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert('cchost.js (7): ' + e);
         }
     },
 
@@ -296,7 +296,7 @@ ccGridEditor.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert('cchost.js (8): ' + e);
         }
     }
 }

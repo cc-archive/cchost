@@ -245,7 +245,7 @@ ratingsHooks.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert( 'cchost.js (1): ' + e);
         }
     },
     onRateClick: function(event,id,num) {
@@ -312,7 +312,7 @@ quickReviewHooks.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert('cchost.js (2): ' + e);
         }
     },
 
@@ -350,7 +350,7 @@ recommendsHooks.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert( 'cchost.js (3): ' + e);
         }
     },
 
@@ -393,7 +393,7 @@ topicHooks.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert('cchost.js (4): ' + e);
         }
     }
 }
@@ -407,9 +407,11 @@ var userHookup = Class.create();
 
 userHookup.prototype = {
 
+    req_url: null,
+
     initialize: function(req,params) {
-        var url = home_url + 'user_hook/' + req + q + params;
-        new Ajax.Request( url, { method: 'get', onComplete: this.onUserHooks.bind(this) } );
+        this.req_url = home_url + 'user_hook/' + req + q + params;
+        new Ajax.Request( this.req_url, { method: 'get', onComplete: this.onUserHooks.bind(this) } );
     },
 
     onUserHooks: function(resp,json) {
@@ -450,7 +452,7 @@ userHookup.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert('cchost.js (5): ' + e);
         }
     }
 
@@ -601,7 +603,7 @@ var ccPopupManagerMethods = {
         }
         catch(ex)
         {
-            alert('show message: ' + ex.message);
+            alert('cchost.js (6): ' +  + ex.message);
         }
     },
 

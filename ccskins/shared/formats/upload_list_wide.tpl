@@ -198,7 +198,7 @@ EOF;
             full_star = '%url('images/stars/star-red-s.gif')%';
             rate_return_t = 'ratings_stars_small_user';
             recommend_return_t = 'recommends';
-            new userHookup('upload_list', 'ids=<?= join(',',$rec_ids) ?>');
+            new userHookup('upload_list', 'ids=<?= join(',',$rec_ids) ?>&limit=page');
         }
     </script>
 %end_if%

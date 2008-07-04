@@ -158,7 +158,7 @@ ccQueryBrowserFilters.prototype = {
         $(this.options.formInfo.submitId).innerHTML = '<span>' + this.options.submit_text + '</span>';
       }
       catch(e) {
-          alert(e);
+          alert('query_filter.js (1): 'e);
       }
     },
 

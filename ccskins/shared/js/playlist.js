@@ -254,7 +254,7 @@ var ccPlaylistBrowserObject = {
         }
         catch (e)
         {
-            alert(e);
+            alert('playlist.js (1): ' +  e);
         }
 
     },
@@ -282,7 +282,7 @@ var ccPlaylistBrowserObject = {
         }
         catch (err)
         {
-            this._report_error('pl: ',err);
+            this._report_error('playlist.js (2): ',err);
         }
     },
 
@@ -321,7 +321,7 @@ var ccPlaylistBrowserObject = {
         }
         catch (err)
         {
-            this._report_error( 'open pl:', err);
+            this._report_error( 'playlist.js (2)', err);
         }
     },
 
@@ -365,7 +365,7 @@ var ccPlaylistBrowserObject = {
         }
         catch (err)
         {
-            this._report_error( 'detail: ', err );
+            this._report_error( 'playlist.js (3): ', err );
         }
         this.openingRec = false;
     },

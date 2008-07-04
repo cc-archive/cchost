@@ -80,7 +80,7 @@ ccRemixSearch.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert('remix_search.js (1): 'e);
         }
     },
 
@@ -188,7 +188,7 @@ ccRemixSearch.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert('remix_search.js (2): 'e);
         }
     },
 

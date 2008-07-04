@@ -95,7 +95,7 @@ ccEmbeddedPlayer.prototype = {
         }
         catch (err)
         {
-            alert('flash err: ' + err);
+            alert('playerembed.js (1): ' +  err);
         }
 
         ccEPlayer = this;
@@ -482,7 +482,7 @@ ccEmbeddedPlayer.prototype = {
         }
         catch (err)
         {
-            alert( 'playlist: ' + err );
+            alert( 'playerembed.js (2): ' +  err );
         }
     },
 

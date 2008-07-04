@@ -68,7 +68,7 @@ ccAutoPick.prototype = {
         }
         catch (e)
         {
-            alert(e);
+            alert( 'autopick.js (1)' + e);
         }
 
     },
@@ -330,7 +330,7 @@ ccAutoPick.prototype = {
         }
         catch (err)
         {
-            alert( err + '  "' + resp.responseText + '"');
+            alert( 'autopick.js (2)' + err + '  "' + resp.responseText + '"');
         }
     }
 }

@@ -53,7 +53,7 @@ ccQueryBrowser.prototype = {
         }
         catch (e)
         {
-            alert('init qbrowser failed: ' + e );
+            alert('query_browser.js (1): ' +  e );
         }
     },
 
@@ -233,7 +233,7 @@ ccQueryBrowser.prototype = {
       }
       catch (err)
       {
-        alert(err);
+        alert('query_browser.js (2): ' + err);
       }
     },
 

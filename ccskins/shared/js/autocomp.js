@@ -255,7 +255,7 @@ ccAutoComplete.prototype = {
         }
         catch (err)
         {
-            alert( err );
+            alert( 'autocomp.js (1)' + err );
         }
     }
 }
