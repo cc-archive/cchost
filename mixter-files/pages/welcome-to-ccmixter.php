@@ -11,6 +11,7 @@
       content_page_box = 1
       sort = date
       ord = desc
+      content_feed = 1
       topic_type = home
 
 [/meta]
@@ -25,4 +26,5 @@ $topic = empty($_GET['topic']) ? '' : $_GET['topic'];
 print "<h1>Welcome to ccMixter</h1>";
 cc_query_fmt('f=page&t=ccskins/shared/pages/content_page.tpl&sort=date&ord=desc&type=home&limit=' . $id . '&topic=' . $topic );
 $A['macro_names'][] = 'prev_next_links';
+ cc_content_feed('datasource=topics&type=home&page=welcome-to-ccmixter','Welcome to ccMixter','topics');
 ?>

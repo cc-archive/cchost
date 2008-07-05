@@ -11,6 +11,7 @@
       content_page_box = 0
       sort = date
       ord = asc
+      content_feed = 1
       topic_type = artist_qa
 
 [/meta]
@@ -25,4 +26,5 @@ $topic = empty($_GET['topic']) ? '' : $_GET['topic'];
 print "<h1>Artist Spotlight Q & A</h1>";
 cc_query_fmt('f=page&t=ccskins/shared/pages/content_page.tpl&sort=date&ord=asc&type=artist_qa&limit=1' . $id . '&topic=' . $topic );
 $A['macro_names'][] = 'prev_next_links';
+ cc_content_feed('datasource=topics&type=artist_qa&page=artist-spotlight-q-a','Artist Spotlight Q & A','topics');
 ?>
