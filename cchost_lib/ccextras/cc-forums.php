@@ -37,6 +37,7 @@ CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCForums',  'OnFilterU
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCForums',  'OnUserProfileTabs') );
 
 CCEvents::AddHandler(CC_EVENT_TOPIC_DELETE,       array( 'CCForumAPI' , 'OnTopicDelete'), 'cchost_lib/ccextras/cc-forums.inc' );
+CCEvents::AddHandler(CC_EVENT_POST_TOPIC_DELETE,  array( 'CCForumAPI' , 'OnPostTopicDelete'), 'cchost_lib/ccextras/cc-forums.inc' );
 CCEvents::AddHandler(CC_EVENT_TOPIC_REPLY,        array( 'CCForumAPI',  'OnTopicReply'),  'cchost_lib/ccextras/cc-forums.inc'  );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCForumsAdmin',  'OnMapUrls'),    'cchost_lib/ccextras/cc-forums-admin.inc');

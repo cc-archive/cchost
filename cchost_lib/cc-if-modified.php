@@ -42,7 +42,7 @@ function cc_set_if_modified()
         $cfg->SetValue('config', CC_IF_MOD_FLAG, $time, CC_GLOBAL_SCOPE);
         unset($CC_GLOBALS['in_if_modified']);
         $CC_GLOBALS[CC_IF_MOD_FLAG]  = $time;
-        _clog('setting if-mod: ' . $time);
+        // _clog('^^^^  setting if-mod: ' . $time . ' ^^^^^^^^^');
     }
 }
 
@@ -78,16 +78,18 @@ function cc_check_if_modified()
     $if_modified_since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? stripslashes($_SERVER['HTTP_IF_MODIFIED_SINCE']) : false;
     $if_none_match     = isset($_SERVER['HTTP_IF_NONE_MATCH'])     ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])     : false;
 
+    // _clog("IS($is_static)  INM($if_none_match) ET($etag) IFM($if_modified_since) LM($last_modified)");
+    
     if( $is_static || ($if_modified_since && $if_none_match && ($if_none_match == $etag) && ($if_modified_since == $last_modified)) )
     {
-        _clog('Sending 304');
+        // _clog('======= Sending 304 =========');
         header('HTTP/1.1 304 Not Modified');
         // All 304 responses must send an etag if the 200 response for the same object contained an etag
         header("Etag: $etag");
         exit();
     }
 
-    _clog("Sending page: $last_modified ($if_modified_since/$if_none_match)");
+    // _clog("**** Sending page  *****");
     header("Last-Modified: $last_modified"); 
     header("ETag: $etag");
     // force validation on this page
@@ -97,7 +99,7 @@ function cc_check_if_modified()
 
 function cc_send_no_cache_headers()
 {
-    _clog('Clearing headers');
+    // _clog('##### Clearing headers ######');
 
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
@@ -115,7 +117,6 @@ function cc_send_no_cache_headers()
 
 function _clog($msg)
 {
-    return; 
     $debug = CCDebug::Enable(true);
     $uri = empty($_SERVER['REQUEST_URI']) 
                 ? str_replace(ccl(),'',cc_current_url()) . $_SERVER['QUERY_STRING'] 

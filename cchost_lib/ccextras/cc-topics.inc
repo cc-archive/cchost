@@ -508,6 +508,8 @@ class CCTopic
 
         $x = $topics->GetParentTopic($topic_id);
         list( $parent_id, $left, $right ) = $x;
+        $depth = '';
+        $delrecord = $topics->QueryKeyRow($topic_id);
 
         if( $parent_id && !$branch )
         {
@@ -518,14 +520,16 @@ class CCTopic
                 $args4['topic_id'] = $topic_id;
                 $args4['topic_deleted'] = 1;
                 $topics->Update($args4);
-                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_MARK, $topic_id ));
+                $depth = CCTDF_MARK;
+                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( $depth, $topic_id ));
             }
             else
             {
                 // one parent, no children:
                 // delete from tree
 
-                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_SHALLOW, $topic_id ));
+                $depth = CCTDF_SHALLOW;
+                CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( $depth, $topic_id ));
                 // delete from topics
                 $topics->DeleteKey($topic_id);
                 $translations->DeleteTranslationsOf($topic_id);
@@ -540,10 +544,13 @@ class CCTopic
         else
         {
             // top level topic or branch flag is set, wipe it's tree...
-            CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( CCTDF_DEEP, $topic_id ));
+            $depth = CCTDF_DEEP;
+            CCEvents::Invoke( CC_EVENT_TOPIC_DELETE, array( $depth, $topic_id ));
             $topics->DeleteKeyRow($topic_id);
             $translations->DeleteTranslationsOf($parent_id);
         }
+
+        CCEvents::Invoke( CC_EVENT_POST_TOPIC_DELETE, array( $depth, $delrecord ) );
     }
 
     /**

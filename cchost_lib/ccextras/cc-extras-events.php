@@ -61,6 +61,7 @@ define('CC_EVENT_REVIEW','review');
 * @see CCEvents::AddHandler()
 */
 define('CC_EVENT_TOPIC_DELETE', 'topicdelete');
+define('CC_EVENT_POST_TOPIC_DELETE', 'posttopicdelete');
 
 /**
 * Notification Event: Topic has been replied to

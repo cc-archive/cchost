@@ -343,78 +343,39 @@ EOF;
         CCPage::AddBreadCrumbs($trail);
     }
 
-    function OnTopicDelete($deltype,$topic_id)
+    function OnPostTopicDelete($deltype,$topic)
     {
-        // CCTDF_SHALLOW 
-        // CCTDF_MARK
-        // CCTDF_DEEP
-
-        // we're not physically deleting
-        if( $deltype == CCTDF_MARK ) 
+        if( empty($topic['topic_thread']) )
             return;
-
-        $api = new CCForums();
-
-        $sql =<<<EOF
-            SELECT * FROM cc_tbl_topics
-            LEFT OUTER JOIN cc_tbl_forum_threads ON topic_thread=forum_thread_id
-            WHERE topic_id = $topic_id
-EOF;
-        $topic = CCDatabase::QueryRow($sql);
-        if( empty($topic['forum_thread_id']) )
-            return;
-
-        $thread_id = $topic['forum_thread_id'];
 
         $topic_threads = new CCForumThreads();
 
-        if( $topic['forum_thread_oldest'] == $topic_id )
+        $thread_id = $topic['topic_thread'];
+
+        $sql =<<<EOF
+            SELECT topic_id, topic_date FROM cc_tbl_topics 
+            WHERE topic_thread={$thread_id} AND topic_deleted = 0
+            ORDER BY topic_date DESC 
+            LIMIT 1
+EOF;
+        list( $newest, $topic_date ) = CCDatabase::QueryRow($sql,false);
+        if( empty($newest) )
         {
-            // no more topics left in this thread
             $topic_threads->DeleteKey( $thread_id );
         }
         else
         {
-            // if this topic or one of its children is the 'newest' in the thread
-            // then we have to reset the thread's 'newest' pointer to some other topic
-            // that isn't being deleted
-
-            if( !($is_newest = ($topic['forum_thread_newest'] == $topic_id)) )
-            {
-                // first let's see if one the newest topic in the thread
-                // is one of our children
-
-                $sql = 'SELECT topic_left, topic_right FROM cc_tbl_topics WHERE topic_id='.$topic['forum_thread_newest'];
-                list( $newleft, $newright ) = CCDatabase::QueryRow($sql,false);
-                $is_newest = ($newleft < $topic['topic_left']) || ($newright > $topic['topic_right']);
-            }
-
-            if( $is_newest )
-            {
-                // The thread's newest pointer needs to be reset (its not as new as it used to be)
-
-                // get the next newest valid topic
-                $sql =<<<EOF
-                    SELECT topic_id, topic_date 
-                    FROM cc_tbl_topics 
-                    WHERE (topic_thread = $thread_id) AND (topic_date < '{$topic['topic_date']}')
-                    ORDER BY topic_date DESC
-                    LIMIT 1
-EOF;
-                $newest_row = CCDatabase::QueryRow($sql);
-
-                $tf['forum_thread_newest'] = $newest_row['topic_id'];
-                $tf['forum_thread_date']   = $newest_row['topic_date'];
-                $tf['forum_thread_id']     = $thread_id;
-                $topic_threads->Update($tf);
-            }
+            $tf['forum_thread_newest'] = $newest;
+            $tf['forum_thread_date']   = $topic_date;
+            $tf['forum_thread_id']     = $thread_id;
+            $topic_threads->Update($tf);
         }
-
-        $this->_del_sync($topic_id, $deltype == CCTDF_DEEP);
     }
 
-    function _del_sync($topic_id,$deep)
+    function OnTopicDelete($deltype,$topic_id)
     {
+        $deep = $deltype == CCTDF_DEEP;
+
         if( $deep )
         {
             list( $left, $right ) = CCDatabase::QueryRow('SELECT topic_left, topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
@@ -545,6 +506,7 @@ EOF;
                 $msg = 'str_forum_login_required';
             else
                 $msg = 'str_forum_perm_denied';
+            require_once('cchost_lib/cc-page.php');
             CCPage::SetTitle('str_forum_restricted_access');
             CCPage::Prompt($msg);
             return;
