@@ -25,6 +25,8 @@ function rss_topic_dataview($queryObj)
     // Thu, 27 Dec 2007 09:28:38 PST
     // %a,  %d %b %Y    %T
 
+    $Y = date('Y') + 1;
+
     $sql =<<<EOF
         SELECT topic_date, author.user_real_name, 
             topic_text as format_text_topic_text, 
@@ -49,7 +51,7 @@ function rss_topic_dataview($queryObj)
         LEFT OUTER JOIN cc_tbl_uploads ups ON topic_upload=upload_id
         LEFT OUTER JOIN cc_tbl_user reviewee ON ups.upload_user=reviewee.user_id
         %joins%
-        %where% and (topic_deleted = 0)
+        %where% and (topic_date < '${Y}') AND (topic_deleted = 0)
         %order%
         %limit%
 EOF;
