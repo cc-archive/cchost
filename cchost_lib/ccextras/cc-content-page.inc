@@ -209,6 +209,12 @@ class CCContentPageForm extends CCForm
                                'options'     => $options,
                                'flags'       => CCFF_POPULATE );
 
+        $fields['content_feed'] =
+                        array(  'label'      => _('Feed Links'),
+                               'form_tip'    => _('Check this to display a feed link on these pages'),
+                               'formatter'   => 'checkbox',
+                               'flags'       => CCFF_POPULATE );
+
         $this->AddFormFields( $fields );
     }
 }
@@ -455,11 +461,13 @@ class CCContentPage
 
         $vars = '';
         foreach( array( 'content_page_box', 'content_page_paging', 'content_page_width',
-                        'content_page_textformat', 'content_page_columns' ) as $K  )
+                        'content_page_textformat', 'content_page_columns', ) as $K  )
         {
             if( isset($values[$K]) )
                 $vars .= "\$A['{$K}'] = '" . $values[$K] . "';\n";
         }
+
+        $feed_comment = empty($values['content_feed']) ? '// ' : '';
 
         $vars .=<<<EOF
 \$id = empty(\$_GET['ids']) ? '' : \$_GET['ids'];
@@ -477,6 +485,7 @@ EOF;
 print "<h1>{$values['title']}</h1>";
 cc_query_fmt('{$q}' . \$id . '&topic=' . \$topic );
 \$A['macro_names'][] = 'prev_next_links';
+{$feed_comment} cc_content_feed('datasource=topics&type={$values['type']}&page={$fname}','{$values['title']}','topics');
 ?>
 EOF;
 
