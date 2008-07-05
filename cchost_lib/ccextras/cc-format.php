@@ -133,7 +133,7 @@ function _cc_format_format($text)
 function _cc_format_query(&$m)
 {
     static $num = 0;
-    $qurl = url_args( ccl('api','query'), 'f=html&' . urldecode($m[1]));
+    $qurl = url_args( ccl('api','query'), 'limit=page&f=html&' . urldecode($m[1]));
     ++$num;
     return "<div><div id=\"cath_{$num}\" ></div><script> new Ajax.Updater('cath_{$num}', '{$qurl}', { method: 'get' } );</script></div>";
 }
