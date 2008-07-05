@@ -57,13 +57,14 @@ td.value, span.value {
     font-weight: normal;
 }
 </style>
+<h1>Query API 2.0 (beta)</h1>
 <div class="qouter">
 <p>
 The Query API is how you get data from a ccHost site installation. This information can used as widgets in a blog or
 other web page, a feed or raw data for programmatic manipulation.
 </p>
 
-<h2>Parameter Passing</h2
+<h2>Parameter Passing</h2>
 
 <p>
 No matter what the calling context, the information in the results and how they are formatted are
@@ -79,20 +80,21 @@ For example, to return uploads that have been tagged with either foo or bar you 
 <div class="qexample"><span class="key">tags</span>=<span class="value">foo</span>+<span class="value">bar</span>&<span class="key">type</span>=<span class="value">any</span></div>
 
 <p>
-To see the results in a RSS feed format, you would add the <span class="value">rss</span> value as a format parameter:
+To see the results in a RSS feed format, you would add the <span class="value">rss</span> value as a <span class="key">format</span>
+(<span>f</span> for short) parameter:
 </p>
 
-<div class="qexample"><span class="key">tags</span>=<span class="value">foo</span>+<span class="value">bar</span>&<span class="key">type</span>=<span class="value">any</span>&<span class="key">format</span>=<span class="value">rss</span></div>
+<div class="qexample"><span class="key">tags</span>=<span class="value">foo</span>+<span class="value">bar</span>&<span class="key">type</span>=<span class="value">any</span>&<span class="key">f</span>=<span class="value">rss</span></div>
 
 <p>
 Unlike the RSS format which has a pre-defined output format, the HTML format can be further 
-controlled by specifying a <span class="key">template</span> to be used. For example, to embed the same results into
-a web page with links and attribution:
+controlled by specifying a <span class="key">template</span> (<span class="key">t</span> for short) to be used. 
+For example, to embed the same results into a web page with links and attribution:
 
-<div class="qexample"><span class="key">tags</span>=<span class="value">foo</span>+<span class="value">bar</span>&<span class="key">type</span>=<span class="value">any</span>&<span class="key">format</span>=<span class="value">html</span>&<span class="key">template</span>=<span class="value">links_by</span></div>
+<div class="qexample"><span class="key">tags</span>=<span class="value">foo</span>+<span class="value">bar</span>&<span class="key">type</span>=<span class="value">any</span>&<span class="key">format</span>=<span class="value">html</span>&<span class="key">t</span>=<span class="value">links_by</span></div>
 
 <p>
-See the parameter reference for a detailed explanation of what parameters are available.
+See the <a href="#param_ref">parameter reference</a> for a detailed explanation of what parameters are available.
 </p>
 
 
@@ -112,24 +114,27 @@ The Query API can invoked from several contexts:
 <h3>URL Remote invocation</h3>
 <p>
   The base URL for the Query API is http://example.com/api/query where 'example.com' is the base of the
-  ccHost site installation. Parameters and values are passed URL query parameters. Examples:
+  ccHost site installation. Parameters and values are passed URL query parameters. In the following example
+  the <span class="key">user</span> (<span class="key">u</span> for short) is used to limit the results
+  to uploads by a specific uploader:
 </p>
 
-<div class="urlexample"><a href="http://ccmixter.org/api/query?tags=hip_hop&sort=name&user=teru">http://ccmixter.org/api/query?<span class="key">tags</span>=<span class="value">hip_hop</span>&<span class="key">sort</span>=<span class="value">name</span>&<span class="key">user</span>=<span class="value">teru</span></a></div>
+<div class="urlexample"><a href="<?= $A['query-url']?>tags=hip_hop&sort=name&u=teru"><?= $A['query-url']?><span class="key">tags</span>=<span class="value">hip_hop</span>&<span class="key">sort</span>=<span class="value">name</span>&<span class="key">u</span>=<span class="value">teru</span></a></div>
 <p></p>
 <div class="urlexample">
-<a href="http://ccmixter.org/api/query?format=rss&datasource=topics&type=review&user=victor">http://ccmixter.org/api/query?<span class="key">f</span>=<span class="value">rss</span>&<span class="key">datasource</span>=<span class="value">topics</span>&<span class="key">type</span>=<span class="value">review</span>&<span class="key">user</span>=<span class="value">victor</span></a></div>
+<a href="<?= $A['query-url']?>format=rss&datasource=topics&type=review&u=victor"><?= $A['query-url']?><span class="key">f</span>=<span class="value">rss</span>&<span class="key">datasource</span>=<span class="value">topics</span>&<span class="key">type</span>=<span class="value">review</span>&<span class="key">u</span>=<span class="value">victor</span></a></div>
 
-<p>This type of query request can be used anywhere an URL is used however only certain formats make sense 
-in some URL contexts. For example, when typing in an URL in your browser, only the <span class="key">format</span>=<span class="value">page</span> is useful. When
-embedding into a blog use <span class="key">format</span>=<span class="value">html</span> or if used in the SRC parameter of a <span class="codesnippet">&lt;script&gt;</span>
-then <span class="key">format</span>=<span class="value">docwrite</span> should be used. </p>
+<p>This type of query request can be used anywhere an URL is used, however only certain formats make sense 
+in some URL contexts. For example, when typing in an URL in your browser, only the <span class="key">f</span>=<span class="value">page</span> is useful. When
+embedding into a blog use <span class="key">f</span>=<span class="value">html</span> or if used in the SRC parameter of a <span class="codesnippet">&lt;script&gt;</span>
+then <span class="key">f</span>=<span class="value">docwrite</span> should be used. </p>
 
 <h3>Directly from PHP</h3>
 <p>
   Developers that write extensions to ccHost use the URL query syntax to call the CCQuery object:
 </p>
 <div class="codexample">
+require_once('cchost_list/cc-query.php');
 $query = new CCQuery();
 $args = $query->ProcessAdminArgs('tags=hip_hop&sort=name&user=teru');
 $query->Query($args);
@@ -140,19 +145,21 @@ $query->Query($args);
 </p>
 
 <div class="codexample">
+require_once('cchost_list/cc-query.php');
 $query = new CCQuery();
-$args = $query->ProcessUriArgs();
+$args = $query-><b>ProcessUriArgs</b>();
 $query->Query($args);
 </div>
 
 <p>
   Instead of outputting the results into the page directly, the results can be returned as a PHP array
-  by using <span class="key">format</span>=<span class="value">php</span>:
+  by using <span class="key">f</span>=<span class="value">php</span>:
 </p>
 
 <div class="codexample">
+require_once('cchost_list/cc-query.php');
 $query = new CCQuery();
-$args = $query->ProcessAdminArgs('tags=hip_hop&sort=name&user=teru&format=php');
+$args = $query->ProcessAdminArgs('tags=hip_hop&sort=name&user=teru&<b>b=php</b>');
 $results = $query->Query($args);
 </div>
 
@@ -182,17 +189,18 @@ $results = $query->Query($args);
 
 <h2>Concepts and Definitions </h2>
 
+<a name="format"></a>
 <h3>Formats</h3>
 <p>
   Every query must have a <span class="key">format</span> parameter (or <span class="key">f</span> for short).
 </p>
 <p>
-  The <span class="key">format</span> parameter determines how the final data is returned. There are several
+  The <span class="key">f</span> parameter determines how the final data is returned. There are several
   categories:
 </p>
 
 <table class="qtable">
- <tr><th>Category</th><th>Formats</th></tr>
+ <tr><th>Category</th><th>Format Values</th></tr>
  <tr><td class="key">HTML       </td><td>   <span class="value">page</span>, <span class="value">html</span></td><tr>
  <tr><td class="key">Feeds/XML  </td><td>   <span class="value">atom</span>, <span class="value">rss</span>, <span class="value">xspf</span>, <span class="value">xml</span>    </td><tr>
  <tr><td class="key">Javascript </td><td>   <span class="value">js</span>, <span class="value">json</span>, <span class="value">docwrite</span> </td><tr>
@@ -212,7 +220,7 @@ $results = $query->Query($args);
 </p>
 
 <p>
-  See the Templates appendeix for details.
+  See the <a href="#tempaltes">Templates Appendix</a> for details.
 </p>
 
 
@@ -225,7 +233,7 @@ $results = $query->Query($args);
 </p>
 
 <p>
-  See the appendix section for a list of <span class="key">dataview</span> values in the system.
+  See the <a href="#dataviews">Dataview Appendix</a> section for a list of <span class="key">dataview</span> values in the system.
 </p>
 
 <h3>Specifying Parameters</h3>
@@ -239,7 +247,7 @@ $results = $query->Query($args);
 </p>
 
 <div class="urlexample">
-<a href="http://ccmixter.org/api/query?limit=10&tags=sample&lic=by"><span class="key">limit</span>=<span class="value">10</span>&<span class="key">tags</span>=<span class="value">sample</span>&<span class="key">lic</span>=<span class="value">by</span></a></div>
+<a href="<?= $A['query-url']?>limit=10&tags=sample&lic=by"><span class="key">limit</span>=<span class="value">10</span>&<span class="key">tags</span>=<span class="value">sample</span>&<span class="key">lic</span>=<span class="value">by</span></a></div>
 
 <p></p>     
 
@@ -270,27 +278,58 @@ or <span class="key">user</span>. </p>
 <p>Suppose that you know of a playlist (986) and you want to know which songs are available under an
 Attribution license:</p>
 
-<div class="urlexample"><a href="http://ccmixter.org/api/query?f=html&t=links&playlist=986&lic=by"><span class="key">f</span>=<span class="value">html</span>&<span class="key">t</span>=<span class="value">links</span>&<span class="key">playlist</span>=<span class="value">986</span>&<span class="key">lic</span>=<span class="value">by</span></a></div>
+<div class="urlexample"><a href="<?= $A['query-url']?>f=html&t=links&playlist=986&lic=by"><span class="key">f</span>=<span class="value">html</span>&<span class="key">t</span>=<span class="value">links</span>&<span class="key">playlist</span>=<span class="value">986</span>&<span class="key">lic</span>=<span class="value">by</span></a></div>
 
 <p>You want to know of a cappellas by calendargirl that have been remixed less than 5 times...</p>
 
-<div class="urlexample"><a href="http://ccmixter.org/api/query?f=html&t=links&user=calendargirl&tags=acappella&remixmax=5"><span class="key">f</span>=<span class="value">html</span>&<span class="key">t</span>=<span class="value">links</span>&<span class="key">user</span>=<span class="value">calendargirl</span>&<span class="key">tags</span>=<span class="value">acappella</span>&<span class="key">remixmax</span>=<span class="value">5</span></a></div>
+<div class="urlexample"><a href="<?= $A['query-url']?>f=html&t=links&user=calendargirl&tags=acappella&remixmax=5"><span class="key">f</span>=<span class="value">html</span>&<span class="key">t</span>=<span class="value">links</span>&<span class="key">user</span>=<span class="value">calendargirl</span>&<span class="key">tags</span>=<span class="value">acappella</span>&<span class="key">remixmax</span>=<span class="value">5</span></a></div>
 
-
+<a name="param_ref"></a>
 <h2>Appendix A: Parameter Reference</h2>
 
 <table class="qtable">
 <tr><th>Parameter</th><th>Short Form</th>               <th>Description</th></tr>
 
-<tr><td class="key">  chop             </td><td></td><td> Several of the embedding HTML templates will "chop" long names to this value.</td></tr>
-<tr><td class="key">  collab           </td><td></td><td> Return files belonging to a given collaboration project. Value is a numeric id of the project.</td></tr>
-<tr><td class="key">  datasource       </td><td></td><td> Set to <span class="value">topics</span> with <span class="key">format</span>=<span class="value">rss</span> to get topics related feeds. (See type parameter.)</td></tr>
-<tr><td class="key">  dataview         </td><td></td><td> (see Data View section)</td></tr>
-<tr><td class="key">  format           </td><td>f</td><td> (see Formats section)</td></tr>
+<tr><td class="key">  chop             </td><td></td>
+<td> Several of the embedding HTML templates will "chop" long names to this value.</td></tr>
+
+<tr><td class="key">  collab           </td><td></td>
+<td> Return files belonging to a given collaboration project. Value is a numeric id of the project.</td></tr>
+
+<tr><td class="key">  datasource       </td><td></td>
+<td> Set to <span class="value">topics</span> with <span class="key">format</span>=<span class="value">rss</span> to get topics related feeds. (See type parameter.)</td></tr>
+
+<tr><td class="key">  dataview         </td><td></td><td> (see <a href="dataviews">Data View section</a>)</td></tr>
+<tr><td class="key">  format           </td><td>f</td><td> (see <a href="#formats">Formats section</a>)</td></tr>
 <tr><td class="key">  ids              </td><td></td><td> Comma-separated numeric ids</td></tr>
-<tr><td class="key">  lic              </td><td></td><td> (See License Values)</td></tr>
-<tr><td class="key">  limit            </td><td></td><td> Either a numeric number or <span class="value">default</span>. The actual maximum depends on site administors' settings for various the various formats.</td></tr>
-<tr><td class="key">  match            </td><td></td><td> Template specific, for example t=review_upload&match=%upload_id% t=topic_thread&match=%thread_id%</td></tr>
+<tr><td class="key">  lic              </td><td></td><td> (See <a href="#license">License Values</a>)</td></tr>
+
+<tr><td class="key">  limit            </td><td></td>
+<td> This will tell the QAPI to return "no more than" a certain number of records. Valid values are:<p></p>
+    <table>
+    <tr><td><span class="value">numeric value</span> </td>
+        <td> A paging system can simulated by setting a limit, combined with <span class="key">offset</span>.</td></tr>
+    
+    <tr><td><span class="value">page</span></td>
+        <td>This tells the QAPI to return no more than the number of records shown on a typical page listing. This is the default
+    value for <span class="key">f</span>=<span class="value">page</span>. This is assigned by the site's administrator, typically in the 10-15 range, and can not be surpassed in URL context.</td></tr>
+
+    <tr><td><span class="value">feed</span></td>
+     <td>This tells the QAPI to return no more than the number of records in a feed listing. This is the default
+    value for any of the feed category of formats (<span class="value">rss</span>, <span class="value">atom</span>, etc.). This is assigned by the site's administrator, typically in the 15-20 range, and can not be surpassed in URL context.</td></tr>
+
+    <tr><td><span class="value">query</span></td>
+    <td>This tells the QAPI to return no more than the number of records in a feed listing. This is the default
+    value for any of the non feed or page category of formats (<span class="value">html</span>, <span class="value">csv</span>, etc.). This is assigned by the site's administrator, typically in the 100-200 range, and can not be surpassed in URL context.</td></tr>
+
+    <tr><td style="border:0px"><span class="value">default</span></td>
+     <td style="border:0px">This tells the QAPI to use whatever is the admin assigned value for the current context and format. This is the same as leaving out the <span value="key">limit</span> parameter.</td></tr>
+     
+     </table>
+
+</td></tr>
+
+<tr><td class="key">  match            </td><td></td><td> Template specific, for example <span class="codexample">t=review_upload&match=%upload_id% </span> and <span class="codexample">t=topic_thread&match=%thread_id%</span></td></tr>
 <tr><td class="key">  nosort           </td><td></td><td> Used with param <span class="key">ids</span> to honor the order of ids passed in.</td></tr>
 <tr><td class="key">  offset           </td><td></td><td> Combine with <span class="key">limit</span> to page through results.</td></tr>
 <tr><td class="key">  paging           </td><td></td><td> Used with <span class="key">format</span>s <span class="value">page</span> and <span class="value">html</span> to include prev/next buttons. Valid values are <span class="value">on</span> and <span class="value">off</span><br /><br />The default for <span class="value">page</span> is <span class="value">on</span>, for <span class="value">html</span> is <span class="value">off</span></td></tr>
@@ -304,22 +343,23 @@ Attribution license:</p>
 <tr><td class="key">  reqtags          </td><td></td><td> These tags must be included in upload</td></tr>
 <tr><td class="key">  reviewee         </td><td></td><td> Review topics authored by reviewee</td></tr>
 <tr><td class="key">  score            </td><td></td><td> Uploads that have at least <span class="value">score</span> number of ratings</td></tr>
-<tr><td class="key">  search           </td><td>s</td><td></td></tr>
-<tr><td class="key">  search_type      </td><td></td><td>(match|all|any) </td></tr>
+<tr><td class="key">  search           </td><td>s</td><td>Search for text words or a phrase.</td></tr>
+<tr><td class="key">  search_type      </td><td></td><td> Valid values are <span class="value">match</span> for an exact phrase, <span class="value">any</span> for matches of any of the terms, <span class="value">all</span> for matches of all of the terms.</td></tr>
 <tr><td class="key">  sinceu           </td><td></td><td> Unix time</td></tr>
-<tr><td class="key">  sinced           </td><td></td><td> Date string (see php strtodate)</td></tr>
-<tr><td class="key">  sort             </td><td></td><td> (See valid sorts)</td></tr>
-<tr><td class="key">  ord              </td><td></td><td></td></tr>
+<tr><td class="key">  sinced           </td><td></td><td> Date string (see php's <a href="http://us.php.net/strtotime">strtodate</a>)</td></tr>
+<tr><td class="key">  sort             </td><td></td><td> (See <a href="#sorts">Valid Sorts</a>)</td></tr>
+<tr><td class="key">  ord              </td><td></td><td>Order of score. Valid values are <span class="value">ASC</span> and <span class="value">DESC</span>.</td></tr>
 <tr><td class="key">  sources          </td><td></td><td> Sources of a given remix</td></tr>
 <tr><td class="key">  tags             </td><td></td><td>Return uploads with the tags (separated by '+'). For multiple tags set the type parameter to either <span class="value">all</span> to see records with all tags or <span class="value">any</span> to see records that have any of the tags.</td></tr>
-<tr><td class="key">  template         </td><td>t</td><td> (See templates section)</td></tr>
+<tr><td class="key">  template         </td><td>t</td><td> (See <a href="#templates">Templates Appendix</a>)</td></tr>
 <tr><td class="key">  thread           </td><td></td><td>Used with forum related templates to specify the topics associated with a given thread.</td></tr>
 <tr><td class="key">  title            </td><td></td><td>Used with <span class="key">format</span>=<span class="value">page</span> and some feed formats to display a title at the top of the page or XML file.</td></tr>
 <tr><td class="key">  type             </td><td></td><td> When data source is <span class="value">uploads</span> this is a modifier for the tags parameter. When data source is <span class="value">topics</span> this restricts the returning records to topics of that type (e.g. <span class="value">forum</span>, <span class="value">review</span>, <span class="value">artist_qa</span>, etc.) The exact types available are site specific.</td></tr>
 <tr><td class="key">  user             </td><td>u</td><td> Return records that were uploaded by a certain user. Value is the login name.</td></tr>
 </table>
 
-<h2>Appendix B: License keys</h2>
+<a name="license"></a>
+<h2>Appendix B: License Values</h2>
 
 <table class="qtable">
 <tr><td class="key">  by</td><td>Attribution</td></tr>
@@ -334,6 +374,7 @@ Attribution license:</p>
 <tr><td class="key">  pd</td><td> Public Domain</td></tr>
 </table>
 
+<a name="dataviews"></a>
 <h2>Appendix C: Data Views</h2>
 
 <p>
@@ -357,6 +398,7 @@ Attribution license:</p>
 
 <h2>Appendix D: Sort values</h2>
 
+<a name="sorts"></a>
 <p>
 Valid sort requests depends on the data source:
 </p>
@@ -402,6 +444,7 @@ Valid sort requests depends on the data source:
 <tr><td></td><td class="value"> 	user </td><td> Pool item artist</td></tr>
 </table>
 
+<a name="templates"></a>
 <h2>Appendix E: HTML Templates</h2>
 
 <p>
