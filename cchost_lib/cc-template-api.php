@@ -191,19 +191,6 @@ if( !function_exists('http_build_query') )
     }
 }
 
-function cc_recent_playlists()
-{
-    require_once('cchost_lib/ccextras/cc-playlist.php');
-    return CC_recent_playlists_impl();
-}
-
-function cc_hot_playlists()
-{
-    require_once('cchost_lib/ccextras/cc-playlist.php');
-    return CC_hot_playlists_impl();
-}
-
-
 function cc_get_value($arr,$key)
 {
     if( is_array($arr) && array_key_exists($key,$arr) )

@@ -193,7 +193,7 @@ class CCQuery
         $this->_arg_alias_ref($req); // convert short to long
         $this->_uri_args = $req;     // store for later
 
-        $this->args = array_merge($this->GetDefaultArgs(),$req,$extra_args);
+        $this->args = array_merge($this->GetDefaultArgs($req),$req,$extra_args);
 
         // get the '+' out of the tag str
         if( !empty($this->args['tags']) )
@@ -250,6 +250,7 @@ class CCQuery
         $template = $this->template = new CCSkinMacro($template_name);
         $this->templateProps = $template->GetProps();
         $this->dataviewProps = $this->dataview->GetDataviewFromTemplate($template);
+
         if( empty($this->dataviewProps) )
         {
             if( empty($this->templateProps['dataview_param']) || 
@@ -269,6 +270,7 @@ class CCQuery
         }
 
         $this->args['dataview'] = $this->templateProps['dataview'];
+
         if( empty($this->templateProps['datasource']) )
         {
             $this->args['datasource'] = empty($this->dataviewProps['datasource']) ? 'uploads' : $this->dataviewProps['datasource'];
@@ -415,7 +417,7 @@ class CCQuery
         // alias short to long
         $this->_arg_alias_ref($args);
 
-        $this->args = array_merge($this->GetDefaultArgs(),$args,$extra_args);
+        $this->args = array_merge($this->GetDefaultArgs($args),$args,$extra_args);
 
         if( !empty($this->args['tags']) )
         {
@@ -432,13 +434,13 @@ class CCQuery
         if( empty($args) )
             $args =& $this->args;
         $keys = array_keys($args);
-        $default_args = $this->GetDefaultArgs();
+        $default_args = $this->GetDefaultArgs($args);
         $str = '';
 
         // alias short to long
-        $this->_arg_alias();
+        $this->_arg_alias_ref($args);
 
-        $badargs = array( 'qstring', 'ccm', 'format', 'template', 'dataview', 'datasource' ); 
+        $badargs = array( 'qstring', 'ccm', 'format', 'template', 'dataview', 'datasource', '_cache_buster' ); 
 
         foreach( $keys as $K )
         {
@@ -456,15 +458,20 @@ class CCQuery
         return $str;
     }
 
-    function GetDefaultArgs()
+    function GetDefaultArgs($passed_in=array())
     {
         global $CC_GLOBALS;
 
-        return array(
-                    'sort' => 'date', 'ord'  => 'DESC', 
+        $args = array(
+                    'sort' => 'date', 
+                    'ord'  => 'DESC', 
                     'limit' => 'default', 'offset' => 0,
                     'format' => 'page',
                     );
+        if( !empty($passed_in['playlist']) && empty($passed_in['sort']) )
+            $args['nosort'] = 1;
+
+        return $args;
     }
 
     function _generate_records()
