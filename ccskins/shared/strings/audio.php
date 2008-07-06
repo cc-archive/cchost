@@ -155,6 +155,7 @@ $GLOBALS['str_user_feed_trackbacks'] = _('Uploads by %s featured in videos, podc
 $GLOBALS['str_user_feed_remix_trackbacks'] = _('Remixes of %s featured in videos, podcasts, albums, etc.');
 $GLOBALS['str_user_feed_reviews_by'] = _('Reviews left by %s');
 $GLOBALS['str_user_feed_reviews_for'] = _('Reviews left for %s');
+$GLOBALS['str_search_playlists'] = _('Playlists');
 
 
 ?>

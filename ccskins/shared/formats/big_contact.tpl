@@ -1,6 +1,6 @@
 %%
 [meta]
-    type     = embed
+    type     = format
     desc     = _('Big Contact Flash Player')
     dataview = passthru
 [/meta]

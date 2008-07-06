@@ -1173,6 +1173,14 @@ class CCQuery
     {
         // this method is a little shaky...
 
+        if( $this->args['datasource'] == 'cart' )
+        {
+            return array( 'name' => array( _('Cart (playlist) name'), 'cart_name' ),
+                          'date' => array( _('Cart (playlist) date'), 'cart_date' ),
+                        );
+        }
+
+
         if( $this->args['datasource'] == 'pool_items' )
         {
             return array( 'name' => array( _('Pool item name'), 'pool_item_name' ),

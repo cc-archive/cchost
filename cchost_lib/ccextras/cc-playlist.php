@@ -39,6 +39,7 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPlaylistHV', 'OnUplo
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCPlaylistHV', 'OnUserProfileTabs'));
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCPlaylistHV', 'OnFilterMacros')      );
 CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCPlaylistHV', 'OnFilterUserProfile') );
+CCEvents::AddHandler(CC_EVENT_SEARCH_META,        array( 'CCPlaylistHV',  'OnSearchMeta') );
 
 
 CCEvents::AddHandler(CC_EVENT_FILTER_PLAY_URL,        array( 'CCPlaylistHV', 'OnFilterPlayURL'));
@@ -49,6 +50,18 @@ CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCPlaylistManage',  'O
 
 class CCPlaylistHV 
 {
+
+    function OnSearchMeta(&$search_meta)
+    {
+        $search_meta[] = 
+            array(
+                'template'   => 'search_playlists',
+                'title'      => 'str_search_playlists',
+                'datasource' => 'cart',
+                'group'      => 'cart',
+                'match'      => 'cart_name,cart_tags,cart_desc ',
+            );
+    }
 
     function OnFilterPlayURL( &$records ) 
     {

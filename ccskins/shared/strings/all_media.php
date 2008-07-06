@@ -540,6 +540,7 @@ $GLOBALS['str_save_to_playlist'] = _('Save to collection');
 $GLOBALS['str_results_from'] = _('Search Results From');
 $GLOBALS['str_search']             = _('Search');
 $GLOBALS['str_search_forums'] = _('Forums');
+$GLOBALS['str_search_playlists'] = _('Collections');
 $GLOBALS['str_search_found_d'] = _('Found %s total matches');
 $GLOBALS['str_search_google'] = _('Search using Google (tm)');
 $GLOBALS['str_search_miss'] = _('
