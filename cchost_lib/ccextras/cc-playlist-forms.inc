@@ -62,13 +62,13 @@ class CCPlaylistForm extends CCForm
                                'formatter'  => 'tagsedit',
                                'form_tip'   => _('(e.g. chill, high_energy, guitar_stuff)'),
                                'flags'      => CCFF_POPULATE),
-            'cart_desc' => 
+            'cart_desc' =>
                         array( 'label'      => _('Description'),
                                'formatter'  => 'textarea',
                                'want_formatting' => true,
                                'form_tip'   => _(''),
                                'flags'      => CCFF_POPULATE),
-                );
+            );
 
         if( $dynamic )
         {
@@ -76,8 +76,9 @@ class CCPlaylistForm extends CCForm
             $fields += array(
                 '_dynlink' => 
                             array( 'label'      => _('Dynamic Query'),
-                                   'value'      => "<a href=\"$url\">" . _('Edit dynamic query') . '</a>',
-                                   'formatter'  => 'statictext',
+                                   'url'        => $url,
+                                   'value'      => _('Edit dynamic query'),
+                                   'formatter'  => 'button',
                                    'form_tip'   => _('Edit the dynamic query for this playlist'),
                                    'flags'      => CCFF_NOUPDATE | CCFF_STATIC ),
                 );
@@ -88,14 +89,31 @@ class CCPlaylistForm extends CCForm
             $fields += array(
                 '_dynlink' => 
                             array( 'label'      => _('Track Order'),
-                                   'value'      => "<a href=\"$url\">" . _('Edit track order') . '</a>',
-                                   'formatter'  => 'statictext',
+                                   'url'        => $url,
+                                   'value'      => 'str_pl_edit_track_order',
+                                   'formatter'  => 'button',
                                    'form_tip'   => _('Edit the order in which the tracks play'),
                                    'flags'      => CCFF_NOUPDATE | CCFF_STATIC ),
                 );
         }
 
         $this->AddFormFields($fields);
+        $this->SetFormHelp('str_pl_tags_are_fun');
+    }
+
+    function SetSuggestedTags($tags)
+    {
+        $fields['suggested_tags'] = 
+                    array( 'label'      => 'str_suggested_tags',
+                           'target'     => 'cart_tags',
+                           'tags'       => $tags,
+                           'formatter'  => 'metalmacro',
+                           'macro'      => 'popular_tags',
+                           'form_tip'   => 'str_pl_click_on_these',
+                           'flags'      => CCFF_STATIC | CCFF_NOUPDATE );
+
+        $this->InsertFormFields( $fields, 'after', 'cart_tags' );
+
     }
 }
 
@@ -236,7 +254,7 @@ class CCPlaylistManage
         CCPage::SetTitle('str_pl_edit_properties');
         $carts =& CCPlaylist::GetTable();
         $row = $carts->QueryKeyRow($playlist_id);
-        $form = new CCPlaylistForm($row['cart_dynamic'],$playlist_id);
+        $form = new CCPlaylistForm($row['cart_dynamic'],$playlist_id,array());
         $show = false;
         if( empty($_POST['playlist']) )
         {
@@ -249,6 +267,9 @@ class CCPlaylistManage
         }
         if( $show  )
         {
+            $tags = $this->_get_suggested_tags($row);
+            if( !empty($tags) )
+                $form->SetSuggestedTags($tags);
             CCPage::AddForm( $form->GenerateForm() );
         }
         else
@@ -261,6 +282,60 @@ class CCPlaylistManage
             CCUtil::SendBrowserTo(); // $url);
         }
     }
+
+
+    function _get_suggested_tags($row)
+    {
+
+        $playlist_id = $row['cart_id'];
+        $query = $row['cart_dynamic'];
+
+        if( empty($query) )
+        {
+            $sql =<<<EOF
+            SELECT upload_tags
+            FROM cc_tbl_uploads
+            JOIN cc_tbl_cart_items ON upload_id=cart_item_upload
+            JOIN cc_tbl_cart ON cart_item_cart=cart_id
+            WHERE cart_id = $playlist_id
+EOF;
+
+            $all_tags = CCDatabase::QueryItems($sql);
+            if( empty($all_tags) )
+                return;
+        }
+        else
+        {
+            $all_tags = array();
+            parse_str($query,$args);
+            if( !empty($args['reqtags']) )
+                $all_tags[] = ','.$args['reqtags'].',';
+            if( !empty($args['tags']) )
+                $all_tags[] = ','.$args['tags'].',';
+            if( empty($all_tags) )
+                return;
+        }
+        
+        $all_tags = array_unique(preg_split('/,/',join('',$all_tags),0,PREG_SPLIT_NO_EMPTY));
+        if( !empty($row['cart_tags']) )
+        {
+            $cart_tags = split(',',$row['cart_tags']);
+            $all_tags = array_diff($all_tags,$cart_tags);
+            if( empty($all_tags) )
+                return;
+        }
+
+        $tagstr = join("', '", $all_tags);
+
+        $sql =<<<EOF
+            SELECT tags_tag
+            FROM cc_tbl_tags
+            WHERE (tags_count > 130) AND (tags_type = 4) && (tags_tag IN ('{$tagstr}'))
+EOF;
+        $tags = CCDatabase::QueryItems($sql);
+        return $tags;
+    }
+
 
     function _send_prompt($msg)
     {

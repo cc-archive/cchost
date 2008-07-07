@@ -549,14 +549,20 @@ EOF;
             }
             else
             {
-                if( !empty($_GET['min']) )
-                    $args['min'] = intval($_GET['min']);
                 if( !empty($_GET['since']) )
                     $args['since'] = date('Y-m-d', strtotime($_GET['since']));
+                if( !empty($_GET['min']) )
+                    $args['min'] = sprintf('%0d',$_GET['min']);
                 if( !empty($_GET['offset']) )
-                    $args['offset'] = intval($_GET['offset']);
+                    $args['offset'] = sprintf('%0d',$_GET['offset']);
+                if( !empty($_GET['tags']) )
+                    $args['tags'] = $_GET['tags'];
+                if( !empty($_GET['type']) )
+                    $args['type'] = $_GET['type'];
                 $args['hot'] = !empty($_GET['hot']);
-                if( $args['hot'] )
+                if( !empty($args['tags']) )
+                    $title = array('str_pl_tagged_playlists',$args['tags']);
+                elseif( $args['hot'] )
                     $title = 'str_pl_hot_playlists';
                 else
                     $title = 'str_pl_new_playlists';
@@ -625,6 +631,14 @@ EOF;
         if( !empty($_GET['since']) )
             $where .= " AND cart_date >= '{$_GET['since']}'";
 
+        if( !empty($_GET['tags']) )
+        {
+            require_once('cchost_lib/cc-dataview.php');
+            $dv = new CCDataview();
+            $ttype = empty($_GET['type']) ? 'all' : $_GET['type'];
+            $tagfilt = $dv->MakeTagFilter( $_GET['tags'], $ttype, 'cart_tags' );
+            $where .= " AND ({$tagfilt})";
+        }
         if( empty($_GET['upload_id']) )
         {
             require_once('cchost_lib/cc-page.php');

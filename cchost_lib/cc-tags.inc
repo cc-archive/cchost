@@ -537,6 +537,7 @@ class CCTagEvents
     {
         global $CC_GLOBALS;
 
+        $tagbase = empty($_GET['tagbase']) ? ccl('tags') . '/' : ccl($_GET['tagbase']);
         $tags =& CCTags::GetTable();
         $tags->SetSort('tags_tag');
         
@@ -547,19 +548,28 @@ class CCTagEvents
 
         $where = "tags_count > $minshow";
 
-        if( empty($_REQUEST['all']) )
+        if( !empty($_GET['tabgbase']) )
         {
-            $where .=  ' AND tags_type = ' . CCTT_USER;
-            $switch_url = url_args( ccl('tags'), 'all=1' );
-            $switch_text = _('Turn System Tags ON');
+            if( empty($_REQUEST['all']) )
+            {
+                $where .=  ' AND tags_type = ' . CCTT_USER;
+                $switch_url = url_args( ccl('tags'), 'all=1' );
+                $switch_text = _('Turn System Tags ON');
+            }
+            else
+            {
+                $switch_url = ccl('tags');
+                $switch_text = _('Turn System Tags OFF');
+            }
+
+            $switch_link = "<table class=\"cc_tag_switch_link\"><tr><td><a class=\"cc_gen_button\" href=\"$switch_url\"><span>$switch_text</span></a></td><td></td></tr></table>";
         }
         else
         {
-            $switch_url = ccl('tags');
-            $switch_text = _('Turn System Tags OFF');
+            $switch_link = '';
+            $where .=  ' AND tags_type = ' . CCTT_USER;
         }
 
-        $switch_link = "<table class=\"cc_tag_switch_link\"><tr><td><a class=\"cc_gen_button\" href=\"$switch_url\"><span>$switch_text</span></a></td></tr></table>";
 
         $records =& $tags->QueryRows($where);
         $count = count($records);
@@ -569,10 +579,10 @@ class CCTagEvents
             $c = $records[$i]['tags_count'] - 1;
             $percent = ($c / $max_count) * 100;
             $records[$i]['fontsize'] = 11 + intval($percent * 0.6); // set max px size is 60
-            $records[$i]['tagurl'] = ccl('tags',  $records[$i]['tags_tag']);
+            $records[$i]['tagurl'] = $tagbase . $records[$i]['tags_tag'];
         }
 
-        CCPage::SetTitle('str_tags');
+        CCPage::SetTitle(empty($_GET['title']) ? 'str_tags' : CCUtil::Strip($_GET['title']) );
         CCPage::PageArg('tag_switch_link',$switch_link);
         CCPage::PageArg('tag_array',$records,'tags');
     }

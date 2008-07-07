@@ -248,6 +248,10 @@ var ccPlaylistBrowserObject = {
                     url += '&since=' + this.options.since;
                 if( this.options.min )
                     url += '&min=' + this.options.min;
+                if( this.options.tags )
+                    url += '&tags=' + this.options.tags;
+                if( this.options.type )
+                    url += '&type=' + this.options.type;
             }
             var me = this;
             new Ajax.Request( url, { method: 'get', onComplete: me._resp_browse.bind(me) } );

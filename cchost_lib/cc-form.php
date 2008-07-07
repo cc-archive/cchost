@@ -1024,6 +1024,32 @@ END;
     }
 
     /**
+     * Handles generation of HTML button/link field
+     *
+     * @param string $varname Name of the HTML field
+     * @param string $value   value to be published into the field
+     * @param string $class   CSS class (rarely used)
+     * @returns string $html HTML that represents the field
+     */
+    function generator_button($varname,$value='',$class='')
+    {
+        if( empty($value) )
+            $value = 'str_click_here';
+
+        $page =& CCPage::GetPage();
+        $str = $page->String($value);
+        $wid = strlen($str);
+
+        $url =  $this->GetFormFieldItem($varname,'url');
+        return( "<div style=\"width:{$wid}em\"><a class=\"cc_gen_button\" href=\"{$url}\"><span>$str</span></a></div>" );
+    }
+
+    function validator_button()
+    {
+        return true;
+    }
+
+    /**
      * Handles generation of HMTL field <input type='checkbox'
      *
      * @param string $varname Name of the HTML field
