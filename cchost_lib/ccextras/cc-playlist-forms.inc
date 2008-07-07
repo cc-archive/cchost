@@ -330,7 +330,7 @@ EOF;
         $sql =<<<EOF
             SELECT tags_tag
             FROM cc_tbl_tags
-            WHERE (tags_count > 130) AND (tags_type = 4) && (tags_tag IN ('{$tagstr}'))
+            WHERE (tags_count > 22) AND (tags_type = 4) && (tags_tag IN ('{$tagstr}'))
 EOF;
         $tags = CCDatabase::QueryItems($sql);
         return $tags;
