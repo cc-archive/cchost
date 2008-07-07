@@ -72,6 +72,7 @@ $GLOBALS['str_pl_remove_from']        = _('Remove from');
 $GLOBALS['str_pl_reorder playlist'] = _('Reorder Playlist');
 $GLOBALS['str_pl_return_to'] = _('%s Return to %syour playlists%s');
 $GLOBALS['str_pl_save_playlist_query'] = _('Save Playlist Query');
+$GLOBALS['str_pl_tagged_playlists'] = _('Browse Playlists Tagged \'%s\'');
 $GLOBALS['str_pl_track_added'] = _('Track added to playlist'); // js
 $GLOBALS['str_pl_track_has_been_removed'] = _('Track has been removed from playlist'); // js
 $GLOBALS['str_pl_upload_is_already'] = _('Upload is already in list');

@@ -70,6 +70,7 @@ $GLOBALS['str_pl_remove_from']        = _('Remove from');
 $GLOBALS['str_pl_reorder playlist'] = _('Reorder List');
 $GLOBALS['str_pl_return_to'] = _('%s Return to %syour galleries%s');
 $GLOBALS['str_pl_save_playlist_query'] = _('Save Gallery List Query');
+$GLOBALS['str_pl_tagged_playlists'] = _('Browse Galleries Tagged \'%s\'');
 $GLOBALS['str_pl_track_added'] = _('Image added to list'); // js
 $GLOBALS['str_pl_track_has_been_removed'] = _('Image has been removed from list'); // js
 $GLOBALS['str_pl_upload_is_already'] = _('Image is already in list');
