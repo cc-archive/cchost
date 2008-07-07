@@ -374,6 +374,8 @@ $GLOBALS['str_pl_reorder playlist'] = _('Reorder List');
 $GLOBALS['str_pl_return_to'] = _('%s Return to %syour favorites%s');
 $GLOBALS['str_pl_save_playlist_query'] = _('Save Favorites List Query');
 $GLOBALS['str_pl_save_order'] = _('Save This Order');
+$GLOBALS['str_pl_tagged_playlists'] = _('Browse Collections Tagged \'%s\'');
+
 $GLOBALS['str_pl_tags_are_fun'] = _('As you add uploads you will see Suggested Tags based on the tags of the uploads. Use them to help publicize your list.');
 $GLOBALS['str_pl_track_added'] = _('New favorite added to list'); // js
 $GLOBALS['str_pl_track_has_been_removed'] = _('Favorite has been removed from list'); // js
