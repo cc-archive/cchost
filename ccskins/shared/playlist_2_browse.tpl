@@ -12,7 +12,7 @@
 <script  src="%url('js/playlist.js')%" ></script>
 <div  id="playlist_browser">
 %loop(records,PL)%  
-  <div  class="cc_playlist_line med_bg" id="_pl_%(#PL/cart_id)%">%(#PL/cart_name)% 
+  <div  class="cc_playlist_line med_bg" id="_pl_%(#PL/cart_id)%"><span class="pl_cart_name">%(#PL/cart_name)%</span>
         <span class="cc_playlist_dyn_user">%text(str_pl_created_by)% <!-- -->%(#PL/user_real_name)%</span>
     %if_not_null(#PL/cart_dynamic)%
        <span class="cc_playlist_dyn_label">(%text(str_pl_dynamic)%)</span>
@@ -20,8 +20,8 @@
     %if_null(#PL/cart_dynamic)%
        <span> %text(str_pl_items)%: %(#PL/cart_num_items)%</span>
     %end_if%
-    <span>%(#PL/cart_tags_munged)%</span>
-    </div>
+    <div style="font-size:10px;font-style:normal;font-weight:normal;" class="">%(#PL/cart_tags_munged)%</div>
+  </div>
 %end_loop%
 </div>
 

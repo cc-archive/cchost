@@ -57,23 +57,18 @@ $R =& $A['records'][0];
             <a href="<?= $R['license_url']?>" title="<?= $R['license_name']?>">
                 <img src="<?= $R['license_logo_url'] ?>" />
             </a>
+            <? if( !empty($R['upload_extra']['bpm']) ) { ?>
+                <div id="info_bpm"><?= $T->String('str_bpm') ?> <span><?= $R['upload_extra']['bpm'] ?></span></div>
+            <? } ?>
+            <? if ( !empty($R['upload_extra']['featuring'])) { ?>
+                <div><?= $T->String('str_featuring')?> : <b ><?= $R['upload_extra']['featuring']?></b></div>
+            <? } ?>
+
+            <div  class="cc_upload_date"><?= $R['upload_date']?></div>
         </td>
+     </tr>
+     <tr>
         <td>
-<? if( !empty($R['upload_extra']['bpm']) ) { ?>
-    <div id="info_bpm"><?= $T->String('str_bpm') ?> <span><?= $R['upload_extra']['bpm'] ?></span></div>
-<? } ?>
-<? if ( !empty($R['upload_extra']['featuring'])) { ?>
-    <div><?= $T->String('str_featuring')?> : <b ><?= $R['upload_extra']['featuring']?></b></div>
-<? } ?>
-
-<div  class="cc_upload_date"><?= $R['upload_date']?></div>
-
-<? $A['tag_array'] = $R['upload_taglinks']; ?>
-
-<div  class="taglinks"><?= $T->String('str_tags')?>: <? $T->Call('tags.xml/taglinks');?></div>
-        </td>
-    </tr>
-</table>
 <?
 
 if ( !empty($R['upload_description_plain'])) 
@@ -85,7 +80,13 @@ if ( !empty($R['upload_description_plain']))
     <?
 }
 
-?>
+$A['tag_array'] = $R['upload_taglinks']; ?>
+
+<div  class="taglinks"><?= $T->String('str_tags')?>: <? $T->Call('tags.xml/taglinks');?></div>
+        </td>
+    </tr>
+</table>
+
 <table class="files_table">
     <tr>
         <td style="width:33%">

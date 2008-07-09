@@ -36,14 +36,21 @@ a.info_button:hover {
 	border: 1px solid black;
 	background: white url("../images/bg_fade.gif") repeat-x;
 	padding: 12px;
-	width: 560px;
+/*	width: 520px; */
 	z-index: 100;
 }
 
 
-.info_detail .liclogo {
-	vertical-align: top;
+.info_detail td.liclogo {
+   height: 40px;
+   }
+
+.info_detail td.liclogo img {
+	/* vertical-align: top; */
+	float: left;
+	margin: 5px;
 }
+
 
 .info_detail .info_list {
 	background-color: transparent;
@@ -51,6 +58,7 @@ a.info_button:hover {
 }
 
 .info_detail .info_list .taglinks {
+    margin-bottom: 3px;
     margin-top: 5px;
 	width: 450px; 
 	white-space: normal;

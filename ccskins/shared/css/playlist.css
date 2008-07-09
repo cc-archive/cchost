@@ -12,7 +12,18 @@
 .cc_playlist_line span {
     margin-left: 20px;
 	font-weight: normal;
+}
+
+.cc_playlist_dyn_user {
 	font-style: italic;
+	display: block;
+	float: right;
+}
+
+.pl_cart_name {
+	font-size: 1.4em;
+	font-style: normal;
+	margin-left: 4px;
 }
 
 .cc_playlist_detail {
@@ -55,8 +66,23 @@ a.cc_playlist_edit {
 
 .gd_description div {
 	white-space: normal;
+	margin: 4px;
+	background-color: #EEC; /* colorize */
+	color: #333;
+	padding: 0px;
 }
 
+.cc_pl_table .taglinks {
+	width: 500px;
+    margin-bottom: 3px;
+    margin-top: 5px;
+	white-space: normal;
+}
+
+.cc_pl_table .taglinks a {
+	display: inline;
+	font-size: 10px;
+}
 
 .moveupdown{
 	width: 18px;

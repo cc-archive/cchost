@@ -55,10 +55,10 @@
     </div>
 %end_if%
 %if_not_null(#R/cart_tags)%
-    <div class="tag_links" style="margin:4px" >
+    <div class="taglinks" style="margin:4px" >
     %map(tag_urlbase,#R/browse_tag_url)%
-    %map(tag_str,#R/cart_tags)%
-    %call('tags.php/taglinks_str')%
+    %map(tag_str,#R/cart_tags)%<!-- tags: -->
+    %text(str_tags)%: %call('tags.php/taglinks_str')%
     </div>
 %end_if%
  </td></tr>
