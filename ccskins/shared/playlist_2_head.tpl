@@ -40,7 +40,7 @@
   %text(str_pl_created_by)% <a target="_parent" class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> 
   %(#R/cart_date_format)%
 </span>
-%if_not_null(#R/cart_desc)%
+%if_not_null(#R/cart_desc_html)%
     <div  class="gd_description" id="pldesc_%(#R/cart_id)%">
         <div style="padding: 10px;">%(#R/cart_desc_html)%</div>
     </div>
