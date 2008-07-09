@@ -12,7 +12,7 @@ function playlists_dataview()
     $sql =<<<EOF
 SELECT cart_id, cart_name, {$user_sql}, cart_dynamic, cart_num_items,
         DATE_FORMAT(cart_date, '%W, %M %e, %Y @ %l:%i %p') as cart_date_format,
-        REPLACE(cart_tags, ',', ' ') as cart_tags_munged,
+        CONCAT(SUBSTRING(REPLACE(cart_tags, ',', ' '),1,120),'...') as cart_tags_munged,
         cart_tags
         %columns%
         FROM cc_tbl_cart 
