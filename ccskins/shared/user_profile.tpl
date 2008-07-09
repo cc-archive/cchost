@@ -80,7 +80,7 @@ if( user_desc )
     if( window.round_box_enabled )
     {
         cc_round_box('user_description_html');
-        $$('#user_description_html .ufc_label').each( function( e ) { e.style.display = 'none'; } );
+        CC$$('.ufc_label',user_desc).each( function( e ) { e.style.display = 'none'; } );
     }
     else
     {

@@ -19,7 +19,23 @@ function _t_tags_taglinks(&$T,&$A)
         if ( !($i == ($c-1)) ) { ?>, <? }
     }
 }
-  
+
+//------------------------------------- 
+function _t_tags_taglinks_str(&$T,&$A) 
+{
+    $tags = split(',',$A['tag_str']);
+    $urlbase = $A['tag_urlbase'];
+    $c = count( $tags );
+    $k = array_keys( $tags );
+    for( $i = 0; $i < $c; ++$i )
+    { 
+       $tag = $tags[ $k[ $i ] ];
+       
+        ?><a href="<?= $urlbase . $tag ?>" rel="tag" class="taglink"><?= $tag ?></a><?
+        if ( !($i == ($c-1)) ) { ?>, <? }
+    }
+}
+
 //------------------------------------- 
 function _t_tags_popular_tags(&$T,&$A) 
 {

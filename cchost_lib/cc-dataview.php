@@ -69,7 +69,10 @@ class CCDataView
             $file = $skinmac->GetSkinFile();
             $text = file_get_contents($file);
             if( !preg_match('#\[dataview\](.*)\[/dataview\]#s',$text,$m) )
+            {
+                die('missing [dataview] section');
                 return null;
+            }
             $dvprops['code'] = $m[1];
         }
         return $dvprops;

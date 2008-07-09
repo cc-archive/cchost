@@ -20,7 +20,7 @@
 /*
 
 [meta]
-    type = template_component
+    type = ajax_component
     desc  = _('Return a menu for an upload')
     dataview = upload_menu
     valid_args = ids
@@ -88,7 +88,11 @@ else
 
 $menu =& $R['local_menu'];
 
-print '<div id="ajax_menu"><ul>';
+//print '<div id="ajax_menu">
+
+print '<table><tr><td style="vertical-align:top;padding-right:12px;">';
+
+print '<ul>';
 
 /** OWNER stuff *****/
 
@@ -104,7 +108,10 @@ if( !empty($menu['comment']['comments']) )
     helper_ajax_menu_item($menu['comment']['comments'],$T);
 
 if( !empty($menu['share']['share_link']) )
+{
+    $menu['share']['share_link']['menu_text'] = '<img src="'. $T->URL('images/share-link.gif') . '" />';
     helper_ajax_menu_item($menu['share']['share_link'],$T);
+}
 
 /** ADMIN menu *****/
 
@@ -125,12 +132,14 @@ if( !empty($menu['editorial']) )
 
 print '</ul>';
 
+print '</td><td style="vertical-align:top;padding-right:12px;width:30%">';
+
 /** TRACKBACK menu *****/
 
 $str = sprintf($T->String('str_list_i_saw_this'), '"' . $R['upload_name'] . '"');
 
 ?><div id="trackbackbox"><div class="box">
-  <h2><?= $T->String('str_list_trackback') ?></h2>
+  <h2 style="margin-top:0px;"><?= $T->String('str_list_trackback') ?></h2>
   <a name="trackback"></a>
   <p id="trackback_caption"><?= $str ?></p><ul><?
 
@@ -149,7 +158,11 @@ foreach( $saws as $saw )
     helper_ajax_menu_item($mi,$T);
 }
 
-print "</ul></div></div>";
+print "</ul>";
+
+print '</td><td style="vertical-align:top;padding-right:12px;">';
+
+// print "</div></div>";
 
 /** PLAYLIST menu *****/
 
@@ -157,10 +170,13 @@ if( !empty($menu['playlist']['playlist_menu']) )
 {
     // actually we're going to embed the thing right here...
     // helper_ajax_menu_item($menu['playlist']['playlist_menu'],$T);
-print '<div class="box plblock" style="float:left"><h2>' . $T->String('str_playlists') . '</h2>';
-    $A['args'] =& cc_get_playlist_with($R);
-    $T->Call('playlist.tpl/playlist_popup');
+print '<div class="box plblock" id="am_pl_menu" style="float:left"><h2 style="margin-top:0px;">' . $T->String('str_playlists') . '</h2>';
+    $A['args'] = $menu['playlist']['playlist_menu']['mi'];
+    $T->Call('playlist_2_menu');
 print '</div>';
+
+print '</td></tr></table>';
+
 $script =<<<EOF
 <script type="text/javascript">
 function pl_item_cb(resp,json)
@@ -173,7 +189,7 @@ function pl_item_action(event,url)
     Event.stop(event);
     return false;
 }
-$$('a.pl_menu_item').each( function(e) {
+CC$$('a.pl_menu_item',$('am_pl_menu')).each( function(e) {
     var url = e.href;
     e.href = 'javascript:// playlist goo';
     Event.observe( e, 'click', pl_item_action.bindAsEventListener(e,url) );

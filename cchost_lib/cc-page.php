@@ -62,9 +62,8 @@ class CCPageAdmin
 
         if( ($limit == 'page') || ($format == 'page')  )
         {
-            $configs =& CCConfigs::GetTable();
-            $settings = $configs->GetConfig('skin-settings');
-            $max_listing = empty($settings['max-listing']) ? 12 : $settings['max-listing'];
+            $page =& CCPage::GetPage();
+            $max_listing = $page->GetPageQueryLimit();
             $queryObj->ValidateLimit(null,$max_listing);
         }
 
@@ -79,6 +78,10 @@ class CCPageAdmin
         // why is this needed again?
         if( !empty($_GET['offset']) )
             $args['offset'] = sprintf('%0d',$_GET['offset']);
+
+        if( !empty($args['dataview']) && ($args['dataview'] == 'passthru') )
+            return;
+
     }
 
     function OnApiQueryFormat( &$records, $args, &$result, &$result_mime )
@@ -212,6 +215,14 @@ class CCPage extends CCSkin
             $_page = new CCPage();
         return($_page);
     }
+
+    function GetPageQueryLimit()
+    {
+        $configs =& CCConfigs::GetTable();
+        $settings = $configs->GetConfig('skin-settings');
+        return empty($settings['max-listing']) ? 12 : $settings['max-listing'];
+    }
+
 
     /**
     * Displays the contents of an XHTML file in the main client area of the page
@@ -457,7 +468,7 @@ class CCPage extends CCSkin
                 }
                 else
                 {
-                    $title = $defq_args['title'];
+                    $title = $page->String($defq_args['title']);
                 }
                 $page->AddFeedLink($defq, $title, $title);
                 // Set this flag incase a template adds a feed link midway through render

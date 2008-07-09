@@ -240,6 +240,7 @@ class CCQuery
     */
     function GetSourcesFromTemplate($template_name)
     {
+
         if( empty($this->dataview) )
         {
             require_once('cchost_lib/cc-dataview.php');
@@ -352,8 +353,15 @@ class CCQuery
                 break;
         }
 
+        if( empty($A['datasource']) )
+            die('Could not determine datasource');
+
+        if( $A['dataview'] == 'passthru' )
+            $this->dead = true;
+
         if( $A['datasource'] == 'users' )
             $A['datasource'] = 'user';
+
 
         $this->_validated_sources = true;
     }
@@ -468,9 +476,6 @@ class CCQuery
                     'limit' => 'default', 'offset' => 0,
                     'format' => 'page',
                     );
-        if( !empty($passed_in['playlist']) && empty($passed_in['sort']) )
-            $args['nosort'] = 1;
-
         return $args;
     }
 
@@ -482,9 +487,9 @@ class CCQuery
             $this->$method();
         }
 
-        foreach( array( 'search', 'tags', 'type', 'playlist', 'ids', 'user', 'remixes', 'sources', 
+        foreach( array( 'search', 'tags', 'type', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 'reqtags','rand', 'recc', 'collab', 'topic',
+                         'reviewee', 'match', 'reqtags','rand', 'recc', 'collab', 'topic', 'minitems'
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -681,12 +686,11 @@ class CCQuery
         $this->sql_p['match'] = addslashes(trim($this->args['match']));
     }
 
-    function _gen_playlist()
+    function _gen_minitems()
     {
-        if( $this->args['datasource'] == 'uploads' )
+        if( $this->args['datasource'] == 'cart' && !empty($this->args['minitems']) )
         {
-            $this->sql_p['joins'][] = 'cc_tbl_cart_items ON cart_item_upload=upload_id';
-            $this->where[] = 'cart_item_cart = '.$this->args['playlist']; // err, is this right?
+            $this->where[] = 'cart_num_items >= ' . $this->args['minitems'];
         }
     }
 
@@ -881,10 +885,16 @@ class CCQuery
 
     function _gen_sort()
     {
+        if( !empty($this->sql_p['order']) )
+        {
+            // this can happen when a formatter hacks in during ApiQuerySetup
+            return;
+        }
+
         $args =& $this->args;
         if( !empty($args['ids']) || !empty($args['nosort'])  )
         {
-            $this->sql_p['order'] = empty($args['playlist']) ? '' : 'cart_item_order';
+            $this->sql_p['order'] = '';
             return;
         }
 
@@ -962,11 +972,18 @@ class CCQuery
 
     function _gen_upload()
     {
-        if( $this->args['datasource'] == 'topics' || ($this->args['datasource'] == 'ratings'))
+        if( $this->args['datasource'] == 'cart' )
+        { 
+            $this->sql_p['joins'] = 'cc_tbl_cart_items on cart_item_cart=cart_id';
+            $field = 'cart_item_upload';
+        }
+        elseif( $this->args['datasource'] == 'topics' || ($this->args['datasource'] == 'ratings'))
         {
             $field = $this->_make_field('upload');
-            $this->where[] = $field ." = '{$this->args['upload']}'";
         }
+
+        if( !empty($field) )
+            $this->where[] = $field ." = '{$this->args['upload']}'";
     }
 
     function _gen_user()

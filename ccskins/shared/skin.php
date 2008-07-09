@@ -9,6 +9,7 @@ $A['horizontal_form_fields'] = 'form_fields.tpl/horizontal_form_fields';
 $A['flat_grid_form_fields'] = 'form_fields.tpl/flat_grid_form_fields';
 $A['print_html_content'] = 'util.php/print_html_content';
 $A['hide_upload_form']   = 'util.php/hide_upload_form';
+$A['popup_background'] = 'popup_background.php';
 $A['print_prompts']      = 'util.php/print_prompts';
 $A['prev_next_links']      = 'util.php/prev_next_links';
 $A['print_bread_crumbs'] = 'util.php/print_bread_crumbs';
@@ -35,7 +36,7 @@ $A['show_nsfw'] = 'file_macros.php/show_nsfw';
 $A['upload_banned'] = 'file_macros.php/upload_banned';
 $A['upload_not_published'] = 'file_macros.php/upload_not_published';
 
-$A['playlist_list_lines'] = 'playlist_audio.tpl';
+$A['playlist_list_lines'] = 'playlist_2_audio.tpl';
 
 $A['user_listings'] = 'user_list.tpl';
 $A['user_listing']  = 'user_profile.tpl';

@@ -134,13 +134,14 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 <div id="upload_sidebar_box">
 
     <div class="box" id="license_info" %if_not_null(#R/files/0/file_extra/sha1)% about="urn:sha1:%(#R/files/0/file_extra/sha1)%" %end_if% >
-      <p><img src="%(#R/license_logo_url)%" />
+      <p>
         <div id="license_info_t" >
             "<span property="dc:title">%(#R/upload_name)%</span>" <br />
             %text(str_by)% <span property="dc:creator"> %(#R/user_real_name)%</span><br /><br />
             %(#R/year)% - %text(str_lic)%<br />
             Creative Commons<br />
-            <a rel="license" href="%(#R/license_url)%">%(#R/license_name)%</a><br />
+            <a rel="license" href="%(#R/license_url)%" title="%(#R/license_name)%">%(#R/license_name)%</a><br /><br />
+            <a rel="license" href="%(#R/license_url)%" title="%(#R/license_name)%"><img title="%(#R/license_name)%" src="%(#R/license_logo_url)%" /></a>
         </div>
       </p>
     </div>

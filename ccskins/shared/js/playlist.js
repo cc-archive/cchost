@@ -36,7 +36,7 @@ ccPlaylistMenu.prototype = {
 
     hookElements: function(parent) {
         var me = this;
-        $$('.cc_playlist_button', parent).each( function(e) {
+        CC$$('.cc_playlist_button',parent).each( function(e) {
             var id = e.href.match( /([0-9]+$)/ )[1];
             Event.observe( e, 'click', me.onMenuButtonClick.bindAsEventListener( me, id ) );
         });
@@ -90,8 +90,7 @@ ccPlaylistMenu.prototype = {
         e.needRefresh = false;
         e.innerHTML = resp.responseText;
         var me = this;
-        //$A(e.getElementsByTagName('A'))
-        $$('.pl_menu_item').each( function( a ) {
+        CC$$('.pl_menu_item',e).each( function( a ) {
             var url = a.href;
             a.href = 'javascript://playlist menu item';
             Event.observe( a, 'click', me.onMenuItemClick.bindAsEventListener( me, url, pid ) );
@@ -141,10 +140,14 @@ ccPlaylistMenu.prototype = {
 
 ccPlayerMethods = {
     hook_playlist: function(playlist_id,parent) {
-        var play_all = $('_pla_' + playlist_id);
+        var play_all = $('_pla_' + playlist_id); // comes from cc-playlist-browse.inc
         if( window.ccEPlayer && ccEPlayer.hookElements )
         {
+            // this will hook all the 'play' buttons...
             var play_ids = ccEPlayer.hookElements(parent);
+
+            // this only happens with a playlist 'header' with
+            // a 'Play All' link
             if( play_all )
             {
                 if( ccEPlayer.flashOK )
@@ -165,6 +168,9 @@ ccPlayerMethods = {
                     play_all.href = query_url + 'f=m3u&nosort=1&ids=' + ids_str;
                 }
             }
+
+            // this only happens with a playlist 'header' with
+            // a '` Window' link
             var play_win = $('_plw_' + playlist_id);
             if( play_win )
             {
@@ -178,10 +184,9 @@ ccPlayerMethods = {
 
     onPlayWin: function(event,playlist_id) {
         var qs  = location.search.substring(1);
-        var url = home_url + 'playlist/popup/' + playlist_id + q + qs;
-        var dim = "height=300,width=550";
-        // var url = query_url + 't=mplayerbig&f=html&playlist=' + playlist_id + '&' + qs;
-        // var dim = "height=170, width=420";
+        //var url = home_url + 'playlist/popup/' + playlist_id + q + qs;
+        var url = query_url + 'popup=1&t=playlist_2_popup_window&playlist=' + playlist_id;
+        var dim = "height=400,width=650";
         var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                       "resizable=1,scrollbars=1," + dim );
         Event.stop(event);
@@ -228,71 +233,19 @@ var ccPlaylistBrowserObject = {
     initialize: function(container_id,options) {
         this.options = Object.extend( this.options || {}, options || {} );
         this.container_id = container_id;
-        this._get_carts();
+        //this._get_carts();
+        this._hook_container();
     },
 
-    _get_carts: function(url) {
-        try
+
+    _hook_container: function()
+    {
+        if( !$(this.container_id)._cc_hooked ) 
         {
-            if( !url )
-            {
-                url = home_url + 'api/playlist/browse';
-                if( this.options.user )
-                    url += '/' + this.options.user;
-                url += q + 'f=html&t=playlist_browse';
-                if( this.options.upload )
-                    url += '&upload_id=' + this.options.upload;
-                if( this.options.hot )
-                    url += '&hot=1';
-                if( this.options.since )
-                    url += '&since=' + this.options.since;
-                if( this.options.min )
-                    url += '&min=' + this.options.min;
-                if( this.options.tags )
-                    url += '&tags=' + this.options.tags;
-                if( this.options.type )
-                    url += '&type=' + this.options.type;
-            }
-            var me = this;
-            new Ajax.Request( url, { method: 'get', onComplete: me._resp_browse.bind(me) } );
+            Event.observe( this.container_id, 'mouseover', this.onListHover.bindAsEventListener(this) );
+            Event.observe( this.container_id, 'click',     this.onListClick.bindAsEventListener(this) );
+            $(this.container_id)._cc_hooked = true;
         }
-        catch (e)
-        {
-            alert('playlist.js (1): ' +  e);
-        }
-
-    },
-
-    /*
-       got the list of playlists, already formatted in HTML
-    */
-    _resp_browse: function( resp, json ) {
-
-        try
-        {
-            $(this.container_id).innerHTML = resp.responseText;
-
-            if( !$(this.container_id)._cc_hooked ) 
-            {
-                Event.observe( this.container_id, 'mouseover', this.onListHover.bindAsEventListener(this) );
-                Event.observe( this.container_id, 'click',     this.onListClick.bindAsEventListener(this) );
-                $(this.container_id)._cc_hooked = true;
-            }
-            var me = this;
-            $$('#cc_prev_next_links a').each( function(a) {
-                Event.observe( a, 'click', me.onPrevNext.bindAsEventListener(me,a.href) );
-                a.href = 'javascript:// prev-next';
-            });
-        }
-        catch (err)
-        {
-            this._report_error('playlist.js (2): ',err);
-        }
-    },
-
-    onPrevNext: function(e,href) {
-        this._get_carts(href);
-        Event.stop(e);
     },
 
     onListClick: function(event) {
@@ -339,7 +292,7 @@ var ccPlaylistBrowserObject = {
     * Call back to the server to get the playlist information
     */
     refreshDetails: function( cart_id ) {
-        var url = home_url + 'api/playlist/view/' + cart_id + q + 'f=html&m=playlist_list&fcac=' + (new Date()).getTime();
+        var url = query_url + 't=playlist_2_nostyle&f=html&playlist=' + cart_id;
         new Ajax.Request( url, { method: 'get', onComplete: this._resp_playlist.bind(this, cart_id) } );
     },
 
@@ -350,22 +303,14 @@ var ccPlaylistBrowserObject = {
 
         try
         {
-            var id = '_pld_' + cart_id;
+            var id = '_pld_' + cart_id; // generated by this module
             var e = $(id);
             e.style.display = 'none';
-            //Element.makeClipping(e);
             e.innerHTML = resp.responseText;
 
-            // hook the .mp3 links
-            this.hook_playlist(cart_id,e);
-            
-            if( !this.playlistMenu )
-                this.playlistMenu = new ccPlaylistMenu( { autoHook: false, playlist: this } );
-
-            // hook the menus, info button, et. al.
-            this.playlistMenu.hookElements(e);
-
+            cc_playlist_hook(cart_id,this);
             this.dataFetchedOpenPopup(id);
+
         }
         catch (err)
         {
@@ -409,7 +354,8 @@ var ccPlaylistBrowserObject = {
 
     _report_error: function(cap,err) {
         alert( cap + ' :' + err );
-    }
+    },
+
 }
 
 ccPlaylistBrowser = Class.create();
@@ -469,5 +415,49 @@ ccParentRedirector.prototype = {
         return false;
     }
 
+}
+
+function cc_playlist_hook(playlist_id,player,options)
+{
+    try
+    {
+        
+        var opts = options || { play_buttons: true, dl_button: true, action_buttons: true, info_buttons: true };
+
+        var cart = $('cartlines'+ playlist_id );
+
+        if( opts.play_buttons )
+        {
+            // Play buttons, Play All, Play in Window
+            player.hook_playlist(playlist_id,cart);
+        }
+
+        if( opts.dl_button )
+        {
+            // download button
+            var dlpopup = new queryPopup('','',str_download);
+            dlpopup.height = 550;
+            dlpopup.hookLink($('dlcart'+ playlist_id),'f=html&t=download&playlist='+ playlist_id);
+        }
+
+        if( opts.action_buttons )
+        {
+            // 'action' buttons
+            var menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);
+            if( window.user_name )
+                menu_hook.width = 720;
+            menu_hook.hookLinks(cart);
+        }
+
+        if( opts.info_buttons )
+        {
+            // 'info' buttons
+            new ccUploadInfo().hookInfos('.info_button',cart);
+        }
+    }
+    catch (err)
+    {
+        alert('playlist.js (4): ' + err);
+    }
 }
 

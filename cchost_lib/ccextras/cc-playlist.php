@@ -28,28 +28,72 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+define('CC_EVENT_FILTER_CART_MENU','cartmenu');
+
 /**
 *
 */
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPlaylists',  'OnMapUrls'),          'cchost_lib/ccextras/cc-playlist.inc' );
-CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,    array( 'CCPlaylists',  'OnApiQuerySetup'),    'cchost_lib/ccextras/cc-playlist.inc' ); 
-CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCPlaylists',  'OnApiQueryFormat'),   'cchost_lib/ccextras/cc-playlist.inc' ); 
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCPlaylists',  'OnUploadDelete'),     'cchost_lib/ccextras/cc-playlist.inc' );
+
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCPlaylistHV', 'OnUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCPlaylistHV', 'OnUserProfileTabs'));
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCPlaylistHV', 'OnFilterMacros')      );
 CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCPlaylistHV', 'OnFilterUserProfile') );
 CCEvents::AddHandler(CC_EVENT_SEARCH_META,        array( 'CCPlaylistHV',  'OnSearchMeta') );
+CCEvents::AddHandler(CC_EVENT_FILTER_PLAY_URL,    array( 'CCPlaylistHV', 'OnFilterPlayURL'));
+CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,    array( 'CCPlaylistHV', 'OnApiQuerySetup')); 
 
+CCEvents::AddHandler(CC_EVENT_FILTER_CART_MENU,   array( 'CCPlaylistBrowse', 'OnFilterCartMenu'), 'cchost_lib/ccextras/cc-playlist-browse.inc' );
 
-CCEvents::AddHandler(CC_EVENT_FILTER_PLAY_URL,        array( 'CCPlaylistHV', 'OnFilterPlayURL'));
-
-//CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPlaylists' , 'OnGetConfigFields') , 'cchost_lib/ccextras/cc-playlist.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCPlaylistManage',  'OnAdminMenu'),     'cchost_lib/ccextras/cc-playlist-forms.inc' );
 
 
 class CCPlaylistHV 
 {
+    function OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
+    {
+        if( empty($args['playlist']) ) 
+            return;
+
+        if( !empty($args['dataview']) && ($args['dataview'] == 'passthru') )
+            return;
+
+        $id = sprintf('0%d',$args['playlist']);
+        $ok = $id > 0;
+        if( $ok )
+        {
+            $row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_cart WHERE cart_id='.$id);
+            $ok = !empty($row);
+        }
+        if( !$ok )
+            CCUtil::Send404(true,'Invalid playlist id');
+
+        if( !empty($row['cart_subtype']) && ($row['cart_subtype'] == 'default') )
+        {
+            $args += $_GET;
+        }
+        elseif( $row['cart_dynamic'] )
+        {
+            parse_str($row['cart_dynamic'],$cargs);
+            $args += $cargs;
+            $args['title'] = $row['cart_name'];
+            if( !empty($args['limit']) && ($args['limit'] == 'default') )
+            {
+                $page =& CCPage::GetPage();
+                $args['limit'] = $page->GetPageQueryLimit();
+            }
+        }
+        else
+        {
+            if( empty($args['sort']) )
+                $queryObj->sql_p['order'] = 'cart_item_order';
+
+            $queryObj->sql_p['joins'][] = 'cc_tbl_cart_items ON cart_item_upload=upload_id';
+            $queryObj->where[] = 'cart_item_cart = '.$id;
+        }
+
+    }
 
     function OnSearchMeta(&$search_meta)
     {
@@ -123,10 +167,7 @@ EOF;
         if( !$count )
             return;
 
-        require_once('cchost_lib/cc-page.php');
-        $page =& CCPage::GetPage();
-        $title = $page->String( array( 'str_pl_user_title', $row['user_real_name'] ) );
-        $url = url_args( ccl('api','query'), 'sort=num_playlists&t=pop_playlists&user=' . $row['user_name'] . '&title=' . $title);
+        $url = url_args( ccl('playlist','browse'), 'u=' . $row['user_name'] );
 
         if( $count == 1 )
             $value = array('str_pl_user_num',$row['user_real_name'], "<a href=\"$url\">", '</a>');
@@ -159,13 +200,13 @@ EOF;
             return;
 
         $tabs['playlists'] = array(
-                    'text' => 'Playlists',
-                    'help' => 'Playlists',
+                    'text' => 'str_playlists',
+                    'help' => 'str_playlists',
                     'tags' => 'playlists',
                     'access' => CC_DONT_CARE_LOGGED_IN,
                     'function' => 'url',
-                    'user_cb' => array( 'CCPlaylists', 'User' ),
-                    'user_cb_mod' => 'cchost_lib/ccextras/cc-playlist.inc',
+                    'user_cb' => array( 'CCPlaylistBrowse', 'User' ),
+                    'user_cb_mod' => 'cchost_lib/ccextras/cc-playlist-browse.inc',
             );
     }
 
@@ -194,6 +235,10 @@ EOF;
         $menu['playlist_menu']['action'] = "javascript://{$parent_id}";
         $menu['playlist_menu']['id']     = 'commentcommand';
         $menu['playlist_menu']['class']  = "cc_playlist_button";
+        require_once('cchost_lib/ccextras/cc-playlist.inc');
+        $pls = new CCPlaylists();
+        $menu['playlist_menu']['mi'] =& $pls->_playlist_with($record['upload_id']);
+
     }
 
     function OnFilterMacros(&$records)

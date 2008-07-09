@@ -77,7 +77,7 @@ ccEmbeddedPlayer.prototype = {
             autoHook: true,                       // 'true' means page is already rendered 
 
             plc_controls: null,                   // global playlist controls
-            plcc_id: ''                           // playlist controls container
+            plcc_id: null                         // playlist controls container
 
         };
 
@@ -106,7 +106,7 @@ ccEmbeddedPlayer.prototype = {
 
     hookElements: function(parent) {
         var me = this;
-        return $$('.' + this.options.cButton, parent).inject( [], function(arr, e) {
+        return CC$$('.' + this.options.cButton, parent).inject( [], function(arr, e) {
                 if( e.href.match(/\.mp3$/) )
                 {
                     var  href;
@@ -128,7 +128,7 @@ ccEmbeddedPlayer.prototype = {
     },
 
     _create_pl_controls: function() {
-        if( !this.options.plcc_id.length || $(this.options.plcc_id + '_player') )
+        if( !this.options.plcc_id || $(this.options.plcc_id + '_player') )
             return;
 
         if( !this.options.plc_controls )
@@ -299,9 +299,12 @@ ccEmbeddedPlayer.prototype = {
         var player_id = this.currButton.id + '_player';
         if( $(player_id) )
             $(player_id).style.display = style;
-        player = $(this.options.plcc_id);
-        if( player )
-            player.style.display = style;
+        if( this.options.plcc_id )
+        {
+            player = $(this.options.plcc_id);
+            if( player )
+                player.style.display = style;
+        }
     },
 
     _start_element: function(song) {
@@ -356,7 +359,7 @@ ccEmbeddedPlayer.prototype = {
     },
 
     _get_base_id: function(postfix) {
-        if( this.options.plcc_id.length > 0 )
+        if( this.options.plcc_id )
             return this.options.plcc_id + postfix;
         return this.currButton.id + postfix;
     },

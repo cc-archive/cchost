@@ -50,17 +50,18 @@ ccCollab.prototype = {
     },
 
     _req_updatefiles: function( resp ) {
-        $('file_list').innerHTML = resp.responseText;
+        var flist = $('file_list');
+        flist.innerHTML = resp.responseText;
         var me = this;
-        $$('.file_remove').each( function(a) {
+        CC$$('.file_remove',flist).each( function(a) {
             var id = a.id.match(/[0-9]+$/);
             Event.observe( a, 'click', me.onUploadRemove.bindAsEventListener(me,id) );
         });
-        $$('.file_publish').each( function(a) {
+        CC$$('.file_publish',flist).each( function(a) {
             var id = a.id.match(/[0-9]+$/);
             Event.observe( a, 'click', me.onUploadPublish.bindAsEventListener(me,id) );
         });
-        $$('.file_tags').each( function(a) {
+        CC$$('.file_tags',flist).each( function(a) {
             var id = a.id.match(/[0-9]+$/);
             Event.observe( a, 'click', me.onUploadTags.bindAsEventListener(me,id) );
         });
@@ -72,25 +73,26 @@ ccCollab.prototype = {
     },
 
     _req_updateusers: function( resp ) {
-        $('user_lines').innerHTML = resp.responseText;
+        var ulines = $('user_lines');
+        ulines.innerHTML = resp.responseText;
         var me = this;
 
-        $$('.remove_user').each( function(e) {
+        CC$$('.remove_user',ulines).each( function(e) {
             var username = e.id.match(/remove_(.+)$/)[1];
             Event.observe( e, 'click', me.onUserRemove.bindAsEventListener(me,username) );
         });
 
-        $$('.edit_credit').each( function(e_credit) {
+        CC$$('.edit_credit',ulines).each( function(e_credit) {
             var username = e_credit.id.match(/_credit_(.+)$/)[1];
             Event.observe( e_credit, 'click', me.onUserCredit.bindAsEventListener(me,username) );
         });
 
-        $$('.edit_contact').each( function(e_contact) {
+        CC$$('.edit_contact',ulines).each( function(e_contact) {
             var username = e_contact.id.match(/_contact_(.+)$/)[1];
             Event.observe( e_contact, 'click', me.onUserContact.bindAsEventListener(me,username) );
         });
 
-        $$('.confirm_user').each( function(e_confirm) {
+        CC$$('.confirm_user',ulines).each( function(e_confirm) {
             var username = e_confirm.id.match(/_confirm_(.+)$/)[1];
             Event.observe( e_confirm, 'click', me.onUserConfirm.bindAsEventListener(me,username) );
         });

@@ -10,7 +10,7 @@ function _t_file_macros_print_howididit_link(&$T,&$A)
 
 function _t_file_macros_print_num_playlists(&$T,&$A)
 {
-    $ccb = url_args( ccl('playlist','browse'), 'id=' .$A['record']['upload_id'] );
+    $ccb = url_args( ccl('playlist','browse'), 'upload=' .$A['record']['upload_id'] );
     $text = $T->String( array('str_pl_found_in_d',
                               '<a href="' . $ccb . '">',
                               $A['record']['upload_num_playlists'],

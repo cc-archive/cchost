@@ -7,24 +7,35 @@
 
 function playlist_line_dataview() 
 {
-    $urlf = ccl('files') . '/';
-    $urlp = ccl('people') . '/';
+    $urlf             = ccl('files') . '/';
+    $urll             = ccd('ccskins/shared/images/lics/small-'); 
+    $user_sql         = cc_fancy_user_sql('user_real_name');
+    $ccp              = ccl('people') . '/';
+    $browse_ref_url   = url_args( ccl('playlist','browse'), 'upload=' );
 
     $sql =<<<EOF
 SELECT 
-    upload_id, upload_name, user_real_name, user_name, 
+    upload_id, upload_name, {$user_sql}, user_name, 
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
-    CONCAT( '$urlp', user_name ) as artist_page_url,
+    upload_num_playlists,
+    CONCAT( '{$ccp}', user_name, '/playlists' ) as artist_page_url,
+    CONCAT('{$browse_ref_url}', upload_id ) as playlist_browse_url,
+    CONCAT( '$urll', license_logo ) as license_logo_url, license_url, license_name,
     upload_contest
     %columns%
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id
+JOIN cc_tbl_licenses ON upload_license=license_id
 %joins%
 %where%
 %order%
 %limit%
 EOF;
+
+    $sql_count = 'SELECT count(*) FROM cc_tbl_uploads'; // really? 
+
     return array( 'sql' => $sql,
+                   'sql_count' => $sql_count, 
                    'e'  => array( CC_EVENT_FILTER_FILES,
                                   CC_EVENT_FILTER_DOWNLOAD_URL,
                                   CC_EVENT_FILTER_PLAY_URL,

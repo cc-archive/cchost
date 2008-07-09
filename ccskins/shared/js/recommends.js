@@ -21,7 +21,7 @@ ccReccommendFilter.prototype = {
     queryString: function(withTemplate) {
         var str = 'f=html&reccby=' + ruser + '&limit='+this.limit;
         if( withTemplate )
-            str += '&t=reccby';
+            str += '&t=playlist_list_lines';
         return str;
     },
 

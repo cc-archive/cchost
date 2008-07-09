@@ -509,28 +509,6 @@ class CCMediaHost
         {
             $menu['publish']['access'] = CC_DISABLED_MENU_ITEM;
         }
-
-        //$downloads = array();
-        $weight  = 0;
-        foreach( $record['files'] as $file )
-        {
-            // NOTE: This hopefully didn't break anything ;)
-            #if ( ! isset($file['download_url']) )
-            #    continue;
-
-            $tip = $file['file_name'];
-            $menu[$weight] = array(
-                            'action'    => $file['download_url'],
-                            'menu_text' => $file['file_nicname'] . ' ' . $file['file_filesize'],
-                            'group_name' => 'download',
-                            'type'      => empty($file['file_format_info']['mime_type']) ? '' : $file['file_format_info']['mime_type'],
-                            'weight'     => ++$weight,
-                            'tip'       => $tip,
-                            'access'    => CC_DONT_CARE_LOGGED_IN,
-                            'id'        => 'cc_downloadbutton',
-                            );
-        }
-
     }
 
     /**

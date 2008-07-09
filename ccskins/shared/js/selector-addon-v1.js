@@ -17,9 +17,7 @@
  *
  ************************************/
  
-/* cchost svn id
-$Id$
-*/
+ 
  
 // We don't extend the Selector class because we want 
 // to be able to use it if the expression is too complicated.
@@ -151,26 +149,15 @@ SelectorLiteAddon.prototype = {
   
 }
 
+
 //Overwrite the $$ function.
 var $$old=$$;
 
-
 var $$=function(a,b) {
 
-    return $$old(a);
-
-    // Hacked by VS for ccHost
-    //expression is too complicated, forward the call to prototype's function!
-    // original: if (b || a.indexOf("[")>=0) return $$old.apply(this,arguments);
-
-    if (a.indexOf("[")>=0) 
-        return $$old.apply(this,arguments);
-
-    //Otherwise use our addon!
-    if( a.search(/^\.[^ ]+$/) != -1 )
-    { 
-        b = (b && b.getElementsByClassName) ? b : document;
-        return b.getElementsByClassName(a.substring(1));
-    }
-    return new SelectorLiteAddon(a.split(/\s+/)).get(b | document);
+  //expression is too complicated, forward the call to prototype's function!
+  if (b || a.indexOf("[")>=0) return $$old.apply(this,arguments);
+  
+  //Otherwise use our addon!
+  return new SelectorLiteAddon(a.split(/\s+/)).get();
 }

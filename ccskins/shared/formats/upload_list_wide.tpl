@@ -187,10 +187,11 @@ EOF;
 
     <script type="text/javascript">
         var dl_hook = new queryPopup("download_hook","download",str_download); 
-            dl_hook.height = '550';
-            dl_hook.width  = '700';
+            dl_hook.height = 550;
+            dl_hook.width  = 700;
             dl_hook.hookLinks(); 
         var menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);
+        menu_hook.width = user_name ? 720 : null;
         menu_hook.hookLinks();
         if( user_name && ratings_enabled )
         {

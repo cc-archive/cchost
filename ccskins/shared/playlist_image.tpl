@@ -17,7 +17,7 @@ if( !defined('IN_CC_HOST') )
   <div class="tdc"><a class="info_button" id="_plinfo_%(#R/upload_id)%"></a></div>
   %if_not_null(reg_user)%
     <div  id="playlist_menu_%(#R/upload_id)%" class="cc_playlist_action tdc light_bg dark_border">
-        <a class="cc_playlist_button" href="javascript://playlist_menu_%(#R/upload_id)%">
+        <a class="cc_playlist_button need_plb_hook" href="javascript://playlist_menu_%(#R/upload_id)%">
         <span>%text(str_pl_add_to)% ...</span></a>
         </div>
     %end_if%

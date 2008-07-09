@@ -83,10 +83,11 @@ ccQueryBrowser.prototype = {
     play_in_popup: function()
     {
         var query = this.options.filters.queryString(false);
-        var url = home_url + 'playlist/popup' + q + query;
+        var url = query_url + 'popup=1&t=playable_list&' + query;
         if( this.currOffset > 0 )
             url += '&offset='+this.currOffset;
-        var dim = "height=300,width=550";
+        url += '&f=page'; // someone is putting f=html on here (check it out later)
+        var dim = "height=400,width=650";
         var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                     "resizable=1,scrollbars=1," + dim );
     },
@@ -175,8 +176,8 @@ ccQueryBrowser.prototype = {
 
             if( this.s2pl_link != null )
             {
-                p.f = 'playlist';
-                var pl_url = query_url + $H(p).toQueryString();
+                p.f = 'page';
+                var pl_url = home_url + 'playlist/save' + q + $H(p).toQueryString();
                 this.s2pl_link.href = pl_url;
                 this.s2pl_link.style.display = '';
             }

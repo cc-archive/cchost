@@ -66,11 +66,12 @@ ccHowIDidIt.prototype = {
 
     _resp_detail: function(resp) {
         try {
-            $('cc_howididit_detail').innerHTML = resp.responseText;
+            var det = $('cc_howididit_detail');
+            det.innerHTML = resp.responseText;
             resp.responseText.evalScripts();
             if( window.round_box_enabled )
             {
-                $$('.cc_howididit .box').each( function(e) {
+                CC$$('.cc_howididit .box',det).each( function(e) {
                     cc_round_box(e);
                 });
             }

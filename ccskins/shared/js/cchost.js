@@ -39,6 +39,10 @@ Ajax.Request.prototype.initialize = function(url, options) {
     this._old_request_init(url,options);
   };
 
+function CC$$(expr,parent)
+{
+    return new SelectorLiteAddon(expr.split(/\s+/)).get(parent);
+}
 
 /*
     Double clicking on a link that is supposed to open a modal box
@@ -177,7 +181,7 @@ queryPopup.prototype = {
     className: '',
     template: '',
     title: '',
-    width: 500,
+    width: null,
     height: null,
     in_hook: false,
 
@@ -187,23 +191,36 @@ queryPopup.prototype = {
         this.title = title;
     },
 
-    hookLinks: function() {
+    hookLink: function( element, query ) {
+        Event.observe( element, 'click', this.onQClick.bindAsEventListener(this,query) );
+    },
+
+    onQClick: function( e, query ) {
+        this._show(query_url + query);
+    },
+
+    _show: function(url) {
+        if( this.in_hook )
+            return;
+        this.in_hook = true;
+        var params = {title: this.title, afterHide: this.afterHide.bind(this) };
+        if( this.height )
+            params.height = this.height;
+        if( this.width )
+            params.width = this.width;
+        Modalbox.show( url,  params );
+    },
+
+    hookLinks: function(parent) {
         var me = this;
-        $$('.' + this.className).each( function(link) {
+        CC$$('.' + this.className,parent).each( function(link) {
             var upload_id = link.id.match(/[0-9]+$/);
             Event.observe( link, 'click', me.onClick.bindAsEventListener( me, upload_id ) );
         });
     },
 
     onClick: function( e, upload_id ) {
-        if( this.in_hook )
-            return;
-        this.in_hook = true;
-        var url = query_url + 'f=html&t='+this.template+'&ids=' + upload_id;
-        var params = {title: this.title, width: this.width, afterHide: this.afterHide.bind(this) };
-        if( this.height )
-            params.height = this.height;
-        Modalbox.show( url,  params );
+        this._show(query_url + 'f=html&t='+this.template+'&ids=' + upload_id);
     },
 
     afterHide: function() {
@@ -481,15 +498,22 @@ function upload_trackback( upload_id, type )
 }
 
 
-function ajax_debug(url)
-{
+function ajax_debug(url) {
+    if( url.match(/^http:/) )
+        debug_stuff('<a href="' + url + '">' + url + '</a>');
+    else
+        debug_stuff(url);
+}
+
+function debug_stuff(str) {
     if( !$('debug') )
         new Insertion.Top('content','<div id="debug"></div>');
     $('debug').style.display = 'block';
-    if( url.match(/^http:/) )
-        $('debug').innerHTML = '<a href="' + url + '">' + url + '</a>';
-    else
-        $('debug').innerHTML = url;
+    $('debug').innerHTML += str;
+}
+
+function _d(obj) {
+    debug_stuff( Object.toJSON(obj) + ' ' );
 }
 
 var ccPopupManagerMethods = {

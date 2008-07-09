@@ -85,7 +85,6 @@ Modalbox.Methods = {
 		
 		this.content = content;
 		this.setOptions(options);
-		
 		Element.update(this.MBcaption, this.options.title); // Updating title of the MB
 		
 		if(this.MBwindow.style.display == "none") { // First modal box appearing
@@ -184,7 +183,9 @@ Modalbox.Methods = {
 		this.MBcontent.appendChild(this.MBloading);
 		Element.update(this.MBloading, this.options.loadingString);
 		this.currentDims = [this.MBwindow.offsetWidth, this.MBwindow.offsetHeight];
-		Modalbox.resize((this.options.width - this.currentDims[0]), (this.options.height - this.currentDims[1]), {_afterResize: this._loadAfterResize.bind(this) });
+		Modalbox.resize((this.options.width - this.currentDims[0]), 
+                        (this.options.height - this.currentDims[1]), 
+                        {_afterResize: this._loadAfterResize.bind(this) });
 	},
 	
 	loadContent: function () {

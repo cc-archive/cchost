@@ -9,7 +9,7 @@ ccUploadInfo.prototype = {
     hookInfos: function(class_i,parent) 
     {
         var me = this;
-        $$(class_i,parent).each( function(pli) {
+        CC$$(class_i,parent).each( function(pli) {
             var upload_id = pli.id.match(/[0-9]+$/);
             Event.observe( pli, 'click', me.onInfoClick.bindAsEventListener( me, upload_id ) );
         });            

@@ -55,6 +55,8 @@ class CCSkin
         $this->vars['site-root']    = preg_replace('#http://[^/]+/?#','/',ccd());
         $this->vars['noproto']      = false;
         $this->vars['ajax']         = !empty($_REQUEST['ajax']);
+        $this->vars['true']         = true;
+        $this->vars['false']        = false;
 
         $site_logo['logo'] = $configs->GetConfig('site-logo');
 

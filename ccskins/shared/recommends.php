@@ -17,14 +17,6 @@ if( !defined('IN_CC_HOST') )
         <div id="limit_picker_container">
             <?= $T->String('str_filter_limit') ;?>: <select  id="limit_picker"></select>
         </div>
-        <? if( $GLOBALS['strings-profile'] == 'audio' ) { ?>
-        <div class="cc_stream_page_link" id="stream_link_container">
-            <a href="javascript://stream" id="mi_stream_page"  style="display:none;"><span ><?= $T->String('str_stream') ?></span></a>
-        </div>
-        <div class="cc_stream_page_link" id="play_link_container">
-            <a href="javascript://play win" id="mi_play_page"  style="display:none;"><span ><?= $T->String('str_play') ;?></span></a>
-        </div>
-        <? } ?>
     </div>
     <div id="browser">
         <?= $T->String('str_getting_data') ;?>
@@ -52,3 +44,6 @@ var fullname = '<?= $A['get']['fullname']?>';
 <script type="text/javascript">
 new ccQueryBrowser( { filters: new ccReccommendFilter() } );
 </script>
+<? $A['qstring'] = 'reccby=' . $A['get']['ruser']; 
+cc_content_feed($A['qstring'],array('str_recommended_by_s',$A['get']['ruser']));
+?>

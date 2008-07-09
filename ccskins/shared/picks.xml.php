@@ -40,8 +40,8 @@ if( !defined('IN_CC_HOST') )
 //<!--
 function pickwinplay(qstring)
 {
-  var url = home_url + 'playlist/popup' + q + qstring;
-  var dim = "height=300,width=550";
+  var url = query_url + 'popup=1&t=playable_list&' + qstring;
+        var dim = "height=400,width=650";
   var win = window.open( url, 'cchostplayerwin', "status=1,toolbar=0,location=0,menubar=0,directories=0," +
                 "resizable=1,scrollbars=1," + dim );
 }

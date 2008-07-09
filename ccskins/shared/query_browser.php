@@ -24,7 +24,7 @@ $optset = cc_query_get_optset( empty($_GET['optset']) ? 'default' : $_GET['optse
             </td>
             <td><a id="browser_next" class="cc_gen_button  browse_prevnext" style="display:none" href="javascript://browser_next">
                 <span><?= $T->String('str_more') ?> &gt;&gt;&gt;</span></a> </td>
-        <? if( !empty($A['enable_playlists']) && !empty($optset['playlist_button']) ) { ?>
+        <? if( !empty($A['is_logged_in']) && !empty($A['enable_playlists']) && !empty($optset['playlist_button']) ) { ?>
             <td> <a id="mi_save_to_playlist" class="cc_gen_button" style="display:none" href="javascript://save to playlist">
                 <span><?= $T->String('str_save_to_playlist') ?></span></a></td>
         <? } ?>
@@ -53,7 +53,7 @@ var filters = new ccQueryBrowserFilters(
                     }); 
 
 new ccQueryBrowser( { filters: filters } );
-$$('.th').each( function(e) {
+CC$$('.th',$('browser_filter')).each( function(e) {
     Element.addClassName(e,'med_dark_bg light_color');
 });
 </script>
