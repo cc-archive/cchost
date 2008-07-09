@@ -434,10 +434,14 @@ function cc_playlist_hook(playlist_id,player,options)
 
         if( opts.dl_button )
         {
-            // download button
-            var dlpopup = new queryPopup('','',str_download);
-            dlpopup.height = 550;
-            dlpopup.hookLink($('dlcart'+ playlist_id),'f=html&t=download&playlist='+ playlist_id);
+            var dlbut = $('dlcart'+ playlist_id);
+            if( dlbut )
+            {
+                // download button
+                var dlpopup = new queryPopup('','',str_download);
+                dlpopup.height = 550;
+                dlpopup.hookLink(dlbut,'f=html&t=download&playlist='+ playlist_id);
+            }
         }
 
         if( opts.action_buttons )
