@@ -18,7 +18,7 @@ function playlist_detail_dataview()
     
     $sql =<<<EOF
 SELECT  cart_id, cart_name, cart_user, cart_num_items, cart_subtype, cart_tags, cart_dynamic,
-        {$user_sql}, 
+        {$user_sql}, user_name,
         DATE_FORMAT(cart_date, '%W, %M %e, %Y @ %l:%i %p') as cart_date_format,
         REPLACE(cart_tags, ',', ' ') as cart_tags_munged,
         {$user_sql_url}  as artist_page_url,

@@ -49,7 +49,7 @@ if( !empty($A['content_page_width']) ) {
 }
 ?>
 
-<table class="cc_content_page" cellspacing="0" cellspacing="0" >
+<table class="cc_content_page" cellspacing="0" cellspacing="0" style="width:100%">
 <?  $num_cols = empty($A['content_page_columns']) ? 2 : $A['content_page_columns'];
     $wid = intval(100/$num_cols);
     $rows = array_chunk($A['records'],$num_cols); ?>

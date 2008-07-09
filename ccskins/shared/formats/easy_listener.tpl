@@ -1,6 +1,6 @@
 %%
 [meta]
-    type     = embed
+    type     = format
     desc     = _('Y!(tm) Easy Listener Player')
     dataview = passthru
 [/meta]
