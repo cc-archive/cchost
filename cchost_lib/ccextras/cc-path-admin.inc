@@ -198,7 +198,10 @@ class CCPathAdmin
 {
     function Admin()
     {
-        CCPage::SetTitle(_('Paths and Files'));
+        $title = _('Paths and Files');
+        require_once('cchost_lib/cc-admin.php');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCPathAdminForm();
         CCPage::AddForm($form->GenerateForm());
     }

@@ -252,8 +252,11 @@ class CCRatingsAdmin
     */
     function _admin_ratings_chart()
     {
+        $title = _("Configure Ratings Chart Engine");
+        require_once('cchost_lib/cc-admin.php');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_("Configure Ratings Chart Engine"));
+        CCPage::SetTitle($title);
         $form = new CCAdminRatingsForm();
         CCPage::AddForm( $form->GenerateForm() );
     }

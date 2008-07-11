@@ -307,6 +307,22 @@ class CCAdminMakeCfgRootForm extends CCForm
 */
 class CCAdmin
 {
+    function BreadCrumbs($global)
+    {
+        $args = func_get_args();
+        array_shift($args);
+        $k[] = array( 'url' => ccl(), 'text' => 'str_home' );
+        if( $global )
+            $k[] = array( 'url' => ccl('admin','site','global'), 'text' => _('Global Settings') );
+        else
+            $k[] = array( 'url' => ccl('admin','site'), 'text' => _('Virtual Root Settings') );
+        foreach( $args as $arg )
+            $k[] = $arg;
+
+        $page =& CCPage::GetPage();
+        $page->AddBreadCrumbs($k);
+    }
+
     function _check_access($args)
     {
         if( CCUser::IsSuper() )
@@ -703,7 +719,9 @@ END;
     function Setup()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Global Site Setup'));
+        $title = _('Global Site Setup');
+        $this->BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCAdminConfigForm();
         CCPage::AddForm( $form->GenerateForm() );
     }

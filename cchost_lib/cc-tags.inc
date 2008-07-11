@@ -648,7 +648,10 @@ class CCTagEvents
 
     function Admin()
     {
-        CCPage::SetTitle(_('Admin') . ' ' . _('Tags'));
+        $title = _('Admin') . ' ' . _('Tags');
+        require_once('cchost_lib/cc-admin.php');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCAdminTagsForm();
         if( empty($_POST['admintags']) || !$form->ValidateFields() )
         {

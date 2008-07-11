@@ -491,7 +491,10 @@ class CCForumsAdmin
             $args['forums'] = $forum_items;
             $args['forum_groups'] = $groups;
 
-            CCPage::SetTitle( _('Forum Admin') );
+            $title = _('Forum Admin');
+            require_once('cchost_lib/cc-admin.php');
+            CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+            CCPage::SetTitle( $title );
             CCPage::PageArg('fadmin',$args,'forum_admin');
         }
     }

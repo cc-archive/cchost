@@ -137,7 +137,10 @@ class CCAccess
 {
     function Super()
     {
-        CCPage::SetTitle(_('Edit Super Admins'));
+        $title = _('Edit Super Admins');
+        require_once('cchost_lib/cc-admin.php');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCAdminSuperForm();
         CCPage::AddForm($form->GenerateForm());
     }

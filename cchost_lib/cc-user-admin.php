@@ -180,7 +180,10 @@ class CCUserAdmin
         global $CC_GLOBALS;
 
         $upload_dir = $CC_GLOBALS['image-upload-dir'];
-        CCPage::SetTitle(_("Set Default User Avatar"));
+        $title = _("Set Default User Avatar");
+        require_once('cchost_lib/cc-admin.php');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form  = new CCDefaultAvatarForm( $upload_dir );
 
         if( !empty($_POST['defaultavatar']) && $form->ValidateFields() )
