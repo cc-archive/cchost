@@ -320,41 +320,49 @@ var ccPlaylistBrowserObject = {
     },
 
     onListHover: function(event) {
-        var e = Event.element(event);
-
-        var hasClass = Element.hasClassName( e, 'cc_playlist_line' );
-        if( !hasClass )
+        try
         {
-            while( e.tagName != 'DIV' )
+            
+            var e = Event.element(event);
+
+            var hasClass = Element.hasClassName( e, 'cc_playlist_line' );
+            if( !hasClass )
             {
-                e = e.parentNode;
-                if( Element.hasClassName( e, 'cc_playlist_line' ) )
+                while( e.tagName != 'DIV' )
                 {
-                    hasClass = true;
-                    break;
+                    e = e.parentNode;
+                    if( Element.hasClassName( e, 'cc_playlist_line' ) )
+                    {
+                        hasClass = true;
+                        break;
+                    }
                 }
             }
-        }
 
-        if( hasClass )
-        {
-            if( this.selected && (this.selected.id != e.id) )
-                Element.removeClassName(this.selected, 'selected_area'); 
-            if( !Element.hasClassName( e, 'selected_area') )
-                Element.addClassName( e, 'selected_area'); 
-            this.selected = e;
+            if( hasClass )
+            {
+                if( this.selected && (this.selected.id != e.id) )
+                    Element.removeClassName(this.selected, 'selected_area'); 
+                if( !Element.hasClassName( e, 'selected_area') )
+                    Element.addClassName( e, 'selected_area'); 
+                this.selected = e;
+            }
+            else
+            {
+                if( this.selected )
+                    Element.removeClassName(this.selected, 'selected_area'); 
+                this.selected = null;
+            }
         }
-        else
+        catch (err)
         {
-            if( this.selected )
-                Element.removeClassName(this.selected, 'selected_area'); 
-            this.selected = null;
+            alert( 'playlist.js (3a) ' + err );
         }
     },
 
     _report_error: function(cap,err) {
         alert( cap + ' :' + err );
-    },
+    }
 
 }
 

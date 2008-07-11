@@ -40,9 +40,21 @@ class CCExtrasForm extends CCEditConfigForm
         $this->CCEditConfigForm('extras','',false);
 
         require_once('cchost_lib/cc-template.inc');
+        
+        $lab = _('Available Sidebar Extras');
+        $str =<<<EOF
+<div style="margin-left:25%"><b>{$lab}</b></div>
+<style>table.flat_form td.form_label { width: 5px; }</style>
+EOF;
+        $fields['_macros'] = array(
+                'label'     => '',
+                'formatter' => 'statictext',
+                'value'     => $str,
+                'flags'     => CCFF_NOUPDATE,
+                );
 
         $fields['macros'] = array(
-                'label'     => _('Sidebar Extras'),
+                'label'     => '',
                 'formatter' => 'extras_editor',
                 'options'   => CCTemplateAdmin::GetExtras(),
                 'flags'     => CCFF_POPULATE,
@@ -133,7 +145,7 @@ function generator_extras_editor($form,$id,$value='',$class='')
 {$hides}
 EOF;
 
-    $msg = _('Drag items to here');
+    $msg = sprintf(_('Sidebar Extras In Use %s Drag items to here...%s'),'<br /><span style="font-weight:normal">','</span');
     $target =<<<EOF
     
     <div class="ddex"><p style="padding:3px;"><b>{$msg}</b></p><ul id="targetmacros" class="ddex" style="border:1px solid black;{$hgt}">{$macs}</ul></div>
@@ -393,7 +405,7 @@ class CCTemplateAdmin
     function OnAdminTemplateMenu()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Configure Skins'));
+        CCPage::SetTitle(_('Edit Banners and Footers'));
 
         $args[] = array( 'action'    => ccl('admin','templatetags','profiles'),
                          'menu_text' => _('Banner Text, Footers, etc.'),

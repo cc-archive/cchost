@@ -33,18 +33,9 @@ if( !defined('IN_CC_HOST') )
 */
 require_once('cchost_lib/ccextras/cc-cart-table.inc');
 require_once('cchost_lib/ccextras/cc-playlist.inc');
-require_once('cchost_lib/ccextras/cc-tag-editor.inc');
 require_once('cchost_lib/cc-form.php');
 require_once('cchost_lib/cc-admin.php');
 require_once('cchost_lib/cc-page.php');
-
-class CCPlaylistTagsAdminForm extends CCTagEditorForm
-{
-    function CCPlaylistTagsAdminForm()
-    {
-        $this->CCTagEditorForm('playlist_tags',_('Add Tag'));
-    }
-}
 
 class CCPlaylistForm extends CCForm
 {
@@ -156,18 +147,6 @@ class CCAdminPlaylistsForm extends CCEditConfigForm
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE ),
 
-            'playlist_excl_user' =>
-               array(  'label'      => _('Playlist Abuse List'),
-                       'form_tip'   => _('Users who have abused playlists'),
-                       'formatter'  => 'textarea',
-                       'flags'      => CCFF_POPULATE ),
-
-            '_tags' => 
-                array( 'label'      => _('Create Tags'),
-                       'value'      => "<a href=\"".ccl('admin','playlists','tags')."\">" . _('Edit default tags for create form') . '</a>',
-                       'formatter'  => 'statictext',
-                       'form_tip'   => _('Edit which tags are shown in the Create Playlist form'),
-                       'flags'      => CCFF_NOUPDATE | CCFF_STATIC ),
                 );
 
 
@@ -183,41 +162,6 @@ class CCPlaylistManage
         $form = new CCAdminPlaylistsForm();
         CCPage::AddForm($form->GenerateForm());
     }
-
-    function AdminTags()
-    {
-        CCPage::SetTitle(_('Config Create Playlist Tags'));
-
-        $form = new CCPlaylistTagsAdminForm();
-        if( empty($_POST['playlisttagsadmin']) || !$form->ValidateFields() )
-        {
-            CCPage::AddForm( $form->GenerateForm() );
-        }
-        else
-        {
-            $channels = array();
-            if( !empty($_POST['S']) )
-                $this->_inject($channels,$_POST['S']);
-            if( !empty($_POST['new']) )
-                $this->_inject($channels,$_POST['new']);
-            $configs =& CCConfigs::GetTable();
-            $configs->SaveConfig('playlist_tags',$channels,CC_GLOBAL_SCOPE,false);
-
-            CCPage::Prompt(_('Tags information saved'));
-        }
-
-    }
-
-    function _inject(&$results,$arr)
-    {
-        CCUtil::StripSlash($arr);
-        foreach( $arr as $channel )
-        {
-            if( empty($channel['delete']) )
-                $results[] = $channel;
-        }
-    }
-
 
     /**
     * Event handler for {@link CC_EVENT_ADMIN_MENU}

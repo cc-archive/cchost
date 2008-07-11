@@ -513,7 +513,10 @@ function debug_stuff(str) {
 }
 
 function _d(obj) {
-    debug_stuff( Object.toJSON(obj) + ' ' );
+    if( !obj )
+        debug_stuff('empty');
+    else
+        debug_stuff( Object.toJSON(obj) + ' ' );
 }
 
 var ccPopupManagerMethods = {

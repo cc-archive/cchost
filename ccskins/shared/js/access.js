@@ -18,33 +18,3 @@ $Id$
 
 */
 
-function updateGroup(gid)
-{
-    if( prevGroup )
-    {
-        pc = $('acc_knob_' + prevGroup);
-        Element.classNames(pc).remove('acc_knob_selected');
-        pc = $('acc_group_' + prevGroup);
-        Element.classNames(pc).remove('acc_group_selected');
-    }
-    pc = $('acc_knob_' + gid);
-    Element.classNames(pc).add('acc_knob_selected');
-    pc = $('acc_group_' + gid);
-    Element.classNames(pc).add('acc_group_selected');
-    prevGroup = gid;
-}
-
-var prevGroup;
-
-
-$$('.acc_knob').each( function(e) {
-      e.gid = e.id.match(/[0-9]+/);
-      Event.observe(e,'click', function (e)
-            {
-                var e = Event.element(e);
-                updateGroup(e.gid);
-            }, false )
-});
-
-
-updateGroup('0');

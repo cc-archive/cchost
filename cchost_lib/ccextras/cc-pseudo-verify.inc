@@ -59,7 +59,7 @@ class CCPseudoVerifyAdminForm extends CCGridForm
         $heads = array( 
             _('Delete'), 
                 _('D/S/V'), 
-             _('Type'), _('Ext.'), 
+             _('Ext.'), _('Type'), 
             _('Description'), 
             _('Tags'), _('Signature'), );
         

@@ -54,6 +54,7 @@ class CCAdminLicenseForm extends CCForm
         if( empty($config_lics) )
             $config_lics = array();
         $licenses =& CCLicenses::GetTable();
+        $licenses->SetOrder('license_name');
         $rows = $licenses->QueryRows('');
         $fields = array();
         foreach($rows as $row)
@@ -64,13 +65,30 @@ class CCAdminLicenseForm extends CCForm
                        array( 'label'       => _('Enabled:'),
                                'value'      => $value,
                                'license'    => $row,
-                               'formatter'  => 'metalmacro',
-                               'macro'      => 'license_enable',
+                               'formatter'  => 'lic',
                                'flags'      => CCFF_NONE );
         }
         $this->AddFormFields($fields);
     }
 
+    function generator_lic($name)
+    {
+        $row = $this->GetFormFieldItem( $name, 'license' );
+        $checked = $this->GetFormValue($name) ? 'checked="checked"' : '';
+        $page =& CCPage::GetPage();
+        $logourl = $page->URL('images/lics/'.$row['license_logo']);
+        $html =<<<EOF
+<input type="checkbox" id="{$name}" name="{$name}" {$checked} />
+        {$row['license_name']}<br />
+<img src="{$logourl}" />
+EOF;
+        return $html;
+    }
+
+    function validator_lic()
+    {
+        return true;
+    }
 }
 
 

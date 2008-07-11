@@ -74,8 +74,8 @@ class CCAccessEditForm extends CCForm
     {
         $this->CCForm();
     
-        CCPage::SetStyleSheet( 'access.css' );
-        CCPage::PageArg('access_editor', 'access.xml/access_editor');
+        CCPage::SetStyleSheet( 'css/access.css' );
+//        CCPage::PageArg('access', 'access');
 
         $map = cc_get_url_map();
         
@@ -98,7 +98,7 @@ class CCAccessEditForm extends CCForm
             'map' => array( 'label'      => '', // _('Access Map'),
                            'formatter'  => 'metalmacro',
                            'flags'      => CCFF_POPULATE,
-                           'macro'      => 'access_editor',
+                           'macro'      => 'access',
                            'access_map' => $map,
                             )
             );

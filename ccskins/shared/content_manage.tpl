@@ -58,7 +58,7 @@ require_once('cchost_lib/cc-template.inc');
 $A['content_pages'] = CCTemplateAdmin::GetContentPages();
 $A['topic_types'] = CCDatabase::QueryItems("SELECT DISTINCT topic_type FROM cc_tbl_topics WHERE topic_type > ''");
 ?>
-<h2><?= _('Conent Pages') ?></h2>
+<h2><?= _('Content Pages') ?></h2>
 <a href="%(home-url)%admin/content/page" class="butt cc_gen_button"><span><?= _('Create a new page')?></span></a>
 <div style="clear:both">&nbsp;</div>
 <table class="cc_content_pages">

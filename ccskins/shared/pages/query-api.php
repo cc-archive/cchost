@@ -134,7 +134,7 @@ then <span class="key">f</span>=<span class="value">docwrite</span> should be us
   Developers that write extensions to ccHost use the URL query syntax to call the CCQuery object:
 </p>
 <div class="codexample">
-require_once('cchost_list/cc-query.php');
+require_once('cchost_lib/cc-query.php');
 $query = new CCQuery();
 $args = $query->ProcessAdminArgs('tags=hip_hop&sort=name&user=teru');
 $query->Query($args);
@@ -145,7 +145,7 @@ $query->Query($args);
 </p>
 
 <div class="codexample">
-require_once('cchost_list/cc-query.php');
+require_once('cchost_lib/cc-query.php');
 $query = new CCQuery();
 $args = $query-><b>ProcessUriArgs</b>();
 $query->Query($args);
@@ -153,14 +153,21 @@ $query->Query($args);
 
 <p>
   Instead of outputting the results into the page directly, the results can be returned as a PHP array
-  by using <span class="key">f</span>=<span class="value">php</span>:
+  by using <span class="key">f</span>=<span class="value">php</span>. The following is an example of 
+  using a <span class="key">dataview</span> to retrieve the upload_ids of all uploads by <span class="value">teru</span> tagged
+  as <span class="value">hip_hop</span>
 </p>
 
 <div class="codexample">
-require_once('cchost_list/cc-query.php');
+require_once('cchost_lib/cc-query.php');
 $query = new CCQuery();
-$args = $query->ProcessAdminArgs('tags=hip_hop&sort=name&user=teru&<b>b=php</b>');
+$args = $query->ProcessAdminArgs('tags=hip_hop&u=teru&<b>dataview=ids&b=php</b>');
 $results = $query->Query($args);
+foreach( $results[0] as $row )
+{
+    $id = $row['upload_id'];
+    //...
+}
 </div>
 
 <p>The <span class="codesnippet">$results</span> variable now contains an array that contains the results</p>
@@ -220,7 +227,7 @@ $results = $query->Query($args);
 </p>
 
 <p>
-  See the <a href="#tempaltes">Templates Appendix</a> for details.
+  See the <a href="#templates">Templates Appendix</a> for details.
 </p>
 
 
