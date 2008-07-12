@@ -12,15 +12,29 @@ function rss_topic_dataview($queryObj)
 {
     $TZ = ' ' . CCUtil::GetTimeZone();
 
-    // NOTE add to this list when you get to blogs, etc.
-
-    if( empty($queryObj->args['page']) )
-        $ccp = '';
-    else
-        $ccp = url_args(ccl($queryObj->args['page']),'topic=');
 
     $ccr = ccl('reviews') . '/';
     $cct = ccl('thread') . '/';
+    $cctopic = ccl('topics','view') . '/';
+
+    // NOTE add to this list when you get to blogs, etc.
+    if( empty($queryObj->args['page']) )
+    {
+        if( !empty($queryObj->args['thread']) )
+        {
+            $ccp_sql = "CONCAT('{$cct}',topic_thread, '#', topic_id)";
+        }
+        else
+        {
+            // this is bogus.. but we may be stuck in the case of replies to reviews (?)
+            $ccp_sql = "CONCAT('{$cctopic}',topic_id)";
+        }
+    }
+    else
+    {
+        $ccp = url_args(ccl($queryObj->args['page']),'topic=');
+        $ccp_sql = "CONCAT('{$ccp}', LOWER(REPLACE(topic_name,' ','-')))";
+    }
 
     // Thu, 27 Dec 2007 09:28:38 PST
     // %a,  %d %b %Y    %T
@@ -41,7 +55,7 @@ function rss_topic_dataview($queryObj)
             CONCAT('{$ccr}',reviewee.user_name,'/',topic_upload,'#',topic_id),
             IF( topic_type = 'forum',
               CONCAT('{$cct}',topic_thread, '#', topic_id),
-              CONCAT('{$ccp}', LOWER(REPLACE(topic_name,' ','-')))
+              {$ccp_sql}              
               )
           ) as topic_permalink
         FROM cc_tbl_topics
