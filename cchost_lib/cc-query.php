@@ -667,6 +667,9 @@ class CCQuery
 
     function _gen_limit()
     {
+        if( !empty($this->sql_p['limit']) )
+            return;
+
         $this->ValidateLimit('querylimit');
         
         $A =& $this->args;
