@@ -261,6 +261,8 @@ class CCContest
     */
     function OnAdminMenu(&$items,$scope)
     {
+        // don't think we support contests anymore
+        /*
         if( $scope != CC_GLOBAL_SCOPE )
             return;
 
@@ -273,6 +275,7 @@ class CCContest
                              'access' => CC_ADMIN_ONLY
                               ),
              );
+        */
     }
 
 
@@ -372,20 +375,22 @@ class CCContest
     */
     function OnMapUrls()
     {
+        // contests are undocumented, probably going away completely
+
         CCEvents::MapUrl( 'contest/submit',        array( 'CCContest', 'SubmitEntry'),   
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{contestname}', _('Display contest entry form'), CC_AG_CONTESTS );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ); // , '{contestname}', _('Display contest entry form'), CC_AG_CONTESTS );
         CCEvents::MapUrl( 'contest/submitsource',  array( 'CCContest', 'SubmitSource'),  
-            CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display contest source upload form'), CC_AG_CONTESTS );
+            CC_ADMIN_ONLY, ccs(__FILE__)); // '{contestname}', _('Display contest source upload form'), CC_AG_CONTESTS );
 
         CCEvents::MapUrl( 'contest/publish_sources',  array( 'CCContest', 'PublishSources'),  
-            CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Publish contest sources'), CC_AG_CONTESTS );
+            CC_ADMIN_ONLY, ccs(__FILE__)); // '{contestname}', _('Publish contest sources'), CC_AG_CONTESTS );
 
         CCEvents::MapUrl( 'contest/create',        array( 'CCContest', 'CreateContest'), 
-            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display new contest form'), CC_AG_CONTESTS );
+            CC_ADMIN_ONLY, ccs(__FILE__)) ;// '', _('Display new contest form'), CC_AG_CONTESTS );
         CCEvents::MapUrl( 'contest/edit',          array( 'CCContest', 'EditContest'),   
-            CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display contest properties form'), CC_AG_CONTESTS );
+            CC_ADMIN_ONLY, ccs(__FILE__)); // '{contestname}', _('Display contest properties form'), CC_AG_CONTESTS );
         CCEvents::MapUrl( 'admin/contest',          array( 'CCContest', 'Admin'),        
-            CC_ADMIN_ONLY, ccs(__FILE__), '{contestname}', _('Display admin contest forms'), CC_AG_CONTESTS );
+            CC_ADMIN_ONLY, ccs(__FILE__)); // '{contestname}', _('Display admin contest forms'), CC_AG_CONTESTS );
     }
 
 }

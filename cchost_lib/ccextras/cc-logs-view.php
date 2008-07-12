@@ -46,7 +46,7 @@ class CCViewLogs
                 ccs(__FILE__), '[log|error]', _('ajax call to view log files'),
                 CC_AG_ADMIN_MISC );
         CCEvents::MapUrl( ccp('admin','logs','archive'), array('CCViewLogs','Archive'), CC_ADMIN_ONLY,
-                ccs(__FILE__), '[log|error]', _('Archive logs.'),
+                ccs(__FILE__), '[log|error]', _('Display runtime log and error'),
                 CC_AG_ADMIN_MISC );
     }
 

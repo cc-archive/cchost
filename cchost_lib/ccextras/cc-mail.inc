@@ -649,7 +649,11 @@ class CCMailerAPI
 
     function Admin()
     {
-        CCPage::SetTitle(_('Configure Mail'));
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Configure Mail');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCMailAdminForm();
         CCPage::AddForm( $form->GenerateForm() );
     }

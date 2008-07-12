@@ -20,7 +20,7 @@
     %if_null(#PL/cart_dynamic)%
        <span> %text(str_pl_items)%: %(#PL/cart_num_items)%</span>
     %end_if%
-    <div style="font-size:10px;font-style:normal;font-weight:normal;" class="">%(#PL/cart_tags_munged)%</div>
+    <p style="margin:0px;font-size:10px;font-style:normal;font-weight:normal;" class="">%(#PL/cart_tags_munged)%</p>
   </div>
 %end_loop%
 </div>

@@ -10,9 +10,8 @@ class CCQueryBrowser
 {
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('browse'),     array( 'CCQueryBrowser', 'Browse'),    CC_DONT_CARE_LOGGED_IN ); 
-            /*, 'cchost_lib/ccextras/cc-forums.inc', '{user_name}', 
-            _('Display forum topics for user'), CC_AG_FORUMS ); */
+        CCEvents::MapUrl( ccp('browse'),     array( 'CCQueryBrowser', 'Browse'),    CC_DONT_CARE_LOGGED_IN,
+              ccs(__FILE__),'',_('Display Query (upload) Browser'), CC_AG_UPLOADS );
     }
 
     function Browse()

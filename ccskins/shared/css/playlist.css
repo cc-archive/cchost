@@ -276,3 +276,41 @@ div.cc_playlist_action  {
 	font-weight: bold;
 }
 
+.pl_action_button {
+	cursor: pointer;
+	width: 19px;
+	height: 19px;
+}
+
+.pl_action_button a {
+	display: block;
+	width: 100%;
+	height: 19px;
+	background: transparent url('../images/tool.png') no-repeat top left;
+}
+
+.pl_action_button a:hover{
+	text-decoration: none;
+	background-image: url('../images/tool-fg.png');
+}
+
+.pl_action_button:hover{
+}
+
+.pl_found_in {
+	display:block;
+	width: 24px;
+	height: 19px;
+	padding-left: 20px;
+	background: transparent url('../images/menu-play.png') no-repeat top left;
+	color: black;
+}
+	
+
+.pl_found_in:hover {
+	text-decoration: none;
+	background-image: url('../images/menu-play-hi.png');
+	color: #D88F8F;
+}
+
+<img src="%url('images/menu-play.png')%" title="%text(str_pl_found_in)%: (%(#R/upload_num_playlists)%) %text(str_pl_playlists)% ">

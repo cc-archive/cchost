@@ -702,10 +702,6 @@ END;
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
             _('Virtual root settings menu'), CC_AG_CONFIG );
 
-        CCEvents::MapUrl( 'admin/edit',     array('CCAdmin', 'Deep'),       
-            CC_ADMIN_ONLY, ccs(__FILE__), '', 
-            _('Raw config editing'), CC_AG_CONFIG );
-
         CCEvents::MapUrl( 'admin/cfgroot',  array('CCAdmin', 'NewConfigRoot'),       
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
             _('Display form to create a new virtual root'), CC_AG_CONFIG );

@@ -103,6 +103,7 @@ class CCLanguageAdmin
 {
     function Admin()
     {
+        require_once('cchost_lib/cc-page.php');
         global $CC_GLOBALS;
 
         $form = new CCLanguageAdminForm();
@@ -134,6 +135,7 @@ class CCLanguageAdmin
      */
     function SavePage ()
     {
+
         CCPage::SetTitle(_("Language Support"));
         CCPage::Prompt(_("Language support options saved."));
     }
@@ -145,6 +147,7 @@ class CCLanguageAdmin
      */
     function DiagnosticPage ()
     {
+        require_once('cchost_lib/cc-page.php');
         global $CC_GLOBALS;
         CCPage::SetTitle(_("Diagnostic") . " : " . _("Language") );
         $var_mixed = array("CC_GLOBALS"        => &$CC_GLOBALS, 

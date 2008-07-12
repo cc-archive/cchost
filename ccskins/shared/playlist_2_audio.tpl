@@ -18,11 +18,11 @@
   <div class="tdc"><a class="info_button" title="[ info ]" id="_plinfo_%(#R/upload_id)%"></a></div>
   %end_if%
   %if_null(skip_action_button)%
-  <div class="tdc"><a class="menuup_hook" id="_plaction_%(#R/upload_id)%" title="[ action ]"><img src="%url('images/tool.png')%" title="[ action ]" /></a></div>
+  <div class="tdc pl_action_button"><a class="menuup_hook" id="_plaction_%(#R/upload_id)%" title="[ action ]">&nbsp;</a></div>
   %end_if%
   %if_null(skip_found_in)%<!-- -->
     %if_not_null(#R/playlist_browse_url)%
-    <div class="tdc" style="padding-left:5px"><a href="%(#R/playlist_browse_url)%"  title="%text(str_pl_found_in)%: (%(#R/upload_num_playlists)%) %text(str_pl_playlists)% "><img src="%url('images/menu-play.png')%" title="%text(str_pl_found_in)%: (%(#R/upload_num_playlists)%) %text(str_pl_playlists)% "> (%(#R/upload_num_playlists)%)</a>
+    <div class="tdc" style="padding-left:5px"><a href="%(#R/playlist_browse_url)%" class="pl_found_in" title="%text(str_pl_found_in)%: (%(#R/upload_num_playlists)%) %text(str_pl_playlists)% "> (%(#R/upload_num_playlists)%)</a>
     </div>
     %end_if%
   %end_if%

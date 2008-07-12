@@ -57,6 +57,7 @@ class CCRenderAudio extends CCRender
     */
     function OnMapUrls()
     {
+        /*
         CCEvents::MapUrl( 'files/stream',         array('CCRenderAudio', 'StreamFiles'),          
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}/{upload_id.m3u}', 
             _('Stream audio file'), CC_AG_RENDER  );
@@ -66,6 +67,7 @@ class CCRenderAudio extends CCRender
         CCEvents::MapUrl( 'stream/radio',         array('CCRenderAudio', 'StreamRadio'),          
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', 
             _('Stream audio results of query'), CC_AG_RENDER  );
+      */
     }
 
 

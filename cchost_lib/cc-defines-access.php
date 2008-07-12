@@ -77,6 +77,8 @@ define('CC_AG_QUERY', '_agq' );
 define('CC_AG_CONFIG', '_cfg' );
 define('CC_AG_API', '_api' );
 define('CC_AG_PLAYLIST', '_play' );
+define('CC_AG_SKINS', '_skin' );
+define('CC_AG_SKIN', CC_AG_SKINS );
  
 function cc_get_access_groups()
 {
@@ -102,6 +104,7 @@ function cc_get_access_groups()
         CC_AG_CONTESTS     => _('Contests')   ,
         CC_AG_QUERY        => _('Query')   ,
         CC_AG_CONFIG       => _('Site Admin'),
+        CC_AG_SKINS        => _('Skins'),
         );
 }
 

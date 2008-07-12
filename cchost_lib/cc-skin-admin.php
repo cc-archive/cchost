@@ -620,21 +620,21 @@ EOF;
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'admin/skins',                array('CCSkinAdmin', 'Admin'),
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show main "Configure Skins" menu)'),  CC_AG_SKINS );
         CCEvents::MapUrl( 'admin/skins/profiles',       array('CCSkinAdmin', 'Profiles'),
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show "Select New Profile" form'), CC_AG_SKINS );
         CCEvents::MapUrl( 'admin/skins/profile/save',   array('CCSkinAdmin', 'ProfileSave'),
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show "Save Profile" form'), CC_AG_SKINS );
         CCEvents::MapUrl( 'admin/skins/profile/load',   array('CCSkinAdmin', 'ProfileLoad'),
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show "Load Profile" form'), CC_AG_SKINS );
         CCEvents::MapUrl( 'admin/skins/settings',       array('CCSkinAdmin', 'Settings'),
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show "Profile Settings" form'), CC_AG_SKINS );
         CCEvents::MapUrl( 'admin/skins/layout',         array('CCSkinAdmin', 'Layout'),
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show "Profile Layouts" form'), CC_AG_SKINS );
         CCEvents::MapUrl( 'admin/colors',               array('CCSkinAdmin', 'ColorSchemes'),       
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show "Profile Fonts and Colors" form'), CC_AG_SKINS );
         CCEvents::MapUrl( 'admin/skins/create',         array('CCSkinAdmin', 'Create'),
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show "Create Skins" form'), CC_AG_SKINS );
     }
 
 }

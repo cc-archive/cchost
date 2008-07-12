@@ -90,9 +90,9 @@ class CCChannels
     {
         CCEvents::MapUrl( ccp('admin','channels'), 
                           array( 'CCChannels', 'Admin'),  CC_ADMIN_ONLY,
-                          ccs(__FILE__), '', 
+                          ccs(__FILE__)); /* , '', 
                           _('Configure channels/radio interface'), 
-                          CC_AG_RENDER );
+                          CC_AG_RENDER ); */
     }
 
     /**
@@ -103,6 +103,8 @@ class CCChannels
     */
     function OnAdminMenu(&$items,$scope)
     {
+        // I think this feature is dead
+        /*
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $items += array(
@@ -116,6 +118,7 @@ class CCChannels
                                  ),
                 );
         }
+        */
     }
 
 }

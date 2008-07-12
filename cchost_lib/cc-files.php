@@ -651,11 +651,15 @@ class CCPhysicalFile
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'file/add',     array('CCPhysicalFile','Add'),     CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
-        CCEvents::MapUrl( 'file/replace', array('CCPhysicalFile','Replace'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/add',     array('CCPhysicalFile','Add'),     CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
+                     '{upload_id}', _('Show Add File form'), CC_AG_UPLOADS );
+        CCEvents::MapUrl( 'file/replace', array('CCPhysicalFile','Replace'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
+                     '{file_id}', _('Show Replace File form'), CC_AG_UPLOADS );
         CCEvents::MapUrl( 'file/jockey',  array('CCPhysicalFile','Jockey'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
-        CCEvents::MapUrl( 'file/delete',  array('CCPhysicalFile','Delete'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
-        CCEvents::MapUrl( 'file/nickname',array('CCPhysicalFile','Nicname'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/delete',  array('CCPhysicalFile','Delete'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
+                      '{file_id}', _('Show Delete File form (not the whole upload)'), CC_AG_UPLOADS );
+        CCEvents::MapUrl( 'file/nickname',array('CCPhysicalFile','Nicname'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
+                      '{file_id}', _('Show Change Nicname form (not the whole upload)'), CC_AG_UPLOADS );
         CCEvents::MapUrl( 'file/changetype',array('CCPhysicalFile','ChangeType'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
         CCEvents::MapUrl( 'file/manage',  array('CCPhysicalFile','Manage'), 
             CC_MUST_BE_LOGGED_IN , ccs(__FILE__), '', _('Show "Manage Files" form'), CC_AG_UPLOADS );

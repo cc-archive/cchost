@@ -248,7 +248,7 @@ class CCBan
         CCEvents::MapUrl( ccp('admin','ban'),   array('CCBan','Ban'),  CC_ADMIN_ONLY, ccs(__FILE__), '{upload_id}', 
             _('Ban/unban an upload') , CC_AG_USER );
         CCEvents::MapUrl( ccp('admin','ban','admin'),   array('CCBan','Admin'),  CC_ADMIN_ONLY, ccs(__FILE__), '', 
-            _('Ban/unban an upload') , CC_AG_USER );
+            _('Show Moderation (ban) admin form') , CC_AG_USER );
     }
 }
 

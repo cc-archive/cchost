@@ -112,7 +112,10 @@ class CCDownload
     {
         global $CC_GLOBALS;
 
-        CCPage::SetTitle(_('Configure Download Manager'));
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Configure Download Manager');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
 
         if( empty($CC_GLOBALS['pretty-urls']) )
         {
