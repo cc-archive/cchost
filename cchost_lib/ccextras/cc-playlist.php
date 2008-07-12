@@ -86,7 +86,7 @@ class CCPlaylistHV
         }
         else
         {
-            if( empty($args['sort']) )
+            //if( empty($args['sort']) )
                 $queryObj->sql_p['order'] = 'cart_item_order';
 
             $queryObj->sql_p['joins'][] = 'cc_tbl_cart_items ON cart_item_upload=upload_id';
