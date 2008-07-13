@@ -489,7 +489,7 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 'reqtags','rand', 'recc', 'collab', 'topic', 'minitems'
+                         'reviewee', 'match', 'reqtags','rand', 'recc', 'collab', 'topic', 'minitems', 'pool',
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -599,28 +599,36 @@ class CCQuery
 
     function _gen_date()
     {
+        // Check for date limits
+        $this->_date_helper('since');
+        $this->_date_helper('before');
+    }
+
+    function _date_helper($pivot)
+    {
         // Check for date limit
 
-        $since = 0;
+        $pivot_val = 0;
 
-        if( !empty($this->args['sinced']) )     // text date
+        if( !empty($this->args[$pivot . 'd']) )     // text date
         {
-            $since = strtotime($this->args['sinced']);
-            if( $since < 1 )
+            $pivot_val = strtotime($this->args[$pivot . 'd']);
+            if( $pivot_val < 1 )
                 die('invalid date string');
         }
-        elseif( !empty($this->args['sinceu']) ) // unix time
+        elseif( !empty($this->args[$pivot . 'u']) ) // unix time
         {
-            if( $this->args['sinceu']{0} === '_' )
-                $this->args['sinceu'] = substr($this->args['sinceu'],1);
-            $since = sprintf('%0d',$this->args['sinceu']);
+            if( $this->args[$pivot . 'u']{0} === '_' )
+                $this->args[$pivot . 'u'] = substr($this->args[$pivot . 'u'],1);
+            $pivot_val = sprintf('%0d',$this->args[$pivot . 'u']);
         }
 
-        if( !empty($since) )
+        if( !empty($pivot_val) )
         {
-            $after = date( 'Y-m-d H:i', $since );
+            $pivot_date = date( 'Y-m-d H:i', $pivot_val );
             $field = $this->_make_field('date');
-            $this->where[] = "($field > '$after')";
+            $op = $pivot == 'since' ? '>' : '<'; // or 'before'
+            $this->where[] = "($field $op '$pivot_date')";
         }
 
     }
@@ -694,6 +702,18 @@ class CCQuery
         if( $this->args['datasource'] == 'cart' && !empty($this->args['minitems']) )
         {
             $this->where[] = 'cart_num_items >= ' . $this->args['minitems'];
+        }
+    }
+
+    function _gen_pool()
+    {
+        if( ($this->args['datasource'] == 'pools') || ($this->args['datasource'] == 'pool_items'))
+        {
+            $pool_id = sprintf('%0d',$this->args['pool']);
+            if( !empty($pool_id) && ($pool_id > 0) )
+            {
+                $this->where[] = 'pool_id = ' . $pool_id;
+            }
         }
     }
 
