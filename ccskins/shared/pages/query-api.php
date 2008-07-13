@@ -11,8 +11,25 @@ div.urlexample {
 .urlexample a {
     font-weight: normal;
 }
-.qexample, .codexample, .urlexample, .codesnippet {
+.qexample, .codexample, .urlexample, .codesnippet, .exq {
     font-family: Courier New, courier, serif;
+}
+
+.exq_desc, .exq {
+    padding-bottom: 7px;
+    border: solid #AAA;
+
+}
+.exq_desc {
+    vertical-align: top;
+    padding: 3px 10px 3px 3px;
+    background-color: #CCC;
+    border-width: 2px 0px 2px 4px;
+}
+.exq {
+    white-space: nowrap;
+    padding: 0px 3px 0px 3px;
+    border-width: 2px 4px 2px 0px;
 }
 
 .qexample, .codexample, .urlexample {
@@ -290,6 +307,40 @@ Attribution license:</p>
 <p>You want to know of a cappellas by calendargirl that have been remixed less than 5 times...</p>
 
 <div class="urlexample"><a href="<?= $A['query-url']?>f=html&t=links&user=calendargirl&tags=acappella&remixmax=5"><span class="key">f</span>=<span class="value">html</span>&<span class="key">t</span>=<span class="value">links</span>&<span class="key">user</span>=<span class="value">calendargirl</span>&<span class="key">tags</span>=<span class="value">acappella</span>&<span class="key">remixmax</span>=<span class="value">5</span></a></div>
+<p></p>
+<a name="examples"></a>
+<h3>Example Queries</h3>
+
+<table cellspacing="0" cellpadding="0">
+<tr><td class="exq_desc">The lastest 15 uploads sorted by user's full name</td>
+    <td class="exq">f=html&t=links_by&limit=15&chop=0&sort=fullname</td></tr>
+<tr><td class="exq_desc">The latest 15 modified uploads</td>
+    <td class="exq">f=html&t=links_by&limit=15&chop=0&sort=last_edit</td></tr>
+<tr><td class="exq_desc">Playlists created in the last 3 weeks that have at least 3 items</td>
+    <td class="exq">t=playlist_2_browse&since=3 weeks ago&minitems=3</td></tr>
+<tr><td class="exq_desc">Playlists created by user 'teru' sorted alphabetically</td>
+    <td class="exq">t=playlist_2_browse&u=teru&sort=name&ord=asc</td></tr>
+<tr><td class="exq_desc">Uploads sorted by number of playlists they are included in</td>
+    <td class="exq">t=playlist_2_uploads&sort=num_playlists&ord=desc</td></tr>
+<tr><td class="exq_desc">Uploads by user 'teru' ordered by times included in playlists</td>
+    <td class="exq">t=playlist_2_uploads&sort=num_playlists&ord=desc&u=teru</td></tr>
+<tr><td class="exq_desc">Raw header information about a playlier</td>
+    <td class="exq">f=html&t=playlist_2_info&ids=1651</td></tr>
+<tr><td class="exq_desc">Link to the latest 5 topics on the page 'Featured Samples'</td>
+    <td class="exq">f=html&t=topic_page_links&limit=5&page=featured-samples</td></tr>
+<tr><td class="exq_desc">Avatar for the user 'mcjackinthebox'</td>
+    <td class="exq">f=html&t=avatar&u=mcjackinthebox</td></tr>
+<tr><td class="exq_desc">XML formatted search results for 'anthony' in user table.</td>
+    <td class="exq">f=xml&t=search_users&limit=5&search_type=any&search=anthony</td></tr>
+<tr><td class="exq_desc">Yahoo! Easy Listener Flash(tm) plugin with uploads that are tagged 'remix' and either 'ambient' or 'chill'</td>
+    <td class="exq">f=html&t=easy_listener&limit=10&reqtags=remix&tags=ambient+chill&type=any</td></tr>
+<tr><td class="exq_desc">Count of uploads during the month of July 2006</td>
+    <td class="exq">sinced=July 2006&befored=Aug 2006&f=count</td></tr>
+<tr><td class="exq_desc">Highest recommended uploads from 3 weeks ago</td>
+    <td class="exq">sinced=3 weeks ago&befored=2 weeks ago&sort=num_scores</td></tr>
+<tr><td class="exq_desc">XML with basic user info of the last 3 registered users</td>
+    <td class="exq">dataview=user_basic&limit=3&f=xml</td></tr>
+</table>
 
 <a name="param_ref"></a>
 <h2>Appendix A: Parameter Reference</h2>
@@ -297,6 +348,8 @@ Attribution license:</p>
 <table class="qtable">
 <tr><th>Parameter</th><th>Short Form</th>               <th>Description</th></tr>
 
+<tr><td class="key">  beforeu          </td><td></td><td> Unix time</td></tr>
+<tr><td class="key">  befored          </td><td></td><td> Date string (see php's <a href="http://us.php.net/strtotime">strtodate</a>)</td></tr>
 <tr><td class="key">  chop             </td><td></td>
 <td> Several of the embedding HTML templates will "chop" long names to this value.</td></tr>
 
