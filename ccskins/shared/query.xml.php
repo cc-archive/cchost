@@ -3,4 +3,5 @@
 
 ?>
 <!-- template query -->
-<? CCUtil::SendBrowserTo( ccl('query-api') ); ?>
+
+<p>This document has <a href="<?= ccl('query-api') ?>">moved</a></p>
