@@ -97,7 +97,7 @@ class CCReviewFormAPI
             }
             else
             {
-                $args = $query->ProcessAdminArgs('t=reviews_summary&paging=off&ids=' . $upload_id); 
+                $args = $query->ProcessAdminArgs('t=reviews_summary&paging=off&upload=' . $upload_id); 
             }
 
             $query->Query($args);
