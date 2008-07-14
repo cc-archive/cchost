@@ -322,8 +322,10 @@ class CCMenuAdmin
         }
         
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Edit Menus'));
-        $this->_build_bread_crumb_trail(_('Edit Menus'));
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Edit Menus');
+        CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
 
         $configs =& CCConfigs::GetTable();
 
@@ -373,26 +375,16 @@ class CCMenuAdmin
 
     }
 
-    function _build_bread_crumb_trail($text,$cmd=false)
-    {
-        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
-        
-        $trail[] = array( 'url' => ccl('admin','site'), 'text' => _('Settings') );
-    
-        $trail[] = array( 'url' => '', 'text' => _($text) );
-
-        CCPage::AddBreadCrumbs($trail);
-    }
-
-
     /**
     * Displays and processes a form that allows admins to edit the main menu's groups
     */
     function AdminGroup()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Edit Menu Groups'));
-        $this->_build_bread_crumb_trail(_('Edit Groups'));
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Edit Menu Groups');
+        CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
 
         $configs =& CCConfigs::GetTable();
 
