@@ -4,9 +4,10 @@ if( !defined('IN_CC_HOST') )
 
 /*%%
 [meta]
-    type     = template_component
-    desc     = _('Display Pools')
+    type     = ajax_component
+    desc     = _('Display remix searchable pools')
     dataview = pools
+    datasource = pools
     embedded = 1
 [/meta]
 [dataview]

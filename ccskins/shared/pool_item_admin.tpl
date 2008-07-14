@@ -8,6 +8,7 @@ if( !defined('IN_CC_HOST') )
     desc = _('Pool item (admin)')
     dataview = pool_item_admin
     embedded = 1
+    datasource = pool_items
 [/meta]
 [dataview]
 function pool_item_admin_dataview()
