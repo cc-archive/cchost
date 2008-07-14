@@ -1,6 +1,7 @@
 <?/*
 [meta]
     type = dataview
+    desc = _('All the information needed for uploads page')
     name = upload_page
 [/meta]
 */
