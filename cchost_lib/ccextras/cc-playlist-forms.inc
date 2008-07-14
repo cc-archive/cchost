@@ -158,7 +158,11 @@ class CCPlaylistManage
 {
     function Admin()
     {
-        CCPage::SetTitle(_('Admin Playlists'));
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Admin Playlists');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCAdminPlaylistsForm();
         CCPage::AddForm($form->GenerateForm());
     }

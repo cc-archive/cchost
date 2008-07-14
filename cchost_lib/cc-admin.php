@@ -307,15 +307,18 @@ class CCAdminMakeCfgRootForm extends CCForm
 */
 class CCAdmin
 {
+
     function BreadCrumbs($global)
     {
+        global $CC_CFG_ROOT;
+
         $args = func_get_args();
         array_shift($args);
         $k[] = array( 'url' => ccl(), 'text' => 'str_home' );
         if( $global )
             $k[] = array( 'url' => ccl('admin','site','global'), 'text' => _('Global Settings') );
         else
-            $k[] = array( 'url' => ccl('admin','site'), 'text' => _('Virtual Root Settings') );
+            $k[] = array( 'url' => ccl('admin','site'), 'text' => _('Virtual Root Settings') . ': ' . $CC_CFG_ROOT );
         foreach( $args as $arg )
             $k[] = $arg;
 
@@ -474,10 +477,14 @@ class CCAdmin
             return;
 
         require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-admin.php');
+        $title = _("Create New Virtual Root");
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
+
 
         if( empty($_GET['vroot']) )
         {
-            CCPage::SetTitle(_("Create New Virtual Root"));
             $form = new CCAdminMakeCfgRootForm();
             if( !empty($_POST['adminmakecfgroot']) && $form->ValidateFields() )
             {
@@ -732,7 +739,10 @@ END;
         global $CC_CFG_ROOT;
 
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle( _("Edit Settings:") . " '$CC_CFG_ROOT'");
+        $title = _("Edit Settings:") . " '$CC_CFG_ROOT'";
+        $this->BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
+
         $form = new CCAdminSettingsForm();
         CCPage::AddForm( $form->GenerateForm() );
     }

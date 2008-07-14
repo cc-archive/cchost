@@ -60,25 +60,15 @@ class CCQuotaAdminForm extends CCGridForm
         $count = 0;
         foreach( $records as $user  )
         {
-            $S = 'S[' . ++$count . ']';
-            $a = array(
-                  array(
-                    'element_name'  => $S . '[delete]',
-                    'value'      => false,
-                    'formatter'  => 'checkbox',
-                    'flags'      => CCFF_POPULATE ),
-                  array(
-                    'element_name'  => $S . '[name]',
-                    'value'      => $user['user_name'],
-                    'formatter'  => 'textedit',
-                    'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
-                  array(
-                    'element_name'  => $S . '[quota]',
-                    'value'      => $user['user_quota'],
-                    'formatter'  => 'textedit',
-                    'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
-                );
+            $a = $this->_get_row(++$count,$user);
+            $this->AddGridRow( $count, $a );
+        }
 
+        if( $count == 0 )
+        {
+            $user['user_name'] = '';
+            $user['user_quota'] = 100;
+            $a = $this->_get_row(++$count,$user);
             $this->AddGridRow( $count, $a );
         }
 
@@ -103,6 +93,29 @@ class CCQuotaAdminForm extends CCGridForm
 	
          $this->AddMetaRow($a, _('Add User') );
     }	
+
+    function _get_row($count,$user)
+    {
+        $S = 'S[' . $count . ']';
+        return array(
+              array(
+                'element_name'  => $S . '[delete]',
+                'value'      => false,
+                'formatter'  => 'checkbox',
+                'flags'      => CCFF_POPULATE ),
+              array(
+                'element_name'  => $S . '[name]',
+                'value'      => $user['user_name'],
+                'formatter'  => 'textedit',
+                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
+              array(
+                'element_name'  => $S . '[quota]',
+                'value'      => $user['user_quota'],
+                'formatter'  => 'textedit',
+                'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
+            );
+
+    }
 }
 
 class CCQuotaAPI
@@ -114,7 +127,12 @@ class CCQuotaAPI
 
     function Admin()
     {
-        CCPage::SetTitle('Configure User Quota');
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Configure User Quota');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
+
         $form = new CCQuotaAdminForm();
         if( empty($_POST['quotaadmin']) || !$form->ValidateFields() )
         {

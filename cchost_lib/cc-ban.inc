@@ -211,7 +211,10 @@ class CCBan
     function Admin()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Configure Moderation'));
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Configure Moderation');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCBanAdminForm();
         CCPage::AddForm( $form->GenerateForm() );
     }

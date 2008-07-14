@@ -294,7 +294,10 @@ class CCFileVerify
     function ConfigureFormats()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_("Edit Allowable File Formats"));
+        require_once('cchost_lib/cc-admin.php');
+        $title = _("Edit Allowable File Formats");
+        CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
 
         $form = new CCAdminFileVerifyForm($this);
         CCPage::AddForm( $form->GenerateForm() );

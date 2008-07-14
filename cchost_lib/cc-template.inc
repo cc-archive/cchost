@@ -324,7 +324,10 @@ class CCTemplateAdmin
     function OnAdminExtras()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_("Sidebar Extras Content"));
+        require_once('cchost_lib/cc-admin.php');
+        $title = _("Sidebar Extras Content");
+        CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCExtrasForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -363,7 +366,13 @@ class CCTemplateAdmin
                 return $this->OnBannerLogo();
         }
 
-        CCPage::SetTitle(_("Edit Template Tags"));
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-admin.php');
+        $title = _("Edit Template Tags");
+        CCAdmin::BreadCrumbs(false,array('url'=>ccl('admin','templatetags','menu'),'text'=>_('Edit Banners and Footers')),
+                                   array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
+
         $form = new CCAdminTemplateTagsForm();
         CCPage::AddForm( $form->GenerateForm() );
     }
@@ -397,7 +406,11 @@ class CCTemplateAdmin
         else
         {
             require_once('cchost_lib/cc-page.php');
-            CCPage::SetTitle(_('Set Banner Image'));
+            require_once('cchost_lib/cc-admin.php');
+            $title = _('Set Banner Image Logo');
+            CCAdmin::BreadCrumbs(false,array('url'=>ccl('admin','templatetags','menu'),'text'=>_('Edit Banners and Footers')),
+                                       array('url'=>'','text'=>$title));
+            CCPage::SetTitle($title);
             CCPage::AddForm( $form->GenerateForm() );
         }
     }
@@ -405,7 +418,10 @@ class CCTemplateAdmin
     function OnAdminTemplateMenu()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Edit Banners and Footers'));
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Edit Banners and Footers');
+        CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
 
         $args[] = array( 'action'    => ccl('admin','templatetags','profiles'),
                          'menu_text' => _('Banner Text, Footers, etc.'),
@@ -425,7 +441,10 @@ class CCTemplateAdmin
     function OnNewTags()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_("Add a New Template Tag"));
+        require_once('cchost_lib/cc-admin.php');
+        $title = _("Add a New Template Tag");
+        CCAdmin::BreadCrumbs(false,array('url'=>ccl('admin','templatetags','menu'),'text'=>_('Edit Banners and Footers')),
+                                   array('url'=>'','text'=>$title));
         $form = new CCNewTemplateTagForm();
         if( empty($_POST['newtemplatetag']) )
         {

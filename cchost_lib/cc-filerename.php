@@ -79,7 +79,10 @@ class CCFileRename
     function AdminRenaming()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle("Edit Upload Renaming Rules");
+        require_once('cchost_lib/cc-admin.php');
+        $title = _("Edit Upload Renaming Rules");
+        CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
 
         require_once('cchost_lib/cc-filerename-admin.inc');
         $form = new CCAdminRenameForm();

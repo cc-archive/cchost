@@ -278,10 +278,14 @@ class CCQueryAdmin
             $this->AdminQueryTypes($optsname);
             return;
         }
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Admin Query Options Sets');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
+
         $configs = CCConfigs::GetTable();
         $query_opts = $configs->GetConfig('query-browser-opts');
-        require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_('Admin Query Options Sets'));
         $configs =& CCConfigs::GetTable();
         $opts = $configs->GetConfig('query-browser-opts');
         $form = new CCQueryAdminForm($opts);
@@ -299,6 +303,7 @@ class CCQueryAdmin
                 $this->_proc_qopts($_POST['new'],$new_opts,$names,$counter);
             $configs->SaveConfig('query-browser-opts',$new_opts,CC_GLOBAL_SCOPE,false);
             CCPage::SetArg('query-browser-opts',$new_opts,'qbrowser_edit_aftermath');
+            CCPage::Prompt(_('Query options sets saved.'));
         }
     }
 

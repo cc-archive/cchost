@@ -50,8 +50,12 @@ class CCRenderImage extends CCRender
 
     function Admin()
     {
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-admin.php');
         require_once('cchost_lib/cc-renderimage-form.php');
-        CCPage::SetTitle(_('Admin Thumbnail'));
+        $title = _("Edit Thumbnail Properties");
+        CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCAdminThumbnailForm();
         CCPage::AddForm( $form->GenerateForm() );
     }

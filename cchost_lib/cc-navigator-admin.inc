@@ -242,9 +242,13 @@ class CCNavigatorAdmin
     */
     function AdminTabs($page_name='',$cmd='')
     {
+        require_once('cchost_lib/cc-page.php');
+
         $nav_api = new CCNavigator();
 
         $pages = $nav_api->_get_pages();
+
+        $main_crumb = false;
 
         if( empty($page_name) )
         {
@@ -280,7 +284,7 @@ class CCNavigatorAdmin
                 if( empty($_POST['renamenavtab']) || !$form->ValidateFields() )
                 {
                     require_once('cchost_lib/cc-page.php');
-                    CCPage::SetTitle(_('Rename Navigator Tabs Set'));
+                    $title = _('Rename Navigator Tabs Set');
                     CCPage::AddForm( $form->GenerateForm() );
                 }
                 else
@@ -338,8 +342,8 @@ class CCNavigatorAdmin
                 $html .= "<p><b><a href=\"$url\">[" . _('Add new tab set') . 
                          "]</a></b></p>";
 
-                require_once('cchost_lib/cc-page.php');
-                CCPage::SetTitle(_("Manage Navigator Tab Sets"));
+                $main_crumb = true;
+                $title = _("Manage Navigator Tab Sets");
                 CCPage::AddContent($html);
 
                 break;
@@ -368,8 +372,7 @@ class CCNavigatorAdmin
 
             case 'edit':
             {
-                require_once('cchost_lib/cc-page.php');
-                CCPage::SetTitle(_("Edit Navigator Tabs:") . " '$page_name'");
+                $title = _("Edit Navigator Tabs:") . " '$page_name'";
                 if( empty($page) )
                     $page = $pages[$page_name];
                 $form = new CCEditTabsForm($page,$page_name);
@@ -509,6 +512,15 @@ class CCNavigatorAdmin
             }
         }
 
+        if( !empty($title) )
+        {
+            require_once('cchost_lib/cc-admin.php');
+            if( $main_crumb )
+                CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+            else
+                CCAdmin::BreadCrumbs(false,array('url'=>ccl('admin','tabs'),'text'=>_('Manage Navigator Tab Sets')),array('url'=>'','text'=>$title));
+            CCPage::SetTitle($title);
+        }
     }
 
 
