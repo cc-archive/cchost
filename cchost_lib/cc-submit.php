@@ -237,7 +237,7 @@ class CCSubmit
 
             if( !empty($types[$key]['logo']) )
             {
-                $img = $CC_GLOBALS['image-upload-dir'] . basename($types[$key]['logo']);
+                $img = $CC_GLOBALS['image-upload-dir'] . $types[$key]['logo'];
                 if( file_exists($img ) )
                 {
                     $types[$key]['logo'] = $img;
@@ -623,20 +623,17 @@ class CCSubmit
     */
     function _build_bread_crumb_trail($text)
     {
-        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
-        
-        $trail[] = array( 'url' => ccl('admin','site'), 'text' => _('Settings') );
+        require_once('cchost_lib/cc-admin.php');
         if( empty($text) )
         {
-            $trail[] = array( 'url' => '', 'text' => _('Manage Submit Forms') );
+            CCAdmin::BreadCrumbs(false,array( 'url' => '', 'text' => _('Manage Submit Forms') ));
         }
         else
         {
-            $trail[] = array( 'url' => ccl('admin','submit'), 'text' => _('Manage Submit Forms') );
-            $trail[] = array( 'url' => '', 'text' => $text );
+            CCAdmin::BreadCrumbs(false,array( 'url' => ccl('admin','submit'), 'text' => _('Manage Submit Forms') ),
+                                       array( 'url' => '', 'text' => $text ));
         }
 
-        CCPage::AddBreadCrumbs($trail);
     }
 }
 
