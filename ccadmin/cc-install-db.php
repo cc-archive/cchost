@@ -94,6 +94,13 @@ function cc_install_tables(&$vars,&$msg,$local_base_dir)
         $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (3, $ru, $dc, 3, 'The Big OT', 'off topic stuff', 3)";
         $sql[] = "INSERT INTO `cc_tbl_forums` VALUES (4, $ru, $dc, 4, 'Bugs', 'Report bugs here', 1)";
 
+        $sql[] =<<<EOF
+INSERT INTO `cc_tbl_topics` (`topic_id`, `topic_upload`, `topic_user`, `topic_views`, `topic_type`, `topic_date`, `topic_edited`, `topic_deleted`, `topic_name`, `topic_text`, `topic_tags`, `topic_forum`, `topic_thread`, `topic_locked`, `topic_can_xlat`, `topic_left`, `topic_right`) VALUES (1, 0, 1, 0, 'news', '2008-07-14 17:12:00', '0000-00-00 00:00:00', 0, 'ccHost is up and running!', 'Congratulations on getting ccHost up and running. The ''news'' feature is part of the new [url=/admin/content]Content Manager[/url].', '', NULL, 0, 0, 0, 1, 2)
+EOF;
+        $sql[] =<<<EOF
+INSERT INTO `cc_tbl_topics` (`topic_id`, `topic_upload`, `topic_user`, `topic_views`, `topic_type`, `topic_date`, `topic_edited`, `topic_deleted`, `topic_name`, `topic_text`, `topic_tags`, `topic_forum`, `topic_thread`, `topic_locked`, `topic_can_xlat`, `topic_left`, `topic_right`) VALUES (2, 0, 1, 0, 'news', '2008-07-14 17:14:00', '0000-00-00 00:00:00', 0, 'Radiohead releases video sources under CC', 'Creative Commons is [url=http://creativecommons.org/weblog/entry/8476]reporting[/url] that Radiohead has released the sources to their video "House of Cards" under a CC license.', '', NULL, 0, 0, 0, 3, 4)
+EOF;
+
         CCDatabase::Query($sql);
 
     return(true);

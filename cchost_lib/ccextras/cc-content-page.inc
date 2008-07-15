@@ -505,7 +505,10 @@ EOF;
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         if( empty($_GET['topic_type']) )
-            $_GET['topic_type'] = empty($types[0]) ? 'home' : $types[0];
+        {
+            $type = CCDatabase::QueryItem('SELECT topic_type FROM cc_tbl_topics LIMIT 1');
+            $_GET['topic_type'] = empty($type) ? 'home' : $type;
+        }
         $args = $query->ProcessAdminArgs('t=content_manage&type='.$_GET['topic_type']);
         $query->Query($args);
     }

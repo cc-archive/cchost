@@ -84,6 +84,8 @@ function _t_html_form_submit_forms(&$T,&$A)
 {
     $results = cc_query_fmt('f=php&dataview=links&limit=3&user=' . $A['user_name']);
 
+    print '<div class="cc_submit_forms_outer">';
+
     if( !empty($results) )
     {
         $manage_url = url_args(ccl('api','query'),'t=manage_files&user=' . $A['user_name']);
@@ -92,7 +94,6 @@ function _t_html_form_submit_forms(&$T,&$A)
             $results[$k] = $res['upload_name'];
         $names = '<i>' . join('</i>, <i>',$results) . '</i>';
 ?>
-    <div class="cc_submit_forms_outer">
        <div  id="manage_box" style="display:;">
             <div class="cc_submit_forms box">
                 <img  src="<?= $T->URL('images/submit-manage.png') ?>" />

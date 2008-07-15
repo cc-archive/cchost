@@ -301,7 +301,7 @@ class CCSubmit
                     'isremix' => 1,
                     'media_types' => 'audio',
                     'action' => '',
-                    'logo' => 'ccskins/shared/images/submit-remix.gif',
+                    'logo' => 'submit-remix.gif',
                     'type_key' => 'remix',
                     ),
                 'samples' => array (
@@ -319,7 +319,7 @@ class CCSubmit
                     'isremix' => '',
                     'media_types' => 'audio,archive',
                     'action' => '',
-                    'logo' => 'ccskins/shared/images/submit-sample.gif',
+                    'logo' => 'submit-sample.gif',
                     'type_key' => 'samples',
                     ),
                 'fullmix' => array (
@@ -337,7 +337,7 @@ class CCSubmit
                     'isremix' => '',
                     'media_types' => 'audio',
                     'action' => '',
-                    'logo' => 'ccskins/shared/images/submit-original.gif',
+                    'logo' => 'submit-original.gif',
                     'type_key' => 'fullmix',
                     ),
             );
@@ -436,7 +436,6 @@ class CCSubmit
         $form = new CCAdminSubmitFormForm();
         if( empty($_POST['adminsubmitform']) )
         {
-            $this->_ensure_private_logo($form_types,$form_type_key);
             $form->PopulateValues($form_types[$form_type_key]);
         }
         elseif( array_key_exists('delete',$_POST) )
@@ -468,58 +467,6 @@ class CCSubmit
         {
             CCPage::AddForm( $form->GenerateForm() );
         }
-    }
-
-    function _ensure_private_logo(&$form_types,&$form_type_key)
-    {
-        global $CC_GLOBALS;
-
-        // 
-        // We copy the image to the user's upload dir so they
-        // don't edit the 'system' copy
-        //
-        // This is all a little heavy handed but it's solid
-        // and we take no chances of screwing things up
-        // down the line
-        //
-        if( !isset($form_types[$form_type_key]['logo']) )
-        {
-            $form_types[$form_type_key]['logo'] = '';
-            return;
-        }
-
-        if( strstr($form_types[$form_type_key]['logo'],'ccskins') === false )
-            return;
-
-        global $CC_GLOBALS;
-        $fullpath = realpath($form_types[$form_type_key]['logo']);
-        $filename = basename($fullpath);
-        $dest_path = $CC_GLOBALS['image-upload-dir'] . $filename;
-        if( file_exists($dest_path) )
-        {
-            $ret = true;
-        }
-        else
-        {
-            $ret = copy($fullpath,$dest_path);
-        }
-        if( $ret )
-        {
-            // we'll write this back to the form type (might as well)
-            //
-            // we get a fresh copy 
-            $configs =& CCConfigs::GetTable();
-            $forms_temp = $configs->GetConfig('submit_forms');
-            $forms_temp[$form_type_key]['logo'] = $filename;
-            $configs->SaveConfig('submit_forms',$forms_temp,'',false);
-        }
-        else
-        {
-            $msg = sprintf(_('Your Graphics Upload Path (%s) must be writable to work on Submit Forms.'),$CC_GLOBALS['image-upload-dir']);
-            CCPage::Prompt($msg);
-            return;
-        }
-        $form_types[$form_type_key]['logo'] = $filename;
     }
 
     function NewForm()

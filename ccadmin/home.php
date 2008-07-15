@@ -40,10 +40,7 @@ $Id$
 
           <div  style="width:550px;margin: 14px auto;">
           <div class="box">
-            <p>This is a pre-early-adoptors-curious-developers build of ccHost 5. Only install this on a web you don't care
-            about. </p>
-            
-            <p>New features in cchost 5 (so far):</p>
+            <p>Some new features in ccHost 5:</p>
 
             <table style="float:right; margin: 5px;">
                 <tr><td><img src="ccskins/shared/layouts/images/layout005.gif" /></td></tr>
@@ -56,12 +53,12 @@ $Id$
                     <p>
                         The new skin engine allows for easy customization for admins and web developers. Shipping 
                         in the box are <b>40 layouts</b>, 3 <b>string profiles</b> for generic media sites, music sites and 
-                        image sites, configurable <b>tab layouts</b>, <b>form layouts</b>, etc.
+                        image sites, configurable <b>tab layouts</b>, <b>form layouts</b>, etc. <a href="<?= ccl('admin','skins') ?>">Start here...</a>.
                     </p>
                 </li>
                 <li><b>New Page Content Manager</b>
                     <p>
-                        Admins can create pages in your system without any XML/HTML. 
+                        Admins can create pages in your system without any XML/HTML. <a href="<?= ccl('admin','content') ?>">Start here...</a>.
                     </p>
                 </li>
                 <li><b>Trackbacks</b>

@@ -406,7 +406,7 @@ function install_local_files($local_dir)
                     $local_dir, 
                     $local_dir . '/pages',
                     $local_dir . '/skins', 
-                    $local_dir . '/skins/images',
+                    $local_dir . '/images',
                     $local_dir . '/skins/extras',
                     $local_dir . '/dataviews',
                     $local_dir . '/lib',
@@ -426,10 +426,14 @@ function install_local_files($local_dir)
     }
 
     docopy( 'home.php', $local_dir, 'pages');
+    docopy( 'news.php', $local_dir, 'pages');
     docopy( 'welcome.php', $local_dir, 'pages');
     docopy( 'DEBUG.php', $local_dir, 'lib');
     docopy( 'extras_links.tpl', $local_dir, 'skins/extras');
-    docopy( 'person.png', $local_dir, 'skins/images');
+    docopy( 'person.png', $local_dir, 'images');
+    docopy( 'submit-remix.gif', $local_dir, 'images');
+    docopy( 'submit-sample.gif', $local_dir, 'images');
+    docopy( 'submit-original.gif', $local_dir, 'images');
     docopy( 'error-msg.txt', $local_dir, '');
     docopy( 'disabled-msg.txt', $local_dir, '');
 }

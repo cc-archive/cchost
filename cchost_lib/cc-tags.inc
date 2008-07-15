@@ -546,7 +546,7 @@ class CCTagEvents
         else
             $minshow = $CC_GLOBALS['tags-min-show'];
 
-        $where = "tags_count > $minshow";
+        $where = "tags_count >= $minshow";
 
         if( !empty($_GET['tabgbase']) )
         {
