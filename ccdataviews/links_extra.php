@@ -12,7 +12,7 @@ function links_extra_dataview()
 
     $sql =<<<EOF
 SELECT 
-    upload_id, upload_name, upload_extra,
+    upload_id, upload_name, upload_extra, upload_num_playlists,
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name,
     CONCAT( '$urlp', user_name ) as artist_page_url
