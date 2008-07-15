@@ -57,7 +57,7 @@ function _t_picks_picks_links(&$T,&$A)
 ?>
         <div class="pickslinks">
         <a id="mi_podcast_page" href="<?= $A['query-url']?>f=rss&<?= $A['qstring']?>"><span ><?= $T->String('str_podcast')?></span></a>
-        <a id="mi_stream_page" href="<?= $A['home-url']?>stream/page/playlist.m3u?<?= $A['qstring']?>">
+        <a id="mi_stream_page" href="<?= url_args( ccl('api','query','stream.m3u'), $A['qstring'] . '&f=m3u' ) ?>">
             <span><?= $T->String('str_stream')?></span></a>
         <a id="mi_play_page" href="javascript://play win" onclick="pickwinplay('<?= $A['qstring']?>');">
             <span><?= $T->String('str_play')?></span></a>
@@ -76,13 +76,14 @@ function _t_picks_picks(&$T,&$A) {
   {
         $T->Call('picks_links');
 
-        $carr101 = $A['chart'];
-        $cc101= count( $carr101);
-        $ck101= array_keys( $carr101);
-        for( $ci101= 0; $ci101< $cc101; ++$ci101)
+        foreach( $A['chart'] as $item )
         {    
-            $item = $carr101[ $ck101[ $ci101 ] ];
-            ?><div ><a href="<?= $item['file_page_url'] ?>" class="cc_file_link"><?= $item['upload_name'] ?></a>
+            ?><div ><a href="<?= $item['file_page_url'] ?>" class="cc_file_link"><?= $item['upload_name'] ?></a> <?
+            if( !empty($item['upload_num_playlists']) )
+            {
+                ?> <a href="<?= url_args(ccl('playlist','browse'),'upload='.$item['upload_id'])?>">(<?=$item['upload_num_playlists']?>)</a><?
+            }
+                ?>
                   <br  /><span ><?= $T->String('str_by') ?> <a class="cc_user_link" href="<?= $item['artist_page_url'] ?>"><?= $item['user_real_name'] ?></a></span>
             <?
             if ( !empty($A['ed_pick'])) 
