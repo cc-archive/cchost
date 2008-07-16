@@ -81,7 +81,7 @@ function _t_picks_picks(&$T,&$A) {
             ?><div ><a href="<?= $item['file_page_url'] ?>" class="cc_file_link"><?= $item['upload_name'] ?></a> <?
             if( !empty($item['upload_num_playlists']) )
             {
-                ?> <a href="<?= url_args(ccl('playlist','browse'),'upload='.$item['upload_id'])?>">(<?=$item['upload_num_playlists']?>)</a><?
+                ?> <a style="font-weight:normal;font-size:0.85em;color:#797;" href="<?= url_args(ccl('playlist','browse'),'upload='.$item['upload_id'])?>">(<?=$item['upload_num_playlists']?>)</a><?
             }
                 ?>
                   <br  /><span ><?= $T->String('str_by') ?> <a class="cc_user_link" href="<?= $item['artist_page_url'] ?>"><?= $item['user_real_name'] ?></a></span>
