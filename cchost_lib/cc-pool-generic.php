@@ -34,10 +34,8 @@ class CCPoolGeneric
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         $dv = empty($CC_GLOBALS['use_text_index']) ? 'pool_item_search_gen' : 'pool_item_search';
-        parse_str('limit=250&format=php&sort=&datasource=pool_items&dataview='.$dv,$q);
-        $sql['where'] = 'pool_item_pool =' . $pool_id;
-        $sql['match'] = $text;
-        list( $items ) = $query->QuerySQL($q,$sql);
+        $q = $query->ProcessAdminArgs('limit=250&format=php&sort=&datasource=pool_items&dataview='.$dv.'&match='.$text.'&pool='.$pool_id);
+        list( $items ) = $query->Query($q); // SQL($q,$sql);
         return($items);
     }
 

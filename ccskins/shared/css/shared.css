@@ -154,3 +154,19 @@ a.cc_playlist_edit {
 .cc_playlist_menu_item a.cc_playlist_edit {
 	font-weight: normal;
 }
+
+ul.page_topic_toc {
+	list-style: none;
+	margin: 1px;
+	padding: 2px;
+}
+
+ul.page_topic_toc li {
+	display: inline;
+	margin: 0px 12px 0px 0px;
+	}
+
+select.page_topic_toc {
+	font-size: 0.85em;
+	float: right;
+	}

@@ -32,8 +32,9 @@ function rss_topic_dataview($queryObj)
     }
     else
     {
+        $slug = cc_get_topic_name_slug();
         $ccp = url_args(ccl($queryObj->args['page']),'topic=');
-        $ccp_sql = "CONCAT('{$ccp}', LOWER(REPLACE(topic_name,' ','-')))";
+        $ccp_sql = "CONCAT('{$ccp}', {$slug} )";
     }
 
     // Thu, 27 Dec 2007 09:28:38 PST

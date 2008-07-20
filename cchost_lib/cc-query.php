@@ -361,6 +361,8 @@ class CCQuery
 
         if( $A['datasource'] == 'users' )
             $A['datasource'] = 'user';
+        elseif( $A['datasource'] == 'pool_item' )
+            $A['datasource'] = 'pool_items';
 
 
         $this->_validated_sources = true;

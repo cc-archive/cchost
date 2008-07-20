@@ -204,6 +204,11 @@ function cc_get_user_role($user_name)
     return CCUser::IsAdmin($user_name) ? 'admin' : '';
 }
 
+function cc_get_topic_name_slug($col='topic_name')
+{
+    return "LOWER(REPLACE({$col},' ','-'))";
+}
+
 function cc_get_user_avatar_sql()
 {
     global $CC_GLOBALS;
@@ -289,4 +294,77 @@ function cc_get_content_page_type($page)
         die("Content Page '{$page}' does not have 'topic_type' property");
     return $props['topic_type'];
 }
+
+function cc_add_content_paging_links(&$A,$type,$topic_slug,$ord,$page_slug)
+{
+    $slug_sql = cc_get_topic_name_slug();
+
+    if( $topic_slug )
+    {
+        // get date of current topic
+        $sql =<<<EOF
+            SELECT topic_date FROM cc_tbl_topics WHERE topic_type = '{$type}' AND  {$slug_sql} = '{$topic_slug}'
+EOF;
+        $date = CCDatabase::QueryItem($sql);
+        $ord = strtolower($ord);
+        if( $ord == 'asc' )
+        {
+            $prev_op = '<';
+            $next_op = '>';
+            $prev_ord = 'desc';
+            $next_ord = 'asc';
+        }
+        else
+        {
+            $prev_op = '>';
+            $next_op = '<';
+            $prev_ord = 'asc';
+            $next_ord = 'desc';
+        }
+
+        // query to get prev
+        $sql =<<<EOF
+            SELECT topic_name, {$slug_sql} FROM cc_tbl_topics 
+            WHERE topic_type = '{$type}' AND topic_date {$prev_op} '{$date}' 
+            ORDER BY topic_date {$prev_ord}
+            LIMIT 1
+EOF;
+        _make_topic_np_link( $A, array('prev_link','back_text'), $page_slug,'&lt;&lt;&lt; %s',$sql);
+
+        // query to get next
+        $sql =<<<EOF
+            SELECT topic_name, {$slug_sql} FROM cc_tbl_topics 
+            WHERE topic_type = '{$type}' AND topic_date {$next_op} '{$date}' 
+            ORDER BY topic_date {$next_ord}
+            LIMIT 1
+EOF;
+        _make_topic_np_link( $A, array('next_link','more_text'), $page_slug,'%s &gt;&gt;&gt;',$sql);
+
+    }
+    else
+    {
+        // query to get second topic
+        $sql =<<<EOF
+            SELECT topic_name, {$slug_sql} 
+            FROM cc_tbl_topics 
+            WHERE topic_type = '{$type}' 
+            ORDER BY topic_date {$ord} 
+            LIMIT 1 OFFSET 1
+EOF;
+        _make_topic_np_link( $A, array('next_link','more_text'), $page_slug,'%s &gt;&gt;&gt;',$sql);
+    }
+}
+
+function _make_topic_np_link(&$A,$keys,$page_slug,$sptext,$sql)
+{
+    list( $name, $slug) = CCDatabase::QueryRow($sql,false);
+
+    if( !empty($slug) )
+    {
+        $A[$keys[0]] = url_args( ccl( $page_slug ), 'topic='.$slug);
+        $A[$keys[1]] = cc_strchop(sprintf($sptext,$name),40);
+    }
+}
+
+
 ?>
