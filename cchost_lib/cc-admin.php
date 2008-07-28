@@ -493,7 +493,7 @@ class CCAdmin
                 $configs =& CCConfigs::GetTable();
                 $settings = $configs->GetConfig('settings');
                 $configs->SaveConfig('settings',$settings,$new_cfg_root);
-                CCUtil::SendBrowserTo( ccc( $new_cfg_root, 'admin', 'settings' ) );
+                CCUtil::SendBrowserTo( ccc( '/' . $new_cfg_root, 'admin', 'settings' ) );
             }
 
             CCPage::AddForm( $form->GenerateForm() );
