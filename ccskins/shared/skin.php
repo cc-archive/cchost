@@ -1,5 +1,7 @@
 <?
 
+$A['tabs_id'] = 'tabs';
+
 $A['picks_links']        = 'picks.xml/picks_links';
 
 $A['print_forms']        = 'util.php/print_forms';
@@ -47,7 +49,13 @@ $A['search_results_head'] = 'search_results.tpl/search_results_head';
 $A['tags'] = 'tags.php/tags';
 
 $A['script_links'][] = 'js/selector-addon-v1.js';
-$A['script_links'][] = 'js/scriptaculous/scriptaculous.js';
+
+//$A['script_links'][] = 'js/scriptaculous/scriptaculous.js';
+$A['script_links'][] = 'js/scriptaculous/builder.js';
+$A['script_links'][] = 'js/scriptaculous/effects.js';
+$A['script_links'][] = 'js/scriptaculous/controls.js';
+$A['script_links'][] = 'js/scriptaculous/dragdrop.js';
+
 $A['script_links'][] = url_args(ccl('docs/strings_js.php'),'ajax=1');
 $A['script_links'][] = 'js/modalbox/modalbox.js';
 $A['script_links'][] = 'js/cchost.js';

@@ -138,7 +138,7 @@
 ?></p>
 </div><!-- footer -->
 
-%end_if% <!-- if_not_null_popup -->
+%end_if% %% if_not_null_popup %%
 
 </div> <!-- container -->
 

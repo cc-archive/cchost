@@ -128,6 +128,35 @@ function _t_util_print_client_menu(&$T,&$A)
     {
         ?><div class="client_menu_help box"><?= $A['client_menu_help'] ?></div><?
     }
+    print '<table class="client_menu_table">';
+
+    foreach( $A['client_menu'] as $I )
+    {
+        ?>
+<tr><th><a href="<?= $I['action'] ?>"><?= $I['menu_text'] ?></a></th><td>
+        <?
+        if( !empty($I['help']) )
+        {
+            ?> <span class="hint"><?= $T->String($I['help']) ?></span> <?
+        }
+        print '</td></tr>';
+    }
+
+    print '</table>';
+    if( !empty($A['client_menu_hint']) )
+    {
+        ?><div class="client_menu_hint"><?= $A['client_menu_hint'] ?></div><?
+    }
+}
+
+function _t_util_print_client_menux(&$T,&$A)
+{
+    ?><link rel="stylesheet" type="text/css" href="<?= $T->URL('css/client_menu.css'); ?>" title="Default Style" /><?
+
+    if( !empty($A['client_menu_help']) )
+    {
+        ?><div class="client_menu_help box"><?= $A['client_menu_help'] ?></div><?
+    }
 
     $items = $A['client_menu'];
     $count = count($items);

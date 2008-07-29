@@ -3,9 +3,11 @@
     type              = profile
     skin-file         = ccskins/commons/skin.tpl
     desc              = _('CC Style, wide, menus on right, fancy tabs')
+    head-type         = ccskins/shared/head.tpl
     string_profile    = ccskins/shared/strings/all_media.php
     list_file         = ccskins/shared/formats/upload_page_wide.php
     list_files        = ccskins/shared/formats/upload_list_wide.tpl
+    max-listing       = 15
     form_fields       = form_fields.tpl/form_fields
     grid_form_fields  = form_fields.tpl/grid_form_fields
     tab_pos           = ccskins/shared/layouts/tab_pos_header.php

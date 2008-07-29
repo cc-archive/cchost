@@ -13,7 +13,7 @@
 
 %macro(print_tabs)%
 %if_not_empty(tab_info)%
-    <ul id="tabs">
+    <ul id="%(tabs_id)%">
     %loop(tab_info/tabs,tab)%
         <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
     %end_loop%
@@ -25,7 +25,7 @@
 
 %macro(print_nested_tabs)%
 %if_not_empty(tab_info)%
-    <ul id="tabs">
+    <ul id="%(tabs_id)%">
     %loop(tab_info/tabs,tab)%
         <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
         %if_not_null(#tab/selected)%

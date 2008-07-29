@@ -1,7 +1,7 @@
 %%
 [meta]
     type = head
-    desc = _('Embed styles and scripts in each page')
+    desc = _('Cache common scripts and styles (experimental)')
 [/meta]
 %%
 <head> 
@@ -44,17 +44,6 @@ var user_name = %if_not_null(logged_in_as)% '%(logged_in_as)%'; %else% null; %en
     <link rel="%(#head/rel)%" type="%(#head/type)%" href="%(#head/href)%" title="%(#head/title)%"/>
 %end_loop%
 
-%loop(script_links,script_link)%
-    <script type="text/javascript" src="%url(#script_link)%" ></script>
-%end_loop%
+<? $T->CachedHead(); ?>
 
-%loop(script_blocks,script_block)%
-    %call(#script_block)%
-%end_loop%
-
-%customize%
-
-%loop(style_sheets,css)%
-    <link rel="stylesheet" type="text/css" href="%url(#css)%" title="Default Style" />
-%end_loop%
 </head>

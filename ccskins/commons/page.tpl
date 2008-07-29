@@ -9,7 +9,7 @@
    xmlns:cc="http://web.resource.org/cc/"   
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xml:lang="en" lang="en">
-    %call('head.tpl')%
+    %call(head-type)%
     %if(show_body_header)%
         %call('body.tpl')%
     %else%

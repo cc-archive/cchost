@@ -310,6 +310,11 @@ class CCTemplateAdmin
         $fp = new CCFileProps(); return $fp->GetProps('','skin');
     }
 
+    function GetHeads()
+    {
+        $fp = new CCFileProps(); return $fp->GetProps('','head');
+    }
+
     function GetContentTemplates()
     {
         $fp = new CCFileProps(); return $fp->GetProps('pages','content_page');
@@ -319,6 +324,11 @@ class CCTemplateAdmin
     {
         global $CC_GLOBALS;
         $fp = new CCFileProps(); return $fp->GetProps('','dynamic_content_page',true,$CC_GLOBALS['files-root']);
+    }
+
+    function GetMultipleTypes( $types )
+    {
+        $fp = new CCFileProps(); return $fp->GetMultipleProps($types);
     }
 
     function OnAdminExtras()

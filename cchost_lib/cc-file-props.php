@@ -40,28 +40,25 @@ class CCFileProps
         if( empty($tdirs) )
         {
             $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS );
-            $tdirs = array_filter($tdirs);
         }
         else
         {
             if( is_string($tdirs) )
                 $tdirs = CCUtil::SplitPaths($tdirs);
         }
-        $k = array_keys($tdirs);
-        $c = count($k);
-        for( $i = 0; $i < $c; $i++ )
-        {
-            $tdirs[$k[$i]] = CCUtil::CheckTrailingSlash($tdirs[$k[$i]],false);
-        }
+        $this->_check_slashes($tdirs);
         $results = array();
-        $this->_scan_dir($results, $tdirs, $format_dir, $type, $ret_files,$must_have);
+        $seen = array();
+        $this->_scan_dir( $results, $tdirs, $format_dir, $type, $ret_files, $must_have, $seen );
         return $results;
     }
 
     function GetFileProps($filename)
     {
+        global $xx;
+
         $text = file_get_contents($filename);
-        if( !preg_match('#.*\[meta\](.*)\[/meta\].*#ms',$text,$m) )
+        if( !preg_match('#.*\[meta\](.*)\[/meta\].*#Ums',$text,$m) )
             return null;
         $lines = split("\n",$m[1]);
         $props = array();
@@ -82,10 +79,15 @@ class CCFileProps
         return $props;
     }
 
-    function _scan_dir(&$match_files, $source, $format_dir, $type, $ret_files, $must_have=null )
+    function _scan_dir( &$match_files, $source, $format_dir, $type, $ret_files, $must_have, &$seen )
     {
         foreach( $source as $dir )
         {
+            if( substr($dir,-6) == 'images' || in_array($dir,$seen) )
+                continue;
+
+            $seen[] = $dir;
+
             if( $format_dir )
             {
                 $format_path = $dir . '/' . $format_dir;
@@ -134,10 +136,83 @@ class CCFileProps
 
             $subdirs = glob( $dir . '/*', GLOB_ONLYDIR );
             if( !empty($subdirs) )
-                $this->_scan_dir($match_files, $subdirs, $format_dir, $type, $ret_files );
+                $this->_scan_dir($match_files, $subdirs, $format_dir, $type, $ret_files, $must_have, $seen );
         }
 
         return $match_files;
+    }
+
+    function GetMultipleProps( $types )
+    {
+        global $CC_GLOBALS;
+        require_once('cchost_lib/cc-template.php');
+        $tdirs = CCUtil::SplitPaths($CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS );
+        $this->_check_slashes($tdirs);
+        $results = array();
+        $seen = array();
+        $this->_multiple_scan_dir($results, $tdirs, $types, $seen);
+        return $results;
+    }
+
+    function _multiple_scan_dir(&$match_files, $base_dirs, $types, &$seen )
+    {
+        foreach( $base_dirs as $dir )
+        {
+            if( substr($dir,-6) == 'images' || in_array( $dir, $seen ) )
+                continue;
+
+            $seen[] = $dir;
+//print "$dir<br />";
+global $xx;
+$xx = $dir == 'ccskins/shared/strings' ? true : false;
+
+            $_files = glob( $dir . '/*.*' ) ;
+            foreach( $_files as $ffile )
+            {
+                if( is_dir($ffile) || $ffile{0} == '.' )
+                    continue;
+
+                $props = $this->GetFileProps($ffile);
+  
+                if( $props && empty($props['type']) )
+                    die("Missing meta 'type' in $ffile");
+
+                if( !$props )
+                    continue;
+
+                foreach( $types as $type )
+                {
+                    if( $props['type'] != $type )
+                        continue;
+
+                    if( empty($props['desc']) )
+                    {
+                        $match_files[$type][$ffile] = $ffile;
+                    }
+                    else
+                    {
+                        $match_files[$type][$ffile] = $props['desc'];
+                    }
+                }
+            }
+
+            $subdirs = glob( $dir . '/*', GLOB_ONLYDIR );
+            if( !empty($subdirs) )
+                $this->_multiple_scan_dir($match_files, $subdirs, $types, $seen );
+        }
+
+        return $match_files;
+    }
+
+    function _check_slashes(&$tdirs)
+    {
+        $tdirs = array_filter($tdirs);
+        $k = array_keys($tdirs);
+        $c = count($k);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $tdirs[$k[$i]] = CCUtil::CheckTrailingSlash($tdirs[$k[$i]],false);
+        }
     }
 }
 

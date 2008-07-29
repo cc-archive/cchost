@@ -126,10 +126,12 @@ class CCSkinSettingsForm extends CCEditConfigForm
         $this->CCEditConfigForm('skin-settings');
 
         require_once('cchost_lib/cc-template.inc');
-        $skins             = CCTemplateAdmin::GetSkins(true);
-        $list_format_files = CCTemplateAdmin::GetFormats('list');
-        $page_format_files = CCTemplateAdmin::GetFormats('page');
-        $str_profiles      = CCTemplateAdmin::GetStringProfiles();
+        $ffiles = CCTemplateAdmin::GetMultipleTypes( array( 'skin', 'list', 'page', 'head', 'string_profile' ) );
+        $skins             = $ffiles['skin'];
+        $list_format_files = $ffiles['list'];
+        $page_format_files = $ffiles['page'];
+        $heads             = $ffiles['head'];
+        $str_profiles      = $ffiles['string_profile'];
 
         $fields['string_profile'] =
             array( 'label'       => _('String Profile'),
@@ -157,6 +159,12 @@ class CCSkinSettingsForm extends CCEditConfigForm
                    'class'       => 'cc_form_input_short',
                    'formatter'   => 'textedit',
                    'flags'       => CCFF_POPULATE | CCFF_REQUIRED);
+        $fields['head-type'] =
+            array( 'label'       => _('Optimized HEAD'),
+                   'form_tip'    => _('Combine scripts and styles in common files'),
+                   'formatter'   => 'select',
+                   'options'     => $heads,
+                   'flags'       => CCFF_POPULATE );
         $fields['skin-file'] =
             array( 'label'       => _('Base Skin Template'),
                    'form_tip'    => _('Default skin template for this profile (Advanced)'),
@@ -452,7 +460,7 @@ class CCSkinAdmin
             $config =& CCConfigs::GetTable();
             $skin_settings = $config->GetConfig('skin-settings');
             $text = '<?/*' . "\n[meta]\n    type = profile\n    desc = _('{$values['desc']}')";
-            foreach( array( 'max-listing', 'properties', 'skin_profile') as $outme )
+            foreach( array( 'properties', 'skin_profile') as $outme )
                 if( isset($skin_settings[$outme]) )
                     unset($skin_settings[$outme]);
 

@@ -75,6 +75,14 @@ function cc_tpl_parse_last($bang, $item)
     return "<? if( {$bang}(\$i_{$item} == \$c_{$item}) ) { ?>";
 }
 
+function cc_tpl_parse_first($bang, $item)
+{
+    $item = preg_replace('/(#|\$)/','',$item);
+    $bang = empty($bang) ? '' : '!';
+
+    return "<? if( {$bang}(\$i_{$item} == 0) ) { ?>";
+}
+
 function cc_tpl_parse_call_macro($prefix, $mac)
 {
     $prefix = _cc_tpl_flip_prefix($prefix);
@@ -207,6 +215,7 @@ function cc_tpl_parse_text($text,$bfunc)
         "/(<\?=?) chop{$op}{$ac}{$a}{$cp}%/e"             =>   "cc_tpl_parse_chop('$1', '$2','$3');",
         "/(<\?=?) date{$op}{$ac}{$qa}{$cp}%/e"            =>   "cc_tpl_parse_date('$1', '$2','$3');",
         "/<\? inspect{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_inspect('$1');",
+        "/<\? if_(not_)?first{$op}{$a}{$cp}%/e"            =>   "cc_tpl_parse_first('$1','$2');",  
         "/<\? if_(not_)last{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_last('$1','$2');",  
         "/(<\?=?) url{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_url('$1','$2');",
         "/<\?=? if_attr{$op}{$ac}{$a}{$cp}%/e"            =>   "cc_tpl_parse_if_attr('$1','$2');",

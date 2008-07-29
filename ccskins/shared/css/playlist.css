@@ -312,5 +312,3 @@ div.cc_playlist_action  {
 	background-image: url('../images/menu-play-hi.png');
 	color: #D88F8F;
 }
-
-<img src="%url('images/menu-play.png')%" title="%text(str_pl_found_in)%: (%(#R/upload_num_playlists)%) %text(str_pl_playlists)% ">

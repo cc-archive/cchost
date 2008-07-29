@@ -5,6 +5,7 @@
     desc = _('Text appropriate for generic media')
 [/meta]
 */
+
 $GLOBALS['strings-profile'] = 'generic';
 
 $GLOBALS['str_action']              = _('Actions');

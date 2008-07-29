@@ -3,11 +3,13 @@
     type              = profile
     skin-file         = ccskins/commons/skin.tpl
     desc              = _('ccMixter style, wide, menus on left, fancy tabs')
+    head-type         = ccskins/shared/head.tpl
     string_profile    = ccskins/shared/strings/audio.php
     list_file         = ccskins/shared/formats/upload_page_wide.php
     list_files        = ccskins/shared/formats/upload_list_wide.tpl
     form_fields       = form_fields.tpl/form_fields
     grid_form_fields  = form_fields.tpl/grid_form_fields
+    max-listing       = 15
     tab_pos           = ccskins/shared/layouts/tab_pos_header.php
     box_shape         = ccskins/shared/layouts/box_round.php
     page_layout       = ccskins/shared/layouts/layout024.php

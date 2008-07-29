@@ -3,6 +3,7 @@
     type = profile
     desc = _('Max client (Menus and Extras at bottom)')
     skin-file  = ccskins/plain/skin.tpl
+    head-type         = ccskins/shared/head.tpl
     string_profile  = ccskins/shared/strings/all_media.php
     list_file  = ccskins/shared/formats/upload_page_wide.php
     list_files  = ccskins/shared/formats/upload_list_wide.tpl

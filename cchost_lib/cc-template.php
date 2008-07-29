@@ -63,6 +63,10 @@ class CCSkin
         // this seems like (memory) overkill, need to optimize
         $this->vars = array_merge($CC_GLOBALS,$this->vars,$site_logo);
 
+        // for compat with pre 5.0.beta.2 
+        if( empty($this->vars['head-type']) )
+            $this->vars['head-type'] = 'ccskins/shared/head.tpl';
+
         if( CCUser::IsLoggedIn() )
         {
             $this->vars['logged_in_as'] = CCUser::CurrentUserName();
@@ -200,10 +204,252 @@ class CCSkin
                 $A[$inc] = $_REQUEST[$inc];
             if( !empty($A[$inc]) && file_exists($A[$inc]))
             {
-                //CCDebug::Log('Loading custom: ' . $A[$inc]);
                 require_once($A[$inc]);
             }
         }
+    }
+
+    function _d($t)
+    {
+        // print $t;
+    }
+
+    function _get_head_files($auto_create=1)
+    {
+        global $CC_GLOBALS,$CC_CFG_ROOT;
+
+        $base = $CC_GLOBALS['user-upload-root'] . '/' . $CC_CFG_ROOT . '_skin_'; 
+        $files = glob( $base . '*.*' );
+        if( empty($files) && $auto_create )
+        {
+            $base .= date('YmdHis');
+            return array( $base . '.css', $base . '.js' );
+        }
+
+        return $files;
+    }
+
+    /**
+    * Create a cache of common head js and css files and blocks
+    *
+    * The idea here is to suck in all the stateless javascript and style
+    * information common to all pages in this skin and write them out
+    * to 2 cache files, one for the JS one for the CSS. We will then use
+    * them for a <script tag and a <link tag in the <head> for each page
+    *
+    * The cache files are named for the current skin and the time they
+    * were generated and put into the root of the user's uplaod directory
+    * because that's the one place in the system guaranteed to be both
+    * writable and accessable by browsers.
+    *
+    * Admin's can determin whether to use this method of head caching
+    * from the Setting/Skins/Basic Settings options screen. 
+    *
+    * To clear the cache from the browser use ?update=1
+    */
+    function CachedHead()
+    {
+        // this returns valid file names even if they don't exist
+        list( $css_file, $script_file ) = $this->_get_head_files();
+
+        if( !file_exists($script_file) )
+        {
+            // there are no cached files so we create them
+
+            $f_js  = fopen($script_file,'w');
+            $f_css = fopen($css_file,   'w');
+
+            // we're going to suck in all the CSS files 
+
+            if( !empty($this->vars['style_sheets']) ) foreach( $this->vars['style_sheets'] as $css ) {
+                    $note = $this->GetTemplate($css);
+                    $text = file_get_contents($note);
+                    if( preg_match_all("/url\(['\"]([^'\"]+)['\"]/",$text,$m) )
+                    {
+                        $dir = $this->_strip_root(dirname($note)) . '/';
+                        foreach( $m[1] as $urlarg )
+                        {
+                            $path = ccd($this->_strip_root(realpath( $dir . $urlarg )));
+                            $text = str_replace($urlarg,$path,$text);
+                        }
+                    }
+                    $this->_write_css($f_css,$text);
+            }
+
+            // There is already a list of js files in this->var['script_links'] and they
+            // will be written to the cache first, but the customizations are freewheeling
+            // so we will parse those first and add any links we find links or blocks in
+            // the generated HTML
+
+            ob_start();
+            $this->AddCustomizations();
+            $text = ob_get_contents();
+            ob_end_clean();
+
+
+            require_once('cchost_lib/htmlparser/htmlparser.inc');
+            $parser = new HtmlParser($text);
+            $tag = null;
+            $attrs = null;
+            while ($parser->parse()) {
+
+                switch( $parser->iNodeType )
+                {
+                    case NODE_TYPE_ELEMENT:
+                        $attrs =& $parser->iNodeAttributes;
+                        $tag = strtolower($parser->iNodeName);
+                        $this->_d( "START: $tag<br />\n");
+                        if( $tag == 'script' and !empty($attrs['src']) )
+                        {
+                            // this is a script link, add it to our 'to-be-written' list
+
+                            $this->_d( "SCRIPT LINK: {$attrs['src']}<br />\n");
+                            $this->vars['script_links'][] = str_replace(ccl(),'',$attrs['src']);
+                        }
+                        break;
+                    case NODE_TYPE_ENDELEMENT:
+                        //$tag = strtolower($parser->iNodeName);
+                        $this->_d("END: $tag<br />\n");
+                        switch($tag) 
+                        {
+                            case 'link':
+                                if( !empty($attrs['rel']) )
+                                {
+                                    if( $attrs['rel'] == 'stylesheet' )
+                                    {
+                                        // this is a link to a stylesheet, write it now
+                                        // ...
+                                        // tbh I'm not sure this preserves the order 
+                                        // properly but we'll see...
+
+                                        $file = str_replace(ccl(),'',$attrs['href']);
+                                        $text = file_get_contents($file);
+                                        $this->_write_css($f_css,$text);
+                                    }
+                                }
+                                break;
+                        }
+                        $tag = null;
+                        $attrs = null;
+                        $val = null;
+                        break;
+                    case NODE_TYPE_COMMENT:
+                        // todo: verify that all the IF[IE] comments are handled
+                        // correctly...
+                        $this->_d("COMMENT: $tag<br />\n");
+                        continue;
+                    case NODE_TYPE_TEXT:
+                        $val = trim($parser->iNodeValue);
+                        $this->_d("TEXT: $tag<br />\n$val<br />\n");
+                        switch( $tag )
+                        {
+                            case 'style':
+                                $this->_write_css($f_css,$val);
+                                break;
+                            case 'script':
+                                if( empty($attrs['src']) )
+                                {
+                                    // this is an actual block of JS, add it to the
+                                    // 'to-be-written' list
+                                    $this->vars['script_blocks'][] = $val;
+                                }
+                                break;
+                        }
+                        break;
+                }
+
+            }
+
+            // Some customizations write 'end_script_text' blocks. We store
+            // those up here and put them into a js function into the cache
+            // Later we will add a call to this function to the bottom of
+            // every page
+
+            if( !empty($this->vars['end_script_text']) ) {
+                $scr = 'function _cc_post_page_load() { ';
+                foreach( $this->vars['end_script_text'] as $FL )
+                {
+                    $scr .= $FL;
+                }
+                $scr .= '} ';
+
+                // now put the function into the 'to-be-written' queue
+
+                $this->vars['script_blocks'][] = $scr;
+
+                // clear this now so we don't write the blocks
+                // twice while creating this cache file...
+                
+                $this->vars['end_script_text'] = array();
+            }
+            
+
+            // OK, we are finally ready to start writing out some javascript, start by sucking
+            // in all the js files 
+
+            if( !empty($this->vars['script_links']) ) foreach( $this->vars['script_links'] as $FL )
+            {
+                if( strstr($FL, 'strings_js.php?ajax=1') !== false )
+                {
+                    // we have to special case the JS strings files because they need to be
+                    // 'eval'd right here to do int'l and other string substitutions
+
+                    $FL = 'strings_js.php';
+                    $note = $this->GetTemplate($FL,true);
+                    $text = file_get_contents($note);
+                    $text = preg_replace( '/header\(.*;/', '', $text );
+                    $text = str_replace( 'exit;', '', $text );
+                    $T = $this;
+                    ob_start();
+                    eval( '?>' . $text);
+                    $text = ob_get_contents();
+                    ob_end_clean();
+                }
+                else
+                {
+                    // otherwise we can read the file 'as is'
+
+                    $note = $this->GetTemplate($FL,true);
+                    $text = file_get_contents($note);
+                }
+
+                $this->_write_js($f_js,$text);
+            }
+
+            if( !empty($this->vars['script_blocks']) ) foreach( $this->vars['script_blocks'] as $FL ) {
+                    $this->_write_js($f_js,$FL);
+            }
+
+            fclose($f_js);
+            fclose($f_css);
+        }
+
+        print "\n" . '<script type="text/javascript" src="' . ccd($script_file) . '"></script>';
+        print "\n" . '<link rel="stylesheet"  type="text/css" title="Default Style" href="' . ccd($css_file) . '" />';
+
+        $this->vars['end_script_text'][] = "if( typeof(_cc_post_page_load) == 'function' ) { _cc_post_page_load(); }";
+
+    }
+
+    function _strip_root($f)
+    {
+        return str_replace(str_replace('\\','/',getcwd()) . '/','',str_replace('\\','/',$f));
+    }
+
+    function _write_css($f,$text)
+    {
+        fwrite( $f, preg_replace('/\s+/',' ',trim(preg_replace('#/\*.+\*/#Us','',$text))));
+    }
+
+    function _write_js($f,$text)
+    {
+        /*
+        $text = preg_replace( array('#/\*.+\*' . '/#Us','%//.*$%m'),'',$text);
+        */
+        $text = preg_replace(array('/^\s+/m',"/([;,{])\n/",'#^//.*\n#m'),
+                             array('',       '\1',         ''),
+                             trim($text));
+        fwrite( $f, $text . "\n" );
     }
 
     function String($args)
@@ -671,10 +917,14 @@ class CCSkin
     {
     }
 
-    /**
-    * @deprecated
-    */
-    function ClearCache() { return true; }
+    function ClearCache() 
+    { 
+        $files = CCTemplate::_get_head_files(false);
+        foreach( $files as $F )
+            if( file_exists($F) )
+                unlink($F);
+        return true; 
+    }
 
 }
 
