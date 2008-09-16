@@ -239,7 +239,7 @@ class CCMailer
         $message = $this->_message; // do doubt this needs to be messaged...
 
         $headers  = "MIME-Version: 1.0\r\n";
-        $headers .= "Content-type: text/plain; charset=us-ascii\r\n";
+        $headers .= "Content-type: text/plain; charset=utf-8\r\n";
         $headers .= "From: $from\r\n";
         $headers .= "Reply-To: $replyto\r\n";
 
