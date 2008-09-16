@@ -387,7 +387,7 @@ EOF;
         }
 
         $sql =<<<EOF
-            SELECT user_num_posts - COUNT(user_num_posts) as user_num_posts, user_id 
+            SELECT user_num_posts - 1 as user_num_posts, user_id 
             FROM cc_tbl_user
             JOIN cc_tbl_topics ON user_id=topic_user
             WHERE $where
