@@ -1,7 +1,19 @@
+BEFORE Jumping In
+==================
+The information in this file is a snapshot. Full the latest information
+regarding ccHost please refer to our wiki
+
+http://wiki.creativecommons.org/cchost
+
+
+
 Compiling the SVN version
 =========================
 
-    svn co https://svn.sourceforge.net/svnroot/cctools/cchost/trunk cchost
+For read-only snapshots:
+
+    svn co http://code.creativecommons.org/svnroot/cchost/trunk/ cchost
+
 
 Dependencies
 ------------
@@ -67,6 +79,8 @@ From Unix/Linux-based systems, all you need is to run from the commandline:
 
     make install
 
+NOTE: make is currently (5.x) NOT WORKING
+
 Packaging
 =========
 
@@ -77,4 +91,4 @@ Packaging is simple with ccHost. Just run from the commandline:
 Packages are then placed into the packages subfolder. There are also other
 directives in the makefile for making other packages.
 
-
+NOTE: Packaging is currently (5.x) NOT WORKING
