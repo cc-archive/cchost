@@ -12,9 +12,6 @@ $A["tab_pos"] = array(
     "subclient" => true );
 ?>
 <style type="text/css">
-#tabs {
-  height: 1.1em;
-}
 #tabs li {
   float: left;
   display: block;

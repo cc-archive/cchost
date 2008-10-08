@@ -126,7 +126,7 @@ h2 {
 	list-style-type: none;
 	background: url('../images/tabbar-bg.png') top left repeat-x;
 	line-height: 145%;
-	height: 30px;
+	height: 2.7em;
 }
 
 ul#tabs a { font-weight: normal; }
