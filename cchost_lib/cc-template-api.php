@@ -295,11 +295,11 @@ function cc_get_content_page_type($page)
     return $props['topic_type'];
 }
 
-function cc_add_content_paging_links(&$A,$type,$topic_slug,$ord,$page_slug)
+function cc_add_content_paging_links(&$A,$type,$topic_slug,$ord,$page_slug,$limit=1)
 {
     $slug_sql = cc_get_topic_name_slug();
 
-    if( $topic_slug )
+    if( $topic_slug && ($limit==1) )
     {
         // get date of current topic
         $sql =<<<EOF
@@ -343,15 +343,24 @@ EOF;
     }
     else
     {
-        // query to get second topic
-        $sql =<<<EOF
-            SELECT topic_name, {$slug_sql} 
-            FROM cc_tbl_topics 
-            WHERE topic_type = '{$type}' 
-            ORDER BY topic_date {$ord} 
-            LIMIT 1 OFFSET 1
+        if( $limit == 1 )
+        {
+            // query to get second topic
+            $sql =<<<EOF
+                SELECT topic_name, {$slug_sql} 
+                FROM cc_tbl_topics 
+                WHERE topic_type = '{$type}' 
+                ORDER BY topic_date {$ord} 
+                LIMIT 1 OFFSET 1
 EOF;
-        _make_topic_np_link( $A, array('next_link','more_text'), $page_slug,'%s &gt;&gt;&gt;',$sql);
+            _make_topic_np_link( $A, array('next_link','more_text'), $page_slug,'%s &gt;&gt;&gt;',$sql);
+        }
+        else
+        {
+            $table = new CCTable('cc_tbl_topics','topic_id');
+            $sql_where = "topic_type = '{$type}'";
+            CCPage::AddPagingLinks($table,$sql_where,$limit);
+        }
     }
 }
 

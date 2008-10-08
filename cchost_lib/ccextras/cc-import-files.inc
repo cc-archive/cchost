@@ -119,7 +119,7 @@ class CCImportFiles
         require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/cc-admin.php');
         $page_title = _('Import files');
-        CCAdmin::BreadCrumbs(true,array('url' => '','title'=>$page_title));
+        CCAdmin::BreadCrumbs(true,array('url' => '','text'=>$page_title));
         $tags = CCUD_ORIGINAL;
         $form_help = _('Use this form to import files already on your server into this ccHost system. WARNING: This form will <b>MOVE</b> your file from its original location to one specified by this ccHost system.');
 
@@ -170,6 +170,10 @@ class CCImportFiles
                 }
                 else
                 {
+global $CC_GLOBALS;
+$url = ccl('files',$CC_GLOBALS['user_name'],$ret);
+CCUtil::SendBrowserTo($url);
+return;
                     $upload_id = $ret;
                     $uploads =& CCUploads::GetTable();
                     $record = $uploads->GetRecordFromID($upload_id);

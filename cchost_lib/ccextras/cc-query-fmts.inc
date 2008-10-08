@@ -147,6 +147,10 @@ class CCQueryFormats
                 $page->PageArg('dochop',  isset($chop) && $chop > 0 );
                 $page->PageArg('chop',    isset($chop) ? $chop : 25 );
                 $page->Call($template,true);
+                if( !empty($paging) && ($paging == 'on') )
+                {
+                    CCPage::AddPagingLinks($queryObj->dataview,'',$limit);
+                }
             }
             break;
 

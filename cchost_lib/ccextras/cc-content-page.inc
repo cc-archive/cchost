@@ -487,7 +487,7 @@ class CCContentPage
         {
             $paging_goo = '';
 
-            if( $values['limit'] == 1 )
+            //if( $values['limit'] == 1 )
             {
                 // let's special case topic to topic paging because we don't use 'offset', we
                 // use the topic slug (URL safe version of the topic_name) 
@@ -498,7 +498,7 @@ class CCContentPage
         }
         else
         {
-            $paging_goo = '';
+            $paging_goo = "// no paging \n";
         }
 
 
@@ -526,13 +526,13 @@ class CCContentPage
 print "<h1>{$values['title']}</h1>";
 {$toc}cc_query_fmt('{$q}&topic=' . \$topic );
 {$paging_goo}{$feed_goo} 
-?>
+
 EOF;
 
         $f = fopen($path,'w');
-        fwrite($f,$text);
+        fwrite($f,$text . '?' . ">\n\n");
         fclose($f);
-        chmod($path,cc_default_file_perms());
+        @chmod($path,cc_default_file_perms());
         return $fname;
     }
 
