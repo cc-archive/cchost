@@ -3,10 +3,19 @@
 function fix_all()
 {
     fix_collabs();
+    fix_lics();
     fix_pool_resync();
     flush();
     fix_topics();
 }
+
+function fix_lics()
+{
+    require_once('cchost_lib/cc-lics-install.php');
+    print("Updating licenses<br />\n");
+    cc_install_licenses();
+}
+
 
 function fix_cart_sync()
 {
