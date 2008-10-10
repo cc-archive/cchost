@@ -1,9 +1,8 @@
-Installation notes for ccHost 4.0
+Installation notes for ccHost 5.0
 ====================================
 
 Please check the project website/wiki to see if there are updates to any of 
 these steps: http://wiki.creativecommons.org/CcHost#Install
-
 
 
 New Install (Simple or Hosted Environment)
@@ -36,7 +35,7 @@ New Install (Advanced)
 If you have basic knowledge of using FTP and you are comfortable
 at a Unix/Linux command line you can use these steps to install: 
 
-    1. Unzip the ccHost ZIP, tar.gz, or tar.bz2 archive on your local system 
+    1. Unzip the ccHost ZIP archive on your local system 
        and copy the files (retaining the directory structure) to your web 
        server.
 
@@ -73,119 +72,35 @@ at a Unix/Linux command line you can use these steps to install:
 
    6. Follow the instructions from there on...
 
-
-Upgrading from 3.1, 4.0 or newer to 4.5
------------------------------------------
+Upgrading from 3.1 or higher to 5.0
+-----------------------------------
 
   -1. Make a backup of your database.
 
-   1. Login as admin to your existing site
+   1. Unzip cchost ZIP archive to a local machine.
 
-   2. Copy the 4.5 files (everything EXCEPT the ccadmin directory)
+   2. Copy the 5.0 files (everything EXCEPT the ccadmin directory)
       over your existing site
 
-   3. Browse to you home page with:
-        ?update=1 (for pretty url sites) or 
-	&update=1 (for non-pretty url)
-  
+   3. Browse to http://where_you_installed_cchost
 
-Upgrading from 3.0
-------------------
+   4. Importing phpTal Templates
 
-ccHost 3.1 represented a significant change in how we handle
-your customized files and paths. The main purpose of this
-update is to ensure that updating in the future will be as
-painless as possible. In other words, we have learned our
-lessons and the hoop-jumping days of moving your custom
-files around before an update will no longer be necessary...
-after this update. 
+      None of your version 4 skins, pages, etc. work anymore as is. You can 
+      try to import your old phpTAL XML templates using:
 
-During this update you'll create a directory structure that
-will house all your custom and temporary files and then never 
-have to worry about it.
+          bin/cc-host-import-v4-template.php 
 
-NOTE: As always, the first thing you should is make a backup of 
-your MySQL database as well as your ccHost directory tree. See
-our administor's guide on backing up if you need specific help
-on how to do this:
+      Many imported templates (like your home page) might "just work" 
+      but many will need tweaking, assuming you are familiar with PHP.
 
-http://mirrors.creativecommons.org/cchost/docs/cchost/tutorial_admin.backup.pkg.html
 
-NOTE TO SVN and 3x DAILY BUILD USERS: If you are up to date 
-with the current SVN code base and you have already used
-Global Settings/Paths to customize your install then you can
-just log in as administrator and skip down to Step 8 below.
+Upgrading from 3.0 or lower to 5.0
+-----------------------------------
 
-Here are the steps for this update:
+Upgrading from 3.0 or lower installation has not been tested. 
+It should theoritically work the same as upgrading from 
+a ccHost 4.x installation. 
 
-1. Make sure you logged in admin on your ccHost installation
-   with the 'remember me' option CHECKED ON.
-
-2. If you have a file called ccextras/cc-language.php delete that 
-   file now
-
-3. Create a directory under your ccHost web root that looks like:
-
-     - local_files
-       |
-       |- lib
-       |
-       |- skins
-       |
-       |- temp
-       |
-       |- viewfile
-
-   Make sure these directories are writable to PHP scripts. To
-   ease the update you should make all these globally accessable
-   (0777) for now.
-
-   After the update you can rename and move these files around
-   but the updater will look for this specific structure just 
-   to make the transition easier.
-
-4. MOVE all custom modules (.php, .inc, etc) you installed into 
-   ccextras to local_files/lib (make sure to update any include() 
-   statements you might have to reflect the move)
-
-5. COPY custom skins you installed in cctemplates to 
-   local_files/skins. 
-   
-   Make sure to update any references to cctemplates, 
-   including implicit ones, (e.g. @import('skin-simple.css') 
-   becomes @import('../../cctemplates/skin-simple.css')) 
-   to reflect the move.
-
-6. If you edited cctemplates/custom.xml COPY it to 
-   cctemplates/sidebar.xml
-
-7. MOVE all custom files you installed or edited (e.g. home.xml) in
-   ccfiles to local_files/viewfile. Make sure to update any references
-   (e.g. <IMG src="" ) to reflect the move.
-
-8. Unzip the ccHost 4.5 package on your local machine
-
-9. Copy everything EXCEPT the ccadmin directory over your server's 
-   ccHost directory. 
-
-10. Browse to http://your_installation_root/?update=1
-
-11. If you are using your own skin go to 'Manage Site/Settings' to
-    tell ccHost to use the version in local_files/skins.
-
-    NOTE: You skin may be 'trashed' during this process and 
-    your pages appear totally without styling. The site
-    should continue to function however, you'll just be
-    scrolling a lot more until you can reset the skin settings.
-
-    After successfully reseting your skin settings you should
-    remove the skin from cctemplates and never touch that 
-    directory again.
-
-Again, this really is the very last time this will happen. The 
-new system of using admin configured paths for looking for files
-means that you can scribble all you want in your directories, never 
-touch the cc* directories again and always have a simple install
-from now on.
 
 $Id$
