@@ -17,5 +17,5 @@
 </style>
 <p>%text(str_news)%</p>
 <ul>
-%query('f=embed&t=topic_dump&type=news&limit=5&cache=news')%
+%query('f=embed&t=topic_dump&type=news&limit=5')%
 </ul>

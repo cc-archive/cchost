@@ -147,7 +147,10 @@ class CCAccess
 
     function Access()
     {
-        CCPage::SetTitle(_('Edit Access Rights'));
+        $title = _('Restrict Access Rights');
+        require_once('cchost_lib/cc-admin.php');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
         $form = new CCAccessEditForm();
         if( empty($_POST['accessedit']) )
         {

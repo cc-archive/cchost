@@ -1,10 +1,31 @@
 ccHost Release Notes
 ====================
 
-Version 4.4
+Version 5.0 marks a major feature release that removes all programming
+and HTML/XML markup requirements from admins of a ccHost site with a 
+heavy emphasis on content creation and customization all through admin 
+browser interfaces.
 
-This version marks a major feature release with something for 
-end users, admins and devleopers (and many, many bugfixes)
+New Features in 5.0
+=====================
+
+- Content Manager 
+
+Admins can now create pages of content without any PHP, XML or HTML markup. 
+
+- Skin Profiles
+
+Admins can customize skins based on a choice of 40 layouts, color and font profiles,
+drag and drop sidebar extras, etc.
+
+- String Profiles
+
+A simple choice will change every string in the system to be domain specific
+(music site, image site, video site, etc.)
+
+- Query Browser
+
+Admin configurable query browser 
 
 
 New Features in 4.5
@@ -166,83 +187,3 @@ Improvements in 4.0
   will return all remixes that do NOT have the 'downtempo' tag
 
 
-An edited SVN LOG (4.5):
--------------------------
-
-
-api: remix min/max param (for sample digging)
-bugfix: 2 players are not good
-bugfix: Fixed big db overlaod with openclipart.org 
-bugfix: add template tag was broken
-bugfix: bad people url broke collab page
-bugfix: calculate the amount of user's upload file
-bugfix: contest edit was broken
-bugfix: csv didn't output separate lines.
-bugfix: digging checkbox was not being read on refresh
-bugfix: dyn playlists don't display in profile
-bugfix: email form name
-bugfix: errors in skin-simple template
-bugfix: extra quote in mail
-bugfix: fix for mixed version lic remix
-bugfix: formats in publicize
-bugfix: got rid of extra click on pl open
-bugfix: ie margin bug
-bugfix: missed by sa for 3.0 lic
-bugfix: missing form_id caused js error
-bugfix: missing include
-bugfix: missing include
-bugfix: missing yet another include
-bugfix: new rec'd were not showing up
-bugfix: new uploads displayed wrong recc'd number
-bugfix: open list playlist broke when going 'next'
-bugfix: overrides on auto-macros in skins never worked
-bugfix: paging next in playlists confused onclick handlers
-bugfix: playlist counts could get out of date
-bugfix: popup info would not go away under IE on click away
-bugfix: post remix was broken
-bugfix: prevent wrapping of player button
-bugfix: publicize yourself was broken
-bugfix: recent playlists blew up
-bugfix: removing item from playlist would throw off counters
-bugfix: review feeds were broken
-bugfix: some format templates were broken,
-bugfix: some versions of php croaked on null contest return
-bugfix: spelling
-bugfix: stats broken for non-logged in users
-bugfix: translated topics were not being deleted
-bugfix: turning off getid3 confused psuedo verifier
-bugfix: unknown user crashed page
-bugfix: unreg users got missing func error
-bugfix: userid that starts with number couldn't publish/manage files
-bugfix: xspf feeds were broken for some reason
-
-code: Added reply-to field as an option...
-code: Jose Solorzano's html parser
-code: add 'realpath' choice
-code: array_combine doen'st exists in php4
-code: change rdf format
-code: enable type-type deleteWhere (this is a scary checkin)
-code: format.php was a dupe of .inc version
-code: kill invalid query choice with err msg
-code: more equitable and memory efficient ratings
-code: need to include events to ensure event defs are loaded
-code: new events (LostPassword, ip banned, etc.)
-code: optimized sql lookup
-code: shorten header link
-code: turn on new profile page tabs by default
-code: used to be 'people' dir, now it's 'files'
-code: Added check to see if the cc-config-db.php exists from ccadmin and if
-
-format: button player and upgrade
-format: embed playlist ui
-
-typo: clean avatar names
-typo: fixed count name
-
-ui: Lets give some error when this isn't getting anything...
-ui: clean up on play links
-ui: collab and recommends UI clean up
-ui: added 'display' ui, cleaned up buttons
-ui: it can show a listing of files contained in the zip file.
-ui: force a login after password change
-ui: dynamic user tabs

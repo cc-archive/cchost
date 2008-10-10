@@ -11,8 +11,6 @@ function updateGroup(e)
     }
     if( !prevGroup || (Number(prevGroup) != Number(gid)) )
     {
-        _d(prevGroup);
-        _d(gid);
         pc = $('acc_knob_' + gid);
         Element.classNames(pc).add('acc_knob_selected');
         pc = $('acc_group_' + gid);

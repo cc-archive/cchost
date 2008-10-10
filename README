@@ -1,303 +1,38 @@
-This ccHost v5.0.b package is an early-adopters BETA 
 
-As of this writing (May 10, 2008) this is the code currently running
-on ccMixter.org and has been since Feb. so it is known to work under 
-SOME conditions. However it is NOT recommended to be used on a 
-production/public site and this release is for developing new skins,
-plugins, testing and bug finding/fixing purposes only.
+ccHost 5.0 README
+==================
 
-This relesae do NOT include developer documentation, admin 
-documentation (other than this README) or any skins to speak
-of.
+For the latest information on this release please see our wiki
+
+http://wiki.creativecommons.org/cchost
+
 
 In this document:
 
-1. NEW INSTALL
-2. UPGRADE
-3. IMPORTING phpTAL TEMPLATES
+1. WHAT'S NEW
+2. INSTALLING & UPGRADING
+3. SYSTEM REQUIREMENTS
 4. KNOWN ISSUES
-5. DEVELOPERS
-6. SECURITY ALERT
-7. HOWTO: CONTENT MANAGER
-8. HOWTO: CREATE A SKIN
-9. HOWTO: REPAIR A CONFIG (A.K.A. HELP!!!!)
-10. HOWTO: CONFIGURE QUERY BROWSER
-
-1. NEW INSTALL
-----------------
-1. Unzip the package on a local machine
-2. Copy the directory structure to the root of your web server
-3. Browse to http://your_domain
+5. SECURITY ALERT
+6. HOWTO: REPAIR A CONFIG (A.K.A. HELP!!!!)
+7. CONTACTS (REPORTING BUGS)
+8. LICENSING INFORMATION
 
 
-2. UPGRADE
-------------
-For upgrading from ccHost 4.x or before:
-
-1. Do not try the upgrade on your main/production/public site.
-2. Make a copy of your entire ccHost database onto your test site
-3. Copy your content (e.g. 'people' directory) to your test site
-4. Copy your cc-config-db.php to the root of your test site 
-   (edit manually if you renamed the database or changed user information)
-5. Unzip the ccHost 5 package on a local machine
-6. Copy the directory structure to your test site's server (including ccadmin)
-7. Browse to http://your_domain
-
-NOTE: It is recommended that you do NOT copy any plugins or
-custom code that have not been ported to ccHost 5. (See Developers
-section below)
-
-
-3. IMPORTING phpTAL TEMPLATES
-------------------------------
-
-None of your version 4 skins, pages, etc. work anymore as is. You can 
-try to import your old phpTAL XML templates using:
-
-     bin/cc-host-import-v4-template.php 
-
-Many imported templates (like your home page) might "just work" 
-but many will need tweaking, assuming you are familiar with PHP.
-
-4. KNOWN ISSUES
+1.   WHAT'S NEW
 -----------------
-
-The list of known issues is very dynamic and up to YOU to keep
-up to date by checking and submitting bugs to our Source Forge
-bug tracker:
-
-https://sourceforge.net/tracker/?atid=559966&group_id=80503&func=browse
-
-Category: ccHost
-
-5. DEVELOPERS
---------------
-
-If you have written custom PHP code or plugins for ccHost v4 or before
-you should first get the ccHost 5 installation up and running before
-trying your custom code. Much has changed in the code and the chances
-of your custom 'just working' is very low. The new core APIs are still
-very fluid so expect more churn.
-
-6. SECURITY ALERT
-------------------
-
-The new template engine uses a .tpl extension file that is generally
-directly accessable from the web. If you don't map that extension to
-some program (like php) in your server configuration then users can
-see SQL syntax directly in their browsers.
-
-7. HOWTO: CONTENT MANAGER
---------------------------
-
-In ccHost 5 you can create pages in your system without any HTML/XML file editing 
-whatsoever. Examples of pages created this way are the ccMixter home page and
-"As Seen on the Web"
-
-http://ccmixter.org/
-http://ccmixter.org/view/media/remix/trackback
-
-The second example is mapped to a navigation tab. The creation of a page like this
-and mapping to a tab are explained here:
-
-First create new content topics:
-
-1. While logged in as admin account: Click on 'Global Settings' in the menu
-2. Click on 'Manage Page Content'
-3. Click on 'Create New Content'
-4. At 'New Content Type' type in "my_page_content" (without the quotes)
-5. Enter a title and topic contents
-6. Click on 'Submit Content'
-
-Repeat these steps for addition topics except replace step (4):
-
-4. At 'Content Type' select 'my_page_content' from the drop down, 
-   leave 'New Content Type' blank
-
-Images are uploaded to cchost_files/images (replace cchost_files with the name of the
-files directory you supplied during install). To refer to those images use the new 'img' 
-block in your topics. Example:
-
-[img=/cchost_files/images/my_image.gif][/img]
-
-You can also use the new 'left' or 'right' blocks to float images or blocks of text:
-
-[left][img=/cchost_files/images/my_image.gif][/img][/left]
-
-Next create a new content page:
-
-1. While logged in as admin account: Click on 'Global Settings' in the menu
-2. Click on 'Manage Page Content'
-3. Click on 'Create a New Page'
-4. At 'Content Type' select "my_page_content" 
-5. Enter a page title like "My Page" (without the quotes)
-6. Click on 'Submit' - this should take you back to the 'Manage Page Content' screen
-7. Click on 'view' next to your new page to preview the page (Note the URL in your browser)
-
-To map your new page to a tab:
-
-1. While logged in as admin account: Click on 'Manage Site' in the menu
-2. Click on 'Navigator Tab Sets'
-3. Click on '[edit tabs]'
-4. Click on 'Add tab'
-5. Under 'Function' select 'Execute URL'
-6. Under 'Data' enter the URL from Step (7) in the section above
-7. Click on 'Submit'
-
-HINT: entering a full URL in a tab causes a re-direct (extra round trip to your server). To 
-prevent this in Step (6) enter "/viewfile/my-page" without the quotes and 
-substituting my-page with the name of your page.
-
-
-8. HOWTO: CREATE A SKIN
------------------------
-
-During the install/upgrade you were prompted for the name of where to keep your
-local (non ccHost system) files. In the documenation below, substitute that
-directory name in place of cchost_files.
-
-1. While logged in as admin account: Click on 'Manage Site' in the menu
-2. Click on 'Skin'
-3. Click on 'Create Skin Template'
-4. Type in a name like "my_skin" (without the quotes)
-5. Click 'Create New Skin'
-
-Over riding 'shared' styles and layouts:
-
-Most of what you need should be in cchost_files/skins/my_skin directory. If you
-want to modify a specific screen layout, style or javascript behavior other than 
-the body or page template (like the upload listings) then COPY the file(s) from 
-ccskins/shared/* into cchost_files/skins/my_skin and edit there. Your changes will 
-be noted by ccHost and override the 'shared' version.
-
-
-9. HOWTO: REPAIR A CONFIG (A.K.A. HELP!!!!)
---------------------------------------------
-
-If you get into 'trouble' with your system you might be able to salvage your site
-by browsing to either:
-
-http://your_server/admin/edit
-http://your_server?ccm=/media/admin/edit
-http://your_server/cchost_lib/cc-config-repair.php
-
-10. HOWTO: CONFIGURE QUERY BROWSER
-
-This release is the first with an admin configurable query brower. You can see examples
-of the browser in action at http://ccmixter.org/browse and http://fourstones.net/browse
-
-This browser is a query builder (see http://your_install_root/query for documentation 
-on ccHost Query API). The browser can configured with option sets (optset) that determine 
-several visual features. 
-
-In order to create an optset:
-
-1. Click on 'Global Settings' ( admin/site/global )
-2. Click on 'Query Browser'  ( admin/browse )
-3. Here you can edit the default optset and create different optsets for the 
-browser
-
-    Name - The 'name' is important because it will be used in the 
-           browse URL's 'optset' parameter. If no optset parameter is
-	   in the URL then the optset called 'default' is assumed
-
-    Template - Select the template that will be used to show results 
-
-    Style    - Select the style sheet
-
-    Def. limit - Enter the initial amount to display in the results area
-
-    Playlist but. - Check this if you want to have the 'Save to playlist'
-                    button (this only applies to sites with playlists
-		    enabled).
-
-    Req. tags - These tags will be added to every query made, the user
-                can NOT edit these.
-
-    Types - Click on the "Edit types" to bring up a popup that allows you
-            edit what the user will see in the 'Types' select box and
-	    what tags they map to.
-
-    Filter on: User - Check this to include the 'User' look up field
-
-    Filter on: License - Check this to include the 'License' look up field
-
-Click on 'Add Option Set' to create new, custom option sets.
-
-4. Once you have saved your optsets you can then see the results by specifying
-them in the 'browse' URL. Examples
-
-    To use the 'default' optset simply browse to: 
-    
-    http://your_install_root/browse
-
-    To use a different optset browse to:
-
-    http://your_install_root/browse?optset=your_optset_name
-
-5. You can specify 'start-up' values based on the Query API
-
-    http://your_install_root/browse?tags=hip_hop&limit=15
-
-    http://your_install_root/browse?user=teru
-
-    The user can then change these values once in the browser.
-
-    This can be very useful for menu items and navigation tabs.
-
-6. For DEVELOPERS:
-
-    To make your own custom styles for the entire query browser:
-
-      a: Copy ccskins/shared/css/qbrowser_narrow.css to
-          your_cchost_files/skins/css/my_browser_styles.css
-
-      b: Edit the 'desc' line at the top to something meaningful
-         to you
-
-      c: Edit the import urls to point to ccskins versions of
-         those files
-
-      d: Browse to admin/browse and select your stylesheet 
-         in the "Style" option
-
-    To make your custom results templates:
-
-      a: Copy ccskins/shared/formats/simple_qbrowser.tpl to 
-         your_cchost_files/skins/formats/my_browser_results.tpl
-
-      b: Edit the 'desc' line at the top to something meaningful
-         to you
-
-      c: The current dataview for that template is 'playlist_line'
-         which has limited information per record. If you like
-	 a more full record of information change the dataview
-	 line to 'default'
-
-      d: Browse to admin/browse and select your template in the
-         "template" section
-
-======================================================================================
-======================================================================================
-
-Release notes for ccHost v4 
-
-1.   What's New (Stable)
-2.   System Requirements
-3.   New Installations/Upgrading 
-4.   Known Issues
-4.   Contacts (Reporting Bugs)
-5.   Licensing Information
-
-
-1.   What's New
----------------------------------
 
 Please read the document NEWS.
 
 
-2.   System Requirements
----------------------------------
+2. INSTALLING & UPGRADING
+-------------------------
+
+For installation instruction please see ccadmin/INSTALL.
+
+
+3.   SYSTEM REQUIREMENTS
+------------------------
 
 a.  APACHE.  This system has been tested on Apache 1 and 2 Windows and
 Linux.  If you get it working on IIS or OSX let us know.  We haven't
@@ -317,28 +52,65 @@ the core ccHost. Support for phpBB2 is removed in this release, as ccHost
 supports native forums.
 
 e.  BROWSER.  Should work on any browser.  COOKIES must be enabled in
-your browser in order to log in to a session.
+your browser in order to log in to a session. NOTE: For several of the 
+skins (especially 'commons') IE6 browser is no longer supported.
 
 
-3. New Installations/Upgrading from previous ccHost
-------------------------------------------------------
+4. KNOWN ISSUES
+-----------------
 
-To install follow the instructions in ccadmin/INSTALL.txt.
+-  This relesae does NOT include the following:
+     * developer documentation
+     * international support
+     * redistribution tools
 
+-  The 'Download Manager' is not supported in non-pretty urls mode 
 
-4. Known Issues
-------------------------
-
-- The 'Download Manager' is not supported in non-pretty urls mode 
-
-- getID3 1.7.7 has a problem tagging RIFF files (WAV, AVI, etc.)
-  The work around is to remove line 105 in getid3/write.php that
-  looks like:
+-  getID3 1.7.7 has a problem tagging RIFF files (WAV, AVI, etc.)
+   The work around is to remove line 105 in getid3/write.php that
+   looks like:
      case 'riff': // maybe not officially, but people do it anyway
 
+-  The full list of known issues is very dynamic and up to YOU to keep
+   up to date by checking and submitting bugs to our Source Forge
+   bug tracker:
 
-5. Contacts (Reporting Bugs)
----------------------------------
+   https://sourceforge.net/tracker/?atid=559966&group_id=80503&func=browse
+
+   Category: ccHost
+
+-  A note to developers with ccHost plugin code writting for v4 or before:
+   
+   If you have written custom PHP code or plugins for ccHost v4 or before
+   you should first get the ccHost 5 installation up and running before
+   trying your custom code. Much has changed in the code and the chances
+   of your custom 'just working' is very low. The new core APIs are still
+   very fluid so expect more churn.
+
+
+5. SECURITY ALERT
+------------------
+
+The new template engine uses a .tpl extension file that is generally
+directly accessable from the web. If you don't map that extension to
+some program (like php) in your server configuration then users can
+see SQL syntax directly in their browsers.
+
+
+6. HOWTO: REPAIR A CONFIG (A.K.A. HELP!!!!)
+--------------------------------------------
+
+If you get into 'trouble' with your system you might be able to salvage your site
+by browsing to either:
+
+http://your_server/admin/edit
+http://your_server?ccm=/media/admin/edit
+http://your_server/cchost_lib/cc-config-repair.php
+
+
+7. CONTACTS (REPORTING BUGS)
+----------------------------
+
 Mailing for dicussion, support and announcements:
 
 https://lists.sourceforge.net/lists/listinfo/cctools-cchost
@@ -349,8 +121,8 @@ bug reporting) and some tips contributed by users:
 http://wiki.creativecommons.org/ccHost
 
 
-6. Licensing Information
----------------------------
+8. LICENSING INFORMATION
+-------------------------
 
 Creative Commons has made the contents of this package
 available under a CC-GNU-GPL license:
