@@ -457,7 +457,7 @@ class CCSubmit
             $form->GetFormValues($values);
             // this ensures that the logo isn't wiped. (sigh)
             if( empty($values['logo']) )
-                $values['logo'] = $form_types[$form_type_key]['logo'];
+                $values['logo'] = empty($form_types[$form_type_key]['logo']) ? '' : $form_types[$form_type_key]['logo'];
             $form_types = $this->SaveFormType($values,$form_type_key,$form_types);
             CCPage::Prompt( _('Submit form changes saved') );
             $ok = true;

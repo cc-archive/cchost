@@ -386,12 +386,14 @@ EOF;
             $where = "topic_id = $topic_id";
         }
 
+        $sql = "SELECT topic_user FROM cc_tbl_topics WHERE {$where}";
+        $user_ids = CCDatabase::QueryItems($sql);
+        $user_ids = join( ', ', $user_ids );
         $sql =<<<EOF
-            SELECT user_num_posts - 1 as user_num_posts, user_id 
-            FROM cc_tbl_user
-            JOIN cc_tbl_topics ON user_id=topic_user
-            WHERE $where
-            GROUP BY user_id
+            SELECT COUNT(*)-1 as user_num_posts, topic_user as user_id 
+            FROM cc_tbl_topics 
+            WHERE topic_user IN ({$user_ids}) AND topic_thread > 0 
+            GROUP BY topic_user
 EOF;
         $rows = CCDatabase::QueryRows($sql);
         $users =& CCUsers::GetTable();
