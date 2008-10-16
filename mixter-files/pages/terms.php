@@ -15,7 +15,7 @@ represent that you have the legal authority to accept these terms on behalf of y
 any party you represent. <STRONG >If you do not agree to these terms, please do not use the site</STRONG>. 
 </p><p >
 Creative Commons Corporation, a Massachusetts corporation with a business office at 
-543 Howard St., 5th Floor, San Francisco, California 94105, United States makes 
+171 Second Street, Suite 300, San Francisco, CA 94105, United States makes 
 ccMixter available to you to use on these terms. 
 </p><p >
 <strong >Changes to these terms:</strong> From time to time, Creative Commons may change these 
@@ -235,11 +235,11 @@ Site, please contact the agent designated to respond to reports alleging copyrig
 infringement. The designated agent for Sponsor to receive notification of claimed 
 infringement under Title II of the DMCA is: 
 </p><pre >
-Mia Garlick
+Mike Linksvayer
 dmca@creativecommons.org
-543 Howard Street, Fifth Floor
+171 Second Street, Suite 300
+San Francisco, CA 94105, 
 
-San Francisco, CA 94105
 Tel: 415.946.3073
 Fax: 415.946.3001
 </pre>
