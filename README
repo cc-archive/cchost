@@ -38,22 +38,18 @@ a.  APACHE.  This system has been tested on Apache 1 and 2 Windows and
 Linux.  If you get it working on IIS or OSX let us know.  We haven't
 tried.
 
-b.  PHP.  This system requires PHP 4, and prefers 4.3 but has been seen
-working on 4.4 and 5.  PHP 3 will never be supported.
+b.  PHP.  This system requires PHP 4 or 5.  
 
-c.  MYSQL.  MySQL 4 is required.
+c.  MYSQL.  MySQL 4 or higher is required.
 
 d.  GETID3.  Download the GetID3 (1.7.3 - 1.7.7 tested to work) library from
 http://www.getid3.org/#download, then untar and place into ccHost at
 cchost/getid3/. 
 
-Ratings, Editorial Picks, Reviews, Comments and Contest Polls are built into 
-the core ccHost. Support for phpBB2 is removed in this release, as ccHost
-supports native forums.
-
-e.  BROWSER.  Should work on any browser.  COOKIES must be enabled in
-your browser in order to log in to a session. NOTE: For several of the 
-skins (especially 'commons') IE6 browser is no longer supported.
+e.  BROWSER.  Should work on most popular browsers.  
+COOKIES must be enabled in your browser in order to log in 
+to a session. NOTE: For several of the skins (especially 'commons') 
+IE6 browser is no longer supported.
 
 
 4. KNOWN ISSUES
@@ -71,14 +67,6 @@ skins (especially 'commons') IE6 browser is no longer supported.
    looks like:
      case 'riff': // maybe not officially, but people do it anyway
 
--  The full list of known issues is very dynamic and up to YOU to keep
-   up to date by checking and submitting bugs to our Source Forge
-   bug tracker:
-
-   https://sourceforge.net/tracker/?atid=559966&group_id=80503&func=browse
-
-   Category: ccHost
-
 -  A note to developers with ccHost plugin code writting for v4 or before:
    
    If you have written custom PHP code or plugins for ccHost v4 or before
@@ -87,11 +75,14 @@ skins (especially 'commons') IE6 browser is no longer supported.
    of your custom 'just working' is very low. The new core APIs are still
    very fluid so expect more churn.
 
+-  For the most up to date listing of known issues check with the wiki
+
+   http://wiki.creativecommons.org/Cchost#Known_Issues
 
 5. SECURITY ALERT
 ------------------
 
-The new template engine uses a .tpl extension file that is generally
+The new template engine in 5.0 uses a .tpl extension file that is generally
 directly accessable from the web. If you don't map that extension to
 some program (like php) in your server configuration then users can
 see SQL syntax directly in their browsers.
@@ -111,15 +102,11 @@ http://your_server/cchost_lib/cc-config-repair.php
 7. CONTACTS (REPORTING BUGS)
 ----------------------------
 
-Mailing for dicussion, support and announcements:
-
-https://lists.sourceforge.net/lists/listinfo/cctools-cchost
 
 Project WIKI with every link you ever wanted (including
 bug reporting) and some tips contributed by users:
 
-http://wiki.creativecommons.org/ccHost
-
+http://wiki.creativecommons.org/CcHost#Communication
 
 8. LICENSING INFORMATION
 -------------------------
