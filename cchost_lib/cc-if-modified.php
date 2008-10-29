@@ -38,13 +38,19 @@ function cc_set_if_modified()
     if( !isset($CC_GLOBALS[CC_IF_MOD_FLAG]) || ($CC_GLOBALS[CC_IF_MOD_FLAG] != $time) )
     {
         $cfg = new CCConfigs();
-        $CC_GLOBALS['in_if_modified'] = true;
-        $cfg->SetValue('config', CC_IF_MOD_FLAG, $time, CC_GLOBAL_SCOPE);
-        unset($CC_GLOBALS['in_if_modified']);
-        $CC_GLOBALS[CC_IF_MOD_FLAG]  = $time;
-        // _clog('^^^^  setting if-mod: ' . $time . ' ^^^^^^^^^');
+
+        $cnt = $cfg->CountRows('');
+        if( !empty($cnt) ) { // bugfix: make sure we aren't doing a cfg import
+            $CC_GLOBALS['in_if_modified'] = true;
+            $cfg->SetValue('config', CC_IF_MOD_FLAG, $time, CC_GLOBAL_SCOPE);
+            unset($CC_GLOBALS['in_if_modified']);
+            $CC_GLOBALS[CC_IF_MOD_FLAG]  = $time;
+            // _clog('^^^^  setting if-mod: ' . $time . ' ^^^^^^^^^');
+        }
     }
 }
+
+if( !function_exists('d') ) { function d(&$x) { CCDebug::Enable(true); CCDebug::PrintVar($x); } }
 
 function cc_check_if_modified()
 {
