@@ -50,7 +50,7 @@ function cc_set_if_modified()
     }
 }
 
-if( !function_exists('d') ) { function d(&$x) { CCDebug::Enable(true); CCDebug::PrintVar($x); } }
+//if( !function_exists('d') ) { function d(&$x) { CCDebug::Enable(true); CCDebug::PrintVar($x); } }
 
 function cc_check_if_modified()
 {

@@ -230,7 +230,8 @@ class CCMenu
             {
                 if( strpos($item['action'],'http://',0) === false )
                     $item['action'] = ccl($item['action']);
-                $groups[$item['menu_group']]['menu_items'][] = $item;
+                if( array_key_exists($item['menu_group'],$groups) )
+                    $groups[$item['menu_group']]['menu_items'][] = $item;
             }
         }
 
