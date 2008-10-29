@@ -391,7 +391,7 @@ class CCConfigs extends CCTable
         if( $cmp == 0 )
             return;
 
-        $cmp = version_compare($config_in_db, '5.0.0');
+        $cmp = version_compare($config_in_db, '5.0');
 
         if( $cmp < 0 )
         {
