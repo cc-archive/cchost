@@ -79,8 +79,7 @@ Upgrading from 3.1 or higher to 5.0
 
    1. Unzip cchost ZIP archive to a local machine.
 
-   2. Copy the 5.0 files (everything EXCEPT the ccadmin directory)
-      over your existing site
+   2. Copy ALL the 5.0 files over your existing site
 
    3. Browse to http://where_you_installed_cchost
 
@@ -93,7 +92,6 @@ Upgrading from 3.1 or higher to 5.0
 
       Many imported templates (like your home page) might "just work" 
       but many will need tweaking, assuming you are familiar with PHP.
-
 
 Upgrading from 3.0 or lower to 5.0
 -----------------------------------
