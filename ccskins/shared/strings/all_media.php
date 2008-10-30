@@ -238,6 +238,12 @@ $GLOBALS['str_getting_data'] = _('Getting data...');
 $GLOBALS['str_home'] = _('Home');
 
 $GLOBALS['str_how_i_did_it'] = _('See "How I Did It"');
+
+$GLOBALS['str_hidi_title'] = _('How I Did It');
+$GLOBALS['str_hidi_edit'] = _("Edit 'How I Did It' for %s");
+$GLOBALS['str_hidi_saved_changes'] = _("Changes saved. Click %shere%s to see results");
+$GLOBALS['str_hidi_no_rec'] = _("No 'How I Did It' for this record. Click %shere%s to go back to the upload's page");
+
 $GLOBALS['str_hidi_how_did_you'] = _('How did you put all the pieces together?');
 $GLOBALS['str_hidi_original_samples'] = _('Original Material');
 $GLOBALS['str_hidi_other_notes'] = _('Other Notes');
@@ -642,6 +648,9 @@ $GLOBALS['str_permalink']              = _('permalink');
 $GLOBALS['str_uploading']  = _('Uploading...');
 $GLOBALS['str_uploading_msg']  = _('This could take a while... please be patient while the file is uploading');
 $GLOBALS['str_upload_browser'] = _('Browse Uploads');
+
+$GLOBALS['str_upload_admin'] = _("Administrator Functions for '%s'");
+$GLOBALS['str_upload_saved_changes'] = _("Changes saved to '%s'. Click %shere%s to see results");
 
 $GLOBALS['str_user_home_page']     = _('Home Page') ;
 $GLOBALS['str_user_about_me']      = _('About Me');

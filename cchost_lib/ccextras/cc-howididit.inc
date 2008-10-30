@@ -72,7 +72,7 @@ class CCHowIDidIt
         $fields = $this->_get_fields();
         $data = $this->_get_data($upload_id);
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_("How I Did It"));
+        CCPage::SetTitle('str_hidi_title');
         if( empty($data) )
             CCUtil::Send404();
         CCPage::PageArg('howididit_upload',$upload_id);
@@ -117,7 +117,7 @@ class CCHowIDidIt
         require_once('cchost_lib/cc-page.php');
         list( $upload_name, $upload_extra ) = CCDatabase::QueryRow(
                 'SELECT upload_name, upload_extra FROM cc_tbl_uploads WHERE upload_id=' . $upload_id, false );
-        CCPage::SetTitle( sprintf(_("Edit 'How I Did It' for %s"), $upload_name) );
+        CCPage::SetTitle( 'str_hidi_edit', $upload_name );
         $form = new CCHowIDidItForm();
         $is_post = !empty($_POST['howididit']);
         $upload_extra = unserialize($upload_extra);
@@ -148,7 +148,7 @@ class CCHowIDidIt
                 $uploads->Update($args);
                 CCUploadAPI::UpdateCCUD($upload_id,'how_i_did_it','');
                 $url = ccl('howididit',$upload_id);
-                CCPage::Prompt(sprintf(_("Changes saved. Click %shere%s to see results"), "<a href=\"$url\">","</a>"));
+                CCPage::Prompt('str_hidi_saved_changes', "<a href=\"$url\">","</a>");
             }
             else
             {
@@ -165,8 +165,7 @@ class CCHowIDidIt
                 $user_name = CCDatabase::QueryItem(
                                 'SELECT user_name FROM cc_tlb_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id);
                 $url = ccl('files',$user_name,$upload_id);
-                $msg = _("No 'How I Did It' for this record. Click %s to go back to the upload's page");
-                CCPage::Prompt(sprintf($msg,"<a href=\"$url\">here</a>"));
+                CCPage::Prompt('str_hidi_no_rec',"<a href=\"$url\">","</a>");
             }
                     
         }
