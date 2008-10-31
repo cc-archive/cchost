@@ -131,9 +131,9 @@
 </div>
 
 <div id="footer" class="med_light_bg">
-  <div id="license"><p>%(site-license)%</p></div>
+  <div id="license"><p>%text(site-license)%</p></div>
   <p><?
-  $__plug = str_replace('#rand#',rand(),$A['footer']);
+  $__plug = str_replace('#rand#',rand(),$T->String($A['footer']));
   print $__plug;
 ?></p>
 </div><!-- footer -->
