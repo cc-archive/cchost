@@ -160,7 +160,7 @@ class CCNotify
         {
             $fields['notify'] =
                array(  'label'      => _('Allow email notifications'),
-                       'form_tip'   => _('Is it ok to allow users get notified on activity on their accounts and others?'),
+                       'form_tip'   => _('Is it ok to allow users to get notified on activity on their accounts and others?'),
                        'value'      => 0,
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE );
