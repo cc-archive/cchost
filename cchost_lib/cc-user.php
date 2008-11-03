@@ -232,6 +232,36 @@ class CCUsers extends CCTable
         return $_table;
     }
 
+    function SetExtraField($user_id,$name,$data)
+    {
+        $extra = $this->QueryItemFromKey('user_extra',$user_id);
+        $args['extra'] = unserialize($extra);
+        $args['extra'][$name] = $data;
+        $args['extra'] = serialize($args['extra']);
+        $args['user_id'] = $user_id;
+        $this->Update($args);
+    }
+
+    function GetExtraField($user_id,$name)
+    {
+        $extra = $this->QueryItemFromKey($user_id);
+        $extra = unserialize($extra);
+        return empty($extra[$name]) ? null : $extra[$name];
+    }
+
+    function UnsetExtraField($user_id,$name)
+    {
+        $extra = $this->QueryItemFromKey($user_id);
+        $extra = unserialize($extra);
+        if( !isset($extra[$name]) )
+            return;
+        unset($extra[$name]);
+        $args['extra'] = serialize($extra);
+        $args['user_id'] = $user_id;
+        $this->Update($args);
+    }
+
+    // depricated (will break your site)
     function & GetRecordFromName($username)
     {
         $where = "user_name = '" . strtolower($username) . "'";
@@ -245,6 +275,7 @@ class CCUsers extends CCTable
         return $r;
     }
 
+    // depricated (will break your site)
     function & GetRecordFromID($userid)
     {
         $row = $this->QueryKeyRow($userid);
@@ -260,6 +291,7 @@ class CCUsers extends CCTable
         return $r;
     }
 
+    // depricated (will break your site)
     function & GetRecordFromRow(&$row,$expand = true)
     {
         CCDebug::StackTrace();
