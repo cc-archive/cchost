@@ -63,6 +63,26 @@ class CCCollabTopics extends CCTopics
 */
 class CCCollab
 {
+    /**
+    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
+    *
+    * Add global settings settings to config editing form
+    * 
+    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
+    * @param array  $fields Array of form fields to add fields to.
+    */
+    function OnGetConfigFields($scope,&$fields)
+    {
+        if( $scope == CC_GLOBAL_SCOPE )
+        {
+            $fields['collab_enabled'] =
+               array(  'label'      => _('Enable Collaborations Feature'),
+                       'value'      => '',
+                       'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE);
+        }
+    }
+
     function UserTab($user_name)
     {
         $user_real_name = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_name=\''.$user_name.'\'');
@@ -97,6 +117,9 @@ class CCCollab
         ***************************************************************/
 
         global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['collab_enabled']) )
+            return;
 
         if( is_subclass_of($form,'CCUploadMediaForm') ||
                     is_subclass_of($form,'ccuploadmediaform') )

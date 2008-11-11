@@ -32,11 +32,18 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,        array( 'CCCollab', 'OnUploadDo
 CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,      array( 'CCCollab',  'OnUploadDelete')    , 'cchost_lib/ccextras/cc-collab.inc' );
 CCEvents::AddHandler(CC_EVENT_FILTER_COLLAB_CREDIT, array( 'CCCollabHV',  'OnFilterCollabCredit') );
 CCEvents::AddHandler(CC_EVENT_USER_PROFILE_TABS,  array( 'CCCollabHV',  'OnUserProfileTabs') );
+CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCCollab' , 'OnGetConfigFields' ), 'cchost_lib/ccextras/cc-collab.inc' );
+
 
 class CCCollabHV 
 {
     function OnUserProfileTabs( &$tabs, &$record )
     {
+        global $CC_GLOBALS;
+        
+        if( empty($CC_GLOBALS['collab_enabled']) )
+            return;
+
         if( empty($record['user_id']) )
         {
             $tabs['collabs'] = 'str_collaborations';

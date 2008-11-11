@@ -145,6 +145,103 @@ class CCAccess
         CCPage::AddForm($form->GenerateForm());
     }
 
+    function CommandDump($undocced=1)
+    {
+        $title = _('ccHost Commands');
+        require_once('cchost_lib/cc-admin.php');
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
+
+        $map = cc_get_url_map(1,$undocced);
+        $html =<<<EOF
+<style>
+#cmd_table td {
+    vertical-align: top;
+    padding-right: 5px;
+    border: 1px solid #CCC;
+}
+.group_name {
+      font-weight: bold;
+    }
+.ckey {
+    font-wieght: bold;
+    }
+.arg {
+    color: green;
+    }
+.command_key {
+    width: 150px;
+    text-align: right;
+    }
+.func {
+    color: #666;
+    }
+</style>
+
+<table id="cmd_table" cellspacing="0" cellpadding="0">
+EOF;
+        foreach( $map as $group_name => $group )
+        {
+            $html .= "\n" . '<tr><td><span class="group_name">' . $group_name . '</span></td>';
+            
+            $html .= '<td><table>';
+
+            foreach( $group as $command_name => $C )
+            {
+                $html .= "\n" . '<tr><td class="command_key">' . $command_name . '</td>';
+                
+                $html .= "\n" . '   <td><table>';
+
+                $html .= "\n" . '<tr><td class="ckey">URL</td>';
+                
+                $html .= '<td>';
+                if( is_array($C->dp) )
+                {
+                    foreach( $C->dp as $url )
+                        $html .= $url . '<br />';
+                }
+                else
+                {
+                    $html .= $C->url;
+                    if( !empty($C->dp) )
+                    {
+                        $html.= '/<span class="arg">' . $C->dp . '</span>';
+                    }
+                }
+                $html .= '</td></tr>';
+                
+                $html .= "\n" . '<tr><td class="ckey">Source</td>';
+                
+                $html .= '<td>' . $C->md . ' <span class="func">(';
+                if( is_array($C->cb) )
+                {
+                    $html .= join('::',$C->cb);
+                }
+                else
+                {
+                    $html .= $C->cb;
+                }
+
+                $html .= ')</span></td></tr>';
+                
+                $html .=  "\n" . '<tr><td class="ckey">Desc</td><td>' . $C->ds . '</td></tr>';
+
+                $html .= "\n" . '<tr><td class="ckey">Access</td><td>' . $C->pmd . '</td></tr>';
+                $html .= "\n" . '</table></td></tr>';
+
+            }
+                           
+
+            $html .= '</table></td></tr>';
+        }
+
+    $html .=<<<EOF
+</table>
+EOF;
+
+        CCPage::AddContent($html);
+    }
+
     function Access()
     {
         $title = _('Restrict Access Rights');
@@ -207,11 +304,13 @@ class CCAccess
             CC_SUPER_ONLY, ccs(__FILE__) );
         CCEvents::MapUrl( 'admin/access',     array('CCAccess', 'Access'), 
             CC_SUPER_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( 'commands',     array('CCAccess', 'CommandDump'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
     }
 
 }
 
-function cc_get_url_map($doconly=1)
+function cc_get_url_map($doconly=1,$doconly2=1)
 {
     $roles = cc_get_roles();
     $group_names = cc_get_access_groups();
@@ -225,9 +324,16 @@ function cc_get_url_map($doconly=1)
         $groups = array();
         foreach( $map as $K => $V )
         {
-            if( empty($V->dg) ) // no doc group?
-                continue;       // never mind
-
+            if( $doconly2 ) 
+            {
+                if( empty($V->dg) ) // no doc group?
+                    continue;       // never mind
+            }
+            else
+            {
+                if( empty($V->dg) ) // no doc group?
+                    $V->dg = '*UN-DOCCED';
+            }
             $pm = empty($accmap[$K]) ? $V->pm : $accmap[$K];
             $V->pmu = $pm;
             $V->url = $K;
