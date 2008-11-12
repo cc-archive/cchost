@@ -9,7 +9,11 @@ function config_changed( &$spec, &$old_value )
     $config_data = CCDatabase::QueryItem("SELECT config_data FROM cc_tbl_config WHERE config_type = 'config'");
     $config_data = unserialize($config_data);
     CCDebug::Enable(true);
-    CCDebug::Log("Config changed: type:{$spec['config_type']}");
+    $str = '';
+    if( CCUser::IsLoggedIn() )
+        $str = CCUser::CurrentUserName() . ': ';
+    $str .= str_replace(ccl(),'',cc_current_url()) . ' ';
+    CCDebug::Log("Config changed: {$str} type:{$spec['config_type']}");
     if( $config_data['cc-host-version'] != CC_HOST_VERSION )
     {
         CCDebug::Log("CONFIG IS WRONG! Correcting");
