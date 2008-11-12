@@ -11,8 +11,10 @@ function config_changed( &$spec, &$old_value )
     CCDebug::Enable(true);
     $str = '';
     if( CCUser::IsLoggedIn() )
-        $str = CCUser::CurrentUserName() . ': ';
+        $str = '[' . CCUser::CurrentUserName() . ']';
     $str .= str_replace(ccl(),'',cc_current_url()) . ' ';
+    //$diff = array_diff( $config_data, $old_value );
+    //d($diff);
     CCDebug::Log("Config changed: {$str} type:{$spec['config_type']}");
     if( $config_data['cc-host-version'] != CC_HOST_VERSION )
     {
