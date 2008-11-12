@@ -111,7 +111,9 @@ class CCDatabase
             }
             elseif( !$cc_in_table_lock 
                 && empty($CC_GLOBALS['in_if_modified']) 
-                && preg_match( '/^(\s+)?(insert|delete|update)/i',$sql) )
+                && preg_match( '/^(\s+)?(insert|delete|update)/i',$sql) 
+                && !preg_match( '/(cc_tbl_keys|cc_tbl_activity|cc_tbl_notifications)/i',$sql)
+                )
             {
                 cc_set_if_modified();
                 $cc_in_table_lock = false;
