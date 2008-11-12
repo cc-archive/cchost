@@ -201,7 +201,8 @@ class CCConfigs extends CCTable
             $cache[$where['config_scope']][$where['config_type']] = $original;
         }
 
-        CCEvents::Invoke( CC_EVENT_CONFIG_CHAGNED, array( &$where, &$old ) );
+        if( class_exists( 'CCEvents' ) )
+            CCEvents::Invoke( CC_EVENT_CONFIG_CHAGNED, array( &$where, &$old ) );
         
         // yea, should be smarter about this, but alas... we're not
         require_once('cchost_lib/cc-template.php');
