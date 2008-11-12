@@ -402,6 +402,8 @@ define('CC_EVENT_SEARCH_META',            'srchmeta' );
 */
 define('CC_EVENT_GET_CONFIG_FIELDS',   'getcfgflds' );
 
+define('CC_EVENT_CONFIG_CHAGNED', 'cfgchanged');
+
 /**
 * Notification Event: Upload is about to be deleted
 *

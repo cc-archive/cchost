@@ -163,7 +163,7 @@ class CCHowIDidIt
                 CCUploadAPI::UpdateCCUD($upload_id,'','how_i_did_it');
 
                 $user_name = CCDatabase::QueryItem(
-                                'SELECT user_name FROM cc_tlb_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id);
+                                'SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$upload_id);
                 $url = ccl('files',$user_name,$upload_id);
                 CCPage::Prompt('str_hidi_no_rec',"<a href=\"$url\">","</a>");
             }
