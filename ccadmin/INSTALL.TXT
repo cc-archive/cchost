@@ -72,6 +72,14 @@ at a Unix/Linux command line you can use these steps to install:
 
    6. Follow the instructions from there on...
 
+Upgrading from 5.0 or higher to 5.0.1
+---------------------------------------
+
+   1. Unzip ccHost ZIP archive to a local machine
+   2. Delete the ccadmin directory
+   3. Copy all 5.0.1 file over your existing site
+   4. Browse to http://<your_installation_root>?update=1
+
 Upgrading from 3.1 or higher to 5.0
 -----------------------------------
 
