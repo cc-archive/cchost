@@ -111,8 +111,8 @@
 </div>
 
 <div id="footer" class="med_light_bg">
-  <div id="license"><p>%(site-license)%</p></div>
-  <p>%(footer)%</p>
+  <div id="license"><p>%text(site-license)%</p></div>
+  <p>%text(footer)%</p>
 </div><!-- footer -->
 </div> <!-- container -->
 
