@@ -150,6 +150,8 @@ CCEvents::AddHandler(CC_EVENT_FILTER_SEARCH_RESULTS, array( 'CCSearch', 'OnFilte
 CCEvents::AddHandler(CC_EVENT_SEARCH_META,          array( 'CCSearch',  'OnSearchMeta'), 'cchost_lib/cc-search.php'  ) ;
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,   array( 'CCSearch', 'OnGetConfigFields'), 'cchost_lib/cc-search.php' );
 
+CCEvents::AddHandler(CC_EVENT_CONFIG_CHAGNED, 'skin_OnConfigChange', 'cchost_lib/cc-template.php' );
+
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCSkinAdmin' , 'OnMapUrls'),  'cchost_lib/cc-skin-admin.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCSkinAdmin' , 'OnAdminMenu'), 'cchost_lib/cc-skin-admin.php' );
 
@@ -162,6 +164,7 @@ CCEvents::AddHandler(CC_EVENT_MAIN_MENU,        array( 'CCTagEvents', 'OnBuildMe
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,         array( 'CCTagEvents', 'OnMapUrls'), 'cchost_lib/cc-tags.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,       array( 'CCTagEvents', 'OnAdminMenu'), 'cchost_lib/cc-tags.inc' );
 CCEvents::AddHandler(CC_EVENT_SOURCES_CHANGED,  array( 'CCTag', 'OnSourcesChanged'), 'cchost_lib/cc-tags.php'  );
+
 
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCTemplateAdmin', 'OnAdminMenu'), 'cchost_lib/cc-template.inc' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCTemplateAdmin', 'OnMapUrls'), 'cchost_lib/cc-template.inc' );

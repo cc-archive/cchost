@@ -2,31 +2,30 @@
 
 error_reporting(E_ALL);
 
-CCEvents::AddHandler(CC_EVENT_CONFIG_CHAGNED, 'config_changed' );
+// This module was created to try to catch the dreaded version auto-change
+// bug.
 
-function config_changed( &$spec, &$old_value )
+// I'm turning it off because, well, it didn't work, the version "changed
+// itself" and this code didn't catch it.
+
+//CCEvents::AddHandler(CC_EVENT_CONFIG_CHAGNED, 'config_changed' );
+
+function config_changed( &$spec, &$old_value, &$new_value )
 {
-    $config_data = CCDatabase::QueryItem("SELECT config_data FROM cc_tbl_config WHERE config_type = 'config'");
-    $config_data = unserialize($config_data);
-    CCDebug::Enable(true);
+    if( count($new_value) != 1 || !array_key_exists('mod-stamp',$new_value) )
+    {
+        _catch_log($spec,"Config changed: type:{$spec['config_type']}");
+    }
+
+}
+
+function _catch_log($spec,$stra)
+{
     $str = '';
     if( CCUser::IsLoggedIn() )
         $str = '[' . CCUser::CurrentUserName() . ']';
     $str .= str_replace(ccl(),'',cc_current_url()) . ' ';
-    //$diff = array_diff( $config_data, $old_value );
-    //d($diff);
-    CCDebug::Log("Config changed: {$str} type:{$spec['config_type']}");
-    if( $config_data['cc-host-version'] != CC_HOST_VERSION )
-    {
-        CCDebug::Log("CONFIG IS WRONG! Correcting");
-        $config_data['cc-host-version'] = CC_HOST_VERSION;
-        $config_data = serialize($config_data);
-        $table = new CCTable('cc_tbl_config','config_type');
-        $args['config_type'] = 'config';
-        $args['config_data'] = $config_data;
-        $table->Update($args);
-    }
+    CCDebug::Log($str . ' ' . $stra);
 }
-
 
 ?>

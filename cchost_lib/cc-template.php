@@ -928,6 +928,15 @@ class CCSkin
 
 }
 
+function skin_OnConfigChange( &$spec, &$old, &$new_value )
+{
+    if( count($new_value) != 1 || !array_key_exists('mod-stamp',$new_value) )
+    {
+        CCSkin::ClearCache();
+    }
+}
+
+
 class CCSkinMacro extends CCSkin
 {
     var $_macro;

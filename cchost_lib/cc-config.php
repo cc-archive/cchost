@@ -202,7 +202,7 @@ class CCConfigs extends CCTable
         }
 
         if( class_exists( 'CCEvents' ) )
-            CCEvents::Invoke( CC_EVENT_CONFIG_CHAGNED, array( &$where, &$old ) );
+            CCEvents::Invoke( CC_EVENT_CONFIG_CHAGNED, array( &$where, &$old, &$arr ) );
         
         // yea, should be smarter about this, but alas... we're not
         require_once('cchost_lib/cc-template.php');
@@ -399,7 +399,19 @@ class CCConfigs extends CCTable
 
         if( $cmp < 0 )
         {
-            die('This installation of ccHost must be upgraded to version 5.0');
+            if( empty($CC_GLOBALS['cc_mixter_installed']) )
+            {
+                die('This installation of ccHost must be upgraded to version 5.0');
+            }
+            else
+            {
+                // sorry but there's a whacko bug in ccMixter where config
+                // version is being overwritten with 2.0.RC !!!! trying to 
+                // catch it has been a huge pain
+                $old_debug = CCDebug::Enable(true);
+                CCDebug::Log("CONFIG VERSION IS WRONG: ($config_in_db} {$_SERVER['REQUEST_URI']}");
+                CCDebug::Enable($old_debug);
+            }
         }
 
         $cfg = new CCConfigs();
