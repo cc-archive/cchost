@@ -16,13 +16,13 @@ For other embed goodies, go to your <a href="<?= ccl('publicize', $R['user_name'
 </p>
 
 <div style="margin:0px auto;width:530px">
-<script type="text/javascript" src="http://cchost.org/api/query?limit=50&template=mixter-files%2Fskins%2Fformats%2Fremix_me.tpl&chop=10&remixesof=%(#R/user_name)%&format=docwrite" ></script>
+<script type="text/javascript" src="%(query-url)%limit=50&template=mixter-files%2Fskins%2Fformats%2Fremix_me.tpl&chop=10&remixesof=%(#R/user_name)%&format=docwrite" ></script>
 </div>
 
 <p>Copy the following code into your web page:</p>
 
 <textarea style="width:35em;height:10em;">
-<script type="text/javascript" src="http://cchost.org/api/query?limit=50&template=mixter-files%2Fskins%2Fformats%2Fremix_me.tpl&chop=10&remixesof=%(#R/user_name)%&format=docwrite" ></script>
+<script type="text/javascript" src="%(query-url)%limit=50&template=mixter-files%2Fskins%2Fformats%2Fremix_me.tpl&chop=10&remixesof=%(#R/user_name)%&format=docwrite" ></script>
 </textarea>
 
 </div>
