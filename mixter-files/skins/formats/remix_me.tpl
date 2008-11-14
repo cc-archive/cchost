@@ -3,7 +3,7 @@
  type = format
  dataview = remix_me
  embedded = 1
- desc = _('Remix ME (tag your stems with "remixme")')
+ desc = _('Remix ME (use with Other Peoples Remixes...)')
  required_args = remixesof
 [/meta]
   [dataview]
