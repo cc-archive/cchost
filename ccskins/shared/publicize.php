@@ -7,6 +7,9 @@ if( !defined('IN_CC_HOST') )
 //------------------------------------- 
 function _t_publicize_publicize(&$T,&$A) 
 {
+
+    print '<link rel="stylesheet"  type="text/css" title="Default Style" href="'.$T->URL('css/publicize.css').'" />';
+
   
     if ( !empty($A['PUB']['intro'])) 
     {
