@@ -313,9 +313,6 @@ EOF;
 
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle( $title );
-        CCPage::AddScriptLink( 'js/sharesites.js', true );
-        CCPage::AddScriptLink( 'js/share.js', true );
-        CCPage::SetStyleSheet('css/publicize.css');
         CCPage::PageArg('publicize', 'publicize.php/publicize');
         CCPage::PageArg('PUB', $args );
         if( $do_share_popup )
