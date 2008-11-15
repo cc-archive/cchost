@@ -58,7 +58,7 @@ EOF;
 %if_not_null(remix-me-title)%<p style="text-align:center;margin:5px;font-weight:bold;font-family:arial;font-size: 14px;">%(remix-me-title)%</p>%end_if%
 </div>
 <div style="clear:left;background-color:#DDD;padding:2px;margin:2px;font-weight:bold;font-family:verdana;font-size:11px;">
-Here are the most recent remixes other people have done of my stems...</div>
+Here are the most recent remixes other people have done with my stems...</div>
 <table cellpadding="0" cellspacing="0" style="text-align:left;margin:2px;clear:left;font-weight:normal;font-family:verdana;font-size:11px;">
 %loop(records,R)%
 <tr>
