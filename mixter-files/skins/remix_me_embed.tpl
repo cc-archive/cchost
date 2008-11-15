@@ -1,6 +1,6 @@
 <?/*
 [meta]
-    type = ajax_component
+    type = template_component
     desc = _('Remix Me Embed')
     dataview = user_basic
     require_args = user
@@ -11,7 +11,7 @@
 <h1>Embed a "Remix Me" Widget In Your Web Page</h1>
 
 <div style="width:450px;text-align:center;margin:14px auto;">
-<p>Now you can encourage folks to remix your stems and a cappellas by embedding the following widget into your web site!
+<p>Now you can encourage folks to remix your stems and a cappellas by embedding this widget into your web site!
 For other embed goodies, go to your <a href="<?= ccl('publicize', $R['user_name']); ?>">Publicize page</a>.
 </p>
 

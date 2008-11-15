@@ -2,7 +2,7 @@
 [meta]
  type = format
  dataview = user_basic
- require_arg = user
+ required_args = user
 [/meta]
 %%
 %map(#R,records/0)%
@@ -15,7 +15,7 @@
 <div id="remix_me_doc" style="padding-left:13%">
 <p>First off, thanks for remixing %(#R/user_real_name)%!</p>
 %if_not_null(logged_in_as)%
-<p>Since you're already logged, go straight to the <a href="<?= ccl('submit','remix') ?>">Submit A Remix</a> form...</p>
+<p>Since you're already logged in, go straight to the <a href="<?= ccl('submit','remix') ?>">Submit A Remix</a> form...</p>
 %else%
 <p>In order to upload your remix you need to have an account with %(site-title)%.</p>
 <p>If you already have one, great, <a href="<?= ccl('login') ?>">log in</a> and click on 'Submit Files' in the <b>Artists</b> menu.</p>
