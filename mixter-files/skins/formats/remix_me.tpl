@@ -32,11 +32,13 @@ if( !defined('IN_CC_HOST') )
 function remix_me_dataview()
 {
     $furl = ccl('files') . '/';
+    $stream_base = url_args( ccl('api','query','stream.m3u'), 'f=m3u&ids='  ) . '/';
 
     $sql =<<<EOF
         SELECT upload_id, upload_contest, upload_name, user_name, user_real_name,
                CONCAT( '{$furl}', user_name, '/', upload_id ) as file_page_url,
-               license_url, license_name
+               license_url, license_name,
+               CONCAT( '{$stream_base}', upload_id ) as stream_url
                %columns%
         FROM cc_tbl_uploads
         JOIN cc_tbl_user ON upload_user=user_id
@@ -89,7 +91,7 @@ Here are the most recent remixes other people have done with my stems. </div>
   <td style="height:21px">%chop(#R/upload_name,23)%</td>
   <td>%text(str_by)%&nbsp;</td>
   <td>%chop(#R/user_real_name,12)%&nbsp;</td>
-  <td><a href="%(query-url)%f=m3u&ids=%(#R/upload_id)%"><img style="border:0px" src="%url('images/player/hear-button-fg.gif')%" /></a></td>
+  <td><a href="%(#R/stream_url)%"><img style="border:0px" src="%url('images/player/hear-button-fg.gif')%" /></a></td>
   <td><a href="%(#R/download_url)%"><img style="border:0px" src="%url('images/menu-download.png')%" /></a></td>
   <td><a href="%(#R/file_page_url)%"><img style="border:0px" src="%url('images/i-fg.png')%" title="%(#R/upload_name)%" /></a></td>
   <td>&nbsp;<a href="%(#R/license_url)%" title="%(#R/license_name)%"><img style="border:0px" src="%url('images/favicon.ico')%" title="%(#R/license_name)%" /></a></td>
