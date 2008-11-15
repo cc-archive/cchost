@@ -13,10 +13,12 @@ function remix_me_dataview()
 
     $sql =<<<EOF
         SELECT upload_id, upload_contest, upload_name, user_name, user_real_name,
-               CONCAT( '{$furl}', user_name, '/', upload_id ) as file_page_url
+               CONCAT( '{$furl}', user_name, '/', upload_id ) as file_page_url,
+               license_url, license_name
                %columns%
         FROM cc_tbl_uploads
         JOIN cc_tbl_user ON upload_user=user_id
+        JOIN cc_tbl_licenses ON upload_license=license_id
         %joins%
         %where%
         %order%
@@ -36,7 +38,7 @@ EOF;
 }
   [/dataview]
 %%
-<div style="background-color:#EEE;border:3px solid #444;width:370px;height:300px;overflow:scroll;padding:0px;">
+<div style="background-color:#EEE;border:3px solid #444;width:375px;height:300px;overflow:scroll;padding:0px;">
 
 <div style="padding:2px;background-color:#FFF;">
 <? /*
@@ -58,7 +60,7 @@ EOF;
 %if_not_null(remix-me-title)%<p style="text-align:center;margin:5px;font-weight:bold;font-family:arial;font-size: 14px;">%(remix-me-title)%</p>%end_if%
 </div>
 <div style="clear:left;background-color:#DDD;padding:2px;margin:2px;font-weight:bold;font-family:verdana;font-size:11px;">
-Here are the most recent remixes other people have done with my stems...</div>
+Here are the most recent remixes other people have done with my stems. </div>
 <table cellpadding="0" cellspacing="0" style="text-align:left;margin:2px;clear:left;font-weight:normal;font-family:verdana;font-size:11px;">
 %loop(records,R)%
 <tr>
@@ -68,6 +70,7 @@ Here are the most recent remixes other people have done with my stems...</div>
   <td><a href="%(query-url)%f=m3u&ids=%(#R/upload_id)%"><img style="border:0px" src="%url('images/player/hear-button-fg.gif')%" /></a></td>
   <td><a href="%(#R/download_url)%"><img style="border:0px" src="%url('images/menu-download.png')%" /></a></td>
   <td><a href="%(#R/file_page_url)%"><img style="border:0px" src="%url('images/i-fg.png')%" title="%(#R/upload_name)%" /></a></td>
+  <td>&nbsp;<a href="%(#R/license_url)%" title="%(#R/license_name)%"><img style="border:0px" src="/favicon.ico" title="%(#R/license_name)%" /></a></td>
 </tr>
 %end_loop%
 </table>

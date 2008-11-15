@@ -54,5 +54,6 @@ Remix %(#R/user_real_name)%
 </p>
 </div>
 <div style="clear:left;background-color:#DDD;padding:2px;margin:2px;font-weight:bold;font-family:verdana;font-size:11px;">
-Here are %(#R/user_real_name)%'s stems for download...</div>
+These are all licensed under a <a target="_blank" href="http://creativecommons.org">Creative Commons</a> license. For details check
+the <a target="_blank" href="%(home-url)%/people/%(#R/user_name)%sample">%(#R/user_real_name)% profile page.</div>
 <?= cc_query_fmt('t=download&user='.$R['user_name'] .'&tags=sample&f=embed'); ?>
