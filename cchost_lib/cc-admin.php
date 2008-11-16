@@ -513,10 +513,10 @@ class CCAdmin
             }
             else
             {
+                $url = ccc( '/' . CC_GLOBAL_SCOPE, 'admin', 'site', 'local' );
                 $configs =& CCConfigs::GetTable();
                 $w['config_scope'] = $CC_CFG_ROOT;
                 $configs->DeleteWhere($w);
-                $url = ccc( CC_GLOBAL_SCOPE, 'admin', 'site', 'local' );
                 CCUtil::SendBrowserTo($url);
             }
         }
