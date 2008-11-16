@@ -127,7 +127,8 @@ class CCAdminMenuForm extends CCGridForm
                     'flags'      => CCFF_REQUIRED ),
                   array(
                     'element_name'  => "mi[$keyname][action]",
-                    'value'      => htmlspecialchars($menuitem['action']),
+                    
+                    'value'      => $menuitem['action'],
                     'formatter'  => 'textedit',
                     'flags'      => CCFF_REQUIRED ),
                   array(
