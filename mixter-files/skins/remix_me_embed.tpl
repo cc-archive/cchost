@@ -24,7 +24,7 @@ if( !defined('IN_CC_HOST') )
     type = template_component
     desc = _('Remix Me Embed')
     dataview = user_basic
-    require_args = user
+    required_args = user
 [/meta]
 */?>
 %map(#R,records/0)%

@@ -93,8 +93,8 @@ Here are the most recent remixes other people have done with my stems. </div>
   <td>%chop(#R/user_real_name,12)%&nbsp;</td>
   <td><a href="%(#R/stream_url)%"><img style="border:0px" src="%url('images/player/hear-button-fg.gif')%" /></a></td>
   <td><a href="%(#R/download_url)%"><img style="border:0px" src="%url('images/menu-download.png')%" /></a></td>
-  <td><a href="%(#R/file_page_url)%"><img style="border:0px" src="%url('images/i-fg.png')%" title="%(#R/upload_name)%" /></a></td>
-  <td>&nbsp;<a href="%(#R/license_url)%" title="%(#R/license_name)%"><img style="border:0px" src="%url('images/favicon.ico')%" title="%(#R/license_name)%" /></a></td>
+  <td><a href="%(#R/file_page_url)%"><img style="border:0px" src="%url('images/i-fg.png')%" title="%(#R/upload_name)%" /></a>&nbsp;</td>
+  <td><a href="%(#R/license_url)%" title="%(#R/license_name)%"><img style="border:0px" src="%url('images/cc-tiny.png')%" title="%(#R/license_name)%" /></a></td>
 </tr>
 %end_loop%
 </table>
