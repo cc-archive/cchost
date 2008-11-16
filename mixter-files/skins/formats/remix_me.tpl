@@ -62,8 +62,9 @@ EOF;
 }
   [/dataview]
 %%
+<div id="cc_remix_me_outer">
 <div style="background-color:#EEE;border:3px solid #444;width:375px;height:300px;overflow:scroll;padding:0px;">
-
+<div id="cc_remix_me">
 <div style="padding:2px;background-color:#FFF;">
 <? /*
    There's no need to edit this file if all you want to do is put in your own logo or title!
@@ -98,5 +99,6 @@ Here are the most recent remixes other people have done with my stems. </div>
 </tr>
 %end_loop%
 </table>
-
+</div>
+</div>
 </div>
