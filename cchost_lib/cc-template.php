@@ -919,6 +919,8 @@ class CCSkin
 
     function ClearCache() 
     { 
+        if( function_exists('_catch_log') )
+            _catch_log( array(), 'Clearing template head cache' );
         $files = CCTemplate::_get_head_files(false);
         foreach( $files as $F )
             if( file_exists($F) )
