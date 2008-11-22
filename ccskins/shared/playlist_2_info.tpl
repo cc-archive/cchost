@@ -12,7 +12,7 @@
 %end_if%
 
 %map(#R,records/0)%
-<h2 style="margin:0px;"><a target="_parent" href="%(#R/permalink_url)%">%(#R/cart_name)%</a></h2>
+<h2 class="playlist_info_h2" style="margin:0px;"><a target="_parent" href="%(#R/permalink_url)%">%(#R/cart_name)%</a></h2>
 <div>
   %text(str_pl_created_by)% <a target="_parent" class="cc_user_link" href="%(#R/artist_page_url)%">%(#R/user_real_name)%</a> 
 </div>

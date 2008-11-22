@@ -332,3 +332,9 @@ a.small_button:hover, #do_remix_search:hover {
 a.small_button span, #do_remix_search span {
 	padding: 0px 2px 4px 0px;
 }
+
+/* this belongs somewhere else */
+.playlist_info_h2 {
+  font-size: 1.2em;
+  font-weight: bold;
+  }
