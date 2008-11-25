@@ -129,7 +129,12 @@ function cc_get_feed_items($url,$cache_time=86400,$max_items=20) // 86400 = 24*6
 
         if( empty($items) )
         {
-            $items = $new_items;
+            foreach( $new_items as $new_item )
+            {
+                if( stristr( $new_item['link'], 'google.com' ) !== false )
+                    continue;
+                $items[] = $new_item;
+            }
         }
         else
         {
@@ -137,13 +142,17 @@ function cc_get_feed_items($url,$cache_time=86400,$max_items=20) // 86400 = 24*6
 
             foreach( $new_items as $new_item )
             {
+                    dnw( 'new: (' . $new_item['link'] . ') ');
+    
+                if( stristr( $new_item['link'], 'google.com' ) !== false )
+                    continue;
+
                 $found = false;
                 foreach( $items as $item )
                 {
                     if( $item['link'] == $new_item['link'] )
                     {
                         $found = true;
-                        dnw( 'found: (' . $item['link'] . ') ');
                         break;
                     }
                 }
