@@ -98,7 +98,7 @@ function dnw($str)
     //print $str . '<br />' . "\n";
 }
 
-function cc_get_feed_items($url,$cache_time=60*60,$max_items=20) // 86400 = 24*60*60
+function cc_get_feed_items($url,$cache_time=360,$max_items=20) // 86400 = 24*60*60
 {
     global $CC_GLOBALS;
 
