@@ -64,7 +64,11 @@ function cc_temp_dir()
 
     if( !empty($CC_GLOBALS['temp-dir']) )
         return $CC_GLOBALS['temp-dir'];
-    return $CC_GLOBALS['php-tal-cache-dir'];
+    if( !empty($CC_GLOBALS['php-tal-cache-dir']) )
+        return $CC_GLOBALS['php-tal-cache-dir'];
+    if( !empty($CC_GLOBALS['logfile-dir']) )
+        return $CC_GLOBALS['logfile-dir'] ;
+    return getcwd();
 }
 
 /**

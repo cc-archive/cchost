@@ -129,7 +129,7 @@ class CCXmlReader
         
         $ok = @$snoopy->fetch($url);
 
-        //print_r($snoopy); exit;
+        //d($snoopy); exit;
 
         if( $ok )
             return $this->parse($snoopy->results);
@@ -492,6 +492,7 @@ class CCFeedReader extends CCXmlReader
                 unset($ccFR->current_item);
                 break;
         }
+        $ccFR->waiting_for = null;
     }
 
     function cb_element_data($parser, $data) 
@@ -528,14 +529,15 @@ class CCFeedReader extends CCXmlReader
         {
             if( isset($ccFR->current_item) )
             {
-                $ccFR->current_item[ $ccFR->waiting_for ] = $data;
+                $wfitem =& $ccFR->current_item[ $ccFR->waiting_for ];
+                if( empty($wfitem) )
+                    $wfitem = '';
+                $wfitem .= $data;
             }
             else
             {
                 $ccFR->channel[ $ccFR->waiting_for ] = $data;
             }
-
-            $ccFR->waiting_for = null;
         }
     }
 
