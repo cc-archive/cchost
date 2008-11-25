@@ -2,11 +2,7 @@
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-function _t_news_init($T,&$targs) {
-    
-}
 ?>
-<h1  class="cc_hide">News from Friends of ccMixter</h1>
 <style >
 .reader-publisher-module { /* outter div */
 }
@@ -14,7 +10,7 @@ function _t_news_init($T,&$targs) {
 #readerpublishermodule0 { /* outter div ID */
 }
 
-#readerpublishermodule0 h3 { /* headline */
+#readerpublishermodule0 h3, .headline { /* headline */
     font-size: 14px;
 }
 
@@ -38,22 +34,135 @@ div.s a { /* "from" link */
 div.f { /* 'read more' link container */
 
 }
+
+.newsitem {
+    margin-bottom: 8px;
+    margin-left: 3em;
+    margin-top: 3px;
+    border: 1px solid #DDD;
+    padding: 0.8em;
+}
+
+.newsitem font {
+    display: block;
+    margin-top: 0.8em;
+}
+
+.nlink {
+    background-color: #DDD;
+    padding: 2px;
+    margin:  0.8em -0.8em -0.8em -0.8em;
+}
+
+.ndate {
+    font-style: italic;
+    display: block;
+    float: right;
+}
+
+.ndesc b {
+    font-weight: normal;
+    font-style: italic;
+}
+
+#newstable td {
+    vertical-align: top;
+}
 </style>
-<div  id="fs_container" style="width: 210px; float:right">
-<table  id="fs_table" cellspacing="0" cellpadding="0">
-<tr ><td  id="fs_top_left"></td><td  id="fs_top">&nbsp;</td><td  id="fs_top_right"></td></tr>
-<tr ><td  id="fs_side"></td>
-<td  id="fs_content">
 
-            The latest news from friends of ccMixter. If you have a weblog with a feed
-            that focuses primarily on Creative Commons Music use the link at the bottom
-            of this page to contact the administrators.
+<table id="newstable">
+<tr><td style="width:45%;padding-right:4em;">
+<h3 class="headline" style="margin-botttom:1.5em;">ccMixter in the News</h3>
+<br />
+<?
+   $items = cc_get_feed_items('http://www.google.com/alerts/feeds/12748645413098479754/4912859173467429734'); 
+   foreach( $items as $item )
+   {
+      ?><div class="newsitem">
+             <div class="ndesc"><?= $item['description'] ?></div>
+             <div class="nlink"><span class="ndate"><?= $item['date_timestamp'] ?></span> <a href="<?= $item['link'] ?>">read more...</a></div>
+        </div>
+      <?
+   }
+?>
 
-            </td>
-<td  id="fs_side"></td>
-</tr>
-<tr ><td  id="fs_bot_left"></td><td  id="fs_bot">&nbsp;</td><td  id="fs_bot_right"></td></tr>
-</table>
-</div>
+</td><td>
 <script  type="text/javascript" src="http://www.google.com/reader/ui/publisher.js"></script>
 <script  type="text/javascript" src="http://www.google.com/reader/public/javascript/user/12748645413098479754/label/friend-of-ccmixter?n=25&callback=GRC_p(%7Bc%3A'-'%2Ct%3A'Friends%20of%20ccMixter'%2Cs%3A'true'%7D)%3Bnew%20GRC"></script>
+</td></tr></table>
+
+<?
+
+function dnw($str)
+{
+    //print $str . '<br />' . "\n";
+}
+
+function cc_get_feed_items($url,$cache_time=86400,$max_items=20) // 86400 = 24*60*60
+{
+    global $CC_GLOBALS;
+
+    $path = cc_temp_dir() . '/' . md5($url) . '.tmp';
+    if( file_exists($path) )
+    {
+        dnw('got file: ' . $path);
+
+        $items = file_get_contents($path);
+        $items = unserialize($items);
+    }
+
+    $admin_over = CCUser::IsAdmin() && !empty($_GET['xnews']);
+
+        dnw('admin_over: (' . $admin_over . ')');;
+    
+    $is_expired = empty($cache_time) || empty($items) || ( (filemtime($path) + $cache_time) < time() );
+
+        dnw('cache_time: (' . $cache_time . ')');
+        dnw('is_expired: (' . $is_expired . ')');
+
+    if( $admin_over || $is_expired )
+    {
+        require_once('cchost_lib/cc-feedreader.php');
+        $fr = new CCFeedReader();
+        $xml = $fr->cc_parse_url($url);
+        $new_items =& $xml->items;
+
+        if( empty($items) )
+        {
+            $items = $new_items;
+        }
+        else
+        {
+            $prepend_these = array();
+
+            foreach( $new_items as $new_item )
+            {
+                $found = false;
+                foreach( $items as $item )
+                {
+                    if( $item['link'] == $new_item['link'] )
+                    {
+                        $found = true;
+                        dnw( 'found: (' . $item['link'] . ') ');
+                        break;
+                    }
+                }
+                if( !$found )
+                    $prepend_these[] = $new_item;
+            }
+
+            $items = array_merge( $prepend_these, $items );
+        }
+
+        $copy = $items;
+        if( count($copy) > $max_items )
+            $copy = array_slice( $copy, 0, $max_items );
+        $text = serialize($copy);
+        $f = fopen($path,'w');
+        fwrite($f,$text);
+        fclose($f);
+    }
+
+    return $items;
+}
+?>
