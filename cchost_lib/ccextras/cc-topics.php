@@ -28,4 +28,14 @@ if( !defined('IN_CC_HOST') )
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCTopic',  'OnMapUrls'), 'cchost_lib/ccextras/cc-topics.inc');
 
+CCEvents::AddHandler( CC_EVENT_API_QUERY_SETUP, 'xlat_ApiQuerySetup' );
+
+function xlat_ApiQuerySetup( &$args, &$queryObj, $requiresValidation )
+{
+    //d($args);
+    if( !empty($args['xlat']) )
+        $queryObj->where[] = 'topic_can_xlat = 1';
+
+}
+
 ?>
