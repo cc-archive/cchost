@@ -32,6 +32,10 @@ if( !empty($_REQUEST['cmd']) )
             exit;
     }
 }
+
+$ttag = data( array('media','ttag') );
+$root_url = $ttag['root-url'];
+
 ?>
 <html>
 <head>
@@ -40,7 +44,7 @@ if( !empty($_REQUEST['cmd']) )
 function save_config(path)
 {
     var value = $('config_value').value;
-    new Ajax.Updater('config_field','/cchost_lib/cc-config-repair.php',{method:'post',parameters:'cmd=save&path='+path+'&value='+value});
+    new Ajax.Updater('config_field','<?= $root_url ?>/cchost_lib/cc-config-repair.php',{method:'post',parameters:'cmd=save&path='+path+'&value='+value});
     $('config_field').innerHTML = 'working...';
 }
 function add_path(path)
@@ -51,7 +55,7 @@ function add_path(path)
         alert('empty path name');
         return;
     }
-    location.href = '/cchost_lib/cc-config-repair.php?cmd=add&path='+path+'/' + value;
+    location.href = '<?= $root_url ?>/cchost_lib/cc-config-repair.php?cmd=add&path='+path+'/' + value;
     return false;
 }
 </script>
