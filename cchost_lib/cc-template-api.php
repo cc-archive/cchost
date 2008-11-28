@@ -375,5 +375,10 @@ function _make_topic_np_link(&$A,$keys,$page_slug,$sptext,$sql)
     }
 }
 
+function cc_get_topic_tranlations($topic_id)
+{
+    $xlat_rows = CCDatabase::QueryRows('SELECT * FROM cc_tbl_topic_i18n WHERE topic_i18n_topic = '.$topic_id);
+    return $xlat_rows;
+}
 
 ?>

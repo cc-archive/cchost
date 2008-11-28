@@ -434,7 +434,7 @@ EOF;
         CCPage::SetTitle( 'str_forum_post_new_topic' );
 
         require_once('cchost_lib/ccextras/cc-topics-forms.inc');
-        $form = new CCTopicForm( 'str_forum_new_topic_text', 'str_forum_submit_topic', true );
+        $form = new CCTopicForm( 'str_forum_new_topic_text', 'str_forum_submit_topic', CC_TTF_EDIT );
         if( empty($_POST['topic']) || !$form->ValidateFields() )
         {
             CCPage::AddForm( $form->GenerateForm() );

@@ -33,7 +33,7 @@ class CCContentPostForm extends CCTopicForm
 {
     function CCContentPostForm()
     {
-        $this->CCTopicForm(_('Content Entry'),_('Submit Content'),true,false);
+        $this->CCTopicForm(_('Content Entry'),_('Submit Content'),CC_TTF_EDIT,false);
         $this->EnableUploads();
 
         $types = CCDatabase::QueryItems('SELECT DISTINCT topic_type FROM cc_tbl_topics');

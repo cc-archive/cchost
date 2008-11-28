@@ -70,34 +70,46 @@ EOF;
                                             'text' => 'str_topic_translate' );
             }
 
-            if( $is_topic_owner || $is_admin )
+            if( !empty($_GET['xlat']) )
+            {
+                /*
+                $rec['cmds'][] = array( 'href' => ccl('topics','delete',$R['topic_id']),
+                                            'id' => 'delete_link_' . $R['topic_id'],
+                                            'text' => 'str_topic_delete' );
+                */
+                $rec['cmds'][] = array( 'href' => '',
+                                            'id' => 'edit_link_' . $R['topic_id'],
+                                            'hidden' => true,
+                                            'text' => 'str_topic_edit' );
+            }
+            elseif( $is_topic_owner || $is_admin )
             {
                 $rec['cmds'][] = array( 'href' => ccl('topics','delete',$R['topic_id']),
                                             'text' => 'str_topic_delete' );
                 $rec['cmds'][] = array( 'href' => ccl('topics','edit',$R['topic_id']),
                                             'text' => 'str_topic_edit' );
 
-            }
-
-            if( $is_admin )
-            {
-                if( empty($R['topic_locked']) )
-                    $text = _('Lock');
-                else
-                    $text = _('Unlock');
-
-                $rec['cmds'][] = array( 'href' => ccl('topics','lock',$R['topic_id']),
-                                                  'text' => $text );
-
-                if( $R['has_children'] )
+                if( $is_admin )
                 {
-                    $rec['cmds'][] 
-                        = array( 'href' => ccl('topics','delete',$R['topic_id'],'branch'),
-                                                      'text' => _('Delete branch') );
+                    if( empty($R['topic_locked']) )
+                        $text = _('Lock');
+                    else
+                        $text = _('Unlock');
+
+                    $rec['cmds'][] = array( 'href' => ccl('topics','lock',$R['topic_id']),
+                                                      'text' => $text );
+
+                    if( $R['has_children'] )
+                    {
+                        $rec['cmds'][] 
+                            = array( 'href' => ccl('topics','delete',$R['topic_id'],'branch'),
+                                                          'text' => _('Delete branch') );
+                    }
                 }
+
             }
 
-            if( empty($R['topic_locked']) || $is_admin )
+            if( empty($_GET['noreply']) && (empty($R['topic_locked']) || $is_admin) )
             {
                 if( $is_topic_owner )
                 {

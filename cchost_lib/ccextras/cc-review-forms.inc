@@ -35,7 +35,7 @@ class CCReviewForm extends CCTopicForm
 {
     function CCReviewForm()
     {
-        $this->CCTopicForm(_('Review'),'Submit Review');
+        $this->CCTopicForm(_('Review'),'Submit Review', CC_TTF_NOT_VISIBLE );
 //       $this->SetTemplateMacro('review_post')
     }
 }
