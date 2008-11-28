@@ -642,6 +642,7 @@ $GLOBALS['str_topic_deleted']        = _('*** Topic deleted by author ***');
 $GLOBALS['str_topic_edit']            = _("Edit");
 $GLOBALS['str_topic_reply_with_quote']            = _("Reply with quote");
 $GLOBALS['str_topic_translate']            = _('Translate');
+$GLOBALS['str_topics_for_translation']            = _('Topics For Translation');
 
 $GLOBALS['str_permalink']              = _('permalink');
 
@@ -807,5 +808,8 @@ $GLOBALS['str_updated_file_deleted'] = _('File(s) deleted');
 $GLOBALS['str_updated_unknown'] = _('(? unknown operation ?)');
 $GLOBALS['str_updated_recent'] = _('Recent Updates');
 $GLOBALS['str_updated_more'] = _('More recent updates');
+
+$GLOBALS['str_native_lang'] = _('English');
+$GLOBALS['str_topic_reply_head'] = _('Original Message:');
 
 ?>

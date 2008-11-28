@@ -402,7 +402,16 @@ topicHooks.prototype = {
                 if( cmd_meta.cmds )
                 {
                     cmd_meta.cmds.each( function(cmd) {
-                        html += '<a class="cc_gen_button" href="' + cmd.href + '"><span>' + cc_str(cmd.text) + '</span></a> ';
+                        html += '<a class="cc_gen_button" href="' + cmd.href + '"';
+                        if( cmd.id )
+                        {
+                            html += ' id="' + cmd.id + '" ';
+                        }
+                        if( cmd.hidden )
+                        {
+                            html += ' style="display:none" ';
+                        }
+                        html += '><span>' + cc_str(cmd.text) + '</span></a> ';
                     });
                     $('commands_' + id).innerHTML = html;
                 }

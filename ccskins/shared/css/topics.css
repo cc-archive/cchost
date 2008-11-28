@@ -147,3 +147,15 @@ a.topic_permalink {
 	font-weight: normal;
 }
 	
+.topic_reply_head {
+	width: 70%;
+	margin: 3em auto;
+}
+
+.topic_reply_head h3 {
+	padding: 0.5em;
+}
+
+.topic_reply_text {
+	padding: 1em;
+}
