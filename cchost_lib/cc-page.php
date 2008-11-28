@@ -695,7 +695,7 @@ class CCPage extends CCSkin
         $page->vars[$placement][] = array(   'rel'       => $rel,
                                                    'type'      => $type,
                                                    'href'      => str_replace('&','&amp;',$href),
-                                                   'title'     => $title,
+                                                   'title'     => str_replace('"',"'",$title),
                                                    'link_text' => $link_text,
                                                    'id'        => $id );
     }
