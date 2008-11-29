@@ -293,9 +293,13 @@ class CCQuery
     {
         if( !empty($this->_limit_is_valid) )
             return;
+        if( empty($max) )
+            $max = 12;
         global $CC_GLOBALS;
         if( empty($this->_from_url) && empty($this->args['limit']) )
             $admin_limit_key = 'querylimit';
+        if( empty($CC_GLOBALS[$admin_limit_key]) )
+             $CC_GLOBALS[$admin_limit_key] = $max;
         $admin_limit = empty($admin_limit_key) ? $max : $CC_GLOBALS[$admin_limit_key];
         if( empty($this->args['limit']) || ( $this->args['limit'] == 'default' ) )
             $caller_limit = 'default';
