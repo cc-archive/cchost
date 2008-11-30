@@ -83,7 +83,6 @@ a:hover {
 
 h1, h2, h3 {
 	line-height: 105%;
-	font-family: arial,sans serif;
 	margin: 2px;
 }
 
@@ -104,7 +103,6 @@ h2 {
 	padding: 0px 5px 10px 0px;
 	margin: 0px;
 	text-align: center;
-	font-family: Verdana;
 	font-size: 20px;
 	font-weight: normal;
 }

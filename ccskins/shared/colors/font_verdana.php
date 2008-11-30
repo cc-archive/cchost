@@ -5,7 +5,7 @@
 [/meta]
 */?>
 <style type="text/css">
-body, td, input, select, ul, h1, h2, h3, h4, p {
-  font-family: Verdana, Geneva, sans-serif;
+body, td, input, select, option, ul, h1, h2, h3, h4, p, a, a span {
+  font-family: Verdana, Geneva, Helvetica, sans-serif;
 }
 </style>
