@@ -71,10 +71,20 @@ div.f { /* 'read more' link container */
 </style>
 
 <table id="newstable">
-<tr><td style="width:45%;padding-right:4em;">
-<h3 class="headline" style="margin-botttom:1.5em;">ccMixter in the News</h3>
-<br />
+<tr>
+<? // print_news_items(); ?>
+<td>
+<script  type="text/javascript" src="http://www.google.com/reader/ui/publisher.js"></script>
+<script  type="text/javascript" src="http://www.google.com/reader/public/javascript/user/12748645413098479754/label/friend-of-ccmixter?n=25&callback=GRC_p(%7Bc%3A'-'%2Ct%3A'Friends%20of%20ccMixter'%2Cs%3A'true'%7D)%3Bnew%20GRC"></script>
+</td></tr></table>
+
 <?
+function print_news_items()
+{
+    print '<td style="width:45%;padding-right:4em;">';
+    print '<h3 class="headline" style="margin-botttom:1.5em;">ccMixter in the News</h3>';
+    print '<br />';
+    
    $items = cc_get_feed_items('http://www.google.com/alerts/feeds/12748645413098479754/4912859173467429734'); 
    foreach( $items as $item )
    {
@@ -84,14 +94,9 @@ div.f { /* 'read more' link container */
         </div>
       <?
    }
-?>
-
-</td><td>
-<script  type="text/javascript" src="http://www.google.com/reader/ui/publisher.js"></script>
-<script  type="text/javascript" src="http://www.google.com/reader/public/javascript/user/12748645413098479754/label/friend-of-ccmixter?n=25&callback=GRC_p(%7Bc%3A'-'%2Ct%3A'Friends%20of%20ccMixter'%2Cs%3A'true'%7D)%3Bnew%20GRC"></script>
-</td></tr></table>
-
-<?
+   
+   print '</td>';
+}
 
 function dnw($str)
 {
