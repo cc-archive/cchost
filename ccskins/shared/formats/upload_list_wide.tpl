@@ -17,9 +17,9 @@
     <? $rec_ids[] = $R['upload_id']; ?>
     <div class="upload" 
         %if_not_null(#R/files/0/file_extra/sha1)% about="urn:sha1:%(#R/files/0/file_extra/sha1)%" %end_if% >
-        <!--   <?= str_replace('--','', $R['upload_name']) ?>   -->
+        <!-- <?= str_replace('--','', $R['upload_name']) ?>   -->
     <div class="upload_avatar"><img src="%(#R/user_avatar_url)%" /></div>
-    <div class="upload_info"><!-- about="%(#R/download_url)%" -->
+    <div class="upload_info" about="<?= str_replace('-', '%2D', $R['download_url'] ) ?> ">
         <a class="lic_link" href="%(#R/license_url)%" 
                   rel="license" title="%(#R/license_name)%" ><img src="%(#R/license_logo_url)%" /></a> 
         <a property="dc:title" href="%(#R/file_page_url)%" class="cc_file_link upload_name">%(#R/upload_name_chop)%</a><br />%text(str_by)% 
