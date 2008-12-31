@@ -238,6 +238,8 @@ END;
             if( !empty($ex['ttype']) )
                 CCUploadAPI::UpdateCCUD($upload_id,'trackback,in_' . $ex['ttype'] ,'');
 
+            CCEvents::Invoke( CC_EVENT_TRACKBACKS_APPROVED, array( &$x ) );
+
             CCSync::Upload($upload_id);
         }
     }
@@ -271,11 +273,17 @@ END;
                     continue;
                 $id = CCUtil::StripText($id);
                 if( $action == 'delete' )
+                {
                     $this->_delete_trackback($id);
+                }
                 elseif( $action == 'approve' )
+                {
                     $this->ApproveTrackback($id);
+                }
             }
+            
         }
+
 
         $pool_id = $this->GetWebSamplePool();
         $cce = ccl('admin','poolitem','edit') . '/';

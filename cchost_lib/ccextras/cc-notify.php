@@ -40,7 +40,7 @@ CCEvents::AddHandler(CC_EVENT_TOPIC_REPLY,    array( 'CCNotify',  'OnReply'));
 CCEvents::AddHandler(CC_EVENT_ED_PICK,        array( 'CCNotify',  'OnEdPick'));
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    array( 'CCNotify',  'OnUploadDone')); 
 CCEvents::AddHandler(CC_EVENT_RATED,          array( 'CCNotify',  'OnRated')); 
-
+CCEvents::AddHandler(CC_EVENT_TRACKBACKS_APPROVED, array( 'CCNotify', 'OnTrackbacksApproved' ));
 /**
 *
 *
@@ -93,6 +93,16 @@ class CCNotify
         require_once('cchost_lib/ccextras/cc-notify.inc');
         $notify_api = new CCNotifyAPI();
         $notify_api->OnEdPick($upload_id);
+    }
+
+    function OnTrackbacksApproved(&$tb_info) 
+    {
+        if( !$this->_is_notify_on() )
+            return;
+
+        require_once('cchost_lib/ccextras/cc-notify.inc');
+        $notify_api = new CCNotifyAPI();
+        $notify_api->OnTrackbacksApproved($tb_info);
     }
 
     /**

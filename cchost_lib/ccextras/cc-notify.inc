@@ -36,6 +36,7 @@ define('CC_NTFY_ED_PICK',           0x0008 );
 define('CC_NTFY_THEY_UPLOADED',     0x0010 );
 define('CC_NTFY_IVE_BEEN_REMIXED',  0x0020 );
 define('CC_NTFY_IVE_BEEN_RATED',    0x0040 );
+define('CC_NTFY_TRACKBACK',          0x0080 );
 
 define('CC_NTFY_MAX',    CC_NTFY_IVE_BEEN_RATED );
 
@@ -101,6 +102,8 @@ class CCNotifyAPI
                        'flag' => CC_NTFY_REVIEW_REPLY, ),
                 array( 'label' => _("I've been rated"),
                        'flag' => CC_NTFY_IVE_BEEN_RATED, ),
+                array( 'label' => _("I've been used in a trackback"),
+                       'flag' => CC_NTFY_TRACKBACK, ),
 /*
                 array( 'label' => _('Any upload has been editor picked'),
                        'flag' => CC_NTFY_ED_PICK, ),
@@ -233,6 +236,35 @@ class CCNotifyAPI
         }
     }
 
+    function OnTrackbacksApproved(&$trackback_info)
+    {
+        $upload_id = $trackback_info['pool_tree_parent'];
+        $pool_item_id = $trackback_info['pool_tree_pool_child'];
+
+        list( $uploader, $upload_name ) = CCDatabase::QueryRow(
+                    'SELECT upload_user, upload_name FROM cc_tbl_uploads WHERE upload_id='.$upload_id,false);
+        $ibr = CC_NTFY_TRACKBACK;
+        $where = "(notify_user = $uploader) AND (notify_mask & $ibr)";
+        $notifications =& CCNotifications::GetTable();
+        $notify_row = $notifications->QueryRow($where);
+        if( $notify_row )
+        {
+            $item_url = ccl('pools','item',$pool_item_id);
+            
+            $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . 
+            "\n\n" . 
+            _('This is a notification that "%s" has been used in a trackback:') .
+            "\n\n%s\n";
+            $body = sprintf($body,$upload_name,$item_url);
+
+            $subject = _('Trackback notification');
+            $nrarray = array( $notify_row );
+            $this->_do_notify($subject, $body, $nrarray  );
+        }
+
+
+    }
+    
     function OnReply(&$reply, &$original)
     {
         // figure out everybody who's in

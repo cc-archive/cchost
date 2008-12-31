@@ -627,6 +627,24 @@ define('CC_EVENT_LOGOUT',               'logout' );
 */
 define('CC_EVENT_LOST_PASSWORD', 'lostpassword' );
 
+/**
+* Notification Event: Trackback(s) approved
+*
+* Event call back (handler) prototype:
+*<code>
+* function OnTrackbacksApproved( &$trackback_info );
+*</code>
+* 
+* where 'trackback_info' is an array:
+*
+*    $trackback_info['pool_tree_parent'] = $upload_id;
+*    $trackback_info['pool_tree_pool_child'] = $pool_item_id;
+*
+* @see CCEvents::AddHandler()
+*/
+define('CC_EVENT_TRACKBACKS_APPROVED',  'trackbacksapp' );
+
+
 /**#@+
 * @access private
 */
