@@ -67,14 +67,30 @@ class CCRestAPI
 
     function Search()
     {
-        if( empty( $_REQUEST['query'] ) && empty( $_REQUEST['q'] ) )
+        if( empty($_POST) )
+        {
+            if( !empty($_GET) )
+                $req =& $_GET;
+            else
+                $req = array();
+        }
+        else
+        {
+            $req =& $_POST;
+        }
+        if( empty( $req['query'] ) && empty( $req['q'] ) )
             $this->Info();
 
         require_once('cchost_lib/cc-query.php');
         $queryapi = new CCQuery();
         $args = array();
-        if( empty($_REQUEST['format']) )
+        if( empty($req['format']) )
             $args['format'] = 'rss';
+        if( !empty($req['type']) )
+        {
+             $args['search_type'] = $req['type'];
+             $req['type'] = '';
+         }
         $args = $queryapi->ProcessUriArgs($args);
         $queryapi->Query($args);
     }
@@ -319,10 +335,10 @@ class CCRestAPI
     function OnMapUrls()
     {
         // compat mappings
-        CCEvents::MapUrl( ccp('api','info'),                 array( 'CCRestAPI', 'Info'),CC_DONT_CARE_LOGGED_IN); 
-        CCEvents::MapUrl( ccp('api','search'),               array( 'CCRestAPI', 'Search'),CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','file'),                 array( 'CCRestAPI', 'File'),CC_DONT_CARE_LOGGED_IN);
-        CCEvents::MapUrl( ccp('api','ubeensampled'),         array( 'CCRestAPI', 'UBeenRemixed'),CC_DONT_CARE_LOGGED_IN);
+        CCEvents::MapUrl( ccp('api','info'),                 array( 'CCRestAPI', 'Info'),CC_DONT_CARE_LOGGED_IN, ccs(__FILE__)); 
+        CCEvents::MapUrl( ccp('api','search'),               array( 'CCRestAPI', 'Search'),CC_DONT_CARE_LOGGED_IN,ccs(__FILE__));
+        CCEvents::MapUrl( ccp('api','file'),                 array( 'CCRestAPI', 'File'),CC_DONT_CARE_LOGGED_IN,ccs(__FILE__));
+        CCEvents::MapUrl( ccp('api','ubeensampled'),         array( 'CCRestAPI', 'UBeenRemixed'),CC_DONT_CARE_LOGGED_IN,ccs(__FILE__));
 
         // happy new mappings
         CCEvents::MapUrl( ccp('api','pool','info'),                 array( 'CCRestAPI', 'Info'), 
