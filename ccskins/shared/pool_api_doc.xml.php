@@ -62,7 +62,7 @@ you only need to implement two URLs:</p>
 <tr >
 <td  style="vertical-align: top;" class="api">/info</td><td  style="vertical-align: top;"></td><td ></td>
 <td  style="vertical-align: top;">The general info for a pool. Just return a channel info without any items.
-     (Example: <a  href="http://ccmixter.org/media/api/info">http://ccmixter.org/media/api/info</a>) </td>
+     (Example: <a  href="http://ccmixter.org/api/pool/info">http://ccmixter.org/api/pool/info</a>) </td>
 </tr>
 <tr ><td  colspan="5" class="sep">&nbsp;</td></tr>
 <tr >
@@ -72,7 +72,7 @@ you only need to implement two URLs:</p>
 <td  style="vertical-align: top;" rowspan="2">
     RSS or Atom feed of matching results. The 'guid' (or 'id') element in these are 
     used for further inquiries like '/file' and '/ubeensampled'. Default type of search is 'any' if none
-    is specified. (Example: <a  href="http://ccmixter.org/media/api/search?query=mustang">http://ccmixter.org/media/api/search?query=mustang</a>)</td>
+    is specified. (Example: <a  href="http://ccmixter.org/api/pool/search?query=mustang">http://ccmixter.org/api/pool/search?query=mustang</a>)</td>
 </tr>
 <tr >
 <td ></td>
@@ -98,7 +98,7 @@ you only need to implement two URLs:</p>
 <td  style="vertical-align: top;"><span  class="term">guid</span></td>
 <td  style="vertical-align: top;" class="v">file_guid</td>
 <td  style="vertical-align: top;">An RSS feed with a single item in it as identified by 'guid'
-(Example: <a  href="http://ccmixter.org/media/api/file?guid=http://ccmixter.org/media/files/RinkyD/3964">http://ccmixter.org/media/api/file?guid=http://ccmixter.org/media/files/RinkyD/3964</a>)
+(Example: <a  href="http://ccmixter.org/api/pool/file?guid=http://ccmixter.org/files/RinkyD/3964">http://ccmixter.org/api/pool/file?guid=http://ccmixter.org/files/RinkyD/3964</a>)
     </td>
 </tr>
 <tr ><td  colspan="5" class="sep">&nbsp;</td></tr>
@@ -134,20 +134,20 @@ you only need to implement two URLs:</p>
 </table>
 <h3 >Example</h3>
 <p >Assume that example1.com has source media for an artist called 'Brad Sucks' that a user at example2.com has downloaded, 
-remixed and wants to upload to example2.com. Assume that base API url for both is at /media/api.</p>
+remixed and wants to upload to example2.com. Assume that base API url for both is at /api/pool.</p>
 <p >example2.com calls to example1.com to query for the exact information:</p>
 <code >
-   http://example1.com/media/api/search?query=brad+sucks&type=phrase
+   http://example1.com/api/pool/search?query=brad+sucks&type=phrase
 </code>
 <p >example1.com responds with an RSS feed with all sources matching the phrase 'brad sucks'.</p>
 <p >The user at example2.com selects the matching source and example2.com extracts the guid for 
 that source, combines it with the new guid for the user's upload and notifies example1.com of
 that the remix has occured (URL has been broken across lines for readability):</p>
 <code >
-  http://example2.com/media/api/ubeensampled
+  http://example2.com/api/pool/ubeensampled
              ?guid=http://example1.com/files/49565
               &remixid=http://example2.com/files/43923
-              &pootsite=http://example2.com/media/api
+              &pootsite=http://example2.com/api/pool
 </code>
 <p >The actual guids are extracted from the RSS feed results from '/search' so it
 does not matter what format they are. In this case both servers use URLs but that
@@ -166,7 +166,7 @@ Commons license information should be included:</p>
 
   &lt;channel&gt;
     &lt;title&gt;ccMixter (spoken_word)&lt;/title&gt;
-    &lt;link&gt;http://cchost.org/media/&lt;/link&gt;
+    &lt;link&gt;http://cchost.org&lt;/link&gt;
     &lt;description&gt;Download, Sample, Cut-up, Share.&lt;/description&gt;
     &lt;language&gt;en-us&lt;/language&gt;
 
@@ -175,7 +175,7 @@ Commons license information should be included:</p>
 
     &lt;item&gt;
       &lt;title&gt;Generation Defects&lt;/title&gt;
-      &lt;link&gt;http://cchost.org/media/files/aerosolspray/3374&lt;/link&gt;
+      &lt;link&gt;http://cchost.org/files/aerosolspray/3374&lt;/link&gt;
       &lt;pubDate&gt;Tue, 20 Dec 2005 21:32:04 PST&lt;/pubDate&gt;
 
       &lt;dc:creator&gt;aerosolspray&lt;/dc:creator&gt;
@@ -199,7 +199,7 @@ Commons license information should be included:</p>
       &lt;category&gt;spoken_word&lt;/category&gt;
       &lt;category&gt;synth&lt;/category&gt;
 
-      &lt;guid&gt;http://cchost.org/media/files/aerosolspray/3374&lt;/guid&gt;
+      &lt;guid&gt;http://cchost.org/files/aerosolspray/3374&lt;/guid&gt;
       &lt;cc:license&gt;http://creativecommons.org/licenses/by-nc/2.5/&lt;/cc:license&gt;
     &lt;/item&gt;
   &lt;/channel&gt;
@@ -211,19 +211,19 @@ Commons license information should be included:</p>
 &lt;feed xmlns="http://www.w3.org/2005/Atom"&gt;
 
   &lt;title&gt;ccMixter (spoken_word) [BETA]&lt;/title&gt;
-  &lt;link rel="self" href="http://cchost.org/media/feed/atom/spoken_word"&gt;&lt;/link&gt;
-  &lt;link rel="alternate" href="http://cchost.org/media/tags/spoken_word"&gt;&lt;/link&gt;
+  &lt;link rel="self" href="http://cchost.org/feed/atom/spoken_word"&gt;&lt;/link&gt;
+  &lt;link rel="alternate" href="http://cchost.org/tags/spoken_word"&gt;&lt;/link&gt;
   &lt;updated&gt;2006-02-06T19:34:55-08:00&lt;/updated&gt;
-  &lt;id&gt;http://cchost.org/media/tags/spoken_word&lt;/id&gt;
+  &lt;id&gt;http://cchost.org/tags/spoken_word&lt;/id&gt;
 
   &lt;entry&gt;
-      &lt;id&gt;http://cchost.org/media/files/aerosolspray/3374&lt;/id&gt;
+      &lt;id&gt;http://cchost.org/files/aerosolspray/3374&lt;/id&gt;
       &lt;title&gt;Generation Defects&lt;/title&gt;
       &lt;author&gt;
         &lt;name&gt;aerosolspray&lt;/name&gt;
       &lt;/author&gt;
       &lt;link rel="alternate" 
-        href="http://cchost.org/media/files/aerosolspray/3374" type="text/html"&gt;
+        href="http://cchost.org/files/aerosolspray/3374" type="text/html"&gt;
       &lt;/link&gt;
       &lt;link rel="enclosure" 
             href="http://cchost.org/people/aerosolspray/aerosolspray_-_Generation_Defects.wma" 
