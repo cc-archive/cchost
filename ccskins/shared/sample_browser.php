@@ -155,18 +155,22 @@ function _t_sample_browser_browser_page($T,&$A) {
     background-color: #DDD;
     border: 2px solid #999;
     padding-bottom: 4px;
-    float: left;
+    float: right;
   }
 
   #sample_browser {
     float: left;
-    width: 600px;
+    width: 580px;
     border: 2px solid #999;
     height: 480px;
     background-color: #EEE;
     padding: 8px;
   }
 
+  #browser_container {
+      width:   842px;
+      white-space: nowrap;
+  }
   /* ------------------------ */
 
   #results_container {
@@ -355,6 +359,7 @@ function _t_sample_browser_browser_page($T,&$A) {
       color: green;
   }
   </style>
+<div id="browser_container">
 <div  id="sample_browser">
   <?= $A['default_msg']?>
 </div>
@@ -501,6 +506,8 @@ if ( !($A['TL']['selected']) ) {
 <input  type="button" value="<?= $A['search_text']?>" onclick="do_search(this);" id="btn_search"></input>
 </div>
 </div>
+<br style="clear:both" />
+</div><!-- browser container -->
 <?
 } // END: function browser_page
 
