@@ -71,7 +71,12 @@ class CCPageAdmin
             return;
 
         if( empty($template) )
-            $args['template'] = 'list_files';
+        {
+            if( !empty($datasource) && ($datasource == 'pool_items') )
+                $args['template'] = 'pool_listing';
+            else
+                $args['template'] = 'list_files';
+        }
 
         $queryObj->GetSourcesFromTemplate($args['template']);
 

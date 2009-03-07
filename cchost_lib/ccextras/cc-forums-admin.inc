@@ -123,7 +123,7 @@ class CCForumConfirmDeleteForm extends CCForm
 
 class CCForumMoveThreadForm extends CCForm
 {
-    function CCForumMoveThreadForm()
+    function CCForumMoveThreadForm($fork=false)
     {
         $this->CCForm();
 
@@ -146,6 +146,16 @@ class CCForumMoveThreadForm extends CCForm
                      ),
             );
 
+        if( $fork )
+        {
+            $fields['topic_name'] = array(
+                   'label' => _('Thread Name'),
+                    'form_tip' => _('Name of new thread'),
+                    'formatter' => 'textedit',
+                    'flags' => CCFF_REQUIRED | CCFF_POPULATE
+                );
+        }
+        
         $this->AddFormFields($fields);
     }
 
@@ -215,6 +225,70 @@ class CCForumsAdmin
         CCEvents::MapUrl( ccp('admin','forums','move'), array( 'CCForumsAdmin', 'MoveThread'),   
                 CC_ADMIN_ONLY, ccs(__FILE__), '{thread_id}', 
                 _("Displays 'Move Thread' form"), CC_AG_FORUMS );
+                
+        CCEvents::MapUrl( ccp('admin','forums','fork'), array( 'CCForumsAdmin', 'ForkThread'),   
+                CC_ADMIN_ONLY, ccs(__FILE__), '{topic_id}', 
+                _("Displays 'Move Thread' form"), CC_AG_FORUMS );
+    }
+
+    
+    function ForkThread($topic_id)
+    {
+        $form = new CCForumMoveThreadForm(true); // true means fork
+
+        if( empty($_POST['forummovethread']) || !$form->ValidateFields() )
+        {
+            $title = _('Fork Topic to New Thread');
+            CCPage::SetTitle($title);
+            CCPage::AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            $form->GetFormValues($values);
+            $forum_id = $values['forum_id'];
+
+            $topics =& CCTopics::GetTable();
+            
+            $threads =& CCForumThreads::GetTable();
+            $thread_id = $threads->NextID();
+
+            $sql = 'SELECT topic_date,topic_user,topic_thread FROM cc_tbl_topics WHERE topic_id=';
+            $topic = CCDatabase::QueryRow($sql.$topic_id);
+            $old_thread = $topic['topic_thread'];
+            
+
+            // de-parent the topic 
+            $topics->ForkBranch($topic_id);
+    
+            // Update the topics with the new thread info        
+            
+            // left and right are new as of the ForkBranch
+            list( $left, $right ) = CCDatabase::QueryRow('SELECT topic_left, topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
+            $where = "topic_left >= $left AND topic_right <= $right";
+            $up_topic['topic_name'] = $values['topic_name'];
+            $up_topic['topic_forum'] = $forum_id;
+            $up_topic['topic_thread'] = $thread_id;
+            $topics->UpdateWhere($up_topic,$where);
+            
+            // We need the newest thread
+            $newest_topic = CCDatabase::QueryItem(
+              "SELECT topic_id FROM cc_tbl_topics WHERE topic_thread = {$thread_id} ORDER BY topic_date DESC LIMIT 1");
+            
+            // Create the new thread 
+            $ftvalues = array();
+            $ftvalues['forum_thread_id'] = $thread_id;
+            $ftvalues['forum_thread_forum'] = $forum_id;
+            $ftvalues['forum_thread_user'] = $topic['topic_user'];
+            $ftvalues['forum_thread_oldest'] = $topic_id;
+            $ftvalues['forum_thread_newest'] = $newest_topic;
+            $ftvalues['forum_thread_date'] = $topic['topic_date'];
+            $ftvalues['forum_thread_name'] = $values['topic_name'];
+            $threads->Insert($ftvalues);
+                        
+            $url = ccl('thread',$thread_id);
+            CCUtil::SendBrowserTo($url);
+        }
+
     }
 
     function MoveThread($thread_id)
@@ -224,7 +298,7 @@ class CCForumsAdmin
         $threads->AddJoin( new CCTopics(), 'forum_thread_oldest' );
         $row = $threads->QueryKeyRow($thread_id);
 
-        $form = new CCForumMoveThreadForm();
+        $form = new CCForumMoveThreadForm(false); // false means not a fork
 
         if( empty($_POST['forummovethread']) || !$form->ValidateFields() )
         {
@@ -246,7 +320,7 @@ class CCForumsAdmin
             $where2['forum_thread_forum'] = $new_forum;
             $where2['forum_thread_id'] = $thread_id;
             $threads->Update($where2);
-
+            
             $url = ccl('thread',$thread_id);
             CCUtil::SendBrowserTo($url);
         }

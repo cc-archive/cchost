@@ -25,6 +25,9 @@
           %end_if%
             <a class="cc_file_link upload_name" href="%(#R/pool_item_page)%">%(#R/pool_item_name)%</a>
             <br />%text(str_by)% <a class="cc_user_link" href="%(#R/pool_item_url)%">%(#R/pool_item_artist)%</a>
+          %if_not_null(#R/pool_item_date)%
+             <div class="pool_item_date"><b>%text(date_added)%</b> %(#R/pool_item_date)%</div>
+          %end_if%
             <br /><a class="cc_external_link" href="%(#R/pool_item_url)%"><span>%text(str_external_link)%</span> 
                          <img src="%url(images/remote.gif)%" /></a>
 

@@ -161,6 +161,26 @@ class CCTopics extends CCTable
         $this->Unlock();
     }
 
+    /**
+     *  Create a new top level topic from an existing branch (reply)
+     *
+     */
+    function ForkBranch($topic_id)
+    {
+        $this->Lock();
+        $right_sql = 'SELECT MAX(topic_right) FROM cc_tbl_topics';
+        $max_right = CCDatabase::QueryItem($right_sql);
+        list( $left, $right ) = CCDatabase::QueryRow('SELECT topic_left,topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
+        $diff = $max_right - $left;
+        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right + $diff WHERE topic_left BETWEEN $left AND $right";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left  + $diff WHERE topic_left BETWEEN $left AND $right";
+        $wid = ($right - $left) + 1;
+        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right - $wid WHERE topic_right > $right";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left - $wid  WHERE topic_left  > $right";
+        CCDatabase::Query($sql);
+        $this->Unlock();        
+    }
+    
     function Insert(&$values,$parent_id)
     {
         // we do a variation of the nested set model discussed here
@@ -499,7 +519,6 @@ class CCTopic
         $translations =& CCTopicsi18n::GetTable();
         $topics       =& CCTopics::GetTable();
 
-
         $x = $topics->GetParentTopic($topic_id);
         list( $parent_id, $left, $right ) = $x;
         $depth = '';
@@ -649,7 +668,7 @@ class CCTopic
             _('Display a topic thread') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('topics','lock'),   array( 'CCTopic', 'Lock'),    
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{topicid}', 
+            CC_ADMIN_ONLY, ccs(__FILE__), '{topicid}', 
             _('Lock a topic thread from replies') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('user_hook','topic_cmds'),   array( 'CCTopicHook', 'DoHook'),    

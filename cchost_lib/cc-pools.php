@@ -138,6 +138,18 @@ class CCPoolTree extends CCTable
 */
 class CCPool
 {
+    function OnSearchMeta(&$search_meta)
+    {
+        $search_meta[] = array
+                        (
+                            'template' => 'search_pool_items',
+                            'datasource' => 'pool_items',
+                            'group' => 'pools',
+                            'match' => 'pool_item_name,pool_item_artist',
+                            'title' => 'str_pool_search',
+                        );
+    }
+    
     function Search($pool_id)
     {
         $query = CCUtil::Strip($_GET['search']);

@@ -35,7 +35,7 @@ class CCTopicHook
         $sql =<<<EOF
             SELECT topic_id, user_real_name, topic_can_xlat, topic_locked, 
                 IF( (topic_right - topic_left) > 1, 1, 0) as has_children,
-                topic_user
+                topic_user, topic_thread
             FROM cc_tbl_topics
             JOIN cc_tbl_user ON topic_user=user_id
             WHERE topic_id IN ($ids)
@@ -55,6 +55,8 @@ EOF;
                                      'text' => 'str_review_write'  );
             }
         }
+        
+        $first = false;
 
         foreach( $recs as $R )
         {
@@ -99,11 +101,28 @@ EOF;
                     $rec['cmds'][] = array( 'href' => ccl('topics','lock',$R['topic_id']),
                                                       'text' => $text );
 
+                    $rec['cmd'][] = array( 'href' => ccl('forum','fork',$R['topic_id']),
+                                                       'text' => _('Fork') );
+                                                       
                     if( $R['has_children'] )
                     {
                         $rec['cmds'][] 
                             = array( 'href' => ccl('topics','delete',$R['topic_id'],'branch'),
                                                           'text' => _('Delete branch') );
+                    }
+
+                    if( $is_admin && !empty($R['topic_thread']) )
+                    {  
+                        if( $first )
+                        {                          
+                          $rec['cmds'][] 
+                             = array( 'href' => ccl('admin','forums', 'fork', $R['topic_id'] ),
+                                    'text' => _('Fork' )  );
+                        }
+                        else
+                        {
+                            $first = true;
+                        }
                     }
                 }
 

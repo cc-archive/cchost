@@ -45,7 +45,21 @@ class CCFeedsRSS
         if( $f != 'rss' )
             return;
 
-        $args['template'] = (!empty($args['datasource']) && $args['datasource'] == 'topics' ) ? 'rss_20_topics.php' : 'rss_20.php';
+        if( empty($args['datasource']) )
+            $args['datasource'] = 'uploads';
+        switch( $args['datasource'] )
+        {
+            case 'topics':
+                $args['template'] = 'rss_20_topics.php' ;
+                break;
+            case 'pool_items':
+                $args['template'] = 'rss_20_pool_items.php';
+                break;
+            case 'uploads': // fallthru
+            default:
+                $args['template'] = 'rss_20.php';
+                break;                
+        }
         $queryObj->GetSourcesFromTemplate($args['template']);
         $queryObj->ValidateLimit('max-feed');
     }
@@ -70,31 +84,48 @@ class CCFeedsRSS
         $k = array_keys($records);
         $c = count($k);
         $is_topics = $args['datasource'] == 'topics';
+        $is_pool_items = $args['datasource'] == 'pool_items';
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $records[$k[$i]];
-            $R['user_real_name'] = cc_feed_encode($R['user_real_name']);
-            if( $is_topics )
+            if( $is_pool_items )
             {
-                // we're going to experiment with turnin this off since all this text 
-                // will be displayed within CDATA blocks which freely allow angle
-                // brackets and ampersands. What other characters may blow up this
-                // section I'm not sure
-                //
-                //$R['topic_text_html']   = cc_feed_safe_html($R['topic_text_html']) ;
-
-                $R['topic_text_plain']  = cc_feed_encode($R['topic_text_plain']);
-                $R['topic_name']        = cc_feed_encode($R['topic_name']);
+                $R['pool_item_name']   = cc_feed_encode($R['pool_item_name']);                                
+                $R['pool_item_artist'] = cc_feed_encode($R['pool_item_artist']);                                
+                $desc_tag =<<<EOF
+  
+  <br />
+  <br />From the <a href="{$R['pool_url']}">{$R['pool_name']}</a>  Sample Pool.
+  <br />Licensed under a <a href="{$R['license_url']}">{$R['license_name']}</a>
+EOF;
+                $R['pool_item_description_plain'] = htmlspecialchars($R['pool_item_description'] . $desc_tag);
+                $R['pool_item_description'] = cc_feed_encode($R['pool_item_description'] . $desc_tag );
             }
             else
             {
-                // see note above
-                //
-                //$R['upload_description_html']  = cc_feed_safe_html($R['upload_description_html']) ;
+                $R['user_real_name'] = cc_feed_encode($R['user_real_name']);
+                if( $is_topics )
+                {
+                    // we're going to experiment with turnin this off since all this text 
+                    // will be displayed within CDATA blocks which freely allow angle
+                    // brackets and ampersands. What other characters may blow up this
+                    // section I'm not sure
+                    //
+                    //$R['topic_text_html']   = cc_feed_safe_html($R['topic_text_html']) ;
 
-                $R['upload_description_plain'] = cc_feed_encode($R['upload_description_plain']);
-                $R['upload_name']              = cc_feed_encode($R['upload_name']);
-                $R['user_avatar_url']          = str_replace(' ','%20',$R['user_avatar_url']); // required by validation
+                    $R['topic_text_plain']  = cc_feed_encode($R['topic_text_plain']);
+                    $R['topic_name']        = cc_feed_encode($R['topic_name']);
+                }
+                else
+                {
+                    // see note above
+                    //
+                    //$R['upload_description_html']  = cc_feed_safe_html($R['upload_description_html']) ;
+
+                    $R['upload_description_plain'] = cc_feed_encode($R['upload_description_plain']);
+                    $R['upload_name']              = cc_feed_encode($R['upload_name']);
+                    $R['user_avatar_url']          = str_replace(' ','%20',$R['user_avatar_url']); // required by validation
+                }
             }
         }
 

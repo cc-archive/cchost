@@ -540,6 +540,7 @@ $GLOBALS['str_pool_info_head'] = _('Sample Pool Info');
 $GLOBALS['str_pool_from'] = _('From sample pool');
 $GLOBALS['str_pool_filter'] = _('Sample pool artists');
 $GLOBALS['str_pool_details_link'] = _('See remixes...');
+$GLOBALS['str_pool_search'] = _('Sample Pools and Trackbacks');
 
 $GLOBALS['str_ex_link'] = _('Link');
 $GLOBALS['str_external_link'] = _('External link');

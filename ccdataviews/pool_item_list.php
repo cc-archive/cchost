@@ -16,12 +16,16 @@ function pool_item_list_dataview()
     $sql =<<<EOF
     SELECT 
         pool_item_id, pool_item_url, pool_item_name, pool_item_artist,
+        pool_item_description,
         pool_name, pool_short_name, pool_description, pool_site_url,
         CONCAT( '$urli', pool_item_id) as pool_item_page,
         CONCAT( '$urlp', pool_id ) as pool_url,
         IF( pool_short_name = '_web', '', CONCAT( '$urll', license_logo ) )  as license_logo_url, 
         IF( pool_short_name = '_web', '', CONCAT( '$urlls', license_logo ) ) as license_logo_url_small,
-        license_url, license_name, pool_item_extra
+        license_url, license_name, pool_item_extra,
+        FROM_UNIXTIME( pool_item_timestamp, '%a, %b %e, %Y @ %l:%i %p' ) as pool_item_date,
+        pool_item_timestamp,
+        LOWER(CONCAT_WS(' ', pool_item_name, pool_item_artist )) as qsearch
     FROM cc_tbl_pool_item
     JOIN cc_tbl_pools ON pool_item_pool = pool_id
     JOIN cc_tbl_licenses ON pool_item_license = license_id

@@ -324,6 +324,8 @@ class CCQuery
 
         $A =& $this->args;
 
+        $this->_do_ds_ensure($A);
+        
         //
         // This is the default return type from dataview::perform
         //
@@ -345,7 +347,11 @@ class CCQuery
                 break;
             case 'count':
                 $A['rettype'] = CCDV_RET_ITEM;
-                $this->GetSourcesFromDataview('count');
+                if( !empty($A['datasource']) && ($A['datasource'] == 'pool_items') )
+                   $dv_name = 'count_pool_items';
+                else
+                    $dv_name = 'count';
+                $this->GetSourcesFromDataview($dv_name);
                 $this->sql_p['limit'] = '';
                 break;
             case 'ids':
@@ -363,13 +369,20 @@ class CCQuery
         if( $A['dataview'] == 'passthru' )
             $this->dead = true;
 
+        // do it again, sigh
+        $this->_do_ds_ensure($A);
+
+        $this->_validated_sources = true;
+    }
+
+    function _do_ds_ensure(&$A)
+    {
+        if( empty($A['datasource']) )
+            return;
         if( $A['datasource'] == 'users' )
             $A['datasource'] = 'user';
         elseif( $A['datasource'] == 'pool_item' )
             $A['datasource'] = 'pool_items';
-
-
-        $this->_validated_sources = true;
     }
 
     /** 
@@ -631,7 +644,15 @@ class CCQuery
 
         if( !empty($pivot_val) )
         {
-            $pivot_date = date( 'Y-m-d H:i', $pivot_val );
+            // yup, another hack
+            if( $this->args['datasource'] == 'pool_items' )
+            {
+                $pivot_date = $pivot_val;
+            }
+            else
+            {
+                $pivot_date = date( 'Y-m-d H:i', $pivot_val );
+            }
             $field = $this->_make_field('date');
             $op = $pivot == 'since' ? '>' : '<'; // or 'before'
             $this->where[] = "($field $op '$pivot_date')";
@@ -713,12 +734,27 @@ class CCQuery
 
     function _gen_pool()
     {
-        if( ($this->args['datasource'] == 'pools') || ($this->args['datasource'] == 'pool_items'))
+        if( $this->args['datasource'] == 'pools') 
+            $f = 'pool_id';
+        
+        if( $this->args['datasource'] == 'pool_items' )
+            $f = 'pool_item_pool';
+            
+        if( !empty($f) )
         {
-            $pool_id = sprintf('%0d',$this->args['pool']);
-            if( !empty($pool_id) && ($pool_id > 0) )
+            if( !(intval($this->args['pool']) > 0 ) )
             {
-                $this->where[] = 'pool_id = ' . $pool_id;
+                $pool_id = CCDatabase::QueryItem(
+                    "SELECT pool_id FROM cc_tbl_pools WHERE pool_short_name = '{$this->args['pool']}'");
+            }
+            else
+            {
+                $pool_id = sprintf('%0d',$this->args['pool']);
+            }
+
+            if( !empty($pool_id) )
+            {
+                $this->where[] = $f . ' = ' . $pool_id;
             }
         }
     }
@@ -1174,8 +1210,14 @@ class CCQuery
     function _make_field($field)
     {
         // yes, special case hacks go here
-        if( ($field =='date') && ($this->args['datasource'] == 'user') )
-            return 'user_registered';
+        if( $field =='date')
+        {
+            if( $this->args['datasource'] == 'user' ) 
+              return 'user_registered';
+            elseif( $this->args['datasource'] == 'pool_items' ) 
+              return 'pool_item_timestamp';
+        }
+            
 
         return preg_replace('/s?$/', '', $this->args['datasource']) . '_' . $field;
     }
@@ -1247,6 +1289,7 @@ class CCQuery
         {
             return array( 'name' => array( _('Pool item name'), 'pool_item_name' ),
                           'user' => array( _('Pool item artist'), 'pool_item_artist' ),
+                          'date' => array( _('Pool item date'), 'pool_item_timestamp' ),
                           'id'   => array( _('Internal id'), 'pool_item_id'),
                         );
         }

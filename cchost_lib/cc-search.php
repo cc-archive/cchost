@@ -65,24 +65,7 @@ class CCSearch
 
     function OnSearchMeta(&$search_meta)
     {
-        $search_meta[] = 
-            array(
-                'template' => '*',
-                'title'    => 'str_search_site',
-                'datasource' => '*',
-                'group'    => 'all'
-            );
-        $search_meta[] = 
-            array(
-                'template'   => 'search_uploads',
-                'datasource' => 'uploads',
-                'title'      => 'str_search_uploads',
-                'fields'     => array(),
-                'group'      => 'uploads',
-                'match'      => 'upload_name,upload_description,upload_tags',
-            );
-        $search_meta[] = 
-            array(
+        $user_meta =             array(
                 'template'   => 'search_users',
                 'title'      => 'str_search_users',
                 'datasource' => 'user',
@@ -90,6 +73,32 @@ class CCSearch
                 'group'      => 'user',
                 'match'      => 'user_name,user_real_name,user_description',
             );
+            
+        if( empty($search_meta) )
+        {
+            $search_meta = array( $user_meta );
+        }
+        else
+        {
+            array_unshift($search_meta, $user_meta );
+        }
+        
+        array_unshift($search_meta,
+            array(
+                'template'   => 'search_uploads',
+                'datasource' => 'uploads',
+                'title'      => 'str_search_uploads',
+                'fields'     => array(),
+                'group'      => 'uploads',
+                'match'      => 'upload_name,upload_description,upload_tags',
+            ));
+        array_unshift($search_meta,
+            array(
+                'template' => '*',
+                'title'    => 'str_search_site',
+                'datasource' => '*',
+                'group'    => 'all'
+            ));
     }
 
     function Results()
