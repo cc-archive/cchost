@@ -81,18 +81,19 @@ class CCRestAPI
         if( empty( $req['query'] ) && empty( $req['q'] ) )
             $this->Info();
 
-        require_once('cchost_lib/cc-query.php');
-        $queryapi = new CCQuery();
-        $args = array();
-        if( empty($req['format']) )
-            $args['format'] = 'rss';
+        if( empty($req['format']) && empty($req['f']) )
+            $req['format'] = 'rss';
+
         if( !empty($req['type']) )
         {
-             $args['search_type'] = $req['type'];
+             $req['search_type'] = $req['type'];
              $req['type'] = '';
-         }
-        $args = $queryapi->ProcessUriArgs($args);
-        $queryapi->Query($args);
+        }
+        
+        require_once('cchost_lib/cc-query.php');
+                
+        $queryapi = new CCQuery();
+        $queryapi->QueryURL();
     }
 
     function _get_upload_id_from_guid($guid)
