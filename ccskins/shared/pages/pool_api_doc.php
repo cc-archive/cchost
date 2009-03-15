@@ -17,7 +17,7 @@
 }
 
 .term {
-    font-family: New Courier, serif;
+    font-family: New Courier, courier, serif;
 }
 
 .sep {
@@ -46,7 +46,7 @@ h3 {
     padding-left: 7px;
 }
 </style>
-<h1 >Sample Pool API [BETA]</h1>
+<h1 >Sample Pool API 2.0 [BETA]</h1>
 <p >The Sample Pool API allows two media hosting servers to keep track of when one uses samples from 
 another. It is a RESTful API meaning URL goes in and XML comes out. The returning 
 XML is in the form of a feed (RSS or Atom) with enclosures for downloading media.</p>
@@ -78,14 +78,47 @@ you only need to implement two URLs:</p>
 <td ></td>
 <td  style="vertical-align: top;"><span  class="term">type</span></td>
 <td  style="vertical-align: top;">One of: 
-        <table >
-<tr ><td  style="vertical-align: top;" class="term">any</td><td  style="vertical-align: top;">Match any terms</td></tr>
-<tr ><td  style="vertical-align: top;" class="term">all</td><td  style="vertical-align: top;">Match all terms</td></tr>
-<tr ><td  style="vertical-align: top;" class="term">phrase</td><td  style="vertical-align: top;">Match exact phrase</td></tr>
-</table>
+  <table >
+   <tr ><td  style="vertical-align: top;" class="term">any</td><td  style="vertical-align: top;">Match any terms</td></tr>
+   <tr ><td  style="vertical-align: top;" class="term">all</td><td  style="vertical-align: top;">Match all terms</td></tr>
+   <tr ><td  style="vertical-align: top;" class="term">phrase</td><td  style="vertical-align: top;">Match exact phrase</td></tr>
+  </table>
 </td>
 </tr>
+
+<tr >
+<td ></td>
+<td  style="vertical-align: top;"><span  class="term">limit<span style="color:red">*</span></span></td>
+<td  style="vertical-align: top;">Limits the number of items returned (e.g. <i>limit=20</i>)
+</td>
+</tr>
+
+<tr >
+<td ></td>
+<td  style="vertical-align: top;"><span  class="term">offset<span style="color:red">*</span></span></td>
+<td  style="vertical-align: top;">Return items starting at a given zero-based offset (e.g. <i>offset=40</i>)
+</td>
+</tr>
+
+<tr >
+<td ></td>
+<td  style="vertical-align: top;"><span  class="term">format<span style="color:red">*</span></span></td>
+<td  style="vertical-align: top;">One of:
+  <table >
+   <tr ><td  style="vertical-align: top;" class="term">rss</td><td  style="vertical-align: top;">Return a RSS 2.0 feed (default)</td></tr>
+   <tr ><td  style="vertical-align: top;" class="term">atom</td><td  style="vertical-align: top;">Return an ATOM 1.0 feed</td></tr>
+   <tr ><td  style="vertical-align: top;" class="term">count</td><td  style="vertical-align: top;">Return a count of times</td></tr>
+  </table>
+</td>
+</tr>
+
+
+
 </table>
+
+<div style="color:red;font-weight:bold">*Proposed for version 2.0</div>
+
+
 <h3 >Tracking Sample Pools</h3>
 <p >If you do want to keep track of who is remixing material on your site, then you need to implement two more:</p>
 <table  id="doctable" cellspacing="0">
@@ -160,7 +193,7 @@ Commons license information should be included:</p>
 &lt;?xml version="1.0" encoding="utf-8" ?&gt;
 &lt;rss version="2.0" 
   xmlns:content="http://purl.org/rss/1.0/modules/content/" 
-  xmlns:cc="http://web.resource.org/cc/" 
+  xmlns:cc="http://creativecommons.org/ns" 
   xmlns:dc="http://purl.org/dc/elements/1.1/" 
   xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"&gt;
 
