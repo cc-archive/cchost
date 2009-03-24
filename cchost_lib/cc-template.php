@@ -734,12 +734,20 @@ class CCSkin
     function GetTemplatePath()
     {
         global $CC_GLOBALS;
-        $arr = array_filter(
-                array_unique(array_merge( array('./'),
-                                         $this->template_stack,
-                                         $this->map_stack, 
-                                         CCUtil::SplitPaths( $CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS ) )));
-
+        
+        $user_paths = CCUtil::SplitPaths( $CC_GLOBALS['template-root'], CC_DEFAULT_SKIN_SEARCH_PATHS );
+        
+        if( empty($CC_GLOBALS['search-user-path-first']) )
+        {
+            $paths = array_merge( array('./'), $this->template_stack, $this->map_stack, $user_paths  );
+        }
+        else
+        {
+            $paths = array_merge( array('./'), $user_paths, $this->template_stack, $this->map_stack );
+        }
+        
+        $arr = array_filter( array_unique( $paths ) );
+        
         return $arr;
     }
 

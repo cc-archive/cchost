@@ -249,6 +249,7 @@ function cc_get_lic_fields_3_0()
 
 function cc_install_licenses( $lic_infos = array(  '3_0' ), $nuke_db = true )
 {
+    require_once('cchost_lib/cc-table.php');
 
     $licenses =  new CCTable('cc_tbl_licenses','license_id');
 
@@ -279,6 +280,8 @@ function cc_install_licenses( $lic_infos = array(  '3_0' ), $nuke_db = true )
 
     if( $nuke_db )
     {
+        require_once('cchost_lib/cc-config.php');
+        
         $configs =& CCConfigs::GetTable();
         $configs->SaveConfig('licenses',$active,CC_GLOBAL_SCOPE,false);
     }

@@ -49,6 +49,13 @@ class CCPathAdminForm extends CCEditConfigForm
                        'formatter'  => 'sysdir',
                        'flags'      => CCFF_POPULATE  );
 
+        $fields['search-user-path-first'] =
+               array( 'label'      => _('Prioritize Custom Skins'),
+                      'form_tip'   => _('Uncheck this box for compatibility with 5.0.1 and before (advanced/experimental)'),
+                      'formatter'  => 'checkbox',
+                      'flags'      => CCFF_POPULATE  );
+
+
         $fields['logfile-dir'] =
                array( 'label'       => $wflag . _('Logfile Directory'),
                        'form_tip'   => _('Log files and error files will be written here.'),

@@ -330,6 +330,13 @@ $GLOBALS['str_no_chart']              = _('No Chart');
 $GLOBALS['str_notify_edit']           = _('Edit My Notifications');
 $GLOBALS['str_notify_get_notified']   = _('%sGet Notified About %s%s');
 $GLOBALS['str_notify_link']           = _('%sClick here to edit notifications%s');
+
+$GLOBALS['str_notify_dont_respond']   = _('PLEASE DO NOT RESPOND TO THIS EMAIL');
+$GLOBALS['str_notify_got_rating']     = _('This is a notification that "%s" has just received a rating of %d.00');
+$GLOBALS['str_notify_rating_subject'] = _('Ratings notification');
+$GLOBALS['str_notify_recc_subject']   = _('Recommends notification');
+$GLOBALS['str_notify_got_recc']       = _('This is a notification that "%s" has just been recommened by %s');
+
 $GLOBALS['str_nsfw']                  = _('Not Safe For Work');
 $GLOBALS['str_nsfw_mark_this_upload'] = _('Mark this upload as %s if it contains questionable language.');
 $GLOBALS['str_nsfw_t']                = _('This upload might be %sNot Safe For Work%s');

@@ -185,7 +185,14 @@ class CCNotifyAPI
     }
 
     function OnRated($rating_rec,$rating,&$record)
-    {
+    {  
+              
+        require_once('cchost_lib/cc-config.php');        
+        require_once('cchost_lib/cc-page.php');
+        $configs =& CCConfigs::GetTable();
+        $C       = $configs->GetConfig('chart',CC_GLOBAL_SCOPE);
+        $page   =& CCPage::GetPage();
+                
         $uploader = $record['upload_user'];
         $ibr = CC_NTFY_IVE_BEEN_RATED;
         $where = "(notify_user = $uploader) AND (notify_mask & $ibr)";
@@ -193,15 +200,32 @@ class CCNotifyAPI
         $notify_row = $notifications->QueryRow($where);
         if( $notify_row )
         {
-            $body = "\n\n" . 
-                    _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 
-                    _('This is a notification that "%s" has just received a rating of %d.00') . "\n\n%s\n";
+            $body = "\n\n" . $page->String('str_notify_dont_respond') . "\n\n";
+            
+            if(  empty($C['thumbs_up']) )
+            {
+                $body .= $page->String('str_notify_got_rating') . "\n\n%s\n";
 
-            $body = sprintf($body, $record['upload_name'],
-                                   $rating,
-                                   $record['file_page_url'] );
+                $body = sprintf($body, $record['upload_name'],
+                                       $rating,
+                                       $record['file_page_url'] );
 
-            $subject = _('Ratings notification');
+                $subject = $page->String('str_notify_rating_subject');
+            }
+            else
+            {
+                $rater = CCDatabase::QueryItem('SELECT user_real_name FROM cc_tbl_user WHERE user_id='.
+                                             $rating_rec['ratings_user'] );
+                                             
+                $body .= $page->String('str_notify_got_recc') . "\n\n%s\n";
+
+                $body = sprintf($body, $record['upload_name'],
+                                       $rater,
+                                       $record['file_page_url'] );
+
+                $subject = $page->String('str_notify_recc_subject');
+            }
+
             $nrarray = array( $notify_row );
             $this->_do_notify($subject, $body, $nrarray  );
         }

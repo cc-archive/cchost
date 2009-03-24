@@ -23,7 +23,9 @@ function pool_item_list_dataview()
         IF( pool_short_name = '_web', '', CONCAT( '$urll', license_logo ) )  as license_logo_url, 
         IF( pool_short_name = '_web', '', CONCAT( '$urlls', license_logo ) ) as license_logo_url_small,
         license_url, license_name, pool_item_extra,
-        FROM_UNIXTIME( pool_item_timestamp, '%a, %b %e, %Y @ %l:%i %p' ) as pool_item_date,
+        IF( pool_item_timestamp > 1202785684, 
+            FROM_UNIXTIME( pool_item_timestamp, '%a, %b %e, %Y @ %l:%i %p' ), 
+            0 ) as pool_item_date,
         pool_item_timestamp,
         LOWER(CONCAT_WS(' ', pool_item_name, pool_item_artist )) as qsearch
     FROM cc_tbl_pool_item

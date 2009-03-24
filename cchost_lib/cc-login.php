@@ -456,6 +456,7 @@ class CCLogin
 
         if( empty($_POST['userlogin']) || !$form->ValidateFields() )
         {
+            
             if( !empty($confirm) )
             {
                 $reg_type = empty($CC_GLOBALS['reg-type']) ? null : $CC_GLOBALS['reg-type'];
@@ -488,7 +489,12 @@ class CCLogin
             cc_setcookie(CC_TRANSITION_COOKIE,gmmktime(),time()+60*60*24*30);
             if( $do_ui )
             {
-                CCUtil::SendBrowserTo( ccl('people',$CC_GLOBALS['user_name'] ) );
+                $ref = $form->GetFormValue('http_referer');
+                if( empty( $ref ) )
+                    $url = ccl('people',$CC_GLOBALS['user_name'] );
+                else
+                    $url = urldecode($ref);
+                CCUtil::SendBrowserTo( $url );
             }
             $ok = true;
         }

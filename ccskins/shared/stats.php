@@ -57,7 +57,8 @@ table.statstable td {
         <td>
 <?
     $r = CCDatabase::QueryItem($sql . " AND upload_num_remixes > 0");
-    print floor( ($r*100) / $n ) . '%';
+    if( $n )
+        print floor( ($r*100) / $n ) . '%';
 ?>
         </td>
     </tr>
@@ -74,7 +75,8 @@ table.statstable td {
         <td>
 <?
     $r = CCDatabase::QueryItem($sql . " AND upload_num_remixes > 0");
-    print floor( ($r*100) / $n ) . '%';
+    if( $n )
+        print floor( ($r*100) / $n ) . '%';
 ?>
         </td>
     </tr>
@@ -90,7 +92,8 @@ table.statstable td {
         <td>
 <?
     $r = CCDatabase::QueryItem($sql . " AND upload_num_remixes > 0");
-    print floor( ($r*100) / $n ) . '%';
+    if( $n )
+        print floor( ($r*100) / $n ) . '%';
 ?>
         </td>
     </tr>
