@@ -68,7 +68,8 @@ class CCUploadAPI
     function & _get_record($upload_id)
     {
         $sql =<<<EOF
-            SELECT upload_id, upload_extra, upload_contest, user_name, upload_name, upload_tags, upload_user
+            SELECT upload_id, upload_extra, upload_contest, 
+                   user_name, upload_name, upload_tags, upload_user, upload_license
             FROM cc_tbl_uploads 
             JOIN cc_tbl_user ON upload_user = user_id
             WHERE upload_id = {$upload_id}
@@ -785,6 +786,8 @@ EOF;
         $file_args['local_path']   = cca($relative_dir,$file_args['file_name']);
         $file_args['download_url'] = ccd($relative_dir,$file_args['file_name']);
         $tagger = CCUploadAPI::GetTagger();
+        global $stop;
+        $stop = 1;
         if( isset($tagger) )
             $tagger->TagFile( $record, $file_args['local_path'] );
 
