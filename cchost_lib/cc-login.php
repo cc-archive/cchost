@@ -490,10 +490,16 @@ class CCLogin
             if( $do_ui )
             {
                 $ref = $form->GetFormValue('http_referer');
+                if( !empty($ref) )
+                {
+                    $ref = urldecode($ref);
+                    if( preg_match('/logout$/',$ref ) )
+                        $ref = '';
+                }
                 if( empty( $ref ) )
                     $url = ccl('people',$CC_GLOBALS['user_name'] );
                 else
-                    $url = urldecode($ref);
+                    $url = $ref;
                 CCUtil::SendBrowserTo( $url );
             }
             $ok = true;
