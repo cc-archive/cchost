@@ -241,6 +241,9 @@ class CCSkin
             $name[$m[1]] = $f;
         }
         
+        if( empty($name['css']) || empty($name['inc']) || empty($name['js']) )
+            return array();
+        
         return $name;
     }
 
