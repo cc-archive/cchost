@@ -25,7 +25,6 @@ require_once( 'cchost_lib/cc-handlers.inc');
 require_once( 'cchost_lib/cc-user.php' );
 require_once( 'cchost_lib/cc-upload-table.php' );
 require_once( 'cchost_lib/cc-file-props.php' );
-require_once( 'cchost_lib/cc-dataview.php' );
 require_once( 'cchost_lib/cc-if-modified.php' );
 
 ?>

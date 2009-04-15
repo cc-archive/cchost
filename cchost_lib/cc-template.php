@@ -62,7 +62,7 @@ class CCSkin
 
         // this seems like (memory) overkill, need to optimize
         $this->vars = array_merge($CC_GLOBALS,$this->vars,$site_logo);
-
+        
         // for compat with pre 5.0.beta.2 
         if( empty($this->vars['head-type']) )
             $this->vars['head-type'] = 'ccskins/shared/head.tpl';
@@ -197,16 +197,22 @@ class CCSkin
     function AddCustomizations()
     {
         $T =& $this;
-        $A =& $this->vars;
-        foreach( array( 'page_layout', 'color_scheme', 'font_scheme', 'font_size', 'tab_pos', 'box_shape', ) as $inc )
+        $V =& $this->vars;
+        $A = array();
+        $keys = array( 'paging_style', 'page_layout', 'color_scheme', 'font_scheme', 'font_size', 
+                                'tab_pos', 'box_shape',  ) ;
+        foreach( $keys as $inc )
         {
             if( !empty($_REQUEST[$inc]) )
-                $A[$inc] = $_REQUEST[$inc];
-            if( !empty($A[$inc]) && file_exists($A[$inc]))
+                $V[$inc] = $_REQUEST[$inc];
+
+            if( !empty($V[$inc]) && file_exists($V[$inc]))
             {
-                require_once($A[$inc]);
+                require_once($V[$inc]);
             }
         }
+        $V = array_merge($V,$A);
+        return $A;
     }
 
     function _d($t)
@@ -223,10 +229,19 @@ class CCSkin
         if( empty($files) && $auto_create )
         {
             $base .= date('YmdHis');
-            return array( $base . '.css', $base . '.js' );
+            return array( 'css' => $base . '.css', 
+                          'inc' => $base . '.inc', 
+                          'js'  => $base . '.js',  );
         }
 
-        return $files;
+        $name = array();
+        foreach( $files as $f )
+        {
+            preg_match( '/\.([a-z]+)$/',$f,$m);
+            $name[$m[1]] = $f;
+        }
+        
+        return $name;
     }
 
     /**
@@ -250,14 +265,18 @@ class CCSkin
     function CachedHead()
     {
         // this returns valid file names even if they don't exist
-        list( $css_file, $script_file ) = $this->_get_head_files();
+        $fnames = $this->_get_head_files();
+        $css_file = $fnames['css'];
+        $script_file = $fnames['js'];
+        $inc_file = $fnames['inc'];
 
-        if( !file_exists($script_file) )
+        if( !file_exists($inc_file) )
         {
             // there are no cached files so we create them
 
             $f_js  = fopen($script_file,'w');
             $f_css = fopen($css_file,   'w');
+            $f_inc = fopen($inc_file,   'w');
 
             // we're going to suck in all the CSS files 
 
@@ -277,16 +296,22 @@ class CCSkin
             }
 
             // There is already a list of js files in this->var['script_links'] and they
-            // will be written to the cache first, but the customizations are freewheeling
+            // will be written to the cache first, but the customizations are PHP that
+            // generates JS and CSS as well as assigns PHP variables.
             // so we will parse those first and add any links we find links or blocks in
             // the generated HTML
 
             ob_start();
-            $this->AddCustomizations();
+            $cache_settings = $this->AddCustomizations();
             $text = ob_get_contents();
             ob_end_clean();
 
+            // We'll need to load these every session as PHP
+            if( !empty($cache_settings['end_script_text']) )
+                unset($cache_settings['end_script_text']);
+            fwrite($f_inc,serialize($cache_settings));
 
+            // now parse out the css/script blocks and links
             require_once('cchost_lib/htmlparser/htmlparser.inc');
             $parser = new HtmlParser($text);
             $tag = null;
@@ -416,16 +441,26 @@ class CCSkin
                 $this->_write_js($f_js,$text);
             }
 
-            if( !empty($this->vars['script_blocks']) ) foreach( $this->vars['script_blocks'] as $FL ) {
+            if( !empty($this->vars['script_blocks']) ) 
+                foreach( $this->vars['script_blocks'] as $FL ) {
                     $this->_write_js($f_js,$FL);
-            }
+                }
 
             fclose($f_js);
             fclose($f_css);
+            fclose($f_inc);
         }
 
         print "\n" . '<script type="text/javascript" src="' . ccd($script_file) . '"></script>';
         print "\n" . '<link rel="stylesheet"  type="text/css" title="Default Style" href="' . ccd($css_file) . '" />';
+
+        $opts = unserialize(file_get_contents($inc_file));
+        global $CC_GLOBALS;
+        foreach( $opts as $K => $V )
+        {
+            $CC_GLOBALS[$K] = $V; // for future instantiated templates
+            $this->vars[$K] = $V; // for this one
+        }
 
         $this->vars['end_script_text'][] = "if( typeof(_cc_post_page_load) == 'function' ) { _cc_post_page_load(); }";
 

@@ -341,6 +341,13 @@ $GLOBALS['str_nsfw']                  = _('Not Safe For Work');
 $GLOBALS['str_nsfw_mark_this_upload'] = _('Mark this upload as %s if it contains questionable language.');
 $GLOBALS['str_nsfw_t']                = _('This upload might be %sNot Safe For Work%s');
 $GLOBALS['str_ok']                    = _('ok');
+
+$GLOBALS['str_pagination_next_link']  = _('More') . ' &gt;&gt;&gt';
+$GLOBALS['str_pagination_prev_link']  = '&lt;&lt;&lt; ' . _('Back');
+$GLOBALS['str_pagination_prompt']     = _('Viewing %s through %s of %s');
+$GLOBALS['str_pagination_first']      = _('first page');
+$GLOBALS['str_pagination_last']       = _('last page');
+
 $GLOBALS['str_people']                = _('People');
 $GLOBALS['str_pick_submission_type']  = _('Pick Submission Type');
 

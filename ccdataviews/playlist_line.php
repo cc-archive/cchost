@@ -18,7 +18,7 @@ SELECT
     upload_id, upload_name, {$user_sql}, user_name, 
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     upload_num_playlists,
-    CONCAT( '{$ccp}', user_name, '/playlists' ) as artist_page_url,
+    CONCAT( '{$ccp}', user_name ) as artist_page_url,
     CONCAT('{$browse_ref_url}', upload_id ) as playlist_browse_url,
     CONCAT( '$urll', license_logo ) as license_logo_url, license_url, license_name,
     upload_contest

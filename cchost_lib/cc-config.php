@@ -241,7 +241,7 @@ class CCConfigs extends CCTable
         {
             // old install? hack through this for now...
             require_once('cchost_lib/cc-skin-admin.php');
-            CCSkinAdmin::_load_profile('ccskins/shared/profiles/profile_cchost.php');
+            CCSkinAdmin::_load_profile('ccskins/shared/profiles/profile_cc.php');
         }
         $settings = $configs->GetConfig('settings');
         $CC_GLOBALS = array_merge($CC_GLOBALS,$settings,$skin_settings);

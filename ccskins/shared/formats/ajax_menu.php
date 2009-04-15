@@ -76,7 +76,7 @@ no download/play/show stuff, just actions (review, edit, share, etc.)
 */
 ?>
 <script src="/ccskins/shared/js/prototype.js" /></script>
-
+<!-- template ajax_menu -->
 <?
 if( !empty($A['records']) )
     $R =& $A['records'][0];

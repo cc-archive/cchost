@@ -17,5 +17,6 @@
     font_size         = ccskins/shared/colors/fontsize_px11.php
     color_scheme      = ccskins/shared/colors/color_sky.php
     profile_extras    = ccskins/shared/image_extras.php
+    paging_style      = ccskins/shared/layouts/paging_basic.php
 [/meta]
 */?>

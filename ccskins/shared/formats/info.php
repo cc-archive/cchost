@@ -44,10 +44,13 @@ EOF;
 [/dataview]
 */
 
+if( empty($A['records'][0]) )
+  die('no record found');
+  
 $R =& $A['records'][0];
 
 ?>
-<!--- INFO DETAIL -->
+<!--- template info  -->
 <div class="info_detail" style="margin:0px;padding:0px;">
 <div  class="info_list" id="_info_<?= $R['upload_id']?>">
 

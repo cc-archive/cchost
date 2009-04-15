@@ -29,6 +29,7 @@ require_once( 'cchost_lib/cc-database.php' );
 require_once( 'cchost_lib/cc-table.php' );
 require_once( 'cchost_lib/cc-config.php' );
 require_once( 'cchost_lib/cc-url.php' );
+require_once( 'cchost_lib/cc-dataview.php' );
 
 
 ?>

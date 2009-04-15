@@ -16,5 +16,6 @@
     font_scheme       = ccskins/shared/colors/font_verdana.php
     font_size         = ccskins/shared/colors/fontsize_px11.php
     color_scheme      = ccskins/shared/colors/color_blue.php
+    paging_style      = ccskins/shared/layouts/paging_basic.php
 [/meta]
 */?>

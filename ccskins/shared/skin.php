@@ -13,7 +13,6 @@ $A['print_html_content'] = 'util.php/print_html_content';
 $A['hide_upload_form']   = 'util.php/hide_upload_form';
 $A['popup_background'] = 'popup_background.php';
 $A['print_prompts']      = 'util.php/print_prompts';
-$A['prev_next_links']      = 'util.php/prev_next_links';
 $A['print_bread_crumbs'] = 'util.php/print_bread_crumbs';
 $A['print_client_menu'] = 'util.php/print_client_menu';
 $A['format_sig'] = 'util.php/format_signature';

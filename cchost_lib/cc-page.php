@@ -814,6 +814,10 @@ class CCPage extends CCSkin
             $all_row_count = $table_or_dataview->CountRows($sql_where);
             $table_or_dataview->SetOffsetAndLimit($offset,$limit);
         }
+
+        $args['limit'] = $limit;                     // 3
+        $args['all_row_count'] = $all_row_count;     // 8
+        
         if( $limit < $all_row_count )
         {
             $current_url = cc_current_url(); // ccl(CCEvents::_current_action());
@@ -828,31 +832,47 @@ class CCPage extends CCSkin
                 }
             }
 
-            if( $offset )
-            {
-               $prev_offs = 'offset=' . ($offset - $limit);
-               $url = url_args( $current_url, $prev_offs );
-               $back_text = '<<< ' . _('Back');
-               CCPage::PageArg('back_text',$back_text);
-               CCPage::PageArg('prev_link',$url);
-               $args['prev_link'] = $url;
-               $args['back_text'] = $back_text;
-               $args['prev_offs'] = $prev_offs;
+            $args['paging'] = 1;
+            $args['current_url'] = $current_url;
+            $args['num_pages'] =  intval($all_row_count / $limit);  // 2
+            if( ($all_row_count % $limit) > 0 )
+              ++$args['num_pages'];                                 // 3
 
-            }
-            if( $offset + $limit < $all_row_count )
+            if( $offset )                                           // 6
             {
-               $next_offs = 'offset=' . ($offset + $limit);
-               $url = url_args( $current_url, $next_offs );
-               $more_text = _('More') . ' >>>';
-               CCPage::PageArg('more_text',$more_text);
-               CCPage::PageArg('next_link',$url);
-               $args['next_link'] = $url;
-               $args['more_text'] = $more_text;
+               $prev_num = $offset - $limit;                        // 3
+               if( $prev_num < 0 )
+                 $prev_num = 0;
+               $args['prev_link'] = url_args( $current_url, 'offset=' . $prev_num );
+               $args['prev_offs'] = $prev_num;
+               $args['current_page'] = intval( $offset / $limit );  // 2
+            }
+            else
+            {
+               $args['current_page'] = 0;
+            }
+            
+            if( $offset + $limit < $all_row_count )                 // (6 + 3) < 8
+            {
+               $next_offs = $offset + $limit;
+               $args['next_link'] = url_args( $current_url, 'offset=' . $next_offs );
                $args['next_offs'] = $next_offs;
             }
-
         }
+        else
+        {
+            $args['paging'] = 0;
+        }
+        
+       CCPage::PageArg('paging_stats',$args);
+
+       // this is all deprecated since 5.1
+       CCPage::PageArg('more_text', _('More') . ' >>>');
+       CCPage::PageArg('back_text','<<< ' . _('Back'));
+       if( !empty($args['prev_link']) )
+          CCPage::PageArg('prev_link',$args['prev_link']);
+       if( !empty($args['next_link']) )
+          CCPage::PageArg('next_link',$args['next_link']);
 
         return $args;
     }

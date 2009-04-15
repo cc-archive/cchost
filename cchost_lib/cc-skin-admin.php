@@ -126,11 +126,14 @@ class CCSkinSettingsForm extends CCEditConfigForm
         $this->CCEditConfigForm('skin-settings');
 
         require_once('cchost_lib/cc-template.inc');
-        $ffiles = CCTemplateAdmin::GetMultipleTypes( array( 'skin', 'list', 'page', 'head', 'string_profile' ) );
+        $ffiles = CCTemplateAdmin::GetMultipleTypes( array( 'skin', 'list', 'page', 
+                                                            'head', 'string_profile',
+                                                            'paging_style' ) );
         $skins             = $ffiles['skin'];
         $list_format_files = $ffiles['list'];
         $page_format_files = $ffiles['page'];
         $heads             = $ffiles['head'];
+        $paging_styles     = $ffiles['paging_style'];
         $str_profiles      = $ffiles['string_profile'];
 
         $fields['string_profile'] =
@@ -159,6 +162,13 @@ class CCSkinSettingsForm extends CCEditConfigForm
                    'class'       => 'cc_form_input_short',
                    'formatter'   => 'textedit',
                    'flags'       => CCFF_POPULATE | CCFF_REQUIRED);
+        $fields['paging_style'] =
+            array( 'label'       => _('Paging Style'),
+                   'form_tip'    => _('Select the default paging buttons ("prev"/"next")'),
+                   'formatter'   => 'select',
+                   'options'     => $paging_styles,
+                   'flags'       => CCFF_POPULATE );
+
         $fields['head-type'] =
             array( 'label'       => _('Optimized HEAD'),
                    'form_tip'    => _('Combine scripts and styles in common files'),
@@ -409,6 +419,9 @@ class CCSkinAdmin
         $props = $fp->GetFileProps($skin_profile);
         unset($props['type']);
         unset($props['desc']);
+        if( empty($props['paging_style']) ) // added in 5.1
+            $props['paging_style'] = 'ccskins/shared/layouts/paging_basic.php';
+
         $props['skin_profile'] = $skin_profile;
         $config =& CCConfigs::GetTable();
         /* wtf was this about??
@@ -547,6 +560,7 @@ class CCSkinAdmin
     font_scheme       = ccskins/shared/colors/font_arial.php
     font_size         = ccskins/shared/colors/fontsize_sz_small.php
     color_scheme      = ccskins/shared/colors/color_mono.php
+    paging_style      = ccskins/shared/layouts/paging_basic.php
 [/meta]
 */?>
 EOF;

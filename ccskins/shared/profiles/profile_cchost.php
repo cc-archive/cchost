@@ -16,5 +16,6 @@
     font_scheme       = ccskins/shared/colors/font_arial.php
     font_size         = ccskins/shared/colors/fontsize_sz_med.php
     color_scheme      = ccskins/shared/colors/color_mono.php
+    paging_style      = ccskins/shared/layouts/paging_basic.php
 [/meta]
 */?>

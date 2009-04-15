@@ -5,7 +5,7 @@
     dataview       = playlist_line
 [/meta]
 %%
-<!-- template playlist_audio -->
+<!-- template playlist_2_audio -->
 %loop(records,R)%
 <div class="trr">
   <div class="tdc cc_playlist_item" id="_pli_%(#R/upload_id)%">
@@ -26,7 +26,7 @@
     </div>
     %end_if%
   %end_if%
-  <div class="tdc" ">
+  <div class="tdc">
     <a href="%(#R/license_url)%" title="%(#R/license_name)%"><img src="%(#R/license_logo_url)%" title="%(#R/license_name)%"/></a>
   </div>
   %if_not_null(#R/fplay_url)%

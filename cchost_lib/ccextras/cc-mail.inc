@@ -221,6 +221,7 @@ class CCMailer
 
         if( empty($this->_from) && empty($CC_GLOBALS['mail_sender']) )
         {
+            print 'failed';
             $this->_confim_install();
             return;
         }
@@ -264,9 +265,11 @@ class CCMailer
         
         $add_params = empty($GLOBALS['mail_add_params']) ? '' : $GLOBALS['mail_add_params'];
 
+        if( function_exists('cc_mailer_func') )
+            return @cc_mailer_func( $to, $subject, $message, $headers, $add_params );
+        
         return @mail( $to, $subject, $message, $headers, $add_params );
 
-        //return 1;
     }
 } 
 

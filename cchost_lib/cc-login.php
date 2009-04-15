@@ -241,7 +241,7 @@ class CCLostPasswordForm extends CCUserForm
                                'flags'      => CCFF_REQUIRED ),
 
                     '_new_user' =>
-                       array( 'label'       => 'str_new_user',
+                       array( 'label'       => 'str_login_new_user',
                                'formatter'  => 'statictext',
                                'value'      => '<a href="' . ccl('register') . '">' . _('Click Here') . '</a>',
                                'flags'      => CCFF_NOUPDATE  | CCFF_STATIC),
