@@ -13,12 +13,12 @@ function _t_paging_prev_next_links(&$T,&$A)
     print '<table id="cc_prev_next_links"><tr >';
 
     if ( !empty($stats['prev_link'])) 
-        print "<td ><a class=\"cc_gen_button\" href=\"{$stats['prev_link']}\"><span >{$T->String('str_prev_link')}</span></a></td>\n";
+        print "<td ><a class=\"cc_gen_button\" href=\"{$stats['prev_link']}\"><span >{$T->String('str_pagination_prev_link')}</span></a></td>\n";
 
     print '<td  class="cc_list_list_space">&nbsp</td>';
 
     if ( !empty($stats['next_link'])) 
-        print "<td ><a class=\"cc_gen_button\" href=\"{$stats['next_link']}\"><span >{$T->String('str_next_link')}</span></a></td>\n";
+        print "<td ><a class=\"cc_gen_button\" href=\"{$stats['next_link']}\"><span >{$T->String('str_pagination_next_link')}</span></a></td>\n";
 
     print '</tr></table>';
 

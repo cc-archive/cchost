@@ -220,7 +220,7 @@ class CCSkin
         // print $t;
     }
 
-    function _make_head_names()
+    function _make_head_names($base)
     {
         $base .= date('YmdHis');
         return array( 'css' => $base . '.css', 
@@ -235,7 +235,7 @@ class CCSkin
         $base = $CC_GLOBALS['user-upload-root'] . '/' . $CC_CFG_ROOT . '_skin_'; 
         $files = glob( $base . '*.*' );
         if( empty($files) && $auto_create )
-            return $this->_make_head_names();
+            return CCSkin::_make_head_names($base);
 
         $name = array();
         foreach( $files as $f )
@@ -245,7 +245,7 @@ class CCSkin
         }
         
         if( empty($name['css']) || empty($name['inc']) || empty($name['js']) )
-            return $this->_make_head_names();
+            return CCSkin::_make_head_names($base);
         
         return $name;
     }
