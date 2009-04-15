@@ -220,6 +220,14 @@ class CCSkin
         // print $t;
     }
 
+    function _make_head_names()
+    {
+        $base .= date('YmdHis');
+        return array( 'css' => $base . '.css', 
+                      'inc' => $base . '.inc', 
+                      'js'  => $base . '.js',  );
+    }
+    
     function _get_head_files($auto_create=1)
     {
         global $CC_GLOBALS,$CC_CFG_ROOT;
@@ -227,12 +235,7 @@ class CCSkin
         $base = $CC_GLOBALS['user-upload-root'] . '/' . $CC_CFG_ROOT . '_skin_'; 
         $files = glob( $base . '*.*' );
         if( empty($files) && $auto_create )
-        {
-            $base .= date('YmdHis');
-            return array( 'css' => $base . '.css', 
-                          'inc' => $base . '.inc', 
-                          'js'  => $base . '.js',  );
-        }
+            return $this->_make_head_names();
 
         $name = array();
         foreach( $files as $f )
@@ -242,7 +245,7 @@ class CCSkin
         }
         
         if( empty($name['css']) || empty($name['inc']) || empty($name['js']) )
-            return array();
+            return $this->_make_head_names();
         
         return $name;
     }
@@ -273,7 +276,7 @@ class CCSkin
         $script_file = $fnames['js'];
         $inc_file = $fnames['inc'];
 
-        if( !file_exists($inc_file) )
+        if( !file_exists($inc_file) || !file_exists($css_file) || !file_exists($script_file) )
         {
             // there are no cached files so we create them
 
