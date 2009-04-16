@@ -853,7 +853,7 @@ function get_install_fields($values)
         'h' => 'Almost always \'localhost\' unless your hosting service told you otherwise' ),
 
     'logfile_dir' => array( 'n' => 'Path to ccHost logfiles',      'e' => '', 't'  => 'text', 'v' => '' , 'q' => 0,
-        'h' => 'Where should ccHost write log files to? (e.g. \'/var/log/cchost\')' ),
+        'h' => 'Where should ccHost write log files to? (e.g. \'/var/log/cchost\') - This directory MUST exists.' ),
 
     'getid3'      => array( 'n' => 'Path to GetID3',         'e' => '', 't'  => 'text', 'v' => '' , 'q' => 0,
         'h' => "Root directory of GetID3 Library (the one with " .
