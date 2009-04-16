@@ -193,6 +193,12 @@ class CCQueryFormats
                 $targs['chop']     = isset($chop) ? $chop : 25;
                 $targs['qstring']  = $queryObj->SerializeArgs($args);
 
+                if( !empty($paging) && ($paging == 'on') )
+                {
+                    CCPage::AddPagingLinks($queryObj->dataview,'',$limit, $skinmac);
+                    $skinmac->AddCustomizations(array( 'paging_style'));
+                }
+
                 $text = $skinmac->SetAllAndParse($targs);
 
                 if( $format == 'docwrite' )
@@ -218,11 +224,6 @@ class CCQueryFormats
                     $mime = '';
                 }
                 $results = array( $text, $mime );
-
-                if( !empty($paging) && ($paging == 'on') )
-                {
-                    CCPage::AddPagingLinks($queryObj->dataview,'',$limit);
-                }
 
                 break;
             }

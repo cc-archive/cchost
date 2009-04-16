@@ -191,13 +191,18 @@ class CCPool
         exit; // this is an ajax call
     }
 
+    function IsLocalPool($api_url)
+    {
+        return substr($api_url,0,7) != 'http://';
+    }
+    
     function PoolQuery($pool_id, $query, $type='full')
     {
         $pools =& CCPools::GetTable();
         $pool = $pools->QueryKeyRow($pool_id);
         $api_url = $pool['pool_api_url'];
         $query = urlencode($query);
-        if( substr($api_url,0,7) == 'http://' )
+        if( !CCPool::IsLocalPool($api_url) )
         {
             require_once('cchost_lib/cc-api.php');
             $query_url = CCRestAPI::MakeUrl( $api_url, 'search', 'query=' . $query );
@@ -269,6 +274,29 @@ class CCPool
         }
     }
 
+    function AddLocalPool($info)
+    {
+        $pools =& CCPools::GetTable();
+        $info['pool_id'] = $pools->NextID();
+        $info['pool_api_url'] = 'CCPoolGeneric:cchost_lib/cc-pool-generic.php';
+        $info['pool_banned']       = 0;
+        $info['pool_auto_approve'] = 0;
+        $info['pool_search']       = 1;
+        if( !$this->_gen_short_name($info) )
+            $this->_gen_short_name($info); // it might have been emptied, just call it again
+        $pools->Insert($info);
+    }
+    
+    function _gen_short_name(&$info)
+    {
+        if( empty($info['pool_short_name']) )
+        {
+            $info['pool_short_name'] = $info['pool_name'];
+        }
+        $info['pool_short_name'] = preg_replace('/[^a-zA-Z0-9_]+/','',$info['pool_short_name']);
+        return !empty($info['pool_short_name']);
+    }
+    
     function AddPool($pool_site_api_url)
     {
         require_once('cchost_lib/cc-api.php');

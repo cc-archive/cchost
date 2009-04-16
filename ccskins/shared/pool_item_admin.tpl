@@ -24,7 +24,7 @@ function pool_item_admin_dataview()
                CONCAT( '$ccp', pool_item_id ) as item_view_url
         FROM cc_tbl_pool_item
         JOIN cc_tbl_pools ON pool_item_pool=pool_id
-        %where% AND pool_short_name = '%match%'
+        %where% AND (pool_short_name = '%match%')
         %order%
         %limit%
 EOF;
@@ -32,7 +32,8 @@ EOF;
         $sql_count =<<<EOF
         SELECT COUNT(*)
         FROM cc_tbl_pool_item
-        %where% AND (pool_item_approved = 0)
+        JOIN cc_tbl_pools ON pool_item_pool=pool_id
+        %where% AND (pool_short_name = '%match%')
 EOF;
 
     return array( 'sql' => $sql,
@@ -83,6 +84,7 @@ $tr = array( '<' => '&lt;', '>' => '&gt' );
     margin: 3px;
     float: left;
 }
+
 </style>
 
 <div class="cc_pool_approval_list">

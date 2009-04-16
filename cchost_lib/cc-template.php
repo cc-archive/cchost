@@ -194,13 +194,13 @@ class CCSkin
         $this->vars = $snapshot;
     }
 
-    function AddCustomizations()
+    function AddCustomizations( $keys = array( 'paging_style', 'page_layout', 'color_scheme', 
+                                      'font_scheme', 'font_size', 'tab_pos', 'box_shape',  ))
     {
         $T =& $this;
         $V =& $this->vars;
         $A = array();
-        $keys = array( 'paging_style', 'page_layout', 'color_scheme', 'font_scheme', 'font_size', 
-                                'tab_pos', 'box_shape',  ) ;
+
         foreach( $keys as $inc )
         {
             if( !empty($_REQUEST[$inc]) )

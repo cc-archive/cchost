@@ -27,6 +27,7 @@ $GLOBALS['str_cannot_find_username']  = _('Cannot find that username');
 $GLOBALS['str_changes_saved']         = _('Changes saved (see %sresults%s)');
 $GLOBALS['str_changes_were_saved']    = _('Changes were saved');
 $GLOBALS['str_charts']                = _('Charts');
+$GLOBALS['str_click_here']            = _('Click Here');
 $GLOBALS['str_click_on_these']        = _('Click on these to automatically add to your upload.');
 $GLOBALS['str_close']                 = _('close');
 

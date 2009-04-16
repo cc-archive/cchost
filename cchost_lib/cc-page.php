@@ -779,8 +779,9 @@ class CCPage extends CCSkin
     * @param object $table A instance of the CCTable being queried
     * @param string $sql_where The SQL WHERE clause to limit queries
     * @param integer $limit Override system defaults for how many records in a page
+    * @param object $template Template to set args into (current page is default)
     */
-    function AddPagingLinks(&$table_or_dataview,$sql_where='',$limit ='')
+    function AddPagingLinks(&$table_or_dataview,$sql_where='',$limit ='',$template='')
     {
         global $CC_GLOBALS;
 
@@ -863,17 +864,23 @@ class CCPage extends CCSkin
         {
             $args['paging'] = 0;
         }
+
+        if( empty($template) )        
+            CCPage::PageArg('paging_stats',$args);
+        else
+            $template->SetArg('paging_stats',$args);
+
+        if( !empty($template) )
+        {
+            // this is all deprecated since 5.1
+            CCPage::PageArg('more_text', _('More') . ' >>>');
+            CCPage::PageArg('back_text','<<< ' . _('Back'));
+            if( !empty($args['prev_link']) )
+              CCPage::PageArg('prev_link',$args['prev_link']);
+            if( !empty($args['next_link']) )
+              CCPage::PageArg('next_link',$args['next_link']);
+        }
         
-       CCPage::PageArg('paging_stats',$args);
-
-       // this is all deprecated since 5.1
-       CCPage::PageArg('more_text', _('More') . ' >>>');
-       CCPage::PageArg('back_text','<<< ' . _('Back'));
-       if( !empty($args['prev_link']) )
-          CCPage::PageArg('prev_link',$args['prev_link']);
-       if( !empty($args['next_link']) )
-          CCPage::PageArg('next_link',$args['next_link']);
-
         return $args;
     }
 }
