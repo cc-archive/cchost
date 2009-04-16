@@ -2,7 +2,7 @@
 /*
 [meta]
     type  = paging_style
-    desc  = _('Google [tm] style paging')
+    desc  = _('Google [tm] style paging [table/paging.css] ')
 [/meta]    
 */
 global $A;

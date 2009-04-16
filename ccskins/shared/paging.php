@@ -24,7 +24,22 @@ function _t_paging_prev_next_links(&$T,&$A)
 
 } // END: function prev_next_links
 
+function _t_paging_google_nostyle(&$T,&$A) 
+{
+    _goog_style($A,$T,true,true);
+}
+
 function _t_paging_google_style_paging(&$T,&$A) 
+{
+    _goog_style($A,$T,false,true);
+}
+
+function _t_paging_google_style_paging_ul(&$T,&$A) 
+{
+    _goog_style($A,$T,false,false);
+}
+
+function _goog_style($A,$T,$with_buttons,$is_table)
 {
     if( empty($A['paging_stats']) )
         return;
@@ -58,33 +73,64 @@ function _t_paging_google_style_paging(&$T,&$A)
     $full_numb_of_pages = $stats['num_pages'];
     $page               = $stats['current_page'];
     
-    $pagination = '<link rel="stylesheet" type="text/css" href="' . $T->URL('css/paging.css'). '" />';
+    if( $is_table )
+    {
+        $open_block_tag = '<table id="%s"><tr>';
+        $close_block_tag = '</tr></table>';
+        $open_tag = '<td>';
+        $close_tag = '</td>';
+    }
+    else
+    {
+        $open_block_tag = '<ul id="%s">';
+        $close_block_tag = '</ul>';
+        $open_tag = '<li>';
+        $close_tag = '</li>';
+    }
     
-    $pagination .= '<table id="page_buttons"><tr>';
+    if( $with_buttons )
+    {
+        $sm_button = 'class = "small_button"';
+        $button = 'class = "cc_gen_button"';
+        $pagination = '';
+    }
+    else
+    {
+        $sm_button = '';
+        $button = '';
+        $pagination = '<link rel="stylesheet" type="text/css" href="' . $T->URL('css/paging.css'). '" />';
+    }
+    
+    $pagination .= sprintf($open_block_tag,'page_buttons');
     
     if( !empty($stats['prev_link']) ) {
         $text = $T->String('str_pagination_prev_link');
-        $pagination .= "<td><a href=\"{$stats['prev_link']}\"><span >{$text}</span></a></td> ";
+        $pagination .= "{$open_tag}<a {$button} href=\"{$stats['prev_link']}\"><span >{$text}</span></a>${close_tag} ";
     }
     $first = ($stats['limit'] * $page);
     $last  = $first + $stats['limit'];
     if( $last > $stats['all_row_count'] )
         $last = $stats['all_row_count'];
     
-    $pagination .= '<td>' .$T->String(array('str_pagination_prompt',
+    $pagination .= $open_tag . 
+                   '<span class="page_viewing">' . 
+                   $T->String(array('str_pagination_prompt',
                              number_format($first + 1),
                              number_format($last),
-                             number_format($stats['all_row_count']))) . '</td>';
+                             number_format($stats['all_row_count']))) . 
+                   '</span>' . 
+                    $close_tag;
+                    
     if ( !empty($stats['next_link'])) {
         $text2 = $T->String('str_pagination_next_link');
-        $pagination .= " <td><a href=\"{$stats['next_link']}\"><span >{$text2}</span></a></td>";
+        $pagination .= " {$open_tag}<a {$button} href=\"{$stats['next_link']}\"><span >{$text2}</span></a>{$close_tag}";
     }
-    $pagination .= '</tr></table>';
+    $pagination .= $close_block_tag;
     
-    $pagination .= '<table id="page_links"><tr>';
+    $pagination .= sprintf($open_block_tag,'page_links');
 
     if( $page ) {
-        $pagination .= "<td><a href=\"$first_page\">{$T->String('str_pagination_first')}</a></td>";
+        $pagination .= "{$open_tag}<a {$sm_button} href=\"$first_page\">{$T->String('str_pagination_first')}</a>{$close_tag}";
     }
     $numpages = $pagesgroup + $page;
     if ($page > ($pagesgroup / 2)){
@@ -97,26 +143,26 @@ function _t_paging_google_style_paging(&$T,&$A)
         $numpages = $full_numb_of_pages;
     }
     if( $pages_to_display > 0 ) {
-        $pagination .= '<td> ... </td>';  
+        $pagination .= $open_tag . '<span> ... </span>' . $close_tag;  
     }              
     for ($i=$pages_to_display; $i <$numpages; $i++)
     {
         $y = $i+1;
         if ($i == $page){
-            $pagination .= "<td class=\"selected_page_link\"><b>{$y}</b></td>";
+            $pagination .= str_replace('>','',$open_tag) . " class=\"selected_page_link\"><b>{$y}</b>" . $close_tag;
         }else{
             $next_link = $url . ($stats['limit'] * $i);
-            $pagination .= "<td><a href=\"{$next_link}\">{$y}</a></td>";
+            $pagination .= "{$open_tag}<a {$sm_button} href=\"{$next_link}\">{$y}</a>{$close_tag}";
         }
     }
     if( $i < $full_numb_of_pages ) {
-        $pagination .= '<td> ... </td>';     
+        $pagination .= $open_tag . '<span> ... </span>' . $close_tag;  
     }           
     if( $page != ($numpages-1) ) {
-        $pagination .= "\n<td><a href=\"{$last_page}\">{$T->String('str_pagination_last')}</a></td>";
+        $pagination .= "\n{$open_tag}<a {$sm_button} href=\"{$last_page}\">{$T->String('str_pagination_last')}</a>{$close_tag}";
     }
  
-    $pagination .= "</td></table>";    
+    $pagination .= $close_block_tag;
     
     print $pagination;
     
