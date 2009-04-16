@@ -362,21 +362,22 @@ function untangle_the_freakin_config_mess($local_base_dir,$new_config)
     mysql_query("UPDATE cc_tbl_config SET config_data = '$config' WHERE config_scope = 'media' AND config_type = 'config'");
 
     $skin_settings = addslashes( serialize( array (
-            'skin-file' => 'ccskins/plain/skin.tpl',
+            'skin-file' => 'ccskins/commons/skin.tpl',
             'string_profile' => 'ccskins/shared/strings/all_media.php',
             'list_file' => 'ccskins/shared/formats/upload_page_wide.php',
             'list_files' => 'ccskins/shared/formats/upload_list_wide.tpl',
+            'head-type' => 'ccskins/shared/head.tpl',
             'max-listing' => 12,
-            'html_form' => 'html_form.tpl/html_form',
             'form_fields' => 'form_fields.tpl/form_fields',
             'grid_form_fields' => 'form_fields.tpl/grid_form_fields',
             'tab_pos' => 'ccskins/shared/layouts/tab_pos_header.php',
             'box_shape' => 'ccskins/shared/layouts/box_round.php',
-            'page_layout' => 'ccskins/shared/layouts/layout024.php',
+            'page_layout' => 'ccskins/shared/layouts/layout023.php',
             'color_scheme' => 'ccskins/shared/colors/color_mono.php',
             'font_scheme' => 'ccskins/shared/colors/font_verdana.php',
-            'font_size' => 'ccskins/shared/colors/fontsize_sz_small.php',
-            'skin_profile' => 'ccskins/shared/profiles/profile_cchost.php',
+            'font_size' => 'ccskins/shared/colors/fontsize_px11.php',
+            'paging_style' => 'ccskins/shared/layouts/paging_basic.php',
+            'skin_profile' => 'ccskins/shared/profiles/profile_cc.php',            
         ) ) );
 
     mysql_query("INSERT INTO cc_tbl_config ( config_data, config_scope, config_type ) VALUES( '$skin_settings', 'media', 'skin-settings')");
