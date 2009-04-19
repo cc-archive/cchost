@@ -1,0 +1,190 @@
+<?
+
+require_once('cchost_lib/ccextras/cc-openid.inc');
+
+$path = (dirname(dirname(__FILE__))) . '/php-openid:' . ini_get('include_path');
+ini_set('include_path', $path);
+
+/**
+ * Require the OpenID consumer code.
+ */
+require_once('cchost_lib/php-openid/examples/consumer/common.php');
+
+
+function cc_openid_handler($cmd,$arg1='')
+{
+    $api = new CCOpenID();
+    
+    switch( $cmd )
+    {
+        case 'login':
+        {
+            cc_openid_onlogin($api,$arg1);
+            break;
+        }
+        case 'auth':
+        {
+            cc_openid_auth($api);
+            break;
+            
+        }
+        case 'match':
+        {
+            $api->OnTryMatch();
+            break;
+        }
+        
+        case 'test':
+        {
+            ccoi_do_test($api,$arg1);
+            break;
+        }
+        
+        default:
+        {
+            ccoi_displayError( $api, "Unknown OpenID command: " . $cmd );
+        }
+        
+    }
+    
+}
+
+function ccoi_do_test($api,$arg)
+{
+    switch($arg)
+    {
+        case 1:
+            $api->OnIDVerified('http://openid.claimid.com/victorstone','',
+                array
+                    (
+                        'fullname' => 'victor stone',
+                        'nickname' => 'victorstone',
+                        'email' => 'victor.stone@gmail.com'
+                    )
+                );
+            break;
+        case 2:
+            $api->OnIDVerified('http://fourstones.net','',
+                array
+                    (
+                        'fullname' => 'victor stone',
+                        'nickname' => 'fourstones',
+                        'email' => 'fourstones.net@gmail.com'
+                    )
+                );
+            break;
+        case 3:
+            $api->OnIDVerified('http://foodyfoo.net','',
+                array
+                    (
+                        'fullname' => 'blah stone',
+                        'nickname' => 'bliief',
+                        'email' => 'fourstonesx.net@gmail.com'
+                    )
+                );
+            break;
+
+            
+        default:
+            ccoi_displayError($api,"Unknown test case");
+            break;            
+    }
+}
+function ccoi_displayError($api,$msg)
+{
+    $api->OnIDFailed($msg);
+}
+
+function cc_openid_auth($api)
+{
+    session_start();
+    $consumer = getConsumer();
+
+    // Complete the authentication process using the server's
+    // response.
+    $return_to = getReturnTo();
+    $response = $consumer->complete($return_to);
+
+    // Check the response status.
+    if ($response->status == Auth_OpenID_CANCEL) {
+        // This means the authentication was cancelled.
+        $msg = 'Verification cancelled.';
+        ccoi_displayError($api,$msg);
+    } else if ($response->status == Auth_OpenID_FAILURE) {
+        // Authentication failed; display the error message.
+        $msg = "OpenID authentication failed: " . $response->message;
+        ccoi_displayError($api,$msg);
+    } else if ($response->status == Auth_OpenID_SUCCESS) {
+        // This means the authentication succeeded; extract the
+        // identity URL and Simple Registration data (if it was
+        // returned).
+        $openid = $response->getDisplayIdentifier();
+        $sreg_resp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
+        $sreg = $sreg_resp->contents();
+        $api->OnIDVerified( $openid, $response->endpoint->canonicalID, $sreg );
+    }
+    
+}
+
+function cc_openid_onlogin( $api, $openid )
+{
+    session_start();
+
+    $consumer = getConsumer();
+
+    // Begin the OpenID authentication process.
+    $auth_request = $consumer->begin($openid);
+
+    // No auth request means we can't begin OpenID.
+    if (!$auth_request) {
+        ccoi_displayError($api,"Authentication error; not a valid OpenID.");
+        return 0;
+    }
+
+    $sreg_request = Auth_OpenID_SRegRequest::build(
+                                     // Required
+                                     array('nickname'),
+                                     // Optional
+                                     array('fullname', 'email'));
+
+    if ($sreg_request) {
+        $auth_request->addExtension($sreg_request);
+    }
+
+    // Redirect the user to the OpenID server for authentication.
+    // Store the token for this authentication so we can verify the
+    // response.
+
+    // For OpenID 1, send a redirect.  For OpenID 2, use a Javascript
+    // form to send a POST request to the server.
+    if ($auth_request->shouldSendRedirect()) {
+        $redirect_url = $auth_request->redirectURL(getTrustRoot(),
+                                                   getReturnTo());
+
+        // If the redirect URL can't be built, display an error
+        // message.
+        if (Auth_OpenID::isFailure($redirect_url)) {
+            displayError("Could not redirect to server: " . $redirect_url->message);
+        } else {
+            // Send redirect.
+            header("Location: ".$redirect_url);
+        }
+    } else {
+        // Generate form markup and render it.
+        $form_id = 'openid_message';
+        $form_html = $auth_request->htmlMarkup(getTrustRoot(), getReturnTo(),
+                                               false, array('id' => $form_id));
+
+        // Display an error if the form markup couldn't be generated;
+        // otherwise, render the HTML.
+        if (Auth_OpenID::isFailure($form_html)) {
+            ccoi_displayError("Could not redirect to server: " . $form_html->message);
+        } else {
+            print $form_html;
+        }
+    }
+    
+    return 1;
+}
+
+?>

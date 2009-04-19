@@ -343,6 +343,29 @@ $GLOBALS['str_nsfw_mark_this_upload'] = _('Mark this upload as %s if it contains
 $GLOBALS['str_nsfw_t']                = _('This upload might be %sNot Safe For Work%s');
 $GLOBALS['str_ok']                    = _('ok');
 
+$GLOBALS['str_openid_display_name']   = _('Display name:');
+$GLOBALS['str_openid_exist_user']     = _('Existing user name:');
+$GLOBALS['str_openid_existing']       = _('Use an existing account');
+$GLOBALS['str_openid_existing_tip1']  = _('We could not find an account that might match your OpenID information. Enter your existing login information if you have one.');
+$GLOBALS['str_openid_existing_tip2']  = _('If none of the accounts above are yours, enter your existing login information if you have one.');
+$GLOBALS['str_openid_login_title']    = _('Log in with OpenId');
+$GLOBALS['str_openid_match']          = _('Select an existing account');
+$GLOBALS['str_openid_match_help']     = _('You are logging in using your verfied OpenID: <b>%s</b>. The information you\'ve given us is nickname: <b>%s</b> at email address: <b>%s</b>');
+$GLOBALS['str_openid_match_submit']   = _('Submit Account Information');
+$GLOBALS['str_openid_match_tip']      = _('One of these accounts may be yours. Select the one that you wish to use and enter the password for that account.');
+$GLOBALS['str_openid_new']            = _('Create a new account');
+$GLOBALS['str_openid_new_tip']        = _('If you do not have an existing account, enter a user name. Only alpha characters and numbers are allowed.');
+$GLOBALS['str_openid_new_user']       = _('New user name:');
+$GLOBALS['str_openid_password']       = _('Password:');
+
+$GLOBALS['str_openid_r_bad_chars']    = _('Invalid characters in account name');
+$GLOBALS['str_openid_r_bad_password'] = _('Incorrect password');
+$GLOBALS['str_openid_r_bad_username'] = _('Could not find that user account');
+$GLOBALS['str_openid_r_no_username']  = _('Missing account name');
+$GLOBALS['str_openid_r_no_newuser']   = _('Missing new account name');
+$GLOBALS['str_openid_r_no_password']  = _('Missing passowrd');
+$GLOBALS['str_openid_r_username_taken'] = _('That user/account name is already in use');
+
 $GLOBALS['str_pagination_next_link']  = _('More') . ' &gt;&gt;&gt';
 $GLOBALS['str_pagination_prev_link']  = '&lt;&lt;&lt; ' . _('Back');
 $GLOBALS['str_pagination_prompt']     = _('Viewing %s through %s of %s');
