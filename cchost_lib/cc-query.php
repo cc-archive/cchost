@@ -339,12 +339,6 @@ class CCQuery
 
         switch( $A['format'] )
         {
-            case 'php':
-            case 'phps':
-                if( empty($A['dataview']) )
-                    $A['dataview'] = 'default';
-                $this->GetSourcesFromDataview($A['dataview']);
-                break;
             case 'count':
                 $A['rettype'] = CCDV_RET_ITEM;
                 if( !empty($A['datasource']) && ($A['datasource'] == 'pool_items') )
@@ -358,6 +352,12 @@ class CCQuery
                 $A['rettype'] = CCDV_RET_ITEMS;
                 $this->GetSourcesFromDataview('ids');
                 break;
+            case 'php':
+            case 'phps':
+                if( empty($A['dataview']) )
+                    $A['dataview'] = 'default';
+                $this->GetSourcesFromDataview($A['dataview']);
+                // fall through
             default:
                 CCEvents::Invoke( CC_EVENT_API_QUERY_SETUP, array( &$this->args, &$this, !empty($this->_from_url)) );
                 break;
