@@ -98,6 +98,13 @@ function ccoi_do_test($api,$arg)
                     )
                 );
             break;
+        case 4:
+            $api->OnIDVerified('http://empty.com','',
+                array
+                    (
+                    )
+                );
+            break;
 
             
         default:
