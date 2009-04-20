@@ -311,6 +311,11 @@ class CCQuery
         $this->_limit_is_valid = true;
     }
 
+    function _trigger_setup_event()
+    {
+        CCEvents::Invoke( CC_EVENT_API_QUERY_SETUP, array( &$this->args, &$this, !empty($this->_from_url)) );
+    }
+    
     /** 
     * Query phase 1 processing
     *
@@ -346,6 +351,7 @@ class CCQuery
                 else
                     $dv_name = 'count';
                 $this->GetSourcesFromDataview($dv_name);
+                $this->_trigger_setup_event();
                 $this->sql_p['limit'] = '';
                 break;
             case 'ids':
@@ -359,7 +365,7 @@ class CCQuery
                 $this->GetSourcesFromDataview($A['dataview']);
                 // fall through
             default:
-                CCEvents::Invoke( CC_EVENT_API_QUERY_SETUP, array( &$this->args, &$this, !empty($this->_from_url)) );
+                $this->_trigger_setup_event();
                 break;
         }
 
