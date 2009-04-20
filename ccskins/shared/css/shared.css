@@ -1,3 +1,26 @@
+.cc_openid_edit {
+    background: #FFFFFF url('../images/openid-icon-small.gif') no-repeat scroll 0pt 50%;
+    padding-left: 18px;
+}
+
+a#cc_openid_enabled {
+    font-weight: normal;
+    font-variant: small-caps;
+    background: transparent url('../images/openid-icon-rnd.gif') no-repeat scroll 0pt 50%;
+    padding: 3px 2px 2px 18px;
+    background-color: #FFF;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    margin-top: 2px;
+    color: #41483b;
+}
+
+a#cc_openid_enabled div {
+    font-weight: normal;
+    font-size: 0.6em; 
+}
+
+
 .cc_name_ban {
    text-decoration: line-through;
    color: red;

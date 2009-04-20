@@ -26,6 +26,9 @@
     %else%<!-- not logged in -->
         <span class="med_color">%text(str_logged_in_not)%</span>
         <a class="light_color" href="%(home-url)%login">%text(str_log_in)%</a>
+        %if_not_empty(openid-type)%
+            <a class="light_color" id="cc_openid_enabled" href="%(home-url)%login/openid"><div>%text(str_openid_enabled)%</div></a>
+        %end_if%        
     %end_if%
     </div>
 

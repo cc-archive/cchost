@@ -10,6 +10,15 @@ function _t_util_fixup_logout($T,$A)
     $html = '<span class="med_color">' . $T->String('str_logged_in_not') . 
         '</span><a class="light_color" href="' . ccl('login') . '">' . $T->String('str_log_in') . '</a>';
 
+    if( !empty($A['openid-type']) )
+    {
+        $html .= '<a class="light_color" id="cc_openid_enabled" href="' .
+                ccl('login/openid') .
+                '><div>'.
+                $T->('str_openid_enabled') . 
+                '</div></a>' ;
+    }
+
 ?>
 <script>
     $('login_info').innerHTML = '<?= $html ?>';

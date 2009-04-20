@@ -344,10 +344,11 @@ $GLOBALS['str_nsfw_t']                = _('This upload might be %sNot Safe For W
 $GLOBALS['str_ok']                    = _('ok');
 
 $GLOBALS['str_openid_display_name']   = _('Display name:');
+$GLOBALS['str_openid_enabled']        = _('OpenID Enabled');
 $GLOBALS['str_openid_exist_user']     = _('Existing user name:');
 $GLOBALS['str_openid_existing']       = _('Use an existing account');
-$GLOBALS['str_openid_existing_tip1']  = _('We could not find an account that might match your OpenID information. Enter your existing login information if you have one.');
-$GLOBALS['str_openid_existing_tip2']  = _('If none of the accounts above are yours, enter your existing login information if you have one.');
+$GLOBALS['str_openid_existing_tip1']  = _('We could not find an account that might match your OpenID information. Enter your existing account information if you have one.');
+$GLOBALS['str_openid_existing_tip2']  = _('If none of the accounts above are yours, enter your existing account information if you have one.');
 $GLOBALS['str_openid_login_title']    = _('Log in with OpenId');
 $GLOBALS['str_openid_match']          = _('Select an existing account');
 $GLOBALS['str_openid_match_help']     = _('You are logging in using your verfied OpenID: <b>%s</b>. The information you\'ve given us is nickname: <b>%s</b> at email address: <b>%s</b>');

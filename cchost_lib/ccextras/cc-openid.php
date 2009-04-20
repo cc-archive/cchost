@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id$
+* $id$
 *
 */
 
@@ -35,7 +35,5 @@ CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCOpenID' , 'OnGetConf
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCOpenID', 'OnMapUrls' ), 'cchost_lib/ccextras/cc-openid.inc' );
 
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,    array( 'CCOpenID', 'OnFormFields'), 'cchost_lib/ccextras/cc-openid.inc' );
-CCEvents::AddHandler(CC_EVENT_FORM_POPULATE,  array( 'CCOpenID', 'OnFormPopulate'), 'cchost_lib/ccextras/cc-openid.inc'  );
-CCEvents::AddHandler(CC_EVENT_FORM_VERIFY,    array( 'CCOpenID', 'OnFormVerify'), 'cchost_lib/ccextras/cc-openid.inc'  );
 
 ?>

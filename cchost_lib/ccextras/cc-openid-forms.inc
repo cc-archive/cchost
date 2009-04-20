@@ -28,6 +28,22 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cchost_lib/cc-form.php');
 
+class CCOpenIDLoginForm extends CCForm
+{
+    function CCOpenIDLoginForm()
+    {
+        $this->CCForm();
+        $fields['openid_url'] = 
+            array( 'label'  => _('OpenID Identity'),
+                   'form_tip'   => _('Log in using your OpenID identity'),
+                    'class'     => 'cc_openid_edit',
+                   'formatter'  => 'textedit',
+                   'flags'      => CCFF_REQUIRED);
+        $this->AddFormFields($fields);
+        $this->SetSubmitText('Log in');        
+    }
+}
+
 class CCOpenIDHookUpForm extends CCForm
 {
     var $_checked_radio;

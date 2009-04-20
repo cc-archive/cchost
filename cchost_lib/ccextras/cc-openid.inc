@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id$
+* $id$
 *
 */
 
@@ -32,119 +32,38 @@ if( !defined('IN_CC_HOST') )
 */
 class CCOpenID
 {
-
-    function _verify_and_dispatch(&$form, &$fields, $method)
+    function Login()
     {
-        global $CC_GLOBALS;
-        
-        if( empty($CC_GLOBALS['openid-type']) || ($CC_GLOBALS['openid-type'] == CC_OPENID_NONE))
-            return false;
-            
-        if( is_a($form,'CCNewUserForm') )
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/ccextras/cc-openid-forms.inc');
+        $title = 'str_openid_login_title';
+        CCPage::SetTitle($title);
+        $form = new CCOpenIDLoginForm();
+        if( empty($_POST['openidlogin']) || !$form->ValidateFields() )
         {
-            $form_type = 'register';
-        }
-        elseif( is_a($form,'CCUserLoginForm') )
-        {
-            $form_type = 'login';
+            CCPage::AddForm($form->GenerateForm());
         }
         else
         {
-            return;
+            $form->GetValues($values);
+            require_once('cchost_lib/ccextras/cc-openid-handler.inc');
+            cc_openid_handler('login',$values['openid_url']);
         }
-                    
-        $method_name = '_' . $form_type . '_' . $method;
-        $this->$method_name($form,$fields,$CC_GLOBALS['openid-type']);
+    }
+
+    function OnFormFields( &$form, &$fields )
+    {
+        if( (strtolower( get_class($form) ) == 'ccnewuserform') ||
+            (strtolower( get_class($form) ) == 'ccuserloginform') )
+        {
+            $url = ccl('login','openid');
+            $html =<<<EOF
+<p><a href="{$url}" id="cc_openid_enabled">Log in using OpenID</a>
+EOF;
+            $form->SetHelpText($html);
+        }
     }
     
-    function _register_fields(&$form, &$fields, $type)
-    {
-        if( empty($fields['openid_url']) )
-        {
-            $fields['openid_url'] = 
-                        array( 'label'  => _('OpenID Identity'),
-                               'form_tip'   => _('Log in using just your OpenID identity'),
-                                'class'     => 'openid_url',
-                               'formatter'  => 'textedit',
-                               'flags'      => CCFF_NOUPDATE);
-        }
-        if( $type == CC_OPENID_ONLY )
-        {
-            unset($fields['user_name']);
-            unset($fields['user_email']);
-            if( !empty($fields['user_password']) )
-                unset($fields['user_password']);
-        }
-    }
-    function _register_populate(&$form, &$fields, $type)
-    {
-    }
-    function _register_verify(&$form, &$fields, $type)
-    {
-    }
-    function _login_fields(&$form, &$fields, $type)
-    {
-        $form->SetHandler(ccl('login','openid'));
-        
-        if( empty($fields['openid_url']) )
-        {
-            $fields['openid_url'] = 
-                        array( 'label'  => _('OpenID Identity'),
-                               'form_tip'   => _('Log in using just your OpenID identity'),
-                                'class'     => 'openid_url',
-                               'formatter'  => 'textedit',
-                               'flags'      => CCFF_NOUPDATE);
-        }
-        if( $type == CC_OPENID_ONLY )
-        {
-            unset($fields['user_name']);
-            unset($fields['user_email']);
-            if( !empty($fields['user_password']) )
-                unset($fields['user_password']);
-        }
-    }
-    function _login_populate(&$form, &$fields, $type)
-    {
-    }
-    function _login_verify(&$form, &$fields, $type)
-    {
-    }
-    
-    /**
-    * Event handler for {@link CC_EVENT_FORM_FIELDS}
-    *
-    * @param object &$form CCForm object
-    * @param object &$fields Current array of form fields
-    */
-    function OnFormFields(&$form,&$fields)
-    {
-        $this->_verify_and_dispatch($form,$fields,'fields');
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_FORM_POPULATE}
-    * 
-    * @param object &$form CCForm object
-    * @param array &$values Current values being applied to form fields
-    */
-    function OnFormPopulate(&$form,&$values)
-    {
-        $this->_verify_and_dispatch($form,$values,'populate');
-    }
-
-
-    /**
-    * Event handler for {@link CC_EVENT_FORM_VERIFY}
-    * 
-    * @param object &$form CCForm object
-    * @param boolean &$retval Set this to false if fields fail to verify
-    */
-    function OnFormVerify(&$form,&$retval)
-    {
-        $this->_verify_and_dispatch($form,$retval,'verify');
-    }
-
-
     /**
     * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
     *
@@ -197,24 +116,6 @@ class CCOpenID
         }
     }
 
-    function LoginPost()
-    {
-        if( empty($_POST['openid_url'] ) )
-        {
-            require_once('cchost_lib/cc-login.php');
-            $login = new CCLogin();
-            $login->Login();
-        }
-        else
-        {
-            require_once('cchost_lib/ccextras/cc-openid-handler.inc');
-            cc_openid_handler('login',$_POST['openid_url']);
-        }
-    }
-    
-    function RegisterPost()
-    {
-    }
 
     function OnIDFailed($msg)
     {
@@ -300,8 +201,7 @@ class CCOpenID
     
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('login','openid'), array( 'CCOpenID', 'LoginPost' ), CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('register','openid'), array( 'CCOpenID', 'RegisterPost' ), CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__) ); 
+        CCEvents::MapUrl( ccp('login','openid'), array( 'CCOpenID', 'Login' ), CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__) ); 
         CCEvents::MapUrl( ccp('openid'), 'cc_openid_handler', CC_DONT_CARE_LOGGED_IN, dirname(__FILE__) . '/cc-openid-handler.inc' ); 
     }
 }
