@@ -15,7 +15,7 @@ function _t_util_fixup_logout($T,$A)
         $html .= '<a class="light_color" id="cc_openid_enabled" href="' .
                 ccl('login/openid') .
                 '><div>'.
-                $T->('str_openid_enabled') . 
+                $T->String('str_openid_enabled') . 
                 '</div></a>' ;
     }
 
