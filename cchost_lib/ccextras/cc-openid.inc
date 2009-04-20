@@ -45,7 +45,7 @@ class CCOpenID
         }
         else
         {
-            $form->GetValues($values);
+            $form->GetFormValues($values);
             require_once('cchost_lib/ccextras/cc-openid-handler.inc');
             cc_openid_handler('login',$values['openid_url']);
         }
