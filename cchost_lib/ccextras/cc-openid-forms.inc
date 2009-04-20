@@ -55,7 +55,9 @@ class CCOpenIDHookUpForm extends CCForm
         $this->SetHandler(ccl('openid','match'));
         $this->SetSubmitText('str_openid_match_submit');
         $page =& CCPage::GetPage();
-        $help = $page->String( array('str_openid_match_help',$args['openid'],$args['nickname'],$args['email']) );
+        $nic = empty($args['nickname']) ? '' : empty($args['nickname']);
+        $email = empty($args['email']) ? '' : empty($args['email']);
+        $help = $page->String( array('str_openid_match_help',$args['openid'],$nic,$email) );
         $this->SetHelpText($help);
         $fields = array();
         if( empty($args['matches']) )
@@ -194,8 +196,10 @@ EOF;
         $str1 = $page->String('str_openid_new_user');
         $str2 = $page->String('str_openid_display_name');
         $chk = (!empty($_POST['match']) && ($_POST['match'] == 'new')) ? 'checked="checked"' : $this->_checked_radio;
-        $val = !empty($_POST['new_name'])  ? $_POST['new_name'] : $args['free_user_name'];
-        $val2 = !empty($_POST['new_full_name'])  ? $_POST['new_full_name'] : $args['fullname'];
+        $fun = empty($args['free_user_name']) ? '' : $args['free_user_name'];
+        $val = !empty($_POST['new_name'])  ? $_POST['new_name'] : $fun;
+        $full = empty($args['fullname']) ? '' : $args['fullname'];
+        $val2 = !empty($_POST['new_full_name'])  ? $_POST['new_full_name'] : $full;
         $html =<<<EOF
 <input type="radio" {$chk} name="match" id="new_record" value="new">
 <div style="margin: 5px 0px 4px 13px;">
