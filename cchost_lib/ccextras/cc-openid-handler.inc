@@ -23,14 +23,7 @@
 */
 
 require_once('cchost_lib/ccextras/cc-openid.inc');
-
-$path = (dirname(dirname(__FILE__))) . '/php-openid:' . ini_get('include_path');
-ini_set('include_path', $path);
-
-/**
- * Require the OpenID consumer code.
- */
-require_once('cchost_lib/php-openid/examples/consumer/common.php');
+require_once('cchost_lib/ccextras/cc-openid-helpers.inc');
 
 
 function cc_openid_handler($cmd,$arg1='')
