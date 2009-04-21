@@ -2,9 +2,6 @@
 
 error_reporting(E_ALL);
 
-chdir('..');
-
-require_once('cchost_lib/cc-tpl-parser.php');
 
 if( empty($argv[1]) || (!empty($argv[2]) && ($argv[2] != '-#')) )
     die( syntax() );
@@ -12,6 +9,13 @@ if( empty($argv[1]) || (!empty($argv[2]) && ($argv[2] != '-#')) )
 $num = !empty($argv[2]);
 $fname = str_replace('.tpl','',basename($argv[1]));
 $fname = '_t_' . preg_replace('/[^a-z]+/i', '_', $fname) . '_';
+$fname = realpath($fname);
+$argv[1] = realpath($argv[1]);
+
+chdir('/var/www/cchost');
+
+require_once('cchost_lib/cc-tpl-parser.php');
+
 $text = cc_tpl_parse_file($argv[1],$fname);
 
 if( $num )

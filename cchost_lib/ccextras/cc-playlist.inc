@@ -103,6 +103,8 @@ class CCPlaylists
          '{upload_id},{playlist_id}', _('Add upload to playlist'), CC_AG_PLAYLIST );
 
 
+        CCEvents::MapUrl( ccp('api','playlist','getfavorite'),   array( 'CCPlaylists', 'GetFavorite'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+         '', _('Get the current user\'s favorites playlist'), CC_AG_PLAYLIST );
         CCEvents::MapUrl( ccp('api','playlist','remove'),   array( 'CCPlaylists', 'Remove'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
          '{upload_id},{playlist_id}', _('Remove upload from playlist'), CC_AG_PLAYLIST );
         CCEvents::MapUrl( ccp('api','playlist','bump'),     array( 'CCPlaylists', 'Bump'),    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ,
@@ -142,6 +144,26 @@ class CCPlaylists
                                             'cchost_lib/ccextras/cc-playlist-forms.inc' ,
                    '', _('Playlist api'), CC_AG_PLAYLIST ); 
 
+    }
+
+    function GetFavorite()
+    {
+        $user_id = CCUser::CurrentUser();
+        $sql = "SELECT cart_id FROM cc_tbl_cart WHERE cart_user = '{$user_id}' and cart_subtype = 'favorites'";
+        $cart_id = CCDatabase::QueryItem($sql);
+        if( empty($cart_id) )
+        {
+            global $CC_GLOBALS;
+            require_once('cchost_lib/ccextras/cc-playlist.inc');
+            $api = new CCPlaylists();
+            $title = sprintf( _("%s's Favorites"), $CC_GLOBALS['user_real_name'] );
+            $cart_id = $api->_create_playlist('favorites',$title);
+        }
+        $cart_items =& CCPlaylistItems::GetTable();
+        $w['cart_item_cart'] = $cart_id;
+        $ids = $cart_items->QueryItems('cart_item_upload',$w);
+        $obj = array( 'cart_id' => $cart_id, 'upload_ids' => $ids );
+        CCUtil::ReturnAjaxData($obj); // this will exit
     }
 
     function Save()
