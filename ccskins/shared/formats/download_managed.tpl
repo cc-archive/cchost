@@ -5,14 +5,20 @@
     dataview = files
 [/meta]
 */?>
-<div  id="cc_download">
 
-%loop(records,R)%
-<? 
-    // Enable counting, checksum, RDF license at admin/download
+<? // NOTE: Enable counting, checksum, RDF license at admin/download ?>
     
-    $url = ccl('download',$R['upload_id']);
-?>
-<a href="%(#url)%">%(#R/upload_name)%</a><br />
+<div  id="cc_download">
+%loop(records,R)%
+<p class="upload_name">%(#R/upload_name)% <span style="font-style:italic">%if_not_null(#R/upload_extra/bpm)% (BPM: %(#R/upload_extra/bpm)%) %end_if%</span></p>
+<ol>
+    %loop(#R/files,F)%
+         <li>
+            <? $url = ccl('download',$R['user_name'],$F['file_id']); ?>
+            %(#F/file_nicname)% %(#F/file_filesize)%: <a href="%(#url)%">%(#F/file_name)%</a> 
+         </li>
+    %end_loop%
+</ol>
 %end_loop%
 </div>
+

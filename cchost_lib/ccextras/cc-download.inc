@@ -41,19 +41,25 @@ class CCDownload
                 CC_AG_UPLOADS );
     }
 
-    function Download($name,$id)
+    function Download($name,$id,$opts='')
     {
         global $CC_GLOBALS;
 
-        $files =& CCFiles::GetTable();
-        $file_name = $files->QueryItemFromKey('file_name',$id);
+        $sql = 'SELECT file_name, file_num_download, file_upload FROM cc_tbl_files WHERE file_id='.$id;
+        list( $file_name, $num_downloads, $upload_id ) = CCDatabase::QueryRow($sql,false);
 
         if(!empty($CC_GLOBALS['counter']))
         {
-            $uargs['file_num_download'] = $files->QueryItemFromKey('file_num_download',$id) + 1;
+            $uargs['file_num_download'] = ++$num_downloads;
             $uargs['file_id'] = $id;
-            $upload = new CCTable('cc_tbl_files','file_id');
-            $upload->Update($uargs);
+            $files =& CCFiles::GetTable();
+            $files->Update($uargs);
+            $sql = "SELECT MAX(file_num_download) FROM cc_tbl_files WHERE file_upload = {$upload_id}";
+            $upload_count = CCDatabase::QueryItem($sql);
+            $uploads = new CCUploads();
+            $xarg['upload_dl_count'] = $upload_count;
+            $xarg['upload_id'] = $upload_id;
+            $uploads->Update($xarg);
         }
 
         if(!empty($CC_GLOBALS['license']) || !empty($CC_GLOBALS['checksum']))
