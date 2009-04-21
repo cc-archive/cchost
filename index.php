@@ -17,7 +17,7 @@
 * $Id$
 *
 */
-if( !empty($_GET['ccm']) && preg_match('/\.(gif|png|ico|jpg|mp3)$/',$_GET['ccm']) )
+if( !empty($_GET['ccm']) && preg_match('/\.(gif|png|ico|jpg|mp3|jpeg|___)$/i',$_GET['ccm']) )
 {
     header("HTTP/1.0 404 Not Found");
     exit;
