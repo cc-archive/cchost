@@ -58,11 +58,11 @@ EOF;
 }
 [/dataview]
 */?>
-
+<!-- template reviews_upload -->
 <? 
     if( empty($A['topic_upload']) && !empty($_GET['match']) )
         $A['topic_upload'] = sprintf('%0d',$_GET['match']);
-    cc_query_fmt('noexit=1&nomime=1&f=html&t=list_files&ids=' . $A['topic_upload']); 
+    cc_query_fmt('paging=on&noexit=1&nomime=1&f=html&t=list_files&ids=' . $A['topic_upload']); 
     // sorry about this...
     $user_name = 
       CCDatabase::QueryItem('SELECT user_name FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id='.$A['topic_upload']);
