@@ -3,7 +3,7 @@
 %if_not_empty(sub_nav_tabs)%
     <ul id="sub_tabs">
     %loop(sub_nav_tabs/tabs,tab)%
-        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
+        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%text(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
     %end_loop%
     %unmap(sub_nav_tabs)%
     </ul>
@@ -15,7 +15,7 @@
 %if_not_empty(tab_info)%
     <ul id="%(tabs_id)%">
     %loop(tab_info/tabs,tab)%
-        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
+        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%text(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
     %end_loop%
     %unmap(tab_info)%
     </ul>
@@ -27,13 +27,13 @@
 %if_not_empty(tab_info)%
     <ul id="%(tabs_id)%">
     %loop(tab_info/tabs,tab)%
-        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
+        <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%text(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
         %if_not_null(#tab/selected)%
           <li>
             %if_not_empty(sub_nav_tabs)%
                 <ul id="sub_tabs">
                 %loop(sub_nav_tabs/tabs,tab)%
-                    <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
+                    <li %if_class(#tab/selected,selected_tab)%><a href="%(#tab/url)%" title="%text(#tab/help)%"><span>%text(#tab/text)%</span></a></li>
                 %end_loop%
                 %unmap(sub_nav_tabs)%
                 </ul>
