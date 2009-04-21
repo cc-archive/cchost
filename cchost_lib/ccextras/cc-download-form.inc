@@ -41,24 +41,33 @@ class CCDownloadAdminForm extends CCEditConfigForm
         $fields['counter'] =
            array(  'label'      => _('Download counter'),
                    'form_tip'   => _('File download counter.'),
-                   'value'      => 0,
                    'formatter'  => 'checkbox',
                    'flags'      => CCFF_POPULATE );
 
         $fields['checksum'] =
            array(  'label'      => _('Checksum'),
-                   'form_tip'   => _('Download files with checksum. (Raps download in ZIP archive)'),
-                   'value'      => 0,
+                   'form_tip'   => _('Download files with checksum. (Wraps download in ZIP archive)'),
                    'formatter'  => 'checkbox',
                    'flags'      => CCFF_POPULATE );
 
         $fields['license'] =
            array(  'label'      => _('License'),
-                   'form_tip'   => _('Download files with license RDF file.  (Raps download in ZIP archive)'),
-                   'value'      => 0,
+                   'form_tip'   => _('Download files with license RDF file.  (Wraps download in ZIP archive)'),
                    'formatter'  => 'checkbox',
                    'flags'      => CCFF_POPULATE );
 
+        require_once('cchost_lib/cc-template.inc');
+        $templates = CCTemplateAdmin::GetFormats('download_template');
+
+        // sorry, but this field has to be called 'download' to
+        // match the pre 5.1 template name
+        $fields['download'] =
+           array(  'label'      => _('Download Template'),
+                   'form_tip'   => _('Select the template that will be shown to user for downloading.'),
+                   'options'    => $templates,
+                   'formatter'  => 'select',
+                   'flags'      => CCFF_POPULATE );
+        
         $this->AddFormFields($fields);
         $this->SetModule( ccs(__FILE__) );
     }
