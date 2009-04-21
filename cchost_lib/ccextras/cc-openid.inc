@@ -144,7 +144,7 @@ EOF;
         $openids->Insert($rec);
     }
         
-    function _do_login($user_id,$redir)
+    function _do_login($user_id)
     {
         require_once('cchost_lib/cc-login.php');
         list( $user, $pw ) = CCDatabase::QueryRow(
