@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $id$
+* $Id$
 *
 */
 
@@ -80,42 +80,10 @@ EOF;
                array(  'label'      => _('OpenID'),
                        'form_tip'   => _('Enable OpenID log in and registration.'),
                        'value'      => '',
-                       'formatter'  => 'select',
-                       'options'    => array( 
-                                        CC_OPENID_NONE => 
-                                        _('Do not use OpenID'),
-                                        CC_OPENID_AND_REG => 
-                                        _('Use OpenID in addition to standard registration'),
-                                        CC_OPENID_ONLY => 
-                                        _('Use OpenID only')
-                                        ),
+                       'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE  ); 
         }
     }
-
-
-    // THIS METHOD IS NOT USE (yet)
-    /**
-    * Event handler for {@link CC_EVENT_ADMIN_MENU}
-    *
-    * @param array &$items Menu items go here
-    * @param string $scope One of: CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    */
-    function OnAdminMenu(&$items,$scope)
-    {
-        if( $scope == CC_GLOBAL_SCOPE )
-        {
-            $items += array( 
-                'openid'   => array( 'menu_text'  => _('OpenID'),
-                                 'menu_group' => 'configure',
-                                 'help'      => _('Configure OpenID '),
-                                 'access' => CC_ADMIN_ONLY,
-                                 'weight' => 5,
-                                 'action' =>  ccl('admin','forums') ),
-                );
-        }
-    }
-
 
     function OnIDFailed($msg)
     {
@@ -139,32 +107,72 @@ EOF;
         }
         else
         {
-            // bingo, log 'em in
+            if( !empty($form->_match_user_id) )
+            {
+                $this->_do_assoc($form->_args['openid'],$form->_match_user_id);
+                $this->_do_login($form->_match_user_id,ccl('people',$user));
+            }
+            elseif( !empty($form->_new_user_info) )
+            {
+                require_once('cchost_lib/cc-login.php');
+                $login = new CCLogin();
+                $new_password = $login->_make_new_password();
+                $fields['user_password'] = md5($new_password);
+                $fields['user_registered'] = date( 'Y-m-d H:i:s' );
+                $fields['user_name'] = $form->_new_user_info[0];
+                $fields['user_real_name'] = empty($form->_new_user_info[1]) ? $fields['user_name'] : 
+                                                    $form->_new_user_info[1];
+                $users =& CCUsers::GetTable();
+                $fields['user_id'] = $users->NextID();
+                $users->Insert($fields);
+                $this->_do_assoc($form->_args['openid'],$fields['user_id']);
+                $this->_do_login($fields['user_id'],ccl('people','profile'));
+            }
+            else
+            {
+                // this should never happen
+            }
+
         }
+    }
+
+    function _do_assoc($openid,$user_id)
+    {
+        $rec['openid'] = rtrim($openid,'/');
+        $rec['openid_user'] = $user_id;
+        $openids = new CCTable('cc_tbl_openids','openid');
+        $openids->Insert($rec);
+    }
+        
+    function _do_login($user_id,$redir)
+    {
+        require_once('cchost_lib/cc-login.php');
+        list( $user, $pw ) = CCDatabase::QueryRow(
+           'SELECT user_name,user_password FROM cc_tbl_user WHERE user_id='.$user_id,false);
+        $login = new CCLogin();
+        $login->_create_login_cookie(1,$user,$pw);
+        $login->_do_login_redirect($redir);
     }
     
 	function OnIDVerified( $openid,$canonicalID,$sreg)
 	{
 	    /*
-            [0] => http://openid.claimid.com/victorstone
-            [1] => 
-            [2] => Array
-                (
-                    [fullname] => victor stone
-                    [nickname] => victorstone
-                    [email] => victor.stone@gmail.com
-                )
+            [fullname] => victor stone
+            [nickname] => victorstone
+            [email] => victor.stone@gmail.com
 	     */
-        $row = CCDatabase::QueryRow("SELECT * FROM cc_tbl_openids WHERE openid = '{$openid}'");
+        if( empty($canonicalID) )
+            $canonicalID = rtrim($openid,'/');
+        $args['connonical'] = $canonicalID;
+        $row = CCDatabase::QueryRow("SELECT * FROM cc_tbl_openids WHERE openid = '{$canonicalID}'");
         if( empty($row) )
         {
             require_once('cchost_lib/cc-page.php');
             CCPage::SetTitle('str_openid_login_title');
             $args = $sreg;
             $args['openid'] = $openid;
-            $args['connonical'] = $canonicalID;
             $user_name = cc_fancy_user_sql('display_name');
-            $sql = "SELECT user_id, user_email, {$user_name} FROM cc_tbl_user WHERE (user_homepage = '{$openid}') ";
+            $sql = "SELECT user_id, user_email, {$user_name} FROM cc_tbl_user WHERE (user_homepage LIKE '{$canonicalID}%') ";
             if( !empty($args['nickname']) )
             {
                 $sql .= "OR (user_name = '{$args['nickname']}') ";
@@ -194,8 +202,7 @@ EOF;
         }
         else
         {
-            $user_id = $row['openid_user'];
-            // log them in!
+            $this->_do_login($row['openid_user']);
         }
     }
     

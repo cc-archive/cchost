@@ -80,9 +80,9 @@ class CCSkin
 
         $this->template_stack = array();
         $this->map_stack = array();
-        $this->files = array();
+        $this->files        = array();
         $this->search_cache = array();
-
+        
         $template = $this->GetTemplate($this->filename);
         $this->_pick_up_skin_file(dirname($template),'skin');
 
@@ -194,7 +194,7 @@ class CCSkin
         $this->vars = $snapshot;
     }
 
-    function AddCustomizations( $keys = array( 'paging_style', 'page_layout', 'color_scheme', 
+    function AddCustomizations( $keys = array( 'page_layout', 'color_scheme', 'paging_style', 
                                       'font_scheme', 'font_size', 'tab_pos', 'box_shape',  ))
     {
         $T =& $this;
@@ -208,7 +208,7 @@ class CCSkin
 
             if( !empty($V[$inc]) && file_exists($V[$inc]))
             {
-                require_once($V[$inc]);
+                include($V[$inc]);
             }
         }
         $V = array_merge($V,$A);
@@ -852,6 +852,7 @@ class CCSkin
             return ccd($path);
         die("\"/>Can't find graphic $partial");
     }
+
     function ImportSkin($dir)
     {
         $this->_pick_up_skin_file($dir,'strings');
@@ -883,7 +884,7 @@ class CCSkin
     function _parse($file,$forceParse=false)
     {
         $file = str_replace( '\\', '/', $file );
-
+    
         if( $forceParse || !in_array( $file, $this->files ) )
         {
             preg_match( '#([^/]+)\.([a-z]+)$#i', $file, $m );
@@ -895,14 +896,10 @@ class CCSkin
             $A =& $this->vars;
             $T =& $this;
 
-            //CCDebug::Log("Loading/parsing: $file");
-
             if( $m[2] == 'tpl' )
             {
                 require_once('cchost_lib/cc-tpl-parser.php');
-                //CCDebug::Log("parsing: $file");
                 $parsed = cc_tpl_parse_file($file,$bfunc);
-                //if( preg_match('/skin.tpl/',$file) ) CCDebug::PrintVar($parsed);
                 $ret = eval( '?>' . $parsed);
 
                 if( $ret != 'ok' && CCUser::IsAdmin() )

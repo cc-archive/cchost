@@ -88,11 +88,10 @@ class CCNewUserForm extends CCUserForm
         {
             $fields += array(
                     '_lost_password' =>
-                       array(  'label'      => 'str_login_lost_password',
-                               'formatter'  => 'statictext',
-                               'value'      => '<a href="' . 
-                                               ccl('lostpassword') . '">' 
-                                               . _('Click Here') . '</a>',
+                       array(  'label'      => '',
+                               'formatter'  => 'button',
+                               'url'        => ccl('lostpassword'),
+                               'value'      => 'str_login_lost_password',
                                'flags'      => CCFF_NONE | CCFF_NOUPDATE  | CCFF_STATIC),
                         );
         }
@@ -195,10 +194,10 @@ class CCUserLoginForm extends CCUserForm
                                'flags'      => CCFF_NONE ),
 
                     '_new_user' =>
-                       array(  'label'       => 'str_login_new_user',
-                               'formatter'  => 'statictext',
-                               'value'      => '<a href="' . ccl('register') . '">' .
-                                             _('Click Here') . '</a>',
+                       array(  'label'       => '',
+                               'formatter'  => 'button',
+                               'url'        => ccl('register'),
+                               'value'      => 'str_login_new_user',
                                'flags'      => CCFF_NONE | CCFF_NOUPDATE  | CCFF_STATIC),
                         );
 
@@ -208,11 +207,10 @@ class CCUserLoginForm extends CCUserForm
         {
             $fields += array( 
                     '_lost_password' =>
-                       array( 'label'       => 'str_login_lost_password',
-                               'formatter'  => 'statictext',
-                               'value'      => '<a href="' . 
-                                               ccl('lostpassword') . '">' .
-                                               _('Click Here') . '</a>',
+                       array( 'label'       => '',
+                               'formatter'  => 'button',
+                               'url'        => ccl('lostpassword'),
+                               'value'      => 'str_login_lost_password',
                                'flags'      => CCFF_NONE | CCFF_NOUPDATE  | CCFF_STATIC),
                     );
         }
@@ -241,9 +239,10 @@ class CCLostPasswordForm extends CCUserForm
                                'flags'      => CCFF_REQUIRED ),
 
                     '_new_user' =>
-                       array( 'label'       => 'str_login_new_user',
-                               'formatter'  => 'statictext',
-                               'value'      => '<a href="' . ccl('register') . '">' . _('Click Here') . '</a>',
+                       array( 'label'       => '',
+                               'formatter'  => 'button',
+                               'value'      => 'str_login_new_user',
+                               'url'        => ccl('register'),
                                'flags'      => CCFF_NOUPDATE  | CCFF_STATIC),
                         );
 
@@ -295,7 +294,7 @@ class CCLogin
     {
         $items = array(
             'register'  => array( 
-                             'menu_text'  => _('Register'),
+                             'menu_text'  => 'str_login_register',
                              'access'  => CC_ONLY_NOT_LOGGED_IN,
                              'menu_group' => 'artist',
                              'weight' => 5,
@@ -304,7 +303,7 @@ class CCLogin
 
 
             'login'  => array( 
-                             'menu_text'  => _('Log In'),
+                             'menu_text'  => 'str_log_in',
                              'access'  => CC_ONLY_NOT_LOGGED_IN,
                              'id'     => 'menu_item_login',
                              'menu_group' => 'artist',
@@ -344,9 +343,9 @@ class CCLogin
         global $CC_GLOBALS;
 
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle(_("Create A New Account"));
+        CCPage::SetTitle('str_login_create_acc');
         $form = new CCNewUserForm();
-        $form->SetHelpText(_('This site requires cookies to be enabled in your browser'));
+        $form->SetHelpText('str_login_this_site_req');
         
         $show = empty($_POST['newuser']) || !$form->ValidateFields();
 
@@ -397,11 +396,11 @@ class CCLogin
                     }
                     else
                     {
-                        $why = _('You are receiving this email because you requested a new account.');
+                        $why = 'str_login_you_are_rec';
                         $to =  $fields['user_email'];
                     }
 
-                    $this->_send_login_info($fields['user_name'], _("New Account Registration"),$why,$new_password,$to);
+                    $this->_send_login_info($fields['user_name'], 'str_login_new_account',$why,$new_password,$to);
                     $url =  ccl('login','new','confirm');
 
                 }
@@ -461,9 +460,9 @@ class CCLogin
             {
                 $reg_type = empty($CC_GLOBALS['reg-type']) ? null : $CC_GLOBALS['reg-type'];
                 if( $reg_type == CC_REG_ADMIN_EMAIL )
-                    $rmsg = _('You registration request has been forwarded to the site administrators.');
+                    $rmsg = 'str_login_your_reg_has';
                 elseif( $reg_type == CC_REG_USER_EMAIL )
-                    $rmsg = _("Your new login information has been sent to your email address.");
+                    $rmsg = 'str_login_your_new_login';
                 if( !empty($rmsg) )
                     CCPage::Prompt($rmsg);
             }
@@ -479,28 +478,13 @@ class CCLogin
             $CC_GLOBALS = array_merge($CC_GLOBALS,$form->record);
             CCEvents::Invoke(CC_EVENT_LOGIN );
             
-            if( $form->GetFormValue('user_remember') == 1 )
-                $time = time()+60*60*24*30;
-            else
-                $time = null;
-            $val = array( $CC_GLOBALS['user_name'], $CC_GLOBALS['user_password'] );
-            $val = serialize($val);
-            cc_setcookie(CC_USER_COOKIE,$val,$time);
-            cc_setcookie(CC_TRANSITION_COOKIE,gmmktime(),time()+60*60*24*30);
+            $remember = $form->GetFormValue('user_remember');
+            $this->_create_login_cookie($remember);
+
             if( $do_ui )
             {
                 $ref = $form->GetFormValue('http_referer');
-                if( !empty($ref) )
-                {
-                    $ref = urldecode($ref);
-                    if( preg_match('/logout$/',$ref ) )
-                        $ref = '';
-                }
-                if( empty( $ref ) )
-                    $url = ccl('people',$CC_GLOBALS['user_name'] );
-                else
-                    $url = $ref;
-                CCUtil::SendBrowserTo( $url );
+                $this->_do_login_redirect($ref);
             }
             $ok = true;
         }
@@ -508,6 +492,40 @@ class CCLogin
         return( $ok );
     }
 
+    function _do_login_redirect($ref)
+    {
+        global $CC_GLOBALS;
+        
+        if( !empty($ref) )
+        {
+            $ref = urldecode($ref);
+            if( preg_match('/logout$/',$ref ) || ($ref == '/'))
+                $ref = '';
+        }
+        if( empty( $ref ) )
+            $url = ccl('people',$CC_GLOBALS['user_name'] );
+        else
+            $url = $ref;
+        CCUtil::SendBrowserTo( $url );
+    }
+    
+    function _create_login_cookie($remember,$user='',$pw='')
+    {
+        global $CC_GLOBALS;
+        
+        if( $remember )
+            $time = time()+60*60*24*30;
+        else
+            $time = null;
+        if( empty($user) )
+            $user = $CC_GLOBALS['user_name'];
+        if( empty($pw) )
+            $pw = $CC_GLOBALS['user_password'];
+        $val = serialize(array($user,$pw));
+        cc_setcookie(CC_USER_COOKIE,$val,$time);
+        cc_setcookie(CC_TRANSITION_COOKIE,gmmktime(),time()+60*60*24*30);
+    }
+    
     /**
     * Handler for /lostpassword URL puts up form an responds to it (not implemented yet)
     */
@@ -533,9 +551,9 @@ class CCLogin
             $users->Update($args);
             CCEvents::Invoke(CC_EVENT_LOST_PASSWORD, array( $args['user_id'] , &$row));
 
-            $why = _('You are receiving this email because you requested a new password.');
-            $this->_send_login_info($user_name,_("Recover Lost Password"),$why,$new_password,$row['user_email']);
-            CCPage::Prompt(_("New password has been sent to your email address."));
+            $why = 'str_login_you_are_rec2';
+            $this->_send_login_info($user_name,'str_login_recover_lost_password',$why,$new_password,$row['user_email']);
+            CCPage::Prompt('str_login_new_password');
         }
 
     }
@@ -547,25 +565,23 @@ class CCLogin
 
     function _send_login_info($user_name,$subject,$why,$new_password,$to)
     {
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        $why     = $page->String($why);
+        $subject = $page->String($subject);
+        $msg     = $page->String('str_login_email_message');
+        
         $configs =& CCConfigs::GetTable();
         $ttags = $configs->GetConfig('ttag');
         $site_name = $ttags['site-title'];
+
+        $url = ccl('login');
+        $msg = sprintf(_($msg),$site_name,$why,$url,$user_name,$new_password,
+                               $site_name);
+        
         require_once('cchost_lib/ccextras/cc-mail.inc');
         $mailer = new CCMailer();
         $mailer->To($to);
-        $url = ccl('login');
-        $msg =
-            _("Hi from %s!") . "\n\n%s\n\n" . 
-            _("Please visit: %s") . "\n\n" . 
-            _("Use the following information to log in:") . "\n\n" . 
-            _('Login name: %s') . "\n" . 
-            _('Password: %s') . "\n" . 
-            _('You should then edit your profile and change the password to whatever you like.') . 
-            _('Thanks') . ",\n" . 
-            _('Admin') . ", %s\n";
-
-        $msg = sprintf(_($msg),$site_name,$why,$url,$user_name,$new_password,
-                               $site_name);
         $mailer->Body($msg);
         $mailer->Subject($site_name . ': ' . $subject);
         $mailer->Send();

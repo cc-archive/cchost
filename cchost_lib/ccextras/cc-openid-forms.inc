@@ -47,11 +47,13 @@ class CCOpenIDLoginForm extends CCForm
 class CCOpenIDHookUpForm extends CCForm
 {
     var $_checked_radio;
+    var $_args;
     
     function CCOpenIDHookUpForm($args)
     {
         $this->CCForm();
         $this->_checked_radio = '"checked=1"';
+        $this->_args = $args;
         $this->SetHandler(ccl('openid','match'));
         $this->SetSubmitText('str_openid_match_submit');
         $page =& CCPage::GetPage();

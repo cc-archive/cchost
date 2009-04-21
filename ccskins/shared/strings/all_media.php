@@ -296,10 +296,13 @@ $GLOBALS['str_log_out'] = _('Log Out');
 $GLOBALS['str_loggedin']              = _('Logged in as');
 $GLOBALS['str_logged_in_not']  = _('Not logged in');
 $GLOBALS['str_log_logged_out']  = _('You are now logged out');
+$GLOBALS['str_login_create_acc']  = _('Create A New Account');
 $GLOBALS['str_login_does_not_match'] = _('Password does not match login name.');
 $GLOBALS['str_login_lost_password'] = _('Lost Password?');
 $GLOBALS['str_login_name'] = _('Login Name');
+$GLOBALS['str_login_new_account'] = _('New Account Registration');
 $GLOBALS['str_login_new_user'] = _('New User?');
+$GLOBALS['str_login_new_password'] = _('New password has been sent to your email address.');
 $GLOBALS['str_login_password'] = _('Password');
 $GLOBALS['str_login_recover_lost_password'] = _('Recover Lost Password');
 $GLOBALS['str_login_register'] = _('Register');
@@ -311,6 +314,21 @@ $GLOBALS['str_login_this_must_be'] = _('This must be at least 5 characters long.
 $GLOBALS['str_login_this_must_be_less'] = _('This must be less than 25 characters.');
 $GLOBALS['str_login_this_must_consist'] = _('This must consist of letters, numbers or underscores (_) and be no longer than 25 characters.');
 $GLOBALS['str_login_this_must_letters'] = _('This must be letters, numbers or underscores (_)');
+$GLOBALS['str_login_this_site_req'] = _('This site requires cookies to be enabled in your browser');
+$GLOBALS['str_login_you_are_rec'] = _('You are receiving this email because you requested a new account.');
+$GLOBALS['str_login_you_are_rec2'] = _('You are receiving this email because you requested a new password.');
+$GLOBALS['str_login_your_reg_has'] = _('You registration request has been forwarded to the site administrators.');
+$GLOBALS['str_login_your_new_login'] = _('Your new login information has been sent to your email address.');
+$GLOBALS['str_login_email_message'] = 
+            _('Hi from %s!') . "\n\n%s\n\n" . 
+            _('Please visit: %s') . "\n\n" . 
+            _('Use the following information to log in:') . "\n\n" . 
+            _('Login name: %s') . "\n" . 
+            _('Password: %s') . "\n\n" . 
+            _('You should then edit your profile and change the password to whatever you like.') . "\n\n" .
+            _('Thanks') . ",\n" . 
+            _('Admin') . ",\n%s\n";
+
 
 $GLOBALS['str_logout']                = _('log out');
 $GLOBALS['str_media']                 = _('Media');
