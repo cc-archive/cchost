@@ -110,7 +110,7 @@ EOF;
             if( !empty($form->_match_user_id) )
             {
                 $this->_do_assoc($form->_args['openid'],$form->_match_user_id);
-                $this->_do_login($form->_match_user_id,ccl('people',$user));
+                $this->_do_login($form->_match_user_id);
             }
             elseif( !empty($form->_new_user_info) )
             {
@@ -126,7 +126,7 @@ EOF;
                 $fields['user_id'] = $users->NextID();
                 $users->Insert($fields);
                 $this->_do_assoc($form->_args['openid'],$fields['user_id']);
-                $this->_do_login($fields['user_id'],ccl('people','profile'));
+                $this->_do_login($fields['user_id']);
             }
             else
             {
@@ -151,7 +151,7 @@ EOF;
            'SELECT user_name,user_password FROM cc_tbl_user WHERE user_id='.$user_id,false);
         $login = new CCLogin();
         $login->_create_login_cookie(1,$user,$pw);
-        $login->_do_login_redirect($redir);
+        $login->_do_login_redirect(ccl('people',$user));
     }
     
 	function OnIDVerified( $openid,$canonicalID,$sreg)
