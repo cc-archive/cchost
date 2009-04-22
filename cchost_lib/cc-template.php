@@ -227,7 +227,6 @@ class CCSkin
 
             if( !empty($V[$inc]) && file_exists($V[$inc]))
             {
-                dlog($V[$inc]);
                 include($V[$inc]);
             }
         }
