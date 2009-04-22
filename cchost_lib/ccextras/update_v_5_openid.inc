@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: update_v_5_oh1_bug.inc 11065 2008-10-29 09:19:17Z fourstones $
+* $Id$
 *
 */
 
