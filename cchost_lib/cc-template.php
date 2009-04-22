@@ -64,7 +64,7 @@ class CCSkin
         $this->vars = array_merge($CC_GLOBALS,$this->vars,$site_logo);
         
         // for compat with pre 5.0.beta.2 
-        if( empty($this->vars['head-type']) )
+        if( empty($this->vars['head-type']) || (strstr(cc_current_url(),'admin/skins/layout')!=-1))
             $this->vars['head-type'] = 'ccskins/shared/head.tpl';
 
         if( CCUser::IsLoggedIn() )
