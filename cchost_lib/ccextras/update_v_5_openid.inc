@@ -32,17 +32,20 @@ class v_5_openid extends CCUpdate
 {
     function Update()
     {
-        $sql =<<<EOF
-            CREATE TABLE cc_tbl_openids (
-              openid varchar(255) default NULL,
-              openid_user int(11) NOT NULL default '0',
-              openid_confirmed int(1) NOT NULL default '0',
-              openid_session int(11) NOT NULL default '0',
-              openid_extra mediumtext,
-              PRIMARY KEY openid (openid)
-            ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+        if( !$this->_table_exists('cc_tbl_openids') )
+        {
+            $sql =<<<EOF
+                CREATE TABLE cc_tbl_openids (
+                  openid varchar(255) default NULL,
+                  openid_user int(11) NOT NULL default '0',
+                  openid_confirmed int(1) NOT NULL default '0',
+                  openid_session int(11) NOT NULL default '0',
+                  openid_extra mediumtext,
+                  PRIMARY KEY openid (openid)
+                ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 EOF;
-        CCDatabase::Query($sql);
+            CCDatabase::Query($sql);
+        }
         CCPage::Prompt( _('OpenID extensions installed') );
 
     }
