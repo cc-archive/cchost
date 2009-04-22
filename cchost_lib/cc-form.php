@@ -1963,6 +1963,11 @@ END;
 
                 $clean_name = preg_replace('/[^a-z0-9\._-]/i','_',$filesobj['name']);
 
+                if( !preg_match('/\.[a-z]+$/i',$clean_name) )
+                {
+                    $clean_name .= '.gif'; // er, just a hunch
+                }
+                
                 if( $clean_name != $filesobj['name'] )
                 {
                     $filesobj['name'] = $clean_name;
