@@ -57,4 +57,11 @@ var user_name = %if_not_null(logged_in_as)% '%(logged_in_as)%'; %else% null; %en
 %loop(style_sheets,css)%
     <link rel="stylesheet" type="text/css" href="%url(#css)%" title="Default Style" />
 %end_loop%
+
+%loop(style_sheets_blocks,css_block)%
+    <style type="text/css" title="Default Style">
+      %(#css_block)%
+    </style>
+%end_loop%
+
 </head>

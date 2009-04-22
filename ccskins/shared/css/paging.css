@@ -18,16 +18,9 @@ table#page_buttons td, table#page_links td {
 table#page_buttons a, table#page_links a {
   margin: 3px;  
   padding: 3px;
-  display: block;
-  border: 1px solid black;
-  background-color: #DDD;
-  color: black;
-  text-decoration: none;
 }
 
 table#page_buttons a:hover, table#page_links a:hover {
-  background-color: #FFF;
-  text-decoration: none;
 }
 
 <!-- ul VERSION -->
@@ -48,29 +41,15 @@ ul#page_buttons, ul#page_links {
 ul#page_buttons li, ul#page_links li {
   margin: 3px; 
   float: left;
-  
 }
 
 ul#page_links .selected_page_link {
-  margin: 5px 3px;
-  padding: 4px;
-  display: block;
-  border: 1px solid #999;
- -moz-border-radius: 3px;
- -webkit-border-radius: 3px;
+    background: transparent;
+    border: 0px;
 }
 
 ul#page_buttons a, ul#page_links a {
   margin: 3px;  
-  padding: 3px;
-  display: block;
-  border: 1px solid black;
-  background-color: #DDD;
-  color: black;
-  text-decoration: none;
- -moz-border-radius: 3px;
- -webkit-border-radius: 3px;
-  
 }
 
 ul#page_buttons .page_viewing {
@@ -79,7 +58,5 @@ ul#page_buttons .page_viewing {
 }
 
 ul#page_buttons a:hover, ul#page_links a:hover {
-  background-color: #FFF;
-  text-decoration: none;
 }
 

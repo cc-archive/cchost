@@ -280,6 +280,18 @@ class CCTemplateAdmin
         $fp = new CCFileProps(); return $fp->GetProps('layouts',$type,false);
     }
 
+    function GetMultipleLayouts( $types )
+    {
+        $fp = new CCFileProps();
+        // sigh, this should optimized
+        $ret = array();
+        foreach( $types as $type )
+        {
+            $ret[$type] = $fp->GetProps('layouts',$type,false);
+        }
+        return $ret;
+    }
+
     function GetFonts()
     {
         $fp = new CCFileProps(); return $fp->GetProps('colors','font',false);

@@ -26,20 +26,20 @@ function _t_paging_prev_next_links(&$T,&$A)
 
 function _t_paging_google_nostyle(&$T,&$A) 
 {
-    _goog_style($A,$T,true,true);
+    _goog_style($A,$T,false,true,false);
 }
 
 function _t_paging_google_style_paging(&$T,&$A) 
 {
-    _goog_style($A,$T,false,true);
+    _goog_style($A,$T,true,true,true);
 }
 
 function _t_paging_google_style_paging_ul(&$T,&$A) 
 {
-    _goog_style($A,$T,false,false);
+    _goog_style($A,$T,true,false,true);
 }
 
-function _goog_style($A,$T,$with_buttons,$is_table)
+function _goog_style($A,$T,$with_buttons,$is_table,$incstyle)
 {
     if( empty($A['paging_stats']) )
         return;
@@ -98,7 +98,12 @@ function _goog_style($A,$T,$with_buttons,$is_table)
     {
         $sm_button = '';
         $button = '';
-        $pagination = '<link rel="stylesheet" type="text/css" href="' . $T->URL('css/paging.css'). '" />';
+        $pagination = '';
+    }
+
+    if( $incstyle )
+    {
+        $pagination .= '<link rel="stylesheet" type="text/css" href="' . $T->URL('css/paging.css'). '" />';
     }
     
     $pagination .= sprintf($open_block_tag,'page_buttons');
@@ -149,7 +154,8 @@ function _goog_style($A,$T,$with_buttons,$is_table)
     {
         $y = $i+1;
         if ($i == $page){
-            $pagination .= str_replace('>','',$open_tag) . " class=\"selected_page_link\"><b>{$y}</b>" . $close_tag;
+            $cls = 
+            $pagination .= "{$open_tag}<a href=\"\" class=\"{$sm_button} selected_page_link\"><b>{$y}</b></a>" . $close_tag;
         }else{
             $next_link = $url . ($stats['limit'] * $i);
             $pagination .= "{$open_tag}<a {$sm_button} href=\"{$next_link}\">{$y}</a>{$close_tag}";

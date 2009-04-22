@@ -79,9 +79,10 @@ class CCSkin
         $this->vars['not_admin'] = !$this->vars['is_admin'];
 
         $this->template_stack = array();
-        $this->map_stack = array();
-        $this->files        = array();
-        $this->search_cache = array();
+        $this->map_stack      = array();
+        $this->files          = array();
+        $this->search_cache   = array();
+        $this->print_once     = array();
         
         $template = $this->GetTemplate($this->filename);
         $this->_pick_up_skin_file(dirname($template),'skin');
@@ -194,8 +195,26 @@ class CCSkin
         $this->vars = $snapshot;
     }
 
+    function PrintOnce($partial,$type = 'script')
+    { 
+        $url = $this->URL($partial);
+        if( in_array( $url, $this->print_once ) )
+            return;
+        $this->print_once[] = $url;
+        switch( $type )
+        {
+            case 'script':
+                print "<script type=\"text/javascript\" src=\"{$url}\" ></script>";
+                break;
+            case 'css':
+                print "<link type=\"text/css\" href=\"{$url}\" rel=\"stylesheet\" title=\"Default Style\" />";
+                break;
+        }
+    }
+    
     function AddCustomizations( $keys = array( 'page_layout', 'color_scheme', 'paging_style', 
-                                      'font_scheme', 'font_size', 'tab_pos', 'box_shape',  ))
+                                      'font_scheme', 'font_size', 'tab_pos', 'box_shape',
+                                       'button_style','formfields_layout','gridform_layout'  ))
     {
         $T =& $this;
         $V =& $this->vars;
@@ -208,6 +227,7 @@ class CCSkin
 
             if( !empty($V[$inc]) && file_exists($V[$inc]))
             {
+                dlog($V[$inc]);
                 include($V[$inc]);
             }
         }
@@ -284,6 +304,22 @@ class CCSkin
             $f_css = fopen($css_file,   'w');
             $f_inc = fopen($inc_file,   'w');
 
+            // There is already a list of js files in this->var['script_links'] and they
+            // will be written to the cache first, but the customizations are PHP that
+            // generates JS and CSS as well as assigns PHP variables.
+            // so we will parse those first and add any links we find links or blocks in
+            // the generated HTML
+
+            ob_start();
+            $cache_settings = $this->AddCustomizations();
+            $text = ob_get_contents();
+            ob_end_clean();
+
+            // We'll need to load these every session as PHP
+            if( !empty($cache_settings['end_script_text']) )
+                unset($cache_settings['end_script_text']);
+            fwrite($f_inc,serialize($cache_settings));
+
             // we're going to suck in all the CSS files 
 
             if( !empty($this->vars['style_sheets']) ) foreach( $this->vars['style_sheets'] as $css ) {
@@ -301,21 +337,6 @@ class CCSkin
                     $this->_write_css($f_css,$text);
             }
 
-            // There is already a list of js files in this->var['script_links'] and they
-            // will be written to the cache first, but the customizations are PHP that
-            // generates JS and CSS as well as assigns PHP variables.
-            // so we will parse those first and add any links we find links or blocks in
-            // the generated HTML
-
-            ob_start();
-            $cache_settings = $this->AddCustomizations();
-            $text = ob_get_contents();
-            ob_end_clean();
-
-            // We'll need to load these every session as PHP
-            if( !empty($cache_settings['end_script_text']) )
-                unset($cache_settings['end_script_text']);
-            fwrite($f_inc,serialize($cache_settings));
 
             // now parse out the css/script blocks and links
             require_once('cchost_lib/htmlparser/htmlparser.inc');

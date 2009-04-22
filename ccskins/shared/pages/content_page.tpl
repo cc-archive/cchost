@@ -48,7 +48,6 @@ if( !empty($A['content_page_width']) ) {
 <?
 }
 ?>
-
 <table class="cc_content_page" cellspacing="0" cellspacing="0" style="width:100%">
 <?  $num_cols = empty($A['content_page_columns']) ? 2 : $A['content_page_columns'];
     $wid = intval(100/$num_cols);
@@ -57,12 +56,17 @@ if( !empty($A['content_page_width']) ) {
 <tr>
     %loop(#row,R)%
         <td style="vertical-align:top;width:<?=$wid?>%">%if_not_null(content_page_box)%<div class="box">%end_if%
-            <h2>%(#R/topic_name)%</h2>
-            <? switch($A['content_page_textformat']) {
-                case 'format': print $R['topic_text_html']; break;
-                case 'text':   print $R['topic_text_plain']; break;
-                case 'raw':    print $R['topic_text']; break;
-            } ?>
+           <?   
+             $tname = preg_replace( '/[^\w]/','',$R['topic_name']);
+             if( empty($tname) ) 
+                { print '<br class="topic_box_head_spacer" />'; }
+             else
+                { print "<h2>{$tname}</h2>"; }
+             switch($A['content_page_textformat']) {
+                    case 'format': print $R['topic_text_html']; break;
+                    case 'text':   print $R['topic_text_plain']; break;
+                    case 'raw':    print $R['topic_text']; break;
+                } ?>
         %if_not_null(content_page_box)%</div>%end_if%</td>
     %end_loop%
 </tr>

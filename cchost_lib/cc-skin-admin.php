@@ -203,37 +203,43 @@ class CCSkinLayoutForm extends CCEditConfigForm
 
         require_once('cchost_lib/cc-template.inc');
 
+        $ffiles = CCTemplateAdmin::GetMultipleTypes( array( 'button_style','formfields_layout','gridform_layout' ) );
+
         $fields = array();
 
-        $fields['form_fields'] =
+        $fields['formfields_layout'] =
             array( 'label'       => _('Form Fields Style'),
                    'form_tip'    => _('Choice the formatting of regular submit and user profile forms'),
                    'formatter'   => 'select',
                    'value'       => 'form_fields.tpl/form_fields',
-                   'options'     => array(
-                                        'form_fields.tpl/form_fields' => _('Field labels next to fields'),
-                                        'form_fields.tpl/stacked_form_fields' => _('Field labels above fields'),
-                                        'form_fields.tpl/fieldset_form_fields' => _('Field sets'),
-                                        ),
+                   'options'     => $ffiles['formfields_layout'],
                    'flags'       => CCFF_POPULATE_WITH_DEFAULT );
 
-        $fields['grid_form_fields'] =
+        $fields['gridform_layout'] =
             array( 'label'       => _('Grid Form Fields Style'),
                    'form_tip'    => _('Choice the formatting of grid forms'),
                    'formatter'   => 'select',
                    'value'       => 'form_fields.tpl/grid_form_fields',
-                   'options'     => array(
-                                        'form_fields.tpl/flat_grid_form_fields' => _('Matrix grid (all fields on one screen)'),
-                                        'form_fields.tpl/grid_form_fields' => _('Tab style (recommended for narrow layouts)'),
-                                        ),
+                   'options'     => $ffiles['gridform_layout'],
                    'flags'       => CCFF_POPULATE_WITH_DEFAULT );
+
+        $fields['button_style'] = array(
+                'label'     => _('Button Style'),
+                'formatter' => 'select',
+                'value'       => 'layouts/button_browser.php',
+                'options'   => $ffiles['button_style'],
+                'flags'     => CCFF_POPULATE_WITH_DEFAULT ,
+                );
+                
+
+        $ffiles = CCTemplateAdmin::GetMultipleLayouts( array( 'tab_pos', 'box_shape', 'layout',  ) );
 
         $fields['tab_pos'] = array(
                 'label'     => _('Tab Positions'),
                 'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_layouts',
                 'scroll'    => false,
-                'props'     => CCTemplateAdmin::GetLayouts('tab_pos'),
+                'props'     => $ffiles['tab_pos'],
                 'flags'     => CCFF_POPULATE,
                 );
 
@@ -242,7 +248,7 @@ class CCSkinLayoutForm extends CCEditConfigForm
                 'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_layouts',
                 'scroll'    => false,
-                'props'     => CCTemplateAdmin::GetLayouts('box_shape'),
+                'props'     => $ffiles['box_shape'],
                 'flags'     => CCFF_POPULATE,
                 );
 
@@ -251,7 +257,7 @@ class CCSkinLayoutForm extends CCEditConfigForm
                 'formatter' => 'metalmacro',
                 'macro'     => 'skin_editor.php/edit_layouts',
                 'scroll'    => true,
-                'props'     => CCTemplateAdmin::GetLayouts('layout'),
+                'props'     => $ffiles['layout'],
                 'flags'     => CCFF_POPULATE,
                 );
 

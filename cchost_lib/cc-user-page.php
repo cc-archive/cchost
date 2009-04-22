@@ -46,8 +46,8 @@ class CCUserPage
         if( $username && empty($uid) )
         {
             CCUtil::Send404(false);
-            CCPage::SetTitle(_('People'));
-            CCPage::Prompt( $username . '? ' . _('Sorry, we don\'t know who that is...'));
+            CCPage::SetTitle('str_people');
+            CCPage::Prompt( array( 'str_dont_know_user', $username ) );
             return;
         }
 
@@ -83,10 +83,11 @@ class CCUserPage
     function Profile($username)
     {
         require_once('cchost_lib/cc-page.php');
-        $user_real_name = CCDatabase::QueryItem("SELECT user_real_name FROM cc_tbl_user WHERE user_name ='{$username}'");
+        $fun = cc_fancy_user_sql();
+        $user_real_name = CCDatabase::QueryItem("SELECT {$fun} FROM cc_tbl_user WHERE user_name ='{$username}'");
         if( !$user_real_name )
         {
-            CCPage::Prompt(_("The system does not know that user."));
+            CCPage::Prompt('str_the_system_doesnt');
             CCUtil::Send404(false);
         }
         else
@@ -122,13 +123,14 @@ class CCUserPage
 
     function Hidden($username)
     {
-        $q = 'title=' . _('Non-public Files');
+        $page =& CCPage::GetPage();
+        $txt = $page->String('str_non_public_files');
+        $q = 'title=' . $txt;
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('title=str_hidden_list&t=unpub&f=page&unpub=1&mod=1&user='.$username);
         $query->Query($args);
         $this->_no_feeds = true;
-        $page =& CCPage::GetPage();
         $page->SetArg('qstring','');
     }
 
@@ -163,8 +165,10 @@ class CCUserPage
     {
         global $CC_GLOBALS;
 
+        $fun = cc_fancy_user_sql();
         $record = CCDatabase::QueryRow(
-             "SELECT user_id, user_name, user_real_name, user_num_uploads, user_num_reviews, user_num_reviewed,user_num_scores,user_num_posts "
+             "SELECT user_id, user_name, user_real_name, user_num_uploads, user_num_reviews, user_num_reviewed," .
+             "user_num_scores,user_num_posts,{$fun} "
              . "FROM cc_tbl_user WHERE user_name = '{$user}'");
 
         $tabs = array();
@@ -172,8 +176,8 @@ class CCUserPage
         if( $record['user_num_uploads'] )
         {
             $tabs['uploads'] = array (
-                    'text' => 'Uploads',
-                    'help' => 'Uploads',
+                    'text' => 'str_uploads',
+                    'help' => 'str_uploads',
                     'tags' => "uploads",
                     'limit' => '',
                     'access' => 4,
@@ -183,8 +187,8 @@ class CCUserPage
         }
 
         $tabs['profile'] = array (
-                    'text' => 'Profile',
-                    'help' => 'Profile',
+                    'text' => 'str_profile2',
+                    'help' => 'str_profile2',
                     'tags' => "profile",
                     'limit' => '',
                     'access' => 4,
@@ -221,8 +225,8 @@ class CCUserPage
                 if( $hidden )
                 {
                     $tabs['hidden'] = array (
-                                'text' => 'Hidden',
-                                'help' => 'non-public files',
+                                'text' => 'str_hidden',
+                                'help' => 'str_hidden_list',
                                 'tags' => "hidden",
                                 'limit' => '',
                                 'access' => 4,
@@ -234,10 +238,13 @@ class CCUserPage
         }
 
         $keys = array_keys($tabs);
+        $user_real = $record['fancy_user_name'];
         for( $i = 0; $i < count($keys); $i++ )
         {
-            $K = $keys[$i];
-            $tabs[$K]['tags'] = str_replace('%user_name%',$user,$tabs[$K]['tags']);
+            $T =& $tabs[$keys[$i]];
+            $T['tags'] = str_replace('%user_name%',$user,$T['tags']);
+            $T['help'] = str_replace('%user_name%',$user_real,$T['help']);
+            $T['text'] = str_replace('%user_name%',$user_real,$T['text']);
         }
 
         if( empty($default_tab_name) && !empty($CC_GLOBALS['user_extra']['prefs']['default_user_tab']) )
@@ -371,7 +378,7 @@ END;
                 WHERE $where
 END;
             $links = CCDatabase::QueryRows($sql);
-            $row['user_tag_links']['links0'] = array( 'label' => _('Favorite people'),
+            $row['user_tag_links']['links0'] = array( 'label' => 'str_favorites',
                                               'value' => $links );
         }
 

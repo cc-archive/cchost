@@ -765,16 +765,23 @@ class CCTable
     */
     function Insert($fields)
     {
-        $columns  = array_keys($fields);
-        $data     = array_values($fields);
-        $cols     = implode( ',', $columns );
-        $count    = count($data);
-        $values   = '';
-        for( $i = 0; $i < $count; $i++ )
-            $values .= " '" . addslashes($data[$i]) . "', ";
-        $values   = substr($values,0,-2);
-        $sql = "INSERT INTO {$this->_table_name} ($cols) VALUES ( $values )";
-        CCDatabase::Query($sql);
+        if( !empty($this->_watch_next_id) && !empty($fields[$this->_key_field]) )
+        {
+            $this->Update($fields);
+        }
+        else
+        {
+            $columns  = array_keys($fields);
+            $data     = array_values($fields);
+            $cols     = implode( ',', $columns );
+            $count    = count($data);
+            $values   = '';
+            for( $i = 0; $i < $count; $i++ )
+                $values .= " '" . addslashes($data[$i]) . "', ";
+            $values   = substr($values,0,-2);
+            $sql = "INSERT INTO {$this->_table_name} ($cols) VALUES ( $values )";
+            CCDatabase::Query($sql);
+        }
     }
 
     /**
@@ -939,9 +946,17 @@ class CCTable
     */
     function NextID()
     {
+        $this->_watch_next_id = true;
+        $sql = "INSERT INTO {$this->_table_name} () VALUES ()";
+        CCDatabase::Query($sql);
+        return CCDatabase::LastInsertID();
+        /*
+            This is open to race conditions
+            
         $sql = "SHOW TABLE STATUS LIKE '$this->_table_name'" ;
         $row = CCDatabase::QueryRow($sql);
         return( $row['Auto_increment'] );
+        */
     }
 
     function Lock($type='WRITE')

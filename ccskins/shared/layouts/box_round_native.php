@@ -8,7 +8,8 @@
 */
 ?>
 
-<script type="text/javascript" src="<?= $T->URL('js/DD_roundies_0.0.2a.js'); ?>"></script>
+<? $T->PrintOnce('js/DD_roundies_0.0.2a.js'); ?>
+
 <script type="text/javascript" >
  DD_roundies.addRule('div.box', '8px',true);
 </script>

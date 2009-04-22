@@ -98,6 +98,11 @@ class CCDatabase
         $qr = mysql_query($sql,$link);
         //$_sql_time = CCDebug::Chronometer($_sql_t);
 
+        if( preg_match('/^insert\s/i',trim($sql)) )
+        {
+            $insert_id =& CCDatabase::_last_insert_id();
+            $insert_id = mysql_insert_id();
+        }
 
         global $CC_GLOBALS;
 
@@ -245,6 +250,15 @@ class CCDatabase
     }
 
     /**
+    * Public interface to get the last insert id
+    *
+    */
+    function LastInsertID()
+    {
+        return CCDatabase::_last_insert_id();
+    }
+    
+    /**
     * Internal:  Returns the path to the current database config file
     *
     * @param string $file Name of config file to load (default is 'cc-config-db.php')
@@ -271,6 +285,18 @@ class CCDatabase
         static $_link;
         return $_link;
     }
+    
+    /**
+    * Internal:  Returns the latest INSERT id
+    *
+    * @access private
+    **/
+    function & _last_insert_id()
+    {
+        static $_id;
+        return $_id;
+    }
+    
 }
 
 ?>
