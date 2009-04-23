@@ -25,6 +25,7 @@
 .box h2 {
     margin: -10px 8px 8px 5%;
     padding: 4px;
+    text-align: center;
 }
 .cc_form div#cc_form_help_container {
     /* width: 82%; */

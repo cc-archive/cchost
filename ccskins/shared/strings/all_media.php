@@ -364,12 +364,16 @@ $GLOBALS['str_nsfw_mark_this_upload'] = _('Mark this upload as %s if it contains
 $GLOBALS['str_nsfw_t']                = _('This upload might be %sNot Safe For Work%s');
 $GLOBALS['str_ok']                    = _('ok');
 
+$GLOBALS['str_openids']               = _('OpenId');
+$GLOBALS['str_openid_contact']        = _('Contact Through OpenID');
+$GLOBALS['str_openid_contact_disc']   = _('This account has not shared their email address with us. However you may be able to contact them using an OpenID identifier:');
 $GLOBALS['str_openid_display_name']   = _('Display name:');
 $GLOBALS['str_openid_enabled']        = _('OpenID Enabled');
 $GLOBALS['str_openid_exist_user']     = _('Existing user name:');
 $GLOBALS['str_openid_existing']       = _('Use an existing account');
 $GLOBALS['str_openid_existing_tip1']  = _('We could not find an account that might match your OpenID information. Enter your existing account information if you have one.');
 $GLOBALS['str_openid_existing_tip2']  = _('If none of the accounts above are yours, enter your existing account information if you have one.');
+$GLOBALS['str_openid_login_help']     = _('Instead of an account name and password, you can %sLog in using your OpenID%s');
 $GLOBALS['str_openid_login_title']    = _('Log in with OpenId');
 $GLOBALS['str_openid_match']          = _('Select an existing account');
 $GLOBALS['str_openid_match_help']     = _('You are logging in using your verfied OpenID: <b>%s</b>.');
@@ -378,7 +382,16 @@ $GLOBALS['str_openid_match_tip']      = _('One of these accounts may be yours. S
 $GLOBALS['str_openid_new']            = _('Create a new account');
 $GLOBALS['str_openid_new_tip']        = _('If you do not have an existing account, enter a user name. Only alpha characters and numbers are allowed.');
 $GLOBALS['str_openid_new_user']       = _('New user name:');
+$GLOBALS['str_openid_notify']         = _('Missing e-mail Address');
+$GLOBALS['str_openid_notify_disc']    = _('You can not receive email notification until you supply us with an email address. You can do that by editing your profile.');
 $GLOBALS['str_openid_password']       = _('Password:');
+$GLOBALS['str_openid_stop']           = _('Stop Using OpenID:');
+$GLOBALS['str_openid_tip']            = _('Check this box to STOP using the selected OpenID.');
+$GLOBALS['str_openid_tip2']           = $GLOBALS['str_openid_tip'] . ' ' ._('If you remove this OpenID, an account password will be emailed to you.');
+
+$GLOBALS['str_openid_you_are_rec']    = _('You are receiving this email because, without an OpenID, you will need a new password.');
+$GLOBALS['str_openid_new_pass']       = _('New Password Generated');
+
 
 $GLOBALS['str_openid_r_bad_chars']    = _('Invalid characters in account name');
 $GLOBALS['str_openid_r_bad_password'] = _('Incorrect password');

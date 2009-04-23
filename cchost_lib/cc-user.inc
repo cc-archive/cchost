@@ -335,15 +335,12 @@ class CCUserAPI
 
                 if( !empty($fields['user_password']) && ( $fields['user_password'] != $old_password ) )
                 {
-                    $url = ccl('login');
+                    require_once('cchost_lib/cc-login.php');
+                    $login = new CCLogin();
+                    $login->_create_login_cookie(1,$username,$fields['user_password']);
                 }
-                else
-                {
-                    // this sends us to the save page
-                    // I added because problem with getting the new language
-                    // visible as soon as changed upon save (Jon)
-                    $url = ccl('people','profile','save');
-                }
+
+                $url = ccl('people',$username, 'profile');
 
                 CCUtil::SendBrowserTo($url);
             }
@@ -351,23 +348,6 @@ class CCUserAPI
 
         if( !$ok )
             CCPage::AddForm( $form->GenerateForm() );
-    }
-
-    /**
-    *
-    * This just displays a message about the changes being saved.
-    *
-    * This is really a stub for moving the save profile to this method, but for
-    * now it is just a quick display on the page saying changes were saved
-    * and is ncessary to display this message in the newly selected language.
-    *
-    * @access   public
-    */
-    function SaveProfile()
-    {
-        require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle("str_edit_profile");
-        CCPage::Prompt("str_changes_were_saved");
     }
 
     function AddToFavs($user_to_add_or_remove)
@@ -484,9 +464,6 @@ class CCUserAPI
         CCEvents::MapUrl( 'people/profile',   array('CCUserAPI','EditProfile'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', 
             _('Edit user profile'), CC_AG_USER );
-
-        CCEvents::MapUrl( 'people/profile/save', array('CCUserAPI','SaveProfile'),    
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
 
         CCEvents::MapUrl( 'people/addtofavs', array('CCUserAPI','AddToFavs'),  
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{username}', 

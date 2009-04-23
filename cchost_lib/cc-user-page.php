@@ -338,10 +338,14 @@ END;
         }
 
         $feed_url = url_args( ccl('api','query'), 't=user_feeds&u='.$row['user_name'] );
-        $page =& CCPage::GetPage();
-        $feed_link = 
-            $page->String( array('str_user_feed_link','<a href="' . $feed_url . '">', '</a>', $row['user_real_name']));
-        $row['user_fields'][] = array( 'label' => 'str_user_feeds', 'value' => $feed_link , 'id' => 'user_feeds' );
+        $feed_link = array('str_user_feed_link',
+                                   '<a href="' . $feed_url . '">',
+                                   '</a>',
+                                   $row['user_real_name']);
+                                   
+        $row['user_fields'][] = array( 'label' => 'str_user_feeds',
+                                       'value' => $feed_link ,
+                                       'id' => 'user_feeds' );
 
         if( CCUser::IsLoggedIn() && ($row['user_id'] != CCUser::CurrentUser()) )
         {

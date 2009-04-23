@@ -39,21 +39,6 @@ function CC_pending_pool_remix()
 }
 
 
-if( !function_exists('array_combine') )
-{
-    function array_combine($keys,$values)
-    {
-        $c = count($keys);
-        $dest = array();
-        $vkeys = array_keys($values);
-        for( $i = 0; $i < $c; $i++ )
-        {
-            $dest[$keys[$i]] = $values[$vkeys[$i]];
-        }
-        return $dest;
-    }
-}
-
 function list_all_users()
 {
    $users = new CCUsers();

@@ -29,5 +29,8 @@ if( !defined('IN_CC_HOST') )
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCOpenID' , 'OnGetConfigFields' ), 'cchost_lib/ccextras/cc-openid.inc' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCOpenID', 'OnMapUrls' ), 'cchost_lib/ccextras/cc-openid.inc' );
 CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,    array( 'CCOpenID', 'OnFormFields'), 'cchost_lib/ccextras/cc-openid.inc' );
+CCEvents::AddHandler(CC_EVENT_FORM_VERIFY,    array( 'CCOpenID', 'OnFormVerify'), 'cchost_lib/ccextras/cc-openid.inc'  );
+CCEvents::AddHandler(CC_EVENT_FORM_INIT,    array( 'CCOpenID', 'OnFormInit'), 'cchost_lib/ccextras/cc-openid.inc'  );
+CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE, array( 'CCOpenID' , 'OnFilterUserProfile'), 'cchost_lib/ccextras/cc-openid.inc'  );
 
 ?>
