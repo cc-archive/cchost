@@ -202,7 +202,9 @@ function cc_openid_onlogin( $api, $openid )
         if (Auth_OpenID::isFailure($form_html)) {
             ccoi_displayError("Could not redirect to server: " . $form_html->message);
         } else {
+            $form_html = str_replace('</html>','<h3>Contacting OpenID site...</h3></html>',$form_html);
             print $form_html;
+            exit;
         }
     }
     

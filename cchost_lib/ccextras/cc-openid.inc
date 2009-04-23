@@ -53,12 +53,17 @@ class CCOpenID
 
     function OnFormFields( &$form, &$fields )
     {
+        global $CC_GLOBALS;
+
+        if( empty($CC_GLOBALS['openid-type']) )
+            return;
+            
         if( (strtolower( get_class($form) ) == 'ccnewuserform') ||
             (strtolower( get_class($form) ) == 'ccuserloginform') )
         {
             $url = ccl('login','openid');
             $html =<<<EOF
-<p><a href="{$url}" id="cc_openid_enabled">Log in using OpenID</a>
+<p>Instead of an account name and password, you can <a href="{$url}" id="cc_openid_enabled">Log in using OpenID</a>
 EOF;
             $form->SetHelpText($html);
         }
