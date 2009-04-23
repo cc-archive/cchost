@@ -38,10 +38,13 @@
 #license_info p img {
  }
 
-#remix_info p img {
-    position: absolute;
-    top: -30px;
-    left: -45px;
+#remix_info img, #pick_box img {
+    float: left;
+    margin: 4px;
+}
+
+#remix_info h2, #pick_box h2 {
+    padding-left: 30px;
 }
 
 #remix_info {
@@ -49,26 +52,14 @@
 }
 
 #remix_info p {
-    position: relative;
     margin: 0px;
 }
 
-#remix_info p img {
-    position: absolute;
-    top: -70px;
-    left: -35px;
-}
 
 #pick_box p {
-    position: relative;
     margin: 0px;
 }
 
-#pick_box p img {
-    position: absolute;
-    top: -46px;
-    left: -38px;
-}
 
 .pick_reviewer {
     margin-top: 12px;
@@ -76,11 +67,6 @@
     font-style: italic;
 }
 
-#remix_info div  {
-}
-
-#remix_info div span {
-}
 
 .remix_link {
     font-weight: bold;

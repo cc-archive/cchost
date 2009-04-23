@@ -128,6 +128,9 @@
 <script type="text/javascript"> 
     new modalHook( [ 'search_site_link', 'mi_login', 'mi_register']);  
     $$('.selected_tab a').each( function(e) { e.style.cursor = 'default'; e.href = 'javascript:// disabled'; } );
+%loop(end_script_text,tblock)%
+    %(#tblock)%
+%end_loop%
 </script>
 
 <!--[if lt IE 7.]>

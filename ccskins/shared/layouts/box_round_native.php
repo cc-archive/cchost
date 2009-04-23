@@ -18,11 +18,12 @@
 .box {
     border: 1px solid #99A;
     margin: 7px;
-    padding: 0px 8px 8px 8px;
-    background: url('<?= $T->URL('images/native-box-bg.png') ?>') repeat-x top left;
+    padding: 12px 8px 8px 8px;
+    background: white url('<?= $T->URL('images/native-box-bg.png') ?>') repeat-x top left;
 }
+
 .box h2 {
-    margin: 0px 8px 8px 5%;
+    margin: -10px 8px 8px 5%;
     padding: 4px;
 }
 .cc_form div#cc_form_help_container {

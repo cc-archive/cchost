@@ -3,7 +3,7 @@
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-cc_query_fmt('f=html&noexit=1&nomime=1&t=list_files&ids=' . $A['howididit_upload']); ?>
+cc_query_fmt('paging=on&f=html&noexit=1&nomime=1&t=list_files&ids=' . $A['howididit_upload']); ?>
 <div class="cc_howididit"><?
       $info = $A['howididit_info'];
       $arr = $A['howididit_fields'];
