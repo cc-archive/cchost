@@ -1,5 +1,9 @@
 <?
 
+function _t_util_empty($T,$A)
+{
+}
+
 function _t_util_format_signature($T,$A)
 {
     print $T->String('str_from'). " <a href=\"{$A['root-url']}\">{$A['site-title']}</a>";

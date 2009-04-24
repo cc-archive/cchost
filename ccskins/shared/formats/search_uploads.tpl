@@ -56,4 +56,6 @@ EOF;
    </div>
 %end_loop%
 </div>
-%call(prev_next_links)%
+%if(prev_next_links)%<!-- -->
+  %call(prev_next_links)%<!-- -->
+%end_if%  

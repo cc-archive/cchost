@@ -62,11 +62,19 @@ class CCSkin
 
         // this seems like (memory) overkill, need to optimize
         $this->vars = array_merge($CC_GLOBALS,$this->vars,$site_logo);
-        
-        // for compat with pre 5.0.beta.2 
-        if( empty($this->vars['head-type']) || (strstr(cc_current_url(),'admin/skins/layout')!=-1))
-            $this->vars['head-type'] = 'ccskins/shared/head.tpl';
 
+        $curl = cc_current_url();
+        // for compat with pre 5.0.beta.2 
+        if( empty($this->vars['head-type']) ||
+           (strpos($curl,'admin/skins/layout')!==false) ||
+           (strpos($curl,'admin/colors')!==false) )
+        {
+            $this->vars['head-type'] = 'ccskins/shared/head.tpl';
+        }
+
+        // more compat stuff
+        $this->vars['prev_next_links'] = 'util.php/empty';
+        
         if( CCUser::IsLoggedIn() )
         {
             $this->vars['logged_in_as'] = CCUser::CurrentUserName();
@@ -303,22 +311,6 @@ class CCSkin
             $f_css = fopen($css_file,   'w');
             $f_inc = fopen($inc_file,   'w');
 
-            // There is already a list of js files in this->var['script_links'] and they
-            // will be written to the cache first, but the customizations are PHP that
-            // generates JS and CSS as well as assigns PHP variables.
-            // so we will parse those first and add any links we find links or blocks in
-            // the generated HTML
-
-            ob_start();
-            $cache_settings = $this->AddCustomizations();
-            $text = ob_get_contents();
-            ob_end_clean();
-
-            // We'll need to load these every session as PHP
-            if( !empty($cache_settings['end_script_text']) )
-                unset($cache_settings['end_script_text']);
-            fwrite($f_inc,serialize($cache_settings));
-
             // we're going to suck in all the CSS files 
 
             if( !empty($this->vars['style_sheets']) ) foreach( $this->vars['style_sheets'] as $css ) {
@@ -335,6 +327,22 @@ class CCSkin
                     }
                     $this->_write_css($f_css,$text);
             }
+
+            // There is already a list of js files in this->var['script_links'] and they
+            // will be written to the cache first, but the customizations are PHP that
+            // generates JS and CSS as well as assigns PHP variables.
+            // so we will parse those first and add any links we find links or blocks in
+            // the generated HTML
+
+            ob_start();
+            $cache_settings = $this->AddCustomizations();
+            $text = ob_get_contents();
+            ob_end_clean();
+
+            // We'll need to load these every session as PHP
+            if( !empty($cache_settings['end_script_text']) )
+                unset($cache_settings['end_script_text']);
+            fwrite($f_inc,serialize($cache_settings));
 
 
             // now parse out the css/script blocks and links

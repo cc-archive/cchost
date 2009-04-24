@@ -19,8 +19,8 @@
 a.small_button,
 #do_remix_search,
 a.cc_gen_button {
-    color: #333;
-    background: url('<?= $T->URL('images/native-box-bg.png') ?>') repeat-x top left;
+    color: #443;
+    background: white url('<?= $T->URL('images/native-box-bg.png') ?>') repeat-x top left;
 }
 
 a.cc_gen_button {
@@ -32,21 +32,22 @@ a.cc_gen_button {
     font-size: 9px;
     font-weight: normal;
     cursor: pointer;
-    border: 1px solid black;
+    border: 1px solid #555;
 }
 
 a.cc_gen_button span {
     display: block;
     text-align: center;
-    padding: 5px 7px 6px 2px;
+    padding: 2px 7px 3px 2px;
 }
 
 a.cc_gen_button:hover,
 a.small_button:hover,
 #do_remix_search:hover  {
     color: black;
-    background: #FFF;
+    background: white;
     text-decoration: none;
+    border: 1px solid black;
 }
 
 a.cc_gen_button:hover span {

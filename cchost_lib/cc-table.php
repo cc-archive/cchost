@@ -768,6 +768,7 @@ class CCTable
         if( !empty($this->_watch_next_id) && !empty($fields[$this->_key_field]) )
         {
             $this->Update($fields);
+            $this->_watch_next_id = null;
         }
         else
         {
@@ -946,17 +947,25 @@ class CCTable
     */
     function NextID()
     {
-        $this->_watch_next_id = true;
-        $sql = "INSERT INTO {$this->_table_name} () VALUES ()";
-        CCDatabase::Query($sql);
-        return CCDatabase::LastInsertID();
-        /*
-            This is open to race conditions
+        if( 0 )
+        {
+            // sigh, this doesn't work for reviews...
+            // will investigate later...
             
-        $sql = "SHOW TABLE STATUS LIKE '$this->_table_name'" ;
-        $row = CCDatabase::QueryRow($sql);
-        return( $row['Auto_increment'] );
-        */
+            $this->_watch_next_id = true;
+            $sql = "INSERT INTO {$this->_table_name} () VALUES ()";
+            CCDatabase::Query($sql);
+            return CCDatabase::LastInsertID();
+        }
+        else
+        {
+            /*
+                This is open to race conditions
+            */
+            $sql = "SHOW TABLE STATUS LIKE '$this->_table_name'" ;
+            $row = CCDatabase::QueryRow($sql);
+            return( $row['Auto_increment'] );
+        }
     }
 
     function Lock($type='WRITE')
