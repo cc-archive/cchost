@@ -150,9 +150,9 @@ class CCAdminPoolsForm extends CCForm
     }
 }
 
-class CCAddLocalPoolForm extends CCForm
+class CCAddPoolWrapperForm extends CCForm
 {
-    function CCAddLocalPoolForm()
+    function CCAddPoolWrapperForm()
     {
         $this->CCForm();
 
@@ -184,7 +184,7 @@ class CCAddLocalPoolForm extends CCForm
                            'flags'      => CCFF_POPULATE  ),
                );
         $this->AddFormFields($fields);
-        $help = 'Use this form to create a "fake" remote Sample Pool for a site that does not implement the Sample Pool API. Items in this pool will be entered by "hand" by you instead of remotely searched from another site.';
+        $help = 'Use this form to create a wrapper for a remote Sample Pool that does not implement the Sample Pool API. Items in this wrapper pool will be entered by "hand" by you instead of remotely searched from another site.';
         $this->SetFormHelp($help);
     }
 }

@@ -131,6 +131,8 @@ function _t_util_print_bread_crumbs(&$T,&$A)
 
 function _t_util_print_client_menu(&$T,&$A)
 {
+    $btn = empty($A['use_buttons']) ? '' : 'class="small_button"';
+    
     ?><link rel="stylesheet" type="text/css" href="<?= $T->URL('css/client_menu.css'); ?>" title="Default Style" /><?
 
     if( !empty($A['client_menu_help']) )
@@ -140,15 +142,33 @@ function _t_util_print_client_menu(&$T,&$A)
     print '<table class="client_menu_table">';
 
     foreach( $A['client_menu'] as $I )
-    {
+    {        
         ?>
-<tr><th><a href="<?= $I['action'] ?>"><?= $I['menu_text'] ?></a></th><td>
+<tr><th>
+        <? if( !empty($I['actions']) ) {
+                foreach( $I['actions'] as $act )
+                {
+                    ?>
+                      <a <?=$btn?> href="<?= $act['action'] ?>"><?= $act['menu_text'] ?></a>
+                    <?
+                }
+            }
+        
+            if( !empty($I['action']) ) {
+        ?>
+            <a <?=$btn?> href="<?= $I['action'] ?>"><?= $I['menu_text'] ?></a>
         <?
-        if( !empty($I['help']) )
-        {
-            ?> <span class="hint"><?= $T->String($I['help']) ?></span> <?
-        }
-        print '</td></tr>';
+            }
+        ?>
+    </th>
+    <td>
+        <?
+            if( !empty($I['help']) ) {
+                ?> <span class="hint"><?= $T->String($I['help']) ?></span> <?
+            }
+        ?>
+    </td></tr>
+<?    
     }
 
     print '</table>';
@@ -158,39 +178,7 @@ function _t_util_print_client_menu(&$T,&$A)
     }
 }
 
-function _t_util_print_client_menux(&$T,&$A)
-{
-    ?><link rel="stylesheet" type="text/css" href="<?= $T->URL('css/client_menu.css'); ?>" title="Default Style" /><?
-
-    if( !empty($A['client_menu_help']) )
-    {
-        ?><div class="client_menu_help box"><?= $A['client_menu_help'] ?></div><?
-    }
-
-    $items = $A['client_menu'];
-    $count = count($items);
-    $K = array_keys($items);
-
-    ?><ul class="client_menu"><?
-
-    for( $i = 0; $i < $count; $i++ )
-    {
-        $I =& $items[ $K[$i] ];
-        ?><li><a href="<?= $I['action'] ?>"><span><?= $I['menu_text'] ?></span></a> <?
-        if( !empty($I['help']) )
-        {
-            ?> <span class="hint"><?= $T->String($I['help']) ?></span> <?
-        }
-    }
-    
-    ?></ul><?
-
-    if( !empty($A['client_menu_hint']) )
-    {
-        ?><div class="client_menu_hint"><?= $A['client_menu_hint'] ?></div><?
-    }
-}
-
+/* this is deprecated - don't call */
 function _t_util_prev_next_links(&$T,&$A) 
 {
     print '<table id="cc_prev_next_links"><tr >';

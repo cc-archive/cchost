@@ -36,9 +36,9 @@ define('CC_NTFY_ED_PICK',           0x0008 );
 define('CC_NTFY_THEY_UPLOADED',     0x0010 );
 define('CC_NTFY_IVE_BEEN_REMIXED',  0x0020 );
 define('CC_NTFY_IVE_BEEN_RATED',    0x0040 );
-define('CC_NTFY_TRACKBACK',          0x0080 );
+define('CC_NTFY_TRACKBACK',         0x0080 );
 
-define('CC_NTFY_MAX',    CC_NTFY_IVE_BEEN_RATED );
+define('CC_NTFY_MAX',    CC_NTFY_TRACKBACK );
 
 class CCNotifications extends CCTable
 {
@@ -69,7 +69,7 @@ class CCNotifyAPI
     {
         require_once('cchost_lib/cc-page.php');
 
-        CCPage::SetTitle(_('My Notifications'));
+        CCPage::SetTitle('str_notify_edit');
 
         // figure out what fields we are editing
 
@@ -82,9 +82,9 @@ class CCNotifyAPI
             $where['user_name'] = $other_user_name;
             $user_happy_name = $users->QueryItem('user_real_name',$where);
             $fields = array(
-                array( 'label' => sprintf(_('%s has been remixed'),$user_happy_name),
+                array( 'label' => array('str_notify_has_been_remixed',$user_happy_name),
                        'flag' => CC_NTFY_THEY_BEEN_REMIXED, ),
-                array( 'label' => sprintf(_('%s uploads something new'),$user_happy_name),
+                array( 'label' => array('str_notify_uploads_some',$user_happy_name),
                        'flag' => CC_NTFY_THEY_UPLOADED, ),
                 );
         }
@@ -94,20 +94,16 @@ class CCNotifyAPI
             // to get notified when people affect her work
 
             $fields = array(
-                array( 'label' => _("I've been remixed"),
+                array( 'label' => 'str_notify_i_been_remixed',
                        'flag' => CC_NTFY_IVE_BEEN_REMIXED, ),
-                array( 'label' => _("I've been reviewed"),
+                array( 'label' => 'str_notify_i_been_reviewed',
                        'flag' => CC_NTFY_IVE_BEEN_REVIEWED, ),
-                array( 'label' => _("I've been replied to"),
+                array( 'label' => 'str_notify_i_been_replied',
                        'flag' => CC_NTFY_REVIEW_REPLY, ),
-                array( 'label' => _("I've been rated"),
+                array( 'label' => 'str_notify_i_been_rated',
                        'flag' => CC_NTFY_IVE_BEEN_RATED, ),
-                array( 'label' => _("I've been used in a trackback"),
+                array( 'label' => 'str_notify_i_been_tracked',
                        'flag' => CC_NTFY_TRACKBACK, ),
-/*
-                array( 'label' => _('Any upload has been editor picked'),
-                       'flag' => CC_NTFY_ED_PICK, ),
-*/
                 );
         }
 
@@ -126,7 +122,7 @@ class CCNotifyAPI
             $args['notify_other_user'] = 0;
         }
         $current_notifications = $notifications->QueryRow($args);
-        
+
         require_once('cchost_lib/ccextras/cc-notify-forms.inc');
 
         $form = new CCEditUserNotificationForm($fields);
@@ -138,6 +134,7 @@ class CCNotifyAPI
             $form->ValidateFields();
             $form->GetFormValues($values);
             $mask = 0;
+            // $K is 'f_[n]' where [n] is the flag number
             foreach( $values as $K => $V )
             {
                 if( $V )
@@ -154,7 +151,7 @@ class CCNotifyAPI
                 $notifications->Insert($args);
             }
             
-            CCPage::Prompt(_('Notifications have been updated'));
+            CCPage::Prompt('str_notify_updated');
         }
         else
         {
@@ -234,6 +231,8 @@ class CCNotifyAPI
 
     function OnReview(&$review)
     {
+        require_once('cchost_lib/cc-page.php');
+        $page   =& CCPage::GetPage();
         $uploads =& CCUploads::GetTable();
         $uploader = $uploads->QueryItemFromKey('upload_user',$review['topic_upload']);
         if( $uploader )
@@ -244,16 +243,16 @@ class CCNotifyAPI
             $notify_row = $notifications->QueryRow($where);
             if( $notify_row )
             {
-                $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . 
+                $body = "\n\n" . $page->String('str_notify_dont_respond')  . 
                 "\n\n" . 
-                _('This is a notification that "%s" has been reviewed by %s') .
+                $page->String('str_notify_reviewed_by') .
                 "\n\n%s\n";
                 $upload_name = $uploads->QueryItemFromKey('upload_name',$review['topic_upload']);
                 $body = sprintf($body,$upload_name,
                                       $review['user_real_name'],
                                       $review['topic_permalink']);
 
-                $subject = _('Review notification');
+                $subject = $page->String('str_notify_review');
                 $nrarray = array( $notify_row );
                 $this->_do_notify($subject, $body, $nrarray  );
             }
@@ -262,6 +261,9 @@ class CCNotifyAPI
 
     function OnTrackbacksApproved(&$trackback_info)
     {
+        require_once('cchost_lib/cc-page.php');
+        $page   =& CCPage::GetPage();
+        
         $upload_id = $trackback_info['pool_tree_parent'];
         $pool_item_id = $trackback_info['pool_tree_pool_child'];
 
@@ -275,18 +277,16 @@ class CCNotifyAPI
         {
             $item_url = ccl('pools','item',$pool_item_id);
             
-            $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . 
-            "\n\n" . 
-            _('This is a notification that "%s" has been used in a trackback:') .
+            $body = "\n\n" . $page->String('str_notify_dont_respond')  . 
+            "\n\n" .
+            $page->String('str_notify_track_used') .
             "\n\n%s\n";
             $body = sprintf($body,$upload_name,$item_url);
 
-            $subject = _('Trackback notification');
+            $subject = $page->String('str_notify_trackback');
             $nrarray = array( $notify_row );
             $this->_do_notify($subject, $body, $nrarray  );
         }
-
-
     }
     
     function OnReply(&$reply, &$original)
@@ -373,9 +373,11 @@ EOF;
             $url = ccl('thread',$C['topic_thread']) . '#' . $reply['topic_id'];
         }
 
-        $subject = _('Topic Reply Notification');
-        $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 
-        'This is a notification of a reply to a review thread, "%s":' . 
+        require_once('cchost_lib/cc-page.php');
+        $page   =& CCPage::GetPage();
+        $subject = $page->String('str_notify_topic');
+        $body = "\n\n" . $page->String('str_notify_dont_respond')  . "\n\n" . 
+        $page->String('str_notify_replied') . 
         "\n\n%s\n";
         $body = sprintf( $body, $C['topic_name'], $url );
 
@@ -463,10 +465,12 @@ EOF;
         $configs =& CCConfigs::GetTable();
         $ttags = $configs->GetConfig('ttag');
         $site_name = $ttags['site-title'];
+        require_once('cchost_lib/cc-page.php');
+        $page   =& CCPage::GetPage();
         
-        $subject = sprintf(_('Upload by %s'),$user_real_name);
-        $body = "\n\n" . _('PLEASE DO NOT RESPOND TO THIS EMAIL') . "\n\n" . 
-        _('This is a notification that %s has just uploaded new material to %s')
+        $subject = $page->String(array('str_notify_upload_by',$user_real_name));
+        $body = "\n\n" . $page->String('str_notify_dont_respond')  . "\n\n" . 
+        $page->String('str_notify_uploaded')
         . "\n\n\"%s\"\n\n%s\n";
         $body = sprintf($body, $user_real_name,
                                $ttags['site-title'],
@@ -475,16 +479,18 @@ EOF;
 
         if( $parents )
         {
-            $body .= _("It uses samples from:\n");
+            $body .= "\n" . $page->String('str_notify_uses') . "\n\n";
             $count = count($parents);
             for( $i = 0; $i < $count; $i++ )
             {
                 $R =& $parents[$i];
-                $body .= sprintf(_('%s by %s'), "\n \"{$R['upload_name']}\"", "{$R['user_real_name']}\n");
+                $body .= "\n" . $page->String(
+                    array('str_notify_uses_by', "\"{$R['upload_name']}\"", $R['user_real_name']))
+                    . "\n";
             }
         }
 
-        $body .= "\n" . sprintf(_("Thank you, %s"), "\n" . "\n" . $ttags['site-title']);
+        $body .= "\n\n" . $page->String(array('str_notify_upload_thanks', "\n\n" . $ttags['site-title']));
 
         $this->_do_notify($subject, $body, $notify_rows);
     }
@@ -507,12 +513,15 @@ EOF;
         $mailer = new CCMailer();
         $mailer->Subject( $subject );
         $users =& CCUsers::GetTable();
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        $sendtext = $page->String('str_notify_sent_to');
         foreach( $user_ids as $user_id )
         {
             $wx['user_id'] = $user_id;
             $urow = $users->QueryRow($wx,'user_email,user_name,user_real_name');
             $mailer->To($urow['user_email']);
-            $u_body = $body . "\n\nSent to account: {$urow['user_real_name']} ({$urow['user_name']})\n";
+            $u_body = $body . "\n\n {$sendtext}: {$urow['user_real_name']} ({$urow['user_name']})\n";
             $mailer->Body($u_body);
             $ok = @$mailer->Send();
             if( !$ok )

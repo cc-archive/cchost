@@ -75,6 +75,10 @@ class CCOpenID
             case 'cceditusernotificationform':
             {
                 $user_name = CCUser::CurrentUserName();
+                $user_email = CCDatabase::QueryItem(
+                    'SELECT user_email FROM cc_tbl_user WHERE user_name=\''.$user_name.'\'');
+                if( !empty($user_email) )
+                    return; // we're cool, let the system handle it.
                 $url = ccl('openid','notify',$user_name);
                 CCUtil::SendBrowserTo($url);
                 break;

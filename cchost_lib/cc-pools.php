@@ -191,7 +191,7 @@ class CCPool
         exit; // this is an ajax call
     }
 
-    function IsLocalPool($api_url)
+    function IsPoolWrapper($api_url)
     {
         return substr($api_url,0,7) != 'http://';
     }
@@ -202,7 +202,7 @@ class CCPool
         $pool = $pools->QueryKeyRow($pool_id);
         $api_url = $pool['pool_api_url'];
         $query = urlencode($query);
-        if( !CCPool::IsLocalPool($api_url) )
+        if( !CCPool::IsPoolWrapper($api_url) )
         {
             require_once('cchost_lib/cc-api.php');
             $query_url = CCRestAPI::MakeUrl( $api_url, 'search', 'query=' . $query );
@@ -274,7 +274,7 @@ class CCPool
         }
     }
 
-    function AddLocalPool($info)
+    function AddPoolWrapper($info)
     {
         $pools =& CCPools::GetTable();
         $info['pool_id'] = $pools->NextID();

@@ -311,6 +311,49 @@ class CCNavigatorAdmin
             {
                 $keys = array_keys($pages);
                 $count = count($keys);
+                $MI = array();
+                for( $i = 0; $i < $count; $i++ )
+                {
+                    $pname = $keys[$i];
+                    $actions = array();
+                    $actions[] = array(
+                                    'action' => ccl('admin','tabs',$pname,'rename'),
+                                    'menu_text'   => _('Rename')
+                                    );
+                    $actions[] = array(
+                                    'action' => ccl('admin','tabs',$pname,'edit'),
+                                    'menu_text'   => _('Edit tabs')
+                                    );
+
+                    if( $i > 0 )
+                    {
+                        $actions[] = array(
+                                        'action' => ccl('admin','tabs',$pname,'deletepage'),
+                                        'menu_text'   => _('Delete')
+                                        );
+                        $actions[] = array(
+                                        'action' => ccl('admin','tabs',$pname,'makedefault'),
+                                        'menu_text'   => _('Make default')
+                                        );
+                    }
+                    $MI[] = array( 'actions' => $actions,
+                                   'help' => '<b>' . $pname . '</b> <br /><br />&nbsp;'
+                                  );
+                }
+                $MI[] = array( 'action' => url_args( ccl('admin','tabs'), 'cmd=addpage' ),
+                              'menu_text' => _('Add new tab set')
+                              );
+                $main_crumb = true;
+                $title = _("Manage Navigator Tab Sets");
+                CCPage::PageArg('use_buttons',1);
+                CCPage::PageArg('client_menu',$MI,'print_client_menu');
+                break;
+            }
+
+            case 'editpages2':
+            {
+                $keys = array_keys($pages);
+                $count = count($keys);
                 $html = '<style type="text/css">#tabtable td{white-space:nowrap;padding-right:20px;}</style><table id="tabtable" style="width: 60%;margin-top: 40px;">';
                 for( $i = 0; $i < $count; $i++ )
                 {
