@@ -473,7 +473,7 @@ EOF;
         }
     }
 
-    function ViewThread($thread_id)
+    function ViewThread($thread_id='')
     {
         global $CC_GLOBALS;
 
@@ -559,10 +559,13 @@ EOF;
         CCPage::PageArg('thread_commands',$commands);
     }
 
-    function User($user_name)
+    function User($user_name='')
     {
-        list( $user_real_name, $user_id ) = 
-            CCDatabase::QueryRow('SELECT user_real_name, user_id FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'', false);
+        if( !empty($user_name) )
+        {
+            list( $user_real_name, $user_id ) = 
+                CCDatabase::QueryRow('SELECT user_real_name, user_id FROM cc_tbl_user WHERE user_name = \'' . $user_name . '\'', false);
+        }
         if( empty($user_id) )
         {
             CCUtil::Send404();

@@ -116,7 +116,11 @@ class CCRestAPI
     function File($guid='')
     {
         if( empty($guid) )
+        {
+            if( empty($_REQUEST['guid']) )
+                CCUtil::Send404(true,"missing guid");
             $guid = urldecode($_REQUEST['guid']);
+        }
 
         $upload_id = CCRestAPI::_get_upload_id_from_guid($guid);
         require_once('cchost_lib/cc-query.php');

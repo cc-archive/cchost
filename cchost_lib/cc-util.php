@@ -264,7 +264,11 @@ class CCUtil
         if( $exit )
         {
             if( $file )
-                $file = ' ' . ccs($file) . ' (' . $line . ')';
+            {
+                $file = ' ' . ccs($file);
+                if( $line )
+                    $file .= ' (' . $line . ')';
+            }
             print(_('file not found') . $file );
             exit;
         }

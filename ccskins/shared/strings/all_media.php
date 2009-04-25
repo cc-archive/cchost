@@ -200,12 +200,18 @@ $GLOBALS['str_filter_this_many']             = _('This many');
 $GLOBALS['str_filter_yesterday']             = _('Yesterday');
 
 $GLOBALS['str_flag']      = _('Flag');
+$GLOBALS['str_flag_content'] = _('Flag Content');
+$GLOBALS['str_flag_content_has'] = _('Content has been flagged');
+$GLOBALS['str_flag_err'] = _('An error occurred trying to contact the site');
 $GLOBALS['str_flag_this_upload']      = _('Flag this upload for possible violation of terms');
 $GLOBALS['str_flag_this_topic']       = _('Flag this topic for possible violation of terms');
 $GLOBALS['str_flag_this_s_contains']  = _("This %s contains material that may violate the terms of the site");
 $GLOBALS['str_flag_s_s']  = _('Flag %s "%s"'); // as in: Flag topic "foo bar"
+$GLOBALS['str_flag_thank_you'] = _('Thank you, your message has been sent');
 $GLOBALS['str_flag_topic'] = _('topic');
+$GLOBALS['str_flag_topic_flagged'] = _('Topic Flagged');
 $GLOBALS['str_flag_upload'] = _('upload');
+$GLOBALS['str_flag_upload_flagged'] = _('Upload Flagged');
 
 $GLOBALS['str_for'] = _('for'); // as in: 9 Reviews for Trifonic's Beatorama
 

@@ -160,11 +160,14 @@ class CCFlag
         CCPage::AddBreadCrumbs($trail);
     }
 
-    function Flag($type,$id)
+    function Flag($type='',$id='')
     {
         global $CC_GLOBALS;
 
-        CCPage::SetTitle(_('Flag Content'));
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+
+        $page->SetTitle('str_flag_content');
 
         $id = sprintf("%0d",$id);
 
@@ -194,7 +197,7 @@ class CCFlag
 
         if( empty($_POST['flagcontent']) || !$form->ValidateFields() )
         {
-            CCPage::AddForm( $form->GenerateForm() );
+            $page->AddForm( $form->GenerateForm() );
         }
         else
         {
@@ -205,7 +208,7 @@ class CCFlag
                 $ccl = ccl('files') . '/';
                 list( $url, $title  ) = CCDatabase::QueryRow("SELECT CONCAT('{$ccl}',user_name,'/',{$id}) as url, upload_name " .
                                            'FROM cc_tbl_uploads JOIN cc_tbl_user ON upload_user=user_id WHERE upload_id=' . $id, false );
-                $type = _('Upload');
+                $type = 'str_flag_upload_flagged';
 
             }
             elseif( $type == 'topic' )
@@ -213,12 +216,13 @@ class CCFlag
                 $record = $topics->GetRecordFromKey($id);
                 $url = ccl('topics','view',$id);
                 $title = $record['topic_name'];
-                $type = _('Topic');
+                $type = 'str_flag_topic_flagged';
             }
 
+            $type = $page->String($type);
             $from = empty($values['mail_from']) ? $CC_GLOBALS['mail_sender'] : $values['mail_from'];
             $user_text = $values['mail_body'];
-            $flag_lang = _('Content has been flagged');
+            $flag_lang = $page->String('str_flag_content_has');
             $ip = $_SERVER['REMOTE_ADDR'];
             $user = CCUser::IsLoggedIn() ? CCUser::CurrentUserName() : 'anon';
             $text =<<<END
@@ -234,17 +238,17 @@ END;
             require_once('cchost_lib/ccextras/cc-mail.inc');
             $mailer = new CCMailer();
             $mailer->To($CC_GLOBALS['mail_sender']);
-            $mailer->Subject( $type . ' Flagged' );
+            $mailer->Subject( $type );
             $mailer->From($from);
             $mailer->Body($text);
             $ok = $mailer->Send();
             if( !$ok )
             {
-                CCPage::Prompt(_("An error occurred trying to contact the site"));
+                CCPage::Prompt('str_flag_err');
             }
             else
             {
-                CCPage::Prompt(_("Thank you, your message has been sent"));                
+                CCPage::Prompt('str_flag_thank_you');
             }
         }
     }

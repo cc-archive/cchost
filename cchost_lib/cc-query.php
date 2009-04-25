@@ -182,6 +182,16 @@ class CCQuery
 
         $req = !empty($_POST) ? $_POST : $_GET;
 
+        // some bots have been passing in empty args
+        // like user= without values
+        $keys = array_keys($req);
+        for( $i = 0; $i < count($keys); $i++ )
+        {
+            $k = $keys[$i];
+            if( empty($req[$k]) && ($req[$k] !== '0') )
+                unset($req[$k]);
+        }
+
         if( empty($req) )
             return $extra_args;
 
