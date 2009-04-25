@@ -61,7 +61,7 @@ if( !empty($A['content_page_width']) ) {
              if( empty($tname) ) 
                 { print '<br class="topic_box_head_spacer" />'; }
              else
-                { print "<h2>{$tname}</h2>"; }
+                { print "<h2>".$R['topic_name']."</h2>"; }
              switch($A['content_page_textformat']) {
                     case 'format': print $R['topic_text_html']; break;
                     case 'text':   print $R['topic_text_plain']; break;

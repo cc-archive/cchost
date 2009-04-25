@@ -8,11 +8,11 @@
       content_page_box = 1
       content_page_columns = 2
       content_page_textformat = format
-      content_page_width = 830px
-      content_toc = 0
-      limit = 6
+      content_page_width = 730px
+      content_toc = ccskins/shared/formats/topic_toc_select.tpl
+      limit = 10
       ord = desc
-      paging = on
+      paging = off
       sort = date
       t = ccskins/shared/pages/content_page.tpl
       topic_type = feat_playlist
@@ -20,15 +20,15 @@
 [/meta]
 */
 $A['content_page_box'] = '1';
-$A['content_page_width'] = '830px';
+$A['content_page_width'] = '730px';
 $A['content_page_textformat'] = 'format';
 $A['content_page_columns'] = '2';
 
 $topic = empty($_GET['topic']) ? '' : $_GET['topic'];
 print "<h1>Featured Playlists</h1>";
-cc_query_fmt('f=embed&t=ccskins/shared/pages/content_page.tpl&sort=date&ord=desc&type=feat_playlist&limit=6&paging=on&topic=' . $topic );
-cc_add_content_paging_links($A,'feat_playlist',$topic,'desc','featured-playlists', '6');
-$A['macro_names'][] = 'prev_next_links';
+cc_query_fmt('f=html&limit=query&&noexit=1&nomime=1&t=ccskins/shared/formats/topic_toc_select.tpl&page=featured-playlists&sort=date&ord=desc');
+cc_query_fmt('f=embed&t=ccskins/shared/pages/content_page.tpl&sort=date&ord=desc&type=feat_playlist&limit=10&paging=off&topic=' . $topic );
+// no paging 
 cc_content_feed('datasource=topics&type=feat_playlist&page=featured-playlists','Featured Playlists','topics'); 
 ?>
 
