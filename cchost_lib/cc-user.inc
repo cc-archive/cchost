@@ -324,14 +324,6 @@ class CCUserAPI
                 if( empty($fields['user_real_name']) )
                     $fields['user_real_name'] = $username;
                 $users =& CCUsers::GetTable();
-                $users->Update($fields);
-                
-                $old_info = CCDatabase::QueryRow('SELECT * FROM cc_tbl_user WHERE user_id='.$id);
-                $old_info['user_extra'] = unserialize($old_info['user_extra']);
-                CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $id, &$old_info));
-
-                if( !empty($CC_GLOBALS['lang_per_user']) )
-                    CCEvents::Invoke(CC_EVENT_TRANSLATE);
 
                 if( !empty($fields['user_password']) && ( $fields['user_password'] != $old_password ) )
                 {
@@ -339,6 +331,19 @@ class CCUserAPI
                     $login = new CCLogin();
                     $login->_create_login_cookie(1,$username,$fields['user_password']);
                 }
+                elseif( isset($fields['user_password']) )
+                {
+                    unset($fields['user_password']);
+                }
+
+                $old_info = CCDatabase::QueryRow('SELECT * FROM cc_tbl_user WHERE user_id='.$id);
+                $old_info['user_extra'] = unserialize($old_info['user_extra']);
+                CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $id, &$old_info));
+
+                $users->Update($fields);
+                
+                if( !empty($CC_GLOBALS['lang_per_user']) )
+                    CCEvents::Invoke(CC_EVENT_TRANSLATE);
 
                 $url = ccl('people',$username, 'profile');
 
