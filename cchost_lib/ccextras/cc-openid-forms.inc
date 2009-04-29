@@ -44,6 +44,65 @@ class CCOpenIDLoginForm extends CCForm
     }
 }
 
+class CCManageOpenIDsForm extends CCGridForm
+{
+    function CCManageOpenIDsForm($openids)
+    {
+        $this->CCGridForm();
+        $this->SetTemplateVar('form_fields_macro','flat_grid_form_fields');
+
+        $heads = array(
+            'str_openid', 'str_openid_action'
+            );
+        
+        $this->SetColumnHeader($heads);
+
+        $count = 0;
+        foreach( $openids as $OID  )
+        {
+            $S = 'S[' . ++$count . ']';
+            $a = $this->_get_row($S,$OID['openid'],$OID['openid_show'] ? 'show' : 'hide');
+            $this->AddGridRow( $count, $a );
+        }
+
+
+        $S = 'new';
+        $a = $this->_get_row($S,'','show');
+        // normally we would AddMetaRow but we only want to add
+        // one new openid at a time.
+        $this->AddGridRow( ++$count, $a );
+
+        $this->SetFormHelp('str_openid_tip1');
+        $this->SetFormHelp('<p></p>');
+        /*
+        $url = ccl('logout');
+        $this->SetFormHelp(array('str_openid_tip2','<a href="'.$url.'">','</a>'));
+        */
+        
+    }
+
+    function _get_row($S,$openid,$action)
+    {
+        return array(
+              array(
+                'element_name'  => $S . '[openid]',
+                'value'      => $openid,
+                'class'      => 'cc_openid_edit',
+                'formatter'  => 'textedit',
+                'flags'      => CCFF_POPULATE ),
+              array(
+                'element_name'  => $S . '[act]',
+                'value'      => $action,
+                'formatter'  => 'radio',
+                'nobr'       => true,
+                'options'    => array( 'show' => 'str_openid_show',
+                                       'hide' => 'str_openid_hide',
+                                       'delete' => 'str_openid_stop'),
+                'flags'      => CCFF_POPULATE ),
+            );
+    }
+}
+
 class CCOpenIDHookUpForm extends CCForm
 {
     var $_checked_radio;

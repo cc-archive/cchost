@@ -27,21 +27,27 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 /**
-*
+* API for handling OpenID logins
 *
 */
 class CCOpenID
 {
+    /**
+     * Main OpenID login screen /openid/login
+     *
+     */
     function Login()
     {
         require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/ccextras/cc-openid-forms.inc');
+        $page =& CCPage::GetPage();
+        $this->_build_bread_crumb_trail1($page);
         $title = 'str_openid_login_title';
-        CCPage::SetTitle($title);
+        $page->SetTitle($title);
         $form = new CCOpenIDLoginForm();
         if( empty($_POST['openidlogin']) || !$form->ValidateFields() )
         {
-            CCPage::AddForm($form->GenerateForm());
+            $page->AddForm($form->GenerateForm());
         }
         else
         {
@@ -51,6 +57,17 @@ class CCOpenID
         }
     }
 
+    /**
+     * Event handler for {@link CC_EVENT_FORM_INIT}
+     *
+     * For contact mailer form (/people/contact) and user notification
+     * (/people/notify/edit) we make sure the user in question actually
+     * has an email address before showing the default screens. Otherwise
+     * we throw up contingency screens.
+     * 
+     * @param object &$form CCForm object
+     * @param object &$fields Current array of form fields
+     */
     function OnFormInit(&$form)
     {
         $class = strtolower( get_class($form) );
@@ -87,6 +104,11 @@ class CCOpenID
 
     }
 
+    /**
+     * Users are redirected here when contact target does not have an email addr.
+     *
+     * @param string $user_name 
+     */
     function Contact($user_name)
     {
         require_once('cchost_lib/cc-page.php');
@@ -97,6 +119,11 @@ class CCOpenID
         $page->SetArg('contact_info',$openids,'openid_contact');
     }
 
+    /**
+     * Users are redirected here when notify target does not have an email addr.
+     *
+     * @param string $user_name 
+     */
     function Notify($user_name)
     {
         require_once('cchost_lib/cc-page.php');
@@ -104,92 +131,147 @@ class CCOpenID
         $page->SetTitle('str_openid_notify');
         $page->SetArg('user_name',$user_name,'openid_notify');
     }
+
+
+    function _build_bread_crumb_trail1(&$page)
+    {
+        $trail[] = array( 'url' => ccl(), 
+                          'text' => 'str_home');
+        
+        $trail[] = array( 'url' => ccl('login'), 
+                          'text' => 'str_log_in' );
+                          
+        $trail[] = array( 'url' => '',
+                          'text' => 'str_openid_login_title' );
+
+        $page->AddBreadCrumbs($trail);
+    }
+    
+    
+    function _build_bread_crumb_trail2(&$page)
+    {
+        global $CC_GLOBALS;
+
+        $trail[] = array( 'url' => ccl(), 
+                          'text' => 'str_home');
+        
+        $trail[] = array( 'url' => ccl('people'), 
+                          'text' => 'str_people' );
+        
+        $trail[] = array( 'url' => ccl('people',$CC_GLOBALS['user_name']), 
+                          'text' => $CC_GLOBALS['user_real_name'] );
+
+        $trail[] = array( 'url' => ccl('people','profile'), 
+                          'text' => 'str_prof_edit_your_settings' );
+
+        $trail[] = array( 'url' => '', 'text' => 'str_openid_manage' );
+
+        $page->AddBreadCrumbs($trail);
+    }
     
     /**
-    * Event handler for {@link CC_EVENT_FORM_VERIFY}
-    * 
-    * @param object &$form CCForm object
-    * @param boolean &$retval Set this to false if fields fail to verify
-    */
-    function OnFormVerify(&$form,&$retval)
+     * Form for managing a user's OpenIDs (/openid/edit)
+     *
+     */
+    function EditIDs()
     {
         global $CC_GLOBALS;
 
         if( empty($CC_GLOBALS['openid-type']) )
             return;
 
-        // nb: this method will alter the db (data loss!)
-        // and possibly email the user
-        // even though we are not 100% sure the data in the form will
-        // be saved. We are assuming here that that our OnFormVerify
-        // is the last one called. If there are any others after us
-        // that reject the data in the form then this was all a
-        // wasted (and confusing) effort - in fact, things might
-        // even break.
-        //
-        // To fix this, we really need a FORM_SAVE event, after
-        // everybody has verified all the fields.
-        //
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/ccextras/cc-openid-forms.inc');
+        $page =& CCPage::GetPage();
+        $page->SetTitle('str_openid_manage');
+        $this->_build_bread_crumb_trail2($page);
         
-        // don't bother is someone else rejected this form already
-        if( !$retval )
-            return;
-            
-        $class = strtolower( get_class($form) );
+        $user_id = CCUser::CurrentUser();
+        $user_name = CCUser::CurrentUserName();
+        $recs = $this->_get_openids($user_id,'*');
+        $form = new CCManageOpenIDsForm($recs);
         
-        switch( $class )
+        if( empty($_POST['manageopenids']) || !$form->ValidateFields($form) )            
         {
-            case 'ccuserprofileform':
+            $page->AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            $table = new CCTable('cc_tbl_openids','openid');
+            if( !empty($_POST['S']) )
             {
-                $value = $form->GetFormValue('openids_stop');
-                if( $value )
+                foreach( $_POST['S'] as $oid )
                 {
-                    $openid = $form->GetFormValue('openids');
-                    $table = new CCTable('cc_tbl_openids','openid');
-                    $table->DeleteKey($openid);
-                    $user_id = CCUser::CurrentUser();
-                    $ids = $this->_get_openids($user_id);
-                    if( empty($ids) )
+                    $uarg = array();
+                    switch( $oid['act'] )
                     {
-                        // that was the last openid, we have to setup
-                        // a new password for this person.
-                        require_once('cchost_lib/cc-login.php');
-                        $login = new CCLogin();
-                        $new_password = $login->_make_new_password();
-                        // this will save the new pw to the record
-                        // and set the cookie to reflect the change
-                        $form->SetFormValue('user_password',$new_password);
-                        $user_name = CCUser::CurrentUserName();
-                        // we have to get this from the form in case
-                        // it's brand new (it hasn't been saved yet)
-                        $email = $form->GetFormValue('user_email');
-                        $login->_send_login_info($user_name,'str_openid_new_pass','str_openid_you_are_rec',
-                                        $new_password,$email);
+                        case 'show':
+                        {
+                            $uarg['openid_show'] = 1;
+                            $uarg['openid'] = $oid['openid'];
+                            $table->Update($uarg);
+                            break;
+                        }
+
+                        case 'hide':
+                        {
+                            $uarg['openid_show'] = 0;
+                            $uarg['openid'] = $oid['openid'];
+                            $table->Update($uarg);
+                            break;
+                        }
+
+                        case 'delete':
+                        {
+                            $table->DeleteKey($oid['openid']);
+                            break;
+                        }
                     }
-                    
                 }
             }
+
+            if( empty($_POST['new']['openid']) )
+            {
+                CCUtil::SendBrowserTo( ccl('people',$user_name,'profile') );
+            }
+            else
+            {
+                cc_openid_handler('login',$_POST['new']['openid']);
+            }
         }
-        $retval = true;
-        return true;
     }
 
-    function _get_openids($user_id)
+    function _get_openids($user_id,$fields='openid')
     {
-        return CCDatabase::QueryItems('SELECT openid FROM cc_tbl_openids WHERE openid_user='.$user_id);
+        if( $fields == 'openid' )
+            return CCDatabase::QueryItems('SELECT openid FROM cc_tbl_openids WHERE openid_user='.$user_id);
+        return CCDatabase::QueryRows('SELECT '.$fields.' FROM cc_tbl_openids WHERE openid_user='.$user_id);        
     }
     
+    /**
+     * Event handler for {@link CC_EVENT_FILTER_USER_PROFILE}
+     *
+     * We add the user's OpenIDs (assuming they have agreed to
+     * display them)
+     * 
+     * @param object &$records CCUser record (at offset 0)
+     */
     function OnFilterUserProfile(&$records)
     {
         $user_rec =& $records[0];
-        $openids = $this->_get_openids($user_rec['user_id']);
+        $openids = $this->_get_openids($user_rec['user_id'],'*');
         if( empty($openids) )
             return;
         $text = array();
-        foreach( $openids as $openid )
+        foreach( $openids as $OID )
         {
+            if( empty($OID['openid_show']) )
+                continue;
+            $openid = $OID['openid'];
             $text[] = "<a href=\"{$openid}\" class=\"cc_openid_link\">{$openid}</a>";
         }
+        if( empty($text) )
+            return;
         $text = join('<br />',$text);
         $arr = array( 'label' => 'str_openids', 'value' => $text, 'id' => 'openids' );
         if( count($user_rec['user_fields']) > 0 )
@@ -202,6 +284,12 @@ class CCOpenID
         }
     }
     
+    /**
+     * Event handler for {@link CC_EVENT_FORM_FIELDS}
+     *
+     * @param object &$form CCForm object
+     * @param object &$fields Current array of form fields
+     */
     function OnFormFields( &$form, &$fields )
     {
         global $CC_GLOBALS;
@@ -219,39 +307,24 @@ class CCOpenID
                 
                 $url = ccl('login','openid');
                 $link1 = "<a href=\"{$url}\" id=\"cc_openid_enabled\">";
-                $link2 = '</a>';
+                $link2 = '</a><p></p>';
                 $form->SetHelpText(array('str_openid_login_help',$link1,$link2));
                 break;
             }
             
             case 'ccuserprofileform':
             {
-                $user_id = CCUser::CurrentUser();
-                $openids = $this->_get_openids($user_id);
-                if( !empty($openids) )
-                {
-                    // keep the password fields around in case
-                    // we need to generate a new one later, it
-                    // will make things a lot easier.
-                    $fields['user_password']['formatter'] = 'hidden';
-                    $fields['user_password']['flags']     = CCFF_HIDDEN;  // do NOT populate
-                    $fields['user_password']['value']     = '';  // CCForm requires 'value' is present
+                $fields['user_password']['form_tip'] = 'str_openid_pw_tip';
 
-                    $tip = count($openids) == 1 ? 'str_openid_tip2' : 'str_openid_tip';
-                    $field['openids'] = array (
-                     'label'      => '',
-                     'form_tip'   => '',
-                     'formatter'  => 'select',
-                     'options'    => array_combine($openids,$openids),
-                     'flags'      => CCFF_NOUPDATE );
-                    $field['openids_stop'] = array (
-                     'label'      => 'str_openid_stop',
-                     'form_tip'   => $tip,
-                     'formatter'  => 'checkbox',
-                     'value'      => '',
-                     'flags'      => CCFF_NOUPDATE );
-                    $form->InsertFormFields( $field, 'after', 'user_real_name');
-                }
+                $field['openids_edit'] = array (
+                 'label'      => '',
+                 'url'        => ccl('openid','edit'),
+                 'formatter'  => 'button',
+                 'class'      => 'cc_openid_link cc_gen_button',
+                 'value'      => 'str_openid_manage',
+                 'flags'      => CCFF_NOUPDATE );
+                 
+                $form->InsertFormFields( $field, 'after', 'user_real_name');                   
             }
         }
     }
@@ -277,18 +350,32 @@ class CCOpenID
         }
     }
 
+    /**
+     * This is called when an OpenID auth has failed
+     *
+     * @param string $msg
+     */
     function OnIDFailed($msg)
     {
 	    require_once('cchost_lib/cc-page.php');
 	    CCPage::Prompt( $msg );
     }
         
+    /**
+     * This is called when an OpenID auth has been OK's without a known match
+     *
+     * This called the first time we see an OpenID and we're trying to
+     * match it up with some account, or create a new one.
+     *
+     * This is the submit form handler (/openid/match) for CCOpenIDHookUpForm
+     */
     function OnTryMatch()
     {
         if( empty($_POST['openidinfo']) )
             CCUtil::Send404();
+
         $args = unserialize( urldecode($_POST['openidinfo']) );
-        //d($args);
+
         require_once('cchost_lib/ccextras/cc-openid-forms.inc');
         $form = new CCOpenIDHookUpForm($args);
         if( !$form->ValidateFields() )
@@ -324,14 +411,22 @@ class CCOpenID
             {
                 // this should never happen
             }
-
         }
     }
 
-    function _do_assoc($openid,$user_id)
+    function _make_canon($openid)
     {
-        $rec['openid'] = rtrim($openid,'/');
+        if( strpos($openid,'http://') != 0 )
+            $openid = 'http://' . $openid;
+
+        return rtrim($openid,'/');
+    }
+    
+    function _do_assoc($openid,$user_id,$show=0)
+    {
+        $rec['openid'] = $this->_make_canon($openid);
         $rec['openid_user'] = $user_id;
+        $rec['openid_show'] = $show;
         $openids = new CCTable('cc_tbl_openids','openid');
         $openids->Insert($rec);
     }
@@ -346,15 +441,36 @@ class CCOpenID
         $login->_do_login_redirect(ccl('people',$user));
     }
     
+    /**
+     * This is called when an OpenID auth has been OK's without a known match
+     *
+     * This called the first time we see an OpenID and we're trying to
+     * match it up with some account, or create a new one.
+     *
+     * This is the submit form handler (/openid/match) for CCOpenIDHookUpForm
+     * 
+     * @param string $openid OpenID returned by authority
+     * @param string $canonicalID Should be cononical openID (but it's mainly blank)
+     * @param array  $sreg Array of potential stuff authority gave us (nickname, email, fullname)
+     */
 	function OnIDVerified( $openid,$canonicalID,$sreg)
 	{
+	    $user_id = CCUser::CurrentUser();
+
+	    if( $user_id != -1 )
+	    {
+	        // user is already logged in, we're just attaching.
+	        $this->_do_assoc($openid,$user_id,true);
+	        $user_name = CCUser::CurrentUserName();
+	        CCUtil::SendBrowserTo( ccl('people',$user_name,'profile') );
+        }
 	    /*
             [fullname] => victor stone
             [nickname] => victorstone
             [email] => victor.stone@gmail.com
 	     */
         if( empty($canonicalID) )
-            $canonicalID = rtrim($openid,'/');
+            $canonicalID = $this->_make_canon($openid);
         $args['connonical'] = $canonicalID;
         $row = CCDatabase::QueryRow("SELECT * FROM cc_tbl_openids WHERE openid = '{$canonicalID}'");
         if( empty($row) )
@@ -400,10 +516,14 @@ class CCOpenID
     
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('login','openid'), array( 'CCOpenID', 'Login' ), CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__) ); 
-        CCEvents::MapUrl( ccp('openid'), 'cc_openid_handler', CC_DONT_CARE_LOGGED_IN, dirname(__FILE__) . '/cc-openid-handler.inc' ); 
-        CCEvents::MapUrl( ccp('openid','contact'), array( 'CCOpenID', 'Contact' ), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__)); 
-        CCEvents::MapUrl( ccp('openid','notify'), array( 'CCOpenID', 'Notify' ), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__)); 
+        CCEvents::MapUrl( ccp('login','openid'), array( 'CCOpenID', 'Login' ), CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__), 
+            '', _('Show OpenID Login form'), CC_AG_USER  );
+        CCEvents::MapUrl( ccp('openid'), 'cc_openid_handler', CC_DONT_CARE_LOGGED_IN,
+            dirname(__FILE__) . '/cc-openid-handler.inc', '', _('Internal handler for openid comm.'), CC_AG_USER ); 
+        CCEvents::MapUrl( ccp('openid','contact'), array( 'CCOpenID', 'Contact' ), CC_DONT_CARE_LOGGED_IN,
+            ccs(__FILE__), '', _('Contact form hook to handle openid'), CC_AG_USER  );
+        CCEvents::MapUrl( ccp('openid','notify'), array( 'CCOpenID', 'Notify' ), CC_MUST_BE_LOGGED_IN,
+            ccs(__FILE__), '', _('Notify form hook to handle openid'), CC_AG_USER  );
     }
 }
 

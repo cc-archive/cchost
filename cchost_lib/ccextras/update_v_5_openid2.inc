@@ -20,16 +20,28 @@
 
 /**
 * @package cchost
-* @subpackage user
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCOpenID' , 'OnGetConfigFields' ), 'cchost_lib/ccextras/cc-openid.inc' );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCOpenID', 'OnMapUrls' ), 'cchost_lib/ccextras/cc-openid.inc' );
-CCEvents::AddHandler(CC_EVENT_FORM_FIELDS,    array( 'CCOpenID', 'OnFormFields'), 'cchost_lib/ccextras/cc-openid.inc' );
-CCEvents::AddHandler(CC_EVENT_FORM_INIT,    array( 'CCOpenID', 'OnFormInit'), 'cchost_lib/ccextras/cc-openid.inc'  );
-CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE, array( 'CCOpenID' , 'OnFilterUserProfile'), 'cchost_lib/ccextras/cc-openid.inc'  );
+/**
+*/
+class v_5_openid2 extends CCUpdate
+{
+    function Update()
+    {
+        if( $this->_table_exists('cc_tbl_openids') )
+        {
+            $this->_check_for_field('cc_tbl_openids','openid_show',"int(1)  NOT NULL default '0'");
+        }
+        $cfg = new CCConfigs();
+        $CC_GLOBALS['openid-type'] =    /* just to be safe, put it in the globals */
+        $arg['openid-type'] = true; /* this we'll write to disk */
+        $cfg->SaveConfig( 'config', $arg,'', true );
+        CCPage::Prompt('OpenID Flag is set');
+    }
+}
 
 ?>

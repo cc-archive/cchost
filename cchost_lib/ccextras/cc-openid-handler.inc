@@ -34,8 +34,7 @@ function cc_openid_handler($cmd,$arg1='')
     {
         case 'login':
         {
-            cc_openid_onlogin($api,$arg1);
-            break;
+            return cc_openid_onlogin($api,$arg1);
         }
         case 'auth':
         {
@@ -48,13 +47,13 @@ function cc_openid_handler($cmd,$arg1='')
             $api->OnTryMatch();
             break;
         }
-        
-        case 'test':
+
+        case 'edit':
         {
-            ccoi_do_test($api,$arg1);
+            $api->EditIDs();
             break;
         }
-        
+                
         default:
         {
             ccoi_displayError( $api, "Unknown OpenID command: " . $cmd );
@@ -64,54 +63,6 @@ function cc_openid_handler($cmd,$arg1='')
     
 }
 
-function ccoi_do_test($api,$arg)
-{
-    switch($arg)
-    {
-        case 1:
-            $api->OnIDVerified('http://openid.claimid.com/victorstone','',
-                array
-                    (
-                        'fullname' => 'victor stone',
-                        'nickname' => 'victorstone',
-                        'email' => 'victor.stone@gmail.com'
-                    )
-                );
-            break;
-        case 2:
-            $api->OnIDVerified('http://fourstones.net','',
-                array
-                    (
-                        'fullname' => 'victor stone',
-                        'nickname' => 'fourstones',
-                        'email' => 'fourstones.net@gmail.com'
-                    )
-                );
-            break;
-        case 3:
-            $api->OnIDVerified('http://foodyfoo.net','',
-                array
-                    (
-                        'fullname' => 'blah stone',
-                        'nickname' => 'bliief',
-                        'email' => 'fourstonesx.net@gmail.com'
-                    )
-                );
-            break;
-        case 4:
-            $api->OnIDVerified('http://empty.com','',
-                array
-                    (
-                    )
-                );
-            break;
-
-            
-        default:
-            ccoi_displayError($api,"Unknown test case");
-            break;            
-    }
-}
 function ccoi_displayError($api,$msg)
 {
     $api->OnIDFailed($msg);
@@ -152,6 +103,8 @@ function cc_openid_onlogin( $api, $openid )
 {
     session_start();
 
+    $ret = 1;
+    
     $consumer = getConsumer();
 
     // Begin the OpenID authentication process.
@@ -187,6 +140,7 @@ function cc_openid_onlogin( $api, $openid )
         // message.
         if (Auth_OpenID::isFailure($redirect_url)) {
             displayError("Could not redirect to server: " . $redirect_url->message);
+            $ret = 0;
         } else {
             // Send redirect.
             header("Location: ".$redirect_url);
@@ -201,6 +155,7 @@ function cc_openid_onlogin( $api, $openid )
         // otherwise, render the HTML.
         if (Auth_OpenID::isFailure($form_html)) {
             ccoi_displayError("Could not redirect to server: " . $form_html->message);
+            $ret = 0;
         } else {
             $form_html = str_replace('</html>','<h3>Contacting OpenID site...</h3></html>',$form_html);
             print $form_html;
@@ -208,7 +163,7 @@ function cc_openid_onlogin( $api, $openid )
         }
     }
     
-    return 1;
+    return $ret;
 }
 
 ?>
