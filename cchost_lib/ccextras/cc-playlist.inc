@@ -113,7 +113,7 @@ class CCPlaylists
         CCEvents::MapUrl( ccp('api','playlist','with'),     array( 'CCPlaylists', 'With'),    CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
                    '{upload_id}', _('Return playlists with-w/o this upload'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','create'), array( 'CCPlaylists', 'Create'),   CC_DONT_CARE_LOGGED_IN,   ccs(__FILE__) ,
+        CCEvents::MapUrl( ccp('playlist','create'), array( 'CCPlaylists', 'Create'),   CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
                    '', _('Display create playlist form'), CC_AG_PLAYLIST ); 
         CCEvents::MapUrl( ccp('playlist','save'),   array( 'CCPlaylists', 'Save'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
                    '', _('Save dynamic playlist'), CC_AG_PLAYLIST ); 

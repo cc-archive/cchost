@@ -527,7 +527,7 @@ EOF;
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('publicize'),  array( 'CCPublicize', 'Publicize'), 
-                CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
+                CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}', _('Displays users publicize page'), CC_AG_USER  );
 
         CCEvents::MapUrl( ccp('share'), array( 'CCPublicize', 'Share' ),  
                 CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{id}', _('Displays Share/Embed PopupWindow'), CC_AG_UPLOADS  );

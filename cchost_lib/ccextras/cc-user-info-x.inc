@@ -231,7 +231,8 @@ EOF;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('contest', 'userinfo'), array( 'CCUserInfoX', 'UserInfo'),  CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('contest', 'userinfo'), array( 'CCUserInfoX', 'UserInfo'),
+          CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', '', CC_AG_deprecated );
     }
 
 }

@@ -1,6 +1,12 @@
 .cc_openid_edit {
     background: #FFFFFF url('../images/openid-icon-small.gif') no-repeat scroll 0pt 50%;
     padding-left: 18px;
+    width: 230px;
+    height: 15px;
+}
+
+form .cc_openid_edit {
+	margin-bottom: 15px;
 }
 
 a.cc_openid_link {
@@ -9,6 +15,7 @@ a.cc_openid_link {
     padding: 3px 2px 2px 18px;
     background-color: #FFF;
     color: #41483b;
+    height: 15px;
 }
 
 a#cc_openid_enabled {

@@ -201,12 +201,12 @@ EOF;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('library','loops'),      array('CCMagnatune','Loops'),      CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
-        CCEvents::MapUrl( ccp('library','loopstream'), array('CCMagnatune','LoopStream'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
-        CCEvents::MapUrl( ccp('library','songstream'), array('CCMagnatune','SongStream'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
-        CCEvents::MapUrl( ccp('library','albumlist'),  array('CCMagnatune','AlbumList'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
-        CCEvents::MapUrl( ccp('library','looplist'),   array('CCMagnatune','LoopList'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
-        CCEvents::MapUrl( ccp('mt','csv'),             array('CCMagnatune','csv'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
+        CCEvents::MapUrl( ccp('library','loops'),      array('CCMagnatune','Loops'),      CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'','','ccMixter');
+        CCEvents::MapUrl( ccp('library','loopstream'), array('CCMagnatune','LoopStream'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'','','ccMixter');
+        CCEvents::MapUrl( ccp('library','songstream'), array('CCMagnatune','SongStream'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'','','ccMixter');
+        CCEvents::MapUrl( ccp('library','albumlist'),  array('CCMagnatune','AlbumList'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'','','ccMixter');
+        CCEvents::MapUrl( ccp('library','looplist'),   array('CCMagnatune','LoopList'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'','','ccMixter');
+        CCEvents::MapUrl( ccp('mt','csv'),             array('CCMagnatune','csv'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'','','ccMixter');
     }
 
     function check_for_loop_artists()

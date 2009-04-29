@@ -98,8 +98,8 @@ class MixterContest
 {
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('contest','snap'), array( 'MixterContest', 'Snap' ), CC_ADMIN_ONLY, ccs(__FILE__)  );
-        CCEvents::MapUrl( ccp('contest','tagentries'), array( 'MixterContest', 'TagEntries' ), CC_ADMIN_ONLY, ccs(__FILE__)  );
+        CCEvents::MapUrl( ccp('contest','snap'), array( 'MixterContest', 'Snap' ), CC_ADMIN_ONLY, ccs(__FILE__),'','','ccMixter'  );
+        CCEvents::MapUrl( ccp('contest','tagentries'), array( 'MixterContest', 'TagEntries' ), CC_ADMIN_ONLY, ccs(__FILE__),'','','ccMixter'  );
     }
 
     function TagEntries($contest)

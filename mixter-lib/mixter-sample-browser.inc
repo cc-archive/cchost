@@ -35,19 +35,19 @@ class CCSampleBrowser
 {
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('samples'),   array('CCMixter', 'Samples'),  
+        CCEvents::MapUrl( ccp('samples'),   array('CCMixter', 'Samples','','','ccMixter'),  
                             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
 
-        CCEvents::MapUrl( ccp('samples','list'),   array('CCSampleBrowser', 'SamplesList'),  
+        CCEvents::MapUrl( ccp('samples','list'),   array('CCSampleBrowser', 'SamplesList','','','ccMixter'),  
                             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('samples','browse'),   array('CCSampleBrowser', 'SamplesBrowse'),  
+        CCEvents::MapUrl( ccp('samples','browse'),   array('CCSampleBrowser', 'SamplesBrowse','','','ccMixter'),  
                             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('samples','stream'),   array('CCSampleBrowser', 'SamplesStream'),  
+        CCEvents::MapUrl( ccp('samples','stream'),   array('CCSampleBrowser', 'SamplesStream','','','ccMixter'),  
                             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('samples','search'),   array('CCSampleBrowser', 'SamplesSearch'),  
+        CCEvents::MapUrl( ccp('samples','search'),   array('CCSampleBrowser', 'SamplesSearch','','','ccMixter'),  
                             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
 
-        CCEvents::MapUrl( ccp('samples','lics'),   array('CCSampleBrowser', 'LicsForTags'),  
+        CCEvents::MapUrl( ccp('samples','lics'),   array('CCSampleBrowser', 'LicsForTags','','','ccMixter'),  
                             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
 
     }

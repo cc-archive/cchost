@@ -672,7 +672,8 @@ class CCTopic
             _('Lock a topic thread from replies') , CC_AG_FORUMS );
 
         CCEvents::MapUrl( ccp('user_hook','topic_cmds'),   array( 'CCTopicHook', 'DoHook'),    
-            CC_MUST_BE_LOGGED_IN, 'cchost_lib/ccextras/cc-topics-hook.inc' );
+            CC_MUST_BE_LOGGED_IN, dirname(__FILE__) . '/cc-topics-hook.inc', '', 
+            _('Ajax callback for topic hook'), CC_AG_FORUMS );
     }
 
 }

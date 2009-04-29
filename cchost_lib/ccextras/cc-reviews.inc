@@ -333,10 +333,6 @@ class CCReview
             CC_MUST_BE_LOGGED_IN, 'cchost_lib/ccextras/cc-review-forms.inc', '[upload_id]', 
             _('Display a review form'), CC_AG_REVIEWS );
 
-        // ajax callbacks...
-
-        CCEvents::MapUrl( ccp('reviews','hottopics'), array( 'CCReview', 'HotTopics'),    
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
     }
 
 }

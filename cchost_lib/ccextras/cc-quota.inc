@@ -122,7 +122,8 @@ class CCQuotaAPI
 {
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp( 'admin', 'quota' ), array( 'CCQuotaAPI', 'Admin' ), CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp( 'admin', 'quota' ), array( 'CCQuotaAPI', 'Admin' ),
+            CC_ADMIN_ONLY, ccs(__FILE__),'',_('Admin upload quotas'), CC_AG_MISC_ADMIN );
     }
 
     function Admin()

@@ -30,25 +30,23 @@ define( 'CC_TS_DEFAULT', CC_TS_ALPHA );
 
 define( 'CC_TS_MINTAGS', 3 );
 
+define('CC_AG_SAMPLE_BROWSER', 'Sample Browser');
 
 class CCSampleBrowser
 {
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('samples'),   array('CCMixter', 'Samples'),  
-                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
-
         CCEvents::MapUrl( ccp('samples','list'),   array('CCSampleBrowser', 'SamplesList'),  
-                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('samples','browse'),   array('CCSampleBrowser', 'SamplesBrowse'),  
-                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'[?tags=][&bpm=][&lic=]','',CC_AG_SAMPLE_BROWSER );
+        CCEvents::MapUrl( ccp('samples'),   array('CCSampleBrowser', 'SamplesBrowse'),  
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'','',CC_AG_SAMPLE_BROWSER );
         CCEvents::MapUrl( ccp('samples','stream'),   array('CCSampleBrowser', 'SamplesStream'),  
-                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'{file_id_with_m3u}','',CC_AG_SAMPLE_BROWSER );
         CCEvents::MapUrl( ccp('samples','search'),   array('CCSampleBrowser', 'SamplesSearch'),  
-                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'?term=','',CC_AG_SAMPLE_BROWSER );
 
         CCEvents::MapUrl( ccp('samples','lics'),   array('CCSampleBrowser', 'LicsForTags'),  
-                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+                            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__),'','',CC_AG_SAMPLE_BROWSER );
 
     }
 
@@ -70,9 +68,15 @@ class CCSampleBrowser
         $this->_list_records($recs,"\"$term\"", _('Search phrase'));
     }
 
-    function SamplesStream($file_id_with_m3u)
+    function SamplesStream($file_id_with_m3u='')
     {
-        $file_id = str_replace('.m3u', '', $file_id_with_m3u);
+        if( empty($file_id_with_m3u) )
+            CCUtil::Send404();
+            
+        $file_id = sprintf('%d',str_replace('.m3u', '', $file_id_with_m3u));
+        if( empty($file_id) )
+            CCUtil::Send404();
+        
         $sql =<<<EOF
             SELECT upload_contest, user_name, contest_short_name, file_name
             FROM cc_tbl_files
@@ -212,6 +216,8 @@ EOF;
     {
         global $CC_GLOBALS;
 
+        require_once('cchost_lib/cc-page.php');
+
         $args = array(); // $CC_GLOBALS;
         list( $tags, $bpms ) = $this->_get_tags();
 
@@ -239,8 +245,11 @@ EOF;
     }
 
 
-    function LicsForTags($tag_filter)
+    function LicsForTags($tag_filter='')
     {
+        $tag_filter = CCUtil::StripText($tag_filter);
+        if( empty($tag_filter) )
+            CCUtil::Send404();
         $lics = $this->_get_lic_filters($tag_filter,true);
         CCUtil::ReturnAjaxData($lics);
     }

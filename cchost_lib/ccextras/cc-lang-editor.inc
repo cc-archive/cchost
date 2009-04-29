@@ -79,6 +79,7 @@ class CCLanguageEditor
         $args['str_missinglangname'] = _('Missing language name');
         $args['msg']                 = $msg;
 
+        require_once('cchost_lib/cc-page.php');
         CCPage::PageArg('language_editor_menu', 'language-editor.xml/language_editor_menu');
         CCPage::PageArg('LEM',$args,'language_editor_menu');
         CCPage::SetTitle(_('Language Domain Terms Editor'));

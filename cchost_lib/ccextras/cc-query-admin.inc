@@ -402,7 +402,7 @@ class CCQueryAdmin
                           array( 'CCQueryAdmin', 'Admin'),  CC_ADMIN_ONLY,
                           ccs(__FILE__), '', 
                           _('Configure browse interface'), 
-                          CC_AG_RENDER );
+                          CC_AG_QUERY );
     }
 
     /**

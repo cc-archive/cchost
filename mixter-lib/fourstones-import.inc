@@ -49,7 +49,7 @@ class FSImporter
 {
     function OnMapUrl()
     {
-        CCEvents::MapUrl( 'fsimport', array( 'FSImporter', 'Import' ),  CC_DONT_CARE_LOGGED_IN );
+        CCEvents::MapUrl( 'fsimport', array( 'FSImporter', 'Import' ),  CC_DONT_CARE_LOGGED_IN,'','','','ccMixter' );
     }
 
     function Retag()

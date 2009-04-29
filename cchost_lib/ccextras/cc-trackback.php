@@ -146,7 +146,9 @@ EOF;
     function OnMapUrls()
     {
         // ajax call (I think)
-        CCEvents::MapUrl( ccp('track'),           array('CCTrackBack', 'Track'),   CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('track'),  array('CCTrackBack', 'Track'),
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{type}/{upload_id}', _('Add a trackback (ajax call)'),
+            CC_AG_SAMPLE_POOL );
     }
 
 }

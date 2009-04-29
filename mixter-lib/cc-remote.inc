@@ -112,10 +112,10 @@ class CCRemote
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin', 'remoting'),           array('CCRemote', 'Admin'), CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin', 'remoting', 'run'),    array('CCRemote', 'Run'),   CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin', 'remoting', 'view'),   array('CCRemote', 'View'),   CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin', 'remoting', 'manage'), array('CCRemote', 'Manage'),   CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('admin', 'remoting'),           array('CCRemote', 'Admin'), CC_ADMIN_ONLY, ccs(__FILE__),'','','ccMixter' );
+        CCEvents::MapUrl( ccp('admin', 'remoting', 'run'),    array('CCRemote', 'Run'),   CC_ADMIN_ONLY, ccs(__FILE__),'','','ccMixter' );
+        CCEvents::MapUrl( ccp('admin', 'remoting', 'view'),   array('CCRemote', 'View'),   CC_ADMIN_ONLY, ccs(__FILE__),'','','ccMixter' );
+        CCEvents::MapUrl( ccp('admin', 'remoting', 'manage'), array('CCRemote', 'Manage'),   CC_ADMIN_ONLY, ccs(__FILE__),'','','ccMixter' );
     }
 
     function Admin()

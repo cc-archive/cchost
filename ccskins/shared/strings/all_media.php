@@ -390,17 +390,22 @@ $GLOBALS['str_nsfw_mark_this_upload'] = _('Mark this upload as %s if it contains
 $GLOBALS['str_nsfw_t']                = _('This upload might be %sNot Safe For Work%s');
 $GLOBALS['str_ok']                    = _('ok');
 
-$GLOBALS['str_openids']               = _('OpenId');
+$GLOBALS['str_openid']                = _('OpenID');
+$GLOBALS['str_openids']               = _('OpenID');
+$GLOBALS['str_openid_action']         = _('Action');
 $GLOBALS['str_openid_contact']        = _('Contact Through OpenID');
 $GLOBALS['str_openid_contact_disc']   = _('This account has not shared their email address with us. However you may be able to contact them using an OpenID identifier:');
 $GLOBALS['str_openid_display_name']   = _('Display name:');
+$GLOBALS['str_openid_edit_ids']       = _('%sManage your OpenIDs%s');
 $GLOBALS['str_openid_enabled']        = _('OpenID Enabled');
 $GLOBALS['str_openid_exist_user']     = _('Existing user name:');
 $GLOBALS['str_openid_existing']       = _('Use an existing account');
 $GLOBALS['str_openid_existing_tip1']  = _('We could not find an account that might match your OpenID information. Enter your existing account information if you have one.');
 $GLOBALS['str_openid_existing_tip2']  = _('If none of the accounts above are yours, enter your existing account information if you have one.');
+$GLOBALS['str_openid_hide']           = _('Hide');
 $GLOBALS['str_openid_login_help']     = _('Instead of an account name and password, you can %sLog in using your OpenID%s');
-$GLOBALS['str_openid_login_title']    = _('Log in with OpenId');
+$GLOBALS['str_openid_login_title']    = _('Log in with OpenID');
+$GLOBALS['str_openid_manage']         = _('Manage Your OpenIDs');
 $GLOBALS['str_openid_match']          = _('Select an existing account');
 $GLOBALS['str_openid_match_help']     = _('You are logging in using your verfied OpenID: <b>%s</b>.');
 $GLOBALS['str_openid_match_submit']   = _('Submit Account Information');
@@ -411,12 +416,10 @@ $GLOBALS['str_openid_new_user']       = _('New user name:');
 $GLOBALS['str_openid_notify']         = _('Missing e-mail Address');
 $GLOBALS['str_openid_notify_disc']    = _('You can not receive email notification until you supply us with an email address. You can do that by editing your profile.');
 $GLOBALS['str_openid_password']       = _('Password:');
-$GLOBALS['str_openid_stop']           = _('Stop Using OpenID:');
-$GLOBALS['str_openid_tip']            = _('Check this box to STOP using the selected OpenID.');
-$GLOBALS['str_openid_tip2']           = $GLOBALS['str_openid_tip'] . ' ' ._('If you remove this OpenID, an account password will be emailed to you.');
-
-$GLOBALS['str_openid_you_are_rec']    = _('You are receiving this email because, without an OpenID, you will need a new password.');
-$GLOBALS['str_openid_new_pass']       = _('New Password Generated');
+$GLOBALS['str_openid_show']           = _('Show');
+$GLOBALS['str_openid_stop']           = _('Stop Using');
+$GLOBALS['str_openid_tip1']           = _('Use this form to manage your OpenIDs, add a new one, remove existings ones and whether to should show your OpenIDs on your profile.');
+$GLOBALS['str_openid_tip2']           = _('');
 
 
 $GLOBALS['str_openid_r_bad_chars']    = _('Invalid characters in account name');
@@ -508,7 +511,7 @@ $GLOBALS['str_prof_full_name']            = _('Full Name');
 $GLOBALS['str_prof_home_page_url']        = _('Home Page URL');
 $GLOBALS['str_prof_image']                = _('Image');
 $GLOBALS['str_prof_image_file']           = _('Image file (cannot be bigger than 93x93)');
-$GLOBALS['str_prof_leave_this_blank']     = _('Leave this blank to keep your same password. If you change it you will need to log in again.');
+$GLOBALS['str_prof_leave_this_blank']     = _('Leave this blank to keep your same password.');
 $GLOBALS['str_prof_list_attributes']      = _('List attributes of people you\'d like to hook up with (e.g. policital, hip hop, academic )');
 $GLOBALS['str_prof_make_sure_it']         = _('Make sure it starts with http://');
 $GLOBALS['str_prof_vinyl_guitar']         = _('(e.g. what software, hardware, etc. )');
@@ -516,6 +519,9 @@ $GLOBALS['str_prof_what_i_like']          = _('What I Like');
 $GLOBALS['str_prof_what_i_pound_on']      = _('Tools I Use');
 $GLOBALS['str_prof_what_im_looking_for']  = _("What I'm Looking For");
 $GLOBALS['str_prof_your_display']         = _('Your display name for the site (not to be confused with your login name).');
+
+$GLOBALS['str_openid_pw_tip']           = $GLOBALS['str_prof_leave_this_blank'] . _(' You do not need a password if you log in using an OpenID.');
+
 
 $GLOBALS['str_publicize']                 = _('Publicize');
 $GLOBALS['str_publicize_yourself_s']      = _('%sPublicize yourself%s');

@@ -217,11 +217,12 @@ class CCHowIDidIt
             _('Show How I Did It Page for an upload'), CC_AG_HIDI );
 
         CCEvents::MapUrl( ccp('howididit','browse'), array('CCHowIDidIt','Browse'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '',
             _('Show How I Did It browser'), CC_AG_HIDI  );
 
         CCEvents::MapUrl( ccp('howididit','detail'), array('CCHowIDidIt','Detail'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__)  );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{upload_id}',
+            _('Ajax callback for hidi details'), CC_AG_HIDI  );
 
         CCEvents::MapUrl( ccp('edithowididit'),  array('CCHowIDidIt','EditHowIDidIt'),   
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{upload_id}', 

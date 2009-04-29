@@ -19,7 +19,7 @@ function playlist_feature_OnFilterCartMenu(&$records)
 
 function playlist_feature_OnMapUrls()
 {
-    CCEvents::MapUrl( ccp('playlist', 'feature'), 'playlist_feature_playlist', CC_ADMIN_ONLY, ccs(__FILE__) );
+    CCEvents::MapUrl( ccp('playlist', 'feature'), 'playlist_feature_playlist', CC_ADMIN_ONLY, ccs(__FILE__),'','','ccMixter' );
 }
 
 function playlist_feature_playlist($playlist_id)

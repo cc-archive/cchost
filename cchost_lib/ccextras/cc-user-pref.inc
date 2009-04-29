@@ -125,7 +125,7 @@ class CCUserPreferences
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('preferences'),  array( 'CCUserPreferences', 'SetPreferences'), 
-                          CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
+                          CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Show user preferences form'), CC_AG_USER );
     }
 }
 
