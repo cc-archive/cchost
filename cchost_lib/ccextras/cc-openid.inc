@@ -320,7 +320,7 @@ class CCOpenID
                  'label'      => '',
                  'url'        => ccl('openid','edit'),
                  'formatter'  => 'button',
-                 'class'      => 'cc_openid_link cc_gen_button',
+                 'class'      => 'cc_openid_link',
                  'value'      => 'str_openid_manage',
                  'flags'      => CCFF_NOUPDATE );
                  
@@ -428,7 +428,10 @@ class CCOpenID
         $rec['openid_user'] = $user_id;
         $rec['openid_show'] = $show;
         $openids = new CCTable('cc_tbl_openids','openid');
-        $openids->Insert($rec);
+        if( $openids->QueryKeyRow($rec['openid']) )
+            $openids->Update($rec);
+        else
+            $openids->Insert($rec);
     }
         
     function _do_login($user_id)
