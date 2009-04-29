@@ -607,13 +607,16 @@ EOF;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','content','page'),   array( 'CCContentPage', 'Page'),       CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin','content','post'),   array( 'CCContentPage', 'Post'),       CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin','content','edit'),   array( 'CCContentPage', 'Edit'),       CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin','content','delete'), array( 'CCContentPage', 'TDelete'),    CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin','content','manage'), array( 'CCContentPage', 'Manage'),     CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin','content','pages'),  array( 'CCContentPage', 'Pages'),      CC_ADMIN_ONLY, ccs(__FILE__) );
-        CCEvents::MapUrl( ccp('admin','content'),          array( 'CCContentPage', 'Manage'),     CC_ADMIN_ONLY, ccs(__FILE__) );
+        CCEvents::MapUrl( ccp('admin','content','page'),   array( 'CCContentPage', 'Page'),       
+                CC_ADMIN_ONLY, ccs(__FILE__), '', _('Create a content page'), CC_AG_CONTENT_MAN );
+        CCEvents::MapUrl( ccp('admin','content','post'),   array( 'CCContentPage', 'Post'),       
+                CC_ADMIN_ONLY, ccs(__FILE__), '', _('Post content topic'), CC_AG_CONTENT_MAN );
+        CCEvents::MapUrl( ccp('admin','content','edit'),   array( 'CCContentPage', 'Edit'),       
+                CC_ADMIN_ONLY, ccs(__FILE__), '', _('Edit a content topic'), CC_AG_CONTENT_MAN );
+        CCEvents::MapUrl( ccp('admin','content','delete'), array( 'CCContentPage', 'TDelete'),    
+                CC_ADMIN_ONLY, ccs(__FILE__), '', _('Delete a content topic'), CC_AG_CONTENT_MAN );
+        CCEvents::MapUrl( ccp('admin','content'),          array( 'CCContentPage', 'Manage'),
+                CC_ADMIN_ONLY, ccs(__FILE__), '', _('Content manager'), CC_AG_CONTENT_MAN );
     }
 
 }

@@ -338,15 +338,13 @@ class CCUserAPI
 
                 $old_info = CCDatabase::QueryRow('SELECT * FROM cc_tbl_user WHERE user_id='.$id);
                 $old_info['user_extra'] = unserialize($old_info['user_extra']);
-                CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $id, &$old_info));
-
                 $users->Update($fields);
+                CCEvents::Invoke(CC_EVENT_USER_PROFILE_CHANGED, array( $id, &$old_info));
                 
                 if( !empty($CC_GLOBALS['lang_per_user']) )
                     CCEvents::Invoke(CC_EVENT_TRANSLATE);
 
                 $url = ccl('people',$username, 'profile');
-
                 CCUtil::SendBrowserTo($url);
             }
         }

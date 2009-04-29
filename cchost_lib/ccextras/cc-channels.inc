@@ -47,7 +47,7 @@ class CCChannels
 {
     function Admin()
     {
-        CCPage::SetTitle(_('Configure Channels'));
+        CCPage::SetTitle(_('Configure Radio Template'));
         $form = new CCChannelsAdminForm();
         if( empty($_POST['channelsadmin']) || !$form->ValidateFields() )
         {
@@ -88,11 +88,11 @@ class CCChannels
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('admin','channels'), 
+        CCEvents::MapUrl( ccp('admin','radio'), 
                           array( 'CCChannels', 'Admin'),  CC_ADMIN_ONLY,
-                          ccs(__FILE__)); /* , '', 
-                          _('Configure channels/radio interface'), 
-                          CC_AG_RENDER ); */
+                          ccs(__FILE__), '', 
+                          _('Configure "radio" template'), 
+                          CC_AG_MISC_ADMIN ); 
     }
 
     /**
@@ -103,22 +103,19 @@ class CCChannels
     */
     function OnAdminMenu(&$items,$scope)
     {
-        // I think this feature is dead
-        /*
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $items += array(
                 'channels' => array( 
-                                 'menu_text'  => _('Channels Page'),
+                                 'menu_text'  => _('Radio Page'),
                                  'menu_group' => 'configure',
-                                 'help' => 'Configure playlists for the channels page',
+                                 'help' => 'Configure playlists for the "radio" template',
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 1340,
-                                 'action' =>  ccl('admin','channels')
+                                 'action' =>  ccl('admin','radio')
                                  ),
                 );
         }
-        */
     }
 
 }

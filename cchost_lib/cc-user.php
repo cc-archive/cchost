@@ -244,7 +244,7 @@ class CCUsers extends CCTable
 
     function GetExtraField($user_id,$name)
     {
-        $extra = $this->QueryItemFromKey($user_id);
+        $extra = $this->QueryItemFromKey('user_extra',$user_id);
         $extra = unserialize($extra);
         return empty($extra[$name]) ? null : $extra[$name];
     }
@@ -262,20 +262,6 @@ class CCUsers extends CCTable
     }
 
     // depricated (will break your site)
-    function & GetRecordFromName($username)
-    {
-        $where = "user_name = '" . strtolower($username) . "'";
-        $row = $this->QueryRow($where);
-        if( empty($row) )
-        {
-            $row = null;
-            return $row;
-        }
-        $r =& $this->GetRecordFromRow($row);
-        return $r;
-    }
-
-    // depricated (will break your site)
     function & GetRecordFromID($userid)
     {
         $row = $this->QueryKeyRow($userid);
@@ -289,34 +275,6 @@ class CCUsers extends CCTable
         }
         $r =& $this->GetRecordFromRow($row);
         return $r;
-    }
-
-    // depricated (will break your site)
-    function & GetRecordFromRow(&$row,$expand = true)
-    {
-        CCDebug::StackTrace();
-        trigger_error('User get record called');
-
-        global $CC_GLOBALS;
-        
-        if( !empty($row['user_extra']) )
-            $row['user_extra'] = unserialize($row['user_extra']);
-        else
-            $row['user_extra'] = array();
-
-        // set the language to default (for visibility on the form only)
-        if (empty($row['user_language']))
-            $row['user_language'] = 'default';
-    /*
-
-        $row['artist_page_url']  = ccl('people' ,$row['user_name']);
-        $row['user_emailurl']    = ccl('people', 'contact', $row['user_name'] );
-
-        $row['user_is_admin'] = CCUser::IsAdmin($row['user_name']);
-        $row['user_avatar_url'] = cc_get_user_avatar($row);
-    */
-
-        return $row;
     }
 
     function SaveKnownIP()

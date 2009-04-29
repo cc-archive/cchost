@@ -140,11 +140,20 @@ class CCRestAPI
     //
     function UBeenRemixed()
     {
+        
+        if( empty($_REQUEST['guid']) ||
+            empty($_REQUEST['remixguid']) ||
+            empty($_REQUEST['poolsite']) )
+        {
+            CCUtil::Send404(true,"missing arguments");    
+        }
+            
+        
         global $CC_GLOBALS;
 
         require_once('cchost_lib/cc-pools.php');
         require_once('cchost_lib/cc-feedreader.php');
-
+        
         $guid        = $_REQUEST['guid'];
         $remixguid   = $_REQUEST['remixguid'];
         $poolsiteurl = $_REQUEST['poolsite'];
@@ -279,23 +288,6 @@ class CCRestAPI
         $this->success_exit('error',$msg);
     }
 
-    function Pools()
-    {
-        global $CC_GLOBALS;
-
-        // not really done here...
-        $tfile = CCTemplate::GetTemplate('api.xml');
-        $template = new CCTemplate( $tfile, false ); // false means xml mode
-        $configs =& CCConfigs::GetTable();
-        $args = array_merge($CC_GLOBALS,$configs->GetConfig('ttags'));
-        $pools =& CCPools::GetTable();
-        $args['feed_items'] = $pools->QueryRows('');
-        $xml = $template->SetAllAndParse($args);
-        header("Content-type: text/xml");
-        print($xml);
-        exit;
-    }
-
     function PoolRegister()
     {
         global $CC_GLOBALS;
@@ -340,10 +332,14 @@ class CCRestAPI
     function OnMapUrls()
     {
         // compat mappings
-        CCEvents::MapUrl( ccp('api','info'),                 array( 'CCRestAPI', 'Info'),CC_DONT_CARE_LOGGED_IN, ccs(__FILE__)); 
-        CCEvents::MapUrl( ccp('api','search'),               array( 'CCRestAPI', 'Search'),CC_DONT_CARE_LOGGED_IN,ccs(__FILE__));
-        CCEvents::MapUrl( ccp('api','file'),                 array( 'CCRestAPI', 'File'),CC_DONT_CARE_LOGGED_IN,ccs(__FILE__));
-        CCEvents::MapUrl( ccp('api','ubeensampled'),         array( 'CCRestAPI', 'UBeenRemixed'),CC_DONT_CARE_LOGGED_IN,ccs(__FILE__));
+        CCEvents::MapUrl( ccp('api','info'),                 array( 'CCRestAPI', 'Info'),
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', '(alias for pool/api/info)', CC_AG_deprecated); 
+        CCEvents::MapUrl( ccp('api','search'),               array( 'CCRestAPI', 'Search'),
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', '(alias for pool/api/search)', CC_AG_deprecated); 
+        CCEvents::MapUrl( ccp('api','file'),                 array( 'CCRestAPI', 'File'),
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', '(alias for pool/api/file)', CC_AG_deprecated); 
+        CCEvents::MapUrl( ccp('api','ubeensampled'),         array( 'CCRestAPI', 'UBeenRemixed'),
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', '(alias for pool/api/ubeensampled)', CC_AG_deprecated); 
 
         // happy new mappings
         CCEvents::MapUrl( ccp('api','pool','info'),                 array( 'CCRestAPI', 'Info'), 
@@ -355,10 +351,8 @@ class CCRestAPI
         CCEvents::MapUrl( ccp('api','pool','ubeensampled'),         array( 'CCRestAPI', 'UBeenRemixed'), 
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '',_('Notification this pool has been sampled remotely'), CC_AG_SAMPLE_POOL );
 
-        CCEvents::MapUrl( ccp('api','pools'),                array( 'CCRestAPI', 'Pools'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
         CCEvents::MapUrl( ccp('api','poolregister'),         array( 'CCRestAPI', 'PoolRegister'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '?poolsite', _('Remote pool site registration'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp('api','version'),         array( 'CCRestAPI', 'Version'), 
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Display version info for site'), CC_AG_SAMPLE_POOL );
     }

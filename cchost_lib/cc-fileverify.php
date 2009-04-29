@@ -283,7 +283,7 @@ class CCFileVerify
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'admin/formats',  array('CCFileVerify', 'ConfigureFormats'), 
-            CC_ADMIN_ONLY, ccs(__FILE__) ); // don't doc this, it's going to move
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show file type admin form'), CC_AG_UPLOAD );
     }
 
     /**

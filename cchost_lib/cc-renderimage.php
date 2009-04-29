@@ -45,7 +45,7 @@ class CCRenderImage extends CCRender
         CCEvents::MapUrl( ccp('media','showimage'), array('CCRenderImage','Show'), 
             CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}/{upload_id}', _('Display bitmap'), CC_AG_RENDER );
         CCEvents::MapUrl( ccp('admin','thumbnail'), array('CCRenderImage','Admin'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Display thumbnail admin form'), CC_AG_RENDER );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display thumbnail admin form'), CC_AG_RENDER );
     }
 
     function Admin()

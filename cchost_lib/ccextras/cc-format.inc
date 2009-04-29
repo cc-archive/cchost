@@ -91,8 +91,8 @@ class CCFormat
 {
     function Preview()
     {
-        if( !_cc_is_formatting_on() )
-            return;
+        if( !_cc_is_formatting_on() || empty($_GET['ptext']) )
+            exit;
 
         $text = CCUtil::StripSlash(urldecode($_GET['ptext']));
         print _cc_format_format($text);
@@ -147,10 +147,10 @@ class CCFormat
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('format'), array('CCFormat','CallBack'), CC_DONT_CARE_LOGGED_IN,
-                ccs(__FILE__));
+                ccs(__FILE__), '/preview?ptext=', _('Ajax callback to return formatted text'), CC_AG_FORUMS);
     }
 
-    function CallBack($cmd)
+    function CallBack($cmd='')
     {
         switch( $cmd )
         {

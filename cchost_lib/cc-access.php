@@ -145,12 +145,63 @@ class CCAccess
         CCPage::AddForm($form->GenerateForm());
     }
 
+    function CommandTest()
+    {
+        /*
+    [admin/super] => CCAction Object
+        (
+            [cb] => Array
+                (
+                    [0] => CCAccess
+                    [1] => Super
+                )
+
+            [pm] => 4096
+            [md] => cchost_lib/cc-access.php
+            [dp] => 
+            [ds] => Edit list of super admins
+            [dg] => _mad
+            [url] => admin/super
+        )
+        */
+        $map = cc_get_url_map(0,0);
+        print '<html><body>';
+        foreach( $map as $cmd => $obj )
+        {
+            if( ($obj->pm & (CC_ADMIN_ONLY|CC_SUPER_ONLY|CC_MUST_BE_LOGGED_IN)) != 0 )
+                continue;
+            $url = ccl($cmd);
+            $link = "<a href=\"{$url}\">{$cmd}</a><br />";
+            print $link;
+        }
+        print '</body></html>';
+        exit;
+    }
+
     function CommandDump($undocced=1)
     {
+        if( $undocced == 'test' )
+        {
+            return $this->CommandTest();
+        }
+        
         $title = _('ccHost Commands');
         require_once('cchost_lib/cc-admin.php');
         CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
         CCPage::SetTitle($title);
+
+        $user_only   = false;
+        $public_only = false;
+        if( $undocced == 'user' )
+        {
+            $undocced = 1;
+            $user_only = true;
+        }
+        elseif( $undocced == 'public' )
+        {
+            $undocced = 1;
+            $public_only = true; 
+        }
 
         $map = cc_get_url_map(1,$undocced);
         $html =<<<EOF
@@ -188,6 +239,18 @@ EOF;
 
             foreach( $group as $command_name => $C )
             {
+                if( $user_only || $public_only)
+                {
+                    if( ($C->pmu & (CC_ADMIN_ONLY|CC_SUPER_ONLY)) != 0 )
+                        continue;
+
+                    if( $public_only )
+                    {
+                        if( ($C->pmu & CC_MUST_BE_LOGGED_IN) != 0 )
+                            continue;
+                    }
+                }
+                
                 $html .= "\n" . '<tr><td class="command_key">' . $command_name . '</td>';
                 
                 $html .= "\n" . '   <td><table>';
@@ -301,11 +364,11 @@ EOF;
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'admin/super',     array('CCAccess', 'Super'),       
-            CC_SUPER_ONLY, ccs(__FILE__) );
+            CC_SUPER_ONLY, ccs(__FILE__), '', _('Edit list of super admins'), CC_AG_ADMIN_MISC );
         CCEvents::MapUrl( 'admin/access',     array('CCAccess', 'Access'), 
-            CC_SUPER_ONLY, ccs(__FILE__) );
+            CC_SUPER_ONLY, ccs(__FILE__), '', _('Edit URL access levels'), CC_AG_ADMIN_MISC );
         CCEvents::MapUrl( 'commands',     array('CCAccess', 'CommandDump'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{0|user|public}', _('This screen...'), CC_AG_ADMIN_MISC );
     }
 
 }

@@ -625,19 +625,26 @@ END;
                                  'weight' => 1,
                                  'action' =>  ccl('viewfile','adminhelp.xml')
                                  ),
+                'inisettings'   => array( 'menu_text'  => 'Check PHP Settings',
+                                 'menu_group' => 'configure',
+                                 'help'      => _('Check your PHP environment settings'),
+                                 'access' => CC_ADMIN_ONLY,
+                                 'weight' => 2,
+                                 'action' =>  ccl('ini_settings')
+                                 ),
+                'adminadvanced'   => array( 'menu_text'  => 'Global Setup',
+                                 'menu_group' => 'configure',
+                                 'help'  => _('Cookies, ban message, admin email, 3rd party add ins, etc.'),
+                                 'access' => CC_ADMIN_ONLY,
+                                 'weight' => 3,
+                                 'action' =>  ccl('admin','setup')
+                                 ),
                 'virtualhost'   => array( 'menu_text'  => 'Virtual ccHost',
                                  'menu_group' => 'configure',
                                  'help' => _('Create a new virtual root'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 1003,
                                  'action' =>  ccl('admin','cfgroot')
-                                 ),
-                'adminadvanced'   => array( 'menu_text'  => 'Global Setup',
-                                 'menu_group' => 'configure',
-                                 'help'  => _('Cookies, ban message, admin email, 3rd party add ins, etc.'),
-                                 'access' => CC_ADMIN_ONLY,
-                                 'weight' => 2,
-                                 'action' =>  ccl('admin','setup')
                                  ),
                     );
         }
@@ -695,7 +702,7 @@ END;
     function OnMapUrls()
     {
         CCEvents::MapUrl( 'admin/save',     array('CCAdmin', 'SaveConfig'), 
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Common form post callback'), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/site',     array('CCAdmin', 'Site'),       
             CC_ADMIN_ONLY, ccs(__FILE__), '[local|global]', 

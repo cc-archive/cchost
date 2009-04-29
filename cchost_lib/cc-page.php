@@ -50,9 +50,9 @@ class CCPageAdmin
     function OnMapUrl()
     {
         CCEvents::MapUrl( 'viewfile', array( 'CCPageAdmin', 'ViewFile' ),  
-                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays XHTML template'), CC_AG_VIEWFILE  );
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays template from "pages" dir'), CC_AG_VIEWFILE  );
         CCEvents::MapUrl( 'docs',     array( 'CCPageAdmin', 'ViewFile' ),  
-                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('Displays XHTML template (alias for viewfile)'), CC_AG_VIEWFILE );
+                          CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{docfilename}', _('(alias for viewfile)'), CC_AG_VIEWFILE );
     }
 
 

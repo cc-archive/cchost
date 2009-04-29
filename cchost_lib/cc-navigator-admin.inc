@@ -624,7 +624,7 @@ class CCNavigatorAdmin
     {
         CCEvents::MapUrl( 'view',             array('CCNavigator', 'View'),            
             CC_DONT_CARE_LOGGED_IN, 'cchost_lib/cc-navigator.php', '[tab_set]/[tab]/[subtab]',
-            _('Perform view tabs actions'), CC_AG_CONFIG );
+            _('Display main navigator tabs'), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/tabs',       array('CCNavigatorAdmin', 'AdminTabs'),       
             CC_ADMIN_ONLY, ccs(__FILE__), '',

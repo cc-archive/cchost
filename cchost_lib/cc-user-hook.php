@@ -125,8 +125,8 @@ EOF;
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('user_hook','upload_list'), array('CCUserHook','UploadList'), CC_MUST_BE_LOGGED_IN, ccs(__FILE__));
-        CCEvents::MapUrl( ccp('user_hook','tags'),        array('CCUserHook','Tags'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__));
+        CCEvents::MapUrl( ccp('user_hook','upload_list'), array('CCUserHook','UploadList'),
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '', _('Ajax callback for user hooks'), CC_AG_USER);
     }
 
 }

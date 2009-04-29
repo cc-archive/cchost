@@ -1262,7 +1262,7 @@ class CCQuery
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('api','query'),   array( 'CCQuery', 'QueryURL'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Query API (URL context)'), CC_AG_QUERY );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Query API'), CC_AG_QUERY );
 
         cc_tcache_kill(); // this is probably an ?update=1 so kill the cache...
     }

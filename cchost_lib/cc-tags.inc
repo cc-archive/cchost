@@ -643,7 +643,7 @@ class CCTagEvents
         CCEvents::MapUrl( ccp('admin','tags'), array('CCTagEvents','Admin'), 
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Admin Tags'), CC_AG_TAGS ); 
         CCEvents::MapUrl( ccp('admin','tags','reset'), array('CCTagEvents','Reset'), 
-            CC_ADMIN_ONLY, ccs(__FILE__));
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Resync all tag counts (slow)'), CC_AG_TAGS);
     }
 
     function Admin()

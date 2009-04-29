@@ -88,8 +88,12 @@ END;
         $query->Query($args);
     }
 
-    function PoolHook($cmd,$pool_id)
+    function PoolHook($cmd='',$pool_id='')
     {
+        $pool_id = sprintf('%d',$pool_id);
+        if( empty($pool_id) )
+            exit;
+        
         switch($cmd)
         {
             case 'alpha':
@@ -757,7 +761,8 @@ EOF;
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp( 'pools', 'pool_hook'),     array( 'CCPoolUI', 'PoolHook'), 
-            CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid},{cmd}'); // ajax callbck
+            CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid},{cmd}',
+            _('Ajax callback hook'), CC_AG_SAMPLE_POOL); 
         CCEvents::MapUrl( ccp( 'pools'),     array( 'CCPoolUI', 'Pool'),
             CC_DONT_CARE_LOGGED_IN , ccs(__FILE__) , '{poolid}', 
             _('List sample pools'), CC_AG_SAMPLE_POOL );
@@ -772,10 +777,11 @@ EOF;
             _('Search a given pool (perhaps remotely) with a string'), CC_AG_SAMPLE_POOL );
 
         CCEvents::MapUrl( ccp( 'admin', 'pools'),                array( 'CCPoolUI', 'Admin'),    
-            CC_ADMIN_ONLY , ccs(__FILE__) , '', _('Display admin pools menu'), CC_AG_SAMPLE_POOL );
+            CC_ADMIN_ONLY , ccs(__FILE__) , '',
+            _('Display admin pools menu'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp( 'admin', 'pools', 'settings' ),   array( 'CCPoolUI', 'Settings'), 
-            CC_ADMIN_ONLY , ccs(__FILE__) , '', _('Display pool admin settings form'), 
-            CC_AG_SAMPLE_POOL );
+            CC_ADMIN_ONLY , ccs(__FILE__) , '',
+            _('Display pool admin settings form'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp( 'admin', 'pools', 'manage' ),     array( 'CCPoolUI', 'Manage'),   
             CC_ADMIN_ONLY , ccs(__FILE__) , '', _('Display list of pools to admin'), CC_AG_SAMPLE_POOL );
         CCEvents::MapUrl( ccp( 'admin', 'pool',  'edit' ),       array( 'CCPoolUI', 'Edit'),     

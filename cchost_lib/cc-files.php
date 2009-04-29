@@ -220,14 +220,14 @@ class CCFileNicknameForm extends CCForm
 */
 class CCPhysicalFile
 {
-    function Manage($upload_id)
-    {
+    function Manage($upload_id='')
+    {        
         require_once('cchost_lib/cc-uploadapi.php');
         require_once('cchost_lib/cc-page.php');
 
         $upload_id = CCUtil::StripText($upload_id);
         if( empty($upload_id) || !intval($upload_id) )
-            return;
+            CCUtil::Send404();
 
         $record =& CCUploadAPI::_get_record($upload_id);
         $record['file_page_url'] = ccl('files',$record['user_name'],$upload_id);
@@ -655,12 +655,14 @@ class CCPhysicalFile
                      '{upload_id}', _('Show Add File form'), CC_AG_UPLOADS );
         CCEvents::MapUrl( 'file/replace', array('CCPhysicalFile','Replace'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
                      '{file_id}', _('Show Replace File form'), CC_AG_UPLOADS );
-        CCEvents::MapUrl( 'file/jockey',  array('CCPhysicalFile','Jockey'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/jockey',  array('CCPhysicalFile','Jockey'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
+                        '',_('Ajax callback to reorder files'), CC_AG_UPLOAD );
         CCEvents::MapUrl( 'file/delete',  array('CCPhysicalFile','Delete'),  CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
                       '{file_id}', _('Show Delete File form (not the whole upload)'), CC_AG_UPLOADS );
         CCEvents::MapUrl( 'file/nickname',array('CCPhysicalFile','Nicname'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
                       '{file_id}', _('Show Change Nicname form (not the whole upload)'), CC_AG_UPLOADS );
-        CCEvents::MapUrl( 'file/changetype',array('CCPhysicalFile','ChangeType'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__) );
+        CCEvents::MapUrl( 'file/changetype',array('CCPhysicalFile','ChangeType'), CC_MUST_BE_LOGGED_IN , ccs(__FILE__),
+                       '', _('Ajax callback to change file tag'), CC_AG_UPLOAD );
         CCEvents::MapUrl( 'file/manage',  array('CCPhysicalFile','Manage'), 
             CC_MUST_BE_LOGGED_IN , ccs(__FILE__), '', _('Show "Manage Files" form'), CC_AG_UPLOADS );
     }

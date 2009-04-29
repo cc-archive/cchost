@@ -1039,9 +1039,11 @@ END;
         $page =& CCPage::GetPage();
         $str = $page->String($value);
         $wid = strlen($str);
-
+        if( empty($class) )
+            $class='cc_gen_button';
+            
         $url =  $this->GetFormFieldItem($varname,'url');
-        return( "<div style=\"width:{$wid}em\"><a class=\"cc_gen_button\" href=\"{$url}\"><span>$str</span></a></div>" );
+        return( "<div style=\"width:{$wid}em\"><a class=\"{$class}\" href=\"{$url}\"><span>$str</span></a></div>" );
     }
 
     function validator_button()
@@ -1106,6 +1108,8 @@ END;
             $html = '<span style="white-space:nowrap">';
         else
             $html = '';
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
         foreach( $options as $ovalue => $otext )
         {
             if( !isset($value) )
@@ -1120,7 +1124,10 @@ END;
                     "$selected class=\"$class\" />";
             
             if( !empty($otext) )
+            {
+                $otext = $page->String($otext);
                 $html .= "<label>$otext</label>";
+            }
 
             if( empty($nobr) )
             {

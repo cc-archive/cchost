@@ -561,7 +561,7 @@ class CCTemplateAdmin
     {
         CCEvents::MapUrl( 'admin/templatetags',     array('CCTemplateAdmin','OnAdminTags'),         
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
-            _("Displays 'Header/Footer' menus and option forms"), CC_AG_CONFIG );
+            _("Display form to edit variables in templates"), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/extras',          array('CCTemplateAdmin','OnAdminExtras'),      
             CC_ADMIN_ONLY, ccs(__FILE__), '', 

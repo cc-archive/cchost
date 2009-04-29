@@ -150,8 +150,12 @@ class CCPool
                         );
     }
     
-    function Search($pool_id)
+    function Search($pool_id='')
     {
+        $pool_id = sprintf('%d',$pool_id);
+        if( empty($pool_id) )
+            exit;
+        
         $query = CCUtil::Strip($_GET['search']);
 
         list( $type, $pool_results ) = CCPool::PoolQuery($pool_id, $query);

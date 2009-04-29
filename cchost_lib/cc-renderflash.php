@@ -26,19 +26,40 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cchost_lib/cc-render.php');
+
 /**
 * @package cchost
 * @subpackage video
 */
 class CCRenderFlash extends CCRender
 {
-    function Play($username,$upload_id) {
-        Show($username,$upload_id);
+    function Play($username='',$upload_id='') {
+        $this->Show($username,$upload_id);
     }
 
-    function Show($username,$upload_id)
+    function Show($username='',$upload_id='')
     {
-        list( $w, $h ) = CCUploads::GetFormatInfo($record,'dim');
+        $username = CCUtil::StripText($username);
+        $upload_id = sprintf('%d',$upload_id);
+        if( empty($username) || empty($upload_id) )
+            CCUtil::Send404();
+
+        require_once('cchost_lib/cc-query.php');
+        $q = 'dataview=files&f=php&ids=' . $upload_id;
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs($q);
+        list( $records, $m ) = $query->Query($args);
+        if( empty($records) )
+            CCUtil::Send404();
+        $record =& $records[0];
+        $dim = CCUploads::GetFormatInfo($record,'dim');
+        if( empty($dim) )
+        {
+            // er, ungraceful yo'
+            die('this upload does not support dimensions');
+        }
+        list( $w, $h ) = $dim;
         $html =<<<END
 <html>
 <body style="margin:0">
@@ -51,46 +72,6 @@ class CCRenderFlash extends CCRender
 END;
         print($html);
         exit;
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow(&$record)
-    {
-        if( empty($record['script_link']) )
-        {
-            $link = $this->_get_stream_link($record);
-            if( !empty($link) )
-                $record['script_link'] = $link;
-        }
-        else
-        {
-            $record['script_link'] = '';
-        }
-    }
-
-    function _get_stream_link(&$record)
-    {
-      //if( empty($record['upload_banned']) && CCUploads::IsMediaType($record,'video','swf')  )
-        if( empty($record['upload_banned']) && CCUploads::InTags('swf',$record) )
-        {
-            $ilink = ccl('files','playflash', $record['user_name'],
-                                             $record['upload_id']);
-            list( $w, $h ) = CCUploads::GetFormatInfo($record,'dim');
-            $w += 30;
-            $h += 30;
-            $action =<<<END
-      javascript:window.open('$ilink','flashplay',
-                'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width=$w, height=$h');
-END;
-            $link['url'] = $action;
-            $link['text'] = _('Play');
-            return($link);
-        }
     }
 
     /**

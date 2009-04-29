@@ -27,39 +27,64 @@ if( !defined('IN_CC_HOST') )
 
 class CCUserSearch
 {
-    function OnUserSearch($field,$tag='')
+    function OnUserSearch($field='',$tag='')
     {
+        $field = CCUtil::StripText($field);
+        if( empty($field) )
+            CCUtil::Send404();
+            
         require_once('cchost_lib/cc-page.php');
 
-        if( $field == 'lookinfor' )
+        switch( $field )
         {
-            CCPage::SetTitle('str_search_wipo');
-
-            $org_tag = $tag;
-            $tag = strtolower($tag);
-            $users = new CCUsers();
-            $where = "(LOWER(user_whatido) REGEXP '(^| |,)($tag)(,|\$)' )";
-            $count = $users->CountRows($where);
-            $got_tag = $count > 0;
-            $first_letter = $tag ? $tag{0} : '';
-            $where = "user_whatido > ''";
-            $users->SetSort('user_registered','DESC');
-            $rows = $users->QueryRows($where,'user_name,user_real_name,LOWER(user_whatido) as wid');
-            $whatidos = array();
-            $base = ccl('people') . '/';
-            foreach( $rows as $row )
+            case 'lookinfor':
             {
-                $wids = split(',',$row['wid']);
-                unset($row['user_whatido']);
-                foreach($wids as $wid)
-                    $whatidos[strtolower($wid)][] = 
-                       "<a href=\"{$base}{$row['user_name']}\">{$row['user_real_name']}</a>";
+                $this->_lookin_for($tag);
+                break;
             }
+            case 'whatido':
+            case 'whatilike':
+            {
+                $field = 'user_' . $field;
+                CCPage::SetTitle('str_search_users_that', $tag);
+                require_once('cchost_lib/cc-query.php');
+                $query = new CCQuery();
+                $sqlargs['where'] = "CONCAT($field,',') LIKE '%$tag,%'";
+                $args = $query->ProcessAdminArgs('t=user_match');
+                $query->QuerySQL($args,$sqlargs);
+            }
+        }
+    }
 
-            ksort($whatidos);
-            $wid_links = array();
-            // TODO: This should really go into a stylesheet proper.
-            $html =<<<EOF
+    function _lookin_for($tag)
+    {
+        CCPage::SetTitle('str_search_wipo');
+
+        $org_tag = $tag;
+        $tag = strtolower($tag);
+        $users = new CCUsers();
+        $where = "(LOWER(user_whatido) REGEXP '(^| |,)($tag)(,|\$)' )";
+        $count = $users->CountRows($where);
+        $got_tag = $count > 0;
+        $first_letter = $tag ? $tag{0} : '';
+        $where = "user_whatido > ''";
+        $users->SetSort('user_registered','DESC');
+        $rows = $users->QueryRows($where,'user_name,user_real_name,LOWER(user_whatido) as wid');
+        $whatidos = array();
+        $base = ccl('people') . '/';
+        foreach( $rows as $row )
+        {
+            $wids = split(',',$row['wid']);
+            unset($row['user_whatido']);
+            foreach($wids as $wid)
+                $whatidos[strtolower($wid)][] = 
+                   "<a href=\"{$base}{$row['user_name']}\">{$row['user_real_name']}</a>";
+        }
+
+        ksort($whatidos);
+        $wid_links = array();
+        // TODO: This should really go into a stylesheet proper.
+        $html =<<<EOF
 <style type="text/css">
 #wid_table td, #wid_table th {
   vertical-align: top;
@@ -73,40 +98,29 @@ class CCUserSearch
 </style>
 <table id="wid_table">
 EOF;
-            $got_first_letter = false;
-            $show_all = empty($_GET['filter']);
-            foreach( $whatidos as $wid => $alinks )
-            {
-                if( !$show_all && (count($alinks) < 2) )
-                    continue;
-
-                $html .= '<tr><th class="light_bg">' . $wid;
-                if( ($got_tag && ($wid == $tag)) ||
-                    (!$got_tag && ($first_letter == $wid{0}) )
-                   )
-                {
-                    $html .= '<a name="' . $org_tag . '" />';
-                }
-                $html .= '</th><td>' .
-                            join(', ',$alinks) . '</td></tr>' . "\n";
-            }
-
-            $html .= '</table>';
-
-            CCPage::AddContent($html);
-        }
-        else
+        $got_first_letter = false;
+        $show_all = empty($_GET['filter']);
+        foreach( $whatidos as $wid => $alinks )
         {
-            $field = 'user_' . $field;
-            CCPage::SetTitle('str_search_users_that', $tag);
-            require_once('cchost_lib/cc-query.php');
-            $query = new CCQuery();
-            $sqlargs['where'] = "CONCAT($field,',') LIKE '%$tag,%'";
-            $args = $query->ProcessAdminArgs('t=user_match');
-            $query->QuerySQL($args,$sqlargs);
-        }
-    }
+            if( !$show_all && (count($alinks) < 2) )
+                continue;
 
+            $html .= '<tr><th class="light_bg">' . $wid;
+            if( ($got_tag && ($wid == $tag)) ||
+                (!$got_tag && ($first_letter == $wid{0}) )
+               )
+            {
+                $html .= '<a name="' . $org_tag . '" />';
+            }
+            $html .= '</th><td>' .
+                        join(', ',$alinks) . '</td></tr>' . "\n";
+        }
+
+        $html .= '</table>';
+
+        CCPage::AddContent($html);
+    }
+    
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *

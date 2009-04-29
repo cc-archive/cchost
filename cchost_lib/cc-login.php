@@ -332,7 +332,7 @@ class CCLogin
         CCEvents::MapUrl( 'lostpassword',   array( 'CCLogin', 'LostPassword'),    
             CC_ONLY_NOT_LOGGED_IN, ccs(__FILE__), '', _('Show lost password form'), CC_AG_USER  );
         CCEvents::MapUrl( 's',              array( 'CCLogin', 'OnSecurityCallback'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', _('Security callback'), CC_AG_USER );
     }
 
     /**
@@ -343,7 +343,9 @@ class CCLogin
         global $CC_GLOBALS;
 
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle('str_login_create_acc');
+        $page =& CCPage::GetPage();
+        $this->_bread_crumbs_login($page,'str_login_create_acc');
+        $page->SetTitle('str_login_create_acc');
         $form = new CCNewUserForm();
         $form->SetHelpText('str_login_this_site_req');
         
@@ -373,7 +375,7 @@ class CCLogin
                     $msg= $status['error'];
                     if( CCDebug::IsEnabled() )
                         $msg .= " " . $status['sql_error'];
-                    CCPage::SystemError($msg);
+                    $page->SystemError($msg);
                 }
             }
             else
@@ -418,7 +420,7 @@ class CCLogin
 
         if( $show )
         {
-            CCPage::AddForm( $form->GenerateForm() );
+            $page->AddForm( $form->GenerateForm() );
         }
     }
 
@@ -430,6 +432,8 @@ class CCLogin
         global $CC_GLOBALS;
 
         require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        $this->_bread_crumbs($page,'str_log_out');
         cc_setcookie(CC_USER_COOKIE,'',time());
         cc_setcookie(CC_TRANSITION_COOKIE,gmmktime(),time()+60*60*24*30);
         unset($_COOKIE[CC_USER_COOKIE]);
@@ -442,12 +446,31 @@ class CCLogin
         CCPage::AddMacro('util.php/fixup_logout');
     }
 
+    function _bread_crumbs(&$page, $text)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => 'str_home' );
+        $trail[] = array( 'url' => '',    'text' => $text );
+        $page->AddBreadCrumbs($trail);
+    }
+
+    function _bread_crumbs_login(&$page, $text)
+    {
+        $trail[] = array( 'url' => ccl(), 'text' => 'str_home' );
+        $trail[] = array( 'url' => ccl('login'),    'text' => 'str_log_in' );
+        $trail[] = array( 'url' => '',    'text' => $text );
+        $page->AddBreadCrumbs($trail);
+    }
+    
     /**
     * Handles /login URL, puts up log in form
     */
     function Login($do_ui=true,$confirm='')
     {
         global $CC_GLOBALS;
+
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        $this->_bread_crumbs($page,'str_log_in');
 
         $do_ui = is_string($do_ui) || $do_ui; // sorry bout that
 
@@ -464,13 +487,13 @@ class CCLogin
                 elseif( $reg_type == CC_REG_USER_EMAIL )
                     $rmsg = 'str_login_your_new_login';
                 if( !empty($rmsg) )
-                    CCPage::Prompt($rmsg);
+                    $page->Prompt($rmsg);
             }
 
             CCEvents::Invoke(CC_EVENT_LOGIN_FORM,array(&$form));
             require_once('cchost_lib/cc-page.php');
-            CCPage::SetTitle('str_log_in');
-            CCPage::AddForm( $form->GenerateForm() );
+            $page->SetTitle('str_log_in');
+            $page->AddForm( $form->GenerateForm() );
             $ok = false;
         }
         else
@@ -532,11 +555,13 @@ class CCLogin
     function LostPassword()
     {
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle('str_login_recover_lost_password');
+        $page =& CCPage::GetPage();
+        $this->_bread_crumbs_login($page,'str_login_recover_lost_password');
+        $page->SetTitle('str_login_recover_lost_password');
         $form = new CCLostPasswordForm();
         if( empty($_POST['lostpassword']) || !$form->ValidateFields() )
         {
-            CCPage::AddForm( $form->GenerateForm() );
+            $page->AddForm( $form->GenerateForm() );
         }
         else
         {
@@ -553,7 +578,7 @@ class CCLogin
 
             $why = 'str_login_you_are_rec2';
             $this->_send_login_info($user_name,'str_login_recover_lost_password',$why,$new_password,$row['user_email']);
-            CCPage::Prompt('str_login_new_password');
+            $page->Prompt('str_login_new_password');
         }
 
     }
@@ -595,9 +620,9 @@ class CCLogin
     * @see CCNewUserForm::generator_securitykey()
     * @param integer $s Combination ID and index into a security key
     */
-    function OnSecurityCallback($s)
+    function OnSecurityCallback($s='')
     {
-        $intval = intval($s);
+        $intval = intval(sprintf('%d',$s));
         if( !$intval )
             exit;
         $key = intval($intval / 100);

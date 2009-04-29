@@ -474,6 +474,10 @@ EOF;
 
     function GetUploads( $collab_id='' )
     {
+        $collab_id = sprintf('%d',$collab_id);
+        if( empty($collab_id) )
+            CCUtil::Send404();
+            
         $collab_row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_collabs WHERE collab_id='.$collab_id);
         list( $is_owner, $is_member, $is_confirmed ) = $this->_get_user_acccess($collab_row);
 
@@ -493,6 +497,10 @@ EOF;
 
     function GetUsers( $collab_id='' )
     {
+        $collab_id = sprintf('%d',$collab_id);
+        if( empty($collab_id) )
+            CCUtil::Send404();
+            
         global $CC_GLOBALS;
         $collab_row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_collabs WHERE collab_id='.$collab_id);
         list( $CC_GLOBALS['is_collab_owner'], 
@@ -515,7 +523,9 @@ EOF;
             $cmd = CCUtil::Strip($cmd);
             $ok = !empty($collab_id) && !empty($upload_id) && !empty($cmd);
         }
-        else
+
+
+        if( !$ok )
         {
             $args[CC_AJAX_ERROR] = _('Invalid arguments');
         }
@@ -579,7 +589,8 @@ EOF;
             $cmd = CCUtil::Strip($cmd);
             $ok = !empty($collab_id) && !empty($username) && !empty($cmd);
         }
-        else
+
+        if( !$ok )
         {
             $args[CC_AJAX_ERROR] = _('Invalid arguments');
         }
@@ -992,39 +1003,50 @@ EOF;
     function OnMapUrls()
     {
         CCEvents::MapUrl( ccp('collab'),        array( 'CCCollab', 'View'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}' );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}',
+            _('Show a collaboration'), CC_AG_COLLAB );
 
         CCEvents::MapUrl( ccp('collab','create'), array( 'CCCollab', 'Create'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__) );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '',
+            _('Create a new collab project'), CC_AG_COLLAB );
 
         CCEvents::MapUrl( ccp('collab','edit'), array( 'CCCollab', 'Edit'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}',
+            _('Edit a collab project'), CC_AG_COLLAB  );
 
         CCEvents::MapUrl( ccp('collab','sync'), array( 'CCCollab', 'Sync'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}',
+            _('Ajax call to synchronize remixes of a collab proj'), CC_AG_COLLAB  );
 
         CCEvents::MapUrl( ccp('collab','topic','add'), array( 'CCCollab', 'PostTopic'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}',
+            _('Ajax call to post a topic to a collab project'), CC_AG_COLLAB  );
 
         // useradd, removeuser, editcredit, contact
         CCEvents::MapUrl( ccp('collab','user'), array( 'CCCollab', 'User'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{username},{cmd}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{username},{add|remove|credit|contact|confirm}',
+             _('Ajax call to maintain user of collab project'), CC_AG_COLLAB  );
 
         // remove, publish
         CCEvents::MapUrl( ccp('collab','upload'), array( 'CCCollab', 'Upload'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id},{cmd}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id},{remove|publish}',
+            _('Ajax call for maintainance on uploads of a collab proj.'), CC_AG_COLLAB  );
 
         CCEvents::MapUrl( ccp('collab','upload','update'), array( 'CCCollab', 'GetUploads'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}',
+            _('Ajax call to return uploads of a collab proj.'), CC_AG_COLLAB  );
 
         CCEvents::MapUrl( ccp('collab','users'), array( 'CCCollab', 'GetUsers'),  
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{collab_id}',
+            _('Ajax call to return users of a collab proj.'), CC_AG_COLLAB  );
 
         CCEvents::MapUrl( ccp('collab','upload','file'), array( 'CCCollab', 'UploadFile'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id}',
+            _('Ajax call to post a file to a collab project.'), CC_AG_COLLAB  );
 
         CCEvents::MapUrl( ccp('collab','upload','tags'), array( 'CCCollab', 'UpdateTags'),  
-            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}'  );
+            CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{collab_id},{upload_id}?tags=',
+            _('Ajax call to set tags on a collab proj.'), CC_AG_COLLAB  );
     }
 }
 

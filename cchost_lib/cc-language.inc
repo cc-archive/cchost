@@ -191,11 +191,11 @@ class CCLanguageAdmin
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show language admin form'), CC_AG_MISC_ADMIN );
 
         CCEvents::MapUrl( ccp('admin','language','save'),  array( 'CCLanguageAdmin', 'SavePage'), 
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('language form post callback'), CC_AG_MISC_ADMIN  );
 
         CCEvents::MapUrl( ccp('admin','language','diagnostic'),  
                             array( 'CCLanguageAdmin', 'DiagnosticPage'), 
-            CC_ADMIN_ONLY, ccs(__FILE__) );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Language diag.'), CC_AG_MISC_ADMIN  );
     }
 
 }

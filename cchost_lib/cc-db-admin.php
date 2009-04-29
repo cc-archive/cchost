@@ -32,6 +32,8 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
+require_once('cchost_lib/cc-form.php');
+
 /**
 * Configuration form for database admin
 * 
@@ -89,7 +91,8 @@ class CCDatabaseAdmin
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( 'admin/database',  array('CCDatabaseAdmin','Admin'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/database',  array('CCDatabaseAdmin','Admin'), CC_ADMIN_ONLY,
+            ccs(__FILE__), '', _('Edit config-db file'), CC_AG_ADMIN_MISC );
     }
 
     /**

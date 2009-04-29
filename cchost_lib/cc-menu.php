@@ -392,8 +392,8 @@ class CCMenu
             _('Display admin menu form'), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/menu/killcache',  array('CCMenu', 'KillCache'),         
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '', 
-            _('Remove menu/url cache'), CC_AG_CONFIG );
+            CC_ADMIN_ONLY, ccs(__FILE__), '', 
+            _('Clear menu/url cache'), CC_AG_CONFIG );
 
         CCEvents::MapUrl( 'admin/menu/additems',   array('CCMenu', 'AddMenuItems'),  
             CC_ADMIN_ONLY, ccs(__FILE__), '', 
