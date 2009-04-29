@@ -411,6 +411,7 @@ $GLOBALS['str_openid_match_help']     = _('You are logging in using your verfied
 $GLOBALS['str_openid_match_submit']   = _('Submit Account Information');
 $GLOBALS['str_openid_match_tip']      = _('One of these accounts may be yours. Select the one that you wish to use and enter the password for that account.');
 $GLOBALS['str_openid_new']            = _('Create a new account');
+$GLOBALS['str_openid_new_id']         = _('new:');
 $GLOBALS['str_openid_new_tip']        = _('If you do not have an existing account, enter a user name. Only alpha characters and numbers are allowed.');
 $GLOBALS['str_openid_new_user']       = _('New user name:');
 $GLOBALS['str_openid_notify']         = _('Missing e-mail Address');

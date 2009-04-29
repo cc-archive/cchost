@@ -961,6 +961,8 @@ class CCForm
      */
     function generator_statictext($varname,$value='',$class='')
     {
+        $page =& CCPage::GetPage();
+        $value = $page->String($value);
         return( "<span class=\"$class\">$value</span>" );
     }
 
