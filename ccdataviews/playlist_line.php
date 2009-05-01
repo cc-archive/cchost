@@ -32,7 +32,14 @@ JOIN cc_tbl_licenses ON upload_license=license_id
 %limit%
 EOF;
 
-    $sql_count = 'SELECT count(*) FROM cc_tbl_uploads'; // really? 
+    $sql_count =<<<EOF
+SELECT count(*)
+FROM cc_tbl_uploads
+JOIN cc_tbl_user ON upload_user = user_id
+JOIN cc_tbl_licenses ON upload_license=license_id
+%joins%
+%where%
+EOF;
 
     return array( 'sql' => $sql,
                    'sql_count' => $sql_count, 
