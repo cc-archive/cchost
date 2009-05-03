@@ -69,7 +69,8 @@ ccPlaylistMenu.prototype = {
     },
 
     _create_controls: function( event, link, pid, id ) {
-        var html = '<div id="' + pid + '" style="opacity:0.0" class="cc_playlist_popup light_bg dark_border">&nbsp;</div>';
+        var pos = Prototype.Browser.IE ? '' : 'position:absolute;';
+        var html = '<div id="' + pid + '" style="opacity:0.0;'+pos+'" class="cc_playlist_popup light_bg dark_border">&nbsp;</div>';
         new Insertion.After( link, html );
         var pp = $(pid);
         Position.clone( link, pid, {  setWidth:   false,

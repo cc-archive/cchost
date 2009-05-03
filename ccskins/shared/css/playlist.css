@@ -35,8 +35,7 @@
     border-width: 1px;
 	border-style: solid;
     padding: 9px;
-	z-index: 4;
-	position: absolute;
+	z-index: 1000;
 	height: auto;
 	width: auto;
 }
