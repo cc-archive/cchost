@@ -168,15 +168,52 @@ class CCTopics extends CCTable
     function ForkBranch($topic_id)
     {
         $this->Lock();
+        // before:
+        //  7             18
+        //    8       9
+        //    10      13  <-- remove this
+        //       11 12
+        //    14      15  
+        //    16      17
+        // ----------
+        //
         $right_sql = 'SELECT MAX(topic_right) FROM cc_tbl_topics';
         $max_right = CCDatabase::QueryItem($right_sql);
+        // max_right = 18
         list( $left, $right ) = CCDatabase::QueryRow('SELECT topic_left,topic_right FROM cc_tbl_topics WHERE topic_id='.$topic_id,false);
-        $diff = $max_right - $left;
-        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right + $diff WHERE topic_left BETWEEN $left AND $right";
-        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left  + $diff WHERE topic_left BETWEEN $left AND $right";
+        // ( 10, 13 )
+        $diff = ($max_right+1) - $left;
+        // diff = 9
+        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right + $diff " .
+                    "WHERE topic_left BETWEEN $left AND $right";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left  + $diff " .
+                    "WHERE topic_left BETWEEN $left AND $right";
+        // ----------
+        //  7             18
+        //    8       9
+        //    19      22  <-- 
+        //       20 21
+        //    14      15  
+        //    16      17
+        // ----------
         $wid = ($right - $left) + 1;
-        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right - $wid WHERE topic_right > $right";
-        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left - $wid  WHERE topic_left  > $right";
+        //  4
+        ++$right;
+        // 14
+        $sql[] = "UPDATE cc_tbl_topics SET topic_right = topic_right - $wid ".
+                    "WHERE topic_right BETWEEN $right AND $max_right";
+        $sql[] = "UPDATE cc_tbl_topics SET topic_left  = topic_left - $wid "  .
+                    "WHERE topic_left BETWEEN $right AND $max_right";
+        //
+        // right/left -= 4 BETWEEN 14 AND 18
+        // ----------
+        //  7             14
+        //    8       9
+        //    10      11  
+        //    12      13
+        //  19            22  <-- 
+        //       20 21
+        // ----------
         CCDatabase::Query($sql);
         $this->Unlock();        
     }
