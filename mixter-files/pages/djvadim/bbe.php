@@ -33,35 +33,17 @@ if( !defined('IN_CC_HOST') )
     <p style="font-size:13px"><?= $bbet ?></p>
     <? $bbet = file_get_contents('mixter-files/pages/djvadim/bbe_3.txt'); ?>
     <div  id="sources">
-        <span  class="bbemsg"><?= $bbet?></span>
+    <?
+    $module = 'cchost_lib/snoopy/Snoopy.class.php';
+    require_once($module);
+    $snoopy = new Snoopy();
+    $snoopy->fetch('http://ccmixtermedia.org/djvadim/tracks');
+    print $snoopy->results;
+
+    ?>
     </div>
     <p >
       NOTE: we have <a  href="/thread/611">strict policies about copyright material</a>. No wink-wink. Violators
       will be banned from the site.
     </p>
 </div>
-
-<script type="text/javascript">
-
-function showBBESources( resp )
-{
-    $('sources').innerHTML = resp.responseText;
-}
-
-function getSources()
-{
-    try
-    {
-      var url = root_url + 'mixter-lib/mixter-bbe.php?bbe_format=1';
-      var myAjax = new Ajax.Request( url, { onComplete: showBBESources, method: 'get'} );
-    }
-    catch (e)
-    {
-      $('sources').innerHTML = 'error';
-    }
-}
-
-
-getSources();
-
-</script>
