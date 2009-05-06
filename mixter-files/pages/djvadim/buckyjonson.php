@@ -10,6 +10,7 @@
 }
 </style>
 
+<script>var meat_url = 'ccmixtermedia';</script>
 
 <div class="box">
     <h2>BBE Music and ccMixter presents: Bucky Jonson</h2>
@@ -35,7 +36,13 @@
         <?= file_get_contents('mixter-files/pages/djvadim/bucky_2.txt') ?>
     </p>
     <div id="sources">
-        <span class="bbemsg" ><?= file_get_contents('mixter-files/pages/djvadim/bucky_3.txt') ?></span>
+<?
+    $module = 'cchost_lib/snoopy/Snoopy.class.php';
+    require_once($module);
+    $snoopy = new Snoopy();
+    $snoopy->fetch('http://ccmixtermedia.org/djvadim/tracks');
+    print $snoopy->results;
+?>
     </div>
     <p>
       NOTE: we have <a href="<?= $A['home-url'] ?>thread/611">strict policies about copyright material</a>. No wink-wink. Violators
@@ -43,33 +50,5 @@
     </p>
 </div>
 
-<script type="text/javascript">
-
-function showBBESources( resp )
-{
-    try {
-        $('sources').innerHTML = resp.responseText;
-    } catch( e ) {
-        alert( e.message );
-    }
-
-}
-
-function getSources()
-{
-    try
-    {
-      var url = root_url + 'mixter-lib/mixter-bucky.php?bbe_format=1';
-      var myAjax = new Ajax.Request( url, { onComplete: showBBESources, method: 'get'} );
-    }
-    catch (e)
-    {
-      $$('sources').innerHTML = 'error';
-    }
-}
-
-getSources();
-
-</script>
 
 </div>
