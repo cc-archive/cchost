@@ -12,10 +12,13 @@ if( !defined('IN_CC_HOST') )
 [dataview]
 function playlist_reorder_dataview()
 {
+    $username = cc_fancy_user_sql('username');
+    
     $sql =<<<EOF
-        SELECT upload_id, upload_name 
+        SELECT upload_id, upload_name, {$username}
         FROM cc_tbl_uploads 
         JOIN cc_tbl_cart_items ON cart_item_upload=upload_id
+        JOIN cc_tbl_user ON upload_user=user_id
         %where%
         ORDER BY cart_item_order
 EOF;
@@ -43,18 +46,22 @@ div.fn {
     cursor: move;  
     overflow: hidden;
 }
+.cmd_link {
+    width: 12em;
+    text-align: center;
+}
 </style>
 <div class="cc_form_about box"><?= $T->String('str_pl_drag_to_reorder') ?></div>
 <ul id="file_order" class="ddex">
     %loop(records,R)%
     <li class="file_desc dark_border light_bg dark_color" id="file_order_%(#i_R)%">
-    <div class="fn">%(#R/upload_name)%</div>
+    <div class="fn"><b>%(#R/upload_name)%</b> by %(#R/username)%</div>
     </li>
     %end_loop%
 </ul>
 
 <div class="cmd_link">
-    <a id="submit_file_order" href="javascript://playlist record">%text(str_pl_save_order)%</a>
+    <a id="submit_file_order" class="cc_gen_button" href="javascript://playlist record">%text(str_pl_save_order)%</a>
 </div>
 
 <script type="text/javascript">

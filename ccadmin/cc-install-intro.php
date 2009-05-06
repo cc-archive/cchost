@@ -46,10 +46,12 @@ the administrators can either do it for you or have already told you how to do i
 
 <p>ccHost uses the <a href="http://www.getid3.org/">getID3 library</a> to verify 
 the formats of file uploads of all types of media and archive files. It also uses it to tag
-ID3 format files (like MP3s) with things like artist, song title, license, etc. Make sure to download at least version <b>1.7.2</b> or higher. You can download this version from
-<a href="http://www.getid3.org/#download">here</a>. </p>
+ID3 format files (like MP3s) with things like artist, song title, license, etc.
+Make sure to download at least <b>stable</b> version (<b>1.7.9</b> or higher is suggested).
+You can download this version from <a href="http://www.getid3.org/#download">here</a>. </p>
 
-<p>Installing getID3 is actually very simple: just unzip the library to a directory (e.g. <b class="d"><? print $id3suggest; ?></b>).</p>
+<p>Installing getID3 is actually very simple: just unzip the library to
+a directory (e.g. <b class="d"><? print $id3suggest; ?></b>).</p>
 
 </li>
 

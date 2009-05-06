@@ -59,7 +59,7 @@ function getSources()
 {
     try
     {
-      var url = root_url + 'mixter-lib/mixter-bucky.php?bucky_format=1';
+      var url = root_url + 'mixter-lib/mixter-bucky.php';
       var myAjax = new Ajax.Request( url, { onComplete: showBBESources, method: 'get'} );
     }
     catch (e)
