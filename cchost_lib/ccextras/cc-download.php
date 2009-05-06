@@ -26,33 +26,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,       array( 'CCDownloadHV', 'OnUploadMenu'));
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCDownload' , 'OnMapUrls') , 'cchost_lib/ccextras/cc-download.inc' );
-//CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS, array( 'CCDownload' , 'OnGetConfigFields') , 'cchost_lib/ccextras/cc-download.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCDownload', 'OnAdminMenu'), 'cchost_lib/ccextras/cc-download.inc');
 
-class CCDownloadHV
-{
-
-    function OnUploadMenu(&$menu,&$record)
-    {
-
-        global $CC_GLOBALS;
-        
-        if(!empty($CC_GLOBALS['counter']) || !empty($CC_GLOBALS['license']) || !empty($CC_GLOBALS['checksum']))
-        {
-            $weight = 0;
-            foreach( $record['files'] as $file )
-            {
-                $weight++;
-                $menu[$weight]['action'] = ccl( 'download', $record['user_name'], $file['file_id'], $file['file_name'] );
-                if(!empty($CC_GLOBALS['counter']))
-                {
-                    $menu[$weight]['menu_text'] .= " " . _('downloads') . ": " . $file['file_num_download'];
-                }
-            }
-        }
-    }
-
-}
 ?>
