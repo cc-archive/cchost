@@ -42,23 +42,15 @@ class CCUpdate
 
         require_once('cchost_lib/cc-page.php');
         $updates = array();
-        if ($cc_dh = opendir('cchost_lib/ccextras')) 
-        {
-           while (($cc_file = readdir($cc_dh)) !== false) 
-           {
-               if( preg_match('/update_([^\.]+)\.inc$/',$cc_file,$m) )
-                   $updates[] = $m[1];
-           }
-           closedir($cc_dh);
-        }
+        $dirs = split(';',$CC_GLOBALS['extra-lib']);
+        array_unshift($dirs,'cchost_lib/ccextras');
+        foreach( $dirs as $dir )
+            $this->_fetch_updates(trim($dir),$updates);
 
         $prompts = array();
         foreach( $updates as $update )
         {
-            if( empty($CC_GLOBALS[$update])  )
-                $this->_do_update($update);
-            else
-                $prompts[] = $update;
+            $prompts[] = $this->_do_update($update);
         }
 
         $prompts = join(', ',$prompts);
@@ -68,13 +60,27 @@ class CCUpdate
         CCTemplate::ClearCache();
     }
 
-
-    function _do_update($name)
+    function _fetch_updates($dir,&$updates)
     {
-        require_once('update_' . $name . '.inc');
-        $updater = new $name;
-        $updater->Update();
-        $this->_write_config_flag($name);
+        $g = glob($dir . '/update_*.inc');
+        if( !empty($g) )
+            $updates = array_merge($updates,$g);
+    }
+    
+    function _do_update($fname)
+    {
+        global $CC_GLOBALS;
+        
+        preg_match('/update_([^\.]+)\.inc$/',$fname,$m);
+        $name = $m[1];
+        if( empty($CC_GLOBALS[$name])  )
+        {
+            require_once($fname);
+            $updater = new $name;
+            $updater->Update();
+            $this->_write_config_flag($name);
+        }
+        return $name;
     }
 
     function _write_config_flag($flag)

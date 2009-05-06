@@ -162,6 +162,17 @@ class CCPageAdmin
         }
 
     }
+
+    function OnLogout($username)
+    {
+        $page =& CCPage::GetPage();
+        $page->UnSetArg('logged_in_as');
+        $page->UnSetArg('logout_url');
+        $page->SetArg('is_logged_in',0);
+        $page->SetArg('is_admin',0);
+        $page->SetArg('not_admin',1);
+        CCMenu::Reset();
+    }
 }
 
 
@@ -481,7 +492,7 @@ class CCPage extends CCSkin
             }
         }
 
-        if( !empty($_REQUEST['dump_page']) ) // && $isadmin )
+        if( !empty($_REQUEST['dump_page']) && CCUser::IsAdmin() )
              CCDebug::PrintVar($page->vars,false);
 
         if( !empty($CC_GLOBALS['no-cache']) )

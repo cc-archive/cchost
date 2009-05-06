@@ -292,11 +292,14 @@ class CCActivityLogAPI
         
                 $files = glob( $logdir . 'activity-log*.*' );
                 $html = '<table id="activity_log_archive">';
-                foreach( $files as $file )
+                if( $files !== false )
                 {
-                    $name = basename($file,'.csv');
-                    $url = url_args( ccl('activity','archive'), 'file=' . $name );
-                    $html .= "<tr><td><a href=\"$url\">$name</a></td></tr>";
+                    foreach( $files as $file )
+                    {
+                        $name = basename($file,'.csv');
+                        $url = url_args( ccl('activity','archive'), 'file=' . $name );
+                        $html .= "<tr><td><a href=\"$url\">$name</a></td></tr>";
+                    }
                 }
                 $html .= '</table>';
                 CCPage::AddContent($html);
@@ -394,14 +397,16 @@ EOF;
     
         $files = glob( $logdir . 'activity-log*.*' );
         $lines = array();
-        foreach( $files as $file )
+        if( $files !== false )
         {
-            $contents = file_get_contents($file);
-            preg_match_all( "/^(.*$term.*)$/Uim", $contents, $m );
-            if( !empty($m[1]) )
-                $lines = array_merge($lines,$m[1]);
+            foreach( $files as $file )
+            {
+                $contents = file_get_contents($file);
+                preg_match_all( "/^(.*$term.*)$/Uim", $contents, $m );
+                if( !empty($m[1]) )
+                    $lines = array_merge($lines,$m[1]);
+            }
         }
-
         $count = min(151,count($lines));
         $this->_do_import_text($lines,$logs,0,$count);
     }

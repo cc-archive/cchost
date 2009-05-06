@@ -197,14 +197,14 @@ class CCLanguage
         // read in each locale preference folder
         $locale_dirs = glob( $locale_dir . '/*', GLOB_ONLYDIR ); 
     
-        if ( count($locale_dirs) == 0 )
+        if ( !empty($locale_dirs)  )
             return false;
     
         foreach ( $locale_dirs as $dir ) {
             // Read in each folder (language) for consideration
             $lang_dirs = glob( "$dir/*", GLOB_ONLYDIR );
             // if the locale pref. folder has no languages, then don't load it
-            if ( count($lang_dirs) == 0 )
+            if ( empty($lang_dirs) )
                 continue;
             $locale_pref = basename($dir);
             $this->_all_languages['locale'][$locale_pref] = 

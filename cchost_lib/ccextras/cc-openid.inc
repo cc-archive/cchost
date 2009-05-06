@@ -441,6 +441,7 @@ class CCOpenID
            'SELECT user_name,user_password FROM cc_tbl_user WHERE user_id='.$user_id,false);
         $login = new CCLogin();
         $login->_create_login_cookie(1,$user,$pw);
+        CCEvents::Invoke(CC_EVENT_LOGIN, array( $user_id ) );
         $login->_do_login_redirect(ccl('people',$user));
     }
     

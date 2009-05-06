@@ -114,6 +114,17 @@ class CCSkin
     }
 
     /**
+    * Remove a variable from the page when rendering
+    *
+    * @param string $name The name of the variable as will be invisible in the template
+    */
+    function UnSetArg($name)
+    {
+        if( isset($this->vars[$name]) )
+            unset($this->vars[$name]);
+    }
+
+    /**
     * Trigger a macro during page execution, typically in the middle of the client area
     *
     * @param string $macro The name of a specific macro to invoke during template generation
@@ -259,16 +270,20 @@ class CCSkin
     {
         global $CC_GLOBALS,$CC_CFG_ROOT;
 
+        $name = array();
+
         $base = $CC_GLOBALS['user-upload-root'] . '/' . $CC_CFG_ROOT . '_skin_'; 
         $files = glob( $base . '*.*' );
-        if( empty($files) && $auto_create )
-            return CCSkin::_make_head_names($base);
-
-        $name = array();
-        foreach( $files as $f )
+        if( $files !== false )
         {
-            preg_match( '/\.([a-z]+)$/',$f,$m);
-            $name[$m[1]] = $f;
+            if( empty($files) && $auto_create )
+                return CCSkin::_make_head_names($base);
+            
+            foreach( $files as $f )
+            {
+                preg_match( '/\.([a-z]+)$/',$f,$m);
+                $name[$m[1]] = $f;
+            }
         }
         
         if( empty($name['css']) || empty($name['inc']) || empty($name['js']) )

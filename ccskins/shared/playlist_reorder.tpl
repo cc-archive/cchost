@@ -7,34 +7,7 @@ if( !defined('IN_CC_HOST') )
     type = template_component
     desc = _('Playlist Reorder')
     dataview = playlist_reorder
-    embedded = 1
 [/meta]
-[dataview]
-function playlist_reorder_dataview()
-{
-    $username = cc_fancy_user_sql('username');
-    
-    $sql =<<<EOF
-        SELECT upload_id, upload_name, {$username}
-        FROM cc_tbl_uploads 
-        JOIN cc_tbl_cart_items ON cart_item_upload=upload_id
-        JOIN cc_tbl_user ON upload_user=user_id
-        %where%
-        ORDER BY cart_item_order
-EOF;
-
-    $sql_count =<<<EOF
-        SELECT COUNT(*)
-        FROM cc_tbl_uploads 
-        JOIN cc_tbl_cart_items ON cart_item_upload=upload_id
-        %where%
-EOF;
-
-     return array( 'sql' => $sql,
-                   'sql_count' => $sql_count,
-                   'e'   => array() );
-}                  
-[/dataview]
 %%*/?>
 <!-- template playlist_reorder -->
 <style type="text/css">
@@ -51,10 +24,10 @@ div.fn {
     text-align: center;
 }
 </style>
-<div class="cc_form_about box"><?= $T->String('str_pl_drag_to_reorder') ?></div>
-<ul id="file_order" class="ddex">
+<div class="cc_form_about box" style="width:30%;" ><?= $T->String('str_pl_drag_to_reorder') ?></div>
+<ul id="fo" class="ddex">
     %loop(records,R)%
-    <li class="file_desc dark_border light_bg dark_color" id="file_order_%(#i_R)%">
+    <li class="file_desc dark_border light_bg dark_color" id="fo_%(#i_R)%">
     <div class="fn"><b>%(#R/upload_name)%</b> by %(#R/username)%</div>
     </li>
     %end_loop%
@@ -67,11 +40,11 @@ div.fn {
 <script type="text/javascript">
 function on_reorder_click()
 {
-    var _file_order = Sortable.serialize('file_order');
+    var _file_order = Sortable.serialize('fo');
     var url = home_url + 'playlist/editorder/%(playlist_id)%/cmd' + q + _file_order;
     window.location.href = url;
     return false;
 }
 Event.observe('submit_file_order','click',on_reorder_click);
-Sortable.create("file_order",{constraint:false});
+Sortable.create("fo",{constraint:false});
 </script>

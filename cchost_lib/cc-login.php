@@ -437,13 +437,11 @@ class CCLogin
         cc_setcookie(CC_USER_COOKIE,'',time());
         cc_setcookie(CC_TRANSITION_COOKIE,gmmktime(),time()+60*60*24*30);
         unset($_COOKIE[CC_USER_COOKIE]);
-        CCPage::Prompt('str_log_logged_out');
-        CCPage::SetTitle('str_log_out');
+        $page->Prompt('str_log_logged_out');
+        $page->SetTitle('str_log_out');
         CCEvents::Invoke( CC_EVENT_LOGOUT, array( $CC_GLOBALS['user_name'] ) );
         unset($CC_GLOBALS['user_name']);
         unset($CC_GLOBALS['user_id']);
-        CCMenu::Reset();
-        CCPage::AddMacro('util.php/fixup_logout');
     }
 
     function _bread_crumbs(&$page, $text)
@@ -499,7 +497,7 @@ class CCLogin
         else
         {
             $CC_GLOBALS = array_merge($CC_GLOBALS,$form->record);
-            CCEvents::Invoke(CC_EVENT_LOGIN );
+            CCEvents::Invoke(CC_EVENT_LOGIN, array( $CC_GLOBALS['user_id'] ) );
             
             $remember = $form->GetFormValue('user_remember');
             $this->_create_login_cookie($remember);

@@ -598,19 +598,25 @@ EOF;
         }
 
         $dirs = glob($src . '/*', GLOB_ONLYDIR );
-        foreach( $dirs as $dir )
+        if( $dirs !== false )
         {
-            $sub_dir = basename($dir);
-            $this->_deep_copy($src . '/' . $sub_dir, $target . '/' . $sub_dir );
+            foreach( $dirs as $dir )
+            {
+                $sub_dir = basename($dir);
+                $this->_deep_copy($src . '/' . $sub_dir, $target . '/' . $sub_dir );
+            }
         }
 
         $files = glob($src . '/*.*');
-        foreach( $files as $file )
+        if( $files !== false )
         {
-            $base = basename($file);
-            $t = $target . '/' . $base;
-            copy( $file, $t );
-            chmod( $t, 0777 );
+            foreach( $files as $file )
+            {
+                $base = basename($file);
+                $t = $target . '/' . $base;
+                copy( $file, $t );
+                chmod( $t, 0777 );
+            }
         }
     }
 

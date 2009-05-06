@@ -583,11 +583,11 @@ define('CC_EVENT_USER_PROFILE_CHANGED', 'userprof' );
 
 
 /**
-* Notification Event: User logged in with login form
+* Notification Event: User logged in
 *
 * Event handler prototype:
 *<code>
-*function OnLogin()
+*function OnLogin( $user_id )
 *</code>
 * @see CCEvents::AddHandler()
 */

@@ -1383,8 +1383,9 @@ class CCQuery
 function cc_tcache_kill()
 {
     $files = glob(cc_temp_dir() . '/query_cache_*.txt');
-    foreach( $files as $file )
-        unlink($file);
+    if( $files !== false )
+        foreach( $files as $file )
+            unlink($file);
 }
 
 

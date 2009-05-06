@@ -100,40 +100,43 @@ class CCFileProps
             }
             $subdirs = array();
             $_files = glob( $format_path . '/*.*' ) ;
-            foreach( $_files as $ffile)
+            if( $_files !== false )
             {
-                if( is_dir($ffile) )
-                    continue;
-
-                $props = $this->GetFileProps($ffile);
-
-                if( $props && empty($props['type']) )
-                    die("Missing meta 'type' in $ffile");
-
-                if( !$props || ($props['type'] != $type) )
-                    continue;
-
-                if( $must_have && empty($props[$must_have]) )
-                    continue;
-
-                if( $ret_files )
+                foreach( $_files as $ffile)
                 {
-                    if( empty($props['desc']) )
+                    if( is_dir($ffile) )
+                        continue;
+
+                    $props = $this->GetFileProps($ffile);
+
+                    if( $props && empty($props['type']) )
+                        die("Missing meta 'type' in $ffile");
+
+                    if( !$props || ($props['type'] != $type) )
+                        continue;
+
+                    if( $must_have && empty($props[$must_have]) )
+                        continue;
+
+                    if( $ret_files )
                     {
-                        $match_files[$ffile] = $ffile;
+                        if( empty($props['desc']) )
+                        {
+                            $match_files[$ffile] = $ffile;
+                        }
+                        else
+                        {
+                            $match_files[$ffile] = $props['desc'];
+                        }
                     }
                     else
                     {
-                        $match_files[$ffile] = $props['desc'];
+                        $props['id'] = $ffile;
+                        $match_files[] = $props;
                     }
                 }
-                else
-                {
-                    $props['id'] = $ffile;
-                    $match_files[] = $props;
-                }
             }
-
+            
             $subdirs = glob( $dir . '/*', GLOB_ONLYDIR );
             if( !empty($subdirs) )
                 $this->_scan_dir($match_files, $subdirs, $format_dir, $type, $ret_files, $must_have, $seen );
@@ -162,40 +165,40 @@ class CCFileProps
                 continue;
 
             $seen[] = $dir;
-//print "$dir<br />";
-global $xx;
-$xx = $dir == 'ccskins/shared/strings' ? true : false;
 
             $_files = glob( $dir . '/*.*' ) ;
-            foreach( $_files as $ffile )
+            if( $_files !== false )
             {
-                if( is_dir($ffile) || $ffile{0} == '.' )
-                    continue;
-
-                $props = $this->GetFileProps($ffile);
-  
-                if( $props && empty($props['type']) )
-                    die("Missing meta 'type' in $ffile");
-
-                if( !$props )
-                    continue;
-
-                foreach( $types as $type )
+                foreach( $_files as $ffile )
                 {
-                    if( $props['type'] != $type )
+                    if( is_dir($ffile) || $ffile{0} == '.' )
                         continue;
 
-                    if( empty($props['desc']) )
+                    $props = $this->GetFileProps($ffile);
+      
+                    if( $props && empty($props['type']) )
+                        die("Missing meta 'type' in $ffile");
+
+                    if( !$props )
+                        continue;
+
+                    foreach( $types as $type )
                     {
-                        $match_files[$type][$ffile] = $ffile;
-                    }
-                    else
-                    {
-                        $match_files[$type][$ffile] = $props['desc'];
+                        if( $props['type'] != $type )
+                            continue;
+
+                        if( empty($props['desc']) )
+                        {
+                            $match_files[$type][$ffile] = $ffile;
+                        }
+                        else
+                        {
+                            $match_files[$type][$ffile] = $props['desc'];
+                        }
                     }
                 }
             }
-
+            
             $subdirs = glob( $dir . '/*', GLOB_ONLYDIR );
             if( !empty($subdirs) )
                 $this->_multiple_scan_dir($match_files, $subdirs, $types, $seen );

@@ -205,7 +205,7 @@ class CCDebug
 
         $t =& CCDebug::_textize($var);
 
-        $html = '<pre style="font-size: 10pt;">' .
+        $html = '<pre style="font-size: 10pt;text-align:left;">' .
                 htmlspecialchars($t) .
                 '</pre>';
 

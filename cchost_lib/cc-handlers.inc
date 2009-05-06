@@ -111,6 +111,7 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCPageAdmin', 'OnMapUr
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCPageAdmin', 'OnGetConfigFields'), 'cchost_lib/cc-page.php'  );
 CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,   array( 'CCPageAdmin',  'OnApiQuerySetup'), 'cchost_lib/cc-page.php' ); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT,   array( 'CCPageAdmin',  'OnApiQueryFormat'), 'cchost_lib/cc-page.php' ); 
+CCEvents::AddHandler(CC_EVENT_LOGOUT,    array( 'CCPageAdmin' , 'OnLogout'), 'cchost_lib/cc-page.php' );
 
 CCEvents::AddHandler(CC_EVENT_SEARCH_META,          array( 'CCPool',  'OnSearchMeta'), 'cchost_lib/cc-pools.php'  ) ;
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,       array( 'CCPoolUI',  'OnMapUrls'), 'cchost_lib/cc-pools-ui.php' );
@@ -155,6 +156,7 @@ CCEvents::AddHandler(CC_EVENT_CONFIG_CHAGNED, 'skin_OnConfigChange', 'cchost_lib
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,    array( 'CCSkinAdmin' , 'OnMapUrls'),  'cchost_lib/cc-skin-admin.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,  array( 'CCSkinAdmin' , 'OnAdminMenu'), 'cchost_lib/cc-skin-admin.php' );
+
 
 
 CCEvents::AddHandler(CC_EVENT_MAIN_MENU,    array( 'CCSubmit',  'OnBuildMenu'), 'cchost_lib/cc-submit.php' );

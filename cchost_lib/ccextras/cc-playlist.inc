@@ -234,26 +234,38 @@ class CCPlaylists
     function EditOrder($playlist_id='',$cmd='')
     {
         $this->_test_pl(0,$playlist_id,false,true,true);
+        require_once('cchost_lib/cc-query.php');
+        $query = new CCQuery();
         if( empty($cmd) )
         {
             require_once('cchost_lib/cc-page.php');
-            require_once('cchost_lib/cc-query.php');
             $this->_build_bread_crumb_trail($playlist_id,'str_pl_edit_playlist_order');
             CCPage::SetTitle('str_pl_edit_playlist_order');
-            CCPage::PageArg('playlist_id',$playlist_id);
-            $query = new CCQuery();
+            CCPage::PageArg('playlist_id',$playlist_id); // there should be a better way to do this
             $args = $query->ProcessAdminArgs('t=playlist_reorder&playlist='.$playlist_id);
             $query->Query($args);
         }
         else
         {
-            $ids = CCDatabase::QueryItems("SELECT cart_item_id FROM cc_tbl_cart_items WHERE cart_item_cart = $playlist_id ORDER by cart_item_order ASC");
-            foreach( $_GET['file_order'] as $new_pos => $old_pos )
+            // there are much more efficient ways of doing this, but by using
+            // the exact same dataview as the edit screen, we are assured
+            // fidelity between the two (e.g. skipping moderated and hidden tracks)
+            
+            $args = $query->ProcessAdminArgs('dataview=playlist_reorder&f=php&playlist='.$playlist_id);
+            list( $recs, $m ) = $query->Query($args);
+            $ids = array();
+            foreach( $recs as $rec )
+                $ids[] = $rec['cart_item_id'];
+                
+            $ups = array();
+            foreach( $_GET['fo'] as $new_pos => $old_pos )
             {
+                // $old_pos is '1' indexed
                 $id = $ids[$old_pos-1];
                 $sql = "UPDATE cc_tbl_cart_items SET cart_item_order = $new_pos WHERE cart_item_id = $id";
                 CCDatabase::Query($sql);
             }
+
             $url = ccl('playlist','browse',$playlist_id);
             CCUtil::SendBrowserTo($url);
         }

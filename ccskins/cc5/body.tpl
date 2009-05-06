@@ -49,10 +49,16 @@
                  <input id="searchsubmit" value="Go" type="submit">
            </div>
          </form>
-         <span>
-           <a href="%(home-url)%/login">Log in / create account</a>
-         </span>
-         <span>(<a href="%(home-url)%/login/openid">OpenID</a>)</span>
+    %if_null(logged_in_as)%
+         <span><a href="%(home-url)%login">Log in / create account</a></span>
+         %if_not_empty(openid-type)%
+          <span>(<a href="%(home-url)%login/openid">OpenID</a>)</span>
+         %end_if%
+    %else%
+         <span>%text(loggedin)%: <b><span>%(logged_in_as)%</span></b> 
+            <span><a class="small_button" href="%(home-url)%logout">%text(logout)%</a></span>
+    %end_if%
+         
        </div><!-- sideitem -->
        
 %if_not_empty(page-title)%
