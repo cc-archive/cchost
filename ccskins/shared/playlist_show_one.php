@@ -22,11 +22,14 @@ if( !defined('IN_CC_HOST') )
 <? $A['player_options'] = 'autoHook: false';?>
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <?
-    $T->Call('playlist.tpl/playlist_list');
+    $T->Call('playlist_list_lines');
     $T->Call('playerembed.xml/eplayer');
 ?>
 <script type="text/javascript">
     new ccPlaylistMenu();
+    <? if( !empty($A['args']['playlist']['cart_id']) ) { ?>
     new ccPagePlayer(<?= $A['args']['playlist']['cart_id']?>);
+    <? } ?>
 </script>
 
+<? $T->Call('prev_next_links'); ?>
