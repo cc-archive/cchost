@@ -152,7 +152,7 @@ function _cc_format_url(&$m)
     if( empty($m[2]) )
         $text = strlen($url) > 30 ? substr($url,0,27) . '...' : $url;
     else
-        $text = $m[1];
+        $text = $m[2];
     return( " <a title=\"$url\" class=\"cc_format_link\" href=\"$url\">$text</a>" );
 }
 

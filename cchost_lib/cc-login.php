@@ -78,7 +78,8 @@ class CCNewUserForm extends CCUserForm
                                'flags'      => CCFF_NOUPDATE),
                     'user_confirm' =>
                        array(  'label'       => 'str_security_key',
-                               'formatter'  => 'textedit',
+                               'formatter'  => 'securitymatch',
+                               'autocomp'   => 'off',
                                'class'      => 'cc_form_input_short',
                                'form_tip'   => CCSecurityVerifierForm::GetSecurityTipStr(),
                                'flags'      => CCFF_REQUIRED | CCFF_NOUPDATE)

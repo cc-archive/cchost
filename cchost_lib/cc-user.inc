@@ -38,6 +38,27 @@ class CCSecurityVerifierForm extends CCForm
     }
 
     /**
+     * Handles generation of input fields for security key
+     *
+     * @see CCLogin::OnSecurityCallback()
+     * @param string $varname Name of the HTML field
+     * @param string $value   value to be published into the field
+     * @param string $class   CSS class (rarely used)
+     * @returns string $html HTML that represents the field
+     */
+    function generator_securitymatch($varname,$value='',$class='')
+    {
+        $html = $this->generator_textedit($varname,$value,$class);
+        $html = str_replace( '<input ', '<input autocomplete="off" ',$html);
+        return $html;
+    }
+
+    function validator_securitymatch( $fieldname )
+    {
+        return $this->validator_textedit($fieldname);
+    }
+
+    /**
      * Handles generation of &lt;img's and a hidden $id field
      *
      * The img tags are actually stuff with '/s/#' URLs that call back to
