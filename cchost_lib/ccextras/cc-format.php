@@ -112,6 +112,7 @@ function _cc_format_format($text)
                   "#\[/indent\]#" => '</div>', 
                   "/\[cmd=([^\]]+)]/e" => '"<a href=\"" . ccl(\'\1\') . "\">"', 
                   "#\[/cmd\]#" => '</a>', 
+                  "#\[define=([^\]]+)\]\[/define\]#e" => '\1', 
                   "#\[skinimg=([^\]]+)\]\[/skinimg\]#e" => '\'<img class="format_image" src="\' . ccd("ccskins/" . ltrim("$1","/") ) . \'" />\'', 
                   "#\[img=([^\]]+)\]\[/img\]#" => '<img class="format_image" src="$1" />', 
                 );
@@ -121,8 +122,8 @@ function _cc_format_format($text)
     $text = SmartyPants($text);
 
     $urls = array( '@(?:^|[^">=\]])(http://[^\s$]+)@m',
-                   '@\[(url|file)\]([^\[]+)\[/url\]@' ,
-                   '@\[(url|file)=([^\]]+)\]([^\[]+)\[/url\]@' 
+                   '@\[url\]([^\[]+)\[/url\]@' ,
+                   '@\[url=([^\]]+)\]([^\[]+)\[/url\]@' 
                     );
     $text = preg_replace_callback($urls,'_cc_format_url', $text);
 
@@ -147,11 +148,11 @@ function _cc_format_query(&$m)
 
 function _cc_format_url(&$m)
 {
-    $url = $m[2];
-    if( empty($m[3]) )
+    $url = $m[1];
+    if( empty($m[2]) )
         $text = strlen($url) > 30 ? substr($url,0,27) . '...' : $url;
     else
-        $text = $m[2];
+        $text = $m[1];
     return( " <a title=\"$url\" class=\"cc_format_link\" href=\"$url\">$text</a>" );
 }
 
