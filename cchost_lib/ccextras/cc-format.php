@@ -106,6 +106,13 @@ function _cc_format_format($text)
                   "#\[/quote\]#" =>  '</span>', 
                   "/\[up]/" => "<img class=\"cc_thumbs_up\" src=\"$thumbs_up\" />", 
                   "#\[/up\]#" => '', 
+                  "/\[box]/" => "<div class=\"box\">", 
+                  "#\[/box\]#" => '</div>', 
+                  "/\[indent=([0-9]+)]/" => '<div style="padding-left:$1px">',
+                  "#\[/indent\]#" => '</div>', 
+                  "/\[cmd=([^\]]+)]/e" => '"<a href=\"" . ccl(\'\1\') . "\">"', 
+                  "#\[/cmd\]#" => '</a>', 
+                  "#\[skinimg=([^\]]+)\]\[/skinimg\]#e" => '\'<img class="format_image" src="\' . ccd("ccskins/" . ltrim("$1","/") ) . \'" />\'', 
                   "#\[img=([^\]]+)\]\[/img\]#" => '<img class="format_image" src="$1" />', 
                 );
     $text = preg_replace( array_keys($map), 
@@ -114,8 +121,8 @@ function _cc_format_format($text)
     $text = SmartyPants($text);
 
     $urls = array( '@(?:^|[^">=\]])(http://[^\s$]+)@m',
-                   '@\[url\]([^\[]+)\[/url\]@' ,
-                   '@\[url=([^\]]+)\]([^\[]+)\[/url\]@' 
+                   '@\[(url|file)\]([^\[]+)\[/url\]@' ,
+                   '@\[(url|file)=([^\]]+)\]([^\[]+)\[/url\]@' 
                     );
     $text = preg_replace_callback($urls,'_cc_format_url', $text);
 
@@ -140,8 +147,8 @@ function _cc_format_query(&$m)
 
 function _cc_format_url(&$m)
 {
-    $url = $m[1];
-    if( empty($m[2]) )
+    $url = $m[2];
+    if( empty($m[3]) )
         $text = strlen($url) > 30 ? substr($url,0,27) . '...' : $url;
     else
         $text = $m[2];
