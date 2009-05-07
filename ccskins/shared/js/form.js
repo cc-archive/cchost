@@ -319,3 +319,15 @@ function add_flat_row(form_id,num_grid_rows,num_grid_cols)
         td.innerHTML = $(form_id + '_meta_' + nid).innerHTML.replace(/%i%/g,"" + row_num); 
     }
 }
+
+function cc_date_disable(ename,disabled)
+{
+    ['m','d','y','h','i','a'].each( function(x) {
+        $( ename + '[' + x + ']').disabled = disabled;
+    });
+}
+
+function cc_date_stick(ename)
+{    
+    cc_date_disable(ename,$('sticky_check_' + ename).checked);
+}

@@ -28,6 +28,7 @@ if( !defined('IN_CC_HOST') )
 
 require_once('cchost_lib/ccextras/cc-topics-forms.inc');
 
+define('CC_FAR_IN_THE_FUTURE', '2030');
 
 class CCContentPostForm extends CCTopicForm
 {
@@ -58,8 +59,9 @@ class CCContentPostForm extends CCTopicForm
 
         $fields['topic_date'] =
                         array(  'label'      => _('Publish Date'),
-                               'form_tip'    => '',
-                               'formatter'   => 'date',
+                               'form_tip'    => _('Check "Sticky" to have this topic stick as the first topic of its type. It will ' .
+                   'be skipped by feed generators.'),
+                               'formatter'   => 'sticky_date',
                                'value'       => date('Y-m-d H:i:s'),
                                'flags'       => CCFF_POPULATE );
 
@@ -70,6 +72,14 @@ class CCContentPostForm extends CCTopicForm
 
         global $CC_GLOBALS;
 
+        $imgurl = ccd($CC_GLOBALS['image-upload-dir']);
+        $images['img_help'] = array( 'label' => _('Image Uploads'),
+                                     'form_tip' => '',
+                                     'formatter' => 'statictext',
+                                     'flags' => CCFF_STATIC | CCFF_NOUPDATE,
+                                     'value' => sprintf( _('Images uploaded here will be accessable from %s'),
+                                                  '<b>'. $imgurl.'</b>' )
+                                                  );
         for( $i = 1; $i < 5; $i++ )
         {
             $images['images_' . $i] = 
@@ -81,6 +91,38 @@ class CCContentPostForm extends CCTopicForm
 
         $this->AddFormFields($images);
         // | CCFF_NOSTRIP | CCFF_HTML
+    }
+
+    function generator_sticky_date($varname,$value='',$class='')
+    {
+        $html = $this->generator_date($varname,$value,$class);
+        $y = strftime('%Y',strtotime($value));
+        if( intval($y) >= intval(CC_FAR_IN_THE_FUTURE) )
+        {
+            $value = date('Y-m-d H:i:s');
+            $html = $this->generator_date($varname,$value,$class);
+            $html = str_replace( '<select', '<select disabled=\'disabled\'',$html);
+            $val = 'checked="checked"';
+        }
+        else
+        {
+            $val = '';
+        }
+        $html .= ' <input '.$val.' type="checkbox" id="sticky_check_'.$varname.
+                 '" onclick="cc_date_stick(\''.$varname.'\');" /> ' . _('Sticky');
+                 
+        return $html;
+    }
+
+    function validator_sticky_date($fieldname)
+    {
+        $v = $this->GetFormValue($fieldname);
+        if( empty($v) )
+        {
+            $v = array( 'm' => _('January'), 'd' => 1, 'y' => CC_FAR_IN_THE_FUTURE, 'h' => 12, 'i' => '00', 'a' => 'am' );
+            $this->SetFormValue($fieldname,$v);
+        }        
+        return $this->validator_date($fieldname);
     }
 }
 
