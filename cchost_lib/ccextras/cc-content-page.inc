@@ -73,13 +73,14 @@ class CCContentPostForm extends CCTopicForm
         global $CC_GLOBALS;
 
         $imgurl = ccd($CC_GLOBALS['image-upload-dir']);
+        $txt = sprintf( _('Images uploaded here will be accessable from %s Use [img=full_url][/img] or [skinimg=filename.ext][/skinimg] in the topic to display.'),
+                                                  '<p><b>'. $imgurl.'</b></p>' 
+                                                  );
         $images['img_help'] = array( 'label' => _('Image Uploads'),
                                      'form_tip' => '',
                                      'formatter' => 'statictext',
                                      'flags' => CCFF_STATIC | CCFF_NOUPDATE,
-                                     'value' => sprintf( _('Images uploaded here will be accessable from %s'),
-                                                  '<b>'. $imgurl.'</b>' )
-                                                  );
+                                     'value' => $txt );
         for( $i = 1; $i < 5; $i++ )
         {
             $images['images_' . $i] = 

@@ -93,8 +93,9 @@ function _cc_is_formatting_on()
 
 function _cc_format_format($text)
 {
-    require_once('cchost_lib/cc-template.php');
-    $thumbs_up = ccd( CCTemplate::Search('images/thumbs_up.gif') );
+    require_once('cchost_lib/cc-page.php');
+    $page =& CCPage::GetPage();
+    $thumbs_up = ccd( $page->Search('images/thumbs_up.gif') );
 
     $quote = _('Quote:');
     require_once('cchost_lib/smartypants/smartypants.php');
@@ -113,7 +114,8 @@ function _cc_format_format($text)
                   "/\[cmd=([^\]]+)]/e" => '"<a href=\"" . ccl(\'\1\') . "\">"', 
                   "#\[/cmd\]#" => '</a>', 
                   "#\[define=([^\]]+)\]\[/define\]#e" => '\1', 
-                  "#\[skinimg=([^\]]+)\]\[/skinimg\]#e" => '\'<img class="format_image" src="\' . ccd("ccskins/" . ltrim("$1","/") ) . \'" />\'', 
+                  "#\[skinimg=([^\]]+)\]\[/skinimg\]#e" =>
+                     '\'<img class="format_image" src="\' . ccd($page->Search(array("$1","images/$1"))) . \'" />\'', 
                   "#\[img=([^\]]+)\]\[/img\]#" => '<img class="format_image" src="$1" />', 
                 );
     $text = preg_replace( array_keys($map), 
