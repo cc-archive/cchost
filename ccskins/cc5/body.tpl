@@ -40,13 +40,14 @@
 %end_if%
      
 
-     <div class="block" id="title">
+     <div class="block" id="page_title">
  	    <div class="sideitem">
-         <form method="get" id="searchform" action="%(home-url)%search">
+         <form method="get" id="searchform" action="%(home-url)%search/results">
            <div>
              <input title="Search" accesskey="f"
-                 value="" name="search" id="search" class="inactive" type="text">
+                 value="" name="search_text" id="search_text" class="inactive" type="text">
                  <input id="searchsubmit" value="Go" type="submit">
+                <input type="hidden" name="search_in" value="all"></input>
            </div>
          </form>
     %if_null(logged_in_as)%
@@ -62,7 +63,7 @@
        </div><!-- sideitem -->
        
 %if_not_empty(page-title)%
-    <h1 class="title">%text(page-title)%</h1>
+    <h1 class="page_title">%text(page-title)%</h1>
 %end_if%
     </div><!-- block #title -->
      

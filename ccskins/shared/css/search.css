@@ -45,6 +45,12 @@ div.search_result_title {
 	color: #666;
 }
 
+div.search_results_link a {
+  font-size: 1.1em;
+  text-decoration: underline;
+}
+
+
 div.search_result_count {
 	margin: 0.3em 0px 0.4em 2.0em;
 }

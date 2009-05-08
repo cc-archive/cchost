@@ -96,7 +96,6 @@ img.mugshot {
 }
 
 #headerLogo h1 span {
-	display: none;
 }
 
 #headerLogo a {
@@ -236,30 +235,34 @@ img.mugshot {
 	color: #111;
 }
 
-#title {
+#page_title {
 	padding-right: 5px;
 	padding-left: 31px;
 }
-#title h2 {
+#page_title h2 {
 	margin-right: 200px !important;
 }
-#title .sideitem {
+#page_title .sideitem {
 	float: right;
 	/* padding-top: 0.5em; */
 }
 
-#title .sideitem #searchform	{
-	margin-bottom: 0.15em;
+#page_title .sideitem #searchform	{
+	margin-bottom: 0.5em;
 }
 
-#title .sideitem input#s {
+#page_title .sideitem #searchform input	{
+	font-size: 0.95em;
+}
+
+#page_title .sideitem #searchform #search_text {
+	background: url(../images/search_icon.gif) top left no-repeat;
+	padding-left: 18px;
+	font-family: verdana;
+}
+
+#page_title .sideitem input#s {
 	width: 96px;
-}
-
-#title .sideitem #searchsubmit	{}
-
-#title .sideitem span {
-	/* font-size: 50%; */
 }
 
 #toc {
@@ -327,3 +330,33 @@ img.mugshot {
 	margin: 0px;
 	padding: 0px;
 }
+
+#mi_stream_page {
+	background: url('../../shared/images/menu-stream.png') top left no-repeat;
+}
+#mi_play_page {
+	background: url('../../shared/images/menu-play.png') top left no-repeat;
+}
+#mi_podcast_page {
+	background: url('../../shared/images/menu-podcast.png') top left no-repeat;
+}
+#mi_download_page {
+	background: url('../../shared/images/menu-download.png') top left no-repeat;
+}
+
+.menu_group #mi_stream_page,
+.menu_group #mi_play_page,
+.menu_group #mi_podcast_page,
+.menu_group #mi_download_page {
+  padding-left: 21px;
+ }
+
+.selected_tab a:hover {
+  text-decoration: none;
+}
+
+.selected_tab a {
+	background-color: #CCC;
+	border: 2px solid #CCC;
+	color: white;
+	}
