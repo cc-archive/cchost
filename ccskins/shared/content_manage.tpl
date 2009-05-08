@@ -65,7 +65,8 @@ $A['topic_types'] = CCDatabase::QueryItems("SELECT DISTINCT topic_type FROM cc_t
 %loop(content_pages,cp)%
 <? $class = $i_cp & 1 ? 'odd_row' : 'even_row'; ?>
 <tr class="%(#class)%" >
-    <td>%(#cp)%</td>
+   <? $short_name = str_replace('.php','',basename($k_cp)); ?>
+    <td><b>%(#cp)%</b> (/%(#short_name)%)</td>
     <td><a href="%(home-url)%admin/content/page/edit/%(q)%page=%(#k_cp)%" class="small_button"><span>edit</span></a></td>
     <td><a href="%(home-url)%admin/content/page/delete/%(q)%page=%(#k_cp)%" class="small_button"><span>delete</span></a></td>
     <? $page = ccl(preg_replace('/\.[^\.]+$/','',basename($k_cp))); ?>

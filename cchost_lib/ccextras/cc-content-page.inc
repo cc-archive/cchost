@@ -139,7 +139,7 @@ class CCContentPageForm extends CCForm
     * Constructor
     *
     */
-    function CCContentPageForm()
+    function CCContentPageForm($old_name=false)
     {
         $this->CCForm();
 
@@ -148,6 +148,17 @@ class CCContentPageForm extends CCForm
                                'form_tip'    => '',
                                'formatter'   => 'textedit',
                                'flags'       => CCFF_POPULATE | CCFF_REQUIRED );
+
+        if( $old_name )
+        {
+            $old_url = ccl($old_name);
+            $tip = sprintf(_('Check this to keep the URL as %s even if you edit the title above.'),'<b>'.$old_url.'</b>');
+            $fields['keep_name'] = array( 'label' => _('URL Follows Title'),
+                              'form_tip' => $tip,
+                              'formatter' => 'checkbox',
+                              'value' => '',
+                              'flags' => CCFF_NONE );
+        }
 
         $types = CCDatabase::QueryItems('SELECT DISTINCT topic_type FROM cc_tbl_topics');
         $types = array_filter($types);
@@ -421,15 +432,15 @@ class CCContentPage
         $props = $fp->GetFileProps($page);
         $props['type'] = $props['topic_type'];
         $props['title'] = $props['desc'];
-
-        $form = new CCContentPageForm();
+        $short_page = str_replace('.php','',basename($page));
+        $form = new CCContentPageForm($short_page);
         if( empty($_POST['contentpage']) )
         {
             $form->PopulateValues($props);                
         }
         elseif( $form->ValidateFields() && $this->_valid_target_dir($form,$target) )
         {
-            $this->_save_page($form,false,$target);
+            $this->_save_page($form,false,$target,$short_page);
             $url = url_args( ccl('admin','content','manage'), 'topic_type=' . $props['type'] );
             CCUtil::SendBrowserTo($url);
         }
@@ -476,12 +487,19 @@ class CCContentPage
         return true;
     }
 
-    function _save_page(&$form,$new,$target_dir)
+    function _save_page(&$form,$new,$target_dir,$old_name='')
     {
         $form->GetFormValues($values);
-        $fname = trim(preg_replace('/[^0-9a-z_-]+/', '-', strtolower($values['title'])),'-');
-        if( empty($fname) )
-            $fname = 'topicpage';
+        if( empty($values['keep_name']) || empty($old_name) )
+        {
+            $fname = trim(preg_replace('/[^0-9a-z_-]+/', '-', strtolower($values['title'])),'-');
+            if( empty($fname) )
+                $fname = 'topicpage';
+        }
+        else
+        {
+            $fname = $old_name;
+        }
         $path = $target_dir . '/' . $fname . '.php';
         if( $new )
         {
@@ -501,7 +519,7 @@ class CCContentPage
         ksort($values);
         foreach( $values as $K => $V )
         {
-            if( ($K == 'title') || ($K == 'type') )
+            if( ($K == 'title') || ($K == 'type') || ($K == 'keep_name') )
                 continue;
             $meta .= '      ' . $K . ' = ' . $V . "\n";
         }
