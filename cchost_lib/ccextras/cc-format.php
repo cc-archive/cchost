@@ -91,17 +91,28 @@ function _cc_is_formatting_on()
            !empty($CC_GLOBALS['adminformat']);
 }
 
+function _cc_format_template_tag($tagname,$page)
+{
+    $value = $page->GetArg($tagname);
+    if( $value === null )
+        return $page->String(array('str_invalid_tag',$tagname));
+    return $value;
+}
+
 function _cc_format_format($text)
 {
     require_once('cchost_lib/cc-page.php');
     $page =& CCPage::GetPage();
     $thumbs_up = ccd( $page->Search('images/thumbs_up.gif') );
-
-    $quote = _('Quote:');
+    
+    $quote = $page->String('str_quote');
     require_once('cchost_lib/smartypants/smartypants.php');
     $attrs = '(b|i|u|red|green|blue|big|small|right|left)';
     $text = strip_tags($text);
-    $map = array( "/\[$attrs\]/" => '<span class="\1">', 
+    $map = array(
+                  "#\[var=([^\]]+)]\[/var\]#e" => '_cc_format_template_tag(\'\1\',$page)', 
+                  "#\[define=([^\]]+)\]\[/define\]#e" => '\1', 
+                  "/\[$attrs\]/" => '<span class="\1">', 
                   "#\[/$attrs\]#" => '</span>', 
                   "/\[quote=?([^\]]+)?\]/" => '<span class="quote"><span>'. $quote . ' $1</span>', 
                   "#\[/quote\]#" =>  '</span>', 
@@ -111,9 +122,9 @@ function _cc_format_format($text)
                   "#\[/box\]#" => '</div>', 
                   "/\[indent=([0-9]+)]/" => '<div style="padding-left:$1px">',
                   "#\[/indent\]#" => '</div>', 
-                  "/\[cmd=([^\]]+)]/e" => '"<a href=\"" . ccl(\'\1\') . "\">"', 
+                  "#\[cmdurl=([^\]]+)\]\[/cmdurl\]#e" => 'ccl(\'\1\')', 
+                  "/\[cmd=([^\]]+)\]/e" => '"<a href=\"" . ccl(\'\1\') . "\">"', 
                   "#\[/cmd\]#" => '</a>', 
-                  "#\[define=([^\]]+)\]\[/define\]#e" => '\1', 
                   "#\[skinimg=([^\]]+)\]\[/skinimg\]#e" =>
                      '\'<img class="format_image" src="\' . ccd($page->Search(array("$1","images/$1"))) . \'" />\'', 
                   "#\[img=([^\]]+)\]\[/img\]#" => '<img class="format_image" src="$1" />', 

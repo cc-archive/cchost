@@ -184,7 +184,24 @@ class CCMediaHost
 
         if( empty($_POST['postremix']) )
         {
+            if( !empty($_GET['pool']) )
+            {
+                $pool = CCUtil::Strip($_GET['pool']);
+                $pool_id = sprintf('%d',$pool);
+                if( empty($pool_id) )
+                {
+                    $pool_id = CCDatabase::QueryItem('SELECT pool_id FROM cc_tbl_pools WHERE pool_short_name=\''.$pool . '\'');
+                }
+
+                if( !empty($pool_id) )
+                    $form->SetFormFieldItem('sources','pool_id',$pool_id);
+            }
+            if( !empty($_GET['sourcesof']) )
+            {
+                $form->SetFormFieldItem('sources','sourcesof',$_GET['sourcesof']);
+            }
             $form->SetFormFieldItem('sources','remix_id',empty($etc['url_extra']) ? '' : $etc['url_extra']);
+
             CCPage::AddForm( $form->GenerateForm() );
         }
         else

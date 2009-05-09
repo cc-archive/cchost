@@ -14,7 +14,8 @@ ccRemixSearch.prototype = {
         {
             var html = '<select id="pools"><option value="-1" selected="selected">' + str_remix_this_site + '</option>';
             pools.each( function(p) {
-                html += '<option value="' + p.pool_id + '">' + p.pool_name + '</option>';
+                var sel = pool_id && (pool_id == p.pool_id) ? 'selected="selected"' : '';
+                html += '<option '+sel+'value="' + p.pool_id + '">' + p.pool_name + '</option>';
             });
             html += '</select>';
             $('pool_select_contaner').innerHTML = html;
@@ -27,6 +28,11 @@ ccRemixSearch.prototype = {
             Event.observe( 'remix_toggle_link', 'click', me.onToggleBox.bindAsEventListener(me) );
 
         this._scan_checks(true);
+
+        if( pool_id )
+        {
+            this.onPoolChange(null);
+        }
     },
 
     _scan_checks: function(check_all) {

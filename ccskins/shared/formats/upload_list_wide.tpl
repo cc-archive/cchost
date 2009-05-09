@@ -114,7 +114,8 @@
 %if_null(#_GET/noscripts)%
     %call('playerembed.xml/eplayer')%
     <script type="text/javascript">
-        ccEPlayer.hookElements($('upload_listing'));
+        if( window.ccEPlayer )
+            ccEPlayer.hookElements($('upload_listing'));
     </script>
 
     <script type="text/javascript">

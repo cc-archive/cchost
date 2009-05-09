@@ -63,10 +63,14 @@ class CCRatings extends CCTable
     /**
     * Determine if the current user is allowed to rate a given record
     *
+    * WARNING: See also cc-user-hook.php (ok_to_rate)
+    *
     * @param array $record Upload record
     */
     function IsRateBlocked($record)
     {
+        // WARNING: See also cc-user-hook.php (ok_to_rate)
+        
         global $CC_GLOBALS;
 
         $upload_id = $record['upload_id'];

@@ -269,6 +269,8 @@ $GLOBALS['str_hidi_name'] = _('Upload name');
 $GLOBALS['str_hidi_date'] = _('Upload date');
 $GLOBALS['str_hidi_author'] = _('Artist');
 
+$GLOBALS['str_invalid_tag'] = _('[Don\'t know variable: %s]');
+
 $GLOBALS['str_hidden'] = _('Hidden');
 $GLOBALS['str_hidden_list'] = _('Unpublished and Moderated Uploads');
 $GLOBALS['str_highest_rated']         = _('Highest Rated');
@@ -356,8 +358,9 @@ $GLOBALS['str_news']                  = _('News');
 $GLOBALS['str_no_chart']              = _('No Chart');
 $GLOBALS['str_non_public_files']      = _('Non-public Files');
 
+$GLOBALS['str_notifications']           = _('Notifications');
 $GLOBALS['str_notify_dont_respond']     = _('PLEASE DO NOT RESPOND TO THIS EMAIL');
-$GLOBALS['str_notify_edit']             = _('Edit My Notifications');
+$GLOBALS['str_notify_edit']             = _('Manage Notifications');
 $GLOBALS['str_notify_get_notified']     = _('%sGet Notified About %s%s');
 $GLOBALS['str_notify_got_rating']       = _('This is a notification that "%s" has just received a rating of %d.00');
 $GLOBALS['str_notify_got_recc']         = _('This is a notification that "%s" has just been recommended by %s');
@@ -527,6 +530,8 @@ $GLOBALS['str_openid_pw_tip']           = $GLOBALS['str_prof_leave_this_blank'] 
 $GLOBALS['str_publicize']                 = _('Publicize');
 $GLOBALS['str_publicize_yourself_s']      = _('%sPublicize yourself%s');
 $GLOBALS['str_publicize_s']               = _('Publicize %s');
+
+$GLOBALS['str_quote']                     = _('Quote:');
 
 $GLOBALS['str_radio_create'] = _('Create your own stream or podcast from a random pool of remixes in %s by selecting a style and other choices.');
 $GLOBALS['str_radio_remix']           = _('Remix Radio');
@@ -865,6 +870,7 @@ $GLOBALS['str_trackback_link_album']   = _('URL to album page');
 $GLOBALS['str_trackback_error']   = _('There was an error reaching the page:');
 $GLOBALS['str_trackback_remix_upload'] = _('%sClick here if you want to upload a remix of "%s"%s');
 
+$GLOBALS['str_preferences'] = _('Preferences');
 $GLOBALS['str_pref_title'] = _('Your Preferences');
 $GLOBALS['str_pref_default_tab'] = _('Default Profile Tab');
 $GLOBALS['str_pref_setting_this'] =_('Setting this will determine which tab is the default when visiting an artist\'s page');

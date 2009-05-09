@@ -114,6 +114,17 @@ class CCSkin
     }
 
     /**
+    * Get a variable available to the page when rendering
+    *
+    * @param string $name The name of the variable as will be seen in the template
+    * @return string value of variable name or null if not found
+    */
+    function GetArg($name)
+    {
+        return isset($this->vars[$name]) ? $this->vars[$name] : null;
+    }
+
+    /**
     * Remove a variable from the page when rendering
     *
     * @param string $name The name of the variable as will be invisible in the template
@@ -498,6 +509,10 @@ class CCSkin
             fclose($f_js);
             fclose($f_css);
             fclose($f_inc);
+            
+            chmod( $script_file,  cc_default_file_perms() );
+            chmod( $css_file,     cc_default_file_perms() );
+            chmod( $inc_file,     cc_default_file_perms() );
         }
 
         print "\n" . '<script type="text/javascript" src="' . ccd($script_file) . '"></script>';

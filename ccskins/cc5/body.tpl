@@ -108,7 +108,7 @@
     </div>
    
    <!-- footer -->
-    <div id="footer">
+    <div id="footer" class="ccfooter">
         <div id="footerContent" class="ccbox">%text(footer)%</div>
         <div id="footerLicense">
             <p class="ccbox">

@@ -12,7 +12,7 @@ $fname = '_t_' . preg_replace('/[^a-z]+/i', '_', $fname) . '_';
 $fname = realpath($fname);
 $argv[1] = realpath($argv[1]);
 
-chdir('/var/www/cchost');
+chdir(dirname(dirname(__FILE__)));
 
 require_once('cchost_lib/cc-tpl-parser.php');
 

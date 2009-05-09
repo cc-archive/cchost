@@ -288,13 +288,17 @@ class CCSearch
     {
         if( $scope == CC_GLOBAL_SCOPE )
         {
+            /*
+               this just doesn't work
+               
             $fields['use_text_index'] =
                array(  'label'      => _('Search Method'),
                        'form_tip'   => _('Check this to use mysql TEXTINDEX searching'),
                        'value'      => '',
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE );
-
+            */
+            
             $fields['show_google_form'] =
                array(  'label'      => _('Show Google(tm) Search Form'),
                        'form_tip'   => _('Check this to show users a Google search form'),

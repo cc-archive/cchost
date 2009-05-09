@@ -27,7 +27,7 @@ h5 { font-size: 1em;}
 
 h1, h2, h3, h4, h5 { line-height: 1.5em;}
 
-a, a:visited {
+a, a:visited, a:link {
 	text-decoration: none;
 	color: #1c438b;
 }
@@ -239,7 +239,7 @@ p { margin-bottom: 10px; line-height:1.5em;}
 
 
 /** Footer **/
-#footer { 
+.ccfooter { 
 	background-color: #eee; 
 	clear: both; 
 	margin-top: 6em; 
@@ -278,5 +278,3 @@ p { margin-bottom: 10px; line-height:1.5em;}
 	padding-top: 4px;
 }
 
-
-<!-- end
