@@ -53,12 +53,25 @@ class CCPlaylistHV
 {
     function OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
     {
-        if( empty($args['playlist']) ) 
-            return;
-
         if( !empty($args['dataview']) && ($args['dataview'] == 'passthru') )
             return;
 
+        if( !empty($args['playlist_type']) )
+        {
+            if( !empty($args['user']) )
+            {
+                $user_id = CCUser::IDFromName($args['user']);
+                if( empty($user_id) )
+                    return; // er, no error?
+                $args['playlist'] = $this->_get_type_for_user($user_id,$args['playlist_type'],false,null);
+                
+                unset($args['user']);
+            }
+        }
+
+        if( empty($args['playlist']) ) 
+            return;
+        
         $id = sprintf('0%d',$args['playlist']);
         $ok = $id > 0;
         if( $ok )
@@ -191,7 +204,6 @@ EOF;
             return;
         }
 
-
         require_once('cchost_lib/ccextras/cc-cart-table.inc');
         $carts = new CCPlaylist(false);
         $w['cart_user'] = $record['user_id'];
@@ -285,6 +297,21 @@ EOF;
 
             $R['file_macros'][] = 'file_macros.php/print_num_playlists';
         }
+    }
+
+    function _get_type_for_user( $user_id, $type, $auto_create, $name )
+    {
+        $sql = "SELECT cart_id FROM cc_tbl_cart WHERE cart_user = '{$user_id}' and cart_subtype = '{$type}'";
+        $cart_id = CCDatabase::QueryItem($sql);
+        if( empty($cart_id) && $auto_create)
+        {
+            require_once('cchost_lib/ccextras/cc-playlist.inc');
+            $api = new CCPlaylists();
+            //global $CC_GLOBALS;
+            //$name = sprintf( _("%s's Favorites"), $CC_GLOBALS['user_real_name'] );
+            $cart_id = $api->_create_playlist($type,$name);
+        }
+        return $cart_id;
     }
 
 

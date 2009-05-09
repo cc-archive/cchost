@@ -127,9 +127,9 @@ class CCUser
 
     function IDFromName($username)
     {
-        $users =& CCUsers::GetTable();
-        $where = "user_name = '" . strtolower($username) . "'";
-        return( $users->QueryKey($where) );
+        return CCDatabase::QueryItem(
+                  'SELECT user_id FROM cc_tbl_user WHERE user_name = \'' .
+                  strtolower($username) . '\'' );
     }
 
     /**

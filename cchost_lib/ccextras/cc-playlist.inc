@@ -103,8 +103,12 @@ class CCPlaylists
          '{upload_id},{playlist_id}', _('Add upload to playlist'), CC_AG_PLAYLIST );
 
 
+        CCEvents::MapUrl( ccp('api','playlist','type'),   array( 'CCPlaylists', 'GetType'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+         '{user_name}/{type}', _('Get a specific type of playlist (e.g. favorites'), CC_AG_PLAYLIST );
+
         CCEvents::MapUrl( ccp('api','playlist','getfavorite'),   array( 'CCPlaylists', 'GetFavorite'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
-         '', _('Get the current user\'s favorites playlist'), CC_AG_PLAYLIST );
+         '', _(''), CC_AG_deprecated );
+
         CCEvents::MapUrl( ccp('api','playlist','remove'),   array( 'CCPlaylists', 'Remove'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
          '{upload_id},{playlist_id}', _('Remove upload from playlist'), CC_AG_PLAYLIST );
         CCEvents::MapUrl( ccp('api','playlist','bump'),     array( 'CCPlaylists', 'Bump'),    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ,
@@ -146,26 +150,25 @@ class CCPlaylists
 
     }
 
-    function GetFavorite()
+    function GetType($user_name,$type,$name='')
     {
-        $user_id = CCUser::CurrentUser();
-        $sql = "SELECT cart_id FROM cc_tbl_cart WHERE cart_user = '{$user_id}' and cart_subtype = 'favorites'";
-        $cart_id = CCDatabase::QueryItem($sql);
-        if( empty($cart_id) )
-        {
-            global $CC_GLOBALS;
-            require_once('cchost_lib/ccextras/cc-playlist.inc');
-            $api = new CCPlaylists();
-            $title = sprintf( _("%s's Favorites"), $CC_GLOBALS['user_real_name'] );
-            $cart_id = $api->_create_playlist('favorites',$title);
-        }
+        $name = empty($name) ? $type : urldecode($name);
+        $user_id = CCUser::IDFromName($user_name);
+        $cart_id = CCPlaylistHV::_get_type_for_user($user_id,$type,true,$name);
         $cart_items =& CCPlaylistItems::GetTable();
         $w['cart_item_cart'] = $cart_id;
         $ids = $cart_items->QueryItems('cart_item_upload',$w);
         $obj = array( 'cart_id' => $cart_id, 'upload_ids' => $ids );
         CCUtil::ReturnAjaxData($obj); // this will exit
     }
-
+    
+    function GetFavorite()
+    {
+        $user_name = CCUser::CurrentUserName();
+        $pname = empty($_GET['pname']) ? $user_name . "'s Favorites" : urldecode($_GET['pname']);
+        $this->GetType($user_name,'favorites', $pname); // todo stringize
+    }
+    
     function Save()
     {
         require_once('cchost_lib/cc-query.php');
