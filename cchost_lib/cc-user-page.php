@@ -39,6 +39,7 @@ class CCUserPage
 
         require_once('cchost_lib/cc-page.php');
 
+        $page =& CCPage::GetPage();
         $configs =& CCConfigs::GetTable();
         $settings = $configs->GetConfig('settings');
 
@@ -46,8 +47,8 @@ class CCUserPage
         if( $username && empty($uid) )
         {
             CCUtil::Send404(false);
-            CCPage::SetTitle('str_people');
-            CCPage::Prompt( array( 'str_dont_know_user', $username ) );
+            $page->SetTitle('str_people');
+            $page->Prompt( array( 'str_dont_know_user', $username ) );
             return;
         }
 
@@ -57,10 +58,24 @@ class CCUserPage
             return;
         }
 
+        $custom_template = $page->LookupMacro('custom_user_profile',true);
+        if( !empty($custom_template) )
+        {
+            require_once('cchost_lib/cc-query.php');
+            $query = new CCQuery();
+            $args = $query->ProcessAdminArgs('t=custom_user_profile&user='.$username);
+            $query->Query($args);
+            return;
+        }
+        
+        $fun = cc_fancy_user_sql();
+        $user_real_name = CCDatabase::QueryItem("SELECT {$fun} FROM cc_tbl_user WHERE user_name ='{$username}'");
+        $page->SetArg('sub_tab_prefix',$user_real_name . ': ');
+
         $originalTab = $tab;
         $tabs = $this->_get_tabs($username,$tab);
         $tagfilter = '';
-        CCPage::PageArg('sub_nav_tabs',$tabs);
+        $page->PageArg('sub_nav_tabs',$tabs);
         if( empty($tabs['tabs'][$originalTab]) )
         {
             // HACK
