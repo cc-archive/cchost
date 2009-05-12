@@ -51,7 +51,7 @@ class CCRemix
 
         $uploads =& CCUploads::GetTable();
         $name = $uploads->QueryItemFromKey('upload_name',$upload_id);
-        $msg = sprintf(_("Editing Remixes for '%s'"),$name);
+        $msg = array('str_remix_editing',$name);
         $this->_build_bread_crumb_trail($upload_id,$msg);
         CCPage::SetTitle($msg);
 

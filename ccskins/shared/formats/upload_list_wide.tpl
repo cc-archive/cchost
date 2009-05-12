@@ -112,7 +112,7 @@
 %call(prev_next_links)%
 <!-- -->
 %if_null(#_GET/noscripts)%
-    %call('playerembed.xml/eplayer')%
+    %call('flash_player')%
     <script type="text/javascript">
         if( window.ccEPlayer )
             ccEPlayer.hookElements($('upload_listing'));

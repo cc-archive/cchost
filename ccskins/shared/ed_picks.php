@@ -144,10 +144,8 @@ var uinfo = new ccUploadInfo();
 uinfo.hookInfos('.info_button',$('edpicks'));
 </script>
 <?
-
 $T->Call('prev_next_links');
-
-$T->Call('playerembed.xml/eplayer');
+$T->Call('flash_player');
 ?>
 <script type="text/javascript">
 if( window.ccEPlayer )

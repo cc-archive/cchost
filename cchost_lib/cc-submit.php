@@ -428,9 +428,11 @@ class CCSubmit
             return;
 
         require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        $type_name = $page->String($form_types[$form_type_key]['submit_type']);
         $this->_build_bread_crumb_trail(_('Edit Submit Form'));
-        $msg = sprintf(_('Editing Submit Form for: %s'), $form_types[$form_type_key]['submit_type'] );
-        CCPage::SetTitle($msg);
+        $msg = sprintf(_('Editing Submit Form for: %s'), $type_name );
+        $page->SetTitle($msg);
         $ok = false;
 
         $form = new CCAdminSubmitFormForm();
@@ -448,7 +450,7 @@ class CCSubmit
             $urlx = ccl('admin','submit');
             $urly = ccl('submit');
             $link1 = "<a href=\"$urlx\">";
-            CCPage::Prompt(sprintf( _('Submit form "%s" has been deleted.'), $form_name ));
+            $page->Prompt(sprintf( _('Submit form "%s" has been deleted.'), $form_name ));
             $ok = true;
         }
         elseif ( $form->ValidateFields() )
@@ -459,13 +461,13 @@ class CCSubmit
             if( empty($values['logo']) )
                 $values['logo'] = empty($form_types[$form_type_key]['logo']) ? '' : $form_types[$form_type_key]['logo'];
             $form_types = $this->SaveFormType($values,$form_type_key,$form_types);
-            CCPage::Prompt( _('Submit form changes saved') );
+            $page->Prompt( _('Submit form changes saved') );
             $ok = true;
         }
 
         if( !$ok )
         {
-            CCPage::AddForm( $form->GenerateForm() );
+            $page->AddForm( $form->GenerateForm() );
         }
     }
 

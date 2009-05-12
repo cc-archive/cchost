@@ -54,7 +54,7 @@ h1 { display: none; }
 <script  src="%url('/js/info.js')%"></script>
 <script  src="%url('js/playlist.js')%" ></script>
 %map(player_options,'autoHook: false,showVolume: false,showProgress: false,plcc_id: \'plc_id\'')%
-%call('playerembed.xml/eplayer')%
+%call('flash_player')%
 %if_not_null(get/popup)%
    %map(skip_action_button,true)%
    %map(skip_into_button,true)%

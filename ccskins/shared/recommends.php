@@ -34,7 +34,7 @@ if( !defined('IN_CC_HOST') )
 </div><!-- browser client -->
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js'); ?>"></script>
-<? $T->Call('playerembed.xml/eplayer'); ?>
+<? $T->Call('flash_player'); ?>
 <script type="text/javascript">
 var ruser = '<?= $A['get']['ruser']?>';
 var fullname = '<?= $A['get']['fullname']?>';

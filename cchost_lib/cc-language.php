@@ -196,13 +196,14 @@ class CCLanguage
 
         // read in each locale preference folder
         $locale_dirs = glob( $locale_dir . '/*', GLOB_ONLYDIR ); 
-    
-        if ( !empty($locale_dirs)  )
+
+        if ( empty($locale_dirs)  )
             return false;
     
         foreach ( $locale_dirs as $dir ) {
             // Read in each folder (language) for consideration
             $lang_dirs = glob( "$dir/*", GLOB_ONLYDIR );
+
             // if the locale pref. folder has no languages, then don't load it
             if ( empty($lang_dirs) )
                 continue;
@@ -346,12 +347,12 @@ class CCLanguage
     {
         $lang_list = 
         array_keys(
-        $this->_all_languages['locale'][$this->_locale_pref]['language']);
+            $this->_all_languages['locale'][$this->_locale_pref]['language']);
 
         $possible_langs = array();
 
         foreach ( $lang_list as $item ) {
-        $possible_langs[$item] = $item;
+          $possible_langs[$item] = $item;
         }
     
     // This is dumb in that if it is selected for user preferences, it
@@ -364,7 +365,7 @@ class CCLanguage
         $possible_langs[CC_LANG] = CC_LANG;
         $possible_langs['autodetect'] = _('autodetect');
     
-    return $possible_langs;
+        return $possible_langs;
     }
 
     /**

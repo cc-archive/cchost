@@ -13,7 +13,7 @@
 <script  src="%url('/js/info.js')%"></script>
 <script  src="%url('js/playlist.js')%" ></script>
 %map(player_options,'autoHook: false')%
-%call('playerembed.xml/eplayer')%
+%call('flash_player')%
 
 %call('playlist_2_nostyle')%
 

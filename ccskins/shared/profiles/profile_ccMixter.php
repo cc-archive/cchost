@@ -2,7 +2,7 @@
 [meta]
     type              = profile
     skin-file         = ccskins/commons/skin.tpl
-    desc              = _('ccMixter style, wide, menus on left, fancy tabs')
+    desc              = _('ccMixter fancy tabs [2008]')
     head-type         = ccskins/shared/head.tpl
     string_profile    = ccskins/shared/strings/audio.php
     list_file         = ccskins/shared/formats/upload_page_wide.php

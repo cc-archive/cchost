@@ -180,7 +180,7 @@ foreach( $A['feats'] as $R )
 <script  src="<?= $T->URL('/js/playlist.js') ?>"></script>
 <script  src="<?= $T->URL('/js/query_browser.js') ?>"></script>
 <? 
-    $T->Call('playerembed.xml/eplayer'); 
+    $T->Call('flash_player'); 
     $A['qstring'] = 'tags=acappella+featured&limit=50';
 ?>
 <script type="text/javascript">

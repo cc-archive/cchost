@@ -1,9 +1,9 @@
 <?/*
 [meta]
     type = profile
-    desc = _('CC Site Clone [2009]')
+    desc = _('CC Mixter [2009]')
     skin-file  = ccskins/cc5/skin.tpl
-    string_profile  = ccskins/shared/strings/all_media.php
+    string_profile  = ccskins/shared/strings/audio.php
     list_file  = ccskins/shared/formats/upload_page_wide.php
     list_files  = ccskins/shared/formats/upload_list_wide.tpl
     form_fields  = form_fields.tpl/form_fields

@@ -68,7 +68,7 @@
 %call(prev_next_links)%
 </div>
 
-%call('playerembed.xml/eplayer')%
+%call('flash_player')%
 <script type="text/javascript">
 if( window.ccEPlayer )
     ccEPlayer.hookElements($('cc_narrow_list'));

@@ -168,7 +168,6 @@ class CCSkinSettingsForm extends CCEditConfigForm
                    'formatter'   => 'select',
                    'options'     => $paging_styles,
                    'flags'       => CCFF_POPULATE );
-
         $fields['head-type'] =
             array( 'label'       => _('Optimized HEAD'),
                    'form_tip'    => _('Combine scripts and styles in common files'),

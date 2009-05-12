@@ -339,6 +339,14 @@ class CCContactMailerForm extends CCSecurityVerifierForm
 
 }
 
+class CCMassMailerForm extends CCContactMailerForm
+{
+    function CCMassMailerForm($user_to,$user_from)
+    {
+        $this->CCContactMailerForm($user_to,$user_from);
+    }    
+}
+
 class CCMailerAPI
 {
 
@@ -599,9 +607,9 @@ class CCMailerAPI
         $user_from['user_real_name'] = _('You');
         $user_from['user_id']        = CCUser::CurrentUser();
 
-        $form = new CCContactMailerForm($user_to,$user_from);
+        $form = new CCMassMailerForm($user_to,$user_from);
 
-        if( empty( $_REQUEST['contactmailer'] ) || !$form->ValidateFields() )
+        if( empty( $_REQUEST['massmailer'] ) || !$form->ValidateFields() )
         {
             CCPage::AddForm( $form->GenerateForm() );
         }
@@ -636,7 +644,8 @@ class CCMailerAPI
                 for( $i = 0; $i < $count; $i++ )
                 {
                     $addr = $rows[$i]['user_email'];
-                    $mailer->BCC( $addr );
+                    if( $addr )
+                        $mailer->BCC( $addr );
                 }
                 $ok = $mailer->Send();
                 if( !$ok )

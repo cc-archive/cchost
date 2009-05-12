@@ -26,7 +26,7 @@
 </div>
 
 %map(player_options,'autoHook: false')%
-%call('playerembed.xml/eplayer')%
+%call('flash_player')%
 
 <script type="text/javascript">
     var plb = new ccPlaylistBrowser( 'playlist_browser', '' );

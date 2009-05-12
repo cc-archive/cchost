@@ -134,18 +134,29 @@ class CCAdminPlaylistsForm extends CCEditConfigForm
     {
         $this->CCEditConfigForm('config',CC_GLOBAL_SCOPE);
         $this->SetModule(ccs(__FILE__));
+
+        require_once('cchost_lib/cc-template.inc');
+        $players = CCTemplateAdmin::GetPropType( 'players','embedded_player');
+        
         $fields = array(
 
             'enable_playlists' =>
-               array(  'label'      => _('Enable Playlists'),
+               array(  'label'      => 'str_pl_enable',
                        'formatter'  => 'checkbox',
                        'flags'      => CCFF_POPULATE ),
 
             'playlist_promo_tag' =>
                array(  'label'      => _('Promomotion tag for playlist'),
-                       'form_tip'   => _('Uploads with this tag will be mixed in with dynamic playlists'),
+                       'form_tip'   => _('This tag will be mixed in with dynamic playlists (audio sites only)'),
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE ),
+                       
+            'embedded_player' =>
+                array( 'label'       => _('Embedded Audio Player'),
+                       'form_tip'    => _('(audio sites only)'),
+                       'formatter'   => 'select',
+                       'options'     => $players,
+                       'flags'       => CCFF_POPULATE ),
 
                 );
 
@@ -160,7 +171,7 @@ class CCPlaylistManage
     {
         require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/cc-admin.php');
-        $title = _('Admin Playlists');
+        $title = 'str_pl_manage';
         CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
         CCPage::SetTitle($title);
         $form = new CCAdminPlaylistsForm();
@@ -178,9 +189,9 @@ class CCPlaylistManage
         if( $scope == CC_GLOBAL_SCOPE )
         {
             $items += array( 
-                'playlists'   => array( 'menu_text'  => 'Playlists',
+                'playlists'   => array( 'menu_text'  => 'str_playlists',
                                  'menu_group' => 'configure',
-                                 'help'      => _('Manage Playlists'),
+                                 'help'      => 'str_pl_manage',
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 700,
                                  'action' =>  ccl('admin','playlists')

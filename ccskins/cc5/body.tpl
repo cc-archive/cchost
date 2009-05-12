@@ -1,18 +1,18 @@
 <body>
 <div id="container">
-%if_not_empty(site-disabled)%
-  <div id="site_disabled_message" style="position:absolute">%text(str_site_disabled)%</div>
-%end_if%
-%if_not_empty(beta_message)%
-  <div id="beta_message" style="position:absolute;">%(beta_message)%</div>
-%end_if%
+    %if_not_empty(site-disabled)%
+      <div id="site_disabled_message" style="position:absolute">%text(str_site_disabled)%</div>
+    %end_if%
+    %if_not_empty(beta_message)%
+      <div id="beta_message" style="position:absolute;">%(beta_message)%</div>
+    %end_if%
 
-<div class="hide">
-  <a href="#content">%text(skip)%</a>
-</div>
+    <div class="hide">
+      <a href="#content">%text(skip)%</a>
+    </div>
 
   <div id="globalWrapper">
-    <div id="headerWrapper">
+      <div id="headerWrapper">
         <div id="headerLogo">
             <h1><a href="%(root-url)%" title="%(site-title)%" >
             %if_not_null(logo/src)% 
@@ -22,6 +22,9 @@
             %end_if%
             </a></h1>
         </div><!-- #headerLogo -->
+            %if_not_null(site-description)%
+              <div class="light_color" id="site_description">%(site-description)%</div>
+            %end_if%
  
         <div id="headerNav">
             %if_not_empty(tab_pos/in_header)%
@@ -29,7 +32,6 @@
             %end_if%
         </div><!-- #headerNav -->
     </div><!-- #headerWrapper -->
-
     <div id="wrapper"><div id="content">
         <div id="tools">
             <div class="sideitem">
@@ -42,12 +44,12 @@
                     </div>
                 </form>
                 %if_null(logged_in_as)%
-                     <span><a href="%(home-url)%login">Log in / create account</a></span>
+                     <span><a href="%(home-url)%login">%text(str_log_in_create)%</a></span>
                      %if_not_empty(openid-type)%
-                      <span>(<a href="%(home-url)%login/openid">OpenID</a>)</span>
+                      <span>(<a href="%(home-url)%login/openid">%text(str_openid)%</a>)</span>
                      %end_if%
                 %else%
-                     <span>%text(loggedin)%: <b><span>%(logged_in_as)%</span></b> 
+                     <span>%text(str_loggedin)%: <b><span>%(logged_in_as)%</span></b> 
                         <span><a class="small_button" href="%(home-url)%logout">%text(logout)%</a></span>
                 %end_if%
             </div><!-- .sideitem -->
@@ -59,6 +61,7 @@
             </div><!-- #pageNav -->
             </div>
         </div><!-- tools -->
+
         <div id="page_title">
             %if_not_empty(page-title)%
                 <h1 class="page_title">%text(page-title)%</h1>
@@ -103,17 +106,19 @@
             <br />
             
             <!-- editing extras -->
-            %(edit_extra)%
+            %call('extras_drop')%
         %end_if%
     </div>
    
    <!-- footer -->
     <div id="footer" class="ccfooter">
-        <div id="footerContent" class="ccbox">%text(footer)%</div>
-        <div id="footerLicense">
-            <p class="ccbox">
-             %text(site-license)%
-            </p>
+        <div id="footerWrapper">
+            <div id="footerContent" class="ccbox">%text(footer)%</div>
+            <div id="footerLicense">
+                <p class="ccbox">
+                 %text(site-license)%
+                </p>
+            </div>
         </div>
     </div>
    

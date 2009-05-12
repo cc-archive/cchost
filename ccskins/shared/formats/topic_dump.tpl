@@ -25,8 +25,6 @@ EOF;
         FROM cc_tbl_topics
         %joins%
         %where%
-        %order%
-        %limit%
 EOF;
         return array( 'sql' => $sql, 
                       'sql_count' => $sql_count,

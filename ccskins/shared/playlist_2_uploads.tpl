@@ -16,7 +16,7 @@ audio sites, playlist_2_image for image gallery sites)
 <link  rel="stylesheet" type="text/css" href="%url('css/info.css')%"  title="Default Style"></link>
 <script  src="%url('/js/info.js')%"></script>
 <script  src="%url('js/playlist.js')%" ></script>
-%call('playerembed.xml/eplayer')%
+%call('flash_player')%
 <div id="cc_pl_div" id="_pl_1">
 %call('playlist_list_lines')%
 </div>

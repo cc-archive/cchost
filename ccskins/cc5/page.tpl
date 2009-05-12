@@ -8,7 +8,11 @@
 <html>
     %call(head-type)%
     %if(show_body_header)%
-        %call('body.tpl')%
+        %if_empty(get/popup)%
+            %call('body.tpl')%
+        %else%
+            %call('short_page.tpl')%
+        %end_if%
     %else%
         %call('short_page.tpl')%
     %end_if%

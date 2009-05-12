@@ -23,7 +23,7 @@ if( !defined('IN_CC_HOST') )
 <script  src="<?= $T->URL('js/playlist.js') ?>" ></script>
 <?
     $T->Call('playlist_list_lines');
-    $T->Call('playerembed.xml/eplayer');
+    $T->Call('flash_player');
 ?>
 <script type="text/javascript">
     new ccPlaylistMenu();

@@ -185,45 +185,6 @@ class CCRating
     }
 
     /**
-    * Racalculate all ratings in system
-    */
-    function Recalc()
-    {
-        require_once('cchost_lib/cc-ratings-admin.inc');
-        $api = new CCRatingsAdmin();
-        $api->Recalc();
-    }
-
-    /**
-    * Returns array of records sorted by uploaded ranks desc.
-    *
-    * @param integer $limit Max number of records to return
-    * @param string $since String representing date of first record to return
-    * @return array $records Upload records
-    */
-    function GetChart($limit,$since='')
-    {
-        $configs =& CCConfigs::GetTable();
-        $C = $configs->GetConfig('chart',CC_GLOBAL_SCOPE);
-        if( empty($C['bayesian-min']) )
-            $C['bayesian-min'] = 1;
-
-        $where = "(upload_num_scores >= {$C['bayesian-min']})";
-        if( $since != 'forever' )
-        {
-            $cutoff_t = strtotime( empty($since) ? $C['cut-off'] : $since);
-            $cutoff = date('Y-m-d H:i:s', $cutoff_t);
-            $where .= " AND  (upload_date > '$cutoff')";
-        }
-
-        $uploads = new CCUploads(); // getting new let's us step all over it fearlessly
-        $uploads->SetSort('upload_rank','DESC');
-        $uploads->SetOffsetAndLimit(0,$limit);
-        $records = $uploads->GetRecords($where);
-        return $records;
-    }
-
-    /**
     * Rate an upload
     *
     * This is an AJAX callback and will print stars to the browser and
@@ -290,42 +251,6 @@ EOF;
         exit;
     }
 
-    function GetRatingsInfo(&$record)
-    {
-        $configs    =& CCConfigs::GetTable();
-        $settings   = $configs->GetConfig('settings'); // local
-        $chart      = $configs->GetConfig('chart');    // global
-        $ratings    =& CCRatings::GetTable();           
-        $ratings_on = !empty($chart['ratings']) && !empty($settings['ratings']);
-                
-        $is_me = $record['upload_user'] == CCUser::CurrentUser();
-
-        if( $is_me || 
-            !$ratings_on || 
-            !empty($record['upload_banned']) || 
-            $ratings->IsRateBlocked($record) )
-        {
-            $record['ok_to_rate'] = false;
-        }
-        else
-        {
-            $record['ok_to_rate'] = true;
-        }
-
-        // ugh, this is a temp fix until I can figure out the real
-        // thing to do about all these ratings/ranking feilds
-
-        if( ($record['thumbs_up'] = !empty($chart['thumbs_up'])) != false )
-            $record['upload_score'] = $record['upload_num_scores'];
-
-        if( !$ratings_on || empty($record['upload_score']) )
-            return;
-
-        require_once('cchost_lib/cc-ratings.inc');
-
-        CCRatingsHV::_fill_scores($record,'upload');
-    }
-
     /**
     * Event handler for {@link CC_EVENT_USER_DELETED}
     *
@@ -340,34 +265,6 @@ EOF;
     }
 
     /**
-    * Event handler for {@link CC_EVENT_GET_CONFIG_FIELDS}
-    *
-    * Add global settings settings to config editing form
-    * 
-    * @param string $scope Either CC_GLOBAL_SCOPE or CC_LOCAL_SCOPE
-    * @param array  $fields Array of form fields to add fields to.
-    */
-    function OnGetConfigFields($scope,&$fields)
-    {
-        global $CC_CFG_ROOT;
-
-        if( $scope != CC_GLOBAL_SCOPE )
-        {
-            $url = ccl('admin','ratings');
-            $link1 = "<a href=\"$url\">";
-            $link2 = '</a>';
-            $help = _('Allow ratings for %s virtual root. (Click %shere%s to configure global ratings)');
-
-            $fields['ratings'] =
-               array(  'label'      => 'Ratings',
-                       'form_tip'   => sprintf($help,$CC_CFG_ROOT,$link1,$link2),
-                       'formatter'  => 'checkbox',
-                       'flags'      => CCFF_POPULATE,
-                    );
-        }
-    }
-
-    /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
     * @see CCEvents::MapUrl()
@@ -378,8 +275,6 @@ EOF;
             CC_MUST_BE_LOGGED_IN, ccs(__FILE__), '{upload_id}/{rating}', _('Rate an upload (Ajax)'), CC_AG_RATINGS );
         CCEvents::MapUrl( ccp('admin','ratings'),       array('CCRating','Admin'), 
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display admin ratings form'), CC_AG_RATINGS );
-        CCEvents::MapUrl( ccp('admin','ratings','recalc'), array('CCRating','Recalc'), 
-            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Recalcuate all upload scores'), CC_AG_RATINGS  );
     }
 }
 

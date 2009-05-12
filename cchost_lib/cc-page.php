@@ -351,6 +351,26 @@ class CCPage extends CCSkin
     }
 
     /**
+    * Gets the the title for the page
+    *
+    * @return string The title or null if not set yet
+    */
+    function GetTitle()
+    {
+        if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
+           $page =& CCPage::GetPage();
+         else
+           $page =& $this;
+
+        $arg = $page->GetArg('page-title');
+        if( empty($arg) )
+            $arg = $page->SetArg('page-caption' );
+        if( !empty($arg) )
+            $arg = $page->String($arg);
+        return $arg;
+    }
+
+    /**
     * Force the display (HTML output to client) of the current page
     *
     * @param string $body Specific HTML for the client area of the page
@@ -689,6 +709,21 @@ class CCPage extends CCSkin
             $page->vars['bread_crumbs'] = $trail;
     }
 
+    /**
+    * Return a trail of bread crumb urls at the top of the page
+    *
+    * @return array Links to display at top of page
+    */
+    function GetBreadCrumbs()
+    {
+        if( empty($this) || (strtolower(get_class($this)) != 'ccpage') )
+            $page =& CCPage::GetPage();
+        else
+            $page =& $this;
+            
+        return $page->GetArg('bread_crumbs');
+    }
+    
     /**
     * Add a LINK tag into the output
     *

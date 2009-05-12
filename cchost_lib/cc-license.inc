@@ -27,7 +27,7 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-require_once('cchost_lib/cc-form.php');
+require_once('cchost_lib/cc-admin.php');
 require_once('cchost_lib/cc-license.php');
 
 /**
@@ -36,7 +36,7 @@ require_once('cchost_lib/cc-license.php');
 * @package cchost
 * @subpackage admin
  */
-class CCAdminLicenseForm extends CCForm
+class CCAdminLicenseForm extends CCEditConfigForm
 {
     /**
      * Constructor.
@@ -46,37 +46,33 @@ class CCAdminLicenseForm extends CCForm
      * @access public
      * @param  boolean $populate True if fields are to be populated with values in the database
      */
-    function CCAdminLicenseForm($populate)
+    function CCAdminLicenseForm()
     {
-        $this->CCForm();
-        $config =& CCConfigs::GetTable();
-        $config_lics = $config->GetConfig('licenses');
-        if( empty($config_lics) )
-            $config_lics = array();
+        $this->CCEditConfigForm('licenses','',false);
+        $this->SetModule(ccs(__FILE__));
+ 
         $licenses =& CCLicenses::GetTable();
         $licenses->SetOrder('license_name');
         $rows = $licenses->QueryRows('');
         $fields = array();
         foreach($rows as $row)
         {
-            $value = $populate && in_array( $row['license_id'], $config_lics ) ? 'checked' : '';
-
             $fields[ $row['license_id'] ] = 
                        array( 'label'       => _('Enabled:'),
-                               'value'      => $value,
                                'license'    => $row,
                                'formatter'  => 'lic',
-                               'flags'      => CCFF_NONE );
+                               'flags'      => CCFF_POPULATE );
         }
         $this->AddFormFields($fields);
     }
 
-    function generator_lic($name)
+    function generator_lic($name,$value='')
     {
+        $args = func_get_args();
         $row = $this->GetFormFieldItem( $name, 'license' );
-        $checked = $this->GetFormValue($name) ? 'checked="checked"' : '';
         $page =& CCPage::GetPage();
         $logourl = $page->URL('images/lics/'.$row['license_logo']);
+        $checked = empty($value) ? '' : 'checked="checked"';
         $html =<<<EOF
 <input type="checkbox" id="{$name}" name="{$name}" {$checked} />
         {$row['license_name']}<br />
@@ -189,28 +185,15 @@ class CCLicense
     */
     function Admin()
     {
-        CCPage::SetTitle(_("Configure Licenses"));
-        if( empty($_POST['adminlicense']) )
-        {
-            $form = new CCAdminLicenseForm(true);
-            CCPage::AddForm( $form->GenerateForm() );
-        }
-        else
-        {
-            $form = new CCAdminLicenseForm(false);
-            if( $form->ValidateFields() )
-            {
-                $form->GetFormValues($values);
-                foreach( $values as $name => $value )
-                {
-                    if( !empty($value) )
-                        $config_lics[] = $name;
-                }
-                $configs =& CCConfigs::GetTable();
-                $configs->SaveConfig('licenses',$config_lics,'',false);
-                CCPage::Prompt(_("Licenses Updated"));
-            }
-        }
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        $admin = new CCAdmin();
+        $title = _("Configure Licenses");
+        $page->SetTitle($title);
+        $admin->BreadCrumbs(false,array( 'url' => '', 'text' => $title ));
+        $page->SetTitle($title);
+        $form = new CCAdminLicenseForm(true);
+        $page->AddForm( $form->GenerateForm() );
     }
 
     /**

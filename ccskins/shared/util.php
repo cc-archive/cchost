@@ -131,14 +131,14 @@ function _t_util_print_client_menu(&$T,&$A)
                 foreach( $I['actions'] as $act )
                 {
                     ?>
-                      <a <?=$btn?> href="<?= $act['action'] ?>"><?= $act['menu_text'] ?></a>
+                      <a <?=$btn?> href="<?= $act['action'] ?>"><?= $T->String($act['menu_text']) ?></a>
                     <?
                 }
             }
         
             if( !empty($I['action']) ) {
         ?>
-            <a <?=$btn?> href="<?= $I['action'] ?>"><?= $I['menu_text'] ?></a>
+            <a <?=$btn?> href="<?= $I['action'] ?>"><?= $T->String($I['menu_text']) ?></a>
         <?
             }
         ?>
@@ -156,7 +156,7 @@ function _t_util_print_client_menu(&$T,&$A)
     print '</table>';
     if( !empty($A['client_menu_hint']) )
     {
-        ?><div class="client_menu_hint"><?= $A['client_menu_hint'] ?></div><?
+        ?><div class="client_menu_hint"><?= $T->String($A['client_menu_hint']) ?></div><?
     }
 }
 

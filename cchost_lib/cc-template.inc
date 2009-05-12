@@ -35,147 +35,75 @@ require_once('cchost_lib/cc-admin.php');
 */
 class CCExtrasForm extends CCEditConfigForm
 {
-    function CCExtrasForm()
+    function CCExtrasForm($populate=false)
     {
         $this->CCEditConfigForm('extras','',false);
 
-        require_once('cchost_lib/cc-template.inc');
-        
-        $lab = _('Available Sidebar Extras');
-        $str =<<<EOF
-<div style="margin-left:25%"><b>{$lab}</b></div>
-<style>table.flat_form td.form_label { width: 5px; }</style>
-EOF;
-        $fields['_macros'] = array(
-                'label'     => '',
-                'formatter' => 'statictext',
-                'value'     => $str,
-                'flags'     => CCFF_NOUPDATE,
-                );
-
         $fields['macros'] = array(
                 'label'     => '',
-                'formatter' => 'extras_editor',
-                'options'   => CCTemplateAdmin::GetExtras(),
-                'flags'     => CCFF_POPULATE,
+                'formatter' => 'template',
+                'macro'     => 'extras_drag.tpl/macros',
+                'flags'     => CCFF_NONE,
                 );
 
-        $fields['macros_order'] = array(
-                'label'     => '',
-                'formatter' => 'extras_hidden',
-                'options'   => CCTemplateAdmin::GetExtras(),
-                'flags'     => CCFF_POPULATE_WITH_DEFAULT,
-                );
+        if( $populate )
+        {
+            $configs =& CCConfigs::GetTable();
+            $saved = $configs->GetConfig('extras');
 
-        $help = _('Drag items from here to sidebar (and back) to add (and remove) items. Drag items within sidebar to reorder.');
-        $this->SetFormHelp($help);
+            // these are macros in order as
+            // saved last time as filenames
+            $macros = $saved['macros'];
+
+            // these are the file names -> friendly names
+            require_once('cchost_lib/cc-template.inc');
+            $extras = CCTemplateAdmin::GetExtras();
+
+            // just the file names...
+            $file_names = array_keys($extras);
+                        
+            $source = array();
+            $target = array();
+            $map = array();
+
+            $mac_keys = empty($macros) ? array() : array_keys($macros);
+            // we have to preserve the order in
+            // the drop target area
+            for( $i = 0; $i < count($mac_keys); $i++ )
+            {
+                $macro = $macros[$mac_keys[$i]];
+                $target['targetmacros_'.($i+1)] = $extras[$macro];
+
+                $map[$i+1] = $macro;
+
+                // remove it from what will be the sources
+                unset($extras[$macro]);
+            }
+
+            // put what's left into the sources area
+            foreach( $extras as $filename => $name )
+            {
+                $source['draglistmacros_'.($i+1)] = $name;
+                $map[$i+1] = $filename;
+                ++$i;
+            }
+                                
+            $fields['macros']['mac_source'] = $source;
+            $fields['macros']['mac_target'] = $target;
+            $fields['macros']['mac_map']    = $map;
+            $msg = '<b><i>%(edit_extra)%</i> is no longer valid. Change it to %call(\'extras_drop\')%</b>';
+            CCPage::PageArg('edit_extra',$msg);
+
+            $help = _('Drag items from here to sidebar (and back) to add (and remove) items. '.
+                      'Drag items within sidebar to reorder.');
+            $this->SetFormHelp($help);            
+        }
+        
         $this->AddFormFields($fields);
         $this->SetSubmitText(_('Save'));
         $this->SetModule( ccs(__FILE__) );
     }
 }
-
-function generator_extras_hidden($form,$id,$value='',$class='')
-{
-    return '<input type="hidden" value="*"  id="' . $id .'"  name="' . $id .'" />';
-}
-
-function validator_extras_hidden($form,$fieldname)
-{
-    return true;
-}
-
-function validator_extras_editor($form,$fieldname)
-{
-    $order = $_POST['macros_order'];
-    preg_match_all('/targetmacros\[\]=([0-9]+)&?/',$order,$m);
-    $macs = array();
-    foreach( $m[1] as $i )
-    {
-        $macs[] = $_POST['F'][$i];
-    }
-    $form->SetFormValue('macros',$macs);
-    return true;
-}
-
-function generator_extras_editor($form,$id,$value='',$class='')
-{
-    $opts = $form->GetFormFieldItem($id,'options');
-
-    $macs = '';
-
-    if( empty($value) )
-    {
-        $macs = '';
-        $hgt = 'height:14px;';
-    }
-    else
-    {
-        $nums = array_keys($opts);
-        foreach( $value as $mac )
-        {
-            $i = array_search($mac,$nums) + 1;
-            if( array_key_exists($mac,$opts) )
-            {
-                $text = $opts[$mac];
-                $macs .= "\n<li id=\"targetmacros_{$i}\">{$opts[$mac]}</li>";
-            }
-        }
-        $hgt = '';
-    }
-
-    $list = '';
-    $hides = '';
-    $i = 0;
-    foreach( $opts as $F => $opt )
-    {
-        ++$i;
-        $hides .= "\n<input type=\"hidden\" name=\"F[{$i}]\" value=\"{$F}\" />";
-        if( !empty($value) && in_array( $F, $value ) )
-            continue;
-        $list .= "\n<li id=\"draglistmacros_{$i}\">{$opt}</li>";
-    }
-
-    $html =<<<EOF
-<div style="width:50%;margin:0px auto;">
-    <ul id="draglistmacros" class="ddex">
-        {$list}
-    </ul>
-</div>
-{$hides}
-EOF;
-
-    $msg = sprintf(_('Sidebar Extras In Use %s Drag items to here...%s'),'<br /><span style="font-weight:normal">','</span');
-    $target =<<<EOF
-    
-    <div class="ddex"><p style="padding:3px;"><b>{$msg}</b></p><ul id="targetmacros" class="ddex" style="border:1px solid black;{$hgt}">{$macs}</ul></div>
-
-<script type="text/javascript">
-function on_macros_drop(a,b)
-{
-    if( \$('macros_order').value == '*' )
-        \$('targetmacros').style.height = "";
-
-    \$('macros_order').value = Sortable.serialize('targetmacros');
-}
-
-Sortable.create("draglistmacros",
- {dropOnEmpty:true,containment:['draglistmacros',"targetmacros"],constraint:false});
-Sortable.create("targetmacros",
- {dropOnEmpty:true,containment:['draglistmacros',"targetmacros"],constraint:false,onUpdate: on_macros_drop});
-
-</script>
-<style type="text/css">
-.ddex { list-style: none; padding: 0px; }
-.ddex li { cursor: move; padding: 4px; margin: 5px; border: 1px solid #999}
-</style>
-EOF;
-
-    CCPage::PageArg('edit_extra',$target);
-
-    return $html;
-}
-
 
 /**
 * @package cchost
@@ -260,6 +188,11 @@ class CCNewTemplateTagForm extends CCForm
 */
 class CCTemplateAdmin
 {
+    function GetPropType($dir,$type,$ret_files=true)
+    {
+        $fp = new CCFileProps(); return $fp->GetProps($dir,$type,$ret_files);
+    }
+    
     function GetFormats($type)
     {
         $fp = new CCFileProps(); return $fp->GetProps('formats',$type);
@@ -350,7 +283,7 @@ class CCTemplateAdmin
         $title = _("Sidebar Extras Content");
         CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
         CCPage::SetTitle($title);
-        $form = new CCExtrasForm();
+        $form = new CCExtrasForm(true);
         CCPage::AddForm( $form->GenerateForm() );
     }
 

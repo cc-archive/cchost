@@ -54,7 +54,7 @@ class CCImportForm extends CCNewUploadForm
             $name = $this->GetFormValue($fieldname);
             if( !file_exists($name) || !is_file($name) )
             {
-                $this->SetFieldError($fieldname,_('Cannot file a file by that name'));
+                $this->SetFieldError($fieldname,_('Cannot file a file by that name (if the file exists, it be outside PHP\'s safe directories.)'));
             }
             else
             {

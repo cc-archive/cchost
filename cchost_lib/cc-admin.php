@@ -112,12 +112,11 @@ class CCEditConfigForm extends CCForm
     {
         $this->CCForm();
         $this->SetHandler( ccl('admin', 'save') );
-        $classname = __CLASS__; // err, cruft?
+        $this->StorePageInfo();
         $this->SetHiddenField( '_name', get_class($this), CCFF_HIDDEN | CCFF_NOUPDATE );
         $this->_typename = $config_type;
         $this->_scope = $scope;
         $this->_merge = $merge;
-
     }
 
     /**
@@ -170,6 +169,38 @@ class CCEditConfigForm extends CCForm
         $configs =& CCConfigs::GetTable();
         $this->GetFormValues($values);
         $configs->SaveConfig($this->_typename, $values, $this->_scope, $this->_merge);
+    }
+
+    function SavePrompts($save_prompt)
+    {
+        $page =& CCPage::GetPage();
+        $args = $this->GetPageInfo();
+        if( empty($args['bread_crumbs']) )
+        {
+            $global = $this->_scope == CC_GLOBAL_SCOPE;
+            $admin = new CCAdmin();
+            $admin->BreadCrumbs($global, array('url'=> ccl('admin','save'),'text' => $args['title']) );
+        }
+        else
+        {
+            $page->AddBreadCrumbs($args['bread_crumbs']);
+        }
+
+        $page->SetTitle($args['title']);
+        
+        if( $save_prompt )
+        {
+            if( empty($args['ret_link']) )
+            {
+                $msg = $page->String('str_changes_were_saved');
+            }
+            else
+            {
+                $msg = array( _('str_changes_saved_goto_s'), $args['ret_link'] );
+
+            }        
+            $page->Prompt($msg);
+        }
     }
 }
 
@@ -318,7 +349,7 @@ class CCAdmin
         if( $global )
             $k[] = array( 'url' => ccl('admin','site','global'), 'text' => _('Global Settings') );
         else
-            $k[] = array( 'url' => ccl('admin','site'), 'text' => _('Virtual Root Settings') . ': ' . $CC_CFG_ROOT );
+            $k[] = array( 'url' => ccl('admin','site'), 'text' => _('Manage Site') . ': ' . $CC_CFG_ROOT );
         foreach( $args as $arg )
             $k[] = $arg;
 
@@ -395,7 +426,7 @@ class CCAdmin
         $args['local_items'] = $this->_check_access($local_items);
         $args['delete_url'] = $CC_CFG_ROOT == CC_GLOBAL_SCOPE ? '' : url_args( ccl( 'admin/cfgroot' ), 'vroot=del' );
         $args['do_local'] = true;
-        CCPage::SetTitle(_('Virtual Root Settings'));
+        CCPage::SetTitle(_('Manage Site'));
     }
 
     function _add_tabs($subtab)
@@ -410,8 +441,8 @@ class CCAdmin
                 );
 
         $tabs[ 'local' ] = 
-            array(  'text'     => _('Virtual Root Settings'),
-                    'help'     => _('Virtual Root settings'),
+            array(  'text'     => _('Manage Site'),
+                    'help'     => _('Manage site'),
                     'tabname'  => 'local',
                     'url'     => ccl('admin','site','local'),
                 );
@@ -460,7 +491,7 @@ class CCAdmin
     /**
     * This form edits the raw configation data
     *
-    * This is not on any menu, admins can reach it via /main/admin/edit
+    * This is not on any menu, admins can reach it via admin/edit
     */
     function Deep()
     {
@@ -765,13 +796,13 @@ END;
     function SaveConfig($form = '')
     {
         require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
         if( empty($_POST) )
 	    {	
-            CCPage::Prompt(_("Error Saving"));
+            $page->Prompt(_("Error Saving"));
             return;
 	    }
 
-        CCPage::SetTitle(_("Saving Configuration"));
         if( empty($form) )
         {
             $form_name = CCUtil::StripText($_REQUEST['_name']);
@@ -786,12 +817,12 @@ END;
         if( $form->ValidateFields() )
         {
             $form->SaveToConfig();
-
-            CCPage::Prompt(_("Changes Saved"));
+            $form->SavePrompts(true);
         }
         else
         {
-            CCPage::AddForm( $form->GenerateForm() );
+            $form->SavePrompts(false);
+            $page->AddForm( $form->GenerateForm() );
         }
     }
 

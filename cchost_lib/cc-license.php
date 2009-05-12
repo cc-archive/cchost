@@ -76,8 +76,11 @@ class CCLicenses extends CCTable
             return($rows);
         }
         $where = array();
-        foreach($licenses as $lic)
-            $where[] = "(license_id = '$lic')";
+        foreach($licenses as $lic => $on )
+        {
+            if( $on )
+                $where[] = "(license_id = '$lic')";
+        }
         $where = implode(' OR ' ,$where);
         if( $looser_than != -1 )
             $where = "($where) AND (license_strict <= $looser_than)";

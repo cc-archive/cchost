@@ -86,13 +86,6 @@ function CC_query($tablename,$func,$module='')
     return( $table->$func() );
 }
 
-function CC_ratings_chart($limit,$since='')
-{
-    require_once('cchost_lib/cc-ratings.php');
-    $retval = CCRating::GetChart($limit,$since);
-    return($retval);
-}
-
 function CC_ids_for_records(&$records)
 {
     $count = count($records);

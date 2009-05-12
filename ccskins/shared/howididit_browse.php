@@ -92,8 +92,5 @@ new ccHowIDidIt();
 
 </script>
 <? 
-if( !empty($A['enable_playlists']) )
-{
-    $T->Call('playerembed.xml/eplayer');
-}
+$T->Call('flash_player');
 ?> 

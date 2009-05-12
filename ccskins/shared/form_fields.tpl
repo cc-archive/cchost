@@ -11,7 +11,7 @@
         <td  class="form_label">
             %if_not_null(#F/label)%<div>%text(#F/label)%</div>%end_if%
             %if_not_null(#F/form_tip)%<span>%text(#F/form_tip)%</span>%end_if%</td>
-        <td class="form_element">%if_not_null(#F/macro)% %map(field,#F)%<!-- -->%call(#F/macro)% %end_if%<!-- -->%(#F/form_element)%</td></tr>
+        <td class="form_element">%if_not_null(#F/macro)% %map(field,#F)%%call(#F/macro)%%end_if%%(#F/form_element)%</td></tr>
     %end_loop%
 </table>
 %end_macro%
@@ -47,7 +47,12 @@
         <td>
              <div class="form_label">%text(#F/label)%</div>
              %if_not_null(#F/form_tip)%<span>%text(#F/form_tip)%</span>%end_if%
-             <div class="form_element">%if_not_null(#F/macro)%  %map(field,#F)%<!-- -->%call(#F/macro)% %end_if%<!-- -->%(#F/form_element)%</div>
+             <div class="form_element">
+                %if_not_null(#F/macro)%
+                   %map(field,#F)%
+                   %call(#F/macro)%
+                %end_if%
+                %(#F/form_element)%</div>
          </td></tr>
     %end_loop%
 </table>
@@ -56,12 +61,19 @@
 %macro(fieldset_form_fields)%
     %loop(curr_form/html_form_fields,F)%
     <fieldset class="form_fieldset" id="%(#k_F)%_field_row">
-        <legend class="form_label med_bg light_color">%text(#F/label)%</legend>
+        %if_not_empty(#F/label)%
+            <legend class="form_label med_bg light_color">%text(#F/label)%</legend>
+        %end_if%
         %if_not_empty(#F/form_error)%
             <div class="form_error_row"><div class="form_error">%text(#F/form_error)%</div></div>
         %end_if%
         %if_not_null(#F/form_tip)%<span>%text(#F/form_tip)%</span>%end_if%
-        <div class="form_element">%if_not_null(#F/macro)%  %map(field,#F)%<!-- -->%call(#F/macro)% %end_if%<!-- -->%(#F/form_element)%</div>
+        <div class="form_element">
+           %if_not_null(#F/macro)%
+                %map(field,#F)%
+                %call(#F/macro)%
+            %end_if%
+            %(#F/form_element)%</div>
     </fieldset>
     %end_loop%
 %end_macro%

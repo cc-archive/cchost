@@ -34,7 +34,7 @@ div#content {
 <link  rel="stylesheet" type="text/css" href="%url('css/playlist.css')%" title="Default Style"></link>
 <script  src="%url('js/playlist.js')%" ></script>
 %map(player_options,'autoHook: false,showVolume: false,showProgress: false,plcc_id: \'plc_id\'')%
-%call('playerembed.xml/eplayer')%
+%call('flash_player')%
 %map(skip_playlist_feed,true)%
 %map(skip_info_button,true)%
 %map(skip_action_button,true)%

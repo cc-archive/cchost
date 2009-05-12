@@ -16,7 +16,7 @@ chdir(dirname(dirname(__FILE__)));
 
 require_once('cchost_lib/cc-tpl-parser.php');
 
-$text = cc_tpl_parse_file($argv[1],$fname);
+$text = cc_tpl_parse_file($argv[1],basename($fname));
 
 if( $num )
 {

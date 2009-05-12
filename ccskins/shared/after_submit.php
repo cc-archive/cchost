@@ -47,6 +47,7 @@ print '<div id="after_submit"><h2>' . $T->String('str_submit_after') . '</h2>'
     . '<p>' . $T->String( array('str_submit_succeeded',$R['upload_name'] ) ) . '</p>'
     . '<p>' . $T->String( array('str_submit_link', "<a href=\"{$R['download_url']}\">${R['download_url']}</a>" ) ) . '</p>';
 
+/*
 if( empty($R['contest_id']) )
 {
     print '<p>' . $T->String( array( 'str_submit_no_contest', $R['upload_name'] ) ) . '</p>';
@@ -55,6 +56,7 @@ else
 {
     print '<p>' . $T->String( array( 'str_submit_contest', $R['upload_name'], $R['contest_friendly_name'] ) ) . '</p>';
 }
+*/
 
 print '<a id="add_block" href="' . ccl('file','add',$R['upload_id']) . '">'
     . $T->String( array( 'str_submit_add_files',$R['upload_name'] ) ) 

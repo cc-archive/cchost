@@ -201,7 +201,7 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
 </div><!-- upload_menu_box -->
 <div style="clear:both">&nbsp;</div>
 
-%call('playerembed.xml/eplayer')%
+%call('flash_player')%
 <script type="text/javascript">
 if( window.ccEPlayer )
     ccEPlayer.hookElements($('upload_middle'));

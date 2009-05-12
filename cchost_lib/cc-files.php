@@ -232,8 +232,9 @@ class CCPhysicalFile
         $record =& CCUploadAPI::_get_record($upload_id);
         $record['file_page_url'] = ccl('files',$record['user_name'],$upload_id);
 
-        $this->_build_bread_crumb_trail($upload_id,true,false,'str_file_manage');
-        CCPage::SetTitle( 'str_files_manage' );
+        $bct = array( 'str_files_manage_for', $record['upload_name'] );
+        $this->_build_bread_crumb_trail($upload_id,true,false,$bct);
+        CCPage::SetTitle( $bct );
 
         $args['upload_id'] = $upload_id;
         $args['files'] = &$record['files'];

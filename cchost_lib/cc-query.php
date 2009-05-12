@@ -997,7 +997,12 @@ class CCQuery
 
         if( ($args['datasource'] == 'uploads') && ($args['sort'] == 'rank') )
         {
-            $this->sql_p['columns'] = '((upload_num_scores*4) + (upload_num_playlists*2) + (upload_num_plays/2)) AS qrank';
+            $configs =& CCConfigs::GetTable();
+            $ratings = $configs->GetConfig('chart');
+            $formula = empty($ratings['rank_formula']) ?
+                          '((upload_num_scores*4) + (upload_num_playlists*2))' :
+                          $ratings['rank_formula'];
+            $this->sql_p['columns'] =  $formula . ' AS qrank';
         }
 
         $sorts = $this->GetValidSortFields();

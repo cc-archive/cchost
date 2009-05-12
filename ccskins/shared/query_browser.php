@@ -39,7 +39,7 @@ $optset = cc_query_get_optset( empty($_GET['optset']) ? 'default' : $_GET['optse
 <script  src="<?= $T->URL('js/autopick.js')?>" ></script>
 <script  src="<?= $T->URL('/js/info.js') ?>"></script>
 <script  src="<?= $T->URL('js/playlist.js'); ?>"></script>
-<?$T->Call('playerembed.xml/eplayer'); ?>
+<?$T->Call('flash_player'); ?>
 <script type="text/javascript">
 <?
     list( $args, $json_args ) = cc_query_default_args( array( 'limit' => $optset['limit'], 'reqtags' => $optset['reqtags'] ) );

@@ -74,6 +74,8 @@ class CCSkin
 
         // more compat stuff
         $this->vars['prev_next_links'] = 'util.php/empty';
+        if( empty($this->vars['embedded_player']) )
+            $this->vars['embedded_player'] = 'ccskins/shared/layouts/player_none.php';
         
         if( CCUser::IsLoggedIn() )
         {
@@ -244,7 +246,8 @@ class CCSkin
     
     function AddCustomizations( $keys = array( 'page_layout', 'color_scheme', 'paging_style', 
                                       'font_scheme', 'font_size', 'tab_pos', 'box_shape',
-                                       'button_style','formfields_layout','gridform_layout'  ))
+                                       'button_style','formfields_layout','gridform_layout',
+                                       'embedded_player'  ))
     {
         $T =& $this;
         $V =& $this->vars;
@@ -675,12 +678,12 @@ class CCSkin
     }
 
 
-    function LookupMacro($macropath)
+    function LookupMacro($macropath,$allow_fail=false)
     {
-        return $this->_inner_lookup_macro($macropath);
+        return $this->_inner_lookup_macro($macropath,$allow_fail);
     }
 
-    function _inner_lookup_macro($macropath)
+    function _inner_lookup_macro($macropath,$allow_fail=false)
     {
         global $CC_GLOBALS;
 
@@ -727,10 +730,17 @@ class CCSkin
 
         if( empty($path) )
         {
-            print( "<h3>Can't find template: <span style='color:red'>$macropath</span></h3>");
-            if( !CCDebug::IsEnabled() )
-                CCUtil::Send404();
-            CCDebug::PrintVar($this);
+            if( $allow_fail )
+            {
+                return null;
+            }
+            else
+            {
+                print( "<h3>Can't find template: <span style='color:red'>$macropath</span></h3>");
+                if( !CCDebug::IsEnabled() )
+                    CCUtil::Send404();
+                CCDebug::PrintVar($this);
+            }
         }
 
         return array( $path, $funcname );

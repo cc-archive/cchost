@@ -125,7 +125,6 @@ CCEvents::AddHandler(CC_EVENT_DELETE_FILE,    'cc_tcache_kill', 'cchost_lib/cc-q
 CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,    'cc_tcache_kill', 'cchost_lib/cc-query.php'   );
 
 
-CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCRating' , 'OnGetConfigFields' ), 'cchost_lib/cc-ratings.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCRating',  'OnMapUrls'), 'cchost_lib/cc-ratings.php' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCRating' , 'OnAdminMenu'), 'cchost_lib/cc-ratings.php'  );
 CCEvents::AddHandler(CC_EVENT_FILTER_USER_PROFILE,array( 'CCRating' , 'OnFilterUserProfile'), 'cchost_lib/cc-ratings.php'  );

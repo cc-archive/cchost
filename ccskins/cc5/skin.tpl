@@ -6,3 +6,6 @@
 */?>
 
 %import_skin(ccskins/shared)%
+
+%map(popup_background,'util.php/empty')%
+
