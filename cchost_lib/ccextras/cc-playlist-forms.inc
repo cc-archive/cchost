@@ -237,8 +237,21 @@ class CCPlaylistManage
             $values['cart_name'] = substr($values['cart_name'],0,60);
             $values['cart_id'] = $playlist_id;
             $carts->Update($values);
-            //$url = ccl('playlist','browse',$playlist_id);
-            CCUtil::SendBrowserTo(); // $url);
+            $url = '';
+            $refer = $form->GetFormValue('http_referer');
+            if( empty($refer) )
+            {
+                if( !empty($_POST['http_referer']) )
+                    $refer = $_POST['http_referer'];
+            }
+            if( !empty($refer) )
+            {
+                if( strpos(urldecode($refer),'playlist/save') !== false )
+                {
+                    $url = ccl('playlist','browse',$playlist_id);
+                }
+            }
+            CCUtil::SendBrowserTo($url);
         }
     }
 
