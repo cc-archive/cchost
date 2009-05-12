@@ -134,7 +134,8 @@ $A['feats'] = cc_query_fmt('tags=acappella+featured&limit=3&rand=1&dataview=info
     <div class="featured_info">
         <span  style="display:none">wrong spellings: acappela, accapella, acapella</span>
         <img src="http://creativecommons.org/images/public/somerights20.gif" style="margin: 8px;float:right" />
-        All a cappellas are under a <a href="http://creativecommons.org">Creative Commons</a> license. Please
+        All <b><?= number_format(trim(cc_query_fmt('f=count&tags=acappella'),'[]'))
+           ?></b> a cappellas are under a <a href="http://creativecommons.org">Creative Commons</a> license. Please
         verify which license applies to each a cappella.
     </div>
     <h3>Featured A Cappellas</h3>

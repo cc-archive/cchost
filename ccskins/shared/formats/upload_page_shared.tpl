@@ -17,21 +17,14 @@
 * $Id: upload_page_shared.php 8092 2007-11-19 06:59:29Z fourstones $
 *
 */
-
-
-?><link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/upload_page.css')%" />
-
-<!--[if lt IE 7]> 
-<style>
-#remix_info p img, #pick_box p img {
-    position:static;
-}
-</style>
-<![endif]-->
+?>
+<!-- template upload_page_shared -->
 
 %if_null(records)%
     %return%
 %end_if% 
+
+<link rel="stylesheet" type="text/css" title="Default Style" href="%url('css/upload_page.css')%" />
 
 %map(#R,records/0)% 
 %map(record,#R)% 
@@ -92,17 +85,14 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
             </table>
 
             %if_not_null(#R/upload_description_html)%
-            <?
-                $scroll = (strlen($R['upload_description_html']) > 400) || (preg_match_all('/<br/',$R['upload_description_html'],$brs) > 17);
-                if( $scroll )
-                {
-                    ?><div style="overflow:scroll;height:19em;border:1px solid #BBB;padding:4px;"><?
-                } 
-                ?>%(#R/upload_description_html)%<?
-                if( $scroll )
-                { ?>
+                <?  $scroll = (strlen($R['upload_description_html']) > 400) || (preg_match_all('/<br/',$R['upload_description_html'],$brs) > 17); ?>
+                %if_not_null(#scroll)%
+                    <div style="overflow:scroll;height:19em;border:1px solid #BBB;padding:4px;">
+                %end_if%
+                %(#R/upload_description_html)%
+                %if_not_null(#scroll)%
                     </div>
-             <? } ?>
+                %end_if%
             %end_if%
 
             <div class="taglinks">
@@ -119,8 +109,8 @@ var ratings_enabled = '%(#R/ratings_enabled)%';
             <div class="info_box_clear">&nbsp;</div>
         </div><!-- info box -->
 
-        <div class="box">
         %if_not_null(#R/file_macros)%
+            <div class="box">
             %loop(#R/file_macros,M)%
                 %call(#M)%
             %end_loop%

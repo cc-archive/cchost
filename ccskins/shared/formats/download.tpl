@@ -4,6 +4,10 @@
     desc = _('Download files [direct links]')
     dataview = files
 [/meta]
+*
+* Don't call this template directly, it is picked
+* by admin/downloads
+* 
 */?>
 <div  id="cc_download">
 <div id="download_help">

@@ -231,6 +231,13 @@ ccQueryBrowser.prototype = {
 
             // hook the menus, info button, et. al.
             this.playlistMenu.hookElements(this.browser);
+
+            // the 'action' buttons (if any)
+            if( !this.actionHooker )
+                this.actionHooker = new queryPopup('menuup_hook','ajax_menu',str_action_menu);
+            if( window.user_name )
+                this.actionHooker.width = 720;
+            this.actionHooker.hookLinks(this.browser);
       }
       catch (err)
       {

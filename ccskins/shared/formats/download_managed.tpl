@@ -4,6 +4,10 @@
     desc = _('Download files [managed]')
     dataview = files
 [/meta]
+*
+* Don't call this template directly, it is picked
+* by admin/downloads
+* 
 */?>
 
 <? // NOTE: Enable counting, checksum, RDF license at admin/download ?>

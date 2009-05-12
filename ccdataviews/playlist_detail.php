@@ -14,7 +14,7 @@ function playlist_detail_dataview()
 
     $browse_tag_url = url_args( ccl('playlist','browse'), 'tags=' );
     $permalink      = ccl('playlist','browse') . '/';
-    $user_sql_url   = "CONCAT( '".ccl('people')."/', user_name, '/playlists' )";
+    $user_sql_url   = "CONCAT( '".ccl('people')."/', user_name )";
     
     $sql =<<<EOF
 SELECT  cart_id, cart_name, cart_user, cart_num_items, cart_subtype, cart_tags, cart_dynamic,
