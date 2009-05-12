@@ -8,4 +8,4 @@
 %import_skin(ccskins/shared)%
 
 %map(popup_background,'util.php/empty')%
-
+%map(print_prompts,'fancy_prompts.tpl')%

@@ -217,6 +217,10 @@ p {
    margin: 0px 0px 0px 6%;
 }
 
+#inner_content {
+  position: relative;
+}
+
 .menu_group p {
 	font-weight: bold;
 	margin: 5px 0px 0px 0px;
@@ -319,3 +323,26 @@ fieldset.form_fieldset legend.form_label {
   display: block;
   margin-top: -2px;
 }
+
+.cc_system_prompt {
+	background: white;
+	color: black;
+	margin: 3px;
+	padding: 10px;
+	font-size: medium;
+	border: 2px solid black;
+	z-index: 4;
+	position: relative;
+	width: 70%;
+}
+
+.close_prompt {
+	text-align: center;
+	font-size: 11px;
+	margin: 0.2em;
+	border: 1px solid #AAA;
+	padding: 1px;
+	cursor: pointer;
+	width: 4em;
+}
+	
