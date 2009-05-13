@@ -285,11 +285,24 @@ EOF;
     return $sql;
 }
 
-function cc_get_content_page_type($page)
+function cc_get_content_page_type($pagename)
 {
-    require_once('cchost_lib/cc-template.php');
-    $skinmac = new CCSkinMacro($page);
-    $props = $skinmac->GetProps();
+    $page_path = CCPage::GetViewFile($pagename);
+    if( empty($page_path) )
+    {
+        // searching the page view path failed,
+        // have some mercy and see if it's wandered
+        // off to the template directories
+        require_once('cchost_lib/cc-template.php');
+        $skinmac = new CCSkinMacro($pagename);
+        $props = $skinmac->GetProps();
+    }
+    else
+    {
+        require_once('cchost_lib/cc-file-props.php');
+        $fp = new CCFileProps();
+        $props = $fp->GetFileProps($page_path);
+    }
     if( empty($props['topic_type']) )
         die("Content Page '{$page}' does not have 'topic_type' property");
     return $props['topic_type'];
