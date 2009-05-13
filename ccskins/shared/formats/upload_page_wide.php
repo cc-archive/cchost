@@ -27,20 +27,14 @@
 */
 ?>
 
-<style type="text/css">
-div#upload_wrapper{float:left;width:100%}
-div#upload_middle{margin: 0 30% 0 20%;padding-left:2.0em;}
-div#upload_sidebar_box{float:left;width:30%;margin-left:-30%}
-div#upload_menu_box{float:left;width:20%;margin-left:-100%;padding-left:1.5em;}
-</style>
+<?
+    if( empty($A['records']) )
+        return 'ok';
 
-<!--[if IE]> 
-<style type="text/css">
-div#upload_wrapper{float:left;width:100%;}
-div#upload_middle{margin: 0 35% 0 23%;}
-div#upload_sidebar_box{float:left;width:30%;margin-left:-30%;}
-div#upload_menu_box{float:left;width:23%;margin-left:-85%;}
-</style>
-<![endif]-->
-
-<? $T->Call('formats/upload_page_shared.tpl'); ?>
+    /*
+     * sorry but by the time IE8 rolled around
+     * any hope of doing the DIV version was
+     * completely killed.
+     */
+    $T->Call('upload_page_tbl_layout');
+?>

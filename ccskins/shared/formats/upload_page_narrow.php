@@ -38,5 +38,10 @@ div#upload_sidebar_box
 
 </style>
 
-<? $T->Call('formats/upload_page_shared.tpl') ?>
+<?
+    if( empty($A['records']) )
+        return 'ok';
+
+    $T->Call('upload_page_div_layout');
+?>
 

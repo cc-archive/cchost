@@ -48,6 +48,13 @@ $A['search_results_head'] = 'search_results.tpl/search_results_head';
 
 $A['tags'] = 'tags.php/tags';
 
+$A['upload_page_tbl_layout'] = 'upload_page_pieces.tpl/upload_page_tbl_layout';
+$A['upload_page_div_layout'] = 'upload_page_pieces.tpl/upload_page_div_layout';
+$A['upload_page_head']       = 'upload_page_pieces.tpl/upload_page_head';
+$A['upload_page_middle']     = 'upload_page_pieces.tpl/upload_page_middle';
+$A['upload_page_sidebar']    = 'upload_page_pieces.tpl/upload_page_sidebar';
+$A['upload_page_foot']       = 'upload_page_pieces.tpl/upload_page_foot';
+
 $A['script_links'][] = 'js/selector-addon-v1.js';
 
 //$A['script_links'][] = 'js/scriptaculous/scriptaculous.js';
