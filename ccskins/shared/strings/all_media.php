@@ -282,6 +282,7 @@ $GLOBALS['str_list_length']                = _('length');
 $GLOBALS['str_list_num_files'] = _('Number of files: %d');
 $GLOBALS['str_license']                   = _('License');
 $GLOBALS['str_lic']                   = _('Licensed under');
+$GLOBALS['str_lic_click']           = _('Click %shere%s for how to give credit and other conditions.');
 $GLOBALS['str_lic_attribution']           = _('attribution');
 $GLOBALS['str_lic_nc_sampling_plus']      = _('nc sampling+');
 $GLOBALS['str_lic_nc_share_alike']        = _('nc share alike');

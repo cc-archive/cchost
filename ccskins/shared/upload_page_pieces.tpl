@@ -153,7 +153,10 @@
                    title="%(#R/license_name)%">%(#R/license_name)%</a><br /><br />
             <a rel="license" href="%(#R/license_url)%"
                   title="%(#R/license_name)%"><img title="%(#R/license_name)%"
-                  src="%(#R/license_logo_url)%" /></a>
+                  src="%(#R/license_logo_url)%" /></a><br /><br />
+            <p id="license_more_info">
+                <?= $T->String(array('str_lic_click',"<a href=\"{$R['license_url']}\">","</a>")); ?>
+            </p>
         </div>
       </p>
     </div>
