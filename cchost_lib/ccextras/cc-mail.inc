@@ -530,13 +530,15 @@ class CCMailerAPI
 
         $title = sprintf(_('Send Mail to %s'), $userto);
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle($title);
+        $page =& CCPage::GetPage();
+        $page->SetTitle($title);
+        CCUser::AddUserBreadCrumbs($title,null,$userto);
 
         $verify = $this->_ok_to_contact($userto);
 
         if( !$verify['ok'] )
         {
-            CCPage::Prompt( $verify['msg'] );
+            $page->Prompt( $verify['msg'] );
             return;
         }
 
@@ -550,7 +552,7 @@ class CCMailerAPI
             if( $verify['msg'] )
                 $form->SetHelpText($verify['msg']);
 
-            CCPage::AddForm( $form->GenerateForm() );
+            $page->AddForm( $form->GenerateForm() );
         }
         else
         {
@@ -582,7 +584,7 @@ class CCMailerAPI
             $mailer->Body( $body );
             $mailer->Send();
 
-            CCPage::Prompt( _('Mail sent') );
+            $page->Prompt( _('Mail sent') );
 
             // enabled debug to force log message
             CCDebug::Enable(true);
@@ -592,14 +594,18 @@ class CCMailerAPI
 
     function MassMail()
     {
-        CCPage::SetTitle(_("Send Mail to Everybody"));
-
         if( !CCUser::IsAdmin() )
             die('Welcome to ccHost');
+            
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-admin.php');
+        $page =& CCPage::GetPage();
+        $title = _("Send Mail to Everybody");
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        $page->SetTitle($title);
 
         if( !$this->_confirm_install() )
             return;
-
 
         $user_to['user_name']        = _('really');
         $user_to['user_real_name']   = _('EVERYONE');
@@ -611,7 +617,7 @@ class CCMailerAPI
 
         if( empty( $_REQUEST['massmailer'] ) || !$form->ValidateFields() )
         {
-            CCPage::AddForm( $form->GenerateForm() );
+            $page->AddForm( $form->GenerateForm() );
         }
         else
         {
@@ -656,7 +662,7 @@ class CCMailerAPI
 
             $msg = sprintf(_("Mass mail: Sent %s Messages"), $sent);
 
-            CCPage::Prompt($msg);
+            $page->Prompt($msg);
         }
     }
 

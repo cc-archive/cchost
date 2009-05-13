@@ -70,6 +70,8 @@ class CCNotifyAPI
         require_once('cchost_lib/cc-page.php');
 
         CCPage::SetTitle('str_notify_edit');
+        $bc[] = array( 'url' => ccl('preferences'), 'text' => 'str_pref_title' );
+        CCUser::AddUserBreadCrumbs('str_notify_edit',$bc);
 
         // figure out what fields we are editing
 

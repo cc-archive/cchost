@@ -322,7 +322,8 @@ class CCUserAPI
             $upload_dir = $CC_GLOBALS['avatar-dir'];
 
         require_once('cchost_lib/cc-page.php');
-        CCPage::SetTitle("str_prof_edit_your_settings");
+        CCPage::SetTitle('str_prof_edit_your_settings');
+        CCUser::AddUserBreadCrumbs('str_prof_edit_your_settings');
         $id    = CCUser::IDFromName($username);
         $form  = new CCUserProfileForm($id, $upload_dir );
         $ok    = false;

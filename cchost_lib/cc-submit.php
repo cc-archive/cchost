@@ -184,8 +184,10 @@ class CCSubmit
 
         CCEvents::Invoke(CC_EVENT_UPLOAD_ALLOWED, array( &$allowed ) );
 
+
         if( empty($formtype) )
         {
+            CCUser::AddUserBreadCrumbs('str_submit_files');
             $this->ShowSubmitTypes($types);
             return;
         }
@@ -203,6 +205,8 @@ class CCSubmit
 
             $etc['suggested_tags'] = empty($type['suggested_tags']) ? '' : $type['suggested_tags'];
 
+            $bc[] = array('url'=>ccl('submit'),'text'=>'str_submit_files');
+            CCUser::AddUserBreadCrumbs($type['text'], $bc);
             require_once('cchost_lib/cc-mediahost.php');
             $api = new CCMediaHost();
             if( $type['isremix'] )

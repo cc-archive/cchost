@@ -204,6 +204,36 @@ class CCUser
             $M['action'] = str_replace('%login_name%',$current_user_name,$M['action']);
         }
     }
+
+    function AddUserBreadCrumbs($text,$more=array(),$userrec=array())
+    {
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        global $CC_GLOBALS;
+        if( empty($userrec) )
+            $userrec =& $CC_GLOBALS;
+        $bc = array();
+        if( empty($userrec['user_name']) )
+        {
+            $bc[] = array( 'url' => '', 'text' => 'invalid user info in breadcrumbs...' );
+        }
+        else
+        {
+            $bc[] = array( 'url' => ccl(), 'text' => 'str_home' );
+            $bc[] = array( 'url' => ccl('people'), 'text' => 'str_people' );
+            $url = empty($text) ? '' : ccl('people',$userrec['user_name'] );
+            $bc[] = array( 'url' => $url, 'text' => $userrec['user_real_name'] );
+            if( !empty($more) )
+            {
+                foreach( $more as $M )
+                    $bc[] = $M;
+            }
+            if( !empty($text) )
+                $bc[] = array( 'url' => '', 'text' => $text );
+        }
+        $page->AddBreadCrumbs($bc);
+    } 
+    
 }
 
 class CCUsers extends CCTable

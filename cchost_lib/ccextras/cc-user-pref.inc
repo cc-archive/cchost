@@ -35,6 +35,7 @@ class CCUserPreferences
 
         require_once('cchost_lib/cc-form.php');
         CCPage::SetTitle('str_pref_title');
+        CCUser::AddUserBreadCrumbs('str_pref_title');
 
         $form = new CCGenericForm();
 
@@ -58,20 +59,34 @@ class CCUserPreferences
 
         /* side bar preferences */
 
-        require_once('cchost_lib/cc-template.inc');
-        $extras = CCTemplateAdmin::GetExtras(true);
-        $prev = empty($ex['prefs']['extras']) ? null : $ex['prefs']['extras'];
-        foreach( $extras as $file => $text )
+        $configs =& CCConfigs::GetTable();
+        $admin_extras = $configs->GetConfig('extras');
+        $found_admin = false;
+        foreach( $admin_extras['macros'] as $admin_extra )
         {
-            $fields['extras['.$file.']'] = array(
-                        'label' => $text,
-                        'form_tip' => 'str_pref_sidebar', 
-                        'formatter' => 'checkbox',
-                        'value' => $prev && in_array($file,$prev),
-                        'flags' => CCFF_POPULATE
-                );
+            if( basename($admin_extra) == 'extras_user_pref.tpl' )
+            {
+                $found_admin = true;
+                break;
+            }
         }
 
+        if( $found_admin )
+        {
+            require_once('cchost_lib/cc-template.inc');
+            $extras = CCTemplateAdmin::GetExtras(true);
+            $prev = empty($ex['prefs']['extras']) ? null : $ex['prefs']['extras'];
+            foreach( $extras as $file => $text )
+            {
+                $fields['extras['.$file.']'] = array(
+                            'label' => $text,
+                            'form_tip' => 'str_pref_sidebar', 
+                            'formatter' => 'checkbox',
+                            'value' => $prev && in_array($file,$prev),
+                            'flags' => CCFF_POPULATE
+                    );
+            }
+        }
 
         $fields['anon_ok'] = array(
                 'label' => 'str_email_allow_anon',

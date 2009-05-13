@@ -97,33 +97,77 @@ class CCPageAdmin
 
         extract($args);
 
+        $page =& CCPage::GetPage();
+        
         if( !empty($title) )
-            CCPage::SetTitle($title);
+            $page->SetTitle($title);
 
+        if( !empty($queryObj->templateProps['breadcrumbs']) )
+            $this->_add_template_bread_crumbs($queryObj->templateProps['breadcrumbs'],$page);
         $dochop = isset($chop) && $chop > 0;
         $chop   = isset($chop) ? $chop : 25;
-        CCPage::PageArg('chop',$chop);
-        CCPage::PageArg('dochop',$dochop);
+        $page->PageArg('chop',$chop);
+        $page->PageArg('dochop',$dochop);
 
         // this needs to be done through CCDataview:
 
         if( !empty($records) && (count($records) > 1) && (empty($paging) || ($paging == 'on') || ($paging=='default')) )
         {
-            CCPage::AddPagingLinks($queryObj->dataview,'',empty($limit)?'':$limit);
+            $page->AddPagingLinks($queryObj->dataview,'',empty($limit)?'':$limit);
         }
 
         if( empty($template) )
             $template = 'list_files';
-        CCPage::PageArg( 'records', $records, $template );
+        $page->PageArg( 'records', $records, $template );
 
         if( !isset( $qstring ) )
             $qstring = $queryObj->SerializeArgs($args);
 
-        CCPage::PageArg('qstring',$qstring );
-        CCPage::PageArg('page_datasource',$datasource);
+        $page->PageArg('qstring',$qstring );
+        $page->PageArg('page_datasource',$datasource);
         $result = true;
     }
 
+    function _add_template_bread_crumbs($breadcrumbs,&$page)
+    {
+        $bc = array();
+        $args = split(',',$breadcrumbs);
+        foreach( $args as $arg )
+        {
+            $arg = trim($arg);
+            
+            if( $arg == 'home' )
+            {
+                $bc[] = array( 'url' => ccl(), 'text' => 'str_home' );
+            }
+            elseif( $arg == 'user_name' || $arg == 'user' || $arg == 'username')
+            {
+                global $CC_GLOBALS;
+                if( empty($CC_GLOBALS['user_name']) )
+                    CCUtil::Send404(); // this is bot or a-h
+                    
+                $bc[] = array( 'url' => ccl('people'), 'text' => 'str_people' );
+                $bc[] = array( 'url' => ccl('people',$CC_GLOBALS['user_name'] ),
+                                      'text' => $CC_GLOBALS['user_real_name'] );
+            }
+            elseif( $arg == 'forum' )
+            {
+                $bc[] = array( 'url' => ccl('forum'), 'text' => 'str_forum' );
+            }
+            else
+            {
+                if( preg_match( '/text\(([^\)]+)\)/', $arg, $m ) )
+                {
+                    $bc[] = array( 'url' => '', 'text' => $m[1] );
+                }
+            }
+        }
+
+        if( !empty($bc) )
+        {
+            $page->AddBreadCrumbs($bc);
+        }
+    }
 
     /**
     * Display a file in the client area of the page (wrapper)

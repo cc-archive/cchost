@@ -4,6 +4,7 @@
     desc = _('Manage files for user')
     embedded = 1
     dataview = manage_files
+    breadcrumbs = home,user,text(str_manage_files)
 [/meta]
 [dataview]
 function manage_files_dataview()
