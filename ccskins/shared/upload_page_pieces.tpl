@@ -20,7 +20,7 @@
             <td id="upload_middle_td">
                 %call(upload_page_middle)%
             </td>
-            <td id="upload_sidebar_td">
+            <td id="upload_sidebar_td" xmlns:dc="http://purl.org/dc/elements/1.1/" >
                 %call(upload_page_sidebar)%
             </td>
         </tr>
@@ -35,7 +35,7 @@
             %call(upload_page_middle)%
         </div>
     </div><!-- upload_middle/wrapper -->
-    <div id="upload_sidebar_box">
+    <div id="upload_sidebar_box" xmlns:dc="http://purl.org/dc/elements/1.1/" >
         %call(upload_page_sidebar)%
     </div><!-- sidebar box -->
     <div id="upload_menu_box">
@@ -91,7 +91,6 @@
             <tr><th>%text(str_bpm)%</th><td>%(#R/upload_extra/bpm)%</td></tr>
         %end_if%
 
-
         %if_not_null(#R/ratings_enabled)%
             %if_empty(#R/thumbs_up)%
             <tr><th id="rate_label_%(#R/upload_id)%">%if_not_null(#R/ratings)%<!-- -->%text(str_ratings)% %end_if%</th>
@@ -140,15 +139,21 @@
 
 %macro(upload_page_sidebar)%
     %map(#R,record)%
-    <div class="box" id="license_info" %if_not_null(#R/files/0/file_extra/sha1)% about="urn:sha1:%(#R/files/0/file_extra/sha1)%" %end_if% >
+    
+    <div class="box" id="license_info"
+        %if_not_null(#R/files/0/file_extra/sha1)% about="urn:sha1:%(#R/files/0/file_extra/sha1)%" %end_if% >
       <p>
-        <div id="license_info_t" >
-            "<span property="dc:title">%(#R/upload_name)%</span>" <br />
-            %text(str_by)% <span property="dc:creator"> %(#R/user_real_name)%</span><br /><br />
+        <div id="license_info_t" xmlns:cc="http://creativecommons.org/ns#" >
+            "<a href="%(#R/file_page_url)%" rel="cc:attributionURL"><span href="http://purl.org/dc/dcmitype/Sound" rel="dc:type" property="dc:title">%(#R/upload_name)%</span></a>" <br />
+            %text(str_by)%
+            <span property="cc:attributionName"> %(#R/user_real_name)%</span><br /><br />
             %(#R/year)% - %text(str_lic)%<br />
             Creative Commons<br />
-            <a rel="license" href="%(#R/license_url)%" title="%(#R/license_name)%">%(#R/license_name)%</a><br /><br />
-            <a rel="license" href="%(#R/license_url)%" title="%(#R/license_name)%"><img title="%(#R/license_name)%" src="%(#R/license_logo_url)%" /></a>
+            <a rel="license" href="%(#R/license_url)%"
+                   title="%(#R/license_name)%">%(#R/license_name)%</a><br /><br />
+            <a rel="license" href="%(#R/license_url)%"
+                  title="%(#R/license_name)%"><img title="%(#R/license_name)%"
+                  src="%(#R/license_logo_url)%" /></a>
         </div>
       </p>
     </div>
@@ -170,8 +175,11 @@
             <div style="overflow: scroll;height:300px;">
         %end_if%
         %loop(#R/remix_parents,P)%
-            <div><a class="remix_links cc_file_link" href="%(#P/file_page_url)%">%(#P/upload_name)%</a> %text(str_by)%
-                 <a href="%(#P/artist_page_url)%" class="cc_user_link user_name">%(#P/user_real_name)%</a></div>
+            <div>
+              <a class="remix_links cc_file_link" rel="dc:source" href="%(#P/file_page_url)%">%(#P/upload_name)%</a>
+              %text(str_by)%
+              <a href="%(#P/artist_page_url)%" class="cc_user_link user_name">%(#P/user_real_name)%</a>
+            </div>
         %end_loop%
         %if_not_null(#R/parents_overflow)%
             </div>

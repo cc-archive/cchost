@@ -771,6 +771,7 @@ $GLOBALS['str_permalink']              = _('permalink');
 $GLOBALS['str_uploading']  = _('Uploading...');
 $GLOBALS['str_uploading_msg']  = _('This could take a while... please be patient while the file is uploading');
 $GLOBALS['str_upload_browser'] = _('Browse Uploads');
+$GLOBALS['str_upload_listing'] = _('Listing');
 
 $GLOBALS['str_upload_admin'] = _("Administrator Functions for '%s'");
 $GLOBALS['str_upload_saved_changes'] = _("Changes saved to '%s'. Click %shere%s to see results");

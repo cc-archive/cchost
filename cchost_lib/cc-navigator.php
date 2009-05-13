@@ -116,7 +116,7 @@ class CCNavigator
         if( empty($default_tab) )
             return;
 
-        $caption = $qname = $default_tab['text'];
+        $caption = $qname = $page_out->String($default_tab['text']);
 
         if( $default_tab['function'] == 'sub' )
         {
@@ -135,7 +135,7 @@ class CCNavigator
 
                 $page_out->PageArg('sub_nav_tabs',$sub_tab_info);
 
-                $caption .= ' :: ' . $default_tab['text'];
+                $caption .= ' :: ' . $page_out->String($default_tab['text']);
             }
         }
 
