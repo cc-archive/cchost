@@ -4,6 +4,7 @@
 [meta]
      type = dynamic_content_page
      desc = _('Artist Spotlight Q & A')
+     page_title = _('Artist Spotlight Q & A')
       content_feed = 1
       content_page_box = 0
       content_page_columns = 1
@@ -13,9 +14,11 @@
       limit = 1
       ord = desc
       paging = on
+      show_bread_crumbs = 1
       sort = date
       t = ccskins/shared/pages/content_page.tpl
       topic_type = artist_qa
+      breadcrumbs = home,page_title,topic
 
 [/meta]
 */
@@ -25,10 +28,10 @@ $A['content_page_textformat'] = 'format';
 $A['content_page_columns'] = '1';
 
 $topic = empty($_GET['topic']) ? '' : $_GET['topic'];
-print "<h1>Artist Spotlight Q & A</h1>";
 cc_query_fmt('f=html&limit=query&&noexit=1&nomime=1&t=ccskins/shared/formats/topic_toc_ul.tpl&page=artist-spotlight-q-a&sort=date&ord=desc');
 cc_query_fmt('f=embed&t=ccskins/shared/pages/content_page.tpl&sort=date&ord=desc&type=artist_qa&limit=1&paging=on&topic=' . $topic );
 cc_add_content_paging_links($A,'artist_qa',$topic,'desc','artist-spotlight-q-a', '1');
 $A['macro_names'][] = 'prev_next_links';
 cc_content_feed('datasource=topics&type=artist_qa&page=artist-spotlight-q-a','Artist Spotlight Q & A','topics'); 
 ?>
+

@@ -4,6 +4,7 @@
 [meta]
      type = dynamic_content_page
      desc = _('Yea, But Is It Legal?')
+     page_title = _('Yea, But Is It Legal?')
       content_feed = 0
       content_page_box = 0
       content_page_columns = 1
@@ -13,9 +14,11 @@
       limit = 
       ord = asc
       paging = off
+      show_bread_crumbs = 1
       sort = date
       t = ccskins/shared/pages/content_page.tpl
       topic_type = faq
+      breadcrumbs = home,page_title,topic
 
 [/meta]
 */
@@ -25,7 +28,6 @@ $A['content_page_textformat'] = 'format';
 $A['content_page_columns'] = '1';
 
 $topic = empty($_GET['topic']) ? '' : $_GET['topic'];
-print "<h1>Yea, But Is It Legal?</h1>";
 cc_query_fmt('f=embed&t=ccskins/shared/pages/content_page.tpl&sort=date&ord=asc&type=faq&limit=&paging=off&topic=' . $topic );
 // no paging 
 //  

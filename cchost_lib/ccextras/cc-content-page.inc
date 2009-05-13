@@ -40,8 +40,6 @@ class CCContentPostForm extends CCTopicForm
         $types = CCDatabase::QueryItems('SELECT DISTINCT topic_type FROM cc_tbl_topics');
 
         $new_types[] = _('home');
-        $new_types[] = _('sidebar_blurb');
-        $new_types[] = _('blog');
         $types = array_filter(array_unique(array_merge($types,$new_types)));
         $types = array_combine( array_values($types), $types );
         $fields['topic_type'] =
@@ -157,7 +155,7 @@ class CCContentPageForm extends CCForm
             $fields['keep_name'] = array( 'label' => _('URL Follows Title'),
                               'form_tip' => $tip,
                               'formatter' => 'checkbox',
-                              'value' => '',
+                              'value' => 'on',
                               'flags' => CCFF_NONE );
         }
 
@@ -176,13 +174,6 @@ class CCContentPageForm extends CCForm
                                    'flags'       => CCFF_POPULATE );
         }
 
-/*
-        $fields['ids'] =
-                        array(  'label'      => _('Topic IDs'),
-                               'form_tip'    => _('...or you can specify a list of content (topic) ids, separated by commas'),
-                               'formatter'   => 'textedit',
-                               'flags'       => CCFF_POPULATE );
-*/
         require_once('cchost_lib/cc-template.inc');
         $formats = CCTemplateAdmin::GetContentTemplates();
         $fields['t'] =
@@ -278,6 +269,12 @@ class CCContentPageForm extends CCForm
         $fields['content_feed'] =
                         array(  'label'      => _('Feed Links'),
                                'form_tip'    => _('Check this to display a feed link on these pages'),
+                               'formatter'   => 'checkbox',
+                               'flags'       => CCFF_POPULATE );
+
+        $fields['show_bread_crumbs'] =
+                        array(  'label'      => _('Show Bread Crumbs'),
+                               'form_tip'    => _('Check this to display a bread crumbs'),
                                'formatter'   => 'checkbox',
                                'flags'       => CCFF_POPULATE );
 
@@ -520,12 +517,17 @@ class CCContentPage
         ksort($values);
         foreach( $values as $K => $V )
         {
-            if( ($K == 'title') || ($K == 'type') || ($K == 'keep_name') )
+            if( ($K == 'title') || ($K == 'type') || ($K == 'keep_name')  )
                 continue;
             $meta .= '      ' . $K . ' = ' . $V . "\n";
         }
 
         $meta .= '      topic_type = ' . $values['type'] . "\n";
+
+        if( !empty($values['show_bread_crumbs']) )
+        {
+            $meta .= "      breadcrumbs = home,page_title,topic\n";
+        }
 
         $q = 'f=embed';
         foreach( array('t','sort','ord','type','limit','paging',) as $K )
@@ -541,6 +543,7 @@ class CCContentPage
                 $vars .= "\$A['{$K}'] = '" . $values[$K] . "';\n";
         }
 
+        
         $feed_goo = empty($values['content_feed']) ? '// ' : 
                           "cc_content_feed('datasource=topics&type={$values['type']}&page={$fname}','{$values['title']}','topics');";
 
@@ -579,12 +582,12 @@ class CCContentPage
         $text .=<<<EOF
      type = dynamic_content_page
      desc = _('{$values['title']}')
+     page_title = _('{$values['title']}')
 {$meta}
 [/meta]
 */
 {$vars}
 \$topic = empty(\$_GET['topic']) ? '' : \$_GET['topic'];
-print "<h1>{$values['title']}</h1>";
 {$toc}cc_query_fmt('{$q}&topic=' . \$topic );
 {$paging_goo}{$feed_goo} 
 

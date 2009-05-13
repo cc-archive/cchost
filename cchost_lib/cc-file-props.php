@@ -71,14 +71,20 @@ class CCFileProps
             $prop_name = array_shift($parts);
             $props[ trim($prop_name) ] = trim( join( '=', $parts) );
         }
-        if( !empty($props['desc']) )
-        {
-            if( preg_match("/^_\(['\"](.+)['\"]\)$/",$props['desc'],$m) )
-                $props['desc'] = _($m[1]);
-        }
+        $this->_get_wrapped_prop($props,'desc');
+        $this->_get_wrapped_prop($props,'page_title');
         return $props;
     }
 
+    function _get_wrapped_prop(&$props,$pt)
+    {
+        if( !empty($props[$pt]) )
+        {
+            if( preg_match("/^_\(['\"](.+)['\"]\)$/",$props[$pt],$m) )
+                $props[$pt] = _($m[1]);
+        }
+    }
+    
     function _scan_dir( &$match_files, $source, $format_dir, $type, $ret_files, $must_have, &$seen )
     {
         foreach( $source as $dir )

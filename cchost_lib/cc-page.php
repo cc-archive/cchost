@@ -102,8 +102,7 @@ class CCPageAdmin
         if( !empty($title) )
             $page->SetTitle($title);
 
-        if( !empty($queryObj->templateProps['breadcrumbs']) )
-            $this->_add_template_bread_crumbs($queryObj->templateProps['breadcrumbs'],$page);
+        $page->_add_template_bread_crumbs($queryObj->templateProps);
         $dochop = isset($chop) && $chop > 0;
         $chop   = isset($chop) ? $chop : 25;
         $page->PageArg('chop',$chop);
@@ -126,47 +125,6 @@ class CCPageAdmin
         $page->PageArg('qstring',$qstring );
         $page->PageArg('page_datasource',$datasource);
         $result = true;
-    }
-
-    function _add_template_bread_crumbs($breadcrumbs,&$page)
-    {
-        $bc = array();
-        $args = split(',',$breadcrumbs);
-        foreach( $args as $arg )
-        {
-            $arg = trim($arg);
-            
-            if( $arg == 'home' )
-            {
-                $bc[] = array( 'url' => ccl(), 'text' => 'str_home' );
-            }
-            elseif( $arg == 'user_name' || $arg == 'user' || $arg == 'username')
-            {
-                global $CC_GLOBALS;
-                if( empty($CC_GLOBALS['user_name']) )
-                    CCUtil::Send404(); // this is bot or a-h
-                    
-                $bc[] = array( 'url' => ccl('people'), 'text' => 'str_people' );
-                $bc[] = array( 'url' => ccl('people',$CC_GLOBALS['user_name'] ),
-                                      'text' => $CC_GLOBALS['user_real_name'] );
-            }
-            elseif( $arg == 'forum' )
-            {
-                $bc[] = array( 'url' => ccl('forum'), 'text' => 'str_forum' );
-            }
-            else
-            {
-                if( preg_match( '/text\(([^\)]+)\)/', $arg, $m ) )
-                {
-                    $bc[] = array( 'url' => '', 'text' => $m[1] );
-                }
-            }
-        }
-
-        if( !empty($bc) )
-        {
-            $page->AddBreadCrumbs($bc);
-        }
     }
 
     /**
@@ -303,6 +261,7 @@ class CCPage extends CCSkin
            $page =& CCPage::GetPage();
          else
            $page =& $this;
+           
         if( !($file = $page->GetViewFile($template)) && !preg_match('/\.xml$/',$template) )
         {
             $file = $page->GetViewFile($template . '.xml');
@@ -315,13 +274,25 @@ class CCPage extends CCSkin
         }
         else
         {
-            // see notes in CCPage::Show for why this is important
-            if( empty($page->vars['page-title']) )
+            require_once('cchost_lib/cc-file-props.php');
+            $fp = new CCFileProps();
+            $props = $fp->GetFileProps($file);
+            if( empty($props['page_title']) )
             {
-                $contents = file_get_contents($file);
-                $page->_check_for_title($contents);
+                // see notes in CCPage::Show for why this is important
+                if( empty($page->vars['page-title']) )
+                {
+                    $contents = file_get_contents($file);
+                    $page->_check_for_title($contents);
+                }
+            }
+            else
+            {
+                $page->SetTitle( $props['page_title'] );
             }
 
+            $page->_add_template_bread_crumbs($props);
+            
             $page->_body_template = $file;
         }
     }
@@ -973,6 +944,71 @@ class CCPage extends CCSkin
         
         return $args;
     }
+    
+    function _add_template_bread_crumbs($props)
+    {
+        if( empty($props['breadcrumbs']) )
+            return;
+            
+        $breadcrumbs = $props['breadcrumbs'];
+        $bc = array();
+        $args = split(',',$breadcrumbs);
+        foreach( $args as $arg )
+        {
+            $arg = trim($arg);
+            
+            if( $arg == 'home' )
+            {
+                $bc[] = array( 'url' => ccl(), 'text' => 'str_home' );
+            }
+            elseif( $arg == 'user_name' || $arg == 'user' || $arg == 'username')
+            {
+                global $CC_GLOBALS;
+                if( empty($CC_GLOBALS['user_name']) )
+                    CCUtil::Send404(); // this is bot or a-h
+                    
+                $bc[] = array( 'url' => ccl('people'), 'text' => 'str_people' );
+                $bc[] = array( 'url' => ccl('people',$CC_GLOBALS['user_name'] ),
+                                      'text' => $CC_GLOBALS['user_real_name'] );
+            }
+            elseif( $arg == 'forum' )
+            {
+                $bc[] = array( 'url' => ccl('forum'), 'text' => 'str_forum' );
+            }
+            elseif( $arg == 'page_title' || $arg == 'page-title'|| $arg == 'title')
+            {
+                $title = $this->GetTitle();
+                if( empty($title) )
+                    return; // we're done
+                $bc[] = array( 'url' => cc_current_url(), 'text' => $title );
+            }
+            elseif( $arg == 'topic_title' || $arg == 'topic-title'|| $arg == 'topic')
+            {
+                if( empty($props['topic_type']) || empty($_GET['topic']) )
+                {
+                    continue;
+                }
+                $res = cc_query_fmt("dataview=topic_info&f=php&type={$props['topic_type']}&topic={$_GET['topic']}" );
+                if( !empty($res[0]['topic_name']) )
+                {
+                    $bc[] = array( 'url' => '', 'text' => $res[0]['topic_name'] );
+                }
+            }
+            else
+            {
+                if( preg_match( '/text\(([^\)]+)\)/', $arg, $m ) )
+                {
+                    $bc[] = array( 'url' => '', 'text' => $m[1] );
+                }
+            }
+        }
+
+        if( !empty($bc) )
+        {
+            $this->AddBreadCrumbs($bc);
+        }
+    }
+
 }
 
 
