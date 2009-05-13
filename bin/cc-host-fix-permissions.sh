@@ -44,10 +44,6 @@ fi
 # Make sure that you are in the group apache
 chown ${USERNAME}:${WWWGROUP} ./
 chmod $DEFAULT_CHMOD ./
-chown -R ${USERNAME}:${WWWGROUP} cclib/phptal/phptal_cache
-chmod $DEFAULT_CHMOD cclib/phptal/phptal_cache
-chmod $DEFAULT_CHMOD cctemplates
-chown ${USERNAME}:${WWWGROUP} cctemplates
 chmod $DEFAULT_CHMOD locale
 chown -R ${USERNAME}:${WWWGROUP} locale
 

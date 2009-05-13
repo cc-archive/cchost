@@ -21,27 +21,29 @@
 * Copyright 2006, Jon Phillips, jon@rejon.org.
 */
 
-$help = '
+$this_file = basename(__FILE__);
+
+$help =<<<EOF
   usage: 
 
-  cc-host-stat.php  [-s start_date_string] [-e end_date_string]
+  {$this_file}  [-s start_date_string] [-e end_date_string]
 
   date strings are passed to strtotime()
-  default start is \'7 days ago\'
-  default end   is \'now\'
+  default start is '7 days ago'
+  default end   is 'now'
 
   examples:
     // Get log since Feb, 23
-    php statcchost.php -s 2006-02-23 
+    php {$this_file} -s 2006-02-23 
 
     // Get log for Jan
-    php statcchost.php -s "Jan 1, 2006" -e "Feb 1, 2006"
+    php {$this_file} -s "Jan 1, 2006" -e "Feb 1, 2006"
 
     // Get log for the last 3 days
-    php statcchost.php -s "-3 days ago"
+    php {$this_file} -s "-3 days ago"
 
     // Get log for the last week (no args needed):
-    php statcchost.php
+    php {$this_file}
 
   if you are running the cgi mode command line (as opposed to cli) then you
   should add some needed defines:
@@ -50,13 +52,11 @@ $help = '
     php -q -d html_errors=Off -d register_argc_argv=On statcchost.php
 
   NOTE: actually this script has not been tested in cli mode
-';
+
+EOF;
 
 
-if( basename(getcwd()) == 'bin' )
-    define('CC_HOST_ROOT_DIR', '..');
-else
-    define('CC_HOST_ROOT_DIR', '.');
+define('CC_HOST_ROOT_DIR', dirname(dirname(__FILE__)) );
 
 error_reporting(E_ALL);
 
