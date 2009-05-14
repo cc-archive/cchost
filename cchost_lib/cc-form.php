@@ -1227,7 +1227,7 @@ END;
     }
 
     /**
-     * Handles generation &lt;select HTML field with no string xlate
+     * Handles generation &lt;select HTML field with gen-time string xlate
      * 
      * The 'options' field for the field descriptor must be an array
      * of options to be generated here
@@ -1242,6 +1242,7 @@ END;
         $options = $this->GetFormFieldItem($varname,'options');
         $fvalue   = $this->GetFormValue($varname);
         $html = "<select id=\"$varname\" name=\"$varname\" class=\"$class\">";
+        $page =& CCPage::GetPage();
 
         foreach( $options as $value => $text )
         {
@@ -1249,8 +1250,8 @@ END;
                 $selected = ' selected="selected" ';
             else
                 $selected = '';
-
-            $html .= "<option value=\"$value\" $selected >$text</option>";
+            $text = $page->String($text);
+            $html .= "<option value=\"$value\" $selected >{$text}</option>";
         }
         $html .= "</select>";
         return( $html );
