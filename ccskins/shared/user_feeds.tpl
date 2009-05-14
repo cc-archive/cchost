@@ -6,7 +6,9 @@
 %%
 [meta]
     desc = _('User Feeds')
+    page_title = _('User Feeds')
     type = template_component
+    breadcrumbs = home,user,text(User Feeds)
     embedded = 1
     dataview = user_feeds
     datasource = user
@@ -35,7 +37,7 @@ EOF;
 
 <? 
 
-global $urec, $rssfeed, $rssimg, $atomfeed, $atomimg, $xspffeed, $xspfimg, $podimg;
+global $urec, $rssfeed, $rssimg, $feed, $atomfeed, $atomimg, $xspffeed, $xspfimg, $podimg;
 
 $urec = $A['records']['0'];
 $urec['fancy_user_name'] = '<b>' . $urec['fancy_user_name'] . '</b>';
@@ -46,18 +48,6 @@ $atomfeed = $A['query-url'] . 'f=atom&';
 $atomimg  = '<img src="' . $T->URL('images/feed-atom16x16.png') . '" />';
 $xspffeed = $A['query-url'] . 'f=xspf&';
 $xspfimg  = '<b>XSPF</b>';
-
-
-if( empty($A['bread_crumbs']) )
-{
-    $A['bread_crumbs'] = array( array( 'url' => ccl(), 'text' => 'str_home' ),
-                                array( 'url' => ccl('people'), 'text' => 'str_people' ),
-                                array( 'url' => ccl('people',$urec['user_name']), 'text' => $urec['user_real_name'] ),
-                                array( 'url' => ccl('people',$urec['user_name'], 'profile'), 'text' => 'str_profile' ),
-                                array( 'text' => 'str_user_feeds' ) );
-    $T->Call('print_bread_crumbs');
-}
-
 
 ?>
 <style>
@@ -89,7 +79,7 @@ table.linkstable td {
 <div class="user_feeds">
 
 <?
-function gen_ufl($q,$title,$pod=true)
+function gen_ufl($q,$title,$dopod=true)
 {
     global $urec, $rssfeed, $rssimg, $atomfeed, $atomimg, $xspffeed, $xspfimg,$podimg;
 
@@ -97,14 +87,14 @@ function gen_ufl($q,$title,$pod=true)
 
     if( $GLOBALS['strings-profile'] == 'audio' )
     {
-        $pod  = empty($pod) ? '' : "<a href=\"{$rssfeed}{$q}{$urec['user_name']}&title={$utitle}\">{$podimg}</a>";
-        $xspf = empty($pod) ? '' : "<a class=\"small_button\" href=\"{$xspffeed}{$q}{$urec['user_name']}&title={$utitle}\"><span>{$xspfimg}</span></a>";
+        $pod  = empty($dopod) ? '' : "<a href=\"{$rssfeed}{$q}{$urec['user_name']}&title={$utitle}\">{$podimg}</a>";
+        $xspf = empty($dopod) ? '' : "<a class=\"small_button\" href=\"{$xspffeed}{$q}{$urec['user_name']}&title={$utitle}\"><span>{$xspfimg}</span></a>";
     }
     else
     {
         $pod = $xspf = '';
     }
-    $atom = empty($pod) ? '' : "<a href=\"{$atomfeed}{$q}{$urec['user_name']}&title={$utitle}\">{$atomimg}</a>";
+    $atom = $dopod ? "<a href=\"{$atomfeed}{$q}{$urec['user_name']}&title={$utitle}\">{$atomimg}</a>" : '';
 
     $html =<<<EOF
  <tr>
@@ -138,7 +128,7 @@ print '</table>';
     <tr><td class="keyimg"><?= $atomimg ?></td><td><b>ATOM</b> %text(str_syndication_feed)%</td></tr>
 <? if( $GLOBALS['strings-profile'] == 'audio' ) { ?>
     <tr><td class="keyimg"><?= $podimg ?></td><td><b>Podcast</b> %text(str_drag_this_link)%</td></tr>
-    <tr><td class="keyimg"><a href="" class="small_button"><?= $xspfimg ?></a></td><td><b>XSPF</b> %text(str_playlist)%</td></tr>
+    <tr><td class="keyimg"><a href="javascript://" class="small_button"><?= $xspfimg ?></a></td><td><b>XSPF</b> %text(str_playlist)%</td></tr>
 <? } ?>
 </table>
 </div>

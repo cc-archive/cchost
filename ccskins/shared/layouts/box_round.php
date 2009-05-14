@@ -3,7 +3,7 @@
 [meta]
     type  = box_shape
     image = layouts/images/rbox_layout002.gif
-    desc  = _('Rounded Boxes')
+    desc  = _('Rounded Boxes [graphic]')
 [/meta]    
 */
 

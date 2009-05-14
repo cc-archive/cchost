@@ -436,7 +436,6 @@ class CCLogin
         $page =& CCPage::GetPage();
         $this->_bread_crumbs($page,'str_log_out');
         cc_setcookie(CC_USER_COOKIE,'',time());
-        cc_setcookie(CC_TRANSITION_COOKIE,gmmktime(),time()+60*60*24*30);
         unset($_COOKIE[CC_USER_COOKIE]);
         $page->Prompt('str_log_logged_out');
         $page->SetTitle('str_log_out');
@@ -545,7 +544,6 @@ class CCLogin
             $pw = $CC_GLOBALS['user_password'];
         $val = serialize(array($user,$pw));
         cc_setcookie(CC_USER_COOKIE,$val,$time);
-        cc_setcookie(CC_TRANSITION_COOKIE,gmmktime(),time()+60*60*24*30);
     }
     
     /**

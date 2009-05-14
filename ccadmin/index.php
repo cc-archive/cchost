@@ -43,14 +43,18 @@ if( empty($_GET) && file_exists('../cc-host-db.php') )
          </body></html>');
 }
 
-
-
 chdir('..');
 
 if( !empty($_REQUEST['rewritehelp']) )
     get_rewrite_help();
 
 $step = empty($_REQUEST['step']) ? '1' : $_REQUEST['step'];
+
+if( intval($step) == 4 )
+{
+    // we have to login before headers are sent
+    do_login();
+}
 
 $install_title = 'ccHost Installation';
 include( dirname(__FILE__) . '/cc-install-head.php');
@@ -102,11 +106,12 @@ function step_3()
 {
     $f = array();
     $errs = '';
-
+    
     $ok =        verify_fields($f,$errs);
     $ok = $ok && install_htaccess($f,$errs);
     $ok = $ok && install_db_config($f,$errs);
     $ok = $ok && install_tables($f,$errs);
+
     if( !$ok )
     {
         print_install_form($f,$errs);
@@ -116,7 +121,16 @@ function step_3()
     step_3a();
 }
 
-function step_4()
+function do_login()
+{
+    cc_host_incs();
+    require_once( 'cchost_lib/cc-login.php' );
+    list($user,$pw) = CCDatabase::QueryRow('SELECT user_name,user_password FROM cc_tbl_user WHERE user_id=1',false);
+    $lapi = new CCLogin();
+    $lapi->_create_login_cookie(1,$user,$pw);
+}
+
+function cc_host_incs()
 {
     require_once('cc-host-db.php');
     require_once('cchost_lib/cc-defines.php');
@@ -127,7 +141,11 @@ function step_4()
     require_once('cchost_lib/cc-util.php');
     if( !function_exists('gettext') )
        require_once('cchost_lib/ccextras/cc-no-gettext.inc'); // ugh, ccextras
+}
 
+function step_4()
+{
+    cc_host_incs();
     $configs =& CCConfigs::GetTable();
     $settings = $configs->GetConfig('settings');
     $config   = $configs->GetConfig('config');
@@ -167,8 +185,8 @@ function step_4()
     <p>For Unix/Linux installations you should further read <a href="http://wiki.creativecommons.org/CcHost_File_Access">ccHost File Access Policy and Troubleshooting</a>
     <h2>Go forth...</h2>
 
-    <p>If you've done those steps you can browse to <a href="$login_url">$login_url</a> and log in as "<b>$admin</b>"
-    and continue setting up and configuring the site.</p>
+    <p>If you've done those steps you can browse to <a href="$login_url">$login_url</a> (log in as "<b>$admin</b>"
+    if not already) and continue with the installation.</p>
 
 EOF;
 
@@ -347,19 +365,10 @@ EOF;
 
 function install_tables(&$f,&$errs)
 {
-    //print("<pre>");print_r($f);print("</pre>");exit;
-    require_once( 'cc-host-db.php');
-    require_once( 'cchost_lib/cc-defines.php');
-    require_once( 'cchost_lib/cc-debug.php');
-    require_once( 'cchost_lib/cc-database.php' );
-    require_once( 'cchost_lib/cc-table.php' );
-    require_once( 'cchost_lib/cc-config.php');
+    cc_host_incs();
     require_once( 'cchost_lib/cc-pools.php' );
     require_once( dirname(__FILE__) . '/cc-install-db.php');
     require_once( 'cchost_lib/cc-lics-install.php');
-    require_once( 'cchost_lib/cc-util.php' );
-    if( !function_exists('gettext') )
-       require_once('cchost_lib/ccextras/cc-no-gettext.inc'); // ugh, ccextras
     
     CCDebug::Enable(true) ;
 
@@ -392,8 +401,8 @@ END;
         $errs = "Error creating admin account: " . mysql_error();
         return( false );
     }
-
-    print "Created admin account <br />";
+    
+    print "Created admin account<br />";
 
     return( true );
 
@@ -402,7 +411,6 @@ END;
 function install_local_files($local_dir)
 {
     foreach( array( 'content', 
-                    'contests', 
                     $local_dir, 
                     $local_dir . '/pages',
                     $local_dir . '/skins', 
@@ -425,6 +433,18 @@ function install_local_files($local_dir)
         }
     }
 
+    $htaccess =<<<EOF
+# should deny from the outside
+<Limit GET>
+order deny,allow
+deny from all
+</Limit>
+EOF;
+
+    $f = fopen( $local_dir . '/temp/.htaccess', 'w' );
+    fwrite($f,$htaccess);
+    fclose($f);
+
     docopy( 'home.php', $local_dir, 'pages');
     docopy( 'news.php', $local_dir, 'pages');
     docopy( 'welcome.php', $local_dir, 'pages');
@@ -438,7 +458,7 @@ function install_local_files($local_dir)
     docopy( 'disabled-msg.txt', $local_dir, '');
 }
 
-function docopy($file,$local_dir,$subdir)
+function docopy($file,$local_dir,$subdir,$do_chmod=true)
 {
     $src = dirname( __FILE__ )   . '/' . $file;
     if( $subdir )
@@ -448,7 +468,8 @@ function docopy($file,$local_dir,$subdir)
     if( file_exists($src) && !file_exists($dest) )
     {
         copy( $src, $dest);
-        chmod( $dest, 0777 );
+        if( $do_chmod )
+            chmod( $dest, 0777 );
     }
 }
 

@@ -94,6 +94,11 @@ $install_settings = array(
             'show_google_form' => '1',
             'collab_enabled' => '',
 
+            'v_5_1_paging' => '1',
+            'v_5_1_button' => '1',
+            'v_5_oh1_bug'  => '1',
+            'v_5_1_minilic' => '1',
+
             ),
      ),
     array( 

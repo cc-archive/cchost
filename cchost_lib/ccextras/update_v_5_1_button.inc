@@ -32,26 +32,17 @@ class v_5_1_button extends CCUpdate
 {
     function Update()
     {
+        global $CC_GLOBALS;
+        
         require_once('cchost_lib/cc-page.php');
         $cfg = new CCConfigs();
         $skin_settings = $cfg->GetConfig('skin-settings');
         $page =& CCPage::GetPage();        
-        foreach( array('formfields_layout' => 'layouts/form_fields_next.php',
-                'gridform_layout' => 'layouts/gridform_tabbed.php',
-                'button_style'=> 'layouts/button_browser.php',) as $K => $V )
-        {
-            $this->_set_all_props($page,$skin_settings,$K,$V);
-        }
+        $page->vars['button_style'] =   /* the page is probably already built, so that will be used in cached headers */
+        $CC_GLOBALS['button_style'] =    /* just to be safe, put it in the globals */
+        $skin_settings['button_style'] = 'ccskins/shared/layouts/button_browser.php'; /* this we'll write to disk */
         $cfg->SaveConfig( 'skin-settings', $skin_settings,'',false );
-        CCPage::Prompt( sprintf(_('Installed new buttons, etc. styles') ) );
-    }
-
-    function _set_all_props(&$page,&$skin_settings,$key,$value)
-    {
-        global $CC_GLOBALS;
-        $page->vars[$key] =   /* the page is probably already built, so that will be used in cached headers */
-        $CC_GLOBALS[$key] =    /* just to be safe, put it in the globals */
-        $skin_settings[$key] = $value; /* this we'll write to disk */
+        $page->Prompt( sprintf(_('Installed new buttons') ) );
     }
 }
 

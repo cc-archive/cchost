@@ -102,8 +102,9 @@ class CCPlaylistHV
             //if( empty($args['sort']) )
             $queryObj->sql_p['order'] = 'cart_item_order';
             $queryObj->sql_p['limit'] = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_cart_items WHERE cart_item_cart='.$id);
-            $queryObj->sql_p['joins'][] = 'cc_tbl_cart_items ON cart_item_upload=upload_id';
             $queryObj->where[] = 'cart_item_cart = '.$id;
+            if( $args['dataview'] == 'uploads' )
+                $queryObj->sql_p['joins'][] = 'cc_tbl_cart_items ON cart_item_upload=upload_id';
         }
 
     }

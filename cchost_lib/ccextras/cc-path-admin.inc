@@ -133,6 +133,7 @@ class CCPathAdminForm extends CCEditConfigForm
                        'slash'      => false,
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
 
+/*
         $fields['contest-upload-root'] =
                array( 'label'       => $wflag . _('Contest Upload Directory'),
                        'form_tip'   => _('Contest sources and entries will be uploaded and downloaded here.'),
@@ -141,7 +142,7 @@ class CCPathAdminForm extends CCEditConfigForm
                        'formatter'  => 'sysdir',
                        'slash'      => false,
                        'flags'      => CCFF_POPULATE | CCFF_REQUIRED );
-
+*/
         CCEvents::Invoke( CC_EVENT_SYSPATHS, array( &$fields ) );
 
         $this->AddFormFields($fields);

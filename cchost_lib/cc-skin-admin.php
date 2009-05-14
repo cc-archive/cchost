@@ -509,6 +509,13 @@ class CCSkinAdmin
         $this->_build_bread_crumb_trail($title,true);
         CCPage::SetTitle($title);
         $form = new CCSkinLayoutForm();
+        $help =<<<EOF
+    Note that many combinations of layouts will not work together because
+    they are simply incompatible. Some times an option you set here
+     will simply be ignored by some
+    skin templates. Experimentaion is encouraged...    
+EOF;
+        $form->SetFormHelp($help);
         CCPage::AddForm($form->GenerateForm());
     }
 
