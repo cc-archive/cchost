@@ -241,6 +241,12 @@ $GLOBALS['str_forum_submit_topic'] = _('Submit Topic');
 $GLOBALS['str_forum_thread_closed'] = _('Thread is closed to new comments.') ;
 $GLOBALS['str_forum_post_topic_reply'] = _('Post topic reply');
 
+$GLOBALS['str_forum_the_site'] = _('The Site');
+$GLOBALS['str_forum_the_content'] = _('The Content');
+$GLOBALS['str_forum_off_beats'] = _('Off Beats');
+$GLOBALS['str_forum_announcements'] = _('Announcements');
+$GLOBALS['str_forum_messages_admins'] = _('Messages from the site admins');
+
 $GLOBALS['str_from'] = _('from');
 $GLOBALS['str_full_search'] = _('Full search');
 $GLOBALS['str_getting_data'] = _('Getting data...');

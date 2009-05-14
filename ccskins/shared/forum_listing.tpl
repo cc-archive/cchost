@@ -7,6 +7,7 @@
     <a href="%(#FC/url)%" class="cc_gen_button"><span>%text(#FC/text)%</span></a>
 %end_loop%
 </div>
+<br style="clear:both" />
 <table class="forum_listing">
 <tr>
 <th class="med_border">%text(str_forum_topic)%</th>
@@ -27,8 +28,10 @@
         %(#thread/num_topics)%
    </td>
    <td>
-      <a href="%(#thread/newest_topic_url)%">%(#thread/newest_topic_date)%</a>
-    <div>%text(str_by)%: %(#thread/newest_real_name)%
+      %if_not_null(#thread/newest_real_name)%
+          <a href="%(#thread/newest_topic_url)%">%(#thread/newest_topic_date)%</a>
+          <div>%text(str_by)%: %(#thread/newest_real_name)%</div>
+       %end_if%
    </td>
 </tr>
 %end_loop%

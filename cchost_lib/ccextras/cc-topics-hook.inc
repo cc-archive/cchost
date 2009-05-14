@@ -31,6 +31,7 @@ class CCTopicHook
     function DoHook()
     {
          $ids = CCUtil::Strip($_GET['ids']);
+         $thread_id = empty($_GET['thread']) ? 0 : CCUtil::Strip($_GET['thread']);
 
         $sql =<<<EOF
             SELECT topic_id, user_real_name, topic_can_xlat, topic_locked, 
@@ -149,11 +150,13 @@ EOF;
                     else
                         $text = array('str_topic_reply_to_sn',$R['user_real_name']);
                 }
+
+                $rcmd = $thread_id ? 'thread' : 'topics';
                 
-                $rec['cmds'][] = array( 'href' => ccl('topics','quote',$R['topic_id']),
+                $rec['cmds'][] = array( 'href' => ccl($rcmd,'quote',$R['topic_id']),
                                             'text' => 'str_topic_reply_with_quote' );
                 
-                $rec['cmds'][] = array( 'href' => ccl('topics','reply',$R['topic_id']),
+                $rec['cmds'][] = array( 'href' => ccl($rcmd,'reply',$R['topic_id']),
                                             'text' => $text );
             }
 

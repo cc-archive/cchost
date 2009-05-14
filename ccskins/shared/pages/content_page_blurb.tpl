@@ -3,6 +3,7 @@
     type     = content_page
     desc     = _('Blurbs for the Extras Sidebar')
     dataview = content_page_blurb
+    datasource = topics
     embedded = 1
 [/meta]
 [dataview]
@@ -36,7 +37,6 @@ EOF;
 
 if( empty($A['content_page_textformat']) )
     $A['content_page_textformat'] = 'format';
-
 ?>
 
 %loop(records,R)%

@@ -343,6 +343,24 @@ EOF;
         CCPage::AddBreadCrumbs($trail);
     }
 
+    function _build_bread_crumb_trail2($topic_id, $text)
+    {
+        $sql = "SELECT forum_id, forum_name, forum_thread_id, topic_name  FROM cc_tbl_topics " .
+                 "JOIN cc_tbl_forum_threads ON topic_thread = forum_thread_id ".
+                 "JOIN cc_tbl_forums        ON forum_thread_forum = forum_id " .
+                 "WHERE topic_id=" .$topic_id;
+        $row = CCDatabase::QueryRow($sql,false);
+        list( $forum_id, $forum_name, $thread_id, $thread_name  ) = $row;
+        $trail = array();
+        $trail[] = array( 'url' => ccl(), 'text' => 'str_home' );
+        $trail[] = array( 'url' => ccl('forums'), 'text' => 'str_forums' );
+        $trail[] = array( 'url' => ccl('forums',$forum_id), 'text' => $forum_name );
+        $trail[] = array( 'url' => ccl('thread',$thread_id), 'text' => $thread_name );
+        $trail[] = array( 'url' => '', 'text' => $text );
+        require_once('cchost_lib/cc-page.php');
+        CCPage::AddBreadCrumbs($trail);
+    }
+
     function OnPostTopicDelete($deltype,$topic)
     {
         if( empty($topic['topic_thread']) )
@@ -418,6 +436,20 @@ EOF;
         $users->Update($args);
     }
 
+    function Reply($topic_id)
+    {
+        $this->_build_bread_crumb_trail2($topic_id, 'str_topic_reply');
+        $api = new CCTopic();
+        $api->Reply($topic_id,false);
+    }
+
+    function Quote($topic_id)
+    {
+        $this->_build_bread_crumb_trail2($topic_id, 'str_topic_reply');
+        $api = new CCTopic();
+        $api->Reply($topic_id,true);
+    }
+    
     function PostNew($forum_id)
     {
         $api = new CCForums();
@@ -432,6 +464,7 @@ EOF;
 
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle( 'str_forum_post_new_topic' );
+        $this->_build_bread_crumb_trail($forum_id,'str_forum_post_new_topic' );
 
         require_once('cchost_lib/ccextras/cc-topics-forms.inc');
         $form = new CCTopicForm( 'str_forum_new_topic_text', 'str_forum_submit_topic', CC_TTF_EDIT );
@@ -557,6 +590,7 @@ EOF;
         }
 
         CCPage::PageArg('thread_commands',$commands);
+        CCPage::PageArg('topic_thread_id',$thread_id);
     }
 
     function User($user_name='')

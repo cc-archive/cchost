@@ -207,6 +207,14 @@ class CCForumsAdmin
                 CC_MUST_BE_LOGGED_IN, 'cchost_lib/ccextras/cc-forums.inc', '{forum_id}', 
                 _('Post a new topic'), CC_AG_FORUMS );
 
+        CCEvents::MapUrl( ccp('thread','reply'),       array( 'CCForumAPI', 'Reply'), 
+                CC_MUST_BE_LOGGED_IN, 'cchost_lib/ccextras/cc-forums.inc', '{topic_id}', 
+                _('Post a reply'), CC_AG_FORUMS );
+
+        CCEvents::MapUrl( ccp('thread','quote'),       array( 'CCForumAPI', 'Quote'), 
+                CC_MUST_BE_LOGGED_IN, 'cchost_lib/ccextras/cc-forums.inc', '{topic_id}', 
+                _('Post a quoted reply'), CC_AG_FORUMS );
+
         CCEvents::MapUrl( ccp('forums','people'),     array( 'CCForumAPI', 'User'),    
                 CC_DONT_CARE_LOGGED_IN, 'cchost_lib/ccextras/cc-forums.inc', '{user_name}', 
                 _('Display forum topics for user'), CC_AG_FORUMS );

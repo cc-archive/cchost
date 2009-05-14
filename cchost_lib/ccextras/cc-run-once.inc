@@ -36,7 +36,7 @@ class CCRunOnce
         {
             return;
         }
-
+        
         require_once('cchost_lib/cc-tags.php');
         $run_pages = CCTag::TagSplit($CC_GLOBALS['run_once']);
         $key = 'run7';
@@ -50,8 +50,17 @@ class CCRunOnce
                 $up['user_id'] = $CC_GLOBALS['user_id'];
                 $users =& CCUsers::GetTable();
                 $users->Update($up);
-                $url = url_args( ccl('viewfile',$run_page), 'run_once=1' );
-                CCUtil::SendBrowserTo( $url );
+                $url = url_args( ccl($run_page), 'run_once=1' );
+                $num_users = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_user');
+                if( $num_users > 1 )
+                {
+                    CCUtil::SendBrowserTo( $url );
+                }
+                else
+                {
+                    // this is the admin in the middle of the install,
+                    // don't mess it up...
+                }
             }
         }
     }
@@ -70,7 +79,7 @@ class CCRunOnce
         {
             $fields['run_once'] =
                array(  'label'      => _('Run Once'),
-                       'form_tip'   => _('Comma separated list of xml files in viewfiles directory that registered users will see once.'),
+                       'form_tip'   => _('Comma separated list of content pages that registered users will see once.'),
                        'value'      => '',
                        'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE );

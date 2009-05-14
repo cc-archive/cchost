@@ -351,26 +351,6 @@ CREATE TABLE cc_tbl_ratings (
 -- --------------------------------------------------------
 
 -- 
--- Table structure for table 'cc_tbl_ratings_chart'
--- 
-
-CREATE TABLE cc_tbl_ratings_chart (
-  chart_id int(11) unsigned NOT NULL auto_increment,
-  chart_upload int(11) NOT NULL default '0',
-  chart_rank int(11) NOT NULL default '0',
-  chart_user int(11) NOT NULL default '0',
-  chart_rating int(11) NOT NULL default '0',
-  chart_count int(11) NOT NULL default '0',
-  chart_weight int(11) NOT NULL default '0',
-  chart_num_children int(4) NOT NULL default '0',
-  chart_num_parents int(4) NOT NULL default '0',
-  chart_time int(20) NOT NULL default '0',
-  PRIMARY KEY  (chart_id)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
--- 
 -- Table structure for table 'cc_tbl_role_permissions'
 -- 
 
@@ -521,16 +501,12 @@ CREATE TABLE cc_tbl_uploads (
   upload_published int(1) unsigned NOT NULL default '0',
   upload_banned int(1) unsigned NOT NULL default '0',
   upload_topic_id int(11) unsigned NOT NULL default '0',
-  old_topic int(11) NOT NULL default '0',
-  old_dtitle int(11) NOT NULL default '0',
-  old_fname mediumtext,
   upload_num_remixes int(7) unsigned NOT NULL default '0',
   upload_num_pool_remixes int(7) unsigned NOT NULL default '0',
   upload_num_sources int(7) unsigned NOT NULL default '0',
   upload_num_pool_sources int(7) unsigned NOT NULL default '0',
   upload_score int(11) unsigned NOT NULL default '0',
   upload_num_scores int(11) unsigned NOT NULL default '0',
-  upload_rank int(11) unsigned NOT NULL default '0',
   upload_last_edit datetime NOT NULL default '0000-00-00 00:00:00',
   upload_num_playlists int(5) unsigned NOT NULL default '0',
   upload_num_plays int(5) unsigned NOT NULL default '0',

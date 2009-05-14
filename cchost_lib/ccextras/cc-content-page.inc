@@ -40,6 +40,7 @@ class CCContentPostForm extends CCTopicForm
         $types = CCDatabase::QueryItems('SELECT DISTINCT topic_type FROM cc_tbl_topics');
 
         $new_types[] = _('home');
+        $new_types[] = _('sidebar_blurb');        
         $types = array_filter(array_unique(array_merge($types,$new_types)));
         $types = array_combine( array_values($types), $types );
         $fields['topic_type'] =

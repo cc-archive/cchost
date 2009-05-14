@@ -78,6 +78,6 @@ var cc_show_xlat = function( orig_id, xlat_id, is_native)
 <script type="text/javascript">
 if( window.user_name && userHookup )
 {
-    new userHookup('topic_cmds','ids=<?= join(',',$A['thread_ids']) ?>');
+    new userHookup('topic_cmds','ids=<?= join(',',$A['thread_ids']) ?>&thread=%(topic_thread_id)%');
 }
 </script>

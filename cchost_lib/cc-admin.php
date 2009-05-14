@@ -665,7 +665,7 @@ END;
                                  ),
                 'adminadvanced'   => array( 'menu_text'  => 'Global Setup',
                                  'menu_group' => 'configure',
-                                 'help'  => _('Cookies, ban message, admin email, 3rd party add ins, etc.'),
+                                 'help'  => _('Cookies, admin email, 3rd party add ins, misc. settings.'),
                                  'access' => CC_ADMIN_ONLY,
                                  'weight' => 3,
                                  'action' =>  ccl('admin','setup')
