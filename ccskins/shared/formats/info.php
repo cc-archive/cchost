@@ -10,7 +10,7 @@ function info_dataview()
 {
     $urlf = ccl('files') . '/';
     $urlp = ccl('people') . '/';
-    $urll = ccd('ccskins/shared/images/lics/'); 
+    $lic_logo = cc_get_license_logo_sql('big');
 
     $sql =<<<EOF
 SELECT 
@@ -19,7 +19,7 @@ SELECT
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name,
     CONCAT( '$urlp', user_name ) as artist_page_url,
-    CONCAT( '$urll', license_logo ) as license_logo_url,
+    {$lic_logo},
     license_url, license_name,
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date,
     collab_upload_collab as collab_id, upload_contest, user_name

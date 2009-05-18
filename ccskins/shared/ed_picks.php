@@ -15,8 +15,8 @@ function edpick_detail_dataview()
 
     $urlf = ccl('files') . '/';
     $urlp = ccl('people') . '/';
-    $urll = ccd('ccskins/shared/images/lics/small-'); 
     $avatar_sql = cc_get_user_avatar_sql();
+    $lic_logo = cc_get_license_logo_sql('small');
 
     $sql =<<<EOF
 SELECT 
@@ -27,7 +27,7 @@ SELECT
     user_name,
     $avatar_sql,
     CONCAT( '$urlp', user_name ) as artist_page_url,
-    CONCAT( '$urll', license_logo ) as license_logo_url,
+    {$lic_logo},
     license_url,
     collab_upload_collab as collab_id, upload_contest
     %columns%
@@ -66,7 +66,7 @@ EOF;
 [/dataview]
 */
 ?>
-<!-- tempalte ed_picks -->
+<!-- template ed_picks -->
 <style type="text/css">
 #edpicks td {
     vertical-align: top;
@@ -126,7 +126,8 @@ for( $i = 0; $i < $row_count; $i++ )
             if( !empty($R['fplay_url']) )
             {
                 ?>  <div class="playlabel"><?= $T->String('str_play') ?></div>
-                    <a class="cc_player_button cc_player_hear" id="_ep_<?= $R['upload_id'] ?>"> </a>
+                    <a class="cc_player_button cc_player_hear" id="_ep_<?= $R['upload_id'] ?>">
+                        <span style="display:none"><?= $R['upload_name'] ?></span></a>
                     <div style="clear:both" />
                     <script type="text/javascript"> $('_ep_<?= $R['upload_id']?>').href = '<?= $R['fplay_url'] ?>' </script>
                 <?

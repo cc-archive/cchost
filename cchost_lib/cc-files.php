@@ -76,51 +76,6 @@ class CCEditFileForm extends CCUploadMediaForm
         $this->EnableSubmitMessage(false);
     }
 
-    function _looser_child_lics($record)
-    {
-        $id = $record['upload_id'];
-        $strict = $record['license_strict'];
-
-        $sql =<<<END
-            SELECT DISTINCT lic.*
-            FROM 
-                cc_tbl_tree t, 
-                cc_tbl_uploads u1, 
-                cc_tbl_uploads u2,
-                cc_tbl_licenses lic
-            WHERE 
-                t.tree_child = $id                 AND 
-                t.tree_parent = u2.upload_id       AND
-                u2.upload_license = lic.license_id AND
-                lic.license_strict <= $strict
-END;
-
-        $lics1 = CCDatabase::QueryRows($sql);
-
-        $sql =<<<END
-         SELECT DISTINCT lic.*
-            FROM 
-                cc_tbl_pool_tree t, 
-                cc_tbl_uploads u1, 
-                cc_tbl_pool_item p,
-                cc_tbl_licenses lic
-            WHERE 
-                t.pool_tree_child =       $id            AND 
-                t.pool_tree_pool_parent = p.pool_item_id AND
-                p.pool_item_license     = lic.license_id AND
-                lic.license_strict <= $strict
-END;
-
-        $lics2 = CCDatabase::QueryRows($sql);
-
-        $lics = array();
-        foreach($lics1 as $lic)
-            $lics[ $lic['license_id'] ] = $lic;
-        foreach($lics2 as $lic)
-            $lics[ $lic['license_id'] ] = $lic;
-
-        return( $lics  );
-    }
 }
 
 /**

@@ -11,7 +11,6 @@ function upload_list_wide_dataview()
 
     $urlf = ccl('files') . '/';
     $urlp = ccl('people') . '/';
-    $urll = ccd('ccskins/shared/images/lics/small-'); 
     $urlr = ccl('reviews') . '/';
     $configs =& CCConfigs::GetTable();
     $chart = $configs->GetConfig('chart');
@@ -19,6 +18,7 @@ function upload_list_wide_dataview()
     $ratings_on = empty( $chart['ratings'] ) ? '0' : '1';
 
     $user_avatar_col = cc_get_user_avatar_sql();
+    $lic_logo = cc_get_license_logo_sql('small');
 
     $stream_url = url_args( ccl('api','query','stream.m3u'), 'f=m3u&ids=' );
 
@@ -31,7 +31,7 @@ SELECT
     user_real_name, user_name, upload_score, upload_num_scores, upload_extra,
     $is_thumbs_up as thumbs_up, $ratings_on as ratings_enabled,
     CONCAT( '$urlp', user_name ) as artist_page_url,
-    CONCAT( '$urll', license_logo ) as license_logo_url, license_url, license_name,
+    {$lic_logo}, license_url, license_name,
     CONCAT( '$urlr', user_name, '/', upload_id ) as reviews_url,
     IF( upload_tags LIKE '%,audio,%', CONCAT( '$stream_url', upload_id ) , '' ) as stream_url,
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date_format,

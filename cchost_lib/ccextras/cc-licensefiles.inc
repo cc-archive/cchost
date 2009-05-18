@@ -50,7 +50,7 @@ class CCLicensefiles
         $license = $licenses->QueryKeyRow($row['upload_license']);
 
         $rdf='<rdf:RDF
-   xmlns="http://web.resource.org/cc/"
+   xmlns="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
@@ -72,7 +72,7 @@ class CCLicensefiles
     foreach( $permits as $pt )
     {
         if( $pt )
-            $rdf .= "\n" . '      <permits rdf:resource="http://web.resource.org/cc/'.$pt.'" />';
+            $rdf .= "\n" . '      <permits rdf:resource="http://creativecommons.org/ns#'.$pt.'" />';
     }
 
     $required = explode(',',$license['license_required']);
@@ -80,7 +80,7 @@ class CCLicensefiles
     foreach( $required as $rd )
     {
         if( $rd )
-            $rdf .= "\n" . '      <requires rdf:resource="http://web.resource.org/cc/'.$rd.'" />';
+            $rdf .= "\n" . '      <requires rdf:resource="http://creativecommons.org/ns#'.$rd.'" />';
     }
 
     $prohibits = explode(',',$license['license_prohibits']);
@@ -88,7 +88,7 @@ class CCLicensefiles
     foreach( $prohibits as $ph )
     {
         if( $ph )
-            $rdf .= "\n" . '      <prohibits rdf:resource="http://web.resource.org/cc/'.$ph.'" />';
+            $rdf .= "\n" . '      <prohibits rdf:resource="http://creativecommons.org/ns#'.$ph.'" />';
     }
 
    $rdf .= "\n" . '   </License>

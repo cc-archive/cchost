@@ -122,6 +122,18 @@ function & cc_license_chart()
                     'publicdomain' =>   'publicdomain' , 
                 ),
 
+            'cc_zero' =>   array
+                (
+                    'nc-sampling+' =>  'nc-sampling+' , 
+                    'sampling+' =>   'sampling+', 
+                    'sampling' =>   'sampling' , 
+                    'share-alike_3' =>  'share-alike_3'  , 
+                    'by-nc-sa_3' =>  'by-nc-sa_3'  , 
+                    'noncommercial_3' =>  'noncommercial_3' , 
+                    'attribution_3' =>   'attribution_3', 
+                    'publicdomain' =>   'publicdomain' , 
+                ),
+
             );
     }
 
@@ -132,10 +144,10 @@ function cc_stricter_license( $lic1,$lic2 )
 {
     $update = array
         (
-            'share-alike' =>  'share-alike_3'  , 
-            'by-nc-sa' =>  'by-nc-sa_3'  , 
+            'share-alike' =>    'share-alike_3'  , 
+            'by-nc-sa' =>       'by-nc-sa_3'  , 
             'noncommercial' =>  'noncommercial_3' , 
-            'attribution' =>   'attribution_3', 
+            'attribution' =>    'attribution_3', 
         );
 
     if( array_key_exists($lic1,$update) )

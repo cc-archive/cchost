@@ -66,7 +66,7 @@ class CCLicenses extends CCTable
     *
     * @returns array $rows Returns CCLicense table object rows
     */
-    function GetEnabled($looser_than = -1)
+    function GetEnabled()
     {
         $configs =& CCConfigs::GetTable();
         $licenses = $configs->GetConfig('licenses');
@@ -82,8 +82,6 @@ class CCLicenses extends CCTable
                 $where[] = "(license_id = '$lic')";
         }
         $where = implode(' OR ' ,$where);
-        if( $looser_than != -1 )
-            $where = "($where) AND (license_strict <= $looser_than)";
         $rows = $this->QueryRows($where);
         if( empty($rows) )
             $rows = $this->QueryRows("license_id = 'attribution'");

@@ -35,9 +35,7 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,        array( 'CCBanHV',  'OnUploadMe
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCBan',  'OnMapUrls'), 'cchost_lib/cc-ban.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCBan',  'OnAdminMenu'), 'cchost_lib/cc-ban.inc'  );
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCContest' , 'OnMapUrls'), 'cchost_lib/cc-contest.inc' );
 CCEvents::AddHandler(CC_EVENT_GET_MACROS,    array( 'CCContest' , 'OnGetMacros'), 'cchost_lib/cc-contest.inc' );
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCContest', 'OnAdminMenu'), 'cchost_lib/cc-contest.inc' );
 
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,            array( 'CCDatabaseAdmin', 'OnMapUrls'), 'cchost_lib/cc-db-admin.php' );
 

@@ -398,7 +398,7 @@ class CCConfigs extends CCTable
         {
             if( empty($CC_GLOBALS['cc_mixter_installed']) )
             {
-                die('This installation of ccHost must be upgraded to version 5.0');
+                die('This installation of ccHost must be upgraded to version 5');
             }
             else
             {
@@ -411,8 +411,9 @@ class CCConfigs extends CCTable
             }
         }
 
-        $cfg = new CCConfigs();
-        $cfg->SetValue('config', 'cc-host-version', CC_HOST_VERSION, CC_GLOBAL_SCOPE);
+        // we don't have a $this ptr
+        $configs =& CCConfigs::GetTable();
+        $configs->SetValue('config', 'cc-host-version', CC_HOST_VERSION, CC_GLOBAL_SCOPE);
         $CC_GLOBALS['cc-host-version']  = CC_HOST_VERSION;
     }
 }

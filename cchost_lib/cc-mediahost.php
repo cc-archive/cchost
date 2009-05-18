@@ -106,8 +106,14 @@ class CCMediaHost
     * @param string $username Login name of user doing the upload
     * @param array  $etc Extra data for this operation (current supports $etc['suggested_tags'])
     */
-    function SubmitOriginal($page_title, $tags, $form_help, $username='', $etc='')
+    function SubmitOriginal($submit_meta,$username)
     {
+        $page_title = $submit_meta['text'];
+        $tags       = $submit_meta['tags'];
+        $form_help  = $submit_meta['form_help'];
+        $avail_lics = $submit_meta['licenses'];
+        $suggested_tags = $submit_meta['suggested_tags'];
+        
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle($page_title);
         if( empty($username) )
@@ -123,10 +129,10 @@ class CCMediaHost
 
         require_once('cchost_lib/cc-upload-forms.php');
 
-        $form = new CCNewUploadForm($uid);
+        $form = new CCNewUploadForm($uid,true,$avail_lics);
         
-        if( !empty($etc['suggested_tags']) )
-            $form->AddSuggestedTags($etc['suggested_tags']);
+        if( !empty($suggested_tags) )
+            $form->AddSuggestedTags($suggested_tags);
 
         $this->_add_publish_field($form);
 
@@ -163,10 +169,16 @@ class CCMediaHost
     * @param string $username Login name of user doing the upload
     * @param array  $etc Extra data for this operation (current supports $etc['suggested_tags'])
     */
-    function SubmitRemix($title,$tags,$form_help,$etc ='')
+    function SubmitRemix($submit_meta)
     {
         global $CC_GLOBALS;
 
+        $title = $submit_meta['text'];
+        $tags  = $submit_meta['tags'];
+        $form_help = $submit_meta['form_help'];
+        $suggested_tags = $submit_meta['suggested_tags'];
+        $url_extra = empty($submit_meta['url_extra']) ? '' : $submit_meta['url_extra'];
+        
         $username = CCUser::CurrentUserName();
         $userid   = CCUser::CurrentUser();
         require_once('cchost_lib/cc-remix-forms.php');
@@ -174,8 +186,8 @@ class CCMediaHost
 
         $this->_add_publish_field($form);
 
-        if( !empty($etc['suggested_tags']) )
-            $form->AddSuggestedTags($etc['suggested_tags']);
+        if( !empty($suggested_tags) )
+            $form->AddSuggestedTags($suggested_tags);
 
         CCPage::SetTitle($title);
 
@@ -200,7 +212,7 @@ class CCMediaHost
             {
                 $form->SetFormFieldItem('sources','sourcesof',$_GET['sourcesof']);
             }
-            $form->SetFormFieldItem('sources','remix_id',empty($etc['url_extra']) ? '' : $etc['url_extra']);
+            $form->SetFormFieldItem('sources','remix_id',$url_extra);
 
             CCPage::AddForm( $form->GenerateForm() );
         }
@@ -209,11 +221,7 @@ class CCMediaHost
             $upload_dir = $this->_get_upload_dir($username);
             
             require_once('cchost_lib/cc-remix.php');
-            $do_prompt = CCRemix::OnPostRemixForm($form, $upload_dir, $tags );
-
-            if( $do_prompt )
-                CCPage::Prompt(_("This upload is <b>NOT</b> entered in any contest."));
-
+            CCRemix::OnPostRemixForm($form, $upload_dir, $tags );
         }
     }
 

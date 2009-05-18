@@ -84,7 +84,9 @@ $install_settings = array(
 
             'enable_playlists' => 1,
             'playlist_promo_tag' => 'site_promo',
-            'playlist_excl_user' => '',
+            'embedded_player' => 'ccskins/shared/players/player_native.php',
+            
+
             'contests' => array (),
             'counter' => '',
             'license' => '',

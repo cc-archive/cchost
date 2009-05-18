@@ -37,7 +37,7 @@ function cc_set_if_modified()
     $time = gmmktime(); 
     if( !isset($CC_GLOBALS[CC_IF_MOD_FLAG]) || ($CC_GLOBALS[CC_IF_MOD_FLAG] != $time) )
     {
-        $cfg = new CCConfigs();
+        $cfg =& CCConfigs::GetTable();
 
         $cnt = $cfg->CountRows('');
         if( !empty($cnt) ) { // bugfix: make sure we aren't doing a cfg import

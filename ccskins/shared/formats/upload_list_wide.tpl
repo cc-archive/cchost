@@ -47,7 +47,8 @@
         </div><!-- tags -->
 
         %if_not_empty(#R/fplay_url)%
-            <div class="playerdiv"><span class="playerlabel">%text(str_play)%</span><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a></div>
+            <div class="playerdiv"><span class="playerlabel">%text(str_play)%</span><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%">
+                <span style="display:none">%(#R/upload_name)%</span></a></div>
             <script type="text/javascript"> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
         %end_if%
 

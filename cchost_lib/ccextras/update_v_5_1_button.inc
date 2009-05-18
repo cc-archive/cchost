@@ -35,7 +35,7 @@ class v_5_1_button extends CCUpdate
         global $CC_GLOBALS;
         
         require_once('cchost_lib/cc-page.php');
-        $cfg = new CCConfigs();
+        $cfg =& CCConfigs::GetTable();
         $skin_settings = $cfg->GetConfig('skin-settings');
         $page =& CCPage::GetPage();        
         $page->vars['button_style'] =   /* the page is probably already built, so that will be used in cached headers */

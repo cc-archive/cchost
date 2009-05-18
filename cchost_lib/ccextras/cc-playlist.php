@@ -110,6 +110,10 @@ class CCPlaylistHV
 
     function OnSearchMeta(&$search_meta)
     {
+        $count = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_cart');
+        if( $count < 2 ) // dynamic playlist
+            return;
+            
         $search_meta[] = 
             array(
                 'template'   => 'search_playlists',
@@ -122,12 +126,15 @@ class CCPlaylistHV
 
     function OnFilterPlayURL( &$records ) 
     {
-        if( !cc_playlist_enabled() )
+        if( !cc_is_player_embedded() )
             return;
 
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('remote_files');
-        $remoting = !empty($settings['enable_streaming']);
+        global $CC_GLOBALS;
+        if( empty($CC_GLOBALS['embedded_player']) )
+        {
+            $CC_GLOBALS['embedded_player'] = 'ccskins/shared/players/player_none.php';
+        }
+        $is_native = $CC_GLOBALS['embedded_player'] == 'ccskins/shared/players/player_native.php';
         $c = count($records);
         $k = array_keys($records);
         for( $i = 0; $i < $c; $i++ )
@@ -142,15 +149,13 @@ class CCPlaylistHV
                 foreach( array('file_extra','file_format_info') as $f )
                     if( is_string($R[$f]) )
                         $R[$f] = unserialize($R[$f]);
-                if( !empty($R['file_format_info']['sr']) && 
+                if( $R['file_format_info']['media-type'] != 'audio' )
+                    continue;
+                if( !$is_native || (!empty($R['file_format_info']['sr']) && 
                     ($R['file_format_info']['format-name'] == 'audio-mp3-mp3') && 
-                    ($R['file_format_info']['sr'] == '44k') )
+                    ($R['file_format_info']['sr'] == '44k')) )
                 {
-                    if( !$remoting || empty($R['file_extra']['remote_url'] ) )
-                        $url = $R['download_url'];
-                    else
-                        $url = $R['file_extra']['remote_url'];
-                    $rec['fplay_url'] = $url;
+                    $rec['fplay_url'] = $R['download_url'];
                     break;
                 }
             }
@@ -315,6 +320,13 @@ EOF;
     }
 
 
+}
+
+function cc_is_player_embedded()
+{
+    global $CC_GLOBALS;
+
+    return $CC_GLOBALS['embedded_player'] != 'ccskins/shared/players/player_none.php';
 }
 
 function cc_playlist_enabled()

@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id$
+* $Id: update_v_5_openid.inc 12467 2009-04-29 05:09:20Z fourstones $
 *
 */
 
@@ -28,19 +28,21 @@ if( !defined('IN_CC_HOST') )
 
 /**
 */
-class v_5_openid2 extends CCUpdate
+class v_5_1_embed_play extends CCUpdate
 {
     function Update()
     {
-        if( $this->_table_exists('cc_tbl_openids') )
+        global $CC_GLOBAL;
+
+        if( empty($CC_GLOBALS['embededd_player']) )
         {
-            $this->_check_for_field('cc_tbl_openids','openid_show',"int(1)  NOT NULL default '0'");
+            $configs =& CCConfigs::GetTable();
+            $CC_GLOBALS['embedded_player'] = 
+            $config['embedded_player'] = 'ccskins/shared/players/player_native.php';
+            $configs->SaveConfig('config',$config,'',true);
         }
-        $cfg =& CCConfigs::GetTable();
-        $CC_GLOBALS['openid-type'] =    /* just to be safe, put it in the globals */
-        $arg['openid-type'] = true; /* this we'll write to disk */
-        $cfg->SaveConfig( 'config', $arg,'', true );
-        CCPage::Prompt('OpenID Flag is set');
+        CCPage::Prompt( _('Multiple embedded player installed') );
+
     }
 }
 

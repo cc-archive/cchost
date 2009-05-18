@@ -36,7 +36,9 @@ class CCImportForm extends CCNewUploadForm
 {
     function CCImportForm($uid)
     {
-        $this->CCNewUploadForm($uid);
+        $all_lics = CCDatabase::QueryItems('SELECT license_id FROM cc_tbl_licenses ORDER by license_name');
+        $all_lics = join(',',$all_lics);
+        $this->CCNewUploadForm($uid,true,$all_lics);
 
         $this->SetFormFieldItem( 'upload_file_name', 'formatter', 'importer');
         $this->SetFormFieldItem( 'upload_file_name', 'label', _('Path to file on this server') );

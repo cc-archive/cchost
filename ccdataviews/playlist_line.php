@@ -8,10 +8,11 @@
 function playlist_line_dataview() 
 {
     $urlf             = ccl('files') . '/';
-    $urll             = ccd('ccskins/shared/images/lics/small-'); 
     $user_sql         = cc_fancy_user_sql('user_real_name');
     $ccp              = ccl('people') . '/';
     $browse_ref_url   = url_args( ccl('playlist','browse'), 'upload=' );
+
+    $lic_logo = cc_get_license_logo_sql('small');
 
     $sql =<<<EOF
 SELECT 
@@ -20,7 +21,7 @@ SELECT
     upload_num_playlists,
     CONCAT( '{$ccp}', user_name ) as artist_page_url,
     CONCAT('{$browse_ref_url}', upload_id ) as playlist_browse_url,
-    CONCAT( '$urll', license_logo ) as license_logo_url, license_url, license_name,
+    {$lic_logo}, license_url, license_name,
     upload_contest
     %columns%
 FROM cc_tbl_uploads

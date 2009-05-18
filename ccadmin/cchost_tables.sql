@@ -250,6 +250,8 @@ CREATE TABLE cc_tbl_licenses (
   license_required mediumtext NOT NULL,
   license_prohibits mediumtext NOT NULL,
   license_logo varchar(255) NOT NULL default '',
+  license_img_small mediumtext NOT NULL,
+  license_img_big mediumtext NOT NULL,
   license_tag varchar(255) NOT NULL default '',
   license_strict int(4) NOT NULL default '0',
   license_text mediumtext NOT NULL,

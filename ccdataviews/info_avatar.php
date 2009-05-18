@@ -13,8 +13,8 @@ function info_avatar_dataview()
 
     $urlf = ccl('files') . '/';
     $urlp = ccl('people') . '/';
-    $urll = ccd('ccskins/shared/images/lics/'); 
     $avatar_sql = cc_get_user_avatar_sql();
+    $lic_logo = cc_get_license_logo_sql('big');
 
     $sql =<<<EOF
 SELECT 
@@ -25,7 +25,7 @@ SELECT
     user_name,
     $avatar_sql,
     CONCAT( '$urlp', user_name ) as artist_page_url,
-    CONCAT( '$urll', license_logo ) as license_logo_url,
+    {$lic_logo},
     license_url, license_name,
     upload_contest
     %columns%

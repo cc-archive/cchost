@@ -6,7 +6,7 @@
     required_args = ids
 [/meta]
 %%
-<!-- template playlist_2_nostyle -->
+<!-- template playlist_2_info -->
 %if_null(records)%
     %return%
 %end_if%

@@ -25,7 +25,7 @@ function _t_file_macros_print_num_playlists(&$T,&$A)
 function _t_file_macros_license_rdf(&$T,&$A)
 {
   ?><!-- 
-<rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:RDF xmlns="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 <Work rdf:about="">
   <dc:title><?= str_replace('--','',$A['record']['upload_name']) ?></dc:title>
 
@@ -64,7 +64,7 @@ function _t_file_macros_license_rdf(&$T,&$A)
         $pts = CC_split_tags($A['record']['license_permits']);
         foreach( $pts as $pt )
         {
-            ?>  <permits rdf:resource="http://web.resource.org/cc/<?= $pt ?>"></permits>
+            ?>  <permits rdf:resource="http://creativecommons.org/ns#<?= $pt ?>"></permits>
 <?
         }
     }
@@ -73,7 +73,7 @@ function _t_file_macros_license_rdf(&$T,&$A)
         $pts = CC_split_tags($A['record']['license_required']);
         foreach( $pts as $pt )
         {
-            ?>  <requires rdf:resource="http://web.resource.org/cc/<?= $pt ?>"></requires>
+            ?>  <requires rdf:resource="http://creativecommons.org/ns#<?= $pt ?>"></requires>
 <?
         }
     }

@@ -971,6 +971,14 @@ class CCPage extends CCSkin
                 $bc[] = array( 'url' => ccl('people',$CC_GLOBALS['user_name'] ),
                                       'text' => $CC_GLOBALS['user_real_name'] );
             }
+            elseif( $arg == 'global' || $arg == 'globalsettings' || $arg == 'global_settings' )
+            {
+                $bc[] = array( 'url' => ccl('admin','site','global'), 'text' => _('Global Settings') );
+            }
+            elseif( $arg == 'local' || $arg == 'localsettings' || $arg == 'local_settings' )
+            {
+                $bc[] = array( 'url' => ccl('admin','site','local'), 'text' => _('Manage Site') );
+            }
             elseif( $arg == 'forum' )
             {
                 $bc[] = array( 'url' => ccl('forum'), 'text' => 'str_forum' );

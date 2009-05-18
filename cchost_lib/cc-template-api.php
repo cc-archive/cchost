@@ -209,6 +209,11 @@ function cc_get_topic_name_slug($col='topic_name')
     return "LOWER(REPLACE({$col},' ','-'))";
 }
 
+function cc_get_license_logo_sql($size='big',$col='license_logo_url')
+{
+    return "license_img_{$size} as {$col}";
+}
+
 function cc_get_user_avatar_sql()
 {
     global $CC_GLOBALS;

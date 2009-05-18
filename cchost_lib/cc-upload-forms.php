@@ -103,17 +103,17 @@ class CCNewUploadForm extends CCUploadMediaForm
      * @param integer $userid The upload will be 'owned' by this user
      * @param integer $show_lic Set this to display license choices
      */
-    function CCNewUploadForm($userid, $show_lic = true)
+    function CCNewUploadForm($userid, $show_lic = true, $avail_lics='')
     {
         $this->CCUploadMediaForm($userid);
 
         $this->SetHiddenField('upload_date', date( 'Y-m-d H:i:s' ) );
 
-        if( $show_lic )
+        if( $show_lic && !empty($avail_lics) )
         {
-            require_once('cchost_lib/cc-license.php');
-            $licenses =& CCLicenses::GetTable();
-            $lics     = $licenses->GetEnabled();
+            $lics = split(',',$avail_lics);
+            $lics = "'" . join( "','",$lics) . "'";
+            $lics = CCDatabase::QueryRows("SELECT *, 0 as license_checked FROM cc_tbl_licenses WHERE license_id IN ({$lics})");
             $count    = count($lics);
             if( $count == 1 )
             {

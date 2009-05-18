@@ -34,7 +34,7 @@ class v_5_1_paging extends CCUpdate
     {
         require_once('cchost_lib/cc-page.php');
         global $CC_GLOBALS;
-        $cfg = new CCConfigs();
+        $cfg =& CCConfigs::GetTable();
         $skin_settings = $cfg->GetConfig('skin-settings');
         $page =& CCPage::GetPage();
         $page->vars['paging_style'] =   /* the page is probably already built, so that will be used in cached headers */

@@ -195,6 +195,40 @@ function do_add_row()
 </select>
 %end_macro%
 
+%macro(multi_checkbox)%
+<div %if_attr(field/class,class)%>
+%map(#opts,field/options)%
+%if_not_null(field/value)%
+    %map(#selval,field/value)%
+%else%
+    %map(#selval,'')%
+%end_if%
+%if_not_null(field/cols)%
+    %map(#cols,field/cols)%
+%else%
+    %map(#cols,1)%
+%end_if%
+<? $chunks = array_chunk($opts,count($opts)/$cols,true); ?>
+<table>
+<tr>
+%loop(#chunks,chunk)%
+    <td>
+        %loop(#chunk,opt)%
+           <? $selected = strpos(','.$selval.',', ','.$k_opt.',') === false ? '' : 'checked="checked"'; ?>
+           <div><input type="checkbox" %(#selected)%
+                     name="%(field/name)%[%(#k_opt)%]" 
+                      id="%(field/name)%[%(#k_opt)%]"></input>
+                      <label for="%(field/name)%[%(#k_opt)%]">%text(#opt)%</label>
+            </div>
+        %end_loop%
+    </td>
+%end_loop%
+</tr>
+</table>
+</div>
+%end_macro%
+
+
 <?
 
 function _suck_out_grid_row_name(&$row)

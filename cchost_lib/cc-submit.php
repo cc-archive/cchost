@@ -39,6 +39,11 @@ class CCAdminSubmitFormForm extends CCUploadForm
     {
         global $CC_GLOBALS;
 
+        $lics = CCDatabase::QueryRows('SELECT license_id,license_name FROM cc_tbl_licenses ORDER by license_name');
+        $licx = array();
+        foreach( $lics as $L )
+            $licx[$L['license_id']] = $L['license_name'];
+            
         $this->CCUploadForm();
         $fields = array( 
                     'enabled' =>
@@ -106,13 +111,24 @@ class CCAdminSubmitFormForm extends CCUploadForm
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE ),
 
+                    'licenses' =>
+                        array(
+                                'label' => _('Licenses'),
+                                'form_tip' => _('Select which licenses will be available on the form. NOTE this ' .
+                                              'NOT affect submit form with Remix Search enabled.') ,
+                                'formatter' => 'template',
+                                'macro' => 'multi_checkbox',
+                                'options' => $licx,
+                                'cols' => 2,
+                                'flags' => CCFF_POPULATE ),
+                    /*
                     'media_types' =>
                         array( 'label' => _('Media Type Allows'),
                                'form_tip'   => _("Comma separted list of allowable file type. Valid types are 'audio', 'video', 'image', 'archive'"),
                                'isarray'    => true,
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
-
+                    */
                     'action' =>
                         array( 'label' => _('Handler URL'),
                                'form_tip'   => _('Redirect this submission from the default Submit Form handler (advanced usage)'),
@@ -200,10 +216,8 @@ class CCSubmit
 
             if( !empty($extra) )
             {
-                $etc['url_extra'] = $extra;
+                $type['url_extra'] = $extra;
             }
-
-            $etc['suggested_tags'] = empty($type['suggested_tags']) ? '' : $type['suggested_tags'];
 
             $bc[] = array('url'=>ccl('submit'),'text'=>'str_submit_files');
             CCUser::AddUserBreadCrumbs($type['text'], $bc);
@@ -211,11 +225,11 @@ class CCSubmit
             $api = new CCMediaHost();
             if( $type['isremix'] )
             {
-                $api->SubmitRemix( $type['text'], $type['tags'], $type['form_help'], $etc );
+                $api->SubmitRemix( $type );
             }
             else
             {
-                $api->SubmitOriginal( $type['text'], $type['tags'], $type['form_help'], $username, $etc  );
+                $api->SubmitOriginal( $type, $username  );
             }
         }
         else
@@ -546,6 +560,15 @@ class CCSubmit
             }
         }
 
+        if( empty($values['licenses']) )
+        {
+            $values['licenses'] = 'attribution_3';
+        }
+        else
+        {
+            $values['licenses'] = join(',',array_keys($values['licenses']));
+        }
+        
         $form_types[$form_type_key] = $values;
         $form_types = $this->_sort_form_types($form_types,false);
         $configs =& CCConfigs::GetTable();

@@ -71,7 +71,7 @@ class CCAdminLicenseForm extends CCEditConfigForm
         $args = func_get_args();
         $row = $this->GetFormFieldItem( $name, 'license' );
         $page =& CCPage::GetPage();
-        $logourl = $page->URL('images/lics/'.$row['license_logo']);
+        $logourl = $row['license_img_big'];
         $checked = empty($value) ? '' : 'checked="checked"';
         $html =<<<EOF
 <input type="checkbox" id="{$name}" name="{$name}" {$checked} />
@@ -87,6 +87,57 @@ EOF;
     }
 }
 
+class CCEditLicensesForm extends CCForm
+{
+    function CCEditLicensesForm($id='')
+    {
+        $this->CCForm();
+        $meta = array(        
+            'license_id' => array( _('License ID'),  $id ? '' : _('This value must be unique'), 1 ),
+            'license_url' => array( _('URL to License Page'),  _(''), 1 ),
+            'license_name' => array( _('Display Name'),  _(''), 1 ),
+            'license_tag' => array( _('Tag'),  _('Tag to be assigned to uploads with this license.'), 1 ),
+            'license_img_small' => array( _('Small Logo'),  _('Fully qualified URL to small version of license image'), 1 ),
+            'license_img_big' => array( _('Big Logo'),  _('Fully qualified URL to big version of license image'), 1 ),
+            'license_text' => array( _('Description'),  _(''), 0 ),
+            );
+
+        $fields = array();
+        foreach( $meta as $K => $M )
+        {
+            $formatter = empty($id) || ($K != 'license_id') ? 'textedit' : 'statictext';
+            $fields[$K] = array(
+                    'label' => $M[0],
+                    'form_tip' => $M[1],
+                    'formatter' => $formatter,
+                    'flags' => CCFF_POPULATE | (empty($M[2]) ? 0 : CCFF_REQUIRED),
+                    );                    
+        }
+
+        $licattrs = array(
+            'license_permits' => array( _('Permits'),  _('List of attributeds premitted by this license.') ),
+            'license_required' => array( _('Required'),  _('List of attributes required by this license.')   ),
+            'license_prohibits' => array( _('Prohibits'),  _('List of attributes prohibited by this license.') ),
+            );
+
+        $attr = split(',','Reproduction,Distribution,DerivativeWorks,CommercialUse,Attribution,Notice,Sharing,ShareAlike');
+        $arrt = array_combine($attr,$attr);
+        foreach( $licattrs as $K => $LA )
+        {
+            $fields[$K] = array(
+                    'label' => $LA[0],
+                    'form_tip' => $LA[1],
+                    'formatter' => 'template',
+                    'macro' => 'multi_checkbox',
+                    'options' => $arrt,
+                    'cols' => 2,
+                    'flags' => CCFF_POPULATE,
+                    );                    
+        }
+
+        $this->AddFormFields($fields);
+    }
+}
 
 /**
 * License event handlers and API
@@ -94,6 +145,64 @@ EOF;
 */
 class CCLicense
 {
+    function Edit($license_id='')
+    {
+        require_once('cchost_lib/cc-page.php');
+        $page =& CCPage::GetPage();
+        $admin = new CCAdmin();
+        $title = empty($license_id) ? _('Add a License') : _("Edit Licenses");
+        $page->SetTitle($title);
+        $admin->BreadCrumbs(false,array( 'url' => '', 'text' => $title ));
+        $page->SetTitle($title);
+        $form = new CCEditLicensesForm($license_id);
+        $show = false;
+        if( empty($_POST['editlicenses']) )
+        {
+            $show = true;
+            if( !empty($license_id) )
+            {
+                $row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_licenses WHERE license_id=\''.$license_id.'\'');
+                $form->PopulateValues($row);
+            }
+        }
+        elseif( !$form->ValidateFields() )
+        {
+            $show = true;
+        }
+
+        if( $show )
+        {
+            $page->AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            $form->GetFormValues($values);
+            $licdb =& CCLicenses::GetTable();
+            foreach( array('license_permits','license_required','license_prohibits') as $LA )
+            {
+                if( empty($values[$LA]) )
+                {
+                    $values[$LA] = '';
+                }
+                else
+                {
+                    $keys = array_keys($values[$LA]);
+                    $values[$LA] = join(',',$keys);
+                }
+            }
+            if( empty($license_id) )
+            {
+                $licdb->Insert($values);
+            }
+            else
+            {
+                $values['license_id'] = $license_id;
+                $licdb->Update($values);
+            }
+            CCUtil::SendBrowserTo(ccl('license_menu'));            
+        }
+        
+    }
     /**
     * Event handler for {@link CC_EVENT_GET_MACROS}
     *
@@ -167,16 +276,16 @@ class CCLicense
     */
     function OnAdminMenu(&$items, $scope)
     {
-        if( $scope == CC_GLOBAL_SCOPE )
+        if( $scope != CC_GLOBAL_SCOPE )
             return;
 
         $items += array( 
             'licenses'=> array( 'menu_text'  => _('License'),
                                 'menu_group' => 'configure',
                                 'access'     => CC_ADMIN_ONLY,
-                                'help'       => _('Pick which licenses a user is allowed to select from'),
+                                'help'       => _('Edit the licenses in the system'),
                                 'weight'     => 16,
-                                'action'     => ccl('admin','license') )
+                                'action'     => ccl('license_menu') )
                         );
     }
 
@@ -205,6 +314,8 @@ class CCLicense
     {
         CCEvents::MapUrl( 'admin/license',  array('CCLicense', 'Admin'), 
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show admin license form'), CC_AG_MISC_ADMIN   );
+        CCEvents::MapUrl( 'admin/licenses',  array('CCLicense', 'Edit'), 
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _('Show edit licenses form'), CC_AG_MISC_ADMIN   );
     }
 
     /**

@@ -129,7 +129,7 @@
     %end_loop%
   %else%
     <!-- editing extras -->
-    %(edit_extra)%
+    %call('extras_drop')%
   %end_if%
 </div>
 

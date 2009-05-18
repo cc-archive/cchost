@@ -140,6 +140,10 @@ class CCPool
 {
     function OnSearchMeta(&$search_meta)
     {
+        $count = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_pool_item');
+        if( empty($count) )
+            return;
+            
         $search_meta[] = array
                         (
                             'template' => 'search_pool_items',

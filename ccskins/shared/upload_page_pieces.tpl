@@ -1,5 +1,8 @@
 <!-- template upload_page_pieces.tpl -->
-
+%%
+  Note, this template assumes that xmlns cc and dc
+  are defined at a higher level (like at page.tpl)
+%%
 %macro(upload_page_tbl_layout)%
     <style>
         table#upload_page_table td {
@@ -20,7 +23,7 @@
             <td id="upload_middle_td">
                 %call(upload_page_middle)%
             </td>
-            <td id="upload_sidebar_td" xmlns:dc="http://purl.org/dc/elements/1.1/" >
+            <td id="upload_sidebar_td">
                 %call(upload_page_sidebar)%
             </td>
         </tr>
@@ -35,7 +38,7 @@
             %call(upload_page_middle)%
         </div>
     </div><!-- upload_middle/wrapper -->
-    <div id="upload_sidebar_box" xmlns:dc="http://purl.org/dc/elements/1.1/" >
+    <div id="upload_sidebar_box">
         %call(upload_page_sidebar)%
     </div><!-- sidebar box -->
     <div id="upload_menu_box">
@@ -143,7 +146,7 @@
     <div class="box" id="license_info"
         %if_not_null(#R/files/0/file_extra/sha1)% about="urn:sha1:%(#R/files/0/file_extra/sha1)%" %end_if% >
       <p>
-        <div id="license_info_t" xmlns:cc="http://creativecommons.org/ns#" >
+        <div id="license_info_t">
             "<a href="%(#R/file_page_url)%" rel="cc:attributionURL"><span href="http://purl.org/dc/dcmitype/Sound" rel="dc:type" property="dc:title">%(#R/upload_name)%</span></a>" <br />
             %text(str_by)%
             <span property="cc:attributionName"> %(#R/user_real_name)%</span><br /><br />

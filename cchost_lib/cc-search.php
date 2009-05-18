@@ -121,6 +121,8 @@ class CCSearch
         if( empty($_REQUEST['search_in']) )
             die('missing "search in" field'); // I think this is a hack attempt
 
+        $maxview = empty($CC_GLOBALS['max_search_overview']) ? 5 : $CC_GLOBALS['max_search_overview'];
+        
         $what = CCUtil::StripText($_REQUEST['search_in']);
         $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
@@ -153,7 +155,7 @@ class CCSearch
                 $query = new CCQuery();
                 $grp_type = $meta['datasource'] == $meta['group'] ? '' : '&type=' . $meta['group'];
                 $qs = "search=$search_text&datasource={$meta['datasource']}{$grp_type}&t={$meta['template']}"; 
-                $q = $qs . "&limit=5&f=html&noexit=1&nomime=1";
+                $q = $qs . "&limit={$maxview}&f=html&noexit=1&nomime=1";
                 if( empty($search_type) )
                 {
                     $search_type_arg = '';
@@ -168,7 +170,7 @@ class CCSearch
                 $query->Query($args);
                 $html = ob_get_contents();
                 ob_end_clean();
-                $link = (count($query->records) == 5) 
+                $link = (count($query->records) == $maxview) 
                     ? url_args(ccl('search'),"search_text=$search_text&search_in={$meta['group']}{$search_type_arg}") : '';
                 $total = $query->dataview->GetCount();
                 $grand_total += $total;
@@ -304,6 +306,13 @@ class CCSearch
                        'form_tip'   => _('Check this to show users a Google search form'),
                        'value'      => '',
                        'formatter'  => 'checkbox',
+                       'flags'      => CCFF_POPULATE );
+            $fields['max_search_overview'] =
+               array(  'label'      => _('Search Return Results'),
+                       'form_tip'   => _('Maximum number of results in search overview'),
+                       'value'      => '',
+                       'class'      => 'cc_form_input_short',
+                       'formatter'  => 'textedit',
                        'flags'      => CCFF_POPULATE );
         }
 

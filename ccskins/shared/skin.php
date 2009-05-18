@@ -9,6 +9,7 @@ $A['html_form']                = 'html_form.php/html_form';
 $A['horizontal_form_fields']   = 'form_fields.tpl/horizontal_form_fields';
 $A['horizontal_form_fields']   = 'form_fields.tpl/horizontal_form_fields';
 $A['flat_grid_form_fields']    = 'form_fields.tpl/flat_grid_form_fields';
+$A['multi_checkbox']           = 'form_fields.tpl/multi_checkbox';
 $A['print_html_content']       = 'util.php/print_html_content';
 $A['hide_upload_form']         = 'util.php/hide_upload_form';
 $A['popup_background']         = 'popup_background.php';
@@ -24,9 +25,9 @@ $A['recommends']               = 'util.php/recommends';
 $A['flash_player']             = 'util.php/empty';
 
 $A['admin_menu_page'] = 'admin.php/print_admin_menu';
-
 $A['popular_tags']   = 'tags.xml/popular_tags';
-$A['license_choice'] = 'license.xml/license_choice';
+
+$A['license_choice']  = 'license_editing.tpl/license_choice';
 
 $A['license_rdf']          = 'file_macros.php/license_rdf';
 $A['print_howididit_link'] = 'file_macros.php/print_howididit_link';

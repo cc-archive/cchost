@@ -10,7 +10,7 @@ function list_narrow_dataview()
 {
     $urlf = ccl('files') . '/';
     $urlp = ccl('people') . '/';
-    $urll = ccd('ccskins/shared/images/lics/small-'); 
+    $lic_logo = cc_get_license_logo_sql('small');
 
     $sql =<<<EOF
 SELECT 
@@ -21,7 +21,7 @@ SELECT
     user_real_name,
     user_name,
     CONCAT( '$urlp', user_name ) as artist_page_url,
-    CONCAT( '$urll', license_logo ) as license_logo_url,
+    {$lic_logo},
     license_url,
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date_format,
     upload_contest
