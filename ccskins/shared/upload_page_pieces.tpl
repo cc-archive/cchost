@@ -147,7 +147,7 @@
         %if_not_null(#R/files/0/file_extra/sha1)% about="urn:sha1:%(#R/files/0/file_extra/sha1)%" %end_if% >
       <p>
         <div id="license_info_t">
-            "<a href="%(#R/file_page_url)%" rel="cc:attributionURL"><span href="http://purl.org/dc/dcmitype/Sound" rel="dc:type" property="dc:title">%(#R/upload_name)%</span></a>" <br />
+            "<a href="%(#R/file_page_url)%" rel="cc:attributionURL"><span %if_attr(#R/dcmi,href)% property="dc:title" %if_attr(#R/dcmirel,rel)%>%(#R/upload_name)%</span></a>" <br />
             %text(str_by)%
             <span property="cc:attributionName"> %(#R/user_real_name)%</span><br /><br />
             %(#R/year)% - %text(str_lic)%<br />

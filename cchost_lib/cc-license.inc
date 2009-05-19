@@ -96,7 +96,8 @@ class CCEditLicensesForm extends CCForm
             'license_id' => array( _('License ID'),  $id ? '' : _('This value must be unique'), 1 ),
             'license_url' => array( _('URL to License Page'),  _(''), 1 ),
             'license_name' => array( _('Display Name'),  _(''), 1 ),
-            'license_tag' => array( _('Tag'),  _('Tag to be assigned to uploads with this license.'), 1 ),
+            'license_tag' => array( _('Tag'),  _('Tag(s) to be assigned to uploads with this license. Seperate multiple tags with commas.'), 1 ),
+            'license_jurisdiction' => array( _('Jurisdiction'),  _(''), 0 ),
             'license_img_small' => array( _('Small Logo'),  _('Fully qualified URL to small version of license image'), 1 ),
             'license_img_big' => array( _('Big Logo'),  _('Fully qualified URL to big version of license image'), 1 ),
             'license_text' => array( _('Description'),  _(''), 0 ),
@@ -256,7 +257,9 @@ class CCLicense
             $record['upload_license'] = CCDatabase::QueryItem('SELECT upload_license FROM cc_tbl_uploads WHERE upload_id='.$record['upload_id']);
         $licenses =& CCLicenses::GetTable();
         $where['license_id'] = $record['upload_license'];
-        $tags[] = $licenses->QueryItem('license_tag',$where);
+        $lic_tags = $licenses->QueryItem('license_tag',$where);
+        foreach( $lic_tags as $T )
+            $tags[] = trim($T);
     }
 
     function OnFileDone(&$file)

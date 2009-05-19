@@ -107,13 +107,9 @@ function cc_get_submit_types($allow_remix=false,$default_title='')
         if( empty($types['quota_reached']) && ($allow_remix || !$typeinfo['isremix']) )
             $submit_types[$typekey] = $typeinfo['submit_type'];
     }
-
+    $alternates = $sapi->GetAlternates();
     return array_merge(    array( '' => $default_title ),
-                        $submit_types, 
-                        array( 'alternate_mix' => _('Alternate mix'),
-                               'rough_mix'  => _('Rough mix'),
-                               'multiple_formats'  => _('Alternate format'),
-                               'preview' => _('Preview') ));
+                        $submit_types, $alternates );
 }
 
 function cc_query_default_args($required_args=array())

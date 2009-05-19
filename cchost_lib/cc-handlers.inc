@@ -86,6 +86,7 @@ CCEvents::AddHandler(CC_EVENT_GET_MACROS,   array( 'CCLicense' , 'OnGetMacros'),
 CCEvents::AddHandler(CC_EVENT_GET_SYSTAGS,  array( 'CCLicense',  'OnGetSysTags'), 'cchost_lib/cc-license.inc' );
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,   array( 'CCLicense',  'OnAdminMenu'), 'cchost_lib/cc-license.inc' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCLicense',  'OnMapUrls'), 'cchost_lib/cc-license.inc' );
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_PAGE,         array( 'CCLicenseHV', 'OnFilterUploadPage'),'cchost_lib/cc-license.php' );
 
 CCEvents::AddHandler(CC_EVENT_GET_CONFIG_FIELDS,  array( 'CCLogin' , 'OnGetConfigFields'), 'cchost_lib/cc-login.php' );
 CCEvents::AddHandler(CC_EVENT_MAIN_MENU,  array( 'CCLogin',  'OnBuildMenu'), 'cchost_lib/cc-login.php' );

@@ -148,6 +148,74 @@ class CCAdminSubmitFormForm extends CCUploadForm
 
 }
 
+class CCSubmitAlternateTypesForm extends CCGridForm
+{
+    function CCSubmitAlternateTypesForm()
+    {
+        $this->CCGridForm();
+        $heads = array(_('Delete'), _('Tag'), _('Display Text') );
+        $this->SetColumnHeader($heads);
+        $this->SetFormHelp(_('These alternate types will be available on the "Manage Files" forms'));
+        $configs =& CCConfigs::GetTable();
+        $types = $configs->GetConfig('alt_submit_types');
+        if( empty($types) )
+        {
+            $types[] = array(
+                'tag' => 'alternate',
+                'text' => _('Alternate mix')
+                );
+        }
+        
+        $keys = array_keys($types);
+        $c = count($keys);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $name = "mi[{$i}]";
+            $E =& $types[$keys[$i]];
+
+            $a = array(  
+                array(
+                    'element_name'  => "{$name}[delete]",
+                    'value'      => '',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE),
+                array(
+                    'element_name'  => "{$name}[tag]",
+                    'value'      => $E['tag'],
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED),
+                array(
+                    'element_name'  => "{$name}[text]",
+                    'value'      => $E['text'],
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED),
+                );
+
+            $this->AddGridRow($name,$a);
+        }
+
+        $S = 'new[%i%]';
+        $a = array(
+                array(
+                    'element_name'  => "{$S}[delete]",
+                    'value'      => '',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE),
+                array(
+                    'element_name'  => "{$S}[tag]",
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED),
+                array(
+                    'element_name'  => "{$S}[text]",
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_REQUIRED),
+                );
+
+            $this->AddMetaRow($a, _('Add Type') );
+        
+    }
+}
+
 /**
 * Event handlers for Submit forms
 */
@@ -157,6 +225,77 @@ class CCSubmit
         MAPPED TO URLS
     -------------------------------*/
 
+    function Alternate()
+    {
+        $page =& CCPage::GetPage();
+        $title = _('Edit Alternate Submit Types');
+        $page->SetTitle($title);
+        $this->_build_bread_crumb_trail($title);
+        $form = new CCSubmitAlternateTypesForm();
+        if( empty($_POST['submitalternatetypes']) || !$form->ValidateFields() )
+        {
+            $page->AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            $types = CCUtil::Strip($_POST['mi']);
+            $newtypes = CCUtil::Strip($_POST['new']);
+            if( !empty($newtypes) )
+            {
+                $types = array_merge($types,$newtypes);
+            }
+            $save_these = array();
+            foreach( $types as $T )
+            {
+                if( !empty($T['delete']) )
+                    continue;
+                if( !empty($T['tag']) )
+                    $save_these[] = $T;
+            }
+            $configs =& CCConfigs::GetTable();
+            $configs->SaveConfig('alt_submit_types',$save_these,'',false);
+            $url = ccl('admin','submit','alternate');
+            $link = "<a href=\"{$url}\">{$title}</a>";
+            $msg = array( _('str_changes_saved_goto_s'), $link );
+            $page->Prompt($msg);
+
+        }
+        
+    }
+
+    function GetAlternates()
+    {
+        $configs =& CCConfigs::GetTable();
+        $alts = $configs->GetConfig('alt_submit_types');
+        $formatted = array();
+        foreach( $alts as $A )
+            $formatted[$A['tag']] = $A['text'];
+        return $formatted;
+    }
+
+    function GetSubmitLicenses($formatted = false)
+    {
+        $types = $this->GetSubmitTypes();
+        $lics = array();
+        foreach( $types as $typekey => $typeinfo )
+        {
+            if( empty($types['quota_reached'])  )
+                $submit_types[$typekey] = $typeinfo['submit_type'];
+            $lics[] = $typeinfo['licenses'];
+        }
+        $lics = "'" . join("','",array_unique(split(',',join(',',$lics)))) . "'";
+        $lics = CCDatabase::QueryRows(
+            "SELECT license_id,license_name FROM cc_tbl_licenses WHERE license_id IN ({$lics})");
+
+        if( !$formatted )
+            return $lics;
+        
+        $formatted = array();
+        foreach( $lics as $L )
+            $formatted[$L['license_id']] = $L['license_name'];
+        return $formatted;
+    }
+    
     /**
     * Handles /remix URL
     *
@@ -614,6 +753,10 @@ class CCSubmit
 
         CCEvents::MapUrl( ccp('admin','submit'), array('CCSubmit','Admin'),    
             CC_ADMIN_ONLY, ccs(__FILE__), '', _("Dislays 'Manage Submit Forms' form"), 
+            CC_AG_SUBMIT_FORM );
+
+        CCEvents::MapUrl( ccp('admin','submit','alternate'), array('CCSubmit','Alternate'),    
+            CC_ADMIN_ONLY, ccs(__FILE__), '', _("Dislays 'Manage Alternate Submit Types Forms' form"), 
             CC_AG_SUBMIT_FORM );
 
         CCEvents::MapUrl( ccp('admin','editsubmitform'), array('CCSubmit','EditForm'),    

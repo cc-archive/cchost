@@ -374,9 +374,7 @@ class CCCollab
 
         $collab_users = $this->_get_collab_users($collab_id);
         list( $is_owner, $is_member, $is_confirmed ) = $this->_get_user_acccess($collab_row,$collab_users);
-        require_once('cchost_lib/cc-license.php');
-        $licenses =& CCLicenses::GetTable();
-        $lics     = $licenses->GetEnabled();
+        $lics     = $this->_get_licenses();
 
         $args = array(
                 'is_owner'  => $is_owner,
@@ -385,11 +383,17 @@ class CCCollab
                 'collab'    => $collab_row,
                 'lics'      => $lics,
                 );
-
         CCPage::PageArg( 'collab', $args, 'collab_view' );
         $this->_build_bread_crumb_trail($collab_row['collab_name'] );
     }
 
+    function _get_licenses()
+    {
+        require_once('cchost_lib/cc-submit.php');
+        $sapi = new CCSubmit();
+        return $sapi->GetSubmitLicenses();
+    }
+    
     /**
     * @access private
     */

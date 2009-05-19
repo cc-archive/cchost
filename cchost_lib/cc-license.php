@@ -60,34 +60,53 @@ class CCLicenses extends CCTable
             $_table = new CCLicenses();
         return( $_table );
     }
+}
 
-    /**
-    * Get rows with enabled flag turned on (this is bogus and will change)
-    *
-    * @returns array $rows Returns CCLicense table object rows
-    */
-    function GetEnabled()
+class CCLicenseHV
+{
+    function OnFilterUploadPage(&$rows)
     {
-        $configs =& CCConfigs::GetTable();
-        $licenses = $configs->GetConfig('licenses');
-        if( empty($licenses) )
+        $keys = array_keys($rows);
+        $c = count($keys);
+        for( $i = 0; $i < $c; $i++ )
         {
-            $rows = $this->QueryRows("license_id = 'attribution'");
-            return($rows);
+            $R =& $rows[$keys[$i]];
+            $fkeys = array_keys($R['files']);
+            $fc = count($fkeys);
+            $dcmi = null;
+            for( $n = 0; $n < $fc; $n++ )
+            {
+                $F =& $R['files'][$fkeys[$n]];
+                if( !empty($F['file_format_info']['media-type']) )
+                {
+                    switch( $F['file_format_info']['media-type'] )
+                    {
+                        case 'audio':
+                            $dcmi = 'Sound';
+                            break;
+                        case 'graphic':
+                            $dmci = 'Image';
+                            break;
+                        case 'video':
+                            $dmci = 'MovingImage';
+                            break;
+                        case 'archive':
+                            $dcmi = 'Collection';
+                            break;
+                        case 'document':
+                            $dcmi = 'Text';
+                            break;
+                    }
+                }
+                if( !empty($dcmi) )
+                    break;
+            }
+            if( !empty($dcmi) )
+            {
+                $R['dcmi'] = "http://purl.org/dc/dcmitype/" . $dcmi;
+                $R['dcmirel'] = "dc:type";
+            }
         }
-        $where = array();
-        foreach($licenses as $lic => $on )
-        {
-            if( $on )
-                $where[] = "(license_id = '$lic')";
-        }
-        $where = implode(' OR ' ,$where);
-        $rows = $this->QueryRows($where);
-        if( empty($rows) )
-            $rows = $this->QueryRows("license_id = 'attribution'");
-        if( !empty($rows) )
-            $rows[0]['license_checked'] = true;
-        return( $rows );
     }
 }
 
