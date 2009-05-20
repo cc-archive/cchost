@@ -17,6 +17,8 @@ function cc_filter_std(&$records,&$dataview_info)
                     CC_EVENT_FILTER_RATINGS_STARS, CC_EVENT_FILTER_DOWNLOAD_URL,
                     CC_EVENT_FILTER_UPLOAD_MENU, CC_EVENT_FILTER_NUM_FILES, ) as $e )
     {
+        global $cc_dont_eat_std_filters;
+        
         if( !in_array( $e, $dataview_info['e'] ) )
             continue;
 
@@ -183,7 +185,8 @@ function cc_filter_std(&$records,&$dataview_info)
 
         } // for each record
 
-        $dataview_info['e'] = array_diff( $dataview_info['e'], array( $e ) );
+        if( empty($cc_dont_eat_std_filters) )
+            $dataview_info['e'] = array_diff( $dataview_info['e'], array( $e ) );
 
     } // foreach event sent in
 
