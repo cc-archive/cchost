@@ -551,6 +551,8 @@ EOF;
 
         if( ($mask & $row['forum_post_access']) != 0 )
             $this->_thread_commands($row,$thread_id);
+
+        CCPage::PageArg('topic_thread_id',$thread_id);
         
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
@@ -590,7 +592,6 @@ EOF;
         }
 
         CCPage::PageArg('thread_commands',$commands);
-        CCPage::PageArg('topic_thread_id',$thread_id);
     }
 
     function User($user_name='')
