@@ -65,7 +65,19 @@ function _t_util_print_forms(&$T,&$A)
 function _t_util_disable_submit_button(&$T,&$A)
 {
     ?>
-<script type="text/javascript"> if( $('form_submit') ) { $('form_submit').disabled = true; } </script>
+<script type="text/javascript">
+    if( $('form_submit') )
+    {
+        var do_disable = true;
+        CC$$('.remix_checks').each( function(rc) {
+                if( rc.checked )
+                {
+                    do_disable = false;
+                }
+            });
+        $('form_submit').disabled = do_disable;
+    }
+</script>
     <?
 }
 
