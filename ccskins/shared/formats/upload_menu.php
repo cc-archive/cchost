@@ -140,10 +140,16 @@ function _t_upload_menu_init(&$T,&$A)
     $mi = array();
     $mi['action'] = 'javascript:// noted';
     $saws = array( array( 'remix',    $T->String('str_trackback_type_remix')),
-                   array( 'podcast',  $T->String('str_trackback_type_podcast')),
                    array( 'video',    $T->String('str_trackback_type_video')),
                    array( 'web',      $T->String('str_trackback_type_web')),
-                   array( 'album',    $T->String('str_trackback_type_album'), ) );
+                   array( 'album',    $T->String('str_trackback_type_album')),
+                   );
+
+    if( !empty($GLOBALS['strings-profile']) && ($GLOBALS['strings-profile'] == 'audio') )
+    {
+        $saws[] = array( 'podcast',  $T->String('str_trackback_type_podcast'));
+    }
+    
     $url = "upload_trackback('{$R['upload_id']}', '";
     foreach( $saws as $saw )
     {
