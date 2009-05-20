@@ -460,6 +460,7 @@ class CCSubmit
                     'action' => '',
                     'logo' => 'submit-remix.gif',
                     'type_key' => 'remix',
+                    'licenses' => 'attribution_3,cczero',
                     ),
                 'samples' => array (
                     'enabled' => 1,
@@ -478,6 +479,7 @@ class CCSubmit
                     'action' => '',
                     'logo' => 'submit-sample.gif',
                     'type_key' => 'samples',
+                    'licenses' => 'attribution_3,cczero',
                     ),
                 'fullmix' => array (
                     'enabled' => '1',
@@ -496,6 +498,7 @@ class CCSubmit
                     'action' => '',
                     'logo' => 'submit-original.gif',
                     'type_key' => 'fullmix',
+                    'licenses' => 'attribution_3,cczero',
                     ),
             );
         $configs =& CCConfigs::GetTable();

@@ -49,7 +49,6 @@ function cc_get_lic_fields_2_5()
                        'license_img_small'  => $sm .  'by.png',
                        'license_img_big'    => $big . 'by.png',
                        'license_tag'        => 'attribution',
-                       'license_enabled'    => false,
                        'license_strict'     => 10,
                        'license_text'       => _('<strong>Attribution</strong>: People can copy, distribute, perform, display, transform and make money from your work for any purpose as long they give you credit (attribution).')
                        ),
@@ -63,7 +62,6 @@ function cc_get_lic_fields_2_5()
                        'license_img_big'    => $big . 'by-nc.png',
                        'license_logo'       => 'by-nc.png',
                        'license_tag'        => 'non_commercial',
-                       'license_enabled'    => false,
                        'license_strict'     => 20,
                        'license_text'       => _('<strong>Attribution Noncommercial</strong>: People can copy, distribute, perform, display and transform your work for any purpose as long they give you credit (attribution). People may <i>not</i> use your work for commercial purposes.')
                        ),
@@ -77,7 +75,6 @@ function cc_get_lic_fields_2_5()
                        'license_img_big'    => $big . 'by-sa.png',
                        'license_logo'       => 'by-sa.png',
                        'license_tag'        => 'share_alike',
-                       'license_enabled'    => false,
                        'license_strict'     => 90,
                        'license_text'       => _('<strong>Attribution Share Alike</strong>: People can copy, distribute, perform, display, transform and make money from your work for any purpose as long they give you credit (attribution). If someone  alters, transforms, or builds upon this work, they have to distribute the resulting work under this same license.')
                        ),
@@ -91,7 +88,6 @@ function cc_get_lic_fields_2_5()
                        'license_img_big'    => $big . 'by-nd.png',
                        'license_logo'       => 'by-nd.png',
                        'license_tag'        => 'no_derivitives',
-                       'license_enabled'    => false,
                        'license_strict'     => 30,
                        'license_text'       => _('<strong>Attribution NoDerivatives</strong>: People can copy, distribute, perform, and display your work "as is" (without changes) for any purpose (e.g. file sharing) as long they give you credit (attribution).')
                        ),
@@ -105,7 +101,6 @@ function cc_get_lic_fields_2_5()
                        'license_img_big'    => $big . 'by-nc-sa.png',
                        'license_logo'       => 'by-nc-sa.png',
                        'license_tag'        => 'non_commercial_share_alike',
-                       'license_enabled'    => false,
                        'license_strict'     => 90,
                        'license_text'       => _('<strong>Attribution Noncommercial Share-Alike</strong>: People can copy, distribute, perform, display, transform your work for <b>non commercial purposes only</b> as long they give you credit (attribution). If someone  alters, transforms, or builds upon this work, they have to distribute the resulting work under this same license.')
                        ),
@@ -119,7 +114,6 @@ function cc_get_lic_fields_2_5()
                        'license_img_big'    => $big . 'by-nc-nd.png',
                        'license_logo'       => 'by-nc-nd.png',
                        'license_tag'        => 'non_commercial_no_derivs',
-                       'license_enabled'    => false,
                        'license_strict'     => 40,
                        'license_text'       => _('<strong>Attribution Noncommercial No Derivatives</strong>: People can copy, distribute, perform, display, your work "as is" (without modifcations) for <b>non commercial purposes only</b> as long they give you credit (attribution).')
                        ),
@@ -152,7 +146,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_big'    => $big . 'by-3.png',
                        'license_logo'       => 'by-3.png',
                        'license_tag'        => 'attribution',
-                       'license_enabled'    => true,
                        'license_text'       => _('<strong>Attribution</strong> 3.0: People can copy, distribute, perform, display, transform and make money from your work for any purpose as long they give you credit (attribution).')
                        ),
                 array( 'license_id'         => 'noncommercial_3', 
@@ -165,7 +158,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_big'    => $big . 'by-nc-3.png',
                        'license_logo'       => 'by-nc-3.png',
                        'license_tag'        => 'non_commercial',
-                       'license_enabled'    => true,
                        'license_text'       => _('<strong>Attribution Noncommercial</strong>  3.0: People can copy, distribute, perform, display and transform your work for any purpose as long they give you credit (attribution). People may <i>not</i> use your work for commercial purposes.')
                        ),
                 array( 'license_id'         => 'share-alike_3'   , 
@@ -178,7 +170,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_big'    => $big . 'by-sa-3.png',
                        'license_logo'       => 'by-sa-3.png',
                        'license_tag'        => 'share_alike',
-                       'license_enabled'    => true,
                        'license_text'       => _('<strong>Attribution Share Alike</strong>  3.0: People can copy, distribute, perform, display, transform and make money from your work for any purpose as long they give you credit (attribution). If someone  alters, transforms, or builds upon this work, they have to distribute the resulting work under this same license.')
                        ),
                 array( 'license_id'         => 'noderives_3'   , 
@@ -191,7 +182,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_big'    => $big . 'by-nd-3.png',
                        'license_logo'       => 'by-nd-3.png',
                        'license_tag'        => 'no_derivitives',
-                       'license_enabled'    => false,
                        'license_text'       => _('<strong>Attribution NoDerivatives</strong>  3.0: People can copy, distribute, perform, and display your work "as is" (without changes) for any purpose (e.g. file sharing) as long they give you credit (attribution).')
                        ),
                 array( 'license_id'         => 'by-nc-sa_3'   , 
@@ -204,7 +194,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_big'    => $big . 'by-nc-sa-3.png',
                        'license_logo'       => 'by-nc-sa-3.png',
                        'license_tag'        => 'non_commercial_share_alike',
-                       'license_enabled'    => true,
                        'license_text'       => _('<strong>Attribution Noncommercial Share-Alike</strong>  3.0: People can copy, distribute, perform, display, transform your work for <b>non commercial purposes only</b> as long they give you credit (attribution). If someone  alters, transforms, or builds upon this work, they have to distribute the resulting work under this same license.')
                        ),
                 array( 'license_id'         => 'by-nc-nd_3'   , 
@@ -217,7 +206,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_big'    => $big . 'by-nc-nd-3.png',
                        'license_logo'       => 'by-nc-nd-3.png',
                        'license_tag'        => 'non_commercial_no_derivs',
-                       'license_enabled'    => false,
                        'license_text'       => _('<strong>Attribution Noncommercial No Derivatives</strong>  3.0: People can copy, distribute, perform, display, your work "as is" (without modifcations) for <b>non commercial purposes only</b> as long they give you credit (attribution).')
                        ),
                 array( 'license_id'         => 'sampling'   , 
@@ -230,7 +218,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_big'    => $big . 'sampling.png',
                        'license_logo'       => 'sampling.png',
                        'license_tag'        => 'sampling',
-                       'license_enabled'    => false,
                        'license_text'       => _('<strong>Sampling</strong>: People can take and transform <strong>pieces</strong> of your work for any purpose other than advertising, which is prohibited. Copying and distribution of the <strong>entire work</strong> is also prohibited.')
                        ),
                  array( 'license_id'        => 'sampling+',
@@ -242,7 +229,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_small'  => $sm .  'sampling_plus.png',
                        'license_img_big'    => $big . 'sampling_plus.png',
                        'license_tag'        => 'sampling_plus',
-                       'license_enabled'    => false,
                        'license_logo'       => 'sampling_plus.png',
                        'license_text'       => _('<strong>Sampling Plus</strong>: People can take and transform <strong>pieces</strong> of your work for any purpose other than advertising, which is prohibited. <strong>Noncommercial</strong> copying and distribution (like file-sharing) of the <strong>entire work</strong> are also allowed. Hence, "<strong>plus</strong>".')
                        ),
@@ -252,7 +238,6 @@ function cc_get_lic_fields_3_0()
                        'license_permits'    => 'Distribution,DerivativeWorks,Reproduction',
                        'license_prohibits'  => 'CommercialUse',
                        'license_required'   => 'Attribution,Notice',
-                       'license_enabled'    => false,
                        'license_tag'        => 'nc_sampling_plus',
                        'license_img_small'  => $sm .  'nc-sampling_plus.png',
                        'license_img_big'    => $big . 'nc-sampling_plus.png',
@@ -268,7 +253,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_small'  => 'http://i.creativecommons.org/l/zero/1.0/80x15.png',
                        'license_img_big'    => 'http://i.creativecommons.org/l/zero/1.0/88x31.png',
                        'license_tag'        => 'cczero',
-                       'license_enabled'    => false,
                        'license_text'       => _('<strong>CC0</strong>: Use this if you wish to waive all rights to your work. Once these rights are waived, you cannot reclaim them. In particular, if you are an artist or author who depends upon copyright for your income, Creative Commons <b>does not recommend</b> that you use this tool.')
                        ),
                  array( 'license_id'        => 'publicdomain' ,
@@ -281,7 +265,6 @@ function cc_get_lic_fields_3_0()
                        'license_img_big'    => $big . 'pd.png',
                        'license_logo'       => 'pd.png',
                        'license_tag'        => 'public_domain',
-                       'license_enabled'    => false,
                        'license_text'       => _('<strong>Public Domain</strong>: This choice suggests you want to dedicate your work to the public domain, the commons of information and expression where <strong>nothing is owned and all is permitted</strong>. The Public Domain Dedication is not a license. By using it, you do not simply carve out exceptions to your copyright; you grant your entire copyright to the public without condition. This grant is <strong>permanent and irreversible</strong>.')
                        ),
                  );
@@ -307,9 +290,6 @@ function cc_install_licenses( $lic_infos = array(  '3_0' ), $nuke_db = true )
         $active = array();
         foreach( $default_licenses as $lic )
         {
-            if( $lic['license_enabled'] )
-                $active[] = $lic['license_id'];
-            unset($lic['license_enabled']);
             if( !$nuke_db )
             {
                 $key['license_id'] = $lic['license_id'];
@@ -321,13 +301,6 @@ function cc_install_licenses( $lic_infos = array(  '3_0' ), $nuke_db = true )
         }
     }
 
-    if( $nuke_db )
-    {
-        require_once('cchost_lib/cc-config.php');
-        
-        $configs =& CCConfigs::GetTable();
-        $configs->SaveConfig('licenses',$active,CC_GLOBAL_SCOPE,false);
-    }
 }
 
 ?>

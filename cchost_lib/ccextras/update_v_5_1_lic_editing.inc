@@ -36,11 +36,13 @@ class v_5_1_lic_editing extends CCUpdate
         
         $this->_check_for_field('cc_tbl_licenses','license_img_small', 'varchar(255)');
         $this->_check_for_field('cc_tbl_licenses','license_img_big', 'varchar(255)');
-        $lics = CCDatabase::QueryRows('SELECT license_id,license_logo FROM cc_tbl_licenses');
+        $lics = CCDatabase::QueryRows('SELECT license_id,license_logo,license_img_big FROM cc_tbl_licenses');
         require_once('cchost_lib/cc-license.php');
         $db =& CCLicenses::GetTable();
         foreach( $lics as $L )
         {
+            if( !empty($L['license_img_big']) )
+                continue;
             $args = array();
             $args['license_id'] = $L['license_id'];
             $args['license_img_small'] = ccd('ccskins/shared/images/lics/small-'.$L['license_logo']);

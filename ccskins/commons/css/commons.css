@@ -287,3 +287,7 @@ div#footer {
   font-size: 1.2em;
   font-weight: bold;
   }
+
+#sub_tab_prefix {
+	display: none;
+}

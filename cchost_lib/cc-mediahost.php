@@ -113,7 +113,10 @@ class CCMediaHost
         $form_help  = $submit_meta['form_help'];
         $avail_lics = $submit_meta['licenses'];
         $suggested_tags = $submit_meta['suggested_tags'];
-        
+
+        if( empty($avail_lics) )
+            $avail_lics = 'attribution_3';
+            
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle($page_title);
         if( empty($username) )

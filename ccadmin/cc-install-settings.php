@@ -193,22 +193,6 @@ $install_settings = array(
             ),
      ),
     array( 
-        'config_type'  => 'licenses',
-        'config_scope' => 'media',
-        'config_data'  => array (
-            'attribution_3' => 'on',
-            'noderives_3' => '',
-            'noncommercial_3' => 'on',
-            'by-nc-nd_3' => '',
-            'by-nc-sa_3' => '',
-            'share-alike_3' => '',
-            'nc-sampling+' => '',
-            'publicdomain' => 'on',
-            'sampling' => '',
-            'sampling+' => '',
-            ),
-     ),
-    array( 
         'config_type'  => 'tab_pages',
         'config_scope' => 'media',
         'config_data'  => array (
@@ -354,6 +338,7 @@ $install_settings = array(
                 'action' => '',
                 'logo' => 'submit-remix.gif',
                 'type_key' => 'remix',
+                'licenses' => 'attribution_3,cczero',
                 ),
             'samples' => array (
                 'enabled' => 1,
@@ -372,6 +357,7 @@ $install_settings = array(
                 'action' => '',
                 'logo' => 'submit-sample.gif',
                 'type_key' => 'samples',
+                'licenses' => 'attribution_3,cczero',
                 ),
             'fullmix' => array (
                 'enabled' => '1',

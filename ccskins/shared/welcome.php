@@ -1,6 +1,6 @@
 
-<h2>Hey admin...</h2>
+<h2>Hey, tell your admin...</h2>
 
-You should not be seeing your copy in your *_files/pages directory
+...to setup a 'welcome new users' page
 
 

@@ -507,14 +507,15 @@ class CCAdmin
         if( !CCUser::IsAdmin() )
             return;
 
+        $is_del = !empty($_GET['vroot']) && ($_GET['vroot'] == 'del');
         require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/cc-admin.php');
-        $title = _("Create New Virtual Root");
+        $title = $is_del ? _('Delete a Virtual Root') : _('Create New Virtual Root');
         CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
         CCPage::SetTitle($title);
 
 
-        if( empty($_GET['vroot']) )
+        if( !$is_del )
         {
             $form = new CCAdminMakeCfgRootForm();
             if( !empty($_POST['adminmakecfgroot']) && $form->ValidateFields() )
