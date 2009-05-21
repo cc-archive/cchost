@@ -1,13 +1,14 @@
 <body>
-<!--[if lt IE 7.]> 
-<style> #tabs { background: transparent; } </style>
-<![endif]-->
 
 %if_not_empty(site-disabled)%
     <div id="site_disabled_message" style="position:absolute">%text(str_site_disabled)%</div>
 %end_if%
-%if_not_empty(beta_message)%
-    <div id="beta_message" style="position:absolute;">%(beta_message)%</div>
+%if_null(#_GET/popup)%
+    %if_not_empty(beta_message)%
+        <div id="beta_message" style="position:absolute;">%(beta_message)%</div>
+    %end_if%
+%else%    
+  <link rel="stylesheet"  type="text/css" title="Default Style" href="%url(css/short_page.css)%" />
 %end_if%
 
 <div class="hide">
