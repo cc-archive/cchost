@@ -30,7 +30,7 @@ $text  = $T->String( array( 'str_trackback_' .$ttype, '<span>'.$R['upload_name']
                     '<span>'.$R['user_real_name'].'</span>' ) );
 $title = $T->String('str_trackback_title_' .$ttype);
 ?>
-<!-- tempalte trackback -->
+<!-- template trackback -->
 
 <div id="trackback_response">
 </div>

@@ -161,6 +161,11 @@
                 <?= $T->String(array('str_lic_click',"<a href=\"{$R['license_url']}\">","</a>")); ?>
             </p>
         </div>
+        <div id="histogram">
+          <p>
+            <a href="%(query-url)%t=upload_histogram&ids=%(#R/upload_id)%">Histogram</a>
+          </p>
+        </div>
       </p>
     </div>
 

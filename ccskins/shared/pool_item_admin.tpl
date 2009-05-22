@@ -46,7 +46,7 @@ EOF;
 $tr = array( '<' => '&lt;', '>' => '&gt' );
 
 ?>
-<!-- tempalte pool_approvals -->
+<!-- template pool_approvals -->
 <style>
 #inner_content {
     width: 750px;

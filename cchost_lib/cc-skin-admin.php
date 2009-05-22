@@ -331,19 +331,20 @@ class CCSkinAdmin
     * @access private
     */
     function _build_bread_crumb_trail($text,$cmd=false)
-    {
-        $trail[] = array( 'url' => ccl(), 'text' => _('Home') );
+    {        
+        require_once('cchost_lib/cc-admin.php');
+        $admin = new CCAdmin();
+        $trail2 = array( 'url' => '', 'text' => _($text) );
         
-        $trail[] = array( 'url' => ccl('admin','site'), 'text' => _('Settings') );
-    
         if( $cmd )
         {
-            $trail[] = array( 'url' => ccl('admin','skins'), 'text' => _('Configure Skins') );
+            $trail1 = array( 'url' => ccl('admin','skins'), 'text' => _('Configure Skins') );
+            $admin->BreadCrumbs(false,$trail1,$trail2);
         }
-
-        $trail[] = array( 'url' => '', 'text' => _($text) );
-
-        CCPage::AddBreadCrumbs($trail);
+        else
+        {
+            $admin->BreadCrumbs(false,$trail2);
+        }
     }
 
     function Admin()

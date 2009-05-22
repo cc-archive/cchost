@@ -2,7 +2,7 @@
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-?><!-- tempalte howididit_browse -->
+?><!-- template howididit_browse -->
 
 <? /* er, IE won't accept stylesheets in ajax calbacks so we have to include it here, but what if we are in 'narrow' mode?? */ ?>
 <link rel="stylesheet" type="text/css" title="Default Style" href="<?= $T->URL('css/upload_list_wide.css') ?>" />

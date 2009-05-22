@@ -2,7 +2,7 @@
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 ?>
-<!-- tempalte pool_alpha -->
+<!-- template pool_alpha -->
 <div id="pool_filter"><span id="pool_filter_label">&nbsp;</span> <div id="pool_target"></div></div>
 
 <script type="text/javascript">

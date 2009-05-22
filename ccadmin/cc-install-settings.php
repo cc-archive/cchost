@@ -229,6 +229,14 @@ $install_settings = array(
                     'access' => 4,
                     'function' => 'qry',
                     ),
+                'collections' => array (
+                    'text' => 'str_playlists',
+                    'help' => 'str_playlists',
+                    'tags' => '/playlist/browse?minitems=1',
+                    'limit' => '',
+                    'access' => 4,
+                    'function' => 'url',
+                    ),
                 'people' => array (
                     'text' => 'str_people',
                     'help' => 'str_see_people',

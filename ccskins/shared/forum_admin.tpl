@@ -1,5 +1,5 @@
 
-<!-- tempalte forum_admin -->
+<!-- template forum_admin -->
 <style>
 .forumadmin td {
     vertical-align: top;

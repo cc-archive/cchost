@@ -25,8 +25,17 @@ JOIN cc_tbl_user ON upload_user = user_id
 %order%
 %limit%
 EOF;
+
+    $sql_count =<<<EOF
+SELECT COUNT(*)
+FROM cc_tbl_uploads
+JOIN cc_tbl_user ON upload_user = user_id
+%joins%
+%where%
+EOF;
+
     return array( 'sql' => $sql,
-                  'name' => 'links_by',
+                  'sql_count' => $sql_count,
                    'e'  => array( CC_EVENT_FILTER_DOWNLOAD_URL )
                 );
 }

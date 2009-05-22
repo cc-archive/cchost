@@ -7,7 +7,7 @@ $post_url = ccl( 'admin', 'pools', 'approve', 'submit' );
 $heads = array( '', _('Approve'), _('Delete'), _('None'), _('Uploads'),_('Author'), _('Site/Links') );
 $tr = array( '<' => '&lt;', '>' => '&gt' );
 ?>
-<!-- tempalte pool_approvals -->
+<!-- template pool_approvals -->
 <style>
 .cc_pool_approval_list table td {
     vertical-align: top;

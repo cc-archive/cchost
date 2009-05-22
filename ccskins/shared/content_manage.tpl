@@ -32,7 +32,7 @@ EOF;
 if( empty($_GET['topic_type']) )
     $_GET['topic_type'] = '';
 ?>
-<!-- tempalte content_manage -->
+<!-- template content_manage -->
 <style type="text/css">
 .odd_row {
     background-color: #FDD;
