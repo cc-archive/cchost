@@ -277,12 +277,12 @@ $GLOBALS['str_hidi_name'] = _('Upload name');
 $GLOBALS['str_hidi_date'] = _('Upload date');
 $GLOBALS['str_hidi_author'] = _('Artist');
 
-$GLOBALS['str_invalid_tag'] = _('[Don\'t know variable: %s]');
 
 $GLOBALS['str_hidden'] = _('Hidden');
 $GLOBALS['str_hidden_list'] = _('Unpublished and Moderated Uploads');
 $GLOBALS['str_highest_rated']         = _('Highest Rated');
 $GLOBALS['str_info']                  = _('Info');
+$GLOBALS['str_invalid_tag'] = _('[Don\'t know variable: %s]');
 $GLOBALS['str_lang_default'] = _('Default Language');
 $GLOBALS['str_list_length']                = _('length');
 $GLOBALS['str_list_num_files'] = _('Number of files: %d');
@@ -563,6 +563,7 @@ $GLOBALS['str_recommends_browser']    = _('Recommends Browser');
 $GLOBALS['str_recommends_s_2']        = _('%s recommends these uploads.');
 
 $GLOBALS['str_remix']                 = _('Remix');
+$GLOBALS['str_remix_history']         = _('Remix History Chart');
 $GLOBALS['str_remix_i_used_samples']  = _('I used samples from');
 $GLOBALS['str_remix_artist']          = _('Artist');
 $GLOBALS['str_remix_editing']         = _("Editing Remix Sources for '%s'");

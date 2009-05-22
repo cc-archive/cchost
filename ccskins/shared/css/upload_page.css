@@ -133,3 +133,8 @@ a.upload_flag {
 	float: right;
 	margin-right: 20px;
 	}
+
+#histogram_link {
+    text-align: center;
+    margin: 5px;
+}

@@ -161,11 +161,6 @@
                 <?= $T->String(array('str_lic_click',"<a href=\"{$R['license_url']}\">","</a>")); ?>
             </p>
         </div>
-        <div id="histogram">
-          <p>
-            <a href="%(query-url)%t=upload_histogram&ids=%(#R/upload_id)%">Histogram</a>
-          </p>
-        </div>
       </p>
     </div>
 
@@ -195,6 +190,11 @@
         %if_not_null(#R/parents_overflow)%
             </div>
         %end_if%
+        <div id="histogram_link">
+          <p>
+            <a href="%(query-url)%t=upload_histogram&ids=%(#R/upload_id)%">%text(str_remix_history)%</a>
+          </p>
+        </div>
         </div>
     %end_if%
 

@@ -189,6 +189,7 @@ $install_settings = array(
             'ratings_ban' => '',
             'requires-review' => '',
             'thumbs_up' => 1,
+            'cut-off' => '2 weeks ago',
             'rank_formula' => '((upload_num_scores*4) + (upload_num_playlists*2))',
             ),
      ),

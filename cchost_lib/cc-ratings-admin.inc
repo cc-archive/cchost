@@ -62,6 +62,20 @@ class CCAdminRatingsForm extends CCEditConfigForm
                                'formatter'  => 'checkbox',
                                'flags'      => CCFF_POPULATE),
 
+                    'cut-off' =>  
+                       array(  'label'      => _('Cut Off Point'),
+                               'form_tip'   => _('Used by "picks" page to limit results.'),
+                               'formatter'  => 'select',
+                               'options'    => array( '1 day ago' => _('The day before'),
+                                                      '3 days ago' => _('The previous 3 days'),
+                                                      '1 week ago' => _('The previous week'),
+                                                      '2 weeks ago' => _('The previous 2 weeks'),
+                                                      '1 month ago' => _('The previous month'),
+                                                      'forever' => _('Since forever and ever'),
+                                                        ),
+                               'value'      => '2 weeks ago',
+                               'flags'      => CCFF_POPULATE),
+                               
                     'rank_formula' =>
                        array(  'label'      => _('Query Ranking formula'),
                                'form_tip'   => _('This is the SQL used to calculate sort=rank for the Query API(WARNING: easy to break the site!)'),
