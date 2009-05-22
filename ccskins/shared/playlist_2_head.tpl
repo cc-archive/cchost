@@ -29,6 +29,9 @@
 %if_null(skip_playlist_feed)%
 <div class="cc_playlist_feed">
    <a target="_parent" class="pl_download" id="dlcart%(#R/cart_id)%" href="javascript://dl"><img src="%url('images/menu-download.png')%" /></a>
+   <? if( !empty($GLOBALS['strings-profile']) && ($GLOBALS['strings-profile'] == 'audio') ) { ?>
+   <a target="_parent" href="%(query-url)%playlist=%(#R/cart_id)%&f=xspf"><img src="%url('images/xspf.png')%" /></a>
+   <? } ?>
    <a target="_parent" href="%(#R/feed_url)%"><img src="%url('images/feed-icon16x16.png')%" /></a>
    <a target="_parent" href="%(#R/share_url)%"><img src="%url('images/share-link.gif')%" /></a>
 </div>
