@@ -181,7 +181,7 @@ class CCTags extends CCTable
         $this->UpdateWhere($updates,$where,false);
     }
 
-    function Add($new_tags,$type,$count)
+    function _prep_add(&$new_tags,$type,$count,$names=false)
     {
         if( empty($new_tags) )
             return;
@@ -191,8 +191,45 @@ class CCTags extends CCTable
         $values = array();
         foreach( $new_tags as $tag )
         {
-            $values[] = array( strtolower($tag), $count, $type );
+            if( $names )
+            {
+                $values[] = array( 'tags_tag' => strtolower($tag),
+                                 'tags_count' => $count,
+                                 'tags_type' => $type );
+            }
+            else
+            {
+                $values[] = array( strtolower($tag), $count, $type );
+            }
         }
+        return $values;
+    }
+
+    function SmartAdd($new_tags,$type)
+    {
+        $values = $this->_prep_add($new_tags,$type,1,true);
+        if( empty($values) )
+            return;
+        foreach( $values as $V )
+        {
+            $row = CCDatabase::QueryRow('SELECT tags_tag,tags_count FROM cc_tbl_tags WHERE tags_tag=\''.$V['tags_tag'].'\'');
+            if( !empty($row) )
+            {
+                ++$row['tags_count'];
+                parent::Update($row);
+            }
+            else
+            {
+                parent::Insert($V);
+            }
+        }
+    }
+        
+    function Add($new_tags,$type,$count)
+    {
+        $values = $this->_prep_add($new_tags,$type,$count);
+        if( empty($values) )
+            return;
         $fields = array( 'tags_tag', 'tags_count', 'tags_type' );
         foreach( $values as $v )
             if( empty($v[0]) )
@@ -431,15 +468,19 @@ class CCTagEvents
             // [ccud] => media,acappella
             // [usertags] => female_vocals,melody
             // [systags] => sampling_plus,audio,mp3,44k,mono,128kbps
-            $extra = unserialize($row[2]);
+            $extra = @unserialize($row[2]);
+            if( !is_array($extra) )
+            {
+                //CCDebug::PrintVar($row);
+                continue;
+            }
             if( $extra['ccud'] )
-                $tags->Insert( $extra['ccud'], CCTT_ADMIN, false );
+                $tags->SmartAdd( $extra['ccud'], CCTT_ADMIN );
             if( $extra['usertags'] )
-                $tags->Insert( $extra['usertags'], CCTT_USER, false );
+                $tags->SmartAdd( $extra['usertags'], CCTT_USER );
             if( $extra['systags'] )
-                $tags->Insert( $extra['systags'], CCTT_SYSTEM, false );
+                $tags->SmartAdd( $extra['systags'], CCTT_SYSTEM );
 
-            $tags->Update( $row[1] );
         }
 
         CCUtil::SendBrowserTo( ccl('tags') );

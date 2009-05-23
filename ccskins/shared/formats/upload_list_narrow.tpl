@@ -26,6 +26,12 @@
    <tr><th>%text(str_play)%</th><td><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a><script type="text/javascript">
     $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%'</script></tr>
    %end_if%
+    %if_not_empty(#R/flash_id)%
+        <tr><th></th><td>
+            <a class="small_button flash_game_link" id="%(#R/flash_id)%" href="javascript://flash play">%text(str_play)%</a>
+        </td></tr>
+    %end_if%
+   
    <tr><th>%text(str_by)%</th><td><a href="%(#R/artist_page_url)%" class="cc_user_link artist_name">%chop(#R/user_real_name,chop)%</a> 
                               <span class="upload_date">%(#R/upload_date_format)%</span></td></tr>
    <tr><th>%text(str_license)%</th>

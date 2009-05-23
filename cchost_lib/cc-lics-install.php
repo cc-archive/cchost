@@ -295,7 +295,10 @@ function cc_install_licenses( $lic_infos = array(  '3_0' ), $nuke_db = true )
                 $key['license_id'] = $lic['license_id'];
                 $count = $licenses->CountRows($key);
                 if( $count )
+                {
+                    $licenses->Update($lic);
                     continue;
+                }
             }
             $licenses->Insert($lic);
         }

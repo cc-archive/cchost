@@ -128,6 +128,12 @@
             <script type="text/javascript"> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
         %end_if%
 
+        %if_not_empty(#R/flash_id)%
+            <div class="flash_link_div">
+                <a class="small_button flash_game_link" id="%(#R/flash_id)%" href="javascript://flash play">%text(str_play)%</a>
+            </div>
+        %end_if%
+
         <div class="info_box_clear">&nbsp;</div>
     </div><!-- info box -->
 

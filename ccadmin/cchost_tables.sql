@@ -293,8 +293,7 @@ CREATE TABLE cc_tbl_pool_item (
   albumsku varchar(255) default NULL,
   pool_item_num_remixes int(6) unsigned default NULL,
   pool_item_num_sources int(6) unsigned default NULL,
-  PRIMARY KEY  (pool_item_id),
-  FULLTEXT KEY search_text (pool_item_description,pool_item_name,pool_item_artist)
+  PRIMARY KEY  (pool_item_id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -466,8 +465,7 @@ CREATE TABLE cc_tbl_topics (
   PRIMARY KEY  (topic_id),
   KEY topic_upload (topic_upload),
   KEY topic_thread (topic_thread),
-  KEY topic_user (topic_user),
-  FULLTEXT KEY topic_search (topic_name,topic_text)
+  KEY topic_user (topic_user)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -513,9 +511,7 @@ CREATE TABLE cc_tbl_uploads (
   upload_num_playlists int(5) unsigned NOT NULL default '0',
   upload_num_plays int(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (upload_id),
-  KEY upload_tags (upload_tags(300)),
-  FULLTEXT KEY text_search (upload_name,upload_tags,upload_description),
-  FULLTEXT KEY upload_name (upload_name)
+  KEY upload_tags (upload_tags(300))
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -552,7 +548,5 @@ CREATE TABLE cc_tbl_user (
   user_language varchar(255) NOT NULL default '',
   user_quota int(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (user_id),
-  KEY user_name (user_name),
-  FULLTEXT KEY text_search (user_name,user_real_name,user_description,user_favorites,user_whatido),
-  FULLTEXT KEY remix_search (user_name,user_real_name)
+  KEY user_name (user_name)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;

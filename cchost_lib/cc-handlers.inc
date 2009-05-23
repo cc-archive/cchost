@@ -137,7 +137,8 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,        array( 'CCRenderAudio', 'OnMapUrl
 CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP, array( 'CCRenderAudio', 'OnApiQuerySetup'), 'cchost_lib/cc-renderaudio.php' ); 
 CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT, array( 'CCRenderAudio', 'OnApiQueryFormat'), 'cchost_lib/cc-renderaudio.php' ); 
 
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,      array( 'CCRenderFlash', 'OnMapUrls'), 'cchost_lib/cc-renderflash.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_PAGE,   array( 'CCRenderFlash', 'OnFilterUploads'), 'cchost_lib/cc-renderflash.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_LIST,   array( 'CCRenderFlash', 'OnFilterUploads'), 'cchost_lib/cc-renderflash.php' );
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,       array( 'CCRenderImage', 'OnUploadMenu'), 'cchost_lib/cc-renderimage.php' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCRenderImage', 'OnMapUrls'), 'cchost_lib/cc-renderimage.php' );

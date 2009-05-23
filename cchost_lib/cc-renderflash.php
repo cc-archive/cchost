@@ -26,64 +26,40 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-require_once('cchost_lib/cc-render.php');
-
 /**
 * @package cchost
 * @subpackage video
 */
-class CCRenderFlash extends CCRender
+class CCRenderFlash 
 {
-    function Play($username='',$upload_id='') {
-        $this->Show($username,$upload_id);
-    }
-
-    function Show($username='',$upload_id='')
+    function OnFilterUploads(&$records)
     {
-        $username = CCUtil::StripText($username);
-        $upload_id = sprintf('%d',$upload_id);
-        if( empty($username) || empty($upload_id) )
-            CCUtil::Send404();
-
-        require_once('cchost_lib/cc-query.php');
-        $q = 'dataview=files&f=php&ids=' . $upload_id;
-        $query = new CCQuery();
-        $args = $query->ProcessAdminArgs($q);
-        list( $records, $m ) = $query->Query($args);
-        if( empty($records) )
-            CCUtil::Send404();
-        $record =& $records[0];
-        $dim = CCUploads::GetFormatInfo($record,'dim');
-        if( empty($dim) )
+        $info = array();
+        $keys = array_keys($records);
+        $c = count($keys);
+        for( $i = 0; $i < $c; $i++ )
         {
-            // er, ungraceful yo'
-            die('this upload does not support dimensions');
+            $R =& $records[$keys[$i]];
+            $F = $R['files'][0];
+            if( !empty($F['file_format_info']['format-name']) &&
+                     ($F['file_format_info']['format-name'] == 'video-swf-swf' ) &&
+                     !empty($F['file_format_info']['dim']) )
+            {
+                $R['flash_id'] = 'flash_play_' . $R['upload_id'];
+                list( $w, $h ) = $F['file_format_info']['dim'];
+                $info[] = array( 'url' => $R['download_url'],
+                                 'w' => $w, 'h' => $h, 'id' => $R['flash_id'],
+                                 'title' => $R['upload_name']  );
+            }
         }
-        list( $w, $h ) = $dim;
-        $html =<<<END
-<html>
-<body style="margin:0">
-<object width="$w" height="$h" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0">
-<param name="movie" value="$url">
-<embed src="$url" width="$w" height="$h" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" >
-</embed>
-</object></body>
-</html>
-END;
-        print($html);
-        exit;
-    }
 
-    /**
-    * Event handler for {@link CC_EVENT_MAP_URLS}
-    *
-    * @see CCEvents::MapUrl()
-    */
-    function OnMapUrls()
-    {
-        CCEvents::MapUrl( ccp('files','playflash'),   array('CCRenderFlash', 'Play'), CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}/{upload_id}', _('Display Flash'), CC_AG_RENDER );
+        if( !empty($info) )
+        {
+            $page =& CCPage::GetPage();
+            $page->PageArg('flash_popup_infos',$info,'flash_popup_play');
+        }
     }
-
+    
 }
 
 

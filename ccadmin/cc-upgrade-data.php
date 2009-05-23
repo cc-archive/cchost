@@ -7,13 +7,15 @@ function fix_all()
     fix_pool_resync();
     flush();
     fix_topics();
+    require_once( dirname(__FILE__) . '/cc-content-topics.php' );
+    inject_content_topics();    
 }
 
 function fix_lics()
 {
     require_once('cchost_lib/cc-lics-install.php');
     print("Updating licenses<br />\n");
-    cc_install_licenses();
+    cc_install_licenses( array( '3_0', '2_5' ), false );
 }
 
 

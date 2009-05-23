@@ -1,18 +1,3 @@
-<script type="text/javascript">
-function grey_me(obj,msgid)
-{
-    var msg =     document.getElementById(msgid);
-    msg.style.display = 'inline';
-    msg.innerHTML = 'working...';
-    obj.style.color = '#888';
-    obj.innerHTML = '';
-    return true;
-}
-function enable_other()
-{
-    document.getElementById('other_dir').style.display = 'inline';
-}
-</script>
 <?
 
 chdir('..');
@@ -24,10 +9,28 @@ if( !function_exists('gettext') )
 
 $step = empty($_REQUEST['up_step']) ? '1' : $_REQUEST['up_step'];
 
+$do_buffer = !empty($_POST);
+
+if( $do_buffer )
+{
+    ob_start();
+}
+
 $install_title = 'ccHost Upgrade';
 include( dirname(__FILE__) . '/cc-install-head.php');
+grey_me_script();
 $stepfunc = 'up_step_' . $step;
 $stepfunc();
+print '</body></html>';
+
+if( $do_buffer )
+{
+    $text = ob_get_contents();
+    ob_end_clean();
+    print $text;
+}
+
+exit; // otherwise we see install script
 
 function up_step_1()
 {
@@ -36,12 +39,98 @@ function up_step_1()
 
 function up_step_2()
 {
-?>
-<h2></h2>
-<?
+    ?><h2></h2><?
+    
     $step = empty($_REQUEST['impf']) ? '1' : $_REQUEST['impf'];
     $impffunc = 'impf_' . $step;
     $impffunc();
+}
+
+function up_step_3()
+{
+    $username = empty($_POST['username']) ? '' : $_POST['username'];
+    
+    if( !empty($_POST['submitbutton']) )
+    {
+        require_once('cchost_lib/cc-non-ui.php');
+        
+        if( empty($_POST['username']) )
+        {
+            $err = 'Can not leave username blank';
+        }
+        elseif ( empty($_POST['password']) )
+        {
+            $err = 'Can not leave password blank';
+        }
+        else
+        {
+            $user_id = CCDatabase::QueryItem('SELECT user_id FROM cc_tbl_user WHERE user_name = \''.
+                             $_POST['username'] . '\'');
+            if( empty($user_id) )
+            {
+                $err = 'Do not know that username';
+            }
+            else
+            {
+                $md5pw = CCDatabase::QueryItem('SELECT user_password FROM cc_tbl_user WHERE user_id='.$user_id);
+                if( $md5pw != md5($_POST['password']) )
+                {
+                    $err = 'That password does not match the user name';
+                }
+                else
+                {
+                    $configs =& CCConfigs::GetTable();
+                    $settings = $configs->GetConfig('settings');
+                    $_admins = $settings['admins'];
+                    if( !(preg_match( "/(^|\W|,){$_POST['username']}(\W|,|$)/i",$_admins) > 0) )
+                    {
+                        $err = 'That user is not an administrator';
+                    }
+                    else
+                    {                    
+                        require_once( 'cchost_lib/cc-login.php' );
+                        $lapi = new CCLogin();
+                        $lapi->_create_login_cookie(1,$_POST['username'],md5($_POST['password']));
+                        $root_url = url_args(ccl(),'update=1');
+?>
+                        <p>You upgrade is almost complete. Please <b>rename ccadmin</b> to something else.</p>
+                        <p>After you have done that, <a href="<?=$root_url?>">CLICK HERE</a> to finish up.</p>
+<?                        
+
+                        return;
+                    }
+                }
+            }
+        }
+    }
+?>
+    <p>
+       We need to log to you in as admin to perform the last step.
+    </p>
+    <form action="?up_step=3" method="post">
+    <table>
+       <tr>
+           <td>Your admin login name:</td><td><input name="username" value="<?= $username ?>"/></td>
+       </tr>
+<?
+    if( !empty($err) )
+    {
+?>
+        <tr>
+             <td colspan="2" style="color:red;font-weight: bold;"><?= $err ?></td>
+        </tr>
+<?
+    }
+?>
+       <tr>
+            <td>Your password: </td><td><input type="password" name="password" /></td>
+       </tr>
+       <tr>
+            <td></td><td><input name="submitbutton" type="submit" value="Log in" ?></td>
+       </tr>
+    </table>
+    </form>
+<?    
 }
 
 function dx(&$obj)
@@ -100,63 +189,60 @@ function print_dir_form($msg='')
 
         print $msg;
 ?>
-
-<p>
-    We're going to create some new directories for your custom files. Please make <b>sure</b>
-    this directory is 
-    <ul>
-        <li>Writable to PHP script</li>
-        <li>Under your web server root so it's visble and accessable to web browsers</li>
-    </ul>
-    Where would like us to put these new directories?
-</p>
-<form method="post" action="?up_step=2&impf=2">
-<table id="froot">
-<tr><td style="text-align:right">Under:</td><td></td></tr>
+        <p>
+            We're going to create some new directories for your custom files. Please make <b>sure</b>
+            this directory is 
+            <ul>
+                <li>Writable to PHP script</li>
+                <li>Under your web server root so it's visble and accessable to web browsers</li>
+            </ul>
+            Where would like us to put these new directories?
+        </p>
+        <form method="post" action="?up_step=2&impf=2">
+        <table id="froot">
+        <tr><td style="text-align:right">Under:</td><td></td></tr>
 <?
         for( $i = 0; $i < $c; $i++ )
         {
             $dir = $dirs[$keys[$i]];
         ?>
-
-<tr><td style="text-align:right;width:220px;"><input <?= $checked ?> type="radio" name="root_file_dir" value="<?=$dir?>"  /></td>
-<td><b><?= $dir ?></b></td></tr>
+            <tr><td style="text-align:right;width:220px;"><input <?= $checked ?> type="radio" name="root_file_dir" value="<?=$dir?>"  /></td>
+            <td><b><?= $dir ?></b></td></tr>
         <?
             $checked = '';
         }
     ?>
-    <tr><td style="text-align:right;">Another directory: <input type="radio" name="root_file_dir" onclick="enable_other()" value=".other." /></td>
-    <td><input size="45" name="other_dir" id="other_dir" style="display:none" /></td></tr>
+        <tr><td style="text-align:right;">Another directory: <input type="radio" name="root_file_dir" onclick="enable_other()" value=".other." /></td>
+        <td><input size="45" name="other_dir" id="other_dir" style="display:none" /></td></tr>
 
-    <tr><th colspan="2" style="padding-top:1em;">Domain Change</th></tr>
-    <tr><td colspan="2" style="padding-top:1em;">If you moved your data from another domain please let us know the change:</td><tr>
-    <? $ttag = get_old_config('ttag');
-       $old_domain = preg_replace('%http://([^/]+)/%','$1',$ttag['root-url']); 
-       $new_domain = !empty($_SERVER['HTTP_HOST']) ? 'http://' . $_SERVER['HTTP_HOST'] : $old_domain;
-       ?>
-
-    <tr><td style="text-align:right">Old domain:</td><td><input name="old_domain" value="<?= $old_domain ?>" /></td></tr>
-    <tr><td style="text-align:right">New domain:</td><td><input name="new_domain" value="<?= $old_domain ?>" /></td></tr>
-
+        <tr><th colspan="2" style="padding-top:1em;">Domain Change</th></tr>
+        <tr><td colspan="2" style="padding-top:1em;">If you moved your data from another domain please let us know the change:</td><tr>
+    <?
+        $ttag = get_old_config('ttag');
+        $old_domain = preg_replace('%http://([^/]+)/%','$1',$ttag['root-url']); 
+        $new_domain = !empty($_SERVER['HTTP_HOST']) ? 'http://' . $_SERVER['HTTP_HOST'] : $old_domain;
+    ?>
+        <tr><td style="text-align:right">Old domain:</td><td><input name="old_domain" value="<?= $old_domain ?>" /></td></tr>
+        <tr><td style="text-align:right">New domain:</td><td><input name="new_domain" value="<?= $old_domain ?>" /></td></tr>
     <?
 
         if( ($config['user-upload-root'] == 'people') && !empty($config['pretty-urls']) ) 
         {
     ?>
-    <tr><th colspan="2" style="padding-top:1em;">'People' Change</th></tr>
-    <tr><td colspan="2" style="padding-top:1em;">The upload directory 'people' conflicts with changes made to pretty-url setups.</td><tr>
-    <tr><td style="text-align:right">Change 'people' to:</td><td><input name="new_people" value="content" /></td></tr>
+            <tr><th colspan="2" style="padding-top:1em;">'People' Change</th></tr>
+            <tr><td colspan="2" style="padding-top:1em;">The upload directory 'people' conflicts with changes made to pretty-url setups.</td><tr>
+            <tr><td style="text-align:right">Change 'people' to:</td><td><input name="new_people" value="content" /></td></tr>
     <?
         } else {
     ?>
-    <tr><td /><td><input name="new_people" type="hidden" value="<?= $config['user-upload-root'] ?>" /></td></tr>
+            <tr><td /><td><input name="new_people" type="hidden" value="<?= $config['user-upload-root'] ?>" /></td></tr>
     <?
         }
     ?>
-<tr><td></td><td style="padding-top:2em;"><input type="submit" value="Let's go..." /></td></tr>
-</table>
-</form>
-<?
+        <tr><td></td><td style="padding-top:2em;"><input type="submit" value="Let's go..." /></td></tr>
+        </table>
+        </form>
+    <?
     }
 }
 
@@ -215,13 +301,13 @@ function impf_2()
 
 
 ?>
-<p>
-The next step involves updating the structure of your database. Depending on the amount
-of data and the speed of your server this could take a few minutes. (WARNING: Your
-ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
-</p>
-<p>
-<h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=3">Do it...</a></h3>
+    <p>
+    The next step involves updating the structure of your database. Depending on the amount
+    of data and the speed of your server this could take a few minutes. (WARNING: Your
+    ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
+    </p>
+    <p>
+    <h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=3">Do it...</a></h3>
 <?
 }
 
@@ -234,45 +320,43 @@ function impf_3()
     print("Database structure upgraded<br />\n");
 
 ?>
-<p>
-The next step involves updating the some internal pointers in the database. If you have a lot of reviews
-or forum messages this could take a few minutes. (WARNING: Your
-ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
-</p>
-<p>
-<h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=4">Do it...</a></h3>
+    <p>
+    The next step involves updating the some internal pointers in the database. If you have a lot of reviews
+    or forum messages this could take a few minutes. (WARNING: Your
+    ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
+    </p>
+    <p>
+    <h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=4">Do it...</a></h3>
 <?
 }
+
 function impf_4()
 {
     setup_old_db();
-
+    require_once('cchost_lib/cc-includes.php');
     require_once( dirname(__FILE__) . '/cc-upgrade-data.php');
     fix_all();
 
 ?>
-<p>
-The next step will update your configuration (WARNING: Your
-ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
-</p>
-<p>
-<h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=5">Do it...</a></h3>
+    <p>
+    The next step will update your configuration (WARNING: Your
+    ccHost installation is in an incomplete, unusable state until you finish this upgrade.)
+    </p>
+    <p>
+    <h3>Continue on to the next upgrade step: <span id="msg"></span><a onclick="grey_me(this,'msg')" href="?up_step=2&impf=5">Do it...</a></h3>
 <?
 }
 
 function impf_5()
 {
-
-update_config_db($err);
+    update_config_db($err);
     if( $err )
     {
         print "$e\n<br />";
         return;
     }
-   ?>
-<p>Please rename the 'ccadmin' directory to something secure and then you are now ready to start using the upgraded ccHost.</p>
-<?
 
+    up_step_3();    
 }
 
 function update_config_db(&$err)
@@ -455,6 +539,26 @@ function untangle_the_freakin_config_mess($local_base_dir,$new_config)
 
 }
 
-print '</body></html>';
-exit;
+function grey_me_script()
+{
+?>
+    <script type="text/javascript">
+    function grey_me(obj,msgid)
+    {
+        var msg =     document.getElementById(msgid);
+        msg.style.display = 'inline';
+        msg.innerHTML = 'working...';
+        obj.style.color = '#888';
+        obj.innerHTML = '';
+        return true;
+    }
+    function enable_other()
+    {
+        document.getElementById('other_dir').style.display = 'inline';
+    }
+    </script>
+<?
+}
+
+
 ?>

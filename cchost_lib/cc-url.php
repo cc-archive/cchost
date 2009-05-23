@@ -139,6 +139,7 @@ function ccs($file)
 function cc_get_root_url()
 {
     static $_root_url;
+    require_once('cchost_lib/cc-config.php');
     if( !isset($_root_url) )
     {
         $configs =& CCConfigs::GetTable();
