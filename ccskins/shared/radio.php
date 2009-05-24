@@ -71,7 +71,7 @@ if( !empty($chart['ratings']) )
                     <select  id="score" name="score">
                     <option  value="500">5</option>
                     <option  value="450"><?= $T->String( array('str_filter_d_or_above', '4.5') ) ?></option>
-                    <option  value="400" selected="selected"><?= $T->String( array('str_d_or_above', '4') ) ;?></option>
+                    <option  value="400" selected="selected"><?= $T->String( array('str_filter_d_or_above', '4') ) ;?></option>
                     <option  value="350"><?= $T->String( array('str_filter_d_or_above', '3.5') ) ?></option>
                     <option  value="300"><?= $T->String( array('str_filter_d_or_above', '3') ) ;?></option>
                     <option  value="0"><?= $T->String('str_filter_all') ;?></option>
