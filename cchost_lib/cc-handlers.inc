@@ -187,14 +187,16 @@ CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserSearch', 'OnMapU
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,           array( 'CCUserHook', 'OnMapUrls'), 'cchost_lib/cc-user-hook.php' );
 
 CCEvents::AddHandler(CC_EVENT_FILTER_DOWNLOAD_URL, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
-CCEvents::AddHandler(CC_EVENT_FILTER_NUM_FILES, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
-CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_USER_TAGS, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
-CCEvents::AddHandler(CC_EVENT_FILTER_REMIXES_SHORT, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
-CCEvents::AddHandler(CC_EVENT_FILTER_REMIXES_FULL, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
-CCEvents::AddHandler(CC_EVENT_FILTER_RATINGS_STARS, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
-CCEvents::AddHandler(CC_EVENT_FILTER_FILES, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
-CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_TAGS, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_EXTRA, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_FILES, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_NUM_FILES, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_RATINGS_STARS, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_REMIXES_FULL, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_REMIXES_SHORT, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_MENU, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_TAGS, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_USER_TAGS, 'cc_filter_std', 'cchost_lib/cc-filters.php' );
+
 
 CCEvents::AddHandler(CC_EVENT_FILTER_POOL_ITEMS, 'cc_filter_pool_items', 'cchost_lib/cc-pool-filters.php' );
 

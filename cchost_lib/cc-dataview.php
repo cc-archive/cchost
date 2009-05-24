@@ -215,15 +215,30 @@ class CCDataView
 
     function FilterRecords(&$records,$info)
     {
-        while( count($info['e']) )
-        {
-            $k = array_keys($info['e']);
-            $e = $info['e'][$k[0]];
-            CCEvents::Invoke( $e, array( &$records, &$info ) );
-            if( in_array( $e, $info['e'] ) )
-                $info['e'] = array_diff( $info['e'], array( $e ) );
+        global $cc_dont_eat_std_filters;
+
+        if( empty($cc_dont_eat_std_filters) )
+        {        
+            while( count($info['e']) )
+            {
+                $k = array_keys($info['e']);
+                $e = $info['e'][$k[0]];
+                CCEvents::Invoke( $e, array( &$records, &$info ) );
+                if( in_array( $e, $info['e'] ) )
+                    $info['e'] = array_diff( $info['e'], array( $e ) );
+            }
+            return $info['e'];
         }
-        return $info['e'];
+        else
+        {
+            $events = $info['e'];
+            foreach( $events as $e )
+            {
+                $info['e'] = array( $e );
+                CCEvents::Invoke( $e, array( &$records, &$info ) );
+            }
+            $info['e'] = $events;
+        }
     }
 
     function MakeTagFilter( $tags, $type='all', $tagfield='upload_tags' )

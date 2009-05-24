@@ -4,21 +4,28 @@
 if( !defined('IN_CC_HOST') )
     die( 'Welcome to ccHost' );
 
-
 function cc_filter_std(&$records,&$dataview_info)
 {
+    global $cc_dont_eat_std_filters;
     global $CC_GLOBALS;
+    
     $c = count($records);
     $k = array_keys($records);
     require_once('cchost_lib/cc-tags.php');
-
-    foreach( array( CC_EVENT_FILTER_UPLOAD_USER_TAGS, CC_EVENT_FILTER_REMIXES_SHORT, CC_EVENT_FILTER_FILES,
-                    CC_EVENT_FILTER_UPLOAD_TAGS, CC_EVENT_FILTER_REMIXES_FULL, CC_EVENT_FILTER_EXTRA,
-                    CC_EVENT_FILTER_RATINGS_STARS, CC_EVENT_FILTER_DOWNLOAD_URL,
-                    CC_EVENT_FILTER_UPLOAD_MENU, CC_EVENT_FILTER_NUM_FILES, ) as $e )
-    {
-        global $cc_dont_eat_std_filters;
         
+    foreach( array( CC_EVENT_FILTER_DOWNLOAD_URL,
+                    CC_EVENT_FILTER_EXTRA,
+                    CC_EVENT_FILTER_FILES,
+                    CC_EVENT_FILTER_NUM_FILES,
+                    CC_EVENT_FILTER_RATINGS_STARS,
+                    CC_EVENT_FILTER_REMIXES_FULL,
+                    CC_EVENT_FILTER_REMIXES_SHORT,
+                    CC_EVENT_FILTER_UPLOAD_MENU,
+                    CC_EVENT_FILTER_UPLOAD_TAGS,
+                    CC_EVENT_FILTER_UPLOAD_USER_TAGS,
+                     ) as $e )
+    {
+
         if( !in_array( $e, $dataview_info['e'] ) )
             continue;
 
