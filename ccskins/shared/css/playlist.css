@@ -301,13 +301,13 @@ div.cc_playlist_action  {
 	width: 24px;
 	height: 19px;
 	padding-left: 20px;
-	background: transparent url('../images/menu-play.png') no-repeat top left;
+	background: transparent url('../images/folder.png') no-repeat top left;
 	color: black;
 }
 	
 
 .pl_found_in:hover {
 	text-decoration: none;
-	background-image: url('../images/menu-play-hi.png');
+	background-image: url('../images/folder-hi.png');
 	color: #D88F8F;
 }
