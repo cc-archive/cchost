@@ -74,9 +74,6 @@ class CCAccessEditForm extends CCForm
     {
         $this->CCForm();
     
-        CCPage::SetStyleSheet( 'css/access.css' );
-//        CCPage::PageArg('access', 'access');
-
         $map = cc_get_url_map();
         
         $cg = count($map);

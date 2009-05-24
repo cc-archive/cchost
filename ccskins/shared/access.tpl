@@ -1,3 +1,5 @@
+<link rel="stylesheet"  type="text/css" title="Default Style" href="%url(css/access.css)%" />
+<script type="text/javascript" src="%url(js/access.js)%" /></script>
 <script>
 function updateGroup(e)
 {
