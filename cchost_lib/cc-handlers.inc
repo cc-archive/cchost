@@ -140,9 +140,12 @@ CCEvents::AddHandler(CC_EVENT_API_QUERY_FORMAT, array( 'CCRenderAudio', 'OnApiQu
 CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_PAGE,   array( 'CCRenderFlash', 'OnFilterUploads'), 'cchost_lib/cc-renderflash.php' );
 CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_LIST,   array( 'CCRenderFlash', 'OnFilterUploads'), 'cchost_lib/cc-renderflash.php' );
 
-CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU,       array( 'CCRenderImage', 'OnUploadMenu'), 'cchost_lib/cc-renderimage.php' );
-CCEvents::AddHandler(CC_EVENT_MAP_URLS,          array( 'CCRenderImage', 'OnMapUrls'), 'cchost_lib/cc-renderimage.php' );
-CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,        array( 'CCRenderImage' , 'OnAdminMenu' ), 'cchost_lib/cc-renderimage.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_PAGE,   array( 'CCRenderImage', 'OnFilterUploads'), 'cchost_lib/cc-renderimage.php' );
+CCEvents::AddHandler(CC_EVENT_FILTER_UPLOAD_LIST,   array( 'CCRenderImage', 'OnFilterUploads'), 'cchost_lib/cc-renderimage.php' );
+CCEvents::AddHandler(CC_EVENT_MAP_URLS,             array( 'CCRenderImage', 'OnMapUrls'), 'cchost_lib/cc-renderimage.php' );
+CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,           array( 'CCRenderImage' , 'OnAdminMenu' ), 'cchost_lib/cc-renderimage.php' );
+CCEvents::AddHandler(CC_EVENT_DELETE_UPLOAD,        array( 'CCRenderImage' , 'OnDeleteUpload' ), 'cchost_lib/cc-renderimage.php' );
+CCEvents::AddHandler(CC_EVENT_DELETE_FILE,          array( 'CCRenderImage' , 'OnDeleteFile' ), 'cchost_lib/cc-renderimage.php' );
 
 CCEvents::AddHandler(CC_EVENT_FILTER_MACROS,      array( 'CCRenderZip',  'OnFilterMacros'), 'cchost_lib/cc-renderzip.php'  );
 

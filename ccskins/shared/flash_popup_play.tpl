@@ -12,7 +12,6 @@ flashPopupHook.prototype = {
             var e = $(info.id);
             if( e )
             {
-                var href = info.url;
                 Event.observe( e, 'click', me.onClick.bindAsEventListener( me, info ) );
             }
         } );

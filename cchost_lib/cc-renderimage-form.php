@@ -32,33 +32,35 @@ class CCAdminThumbnailForm extends CCEditConfigForm
 {
     function CCAdminThumbnailForm()
     {
-        $this->CCEditConfigForm('settings');
+        $this->CCEditConfigForm('config');
 
         $fields['thumbnail-on'] = 
-           array( 'label'       => _('Display Thumbnails'),
+           array( 'label'       => _('Generate and Display Thumbnails'),
                    'formatter'  => 'checkbox',
                    'form_tip'   => _('Display thumbnails for image uploads'),
                    'flags'      => CCFF_POPULATE);
 
-        $fields['thumbnail-constrain-y'] = 
-           array( 'label'       => _('Constrain Thumbnail Proportion'),
-                   'formatter'  => 'checkbox',
-                   'form_tip'   => _('Constrain proportion of image to the original image\'s height (y value)'),
+        $fields['thumbnail-exec'] = 
+           array( 'label'       => _('Thumbnail Command Line'),
+                   'formatter'  => 'textedit',
+                   'form_tip'   => array( _('Parameterized command to execute to create thumbnail.<br />ex: %s'),
+                                '<span style="white-space:pre;">/usr/bin/convert %file_in% -resize 100x120 -compress JPEG -quality 75 %file_out%</span>' ),
                    'flags'      => CCFF_POPULATE);
 
-        $fields['thumbnail-x'] = 
-           array( 'label'       => _('Max Thumb X'),
+        $fields['thumbnail-mime'] = 
+           array( 'label'       => _('Thumbnail MIME Type'),
                    'formatter'  => 'textedit',
-                   'form_tip'   => _('Leave this blank or 0 (zero) to use the image\'s natural size'),
-                   'class'      => 'cc_form_input_short',
+                   'form_tip'   => array( 'ex: image/jpeg' ),
                    'flags'      => CCFF_POPULATE);
 
-        $fields['thumbnail-y'] =
-           array( 'label'       => _('Max Thumb Y'),
+        $fields['thumbnail-ext'] = 
+           array( 'label'       => _('Thumbnail File Extension'),
                    'formatter'  => 'textedit',
-                   'class'      => 'cc_form_input_short',
-                   'flags'      => CCFF_POPULATE );
+                   'form_tip'   => array( 'ex: jpeg' ),
+                   'flags'      => CCFF_POPULATE);
 
+        $help = _('In order to create the thumbnail your PHP system must allow calling third party command line executables.');
+        $this->SetFormHelp($help);
         $this->AddFormFields($fields);
         $this->SetModule(ccs(__FILE__));
     }

@@ -26,15 +26,155 @@
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-require_once('cchost_lib/cc-render.php');
-
 /**
 * @package cchost
 * @subpackage image
 */
-class CCRenderImage extends CCRender
+class CCRenderImage
 {
+    function OnFilterUploads(&$records)
+    {
+        global $CC_GLOBALS;
+        
+        $info = array();
+        $keys = array_keys($records);
+        $c = count($keys);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $records[$keys[$i]];
+            $F = $R['files'][0];
+            if( !empty($F['file_format_info']['media-type']) &&
+                     ($F['file_format_info']['media-type'] == 'image' ) &&
+                     !empty($F['file_format_info']['dim']) )
+            {
+                $R['image_id'] = 'image_show_' . $R['upload_id'];
+                list( $w, $h ) = $F['file_format_info']['dim'];
+                //if( !empty($CC_GLOBALS['thumbnail-on']) )
+                {
+                    $R['thumbnail'] = ccl('thumbnail',$R['upload_id']);
+                }
+                $info[] = array( 'url' => $R['download_url'],
+                                 'w' => $w, 'h' => $h, 'id' => $R['image_id'],
+                                 'title' => $R['upload_name'] );
+            }
+        }
 
+        if( !empty($info) )
+        {
+            $page =& CCPage::GetPage();
+            $page->PageArg('image_popup_infos',$info,'image_popup');
+        }
+    }
+
+    function _err_out($msg)
+    {
+        die($msg);
+    }
+    
+    function Thumbnail($upload_id='')
+    {
+        global $CC_GLOBALS;
+
+        $upload_id = sprintf('%d',$upload_id);
+        if( empty($upload_id) )
+            $this->_erro_out('bad upload_id');
+        //if( empty($CC_GLOBALS['thumbnail-on']) )
+        //    CCUtil::Send404(true,'','','thumbnails not on');
+        if( empty($CC_GLOBALS['thumbnail-exec']) )
+            $this->_erro_out('thumbnail-exec empty');
+
+        $this->_ensure_globals();
+        $tsql = $this->_thumb_name_sql();
+        $sql =<<<EOF
+          SELECT user_name, {$tsql}, file_name
+          FROM cc_tbl_files
+          JOIN cc_tbl_uploads on file_upload=upload_id
+          JOIN cc_tbl_user on upload_user=user_id
+          WHERE file_order = 0 AND upload_id = {$upload_id}
+EOF;
+        $info = CCDatabase::QueryRow($sql);
+        if( empty($info) )
+            $this->_erro_out('no upload rec');
+        $thumbdir = cca( $CC_GLOBALS['user-upload-root'], $info['user_name'], 'thumbs' );
+        CCUtil::MakeSubdirs($thumbdir);
+        $thumbfile = $thumbdir . '/' . $info['thumb_name'];
+        if( !file_exists($thumbfile) )
+        {
+            $srcfile = cca( $CC_GLOBALS['user-upload-root'], $info['user_name'], $info['file_name']);
+            $cmd = str_replace( '%file_in%', '"'.$srcfile.'"', $CC_GLOBALS['thumbnail-exec'] );
+            $cmd = str_replace( '%file_out%', $thumbfile, $cmd );
+            exec($cmd);
+            chmod($thumbfile,cc_default_file_perms());
+        }
+        if( !file_exists($thumbfile) )
+            $this->_erro_out('file never generated');
+        header ("Content-Type: {$CC_GLOBALS['thumbnail-mime']}");
+        readfile($thumbfile);
+        exit;                    
+    }
+
+    function OnDeleteUpload(&$R)
+    {
+        $this->_ensure_globals();
+        $upload_id = $R['upload_id'];
+        $tsql = $this->_thumb_name_sql();
+        $sql =<<<EOF
+          SELECT user_name, {$tsql}
+          FROM cc_tbl_files
+          JOIN cc_tbl_uploads on file_upload=upload_id
+          JOIN cc_tbl_user on upload_user=user_id
+          WHERE file_order = 0 AND upload_id = {$upload_id}
+EOF;
+        $this->_del_thumb($sql);
+    }
+    
+    function OnDeleteFile($file_id)
+    {
+        $this->_ensure_globals();
+        $tsql = $this->_thumb_name_sql();
+        $sql =<<<EOF
+          SELECT user_name, {$tsql}
+          FROM cc_tbl_files
+          JOIN cc_tbl_uploads on file_upload=upload_id
+          JOIN cc_tbl_user on upload_user=user_id
+          WHERE file_order = 0 AND file_id = {$file_id}
+EOF;
+        $this->_del_thumb($sql);
+    }
+
+    function _ensure_globals()
+    {
+        global $CC_GLOBALS;
+        if( empty($CC_GLOBALS['thumbnail-ext']) )
+            $CC_GLOBALS['thumbnail-ext'] = 'jpg';
+        else
+            $CC_GLOBALS['thumbnail-ext'] = trim('jpg','.');
+        if( empty($CC_GLOBALS['thumbnail-mime']) )
+            $CC_GLOBALS['thumbnail-mime'] = 'image/jpeg';
+    }
+    
+    function _thumb_name_sql()
+    {
+        global $CC_GLOBALS;
+        
+        return "CONCAT(file_id,'.{$CC_GLOBALS['thumbnail-ext']}') as thumb_name";
+    }
+    
+    function _del_thumb($sql)
+    {
+        global $CC_GLOBALS;
+        
+        $info = CCDatabase::QueryRow($sql);
+        if( empty($info) )
+            return;
+        $thumbdir = cca( $CC_GLOBALS['user-upload-root'], $info['user_name'], 'thumbs' );
+        $thumbfile = $thumbdir . '/' . $info['thumb_name'];
+        if( !file_exists($thumbfile) )
+            return;
+        @unlink($thumbfile);
+    }
+
+    
     /**
     * Event handler for {@link CC_EVENT_MAP_URLS}
     *
@@ -42,8 +182,8 @@ class CCRenderImage extends CCRender
     */
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('media','showimage'), array('CCRenderImage','Show'), 
-            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{user_name}/{upload_id}', _('Display bitmap'), CC_AG_RENDER );
+        CCEvents::MapUrl( ccp('thumbnail'), array('CCRenderImage','Thumbnail'), 
+            CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{upload_id}', _('Display thumbnail'), CC_AG_RENDER );
         CCEvents::MapUrl( ccp('admin','thumbnail'), array('CCRenderImage','Admin'), 
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Display thumbnail admin form'), CC_AG_RENDER );
     }
@@ -54,141 +194,10 @@ class CCRenderImage extends CCRender
         require_once('cchost_lib/cc-admin.php');
         require_once('cchost_lib/cc-renderimage-form.php');
         $title = _("Edit Thumbnail Properties");
-        CCAdmin::BreadCrumbs(false,array('url'=>'','text'=>$title));
+        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
         CCPage::SetTitle($title);
         $form = new CCAdminThumbnailForm();
         CCPage::AddForm( $form->GenerateForm() );
-    }
-    function Show($username,$upload_id)
-    {
-        /* 
-        $uploads =& CCUploads::GetTable();
-        $record =& $uploads->GetRecordFromID($upload_id);
-        CCUpload::EnsureFiles($record,true);
-        $url = $record['files'][0]['download_url'];
-        */
-        parent::Show();
-        $html =<<< END
-<html>
-<body>
-<img src="$url" />
-</body>
-</html>
-END;
-        print($html);
-        exit;
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_MENU}
-    * 
-    * The handler is called when a menu is being displayed with
-    * a specific record. All dynamic changes are made here
-    * 
-    * @param array $menu The menu being displayed
-    * @param array $record The database record the menu is for
-    */
-    function OnUploadMenu(&$menu,&$record) 
-    { 
-        if( empty($record['upload_banned']) && CCUploads::InTags('image',$record) )
-        {
-            $link = ccl('media','showimage', $record['user_name'],
-                                             $record['upload_id']);
-            list( $w, $h ) = CCUploads::GetFormatInfo($record,'dim');
-            $w += 10;
-            $h += 10;
-            $action =<<<END
-      window.open('$link','showimage','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width=$w, height=$h');
-END;
-            $menu['stream'] = 
-                         array(  'menu_text'  => _('Show'),
-                                 'weight'     => 1,
-                                 'group_name' => 'play',
-                                 'id'         => 'showimage',
-                                 'access'     => CC_DONT_CARE_LOGGED_IN,
-                                 'scriptaction'     =>  $action );
-
-        }
-    }
-
-    /**
-    * Event handler for {@link CC_EVENT_UPLOAD_ROW}
-    *
-    * @param array &$record Upload row to massage with display data 
-    * @see CCTable::GetRecordFromRow()
-    */
-    function OnUploadRow(&$record)
-    {
-        $has_image = CCUploads::InTags('image',$record);
-        if( !$has_image )
-            return;
-    
-        $configs =& CCConfigs::GetTable();
-        $settings = $configs->GetConfig('settings');
-
-        if( empty($settings['thumbnail-on']) )
-            return;
-
-
-        CCUpload::EnsureFiles($record,true);
-        $image_index = 0;
-        $count = count($record['files']);
-        // finds out where the thumbnail is...
-        for( $image_index = 0; $image_index < $count; $image_index++ )
-        {
-            if( $record['files'][$image_index]['file_format_info']['media-type'] == 'image' )
-                break;
-        }
-
-        // Basically, make sure that there is something here to get 
-        // dimensions with
-        if( empty( $record['files'][$image_index]['download_url'] ) &&
-            empty( $record['files'][$image_index]['local_path'] ) )
-            return;
-        
-        if( !empty($settings['thumbnail-x']) && !empty($settings['thumbnail-y']) )
-        {
-            // set as a default
-            $maxx =  $settings['thumbnail-x'];
-
-            if ( $settings['thumbnail-constrain-y'] )
-            {
-                $thumbnailx = str_replace('px', '', $settings['thumbnail-x']);
-                $thumbnaily = str_replace('px', '', $settings['thumbnail-y']);
-
-                // CCDebug::PrintVar($record);
-                
-                if ( $record['files'][$image_index]['local_path'] )  
-                    list($orig_width, $orig_height) = 
-                        getimagesize($record['files'][$image_index]['local_path']);
-                else
-                    list($orig_width, $orig_height) = 
-                        getimagesize($record['files'][$image_index]['download_url']);
-
-                // echo "$orig_width X $orig_height <br />"; 
-                if ( $orig_height > 0 && $orig_width > 0 )
-                {
-                    $zoom_factor = $thumbnaily / $orig_height ;
-                    $maxx = round($zoom_factor * $orig_width);
-                }
-            }
-
-            if( strpos($maxx,'px') === false )
-                $maxx .= 'px';
-
-            $maxy =  $settings['thumbnail-y'];
-            if( strpos($maxy,'px') === false )
-                $maxy .= 'px';
-            $record['thumbnail_style'] = "height:$maxy;width:$maxx;";
-        }
-        else
-        {
-            $record['thumbnail_style'] = '';
-        }
-
-        
-        $record['file_macros'][]   = 'render_image';
-        $record['thumbnail_url']   = $record['files'][$image_index]['download_url'];
     }
 
     /**
@@ -199,7 +208,7 @@ END;
     */
     function OnAdminMenu(&$items, $scope)
     {
-        if( $scope == CC_GLOBAL_SCOPE )
+        if( $scope != CC_GLOBAL_SCOPE )
             return;
 
         $items += array( 
@@ -210,8 +219,7 @@ END;
                                 'weight'     => 160,
                                 'action'     => ccl('admin','thumbnail') )
                         );
-    }
-
+    }  
 }
 
 

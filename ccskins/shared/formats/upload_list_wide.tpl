@@ -46,18 +46,13 @@
             %end_if%
         </div><!-- tags -->
 
-        %if_not_empty(#R/fplay_url)%
-            <div class="playerdiv"><span class="playerlabel">%text(str_play)%</span><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%">
-                <span>%(#R/upload_name)%</span></a></div>
-            <script type="text/javascript"> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
+        %map(render_record,#R)%
+        %if_not_empty(#R/render_link_macro)%
+            %call(#R/render_link_macro)%
+        %else%
+            %call(render_link)%
         %end_if%
-
-        %if_not_empty(#R/flash_id)%
-            <div class="flash_link_div">
-                <a class="small_button flash_game_link" id="%(#R/flash_id)%" href="javascript://flash play">%text(str_play)%</a>
-            </div>
-        %end_if%
-
+        
         %if_not_null(#R/upload_extra/nsfw)%
             <div id="nsfw"><?= $T->String(array('str_nsfw_t','<a href="http://en.wikipedia.org/wiki/NSFW">','</a>')) ?></div>
         %end_if%

@@ -121,18 +121,12 @@ for( $i = 0; $i < $row_count; $i++ )
             <div class="reviewer">
                 <?= $R['edpick']['reviewer'] ?>
             </div>
-            <div style="clear:both" />
+            <div style="clear:both" />            
             <?
-            if( !empty($R['fplay_url']) )
-            {
-                ?>  <div class="playlabel"><?= $T->String('str_play') ?></div>
-                    <a class="cc_player_button cc_player_hear" id="_ep_<?= $R['upload_id'] ?>">
-                        <span style="display:none"><?= $R['upload_name'] ?></span></a>
-                    <div style="clear:both" />
-                    <script type="text/javascript"> $('_ep_<?= $R['upload_id']?>').href = '<?= $R['fplay_url'] ?>' </script>
-                <?
-            }
+              $A['render_record'] = $R;
+              $T->Call('render_link');              
             ?>
+            <div style="clear:both" />            
         </div>
         </td><?
     }

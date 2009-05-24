@@ -123,15 +123,11 @@
         %end_loop%
         </div>
 
-        %if_not_empty(#R/fplay_url)%
-            <div class="playerdiv"><span class="playerlabel">%text(str_play)%</span><a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%"> </a></div>
-            <script type="text/javascript"> $('_ep_%(#R/upload_id)%').href = '%(#R/fplay_url)%' </script>
-        %end_if%
-
-        %if_not_empty(#R/flash_id)%
-            <div class="flash_link_div">
-                <a class="small_button flash_game_link" id="%(#R/flash_id)%" href="javascript://flash play">%text(str_play)%</a>
-            </div>
+        %map(render_record,#R)%
+        %if_not_empty(#R/render_link_macro)%
+            %call(#R/render_link_macro)%
+        %else%
+            %call(render_link)%
         %end_if%
 
         <div class="info_box_clear">&nbsp;</div>

@@ -661,6 +661,8 @@ $GLOBALS['str_share_preview'] = _('Preview');
 $GLOBALS['str_share_preview_warn'] = _('This preview is pre-formatted. How this will actually look on your web page will change depending on your stylesheet settings.');
 $GLOBALS['str_share_html_warn'] = _('Make sure to copy from the box above, not what is showing below because the actual content of this HTML will change based on the upload activity. You can still get an idea of what of the formatting will look like here:');
 
+$GLOBALS['str_show'] = _('Show');
+
 $GLOBALS['str_pool_name_s']         = _('Sample Pool: %s');
 $GLOBALS['str_pool_item_page'] = _('Sample Pool Item');
 $GLOBALS['str_pools_link']         = _('Sample Pools');
