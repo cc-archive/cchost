@@ -115,26 +115,28 @@
 <!-- -->
 %if_null(#_GET/noscripts)%
     %call('flash_player')%
-    <script type="text/javascript">
-        if( window.ccEPlayer )
-            ccEPlayer.hookElements($('upload_listing'));
-    </script>
 
     <script type="text/javascript">
-        var dl_hook = new queryPopup("download_hook","download",str_download); 
-            dl_hook.height = 550;
-            dl_hook.width  = 700;
-            dl_hook.hookLinks(); 
-        var menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);
-        menu_hook.width = user_name ? 720 : null;
-        menu_hook.hookLinks();
-        if( user_name && ratings_enabled )
+        function do_page_hookups()
         {
-            null_star = '%url('images/stars/star-empty-s.gif')%';
-            full_star = '%url('images/stars/star-red-s.gif')%';
-            rate_return_t = 'ratings_stars_small_user';
-            recommend_return_t = 'recommends';
-            new userHookup('upload_list', 'ids=<?= join(',',$rec_ids) ?>&limit=page');
+            if( window.ccEPlayer )
+                ccEPlayer.hookElements($('upload_listing'));
+            var dl_hook = new queryPopup("download_hook","download",str_download); 
+                dl_hook.height = 550;
+                dl_hook.width  = 700;
+                dl_hook.hookLinks(); 
+            var menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);
+            menu_hook.width = user_name ? 720 : null;
+            menu_hook.hookLinks();
+            if( user_name && ratings_enabled )
+            {
+                null_star = '%url('images/stars/star-empty-s.gif')%';
+                full_star = '%url('images/stars/star-red-s.gif')%';
+                rate_return_t = 'ratings_stars_small_user';
+                recommend_return_t = 'recommends';
+                new userHookup('upload_list', 'ids=<?= join(',',$rec_ids) ?>&limit=page');
+            }
         }
+        Event.observe(window,'load',do_page_hookups);
     </script>
 %end_if%
