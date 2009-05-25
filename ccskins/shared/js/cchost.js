@@ -17,9 +17,8 @@
 *
 */
 
-/*
-
-*/
+var cc_unloading = false;
+Event.observe(window,'beforeunload', function() { cc_unloading = true; } );
 
 /*
     Some browsers (er, like IE) cache ajax requests, even if the
@@ -478,7 +477,8 @@ userHookup.prototype = {
         }
         catch (e)
         {
-            alert('cchost.js (5): ' + e);
+            if( cc_unloading )
+                alert('cchost.js (5): ' + e);
         }
     }
 
@@ -825,3 +825,4 @@ function cc_window_dim() {
     }
     return { top: T, left: L, width: W, height: H };
 }
+
