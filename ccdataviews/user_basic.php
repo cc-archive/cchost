@@ -8,7 +8,7 @@
 */
 function user_basic_dataview() 
 {
-    $ccp = ccp('people');
+    $ccp = ccl('people') . '/';
     $avatar_sql = cc_get_user_avatar_sql();
 
     $sql =<<<EOF

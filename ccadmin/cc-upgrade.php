@@ -352,7 +352,7 @@ function impf_5()
     update_config_db($err);
     if( $err )
     {
-        print "$e\n<br />";
+        print "$err\n<br />";
         return;
     }
 
