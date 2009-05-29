@@ -81,6 +81,7 @@ EOF;
 
 print '<?xml version="1.0" encoding="utf-8" ?>' 
 ?>
+
 <rss version="2.0" 
    xmlns:content="http://purl.org/rss/1.0/modules/content/"
    xmlns:cc="http://creativecommons.org/ns#"   
@@ -108,6 +109,9 @@ print '<?xml version="1.0" encoding="utf-8" ?>'
       <content:encoded><![CDATA[<?= $item['topic_text_html'] ?>]]></content:encoded>
       <guid><?= $item['topic_permalink'] ?></guid>
       <cc:license><?= $A['topics_license_url'] ?></cc:license>
+      <? if( !empty($item['enclosure_url']) ) { ?>
+         <enclosure url="<?= $item['enclosure_url']?>" length="<?= $item['enclosure_size']?>" type="<?= $item['enclosure_type']?>"></enclosure>
+      <? } ?>
     </item>
     <?
         } }

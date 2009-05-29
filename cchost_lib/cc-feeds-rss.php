@@ -115,6 +115,7 @@ EOF;
 
                     $R['topic_text_plain']  = cc_feed_encode($R['topic_text_plain']);
                     $R['topic_name']        = cc_feed_encode($R['topic_name']);
+                    $this->_check_for_enclosure($R);
                 }
                 else
                 {
@@ -145,7 +146,20 @@ EOF;
         exit;
     }
 
-
+    function _check_for_enclosure(&$R)
+    {
+        if( strpos($R['topic_text_plain'],'enclosure_url') !== false )
+        {
+            // this is podcast
+            $R['topic_text_html'] = htmlentities($R['topic_text_plain']);
+            preg_match_all('/enclosure_(url|size|type)%([^%]+)%/U',$R['topic_text_plain'],$m);
+            for( $i = 0; $i < 3; $i++ )
+            {
+                $R['enclosure_' . $m[1][$i]] = $m[2][$i];
+            }
+        }
+    }
+    
     function OnAddPageFeed(&$page,$feed_info)
     {
         cc_feed_add_page_links($page,$feed_info,'feed-icon16x16.png','RSS 2.0','rss','feed_rss',array('uploads','topics'));
