@@ -160,7 +160,7 @@ class CCContentPageForm extends CCForm
                               'flags' => CCFF_NONE );
         }
 
-        $types = CCDatabase::QueryItems('SELECT DISTINCT topic_type FROM cc_tbl_topics');
+        $types = CCDatabase::QueryItems('SELECT DISTINCT topic_type FROM cc_tbl_topics ORDER BY topic_type');
         $types = array_filter($types);
         $types = empty($types) ? array( 'home' => 'home' ) : array_combine( array_values($types), $types );
 
@@ -611,8 +611,31 @@ EOF;
         $query = new CCQuery();
         if( empty($_GET['topic_type']) )
         {
-            $type = CCDatabase::QueryItem('SELECT topic_type FROM cc_tbl_topics LIMIT 1');
-            $_GET['topic_type'] = empty($type) ? 'home' : $type;
+            // the list was always defaulting to 'review' (which is kind of lame)
+            // see if there's a home topics
+            $home_count = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_topics WHERE topic_type=\'home\'');
+            if( !empty($home_count) )
+            {
+                $type = 'home';
+            }
+            else
+            {
+                // well, anything but 'review' or 'reply'
+                $type = CCDatabase::QueryItem(
+                  "SELECT topic_type FROM cc_tbl_topics LIMIT 1 WHERE topic_type NOT IN ('review','reply')");
+                  
+                if( empty($type) )
+                {
+                    // ok, there's probably nothing there, just grab whatever is first
+                    $type = CCDatabase::QueryItem("SELECT topic_type FROM cc_tbl_topics LIMIT 1");
+                    if( empty($type) )
+                    {
+                        // oh, there are no topics, then it doesn't matter what this
+                        $type = 'home';
+                    }
+                }
+            }
+            $_GET['topic_type'] = $type;
         }
         $args = $query->ProcessAdminArgs('t=content_manage&type='.$_GET['topic_type']);
         $query->Query($args);

@@ -118,6 +118,8 @@ function _cc_format_format($text)
                   "#\[/quote\]#" =>  '</span>', 
                   "/\[up]/" => "<img class=\"cc_thumbs_up\" src=\"$thumbs_up\" />", 
                   "#\[/up\]#" => '', 
+                  "/\[enclosure=?([^\]]+)?\]/" => '<a href="$1" rel="enclosure">', 
+                  "#\[/enclosure\]#" =>  '</a>', 
                   "/\[box]/" => "<div class=\"box\">", 
                   "#\[/box\]#" => '</div>', 
                   "/\[indent=([0-9]+)]/" => '<div style="padding-left:$1px">',
