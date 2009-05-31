@@ -94,7 +94,7 @@ function _cc_is_formatting_on()
 function _cc_format_template_tag($tagname,$page)
 {
     $value = $page->GetArg($tagname);
-    if( $value === null )
+    if( $value === null && CCUser::IsAdmin() )
         return $page->String(array('str_invalid_tag',$tagname));
     return $value;
 }

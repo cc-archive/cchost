@@ -35,6 +35,8 @@ class CCPublicize
     {
         global $CC_GLOBALS;
 
+        require_once('cchost_lib/cc-page.php');
+        
         if( empty($user) )
         {
             if( !($user = CCUser::CurrentUserName()) )
