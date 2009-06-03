@@ -125,7 +125,7 @@ function _cc_format_format($text)
                   "/\[indent=([0-9]+)]/" => '<div style="padding-left:$1px">',
                   "#\[/indent\]#" => '</div>', 
                   "#\[cmdurl=([^\]]+)\]\[/cmdurl\]#e" => 'ccl(\'\1\')', 
-                  "/\[cmd=([^\]]+)\]/e" => '"<a href=\"" . ccl(\'\1\') . "\">"', 
+                  "/\[cmd=([^\]]+)\]/e" => '"<a rel=\"nofollow\" href=\"" . ccl(\'\1\') . "\">"', 
                   "#\[/cmd\]#" => '</a>', 
                   "#\[skinimg=([^\]]+)\]\[/skinimg\]#e" =>
                      '\'<img class="format_image" src="\' . ccd($page->Search(array("$1","images/$1"))) . \'" />\'', 

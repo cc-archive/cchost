@@ -172,6 +172,18 @@ class CCForm
         $this->EnableSubmitMessage(true);
     }
 
+    function SetSubmitFormType($submit_meta_data)
+    {
+        $this->_submit_meta_data = $submit_meta_data;
+    }
+
+    function GetSubmitFormType()
+    {
+        if( isset($this->_submit_meta_data) )
+            return $this->_submit_meta_data;
+        return null;
+    }
+
     /**
      * Set the value of an html form field. 
      *
