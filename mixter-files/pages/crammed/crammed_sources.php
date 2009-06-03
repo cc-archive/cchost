@@ -2,9 +2,6 @@
 if( !defined('IN_CC_HOST') )
     die('Welcome to ccHost');
 
-function _t_crammed_sources_init($T,&$targs) {
-    
-}
 ?><style >
 	.pagehead {
 	  color: #000 !important;
@@ -25,8 +22,8 @@ function _t_crammed_sources_init($T,&$targs) {
 		float: right;
 	}
 </style>
-<div >
-<h1  class="pagehead">Crammed Discs Remix Contest Sources</h1>
+<div style="width:65%">
+<h1  class="pagehead">Crammed Discs Remix Sources</h1>
 <div  class="artist">
 <img  src="<?= $T->URL('crammed_small_cibelle.jpg'); ?>" alt="Cibelle" width="280" height="60" />
 <p ><a  href="<?= $A['root-url']?>crammed/files/cibelle/4893">"Noite de Carnaval" (A Capellas)</a> by Cibelle</p>
