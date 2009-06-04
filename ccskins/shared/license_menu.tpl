@@ -31,4 +31,7 @@ $submit_admin = ccl('admin','submit');
 <p>
   To enabled these licenses in submit forms click here: <a class="small_button" href="%(#submit_admin)%">Manage Submit Forms</a>
 </p>
+<p>
+  To offer users alternative licenses to Public Domain waivers click here: <a class="small_button" href="%(home-url)%admin/waiver">Configure Upgrade Alternatives</a>
+</p>
 </div>

@@ -42,7 +42,7 @@ class CCAdminLicWaiverForm extends CCEditConfigForm
         $fields = array(
                     'waivers' =>
                         array(
-                                'label' => _('Waivers'),
+                                'label' => _('Default License'),
                                 'form_tip' => _('When a remix would default to one of these...') ,
                                 'formatter' => 'template',
                                 'macro' => 'multi_checkbox',
@@ -52,7 +52,7 @@ class CCAdminLicWaiverForm extends CCEditConfigForm
                     'licenses' =>
                         array(
                                 'label' => _('Alternatives'),
-                                'form_tip' => _('...then offer one of these...') ,
+                                'form_tip' => _('...allow the user to choose from these') ,
                                 'formatter' => 'template',
                                 'macro' => 'multi_checkbox',
                                 'options' => $licx,
@@ -61,6 +61,14 @@ class CCAdminLicWaiverForm extends CCEditConfigForm
             );
 
         $this->AddFormFields($fields);
+        
+        $this->SetFormHelp( _('Use this form to present alternative licenses when a remix would result in a waiving of rights or liberal license.'));
+        $this->SetFormHelp( '<br />' );
+        $this->SetFormHelp( _('For example, if a remix would result in a CCZero waiver, you can allow users to select an Attribution license.'));
+        $this->SetFormHelp( '<br />' );
+        $this->SetFormHelp( _('NOTE: Using this form, it is easy to create a situation where an illegal combination of licenses occur.'));
+        $this->SetFormHelp( '<br />' );
+        $this->SetFormHelp( _('For example, if a remix would result in a ShareAlike license and the user is offered to license the remix as Attribution, that would be a violation of the source\'s ShareAlike license.'));
     }
 
     function PopulateValues(&$vals)
@@ -77,8 +85,10 @@ class CCLicWaiver
     {
         require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/cc-admin.php');
-        $title = _('Configure Waiver Alternatives');
-        CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        $title = _('Configure Upgrade Alternatives');
+        $trail1 = array( 'url' => '/license_menu', 'text' => 'Edit System Licenses' );
+        $trail2 = array('url'=>'','text'=>$title);
+        CCAdmin::BreadCrumbs(true,$trail1,$trail2);
         CCPage::SetTitle($title);
         $form = new CCAdminLicWaiverForm();
         CCPage::AddForm( $form->GenerateForm() );

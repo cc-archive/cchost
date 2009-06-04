@@ -157,6 +157,8 @@ EOF;
             {
                 $R['enclosure_' . $m[1][$i]] = $m[2][$i];
             }
+            $text = preg_replace('#(</div>|</h2>|</li>)#',"\n\r" . '$1', $R['topic_text_plain']);
+            $R['topic_text_plain'] = htmlentities(nl2br(strip_tags($text)));
         }
     }
     
