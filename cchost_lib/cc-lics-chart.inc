@@ -36,6 +36,7 @@ function & cc_license_chart()
                     'noncommercial_3' =>   'nc-sampling+', 
                     'attribution_3' =>   'nc-sampling+', 
                     'publicdomain' =>   'nc-sampling+', 
+                    'cczero' =>   'nc-sampling+', 
                 ),
 
             'sampling+' =>  array
@@ -48,6 +49,7 @@ function & cc_license_chart()
                     'noncommercial_3' =>  'nc-sampling+' , 
                     'attribution_3' =>   'sampling+', 
                     'publicdomain' =>   'sampling+', 
+                    'cczero' =>   'sampling+', 
                 ),
 
             'sampling' =>   array
@@ -60,6 +62,7 @@ function & cc_license_chart()
                     'noncommercial_3' =>   'nc-sampling+', 
                     'attribution_3' =>   'sampling', 
                     'publicdomain' =>   'sampling', 
+                    'cczero' =>   'sampling', 
                 ),
 
             'share-alike_3' =>   array
@@ -72,6 +75,7 @@ function & cc_license_chart()
                     'noncommercial_3' =>  'by-nc-sa_3' , 
                     'attribution_3' =>   'share-alike_3', 
                     'publicdomain' =>  'share-alike_3' , 
+                    'cczero' =>   'share-alike_3', 
                 ),
 
             'by-nc-sa_3' =>   array
@@ -84,6 +88,7 @@ function & cc_license_chart()
                     'noncommercial_3' =>  'by-nc-sa_3' , 
                     'attribution_3' =>  'by-nc-sa_3' , 
                     'publicdomain' =>   'by-nc-sa_3', 
+                    'cczero' =>   'by-nc-sa_3', 
                 ),
 
             'noncommercial_3' =>   array
@@ -96,6 +101,7 @@ function & cc_license_chart()
                     'noncommercial_3' =>  'noncommercial_3' , 
                     'attribution_3' =>   'noncommercial_3', 
                     'publicdomain' =>   'noncommercial_3', 
+                    'cczero' =>   'noncommercial_3', 
                 ),
 
             'attribution_3' =>   array
@@ -108,6 +114,7 @@ function & cc_license_chart()
                     'noncommercial_3' =>  'noncommercial_3' , 
                     'attribution_3' =>   'attribution_3', 
                     'publicdomain' =>   'attribution_3', 
+                    'cczero' =>   'attribution_3', 
                 ),
 
             'publicdomain' =>   array
@@ -120,6 +127,7 @@ function & cc_license_chart()
                     'noncommercial_3' =>  'noncommercial_3' , 
                     'attribution_3' =>   'attribution_3', 
                     'publicdomain' =>   'publicdomain' , 
+                    'cczero' =>   'cczero', 
                 ),
 
             'cc_zero' =>   array
@@ -131,7 +139,8 @@ function & cc_license_chart()
                     'by-nc-sa_3' =>  'by-nc-sa_3'  , 
                     'noncommercial_3' =>  'noncommercial_3' , 
                     'attribution_3' =>   'attribution_3', 
-                    'publicdomain' =>   'publicdomain' , 
+                    'publicdomain' =>   'cc_zero' , 
+                    'cczero' =>   'cczero', 
                 ),
 
             );
@@ -147,7 +156,7 @@ function cc_stricter_license( $lic1,$lic2 )
             'share-alike' =>    'share-alike_3'  , 
             'by-nc-sa' =>       'by-nc-sa_3'  , 
             'noncommercial' =>  'noncommercial_3' , 
-            'attribution' =>    'attribution_3', 
+            'attribution' =>    'attribution_3',
         );
 
     if( array_key_exists($lic1,$update) )

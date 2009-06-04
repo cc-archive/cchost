@@ -98,12 +98,35 @@ ccRemixSearch.prototype = {
     },
 
     onLicenseResults: function(resp,json) {
-        $('license_info').innerHTML = str_remix_lic.replace('%s','<a href="' + json.license_url 
-                                                                 + '">' + json.license_name + '</a>' );
+        if( json.options )
+        {
+            var html = '<select id="licpicker">';
+            json.options.each( function(lic) {
+                    html += '<option value="' + lic.license_id + '"';
+                    if( lic.license_id == json.license_id )
+                    {
+                        html += ' selected="selected" ';
+                    }
+                    html += '>' + lic.license_name + '</option>';
+                } );
+            html += '</select>';
+            $('license_info').innerHTML = 'Your remix will be licensed as: ' + html;
+            Event.observe( 'licpicker', 'change', this.onLicenseChange.bind(this) );
+        }
+        else
+        {
+            $('license_info').innerHTML = str_remix_lic.replace('%s','<a href="' + json.license_url 
+                                                                     + '">' + json.license_name + '</a>' );
+        }
         $('license_info_container').style.display = 'block';
         $('upload_license').value = json.license_id;
     },
 
+    onLicenseChange: function(ev) {
+        var box = $('licpicker');
+        $('upload_license').value = box.options[ box.selectedIndex ].value;
+    },
+    
     onToggleBox: function(ev){ 
         this._toggle_open();
     },

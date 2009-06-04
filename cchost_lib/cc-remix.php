@@ -274,12 +274,31 @@ EOF;
     /**
     * Calculate the strictest license given a set of uploads
     *
-    * @param object &$form CCForm object
-    * @param array &$rows Array of upload rows
     */
     function RemixLicenses()
     {
-        $row = CCRemix::GetStrictestLicense($_GET['remix_sources'],$_GET['pool_sources']);
+        global $CC_GLOBALS;
+        $rowx = CCRemix::GetStrictestLicense($_GET['remix_sources'],$_GET['pool_sources']);
+        $row = array();
+        foreach( array('license_id','license_url','license_name') as $K )
+            $row[$K] = $rowx[$K];
+        $configs =& CCConfigs::GetTable();
+        $lic_waiver = $configs->GetConfig('lic-waiver');
+        
+        if( !empty($lic_waiver) )
+        {
+            $waivers = array_keys($lic_waiver['waivers']);
+            if( in_array($row['license_id'],$waivers) )
+            {
+                $lics = array_keys($lic_waiver['licenses']);
+                if( !in_array($row['license_id'],$lics) )
+                    $lics[] = $row['license_id'];
+                $lics = "'" . join("','",$lics) . "'";
+                $lics = CCDatabase::QueryRows('SELECT license_id,license_name,license_url FROM cc_tbl_licenses WHERE ' .
+                                            " license_id IN ({$lics}) ");
+                $row['options'] = $lics;
+            }
+        }                
         CCUtil::ReturnAjaxData($row);
     }
 
