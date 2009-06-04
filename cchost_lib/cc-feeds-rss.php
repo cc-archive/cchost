@@ -151,14 +151,13 @@ EOF;
         if( strpos($R['topic_text_plain'],'enclosure_url') !== false )
         {
             // this is podcast
-            $R['topic_text_html'] = htmlentities($R['topic_text_plain']);
+            $R['topic_text_html'] = ''; //htmlentities($R['topic_text_plain']);
             preg_match_all('/enclosure_(url|size|type)%([^%]+)%/U',$R['topic_text_plain'],$m);
             for( $i = 0; $i < 3; $i++ )
             {
                 $R['enclosure_' . $m[1][$i]] = $m[2][$i];
             }
-            $text = preg_replace('#(</div>|</h2>|</li>)#',"\n\r" . '$1', $R['topic_text_plain']);
-            $R['topic_text_plain'] = htmlentities(nl2br(strip_tags($text)));
+            $R['topic_text_plain'] = '<![CDATA[' . $R['topic_text_plain'] . ']]>';
         }
     }
     
