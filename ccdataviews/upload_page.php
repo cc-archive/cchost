@@ -18,6 +18,7 @@ function upload_page_dataview()
     $is_thumbs_up = empty($chart['thumbs_up']) ? '0' : '1';
     $ratings_on = empty( $chart['ratings'] ) ? '0' : '1';
     $lic_logo = cc_get_license_logo_sql('big');
+    
 
     $sql =<<<EOF
 SELECT 
@@ -29,6 +30,7 @@ SELECT
     user_real_name,user_name, $avatar_sql, upload_num_scores, upload_score,
     CONCAT( '$urlp', user_name ) as artist_page_url,
     {$lic_logo},
+    IF( license_id IN ('cczero','publicdomain'), 1, 0 ) as is_waiver,
     license_url, license_name, license_permits, license_required, license_prohibits,
     DATE_FORMAT( upload_date, '%Y' ) as year, 
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date,

@@ -152,7 +152,9 @@
             "<a href="%(#R/file_page_url)%" rel="cc:attributionURL"><span %if_attr(#R/dcmi,href)% property="dc:title" %if_attr(#R/dcmirel,rel)%>%(#R/upload_name)%</span></a>" <br />
             %text(str_by)%
             <span property="cc:attributionName"> %(#R/user_real_name)%</span><br /><br />
-            %(#R/year)% - %text(str_lic)%<br />
+            %if_null(#R/is_waiver)%
+              %(#R/year)% - %text(str_lic)%
+            %end_if%<br />
             Creative Commons<br />
             <a rel="license" href="%(#R/license_url)%"
                    title="%(#R/license_name)%">%(#R/license_name)%</a><br /><br />
@@ -160,7 +162,12 @@
                   title="%(#R/license_name)%"><img title="%(#R/license_name)%"
                   src="%(#R/license_logo_url)%" /></a><br /><br />
             <p id="license_more_info">
-                <?= $T->String(array('str_lic_click',"<a href=\"{$R['license_url']}\">","</a>")); ?>
+                %if_null(#R/is_waiver)%
+              <p>HELLO</p>
+                    <?= $T->String(array('str_lic_click',"<a href=\"{$R['license_url']}\">","</a>")); ?>
+                %else%<!-- waiver -->
+                    <?= $T->String(array('str_lic_waiver',"<a href=\"{$R['license_url']}\">","</a>")); ?>                
+                %end_if%
             </p>
         </div>
       </p>

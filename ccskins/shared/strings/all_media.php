@@ -297,6 +297,7 @@ $GLOBALS['str_lic_public']                = _('public domain');
 $GLOBALS['str_lic_sampling']              = _('sampling');
 $GLOBALS['str_lic_sampling_plus']         = _('sampling+');
 $GLOBALS['str_lic_share_alike']           = _('share alike');
+$GLOBALS['str_lic_waiver']                = _('The artist has waived all rights. Click %shere%s for more information.');
 $GLOBALS['str_list_IEtip']                 = _('IE: Right-click select \'Save Target As\'');
 $GLOBALS['str_list_Mactip']                = _('Mac: Control-click select \'Save Link As\'');
 $GLOBALS['str_list_date']                  = _('uploaded');

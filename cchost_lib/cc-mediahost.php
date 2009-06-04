@@ -133,6 +133,8 @@ class CCMediaHost
         require_once('cchost_lib/cc-upload-forms.php');
 
         $form = new CCNewUploadForm($uid,true,$avail_lics);
+
+        $form->SetSubmitFormType($submit_meta);
         
         if( !empty($suggested_tags) )
             $form->AddSuggestedTags($suggested_tags);
@@ -186,6 +188,8 @@ class CCMediaHost
         $userid   = CCUser::CurrentUser();
         require_once('cchost_lib/cc-remix-forms.php');
         $form     = new CCPostRemixForm($userid);
+
+        $form->SetSubmitFormType($submit_meta);
 
         $this->_add_publish_field($form);
 
