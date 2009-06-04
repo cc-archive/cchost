@@ -130,7 +130,7 @@ function & cc_license_chart()
                     'cczero' =>   'cczero', 
                 ),
 
-            'cc_zero' =>   array
+            'cczero' =>   array
                 (
                     'nc-sampling+' =>  'nc-sampling+' , 
                     'sampling+' =>   'sampling+', 
@@ -157,7 +157,9 @@ function cc_stricter_license( $lic1,$lic2 )
             'by-nc-sa' =>       'by-nc-sa_3'  , 
             'noncommercial' =>  'noncommercial_3' , 
             'attribution' =>    'attribution_3',
+            'cc_zero'     =>    'cczero'
         );
+
 
     if( array_key_exists($lic1,$update) )
         $lic1 = $update[$lic1];

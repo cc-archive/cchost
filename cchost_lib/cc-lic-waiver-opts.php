@@ -65,8 +65,8 @@ class CCAdminLicWaiverForm extends CCEditConfigForm
 
     function PopulateValues(&$vals)
     {
-        $vals['licenses'] = join(',',array_keys( $vals['licenses']));
-        $vals['waivers'] = join(',',array_keys( $vals['waivers']));
+        $vals['licenses'] = empty($vals['licenses']) ? '' : join(',',array_keys( $vals['licenses']));
+        $vals['waivers'] = empty($vals['waivers']) ? '' : join(',',array_keys( $vals['waivers']));
         parent::PopulateValues($vals);
     }
 }

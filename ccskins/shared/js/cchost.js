@@ -34,7 +34,7 @@ Ajax.Request.prototype.initialize = function(url, options) {
     if( url.match(/\?/) )
         _q_ = '&';
     url += _q_ + '_cache_buster=' + new Date().getTime();
-    ajax_debug(url);
+    //ajax_debug(url);
     this._old_request_init(url,options);
   };
 

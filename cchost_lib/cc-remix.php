@@ -279,13 +279,13 @@ EOF;
     {
         global $CC_GLOBALS;
         $rowx = CCRemix::GetStrictestLicense($_GET['remix_sources'],$_GET['pool_sources']);
+
         $row = array();
         foreach( array('license_id','license_url','license_name') as $K )
             $row[$K] = $rowx[$K];
         $configs =& CCConfigs::GetTable();
         $lic_waiver = $configs->GetConfig('lic-waiver');
-        
-        if( !empty($lic_waiver) )
+        if( !empty($lic_waiver['waivers']) )
         {
             $waivers = array_keys($lic_waiver['waivers']);
             if( in_array($row['license_id'],$waivers) )
