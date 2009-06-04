@@ -163,7 +163,6 @@
                   src="%(#R/license_logo_url)%" /></a><br /><br />
             <p id="license_more_info">
                 %if_null(#R/is_waiver)%
-              <p>HELLO</p>
                     <?= $T->String(array('str_lic_click',"<a href=\"{$R['license_url']}\">","</a>")); ?>
                 %else%<!-- waiver -->
                     <?= $T->String(array('str_lic_waiver',"<a href=\"{$R['license_url']}\">","</a>")); ?>                
