@@ -57,6 +57,8 @@ class CCFileProps
     {
         global $xx;
 
+        if( filesize($filename) > (100 * 1024) )
+            return null;
         $text = file_get_contents($filename);
         if( !preg_match('#.*\[meta\](.*)\[/meta\].*#Ums',$text,$m) )
             return null;
