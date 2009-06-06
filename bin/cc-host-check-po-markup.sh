@@ -1,7 +1,7 @@
 #! /usr/bin/perl -w
 # Try to detect markup errors in translations.
 #
-# $Id: $
+# $Id$
 #
 # Author: Peter Moulder <pmoulder@mail.csse.monash.edu.au>
 # Author: Jon Phillips <jon@rejon.org>

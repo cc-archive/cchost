@@ -1,5 +1,5 @@
 
-ccHost 5.0 README
+ccHost 5.1 README
 ==================
 
 For the latest information on this release please see our wiki
@@ -42,11 +42,10 @@ b.  PHP.  This system requires PHP 4 or 5.
 
 c.  MYSQL.  MySQL 4 or higher is required.
 
-d.  GETID3.  Download the GetID3 (1.7.3 - 1.7.7 tested to work) library from
-http://www.getid3.org/#download, then untar and place into ccHost at
-cchost/getid3/. 
+d.  GETID3.  Download the GetID3 (1.7.9 tested to work - STABLE version
+ONLY!) library from http://www.getid3.org/#download
 
-e.  BROWSER.  Should work on most popular browsers.  
+e.  BROWSER.  Should work on most popular browsers (not IE6 though).  
 COOKIES must be enabled in your browser in order to log in 
 to a session. NOTE: For several of the skins (especially 'commons') 
 IE6 browser is no longer supported.
@@ -56,7 +55,6 @@ IE6 browser is no longer supported.
 -----------------
 
 -  This relesae does NOT include the following:
-     * developer documentation
      * international support
      * redistribution tools
 
@@ -102,8 +100,7 @@ http://your_server/cchost_lib/cc-config-repair.php
 7. CONTACTS (REPORTING BUGS)
 ----------------------------
 
-
-Project WIKI with every link you ever wanted (including
+Project WIKI has every link you ever wanted (including
 bug reporting) and some tips contributed by users:
 
 http://wiki.creativecommons.org/CcHost#Communication

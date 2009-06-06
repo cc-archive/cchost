@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# The makefile is now officially crufty and needs someone
+# to step up and clean it up and make it functional for 5.x
+# releases.
+#
+# In the meantime, this will crank out a ZIP
+#
+app=cchost
+dist=../dist
+prev_rel_date=11/12/2008
+
+version=`cat VERSION`
+targetfile=${app}-${version}
+targetdir=${dist}/${targetfile}
+
+mkdir -p ${dist}
+mkdir ${targetdir}
+
+svn --force export . ${targetdir}
+echo "Change log for ${version} - since ${prev_rel_date}" > ${targetdir}/ChangeLog
+php bin/cc-host-stat.php -s "${prev_rel_date}" -q >> ${targetdir}/ChangeLog
+cd ${targetdir}
+sed -e "s/PROJECT_VERSION/${version}/" NEWS.in > NEWS
+[ -x `which txt2html` ] && txt2html --xhtml NEWS > PRESS.html
+
+rm cchost.pot
+rm cchost.spec.in
+rm ChangeLog.in
+rm Makefile
+rm Makefile.dist
+rm Makefile.include
+rm Makefile.language
+rm NEWS.in
+rm POTFILES
+rm PRESS.in
+rm -Rf locale
+rm -Rf mixter-files
+rm -Rf mixter-lib
+rm -Rf tutorials
+
+cd ..
+zip -r ${targetfile}.zip ${targetfile}/*
+rm -Rf ${targetfile}

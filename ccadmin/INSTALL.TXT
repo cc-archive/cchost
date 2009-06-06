@@ -1,4 +1,4 @@
-Installation notes for ccHost 5.0
+Installation notes for ccHost 5.1
 ====================================
 
 Please check the project website/wiki to see if there are updates to any of 
@@ -17,13 +17,14 @@ directories.
        environment makes available to you. During the creation take note
        of the following information:
 
-         - database name
+     - database name
 	 - database user
 	 - database user's password
-	 - database's server location
+	 - database's server location (typically, but not always, 'localhost')
 
     2. Unzip the ccHost ZIP archive on your local system and copy the files to 
-       your server retaining the the directory structure.
+       your server retaining the the directory structure so that the file
+       'index.php' is in your root directory
 
     3. Browse to http://where_you_installed/ccadmin and follow all the 
        instructions from then on. 
@@ -72,13 +73,13 @@ at a Unix/Linux command line you can use these steps to install:
 
    6. Follow the instructions from there on...
 
-Upgrading from 5.0 or higher to 5.0.1
+Upgrading from 5.0 or higher to 5.1
 ---------------------------------------
 
    1. Unzip ccHost ZIP archive to a local machine
    2. Delete the ccadmin directory
    3. Copy all 5.0.1 file over your existing site
-   4. Browse to http://<your_installation_root>?update=1
+   4. While logged in as admin, browse to http://<your_installation_root>?update=1
 
 Upgrading from 3.1 or higher to 5.0
 -----------------------------------
@@ -87,7 +88,7 @@ Upgrading from 3.1 or higher to 5.0
 
    1. Unzip cchost ZIP archive to a local machine.
 
-   2. Copy ALL the 5.0 files over your existing site
+   2. Copy ALL the 5.1 files over your existing site
 
    3. Browse to http://where_you_installed_cchost
 
@@ -101,8 +102,8 @@ Upgrading from 3.1 or higher to 5.0
       Many imported templates (like your home page) might "just work" 
       but many will need tweaking, assuming you are familiar with PHP.
 
-Upgrading from 3.0 or lower to 5.0
------------------------------------
+Upgrading from 3.0 or lower to 5.0 or higher
+--------------------------------------------
 
 Upgrading from 3.0 or lower installation has not been tested. 
 It should theoritically work the same as upgrading from 

@@ -1,13 +1,46 @@
 ccHost Release Notes
 ====================
 
+New in 5.1
+=====================
+If you've been waiting to upgrade to 5.x for the more stable
+release then the wait is over.
+
++100 bug fixes
+OpenID support for login and new accounts
+Remix "history chart" details sample derivation
+Support for ccZero/public domain waiver
+Admins can edit license info
+Licenses are now per submit form
+Now support RDFa license callbacks
+'News' and 'Blurbs' sidebar widgets
+Support for Y! and other media players
+Many new formats available inside topics
+New skin ala creativecommons.org 2009
+Content topics can be 'sticky'
+Pretty (non-graphic) buttons option
+Modern (non-graphic) rounded corners
+Sample Pool wrappers for any CC sites 
+Google(tm) style paging now an option
+Login will redirect to previous screen
+Skin writers now have priority over system defaults
+Search through sample pool/trackback items
+Fork a forum topic
+Email notify on trackbacks
+Allow users to translate forum topics
+Support for imgmagick thumbnails (hacky)
+Support for 'podcast' topic type w/enclosures (hacky)
+Plug-in devs can now do custom updates
+All commands are now admin documented
+
+
+New Features in 5.0
+=====================
+
 Version 5.0 marks a major feature release that removes all programming
 and HTML/XML markup requirements from admins of a ccHost site with a 
 heavy emphasis on content creation and customization all through admin 
 browser interfaces.
-
-New Features in 5.0
-=====================
 
 - Content Manager 
 

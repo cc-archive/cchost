@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: upload_page_shared.php 8092 2007-11-19 06:59:29Z fourstones $
+* $Id$
 *
 */
 

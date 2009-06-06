@@ -14,7 +14,7 @@
 # represent and warrant to Creative Commons that your use
 # of the ccHost software will comply with the CC-GNU-GPL.
 # 
-# $Id: $
+# $Id$
 # 
 # Copyright 2005-2006, Creative Commons, www.creativecommons.org.
 # Copyright 2006, Jon Phillips, jon@rejon.org.

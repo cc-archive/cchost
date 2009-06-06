@@ -26,12 +26,15 @@ $this_file = basename(__FILE__);
 $help =<<<EOF
   usage: 
 
-  {$this_file}  [-s start_date_string] [-e end_date_string]
+  {$this_file}  [-s start_date_string] [-e end_date_string] [-q] [-v]
 
   date strings are passed to strtotime()
   default start is '7 days ago'
   default end   is 'now'
 
+  use -q to supress file names in output
+  use -v for verbose
+  
   examples:
     // Get log since Feb, 23
     php {$this_file} -s 2006-02-23 
@@ -120,10 +123,17 @@ for( $i = $count-1; $i >= 0; $i--)
         foreach( $updates as $U )
         {
             $files = preg_split("/\n/",$U['f']);
-            foreach( $files as $file )
+            if( empty($args['q']) )
             {
-                $f = preg_replace('#^\s+[A-Z]\s.*/trunk/(.*)$#','\1',$file);
-                print("\t* {$f} {$U['r']}:\n");
+                foreach( $files as $file )
+                {
+                    $f = preg_replace('#^\s+[A-Z]\s.*/trunk/(.*)$#','\1',$file);
+                    print "\t* {$f} {$U['r']}:\n";
+                }
+            }
+            else
+            {
+                print "\t* {$U['r']}:\n";
             }
             $comments = split("\n",$U['c']);
             foreach( $comments as $comment )
@@ -164,6 +174,10 @@ function get_args()
                 ++$i;
                 break;
 
+            case '-q':
+                $args['q'] = true;
+                break;
+                
             case '-v':
                 $args['v'] = true;
                 break;

@@ -1,10 +1,10 @@
-Creative Commons Sponsored Software ccHost Releases Version 4.0
+Creative Commons Sponsored Software ccHost Releases Version 5.1
 
 San Francisco, USA
 
 Creative Commons, a nonprofit organization that provides flexible
 copyright licenses for authors and artists along with the Creative
-Commons Developer Community released the ccHost 4.0 today. ccHost is an
+Commons Developer Community released the ccHost 5.1 today. ccHost is an
 Open Source web-based media sharing software. This
 release builds upon ccHost's novel support of collaboration, sharing,
 and storage of multi-media using the different Creative Commons licenses
@@ -16,15 +16,10 @@ service that supports legal music sharing and remixing. ccHost is the
 Open Source Software engine powering ccmixter.org and which anyone may
 download, install, and use to freely build media sharing communities.
 
-This 4.0 release is a 2-3X performance boost over the last major version.
-This release also includes playlists/favorites, an embedded mp3 player, 
-and a remix radio channels for audio content. A new feature that builds
-upon ccHost's usage of standards is the "Publicize" feature whereby
-anyone can include lists of information about their profile from 
-ccHost so that their info may be used around the web in easy-to-use 
-formats. Also of note with this release is the inclusion of the
-recently released Creative Commons 3.0 Licenses, which are
-selectable as an administrator.
+This 5.1 represents over a year of stabalization of the major 5.0 upgrade
+from from early 2008. There are also many new features, including support
+for OpenID, CC0 (CC Zero) waivers, extensive license configuration and
+dozens of other imporvements and features. 
 
 The ccHost development community encourages new developers to
 contribute to the project. The future of ccHost is bright with upcoming
@@ -32,16 +27,15 @@ development focusing on user and admin requests for features like further
 generalization of media support, better tools to support social networking
 features, and further language support.
 
-Chat with other developers on channel #cc on
-irc.freenode.org, join the project mailing list
+Join the project mailing list
 (https://lists.sourceforge.net/mailman/listinfo/cctools-cchost), and
 edit the project wiki page to help shape this project's future direction
-(http://wiki.creativecommons.org/wiki/ccHost).
+(http://wiki.creativecommons.org/ccHost).
 
 
 Project Website
 
-http://wiki.creativecommons.org/wiki/ccHost
+http://wiki.creativecommons.org/ccHost
 
 
 ccHost Download
@@ -60,13 +54,10 @@ Bug Reports
 https://sourceforge.net/tracker/?atid=559966&group_id=80503&func=browse
 
 
-Roadmap (Project Timeline)
-
-http://wiki.creativecommons.org/CcHost_Roadmap
-
-
 About ccHost
 
+ccHost is a content management system, winner of the Linux Journal
+LinuxWorldExpo Product Excellence Award for Best Open Source Solution. 
 The goal of this project is to spread media content that is licensed
 under Creative Commons throughout the web in much the same way that
 weblogs spread CC licensed text. ccHost is web-based infrastructure that
@@ -94,9 +85,8 @@ For general information, visit http://creativecommons.org/.
 
 Contact
 
-Jon Phillips
-Community Developer
-jon@creativecommons.org
+Nathan Yergler
+nathan@creativecommons.org
 
 
 Press Kit

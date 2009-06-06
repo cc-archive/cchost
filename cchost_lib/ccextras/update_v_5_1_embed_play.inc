@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id: update_v_5_openid.inc 12467 2009-04-29 05:09:20Z fourstones $
+* $Id$
 *
 */
 

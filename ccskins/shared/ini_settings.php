@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id:  12213 2009-04-16 01:32:20Z fourstones $
+* $Id$
 *
 */
 
