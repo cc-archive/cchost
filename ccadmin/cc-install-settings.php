@@ -1,4 +1,5 @@
 <?
+/* $Id$ */
 
 $install_settings = array(
     array( 
@@ -347,7 +348,7 @@ $install_settings = array(
                 'action' => '',
                 'logo' => 'submit-remix.gif',
                 'type_key' => 'remix',
-                'licenses' => 'attribution_3,cczero',
+                'licenses' => 'attribution_3,noncommercial_3',
                 ),
             'samples' => array (
                 'enabled' => 1,
@@ -366,7 +367,7 @@ $install_settings = array(
                 'action' => '',
                 'logo' => 'submit-sample.gif',
                 'type_key' => 'samples',
-                'licenses' => 'attribution_3,cczero',
+                'licenses' => 'attribution_3,noncommercial_3',
                 ),
             'fullmix' => array (
                 'enabled' => '1',
@@ -385,6 +386,7 @@ $install_settings = array(
                 'action' => '',
                 'logo' => 'submit-original.gif',
                 'type_key' => 'fullmix',
+                'licenses' => 'attribution_3,noncommercial_3',
                 ),
             ),
      ),
