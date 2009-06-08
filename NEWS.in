@@ -34,6 +34,52 @@ Plug-in devs can now do custom updates
 All commands are now admin documented
 
 
+New in 5.0.1
+=====================
+
+head script/css ganging
+add full date range support to query API
+playlist templates redux
+allow rewrite of tag base url in /tags
+gather uploads' tags for playlist properties form
+allow feed links from content page
+playlist search and templates
+added 'page' and 'feed' limit to query API
+query eng. 2.0
+turn on if-modified-since code for non registered users
+an official admin log viewer
+'edit' on playlist menus
+add edit button to pool item
+add view button to pool admin listing
+allow delete submit forms
+queryapi: new format "textfile"
+display filename as link (not nickname)
+add recent update to user feed page
+num playlists in upload page and user profile
+making queries more friendly to playlists
+num playlists in upload page and user profile
+user feeds hanging off profile
+share playlists
+added - and quoted strs for generic search
+new 'teru' style 'manage files'
+admins can now add google search form with checkbox
+feature: user can select ccud tag type (e.g. sample) when adding files
+feature: user can manage file from 'Submit Files'
+added 'recc' to query to see who recommends an upload
+admin feature: Query browse option sets for driving look/feel of query browser
+query browser now has 'save to playlist' button
+query browser now respect admin edited 'optsets'
+expand ZIPs in sample browser
+security: download urls were linked directly
+'download this page' in menu
+generic sample pool search (import not. impl)
+admin: hide all files for a user
+admin: allow embed code in pool items when editing
+multiple file download indicator
+in-situ reviewing on wide listing page
+allow content admin to control content page width
+edit button on 'approve' page
+
 New Features in 5.0
 =====================
 

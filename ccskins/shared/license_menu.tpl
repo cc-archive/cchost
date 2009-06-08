@@ -20,7 +20,8 @@ $submit_admin = ccl('admin','submit');
 <table id="license_menu_table">
 %loop(lics,L)%
     <tr>
-        <td  style="padding-bottom:11px" ><a class="small_button" href="%(#lic_edit)%/%(#L/license_id)%">Edit</a></td>
+        <? $urlsafe = urlencode(urlencode($L['license_id'])); ?>
+        <td  style="padding-bottom:11px" ><a class="small_button" href="%(#lic_edit)%/%(#urlsafe)%">Edit</a></td>
         <td>%(#L/license_name)%</td>
     </tr>
 %end_loop%

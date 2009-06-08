@@ -18,8 +18,14 @@ mkdir -p ${dist}
 mkdir ${targetdir}
 
 svn --force export . ${targetdir}
+echo "getting log for 5.1"
 echo "Change log for ${version} - since ${prev_rel_date}" > ${targetdir}/ChangeLog
+echo -e "==============================\n\n" >> ${targetdir}/ChangeLog
 php bin/cc-host-stat.php -s "${prev_rel_date}" -q >> ${targetdir}/ChangeLog
+echo "getting log for 5.0.1"
+echo -e "\n\nChange log for 5.0.1 " >> ${targetdir}/ChangeLog
+echo -e "==============================\n\n" >> ${targetdir}/ChangeLog
+php bin/cc-host-stat.php  -s "02/15/2008" -e "${prev_rel_date}" -q >> ${targetdir}/ChangeLog
 cd ${targetdir}
 sed -e "s/PROJECT_VERSION/${version}/" NEWS.in > NEWS
 [ -x `which txt2html` ] && txt2html --xhtml NEWS > PRESS.html
@@ -34,6 +40,8 @@ rm Makefile.language
 rm NEWS.in
 rm POTFILES
 rm PRESS.in
+rm VERSION
+rm quickmakedist
 rm -Rf locale
 rm -Rf mixter-files
 rm -Rf mixter-lib
