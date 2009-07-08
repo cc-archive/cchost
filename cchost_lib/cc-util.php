@@ -421,6 +421,11 @@ class CCUtil
 
     function EncodeIP($dotquad_ip)
     {
+        if( preg_match('/::[0-9]+$/',$dotquad_ip) )
+        {
+            // this is a mac dev environment (sheesh)
+            return '127.0.0.1';
+        }
         $ip_sep = explode('.', $dotquad_ip);
         return sprintf('%02x%02x%02x%02x', $ip_sep[0], $ip_sep[1], $ip_sep[2], $ip_sep[3]);
     }
