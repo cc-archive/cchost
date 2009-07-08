@@ -14,32 +14,27 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $Id$
+* $id$
 *
 */
 
 /**
 * @package cchost
-* @subpackage feature
+* @subpackage admin
 */
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
-define( 'CC_TOPIC_FORMAT_BB', 0 );
-define( 'CC_TOPIC_FORMAT_HTML', 1 );
-define( 'CC_TOPIC_FORMAT_PLAIN', 2 );
-
-CCEvents::AddHandler(CC_EVENT_MAP_URLS, array( 'CCTopic',  'OnMapUrls'), 'cchost_lib/ccextras/cc-topics.inc');
-
-CCEvents::AddHandler( CC_EVENT_API_QUERY_SETUP, 'xlat_ApiQuerySetup' );
-
-function xlat_ApiQuerySetup( &$args, &$queryObj, $requiresValidation )
+/**
+*/
+class v_5_1_topic_format extends CCUpdate
 {
-    //d($args);
-    if( !empty($args['xlat']) )
-        $queryObj->where[] = 'topic_can_xlat = 1';
-
+    function Update()
+    {
+        $this->_check_for_field('cc_tbl_topics','topic_format', 'INT NOT NULL ');
+        CCPage::Prompt( _('Topic format flag') );
+    }
 }
 
 ?>

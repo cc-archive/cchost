@@ -32,7 +32,7 @@ if( !defined('IN_CC_HOST') )
 function cc_feed_encode($str)
 {
     $str = preg_replace('/&(?!amp;|#)/','&amp;',$str);
-    return utf8_encode( preg_replace('`[^&a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]`','',$str ) );
+    return utf8_encode( preg_replace('`[^'."\n".'&a-zA-Z0-9()!@#$%^*-_=+\[\];:\'\"\\.,/?~ ]`','',$str ) );
 }
 
 function cc_feed_transcode($str)

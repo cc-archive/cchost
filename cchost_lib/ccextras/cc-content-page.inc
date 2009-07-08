@@ -43,6 +43,7 @@ class CCContentPostForm extends CCTopicForm
         $new_types[] = _('sidebar_blurb');        
         $types = array_filter(array_unique(array_merge($types,$new_types)));
         $types = array_combine( array_values($types), $types );
+        ksort($types);
         $fields['topic_type'] =
                         array(  'label'      => _('Content Type'),
                                'form_tip'    => '',
@@ -62,6 +63,19 @@ class CCContentPostForm extends CCTopicForm
                    'be skipped by feed generators.'),
                                'formatter'   => 'sticky_date',
                                'value'       => date('Y-m-d H:i:s'),
+                               'flags'       => CCFF_POPULATE );
+
+        $options =
+            array( CC_TOPIC_FORMAT_BB    => _('[b] formatting codes'),
+                   CC_TOPIC_FORMAT_HTML  => _('X/HTML markup'),
+                   CC_TOPIC_FORMAT_PLAIN => _('Plain text (no formatting)'),
+                );
+
+        $fields['topic_format'] =
+                        array( 'label'      => _('Text Format'),
+                               'form_tip'    => _('Select the text format you are using for this topic'),
+                               'formatter'   => 'select',
+                               'options'     => $options,
                                'flags'       => CCFF_POPULATE );
 
         $this->SetFormFieldItem('topic_text', 'show_img', true);
@@ -205,16 +219,17 @@ class CCContentPageForm extends CCForm
                                'options'     => $options,
                                'flags'       => CCFF_POPULATE );
 
-        $options =
-            array( 'format' => _('Use formatted text (e.g. [b] style)'),
-                    'raw' =>   _('Do not format text (HTML)'),
-                   'text'  =>  _('Unformatted (remove [b] style formatting)'), );
-
         $fields['content_page_width'] =
                         array(  'label'      => _('Page Width'),
                                'form_tip'    => _('ex: 80% or 730px (Some layouts ignore this)'),
                                'formatter'   => 'textedit',
                                'flags'       => CCFF_POPULATE );
+
+        $options =
+            array( 'format' => _('Always display HTML'),
+                   'text'  =>  _('Always display plain text'),
+                    'raw' =>   _('Display the topic "raw" (for debugging)'),
+                    );
 
         $fields['content_page_textformat'] =
                         array(  'label'      => _('Text Format'),

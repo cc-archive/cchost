@@ -10,6 +10,8 @@
 [dataview]
 function rss_topic_dataview($queryObj)
 {
+    global $CC_GLOBALS;
+    
     $TZ = ' ' . CCUtil::GetTimeZone();
 
 
@@ -42,8 +44,14 @@ function rss_topic_dataview($queryObj)
 
     $Y = date('Y') + 1;
 
+    // There is a moment between SVN update and ?update=1 where the feed for the 
+    // home page will break because the 'topic_format' field isn't actually
+    // part of the table yet. This is prevented with this line:
+    
+    $topic_format = empty($CC_GLOBALS['v_5_1_topic_format']) ? '' : 'topic_format,';
+    
     $sql =<<<EOF
-        SELECT topic_date, author.user_real_name, 
+        SELECT topic_date, author.user_real_name, {$topic_format}
             topic_text as format_text_topic_text, 
             topic_text as format_html_topic_text,
             
@@ -98,7 +106,6 @@ print '<?xml version="1.0" encoding="utf-8" ?>'
     <lastBuildDate><?= $A['rss-build-date'] ?></lastBuildDate>
     <?
         if( !empty($A['records']) ) { foreach( $A['records'] as $item ) {
-
     ?>
     <item>
       <title><?= $item['topic_name'] ?></title>

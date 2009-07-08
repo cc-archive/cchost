@@ -60,9 +60,40 @@ function cc_format_text($text)
 
 function cc_format_unformat($text)
 {
-    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up|left|right|img|query)';
+    $attrs = '(b|i|u|red|green|blue|big|small|url|quote|up|left|right|img|query|img|cmd|cmdurl|indent|box|enclosure|var|define)';
     return preg_replace("#\[/?$attrs(=[^\]]+)?\]#U",'',$text);
 }
+
+function cc_format_html_to_text($text)
+{
+    require_once('cchost_lib/smartypants/smartypants.php');
+    $text = str_replace(array("\n\r","\n","\r"), '', $text);
+    $tokens = _TokenizeHTML($text);
+    $text = '';
+    foreach( $tokens as $T )
+    {
+        if($T[0] == 'text')
+        {
+            if( $text != "\n" )
+                $text .= $T[1];
+        }
+        else {
+            if( $T[0] == 'tag'  )
+            {
+                if( in_array( $T[1], array( '</p>', '</ul>', '</ol>', '</li>',
+                                            '</div>', '<br>', '<br />',
+                                            '</h1>', '</h2>', '</h3>', '</h4>',
+                                            '</tr>', '</table>'
+                                           ) ) )
+                {
+                    $text .= "\n";
+                }
+            }
+        }
+    }
+    return $text;
+}
+
 
 // old name
 function _cc_format_unformat($text)

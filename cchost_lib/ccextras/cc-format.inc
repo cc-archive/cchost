@@ -130,10 +130,33 @@ class CCFormat
             $R =& $rows[$k[$i]];
             foreach( $format_needed as $F => $meta )
             {
-                if( $meta['format'] == 'text' )
-                    $R[$meta['name']] = _cc_format_unformat($R[$F]);
-                elseif( $meta['format'] == 'html' )
-                    $R[$meta['name']] = _cc_format_format($R[$F]);
+                if( !isset($R['topic_format']) )
+                    $R['topic_format'] = CC_TOPIC_FORMAT_BB;
+
+                switch( $R['topic_format'] )
+                {
+                    case CC_TOPIC_FORMAT_BB:
+                    {
+                        if( $meta['format'] == 'text' )
+                            $R[$meta['name']] = _cc_format_unformat($R[$F]);
+                        elseif( $meta['format'] == 'html' )
+                            $R[$meta['name']] = _cc_format_format($R[$F]);
+                        break;
+                    }
+                    case CC_TOPIC_FORMAT_HTML:
+                    {
+                        if( $meta['format'] == 'text' )
+                            $R[$meta['name']] = cc_format_html_to_text($R[$F]);
+                        elseif( $meta['format'] == 'html' )
+                            $R[$meta['name']] = $R[$F]; // it's already HTML
+                        break;
+                    }
+                    case CC_TOPIC_FORMAT_PLAIN:
+                    {
+                        $R[$meta['name']] = $R[$F]; // it's all plain
+                        break;
+                    }
+                }
                 unset($R[$F]);
             }
         }
