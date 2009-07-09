@@ -33,6 +33,8 @@ require_once('cchost_lib/cc-form.php');
 
 class CCAdminLoggingForm extends CCForm
 {
+    var $_default_ip_url = 'http://tools.whois.net/index.php?fuseaction=whois.whoisbyipresults&host=%IP%';
+    
     function CCAdminLoggingForm()
     {
         $this->CCForm();
@@ -57,6 +59,14 @@ class CCAdminLoggingForm extends CCForm
                 'formatter' => 'checkbox',
                 'flags' => CCFF_NONE );
         }
+        
+        $fields['ip_lookup_url'] = array(
+            'label' => _('IP Lookup URL'),
+            'form_tip' => _('This is the address of the WhoIS utility to use for looking up IP addresses.'),
+            'value' => $this->_default_ip_url,
+            'formatter' => 'textedit',
+            'flags' => CCFF_POPULATE,
+        );
         $this->AddFormFields($fields);
         $help = _('Select the events you want to show in the activity log.' );
         $this->SetHelpText($help);
@@ -67,6 +77,18 @@ class CCAdminLoggingForm extends CCForm
     */
     function PopulateValues($values) 
     {
+        // please don't do this anywhere else, it's a paste-on hack
+        // while we prepare 5.1 - Reaching into CC_GLOBALS at this
+        // point is very nasty.
+        global $CC_GLOBALS;
+        if( !empty($CC_GLOBALS['ip_lookup_url'])) {
+            $this->SetFormValue('ip_lookup_url',$CC_GLOBALS['ip_lookup_url']);
+        }
+        else {
+            $this->SetFormValue('ip_lookup_url',$this->_default_ip_url);            
+        }
+        
+        // at least this is ok...
         foreach( $values as $V )
             $this->SetFormValue( 'events[' . $V . ']', true );
     }
@@ -224,6 +246,9 @@ class CCActivityLogAPI
             $configs =& CCConfigs::GetTable();
             // 'logging' is not stored in 'config' but stuffed there in AppInit()
             $configs->SaveConfig('logging', $logging, CC_GLOBAL_SCOPE, false );
+            // on the other hand, ip_lookup_url is a global variable
+            $cfg['ip_lookup_url'] = empty($_POST['ip_lookup_url']) ? $form->_default_ip_url : $_POST['ip_lookup_url'];
+            $configs->SaveConfig('config',$cfg,CC_GLOBAL_SCOPE,true);
             CCPage::Prompt( _("Logging options saved.") );
         }
 
@@ -244,14 +269,14 @@ class CCActivityLogAPI
         
         $searchterm = '';
         $menuopts['full'] = true;
-        CCPage::PageArg('activity_menu',$menuopts,'admin.php/show_activity_menu'); 
-
+ 
         if( $arg == 'admin' )
         {
             $this->_do_admin();
             return;
         }
 
+        CCPage::PageArg('activity_menu',$menuopts,'admin.php/show_activity_menu'); 
         CCPage::SetTitle(_('View Activity Log'));
 
         $logs =& CCActivityLog::GetTable();

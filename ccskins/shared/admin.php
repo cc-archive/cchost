@@ -115,13 +115,23 @@ function _t_admin_show_activity_log($T,&$A) {
 <table  class="cc_log_view" cellspacing="0" cellpadding="0">
 <tr ><th >Date</th><th  colspan="2">IP</th><th  colspan="2">User</th><th >Event</th><th ></th><th ></th></tr>
 <?
+    $ipurl = empty($A['ip_lookup_url']) ? '' : $A['ip_lookup_url'];
 
     foreach( $A['activity_log'] as $e )
     { 
 ?><tr >
 <td><?= CC_datefmt($e['activity_log_date'],'m-d-y h:ia')?></td>
 <td class="vlinktd">
-<a href="http://www.dnsstuff.com/tools/whois.ch?ip=<?= $e['activity_log_ip']?>">IP</a></td>
+     <?
+        if( empty($ipurl)) {
+            print '&nbsp;&nbsp;';
+        }
+        else {
+            $thisipurl = str_replace( '%IP%', $e['activity_log_ip'], $ipurl );
+            print "<a href=\"{$thisipurl}\">IP</a>";
+        }
+    ?>
+</td>
 <td>
 <a href="<?= $A['activity-url']?>?ip=<?= $e['activity_log_ip']?>"><?= $e['activity_log_ip']?></a></td>
 <td class="vlinktd"><?
