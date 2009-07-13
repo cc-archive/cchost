@@ -44,13 +44,14 @@ function rss_20_topics_dataview($queryObj)
     $Y = date('Y') + 1;
 
     // There is a moment between SVN update and ?update=1 where the feed for the 
-    // home page will break because the 'topic_format' field isn't actually
+    // home page will break because the 'topic_format/nsfw' fields aren't actually
     // part of the table yet. This is prevented with this line:
     
     $topic_format = empty($CC_GLOBALS['v_5_1_topic_format']) ? '' : 'topic_format,';
+    $topic_nsfw   = empty($CC_GLOBALS['v_5_1_topic_nsfw'])   ? '' : 'topic_nsfw,';
     
     $sql =<<<EOF
-        SELECT topic_date, author.user_real_name, {$topic_format}
+        SELECT topic_date, author.user_real_name, {$topic_format} {$topic_nsfw}
             topic_text as format_text_topic_text, 
             topic_text as format_html_topic_text,
             

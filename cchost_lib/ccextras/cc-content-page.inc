@@ -63,6 +63,7 @@ class CCContentPostForm extends CCTopicForm
                    'be skipped by feed generators.'),
                                'formatter'   => 'sticky_date',
                                'value'       => date('Y-m-d H:i:s'),
+                               'year_begin'  => date('Y') - 2,
                                'flags'       => CCFF_POPULATE );
 
         $options =
@@ -104,7 +105,8 @@ class CCContentPostForm extends CCTopicForm
         }
 
         $this->AddFormFields($images);
-        // | CCFF_NOSTRIP | CCFF_HTML
+        $this->SetHiddenField('topic_user',CCUser::CurrentUser());
+        $this->SetHiddenField('topic_nsfw',0);
     }
 
     function generator_sticky_date($varname,$value='',$class='')
@@ -403,10 +405,8 @@ class CCContentPage
             $values['topic_thread'] = 0;
             if( empty($values['topic_date']) )
                 $values['topic_date'] = date('Y-m-d H:i:s',time());
-            $values['topic_user'] = CCUser::CurrentUser();
-            //$values['topic_type'] = $values['topic_type'];
+            
             $topics->Insert($values,0);
-            //$q="title={$title}&datasource=topics&t=content_page&ids=".$values['topic_id'];
 
             CCUtil::SendBrowserTo( ccl('admin','content','manage') );
         }

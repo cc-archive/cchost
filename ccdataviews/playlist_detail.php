@@ -41,7 +41,9 @@ EOF;
 
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
-                   'e'  => array( CC_EVENT_FILTER_FORMAT, CC_EVENT_FILTER_CART_MENU ) 
+                   'e'  => array( CC_EVENT_FILTER_FORMAT,
+                                  CC_EVENT_FILTER_CART_MENU,
+                                  CC_EVENT_FILTER_CART_NSFW ) 
                  );
 }
 

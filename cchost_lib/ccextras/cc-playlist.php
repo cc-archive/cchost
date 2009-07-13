@@ -29,7 +29,7 @@ if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');
 
 define('CC_EVENT_FILTER_CART_MENU','cartmenu');
-
+define('CC_EVENT_FILTER_CART_NSFW','cartnsfw');
 /**
 *
 */
@@ -45,6 +45,7 @@ CCEvents::AddHandler(CC_EVENT_FILTER_PLAY_URL,    array( 'CCPlaylistHV', 'OnFilt
 CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP,    array( 'CCPlaylistHV', 'OnApiQuerySetup')); 
 
 CCEvents::AddHandler(CC_EVENT_FILTER_CART_MENU,   array( 'CCPlaylistBrowse', 'OnFilterCartMenu'), 'cchost_lib/ccextras/cc-playlist-browse.inc' );
+CCEvents::AddHandler(CC_EVENT_FILTER_CART_NSFW,   array( 'CCPlaylistBrowse', 'OnFilterCartNSFW'), 'cchost_lib/ccextras/cc-playlist-browse.inc' );
 
 CCEvents::AddHandler(CC_EVENT_ADMIN_MENU,         array( 'CCPlaylistManage',  'OnAdminMenu'),     'cchost_lib/ccextras/cc-playlist-forms.inc' );
 

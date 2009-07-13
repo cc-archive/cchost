@@ -97,56 +97,80 @@ class CCPlaylists
 
     function OnMapUrls()
     {
-        CCEvents::MapUrl( ccp('api','playlist','new'),      array( 'CCPlaylists', 'NewPL'),   CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
-         '[upload_id]', _('Create a new playlist, optionally starting with upload_id'), CC_AG_PLAYLIST );
-        CCEvents::MapUrl( ccp('api','playlist','add'),      array( 'CCPlaylists', 'Add'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
-         '{upload_id},{playlist_id}', _('Add upload to playlist'), CC_AG_PLAYLIST );
+        CCEvents::MapUrl( ccp('api','playlist','new'),
+            array( 'CCPlaylists', 'NewPL'),   CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+            '[upload_id]', _('Create a new playlist, optionally starting with upload_id'), CC_AG_PLAYLIST );
+    
+        CCEvents::MapUrl( ccp('api','playlist','add'),
+            array( 'CCPlaylists', 'Add'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+            '{upload_id},{playlist_id}', _('Add upload to playlist'), CC_AG_PLAYLIST );
 
 
-        CCEvents::MapUrl( ccp('api','playlist','type'),   array( 'CCPlaylists', 'GetType'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
-         '{user_name}/{type}', _('Get a specific type of playlist (e.g. favorites'), CC_AG_PLAYLIST );
+        CCEvents::MapUrl( ccp('api','playlist','type'),
+            array( 'CCPlaylists', 'GetType'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+            '{user_name}/{type}', _('Get a specific type of playlist (e.g. favorites'), CC_AG_PLAYLIST );
 
-        CCEvents::MapUrl( ccp('api','playlist','getfavorite'),   array( 'CCPlaylists', 'GetFavorite'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
-         '', _(''), CC_AG_deprecated );
+        CCEvents::MapUrl( ccp('api','playlist','getfavorite'),
+            array( 'CCPlaylists', 'GetFavorite'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+             '', _(''), CC_AG_deprecated );
 
-        CCEvents::MapUrl( ccp('api','playlist','remove'),   array( 'CCPlaylists', 'Remove'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
-         '{upload_id},{playlist_id}', _('Remove upload from playlist'), CC_AG_PLAYLIST );
-        CCEvents::MapUrl( ccp('api','playlist','bump'),     array( 'CCPlaylists', 'Bump'),    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ,
-                   '{update_id}', _('Bump playlist count'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('api','playlist','remove'),
+            array( 'CCPlaylists', 'Remove'),  CC_MUST_BE_LOGGED_IN,   ccs(__FILE__),
+             '{upload_id},{playlist_id}', _('Remove upload from playlist'), CC_AG_PLAYLIST );
+    
+        CCEvents::MapUrl( ccp('api','playlist','bump'),
+            array( 'CCPlaylists', 'Bump'),    CC_DONT_CARE_LOGGED_IN, ccs(__FILE__) ,
+            '{update_id}', _('Bump playlist count'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('api','playlist','with'),     array( 'CCPlaylists', 'With'),    CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
-                   '{upload_id}', _('Return playlists with-w/o this upload'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('api','playlist','with'),
+            array( 'CCPlaylists', 'With'),    CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+            '{upload_id}', _('Return playlists with-w/o this upload'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','create'), array( 'CCPlaylists', 'Create'),   CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
-                   '', _('Display create playlist form'), CC_AG_PLAYLIST ); 
-        CCEvents::MapUrl( ccp('playlist','save'),   array( 'CCPlaylists', 'Save'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
-                   '', _('Save dynamic playlist'), CC_AG_PLAYLIST ); 
-        CCEvents::MapUrl( ccp('playlist','editquery'),   array( 'CCPlaylists', 'EditQuery'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
-                   '', _('Display edit query form'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('playlist','create'),
+            array( 'CCPlaylists', 'Create'),   CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+            '', _('Display create playlist form'), CC_AG_PLAYLIST );
+       
+        CCEvents::MapUrl( ccp('playlist','save'),
+            array( 'CCPlaylists', 'Save'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+            '', _('Save dynamic playlist'), CC_AG_PLAYLIST );
+    
+        CCEvents::MapUrl( ccp('playlist','editquery'),
+            array( 'CCPlaylists', 'EditQuery'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+            '', _('Display edit query form'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','editorder'),   array( 'CCPlaylists', 'EditOrder'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
-                   '', _('Display reorder playlist form'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('playlist','editorder'),
+            array( 'CCPlaylists', 'EditOrder'),     CC_MUST_BE_LOGGED_IN,   ccs(__FILE__) ,
+            '', _('Display reorder playlist form'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','browse'), array( 'CCPlaylistBrowse', 'Browse'),   CC_DONT_CARE_LOGGED_IN,   
-                   'cchost_lib/ccextras/cc-playlist-browse.inc',
-                   '{playlist_id}', _('Display browse playlist UI'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('playlist','browse'),
+            array( 'CCPlaylistBrowse', 'Browse'),   CC_DONT_CARE_LOGGED_IN,   
+            'cchost_lib/ccextras/cc-playlist-browse.inc',
+            '{playlist_id}', _('Display browse playlist UI'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('playlist','empty'),          array( 'CCPlaylistManage', 'EmptyPL'),   CC_MUST_BE_LOGGED_IN,   
-                                            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
-                   '{playlist_id}', _('Display empty playlist UI'), CC_AG_PLAYLIST ); 
-        CCEvents::MapUrl( ccp('playlist','delete'),         array( 'CCPlaylistManage', 'DeletePL'),  CC_MUST_BE_LOGGED_IN,   
-                                            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
-                   '{playlist_id}', _('Display delete playlist form'), CC_AG_PLAYLIST ); 
-        CCEvents::MapUrl( ccp('playlist','edit'),           array( 'CCPlaylistManage', 'Edit'), CC_MUST_BE_LOGGED_IN,   
-                                            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
-                   '{playlist_id}', _('Display edit playlist props form'), CC_AG_PLAYLIST ); 
-        CCEvents::MapUrl( ccp('admin','playlists'),           array( 'CCPlaylistManage', 'Admin'), CC_ADMIN_ONLY,   
-                                            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
-                   '', _('Display admin playlist form'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('playlist','empty'),
+            array( 'CCPlaylistManage', 'EmptyPL'),   CC_MUST_BE_LOGGED_IN,   
+            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
+            '{playlist_id}', _('Display empty playlist UI'), CC_AG_PLAYLIST );
+        
+        CCEvents::MapUrl( ccp('playlist','delete'),
+            array( 'CCPlaylistManage', 'DeletePL'),  CC_MUST_BE_LOGGED_IN,   
+            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
+            '{playlist_id}', _('Display delete playlist form'), CC_AG_PLAYLIST );
+        
+        CCEvents::MapUrl( ccp('playlist','edit'),
+            array( 'CCPlaylistManage', 'Edit'), CC_MUST_BE_LOGGED_IN,   
+            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
+            '{playlist_id}', _('Display edit playlist props form'), CC_AG_PLAYLIST );
+        
+        CCEvents::MapUrl( ccp('admin','playlists'),
+            array( 'CCPlaylistManage', 'Admin'), CC_ADMIN_ONLY,   
+            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
+            '', _('Display admin playlist form'), CC_AG_PLAYLIST ); 
 
-        CCEvents::MapUrl( ccp('admin','playlists','recalc'),           array( 'CCPlaylistManage', 'Recalc'), CC_ADMIN_ONLY,   
-                                            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
-                   '', _('Playlist api'), CC_AG_PLAYLIST ); 
+        CCEvents::MapUrl( ccp('admin','playlists','recalc'),
+            array( 'CCPlaylistManage', 'Recalc'), CC_ADMIN_ONLY,   
+            'cchost_lib/ccextras/cc-playlist-forms.inc' ,
+            '', _('Playlist api'), CC_AG_PLAYLIST ); 
 
     }
 
@@ -182,6 +206,7 @@ class CCPlaylists
         $bapi = new CCPlaylistBrowse();
         $bapi->Browse($row['cart_id']);
     }
+
 
     function Bump($upload_encoded='')
     {
