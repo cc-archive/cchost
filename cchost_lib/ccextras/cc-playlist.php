@@ -152,9 +152,13 @@ class CCPlaylistHV
                         $R[$f] = unserialize($R[$f]);
                 if( $R['file_format_info']['media-type'] != 'audio' )
                     continue;
-                if( !$is_native || (!empty($R['file_format_info']['sr']) && 
-                    ($R['file_format_info']['format-name'] == 'audio-mp3-mp3') && 
-                    ($R['file_format_info']['sr'] == '44k')) )
+                if( !$is_native ||
+                    (
+                        !empty($R['file_format_info']['sr']) && 
+                        ($R['file_format_info']['format-name'] == 'audio-mp3-mp3') && 
+                        1 // ($R['file_format_info']['sr'] == '44k')
+                    )
+                  )
                 {
                     $rec['fplay_url'] = $R['download_url'];
                     break;
