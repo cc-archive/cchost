@@ -28,7 +28,7 @@ var ccShareSites =
         [
             'facebook',                                                 // unique ID
             'facebook',                                                 // display text 
-            'http://www.facebook.com/share.php?u==%url%&t=%title%',     // bookmark URL
+            'http://www.facebook.com/share.php?u=%url%&t=%title%',     // bookmark URL
             root_url + '/ccskins/shared/images/shareicons/facebook.png' // icon
         ], 
         [
