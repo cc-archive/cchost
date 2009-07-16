@@ -26,6 +26,18 @@ var ccShareSites =
 [
     [
         [
+            'facebook',                                                 // unique ID
+            'facebook',                                                 // display text 
+            'http://www.facebook.com/share.php?u==%url%&t=%title%',     // bookmark URL
+            root_url + '/ccskins/shared/images/shareicons/facebook.png' // icon
+        ], 
+        [
+            'twitter' ,
+            'twitter',
+            'http://twitter.com/home?status=%title%+%url%',
+            root_url + '/ccskins/shared/images/shareicons/twitter.png'
+        ],
+        [
             'delicious',                                        // unique ID
             'del.icio.us',                                      // display text 
             'http://del.icio.us/post?url=%url%&title=%title%',  // bookmark URL
@@ -37,18 +49,6 @@ var ccShareSites =
             'http://digg.com/submit?phase=2&url=%url%&title=%title%',
             root_url + '/ccskins/shared/images/shareicons/digg.gif'
         ],
-        [
-            'furl' ,
-            'Furl',
-            'http://furl.net/storeIt.jsp?u=%url%&t=%title%',
-            root_url + '/ccskins/shared/images/shareicons/furl.gif'
-        ],
-        [
-            'netscape',
-            'Netscape',
-            'http://www.netscape.com/submit/?U=%url%&T=%title%',
-            root_url + '/ccskins/shared/images/shareicons/netscape.gif'
-        ]
     ],
     [
         [
@@ -77,6 +77,7 @@ var ccShareSites =
         ]
     ],
     [
+        /*
         [
             'blinklist',
             'BlinkList',
@@ -88,7 +89,20 @@ var ccShareSites =
             'Newsvine', 
             'http://www.newsvine.com/_wine/save?u=%url%&h=%title%',
             root_url + '/ccskins/shared/images/shareicons/newsvine.gif'
-        ], 
+        ],
+        */
+        [
+            'furl' ,
+            'Furl',
+            'http://furl.net/storeIt.jsp?u=%url%&t=%title%',
+            root_url + '/ccskins/shared/images/shareicons/furl.gif'
+        ],
+        [
+            'netscape',
+            'Netscape',
+            'http://www.netscape.com/submit/?U=%url%&T=%title%',
+            root_url + '/ccskins/shared/images/shareicons/netscape.gif'
+        ],
         [
             'magnolia',
             'ma.gnolia',

@@ -20,17 +20,17 @@ ccShareLinks.prototype = {
             row.each( function(col) {
                 if( col && (col.length == 4) )
                 {
+                    var shareurl = '';
                     if( inPopUp )
                     {
-                        var shareurl = col[2].replace('%title%',title).replace('%url%',url);
-                        html += '<td><a href="'+shareurl+'" id="' + col[0] + '"><img title="' + col[1] + '" src="' + 
-                                    col[3] + '" />' + col[1] + '</a></td>\n';
+                        shareurl = col[2].replace('%title%',title).replace('%url%',url);
                     }
                     else
                     {
-                        html += '<td><a href="javascript://share" id="' + col[0] + '"><img title="' + col[1] + '" src="' + 
-                                    col[3] + '" />' + col[1] + '</a></td>\n';
+                        shareurl = "javascript://share";
                     }
+                    html += '<td><a href="'+shareurl+'" id="' + col[0] + '"><img title="' + col[1] + '" src="' + 
+                                col[3] + '" />&nbsp;&nbsp;' + col[1] + '</a></td>\n';
                 }
             });
             html += '</tr>\n';
