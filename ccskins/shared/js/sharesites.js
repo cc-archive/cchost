@@ -90,18 +90,24 @@ var ccShareSites =
             'http://www.newsvine.com/_wine/save?u=%url%&h=%title%',
             root_url + '/ccskins/shared/images/shareicons/newsvine.gif'
         ],
-        */
-        [
-            'furl' ,
-            'Furl',
-            'http://furl.net/storeIt.jsp?u=%url%&t=%title%',
-            root_url + '/ccskins/shared/images/shareicons/furl.gif'
-        ],
         [
             'netscape',
             'Netscape',
             'http://www.netscape.com/submit/?U=%url%&T=%title%',
             root_url + '/ccskins/shared/images/shareicons/netscape.gif'
+        ],
+        */
+        [
+            'ping_fm',
+            'Ping FM',
+            'http://ping.fm/ref?link=%url%&title=%title%&body=%site_title%',
+            root_url + '/ccskins/shared/images/shareicons/ping_fm.png'
+        ],
+        [
+            'furl' ,
+            'Furl',
+            'http://furl.net/storeIt.jsp?u=%url%&t=%title%',
+            root_url + '/ccskins/shared/images/shareicons/furl.gif'
         ],
         [
             'magnolia',

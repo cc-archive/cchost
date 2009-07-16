@@ -15,6 +15,7 @@ ccShareLinks.prototype = {
         var inPopUp = options.inPopUp;
         var title = options.title;
         var url = options.url;
+        var site = options.site_title;
         ccShareSites.each( function(row) {
             html += '<tr>';
             row.each( function(col) {
@@ -23,7 +24,7 @@ ccShareLinks.prototype = {
                     var shareurl = '';
                     if( inPopUp )
                     {
-                        shareurl = col[2].replace('%title%',title).replace('%url%',url);
+                        shareurl = col[2].replace('%title%',title).replace('%url%',url).replace('%site_title%',site);
                     }
                     else
                     {
@@ -44,7 +45,7 @@ ccShareLinks.prototype = {
             var me  = this;
             ccShareSites.each( function(row) {
                 row.each( function(col) {
-                    var shareurl = col[2].replace('%title%',title).replace('%url%',url);
+                    var shareurl = col[2].replace('%title%',title).replace('%url%',url).replace('%site_title%',site);
                     Event.observe( col[0], 'click', me.onSharePopup.bindAsEventListener(me,shareurl) );
                 })
             });
