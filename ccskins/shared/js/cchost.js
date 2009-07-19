@@ -806,7 +806,8 @@ ccReviewFormHook.prototype = {
         {
             var html = '<a class="upload_review_link" href="' + json.reviews_url + '">(' + json.num_reviews + ')</a>';
             var target = $('review_' + json.upload_id);
-            target.innerHTML = html;
+            if( target )
+               target.innerHTML = html;
             Modalbox.hide();
         }
     }
