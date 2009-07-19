@@ -348,18 +348,27 @@ recommendsHooks.prototype = {
 
     return_macro: null,
 
-    initialize: function(ok_to_rate) {
+    initialize: function(ok_to_rate,block_parent) {
         try
         {
+            if( block_parent )
+            {
+                if( block_parent == 'undefined' ) {
+                    block_parent =  null;
+                }
+                else {
+                    block_parent = $(block_parent);
+                }
+            }
             var me = this;
             this.return_macro = recommend_return_t || null ;
-            $$('.recommend_block').each( function(e) {
+            CC$$('.recommend_block',block_parent).each( function(e) {
                 var id = e.id.match(/[0-9]+$/);
                 if( ok_to_rate.include(id) ) {
                     var html = e.innerHTML;
                     var newHtml = '<span class="recommend_link">' + html + '</span>';
                     e.innerHTML = newHtml;
-                    Event.observe(e,'click',me.onRecommendClick.bindAsEventListener(me,id));
+                    Event.observe(e,'click',me.onRecommendClick.bindAsEventListener(me,id,e));
                     Element.removeClassName(e,'rated');
                 }
             });
@@ -371,6 +380,7 @@ recommendsHooks.prototype = {
     },
 
     onRecommendClick: function(event,id) {
+        
         var d_elem = $("recommend_block_" + id);
         d_elem.innerHTML = '...';
         var url = home_url + "rate/" + id + "/5";
@@ -433,8 +443,10 @@ var userHookup = Class.create();
 userHookup.prototype = {
 
     req_url: null,
+    block_parent: null,
 
-    initialize: function(req,params) {
+    initialize: function(req,params,block_parent) {
+        this.block_parent = block_parent;
         this.req_url = home_url + 'user_hook/' + req + q + params;
         new Ajax.Request( this.req_url, { method: 'get', onComplete: this.onUserHooks.bind(this) } );
     },
@@ -451,11 +463,11 @@ userHookup.prototype = {
                 {
                     if( json.rate_mode == 'rate' )
                     {
-                        new ratingsHooks(json.ok_to_rate);
+                        new ratingsHooks(json.ok_to_rate,this.block_parent);
                     }
                     else if( json.rate_mode == 'recommend' )
                     {
-                        new recommendsHooks(json.ok_to_rate);
+                        new recommendsHooks(json.ok_to_rate,this.block_parent);
                     }
                     else
                     {
@@ -466,12 +478,12 @@ userHookup.prototype = {
                 {
                     if( json.topic_cmds )
                     {
-                        new topicHooks(json.topic_cmds);
+                        new topicHooks(json.topic_cmds,this.block_parent);
                     }
                 }
                 if( json.reviewable )
                 {
-                    new quickReviewHooks(json.reviewable);
+                    new quickReviewHooks(json.reviewable,this.block_parent);
                 }
             }
         }

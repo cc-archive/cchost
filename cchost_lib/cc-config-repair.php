@@ -1,8 +1,13 @@
-<? 
+<?
+
+// If you can't even login then change the 1 to a 0 (zero) in the next line
+define('CC_REQUIRE_LOGIN', 1);
+
 function validate_user()
 {
-    // If you can't even login then uncomment the next line TEMPORARILY to edit your config
-    // return; 
+    if( !CC_REQUIRE_LOGIN )    
+        return;
+        
     list( $user_name, $pw ) = unserialize(strip($_COOKIE['lepsog3'])) or die('no login cookie. log in to cchost first, otherwise edit this script');
     $qr = q('SELECT user_id FROM cc_tbl_user WHERE user_name=\''.$user_name.'\' AND user_password=\''.$pw.'\'');
     $ok = mysql_num_rows($qr) or die('can not find you in the user database');
@@ -13,6 +18,7 @@ function validate_user()
     if( !in_array($user_name,$supers) )
         die('you are not in the media/config/supers list');
 }
+
 error_reporting(E_ALL); validate_user(); 
 
 $path = empty($_REQUEST['path']) ? array() : split('/',$_REQUEST['path']);

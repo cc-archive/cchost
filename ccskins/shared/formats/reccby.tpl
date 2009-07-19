@@ -16,13 +16,8 @@
         <a target="_parent" class="cc_user_link" href="%(#R/artist_page_url)%">%chop(#R/user_real_name,12,true)%</a>
     </div>
     <div class="tdc"><a class="info_button" id="_plinfo_%(#R/upload_id)%"></a></div>
-    %if_not_null(logged_in_as)%
-    <div id="playlist_menu_%(#R/upload_id)%" class="cc_playlist_action tdc light_bg dark_border">
-        <a class="cc_playlist_button need_plb_hook" href="javascript://playlist_menu_%(#R/upload_id)%">
-        <span>%text(str_pl_add_to)% ...</span></a>
-    </div>
-    %end_if%
-    %if_not_empty(#R/fplay_url)%
+    <div class="tdc pl_action_button"><a class="menuup_hook" id="_plaction_%(#R/upload_id)%" title="[ action ]">&nbsp;</a></div>
+   %if_not_empty(#R/fplay_url)%
     <div class="tdc cc_playlist_pcontainer">
       <a class="cc_player_button cc_player_hear" id="_ep_%(#R/upload_id)%" href="%(#R/fplay_url)%"><span style="display:none">%(#R/upload_name)% %text(str_by)% %(#R/user_real_name)%</span></a></div>
     %end_if%

@@ -28,3 +28,7 @@
 	white-space: nowrap;
 }
 
+#action_recommends .small_stars,
+#action_recommends .recommend_block {
+	float: left;
+}

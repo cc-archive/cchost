@@ -7,6 +7,7 @@ if( !defined('IN_CC_HOST') )
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css'); ?>" title="Default Style"></link>
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css'); ?>" title="Default Style"></link>
 <link rel="stylesheet" type="text/css" href="<?= $T->URL('css/recommends.css'); ?>" title="Default Style"></link>
+<link rel="stylesheet" type="text/css" href="<?= $T->URL('css/rate.css'); ?>" title="Default Style"></link>
 
 <div id="browser_client">
     <div id="featured" class="dark_border med_bg light_color">

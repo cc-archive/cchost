@@ -30,6 +30,11 @@ This is used for an ajax callback for just a menu on a record
 
 no download/play/show stuff, just actions (review, edit, share, etc.)
 
+N.B. Originally, the URLs (actions) in this structure were used directly (and
+in several cases, still, are used that way. However, there are now several
+other cases where the presense of a URL is simply used as a flag to engage
+the AJAX version of the feature.
+
 ----------------------------------
     Menu layout ?
 ------------------------------------
@@ -75,9 +80,11 @@ no download/play/show stuff, just actions (review, edit, share, etc.)
 
 */
 ?>
-<script src="/ccskins/shared/js/prototype.js" /></script>
+<script src="/ccskins/shared/js/prototype.js" ></script>
+
 <!-- template ajax_menu -->
 <?
+
 if( !empty($A['records']) )
     $R =& $A['records'][0];
 else
@@ -88,132 +95,237 @@ else
 
 $menu =& $R['local_menu'];
 
-//print '<div id="ajax_menu">
+?>
 
-print '<table><tr><td style="vertical-align:top;padding-right:12px;">';
+<table><tr>
 
-print '<ul>';
+<td style="vertical-align:top;padding-right:12px;">
 
-/** OWNER stuff *****/
+<?
+    /** SHARE ******/
+    
+    if( !empty($menu['share']['share_link']) )
+    {
+        ?>
+          <div class="box">
+        <?
+          $menu['share']['share_link']['menu_text'] = '<img src="'. $T->URL('images/share-link.gif') . '" />';
+          helper_ajax_menu_item($menu['share']['share_link'],$T,false);
+        ?>
+          </div><!-- .box share -->
+        <?
+    }
+    
 
-if( !empty($menu['owner']) )
-{
-    foreach( $menu['owner'] as $mi )
-        helper_ajax_menu_item($mi,$T);
-}
+/* INSTA REVIEW */
 
-/** REVIEW/RATE/SHARE menu ******/
+    if( !empty($R['upload_extra']['num_reviews']) || !empty($menu['comment']['comments']) )
+    {
+        ?>
+            <div class="box">
+               <h3 style="margin: 0 auto 3px auto"><?= $T->String('str_reviews') ?></h3>
+               <br />
+               <div id="review_<?= $R['upload_id']; ?>">
+                   <?
+                       if( !empty($menu['comment']['comments']) )
+                       {
+                           ?>
+                               <span id="instareview_btn_<?= $R['upload_id']; ?>"></span>
+                           <?
+                       }
+                   
+                       if( !empty($R['upload_extra']['num_reviews']) )
+                       {
+                           $revurl = ccl('reviews',$R['user_name'],$R['upload_id']);
+                         ?>
+                           <a class="small_button" href="<?= $revurl ?>"><?= $T->String('str_read_all') ?> (<?= ($R['upload_extra']['num_reviews']); ?>)</a> 
+                         <?
+                       }
+                   ?>
+                &nbsp;<br style="clear:both" />
+                </div><!-- #review_[upload_id] -->
+            </div> <!-- box -->
+        <?
 
-if( !empty($menu['comment']['comments']) )
-    helper_ajax_menu_item($menu['comment']['comments'],$T);
+    } // insta review
+    
 
-if( !empty($menu['share']['share_link']) )
-{
-    $menu['share']['share_link']['menu_text'] = '<img src="'. $T->URL('images/share-link.gif') . '" />';
-    helper_ajax_menu_item($menu['share']['share_link'],$T);
-}
-
-/** ADMIN menu *****/
-
-if( !empty($menu['admin']) )
-{
-    foreach( $menu['admin'] as $mi )
-        helper_ajax_menu_item($mi,$T);
-}
-
-/** Editors menu *****/
-
-if( !empty($menu['editorial']) )
-{
-    foreach( $menu['editorial'] as $mi )
-        helper_ajax_menu_item($mi,$T);
-}
+    /* RECOMMENDS/RATINGS */
 
 
-print '</ul>';
+    if( $R['ratings_on'] ) {
+        print '<div class="box" id="action_recommends">';
+        
+        $A['record'] = $R;
+        if( $R['is_thumbs_up'] ) {
+            $T->Call('util.php/recommends');
+        }
+        else {
+            $T->Call('util.php/ratings_stars_small_user');
+        }
+        if( !empty($A['logged_in_as']) )
+        {
+            ?>
+            <script type="text/javascript">
+                null_star = '<?= $T->URL('images/stars/star-empty-s.gif'); ?>';
+                full_star = '<?= ('images/stars/star-red-s.gif') ?>';
+                rate_return_t = 'ratings_stars_small_user';
+                recommend_return_t = 'recommends';
+                new userHookup('upload_list', 'ids=<?= $R['upload_id'] ?>&limit=1','action_recommends');
+            </script>
+            <?
+        }
+        
+        print '&nbsp;<br style="clear:both" /></div><!-- box -->';
+        
+    } // ratings enabled
 
-print '</td><td style="vertical-align:top;padding-right:12px;width:30%">';
+   
+    if( !empty($menu['owner']) || !empty($menu['admin']) || !empty($menu['editorial']) )
+    {
+        ?>
+           <div class="box" id="ownermenubox">
+            <ul>
+        <?
+
+            /** OWNER stuff *****/
+            
+            if( !empty($menu['owner']) )
+            {
+                foreach( $menu['owner'] as $mi )
+                    helper_ajax_menu_item($mi,$T);
+            }
+            
+            
+            /** ADMIN menu *****/
+            
+            if( !empty($menu['admin']) )
+            {
+                foreach( $menu['admin'] as $mi )
+                    helper_ajax_menu_item($mi,$T);
+            }
+            
+            /** Editors menu *****/
+            
+            if( !empty($menu['editorial']) )
+            {
+                foreach( $menu['editorial'] as $mi )
+                    helper_ajax_menu_item($mi,$T);
+            }
+    
+            ?>
+              </ul>
+              </div><!-- .box #ownmenubox -->
+            <?
+    }
+    ?>
+    </td>
+
+    <td style="vertical-align:top;padding-right:12px;width:30%">
+<?        
 
 /** TRACKBACK menu *****/
 
 $str = sprintf($T->String('str_list_i_saw_this'), '"' . $R['upload_name'] . '"');
 
-?><div id="trackbackbox"><div class="box">
+?>
+<div id="trackbackbox">
+
+ <div class="box">
   <h2 style="margin-top:0px;"><?= $T->String('str_list_trackback') ?></h2>
-  <a name="trackback"></a>
-  <p id="trackback_caption"><?= $str ?></p><ul><?
 
-$mi = array();
-$mi['action'] = 'javascript:// noted';
-$saws = array( array( 'remix',    $T->String('str_trackback_type_remix')),
-               array( 'video',    $T->String('str_trackback_type_video')),
-               array( 'web',      $T->String('str_trackback_type_web')),
-               array( 'album',    $T->String('str_trackback_type_album'))
-                );
+  <p id="trackback_caption"><?= $str ?></p>
+  <ul>
+  
+  <?
+        $mi = array();
+        $mi['action'] = 'javascript:// noted';
+        $saws = array( array( 'remix',    $T->String('str_trackback_type_remix')),
+                       array( 'video',    $T->String('str_trackback_type_video')),
+                       array( 'web',      $T->String('str_trackback_type_web')),
+                       array( 'album',    $T->String('str_trackback_type_album'))
+                        );
+        
+        if( !empty($GLOBALS['strings-profile']) && ($GLOBALS['strings-profile'] == 'audio' ) )
+        {
+            $saws[] = array( 'podcast',  $T->String('str_podcast'));
+        }
+        
+        $url = "upload_trackback('{$R['upload_id']}', '";
+        foreach( $saws as $saw )
+        {
+            $mi['menu_text'] = $saw[1];
+            $mi['onclick'] = $url . $saw[0] . "');";
+            helper_ajax_menu_item($mi,$T);
+        }
+    ?>
 
-if( !empty($GLOBALS['strings-profile']) && ($GLOBALS['strings-profile'] == 'audio' ) )
-{
-    $saws[] = array( 'podcast',  $T->String('str_podcast'));
-}
-
-$url = "upload_trackback('{$R['upload_id']}', '";
-foreach( $saws as $saw )
-{
-    $mi['menu_text'] = $saw[1];
-    $mi['onclick'] = $url . $saw[0] . "');";
-    helper_ajax_menu_item($mi,$T);
-}
-
-print "</ul>";
-
-print '</td><td style="vertical-align:top;padding-right:12px;">';
-
-// print "</div></div>";
+    </ul>
+  </div><!-- box -->
+</div><!-- trackback box -->
+    
+</td>
+    
+<td style="vertical-align:top;padding-right:12px;">
+    
+<?
 
 /** PLAYLIST menu *****/
 
-if( !empty($menu['playlist']['playlist_menu']) )
-{
-    // actually we're going to embed the thing right here...
-    // helper_ajax_menu_item($menu['playlist']['playlist_menu'],$T);
-print '<div class="box plblock" id="am_pl_menu" style="float:left"><h2 style="margin-top:0px;">' . $T->String('str_playlists') . '</h2>';
-    $A['args'] = $menu['playlist']['playlist_menu']['mi'];
-    $T->Call('playlist_2_menu');
-print '</div>';
+    if( !empty($menu['playlist']['playlist_menu']) )
+    {
+        // actually we're going to embed the thing right here...
 
-print '</td></tr></table>';
+        ?>
+          <div class="box plblock" id="am_pl_menu" style="float:left">
+            <h2 style="margin-top:0px;"><?= $T->String('str_playlists'); ?></h2>
+        <?
+            $A['args'] = $menu['playlist']['playlist_menu']['mi'];
+            $T->Call('playlist_2_menu');
+        ?>
+          </div>
+    
+    </td>
+</tr>
+</table>
 
-$script =<<<EOF
+&nbsp;
+<br style="clear:both" />
+
 <script type="text/javascript">
-function pl_item_cb(resp,json)
-{
-    this.parentNode.innerHTML = json.message ? eval(json.message) : eval(json);
-}
-function pl_item_action(event,url)
-{
-    new Ajax.Request( url, { method: 'get', onComplete: pl_item_cb.bind(this) } );
-    Event.stop(event);
-    return false;
-}
-CC$$('a.pl_menu_item',$('am_pl_menu')).each( function(e) {
-    var url = e.href;
-    e.href = 'javascript:// playlist goo';
-    Event.observe( e, 'click', pl_item_action.bindAsEventListener(e,url) );
-});
+    function pl_item_cb(resp,json)
+    {
+        this.parentNode.innerHTML = json.message ? eval(json.message) : eval(json);
+    }
+    function pl_item_action(event,url)
+    {
+        new Ajax.Request( url, { method: 'get', onComplete: pl_item_cb.bind(this) } );
+        Event.stop(event);
+        return false;
+    }
+    CC$$('a.pl_menu_item',$('am_pl_menu')).each( function(e) {
+        var url = e.href;
+        e.href = 'javascript:// playlist goo';
+        Event.observe( e, 'click', pl_item_action.bindAsEventListener(e,url) );
+    });
 </script>
-EOF;
-    print $script;
+
+<?
+
 }
 
 
 
-function helper_ajax_menu_item(&$item,&$T) 
+function helper_ajax_menu_item(&$item,&$T,$use_li=true) 
 {
-    if( empty($item['parent_id']) )
-        print '<li>';
-    else
-        print "<li id=\"{$item['parent_id']}\">";
-
+    if( $use_li )
+    {
+        if( empty($item['parent_id']) )
+            print '<li>';
+        else
+            print "<li id=\"{$item['parent_id']}\">";
+    }
+    
     if( !empty($item['pre']) )
         print $item['pre'];
 
@@ -235,7 +347,10 @@ function helper_ajax_menu_item(&$item,&$T)
     if( !empty($item['menu_text']) )
         print $T->String($item['menu_text']);
     
-    print "</a></li>\n";
+    print '</a>';
+    
+    if( $use_li )
+       print "</li>\n";
 }
 
 

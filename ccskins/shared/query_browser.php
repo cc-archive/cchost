@@ -4,6 +4,8 @@
 $optset = cc_query_get_optset( empty($_GET['optset']) ? 'default' : $_GET['optset'] );
 ?>
 <!-- template query_browser -->
+<link rel="stylesheet" type="text/css" href="<?= $T->URL('css/rate.css'); ?>" title="Default Style"></link>
+<link rel="stylesheet" type="text/css" href="<?= $T->URL('css/form.css'); ?>" title="Default Style"></link>
 <link rel="stylesheet" type="text/css" href="<?= $T->URL($optset['css']); ?>" title="Default Style"></link>
 
 <div id="browser_client">
