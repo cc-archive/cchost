@@ -1,8 +1,8 @@
 
 <h1>A Cappella Browser</h1>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/rate.css') ?>" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>" title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/rate.css') ?>" title="Default Style" />
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/playlist.css') ?>" title="Default Style" />
+<link  rel="stylesheet" type="text/css" href="<?= $T->URL('css/info.css') ?>" title="Default Style" />
 <style >
 #inner_content {
     width: 750px;

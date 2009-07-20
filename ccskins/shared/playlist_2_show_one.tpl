@@ -8,8 +8,9 @@
 %%
 <!-- template playlist_2_show_one -->
 %map(playlist_id,#_GET['playlist'])%
-<link  rel="stylesheet" type="text/css" href="%url('css/playlist.css')%" title="Default Style"></link>
-<link  rel="stylesheet" type="text/css" href="%url('css/info.css')%"  title="Default Style"></link>
+<link  rel="stylesheet" type="text/css" href="%url('css/playlist.css')%" title="Default Style" />
+<link  rel="stylesheet" type="text/css" href="%url('css/info.css')%"  title="Default Style" />
+<link  rel="stylesheet" type="text/css" href="%url('css/rate.css')%"  title="Default Style" />
 <script  src="%url('/js/info.js')%"></script>
 <script  src="%url('js/playlist.js')%" ></script>
 %map(player_options,'autoHook: false')%
