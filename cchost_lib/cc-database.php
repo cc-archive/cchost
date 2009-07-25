@@ -96,6 +96,9 @@ class CCDatabase
 
         //CCDebug::Chronometer($_sql_t);
         $qr = mysql_query($sql,$link);
+        if( !$qr ) {
+            $mysqlerr = mysql_error();
+        }
         //$_sql_time = CCDebug::Chronometer($_sql_t);
 
         if( preg_match('/^insert\s/i',trim($sql)) )
@@ -129,7 +132,7 @@ class CCDatabase
         {
             if( CCDebug::IsEnabled() )
             {
-                print( "<pre>$sql<br />" . mysql_error() . "</pre>");
+                print( "<pre>$sql<br /><hr />MYSQL ERROR:\n" . $mysqlerr . "</pre>");
                 CCDebug::StackTrace(false,true);
             }
             else

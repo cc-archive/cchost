@@ -210,14 +210,17 @@ function cc_get_license_logo_sql($size='big',$col='license_logo_url')
     return "license_img_{$size} as {$col}";
 }
 
-function cc_get_user_avatar_sql()
+function cc_get_user_avatar_sql($table='',$colname='user_avatar_url')
 {
     global $CC_GLOBALS;
 
+    if( !empty($table) && substr($table,-1) != '.' )
+        $table .= '.';
+        
     if( empty($CC_GLOBALS['avatar-dir']) )
     {
         $aurl = ccd($CC_GLOBALS['user-upload-root']) . '/';
-        $aavtr = "user_name,  '/', " ;
+        $aavtr = "{$table}user_name,  '/', " ;
     }
     else
     {
@@ -233,7 +236,7 @@ function cc_get_user_avatar_sql()
         $davurl = '';
     }
  
-    return "IF( LENGTH(user_image) > 0, CONCAT( '$aurl', {$aavtr} user_image ), '$davurl' ) as user_avatar_url";
+    return "IF( LENGTH({$table}user_image) > 0, CONCAT( '$aurl', {$aavtr} {$table}user_image ), '$davurl' ) as {$colname}";
     //return "'$davurl' as user_avatar_url";
 }
 

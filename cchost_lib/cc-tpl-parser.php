@@ -152,6 +152,12 @@ function cc_tpl_parse_inspect($varname)
     return "<? CCDebug::Enable(true); CCDebug::PrintVar($var,false); ?>";
 }
 
+function cc_tpl_parse_switch($varname)
+{
+    $var = cc_tpl_parse_var('',$varname,'');
+    return "<? switch($var) {  ?>";
+}
+
 function cc_tpl_parse_query_sql($args,$sql_where)
 {
     $code =<<<EOF
@@ -214,24 +220,27 @@ function cc_tpl_parse_text($text,$bfunc)
         "/<\? (?:define|map){$op}{$ac}{$a}{$cp}%/e"       =>   "cc_tpl_parse_define('$1','$2');",
         "/(<\?=?) chop{$op}{$ac}{$a}{$cp}%/e"             =>   "cc_tpl_parse_chop('$1', '$2','$3');",
         "/(<\?=?) date{$op}{$ac}{$qa}{$cp}%/e"            =>   "cc_tpl_parse_date('$1', '$2','$3');",
+        "/<\? switch{$op}{$a}{$cp}%/e"                    =>   "cc_tpl_parse_switch('$1');",
         "/<\? inspect{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_inspect('$1');",
-        "/<\? if_(not_)?first{$op}{$a}{$cp}%/e"            =>   "cc_tpl_parse_first('$1','$2');",  
+        "/<\? if_(not_)?first{$op}{$a}{$cp}%/e"           =>   "cc_tpl_parse_first('$1','$2');",  
         "/<\? if_(not_)last{$op}{$a}{$cp}%/e"             =>   "cc_tpl_parse_last('$1','$2');",  
         "/(<\?=?) url{$op}{$a}{$cp}%/e"                   =>   "cc_tpl_parse_url('$1','$2');",
         "/<\?=? if_attr{$op}{$ac}{$a}{$cp}%/e"            =>   "cc_tpl_parse_if_attr('$1','$2');",
-        "/<\?=? if_(not_)?class{$op}{$ac}{$a}{$cp}%/e"           =>   "cc_tpl_parse_if_class('$1','$2','$3');",
+        "/<\?=? if_(not_)?class{$op}{$ac}{$a}{$cp}%/e"    =>   "cc_tpl_parse_if_class('$1','$2','$3');",
         "/<\? text{$op}{$a}{$cp}%/e"                      =>   "cc_tpl_parse_t('$1');", 
         "/<\? query_sql{$op}{$ac}{$a}{$cp}%/e"            =>   "cc_tpl_parse_query_sql('$1','$2');", 
 
-        "/<\? else%/"               =>   "<? } else { ?>",
-        "/<\? end_(?:macro|if)%/"   =>   "<?\n } ?>",
-        "/<\? end_loop%/"           =>   "<?\n } } ?>",
+        "/<\? else%/"                           =>   "<? } else { ?>",
+        "/<\? end_(?:macro|if|switch)%/"   =>   "<?\n } ?>",
+        "/<\? end_case%/"                       =>   "<?\n } break;\n; ?>",
+        "/<\? end_loop%/"                       =>   "<?\n } } ?>",
 
         "/<\? if\(([^\)]+)\)%/"                           =>   "<? if( !empty(\$A['$1']) ) { ?>",
         "/<\? if_not\(([^\)]+)\)%/"                       =>   "<? if( empty(\$A['$1']) ) { ?>",
         "/<\? prepend{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? array_unshift(\$A['$1'],'$2'); ?>",
         "/<\? append{$op}{$ac}{$aoq}{$cp}%/"              =>   "<? \$A['$1'][] = '$2'; ?>",
         "/<\? import_skin{$op}{$aoq}{$cp}%/"              =>   "<? \$T->ImportSkin('$1'); ?>",
+        "/<\? case{$op}{$a}{$cp}%/"                       =>   "<? case $1: { ?>",
         "/<\? query{$op}{$aoq}{$cp}%/"                    =>   "<?= cc_query_fmt('f=html&noexit=1&nomime=1&' . '$1'); ?>",
         "/<\? customize%/"                                =>   "<? \$T->AddCustomizations(); ?>",
         "/<\? return%/"                                   =>   "<? return 'ok'; ?>",

@@ -708,7 +708,7 @@ class CCForm
                 $class = empty($form_fields['class']) ? '' : $form_fields['class'];
                 if( !empty($form_fields['form_error']) ) 
                     $class .= ' form_error_input';
-
+                    
                 if( method_exists($this,$generator) )
                     $form_fields['form_element'] = $this->$generator( $fieldname, $value, $class );
                 else
@@ -997,9 +997,11 @@ class CCForm
             $class='form_input';
         elseif( strstr($class,'form_input') === false )
             $class .= ' form_input';
-
+            
+        $prefix = $this->GetFormFieldItem( $varname, 'prefix' );
         $value = str_replace('"', '&quot;',$value);
-        return( "<input type='text' id=\"$varname\" name=\"$varname\" value=\"$value\" class=\"$class\" />" );
+        $html = "{$prefix} <input type='text' id=\"$varname\" name=\"$varname\" value=\"$value\" class=\"$class\" />";
+        return $html;
     }
 
     /**
@@ -1421,6 +1423,61 @@ END;
         }
         return( false );
     }
+
+
+    /**
+     * Handles generation of &lt;input type='text' HTML field for user names
+     *
+     * Converts a user_id to user_name during validation
+     * 
+     * @param string $varname Name of the HTML field
+     * @param string $value   value to be published into the field
+     * @param string $class   CSS class (rarely used)
+     * @returns string $html HTML that represents the field
+     */
+    function generator_username($varname,$value='',$class='')
+    {
+        if( !empty($value) )
+        {
+            $value = CCUser::GetUserName($value);
+        }
+        return( $this->generator_textedit($varname,$value,$class) );
+    }
+
+    /**
+    * Handles validator for a user name field, called during ValidateFields()
+    *
+    * Converts a user_name entered into a valid user_id 
+    * 
+    * @see CCForm::ValidateFields()
+    * 
+    * @param string $fieldname Name of the field will be passed in.
+    * @returns bool $ok true means field validates, false means there were errors in user input
+    */
+    function validator_username($fieldname)
+    {
+        if( $this->validator_must_exist($fieldname) )
+        {
+            $value = $this->GetFormValue($fieldname);
+            if( $value )
+            {
+                $value = CCUser::IDFromName($value);
+                if( $value )
+                {
+                    $this->SetFormValue($fieldname,$value);
+                }
+                else
+                {                    
+                    $this->SetFieldError($fieldname, _("This is not a valid user name."));
+                    return(false);
+                }
+            }
+            return( true );
+        }
+        return( false );
+    }
+
+
 
     /**
      * Handles generation of &lt;input type='text' HTML field 
@@ -2216,8 +2273,7 @@ class CCGridForm extends CCForm
     /**
      * Overrides base class to handle grid rows
      *
-     * This should be called once to setup the column headers, see CCForm::GetFormValues()
-     *
+     * @see CCForm::GetFormValues()
      * @access public
      * @param array $values Out parameter to receive values. This is suitable for called CCTable::Update() or CCTable::Insert().
      * 

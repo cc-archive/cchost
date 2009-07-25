@@ -118,13 +118,16 @@ div#site_disabled_message {
 	font-weight: bold;
 }
 
+#cc_thinking.ajaxmsg_error,
 .ajaxmsg_error {
 	background-color: red;
 	color: white;
 	font-weight: bold;
 }
 
-.ajaxmsg_working, .ajaxmsg_warning {
+#cc_thinking.ajaxmsg_warning,
+.ajaxmsg_working,
+.ajaxmsg_warning {
 	background-color: yellow;
 	color: black;
 	font-weight: bold;
