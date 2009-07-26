@@ -136,7 +136,7 @@ ul#tabs a {display: block; color: #333; background: url("../images/tab-body-dark
 ul#tabs a span { display: block; padding: 0.5em 1.4em 0.2em; padding-top: 0.7em; background: url("../images/tab-left-dark.png") no-repeat top left; }
 
 ul#tabs a:hover {text-decoration: none; color: #333;  background: url("../images/tab-body-lit.gif") no-repeat top right #fff; }
-ul#tabs a:hover span { background: url("../images/tab-left-lit.png") no-repeat top left; }
+ul#tabs a:hover span { text-decoration: none; background: url("../images/tab-left-lit.png") no-repeat top left; }
 
 ul#tabs li.selected_tab a { background: url("../images/tab-body-lit.gif") no-repeat top right #fff; }
 ul#tabs li.selected_tab a span { background: url("../images/tab-left-lit.png") no-repeat top left; padding-bottom: 0.4em; }
@@ -160,7 +160,7 @@ ul#sub_tabs a {display: block; color: #333; background: url("../images/tab-body-
 ul#sub_tabs a span { border-bottom: 1px solid black; display: block; padding: 0.5em 1.4em 0.2em; padding-top: 0.7em; background: url("../images/tab-left-dark.png") no-repeat top left; }
 
 ul#sub_tabs a:hover {text-decoration: none; color: #333;  background: url("../images/tab-body-lit.gif") no-repeat top right #fff; }
-ul#sub_tabs a:hover span { background: url("../images/tab-left-lit.png") no-repeat top left; }
+ul#sub_tabs a:hover span { text-decoration: none; background: url("../images/tab-left-lit.png") no-repeat top left; }
 
 ul#sub_tabs li.selected_tab a { background: url("../images/tab-body-lit.gif") no-repeat top right #fff; }
 ul#sub_tabs li.selected_tab a span { border-bottom: 0px; background: url("../images/tab-left-lit.png") no-repeat top left; padding-bottom: 0.4em; }

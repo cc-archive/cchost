@@ -60,6 +60,7 @@ class CCQuery
         $this->where = array();
         $this->args = array();
         $this->records = array();
+        $this->columns = array();
     }
 
     /**
@@ -324,6 +325,17 @@ class CCQuery
     function _trigger_setup_event()
     {
         CCEvents::Invoke( CC_EVENT_API_QUERY_SETUP, array( &$this->args, &$this, !empty($this->_from_url)) );
+        // ugh, sql_p['columns'] is a string, it should have been an array
+        // all along. We hack it into a string here so we don't break
+        // anybody else that depends on it being a string.
+        if( !empty($this->columns) )
+        {
+            $cols = join( ',' , $this->columns );
+            if( !empty($this->sql_p['columns']) ) {
+                $cols = ',' . $cols;
+            }
+            $this->sql_p['columns'] .= $cols;
+        }
     }
     
     /** 
@@ -1002,7 +1014,8 @@ class CCQuery
             $formula = empty($ratings['rank_formula']) ?
                           '((upload_num_scores*4) + (upload_num_playlists*2))' :
                           $ratings['rank_formula'];
-            $this->sql_p['columns'] =  $formula . ' AS qrank';
+            $comma = empty($this->sql_p['columns']) ? '' : ',';
+            $this->sql_p['columns'] =  $comma . $formula . ' AS qrank';
         }
 
         $sorts = $this->GetValidSortFields();

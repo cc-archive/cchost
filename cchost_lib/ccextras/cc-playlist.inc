@@ -202,9 +202,7 @@ class CCPlaylists
             CCUtil::Send404();
         $new_name = $this->_gen_name();
         $row = $this->_create_playlist('playlist',$new_name,'',0,$qstring);
-        require_once('cchost_lib/ccextras/cc-playlist-browse.inc');
-        $bapi = new CCPlaylistBrowse();
-        $bapi->Browse($row['cart_id']);
+        CCUtil::SendBrowserTo( ccl('playlist','browse',$row['cart_id']));
     }
 
 

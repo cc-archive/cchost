@@ -10,6 +10,11 @@
 %%
 -->
 <!-- template mixups -->
+<link  rel="stylesheet" type="text/css" href="%url('css/playlist.css')%" title="Default Style" />
+<link  rel="stylesheet" type="text/css" href="%url('css/info.css')%"  title="Default Style" />
+<link  rel="stylesheet" type="text/css" href="%url('css/rate.css')%"  title="Default Style" />
+<script  src="%url('/js/info.js')%"></script>
+<script  src="%url('js/playlist.js')%" ></script>
 
 <style title="Default Style" type="text/css">
 #mixup_table {
@@ -42,6 +47,21 @@
     float: right;
     margin-right: 8%;
 }
+
+.results_info {
+    width: 600px;
+    padding: 6px;
+    font-size: 120%;
+    font-style: italic;
+    margin: 0px auto;
+    border-top: 2px solid #777;
+    border-bottom: 2px solid #777;
+    text-align: center;
+}
+
+#mixup_faq_link {
+    margin: 1em auto 3em 70%;
+}
 .mixup_mode_type_<?= CC_MIXUP_MODE_DISABLED  ?> { background-color: orange; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_SIGNUP    ?> { background-color: green; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_MIXING    ?> { background-color: green; }
@@ -56,9 +76,10 @@ var mixupAPI = Class.create();
 
 mixupAPI.prototype = {
 
-    initialize: function(mixup_id)
+    initialize: function(mixup_id,user_template)
     {
         this.mixup_id = mixup_id;
+        this.user_template = user_template;
         this.statusDiv = $('signup_status_' + this.mixup_id );
         var user_list_id = 'mixup_user_list_' + this.mixup_id;
         this.userList = $(user_list_id);
@@ -85,10 +106,25 @@ mixupAPI.prototype = {
     {
         if( this.userList )
         {
-            url = query_url + 't=mixup_users&f=html&mixup=' + this.mixup_id;
+            url = query_url + 't='+this.user_template+'&f=html&mixup=' + this.mixup_id;
             new Ajax.Updater( this.userList, url, { method: 'get' } );
         }
         
+    },
+    
+    hookPlayer: function()
+    {
+        if( window.ccEPlayer )
+            ccEPlayer.hookElements($('mixup_table'));
+        var dl_hook = new queryPopup("download_hook","download",str_download); 
+            dl_hook.height = 550;
+            dl_hook.width  = 700;
+            dl_hook.hookLinks(); 
+        var menu_hook = new queryPopup("menuup_hook","ajax_menu",str_action_menu);
+            menu_hook.width = window.user_name ? 720 : null;
+            menu_hook.hookLinks();
+        var infoHook = new ccUploadInfo();
+            infoHook.hookInfos('.info_button',$('mixup_table'));
     },
 
     onUserStatus: function(resp, json) {
@@ -146,7 +182,9 @@ function show_hide_miximg()
     cc_set_cookie( 'miximg_on', miximg_on );
 }
 </script>
-
+<div id="mixup_faq_link">
+    What's going on? <a class="small_button" href="%(home-url)%api/mixup/faq">Read the FAQ</a>
+</div>
 <div id="mixup_table">
     %loop(records,R)%
         <div id="mixup_record">
@@ -160,52 +198,72 @@ function show_hide_miximg()
                 <div class="mixup_desc">
                     %(#R/mixup_desc_html)%
                 </div><!-- mixup_desc -->
-            </div>
-            <div class="mixup_status">
-                <span class="mixup_mode_type mixup_mode_type_%(#R/mixup_mode_type)%">%(#R/mixup_mode_name)%</span>
-                <p>%(#R/mixup_mode_desc_html)%</p>
-                %map(show_who,'1')%
-                %map(show_status,'0')%
-                %map(show_matches,'0')%
-                %switch(#R/mixup_mode_type)%
-                    %case(CC_MIXUP_MODE_DISABLED)%
-                        %map(show_who,'0')%
-                    %end_case%
-                    %case(CC_MIXUP_MODE_SIGNUP)%
-                        %map(show_status,'1')%
-                    %end_case%
-                    %case(CC_MIXUP_MODE_MIXING)%
-                        %map(show_status,'1')%
-                    %end_case%
-                    %case(CC_MIXUP_MODE_UPLOADING)%
-                    %end_case%
-                    %case(CC_MIXUP_MODE_DONE)%
-                      %map(show_matches,'1')%
-                    %end_case%
-                %end_switch%
-                %if(show_status)%
-                    <div id="signup_status_%(#R/mixup_id)%">...</div><!-- signup_status_%(#R/mixup_id)% -->
+                <div class="mixup_status">
+                    <span class="mixup_mode_type mixup_mode_type_%(#R/mixup_mode_type)%">%(#R/mixup_mode_name)%</span>
+                    <p>%(#R/mixup_mode_desc_html)%</p>
+                    %map(show_who,'1')%
+                    %map(show_status,'0')%
+                    %map(show_matches,'0')%
+                    %switch(#R/mixup_mode_type)%
+                        %case(CC_MIXUP_MODE_DISABLED)%
+                            %map(show_who,'0')%
+                        %end_case%
+                        %case(CC_MIXUP_MODE_SIGNUP)%
+                            %map(show_status,'1')%
+                        %end_case%
+                        %case(CC_MIXUP_MODE_MIXING)%
+                            %map(show_status,'1')%
+                        %end_case%
+                        %case(CC_MIXUP_MODE_UPLOADING)%
+                            %map(show_who,'0')%
+                            %map(show_matches,'1')%
+                        %end_case%
+                        %case(CC_MIXUP_MODE_DONE)%
+                            %map(show_who,'0')%
+                            %map(show_matches,'1')%
+                        %end_case%
+                    %end_switch%
+                    %if(show_status)%
+                        <div id="signup_status_%(#R/mixup_id)%">...</div><!-- signup_status_%(#R/mixup_id)% -->
+                    %end_if%
+                </div><!-- mixup_status -->
+                %if_not_null(#R/mixup_playlist)%
+                    View the results : <a href="%(home-url)%playlist/browse/%(#R/mixup_playlist)%">as a playlist</a>.
                 %end_if%
-                %if(show_who)%
-                    <div class="pictoggle">
-                        <a class="pictoglink small_button" id="pictoglink_%(#R/mixup_id)%" href="javascript://pictoggle">Hide avatars</a>
-                    </div>
-                    <div class="mixup_users_%(#R/mixup_id)%">
-                        <div class="who_caption">Who signed up:</div>
-                        <div id="mixup_user_list_%(#R/mixup_id)%">...</div><!-- mixup_user_list -->
-                    </div><!-- mixup_users -->
-                %end_if%
-            </div><!-- mixup_status -->
+            </div><!-- desc box -->
+            %if(show_who)%
+                <div class="results_info">Who signed up</div>
+                <div class="pictoggle">
+                    <a class="pictoglink small_button" id="pictoglink_%(#R/mixup_id)%" href="javascript://pictoggle">Hide avatars</a>
+                </div>
+                <div class="mixup_users_%(#R/mixup_id)%">
+                    <div id="mixup_user_list_%(#R/mixup_id)%">...</div><!-- mixup_user_list -->
+                </div><!-- mixup_users -->
+            %end_if%
+            %if(show_matches)%
+                <div class="results_info">
+                    Here's the results! Click on <img src="http://ccdevmac/ccskins/shared/images/tool-fg.png" /> to
+                    %if(logged_in_as)% review, recommend, add to playlist and %end_if% share.
+                </div>
+                <?= cc_query_fmt('f=embed&t=mixup_uploads&mixup='.$R['mixup_id']); ?>
+            %end_if%
         </div><!-- mixup_record -->
         <script type="text/javascript">
           function mixup_hook_%(#R/mixup_id)%()
           {
-            new mixupAPI(%(#R/mixup_id)%);
+            var api = new mixupAPI(%(#R/mixup_id)%,'mixup_users');
+            %if(show_matches)%
+                api.hookPlayer();
+            %end_if%
           }
           Event.observe(window,'load',mixup_hook_%(#R/mixup_id)%);
-          Event.observe('pictoglink_%(#R/mixup_id)%','click',toggle_img)
+          %if(show_who)%
+            Event.observe('pictoglink_%(#R/mixup_id)%','click',toggle_img)
+          %end_if%
         </script>
     %end_loop%
 </div><!-- mixup_table -->
+
+%call('flash_player')%
 
 %call(prev_next_links)%

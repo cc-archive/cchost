@@ -13,6 +13,49 @@ define('CC_MIXUP_MODE_CUSTOM',    7 );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,        'mixup_onmapurls');
 CCEvents::AddHandler(CC_EVENT_FORMAT_MIXUP,    'mixup_onfiltermixup');
 CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP, 'mixup_onqapiquerysetup' ); 
+CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,     'mixup_onuploaddone' );
+
+
+function mixup_onuploaddone( $upload_id, $op )
+{
+    $user_id   = CCUser::CurrentUser();
+    $mode_type = CC_MIXUP_MODE_UPLOADING;
+    
+    // is the current user signed up for a mixup that
+    // is currently in 'uploading' mode?
+    
+    $sql =<<<EOF
+        SELECT mixup_id, mixup_tag
+            FROM cc_tbl_mixups
+            JOIN cc_tbl_mixup_mode ON mixup_mode = mixup_mode_id
+            JOIN cc_tbl_mixup_user ON mixup_id = mixup_user_mixup
+            WHERE mixup_mode_type = {$mode_type} AND
+            mixup_user_user = {$user_id}
+
+EOF;
+
+    $mixup_info = CCDatabase::QueryRows($sql);
+    if( empty($mixup_info ) )
+        return;
+
+    $upload_tags = CCDatabase::QueryRow('SELECT upload_tags FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
+    $upload_tags['op'] = $op;
+    $table = new CCTable( 'cc_tbl_mixup_user', 'mixup_user_user');
+    
+    foreach( $mixup_info as $MI )
+    {
+        // Is this upload intended for the mixup in question?
+        if( CCUploads::InTags($MI['mixup_tag'],$upload_tags) )
+        {
+            $w['mixup_user_user']  = $user_id;
+            $w['mixup_user_mixup'] = $MI['mixup_id'];
+            $args['mixup_user_upload'] = $upload_id;
+            $table->UpdateWhere($args,$w);
+            break;
+        }
+        
+    }
+}
 
 function mixup_onqapiquerysetup( &$args, &$queryObj, $validate)
 {
@@ -23,6 +66,15 @@ function mixup_onqapiquerysetup( &$args, &$queryObj, $validate)
        )
       )
     {
+        if( !empty($args['mixup'])) {
+            $urlp = ccl('people') . '/';
+
+            $queryObj->sql_p['joins'][] = 'cc_tbl_mixup_user ON mixup_user_upload=upload_id';
+            $queryObj->sql_p['joins'][] = 'cc_tbl_user mixee ON mixup_user_other=mixee.user_id';
+            $queryObj->where[] = 'mixup_user_mixup = ' . $args['mixup'];
+            $queryObj->columns[] = "IF( mixup_user_other,  CONCAT( '{$urlp}', mixee.user_name ), '' ) as mixee_page_url";
+            $queryObj->columns[] = cc_fancy_user_sql('mixee_name', 'mixee');
+        }
         return;
     }
 
@@ -49,7 +101,14 @@ function mixup_onqapiquerysetup( &$args, &$queryObj, $validate)
     }
     
     $queryObj->sql_p['order'] .= ' ' . $args['ord'];
+
+    // our 'user' is actually a remixer in mixup_user table
     
+    if( !empty($args['user']) )
+    {
+        $queryObj->where[] = 'mixer.user_name = \'' . $args['user'] . '\'';
+        unset($args['user']);
+    }
     
     // We add a 'mixup' parameter for queries
     
@@ -77,11 +136,11 @@ function mixup_onfiltermixup(&$rows)
     if( $c > 0 )
     {
         // these are the fields that potentially need replacing:
-        $fields = array( 'mixup_mode_mail', 'mixup_desc_html', 'mixup_desc_plain', 'mixup_mode_desc_html', 'mixup_mode_desc_plain');
+        $fields = array( 'mixup_desc_html', 'mixup_desc_plain', 'mixup_mode_desc_html', 'mixup_mode_desc_plain');
         
         // here's all the columns in each row:
         $cols = array_keys($rows[0]);
-        
+
         // these are cols in the row that (actually) need replacing
         $need_replacing = array_intersect($fields,$cols);
         
@@ -92,10 +151,10 @@ function mixup_onfiltermixup(&$rows)
         
         // these are fields that potentially have replacement values:
         $replace_keys = array_diff($cols,$fields);
-        
+
         // these are the (potentially) replacement fields with '%' surrounding the names
         $replace_pats = array_map('mixup_helper_addpatt',$replace_keys);
-             
+
         // loop through all rows:
         $keys = array_keys($rows);
         for( $i = 0; $i < $c; $i++ )
@@ -108,13 +167,12 @@ function mixup_onfiltermixup(&$rows)
             {
                 $values[] = $R[$K];
             }
-            
+
             // loop through 
             foreach( $need_replacing as $NR )
             {
                 $R[$NR] = str_replace($replace_pats,$values,$R[$NR]);
             }
-            
         }    
     }
 }
@@ -138,19 +196,29 @@ function mixup_onmapurls()
         'mixup' );
 }
 
-function mixup_helper_get_default_modes()
-{
+function mixup_helper_get_default_modes($mixup_id)
+{    
+    if( empty($mixup_id) )
+        $mixup_id = '0'; // make sure it's text
+        
+    $sql = 'SELECT * FROM cc_tbl_mixup_mode WHERE mixup_mode_mixup = ' . $mixup_id;
+    $rows = CCDatabase::QueryRows($sql);
+    if( !empty($rows) )
+        return $rows;
+    
     $baseurl = ccl('people') . '/';
     
-    return array(
-         array( CC_MIXUP_MODE_DISABLED,
+    $fields = array(
+         array( CC_MIXUP_MODE_DISABLED,             // mode_type
+                $mixup_id,                          // mixup_id
                 'Not active yet',                   // name
                 'This mixup is not active yet.',    // desc
                 '',                                 // e-mail
-                date( 'Y-m-d H:i:s')                // date
+                'now'                              // date offset
                 ),                            
          
          array( CC_MIXUP_MODE_SIGNUP,
+                $mixup_id,                          // mixup_id
                 'Signing Up',
                 'This mixup is currently signing up participants. '.
                     'E-mail notifications will go out on %mixup_mode_date%',
@@ -164,10 +232,11 @@ function mixup_helper_get_default_modes()
                     "More information: %mixup_url%\n\n" .
                     "Thanks,\n" .
                     "%mixup_name% Admin",
-                date( 'Y-m-d H:i:s', strtotime( 'now + 2 weeks' ))
+                'now + 2 weeks'
                 ),
          
          array( CC_MIXUP_MODE_MIXING,
+                $mixup_id,                          // mixup_id
                 'Mixing',
                 'The sign up period for this mixup is closed. ' .
                     'Participants are currently mixing it up. They will upload their remixes on: %mixup_mode_date%',
@@ -183,10 +252,11 @@ function mixup_helper_get_default_modes()
                     "More information: %mixup_url%\n\n" .
                     "Thanks,\n" .
                     "%mixup_name% Admin",
-                date( 'Y-m-d H:i:s', strtotime( 'now + 4 weeks' ))
+                'now + 4 weeks'
                 ),
          
          array( CC_MIXUP_MODE_REMINDER,
+                $mixup_id,                          // mixup_id
                 'Reminder',
                 'The sign up period for this mixup is closed. ' .
                     'Participants are currently mixing it up. They will upload their remixes on: %mixup_mode_date%',
@@ -199,10 +269,11 @@ function mixup_helper_get_default_modes()
                     "More information: %mixup_url%\n\n" .
                     "Thanks,\n" .
                     "%mixup_name% Admin",
-                date( 'Y-m-d H:i:s', strtotime( 'now + 4 weeks' ))
+                'now + 4 weeks'
                 ),
          
          array( CC_MIXUP_MODE_UPLOADING,
+                $mixup_id,                          // mixup_id
                 'Uploading',
                 'The sign up period for this mixup is closed. ' .
                     'The mixup particpants should be uploading right now(!)',
@@ -214,28 +285,48 @@ function mixup_helper_get_default_modes()
                     "More information: %mixup_url%\n\n" .
                     "Thanks,\n" .
                     "%mixup_name% Admin",
-                date( 'Y-m-d H:i:s', strtotime( 'now + 4 weeks' ))
+                'now + 4 weeks'
                 ),
          
          array( CC_MIXUP_MODE_DONE,
+                $mixup_id,                          // mixup_id
                'Done',
                 'This mixup is ancient history',
                 '',
-                date( 'Y-m-d H:i:s')            // date
+                'now'
                 ),                            
          );
       
+    $table = new CCTable('cc_tbl_mixup_mode', 'mixup_mode_id');
+    $cols = array( 'mixup_mode_type', 'mixup_mode_mixup', 'mixup_mode_name', 'mixup_mode_desc',
+                  'mixup_mode_mail', 'mixup_mode_date_offset' );
+    $table->InsertBatch($cols, $fields);
+    $rows = CCDatabase::QueryRows($sql);
+    return $rows;
 }
 
-function mixup_helper_get_modes()
+
+function mixup_helper_get_modes($mixup_id='0')
 {
-    $rows = CCDatabase::QueryRows('SELECT * FROM cc_tbl_mixup_mode');
+    $sql = 'SELECT * FROM cc_tbl_mixup_mode WHERE mixup_mode_mixup = ' . $mixup_id;
+    $rows = CCDatabase::QueryRows($sql);
     if( empty($rows) ) {
+        $recs = mixup_helper_get_default_modes(0);
+        if( empty($mixup_id) )
+            return $recs;
+        $keys = array_keys($recs);
+        $c = count($keys);
+        for( $i = 0; $i < $c; $i++ )
+        {
+            $R =& $recs[ $keys[$i]];
+            $R['mixup_mode_mixup'] = $mixup_id;
+            $R['mixup_mode_date'] = date( 'Y-m-d H:i:s', strtotime( $R['mixup_mode_date_offset'] ));
+            unset($R['mixup_mode_id']);
+        }        
+        $cols = array_keys( $recs[0] );
         $table = new CCTable('cc_tbl_mixup_mode', 'mixup_mode_id');
-        $recs = mixup_helper_get_default_modes();
-        $cols = array( 'mixup_mode_type', 'mixup_mode_name', 'mixup_mode_desc', 'mixup_mode_mail', 'mixup_mode_date' );
         $table->InsertBatch($cols, $recs );
-        $rows = CCDatabase::QueryRows('SELECT * FROM cc_tbl_mixup_mode');
+        $rows = CCDatabase::QueryRows($sql);
     }
     
     return $rows;
@@ -275,10 +366,9 @@ function mixup_helper_setup_page($text,$mixup_id=0)
     $page->SetTitle($text);
 }    
 
-function mixup_helper_get_mixup_options()
+function mixup_helper_get_mixup_options($mixup_id)
 {
-    
-    $modes = mixup_helper_get_modes();
+    $modes = mixup_helper_get_modes($mixup_id);
     $mod_opts = array();
     foreach( $modes as $M ) {
         $mod_opts[ $M['mixup_mode_id'] ] = $M['mixup_mode_name'];
@@ -286,9 +376,8 @@ function mixup_helper_get_mixup_options()
     return $mod_opts;
 }
 
-function mixup_helper_get_mixup_fields()
+function mixup_helper_get_mixup_fields($mixup_id)
 {
-    $mod_opts = mixup_helper_get_mixup_options();
     $urlm = ccl('mixup') . '/';
     $fields = array(
             'mixup_name' =>
@@ -304,12 +393,6 @@ function mixup_helper_get_mixup_fields()
                     'formatter' => 'textedit',
                     'flags' => CCFF_POPULATE,
                     ),
-            'mixup_mode' =>
-                array( 'label' => 'Current Mode',
-                        'formatter' => 'select',
-                        'flags' => CCFF_POPULATE,
-                        'options' => $mod_opts),
-                
             'mixup_tag' =>
                 array( 'label' => 'Upload Tag',
                         'formatter' => 'textedit',
@@ -331,6 +414,33 @@ function mixup_helper_get_mixup_fields()
                     ),
             );
 
+    if( !empty($mixup_id) )
+    {
+        $mod_opts = mixup_helper_get_mixup_options($mixup_id);
+        $fields['mixup_mode'] = 
+                array( 'label' => 'Current Mode',
+                        'formatter' => 'select',
+                        'flags' => CCFF_POPULATE,
+                        'options' => $mod_opts);
+                
+
+        $purl = ccl('admin','mixup','edit',$mixup_id);
+
+        $fields['mixup_playlist'] = 
+                array( 'label' => 'Playlist',
+                        'formatter' => 'textedit',
+                        'class' => 'form_input_short',
+                        'form_tip' => 'This can be generated automatically <a href="'.$purl.'">here</a>',
+                        'flags' => CCFF_POPULATE );
+                
+        
+        $fields['mixup_thread'] = 
+                array( 'label' => 'Forum Thread',
+                        'formatter' => 'textedit',
+                        'class' => 'form_input_short',
+                        'form_tip' => '',
+                        'flags' => CCFF_POPULATE );
+    }
     return $fields;
 }
 
@@ -344,21 +454,24 @@ function mixup_helper_get_edit_form_help($mixup)
     // - do mixup
     // - send global email (mixing assignments, time to upload)
     // - create submit form (?)
-    
-    $mixup_url   = ccl('admin','mixup','assign',$mixup_id);
-    $mail_url    = ccl('admin','mixup','massmail',$mixup_id);
-    $makefrm_url = ccl('admin','submit', $mixup['mixup_name'] ); // ccl('admin','mixup', 'makeform', $mixup_id);
-    $mode_url    = ccl('admin','mixup','editmodes');
+
+    $prop_url    = ccl('admin','mixup', 'properties', $mixup_id ); 
+    $mixup_url   = ccl('admin','mixup', 'assign',$mixup_id);
+    $mail_url    = ccl('admin','mixup', 'massmail',$mixup_id);
+    $mode_url    = ccl('admin','mixup', 'editmodes',$mixup_id);
+    $makefrm_url = ccl('admin','submit'); // ccl('admin','mixup', 'makeform', $mixup_id);
+    $playlist_url= ccl('api','mixup','playlist', $mixup_id);
     
     $txt =<<<EOF
     <p>Here's some stuff you can do with this mixup:</p>
     <ul>
+        <li><a href="{$prop_url}">Edit Properties</a></li>
         <li><a href="{$mixup_url}">Generate/Edit Mixup Assignments</a></li>
         <li><a href="{$mail_url}">Send mail to everybody</a></li>
-        <li><a href="{$makefrm_url}">Edit submit form</a></li>
-        <li><a href="{$mode_url}">Edit mixup modes</a> (this affects all mixups) </li>
+        <li><a href="{$playlist_url}">Create/Browse Dynamic Playlist</a></li>
+        <li><a href="{$makefrm_url}">Edit submit forms</a></li>
+        <li><a href="{$mode_url}">Edit mixup modes</a> </li>
     </ul>
-    <p>Clicking on a link above will <b>NOT</b> save property changes made below. For that, click on the "Submit" button.</p>
 EOF;
 
     return $txt;
@@ -376,7 +489,7 @@ function mixup_admin($cmd='',$arg='')
                 mixup_helper_setup_page(_('Create a New Mixup'));
                 require_once('cchost_lib/cc-form.php');
                 $form = new CCForm();
-                $fields = mixup_helper_get_mixup_fields();
+                $fields = mixup_helper_get_mixup_fields(0);
                 $form->AddFormFields($fields);
                 if( empty($_POST) || !$form->ValidateFields() ) {
                     $page->AddForm( $form->GenerateForm() );
@@ -385,6 +498,15 @@ function mixup_admin($cmd='',$arg='')
                     $form->GetFormValues($values);
                     $table = new CCTable('cc_tbl_mixups','mixup_id');
                     $values['mixup_id'] = $table->NextID();
+                    $modes = mixup_helper_get_modes($values['mixup_id']);
+                    $mode = 0;
+                    foreach($modes as $M) {
+                        if( $M['mixup_mode_type'] == CC_MIXUP_MODE_DISABLED ) {
+                            $mode = $M['mixup_mode_id'];
+                            break;
+                        }
+                    }
+                    $values['mixup_mode'] = $mode;
                     $values['mixup_date'] = date( 'Y-m-d H:i:s');
                     $table->Insert($values);
                     $url = ccl('mixup', $values['mixup_name'] );
@@ -396,10 +518,21 @@ function mixup_admin($cmd='',$arg='')
         case 'edit':
             {
                 $mixup_id = $arg;
-                mixup_helper_setup_page(_('Edit Mixup'), $mixup_id );
+                mixup_helper_setup_page(_('Actions'), $mixup_id );
+                $row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_mixups WHERE mixup_id=' . $mixup_id);
+                $html = '<div class="box" style="width:60%">' . mixup_helper_get_edit_form_help($row) . '</div>';
+                $page =& CCPage::GetPage();
+                $page->AddContent($html);
+            }
+            break;
+        
+        case 'properties':
+            {
+                $mixup_id = $arg;
+                mixup_helper_setup_page(_('Mixup Properties'), $mixup_id );
                 require_once('cchost_lib/cc-form.php');
                 $form = new CCForm();
-                $fields = mixup_helper_get_mixup_fields();
+                $fields = mixup_helper_get_mixup_fields($mixup_id);
                 $form->AddFormFields($fields);
                 if( empty($_POST) )
                 {
@@ -425,7 +558,6 @@ function mixup_admin($cmd='',$arg='')
                 if( $populate ) {
                     $row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_mixups WHERE mixup_id=' . $mixup_id);
                     $form->PopulateValues($row);
-                    $form->SetFormHelp( mixup_helper_get_edit_form_help($row) );
                 }
                 
                 if( $show ) {
@@ -436,8 +568,14 @@ function mixup_admin($cmd='',$arg='')
             
         case 'editmodes':
             {
-                mixup_helper_setup_page(_('Edit Mixup Modes'));
-                $rows = mixup_helper_get_modes();
+                $mixup_id = $arg;
+                if( empty($mixup_id) ) {
+                    mixup_helper_setup_page(_('Edit Default Mixup Modes'));
+                }
+                else {
+                    mixup_helper_setup_page(_('Edit Mixup Modes'),$mixup_id);
+                }
+                $rows = mixup_helper_get_modes($mixup_id);
                 $args = array();
                 foreach( $rows as $mode_row )
                 {
@@ -452,7 +590,7 @@ function mixup_admin($cmd='',$arg='')
                                'help' => '"' . $mode_row['mixup_mode_name'] . '"',
                              );
                 }
-                $args[] = array( 'action' => ccl('admin','mixup','newmode'), 'menu_text' => _('Create new mode'));
+                // $args[] = array( 'action' => ccl('admin','mixup','newmode'), 'menu_text' => _('Create new mode'));
                 $page->PageArg('use_buttons', 1 );
                 $page->PageArg('client_menu',$args,'print_client_menu');                
             }
@@ -460,8 +598,14 @@ function mixup_admin($cmd='',$arg='')
             
         case 'editmode':
             {
-                mixup_helper_setup_page(_('Mixup Mode Properties'));
                 $mode_id = $arg;
+                $row = CCDatabase::QueryRow('SELECT mixup_mode_name, mixup_mode_mixup FROM cc_tbl_mixup_mode WHERE mixup_mode_id='.$mode_id);
+                if( empty($row['mixup_mode_mixup']) ) {
+                    mixup_helper_setup_page(_('Edit Default Mixup Mode: ') . $row['mixup_mode_name']);
+                }
+                else {
+                    mixup_helper_setup_page(_('Edit Mixup Mode: ' . $row['mixup_mode_name']),$row['mixup_mode_mixup']);
+                }
                 require_once('cchost_lib/cc-form.php');
                 $form = new CCForm();
                 $fields = array(
@@ -483,7 +627,7 @@ function mixup_admin($cmd='',$arg='')
                                 'flags' => CCFF_POPULATE,
                                 ),
                         'mixup_mode_mail' =>
-                            array( 'label' => 'Mail',
+                            array( 'label' => 'Mail Template',
                                 'formatter' => 'textarea',
                                 'form_tip' => _('Mail that might be relevant to this mode. (Leave blank for n/a)'),
                                 'flags' => CCFF_POPULATE,
@@ -546,7 +690,7 @@ function mixup_admin($cmd='',$arg='')
                        ),
                     array(
                         'action'    => ccl( 'admin', 'mixup', 'editmodes' ),
-                        'menu_text' =>  _('Edit Modes')
+                        'menu_text' =>  _('Edit Default Modes')
                        ),
                     );
                 $page->PageArg('client_menu',$args,'print_client_menu');                
@@ -601,7 +745,7 @@ function mixup_admin_massmail($mixup_id,$mode='')
     require_once('cchost_lib/cc-form.php');
     $form = new CCForm();
 
-    $mod_opts = mixup_helper_get_mixup_options();
+    $mod_opts = mixup_helper_get_mixup_options($mixup_id);
 
     if( empty($_POST) && empty($mode) )
         $mode = CCDatabase::QueryItem('SELECT mixup_mode FROM cc_tbl_mixups WHERE mixup_id = ' . $mixup_id);
@@ -649,24 +793,16 @@ function mixup_admin_massmail($mixup_id,$mode='')
     }
     else {
         $form->GetFormValues($values);
-
-        require_once('cchost_lib/cc-query.php');
-        $query = new CCQuery();
-        $args = $query->ProcessAdminArgs('f=php&dataview=mixup_mail&mixup='.$mixup_id);
-        $results = $query->Query($args);
-        if( empty($results[0][0]) ) {
-            $page->Prompt('wups, nobody to send mail to!');
+        $query_str = 'f=php&dataview=mixup_mail&mixup='.$mixup_id;
+        $org_text = $values['body_template'];
+        if( mixup_helper_mail_merge($org_text,$query_str) )
+        {
+            $page->Prompt('OK, sent out all the mail');            
         }
-        else {
-            $replace_pats = array_map('mixup_helper_addpatt',array_keys($results[0][0]));
-            $org_text = $values['body_template'];
-            foreach( $results[0] as $R ) {
-                $text = str_replace( $replace_pats, $R, $org_text );
-                mixup_helper_send_mail($text,$R['mixer_user_id'],$R['mixup_display']);
-            }
-            $page->Prompt('OK, sent out all the mail');
+        else
+        {
+            $page->Prompt('wups, nobody to send mail to!');            
         }
-        
     }
 }
 
@@ -686,8 +822,59 @@ function mixup_helper_get_macro_help(&$R)
     return $html;
 }
 
-function mixup_api($action,$mixup_id)
+function mixup_api($action,$mixup_id=0)
 {
+    if( $action == 'playlist' )
+    {
+        if( !CCUser::IsAdmin() )
+            exit;
+            
+        $playlist = CCDatabase::QueryItem('SELECT mixup_playlist FROM cc_tbl_mixups WHERE mixup_id ='.$mixup_id);
+        if( empty($playlist) ) {
+            // we do this to ensure all the proper macro and bbCode substitutions in the desc field
+            // (very heavy weight, done exactly ONCE in the lifetime of any given mixup)
+            require_once('cchost_lib/cc-query.php');
+            $query = new CCQuery();
+            $args = $query->ProcessAdminArgs('f=php&dataview=mixups&mixup='.$mixup_id);
+            list( list( $row ) ) = $query->Query($args);
+
+            // create the playlist
+            require_once('cchost_lib/ccextras/cc-playlist.inc');
+            $playlist_api = new CCPlaylists();
+            $prow = $playlist_api->_create_playlist('playlist',
+                                                    $row['mixup_display'],
+                                                    $row['mixup_desc_plain'],
+                                                    0,  // current user
+                                                    'tags=' . $row['mixup_tag']
+                                                    );
+            $playlist = $prow['cart_id'];
+            
+            $table = new CCTable('cc_tbl_mixups','mixup_id');
+            $dargs['mixup_id'] = $mixup_id;
+            $dargs['mixup_playlist'] = $playlist;
+            $table->Update($dargs);
+        }
+
+        $url = ccl('playlist','browse',$playlist);
+        CCUtil::SendBrowserTo($url);
+        exit;
+    }
+    
+    if( $action == 'faq' )
+    {
+        $topic_id = CCDatabase::QueryItem('SELECT topic_id FROM cc_tbl_topics WHERE topic_type = \'secret_faq\'');
+        if( empty($topic_id) )
+        {
+            require_once('cchost_lib/cc-page.php');
+            $page =& CCPage::GetPage();
+            $page->Prompt('Hey, tell your admin to create a topic with the type "secret_faq"');
+            return;
+        }
+        $url = ccl('topics','view',$topic_id);
+        CCUtil::SendBrowserTo($url);
+        exit;
+    }
+    
     $mode_type = CCDatabase::QueryItem('SELECT mixup_mode_type FROM cc_tbl_mixups JOIN cc_tbl_mixup_mode on mixup_mode = mixup_mode_id WHERE mixup_id = ' .$mixup_id);    
     if( $mode_type != CC_MIXUP_MODE_SIGNUP )
     {
@@ -722,16 +909,23 @@ function mixup_api($action,$mixup_id)
                     {
                         if( !$user )
                         {
+                            // insert the new user info...
                             $table  = new CCTable('cc_tbl_mixup_user','mixup_user_mixup');
                             $dargs['mixup_user_mixup'] = $mixup_id;
                             $dargs['mixup_user_user']  = CCUser::CurrentUser();
                             $dargs['mixup_user_date'] = date( 'Y-m-d H:i:s');
                             $table->Insert($dargs);
-                            require_once('cchost_lib/cc-query.php');
-                            $query = new CCQuery();
-                            $qargs = $query->ProcessAdminArgs('dataview=mixups&f=php&mixup='.$mixup_id);
-                            list( list( $row ) ) = $query->Query($qargs);
-                            mixup_helper_send_mail($row['mixup_mode_mail'],CCUser::CurrentUser(),$row['mixup_display']);
+
+                            // notify the new user...
+                            
+                            $org_text = CCDatabase::QueryItem('SELECT mixup_mode_mail FROM cc_tbl_mixups ' .
+                                                              'JOIN cc_tbl_mixup_mode on mixup_mode=mixup_mode_id ' .
+                                                              'WHERE mixup_id ='.$mixup_id);
+                            
+                            $query_str = 'f=php&dataview=mixup_mail&mixup='.$mixup_id .
+                                                              '&user=' . CCUser::CurrentUserName();
+                            
+                            mixup_helper_mail_merge( $org_text, $query_str );
                         }
                         $args['signedUp'] = true;
                     }
@@ -758,6 +952,28 @@ function mixup_api($action,$mixup_id)
 }
 
 
+function mixup_helper_mail_merge($org_text,$query_str,$merge_with = array())
+{
+    if( empty($merge_with) )
+    {
+        require_once('cchost_lib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs($query_str);
+        $results = $query->Query($args);
+        if( empty($results[0][0]) ) {
+            return false;
+        }
+        $merge_with = $results[0][0];
+    }
+     
+    $replace_pats = array_map('mixup_helper_addpatt',array_keys($merge_with));
+    foreach( $results[0] as $R ) {
+        $text = str_replace( $replace_pats, $R, $org_text );
+        mixup_helper_send_mail($text,$R['mixer_user_id'],$R['mixup_display']);
+    }
+
+    return $merge_with;
+}
 
 function mixup_helper_do_shuffle( $first_half, $org_second_half, $rejects  = array() )
 {
@@ -768,11 +984,11 @@ function mixup_helper_do_shuffle( $first_half, $org_second_half, $rejects  = arr
     
     for( $i = 0; $i < $num_half; $i++ )
     {
-        $f = $first_half[$i]['user_name'];
-        $s = $second_half[$i]['user_name'];
-        if( $f == $s || ( in_array($f,$rejects) && in_array($s, $rejects) ) )
+        $f = $first_half[$i];
+        $s = $second_half[$i];
+        if( $f == $s ) // || ( in_array($f,$rejects) && in_array($s, $rejects) ) )
         {
-            //dump("\nFORCING reshuffle on {$f}/{$s}\n");
+            dlog("\nFORCING reshuffle on {$f}/{$s}\n");
             return mixup_helper_do_shuffle($first_half, $org_second_half);
         }
         
@@ -872,6 +1088,30 @@ EOF;
 
 }
 
+/*
+function mixup_helper_submit_form($mixup_id)
+{
+    -*
+        [enabled] => 0
+        [submit_type] => The Label
+        [text] => The Caption
+        [help] => The Description
+        [tags] => The_tags (ARRAY!)
+        [suggested_tags] => The_Suggested_Tags
+        [weight] => 1
+        [form_help] => The Form Help Message
+        [isremix] => 1
+        [licenses] => 
+        [action] => 
+        [delete] => 0
+        [logo] => chut.jpg
+        [type_key] => secretmixter
+        [licenses] => attribution_3,noncommercial_3
+
+    *-
+    
+}
+*/
 
 function mixup_view($mixup=null)
 {

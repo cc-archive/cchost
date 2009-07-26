@@ -42,8 +42,10 @@ class v_5_2_mixup extends CCUpdate
                   mixup_display   varchar(255) NOT NULL default '',
                   mixup_desc      mediumtext NOT NULL,
                   mixup_date      datetime NOT NULL default '0000-00-00 00:00:00',
-                  mixup_mode         int(4) unsigned NOT NULL default '0',
+                  mixup_mode      int(4) unsigned NOT NULL default '0',
                   mixup_admin     int(9) unsigned NOT NULL,
+                  mixup_thread    int(9) unsigned NOT NULL,
+                  mixup_playlist  int(9) unsigned NOT NULL,
                   PRIMARY KEY mixup_id (mixup_id),
                   KEY mixup_name (mixup_name)
                 ) DEFAULT CHARSET=latin1;
@@ -75,6 +77,7 @@ EOF;
                   mixup_mode_mixup INT(9) unsigned NOT NULL,
                   mixup_mode_name varchar(100) NOT NULL default '',
                   mixup_mode_date datetime NOT NULL default '0000-00-00 00:00:00',
+                  mixup_mode_date_offset varchar(100) NOT NULL default '',
                   mixup_mode_desc mediumtext NOT NULL,
                   mixup_mode_mail mediumtext NOT NULL,
                   PRIMARY KEY mixup_mode_id (mixup_mode_id)

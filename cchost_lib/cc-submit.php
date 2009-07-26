@@ -339,7 +339,6 @@ class CCSubmit
 
         CCEvents::Invoke(CC_EVENT_UPLOAD_ALLOWED, array( &$allowed ) );
 
-
         if( empty($formtype) )
         {
             CCUser::AddUserBreadCrumbs('str_submit_files');
@@ -407,7 +406,10 @@ class CCSubmit
                     unset($types[$key]['logo']);
                 }
             }
-            $sorted[ $types[$key]['weight'] ] = $types[$key];
+            $weight = $types[$key]['weight'];
+            while( array_key_exists( $weight, $sorted ) )
+               $weight .= '1';
+            $sorted[ $weight ] = $types[$key];
         }
         ksort($sorted);
         CCPage::PageArg('submit_form_infos', $sorted, 'html_form.php/submit_forms');
@@ -434,7 +436,6 @@ class CCSubmit
                         unset($form_types[$key]);
                 }
             }
-            $sorted = array();
             return $form_types;
         }
 
@@ -634,7 +635,7 @@ class CCSubmit
         }
     }
 
-    function NewForm()
+    function NewForm($init_values=array())
     {
         global $CC_GLOBALS;
 
@@ -665,6 +666,11 @@ class CCSubmit
         }
         else
         {
+            if( !empty($init_values) && empty($_POST) )
+            {
+                $form->PopulateValues($init_values);
+                $form->SetHandler(ccl('admin','newsubmitform'));
+            }
             CCPage::AddForm( $form->GenerateForm() );
         }
     }

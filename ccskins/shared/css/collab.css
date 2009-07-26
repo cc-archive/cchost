@@ -80,6 +80,7 @@ a.fname {
 
 .file_dl_table .down_button:hover {
 	background: url('../images/down-button-bg.gif');
+	text-decoration: none; 
 }
 
 .user_line {

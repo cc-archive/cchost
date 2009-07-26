@@ -23,7 +23,9 @@ function mixups_dataview()
             mixup_mode_desc as format_html_mixup_mode_desc,
             DATE_FORMAT( mixup_date,      '%W, %M %e, %Y' ) as mixup_date,
             DATE_FORMAT( mixup_mode_date, '%W, %M %e, %Y' ) as mixup_mode_date,
-            CONCAT( '{$urlm}', mixup_name ) as mixup_url
+            CONCAT( '{$urlm}', mixup_name ) as mixup_url,
+            mixup_playlist,
+            mixup_thread
         FROM cc_tbl_mixups
         JOIN cc_tbl_mixup_mode ON mixup_mode = mixup_mode_id
         JOIN cc_tbl_user as admin ON mixup_admin = admin.user_id

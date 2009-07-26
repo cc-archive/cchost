@@ -71,6 +71,7 @@ a.flag {
 
 a.flag:hover {
 	background: url('../images/flag-red.gif') top left no-repeat;
+	text-decoration: none;
 }
 
 div#beta_message {

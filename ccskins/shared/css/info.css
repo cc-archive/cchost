@@ -29,6 +29,7 @@ a.info_button {
 }
 
 a.info_button:hover {
+	text-decoration: none;
 	background: url('../images/i-fg.png') no-repeat;
 }
 

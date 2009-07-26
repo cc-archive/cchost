@@ -68,9 +68,11 @@
 }
 .cc_player_hear:hover {
   background: url('../images/player/hear-button-bg.gif');
+  text-decoration: none; 
 }
 
 .cc_player_prev {
+  text-decoration: none;
   background: url('../images/player/dleftt-button-fg.gif');
 }
 .cc_player_prev:hover {
@@ -78,9 +80,11 @@
 }
 
 .cc_player_next {
+  text-decoration: none;
   background: url('../images/player/dright-button-fg.gif');
 }
 .cc_player_next:hover {
+  text-decoration: none;
   background: url('../images/player/dright-button-bg.gif');
 }
 
@@ -88,17 +92,20 @@
   background: url('../images/player/pause-button-fg.gif');
 }
 .cc_player_play:hover {
+  text-decoration: none;
   background: url('../images/player/pause-button-bg.gif');
 }
 .cc_player_pause {
   background: url('../images/player/right-button-fg.gif');
 }
 .cc_player_pause:hover {
+  text-decoration: none;
   background: url('../images/player/right-button-bg.gif');
 }
 .cc_player_stop {
   background: url('../images/player/stop-button-fg.gif');
 }
 .cc_player_stop:hover {
+  text-decoration: none;
   background: url('../images/player/stop-button-bg.gif');
 }
