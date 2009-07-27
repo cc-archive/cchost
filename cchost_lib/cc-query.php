@@ -1071,7 +1071,10 @@ class CCQuery
         {
             $topic = trim($this->args['topic']);
             if( strlen($topic) )
-                $this->where[] = "REPLACE(LOWER(topic_name),' ','-') = '{$this->args['topic']}'";
+            {
+                $slug_sql = cc_get_topic_name_slug();
+                $this->where[] = "{$slug_sql} = '{$this->args['topic']}'";
+            }
         }
     }
 

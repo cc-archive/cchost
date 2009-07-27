@@ -996,7 +996,8 @@ class CCPage extends CCSkin
                 {
                     continue;
                 }
-                $res = cc_query_fmt("dataview=topic_info&f=php&type={$props['topic_type']}&topic={$_GET['topic']}" );
+                $tname = CCUtil::Strip($_GET['topic']);
+                $res = cc_query_fmt("dataview=topic_info&f=php&type={$props['topic_type']}&topic={$tname}" );
                 if( !empty($res[0]['topic_name']) )
                 {
                     $bc[] = array( 'url' => '', 'text' => $res[0]['topic_name'] );

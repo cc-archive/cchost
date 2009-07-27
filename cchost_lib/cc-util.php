@@ -144,7 +144,7 @@ class CCUtil
             return($text);
         if( empty($text) )
             return(null);
-        $text = trim(strip_tags(CCUtil::StripSlash($text)));
+        $text = trim(strip_tags(CCUtil::StripSlash(str_replace("'",'',$text))));
         return($text);
     }
 

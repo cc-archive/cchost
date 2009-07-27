@@ -126,7 +126,8 @@ function cc_query_fmt($qstring,$debug=0)
 {
     if( empty($qstring) )
         return array();
-    
+
+    $qstring = CCUtil::Strip($qstring);    
     parse_str($qstring,$args);
     require_once('cchost_lib/cc-query.php');
     $query = new CCQuery();
@@ -202,7 +203,7 @@ function cc_get_user_role($user_name)
 
 function cc_get_topic_name_slug($col='topic_name')
 {
-    return "LOWER(REPLACE({$col},' ','-'))";
+    return "LOWER(REPLACE(REPLACE({$col},' ','-'),\"'\",''))";
 }
 
 function cc_get_license_logo_sql($size='big',$col='license_logo_url')
