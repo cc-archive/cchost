@@ -13,9 +13,9 @@
 <div class="trr">
   <div class="tdc cc_playlist_item" id="_pli_%(#R/upload_id)%">
     <span>
-     <a href="%(#R/mixee_page_url)%">%(#R/mixee_name)%</a>
-     remix of
      <a class="cc_user_link" href="%(#R/artist_page_url)%">%chop(#R/user_real_name,30)%</a>
+     remix of
+     <a href="%(#R/mixee_page_url)%">%(#R/mixee_name)%</a>
      "<a class="cc_playlist_pagelink cc_file_link" id="_plk_%(#R/upload_id)%" 
             href="%(#R/file_page_url)%">%chop(#R/upload_name,30)%</a>"
     </span>
