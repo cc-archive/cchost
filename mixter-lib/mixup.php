@@ -306,8 +306,11 @@ function mixup_helper_get_default_modes($mixup_id)
 }
 
 
-function mixup_helper_get_modes($mixup_id='0')
+function mixup_helper_get_modes($mixup_id='')
 {
+    if( empty($mixup_id) )
+      $mixup_id = "0";
+      
     $sql = 'SELECT * FROM cc_tbl_mixup_mode WHERE mixup_mode_mixup = ' . $mixup_id;
     $rows = CCDatabase::QueryRows($sql);
     if( empty($rows) ) {
@@ -647,7 +650,7 @@ function mixup_admin($cmd='',$arg='')
                         $values['mixup_mode_id'] = $mode_id;
                         $table = new CCTable('cc_tbl_mixup_mode','mixup_mode_id');
                         $table->Update($values);
-                        $url = ccl('admin','mixup','editmodes' );
+                        $url = ccl('admin','mixup','editmodes',$row['mixup_mode_mixup']);
                         CCUtil::SendBrowserTo($url);
                     } else {
                         $populate = false;
