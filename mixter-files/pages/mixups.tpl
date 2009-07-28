@@ -131,27 +131,31 @@ mixupAPI.prototype = {
         var id = 'signup_link_' + this.mixup_id;
         var html = '<a href="javascript://signup" class="small_button" id="' + id + '">';
         var msg = '';
+
         if( json.notSignedUp )
         {
             msg = 'You are not signed up for this mixup.';
-            html += "Sign Up Now!";
+            html += "Sign Up Now!</a>";
             this.action = 'signup';
         }
         else if( json.signedUp )
         {
             msg = 'You are signed up for this mixup. To remove yourself from the mixup, click on the "Remove me" button below.';
-            html += 'Remove me';
+            html += 'Remove me</a>';
             this.action = 'remove';
         }
         else if( json.msg ) {
-            this.statusDiv.innerHTML = json.msg;
-            return;
+            msg = json.msg;
+            id = null;
+            html = '';
         }
         
-        html += '</a>';
         this.statusDiv.innerHTML = '<p>' + msg + '</p><p>' + html + '</p>';
 
-        Event.observe(id,'click', this.doAction.bindAsEventListener(this) );
+        if( id ) {
+            Event.observe(id,'click', this.doAction.bindAsEventListener(this) );
+        }
+        
         this.doUserList();
     }
 }
