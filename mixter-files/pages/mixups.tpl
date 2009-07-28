@@ -86,10 +86,11 @@ mixupAPI.prototype = {
         if( this.statusDiv )
         {
             this.action = 'status';
-            this.doAction();
+            this.doAction(); // user list will be updated here
         }
         else
         {
+            // otherwise we do it here
             this.doUserList();
         }
     },
@@ -99,7 +100,6 @@ mixupAPI.prototype = {
         this.statusDiv.innerHTML = '...';
         var url = home_url + 'api/mixup/' + this.action + '/' + this.mixup_id;
         new Ajax.Request( url, { method: 'get', onComplete: this.onUserStatus.bind(this) } );
-        this.doUserList();
     },
     
     doUserList: function()
@@ -152,6 +152,7 @@ mixupAPI.prototype = {
         this.statusDiv.innerHTML = '<p>' + msg + '</p><p>' + html + '</p>';
 
         Event.observe(id,'click', this.doAction.bindAsEventListener(this) );
+        this.doUserList();
     }
 }
 
