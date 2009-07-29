@@ -237,7 +237,7 @@ function show_hide_miximg()
                 %end_if%
             </div><!-- desc box -->
             %if(show_who)%
-                <div class="results_info">Who signed up</div>
+                <div class="results_info">Who's signed up...</div>
                 <div class="pictoggle">
                     <a class="pictoglink small_button" id="pictoglink_%(#R/mixup_id)%" href="javascript://pictoggle">Hide avatars</a>
                 </div>

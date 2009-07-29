@@ -12,7 +12,7 @@
 <!-- template mixup_users -->
 
 <?
-    $NC = 4;
+    $NC = 5;
     $W = 100 / $NC;
     $rows = array_chunk($A['records'], $NC);
     
@@ -22,7 +22,7 @@
 <tr>
   %loop(#cols,R)%
   <td  style="vertical-align:bottom;width:110px;text-align:center;padding:3px;">
-     <div class="box miximgbox" style="height:120px" >
+     <div class="box miximgbox" style="height:150px" >
       <a class="hidemixup" href="%(#R/mixer_page_url)%"><img src="%(#R/mixer_avatar_url)%" /></a>
       <br class="hidemixup" />
       <a href="%(#R/mixer_page_url)%">%(#R/mixer_name)%</a>
