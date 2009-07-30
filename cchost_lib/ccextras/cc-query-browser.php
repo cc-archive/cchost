@@ -112,7 +112,7 @@ EOF;
             array_walk($tags,'cc_wrap_user_tags');
             $args['count'] = count($tags);
             $args['html'] = join('',$tags);
-            CCUtil::ReturnAjaxData($args);
+            CCUtil::ReturnAjaxData($args,false);
         }
         else
         {
