@@ -489,7 +489,7 @@ userHookup.prototype = {
         }
         catch (e)
         {
-            if( cc_unloading )
+            if( !cc_unloading )
                 alert('cchost.js (5): ' + e);
         }
     }
