@@ -825,8 +825,22 @@ function mixup_helper_get_macro_help(&$R)
     return $html;
 }
 
-function mixup_api($action,$mixup_id=0)
+function mixup_api($action,$mixup_id=0,$arg='')
 {
+    if( $action == 'remove' )
+    {
+        if( !CCUser::IsAdmin() )
+            exit;
+            
+        $table  = new CCTable('cc_tbl_mixup_user','mixup_user_mixup');
+        $args['mixup_user_mixup'] = $mixup_id;
+        $args['mixup_user_user']  = $arg;
+        $table->DeleteWhere($args);
+        $url = ccl('mixup',$mixup_id);
+        CCUtil::SendBrowserTo($url);
+        exit;
+    }
+    
     if( $action == 'playlist' )
     {
         if( !CCUser::IsAdmin() )

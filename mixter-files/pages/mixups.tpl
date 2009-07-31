@@ -62,6 +62,11 @@
 #mixup_faq_link {
     margin: 1em auto 3em 70%;
 }
+
+.admin_remove {
+    margin-top: 0.24em;
+    font-size: 80%;
+}
 .mixup_mode_type_<?= CC_MIXUP_MODE_DISABLED  ?> { background-color: orange; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_SIGNUP    ?> { background-color: green; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_MIXING    ?> { background-color: green; }

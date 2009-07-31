@@ -26,6 +26,9 @@
       <a class="hidemixup" href="%(#R/mixer_page_url)%"><img src="%(#R/mixer_avatar_url)%" /></a>
       <br class="hidemixup" />
       <a href="%(#R/mixer_page_url)%">%(#R/mixer_name)%</a>
+      %if_not_null(#R/admin_remove_url)%
+        <div class="admin_remove">[<a href="%(#R/admin_remove_url)%">remove</a>]</div>
+      %end_if%
       </div>
   </td>
   %end_loop%
