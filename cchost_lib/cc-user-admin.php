@@ -230,8 +230,75 @@ class CCUserAdmin
         }
     }
 
-    function Admin($username,$cmd='')
+    function _lookup_user()
     {
+        $page =& CCPage::GetPage();
+        $page->SetTitle(_('Admin User Lookup') );
+                         
+        $form = new CCForm();
+        $fields = array( 
+                    'lname' =>
+                        array( 'label'      => _('Search for'),
+                              'form_tip'    => _('Can be email, login name or display name'),
+                               'formatter'  => 'textedit',
+                               'flags'      => CCFF_REQUIRED ),
+                       );
+        $form->AddFormFields($fields);
+        if( !empty($_POST) && $form->ValidateFields() )
+        {
+            $search = $form->GetFormValue('lname');
+            $sql =<<<EOF
+            SELECT user_name, user_real_name, user_email, user_id
+            FROM cc_tbl_user
+            WHERE CONCAT(user_name,user_real_name,user_email) LIKE '%{$search}%'
+            LIMIT 25
+EOF;
+            
+            $rows = CCDatabase::QueryRows($sql);
+            
+            if( empty($rows) ) {
+                $html = "NO MATCHES";
+            }
+            else {
+                $html = '<style>#utxtable td { padding: 4px; }</style><table id="utxtable">';
+                $ccp = ccl('people') . '/';
+                $cca = ccl('admin','user') . '/';
+                foreach( $rows as $R ) {
+                    $html .=<<<EOF
+    <tr>
+        <td>
+            <a class="small_button" href="{$ccp}{$R['user_name']}">view</a>
+        </td>
+        <td>
+            <a class="small_button" href="{$cca}{$R['user_name']}">admin</a>
+        </td>
+        <td>{$R['user_id']}</td>
+        <td>{$R['user_name']}</td>
+        <td>{$R['user_real_name']}</td>
+        <td>{$R['user_email']}</td>
+    </tr>
+EOF;
+                }
+                
+                $html .= '</table>';
+                if( count($rows) >= 25 ) {
+                    $html .= '<p>LIMIT REACHED</p>';
+                }
+            }
+            
+            $form->SetFormHelp($html);
+        }
+        
+        $page->AddForm( $form->GenerateForm() );
+        
+    }
+    
+    function Admin($username='',$cmd='')
+    {
+        if( empty($username) ) {
+            return $this->_lookup_user();
+        }
+        
         $record = CCDatabase::QueryRow(
                     'SELECT user_name, user_last_known_ip, user_name, user_id FROM cc_tbl_user WHERE user_name=\''.$username.'\'');
 
@@ -250,6 +317,7 @@ class CCUserAdmin
         $hidefileslink = ccl('admin','user',$user_id,'hidefiles');
         $deluserlink = ccl('admin','user',$user_id,'deluser');
         $ban_ip_link = ccl('admin','user',$user_id,'banip');
+        $nuke_notify_link = ccl('admin','user',$user_id,'nukenotify');
         $change_pass = ccl('admin','password',$user_id);
         $activity_user = url_args( ccl('activity'), 'user=' . $username );
 
@@ -263,6 +331,12 @@ class CCUserAdmin
 
         switch( $cmd )
         {
+            case 'nukenotify':
+                $msg = $this->_nuke_notify($user_id);
+                if( $msg == false )
+                    return;
+                break;
+            
             case 'delfiles':
                 $msg = $this->_del_user_files($record);
                 if( $msg === false )
@@ -346,6 +420,10 @@ class CCUserAdmin
                          'help' => _('Create A New Password and Change E-mail For This Account') );
 
 
+        $args[] = array( 'action' => $nuke_notify_link,
+                         'menu_text' => sprintf(_("Clear notifications for %s"), $uq),
+                         'help' => _('Clear the notifications tables if email addr is stale. (NO UNDO)') );
+
         $args[] = array( 'action'    => $activity_user,
                          'menu_text' => sprintf(_("Activity for %s"), $uq ),
                          'help'      => _('See Activity Log for this user.') );
@@ -354,6 +432,19 @@ class CCUserAdmin
 
     }
 
+    function _nuke_notify($user_id)
+    {
+        $sql = "SELECT COUNT(*) FROM cc_tbl_notifications WHERE notify_user = $user_id";
+        $count = CCDatabase::QueryItem($sql);
+        if( empty($count) )
+        {
+            return "There are no notification records for this user.";
+        }
+        $sql = "DELETE FROM cc_tbl_notifications WHERE notify_user = $user_id";
+        CCDatabase::Query($sql);
+        return sprintf("%d notifications for this user has been cleared",$count);
+    }
+    
     function _hide_user_files($record)
     {
         $sql = 'UPDATE cc_tbl_uploads SET upload_published = 0 WHERE upload_user = ' . $record['user_id'];
