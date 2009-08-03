@@ -924,27 +924,41 @@ function mixup_api($action,$mixup_id=0,$arg='')
                 
                 case 'signup':
                     {
-                        if( !$user )
+                        if( $user )
                         {
-                            // insert the new user info...
-                            $table  = new CCTable('cc_tbl_mixup_user','mixup_user_mixup');
-                            $dargs['mixup_user_mixup'] = $mixup_id;
-                            $dargs['mixup_user_user']  = CCUser::CurrentUser();
-                            $dargs['mixup_user_date'] = date( 'Y-m-d H:i:s');
-                            $table->Insert($dargs);
-
-                            // notify the new user...
-                            
-                            $org_text = CCDatabase::QueryItem('SELECT mixup_mode_mail FROM cc_tbl_mixups ' .
-                                                              'JOIN cc_tbl_mixup_mode on mixup_mode=mixup_mode_id ' .
-                                                              'WHERE mixup_id ='.$mixup_id);
-                            
-                            $query_str = 'f=php&dataview=mixup_mail&mixup='.$mixup_id .
-                                                              '&user=' . CCUser::CurrentUserName();
-                            
-                            mixup_helper_mail_merge( $org_text, $query_str );
+                            $args['signedUp'] = true;                            
                         }
-                        $args['signedUp'] = true;
+                        else
+                        {
+                            $count = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_uploads WHERE upload_user='.
+                                                             CCUser::CurrentUser() );
+                            if( empty($count) )
+                            {
+                                $args['msg'] = '<b style="color:red">Sorry we can not sign you up for this mixup. Please read the FAQ</b>';
+                            }
+                            else
+                            {
+                                // insert the new user info...
+                                $table  = new CCTable('cc_tbl_mixup_user','mixup_user_mixup');
+                                $dargs['mixup_user_mixup'] = $mixup_id;
+                                $dargs['mixup_user_user']  = CCUser::CurrentUser();
+                                $dargs['mixup_user_date'] = date( 'Y-m-d H:i:s');
+                                $table->Insert($dargs);
+
+                                // notify the new user...
+                                
+                                $org_text = CCDatabase::QueryItem('SELECT mixup_mode_mail FROM cc_tbl_mixups ' .
+                                                                  'JOIN cc_tbl_mixup_mode on mixup_mode=mixup_mode_id ' .
+                                                                  'WHERE mixup_id ='.$mixup_id);
+                                
+                                $query_str = 'f=php&dataview=mixup_mail&mixup='.$mixup_id .
+                                                                  '&user=' . CCUser::CurrentUserName();
+                                
+                                mixup_helper_mail_merge( $org_text, $query_str );
+                                
+                                $args['signedUp'] = true;
+                            }
+                        }
                     }
                     break;
                 
