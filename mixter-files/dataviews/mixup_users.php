@@ -15,7 +15,7 @@ function mixup_users_dataview()
     $urlp = ccl('people') . '/';
     $urlf = ccl('files') . '/';
     
-    $urlremove = CCUser::IsAdmin() ? "CONCAT('".ccl('api','mixup','remove') ."/',mixup_user_mixup,'/',mixer.user_id)" : "0";
+    $urlremove = CCUser::IsAdmin() ? "CONCAT('".ccl('api','mixup','adminremove') ."/',mixup_user_mixup,'/',mixer.user_id)" : "0";
     
     $sql =<<<EOF
        SELECT
