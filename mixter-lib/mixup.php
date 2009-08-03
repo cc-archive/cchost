@@ -827,7 +827,7 @@ function mixup_helper_get_macro_help(&$R)
 
 function mixup_api($action,$mixup_id=0,$arg='')
 {
-    if( $action == 'remove' )
+    if( $action == 'adminremove' )
     {
         if( !CCUser::IsAdmin() )
             exit;
