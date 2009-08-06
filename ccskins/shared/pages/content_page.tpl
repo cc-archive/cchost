@@ -14,7 +14,8 @@ SELECT  topic_text as format_html_topic_text,
         topic_text as format_text_topic_text, 
         topic_text,
         topic_id,
-        topic_name
+        topic_name,
+        topic_format
 FROM cc_tbl_topics AS topic
 %where% 
 %order%
