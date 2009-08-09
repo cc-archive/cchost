@@ -79,10 +79,14 @@ span.quote span {
 span.right {
 	display: block;
 	float: right;
-	margin: 4px;
+	margin: 10px;
 }
 span.left {
 	display: block;
 	float: left;
-	margin: 4px;
+	margin: 10px;
+}
+
+.format_indent {
+	clear: both;
 }

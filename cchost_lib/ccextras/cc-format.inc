@@ -124,10 +124,35 @@ class CCFormat
                 'name' => $db_col . '_' . (($pieces[1] == 'text') ? 'plain' : 'html'),
                 'format' => $pieces[1] );
         }
+        /*
+            In the end, $format_needed looks something like:
+            
+                Array
+                (
+                    [format_html_topic_text] => Array
+                        (
+                            [name] => topic_text_html
+                            [format] => html
+                        )
+                
+                    [format_text_topic_text] => Array
+                        (
+                            [name] => topic_text_plain
+                            [format] => text
+                        )
+                
+                )
+                
+            The incoming rows have fields with names that look
+            the keys in that array and assume they will be
+            updated with versions of [format] named [name]
+            
+        */
 
         for( $i = 0; $i < $c; $i++ )
         {
             $R =& $rows[$k[$i]];
+
             foreach( $format_needed as $F => $meta )
             {
                 if( !isset($R['topic_format']) )

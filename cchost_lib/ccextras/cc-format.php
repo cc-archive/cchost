@@ -153,7 +153,7 @@ function _cc_format_format($text)
                   "#\[/enclosure\]#" =>  '</a>', 
                   "/\[box]/" => "<div class=\"box\">", 
                   "#\[/box\]#" => '</div>', 
-                  "/\[indent=([0-9]+)]/" => '<div style="padding-left:$1px">',
+                  "/\[indent=([0-9]+)]/" => '<div class="format_indent" style="padding-left:$1px">',
                   "#\[/indent\]#" => '</div>', 
                   "#\[cmdurl=([^\]]+)\]\[/cmdurl\]#e" => 'ccl(\'\1\')', 
                   "/\[cmd=([^\]]+)\]/e" => '"<a rel=\"nofollow\" href=\"" . ccl(\'\1\') . "\">"', 
