@@ -7,6 +7,6 @@
 [/meta]
 */?>
 %loop(records,R)%
-<li><a href="%(#R/topic_url)%" class="topic_link">%(#R/topic_name)%</a></li>
+<li><a href="%(#R/topic_url)%" class="topic_link">%chop(#R/topic_name,chop)%</a></li>
 %end_loop%
 
