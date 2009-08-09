@@ -83,6 +83,7 @@ class CCHowIDidIt
     function _get_data($upload_id)
     {
         $uploads =& CCUploads::GetTable();
+        $upload_id = sprintf('%d',$upload_id);
         if( !$uploads->KeyExists($upload_id) )
             return null;
         $upload_extra = CCDatabase::QueryItem('SELECT upload_extra FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
