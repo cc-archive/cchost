@@ -211,7 +211,8 @@ ul.page_topic_toc li {
 
 select.page_topic_toc {
 	font-size: 0.85em;
-	float: right;
+	margin-left: 70%;
+	display: block;
 	}
 	
 	
