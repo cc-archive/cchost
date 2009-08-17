@@ -1019,7 +1019,7 @@ function mixup_helper_do_shuffle( $first_half, $org_second_half, $rejects  = arr
         $s = $second_half[$i];
         if( $f == $s ) // || ( in_array($f,$rejects) && in_array($s, $rejects) ) )
         {
-            dlog("\nFORCING reshuffle on {$f}/{$s}\n");
+            //dlog("\nFORCING reshuffle on {$f}/{$s}\n");
             return mixup_helper_do_shuffle($first_half, $org_second_half);
         }
         
@@ -1080,6 +1080,8 @@ function mixup_helper_assignments($mixup_id)
             );
 
         $form->AddGridRow( $count, $a );
+        $form->SetHiddenField( $S . '[mixup_user_id]', $R['mixup_user_id'] );
+        
     }
     
     if( empty($_POST) || !$form->ValidateFields() )
@@ -1102,10 +1104,11 @@ EOF;
         $form->GetFormValues($values);
         $s = $_POST['S'];
         $c = count($s);
-        $table = new CCTable('cc_tbl_mixup_user','mixup_user_user');
+        $table = new CCTable('cc_tbl_mixup_user','mixup_user_id');
         for( $i = 0; $i < $c; $i++ )
         {
             $k = 'S[' . ($i+1) . ']';
+            $da['mixup_user_id']     = $values[ $k . '[mixup_user_id]' ];
             $da['mixup_user_user']   = $values[ $k . '[mixup_user_user]' ];
             $da['mixup_user_other']  = $values[ $k . '[mixup_user_other]' ];
             $da['mixup_user_upload'] = $values[ $k . '[mixup_user_upload]' ];

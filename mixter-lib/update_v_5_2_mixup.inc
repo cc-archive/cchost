@@ -57,11 +57,13 @@ EOF;
         {
             $sql =<<<EOF
                 CREATE TABLE cc_tbl_mixup_user (
+                  mixup_user_id        INT(9) unsigned NOT NULL auto_increment,
                   mixup_user_mixup INT(9) unsigned NOT NULL default '0',
                   mixup_user_user INT(9) unsigned NOT NULL default '0',
                   mixup_user_other INT(9) unsigned NOT NULL default '0',
                   mixup_user_upload INT(9) unsigned NOT NULL default '0',
                   mixup_user_date datetime NOT NULL default '0000-00-00 00:00:00',
+                  PRIMARY KEY mixup_id (mixup_id)
                   KEY user_mixup (mixup_user_mixup,mixup_user_user)
                 ) DEFAULT CHARSET=latin1;
 EOF;
