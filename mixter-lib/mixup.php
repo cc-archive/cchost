@@ -219,10 +219,10 @@ function mixup_confirm($mixup_id)
     $mixup_id = sprintf( '%0d', $mixup_id );
     if( empty($mixup_id) )
         die('Invalid mixup id');
-    $mode = CCDatabase::QueryItem('SELECT mixup_mode FROM cc_tbl_mixups WHERE mixup_id = ' . $mixup_id );
+    $mode = mixup_helper_get_mode_type($mixup_id);
     if( empty($mode) )
         die('Invalid mixup id');
-    if( ($mode != CC_MIXUP_MODE_MIXING) || ($mode != CC_MIXUP_MODE_REMINDER) )
+    if( ($mode != CC_MIXUP_MODE_MIXING) && ($mode != CC_MIXUP_MODE_REMINDER) )
     {
         $page->Prompt('This mixup is not in mixing mode!');
         return;
@@ -530,11 +530,6 @@ function mixup_helper_get_edit_form_help($mixup)
     $mixup_id = $mixup['mixup_id'];
     $mode_row = CCDatabase::QueryRow('SELECT * FROM cc_tbl_mixup_mode WHERE mixup_mode_id = '.$mixup['mixup_mode']);
     $type = $mode_row['mixup_mode_type'];
-
-    // actions:
-    // - do mixup
-    // - send global email (mixing assignments, time to upload)
-    // - create submit form (?)
 
     $prop_url    = ccl('admin','mixup', 'properties', $mixup_id ); 
     $mixup_url   = ccl('admin','mixup', 'assign',$mixup_id);
@@ -916,6 +911,13 @@ function mixup_helper_get_macro_help(&$R)
     return $html;
 }
 
+
+function mixup_helper_get_mode_type($mixup_id)
+{
+  $mode_type = CCDatabase::QueryItem('SELECT mixup_mode_type FROM cc_tbl_mixups JOIN cc_tbl_mixup_mode on mixup_mode = mixup_mode_id WHERE mixup_id = ' .$mixup_id);    
+  return $mode_type;  
+}
+
 function mixup_api($action,$mixup_id=0,$arg='')
 {
     if( $action == 'adminremove' )
@@ -982,8 +984,8 @@ function mixup_api($action,$mixup_id=0,$arg='')
         CCUtil::SendBrowserTo($url);
         exit;
     }
-    
-    $mode_type = CCDatabase::QueryItem('SELECT mixup_mode_type FROM cc_tbl_mixups JOIN cc_tbl_mixup_mode on mixup_mode = mixup_mode_id WHERE mixup_id = ' .$mixup_id);    
+
+    $mode_type = mixup_helper_get_mode_type($mixup_id); 
     if( $mode_type != CC_MIXUP_MODE_SIGNUP )
     {
         $args['msg'] = 'This mixup is not signing up';
