@@ -32,7 +32,7 @@ function mixup_users_dataview()
           IF( mixup_user_upload, CONCAT('{$urlf}', mixer.user_name, '/', mixup_user_upload), '' ) as file_page_url,
           upload_name,
           
-          {$urlremove} as admin_remove_url
+          {$urlremove} as admin_remove_url, mixup_user_confirmed
           
       FROM cc_tbl_mixup_user
                  JOIN cc_tbl_user as mixer ON mixup_user_user   = mixer.user_id
@@ -44,7 +44,7 @@ function mixup_users_dataview()
       
 EOF;
    
-   return array( 'e' => array(), 'sql' => $sql );
+   return array( 'e' => array(), 'sql' => $sql, 'sql_count' => 'select 1' );
 }
 
 ?>

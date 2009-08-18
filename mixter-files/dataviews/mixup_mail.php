@@ -14,6 +14,7 @@ function mixup_mail_dataview()
     $urlf  = ccl('files') . '/';
     $urlc  = ccl('people','contact') . '/';
     $urlm  = ccl('mixup') . '/';
+    $urlq  = ccl('mixup','confirm') . '/';
     
     $sql =<<<EOF
      SELECT
@@ -32,6 +33,7 @@ function mixup_mail_dataview()
         mixup_name,
         CONCAT( '{$urlm}', mixup_name )      as mixup_url,
         CONCAT( '{$urlc}', admin.user_name ) as mixup_admin_contact,
+        CONCAT( '{$urlq}', mixup_id )        as mixup_confirm_url,
         
         mixup_mode_name,                                            
         DATE_FORMAT( mixup_mode_date, '%W, %M %e, %Y' ) as mixup_mode_date

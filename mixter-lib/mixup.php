@@ -94,6 +94,12 @@ function mixup_onqapiquerysetup( &$args, &$queryObj, $validate)
         case 'name':
             $queryObj->sql_p['order'] = $is_user ? 'user_name' : 'mixup_display';
             break;
+        case 'mixer':
+            $queryObj->sql_p['order'] = $is_user ? 'mixer.user_name' : 'mixup_date';
+            break;
+        case 'status':
+            $queryObj->sql_p['order'] = $is_user ? 'mixup_user_confirmed' : 'mixup_date';
+            break;
     }
     
     if( empty($args['ord'])) {
@@ -186,6 +192,10 @@ function mixup_onmapurls()
     CCEvents::MapUrl( 'api/mixup',  'mixup_api', 
         CC_DONT_CARE_LOGGED_IN, ccs(__FILE__), '{signup|remove|status}/mixup_id', _('ajax api for a mixup'),
         'mixup' );
+
+    CCEvents::MapUrl( 'mixup/confirm',  'mixup_confirm', 
+        CC_MUST_BE_LOGGED_IN, ccs(__FILE__), 'mixup_id', _('confirm a mixup user'),
+        'mixup' );
     
     CCEvents::MapUrl( 'admin/mixup',  'mixup_admin', 
         CC_ADMIN_ONLY, ccs(__FILE__), '', _('admin mixup'),
@@ -194,6 +204,74 @@ function mixup_onmapurls()
     CCEvents::MapUrl( 'admin/mixup/massmail',  'mixup_admin_massmail', 
         CC_ADMIN_ONLY, ccs(__FILE__), '', _('admin mixup'),
         'mixup' );
+}
+
+
+function mixup_confirm($mixup_id)
+{
+
+    require_once('cchost_lib/cc-page.php');
+    require_once('cchost_lib/cc-form.php');
+    
+    $page =& CCPage::GetPage();
+    $page->SetTitle('Mixup Confirmation');
+
+    $mixup_id = sprintf( '%0d', $mixup_id );
+    if( empty($mixup_id) )
+        die('Invalid mixup id');
+    $mode = CCDatabase::QueryItem('SELECT mixup_mode FROM cc_tbl_mixups WHERE mixup_id = ' . $mixup_id );
+    if( empty($mode) )
+        die('Invalid mixup id');
+    if( ($mode != CC_MIXUP_MODE_MIXING) || ($mode != CC_MIXUP_MODE_REMINDER) )
+    {
+        $page->Prompt('This mixup is not in mixing mode!');
+        return;
+    }
+    $sql = "SELECT mixup_user_id,mixup_user_confirmed FROM cc_tbl_mixup_user WHERE mixup_user_mixup = {$mixup_id} AND mixup_user_user = "
+              . CCUser::CurrentUser();
+    $row = CCDatabase::QueryRow($sql);
+    if( empty($row) )
+    {
+        $page->Prompt('You are not signed up for the mixup.');
+        return;
+    }
+
+    $id = $row['mixup_user_id'];
+    $form = new CCForm();
+    $fields =  array(
+                'mixup_user_confirmed' => array(
+                    'label' => "Confirmation",
+                    'formatter' => 'radio',
+                    'options' => array(
+                        1 => "I'm done now or expect to finish in time",
+                        2 => "I'm not 100% sure if I'll have it in time",
+                        3 => "I will definitely not be able to finish in time"
+                    ),
+                    'value' => 2,
+                    'flags' => CCFF_POPULATE
+                )
+            );
+
+    $form->AddFormFields($fields);
+    $form->SetHelpText('Please confirm whether you will be able to finish your remix assignment. If you can not, that\'s OK, we can make other arrangments');
+
+    if( empty($_POST) || !$form->ValidateFields() )
+    {
+        if( !empty($row) )
+            $form->PopulateValues($row);
+        $page->AddForm( $form->GenerateForm() );
+    }
+    else
+    {
+        $form->GetFormValues($values);
+        $table  = new CCTable('cc_tbl_mixup_user','mixup_user_id');
+        $args['mixup_user_id'] = $id;
+        $args['mixup_user_confirmed'] = $values['mixup_user_confirmed'];
+        $table->Update($args);
+        $prompt = 'Thanks for letting us know your status! Bookmark this page and use it again if your status changes.';        
+        $mixurl = ccl('mixup',$mixup_id);
+        $page->Prompt( $prompt . "<br /><br /><a href=\"{$mixurl}\">Go to mixup now...</a>");
+    }
 }
 
 function mixup_helper_get_default_modes($mixup_id)
@@ -463,6 +541,7 @@ function mixup_helper_get_edit_form_help($mixup)
     $mail_url    = ccl('admin','mixup', 'massmail',$mixup_id);
     $mode_url    = ccl('admin','mixup', 'editmodes',$mixup_id);
     $makefrm_url = ccl('admin','submit'); // ccl('admin','mixup', 'makeform', $mixup_id);
+    $status_url  = ccl('admin','mixup','status', $mixup_id );
     $playlist_url= ccl('api','mixup','playlist', $mixup_id);
     
     $txt =<<<EOF
@@ -471,6 +550,7 @@ function mixup_helper_get_edit_form_help($mixup)
         <li><a href="{$prop_url}">Edit Properties</a></li>
         <li><a href="{$mixup_url}">Generate/Edit Mixup Assignments</a></li>
         <li><a href="{$mail_url}">Send mail to everybody</a></li>
+        <li><a href="{$status_url}">User confirmation report</a></li>
         <li><a href="{$playlist_url}">Create/Browse Dynamic Playlist</a></li>
         <li><a href="{$makefrm_url}">Edit submit forms</a></li>
         <li><a href="{$mode_url}">Edit mixup modes</a> </li>
@@ -683,6 +763,17 @@ function mixup_admin($cmd='',$arg='')
             }
             break;
         
+        case 'status':
+            {
+                $mixup_id = $arg;
+                mixup_helper_setup_page(_('Status'), $mixup_id );
+                require_once('cchost_lib/cc-query.php');
+                $query = new CCQuery();
+                $args = $query->ProcessAdminArgs('t=mixup_user_status&sort=status&mixup='.$mixup_id);
+                $query->Query($args);
+            }
+            break;
+            
         default:
             {
                 mixup_helper_setup_page('');
