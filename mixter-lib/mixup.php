@@ -88,9 +88,6 @@ function mixup_onqapiquerysetup( &$args, &$queryObj, $validate)
     $is_user = $args['datasource'] == 'mixup_users';
 
     switch( $args['sort'] ) {
-        case 'date':
-            $queryObj->sql_p['order'] = $is_user ? 'mixup_user_date' : 'mixup_date';
-            break;
         case 'name':
             $queryObj->sql_p['order'] = $is_user ? 'user_name' : 'mixup_display';
             break;
@@ -99,6 +96,11 @@ function mixup_onqapiquerysetup( &$args, &$queryObj, $validate)
             break;
         case 'status':
             $queryObj->sql_p['order'] = $is_user ? 'mixup_user_confirmed' : 'mixup_date';
+            break;
+        default:
+            $args['sort'] = 'date';
+        case 'date':
+            $queryObj->sql_p['order'] = $is_user ? 'mixup_user_date' : 'mixup_date';
             break;
     }
     

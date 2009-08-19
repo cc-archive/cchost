@@ -139,6 +139,9 @@ class CCDatabase
             {
                 //print mysql_error();
                 //st();
+                CCDebug::Enable(true);
+                CCDebug::Log('MYSQL: ' . $mysqlerr );
+                CCDebug::Enable(false);
                 trigger_error(_("Internal error, contact the admin"));
             }
         }
