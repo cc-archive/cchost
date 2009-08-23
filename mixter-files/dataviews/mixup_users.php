@@ -23,6 +23,7 @@ function mixup_users_dataview()
           {$mixer_avatar},
           CONCAT( '{$urlp}', mixer.user_name ) as mixer_page_url,
           mixup_user_mixup as mixup_user_id,
+          mixer.user_email as mixer_email,
           
           {$mixee_name},
           {$mixee_avatar},

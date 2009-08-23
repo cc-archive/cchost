@@ -40,6 +40,9 @@
   <td style="text-align: right" >
       <a href="%(#R/mixer_page_url)%">%(#R/mixer_name)%</a>
   </td>
+  <td>
+    <a href="mailto:%(#R/mixer_email)%"><img src="%url(ccskins/shared/images/mail.gif)%" /></a>
+  </td>
   <td class="mixup_status_%(#R/mixup_user_confirmed)% mixstat">
     <span>
     %switch(#R/mixup_user_confirmed)%
