@@ -180,13 +180,16 @@ class CCOpenID
         if( empty($CC_GLOBALS['openid-type']) )
             return;
 
+        $user_id = CCUser::CurrentUser();
+        if( $user_id == -1 )
+            CCUtil::SendBrowserTo(ccl('login'));
+
         require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/ccextras/cc-openid-forms.inc');
         $page =& CCPage::GetPage();
         $page->SetTitle('str_openid_manage');
         $this->_build_bread_crumb_trail2($page);
         
-        $user_id = CCUser::CurrentUser();
         $user_name = CCUser::CurrentUserName();
         $recs = $this->_get_openids($user_id,'*');
         $form = new CCManageOpenIDsForm($recs);
