@@ -430,7 +430,17 @@ class CCEvents
             $pm = CCEvents::_get_action_perms($action);
 
             if( ($pm & CCMenu::GetAccessMask() ) == 0 )
-                $action = CCEvents::ResolveUrl('homepage'); // gets the home page
+            {
+                if( CCUser::IsLoggedIn() )
+                {
+                    $action = CCEvents::ResolveUrl('homepage'); // asking for an admin w/o perms
+                }
+                else
+                {
+                    $_SERVER['HTTP_REFERER'] = cc_current_url();
+                    $action = CCEvents::ResolveUrl('/login'); // gets the login page which should redirect to this url
+                }
+            }
 
             if( is_string($action->cb) )
             {
