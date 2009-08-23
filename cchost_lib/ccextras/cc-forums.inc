@@ -512,6 +512,8 @@ EOF;
 
         $api = new CCForums();
 
+        $thread_id = sprintf('%0d',$thread_id);
+        
         $threads =& CCForumThreads::GetTable();
         if( empty($thread_id) || !$threads->KeyExists($thread_id) )
         {
