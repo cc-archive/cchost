@@ -34,6 +34,7 @@ require_once('cchost_lib/cc-form.php');
 class CCAdminLoggingForm extends CCForm
 {
     var $_default_ip_url = 'http://tools.whois.net/index.php?fuseaction=whois.whoisbyipresults&host=%IP%';
+    var $_default_geo_url = 'http://www.ip2location.com/%IP%';
     
     function CCAdminLoggingForm()
     {
@@ -67,6 +68,15 @@ class CCAdminLoggingForm extends CCForm
             'formatter' => 'textedit',
             'flags' => CCFF_POPULATE,
         );
+        
+        $fields['geo_lookup_url'] = array(
+            'label' => _('Geolocation Lookup URL'),
+            'form_tip' => _('This is the address of the IP geo locator utility to use for locating IP addresses.'),
+            'value' => $this->_default_geo_url,
+            'formatter' => 'textedit',
+            'flags' => CCFF_POPULATE,
+        );
+        
         $this->AddFormFields($fields);
         $help = _('Select the events you want to show in the activity log.' );
         $this->SetHelpText($help);
@@ -81,11 +91,19 @@ class CCAdminLoggingForm extends CCForm
         // while we prepare 5.1 - Reaching into CC_GLOBALS at this
         // point is very nasty.
         global $CC_GLOBALS;
+        
         if( !empty($CC_GLOBALS['ip_lookup_url'])) {
             $this->SetFormValue('ip_lookup_url',$CC_GLOBALS['ip_lookup_url']);
         }
         else {
             $this->SetFormValue('ip_lookup_url',$this->_default_ip_url);            
+        }
+        
+        if( !empty($CC_GLOBALS['geo_lookup_url'])) {
+            $this->SetFormValue('geo_lookup_url',$CC_GLOBALS['geo_lookup_url']);
+        }
+        else {
+            $this->SetFormValue('geo_lookup_url',$this->_default_geo_url);            
         }
         
         // at least this is ok...
@@ -247,7 +265,8 @@ class CCActivityLogAPI
             // 'logging' is not stored in 'config' but stuffed there in AppInit()
             $configs->SaveConfig('logging', $logging, CC_GLOBAL_SCOPE, false );
             // on the other hand, ip_lookup_url is a global variable
-            $cfg['ip_lookup_url'] = empty($_POST['ip_lookup_url']) ? $form->_default_ip_url : $_POST['ip_lookup_url'];
+            $cfg['ip_lookup_url']  = empty($_POST['ip_lookup_url'])  ? $form->_default_ip_url  : $_POST['ip_lookup_url'];
+            $cfg['geo_lookup_url'] = empty($_POST['geo_lookup_url']) ? $form->_default_geo_url : $_POST['geo_lookup_url'];
             $configs->SaveConfig('config',$cfg,CC_GLOBAL_SCOPE,true);
             CCPage::Prompt( _("Logging options saved.") );
         }

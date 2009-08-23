@@ -115,7 +115,8 @@ function _t_admin_show_activity_log($T,&$A) {
 <table  class="cc_log_view" cellspacing="0" cellpadding="0">
 <tr ><th >Date</th><th  colspan="2">IP</th><th  colspan="2">User</th><th >Event</th><th ></th><th ></th></tr>
 <?
-    $ipurl = empty($A['ip_lookup_url']) ? '' : $A['ip_lookup_url'];
+    $ipurl  = empty($A['ip_lookup_url']) ? '' : $A['ip_lookup_url'];
+    $geourl = empty($A['geo_lookup_url']) ? '' : $A['geo_lookup_url'];
 
     foreach( $A['activity_log'] as $e )
     { 
@@ -129,6 +130,17 @@ function _t_admin_show_activity_log($T,&$A) {
         else {
             $thisipurl = str_replace( '%IP%', $e['activity_log_ip'], $ipurl );
             print "<a href=\"{$thisipurl}\">IP</a>";
+        }
+    ?>
+</td>
+<td class="vlinktd">
+     <?
+        if( empty($geourl)) {
+            print '&nbsp;&nbsp;';
+        }
+        else {
+            $thisgeourl = str_replace( '%IP%', $e['activity_log_ip'], $geourl );
+            print "<a href=\"{$thisgeourl}\">geo</a>";
         }
     ?>
 </td>
