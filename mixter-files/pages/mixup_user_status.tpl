@@ -61,7 +61,7 @@
     %end_switch%
     </span>    
   </td>
-  <td><span style="font-size: 80%" href="%(#R/mixee_page_url)%">%(#R/mixee_name)%</span>
+  <td><a style="font-size: 80%;font-weight:normal;text-decoration:underline;" href="%(#R/mixee_page_url)%">%(#R/mixee_name)%</a>
   </td>
 </tr>
 %end_loop%
