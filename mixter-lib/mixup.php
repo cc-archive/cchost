@@ -18,6 +18,11 @@ CCEvents::AddHandler(CC_EVENT_UPLOAD_DONE,     'mixup_onuploaddone' );
 
 function mixup_onuploaddone( $upload_id, $op )
 {
+    if( $op != CC_UF_NEW_UPLOAD )
+    {
+        return;
+    }
+    
     $user_id   = CCUser::CurrentUser();
     $mode_type = CC_MIXUP_MODE_UPLOADING;
     
@@ -39,7 +44,8 @@ EOF;
         return;
 
     $upload_tags = CCDatabase::QueryRow('SELECT upload_tags FROM cc_tbl_uploads WHERE upload_id='.$upload_id);
-    $upload_tags['op'] = $op;
+    // ::InTags wants a 'record'
+    
     $table = new CCTable( 'cc_tbl_mixup_user', 'mixup_user_user');
     
     foreach( $mixup_info as $MI )
