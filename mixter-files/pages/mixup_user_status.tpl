@@ -32,7 +32,8 @@
 }
 .mixup_status_4 {
     background: red;
-    color: black;
+    color: white;
+    font-weight: bold;
 }
 .mixstat {
     text-align: center;
