@@ -30,6 +30,10 @@
     background: yellow;
     color: red;
 }
+.mixup_status_4 {
+    background: red;
+    color: black;
+}
 .mixstat {
     text-align: center;
 }
@@ -57,6 +61,9 @@
         %end_case%
         %case(3)%
             won't finish
+        %end_case%
+        %case(4)%
+            flaked
         %end_case%
     %end_switch%
     </span>    

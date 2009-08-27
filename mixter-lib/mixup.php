@@ -10,6 +10,12 @@ define('CC_MIXUP_MODE_UPLOADING', 5 );
 define('CC_MIXUP_MODE_DONE',      6 );
 define('CC_MIXUP_MODE_CUSTOM',    7 );
 
+define('CC_MIXUP_STATUS_DONE',     1 );
+define('CC_MIXUP_STATUS_NOT_SURE', 2 );
+define('CC_MIXUP_STATUS_CANT',     3 );
+define('CC_MIXUP_STATUS_FLAKED',   4 );
+
+
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,        'mixup_onmapurls');
 CCEvents::AddHandler(CC_EVENT_FORMAT_MIXUP,    'mixup_onfiltermixup');
 CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP, 'mixup_onqapiquerysetup' ); 
@@ -251,9 +257,9 @@ function mixup_confirm($mixup_id)
                     'label' => "Confirmation",
                     'formatter' => 'radio',
                     'options' => array(
-                        1 => "I'm done now or expect to finish in time",
-                        2 => "I'm not 100% sure if I'll have it in time",
-                        3 => "I will definitely not be able to finish in time"
+                        CC_MIXUP_STATUS_DONE     => "I'm done now or expect to finish in time",
+                        CC_MIXUP_STATUS_NOT_SURE => "I'm not 100% sure if I'll have it in time",
+                        CC_MIXUP_STATUS_CANT     => "I will definitely not be able to finish in time"
                     ),
                     'value' => 2,
                     'flags' => CCFF_POPULATE
@@ -1159,6 +1165,12 @@ function mixup_helper_assignments($mixup_id)
     $form->SetColumnHeader($cols);
     $rows = CCDatabase::QueryRows('SELECT * FROM cc_tbl_mixup_user WHERE mixup_user_mixup = ' . $mixup_id);
     $count = 0;
+    $stat_options = array(
+                        CC_MIXUP_STATUS_DONE     => "Done",
+                        CC_MIXUP_STATUS_NOT_SURE => "Not sure",
+                        CC_MIXUP_STATUS_CANT     => "Bailed",
+                        CC_MIXUP_STATUS_FLAKED   => "Flaked"
+                    );
     foreach( $rows as $R )
     {
         $S = 'S[' . ++$count . ']';
@@ -1178,12 +1190,47 @@ function mixup_helper_assignments($mixup_id)
                 'value'      => $R['mixup_user_upload'],
                 'formatter'  => 'textedit',
                 'flags'      => CCFF_POPULATE ),
+              array(
+                'element_name'  => $S . '[mixup_user_confirmed]',
+                'value'      => $R['mixup_user_confirmed'],
+                'formatter'  => 'select',
+                'options'    => $stat_options,
+                'flags'      => CCFF_POPULATE ),
             );
 
         $form->AddGridRow( $count, $a );
         $form->SetHiddenField( $S . '[mixup_user_id]', $R['mixup_user_id'] );
         
     }
+    
+    $S = 'new[%i%]';
+    $a = array(
+          array(
+            'element_name'  => $S . "[mixup_user_user]",
+            'value'      => '',
+            'formatter'  => 'username',
+            'flags'      => CCFF_NONE ),
+          array(
+            'element_name'  => $S . "[mixup_user_other]",
+            'value'      => '',
+            'formatter'  => 'username',
+            'flags'      => CCFF_NONE ),
+          array(
+            'element_name'  => $S . "[mixup_user_upload]",
+            'value'      => '',
+            'formatter'  => 'textedit',
+            'class'      => 'cc_form_input_short',
+            'flags'      => CCFF_NONE ),
+          array(
+            'element_name'  => $S . '[mixup_user_confirmed]',
+            'value'      => $R['mixup_user_confirmed'],
+            'formatter'  => 'raw_select',
+            'options'    => $stat_options,
+            'flags'      => CCFF_NONE ),
+        );
+
+    $form->AddMetaRow($a,_('Add Asssignment'));
+    
     
     if( empty($_POST) || !$form->ValidateFields() )
     {
@@ -1201,7 +1248,6 @@ EOF;
         // sigh.
         // The structure of POST is perfect, but the values
         // are only translated to user_ids in the $form obj.
-        
         $form->GetFormValues($values);
         $s = $_POST['S'];
         $c = count($s);
@@ -1209,11 +1255,35 @@ EOF;
         for( $i = 0; $i < $c; $i++ )
         {
             $k = 'S[' . ($i+1) . ']';
-            $da['mixup_user_id']     = $values[ $k . '[mixup_user_id]' ];
-            $da['mixup_user_user']   = $values[ $k . '[mixup_user_user]' ];
-            $da['mixup_user_other']  = $values[ $k . '[mixup_user_other]' ];
-            $da['mixup_user_upload'] = $values[ $k . '[mixup_user_upload]' ];
+            $da['mixup_user_id']        = $values[ $k . '[mixup_user_id]' ];
+            $da['mixup_user_user']      = $values[ $k . '[mixup_user_user]' ];
+            $da['mixup_user_other']     = $values[ $k . '[mixup_user_other]' ];
+            $da['mixup_user_upload']    = $values[ $k . '[mixup_user_upload]' ];
+            $da['mixup_user_confirmed'] = $values[ $k . '[mixup_user_confirmed]' ];
             $table->Update($da);
+        }
+        
+        if( !empty($_POST['new']) )
+        {
+            $n = $_POST['new'];
+            $usernames = array();
+            foreach( $n as $newrec ) {
+                $usernames[] = $newrec['mixup_user_user'];
+                $usernames[] = $newrec['mixup_user_other'];
+            }
+            $usernames = "'" . join( "','", array_unique($usernames)) . "'";
+            $sql = 'SELECT user_name,user_id from cc_tbl_user WHERE user_name IN (' . $usernames . ')';
+            $rows = CCDatabase::QueryRows($sql);
+            $usernames = array();
+            foreach( $rows as $R )
+                $usernames[ $R['user_name']] = $R['user_id'];
+            foreach( $n as $args )
+            {
+                $args['mixup_user_mixup'] = $mixup_id;
+                $args['mixup_user_user'] = $usernames[ $args['mixup_user_user'] ];
+                $args['mixup_user_other'] = $usernames[ $args['mixup_user_other'] ];
+                $table->Insert($args);
+            }
         }
         
         $url = ccl('admin', 'mixup', 'edit', $mixup_id );
