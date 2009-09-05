@@ -199,6 +199,9 @@ class CCQuery
         if( !empty($req['ccm']) )
             unset($req['ccm']);
 
+        if( !empty($req['rettype']))
+            unset($req['rettype']);
+            
         CCUtil::Strip($req);
 
         $this->_arg_alias_ref($req); // convert short to long
@@ -354,15 +357,16 @@ class CCQuery
         $this->_do_ds_ensure($A);
         
         //
-        // This is the default return type from dataview::perform
-        //
-        $A['rettype'] = CCDV_RET_RECORDS;
-
-        //
         // every query must have a format
         //
         if( empty($A['format']) )
             $A['format'] = 'page';
+
+        //
+        // This is the default return type from dataview::perform
+        //
+        if( empty($A['rettype']) )
+            $A['rettype'] = CCDV_RET_RECORDS;
 
         switch( $A['format'] )
         {
@@ -390,6 +394,7 @@ class CCQuery
                 $this->_trigger_setup_event();
                 break;
         }
+
 
         if( empty($A['datasource']) )
             die('Could not determine datasource');
