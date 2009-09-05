@@ -10,7 +10,7 @@
     width: 90%;
     border: 1px solid #444;
 }
-#log_archive_cntr, #error_archive_cntr {
+#log_archive_cntr, #error_archive_cntr, #search_archive_cntr {
     float: right;
     padding-right: 10%;
 }
@@ -26,15 +26,22 @@
 <div><b>ERRORS</b></div>
 <div class="logviewer" id="error"></div>
 
+<div id="search_archive_cntr"><a class="small_button" id="search_archive" href="javascript://json palin"><span>archive</span></a></div>
+<div><b>SEARCHES</b></div>
+<div class="logviewer" id="search"></div>
+
 <script>
 
-new Ajax.Updater( $('log'),   home_url + 'admin/logs/log',    {method: 'get'} );
-new Ajax.Updater( $('error'), home_url + 'admin/logs/error',  {method: 'get'} );
+new Ajax.Updater( $('log'),    home_url + 'admin/logs/log',     {method: 'get'} );
+new Ajax.Updater( $('error'),  home_url + 'admin/logs/error',   {method: 'get'} );
+new Ajax.Updater( $('search'), home_url + 'admin/logs/search',  {method: 'get'} );
 
 Event.observe( $('log_archive'), 'click', 
     function() { new Ajax.Updater( $('log_archive_cntr'), home_url + 'admin/logs/archive/log', {method:'get'}) });
 Event.observe( $('error_archive'), 'click', 
     function() { new Ajax.Updater( $('error_archive_cntr'), home_url + 'admin/logs/archive/error', {method:'get'}) });
+Event.observe( $('search_archive'), 'click', 
+    function() { new Ajax.Updater( $('search_archive_cntr'), home_url + 'admin/logs/archive/search', {method:'get'}) });
 
 </script>
 

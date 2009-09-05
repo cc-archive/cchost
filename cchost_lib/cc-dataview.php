@@ -122,6 +122,8 @@ class CCDataView
 
     function & PerformInfo( $info, $args, $ret_type = CCDV_RET_RECORDS, $queryObj=null, $dataview=null)
     {
+        $this->info = $info;
+        
         if( !empty($args['joins']) && is_array($args['joins']) )
             $args['joins'] = join( ' JOIN ', $args['joins'] );
 
@@ -213,10 +215,18 @@ class CCDataView
         return intval( CCDatabase::QueryItem($this->sql_count) );
     }
 
-    function FilterRecords(&$records,$info)
+    function FilterRecords(&$records,$info=array())
     {
         global $cc_dont_eat_std_filters;
 
+        if( empty($info) )
+        {
+            if( empty($this->info) ) 
+                die('no "info" parameter supplied to Dataview::FilterRecords');
+                
+            $info = $this->info;
+        }
+        
         if( empty($cc_dont_eat_std_filters) )
         {        
             while( count($info['e']) )

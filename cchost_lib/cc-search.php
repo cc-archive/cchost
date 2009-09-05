@@ -113,6 +113,17 @@ class CCSearch
 
         $this->do_results($search_text);
     }
+    
+    function _log_search($search_text)
+    {
+        $fname = cc_temp_dir() . CC_SEARCH_LOG_FILE;
+        $f = fopen( $fname, 'w' );
+        if( !$f )
+            trigger_error('Could not open file: ' . $fname);
+        $str = CCDebug::FormatLogMsg( $search_text );
+        fwrite($f,$str);
+        fclose($f);
+    }
 
     function do_results($search_text)
     {
@@ -120,6 +131,8 @@ class CCSearch
 
         if( empty($_REQUEST['search_in']) )
             die('missing "search in" field'); // I think this is a hack attempt
+
+        $this->_log_search($search_text);
 
         $maxview = empty($CC_GLOBALS['max_search_overview']) ? 5 : $CC_GLOBALS['max_search_overview'];
         

@@ -299,7 +299,7 @@ class CCActivityLogAPI
         CCPage::SetTitle(_('View Activity Log'));
 
         $logs =& CCActivityLog::GetTable();
-        $logdir = empty($CC_GLOBALS['logfile-dir']) ? './' : $CC_GLOBALS['logfile-dir'];
+        $logdir = cc_log_dir();
 
         if( ($arg == 'clear') || ($arg == 'export') )
         {
@@ -501,7 +501,7 @@ EOF;
 
         // build log name
 
-        $logdir = empty($CC_GLOBALS['logfile-dir']) ? './' : $CC_GLOBALS['logfile-dir'];
+        $logdir = cc_log_dir();
         $fname = 'activity-log-' . date( 'YmdHi');
         $fnum = 0;
         while( file_exists( $logdir . $fname . '-' . $fnum . '.csv' ) )

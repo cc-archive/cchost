@@ -57,7 +57,7 @@ class CCViewLogs
 
         global $CC_GLOBALS;
 
-        $logdir = empty($CC_GLOBALS['logfile-dir']) ? './' : $CC_GLOBALS['logfile-dir'];
+        $logdir = cc_log_dir();
         if( $type == 'error' )
         {
             $srcfile = $logdir. CC_ERROR_FILE;
@@ -67,6 +67,11 @@ class CCViewLogs
         {
             $srcfile = $logdir . CC_LOG_FILE;
             $parts = split('\.',CC_LOG_FILE);
+        }
+        elseif( $type == 'search' )
+        {
+            $srcfile = $logdir . CC_SEARCH_LOG_FILE;
+            $parts = split('\.',CC_SEARCH_LOG_FILE);
         }
         else
             CCUtil::Send404();
@@ -102,11 +107,13 @@ class CCViewLogs
 
         global $CC_GLOBALS;
 
-        $logdir = empty($CC_GLOBALS['logfile-dir']) ? './' : $CC_GLOBALS['logfile-dir'];
+        $logdir = cc_log_dir();
         if( $type == 'error' )
             $filename = $logdir. CC_ERROR_FILE;
         elseif( $type == 'log' )
             $filename = $logdir . CC_LOG_FILE;
+        elseif( $type == 'search' )
+            $filename = $logdir . CC_SEARCH_LOG_FILE;
         else
             CCUtil::Send404();
 

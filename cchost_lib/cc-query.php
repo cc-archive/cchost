@@ -1253,6 +1253,13 @@ class CCQuery
               return 'user_registered';
             elseif( $this->args['datasource'] == 'pool_items' ) 
               return 'pool_item_timestamp';
+            elseif( $this->args['datasource'] == 'uploads' )
+            {
+                if( !empty($this->args['sort']) && ($this->args['sort'] == 'last_edit') )
+                {
+                    return 'upload_last_edit';
+                }
+            }
         }
             
 

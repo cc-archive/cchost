@@ -38,6 +38,7 @@ define( 'CC_QUIET_LEVEL', 0);
 define( 'CC_LOG_FILE', 'cc-log.txt');
 define( 'CC_ERROR_FILE', 'cc-errors.txt');
 define( 'CC_ERROR_MSG_FILE', 'cc-error-msg.txt');
+define( 'CC_SEARCH_LOG_FILE', 'cc-search-log.txt');
 
 /**
 * Helper API for debugging the app
@@ -275,9 +276,9 @@ class CCDebug
 
         if( !CCDebug::IsEnabled() )
             return;
+
+        $msg = CCDebug::FormatLogMsg($msg);
         
-        $ip   = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'cmdline';
-        $msg = '[' . $ip . ' - ' . date("Y-m-d h:i a") . '] ' . $msg . "\n";
         global $CC_GLOBALS;
         static $deferred;
         if( empty($CC_GLOBALS['logfile-dir']) )
@@ -299,6 +300,12 @@ class CCDebug
         }
     }
 
+    function FormatLogMsg($msg)
+    {
+        $ip   = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'cmdline';
+        return '[' . $ip . ' - ' . date("Y-m-d h:i a") . '] ' . $msg . "\n";
+    }
+    
     /**
     *  Works exactly like a stop watch, ie. starts if stopped and stops if started
     *
@@ -472,7 +479,7 @@ function cc_error_handler($errno, $errstr='', $errfile='', $errline='', $errcont
     //
     if( ($states['log_errors'] & $errno) != 0 )
     {
-        $logdir = empty($CC_GLOBALS['logfile-dir']) ? './' : $CC_GLOBALS['logfile-dir'];
+        $logdir = cc_log_dir();
         error_log($err, 3, $logdir. CC_ERROR_FILE);
     }
 

@@ -58,7 +58,13 @@ function cc_default_dir_perm()
     return cc_default_file_perms();
 }
 
+
 function cc_temp_dir()
+{
+    return rtrim( _cc_temp_dir_inner(), '/ ') . '/';
+}
+
+function _cc_temp_dir_inner()
 {
     global $CC_GLOBALS;
 
@@ -70,6 +76,23 @@ function cc_temp_dir()
         return $CC_GLOBALS['logfile-dir'] ;
     return getcwd();
 }
+
+function cc_log_dir()
+{
+    return rtrim( _cc_log_dir_inner(), '/ ') . '/';
+}
+
+function _cc_log_dir_inner()
+{
+    global $CC_GLOBALS;
+
+    if( !empty($CC_GLOBALS['logfile-dir']) )
+        return $CC_GLOBALS['logfile-dir'] ;
+    if( !empty($CC_GLOBALS['temp-dir']) )
+        return $CC_GLOBALS['temp-dir'];
+    return getcwd();
+}
+
 
 /**
 */
