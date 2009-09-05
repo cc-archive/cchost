@@ -40,6 +40,8 @@ print '<?xml version="1.0" encoding="utf-8" ?>'
 
 if ( !empty($A['records'])) {
 
+    $max_enc = empty($_GET['max_enc']) ? 1 : $_GET['max_enc'];
+
     foreach( $A['records'] as $item )
     { 
 ?>
@@ -50,7 +52,6 @@ if ( !empty($A['records'])) {
         <dc:creator><?= $item['user_real_name']?></dc:creator>
         <description><?= $item['upload_description_plain']?> </description>
         <content:encoded><![CDATA[<?= $item['upload_description_html'] ?>]]></content:encoded>
-        <enclosure url="<?= $item['files']['0']['download_url']?>" length="<?= $item['files']['0']['file_rawsize']?>" type="<?= $item['files']['0']['file_format_info']['mime_type']?>"></enclosure>
         <?
         $tags = split(',',$item['upload_tags']);
         foreach( $tags as $tag )
@@ -60,6 +61,14 @@ if ( !empty($A['records'])) {
                 ?><category><?= $tag?></category><?
             }
         }
+
+        $encs = $max_enc == -1 ? count($item['files']) : $max_enc;
+	
+	for( $e = 0; $e < $encs; $e++ )
+	{
+              $F =& $item['files'][$e];
+	      print "\n<enclosure url=\"{$F['download_url']}\" length=\"{$F['file_rawsize']}\" type=\"{$F['file_format_info']['mime_type']}\"></enclosure>";         
+	}
 ?>
 
         <guid><?= $item['file_page_url']?></guid>
