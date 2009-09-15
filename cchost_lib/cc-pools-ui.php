@@ -654,7 +654,7 @@ EOF;
         }
         foreach( array( 'ttype' => _('Link Type'), 'poster' => _('Poster'), 'email' => _('email') ) as $field => $name )
         {
-            if( !empty($fields[$field]) )
+            if( !empty($row['pool_item_extra'][$field]) )
             {
                 $fields[$field] = array(
                         'label' => $name,
