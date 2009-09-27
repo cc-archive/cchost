@@ -34,7 +34,7 @@ var ccShareSites =
         [
             'twitter' ,
             'twitter',
-            'http://twitter.com/home?status=%title%+%url%',
+            'http://twitter.com/home?status=%status%+%url%',
             root_url + '/ccskins/shared/images/shareicons/twitter.png'
         ],
         [
@@ -100,7 +100,7 @@ var ccShareSites =
         [
             'ping_fm',
             'Ping FM',
-            'http://ping.fm/ref?link=%url%&title=%title%&body=%site_title%',
+            'http://ping.fm/ref?link=%url%&title=%status%',
             root_url + '/ccskins/shared/images/shareicons/ping_fm.png'
         ],
         [

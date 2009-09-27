@@ -59,16 +59,11 @@ class CCPublicize
     function Share($id)
     {
         require_once('cchost_lib/cc-page.php');
-        $uploads =& CCUploads::GetTable();
-        if( !$uploads->KeyExists($id) )
-        {
-            CCPage::Prompt('str_share_no_upload');
-            return;
-        }
-        $record = CCDatabase::QueryRow('SELECT upload_id, user_name, upload_name, user_real_name FROM cc_tbl_uploads JOIN ' .
-                                       'cc_tbl_user ON upload_user=user_id WHERE upload_id=' . $id );
-        $record['file_page_url'] = ccl('files',$record['user_name'],$id);
-        $this->_share('upload',$record);
+        require_once('cchost_lib/cc-query.php');
+        $query = new CCQuery();
+        $args = $query->ProcessAdminArgs('f=php&ids='.$id);
+        list( $records, $mime ) = $query->Query($args);
+        $this->_share('upload',$records[0]);
     }
 
     function SharePlaylist($id)
@@ -159,6 +154,9 @@ class CCPublicize
                 
                 $args['intro'] = 'str_share_intro3';
                 $args['bookmark_url'] = $record['file_page_url'];
+                $F =& $record['files'][0];
+                $status = $record['upload_name'] . ' ' . $F['file_nicname'] . ': ' . $F['download_url'];
+                $args['status'] = $status;
                 $args['bookmark_title'] = $record['upload_name'];
                 $args['email_url'] = ccl( 'email', 'upload', $record['upload_id'] );
 
@@ -313,6 +311,11 @@ EOF;
         $args['previewwarn'] = 'str_share_preview_warn';
         $args['htmlwarn'] = 'str_share_html_warn';
 
+        if( empty($args['status']) )
+        {
+            $arg['status'] = '';
+        }
+        
         require_once('cchost_lib/cc-page.php');
         CCPage::SetTitle( $title );
         CCPage::PageArg('publicize', 'publicize.php/publicize');

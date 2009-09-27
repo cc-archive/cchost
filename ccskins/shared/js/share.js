@@ -16,6 +16,7 @@ ccShareLinks.prototype = {
         var title = options.title;
         var url = options.url;
         var site = options.site_title;
+        var status = options.status;
         ccShareSites.each( function(row) {
             html += '<tr>';
             row.each( function(col) {
@@ -45,7 +46,7 @@ ccShareLinks.prototype = {
             var me  = this;
             ccShareSites.each( function(row) {
                 row.each( function(col) {
-                    var shareurl = col[2].replace('%title%',title).replace('%url%',url).replace('%site_title%',site);
+                    var shareurl = col[2].replace('%title%',title).replace('%status%',status).replace('%url%',url).replace('%site_title%',site);
                     Event.observe( col[0], 'click', me.onSharePopup.bindAsEventListener(me,shareurl) );
                 })
             });

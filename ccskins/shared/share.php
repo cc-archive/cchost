@@ -19,6 +19,7 @@ function _t_share_share_popup(&$T,&$A)
 <script  type="text/javascript">
   new ccShareLinks( { url: '<?= $A['PUB']['bookmark_url']?>',
                       title:'<?= addslashes($A['PUB']['bookmark_title']) ?>',
+                      status: '<?= addslashes($A['PUB']['status']) ?>',
                       inPopUp: false,
                       site_title: '<?= addslashes($A['site-title']); ?>'
                     } );
