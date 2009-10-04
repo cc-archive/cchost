@@ -30,7 +30,7 @@ EOF;
     return array( 'sql' => $sql,
                   'sql_count' => $sql_count,
                    'e'  => array(
-                                  CC_EVENT_FILTER_FORMAT)
+                                  CC_EVENT_FILTER_FORMAT, CC_EVENT_FILTER_TOPICS )
                 );
 }
 [/dataview]
@@ -44,6 +44,16 @@ if( !empty($A['content_page_width']) ) {
 #inner_content {
     width: <?= $A['content_page_width'] ?>;
     margin: 0px auto;
+}
+.cc_content_page td ul.topic_links {
+    list-style: none;
+    height: 2em;
+}
+.cc_content_page td ul.topic_links li {
+    display: block;
+    float: right;
+    margin-right: 0.5em;
+    padding: 8px;
 }
 </style>
 <?
@@ -68,6 +78,13 @@ if( !empty($A['content_page_width']) ) {
                     case 'text':   print $R['topic_text_plain']; break;
                     case 'raw':    print $R['topic_text']; break;
                 } ?>
+        %if_not_null(#R/topic_links)%
+            <ul class="topic_links">
+                %loop(#R/topic_links,TL)%
+                   <li><a class="small_button" href="%(#TL/url)%">%(#TL/text)%</a></li>
+                %end_loop%
+            </ul>
+        %end_if%
         %if_not_null(content_page_box)%</div>%end_if%</td>
     %end_loop%
 </tr>
