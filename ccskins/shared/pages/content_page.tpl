@@ -62,7 +62,8 @@ if( !empty($A['content_page_width']) ) {
 <table class="cc_content_page" cellspacing="0" cellspacing="0" style="width:100%">
 <?  $num_cols = empty($A['content_page_columns']) ? 2 : $A['content_page_columns'];
     $wid = intval(100/$num_cols);
-    $rows = array_chunk($A['records'],$num_cols); ?>
+    $rows = array_chunk($A['records'],$num_cols); 
+    $is_one_item = count($A['records']) == 1; ?>
 %loop(#rows,row)%
 <tr>
     %loop(#row,R)%
@@ -77,13 +78,17 @@ if( !empty($A['content_page_width']) ) {
                     case 'format': print $R['topic_text_html']; break;
                     case 'text':   print $R['topic_text_plain']; break;
                     case 'raw':    print $R['topic_text']; break;
-                } ?>
-        %if_not_null(#R/topic_links)%
-            <ul class="topic_links">
-                %loop(#R/topic_links,TL)%
-                   <li><a class="small_button" href="%(#TL/url)%">%(#TL/text)%</a></li>
-                %end_loop%
-            </ul>
+                }
+            
+            ?>
+        %if_not_null(#is_one_item)%
+            %if_not_null(#R/topic_links)%
+                <ul class="topic_links">
+                    %loop(#R/topic_links,TL)%
+                       <li><a class="small_button" href="%(#TL/url)%">%(#TL/text)%</a></li>
+                    %end_loop%
+                </ul>
+            %end_if%
         %end_if%
         %if_not_null(content_page_box)%</div>%end_if%</td>
     %end_loop%
