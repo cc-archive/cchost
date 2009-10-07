@@ -481,13 +481,13 @@ EOF;
                 // Check eligabity
                 $no_email = empty($CC_GLOBALS['user_email']);
                 $rules = mixup_helper_get_rules();
-                $count_ok = true;
+                $count_ok = false;
                 foreach( $rules as $R )
                 {
                     $count = mixup_helper_count_uploads($R['tag']);
-                    if( $count < $R['min'] )
+                    if( $count >= $R['min'] )
                     {
-                        $count_ok = false;
+                        $count_ok = true;
                     }
                 }
 

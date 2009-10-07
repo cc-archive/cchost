@@ -62,7 +62,10 @@ class CCPublicize
         require_once('cchost_lib/cc-query.php');
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('f=php&ids='.$id);
-        list( $records, $mime ) = $query->Query($args);
+        $results = $query->Query($args);
+        if( empty($results) )
+            die('not a valid id'); // this is a bot travelling through
+        list( $records, $mime ) = $results;
         $this->_share('upload',$records[0]);
     }
 
