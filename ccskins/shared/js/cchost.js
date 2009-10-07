@@ -521,7 +521,7 @@ function upload_trackback( upload_id, type )
 
 function ajax_debug(url) {
     if( url.match(/^http:/) )
-        debug_stuff('<a href="' + url + '">' + url + '</a>');
+        debug_stuff('<a href="' + url + '">' + url + '</a>&nbsp;&nbsp;');
     else
         debug_stuff(url);
 }
@@ -587,7 +587,7 @@ var ccPopupManagerMethods = {
         {
             this.thinkingDiv = document.createElement('div');
             this.thinkingDiv.id = 'cc_thinking';
-            this.thinkingDiv.className = 'light_bg dark_border';
+            //this.thinkingDiv.className = 'light_bg dark_border';
             document.body.appendChild(this.thinkingDiv);
         }
 

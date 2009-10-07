@@ -107,10 +107,11 @@ div#site_disabled_message {
 
 #cc_thinking {
     border-width: 1px;
-	border-style: solid;
+    border-style: solid;
     padding: 9px;
-	z-index: 4;
-	position: absolute;
+    z-index: 4;
+    position: absolute;
+    background-color: white;
 }
 
 .ajaxmsg_message {

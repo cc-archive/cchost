@@ -1003,6 +1003,10 @@ class CCPage extends CCSkin
                     $bc[] = array( 'url' => '', 'text' => $res[0]['topic_name'] );
                 }
             }
+            elseif( preg_match( '/url\(([^ )]+) ([^\)]+)\)/', $arg, $m ) )
+            {
+                $bc[] = array( 'url' => ccl($m[1]), 'text' => $m[2] );
+            }
             else
             {
                 if( preg_match( '/text\(([^\)]+)\)/', $arg, $m ) )
