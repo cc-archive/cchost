@@ -313,7 +313,7 @@ EOF;
 
         if( empty($args['status']) )
         {
-            $arg['status'] = '';
+            $args['status'] = '';
         }
         
         require_once('cchost_lib/cc-page.php');
