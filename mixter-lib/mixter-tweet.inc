@@ -95,7 +95,6 @@ function tweet_api($type='',$arg='')
     require_once('cchost_lib/cc-page.php');
     require_once('cchost_lib/cc-form.php');
     
-    $page = new CCPage();
     $page =& CCPage::GetPage();
     $page->SetTitle('Send this item to Twitter');
     
