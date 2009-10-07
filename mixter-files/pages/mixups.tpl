@@ -74,6 +74,15 @@
 .mixup_mode_type_<?= CC_MIXUP_MODE_DONE      ?> { background-color: red; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_CUSTOM    ?> { background-color: inherit; color: inherit; }
 
+#user_status {
+    margin: 1em 23%;
+    padding: 1em;
+    background-color: #BDF;
+    border-bottom: 1px solid black;
+    border-right:  1px solid black;
+    border-top:    1px solid #777;
+    border-left:   1px solid #777;
+}
 </style>
 
 <script type="text/javascript">
@@ -84,43 +93,101 @@ mixupAPI.prototype = {
     initialize: function(mixup_id,user_template)
     {
         this.mixup_id = mixup_id;
-        this.user_template = user_template;
-        this.statusDiv = $('signup_status_' + this.mixup_id );
-        var user_list_id = 'mixup_user_list_' + this.mixup_id;
-        this.userList = $(user_list_id);
-        if( this.statusDiv )
+        this.statusDiv = $('mixup_dyn_status' );
+        this.userStatusDiv = $('user_status');
+        this.userListDiv = $('mixup_user_list');
+        this.hooked = false;
+        this.updateStatus();
+    },
+    
+    updateStatus: function()
+    {
+        var url = home_url + 'api/mixup/status/' + this.mixup_id;
+        this.callHome(url);
+    },
+        
+    callHome: function(url)
+    {
+        var param = $('param');
+        if( param )
         {
-            this.action = 'status';
-            this.doAction(); // user list will be updated here
+            url += q + param.name + '=' + param.value;
+        }
+        this.statusDiv.innerHTML = '...';
+        //ajax_debug(url);
+        new Ajax.Request( url, { method: 'get', onComplete: this.onStatus.bind(this) } );
+    },
+    
+    onStatus: function( resp, json ) {
+        
+        //alert(resp.responseText);
+        
+        if( json.message )
+        {
+            alert(json.message);
+            return;
+        }
+        
+
+        if( json.err )
+        {
+            alert(json.err);
+            return;
+        }
+        
+        this.statusDiv.innerHTML = '<p>' + json.msg + '</p>';
+        
+        if( json.user_status )
+        {
+            this.userStatusDiv.innerHTML = '<p>' + json.user_status + '</p>';
+            this.userStatusDiv.style.display = '';
         }
         else
         {
-            // otherwise we do it here
-            this.doUserList();
-        }
-    },
-    
-    doAction: function()
-    {
-        this.statusDiv.innerHTML = '...';
-        var url = home_url + 'api/mixup/' + this.action + '/' + this.mixup_id;
-        new Ajax.Request( url, { method: 'get', onComplete: this.onUserStatus.bind(this) } );
-    },
-    
-    doUserList: function()
-    {
-        if( this.userList )
-        {
-            url = query_url + 't='+this.user_template+'&f=html&mixup=' + this.mixup_id;
-            new Ajax.Updater( this.userList, url, { method: 'get' } );
+            this.userStatusDiv.style.display = 'none';            
         }
         
+        if( json.show_who )
+        {
+            $('who_list').style.display = '';
+            url = query_url + 't=mixup_users&f=html&mixup=' + this.mixup_id;
+            //ajax_debug(url);
+            new Ajax.Updater( this.userListDiv, url, { method: 'get' } );            
+            Event.observe('pictoglink','click',toggle_img)
+        }
+        
+        if( json.show_matches )
+        {
+            url = query_url + 'f=html&t=mixup_uploads&mixup=' + this.mixup_id;
+            new Ajax.Request( url, { method: 'get', onComplete: this.onShowMatches.bind(this) } );
+        }
+        
+        var button = $('mixup_dyn_button');
+        
+        if( button )
+        {
+            url = button.href;
+            button.href = "javascript:// " + url;
+            //ajax_debug('observing: ')
+            //ajax_debug(url);
+            Event.observe( button, 'click', this.callHome.bind(this,url) );
+        }
+    },
+
+    onShowMatches: function( resp, json ) {
+        $('matches_data').innerHTML = resp.responseText;
+        $('matches').style.display = '';
+        this.hookPlayer();
     },
     
     hookPlayer: function()
     {
+        if( this.hooked == true )
+            return;
+        
         if( window.ccEPlayer )
             ccEPlayer.hookElements($('mixup_table'));
+            
         var dl_hook = new queryPopup("download_hook","download",str_download); 
             dl_hook.height = 550;
             dl_hook.width  = 700;
@@ -130,39 +197,10 @@ mixupAPI.prototype = {
             menu_hook.hookLinks();
         var infoHook = new ccUploadInfo();
             infoHook.hookInfos('.info_button',$('mixup_table'));
-    },
-
-    onUserStatus: function(resp, json) {
-        var id = 'signup_link_' + this.mixup_id;
-        var html = '<a href="javascript://signup" class="small_button" id="' + id + '">';
-        var msg = '';
-
-        if( json.notSignedUp )
-        {
-            msg = 'You are not signed up for this mixup.';
-            html += "Sign Up Now!</a>";
-            this.action = 'signup';
-        }
-        else if( json.signedUp )
-        {
-            msg = 'You are signed up for this mixup. To remove yourself from the mixup, click on the "Remove me" button below.';
-            html += 'Remove me</a>';
-            this.action = 'remove';
-        }
-        else if( json.msg ) {
-            msg = json.msg;
-            id = null;
-            html = '';
-        }
-        
-        this.statusDiv.innerHTML = '<p>' + msg + '</p><p>' + html + '</p>';
-
-        if( id ) {
-            Event.observe(id,'click', this.doAction.bindAsEventListener(this) );
-        }
-        
-        this.doUserList();
+            
+        this.hooked = true;
     }
+
 }
 
 var miximg_on = true;
@@ -182,9 +220,9 @@ function show_hide_miximg()
     CC$$('.hidemixup').each( function(e) {
         e.style.display = newstyle;
     });
-    CC$$('.pictoglink').each( function(a) {
-       a.innerHTML = text; 
-    });
+
+    $('.pictoglink').innerHTML = text; 
+
     CC$$('.miximgbox').each( function(d) {
         d.style.height = height;
     })
@@ -192,88 +230,79 @@ function show_hide_miximg()
     cc_set_cookie( 'miximg_on', miximg_on );
 }
 </script>
+
 <div id="mixup_faq_link">
-    What's going on? <a class="small_button" href="%(home-url)%api/mixup/faq">Read the FAQ</a>
+    What's going on? <a class="small_button" href="%(home-url)%api/mixup/faq">Read the FAQ</a>&nbsp;&nbsp;&nbsp;<a href="%(home-url)%mixup/all">Other mixups &gt;&gt;</a>
 </div>
+
+%if_null(records)%
+    %return%
+%end_if%
+%map(#R,records/0)%
 <div id="mixup_table">
-    %loop(records,R)%
-        <div id="mixup_record">
-            <div class="box">
-                %if_not_null(is_admin)%
-                    <a class="small_button" id="admin_button" href="%(home-url)%admin/mixup/edit/%(#R/mixup_id)%">Admin</a>
-                %end_if%
-                <h2>
-                    %(#R/mixup_display)%
-                </h2>
-                <div class="mixup_desc">
-                    %(#R/mixup_desc_html)%
-                </div><!-- mixup_desc -->
-                <div class="mixup_status">
-                    <span class="mixup_mode_type mixup_mode_type_%(#R/mixup_mode_type)%">%(#R/mixup_mode_name)%</span>
-                    <p>%(#R/mixup_mode_desc_html)%</p>
-                    %map(show_who,'1')%
-                    %map(show_status,'0')%
-                    %map(show_matches,'0')%
-                    %switch(#R/mixup_mode_type)%
-                        %case(CC_MIXUP_MODE_DISABLED)%
-                            %map(show_who,'0')%
-                        %end_case%
-                        %case(CC_MIXUP_MODE_SIGNUP)%
-                            %map(show_status,'1')%
-                        %end_case%
-                        %case(CC_MIXUP_MODE_MIXING)%
-                            %map(show_status,'1')%
-                        %end_case%
-                        %case(CC_MIXUP_MODE_UPLOADING)%
-                            %map(show_who,'0')%
-                            %map(show_matches,'1')%
-                        %end_case%
-                        %case(CC_MIXUP_MODE_DONE)%
-                            %map(show_who,'0')%
-                            %map(show_matches,'1')%
-                        %end_case%
-                    %end_switch%
-                    %if(show_status)%
-                        <div id="signup_status_%(#R/mixup_id)%">...</div><!-- signup_status_%(#R/mixup_id)% -->
-                    %end_if%
-                </div><!-- mixup_status -->
-                %if_not_null(#R/mixup_playlist)%
-                    View the results : <a href="%(home-url)%playlist/browse/%(#R/mixup_playlist)%">as a playlist</a>.
-                %end_if%
-            </div><!-- desc box -->
-            %if(show_who)%
-                <div class="results_info">Who's signed up...</div>
-                <div class="pictoggle">
-                    <a class="pictoglink small_button" id="pictoglink_%(#R/mixup_id)%" href="javascript://pictoggle">Hide avatars</a>
-                </div>
-                <div class="mixup_users_%(#R/mixup_id)%">
-                    <div id="mixup_user_list_%(#R/mixup_id)%">...</div><!-- mixup_user_list -->
-                </div><!-- mixup_users -->
+    <div id="mixup_record">
+        
+        <!-- MIXUP HEAD AREA -->
+        
+        <div class="box">
+            %if_not_null(is_admin)%
+                <a class="small_button" id="admin_button" href="%(home-url)%admin/mixup/edit/%(#R/mixup_id)%">Admin</a>
             %end_if%
-            %if(show_matches)%
-                <div class="results_info">
-                    Here's the results! Click on <img src="http://ccdevmac/ccskins/shared/images/tool-fg.png" /> to
-                    %if(logged_in_as)% review, recommend, add to playlist and %end_if% share.
-                </div>
-                <?= cc_query_fmt('f=embed&t=mixup_uploads&mixup='.$R['mixup_id']); ?>
+            <h2>
+                %(#R/mixup_display)%
+            </h2>
+            <div class="mixup_desc">
+                %(#R/mixup_desc_html)%
+            </div><!-- mixup_desc -->
+            <div class="mixup_status">
+                <span class="mixup_mode_type mixup_mode_type_%(#R/mixup_mode_type)%">%(#R/mixup_mode_name)%</span>
+                <p>%(#R/mixup_mode_desc_html)%</p>
+            </div><!-- mixup_status -->
+            
+            <div style="display:none" id="mixup_dyn_status">...</div><!-- mixup_dyn_status -->
+
+            <div style="display:none" id="user_status">...</div><!-- user_status -->
+            
+            %if_not_null(#R/mixup_playlist)%
+                View the results <a href="%(home-url)%playlist/browse/%(#R/mixup_playlist)%">as a playlist</a>.
             %end_if%
-        </div><!-- mixup_record -->
-        <script type="text/javascript">
-          function mixup_hook_%(#R/mixup_id)%()
-          {
-            var api = new mixupAPI(%(#R/mixup_id)%,'mixup_users');
-            %if(show_matches)%
-                api.hookPlayer();
-            %end_if%
-          }
-          Event.observe(window,'load',mixup_hook_%(#R/mixup_id)%);
-          %if(show_who)%
-            Event.observe('pictoglink_%(#R/mixup_id)%','click',toggle_img)
-          %end_if%
-        </script>
-    %end_loop%
+        </div><!-- desc box -->
+        
+        <!-- MIXUP DISPLAY AREA -->
+        
+        <div id="who_list" style="display:none">
+            <div class="results_info">Who's signed up...</div>
+            <div class="pictoggle">
+                <a class="small_button" id="pictoglink" href="javascript://pictoggle">Hide avatars</a>
+            </div>
+            <div class="mixup_users">
+                <div id="mixup_user_list">...</div><!-- mixup_user_list -->
+            </div><!-- mixup_users -->
+        </div>
+        
+        <div id="matches" style="display:none">
+            <div class="results_info">
+                Here's the results! Click on <img src="http://ccdevmac/ccskins/shared/images/tool-fg.png" /> to
+                %if(logged_in_as)% review, recommend, add to playlist and %end_if% share.
+            </div>
+            <div id="matches_data">
+                
+            </div><!-- matches_data -->
+        </div>
+        
+    </div><!-- mixup_record -->
 </div><!-- mixup_table -->
+
+<?
+    // hack: turn off the 'Syndication' block 
+    $T->SetArg('feed_links', 0 );
+?>
+
+<script type="text/javascript">
+   Event.observe(window,'load', function() {
+                    new mixupAPI(%(#R/mixup_id)%,'mixup_users'); }
+                );
+</script>
 
 %call('flash_player')%
 
-%call(prev_next_links)%
