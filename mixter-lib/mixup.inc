@@ -697,36 +697,29 @@ function mixup_helper_gen_assignments($mixup_id)
     $cutoff = file_exists( $cutoff_file ) ? file_get_contents( $cutoff_file ) : 4;
     $lo = array();
     $hi = array();
-    $lo_names = array();
-    $hi_names = array();
     foreach( $users as $K => $U )
     {
         $count = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_uploads WHERE ({$filter}) AND upload_user={$U}");
         $N = CCUser::GetUserName($U);
         if( $count <= $cutoff )
         {
-            $lo_names[] = $N;
             $lo[] = $U;
         }
         else
         {
-            $hi_names[] = $N;
             $hi[] = $U;
         }
     }
 
+    if( count($hi) & 1 ) // odd number?
+    {
+        $odd = array_shift($hi);
+        $lo[] = $odd;
+    }
+    
     $pairs_lo = mixup_helper_do_shuffle_outer($mixup_id,$lo);
     $pairs_hi = mixup_helper_do_shuffle_outer($mixup_id,$hi);
 
-    if( 0 ) { // debug:
-        $x[] = "Count HI: " . count($pairs_hi) . ' Count lo: ' . count($pairs_lo);
-        $x[] = $lo_names;
-        $x[] = $hi_names;
-        $x[] = $pairs_hi;
-        $x[] = $pairs_lo;
-        d($x);
-    } // end debug
-    
     $pairs = array_merge($pairs_hi,$pairs_lo);
     $table = new CCTable('cc_tbl_mixup_user','mixup_user_id');
     foreach( $pairs as $P )
@@ -750,7 +743,7 @@ function mixup_helper_do_shuffle_outer($mixup_id,$pairs)
         }
     }    
     
-    if( 1 && $swap )
+    if( 0 && $swap )
     {
         d($swap);
     }
