@@ -437,9 +437,11 @@ function mixup_helper_get_mixing_status_text($mixup_id,$mixup_name)
 EOF;
     */
     global $CC_GLOBALS;
-    return "Hello {$CC_GLOBALS['user_real_name']}! Your assignment has been mailed to <b>{$CC_GLOBALS['user_email']}</b> If you " .
+    return "Hello {$CC_GLOBALS['user_real_name']}! Your assignment will been mailed to <b>{$CC_GLOBALS['user_email']}</b> later today. ";
+    
+    /*"If you " .
             "don't see it, check in your junk/spam folder. If you still don't see it in 2 hours, contact the admins using " .
-            "the link at the bottom of this page.";
+            "the link at the bottom of this page."; */
 }
 
 function mixup_helper_get_signup_text($mixup_id,$mode_type,$logged_in,$user_signed_up,$mixup_name)
