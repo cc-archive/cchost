@@ -343,4 +343,11 @@ function mixup_view($mixup=null)
     
 }
 
+function mixup_admin_massmail($mixup_id,$mode='')
+{
+    mixup_helper(true);
+    mixup_helper_admin_massmail($mixup_id,$mode);
+
+}
+
 ?>

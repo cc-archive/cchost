@@ -36,7 +36,7 @@ function validator_mixup_mode_nav(&$form,$fieldname)
     return $form->validator_select($form,$fieldname);
 }
 
-function mixup_admin_massmail($mixup_id,$mode='')
+function mixup_helper_admin_massmail($mixup_id,$mode='')
 {
     mixup_helper_setup_page(_('Send Mixup Mass Mail'),$mixup_id);
     
@@ -400,8 +400,17 @@ function mixup_helper_get_user_status($mixup_id,$mode_type)
     switch( $mode_type )
     {
         case CC_MIXUP_MODE_SIGNUP:
-        case CC_MIXUP_MODE_MIXING:
             $text = mixup_helper_get_signup_text($mixup_id,$mode_type,$logged_in,$user_signed_up,$mixup_name);
+            break;
+        case CC_MIXUP_MODE_MIXING:
+            if( $user_signed_up )
+            {
+                $text = mixup_helper_get_mixing_status_text($mixup_id,$mixup_name);
+            }
+            else
+            {
+                $text = "Sorry, signups are closed.";
+            }
             break;
         case CC_MIXUP_MODE_DISABLED:
         case CC_MIXUP_MODE_UPLOADING:
@@ -410,6 +419,27 @@ function mixup_helper_get_user_status($mixup_id,$mode_type)
     }
     
     return $text;
+}
+
+function mixup_helper_get_mixing_status_text($mixup_id,$mixup_name)
+{
+    /*
+    $user = CCUser::CurrentUser();
+    $row = CCDatabase::QueryRow('SELECT user_name, user_real_name FROM cc_tbl_mixup_user JOIN cc_tbl_user ON '
+                                 . ' mixup_user_other=user_id WHERE mixup_user_user = ' . $user 
+                                 . ' AND mixup_user_mixup = ' . $mixup_id );
+    
+    $html =<<<EOF
+
+<div id="mixup_name" style="display:none;text-align:center;">
+    Your assignement is 
+</div>
+EOF;
+    */
+    global $CC_GLOBALS;
+    return "Hello {$CC_GLOBALS['user_real_name']}! Your assignment has been mailed to <b>{$CC_GLOBALS['user_email']}</b> If you " .
+            "don't see it, check in your junk/spam folder. If you still don't see it in 2 hours, contact the admins using " .
+            "the link at the bottom of this page.";
 }
 
 function mixup_helper_get_signup_text($mixup_id,$mode_type,$logged_in,$user_signed_up,$mixup_name)
@@ -626,24 +656,24 @@ function mixup_helper_mail_merge($org_text,$query_str,$merge_with = array())
     return $merge_with;
 }
 
-function mixup_helper_do_shuffle( $first_half, $org_second_half, $rejects  = array() )
+function mixup_helper_do_shuffle( $first, $org_second, $rejects  = array() )
 {
-    $second_half = $org_second_half;
-    $num_half = count($first_half);
-    shuffle($second_half);
+    $second = $org_second;
+    $num = count($first);
+    shuffle($second);
     $pairs = array();
-    
-    for( $i = 0; $i < $num_half; $i++ )
+
+    for( $i = 0; $i < $num; $i++ )
     {
-        $f = $first_half[$i];
-        $s = $second_half[$i];
+        $f = $first[$i];
+        $s = $second[$i];
         if( $f == $s ) // || ( in_array($f,$rejects) && in_array($s, $rejects) ) )
         {
             //dlog("\nFORCING reshuffle on {$f}/{$s}\n");
-            return mixup_helper_do_shuffle($first_half, $org_second_half);
+            return mixup_helper_do_shuffle($first, $org_second);
         }
         
-        $pairs[] = array( $first_half[$i], $second_half[$i] );
+        $pairs[] = array( $first[$i], $second[$i] );
     }
     
     return $pairs;
@@ -652,14 +682,98 @@ function mixup_helper_do_shuffle( $first_half, $org_second_half, $rejects  = arr
 function mixup_helper_gen_assignments($mixup_id)
 {
     $users = CCDatabase::QueryItems('SELECT mixup_user_user FROM cc_tbl_mixup_user WHERE mixup_user_mixup =' . $mixup_id);
-    $pairs = mixup_helper_do_shuffle($users,$users);
-    $table = new CCTable('cc_tbl_mixup_user','mixup_user_user');
+    
+    require_once('cchost_lib/cc-dataview.php');
+    $rules = mixup_helper_get_rules();
+    $filters = array();
+    foreach( $rules as $R )
+    {
+        $filters[] = CCDataView::MakeTagFilter($R['tag']);
+    }
+    $filter = join( ' OR ', $filters);
+    $cutoff_file = dirname(__FILE__) . '/mixup_cutoff';
+    $cutoff = file_exists( $cutoff_file ) ? file_get_contents( $cutoff_file ) : 4;
+    $lo = array();
+    $hi = array();
+    $lo_names = array();
+    $hi_names = array();
+    foreach( $users as $K => $U )
+    {
+        $count = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_uploads WHERE ({$filter}) AND upload_user={$U}");
+        $N = CCUser::GetUserName($U);
+        if( $count <= $cutoff )
+        {
+            $lo_names[] = $N;
+            $lo[] = $U;
+        }
+        else
+        {
+            $hi_names[] = $N;
+            $hi[] = $U;
+        }
+    }
+
+    $pairs_lo = mixup_helper_do_shuffle_outer($mixup_id,$lo);
+    $pairs_hi = mixup_helper_do_shuffle_outer($mixup_id,$hi);
+
+    if( 0 ) { // debug:
+        $x[] = "Count HI: " . count($pairs_hi) . ' Count lo: ' . count($pairs_lo);
+        $x[] = $lo_names;
+        $x[] = $hi_names;
+        $x[] = $pairs_hi;
+        $x[] = $pairs_lo;
+        d($x);
+    } // end debug
+    
+    $pairs = array_merge($pairs_hi,$pairs_lo);
+    $table = new CCTable('cc_tbl_mixup_user','mixup_user_id');
     foreach( $pairs as $P )
     {
-        $a['mixup_user_user']  = $P[0];
         $a['mixup_user_other'] = $P[1];
-        $table->Update($a);
+        $w['mixup_user_mixup'] = $mixup_id;
+        $w['mixup_user_user']  = $P[0];
+        $table->UpdateWhere($a,$w);
     }
+}
+
+function mixup_helper_do_shuffle_outer($mixup_id,$pairs)
+{
+    for( $i = 0; $i < 3; $i++ )
+    {
+        $pairs_back = mixup_helper_do_shuffle($pairs,$pairs);
+        $swap = mixup_helper_check_prev_assignments($mixup_id,$pairs_back);
+        if( empty($swap) )
+        {
+            break;
+        }
+    }    
+    
+    if( 1 && $swap )
+    {
+        d($swap);
+    }
+    
+    return $pairs_back;
+}
+
+function mixup_helper_check_prev_assignments($mixup_id,$pairs)
+{
+    $swap_out = array();
+
+    foreach( $pairs as $P )
+    {
+        $sql = "SELECT COUNT(*) FROM cc_tbl_mixup_user WHERE (mixup_user_user = {$P[0]} AND mixup_user_other = {$P[1]}) AND "
+               . "mixup_user_mixup <> {$mixup_id}";
+        $count = CCDatabase::QueryItem($sql);
+        if( $count )
+        {
+            $sql2 = "SELECT user_id,user_name FROM cc_tbl_user WHERE user_id IN ({$P[0]},{$P[1]})";
+            $ids = CCDatabase::QueryRows($sql2);
+            $swap_out[] = array( $ids, $P, $sql );
+        }
+    }
+    
+    return $swap_out;
 }
 
 function mixup_helper_assignments($mixup_id)
@@ -676,7 +790,8 @@ function mixup_helper_assignments($mixup_id)
     $form = new CCGridForm();
     $cols = array( 'Remixer', 'Assignment', 'Upload' );
     $form->SetColumnHeader($cols);
-    $rows = CCDatabase::QueryRows('SELECT * FROM cc_tbl_mixup_user WHERE mixup_user_mixup = ' . $mixup_id);
+    $rows = CCDatabase::QueryRows('SELECT cc_tbl_mixup_user.* FROM cc_tbl_mixup_user JOIN cc_tbl_user on ' .
+                                  'mixup_user_user=user_id WHERE mixup_user_mixup = ' . $mixup_id . ' ORDER by user_name');
     $count = 0;
     $stat_options = array(
                         CC_MIXUP_STATUS_DONE     => "Done",
@@ -684,6 +799,7 @@ function mixup_helper_assignments($mixup_id)
                         CC_MIXUP_STATUS_CANT     => "Bailed",
                         CC_MIXUP_STATUS_FLAKED   => "Flaked"
                     );
+    
     foreach( $rows as $R )
     {
         $S = 'S[' . ++$count . ']';
@@ -736,7 +852,7 @@ function mixup_helper_assignments($mixup_id)
             'flags'      => CCFF_NONE ),
           array(
             'element_name'  => $S . '[mixup_user_confirmed]',
-            'value'      => $R['mixup_user_confirmed'],
+            'value'      => CC_MIXUP_STATUS_NOT_SURE,
             'formatter'  => 'raw_select',
             'options'    => $stat_options,
             'flags'      => CCFF_NONE ),
