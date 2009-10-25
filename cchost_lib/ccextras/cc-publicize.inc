@@ -63,7 +63,7 @@ class CCPublicize
         $query = new CCQuery();
         $args = $query->ProcessAdminArgs('f=php&ids='.$id);
         $results = $query->Query($args);
-        if( empty($results) )
+        if( empty($results[0]) )
             die('not a valid id'); // this is a bot travelling through
         list( $records, $mime ) = $results;
         $this->_share('upload',$records[0]);
