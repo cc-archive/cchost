@@ -268,6 +268,12 @@ class CCMailer
         if( function_exists('cc_mailer_func') )
             return @cc_mailer_func( $to, $subject, $message, $headers, $add_params );
         
+        if( empty($to) )
+        {
+            //CCDebug::Log("Mail sent to empty addr \"{$subject}\" ");
+            return 1; // hmmm
+        }
+
         return @mail( $to, $subject, $message, $headers, $add_params );
 
     }

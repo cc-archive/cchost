@@ -220,6 +220,12 @@ function mixup_helper_api($action,$mixup_id=0,$arg='')
         $action = 'status';
     }
 
+    if( $action == 'confirm_remix' )
+    {
+        mixup_helper_confirm_remix($mixup_id,$arg);
+        $action = 'status';
+    }
+    
     if( $action == 'signup' )
     {
         mixup_helper_signup_request($mixup_id);
@@ -259,6 +265,12 @@ function mixup_helper_api($action,$mixup_id=0,$arg='')
     }
     
     die('Unknown command: ' . $action . ' sent to mixup api' );
+}
+
+function mixup_helper_confirm_remix($mixup_id,$arg)
+{
+    $user_id = CCUser::CurrentUser();
+    mixup_helper_update_confirm_remix($mixup_id,$user_id,$_GET['mixstatus']);
 }
 
 function mixup_helper_do_remove($mixup_id)
@@ -412,6 +424,16 @@ function mixup_helper_get_user_status($mixup_id,$mode_type)
                 $text = "Sorry, signups are closed.";
             }
             break;
+        case CC_MIXUP_MODE_REMINDER:
+            if( $user_signed_up )
+            {
+                $text = mixup_helper_get_remix_confirm_text($mixup_id,$mixup_name,$logged_in);
+            }
+            else
+            {
+                $text = "Sorry, signups are closed.";
+            }
+            break;
         case CC_MIXUP_MODE_DISABLED:
         case CC_MIXUP_MODE_UPLOADING:
         case CC_MIXUP_MODE_DONE:
@@ -420,6 +442,39 @@ function mixup_helper_get_user_status($mixup_id,$mode_type)
     
     return $text;
 }
+
+function mixup_helper_get_remix_confirm_text($mixup_id,$mixup_name,$logged_in)
+{
+    $confirm_url = ccl('api','mixup','confirm_remix',$mixup_id);
+    $link_text = 'Update your status';
+    $opts = mixup_helper_get_mixup_confirm_opts();
+    $op = CCDatabase::QueryItem( "SELECT mixup_user_confirmed FROM cc_tbl_mixup_user WHERE mixup_user_mixup = {$mixup_id} AND mixup_user_user = {$logged_in}" );
+    
+    $options = '';
+    foreach( $opts as $K => $V )
+    {
+        $options .= "<option value=\"{$K}\" ";
+        if( $K == $op )
+            $options .= 'selected="selected" ';
+        $options .= ">{$V}</options>\n";
+    }
+    global $CC_GLOBALS;
+    $text = <<<EOF
+
+Hello {$CC_GLOBALS['user_real_name']}! Your assignment has been mailed to <b>{$CC_GLOBALS['user_email']}</b><br /><br />
+
+Your current mixing status is:
+<select id="param" name="mixstatus" onchange="$('mixup_dyn_button').style.display = '';">{$options}</select>
+<a href="{$confirm_url}" id="mixup_dyn_button" class="small_button" style="display:none;font-color:red;font-weight:bold">{$link_text}</a>
+
+<br />
+
+EOF;
+    
+    return $text;
+    
+}
+
 
 function mixup_helper_get_mixing_status_text($mixup_id,$mixup_name)
 {

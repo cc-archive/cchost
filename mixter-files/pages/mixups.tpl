@@ -70,7 +70,8 @@
 .mixup_mode_type_<?= CC_MIXUP_MODE_DISABLED  ?> { background-color: orange; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_SIGNUP    ?> { background-color: green; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_MIXING    ?> { background-color: green; }
-.mixup_mode_type_<?= CC_MIXUP_MODE_UPLOADING ?> { background-color: green; } 
+.mixup_mode_type_<?= CC_MIXUP_MODE_UPLOADING ?> { background-color: green; }
+.mixup_mode_type_<?= CC_MIXUP_MODE_REMINDER  ?> { background-color: green; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_DONE      ?> { background-color: red; }
 .mixup_mode_type_<?= CC_MIXUP_MODE_CUSTOM    ?> { background-color: inherit; color: inherit; }
 

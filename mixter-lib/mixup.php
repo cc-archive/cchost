@@ -240,6 +240,15 @@ function mixup_onmapurls()
 }
 
 
+function mixup_helper_get_mixup_confirm_opts()
+{
+    return array( 
+                CC_MIXUP_STATUS_DONE     => "I'm done now or expect to finish in time",
+                CC_MIXUP_STATUS_NOT_SURE => "I'm not 100% sure if I'll have it in time",
+                CC_MIXUP_STATUS_CANT     => "I will definitely not be able to finish in time"
+            );    
+}
+
 function mixup_confirm($mixup_id)
 {
     mixup_helper();
@@ -260,8 +269,8 @@ function mixup_confirm($mixup_id)
         $page->Prompt('This mixup is not in mixing mode!');
         return;
     }
-    $sql = "SELECT mixup_user_id,mixup_user_confirmed FROM cc_tbl_mixup_user WHERE mixup_user_mixup = {$mixup_id} AND mixup_user_user = "
-              . CCUser::CurrentUser();
+    $user_id = CCUser::CurrentUser();;
+    $sql = "SELECT mixup_user_confirmed FROM cc_tbl_mixup_user WHERE mixup_user_mixup = {$mixup_id} AND mixup_user_user = {$user_id}";
     $row = CCDatabase::QueryRow($sql);
     if( empty($row) )
     {
@@ -269,17 +278,12 @@ function mixup_confirm($mixup_id)
         return;
     }
 
-    $id = $row['mixup_user_id'];
     $form = new CCForm();
     $fields =  array(
                 'mixup_user_confirmed' => array(
                     'label' => "Confirmation",
                     'formatter' => 'radio',
-                    'options' => array(
-                        CC_MIXUP_STATUS_DONE     => "I'm done now or expect to finish in time",
-                        CC_MIXUP_STATUS_NOT_SURE => "I'm not 100% sure if I'll have it in time",
-                        CC_MIXUP_STATUS_CANT     => "I will definitely not be able to finish in time"
-                    ),
+                    'options' => mixup_helper_get_mixup_confirm_opts(),
                     'value' => 2,
                     'flags' => CCFF_POPULATE
                 )
@@ -297,14 +301,22 @@ function mixup_confirm($mixup_id)
     else
     {
         $form->GetFormValues($values);
-        $table  = new CCTable('cc_tbl_mixup_user','mixup_user_id');
-        $args['mixup_user_id'] = $id;
-        $args['mixup_user_confirmed'] = $values['mixup_user_confirmed'];
-        $table->Update($args);
+        mixup_helper_update_confirm_remix($mixup_id,$user_id,$values['mixup_user_confirmed']);
         $prompt = 'Thanks for letting us know your status! Bookmark this page and use it again if your status changes.';        
         $mixurl = mixup_helper_get_mixup_url($mixup_id);
         $page->Prompt( $prompt . "<br /><br /><a href=\"{$mixurl}\">Go to mixup now...</a>");
     }
+}
+
+function mixup_helper_update_confirm_remix($mixup_id,$user_id,$status)
+{
+    $table  = new CCTable('cc_tbl_mixup_user','mixup_user_id');
+    $args['mixup_user_user'] = $user_id;
+    $args['mixup_user_mixup'] = $mixup_id;
+    $key = $table->QueryKey($args);
+    $uargs['mixup_user_id'] = $key;
+    $uargs['mixup_user_confirmed'] = $status;
+    $table->Update($uargs);
 }
 
 
