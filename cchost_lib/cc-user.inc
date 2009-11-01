@@ -238,7 +238,7 @@ class CCUserProfileForm extends CCUploadForm
                        array(  'label'      => 'str_e_mail',
                                'form_tip'   => 'str_login_this_address_will',
                                'formatter'  => 'email',
-                               'flags'      => CCFF_POPULATE | CCFF_REQUIRED ),
+                               'flags'      => CCFF_POPULATE ), // | CCFF_REQUIRED ),
 
                     'user_image' =>
                        array(  'label'      => 'str_prof_image',

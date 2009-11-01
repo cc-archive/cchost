@@ -1410,15 +1410,17 @@ END;
         if( $this->validator_must_exist($fieldname) )
         {
             $value = $this->GetFormValue($fieldname);
-
-            $regex = "/^[A-Z0-9]+([\._\-A-Z0-9+]+)?@[A-Z0-9\.\-_]+\.{1}[A-Z0-9\-_]{2,7}$/i";
-
-            if( !preg_match( $regex, $value ) )
+            
+            if( $value )
             {
-                $this->SetFieldError($fieldname, _("This is not a valid email address."));
-                return(false);
+                $regex = "/^[A-Z0-9]+([\._\-A-Z0-9+]+)?@[A-Z0-9\.\-_]+\.{1}[A-Z0-9\-_]{2,7}$/i";
+    
+                if( !preg_match( $regex, $value ) )
+                {
+                    $this->SetFieldError($fieldname, _("This is not a valid email address."));
+                    return(false);
+                }
             }
-
             return( true );
         }
         return( false );

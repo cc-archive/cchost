@@ -409,6 +409,7 @@ $GLOBALS['str_openid']                = _('OpenID');
 $GLOBALS['str_openids']               = _('OpenID');
 $GLOBALS['str_openid_action']         = _('Action');
 $GLOBALS['str_openid_contact']        = _('Contact Through OpenID');
+$GLOBALS['str_openid_contact_short']  = _('This account has not shared their email address with us.');
 $GLOBALS['str_openid_contact_disc']   = _('This account has not shared their email address with us. However you may be able to contact them using an OpenID identifier:');
 $GLOBALS['str_openid_display_name']   = _('Display name:');
 $GLOBALS['str_openid_edit_ids']       = _('%sManage your OpenIDs%s');
