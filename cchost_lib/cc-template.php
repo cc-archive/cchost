@@ -496,7 +496,8 @@ class CCSkin
                 else
                 {
                     // otherwise we can read the file 'as is'
-
+                    if( strstr($FL,'http://') ) // PrintOnce will emit an URL
+                        $FL = substr($FL,strlen(ccl())-1);
                     $note = $this->GetTemplate($FL,true);
                     $text = file_get_contents($note);
                 }

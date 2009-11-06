@@ -59,7 +59,7 @@ define( 'CC_LOCAL_SCOPE',  'local' );
 
 define('CC_1MG', 1024 * 1024);
 
-define('CC_USER_COOKIE', 'lepsog3');
+define('CC_USER_COOKIE', 'lepsog4');
 
 /**
  * Need this for defining default encoding across the board

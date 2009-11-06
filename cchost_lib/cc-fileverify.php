@@ -220,7 +220,7 @@ class CCFileVerify
             return;
         }
 
-        if( !empty($file['file_format_info']['default-ext']) )
+        if( !empty($file) && !empty($file['file_format_info']['default-ext']) )
         {
             $patterns['%ext%']      = $file['file_format_info']['default-ext'];
             $patterns['%filename%'] = $patterns['%title%'] . '.' .  $patterns['%ext%'];
