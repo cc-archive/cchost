@@ -570,8 +570,24 @@ class CCQuery
         if( !empty($this->sql_p['where']) )
             $this->where[] = $this->sql_p['where'];
 
-        $this->sql_p['where'] = empty($this->where) ? '' : '(' . join( ') AND (', $this->where ) . ')' ;
+        if( !empty($this->where)  )
+            $this->where = array_filter($this->where);
 
+        if( empty($this->where)  )
+        {
+            $this->sql_p['where'] = '';
+        }
+        else
+        {
+            $this->sql_p['where'] =  '(' . join( ') AND (', $this->where ) . ')' ;
+        }
+
+        if( !empty($this->sql_p['where']) )
+        {
+            if( is_array($this->sql_p['where']))
+                $this->sql_p['where'] = array_filter($this->sql_p['where']);
+        }
+        
         if( empty($this->dead) )
         {
             $this->dataviewProps['dataview'] = $this->args['dataview'];
