@@ -76,12 +76,12 @@ class CCOpenID
             case 'cccontactmailerform':
             {
                 // hmm, well, hack the URL to get the username
-                preg_match('#/[a-z0-9_]+$#i',$_GET['ccm'],$m);
-                $m = ltrim($m[0],'/');
+                preg_match('#/([a-z0-9_]+)/?$#i',$_GET['ccm'],$m);
                 if( empty($m) )
                 {
                     return; //this should never happen
                 }
+                $m = $m[1];
                 $user_email = CCDatabase::QueryItem('SELECT user_email FROM cc_tbl_user WHERE user_name=\''.$m.'\'');
                 if( !empty($user_email) )
                     return; // we're cool, let the system handle it.
