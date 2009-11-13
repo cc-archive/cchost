@@ -281,10 +281,18 @@ function convert_to_wavs()
     foreach( $keys as $K )
     {
         $R =& $records[$K];
+        
+        $temp_wavname = sprintf("{$wavdir}/temp.wav");
+        $cmd = "mpg123 -q -w {$temp_wavname} \"{$R['files'][0]['local_path']}\"";
+        sq( CCM_HOME_DIR, $cmd );
+        exec($cmd);
+        
         $wavname = sprintf("{$wavdir}/%03d.wav",$i++);
-        $cmd = "sox \"{$R['files'][0]['local_path']}\" -r 44100 -c 2 {$wavname}";
+        $cmd = "sox \"{$temp_wavname}\" -r 44100 -c 2 {$wavname}";
         sq( $wavdir, $cmd );
         exec($cmd);
+        
+        unlink($temp_wavname);
     }
 }
 
