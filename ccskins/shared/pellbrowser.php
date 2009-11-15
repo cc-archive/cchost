@@ -233,7 +233,7 @@ ccPellFilters.prototype = {
 
     queryString: function(withTemplate) {
         this.getQuery();
-        var str = this.query + '&f=html';
+        var str = this.query + '&f=html&filetag=acappella';
         if( withTemplate )
             str += '&t=reccby';
         return str;

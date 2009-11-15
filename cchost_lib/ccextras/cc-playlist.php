@@ -144,6 +144,7 @@ class CCPlaylistHV
             $rec =& $records[$k[$i]];
             $cf = count($rec['files']);
             $ck = array_keys($rec['files']);
+            $likely_url = '';
             for( $n = 0; $n < $cf; $n++ )
             {
                 $R =& $rec['files'][$ck[$n]];
@@ -161,9 +162,36 @@ class CCPlaylistHV
                     )
                   )
                 {
-                    $rec['fplay_url'] = $R['download_url'];
-                    break;
+                    if( empty($_GET['filetag']) || $cf == 1 )
+                    {
+                        $rec['fplay_url'] = $R['download_url'];
+                        break;
+                    }
+                    else
+                    {
+                        if( $cf == 1 )
+                        {
+                            $rec['fplay_url'] = $R['download_url'];
+                            break;                            
+                        }
+                        if( !empty($R['file_extra']['ccud']) )
+                        {
+                            $tags = explode(',',$R['file_extra']['ccud']);
+                            if( in_array($_GET['filetag'],$tags) )
+                            {
+                                $rec['fplay_url'] = $R['download_url'];
+                                break;                                                        
+                            }
+                        }
+                        if( empty($likely_url) )
+                            $likely_url = $R['download_url'];
+                    }
                 }
+            }
+            
+            if( empty($rec['fplay_url']) && !empty($likely_url) )
+            {
+                $rec['fplay_url'] = $likely_url;
             }
         }
     }
