@@ -268,7 +268,6 @@ EOF;
         $wf['forum_thread_forum'] = $forum_id;
         CCPage::AddPagingLinks($threads,$wf,30);
         $forum_threads =& $threads->QueryRows($wf,$columns);
-
         $topic_counter = new CCTable('cc_tbl_topics','topic_id');
 
         //
@@ -475,37 +474,45 @@ EOF;
         else
         {
             $form->GetFormValues($values);
-            $topics =& CCTopics::GetTable();
-            $topic_id = $topics->NextID();
-            $threads =& CCForumThreads::GetTable();
-            $thread_id = $threads->NextID();
-
-            $values['topic_forum'] = $forum_id;
-            $values['topic_date'] = date('Y-m-d H:i:s',time());
-            $values['topic_user'] = CCUser::CurrentUser();
-            $values['topic_id'] = $topic_id;
-            $values['topic_thread'] = $thread_id;
-            $topics->Insert($values,0);
-
-            $ftvalues = array();
-            $ftvalues['forum_thread_id'] = $thread_id;
-            $ftvalues['forum_thread_forum'] = $forum_id;
-            $ftvalues['forum_thread_user'] = CCUser::CurrentUser();
-            $ftvalues['forum_thread_oldest'] = 
-            $ftvalues['forum_thread_newest'] = $topic_id;
-            $ftvalues['forum_thread_date'] = $values['topic_date'];
-            $ftvalues['forum_thread_name'] = $values['topic_name'];
-            $threads->Insert($ftvalues);
-
-            $this->_on_new_topic($values);
-
-            CCEvents::Invoke( CC_EVENT_FORUM_POST, array( &$values ) );
-
+            list( $thread_id, $topic_id ) = $this->_post_new_topic($values,$forum_id);
             $url = ccl('thread',$thread_id);
             CCUtil::SendBrowserTo($url);
         }
     }
 
+    function _post_new_topic($values,$forum_id)
+    {
+        
+        $topics =& CCTopics::GetTable();
+        $topic_id = $topics->NextID();
+        $threads =& CCForumThreads::GetTable();
+        $thread_id = $threads->NextID();
+
+        $values['topic_forum'] = $forum_id;
+        $values['topic_date'] = date('Y-m-d H:i:s',time());
+        $values['topic_user'] = CCUser::CurrentUser();
+        $values['topic_id'] = $topic_id;
+        $values['topic_thread'] = $thread_id;
+        $topics->Insert($values,0);
+
+        $ftvalues = array();
+        $ftvalues['forum_thread_id'] = $thread_id;
+        $ftvalues['forum_thread_forum'] = $forum_id;
+        $ftvalues['forum_thread_user'] = CCUser::CurrentUser();
+        $ftvalues['forum_thread_oldest'] = 
+        $ftvalues['forum_thread_newest'] = $topic_id;
+        $ftvalues['forum_thread_date'] = $values['topic_date'];
+        $ftvalues['forum_thread_name'] = $values['topic_name'];
+        $threads->Insert($ftvalues);
+
+        $this->_on_new_topic($values);
+
+        CCEvents::Invoke( CC_EVENT_FORUM_POST, array( &$values ) );
+        
+        return array( $thread_id, $topic_id );
+
+    }
+    
     function ViewThread($thread_id='')
     {
         global $CC_GLOBALS;
