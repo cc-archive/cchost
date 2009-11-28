@@ -538,7 +538,7 @@ class CCMailerAPI
         require_once('cchost_lib/cc-page.php');
         $page =& CCPage::GetPage();
         $page->SetTitle($title);
-        CCUser::AddUserBreadCrumbs($title,null,$userto);
+        CCUser::AddUserBreadCrumbs($title,null,$user_to);
 
         $verify = $this->_ok_to_contact($userto);
 
@@ -548,8 +548,10 @@ class CCMailerAPI
             return;
         }
 
-        // mail form expects records in the to/from
-        $user_from = CCUser::IsLoggedIn() ? $CC_GLOBALS : '';
+        // mail form expects a user record in the to/from
+        // CC_GLOBALS is a superset of a user record so
+        // just use that...
+        $user_from = !empty($CC_GLOBALS['user_email']) ? $CC_GLOBALS : '';
 
         $form = new CCContactMailerForm($user_to,$user_from);
 
