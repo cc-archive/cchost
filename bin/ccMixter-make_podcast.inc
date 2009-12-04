@@ -66,7 +66,7 @@ function post_podcast_topic()
     _post_podcast_topic($mp3size/(1024*1024),$mp3_url,$duration);
 }
 
-function _post_podcast_topic($mp3size,$mp3_url,$duration='')
+function _post_podcast_topic($mp3size,$mp3_url_param,$duration='')
 {
     global $target_mp3, $playlist_info, $time,
         $playlist_head         ,
@@ -87,7 +87,7 @@ function _post_podcast_topic($mp3size,$mp3_url,$duration='')
 <p><b>Bumpers...</b></p>
 {$playlist_bumper_links}
     <!--
-         enclosure_url%{$mp3_url}%
+         enclosure_url%{$mp3_url_param}%
          enclosure_size%{$mp3size}%
          enclosure_duration%{$duration}%
          enclosure_type%audio/mp3%
