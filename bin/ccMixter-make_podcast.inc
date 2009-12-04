@@ -58,17 +58,25 @@ $num_recs = count($records);
 function post_podcast_topic()
 {
     global $target_mp3,
-        $mp3_url, $playlist_info, $time,
+        $mp3_url;
+        
+    $mp3size    = filesize($target_mp3);
+    $duration   = get_wav_len($target_mp3,'playtime_string');
+    
+    _post_podcast_topic($mp3size/(1024*1024),$mp3_url,$duration);
+}
+
+function _post_podcast_topic($mp3size,$mp3_url,$duration='')
+{
+    global $target_mp3, $playlist_info, $time,
         $playlist_head         ,
         $playlist_attr_links   ,
         $playlist_bumper_links ,
         $playlist_info         ;
-
+        
     $site       = 'ccmixter.org';    
-    $mp3size    = filesize($target_mp3);
-    $fs         = '(' . number_format($mp3size/(1024*1024),2) . 'MB)';
-    $duration   = get_wav_len($target_mp3,'playtime_string');
-    
+    $fs         = '(' . number_format($mp3size,2) . 'MB)';
+        
     $topic_text =<<<EOF
 {$playlist_head}
 <h3><a rel="enclosure" href="{$mp3_url}">Download podcast - {$duration} {$fs}</a></h3>
@@ -91,7 +99,7 @@ EOF;
         'topic_type' => 'podcast',
         'topic_date' => date( 'Y-m-d H:i'),
         'topic_format' => 1, // 1 is CC_TOPIC_FORMAT_HTML
-        'topic_name' => $playlist_info['cart_name'],
+        'topic_name' => str_replace('&','and',$playlist_info['cart_name']),
         'topic_text' => $topic_text,
         'topic_user' => $playlist_info['cart_user'],
         'topic_nsfw' => $playlist_info['cart_nsfw'],
