@@ -106,8 +106,9 @@ class CCRemix
     * @param string $relative_dir Target directory of upload
     * @param string $ccud System tag to attach to upload
     * @param integer $remixid Upload id of remix editing
+    * @param integer $maxfilesize Reject uploads larger than this (in MB)
     */
-    function OnPostRemixForm(&$form, $relative_dir, $ccud = CCUD_REMIX, $remixid = '')
+    function OnPostRemixForm(&$form, $relative_dir, $ccud = CCUD_REMIX, $remixid = '', $maxfilesize='')
     {
         require_once('cchost_lib/cc-pools.php');
         require_once('cchost_lib/cc-sync.php');
@@ -141,7 +142,8 @@ class CCRemix
                 $remixid = CCUpload::PostProcessNewUploadForm($form,
                                                                $ccud,
                                                                $relative_dir,
-                                                               $remix_sources);
+                                                               $remix_sources,
+                                                               $maxfilesize);
             }
 
 

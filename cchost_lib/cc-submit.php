@@ -129,6 +129,13 @@ class CCAdminSubmitFormForm extends CCUploadForm
                                'formatter'  => 'tagsedit',
                                'flags'      => CCFF_POPULATE ),
                     */
+                    'maxfilesize' =>
+                        array( 'label' => _('Upload Size Limit'),
+                               'form_tip'   => _('Maximum file size (in MB) this type of form will accept. <br /><b style="color:red">Experimental!</b>'),
+                               'class' => 'form_input_short',
+                               'formatter'  => 'textedit',
+                               'flags'      => CCFF_POPULATE ),
+                        
                     'action' =>
                         array( 'label' => _('Handler URL'),
                                'form_tip'   => _('Redirect this submission from the default Submit Form handler (advanced usage)'),
@@ -366,10 +373,23 @@ class CCSubmit
             $api = new CCMediaHost();
             if( $type['isremix'] )
             {
+                // process flow goes from here to:
+                //
+                //    CCMediaHost::SubmitRemix to
+                //    CCRemix::OnPostRemixForm to
+                //    CCUpload::PostProcessNewUploadForm to
+                //    CCUploadAPI::PostProcessNewUpload
+                
                 $api->SubmitRemix( $type );
             }
             else
             {
+                // process flow goes from here to:
+                //
+                //    CCMediaHost::SubmitOriginal to
+                //    CCUpload::PostProcessNewUploadForm to
+                //    CCUploadAPI::PostProcessNewUpload
+                
                 $api->SubmitOriginal( $type, $username  );
             }
         }

@@ -113,6 +113,7 @@ class CCMediaHost
         $form_help  = $submit_meta['form_help'];
         $avail_lics = $submit_meta['licenses'];
         $suggested_tags = $submit_meta['suggested_tags'];
+        $maxfilesize = empty($submit_meta['maxfilesize']) ? '' : $submit_meta['maxfilesize'];
 
         if( empty($avail_lics) )
             $avail_lics = 'attribution_3';
@@ -147,7 +148,9 @@ class CCMediaHost
             {
                 $upload_id = CCUpload::PostProcessNewUploadForm( $form, 
                                                $tags,
-                                               $this->_get_upload_dir($username) );
+                                               $this->_get_upload_dir($username),
+                                               null,
+                                               $maxfilesize );
 
                 if( $upload_id )
                 {
@@ -178,11 +181,12 @@ class CCMediaHost
     {
         global $CC_GLOBALS;
 
-        $title = $submit_meta['text'];
-        $tags  = $submit_meta['tags'];
-        $form_help = $submit_meta['form_help'];
+        $title          = $submit_meta['text'];
+        $tags           = $submit_meta['tags'];
+        $form_help      = $submit_meta['form_help'];
         $suggested_tags = $submit_meta['suggested_tags'];
-        $url_extra = empty($submit_meta['url_extra']) ? '' : $submit_meta['url_extra'];
+        $url_extra      = empty($submit_meta['url_extra']) ? '' : $submit_meta['url_extra'];
+        $maxfilesize    = empty($submit_meta['maxfilesize']) ? '' : $submit_meta['maxfilesize'];
         
         $username = CCUser::CurrentUserName();
         $userid   = CCUser::CurrentUser();
@@ -228,7 +232,7 @@ class CCMediaHost
             $upload_dir = $this->_get_upload_dir($username);
             
             require_once('cchost_lib/cc-remix.php');
-            CCRemix::OnPostRemixForm($form, $upload_dir, $tags );
+            CCRemix::OnPostRemixForm($form, $upload_dir, $tags, '', $maxfilesize );
         }
     }
 

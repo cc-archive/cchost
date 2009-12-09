@@ -233,7 +233,7 @@ class CCUpload
         $form->InsertFormFields( $fields, $how, $where );
     }
 
-    function PostProcessNewUploadForm( &$form, $ccud_tags, $relative_dir, $parents = null)
+    function PostProcessNewUploadForm( &$form, $ccud_tags, $relative_dir, $parents = null, $maxfilesize='')
     {
         $form->GetFormValues($values);
         $current_path = $values['upload_file_name']['tmp_name'];
@@ -256,7 +256,8 @@ class CCUpload
                                                     $ccud_tags,
                                                     $user_tags,
                                                     $relative_dir,
-                                                    $parents );
+                                                    $parents,
+                                                    $maxfilesize);
         if( is_string($ret) )
         {
             $form->SetFieldError('upload_file_name',$ret);

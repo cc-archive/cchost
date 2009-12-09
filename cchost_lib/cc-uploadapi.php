@@ -132,7 +132,8 @@ EOF;
                                     $ccud_tags,
                                     $user_tags,
                                     $relative_dir,
-                                    $parents)
+                                    $parents,
+                                    $maxfilesize='')
     {
         CCUploadAPI::_move_upload_file($current_path,$new_name,$is_temp);
 
@@ -163,7 +164,7 @@ EOF;
         //
         $file_args = array();
         $file_args['file_extra'] = array();
-        $errs = CCUploadAPI::_do_verify_file_size($current_path);
+        $errs = CCUploadAPI::_do_verify_file_size($current_path,$maxfilesize);
         $errs .= CCUploadAPI::_do_verify_file_format($current_path,$file_args);
         if( $errs )
         {
@@ -359,7 +360,7 @@ EOF;
     function PostProcessFileReplace( $overwrite_this,
                                      $nicname,
                                      $current_path,
-                                     $new_name )
+                                     $new_name)
     {
         CCUploadAPI::_move_upload_file($current_path,$new_name,$is_temp);
 
@@ -537,15 +538,24 @@ EOF;
         CCEvents::Invoke( CC_EVENT_UPLOAD_DONE, array( $new_args['upload_id'], CC_UF_PROPERTIES_EDIT, array(&$old_record) ) );
     }
 
-    function _do_verify_file_size($current_path)
+    function _do_verify_file_size($current_path,$maxfilesize='')
     {
+        $size = filesize($current_path);
+        
+        if( !empty($maxfilesize) )
+        {
+            if( $size > ($maxfilesize * (1024*1022)) )
+            {
+                return "Wups, sorry, but this ile exceeds the limit allowed for this submission type.";
+            }
+        }
+        
         global $CC_GLOBALS;
         if( empty($CC_GLOBALS['enable_quota']) )
             return( null );
         $users = new CCUsers();
         $record = $users->QueryKeyRow($CC_GLOBALS['user_id']);
         $quota = empty($record['user_quota']) ? $CC_GLOBALS['default_quota'] : $record['user_quota'];
-        $size = filesize($current_path);
 
         $total = $size;
         $uploads = new CCUploads();
