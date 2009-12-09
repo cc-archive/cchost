@@ -79,7 +79,7 @@ function _post_podcast_topic($mp3size,$mp3_url_param,$duration='')
         
     $topic_text =<<<EOF
 {$playlist_head}
-<h3><a rel="enclosure" href="{$mp3_url}">Download podcast - {$duration} {$fs}</a></h3>
+<h3><a rel="enclosure" href="{$mp3_url_param}">Download podcast - {$duration} {$fs}</a></h3>
 <p><b>Songs...</b></p>
 {$playlist_attr_links}
 
