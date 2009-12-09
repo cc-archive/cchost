@@ -152,8 +152,14 @@ class CCPlaylistHV
                 foreach( array('file_extra','file_format_info') as $f )
                     if( is_string($R[$f]) )
                         $R[$f] = unserialize($R[$f]);
-                if( $R['file_format_info']['media-type'] != 'audio' )
+                if(
+                    ( $R['file_format_info']['media-type'] != 'audio') ||
+                    ( $R['file_rawsize'] > (13*1024*1024) )
+                  )
+                {
                     continue;
+                }
+                
                 if( !$is_native ||
                     (
                         !empty($R['file_format_info']['sr']) && 
