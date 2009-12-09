@@ -546,7 +546,7 @@ EOF;
         {
             if( $size > ($maxfilesize * (1024*1022)) )
             {
-                return "Wups, sorry, but this ile exceeds the limit allowed for this submission type.";
+                return "Wups, sorry, but this file exceeds the limit allowed for this submission type.";
             }
         }
         
