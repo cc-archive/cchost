@@ -108,6 +108,10 @@ class CCQueryFormats
                     $comm = ',';
                 }
                 $text .= ']';
+                if( $format == 'json' && !empty($_REQUEST['callback']) )
+                {
+                    $text = '(' . $_REQUEST['callback'] . ')' . $text;
+                }
                 $results = array( $text, $mime ); 
                 break;
             }
