@@ -433,7 +433,19 @@ Attribution license:</p>
 <tr><td class="key">  ncsplus</td><td>NonCommercial Sampling+</td></tr>
 <tr><td class="key">  pd</td><td> Public Domain (includes CC Zero)</td></tr>
 <tr><td class="key">  zero</td><td>CC Zero</td></tr>
+<tr><td class="key">  open</td><td>All licenses that allow commercial use. Same as: by,pd,s,splus,nd,sa</td></tr>
+<tr><td class="key">  allnc</td><td>All licenses that prohibit commercial use. </td></tr>
 </table>
+
+<p>
+    License values can be combined to find items with one or another license:
+</p>
+<p>
+    <b>lic=by,zero,sa</b>
+</p>
+<p>
+    with find items licensed under Attribution, CC Zero <i>or</i> ShareAlike.
+</p>
 
 <a name="dataviews"></a>
 <h2>Appendix C: Data Views</h2>
