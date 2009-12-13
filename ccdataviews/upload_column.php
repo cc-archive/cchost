@@ -8,7 +8,7 @@
 function upload_column_dataview() 
 {
     $sql =<<<EOF
-    SELECT upload_id, %columns%
+    SELECT upload_id %columns%
     FROM cc_tbl_uploads
 %joins%
 %where%

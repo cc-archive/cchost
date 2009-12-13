@@ -727,26 +727,33 @@ class CCQuery
     function _gen_lic()
     {
         $translator = array( 
-            'by' => 'attribution',
-            'nc' => 'noncommercial', 
-            'sa' => 'share-alike'   , 
-            'nod' => 'noderives'   , 
-            'byncsa' => 'by-nc-sa'   , 
-            'byncnd' => 'by-nc-nd'   , 
-            'by-nc-sa' => 'by-nc-sa'   , 
-            'by-nc-nd' => 'by-nc-nd'   , 
-            's' => 'sampling'   , 
-            'splus' => 'sampling+',
-            'ncsplus' =>   'nc-sampling+',
-            'pd' =>  'publicdomain' ,
+            'by'       =>  array('attribution','attribution_3'),
+            'nc'       =>  array('noncommercial','noncommercial_3'), 
+            'sa'       =>  array('share-alike','share-alike_3'), 
+            'nd'       =>  array('noderives','noderives_3'), 
+            'ncsa'     =>  array('by-nc-sa','by-nc-sa_3'), 
+            'ncnd'     =>  array('by-nc-nc','by-nc-nd_3'), 
+            's'        =>  array('sampling'), 
+            'splus'    =>  array('sampling+'),
+            'ncsplus'  =>  array('nc-sampling+'),
+            'pd'       =>  array('publicdomain','cczero') ,
+            'zero'     =>  array('cczero') ,
             );
+        
+        $lics = split(',',$this->args['lic']);
+        
+        $license_ids = array();
+        
+        foreach( $lics as $lic )
+        {
+            if( !array_key_exists( $lic, $translator ) )
+                die('invalid license argument');
+            $license_ids = array_merge($license_ids,$translator[$lic]);
+        }
 
-        if( !array_key_exists( $this->args['lic'], $translator ) )
-            die('invalid license argument');
-
-        $license = $translator[$this->args['lic']];
         $field = $this->_make_field('license');
-        $this->where[] = "($field = '$license')";
+        $license_ids = join( "', '", $license_ids );
+        $this->where[] = "($field IN ('$license_ids'))";
     }
 
     function _gen_limit()

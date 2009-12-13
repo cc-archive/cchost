@@ -5,7 +5,7 @@
 [/meta]
 */
 
-function links_dataview() 
+function links_short_dataview() 
 {
     $urlf = ccl('files') . '/';
 

@@ -425,13 +425,14 @@ Attribution license:</p>
 <tr><td class="key">  by</td><td>Attribution</td></tr>
 <tr><td class="key">  nc</td><td>NonCommercial</td></tr>
 <tr><td class="key">  sa</td><td>Share-Alike</td></tr>
-<tr><td class="key">  nod</td><td>NoDerives</td></tr>
-<tr><td class="key">  byncsa</td><td>NonCommercial ShareAlike</td></tr>
-<tr><td class="key">  byncnd</td><td>NonCommercial NoDerives</td></tr>
+<tr><td class="key">  nd</td><td>NoDerives</td></tr>
+<tr><td class="key">  ncsa</td><td>NonCommercial ShareAlike</td></tr>
+<tr><td class="key">  ncnd</td><td>NonCommercial NoDerives</td></tr>
 <tr><td class="key">  s</td><td>Sampling</td></tr>
 <tr><td class="key">  splus</td><td>Sampling+</td></tr>
 <tr><td class="key">  ncsplus</td><td>NonCommercial Sampling+</td></tr>
-<tr><td class="key">  pd</td><td> Public Domain</td></tr>
+<tr><td class="key">  pd</td><td> Public Domain (includes CC Zero)</td></tr>
+<tr><td class="key">  zero</td><td>CC Zero</td></tr>
 </table>
 
 <a name="dataviews"></a>
