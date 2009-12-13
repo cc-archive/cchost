@@ -54,9 +54,12 @@ var str_filter_sort               ='<?=addslashes($T->String('str_filter_sort'))
 var str_filter_yesterday          ='<?=addslashes($T->String('str_filter_yesterday'))?>';
 var str_forum_post_topic_reply    ='<?=addslashes($T->String('str_forum_post_topic_reply'))?>';
 var str_getting_data              ='<?=addslashes($T->String('str_getting_data'))?>';
+var str_lic_all                  ='<?=addslashes($T->String('str_lic_all'))?>';
+var str_lic_open                  ='<?=addslashes($T->String('str_lic_open'))?>';
 var str_lic_attribution           ='<?=addslashes($T->String('str_lic_attribution'))?>';
 var str_lic_nc_sampling_plus      ='<?=addslashes($T->String('str_lic_nc_sampling_plus'))?>';
 var str_lic_nc_share_alike        ='<?=addslashes($T->String('str_lic_nc_share_alike'))?>';
+var str_lic_all_non_commercial    ='<?=addslashes($T->String('str_lic_all_non_commercial'))?>';
 var str_lic_non_commercial        ='<?=addslashes($T->String('str_lic_non_commercial'))?>';
 var str_lic_public                ='<?=addslashes($T->String('str_lic_public'))?>';
 var str_lic_sampling              ='<?=addslashes($T->String('str_lic_sampling'))?>';

@@ -53,7 +53,7 @@ ccQueryBrowserFilters.prototype = {
         
         // 'types' as the user sees it, is really 'reqtags' in query-api-speak
 
-        this.reqtags =     { name: 'Type', fmt: 'dropdown', param: 'reqtags', vals: types };
+        this.reqtags =     { name: 'Type', fmt: 'radio', param: 'reqtags', vals: types };
         if( this.options.optset.user )
         {
             this.user       = { name: str_artist, fmt: 'user_lookup', param: 'user' };
@@ -101,15 +101,8 @@ ccQueryBrowserFilters.prototype = {
         if( this.options.optset.license )
         {
             this.lic  = { name: str_filter_license, fmt: 'dropdown', param: 'lic',
-                                             vals: [  [ '*', str_filter_all],
-                                                      [ 'by', str_lic_attribution],
-                                                      [ 'nc', str_lic_non_commercial],
-                                                      [ 'sa', str_lic_share_alike],
-                                                      [ 'byncsa', str_lic_nc_share_alike],
-                                                      [ 's', str_lic_sampling],
-                                                      [ 'splus', str_lic_sampling_plus],
-                                                      [ 'ncsplut', str_lic_nc_sampling_plus],
-                                                      [ 'pd', str_lic_public]
+                                             vals: [  [ '*', str_lic_all],
+                                                      [ 'open', str_lic_open]
                                                    ]
                               };
         }
@@ -285,10 +278,10 @@ ccFormatter.prototype = {
 
     _input: function(t,f,x) {
         var html = this._tag('input type="'+t+'"',f);
-        var x = x || '';
+        var q = x || '';
         if( f.value )
             html += 'value="' + f.value + '" ';
-        html += ' ' + x + ' />';
+        html += ' ' + q + ' />';
         return html;
     },
 
@@ -355,6 +348,20 @@ ccFormatter.prototype = {
             html += '<option ' + sel + 'value="' + val + '" >' + cc_str(text.toString()) + '</option>';
         });
         return html + '</select>';
+    },
+
+    radio: function(f,col) {
+        var html = '';
+        var me = this;
+        f.vals.each( function(opt,i) {
+            var val = opt[0];
+            var text = cc_str(opt[1].toString());
+            var sel = val == f.value ? ' checked="checked" ' : '';
+            var id = f.param + '_' + i;
+            html += '<input type="radio" value="' + val + '" id="' + id + '" name="' + f.param + '"' + sel + '><label for="' + id + '">' + text + '</label><br />';
+          }  
+        );
+        return html + '';
     },
 
     checkbox: function(f,col) {

@@ -726,19 +726,23 @@ class CCQuery
 
     function _gen_lic()
     {
-        $translator = array( 
+        $T = array( 
             'by'       =>  array('attribution','attribution_3'),
-            'nc'       =>  array('noncommercial','noncommercial_3'), 
             'sa'       =>  array('share-alike','share-alike_3'), 
             'nd'       =>  array('noderives','noderives_3'), 
-            'ncsa'     =>  array('by-nc-sa','by-nc-sa_3'), 
-            'ncnd'     =>  array('by-nc-nc','by-nc-nd_3'), 
             's'        =>  array('sampling'), 
             'splus'    =>  array('sampling+'),
+            'nc'       =>  array('noncommercial','noncommercial_3'), 
+            'ncsa'     =>  array('by-nc-sa','by-nc-sa_3'), 
+            'ncnd'     =>  array('by-nc-nc','by-nc-nd_3'), 
             'ncsplus'  =>  array('nc-sampling+'),
             'pd'       =>  array('publicdomain','cczero') ,
             'zero'     =>  array('cczero') ,
             );
+        
+        // available for commercial use
+        $T['open']  = array_merge( $T['by'], $T['pd'], $T['s'],$T['splus'],$T['nd'],$T['sa'] );
+        $T['allnc'] = array_merge( $T['nc'], $T['ncsa'], $T['ncnd'],$T['ncsplus'] );
         
         $lics = split(',',$this->args['lic']);
         
@@ -746,9 +750,9 @@ class CCQuery
         
         foreach( $lics as $lic )
         {
-            if( !array_key_exists( $lic, $translator ) )
+            if( !array_key_exists( $lic, $T ) )
                 die('invalid license argument');
-            $license_ids = array_merge($license_ids,$translator[$lic]);
+            $license_ids = array_merge($license_ids,$T[$lic]);
         }
 
         $field = $this->_make_field('license');
