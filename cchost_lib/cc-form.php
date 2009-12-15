@@ -2493,8 +2493,14 @@ class CCGridForm extends CCForm
         $m = preg_replace('/\[([^\]]+)\]/',"['$1']",$m);
 
         $value = null;
-        if( strstr($m,'word') )
+        /* WOW, what is this doing here??
+          OK, well, I can't figure out what bug this hack is supposed
+          to alleviate so to skip the code set the global
+        */
+        
+        if( empty($GLOBALS['skip_form_word_hack']) && strstr($m,'word') )
             CCDebug::PrintVar($this);
+
         eval($m);
         return($value);
     }

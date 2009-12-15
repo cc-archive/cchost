@@ -89,7 +89,7 @@
    %if_not_null(#R/form_error)%
       <tr class="form_error_row"><td></td><td class="form_error">%text(#R/form_error)%</td></tr>
    %end_if%
-   <tr class="form_row">
+   <tr class="form_row form_row_<?= $i_R & 1 ?>">
    %loop(#R/html_form_grid_fields,F)%
      <td class="form_element" id="%(#k_F)%_field_row">
        %if_not_null(#F/macro)%  %map(field,#F)% <!-- -->%call(#F/macro)% %end_if%

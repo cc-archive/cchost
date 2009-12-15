@@ -183,7 +183,7 @@ class CCDebug
                     unset($st[$i]['object']);
             }
         }
-        CCDebug::PrintVar($st,$template_safe);
+        CCDebug::_PrintVar($st,$template_safe);
     }
 
     /**
@@ -200,6 +200,12 @@ class CCDebug
     * @param bool $template_safe true means you are NOT debugging code that displays HTML
     */
     function PrintVar(&$var, $template_safe = false)
+    {
+        //CCDebug::StackTrace(false,false);
+        CCDebug::_PrintVar($var,$template_safe);    
+    }
+    
+    function _PrintVar(&$var, $template_safe = false)
     {
         if( !CCDebug::IsEnabled() )
             return;

@@ -372,8 +372,8 @@ class CCQuery
         {
             case 'count':
                 $A['rettype'] = CCDV_RET_ITEM;
-                if( !empty($A['datasource']) && ($A['datasource'] == 'pool_items') )
-                   $dv_name = 'count_pool_items';
+                if( !empty($A['datasource']) && ($A['datasource'] != 'uploads') )
+                   $dv_name = 'count_' . $A['datasource'];
                 else
                     $dv_name = 'count';
                 $this->GetSourcesFromDataview($dv_name);
