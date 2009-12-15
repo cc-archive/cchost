@@ -36,12 +36,15 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
     {
         if($dataview == 'passthru')
             return;
+    }
 
-        if( empty($datasource) )
-        {
-            $queryObj->GetSourcesFromDataview($dataview); // <-- this writes to $args...
-            $datasource = $args['datasource'];            //     ...but not result of expand()
-        }
+    if( empty($datasource) )
+    {
+        if( empty($dataview) )
+            return;
+        
+        $queryObj->GetSourcesFromDataview($dataview); // <-- this writes to $args...
+        $datasource = $args['datasource'];            //     ...but not result of expand()
     }
     
     if( $datasource == 'tags' )
