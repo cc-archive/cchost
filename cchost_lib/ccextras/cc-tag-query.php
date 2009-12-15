@@ -35,6 +35,9 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
     if( !empty($dataview) && ($dataview == 'passthru') )
         return;
 
+    if( empty($datasource) ) // why does this happen?
+        return;
+    
     if( $datasource == 'tags' )
     {
         if( empty($dataview) || ($dataview == 'default') )
