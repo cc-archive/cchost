@@ -64,7 +64,7 @@ class CCTagCat
         $showflag = $show_all ? '&showall=1' : '';
         $link = ccl('admin','tagcat');
         $plink = url_args( $link, 'offset='.$prev . $showflag);
-        $prev_link = empty($offset) ? '' : "<a href=\"{$plink}\" class=\"small_button\">prev</a>";
+        $prev_link = $show_all && empty($offset) ? '' : "<a href=\"{$plink}\" class=\"small_button\">prev</a>";
         $nlink = url_args( $link, 'offset='.$next . $showflag);
         $next_link = empty($next) ? '' : "<a href=\"{$nlink}\" class=\"small_button\">next</a>";
         $total = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_tags {$where}");
@@ -157,7 +157,7 @@ EOF;
         }
         else
         {
-            $where = 'WHERE tags_category = "0" OR ISNULL(tags_category)';
+            $where = 'WHERE tags_category = "0" OR ISNULL(tags_category) OR tags_category = "" ';
         }
         
 
