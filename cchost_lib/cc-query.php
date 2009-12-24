@@ -236,6 +236,26 @@ class CCQuery
     * Helper function for formats during CC_EVENT_QUERY_SETUP
     *
     */
+    function GetURIArg($arg,$value=null)
+    {
+        return (empty($this->_uri_args) || empty($this->_uri_args[$arg])) ? $value : $this->_uri_args[$arg] ;
+    }
+
+
+    /** 
+    * Helper function for formats during CC_EVENT_QUERY_SETUP
+    *
+    */
+    function AddJoin($sql)
+    {
+        return $this->sql_p['joins'][] = $sql;
+    }
+
+
+    /** 
+    * Helper function for formats during CC_EVENT_QUERY_SETUP
+    *
+    */
     function GetSourcesFromDataview($dataview_name)
     {
         if( empty($this->dataview) )
@@ -254,7 +274,6 @@ class CCQuery
     */
     function GetSourcesFromTemplate($template_name)
     {
-
         if( empty($this->dataview) )
         {
             require_once('cchost_lib/cc-dataview.php');
@@ -541,7 +560,8 @@ class CCQuery
 
         foreach( array( 'search', 'tags', 'type', 'ids', 'user', 'remixes', 'sources', 
                          'remixesof', 'score', 'lic', 'remixmax', 'remixmin', 'reccby',  'upload', 'thread',
-                         'reviewee', 'match', 'reqtags','rand', 'recc', 'collab', 'topic', 'minitems', 'pool',
+                         'reviewee', 'match', 'reqtags', 'reqtagop', 'rand', 'recc', 'collab', 'topic',
+                         'minitems', 'pool',
                         ) as $arg )
         {
             if( isset($this->args[$arg]) )
@@ -555,8 +575,10 @@ class CCQuery
 
         if( !empty($this->reqtags) )
         {
+            if( empty($this->reqtagop) || !in_array($this->reqtagop,array('all','any')) )
+                $this->reqtagop = 'all';
             $tagfield = $this->_make_field('tags');
-            $this->where[] = $this->dataview->MakeTagFilter($this->reqtags,'all',$tagfield);
+            $this->where[] = $this->dataview->MakeTagFilter($this->reqtags,$this->reqtagop,$tagfield);
         }
 
         if( !empty($this->tags) )
@@ -861,6 +883,11 @@ class CCQuery
         $this->reqtags = preg_split('/[\s,+]+/',$this->args['reqtags'],-1,PREG_SPLIT_NO_EMPTY);
     }
 
+    function _gen_reqtagop()
+    {
+        $this->reqtagop = $this->args['reqtagop'];
+    }
+
     /*
     * List the remixes of a PERSON
     */
@@ -953,12 +980,12 @@ class CCQuery
     {
         $search_meta = array();
         CCEvents::Invoke( CC_EVENT_SEARCH_META, array(&$search_meta) );
-        $grp = empty($this->args['type']) ? 0 : $this->args['type'];
+        $grp = empty($this->args['smeta']) ? 0 : $this->args['smeta'];
         $ds = $this->args['datasource'];
 
         // added this group just for query searches (probably belongs somewhere else)
         //
-        // usage: api/query?type=uploads_alt&s=QUERY_TEXT
+        // usage: api/query?smeta=uploads_alt&s=QUERY_TEXT
         //
         // This will add the user name fields to the search, otherwise only upload info
         // is searched where type=uploads (which is the default)

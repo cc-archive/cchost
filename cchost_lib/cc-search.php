@@ -90,7 +90,7 @@ class CCSearch
                 'title'      => 'str_search_uploads',
                 'fields'     => array(),
                 'group'      => 'uploads',
-                'match'      => 'upload_name,upload_description,upload_tags',
+                'match'      => "upload_name,upload_description,upload_tags,user_name,user_real_name,REPLACE(upload_tags,'_',' ')",
             ));
         array_unshift($search_meta,
             array(
@@ -166,7 +166,7 @@ class CCSearch
                 if( $meta['group'] == 'all' )
                     continue;
                 $query = new CCQuery();
-                $grp_type = $meta['datasource'] == $meta['group'] ? '' : '&type=' . $meta['group'];
+                $grp_type = $meta['datasource'] == $meta['group'] ? '' : '&smeta=' . $meta['group'];
                 $qs = "search=$search_text&datasource={$meta['datasource']}{$grp_type}&t={$meta['template']}"; 
                 $q = $qs . "&limit={$maxview}&f=html&noexit=1&nomime=1";
                 if( empty($search_type) )
@@ -183,8 +183,9 @@ class CCSearch
                 $query->Query($args);
                 $html = ob_get_contents();
                 ob_end_clean();
+                $ue = urlencode($search_text);
                 $link = (count($query->records) == $maxview) 
-                    ? url_args(ccl('search'),"search_text=$search_text&search_in={$meta['group']}{$search_type_arg}") : '';
+                    ? url_args(ccl('search'),"search_text={$ue}&search_in={$meta['group']}{$search_type_arg}") : '';
                 $total = $query->dataview->GetCount();
                 $grand_total += $total;
                 $results[] = array( 
@@ -212,7 +213,7 @@ class CCSearch
                 global $CC_GLOBALS;
                 $result_limit = 30; // todo: option later
                 CCPage::SetTitle( array( 'str_search_results_from', $meta['title']) );
-                $grp_type = $meta['datasource'] == $meta['group'] ? '' : '&type=' . $meta['group'];
+                $grp_type = $meta['datasource'] == $meta['group'] ? '' : '&smeta=' . $meta['group'];
                 $q = "search={$search_text}&datasource={$meta['datasource']}{$grp_type}&t={$meta['template']}&limit={$result_limit}";
                 if( !empty($search_type) )
                     $q .= '&search_type=' . $search_type;

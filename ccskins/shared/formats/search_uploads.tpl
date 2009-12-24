@@ -13,13 +13,14 @@ function search_uploads_dataview()
 {
     $ccp = ccl('people') . '/';
     $ccu = ccl('files') . '/';
+    $user = cc_fancy_user_sql('user_real_name');
 
     $sql =<<<EOF
 SELECT 
-    upload_id, upload_name, user_real_name,
+    upload_id, upload_name, user_real_name, $user,
     CONCAT( '$ccp', user_name ) as artist_page_url,
     CONCAT( '$ccu', user_name, '/', upload_id ) as file_page_url,
-    LOWER(CONCAT_WS(' ', upload_name, upload_description, upload_tags)) as qsearch
+    LOWER(CONCAT_WS(' ', upload_name, user_real_name, user_name, upload_description, upload_tags)) as qsearch
      %columns% 
 FROM cc_tbl_uploads
 JOIN cc_tbl_user ON upload_user = user_id

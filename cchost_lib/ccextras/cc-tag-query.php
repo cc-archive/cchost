@@ -70,12 +70,7 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
             default:
             {
                 $queryObj->sql_p['order'] = 'tags_tag';
-                // this can't be right...
-                if( !empty($queryObj->_uri_args) &&
-                    empty($queryObj->_uri_args['ord']) )
-                {
-                    $ord = 'ASC';
-                }
+                $ord = $queryObj->GetURIArg('ord','ASC');
                 $deford = 'ASC';
                 break;
             }
@@ -84,17 +79,11 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
             $args['ord'] = $ord = $deford;
             
         $queryObj->sql_p['order'] .= ' ' . $ord;
-        
-        // this can't be right...
-        if( !empty($queryObj->_uri_args) &&
-            !empty($queryObj->_uri_args['limit']) &&       
-            !empty($limit) &&
-            ($queryObj->_uri_args['limit'] != $limit)
-           )
-        {
-            $queryObj->sql_p['limit'] = $queryObj->_uri_args['limit'];
-            $queryObj->_limit_is_valid = true;
-        }
+
+        if( (integer)($limit) === 0 ) // e.g. 'default'
+            $limit = 1200;
+        $queryObj->sql_p['limit'] = $limit;
+        $queryObj->_limit_is_valid = true;
         
         if( !empty($category) )
             $cat = $category;
@@ -102,6 +91,45 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
         if( !empty($cat) )
         {
             $queryObj->where[] = "tags_category = '{$cat}'";
+        }
+        
+        if( !empty($subtype) )
+        {
+            $pair = $subtype;
+        }
+        
+        if( empty($pair) )
+        {
+            if( !empty($min) )
+            {
+                $queryObj->where[] = "tags_count >= {$min}";
+            }
+            
+            $queryObj->columns[] = 'tags_count';
+        }
+        else
+        {
+            if( !empty($min) )
+            {
+                $queryObj->where[] = "tag_pair_count >= {$min}";
+            }
+            
+            $pairs = $opairs = CCTag::TagSplit($pair);
+            
+            foreach( $pairs as $K => $V )
+                $pairs[$K] = "(tag_pair = '{$V}')";
+            $pairs = join( ' OR ', $pairs);
+            $queryObj->where[] = $pairs;
+            $queryObj->AddJoin('cc_tbl_tag_pair ON tags_tag = tag_pair_tag');
+            if( count($opairs) == 1 )
+            {
+                $queryObj->columns[] = 'tag_pair_count as tags_count';                
+            }
+            else
+            {
+                $queryObj->columns[] = 'SUM(tag_pair_count) as tags_count';
+                $queryObj->sql_p['group_by'] = 'tag_pair_tag';
+            }
         }
     }
     elseif( $datasource == 'tag_cat')

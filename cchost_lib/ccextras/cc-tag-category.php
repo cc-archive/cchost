@@ -45,7 +45,7 @@ class CCTagCat
         CCEvents::MapUrl( 'admin/tagcat/cats', array('CCTagCat','AdminCats'), CC_ADMIN_ONLY );
     }
     
-    function _get_paging(&$offset)
+    function _get_paging(&$offset,$show_all=false,$where='')
     {
         $page_size = 50;
         if(empty($_REQUEST['offset']))
@@ -61,12 +61,21 @@ class CCTagCat
             $next = $offset + $page_size;
             
         }
+        $showflag = $show_all ? '&showall=1' : '';
         $link = ccl('admin','tagcat');
-        $plink = url_args( $link, 'offset='.$prev);
+        $plink = url_args( $link, 'offset='.$prev . $showflag);
         $prev_link = empty($offset) ? '' : "<a href=\"{$plink}\" class=\"small_button\">prev</a>";
-        $nlink = url_args( $link, 'offset='.$next);
+        $nlink = url_args( $link, 'offset='.$next . $showflag);
         $next_link = empty($next) ? '' : "<a href=\"{$nlink}\" class=\"small_button\">next</a>";
-        $total = CCDatabase::QueryItem('SELECT COUNT(*) FROM cc_tbl_tags');
+        $total = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_tags {$where}");
+        if( $show_all )
+        {
+            $slink = "<a class=\"small_button\" href=\"{$link}\">only show unassigned tags</a>";
+        }
+        else {
+            $surl = url_args($link,'showall=1');
+            $slink = "<a class=\"small_button\" href=\"{$surl}\">show all (assigned and unnassigned)</a>";
+        }
         $edit_url = $link . '/';
         $help =<<<EOF
 <div style="float:right;margin-right:10px;">
@@ -75,6 +84,7 @@ onclick="document.location = '{$edit_url}' + $('specific_tag').value;">edit</a>
 </div>
 This range of tags: {$offset} to {$next} of {$total}<br />
 {$prev_link} {$next_link}
+<p>{$slink}</p>
 EOF;
         
         return $help;    
@@ -99,7 +109,7 @@ EOF;
         $page->SetTitle($title);
         $cats = CCDatabase::QueryRows('SELECT * FROM cc_tbl_tag_category');
         $opts = array();
-        $opts['0'] = '(none)';
+        $opts[''] = '(none)';
         foreach( $cats as $cat )
             $opts[ $cat['tag_category_id'] ] = $cat['tag_category'];
         $form = new CCForm();
@@ -138,8 +148,20 @@ EOF;
             $this->_cat_for_one_tag($tag);
             return;
         }
-  
-        $GLOBALS['skip_form_word_hack'] = true; // sigh
+
+        $show_all = !empty($_REQUEST['showall']);
+        
+        if( $show_all )
+        {
+            $where = '';
+        }
+        else
+        {
+            $where = 'WHERE tags_category = "0" OR ISNULL(tags_category)';
+        }
+        
+
+        $GLOBALS['skip_form_word_hack'] = true; // sigh. go global search for this if you care
       
         require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/cc-form.php');
@@ -156,14 +178,14 @@ EOF;
         $form->SetColumnHeader($heads);
 
         $opts = array();
-        $opts['0'] = '(none)';
+        $opts[''] = '(none)';
         foreach( $cats as $cat )
             $opts[ $cat['tag_category_id'] ] = cc_strchop($cat['tag_category'],7) . '&nbsp;&nbsp;';
-            
-        $offset = 0;    
-        $help = $this->_get_paging($offset);
         
-        $tags = CCDatabase::QueryRows('SELECT tags_tag,tags_category,tags_count FROM cc_tbl_tags ORDER by tags_count DESC LIMIT 50 OFFSET ' . $offset);
+        $offset = 0;    
+        $help = $this->_get_paging($offset,$show_all,$where);
+        $sql = "SELECT tags_tag,tags_category,tags_count FROM cc_tbl_tags {$where} ORDER by tags_count DESC LIMIT 50 OFFSET {$offset}";
+        $tags = CCDatabase::QueryRows($sql);
 
         $count = count($tags);
         

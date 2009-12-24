@@ -1,23 +1,19 @@
 <?/*
 [meta]
     type = dataview
-    desc = _('Basic tags')
-    name = tags
+    desc = _('Tags that only have categories')
+    name = tags_with_cat
     datasource = tags
 [/meta]
 */
-function tags_dataview() 
+function tags_with_cat_dataview() 
 {
-    // tags_count is added by query engine (see cc-tag-query.php)
-    
     $sql =<<<EOF
-SELECT tags_tag, tag_category
-%columns%
+SELECT tags_count, tags_tag, tag_category
     FROM cc_tbl_tags
-    LEFT OUTER JOIN cc_tbl_tag_category ON tags_category = tag_category_id
+    LEFT JOIN cc_tbl_tag_category ON tags_category = tag_category_id
 %joins%
 %where%
-%group%
 %order%
 %limit%
 EOF;
