@@ -14,7 +14,7 @@
 * represent and warrant to Creative Commons that your use
 * of the ccHost software will comply with the CC-GNU-GPL.
 *
-* $id$
+* $Id$
 *
 */
 
@@ -43,6 +43,7 @@ class CCTagCat
     {
         CCEvents::MapUrl( 'admin/tagcat', array('CCTagCat','AdminTags'), CC_ADMIN_ONLY );
         CCEvents::MapUrl( 'admin/tagcat/cats', array('CCTagCat','AdminCats'), CC_ADMIN_ONLY );
+        CCEvents::MapUrl( 'admin/fixtags', array('CCTagCat','AdminStragglers'), CC_ADMIN_ONLY );
     }
     
     function _get_paging(&$offset,$show_all=false,$where='')
@@ -240,6 +241,72 @@ EOF;
                 $table->Update($tag);
             }
             $page->Prompt($help);
+        }        
+        
+    }
+    
+    function AdminStragglers()
+    {
+        $GLOBALS['skip_form_word_hack'] = true; // sigh. go global search for this if you care
+      
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-form.php');
+        require_once('cchost_lib/cc-admin.php');
+        $title = _('Manage Bad Tags');
+        $admin = new CCAdmin();
+        $admin->BreadCrumbs(true,array('url'=>'','text'=>$title));
+        $page =& CCPage::GetPage();
+        $page->SetTitle($title);
+        $form = new CCGridForm();
+        $heads = array(_('Tag'), _('Rule'),_('Del'), _('Becomes...') );
+        $form->SetColumnHeader($heads);
+        $sql = 'SELECT tags_tag FROM cc_tbl_tags WHERE tags_category = "del"';
+        $rows = CCDatabase::QueryItems($sql);
+        $count = count($rows);
+
+        for( $i = 0; $i < $count; $i++ )
+        {
+            $tag = '_%_' . $rows[$i];
+            $pre = "mi[{$tag}]";
+            
+            $a = array(  
+                array(
+                    'element_name'  => $pre . "[tag]",
+                    'value'      => $tag,
+                    'formatter'  => 'statictext',
+                    'flags'      => CCFF_STATIC ),
+                array(
+                    'element_name'  => $pre . "[makerule]",
+                    'value'      => '',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE ),
+                array(
+                    'element_name'  => $pre . "[delete]",
+                    'value'      => '',
+                    'formatter'  => 'checkbox',
+                    'flags'      => CCFF_NONE ),
+                array(
+                    'element_name'  => $pre . '[rule]',
+                    'value'      => '',
+                    'formatter'  => 'textedit',
+                    'flags'      => CCFF_NONE),
+                );
+
+            $form->AddGridRow($tag,$a);
+        
+        }
+
+        if( empty($_POST) || !$form->ValidateFields() )
+        {
+            $page->AddForm( $form->GenerateForm() );
+        }
+        else
+        {
+            $str = serialize($_POST);
+            $f = fopen('fix_tags.serialized_php','w');
+            fwrite($f,$str);
+            fclose($f);
+            $page->Prompt('Changes have been saved');
         }        
         
     }
