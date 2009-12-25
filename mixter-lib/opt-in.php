@@ -1,6 +1,6 @@
 <?
 /*
-  $Id%
+  $Id$
 */
 
 define('CC_MIXTER_OWNER', 'ArtisTech Media');

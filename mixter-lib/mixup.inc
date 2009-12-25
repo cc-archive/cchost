@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 function mixup_helper_send_mail($msg,$user_id,$subject)

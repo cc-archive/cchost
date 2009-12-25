@@ -1,7 +1,7 @@
 <?php
 
 /*
-  $Id%
+  $Id$
 */
 
 CCEvents::AddHandler( CC_EVENT_MAP_URLS, 'cc_mixter_dump_map_urls');

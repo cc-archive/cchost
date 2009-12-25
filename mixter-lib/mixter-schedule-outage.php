@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 $sched_inc = dirname(__FILE__) . '/mixter-schedule-outage.inc';

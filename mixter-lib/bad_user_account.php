@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 CCEvents::AddHandler( CC_EVENT_MAP_URLS, 'bad_user_url_map' );

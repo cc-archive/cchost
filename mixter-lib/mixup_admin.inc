@@ -1,6 +1,6 @@
 <?
 /*
-  $Id%
+  $Id$
 */
 
 function mixup_admin_helper($cmd,$arg)

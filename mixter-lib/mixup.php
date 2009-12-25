@@ -1,7 +1,7 @@
 <?php
 
 /*
-  $Id%
+  $Id$
 */
 
 define('CC_EVENT_FORMAT_MIXUP', 'fmtmixup' );

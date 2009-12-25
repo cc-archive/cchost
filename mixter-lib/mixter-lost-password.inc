@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 require_once('cchost_lib/cc-login.php');

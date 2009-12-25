@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 if( !defined('IN_CC_HOST') )

@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 CCEvents::AddAlias('lostpassword','atmlostpassword');

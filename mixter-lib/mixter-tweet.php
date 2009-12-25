@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 $tweet_inc = dirname(__FILE__) . '/mixter-tweet.inc';

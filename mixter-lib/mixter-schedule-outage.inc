@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 
@@ -108,8 +108,7 @@ EOF;
     $form->SetHelpText($help);
     $me = CCUser::CurrentUserField('user_real_name');
     $deftext =<<<EOF
-ccMixter will be going offline [when_goes_here] for site maintenance. Please make sure to finish
-up any uploads, reviews, forums posts, etc. well before that.
+ccMixter will be going offline [when_goes_here] for site maintenance. Please make sure to finish up any uploads, reviews, forums posts, etc. well before that.
 
 We're hoping to be back up and running in [duration_goes_here];
 

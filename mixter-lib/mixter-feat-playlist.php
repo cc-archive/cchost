@@ -1,7 +1,7 @@
 <?
 
 /*
-  $Id%
+  $Id$
 */
 
 CCEvents::AddHandler(CC_EVENT_FILTER_CART_MENU,   'playlist_feature_OnFilterCartMenu');
