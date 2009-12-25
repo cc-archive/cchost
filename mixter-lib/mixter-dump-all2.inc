@@ -1,5 +1,9 @@
 <?php
 
+/*
+  $Id%
+*/
+
 // MAIN
 {
     error_reporting(E_ALL);

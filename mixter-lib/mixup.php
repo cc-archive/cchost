@@ -1,5 +1,9 @@
 <?php
 
+/*
+  $Id%
+*/
+
 define('CC_EVENT_FORMAT_MIXUP', 'fmtmixup' );
 
 define('CC_MIXUP_MODE_DISABLED',  1 );

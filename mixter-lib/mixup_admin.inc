@@ -1,4 +1,8 @@
 <?
+/*
+  $Id%
+*/
+
 function mixup_admin_helper($cmd,$arg)
 {
     require_once('cchost_lib/cc-page.php');

@@ -248,7 +248,7 @@ class CCConfigs extends CCTable
 
         // allow admins to turn off user interface
         //
-        if( $CC_GLOBALS['site-disabled'] )
+        if( !defined('CC_HOST_CMD_LINE') && $CC_GLOBALS['site-disabled'] )
             cc_check_site_enabled();
     }
 

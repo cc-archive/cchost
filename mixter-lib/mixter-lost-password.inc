@@ -1,5 +1,9 @@
 <?
 
+/*
+  $Id%
+*/
+
 require_once('cchost_lib/cc-login.php');
 
 class ATMLogin extends CCLogin

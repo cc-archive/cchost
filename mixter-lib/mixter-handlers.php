@@ -1,5 +1,8 @@
 <?
 
+/*
+  $Id%
+*/
 
 if( !defined('IN_CC_HOST') )
    die('Welcome to CC Host');

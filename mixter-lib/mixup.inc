@@ -1,5 +1,9 @@
 <?
 
+/*
+  $Id%
+*/
+
 function mixup_helper_send_mail($msg,$user_id,$subject)
 {
     $user_email = CCDatabase::QueryItem('SELECT user_email FROM cc_tbl_user WHERE user_id = ' . $user_id);

@@ -1,5 +1,9 @@
 <?
 
+/*
+  $Id%
+*/
+
 error_reporting(E_ALL);
 
 // This module was created to try to catch the dreaded version auto-change

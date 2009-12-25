@@ -1,4 +1,7 @@
 <?
+/*
+  $Id%
+*/
 
 define('CC_MIXTER_OWNER', 'ArtisTech Media');
 define('CC_OPT_IN_FLAG','opt-in-done');

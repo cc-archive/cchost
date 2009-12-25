@@ -1,5 +1,9 @@
 <?
 
+/*
+  $Id%
+*/
+
 error_reporting(E_ALL);
 
 if( !empty($_GET['bucky_format']) )

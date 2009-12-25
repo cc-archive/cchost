@@ -1,5 +1,8 @@
 <?
 
+/*
+  $Id%
+*/
 
 CCEvents::AddHandler( CC_EVENT_MAP_URLS, 'bad_user_url_map' );
 //CCEvents::AddHandler( CC_EVENT_APP_INIT, 'opt_in_app_init' );

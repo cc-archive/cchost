@@ -1,5 +1,9 @@
 <?
 
+/*
+  $Id%
+*/
+
 $tweet_inc = dirname(__FILE__) . '/mixter-tweet.inc';
 
 CCEvents::AddHandler(CC_EVENT_UPLOAD_MENU, 'tweet_onuploadmenu', $tweet_inc );
