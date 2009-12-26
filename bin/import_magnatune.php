@@ -4,6 +4,7 @@
 /*
     SCRIPT FOR IMPORTING MAGNATUNE SONG INFO TABLE
 
+    $Id$
 */
 
 error_reporting(E_ALL);

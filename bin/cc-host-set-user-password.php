@@ -1,5 +1,7 @@
 <?php
 
+/* $Id$ */
+
 chdir( dirname(dirname(__FILE__)) );
 
 define('IN_CC_HOST',1);
