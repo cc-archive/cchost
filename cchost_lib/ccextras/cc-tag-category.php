@@ -46,9 +46,10 @@ class CCTagCat
         CCEvents::MapUrl( 'admin/fixtags', array('CCTagCat','AdminStragglers'), CC_ADMIN_ONLY );
     }
     
-    function _get_paging(&$offset,$show_all=false,$where='')
+    function _get_paging(&$offset,$show_all=false,$where='',$is_search='')
     {
         $page_size = 50;
+
         if(empty($_REQUEST['offset']))
         {
             $offset = 0;
@@ -62,32 +63,42 @@ class CCTagCat
             $next = $offset + $page_size;
             
         }
-        $showflag = $show_all ? '&showall=1' : '';
+
         $link = ccl('admin','tagcat');
-        $plink = url_args( $link, 'offset='.$prev . $showflag);
-        $prev_link = $show_all && empty($offset) ? '' : "<a href=\"{$plink}\" class=\"small_button\">prev</a>";
-        $nlink = url_args( $link, 'offset='.$next . $showflag);
-        $next_link = empty($next) ? '' : "<a href=\"{$nlink}\" class=\"small_button\">next</a>";
-        $total = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_tags {$where}");
-        if( $show_all )
-        {
-            $slink = "<a class=\"small_button\" href=\"{$link}\">only show unassigned tags</a>";
-        }
-        else {
-            $surl = url_args($link,'showall=1');
-            $slink = "<a class=\"small_button\" href=\"{$surl}\">show all (assigned and unnassigned)</a>";
-        }
         $edit_url = $link . '/';
+        $search_url = $link . '?search=';
+
         $help =<<<EOF
 <div style="float:right;margin-right:10px;">
 specific tag: <input id="specific_tag" style="width:10em" /> <a class="small_button" href="javascript://" id="get_tag"
-onclick="document.location = '{$edit_url}' + $('specific_tag').value;">edit</a>
+onclick="document.location = '{$edit_url}' + $('specific_tag').value;">edit</a><br /><br />
+search for: <input id="search_term" style="width:10em" /><a class="small_button" href="javascript://" id="get_search"
+onclick="document.location = '{$search_url}' + $('search_term').value;">find</a>
 </div>
+EOF;
+        $total = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_tags {$where}");
+        if( $total > $page_size )
+        {
+            $showflag = $show_all ? '&showall=1' : '';
+            $plink = url_args( $link, 'offset='.$prev . $showflag);
+            $prev_link = $show_all && empty($offset) ? '' : "<a href=\"{$plink}\" class=\"small_button\">prev</a>";
+            $nlink = url_args( $link, 'offset='.$next . $showflag);
+            $next_link = empty($next) ? '' : "<a href=\"{$nlink}\" class=\"small_button\">next</a>";
+            if( $show_all )
+            {
+                $slink = "<a class=\"small_button\" href=\"{$link}\">only show unassigned tags</a>";
+            }
+            else {
+                $surl = url_args($link,'showall=1');
+                $slink = "<a class=\"small_button\" href=\"{$surl}\">show all (assigned and unnassigned)</a>";
+            }
+            $help .=<<<EOF
 This range of tags: {$offset} to {$next} of {$total}<br />
 {$prev_link} {$next_link}
 <p>{$slink}</p>
 EOF;
-        
+        }
+    
         return $help;    
     }
     
@@ -144,6 +155,7 @@ EOF;
     {
         if( !empty($tag) )
             $tag = CCUtil::StripText($tag);
+            
         if( !empty($tag) )
         {
             $this->_cat_for_one_tag($tag);
@@ -152,13 +164,20 @@ EOF;
 
         $show_all = !empty($_REQUEST['showall']);
         
-        if( $show_all )
+        $where = '';
+        if( !$show_all )
         {
-            $where = '';
-        }
-        else
-        {
-            $where = 'WHERE tags_category = "0" OR ISNULL(tags_category) OR tags_category = "" ';
+            if( !empty($_REQUEST['search']) )
+            {
+                $search_term = CCUtil::StripText($_REQUEST['search'] );
+                if( !empty($search_term) ) 
+                {
+                    $where = "WHERE tags_tag LIKE '%{$search_term}%'";
+                }
+            }
+            
+            if( empty($where) )
+                $where = 'WHERE tags_category = "0" OR ISNULL(tags_category) OR tags_category = "" ';   
         }
         
 

@@ -636,14 +636,20 @@ class CCTagEvents
     
     function AdminProperties()
     {
-        $title = _('Tag Properties');
+        require_once('cchost_lib/cc-page.php');
+        require_once('cchost_lib/cc-form.php');
         require_once('cchost_lib/cc-admin.php');
-        CCAdmin::BreadCrumbs(true,array('url'=>ccl('admin','tags'),'text'=>_('Manage Tags')),array('url'=>'','text'=>$title));
-        CCPage::SetTitle($title);
+        $title = _('Tag Properties');
+        $admin = new CCAdmin();
+        $admin->BreadCrumbs(true,array('url'=>ccl('admin','tags'),'text'=>_('Manage Tags')),array('url'=>'','text'=>$title));
+        $page =& CCPage::GetPage();
+        $page->SetTitle($title);
+        
+
         $form = new CCAdminTagsForm();
         if( empty($_POST['admintags']) || !$form->ValidateFields() )
         {
-            CCPage::AddForm( $form->GenerateForm() );
+            $page->AddForm( $form->GenerateForm() );
         }
         else
         {
@@ -713,10 +719,12 @@ class CCTagEvents
                 $columns = array( 'tag_alias_tag', 'tag_alias_alias' );
                 $aliases->InsertBatch($columns,$values);
                 $run = true;
-                CCPage::Prompt(_("Changes Saved"));
+                $page->Prompt(_("Changes Saved"));
             }
             
-            CCUtil::SendBrowserTo( ccl('admin','tags','reset') );
+            $url = ccl('admin','tags','reset');
+            $text = "Rules have been saved, but you need to run <a href=\"{$url}\">Recalculate all tags</a> commands to have them go in affect.";
+            $page->Prompt($text);
         }
     }
 
