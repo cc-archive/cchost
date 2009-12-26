@@ -50,7 +50,7 @@ while( $row = mysql_fetch_array($qr) )
         $atags = CCDatabase::QueryItems($sql);
     }
     
-    $ex['usertags'] = join(',',$atags);
+    $ex['usertags'] = join(',',array_unique($atags));
     $user_tags = join(',', array_unique( split(',',join(',', array($ex['ccud'],$ex['usertags'],$ex['systags'] )))));
     $uargs = array();
     $uargs['upload_id']    = $row['upload_id'];
