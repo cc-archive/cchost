@@ -169,9 +169,11 @@ EOF;
         require_once('cchost_lib/cc-admin.php');
         $title = _('Assign Tag Categories');
         $admin = new CCAdmin();
-        $admin->BreadCrumbs(true,array('url'=>'','text'=>$title));
+        $admin->BreadCrumbs(true,array('url'=>ccl('admin','tags'),'text'=>_('Manage Tags')),array('url'=>'','text'=>$title));
         $page =& CCPage::GetPage();
         $page->SetTitle($title);
+        
+        
         $form = new CCGridForm();
         $cats = CCDatabase::QueryRows('SELECT * FROM cc_tbl_tag_category');
 
@@ -254,19 +256,24 @@ EOF;
         require_once('cchost_lib/cc-admin.php');
         $title = _('Manage Bad Tags');
         $admin = new CCAdmin();
-        $admin->BreadCrumbs(true,array('url'=>'','text'=>$title));
+        $admin->BreadCrumbs(true,array('url'=>ccl('admin','tags'),'text'=>_('Manage Tags')),array('url'=>'','text'=>$title));
         $page =& CCPage::GetPage();
         $page->SetTitle($title);
         $form = new CCGridForm();
-        $heads = array(_('Tag'), _('Rule'),_('Del'), _('Becomes...') );
+        $heads = array(_('Tag'), _('Reserve'),_('Becomes...') );
         $form->SetColumnHeader($heads);
-        $sql = 'SELECT tags_tag FROM cc_tbl_tags WHERE tags_category = "del"';
+        $sql = 'SELECT tags_tag FROM cc_tbl_tags WHERE tags_category = "del" AND tags_type = ' . CCTT_USER;
         $rows = CCDatabase::QueryItems($sql);
         $count = count($rows);
 
         for( $i = 0; $i < $count; $i++ )
         {
-            $tag = '_%_' . $rows[$i];
+            // some tags (like 'language') map to stuff in
+            // $GLOBALS which is where strings lookups happen
+            // and cause conflcts. We prepend a goo to avoid
+            // these conflicts
+            
+            $tag = '___' . $rows[$i];
             $pre = "mi[{$tag}]";
             
             $a = array(  
@@ -277,11 +284,6 @@ EOF;
                     'flags'      => CCFF_STATIC ),
                 array(
                     'element_name'  => $pre . "[makerule]",
-                    'value'      => '',
-                    'formatter'  => 'checkbox',
-                    'flags'      => CCFF_NONE ),
-                array(
-                    'element_name'  => $pre . "[delete]",
                     'value'      => '',
                     'formatter'  => 'checkbox',
                     'flags'      => CCFF_NONE ),
@@ -302,15 +304,54 @@ EOF;
         }
         else
         {
-            $str = serialize($_POST);
-            $f = fopen('fix_tags.serialized_php','w');
-            fwrite($f,$str);
-            fclose($f);
-            $page->Prompt('Changes have been saved');
+                $data = $_POST['mi'];
+                $reserved = array();;
+                $aliases = array();
+                foreach( $data as $K => $V )
+                {
+                    $tag = substr($K,3);
+                    foreach( $V as $k2 => $v2 )
+                    {
+                        if( $k2 == 'makerule' )
+                        {
+                            $reserved[] = $tag;
+                            break;
+                        }
+                        if( empty($v2) )
+                            continue;
+                        if( $k2 == 'rule' )
+                        {
+                            if( $v2 == '_ ' )
+                            {
+                                $v2 =  str_replace('_',',',$v2);
+                                break;
+                            }
+                            $aliases[] = array( $tag, $v2 );
+                            break;
+                        }
+                    }
+                }
+                
+                if( !empty($aliases) )
+                {
+                    $table = new CCTable('cc_tbl_tag_alias','tag_alias_tag');
+                    $columns = array( 'tag_alias_tag', 'tag_alias_alias');
+                    $table->InsertBatch($columns, $aliases);
+                }
+                
+                $ttype = CCTT_ADMIN;
+                foreach( $reserved as $R )
+                {
+                    $sql ="INSERT INTO cc_tbl_tags SET tags_tag = '{$R}', tags_type = {$ttype} " .
+                             "ON DUPLICATE KEY UPDATE tags_type = {$ttype}";
+                    CCDatabase::Query($sql);
+                }
+                CCUtil::SendBrowserTo( ccl('admin','tags','properties' ) );
+                
         }        
         
     }
-    
+
     function AdminCats()
     {
         $GLOBALS['skip_form_word_hack'] = true; // sigh
@@ -320,9 +361,10 @@ EOF;
         require_once('cchost_lib/cc-admin.php');
         $title = _('Manage Tag Categories');
         $admin = new CCAdmin();
-        $admin->BreadCrumbs(true,array('url'=>'','text'=>$title));
+        $admin->BreadCrumbs(true,array('url'=>ccl('admin','tags'),'text'=>_('Manage Tags')),array('url'=>'','text'=>$title));
         $page =& CCPage::GetPage();
         $page->SetTitle($title);
+    
         $form = new CCGridForm();
         $heads = array(_('Delete'), _('Name'), _('ID') );
         $form->SetColumnHeader($heads);
@@ -409,55 +451,6 @@ EOF;
 
     }
 
-/*    
-    function UpdateSubmitType($tag,$tags)
-    {
-        $table = new CCTable('cc_tbl_tag_pair','tag_pair');
-        $tags = split(',',$tags);
-        $args['tag_pair'] = $tag;
-        $args['tag_pair_count'] = 1;
-        foreach( $tags as $T )
-        {
-            $where = "tag_pair = '{$type} AND tag_pair_tag = '{$T}'";
-            $count = CCDatabase::QueryItem("SELECT tag_pair_count FROM cc_tbl_tag_pairs WHERE {$where}");
-            if( $count )
-            {
-                $arg = array();
-                $arg['tag_pair_count'] = $count + 1;
-                $table->UpdateWhere($arg,$where,false);
-            }
-            else
-            {
-                $args['tag_pair_tag'] = $T;
-                $table->Update($args);
-            }
-        }
-    }
-*/
-/*
-    function RemoveSubmitType($type,$tags)
-    {
-        $table = new CCTable('cc_tbl_tag_pairs','tag_pairs');
-        $tags = split(',',$tags);
-        $args['tag_pair'] = $type;
-        foreach( $tags as $T )
-        {
-            $where = "tag_pair = '{$type} AND tag_pair_tag = '{$T}'";
-            $count = CCDatabase::QueryItem("SELECT tag_pair_count FROM cc_tbl_tag_pairs WHERE {$where}");
-            if( $count == 1 )
-            {
-                $table->DeleteWhere($where);
-            }
-            else
-            {
-                $args['tag_pair_tag'] = $T;
-                $args['tag_pair_tag'] = $count - 1;
-                $table->Update($args);
-            }
-        }
-    }
-
-*/
 }
 
 ?>

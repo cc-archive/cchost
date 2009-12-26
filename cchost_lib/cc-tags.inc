@@ -366,6 +366,7 @@ class CCAdminTagsForm extends CCForm
         //
         $this->CCForm();
         $aliases =& CCTagAliases::GetTable();
+        $aliases->SetSort('tag_alias_alias');
         $rows = $aliases->QueryRows('');
         $text = '';
         foreach( $rows as $row )
@@ -404,12 +405,6 @@ class CCAdminTagsForm extends CCForm
                 'formatter' =>  'textarea',
                 'value'     => $text,
                 'flags'     => CCFF_POPULATE
-                ),
-            'runnow' => array(
-                'label'     => _('Run Now'),
-                'form_tip'  => _('Check this to run the alias rules now.'),
-                'formatter' =>  'checkbox',
-                'flags'     => CCFF_NONE
                 ),
             'reserved' => array(
                 'label'     => _('Reserved Tags'),
@@ -459,33 +454,14 @@ class CCTagEvents
 {
     function Reset()
     {
-        $tags =& CCTags::GetTable();
-        $tags->DeleteWhere('1');
-        $ups = CCDatabase::Query('SELECT upload_id,upload_tags,upload_extra FROM cc_tbl_uploads');
-
-        while( $row = mysql_fetch_row($ups) )
-        {
-            // [ccud] => media,acappella
-            // [usertags] => female_vocals,melody
-            // [systags] => sampling_plus,audio,mp3,44k,mono,128kbps
-            $extra = @unserialize($row[2]);
-            if( !is_array($extra) )
-            {
-                //CCDebug::PrintVar($row);
-                continue;
-            }
-            if( $extra['ccud'] )
-                $tags->SmartAdd( $extra['ccud'], CCTT_ADMIN );
-            if( $extra['usertags'] )
-                $tags->SmartAdd( $extra['usertags'], CCTT_USER );
-            if( $extra['systags'] )
-                $tags->SmartAdd( $extra['systags'], CCTT_SYSTEM );
-
-        }
-
-        CCUtil::SendBrowserTo( ccl('tags') );
+        print "<pre>This is will completely cleanup tags and tag counts for you entire system.\nIt may take a while...\n\n";
+        require_once('cchost_lib/cc-tags-recalc.php');
+        print '</pre>';
+        $url = ccl('admin','tags');
+        print "Go back to <a href=\"{$url}\">Manage Tags</a>\n";
+        exit;
     }
-
+    
     function OnBrowseTags($tagstr='')
     {
         require_once('cchost_lib/cc-page.php');
@@ -509,69 +485,6 @@ class CCTagEvents
         $args= $query->ProcessAdminArgs($q);
         $query->Query($args);
         return;
-    }
-
-    function _foowhiz()
-    {
-        $q = 'tags=' . $tagstr;
-        $query = new CCQuery();
-        $args= $query->ProcessAdminArgs($q);
-        $query->Query($args);
-        return;
-        
-        global $CC_GLOBALS;
-
-        require_once('cchost_lib/cc-tags.php');
-        $currtags = CCTag::TagSplit($tagstr);
-
-        // All tags ('+')
-        //
-        $all_tags = array();
-        $count = count($records);
-        for( $i = 0; $i < $count; $i++ )
-        {
-            if( $records[$i]['upload_tags'] )
-                $all_tags[] = $records[$i]['upload_tags'];
-        }
-        $all_tags = implode(',',$all_tags);
-        $all_tags = array_unique( CCTag::TagSplit($all_tags) );
-        $alltags  = array_diff($all_tags,$currtags);
-        sort($alltags);
-        CCPage::PageArg('all_tags', $alltags);
-
-        // 'Minus tags'
-        //
-        $minustags = array();
-        if( count($currtags) == 1 )
-        {
-            $minustags[] = array( 'url' => ccl('tags'),
-                                  'tag' => $tagstr );
-        }
-        else
-        {
-            foreach( $currtags as $currtag )
-            {
-                $diff = array_diff($currtags,array($currtag));
-                $diff = implode('+',$diff);
-                $minustags[] = array( 'url' => ccl('tags',$diff),
-                                      'tag' => $currtag );
-            }
-        }
-
-        CCPage::PageArg("minus_tags", $minustags);
-
-        // Base URLs
-        $base_addtag_url = ccl('tags', urlencode($tagstr) . '+');
-        CCPage::PageArg("base_addtag_url", $base_addtag_url);
-        CCPage::PageArg("base_tag_url", ccl('tags'));
-        $taghelp = strlen($tagstr) > 10 ? substr($tagstr,0,8) . '...' : $tagstr;
-
-        /*
-        require_once('cchost_lib/cc-feeds.php');
-
-        CCFeeds::AddFeedLinks($tagstr,'',_('Tags') . ': ' . $taghelp );
-        */
-
     }
 
     function ShowAllTags()
@@ -687,11 +600,45 @@ class CCTagEvents
             CC_ADMIN_ONLY, ccs(__FILE__), '', _('Resync all tag counts (slow)'), CC_AG_TAGS);
     }
 
-    function Admin()
+    function Admin($props='')
     {
-        $title = _('Admin') . ' ' . _('Tags');
+        if( $props == 'properties' )
+        {
+            return $this->AdminProperties();
+        }
+        
+        require_once('cchost_lib/cc-page.php');
         require_once('cchost_lib/cc-admin.php');
+        $title = _("Manage Tags");
         CCAdmin::BreadCrumbs(true,array('url'=>'','text'=>$title));
+        CCPage::SetTitle($title);
+
+        $args =
+            array(
+                array( 'action' => ccl( 'admin', 'tags', 'properties' ),
+                       'menu_text' => _('Tag Properties'),
+                       'help' => _('Rules tag translations, reserved tags, etc. Will re-calculate tags for the entire system.') ),
+                array( 'action' => ccl( 'admin', 'tagcat','cats' ),
+                       'menu_text' => _('Create Tag Categories'),
+                       'help' => _('Create and edit tag categories') ),
+                array( 'action' => ccl( 'admin', 'tagcat' ),
+                       'menu_text' => _('Assign Tag Categories'),
+                       'help' => _('Assign tags into categories') ),
+                array( 'action' => ccl( 'admin', 'fixtags' ),
+                       'menu_text' => _('Fixed Flagged Tags'),
+                       'help' => _('Manual tag clean up of tags which have been flagged') ),
+                array( 'action' => ccl( 'admin', 'tags', 'reset' ),
+                       'menu_text' => _('Recalculate all tags'),
+                       'help' => _('Reset tag counters, apply tag rules and categories (already part of <b>Properties</b>)') ),
+               );
+        CCPage::PageArg('client_menu',$args,'print_client_menu');
+    }
+    
+    function AdminProperties()
+    {
+        $title = _('Tag Properties');
+        require_once('cchost_lib/cc-admin.php');
+        CCAdmin::BreadCrumbs(true,array('url'=>ccl('admin','tags'),'text'=>_('Manage Tags')),array('url'=>'','text'=>$title));
         CCPage::SetTitle($title);
         $form = new CCAdminTagsForm();
         if( empty($_POST['admintags']) || !$form->ValidateFields() )
@@ -748,6 +695,7 @@ class CCTagEvents
             $text = $form->GetFormValue('aliases');
             if( !empty($text) )
             {
+                $left_side = array();
                 $tuples = split("\n",$text);
                 $values = array();
                 foreach( $tuples as $tuple )
@@ -757,47 +705,18 @@ class CCTagEvents
 
                     $arr = explode('=>',$tuple);
                     $arr = array_map('trim',$arr);
-                    if( count($arr) != 2 || empty($arr[0]) || empty($arr[1]) )
+                    if( count($arr) != 2 || empty($arr[0]) || empty($arr[1]) || in_array($arr[0],$left_side) )
                         continue;
                     $values[] = $arr;
+                    $left_side[] = $arr[0];
                 }
                 $columns = array( 'tag_alias_tag', 'tag_alias_alias' );
                 $aliases->InsertBatch($columns,$values);
                 $run = true;
                 CCPage::Prompt(_("Changes Saved"));
             }
-
-            $run_requested = !empty($_POST['runnow']);
-
-            if( $run )
-            {
-                if( $run_requested )
-                {
-                    /* slow way:
-                    $uploads =& CCUploads::GetTable();
-                    $ids = $uploads->QueryKeys();
-                    foreach($ids as $id)
-                    {
-                        CCUploadAPI::_recalc_upload_tags( $id );
-                    }
-                    */
-                    $ups = CCDatabase::Query('SELECT upload_id,upload_extra FROM cc_tbl_uploads');
-                    while( $row = mysql_fetch_row($ups) )
-                    {
-                        $extra = unserialize($row[1]);
-                        if( empty($extra['usertags']) )
-                            continue;
-                        require_once('cchost_lib/cc-uploadapi.php');
-                        CCUploadAPI::_recalc_upload_tags( $row[0] );
-                    }
-
-                    CCPage::Prompt(_('Tags updated with new alias rules'));
-                }
-                else
-                {
-                    CCPage::Prompt(_('Tags settings were updated but new alias rules were not performed'));
-                }
-            }
+            
+            CCUtil::SendBrowserTo( ccl('admin','tags','reset') );
         }
     }
 
