@@ -1,4 +1,5 @@
 <?
+/* $Id$ */
 
 
 if( empty($argv[1]) )

@@ -1,5 +1,5 @@
 <?
-/* $Id */
+/* $Id$ */
 
 define('CC_HOST_CMD_LINE', 1 );
 $admin_id = 9;

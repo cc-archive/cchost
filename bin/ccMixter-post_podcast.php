@@ -2,6 +2,9 @@
 /*
     This script is used to post a podcast topic
     where the podcast file (mp3) is already built
+
+    $Id$ 
+
 */
 
 if( empty($argv[3]) )
