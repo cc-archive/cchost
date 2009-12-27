@@ -46,10 +46,46 @@ class CCTagCat
         CCEvents::MapUrl( 'admin/fixtags', array('CCTagCat','AdminStragglers'), CC_ADMIN_ONLY );
     }
     
-    function _get_paging(&$offset,$show_all=false,$where='',$is_search='')
+    function _get_paging(&$offset,$show_all=false,$where='',$search_term='')
     {
+        /*
+            CONDITIONS:
+            
+            axis 1:
+                Inital form show
+                On submit
+                
+            axis 2:
+                Showing all
+                Showing unassigned only:
+                Showing search results
+         
+        */
+        
         $page_size = 50;
 
+        $showflag = $show_all ? '&showall=1' : '';
+
+        $help = '';
+
+        if( $show_all )
+        {
+            $text = '<p>Results for all tags</p>';
+        }
+        else
+        {
+            if( $search_term )
+            {
+                $text = "<p>Results for search term: <i>{$search_term}</i></p>";
+            }
+            else
+            {
+                $text = '<p>Results for all unassigned tags</p>';
+            }
+        }
+        
+        $help .= $text;
+        
         if(empty($_REQUEST['offset']))
         {
             $offset = 0;
@@ -68,103 +104,92 @@ class CCTagCat
         $edit_url = $link . '/';
         $search_url = $link . '?search=';
 
-        $help =<<<EOF
-<div style="float:right;margin-right:10px;">
-specific tag: <input id="specific_tag" style="width:10em" /> <a class="small_button" href="javascript://" id="get_tag"
-onclick="document.location = '{$edit_url}' + $('specific_tag').value;">edit</a><br /><br />
+        $help .=<<<EOF
+<div style="float:right;margin-right:10%;">
 search for: <input id="search_term" style="width:10em" /><a class="small_button" href="javascript://" id="get_search"
 onclick="document.location = '{$search_url}' + $('search_term').value;">find</a>
 </div>
 EOF;
+        $ord = empty($_REQUEST['order']) ? '' : 'order=' . urlencode($_REQUEST['order']);
+        $xord = $ord ? '&' . $ord : '';
+
+        
+        $buttons = array();
+        
         $total = CCDatabase::QueryItem("SELECT COUNT(*) FROM cc_tbl_tags {$where}");
+        $help .= sprintf("<p>This range of tags: %d to %d (of %d)</p>",$offset,min($total,$next),$total);
+
+        $search_param = $search_term ? '&search=' . urlencode($search_term) : '';
+        
         if( $total > $page_size )
         {
-            $showflag = $show_all ? '&showall=1' : '';
-            $plink = url_args( $link, 'offset='.$prev . $showflag);
-            $prev_link = $show_all && empty($offset) ? '' : "<a href=\"{$plink}\" class=\"small_button\">prev</a>";
-            $nlink = url_args( $link, 'offset='.$next . $showflag);
-            $next_link = empty($next) ? '' : "<a href=\"{$nlink}\" class=\"small_button\">next</a>";
-            if( $show_all )
+            if( !empty($offset) )
             {
-                $slink = "<a class=\"small_button\" href=\"{$link}\">only show unassigned tags</a>";
+                $plink = url_args( $link, 'offset='.$prev . $showflag . $xord . $search_param );
+                $buttons[] = "<a href=\"{$plink}\" class=\"small_button\">prev</a>";
             }
-            else {
-                $surl = url_args($link,'showall=1');
-                $slink = "<a class=\"small_button\" href=\"{$surl}\">show all (assigned and unnassigned)</a>";
+        }
+
+        if( !empty($_POST) )
+        {
+            if( $show_all || $search_term )
+            {
+                $text = 're-display';
             }
-            $help .=<<<EOF
-This range of tags: {$offset} to {$next} of {$total}<br />
-{$prev_link} {$next_link}
-<p>{$slink}</p>
-EOF;
+            else
+            {
+                $text = 'next batch';
+            }
+            $plink = url_args( $link, 'offset='.$offset . $showflag . $xord . $search_param );
+            $buttons[] = "<a href=\"{$plink}\" class=\"small_button\">{$text}</a>";                
+        }
+        
+        if( $total > $page_size && ($next < $total) )
+        {
+            if( !empty($next) && (empty($_POST) || $show_all || $search_term) )
+            {
+                $nlink = url_args( $link, 'offset='.$next . $showflag .  $xord . $search_param );
+                $buttons[] = "<a href=\"{$nlink}\" class=\"small_button\">next</a>";
+            }
         }
     
-        return $help;    
-    }
-    
-    function _cat_for_one_tag($tag)
-    {
-        $tag_info = CCDatabase::QueryRow('SELECT tags_tag,tags_category FROM cc_tbl_tags WHERE tags_tag="'.$tag.'"');
-        if( empty($tag_info) )
+        if( $show_all || $search_term )
         {
-            CCUtil::Send404();
-            return;
+            $buttons[] = "<a class=\"small_button\" href=\"{$link}\">show unassigned tags</a>";
         }
-        require_once('cchost_lib/cc-page.php');
-        require_once('cchost_lib/cc-form.php');
-        require_once('cchost_lib/cc-admin.php');
-        $title1 = _('Assign Tag Categories');
-        $title = _('Assign Tag Category for ') . $tag;
-        $admin = new CCAdmin();
-        $admin->BreadCrumbs(true,array( 'url'=>ccl('admin','tagcat'),'text'=>$title1 ),array('url'=>'','text'=>$title));
-        $page =& CCPage::GetPage();
-        $page->SetTitle($title);
-        $cats = CCDatabase::QueryRows('SELECT * FROM cc_tbl_tag_category');
-        $opts = array();
-        $opts[''] = '(none)';
-        foreach( $cats as $cat )
-            $opts[ $cat['tag_category_id'] ] = $cat['tag_category'];
-        $form = new CCForm();
-        $fields = array(
-            'tags_category' =>
-                array(
-                    'label' => "Tag category for {$tag}",
-                    'options' => $opts,
-                    'value' => $tag_info['tags_category'],
-                    'formatter' => 'select',
-                    'flags' => CCFF_NONE
-                )
-        );
-        $form->AddFormFields($fields);
-        if( empty($_POST) || !$form->ValidateFields() )
+        
+        if( !$show_all || $search_term )
         {
-            $page->AddForm( $form->GenerateForm() );
+            $surl = url_args($link,'showall=1' . $xord );
+            $buttons[] = "<a class=\"small_button\" href=\"{$surl}\">show all tags</a>";
+        }
+
+        if( empty($ord) )
+        {
+            $ourl = url_args($link, ($show_all ? 'showall=1&' : '') . 'order=tags_tag%20asc' . $search_param );
+            $olink = "<a class=\"small_button\" href=\"{$ourl}\">sort by tag</a>";
         }
         else
         {
-            $form->GetFormValues($values);
-            $values['tags_tag'] = $tag;
-            $table = new CCTable('cc_tbl_tags','tags_tag');
-            $table->Update($values);
-            $page->Prompt(_('Tag category has been updated'));
-        }
-        
-    }
-    
-    function AdminTags($tag='')
-    {
-        if( !empty($tag) )
-            $tag = CCUtil::StripText($tag);
-            
-        if( !empty($tag) )
-        {
-            $this->_cat_for_one_tag($tag);
-            return;
+            $ourl = url_args($link, ($show_all ? 'showall=1&' : '') . $search_param  );
+            $olink = "<a class=\"small_button\" href=\"{$ourl}\">sort by count</a>";            
         }
 
+        $buttons[] = $olink;
+        
+        $td = '<td style="padding-right:3px">';
+        $help .= '<table><tr>' . $td . join( '</td>' . $td, $buttons ) . '</td></tr></table>';
+        
+        return $help;    
+    }
+    
+    function AdminTags()
+    {
         $show_all = !empty($_REQUEST['showall']);
         
         $where = '';
+        $search_term = '';
+        
         if( !$show_all )
         {
             if( !empty($_REQUEST['search']) )
@@ -203,12 +228,28 @@ EOF;
         $opts[''] = '(none)';
         foreach( $cats as $cat )
             $opts[ $cat['tag_category_id'] ] = cc_strchop($cat['tag_category'],7) . '&nbsp;&nbsp;';
-        
-        $offset = 0;    
-        $help = $this->_get_paging($offset,$show_all,$where);
-        $sql = "SELECT tags_tag,tags_category,tags_count FROM cc_tbl_tags {$where} ORDER by tags_count DESC LIMIT 50 OFFSET {$offset}";
-        $tags = CCDatabase::QueryRows($sql);
 
+        $order = 'tags_count DESC';
+        if( !empty($_REQUEST['order']) )
+        {
+            $order = $_REQUEST['order'];
+        }
+        $offset = 0;    
+        $help = $this->_get_paging($offset,$show_all,$where,$search_term);
+        if( empty($_POST['tagsnapshot']) )
+        {
+            $sql = "SELECT tags_tag,tags_category,tags_count FROM cc_tbl_tags {$where} ORDER by {$order} LIMIT 50 OFFSET {$offset}";
+            $tags = CCDatabase::QueryRows($sql);
+        }
+        else
+        {
+            // things get horked if a user updates the tags while
+            // we are editing, so we take a snapshot between now
+            // when we hit submit...
+            
+            $tags = unserialize( urldecode($_POST['tagsnapshot']) );
+        }
+        
         $count = count($tags);
         
         for( $i = 0; $i < $count; $i++ )
@@ -239,6 +280,8 @@ EOF;
             $form->AddGridRow($id,$a);
         
         }
+        
+        $form->SetHiddenField('tagsnapshot', urlencode(serialize($tags)) );
 
         $help .=<<<EOF
 <style>
@@ -247,6 +290,7 @@ EOF;
 }
 </style>
 EOF;
+
         $form->SetFormHelp($help);
 
         if( empty($_POST) || !$form->ValidateFields() )
@@ -261,7 +305,11 @@ EOF;
             {
                 $table->Update($tag);
             }
-            $page->Prompt($help);
+            
+            // heh, here's how to show just the form help
+            // this is bound to break somewhere down the line...
+            
+            $page->PageArg('curr_form',$form->GetTemplateVars(),'html_form.php/show_form_about');
         }        
         
     }
@@ -279,11 +327,19 @@ EOF;
         $page =& CCPage::GetPage();
         $page->SetTitle($title);
         $form = new CCGridForm();
-        $heads = array(_('Tag'), _('Reserve'),_('Becomes...') );
+        $heads = array(_('Tag'), _('Category'), _('Reserve'),_('Becomes...') );
         $form->SetColumnHeader($heads);
         $sql = 'SELECT tags_tag FROM cc_tbl_tags WHERE tags_category = "del" AND tags_type = ' . CCTT_USER;
         $rows = CCDatabase::QueryItems($sql);
         $count = count($rows);
+
+        // get cats
+        $cats = CCDatabase::QueryRows('SELECT * FROM cc_tbl_tag_category');
+        $options = array();
+        foreach( $cats as $R )
+        {
+            $options[$R['tag_category_id']] = $R['tag_category'];
+        }
 
         for( $i = 0; $i < $count; $i++ )
         {
@@ -301,6 +357,12 @@ EOF;
                     'value'      => $tag,
                     'formatter'  => 'statictext',
                     'flags'      => CCFF_STATIC ),
+                array(
+                    'element_name'  => $pre . "[cat]",
+                    'value'      => 'del',
+                    'formatter'  => 'select',
+                    'options'    => $options,
+                    'flags'      => CCFF_NONE ),
                 array(
                     'element_name'  => $pre . "[makerule]",
                     'value'      => '',
@@ -324,6 +386,8 @@ EOF;
         else
         {
                 $data = $_POST['mi'];
+
+                $cat_updates = array();                
                 $reserved = array();;
                 $aliases = array();
                 foreach( $data as $K => $V )
@@ -331,6 +395,14 @@ EOF;
                     $tag = substr($K,3);
                     foreach( $V as $k2 => $v2 )
                     {
+                        if( $k2 == 'cat')
+                        {
+                            if( $v2 != 'del' )
+                            {
+                                $cat_updates[] = array('tags_tag'=>$tag,'tags_category'=>$v2);
+                            }
+                            continue;
+                        }
                         if( $k2 == 'makerule' )
                         {
                             $reserved[] = $tag;
@@ -350,7 +422,13 @@ EOF;
                         }
                     }
                 }
-                
+
+                if( !empty($cat_updates) )
+                {
+                    $table = new CCTable('cc_tbl_tags','tags_tag');
+                    foreach( $cat_updates as $U )
+                        $table->Update($U);
+                }
                 if( !empty($aliases) )
                 {
                     $table = new CCTable('cc_tbl_tag_alias','tag_alias_tag');
@@ -365,7 +443,8 @@ EOF;
                              "ON DUPLICATE KEY UPDATE tags_type = {$ttype}";
                     CCDatabase::Query($sql);
                 }
-                CCUtil::SendBrowserTo( ccl('admin','tags','properties' ) );
+                
+                $page->Prompt('Category and rules saved');
                 
         }        
         
