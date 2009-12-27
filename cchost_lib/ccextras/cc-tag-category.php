@@ -192,7 +192,7 @@ EOF;
         
         if( $show_all )
         {
-            $where = "tags_count > 0";
+            $where = '';
         }
         else
         {
@@ -206,7 +206,7 @@ EOF;
             }
             
             if( empty($where) )
-                $where = 'WHERE tags_category = "0" OR ISNULL(tags_category) OR tags_category = "" ';   
+                $where = 'WHERE (tags_count > 0) AND (tags_category = "0" OR ISNULL(tags_category) OR tags_category = "" )';   
         }
         
 
@@ -259,6 +259,7 @@ SELECT tags_tag,tags_category,tags_count,tags_type, tag_alias_alias as rule
     ORDER by {$order}
     LIMIT 50 OFFSET {$offset}
 EOF;
+
             $tags = CCDatabase::QueryRows($sql);
         }
         else
