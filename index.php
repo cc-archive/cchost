@@ -75,6 +75,10 @@ if( file_exists('.cc-ban.txt') )
 */
 require_once('cchost_lib/cc-debug.php');
 
+global $ptimer;
+$ptimer = 0;
+CCDebug::Chronometer($ptimer);
+
 /*
 * Logging errors to a file this will help ccHost developers
 * when things go wrong on your site
@@ -166,4 +170,11 @@ CCPage::Show();
 CCDebug::InstallErrorHandler(false); 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
 
+CCDebug::Chronometer($ptimer);
+if( CCUser::IsAdmin() ) {
+    print "\n<br />load time: {$ptimer['elapsed']} <br />\n";
+}
+else {
+    print "\n<-- load time: {$ptimer['elapsed']} -->\n";
+}
 ?>
