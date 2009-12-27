@@ -190,7 +190,11 @@ EOF;
         $where = '';
         $search_term = '';
         
-        if( !$show_all )
+        if( $show_all )
+        {
+            $where = "tags_count > 0";
+        }
+        else
         {
             if( !empty($_REQUEST['search']) )
             {
