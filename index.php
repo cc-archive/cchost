@@ -170,11 +170,4 @@ CCPage::Show();
 CCDebug::InstallErrorHandler(false); 
 CCEvents::Invoke(CC_EVENT_APP_DONE);    
 
-CCDebug::Chronometer($ptimer);
-if( CCUser::IsAdmin() ) {
-    print "\n<br />load time: {$ptimer['elapsed']} <br />\n";
-}
-else {
-    print "\n<-- load time: {$ptimer['elapsed']} -->\n";
-}
 ?>
