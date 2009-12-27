@@ -16,36 +16,38 @@ while( $row = mysql_fetch_array($qr) )
         continue;
 
     $atags = split(',',$ex['usertags']);
-    $stags = "'" . join("', '", $atags) . "'";
 
     if( !empty($atags) )
     {
-        $stags = "'" . join("', '", $atags) . "'";
-        
         // apply aliases...
         
+        $stags = "'" . join("', '", $atags) . "'";
         $sql = "SELECT tag_alias_tag,tag_alias_alias FROM cc_tbl_tag_alias WHERE tag_alias_tag IN ({$stags})";
-        $aliases = CCDatabase::QueryRows($sql);    
+        $aliases = CCDatabase::QueryRows($sql);
         if( !empty($aliases) )
         {
             $new_user_tags = array();
             foreach($aliases as $alias)
             {
-                $new_user_tags[] = $alias['tag_alias_alias'];
+                $newtags = split(',',$alias['tag_alias_alias']);
+                foreach( $newtags as $NT )
+                {
+                    $NT = trim($NT);
+                    if( !empty($NT) )
+                        $new_user_tags[] = $NT;
+                }
                 $replaces[] = $alias['tag_alias_tag'];
             }
-            $diffs = array_diff($atags,$replaces);
-            foreach( $diffs as $diff )
-                $new_user_tags[] = $diff;
-            $atags = array_merge($diffs,$new_user_tags);
+            $atags = array_unique( array_merge( $new_user_tags, array_diff($atags,$replaces) ));
         }
     }
 
     // weed out system tags...
 
-    if( !empty($atags_) )
+    if( !empty($atags) )
     {
         $userBit = CCTT_USER;
+        $stags = "'" . join("', '", $atags) . "'";
         $sql = "SELECT tags_tag FROM cc_tbl_tags WHERE (tags_type & {$userBit}) <> 0 AND tags_tag IN ({$stags})";
         $atags = CCDatabase::QueryItems($sql);
     }

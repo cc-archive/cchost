@@ -221,24 +221,40 @@ EOF;
         $form = new CCGridForm();
         $cats = CCDatabase::QueryRows('SELECT * FROM cc_tbl_tag_category');
 
-        $heads = array(_('Tag'), _('Category') );
+        $heads = array(_('Tag'), _('Category'),_('T'),_('Convert to...') );
         $form->SetColumnHeader($heads);
 
         $opts = array();
         $opts[''] = '(none)';
         foreach( $cats as $cat )
-            $opts[ $cat['tag_category_id'] ] = cc_strchop($cat['tag_category'],7) . '&nbsp;&nbsp;';
+            $opts[ $cat['tag_category_id'] ] = cc_strchop($cat['tag_category'],6) . '&nbsp;&nbsp;';
 
-        $order = 'tags_count DESC';
-        if( !empty($_REQUEST['order']) )
+/*
+        if( $search_term )
         {
-            $order = $_REQUEST['order'];
+            $order = 'tags_name ASC';
+        }
+        else
+*/
+        {
+            $order = 'tags_count DESC';
+            if( !empty($_REQUEST['order']) )
+            {
+                $order = $_REQUEST['order'];
+            }
         }
         $offset = 0;    
         $help = $this->_get_paging($offset,$show_all,$where,$search_term);
         if( empty($_POST['tagsnapshot']) )
         {
-            $sql = "SELECT tags_tag,tags_category,tags_count FROM cc_tbl_tags {$where} ORDER by {$order} LIMIT 50 OFFSET {$offset}";
+            $sql =<<<EOF
+SELECT tags_tag,tags_category,tags_count,tags_type, tag_alias_alias as rule
+    FROM cc_tbl_tags 
+    LEFT OUTER JOIN cc_tbl_tag_alias ON tags_tag=tag_alias_tag
+    {$where}
+    ORDER by {$order}
+    LIMIT 50 OFFSET {$offset}
+EOF;
             $tags = CCDatabase::QueryRows($sql);
         }
         else
@@ -251,6 +267,12 @@ EOF;
         }
         
         $count = count($tags);
+        
+        $types = array(
+            CCTT_ADMIN =>  'A',
+            CCTT_SYSTEM => 'S',
+            CCTT_USER =>   'U'
+        );
         
         for( $i = 0; $i < $count; $i++ )
         {
@@ -276,6 +298,24 @@ EOF;
                     'flags'      => CCFF_REQUIRED 
                 );
                     
+            $a[] = 
+                array(
+                    'element_name'  => $pre . '[tags_type]',
+                    'value'      => $T['tags_type'],
+                    'options'    => $opts,
+                    'formatter'  => 'select',
+                    'options'    => $types,
+                    'flags'      => CCFF_REQUIRED 
+                );
+            $a[] = 
+                array(
+                    'element_name'  => $pre . '[rule]',
+                    'value'      => $T['rule'],
+                    'formatter'  => 'textedit',
+                    'class'      => 'vedit',
+                    'flags'      => CCFF_NONE
+                );
+                    
             $form->SetHiddenField($pre . '[tags_tag]',$id);
             $form->AddGridRow($id,$a);
         
@@ -287,6 +327,10 @@ EOF;
 <style>
 .form_row_0 {
     background-color: #DEF;
+}
+.vedit {
+    font-size: 9px;
+    width: 60px;
 }
 </style>
 EOF;
@@ -300,12 +344,28 @@ EOF;
         else
         {
             $mi = $_POST['mi'];
+            $aliases = array();            
             $table = new CCTable('cc_tbl_tags','tags_tag');
             foreach( $mi as $tag )
             {
-                $table->Update($tag);
+                if( empty($tag['rule']) )
+                {
+                    unset($tag['rule']);
+                    $table->Update($tag);
+                }
+                else
+                {
+                    $aliases[] = array( $tag['tags_tag'], $tag['rule'] );
+                }
             }
             
+            foreach( $aliases as $A )
+            {
+                $sql = "INSERT INTO cc_tbl_tag_alias SET tag_alias_tag='{$A[0]}', tag_alias_alias ='{$A[1]}'" .
+                          " ON DUPLICATE KEY UPDATE tag_alias_alias = '{$A[1]}'";
+                CCDatabase::Query($sql);
+            }
+
             // heh, here's how to show just the form help
             // this is bound to break somewhere down the line...
             
