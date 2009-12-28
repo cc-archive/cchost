@@ -762,8 +762,9 @@ class CCTable
     * For a tutorial see {@tutorial cchost.pkg#insert Insert a Record into a Table}
     *
     * @param array $fields Associative array of column names and values 
+    * @param boolean $ignore_dupe Set to true to tell mysql to ignore this request on duplicate key
     */
-    function Insert($fields)
+    function Insert($fields,$ignore_dupe=false)
     {
         if( !empty($this->_watch_next_id) && !empty($fields[$this->_key_field]) )
         {
@@ -780,7 +781,8 @@ class CCTable
             for( $i = 0; $i < $count; $i++ )
                 $values .= " '" . addslashes($data[$i]) . "', ";
             $values   = substr($values,0,-2);
-            $sql = "INSERT INTO {$this->_table_name} ($cols) VALUES ( $values )";
+            $ignore = $ignore_dupe ? 'IGNORE' : '';
+            $sql = "INSERT {$ignore} INTO {$this->_table_name} ($cols) VALUES ( $values )";
             CCDatabase::Query($sql);
         }
     }
@@ -800,8 +802,9 @@ class CCTable
     *
     * @param array $columns Names of columns
     * @param array $value Array of records to insert
+    * @param boolean $ignore_dupe Set to true to tell mysql to ignore this request on duplicate key
     */
-    function InsertBatch($columns,$values)
+    function InsertBatch($columns,$values,$ignore_dupe=false)
     {
         $valuestr = '';
         foreach( $values as $valuefields )
@@ -814,7 +817,8 @@ class CCTable
             $valuestr = substr($valuestr,0,-2) . '), ';
         }
         $cols = implode(',',$columns);
-        $sql = "INSERT INTO {$this->_table_name} ($cols) VALUES " . substr($valuestr,0,-2);
+        $ignore = $ignore_dupe ? 'IGNORE' : '';
+        $sql = "INSERT {$ignore} INTO {$this->_table_name} ($cols) VALUES " . substr($valuestr,0,-2);
         CCDatabase::Query($sql);
    }
 
