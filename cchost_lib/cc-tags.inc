@@ -292,7 +292,14 @@ class CCTags extends CCTable
             }
             else
             {
-                $result[] = $row['tag_alias_alias'];
+                $res = split(',',$row['tag_alias_alias']);
+                foreach( $res as $R )
+                {
+                    $R = trim($R);
+                    if( empty($R) )
+                        continue;
+                    $result[] = $R;
+                }
             }
         }
         
