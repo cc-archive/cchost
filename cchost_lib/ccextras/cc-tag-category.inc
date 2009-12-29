@@ -168,6 +168,8 @@ EOF;
         $td = '<td style="padding-right:3px">';
         $help .= '<table><tr>' . $td . join( '</td>' . $td, $buttons ) . '</td></tr></table>';
         
+        $help .= '<div style="text-align:right;">Type (<b>T</b>) is either System (<b>S</b>), Admin (<b>A</b>) or User (<b>U</b>)</div>';
+        
         return $help;    
     }
     
@@ -221,20 +223,12 @@ EOF;
         foreach( $cats as $cat )
             $opts[ $cat['tag_category_id'] ] = cc_strchop($cat['tag_category'],6) . '&nbsp;&nbsp;';
 
-/*
-        if( $search_term )
+        $order = 'tags_count DESC, tags_tag ASC';
+        if( !empty($_REQUEST['order']) )
         {
-            $order = 'tags_name ASC';
+            $order = $_REQUEST['order'];
         }
-        else
-*/
-        {
-            $order = 'tags_count DESC';
-            if( !empty($_REQUEST['order']) )
-            {
-                $order = $_REQUEST['order'];
-            }
-        }
+
         $offset = 0;    
         $help = $this->_get_paging($offset,$show_all,$where,$search_term);
         if( empty($_POST['tagsnapshot']) )

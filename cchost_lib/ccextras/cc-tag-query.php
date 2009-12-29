@@ -31,7 +31,7 @@ CCEvents::AddHandler(CC_EVENT_API_QUERY_SETUP, 'cc_tag_query_OnApiQuerySetup' );
 function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
 {
     extract($args);
-
+    
     if( !empty($dataview) )
     {
         if($dataview == 'passthru')
@@ -47,6 +47,52 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
         $datasource = $args['datasource'];            //     ...but not result of expand()
     }
     
+    
+    if( !empty($tagexp) )
+    {
+        $tagexp = '(' . $tagexp . ')';   
+        
+        $tagexp = preg_replace( '/\s+/', '', $tagexp );
+        
+        if( preg_match( '/([^a-z0-9_\(\)\*\|-])/', $tagexp, $m ) )
+        {
+            die('Invalid character in tagexp: ' . $m[1] );
+        }
+        
+        $open  = '(\(|^)';
+        $close = '(\)|$)';
+        $op    = '[\*\|]';
+        $opm   = '[\*\|-]';
+        
+        if( preg_match( "/({$open}{$op}|{$opm}{$close}|{$op}{$op}|{$opm}{$op})/", $tagexp, $m ) )
+        {
+            die('malformed tagexp: ' . $m[1]);
+        }
+        
+        if( !preg_match("/\(([^()]+|(?R))*\)/",$tagexp,$m) || ($m[0] != $tagexp) )
+        {
+            die('Mismatched parenthesis in tagexp');
+        }
+
+
+        if( $datasource == 'tags' )
+            $f = 'tags_tag';
+        else
+            $f = $queryObj->_make_field('tags');
+            
+        $col = "CONCAT(',',{$f},',')";
+        
+        $replaces = array(
+            '/(-?[a-z0-9_]+)/' => " {$col} LIKE '%,$1,%' \n",
+            '/\*/'          => ' AND ',
+            '/\|/'          => ' OR ',
+            "/LIKE '%,-/"   => "NOT LIKE '%",
+        );
+        
+        $queryObj->where[] = preg_replace(array_keys($replaces),$replaces,$tagexp);
+        
+    }
+
     if( $datasource == 'tags' )
     {
         if( empty($dataview) || ($dataview == 'default') )

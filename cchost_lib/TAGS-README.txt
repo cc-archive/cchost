@@ -5,13 +5,13 @@ $Id$
     How tags work
     -------------
     
-    This documentation is aimed at both admins, query writers and
-    ccHost developers, but favors neither. Each should get something
+    This documentation is aimed at admins, query writers and
+    ccHost developers, but favors none. Each should get something
     out of it.
     
-    N.B. the implementation of tags in ccHost is
-    spread around, much of it happens in cc-query.php, cc-tags.inc
-    and in cc-tag-query.php
+    N.B. the implementation of tags in ccHost is spread around,
+    much of it happens in cc-query.php, cc-tags.inc/php and
+    in cc-tag-query.php
     
     There are several types of tags
     
@@ -30,11 +30,13 @@ $Id$
             code these are referred as 'ccud' for (unknown) historical
             reasons.
             
-            The edit field in an upload's Admin screen are the psuedo tags
-            for that upload.
+            The edit field in an upload's Admin screen are the psuedo
+            system tags for that upload.
             
         Admin tag -
             These are controlled by the admin at: admin/tag/properties
+            and admin/tagcat.
+            
             They strictly exist to prevent users from using tags the admins
             don't want to see in the system.  
             
@@ -98,7 +100,9 @@ $Id$
         users will be restricted from using those tags only
         in future uploads. (The system will also notice the
         tag promotion if the user manually edits the properties
-        of an upload that already had that tag and remove it.)
+        of an upload that already had that tag. The system
+        will remove the newly promoted tag when the user
+        submits the Properties form.)
         
         In order to remove the tag from existing uploads,
         admins have to run the admin/tag/reset command which
@@ -144,7 +148,7 @@ $Id$
         One weird side-affect of all this: If the tag on the
         right is not a user tag (e.g. it has been promoted
         somewhere down the line) then the entry on the left
-        will be replace with nothing - that is, effectively
+        will be replaced with nothing - that is, effectively
         throwing it away. If there are multiple tags on
         the right, only the user tags will be applied to
         the upload.
@@ -180,6 +184,10 @@ $Id$
         the code in cc-tags-recalc.php (see the $subtypes
         variable). There are plans to make these admin
         editable.
+        
+        Tag pairs do not currently show up in any ccHost
+        interface, however they are exposed via the Query
+        API as discussed below.
                 
     Global counts vs. Tag Pair counts
     
@@ -210,8 +218,8 @@ $Id$
         The pairing count is kept in the tag pair table.
         
         The pairing counts are not currently used in the
-        ccHost main code branch but is exposed via the
-        query engine (more below).
+        ccHost interface but is exposed via the Query API
+        as discussed below.
 
     Resetting the counts and pairing (admin/tag/reset)
     
@@ -231,10 +239,6 @@ $Id$
 
     Categories are a way to group tags.
     
-        (As of this writing there is no use of tag categories
-        directly in ccHost. They are exposed through the
-        query engine explained below.)
-        
         Admins can create tag categories in admin/tagcat/cats.
         These categories will then be visible in the assignment
         screen admin/tagcat.
@@ -246,7 +250,11 @@ $Id$
         category) is stored in the tags_category field of
         cc_tbl_tags
 
-    Assigning Categories (and Oh So Much More)
+        Tag categories are not currently used in the
+        ccHost interface but is exposed via the Query API
+        as discussed below.
+
+    Assigning Categories
     
         The 'Assign Tag Categories' admin screen at
         admin/tagcat is a place where admins can almost anything
@@ -269,7 +277,9 @@ $Id$
             - Create an alias rule for the tag
         
         These last two operations can also be done in the
-        Tags Properties screen at admin/tag/properties.
+        Tags Properties screen at admin/tag/properties
+        but are provided on this screen to make it easier
+        to do large scale tag admin duties.
         
         Since the alias rule only applies to user tags, the
         rule edit field is disabled (and ignored) when
@@ -347,8 +357,9 @@ $Id$
                         AND
                      ....
             
-            In the enhanced version tags are groups by parenthesis 
-            in the new 'tagexp' parameter
+            In the enhanced version tags are grouped by parenthesis 
+            in the new 'tagexp' parameter with new combining
+            operators:
             
                     tagexp=(hip_hop|funk)*east_coast
                     
@@ -375,6 +386,14 @@ $Id$
             query results like 'html' and 'page' will
             not work.
             
+            Programmable formats such as 'js' and 'json' and
+            structed formats like 'xml' and 'csv' will work.
+            
+            N.B. 'json' format is NOT suggested because FireFox
+            (for one) will not accept enough data in the HEAD
+            to be useful. Use the 'js' format and eval() the
+            results instead in your javascript code
+
             There is however a test template you can use
             while getting the hang of things: tag_list
             Don't use the default 'page' format because
@@ -383,13 +402,6 @@ $Id$
             
               api/query?t=tag_list&f=html&cat=genre
               
-            Programmable formats such as 'js' and 'json' and
-            structed formats like 'xml' and 'csv' will work.
-            
-            N.B. 'json' format is NOT suggested because FireFox
-            (for one) will not accept enough data in the HEAD
-            to be useful. Use the 'js' format and eval() the
-            results instead in your javascript code
             
             To retrieve all tag categories:
             
@@ -411,16 +423,16 @@ $Id$
                 
             these can be order by 'name' or 'count' either ascending
             or decending. (Default is count, desc)
-            
+
+                dataview=tags&f=js&offset=0&limit=100&ord=name
+                
             The results are
                 tags_tag
                 tags_count
                 tag_category
                 
-            (There no 's' on the last result field - sorry)
+            (There no 's' in the last field name - sorry)
             
-                dataview=tags&f=js&offset=0&limit=100&ord=name
-                
             To specify a category use the 'cat' parameter with
             a tag_category_id retrieved from the first query in
             this section. For example, to see all genre tags:
@@ -435,7 +447,5 @@ $Id$
             When you don't specify a paring the count represents
             the usage for that tag across the system. With a
             pairing the count reflects the cross section.
-                        
-                
         
 */
