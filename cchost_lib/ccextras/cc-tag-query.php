@@ -64,7 +64,7 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
         $op    = '[\*\|]';
         $opm   = '[\*\|-]';
         
-        if( preg_match( "/({$open}{$op}|{$opm}{$close}|{$op}{$op}|{$opm}{$op})/", $tagexp, $m ) )
+        if( preg_match( "/({$open}{$op}|{$opm}{$close}|{$op}{$op}|{$opm}{$op}|{$close}{$open})/", $tagexp, $m ) )
         {
             die('malformed tagexp: ' . $m[1]);
         }
