@@ -277,7 +277,8 @@ class CCUpload
 
         if( is_string($ret) )
         {
-            $form->SetFieldError('upload_file_name',$ret);
+            $field = $form->FormFieldExists('upload_file_name') ? 'upload_file_name' : 'upload_man_files';
+            $form->SetFieldError($field,$ret);
             return(0);
         }
 

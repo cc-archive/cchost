@@ -116,13 +116,9 @@ class CCSearch
     
     function _log_search($search_text)
     {
-        $fname = cc_temp_dir() . CC_SEARCH_LOG_FILE;
-        $f = fopen( $fname, 'w' );
-        if( !$f )
-            trigger_error('Could not open file: ' . $fname);
+        $fname = cc_log_dir() . CC_SEARCH_LOG_FILE;
         $str = CCDebug::FormatLogMsg( $search_text );
-        fwrite($f,$str);
-        fclose($f);
+        error_log($str,3,$fname);
     }
 
     function do_results($search_text)
@@ -337,38 +333,7 @@ class CCSearch
     {
         global $CC_GLOBALS;
 
-        if( empty($CC_GLOBALS['use_text_index']) )
-        {
-            $msg = 'str_search_miss_generic';
-        }
-        else
-        {
-            // gather some stats about the search term:
-            $words = str_word_count($search_text,1);
-            $num_words = count($words);
-            $biggest_word = 0;
-            for( $i = 0; $i < $num_words; $i++ )
-                $biggest_word = max(strlen($words[$i]),$biggest_word);
-            $sophis = preg_match('/[+<>~(-]/',$search_text);
-            $quoted = strpos($search_text,'"');
-            /*
-            if( ($biggest_word < 4) && $num_words == 1 )
-            {
-                $msg = array( 'str_search_miss_tiny', ' <span>"' . $search_text . ' joebob"</span> ', ' <span>"' . $search_text . '_joebob"</span> ' );
-            }
-            elseif( ($biggest_word < 4) && ($num_words > 1) && !$quoted)
-            {
-                $msg = array( 'str_search_miss_quote', ' <span>"' . $search_text . '"<span> ', 
-                             ' <span>' . substr(str_replace(' ','_',$search_text),0,25) . '</span> ' );
-            }
-            else
-            */
-            {
-                $msg = array( 'str_search_miss', 
-                                 '<a href="http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html">','</a>' );
-            }
-        }
-
+        $msg = 'str_search_miss_generic';
         CCPage::PageArg('search_miss_msg',$msg);
     }
 }

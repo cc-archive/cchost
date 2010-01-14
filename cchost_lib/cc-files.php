@@ -243,10 +243,12 @@ class CCPhysicalFile
         {
             if( $form->ValidateFields() )
             {
-                CCUpload::PostProcessEditUploadForm($form, $record, $record['upload_extra']['relative_dir'] );
-                $url = url_args( ccd('files',CCUser::CurrentUserName(),$upload_id), 'prompt=str_file_changed' );
-                CCUtil::SendBrowserTo($url);
-                $show = false;
+                if( CCUpload::PostProcessEditUploadForm($form, $record, $record['upload_extra']['relative_dir'] ) )
+                {
+                    $url = url_args( ccd('files',CCUser::CurrentUserName(),$upload_id), 'prompt=str_file_changed' );
+                    CCUtil::SendBrowserTo($url);
+                    $show = false;
+                }
             }
         }
 

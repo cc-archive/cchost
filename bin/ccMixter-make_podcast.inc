@@ -64,7 +64,7 @@ function post_podcast_topic()
     $mp3size    = filesize($target_mp3);
     $duration   = get_wav_len($target_mp3,'playtime_string');
     
-    _post_podcast_topic($mp3size/(1024*1024),$mp3_url,$duration);
+    _post_podcast_topic($mp3size,$mp3_url,$duration);
 }
 
 function _post_podcast_topic($mp3size,$mp3_url_param,$duration='')
@@ -76,7 +76,7 @@ function _post_podcast_topic($mp3size,$mp3_url_param,$duration='')
         $playlist_info         ;
         
     $site       = 'ccmixter.org';    
-    $fs         = '(' . number_format($mp3size,2) . 'MB)';
+    $fs         = '(' . number_format($mp3size/(1024*1024),2) . 'MB)';
         
     $topic_text =<<<EOF
 {$playlist_head}

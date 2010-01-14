@@ -27,7 +27,7 @@ function make_podcast()
 {
     global $mp3_url, $size_in_mb;
     
-    _post_podcast_topic($size_in_mb,$mp3_url,'');
+    _post_podcast_topic($size_in_mb * (1024*1024),$mp3_url,'');
 }
 
 

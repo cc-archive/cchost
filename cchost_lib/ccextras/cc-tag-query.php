@@ -46,8 +46,7 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
         $queryObj->GetSourcesFromDataview($dataview); // <-- this writes to $args...
         $datasource = $args['datasource'];            //     ...but not result of expand()
     }
-    
-    
+        
     if( !empty($tagexp) )
     {
         $tagexp = '(' . $tagexp . ')';   
@@ -93,6 +92,32 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
         
     }
 
+    if( $datasource == 'tag_alias')
+    {
+        if( empty($search) )
+            return;
+        
+        $text_words = preg_split( '/[_\s+]/', $search, -1, PREG_SPLIT_NO_EMPTY );
+        if( empty($text_words) )
+        {
+            return;
+        }   
+    
+        $text_words[] = join('_',$text_words);
+        
+        $soundex = array();
+        foreach( $text_words as $T )
+        {
+            $soundex[] = "(tag_alias_tag SOUNDS LIKE '{$T}')";
+            $soundex[] = "(tag_alias_tag LIKE '{$T}%')";
+        }
+
+        $queryObj->where[] = join(' OR ', $soundex);
+        $queryObj->where[] = "tag_alias_alias != '{$search}'";
+        $queryObj->where[] = "tag_alias_alias != '" . str_replace(' ','_',$search) . "'";
+
+    }
+    
     if( $datasource == 'tags' )
     {
         if( empty($dataview) || ($dataview == 'default') )

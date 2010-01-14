@@ -712,7 +712,6 @@ Suggestions:
 <ul>
 <li><p>Use minus sign \'-\' to exclude terms: <b>hip -hop</b> will return results that have <b>hip</b> but not <b>hop</b></p></li>
 <li><p>Use double quotes to match exact phrases: <b>"hip hop"</b> will return results with that exact phrase, including the space</p></li>
-<li><p>Use underscore \'_\' instead of space when searching for tags: <b>hip_hop</b> (no quotes needed)</p></li>
 </ul>
 ');
 $GLOBALS['str_search_miss_generic'] = $GLOBALS['str_search_help_generic'];

@@ -335,15 +335,15 @@ EOF;
             $table = new CCTable('cc_tbl_tags','tags_tag');
             foreach( $mi as $tag )
             {
-                if( empty($tag['rule']) )
-                {
-                    unset($tag['rule']);
-                    $table->Update($tag);
-                }
-                else
+                if( !empty($tag['rule']) )
                 {
                     $aliases[] = array( $tag['tags_tag'], $tag['rule'] );
                 }
+
+                if( isset($tag['rule']))
+                    unset($tag['rule']);
+                    
+                $table->Update($tag);
             }
             
             foreach( $aliases as $A )
