@@ -66,7 +66,7 @@ The contest entries included the vocal track from "Remember the Name."  You can 
 <div  style="border: 1px solid brown;margin:5px;padding:5px;color:brown;;font-weight:bold;text-align:center; width: 50%;">The contest is closed to new entries.</div>
 <br  />
 <h2  style="margin: 0px; font-size: 18px; font-weight: normal;">Source Materials</h2>
-<p >Download the separated audio elements of Fort Minor's "Remember the Name" <a  href="<?= $A['root-url']?>fortminor/view/contest/sources">here</a>.
+<p >Download the separated audio elements of Fort Minor's "Remember the Name" <a  href="<?= $A['root-url']?>fortminor_samples">here</a>.
 </p>
 <br  />
 <h2  style="margin: 0px; font-size: 18px; font-weight: normal;">Prize</h2>
