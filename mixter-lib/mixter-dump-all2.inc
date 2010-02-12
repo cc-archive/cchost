@@ -5,29 +5,12 @@
 */
 
 // MAIN
-{
-    error_reporting(E_ALL);
-    
-    chdir( dirname(__FILE__) . '/..');
-    
-    define('IN_CC_HOST', true);
-    
-    require_once('cchost_lib/cc-debug.php');
-    if( !function_exists('gettext') )
-       require_once('cchost_lib/ccextras/cc-no-gettext.inc');
-    require_once( 'cchost_lib/cc-includes.php');
-    require_once('cchost_lib/cc-custom.php');
-    require_once('cchost_lib/cc-template-api.php');
-    $cc_extras_dirs = 'cchost_lib/ccextras';
-    include('cchost_lib/cc-inc-extras.php');
-       
-    if( file_exists('mixter-lib/d.php') )
-        require_once( 'mixter-lib/d.php');
-    
-    CCConfigs::Init();
-    
-    cc_do_datadump();
-}
+define('CC_HOST_CMD_LINE', 1 );      // define this exact way
+chdir( dirname(__FILE__) . '/..');
+$admin_id = 9;                       // user to log in as (OPTIONAL)
+require_once( 'cc-cmd-line.inc' );    // include this file
+cc_do_datadump();
+
 
 function cc_do_datadump( $tags='media', $out_rss_file = 'dump/rss.xml' )
 {
