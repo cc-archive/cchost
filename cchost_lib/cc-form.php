@@ -1545,6 +1545,7 @@ END;
         {
             // Windows and older PHP rolf on dates before 1970
             $time = @strtotime($value);
+
             if( $time == -1 )
             {
                 $newvalue = preg_replace('#^([0-9]{4})#',date('Y'),$value);
@@ -1555,9 +1556,12 @@ END;
             }
             else
             {
+                if( strstr($value,'0000-00-00') !== false )
+                    $time = time();
                 $value = date('Y-m-d-g-i-a',$time);
             }
         }
+
 
         if( empty($value) )
         {

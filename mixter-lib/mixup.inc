@@ -944,7 +944,7 @@ EOF;
             $da['mixup_user_confirmed'] = $values[ $k . '[mixup_user_confirmed]' ];
             $table->Update($da);
         }
-        
+
         if( !empty($_POST['new']) )
         {
             $n = $_POST['new'];
@@ -956,14 +956,15 @@ EOF;
             $usernames = "'" . join( "','", array_unique($usernames)) . "'";
             $sql = 'SELECT user_name,user_id from cc_tbl_user WHERE user_name IN (' . $usernames . ')';
             $rows = CCDatabase::QueryRows($sql);
+
             $usernames = array();
             foreach( $rows as $R )
                 $usernames[ $R['user_name']] = $R['user_id'];
             foreach( $n as $args )
             {
                 $args['mixup_user_mixup'] = $mixup_id;
-                $args['mixup_user_user'] = $usernames[ $args['mixup_user_user'] ];
-                $args['mixup_user_other'] = $usernames[ $args['mixup_user_other'] ];
+                $args['mixup_user_user']  = empty($args['mixup_user_user'])  ? 0 : $usernames[ $args['mixup_user_user'] ];
+                $args['mixup_user_other'] = empty($args['mixup_user_other']) ? 0 : $usernames[ $args['mixup_user_other'] ];
                 $table->Insert($args);
             }
         }
