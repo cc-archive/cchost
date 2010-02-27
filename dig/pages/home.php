@@ -26,7 +26,7 @@
 	<div id="content">
 		<div class="page full home-heading" id="homepage">
 			<div class="block wider first">
-				<h2>ccMixter Music Discovery Site</h2>
+				<h2>ccMixter Music Discovery</h2>
 				<h3 class="subheading">&ldquo;You already have permission&hellip;&rdquo;</h3>
 			</div>
 			<div class="block wider">

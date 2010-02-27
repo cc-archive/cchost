@@ -173,6 +173,12 @@ EOF;
 					</form>
 			</div>
 			<div class="advanced"><a href="#" class="advanced-search-link">Advanced dig</a><a href="#" class="basic-search-link">Basic dig</a></div>
+            <?
+                if( !empty($_GET['title']) )
+                {
+                    print '<h1 id="results-title">' . $_GET['title'] . '</h1>';
+                }
+            ?>
 			<div id="didumean"></div>
 			<div id="results">
 			</div>

@@ -46,7 +46,7 @@ var str_suggestions_on = 'Suggestions on how to give credit?';
 var str_click_here = 'Click here';
 var str_attribution = 'Attribution';
 var str_back = 'Back';
-var str_editors_picks = 'Editor\'s Picks';
+var str_editors_picks = 'Editors\' Picks';
 
 /*
     ADVANCED UTILITY

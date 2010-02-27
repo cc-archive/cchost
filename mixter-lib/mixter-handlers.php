@@ -9,6 +9,8 @@ if( !defined('IN_CC_HOST') )
 
 define('CC_EVENT_FILTER_PODCAST_INFO', 'filtpodinfo');
 
+require_once('dig/config.php');
+
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'CCMagnatune',  'OnMapUrls'), 'mixter-lib/mixter-magnatune.inc','','','ccMixter' );
 CCEvents::AddHandler(CC_EVENT_MAP_URLS,     array( 'MixterContest', 'OnMapUrls' ), 'mixter-lib/mixter-contest.inc','','','ccMixter' );
 
