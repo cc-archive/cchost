@@ -25,7 +25,8 @@
       define('CC_HOST_CMD_LINE', 1 );      // define this exact way
       chdir( YOUR_CCHOST_INSTALL_DIR );    // must be run from the cchost install root dir
       $admin_id = 9;                       // user to log in as (OPTIONAL)
-      require_one( 'cc-cmd-line.inc' );    // include this file
+      $NO_EXTRANEOUS_OUTPUT = 1;           // supress tagline of this file (OPTIONAL)
+      require_once( 'cc-cmd-line.inc' );   // include this file
           
     
     Debug mode is enabled by default
@@ -51,6 +52,12 @@ if( empty($CC_GLOBALS) )
     CCConfigs::Init();
 }
 
+if( !empty($CC_GLOBALS['extra-lib']) )
+{
+    $cc_extras_dirs = $CC_GLOBALS['extra-lib'];
+    include('cchost_lib/cc-inc-extras.php');
+}
+
 if( !empty($admin_id) )
 {
     $admin_rec = CCDatabase::QueryRow('SELECT * FROM cc_tbl_user WHERE user_id = ' . $admin_id);
@@ -60,6 +67,7 @@ if( !empty($admin_id) )
 
 CCDebug::Enable(true);
 
-print "[cchost command line]\n"
+if( empty($NO_EXTRANEOUS_OUTPUT) )
+    print "[cchost command line]\n"
 
 ?>
