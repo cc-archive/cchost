@@ -24,8 +24,29 @@
     YAHOO! MEDIA PLAYER CONFIGURATION
 */
 var YMPParams = {
-    defaultalbumart: DIG_ROOT_URL + 'images/default-cover.jpg'
+    defaultalbumart: DIG_ROOT_URL + '/images/default-cover.jpg'
 };
+
+var str_remove_tag = 'remove tag';
+var str_you_already = 'You already have permission&hellip;';
+var str_more = 'more &raquo;';
+var str_by = 'by';
+var str_download = 'Download';
+var str_IE_right = 'IE: Right-click select &lsquo;Save Target As&rsquo;';
+var str_mac_control = 'Mac: Control-click select &lsquo;Save Link As&rsquo;';
+var str_info = 'Info';
+var str_featuring = 'Featuring';
+var str_BPM = 'BPM';
+var str_uploaded = 'Uploaded';
+var str_you_already_have = 'You already have permission to use &ldquo;';
+var str_more = 'More';
+var str_permission = 'Permission';
+var str_artist_contact_info = 'Artist contact info';
+var str_suggestions_on = 'Suggestions on how to give credit?';
+var str_click_here = 'Click here';
+var str_attribution = 'Attribution';
+var str_back = 'Back';
+var str_editors_picks = 'Editor\'s Picks';
 
 /*
     ADVANCED UTILITY
@@ -86,7 +107,9 @@ function doAddTag(el, tag, cat) {
     // are there any tags yet?
     if(container_content == '') {
         tags_input.val(tag);
-        container.html('<div class="'+cat+' '+tag+' tag nowrap"><span class="tag_name">'+tag+'</span><a href="javascript://" onclick="doRemoveTag(\''+tag+'\');" class="remove"><span>remove tag</span></a><div class="clearer"></div></div>');
+        container.html('<div class="'+cat+' '+tag+' tag nowrap"><span class="tag_name">'+tag+
+                       '</span><a href="javascript://" onclick="doRemoveTag(\''+tag+
+                       '\');" class="remove"><span>'+str_remove_tag+'</span></a><div class="clearer"></div></div>');
     } else {
         var tags = $('.tag');
         var tag_exists = false;
@@ -99,7 +122,10 @@ function doAddTag(el, tag, cat) {
         // only add the tag if it hasn't already been added
         if(!tag_exists) {
             tags_input.val(tags_input.val() + ',' + tag);
-            container.html(container_content+' <div class="'+cat+' '+tag+' tag nowrap"><span class="tag_name">'+tag+'</span><a href="javascript://" onclick="doRemoveTag(\''+tag+'\');" class="remove"><span>remove tag</span></a><div class="clearer"></div></div>');
+            container.html(container_content+' <div class="'+cat+' '+tag+
+                           ' tag nowrap"><span class="tag_name">'+tag+
+                           '</span><a href="javascript://" onclick="doRemoveTag(\''+tag+
+                           '\');" class="remove"><span>'+str_remove_tag+'</span></a><div class="clearer"></div></div>');
         }
     }
     var clear_button = $('#clear');
@@ -174,7 +200,8 @@ function _tagQueryResults(results,type,results_div) {
     for( var i = 0; i < results.length; i++ )
     {
         var result = results[i];
-        links[i] = '<option onclick="doAddTag(this,\'' + result.tags_tag + '\',\'' + type + '\'); ">' + result.tags_tag + ' (' + result.tags_count + ')' + '</option>';
+        links[i] = '<option onclick="doAddTag(this,\'' + result.tags_tag + '\',\'' + type + '\'); ">' +
+        result.tags_tag + ' (' + result.tags_count + ')' + '</option>';
     }
     $( '#' + results_div).html('<select size=8>' + links.join('<br />') + '</select>');
 }
@@ -200,7 +227,7 @@ function slidebox(id, panel) {
             panel - The panel to open the slidebox to by default    
     */
     if(!panel) {
-        var panel = 1;  // Really? do you mean to say 'var'?
+        panel = 1; 
     }
     
     var slidebox = jQuery(id);
@@ -236,32 +263,48 @@ function build_result(result, num, max_name_length, featured) {
     var html = result_actions(num);
     html += result_heading(result, num, max_name_length, featured);
     html += '<div class="clearer"></div>';
-    html += '<div class="license-details" id="license-details-'+num+'">You already have permission&hellip; <a href="#" class="license-more">more &raquo;</a></div>';
+    html += '<div class="license-details" id="license-details-'+num+'">'+
+                 str_you_already +' <a href="#" class="license-more">'+str_more+'</a></div>';
     html += result_slidebox(result, num);
     return html;
 }
 
 function build_podcast_result(result, num, max_name_length) {
-    var html = '<div class="avatar-container"><img src="images/avatar.gif" class="avatar-image round" alt="'+result.user_real_name+'" style="background-image: url('+result.user_avatar_url+');"></div>';
+    var html = '<div class="avatar-container"><img src="images/avatar.gif" class="avatar-image round" alt="'+
+                result.user_real_name+'" style="background-image: url('+result.user_avatar_url+');"></div>';
     html += '<div class="podcast-data-container">';
     html += '<h4>'+safe_upload_name(result.topic_name, max_name_length)+'</h4>';
     html += 'by <span class="result-creator">'+result.user_real_name+'</span>';
-    html += '<div class="podcast-meta"><a href="'+result.enclosure_url+'" class="podcast-download-link" id="podcast-download-'+num+'"><span>Download</span></a> ('+ Math.floor(result.enclosure_size / (1024*1024)) +'MB) '+result.enclosure_duration+'</div>';
+    html += '<div class="podcast-meta"><a href="'+result.enclosure_url+
+            '" class="podcast-download-link" id="podcast-download-'+num+
+            '"><span>Download</span></a> ('+ Math.floor(result.enclosure_size / (1024*1024)) +'MB) '+
+            result.enclosure_duration+'</div>';
     html += '</div>';
     return html;
 }
 
 function result_actions(num) {
-    return '<ul class="result-actions"><li><a href="#" class="download-link" id="download-'+num+'"><span>Download</span></a></li><li><a href="#" class="info-link" id="info-'+num+'"><span>Info</span></a></li></ul>';
+    return '<ul class="result-actions"><li><a href="#" class="download-link" id="download-'+num+
+            '"><span>Download</span></a></li><li><a href="#" class="info-link" id="info-'+num+
+            '"><span>Info</span></a></li></ul>';
 }
 
 function result_heading(result, num, max_name_length, featured) {
     var html = '';
     if(featured) {
-        html += '<h4><a href="'+result['files/0/download_url']+'">'+safe_upload_name(result['upload_name'], max_name_length)+'</a> </h4>';
-        html += '<span class="result-creator">by <a href="'+result['artist_page_url']+'">'+result['user_real_name']+'</a></span> <div class="license" id="license-'+num+'"><a href="'+result['license_url']+'"><img src="'+license_image(result['license_name'])+'" alt="'+result['license_name']+' Creative Commons License" /></a></div>';
+        html += '<h4><a href="'+result['files/0/download_url']+'">'+
+                safe_upload_name(result['upload_name'], max_name_length)+'</a> </h4>';
+        html += '<span class="result-creator">by <a href="'+result['artist_page_url']+'">'+
+                result['user_real_name']+'</a></span> <div class="license" id="license-'+num+
+                '"><a href="'+result['license_url']+'"><img src="'+license_image(result['license_name'])+
+                '" alt="'+result['license_name']+' Creative Commons License" /></a></div>';
     } else {
-        html += '<h4><a href="'+result['files/0/download_url']+'">'+safe_upload_name(result['upload_name'], max_name_length)+'</a> <span class="result-creator">by <a href="'+result['artist_page_url']+'">'+result['user_real_name']+'</a></span> <div class="license" id="license-'+num+'"><a href="'+result['license_url']+'"><img src="'+license_image(result['license_name'])+'" alt="'+result['license_name']+' Creative Commons License" /></a></div></h4>';
+        html += '<h4><a href="'+result['files/0/download_url']+'">'+
+                safe_upload_name(result['upload_name'], max_name_length)+
+                '</a> <span class="result-creator">'+str_by+' <a href="'+result['artist_page_url']+'">'+
+                result['user_real_name']+'</a></span> <div class="license" id="license-'+num+'"><a href="'+
+                result['license_url']+'"><img src="'+license_image(result['license_name'])+'" alt="'+
+                result['license_name']+' Creative Commons License" /></a></div></h4>';
     }
 
     return html;    
@@ -279,22 +322,25 @@ function result_slidebox(result, num) {
 
 function result_download(result, num) {
     var html = '<div class="item">';
-    html += '<h5>Download <em>'+result['upload_name']+'</em></h5>';
-    html += '<p class="note">IE: Right-click select &lsquo;Save Target As&rsquo;<br />Mac: Control-click select &lsquo;Save Link As&rsquo;</p>';
+    html += '<h5>'+str_download+' <em>'+result['upload_name']+'</em></h5>';
+    html += '<p class="note">'+str_IE_right+'<br />'+str_mac_control+'</p>';
     
     html += '<ol>';
     // loop through files
     var file_count = result['num_files'];
     var i = 0;
     while(i < file_count) {
-        html += '<li><a href="'+result['files/'+i+'/download_url']+'">'+result['files/'+i+'/file_name']+'</a> (<strong>'+result['files/'+i+'/file_format_info/default-ext']+'</strong> '+clean_filesize(result['files/'+i+'/file_filesize'])+')</li>';
+        html += '<li><a href="'+result['files/'+i+'/download_url']+'">'+
+                result['files/'+i+'/file_name']+'</a> (<strong>'+result['files/'+i+'/file_format_info/default-ext']+
+                '</strong> '+clean_filesize(result['files/'+i+'/file_filesize'])+')</li>';
         i++;
     }
     html += '</ol>';
     
     html += license_blurb(result);
     
-    html += '<div class="modal-nav-container"><div class="next-link-container"><a href="#" class="next-link nowrap">Info &raquo;</a></div><div class="clearer"></div></div>';
+    html += '<div class="modal-nav-container"><div class="next-link-container"><a href="#" class="next-link nowrap">'+
+            str_info + ' &raquo;</a></div><div class="clearer"></div></div>';
     
     html += '</div>';
     return html;
@@ -304,16 +350,17 @@ function result_info(result, num) {
     var html = '<div class="item">';
     
     html += '<div class="info-header" style="background-image: url('+result['user_avatar_url']+');">';
-    html += '<h5><a href="'+result['file_page_url']+'">'+result['upload_name']+'</a> <span class="length">'+result['files/0/file_format_info/ps']+'</span></h5>';
+    html += '<h5><a href="'+result['file_page_url']+'">'+result['upload_name']+
+            '</a> <span class="length">'+result['files/0/file_format_info/ps']+'</span></h5>';
     html += '<h6>by <a href="'+result['artist_page_url']+'">'+result['user_real_name']+'</a></h6>';
     html += '<ul class="meta">';
     if(result['upload_extra/featuring'] != '') {        
-        html += '<li><strong>Featuring:</strong> '+result['upload_extra/featuring']+'</li>';
+        html += '<li><strong>'+str_featuring+':</strong> '+result['upload_extra/featuring']+'</li>';
     }
     if(result['upload_extra/bpm'] != '') {
-        html += '<li><strong>BPM:</strong> '+result['upload_extra/bpm']+'</li>';
+        html += '<li><strong>'+str_BPM+':</strong> '+result['upload_extra/bpm']+'</li>';
     }
-    html += '<li><strong>Uploaded:</strong> '+result['upload_date_format']+'</li>';
+    html += '<li><strong>'+str_uploaded+':</strong> '+result['upload_date_format']+'</li>';
     if(result['upload_extra/nsfw'] == 'true') {
         html += '<li class="warning">NSFW</li>';
     }
@@ -327,7 +374,10 @@ function result_info(result, num) {
     html += tag_list(result['upload_tags']);
     html += license_blurb(result);
     
-    html += '<div class="modal-nav-container"><div class="prev-link-container"><a href="#" class="prev-link nowrap">&laquo; Download</a></div><div class="next-link-container">You already have permission to use &ldquo;'+safe_upload_name(result['upload_name'], 24)+'&rdquo;&hellip; <a href="#" class="next-link nowrap">More &raquo;</a></div><div class="clearer"></div></div>';
+    html += '<div class="modal-nav-container"><div class="prev-link-container"><a href="#" class="prev-link nowrap">&laquo; '+
+            str_download + '</a></div><div class="next-link-container">'+ str_you_already_have +
+            safe_upload_name(result['upload_name'], 24)+'&rdquo;&hellip; <a href="#" class="next-link nowrap">'+
+            str_more +' &raquo;</a></div><div class="clearer"></div></div>';
     
     html += '</div>';
     return html;
@@ -335,12 +385,28 @@ function result_info(result, num) {
 
 function result_permission(result, num) {
     var html = '<div class="item">';
-    html += '<h5>Permission</h5>';
-    html += '<p>You want to use &ldquo;'+result['upload_name']+'&rdquo; by <a href="'+result['artist_page_url']+'/profile"><strong>'+result['user_real_name']+'</strong></a> in a project, like a video, podcast, school project, album? You already have permission to copy, distribute, remix and embed it into your project '+commercial_clause(result['license_name'])+' as long as you '+share_alike_clause(result['license_name'])+' give proper credit to <a href="'+result['artist_page_url']+'/profile"><strong>'+result['user_real_name']+'</strong></a>. Please read the <a href="'+result['license_url']+'">Creative Commons '+result['license_name']+' license</a> for more details and context.</p><p>If you&rsquo;d like to do something with &ldquo;'+result['upload_name']+'&rdquo; that isn&rsquo;t part of the permissions you already have, you need to get permission directly from <a href="'+result['artist_page_url']+'/profile"><strong>'+result['user_real_name']+'</strong></a>.</p>';
+    html += '<h5>'+str_permission+'</h5>';
+    html += '<p>You want to use &ldquo;'+result['upload_name']+
+            '&rdquo; by <a href="'+result['artist_page_url']+'/profile"><strong>'+
+            result['user_real_name']+'</strong></a>' +
+            ' in a project, like a video, podcast, school project, album? You already have permission to copy,' +
+            'distribute, remix and embed it into your project '+
+            commercial_clause(result['license_name'])+
+            ' as long as you '+share_alike_clause(result['license_name'])+
+            ' give proper credit to <a href="'+result['artist_page_url']+'/profile"><strong>'+
+            result['user_real_name']+'</strong></a>. Please read the ' +
+            '<a href="'+result['license_url']+'">Creative Commons '+result['license_name']+' license</a>' +
+            ' for more details and context.</p><p>If you&rsquo;d like to do something with &ldquo;'+
+            result['upload_name']+'&rdquo; that isn&rsquo;t part of the permissions you already have, ' +
+            'you need to get permission directly from <a href="'+result['artist_page_url']+'/profile"><strong>'+
+            result['user_real_name']+'</strong></a>.</p>';
     
-    html += '<p>[contact section]</p>';
+    html += '<p><a href="'+result['artist_page_url']+'/profile">'+str_artist_contact_info+'</a></p>';
     
-    html += '<div class="modal-nav-container"><div class="prev-link-container"><a href="#" class="prev-link nowrap">&laquo; Info</a></div><div class="next-link-container">Suggestions on how to give credit? <a href="#" class="next-link nowrap">Click here &raquo;</a></div><div class="clearer"></div></div>';
+    html += '<div class="modal-nav-container"><div class="prev-link-container">'+
+            '<a href="#" class="prev-link nowrap">&laquo; '+str_info+'</a></div><div class="next-link-container">' +
+            str_suggestions_on +' <a href="#" class="next-link nowrap">'+str_click_here+
+            ' &raquo;</a></div><div class="clearer"></div></div>';
     
     html += '</div>';
     return html;
@@ -348,7 +414,8 @@ function result_permission(result, num) {
 
 function result_attribution(result, num) {
     var html = '<div class="item">';
-    html += '<h5>Attribution</h5><div class="modal-nav-container"><div class="prev-link-container"><a href="#" class="prev-link nowrap">&laquo; Back</a></div><div class="clearer"></div></div>';
+    html += '<h5>'+str_attribution+'</h5><div class="modal-nav-container"><div class="prev-link-container">'+
+            '<a href="#" class="prev-link nowrap">&laquo; '+str_back+'</a></div><div class="clearer"></div></div>';
     html += '</div>';
     return html;
 }
@@ -585,7 +652,7 @@ function advanced_didUMean_results(results) {
 }
 
 function edpickQueryResults(results) {
-    _digStyleQueryResults(results,'#edpicks', 'More picks&hellip;', 'picks', 'Ed picks');
+    _digStyleQueryResults(results,'#edpicks', 'More picks&hellip;', 'picks', str_editors_picks);
 }
 
 function edpickPageQueryResults(results) {
@@ -1228,13 +1295,14 @@ function populate_popular() {
 
 function populate_podcasts() {
     var options = {
-        // debug: true,
+        debug: true,
         paging: true,
         parent: '#results'
     }
 
     var parameters = {
         dataview: 'topics_podinfo',
+        datasource: 'topics',
         type: 'podcast',
         limit: 10,
         offset: 1
