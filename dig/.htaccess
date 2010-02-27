@@ -1,0 +1,34 @@
+php_value upload_max_filesize 1M
+php_value memory_limit 50M
+php_value post_max_size 2M
+php_value max_execution_time 300
+
+RewriteEngine On
+RewriteBase /
+
+RewriteRule ^about/?$      index.php?page=about [L,QSA]
+RewriteRule ^dig/?$        index.php?page=dig [L,QSA]
+RewriteRule ^featured/?$   index.php?page=featured [L,QSA]
+RewriteRule ^podcasts/?$   index.php?page=podcasts [L,QSA]
+RewriteRule ^picks/?$      index.php?page=picks [L,QSA]
+RewriteRule ^popular/?$    index.php?page=popular [L,QSA]
+RewriteRule ^podcast_music/?$   index.php?page=dig&search-type=podcasting&title=Podsafe+Music [L,QSA]
+RewriteRule ^music_for_film_and_video/?$   index.php?page=dig&search-type=videos&title=Instrumental+Music+for+Film+and+Video [L,QSA]
+RewriteRule ^free_music/?$   index.php?page=dig&search-license=open&title=Music+Free+for+Commercial+Use [L,QSA]
+RewriteRule ^api/query/?$  lib/query_proxy.php [L,QSA]
+
+
+RewriteCond %{HTTP_REFERER} (www.qq.com) [NC,OR]
+RewriteCond %{HTTP_REFERER} (www.difiorefotografi.it) [NC,OR]
+RewriteCond %{HTTP_REFERER} (music.soso.com) [NC,OR]
+RewriteCond %{QUERY_STRING} (DOCUMENT_ROOT|_REQUEST) [NC]
+RewriteRule .* - [F]
+
+order allow,deny
+allow from all
+
+
+
+
+
+
