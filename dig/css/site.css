@@ -32,8 +32,12 @@ body {
 a {
 	color: #3399CC;
 }
-h2, h3 {
+h2, h3, #results-title {
 	color: #3399CC;
+}
+#results-title {
+    font-size: 2.0em;
+    margin-top: 0.75em;
 }
 h3.subheading {
 	margin-left: -.25em;
