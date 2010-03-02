@@ -122,21 +122,23 @@ ccmQuery.prototype = {
         this._options = options;
         this._parameters = fields;
         this._user_func = func;
+        if( !this._options.mode )
+          this._options.mode = 'ajax';          
     },
 
     // public
     
     query: function () {
       
-        this._clear_values();
-        this.values.num_results = 0;
+      this._clear_values();
+      this.values.num_results = 0;
 
-        this._get_params();
-        
-        if( this._options.paging && !this._count_fetched )
-          this._call_ccm( 'count', this._on_count_return.bind(this) );
-        else
-          this._call_ccm( 'js', this._on_query_return.bind(this) );
+      this._get_params();
+      
+      if( this._options.paging && !this._count_fetched && (this._options.mode == 'ajax') )
+        this._call_ccm( 'count', this._on_count_return.bind(this) );
+      else
+        this._call_ccm( 'js', this._on_query_return.bind(this) );
     },
     
     page: function(dir) {
@@ -175,6 +177,10 @@ ccmQuery.prototype = {
     
     _flatten_obj: function(obj,target,path)
     {
+      // wtf was I thinking ??
+      
+      /*
+       
         var pathChar = path ? '/' : '';
     
         for( field in obj )
@@ -192,7 +198,9 @@ ccmQuery.prototype = {
         }
         
         return target;
-        
+      */
+      
+      return obj;
     },
 
     _on_count_return: function(data)
@@ -262,23 +270,39 @@ ccmQuery.prototype = {
     
     _call_ccm: function( format, func ) {    
 
-        var url = this._rootURL + 'f=' + format + this._params;
-        
-        if( this._proxyURL )
+        switch( this._options.mode )
         {
-            url = this._proxyURL + escape(url);
-        }
-
-        if( this._options.debug )
-          dlink(url);
+          case 'ajax':
+            {
+              var url = this._rootURL + 'f=' + format + this._params;
+              
+              if( this._proxyURL )
+              {
+                  url = this._proxyURL + escape(url);
+              }
+      
+              if( this._options.debug )
+                dlink(url);
+                  
+          
+              jQuery.ajax({
+                          type: "POST",
+                          url: url,
+                          data: {},
+                          dataType: 'html',
+                          success: func
+                          });
+              
+              break;
+            }
             
-    
-        jQuery.ajax({
-                    type: "POST",
-                    url: url,
-                    data: {},
-                    dataType: 'html',
-                    success: func
-                    });
+          case 'server':
+          case 'remote':
+            {
+              var url = '/' + this._options.doc + '?' + this._params;
+              document.location = url;
+              break;
+            }
+        }
     }
 }

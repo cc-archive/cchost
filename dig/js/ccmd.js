@@ -27,6 +27,7 @@ var YMPParams = {
     defaultalbumart: DIG_ROOT_URL + '/images/default-cover.jpg'
 };
 
+
 var str_remove_tag = 'remove tag';
 var str_you_already = 'You already have permission&hellip;';
 var str_more = 'more &raquo;';
@@ -47,6 +48,9 @@ var str_click_here = 'Click here';
 var str_attribution = 'Attribution';
 var str_back = 'Back';
 var str_editors_picks = 'Editors\' Picks';
+var str_podcasts = 'Podcasts';
+
+var original_search_type = null;
 
 /*
     ADVANCED UTILITY
@@ -291,15 +295,16 @@ function result_actions(num) {
 
 function result_heading(result, num, max_name_length, featured) {
     var html = '';
+
     if(featured) {
-        html += '<h4><a href="'+result['files/0/download_url']+'">'+
+        html += '<h4><a href="'+result.files[0].download_url+'">'+
                 safe_upload_name(result['upload_name'], max_name_length)+'</a> </h4>';
         html += '<span class="result-creator">by <a href="'+result['artist_page_url']+'">'+
                 result['user_real_name']+'</a></span> <div class="license" id="license-'+num+
                 '"><a href="'+result['license_url']+'"><img src="'+license_image(result['license_name'])+
                 '" alt="'+result['license_name']+' Creative Commons License" /></a></div>';
     } else {
-        html += '<h4><a href="'+result['files/0/download_url']+'">'+
+        html += '<h4><a href="'+result.files[0].download_url+'">'+
                 safe_upload_name(result['upload_name'], max_name_length)+
                 '</a> <span class="result-creator">'+str_by+' <a href="'+result['artist_page_url']+'">'+
                 result['user_real_name']+'</a></span> <div class="license" id="license-'+num+'"><a href="'+
@@ -330,9 +335,10 @@ function result_download(result, num) {
     var file_count = result['num_files'];
     var i = 0;
     while(i < file_count) {
-        html += '<li><a href="'+result['files/'+i+'/download_url']+'">'+
-                result['files/'+i+'/file_name']+'</a> (<strong>'+result['files/'+i+'/file_format_info/default-ext']+
-                '</strong> '+clean_filesize(result['files/'+i+'/file_filesize'])+')</li>';
+        F = result.files[i];
+        html += '<li><a href="'+F.download_url+'">'+
+                F.file_name +'</a> (<strong>'+ F.file_format_info['default-ext'] +
+                '</strong> '+clean_filesize(F.file_filesize)+')</li>';
         i++;
     }
     html += '</ol>';
@@ -348,10 +354,10 @@ function result_download(result, num) {
 
 function result_info(result, num) {
     var html = '<div class="item">';
-    
+
     html += '<div class="info-header" style="background-image: url('+result['user_avatar_url']+');">';
     html += '<h5><a href="'+result['file_page_url']+'">'+result['upload_name']+
-            '</a> <span class="length">'+result['files/0/file_format_info/ps']+'</span></h5>';
+            '</a> <span class="length">'+result.files[0].file_format_info.ps+'</span></h5>';
     html += '<h6>by <a href="'+result['artist_page_url']+'">'+result['user_real_name']+'</a></h6>';
     html += '<ul class="meta">';
     if(result['upload_extra/featuring'] != '') {        
@@ -665,7 +671,7 @@ function popchartQueryResults(results) {
 
 function podcastQueryResults(results) {
     var html ='';
-    html += '<h3>Podcasts</h3>';
+    html += '<h3>'+str_podcasts+'</h3>';
     html += '<p>Subscribe to all by dragging <a href="http://feeds2.feedburner.com/ccMixter_music">this link</a> to your music player</p>';
     var result_count = jQuery('.result').length;
     var j = (result_count == 0) ? 0 : result_count+1;
@@ -869,7 +875,8 @@ function _resultsEvents() {
     jQuery('#prevlink').click(function(e) { queryObj.page(-1);return false; });
     jQuery('#nextlink').click(function(e) { queryObj.page(1);return false; });
     
-    YAHOO.MediaPlayer.addTracks(document.getElementById('results'), null, true);
+    if( YAHOO.MediaPlayer && YAHOO.MediaPlayer.addTracks )
+        YAHOO.MediaPlayer.addTracks(document.getElementById('results'), null, true);
 }
 
 function _podcastsPageEvents() {
@@ -1006,7 +1013,8 @@ function _digStyleResultsEvents(target) {
         }
     );
     
-    YAHOO.MediaPlayer.addTracks(document.getElementById(target), null, false);
+    if( YAHOO.MediaPlayer && YAHOO.MediaPlayer.addTracks ) // TODO: Why is this null (sometimes)?
+        YAHOO.MediaPlayer.addTracks(document.getElementById(target), null, false);
 }
 
 function progress_indicator() {
@@ -1030,11 +1038,38 @@ function do_search() {
     var search_val = $('#search-query').val();
     var search_lic = $('#search-license').val();
     var search_type = $('#search-type').val();
+
+    if( original_search_type && (search_type != original_search_type) )
+    {
+        var mapping = {
+            videos: 'music_for_film_and_video',
+            games: 'music_for_games',
+            podcasting: 'podcast_music',
+            entertainment: 'dig'
+        };
+        
+        if( search_type )
+        {
+            page = mapping[search_type];
+        }
+        else
+        {
+            page = 'dig';
+        }
+
+        
+        url = DIG_ROOT_URL + '/' + page + '?search-query=' + search_val
+                                        + '&search-license=' + search_lic
+                                        + '&search-type=' + search_type;
+        document.location = url;
+        return false; 
+    }
+
     
     var search_reqtags = 'remix';
     var search_tags = '';
     var search_param_type = 'all';
-    var digging_for = default_digging_for;;
+    var digging_for = default_digging_for;
     
     switch(search_type) {
         case 'videos':
@@ -1055,7 +1090,7 @@ function do_search() {
             break;
         case 'entertainment':
             digging_for = '<h3 id="diggingfor">You went digging for: Music for Entertainment</h3>';
-            break;          
+            break;
     }
 
     var parameters = get_search_param_defaults();
@@ -1066,25 +1101,8 @@ function do_search() {
     parameters.reqtags = search_reqtags;
     parameters.type    = search_param_type;
 
-    return do_param_search(parameters,digging_for);
-}
-
-function get_search_param_defaults()
-{
-    var p = {
-        dataview: 'diginfo',
-        ord: 'desc',
-        sort: 'rank',
-        offset: 0,
-     /* tagexp: '(remix|original)', */
-        limit: '10'
-    };
+    // generic search starts here ....
     
-    return p;
-}
-
-function do_param_search(parameters,digging_for)
-{
     var form_id = "search-utility";
     var form = $('#'+form_id);
 
@@ -1127,6 +1145,21 @@ function do_param_search(parameters,digging_for)
     
     return false;   
 }
+
+function get_search_param_defaults()
+{
+    var p = {
+        dataview: 'diginfo',
+        ord: 'desc',
+        sort: 'rank',
+        offset: 0,
+     /* tagexp: '(remix|original)', */
+        limit: '10'
+    };
+    
+    return p;
+}
+
 
 function do_advanced_search() {
     var today = new Date();
@@ -1225,7 +1258,7 @@ function populate_featured() {
     // populate edpicks
     
     var options = {
-        // debug: true,
+        //debug: true,
         parent: '#results'
     }
     var parameters = {
@@ -1394,13 +1427,15 @@ jQuery(document).ready(function() {
     if(jQuery('#dig').length > 0) {
         populate_dig();
         execute_url();
+        original_search_type = $('#search-type').val();
     }
-    
+   
+/* 
     // if the featured page
     if(jQuery('#featured').length > 0) {
         populate_featured();
     }
-    
+
     // if the picks page
     if(jQuery('#pickspage').length > 0) {
         populate_picks();
@@ -1415,4 +1450,6 @@ jQuery(document).ready(function() {
     if(jQuery('#podcastspage').length > 0) {
         populate_podcasts();
     }   
+*/  
+    
 });

@@ -70,22 +70,9 @@ class CCQuery
     function QueryURL()
     {
         $this->ProcessUriArgs();
-
-        list( $value, $mime ) = $this->Query(); // This method MAY exit the session... 
-
-        if( $value === true ) // handled elsewhere 
-            return;           // return and show the page
-
-        if( empty($value) ) 
-            CCUtil::Send404(true);  // We didn't find anything, slap back a 404
-
-        if( !empty($mime) )
-            header( "Content-type: $mime" );
-
-        print($value);
-        exit;
+        $this->ProcessUri();
     }
-
+    
     /**
     * Use this when calling from php (call ProcessAdminArgs first to clean the args)
     *
@@ -231,6 +218,29 @@ class CCQuery
 
         return $this->args;
     }
+
+    /**
+     *  Called after ProcessUriArgs - allows for munging args
+     *  in between the that method and this one
+     *
+     */
+    function ProcessUri()
+    {
+        list( $value, $mime ) = $this->Query(); // This method MAY exit the session... 
+
+        if( $value === true ) // handled elsewhere 
+            return;           // return and show the page
+
+        if( empty($value) ) 
+            CCUtil::Send404(true);  // We didn't find anything, slap back a 404
+
+        if( !empty($mime) )
+            header( "Content-type: $mime" );
+
+        print($value);
+        exit;
+    }
+
 
     /** 
     * Helper function for formats during CC_EVENT_QUERY_SETUP

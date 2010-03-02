@@ -17,21 +17,20 @@
 * $Id$
 *
 */
-	$page_title = 'dig.ccmixter Editor\'s Picks';
-	$featured_class = 'class="current"';
-	
-	require_once('lib/head.php');
-?>
 
-	<div id="content">
-		<div class="page full" id="pickspage">
-			<h2>Editors' Picks</h2>
-			<div id="results">
-			</div>
-			<div class="clearer"></div>
-		</div>
-        <? require_once('lib/footer.php'); ?>
-	</div>
-  </div>
-</body>
-</html>
+$query_args = array(
+    'dataview' => 'diginfo',
+    'tags'     => 'editorial_pick',
+    'limit'    => 10,
+);
+
+$doc_page       = 'picks';
+$page_title     = 'dig.ccmixter Editor\'s Picks';
+$featured_class = 'class="current"';
+$page_div_id    =  'pickspage';
+$h2_title       =  "Editors' Picks";
+$results_func   = 'query_results';
+
+require_once('pages/_canned_query.inc');
+
+?>

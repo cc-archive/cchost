@@ -18,6 +18,7 @@
 *
 */
 
+
 require_once('../config.php');
 
 define('CC_HOST_CMD_LINE', 1 );      // define this exact way
@@ -28,6 +29,15 @@ require_once( 'cc-cmd-line.inc' );
 require_once( 'cchost_lib/cc-query.php');
 
 $query = new CCQuery();
-$query->QueryURL();
+
+$args = $query->ProcessUriArgs();
+
+if( $args['format'] != 'page' )
+{
+    $query->ProcessUri(); // this will exit
+}
+
+chdir( dirname(__FILE__) . '/..' ); // chdir back to dig
+
 
 ?>

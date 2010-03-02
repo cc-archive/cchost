@@ -36,6 +36,12 @@ error_reporting(E_ALL);
 
 if( !defined('CC_HOST_CMD_LINE') )
     die('Welcome to ccHost');
+
+global $CC_GLOBALS;
+global $CC_CFG_ROOT;
+
+$CC_GLOBALS   = array();
+$CC_CFG_ROOT  = '';
     
 define('IN_CC_HOST',1);
 require_once('cchost_lib/cc-debug.php');
@@ -51,6 +57,9 @@ if( empty($CC_GLOBALS) )
 {
     CCConfigs::Init();
 }
+
+// CCDebug::Enable(true);
+// CCDebug::PrintVar($CC_GLOBALS);
 
 if( !empty($CC_GLOBALS['extra-lib']) )
 {

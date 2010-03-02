@@ -17,20 +17,22 @@
 * $Id$
 *
 */
-	$page_title = 'dig.ccmixter Podcasts';
-	$featured_class = 'class="current"';
-	
-	require_once('lib/head.php');
-?>
 
-	<div id="content">
-		<div class="page full" id="podcastspage">
-			<h2>Podcasts</h2>
-			<div id="results">
-			</div>
-			<div class="clearer"></div>
-		</div>
-    <? require_once('lib/footer.php'); ?>
-  </div>
-</body>
-</html>
+$query_args = array(
+    'dataview'   => 'topics_podinfo',
+    'datasource' => 'topics',
+    'type'       => 'podcast',
+    'offset'     => 1,
+    'limit'      => 10,
+);
+
+$doc_page       = 'podcasts';
+$page_title     = 'dig.ccmixter Podcasts';
+$featured_class = 'class="current"';
+$page_div_id    = 'podcastspage';
+$h2_title       = 'Podcasts';
+$results_func   = 'podcastPageQueryResults';
+
+require_once('pages/_canned_query.inc');
+
+?>

@@ -50,6 +50,12 @@ if( !isset($page_title) )
 	<script src="http://mediaplayer.yahoo.com/js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/ccm-query.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/ccmd.js" type="text/javascript" charset="utf-8"></script>
+<?
+if( !empty($script_for_head) )
+{
+		print $script_for_head;
+}
+?>
 </head>
 <body>
   <div class="container">

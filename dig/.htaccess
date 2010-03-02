@@ -14,6 +14,7 @@ RewriteRule ^picks/?$      index.php?page=picks [L,QSA]
 RewriteRule ^popular/?$    index.php?page=popular [L,QSA]
 RewriteRule ^podcast_music/?$   index.php?page=dig&search-type=podcasting&title=Podsafe+Music [L,QSA]
 RewriteRule ^music_for_film_and_video/?$   index.php?page=dig&search-type=videos&title=Instrumental+Music+for+Film+and+Video [L,QSA]
+RewriteRule ^music_for_games/?$   index.php?page=dig&search-type=games&title=Electro+Instrumental+Music+for+Games [L,QSA]
 RewriteRule ^free_music/?$   index.php?page=dig&search-license=open&title=Music+Free+for+Commercial+Use [L,QSA]
 RewriteRule ^api/query/?$  lib/query_proxy.php [L,QSA]
 

@@ -18,6 +18,11 @@
 *
 */
 
+global $DIG_ROOT_URL;
+global $MIXTER_ROOT_DIR;
+global $QUERY_ROOT_URL;
+global $QUERY_PROXY_URL;
+
 $page = empty($_REQUEST['page']) ? 'home' : $_REQUEST['page'];
     
 require_once('pages/'.$page.'.php');

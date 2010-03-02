@@ -61,7 +61,6 @@ function execute_url()
                 $js =<<<EOF
     var parameters = {}; 
     {$params}  
-    //do_param_search(parameters,default_digging_for);
     update_fields(parameters);
     {$fields}
     do_search();

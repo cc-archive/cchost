@@ -17,20 +17,22 @@
 * $Id$
 *
 */
-	$page_title = 'dig.ccmixter Popular';
-	$featured_class = 'class="current"';
-	
-	require_once('lib/head.php');
+
+$query_args = array(
+    'dataview' => 'diginfo',
+    'tags'     => 'remix',
+    'sinced'   => '2 weeks ago',
+    'sort'     => 'rank',
+    'limit'    => 10,
+);
+
+$doc_page       = 'popular';
+$page_title     = 'dig.ccmixter Popular';
+$featured_class = 'class="current"';
+$page_div_id    = 'popularpage';
+$h2_title       = 'Popular';
+$results_func   = 'query_results';
+
+require_once('pages/_canned_query.inc');
+
 ?>
-	<div id="content">
-		<div class="page full" id="popularpage">
-			<h2>Popular</h2>
-			<div id="results">
-			</div>
-			<div class="clearer"></div>
-		</div>
-        <? require_once('lib/footer.php'); ?>
-	</div>
-  </div>
-</body>
-</html>
