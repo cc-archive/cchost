@@ -18,6 +18,8 @@
 *
 */
 
+error_reporting(E_ALL);
+
 global $DIG_ROOT_URL;
 global $MIXTER_ROOT_DIR;
 global $QUERY_ROOT_URL;

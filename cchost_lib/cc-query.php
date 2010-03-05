@@ -758,6 +758,11 @@ class CCQuery
 
     function _gen_lic()
     {
+        if( empty($this->args['lic']) )
+        {
+            return;
+        }
+        
         $T = array( 
             'by'       =>  array('attribution','attribution_3'),
             'sa'       =>  array('share-alike','share-alike_3'), 
@@ -776,7 +781,7 @@ class CCQuery
         $T['open']  = array_merge( $T['by'], $T['pd'], $T['s'],$T['splus'],$T['nd'],$T['sa'] );
         $T['allnc'] = array_merge( $T['nc'], $T['ncsa'], $T['ncnd'],$T['ncsplus'] );
         
-        $lics = split(',',$this->args['lic']);
+        $lics = split(',',trim($this->args['lic']));
         
         $license_ids = array();
         

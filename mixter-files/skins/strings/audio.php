@@ -22,7 +22,7 @@ require_once('dig/config.php');
 $GLOBALS['str_search_help_generic'] =
     '<div style="text-align:center"><h2>Looking for music?</h2>' .
     '<h3>Try our music discovery tool <a style="text-decoration:underline;" href="' . $GLOBALS['DIG_ROOT_URL'] . '">dig.ccMixter</a></h3><br />' .
-    '<a href="' . $GLOBALS['DIG_ROOT_URL'] . '"><img src="' . $CC_GLOBALS['home-url'] . '/dig/images/logo-black.png" /></a>'.
+    '<a href="' . $GLOBALS['DIG_ROOT_URL'] . '"><img src="/dig/images/logo-black.png" /></a>'.
     '</div>' .
     '<hr />Otherwise, use the form below to search for text, a specific user, a forum post, etc.'
     ;

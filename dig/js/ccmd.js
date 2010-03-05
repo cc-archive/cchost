@@ -1026,139 +1026,44 @@ var default_digging_for = '<h3 id="diggingfor">You went digging for: All types o
 /*
     SEARCH & POPULATE
 */
-function update_fields(parameters) {
-    var search_field = $('#search-query');
-    if( search_field ) { // basic search
-        $('#search-query').val(parameters.s ? parameters.s : parameters.search);
-        $('#search-license').val( parameters.lic );
-    }    
-}
+
 
 function do_search() {
     var search_val = $('#search-query').val();
     var search_lic = $('#search-license').val();
     var search_type = $('#search-type').val();
 
+    var page = 'dig';
     if( original_search_type && (search_type != original_search_type) )
     {
-        var mapping = {
-            videos: 'music_for_film_and_video',
-            games: 'music_for_games',
-            podcasting: 'podcast_music',
-            entertainment: 'dig'
-        };
-        
-        if( search_type )
-        {
-            page = mapping[search_type];
-        }
-        else
-        {
-            page = 'dig';
-        }
-
-        
-        url = DIG_ROOT_URL + '/' + page + '?search-query=' + search_val
-                                        + '&search-license=' + search_lic
-                                        + '&search-type=' + search_type;
-        document.location = url;
-        return false; 
+        page = search_type;
     }
 
+    var q = '?';
+    url = DIG_ROOT_URL + '/' + search_type;
     
-    var search_reqtags = 'remix';
-    var search_tags = '';
-    var search_param_type = 'all';
-    var digging_for = default_digging_for;
-    
-    switch(search_type) {
-        case 'videos':
-            search_reqtags += ',instrumental,-male_vocals,-female_vocals';
-            search_param_type = 'any';
-            digging_for = '<h3 id="diggingfor">You went digging for: Music for Videos</h3>';
-            break;
-        case 'games':
-            search_reqtags += ',instrumental,-male_vocals,-female_vocals';
-            search_tags = 'electronic,experimental';
-            search_param_type = 'any';
-            digging_for = '<h3 id="diggingfor">You went digging for: Music for Games</h3>';
-            break;
-        case 'podcasting':
-            search_tags = 'male_vocals,female_vocals,vocals';
-            search_param_type = 'any';
-            digging_for = '<h3 id="diggingfor">You went digging for: Music for Podcasting</h3>';
-            break;
-        case 'entertainment':
-            digging_for = '<h3 id="diggingfor">You went digging for: Music for Entertainment</h3>';
-            break;
-    }
-
-    var parameters = get_search_param_defaults();
-    
-    parameters.search  = search_val;
-    parameters.lic     = search_lic;
-    parameters.tags    = search_tags;
-    parameters.reqtags = search_reqtags;
-    parameters.type    = search_param_type;
-
-    // generic search starts here ....
-    
-    var form_id = "search-utility";
-    var form = $('#'+form_id);
-
-    $('#loading').show();
-    
-    // video - instrumental
-    // game - instrumental + (electronic|experimental)
-    // podcast - male_vocals | female_vocals
-    // entertainment?
-    
-    var options = {
-        // debug: true,
-        paging: true,
-        parent: '#'+form_id
-    };
-
-    $('#results').html(digging_for+progress_indicator());
-    
-    queryObj = new ccmQuery(options, parameters, query_results);
-    queryObj.query();
-    
-    var options2 = {
-        // debug: true,
-        paging: false,
-        parent: '#'+form_id
-    };
-    
-    var parameters2 = {
-        dataview: 'tag_alias',
-        search: parameters.s ? parameters.s : parameters.search
-    };
-    
-    $('#didumean').html('');
-    
-    if( parameters2.search )
+    if( search_lic == 'open' )
     {
-        var didUMeanQuery = new ccmQuery(options2, parameters2, didUMean_results);
-        didUMeanQuery.query();
+        url += q + 'search-license=open';
+        q = '&';
     }
     
-    return false;   
+    if( search_val.length > 0 )
+    {
+        url += q + 'search-query=' + search_val;
+        q = '&';
+    }
+    
+    if( search_type != 'dig' )
+    {
+        url += q + 'search-type=' + search_type;
+    }
+
+    document.location = url;
+    return false; 
 }
 
-function get_search_param_defaults()
-{
-    var p = {
-        dataview: 'diginfo',
-        ord: 'desc',
-        sort: 'rank',
-        offset: 0,
-     /* tagexp: '(remix|original)', */
-        limit: '10'
-    };
-    
-    return p;
-}
+
 
 
 function do_advanced_search() {
@@ -1306,6 +1211,7 @@ function populate_picks() {
     queryObj.query();
 }
 
+/*
 function populate_popular() {
     var options = {
         // debug: true,
@@ -1345,6 +1251,7 @@ function populate_podcasts() {
     queryObj = new ccmQuery(options, parameters, podcastPageQueryResults);
     queryObj.query();
 }
+*/
 
 function populate_home()
 {
@@ -1396,6 +1303,8 @@ function populate_dig()
     advanced_search_button.click(do_advanced_search);
     
     search_button.click(do_search);
+
+    window.original_search_type = $('#search-type').val();
     
 }
 /*
@@ -1422,15 +1331,15 @@ jQuery(document).ready(function() {
     if(jQuery('#homepage').length > 0) {
         populate_home();
     }
+
     
     // if the dig page  
     if(jQuery('#dig').length > 0) {
         populate_dig();
-        execute_url();
-        original_search_type = $('#search-type').val();
     }
-   
+
 /* 
+   
     // if the featured page
     if(jQuery('#featured').length > 0) {
         populate_featured();

@@ -299,7 +299,12 @@ ccmQuery.prototype = {
           case 'server':
           case 'remote':
             {
-              var url = '/' + this._options.doc + '?' + this._params;
+              var url = '/' + this._options.doc + '?';
+              if( this._options.calling_args_str )
+              {
+                url += this._options.calling_args_str;
+              }
+              url += this._params;
               document.location = url;
               break;
             }

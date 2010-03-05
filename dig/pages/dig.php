@@ -17,68 +17,56 @@
 * $Id$
 *
 */
-    $page_title = 'dig.ccmixter Dig Results';
-    $dig_class = 'class="current"';
-                
-    require_once('lib/head.php');
+
+require_once('lib/util.php');
+require_once('lib/dig_util.php');
+require_once('lib/query.php');
+
+$digQuery = new digQuery(DIG_PAGING_ON);
+$digQuery->_page_opts['paging'] = true;
+$digQuery->_page_opts['parent'] = '#search-utility';
+$digQuery->_page_opts['results_func'] = 'query_results';
+$digQuery->ProcessUriArgs();
+$digQuery->ProcessAdminArgs(prep_dig_query_args($digQuery));
+$digQuery->Query();
+
+
+if( empty($digQuery->_fields['search-query']) )
+{
+    $didumeanQuery = null;
+}
+else
+{
+    $didumeanQuery = new digQuery();
+    $didumeanArgs = array(
+        'dataview' => 'tag_alias',
+        'search'   => $digQuery->_fields['search-query'],
+    );
+    $didumeanQuery->ProcessAdminArgs($didumeanArgs);
+    $didumeanQuery->Query();
+    $didumeanQuery->_page_opts = array( 'results_func' => 'didUMean_results' );
+}
+
+// ----------
+$queries = array( &$didumeanQuery, &$digQuery ) ;
+if( !empty($_REQUEST['dquery'] ) )
+{
+    $digQuery->query_str = http_build_query($digQuery->_query_args);
+    dbg($queries);
+}
+$script_heads[] = queries_to_jscript( $queries );
+$page_title = empty($digQuery->_query_args['title']) ? 'dig.ccmixter' : $digQuery->_query_args['title'];
+$dig_class = 'class="current"';
+            
+require_once('lib/head.php');
     
 ?>
-<script type="text/javascript" charset="utf-8">
-function execute_url()
-{
-  <?
-  
-		if( !empty($_GET) )
-		{
-            $fields = array();
-            $params = array();
-            foreach( $_GET as $K => $V )
-            {
-                if( preg_match('/^(advanced-)?search-/',$K) )
-                {
-                    $fields[] = "\$('#{$K}').val('{$V}');";
-                }
-                else
-                {
-                    if( !in_array($K,array('page','x','y')) )
-                    {
-                        $params[] = "parameters.{$K} = '{$V}';";
-                    }
-                }
-            }
-            if( empty($params) )
-                $params = '';
-            else
-                $params = join("    \n",$params);
-                
-            if( empty($fields) )
-                $fields = '';
-            else
-                $fields = join("    \n",$fields);
-            
-            if( !empty($params) || !empty($fields) )
-            {
-                $js =<<<EOF
-    var parameters = {}; 
-    {$params}  
-    update_fields(parameters);
-    {$fields}
-    do_search();
-    
-EOF;
-                print $js;
-            }
-		}
-  ?>
-  
-}
-</script>
 
 	<div id="content">
 		<div class="page full" id="dig">
 			<!-- <h2>dig</h2> -->
 			<div class="search-utility round">
-				<form action="#">
+				<form action="#" >
 					<div class="search-input-container"><input type="text" name="search-query" value="" id="search-query" /></div>
 					<div class="search-select-container">
 						<select name="search-license" id="search-license" size="1">
@@ -86,11 +74,12 @@ EOF;
 					        <option value="open">Free for commercial use</option>
 						</select>
 						<select name="search-type" id="search-type" size="1">
-							<option value="">All types</option>
-					        <option value="videos">For video use</option>
-							<option value="games">For game use</option>
-							<option value="podcasting">For podcasts</option>
-							<option value="entertainment">Entertain me!</option>
+							<option value="dig">All types</option>
+					        <option value="music_for_film_and_video">For video use</option>
+							<option value="music_for_games">For game use</option>
+							<option value="podcast_music">For podcasts</option>
+							<option value="cubicle_music">Cubicle music</option>
+							<option value="party_music">Party music</option>
 						</select>
 					</div>
 					
@@ -173,15 +162,16 @@ EOF;
 			</div>
 			<div class="advanced"><a href="#" class="advanced-search-link">Advanced dig</a><a href="#" class="basic-search-link">Basic dig</a></div>
             <?
-                if( !empty($_GET['title']) )
+                if( !empty($page_title) )
                 {
-                    print '<h1 id="results-title">' . $_GET['title'] . '</h1>';
+                    print "<h2>{$page_title}</h2>";
                 }
             ?>
 			<div id="didumean"></div>
 			<div id="results">
 			</div>
 			<div class="clearer"></div>
+            <? queries_to_no_script(array($digQuery)); ?>
 		</div>
         <?
             require_once('lib/footer.php');
