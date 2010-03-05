@@ -298,7 +298,7 @@ h3.subheading {
 p.site-license {
 	margin-top: 2em;
 	padding-bottom: 1em;
-	vertical-align: center;
+	vertical-align: middle; /* was 'center' */
 }
 .site-license img {
 	vertical-align: text-bottom;
@@ -311,9 +311,13 @@ p.site-license {
 .search-utility {
 	background-color: #FFF;
 }
-.search-utility, .advanced-search-utility {
+.search-utility {
 	margin: 0 0 .5em 0;
 }
+.advanced-search-utility {
+	margin: 0 0 .5em 0;
+}
+
 .advanced-search-utility {
 	display: none;
 }
@@ -399,6 +403,7 @@ p.site-license {
 }
 #advanced-search-query {
 	width: 892px;
+    display: none;
 
 }
 #advanced-search-results {

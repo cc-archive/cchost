@@ -20,6 +20,11 @@
     nvzion.com, 2010
 */
 
+
+/*
+    N.B. Several of the results handlers are referred to from server code
+*/
+
 /*
     YAHOO! MEDIA PLAYER CONFIGURATION
 */
@@ -51,6 +56,7 @@ var str_editors_picks = 'Editors\' Picks';
 var str_podcasts = 'Podcasts';
 
 var original_search_type = null;
+var adv_showing = false;
 
 /*
     ADVANCED UTILITY
@@ -153,6 +159,11 @@ function tagStyleQueryResults(results) {
 }
 
 function populate_tags() {
+    
+    if( window.tags_populated )
+        return;
+    window.tags_populated = true;
+    
     $('#clear').click( function(e) { onClearTag(); });
     $('#tag_add').click(function(e) { onAddTagToQuery(); });
     // populate the tag categories
@@ -193,6 +204,7 @@ function populate_tags() {
         cat: 'mood'   // 'Style' actually
     };
     new ccmQuery(options, parameters, tagStyleQueryResults).query();
+    
 }
 
 function _tagQueryResults(results,type,results_div) {
@@ -1021,8 +1033,6 @@ function progress_indicator() {
     return '<div id="loading"><img src="images/loading.gif"></div>';
 }
 
-var default_digging_for = '<h3 id="diggingfor">You went digging for: All types of music</h3>';
-
 /*
     SEARCH & POPULATE
 */
@@ -1040,7 +1050,7 @@ function do_search() {
     }
 
     var q = '?';
-    url = DIG_ROOT_URL + '/' + search_type;
+    url = DIG_ROOT_URL + '/' + page;
     
     if( search_lic == 'open' )
     {
@@ -1057,272 +1067,110 @@ function do_search() {
     if( search_type != 'dig' )
     {
         url += q + 'search-type=' + search_type;
+        q = '&';
+    }
+
+    if( adv_showing )
+    {
+        var val;
+        
+        url += q +  'advanced-search-results=' + $('#advanced-search-results').val()
+                 + '&advanced-search-sortby='  + $('#advanced-search-sortby').val()
+                 + '&advanced-search-sortdir=' + $('#advanced-search-sortdir').val()
+                 + '&advanced-search-stype='   + $('#advanced-search-stype').val()
+                 + '&adv=1';
+                 
+        val = $('#advanced-search-since').val();
+        
+        if( val.length > 0 )
+        {
+            url += '&advanced-search-since=' + val;            
+        }
+        
+        val = $('#advanced-search-tags').val();
+        
+        if( val.length > 0 )
+        {
+            url += '&advanced-search-tags=' + val;            
+        }
     }
 
     document.location = url;
     return false; 
 }
 
-
-
-
-function do_advanced_search() {
-    var today = new Date();
-    var search_before = prep_date(today);
-    
-    var form_id = "advanced-search-utility";
-    var form = $('#'+form_id);
-    var search_val = $('#advanced-search-query').val();
-    var search_lic = $('#advanced-search-license').val();
-    var search_results = $('#advanced-search-results').val();
-    var search_since = $('#advanced-search-since').val();
-    var search_sort = $('#advanced-search-sortby').val();
-    var search_order = $('#advanced-search-sortdir').val();
-    var search_tags = $('#advanced-search-tags').val();
-    
-    var since_date = new Date();
-    var search_sinced = '';
-    
-    switch(search_since) {
-        case '*':
-            search_before = '';
-            break;
-        case '1 days ago':
-            since_date.setDate(since_date.getDate()-1);
-            search_sinced = prep_date(since_date);
-            break;
-        case '1 weeks ago':
-            since_date.setDate(since_date.getDate()-7);
-            search_sinced = prep_date(since_date);
-            break;
-        case '2 weeks ago':
-            since_date.setDate(since_date.getDate()-14);
-            search_sinced = prep_date(since_date);
-            break;
-        case '1 months ago':
-            since_date.setDate(since_date.getDate()-30);
-            search_sinced = prep_date(since_date);
-            break;
-        case '3 months ago':
-            since_date.setDate(since_date.getDate()-90);
-            search_sinced = prep_date(since_date);
-            break;
-        case '1 years ago':
-            since_date.setDate(since_date.getDate()-365);
-            search_sinced = prep_date(since_date);
-            break;
-    }
-    
-    $('#loading').show();
-    
-    var options = {
-        // debug: true,
-        paging: true,
-        parent: '#'+form_id
-    };
-    var parameters = {
-        dataview: 'diginfo',
-        sinced: search_sinced,
-        befored: search_before,
-        search: search_val,
-        ord: search_order,
-        sort: search_sort,
-        lic: search_lic,
-        offset: 0,
-        reqtags: search_tags,
-        type: 'any',
-        tagexp: '(remix|original)',
-        limit: search_results
-    };
-
-    $('#results').html('<div id="loading"><img src="images/loading.gif"></div>');
-    
-    queryObj = new ccmQuery(options, parameters, query_results);
-    queryObj.query();
-    
-    
-    var options2 = {
-        // debug: true,
-        paging: false,
-        parent: '#'+form_id
-    };
-    var parameters2 = {
-        dataview: 'tag_alias',
-        search: search_val+','+search_tags
-    };
-    
-    $('#didumean').html('');
-    
-    var didUMeanQuery = new ccmQuery(options2, parameters2, advanced_didUMean_results);
-    didUMeanQuery.query();
-    
+function handle_home_submit()
+{
+    var val = $('#q').val();
+    var url = DIG_ROOT_URL + '/dig?search-query=' + val;
+    document.location = url;
     return false;
 }
 
-function populate_featured() {
-    // populate edpicks
-    
-    var options = {
-        //debug: true,
-        parent: '#results'
-    }
-    var parameters = {
-        dataview: 'diginfo',
-        tags: 'editorial_pick',
-        limit: 6
-        
-    };
-    new ccmQuery(options, parameters, edpickQueryResults).query();
-    
-    var parameters = {
-        dataview: 'diginfo',
-        tags: 'remix',
-        sort: 'rank',
-        sinced: '2 weeks ago',
-        limit: 6
-        
-    };
-    new ccmQuery(options, parameters, popchartQueryResults).query();
-
-    var parameters = {
-        dataview: 'topics_podinfo',
-        type: 'podcast',
-        limit: 10,
-        offset: 1
-    };
-    new ccmQuery(options, parameters, podcastQueryResults).query();
-}
-
-function populate_picks() {
-    var options = {
-        // debug: true,
-        paging: true,
-        parent: '#results'
-    }
-    var parameters = {
-        dataview: 'diginfo',
-        tags: 'editorial_pick',
-        limit: 10,
-        offset: 0
-    };
-    $('#results').html(progress_indicator());
-
-    queryObj = new ccmQuery(options, parameters, query_results);
-    queryObj.query();
-}
-
-/*
-function populate_popular() {
-    var options = {
-        // debug: true,
-        paging: true,
-        parent: '#results'
-    }
-
-    var parameters = {
-        dataview: 'diginfo',
-        tags: 'remix',
-        sort: 'rank',
-        sinced: '2 weeks ago',
-        limit: 10,
-        offset: 0
-    };
-
-    queryObj = new ccmQuery(options, parameters, query_results);
-    queryObj.query();
-}
-
-function populate_podcasts() {
-    var options = {
-        debug: true,
-        paging: true,
-        parent: '#results'
-    }
-
-    var parameters = {
-        dataview: 'topics_podinfo',
-        datasource: 'topics',
-        type: 'podcast',
-        limit: 10,
-        offset: 1
-    };
-    $('#results').html(progress_indicator());
-
-    queryObj = new ccmQuery(options, parameters, podcastPageQueryResults);
-    queryObj.query();
-}
-*/
-
 function populate_home()
 {
-    $('#entry-search').click( function(e) {
-        $('#entry-search-form').submit();
-    });
+    $('#entry-search').click( handle_home_submit );
+    $('#entry-search-form').submit( handle_home_submit );
+}
+
+function show_advanced(e)
+{
+    var basic_search_link = jQuery('.basic-search-link');
+    var advanced_search_link = jQuery('.advanced-search-link');
+    
+    window.old_s_height = $('.search-utility').height(); 
+    $('.search-utility').height('42px');
+    $('.advanced-search-utility').show();
+    basic_search_link.show();
+    advanced_search_link.hide();
+    populate_tags();
+    return false;    
+}
+
+function hide_advanced(e)
+{
+    var basic_search_link = jQuery('.basic-search-link');
+    var advanced_search_link = jQuery('.advanced-search-link');
+    
+    $('.search-utility').height(window.old_s_height);
+    $('.advanced-search-utility').hide();
+    advanced_search_link.show();
+    basic_search_link.hide();
+    return false;    
 }
 
 function populate_dig()
 {
-    var license = jQuery('.license');
-    var advanced_search_link = jQuery('.advanced-search-link');
-    var basic_search_link = jQuery('.basic-search-link');
-    var advanced_search_button = jQuery('#advanced-search');
-    var search_button = jQuery('#search');
+    //var advanced_search_button = jQuery('#advanced-search');
+    //advanced_search_button.click(do_advanced_search);
     
-    clean_advanced();
+    var search_button = jQuery('#search');
+    var basic_search_link = jQuery('.basic-search-link');
+    var advanced_search_link = jQuery('.advanced-search-link');
+    
+    window.old_s_height = $('.search-utility').height(); 
+    
+    if( adv_showing )
+        show_advanced();
+    else
+        clean_advanced();
     
     /*
         click action attached to "Advanced dig" link to hide the basic dig form,
         show the advanced dig form and populate tags
     */
-    advanced_search_link.click(function(e) {
-        $('.search-utility').hide();
-        $('.advanced-search-utility').show();
-        $('#results').html('');
-        $('#didumean').html('');
-        basic_search_link.show();
-        $(this).hide();
-        populate_tags();
-        return false;
-    });
+    advanced_search_link.click( show_advanced );
     
     /*  
         click action attached to "Basic dig" link to hide the advanced dig form, 
         show the basic dig form and clear tags
     */
-    basic_search_link.click(function(e) {
-        $('.search-utility').show();
-        $('#results').html('');
-        $('#didumean').html('');
-        clean_advanced();
-        $('.advanced-search-utility').hide();
-        advanced_search_link.show();
-        $(this).hide();
-        return false;
-    });
-    
-    advanced_search_button.click(do_advanced_search);
-    
+    basic_search_link.click( hide_advanced );
+        
     search_button.click(do_search);
 
     window.original_search_type = $('#search-type').val();
     
-}
-/*
-    UTILITY
-*/
-function prep_date(date_object) {
-    var date = normalize_date_segment(date_object.getDate());
-    var month = normalize_date_segment(date_object.getMonth()+1);
-    var year = date_object.getFullYear();
-    
-    return month+'/'+date+'/'+year;
-}
-
-function normalize_date_segment(segment) {
-    if(segment < 10) {
-        segment = '0'+segment;
-    }
-    return segment;
 }
 
 
@@ -1337,28 +1185,5 @@ jQuery(document).ready(function() {
     if(jQuery('#dig').length > 0) {
         populate_dig();
     }
-
-/* 
-   
-    // if the featured page
-    if(jQuery('#featured').length > 0) {
-        populate_featured();
-    }
-
-    // if the picks page
-    if(jQuery('#pickspage').length > 0) {
-        populate_picks();
-    }
-    
-    // if the popular page
-    if(jQuery('#popularpage').length > 0) {
-        populate_popular();
-    }
-    
-    // if the podcasts page
-    if(jQuery('#podcastspage').length > 0) {
-        populate_podcasts();
-    }   
-*/  
     
 });

@@ -55,6 +55,10 @@ if( !empty($_REQUEST['dquery'] ) )
     dbg($queries);
 }
 $script_heads[] = queries_to_jscript( $queries );
+if( !empty($digQuery->pretty_args->args['adv']) )
+{
+    $script_heads[] = '<script type="text/javascript"> adv_showing = true; </script>' . "\n";
+}
 $page_title = empty($digQuery->_query_args['title']) ? 'dig.ccmixter' : $digQuery->_query_args['title'];
 $dig_class = 'class="current"';
             
@@ -104,7 +108,7 @@ require_once('lib/head.php');
 						</select>
 						<label for="advanced-search-since" id="advanced-search-since-label">since</label>
 						<select id="advanced-search-since" name="advanced-search-since">
-							<option value="*">Forever</option>
+							<option value="">Forever</option>
 							<option value="1 days ago">Yesterday</option>
 							<option value="1 weeks ago">1 week ago</option>
 							<option value="2 weeks ago">2 weeks ago</option>
@@ -114,20 +118,27 @@ require_once('lib/head.php');
 						</select>
 						<label for="advanced-search-sortby" id="advanced-search-sortby-label">sort</label>
 						<select name="advanced-search-sortby" id="advanced-search-sortby">
-							<option value="popularity">Popularity</option>
+							<option value="rank">Popularity</option>
 							<option value="date">Date</option>
-							<option value="track-name">Track name</option>
-							<option value="musician">Musician</option>
+							<option value="name">Track name</option>
+							<option value="user">Musician</option>
 						</select>
 						<select name="advanced-search-sortdir" id="advanced-search-sortdir">
 							<option value="desc">Descending</option>
 							<option value="asc">Ascending</option>
 						</select>
 						
-						<label for="advanced-search-license" id="advanced-search-license-label">license</label>
-						<select name="advanced-search-license" id="advanced-search-license" size="1">
+						<!-- label for="advanced-search-license" id="advanced-search-license-label">license</label>
+						<select style="display:none" name="advanced-search-license" id="advanced-search-license" size="1">
 							<option value="">All licenses</option>
 					        <option value="open">Free for commercial use</option>
+						</select -->
+                        
+						<label for="advanced-search-stype" id="advanced-search-stype-label">combine</label>
+						<select name="advanced-search-stype" id="advanced-search-stype" size="1">
+							<option value="all">All words</option>
+							<option value="any">Any word</option>
+							<option value="match">Exact phrase</option>
 						</select>
 						<input type="hidden" name="advanced-search-tags" value="" id="advanced-search-tags" />
 					</div>
@@ -146,18 +157,18 @@ require_once('lib/head.php');
 						</div>
 						<div class="clearer"></div>
 					</div>
-					<div class="advanced-search-row">
+					<div class="advanced-search-row  advanced-search-row-last">
 						<label id="tags-label">tags</label>
 						<div id="tags-container"></div>
 						<div class="clear-button-container"><a href="#" id="clear">Clear</a></div>
 						<div class="clearer"></div>
 					</div>
-					<div class="advanced-search-row advanced-search-row-last">
+					<!-- div class="advanced-search-row advanced-search-row-last">
 						<div class="advanced-search-button-container">
 							<input id="advanced-search" type="image" alt="Search" src="images/advanced-search-button-bg.png" />
 						</div>
 						<div class="clearer"></div>
-					</div>
+					</div -->
 					</form>
 			</div>
 			<div class="advanced"><a href="#" class="advanced-search-link">Advanced dig</a><a href="#" class="basic-search-link">Basic dig</a></div>

@@ -181,7 +181,7 @@ class digQuery
         
         // separate out dig control fields
         
-        foreach( array('page') as $K )
+        foreach( array('page,dquery') as $K )
         {
             if( !empty($all[$K]) )
             {
@@ -190,7 +190,7 @@ class digQuery
         
         }
         
-        foreach( array('results_func') as $K )
+        foreach( array('results_func,adv') as $K )
         {
             if( !empty($all[$K]) )
             {
