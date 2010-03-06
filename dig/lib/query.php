@@ -171,7 +171,7 @@ class digQuery
         
         foreach( $all as $K => $V )
         {
-            if( preg_match('/^(search|advanced)-/i',$K) )
+            if( preg_match('/^dig-/i',$K) )
             {
                 $this->_fields[$K] = $V;
             }

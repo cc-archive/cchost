@@ -61,90 +61,65 @@ var adv_showing = false;
 /*
     ADVANCED UTILITY
 */
-function onAddTagToQuery() {
-    var op_chars = [];
-    op_chars['and'] = '*';
-    op_chars['or']  = '|';
-    op_chars['not'] = '*';
-    
-    $('#tag_worker').hide('fast');
-    var op = $('input[name=tag_op]:checked').val();
-    var target = $('#tags_' + op);
-    var tag = op == 'not' ? '-' + the_work_tag : the_work_tag;
-    var html = target.html();
-    if( html.length )
-        target.html( html + op_chars[op] + tag );
-    else
-        target.html( tag );
-    
-    var clear_button = $('#clear');
-    if(clear_button.is(':hidden')) {
-        clear_button.show();
-    }
-}
 
 function onClearTag() {
+    $('#tagpicker input[type=checkbox]:checked').attr('checked','');
     $('#tags-container').html('');
-    var clear_button = $('#clear');
-    clear_button.hide();
-    var tags_input = $('#advanced-search-tags');
-    tags_input.val('');
+    $('#clear').hide();
+    $('#dig-tags').val('');
     return false;
 }
 
-function doRemoveTag(el) {
-    var tags_input = $('#advanced-search-tags');
-    var tags_value = tags_input.val();
-    tags_value = tags_value.replace(','+el,'');
-    tags_value = tags_value.replace(el+',','');
-    tags_value = tags_value.replace(el,'');
-    tags_input.val(tags_value);
-    var tag = $('.'+el);
-    tag.remove();
-    var tags = $('#tags-container .tag');
-    if(tags.length == 0) {
-        onClearTag();
-    }
-    return false;
+function doRemoveTag(tag) {    
+    $('#tagpicker input[value='+tag+']').attr('checked','');
+    tagChecked();
 }
 
-function doAddTag(el, tag, cat) {
-    var sel = $(el).parent();
-    var container = $('#tags-container');
-    var container_content = container.html();
-    var tags_input = $('#advanced-search-tags');
-    
-    // are there any tags yet?
-    if(container_content == '') {
-        tags_input.val(tag);
-        container.html('<div class="'+cat+' '+tag+' tag nowrap"><span class="tag_name">'+tag+
-                       '</span><a href="javascript://" onclick="doRemoveTag(\''+tag+
-                       '\');" class="remove"><span>'+str_remove_tag+'</span></a><div class="clearer"></div></div>');
-    } else {
-        var tags = $('.tag');
-        var tag_exists = false;
-        // loop through each tag until an existing matching tag is found
-        jQuery.each(tags, function() { 
-            var this_tag = $(this);
-            tag_exists = ($('.tag_name', this_tag).html() == tag);
-            return (!tag_exists);
-        });
-        // only add the tag if it hasn't already been added
-        if(!tag_exists) {
-            tags_input.val(tags_input.val() + ',' + tag);
-            container.html(container_content+' <div class="'+cat+' '+tag+
-                           ' tag nowrap"><span class="tag_name">'+tag+
-                           '</span><a href="javascript://" onclick="doRemoveTag(\''+tag+
-                           '\');" class="remove"><span>'+str_remove_tag+'</span></a><div class="clearer"></div></div>');
+function selectTags() {
+    var tags = $('#dig-tags').val();
+
+    if( tags.length > 0 ){
+        tags = tags.split(',') ;
+
+        for( tag in tags  ){
+            var F = $('#tagpicker input[value='+tags[tag]+']');
+            if( F )
+                F.attr('checked','checked');
         }
     }
-    var clear_button = $('#clear');
-    if(clear_button.is(':hidden')) {
-        clear_button.show();
-    }
-    sel.attr('selectedIndex', '-1');
     
+    tagChecked();
 }
+
+function tagChecked() {
+    var tags = [];
+    
+    var html = '';
+    
+    $('#tagpicker input[type=checkbox]:checked').each( function(i,e) {
+        e = $(e);
+        var a = e.attr('id').match(/cl_([^_]+)_(.*)$/), cat = a[1], tag = a[2];
+        
+        html +=  '<div class="'+ cat +' '+ tag +' tag nowrap">'
+                       + '<span class="tag_name">'+ tag + '</span>'
+                       + '<a href="javascript://" onclick="doRemoveTag(\''+ tag +'\');" class="remove">'
+                       + '<span>'+str_remove_tag+'</span></a>'
+                       + '<div class="clearer"></div>'
+                       + '</div>';
+
+        tags.push(tag);
+    });
+    
+    $('#tags-container').html(html);
+    $('#dig-tags').val( tags.toString() );
+    
+    if( tags.length > 0 )
+        $('#clear').show();
+    else
+        $('#clear').hide();
+}
+
+var tagsCount = 0;
 
 function tagGenreQueryResults(results) {
     _tagQueryResults(results,'genre','genre_results');
@@ -165,7 +140,7 @@ function populate_tags() {
     window.tags_populated = true;
     
     $('#clear').click( function(e) { onClearTag(); });
-    $('#tag_add').click(function(e) { onAddTagToQuery(); });
+
     // populate the tag categories
     
     var options = {
@@ -216,19 +191,32 @@ function _tagQueryResults(results,type,results_div) {
     for( var i = 0; i < results.length; i++ )
     {
         var result = results[i];
-        links[i] = '<option onclick="doAddTag(this,\'' + result.tags_tag + '\',\'' + type + '\'); ">' +
-        result.tags_tag + ' (' + result.tags_count + ')' + '</option>';
+        var tag = result.tags_tag;
+        links[i] = '<option onclick="doAddTag(this,\'' + tag + '\',\'' + type + '\');" '
+                        + ' value="' + tag + '">'
+                        +  tag + ' (' + result.tags_count + ')'
+                        + '</option>';
     }
-    $( '#' + results_div).html('<select size=8>' + links.join('<br />') + '</select>');
+    
+    var checkListName = 'cl_' + type;
+    
+    $( '#' + results_div).html('<select multiple="multiple" id="'+checkListName+'" size="9">' + links.join("\n") + '</select>');
+
+    $('#' + checkListName).toChecklist();
+    
+    $('#' + checkListName + ' input').click(tagChecked);
+
+    if( ++tagsCount == 3 )
+        selectTags();
 }
 
 function clean_advanced() {
-    $("#advanced-search-query").val('');
-    $("#advanced-search-results option[value='10']").attr('selected', 'selected');
-    $("#advanced-search-since option[value='*']").attr('selected', 'selected');
-    $("#advanced-search-sortby option[value='popularity']").attr('selected', 'selected');
-    $("#advanced-search-sortdir option[value='desc']").attr('selected', 'selected');
-    $("#advanced-search-license option[value='']").attr('selected', 'selected');
+    $("#advanced-dig-query").val('');
+    $("#dig-limit option[value='10']").attr('selected', 'selected');
+    $("#dig-since option[value='*']").attr('selected', 'selected');
+    $("#dig-sort option[value='popularity']").attr('selected', 'selected');
+    $("#dig-ord option[value='desc']").attr('selected', 'selected');
+    $("#advanced-dig-lic option[value='']").attr('selected', 'selected');
     
     onClearTag();
 }
@@ -637,7 +625,7 @@ function didUMean_results(results) {
         $('.aliassearch').click(function(e) {
             var alias = $(this).html();
             
-            $('#search-query').val(alias);
+            $('#dig-query').val(alias);
             do_search();
 
             return false;
@@ -660,7 +648,7 @@ function advanced_didUMean_results(results) {
         $('.aliassearch').click(function(e) {
             var alias = $(this).html();
 
-            $('#advanced-search-query').val(alias);
+            $('#advanced-dig-query').val(alias);
             onClearTag();
             do_advanced_search();
 
@@ -1039,59 +1027,55 @@ function progress_indicator() {
 
 
 function do_search() {
-    var search_val = $('#search-query').val();
-    var search_lic = $('#search-license').val();
-    var search_type = $('#search-type').val();
-
-    var page = 'dig';
-    if( original_search_type && (search_type != original_search_type) )
-    {
-        page = search_type;
-    }
+    var search_val = $('#dig-query').val();
+    var search_lic = $('#dig-lic').val();
+    var page       = $('#dig-type').val();
 
     var q = '?';
-    url = DIG_ROOT_URL + '/' + page;
+    var url = DIG_ROOT_URL + '/' + page;
     
     if( search_lic == 'open' )
     {
-        url += q + 'search-license=open';
+        url += q + 'dig-lic=open';
         q = '&';
     }
     
     if( search_val.length > 0 )
     {
-        url += q + 'search-query=' + search_val;
+        url += q + 'dig-query=' + search_val;
         q = '&';
     }
     
+    /*
     if( search_type != 'dig' )
     {
-        url += q + 'search-type=' + search_type;
+        url += q + 'dig-type=' + search_type;
         q = '&';
     }
+    */
 
     if( adv_showing )
     {
         var val;
         
-        url += q +  'advanced-search-results=' + $('#advanced-search-results').val()
-                 + '&advanced-search-sortby='  + $('#advanced-search-sortby').val()
-                 + '&advanced-search-sortdir=' + $('#advanced-search-sortdir').val()
-                 + '&advanced-search-stype='   + $('#advanced-search-stype').val()
+        url += q +  'dig-limit=' + $('#dig-limit').val()
+                 + '&dig-sort='  + $('#dig-sort').val()
+                 + '&dig-ord=' + $('#dig-ord').val()
+                 + '&dig-stype='   + $('#dig-stype').val()
                  + '&adv=1';
                  
-        val = $('#advanced-search-since').val();
+        val = $('#dig-since').val();
         
         if( val.length > 0 )
         {
-            url += '&advanced-search-since=' + val;            
+            url += '&dig-since=' + val;            
         }
         
-        val = $('#advanced-search-tags').val();
+        val = $('#dig-tags').val();
         
         if( val.length > 0 )
         {
-            url += '&advanced-search-tags=' + val;            
+            url += '&dig-tags=' + val;            
         }
     }
 
@@ -1102,7 +1086,7 @@ function do_search() {
 function handle_home_submit()
 {
     var val = $('#q').val();
-    var url = DIG_ROOT_URL + '/dig?search-query=' + val;
+    var url = DIG_ROOT_URL + '/dig?dig-query=' + val;
     document.location = url;
     return false;
 }
@@ -1124,6 +1108,7 @@ function show_advanced(e)
     basic_search_link.show();
     advanced_search_link.hide();
     populate_tags();
+    adv_showing = true;
     return false;    
 }
 
@@ -1136,6 +1121,7 @@ function hide_advanced(e)
     $('.advanced-search-utility').hide();
     advanced_search_link.show();
     basic_search_link.hide();
+    adv_showing = false;
     return false;    
 }
 
@@ -1169,7 +1155,7 @@ function populate_dig()
         
     search_button.click(do_search);
 
-    window.original_search_type = $('#search-type').val();
+    window.original_search_type = $('#dig-type').val();
     
 }
 

@@ -31,7 +31,7 @@ $digQuery->ProcessAdminArgs(prep_dig_query_args($digQuery));
 $digQuery->Query();
 
 
-if( empty($digQuery->_fields['search-query']) )
+if( empty($digQuery->_fields['dig-query']) )
 {
     $didumeanQuery = null;
 }
@@ -40,12 +40,18 @@ else
     $didumeanQuery = new digQuery();
     $didumeanArgs = array(
         'dataview' => 'tag_alias',
-        'search'   => $digQuery->_fields['search-query'],
+        'search'   => $digQuery->_fields['dig-query'],
     );
     $didumeanQuery->ProcessAdminArgs($didumeanArgs);
     $didumeanQuery->Query();
     $didumeanQuery->_page_opts = array( 'results_func' => 'didUMean_results' );
 }
+
+// ----------
+
+
+$script_heads[] = '<script type="text/javascript" src="js/plugins/jquery.toChecklist.js"></script>' . "\n" ; /*
+                  '<link rel="stylesheet" href="css/plugins/jquery.multiSelect.css" type="text/css" />' . "\n"; */
 
 // ----------
 $queries = array( &$didumeanQuery, &$digQuery ) ;
@@ -61,7 +67,7 @@ if( !empty($digQuery->pretty_args->args['adv']) )
 }
 $page_title = empty($digQuery->_query_args['title']) ? 'dig.ccmixter' : $digQuery->_query_args['title'];
 $dig_class = 'class="current"';
-            
+
 require_once('lib/head.php');
     
 ?>
@@ -71,13 +77,13 @@ require_once('lib/head.php');
 			<!-- <h2>dig</h2> -->
 			<div class="search-utility round">
 				<form action="#" >
-					<div class="search-input-container"><input type="text" name="search-query" value="" id="search-query" /></div>
+					<div class="search-input-container"><input type="text" name="dig-query" value="" id="dig-query" /></div>
 					<div class="search-select-container">
-						<select name="search-license" id="search-license" size="1">
+						<select name="dig-lic" id="dig-lic" size="1">
 							<option value="">All licenses</option>
 					        <option value="open">Free for commercial use</option>
 						</select>
-						<select name="search-type" id="search-type" size="1">
+						<select name="dig-type" id="dig-type" size="1">
 							<option value="dig">All types</option>
 					        <option value="music_for_film_and_video">For video use</option>
 							<option value="music_for_games">For game use</option>
@@ -96,18 +102,18 @@ require_once('lib/head.php');
 			<div class="advanced-search-utility round" >
 					<form action="#">
 					<div class="advanced-search-row">
-						<input name="advanced-search-query" id="advanced-search-query" class="round" />
+						<input name="advanced-dig-query" id="advanced-dig-query" class="round" />
 					</div>
 					<div class="advanced-search-row">
-						<label for="advanced-search-results" id="advanced-search-results-label">results</label>
-						<select id="advanced-search-results">
+						<label for="dig-limit" id="dig-limit-label">results</label>
+						<select id="dig-limit">
 							<option value="10">10</option>
 							<option value="15">15</option>
 							<option value="25">25</option>
 							<option value="50">50</option>
 						</select>
-						<label for="advanced-search-since" id="advanced-search-since-label">since</label>
-						<select id="advanced-search-since" name="advanced-search-since">
+						<label for="dig-since" id="dig-since-label">since</label>
+						<select id="dig-since" name="dig-since">
 							<option value="">Forever</option>
 							<option value="1 days ago">Yesterday</option>
 							<option value="1 weeks ago">1 week ago</option>
@@ -116,31 +122,25 @@ require_once('lib/head.php');
 							<option value="3 months ago">3 months ago</option>
 							<option value="1 years ago">1 year ago</option>
 						</select>
-						<label for="advanced-search-sortby" id="advanced-search-sortby-label">sort</label>
-						<select name="advanced-search-sortby" id="advanced-search-sortby">
+						<label for="dig-sort" id="dig-sort-label">sort</label>
+						<select name="dig-sort" id="dig-sort">
 							<option value="rank">Popularity</option>
 							<option value="date">Date</option>
 							<option value="name">Track name</option>
 							<option value="user">Musician</option>
 						</select>
-						<select name="advanced-search-sortdir" id="advanced-search-sortdir">
+						<select name="dig-ord" id="dig-ord">
 							<option value="desc">Descending</option>
 							<option value="asc">Ascending</option>
 						</select>
 						
-						<!-- label for="advanced-search-license" id="advanced-search-license-label">license</label>
-						<select style="display:none" name="advanced-search-license" id="advanced-search-license" size="1">
-							<option value="">All licenses</option>
-					        <option value="open">Free for commercial use</option>
-						</select -->
-                        
-						<label for="advanced-search-stype" id="advanced-search-stype-label">combine</label>
-						<select name="advanced-search-stype" id="advanced-search-stype" size="1">
+						<label for="dig-stype" id="dig-stype-label">combine</label>
+						<select name="dig-stype" id="dig-stype" size="1">
 							<option value="all">All words</option>
 							<option value="any">Any word</option>
 							<option value="match">Exact phrase</option>
 						</select>
-						<input type="hidden" name="advanced-search-tags" value="" id="advanced-search-tags" />
+						<input type="hidden" name="dig-tags" value="" id="dig-tags" />
 					</div>
 					<div id="tagpicker" class="advanced-search-row">
 						<div class="tag-select-container">
@@ -163,12 +163,6 @@ require_once('lib/head.php');
 						<div class="clear-button-container"><a href="#" id="clear">Clear</a></div>
 						<div class="clearer"></div>
 					</div>
-					<!-- div class="advanced-search-row advanced-search-row-last">
-						<div class="advanced-search-button-container">
-							<input id="advanced-search" type="image" alt="Search" src="images/advanced-search-button-bg.png" />
-						</div>
-						<div class="clearer"></div>
-					</div -->
 					</form>
 			</div>
 			<div class="advanced"><a href="#" class="advanced-search-link">Advanced dig</a><a href="#" class="basic-search-link">Basic dig</a></div>

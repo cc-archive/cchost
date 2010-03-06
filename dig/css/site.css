@@ -327,7 +327,7 @@ p.site-license {
 	height: 40px;
 	background: transparent url(../images/search-input-bg.png) top left no-repeat;
 }
-#search-query {
+#dig-query {
 	width: 446px;
 	margin: 3px 0 0 0;
 	height: 26px;
@@ -344,6 +344,22 @@ p.site-license {
 	margin: 0;
 	background: transparent url(../images/search-select-bg.png) top left repeat-x;
 }
+
+div.checklist {
+}
+
+ul.checklist {
+    font-size: 11px;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    width: 90%;
+}
+
+ul.checklist label {
+    font-size: 11px;
+}
+
 .search-select-container select {
 	width: 176px;
 	height: 22px;
@@ -401,22 +417,22 @@ p.site-license {
 	padding-top: .25em;
 	margin-bottom: 0;
 }
-#advanced-search-query {
+#advanced-dig-query {
 	width: 892px;
     display: none;
 
 }
-#advanced-search-results {
+#dig-limit {
 	width: 50px;
 }
 #advanced-search-start, #advanced-search-end {
 	color: #AAA;
 	width: 120px;
 }
-#advanced-search-sortby, #advanced-search-sortdir {
+#dig-sort, #dig-ord {
 	width: 120px;
 }
-#advanced-search-license {
+#advanced-dig-lic {
 	width: 150px;
 }
 .clear-button-container {
@@ -484,7 +500,7 @@ p.site-license {
 	margin-top: .25em;
 	background-color: #FFF;
 	padding: 0 .5em;
-	overflow: auto;
+/*	overflow: auto; */
 }
 .tag-select select {
 	width: 100%;
