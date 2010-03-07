@@ -17,21 +17,11 @@
 *
 */
 
-var makeA = jQuery.makeArray;
-  
-
 var ccmClass = {
   create: function() {
     return function() {
       this.initialize.apply(this, arguments);
     }
-  }
-}
-
-Function.prototype.bind = function() {
-  var __method = this, args = makeA(arguments), object = args.shift();
-  return function() {
-    return __method.apply(object, args.concat(makeA(arguments)));
   }
 }
 
@@ -127,9 +117,9 @@ ccmQuery.prototype = {
       
       if( this._options.mode == 'ajax' ) {
         if( this._options.paging && !this._count_fetched  )
-          this._call_ccm( 'count', this._on_count_return.bind(this) );
+          this._call_ccm( 'count', this._on_count_return );
         else
-          this._call_ccm( 'js', this._on_query_return.bind(this) );
+          this._call_ccm( 'js', this._on_query_return );
       }
       else {
         this._call_ccm('js');
@@ -182,21 +172,17 @@ ccmQuery.prototype = {
         var val = eval(data);
         this.values.total = parseInt(val[0]);
         this._count_fetched = true;
-        this._call_ccm( 'js', this._on_query_return.bind(this) );
+        this._call_ccm( 'js', this._on_query_return ); // .bind(this) );
     },
     
     _on_query_return: function(data)
     {
-        var resp = eval(data);
-        var targets = [];
+        var targets = eval(data);
         var i;
-        for( i = 0; i < resp.length; i++  )
+        for( i = 0; i < targets.length; i++  )
         {
-            var target = {};
-            var obj = resp[i];
-            if( obj.files )
-                obj.num_files = obj.files.length;
-            targets.push(obj);
+            if( targets[i].files )
+                targets[i].num_files = targets[i].files.length;
         }
     
         this.values.num_results = targets.length;
@@ -222,6 +208,8 @@ ccmQuery.prototype = {
     
     _call_ccm: function( format, func ) {    
 
+        var url = this._rootURL + 'f=' + format + this._params;
+        
         switch( this._options.mode )
         {
           case 'ajax':
@@ -236,13 +224,13 @@ ccmQuery.prototype = {
               if( this._options.debug )
                 dlink(url);
                   
-          
+              var me = this;
               jQuery.ajax({
                           type: "POST",
                           url: url,
                           data: {},
                           dataType: 'html',
-                          success: func
+                          success: function(data) { func.call(me,data) }
                           });
               
               break;
@@ -251,12 +239,6 @@ ccmQuery.prototype = {
           case 'server':
           case 'remote':
             {
-              var url = this._options.post_back_url;
-              if( this._options.calling_args_str )
-              {
-                url += this._options.calling_args_str;
-              }
-              url += this._params;
               document.location = url;
               break;
             }

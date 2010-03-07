@@ -145,6 +145,11 @@ class digQuery
             
             $paging = !empty($this->_control['paging']);
                         
+            if( $paging )
+            {
+                $this->_page_opts['pagination_url'] = $this->_page_opts['post_back_url']  . '?offset=';
+            }
+            
             if( !empty($m[3]) )
             {
                 $this->pretty_args = new digArgs($m[3],array('offset'));
@@ -155,10 +160,6 @@ class digQuery
                                                           . $this->pretty_args->stripped_query_str
                                                           . '&offset=';
                 }
-            }
-            elseif( $paging )
-            {
-                $this->_page_opts['pagination_url'] = $this->_page_opts['post_back_url']  . '?offset=';
             }
         }
 

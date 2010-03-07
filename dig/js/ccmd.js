@@ -54,7 +54,9 @@ var str_attribution = 'Attribution';
 var str_back = 'Back';
 var str_editors_picks = 'Editors\' Picks';
 var str_podcasts = 'Podcasts';
-
+var str_even_money   = 'even if you make money with your project';
+var str_except_money = '(except where money is involved)';
+var str_license_your = 'license your project in the same way as %upload_name% and';
 
 
 /*
@@ -319,14 +321,14 @@ function result_heading(result, num, max_name_length, featured) {
                 safe_upload_name(result['upload_name'], max_name_length)+'</a> </h4>';
         html += '<span class="result-creator">by <a href="'+result['artist_page_url']+'">'+
                 result['user_real_name']+'</a></span> <div class="license" id="license-'+num+
-                '"><a href="'+result['license_url']+'"><img src="'+license_image(result['license_name'])+
+                '"><a href="'+result['license_url']+'"><img src="'+license_image(result['license_tag'])+
                 '" alt="'+result['license_name']+' Creative Commons License" /></a></div>';
     } else {
         html += '<h4><a href="'+result.files[0].download_url+'">'+
                 safe_upload_name(result['upload_name'], max_name_length)+
                 '</a> <span class="result-creator">'+str_by+' <a href="'+result['artist_page_url']+'">'+
                 result['user_real_name']+'</a></span> <div class="license" id="license-'+num+'"><a href="'+
-                result['license_url']+'"><img src="'+license_image(result['license_name'])+'" alt="'+
+                result['license_url']+'"><img src="'+license_image(result['license_tag'])+'" alt="'+
                 result['license_name']+' Creative Commons License" /></a></div></h4>';
     }
 
@@ -413,10 +415,10 @@ function result_permission(result, num) {
     html += '<p>You want to use &ldquo;'+result['upload_name']+
             '&rdquo; by <a href="'+result['artist_page_url']+'/profile"><strong>'+
             result['user_real_name']+'</strong></a>' +
-            ' in a project, like a video, podcast, school project, album? You already have permission to copy,' +
+            ' in a project, like a video, podcast, school project, album? You already have permission to copy, ' +
             'distribute, remix and embed it into your project '+
-            commercial_clause(result['license_name'])+
-            ' as long as you '+share_alike_clause(result['license_name'])+
+            commercial_clause(result['license_tag'])+
+            ' as long as you '+share_alike_clause(result['license_tag'])+
             ' give proper credit to <a href="'+result['artist_page_url']+'/profile"><strong>'+
             result['user_real_name']+'</strong></a>. Please read the ' +
             '<a href="'+result['license_url']+'">Creative Commons '+result['license_name']+' license</a>' +
@@ -437,47 +439,77 @@ function result_permission(result, num) {
 }
 
 function result_attribution(result, num) {
-    var html = '<div class="item">';
-    html += '<h5>'+str_attribution+'</h5><div class="modal-nav-container"><div class="prev-link-container">'+
-            '<a href="#" class="prev-link nowrap">&laquo; '+str_back+'</a></div><div class="clearer"></div></div>';
+    
+    var snippet = attribution(result);
+    
+    var html = '<div class="item attribution-help">';
+    
+    html +=   '<h5>'+str_attribution+'</h5>'
+            + '<p>'
+            + 'In order to give proper attribution you need to include the type of license, the '
+            + 'artist\'s name and the title of the track with links and urls. For example:'
+            + '</p>'
+            + '<p class="attribution-example"> '
+            +     '"' + result['upload_name'] + '" by ' + result['user_real_name'] + '<br />'
+            +     result['file_page_url'] + '<br />'
+            +     ' is licensed under a Creative Commons license:<br />'
+            +     result['license_url']
+            + '</p>'
+            + '<p>'
+            +   'If you have a web page you can use this code snippet:'
+            + '<textarea class="attribution-snippet">' + snippet.replace('<','&lt;').replace('>','&gt;') + '</textarea>'
+            + '</p>'
+            + '<p class="attribution-snippet-fmt">' + snippet + '</p>'
+            + '<div class="modal-nav-container">'
+            +   '<div class="prev-link-container">'
+            +      '<a href="#" class="prev-link nowrap">&laquo; '+str_back+'</a>'
+            +   '</div>'
+            +   '<div class="clearer"></div>'
+            + '</div>';
+            
     html += '</div>';
     return html;
 }
 
-function commercial_clause(license_name) {
-    var clause = {
-        'Attribution Share-Alike': 'even if you make money with your project',
-        'Attribution Noncommercial Share-Alike (3.0)': 'except where money is involved',
-        'Attribution Noncommercial Share-Alike  (3.0)': 'except where money is involved',
-        'Attribution Noncommercial Share-Alike': 'except where money is involved',
-        'Attribution Noncommercial  (3.0)': 'except where money is involved',
-        'Attribution Noncommercial': 'except where money is involved',
-        'Sampling Plus': 'even if you make money with your project',
-        'Attribution': 'even if you make money with your project',
-        'Attribution (3.0)': 'even if you make money with your project',
-        'Noncommercial Sampling Plus': 'except where money is involved',
-        'CC0 (CC Zero)': 'even if you make money with your project'
-    }
-    return clause[license_name];
+function attribution(result) {    
+    var attrHtml = '<a rel="license" href="%license_url%"><img alt="Creative Commons License" style="border-width:0" src="%cc_img%" /></a> '
+                 + '<span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Sound" property="dc:title" rel="dc:type">%upload_name%</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="%file_page_url%" property="cc:attributionName" rel="cc:attributionURL">%user_real_name%</a> is licensed under a <a rel="license" href="%license_url%">%license_name%</a>.';
+    
+    $.each(['upload_name','user_real_name','artist_page_url','license_name','license_url'],function(i,e) {
+        attrHtml = attrHtml.replace('%' + e + '%', result[e]); 
+    });
+
+    return attrHtml.replace('%cc_img%',cc_logo(result.license_tag));
 }
 
-function share_alike_clause(license_name, upload_name) {
-    var clause = {
-        'Attribution Share-Alike': 'license your project in the same way as <strong>'+upload_name+'</strong> and',
-        'Attribution Noncommercial Share-Alike (3.0)': 'license your project in the same way as <strong>'+upload_name+'</strong> and',
-        'Attribution Noncommercial Share-Alike  (3.0)': 'license your project in the same way as <strong>'+upload_name+'</strong> and',
-        'Attribution Noncommercial Share-Alike': 'license your project in the same way as <strong>'+upload_name+'</strong> and',
-        'Attribution Noncommercial  (3.0)': '',
-        'Attribution Noncommercial': '',
-        'Sampling Plus': '',
-        'Attribution': '',
-        'Attribution (3.0)': '',
-        'Noncommercial Sampling Plus': '',
-        'CC0 (CC Zero)': ''
-    }
-    return clause[license_name];
-    
+var lic_meta = {
+    'attribution':                { img: 'images/by.png',                com: str_even_money,    cc: 'by/3.0/88x31.png',           sa: null   },
+    'share_alike':                { img: 'images/by-sa.png',             com: str_even_money,    cc: 'by-sa/3.0/88x31.png',        sa: str_license_your   },
+    'non_commercial_share_alike': { img: 'images/by-nc-sa.png',          com: str_except_money,  cc: 'by-nc-sa/3.0/88x31.png',     sa: str_license_your   },
+    'non_commercial':             { img: 'images/by-nc.png',             com: str_except_money,  cc: 'by-nc/3.0/88x31.png',        sa: null   },
+    'sampling_plus':              { img: 'images/sampling-plus.png',     com: str_even_money,    cc: 'sampling+/1.0/88x31.png',    sa: null   },
+    'nc_sampling_plus':           { img: 'images/nc-sampling-plus.png',  com: str_except_money,  cc: 'nc-sampling+/1.0/88x31.png', sa: null   },
+    'cczero':                     { img: 'images/cc0.png',               com: str_even_money,    cc: 'zero/1.0/88x31.png',         sa: null   }
+};
+
+function cc_logo(license_tag) {
+    return 'http://i.creativecommons.org/l/' + lic_meta[license_tag].cc;
 }
+
+function commercial_clause(license_tag) {
+    return lic_meta[license_tag].com;
+}
+
+function share_alike_clause(license_tag, upload_name) {
+    var str = lic_meta[license_tag].sh;
+    return str ? str.replace('%upload_name%','<strong>'+upload_name+'</strong>') : '';
+}
+
+function license_image(license_tag) {
+    return lic_meta[license_tag].img;
+}
+
+
 
 function tag_list(tags) {
     var tag_array = tags.split(",");
@@ -501,26 +533,15 @@ function safe_upload_name(name, max_length) {
 }
 
 function license_blurb(result) {
-    return '<div class="license"><a href="'+result['license_url']+'"><img src="'+license_image(result['license_name'])+'" alt="'+result['license_name']+' Creative Commons License" /></a> Licensed under Creative Commons <a href="'+result['license_url']+'">'+result['license_name']+'</a> &mdash; '+result['upload_date_format']+'</div>';
+    return    '<div class="license">'
+            + '<a href="'+result['license_url']+'">'
+            +   '<img src="'+license_image(result['license_tag'])+'" alt="'+result['license_name']+' Creative Commons License" />'
+            +  '</a> Licensed under Creative Commons <a href="'+result['license_url']+'">'+result['license_name']+'</a> '
+            +  '&mdash; '+result['upload_date_format']+'</div>';
 }
 
-function license_image(license_name) {
-    var image = {
-        'Attribution Share-Alike': 'images/by-sa.png',
-        'Attribution Noncommercial Share-Alike': 'images/by-nc-sa.png',
-        'Attribution Noncommercial Share-Alike  (3.0)': 'images/by-nc-sa.png',
-        'Attribution Noncommercial Share-Alike (3.0)': 'images/by-nc-sa.png',
-        'Attribution Noncommercial  (3.0)': 'images/by-nc.png',
-        'Attribution Noncommercial': 'images/by-nc.png',
-        'Sampling Plus': 'images/sampling-plus.png',
-        'Attribution': 'images/by.png',
-        'Attribution (3.0)': 'images/by.png',
-        'Noncommercial Sampling Plus': 'images/nc-sampling-plus.png',
-        'CC0 (CC Zero)': 'images/cc0.png'
-    };
-    
-    return image[license_name];
-}
+
+
 
 /*
     PAGINATION
@@ -761,144 +782,19 @@ function _digStyleQueryResults(results, target, more_label, more_url, heading) {
     EVENTS
 */
 function _resultsEvents() {
-    
-    var download_links = jQuery(".download-link");
-    var info_links = jQuery(".info-link");
-    var license = jQuery('.license');
-    var queryObj = this;
-    
-    /*
-        adds a click action to all results' download links that brings up the download
-        modal dialog panel
-    */  
-    download_links.click(function(e) {
-        var id_num = jQuery(this).attr("id").split("-")[1];
-        var result_info_id = "result-info-"+id_num;
-        jQuery('#'+result_info_id).modal({
-            opacity : 80,
-            onOpen: function (dialog) {
-                dialog.overlay.fadeIn('fast', function () {
-                    dialog.container.fadeIn('fast', function () {
-                        dialog.data.fadeIn('fast');
-                        slidebox('#'+result_info_id);
-                    });
-                });
-            },
-            onClose : function(dialog) {
-                dialog.data.fadeOut('fast', function() {
-                    dialog.container.fadeOut('fast', function() {
-                        dialog.overlay.fadeOut('fast', function() {
-                            jQuery.modal.close();
-                        });
-                    });
-                });
-            }
-        });
-        
-        return false;
-    });
-    /*
-        adds a click action to all results' info links that brings up the information
-        modal dialog panel
-    */
-    info_links.click(function(e) {
-        var id_num = jQuery(this).attr("id").split("-")[1];
-        var result_info_id = "result-info-"+id_num;
-        jQuery('#'+result_info_id).modal({
-            opacity : 80, 
-            onOpen : function(dialog) {
-                dialog.overlay.fadeIn('fast', function() {
-                    dialog.container.fadeIn('fast', function() {
-                        dialog.data.fadeIn('fast');
-                        slidebox('#'+result_info_id, 2);
-                    });
-                });
-            },
-            onClose : function(dialog) {
-                dialog.data.fadeOut('fast', function() {
-                    dialog.container.fadeOut('fast', function() {
-                        dialog.overlay.fadeOut('fast', function() {
-                            jQuery.modal.close();
-                        });
-                    });
-                });
-            }
-        });
-        
-        return false;
-    });
-    /*
-        adds the cc license badge info reveal hover action
-        and the permissions 'more' link click action that brings up
-        the permissions modal dialog panel
-    */
-    license.find('a').hover(
-        function() {
-            var id_num = jQuery(this).parent().attr("id").split("-")[1];
-            var result_info_id = "result-info-"+id_num;
-            var license_details_id = "license-details-"+id_num;
-            var license_details = jQuery('#'+license_details_id);
-            if(license_details.is(':hidden')) { 
-                license_details.slideDown();
-            }
-        }, 
-        function() {
-            var id_num = jQuery(this).parent().attr("id").split("-")[1];
-            var result_info_id = "result-info-"+id_num;
-            var license_details_id = "license-details-"+id_num;
-            var license_more = jQuery('#'+license_details_id).find(".license-more");
-            license_more.click(function(e) {
-                jQuery('#'+result_info_id).modal({
-                    opacity : 80, 
-                    onOpen : function(dialog) {
-                        dialog.overlay.fadeIn('fast', function() {
-                            dialog.container.fadeIn('fast', function() {
-                                dialog.data.fadeIn('fast');
-                                slidebox('#'+result_info_id, 3);
-                            });
-                        });
-                    },
-                    onClose : function(dialog) {
-                        dialog.data.fadeOut('fast', function() {
-                            dialog.container.fadeOut('fast', function() {
-                                dialog.overlay.fadeOut('fast', function() {
-                                    jQuery.modal.close();
-                                });
-                            });
-                        });
-                    }
-                });
-            });
-            
-            jQuery('#'+license_details_id).animate({opacity: 1.0}, 3000).slideUp();
-        }
-    );
-    
-    // add click events to pagination
-    jQuery('.pagelink').click(function(e) {
-        var offset = queryObj.values.offset;
-        var limit = queryObj.values.limit;
-        var page = jQuery(this).html();
-        var current_page = Math.floor(offset/limit)+1;
-        if(page != current_page) {
-            if(page < current_page) {
-                queryObj.page(-(current_page-page));
-            } else {
-                queryObj.page(page-current_page);
-            }
-        }
-        return false;
-    });
-    
-    jQuery('#prevlink').click(function(e) { queryObj.page(-1);return false; });
-    jQuery('#nextlink').click(function(e) { queryObj.page(1);return false; });
+ 
+    _hookupEvents.call(this);
+    _hookupPagination.call(this)
     
     if( YAHOO.MediaPlayer && YAHOO.MediaPlayer.addTracks )
         YAHOO.MediaPlayer.addTracks(document.getElementById('results'), null, true);
 }
 
 function _podcastsPageEvents() {
-    
+    _hookupPagination.call(this)
+}
+
+function _hookupPagination() {
     var queryObj = this;
     
     // add click events to pagination
@@ -921,8 +817,25 @@ function _podcastsPageEvents() {
     jQuery('#nextlink').click(function(e) { queryObj.page(1);return false; });
 }
 
-function _digStyleResultsEvents(target) {
-    target = target.replace('#','');
+function dialogCloser(dialog) {
+    dialog.data.fadeOut('fast', function() {
+        dialog.container.fadeOut('fast', function() {
+            dialog.overlay.fadeOut('fast', jQuery.modal.close);
+        });
+    });
+}
+
+function _openDialogPanel(dialog,panel) {
+    dialog.overlay.fadeIn('fast', function() {
+        dialog.container.fadeIn('fast', function() {
+            dialog.data.fadeIn('fast');
+            slidebox('#'+result_info_id, panel);
+        });
+    });
+}
+
+function _hookupEvents()
+{
     var download_links = jQuery(".download-link");
     var info_links = jQuery(".info-link");
     var license = jQuery('.license');
@@ -944,15 +857,7 @@ function _digStyleResultsEvents(target) {
                     });
                 });
             },
-            onClose : function(dialog) {
-                dialog.data.fadeOut('fast', function() {
-                    dialog.container.fadeOut('fast', function() {
-                        dialog.overlay.fadeOut('fast', function() {
-                            jQuery.modal.close();
-                        });
-                    });
-                });
-            }
+            onClose : dialogCloser
         });
         
         return false;
@@ -974,15 +879,7 @@ function _digStyleResultsEvents(target) {
                     });
                 });
             },
-            onClose : function(dialog) {
-                dialog.data.fadeOut('fast', function() {
-                    dialog.container.fadeOut('fast', function() {
-                        dialog.overlay.fadeOut('fast', function() {
-                            jQuery.modal.close();
-                        });
-                    });
-                });
-            }
+            onClose : dialogCloser
         });
         
         return false;
@@ -1018,22 +915,21 @@ function _digStyleResultsEvents(target) {
                             });
                         });
                     },
-                    onClose : function(dialog) {
-                        dialog.data.fadeOut('fast', function() {
-                            dialog.container.fadeOut('fast', function() {
-                                dialog.overlay.fadeOut('fast', function() {
-                                    jQuery.modal.close();
-                                });
-                            });
-                        });
-                    }
+                    onClose : dialogCloser
                 });
             });
             
             jQuery('#'+license_details_id).animate({opacity: 1.0}, 3000).slideUp();
         }
     );
+ 
+}
+
+function _digStyleResultsEvents(target) {
+    _hookupEvents.call(this);
     
+    target = target.replace('#','');
+
     if( YAHOO.MediaPlayer && YAHOO.MediaPlayer.addTracks ) // TODO: Why is this null (sometimes)?
         YAHOO.MediaPlayer.addTracks(document.getElementById(target), null, false);
 }

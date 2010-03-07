@@ -19,7 +19,7 @@ SELECT
     CONCAT( '$urlf', user_name, '/', upload_id ) as file_page_url,
     user_real_name,
     CONCAT( '$urlp', user_name ) as artist_page_url,
-    license_url, license_name,
+    license_url, license_name, license_tag,
     DATE_FORMAT( upload_date, '%a, %b %e, %Y @ %l:%i %p' ) as upload_date_format,
     {$avatar}
     %columns% 

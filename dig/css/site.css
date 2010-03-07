@@ -860,6 +860,23 @@ a:active.download-link, a:active.info-link {
 	cursor: pointer;
 }
 
+.attribution-help p {
+}
+
+.attribution-example {
+    padding-left: 20%;
+    font-family: serif;
+}
+textarea.attribution-snippet {
+    height: 3em;
+}
+
+.attribution-snippet-fmt {
+    font-size: small;
+    background-color: white;
+    padding: 3px;
+}
+
 
 /** ------------------------------
     SLIDEBOX
