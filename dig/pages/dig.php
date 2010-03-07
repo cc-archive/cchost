@@ -22,9 +22,9 @@ require_once('lib/util.php');
 require_once('lib/dig_util.php');
 require_once('lib/query.php');
 
+// -------- SETUP QUERY -----------
+
 $digQuery = new digQuery(DIG_PAGING_ON);
-$digQuery->_page_opts['paging'] = true;
-$digQuery->_page_opts['parent'] = '#search-utility';
 $digQuery->_page_opts['results_func'] = 'query_results';
 $digQuery->ProcessUriArgs();
 $digQuery->ProcessAdminArgs(prep_dig_query_args($digQuery));
@@ -33,6 +33,9 @@ $digQuery->Query();
 
 if( empty($digQuery->_fields['dig-query']) )
 {
+    // only run 'Did you mean' query if there is
+    // a search term
+    
     $didumeanQuery = null;
 }
 else
@@ -47,24 +50,32 @@ else
     $didumeanQuery->_page_opts = array( 'results_func' => 'didUMean_results' );
 }
 
-// ----------
-
-
-$script_heads[] = '<script type="text/javascript" src="js/plugins/jquery.toChecklist.js"></script>' . "\n" ; /*
-                  '<link rel="stylesheet" href="css/plugins/jquery.multiSelect.css" type="text/css" />' . "\n"; */
-
-// ----------
 $queries = array( &$didumeanQuery, &$digQuery ) ;
+
+// ------- DEBUG -------
+
 if( !empty($_REQUEST['dquery'] ) )
 {
     $digQuery->query_str = http_build_query($digQuery->_query_args);
     dbg($queries);
 }
+
+// ------- OUTPUT PAGE ---------
+
 $script_heads[] = queries_to_jscript( $queries );
-if( !empty($digQuery->pretty_args->args['adv']) )
-{
-    $script_heads[] = '<script type="text/javascript"> adv_showing = true; </script>' . "\n";
-}
+
+// er, this should be somewhere else maybe?
+$digQuery->_page_opts['show_adv'] = !empty($digQuery->pretty_args->args['adv']);
+
+$page_opts = CCZend_Json_Encoder::encode($digQuery->_page_opts);
+
+$script_heads[] =<<<EOF
+    <script type="text/javascript" src="js/plugins/jquery.toChecklist.js"></script>
+    <script type="text/javascript">
+        page_opts = {$page_opts};
+    </script>
+EOF;
+
 $page_title = empty($digQuery->_query_args['title']) ? 'dig.ccmixter' : $digQuery->_query_args['title'];
 $dig_class = 'class="current"';
 
@@ -83,6 +94,12 @@ require_once('lib/head.php');
 							<option value="">All licenses</option>
 					        <option value="open">Free for commercial use</option>
 						</select>
+                        <?
+                            /*
+                             *  N.B. These must be properly set
+                             *  up in .htaccess
+                             */
+                        ?>
 						<select name="dig-type" id="dig-type" size="1">
 							<option value="dig">All types</option>
 					        <option value="music_for_film_and_video">For video use</option>
@@ -90,6 +107,7 @@ require_once('lib/head.php');
 							<option value="podcast_music">For podcasts</option>
 							<option value="cubicle_music">Cubicle music</option>
 							<option value="party_music">Party music</option>
+							<option value="coffeeshop_music">Coffeeshop music</option>
 						</select>
 					</div>
 					

@@ -20,6 +20,8 @@
 
 require_once('lib/query.php');
 
+// ------ ED PICKS ----------
+
 $query_args = array(
     'dataview' => 'diginfo',
     'tags'     => 'editorial_pick',
@@ -33,6 +35,7 @@ $queries['edpicks']->Query();
 $queries['edpicks']->_page_opts['parent'] = '#edpicks';
 $queries['edpicks']->_page_opts['results_func'] = 'edpickQueryResults';
 
+// -------- POPULAR ------------
 
 $query_args = array(
     'dataview' => 'diginfo',
@@ -49,6 +52,7 @@ $queries['popular']->Query();
 $queries['popular']->_page_opts['parent'] = '#popular';
 $queries['popular']->_page_opts['results_func'] = 'popchartQueryResults';
 
+// ------ PODCASTS ----------
 
 $query_args = array(
     'dataview' => 'topics_podinfo',
@@ -63,6 +67,8 @@ $queries['podcasts']->Query();
 
 $queries['podcasts']->_page_opts['parent'] = '#podcasts';
 $queries['podcasts']->_page_opts['results_func'] = 'podcastQueryResults';
+
+// ------ OUPUT PAGE ----------
 
 $script_heads[] = queries_to_jscript( $queries );
 $page_title = 'dig.ccmixter Featured Music';

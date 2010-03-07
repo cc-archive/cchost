@@ -39,12 +39,15 @@ class digQuery
     function digQuery($paging=DIG_PAGING_OFF)
     {
         $this->_clear();
-        $this->_control['paging'] = $paging;
+        $this->_control['paging'] = 
+        $this->_page_opts['paging'] = $paging;
     }
   
     function Query()
     {
         global $MIXTER_ROOT_DIR;
+        
+        $this->clean_for_instrumental();
         
         $cwd = getcwd();           // there are many on-the-fly includes...
         chdir($MIXTER_ROOT_DIR);   // ...that assume cchost root dir
@@ -59,6 +62,11 @@ class digQuery
             $this->total = trim($count,'[]');
         }
         
+        // oh man, I really limit doesn't become an
+        // issue like with ccmixter
+        if( empty($this->_query_args['limit']) )
+            $this->_query_args['limit'] = 10;
+            
         $this->queryObj = new CCQuery();
         $A = $this->queryObj->ProcessAdminArgs($this->_query_args);
         $A['format'] = 'php';
@@ -131,25 +139,26 @@ class digQuery
         // these were as passed in the browser addr bar
         if( preg_match('%/([^?]+)(\?([^#]+))?%',strip_slash($_SERVER['REQUEST_URI']),$m)  )
         {
-            $this->_control['doc_url'] = $m[1];
+            $this->_page_opts['doc_url'] = $m[1];
 
             $this->_page_opts['post_back_url'] = $DIG_ROOT_URL . '/' . $m[1];
             
             $paging = !empty($this->_control['paging']);
-            
-            
-            if( $paging )
-            {
-                $this->_page_opts['pagination_url'] = $this->_page_opts['post_back_url']  . '?';
-            }
-
+                        
             if( !empty($m[3]) )
             {
                 $this->pretty_args = new digArgs($m[3],array('offset'));
                 if( $paging && !empty($this->pretty_args->stripped_query_str) )
                 {
-                    $this->_page_opts['pagination_url'] .= $this->pretty_args->stripped_query_str . '&';
+                    $this->_page_opts['pagination_url'] = $this->_page_opts['post_back_url']
+                                                          . '?'
+                                                          . $this->pretty_args->stripped_query_str
+                                                          . '&offset=';
                 }
+            }
+            elseif( $paging )
+            {
+                $this->_page_opts['pagination_url'] = $this->_page_opts['post_back_url']  . '?offset=';
             }
         }
 
@@ -302,6 +311,44 @@ class digQuery
         
     }
     
+    function clean_for_instrumental()
+    {
+    
+        // you know what? I'm personally embarrassed by
+        // how many uploads are marked 'instrumental' AND 'vocals'
+        // I.Q. FAIL
+        // so I'm taking matters into my own hands.
+        
+        if( empty($this->_query_args['tagexp']) )
+            return;
+        
+        $tagexp = $this->_query_args['tagexp'];
+        
+        
+        if( strpos($tagexp,'instrumental') !== false )
+        {
+            // we populate the reqtags args with NOT tags
+            // this will return 0 results if the upload
+            // has any of these tags
+            
+            $nottags = '-female_vocals,-male_vocals,-vocals';
+            
+            if( empty($this->_query_args['reqtags']) )
+            {
+                $this->_query_args['reqtags'] = $nottags;
+            }
+            else
+            {
+                // if reqtags already has these tags then don't add them again
+                
+                if( preg_match_all( '/-(female_vocals|male_vocals|vocals)/',$this->_query_args['reqtags']) != 3 )
+                {
+                    $this->_query_args['reqtags'] = ',' . $nottags;
+                }
+            }
+        }
+    }
+    
     function _clear()
     {
         $this->_fields         = array();
@@ -353,7 +400,7 @@ function queries_to_jscript($queries)
 EOF;
         }
         
-        $inits .= "{$Q->_page_opts['results_func']}({$json_results});\n";
+        $inits .= "{$Q->_page_opts['results_func']}.call(queryObj,{$json_results});\n";
         
         if( !empty($Q->_fields) )
         {
@@ -361,15 +408,16 @@ EOF;
             {
                 $inits .= "\t\t\t\tF = \$('#' + '{$K}'); if( F ) { F.val('{$F}'); }\n";
             }
+            
         }
     }
     
 
     $js =<<<EOF
         <script type="text/javascript">
-            {$qs}
         
             jQuery(document).ready(function() {
+                {$qs}
                 var F;
                 {$inits}
             });

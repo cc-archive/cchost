@@ -1,4 +1,4 @@
-/*
+ /*
 * Artistech Media has made the contents of this file
 * available under a CC-GNU-GPL license:
 *
@@ -17,17 +17,8 @@
 *
 */
 
-function makeA(iterable) {
-  if (!iterable) return [];
-  if (iterable.toArray) {
-    return iterable.toArray();
-  } else {
-    var results = [];
-    for (var i = 0, length = iterable.length; i < length; i++)
-      results.push(iterable[i]);
-    return results;
-  }
-}
+var makeA = jQuery.makeArray;
+  
 
 var ccmClass = {
   create: function() {
@@ -86,7 +77,6 @@ ccmQuery.prototype = {
     //
     // options = {
     //     paging: true|false,                   // default is false
-    //     parent: 'YOUR_PARENT_SELECTOR',   // container selector for this query
     //     debug: true|false                 // dumps ajax URL right before calling
     //  }
     //
@@ -135,19 +125,29 @@ ccmQuery.prototype = {
 
       this._get_params();
       
-      if( this._options.paging && !this._count_fetched && (this._options.mode == 'ajax') )
-        this._call_ccm( 'count', this._on_count_return.bind(this) );
-      else
-        this._call_ccm( 'js', this._on_query_return.bind(this) );
+      if( this._options.mode == 'ajax' ) {
+        if( this._options.paging && !this._count_fetched  )
+          this._call_ccm( 'count', this._on_count_return.bind(this) );
+        else
+          this._call_ccm( 'js', this._on_query_return.bind(this) );
+      }
+      else {
+        this._call_ccm('js');
+      }
     },
     
     page: function(dir) {
         var newOffs = parseInt(this.values.offset) + (dir * parseInt(this.values.limit));
         if( newOffs < 0 )
             newOffs = 0;
-        this.values.offset = this._parameters.offset = newOffs;
-        this._get_params();
-        this.query();
+        if( this._options.mode == 'ajax' ) {            
+          this.values.offset = this._parameters.offset = newOffs;
+          this._get_params();
+          this.query();
+        }
+        else {
+          document.location = this._options.pagination_url + newOffs;
+        }
     },
 
     // query values filled in after a query is made.
@@ -175,34 +175,6 @@ ccmQuery.prototype = {
       }
     },
     
-    _flatten_obj: function(obj,target,path)
-    {
-      // wtf was I thinking ??
-      
-      /*
-       
-        var pathChar = path ? '/' : '';
-    
-        for( field in obj )
-        {
-            var this_path = path + pathChar + field;
-            
-            if( typeof(obj[field]) == 'object' )
-            {
-                target = this._flatten_obj(obj[field],target,this_path)
-            }
-            else
-            {
-                target[this_path] = obj[field];
-            }
-        }
-        
-        return target;
-      */
-      
-      return obj;
-    },
-
     _on_count_return: function(data)
     {
         // data from 'count' format is
@@ -224,8 +196,7 @@ ccmQuery.prototype = {
             var obj = resp[i];
             if( obj.files )
                 obj.num_files = obj.files.length;
-            target = this._flatten_obj(obj,target,'');
-            targets.push(target);
+            targets.push(obj);
         }
     
         this.values.num_results = targets.length;
@@ -235,33 +206,14 @@ ccmQuery.prototype = {
           this.values.offset = parseInt(this.values.offset);
         }
         
-        this._user_func(targets);
+        this._user_func.call(this,targets);
     },
 
     _get_params: function() {
         this._params = '';
-        var parent = this._options.parent ? $(this._options.parent) : null;
         for( var f in this._parameters )
         {
-            var field = $( '#' + f, parent );
-            var val = null;
-            var is_field = false;
-            
-            if( field && field.val )
-            {
-              var val_test = field.val();
-              if( typeof(val_test) != 'undefined' )
-              {
-                is_field = true;
-                if( val_test != this._parameters[f] )
-                  val = val_test
-              }
-            }
-            
-            if( !is_field )
-            {
-              val = this._parameters[f];
-            }
+            val = this._parameters[f];
             if( val )
                 this._params += '&' + f + '=' + val;
             this.values[f] = val;
@@ -299,7 +251,7 @@ ccmQuery.prototype = {
           case 'server':
           case 'remote':
             {
-              var url = '/' + this._options.doc + '?';
+              var url = this._options.post_back_url;
               if( this._options.calling_args_str )
               {
                 url += this._options.calling_args_str;

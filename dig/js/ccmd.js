@@ -55,8 +55,7 @@ var str_back = 'Back';
 var str_editors_picks = 'Editors\' Picks';
 var str_podcasts = 'Podcasts';
 
-var original_search_type = null;
-var adv_showing = false;
+
 
 /*
     ADVANCED UTILITY
@@ -126,7 +125,27 @@ function tagGenreQueryResults(results) {
 }
 
 function tagInstrumentQueryResults(results) {
-    _tagQueryResults(results,'instr','instr_results');
+    
+    var important = [],
+        others = [],
+        care_about = ['instrumental','vocals','female_vocals','male_vocals'];
+    
+    // pull out important ones
+    $.each(results, function(i,e) {
+        var mapping = $.inArray(e.tags_tag,care_about);
+        
+        if( mapping == -1 ) {
+            others.push(e);
+        }
+        else {
+            important[mapping] = e;
+        }
+    });
+    
+    
+    var neworder = important.concat(others);
+    
+    _tagQueryResults(neworder,'instr','instr_results');
 }
 
 function tagStyleQueryResults(results) {
@@ -137,6 +156,7 @@ function populate_tags() {
     
     if( window.tags_populated )
         return;
+    
     window.tags_populated = true;
     
     $('#clear').click( function(e) { onClearTag(); });
@@ -148,7 +168,6 @@ function populate_tags() {
         parent: '#tagpicker'
     }
     
-
     var parameters = {
         sort: 'name',
         ord: 'asc',
@@ -188,15 +207,14 @@ function _tagQueryResults(results,type,results_div) {
     // category.
     
     var links = [];
-    for( var i = 0; i < results.length; i++ )
-    {
-        var result = results[i];
+    $.each( results, function(i,result) {
+    
         var tag = result.tags_tag;
         links[i] = '<option onclick="doAddTag(this,\'' + tag + '\',\'' + type + '\');" '
                         + ' value="' + tag + '">'
                         +  tag + ' (' + result.tags_count + ')'
                         + '</option>';
-    }
+    });
     
     var checkListName = 'cl_' + type;
     
@@ -510,13 +528,14 @@ function license_image(license_name) {
 function build_pagination(start_offset) {
     var soffset = (start_offset) ? start_offset : 0;
     var html = '';
+
     // Build pagination links if total is greater than 0
-    if(queryObj.values.total > 0) {
-        var offset = queryObj.values.offset;
-        var limit = queryObj.values.limit;
+    if(this.values.total > 0) {
+        var offset = this.values.offset;
+        var limit = this.values.limit;
         var current_page = Math.floor(offset/limit)+1;
-        var total_pages = Math.floor(queryObj.values.total / queryObj.values.limit);
-        total_pages += ((queryObj.values.total % queryObj.values.limit) == 0) ? 0 : 1;
+        var total_pages = Math.floor(this.values.total / this.values.limit);
+        total_pages += ((this.values.total % this.values.limit) == 0) ? 0 : 1;
         
         html += '<div class="pagination"><ul>';
         var i = 1;
@@ -567,7 +586,7 @@ function build_pagination(start_offset) {
             }       
         }
         
-        if(queryObj.values.offset < (total_pages-1)*10) {
+        if(this.values.offset < (total_pages-1)*10) {
             html += '<li><a href="#" class="round" id="nextlink">Next &raquo;</a></li>';
         }
         html += '</ul></div>';      
@@ -590,7 +609,6 @@ function query_results(results) {
         var html = '';
     }
     
-    
     for(var i = 0; i < results.length; i++)
     {
         var result = results[i];
@@ -603,11 +621,11 @@ function query_results(results) {
         html += '</div>';
     }
     
-    html += build_pagination();
+    html += build_pagination.call(this);
     
     $('#results').html(html);
 
-    _resultsEvents();
+    _resultsEvents.call(this);
 }
 
 function didUMean_results(results) {
@@ -661,9 +679,6 @@ function edpickQueryResults(results) {
     _digStyleQueryResults(results,'#edpicks', 'More picks&hellip;', 'picks', str_editors_picks);
 }
 
-function edpickPageQueryResults(results) {
-    
-}
 
 function popchartQueryResults(results) {
     _digStyleQueryResults(results,'#popchart', 'More popular&hellip;', 'popular', 'Popular');
@@ -683,7 +698,7 @@ function podcastQueryResults(results) {
         } else {
             html += '<div class="result round">';
         }
-        html += build_podcast_result(result, j, 40);
+        html += build_podcast_result.call(this, result, j, 40);
         html += '</div>';
         if((i == 4) || (i == 9)) {
             html += '</div>';
@@ -712,13 +727,14 @@ function podcastPageQueryResults(results) {
         html += '</div>';
     }
 
-    html += build_pagination(1);
+    html += build_pagination.call(this,1);
 
     $('#results').html(html);
     
-    _podcastsPageEvents();
+    _podcastsPageEvents.call(this);
 }
 
+// for 'featured' page
 function _digStyleQueryResults(results, target, more_label, more_url, heading) {
     var html ='';
     html += '<h3>'+heading+'</h3>';
@@ -745,9 +761,11 @@ function _digStyleQueryResults(results, target, more_label, more_url, heading) {
     EVENTS
 */
 function _resultsEvents() {
+    
     var download_links = jQuery(".download-link");
     var info_links = jQuery(".info-link");
     var license = jQuery('.license');
+    var queryObj = this;
     
     /*
         adds a click action to all results' download links that brings up the download
@@ -880,6 +898,9 @@ function _resultsEvents() {
 }
 
 function _podcastsPageEvents() {
+    
+    var queryObj = this;
+    
     // add click events to pagination
     jQuery('.pagelink').click(function(e) {
         var offset = queryObj.values.offset;
@@ -1032,7 +1053,7 @@ function do_search() {
     var page       = $('#dig-type').val();
 
     var q = '?';
-    var url = DIG_ROOT_URL + '/' + page;
+    var url = page_opts['post_back_url'];
     
     if( search_lic == 'open' )
     {
@@ -1046,15 +1067,7 @@ function do_search() {
         q = '&';
     }
     
-    /*
-    if( search_type != 'dig' )
-    {
-        url += q + 'dig-type=' + search_type;
-        q = '&';
-    }
-    */
-
-    if( adv_showing )
+    if( page_opts.show_adv )
     {
         var val;
         
@@ -1108,7 +1121,7 @@ function show_advanced(e)
     basic_search_link.show();
     advanced_search_link.hide();
     populate_tags();
-    adv_showing = true;
+    page_opts.show_adv = true;
     return false;    
 }
 
@@ -1121,7 +1134,7 @@ function hide_advanced(e)
     $('.advanced-search-utility').hide();
     advanced_search_link.show();
     basic_search_link.hide();
-    adv_showing = false;
+    page_opts.show_adv = false;
     return false;    
 }
 
@@ -1136,7 +1149,7 @@ function populate_dig()
     
     window.old_s_height = $('.search-utility').height(); 
     
-    if( adv_showing )
+    if( page_opts.show_adv )
         show_advanced();
     else
         clean_advanced();
@@ -1154,9 +1167,13 @@ function populate_dig()
     basic_search_link.click( hide_advanced );
         
     search_button.click(do_search);
-
-    window.original_search_type = $('#dig-type').val();
     
+    $('#dig-type').change( function() {
+        var val = $(this).val();
+        page_opts['post_back_url'] = page_opts['post_back_url'].replace(page_opts['doc_url'],val);
+        page_opts['doc_url'] = val;
+    })
+
 }
 
 
