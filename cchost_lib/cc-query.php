@@ -778,7 +778,7 @@ class CCQuery
             );
         
         // available for commercial use
-        $T['open']  = array_merge( $T['by'], $T['pd'], $T['s'],$T['splus'],$T['nd'],$T['sa'] );
+        $T['open']  = array_merge( $T['by'], $T['pd'], /* $T['s'],$T['splus'], */ $T['nd'],$T['sa'] );
         $T['allnc'] = array_merge( $T['nc'], $T['ncsa'], $T['ncnd'],$T['ncsplus'] );
         
         $lics = split(',',trim($this->args['lic']));

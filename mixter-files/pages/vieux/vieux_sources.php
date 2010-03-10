@@ -103,13 +103,13 @@ function _t_vieux_sources_init($T,&$targs) {
 		To download right click (control on Mac) on these buttons and select 'Save Target As...'
 	</li>
 </ul>
-<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/vieux/ccmixter_vieux_gtr_bass.zip"><span >gtr_bass.zip (41.1 MB)</span></a>
+<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixter.org/media/vieux/ccmixter_vieux_gtr_bass.zip"><span >gtr_bass.zip (41.1 MB)</span></a>
 <p >(FLAC compressed WAV files in ZIP archive)</p></div>
-<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/vieux/ccmixter_vieux_horns.zip"><span >horns.zip (4.9 MB)</span></a>
+<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixter.org/media/vieux/ccmixter_vieux_horns.zip"><span >horns.zip (4.9 MB)</span></a>
 <p >(FLAC compressed WAV files in ZIP archive)</p></div>
-<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/vieux/ccmixter_vieux_keys.zip"><span >keys.zip (4.1 MB)</span></a>
+<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixter.org/media/vieux/ccmixter_vieux_keys.zip"><span >keys.zip (4.1 MB)</span></a>
 <p >(FLAC compressed WAV files in ZIP archive)</p></div>
-<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/vieux/ccmixter_vieux_vocals.zip"><span >vocals.zip (22.7 MB)</span></a>
+<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixter.org/media/vieux/ccmixter_vieux_vocals.zip"><span >vocals.zip (22.7 MB)</span></a>
 <p >(FLAC compressed WAV files in ZIP archive)</p></div>
-<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/vieux/ccmixter_vieux_drums.zip"><span >drums.zip (29.4 MB)</span></a>
+<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixter.org/media/vieux/ccmixter_vieux_drums.zip"><span >drums.zip (29.4 MB)</span></a>
 <p >(FLAC compressed WAV files in ZIP archive)</p></div>

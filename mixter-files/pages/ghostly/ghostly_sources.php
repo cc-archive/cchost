@@ -50,7 +50,7 @@ packs made up of pre-cut WAV loops (ACIDized with key and tempo) or ReCyle forma
 <h3 ><a  href="<?= $A['home-url']?>files/cwillits/7781">Go to the vocal track's download page (VBR MP3, FLAC)</a></h3>
 <h3 ><a  href="<?= $A['home-url']?>files/cwillits/7780">Go to the sample packs download page (ACIDized WAVs, REX)</a></h3>
 <div  class="dldiv">
-<a  id="cc_downloadbutton" type="application/octet-stream" href="http://ccmixtermedia.org/ghostly/ColorShifting-Tracks.zip"><span >Download solo tracks</span></a>
+<a  id="cc_downloadbutton" type="application/octet-stream" href="http://ccmixter.org/media/ghostly/ColorShifting-Tracks.zip"><span >Download solo tracks</span></a>
 <p >Download uncut studio solo tracks (ZIP of WAVs 72.8 MB)</p>
 </div>
 <hr  />
@@ -58,11 +58,11 @@ packs made up of pre-cut WAV loops (ACIDized with key and tempo) or ReCyle forma
 <p >For completeness' sake, you can also get the vocal tracks in WAV, several mixes featuring isolated
 frequency ranges of the instrumental tracks mixed together, and the original distortion tracks.</p>
 <div  class="dldiv">
-<a  id="cc_downloadbutton" type="application/octet-stream" href="http://ccmixtermedia.org/ghostly/Colors%20Shifting-vocals.wav"><span >Download Vocals WAV</span></a>
+<a  id="cc_downloadbutton" type="application/octet-stream" href="http://ccmixter.org/media/ghostly/Colors%20Shifting-vocals.wav"><span >Download Vocals WAV</span></a>
 <p >Download vocals in WAV format (11.4 MB)</p>
 </div>
 <div  class="dldiv">
-<a  id="cc_downloadbutton" type="application/octet-stream" href="http://ccmixtermedia.org/ghostly/MIXES-FLAC.zip"><span >Download mixed tracks</span></a>
+<a  id="cc_downloadbutton" type="application/octet-stream" href="http://ccmixter.org/media/ghostly/MIXES-FLAC.zip"><span >Download mixed tracks</span></a>
 <p >Download frequency range mixed tracks (ZIP of FLACS 28.8 MB)</p>
 </div>
 <p >

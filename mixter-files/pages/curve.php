@@ -121,10 +121,10 @@ for( $ci104= 0; $ci104< $cc104; ++$ci104)
 <p >
 		To download right click (control on Mac) on these buttons and select 'Save Target As...'
 </p>
-<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/curve/ccmixter.org_curvemusic_instr.zip"><span >guitar/percussion (29.4 MB) </span>
+<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixter.org/media/curve/ccmixter.org_curvemusic_instr.zip"><span >guitar/percussion (29.4 MB) </span>
 </a>
 <p >(FLAC compressed WAV files in ZIP archive)</p></div>
-<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixtermedia.org/curve/ccmixter.org_curvemusic_vocals.zip"><span >vocals (41 MB) </span>
+<div  class="dldiv"><a  id="cc_downloadbutton" href="http://ccmixter.org/media/curve/ccmixter.org_curvemusic_vocals.zip"><span >vocals (41 MB) </span>
 </a>
 <p >(FLAC compressed WAV files in ZIP archive)</p></div>
   

@@ -37,7 +37,7 @@ if( !defined('IN_CC_HOST') )
     $module = 'cchost_lib/snoopy/Snoopy.class.php';
     require_once($module);
     $snoopy = new Snoopy();
-    $snoopy->fetch('http://ccmixtermedia.org/djvadim/tracks');
+    $snoopy->fetch('http://ccmixter.org/media/djvadim/tracks');
     print $snoopy->results;
 
     ?>

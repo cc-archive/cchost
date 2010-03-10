@@ -161,25 +161,25 @@ for( $ci104= 0; $ci104< $cc104; ++$ci104)
 		To download right click (control on Mac) on these buttons and select 'Save Target As...'
 </p>
 <div  class="dldiv" style="display:none">
-<a  id="cc_downloadbutton" href="http://ccmixtermedia.org/salman/Salman_ccmixter_VOCALS-snippets.zip">
+<a  id="cc_downloadbutton" href="http://ccmixter.org/media/salman/Salman_ccmixter_VOCALS-snippets.zip">
 <span >Vocal Snippets (6.9 MB) </span>
 </a>
 <p >(FLAC compressed WAV files in ZIP archive)</p>
 </div>
 <div  class="dldiv">
-<a  id="cc_downloadbutton" href="http://ccmixtermedia.org/salman/Salman_ccmixter_VOCALS.zip">
+<a  id="cc_downloadbutton" href="http://ccmixter.org/media/salman/Salman_ccmixter_VOCALS.zip">
 <span >Main Vocals (60.7 MB) </span>
 </a>
 <p >(FLAC compressed WAV files in ZIP archive)</p>
 </div>
 <div  class="dldiv">
-<a  id="cc_downloadbutton" href="http://ccmixtermedia.org/salman/salman_ccmixter_guitars.zip">
+<a  id="cc_downloadbutton" href="http://ccmixter.org/media/salman/salman_ccmixter_guitars.zip">
 <span >Guitars (50.5 MB) </span>
 </a>
 <p >(FLAC compressed WAV files in ZIP archive)</p>
 </div>
 <div  class="dldiv">
-<a  id="cc_downloadbutton" href="http://ccmixtermedia.org/salman/salman_ccmixter_perc.zip">
+<a  id="cc_downloadbutton" href="http://ccmixter.org/media/salman/salman_ccmixter_perc.zip">
 <span >Percussion (34.5 MB) </span>
 </a>
 <p >(FLAC compressed WAV files in ZIP archive)</p>

@@ -104,6 +104,28 @@ var str_trackback_type_podcast    ='<?=addslashes($T->String('str_trackback_type
 var str_trackback_type_remix      ='<?=addslashes($T->String('str_trackback_type_remix'))?>';
 var str_trackback_type_video      ='<?=addslashes($T->String('str_trackback_type_video'))?>';
 var str_trackback_type_web        ='<?=addslashes($T->String('str_trackback_type_web'))?>';
+var str_trackback_type_web         ='<?=addslashes($T->String('str_trackback_type_web'))?>';
+var str_trackback_type_video       ='<?=addslashes($T->String('str_trackback_type_video'))?>';
+var str_trackback_type_remix       ='<?=addslashes($T->String('str_trackback_type_remix'))?>';
+var str_trackback_type_podcast     ='<?=addslashes($T->String('str_trackback_type_podcast'))?>';
+var str_trackback_link_remix       ='<?=addslashes($T->String('str_trackback_link_remix'))?>';
+var str_trackback_link_podcast     ='<?=addslashes($T->String('str_trackback_link_podcast'))?>';
+var str_trackback_link_video       ='<?=addslashes($T->String('str_trackback_link_video'))?>';
+var str_trackback_link_web         ='<?=addslashes($T->String('str_trackback_link_web'))?>';
+var str_trackback_link_album       ='<?=addslashes($T->String('str_trackback_link_album'))?>';
+var str_trackback_artist_remix     ='<?=addslashes($T->String('str_trackback_artist_remix'))?>';
+var str_trackback_artist_podcast   ='<?=addslashes($T->String('str_trackback_artist_podcast'))?>';
+var str_trackback_artist_video     ='<?=addslashes($T->String('str_trackback_artist_video')) ?>';
+var str_trackback_artist_web       ='<?=addslashes($T->String('str_trackback_artist_web'))   ?>';
+var str_trackback_artist_album     ='<?=addslashes($T->String('str_trackback_artist_album')) ?>';
+var str_trackback_media_video      ='<?=addslashes($T->String('str_trackback_media_video')) ?>';
+
+var str_trackback_remix            ='<?=addslashes($T->String('str_trackback_remix')) ?>';
+var str_trackback_podcast          ='<?=addslashes($T->String('str_trackback_podcast'))?>';
+var str_trackback_video            ='<?=addslashes($T->String('str_trackback_video'))?>';
+var str_trackback_web              ='<?=addslashes($T->String('str_trackback_web')) ?>';
+var str_trackback_album            ='<?=addslashes($T->String('str_trackback_album')) ?>';
+
 var str_working                   ='<?=addslashes($T->String('str_working'))?>';
 
 <? exit; ?>
