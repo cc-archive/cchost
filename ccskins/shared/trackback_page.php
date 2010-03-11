@@ -67,21 +67,27 @@ function on_type_change()
     var fields_div = $('tb_fields');
     fields_div.innerHTML =fields;
     
-    var check_for_remix = <?= (!empty($A['logged_in_as']) && ($R['user_name'] != $A['logged_in_as'])) ? 'true' : 'false' ?>;
-    var remix_note = $('remix_note');
-    if( (ttype == 'remix') &&  check_for_remix )
+    <?
+        if( !empty($A['logged_in_as']) && ($R['user_name'] != $A['logged_in_as']) )
+        {
+            ?>
+            
+    if( ttype == 'remix' )
     {
         html = '<div style="clear:both">&nbsp;</div>'
-            +   '<a class="remix_up_link" href="<?= ccl('submit','remix',$A['logged_in_as'], $R['upload_id']) ?>">'
+            +   '<a class="remix_up_link" href="<?= ccl('submit','remix', $A['logged_in_as'] , $R['upload_id']) ?>">'
             +       '<?= $T->String(array('str_trackback_remix_upload','',$R['upload_name'],'')) ?>'
             +   '</a>';
+
+        $('remix_note').innerHTML = html;
     }
     else
     {
-        html = '';
+        $('remix_note').innerHTML = '';
     }
-    
-    remix_note.innerHTML = html;
+            <?
+        }
+    ?>
 }
 
 function gen_tb_fields(ttype)
