@@ -777,9 +777,14 @@ class CCQuery
             'zero'     =>  array('cczero') ,
             );
         
-        // available for commercial use
-        $T['open']  = array_merge( $T['by'], $T['pd'], /* $T['s'],$T['splus'], */ $T['nd'],$T['sa'] );
-        $T['allnc'] = array_merge( $T['nc'], $T['ncsa'], $T['ncnd'],$T['ncsplus'] );
+        // available for commercial use, even ads
+        $T['open']  = array_merge( $T['by'], $T['pd'], $T['nd'], $T['sa'] );
+        
+        // available for commercial use, except ads
+        $T['safe']  = array_merge( $T['open'], $T['s'], $T['splus'] );
+        
+        // requires supra-nc for commercial use
+        $T['allnc'] = array_merge( $T['nc'], $T['ncsa'], $T['ncnd'], $T['ncsplus'] );
         
         $lics = split(',',trim($this->args['lic']));
         
