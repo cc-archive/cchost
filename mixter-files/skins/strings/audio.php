@@ -16,6 +16,7 @@ $GLOBALS['str_trackback_video']         = _('If you know of a video that uses "%
 $GLOBALS['str_trackback_web']           = _('If you know of a web page or blog the refers to "%s" by %s please enter the link below') . $_x3;
 $GLOBALS['str_trackback_album']         = _('For an album or collection that includes "%s" by %s please enter the a link to its page below') . $_x3;
 
+/*
 // yes, need to move this somewhere else
 require_once('dig/config.php');
 
@@ -26,5 +27,5 @@ $GLOBALS['str_search_help_generic'] =
     '</div>' .
     '<hr />Otherwise, use the form below to search for text, a specific user, a forum post, etc.'
     ;
-
+*/
 ?>
