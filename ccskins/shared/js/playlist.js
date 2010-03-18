@@ -37,7 +37,7 @@ ccPlaylistMenu.prototype = {
     hookElements: function(parent) {
         var me = this;
         CC$$('.cc_playlist_button',parent).each( function(e) {
-            var id = e.href.match( /([0-9]+$)/ )[1];
+            var id = e.href.match( /([0-9]+\/?$)/ )[1]; // friggin chrome add a trailin slash
             Event.observe( e, 'click', me.onMenuButtonClick.bindAsEventListener( me, id ) );
         });
 
