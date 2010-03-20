@@ -35,6 +35,11 @@ class CCSearch
     {
         if( !empty($_REQUEST['search_text']) )
         {
+            if( empty($_REQUEST['search_flag']) || ($_REQUEST['search_flag'] == 'imabot') )
+            {
+                CCUtil::Send404();
+            }
+            
             $search_text = CCUtil::StripText($_REQUEST['search_text']);
 
             if( !empty($search_text) )
@@ -148,9 +153,9 @@ class CCSearch
         $values['search_text'] = htmlentities($search_text);
         $form->PopulateValues($values);
         $gen = $form->GenerateForm();
-        // ack
-        $gen->_template_vars['html_hidden_fields'] = array();
-        //d($gen);
+        // ack!!!
+        unset($gen->_template_vars['html_hidden_fields'][0]);
+
         CCPage::AddForm($gen);
 
         if( $what == 'all')
@@ -390,6 +395,14 @@ class CCSearchForm extends CCForm
                                'formatter'  => 'select',
                                'options'    => $options,
                                'flags'      => CCFF_POPULATE);
+                        
+        $fields['field_munge'] =
+                        array( 'label' => '',
+                                'formatter' => 'template',
+                                'macro' => 'search_debot.tpl/debot_submit',
+                                'form_id' => $this->GetFormID(),
+                                'flags' => CCFF_NONE
+                              );
 
         if( $mode == 'horizontal' )
         {
@@ -408,6 +421,7 @@ class CCSearchForm extends CCForm
             }
         }
         $this->AddFormFields( $fields );
+        $this->SetHiddenField('search_flag','imabot');
         $this->SetSubmitText(_('Search'));
         $this->SetTemplateVar('form_method','GET');
 
