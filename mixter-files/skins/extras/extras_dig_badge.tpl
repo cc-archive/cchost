@@ -7,7 +7,7 @@
 %%
 %if_null(logged_in_as)%
 <br /><br />
-<img src="http://dig.ccmixter.org/images/dig.ccmixter-white-on-black-100x22.jpg" />
+<a href="http://dig.ccmixter.org"><img src="http://dig.ccmixter.org/images/dig.ccmixter-white-on-black-100x22.jpg" /></a>
 <ul><li>
 Search our archives for<br />
 music for your video,<br />
