@@ -17,14 +17,16 @@ $GLOBALS['str_trackback_web']           = _('If you know of a web page or blog t
 $GLOBALS['str_trackback_album']         = _('For an album or collection that includes "%s" by %s please enter the a link to its page below') . $_x3;
 
 
-$GLOBALS['str_search_help_generic'] =
-    '<div style="text-align:center"><h2>Looking for music?</h2>' .
-    '<h3>Try our music discovery tool <a style="text-decoration:underline;" href="http://dig.ccmixter.org">dig.ccMixter</a></h3><br />' .
-    '<a href="http://dig.ccmixter.org"><img src="/dig/images/logo-black.png" /></a>'.
-    '</div>' .
-    '<hr />Use the form below to search artists, a forum post, reviews, etc.' .
-    ' For samples try out <a href="/view/media/samples/browse">Samples Browser</a> or <a href="view/media/pells">A Cappella Browser</a>'
-    ;
+$GLOBALS['str_search_help_generic'] =<<<EOF
+<div style="text-align:center"><h2>Looking for music?</h2>
+    <h3>Try our music discovery tool <a style="text-decoration:underline;" href="http://dig.ccmixter.org">dig.ccMixter</a></h3><br />
+    <a href="http://dig.ccmixter.org"><img src="/dig/images/logo-black.png" /></a><br />
+    <div>
+        <b>Look for music:</b>&nbsp;<input id="digq" value=""/> <a class="small_button"
+            onclick="document.location = 'http://dig.ccmixter.org/dig?dig-query=' + $('digq').value;" href="javascript://">dig</a>
+    </div>
+</div>
+EOF;
 
 $GLOBALS['str_dig_help'] = '<h2>Looking for finished music?</h2> Search our remix catalogue using our dig.ccMixter Music Discovery tool.'
 ?>
