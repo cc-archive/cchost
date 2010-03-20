@@ -1,4 +1,18 @@
-<style >
+<?
+if( empty($A['user_name']) )
+{
+?>
+<script>
+document.location = home_url;
+</script>
+<noscript>
+    You must be logged in to view this page.
+</noscript>
+<?
+    return;
+}
+?>
+<style>
 .hs
 {
     font-style:Courier New, courier, serif;
