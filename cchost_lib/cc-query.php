@@ -204,14 +204,8 @@ class CCQuery
         if( !empty($this->args['search']) )
             $this->args['search'] = urldecode($this->args['search']);
 
-        $k = array_keys($this->args);
-        $n = count($k);
-        for( $i = 0; $i < $n; $i++)
-        {
-            $tt = $this->args[$k[$i]];
-            if( is_string($tt) && (strpos($tt,'\'') === (strlen($tt)-1) ) )
-                die('Illegal value in query');
-        }
+        if( !$this->_check_for_injection() )
+            die('Illegal value in query');
 
         $this->_validate_sources();
         $this->_validate_args();
@@ -219,6 +213,21 @@ class CCQuery
         return $this->args;
     }
 
+    // return true for clean, false for bad args
+    function _check_for_injection()
+    {
+        $k = array_keys($this->args);
+        $n = count($k);
+        for( $i = 0; $i < $n; $i++)
+        {
+            $tt = $this->args[$k[$i]];
+            if( is_string($tt) && (strpos($tt,'\'') === (strlen($tt)-1) ) )
+                return false;
+        }
+        
+        return true;
+    }
+    
     /**
      *  Called after ProcessUriArgs - allows for munging args
      *  in between the that method and this one

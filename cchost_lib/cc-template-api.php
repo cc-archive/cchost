@@ -134,6 +134,8 @@ function cc_query_fmt($qstring,$debug=0)
     if( empty($args['format']) )
         $args['format'] = 'php';
     $args = $query->ProcessAdminArgs($args);
+    if( !$query->_check_for_injection() )
+         die('Illegal query value');
     list( $results ) = $query->Query($args);
     return $results;
 }
@@ -315,6 +317,8 @@ function cc_get_content_page_type($pagename)
 
 function cc_add_content_paging_links(&$A,$type,$topic_slug,$ord,$page_slug,$limit=1)
 {
+    $topic = CCUtil::Strip($topic);
+    
     $slug_sql = cc_get_topic_name_slug();
 
     if( $topic_slug && ($limit==1) )
