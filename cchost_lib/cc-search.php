@@ -133,7 +133,8 @@ class CCSearch
         if( empty($_REQUEST['search_in']) )
             die('missing "search in" field'); // I think this is a hack attempt
 
-        $this->_log_search($search_text);
+        if( empty($_REQUEST['offset']) )
+            $this->_log_search($search_text);
 
         $maxview = empty($CC_GLOBALS['max_search_overview']) ? 5 : $CC_GLOBALS['max_search_overview'];
         
@@ -186,7 +187,7 @@ class CCSearch
                 ob_end_clean();
                 $ue = urlencode($search_text);
                 $link = (count($query->records) == $maxview) 
-                    ? url_args(ccl('search'),"search_text={$ue}&search_in={$meta['group']}{$search_type_arg}") : '';
+                    ? url_args(ccl('search'),"search_text={$ue}&search_in={$meta['group']}{$search_type_arg}&search_flag=notabot") : '';
                 $total = $query->dataview->GetCount();
                 $grand_total += $total;
                 $results[] = array( 

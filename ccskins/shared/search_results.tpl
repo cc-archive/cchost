@@ -64,7 +64,7 @@ a.dum_link:hover {
 <script>
 function got_did_u_mean(res)
 {
-    var s_url = home_url + 'search' + q + 'search_type=all&search_in=' + '<?= $_GET['search_in'] ?>' + '&search_text=';    
+    var s_url = home_url + 'search' + q + 'search_type=all&search_flag=notabot&search_in=' + '<?= $_GET['search_in'] ?>' + '&search_text=';    
     var html ='';
     var comma = '';
     var results = eval(res.responseText);
