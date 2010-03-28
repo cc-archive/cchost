@@ -48,9 +48,10 @@ p {
 	color: #333;
 	font-size: 0.99em;
 	width: 30%;
-	float: left;
+	/* float: left; */
 	height: 220px;
 	line-height: 1.4em;
+    text-align: right;
 }
 .pullquote:hover {
 	border-top: 2px solid #99b;
@@ -66,30 +67,32 @@ p {
 	display: none;
 }
 </style>
-<img  src="<?= $T->URL('crammed-logo.png'); ?>" style="float: left; margin-right: 10px; margin-bottom: 5px;" height="85" alt="Crammed" title="Crammed" />
-<h1  class="pagehead">ccMixter &amp; Crammed Discs</h1>
+<h1 class="pagehead">ccMixter &amp; Crammed Discs</h1>
+<img  src="<?= $T->URL('crammed-logo.png'); ?>"
+     style="float: left; margin-right: 10px; margin-bottom: 5px; margin-top:20px" height="85"
+    alt="Crammed" title="Crammed" />
 <div  class="contestbox">
-<div  class="contestback">
-<img  src="<?= $T->URL('crammed_comp_cibelle.jpg'); ?>" alt="Crammed - Cibelle" /><img  src="<?= $T->URL('crammed_comp_apollo.jpg'); ?>" alt="Crammed - Apollo Nove" /><img  src="<?= $T->URL('crammed_comp_djd.jpg'); ?>" alt="Crammed - DJ Delores" />
-<div  style="padding: 0pt 0px 10px; text-align: left; line-height: 1.4em; " id="photocr">
-<p >Cibelle photo &copy; Kevin Westenberg / Crammed Discs.
-					  	 Apollo Nove photo &copy; Raphael Gianelli&mdash;Meriano.
-							 DJ Dolores photo &copy; Renato Filho / Crammed Discs.
-							 </p>
-<p >All photos used with permission.</p>
+    <div  class="contestback">
+        <img  src="<?= $T->URL('crammed_comp_cibelle.jpg'); ?>" alt="Crammed - Cibelle" /><img  src="<?= $T->URL('crammed_comp_apollo.jpg'); ?>" alt="Crammed - Apollo Nove" /><img  src="<?= $T->URL('crammed_comp_djd.jpg'); ?>" alt="Crammed - DJ Delores" />
+        <div  style="padding: 0pt 0px 10px; text-align: left; line-height: 1.4em; " id="photocr">
+            <p >Cibelle photo &copy; Kevin Westenberg / Crammed Discs.
+                Apollo Nove photo &copy; Raphael Gianelli&mdash;Meriano.
+                DJ Dolores photo &copy; Renato Filho / Crammed Discs.
+            </p>
+            <p >All photos used with permission.</p>
+        </div>
+    </div>
 </div>
+<div style="height:150px">
+    <p><a href="http://creativecommons.org/">Creative Commons</a> and <a  href="http://www.crammed.be/">Crammed Discs</a>
+    are pleased to anncounce Crammed Discs music in the Commons. Crammed artists Cibelle, DJ Dolores, and Apollo Nove &mdash; some of
+    Brazil's most creative musical innovators &mdash; are offering new music online under a <a
+    href="http://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC 2.5 license</a>, so that producers worldwide
+    can use the tracks in remixes and new compositions.</p>
+    <p style="font-size:18px"><a href="<?= $A['root-url']?>crammed_sources">Download audio sources here</a></p>
 </div>
-</div>
-<p ><a  href="http://creativecommons.org/">Creative Commons</a> and <a  href="http://www.crammed.be/">Crammed Discs</a> are pleased to anncounce Crammed Discs music in the Commons. Crammed artists <a  href="http://www.crammed.be/crammed/123/index.htm">Cibelle</a>, <a  href="http://www.crammed.be/zir/19/index.htm">DJ Dolores</a>, and <a  href="http://www.crammed.be/zir/21/index.htm">Apollo Nove</a> &mdash; some of Brazil's most creative musical innovators &mdash; are offering new music online under a <a  href="http://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC 2.5 license</a>, so that producers worldwide can use the tracks in remixes and new compositions.</p>
-<p >Download audio sources offered <a  href="<?= $A['root-url']?>crammed_sources">here </a>) and upload your track to ccMixter or anywhere on the Web. </p>
-<p >You can listen to the original versions of the songs by visiting <a  href="http://www.crammed.be/news/cc.htm">the Crammed Discs Web site</a> (RealPlayer required).</p>
-
-<h2  style="margin: 0px; font-size: 18px; font-weight: normal;">Source Materials</h2>
-<p >Download the separated audio elements of Cibelle's "Noite de Carnaval," DJ Dolores's "Sanidade," and Apollo Nove's "Yage Cameras" <a  href="<?= $A['root-url']?>crammed_sources">here</a>.</p>
-<br  />
-<p >
-<div  class="pullquote" style="margin-left: 0;"><h1 >Cibelle</h1>"The whole process of making music has changed. The very concept of composition now extends to the creation of sounds and textures. I'm very curious to see how other people will use and manipulate my sounds and how they will use them as tools to create new music." <br  />&mdash; <strong >Cibelle</strong>
-</div>
-<div  class="pullquote"><h1 >Apollo Nove</h1>"I like the idea of giving people the opportunity to hear what I hear when I'm producing &mdash; a separate candombl&eacute; percussion track or some painstakingly constructed soundscape. If mixing is part of the compositional process, it's only natural that I try sharing the compositional responsibilities with anyone interested in taking them on." <br  />&mdash; <strong >Apollo Nove</strong></div>
-<div  class="pullquote" style="margin-right: 0; padding-right:0;"><h1 >DJ Dolores</h1>"This is what every intelligent musician should do. The idea is to share and allow one's work to be cut up, reinvented and &mdash; who knows &mdash; transformed into something even better than the original. This isn't about generosity; it's about inventing new ways of creating musical products that go well beyond the world of physical carriers like vinyl and CDs." <br  />&mdash; <strong >DJ Dolores</strong></div>
+<p style="text-align:right">
+    <div class="pullquote"><h1 >Cibelle</h1>"The whole process of making music has changed. The very concept of composition now extends to the creation of sounds and textures. I'm very curious to see how other people will use and manipulate my sounds and how they will use them as tools to create new music." <br  />&mdash; <strong >Cibelle</strong></div>
+    <div class="pullquote"><h1 >Apollo Nove</h1>"I like the idea of giving people the opportunity to hear what I hear when I'm producing &mdash; a separate candombl&eacute; percussion track or some painstakingly constructed soundscape. If mixing is part of the compositional process, it's only natural that I try sharing the compositional responsibilities with anyone interested in taking them on." <br  />&mdash; <strong >Apollo Nove</strong></div>
+    <div class="pullquote" style="margin-right: 0; padding-right:0;"><h1 >DJ Dolores</h1>"This is what every intelligent musician should do. The idea is to share and allow one's work to be cut up, reinvented and &mdash; who knows &mdash; transformed into something even better than the original. This isn't about generosity; it's about inventing new ways of creating musical products that go well beyond the world of physical carriers like vinyl and CDs." <br  />&mdash; <strong >DJ Dolores</strong></div>
 </p>
