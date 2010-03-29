@@ -232,6 +232,8 @@ END;
 
             // bad comma data for Seth Carlin
             $buffer = str_replace('"Grand Duo"',"Grand Duo",$buffer);
+            // and...
+            $buffer = str_replace('not your "Average" Hip Hop Group', "not your Average Hip Hop Group",$buffer);
 
             /////////////////////////////
             //
