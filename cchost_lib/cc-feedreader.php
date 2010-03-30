@@ -319,6 +319,7 @@ class CCFeedReader extends CCXmlReader
                               'description' => '' );
         $ccFR->is_atom = false;
         $ccFR->is_rss = false;
+        $ccFR->is_xspf = false;
         $ccFR->waiting_for = null;
         $ccFR->wait_for_special = null;
 
@@ -338,7 +339,11 @@ class CCFeedReader extends CCXmlReader
                     $I['category'] = join(', ',$I['tags']);
                 unset($I['tags']);
 
+                if( !empty($ccFR->search_title) )
+                    $I['search_title'] = 1;
+                    
                 if( !isset($I['artist']) )              $I['artist'] = '';
+                if( !isset($I['enclosure']) )           $I['enclosure'] = array();
                 if( !isset($I['enclosure']['url']) )    $I['enclosure']['url'] = '';
                 if( !isset($I['enclosure']['length']) ) $I['enclosure']['length'] = '';
                 if( !isset($I['enclosure']['type']) )   $I['enclosure']['type'] = '';
@@ -358,7 +363,7 @@ class CCFeedReader extends CCXmlReader
         global $ccFR;
 
         $name = strtolower($name);
-
+        
         /* ATOM:
             author       category       content
             entry        feed           id
@@ -373,6 +378,12 @@ class CCFeedReader extends CCXmlReader
             pubDate           rss           title 
         */
 
+        /* XSPF
+            track             location      creator
+            album             title         duration
+            image             info          meta (rel=license)
+        */
+
         switch($name)
         {
             case 'feed':
@@ -383,12 +394,19 @@ class CCFeedReader extends CCXmlReader
                 $ccFR->is_rss = true;
                 break;
 
+            case 'playlist':
+                $ccFR->is_xspf = true;
+                $ccFR->search_title = true;
+                break;
+            
             case 'item':
             case 'entry':
+            case 'track':
                 $ccFR->current_item = array();
                 break;
 
             case 'name':
+            case 'creator':
             case 'dc:creator':
             case 'dc:author':  // early ccHosts spit this
                 $ccFR->waiting_for = 'artist';
@@ -399,6 +417,10 @@ class CCFeedReader extends CCXmlReader
                 $ccFR->waiting_for = 'guid';
                 break;
 
+            case 'location':
+                $ccFR->waiting_for_special = 'location';
+                break;
+            
             case 'category':
                 if( $ccFR->is_atom )
                     $ccFR->current_item['tags'][] = $attribs['term'];
@@ -415,6 +437,8 @@ class CCFeedReader extends CCXmlReader
                 $ccFR->waiting_for = 'encoded_description';
                 break;
 
+            case 'meta':
+            case 'info':
             case 'link':
                 $this->wait_for_link($attribs);
                 break;
@@ -458,6 +482,9 @@ class CCFeedReader extends CCXmlReader
         {
             switch( $attribs['rel'] )
             {
+                case 'http://web.resource.org/cc/license':
+                    $ccFR->waiting_for = 'license_url';
+                    break;
                 case 'license':
                     $ccFR->current_item['license_url'] = $attribs['href'];
                     break;
@@ -488,6 +515,7 @@ class CCFeedReader extends CCXmlReader
         {
             case 'item':
             case 'entry':
+            case 'track':
                 $ccFR->items[] = $ccFR->current_item;
                 unset($ccFR->current_item);
                 break;
@@ -521,6 +549,12 @@ class CCFeedReader extends CCXmlReader
                  case 'tag':
                     $ccFR->current_item['tags'][] = $data;
                     return;
+                
+                case 'location':
+                    preg_match('/=([a-f0-9]+)$/',$data,$m);
+                    $ccFR->current_item['guid'] = $m[1];
+                    $ccFR->current_item['enclosure'] = array( 'url' => $data );
+                    return;                    
             }
 
         }

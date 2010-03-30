@@ -172,6 +172,8 @@ class CCPool
                 // table even if the use doesn't pick them just to have them
                 // around.
 
+                //d($pool_results);
+
                 $pools =& CCPools::GetTable();
                 $pool = $pools->QueryKeyRow($pool_id);
     
@@ -214,20 +216,9 @@ class CCPool
         {
             require_once('cchost_lib/cc-api.php');
             $query_url = CCRestAPI::MakeUrl( $api_url, 'search', 'query=' . $query );
-            $fr = new CCFeedReader();
-            $rss = $fr->cc_parse_url( $query_url );
-            if( !empty($rss->ERROR) )
-            {
-                CCDebug::Log("Feed read error on $query_url: " . $rss->ERROR);
-                return(false);
-            }
-
-            if( empty($rss->channel) )
-            {
-                CCDebug::Log("Feed read error on $query_url: Can't find channel info");
-                return(false);
-            }
-            $retval = array( 'rss', $rss->items );
+            $retval = $this->_dig_out_rssitems($query_url,null);
+            if( $retval === false )
+                return false;
         }
         else
         {
@@ -236,12 +227,49 @@ class CCPool
                 require_once($parts[1]);
             $api_url = $parts[0];
             $obj = new $api_url();
-            $retval = array( 'pool_items', $obj->LocalSearch($pool_id,$query,$type) );
+            $data = $obj->LocalSearch($pool_id,$query,$type);
+            if( is_string($data) )
+            {
+                $retval = $this->_dig_out_rssitems(null,$data);
+                if( $retval === false )
+                    return false;
+            }
+            else
+            {
+                $retval = array( 'pool_items', $data  );
+            }
         }
 
         return( $retval );
     }
 
+    function _dig_out_rssitems($url,$data)
+    {
+        
+        $fr = new CCFeedReader();
+        if( empty($url) )
+        {
+            $rss = $fr->parse($data);
+        }
+        else
+        {
+            $rss = $fr->cc_parse_url( $url );
+        }
+        if( !empty($rss->ERROR) )
+        {
+            CCDebug::Log("Feed read error on $url: " . $rss->ERROR);
+            return(false);
+        }
+
+        if( empty($rss->channel) )
+        {
+            CCDebug::Log("Feed read error on $url: Can't find channel info");
+            return(false);
+        }
+        $retval = array( 'rss', $rss->items );
+        return $retval;
+    }
+    
     function NotifyPoolsOfRemix($pool_items, $remixguid)
     {
         // todo: test and enable this code
@@ -372,6 +400,8 @@ class CCPool
         $link = $item['link'];
         $where['pool_item_url'] = $link;
         $where['pool_item_timestamp'] = $item['date_timestamp'];
+        if( !empty($item['search_title']) )
+            $where['pool_item_name'] = $item['title'];
         $row = $pool_items->QueryRow($where);
 
         if( !empty($row) )
@@ -396,7 +426,7 @@ class CCPool
         $args['pool_item_id']            = $pool_items->NextID();
         $args['pool_item_pool']          = $pool['pool_id'];
         $args['pool_item_url']           = $link;
-        $args['pool_item_download_url']  = empty($item['enclosure']) ? '' : $item['enclosure']['url'];
+        $args['pool_item_download_url']  = empty($item['enclosure']['url']) ? '' : $item['enclosure']['url'];
         $args['pool_item_license']       = $license;
         $args['pool_item_name']          = $item['title'];
         $args['pool_item_artist']        = $item['artist'];
@@ -405,8 +435,8 @@ class CCPool
         $args['pool_item_timestamp']     = $item['date_timestamp'];
 
         $extra = array( 'guid'   => $item['guid'],
-                        'length' => empty($item['enclosure']) ? '' : $item['enclosure']['length'],
-                        'type'   => empty($item['enclosure']) ? '' : $item['enclosure']['type'],
+                        'length' => empty($item['enclosure']['length']) ? '' : $item['enclosure']['length'],
+                        'type'   => empty($item['enclosure']['type']) ? '' : $item['enclosure']['type'],
                         'tags'   => empty($item['category']) ? '' : $item['category'] );
 
         $args['pool_item_extra']         = serialize($extra);
