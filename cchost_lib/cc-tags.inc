@@ -373,7 +373,7 @@ class CCAdminTagsForm extends CCForm
         //
         $this->CCForm();
         $aliases =& CCTagAliases::GetTable();
-        $aliases->SetSort('tag_alias_alias');
+        $aliases->SetSort('tag_alias_tag');
         $rows = $aliases->QueryRows('');
         $text = '';
         foreach( $rows as $row )

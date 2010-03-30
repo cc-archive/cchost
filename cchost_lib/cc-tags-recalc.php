@@ -1,8 +1,14 @@
 <?
 
+if( !empty($_GET['fixccud']) )
+{
+    _do_ccud_fix();
+    return;
+}
+
 print "Applying tag rules\n"; flush();
 
-$qr = CCDatabase::Query('SELECT upload_id,upload_extra FROM cc_tbl_uploads' );
+$qr = CCDatabase::Query('SELECT upload_id,upload_extra FROM cc_tbl_uploads');
 $count    = 0;
 $table    = new CCTable('cc_tbl_uploads','upload_id');
 $tagtable = new CCTable('cc_tbl_tags','tags_tag');
@@ -11,11 +17,10 @@ $tagcols  = array( 'tags_tag', 'tags_type' );
 while( $row = mysql_fetch_array($qr) )
 {
     $ex = unserialize($row['upload_extra']);
+
     // [ccud] => media,acappella
     // [usertags] => female_vocals,melody
     // [systags] => sampling_plus,audio,mp3,44k,mono,128kbps
-    if( empty($ex['usertags']) )
-        continue;
 
     $atags = split(',',$ex['usertags']);
 
@@ -63,10 +68,10 @@ while( $row = mysql_fetch_array($qr) )
     }
     
     $ex['usertags'] = join(',',array_unique($atags));
-    $user_tags = join(',', array_unique( split(',',join(',', array($ex['ccud'],$ex['usertags'],$ex['systags'] )))));
+    $upload_tags = join(',', array_unique( split(',',join(',', array($ex['ccud'],$ex['usertags'],$ex['systags'] )))));
     $uargs = array();
     $uargs['upload_id']    = $row['upload_id'];
-    $uargs['upload_tags']  = $user_tags;
+    $uargs['upload_tags']  = $upload_tags;
     $uargs['upload_extra'] = serialize($ex);
     $table->Update($uargs);
     
@@ -157,5 +162,72 @@ $sql[] = 'UPDATE cc_tbl_tags SET tags_tag = LOWER(tags_tag)'; // some tags ended
 CCDatabase::Query($sql);
 
 print "done\n";
+
+function _do_ccud_fix()
+{
+    // somewhere along the line the 'tag' part of
+    // alias rules crept into some ccud areas of
+    // a few upload_extra fields. Hopefully, by
+    // the time you read this I will have fixed
+    // the bug that caused this to happen, but
+    // just I don't or it doesn't take, here's
+    // how to clean it up (something that has to
+    // happen at least once in any event)
+    
+    // to invoke it, add fixccud=OFFENDING_TAGLIST
+    
+    $tags = explode(',',$_GET['fixccud']);
+    if( empty($tags) )
+        die('missing offending tag list');
+
+    $dv = new CCDataView();
+    $exp = $dv->MakeTagFilter($tags,'any');
+    $qr = CCDatabase::Query('SELECT upload_id,upload_extra FROM cc_tbl_uploads WHERE ' . $exp);
+
+    $exp = $dv->MakeTagFilter($tags,'any','tag_alias_tag');
+    $rules = CCDatabase::QueryRows('SELECT tag_alias_tag as tag,tag_alias_alias as rule FROM cc_tbl_tag_alias WHERE ' . $exp);
+
+    if( empty($rules) )
+    {
+        print "Could not find any rules for those tags\n";
+        return;
+    }
+    
+    print "Applaying rules:\n------------\n";
+    foreach( $rules as $R )
+    {
+        print "  {$R['tag']} =&lt; {$R['rule']}\n";
+    }
+    print "------------------\n\n";
+    
+    $table = new CCTable('cc_tbl_uploads','upload_id');
+    
+    $count = 0;
+    while( $row = mysql_fetch_assoc($qr) )
+    {
+        ++$count;
+        $ex = unserialize($row['upload_extra']);
+        print "UPLOAD: {$row['upload_id']}\n - ccud: {$ex['ccud']}\n - usertags: {$ex['usertags']}\n";
+        $ccud = explode(',',$ex['ccud']);
+        $utags = explode(',',$ex['usertags']);
+        foreach( $rules as $R )
+        {
+            $ccud = array_diff($ccud,array($R['tag']));
+            $rtags = explode(',',$R['rule']);
+            $utags = array_unique(array_merge($utags,$rtags));
+        }
+        $munge = array_merge($ccud,$utags,explode(',',$ex['systags']));
+        $ex['ccud'] = join(',',$ccud);
+        $ex['usertags'] = join(',',$utags);
+        print "   updated to:\n - ccud: {$ex['ccud']}\n - usertags: {$ex['usertags']}\n";
+        $upargs['upload_id'] = $row['upload_id'];
+        $upargs['upload_tags'] = join(',', array_unique( split(',',join(',', $munge) ) ) );
+        $upargs['upload_extra'] = serialize($ex);
+        $table->Update($upargs);
+    }
+    
+    print "\n\nFixed {$count} records (the tag counts will be wrong until you do a total reset)";
+
+}
 
 ?>
