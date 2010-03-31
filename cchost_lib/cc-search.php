@@ -242,7 +242,7 @@ class CCSearch
     {
         $k = array_keys($records);
         $c = count($k);
-        $r = '("([^"]+)"|(\w+))';
+        $r = '("([^"]+)"|([[:graph:]]+))';
         preg_match_all( "/$r/", $info['queryObj']->args['search'], $m );
         $terms = array_filter(array_merge($m[2],$m[3]));
         for( $i = 0; $i < $c; $i++ )
@@ -255,7 +255,7 @@ class CCSearch
     function _highlight_results($input,&$terms,$maxoutlen = 150)
     {
         $max = $maxoutlen;
-
+        
         // stripos is only on PHP 5 so we have to fake it...
         $xcopy = strtolower($input);
         foreach( $terms as $term )

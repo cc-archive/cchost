@@ -108,13 +108,15 @@ function cc_tag_query_OnApiQuerySetup( &$args, &$queryObj, $requiresValidation )
         $soundex = array();
         foreach( $text_words as $T )
         {
+            $T = addslashes($T);
             $soundex[] = "(tag_alias_tag SOUNDS LIKE '{$T}')";
             $soundex[] = "(tag_alias_tag LIKE '{$T}%')";
         }
 
         $queryObj->where[] = join(' OR ', $soundex);
-        $queryObj->where[] = "tag_alias_alias != '{$search}'";
-        $queryObj->where[] = "tag_alias_alias != '" . str_replace(' ','_',$search) . "'";
+        $slashed = addslashes($search);
+        $queryObj->where[] = "tag_alias_alias != '{$slashed}'";
+        $queryObj->where[] = "tag_alias_alias != '" . str_replace(' ','_',$slashed) . "'";
 
     }
     
