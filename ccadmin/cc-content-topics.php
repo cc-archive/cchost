@@ -12,7 +12,7 @@ function inject_content_topics()
         array( 'home',          '2009-05-07 13:00:00', 'Welcome to ccHost 5',
            "Welcome to ccHost [define=CC_HOST_VERSION][/define] and congratulations on your installation of ".
            "[b][var=site-title][/var][/b]\r\n\r\nHere are some helpful documentation links:\r\n\r\n[big]".
-           "[url=http://wiki.creativecommons.org/Cchost/Documentation]ccHost Documentaton Wiki[/url]\r\n\r\n".
+           "[url=http://wiki.creativecommons.org/Cchost/Documentation]ccHost Documentation Wiki[/url]\r\n\r\n".
            "[url=http://wiki.creativecommons.org/Cchost/guide/Customize]Customizing your installation[/url]".
            "\r\n\r\n[url=http://wiki.creativecommons.org/Cchost/guide/Troubleshooting]Troubleshooting[/url]".
            "\r\n\r\n[url=http://wiki.creativecommons.org/Cchost#Contacting]Contact the team[/url][/big]" ),
