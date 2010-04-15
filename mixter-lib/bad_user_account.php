@@ -14,30 +14,12 @@ function bad_user_url_map()
     CCEvents::MapUrl( ccp('admin','spamaccount'), 'atm_bad_user', CC_ADMIN_ONLY );
 }
 
-function atm_bad_user()
+function atm_bad_user($see_all='')
 {
     require_once('cchost_lib/cc-page.php');
     $page =& CCPage::GetPage();
     $page->SetTitle('Possible Spam Acounts');
-    if( empty($_POST) )
-    {
-        $bad_accs = file_get_contents('mixter-lib/bad_account_names.txt');
-        $bad_accs = array_filter(explode(",\n",$bad_accs));
-        $url = ccl('admin','spamaccount');
-        $html = "<form method=\"post\" action=\"{$url}\"><table>\n";
-        foreach( $bad_accs as $BA )
-        {
-            $results = CCDatabase::QueryRows("SELECT user_id, user_name FROM cc_tbl_user WHERE user_name LIKE '%{$BA}%'");
-            foreach( $results as $R )
-            {
-                $html .= '<tr><td><input type="checkbox" name="user_ids['.$R['user_id'].']" checked="checked" /></td>'.
-                            '<td>' . $R['user_id'] . '</td><td><b>' . $R['user_name'] . '</b></td>' .
-                            '</tr>';
-            }
-        }
-        $html .= '</table><br /><input type="submit" value="Delete Checked"></form>';
-    }
-    else
+    if( !empty($_POST) )
     {
         if( empty($_POST['user_ids']) )
         {
@@ -52,8 +34,46 @@ function atm_bad_user()
             $html = "Accounts have been deleted";
         }
     }
+
+    $url = ccl('admin','spamaccount',$see_all);
+    $html .= "<form method=\"post\" action=\"{$url}\"><table>\n";
+    $select = "SELECT user_id, user_description, user_name, user_email FROM cc_tbl_user ";
+    if( $see_all == 'all' )
+    {
+        $results = CCDatabase::QueryRows($select . "WHERE user_description LIKE '%[url%' ORDER BY user_registered DESC LIMIT 50");
+        foreach( $results as $R )
+        {
+            $html .= atm_bad_user_line($R);
+        }
+        
+    }
+    else
+    {
+        $bad_accs = file_get_contents('mixter-lib/bad_account_names.txt');
+        $bad_accs = array_filter(explode(",\n",$bad_accs));
+        foreach( $bad_accs as $BA )
+        {
+            $results = CCDatabase::QueryRows($select . "WHERE user_name LIKE '%{$BA}%'");
+            foreach( $results as $R )
+            {
+                $html .= atm_bad_user_line($R);
+            }
+        }
+    }
+
+    $html .= '</table><br /><input type="submit" value="Delete Checked"></form>';
     
     $page->AddContent($html);
+}
+
+function atm_bad_user_line($R)
+{
+  return '<tr><td><input type="checkbox" name="user_ids['.$R['user_id'].']"  /></td>'.
+            '<td>' . $R['user_id'] . '</td><td><b>' . $R['user_name'] . '</b></td>' .
+            '<td>' . $R['user_email'] . '</td>' .
+            '<td>' . substr($R['user_description'],0,300) . '...</td>' .
+            '</tr>';
+    
 }
 
 function atm_bad_user2($cmd='')
