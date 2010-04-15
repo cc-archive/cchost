@@ -19,11 +19,12 @@ function atm_bad_user($see_all='')
     require_once('cchost_lib/cc-page.php');
     $page =& CCPage::GetPage();
     $page->SetTitle('Possible Spam Acounts');
+    $html = '';
     if( !empty($_POST) )
     {
         if( empty($_POST['user_ids']) )
         {
-            $html = "ok, nothing to delete";
+            $html .= "ok, nothing to delete";
         }
         else
         {
@@ -31,7 +32,7 @@ function atm_bad_user($see_all='')
             $ids = join(',',$ids);
             $sql = "DELETE FROM cc_tbl_user WHERE user_id IN ({$ids})";
             CCDatabase::Query($sql);
-            $html = "Accounts have been deleted";
+            $html .= "Accounts have been deleted";
         }
     }
 
